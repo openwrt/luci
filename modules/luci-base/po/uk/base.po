@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2022-04-18 16:53+0000\n"
+"PO-Revision-Date: 2022-04-20 14:12+0000\n"
 "Last-Translator: Vladdrako <vladdrako007@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/luci/"
 "uk/>\n"
@@ -197,7 +197,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:691
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
-msgstr "<abbr title=\"Інтернет-протокол версії 4\">IPv4</abbr>-маска"
+msgstr "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-маски мережі"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:58
 msgid "<abbr title=\"Light Emitting Diode\">LED</abbr> Configuration"
@@ -252,12 +252,12 @@ msgstr "<var>%s</var> відповідає <strong>%s</strong>"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:74
 msgctxt "nft relational \"==\" operator expression"
 msgid "<var>%s</var> is <strong>%s</strong>"
-msgstr "<var>%s</var> рівне <strong>%s</strong>"
+msgstr "<var>%s</var> є <strong>%s</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:80
 msgctxt "nft relational \"in\" operator expression"
 msgid "<var>%s</var> is one of <strong>%s</strong>"
-msgstr "<var>%s</var> один із <strong>%s</strong>"
+msgstr "<var>%s</var> є один із <strong>%s</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:79
 msgctxt "nft relational \"<\" operator expression"
@@ -456,7 +456,7 @@ msgstr "Активні оренди DHCPv6"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:255
 msgid "Active IPv4 Routes"
-msgstr "<abbr title=\"Інтернет-протокол версії 4\">IPv4</abbr>-маршрути"
+msgstr "Активні IPv4 маршрути"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:258
 msgid "Active IPv4 Rules"
@@ -2955,11 +2955,11 @@ msgstr "Готово"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:27
 msgid "Firewall (iptables)"
-msgstr "Мережевий екран (iptables)"
+msgstr "Брандмауер (iptables)"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:43
 msgid "Firewall (nftables)"
-msgstr "Мережевий екран (nftables)"
+msgstr "Брандмауер (nftables)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
 msgid "Firewall Mark"
@@ -3603,7 +3603,7 @@ msgstr "Правила IPv4"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:29
 msgid "IPv4 Upstream"
-msgstr "Висхідне з'єднання IPv4"
+msgstr "З'єднання IPv4 (upstream)"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:178
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:39
@@ -3720,7 +3720,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:29
 msgid "IPv6 Upstream"
-msgstr "Висхідне з'єднання IPv6"
+msgstr "З'єднання IPv6 (upstream)"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:183
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:58
@@ -3945,7 +3945,7 @@ msgstr "Тайм-аут бездіяльності"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:267
 msgid "Inbound:"
-msgstr "Вхідний:"
+msgstr "Вхідна шв.:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:262
 msgid ""
@@ -4001,7 +4001,7 @@ msgstr "Ідентифікатор вхідного пристрою"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:10
 msgctxt "nft meta iifname"
 msgid "Ingress device name"
-msgstr "Ім'я вхідного пристрою"
+msgstr "Іменем вхідного пристрою"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:67
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:25
@@ -4387,7 +4387,7 @@ msgstr "Час оренди"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:90
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:129
 msgid "Lease time remaining"
-msgstr "Час оренди, що лишився"
+msgstr "До кінця оренди"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:41
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
@@ -4797,8 +4797,9 @@ msgid "Manual"
 msgstr "Вручну"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3872
+#, fuzzy
 msgid "Master"
-msgstr "Майстер"
+msgstr "Керований"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:811
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
@@ -5292,7 +5293,7 @@ msgstr "Без шифрування"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:139
 msgid "No Host Routes"
-msgstr "Немає хост-маршрутів"
+msgstr "Не створювати маршрути"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:89
 msgid "No NAT-T"
@@ -5772,7 +5773,7 @@ msgstr "Вих."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:277
 msgid "Outbound:"
-msgstr "Вихідний:"
+msgstr "Вихідна шв.:"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
@@ -6750,7 +6751,7 @@ msgstr "Ресурс не знайдено"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:875
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:100
 msgid "Restart"
-msgstr "Перезавантажити"
+msgstr "Перезапустити"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:348
 msgid "Restart Firewall"
