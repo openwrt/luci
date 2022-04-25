@@ -235,13 +235,13 @@ function _bool( s, n, nopad )
 	local pad = ""
 	if not nopad then pad = "\t" end
 
-	if s and s == "1" then
-		str = pad .. n .. " true"
-	else
-		str = pad .. n .. " false"
+	if s == "1" then
+		str = pad .. n .. " true\n"
+	elseif s == "0" then
+		str = pad .. n .. " false\n"
 	end
 
-	return str .. "\n"
+	return str
 end
 
 function _string( s, n, nopad )
