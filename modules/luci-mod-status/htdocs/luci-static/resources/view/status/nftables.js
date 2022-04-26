@@ -10,7 +10,7 @@ var expr_translations = {
 	'meta.iifname': _('Ingress device name', 'nft meta iifname'),
 	'meta.oifname': _('Egress device name', 'nft meta oifname'),
 	'meta.iif': _('Ingress device id', 'nft meta iif'),
-	'meta.iif': _('Engress device id', 'nft meta oif'),
+	'meta.iif': _('Egress device id', 'nft meta oif'),
 
 	'meta.l4proto': _('IP protocol', 'nft meta l4proto'),
 	'meta.l4proto.tcp': 'TCP',
@@ -24,6 +24,9 @@ var expr_translations = {
 	'meta.nfproto.ipv6': 'IPv6',
 
 	'meta.mark': _('Packet mark', 'nft meta mark'),
+
+	'meta.hour': _('Current time', 'nft meta hour'),
+	'meta.day': _('Current weekday', 'nft meta day'),
 
 	'ct.state': _('Conntrack state', 'nft ct state'),
 
@@ -52,6 +55,8 @@ var expr_translations = {
 	'udp.sport': _('UDP source port', 'nft udp sport'),
 	'udp.dport': _('UDP destination port', 'nft udp dport'),
 	'tcp.flags': _('TCP flags', 'nft tcp flags'),
+	'th.sport': _('Transport header source port', 'nft th sport'),
+	'th.dport': _('Transport header destination port', 'nft th dport'),
 
 	'natflag.random': _('Randomize source port mapping', 'nft nat flag random'),
 	'natflag.fully-random': _('Full port randomization', 'nft nat flag fully-random'),
@@ -68,6 +73,10 @@ var expr_translations = {
 	'unit.day': _('day', 'nft unit'),
 	'unit.hour': _('hour', 'nft unit'),
 	'unit.minute': _('minute', 'nft unit'),
+
+	'payload.ll': _('Link layer header bits %d-%d', 'nft @ll,off,len'),
+	'payload.nh': _('Network header bits %d-%d', 'nft @nh,off,len'),
+	'payload.th': _('Transport header bits %d-%d', 'nft @th,off,len')
 };
 
 var op_translations = {
@@ -168,9 +177,6 @@ return view.extend({
 		case 'rt':
 			return '%h.%h'.format(kind, spec.key);
 
-		case 'payload':
-			return '%h.%h'.format(spec.protocol, spec.field);
-
 		case 'tcp option':
 			return 'tcpoption.%h.%h'.format(spec.name, spec.field);
 
@@ -242,6 +248,18 @@ return view.extend({
 
 		case 'range':
 			return '%s-%s'.format(this.exprToString(spec[0], hint), this.exprToString(spec[1], hint));
+
+		case 'payload':
+			if (spec.protocol && spec.field) {
+				var k = '%h.%h'.format(spec.protocol, spec.field);
+				return expr_translations[k] || '<em>%s</em>'.format(k);
+			}
+			else if (spec.base && spec.offset != null && spec.len != null) {
+				var k = 'payload.%h'.format(spec.base);
+				return (expr_translations[k] || '<em>@%s,%%d,%%d</em>'.format(spec.base)).format(spec.offset + 1, spec.offset + spec.len + 1);
+			}
+
+			return 'payload: %s'.format(kind, JSON.stringify(spec));
 
 		case '&':
 		case '|':
