@@ -132,7 +132,11 @@ var action_translations = {
 
 return view.extend({
 	load: function() {
-		return L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--json', 'list', 'ruleset' ], 'json'), {});
+		return Promise.all([
+			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--json', 'list', 'ruleset' ], 'json'), {}),
+			L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-save'), ''),
+			L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-save'), '')
+		]);
 	},
 
 	isActionExpression: function(expr) {
@@ -662,15 +666,32 @@ return view.extend({
 		return node;
 	},
 
+	checkLegacyRules: function(ipt4save, ipt6save) {
+		if (ipt4save.match(/\n-A /) || ipt6save.match(/\n-A /)) {
+			ui.addNotification(_('Legacy rules detected'), [
+				E('p', _('There are legacy iptables rules present on the system. Mixing iptables and nftables rules is discouraged and may lead to incomplete traffic filtering.')),
+				E('button', {
+					'class': 'btn cbi-button',
+					'click': function() { location.href = 'nftables/iptables' }
+				}, _('Open iptables rules overview…'))
+			], 'warning');
+		}
+	},
+
 	render: function(data) {
-		var view = E('div');
+		var view = E('div'),
+		    nft = data[0],
+		    ipt = data[1],
+		    ipt6 = data[2];
 
-		if (!Array.isArray(data.nftables))
-			return E('em', _('No nftables ruleset load'));
+		this.checkLegacyRules(ipt, ipt6);
 
-		for (var i = 0; i < data.nftables.length; i++)
-			if (data.nftables[i].hasOwnProperty('table'))
-				view.appendChild(this.renderTable(data.nftables, data.nftables[i].table));
+		if (!Array.isArray(nft.nftables))
+			return E('em', _('No nftables ruleset loaded.'));
+
+		for (var i = 0; i < nft.nftables.length; i++)
+			if (nft.nftables[i].hasOwnProperty('table'))
+				view.appendChild(this.renderTable(nft.nftables, nft.nftables[i].table));
 
 		return view;
 	},
