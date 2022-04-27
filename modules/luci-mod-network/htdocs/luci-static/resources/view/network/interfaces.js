@@ -805,7 +805,14 @@ return view.extend({
 						return flags.length ? flags : [ 'other-config' ];
 					};
 					so.remove = function(section_id) {
-						uci.set('dhcp', section_id, 'ra_flags', [ 'none' ]);
+						var existing = L.toArray(uci.get('dhcp', section_id, 'ra_flags'));
+						if (this.isActive(section_id)) {
+							if (existing.length != 1 || existing[0] != 'none')
+								uci.set('dhcp', section_id, 'ra_flags', [ 'none' ]);
+						}
+						else if (existing.length) {
+							uci.unset('dhcp', section_id, 'ra_flags');
+						}
 					};
 
 					so = ss.taboption('ipv6-ra', form.Value, 'ra_maxinterval', _('Max <abbr title="Router Advertisement">RA</abbr> interval'), _('Maximum time allowed  between sending unsolicited <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr>. Default is 600 seconds.'));
