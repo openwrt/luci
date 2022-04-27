@@ -39,6 +39,10 @@ local function check_fs_depends(spec)
 			if fs.stat(path, "type") ~= "reg" then
 				return false
 			end
+		elseif kind == "absent" then
+			if fs.stat(path, "type") then
+				return false
+			end
 		end
 	end
 
