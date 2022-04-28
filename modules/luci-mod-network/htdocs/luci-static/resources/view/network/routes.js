@@ -98,7 +98,7 @@ return view.extend({
 
 			o = s.taboption('advanced', form.Value, 'source', _('Source'), _('Specifies the preferred source address when sending to destinations covered by the target'));
 			o.modalonly = true;
-			o.datatype = (family == 6) ? 'ip6addr("nomask")' : 'ip4addr("nomask")';
+			o.datatype = (family == 6) ? 'ip6addr' : 'ip4addr';
 			o.placeholder = E('em', _('auto'));
 			for (var i = 0; i < netDevs.length; i++) {
 				var addrs = (family == 6) ? netDevs[i].getIP6Addrs() : netDevs[i].getIPAddrs();
