@@ -3125,7 +3125,24 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 			if (!node.children[k].hasOwnProperty('title'))
 				continue;
 
-			children.push(Object.assign(node.children[k], { name: k }));
+			var subnode = Object.assign(node.children[k], { name: k });
+
+			if (L.isObject(subnode.action) && subnode.action.path != null &&
+			    (subnode.action.type == 'alias' || subnode.action.type == 'rewrite')) {
+				var root = this.menu,
+				    path = subnode.action.path.split('/');
+
+				for (var i = 0; root != null && i < path.length; i++)
+					root = L.isObject(root.children) ? root.children[path[i]] : null;
+
+				if (root)
+					subnode = Object.assign({}, subnode, {
+						children: root.children,
+						action: root.action
+					});
+			}
+
+			children.push(subnode);
 		}
 
 		return children.sort(function(a, b) {
