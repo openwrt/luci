@@ -110,7 +110,7 @@ function getServiceStatus() {
 
 function renderStatus(isRunning) {
 	var renderHTML = "";
-	var spanTemp = "<span style=\"color:%s;font-weight:bold;margin-left:15px\">%s - %s</span>";
+	var spanTemp = '<em><span style="color:%s"><strong>%s %s</strong></span></em>';
 
 	if (isRunning) {
 		renderHTML += String.format(spanTemp, 'green', _("frp Server"), _("RUNNING"));
@@ -138,8 +138,8 @@ return view.extend({
 			});
 
 			return E('div', { class: 'cbi-map' },
-				E('div', { class: 'cbi-section'}, [
-					E('div', { id: 'service_status' },
+				E('fieldset', { class: 'cbi-section'}, [
+					E('p', { id: 'service_status' },
 						_('Collecting data ...'))
 				])
 			);
