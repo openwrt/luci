@@ -4491,7 +4491,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							method: 'post',
 							timeout: L.env.apply_timeout * 1000,
 							query: { sid: L.env.sessionid, token: L.env.token }
-						}).then(call);
+						}).then(call, call.bind(null, { status: 0 }, null, 0));
 					}, delay);
 				};
 
