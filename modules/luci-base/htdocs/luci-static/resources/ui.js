@@ -4399,10 +4399,16 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							'class': 'btn',
 							'click': UI.prototype.hideModal
 						}, [ _('Close') ]), ' ',
-						E('button', {
-							'class': 'cbi-button cbi-button-positive important',
-							'click': L.bind(this.apply, this, true)
-						}, [ _('Save & Apply') ]), ' ',
+						new UIComboButton('0', {
+							0: [ _('Save & Apply') ],
+							1: [ _('Apply unchecked') ]
+						}, {
+							classes: {
+								0: 'btn cbi-button cbi-button-positive important',
+								1: 'btn cbi-button cbi-button-negative important'
+							},
+							click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
+						}).render(), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-reset',
 							'click': L.bind(this.revert, this)
