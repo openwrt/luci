@@ -3149,6 +3149,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		    s = m.section(CBINamedSection, section_id, this.sectiontype);
 
 		m.parent = parent;
+		m.section = section_id;
 		m.readonly = parent.readonly;
 
 		s.tabs = this.tabs;
@@ -3188,20 +3189,24 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		}
 
 		return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
-			var modalMap = this.getActiveModalMap();
+			var mapNode = this.getActiveModalMap(),
+			    activeMap = mapNode ? dom.findClassInstance(mapNode) : null;
 
-			if (modalMap) {
-				modalMap.parentNode
+			if (activeMap && (activeMap.parent !== parent || activeMap.section !== section_id)) {
+				mapNode.parentNode
 					.querySelector('h4')
 					.appendChild(E('span', title ? ' » ' + title : ''));
 
-				modalMap.parentNode
+				mapNode.parentNode
 					.querySelector('div.right > button')
 					.firstChild.data = _('Back');
 
-				modalMap.classList.add('hidden');
-				modalMap.parentNode.insertBefore(nodes, modalMap.nextElementSibling);
-				nodes.classList.add('flash');
+				mapNode.classList.add('hidden');
+				mapNode.parentNode.insertBefore(nodes, mapNode.nextElementSibling);
+
+				return activeMap.save(null, true).then(function() {
+					nodes.classList.add('flash');
+				}, function() {});
 			}
 			else {
 				ui.showModal(title, [
