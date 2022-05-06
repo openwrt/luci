@@ -4478,6 +4478,26 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		},
 
 		/** @private */
+		checkConnectivityAffected: function() {
+			return L.resolveDefault(fs.exec_direct('/usr/libexec/luci-peeraddr', null, 'json')).then(L.bind(function(info) {
+				if (L.isObject(info) && Array.isArray(info.inbound_interfaces)) {
+					for (var i = 0; i < info.inbound_interfaces.length; i++) {
+						var iif = info.inbound_interfaces[i];
+
+						for (var j = 0; this.changes && this.changes.network && j < this.changes.network.length; j++) {
+							var chg = this.changes.network[j];
+
+							if (chg[0] == 'set' && chg[1] == iif && (chg[2] == 'proto' || chg[2] == 'ipaddr' || chg[2] == 'netmask'))
+								return iif;
+						}
+					}
+				}
+
+				return null;
+			}, this));
+		},
+
+		/** @private */
 		rollback: function(checked) {
 			if (checked) {
 				this.displayStatus('warning spinning',
@@ -4614,35 +4634,65 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 			this.displayStatus('notice spinning',
 				E('p', _('Starting configuration apply…')));
 
-			request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
-				method: 'post',
-				query: { sid: L.env.sessionid, token: L.env.token }
-			}).then(function(r) {
-				if (r.status === (checked ? 200 : 204)) {
-					var tok = null; try { tok = r.json(); } catch(e) {}
-					if (checked && tok !== null && typeof(tok) === 'object' && typeof(tok.token) === 'string')
-						UI.prototype.changes.confirm_auth = tok;
+			(new Promise(function(resolveFn, rejectFn) {
+				if (!checked)
+					return resolveFn(false);
 
-					UI.prototype.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
-				}
-				else if (checked && r.status === 204) {
-					UI.prototype.changes.displayStatus('notice',
-						E('p', _('There are no changes to apply')));
+				UI.prototype.changes.checkConnectivityAffected().then(function(affected) {
+					if (!affected)
+						return resolveFn(true);
 
-					window.setTimeout(function() {
-						UI.prototype.changes.displayStatus(false);
-					}, L.env.apply_display * 1000);
-				}
-				else {
-					UI.prototype.changes.displayStatus('warning',
-						E('p', _('Apply request failed with status <code>%h</code>')
-							.format(r.responseText || r.statusText || r.status)));
+					UI.prototype.changes.displayStatus('warning', [
+						E('h4', _('Connectivity change')),
+						E('p', _('The network access to this device could be interrupted by changing settings of the "%h" interface.').format(affected)),
+						E('p', _('If the IP address used to access LuCI changes, a <strong>manual reconnect to the new IP</strong> is required within %d seconds to confirm the settings, otherwise modifications will be reverted.').format(L.env.apply_rollback)),
+						E('div', { 'class': 'right' }, [
+							E('button', {
+								'class': 'btn',
+								'click': rejectFn,
+							}, [ _('Cancel') ]), ' ',
+							E('button', {
+								'class': 'btn cbi-button-action important',
+								'click': resolveFn.bind(null, true)
+							}, [ _('Apply and revert on connectivity loss') ]), ' ',
+							E('button', {
+								'class': 'btn cbi-button-negative important',
+								'click': resolveFn.bind(null, false)
+							}, [ _('Apply and keep settings') ])
+						])
+					]);
+				});
+			})).then(function(checked) {
+				request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
+					method: 'post',
+					query: { sid: L.env.sessionid, token: L.env.token }
+				}).then(function(r) {
+					if (r.status === (checked ? 200 : 204)) {
+						var tok = null; try { tok = r.json(); } catch(e) {}
+						if (checked && tok !== null && typeof(tok) === 'object' && typeof(tok.token) === 'string')
+							UI.prototype.changes.confirm_auth = tok;
 
-					window.setTimeout(function() {
-						UI.prototype.changes.displayStatus(false);
-					}, L.env.apply_display * 1000);
-				}
-			});
+						UI.prototype.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
+					}
+					else if (checked && r.status === 204) {
+						UI.prototype.changes.displayStatus('notice',
+							E('p', _('There are no changes to apply')));
+
+						window.setTimeout(function() {
+							UI.prototype.changes.displayStatus(false);
+						}, L.env.apply_display * 1000);
+					}
+					else {
+						UI.prototype.changes.displayStatus('warning',
+							E('p', _('Apply request failed with status <code>%h</code>')
+								.format(r.responseText || r.statusText || r.status)));
+
+						window.setTimeout(function() {
+							UI.prototype.changes.displayStatus(false);
+						}, L.env.apply_display * 1000);
+					}
+				});
+			}, this.displayStatus.bind(this, false));
 		},
 
 		/**
