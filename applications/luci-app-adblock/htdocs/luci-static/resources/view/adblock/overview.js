@@ -343,6 +343,7 @@ return view.extend({
 		o.depends('adb_safesearch', '1');
 		o.value('google');
 		o.value('bing');
+		o.value('duckduckgo');
 		o.value('yandex');
 		o.value('youtube');
 		o.value('pixabay');
@@ -457,7 +458,7 @@ return view.extend({
 		o.placeholder = 'example.com';
 		o.rmempty = true;
 
-		o = s.taboption('adv_dns', form.Flag, 'adb_dnsflush', _('Flush DNS Cache'), _('Flush the DNS Cache before adblock processing as well.'));
+		o = s.taboption('adv_dns', form.Flag, 'adb_dnsflush', _('Flush DNS Cache'), _('Empty the DNS cache before adblock processing starts to reduce the memory consumption.'));
 		o.rmempty = true;
 
 		o = s.taboption('adv_dns', form.Flag, 'adb_dnsallow', _('Disable DNS Allow'), _('Disable selective DNS whitelisting (RPZ-PASSTHRU).'));
