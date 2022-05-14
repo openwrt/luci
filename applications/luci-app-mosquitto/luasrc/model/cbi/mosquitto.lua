@@ -58,6 +58,7 @@ o = s:option(Value, "sys_interval", _("Time in seconds between updates of the $S
 o.datatype = "uinteger"
 o.optional = true
 
+OptionalFlag(s, "allow_anonymous", _("Allow anonymous connections"), _("Allow to connect without providing a username and password"))
 o = s:option(Value, "max_inflight_messages", _("Max Inflight Messages"), _("Limit for message allowed inflight"))
 o.datatype = "uinteger"
 o.optional = true
