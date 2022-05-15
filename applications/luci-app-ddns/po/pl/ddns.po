@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2022-01-06 10:55+0000\n"
+"PO-Revision-Date: 2022-05-13 13:49+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/pl/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:430
 msgid "\"../\" not allowed in path for Security Reason."
@@ -69,15 +69,15 @@ msgstr ""
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:450
 msgid "Ca Certs path"
-msgstr "Ścieżka Ca Certs"
+msgstr "Ścieżka certyfikatów CA"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:451
 msgid ""
 "Ca Certs path that will be used to download services data. Set IGNORE to "
 "skip certificate validation."
 msgstr ""
-"Ścieżka Ca Certs, używana do pobierania danych usług. Ustaw IGNORE, aby "
-"pominąć weryfikację certyfikatu."
+"Ścieżka certyfikatów CA, która będzie używana do pobierania danych usług. "
+"Ustaw IGNORE, aby pominąć weryfikację certyfikatu."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:537
 msgid "Cancel"
@@ -94,7 +94,7 @@ msgstr "Sprawdź jednostkę"
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:522
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:656
 msgid "Checking the service support..."
-msgstr "Sprawdzanie wsparcia serwisowego ..."
+msgstr "Sprawdzanie obsługi usługi..."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/status/include/70_ddns.js:27
 msgid "Configuration"
@@ -305,7 +305,7 @@ msgid ""
 "GNU Wget will use the IP of given network, cURL will use the physical "
 "interface."
 msgstr ""
-"GNU Wget użyje adresu IP danej sieci, Curl użyje fizycznego interfejsu."
+"GNU Wget użyje adresu IP danej sieci, cURL użyje fizycznego interfejsu."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:263
 msgid "Global Settings"
@@ -361,7 +361,7 @@ msgid ""
 "If Wget and cURL package are installed, Wget is used for communication by "
 "default."
 msgstr ""
-"Jeśli pakiety Wget i Curl są zainstalowane, Wget jest domyślnie używany do "
+"Jeśli pakiety Wget i cURL są zainstalowane, Wget jest domyślnie używany do "
 "komunikacji."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:611
@@ -371,15 +371,17 @@ msgstr "Jeśli sekcja tej usługi jest wyłączona, nie można było jej uruchom
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:391
 msgid "If using secure communication you should verify server certificates!"
 msgstr ""
-"Jeśli korzystasz z bezpiecznej komunikacji, powinieneś zweryfikować "
-"certyfikaty serwera!"
+"Jeśli korzystasz z bezpiecznej komunikacji, należy zweryfikować certyfikaty "
+"serwera!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:323
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:337
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:349
 msgid ""
 "In some versions cURL/libcurl in OpenWrt is compiled without proxy support."
-msgstr "W niektórych wersjach curl/libcurl jest kompilowany bez obsługi proxy."
+msgstr ""
+"W niektórych wersjach cURL/libcurl w OpenWrt jest kompilowany bez obsługi "
+"proxy."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:944
 msgid "Info"
@@ -442,11 +444,11 @@ msgstr "Długość dziennika"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:950
 msgid "Log to file"
-msgstr "Zapisz log do pliku"
+msgstr "Rejestrowanie do pliku"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:938
 msgid "Log to syslog"
-msgstr "Log do dziennika systemowego"
+msgstr "Rejestrowanie do dziennika systemowego"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:619
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1120
@@ -464,7 +466,7 @@ msgid ""
 "Neither GNU Wget with SSL nor cURL installed to select a network to use for "
 "communication."
 msgstr ""
-"Ani GNU Wget z SSL, ani Curl nie jest zainstalowany, aby wybrać sieć, która "
+"Ani GNU Wget z SSL, ani cURL nie są zainstalowane, aby wybrać sieć, która "
 "będzie używana do komunikacji."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:319
@@ -472,7 +474,7 @@ msgid ""
 "Neither GNU Wget with SSL nor cURL installed to support secure updates via "
 "HTTPS protocol."
 msgstr ""
-"Ani GNU Wget z SSL, ani Curl nie są zainstalowane w celu obsługi "
+"Ani GNU Wget z SSL, ani cURL nie są zainstalowane w celu obsługi "
 "bezpiecznych aktualizacji poprzez protokół HTTPS."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:613
@@ -517,7 +519,7 @@ msgstr "Nie znaleziono certyfikatów"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:943
 msgid "No logging"
-msgstr "Brak logowania"
+msgstr "Brak rejestrowania"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:400
 msgid "Non-public and by default blocked IP's"
@@ -685,7 +687,7 @@ msgstr "Usługi"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:454
 msgid "Services URL Download"
-msgstr "Pobieranie adresu URL usług"
+msgstr "Adres URL pobierania usług"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:292
 msgid "Services list last update"
@@ -793,7 +795,7 @@ msgid ""
 "package repo."
 msgstr ""
 "Adres URL używany do pobierania pliku usług. Domyślnie jest to główne "
-"repozytorium pakietów openwrt ddns."
+"repozytorium OpenWrt z pakietami DDNS."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:767
 msgid "Use HTTP Secure"
@@ -801,7 +803,7 @@ msgstr "Użyj bezpiecznego HTTP"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:442
 msgid "Use cURL"
-msgstr "Użyj Curl"
+msgstr "Użyj cURL"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:852
 msgid "User defined script to read systems IP-Address"
@@ -851,8 +853,8 @@ msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' or 'hostip' "
 "package, if you need to specify a DNS server to detect your registered IP."
 msgstr ""
-"Powinieneś zainstalować pakiet 'bind-host' lub 'knot-host' lub 'drill' lub "
-"'hostip', jeśli musisz określić serwer DNS w celu wykrycia zarejestrowanego "
+"Należy zainstalować pakiet „bind-host” lub „knot-host”, lub „drill”, lub "
+"„hostip”, jeśli musisz określić serwer DNS w celu wykrycia zarejestrowanego "
 "adresu IP."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:371
@@ -860,40 +862,39 @@ msgid ""
 "You should install 'bind-host' or 'knot-host' or 'drill' package for DNS "
 "requests."
 msgstr ""
-"Powinieneś zainstalować pakiet 'bind-host' lub 'knot-host' lub 'drill' dla "
+"Należy zainstalować pakiet „bind-host” lub „knot-host”, lub „drill”, dla "
 "żądań DNS."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:359
 msgid "You should install 'wget' or 'curl' or 'uclient-fetch' package."
-msgstr "Powinieneś zainstalować pakiet „wget”, „curl” lub „uclient-fetch”."
+msgstr "Należy zainstalować pakiet „wget” lub „curl”, lub „uclient-fetch”."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:321
 msgid ""
 "You should install 'wget' or 'curl' or 'uclient-fetch' with 'libustream-"
 "*ssl' package."
 msgstr ""
-"Powinieneś zainstalować „wget” lub „curl” lub „uclient-fetch” z pakietem "
-"„libustream- * ssl”."
+"Należy zainstalować pakiet „wget” lub „curl”, lub „uclient-fetch”, z "
+"pakietem „libustream-*ssl”."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:333
 msgid "You should install 'wget' or 'curl' package."
-msgstr "Powinieneś zainstalować pakiet „wget” lub „curl”."
+msgstr "Należy zainstalować pakiet „wget” lub „curl”."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:347
 msgid ""
 "You should install 'wget' or 'uclient-fetch' package or replace libcurl."
 msgstr ""
-"Powinieneś zainstalować pakiet „wget” lub „uclient-fetch” lub zastąpić "
-"libcurl."
+"Należy zainstalować pakiet „wget” lub „uclient-fetch”, lub zastąpić libcurl."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:345
 msgid "cURL is installed, but libcurl was compiled without proxy support."
 msgstr ""
-"Curl jest zainstalowany, ale libcurl został skompilowany bez obsługi proxy."
+"cURL jest zainstalowany, ale libcurl został skompilowany bez obsługi proxy."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:344
 msgid "cURL without Proxy Support"
-msgstr "Curl bez obsługi proxy"
+msgstr "cURL bez obsługi proxy"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:517
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:640

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-05-17 07:42+0000\n"
-"Last-Translator: Zocker1012 <julian.schoemer.1997@gmail.com>\n"
+"PO-Revision-Date: 2022-04-25 11:11+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/de/>\n"
 "Language: de\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:602
 msgid ""
@@ -38,11 +38,11 @@ msgstr "Schließen"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
 msgid "Custom configuration"
-msgstr ""
+msgstr "Benutzerdefinierte Einstellungen"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr ""
+msgstr "Benutzerdefinierte Einstellungen aus /etc/fwknop/access.conf."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:581
 msgid ""
@@ -50,6 +50,9 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
+"Definieren Sie eine Reihe von Ports und Protokollen (tcp oder udp), die "
+"unabhängig von der Gültigkeit des eingehenden SPA-Pakets ausdrücklich nicht "
+"zugelassen sind. Mehrere Einträge werden durch Komma getrennt."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
 msgid ""
@@ -69,12 +72,18 @@ msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
+"Definieren Sie den HMAC-Authentifizierungsschlüssel (in Base64-Kodierung), "
+"der zur Überprüfung der Authentizität des SPA-Pakets verwendet wird, bevor "
+"das Paket entschlüsselt wird."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:554
 msgid ""
 "Define the HMAC authentication key used for verifying the authenticity of "
 "the SPA packet before the packet is decrypted."
 msgstr ""
+"Definieren Sie den HMAC-Authentifizierungsschlüssel, der zur Überprüfung der "
+"Authentizität des SPA-Pakets vor der Entschlüsselung des Pakets verwendet "
+"wird."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:585
 msgid ""
@@ -93,6 +102,9 @@ msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Definieren Sie den symmetrischen Schlüssel (in Base64-Kodierung), der zum "
+"Entschlüsseln eines eingehenden SPA-Pakets verwendet wird, das vom fwknop-"
+"Client mit Rijndael verschlüsselt wurde."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:532
 msgid ""
@@ -119,7 +131,7 @@ msgstr "Firewall-Knock-Daemon"
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid "Firewall Knock Operator Daemon"
-msgstr ""
+msgstr "Firewall-Knock-Operator-Daemon"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:590
 msgid ""
@@ -138,11 +150,11 @@ msgstr ""
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:527
 msgid "Generate Keys"
-msgstr ""
+msgstr "Schlüssel erzeugen"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid "Generate keys"
-msgstr ""
+msgstr "Schlüssel erzeugen"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid ""
@@ -151,6 +163,11 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
+"Erzeugt den symmetrischen Schlüssel, der zur Entschlüsselung eines "
+"eingehenden SPA-Pakets verwendet wird, das vom fwknop-Client mit Rijndael-"
+"Blockchiffre verschlüsselt wurde, sowie den HMAC-"
+"Authentifizierungsschlüssel, der zur Überprüfung der Authentizität des "
+"eingehenden SPA-Pakets vor der Entschlüsselung des Pakets verwendet wird."
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
@@ -158,15 +175,15 @@ msgstr "Gewähre UCI Zugriff auf luci-app-fwknopd"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:571
 msgid "HMAC key type"
-msgstr ""
+msgstr "HMAC-Schlüsseltyp"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:549
 msgid "Key type"
-msgstr ""
+msgstr "Schlüsseltyp"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:178
 msgid "Loading…"
-msgstr ""
+msgstr "Laden…"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:600
 msgid ""
@@ -178,15 +195,16 @@ msgstr ""
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
 msgid "Network"
-msgstr ""
+msgstr "Netzwerk"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:492
 msgid "Network configuration"
-msgstr ""
+msgstr "Netzwerkkonfiguration"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:315
+#, fuzzy
 msgid "No stanza found."
-msgstr ""
+msgstr "Keine Stanza gefunden."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:440
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:457
@@ -196,20 +214,25 @@ msgid "Normal key"
 msgstr "Normal-Schlüssel"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
+#, fuzzy
 msgid ""
 "Parses the /etc/fwknop/access.conf file (and included files/folders/keys) "
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
+"Analysiert die Datei /etc/fwknop/access.conf (und eingebundene Dateien/"
+"Ordner/Schlüssel) und erzeugt QR-Codes für alle gefundenen Stanzas. "
+"Bearbeitet aufgrund von Zugriffsrechtsbeschränkungen nur Dateien im Ordner /"
+"etc/fwknop."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:422
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:506
 msgid "QR code"
-msgstr ""
+msgstr "QR-Code"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:489
 msgid "Show access.conf QR codes"
-msgstr ""
+msgstr "QR-Codes der access.conf anzeigen"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:601
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
@@ -222,7 +245,7 @@ msgstr ""
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:559
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:568
 msgid "The HMAC authentication key has to be specified."
-msgstr ""
+msgstr "Der HMAC-Authentifizierungsschlüssel muss angegeben werden."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:517
 msgid ""
@@ -232,6 +255,12 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Die Zieladresse, für die das SPA-Paket akzeptiert werden soll. Die "
+"Zeichenkette \"ANY\" wird ebenfalls akzeptiert, wenn ein gültiges SPA-Paket "
+"für eine beliebige Ziel-IP-Adresse angenommen werden soll. Netzwerke sollten "
+"in CIDR-Notation angegeben werden (z. B. \"192.168.10.0/24\"), es können "
+"aber auch einzelne IP-Adressen angegeben werden. Mehrere Einträge sind durch "
+"Komma zu trennen."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
 msgid ""
@@ -239,6 +268,9 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
+"Das Netzwerk, auf dem der Daemon lauscht. Der Daemon wird automatisch "
+"gestartet, wenn das Netzwerk in Betrieb ist. Diese Option hat Vorrang vor "
+"der Option \"PCAP_INTF\"."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:508
 msgid ""
@@ -248,17 +280,23 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Die Quelladresse, von der das SPA-Paket akzeptiert werden soll. Die "
+"Zeichenfolge \"ANY\" wird ebenfalls akzeptiert, wenn ein gültiges SPA-Paket "
+"von einer beliebigen Quell-IP-Adresse akzeptiert werden soll. Netzwerke "
+"sollten in CIDR-Notation angegeben werden (z. B. \"192.168.10.0/24\"), es "
+"können aber auch einzelne IP-Adressen angegeben werden. Mehrere Einträge "
+"sind durch Komma zu trennen."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:514
 msgid "The source address has to be specified."
-msgstr ""
+msgstr "Die Quelladresse muss angegeben werden."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:430
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:537
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:546
 msgid "The symmetric key has to be specified."
-msgstr ""
+msgstr "Der symmetrische Schlüssel muss angegeben werden."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
 msgid ""
@@ -267,6 +305,11 @@ msgid ""
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
+"Dies weist fwknopd an, vollständige Befehle zu akzeptieren, die in einem "
+"Autorisierungspaket enthalten sind. Jeder dieser Befehle wird auf dem "
+"fwknopd-Server als der durch \"CMD_EXEC_USER\" angegebene Benutzer "
+"ausgeführt oder, wenn dieser nicht festgelegt ist, als der Benutzer, der "
+"fwknopd gestartet hat."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
 msgid ""

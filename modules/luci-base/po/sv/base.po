@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-12-19 22:52+0000\n"
+"PO-Revision-Date: 2022-04-25 11:11+0000\n"
 "Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/luci/sv/"
 ">\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10\n"
+"X-Generator: Weblate 4.12.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1513
 msgid "%.1f dB"
@@ -341,7 +341,7 @@ msgstr "ARP-övervakning stöds inte för den valda policyn!"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid "ARP retry threshold"
-msgstr ""
+msgstr "ARP-tröskel för nya försök"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1501
 msgid "ATM (Asynchronous Transfer Mode)"
@@ -512,7 +512,7 @@ msgstr "Lägg till ett nytt gränssnitt..."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:120
 msgid "Add peer"
-msgstr ""
+msgstr "Lägg till en jämlike"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:326
 msgid "Add to Blacklist"
@@ -597,7 +597,7 @@ msgstr ""
 msgid "Aggregator: Slave added/removed or state changes (bandwidth, 1)"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:191
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "Alert"
 msgstr "Varning"
 
@@ -702,6 +702,8 @@ msgid ""
 "Always use 40MHz channels even if the secondary channel overlaps. Using this "
 "option does not comply with IEEE 802.11n-2009!"
 msgstr ""
+"Använd alltid 40 MHz-kanaler även om den sekundära kanalen överlappar. Att "
+"använda detta alternativ överensstämmer inte med IEEE 802.11n-2009!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
 msgid "Amount of Duplicate Address Detection probes to send"
@@ -709,9 +711,9 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:604
 msgid "An error occurred while saving the form:"
-msgstr ""
+msgstr "Ett fel inträffade när formuläret skulle sparas:"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:138
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:139
 msgid "An optional, short description for this device"
 msgstr "En valfri, kort beskrivning för den här enheten"
 
@@ -785,12 +787,16 @@ msgid ""
 "Announce this device as default router if a local IPv6 default route is "
 "present."
 msgstr ""
+"Tillkännage den här enheten som en standard-router om en lokal standard-rutt "
+"för IPv6 är närvarande."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:779
 msgid ""
 "Announce this device as default router if a public IPv6 prefix is available, "
 "regardless of local default route availability."
 msgstr ""
+"Tillkännage den här enheten som en standard-router om en publik IPv6-prefix "
+"är tillgänglig oavsett tillgänglighet för standardrutt."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:781
 msgid ""
@@ -850,6 +856,8 @@ msgstr "Arkitektur"
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
 msgstr ""
+"Tilldela en del av en given längd av varje offentligt IPv6-prefix till det "
+"här gränssnittet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:978
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
@@ -869,6 +877,7 @@ msgstr "Associationer"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:154
 msgid "Attempt to enable configured mount points for attached devices"
 msgstr ""
+"Försök att aktivera konfigurerade monteringspunkter för anslutna enheter"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:110
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:64
@@ -1017,6 +1026,10 @@ msgid ""
 "defined backup patterns."
 msgstr ""
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:286
+msgid "Bind NTP server"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:484
 msgid ""
 "Bind dynamically to interfaces rather than wildcard address (recommended as "
@@ -1043,7 +1056,7 @@ msgstr "Bind gränssnitt"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:57
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:52
 msgid "Bind the tunnel to this interface (optional)."
-msgstr ""
+msgstr "Bind tunneln till det här gränssnittet (valfritt)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:129
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:188
@@ -1067,12 +1080,12 @@ msgstr "Brygga"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:437
 msgctxt "MACVLAN mode"
 msgid "Bridge (Support direct communication between MAC VLANs)"
-msgstr ""
+msgstr "Brygga (Stötta direktkommunikation mellan MAC-VLAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:339
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:481
 msgid "Bridge VLAN filtering"
-msgstr ""
+msgstr "VLAN-filtrering för brygga"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:344
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1397
@@ -1082,15 +1095,15 @@ msgstr "Bryggenhet"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:338
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:480
 msgid "Bridge port specific options"
-msgstr ""
+msgstr "Port-specifika alternativ för brygga"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:468
 msgid "Bridge ports"
-msgstr ""
+msgstr "Portar för brygga"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1562
 msgid "Bridge unit number"
-msgstr ""
+msgstr "Enhetsnummer för brygga"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:504
 msgid "Bring up empty bridge"
@@ -1098,7 +1111,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:575
 msgid "Bring up on boot"
-msgstr ""
+msgstr "Slå på vid uppstart"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:504
 msgid "Bring up the bridge interface even if no ports are attached"
@@ -1404,8 +1417,8 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:764
 msgid ""
-"Configures the operation mode of the <abbr title=\"Router Advertisement"
-"\">RA</abbr> service on this interface."
+"Configures the operation mode of the <abbr title=\"Router "
+"Advertisement\">RA</abbr> service on this interface."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:872
@@ -1503,11 +1516,11 @@ msgstr ""
 msgid "Create interface"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:190
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:191
 msgid "Critical"
 msgstr "Kritisk"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:194
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:195
 msgid "Cron Log Level"
 msgstr "Loggnivå för Cron"
 
@@ -1536,8 +1549,8 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:59
 msgid ""
-"Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
-"\">LED</abbr>s if possible."
+"Customizes the behaviour of the device <abbr title=\"Light Emitting "
+"Diode\">LED</abbr>s if possible."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
@@ -1650,8 +1663,8 @@ msgstr "DUID"
 msgid "Data Rate"
 msgstr "Datahastighet"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:196
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:186
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
 msgid "Debug"
 msgstr "Felsökning"
 
@@ -1721,7 +1734,7 @@ msgid "Delivery Traffic Indication Message Interval"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:342
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:138
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:139
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:129
 msgid "Description"
 msgstr "Beskrivning"
@@ -1730,7 +1743,7 @@ msgstr "Beskrivning"
 msgid "Deselect"
 msgstr "Avmarkera"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:235
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:236
 msgid "Design"
 msgstr ""
 
@@ -1915,9 +1928,9 @@ msgstr "Avstånd till nätverksmedlemmen längst bort i metrar."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:244
 msgid ""
-"Dnsmasq is a combined <abbr title=\"Dynamic Host Configuration Protocol"
-"\">DHCP</abbr>-Server and <abbr title=\"Domain Name System\">DNS</abbr>-"
-"Forwarder for <abbr title=\"Network Address Translation\">NAT</abbr> "
+"Dnsmasq is a combined <abbr title=\"Dynamic Host Configuration "
+"Protocol\">DHCP</abbr>-Server and <abbr title=\"Domain Name System\">DNS</"
+"abbr>-Forwarder for <abbr title=\"Network Address Translation\">NAT</abbr> "
 "firewalls"
 msgstr ""
 
@@ -2109,7 +2122,7 @@ msgctxt "VLAN port state"
 msgid "Egress untagged"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:193
 msgid "Emergency"
 msgstr "Nödsituation"
 
@@ -2171,7 +2184,7 @@ msgstr ""
 msgid "Enable MAC address learning"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:255
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:256
 msgid "Enable NTP client"
 msgstr "Aktivera NTP-klient"
 
@@ -2350,7 +2363,7 @@ msgstr "Raderar..."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:105
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:106
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:107
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:189
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:190
 msgid "Error"
 msgstr "Fel"
 
@@ -2442,15 +2455,15 @@ msgstr ""
 msgid "External R1 Key Holder List"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:166
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:167
 msgid "External system log server"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:171
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:172
 msgid "External system log server port"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:176
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:177
 msgid "External system log server protocol"
 msgstr ""
 
@@ -2650,10 +2663,10 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:912
 msgid ""
-"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr title="
-"\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr title=\"Neighbour "
-"Advertisement, Type 136\">NA</abbr> messages between the designated master "
-"interface and downstream interfaces."
+"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr "
+"title=\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr "
+"title=\"Neighbour Advertisement, Type 136\">NA</abbr> messages between the "
+"designated master interface and downstream interfaces."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:770
@@ -2751,7 +2764,7 @@ msgstr "Ogiltig Gateway-adress"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:477
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:25
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:240
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:121
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:122
 msgid "General Settings"
 msgstr "Generella inställningar"
 
@@ -2932,7 +2945,7 @@ msgstr ""
 msgid "Hello interval"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:113
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:114
 msgid ""
 "Here you can configure the basic aspects of your device like its hostname or "
 "the timezone."
@@ -2981,7 +2994,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/hosts.js:27
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:54
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:87
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:134
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:135
 msgid "Hostname"
 msgstr "Värdnamn"
 
@@ -3292,10 +3305,10 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:339
 msgid ""
 "If your physical memory is insufficient unused data can be temporarily "
-"swapped to a swap-device resulting in a higher amount of usable <abbr title="
-"\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a very "
-"slow process as the swap-device cannot be accessed with the high datarates "
-"of the <abbr title=\"Random Access Memory\">RAM</abbr>."
+"swapped to a swap-device resulting in a higher amount of usable <abbr "
+"title=\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a "
+"very slow process as the swap-device cannot be accessed with the high "
+"datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:286
@@ -3372,7 +3385,7 @@ msgstr ""
 msgid "Incoming serialization"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:186
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:187
 msgid "Info"
 msgstr "Info"
 
@@ -3688,11 +3701,11 @@ msgstr "LLC"
 msgid "Label"
 msgstr "Märke"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:224
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:225
 msgid "Language"
 msgstr "Språk"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:124
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:125
 msgid "Language and Style"
 msgstr "Språk och Stil"
 
@@ -3922,7 +3935,7 @@ msgid "Local Startup"
 msgstr "Lokal uppstart"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:60
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:130
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:131
 msgid "Local Time"
 msgstr "Lokal tid"
 
@@ -3962,7 +3975,7 @@ msgstr "Lokalisera förfrågningar"
 msgid "Lock to BSSID"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:184
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
 msgid "Log output level"
 msgstr ""
 
@@ -3970,7 +3983,7 @@ msgstr ""
 msgid "Log queries"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:122
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
 msgid "Logging"
 msgstr "Loggning"
 
@@ -4429,7 +4442,7 @@ msgstr ""
 msgid "NT Domain"
 msgstr "NT-domän"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:289
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:299
 msgid "NTP server candidates"
 msgstr "NTP-serverkandidater"
 
@@ -4662,7 +4675,7 @@ msgid "None"
 msgstr "Ingen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:955
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:198
 msgid "Normal"
 msgstr "Normal"
 
@@ -4700,11 +4713,11 @@ msgid ""
 "have problems"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:141
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Notes"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:187
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:188
 msgid "Notice"
 msgstr "Avisering"
 
@@ -4853,7 +4866,7 @@ msgstr "Alternativet togs bort"
 msgid "Optional"
 msgstr "Valfri"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:141
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Optional, free-form notes about this device"
 msgstr ""
 
@@ -5436,7 +5449,7 @@ msgstr "Prot."
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:280
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:281
 msgid "Provide NTP server"
 msgstr ""
 
@@ -5448,6 +5461,12 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:883
 msgid "Provide new network"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:287
+msgid ""
+"Provide the NTP server to the selected interface or, if unspecified, to all "
+"interfaces"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1077
@@ -6217,7 +6236,7 @@ msgstr "Storlek"
 msgid "Size of DNS query cache"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:207
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:208
 msgid "Size of the ZRam device in megabytes"
 msgstr ""
 
@@ -6679,17 +6698,17 @@ msgstr ""
 msgid "Symbolic link"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:88
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:89
 msgid "Sync with NTP-Server"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:80
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:81
 msgid "Sync with browser"
 msgstr "Synkronisera med webbläsare"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:26
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:17
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:112
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:113
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:3
 msgid "System"
 msgstr "System"
@@ -6703,11 +6722,11 @@ msgstr "Systemlogg"
 msgid "System Priority"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:117
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:118
 msgid "System Properties"
 msgstr "Systemets egenskaper"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:161
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:162
 msgid "System log buffer size"
 msgstr ""
 
@@ -6997,8 +7016,8 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:139
 msgid ""
-"The network ports on this device can be combined to several <abbr title="
-"\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
+"The network ports on this device can be combined to several <abbr "
+"title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
 "communicate directly with each other. <abbr title=\"Virtual Local Area "
 "Network\">VLAN</abbr>s are often used to separate different network "
 "segments. Often there is by default one Uplink port for a connection to the "
@@ -7196,7 +7215,7 @@ msgstr ""
 msgid "This section contains no values yet"
 msgstr "Den här sektionen innehåller inga värden ännu"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:124
 msgid "Time Synchronization"
 msgstr "Synkronisering av tid"
 
@@ -7228,7 +7247,7 @@ msgstr ""
 msgid "Timeout in seconds until topology updates on link loss"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:144
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:145
 msgid "Timezone"
 msgstr "Tidszon"
 
@@ -7543,7 +7562,7 @@ msgstr "Upptid"
 msgid "Use <code>/etc/ethers</code>"
 msgstr "Använd <code>/etc/ethers</code>"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:284
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:294
 msgid "Use DHCP advertised servers"
 msgstr ""
 
@@ -7866,8 +7885,8 @@ msgstr ""
 msgid "Waiting for device..."
 msgstr "Väntar på enhet..."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:188
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:198
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:189
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 msgid "Warning"
 msgstr "Varning"
 
@@ -7969,7 +7988,7 @@ msgstr "Trådlöst nätverk är aktiverat"
 msgid "Write received DNS requests to syslog"
 msgstr "Skriv mottagna DNS-förfrågningar till syslogg"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:180
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:181
 msgid "Write system log to file"
 msgstr "Skriv systemlogg till fil"
 
@@ -8020,15 +8039,15 @@ msgid ""
 "You must select at least one ARP IP target if ARP monitoring is selected!"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:212
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:213
 msgid "ZRam Compression Algorithm"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:205
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:206
 msgid "ZRam Settings"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:207
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:208
 msgid "ZRam Size"
 msgstr ""
 
@@ -8120,7 +8139,7 @@ msgstr "inaktivera"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:91
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:25
 msgid "disabled"
-msgstr "inaktiverad"
+msgstr "avstängd"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:577
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:611
