@@ -2273,10 +2273,7 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 	/** @private */
 	renderSectionPlaceholder: function() {
-		return E([
-			E('em', _('This section contains no values yet')),
-			E('br'), E('br')
-		]);
+		return E('em', _('This section contains no values yet'));
 	},
 
 	/** @private */
