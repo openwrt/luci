@@ -3754,7 +3754,7 @@ var CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */ {
 
 		if (!in_table && typeof(this.description) === 'string' && this.description !== '')
 			dom.append(optionEl.lastChild || optionEl,
-				E('div', { 'class': 'cbi-value-description' }, this.description));
+				E('div', { 'class': 'cbi-value-description' }, this.description.trim()));
 
 		if (depend_list && depend_list.length)
 			optionEl.classList.add('hidden');
