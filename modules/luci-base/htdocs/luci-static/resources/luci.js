@@ -2183,7 +2183,7 @@
 			}).render() : E([]);
 
 			if (this.handleSaveApply || this.handleSave || this.handleReset) {
-				footer.appendChild(E('div', { 'class': 'cbi-page-actions control-group' }, [
+				footer.appendChild(E('div', { 'class': 'cbi-page-actions' }, [
 					saveApplyBtn, ' ',
 					this.handleSave ? E('button', {
 						'class': 'cbi-button cbi-button-save',
