@@ -3150,6 +3150,60 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	},
 
 	/** @private */
+	cloneOptions: function(src_section, dest_section) {
+		for (var i = 0; i < src_section.children.length; i++) {
+			var o1 = src_section.children[i];
+
+			if (o1.modalonly === false && src_section === this)
+				continue;
+
+			var o2;
+
+			if (o1.subsection) {
+				o2 = dest_section.option(o1.constructor, o1.option, o1.subsection.constructor, o1.subsection.sectiontype, o1.subsection.title, o1.subsection.description);
+
+				for (var k in o1.subsection) {
+					if (!o1.subsection.hasOwnProperty(k))
+						continue;
+
+					switch (k) {
+					case 'map':
+					case 'children':
+					case 'parentoption':
+						continue;
+
+					default:
+						o2.subsection[k] = o1.subsection[k];
+					}
+				}
+
+				this.cloneOptions(o1.subsection, o2.subsection);
+			}
+			else {
+				o2 = dest_section.option(o1.constructor, o1.option, o1.title, o1.description);
+			}
+
+			for (var k in o1) {
+				if (!o1.hasOwnProperty(k))
+					continue;
+
+				switch (k) {
+				case 'map':
+				case 'section':
+				case 'option':
+				case 'title':
+				case 'description':
+				case 'subsection':
+					continue;
+
+				default:
+					o2[k] = o1[k];
+				}
+			}
+		}
+	},
+
+	/** @private */
 	renderMoreOptionsModal: function(section_id, ev) {
 		var parent = this.map,
 		    title = parent.title,
@@ -3171,31 +3225,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		else if (!this.anonymous)
 			title = '%s - %s'.format(parent.title, section_id);
 
-		for (var i = 0; i < this.children.length; i++) {
-			var o1 = this.children[i];
-
-			if (o1.modalonly === false)
-				continue;
-
-			var o2 = s.option(o1.constructor, o1.option, o1.title, o1.description);
-
-			for (var k in o1) {
-				if (!o1.hasOwnProperty(k))
-					continue;
-
-				switch (k) {
-				case 'map':
-				case 'section':
-				case 'option':
-				case 'title':
-				case 'description':
-					continue;
-
-				default:
-					o2[k] = o1[k];
-				}
-			}
-		}
+		this.cloneOptions(this, s);
 
 		return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
 			var mapNode = this.getActiveModalMap(),
