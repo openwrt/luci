@@ -3206,63 +3206,70 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	/** @private */
 	renderMoreOptionsModal: function(section_id, ev) {
 		var parent = this.map,
-		    title = parent.title,
-		    name = null,
-		    m = new CBIMap(this.map.config, null, null),
-		    s = m.section(CBINamedSection, section_id, this.sectiontype);
+		    sref = parent.data.get(parent.config, section_id),
+		    mapNode = this.getActiveModalMap(),
+		    activeMap = mapNode ? dom.findClassInstance(mapNode) : null,
+		    stackedMap = activeMap && (activeMap.parent !== parent || activeMap.section !== section_id);
 
-		m.parent = parent;
-		m.section = section_id;
-		m.readonly = parent.readonly;
+		return (stackedMap ? activeMap.save(null, true) : Promise.resolve()).then(L.bind(function() {
+			section_id = sref['.name'];
 
-		s.tabs = this.tabs;
-		s.tab_names = this.tab_names;
+			var m = new CBIMap(parent.config, null, null),
+			    s = m.section(CBINamedSection, section_id, this.sectiontype);
 
-		if ((name = this.titleFn('modaltitle', section_id)) != null)
-			title = name;
-		else if ((name = this.titleFn('sectiontitle', section_id)) != null)
-			title = '%s - %s'.format(parent.title, name);
-		else if (!this.anonymous)
-			title = '%s - %s'.format(parent.title, section_id);
+			m.parent = parent;
+			m.section = section_id;
+			m.readonly = parent.readonly;
 
-		this.cloneOptions(this, s);
+			s.tabs = this.tabs;
+			s.tab_names = this.tab_names;
 
-		return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(L.bind(m.render, m)).then(L.bind(function(nodes) {
-			var mapNode = this.getActiveModalMap(),
-			    activeMap = mapNode ? dom.findClassInstance(mapNode) : null;
+			this.cloneOptions(this, s);
 
-			if (activeMap && (activeMap.parent !== parent || activeMap.section !== section_id)) {
-				mapNode.parentNode
-					.querySelector('h4')
-					.appendChild(E('span', title ? ' » ' + title : ''));
+			return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(function() {
+				return m.render();
+			}).then(L.bind(function(nodes) {
+				var title = parent.title,
+				    name = null;
 
-				mapNode.parentNode
-					.querySelector('div.right > button')
-					.firstChild.data = _('Back');
+				if ((name = this.titleFn('modaltitle', section_id)) != null)
+					title = name;
+				else if ((name = this.titleFn('sectiontitle', section_id)) != null)
+					title = '%s - %s'.format(parent.title, name);
+				else if (!this.anonymous)
+					title = '%s - %s'.format(parent.title, section_id);
 
-				mapNode.classList.add('hidden');
-				mapNode.parentNode.insertBefore(nodes, mapNode.nextElementSibling);
+				if (stackedMap) {
+					mapNode.parentNode
+						.querySelector('h4')
+						.appendChild(E('span', title ? ' » ' + title : ''));
 
-				return activeMap.save(null, true).then(function() {
+					mapNode.parentNode
+						.querySelector('div.right > button')
+						.firstChild.data = _('Back');
+
+					mapNode.classList.add('hidden');
+					mapNode.parentNode.insertBefore(nodes, mapNode.nextElementSibling);
+
 					nodes.classList.add('flash');
-				}, function() {});
-			}
-			else {
-				ui.showModal(title, [
-					nodes,
-					E('div', { 'class': 'right' }, [
-						E('button', {
-							'class': 'cbi-button',
-							'click': ui.createHandlerFn(this, 'handleModalCancel', m)
-						}, [ _('Dismiss') ]), ' ',
-						E('button', {
-							'class': 'cbi-button cbi-button-positive important',
-							'click': ui.createHandlerFn(this, 'handleModalSave', m),
-							'disabled': m.readonly || null
-						}, [ _('Save') ])
-					])
-				], 'cbi-modal');
-			}
+				}
+				else {
+					ui.showModal(title, [
+						nodes,
+						E('div', { 'class': 'right' }, [
+							E('button', {
+								'class': 'cbi-button',
+								'click': ui.createHandlerFn(this, 'handleModalCancel', m)
+							}, [ _('Dismiss') ]), ' ',
+							E('button', {
+								'class': 'cbi-button cbi-button-positive important',
+								'click': ui.createHandlerFn(this, 'handleModalSave', m),
+								'disabled': m.readonly || null
+							}, [ _('Save') ])
+						])
+					], 'cbi-modal');
+				}
+			}, this));
 		}, this)).catch(L.error);
 	}
 });
