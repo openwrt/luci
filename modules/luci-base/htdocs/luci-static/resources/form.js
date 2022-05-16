@@ -2583,8 +2583,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 		if (nodes.length == 0)
 			tableEl.appendChild(E('tr', { 'class': 'tr cbi-section-table-row placeholder' },
-				E('td', { 'class': 'td' },
-					E('em', {}, _('This section contains no values yet')))));
+				E('td', { 'class': 'td' }, this.renderSectionPlaceholder())));
 
 		sectionEl.appendChild(tableEl);
 
