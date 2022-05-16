@@ -2994,10 +2994,20 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 	/** @private */
 	handleModalCancel: function(modalMap, ev) {
-		var prevNode = this.getPreviousModalMap();
+		var prevNode = this.getPreviousModalMap(),
+		    resetTasks = Promise.resolve();
 
 		if (prevNode) {
-			var heading = prevNode.parentNode.querySelector('h4');
+			var heading = prevNode.parentNode.querySelector('h4'),
+			    prevMap = dom.findClassInstance(prevNode);
+
+			while (prevMap) {
+				resetTasks = resetTasks
+					.then(L.bind(prevMap.load, prevMap))
+					.then(L.bind(prevMap.reset, prevMap));
+
+				prevMap = prevMap.parent;
+			}
 
 			prevNode.classList.add('flash');
 			prevNode.classList.remove('hidden');
@@ -3014,7 +3024,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			ui.hideModal();
 		}
 
-		return Promise.resolve();
+		return resetTasks;
 	},
 
 	/** @private */
