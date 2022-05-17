@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Support for the batman-adv protocol
-LUCI_DEPENDS:=+kmod-batman-adv
+LUCI_DEPENDS:=+batman-adv
 
 include ../../luci.mk
 
