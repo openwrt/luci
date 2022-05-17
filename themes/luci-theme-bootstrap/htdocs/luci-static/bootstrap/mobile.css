@@ -3,6 +3,10 @@ header h3 a, header .brand {
 }
 
 @media screen and (max-device-width: 600px) {
+	.modal {
+		margin: 1.5em auto;
+	}
+
 	.tabs, .cbi-tabmenu {
 		background: linear-gradient(var(--background-color-high) 20%, var(--border-color-medium) 100%);
 		background-size: 1px 34px;
@@ -37,7 +41,7 @@ header h3 a, header .brand {
 	.table .th,
 	.table .td,
 	.table .tr::before {
-		flex: 2 2 33%;
+		flex: 1 1 50%;
 		align-self: flex-start;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -75,6 +79,8 @@ header h3 a, header .brand {
 
 	.td.cbi-value-field {
 		align-self: flex-start;
+		flex-basis: 100%;
+		margin-bottom: .3em;
 	}
 
 	.td.cbi-value-field .cbi-button {
@@ -112,7 +118,15 @@ header h3 a, header .brand {
 		border-bottom: 1px solid var(--border-color-medium);
 	}
 
-	.td[data-title]::before,
+	.td[data-title]::before {
+		content: attr(data-title);
+		font-weight: bold;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: pre-line;
+	}
+
 	.td[data-description]::after {
 		display: block;
 	}
@@ -121,15 +135,11 @@ header h3 a, header .brand {
 		align-self: flex-start;
 	}
 
-	.td[data-title] ~ .td.cbi-section-actions::before {
-		display: block;
-		content: "\a0";
-	}
-
 	.td.cbi-section-actions {
 		overflow: initial;
 		max-width: 100%;
 		padding: 3px 2px;
+		flex-basis: 100%;
 	}
 
 	.hide-sm,
@@ -137,17 +147,13 @@ header h3 a, header .brand {
 		display: none !important;
 	}
 
-	.td.cbi-value-field {
-		flex-basis: 100%;
-	}
-
-	.td.cbi-value-field[data-widget="dvalue"] {
-		flex-basis: 50%;
-	}
-
+	.td.cbi-value-field[data-widget="CBI.DummyValue"],
+	.td.cbi-value-field[data-widget="CBI.Button"],
+	.td.cbi-value-field[data-widget="CBI.FlagValue"],
+	.td.cbi-value-field[data-widget="dvalue"],
 	.td.cbi-value-field[data-widget="button"],
 	.td.cbi-value-field[data-widget="fvalue"] {
-		flex-basis: 25%;
+		flex-basis: 50%;
 		text-align: left;
 	}
 
@@ -155,6 +161,10 @@ header h3 a, header .brand {
 	.cbi-section-table .tr:hover .th,
 	.cbi-section-table .tr:hover::before {
 		background-color: transparent;
+	}
+
+	.cbi-tab-descr {
+		margin: 0 0 .5em 0;
 	}
 
 	.cbi-value {
@@ -178,9 +188,15 @@ header h3 a, header .brand {
 		font-weight: bold;
 	}
 
-	.cbi-value-field, .cbi-select, .cbi-dropdown:not(.btn):not(.cbi-button) {
+	.cbi-value-field, .cbi-select, .cbi-dynlist, .cbi-dropdown:not(.btn):not(.cbi-button) {
 		width: 100%;
 		margin: 0;
+	}
+
+	.cbi-dynlist > .item {
+		min-height: 30px;
+		display: flex;
+		align-items: center;
 	}
 
 	input, textarea, select,
@@ -194,7 +210,8 @@ header h3 a, header .brand {
 	}
 
 	select, input[type="text"], input[type="password"],
-	.cbi-dropdown > ul > li input[type="text"] {
+	.cbi-dropdown > ul > li input[type="text"],
+	.cbi-value-field .control-group {
 		width: 100%;
 		height: 30px;
 	}
@@ -203,25 +220,9 @@ header h3 a, header .brand {
 		width: calc(100% - 25px);
 	}
 
-	[data-dynlist] {
-		display: block;
-	}
-
-	[data-dynlist] > .add-item > input {
-		width: calc(100% - 21px);
-	}
-
-	[data-dynlist] > .add-item > .cbi-button {
-		margin-right: -1px;
-	}
-
 	input[type="text"] + .cbi-button,
 	input[type="password"] + .cbi-button,
 	select + .cbi-button {
-		font-size: 14px !important;
-		line-height:  28px;
-		height: 30px;
-		box-sizing: border-box;
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
@@ -243,9 +244,8 @@ header h3 a, header .brand {
 		padding: 8px;
 	}
 
-	[data-page="admin-status-overview"] .cbi-section:nth-of-type(1) .td:first-child,
-	[data-page="admin-status-overview"] .cbi-section:nth-of-type(2) .td:first-child {
-		flex-grow: 1;
+	[data-page="admin-status-overview"] .td[width="33%"] {
+		flex-basis: 33%;
 	}
 
 	header .pull-right .label {
@@ -300,14 +300,6 @@ header h3 a, header .brand {
 		flex-basis: 12%;
 	}
 
-	#cbi-network-switch_vlan .td.cbi-section-actions {
-		flex-basis: 100%;
-	}
-
-	#cbi-network-switch_vlan .td.cbi-section-actions::before {
-		display: none;
-	}
-
 	#cbi-network-switch_vlan .td.cbi-section-actions > * {
 		width: auto;
 		display: block;
@@ -343,6 +335,14 @@ header h3 a, header .brand {
 
 	[data-name="bridge-vlan"] .td[data-title]::before {
 		content: attr(data-title);
+	}
+
+	[data-page="admin-network-network"] .td[data-name="_ifacebox"] {
+		flex-basis: 40%;
+	}
+
+	[data-page="admin-network-network"] .td[data-name="_ifacestat"] {
+		flex-basis: 60%;
 	}
 }
 
@@ -396,9 +396,12 @@ header h3 a, header .brand {
 	body[data-page="admin-network-wireless"] .td.cbi-section-actions::before {
 		content: none !important;
 	}
-}
 
-@media screen and (max-width: 375px) {
+	[data-page="admin-network-network"] .td[data-name="_ifacebox"],
+	[data-page="admin-network-network"] .td[data-name="_ifacestat"] {
+		flex-basis: 100%;
+	}
+
 	.td .ifacebox {
 		width: 100%;
 		margin: 0 !important;

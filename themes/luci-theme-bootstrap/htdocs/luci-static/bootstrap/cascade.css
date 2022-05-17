@@ -257,6 +257,18 @@ textarea {
 	vertical-align: top;
 }
 
+.control-group {
+	display: inline-flex;
+	gap: .2em;
+}
+
+.control-group > input + :not(input):not(select),
+.control-group > select + :not(input):not(select) {
+	margin-left: calc(-.2em + -2px);
+	border-radius: 0 3px 3px 0;
+	padding: 0 6px;
+}
+
 /*
  * Scaffolding
  * Basic and global styles for generating a grid system, structural layout, and page templates
@@ -602,7 +614,7 @@ select,
 	margin-bottom: 4px;
 	box-shadow: 0 0 2px var(--border-color-high);
 	background: var(--background-color-high);
-	padding: 2px 2em 2px 4px;
+	padding: 6px 2em 6px 4px;
 	border: 1px solid var(--border-color-high);
 	border-radius: 3px;
 	color: var(--text-color-high);
@@ -1709,25 +1721,6 @@ body.modal-overlay-active #modal_overlay {
 	width: 100%;
 }
 
-input[type="text"] + .cbi-button,
-input[type="password"] + .cbi-button,
-select + .cbi-button,
-.cbi-select + .cbi-button {
-	border-radius: 0 3px 3px 0;
-	border-color: var(--border-color-high);
-	margin-left: -2px;
-	padding: 0 6px;
-	vertical-align: top;
-	height: 30px;
-	font-size: 14px;
-	line-height: 28px;
-}
-
-select + .cbi-button,
-.cbi-select + .cbi-button {
-	position: relative;
-}
-
 .cbi-title-ref {
 	color: #37c;
 }
@@ -2543,4 +2536,8 @@ div.cbi-value var.cbi-tooltip-container,
 
 [data-darkmode="true"] [data-page="admin-statistics-graphs"] [data-plugin] img {
 	filter: invert(100%) hue-rotate(150deg);
+}
+
+[data-page="admin-system-admin-sshkeys"] .cbi-dynlist {
+	max-width: none;
 }
