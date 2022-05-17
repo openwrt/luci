@@ -2208,7 +2208,7 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 			'id': this.options.id,
 			'class': 'cbi-dynlist',
 			'disabled': this.options.disabled ? '' : null
-		}, E('div', { 'class': 'add-item' }));
+		}, E('div', { 'class': 'add-item control-group' }));
 
 		if (this.choices) {
 			if (this.options.placeholder != null)
@@ -4654,7 +4654,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							E('button', {
 								'class': 'btn cbi-button-action important',
 								'click': resolveFn.bind(null, true)
-							}, [ _('Apply and revert on connectivity loss') ]), ' ',
+							}, [ _('Apply with revert after connectivity loss') ]), ' ',
 							E('button', {
 								'class': 'btn cbi-button-negative important',
 								'click': resolveFn.bind(null, false)
