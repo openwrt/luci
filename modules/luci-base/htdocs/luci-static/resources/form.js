@@ -287,9 +287,13 @@ var CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement.p
 		if (typeof(s) == 'string' && !s.match(/[<>]/))
 			return s;
 
-		var x = dom.parse('<div>' + s + '</div>');
+		var x = dom.elem(s) ? s : dom.parse('<div>' + s + '</div>');
 
-		return x.textContent || x.innerText || '';
+		x.querySelectorAll('br').forEach(function(br) {
+			x.replaceChild(document.createTextNode('\n'), br);
+		});
+
+		return (x.textContent || x.innerText || '').replace(/([ \t]*\n)+/g, '\n');
 	},
 
 	/**
@@ -3412,7 +3416,7 @@ var CBIGridSection = CBITableSection.extend(/** @lends LuCI.form.GridSection.pro
 			'data-title': (title != '') ? title : null,
 			'data-description': (descr != '') ? descr : null,
 			'data-name': opt.option,
-			'data-widget': opt.typename || opt.__name__
+			'data-widget': 'CBI.DummyValue'
 		}, (value != null) ? value : E('em', _('none')));
 	},
 
