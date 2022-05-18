@@ -231,10 +231,9 @@ ta.datatype = "host(1)"
 
 
 v = s:option(Value, "via", translate("Via proxy"),
-	translate("Specifies the upstream proxy to use for accessing the target host. Format is <code>address:port</code>"))
+	translate("Specifies the upstream proxy to use for accessing the target host. Format is <code>address:port</code> or <code>socks5 address:port</code>"))
 
 v:depends({type="proxy"})
 v.placeholder = "10.0.0.1:8080"
-v.datatype = "ip4addrport"
 
 return m
