@@ -1450,7 +1450,7 @@ return view.extend({
 			    mac = dev ? dev.getMAC() : null;
 
 			return val ? E('strong', {
-				'data-tooltip': _('The value is overridden by configuration. Original: %s').format(mac || _('unknown'))
+				'data-tooltip': _('The value is overridden by configuration.')
 			}, [ val.toUpperCase() ]) : (mac || '-');
 		};
 
@@ -1462,7 +1462,7 @@ return view.extend({
 			    mtu = dev ? dev.getMTU() : null;
 
 			return val ? E('strong', {
-				'data-tooltip': _('The value is overridden by configuration. Original: %s').format(mtu || _('unknown'))
+				'data-tooltip': _('The value is overridden by configuration.')
 			}, [ val ]) : (mtu || '-').toString();
 		};
 
