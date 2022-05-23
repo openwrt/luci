@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "PO-Revision-Date: 2022-05-07 19:19+0000\n"
 "Last-Translator: drax red <drax@outlook.dk>\n"
-"Language-Team: Danish <https://hosted.weblate.org/projects/openwrt/luci/da/>"
-"\n"
+"Language-Team: Danish <https://hosted.weblate.org/projects/openwrt/luci/da/"
+">\n"
 "Language: da\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -275,6 +275,10 @@ msgid ""
 "internet connection in the mesh) or having the gateway support turned off "
 "entirely (which is the default setting)."
 msgstr ""
+"En batman-adv node kan enten køre i servertilstand (deler sin "
+"internetforbindelse med mesh) eller i klienttilstand (søger efter den bedst "
+"egnede internetforbindelse i mesh) eller have gateway-understøttelsen slået "
+"helt fra (som er standardindstillingen )."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:370
 msgid "A configuration for the device \"%s\" already exists"
@@ -424,7 +428,7 @@ msgstr "Access Point"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:60
 msgid "Access Point Isolation"
-msgstr ""
+msgstr "Adgangspunktsisolering"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:388
 msgid "Actions"
@@ -617,7 +621,7 @@ msgstr "Aldringstid"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:50
 msgid "Aggregate Originator Messages"
-msgstr ""
+msgstr "Aggregerede meddelelser fra afsender"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
 msgid "Aggregate Transmit Power (ACTATP)"
@@ -1052,7 +1056,7 @@ msgstr "Gennemsnit:"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:70
 msgid "Avoid Bridge Loops"
-msgstr ""
+msgstr "Undgå bro Loops"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1505
 msgid "B43 + B43C"
@@ -1116,11 +1120,11 @@ msgstr "Base64-kodet offentlig nøgle for dette interface til deling."
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:10
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:41
 msgid "Batman Device"
-msgstr ""
+msgstr "Batman-enhed"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:10
 msgid "Batman Interface"
-msgstr ""
+msgstr "Batman interface"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:81
 msgid ""
@@ -1132,6 +1136,13 @@ msgid ""
 "the other end. Per default fragmentation is enabled and inactive if the "
 "packet fits but it is possible to deactivate the fragmentation entirely."
 msgstr ""
+"Batman-adv har en indbygget lag 2-fragmentering for unicast-data, der "
+"strømmer gennem nettet, hvilket gør det muligt at køre batman-adv over "
+"grænseflader/forbindelser, der ikke tillader at øge MTU'en ud over Ethernet-"
+"standardpakke-størrelsen på 1500 bytes. Når fragmenteringen er aktiveret, "
+"vil batman-adv automatisk fragmentere for store pakker og defragmentere dem "
+"i den anden ende. Som standard er fragmenteringen aktiveret og inaktiv, hvis "
+"pakken passer, men det er muligt at deaktivere fragmenteringen helt."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:974
 msgid "Beacon Interval"
@@ -1150,7 +1161,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:287
 msgid "Bind NTP server"
-msgstr ""
+msgstr "Bind NTP server"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
 msgid "Bind dynamically to interfaces rather than wildcard address."
@@ -1186,7 +1197,7 @@ msgstr "Bitrate"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:65
 msgid "Bonding Mode"
-msgstr ""
+msgstr "Bonding Mode"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:201
 msgid "Bonding Policy"
@@ -1611,8 +1622,8 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:764
 msgid ""
-"Configures the operation mode of the <abbr title=\"Router "
-"Advertisement\">RA</abbr> service on this interface."
+"Configures the operation mode of the <abbr title=\"Router Advertisement"
+"\">RA</abbr> service on this interface."
 msgstr ""
 "Konfigurerer driftstilstanden for <abbr title=\"Router Advertisement\">RA</"
 "abbr>-tjenesten på denne interface."
@@ -1759,12 +1770,12 @@ msgstr "Nuværende effekt"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:28
 msgctxt "nft meta hour"
 msgid "Current time"
-msgstr ""
+msgstr "Nuværende tid"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:29
 msgctxt "nft meta day"
 msgid "Current weekday"
-msgstr ""
+msgstr "Aktuel hverdag"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:573
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:575
@@ -1789,8 +1800,8 @@ msgstr "Brugerdefineret blitzinterval (kerne: timer)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:59
 msgid ""
-"Customizes the behaviour of the device <abbr title=\"Light Emitting "
-"Diode\">LED</abbr>s if possible."
+"Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
+"\">LED</abbr>s if possible."
 msgstr ""
 "Tilpasser enhedens adfærd <abbr title=\"Light Emitting Diode\">LED</abbr>s, "
 "hvis det er muligt."
@@ -2207,7 +2218,7 @@ msgstr "Afstand til det fjerneste netværksmedlem i meter."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
-msgstr ""
+msgstr "Distribueret ARP-tabel"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:542
 msgid ""
@@ -2219,9 +2230,9 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid ""
-"Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-"abbr> forwarder."
+"Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</abbr> "
+"forwarder."
 msgstr ""
 "Dnsmasq er en let <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
 "abbr>-server og <abbr title=\"Domain Name System\">DNS</abbr>-forwarder."
@@ -2269,8 +2280,8 @@ msgid ""
 "Do not proxy any <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
 "packets."
 msgstr ""
-"Du må ikke give proxy-proxy til <abbr title=\"Neighbour Discovery "
-"Protocol\">NDP</abbr>-pakker."
+"Du må ikke give proxy-proxy til <abbr title=\"Neighbour Discovery Protocol"
+"\">NDP</abbr>-pakker."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
@@ -2452,7 +2463,7 @@ msgstr "Egress QoS-mapping"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:13
 msgctxt "nft meta oif"
 msgid "Egress device id"
-msgstr ""
+msgstr "Egress enheds-id"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:11
 msgctxt "nft meta oifname"
@@ -2565,13 +2576,13 @@ msgstr "Aktiver WPS-knappen, kræver WPA(2)-PSK/WPA3-SAE"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
-"Enable automatic redirection of <abbr title=\"Hypertext Transfer "
-"Protocol\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol "
-"Secure\">HTTPS</abbr> port."
+"Enable automatic redirection of <abbr title=\"Hypertext Transfer Protocol"
+"\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol Secure"
+"\">HTTPS</abbr> port."
 msgstr ""
-"Aktiver automatisk omdirigering af <abbr title=\"Hypertext Transfer "
-"Protocol\">HTTP</abbr>-anmodninger til <abbr title=\"Hypertext Transfer "
-"Protocol Secure\">HTTPS</abbr>-porten."
+"Aktiver automatisk omdirigering af <abbr title=\"Hypertext Transfer Protocol"
+"\">HTTP</abbr>-anmodninger til <abbr title=\"Hypertext Transfer Protocol "
+"Secure\">HTTPS</abbr>-porten."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:977
 msgid ""
@@ -2677,6 +2688,8 @@ msgid ""
 "Enables more efficient, group aware multicast forwarding infrastructure in "
 "batman-adv."
 msgstr ""
+"Muliggør mere effektiv, gruppebevidst multicast-videresendelsesinfrastruktur "
+"i batman-adv."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:518
 msgid "Enables the Spanning Tree Protocol on this bridge"
@@ -3088,14 +3101,14 @@ msgstr "Form token uoverensstemmelse"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:919
 msgid ""
-"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr "
-"title=\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr "
-"title=\"Neighbour Advertisement, Type 136\">NA</abbr> messages between the "
-"designated master interface and downstream interfaces."
+"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr title="
+"\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr title=\"Neighbour "
+"Advertisement, Type 136\">NA</abbr> messages between the designated master "
+"interface and downstream interfaces."
 msgstr ""
 "Videresend <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr "
-"title=\"Neighbour Solicitation, Type 135\">NS</abbr> og <abbr "
-"title=\"Neighbour Advertisement, Type 136\">NA</abbr> meddelelser mellem den "
+"title=\"Neighbour Solicitation, Type 135\">NS</abbr> og <abbr title="
+"\"Neighbour Advertisement, Type 136\">NA</abbr> meddelelser mellem den "
 "udpegede master interface og downstream-interfaces."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:770
@@ -3146,7 +3159,7 @@ msgstr "Videresendelsestilstand"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:80
 msgid "Fragmentation"
-msgstr ""
+msgstr "Fragmentering"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:963
 msgid "Fragmentation Threshold"
@@ -3200,7 +3213,7 @@ msgstr "Gateway"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:85
 msgid "Gateway Mode"
-msgstr ""
+msgstr "Gateway-tilstand"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
 msgid "Gateway Ports"
@@ -3457,7 +3470,7 @@ msgstr "Hook: <strong>%h</strong> (%h), Prioritet: <strong>%d</strong>"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:92
 msgid "Hop Penalty"
-msgstr ""
+msgstr "Hop straf"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:57
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2164
@@ -3913,10 +3926,10 @@ msgstr "Hvis ikke markeret, ignoreres de annoncerede DNS-serveradresser"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:339
 msgid ""
 "If your physical memory is insufficient unused data can be temporarily "
-"swapped to a swap-device resulting in a higher amount of usable <abbr "
-"title=\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a "
-"very slow process as the swap-device cannot be accessed with the high "
-"datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."
+"swapped to a swap-device resulting in a higher amount of usable <abbr title="
+"\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a very "
+"slow process as the swap-device cannot be accessed with the high datarates "
+"of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
 "Hvis din fysiske hukommelse er utilstrækkelig, kan ubrugte data midlertidigt "
 "swappes til en swap-enhed, hvilket resulterer i en større mængde anvendelig "
@@ -3953,6 +3966,9 @@ msgid ""
 "In bridged LAN setups it is advisable to enable the bridge loop avoidance in "
 "order to avoid broadcast loops that can bring the entire LAN to a standstill."
 msgstr ""
+"I bridged LAN-opsætninger er det tilrådeligt at aktivere bridge loop "
+"avoidance for at undgå broadcast loops, der kan få hele LAN'et til at gå i "
+"stå."
 
 #: modules/luci-base/luasrc/view/csrftoken.htm:13
 msgid ""
@@ -4439,7 +4455,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:671
 msgid "Legacy rules detected"
-msgstr ""
+msgstr "opdaget gamle regler"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4386
 msgid "Legend:"
@@ -4480,7 +4496,7 @@ msgstr "Link på"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:77
 msgctxt "nft @ll,off,len"
 msgid "Link layer header bits %d-%d"
-msgstr ""
+msgstr "Linklags header bits %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:432
 msgid "List of IP addresses to convert into NXDOMAIN responses."
@@ -4928,11 +4944,11 @@ msgstr "Mesh Id"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh Routing"
-msgstr ""
+msgstr "Mesh Routing"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh and routing related options"
-msgstr ""
+msgstr "Indstillinger vedrørende mesh og routing"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:404
 msgid "Method not found"
@@ -5144,7 +5160,7 @@ msgstr "Multicast"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:99
 msgid "Multicast Mode"
-msgstr ""
+msgstr "Multicast-tilstand"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:705
 msgid "Multicast routing"
@@ -5221,7 +5237,7 @@ msgstr "Netværk"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:104
 msgid "Network Coding"
-msgstr ""
+msgstr "Netværkskodning"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2004
 msgid "Network SSID"
@@ -5264,7 +5280,7 @@ msgstr "Netværksenhedstabel \"%h\""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:78
 msgctxt "nft @nh,off,len"
 msgid "Network header bits %d-%d"
-msgstr ""
+msgstr "Netværksheader bits %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:426
 msgid "Network ifname configuration migration"
@@ -5413,7 +5429,7 @@ msgstr "Ingen negativ cache"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:690
 msgid "No nftables ruleset loaded."
-msgstr ""
+msgstr "Der er ikke indlæst noget nftables-regelsæt."
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:69
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
@@ -5620,7 +5636,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:676
 msgid "Open iptables rules overview…"
-msgstr ""
+msgstr "Åbn oversigt over iptables-regler…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:472
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
@@ -5778,13 +5794,13 @@ msgstr "Indstillinger"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:525
 msgid ""
 "Options for the Network-ID. (Note: needs also Network-ID.) E.g. "
-"\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</"
-"code>\" for default route. <code>0.0.0.0</code> means \"the address of the "
-"system running dnsmasq\"."
+"\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</code>"
+"\" for default route. <code>0.0.0.0</code> means \"the address of the system "
+"running dnsmasq\"."
 msgstr ""
 "Indstillinger for Network-ID. (Bemærk: har også brug for Network-ID.) F.eks. "
-"\"<code>42,192.168.1.4</code>\" for NTP-server, \"<code>3,192.168.4.4</"
-"code>\" for standardrute. <code>0.0.0.0.0.0</code> betyder \"adressen på det "
+"\"<code>42,192.168.1.4</code>\" for NTP-server, \"<code>3,192.168.4.4</code>"
+"\" for standardrute. <code>0.0.0.0.0.0</code> betyder \"adressen på det "
 "system, der kører dnsmasq\"."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:119
@@ -5793,7 +5809,7 @@ msgstr "Indstillinger:"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:55
 msgid "Originator Interval"
-msgstr ""
+msgstr "Ophavsmandsinterval"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:348
 msgid "Other:"
@@ -6284,6 +6300,8 @@ msgid ""
 "Prevents one wireless client to talk to another. This setting only affects "
 "packets without any VLAN tag (untagged packets)."
 msgstr ""
+"Forhindrer, at en trådløs klient kan tale med en anden. Denne indstilling "
+"påvirker kun pakker uden VLAN-tag (ikke-mærkede pakker)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:213
 msgid "Primary Slave"
@@ -6362,6 +6380,8 @@ msgid ""
 "Provide the NTP server to the selected interface or, if unspecified, to all "
 "interfaces"
 msgstr ""
+"Giv NTP-serveren til den valgte interface eller, hvis den ikke er "
+"specificeret, til alle interfaces"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1077
 msgid "Pseudo Ad-Hoc (ahdemo)"
@@ -6936,7 +6956,7 @@ msgstr "Routing"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:44
 msgid "Routing Algorithm"
-msgstr ""
+msgstr "Routing-algoritme"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
 msgid ""
@@ -7138,7 +7158,7 @@ msgstr "Send værtsnavnet for denne enhed"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:89
 msgid "Server"
-msgstr ""
+msgstr "Server"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:518
 msgid "Server address"
@@ -8216,7 +8236,7 @@ msgstr "VLAN-id'et skal være unikt"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:45
 msgid "The algorithm that is used to discover mesh routes"
-msgstr ""
+msgstr "Algoritmen, der bruges til at opdage mesh-ruter"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2010
 msgid ""
@@ -8329,6 +8349,10 @@ msgid ""
 "forwarded OGM, thereby propagating the cost of an extra hop (the packet has "
 "to be received and retransmitted which costs airtime)"
 msgstr ""
+"Indstillingen for hopstraf gør det muligt at ændre batman-adv's præference "
+"for multihop-ruter i forhold til korte ruter. Værdien anvendes på TQ'en for "
+"hver videresendt OGM, hvorved omkostningerne ved et ekstra hop (pakken skal "
+"modtages og videresendes, hvilket koster sendetid)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "The hostname of the boot server"
@@ -8424,20 +8448,19 @@ msgstr "Netværksnavnet er allerede brugt"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:139
 msgid ""
-"The network ports on this device can be combined to several <abbr "
-"title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
+"The network ports on this device can be combined to several <abbr title="
+"\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
 "communicate directly with each other. <abbr title=\"Virtual Local Area "
 "Network\">VLAN</abbr>s are often used to separate different network "
 "segments. Often there is by default one Uplink port for a connection to the "
 "next greater network like the internet and other ports for a local network."
 msgstr ""
-"Netværksportene på denne enhed kan kombineres til flere <abbr "
-"title=\"Virtual Local Area Network\">VLAN</abbr>s, hvor computere kan "
-"kommunikere direkte med hinanden. <abbr title=\"Virtual Local Area "
-"Network\">VLAN</abbr>s bruges ofte til at adskille forskellige "
-"netværkssegmenter. Ofte er der som standard en Uplink-port til en "
-"forbindelse til det næste større netværk, f.eks. internettet, og andre porte "
-"til et lokalt netværk."
+"Netværksportene på denne enhed kan kombineres til flere <abbr title="
+"\"Virtual Local Area Network\">VLAN</abbr>s, hvor computere kan kommunikere "
+"direkte med hinanden. <abbr title=\"Virtual Local Area Network\">VLAN</"
+"abbr>s bruges ofte til at adskille forskellige netværkssegmenter. Ofte er "
+"der som standard en Uplink-port til en forbindelse til det næste større "
+"netværk, f.eks. internettet, og andre porte til et lokalt netværk."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:569
 msgid "The query response interval must be lower than the query interval value"
@@ -8563,12 +8586,17 @@ msgid ""
 "The value specifies the interval (milliseconds) in which batman-adv floods "
 "the network with its protocol information."
 msgstr ""
+"Værdien angiver intervallet (millisekunder), hvormed batman-adv oversvømmer "
+"netværket med sine protokoloplysninger."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:672
 msgid ""
 "There are legacy iptables rules present on the system. Mixing iptables and "
 "nftables rules is discouraged and may lead to incomplete traffic filtering."
 msgstr ""
+"Der findes gamle iptables-regler på systemet. Det frarådes at blande "
+"iptables- og nftables-regler, hvilket kan føre til ufuldstændig "
+"trafikfiltrering."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:777
@@ -8632,6 +8660,12 @@ msgid ""
 "selector but rather go to the Wireless settings and select this Interface as "
 "a network from there."
 msgstr ""
+"Dette er batman-adv-enheden, som du vil linke den fysiske enhed fra oven "
+"til. Hvis denne liste er tom, skal du først oprette en. Hvis du ønsker at "
+"videresende mesh-trafik over en enhed på et kablet netværk, skal du vælge "
+"den fra ovenstående Enhedsvælger. Hvis du vil tildele batman-adv-interfacet "
+"til et Wi-fi mesh, skal du ikke vælge en enhed i Enhedsvælgeren, men gå til "
+"Trådløse indstillinger og vælg dette interface som et netværk derfra."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:116
 msgid ""
@@ -8796,17 +8830,17 @@ msgstr "Politik for overførsel af hash"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:79
 msgctxt "nft @th,off,len"
 msgid "Transport header bits %d-%d"
-msgstr ""
+msgstr "Transport header bits %d-%d"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:59
 msgctxt "nft th dport"
 msgid "Transport header destination port"
-msgstr ""
+msgstr "Transport header destinationsport"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:58
 msgctxt "nft th sport"
 msgid "Transport header source port"
-msgstr ""
+msgstr "Transport header kildeport"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:75
 msgid "Trigger"
@@ -9497,6 +9531,9 @@ msgid ""
 "When enabled network coding increases the WiFi throughput by combining "
 "multiple frames into a single frame, thus reducing the needed air time."
 msgstr ""
+"Når netværkskodning er aktiveret, øges WiFi-gennemstrømningen ved at "
+"kombinere flere rammer til en enkelt ramme, hvilket reducerer den nødvendige "
+"sendetid."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:76
 msgid ""
@@ -9504,6 +9541,9 @@ msgid ""
 "helps non-mesh clients to get ARP responses much more reliably and without "
 "much delay."
 msgstr ""
+"Når den distribuerede ARP-tabel er aktiveret, danner den en ARP-cache for "
+"hele netværket, som hjælper klienter uden for netværket med at få ARP-svar "
+"meget mere pålideligt og uden stor forsinkelse."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:109
 msgid ""
@@ -9518,6 +9558,8 @@ msgid ""
 "When running the mesh over multiple WiFi interfaces per node batman-adv is "
 "capable of optimizing the traffic flow to gain maximum performance."
 msgstr ""
+"Når mesh kører over flere WiFi-interfaces pr. node, er batman-adv i stand "
+"til at optimere trafikstrømmen for at opnå maksimal ydeevne."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1537
 msgid ""
@@ -9951,6 +9993,8 @@ msgid ""
 "reduces overhead by collecting and aggregating originator messages in a "
 "single packet rather than many small ones"
 msgstr ""
+"reducerer overhead ved at samle og aggregere afsendermeddelelser i en enkelt "
+"pakke i stedet for mange små pakker"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:769
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:884
@@ -10225,6 +10269,11 @@ msgstr "ja"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Tilbage"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1453
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1465
+msgid "The value is overridden by configuration. Original: %s"
+msgstr "Værdien tilsidesættes af konfigurationen. Original: %s"
 
 #~ msgctxt "nft meta oif"
 #~ msgid "Engress device id"

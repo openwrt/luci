@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2022-05-13 13:48+0000\n"
+"PO-Revision-Date: 2022-05-23 11:14+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -113,7 +113,7 @@ msgstr "1"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:233
 msgid "1 Minute Load:"
-msgstr "Obciążenie 1-minutowe:"
+msgstr "Obciążenie 1 min:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:321
 msgctxt "nft amount of flags"
@@ -125,7 +125,7 @@ msgstr[2] "%d flag"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:253
 msgid "15 Minute Load:"
-msgstr "Obciążenie 15-minutowe:"
+msgstr "Obciążenie 15 min:"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:57
 msgctxt "sstp log level value"
@@ -153,7 +153,7 @@ msgstr "464XLAT (CLAT)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:243
 msgid "5 Minute Load:"
-msgstr "Obciążenie 5-minutowe:"
+msgstr "Obciążenie 5 min:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1548
 msgid "6-octet identifier as a hex string - no colons"
@@ -279,6 +279,10 @@ msgid ""
 "internet connection in the mesh) or having the gateway support turned off "
 "entirely (which is the default setting)."
 msgstr ""
+"Węzeł batman-adv może działać w trybie serwera (udostępniając swoje "
+"połączenie internetowe sieci mesh) lub w trybie klienta (wyszukując "
+"najbardziej odpowiednie połączenie internetowe w sieci mesh) albo mając "
+"całkowicie wyłączoną obsługę bramy (co jest ustawieniem domyślnym)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:370
 msgid "A configuration for the device \"%s\" already exists"
@@ -431,7 +435,7 @@ msgstr "Punkt dostępowy"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:60
 msgid "Access Point Isolation"
-msgstr ""
+msgstr "Izolacja punktu dostępowego"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:388
 msgid "Actions"
@@ -625,7 +629,7 @@ msgstr "Czas starzenia"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:50
 msgid "Aggregate Originator Messages"
-msgstr ""
+msgstr "Agregacja komunikatów inicjatora"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
 msgid "Aggregate Transmit Power (ACTATP)"
@@ -1061,7 +1065,7 @@ msgstr "Średnia:"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:70
 msgid "Avoid Bridge Loops"
-msgstr ""
+msgstr "Unikaj pętli mostowych"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1505
 msgid "B43 + B43C"
@@ -1125,11 +1129,11 @@ msgstr "Klucz publiczny tego interfejsu zakodowany w Base64 do udostępniania."
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:10
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:41
 msgid "Batman Device"
-msgstr ""
+msgstr "Urządzenie Batman"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:10
 msgid "Batman Interface"
-msgstr ""
+msgstr "Interfejs Batman"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:81
 msgid ""
@@ -1141,6 +1145,14 @@ msgid ""
 "the other end. Per default fragmentation is enabled and inactive if the "
 "packet fits but it is possible to deactivate the fragmentation entirely."
 msgstr ""
+"Batman-adv ma wbudowaną fragmentację warstwy 2 dla danych unicastowych "
+"przepływających przez sieć, co pozwala na uruchomienie batman-adv na "
+"interfejsach/połączeniach, które nie pozwalają na zwiększenie MTU poza "
+"standardowy rozmiar pakietu Ethernet 1500 bajtów. Gdy fragmentacja jest "
+"włączona, batman-adv będzie automatycznie fragmentował zbyt duże pakiety i "
+"defragmentował je na drugim końcu. Domyślnie fragmentacja jest włączona i "
+"nieaktywna, jeśli pakiet się zmieści, ale możliwe jest całkowite wyłączenie "
+"fragmentacji."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:974
 msgid "Beacon Interval"
@@ -1159,7 +1171,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:287
 msgid "Bind NTP server"
-msgstr ""
+msgstr "Powiąż serwer NTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
 msgid "Bind dynamically to interfaces rather than wildcard address."
@@ -1195,7 +1207,7 @@ msgstr "Szybkość transmisji"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:65
 msgid "Bonding Mode"
-msgstr ""
+msgstr "Tryb wiązania"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:201
 msgid "Bonding Policy"
@@ -1615,13 +1627,13 @@ msgid ""
 "Configures the default router advertisement in <abbr title=\"Router "
 "Advertisement\">RA</abbr> messages."
 msgstr ""
-"Konfiguruje rozgłaszanie routera domyślnego w komunikatach <abbr "
-"title=\"Router Advertisement\">RA</abbr>."
+"Konfiguruje rozgłaszanie routera domyślnego w komunikatach <abbr title="
+"\"Router Advertisement\">RA</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:764
 msgid ""
-"Configures the operation mode of the <abbr title=\"Router "
-"Advertisement\">RA</abbr> service on this interface."
+"Configures the operation mode of the <abbr title=\"Router Advertisement"
+"\">RA</abbr> service on this interface."
 msgstr ""
 "Konfiguruje tryb pracy usługi <abbr title=\"Router Advertisement\">RA</abbr> "
 "na tym interfejsie."
@@ -1765,12 +1777,12 @@ msgstr "Aktualna moc nadawania"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:28
 msgctxt "nft meta hour"
 msgid "Current time"
-msgstr ""
+msgstr "Aktualny czas"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:29
 msgctxt "nft meta day"
 msgid "Current weekday"
-msgstr ""
+msgstr "Bieżący dzień powszedni"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:573
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:575
@@ -1795,8 +1807,8 @@ msgstr "Niestandardowy interwał wgrywania (kernel: zegar)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:59
 msgid ""
-"Customizes the behaviour of the device <abbr title=\"Light Emitting "
-"Diode\">LED</abbr>s if possible."
+"Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
+"\">LED</abbr>s if possible."
 msgstr ""
 "Dostosowuje zachowanie diod <abbr title=\"Light Emitting Diode\">LED</abbr> "
 "urządzenia, jeśli to możliwe."
@@ -1943,8 +1955,8 @@ msgid ""
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
-"Zdefiniuj dodatkowe opcje DHCP, np. \"<code>6,192.168.2.1,192.168.2.2</"
-"code>\", które rozgłaszają różne serwery DNS klientom."
+"Zdefiniuj dodatkowe opcje DHCP, np. \"<code>6,192.168.2.1,192.168.2.2</code>"
+"\", które rozgłaszają różne serwery DNS klientom."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:462
 msgid ""
@@ -2213,7 +2225,7 @@ msgstr "Odległość do najdalej oddalonego użytkownika sieci w metrach."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
-msgstr ""
+msgstr "Rozproszona tablica ARP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:542
 msgid ""
@@ -2225,13 +2237,13 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid ""
-"Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-"abbr> forwarder."
+"Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</abbr> "
+"forwarder."
 msgstr ""
-"Dnsmasq to lekki serwer <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr> i serwer przekazujący (forwarder) <abbr "
-"title=\"Domain Name System\">DNS</abbr>."
+"Dnsmasq to lekki serwer <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr> i serwer przekazujący (forwarder) <abbr title=\"Domain Name "
+"System\">DNS</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:413
 msgid "Do not cache negative replies, e.g. for non-existent domains."
@@ -2277,8 +2289,8 @@ msgid ""
 "Do not proxy any <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
 "packets."
 msgstr ""
-"Nie pośrednicz żadnych pakietów <abbr title=\"Neighbour Discovery "
-"Protocol\">NDP</abbr>."
+"Nie pośrednicz żadnych pakietów <abbr title=\"Neighbour Discovery Protocol"
+"\">NDP</abbr>."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
@@ -2376,8 +2388,8 @@ msgid ""
 "and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"
 msgstr ""
 "Dropbear oferuje zdalny dostęp do konsoli (shella) poprzez swojego klienta "
-"<abbr title=\"Secure Shell\">SSH</abbr> oraz serwer <abbr title=\"Secure "
-"Copy\">SCP</abbr>"
+"<abbr title=\"Secure Shell\">SSH</abbr> oraz serwer <abbr title=\"Secure Copy"
+"\">SCP</abbr>"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:14
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:11
@@ -2463,7 +2475,7 @@ msgstr "Mapowanie wyjścia QoS"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:13
 msgctxt "nft meta oif"
 msgid "Egress device id"
-msgstr ""
+msgstr "Identyfikator urządzenia wyjściowego"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:11
 msgctxt "nft meta oifname"
@@ -2575,9 +2587,9 @@ msgstr "Włącz przycisk WPS, wymaga WPA2-PSK/WPA3-SAE"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
-"Enable automatic redirection of <abbr title=\"Hypertext Transfer "
-"Protocol\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol "
-"Secure\">HTTPS</abbr> port."
+"Enable automatic redirection of <abbr title=\"Hypertext Transfer Protocol"
+"\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol Secure"
+"\">HTTPS</abbr> port."
 msgstr ""
 "Włącz automatyczne przekierowywanie żądań <abbr title=\"Hypertext Transfer "
 "Protocol\">HTTP</abbr> na port <abbr title=\"Hypertext Transfer Protocol "
@@ -2687,6 +2699,8 @@ msgid ""
 "Enables more efficient, group aware multicast forwarding infrastructure in "
 "batman-adv."
 msgstr ""
+"Umożliwia bardziej wydajną, świadomą grupowo infrastrukturę przekazywania "
+"multicast w batman-adv."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:518
 msgid "Enables the Spanning Tree Protocol on this bridge"
@@ -3104,14 +3118,14 @@ msgstr "Niepoprawna forma tokenu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:919
 msgid ""
-"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr "
-"title=\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr "
-"title=\"Neighbour Advertisement, Type 136\">NA</abbr> messages between the "
-"designated master interface and downstream interfaces."
+"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr title="
+"\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr title=\"Neighbour "
+"Advertisement, Type 136\">NA</abbr> messages between the designated master "
+"interface and downstream interfaces."
 msgstr ""
 "Przekazuj komunikaty <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
-"<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr "
-"title=\"Neighbour Advertisement, Type 136\">NA</abbr> między wyznaczonym "
+"<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr title="
+"\"Neighbour Advertisement, Type 136\">NA</abbr> między wyznaczonym "
 "interfejsem głównym a interfejsami podrzędnymi."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:770
@@ -3162,7 +3176,7 @@ msgstr "Tryb przekazywania"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:80
 msgid "Fragmentation"
-msgstr ""
+msgstr "Fragmentacja"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:963
 msgid "Fragmentation Threshold"
@@ -3216,7 +3230,7 @@ msgstr "Brama"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:85
 msgid "Gateway Mode"
-msgstr ""
+msgstr "Tryb bramy"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
 msgid "Gateway Ports"
@@ -3474,7 +3488,7 @@ msgstr "Hak: <strong>%h</strong> (%h), Priorytet: <strong>%d</strong>"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:92
 msgid "Hop Penalty"
-msgstr ""
+msgstr "Kara przeskoku"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:57
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2164
@@ -3894,8 +3908,8 @@ msgstr "Jeżeli jest ustawione, znaczenie opcji dopasowania jest odwrócone"
 msgid ""
 "If specified, mount the device by its UUID instead of a fixed device node"
 msgstr ""
-"Jeśli podano, zainstaluj urządzenie poprzez jego UUID zamiast <abbr "
-"title=\"fixed device node\">ustalonego węzła urządzenia</abbr>"
+"Jeśli podano, zainstaluj urządzenie poprzez jego UUID zamiast <abbr title="
+"\"fixed device node\">ustalonego węzła urządzenia</abbr>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:267
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:376
@@ -3929,10 +3943,10 @@ msgstr "Jeśli odznaczone, rozgłoszane adresy serwerów DNS są ignorowane"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:339
 msgid ""
 "If your physical memory is insufficient unused data can be temporarily "
-"swapped to a swap-device resulting in a higher amount of usable <abbr "
-"title=\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a "
-"very slow process as the swap-device cannot be accessed with the high "
-"datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."
+"swapped to a swap-device resulting in a higher amount of usable <abbr title="
+"\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a very "
+"slow process as the swap-device cannot be accessed with the high datarates "
+"of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
 "Jeśli ilość Twojej pamięci fizycznej jest niewystarczająca, nieużywane "
 "miejsce na dysku może być tymczasowo wykorzystane na plik wymiany. W "
@@ -3969,6 +3983,9 @@ msgid ""
 "In bridged LAN setups it is advisable to enable the bridge loop avoidance in "
 "order to avoid broadcast loops that can bring the entire LAN to a standstill."
 msgstr ""
+"W zmostkowanych konfiguracjach sieci LAN zaleca się włączenie funkcji "
+"unikania pętli mostowych w celu uniknięcia pętli rozgłoszeniowych, które "
+"mogą doprowadzić do zatrzymania całej sieci LAN."
 
 #: modules/luci-base/luasrc/view/csrftoken.htm:13
 msgid ""
@@ -4189,7 +4206,7 @@ msgid ""
 msgstr ""
 "Interwał w centysekundach między zapytaniami ogólnymi dotyczącymi "
 "multicastu. Zmieniając tę wartość, administrator może regulować liczbę "
-"wiadomości IGMP w podsieci; większe wartości powodują, że zapytania IGMP są "
+"komunikatów IGMP w podsieci; większe wartości powodują, że zapytania IGMP są "
 "wysyłane rzadziej"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:522
@@ -4450,13 +4467,13 @@ msgid ""
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
 "Starsze lub źle działające urządzenia mogą wymagać starszego standardu "
-"802.11b do współdziałania. Efektywność nadawania może być znacznie "
-"zmniejszona, gdy jest stosowane to ustawienie. Zaleca się, aby w miarę "
-"możliwości nie zezwalać na szybkości 802.11b."
+"802.11b do współdziałania. Efektywność emisji może być znacznie zmniejszona, "
+"gdy jest stosowane to ustawienie. Zaleca się, aby w miarę możliwości nie "
+"zezwalać na szybkości 802.11b."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:671
 msgid "Legacy rules detected"
-msgstr ""
+msgstr "Wykryto starsze reguły"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4386
 msgid "Legend:"
@@ -4497,7 +4514,7 @@ msgstr "Połączenie aktywne"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:77
 msgctxt "nft @ll,off,len"
 msgid "Link layer header bits %d-%d"
-msgstr ""
+msgstr "Bity nagłówka warstwy łącza %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:432
 msgid "List of IP addresses to convert into NXDOMAIN responses."
@@ -4856,8 +4873,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:458
 msgid "Max. EDNS0 packet size"
 msgstr ""
-"<abbr title=\"Maksymalny\">Maks.</abbr> rozmiar pakietu <abbr "
-"title=\"Extension Mechanisms for Domain Name System\">EDNS0</abbr>"
+"<abbr title=\"Maksymalny\">Maks.</abbr> rozmiar pakietu <abbr title="
+"\"Extension Mechanisms for Domain Name System\">EDNS0</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:465
 msgid "Max. concurrent queries"
@@ -4902,9 +4919,9 @@ msgid ""
 "Maximum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds."
 msgstr ""
-"Maksymalny dozwolony czas pomiędzy wysyłaniem nieproszonego <abbr "
-"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna "
-"to 600 sekund."
+"Maksymalny dozwolony czas pomiędzy wysyłaniem nieproszonego <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to 600 "
+"sekund."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:947
 msgid "Maximum transmit power"
@@ -4950,11 +4967,11 @@ msgstr "Mesh Id"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh Routing"
-msgstr ""
+msgstr "Trasowanie sieci mesh"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh and routing related options"
-msgstr ""
+msgstr "Opcje związane z siecią mesh i trasowaniem"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:404
 msgid "Method not found"
@@ -5004,9 +5021,9 @@ msgid ""
 "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds."
 msgstr ""
-"Minimalny dozwolony czas pomiędzy wysyłaniem nieproszonego <abbr "
-"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna "
-"to 200 sekund."
+"Minimalny dozwolony czas pomiędzy wysyłaniem nieproszonego <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to 200 "
+"sekund."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:204
 msgid "Mirror monitor port"
@@ -5144,7 +5161,7 @@ msgstr "Punkt montownia"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:158
 msgid "Mount swap not specifically configured"
-msgstr "Zamontuj plik wymiany, który nie jest odpowiednio skonfigurowany"
+msgstr "Zamontuj swap, który nie jest odpowiednio skonfigurowany"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:223
 msgid "Mounted file systems"
@@ -5167,7 +5184,7 @@ msgstr "Multicast"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:99
 msgid "Multicast Mode"
-msgstr ""
+msgstr "Tryb multicast"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:705
 msgid "Multicast routing"
@@ -5244,7 +5261,7 @@ msgstr "Sieć"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:104
 msgid "Network Coding"
-msgstr ""
+msgstr "Kodowanie sieciowe"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2004
 msgid "Network SSID"
@@ -5287,7 +5304,7 @@ msgstr "Tabela urządzeń sieciowych \"%h\""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:78
 msgctxt "nft @nh,off,len"
 msgid "Network header bits %d-%d"
-msgstr ""
+msgstr "Bity nagłówka sieci %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:426
 msgid "Network ifname configuration migration"
@@ -5437,7 +5454,7 @@ msgstr "Wyłącz buforowanie negatywnych odpowiedzi"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:690
 msgid "No nftables ruleset loaded."
-msgstr ""
+msgstr "Nie załadowano zestawu reguł nftables."
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:69
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
@@ -5647,7 +5664,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:676
 msgid "Open iptables rules overview…"
-msgstr ""
+msgstr "Otwórz przegląd reguł iptables…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:472
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
@@ -5793,8 +5810,9 @@ msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
 msgstr ""
-"Opcjonalnie. Sekundy między utrzymaniem przy życiu wiadomości. Domyślnie 0 "
-"(wyłączone). Zalecana wartość, jeśli urządzenie znajduje się poza NAT to 25."
+"Opcjonalnie. Sekundy między komunikatami o utrzymaniu przy życiu. Wartość "
+"domyślna to 0 (wyłączone). Zalecana wartość, jeśli urządzenie znajduje się "
+"poza NAT, to 25."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:136
 msgid "Optional. UDP port used for outgoing and incoming packets."
@@ -5808,9 +5826,9 @@ msgstr "Opcje"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:525
 msgid ""
 "Options for the Network-ID. (Note: needs also Network-ID.) E.g. "
-"\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</"
-"code>\" for default route. <code>0.0.0.0</code> means \"the address of the "
-"system running dnsmasq\"."
+"\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</code>"
+"\" for default route. <code>0.0.0.0</code> means \"the address of the system "
+"running dnsmasq\"."
 msgstr ""
 "Opcje identyfikatora sieci. (Uwaga: wymaga również identyfikatora sieci.) "
 "Np. \"<code>42,192.168.1.4</code>\" dla serwera NTP, \"<code>3,192.168.4.4</"
@@ -5823,7 +5841,7 @@ msgstr "Opcje:"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:55
 msgid "Originator Interval"
-msgstr ""
+msgstr "Interwał inicjatora"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:348
 msgid "Other:"
@@ -6316,6 +6334,9 @@ msgid ""
 "Prevents one wireless client to talk to another. This setting only affects "
 "packets without any VLAN tag (untagged packets)."
 msgstr ""
+"Uniemożliwia komunikowanie się jednego klienta bezprzewodowego z drugim. To "
+"ustawienie dotyczy tylko pakietów bez żadnego tagu VLAN (pakietów "
+"nieotagowanych)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:213
 msgid "Primary Slave"
@@ -6383,8 +6404,8 @@ msgid ""
 "Provide a DHCPv6 server on this interface and reply to DHCPv6 solicitations "
 "and requests."
 msgstr ""
-"Zapewnij serwer DHCPv6 w tym interfejsie i odpowiadaj na zapytania i żądania "
-"DHCPv6."
+"Zapewnij serwer DHCPv6 na tym interfejsie i odpowiadaj na zapytania i "
+"żądania DHCPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:883
 msgid "Provide new network"
@@ -6395,6 +6416,8 @@ msgid ""
 "Provide the NTP server to the selected interface or, if unspecified, to all "
 "interfaces"
 msgstr ""
+"Zapewnij serwer NTP wybranemu interfejsowi lub, jeśli nie jest określony, "
+"wszystkim interfejsom"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1077
 msgid "Pseudo Ad-Hoc (ahdemo)"
@@ -6975,7 +6998,7 @@ msgstr "Trasowanie"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:44
 msgid "Routing Algorithm"
-msgstr ""
+msgstr "Algorytm trasowania"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
 msgid ""
@@ -7178,7 +7201,7 @@ msgstr "Wysyłaj nazwę hosta tego urządzenia"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:89
 msgid "Server"
-msgstr ""
+msgstr "Serwer"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:518
 msgid "Server address"
@@ -7514,9 +7537,9 @@ msgid ""
 "messages, for example to instruct clients to request further information via "
 "stateful DHCPv6."
 msgstr ""
-"Określa flagi wysyłane w komunikatach <abbr title=\"Router "
-"Advertisement\">RA</abbr>, na przykład w celu poinstruowania klientów, aby "
-"zażądali dalszych informacji za pośrednictwem stanowego DHCPv6."
+"Określa flagi wysyłane w komunikatach <abbr title=\"Router Advertisement"
+"\">RA</abbr>, na przykład w celu poinstruowania klientów, aby zażądali "
+"dalszych informacji za pośrednictwem stanowego DHCPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:176
 msgid ""
@@ -8257,7 +8280,7 @@ msgstr "Identyfikator VLAN musi być unikalny"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:45
 msgid "The algorithm that is used to discover mesh routes"
-msgstr ""
+msgstr "Algorytm, który jest używany do wykrywania tras w sieci mesh."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2010
 msgid ""
@@ -8370,6 +8393,11 @@ msgid ""
 "forwarded OGM, thereby propagating the cost of an extra hop (the packet has "
 "to be received and retransmitted which costs airtime)"
 msgstr ""
+"Ustawienie kary przeskoku pozwala modyfikować preferencje batman-adv dla "
+"tras z wieloma przeskokami w porównaniu z trasami krótkimi. Wartość jest "
+"stosowana do TQ każdego przekazanego OGM, tym samym propagując koszt "
+"dodatkowego przeskoku (pakiet musi zostać odebrany i ponownie przesłany, co "
+"kosztuje czas emisji)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "The hostname of the boot server"
@@ -8449,7 +8477,7 @@ msgid ""
 msgstr ""
 "Maksymalny czas odpowiedzi w centysekundach wstawiany do okresowych zapytań "
 "ogólnych. Zmieniając tę wartość, administrator może dostroić częstotliwość "
-"wysyłania wiadomości IGMP w podsieci; większe wartości powodują, że ruch "
+"wysyłania komunikatów IGMP w podsieci; większe wartości powodują, że ruch "
 "jest mniej gwałtowny, ponieważ odpowiedzi hostów są rozłożone w większym "
 "odstępie czasu"
 
@@ -8458,9 +8486,8 @@ msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
 "abbr> messages. Maximum is 255 hops."
 msgstr ""
-"Maksymalna liczba przeskoków do opublikowania w komunikatach <abbr "
-"title=\"Router Advertisement\">RA</abbr>. Maksymalna wartość to 255 "
-"przeskoków."
+"Maksymalna liczba przeskoków do opublikowania w komunikatach <abbr title="
+"\"Router Advertisement\">RA</abbr>. Maksymalna wartość to 255 przeskoków."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2016
 msgid "The network name is already used"
@@ -8468,8 +8495,8 @@ msgstr "Nazwa sieci jest już w użyciu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:139
 msgid ""
-"The network ports on this device can be combined to several <abbr "
-"title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
+"The network ports on this device can be combined to several <abbr title="
+"\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
 "communicate directly with each other. <abbr title=\"Virtual Local Area "
 "Network\">VLAN</abbr>s are often used to separate different network "
 "segments. Often there is by default one Uplink port for a connection to the "
@@ -8603,12 +8630,16 @@ msgid ""
 "The value specifies the interval (milliseconds) in which batman-adv floods "
 "the network with its protocol information."
 msgstr ""
+"Wartość określa interwał (w milisekundach), w którym batman-adv zalewa sieć "
+"informacjami o protokole."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:672
 msgid ""
 "There are legacy iptables rules present on the system. Mixing iptables and "
 "nftables rules is discouraged and may lead to incomplete traffic filtering."
 msgstr ""
+"W systemie są obecne starsze reguły iptables. Mieszanie reguł iptables i "
+"nftables jest odradzane i może prowadzić do niekompletnego filtrowania ruchu."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:777
@@ -8651,9 +8682,9 @@ msgid ""
 "configurations are automatically preserved."
 msgstr ""
 "Jest to lista globalnych wzorców dopasowywania plików i katalogów "
-"uwzględnianych podczas przeprowadzania aktualizacji z użyciem "
-"\"sysupgrade\". Zmodyfikowane pliki w /etc/config/ i w niektórych innych "
-"ustawieniach są automatycznie zachowywane."
+"uwzględnianych podczas przeprowadzania aktualizacji z użyciem \"sysupgrade"
+"\". Zmodyfikowane pliki w /etc/config/ i w niektórych innych ustawieniach są "
+"automatycznie zachowywane."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
@@ -8673,6 +8704,13 @@ msgid ""
 "selector but rather go to the Wireless settings and select this Interface as "
 "a network from there."
 msgstr ""
+"Jest to urządzenie batman-adv, do którego chcesz podłączyć urządzenie "
+"fizyczne z listy powyżej. Jeśli ta lista jest pusta, należy ją najpierw "
+"utworzyć. Jeśli chcesz kierować ruch sieciowy przez urządzenie sieci "
+"przewodowej, wybierz je z powyższego selektora urządzeń. Jeśli chcesz "
+"przypisać interfejs batman-adv do sieci Wi-Fi mesh, nie wybieraj urządzenia "
+"w selektorze urządzeń, ale przejdź do ustawień sieci bezprzewodowej i "
+"wybierz stamtąd ten interfejs jako sieć."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:116
 msgid ""
@@ -8840,17 +8878,17 @@ msgstr "Zasady przesyłania skrótów"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:79
 msgctxt "nft @th,off,len"
 msgid "Transport header bits %d-%d"
-msgstr ""
+msgstr "Bity nagłówka transportu %d-%d"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:59
 msgctxt "nft th dport"
 msgid "Transport header destination port"
-msgstr ""
+msgstr "Port docelowy nagłówka transportu"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:58
 msgctxt "nft th sport"
 msgid "Transport header source port"
-msgstr ""
+msgstr "Port źródłowy nagłówka transportu"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:75
 msgid "Trigger"
@@ -9547,6 +9585,8 @@ msgid ""
 "When enabled network coding increases the WiFi throughput by combining "
 "multiple frames into a single frame, thus reducing the needed air time."
 msgstr ""
+"Po włączeniu kodowania sieciowego zwiększa się przepustowość sieci Wi-Fi "
+"poprzez łączenie wielu ramek w jedną ramkę, co zmniejsza potrzebną emisję."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:76
 msgid ""
@@ -9554,6 +9594,9 @@ msgid ""
 "helps non-mesh clients to get ARP responses much more reliably and without "
 "much delay."
 msgstr ""
+"Po włączeniu tej funkcji rozproszona tablica ARP tworzy pamięć podręczną ARP "
+"obejmującą całą sieć, dzięki czemu klienty spoza sieci mogą otrzymywać "
+"odpowiedzi ARP znacznie pewniej i bez większych opóźnień."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:109
 msgid ""
@@ -9568,6 +9611,9 @@ msgid ""
 "When running the mesh over multiple WiFi interfaces per node batman-adv is "
 "capable of optimizing the traffic flow to gain maximum performance."
 msgstr ""
+"Podczas korzystania z sieci mesh przez wiele interfejsów Wi-Fi na węzeł "
+"batman-adv jest w stanie zoptymalizować przepływ ruchu w celu uzyskania "
+"maksymalnej wydajności."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1537
 msgid ""
@@ -9593,7 +9639,7 @@ msgid ""
 "may be significantly reduced."
 msgstr ""
 "Jeśli ESSID zostanie ukryty, roaming klientów może zawieść, a efektywność "
-"wykorzystania czasu antenowego może zostać znacznie zmniejszona."
+"wykorzystania emsji może zostać znacznie zmniejszona."
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:166
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:520
@@ -10003,6 +10049,8 @@ msgid ""
 "reduces overhead by collecting and aggregating originator messages in a "
 "single packet rather than many small ones"
 msgstr ""
+"zmniejsza narzut poprzez zbieranie i agregowanie komunikatów inicjatora w "
+"jednym pakiecie, a nie w wielu małych"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:769
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:884
@@ -10046,9 +10094,9 @@ msgid ""
 "<abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</abbr> network "
 "access."
 msgstr ""
-"uHTTPd oferuje dostęp do sieci <abbr title=\"Hypertext Transfer "
-"Protocol\">HTTP</abbr> lub <abbr title=\"Hypertext Transfer Protocol "
-"Secure\">HTTPS</abbr>."
+"uHTTPd oferuje dostęp do sieci <abbr title=\"Hypertext Transfer Protocol"
+"\">HTTP</abbr> lub <abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</"
+"abbr>."
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:574
 msgid "unique value"
@@ -10279,6 +10327,11 @@ msgstr "tak"
 msgid "« Back"
 msgstr "« Wróć"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1453
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1465
+msgid "The value is overridden by configuration. Original: %s"
+msgstr "Wartość jest zastępowana przez konfigurację. Oryginał: %s"
+
 #~ msgctxt "nft meta oif"
 #~ msgid "Engress device id"
 #~ msgstr "Identyfikator urządzenia wejściowego"
@@ -10362,8 +10415,8 @@ msgstr "« Wróć"
 
 #~ msgid ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router advertises itself as the default IPv6 gateway via <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages (to "
+#~ "Router advertises itself as the default IPv6 gateway via <abbr title="
+#~ "\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages (to "
 #~ "<code>ff02::1</code>) and provides <abbr title=\"Prefix Delegation\">PD</"
 #~ "abbr> to downstream devices.</li> <li><strong>relay mode</strong>: Router "
 #~ "relays <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
@@ -10387,12 +10440,12 @@ msgstr "« Wróć"
 
 #~ msgid ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr>) to downstream interfaces.</li> <li><strong>relay "
-#~ "mode</strong>: Router relays WAN interface config downstream. Helps "
-#~ "support upstream links that lack <abbr title=\"Prefix Delegation\">PD</"
-#~ "abbr>.</li> <li><strong>hybrid mode</strong>: Router does combination of "
-#~ "server+relay.</li></ul>"
+#~ "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix Delegation"
+#~ "\">PD</abbr>) to downstream interfaces.</li> <li><strong>relay mode</"
+#~ "strong>: Router relays WAN interface config downstream. Helps support "
+#~ "upstream links that lack <abbr title=\"Prefix Delegation\">PD</abbr>.</"
+#~ "li> <li><strong>hybrid mode</strong>: Router does combination of server"
+#~ "+relay.</li></ul>"
 #~ msgstr ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>tryb serwera</strong>: "
 #~ "router przypisuje adresy IP i deleguje prefiksy (<abbr title=\"Prefix "
@@ -10444,18 +10497,18 @@ msgstr "« Wróć"
 #~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds "
 #~ "(<code>600</code>)."
 #~ msgstr ""
-#~ "Maksymalny dozwolony czas między wysłaniem dobrowolnego <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość "
-#~ "domyślna to 600 sekund (<code>600</code>)."
+#~ "Maksymalny dozwolony czas między wysłaniem dobrowolnego <abbr title="
+#~ "\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to "
+#~ "600 sekund (<code>600</code>)."
 
 #~ msgid ""
 #~ "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 #~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds "
 #~ "(<code>200</code>)."
 #~ msgstr ""
-#~ "Minimalny dozwolony czas między wysłaniem dobrowolnego <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość "
-#~ "domyślna to 200 sekund (<code>200</code>)."
+#~ "Minimalny dozwolony czas między wysłaniem dobrowolnego <abbr title="
+#~ "\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to "
+#~ "200 sekund (<code>200</code>)."
 
 #~ msgid "Override MAC address"
 #~ msgstr "Nadpisz adres MAC"
@@ -10491,29 +10544,29 @@ msgstr "« Wróć"
 #~ "wartością logiczną <code>ndproxy_slave</code> ustawioną na 1. Pomyśl o "
 #~ "proxy <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> jak o proxy "
 #~ "ARP dla IPv6: ujednolicenie hostów na różnych fizycznych segmentach "
-#~ "sprzętowych w tej samej podsieci IP. Składa się z komunikatów <abbr "
-#~ "title=\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr "
-#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr>. Proxy <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr> nasłuchuje <abbr "
-#~ "title=\"Neighbour Solicitation, Type 135\">NS</abbr> na interfejsie z "
-#~ "ustawioną wartością logiczną <code>master</code> na 1 (tj. nadrzędnym), "
-#~ "następnie zapytuje interfejsy podrzędne/wewnętrzne o docelowe IP przed "
-#~ "ostatecznym wysłaniem komunikatu <abbr title=\"Neighbour Advertisement, "
-#~ "Type 136\">NA</abbr>. <abbr title=\"Neighbour Discovery Protocol\">NDP</"
-#~ "abbr> jest faktycznie ARP dla IPv6. <abbr title=\"Neighbour Solicitation, "
-#~ "Type 135\">NS</abbr> oraz <abbr title=\"Neighbour Advertisement, Type "
+#~ "sprzętowych w tej samej podsieci IP. Składa się z komunikatów <abbr title="
+#~ "\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr title="
+#~ "\"Neighbour Advertisement, Type 136\">NA</abbr>. Proxy <abbr title="
+#~ "\"Neighbour Discovery Protocol\">NDP</abbr> nasłuchuje <abbr title="
+#~ "\"Neighbour Solicitation, Type 135\">NS</abbr> na interfejsie z ustawioną "
+#~ "wartością logiczną <code>master</code> na 1 (tj. nadrzędnym), następnie "
+#~ "zapytuje interfejsy podrzędne/wewnętrzne o docelowe IP przed ostatecznym "
+#~ "wysłaniem komunikatu <abbr title=\"Neighbour Advertisement, Type "
+#~ "136\">NA</abbr>. <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
+#~ "jest faktycznie ARP dla IPv6. <abbr title=\"Neighbour Solicitation, Type "
+#~ "135\">NS</abbr> oraz <abbr title=\"Neighbour Advertisement, Type "
 #~ "136\">NA</abbr> wykrywają osiągalność oraz duplikaty adresów na łączu, co "
 #~ "jest również warunkiem koniecznym do autokonfiguracji SLAAC.<br /> <ul "
 #~ "style=\"list-style-type:none;\"> <li><strong>wyłączone</strong>: żadne "
 #~ "komunikaty <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> nie są "
 #~ "wysyłane poprzez prawdziwe interfejsy <code>ndproxy_slave</code>.</li> "
-#~ "<li><strong>tryb przekaźnika</strong>: wysyła komunikaty <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr> z prawdziwych "
-#~ "interfejsów <code>master</code> do <code>ndproxy_slave</code>. Pomaga "
-#~ "wspierać łącza dostawców bez <abbr title=\"Prefix Delegation\">PD</abbr> "
-#~ "oraz hosty proxy z zaporą sieciową.</li> <li><strong>tryb hybrydowy</"
-#~ "strong>: tryb przekaźnika jest wyłączony, chyba że wartość logiczna "
-#~ "interfejsu <code>master</code> wynosi 1.</li></ul>"
+#~ "<li><strong>tryb przekaźnika</strong>: wysyła komunikaty <abbr title="
+#~ "\"Neighbour Discovery Protocol\">NDP</abbr> z prawdziwych interfejsów "
+#~ "<code>master</code> do <code>ndproxy_slave</code>. Pomaga wspierać łącza "
+#~ "dostawców bez <abbr title=\"Prefix Delegation\">PD</abbr> oraz hosty "
+#~ "proxy z zaporą sieciową.</li> <li><strong>tryb hybrydowy</strong>: tryb "
+#~ "przekaźnika jest wyłączony, chyba że wartość logiczna interfejsu "
+#~ "<code>master</code> wynosi 1.</li></ul>"
 
 #~ msgid ""
 #~ "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 "
@@ -10540,13 +10593,13 @@ msgstr "« Wróć"
 #~ "abbr>. Domyślna wartość to 0 (<code>0</code>). Minimalna to 1280."
 
 #~ msgid ""
-#~ "The maximum hops to be published in <abbr title=\"Router "
-#~ "Advertisement\">RA</abbr> messages.<br />Default is 0 (<code>0</code>), "
-#~ "meaning unspecified. Max 255."
+#~ "The maximum hops to be published in <abbr title=\"Router Advertisement"
+#~ "\">RA</abbr> messages.<br />Default is 0 (<code>0</code>), meaning "
+#~ "unspecified. Max 255."
 #~ msgstr ""
-#~ "Maksymalna liczba skoków do opublikowania w komunikatach <abbr "
-#~ "title=\"Router Advertisement\">RA</abbr>.<br />Domyślna wartość to 0 "
-#~ "(<code>0</code>), tj. nie określono. Maksymalna to 255."
+#~ "Maksymalna liczba skoków do opublikowania w komunikatach <abbr title="
+#~ "\"Router Advertisement\">RA</abbr>.<br />Domyślna wartość to 0 (<code>0</"
+#~ "code>), tj. nie określono. Maksymalna to 255."
 
 #~ msgid "stateful-only"
 #~ msgstr "tylko stanowy"
@@ -10805,12 +10858,12 @@ msgstr "« Wróć"
 
 #~ msgid ""
 #~ "The filesystem that was used to format the memory (<abbr title=\"for "
-#~ "example\">e.g.</abbr> <samp><abbr title=\"Third Extended "
-#~ "Filesystem\">ext3</abbr></samp>)"
+#~ "example\">e.g.</abbr> <samp><abbr title=\"Third Extended Filesystem"
+#~ "\">ext3</abbr></samp>)"
 #~ msgstr ""
-#~ "System plików, który został użyty do sformatowania nośnika (<abbr "
-#~ "title=\"na przykład\">np.</abbr> <samp><abbr title=\"Third Extended "
-#~ "Filesystem\">ext3</abbr></samp>)"
+#~ "System plików, który został użyty do sformatowania nośnika (<abbr title="
+#~ "\"na przykład\">np.</abbr> <samp><abbr title=\"Third Extended Filesystem"
+#~ "\">ext3</abbr></samp>)"
 
 # Przycisk nazywa się "Wykonaj", więc taki sam opis ma być w podpowiedzi.
 #~ msgid ""
