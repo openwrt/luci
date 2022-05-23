@@ -276,6 +276,9 @@ msgid ""
 "internet connection in the mesh) or having the gateway support turned off "
 "entirely (which is the default setting)."
 msgstr ""
+"batman-adv 节点可以运行于在服务器模式（与 Mesh 共享其 Internet 连接）或客户端"
+"模式（在 Mesh 中搜索最合适的 Internet 连接）或完全关闭网关支持（这是默认设"
+"置）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:370
 msgid "A configuration for the device \"%s\" already exists"
@@ -420,7 +423,7 @@ msgstr "接入点 AP"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:60
 msgid "Access Point Isolation"
-msgstr ""
+msgstr "接入点隔离"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:388
 msgid "Actions"
@@ -613,7 +616,7 @@ msgstr "老化时间"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:50
 msgid "Aggregate Originator Messages"
-msgstr ""
+msgstr "聚合发起者消息"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
 msgid "Aggregate Transmit Power (ACTATP)"
@@ -1031,7 +1034,7 @@ msgstr "平均："
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:70
 msgid "Avoid Bridge Loops"
-msgstr ""
+msgstr "避免网桥回环"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1505
 msgid "B43 + B43C"
@@ -1095,11 +1098,11 @@ msgstr "此接口用于共享的 Base64 编码的公钥。"
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:10
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:41
 msgid "Batman Device"
-msgstr ""
+msgstr "Batman 设备"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:10
 msgid "Batman Interface"
-msgstr ""
+msgstr "Batman 接口"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:81
 msgid ""
@@ -1111,6 +1114,10 @@ msgid ""
 "the other end. Per default fragmentation is enabled and inactive if the "
 "packet fits but it is possible to deactivate the fragmentation entirely."
 msgstr ""
+"Batman-adv 内置 2 层分段，用于流经网格的单播数据，这允许在不允许将 MTU 增加到"
+"超过 1500 字节的标准以太网数据包大小的接口/连接上运行 batman-adv。启用分段"
+"后，batman-adv 将自动对过大数据包进行分段并在另一端对它们去分段。 该功能默认"
+"处于启用状态，但如数据包大小适合则该功能不活跃，但不可以完全停用该功能。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:974
 msgid "Beacon Interval"
@@ -1128,7 +1135,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:287
 msgid "Bind NTP server"
-msgstr ""
+msgstr "绑定 NTP 服务器"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
 msgid "Bind dynamically to interfaces rather than wildcard address."
@@ -1164,7 +1171,7 @@ msgstr "速率"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:65
 msgid "Bonding Mode"
-msgstr ""
+msgstr "绑定模式"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:201
 msgid "Bonding Policy"
@@ -1568,8 +1575,8 @@ msgstr "配置 <abbr title=\"路由器通告\">RA</abbr> 消息中的默认路�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:764
 msgid ""
-"Configures the operation mode of the <abbr title=\"Router "
-"Advertisement\">RA</abbr> service on this interface."
+"Configures the operation mode of the <abbr title=\"Router Advertisement"
+"\">RA</abbr> service on this interface."
 msgstr "配置此接口上 <abbr title=\"路由器通告\">RA</abbr> 服务的操作模式。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:879
@@ -1708,12 +1715,12 @@ msgstr "当前功率"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:28
 msgctxt "nft meta hour"
 msgid "Current time"
-msgstr ""
+msgstr "当前时间"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:29
 msgctxt "nft meta day"
 msgid "Current weekday"
-msgstr ""
+msgstr "当前工作日"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:573
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:575
@@ -1737,8 +1744,8 @@ msgstr "自定义闪烁间隔（kernel：timer）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:59
 msgid ""
-"Customizes the behaviour of the device <abbr title=\"Light Emitting "
-"Diode\">LED</abbr>s if possible."
+"Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
+"\">LED</abbr>s if possible."
 msgstr "自定义此设备的 <abbr title=\"发光二极管\">LED</abbr> 行为。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
@@ -2146,7 +2153,7 @@ msgstr "最远网络用户的距离（米）。"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
-msgstr ""
+msgstr "分布式 ARP 表"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:542
 msgid ""
@@ -2158,9 +2165,9 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid ""
-"Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-"abbr> forwarder."
+"Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</abbr> "
+"forwarder."
 msgstr ""
 "Dnsmasq 是轻量级的 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
 "abbr>服务器和<abbr title=\"Domain Name System\">DNS</abbr> 转发器。"
@@ -2301,8 +2308,8 @@ msgid ""
 "Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access "
 "and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"
 msgstr ""
-"Dropbear 提供 <abbr title=\"Secure Shell\">SSH</abbr> 访问和 <abbr "
-"title=\"Secure Copy\">SCP</abbr> 服务"
+"Dropbear 提供 <abbr title=\"Secure Shell\">SSH</abbr> 访问和 <abbr title="
+"\"Secure Copy\">SCP</abbr> 服务"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:14
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:11
@@ -2384,7 +2391,7 @@ msgstr "出口 QoS 映射"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:13
 msgctxt "nft meta oif"
 msgid "Egress device id"
-msgstr ""
+msgstr "出口设备 ID"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:11
 msgctxt "nft meta oifname"
@@ -2493,9 +2500,9 @@ msgstr "启用 WPS 一键加密按钮，需要 WPA(2)-PSK/WPA3-SAE"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
-"Enable automatic redirection of <abbr title=\"Hypertext Transfer "
-"Protocol\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol "
-"Secure\">HTTPS</abbr> port."
+"Enable automatic redirection of <abbr title=\"Hypertext Transfer Protocol"
+"\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol Secure"
+"\">HTTPS</abbr> port."
 msgstr ""
 "允许自动将<abbr title=\"Hypertext Transfer Protocol\">HTTP</abbr>请求重定向至"
 "<abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</abbr>端口。"
@@ -2597,7 +2604,7 @@ msgstr "启用属于同一移动域接入点之间的快速漫游"
 msgid ""
 "Enables more efficient, group aware multicast forwarding infrastructure in "
 "batman-adv."
-msgstr ""
+msgstr "在 batman-adv 中启用更高效、分组感知的多播转发基础架构。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:518
 msgid "Enables the Spanning Tree Protocol on this bridge"
@@ -3005,10 +3012,10 @@ msgstr "表单令牌不匹配"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:919
 msgid ""
-"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr "
-"title=\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr "
-"title=\"Neighbour Advertisement, Type 136\">NA</abbr> messages between the "
-"designated master interface and downstream interfaces."
+"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr title="
+"\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr title=\"Neighbour "
+"Advertisement, Type 136\">NA</abbr> messages between the designated master "
+"interface and downstream interfaces."
 msgstr ""
 "在指定的主接口和下游接口之间转发 <abbr title=\"邻居发现协议\">NDP</abbr> "
 "<abbr title=\"邻居请求报文，类型 135\">NS</abbr> 和 <abbr title=\"邻居通告报"
@@ -3059,7 +3066,7 @@ msgstr "转发模式"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:80
 msgid "Fragmentation"
-msgstr ""
+msgstr "分段"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:963
 msgid "Fragmentation Threshold"
@@ -3113,7 +3120,7 @@ msgstr "网关"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:85
 msgid "Gateway Mode"
-msgstr ""
+msgstr "网关模式"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
 msgid "Gateway Ports"
@@ -3367,7 +3374,7 @@ msgstr "钩子：<strong>%h</strong>(%h)，优先级：<strong>%d</strong>"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:92
 msgid "Hop Penalty"
-msgstr ""
+msgstr "跳跃惩罚"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:57
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2164
@@ -3812,14 +3819,14 @@ msgstr "留空则忽略所通告的 DNS 服务器地址"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:339
 msgid ""
 "If your physical memory is insufficient unused data can be temporarily "
-"swapped to a swap-device resulting in a higher amount of usable <abbr "
-"title=\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a "
-"very slow process as the swap-device cannot be accessed with the high "
-"datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."
+"swapped to a swap-device resulting in a higher amount of usable <abbr title="
+"\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a very "
+"slow process as the swap-device cannot be accessed with the high datarates "
+"of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
-"如果物理内存不足，闲置数据可自动移到交换设备暂存，以增加可用的 <abbr "
-"title=\"随机存取存储器\">RAM</abbr>。请注意：数据交换的过程会非常慢，因为交换"
-"设备无法像 <abbr title=\"随机存取存储器\">RAM</abbr> 那样的高速地访问。"
+"如果物理内存不足，闲置数据可自动移到交换设备暂存，以增加可用的 <abbr title="
+"\"随机存取存储器\">RAM</abbr>。请注意：数据交换的过程会非常慢，因为交换设备无"
+"法像 <abbr title=\"随机存取存储器\">RAM</abbr> 那样的高速地访问。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:363
 msgid "Ignore <code>/etc/hosts</code>"
@@ -3850,6 +3857,8 @@ msgid ""
 "In bridged LAN setups it is advisable to enable the bridge loop avoidance in "
 "order to avoid broadcast loops that can bring the entire LAN to a standstill."
 msgstr ""
+"在桥接 LAN 设置中，建议启用桥接环路避免功能，以避免可导致整个 LAN 停止的广播"
+"环路。"
 
 #: modules/luci-base/luasrc/view/csrftoken.htm:13
 msgid ""
@@ -4324,7 +4333,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:671
 msgid "Legacy rules detected"
-msgstr ""
+msgstr "检测到旧版规则"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4386
 msgid "Legend:"
@@ -4365,7 +4374,7 @@ msgstr "链路活动"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:77
 msgctxt "nft @ll,off,len"
 msgid "Link layer header bits %d-%d"
-msgstr ""
+msgstr "链路层报头位 %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:432
 msgid "List of IP addresses to convert into NXDOMAIN responses."
@@ -4808,11 +4817,11 @@ msgstr "Mesh ID"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh Routing"
-msgstr ""
+msgstr "Mesh 路由"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh and routing related options"
-msgstr ""
+msgstr "Mesh 和路由相关选项"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:404
 msgid "Method not found"
@@ -5018,7 +5027,7 @@ msgstr "多播"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:99
 msgid "Multicast Mode"
-msgstr ""
+msgstr "多播模式"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:705
 msgid "Multicast routing"
@@ -5095,7 +5104,7 @@ msgstr "网络"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:104
 msgid "Network Coding"
-msgstr ""
+msgstr "网络编码"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2004
 msgid "Network SSID"
@@ -5138,7 +5147,7 @@ msgstr "网络设备表 \"%h\""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:78
 msgctxt "nft @nh,off,len"
 msgid "Network header bits %d-%d"
-msgstr ""
+msgstr "网络标头位 %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:426
 msgid "Network ifname configuration migration"
@@ -5284,7 +5293,7 @@ msgstr "禁用无效信息缓存"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:690
 msgid "No nftables ruleset loaded."
-msgstr ""
+msgstr "未加载 nftables 规则集。"
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:69
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
@@ -5487,7 +5496,7 @@ msgstr "仅在当前活跃从属设备发生故障，且主从属设备在线时
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:676
 msgid "Open iptables rules overview…"
-msgstr ""
+msgstr "打开 iptables 规则概况…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:472
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
@@ -5639,9 +5648,9 @@ msgstr "选项"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:525
 msgid ""
 "Options for the Network-ID. (Note: needs also Network-ID.) E.g. "
-"\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</"
-"code>\" for default route. <code>0.0.0.0</code> means \"the address of the "
-"system running dnsmasq\"."
+"\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</code>"
+"\" for default route. <code>0.0.0.0</code> means \"the address of the system "
+"running dnsmasq\"."
 msgstr ""
 "Network-ID 选项。（注意：还需要指定 Network-ID。）如，“<code>42,192.168.1.4</"
 "code>”为 NTP 服务器，“<code>3,192.168.4.4</code>”为默认路由。<code>0.0.0.0</"
@@ -5653,7 +5662,7 @@ msgstr "选项："
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:55
 msgid "Originator Interval"
-msgstr ""
+msgstr "发起人间隔"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:348
 msgid "Other:"
@@ -6140,6 +6149,8 @@ msgid ""
 "Prevents one wireless client to talk to another. This setting only affects "
 "packets without any VLAN tag (untagged packets)."
 msgstr ""
+"防止一个无线客户端与另一个客户端通信。 此设置仅影响没有任何 VLAN 标记的数据包"
+"（未打标记的数据包）。"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:213
 msgid "Primary Slave"
@@ -6216,7 +6227,7 @@ msgstr "添加新网络"
 msgid ""
 "Provide the NTP server to the selected interface or, if unspecified, to all "
 "interfaces"
-msgstr ""
+msgstr "将 NTP 服务器提供给选定的接口，或者，如果未指定，则提供给所有接口"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1077
 msgid "Pseudo Ad-Hoc (ahdemo)"
@@ -6780,7 +6791,7 @@ msgstr "路由"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:44
 msgid "Routing Algorithm"
-msgstr ""
+msgstr "路由算法"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
 msgid ""
@@ -6975,7 +6986,7 @@ msgstr "传输这台设备的主机名称"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:89
 msgid "Server"
-msgstr ""
+msgstr "服务器"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:518
 msgid "Server address"
@@ -7971,7 +7982,7 @@ msgstr "VLAN ID 必须是唯一的"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:45
 msgid "The algorithm that is used to discover mesh routes"
-msgstr ""
+msgstr "用于发现 mesh 路由的算法"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2010
 msgid ""
@@ -8069,6 +8080,8 @@ msgid ""
 "forwarded OGM, thereby propagating the cost of an extra hop (the packet has "
 "to be received and retransmitted which costs airtime)"
 msgstr ""
+"跳跃惩罚设置允许修改 batman-adv 对多跳路由与短路由的偏好。该值应用于每个转发 "
+"OGM 的 TQ，从而传播额外跳的成本（必须接收和重新传输数据包，这会浪费传播时长）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "The hostname of the boot server"
@@ -8158,8 +8171,8 @@ msgstr "网络名称已被使用"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:139
 msgid ""
-"The network ports on this device can be combined to several <abbr "
-"title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
+"The network ports on this device can be combined to several <abbr title="
+"\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
 "communicate directly with each other. <abbr title=\"Virtual Local Area "
 "Network\">VLAN</abbr>s are often used to separate different network "
 "segments. Often there is by default one Uplink port for a connection to the "
@@ -8278,13 +8291,15 @@ msgstr "该值被配置覆盖。"
 msgid ""
 "The value specifies the interval (milliseconds) in which batman-adv floods "
 "the network with its protocol information."
-msgstr ""
+msgstr "该值指定 batman-adv 向网络发送其协议信息的时间间隔（毫秒）。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:672
 msgid ""
 "There are legacy iptables rules present on the system. Mixing iptables and "
 "nftables rules is discouraged and may lead to incomplete traffic filtering."
 msgstr ""
+"系统上存在旧版 iptables 规则。 不鼓励混合使用 iptables 和 nftables 规则，这可"
+"能会导致流量过滤不完整。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:777
@@ -8343,6 +8358,10 @@ msgid ""
 "selector but rather go to the Wireless settings and select this Interface as "
 "a network from there."
 msgstr ""
+"这是你要将上方的物理设备链接到的 batman-adv 设备。 如果此列表为空，你需要先创"
+"建一个。 如果你想通过有线网络设备路由 mesh 流量，请从上面的设备选择器中选择"
+"它。如果您想将 batman-adv 接口分配给 Wi-fi 网格，则不要在设备选择器中选择设"
+"备，而是转到无线设置并从那里选择此接口作为网络。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:116
 msgid ""
@@ -8496,17 +8515,17 @@ msgstr "传输散列策略"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:79
 msgctxt "nft @th,off,len"
 msgid "Transport header bits %d-%d"
-msgstr ""
+msgstr "传输标头位 %d-%d"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:59
 msgctxt "nft th dport"
 msgid "Transport header destination port"
-msgstr ""
+msgstr "传输标头目标端口"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:58
 msgctxt "nft th sport"
 msgid "Transport header source port"
-msgstr ""
+msgstr "传输标头源端口"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:75
 msgid "Trigger"
@@ -9177,6 +9196,8 @@ msgid ""
 "When enabled network coding increases the WiFi throughput by combining "
 "multiple frames into a single frame, thus reducing the needed air time."
 msgstr ""
+"启用后，网络编码通过将多个帧组合成单个帧来增加 WiFi 吞吐量，从而减少所需的传"
+"输时间。"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:76
 msgid ""
@@ -9184,6 +9205,8 @@ msgid ""
 "helps non-mesh clients to get ARP responses much more reliably and without "
 "much delay."
 msgstr ""
+"启用后，分布式 ARP 表形成一个 mesh 范围的 ARP 缓存，帮助非 mesh 客户端更可靠"
+"地获得 ARP 响应，并且没有太多延迟。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:109
 msgid ""
@@ -9196,6 +9219,8 @@ msgid ""
 "When running the mesh over multiple WiFi interfaces per node batman-adv is "
 "capable of optimizing the traffic flow to gain maximum performance."
 msgstr ""
+"当在每个节点的多个 WiFi 接口上运行 mesh 时，batman-adv 能够优化流量以获得最大"
+"性能。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1537
 msgid ""
@@ -9618,7 +9643,7 @@ msgstr "随机"
 msgid ""
 "reduces overhead by collecting and aggregating originator messages in a "
 "single packet rather than many small ones"
-msgstr ""
+msgstr "通过在单个数据包而不是许多小数据包中收集和聚合发起方消息来减少开销"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:769
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:884
@@ -9893,6 +9918,11 @@ msgstr "是"
 msgid "« Back"
 msgstr "« 后退"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1453
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1465
+msgid "The value is overridden by configuration. Original: %s"
+msgstr "该值被配置覆盖。 原始：%s"
+
 #~ msgctxt "nft meta oif"
 #~ msgid "Engress device id"
 #~ msgstr "出口设备 id"
@@ -9973,8 +10003,8 @@ msgstr "« 后退"
 
 #~ msgid ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router advertises itself as the default IPv6 gateway via <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages (to "
+#~ "Router advertises itself as the default IPv6 gateway via <abbr title="
+#~ "\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages (to "
 #~ "<code>ff02::1</code>) and provides <abbr title=\"Prefix Delegation\">PD</"
 #~ "abbr> to downstream devices.</li> <li><strong>relay mode</strong>: Router "
 #~ "relays <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
@@ -9995,12 +10025,12 @@ msgstr "« 后退"
 
 #~ msgid ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr>) to downstream interfaces.</li> <li><strong>relay "
-#~ "mode</strong>: Router relays WAN interface config downstream. Helps "
-#~ "support upstream links that lack <abbr title=\"Prefix Delegation\">PD</"
-#~ "abbr>.</li> <li><strong>hybrid mode</strong>: Router does combination of "
-#~ "server+relay.</li></ul>"
+#~ "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix Delegation"
+#~ "\">PD</abbr>) to downstream interfaces.</li> <li><strong>relay mode</"
+#~ "strong>: Router relays WAN interface config downstream. Helps support "
+#~ "upstream links that lack <abbr title=\"Prefix Delegation\">PD</abbr>.</"
+#~ "li> <li><strong>hybrid mode</strong>: Router does combination of server"
+#~ "+relay.</li></ul>"
 #~ msgstr ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>：路由"
 #~ "器向下游接口分配IP和委托前缀（<abbr title=\"前缀授权\">PD</abbr>）。</li> "
@@ -10091,18 +10121,18 @@ msgstr "« 后退"
 #~ "如果没有将布尔值 <code>ndproxy_slave</code> 设置为 1 的接口，则在内部恢复"
 #~ "为禁用状态。将 <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> 代"
 #~ "理视为 IPv6 的代理 ARP：将不同物理硬件段上的主机统一到同一 IP 子网中。由 "
-#~ "<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 <abbr "
-#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr> 消息组成。<abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr> 代理在布尔值 "
-#~ "<code>master</code> 为 1（即上游）的接口上侦听 <abbr title=\"Neighbour "
-#~ "Solicitation, Type 135\">NS</abbr>，然后查询该目标 IP 的从属/内部接口，最"
-#~ "后发送 <abbr title=\"Neighbour Advertisement, Type 136\">NA</abbr> 消息。 "
-#~ "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> 实际上是用于 IPv6 "
-#~ "的 ARP。<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 "
-#~ "<abbr title=\"Neighbour Advertisement, Type 136\">NA</abbr> 用于检测链路上"
-#~ "的可达性及重复地址，它们本身也是 SLAAC 自动配置的先决条件。<br /> <ul "
-#~ "style=\"list-style-type:none;\"> <li><strong>已禁用</strong>：没有 <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr> 消息将会被被代理到 "
+#~ "<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 <abbr title="
+#~ "\"Neighbour Advertisement, Type 136\">NA</abbr> 消息组成。<abbr title="
+#~ "\"Neighbour Discovery Protocol\">NDP</abbr> 代理在布尔值 <code>master</"
+#~ "code> 为 1（即上游）的接口上侦听 <abbr title=\"Neighbour Solicitation, "
+#~ "Type 135\">NS</abbr>，然后查询该目标 IP 的从属/内部接口，最后发送 <abbr "
+#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr> 消息。 <abbr title="
+#~ "\"Neighbour Discovery Protocol\">NDP</abbr> 实际上是用于 IPv6 的 ARP。"
+#~ "<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 <abbr title="
+#~ "\"Neighbour Advertisement, Type 136\">NA</abbr> 用于检测链路上的可达性及重"
+#~ "复地址，它们本身也是 SLAAC 自动配置的先决条件。<br /> <ul style=\"list-"
+#~ "style-type:none;\"> <li><strong>已禁用</strong>：没有 <abbr title="
+#~ "\"Neighbour Discovery Protocol\">NDP</abbr> 消息将会被被代理到 "
 #~ "<code>ndproxy_slave</code> 为真的接口。</li> <li><strong>中继模式</"
 #~ "strong>：将 <code>master</code> 的 <abbr title=\"Neighbour Discovery "
 #~ "Protocol\">NDP</abbr> 消息代理到 <code>ndproxy_slave</code> 为真的接口。有"
@@ -10134,9 +10164,9 @@ msgstr "« 后退"
 #~ "值为0 (<code>0</code>)。最小值1280。"
 
 #~ msgid ""
-#~ "The maximum hops to be published in <abbr title=\"Router "
-#~ "Advertisement\">RA</abbr> messages.<br />Default is 0 (<code>0</code>), "
-#~ "meaning unspecified. Max 255."
+#~ "The maximum hops to be published in <abbr title=\"Router Advertisement"
+#~ "\">RA</abbr> messages.<br />Default is 0 (<code>0</code>), meaning "
+#~ "unspecified. Max 255."
 #~ msgstr ""
 #~ "在 <abbr title=\"Router Advertisement\">RA</abbr> 报文中通告的最大跳数。"
 #~ "<br />默认为 0（<code>0</code>），表示未指定。最大为 255。"
@@ -10166,17 +10196,17 @@ msgstr "« 后退"
 #~ "an IPv6 address to a host via DHCPv6.</li><ul>"
 #~ msgstr ""
 #~ "默认为无状态 + 有状态。<br /> <ul style=\"list-style-type:none;\"> "
-#~ "<li><strong>无状态</strong>：路由器广播前缀，主机使用 <abbr "
-#~ "title=\"Stateless Address Auto Config\">SLAAC</abbr> 来自分配自己的地址，"
-#~ "不使用 DHCPv6。</li> <li><strong>无状态 + 有状态</strong>：使用 SLAAC 的同"
-#~ "时，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</li> <li><strong>仅有"
-#~ "状态</strong>：不使用 SLAAC，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地"
-#~ "址。</li><ul>"
+#~ "<li><strong>无状态</strong>：路由器广播前缀，主机使用 <abbr title="
+#~ "\"Stateless Address Auto Config\">SLAAC</abbr> 来自分配自己的地址，不使用 "
+#~ "DHCPv6。</li> <li><strong>无状态 + 有状态</strong>：使用 SLAAC 的同时，路"
+#~ "由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</li> <li><strong>仅有状态</"
+#~ "strong>：不使用 SLAAC，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</"
+#~ "li><ul>"
 
 #~ msgid ""
-#~ "The maximum hops to be published in <abbr title=\"Router "
-#~ "Advertisement\">RA</abbr> messages.<br>Default is 0 (<code>0</code>), "
-#~ "meaning unspecified. Max 255."
+#~ "The maximum hops to be published in <abbr title=\"Router Advertisement"
+#~ "\">RA</abbr> messages.<br>Default is 0 (<code>0</code>), meaning "
+#~ "unspecified. Max 255."
 #~ msgstr ""
 #~ "将以<abbr title=\"Router Advertisement\">RA</abbr>消息形式发布的最大跳数。"
 #~ "<br>默认值为0 (<code>0</code>)，意味着未指定。最大值255。"
@@ -10423,8 +10453,8 @@ msgstr "« 后退"
 
 #~ msgid ""
 #~ "The filesystem that was used to format the memory (<abbr title=\"for "
-#~ "example\">e.g.</abbr> <samp><abbr title=\"Third Extended "
-#~ "Filesystem\">ext3</abbr></samp>)"
+#~ "example\">e.g.</abbr> <samp><abbr title=\"Third Extended Filesystem"
+#~ "\">ext3</abbr></samp>)"
 #~ msgstr ""
 #~ "用于格式化存储器的文件系统（例如：<samp><abbr title=\"Third Extended "
 #~ "Filesystem\">ext3</abbr></samp>）"
@@ -10524,11 +10554,11 @@ msgstr "« 后退"
 #~ msgstr "帧突发"
 
 #~ msgid ""
-#~ "Further information about WireGuard interfaces and peers at <a "
-#~ "href=\"http://wireguard.com\">wireguard.com</a>."
+#~ "Further information about WireGuard interfaces and peers at <a href="
+#~ "\"http://wireguard.com\">wireguard.com</a>."
 #~ msgstr ""
-#~ "有关 WireGuard 接口和 Peer 的更多信息：<a href=\"http://wireguard."
-#~ "com\">wireguard.com</a>。"
+#~ "有关 WireGuard 接口和 Peer 的更多信息：<a href=\"http://wireguard.com"
+#~ "\">wireguard.com</a>。"
 
 #~ msgid "Generic 802.11%s Wireless Controller"
 #~ msgstr "通用 802.11%s 无线控制器"
