@@ -571,7 +571,7 @@ function renderDependencies(depends, info)
 		if (deps[i] === 'libc')
 			continue;
 
-		if (deps[i].match(/^(.+)\s+\((<=|<|>|>=|=|<<|>>)(.+)\)$/)) {
+		if (deps[i].match(/^(.+)\s+\((<=|>=|<<|>>|<|>|=)(.+)\)$/)) {
 			dep = RegExp.$1.trim();
 			vop = RegExp.$2.trim();
 			ver = RegExp.$3.trim();
