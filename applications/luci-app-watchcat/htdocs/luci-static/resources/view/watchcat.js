@@ -40,11 +40,20 @@ return view.extend({
 				1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></li><ul>"));
 		o.default = '6h';
 
-		o = s.taboption('general', form.Value, 'pinghosts', _('Host To Check'), _(`IPv4 address or hostname to ping.`));
-		o.datatype = 'host(1)';
+		o = s.taboption('general', form.Value, 'pinghosts', _('Host To Check'), _(`IP address or hostname to ping.`));
+		o.datatype = 'host';
 		o.default = '8.8.8.8';
 		o.depends({ mode: "ping_reboot" });
 		o.depends({ mode: "restart_iface" });
+
+		o = s.taboption('general', form.ListValue, 'addressfamily',
+				_('Address family for pinging the host'));
+		o.default = 'any';
+		o.depends({ mode: 'ping_reboot' });
+		o.depends({ mode: 'restart_iface' });
+		o.value('any');
+		o.value('ipv4');
+		o.value('ipv6');
 
 		o = s.taboption('general', form.Value, 'pingperiod', 
 			_('Check Interval'), 
