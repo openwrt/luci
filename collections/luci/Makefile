@@ -14,6 +14,7 @@ LUCI_DESCRIPTION:=Standard OpenWrt set including full admin with ppp support and
 LUCI_DEPENDS:= \
 	+IPV6:luci-proto-ipv6 \
 	+libiwinfo-lua \
+	+luci-app-attendedsysupgrade \
 	+luci-app-firewall \
 	+luci-app-opkg \
 	+luci-mod-admin-full \
