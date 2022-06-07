@@ -341,6 +341,11 @@ return view.extend({
 					}
 				}
 
+				// allow to re-install running firmware in advanced mode
+				if (this.data.advanced_mode == 1) {
+					candidates.unshift([version, revision])
+				}
+
 				if (candidates.length) {
 					var m, s, o;
 
@@ -357,7 +362,12 @@ return view.extend({
 					s = map.section(form.NamedSection, 'request', '', '', 'Use defaults for the safest update');
 					o = s.option(form.ListValue, 'version', 'Select firmware version');
 					for (let candidate of candidates) {
-						o.value(candidate[0], candidate[1] ? `${candidate[0]} - ${candidate[1]}` : candidate[0]);
+						if (candidate[0] == version && candidate[1] == revision) {
+							o.value(candidate[0], _('[installed] %s')
+								.format(candidate[1] ? `${candidate[0]} - ${candidate[1]}` : candidate[0]));
+						} else {
+							o.value(candidate[0], candidate[1] ? `${candidate[0]} - ${candidate[1]}` : candidate[0]);
+						}
 					}
 
 					if (this.data.advanced_mode == 1) {
