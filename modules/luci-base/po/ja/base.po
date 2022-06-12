@@ -58,13 +58,18 @@ msgstr "（空）"
 msgid "(no interfaces attached)"
 msgstr "（インターフェースが接続されていません）"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:597
+msgctxt "Label indicating further amount of allowed ips"
+msgid "+ %d more"
+msgstr ""
+
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
 msgstr "-- 追加項目 --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:275
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3738
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4106
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3785
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4153
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:798
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1036
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2009
@@ -289,12 +294,6 @@ msgstr "同じ名前のディレクトリがすでに存在します。"
 msgid "A new login is required since the authentication session expired."
 msgstr "認証セッションの期限が切れたため、再ログインが必要です。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:207
-msgid ""
-"A random, on the fly generated \"PrivateKey\", the key will not be saved on "
-"the router"
-msgstr ""
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1503
 msgid "A43C + J43 + A43"
 msgstr "A43C + J43 + A43"
@@ -480,11 +479,11 @@ msgstr "アダプティブな負荷分散（balance-alb、6）"
 msgid "Adaptive transmit load balancing (balance-tlb, 5)"
 msgstr "アダプティブな送信負荷分散（balance-tlb、5）"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2229
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2232
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2245
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2253
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3536
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2233
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2236
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2249
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2257
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3583
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:25
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:189
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:197
@@ -542,7 +541,7 @@ msgstr "hostsファイルから提供される名前にローカルドメイン�
 msgid "Add new interface..."
 msgstr "インターフェースを新規作成..."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:178
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:224
 msgid "Add peer"
 msgstr "ピアを追加"
 
@@ -578,6 +577,10 @@ msgstr "アドレス"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:22
 msgctxt "nft meta nfproto"
 msgid "Address family"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:278
+msgid "Address setting is invalid"
 msgstr ""
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
@@ -718,9 +721,13 @@ msgstr "システム機能の調査を許可"
 msgid "Allow the <em>root</em> user to login with password"
 msgstr "パスワードでの <em>root</em> 権限へのログインを許可します"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:294
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:586
 msgid "Allowed IPs"
 msgstr "許可されたIP"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:306
+msgid "AllowedIPs setting is invalid"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:708
 msgid "Always"
@@ -750,7 +757,7 @@ msgstr ""
 msgid "Amount of Duplicate Address Detection probes to send"
 msgstr "送信に用いる重複アドレス検出（DAD）の数です"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:604
+#: modules/luci-base/htdocs/luci-static/resources/form.js:608
 msgid "An error occurred while saving the form:"
 msgstr "フォームの保存中にエラーが発生しました:"
 
@@ -884,21 +891,29 @@ msgstr "すべてのゾーン"
 msgid "Apply DHCP Options to this net. (Empty = all clients)."
 msgstr ""
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4661
+msgid "Apply and keep settings"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
 msgstr "バックアップを適用しますか？"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4638
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4687
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "適用のリクエストに失敗しました ステータスコード:<code>%h</code>"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2175
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4404
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4504
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4524
 msgid "Apply unchecked"
 msgstr "チェックなしの適用"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4577
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4657
+msgid "Apply with revert after connectivity loss"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4597
 msgid "Applying configuration changes… %ds"
 msgstr "設定を適用中… 残り最大%d秒"
 
@@ -1060,7 +1075,7 @@ msgstr "BR / DMR / AFTR"
 msgid "BSSID"
 msgstr "BSSID"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3202
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3250
 msgid "Back"
 msgstr ""
 
@@ -1072,6 +1087,10 @@ msgstr "概要へ戻る"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:48
 msgid "Back to configuration"
 msgstr "設定へ戻る"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:786
+msgid "Back to peer configuration"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:391
 msgid "Backup"
@@ -1095,7 +1114,7 @@ msgstr "バンド"
 msgid "Base device"
 msgstr "ベース デバイス"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:108
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:158
 msgid "Base64-encoded public key of this interface for sharing."
 msgstr ""
 
@@ -1266,6 +1285,7 @@ msgstr "呼び出しに失敗しました"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2938
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4164
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4653
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:188
@@ -1274,8 +1294,13 @@ msgstr "呼び出しに失敗しました"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:128
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:295
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:203
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:447
 msgid "Cancel"
 msgstr "キャンセル"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:337
+msgid "Cannot parse configuration: %s"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:562
 msgctxt "Chain hook: forward"
@@ -1378,7 +1403,7 @@ msgstr ""
 msgid "Changes"
 msgstr "変更"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4673
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4723
 msgid "Changes have been reverted."
 msgstr "変更は取り消されました。"
 
@@ -1557,11 +1582,15 @@ msgstr "送信チェックサムを計算します（オプション）。"
 msgid "Configuration"
 msgstr "設定"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4552
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:652
+msgid "Configuration Export"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4572
 msgid "Configuration changes applied."
 msgstr "設定が適用されました。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4490
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4510
 msgid "Configuration changes have been rolled back!"
 msgstr "設定がロールバックされました！"
 
@@ -1640,6 +1669,10 @@ msgstr "接続の試行に失敗しました"
 msgid "Connection attempt failed."
 msgstr "接続の試行に失敗しました。"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:719
+msgid "Connection endpoint"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Connection lost"
 msgstr "接続が失われました"
@@ -1647,6 +1680,10 @@ msgstr "接続が失われました"
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:160
 msgid "Connections"
 msgstr "接続数"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4646
+msgid "Connectivity change"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:31
 msgctxt "nft ct state"
@@ -1694,7 +1731,7 @@ msgctxt "Chain policy: accept"
 msgid "Continue processing unmatched packets"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4526
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4546
 msgid ""
 "Could not regain access to the device after applying the configuration "
 "changes. You might need to reconnect if you modified network related "
@@ -1848,6 +1885,10 @@ msgstr "DNS 検索ドメイン"
 msgid "DNS server port"
 msgstr "<abbr title=\"Domain Name System\">DNS</abbr> サーバーポート"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:286
+msgid "DNS setting is invalid"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid "DNS weight"
 msgstr "DNS ウェイト"
@@ -1945,10 +1986,10 @@ msgstr ""
 msgid "Delegate IPv6 prefixes"
 msgstr "IPv6 プレフィックスの委任"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2309
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2310
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2740
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2744
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3520
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3567
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2907
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
@@ -1975,7 +2016,7 @@ msgstr "Delivery Traffic Indication Message（DTIM）間隔"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:342
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:139
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:193
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:479
 msgid "Description"
 msgstr "説明"
 
@@ -2067,7 +2108,7 @@ msgstr "デバイスが存在しません"
 msgid "Device type"
 msgstr "デバイス タイプ"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4525
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4545
 msgid "Device unreachable!"
 msgstr "デバイスにアクセスできません！"
 
@@ -2138,6 +2179,11 @@ msgstr "このネットワークを無効化"
 msgid "Disabled"
 msgstr "無効"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:503
+msgctxt "Label indicating that WireGuard peer is disabled"
+msgid "Disabled"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1186
 #, fuzzy
 msgid "Disassociate On Low Acknowledgement"
@@ -2168,11 +2214,11 @@ msgstr "切断の試行に失敗しました。"
 msgid "Disk space"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:607
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3012
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3218
+#: modules/luci-base/htdocs/luci-static/resources/form.js:611
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3022
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3264
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3663
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4496
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4516
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1770
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:358
 msgid "Dismiss"
@@ -2279,6 +2325,14 @@ msgstr "本当にすべての設定を消去しますか？"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2788
 msgid "Do you really want to recursively delete the directory \"%s\" ?"
 msgstr "本当にディレクトリ\"%s\"を再帰的に削除しますか？"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:575
+msgid "Do you want to replace the current PSK?"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:100
+msgid "Do you want to replace the current keys?"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:592
 msgid "Domain"
@@ -2391,7 +2445,7 @@ msgstr "EAPメソッド"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2718
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2721
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3383
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3430
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:154
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:160
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:495
@@ -2399,7 +2453,7 @@ msgstr "EAPメソッド"
 msgid "Edit"
 msgstr "編集"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:180
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:226
 msgid "Edit peer"
 msgstr ""
 
@@ -2457,7 +2511,7 @@ msgstr "緊急"
 msgid "Enable"
 msgstr "有効化"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:189
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:475
 msgid "Enable / Disable peer. Restart wireguard interface to apply changes."
 msgstr ""
 
@@ -2675,13 +2729,17 @@ msgstr "カプセル化モード"
 msgid "Encryption"
 msgstr "暗号化"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:301
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:624
 msgid "Endpoint Host"
 msgstr "エンドポイントホスト"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:305
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:640
 msgid "Endpoint Port"
 msgstr "エンドポイントポート"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:316
+msgid "Endpoint setting is invalid"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:684
 msgid "Enforce IGMPv1"
@@ -2724,7 +2782,7 @@ msgstr "消去中..."
 msgid "Error"
 msgstr "エラー"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:118
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:170
 msgid "Error getting PublicKey"
 msgstr ""
 
@@ -2787,7 +2845,7 @@ msgstr ""
 msgid "Expecting two priority values separated by a colon"
 msgstr "コロンで区切られた2つの優先度の値である必要があります"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2265
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2269
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:64
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:127
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:133
@@ -2865,7 +2923,7 @@ msgstr "FTプロトコル"
 msgid "Failed to change the system password."
 msgstr "システムパスワードの変更に失敗しました。"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4484
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4504
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
 msgstr "%d秒以内に適用できませんでした。ロールバック中です…"
 
@@ -2962,7 +3020,7 @@ msgstr "終了"
 msgid "Firewall"
 msgstr "ファイアウォール"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:155
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid "Firewall Mark"
 msgstr "ファイアウォールマーク"
 
@@ -3011,10 +3069,6 @@ msgstr "フラッシュ操作"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:319
 msgid "Flashing…"
 msgstr "フラッシュ中…"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:242
-msgid "For QR-Code support please install the qrencode package!"
-msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:536
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:686
@@ -3136,7 +3190,7 @@ msgctxt "nft nat flag fully-random"
 msgid "Full port randomization"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:168
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 msgid ""
 "Further information about WireGuard interfaces and peers at <a href='http://"
 "wireguard.com'>wireguard.com</a>."
@@ -3214,15 +3268,6 @@ msgstr "デバイスの一般オプション"
 msgid "Generate Config"
 msgstr "設定を生成"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:122
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:282
-msgid "Generate Key"
-msgstr "キーを生成"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:246
-msgid "Generate New QR-Code"
-msgstr ""
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1537
 msgid "Generate PMK locally"
 msgstr "ローカルでPMKを生成"
@@ -3231,8 +3276,28 @@ msgstr "ローカルでPMKを生成"
 msgid "Generate archive"
 msgstr "アーカイブを生成"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:261
-msgid "Generate new QR-Code"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:771
+msgid "Generate configuration"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:811
+msgid "Generate configuration…"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:109
+msgid "Generate new key pair"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:583
+msgid "Generate preshared key"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:653
+msgid "Generates a configuration suitable for import on a WireGuard peer"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:745
+msgid "Generating QR code…"
 msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:79
@@ -3249,6 +3314,7 @@ msgstr "全体設定"
 msgid "Global network options"
 msgstr "グローバルネットワークオプション"
 
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:82
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:89
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:72
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:92
@@ -3262,7 +3328,7 @@ msgid "Go to password configuration..."
 msgstr "パスワード設定へ移動..."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2640
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3702
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3749
 #: modules/luci-compat/luasrc/view/cbi/full_valueheader.htm:4
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:58
 msgid "Go to relevant configuration page"
@@ -3417,10 +3483,6 @@ msgstr ""
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>を非表示"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:256
-msgid "Hide QR-Code"
-msgstr ""
-
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:293
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:332
 msgid "Hide empty chains"
@@ -3523,7 +3585,7 @@ msgstr "IEEE 802.3adダイナミックリンクアグリゲーション（802.3a
 msgid "IKE DH Group"
 msgstr "IKE DHグループ"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:141
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "IP Addresses"
 msgstr "IPアドレス"
 
@@ -3822,10 +3884,6 @@ msgstr "IPv6-over-IPv4（6to4）"
 msgid "Identity"
 msgstr "識別子"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:213
-msgid "If available, the client's \"PresharedKey\""
-msgstr ""
-
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "If checked, 1DES is enabled"
 msgstr "チェックを付けると、1DESが有効になります"
@@ -3862,10 +3920,11 @@ msgid ""
 msgstr ""
 "固定のデバイスノード名のかわりに、パーティションラベルを使用してマウント"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:218
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4648
 msgid ""
-"If there are any unsaved changes for this client, please save the "
-"configuration before generating a QR-Code"
+"If the IP address used to access LuCI changes, a <strong>manual reconnect to "
+"the new IP</strong> is required within %d seconds to confirm the settings, "
+"otherwise modifications will be reverted."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
@@ -3911,6 +3970,28 @@ msgstr "イメージ"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:273
 msgid "Image check failed:"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:430
+msgid "Import configuration"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:466
+msgid "Import peer configuration…"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:452
+msgid "Import settings"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:366
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:391
+msgid "Imported peer configuration"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
+msgid "Imports settings from an existing WireGuard configuration file"
 msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
@@ -4154,8 +4235,8 @@ msgstr "無効"
 msgid "Invalid APN provided"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:39
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:42
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:37
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:40
 msgid "Invalid Base64 key string"
 msgstr "無効なBase64キー文字列"
 
@@ -4193,7 +4274,7 @@ msgstr ""
 msgid "Invalid command"
 msgstr "無効なコマンド"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:159
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:205
 msgid "Invalid hexadecimal value"
 msgstr "無効な16進数"
 
@@ -4220,7 +4301,7 @@ msgstr ""
 "フラッシュしようとしたイメージファイルはこのフラッシュメモリー向けではありま"
 "せん。イメージファイルを確認してください！"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:79
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:89
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:96
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:72
 msgid "JavaScript required!"
@@ -4280,6 +4361,11 @@ msgstr "受信パケットのキー（オプション）。"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
 msgid "Key for outgoing packets (optional)."
 msgstr "送信パケットのキー（オプション）。"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:511
+msgctxt "Label indicating that WireGuard peer lacks public key"
+msgid "Key missing"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:71
 msgctxt "nft unit"
@@ -4501,7 +4587,7 @@ msgstr ""
 "リクエストを転送する<abbr title=\"Domain Name System\">DNS</abbr>サーバーのリ"
 "スト"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:136
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Listen Port"
 msgstr "リッスンポート"
 
@@ -4521,6 +4607,10 @@ msgid ""
 "explicitly."
 msgstr "リッスンをこれらのインターフェースとループバックに限定します。"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:293
+msgid "ListenPort setting is invalid"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:438
 msgid "Listening port for inbound DNS queries."
 msgstr "受信DNSクエリをリッスンするポート"
@@ -4534,8 +4624,8 @@ msgstr "負荷"
 msgid "Load Average"
 msgstr "システム平均負荷"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:248
-msgid "Loading QR-Code..."
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:189
+msgid "Load configuration…"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1170
@@ -4761,7 +4851,7 @@ msgstr "MII間隔"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1457
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:86
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:150
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:46
 msgid "MTU"
 msgstr "MTU"
@@ -5036,7 +5126,7 @@ msgstr "モニター"
 msgid "More Characters"
 msgstr "文字数不足"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2580
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2581
 msgid "More…"
 msgstr "さらに表示…"
 
@@ -5266,7 +5356,7 @@ msgstr "新規インターフェース名…"
 msgid "Next »"
 msgstr "次 »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4043
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4090
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:298
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:346
 msgid "No"
@@ -5284,7 +5374,7 @@ msgstr "データなし"
 msgid "No Encryption"
 msgstr "暗号化なし"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:145
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "No Host Routes"
 msgstr "ホストルートなし"
 
@@ -5296,6 +5386,7 @@ msgstr "NAT-Tを使用しない"
 msgid "No RX signal"
 msgstr "RX信号なし"
 
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:80
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:87
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:70
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:90
@@ -5338,6 +5429,12 @@ msgstr "このディレクトリ内にエントリーがありません"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:82
 msgid "No files found"
 msgstr "ファイルが見つかりません"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:793
+msgid ""
+"No fixed interface listening port defined, peers might not be able to "
+"initiate connections to this WireGuard instance!"
+msgstr ""
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
@@ -5383,9 +5480,9 @@ msgstr ""
 msgid "No password set!"
 msgstr "パスワードが設定されていません！"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
-msgid "No peers defined yet"
-msgstr "まだピアが定義されていません"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:472
+msgid "No peers defined yet."
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:140
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:277
@@ -5621,12 +5718,12 @@ msgstr ""
 msgid "Operating frequency"
 msgstr "動作周波数"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2002
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4055
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2006
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4102
 msgid "Option \"%s\" contains an invalid input value."
 msgstr "オプション\"%s\"に無効な入力値が含まれています。"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2017
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2021
 msgid "Option \"%s\" must not be empty."
 msgstr "オプション\"%s\"を設定してください。"
 
@@ -5646,7 +5743,7 @@ msgstr "オプション"
 msgid "Optional, free-form notes about this device"
 msgstr "このデバイスについての備考（オプション）"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:155
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid ""
 "Optional. 32-bit mark for outgoing encrypted packets. Enter value in hex, "
 "starting with <code>0x</code>."
@@ -5666,7 +5763,7 @@ msgstr ""
 "（例: '::1'）を指定します（オプション） 。使用できる値: 'eui64','random'また"
 "は'::1'や'::1:2'のような固定値。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:276
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:561
 #, fuzzy
 msgid ""
 "Optional. Base64-encoded preshared key. Adds in an additional layer of "
@@ -5675,19 +5772,19 @@ msgstr ""
 "Base64でエンコードされた事前共有キーです。ポスト量子レジスタンスのため、対称"
 "鍵暗号の追加層を追加します（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:298
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:621
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "このピアの許可されたIPのルートを作成します（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:193
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:479
 msgid "Optional. Description of peer."
 msgstr "ピアの説明（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:145
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "Optional. Do not create host routes to peers."
 msgstr "ピアへのホストルートを作成しない（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:301
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:624
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -5695,7 +5792,7 @@ msgstr ""
 "ピアのホストです。名前はインターフェースの起動前に解決されます（オプショ"
 "ン）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:294
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:586
 msgid ""
 "Optional. IP addresses and prefixes that this peer is allowed to use inside "
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
@@ -5706,15 +5803,23 @@ msgstr ""
 msgid "Optional. Maximum Transmission Unit of the XFRM interface."
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:150
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "トンネルインターフェースのMaximum Transmission Unit（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:305
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:640
 msgid "Optional. Port of peer."
 msgstr "ピアのポート（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:309
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:552
+msgid ""
+"Optional. Private key of the WireGuard peer. The key is not required for "
+"establishing a connection but allows generating a peer configuration or QR "
+"code if available. It can be removed after the configuration has been "
+"exported."
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:645
 #, fuzzy
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
@@ -5723,7 +5828,7 @@ msgstr ""
 "キープアライブメッセージの送信間隔（秒）です。デフォルトは0（無効）です。この"
 "デバイスがNATを使用する場合の推奨値は25です（オプション）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:136
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Optional. UDP port used for outgoing and incoming packets."
 msgstr "送信パケットと受信パケットに使用されるUDPポート（オプション）。"
 
@@ -5869,6 +5974,10 @@ msgstr "概要"
 msgid "Overwrite existing file \"%s\" ?"
 msgstr "既存のファイル\"%s\"を上書きしますか？"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:345
+msgid "Overwrite the current settings with the imported configuration?"
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:70
 msgid "Owner"
 msgstr "オーナー"
@@ -5964,6 +6073,11 @@ msgstr "PSIDオフセット"
 msgid "PSID-bits length"
 msgstr "PSIDビット長"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:533
+msgctxt "Label indicating that WireGuard peer uses a PSK"
+msgid "PSK"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1512
 msgid "PTM/EFM (Packet Transfer Mode)"
 msgstr "PTM/EFM（パケット転送モード）"
@@ -6036,6 +6150,10 @@ msgstr "パスワード2"
 msgid "Paste or drag SSH key file…"
 msgstr "SSH鍵を貼り付けるかファイルをドラッグ…"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:417
+msgid "Paste or drag WireGuard configuration file…"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1587
 msgid "Path to CA-Certificate"
 msgstr "CA証明書のパス"
@@ -6095,11 +6213,11 @@ msgstr "ピアアドレスがありません"
 msgid "Peer device name"
 msgstr "ピアのデバイス名"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:189
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:475
 msgid "Peer disabled"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:168
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 msgid "Peers"
 msgstr "ピア"
 
@@ -6126,9 +6244,13 @@ msgstr "初期化する"
 msgid "Permission denied"
 msgstr "アクセス許可が拒否されました"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:309
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:645
 msgid "Persistent Keep Alive"
 msgstr "永続的なキープアライブ"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:325
+msgid "PersistentKeepAlive setting is invalid"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:290
 msgid "Phy Rate:"
@@ -6211,9 +6333,17 @@ msgstr "委任されたプレフィックス（PD）"
 msgid "Prefix suppressor"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:276
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:561
 msgid "Preshared Key"
 msgstr "事前共有鍵"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:532
+msgid "Preshared key in use"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:299
+msgid "PresharedKey setting is invalid"
+msgstr ""
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
@@ -6267,14 +6397,28 @@ msgstr "プライマリが復旧するとアクティブスレーブになりま
 msgid "Priority"
 msgstr "優先度"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:527
+msgctxt "Label indicating that WireGuard peer private key is stored"
+msgid "Private"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:436
 msgctxt "MACVLAN mode"
 msgid "Private (Prevent communication between MAC VLANs)"
 msgstr "プライベート（MAC ベース VLAN間の通信を防ぐ）"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:99
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:552
 msgid "Private Key"
 msgstr "秘密鍵"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:526
+msgid "Private key present"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:290
+msgid "PrivateKey setting is missing or invalid"
+msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:93
@@ -6321,10 +6465,19 @@ msgstr ""
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "擬似アドホック（ahdemo）"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:108
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:271
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:158
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:547
 msgid "Public Key"
 msgstr "公開鍵"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:509
+msgid "Public key is missing"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:518
+msgctxt "Tooltip displaying full WireGuard peer public key"
+msgid "Public key: %h"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:284
 msgid ""
@@ -6344,15 +6497,14 @@ msgstr ""
 "クライアントに接続するために、このデバイスにルーティングされるパブリックプレ"
 "フィックスです。"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:296
+msgid "PublicKey setting is missing or invalid"
+msgstr ""
+
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:9
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:27
 msgid "QMI Cellular"
 msgstr "QMIセルラー"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:198
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:229
-msgid "QR-Code"
-msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:146
 msgid "Quality"
@@ -6482,7 +6634,7 @@ msgstr "デバイスのオペレーティングシステムを再起動"
 msgid "Receive"
 msgstr "受信"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:141
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "WireGuardインターフェースのIPアドレスです（推奨）。"
 
@@ -6624,13 +6776,13 @@ msgstr "必須"
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "DOCSIS 3などを使用するいくつかのISPで必要です"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:99
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
 msgid "Required. Base64-encoded private key for this interface."
 msgstr "このインターフェースに使用するBase64エンコードの秘密鍵（必須）。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:271
-msgid "Required. Base64-encoded public key of peer."
-msgstr "Base64エンコードのピアの公開鍵（必須）。"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:547
+msgid "Required. Public key of the WireGuard peer."
+msgstr ""
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
 msgid "Required. Underlying interface."
@@ -6780,15 +6932,15 @@ msgstr "戻り経路フィルター"
 msgid "Revert"
 msgstr "元に戻す"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4500
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4520
 msgid "Revert changes"
 msgstr "変更の取り消し"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4682
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4732
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "取り消しのリクエストに失敗しました ステータスコード:<code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4662
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4712
 msgid "Reverting configuration…"
 msgstr "設定を元に戻しています…"
 
@@ -6855,7 +7007,7 @@ msgstr "ルートの準備"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "ラウンドロビンポリシー（balance-rr、0）"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:298
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:621
 msgid "Route Allowed IPs"
 msgstr "許可されたIPのルート"
 
@@ -6987,7 +7139,7 @@ msgstr "SSTPサーバー"
 msgid "SWAP"
 msgstr "スワップ"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3223
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3269
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2192
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
@@ -7003,7 +7155,7 @@ msgstr "保存"
 msgid "Save & Apply"
 msgstr "保存&適用"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:603
+#: modules/luci-base/htdocs/luci-static/resources/form.js:607
 msgid "Save error"
 msgstr "保存エラー"
 
@@ -7716,7 +7868,7 @@ msgstr "開始優先順位"
 msgid "Start refresh"
 msgstr "更新開始"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4615
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4635
 msgid "Starting configuration apply…"
 msgstr "設定の適用を開始しています…"
 
@@ -7893,6 +8045,7 @@ msgstr "システムプロパティ"
 msgid "System log buffer size"
 msgstr "システムログバッファサイズ"
 
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:79
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:69
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:89
 msgid "System running in recovery (initramfs) mode."
@@ -7974,10 +8127,6 @@ msgstr ""
 msgid "Terminate"
 msgstr "停止"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:211
-msgid "The \"PublicKey\" of that wg interface"
-msgstr ""
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:839
 msgid ""
 "The <abbr title=\"Maximum Transmission Unit\">MTU</abbr> to be published in "
@@ -8006,6 +8155,12 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
 msgstr "<em>block mount</em>コマンドが失敗しました（コード: %d）"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:80
+msgid ""
+"The <em>qrencode</em> package is required for generating an QR code image of "
+"the configuration."
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid ""
@@ -8094,12 +8249,6 @@ msgstr ""
 msgid "The MTU must not exceed the parent device MTU of %d bytes"
 msgstr ""
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:220
-msgid ""
-"The QR-Code works per wg interface, it will be refreshed with every button "
-"click and transfers the following information:"
-msgstr ""
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:864
 msgid "The VLAN ID must be unique"
 msgstr "VLAN ID はユニークでなければなりません"
@@ -8128,7 +8277,7 @@ msgstr ""
 "非表示の無線ネットワークに接続する場合、正しいSSIDを手動で指定する必要があり"
 "ます"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4491
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4511
 msgid ""
 "The device could not be reached within %d seconds after applying the pending "
 "changes, which caused the configuration to be rolled back for safety "
@@ -8192,6 +8341,12 @@ msgstr ""
 msgid "The gateway address must not be a local IP address"
 msgstr "ゲートウェイアドレスは非ローカルIPアドレスでなければなりません"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:714
+msgid ""
+"The generated configuration can be imported into a WireGuard client "
+"application to setup a connection towards this device."
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:166
 msgid "The given SSH public key has already been added."
 msgstr "入力されたSSH公開鍵はすでに追加されています。"
@@ -8235,12 +8390,6 @@ msgstr ""
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:63
 msgid "The length of the IPv6 prefix in bits"
 msgstr "IPv6プレフィックスの長さ（ビット）"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:212
-msgid ""
-"The list of this client's \"AllowedIPs\" or \"0.0.0.0/0, ::/0\" if not "
-"configured"
-msgstr ""
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:165
 msgid "The local IPv4 address"
@@ -8286,6 +8435,12 @@ msgid ""
 "abbr> messages. Maximum is 255 hops."
 msgstr ""
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4647
+msgid ""
+"The network access to this device could be interrupted by changing settings "
+"of the \"%h\" interface."
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2016
 msgid "The network name is already used"
 msgstr "ネットワーク名はすでに使用されています"
@@ -8305,6 +8460,13 @@ msgstr ""
 "ワークセグメントの分離によく使われます。通常、インターネットなどの上位のネッ"
 "トワークへの接続に使用するアップリンクポートと、ローカルネットワーク用のその"
 "他のポートが存在します。"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:719
+msgid ""
+"The public hostname or IP address of this system the peer should connect to. "
+"This usually is a static public IP address, a static hostname or a DDNS "
+"domain."
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:569
 msgid "The query response interval must be lower than the query interval value"
@@ -8433,7 +8595,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "アクティブなリースはありません"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4630
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4679
 msgid "There are no changes to apply"
 msgstr "適用する変更はありません"
 
@@ -8548,8 +8710,7 @@ msgstr ""
 "ca-bundleパッケージがインストールされていないため、このオプションは使用できま"
 "せん。"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2277
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2587
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2280
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:32
 msgid "This section contains no values yet"
@@ -8590,6 +8751,14 @@ msgstr "リンク ロス時にトポロジーを更新するまでのタイム�
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:145
 msgid "Timezone"
 msgstr "タイムゾーン"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:414
+msgid ""
+"To import a WireGuard client configuration, e.g. provided by a commercial "
+"VPN provider, drag the <em>*.conf</em> file or paste its contents into the "
+"text field below. The relevant settings will be automatically extracted from "
+"the configuration."
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
 msgid "To login…"
@@ -8757,6 +8926,10 @@ msgstr "アップストリーム インターフェースを確定できませ�
 msgid "Unable to dispatch"
 msgstr "ディスパッチできません"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:85
+msgid "Unable to generate QR code: %s"
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:9
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:15
 msgid "Unable to load log data:"
@@ -8875,6 +9048,10 @@ msgstr "サポートされていないモデム"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:299
 msgid "Unsupported protocol type."
 msgstr "サポートされていないプロトコルタイプです。"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:494
+msgid "Untitled peer"
+msgstr ""
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:151
 msgid "Up"
@@ -9395,9 +9572,13 @@ msgid "Width"
 msgstr "帯域幅"
 
 #: modules/luci-compat/luasrc/model/network/proto_wireguard.lua:9
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:67
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:119
 msgid "WireGuard VPN"
 msgstr "WireGuard VPN"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:501
+msgid "WireGuard peer is disabled"
+msgstr ""
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:17
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:10
@@ -9461,7 +9642,7 @@ msgstr "システムログをファイルに書き込む"
 msgid "XOR policy (balance-xor, 2)"
 msgstr "XORポリシー（balance-xor、2）"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4043
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4090
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:297
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:345
 msgid "Yes"
@@ -9489,7 +9670,7 @@ msgstr ""
 "変更は再起動後に適用されます。<br /><strong>警告: \"network\"などの重要なスク"
 "リプトを無効にするとデバイスにアクセスできなくなることがあります！</strong>"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:80
+#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:90
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:97
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:73
 msgid ""
@@ -9733,12 +9914,12 @@ msgstr "いいえ"
 msgid "no link"
 msgstr "リンクなし"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2265
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2269
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:59
 msgid "non-empty value"
 msgstr "空でない値"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3373
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3420
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:800
 msgid "none"
 msgstr "なし"
@@ -9785,7 +9966,7 @@ msgstr "正の値（10進数）"
 msgid "positive integer value"
 msgstr "正の整数値"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:138
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:178
 msgid "random"
 msgstr "ランダム"
 
@@ -9845,8 +10026,6 @@ msgstr ""
 msgid "unique value"
 msgstr "固有の値"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1453
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1465
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:592
 msgid "unknown"
 msgstr "不明"
@@ -9859,7 +10038,7 @@ msgstr "不明"
 msgid "unlimited"
 msgstr "無制限"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3738
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3785
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:76
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:138
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:370
@@ -10068,6 +10247,15 @@ msgstr "はい"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 戻る"
+
+#~ msgid "Generate Key"
+#~ msgstr "キーを生成"
+
+#~ msgid "No peers defined yet"
+#~ msgstr "まだピアが定義されていません"
+
+#~ msgid "Required. Base64-encoded public key of peer."
+#~ msgstr "Base64エンコードのピアの公開鍵（必須）。"
 
 #~ msgid "Default %d"
 #~ msgstr "デフォルト %d"
