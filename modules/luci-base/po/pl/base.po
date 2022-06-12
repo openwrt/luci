@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2022-05-13 13:48+0000\n"
+"PO-Revision-Date: 2022-06-10 13:18+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
@@ -108,11 +108,11 @@ msgstr "1"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:233
 msgid "1 Minute Load:"
-msgstr "Obciążenie 1-minutowe:"
+msgstr "Obciążenie 1 min:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:253
 msgid "15 Minute Load:"
-msgstr "Obciążenie 15-minutowe:"
+msgstr "Obciążenie 15 min:"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:57
 msgctxt "sstp log level value"
@@ -140,7 +140,7 @@ msgstr "464XLAT (CLAT)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:243
 msgid "5 Minute Load:"
-msgstr "Obciążenie 5-minutowe:"
+msgstr "Obciążenie 5 min:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1544
 msgid "6-octet identifier as a hex string - no colons"
@@ -1056,7 +1056,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:286
 msgid "Bind NTP server"
-msgstr ""
+msgstr "Powiąż serwer NTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:484
 msgid ""
@@ -2564,15 +2564,15 @@ msgstr "Zewnętrzny Klucz R1 listy właścicieli"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:167
 msgid "External system log server"
-msgstr "Zewnętrzny serwer logów systemowych"
+msgstr "Zewnętrzny serwer dziennika systemowego"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:172
 msgid "External system log server port"
-msgstr "Port zewnętrznego serwera logów systemowych"
+msgstr "Port zewnętrznego serwera dziennika systemowego"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:177
 msgid "External system log server protocol"
-msgstr "Protokół zewnętrznego serwera logów systemowych"
+msgstr "Protokół zewnętrznego serwera dziennika systemowego"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:79
 msgid "Extra SSH command options"
@@ -3672,7 +3672,7 @@ msgid ""
 msgstr ""
 "Interwał w centysekundach między zapytaniami ogólnymi dotyczącymi "
 "multicastu. Zmieniając tę wartość, administrator może regulować liczbę "
-"wiadomości IGMP w podsieci; większe wartości powodują, że zapytania IGMP są "
+"komunikatów IGMP w podsieci; większe wartości powodują, że zapytania IGMP są "
 "wysyłane rzadziej"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:522
@@ -3776,7 +3776,7 @@ msgstr "Zachowaj ustawienia i bieżącą konfigurację"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:20
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:51
 msgid "Kernel Log"
-msgstr "Log kernela"
+msgstr "Dziennik kernela"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:59
 msgid "Kernel Version"
@@ -3920,9 +3920,9 @@ msgid ""
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
 "Starsze lub źle działające urządzenia mogą wymagać starszego standardu "
-"802.11b do współdziałania. Efektywność nadawania może być znacznie "
-"zmniejszona, gdy jest stosowane to ustawienie. Zaleca się, aby w miarę "
-"możliwości nie zezwalać na szybkości 802.11b."
+"802.11b do współdziałania. Efektywność emisji może być znacznie zmniejszona, "
+"gdy jest stosowane to ustawienie. Zaleca się, aby w miarę możliwości nie "
+"zezwalać na szybkości 802.11b."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4062
 msgid "Legend:"
@@ -4582,7 +4582,7 @@ msgstr "Punkt montownia"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:158
 msgid "Mount swap not specifically configured"
-msgstr "Zamontuj plik wymiany, który nie jest odpowiednio skonfigurowany"
+msgstr "Zamontuj swap, który nie jest odpowiednio skonfigurowany"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:223
 msgid "Mounted file systems"
@@ -5150,8 +5150,9 @@ msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
 msgstr ""
-"Opcjonalnie. Sekundy między utrzymaniem przy życiu wiadomości. Domyślnie 0 "
-"(wyłączone). Zalecana wartość, jeśli urządzenie znajduje się poza NAT to 25."
+"Opcjonalnie. Sekundy między komunikatami o utrzymaniu przy życiu. Wartość "
+"domyślna to 0 (wyłączone). Zalecana wartość, jeśli urządzenie znajduje się "
+"poza NAT, to 25."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:78
 msgid "Optional. UDP port used for outgoing and incoming packets."
@@ -5692,8 +5693,8 @@ msgid ""
 "Provide a DHCPv6 server on this interface and reply to DHCPv6 solicitations "
 "and requests."
 msgstr ""
-"Zapewnij serwer DHCPv6 w tym interfejsie i odpowiadaj na zapytania i żądania "
-"DHCPv6."
+"Zapewnij serwer DHCPv6 na tym interfejsie i odpowiadaj na zapytania i "
+"żądania DHCPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:883
 msgid "Provide new network"
@@ -5704,6 +5705,8 @@ msgid ""
 "Provide the NTP server to the selected interface or, if unspecified, to all "
 "interfaces"
 msgstr ""
+"Zapewnij serwer NTP wybranemu interfejsowi lub, jeśli nie jest określony, "
+"wszystkim interfejsom"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1077
 msgid "Pseudo Ad-Hoc (ahdemo)"
@@ -7065,7 +7068,7 @@ msgstr "System"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:25
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:39
 msgid "System Log"
-msgstr "Log systemowy"
+msgstr "Dziennik systemowy"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:245
 msgid "System Priority"
@@ -7078,7 +7081,7 @@ msgstr "Właściwości systemu"
 # Wszędzie używane jest "loga" z małej litery.
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:162
 msgid "System log buffer size"
-msgstr "Rozmiar bufora logu systemowego"
+msgstr "Rozmiar bufora dziennika systemowego"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:338
 msgid "TCP:"
@@ -7402,7 +7405,7 @@ msgid ""
 msgstr ""
 "Maksymalny czas odpowiedzi w centysekundach wstawiany do okresowych zapytań "
 "ogólnych. Zmieniając tę wartość, administrator może dostroić częstotliwość "
-"wysyłania wiadomości IGMP w podsieci; większe wartości powodują, że ruch "
+"wysyłania komunikatów IGMP w podsieci; większe wartości powodują, że ruch "
 "jest mniej gwałtowny, ponieważ odpowiedzi hostów są rozłożone w większym "
 "odstępie czasu"
 
@@ -8416,7 +8419,7 @@ msgid ""
 "may be significantly reduced."
 msgstr ""
 "Jeśli ESSID zostanie ukryty, roaming klientów może zawieść, a efektywność "
-"wykorzystania czasu antenowego może zostać znacznie zmniejszona."
+"wykorzystania emsji może zostać znacznie zmniejszona."
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:166
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:520
