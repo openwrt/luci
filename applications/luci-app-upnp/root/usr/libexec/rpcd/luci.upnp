@@ -14,26 +14,35 @@ local methods = {
 			local ipv4_hints = sys.net.ipv4_hints()
 			local rule = { }
 
-			local ipt = io.popen("iptables --line-numbers -t nat -xnvL MINIUPNPD 2>/dev/null")
-			if ipt then
-				local upnpf = lease_file and io.open(lease_file, "r")
+			local nft = io.popen("nft -a list table ip miniupnpd 2>/dev/null")
+			if nft then
 				while true do
-					local ln = ipt:read("*l")
+					local ln = nft:read("*l")
 					if not ln then
 						break
-					elseif ln:match("^%d+") then
-						local num, proto, extport, intaddr, intport =
-							ln:match("^(%d+).-([a-z]+).-dpt:(%d+) to:(%S-):(%d+)")
+					elseif ln:match("^\t\tiif") then
+						local proto, extport, intaddr, intport, num =
+							ln:match("^\t\tiif \".-\" ([A-Za-z]+) dport (%d+) dnat to (%S-):(%d+) # handle (%d+)$")
 						local descr = ""
 
 						if num and proto and extport and intaddr and intport then
 							extport = tonumber(extport)
 							intport = tonumber(intport)
 
+							local upnpf = lease_file and io.open(lease_file, "r")
 							if upnpf then
-								local uln = upnpf:read("*l")
-								if uln then descr = uln:match(string.format("^%s:%d:%s:%d:%%d*:(.*)$", proto:upper(), extport, intaddr, intport)) end
-								if not descr then descr = "" end
+								while true do
+									local uln = upnpf:read("*l")
+									if uln then
+										descr = uln:match(string.format("^%s:%d:%s:%d:%%d*:(.*)$", proto:upper(), extport, intaddr, intport))
+									end
+									if not descr then
+										descr = ""
+									else
+										break
+									end
+								end
+								upnpf:close()
 							end
 
 							local host_hint, _, e
@@ -58,8 +67,7 @@ local methods = {
 					end
 				end
 
-				if upnpf then upnpf:close() end
-				ipt:close()
+				nft:close()
 			end
 
 			return { rules = rule }
@@ -75,12 +83,65 @@ local methods = {
 			if idx and idx > 0 then
 				local uci = UCI.cursor()
 
-				sys.call("iptables -t filter -D MINIUPNPD %d 2>/dev/null" % idx)
-				sys.call("iptables -t nat -D MINIUPNPD %d 2>/dev/null" % idx)
+				local proto, extport, intaddr, intport
+
+				local nft = io.popen("nft -a list table ip miniupnpd 2>/dev/null")
+				if nft then
+					while true do
+						local ln = nft:read("*l")
+						if not ln then
+							break
+						elseif ln:match(string.format("^\t\tiif \".-\" [A-Za-z]+ dport [0-9]+ dnat to .-:[0-9]+ # handle %d$", idx)) then
+							proto, extport, intaddr, intport =
+								ln:match("^\t\tiif \".-\" ([A-Za-z]+) dport (%d+) dnat to (%S-):(%d+) # handle [0-9]+$")
+
+							local protonum = "0x6"
+							if proto == "udp" then
+								protonum = "0x11"
+							end
+							local nfts = io.popen("nft -a list table inet miniupnpd 2>/dev/null")
+							if nfts then
+								while true do
+									local ln = nfts:read("*l")
+									if not ln then
+										break
+									elseif ln:match(string.format("^\t\tiif \".-\" th dport %d @.- 0x[0-9A-Fa-f]+ @.- %s accept # handle [0-9]+$", extport, protonum)) then
+										local num =
+											ln:match("^\t\tiif \".-\" th dport [0-9]+ @.- 0x[0-9A-Fa-f]+ @.- 0x[0-9A-Fa-f]+ accept # handle (%d+)$")
+										sys.call("nft delete rule inet miniupnpd forward handle %d" % num)
+										sys.call("nft delete rule ip miniupnpd prerouting handle %d" % idx)
+										break
+									end
+								end
+								nfts:close()
+							else
+								break
+							end
+						end
+					end
+					nft:close()
+				end
 
 				local lease_file = uci:get("upnpd", "config", "upnp_lease_file")
 				if lease_file and fs.access(lease_file) then
-					sys.call("sed -i -e '%dd' %s" %{ idx, util.shellquote(lease_file) })
+					local upnpf = io.open(lease_file, "r")
+					local linenum = 0
+					local matched = 0
+					if upnpf then
+						while true do
+							local ln = upnpf:read("*l")
+							linenum = linenum + 1
+							if not ln then
+								break
+							elseif ln:match(string.format("^%s:%d:%s:%d:.-:.-$", proto:upper(), extport, intaddr, intport)) then
+								matched = 1
+								break
+							end
+						end
+					end
+					if matched > 0 then
+						sys.call("sed -i -e '%dd' %s" %{ linenum, util.shellquote(lease_file) })
+					end
 				end
 
 				uci.unload()
