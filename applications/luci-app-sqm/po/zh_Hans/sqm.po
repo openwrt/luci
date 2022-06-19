@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-04-22 07:14+0000\n"
-"Last-Translator: 王攀 <41330784@qq.com>\n"
+"PO-Revision-Date: 2022-06-19 12:59+0000\n"
+"Last-Translator: MkQtS <onewordwrong@aliyun.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationssqm/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
 msgid ""
@@ -30,8 +30,8 @@ msgstr "基本设置"
 msgid ""
 "Create log file for this SQM instance under /var/run/sqm/${Interface_name}."
 "[start|stop]-sqm.log."
-msgstr ""
-"在此 /var/run/sqm/${Interface_name} 下为此 SQM 实例创建日志文件。[start|stop]-sqm.log."
+msgstr "在 /var/run/sqm/${Interface_name} 下为此 SQM "
+"实例创建日志文件。[start|stop]-sqm.log."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:92
 msgid ""
@@ -104,7 +104,7 @@ msgstr "大小和速率计算的最大大小，tcMTU（字节）； 需要 >= �
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
 msgid ""
 "Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables:"
-msgstr "最小数据包大小，MPU(byte)； 在以太网中需要 >0 :"
+msgstr "最小数据包大小，MPU(byte)； 在以太网中需要大于0："
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
 msgid ""
@@ -132,31 +132,29 @@ msgstr "队列"
 msgid ""
 "Queuing disciplines useable on this system. After installing a new qdisc, "
 "you need to restart the router to see updates!"
-msgstr "队列规则(需要重启路由器)！"
+msgstr "队列规则（需要重启路由器！）"
 
 #: applications/luci-app-sqm/root/usr/share/luci/menu.d/luci-app-sqm.json:3
 msgid "SQM QoS"
-msgstr "服务质量管理"
+msgstr "SQM 队列管理"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
 msgid ""
 "Show Advanced Linklayer Options, (only needed if MTU > 1500). Advanced "
 "options will only be used as long as this box is checked."
-msgstr ""
-"显示高级链路选项，(仅在MTU> 1500时才需要)。 只有选中此框时，才会使用高级选"
-"项。"
+msgstr "显示高级链路选项（仅在MTU> 1500时才需要）。选中此框后才会应用高级选项。"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
 msgid ""
 "Show and Use Advanced Configuration. Advanced options will only be used as "
 "long as this box is checked."
-msgstr "显示和使用高级配置。 只有在选中此框时，只会使用高级选项。"
+msgstr "显示和使用高级配置。选中此框后才会应用高级选项。"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
 msgid ""
 "Show and Use Dangerous Configuration. Dangerous options will only be used as "
 "long as this box is checked."
-msgstr "显示和使用危险配置。 只要选中此框，就会使用危险选项。"
+msgstr "显示和使用危险配置。选中此框后会应用危险选项。"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:64
 msgid "Smart Queue Management"
@@ -189,7 +187,7 @@ msgstr "上传速度 (kbit/s)（出口）设置为 0 以选择性地禁用出口
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Verbosity of SQM's output into the system log."
-msgstr "SQM 输出到系统日志的详细程度。"
+msgstr "SQM 日志等级"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
 msgid "Which link layer to account for:"
@@ -197,7 +195,7 @@ msgstr "要考虑哪个链路层："
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
 msgid "Which linklayer adaptation mechanism to use; for testing only"
-msgstr "使用哪个链路适应机制; 仅用于测试"
+msgstr "使用哪个链路适应机制；仅用于测试"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:65
 msgid ""
@@ -205,8 +203,8 @@ msgid ""
 "traffic shaping, better mixing (Fair Queueing), active queue length "
 "management (AQM) and prioritisation on one network interface."
 msgstr ""
-"使用 <abbr title=\"智能列队管理\">SQM</abbr> 你可以启用流量整形，更好的混合"
-"(公平列队)主动列队管理(AQM) 并设置网络接口优先级。"
+"使用 <abbr title=\"智能列队管理\">SQM</abbr> 你可以启用流量整形，更好的混合("
+"公平列队)主动列队管理(AQM)并设置网络接口优先级。"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:107
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:149
