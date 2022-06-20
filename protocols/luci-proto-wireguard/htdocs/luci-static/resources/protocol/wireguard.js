@@ -686,8 +686,8 @@ return network.registerProtocol('wireguard', {
 			return Promise.all([
 				network.getWANNetworks(),
 				network.getWAN6Networks(),
-				uci.load('ddns'),
-				uci.load('system'),
+				L.resolveDefault(uci.load('ddns')),
+				L.resolveDefault(uci.load('system')),
 				parent.save(null, true)
 			]).then(function(data) {
 				var hostnames = [];
