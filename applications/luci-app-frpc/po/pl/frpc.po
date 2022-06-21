@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-03-23 15:14+0000\n"
+"PO-Revision-Date: 2022-06-21 17:16+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrpc/pl/>\n"
@@ -9,11 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:204
 msgid "Add new proxy..."
-msgstr ""
+msgstr "Dodaj nowy serwer proxy..."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:16
 msgid "Additional configs"
@@ -227,7 +227,7 @@ msgstr "Lokalizacje"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:23
 msgid "Log file"
-msgstr ""
+msgstr "Plik dziennika"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:24
 msgid "Log level"
@@ -235,7 +235,7 @@ msgstr "Poziom logowania"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:25
 msgid "Log max days"
-msgstr ""
+msgstr "Maks. dni logowania"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:11
 msgid "Log stderr"
@@ -251,6 +251,9 @@ msgid ""
 "be used if LogWay is set appropriately.<br />By default, this value is "
 "\"console\"."
 msgstr ""
+"LogFile określa plik, w którym będą zapisywane dzienniki. Ta wartość będzie "
+"używana tylko wtedy, gdy LogWay zostanie odpowiednio ustawiony. <br /"
+">Domyślnie ta wartość to \"console\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:24
 msgid ""
@@ -259,7 +262,7 @@ msgid ""
 "\"."
 msgstr ""
 "LogLevel określa minimalny poziom dziennika. Poprawne wartości to \"trace\", "
-"\"debug\", \"info\", \"warn\" i \"error\".<br /> Domyślnie jest to \"info\"."
+"\"debug\", \"info\", \"warn\" i \"error\".<br />Domyślnie jest to \"info\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:25
 msgid ""
@@ -267,6 +270,9 @@ msgid ""
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
 "this value is 0."
 msgstr ""
+"LogMaxDays określa maksymalną liczbę dni przechowywania informacji dziennika "
+"przed usunięciem. Jest używana tylko wtedy, gdy LogWay == \"file\". <br /"
+">Domyślnie ta wartość wynosi 0."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:35
 msgid ""
@@ -274,9 +280,10 @@ msgid ""
 "login attempt. If false, the client will retry until a login attempt "
 "succeeds.<br />By default, this value is true."
 msgstr ""
-"LoginFailExit kontroluje czy klient powinien wyjść po nieudanej próbie "
-"logowania. Jeśli jest ona nieprawdziwa, klient spróbuje ponownie, dopóki "
-"próba logowania nie zakończy się sukcesem.<br /> Domyślnie wartość true."
+"LoginFailExit kontroluje, czy klient powinien zakończyć działanie po "
+"nieudanej próbie logowania. Jeśli jest ustawiona na false, klient spróbuje "
+"ponownie, dopóki próba logowania nie zakończy się sukcesem.<br />Domyślnie "
+"wartość to true."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:155
 msgid "NOT RUNNING"
@@ -312,7 +319,7 @@ msgstr "Ustawienia proxy"
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:44
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:211
 msgid "Proxy name"
-msgstr ""
+msgstr "Nazwa serwera proxy"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:212
@@ -359,7 +366,7 @@ msgstr "Adres serwera"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:71
 msgid "Server name"
-msgstr ""
+msgstr "Nazwa serwera"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:21
 msgid "Server port"
