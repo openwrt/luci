@@ -1,0 +1,163 @@
+<%#
+	Argon is a clean HTML5 theme for LuCI. It is based on luci-theme-bootstrap and MUI and Argon Template
+
+	luci-theme-argon
+	Copyright 2021 Jerryk <jerrykuku@gmail.com>
+
+	Have a bug? Please create an issue here on GitHub!
+	https://github.com/jerrykuku/luci-theme-argon/issues
+
+	luci-theme-bootstrap:
+	Copyright 2008 Steven Barth <steven@midlink.org>
+	Copyright 2008-2016 Jo-Philipp Wich <jow@openwrt.org>
+	Copyright 2012 David Menting <david@nut-bolt.nl>
+
+	MUI:
+	https://github.com/muicss/mui
+	
+	Agron Theme
+	https://demos.creative-tim.com/argon-dashboard/index.html
+
+	Licensed to the public under the Apache License 2.0
+-%>
+
+<%+header_login%>
+<%
+	local util	= require "luci.util"
+	local fs	= require "nixio.fs"
+	local nutil = require "nixio.util"
+	local sys 	= require "luci.sys"
+	local json 	= require "luci.jsonc"
+	local uci 	= require 'luci.model.uci'.cursor()
+	
+	-- Fetch Local Background Media
+
+	function glob(...)
+		local iter, code, msg = fs.glob(...)
+		if iter then
+			return nutil.consume(iter)
+		else
+			return nil, code, msg
+		end
+	end
+
+	function fetchMedia(path,themeDir)
+		local backgroundTable 	= {}
+		local backgroundCount 	= 0
+		for i, f in ipairs(glob(path)) do
+			attr = fs.stat(f)
+			if attr then
+				local ext = fs.basename(f):match(".+%.(%w+)$")
+				if ext == "jpg" or ext == "png" or ext == "gif" or ext == "mp4" then
+					local bg = {}
+					bg.type = ext
+					bg.url = themeDir .. fs.basename(f)
+					table.insert(backgroundTable,bg)
+					backgroundCount = backgroundCount + 1
+				end
+			end
+		end
+		return backgroundTable,backgroundCount
+	end
+
+	local boardinfo			= util.ubus("system", "board")
+	local bingUrl 			= "http://www.bing.com/"
+	local bingApiUrl 		= bingUrl .. "HPImageArchive.aspx?format=js&idx=0&n=1&mkt=en-US"
+	local themeDir			= media .. "/background/"
+	local bgUrl 			= media .. "/img/bg1.jpg"
+	local useBing			= fs.access('/etc/config/argon') and uci:get_first('argon', 'global', 'bing_background') or "0"
+	local backgroundTable, backgroundCount 		= fetchMedia("/www" .. themeDir .. "*",themeDir)
+	local backgroundType 	= "Image"
+
+	function getBing()
+		local bing = sys.exec("wget --timeout=0.5 -qO- '%s'" %bingApiUrl)
+		if (bing and bing ~= '') then
+			bgUrl 	= bingUrl .. json.parse(bing).images[1].url
+		end
+	end
+
+	if ( useBing == "0" ) then
+		if ( backgroundCount > 0 ) then
+			local currentBg = backgroundTable[math.random(1,backgroundCount)]
+			bgUrl 			= currentBg.url
+			if (currentBg.type == "mp4" ) then
+				backgroundType 	= "Video"
+			end
+		end
+	else
+		pcall(getBing)
+	end
+%>
+<!-- Login Page Start -->
+<div class="login-page">
+	
+	<% if ( backgroundType == "Video" ) then %>
+	<!-- Video Player Start -->
+	<div class="video ar-flex ar-justify-content-center ar-align-items-center">
+		<video autoplay loop muted id="video">
+			<source src="<%=bgUrl%>" type="video/mp4">
+		</video>
+	</div>
+	<div class="volume-control mute"></div>
+	<!-- Video Player End -->
+	<% else %>
+	<!-- Image Background Start -->
+	<div class="main-bg" id="main-bg" style="background-image:url(<%=bgUrl%>)"></div>
+	<!-- Image Background End -->
+	<% end %>
+	<!-- Login Container Start -->
+	<div class="login-container">
+		<div class="login-form">
+			<a class="brand" href="/"><img src="<%=media%>/img/argon.svg" class="icon"><span
+					class="brand-text"><%=striptags( (boardinfo.hostname or "?") .. ( (node and node.title) and ' - ' .. translate(node.title) or '')) %></span></a>
+			<form class="form-login" method="post" action="<%=pcdata(luci.http.getenv("REQUEST_URI"))%>">
+
+				<%- if fuser then %>
+				<div class="errorbox"><%:Invalid username and/or password! Please try again.%></div>
+				<% end -%>
+
+				<div class="input-container">
+					<div class="input-group user-icon">
+						<input class="cbi-input-user" id="cbi-input-user" type="text" name="luci_username" value="<%=duser%>" />
+						<label class="border" for="cbi-input-user"></label>
+					</div>
+					<div class="input-group pass-icon">
+						<input class="cbi-input-password" id="cbi-input-password" type="password" name="luci_password" />
+						<label class="border" for="cbi-input-password"></label>
+					</div>
+				</div>
+				<div>
+					<input type="submit" value="<%:Login%>" class="cbi-button cbi-button-apply" />
+				</div>
+			</form>
+
+			<script type="text/javascript">//<![CDATA[
+				var input = document.getElementsByName('luci_password')[0];
+				if (input)
+					input.focus();
+			//]]></script>
+			<%
+			local uci  = require "luci.model.uci".cursor()
+			local fs  = require "nixio.fs"
+			local https_key = uci:get("uhttpd", "main", "key")
+			local https_port = uci:get("uhttpd", "main", "listen_https")
+			if type(https_port) == "table" then
+				https_port = https_port[1]
+			end
+
+			if https_port and fs.access(https_key) then
+				https_port = https_port:match("(%d+)$")
+			%>
+			<script type="text/javascript">//<![CDATA[
+				if (document.location.protocol != 'https:') {
+					var url = 'https://' + window.location.hostname + ':' + '<%=https_port%>' + window.location.pathname;
+					var img = new Image;
+					img.onload = function () { window.location = url };
+					img.src = 'https://' + window.location.hostname + ':' + '<%=https_port%>' + '<%=resource%>/cbi/up.gif?' + Math.random();;
+					setTimeout(function () {
+						img.src = ''
+					}, 5000);
+				}
+			//]]></script>
+			<% end %>
+<%+footer%>
