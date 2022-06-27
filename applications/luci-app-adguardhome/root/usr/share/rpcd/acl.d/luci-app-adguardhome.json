@@ -1,0 +1,31 @@
+{
+	"luci-app-adguardhome": {
+		"description": "Grant permissions for the AdGuard Home LuCI app",
+		"read": {
+			"ubus": {
+				"luci.adguardhome": [
+					"get_config",
+					"get_status",
+					"get_statistics"
+				]
+			},
+			"uci": [
+				"adguardhome"
+			],
+			"file": {
+				"/sbin/logread": [
+					"stat",
+					"exec"
+				],
+				"/sbin/logread -e AdGuardHome": [
+					"exec"
+				]
+			}
+		},
+		"write": {
+			"uci": [
+				"adguardhome"
+			]
+		}
+	}
+}
