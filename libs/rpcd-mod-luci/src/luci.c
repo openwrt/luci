@@ -849,7 +849,7 @@ rpc_luci_get_network_devices(struct ubus_context *ctx,
 			if (e == NULL)
 				break;
 
-			if (strcmp(e->d_name, ".") && strcmp(e->d_name, ".."))
+			if (e->d_type != DT_DIR && e->d_type != DT_REG)
 				rpc_luci_parse_network_device_sys(e->d_name, ifaddr);
 		}
 
