@@ -696,7 +696,11 @@ rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr)
 		for (n = 0, p += strlen("DEVTYPE=");; n++) {
 			if (p[n] == '\0' || p[n] == '\n') {
 				p[n] = 0;
-				blobmsg_add_string(&blob, "devtype", p);
+				if (!strcmp(p, "bond")) {
+					blobmsg_add_string(&blob, "devtype", "bonding");
+				} else {
+					blobmsg_add_string(&blob, "devtype", p);
+				}
 				break;
 			}
 		}

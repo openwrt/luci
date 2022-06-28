@@ -2959,6 +2959,8 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			return 'vlan';
 		else if (this.config.type == 'bridge')
 			return 'bridge';
+		else if (this.dev.devtype == 'bonding' || this.config.type == 'bonding')
+			return 'bonding';
 		else
 			return 'ethernet';
 	},
@@ -3022,6 +3024,9 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 
 		case 'tunnel':
 			return _('Tunnel Interface');
+
+		case 'bonding':
+			return _('Link Aggregation');
 
 		default:
 			return _('Ethernet Adapter');

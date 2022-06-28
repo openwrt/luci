@@ -483,6 +483,9 @@ var CBIDeviceSelect = form.ListValue.extend({
 			if (this.nobridges && type == 'bridge')
 				continue;
 
+			if (this.nobondings && type == 'bonding')
+				continue;
+
 			if (this.noinactive && device.isUp() == false)
 				continue;
 
