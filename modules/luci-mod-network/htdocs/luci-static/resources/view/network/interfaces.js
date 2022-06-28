@@ -1399,6 +1399,9 @@ return view.extend({
 			case 'veth':
 				return 'veth';
 
+			case 'bond':
+				return 'bonding';
+
 			case 'wifi':
 			case 'alias':
 			case 'switch':
@@ -1430,6 +1433,9 @@ return view.extend({
 
 			case 'veth':
 				return _('Virtual Ethernet');
+
+			case 'bond':
+				return _('LAG device');
 
 			default:
 				return _('Network device');

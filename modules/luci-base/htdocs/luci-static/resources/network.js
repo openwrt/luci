@@ -2921,6 +2921,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 *  - `tunnel` if it is a tun or tap device (e.g. `tun0`)
 	 *  - `vlan` if it is a vlan device (e.g. `eth0.1`)
 	 *  - `switch` if it is a switch device (e.g.`eth1` connected to switch0)
+	 *  - `bonding` if it is a bond device (e.g. `bond0`)
 	 *  - `ethernet` for all other device types
 	 */
 	getType: function() {
@@ -2940,6 +2941,8 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			return 'vlan';
 		else if (this.config.type == 'bridge')
 			return 'bridge';
+		else if (this.dev.devtype == 'bond' || this.config.type == 'bonding')
+			return 'bonding';
 		else
 			return 'ethernet';
 	},
@@ -3003,6 +3006,9 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 
 		case 'tunnel':
 			return _('Tunnel Interface');
+
+		case 'bonding':
+			return _('Link Aggregation');
 
 		default:
 			return _('Ethernet Adapter');

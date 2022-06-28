@@ -342,6 +342,7 @@ return baseclass.extend({
 		o.readonly = !isNew;
 		o.value('', _('Network device'));
 		o.value('bridge', _('Bridge device'));
+		o.value('bonding', _('LAG device'));
 		o.value('8021q', _('VLAN (802.1q)'));
 		o.value('8021ad', _('VLAN (802.1ad)'));
 		o.value('macvlan', _('MAC VLAN'));
@@ -465,7 +466,7 @@ return baseclass.extend({
 		o.depends('type', '8021q');
 		o.depends('type', '8021ad');
 
-		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi', _('Bridge ports'));
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_bridge', _('Bridge ports'));
 		o.size = 10;
 		o.rmempty = true;
 		o.multiple = true;
@@ -534,7 +535,6 @@ return baseclass.extend({
 		o.datatype = 'range(6, 40)';
 		o.depends({ type: 'bridge', stp: '1' });
 
-
 		o = this.replaceOption(s, 'devadvanced', form.Flag, 'igmp_snooping', _('Enable <abbr title="Internet Group Management Protocol">IGMP</abbr> snooping'), _('Enables IGMP snooping on this bridge'));
 		o.default = o.disabled;
 		o.depends('type', 'bridge');
@@ -576,6 +576,56 @@ return baseclass.extend({
 		o.placeholder = '100';
 		o.datatype = 'uinteger';
 		o.depends({ type: 'bridge', multicast_querier: '1' });
+
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_bonding', _('LAG ports'));
+		o.size = 10;
+		o.rmempty = true;
+		o.multiple = true;
+		o.noaliases = true;
+		o.nobridges = true;
+		o.nobondings = true;
+		o.ucioption = 'ports';
+		o.default = L.toArray(dev ? dev.getPorts() : null).filter(function(p) { return p.getType() != 'wifi' }).map(function(p) { return p.getName() });
+		o.filter = function(section_id, device_name) {
+			var bonding_name = uci.get('network', section_id, 'name'),
+				choice_dev = network.instantiateDevice(device_name),
+				parent_dev = choice_dev.getParent();
+
+			/* only show wifi networks which are already present in "option ifname" */
+			if (choice_dev.getType() == 'wifi') {
+				var ifnames = L.toArray(uci.get('network', section_id, 'ports'));
+
+				for (var i = 0; i < ifnames.length; i++)
+					if (ifnames[i] == device_name)
+						return true;
+
+				return false;
+			}
+
+			return (!parent_dev || parent_dev.getName() != bonding_name);
+		};
+		o.description = _('Specifies the wired ports to attach to this LAG. In order to attach wireless networks, choose the associated interface as network in the wireless settings.')
+		o.onchange = function(ev, section_id, values) {
+			ss.updatePorts(values);
+
+			return ss.parse().then(function() {
+				ss.redraw();
+			});
+		};
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'policy', _('LAG Mode'));
+		o.value('balance-rr', _('Round robin policy (balance-rr, 0)'));
+		o.value('balance-xor', _('XOR policy (balance-xor, 2)'));
+		o.value('802.3ad', _('IEE 802.3ad Dynamic link aggregation (802.3ad, 4)'));
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'xmit_hash_policy', _('Transmit hash policy'));
+		o.value('layer2', _('Use XOR of hardware MAC addresses (layer2)'));
+		o.value('layer2+3', _('Use XOR of hardware MAC addresses and IP addresses (layer2+3)'));
+		o.value('layer3+4', _('Use XOR of IP addresses and ports (layer3+4)'));
+		o.depends({type: 'bonding', policy: '802.3ad'});
+		o.depends({type: 'bonding', policy: 'balance-xor'});
 
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'mtu', _('MTU'));
 		o.datatype = 'range(576, 9200)';
