@@ -68,6 +68,16 @@ var stcpProxyConf = [
 	[form.Value, 'sk', _('Sk')],
 ];
 
+var pluginConf = [
+	[form.ListValue, 'plugin', _('Plugin'), undefined, {values: ['', 'http_proxy', 'socks5', 'unix_domain_socket'], rmempty: true}],
+	[form.Value, 'plugin_http_user', _('HTTP user'), undefined, {depends: {plugin: 'http_proxy'}}],
+	[form.Value, 'plugin_http_passwd', _('HTTP password'), undefined, {depends: {plugin: 'http_proxy'}}],
+	[form.Value, 'plugin_user', _('SOCKS5 user'), undefined, {depends: {plugin: 'socks5'}}],
+	[form.Value, 'plugin_passwd', _('SOCKS5 password'), undefined, {depends: {plugin: 'socks5'}}],
+	[form.Value, 'plugin_unix_path', _('Unix domain socket path'), undefined, {depends: {plugin: 'unix_domain_socket'}, optional: false, rmempty: false,
+		datatype: 'file', placeholder: '/var/run/docker.sock', default: '/var/run/docker.sock'}],
+];
+
 function setParams(o, params) {
 	if (!params) return;
 	for (var key in params) {
@@ -200,6 +210,7 @@ return view.extend({
 
 		s.tab('general', _('General Settings'));
 		s.tab('http', _('HTTP Settings'));
+		s.tab('plugin', _('Plugin Settings'));
 
 		s.option(form.Value, 'type', _('Proxy type')).modalonly = false;
 		s.option(form.Value, 'local_ip', _('Local IP')).modalonly = false;
@@ -228,6 +239,9 @@ return view.extend({
 
 		// STCP and XTCP
 		defTabOpts(s, 'general', stcpProxyConf, {modalonly: true, depends: [{type: 'stcp'}, {type: 'xtcp'}]});
+
+		// Plugin
+		defTabOpts(s, 'plugin', pluginConf, {modalonly: true});
 
 		return m.render();
 	}
