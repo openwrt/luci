@@ -204,6 +204,16 @@ return view.extend({
 		s.option(form.Value, 'type', _('Proxy type')).modalonly = false;
 		s.option(form.Value, 'local_ip', _('Local IP')).modalonly = false;
 		s.option(form.Value, 'local_port', _('Local port')).modalonly = false;
+		o = s.option(form.Value, 'remote_port', _('Remote port'));
+		o.modalonly = false;
+		o.depends('type', 'tcp');
+		o.depends('type', 'udp');
+		o.cfgvalue = (function(cfgvalue, _this){
+			return function() {
+				var v = cfgvalue.apply(_this, arguments);
+				return v&&v!='0'?v:'#';
+			};
+		})(o.cfgvalue, o);
 
 		defTabOpts(s, 'general', baseProxyConf, {modalonly: true});
 
