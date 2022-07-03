@@ -1284,7 +1284,7 @@ return view.extend({
 						crypto_modes.push(['psk',       'WPA-PSK',                     21]);
 					}
 					else {
-						encr.description = _('WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP and ad-hoc mode) to be installed.');
+						encr.description = _('WPA-Encryption requires wpa-supplicant (for client mode) or hostapd (for AP and ad-hoc mode) to be installed.');
 					}
 
 					if (has_ap_sae || has_sta_sae) {
