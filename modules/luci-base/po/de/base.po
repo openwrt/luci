@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 17:57+0200\n"
-"PO-Revision-Date: 2022-06-12 07:17+0000\n"
+"PO-Revision-Date: 2022-07-02 09:22+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/"
 ">\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1513
 msgid "%.1f dB"
@@ -445,7 +445,7 @@ msgstr "Aktive DHCPv6-Leases"
 msgid "Active-Backup policy (active-backup, 1)"
 msgstr "Active-Backup-Richtlinie (Active-Backup, 1)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3874
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3893
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:993
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:23
 msgid "Ad-Hoc"
@@ -615,7 +615,7 @@ msgstr ""
 msgid "Alert"
 msgstr "Alarm"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2995
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3008
 #: modules/luci-compat/luasrc/model/network.lua:1417
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:62
 msgid "Alias Interface"
@@ -959,6 +959,8 @@ msgid ""
 "Automatically handle multiple uplink interfaces using source-based policy "
 "routing."
 msgstr ""
+"Multiple Upstream-Schnittstellen automatisch durch quell-basiertes Policy-"
+"Routing handhaben."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:170
 msgid "Automatically mount filesystems on hotplug"
@@ -1063,7 +1065,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:286
 msgid "Bind NTP server"
-msgstr ""
+msgstr "Schnittstelle"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:484
 msgid ""
@@ -1109,7 +1111,7 @@ msgstr "Ungültige \"NX-Domain\" Antworten ignorieren"
 msgid "Bonding Policy"
 msgstr "Bonding-Methode"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3001
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3014
 #: modules/luci-compat/luasrc/model/network.lua:1421
 msgid "Bridge"
 msgstr "Bridge"
@@ -1370,7 +1372,7 @@ msgstr ""
 "herunterzuladen. (Hinweis: Diese Funktionalität ist nur für Experten "
 "gedacht!)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3873
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3892
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:992
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1106
 msgid "Client"
@@ -1857,7 +1859,7 @@ msgstr "Ziel"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:48
 msgid "Destination port"
-msgstr "Zielport"
+msgstr "Ziel-Port"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:59
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:165
@@ -2498,12 +2500,12 @@ msgstr "Fehler"
 msgid "Errored seconds (ES)"
 msgstr "Fehlersekunden (ES)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3014
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3027
 #: modules/luci-compat/luasrc/model/network.lua:1433
 msgid "Ethernet Adapter"
 msgstr "Netzwerkschnittstelle"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3005
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3018
 #: modules/luci-compat/luasrc/model/network.lua:1423
 msgid "Ethernet Switch"
 msgstr "Netzwerk Switch"
@@ -3376,7 +3378,7 @@ msgstr "Geroutetes IPv6-Präfix"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:966
 msgid "IPv6 source routing"
-msgstr ""
+msgstr "Quellbasiertes IPv6-Routing"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1018
 msgid "IPv6 suffix"
@@ -3491,7 +3493,7 @@ msgstr "Abbild"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:273
 msgid "Image check failed:"
-msgstr ""
+msgstr "Überprüfung der Abbilddatei fehlgeschlagen:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
 msgid "In"
@@ -3528,6 +3530,8 @@ msgid ""
 "Include in backup a list of current installed packages at /etc/backup/"
 "installed_packages.txt"
 msgstr ""
+"Eine Liste derzeitig installierter Pakete als /etc/backup/installed_packages."
+"txt dem Backup hinzufügen"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:100
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:105
@@ -3712,7 +3716,7 @@ msgstr "Ungültige Eingabe"
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:93
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:74
 msgid "Invalid APN provided"
-msgstr ""
+msgstr "Ungültige APN angegeben"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:19
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:22
@@ -4200,7 +4204,7 @@ msgstr "Protokollierung"
 
 #: themes/luci-theme-bootstrap/htdocs/luci-static/resources/view/bootstrap/sysauth.js:23
 msgid "Logging in…"
-msgstr ""
+msgstr "Anmeldung läuft…"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:57
@@ -4336,7 +4340,7 @@ msgstr "Das Root-Dateisystem muss mit folgenden Kommandsos vorbereitet werden:"
 msgid "Manual"
 msgstr "Manuell"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3872
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3891
 msgid "Master"
 msgstr "Master"
 
@@ -4421,7 +4425,7 @@ msgstr "Speicher"
 msgid "Memory usage (%)"
 msgstr "Speichernutzung (%)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3875
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3894
 msgid "Mesh"
 msgstr "Mesh"
 
@@ -4559,7 +4563,7 @@ msgstr "Modem ist deaktiviert."
 msgid "ModemManager"
 msgstr "ModemManager"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3876
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3895
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1078
 msgid "Monitor"
 msgstr "Monitor"
@@ -5169,6 +5173,9 @@ msgid ""
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
 "routes through the tunnel."
 msgstr ""
+"Optional. IP-Adressen und Netzbereiche die dieser Verbindungspartner "
+"innerhalb des Tunnels nutzen darf. Üblicherweise umfasst dies die IP-Adresse "
+"des Peers und seiner durch diesen Tunnel gerouteten Netzwerke."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:92
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
@@ -5739,6 +5746,8 @@ msgid ""
 "Provide the NTP server to the selected interface or, if unspecified, to all "
 "interfaces"
 msgstr ""
+"NTP-Dienst nur auf der ausgewählten Schnittstelle anbieten oder, wenn "
+"unspezifiziert, auf allen Schnittstellen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1077
 msgid "Pseudo Ad-Hoc (ahdemo)"
@@ -6561,7 +6570,7 @@ msgstr "Überspringen"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:257
 msgid "Skip from backup files that are equal to those in /rom"
-msgstr ""
+msgstr "Mit dem ROM-Speicher identische Dateien nicht sichern"
 
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:46
@@ -6577,7 +6586,7 @@ msgstr "Zur Navigation springen"
 msgid "Slave Interfaces"
 msgstr "Slave-Adapter"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3008
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3021
 #: modules/luci-compat/luasrc/model/network.lua:1428
 msgid "Software VLAN"
 msgstr "Software-VLAN"
@@ -7073,12 +7082,12 @@ msgstr ""
 "Der Switch %q hat eine unbekannte Struktur, die VLAN Settings könnten "
 "unpassend sein."
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3008
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3021
 #: modules/luci-compat/luasrc/model/network.lua:1426
 msgid "Switch VLAN"
 msgstr "Switch-VLAN"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3005
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3018
 msgid "Switch port"
 msgstr "Switch-Port"
 
@@ -7169,7 +7178,7 @@ msgstr "Ziel"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:57
 msgid "Target Platform"
-msgstr ""
+msgstr "Platform"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:103
 msgid "Target network"
@@ -7849,7 +7858,7 @@ msgstr "Auslösmechanismus"
 msgid "Tunnel ID"
 msgstr "Tunnel-ID"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3011
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3024
 #: modules/luci-compat/luasrc/model/network.lua:1431
 msgid "Tunnel Interface"
 msgstr "Tunneladapter"
@@ -8519,13 +8528,13 @@ msgstr "WireGuard VPN"
 msgid "Wireless"
 msgstr "WLAN"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2998
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3011
 #: modules/luci-compat/luasrc/model/network.lua:1419
 msgid "Wireless Adapter"
 msgstr "WLAN-Gerät"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:2977
-#: modules/luci-base/htdocs/luci-static/resources/network.js:4284
+#: modules/luci-base/htdocs/luci-static/resources/network.js:2990
+#: modules/luci-base/htdocs/luci-static/resources/network.js:4303
 #: modules/luci-compat/luasrc/model/network.lua:1405
 #: modules/luci-compat/luasrc/model/network.lua:1868
 msgid "Wireless Network"
@@ -9094,7 +9103,7 @@ msgstr "gültige Ganzzahl"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:344
 msgid "valid multicast MAC address"
-msgstr ""
+msgstr "gültige Multicast-MAC-Adresse"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:312
 msgid "valid network in address/netmask notation"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-05-16 00:02+0000\n"
-"Last-Translator: Alexey Dobrovolsky <dobrovolskiy.alexey@gmail.com>\n"
+"PO-Revision-Date: 2022-06-18 09:18+0000\n"
+"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsyggdrasil/ru/>\n"
 "Language: ru\n"
@@ -23,6 +23,10 @@ msgid ""
 "prevents this, so that only items specified in \"NodeInfo\" are sent back if "
 "specified."
 msgstr ""
+"По умолчанию информация об узле включает в себя платформу, архитектуру и "
+"версию Yggdrasil. Эта информация помогает при диагностировании проблем с "
+"маршрутизацией в сети. Nodeinfo повышенной конфиденциальности не содержит "
+"этих данных, только содержимое поля ввода \"NodeInfo\" (если заполнено)."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:45
 msgid ""
@@ -37,7 +41,7 @@ msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:16
 msgid "Enable NodeInfo privacy"
-msgstr ""
+msgstr "Nodeinfo повышенной конфиденциальности"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:41
@@ -71,10 +75,11 @@ msgstr ""
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:16
 msgid "Keep this private. When compromised, generate a new keypair and IPv6."
 msgstr ""
+"Держите его в тайне. Если он утечёт, сгенерируйте новую ключевую пару и IPv6."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:52
 msgid "Link-local port"
-msgstr ""
+msgstr "Порт Link-local"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:21
 msgid ""
@@ -94,7 +99,7 @@ msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:33
 msgid "Listen addresses"
-msgstr ""
+msgstr "Адреса для прослушивания"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:34
 msgid ""
@@ -104,6 +109,11 @@ msgid ""
 "should be specified in URI format as above, e.g. tcp://0.0.0.0:0 or tcp://"
 "[::]:0 to listen on all interfaces."
 msgstr ""
+"Слушать адреса для входящих подключений. Вы должны добавить адреса, чтобы "
+"принимать входящие запросы от не-локальных узлов. Обнаружение узлов по "
+"мультикасту будет работать вне зависимости от этого значения. Каждый адрес "
+"должен быть указан в формате URI. Например, при указании tcp://0.0.0.0:0 или "
+"tcp://[::]:0 будут прослушиваться все интерфейсы."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:51
 msgid "Listen for beacons"
@@ -111,15 +121,15 @@ msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:31
 msgid "MTU size for the interface"
-msgstr ""
+msgstr "Размер MTU для интерфейса"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:44
 msgid "Multicast interface"
-msgstr ""
+msgstr "Интерфейс для мультикаста"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:23
 msgid "NodeInfo"
-msgstr ""
+msgstr "NodeInfo"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:24
 msgid ""
@@ -127,6 +137,9 @@ msgid ""
 "null. This is entirely optional but, if set, is visible to the whole network "
 "on request."
 msgstr ""
+"Необязательная информация об узле в формате { \"ключ\": \"значение\", … } "
+"или null. Если значение задано, оно может быть просмотрено по запросу от "
+"кого угодно в сети."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:23
@@ -155,12 +168,12 @@ msgstr "Yggdrasil"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/status.js:30
 msgid "Yggdrasil node status"
-msgstr ""
+msgstr "Статус узла Yggdrasil"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:14
 msgid "Yggdrasil's network interface name"
-msgstr ""
+msgstr "Название интерфейса сети Yggdrasil"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:40
 msgid "e.g. tcp://0.0.0.0:0 or tcp://[::]:0"
-msgstr ""
+msgstr "например, tcp://0.0.0.0:0 или tcp://[::]:0"

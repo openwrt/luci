@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: transmission\n"
 "POT-Creation-Date: 2012-08-15 17:35+0300\n"
-"PO-Revision-Date: 2020-07-04 17:41+0000\n"
-"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
+"PO-Revision-Date: 2022-06-18 09:18+0000\n"
+"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstransmission/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -62,15 +62,15 @@ msgstr "Используемый IPv6-адрес"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:86
 msgid "Block list enabled"
-msgstr "Черный список включен"
+msgstr "Чёрный список включен"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:89
 msgid "Blocklist URL"
-msgstr "URL ссылка для<br />загрузки Черного списка"
+msgstr "Ссылка для загрузки чёрного списка"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:83
 msgid "Blocklists"
-msgstr "Черный список"
+msgstr "Чёрный список"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:131
 msgid "Cache size in MB"
@@ -78,11 +78,11 @@ msgstr "Размер кэша в МБ"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:50
 msgid "Config file directory"
-msgstr "Папка расположения<br />сonfig файла"
+msgstr "Каталог расположения сonfig файла"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:53
 msgid "Custom Web UI directory"
-msgstr "Папка расположения пользовательского веб-интерфейса"
+msgstr "Каталог расположения пользовательского веб-интерфейса"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:133
 msgid "DHT enabled"
@@ -94,7 +94,7 @@ msgstr "Отладка"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:97
 msgid "Download directory"
-msgstr "Папка для загрузки"
+msgstr "Каталог для загрузки"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:211
 msgid "Download queue enabled"
@@ -106,7 +106,7 @@ msgstr "Размер очереди загрузок"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:121
 msgid "Enable watch directory"
-msgstr "Включить папку<br />для торрент файлов"
+msgstr "Разрешить отслеживание торрент-файлов в каталоге"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:47
 msgid "Enabled"
@@ -134,11 +134,11 @@ msgstr "Полное"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:183
 msgid "Global peer limit"
-msgstr "Общее ограничение кол-ва<br />пиров для демона"
+msgstr "Общее ограничение кол-ва пиров"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:44
 msgid "Global settings"
-msgstr "Основные настройки"
+msgstr "Общие настройки"
 
 #: applications/luci-app-transmission/root/usr/share/rpcd/acl.d/luci-app-transmission.json:3
 msgid "Grant UCI access for luci-app-transmission"
@@ -154,11 +154,11 @@ msgstr "Приостановка раздачи включена"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:102
 msgid "Incomplete directory"
-msgstr "Папка для не полностью загруженных файлов"
+msgstr "Каталог для не полностью загруженных файлов"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:99
 msgid "Incomplete directory enabled"
-msgstr "Папка для не полностью загруженных файлов включена"
+msgstr "Каталог для не полностью загруженных файлов включен"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:150
 msgid "Info"
@@ -190,10 +190,9 @@ msgid ""
 "enabled, add a value. For Sunday - 1, Monday - 2, Tuesday - 4, Wednesday - "
 "8, Thursday - 16, Friday - 32, Saturday - 64"
 msgstr ""
-"Номер/bitfield. Начните с 0, затем для каждого дня недели, в который вы "
-"хотите включить планировщик, добавьте значение. Для воскресенья - 1, "
-"понедельника - 2, вторника - 4, среды - 8, четверга - 16, пятницы - 32, "
-"субботы - 64"
+"Число (битовая маска). Начните с 0, затем для каждого дня недели, в который "
+"вы хотите включить планировщик, добавьте: для воскресенья - 1, понедельника "
+"- 2, вторника - 4, среды - 8, четверга - 16, пятницы - 32, субботы - 64"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:106
 msgid "Off"
@@ -217,7 +216,7 @@ msgstr "Алгоритм перегрузки пиров"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:185
 msgid "Peer limit per torrent"
-msgstr "Ограничение кол-ва<br />пиров на торрент файл"
+msgstr "Ограничение кол-ва пиров на торрент-файл"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:193
 msgid "Peer port"
@@ -225,11 +224,11 @@ msgstr "Порт для пиров"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:198
 msgid "Peer port random high"
-msgstr "Наибольший случайный<br />порт для пиров"
+msgstr "Наибольший случайный порт для пиров"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:201
 msgid "Peer port random low"
-msgstr "Наименьший случайный<br />порт для пиров"
+msgstr "Наименьший случайный порт для пиров"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:195
 msgid "Peer port random on start"
@@ -261,7 +260,7 @@ msgstr "Предпочтительно без шифрования"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:156
 msgid "Prefetch enabled"
-msgstr "Включен предварительный<br />резерв места на носителе"
+msgstr "Включен предварительный резерв места на носителе"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:214
 msgid "Queue stalled enabled"
@@ -289,7 +288,7 @@ msgstr "Адрес для доступа к удаленному управле�
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:233
 msgid "RPC enabled"
-msgstr "Удаленное управление<br />(RPC) включено"
+msgstr "Удаленное управление (RPC) включено"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:249
 msgid "RPC host whitelist"
@@ -357,7 +356,7 @@ msgstr "Планировщик"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:158
 msgid "Scrape paused torrents enabled"
-msgstr "Выполнять scrape запросы для приостановленных торрентов (нежелательно)"
+msgstr "Выполнять scrape-запросы для приостановленных торрентов (нежелательно)"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:161
 msgid "Script torrent done enabled"
@@ -365,11 +364,11 @@ msgstr "Запуск скрипта после загрузки торрента
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:164
 msgid "Script torrent done filename"
-msgstr "Путь к скрипту<br />запускаемому по<br />завершении загрузки"
+msgstr "Путь к скрипту, запускаемому по завершении загрузки"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:220
 msgid "Seed queue enabled"
-msgstr "Ограничение кол-ва<br />сидов включено"
+msgstr "Ограничение кол-ва сидов включено"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:226
 msgid "Seed queue size"
@@ -410,14 +409,14 @@ msgid ""
 "Transmission daemon is a simple bittorrent client, here you can configure "
 "the settings."
 msgstr ""
-"Демон Transmission - это простой bittorrent-клиент. Здесь вы сможете его "
+"Демон Transmission — это простой bittorrent-клиент. Здесь вы сможете его "
 "настроить.<br />Установить пакеты веб-интерфейса недостаточно, выберите и "
 "установите необходимый для работы пакет демона transmission-daemon-openssl "
 "или transmission-daemon-mbedtls."
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:116
 msgid "Trash original torrent files"
-msgstr "Удалить торрент файлы"
+msgstr "Удалить торрент-файлы"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:80
 msgid "Upload slots per torrent"
@@ -425,12 +424,12 @@ msgstr "Кол-во слотов раздачи на торрент файл"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:124
 msgid "Watch directory"
-msgstr "Папка поиска демоном<br />торрент файлов"
+msgstr "Каталог отслеживания демоном торрент-файлов"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:274
 msgid "When enabled, this will toggle the <b>alt-speed-enabled</b> setting"
 msgstr ""
-"Когда включено, переключается значение параметра <b>alt-speed-enabled</b>"
+"При включении значение параметра <b>alt-speed-enabled</b> переключается"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:181
 msgid "hours"
