@@ -133,7 +133,7 @@ var action_translations = {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--json', 'list', 'ruleset' ], 'json'), {}),
+			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--terse', '--json', 'list', 'ruleset' ], 'json'), {}),
 			L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-save'), ''),
 			L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-save'), '')
 		]);
