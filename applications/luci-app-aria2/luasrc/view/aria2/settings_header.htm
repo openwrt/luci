@@ -10,6 +10,7 @@
 	local uilist = {
 		supported = {
 			["ariang"] = "AriaNg",
+   			["ariang-nginx"] = "AriaNg-Nginx",
 			["webui-aria2"] = "WebUI-Aria2",
 			["yaaw"] = "YAAW"
 		},
@@ -109,6 +110,9 @@ function showRPCURL() {
 };
 
 function openWebInterface(path) {
+	if (path == "ariang-nginx") {
+		path = "ariang";
+	}
 	var host = window.location.host;
 	var protocol = window.location.protocol;
 	window.open(protocol + '//' + host + '/' + path);
