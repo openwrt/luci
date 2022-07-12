@@ -30,9 +30,9 @@ s = m:section(TypedSection, "default", translate("NFT-QoS Settings"))
 s.addremove = false
 s.anonymous = true
 
-s:tab("limit", "Limit Rate by IP Address")
-s:tab("limitmac", "Limit Rate by Mac Address")
-s:tab("priority", "Traffic Priority")
+s:tab("limit", translate("Limit Rate by IP Address"))
+s:tab("limitmac", translate("Limit Rate by Mac Address"))
+s:tab("priority", translate("Traffic Priority"))
 
 --
 -- Static
