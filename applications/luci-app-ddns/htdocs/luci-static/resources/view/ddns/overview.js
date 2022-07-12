@@ -1067,7 +1067,7 @@ return view.extend({
 
 					log_box.render = L.bind(function() {
 						return E([
-							E('p', {}, _('This is the current content of the log file in ') + logdir + ' for this service.'),
+							E('p', {}, _('This is the current content of the log file in %h for this service.').format(logdir)),
 							E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20, 'readonly' : 'readonly', 'id' : 'log_area' }, _('Please press [Read] button') ))
 						]);
 					}, o, this);
