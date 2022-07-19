@@ -1280,7 +1280,7 @@ return view.extend({
 
 					if (has_hostapd || has_supplicant) {
 						crypto_modes.push(['psk2',      'WPA2-PSK',                    35]);
-						crypto_modes.push(['psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
+						crypto_modes.push(['psk-mixed', 'WPA-PSK/WPA2-PSK Mixed Mode', 13]);
 						crypto_modes.push(['psk',       'WPA-PSK',                     12]);
 					}
 					else {
@@ -1380,7 +1380,7 @@ return view.extend({
 				}
 				else if (hwtype == 'broadcom') {
 					crypto_modes.push(['psk2',     'WPA2-PSK',                    33]);
-					crypto_modes.push(['psk+psk2', 'WPA-PSK/WPA2-PSK Mixed Mode', 22]);
+					crypto_modes.push(['psk+psk2', 'WPA-PSK/WPA2-PSK Mixed Mode', 13]);
 					crypto_modes.push(['psk',      'WPA-PSK',                     12]);
 					crypto_modes.push(['wep-open',   _('WEP Open System'),        11]);
 					crypto_modes.push(['wep-shared', _('WEP Shared Key'),         10]);
@@ -1393,11 +1393,18 @@ return view.extend({
 				for (var i = 0; i < crypto_modes.length; i++) {
 					var security_level = (crypto_modes[i][2] >= 30) ? _('strong security')
 						: (crypto_modes[i][2] >= 20) ? _('medium security')
-							: (crypto_modes[i][2] >= 10) ? _('weak security') : _('open network');
+							: (crypto_modes[i][2] >= 10) ? _('weak security/vulnerable') : _('open network');
 
 					encr.value(crypto_modes[i][0], '%s (%s)'.format(crypto_modes[i][1], security_level));
 				}
 
+				o = ss.taboption('encryption', form.DummyValue, '', '');
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk', 'psk-mixed', 'psk+psk2'] });
+				o.title = '&nbsp'
+				o.cfgvalue = function() {
+					return E('div', { 'class': 'alert-message warning' }, [_('The selected encryption mode may be vulnerable to exploits. Consider using a stronger encryption mode')]);
+				};
+				o.rawhtml = true;
 
 				o = ss.taboption('encryption', form.Value, 'auth_server', _('RADIUS Authentication Server'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed'] });
