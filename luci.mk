@@ -282,10 +282,10 @@ ifeq ($(PKG_NAME),luci-base)
         bool "Minify CSS files"
         default y
 
-   menu "Translations"$(foreach lang,$(LUCI_LANGUAGES),
+   menu "Translations"$(foreach lang,$(LUCI_LANGUAGES),$(if $(LUCI_LANG.$(lang)),
 
      config LUCI_LANG_$(lang)
-	   tristate "$(shell echo '$(LUCI_LANG.$(lang))' | sed -e 's/^.* (\(.*\))$$/\1/') ($(lang))")
+	   tristate "$(shell echo '$(LUCI_LANG.$(lang))' | sed -e 's/^.* (\(.*\))$$/\1/') ($(lang))"))
 
    endmenu
  endef
@@ -333,5 +333,5 @@ define LuciTranslation
 
 endef
 
-$(foreach lang,$(LUCI_LANGUAGES),$(eval $(call LuciTranslation,$(firstword $(LUCI_LC_ALIAS.$(lang)) $(lang)),$(lang))))
+$(foreach lang,$(LUCI_LANGUAGES),$(if $(LUCI_LANG.$(lang)),$(eval $(call LuciTranslation,$(firstword $(LUCI_LC_ALIAS.$(lang)) $(lang)),$(lang)))))
 $(foreach pkg,$(LUCI_BUILD_PACKAGES),$(eval $(call BuildPackage,$(pkg))))
