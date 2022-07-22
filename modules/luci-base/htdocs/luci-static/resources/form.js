@@ -3032,7 +3032,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		}
 
 		return saveTasks
-			.then(L.bind(this.handleModalCancel, this, modalMap, ev))
+			.then(L.bind(this.handleModalCancel, this, modalMap, ev, true))
 			.catch(function() {});
 	},
 
@@ -3313,20 +3313,19 @@ var CBIGridSection = CBITableSection.extend(/** @lends LuCI.form.GridSection.pro
 		var mapNode = this.getPreviousModalMap(),
 		    prevMap = mapNode ? dom.findClassInstance(mapNode) : this.map;
 
-		return this.super('handleModalSave', arguments)
-			.then(function() { delete prevMap.addedSection });
+		return this.super('handleModalSave', arguments);
 	},
 
 	/** @private */
-	handleModalCancel: function(/* ... */) {
+	handleModalCancel: function(modalMap, ev, isSaving) {
 		var config_name = this.uciconfig || this.map.config,
 		    mapNode = this.getPreviousModalMap(),
 		    prevMap = mapNode ? dom.findClassInstance(mapNode) : this.map;
 
-		if (prevMap.addedSection != null) {
+		if (prevMap.addedSection != null && !isSaving)
 			this.map.data.remove(config_name, prevMap.addedSection);
-			delete prevMap.addedSection;
-		}
+
+		delete prevMap.addedSection;
 
 		return this.super('handleModalCancel', arguments);
 	},
