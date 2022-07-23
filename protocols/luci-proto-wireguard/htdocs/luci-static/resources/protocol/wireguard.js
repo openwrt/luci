@@ -188,7 +188,7 @@ return network.registerProtocol('wireguard', {
 		o = s.taboption('general', form.Button, '_import', _('Import configuration'), _('Imports settings from an existing WireGuard configuration file'));
 		o.inputtitle = _('Load configuration…');
 		o.onclick = function() {
-			return ss.handleConfigImport('client');
+			return ss.handleConfigImport('full');
 		};
 
 		// -- advanced --------------------------------------------------------------------
@@ -292,8 +292,8 @@ return network.registerProtocol('wireguard', {
 			if (!stubValidator.apply('port', config.interface_listenport || '0'))
 				return _('ListenPort setting is invalid');
 
-			if (!config.peer_publickey || validateBase64(null, config.peer_publickey) !== true)
-				return _('PublicKey setting is missing or invalid');
+			if (config.peer_publickey != null && validateBase64(null, config.peer_publickey) !== true)
+				return _('PublicKey setting is invalid');
 
 			if (config.peer_presharedkey != null && validateBase64(null, config.peer_presharedkey) !== true)
 				return _('PresharedKey setting is invalid');
@@ -339,7 +339,7 @@ return network.registerProtocol('wireguard', {
 				return;
 			}
 
-			if (mode == 'client') {
+			if (mode == 'full') {
 				var prv = s.formvalue(s.section, 'private_key');
 
 				if (prv && prv != config.interface_privatekey && !confirm(_('Overwrite the current settings with the imported configuration?')))
@@ -411,11 +411,18 @@ return network.registerProtocol('wireguard', {
 				'dragover': this.handleDragConfig,
 				'drop': this.handleDropConfig.bind(this, mode)
 			}, [
-				E('p', _('To import a WireGuard client configuration, e.g. provided by a commercial VPN provider, drag the <em>*.conf</em> file or paste its contents into the text field below. The relevant settings will be automatically extracted from the configuration.')),
+				E([], (mode == 'full') ? [
+					E('p', _('Drag or paste a valid <em>*.conf</em> file below to configure the local WireGuard interface.'))
+				] : [
+					E('p', _('Paste or drag a WireGuard configuration (commonly <em>wg0.conf</em>) from another system below to create a matching peer entry allowing that system to connect to the local WireGuard interface.')),
+					E('p', _('To fully configure the local WireGuard interface from an existing (e.g. provider supplied) configuration file, use the <strong><a class="full-import" href="#">configuration import</a></strong> instead.'))
+				]),
 				E('p', [
 					E('textarea', {
-						'placeholder': _('Paste or drag WireGuard configuration file…'),
-						'style': 'height:5em;width:100%;white-space:pre'
+						'placeholder': (mode == 'full')
+							? _('Paste or drag supplied WireGuard configuration file…')
+							: _('Paste or drag WireGuard peer configuration (wg0.conf) file…'),
+						'style': 'height:5em;width:100%; white-space:pre'
 					})
 				]),
 				E('div', {
@@ -424,10 +431,29 @@ return network.registerProtocol('wireguard', {
 				}, [''])
 			]);
 
+			var cancelFn = function() {
+				nodes.parentNode.removeChild(nodes.nextSibling);
+				nodes.parentNode.removeChild(nodes);
+				mapNode.classList.remove('hidden');
+				mapNode.nextSibling.classList.remove('hidden');
+				headNode.removeChild(headNode.lastChild);
+				window.removeEventListener('dragover', handleWindowDragDropIgnore);
+				window.removeEventListener('drop', handleWindowDragDropIgnore);
+			};
+
+			var a = nodes.querySelector('a.full-import');
+
+			if (a) {
+				a.addEventListener('click', ui.createHandlerFn(this, function(mode) {
+					cancelFn();
+					this.handleConfigImport('full');
+				}));
+			}
+
 			mapNode.classList.add('hidden');
 			mapNode.nextElementSibling.classList.add('hidden');
 
-			headNode.appendChild(E('span', [ ' » ', _('Import configuration') ]));
+			headNode.appendChild(E('span', [ ' » ', (mode == 'full') ? _('Import configuration') : _('Import as peer') ]));
 			mapNode.parentNode.appendChild(E([], [
 				nodes,
 				E('div', {
@@ -435,15 +461,7 @@ return network.registerProtocol('wireguard', {
 				}, [
 					E('button', {
 						'class': 'btn',
-						'click': function() {
-							nodes.parentNode.removeChild(nodes.nextSibling);
-							nodes.parentNode.removeChild(nodes);
-							mapNode.classList.remove('hidden');
-							mapNode.nextSibling.classList.remove('hidden');
-							headNode.removeChild(headNode.lastChild);
-							window.removeEventListener('dragover', handleWindowDragDropIgnore);
-							window.removeEventListener('drop', handleWindowDragDropIgnore);
-						}
+						'click': cancelFn
 					}, [ _('Cancel') ]),
 					' ',
 					E('button', {
