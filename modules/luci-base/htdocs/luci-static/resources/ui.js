@@ -777,7 +777,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 		    keys = Object.keys(this.choices);
 
 		if (this.options.sort === true)
-			keys.sort();
+			keys.sort(L.naturalCompare);
 		else if (Array.isArray(this.options.sort))
 			keys = this.options.sort;
 
@@ -1056,7 +1056,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		var keys = Object.keys(this.choices);
 
 		if (this.options.sort === true)
-			keys.sort();
+			keys.sort(L.naturalCompare);
 		else if (Array.isArray(this.options.sort))
 			keys = this.options.sort;
 
@@ -2859,13 +2859,8 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 		    rows = E('ul');
 
 		list.sort(function(a, b) {
-			var isDirA = (a.type == 'directory'),
-			    isDirB = (b.type == 'directory');
-
-			if (isDirA != isDirB)
-				return isDirA < isDirB;
-
-			return a.name > b.name;
+			return L.naturalCompare(a.type == 'directory', b.type == 'directory') ||
+			       L.naturalCompare(a.name, b.name);
 		});
 
 		for (var i = 0; i < list.length; i++) {
@@ -3152,7 +3147,7 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 			if (wA != wB)
 				return wA - wB;
 
-			return a.name > b.name;
+			return L.naturalCompare(a.name, b.name);
 		});
 	}
 });
@@ -3220,13 +3215,9 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 			}, this));
 
 			list.sort(function(a, b) {
-				if (a[0] < b[0])
-					return sorting[1] ? 1 : -1;
-
-				if (a[0] > b[0])
-					return sorting[1] ? -1 : 1;
-
-				return 0;
+				return sorting[1]
+					? -L.naturalCompare(a[0], b[0])
+					: L.naturalCompare(a[0], b[0]);
 			});
 
 			data.length = 0;

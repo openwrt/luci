@@ -74,7 +74,7 @@ var CBIJSONConfig = baseclass.extend({
 			if (indexA != indexB)
 				return (indexA - indexB);
 
-			return (a > b);
+			return L.naturalCompare(a, b);
 		}, this));
 
 		for (var i = 0; i < section_ids.length; i++)
@@ -3080,13 +3080,9 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		}, this));
 
 		list.sort(function(a, b) {
-			if (a[0] < b[0])
-				return descending ? 1 : -1;
-
-			if (a[0] > b[0])
-				return descending ? -1 : 1;
-
-			return 0;
+			return descending
+				? -L.naturalCompare(a[0], b[0])
+				: L.naturalCompare(a[0], b[0]);
 		});
 
 		window.requestAnimationFrame(L.bind(function() {
