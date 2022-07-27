@@ -537,7 +537,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 		}
 
 		if (!this.nocreate) {
-			var keys = Object.keys(checked).sort();
+			var keys = Object.keys(checked).sort(L.naturalCompare);
 
 			for (var i = 0; i < keys.length; i++) {
 				if (choices.hasOwnProperty(keys[i]))
