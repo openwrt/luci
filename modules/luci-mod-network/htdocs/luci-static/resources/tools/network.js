@@ -780,6 +780,8 @@ return baseclass.extend({
 				return network.instantiateDevice(port)
 			}).filter(function(dev) {
 				return dev.getType() != 'wifi' || dev.isUp();
+			}).sort(function(a, b) {
+				return L.naturalCompare(a.getName(), b.getName());
 			});
 
 			this.children = this.children.filter(function(opt) { return !opt.option.match(/^port_/) });
@@ -892,18 +894,6 @@ return baseclass.extend({
 
 		for (var port_name in seen_ports)
 			ports.push(port_name);
-
-		ports.sort(function(a, b) {
-			var m1 = a.match(/^(.+?)([0-9]*)$/),
-			    m2 = b.match(/^(.+?)([0-9]*)$/);
-
-			if (m1[1] < m2[1])
-				return -1;
-			else if (m1[1] > m2[1])
-				return 1;
-			else
-				return +(m1[2] || 0) - +(m2[2] || 0);
-		});
 
 		ss.updatePorts(ports);
 	},
