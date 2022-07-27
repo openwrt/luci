@@ -20,6 +20,7 @@
 #include <errno.h>
 #include <string.h>
 #include <math.h>
+#include <dlfcn.h>
 
 #include "ucode/module.h"
 
@@ -948,10 +949,39 @@ free_lv(void *ud)
 	free(lv);
 }
 
+static void
+dlopen_self(uc_vm_t *vm)
+{
+	uc_value_t *search, *entry;
+	char *path, *wildcard;
+	void *dlh = NULL;
+	size_t i;
+
+	search = ucv_property_get(uc_vm_scope_get(vm), "REQUIRE_SEARCH_PATH");
+
+	for (i = 0; !dlh && i < ucv_array_length(search); i++) {
+		entry = ucv_array_get(search, i);
+		path = ucv_string_get(entry);
+		wildcard = path ? strchr(path, '*') : NULL;
+
+		if (wildcard) {
+			xasprintf(&path, "%.*slua%s", (int)(wildcard - path), path, wildcard + 1);
+			dlh = dlopen(path, RTLD_LAZY|RTLD_GLOBAL);
+			dlerror(); /* clear error */
+			free(path);
+		}
+	}
+}
+
 void uc_module_init(uc_vm_t *vm, uc_value_t *scope)
 {
 	uc_function_list_register(scope, lua_fns);
 
 	vm_type = uc_type_declare(vm, "lua.vm", vm_fns, free_vm);
 	lv_type = uc_type_declare(vm, "lua.value", lv_fns, free_lv);
+
+	/* reopen ourself using dlopen(RTLD_GLOBAL) to make liblua symbols
+	 * available to dynamic Lua extensions loaded by this module through
+	 * Lua's require() */
+	dlopen_self(vm);
 }
