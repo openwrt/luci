@@ -18,12 +18,16 @@ var callFileList = rpc.declare({
 });
 
 network.registerPatternVirtual(/^ncm-.+$/);
-network.registerErrorCode('CONFIGURE_FAILED',  _('Configuration failed'));
-network.registerErrorCode('DISCONNECT_FAILED', _('Disconnection attempt failed'));
-network.registerErrorCode('FINALIZE_FAILED',   _('Finalizing failed'));
-network.registerErrorCode('GETINFO_FAILED',    _('Modem information query failed'));
-network.registerErrorCode('INITIALIZE_FAILED', _('Initialization failure'));
-network.registerErrorCode('SETMODE_FAILED',    _('Setting operation mode failed'));
+network.registerErrorCode('CONFIGURE_FAILED', _('Failed to configure modem'));
+network.registerErrorCode('CONNECT_FAILED',  _('Failed to connect'));
+network.registerErrorCode('DISCONNECT_FAILED', _('Failed to disconnect'));
+network.registerErrorCode('FINALIZE_FAILED',  _('Finalizing failed'));
+network.registerErrorCode('GETINFO_FAILED',  _('Failed to get modem information'));
+network.registerErrorCode('INITIALIZE_FAILED', _('Failed to initialize modem'));
+network.registerErrorCode('NO_DEVICE',     _('No control device specified'));
+network.registerErrorCode('NO_IFACE',     _('The interface could not be found'));
+network.registerErrorCode('PIN_FAILED',    _('Unable to verify PIN'));
+network.registerErrorCode('SETMODE_FAILED',  _('Failed to set operating mode'));
 network.registerErrorCode('UNSUPPORTED_MODEM', _('Unsupported modem'));
 
 return network.registerProtocol('ncm', {
@@ -103,9 +107,6 @@ return network.registerProtocol('ncm', {
 		o = s.taboption('general', form.Value, 'password', _('PAP/CHAP password'));
 		o.password = true;
 
-		o = s.taboption('general', form.Value, 'dialnumber', _('Dial number'));
-		o.placeholder = '*99***1#';
-
 		if (L.hasSystemFeature('ipv6')) {
 			o = s.taboption('advanced', form.ListValue, 'ppp_ipv6', _('Obtain IPv6 address'));
 			o.ucioption = 'ipv6';
@@ -115,8 +116,8 @@ return network.registerProtocol('ncm', {
 			o.default = 'auto';
 		}
 
-		o = s.taboption('advanced', form.Value, 'delay', _('Modem init timeout'), _('Maximum amount of seconds to wait for the modem to become ready'));
-		o.placeholder = '10';
-		o.datatype    = 'min(1)';
+		o = s.taboption('advanced', form.Value, 'delay', _('Modem init timeout'), _('Amount of seconds to wait for the modem to become ready'));
+		o.placeholder = '0';
+		o.datatype  = 'min(0)';
 	}
 });
