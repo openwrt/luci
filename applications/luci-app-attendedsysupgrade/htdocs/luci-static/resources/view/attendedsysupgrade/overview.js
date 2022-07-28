@@ -418,7 +418,7 @@ return view.extend({
 	},
 
 	render: function (res) {
-		this.data.app_version = res[0].packages['luci-app-attendedsysupgrade'];
+		this.firmware.client = 'luci/' + res[0].packages['luci-app-attendedsysupgrade'];
 		this.firmware.packages = res[0].packages;
 
 		this.firmware.profile = res[1].board_name;
