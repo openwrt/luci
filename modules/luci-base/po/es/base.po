@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2022-07-01 10:29+0000\n"
-"Last-Translator: Mc Giver <mcgivergim@gmail.com>\n"
+"PO-Revision-Date: 2022-07-18 23:39+0000\n"
+"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/"
 ">\n"
 "Language: es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1513
 msgid "%.1f dB"
@@ -99,7 +99,7 @@ msgstr "0"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1003
 msgid "0 = not using RSSI threshold, 1 = do not change driver default"
 msgstr ""
-"0 = Sin utilizar el umbral RSSI, 1 = No cambiar el valor predeterminado del "
+"0 = no usar umbral RSSI, 1 = no cambiar el valor predeterminado del "
 "controlador"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:56
@@ -368,7 +368,7 @@ msgstr "Identificador de canal virtual ATM (VCI)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1555
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:70
 msgid "ATM Virtual Path Identifier (VPI)"
-msgstr "Identificador de camino virtual ATM (VPI)"
+msgstr "Identificador de ruta virtual ATM (VPI)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1522
 msgid ""
@@ -376,9 +376,9 @@ msgid ""
 "Linux network interfaces which can be used in conjunction with DHCP or PPP "
 "to dial into the provider network."
 msgstr ""
-"Los puentes ATM exponen conexiones AAL5 ethernet encapsuladas como "
-"interfaces de red Linux que se pueden usar junto a DHCP o PPP para conectar "
-"a la red del proveedor."
+"Los puentes ATM exponen Ethernet encapsulado en conexiones AAL5 como "
+"interfaces de red Linux virtuales que se pueden usar junto con DHCP o PPP "
+"para acceder a la red del proveedor."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1561
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:62
@@ -1031,7 +1031,7 @@ msgstr "Copia de seguridad"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:114
 msgid "Backup / Flash Firmware"
-msgstr "Copia de seguridad / Grabar firmware"
+msgstr "Respaldo / Grabar firmware"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:351
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:12
@@ -1058,10 +1058,10 @@ msgid ""
 "configuration files marked by opkg, essential base files and the user "
 "defined backup patterns."
 msgstr ""
-"Lista de archivos a los que hacer copia de seguridad. Es una lista de "
-"archivos de configuración cambiados por archivos marcados por opkg, archivos "
-"esenciales base y los patrones de copia de seguridad definidos por el "
-"usuario."
+"A continuación se muestra la lista determinada de archivos para respaldar. "
+"Consiste en archivos de configuración modificados marcados por opkg, "
+"archivos base esenciales y los patrones de copia de seguridad definidos por "
+"el usuario."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:286
 #, fuzzy
@@ -1125,12 +1125,12 @@ msgstr "Puente (Soporta comunicación directa entre MAC VLANs)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:339
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:481
 msgid "Bridge VLAN filtering"
-msgstr "Filtrado de puente VLAN"
+msgstr "Filtrado de VLAN del puente"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:344
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1397
 msgid "Bridge device"
-msgstr "Dispositivo de puente"
+msgstr "Dispositivo puente"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:338
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:480
@@ -2363,8 +2363,8 @@ msgstr "Activar soporte de multidifusión"
 msgid ""
 "Enable packet steering across all CPUs. May help or hinder network speed."
 msgstr ""
-"Activa la gestión de paquetes en todas las CPU. Puede ayudar u obstaculizar "
-"la velocidad de la red."
+"Activa el direccionamiento de paquetes en todas las CPU. Puede ayudar o "
+"dificultar la velocidad de la red."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:622
 msgid "Enable promiscuous mode"
@@ -2410,7 +2410,7 @@ msgstr "Activado"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:538
 msgid "Enables IGMP snooping on this bridge"
-msgstr "Activa el protocolo IGMP Snooping en este puente"
+msgstr "Activa IGMP Snooping en este puente"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1504
 msgid ""
@@ -2738,7 +2738,7 @@ msgstr "Grabar nueva imagen de firmware"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:384
 msgid "Flash operations"
-msgstr "Operaciones de instalación/copia"
+msgstr "Operaciones de instalación"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:317
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:319
@@ -2759,7 +2759,7 @@ msgstr "Forzar CCMP (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:686
 msgid "Force DHCP on this network even if another server is detected."
-msgstr "Forzar DHCP en esta red aunque se detecte otro servidor."
+msgstr "Forzar DHCP en esta red incluso si se detecta otro servidor."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:682
 msgid "Force IGMP version"
@@ -2905,7 +2905,7 @@ msgstr "Puertos del gateway"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:11
 #: modules/luci-compat/luasrc/model/network.lua:29
 msgid "Gateway address is invalid"
-msgstr "La dirección de la puerta de enlace es inválida"
+msgstr "La dirección de la puerta de enlace no es válida"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:250
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:477
@@ -3197,7 +3197,7 @@ msgstr "Dirección IP"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:10
 #: modules/luci-compat/luasrc/model/network.lua:28
 msgid "IP address is invalid"
-msgstr "Dirección IP inválida"
+msgstr "La dirección IP no es válida"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:13
 #: modules/luci-compat/luasrc/model/network.lua:31
@@ -3718,7 +3718,7 @@ msgstr "APN proporcionado inválido"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:19
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:22
 msgid "Invalid Base64 key string"
-msgstr "Cadena de clave Base64 inválida"
+msgstr "Cadena de clave Base64 no válida"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:78
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:83
@@ -3747,8 +3747,8 @@ msgid ""
 "Invalid bearer list. Possibly too many bearers created. This protocol "
 "supports one and only one bearer."
 msgstr ""
-"Lista de portadores inválida. Posiblemente se hayan creado demasiados "
-"portadores. Este protocolo admite uno y solo un portador."
+"Lista de portador no válida. Posiblemente se crearon demasiados portadores. "
+"Este protocolo admite un único portador."
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:402
 msgid "Invalid command"
@@ -4094,7 +4094,7 @@ msgstr "Dirección IP local"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:12
 #: modules/luci-compat/luasrc/model/network.lua:30
 msgid "Local IP address is invalid"
-msgstr "Dirección IP local inválida"
+msgstr "La dirección IP local no es válida"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:86
 msgid "Local IP address to assign"
@@ -4371,7 +4371,7 @@ msgstr "Número máximo de direcciones asignadas."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:542
 msgid "Maximum snooping table size"
-msgstr "Tamaño máximo de la tabla de espionaje"
+msgstr "Tamaño máximo de la tabla de snooping"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:811
 msgid ""
@@ -4696,6 +4696,10 @@ msgstr "Validez de la caché de vecinos"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:182
 msgid "Network"
 msgstr "Red"
+
+#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:72
+msgid "Network Mode"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1998
 msgid "Network SSID"
@@ -5784,7 +5788,7 @@ msgstr "Intervalo de consulta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:561
 msgid "Query response interval"
-msgstr "Intervalo de respuesta a la consulta"
+msgstr "Intervalo de respuesta de consulta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1538
 msgid "R0 Key Lifetime"
@@ -6387,7 +6391,6 @@ msgid "Service Name"
 msgstr "Nombre del servicio"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:88
-#: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:72
 msgid "Service Type"
 msgstr "Tipo de servicio"
 
@@ -6486,7 +6489,7 @@ msgstr "Preámbulo corto"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:470
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:18
 msgid "Show current backup file list"
-msgstr "Mostrar lista de archivos a resguardar"
+msgstr "Mostrar la lista actual de archivos a respaldar"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:293
 msgid "Show empty chains"
@@ -6537,7 +6540,7 @@ msgstr "Tamaño"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:450
 msgid "Size of DNS query cache"
-msgstr "Tamaño de la caché de consultas DNS"
+msgstr "Tamaño de la caché de consultas de DNS"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:208
 msgid "Size of the ZRam device in megabytes"
@@ -6796,7 +6799,7 @@ msgid ""
 "wireless networks, choose the associated interface as network in the "
 "wireless settings."
 msgstr ""
-"Especifica los puertos cableados para conectar a este puente. Para conectar "
+"Especifique los puertos cableados para conectar a este puente. Para conectar "
 "redes inalámbricas, elija la interfaz asociada como red en la configuración "
 "inalámbrica."
 
@@ -6986,9 +6989,9 @@ msgid ""
 "configurations where only hosts with a corresponding lease are served."
 msgstr ""
 "Las asignaciones estáticas se usan para asignar direcciones IP fijas y "
-"nombres identificativos de dispositivos a clientes DHCP. También son "
-"necesarias para configuraciones de interfaces no dinámicas en las que a cada "
-"dispositivo siempre se le quiere dar la misma dirección IP."
+"nombres de host a clientes DHCP. También son necesarias para configuraciones "
+"de interfaces no dinámicas en las que a cada dispositivo siempre se le "
+"quiere dar la misma dirección IP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1175
 msgid "Station inactivity limit"
@@ -7034,7 +7037,7 @@ msgstr "Enviar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:292
 msgid "Suppress logging"
-msgstr "Suprimir el registro"
+msgstr "Suprimir registro"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:293
 msgid "Suppress logging of the routine operation of these protocols"
@@ -7758,10 +7761,10 @@ msgid ""
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
 msgstr ""
-"Para restaurar los archivos de configuración, debe subir primero una copia "
-"de seguridad. Para reiniciar el firmware a sus configuraciones "
-"predeterminadas pulse \"Realizar restablecimiento\" (sólo posible con "
-"imágenes squashfs)."
+"Para restaurar los archivos de configuración, puede cargar un archivo de "
+"copia de seguridad generado anteriormente aquí. Para restablecer el firmware "
+"a su estado inicial, haga clic en \"Realizar restablecimiento\" (sólo es "
+"posible con imágenes squashfs)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1491
 msgid "Tone"
