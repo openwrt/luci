@@ -146,6 +146,8 @@ return baseclass.extend({
 			 var ifc = data[i];
 
 			 if (v6) {
+				var uptime = ifc.getUptime();
+				this.params.internet.v6.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
 				this.params.internet.v6.ipprefixv6.value =  ifc.getIP6Prefix() || '-';
 				this.params.internet.v6.gatewayv6.value =  ifc.getGateway6Addr() || '-';
 				this.params.internet.v6.protocol.value=  ifc.getI18n() || E('em', _('Not connected'));
@@ -178,7 +180,7 @@ return baseclass.extend({
 				},
 
 				uptime: {
-					title: _('Connected since'),
+					title: _('Uptime'),
 					visible: true,
 					value: '-'
 				},
@@ -218,7 +220,7 @@ return baseclass.extend({
 				},
 
 				uptime: {
-					title: _('Connected since'),
+					title: _('Uptime'),
 					visible: true,
 					value: '-'
 				},
