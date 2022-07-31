@@ -29,7 +29,7 @@ echo "${zt0}" > "/tmp/zt.nif"
 
 	tmp="/tmp/zerotier"
 	json_init
-	json_add_string o_ifnames ${zt0}
+	json_add_string o_ifnames "$(echo -e "${zt0}" | awk '{print $1}')"
 	json_add_string o_ip_segments "$(echo -e "${ip_segments}" | awk '{print $1}')"
 	json_dump -i >"$tmp.json"
 	if utpl -F "$tmp.json" -S "$RULES_UC" > "$tmp.nft" && ! cmp -s "$tmp.nft" "$RULES_NFT"; then
