@@ -30,7 +30,7 @@ return view.extend({
 					if (res[i].code !== 0 || !res[i].stdout || res[i].stdout.trim() === '')
 						ui.addNotification(null, E('p', {}, _('Unable to get interface %s info: %s.').format(interfaces[i], res[i].message)));
 					else
-						info += res[i].stdout.trim() + '\n\n';
+						info += res[i].stdout;
 				}
 
 				return info;

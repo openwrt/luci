@@ -1,5 +1,10 @@
 #!/bin/sh
 
+. /usr/share/libubox/jshn.sh
+
+RULES_UC="/etc/zerotier/zerotier.uc"
+RULES_NFT="/etc/nftables.d/99-zerotier-rules.nft"
+
 zero_enable="$(uci get zerotier.sample_config.enabled)"
 
 [ "${zero_enable}" -ne "1" ] && exit 0
@@ -18,11 +23,19 @@ echo "${zt0}" > "/tmp/zt.nif"
 [ "${nat_enable}" -eq "1" ] && {
 	for i in ${zt0}
 	do
-		ip_segment=""
-		iptables -I FORWARD -i "$i" -j ACCEPT
-		iptables -I FORWARD -o "$i" -j ACCEPT
-		iptables -t nat -I POSTROUTING -o "$i" -j MASQUERADE
 		ip_segment="$(ip route | grep "dev $i proto kernel" | awk '{print $1}')"
-		iptables -t nat -I POSTROUTING -s "${ip_segment}" -j MASQUERADE
+		ip_segments="${ip_segments:+$ip_segments\n}${ip_segment}"
 	done
+
+	tmp="/tmp/zerotier"
+	json_init
+	json_add_string o_ifnames ${zt0}
+	json_add_string o_ip_segments "$(echo -e "${ip_segments}" | awk '{print $1}')"
+	json_dump -i >"$tmp.json"
+	if utpl -F "$tmp.json" -S "$RULES_UC" > "$tmp.nft" && ! cmp -s "$tmp.nft" "$RULES_NFT"; then
+		echo "table inet chk {include \"$tmp.nft\";}" > "$tmp.nft.chk"
+		! nft -f "$tmp.nft.chk" -c || { mv -f "$tmp.nft" "$RULES_NFT"; fw4 reload; }
+		echo "Add zt interface rules success!"
+	fi
+	rm -f "$tmp.json" "$tmp.nft" "$tmp.nft.chk"
 }
