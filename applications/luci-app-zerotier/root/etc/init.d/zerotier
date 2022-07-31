@@ -26,10 +26,10 @@ start_instance() {
 		echo "disabled in config"
 		return 1
 	fi
-  
-  [ -d /etc/config/zero ] || mkdir -p /etc/config/zero
-  config_path=/etc/config/zero
-  
+
+	[ -d /etc/config/zero ] || mkdir -p /etc/config/zero
+	config_path=/etc/config/zero
+
 	config_get_bool port $cfg 'port'
 	config_get secret $cfg 'secret'
 
@@ -92,10 +92,12 @@ start_service() {
 }
 
 stop_instance() {
-  rm -f /tmp/zero.log
+	rm -f /tmp/zero.log
 	local cfg="$1"
 
-	/etc/zerotier.stop > /tmp/zero.log 2>&1 &
+	rm -f "/etc/nftables.d/99-zerotier-rules.nft"
+	fw4 reload
+	echo "zt interface rules removed!" > /tmp/zero.log 2>&1 &
 
 	# Remove existing link or folder
 	rm -f $CONFIG_PATH/networks.d/*.conf
