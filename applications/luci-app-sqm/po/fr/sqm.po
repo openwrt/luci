@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-08-08 14:26+0000\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"PO-Revision-Date: 2022-07-31 13:17+0000\n"
+"Last-Translator: Christophe Blancon <christophe.blancon@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssqm/fr/>\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
 msgid ""
@@ -49,7 +49,7 @@ msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:58
 msgid "Enable SQM"
-msgstr ""
+msgstr "Activer l'indicateur de la qualité des signaux (SQM)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:78
 msgid "Enable this SQM instance."
@@ -82,7 +82,7 @@ msgstr "Limite des files d'attente entrée ; laisser vide par défaut."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
 msgid "Ignore DSCP on ingress:"
-msgstr "Ignoré DSCP à l'entrée :"
+msgstr "Ignorer DSCP à l'entrée :"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:89
 msgid "Interface name"
@@ -108,38 +108,38 @@ msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:74
 msgid "Link Layer Adaptation"
-msgstr "Adaptation de liaison"
+msgstr "Adaptation de la couche de liaison"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
 msgid ""
 "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
 "interface MTU + overhead:"
 msgstr ""
-"Taille maximale pour les calculs de taille et de taux, tcMTU (byte) ; doit "
-"être >= interface MTU + overhead :"
+"Taille maximale pour les calculs de taille et de débit, tcMTU (octet); doit "
+"être >= interface MTU + surcharge:"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
 msgid ""
 "Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables:"
 msgstr ""
-"Taille minimale des paquets, MPU (byte) ; doit être > 0 pour les tailes de "
-"tables ethernet :"
+"Taille minimale des paquets, MPU (octet) ; doit être > 0 pour les tables de "
+"taille ethernet :"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
 msgid ""
 "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = (tcMTU "
 "+ 1) / 16:"
 msgstr ""
-"Nombre d'entrées de taille/debit tables, TSIZE ; for ATM choose TSIZE = "
-"(tcMTU + 1) / 16 :"
+"Nombre d'entrées dans les tables de taille/taux, TSIZE ; pour ATM, choisir "
+"TSIZE = (tcMTU + 1) / 16 :"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:193
 msgid "Per Packet Overhead (byte):"
-msgstr "Overhead par Packet(byte) :"
+msgstr "Surcharge par paquet (octet) :"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:73
 msgid "Queue Discipline"
-msgstr "Queue Discipline"
+msgstr "Discipline de la file d'attente"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:120
 msgid "Queue setup script"
@@ -147,7 +147,7 @@ msgstr "Script de file d'attente"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:71
 msgid "Queues"
-msgstr "Queues"
+msgstr "Files d'attente"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
 msgid ""
@@ -159,7 +159,7 @@ msgstr ""
 
 #: applications/luci-app-sqm/root/usr/share/luci/menu.d/luci-app-sqm.json:3
 msgid "SQM QoS"
-msgstr "SQM QoS"
+msgstr "Qualité de service SQM"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
 msgid ""
@@ -175,7 +175,7 @@ msgid ""
 "long as this box is checked."
 msgstr ""
 "Afficher et utiliser la configuration avancée. Les options avancées ne "
-"seront utilisées que tant que cette case sera cochée."
+"seront utilisées que si cette case est cochée."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
 msgid ""
@@ -187,7 +187,7 @@ msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:64
 msgid "Smart Queue Management"
-msgstr "Management File d'attente"
+msgstr "Gestion intelligente des files d'attente"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
 msgid "Squash DSCP on inbound packets (ingress):"
@@ -208,12 +208,16 @@ msgid ""
 "The SQM service seems to be disabled. Please use the button below to "
 "activate this service."
 msgstr ""
+"Le service SQM semble être désactivé. Veuillez utiliser le bouton ci-dessous "
+"pour activer ce service."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
 msgid ""
 "Upload speed (kbit/s) (egress) set to 0 to selectively disable egress "
 "shaping:"
-msgstr "Vitesse de chargement (kbit/s) (sortie) Mettre sur 0 pour désactiver :"
+msgstr ""
+"Vitesse de téléchargement (kbit/s) (egress) défini à 0 pour désactiver "
+"sélectivement la mise en forme de l'egress :"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Verbosity of SQM's output into the system log."
@@ -225,7 +229,9 @@ msgstr "Quelle couche liaison à prendre en compte :"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
 msgid "Which linklayer adaptation mechanism to use; for testing only"
-msgstr "Mécanisme d'adaptation de la couche de liaison ; pour essai uniquement"
+msgstr ""
+"Quel mécanisme d'adaptation de la couche de liaison utiliser ; à des fins de "
+"test uniquement"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:65
 msgid ""
@@ -244,4 +250,4 @@ msgstr ""
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:188
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:219
 msgid "default"
-msgstr "Par défaut"
+msgstr "par défaut"
