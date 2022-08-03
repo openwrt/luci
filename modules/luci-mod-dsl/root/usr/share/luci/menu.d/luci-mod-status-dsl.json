@@ -1,0 +1,14 @@
+{
+         "admin/status/dsl-spectrum": {
+                 "title": "DSL line spectrum",
+                 "order": 7,
+                 "action": {
+                         "type": "view",
+                         "path": "status/dsl/dsl-spectrum"
+                 },
+                 "depends": {
+                         "acl": [ "luci-mod-status-dsl" ],
+                         "uci": { "network": { "@dsl": true } }
+                 }
+        }
+}
