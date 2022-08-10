@@ -202,7 +202,7 @@ define Package/$(PKG_NAME)/install
 	  cp -pR $(PKG_BUILD_DIR)/root/* $(1)/; \
 	else true; fi
 	if [ -d $(PKG_BUILD_DIR)/src ]; then \
-	  $(call Build/Install/Default) \
+	  ( $(call Build/Install/Default) ) && \
 	  $(CP) $(PKG_INSTALL_DIR)/* $(1)/; \
 	else true; fi
 endef
