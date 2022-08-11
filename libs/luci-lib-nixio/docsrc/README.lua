@@ -81,13 +81,9 @@ module "nixio.README"
 --- Cryptography and TLS libraries.
 -- <ul>
 -- <li>Currently 3 underlying cryptography libraries are supported: openssl,
--- cyassl and axTLS. The name of the library in use is written to 
+-- wolfssl. The name of the library in use is written to 
 -- <strong>nixio.tls_provider</strong></li>
--- <li>You should whenever possible use openssl or cyassl as axTLS has only 
--- limited support. It does not provide support for non-blocking sockets and
--- is probably less audited than the other ones.</li>
--- <li>As the supported Windows versions are not suitable for embedded devices
--- axTLS is at the moment not supported on Windows.</li>  
+-- <li>You should whenever possible use openssl or wolfssl.</li>
 -- </ul>
 -- @usage Tes
 -- @class table
