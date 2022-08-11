@@ -4,10 +4,15 @@
 #include "nixio.h"
 #include <sys/types.h>
 
-#ifndef WITHOUT_OPENSSL
-#include <openssl/ssl.h>
-#include <openssl/md5.h>
-#include <openssl/sha.h>
+#ifdef WITH_WOLFSSL
+# include <wolfssl/options.h>
+# include <wolfssl/openssl/ssl.h>
+# include <wolfssl/openssl/md5.h>
+# include <wolfssl/openssl/sha.h>
+#else
+# include <openssl/ssl.h>
+# include <openssl/md5.h>
+# include <openssl/sha.h>
 #endif
 
 #define NIXIO_TLS_CTX_META "nixio.tls.ctx"

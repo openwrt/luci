@@ -54,9 +54,9 @@ static int nixio_tls_ctx(lua_State * L) {
 	lua_setmetatable(L, -2);
 
 	if (!strcmp(method, "client")) {
-		*ctx = SSL_CTX_new(TLSv1_client_method());
+		*ctx = SSL_CTX_new(TLS_client_method());
 	} else if (!strcmp(method, "server")) {
-		*ctx = SSL_CTX_new(TLSv1_server_method());
+		*ctx = SSL_CTX_new(TLS_server_method());
 	} else {
 		return luaL_argerror(L, 1, "supported values: client, server");
 	}
@@ -65,9 +65,10 @@ static int nixio_tls_ctx(lua_State * L) {
 		return luaL_error(L, "unable to create TLS context");
 	}
 
-#ifdef WITH_CYASSL
+	/* Setting the minimum version of SSL */
+	SSL_CTX_set_min_proto_version(*ctx,TLS1_2_VERSION);
+	/* Setting do not verify certificate */
 	SSL_CTX_set_verify(*ctx, SSL_VERIFY_NONE, NULL);
-#endif
 
 	return 1;
 }
@@ -230,10 +231,8 @@ void nixio_open_tls_context(lua_State *L) {
     /* register module functions */
     luaL_register(L, NULL, R);
 
-#if defined (WITH_AXTLS)
-    lua_pushliteral(L, "axtls");
-#elif defined (WITH_CYASSL)
-    lua_pushliteral(L, "cyassl");
+#if defined (WITH_WOLFSSL)
+    lua_pushliteral(L, "wolfssl");
 #else
     lua_pushliteral(L, "openssl");
 #endif
