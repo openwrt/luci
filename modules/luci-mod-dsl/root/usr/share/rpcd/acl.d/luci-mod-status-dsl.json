@@ -16,5 +16,15 @@
                                 "/sbin/dsl_cpe_pipe.sh bbsg 1": [ "exec" ]
                         }
                 }
-        }
+        },
+        "luci-mod-status-index-dsl": {
+                "description": "Grant access to DSL status display",
+                "read": {
+                        "ubus": {
+                                "dsl": [ "statistics" ]
+                        }
+                }
+        },
+
+
 }

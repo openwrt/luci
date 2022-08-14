@@ -2,103 +2,71 @@
 // Rendering of DSL spectrum graphs  showing
 // US/DS SNR and US/DS bits/tone
 //
-// This version does not depend on chart.js or
-// any other package
+// This version does depend on an ubus version that support DSL line stattiscis  but 
+// does not depend on chart.js or any other package
 
- class DataSet {
-    constructor (inputString, extractFunction) {
-       this.groupSize = this.getGroupSize(inputString);
-       this.dataPos = this.getDataPos(inputString);
-       this.numData = this.getNumData(inputString);
-       if (!isNaN(this.groupSize)) {                   // this is the tricky part as output of all commands is not consistant
-          this.maxX = this.numData * this.groupSize;   // needs to be validated with various input
-       } else {
-          this.maxX = this.numData;
-          this.groupSize = 1
-       }
-       this.data = inputString.substr(this.dataPos).slice(0, -5).split(" ").map(extractFunction,{groupSize: this.groupSize});
+class DataSet {
+   constructor (input, extractFunction) {
+      this.groupSize = input.groupsize;
+      this.numData = input.groups;
+      this.maxX = this.numData * this.groupSize;   // needs to be validated with various input
+      this.data = input.data.map(extractFunction,{groupSize: this.groupSize});
    }
+}
 
-   getGroupSize(data) {
-      let groupSizePos = data.search('nGroupSize=') + 11
-      return (parseInt(data.substr(groupSizePos,2),10))
-   }
+function myBitsFunction(value, index, array) {
+   return({x: index, y: value, error: false});
+}
 
-   getDataPos(data) {
-      let dataPos = data.search('nData=') + 7
-      return (dataPos)
-   }
+function mySnrFunction(value, index, array) {
+   let result;
 
-   getNumData(data) {
-      let nNumDataPos = data.search('nNumData=') + 9
-      return (parseInt(data.substr(nNumDataPos,4),10))
-   }
+   if (value == 'NaN') {                                                                      // means error value
+      result = {x: index * this.groupSize, y: -40 , error: true}
+   } else {
+      result = {x: index * this.groupSize, y: value, error: false}
+   };
 
- }
- 
- const usSnrData   = new DataSet(document.getElementById("usdB").innerText, mySnrFunction);
- const dsSnrData   = new DataSet(document.getElementById("dsdB").innerText, mySnrFunction); 
- const usBitsData = new DataSet(document.getElementById("usBits").innerText, myBitsFunction);
- const dsBitsData = new DataSet(document.getElementById("dsBits").innerText, myBitsFunction);
- const usQLNData  = new DataSet(document.getElementById("usQln").innerText, myQLNFunction);
- const dsQLNData  = new DataSet(document.getElementById("dsQln").innerText, myQLNFunction);
- const usHLOGData = new DataSet(document.getElementById("usHLog").innerText, myHLOGFunction);
- const dsHLOGData = new DataSet(document.getElementById("dsHLog").innerText, myHLOGFunction);
+   return(result);
+}
 
+function myQLNFunction(value, index, array) {
+   let result;
 
- function myBitsFunction(value, index, array) {
-    return({x: parseInt(index), y: parseInt(value, 16), error: false});
- }
+   if (value == 'NaN') {                                                                 // means error value
+      result = { x: index * this.groupSize, y:  - 150, error: true}
+   } else {
+       result = { x: index * this.groupSize, y:  value, error: false}
+   };
 
- function mySnrFunction(value, index, array) {
-    let t = value.replace(/[\(\)\n]/g,'').split(',');
-    let result;
+   return(result);
+}
 
-    let v = t[1];
-    let i = t[0];
-    if (v == 255) {                                                                      // this is the only special value
-       result = {x: parseInt(i) * this.groupSize, y: -40 , error: true}
-    } else {
-       result = {x: parseInt(i) * this.groupSize, y: parseInt(- 32 + v / 2), error: false} // rec ITU-T G.933.2, section 11.4.1.1.3, SNR(k × G × Δf) = −32 + (snr(k)/2) dB
-    };
-    return(result);
- }
+function myHLOGFunction(value, index, array) {
+   let result;
 
- function myQLNFunction(value, index, array) {
-    let t = value.replace(/[\(\)\n]/g,'').split(',');
-    let result;
+   if (value == 'NaN') {                                                            // means error value
+      result = {x: index * this.groupSize, y: -100, error: true}
+   } else {
+       result = {x: index * this.groupSize, y: value, error: false}    };
 
-    let v = t[1];
-    let i = t[0];
-    if (v == 255) {                                                                 // this is the only  special value defined
-       result = { x: parseInt(i) * this.groupSize, y:  - 150, error: true}
-    } else {
-       result = { x: parseInt(i) * this.groupSize, y:  - 23 - v / 2, error: false}  // ref ITU-T G.933.2, section 11.4.1.1.2, QLN(k × G × Δf) = −23 − (n(k)/2) dBm/Hz
-    };
-    return(result);
- }
+   return(result);
+}
 
- function myHLOGFunction(value, index, array) {
-    let t = value.replace(/[\(\)\n]/g,'').split(',');
-
-    let v = t[1];
-    let i = t[0];
-    let result;
-    if (v == 1023) {                                                            // this is the only special value defined
-       result = {x: parseInt(i) * this.groupSize, y: -100, error: true}
-    } else {
-       result = {x: parseInt(i) * this.groupSize, y: 6 - v / 10, error: false}  // ref ITU-T G.933.2,  section 11.4.1.1.1, Hlog(k × G × Δf) = 6 − (m(k)/10)
-    };
-    return(result);
- }
-
+const usSnrData  = new DataSet(window.json['snr']['upstream'], mySnrFunction);
+const dsSnrData  = new DataSet(window.json['snr']['downstream'], mySnrFunction);
+const usBitsData = new DataSet(window.json['bits']['upstream'], myBitsFunction);
+const dsBitsData = new DataSet(window.json['bits']['downstream'], myBitsFunction);
+const usQLNData  = new DataSet(window.json['qln']['upstream'], myQLNFunction);
+const dsQLNData  = new DataSet(window.json['qln']['downstream'], myQLNFunction);
+const usHLOGData = new DataSet(window.json['hlog']['upstream'], myHLOGFunction);
+const dsHLOGData = new DataSet(window.json['hlog']['downstream'], myHLOGFunction);
 
 const marginX = 50;
 const marginY = 80;
 let darkMode = document.getElementsByTagName("body")[0].parentNode.dataset.darkmode;
 
-
-bitsChart = {
+let bitsChart = {
    "config": {
        "canvas": document.getElementById("bitsChart"),
        "ctx" : document.getElementById("bitsChart").getContext("2d"),
@@ -128,7 +96,7 @@ bitsChart = {
    ] 
 };
 
-dBChart = {
+let dBChart = {
    "config": {
        "canvas": document.getElementById("dbChart"),
        "ctx" : document.getElementById("dbChart").getContext("2d"),
@@ -159,8 +127,7 @@ dBChart = {
 
 };
 
-
-qLNChart = {
+let qLNChart = {
    "config": {
        "canvas": document.getElementById("qlnChart"),
        "ctx" : document.getElementById("qlnChart").getContext("2d"),
@@ -191,8 +158,7 @@ qLNChart = {
 
 };
 
-
-hLogChart = {
+let hLogChart = {
    "config": {
        "canvas": document.getElementById("hlogChart"),
        "ctx" : document.getElementById("hlogChart").getContext("2d"),
@@ -223,7 +189,6 @@ hLogChart = {
 
 };
 
-
 function drawChart (info) {
    drawAxisX(info.config, info.config.minX, info.config.maxX, info.config.stepX, info.config.titleX);
    drawAxisY(info.config, info.config.minY, info.config.maxY, info.config.stepY, info.config.titleY);
@@ -234,12 +199,10 @@ function drawChart (info) {
    drawData(info.config, info.dataSet[1].data, info.dataSet[1].color);
 }
 
-
 function drawBlocks(config, dataPoints, color, borders) {
 
    borders.map(drawBlock,{config, dataPoints, color, borders});
 }
-
 
 function drawData(config, dataPoints, color) {
    let ctx = config.ctx;
@@ -271,10 +234,8 @@ function drawData(config, dataPoints, color) {
 
 }
 
-
 function drawLegend(config, dataSet){
    let ctx = config.ctx;
-
    let graphWidth = config.graphWidth;
    let graphHeight = config.graphHeight;
 
@@ -312,7 +273,6 @@ function drawLegend(config, dataSet){
 
 function drawAxisX(config, minValue, maxValue, step, title) {
    let ctx = config.ctx;
-
    let graphWidth = config.graphWidth;
    let graphHeight = config.graphHeight;
 
@@ -329,6 +289,7 @@ function drawAxisX(config, minValue, maxValue, step, title) {
 
    for (let x = minValue ; x <= maxValue ; x=x+step) {
       let relX = (x - config.minX) / (config.maxX - config.minX);
+
       ctx.fillText(x , relX * graphWidth + marginX,  config.canvas.height - marginY*3/4);
 
       ctx.beginPath();
@@ -344,7 +305,6 @@ function drawAxisX(config, minValue, maxValue, step, title) {
 
 function drawAxisY(config, minValue, maxValue, step, title) {
    let ctx = config.ctx
-
    let graphWidth = config.graphWidth;
    let graphHeight = config.graphHeight;
 
@@ -378,7 +338,6 @@ function drawAxisY(config, minValue, maxValue, step, title) {
    ctx.rotate(3.14 /2)
    ctx.translate(-marginX/3,-(marginY + graphHeight / 2));
 }
-
 
 //console.time();
 drawChart(dBChart);
