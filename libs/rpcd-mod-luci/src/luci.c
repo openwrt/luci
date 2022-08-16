@@ -1083,6 +1083,15 @@ static bool rpc_luci_get_iwinfo(struct blob_buf *buf, const char *devname,
 				if (nret & IWINFO_CIPHER_CCMP)
 					blobmsg_add_string(buf, NULL, "ccmp");
 
+				if (nret & IWINFO_CIPHER_CCMP256)
+					blobmsg_add_string(buf, NULL, "ccmp-256");
+
+				if (nret & IWINFO_CIPHER_GCMP)
+					blobmsg_add_string(buf, NULL, "gcmp");
+
+				if (nret & IWINFO_CIPHER_GCMP256)
+					blobmsg_add_string(buf, NULL, "gcmp-256");
+
 				if (nret & IWINFO_CIPHER_WRAP)
 					blobmsg_add_string(buf, NULL, "wrap");
 
