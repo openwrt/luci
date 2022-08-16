@@ -7,12 +7,15 @@ RULES_NFT="/etc/nftables.d/99-zerotier-rules.nft"
 
 zero_enable="$(uci get zerotier.sample_config.enabled)"
 
-[ "${zero_enable}" -ne "1" ] && exit 0
+[ "${zero_enable}" -eq "1" ] || exit 1
 
+count=0
 [ -f "/tmp/zero.log" ] && {
-	while [ "$(ifconfig | grep 'zt' | awk '{print $1}')" = "" ]
+	while [ -z "$(ifconfig | grep 'zt' | awk '{print $1}')" ]
 	do
-		sleep 1
+		sleep 2
+		let count++
+		[ "${count}" -lt 5 ] || exit 19
 	done
 }
 
