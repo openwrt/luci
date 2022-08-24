@@ -1,4 +1,4 @@
--- Copyright 2016-2018 Stan Grishin <stangri@melmac.net>
+-- Copyright 2016-2018 Stan Grishin <stangri@melmac.ca>
 -- Licensed to the public under the Apache License 2.0.
 
 local packageName = "simple-adblock"
@@ -11,6 +11,8 @@ local fs = require "nixio.fs"
 local nutil = require "nixio.util"
 local http = require "luci.http"
 local dispatcher = require "luci.dispatcher"
+
+local jsonStatusFile = "/var/run/" .. packageName .. "/" .. packageName .. ".json"
 
 function getPackageVersion()
 	local opkgFile = "/usr/lib/opkg/status"
@@ -40,8 +42,17 @@ end
 
 function checkDnsmasq() return fs.access("/usr/sbin/dnsmasq") end
 function checkUnbound() return fs.access("/usr/sbin/unbound") end
+
 function checkIpset() 
 	if fs.access("/usr/sbin/ipset") and sys.call("/usr/sbin/ipset help hash:net >/dev/null 2>&1") == 0 then
+		return true
+	else
+		return false
+	end
+end
+
+function checkNftset() 
+	if sys.call("command -v nft") == 0 then
 		return true
 	else
 		return false
@@ -61,6 +72,19 @@ function checkDnsmasqIpset()
 	end
 end
 
+function checkDnsmasqNftset()
+	if checkDnsmasq() then
+		local o = util.trim(util.exec("/usr/sbin/dnsmasq -v 2>/dev/null"))
+		if not o:match("no%-nftset") and o:match("nftset") and checkNftset() then
+			return true
+		else
+			return false
+		end
+	else
+		return false
+	end
+end
+
 local enabledFlag = uci:get(packageName, "config", "enabled")
 local command, outputFile, outputCache, outputGzip
 local targetDNS = uci:get(packageName, "config", "dns")
@@ -70,30 +94,34 @@ if not targetDNS or targetDNS == "" then
 end
 
 if targetDNS ~= "dnsmasq.addnhosts" and targetDNS ~= "dnsmasq.conf" and 
-	 targetDNS ~= "dnsmasq.ipset" and targetDNS ~= "dnsmasq.servers" and 
-	 targetDNS ~= "unbound.adb_list" then
+	 targetDNS ~= "dnsmasq.ipset" and targetDNS ~= "dnsmasq.nftset" and 
+	 targetDNS ~= "dnsmasq.servers" and targetDNS ~= "unbound.adb_list" then
 	targetDNS = "dnsmasq.servers"
 end
 
 if targetDNS == "dnsmasq.addnhosts" then
-	outputFile="/var/run/" .. packageName .. ".addnhosts"
-	outputCache="/var/run/" .. packageName .. ".addnhosts.cache"
-	outputGzip="/etc/" .. packageName .. ".addnhosts.gz"
+	outputFile="/var/run/" .. packageName .. "/dnsmasq.addnhosts"
+	outputCache="/var/run/" .. packageName .. "/dnsmasq.addnhosts.cache"
+	outputGzip="/etc/" .. packageName .. ".dnsmasq.addnhosts.gz"
 elseif targetDNS == "dnsmasq.conf" then
-	outputFile="/var/dnsmasq.d/" .. packageName .. ""
-	outputCache="/var/run/" .. packageName .. ".dnsmasq.cache"
-	outputGzip="/etc/" .. packageName .. ".dnsmasq.gz"
+	outputFile="/tmp/dnsmasq.d/" .. packageName
+	outputCache="/var/run/" .. packageName .. "/dnsmasq.conf.cache"
+	outputGzip="/etc/" .. packageName .. ".dnsmasq.conf.gz"
 elseif targetDNS == "dnsmasq.ipset" then
-	outputFile="/var/dnsmasq.d/" .. packageName .. ".ipset"
-	outputCache="/var/run/" .. packageName .. ".ipset.cache"
-	outputGzip="/etc/" .. packageName .. ".ipset.gz"
+	outputFile="/tmp/dnsmasq.d/" .. packageName .. ".ipset"
+	outputCache="/var/run/" .. packageName .. "/dnsmasq.ipset.cache"
+	outputGzip="/etc/" .. packageName .. ".dnsmasq.ipset.gz"
+elseif targetDNS == "dnsmasq.nftset" then
+	outputFile="/tmp/dnsmasq.d/" .. packageName .. ".nftset"
+	outputCache="/var/run/" .. packageName .. "/dnsmasq.nftset.cache"
+	outputGzip="/etc/" .. packageName .. ".dnsmasq.nftset.gz"
 elseif targetDNS == "dnsmasq.servers" then
-	outputFile="/var/run/" .. packageName .. ".servers"
-	outputCache="/var/run/" .. packageName .. ".servers.cache"
-	outputGzip="/etc/" .. packageName .. ".servers.gz"
+	outputFile="/var/run/" .. packageName .. "/dnsmasq.servers"
+	outputCache="/var/run/" .. packageName .. "/dnsmasq.servers.cache"
+	outputGzip="/etc/" .. packageName .. ".dnsmasq.servers.gz"
 elseif targetDNS == "unbound.adb_list" then
-	outputFile="/var/lib/unbound/adb_list." .. packageName .. ""
-	outputCache="/var/run/" .. packageName .. ".unbound.cache"
+	outputFile="/var/lib/unbound/adb_list." .. packageName
+	outputCache="/var/run/" .. packageName .. "/unbound.cache"
 	outputGzip="/etc/" .. packageName .. ".unbound.gz"
 end
 
@@ -106,8 +134,8 @@ else
 	tmpfsStatus = "statusStopped"
 end
 
-if fs.access("/var/run/" .. packageName .. ".json") then
-	local f = io.open("/var/run/" .. packageName .. ".json")
+if fs.access(jsonStatusFile) then
+	local f = io.open(jsonStatusFile)
 	local s = f:read("*a")
 	f:close()
 	tmpfs = jsonc.parse(s)
@@ -160,6 +188,7 @@ errorTable["errorDownloadingList"] = translate("failed to download")
 errorTable["errorParsingConfigUpdate"] = translate("failed to parse Config Update file")
 errorTable["errorParsingList"] = translate("failed to parse")
 errorTable["errorNoSSLSupport"] = translate("no HTTPS/SSL support on device")
+errorTable["errorCreatingDirectory"] = translate("failed to create output/cache/gzip file directory")
 
 m = Map("simple-adblock", translate("Simple AdBlock Settings"))
 m.apply_on_parse = true
@@ -273,8 +302,13 @@ if not checkDnsmasq() then
 	dns_descr = dns_descr .. "<br />" .. translatef("Please note that %s is not supported on this system.", "<i>dnsmasq.conf</i>")
 	dns_descr = dns_descr .. "<br />" .. translatef("Please note that %s is not supported on this system.", "<i>dnsmasq.ipset</i>")
 	dns_descr = dns_descr .. "<br />" .. translatef("Please note that %s is not supported on this system.", "<i>dnsmasq.servers</i>")
-elseif not checkDnsmasqIpset() then 
-	dns_descr = dns_descr .. "<br />" .. translatef("Please note that %s is not supported on this system.", "<i>dnsmasq.ipset</i>")
+else
+	if not checkDnsmasqIpset() then 
+		dns_descr = dns_descr .. "<br />" .. translatef("Please note that %s is not supported on this system.", "<i>dnsmasq.ipset</i>")
+	end
+	if not checkDnsmasqNftset() then 
+		dns_descr = dns_descr .. "<br />" .. translatef("Please note that %s is not supported on this system.", "<i>dnsmasq.nftset</i>")
+	end
 end
 if not checkUnbound() then 
 	dns_descr = dns_descr .. "<br />" .. translatef("Please note that %s is not supported on this system.", "<i>unbound.adb_list</i>")
@@ -286,6 +320,9 @@ if checkDnsmasq() then
 	dns:value("dnsmasq.conf", translate("DNSMASQ Config"))
 	if checkDnsmasqIpset() then
 		dns:value("dnsmasq.ipset", translate("DNSMASQ IP Set"))
+	end
+	if checkDnsmasqNftset() then
+		dns:value("dnsmasq.nftset", translate("DNSMASQ NFT Set"))
 	end
 	dns:value("dnsmasq.servers", translate("DNSMASQ Servers File"))
 end
@@ -333,26 +370,21 @@ s2 = m:section(NamedSection, "config", "simple-adblock", translate("Allowed and 
 -- Allowed Domains
 d1 = s2:option(DynamicList, "allowed_domain", translate("Allowed Domains"), translate("Individual domains to be allowed."))
 d1.addremove = false
-d1.optional = false
 
 -- Allowed Domains URLs
 d2 = s2:option(DynamicList, "allowed_domains_url", translate("Allowed Domain URLs"), translate("URLs to lists of domains to be allowed."))
 d2.addremove = false
-d2.optional = false
 
 -- Blocked Domains
 d3 = s2:option(DynamicList, "blocked_domain", translate("Blocked Domains"), translate("Individual domains to be blocked."))
 d3.addremove = false
-d3.optional = false
 
 -- Blocked Domains URLs
 d4 = s2:option(DynamicList, "blocked_domains_url", translate("Blocked Domain URLs"), translate("URLs to lists of domains to be blocked."))
 d4.addremove = false
-d4.optional = false
 
 -- Blocked Hosts URLs
 d5 = s2:option(DynamicList, "blocked_hosts_url", translate("Blocked Hosts URLs"), translate("URLs to lists of hosts to be blocked."))
 d5.addremove = false
-d5.optional = false
 
 return m
