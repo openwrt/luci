@@ -460,17 +460,20 @@ lua_uv_index(lua_State *L)
 {
 	ucv_userdata_t *ud = luaL_checkudata(L, 1, "ucode.value");
 	const char *key = luaL_checkstring(L, 2);
-	uc_value_t *proto, *rv;
-	bool found;
+	long long idx;
+	char *e;
 
-	proto = ucv_prototype_get(ud->uv);
-	rv = ucv_object_get(proto, key, &found);
+	if (ucv_type(ud->uv) == UC_ARRAY) {
+		idx = strtoll(key, &e, 10);
 
-	if (!found)
-		return 0;
+		if (e != key && *e == 0 && idx >= 1 && idx <= (long long)ucv_array_length(ud->uv)) {
+			ucv_to_lua(ud->vm, ucv_array_get(ud->uv, (size_t)(idx - 1)), L, NULL);
 
-	ucv_to_lua(ud->vm, rv, L, NULL);
-	ucv_put(rv);
+			return 1;
+		}
+	}
+
+	ucv_to_lua(ud->vm, ucv_property_get(ud->uv, key), L, NULL);
 
 	return 1;
 }
@@ -687,13 +690,22 @@ uc_lua_vm_get(uc_vm_t *vm, size_t nargs)
 	uc_value_t *key = uc_fn_arg(0);
 	lua_resource_t *lv;
 	size_t i;
+	int top;
 
 	if (!L || !*L || ucv_type(key) != UC_STRING)
 		return NULL;
 
+	top = lua_gettop(*L);
+
 	lua_getglobal(*L, ucv_string_get(key));
 
 	for (i = 1; i < nargs; i++) {
+		if (lua_type(*L, -1) != LUA_TTABLE) {
+			lua_settop(*L, top);
+
+			return NULL;
+		}
+
 		ucv_to_lua(vm, uc_fn_arg(i), *L, NULL);
 		lua_gettable(*L, -2);
 	}
@@ -702,8 +714,7 @@ uc_lua_vm_get(uc_vm_t *vm, size_t nargs)
 	lv->ref = luaL_ref(*L, LUA_REGISTRYINDEX);
 	lv->uvL = ucv_this_to_uvL(vm);
 
-	if (nargs > 1)
-		lua_pop(*L, nargs - 1);
+	lua_settop(*L, top);
 
 	return uc_resource_new(lv_type, lv);
 }
@@ -788,14 +799,23 @@ uc_lua_lv_get_common(uc_vm_t *vm, size_t nargs, bool raw)
 	lua_State *L = uc_lua_lv_to_L(lv);
 	uc_value_t *key;
 	size_t i;
+	int top;
 
 	if (!L)
 		return NULL;
+
+	top = lua_gettop(L);
 
 	lua_rawgeti(L, LUA_REGISTRYINDEX, (*lv)->ref);
 
 	for (i = 0; i < nargs; i++) {
 		key = uc_fn_arg(i);
+
+		if (lua_type(L, -1) != LUA_TTABLE) {
+			lua_settop(L, top);
+
+			return NULL;
+		}
 
 		if (raw) {
 			if (ucv_type(key) == UC_INTEGER) {
@@ -816,7 +836,7 @@ uc_lua_lv_get_common(uc_vm_t *vm, size_t nargs, bool raw)
 	ref->ref = luaL_ref(L, LUA_REGISTRYINDEX);
 	ref->uvL = ucv_this_to_uvL(vm);
 
-	lua_pop(L, nargs);
+	lua_settop(L, top);
 
 	return uc_resource_new(lv_type, ref);
 }
