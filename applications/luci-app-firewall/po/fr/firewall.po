@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2021-04-25 02:37+0000\n"
-"Last-Translator: localhost61 <xmh.rpi+weblate@free.fr>\n"
+"PO-Revision-Date: 2022-07-30 11:58+0000\n"
+"Last-Translator: Christophe Blancon <christophe.blancon@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/fr/>\n"
 "Language: fr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -68,14 +68,14 @@ msgid ""
 "<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP "
 "<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"DNAT\">Suivre</var> vers %{dest}%{dest_ip ? IP "
-"<var>%{dest_ip}</var>}%{dest_port ? port <var>%{dest_port}</var>}"
+"<var data-tooltip=\"DNAT\">Suivre</var> vers %{dest}%{dest_ip? IP "
+"<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:115
 msgid ""
 "<var data-tooltip=\"DROP\">Drop</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"DROP\">Laisser</var> %{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"DROP\">Ignorer</var> %{src?%{dest?forward:input}:output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:133
 msgid ""
@@ -111,7 +111,7 @@ msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?forward:input}:"
 "output}"
 msgstr ""
-"<var data-tooltip=\"NOTRACK\">Ne pas suivre</var> %{src?%{dest?forward:"
+"<var data-tooltip=\"NOTRACK\">Ne pas pister</var> %{src?%{dest?forward:"
 "input}:output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:121
@@ -1088,7 +1088,7 @@ msgstr "Mardi"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:19
 msgid "Unable to save contents: %s"
-msgstr "Impossible d'enregistrer le contenu: %s"
+msgstr "Impossible d'enregistrer le contenu : %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:277
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:427
