@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-07-18 03:20+0000\n"
-"Last-Translator: Hulen <shift0106@gmail.com>\n"
+"PO-Revision-Date: 2022-08-06 13:14+0000\n"
+"Last-Translator: 王攀 <41330784@qq.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -56,13 +56,18 @@ msgstr "(空白)"
 msgid "(no interfaces attached)"
 msgstr "（未連接介面）"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:637
+msgctxt "Label indicating further amount of allowed ips"
+msgid "+ %d more"
+msgstr "+ 另外 %d"
+
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
 msgstr "-- 額外欄位 --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:275
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3732
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4100
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3784
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4152
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:798
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1036
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2009
@@ -282,12 +287,6 @@ msgstr "已存在同名的目錄。"
 msgid "A new login is required since the authentication session expired."
 msgstr "因為身分驗證會話已逾期，需要重新登入。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
-msgid ""
-"A random, on the fly generated \"PrivateKey\", the key will not be saved on "
-"the router"
-msgstr "一枚隨機、執行中產生的 \"PrivateKey\"，此金鑰不會被儲存在路由器上"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1503
 msgid "A43C + J43 + A43"
 msgstr "A43C + J43 + A43"
@@ -471,7 +470,7 @@ msgstr "自適應發送負載平衡 (balance-tlb, 5)"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2236
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2249
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2257
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3530
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3582
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:25
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:189
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:197
@@ -529,7 +528,7 @@ msgstr "將本地網域尾碼加入到主機檔案提供的名稱。"
 msgid "Add new interface..."
 msgstr "新增新介面…"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:172
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:224
 msgid "Add peer"
 msgstr "新增 對等方"
 
@@ -566,6 +565,10 @@ msgstr "位址"
 msgctxt "nft meta nfproto"
 msgid "Address family"
 msgstr "地址家族"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:284
+msgid "Address setting is invalid"
+msgstr "位址設定無效"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
 msgid "Address to access local relay bridge"
@@ -699,9 +702,13 @@ msgstr "允許系統功能探測"
 msgid "Allow the <em>root</em> user to login with password"
 msgstr "允許 <em>root</em> 用戶以密碼登入"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:276
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:626
 msgid "Allowed IPs"
 msgstr "允許的 IP群"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:315
+msgid "AllowedIPs setting is invalid"
+msgstr "AllowedIPs 設定無效"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:708
 msgid "Always"
@@ -1038,7 +1045,7 @@ msgstr "BR / DMR / AFTR"
 msgid "BSSID"
 msgstr "BSSID"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3200
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3250
 msgid "Back"
 msgstr "返回"
 
@@ -1050,6 +1057,10 @@ msgstr "返回至總覽"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:48
 msgid "Back to configuration"
 msgstr "返回至設定"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:826
+msgid "Back to peer configuration"
+msgstr "返回 peer 設定"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:391
 msgid "Backup"
@@ -1073,7 +1084,7 @@ msgstr "頻段"
 msgid "Base device"
 msgstr "基礎裝置"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:102
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:158
 msgid "Base64-encoded public key of this interface for sharing."
 msgstr "此介面用於分享的 Base64 編碼的公鑰。"
 
@@ -1226,8 +1237,13 @@ msgstr "呼叫失敗"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:128
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:295
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:203
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:487
 msgid "Cancel"
 msgstr "取消"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:347
+msgid "Cannot parse configuration: %s"
+msgstr "無法解析設定：%s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:562
 msgctxt "Chain hook: forward"
@@ -1495,6 +1511,10 @@ msgstr "計算傳出的校驗和(自選)."
 msgid "Configuration"
 msgstr "組態"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:692
+msgid "Configuration Export"
+msgstr "設定檔案匯出"
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4555
 msgid "Configuration changes applied."
 msgstr "組態變更已套用。"
@@ -1572,6 +1592,10 @@ msgstr "連線嘗試失敗"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:40
 msgid "Connection attempt failed."
 msgstr "嘗試連線失敗."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:759
+msgid "Connection endpoint"
+msgstr "連線端點"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Connection lost"
@@ -1783,6 +1807,10 @@ msgstr "DNS 搜尋網域"
 msgid "DNS server port"
 msgstr "<abbr title=\"Domain Name System\">DNS</abbr> 伺服器埠號"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:292
+msgid "DNS setting is invalid"
+msgstr "DNS 設定無效"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid "DNS weight"
 msgstr "DNS 權重"
@@ -1879,7 +1907,7 @@ msgstr "委派 IPv6 首碼"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2310
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2740
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2744
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3514
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3566
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2907
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
@@ -1906,7 +1934,7 @@ msgstr "傳送流量指示訊息間隔"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:342
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:139
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:519
 msgid "Description"
 msgstr "描述"
 
@@ -2069,6 +2097,11 @@ msgstr "停用此網路"
 msgid "Disabled"
 msgstr "已停用"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:543
+msgctxt "Label indicating that WireGuard peer is disabled"
+msgid "Disabled"
+msgstr "已停用"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1191
 msgid "Disassociate On Low Acknowledgement"
 msgstr "低確認(Low Acknowledgement)時取消連線"
@@ -2099,8 +2132,8 @@ msgid "Disk space"
 msgstr "磁碟空間"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:611
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3012
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3213
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3022
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3264
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3646
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4499
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1775
@@ -2208,6 +2241,14 @@ msgstr "您確定要清除所有設定？"
 msgid "Do you really want to recursively delete the directory \"%s\" ?"
 msgstr "您真的要遞迴刪除目錄 \"%s\" 嗎？"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:615
+msgid "Do you want to replace the current PSK?"
+msgstr "是否要取代目前的 PSK？"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:100
+msgid "Do you want to replace the current keys?"
+msgstr "是否要取代目前金鑰？"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:592
 msgid "Domain"
 msgstr "網域名稱"
@@ -2245,6 +2286,12 @@ msgstr "下載 mtdblock"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1519
 msgid "Downstream SNR offset"
 msgstr "下載串流 SNR 位移"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:437
+msgid ""
+"Drag or paste a valid <em>*.conf</em> file below to configure the local "
+"WireGuard interface."
+msgstr "拖動或粘貼下面的有效 <em>*.conf</em> 檔以配置本地WireGuard介面。"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2698
 msgid "Drag to reorder"
@@ -2317,7 +2364,7 @@ msgstr "可擴展身份驗證協定(EAP)-方式"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2718
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2721
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3377
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3429
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:154
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:160
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:495
@@ -2325,7 +2372,7 @@ msgstr "可擴展身份驗證協定(EAP)-方式"
 msgid "Edit"
 msgstr "編輯"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:174
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:226
 msgid "Edit peer"
 msgstr "編輯對等"
 
@@ -2381,7 +2428,7 @@ msgstr "緊急"
 msgid "Enable"
 msgstr "啟用"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:183
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:515
 msgid "Enable / Disable peer. Restart wireguard interface to apply changes."
 msgstr "啟用/禁用對等體。 重新啟動wireguard界面以應用更改。"
 
@@ -2586,13 +2633,17 @@ msgstr "封裝模式"
 msgid "Encryption"
 msgstr "加密(Encryption)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:283
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:664
 msgid "Endpoint Host"
 msgstr "終端主機"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:287
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:680
 msgid "Endpoint Port"
 msgstr "終端阜"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:325
+msgid "Endpoint setting is invalid"
+msgstr "端點設定無效"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:684
 msgid "Enforce IGMPv1"
@@ -2635,7 +2686,7 @@ msgstr "刪除中..."
 msgid "Error"
 msgstr "錯誤"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:112
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:170
 msgid "Error getting PublicKey"
 msgstr "獲取公鑰時出錯"
 
@@ -2865,7 +2916,7 @@ msgstr "完成"
 msgid "Firewall"
 msgstr "防火牆"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid "Firewall Mark"
 msgstr "防火牆遮罩"
 
@@ -2914,10 +2965,6 @@ msgstr "韌體工具"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:319
 msgid "Flashing…"
 msgstr "燒錄中…"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:236
-msgid "For QR-Code support please install the qrencode package!"
-msgstr "如需二維碼支持，請安裝 qrencode 包！"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:536
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:686
@@ -3031,7 +3078,7 @@ msgctxt "nft nat flag fully-random"
 msgid "Full port randomization"
 msgstr "全端口隨機化"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 msgid ""
 "Further information about WireGuard interfaces and peers at <a href='http://"
 "wireguard.com'>wireguard.com</a>."
@@ -3105,14 +3152,6 @@ msgstr "一般裝置選項"
 msgid "Generate Config"
 msgstr "產生設定檔"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:116
-msgid "Generate Key"
-msgstr "產生金鑰"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:240
-msgid "Generate New QR-Code"
-msgstr "生成新的二維碼"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1542
 msgid "Generate PMK locally"
 msgstr "本地產生 PMK"
@@ -3121,9 +3160,29 @@ msgstr "本地產生 PMK"
 msgid "Generate archive"
 msgstr "製作壓縮檔"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:255
-msgid "Generate new QR-Code"
-msgstr "生成新的二維碼"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:811
+msgid "Generate configuration"
+msgstr "產生設定"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:851
+msgid "Generate configuration…"
+msgstr "產生設定…"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:109
+msgid "Generate new key pair"
+msgstr "產生新的金鑰組"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:623
+msgid "Generate preshared key"
+msgstr "產生預先共用金鑰"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:693
+msgid "Generates a configuration suitable for import on a WireGuard peer"
+msgstr "產生適合在 WireGuard 對端上匯入的設定"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:785
+msgid "Generating QR code…"
+msgstr "正在產生 QR code…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:79
 msgid "Given password confirmation did not match, password not changed!"
@@ -3151,7 +3210,7 @@ msgid "Go to password configuration..."
 msgstr "前往密碼設定..."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2640
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3696
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3748
 #: modules/luci-compat/luasrc/view/cbi/full_valueheader.htm:4
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:58
 msgid "Go to relevant configuration page"
@@ -3304,10 +3363,6 @@ msgstr "在這裡設定基本設定值，如主機名稱、時區...等。"
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "隱藏 <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:250
-msgid "Hide QR-Code"
-msgstr "隱藏二維碼"
-
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:293
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:332
 msgid "Hide empty chains"
@@ -3408,7 +3463,7 @@ msgstr "IEEE 802.3ad 動態鏈路聚合 (802.3ad, 4)"
 msgid "IKE DH Group"
 msgstr "IKE DH 群組"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:135
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "IP Addresses"
 msgstr "IP 位址"
 
@@ -3706,10 +3761,6 @@ msgstr "IPv6凌駕IPv4外(6轉4)"
 msgid "Identity"
 msgstr "身分識別"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:207
-msgid "If available, the client's \"PresharedKey\""
-msgstr "如果可用，客戶端的“PresharedKey”"
-
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "If checked, 1DES is enabled"
 msgstr "如果勾選，則啟用1DES"
@@ -3753,12 +3804,6 @@ msgid ""
 msgstr ""
 "如果此 IP 位址用於存取 LuCI 變更，需在 %d 秒內<strong>手動重新連線到新 IP </"
 "strong>確認設定，否則修改將被還原。"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:212
-msgid ""
-"If there are any unsaved changes for this client, please save the "
-"configuration before generating a QR-Code"
-msgstr "如果此客戶端有任何未保存的更改，請在生成二維碼之前保存配置"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:64
@@ -3804,6 +3849,32 @@ msgstr "映像檔"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:273
 msgid "Image check failed:"
 msgstr "鏡像檢查失敗了："
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:478
+msgid "Import as peer"
+msgstr "作為對等節點導入"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:478
+msgid "Import configuration"
+msgstr "匯入設定檔案"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:506
+msgid "Import configuration as peer…"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:492
+msgid "Import settings"
+msgstr "匯入設定"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:378
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:405
+msgid "Imported peer configuration"
+msgstr "匯入對端設定"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
+msgid "Imports settings from an existing WireGuard configuration file"
+msgstr "從現有的 WireGuard 設定檔案匯入設定"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
 msgid "In"
@@ -4039,8 +4110,8 @@ msgstr "無效"
 msgid "Invalid APN provided"
 msgstr "提供的 APN 無效"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:33
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:36
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:37
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:40
 msgid "Invalid Base64 key string"
 msgstr "無效的 Base64 鑰匙"
 
@@ -4076,7 +4147,7 @@ msgstr "無效的承載列表. 可能創建了太多承載. 該協定僅支持�
 msgid "Invalid command"
 msgstr "無效的指令"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:205
 msgid "Invalid hexadecimal value"
 msgstr "錯誤的十六進制數值"
 
@@ -4159,6 +4230,11 @@ msgstr "付予連入封包的金鑰(選項)."
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
 msgid "Key for outgoing packets (optional)."
 msgstr "付予連外封包的金鑰(選項)."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:551
+msgctxt "Label indicating that WireGuard peer lacks public key"
+msgid "Key missing"
+msgstr "金鑰遺失"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:71
 msgctxt "nft unit"
@@ -4373,7 +4449,7 @@ msgstr "列出網域以便強制到某個IP位址."
 msgid "List of upstream resolvers to forward queries to."
 msgstr "列出 <abbr title=\"Domain Name System\">DNS</abbr> 伺服器以便轉發請求."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:130
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Listen Port"
 msgstr "監聽連接埠"
 
@@ -4391,6 +4467,10 @@ msgid ""
 "explicitly."
 msgstr "僅監聽這些介面和回送 (loopback)。"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:299
+msgid "ListenPort setting is invalid"
+msgstr "ListenPort 設定無效"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:438
 msgid "Listening port for inbound DNS queries."
 msgstr "進入的DNS請求聆聽埠."
@@ -4404,9 +4484,9 @@ msgstr "負載"
 msgid "Load Average"
 msgstr "平均負載"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:242
-msgid "Loading QR-Code..."
-msgstr "正在加載二維碼..."
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:189
+msgid "Load configuration…"
+msgstr "載入設定…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1170
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1976
@@ -4630,7 +4710,7 @@ msgstr "MII寄存器間隔"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1457
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:86
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:144
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:46
 msgid "MTU"
 msgstr "MTU最大傳輸單元"
@@ -5040,7 +5120,7 @@ msgstr "網路"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:72
 msgid "Network Mode"
-msgstr ""
+msgstr "網路模式"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2009
 msgid "Network SSID"
@@ -5120,7 +5200,7 @@ msgstr "新介面名稱…"
 msgid "Next »"
 msgstr "下一個 »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4037
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4089
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:298
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:346
 msgid "No"
@@ -5138,7 +5218,7 @@ msgstr "無資料"
 msgid "No Encryption"
 msgstr "無加密網路"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:139
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "No Host Routes"
 msgstr "沒有主機路由"
 
@@ -5196,6 +5276,13 @@ msgstr "在這目錄中缺乏項目"
 msgid "No files found"
 msgstr "未找到檔案"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:833
+msgid ""
+"No fixed interface listening port defined, peers might not be able to "
+"initiate connections to this WireGuard instance!"
+msgstr ""
+"沒有定義固定的介面監聽連接埠，對端可能無法發起到此 WireGuard 實例的連接!"
+
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:88
@@ -5239,9 +5326,9 @@ msgstr "未加載 nftables 規則集。"
 msgid "No password set!"
 msgstr "没有設定密碼！"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:179
-msgid "No peers defined yet"
-msgstr "尚未定義節點群"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:512
+msgid "No peers defined yet."
+msgstr "尚未定義對端。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:140
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:277
@@ -5476,7 +5563,7 @@ msgid "Operating frequency"
 msgstr "操作頻率"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2006
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4049
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4101
 msgid "Option \"%s\" contains an invalid input value."
 msgstr "選項 \"%s\" 含有無效的輸入數值。"
 
@@ -5500,7 +5587,7 @@ msgstr "可選"
 msgid "Optional, free-form notes about this device"
 msgstr "此裝置的可選任意格式註解"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid ""
 "Optional. 32-bit mark for outgoing encrypted packets. Enter value in hex, "
 "starting with <code>0x</code>."
@@ -5517,7 +5604,7 @@ msgstr ""
 "收到IPv6前綴(如'a :b :c :d ::')時, 請使用後綴(如':: 1')形成IPv6地址('a :b :"
 "c :d : :1')."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:270
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:601
 msgid ""
 "Optional. Base64-encoded preshared key. Adds in an additional layer of "
 "symmetric-key cryptography for post-quantum resistance."
@@ -5525,25 +5612,25 @@ msgstr ""
 "可選性. Base64編碼的預先共享金鑰. 新增了額外一層對稱金鑰密碼學, 以便針對後量"
 "子攻擊的抵抗力."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:280
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:661
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "可選性. 對已允許的IP對等節點創建路由表."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:519
 msgid "Optional. Description of peer."
 msgstr "可選性. 對等節點描述."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:139
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "Optional. Do not create host routes to peers."
 msgstr "可選性. 針對對等節點群別建立主機路由表."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:283
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:664
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr "可選性. 對等節點主機. 名稱在啟動界面之前已解析."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:276
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:626
 msgid ""
 "Optional. IP addresses and prefixes that this peer is allowed to use inside "
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
@@ -5556,15 +5643,25 @@ msgstr ""
 msgid "Optional. Maximum Transmission Unit of the XFRM interface."
 msgstr "自選。XFRM 介面的最大傳輸單元。"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:144
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "可選性. 隧道界面的MTU."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:287
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:680
 msgid "Optional. Port of peer."
 msgstr "可選性. 節點的埠號."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:291
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:592
+msgid ""
+"Optional. Private key of the WireGuard peer. The key is not required for "
+"establishing a connection but allows generating a peer configuration or QR "
+"code if available. It can be removed after the configuration has been "
+"exported."
+msgstr ""
+"可選。WireGuard 對端的私鑰。該金鑰不是建立連接所必需的，但允許產生對端設定或 "
+"QR code (如果可用)。匯出設定後可以將其刪除。"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:685
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5572,7 +5669,7 @@ msgstr ""
 "可選性. 保持活動消息之間的秒數. 預設值為0(禁用). 如果此設備位於NAT之後, 則建"
 "議值為25."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:130
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Optional. UDP port used for outgoing and incoming packets."
 msgstr "可選性. 用於進出封包的UDP埠號."
 
@@ -5720,6 +5817,10 @@ msgstr "概覽"
 msgid "Overwrite existing file \"%s\" ?"
 msgstr "覆蓋現有文件 \"%s\" ?"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:355
+msgid "Overwrite the current settings with the imported configuration?"
+msgstr "用匯入的設定覆蓋目前設定？"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:70
 msgid "Owner"
 msgstr "持有者"
@@ -5815,6 +5916,11 @@ msgstr "PSID偏移"
 msgid "PSID-bits length"
 msgstr "PSID-位元 長度"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:573
+msgctxt "Label indicating that WireGuard peer uses a PSK"
+msgid "PSK"
+msgstr "PSK"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1512
 msgid "PTM/EFM (Packet Transfer Mode)"
 msgstr "PTM/EFM (封包傳輸模式)"
@@ -5887,6 +5993,23 @@ msgstr "密碼2"
 msgid "Paste or drag SSH key file…"
 msgstr "貼上或拖曳 SSH 金鑰至此…"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:446
+msgid "Paste or drag WireGuard peer configuration (wg0.conf) file…"
+msgstr "粘貼或拖動 WireGuard 對等配置 （wg0.conf） 檔…"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:439
+msgid ""
+"Paste or drag a WireGuard configuration (commonly <em>wg0.conf</em>) from "
+"another system below to create a matching peer entry allowing that system to "
+"connect to the local WireGuard interface."
+msgstr ""
+"從下面的另一個系統中粘貼或拖動WireGuard配置（通常為 <em>wg0.conf</em>），以創"
+"建匹配的對等條目，允許該系統連接到本地WireGuard介面。"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:445
+msgid "Paste or drag supplied WireGuard configuration file…"
+msgstr "貼上或拖動提供的 WireGuard 設定檔…"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1592
 msgid "Path to CA-Certificate"
 msgstr "CA 憑證路徑"
@@ -5946,11 +6069,11 @@ msgstr "對等節點位址遺失中"
 msgid "Peer device name"
 msgstr "對端裝置名稱"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:183
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:515
 msgid "Peer disabled"
 msgstr "對等已禁用"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 msgid "Peers"
 msgstr "對等"
 
@@ -5977,9 +6100,13 @@ msgstr "執行重置"
 msgid "Permission denied"
 msgstr "權限不符"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:291
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:685
 msgid "Persistent Keep Alive"
 msgstr "持久保持活力"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:334
+msgid "PersistentKeepAlive setting is invalid"
+msgstr "PersistentKeepAlive 設定無效"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:290
 msgid "Phy Rate:"
@@ -6061,9 +6188,17 @@ msgstr "前綴委派"
 msgid "Prefix suppressor"
 msgstr "前綴抑制器"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:270
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:601
 msgid "Preshared Key"
 msgstr "預先共享金鑰"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:572
+msgid "Preshared key in use"
+msgstr "預先共用金鑰使用中"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:308
+msgid "PresharedKey setting is invalid"
+msgstr "PresharedKey 設定無效"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
@@ -6108,14 +6243,28 @@ msgstr "邏輯主控在恢復後, 始終變為活動的實體界面 (永遠, 0�
 msgid "Priority"
 msgstr "優先順序"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:567
+msgctxt "Label indicating that WireGuard peer private key is stored"
+msgid "Private"
+msgstr "Private"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:436
 msgctxt "MACVLAN mode"
 msgid "Private (Prevent communication between MAC VLANs)"
 msgstr "專用（防止MAC VLAN之間的通信）"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:93
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:592
 msgid "Private Key"
 msgstr "私鑰"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:566
+msgid "Private key present"
+msgstr "存在私鑰"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:296
+msgid "PrivateKey setting is missing or invalid"
+msgstr "PrivateKey 設定遺失或無效"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:93
@@ -6161,10 +6310,19 @@ msgstr "將 NTP 服務器提供給選定的接口，或者，如果未指定，�
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "偽裝 Ad-Hoc (ahdemo模式)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:102
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:265
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:158
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
 msgid "Public Key"
 msgstr "公鑰"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:549
+msgid "Public key is missing"
+msgstr "缺少公開金鑰"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:558
+msgctxt "Tooltip displaying full WireGuard peer public key"
+msgid "Public key: %h"
+msgstr "公開金鑰：%h"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:284
 msgid ""
@@ -6180,15 +6338,14 @@ msgstr ""
 msgid "Public prefix routed to this device for distribution to clients."
 msgstr "公開前綴字首路由到此設備以分發給客戶端."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:305
+msgid "PublicKey setting is invalid"
+msgstr "公鑰設定無效"
+
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:9
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:27
 msgid "QMI Cellular"
 msgstr "QMI手機"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:192
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:223
-msgid "QR-Code"
-msgstr "二維碼"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:146
 msgid "Quality"
@@ -6313,7 +6470,7 @@ msgstr "重啟您設備的作業系統"
 msgid "Receive"
 msgstr "接收"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:135
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "推薦的. WireGuard界面的IP地址."
 
@@ -6455,13 +6612,13 @@ msgstr "必需"
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr "對特定的ISP需要,例如.DOCSIS 3 加速有線電視寬頻網路"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:93
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
 msgid "Required. Base64-encoded private key for this interface."
 msgstr "必需的. 對此界面的以Base64編碼的私鑰."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:265
-msgid "Required. Base64-encoded public key of peer."
-msgstr "必需的. 對此節點的以Base64編碼的公鑰."
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
+msgid "Required. Public key of the WireGuard peer."
+msgstr "必需。WireGuard 對端的公開金鑰。"
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
 msgid "Required. Underlying interface."
@@ -6685,7 +6842,7 @@ msgstr "預備根系統"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "循環政策 (balance-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:280
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:661
 msgid "Route Allowed IPs"
 msgstr "路由允許的IP群"
 
@@ -6813,7 +6970,7 @@ msgstr "SSTP伺服器"
 msgid "SWAP"
 msgstr "SWAP"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3218
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3269
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2192
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
@@ -7768,10 +7925,6 @@ msgstr "臨時空間"
 msgid "Terminate"
 msgstr "終結"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:205
-msgid "The \"PublicKey\" of that wg interface"
-msgstr "該 wg 介面的“公鑰”"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:839
 msgid ""
 "The <abbr title=\"Maximum Transmission Unit\">MTU</abbr> to be published in "
@@ -7806,6 +7959,12 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
 msgstr "這 <em>區塊掛載</em> 指令失敗因這程式碼 %d"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:80
+msgid ""
+"The <em>qrencode</em> package is required for generating an QR code image of "
+"the configuration."
+msgstr "<em>qrencode</em>套件對產生設定的 QR code 圖片是必需的。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid ""
@@ -7888,12 +8047,6 @@ msgstr "MAC 位址 %h 已被同一個 DHCP 池中的另一個靜態租約使用"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:586
 msgid "The MTU must not exceed the parent device MTU of %d bytes"
 msgstr "MTU 不能超過父裝置 MTU 的 %d 位元組"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
-msgid ""
-"The QR-Code works per wg interface, it will be refreshed with every button "
-"click and transfers the following information:"
-msgstr "QR碼按wg介面工作，每次按下按鈕時都會刷新並傳輸以下資訊："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:864
 msgid "The VLAN ID must be unique"
@@ -7979,6 +8132,12 @@ msgstr "頻率與 1 分鐘的平均 CPU 負載成正比。"
 msgid "The gateway address must not be a local IP address"
 msgstr "網關位址不能是本地 IP"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:754
+msgid ""
+"The generated configuration can be imported into a WireGuard client "
+"application to setup a connection towards this device."
+msgstr "產生的設定可以匯入到 WireGuard 客戶端應用中來設定到該裝置的連接。"
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:166
 msgid "The given SSH public key has already been added."
 msgstr "輸入的 SSH 公鑰早已存在。"
@@ -8012,12 +8171,6 @@ msgstr "這IPv4開頭以位元計的長度, 剩餘部分將會延用在IPv6位�
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:63
 msgid "The length of the IPv6 prefix in bits"
 msgstr "這IPv6開頭以位元計的長度"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:206
-msgid ""
-"The list of this client's \"AllowedIPs\" or \"0.0.0.0/0, ::/0\" if not "
-"configured"
-msgstr "此用戶端的“允許IP”或“0.0.0.0/0，：：/0”（如果未配置）的清單"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:165
 msgid "The local IPv4 address"
@@ -8094,6 +8247,15 @@ msgstr ""
 "Network\">VLAN</abbr>，以便在內的電腦可互通。 <abbr title=\"Virtual Local "
 "Area Network\">VLAN</abbr> 常用來分割網路區段。預設會有一個上傳埠來連接到下一"
 "個網路，像是 Internet ，而其它埠則供區網使用。"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:759
+msgid ""
+"The public hostname or IP address of this system the peer should connect to. "
+"This usually is a static public IP address, a static hostname or a DDNS "
+"domain."
+msgstr ""
+"對端應連接到的此系統的公共主機名稱或 IP 位址。 通常是靜態公共 IP 位址、靜態主"
+"機名稱或 DDNS 網域。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:569
 msgid "The query response interval must be lower than the query interval value"
@@ -8349,6 +8511,15 @@ msgstr "連結遺失拓撲更新前的逾時時間 (以秒為單位)"
 msgid "Timezone"
 msgstr "時區"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:440
+msgid ""
+"To fully configure the local WireGuard interface from an existing (e.g. "
+"provider supplied) configuration file, use the <strong><a class=\"full-"
+"import\" href=\"#\">configuration import</a></strong> instead."
+msgstr ""
+"要從現有（例如提供商提供的）配置文件完全配置本地 WireGuard 接口，請改用 "
+"<strong><a class=\"full-import\" href=\"#\">配置導入</a></strong>。"
+
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
 msgid "To login…"
 msgstr "去登入…"
@@ -8514,6 +8685,10 @@ msgstr "無法判斷上游介面"
 msgid "Unable to dispatch"
 msgstr "無法發送"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:85
+msgid "Unable to generate QR code: %s"
+msgstr "無法產生 QR code：%s"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:9
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:15
 msgid "Unable to load log data:"
@@ -8635,6 +8810,10 @@ msgstr "不支援的數據機"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:299
 msgid "Unsupported protocol type."
 msgstr "不支援的協定型態。"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:534
+msgid "Untitled peer"
+msgstr "無標題的同行"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:151
 msgid "Up"
@@ -9120,9 +9299,13 @@ msgid "Width"
 msgstr "寬度"
 
 #: modules/luci-compat/luasrc/model/network/proto_wireguard.lua:9
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:61
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:119
 msgid "WireGuard VPN"
 msgstr "WireGuard虛擬私人網路(VPN)"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:541
+msgid "WireGuard peer is disabled"
+msgstr "WireGuard 對端被停用"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:17
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:10
@@ -9186,7 +9369,7 @@ msgstr "將系統日誌寫入檔案"
 msgid "XOR policy (balance-xor, 2)"
 msgstr "位元互斥運算子(XOR)策略(balance-xor, 2)"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4037
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4089
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:297
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:345
 msgid "Yes"
@@ -9456,7 +9639,7 @@ msgstr "未連線"
 msgid "non-empty value"
 msgstr "非空值"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3367
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3419
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:800
 msgid "none"
 msgstr "無"
@@ -9503,7 +9686,7 @@ msgstr "正十進位數字"
 msgid "positive integer value"
 msgstr "正整數"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:132
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:178
 msgid "random"
 msgstr "隨機"
 
@@ -9570,7 +9753,7 @@ msgstr "未知"
 msgid "unlimited"
 msgstr "無限"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3732
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3784
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:76
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:138
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:370

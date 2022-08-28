@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2022-06-24 13:31+0000\n"
+"PO-Revision-Date: 2022-08-01 05:54+0000\n"
 "Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/"
 ">\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -60,13 +60,18 @@ msgstr "(пусто)"
 msgid "(no interfaces attached)"
 msgstr "(нет связанных интерфейсов)"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:637
+msgctxt "Label indicating further amount of allowed ips"
+msgid "+ %d more"
+msgstr "+ еще %d"
+
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
 msgstr "-- Дополнительно --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:275
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3732
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4100
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3784
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4152
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:798
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1036
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2009
@@ -290,14 +295,6 @@ msgstr "Директория с таким же именем уже сущест
 msgid "A new login is required since the authentication session expired."
 msgstr "Необходима авторизация."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
-msgid ""
-"A random, on the fly generated \"PrivateKey\", the key will not be saved on "
-"the router"
-msgstr ""
-"Случайный, сгенерированный на лету ключ «PrivateKey», который не будет "
-"сохранен на маршрутизаторе"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1503
 msgid "A43C + J43 + A43"
 msgstr "A43C + J43 + A43"
@@ -483,7 +480,7 @@ msgstr "Адаптивная балансировка нагрузки пере�
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2236
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2249
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2257
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3530
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3582
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:25
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:189
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:197
@@ -542,7 +539,7 @@ msgstr ""
 msgid "Add new interface..."
 msgstr "Добавить новый интерфейс..."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:172
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:224
 msgid "Add peer"
 msgstr "Добавить узел (peer)"
 
@@ -579,6 +576,10 @@ msgstr "Адрес"
 msgctxt "nft meta nfproto"
 msgid "Address family"
 msgstr "Тип адреса"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:284
+msgid "Address setting is invalid"
+msgstr "Неверная настройка параметра Address"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
 msgid "Address to access local relay bridge"
@@ -722,9 +723,13 @@ msgid "Allow the <em>root</em> user to login with password"
 msgstr ""
 "Разрешить пользователю <em>root</em> входить в систему с помощью пароля"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:276
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:626
 msgid "Allowed IPs"
 msgstr "Разрешенные IP-адреса"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:315
+msgid "AllowedIPs setting is invalid"
+msgstr "Неверная настройка параметра AllowedIPs"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:708
 msgid "Always"
@@ -1081,7 +1086,7 @@ msgstr "BR / DMR / AFTR"
 msgid "BSSID"
 msgstr "BSSID"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3200
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3250
 msgid "Back"
 msgstr "Назад"
 
@@ -1093,6 +1098,10 @@ msgstr "Назад к обзору"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:48
 msgid "Back to configuration"
 msgstr "Назад к настройкам"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:826
+msgid "Back to peer configuration"
+msgstr "Вернуться к конфигурации узла"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:391
 msgid "Backup"
@@ -1116,7 +1125,7 @@ msgstr "Диапазон"
 msgid "Base device"
 msgstr "Базовое устройство"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:102
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:158
 msgid "Base64-encoded public key of this interface for sharing."
 msgstr "Открытый ключ этого интерфейса в кодировке Base64."
 
@@ -1273,8 +1282,13 @@ msgstr "Ошибка вызова"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:128
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:295
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:203
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:487
 msgid "Cancel"
 msgstr "Отмена"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:347
+msgid "Cannot parse configuration: %s"
+msgstr "Не удалось обработать конфигурацию: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:562
 msgctxt "Chain hook: forward"
@@ -1557,6 +1571,10 @@ msgstr "Вычислять исходящую контрольную сумму 
 msgid "Configuration"
 msgstr "Конфигурация"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:692
+msgid "Configuration Export"
+msgstr "Экспорт конфигурации"
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4555
 msgid "Configuration changes applied."
 msgstr "Конфигурация применена."
@@ -1640,6 +1658,10 @@ msgstr "Ошибка попытки соединения"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:40
 msgid "Connection attempt failed."
 msgstr "Ошибка попытки соединения."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:759
+msgid "Connection endpoint"
+msgstr "Конечный узел для подключения"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Connection lost"
@@ -1856,6 +1878,10 @@ msgstr "Домены поиска DNS"
 msgid "DNS server port"
 msgstr "<abbr title=\"Система доменных имен\">DNS</abbr> порт сервера"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:292
+msgid "DNS setting is invalid"
+msgstr "Неверная настройка параметра DNS"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid "DNS weight"
 msgstr "Вес DNS"
@@ -1957,7 +1983,7 @@ msgstr "Делегировать IPv6 префиксы"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2310
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2740
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2744
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3514
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3566
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2907
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
@@ -1984,7 +2010,7 @@ msgstr "Интервал сообщений, регламентирующий д
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:342
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:139
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:519
 msgid "Description"
 msgstr "Описание"
 
@@ -2147,6 +2173,11 @@ msgstr "Отключить данную сеть"
 msgid "Disabled"
 msgstr "Отключено"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:543
+msgctxt "Label indicating that WireGuard peer is disabled"
+msgid "Disabled"
+msgstr "Отключено"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1191
 msgid "Disassociate On Low Acknowledgement"
 msgstr "Не ассоциировать при низком подтверждении"
@@ -2179,8 +2210,8 @@ msgid "Disk space"
 msgstr "Дисковое пространство"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:611
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3012
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3213
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3022
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3264
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3646
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4499
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1775
@@ -2292,6 +2323,14 @@ msgstr "Вы действительно хотите стереть все на�
 msgid "Do you really want to recursively delete the directory \"%s\" ?"
 msgstr "Вы действительно хотите рекурсивно удалить директорию «%s»?"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:615
+msgid "Do you want to replace the current PSK?"
+msgstr "Вы хотите заменить текущий PSK?"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:100
+msgid "Do you want to replace the current keys?"
+msgstr "Вы хотите заменить текущие ключи?"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:592
 msgid "Domain"
 msgstr "Домен"
@@ -2329,6 +2368,14 @@ msgstr "Скачать MTD раздел"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1519
 msgid "Downstream SNR offset"
 msgstr "SNR offset внутренней сети"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:437
+msgid ""
+"Drag or paste a valid <em>*.conf</em> file below to configure the local "
+"WireGuard interface."
+msgstr ""
+"Перетащите или вставьте правильный файл <em>*.conf</em> ниже, чтобы "
+"настроить локальный интерфейс WireGuard."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2698
 msgid "Drag to reorder"
@@ -2404,7 +2451,7 @@ msgstr "Метод EAP"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2718
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2721
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3377
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3429
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:154
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:160
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:495
@@ -2412,7 +2459,7 @@ msgstr "Метод EAP"
 msgid "Edit"
 msgstr "Изменить"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:174
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:226
 msgid "Edit peer"
 msgstr "Редактирование узла"
 
@@ -2470,7 +2517,7 @@ msgstr "Чрезвычайная ситуация"
 msgid "Enable"
 msgstr "Включить"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:183
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:515
 msgid "Enable / Disable peer. Restart wireguard interface to apply changes."
 msgstr ""
 "Включить/выключить узел. Перезапустите интерфейс WireGuard, чтобы применить "
@@ -2685,13 +2732,17 @@ msgstr "Режим инкапсуляции"
 msgid "Encryption"
 msgstr "Шифрование"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:283
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:664
 msgid "Endpoint Host"
 msgstr "Конечный узел"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:287
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:680
 msgid "Endpoint Port"
 msgstr "Порт конечного узла"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:325
+msgid "Endpoint setting is invalid"
+msgstr "Неверная настройка параметра Endpoint"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:684
 msgid "Enforce IGMPv1"
@@ -2734,7 +2785,7 @@ msgstr "Стирание..."
 msgid "Error"
 msgstr "Ошибка"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:112
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:170
 msgid "Error getting PublicKey"
 msgstr "Ошибка получения публичного ключа"
 
@@ -2971,7 +3022,7 @@ msgstr "Завершить"
 msgid "Firewall"
 msgstr "Межсетевой экран"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid "Firewall Mark"
 msgstr "Метка межсетевого экрана"
 
@@ -3020,10 +3071,6 @@ msgstr "Операции с прошивкой"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:319
 msgid "Flashing…"
 msgstr "Прошивка…"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:236
-msgid "For QR-Code support please install the qrencode package!"
-msgstr "Для поддержки QR-кодов установите пакет qrencode!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:536
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:686
@@ -3141,7 +3188,7 @@ msgctxt "nft nat flag fully-random"
 msgid "Full port randomization"
 msgstr "Полная рандомизация порта"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 msgid ""
 "Further information about WireGuard interfaces and peers at <a href='http://"
 "wireguard.com'>wireguard.com</a>."
@@ -3215,14 +3262,6 @@ msgstr "Общие опции устройства"
 msgid "Generate Config"
 msgstr "Создать config"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:116
-msgid "Generate Key"
-msgstr "Сгенерировать ключ"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:240
-msgid "Generate New QR-Code"
-msgstr "Сгенерировать новый QR-код"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1542
 msgid "Generate PMK locally"
 msgstr "Создать PMK локально"
@@ -3231,9 +3270,29 @@ msgstr "Создать PMK локально"
 msgid "Generate archive"
 msgstr "Создать архив"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:255
-msgid "Generate new QR-Code"
-msgstr "Сгенерировать новый QR-код"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:811
+msgid "Generate configuration"
+msgstr "Сгенерировать конфигурацию"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:851
+msgid "Generate configuration…"
+msgstr "Генерация конфигурации…"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:109
+msgid "Generate new key pair"
+msgstr "Сгенерировать новую пару ключей"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:623
+msgid "Generate preshared key"
+msgstr "Сгенерировать предварительный ключ"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:693
+msgid "Generates a configuration suitable for import on a WireGuard peer"
+msgstr "Создает конфигурацию, подходящую для импорта на узле WireGuard"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:785
+msgid "Generating QR code…"
+msgstr "Генерация QR-кода…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:79
 msgid "Given password confirmation did not match, password not changed!"
@@ -3261,7 +3320,7 @@ msgid "Go to password configuration..."
 msgstr "Перейти к настройке пароля..."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2640
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3696
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3748
 #: modules/luci-compat/luasrc/view/cbi/full_valueheader.htm:4
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:58
 msgid "Go to relevant configuration page"
@@ -3416,10 +3475,6 @@ msgstr ""
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "Скрыть <abbr title=\"Расширенный идентификатор сети\">ESSID</abbr>"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:250
-msgid "Hide QR-Code"
-msgstr "Скрыть QR-код"
-
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:293
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:332
 msgid "Hide empty chains"
@@ -3521,7 +3576,7 @@ msgstr "Динамическая агрегация каналов IEEE 802.3ad 
 msgid "IKE DH Group"
 msgstr "IKE DH группа"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:135
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "IP Addresses"
 msgstr "IP-адреса"
 
@@ -3818,10 +3873,6 @@ msgstr "IPv6 через IPv4 (6to4)"
 msgid "Identity"
 msgstr "Идентификация EAP"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:207
-msgid "If available, the client's \"PresharedKey\""
-msgstr "Если доступно, «‎PresharedKey» клиента"
-
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "If checked, 1DES is enabled"
 msgstr "Если выбрано, то 1DES включено"
@@ -3874,14 +3925,6 @@ msgstr ""
 "использованием нового IP-адреса</strong> для подтверждения настроек, в "
 "противном случае изменения будут автоматически отменены."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:212
-msgid ""
-"If there are any unsaved changes for this client, please save the "
-"configuration before generating a QR-Code"
-msgstr ""
-"Если для этого клиента есть несохраненные изменения, пожалуйста, сохраните "
-"конфигурацию перед генерацией QR-кода"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:64
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:122
@@ -3928,6 +3971,32 @@ msgstr "Образ"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:273
 msgid "Image check failed:"
 msgstr "Ошибка проверки образа:"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:478
+msgid "Import as peer"
+msgstr "Импортировать как узел"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:478
+msgid "Import configuration"
+msgstr "Импорт конфигурации"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:506
+msgid "Import configuration as peer…"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:492
+msgid "Import settings"
+msgstr "Импорт настроек"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:378
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:405
+msgid "Imported peer configuration"
+msgstr "Импортированная конфигурация узла"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
+msgid "Imports settings from an existing WireGuard configuration file"
+msgstr "Импортирует настройки из существующего файла конфигурации WireGuard"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
 msgid "In"
@@ -4170,8 +4239,8 @@ msgstr "Неверно"
 msgid "Invalid APN provided"
 msgstr "Предоставлен неверный APN"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:33
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:36
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:37
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:40
 msgid "Invalid Base64 key string"
 msgstr "Неверная строка Base64 ключа"
 
@@ -4214,7 +4283,7 @@ msgstr ""
 msgid "Invalid command"
 msgstr "Неверная команда"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:205
 msgid "Invalid hexadecimal value"
 msgstr "Неверное шестнадцатеричное значение"
 
@@ -4299,6 +4368,11 @@ msgstr "Ключ для входящих пакетов (опционально)
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
 msgid "Key for outgoing packets (optional)."
 msgstr "Ключ для исходящих пакетов (опционально)."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:551
+msgctxt "Label indicating that WireGuard peer lacks public key"
+msgid "Key missing"
+msgstr "Отсутствует ключ"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:71
 msgctxt "nft unit"
@@ -4520,7 +4594,7 @@ msgstr ""
 "Список <abbr title=\"Domain Name System\">DNS</abbr>-серверов для "
 "перенаправления запросов."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:130
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Listen Port"
 msgstr "Порт для входящих соединений"
 
@@ -4540,6 +4614,10 @@ msgid ""
 "explicitly."
 msgstr "Ограничьте прослушивание этих интерфейсов и замыкание на себя."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:299
+msgid "ListenPort setting is invalid"
+msgstr "Неверная настройка параметра ListenPort"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:438
 msgid "Listening port for inbound DNS queries."
 msgstr "Порт для входящих DNS-запросов."
@@ -4553,9 +4631,9 @@ msgstr "Нагрузка"
 msgid "Load Average"
 msgstr "Нагрузка (1, 5, 15м)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:242
-msgid "Loading QR-Code..."
-msgstr "Загрузка QR-кода..."
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:189
+msgid "Load configuration…"
+msgstr "Загрузка конфигурации…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1170
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1976
@@ -4782,7 +4860,7 @@ msgstr "MII интервал"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1457
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:86
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:144
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:46
 msgid "MTU"
 msgstr "MTU"
@@ -5206,7 +5284,7 @@ msgstr "Сеть"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:72
 msgid "Network Mode"
-msgstr ""
+msgstr "Режим сети"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2009
 msgid "Network SSID"
@@ -5289,7 +5367,7 @@ msgstr "Новое имя интерфейса…"
 msgid "Next »"
 msgstr "Следующий »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4037
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4089
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:298
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:346
 msgid "No"
@@ -5307,7 +5385,7 @@ msgstr "Нет данных"
 msgid "No Encryption"
 msgstr "Без шифрования"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:139
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "No Host Routes"
 msgstr "Не создавать маршруты"
 
@@ -5365,6 +5443,15 @@ msgstr "Нет элементов в этом каталоге"
 msgid "No files found"
 msgstr "Файлы не найдены"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:833
+msgid ""
+"No fixed interface listening port defined, peers might not be able to "
+"initiate connections to this WireGuard instance!"
+msgstr ""
+"Не определен фиксированный порт прослушивания интерфейса, поэтому узлы могут "
+"оказаться не в состоянии инициировать соединения с этим экземпляром "
+"WireGuard!"
+
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:88
@@ -5408,9 +5495,9 @@ msgstr "Не загружен набор правил nftables."
 msgid "No password set!"
 msgstr "Пароль не установлен!"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:179
-msgid "No peers defined yet"
-msgstr "Узлы ещё не определены"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:512
+msgid "No peers defined yet."
+msgstr "Пока нет сконфигурированных узлов."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:140
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:277
@@ -5656,7 +5743,7 @@ msgid "Operating frequency"
 msgstr "Настройка частоты"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2006
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4049
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4101
 msgid "Option \"%s\" contains an invalid input value."
 msgstr "Опция \"%s\" содержит недопустимое значение."
 
@@ -5680,7 +5767,7 @@ msgstr "Необязательно"
 msgid "Optional, free-form notes about this device"
 msgstr "Необязательные, произвольные заметки об этом устройстве"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid ""
 "Optional. 32-bit mark for outgoing encrypted packets. Enter value in hex, "
 "starting with <code>0x</code>."
@@ -5700,7 +5787,7 @@ msgstr ""
 "d::'), используйте суффикс на вроде ('::1') для этого IPv6 адреса ('a:b:c:"
 "d::1') для этого интерфейса."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:270
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:601
 msgid ""
 "Optional. Base64-encoded preshared key. Adds in an additional layer of "
 "symmetric-key cryptography for post-quantum resistance."
@@ -5708,27 +5795,27 @@ msgstr ""
 "Необязательно. Base64-шифрованный общий ключ. Добавляет дополнительный слой "
 "криптографии с симметричным ключом для постквантовой устойчивости."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:280
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:661
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr ""
 "Необязательно. Создавать маршруты для разрешенных IP адресов для этого узла."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:519
 msgid "Optional. Description of peer."
 msgstr "Необязательно. Описание узла."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:139
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "Optional. Do not create host routes to peers."
 msgstr "Необязательно. Не создавать маршруты к узлам."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:283
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:664
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
 msgstr ""
 "Необязательно. Имя хоста узла. Имена разрешаются до появления интерфейса."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:276
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:626
 msgid ""
 "Optional. IP addresses and prefixes that this peer is allowed to use inside "
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
@@ -5742,15 +5829,26 @@ msgstr ""
 msgid "Optional. Maximum Transmission Unit of the XFRM interface."
 msgstr "Необязательно. MTU XFRM интерфейса."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:144
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Необязательно. MTU туннельного интерфейса."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:287
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:680
 msgid "Optional. Port of peer."
 msgstr "Необязательно. Порт узла."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:291
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:592
+msgid ""
+"Optional. Private key of the WireGuard peer. The key is not required for "
+"establishing a connection but allows generating a peer configuration or QR "
+"code if available. It can be removed after the configuration has been "
+"exported."
+msgstr ""
+"Необязательно. Закрытый ключ узла WireGuard. Ключ не требуется для "
+"установления соединения, но позволяет сгенерировать конфигурацию узла или QR-"
+"код, если он доступен. Он может быть удален после экспорта конфигурации."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:685
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5759,7 +5857,7 @@ msgstr ""
 "'0' (отключено). Рекомендуемое значение, если это устройство находится за "
 "NAT 25."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:130
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Optional. UDP port used for outgoing and incoming packets."
 msgstr ""
 "Необязательно. Udp-порт, используемый для исходящих и входящих пакетов."
@@ -5913,6 +6011,10 @@ msgstr "Обзор"
 msgid "Overwrite existing file \"%s\" ?"
 msgstr "Перезаписать существующий файл «%s»?"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:355
+msgid "Overwrite the current settings with the imported configuration?"
+msgstr "Переписать текущие настройки импортированной конфигурацией?"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:70
 msgid "Owner"
 msgstr "Владелец"
@@ -6008,6 +6110,11 @@ msgstr "PSID смещение"
 msgid "PSID-bits length"
 msgstr "PSID длина в битах"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:573
+msgctxt "Label indicating that WireGuard peer uses a PSK"
+msgid "PSK"
+msgstr "PSK"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1512
 msgid "PTM/EFM (Packet Transfer Mode)"
 msgstr "PTM/EFM (Режим передачи пакетов)"
@@ -6080,6 +6187,24 @@ msgstr "Пароль2"
 msgid "Paste or drag SSH key file…"
 msgstr "Перетащите файл SSH ключа или вставьте содержимое…"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:446
+msgid "Paste or drag WireGuard peer configuration (wg0.conf) file…"
+msgstr "Вставьте или перетащите файл конфигурации узлов WireGuard (wg0.conf)…"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:439
+msgid ""
+"Paste or drag a WireGuard configuration (commonly <em>wg0.conf</em>) from "
+"another system below to create a matching peer entry allowing that system to "
+"connect to the local WireGuard interface."
+msgstr ""
+"Вставьте или перетащите конфигурацию WireGuard (обычно <em>wg0.conf</em>) из "
+"другой системы ниже, чтобы создать соответствующую запись узла, позволяющую "
+"этой системе подключиться к локальному интерфейсу WireGuard."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:445
+msgid "Paste or drag supplied WireGuard configuration file…"
+msgstr "Вставьте или перетащите имеющийся файл конфигурации WireGuard…"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1592
 msgid "Path to CA-Certificate"
 msgstr "Путь к CA-сертификату"
@@ -6139,11 +6264,11 @@ msgstr "Отсутствует адрес узла"
 msgid "Peer device name"
 msgstr "Имя устройства узла"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:183
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:515
 msgid "Peer disabled"
 msgstr "Узел отключен"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 msgid "Peers"
 msgstr "Узлы (peers)"
 
@@ -6170,9 +6295,13 @@ msgstr "Выполнить сброс"
 msgid "Permission denied"
 msgstr "Доступ запрещён"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:291
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:685
 msgid "Persistent Keep Alive"
 msgstr "Постоянно держать включенным"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:334
+msgid "PersistentKeepAlive setting is invalid"
+msgstr "Неверная настройка параметра PersistentKeepAlive"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:290
 msgid "Phy Rate:"
@@ -6254,9 +6383,17 @@ msgstr "Делегированный префикс"
 msgid "Prefix suppressor"
 msgstr "Подавитель префикса"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:270
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:601
 msgid "Preshared Key"
 msgstr "Предварительный ключ"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:572
+msgid "Preshared key in use"
+msgstr "Предварительный ключ используется"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:308
+msgid "PresharedKey setting is invalid"
+msgstr "Неверная настройка параметра PresharedKey"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
@@ -6305,14 +6442,28 @@ msgstr ""
 msgid "Priority"
 msgstr "Приоритет"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:567
+msgctxt "Label indicating that WireGuard peer private key is stored"
+msgid "Private"
+msgstr "Private"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:436
 msgctxt "MACVLAN mode"
 msgid "Private (Prevent communication between MAC VLANs)"
 msgstr "Частный (предотвращение связи между MAC VLAN'ми)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:93
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:592
 msgid "Private Key"
 msgstr "Приватный ключ"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:566
+msgid "Private key present"
+msgstr "Приватный ключ присутствует"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:296
+msgid "PrivateKey setting is missing or invalid"
+msgstr "Отсутствует или неверная настройка параметра PrivateKey"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:93
@@ -6361,10 +6512,19 @@ msgstr ""
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "Псевдо Ad-Hoc (ahdemo)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:102
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:265
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:158
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
 msgid "Public Key"
 msgstr "Публичный ключ"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:549
+msgid "Public key is missing"
+msgstr "Отсутвует публичный ключ"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:558
+msgctxt "Tooltip displaying full WireGuard peer public key"
+msgid "Public key: %h"
+msgstr "Публичный ключ: %h"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:284
 msgid ""
@@ -6384,15 +6544,14 @@ msgstr ""
 "Публичный префикс, направляемый на это устройство для распространения среди "
 "клиентов."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:305
+msgid "PublicKey setting is invalid"
+msgstr "Неверная настройка параметра PublicKey"
+
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:9
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:27
 msgid "QMI Cellular"
 msgstr "QMI модем"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:192
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:223
-msgid "QR-Code"
-msgstr "QR-код"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:146
 msgid "Quality"
@@ -6521,7 +6680,7 @@ msgstr ""
 msgid "Receive"
 msgstr "Приём"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:135
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "Рекомендуемый. IP адреса интерфейса WireGuard."
 
@@ -6666,13 +6825,13 @@ msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr ""
 "Требуется для некоторых Интернет провайдеров, например использующих DOCSIS 3"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:93
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
 msgid "Required. Base64-encoded private key for this interface."
 msgstr "Обязательно. Приватный ключ в кодировке Base64 для этого интерфейса."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:265
-msgid "Required. Base64-encoded public key of peer."
-msgstr "Обязательно. Публичный ключ узла в кодировке Base64."
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
+msgid "Required. Public key of the WireGuard peer."
+msgstr "Обязательно. Публичный ключ WireGuard узла."
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
 msgid "Required. Underlying interface."
@@ -6905,7 +7064,7 @@ msgstr "Подготовка корневой директории"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "Политика round-robin (balance-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:280
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:661
 msgid "Route Allowed IPs"
 msgstr "Маршрутизировать разрешенные IP-адреса"
 
@@ -7036,7 +7195,7 @@ msgstr "Сервер SSTP"
 msgid "SWAP"
 msgstr "Разделы подкачки (swap)"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3218
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3269
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2192
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
@@ -8068,10 +8227,6 @@ msgstr "Пространство temp"
 msgid "Terminate"
 msgstr "Завершить"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:205
-msgid "The \"PublicKey\" of that wg interface"
-msgstr "«‎PublicKey» этого wg-интерфейса"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:839
 msgid ""
 "The <abbr title=\"Maximum Transmission Unit\">MTU</abbr> to be published in "
@@ -8109,6 +8264,14 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
 msgstr "Команда <em>block mount</em> завершилась с кодом ошибки %d"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:80
+msgid ""
+"The <em>qrencode</em> package is required for generating an QR code image of "
+"the configuration."
+msgstr ""
+"Для генерации изображения QR-кода конфигурации необходим пакет <em>qrencode</"
+"em>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid ""
@@ -8199,14 +8362,6 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:586
 msgid "The MTU must not exceed the parent device MTU of %d bytes"
 msgstr "MTU не должно превышать MTU родительского устройства, равное %d байт"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
-msgid ""
-"The QR-Code works per wg interface, it will be refreshed with every button "
-"click and transfers the following information:"
-msgstr ""
-"QR-код действует для каждого wg интерфейса, он обновляется при каждом "
-"нажатии кнопки и содержит следующую информацию:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:864
 msgid "The VLAN ID must be unique"
@@ -8301,6 +8456,14 @@ msgstr "Частота прямо пропорциональна 1-минутн�
 msgid "The gateway address must not be a local IP address"
 msgstr "Адрес шлюза не должен быть локальным IP-адресом"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:754
+msgid ""
+"The generated configuration can be imported into a WireGuard client "
+"application to setup a connection towards this device."
+msgstr ""
+"Сгенерированная конфигурация может быть импортирована в клиентское "
+"приложение WireGuard для установки соединения с этим устройством."
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:166
 msgid "The given SSH public key has already been added."
 msgstr "Указанный публичный SSH ключ уже добавлен."
@@ -8336,14 +8499,6 @@ msgstr ""
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:63
 msgid "The length of the IPv6 prefix in bits"
 msgstr "Длина префикса IPv6 в битах"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:206
-msgid ""
-"The list of this client's \"AllowedIPs\" or \"0.0.0.0/0, ::/0\" if not "
-"configured"
-msgstr ""
-"Список разрешенных IP-адресов (AllowedIP) этого клиента или "
-"\"0.0.0.0/0, ::/0\", если не настроено"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:165
 msgid "The local IPv4 address"
@@ -8429,6 +8584,16 @@ msgstr ""
 "сегментов. Обычно по умолчанию используется один порт для подключения к "
 "внешней сети, например к Интернету и другие порты предназначенные для "
 "внутренней — локальной сети."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:759
+msgid ""
+"The public hostname or IP address of this system the peer should connect to. "
+"This usually is a static public IP address, a static hostname or a DDNS "
+"domain."
+msgstr ""
+"Публичное имя хоста или IP-адрес этой системы, к которой должен подключаться "
+"узел. Обычно это статический публичный IP-адрес, статическое имя хоста или "
+"имя домена DDNS."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:569
 msgid "The query response interval must be lower than the query interval value"
@@ -8709,6 +8874,17 @@ msgstr "Таймаут в секундах до обновления топол�
 msgid "Timezone"
 msgstr "Часовой пояс"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:440
+msgid ""
+"To fully configure the local WireGuard interface from an existing (e.g. "
+"provider supplied) configuration file, use the <strong><a class=\"full-"
+"import\" href=\"#\">configuration import</a></strong> instead."
+msgstr ""
+"Чтобы полностью настроить локальный интерфейс WireGuard из существующего "
+"(например, предоставленного провайдером) файла конфигурации, используйте "
+"вместо этого <strong><a class=\"full-import\" href=\"#\">импорт "
+"конфигурации</a></strong>."
+
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
 msgid "To login…"
 msgstr "Войти…"
@@ -8875,6 +9051,10 @@ msgstr "Невозможно определить основной (upstream) и
 msgid "Unable to dispatch"
 msgstr "Невозможно обработать запрос для"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:85
+msgid "Unable to generate QR code: %s"
+msgstr "Невозможно сгенерировать QR-код: %s"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:9
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:15
 msgid "Unable to load log data:"
@@ -8997,6 +9177,10 @@ msgstr "Не поддерживаемый модем"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:299
 msgid "Unsupported protocol type."
 msgstr "Не поддерживаемый тип протокола."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:534
+msgid "Untitled peer"
+msgstr "Узел без имени"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:151
 msgid "Up"
@@ -9516,9 +9700,13 @@ msgid "Width"
 msgstr "Ширина"
 
 #: modules/luci-compat/luasrc/model/network/proto_wireguard.lua:9
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:61
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:119
 msgid "WireGuard VPN"
 msgstr "WireGuard VPN"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:541
+msgid "WireGuard peer is disabled"
+msgstr "Узел WireGuard отключён"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:17
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:10
@@ -9582,7 +9770,7 @@ msgstr "Записывать системные события в файл"
 msgid "XOR policy (balance-xor, 2)"
 msgstr "Политика XOR (balance-xor, 2)"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4037
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4089
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:297
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:345
 msgid "Yes"
@@ -9862,7 +10050,7 @@ msgstr "нет соединения"
 msgid "non-empty value"
 msgstr "не пустое значение"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3367
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3419
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:800
 msgid "none"
 msgstr "ничего"
@@ -9909,7 +10097,7 @@ msgstr "положительное десятичное число"
 msgid "positive integer value"
 msgstr "положительное целое число"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:132
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:178
 msgid "random"
 msgstr "случайно"
 
@@ -9977,7 +10165,7 @@ msgstr "неизвестный"
 msgid "unlimited"
 msgstr "без ограничений"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3732
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3784
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:76
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:138
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:370

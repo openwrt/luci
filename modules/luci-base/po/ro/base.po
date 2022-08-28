@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-06-19 00:40+0000\n"
-"Last-Translator: Simona Iacob <s@zp1.net>\n"
+"PO-Revision-Date: 2022-08-05 01:21+0000\n"
+"Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/luci/ro/"
 ">\n"
 "Language: ro\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -57,13 +57,18 @@ msgstr "(gol)"
 msgid "(no interfaces attached)"
 msgstr "(nici o interfață atașată)"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:637
+msgctxt "Label indicating further amount of allowed ips"
+msgid "+ %d more"
+msgstr "+ %d mai mult"
+
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
 msgstr "-- Câmp suplimentar --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:275
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3732
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4100
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3784
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4152
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:798
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1036
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2009
@@ -287,14 +292,6 @@ msgid "A new login is required since the authentication session expired."
 msgstr ""
 "O nouă logare este necesară deoarece sesiunea de autentificare a expirat."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
-msgid ""
-"A random, on the fly generated \"PrivateKey\", the key will not be saved on "
-"the router"
-msgstr ""
-"Un \"PrivateKey\" aleatoriu, generat din mers, cheia nu va fi salvată pe "
-"router"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1503
 msgid "A43C + J43 + A43"
 msgstr "A43C + J43 + A43"
@@ -481,7 +478,7 @@ msgstr "Echilibrarea adaptivă a sarcinii de transmisie (balance-tlb, 5)"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2236
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2249
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2257
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3530
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3582
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:25
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:189
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:197
@@ -540,7 +537,7 @@ msgstr ""
 msgid "Add new interface..."
 msgstr "Adăugați o interfață nouă..."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:172
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:224
 msgid "Add peer"
 msgstr "Adăugați un omolog"
 
@@ -577,6 +574,10 @@ msgstr "Adresă"
 msgctxt "nft meta nfproto"
 msgid "Address family"
 msgstr "Familie de adrese"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:284
+msgid "Address setting is invalid"
+msgstr "Setarea adresei nu este valabilă"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
 msgid "Address to access local relay bridge"
@@ -718,9 +719,13 @@ msgstr "Permiteți sondarea caracteristicilor sistemului"
 msgid "Allow the <em>root</em> user to login with password"
 msgstr "Permiteți utilizatorului <em>root</em> să se conecteze cu parolă"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:276
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:626
 msgid "Allowed IPs"
 msgstr "IP-uri permise"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:315
+msgid "AllowedIPs setting is invalid"
+msgstr "Setarea AllowedIPs nu este validă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:708
 msgid "Always"
@@ -1075,7 +1080,7 @@ msgstr "BR / DMR / AFTR"
 msgid "BSSID"
 msgstr "BSSID"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3200
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3250
 msgid "Back"
 msgstr "Inapoi"
 
@@ -1087,6 +1092,10 @@ msgstr "Înapoi la Prezentare generală"
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:48
 msgid "Back to configuration"
 msgstr "Înapoi la configurare"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:826
+msgid "Back to peer configuration"
+msgstr "Înapoi la configurația peer"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:391
 msgid "Backup"
@@ -1110,7 +1119,7 @@ msgstr "Bandă"
 msgid "Base device"
 msgstr "Dispozitiv de bază"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:102
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:158
 msgid "Base64-encoded public key of this interface for sharing."
 msgstr ""
 "Cheia publică codificată în Base64 a acestei interfețe pentru partajare."
@@ -1267,8 +1276,13 @@ msgstr "Apel eșuat"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:128
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:295
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:203
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:487
 msgid "Cancel"
 msgstr "Anulare"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:347
+msgid "Cannot parse configuration: %s"
+msgstr "Nu se poate analiza configurația: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:562
 msgctxt "Chain hook: forward"
@@ -1550,6 +1564,10 @@ msgstr "Calculați suma de control de ieșire (opțional)."
 msgid "Configuration"
 msgstr "Configurație"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:692
+msgid "Configuration Export"
+msgstr "Exportul configurației"
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4555
 msgid "Configuration changes applied."
 msgstr "Modificările de configurare aplicate."
@@ -1635,6 +1653,10 @@ msgstr "Încercarea de conectare a eșuat"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:40
 msgid "Connection attempt failed."
 msgstr "Încercarea de conectare a eșuat."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:759
+msgid "Connection endpoint"
+msgstr "Punct final de conexiune"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Connection lost"
@@ -1852,6 +1874,10 @@ msgstr "Domenii de căutare DNS"
 msgid "DNS server port"
 msgstr "Portul serverului DNS"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:292
+msgid "DNS setting is invalid"
+msgstr "Setarea DNS nu este valabilă"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid "DNS weight"
 msgstr "Pondere DNS"
@@ -1953,7 +1979,7 @@ msgstr "Delegați prefixele IPv6"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2310
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2740
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2744
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3514
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3566
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2907
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
@@ -1980,7 +2006,7 @@ msgstr "Intervalul mesajului de indicare a traficului de livrare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:342
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:139
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:519
 msgid "Description"
 msgstr "Descriere"
 
@@ -2143,6 +2169,11 @@ msgstr "Dezactivați această rețea"
 msgid "Disabled"
 msgstr "Dezactivat"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:543
+msgctxt "Label indicating that WireGuard peer is disabled"
+msgid "Disabled"
+msgstr "Dezactivat"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1191
 msgid "Disassociate On Low Acknowledgement"
 msgstr "Dezasociere la recunoaștere scăzută"
@@ -2175,8 +2206,8 @@ msgid "Disk space"
 msgstr "Spațiu pe disc"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:611
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3012
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3213
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3022
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3264
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3646
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4499
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1775
@@ -2286,6 +2317,14 @@ msgstr "Sigur doriți să ștergeți toate setările?"
 msgid "Do you really want to recursively delete the directory \"%s\" ?"
 msgstr "Sigur doriți să ștergeți recursiv directorul \"%s\" ?"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:615
+msgid "Do you want to replace the current PSK?"
+msgstr "Doriți să înlocuiți PSK-ul actual?"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:100
+msgid "Do you want to replace the current keys?"
+msgstr "Doriți să înlocuiți cheile actuale?"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:592
 msgid "Domain"
 msgstr "Domeniu"
@@ -2323,6 +2362,14 @@ msgstr "Descărcați mtdblock"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1519
 msgid "Downstream SNR offset"
 msgstr "Decalaj SNR în flux"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:437
+msgid ""
+"Drag or paste a valid <em>*.conf</em> file below to configure the local "
+"WireGuard interface."
+msgstr ""
+"Trageți sau lipiți un fișier <em>*.conf</em> valid mai jos pentru a "
+"configura interfața WireGuard locală."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2698
 msgid "Drag to reorder"
@@ -2398,7 +2445,7 @@ msgstr "Metoda-EAP"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2718
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2721
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3377
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3429
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:154
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:160
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:495
@@ -2406,7 +2453,7 @@ msgstr "Metoda-EAP"
 msgid "Edit"
 msgstr "Editați"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:174
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:226
 msgid "Edit peer"
 msgstr "Editați peer"
 
@@ -2464,7 +2511,7 @@ msgstr "Urgență"
 msgid "Enable"
 msgstr "Activați"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:183
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:515
 msgid "Enable / Disable peer. Restart wireguard interface to apply changes."
 msgstr ""
 "Activează / Dezactivează omologul. Reporniți interfața wireguard pentru a "
@@ -2679,13 +2726,17 @@ msgstr "Modul de incapsulare"
 msgid "Encryption"
 msgstr "Criptare"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:283
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:664
 msgid "Endpoint Host"
 msgstr "Gazdă Endpoint"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:287
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:680
 msgid "Endpoint Port"
 msgstr "Port Endpoint"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:325
+msgid "Endpoint setting is invalid"
+msgstr "Setarea punctului final nu este valabilă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:684
 msgid "Enforce IGMPv1"
@@ -2728,7 +2779,7 @@ msgstr "Ștergere..."
 msgid "Error"
 msgstr "Eroare"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:112
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:170
 msgid "Error getting PublicKey"
 msgstr "Eroare la obținerea PublicKey"
 
@@ -2963,7 +3014,7 @@ msgstr "Terminați"
 msgid "Firewall"
 msgstr "Firewall"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid "Firewall Mark"
 msgstr "Marca Firewall"
 
@@ -3012,10 +3063,6 @@ msgstr "Operațiuni de scriere"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:319
 msgid "Flashing…"
 msgstr "Scriere…"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:236
-msgid "For QR-Code support please install the qrencode package!"
-msgstr "Pentru suport QR-Code vă rugăm să instalați pachetul qrencode!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:536
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:686
@@ -3134,7 +3181,7 @@ msgctxt "nft nat flag fully-random"
 msgid "Full port randomization"
 msgstr "Randomizarea completă a porturilor"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 msgid ""
 "Further information about WireGuard interfaces and peers at <a href='http://"
 "wireguard.com'>wireguard.com</a>."
@@ -3208,14 +3255,6 @@ msgstr "Opțiuni generale ale dispozitivului"
 msgid "Generate Config"
 msgstr "Generare configurare"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:116
-msgid "Generate Key"
-msgstr "Generare cheie"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:240
-msgid "Generate New QR-Code"
-msgstr "Generarea unui nou cod QR"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1542
 msgid "Generate PMK locally"
 msgstr "Generarea locală a PMK"
@@ -3224,9 +3263,30 @@ msgstr "Generarea locală a PMK"
 msgid "Generate archive"
 msgstr "Generați arhivă"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:255
-msgid "Generate new QR-Code"
-msgstr "Generarea unui nou cod QR-Code"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:811
+msgid "Generate configuration"
+msgstr "Generarea configurației"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:851
+msgid "Generate configuration…"
+msgstr "Generarea configurației…"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:109
+msgid "Generate new key pair"
+msgstr "Generarea unei noi perechi de chei"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:623
+msgid "Generate preshared key"
+msgstr "Generarea unei chei prestabilite"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:693
+msgid "Generates a configuration suitable for import on a WireGuard peer"
+msgstr ""
+"Generează o configurație potrivită pentru a fi importată pe un peer WireGuard"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:785
+msgid "Generating QR code…"
+msgstr "Generarea de coduri QR…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:79
 msgid "Given password confirmation did not match, password not changed!"
@@ -3256,7 +3316,7 @@ msgid "Go to password configuration..."
 msgstr "Mergeți la configurarea parolei..."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2640
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3696
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3748
 #: modules/luci-compat/luasrc/view/cbi/full_valueheader.htm:4
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:58
 msgid "Go to relevant configuration page"
@@ -3411,10 +3471,6 @@ msgstr ""
 msgid "Hide <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 msgstr "Ascunde <abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:250
-msgid "Hide QR-Code"
-msgstr "Ascundeți codul QR"
-
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:293
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:332
 msgid "Hide empty chains"
@@ -3517,7 +3573,7 @@ msgstr "IEEE 802.3ad Agregarea dinamică a legăturilor (802.3ad, 4)"
 msgid "IKE DH Group"
 msgstr "Grupul IKE DH"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:135
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "IP Addresses"
 msgstr "Adrese IP"
 
@@ -3814,10 +3870,6 @@ msgstr "IPv6-prin-IPv4 (6to4)"
 msgid "Identity"
 msgstr "Identitate"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:207
-msgid "If available, the client's \"PresharedKey\""
-msgstr "Dacă este disponibil, \"PresharedKey\" al clientului"
-
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "If checked, 1DES is enabled"
 msgstr "Dacă este bifat, 1DES este activat"
@@ -3869,14 +3921,6 @@ msgstr ""
 "<strong>reconectare manuală la noul IP</strong> în termen de %d secunde "
 "pentru a confirma setările, în caz contrar modificările vor fi anulate."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:212
-msgid ""
-"If there are any unsaved changes for this client, please save the "
-"configuration before generating a QR-Code"
-msgstr ""
-"Dacă există modificări nesalvate pentru acest client, vă rugăm să salvați "
-"configurația înainte de a genera un cod QR"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:64
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:122
@@ -3923,6 +3967,32 @@ msgstr "Imagine"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:273
 msgid "Image check failed:"
 msgstr "Verificarea imaginii a eșuat:"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:478
+msgid "Import as peer"
+msgstr "Importă ca peer"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:478
+msgid "Import configuration"
+msgstr "Configurație de import"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:506
+msgid "Import configuration as peer…"
+msgstr ""
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:492
+msgid "Import settings"
+msgstr "Setări de import"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:378
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:405
+msgid "Imported peer configuration"
+msgstr "Configurație omologă importată"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
+msgid "Imports settings from an existing WireGuard configuration file"
+msgstr "Importă setările dintr-un fișier de configurare WireGuard existent"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
 msgid "In"
@@ -4165,8 +4235,8 @@ msgstr "Nu este valid"
 msgid "Invalid APN provided"
 msgstr "APN nevalabil furnizat"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:33
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:36
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:37
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:40
 msgid "Invalid Base64 key string"
 msgstr "Șir de chei Base64 nevalabil"
 
@@ -4204,7 +4274,7 @@ msgstr ""
 msgid "Invalid command"
 msgstr "Comandă invalidă"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:153
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:205
 msgid "Invalid hexadecimal value"
 msgstr "Valoare hexazecimală invalidă"
 
@@ -4290,6 +4360,11 @@ msgstr "Cheia pentru pachetele primite (opțional)."
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
 msgid "Key for outgoing packets (optional)."
 msgstr "Cheia pentru pachetele de ieșire (opțional)."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:551
+msgctxt "Label indicating that WireGuard peer lacks public key"
+msgid "Key missing"
+msgstr "Cheia lipsă"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:71
 msgctxt "nft unit"
@@ -4514,7 +4589,7 @@ msgstr "Lista domeniilor care trebuie forțate la o adresă IP."
 msgid "List of upstream resolvers to forward queries to."
 msgstr "Lista de rezolvatori din upstream către care se transmit interogările."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:130
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Listen Port"
 msgstr "Port de ascultare"
 
@@ -4536,6 +4611,10 @@ msgstr ""
 "Ascultați numai pe interfețele specificate, și loopback dacă nu este exclus "
 "în mod explicit."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:299
+msgid "ListenPort setting is invalid"
+msgstr "Setarea ListenPort nu este validă"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:438
 msgid "Listening port for inbound DNS queries."
 msgstr "Port de ascultare pentru interogările DNS de intrare."
@@ -4549,9 +4628,9 @@ msgstr "Încărcare"
 msgid "Load Average"
 msgstr "Încărcare medie"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:242
-msgid "Loading QR-Code..."
-msgstr "Încărcare QR-Code..."
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:189
+msgid "Load configuration…"
+msgstr "Încărcați configurația…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1170
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1976
@@ -4778,7 +4857,7 @@ msgstr "Intervalul MII"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1457
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:86
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:144
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:46
 msgid "MTU"
 msgstr "MTU"
@@ -5194,7 +5273,7 @@ msgstr "Rețea"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:72
 msgid "Network Mode"
-msgstr ""
+msgstr "Mod Rețea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2009
 msgid "Network SSID"
@@ -5276,7 +5355,7 @@ msgstr "Nume nou interfață…"
 msgid "Next »"
 msgstr "Următoarea »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4037
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4089
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:298
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:346
 msgid "No"
@@ -5294,7 +5373,7 @@ msgstr "Nu există date"
 msgid "No Encryption"
 msgstr "Fără criptare"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:139
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "No Host Routes"
 msgstr "Fără rute gazdă"
 
@@ -5353,6 +5432,14 @@ msgstr "Fără intrări în acest director"
 msgid "No files found"
 msgstr "Nu s-au găsit fișiere"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:833
+msgid ""
+"No fixed interface listening port defined, peers might not be able to "
+"initiate connections to this WireGuard instance!"
+msgstr ""
+"Nu este definit un port de ascultare a interfeței fixe, este posibil ca "
+"omologii să nu poată iniția conexiuni cu această instanță WireGuard!"
+
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:88
@@ -5396,9 +5483,9 @@ msgstr "Nu s-a încărcat niciun set de reguli nftables."
 msgid "No password set!"
 msgstr "Nu este setată nicio parolă!"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:179
-msgid "No peers defined yet"
-msgstr "Nu sunt definiți încă colegi"
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:512
+msgid "No peers defined yet."
+msgstr "Încă nu sunt definiți peers."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:140
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:277
@@ -5644,7 +5731,7 @@ msgid "Operating frequency"
 msgstr "Frecvență de operare"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2006
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4049
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4101
 msgid "Option \"%s\" contains an invalid input value."
 msgstr "Opțiunea \"%s\" conține o valoare de intrare invalidă."
 
@@ -5668,7 +5755,7 @@ msgstr "Opțional"
 msgid "Optional, free-form notes about this device"
 msgstr "Note opționale, în formă liberă, despre acest dispozitiv"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:149
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid ""
 "Optional. 32-bit mark for outgoing encrypted packets. Enter value in hex, "
 "starting with <code>0x</code>."
@@ -5688,7 +5775,7 @@ msgstr ""
 "este primit de la un server delegant, se utilizează sufixul (cum ar fi "
 "\"::1\") pentru a forma adresa IPv6 (\"a:b:c:d::1\") pentru interfață."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:270
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:601
 msgid ""
 "Optional. Base64-encoded preshared key. Adds in an additional layer of "
 "symmetric-key cryptography for post-quantum resistance."
@@ -5697,19 +5784,19 @@ msgstr ""
 "suplimentar de criptografie cu cheie simetrică pentru rezistență post-"
 "cuantice."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:280
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:661
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr "Opțional. Creează rute pentru IP-uri permise pentru acest peer."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:519
 msgid "Optional. Description of peer."
 msgstr "Opțional. Descriere a partenerului."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:139
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "Optional. Do not create host routes to peers."
 msgstr "Opțional. Nu creați rute gazdă către parteneri."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:283
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:664
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
@@ -5717,7 +5804,7 @@ msgstr ""
 "Opțional. Gazda omologului. Numele sunt rezolvate înainte de a aduce "
 "interfața."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:276
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:626
 msgid ""
 "Optional. IP addresses and prefixes that this peer is allowed to use inside "
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
@@ -5731,15 +5818,27 @@ msgstr ""
 msgid "Optional. Maximum Transmission Unit of the XFRM interface."
 msgstr "Opțional. Unitatea maximă de transmisie a interfeței XFRM."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:144
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
 msgstr "Opțional. Unitatea maximă de transmisie a interfeței de tunel."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:287
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:680
 msgid "Optional. Port of peer."
 msgstr "Opțional. Portul partenerului."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:291
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:592
+msgid ""
+"Optional. Private key of the WireGuard peer. The key is not required for "
+"establishing a connection but allows generating a peer configuration or QR "
+"code if available. It can be removed after the configuration has been "
+"exported."
+msgstr ""
+"Opțional. Cheia privată a omologului WireGuard. Cheia nu este necesară "
+"pentru stabilirea unei conexiuni, dar permite generarea unei configurații "
+"peer sau a unui cod QR, dacă este disponibilă. Ea poate fi eliminată după ce "
+"configurația a fost exportată."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:685
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
@@ -5748,7 +5847,7 @@ msgstr ""
 "este 0 (dezactivat). Valoarea recomandată dacă acest dispozitiv se află în "
 "spatele unui NAT este 25."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:130
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Optional. UDP port used for outgoing and incoming packets."
 msgstr "Opțional. Port UDP utilizat pentru pachetele de ieșire și de intrare."
 
@@ -5870,6 +5969,8 @@ msgid ""
 "Override default MAC address - the range of usable addresses might be "
 "limited by the driver"
 msgstr ""
+"Suprascrie adresa MAC implicită - intervalul de adrese utilizabile poate fi "
+"limitat de driver"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1153
 msgid "Override default interface name"
@@ -5898,6 +5999,10 @@ msgstr "Prezentare generală"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2756
 msgid "Overwrite existing file \"%s\" ?"
 msgstr "Suprascrieți fișierul existent \"%s\" ?"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:355
+msgid "Overwrite the current settings with the imported configuration?"
+msgstr "Suprascrieți setările curente cu configurația importată?"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:70
 msgid "Owner"
@@ -5994,6 +6099,11 @@ msgstr "Decalaj PSID"
 msgid "PSID-bits length"
 msgstr "PSID-bits lungime"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:573
+msgctxt "Label indicating that WireGuard peer uses a PSK"
+msgid "PSK"
+msgstr "PSK"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1512
 msgid "PTM/EFM (Packet Transfer Mode)"
 msgstr "PTM/EFM (Modul de transfer al pachetelor)"
@@ -6066,6 +6176,25 @@ msgstr "Parola2"
 msgid "Paste or drag SSH key file…"
 msgstr "Lipiți sau trageți fișierul cu cheia SSH…"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:446
+msgid "Paste or drag WireGuard peer configuration (wg0.conf) file…"
+msgstr "Lipiți sau trageți fișierul de configurare peer WireGuard (wg0.conf)…"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:439
+msgid ""
+"Paste or drag a WireGuard configuration (commonly <em>wg0.conf</em>) from "
+"another system below to create a matching peer entry allowing that system to "
+"connect to the local WireGuard interface."
+msgstr ""
+"Lipiți sau trageți o configurație WireGuard (de obicei <em>wg0.conf</em>) de "
+"la un alt sistem mai jos pentru a crea o intrare omologă corespunzătoare "
+"care să permită sistemului respectiv să se conecteze la interfața WireGuard "
+"locală."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:445
+msgid "Paste or drag supplied WireGuard configuration file…"
+msgstr "Lipiți sau trageți fișierul de configurare WireGuard furnizat…"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1592
 msgid "Path to CA-Certificate"
 msgstr "Calea către certificatul CA"
@@ -6125,11 +6254,11 @@ msgstr "Adresa MAC a partenerului"
 msgid "Peer device name"
 msgstr "Numele dispozitivului partener"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:183
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:515
 msgid "Peer disabled"
 msgstr "Partener dezactivat"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 msgid "Peers"
 msgstr "Perechi"
 
@@ -6156,9 +6285,13 @@ msgstr "Efectuați resetarea"
 msgid "Permission denied"
 msgstr "Permisiune refuzată"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:291
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:685
 msgid "Persistent Keep Alive"
 msgstr "Persistentă Keep Alive"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:334
+msgid "PersistentKeepAlive setting is invalid"
+msgstr "Setarea PersistentKeepAlive nu este valabilă"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:290
 msgid "Phy Rate:"
@@ -6240,9 +6373,17 @@ msgstr "Prefix Delegat"
 msgid "Prefix suppressor"
 msgstr "Prefix supresor"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:270
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:601
 msgid "Preshared Key"
 msgstr "Cheie predistribuită"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:572
+msgid "Preshared key in use"
+msgstr "Cheie de partajare în uz"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:308
+msgid "PresharedKey setting is invalid"
+msgstr "Setarea PresharedKey nu este valabilă"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
@@ -6291,14 +6432,28 @@ msgstr ""
 msgid "Priority"
 msgstr "Prioritate"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:567
+msgctxt "Label indicating that WireGuard peer private key is stored"
+msgid "Private"
+msgstr "Privat"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:436
 msgctxt "MACVLAN mode"
 msgid "Private (Prevent communication between MAC VLANs)"
 msgstr "Privat (Împiedică comunicarea între VLAN-urile MAC)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:93
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:592
 msgid "Private Key"
 msgstr "Cheie privată"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:566
+msgid "Private key present"
+msgstr "Cheia privată prezentă"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:296
+msgid "PrivateKey setting is missing or invalid"
+msgstr "Setarea PrivateKey lipsește sau este invalidă"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:93
@@ -6347,10 +6502,19 @@ msgstr ""
 msgid "Pseudo Ad-Hoc (ahdemo)"
 msgstr "Pseudo Ad-Hoc (ahdemo)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:102
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:265
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:158
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
 msgid "Public Key"
 msgstr "Cheia publică"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:549
+msgid "Public key is missing"
+msgstr "Cheia publică lipsește"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:558
+msgctxt "Tooltip displaying full WireGuard peer public key"
+msgid "Public key: %h"
+msgstr "Cheia publică: %h"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:284
 msgid ""
@@ -6370,15 +6534,14 @@ msgstr ""
 "Prefixul public direcționat către acest dispozitiv în vederea distribuirii "
 "către clienți."
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:305
+msgid "PublicKey setting is invalid"
+msgstr "Setarea PublicKey nu este valabilă"
+
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:9
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:27
 msgid "QMI Cellular"
 msgstr "QMI Celular"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:192
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:223
-msgid "QR-Code"
-msgstr "Cod QR"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:146
 msgid "Quality"
@@ -6504,7 +6667,7 @@ msgstr "Repornește sistemul de operare al dispozitivului dumneavoastră"
 msgid "Receive"
 msgstr "Se primește"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:135
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "Recomandat. Adresele IP ale interfeței WireGuard."
 
@@ -6650,14 +6813,14 @@ msgstr ""
 "Necesar pentru anumiți furnizori de servicii de internet, de exemplu Charter "
 "cu DOCSIS 3"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:93
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
 msgid "Required. Base64-encoded private key for this interface."
 msgstr ""
 "Este necesar. Cheia privată codificată în baza 64 pentru această interfață."
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:265
-msgid "Required. Base64-encoded public key of peer."
-msgstr "Este necesar. Cheia publică codificată în baza 64 a omologului."
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
+msgid "Required. Public key of the WireGuard peer."
+msgstr "Este necesar. Cheia publică a omologului WireGuard."
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
 msgid "Required. Underlying interface."
@@ -6887,7 +7050,7 @@ msgstr "Root preparare"
 msgid "Round-Robin policy (balance-rr, 0)"
 msgstr "Politica Round-Robin (balance-rr, 0)"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:280
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:661
 msgid "Route Allowed IPs"
 msgstr "Rutarea IP-urilor permise"
 
@@ -7019,7 +7182,7 @@ msgstr "Serverul SSTP"
 msgid "SWAP"
 msgstr "SWAP"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3218
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3269
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2192
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
@@ -7125,7 +7288,7 @@ msgstr "Adresa serverului"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:512
 msgid "Server name"
-msgstr "Numele serverului"
+msgstr "Nume server"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:50
 msgid "Service Name"
@@ -7871,7 +8034,7 @@ msgstr "Opriți reîmprospătarea"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/25_storage.js:24
 msgid "Storage"
-msgstr "Depozitare"
+msgstr "Stocare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:629
 msgid "Strict filtering"
@@ -8058,10 +8221,6 @@ msgstr "Spațiu temporar"
 msgid "Terminate"
 msgstr "Terminați"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:205
-msgid "The \"PublicKey\" of that wg interface"
-msgstr "\"PublicKey\" al interfeței wg respective"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:839
 msgid ""
 "The <abbr title=\"Maximum Transmission Unit\">MTU</abbr> to be published in "
@@ -8099,6 +8258,14 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
 msgstr "Comanda <em>block mount</em> a eșuat cu codul %d"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:80
+msgid ""
+"The <em>qrencode</em> package is required for generating an QR code image of "
+"the configuration."
+msgstr ""
+"Pachetul <em>qrencode</em> este necesar pentru a genera o imagine QR code a "
+"configurației."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid ""
@@ -8200,14 +8367,6 @@ msgid "The MTU must not exceed the parent device MTU of %d bytes"
 msgstr ""
 "MTU nu trebuie să depășească MTU-ul dispozitivului părinte de %d octeți"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
-msgid ""
-"The QR-Code works per wg interface, it will be refreshed with every button "
-"click and transfers the following information:"
-msgstr ""
-"Codul QR-Code funcționează prin interfața wg, va fi reîmprospătat la fiecare "
-"apăsare de buton și transferă următoarele informații:"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:864
 msgid "The VLAN ID must be unique"
 msgstr "ID-ul VLAN trebuie să fie unic"
@@ -8306,6 +8465,14 @@ msgstr ""
 msgid "The gateway address must not be a local IP address"
 msgstr "Adresa porții de acces nu trebuie să fie o adresă IP locală"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:754
+msgid ""
+"The generated configuration can be imported into a WireGuard client "
+"application to setup a connection towards this device."
+msgstr ""
+"Configurația generată poate fi importată într-o aplicație client WireGuard "
+"pentru a stabili o conexiune cu acest dispozitiv."
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:166
 msgid "The given SSH public key has already been added."
 msgstr "Cheia publică SSH dată a fost deja adăugată."
@@ -8342,14 +8509,6 @@ msgstr ""
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:63
 msgid "The length of the IPv6 prefix in bits"
 msgstr "Lungimea prefixului IPv6 în biți"
-
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:206
-msgid ""
-"The list of this client's \"AllowedIPs\" or \"0.0.0.0/0, ::/0\" if not "
-"configured"
-msgstr ""
-"Lista \"AllowedIPs\" a acestui client sau \"0.0.0.0.0/0, ::/0\" dacă nu este "
-"configurată"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:165
 msgid "The local IPv4 address"
@@ -8436,6 +8595,16 @@ msgstr ""
 "segmente de rețea. Adesea, există în mod implicit un port Uplink pentru o "
 "conexiune la o rețea mai mare, cum ar fi internetul, și alte porturi pentru "
 "o rețea locală."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:759
+msgid ""
+"The public hostname or IP address of this system the peer should connect to. "
+"This usually is a static public IP address, a static hostname or a DDNS "
+"domain."
+msgstr ""
+"Numele de gazdă public sau adresa IP a acestui sistem la care trebuie să se "
+"conecteze omologul. Aceasta este de obicei o adresă IP publică statică, un "
+"nume de gazdă statică sau un domeniu DDNS."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:569
 msgid "The query response interval must be lower than the query interval value"
@@ -8725,6 +8894,17 @@ msgstr ""
 msgid "Timezone"
 msgstr "Fusul orar"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:440
+msgid ""
+"To fully configure the local WireGuard interface from an existing (e.g. "
+"provider supplied) configuration file, use the <strong><a class=\"full-"
+"import\" href=\"#\">configuration import</a></strong> instead."
+msgstr ""
+"Pentru a configura complet interfața WireGuard locală dintr-un fișier de "
+"configurare existent (de exemplu, furnizat de furnizor), utilizați<strong><a "
+"class=\"full-import\" href=\"#\">în schimb importarea configurației</a></"
+"strong>."
+
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
 msgid "To login…"
 msgstr "Mergeți la autentificare…"
@@ -8891,6 +9071,10 @@ msgstr "Nu se poate determina interfața în flux ascendent"
 msgid "Unable to dispatch"
 msgstr "Imposibilitatea de a expedia"
 
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:85
+msgid "Unable to generate QR code: %s"
+msgstr "Nu se poate genera codul QR: %s"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:9
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:15
 msgid "Unable to load log data:"
@@ -9013,6 +9197,10 @@ msgstr "Modem neacceptat"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:299
 msgid "Unsupported protocol type."
 msgstr "Tipul de protocol nesuportat."
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:534
+msgid "Untitled peer"
+msgstr "Fără titlu omolog"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:151
 msgid "Up"
@@ -9529,9 +9717,13 @@ msgid "Width"
 msgstr "Lățime"
 
 #: modules/luci-compat/luasrc/model/network/proto_wireguard.lua:9
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:61
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:119
 msgid "WireGuard VPN"
 msgstr "VPN WireGuard"
+
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:541
+msgid "WireGuard peer is disabled"
+msgstr "Partenerul WireGuard este dezactivat"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:17
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:10
@@ -9595,7 +9787,7 @@ msgstr "Scrieți jurnalul de sistem într-un fișier"
 msgid "XOR policy (balance-xor, 2)"
 msgstr "Politica XOR (balance-xor, 2)"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4037
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4089
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:297
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:345
 msgid "Yes"
@@ -9875,7 +10067,7 @@ msgstr "fără legătură"
 msgid "non-empty value"
 msgstr "valoare nevidă"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3367
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3419
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:800
 msgid "none"
 msgstr "niciunul"
@@ -9922,7 +10114,7 @@ msgstr "valoare zecimală pozitivă"
 msgid "positive integer value"
 msgstr "valoare întreagă pozitivă"
 
-#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:132
+#: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:178
 msgid "random"
 msgstr "aleatoriu"
 
@@ -9990,7 +10182,7 @@ msgstr "necunoscut"
 msgid "unlimited"
 msgstr "nelimitat"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3732
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3784
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:76
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:138
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:370
