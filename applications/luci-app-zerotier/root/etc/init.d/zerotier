@@ -95,7 +95,7 @@ stop_instance() {
 	rm -f /tmp/zero.log
 	local cfg="$1"
 
-	rm -f "/etc/nftables.d/99-zerotier-rules.nft"
+	rm -f "/usr/share/nftables.d/chain-pre/forward/zerotier.nft" "/usr/share/nftables.d/chain-pre/srcnat/zerotier.nft"
 	fw4 reload
 	echo "zt interface rules removed!" > /tmp/zero.log 2>&1 &
 
