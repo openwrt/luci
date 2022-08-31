@@ -1,10 +1,5 @@
 #!/bin/sh
 
-. /usr/share/libubox/jshn.sh
-
-RULES_UC="/etc/zerotier/zerotier.uc"
-RULES_NFT="/etc/nftables.d/99-zerotier-rules.nft"
-
 zero_enable="$(uci get zerotier.sample_config.enabled)"
 
 [ "${zero_enable}" -eq "1" ] || exit 1
@@ -22,23 +17,21 @@ count=0
 nat_enable="$(uci get zerotier.sample_config.nat)"
 zt0="$(ifconfig | grep 'zt' | awk '{print $1}')"
 echo "${zt0}" > "/tmp/zt.nif"
+rm -f "/usr/share/nftables.d/chain-pre/forward/zerotier.nft" "/usr/share/nftables.d/chain-pre/srcnat/zerotier.nft" > /dev/null 2>&1
 
 [ "${nat_enable}" -eq "1" ] && {
+	[ ! -d "/usr/share/nftables.d/chain-pre/forward" ] && mkdir -p "/usr/share/nftables.d/chain-pre/forward"
+	[ ! -d "/usr/share/nftables.d/chain-pre/srcnat" ] && mkdir -p "/usr/share/nftables.d/chain-pre/srcnat"
 	for i in ${zt0}
 	do
 		ip_segment="$(ip route | grep "dev $i proto kernel" | awk '{print $1}')"
-		ip_segments="${ip_segments:+$ip_segments\n}${ip_segment}"
+		echo 'iifname '$i' counter accept comment "!fw4: Zerotier allow inbound forward '$i'"' >> /usr/share/nftables.d/chain-pre/forward/zerotier.nft
+		echo 'oifname '$i' counter accept comment "!fw4: Zerotier allow outbound forward '$i'"' >> /usr/share/nftables.d/chain-pre/forward/zerotier.nft
+		echo 'oifname '$i' counter masquerade comment "!fw4: Zerotier '$i' outbound postrouting masq"' >> /usr/share/nftables.d/chain-pre/srcnat/zerotier.nft
+		[ ! -z $ip_segment ] && echo 'ip saddr '$ip_segment' counter masquerade comment "!fw4: Zerotier '$ip_segment' postrouting masq"' >> /usr/share/nftables.d/chain-pre/srcnat/zerotier.nft
 	done
-
-	tmp="/tmp/zerotier"
-	json_init
-	json_add_string o_ifnames "$(echo -e "${zt0}" | awk '{print $1}')"
-	json_add_string o_ip_segments "$(echo -e "${ip_segments}" | awk '{print $1}')"
-	json_dump -i >"$tmp.json"
-	if utpl -F "$tmp.json" -S "$RULES_UC" > "$tmp.nft" && ! cmp -s "$tmp.nft" "$RULES_NFT"; then
-		echo "table inet chk {include \"$tmp.nft\";}" > "$tmp.nft.chk"
-		! nft -f "$tmp.nft.chk" -c || { mv -f "$tmp.nft" "$RULES_NFT"; fw4 reload; }
-		echo "Add zt interface rules success!"
-	fi
-	rm -f "$tmp.json" "$tmp.nft" "$tmp.nft.chk"
+	echo "zt interface rules added!" > /tmp/zero.log 2>&1 &
+	uci -q set firewall.@defaults[0].auto_includes="1"
+	uci commit firewall
+	fw4 reload
 }
