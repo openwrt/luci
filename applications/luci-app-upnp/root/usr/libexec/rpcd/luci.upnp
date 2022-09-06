@@ -62,6 +62,58 @@ local methods = {
 				ipt:close()
 			end
 
+			local nft = io.popen("nft --handle list chain inet fw4 upnp_prerouting")
+			if nft then
+				local num = 1
+				local upnpf = lease_file and io.open(lease_file, "r")
+				while true do
+					local ln = nft:read("*l")
+					if not ln then
+						break
+					elseif ln:match("iif ") then
+						local proto, extport, intaddr, intport =
+							ln:match('^\t\tiif ".-" @nh,72,8 (0x[0-9a-f]+) th dport ([0-9]+) dnat ip to ([0-9%.]+):([0-9]+)')
+						local descr = ""
+
+						if (proto == "0x6" or proto == "0x11") and extport and intaddr and intport then
+							proto = (proto == "0x6") and "TCP" or "UDP"
+							extport = tonumber(extport)
+							intport = tonumber(intport)
+
+							if upnpf then
+								local uln = upnpf:read("*l")
+								if uln then descr = uln:match(string.format("^%s:%d:%s:%d:%%d*:(.*)$", proto, extport, intaddr, intport)) end
+								if not descr then descr = "" end
+							end
+
+							local host_hint, _, e
+
+							for _,e in pairs(ipv4_hints) do
+								if e[1] == intaddr then
+									host_hint = e[2]
+									break
+								end
+							end
+
+							rule[#rule+1] = {
+								num = tostring(num),
+								proto   = proto,
+								extport = extport,
+								intaddr = intaddr,
+								host_hint = host_hint,
+								intport = intport,
+								descr = descr
+							}
+
+							num = num + 1
+						end
+					end
+				end
+
+				if upnpf then upnpf:close() end
+				nft:close()
+			end
+
 			return { rules = rule }
 		end
 	},
@@ -75,12 +127,10 @@ local methods = {
 			if idx and idx > 0 then
 				local uci = UCI.cursor()
 
-				sys.call("iptables -t filter -D MINIUPNPD %d 2>/dev/null" % idx)
-				sys.call("iptables -t nat -D MINIUPNPD %d 2>/dev/null" % idx)
-
 				local lease_file = uci:get("upnpd", "config", "upnp_lease_file")
 				if lease_file and fs.access(lease_file) then
 					sys.call("sed -i -e '%dd' %s" %{ idx, util.shellquote(lease_file) })
+					sys.call("/etc/init.d/miniupnpd restart")
 				end
 
 				uci.unload()
