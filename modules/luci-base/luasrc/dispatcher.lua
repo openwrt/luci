@@ -121,12 +121,11 @@ local function check_uci_depends(conf)
 
 	for config, values in pairs(conf) do
 		if values == true then
-			local found = false
-			uci:foreach(config, nil, function(s)
-				found = true
+			local _, err = uci:foreach(config, nil, function(s)
 				return false
 			end)
-			if not found then
+
+			if err then
 				return false
 			end
 		elseif type(values) == "table" then
