@@ -128,11 +128,11 @@ PKG_GITBRANCH?=$(if $(DUMP),x,$(strip $(shell \
 
 include $(INCLUDE_DIR)/package.mk
 
-# LUCI_SUBMENU: the submenu-item below the LuCI top-level menu inside OpoenWrt menuconfig
+# LUCI_SUBMENU: the submenu-item below the LuCI top-level menu inside OpenWrt menuconfig
 #               usually one of the LUCI_MENU.* definitions
 # LUCI_SUBMENU_DEFAULT: the regular SUBMENU defined by LUCI_TYPE or derrived from the packagename
 # LUCI_SUBMENU_FORCED: manually forced value SUBMENU to set to by explicit definiton
-#                      can be any string, "none" disables the creation of a submenu 
+#                      can be any string, "none" disables the creation of a submenu
 #                      most usefull in combination with LUCI_CATEGORY, to make the package appear
 #                      anywhere in the menu structure
 LUCI_SUBMENU_DEFAULT=$(if $(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.app))
@@ -222,7 +222,7 @@ endef
 endif
 
 # some generic macros that can be used by all packages
-ifeq ($(LUCI_MINIFY_JS),1)
+ifeq ($(LUCI_MINIFY_LUA),1)
   define SrcDiet
 	$(FIND) $(1) -type f -name '*.lua' | while read src; do \
 		if LUA_PATH="$(STAGING_DIR_HOSTPKG)/lib/lua/5.1/?.lua" luasrcdiet --noopt-binequiv -o "$$$$src.o" "$$$$src"; \
@@ -281,8 +281,8 @@ ifeq ($(PKG_NAME),luci-base)
 	default y
 
    config LUCI_CSSTIDY
-        bool "Minify CSS files"
-        default y
+	bool "Minify CSS files"
+	default y
 
    menu "Translations"$(foreach lang,$(LUCI_LANGUAGES),$(if $(LUCI_LANG.$(lang)),
 
