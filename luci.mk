@@ -212,7 +212,7 @@ endef
 ifndef Package/$(PKG_NAME)/postinst
 define Package/$(PKG_NAME)/postinst
 [ -n "$${IPKG_INSTROOT}" ] || { \
-	rm -f /tmp/luci-indexcache
+	rm -f /tmp/luci-indexcache.*
 	rm -rf /tmp/luci-modulecache/
 	killall -HUP rpcd 2>/dev/null
 	exit 0
