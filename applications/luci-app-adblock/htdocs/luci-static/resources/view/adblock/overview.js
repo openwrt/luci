@@ -382,15 +382,6 @@ return view.extend({
 		o.datatype = 'range(1,300)';
 		o.rmempty = true;
 
-		o = s.taboption('additional', form.ListValue, 'adb_maxqueue', _('Download Queue'), _('Size of the download queue for download processing (incl. sorting, merging etc.) in parallel.'));
-		o.value('1');
-		o.value('2');
-		o.value('4');
-		o.value('8');
-		o.value('16');
-		o.value('32');
-		o.rmempty = false;
-
 		o = s.taboption('additional', form.Value, 'adb_tmpbase', _('Base Temp Directory'), _('Base Temp Directory for all adblock related runtime operations, \
 			e.g. downloading, sorting, merging etc.'));
 		o.placeholder = '/tmp';
@@ -483,10 +474,6 @@ return view.extend({
 		o = s.taboption('adv_dns', form.Value, 'adb_jaildir', _('Jail Directory'), _('Target directory for the generated jail blocklist \'adb_list.jail\'.'));
 		o.depends('adb_jail', '1');
 		o.placeholder = '/tmp';
-		o.rmempty = true;
-
-		o = s.taboption('adv_dns', form.Flag, 'adb_dnsinotify', _('Disable DNS Restarts'), _('Disable adblock triggered restarts for dns backends with autoload/inotify functions.'));
-		o.depends('adb_dnsflush', '0');
 		o.rmempty = true;
 
 		/*
