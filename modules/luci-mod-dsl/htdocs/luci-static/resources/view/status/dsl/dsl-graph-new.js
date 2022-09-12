@@ -21,7 +21,7 @@ function myBitsFunction(value, index, array) {
 function mySnrFunction(value, index, array) {
    let result;
 
-   if (value == 'NaN') {                                                                      // means error value
+   if (value == null) {                                                                      // means error value
       result = {x: index * this.groupSize, y: -40 , error: true}
    } else {
       result = {x: index * this.groupSize, y: value, error: false}
@@ -33,7 +33,7 @@ function mySnrFunction(value, index, array) {
 function myQLNFunction(value, index, array) {
    let result;
 
-   if (value == 'NaN') {                                                                 // means error value
+   if (value == null) {                                                                 // means error value
       result = { x: index * this.groupSize, y:  - 150, error: true}
    } else {
        result = { x: index * this.groupSize, y:  value, error: false}
@@ -45,7 +45,7 @@ function myQLNFunction(value, index, array) {
 function myHLOGFunction(value, index, array) {
    let result;
 
-   if (value == 'NaN') {                                                            // means error value
+   if (value == null) {                                                            // means error value
       result = {x: index * this.groupSize, y: -100, error: true}
    } else {
        result = {x: index * this.groupSize, y: value, error: false}    };
