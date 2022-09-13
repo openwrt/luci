@@ -47,7 +47,6 @@ const Class = {
 		if (!this.L) {
 			this.L = this.env.dispatcher.load_luabridge().create();
 			this.L.set('L', proto({ write: print }, this.env));
-			this.L.eval('package.path = "/usr/lib/lua/luci/ucodebridge/?.lua;" .. package.path');
 			this.L.invoke('require', 'luci.ucodebridge');
 
 			this.env.lua_active = true;
