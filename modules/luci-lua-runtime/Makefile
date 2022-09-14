@@ -15,6 +15,7 @@ LUCI_TITLE:=LuCI Lua runtime libraries
 LUCI_DEPENDS:= \
 	+luci-base \
 	+lua \
+	+luci-lib-base \
 	+luci-lib-nixio \
 	+luci-lib-ip \
 	+luci-lib-jsonc \

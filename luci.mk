@@ -138,6 +138,12 @@ include $(INCLUDE_DIR)/package.mk
 LUCI_SUBMENU_DEFAULT=$(if $(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.$(LUCI_TYPE)),$(LUCI_MENU.app))
 LUCI_SUBMENU=$(if $(LUCI_SUBMENU_FORCED),$(LUCI_SUBMENU_FORCED),$(LUCI_SUBMENU_DEFAULT))
 
+ifneq ($(wildcard ${CURDIR}/luasrc/*),)
+ ifneq ($(filter-out luci-lib-base luci-lua-runtime,$(PKG_NAME)),)
+  LUCI_DEPENDS += +luci-lua-runtime
+ endif
+endif
+
 define Package/$(PKG_NAME)
   SECTION:=$(LUCI_SECTION)
   CATEGORY:=$(LUCI_CATEGORY)
