@@ -91,6 +91,8 @@ return view.extend({
 				_this.services[service.name.replace('.json','')] = true
 			});
 
+			this.services = Object.fromEntries(Object.entries(this.services).sort());
+
 			list_service.forEach(function (service) {
 				if (!_this.services[service])
 					_this.services[service] = false;
