@@ -116,6 +116,9 @@ return network.registerProtocol('openconnect', {
 
 		o = s.taboption('general', form.Value, 'password2', _('Password2'));
 		o.password = true;
+	
+		o = s.taboption('general', form.Value, 'proxy', _('Proxy Server'));
+		o.optional = true;
 
 		o = s.taboption('general', form.TextValue, 'usercert', _('User certificate (PEM encoded)'));
 		o.rows = 10;
@@ -157,5 +160,10 @@ return network.registerProtocol('openconnect', {
 		o.optional = true;
 		o.placeholder = 1406;
 		o.datatype = 'range(68, 9200)';
+		
+		o = s.taboption('advanced', form.Value, 'reconnect_timeout', _('Reconnect Timeout'));
+		o.optional = true;
+		o.placeholder = 300;
+		o.datatype = 'min(10)';
 	}
 });
