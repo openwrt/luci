@@ -776,6 +776,24 @@ function run_action(request_path, lang, tree, resolved, action) {
 		}));
 		break;
 
+	case 'cbi':
+		http.write(render(() => {
+			runtime.call('luci.dispatcher', 'invoke_cbi_action',
+				action.path, null,
+				...resolved.ctx.request_args
+			);
+		}));
+		break;
+
+	case 'form':
+		http.write(render(() => {
+			runtime.call('luci.dispatcher', 'invoke_form_action',
+				action.path,
+				...resolved.ctx.request_args
+			);
+		}));
+		break;
+
 	case 'alias':
 		dispatch(http, [ ...split(action.path, '/'), ...resolved.ctx.request_args ]);
 		break;
