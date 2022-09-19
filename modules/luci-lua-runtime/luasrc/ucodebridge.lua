@@ -5,6 +5,7 @@ local coroutine, assert, error, type, require = coroutine, assert, error, type, 
 local tmpl = require "luci.template"
 local util = require "luci.util"
 local http = require "luci.http"
+local sys  = require "luci.sys"
 
 
 --- LuCI ucode bridge library.
