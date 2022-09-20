@@ -1,5 +1,6 @@
 'use strict';
 'require baseclass';
+'require network';
 'require rpc';
 
 var callDSLMetrics = rpc.declare({
@@ -44,7 +45,7 @@ return baseclass.extend({
 	title: _('DSL'),
 
 	load: function() {
-		if (!L.hasSystemFeature('dsl'))
+		if (!network.getDSLModemType())
 			return Promise.reject();
 
 		return L.resolveDefault(callDSLMetrics(), {});
