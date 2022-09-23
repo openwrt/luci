@@ -9,7 +9,6 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Statistics Application
 LUCI_DEPENDS:= \
 	+luci-base \
-	+luci-lib-jsonc \
 	+collectd \
 	+rrdtool1 \
 	+collectd-mod-rrdtool \
