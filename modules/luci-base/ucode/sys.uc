@@ -49,7 +49,7 @@ export function conntrack_list(callback) {
 
 	if (nfct) {
 		for (let line = nfct.read('line'); length(line); line = nfct.read('line')) {
-			let m = match(line, /^(ipv[46]) +([0-9]+) +\S+ +([0-9]+) +(.+)\n$/);
+			let m = match(line, /^(ipv[46]) +([0-9]+) +\S+ +([0-9]+)( +.+)\n$/);
 
 			if (!m)
 				continue;
@@ -60,7 +60,7 @@ export function conntrack_list(callback) {
 			let tuples = m[4];
 			let timeout = null;
 
-			m = match(tuples, /^([0-9]+) (.+)$/);
+			m = match(tuples, /^ +([0-9]+)( .+)$/);
 
 			if (m) {
 				timeout = m[1];
