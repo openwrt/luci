@@ -26,8 +26,8 @@ const methods = {
 				let idx = init_index(name);
 
 				scripts[name] = {
-					index: idx[0],
-					stop: idx[1],
+					index: idx?.[0],
+					stop: idx?.[1],
 					enabled: init_enabled(name)
 				};
 			}
