@@ -121,7 +121,7 @@ export function init_list() {
 };
 
 export function init_index(name) {
-	const src = readfile(`/etc/init.d/${basename(name)}`, 1024);
+	const src = readfile(`/etc/init.d/${basename(name)}`, 2048);
 	const idx = [];
 
 	for (let m in match(src, /^[[:space:]]*(START|STOP)=('[0-9][0-9]'|"[0-9][0-9]"|[0-9][0-9])[[:space:]]*$/gs)) {
