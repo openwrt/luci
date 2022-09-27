@@ -42,7 +42,7 @@ function s.render(self, sid)
 						<tr class="tr">
 							<td class="td"><%= (count_loop == 0) and mac or "" %></td>
 							<td class="td"><%= mac2 %></td>
-							<td class="td"><%= "%.3f" %( data2.freq / 1000 ) %> GHz Channel: <%= "%d" %( status.frequency_to_channel(data2.freq) ) %></td>
+							<td class="td"><%= "%.3f" %( data2.freq / 1000 ) %> GHz Channel: <%= "%s" %( status.frequency_to_channel(data2.freq) ) %></td>
 							<td class="td"><%= (data2.ht_capabilities == true and data2.ht_support == true) and "True" or "False" %></td>
 							<td class="td"><%= (data2.vht_capabilities == true and data2.vht_support == true) and "True" or "False" %></td>
 							<td class="td"><%= "%d" % data2.signal %></td>
