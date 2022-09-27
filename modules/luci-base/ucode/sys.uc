@@ -67,7 +67,7 @@ export function conntrack_list(callback) {
 				tuples = m[2];
 			}
 
-			if (index(tuples, 'TIME_WAIT ') === 0)
+			if (index(tuples, 'TIME_WAIT') !== -1)
 				continue;
 
 			let e = {
