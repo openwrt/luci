@@ -184,27 +184,28 @@ else
 endif
 
 define Package/$(PKG_NAME)/install
-	if [ -d $(PKG_BUILD_DIR)/luasrc ]; then \
-	  $(INSTALL_DIR) $(1)$(LUCI_LIBRARYDIR); \
-	  cp -pR $(PKG_BUILD_DIR)/luasrc/* $(1)$(LUCI_LIBRARYDIR)/; \
-	  $(FIND) $(1)$(LUCI_LIBRARYDIR)/ -type f -name '*.luadoc' | $(XARGS) rm; \
-	  $(if $(CONFIG_LUCI_SRCDIET),$(call SrcDiet,$(1)$(LUCI_LIBRARYDIR)/),true); \
-	  $(call SubstituteVersion,$(1)$(LUCI_LIBRARYDIR)/); \
-	else true; fi
-	if [ -d $(PKG_BUILD_DIR)/htdocs ]; then \
-	  $(INSTALL_DIR) $(1)$(HTDOCS); \
-	  cp -pR $(PKG_BUILD_DIR)/htdocs/* $(1)$(HTDOCS)/; \
-	  $(if $(CONFIG_LUCI_JSMIN),$(call JsMin,$(1)$(HTDOCS)/),true); \
-	  $(if $(CONFIG_LUCI_CSSTIDY),$(call CssTidy,$(1)$(HTDOCS)/),true); \
-	else true; fi
-	if [ -d $(PKG_BUILD_DIR)/root ]; then \
-	  $(INSTALL_DIR) $(1)/; \
-	  cp -pR $(PKG_BUILD_DIR)/root/* $(1)/; \
-	else true; fi
-	if [ -d $(PKG_BUILD_DIR)/src ]; then \
-	  $(call Build/Install/Default) \
-	  $(CP) $(PKG_INSTALL_DIR)/* $(1)/; \
-	else true; fi
+
+ ifneq ($(wildcard ${CURDIR}/luasrc),)
+	$(INSTALL_DIR) $(1)$(LUCI_LIBRARYDIR)
+	cp -pR $(PKG_BUILD_DIR)/luasrc/* $(1)$(LUCI_LIBRARYDIR)/
+	$(FIND) $(1)$(LUCI_LIBRARYDIR)/ -type f -name '*.luadoc' | $(XARGS) rm
+	$(if $(CONFIG_LUCI_SRCDIET),$(call SrcDiet,$(1)$(LUCI_LIBRARYDIR)/),true)
+	$(call SubstituteVersion,$(1)$(LUCI_LIBRARYDIR)/)
+ endif
+ ifneq ($(wildcard ${CURDIR}/htdocs),)
+	$(INSTALL_DIR) $(1)$(HTDOCS)
+	cp -pR $(PKG_BUILD_DIR)/htdocs/* $(1)$(HTDOCS)/
+	$(if $(CONFIG_LUCI_JSMIN),$(call JsMin,$(1)$(HTDOCS)/),true)
+	$(if $(CONFIG_LUCI_CSSTIDY),$(call CssTidy,$(1)$(HTDOCS)/),true)
+ endif
+ ifneq ($(wildcard ${CURDIR}/root),)
+	$(INSTALL_DIR) $(1)/
+	cp -pR $(PKG_BUILD_DIR)/root/* $(1)/
+ endif
+ ifneq ($(wildcard ${CURDIR}/src),)
+	$(call Build/Install/Default)
+	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
+ endif
 endef
 
 ifndef Package/$(PKG_NAME)/postinst
