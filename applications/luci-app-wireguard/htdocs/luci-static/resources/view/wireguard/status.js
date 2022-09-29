@@ -4,6 +4,7 @@
 'require form';
 'require poll';
 
+var viewopt;
 
 var callGetWgInstances = rpc.declare({
 	object: 'luci.wireguard',
@@ -75,7 +76,7 @@ function generatePeerRows(peers) {
 		var iconSrc = getTunnelIcon(peer.latest_handshake);
 
 		peerRows.push(E('tr', {
-			'class': 'tr cbi-section-table-row'
+			'class': 'tr cbi-section-table-row', 'tr-section-id' : peer.name
 		}, [
 			E('td', {
 				'class': 'td peer-name',
@@ -160,6 +161,16 @@ return view.extend({
 				);
 				var iconEl = peerSection.querySelector('.tunnel-icon');
 				iconEl.src = iconSrc;
+				
+				var row = section.querySelector(
+                                        '[tr-section-id="%q"]'.format(peer.name)
+                                );
+
+                                if ( (viewopt.formvalue(ifaceName)==0) || ( (new Date().getTime() / 1000 - peer.latest_handshake) < 140 )) {
+                                     row.style.display='table-row';
+                                } else {
+                                     row.style.display='none';
+                                }
 
 				peerData.forEach(function (option) {
 					if (option[2]) {
@@ -196,6 +207,9 @@ return view.extend({
 					o.readonly = true;
 				}
 			});
+			
+     		        viewopt = s.option(form.Flag, 'wireguard_display_connected', 'Display only connected peers');
+                        viewopt.default=0;
 
 			o = s.option(form.SectionValue, 'peers', form.TypedSection, 'peers');
 			ss = o.subsection;
