@@ -2,16 +2,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-05-03 12:55+0000\n"
+"PO-Revision-Date: 2022-09-25 14:22+0000\n"
 "Last-Translator: semih <semiht@gmail.com>\n"
-"Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/luci/tr/"
-">\n"
+"Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/luci/tr/>"
+"\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -280,6 +280,10 @@ msgid ""
 "internet connection in the mesh) or having the gateway support turned off "
 "entirely (which is the default setting)."
 msgstr ""
+"Bir batman-adv düğümü, sunucu modunda (internet bağlantısını ağ ile "
+"paylaşarak) veya istemci modunda (ağ içinde en uygun internet bağlantısını "
+"ararken) veya ağ geçidi desteğinin tamamen kapatılmasıyla (varsayılan ayar "
+"budur) çalışabilir."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:370
 msgid "A configuration for the device \"%s\" already exists"
@@ -421,7 +425,7 @@ msgstr "Erişim Noktası"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:60
 msgid "Access Point Isolation"
-msgstr ""
+msgstr "Erişim Noktası İzolasyonu"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:388
 msgid "Actions"
@@ -618,7 +622,7 @@ msgstr "Yaşlanma süresi"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:50
 msgid "Aggregate Originator Messages"
-msgstr ""
+msgstr "Gönderen Mesajlarını Birleştir"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
 msgid "Aggregate Transmit Power (ACTATP)"
@@ -767,7 +771,7 @@ msgstr "Gönderilecek Yinelenen Adres Algılama problarının miktarı"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:119
 msgid "Amount of seconds to wait for the modem to become ready"
-msgstr ""
+msgstr "Modemin hazır olması için beklenecek saniye"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:608
 msgid "An error occurred while saving the form:"
@@ -1156,6 +1160,14 @@ msgid ""
 "the other end. Per default fragmentation is enabled and inactive if the "
 "packet fits but it is possible to deactivate the fragmentation entirely."
 msgstr ""
+"Batman-adv, ağ üzerinden akan tek noktaya yayın verileri için yerleşik bir "
+"katman 2 parçalanmasına sahiptir ve bu, MTU'yu 1500 baytlık standart "
+"Ethernet paket boyutunun ötesine yükseltmeye izin vermeyen arabirimler / "
+"bağlantılar üzerinden batman-adv'yi çalıştırmaya izin verir. Parçalanma "
+"etkinleştirildiğinde, batman-adv, büyük boyutlu paketleri otomatik olarak "
+"parçalara ayıracak ve diğer uçta birleştirecektir. Varsayılan olarak "
+"parçalanma etkindir, paket uyuyorsa etkin değildir ancak parçalamayı tamamen "
+"devre dışı bırakmak mümkündür."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:974
 msgid "Beacon Interval"
@@ -1283,6 +1295,8 @@ msgid ""
 "CA certificate (PEM encoded; Use instead of system-wide store to verify the "
 "gateway certificate."
 msgstr ""
+"CA sertifikası (PEM kodlamalı; Ağ geçidi sertifikasını doğrulamak için "
+"sistem genelinde depolama yerine kullanın."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
 msgid "CA certificate; if empty it will be saved after the first connection."
@@ -1606,7 +1620,7 @@ msgstr "Yapılandırma"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:692
 msgid "Configuration Export"
-msgstr ""
+msgstr "Yapılandırmayı Dışa Aktarma"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4563
 msgid "Configuration changes applied."
@@ -1691,7 +1705,7 @@ msgstr "Bağlantı denemesi başarısız oldu."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:759
 msgid "Connection endpoint"
-msgstr ""
+msgstr "Bağlantı uç noktası"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Connection lost"
@@ -1703,7 +1717,7 @@ msgstr "Bağlantılar"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4637
 msgid "Connectivity change"
-msgstr ""
+msgstr "Bağlantı değişikliği"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:31
 msgctxt "nft ct state"
@@ -1800,12 +1814,12 @@ msgstr "Mevcut güç"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:28
 msgctxt "nft meta hour"
 msgid "Current time"
-msgstr ""
+msgstr "Şimdiki zaman"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:29
 msgctxt "nft meta day"
 msgid "Current weekday"
-msgstr ""
+msgstr "Şu andaki gün"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:573
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:575
@@ -1911,7 +1925,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:292
 msgid "DNS setting is invalid"
-msgstr ""
+msgstr "DNS ayarı geçersiz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid "DNS weight"
@@ -2205,7 +2219,7 @@ msgstr "Devre dışı"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:543
 msgctxt "Label indicating that WireGuard peer is disabled"
 msgid "Disabled"
-msgstr ""
+msgstr "Etkisizleştirilmiş"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1191
 msgid "Disassociate On Low Acknowledgement"
@@ -2256,7 +2270,7 @@ msgstr "Metre cinsinden en uzak ağ üyesine olan mesafe."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
-msgstr ""
+msgstr "Dağıtılmış ARP Tablosu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:542
 msgid ""
@@ -2352,11 +2366,11 @@ msgstr "\"%s\" dizinini gerçekten yinelemeli olarak silmek istiyor musunuz?"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:615
 msgid "Do you want to replace the current PSK?"
-msgstr ""
+msgstr "Mevcut şifreyi (PSK) değiştirmek istiyor musunuz?"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:100
 msgid "Do you want to replace the current keys?"
-msgstr ""
+msgstr "Mevcut anahtarları değiştirmek istiyor musunuz?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:592
 msgid "Domain"
@@ -2401,6 +2415,8 @@ msgid ""
 "Drag or paste a valid <em>*.conf</em> file below to configure the local "
 "WireGuard interface."
 msgstr ""
+"Yerel WireGuard arayüzünü yapılandırmak için geçerli bir <em>*.conf</em> "
+"dosyasını aşağıya sürükleyin veya yapıştırın."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2698
 msgid "Drag to reorder"
@@ -2516,7 +2532,7 @@ msgstr "Çıkış QoS eşlemesi"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:13
 msgctxt "nft meta oif"
 msgid "Egress device id"
-msgstr ""
+msgstr "Çıkış cihazı kimliği"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:11
 msgctxt "nft meta oifname"
@@ -2741,6 +2757,8 @@ msgid ""
 "Enables more efficient, group aware multicast forwarding infrastructure in "
 "batman-adv."
 msgstr ""
+"batman-adv'de daha verimli, grup farkındalıklı çok noktaya yayın yönlendirme "
+"altyapısı sağlar."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:518
 msgid "Enables the Spanning Tree Protocol on this bridge"
@@ -2773,7 +2791,7 @@ msgstr "Uç Nokta Bağlantı Noktası"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:325
 msgid "Endpoint setting is invalid"
-msgstr ""
+msgstr "Uç nokta ayarı geçersiz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:684
 msgid "Enforce IGMPv1"
@@ -2960,7 +2978,7 @@ msgstr "Sistem şifresi değiştirilemedi."
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:21
 msgid "Failed to configure modem"
-msgstr ""
+msgstr "Modem yapılandırılamadı"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4495
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
@@ -2968,11 +2986,11 @@ msgstr "%ds içinde ayarlar uygulanamadı, geri alma bekleniyor…"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:22
 msgid "Failed to connect"
-msgstr ""
+msgstr "Bağlanmada hata meydana geldi"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:23
 msgid "Failed to disconnect"
-msgstr ""
+msgstr "Bağlantıyı kesmede hata meydana geldi"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:37
 msgid "Failed to execute \"/etc/init.d/%s %s\" action: %s"
@@ -2980,15 +2998,15 @@ msgstr "\"/etc/init.d/%s %s\" eylemi yürütülemedi: %s"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:25
 msgid "Failed to get modem information"
-msgstr ""
+msgstr "Modem bilgileri alınamadı"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:26
 msgid "Failed to initialize modem"
-msgstr ""
+msgstr "Modem başlatılamadı"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:30
 msgid "Failed to set operating mode"
-msgstr ""
+msgstr "Çalışma modu ayarlanamadı"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2708
 msgid "File"
@@ -3235,7 +3253,7 @@ msgstr "Yönlendirme modu"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:80
 msgid "Fragmentation"
-msgstr ""
+msgstr "Parçalanma"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:963
 msgid "Fragmentation Threshold"
@@ -3289,7 +3307,7 @@ msgstr "Ağ Geçidi"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:85
 msgid "Gateway Mode"
-msgstr ""
+msgstr "Ağ Geçidi Modu"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
 msgid "Gateway Ports"
@@ -3334,27 +3352,27 @@ msgstr "Arşiv oluştur"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:811
 msgid "Generate configuration"
-msgstr ""
+msgstr "Yapılandırma oluştur"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:851
 msgid "Generate configuration…"
-msgstr ""
+msgstr "Yapılandırma oluştur…"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:109
 msgid "Generate new key pair"
-msgstr ""
+msgstr "Yeni anahtar çifti oluştur"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:623
 msgid "Generate preshared key"
-msgstr ""
+msgstr "Önceden paylaşılan anahtar oluştur"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:693
 msgid "Generates a configuration suitable for import on a WireGuard peer"
-msgstr ""
+msgstr "Bir WireGuard eşine içe aktarma için uygun bir yapılandırma oluşturur"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:785
 msgid "Generating QR code…"
-msgstr ""
+msgstr "QR kodu oluşturuluyor…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:79
 msgid "Given password confirmation did not match, password not changed!"
@@ -3410,7 +3428,7 @@ msgstr "LuCI Wireguard prosedürlerine erişim izni verin"
 
 #: protocols/luci-proto-openfortivpn/root/usr/share/rpcd/acl.d/luci-openfortivpn.json:3
 msgid "Grant access to LuCI openfortivpn procedures"
-msgstr ""
+msgstr "LuCI openfortivpn prosedürlerine Yetki ver"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:20
 msgid "Grant access to SSH configuration"
@@ -3557,7 +3575,7 @@ msgstr "Kanca: <strong>%h</strong> (%h), Öncelik: <strong>%d</strong>"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:92
 msgid "Hop Penalty"
-msgstr ""
+msgstr "Atlama karşılığı"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:57
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2169
@@ -3991,6 +4009,9 @@ msgid ""
 "the new IP</strong> is required within %d seconds to confirm the settings, "
 "otherwise modifications will be reverted."
 msgstr ""
+"LuCI'ye erişmek için kullanılan IP adresi değişirse, ayarları onaylamak için "
+"%d saniye içinde <strong>yeni IP'ye manuel olarak yeniden bağlanma</strong> "
+"gerekir, aksi takdirde değişiklikler geri alınır."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
@@ -4042,29 +4063,29 @@ msgstr "İmaj denetimi başarısız oldu:"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:478
 msgid "Import as peer"
-msgstr ""
+msgstr "Eş olarak içe aktar"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:478
 msgid "Import configuration"
-msgstr ""
+msgstr "Yapılandırmayı içe aktar"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:506
 msgid "Import configuration as peer…"
-msgstr ""
+msgstr "Yapılandırmayı eş olarak içe aktar…"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:492
 msgid "Import settings"
-msgstr ""
+msgstr "Ayarları içe aktar"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:378
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:405
 msgid "Imported peer configuration"
-msgstr ""
+msgstr "İçe aktarılan eş yapılandırması"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:188
 msgid "Imports settings from an existing WireGuard configuration file"
-msgstr ""
+msgstr "Ayarları mevcut bir WireGuard yapılandırma dosyasından içe aktarır"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
 msgid "In"
@@ -4075,6 +4096,9 @@ msgid ""
 "In bridged LAN setups it is advisable to enable the bridge loop avoidance in "
 "order to avoid broadcast loops that can bring the entire LAN to a standstill."
 msgstr ""
+"Köprülü LAN kurulumlarında, tüm LAN'ı durma noktasına getirebilecek yayın "
+"döngülerinden kaçınmak için köprü döngüsünden kaçınmanın etkinleştirilmesi "
+"tavsiye edilir."
 
 #: modules/luci-base/luasrc/view/csrftoken.htm:13
 msgid ""
@@ -4365,7 +4389,7 @@ msgstr "Geçersiz kullanıcı adı ve/veya şifre! Lütfen tekrar deneyin."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:13
 msgid "Invert blinking"
-msgstr ""
+msgstr "Yanıp sönmeyi ters çevir"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:196
 msgid "Invert match"
@@ -4447,7 +4471,7 @@ msgstr "Giden paketler için anahtar (isteğe bağlı)."
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:551
 msgctxt "Label indicating that WireGuard peer lacks public key"
 msgid "Key missing"
-msgstr ""
+msgstr "Anahtar eksik"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:71
 msgctxt "nft unit"
@@ -4572,7 +4596,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:671
 msgid "Legacy rules detected"
-msgstr ""
+msgstr "Eski kurallar algılandı"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4377
 msgid "Legend:"
@@ -4613,7 +4637,7 @@ msgstr "Bağlantı Açık"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:77
 msgctxt "nft @ll,off,len"
 msgid "Link layer header bits %d-%d"
-msgstr ""
+msgstr "Bağlantı katmanı başlık bitleri %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:432
 msgid "List of IP addresses to convert into NXDOMAIN responses."
@@ -4688,7 +4712,7 @@ msgstr "Bu arayüzleri dinlemeyi ve geri dönüşü sınırlayın."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:299
 msgid "ListenPort setting is invalid"
-msgstr ""
+msgstr "ListenPort ayarı geçersiz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:438
 msgid "Listening port for inbound DNS queries."
@@ -4705,7 +4729,7 @@ msgstr "Ortalama Yük"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:189
 msgid "Load configuration…"
-msgstr ""
+msgstr "Yapılandırma Yükle…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1170
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1976
@@ -5066,11 +5090,11 @@ msgstr "Mesh kimliği"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh Routing"
-msgstr ""
+msgstr "Mesh Yönlendirme"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh and routing related options"
-msgstr ""
+msgstr "Mesh ve yönlendirme ile ilgili seçenekler"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:404
 msgid "Method not found"
@@ -5281,7 +5305,7 @@ msgstr "Çok noktaya yayın"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:99
 msgid "Multicast Mode"
-msgstr ""
+msgstr "Çok noktaya yayın modu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:705
 msgid "Multicast routing"
@@ -5358,11 +5382,11 @@ msgstr "Ağ"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:104
 msgid "Network Coding"
-msgstr ""
+msgstr "Ağ Kodlama"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:76
 msgid "Network Mode"
-msgstr ""
+msgstr "Ağ Modu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2009
 msgid "Network SSID"
@@ -5405,7 +5429,7 @@ msgstr "Ağ cihazı tablosu \"%h\""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:78
 msgctxt "nft @nh,off,len"
 msgid "Network header bits %d-%d"
-msgstr ""
+msgstr "Ağ başlık bitleri %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:426
 msgid "Network ifname configuration migration"
@@ -5492,7 +5516,7 @@ msgstr "Hiçbir istemci ilişkilendirilmedi"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:27
 msgid "No control device specified"
-msgstr ""
+msgstr "Kontrol cihazı belirtilmedi"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3206
 msgctxt "empty table placeholder"
@@ -5530,6 +5554,8 @@ msgid ""
 "No fixed interface listening port defined, peers might not be able to "
 "initiate connections to this WireGuard instance!"
 msgstr ""
+"Tanımlanmış sabit bir arabirim dinleme bağlantı noktası yok, eşler bu "
+"WireGuard örneğine bağlantı başlatamayabilir!"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
@@ -5566,7 +5592,7 @@ msgstr "Negatif önbellek yok"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:690
 msgid "No nftables ruleset loaded."
-msgstr ""
+msgstr "Yüklü nftables kural kümesi yok."
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:69
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
@@ -5576,7 +5602,7 @@ msgstr "Şifre belirlenmedi!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:512
 msgid "No peers defined yet."
-msgstr ""
+msgstr "Henüz tanımlanmış bir eş yok."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:140
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:277
@@ -5776,7 +5802,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:676
 msgid "Open iptables rules overview…"
-msgstr ""
+msgstr "iptables kurallarına genel bakışı aç…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:472
 #: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
@@ -5850,6 +5876,8 @@ msgstr "Bu cihaz hakkında isteğe bağlı notlar"
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:147
 msgid "Optional, in seconds. If set to '0', no reconnect is attempted."
 msgstr ""
+"İsteğe bağlı, saniye olarak . '0' olarak ayarlanırsa, yeniden bağlanma "
+"denenmez."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:201
 msgid ""
@@ -5926,6 +5954,9 @@ msgid ""
 "code if available. It can be removed after the configuration has been "
 "exported."
 msgstr ""
+"İsteğe bağlı. WireGuard eşinin özel anahtarı. Anahtar, bağlantı kurmak için "
+"gerekli değildir, ancak bir eş yapılandırma veya varsa QR kodu oluşturmaya "
+"izin verir. Yapılandırma dışa aktarıldıktan sonra kaldırılabilir."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:685
 msgid ""
@@ -5962,7 +5993,7 @@ msgstr "Seçenekler:"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:55
 msgid "Originator Interval"
-msgstr ""
+msgstr "Oluşturucu Aralığı"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:348
 msgid "Other:"
@@ -6063,6 +6094,8 @@ msgid ""
 "Override default MAC address - the range of usable addresses might be "
 "limited by the driver"
 msgstr ""
+"Varsayılan MAC adresini geçersiz kıl - kullanılabilir adres aralığı sürücü "
+"tarafından sınırlandırılabilir"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1153
 msgid "Override default interface name"
@@ -6094,7 +6127,7 @@ msgstr "Mevcut dosyanın \"%s\" üzerine yaz\" ?"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:355
 msgid "Overwrite the current settings with the imported configuration?"
-msgstr ""
+msgstr "İçe aktarılan yapılandırmayla mevcut ayarların üzerine yazılsın mı?"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:70
 msgid "Owner"
@@ -6194,7 +6227,7 @@ msgstr "PSID bit uzunluğu"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:573
 msgctxt "Label indicating that WireGuard peer uses a PSK"
 msgid "PSK"
-msgstr ""
+msgstr "PSK"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1512
 msgid "PTM/EFM (Packet Transfer Mode)"
@@ -6271,6 +6304,7 @@ msgstr "SSH anahtar dosyasını yapıştırın veya sürükleyin…"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:446
 msgid "Paste or drag WireGuard peer configuration (wg0.conf) file…"
 msgstr ""
+"WireGuard eş yapılandırma (wg0.conf) dosyasını yapıştırın veya sürükleyin…"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:439
 msgid ""
@@ -6278,10 +6312,13 @@ msgid ""
 "another system below to create a matching peer entry allowing that system to "
 "connect to the local WireGuard interface."
 msgstr ""
+"Aşağıdaki başka bir sistemden bir WireGuard yapılandırmasını (genellikle "
+"<em>wg0.conf</em>) yapıştırın veya sürükleyin ve bu sistemin yerel WireGuard "
+"arayüzüne bağlanmasına izin veren eşleşen bir eş girişi oluşturun."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:445
 msgid "Paste or drag supplied WireGuard configuration file…"
-msgstr ""
+msgstr "Sağlanan WireGuard yapılandırma dosyasını yapıştırın veya sürükleyin…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1592
 msgid "Path to CA-Certificate"
@@ -6379,11 +6416,11 @@ msgstr "Devamlı Canlı Tut"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:147
 msgid "Persistent reconnect interval"
-msgstr ""
+msgstr "Kalıcı yeniden bağlanma aralığı"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:334
 msgid "PersistentKeepAlive setting is invalid"
-msgstr ""
+msgstr "PersistentKeepAlive ayarı geçersiz"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:290
 msgid "Phy Rate:"
@@ -6471,11 +6508,11 @@ msgstr "Ön Paylaşımlı Anahtar"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:572
 msgid "Preshared key in use"
-msgstr ""
+msgstr "Önceden paylaşılan anahtar kullanımda"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:308
 msgid "PresharedKey setting is invalid"
-msgstr ""
+msgstr "PresharedKey ayarı geçersiz"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
@@ -6499,6 +6536,9 @@ msgid ""
 "Prevents one wireless client to talk to another. This setting only affects "
 "packets without any VLAN tag (untagged packets)."
 msgstr ""
+"Bir kablosuz istemcinin diğeriyle konuşmasını engeller. Bu ayar yalnızca "
+"herhangi bir VLAN etiketi olmayan paketleri (etiketlenmemiş paketler) "
+"etkiler."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:213
 msgid "Primary Slave"
@@ -6529,7 +6569,7 @@ msgstr "Öncelik"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:567
 msgctxt "Label indicating that WireGuard peer private key is stored"
 msgid "Private"
-msgstr ""
+msgstr "Özel"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:436
 msgctxt "MACVLAN mode"
@@ -6543,11 +6583,11 @@ msgstr "Özel anahtar"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:566
 msgid "Private key present"
-msgstr ""
+msgstr "Özel anahtar mevcut"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:296
 msgid "PrivateKey setting is missing or invalid"
-msgstr ""
+msgstr "PrivateKey ayarı eksik veya geçersiz"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:93
@@ -6589,6 +6629,7 @@ msgid ""
 "Provide the NTP server to the selected interface or, if unspecified, to all "
 "interfaces"
 msgstr ""
+"NTP sunucusunu seçilen arayüze veya belirtilmemişse tüm arayüzlere sağla"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1077
 msgid "Pseudo Ad-Hoc (ahdemo)"
@@ -6601,12 +6642,12 @@ msgstr "Genel anahtar"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:549
 msgid "Public key is missing"
-msgstr ""
+msgstr "Ortak anahtar eksik"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:558
 msgctxt "Tooltip displaying full WireGuard peer public key"
 msgid "Public key: %h"
-msgstr ""
+msgstr "Ortak anahtar: %h"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:284
 msgid ""
@@ -6626,7 +6667,7 @@ msgstr "İstemcilere dağıtılmak üzere bu cihaza yönlendirilen genel önek."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:305
 msgid "PublicKey setting is invalid"
-msgstr ""
+msgstr "PublicKey ayarı geçersiz"
 
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:9
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:27
@@ -6906,7 +6947,7 @@ msgstr "Gereklidir. Bu arabirim için Base64 ile kodlanmış özel anahtar."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
 msgid "Required. Public key of the WireGuard peer."
-msgstr ""
+msgstr "Gerekli. WireGuard eşinin ortak anahtarı."
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
 msgid "Required. Underlying interface."
@@ -7175,7 +7216,7 @@ msgstr "Yönlendirme"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:44
 msgid "Routing Algorithm"
-msgstr ""
+msgstr "Yönlendirme Algoritması"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
 msgid ""
@@ -7375,7 +7416,7 @@ msgstr "Bu cihazın ana bilgisayar adını gönder"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:89
 msgid "Server"
-msgstr ""
+msgstr "Sunucu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:518
 msgid "Server address"
@@ -8342,6 +8383,8 @@ msgid ""
 "The <em>qrencode</em> package is required for generating an QR code image of "
 "the configuration."
 msgstr ""
+"Yapılandırmanın QR kod görüntüsünü oluşturmak için <em>qrencode</em> paketi "
+"gereklidir."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:954
 msgid ""
@@ -8439,7 +8482,7 @@ msgstr "VLAN kimliği benzersiz olmalıdır"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:45
 msgid "The algorithm that is used to discover mesh routes"
-msgstr ""
+msgstr "Mesh yollarını keşfetmek için kullanılan algoritma"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2015
 msgid ""
@@ -8536,6 +8579,8 @@ msgid ""
 "The generated configuration can be imported into a WireGuard client "
 "application to setup a connection towards this device."
 msgstr ""
+"Oluşturulan konfigürasyon, bu cihaza bir bağlantı kurmak için bir WireGuard "
+"istemci uygulamasına aktarılabilir."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:166
 msgid "The given SSH public key has already been added."
@@ -8556,6 +8601,10 @@ msgid ""
 "forwarded OGM, thereby propagating the cost of an extra hop (the packet has "
 "to be received and retransmitted which costs airtime)"
 msgstr ""
+"Atlama cezası ayarı, batman-adv'nin kısa rotalara karşı çoklu atlama "
+"rotaları tercihini değiştirmeye izin verir. Değer, iletilen her OGM'nin "
+"TQ'suna uygulanır, böylece ekstra bir atlamanın maliyetini yayar (paketin "
+"alınması ve yeniden iletilmesi gerekir, bu da yayın süresine mal olur)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "The hostname of the boot server"
@@ -8563,7 +8612,7 @@ msgstr "Önyükleme sunucusunun ana makine adı"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:28
 msgid "The interface could not be found"
-msgstr ""
+msgstr "Arayüz bulunamadı"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1110
 msgid "The interface name is already used"
@@ -8646,6 +8695,8 @@ msgid ""
 "The network access to this device could be interrupted by changing settings "
 "of the \"%h\" interface."
 msgstr ""
+"Bu cihaza ağ erişimi, \"%h\" arabiriminin ayarları değiştirilerek "
+"kesilebilir."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2021
 msgid "The network name is already used"
@@ -8673,6 +8724,9 @@ msgid ""
 "This usually is a static public IP address, a static hostname or a DDNS "
 "domain."
 msgstr ""
+"Eşin bağlanması gereken bu sistemin genel ana bilgisayar adı veya IP adresi. "
+"Bu genellikle statik bir genel IP adresi, statik bir ana bilgisayar adı veya "
+"bir DDNS etki alanıdır."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:569
 msgid "The query response interval must be lower than the query interval value"
@@ -8796,12 +8850,17 @@ msgid ""
 "The value specifies the interval (milliseconds) in which batman-adv floods "
 "the network with its protocol information."
 msgstr ""
+"Değer, batman-adv'nin protokol bilgileriyle ağı doldurduğu aralığı "
+"(milisaniye) belirtir."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:672
 msgid ""
 "There are legacy iptables rules present on the system. Mixing iptables and "
 "nftables rules is discouraged and may lead to incomplete traffic filtering."
 msgstr ""
+"Sistemde mevcut eski iptables kuralları vardır. iptables ve nftables "
+"kurallarının karıştırılması önerilmez ve eksik trafik filtrelemesine neden "
+"olabilir."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:777
@@ -8866,6 +8925,12 @@ msgid ""
 "selector but rather go to the Wireless settings and select this Interface as "
 "a network from there."
 msgstr ""
+"Bu, fiziksel Cihazı yukarıdan bağlamak istediğiniz batman-adv cihazıdır. Bu "
+"liste boşsa, önce bir tane oluşturmanız gerekir. Mesh trafiğini kablolu bir "
+"ağ cihazı üzerinden yönlendirmek istiyorsanız, lütfen yukarıdaki Cihaz "
+"seçiciden seçin. Batman-adv arayüzünü bir Wi-fi ağına atamak istiyorsanız, "
+"Cihaz seçicide bir Cihaz seçmeyin, bunun yerine Kablosuz ayarlarına gidin ve "
+"oradan bir ağ olarak bu arabirimi seçin."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:116
 msgid ""
@@ -8975,6 +9040,10 @@ msgid ""
 "provider supplied) configuration file, use the <strong><a class=\"full-"
 "import\" href=\"#\">configuration import</a></strong> instead."
 msgstr ""
+"Yerel WireGuard arayüzünü mevcut (ör. sağlayıcı tarafından sağlanan) "
+"yapılandırma dosyasından tam olarak yapılandırmak için, bunun yerine "
+"<strong><a class=\"full-import\" href=\"#\">yapılandırma içe aktarımını</a></"
+"strong> kullanın."
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2674
 msgid "To login…"
@@ -9040,17 +9109,17 @@ msgstr "Karma Politikasını İlet"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:79
 msgctxt "nft @th,off,len"
 msgid "Transport header bits %d-%d"
-msgstr ""
+msgstr "Taşıma başlık bitleri %d-%d"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:59
 msgctxt "nft th dport"
 msgid "Transport header destination port"
-msgstr ""
+msgstr "Taşıma başlığı hedef bağlantı noktası"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:58
 msgctxt "nft th sport"
 msgid "Transport header source port"
-msgstr ""
+msgstr "Taşıma başlığı kaynak bağlantı noktası"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:75
 msgid "Trigger"
@@ -9145,7 +9214,7 @@ msgstr "Gönderilemiyor"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:85
 msgid "Unable to generate QR code: %s"
-msgstr ""
+msgstr "QR kodu oluşturulamıyor: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:9
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:15
@@ -9192,7 +9261,7 @@ msgstr "İçerik kaydedilemiyor: %s"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:29
 msgid "Unable to verify PIN"
-msgstr ""
+msgstr "PIN doğrulanamadı"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:32
 msgid "Unavailable Seconds (UAS)"
@@ -9276,7 +9345,7 @@ msgstr "Desteklenmeyen protokol türü."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:534
 msgid "Untitled peer"
-msgstr ""
+msgstr "Adsız eş"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:151
 msgid "Up"
@@ -9602,7 +9671,7 @@ msgstr "VPN Sunucusu"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:152
 msgid "VPN Server certificate's SHA256 hash"
-msgstr ""
+msgstr "VPN Sunucu sertifikasının SHA256 karması"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:105
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:96
@@ -9761,6 +9830,8 @@ msgid ""
 "When enabled network coding increases the WiFi throughput by combining "
 "multiple frames into a single frame, thus reducing the needed air time."
 msgstr ""
+"Ağ kodlaması etkinleştirildiğinde, birden çok çerçeveyi tek bir çerçevede "
+"birleştirerek WiFi verimini artırır, böylece gereken yayın süresini azaltır."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:76
 msgid ""
@@ -9768,6 +9839,9 @@ msgid ""
 "helps non-mesh clients to get ARP responses much more reliably and without "
 "much delay."
 msgstr ""
+"Dağıtılmış ARP tablosu etkinleştirildiğinde, ağ tabanlı olmayan istemcilerin "
+"ARP yanıtlarını çok daha güvenilir ve fazla gecikme olmadan almasına "
+"yardımcı olan ağ çapında bir ARP önbelleği oluşturur."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:109
 msgid ""
@@ -9782,12 +9856,17 @@ msgid ""
 "When inverted, the LED is continuously lit and flickers instead of it being "
 "off by default and blinking on system activity."
 msgstr ""
+"Ters çevrildiğinde, LED varsayılan olarak kapalı ve sistem etkinliğinde "
+"yanıp sönmek yerine sürekli yanar ve titreşir."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:66
 msgid ""
 "When running the mesh over multiple WiFi interfaces per node batman-adv is "
 "capable of optimizing the traffic flow to gain maximum performance."
 msgstr ""
+"Ağ, düğüm başına birden çok WiFi arabirimi üzerinden çalıştırıldığında, "
+"batman-adv, maksimum performans elde etmek için trafik akışını optimize "
+"edebilir."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1542
 msgid ""
@@ -9827,7 +9906,7 @@ msgstr "WireGuard VPN"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:541
 msgid "WireGuard peer is disabled"
-msgstr ""
+msgstr "WireGuard eşi devre dışı"
 
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:17
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:10
@@ -10224,6 +10303,8 @@ msgid ""
 "reduces overhead by collecting and aggregating originator messages in a "
 "single packet rather than many small ones"
 msgstr ""
+"gönderen mesajları çok sayıda küçük mesaj yerine tek bir pakette toplayarak "
+"ve bir araya getirerek ek yükü azaltır"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:769
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:884
