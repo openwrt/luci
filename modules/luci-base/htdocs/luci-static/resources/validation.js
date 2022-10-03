@@ -236,6 +236,14 @@ var ValidatorFactory = baseclass.extend({
 	},
 
 	types: {
+		alphanumeric: function() {
+			return this.assert(this.value.match(/^[a-zA-Z0-9]+$/), _('string with characters and numbers only.'));
+		},
+
+		alphanumericspace: function() {
+			return this.assert(this.value.match(/^[a-zA-Z0-9 ]+$/), _('string with characters, numbers and spaces only.'));
+		},
+
 		integer: function() {
 			return this.assert(!isNaN(this.factory.parseInteger(this.value)), _('valid integer value'));
 		},
