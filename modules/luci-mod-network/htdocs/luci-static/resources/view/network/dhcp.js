@@ -385,7 +385,8 @@ return view.extend({
 
 		s.taboption('advanced', form.Flag, 'filterwin2k',
 			_('Filter useless'),
-			_('Do not forward queries that cannot be answered by public resolvers.'));
+			_('Avoid uselessly triggering dial-on-demand links (filters SRV/SOA records and names with underscores).') + '<br />' +
+			_('May prevent VoIP or other services from working.'));
 
 		s.taboption('advanced', form.Flag, 'localise_queries',
 			_('Localise queries'),
