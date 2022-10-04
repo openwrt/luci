@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2021-08-12 12:55+0000\n"
+"PO-Revision-Date: 2022-09-05 01:37+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationswatchcat/pt_BR/>\n"
@@ -11,17 +11,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
 "<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
 "> Specify the interface to monitor and react if a ping over it fails."
 msgstr ""
+"<i>Aplica-se ao Ping Reboot, Reiniciar Interface, e Executar os modos "
+"Script</i> <br /> Especifica a interface para monitorizar e reagir caso um "
+"ping falhe sobre ela."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "Família de endereços para pingar o host"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -105,7 +108,7 @@ msgstr "Enorme: 1492 bytes"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "Endereço IP ou o nome do host para pingar."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
@@ -128,6 +131,17 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"No modo de reinicialização periódica, é definido a frequência de "
+"reinicialização. <br /> No modo Ping Reboot, é definido o maior período de "
+"tempo sem uma resposta do host de verificação antes que uma reinicialização "
+"seja iniciada. <br /> No modo reinicio da rede ou executar script, é "
+"definido o maior período de tempo sem uma resposta do host de verificação "
+"antes que a interface seja reiniciada ou o script seja executado. <br /><br /"
+">A unidade padrão é em segundos, sem sufixo, porém é possível usar o sufixo "
+"<b>m</b> para minutos, <b>h</b> para horas ou <b>d </b> por dias. <br /><br /"
+">Exemplos:<ul><li>10 segundos seriam: <b>10</b> ou <b>10s</b></li><li>5 "
+"minutos seriam: <b>5m</b></li><li> 1 hora seria: <b>1h</b></li><li>1 semana "
+"seria: <b>7d</b></ li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -174,6 +188,13 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Ping de reinicialização: Reinicializa este dispositivo caso um ping para um "
+"determinado host falhe por um período de tempo determinado. <br /> Reinicio "
+"periódico: Reinicializa este dispositivo após um determinado intervalo de "
+"tempo. <br /> Reinicia a interface: Reinicia uma interface de rede caso um "
+"ping para um determinado host falhe por um período de tempo determinado. "
+"<br /> Executa script: executa um script caso um ping para um determinado "
+"host falhe por um período de tempo determinado. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
@@ -181,17 +202,19 @@ msgstr "Reinicie a interface"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Executa script"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Script que será executado"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"O script que será executado quando o host não responder por período de tempo "
+"determinado. O script recebe o nome da interface como $1"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"

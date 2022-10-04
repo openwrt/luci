@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-05-28 17:32+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"PO-Revision-Date: 2022-09-25 14:22+0000\n"
+"Last-Translator: semih <semiht@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/tr/>\n"
 "Language: tr\n"
@@ -10,17 +10,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
 "<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
 "> Specify the interface to monitor and react if a ping over it fails."
 msgstr ""
+"<i>Ping Yeniden Başlatma, Arabirimi Yeniden Başlatma ve Komut Dosyasını "
+"Çalıştırma modları için geçerlidir</i> <br /> Üzerinde bir ping başarısız "
+"olursa izlenecek ve tepki verecek arabirimi belirt."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "Ana bilgisayara ping atmak için adres ailesi"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -104,7 +107,7 @@ msgstr "Çok Büyük: 1492 bayt"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "Ping için IP adresi veya ana bilgisayar adı."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
@@ -127,6 +130,17 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"Periyodik Yeniden Başlatma modunda, ne sıklıkta yeniden başlatılacağı "
+"tanımlanır. <br /> Ping Yeniden Başlatma modunda, yeniden başlatma "
+"yapılmadan önce Kontrol Edilecek Ana Bilgisayardan yanıt alınmaksızın en "
+"uzun süreyi tanımlar. <br /> Ağ Yeniden Başlatma veya Komut Dosyasını "
+"Çalıştırma modunda, arayüz yeniden başlatılmadan veya komut dosyası "
+"çalıştırılmadan önce Ana Bilgisayardan Kontrol edilecek en uzun süreyi "
+"tanımlar. <br /><br />Varsayılan birim saniyedir, son ek yoktur, ancak "
+"dakika için <b>m</b>, saat için <b>h</b> veya gün için <b>d</b> son ekini "
+"kullanabilirsiniz. <br /><br />Örnekler:<ul><li>10 saniye: <b>10</b> veya "
+"<b>10s</b></li><li>5 dakika: <b>5m</b></li><li> 1 saat: <b>1h</b></li><li>1 "
+"hafta: <b>7d</b></ li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -173,6 +187,13 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Ping Yeniden Başlatma: Belirtilen bir ana bilgisayara ping belirli bir süre "
+"boyunca başarısız olursa bu cihazı yeniden başlat. <br /> Periyodik Yeniden "
+"Başlatma: Belirli bir zaman aralığından sonra bu cihazı yeniden başlat. <br /"
+"> Arabirimi Yeniden Başlat: Belirtilen bir ana bilgisayara ping belirli bir "
+"süre boyunca başarısız olursa, bir ağ arabirimini yeniden başlat. <br /> "
+"Komut Dosyasını Çalıştır: Belirtilen bir ana bilgisayara ping belirli bir "
+"süre boyunca başarısız olursa bir komut dosyası çalıştır. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
@@ -180,17 +201,19 @@ msgstr "Arayüzü yeniden başlat"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Komut Dosyasını Çalıştır"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Çalıştırılacak komut dosyası"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"Ana bilgisayar belirtilen süre boyunca yanıt vermediğinde çalıştırılacak "
+"komut dosyası. Komut dosyası, arabirim adına $1 olarak iletilir"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"

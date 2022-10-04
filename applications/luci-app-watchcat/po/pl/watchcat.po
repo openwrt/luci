@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-08-12 12:55+0000\n"
+"PO-Revision-Date: 2022-08-29 20:13+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/pl/>\n"
@@ -11,17 +11,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.14.1-dev\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
 "<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
 "> Specify the interface to monitor and react if a ping over it fails."
 msgstr ""
+"<i>Dotyczy trybów restartu na podstawie pingu, restartu interfejsu i "
+"uruchamiania skrytpu</i> <br /> Określ interfejs do monitorowania i "
+"reagowania w przypadku niepowodzenia pingowania."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "Rodzina adresów do pingowania hosta"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -31,7 +34,7 @@ msgid ""
 "fail. Enter the number of seconds to wait for the soft reboot to fail or use "
 "0 to disable the forced reboot delay."
 msgstr ""
-"Dotyczy trybów ponownego uruchamiania pingu i okresowego ponownego "
+"Dotyczy trybów restartu na podstawie pingu i okresowego ponownego "
 "uruchamiania</i> <br /> Po ponownym uruchomieniu routera usługa uruchomi "
 "miękki restart. Wprowadzenie wartości niezerowej spowoduje opóźniony twardy "
 "restart, jeśli miękki ponowny rozruch nie powiedzie się. Wprowadź liczbę "
@@ -44,7 +47,7 @@ msgid ""
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
 "specifying its name."
 msgstr ""
-"Dotyczy trybów ponownego uruchamiania i restartu interfejsu ping</i> <br /> "
+"Dotyczy trybów restartu na podstawie pingu i restartu interfejsu</i> <br /> "
 "Jeśli używasz ModemManager, program Watchcat może ponownie uruchomić "
 "interfejs ModemManger, określając jego nazwę."
 
@@ -104,7 +107,7 @@ msgstr "Ogromny: 1492 bajtów"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "Adres IP lub nazwa hosta do pingowania."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
@@ -127,6 +130,16 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"W trybie restartu okresowego określa, jak często ma być wykonywany restart."
+"<br /> W trybie restartu na podstawie pingu określa najdłuższy okres czasu "
+"bez odpowiedzi od hosta do sprawdzenia przed ponownym uruchomieniem.<br /> W "
+"trybie ponownego uruchomienia sieci lub uruchomienia skryptu określa "
+"najdłuższy okres czasu bez odpowiedzi od hosta do sprawdzenia przed ponownym "
+"uruchomieniem interfejsu lub uruchomieniem skryptu.<br /><br />Domyślną "
+"jednostką są sekundy, bez przyrostka, ale można użyć przyrostka <b>m</b> dla "
+"minut, <b>h</b> dla godzin lub <b>d</b> dla dni. <br /><br />Przykłady:"
+"<ul><li>10 sekund to: <b>10</b> lub <b>10s</b></li><li>5 minut to: <b>5m</"
+"b></li><li> 1 godzina to: <b>1h</b></li><li>1 tydzień to: <b>7d</b></li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -173,24 +186,33 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Restart na podstawie pingu: uruchom ponownie to urządzenie, jeśli ping do "
+"określonego hosta nie powiedzie się przez określony czas. <br /> Restart "
+"okresowy: uruchom ponownie to urządzenie po określonym czasie. <br />Restart "
+"interfejsu: zrestartuj interfejs sieciowy, jeśli ping do określonego hosta "
+"nie powiedzie się przez określony czas. <br /> Uruchom skrypt: uruchom "
+"skrypt, jeśli ping do określonego hosta nie powiedzie się przez określony "
+"czas. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
-msgstr "Uruchom ponownie interfejs"
+msgstr "Restart interfejsu"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Uruchom skrypt"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Skrypt do uruchomienia"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"Skrypt do uruchomienia, gdy host nie odpowiada przez określony czas. Do "
+"skryptu przekazywana jest nazwa interfejsu jako $1"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
@@ -198,7 +220,7 @@ msgstr "Mały: 1 bajt"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:83
 msgid "Standard: 56 bytes"
-msgstr "Standard: 56 bajtów"
+msgstr "Standardowy: 56 bajtów"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
 msgid "These rules will govern how this device reacts to network events."
