@@ -132,7 +132,17 @@ d1.default = '*'
 f1 = c:option(ListValue, "force_dns", translate("Force Router DNS"), translate("Forces Router DNS use on local devices, also known as DNS Hijacking."))
 f1:value("0", translate("Let local devices use their own DNS servers if set"))
 f1:value("1", translate("Force Router DNS server to all local devices"))
-f1.default = '1'
+f1.default = "1"
+cdi = c:option(ListValue, "canary_domains_icloud", translate("Canary Domains iCloud"), translatef("Blocks access to iCloud Private Relay resolvers, forcing local devices to use router for DNS resolution (%smore information%s).", "<a href=\"" .. readmeURL .. "#canary_domains_icloud" .. "\" target=\"_blank\">", "</a>"))
+cdi:value("0", translate("Let local devices use iCloud Private Relay"))
+cdi:value("1", translate("Force Router DNS server to all local devices"))
+cdi:depends({force_dns="1"}) 
+cdi.default = "1"
+cdm = c:option(ListValue, "canary_domains_mozilla", translate("Canary Domains Mozilla"), translatef("Blocks access to Mozilla resolvers, forcing local devices to use router for DNS resolution (%smore information%s).", "<a href=\"" .. readmeURL .. "#canary_domains_mozilla" .. "\" target=\"_blank\">", "</a>"))
+cdm:value("0", translate("Let local devices use Mozilla resolvers"))
+cdm:value("1", translate("Force Router DNS server to all local devices"))
+cdm:depends({force_dns="1"}) 
+cdm.default = "1"
 
 createHelperText()
 s3 = m:section(TypedSection, "https-dns-proxy", translate("Instances"), 
