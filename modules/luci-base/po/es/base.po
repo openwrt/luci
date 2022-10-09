@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2022-09-10 17:02+0000\n"
+"PO-Revision-Date: 2022-10-05 06:41+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/>"
 "\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 #, fuzzy
@@ -371,6 +371,10 @@ msgid ""
 "to the STA MAC address. Note: This is not Directed Multicast Service (DMS) "
 "in 802.11v. Note: might break receiver STA multicast expectations."
 msgstr ""
+"ARP, IPv4 e IPv6 (incluso 802.1Q) con MAC de destino de multidifusión son de "
+"unidifusión a la dirección MAC de STA. Nota: Esto no es un servicio de "
+"multidifusión dirigido (DMS) en 802.11v. Nota: podría romper las "
+"expectativas de multidifusión STA del receptor."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1511
 msgid "ATM (Asynchronous Transfer Mode)"
@@ -1105,10 +1109,13 @@ msgid "Avoid Bridge Loops"
 msgstr "Evitar bucles de puente"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:388
+#, fuzzy
 msgid ""
 "Avoid uselessly triggering dial-on-demand links (filters SRV/SOA records and "
 "names with underscores)."
 msgstr ""
+"Evita la activación inútil de enlaces de marcación bajo demanda (filtra "
+"registros SRV/SOA y nombres con guiones bajos)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1505
 msgid "B43 + B43C"
@@ -3715,12 +3722,12 @@ msgstr "Híbrido"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:49
 msgctxt "nft icmp code"
 msgid "ICMP code"
-msgstr ""
+msgstr "código ICMP"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:50
 msgctxt "nft icmp type"
 msgid "ICMP type"
-msgstr ""
+msgstr "tipo ICMP"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:51
 msgctxt "nft icmpv6 code"
@@ -4559,7 +4566,7 @@ msgstr "Falta la clave"
 
 #: protocols/luci-proto-unet/htdocs/luci-static/resources/protocol/unet.js:44
 msgid "Key used to sign network config"
-msgstr ""
+msgstr "Clave utilizada para firmar la configuración de red"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:71
 msgctxt "nft unit"
@@ -4912,7 +4919,7 @@ msgstr "Solo servicio local"
 
 #: protocols/luci-proto-unet/htdocs/luci-static/resources/protocol/unet.js:41
 msgid "Local wireguard key"
-msgstr ""
+msgstr "Clave local de WireGuard"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:392
 msgid "Localise queries"
@@ -5146,7 +5153,7 @@ msgstr "Potencia máxima de transmisión"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:389
 msgid "May prevent VoIP or other services from working."
-msgstr ""
+msgstr "Puede impedir que VoIP u otros servicios funcionen."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:129
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:188
@@ -5398,7 +5405,7 @@ msgstr "Mover hacia arriba"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1151
 msgid "Multi To Unicast"
-msgstr ""
+msgstr "Multi a unidifusión"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:89
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:94
@@ -5466,7 +5473,7 @@ msgstr "Nombre de la nueva red"
 
 #: protocols/luci-proto-unet/htdocs/luci-static/resources/protocol/unet.js:38
 msgid "Name of the tunnel device"
-msgstr ""
+msgstr "Nombre del dispositivo de túnel"
 
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:44
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
@@ -6760,7 +6767,7 @@ msgstr ""
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:120
 msgid "Proxy Server"
-msgstr ""
+msgstr "Servidor proxy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1077
 msgid "Pseudo Ad-Hoc (ahdemo)"
@@ -6861,8 +6868,9 @@ msgid "RFC3947 NAT-T mode"
 msgstr "Modo NAT-T RFC3947"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1456
+#, fuzzy
 msgid "RSN Preauth"
-msgstr ""
+msgstr "Autorización previa de RSN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1003
 msgid "RSSI threshold for joining"
@@ -6942,7 +6950,7 @@ msgstr "Recomendado. Direcciones IP de la interfaz de WireGuard."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:164
 msgid "Reconnect Timeout"
-msgstr ""
+msgstr "Tiempo de espera de reconexión"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:504
 msgid "Reconnect this interface"
@@ -7309,6 +7317,10 @@ msgid ""
 "(and advertise it in WLAN beacons). Only works if the specified network "
 "interface is a bridge. Shortens the time-critical reassociation process."
 msgstr ""
+"Red de seguridad robusta (RSN): permita la autenticación previa de roaming "
+"para redes WPA2-EAP (y anúnciela en balizas WLAN). Solo funciona si la "
+"interfaz de red especificada es un puente. Acorta el proceso de reasociación "
+"de tiempo crítico."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:551
 msgid "Robustness"
@@ -9466,8 +9478,9 @@ msgid "Unconfigure"
 msgstr "Desconfigurar"
 
 #: protocols/luci-proto-unet/htdocs/luci-static/resources/protocol/unet.js:8
+#, fuzzy
 msgid "Unet"
-msgstr ""
+msgstr "Unet"
 
 #: modules/luci-base/htdocs/luci-static/resources/fs.js:102
 msgid "Unexpected reply data format"

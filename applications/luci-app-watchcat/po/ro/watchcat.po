@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-01-12 11:22+0000\n"
-"Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
+"PO-Revision-Date: 2022-10-07 17:18+0000\n"
+"Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/ro/>\n"
 "Language: ro\n"
@@ -11,17 +11,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.14.1\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
 "<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
 "> Specify the interface to monitor and react if a ping over it fails."
 msgstr ""
+"<i>Se aplică în modurile Ping Reboot, Restart Interface și Run Script</i> "
+"<br /> Specificați interfața care trebuie monitorizată și reacționează în "
+"cazul în care un ping pe aceasta eșuează."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "Familia de adrese pentru ping la gazdă"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -105,7 +108,7 @@ msgstr "Imens: 1492 bytes"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "Adresa IP sau numele de gazdă pentru ping."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
@@ -128,6 +131,17 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"În modul Repornire periodică, se definește cât de des trebuie să se "
+"repornească. <br /> În modul Ping Reboot, definește cea mai lungă perioadă "
+"de timp fără un răspuns din partea gazdei de verificat înainte de repornire. "
+"<br /> În modul Repornire rețea sau Executare script, definește cea mai "
+"lungă perioadă de timp fără un răspuns din partea gazdei la Check înainte ca "
+"interfața să fie repornită sau scriptul să fie executat. <br /><br /"
+">Unitatea implicită este secundele, fără sufix, dar se poate folosi sufixul "
+"<b>m</b> pentru minute, <b>h</b> pentru ore sau <b>d</b> pentru zile. <br /"
+"><br />Examples:<ul><li>10 secunde ar fi: <b>10</b> or <b>10s</b></li><li>5 "
+"minute ar fi: <b>5m</b></li><li> 1 oră ar fi: <b>1h</b></li><li>1 săptămână "
+"ar fi: <b>7d</b></li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -174,6 +188,13 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Ping Reboot: Reporniți acest dispozitiv în cazul în care un ping către o "
+"gazdă specificată eșuează pentru o anumită perioadă de timp. <br /> "
+"Repornire periodică: Reporniți acest dispozitiv după un interval de timp "
+"specificat. <br /> Reporniți interfața: Reporniți o interfață de rețea dacă "
+"un ping către o gazdă specificată nu reușește pentru o anumită perioadă de "
+"timp. <br /> Rulați scriptul: Executați un script dacă un ping către o gazdă "
+"specificată eșuează pentru o anumită perioadă de timp. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
@@ -181,17 +202,19 @@ msgstr "Reporniți interfața"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Rulați scriptul"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Script pentru a rula"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"Script care se execută atunci când gazda nu a răspuns pentru o perioadă de "
+"timp specificată. Scriptului i se transmite numele interfeței ca $1"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
