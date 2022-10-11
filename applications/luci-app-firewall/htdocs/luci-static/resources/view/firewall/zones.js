@@ -72,22 +72,75 @@ return view.extend({
 		/* Netfilter flow offload support */
 
 		if (L.hasSystemFeature('offloading')) {
+			var cbiRichListValue = form.ListValue.extend({
+				renderWidget: function(section_id, option_index, cfgvalue) {
+					var choices = this.transformChoices();
+					var widget = new ui.Dropdown((cfgvalue != null) ? cfgvalue : this.default, choices, {
+						id: this.cbid(section_id),
+						sort: this.keylist,
+						optional: false,
+						select_placeholder: this.select_placeholder || this.placeholder,
+						custom_placeholder: this.custom_placeholder || this.placeholder,
+						validate: L.bind(this.validate, this, section_id),
+						disabled: (this.readonly != null) ? this.readonly : this.map.readonly
+					});
+
+					return widget.render();
+				},
+
+				value: function(value, title, description) {
+					if (description) {
+						form.ListValue.prototype.value.call(this, value, E([], [
+							E('span', { 'class': 'hide-open' }, [ title ]),
+							E('div', { 'class': 'hide-close', 'style': 'min-width:25vw' }, [
+								E('strong', [ title ]),
+								E('br'),
+								E('span', { 'style': 'white-space:normal' }, description)
+							])
+						]));
+					}
+					else {
+						form.ListValue.prototype.value.call(this, value, title);
+					}
+				}
+			});
+
 			s = m.section(form.TypedSection, 'defaults', _('Routing/NAT Offloading'),
 				_('Experimental feature. Not fully compatible with QoS/SQM.'));
 
 			s.anonymous = true;
 			s.addremove = false;
 
-			o = s.option(form.Flag, 'flow_offloading',
-				_('Software flow offloading'),
-				_('Software based offloading for routing/NAT'));
-			o.optional = true;
+			o = s.option(cbiRichListValue, "offloading_type", _("Offloading type"));
+			o.value('0', _("None"), ' ');
+			o.value('1', _("Software offloading"), _('Software based offloading for routing with/without NAT.'));
+			o.value('2', _("Hardware offloading"), _('Hardware based offloading for routing with/without NAT. Requires the hardware to support it. Implemented at least for the MT7621 SoC.'));
 
-			o = s.option(form.Flag, 'flow_offloading_hw',
-				_('Hardware flow offloading'),
-				_('Requires hardware NAT support. Implemented at least for mt7621'));
-			o.optional = true;
-			o.depends('flow_offloading', '1');
+			o.cfgvalue = (function (section_id) {
+				var flow_offloading = uci.get('firewall', section_id, 'flow_offloading');
+				var flow_offloading_hw = uci.get('firewall', section_id, 'flow_offloading_hw');
+
+				if (flow_offloading === '1' && typeof flow_offloading_hw === 'undefined') {
+					return '1';
+				} else if (flow_offloading === '1' && flow_offloading_hw === '1') {
+					return '2';
+				} else {
+					return '0';
+				};
+			});
+
+			o.write = function(section_id, value) {
+				if (value === '1') {
+					uci.set('firewall', section_id, 'flow_offloading', '1');
+					uci.unset('firewall', section_id, 'flow_offloading_hw');
+				} else if (value === '2') {
+					uci.set('firewall', section_id, 'flow_offloading', '1');
+					uci.set('firewall', section_id, 'flow_offloading_hw', '1');
+				} else {
+					uci.unset('firewall', section_id, 'flow_offloading');
+					uci.unset('firewall', section_id, 'flow_offloading_hw');
+				}
+			};
 		}
 
 
