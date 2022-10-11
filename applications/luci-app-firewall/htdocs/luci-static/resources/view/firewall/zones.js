@@ -79,16 +79,22 @@ return view.extend({
 			s.anonymous = true;
 			s.addremove = false;
 
-			o = s.option(form.Flag, 'flow_offloading',
-				_('Software flow offloading'),
-				_('Software based offloading for routing/NAT'));
-			o.optional = true;
-
-			o = s.option(form.Flag, 'flow_offloading_hw',
-				_('Hardware flow offloading'),
-				_('Requires hardware NAT support.'));
-			o.optional = true;
-			o.depends('flow_offloading', '1');
+			o = s.option(form.RichListValue, "offloading_type", _("Offloading type"));
+			o.value('0', _("None"));
+			o.value('1', _("Software offloading"), _('Software based offloading for routing with/without NAT.'));
+			o.value('2', _("Hardware offloading"), _('Hardware based offloading for routing with/without NAT. Requires hardware support.'));
+			o.optional = false;
+			o.load = function (section_id) {
+				var flow_offloading = uci.get('firewall', section_id, 'flow_offloading');
+				var flow_offloading_hw = uci.get('firewall', section_id, 'flow_offloading_hw');
+				return (flow_offloading === '1')
+					? (flow_offloading_hw === '1' ? '2' : '1')
+					: '0';
+			};
+			o.write = function(section_id, value) {
+				uci.set('firewall', section_id, 'flow_offloading', value === '0' ? null : '1');
+				uci.set('firewall', section_id, 'flow_offloading_hw', value === '2' ? '1' : null);
+			};
 		}
 
 
