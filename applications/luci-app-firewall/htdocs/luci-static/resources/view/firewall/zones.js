@@ -82,12 +82,13 @@ return view.extend({
 				_('Software flow offloading'),
 				_('Software based offloading for routing/NAT'));
 			o.optional = true;
+			o.depends({flow_offloading_hw: '1', '!reverse': true});
 
 			o = s.option(form.Flag, 'flow_offloading_hw',
 				_('Hardware flow offloading'),
 				_('Requires hardware NAT support. Implemented at least for mt7621'));
 			o.optional = true;
-			o.depends('flow_offloading', '1');
+			o.depends({flow_offloading: '1', '!reverse': true});
 		}
 
 
