@@ -475,7 +475,9 @@ return view.extend({
 
 			return m.save(function() {
 				uci.add('ddns', 'service', section_id);
-				uci.set('ddns', section_id, 'service_name', service_value);
+				if (service_value != '-') {
+					uci.set('ddns', section_id, 'service_name', service_value);
+				}
 				uci.set('ddns', section_id, 'use_ipv6', ipv6_value);
 			}).then(L.bind(m.children[1].renderMoreOptionsModal, m.children[1], section_id));
 		};
