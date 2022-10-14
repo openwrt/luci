@@ -157,6 +157,12 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
+		o = s.taboption('http', form.Value, 'subdomain', _('Subdomain'));
+		o.depends.apply(o, [{type: 'http'}]);
+		o.depends.apply(o, [{type: 'https'}]);
+		o.optional = true;
+		o.modalonly = true;
+
 		return m.render();
 	}
 });
