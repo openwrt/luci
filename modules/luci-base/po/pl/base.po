@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2022-10-04 18:07+0000\n"
+"PO-Revision-Date: 2022-10-17 13:26+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -25,6 +25,7 @@ msgid "%.1f dB"
 msgstr "%.1f dB"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:123
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:117
 msgid "%d Bit"
 msgstr "%d Bit"
 
@@ -552,6 +553,8 @@ msgstr "Dodaj instancję"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:171
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:177
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:274
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:165
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:268
 msgid "Add key"
 msgstr "Dodaj klucz"
 
@@ -1060,11 +1063,11 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:170
 msgid "Automatically mount filesystems on hotplug"
-msgstr "Automatycznie montuj systemów plików na zasilaniu"
+msgstr "Automatycznie montuj systemy plików przy podłączaniu"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:166
 msgid "Automatically mount swap on hotplug"
-msgstr "Automatycznie montuj swap na zasilaniu"
+msgstr "Automatycznie montuj swap przy podłączaniu"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:170
 msgid "Automount Filesystem"
@@ -1361,6 +1364,7 @@ msgstr "Połączenie nieudane"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:295
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:209
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:487
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:203
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -1578,6 +1582,7 @@ msgstr "Nazwa (ID) klienta do wysłania podczas negocjacji DHCP"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4392
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:173
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:179
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:167
 msgid "Close"
 msgstr "Zamknij"
 
@@ -1687,13 +1692,13 @@ msgid ""
 "Configures the default router advertisement in <abbr title=\"Router "
 "Advertisement\">RA</abbr> messages."
 msgstr ""
-"Konfiguruje rozgłaszanie routera domyślnego w komunikatach <abbr "
-"title=\"Router Advertisement\">RA</abbr>."
+"Konfiguruje rozgłaszanie routera domyślnego w komunikatach <abbr title="
+"\"Router Advertisement\">RA</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:764
 msgid ""
-"Configures the operation mode of the <abbr title=\"Router "
-"Advertisement\">RA</abbr> service on this interface."
+"Configures the operation mode of the <abbr title=\"Router Advertisement"
+"\">RA</abbr> service on this interface."
 msgstr ""
 "Konfiguruje tryb pracy usługi <abbr title=\"Router Advertisement\">RA</abbr> "
 "na tym interfejsie."
@@ -1875,8 +1880,8 @@ msgstr "Niestandardowy interwał wgrywania (kernel: zegar)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/leds.js:59
 msgid ""
-"Customizes the behaviour of the device <abbr title=\"Light Emitting "
-"Diode\">LED</abbr>s if possible."
+"Customizes the behaviour of the device <abbr title=\"Light Emitting Diode"
+"\">LED</abbr>s if possible."
 msgstr ""
 "Dostosowuje zachowanie diod <abbr title=\"Light Emitting Diode\">LED</abbr> "
 "urządzenia, jeśli to możliwe."
@@ -2027,8 +2032,8 @@ msgid ""
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
-"Zdefiniuj dodatkowe opcje DHCP, np. \"<code>6,192.168.2.1,192.168.2.2</"
-"code>\", które rozgłaszają różne serwery DNS klientom."
+"Zdefiniuj dodatkowe opcje DHCP, np. \"<code>6,192.168.2.1,192.168.2.2</code>"
+"\", które rozgłaszają różne serwery DNS klientom."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:462
 msgid ""
@@ -2067,6 +2072,7 @@ msgstr "Usuń"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:205
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:211
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:199
 msgid "Delete key"
 msgstr "Usuń klucz"
 
@@ -2312,13 +2318,13 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:246
 msgid ""
-"Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-"abbr> forwarder."
+"Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</abbr> "
+"forwarder."
 msgstr ""
-"Dnsmasq to lekki serwer <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr> i serwer przekazujący (forwarder) <abbr "
-"title=\"Domain Name System\">DNS</abbr>."
+"Dnsmasq to lekki serwer <abbr title=\"Dynamic Host Configuration Protocol"
+"\">DHCP</abbr> i serwer przekazujący (forwarder) <abbr title=\"Domain Name "
+"System\">DNS</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:414
 msgid "Do not cache negative replies, e.g. for non-existent domains."
@@ -2358,8 +2364,8 @@ msgid ""
 "Do not proxy any <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
 "packets."
 msgstr ""
-"Nie pośrednicz żadnych pakietów <abbr title=\"Neighbour Discovery "
-"Protocol\">NDP</abbr>."
+"Nie pośrednicz żadnych pakietów <abbr title=\"Neighbour Discovery Protocol"
+"\">NDP</abbr>."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
@@ -2378,6 +2384,7 @@ msgid "Do you really want to delete \"%s\" ?"
 msgstr "Czy jesteś pewien, że chcesz usunąć \"%s\" ?"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:206
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:200
 msgid "Do you really want to delete the following SSH key?"
 msgstr "Czy na pewno chcesz usunąć następujący klucz SSH?"
 
@@ -2473,8 +2480,8 @@ msgid ""
 "and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"
 msgstr ""
 "Dropbear oferuje zdalny dostęp do konsoli (shella) poprzez swojego klienta "
-"<abbr title=\"Secure Shell\">SSH</abbr> oraz serwer <abbr title=\"Secure "
-"Copy\">SCP</abbr>"
+"<abbr title=\"Secure Shell\">SSH</abbr> oraz serwer <abbr title=\"Secure Copy"
+"\">SCP</abbr>"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:14
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:11
@@ -2672,9 +2679,9 @@ msgstr "Włącz przycisk WPS, wymaga WPA2-PSK/WPA3-SAE"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
-"Enable automatic redirection of <abbr title=\"Hypertext Transfer "
-"Protocol\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol "
-"Secure\">HTTPS</abbr> port."
+"Enable automatic redirection of <abbr title=\"Hypertext Transfer Protocol"
+"\">HTTP</abbr> requests to <abbr title=\"Hypertext Transfer Protocol Secure"
+"\">HTTPS</abbr> port."
 msgstr ""
 "Włącz automatyczne przekierowywanie żądań <abbr title=\"Hypertext Transfer "
 "Protocol\">HTTP</abbr> na port <abbr title=\"Hypertext Transfer Protocol "
@@ -3227,14 +3234,14 @@ msgstr "Niepoprawna forma tokenu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:919
 msgid ""
-"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr "
-"title=\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr "
-"title=\"Neighbour Advertisement, Type 136\">NA</abbr> messages between the "
-"designated master interface and downstream interfaces."
+"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr title="
+"\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr title=\"Neighbour "
+"Advertisement, Type 136\">NA</abbr> messages between the designated master "
+"interface and downstream interfaces."
 msgstr ""
 "Przekazuj komunikaty <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
-"<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr "
-"title=\"Neighbour Advertisement, Type 136\">NA</abbr> między wyznaczonym "
+"<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr title="
+"\"Neighbour Advertisement, Type 136\">NA</abbr> między wyznaczonym "
 "interfejsem głównym a interfejsami podrzędnymi."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:770
@@ -3422,12 +3429,14 @@ msgstr "Globalne opcje sieciowe"
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:89
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:74
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:92
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:72
 msgid "Go to firmware upgrade..."
 msgstr "Przejdź do aktualizacji firmware..."
 
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:72
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:64
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:82
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
 msgid "Go to password configuration..."
 msgstr "Przejdź do konfiguracji hasła..."
 
@@ -4033,8 +4042,8 @@ msgstr "Jeżeli jest ustawione, znaczenie opcji dopasowania jest odwrócone"
 msgid ""
 "If specified, mount the device by its UUID instead of a fixed device node"
 msgstr ""
-"Jeśli podano, zainstaluj urządzenie poprzez jego UUID zamiast <abbr "
-"title=\"fixed device node\">ustalonego węzła urządzenia</abbr>"
+"Jeśli podano, zainstaluj urządzenie poprzez jego UUID zamiast <abbr title="
+"\"fixed device node\">ustalonego węzła urządzenia</abbr>"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:268
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:377
@@ -4071,10 +4080,10 @@ msgstr "Jeśli odznaczone, rozgłoszane adresy serwerów DNS są ignorowane"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:340
 msgid ""
 "If your physical memory is insufficient unused data can be temporarily "
-"swapped to a swap-device resulting in a higher amount of usable <abbr "
-"title=\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a "
-"very slow process as the swap-device cannot be accessed with the high "
-"datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."
+"swapped to a swap-device resulting in a higher amount of usable <abbr title="
+"\"Random Access Memory\">RAM</abbr>. Be aware that swapping data is a very "
+"slow process as the swap-device cannot be accessed with the high datarates "
+"of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
 "Jeśli ilość Twojej pamięci fizycznej jest niewystarczająca, nieużywane "
 "miejsce na dysku może być tymczasowo wykorzystane na plik wymiany. W "
@@ -4741,7 +4750,7 @@ msgstr "Lista źródłowych resolwerów, do których będą przekazywane zapytan
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:176
 msgid "Listen Port"
-msgstr "Port nasłuchu"
+msgstr "Port nasłuchiwania"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:332
 msgid "Listen interfaces"
@@ -5052,8 +5061,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:459
 msgid "Max. EDNS0 packet size"
 msgstr ""
-"<abbr title=\"Maksymalny\">Maks.</abbr> rozmiar pakietu <abbr "
-"title=\"Extension Mechanisms for Domain Name System\">EDNS0</abbr>"
+"<abbr title=\"Maksymalny\">Maks.</abbr> rozmiar pakietu <abbr title="
+"\"Extension Mechanisms for Domain Name System\">EDNS0</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:466
 msgid "Max. concurrent queries"
@@ -5097,9 +5106,9 @@ msgid ""
 "Maximum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds."
 msgstr ""
-"Maksymalny dozwolony czas pomiędzy wysyłaniem nieproszonego <abbr "
-"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna "
-"to 600 sekund."
+"Maksymalny dozwolony czas pomiędzy wysyłaniem nieproszonego <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to 600 "
+"sekund."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:947
 msgid "Maximum transmit power"
@@ -5203,9 +5212,9 @@ msgid ""
 "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds."
 msgstr ""
-"Minimalny dozwolony czas pomiędzy wysyłaniem nieproszonego <abbr "
-"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna "
-"to 200 sekund."
+"Minimalny dozwolony czas pomiędzy wysyłaniem nieproszonego <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to 200 "
+"sekund."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:204
 msgid "Mirror monitor port"
@@ -5430,6 +5439,7 @@ msgstr "Nazwa urządzenia tunelowego"
 
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:46
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:44
 msgid "Navigation"
 msgstr "Nawigacja"
 
@@ -5570,6 +5580,7 @@ msgstr "Brak sygnału RX"
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:87
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:72
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:90
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:70
 msgid ""
 "No changes to settings will be stored and are lost after rebooting. This "
 "mode should only be used to install a firmware upgrade"
@@ -5665,6 +5676,7 @@ msgstr "Nie załadowano zestawu reguł nftables."
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:69
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:61
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:79
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:59
 msgid "No password set!"
 msgstr "Nie ustawiono hasła!"
 
@@ -5674,6 +5686,8 @@ msgstr "Nie zdefiniowano jeszcze peerów."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:146
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:283
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:140
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:277
 msgid "No public keys present yet."
 msgstr "Nie istnieją jeszcze klucze publiczne."
 
@@ -6050,9 +6064,9 @@ msgstr "Opcje"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:526
 msgid ""
 "Options for the Network-ID. (Note: needs also Network-ID.) E.g. "
-"\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</"
-"code>\" for default route. <code>0.0.0.0</code> means \"the address of the "
-"system running dnsmasq\"."
+"\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</code>"
+"\" for default route. <code>0.0.0.0</code> means \"the address of the system "
+"running dnsmasq\"."
 msgstr ""
 "Opcje identyfikatora sieci. (Uwaga: wymaga również identyfikatora sieci.) "
 "Np. \"<code>42,192.168.1.4</code>\" dla serwera NTP, \"<code>3,192.168.4.4</"
@@ -6060,6 +6074,7 @@ msgstr ""
 "systemu z uruchomionym dnsmasq\"."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:125
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:119
 msgid "Options:"
 msgstr "Opcje:"
 
@@ -6374,6 +6389,7 @@ msgid "Password2"
 msgstr "Hasło2"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:266
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:260
 msgid "Paste or drag SSH key file…"
 msgstr "Wklej lub przeciągnij plik klucza SSH…"
 
@@ -6733,6 +6749,7 @@ msgid "Public key: %h"
 msgstr "Klucz publiczny: %h"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:290
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:284
 msgid ""
 "Public keys allow for the passwordless SSH logins with a higher security "
 "compared to the use of plain passwords. In order to upload a new key to the "
@@ -7399,6 +7416,7 @@ msgstr "Nazwa użytkownika SSH"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:289
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:51
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:283
 msgid "SSH-Keys"
 msgstr "Klucze SSH"
 
@@ -7711,11 +7729,13 @@ msgstr "Pomiń pliki kopii zapasowej, które są równe plikom w /rom"
 
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:42
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:46
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:40
 msgid "Skip to content"
 msgstr "Pomiń do zawartości"
 
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:41
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:45
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:39
 msgid "Skip to navigation"
 msgstr "Pomiń do nawigacji"
 
@@ -7858,9 +7878,9 @@ msgid ""
 "messages, for example to instruct clients to request further information via "
 "stateful DHCPv6."
 msgstr ""
-"Określa flagi wysyłane w komunikatach <abbr title=\"Router "
-"Advertisement\">RA</abbr>, na przykład w celu poinstruowania klientów, aby "
-"zażądali dalszych informacji za pośrednictwem stanowego DHCPv6."
+"Określa flagi wysyłane w komunikatach <abbr title=\"Router Advertisement"
+"\">RA</abbr>, na przykład w celu poinstruowania klientów, aby zażądali "
+"dalszych informacji za pośrednictwem stanowego DHCPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:176
 msgid ""
@@ -8375,6 +8395,7 @@ msgstr "Rozmiar bufora dziennika systemowego"
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:86
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:71
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:89
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:69
 msgid "System running in recovery (initramfs) mode."
 msgstr "System działa w trybie odzyskiwania (initramfs)."
 
@@ -8699,10 +8720,12 @@ msgstr ""
 "WireGuard w celu nawiązania połączenia z tym urządzeniem."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:172
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:166
 msgid "The given SSH public key has already been added."
 msgstr "Podany klucz publiczny SSH został już dodany."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:178
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:172
 msgid ""
 "The given SSH public key is invalid. Please supply proper public RSA, "
 "ED25519 or ECDSA keys."
@@ -8807,9 +8830,8 @@ msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
 "abbr> messages. Maximum is 255 hops."
 msgstr ""
-"Maksymalna liczba przeskoków do opublikowania w komunikatach <abbr "
-"title=\"Router Advertisement\">RA</abbr>. Maksymalna wartość to 255 "
-"przeskoków."
+"Maksymalna liczba przeskoków do opublikowania w komunikatach <abbr title="
+"\"Router Advertisement\">RA</abbr>. Maksymalna wartość to 255 przeskoków."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4638
 msgid ""
@@ -8825,8 +8847,8 @@ msgstr "Nazwa sieci jest już w użyciu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:139
 msgid ""
-"The network ports on this device can be combined to several <abbr "
-"title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
+"The network ports on this device can be combined to several <abbr title="
+"\"Virtual Local Area Network\">VLAN</abbr>s in which computers can "
 "communicate directly with each other. <abbr title=\"Virtual Local Area "
 "Network\">VLAN</abbr>s are often used to separate different network "
 "segments. Often there is by default one Uplink port for a connection to the "
@@ -8995,6 +9017,7 @@ msgstr "Nie ma żadnych zmian do zastosowania"
 #: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:70
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:80
+#: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:60
 msgid ""
 "There is no password set on this router. Please configure a root password to "
 "protect the web interface."
@@ -9023,9 +9046,9 @@ msgid ""
 "configurations are automatically preserved."
 msgstr ""
 "Jest to lista globalnych wzorców dopasowywania plików i katalogów "
-"uwzględnianych podczas przeprowadzania aktualizacji z użyciem "
-"\"sysupgrade\". Zmodyfikowane pliki w /etc/config/ i w niektórych innych "
-"ustawieniach są automatycznie zachowywane."
+"uwzględnianych podczas przeprowadzania aktualizacji z użyciem \"sysupgrade"
+"\". Zmodyfikowane pliki w /etc/config/ i w niektórych innych ustawieniach są "
+"automatycznie zachowywane."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
@@ -9158,8 +9181,8 @@ msgstr "Strefa czasowa"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:440
 msgid ""
 "To fully configure the local WireGuard interface from an existing (e.g. "
-"provider supplied) configuration file, use the <strong><a class=\"full-"
-"import\" href=\"#\">configuration import</a></strong> instead."
+"provider supplied) configuration file, use the <strong><a class=\"full-import"
+"\" href=\"#\">configuration import</a></strong> instead."
 msgstr ""
 "Aby w pełni skonfigurować lokalny interfejs WireGuard z istniejącego (np. "
 "dostarczonego przez dostawcę) pliku konfiguracyjnego, użyj zamiast tego "
@@ -9442,6 +9465,7 @@ msgid "Unmount"
 msgstr "Odmontuj"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:121
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:115
 msgid "Unnamed key"
 msgstr "Klucz bez nazwy"
 
@@ -9814,7 +9838,7 @@ msgstr "VPNC (CISCO 3000 (i inne) VPN)"
 
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:10
 msgid "VTI"
-msgstr ""
+msgstr "VTI"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:10
 msgid "VXLAN (RFC7348)"
@@ -10482,9 +10506,9 @@ msgid ""
 "<abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</abbr> network "
 "access."
 msgstr ""
-"uHTTPd oferuje dostęp do sieci <abbr title=\"Hypertext Transfer "
-"Protocol\">HTTP</abbr> lub <abbr title=\"Hypertext Transfer Protocol "
-"Secure\">HTTPS</abbr>."
+"uHTTPd oferuje dostęp do sieci <abbr title=\"Hypertext Transfer Protocol"
+"\">HTTP</abbr> lub <abbr title=\"Hypertext Transfer Protocol Secure\">HTTPS</"
+"abbr>."
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:574
 msgid "unique value"
@@ -10888,8 +10912,8 @@ msgstr "« Wróć"
 
 #~ msgid ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router advertises itself as the default IPv6 gateway via <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages (to "
+#~ "Router advertises itself as the default IPv6 gateway via <abbr title="
+#~ "\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages (to "
 #~ "<code>ff02::1</code>) and provides <abbr title=\"Prefix Delegation\">PD</"
 #~ "abbr> to downstream devices.</li> <li><strong>relay mode</strong>: Router "
 #~ "relays <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
@@ -10913,12 +10937,12 @@ msgstr "« Wróć"
 
 #~ msgid ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr>) to downstream interfaces.</li> <li><strong>relay "
-#~ "mode</strong>: Router relays WAN interface config downstream. Helps "
-#~ "support upstream links that lack <abbr title=\"Prefix Delegation\">PD</"
-#~ "abbr>.</li> <li><strong>hybrid mode</strong>: Router does combination of "
-#~ "server+relay.</li></ul>"
+#~ "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix Delegation"
+#~ "\">PD</abbr>) to downstream interfaces.</li> <li><strong>relay mode</"
+#~ "strong>: Router relays WAN interface config downstream. Helps support "
+#~ "upstream links that lack <abbr title=\"Prefix Delegation\">PD</abbr>.</"
+#~ "li> <li><strong>hybrid mode</strong>: Router does combination of server"
+#~ "+relay.</li></ul>"
 #~ msgstr ""
 #~ "<ul style=\"list-style-type:none;\"> <li><strong>tryb serwera</strong>: "
 #~ "router przypisuje adresy IP i deleguje prefiksy (<abbr title=\"Prefix "
@@ -10970,18 +10994,18 @@ msgstr "« Wróć"
 #~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds "
 #~ "(<code>600</code>)."
 #~ msgstr ""
-#~ "Maksymalny dozwolony czas między wysłaniem dobrowolnego <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość "
-#~ "domyślna to 600 sekund (<code>600</code>)."
+#~ "Maksymalny dozwolony czas między wysłaniem dobrowolnego <abbr title="
+#~ "\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to "
+#~ "600 sekund (<code>600</code>)."
 
 #~ msgid ""
 #~ "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 #~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds "
 #~ "(<code>200</code>)."
 #~ msgstr ""
-#~ "Minimalny dozwolony czas między wysłaniem dobrowolnego <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość "
-#~ "domyślna to 200 sekund (<code>200</code>)."
+#~ "Minimalny dozwolony czas między wysłaniem dobrowolnego <abbr title="
+#~ "\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to "
+#~ "200 sekund (<code>200</code>)."
 
 #~ msgid "Override MAC address"
 #~ msgstr "Nadpisz adres MAC"
@@ -11017,29 +11041,29 @@ msgstr "« Wróć"
 #~ "wartością logiczną <code>ndproxy_slave</code> ustawioną na 1. Pomyśl o "
 #~ "proxy <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> jak o proxy "
 #~ "ARP dla IPv6: ujednolicenie hostów na różnych fizycznych segmentach "
-#~ "sprzętowych w tej samej podsieci IP. Składa się z komunikatów <abbr "
-#~ "title=\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr "
-#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr>. Proxy <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr> nasłuchuje <abbr "
-#~ "title=\"Neighbour Solicitation, Type 135\">NS</abbr> na interfejsie z "
-#~ "ustawioną wartością logiczną <code>master</code> na 1 (tj. nadrzędnym), "
-#~ "następnie zapytuje interfejsy podrzędne/wewnętrzne o docelowe IP przed "
-#~ "ostatecznym wysłaniem komunikatu <abbr title=\"Neighbour Advertisement, "
-#~ "Type 136\">NA</abbr>. <abbr title=\"Neighbour Discovery Protocol\">NDP</"
-#~ "abbr> jest faktycznie ARP dla IPv6. <abbr title=\"Neighbour Solicitation, "
-#~ "Type 135\">NS</abbr> oraz <abbr title=\"Neighbour Advertisement, Type "
+#~ "sprzętowych w tej samej podsieci IP. Składa się z komunikatów <abbr title="
+#~ "\"Neighbour Solicitation, Type 135\">NS</abbr> oraz <abbr title="
+#~ "\"Neighbour Advertisement, Type 136\">NA</abbr>. Proxy <abbr title="
+#~ "\"Neighbour Discovery Protocol\">NDP</abbr> nasłuchuje <abbr title="
+#~ "\"Neighbour Solicitation, Type 135\">NS</abbr> na interfejsie z ustawioną "
+#~ "wartością logiczną <code>master</code> na 1 (tj. nadrzędnym), następnie "
+#~ "zapytuje interfejsy podrzędne/wewnętrzne o docelowe IP przed ostatecznym "
+#~ "wysłaniem komunikatu <abbr title=\"Neighbour Advertisement, Type "
+#~ "136\">NA</abbr>. <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
+#~ "jest faktycznie ARP dla IPv6. <abbr title=\"Neighbour Solicitation, Type "
+#~ "135\">NS</abbr> oraz <abbr title=\"Neighbour Advertisement, Type "
 #~ "136\">NA</abbr> wykrywają osiągalność oraz duplikaty adresów na łączu, co "
 #~ "jest również warunkiem koniecznym do autokonfiguracji SLAAC.<br /> <ul "
 #~ "style=\"list-style-type:none;\"> <li><strong>wyłączone</strong>: żadne "
 #~ "komunikaty <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> nie są "
 #~ "wysyłane poprzez prawdziwe interfejsy <code>ndproxy_slave</code>.</li> "
-#~ "<li><strong>tryb przekaźnika</strong>: wysyła komunikaty <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr> z prawdziwych "
-#~ "interfejsów <code>master</code> do <code>ndproxy_slave</code>. Pomaga "
-#~ "wspierać łącza dostawców bez <abbr title=\"Prefix Delegation\">PD</abbr> "
-#~ "oraz hosty proxy z zaporą sieciową.</li> <li><strong>tryb hybrydowy</"
-#~ "strong>: tryb przekaźnika jest wyłączony, chyba że wartość logiczna "
-#~ "interfejsu <code>master</code> wynosi 1.</li></ul>"
+#~ "<li><strong>tryb przekaźnika</strong>: wysyła komunikaty <abbr title="
+#~ "\"Neighbour Discovery Protocol\">NDP</abbr> z prawdziwych interfejsów "
+#~ "<code>master</code> do <code>ndproxy_slave</code>. Pomaga wspierać łącza "
+#~ "dostawców bez <abbr title=\"Prefix Delegation\">PD</abbr> oraz hosty "
+#~ "proxy z zaporą sieciową.</li> <li><strong>tryb hybrydowy</strong>: tryb "
+#~ "przekaźnika jest wyłączony, chyba że wartość logiczna interfejsu "
+#~ "<code>master</code> wynosi 1.</li></ul>"
 
 #~ msgid ""
 #~ "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 "
@@ -11066,13 +11090,13 @@ msgstr "« Wróć"
 #~ "abbr>. Domyślna wartość to 0 (<code>0</code>). Minimalna to 1280."
 
 #~ msgid ""
-#~ "The maximum hops to be published in <abbr title=\"Router "
-#~ "Advertisement\">RA</abbr> messages.<br />Default is 0 (<code>0</code>), "
-#~ "meaning unspecified. Max 255."
+#~ "The maximum hops to be published in <abbr title=\"Router Advertisement"
+#~ "\">RA</abbr> messages.<br />Default is 0 (<code>0</code>), meaning "
+#~ "unspecified. Max 255."
 #~ msgstr ""
-#~ "Maksymalna liczba skoków do opublikowania w komunikatach <abbr "
-#~ "title=\"Router Advertisement\">RA</abbr>.<br />Domyślna wartość to 0 "
-#~ "(<code>0</code>), tj. nie określono. Maksymalna to 255."
+#~ "Maksymalna liczba skoków do opublikowania w komunikatach <abbr title="
+#~ "\"Router Advertisement\">RA</abbr>.<br />Domyślna wartość to 0 (<code>0</"
+#~ "code>), tj. nie określono. Maksymalna to 255."
 
 #~ msgid "stateful-only"
 #~ msgstr "tylko stanowy"
@@ -11331,12 +11355,12 @@ msgstr "« Wróć"
 
 #~ msgid ""
 #~ "The filesystem that was used to format the memory (<abbr title=\"for "
-#~ "example\">e.g.</abbr> <samp><abbr title=\"Third Extended "
-#~ "Filesystem\">ext3</abbr></samp>)"
+#~ "example\">e.g.</abbr> <samp><abbr title=\"Third Extended Filesystem"
+#~ "\">ext3</abbr></samp>)"
 #~ msgstr ""
-#~ "System plików, który został użyty do sformatowania nośnika (<abbr "
-#~ "title=\"na przykład\">np.</abbr> <samp><abbr title=\"Third Extended "
-#~ "Filesystem\">ext3</abbr></samp>)"
+#~ "System plików, który został użyty do sformatowania nośnika (<abbr title="
+#~ "\"na przykład\">np.</abbr> <samp><abbr title=\"Third Extended Filesystem"
+#~ "\">ext3</abbr></samp>)"
 
 # Przycisk nazywa się "Wykonaj", więc taki sam opis ma być w podpowiedzi.
 #~ msgid ""
