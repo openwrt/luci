@@ -720,7 +720,7 @@ m.handle = function(self, state, data)
 	local memory = data.memory or 0
 	local cpu_shares = data.cpu_shares or 0
 	local cpus = data.cpus or 0
-	local blkio_weight = data.blkio_weight or 500
+	local blkio_weight = data.blkio_weight or nil
 
 	local portbindings = {}
 	local exposedports = {}
