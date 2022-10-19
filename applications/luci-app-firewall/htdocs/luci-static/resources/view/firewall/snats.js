@@ -9,6 +9,10 @@
 'require tools.widgets as widgets';
 
 function rule_proto_txt(s) {
+	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:any|\*)$/, '');
+	var sip = uci.get('firewall', s, 'src_ip') || '';
+	var dip = uci.get('firewall', s, 'dest_ip') || '';
+	var rwip = uci.get('firewall', s, 'snat_ip') || '';
 	var proto = L.toArray(uci.get('firewall', s, 'proto')).filter(function(p) {
 		return (p != '*' && p != 'any' && p != 'all');
 	}).map(function(p) {
@@ -27,7 +31,9 @@ function rule_proto_txt(s) {
 		mask: m[3] ? '0x%02X'.format(+m[3]) : null
 	} : null;
 
-	return fwtool.fmt(_('Forwarded IPv4%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}'), {
+	return fwtool.fmt(_('Forwarded %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}'), {
+		ipv4: (family == 'ipv4' || (!family && (sip.indexOf(':') == -1 && dip.indexOf(':') == -1 && rwip.indexOf(':') == -1))),
+		ipv6: (family == 'ipv6' || (!family && (sip.indexOf(':') != -1 || dip.indexOf(':') != -1 || rwip.indexOf(':') != -1))),
 		proto: proto,
 		mark:  f
 	});
@@ -91,6 +97,44 @@ function rule_target_txt(s) {
 	}
 }
 
+function validate_opt_family(m, section_id, opt) {
+	var sopt = m.section.getOption('src_ip'),
+	    dopt = m.section.getOption('dest_ip'),
+	    rwopt = m.section.getOption('snat_ip'),
+	    fmopt = m.section.getOption('family'),
+	    tgopt = m.section.getOption('target');
+
+	if (!sopt.isValid(section_id) && opt != 'src_ip')
+		return true;
+	if (!dopt.isValid(section_id) && opt != 'dest_ip')
+		return true;
+	if (!rwopt.isValid(section_id) && opt != 'snat_ip')
+		return true;
+	if (!fmopt.isValid(section_id) && opt != 'family')
+		return true;
+	if (!tgopt.isValid(section_id) && opt != 'target')
+		return true;
+
+	var sip = sopt.formvalue(section_id) || '',
+	    dip = dopt.formvalue(section_id) || '',
+	    rwip = rwopt.formvalue(section_id) || '',
+	    fm = fmopt.formvalue(section_id) || '',
+	    tg = tgopt.formvalue(section_id);
+
+	if (fm == 'ipv6' && (sip.indexOf(':') != -1 || sip == '') && (dip.indexOf(':') != -1 || dip == '') && ((rwip.indexOf(':') != -1 && tg == 'SNAT') || rwip == ''))
+		return true;
+	if (fm == 'ipv4' && (sip.indexOf(':') == -1) && (dip.indexOf(':') == -1) && ((rwip.indexOf(':') == -1 && tg == 'SNAT') || rwip == ''))
+		return true;
+	if (fm == '') {
+		if ((sip.indexOf(':') != -1 || sip == '') && (dip.indexOf(':') != -1 || dip == '') && ((rwip.indexOf(':') != -1 && tg == 'SNAT') || rwip == ''))
+			return true;
+		if ((sip.indexOf(':') == -1) && (dip.indexOf(':') == -1) && ((rwip.indexOf(':') == -1 && tg == 'SNAT') || rwip == ''))
+			return true;
+	}
+
+	return _('Address family, source address, destination address, rewrite IP address must match');
+}
+
 return view.extend({
 	callHostHints: rpc.declare({
 		object: 'luci-rpc',
@@ -123,6 +167,7 @@ return view.extend({
 		var hosts = data[0],
 		    devs = data[1],
 		    m, s, o;
+		var fw4 = L.hasSystemFeature('firewall4');
 
 		m = new form.Map('firewall', _('Firewall - NAT Rules'),
 			_('NAT rules allow fine grained control over the source IP to use for outbound or forwarded traffic.'));
@@ -166,6 +211,30 @@ return view.extend({
 		o.default = o.enabled;
 		o.editable = true;
 
+		if (fw4) {
+			o = s.taboption('general', form.ListValue, 'family', _('Restrict to address family'));
+			o.modalonly = true;
+			o.rmempty = true;
+			o.value('ipv4', _('IPv4 only'));
+			o.value('ipv6', _('IPv6 only'));
+			o.value('', _('automatic'));  // infer from zone or used IP addresses
+			o.cfgvalue = function(section_id) {
+				var val = this.map.data.get(this.map.config, section_id, 'family');
+
+				if (!val || val == 'any' || val == 'all' || val == '*')
+					return '';
+				else if (val == 'inet' || String(val).indexOf('4') != -1)
+					return 'ipv4';
+				else if (String(val).indexOf('6') != -1)
+					return 'ipv6';
+			};
+			o.validate = function(section_id, value) {
+				fwtool.updateHostHints(this.map, section_id, 'src_ip', value, hosts);
+				fwtool.updateHostHints(this.map, section_id, 'dest_ip', value, hosts);
+				return !fw4?true:validate_opt_family(this, section_id, 'family');
+			};
+		}
+
 		o = s.taboption('general', fwtool.CBIProtocolSelect, 'proto', _('Protocol'));
 		o.modalonly = true;
 		o.default = 'all';
@@ -178,9 +247,12 @@ return view.extend({
 		o.default = 'lan';
 
 		o = fwtool.addIPOption(s, 'general', 'src_ip', _('Source address'),
-			_('Match forwarded traffic from this IP or range.'), 'ipv4', hosts);
+			_('Match forwarded traffic from this IP or range.'), !fw4?'ipv4':'', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4("true"))';
+		o.datatype = !fw4?'neg(ipmask4("true"))':'neg(ipmask("true"))';
+		o.validate = function(section_id, value) {
+			return !fw4?true:validate_opt_family(this, section_id, 'src_ip');
+		};
 
 		o = s.taboption('general', form.Value, 'src_port', _('Source port'),
 			_('Match forwarded traffic originating from the given source port or port range.'));
@@ -192,9 +264,12 @@ return view.extend({
 		o.depends({ proto: 'udp', '!contains': true });
 
 		o = fwtool.addIPOption(s, 'general', 'dest_ip', _('Destination address'),
-			_('Match forwarded traffic directed at the given IP address.'), 'ipv4', hosts);
+			_('Match forwarded traffic directed at the given IP address.'), !fw4?'ipv4':'', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4("true"))';
+		o.datatype = !fw4?'neg(ipmask4("true"))':'neg(ipmask("true"))';
+		o.validate = function(section_id, value) {
+			return !fw4?true:validate_opt_family(this, section_id, 'dest_ip');
+		};
 
 		o = s.taboption('general', form.Value, 'dest_port', _('Destination port'),
 			_('Match forwarded traffic directed at the given destination port or port range.'));
@@ -211,6 +286,9 @@ return view.extend({
 		o.value('SNAT', _('SNAT - Rewrite to specific source IP or port'));
 		o.value('MASQUERADE', _('MASQUERADE - Automatically rewrite to outbound interface IP'));
 		o.value('ACCEPT', _('ACCEPT - Disable address rewriting'));
+		o.validate = function(section_id, value) {
+			return !fw4?true:validate_opt_family(this, section_id, 'target');
+		};
 
 		o = fwtool.addLocalIPOption(s, 'general', 'snat_ip', _('Rewrite IP address'),
 			_('Rewrite matched traffic to the specified source IP address.'), devs);
@@ -223,7 +301,7 @@ return view.extend({
 			if ((a == null || a == '') && (p == null || p == '') && value == '')
 				return _('A rewrite IP must be specified!');
 
-			return true;
+			return !fw4?true:validate_opt_family(this, section_id, 'snat_ip');
 		};
 
 		o = s.taboption('general', form.Value, 'snat_port', _('Rewrite port'),
