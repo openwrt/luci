@@ -287,9 +287,12 @@ return view.extend({
 
 		o = s.taboption('general', form.DynamicList, 'address',
 			_('Addresses'),
-			_('List of domains to force to an IP address.'));
+			_('Resolve specified FQDNs to an IP.') + '<br />' +
+			_('Syntax: <code>/fqdn[/fqdn...]/[ipaddr]</code>.&nbsp;') + '<br />' +
+			_('<code>/#/</code> matches any domain. <code>/asdf.com/</code> returns NXDOMAIN.&nbsp;') + '<br />' +
+			_('<code>/asdf.com/#</code> returns NULL addresses (<code>0.0.0.0</code> and <code>::</code>) for asdf.com and its subdomains.'));
 		o.optional = true;
-		o.placeholder = '/router.local/192.168.0.1';
+		o.placeholder = '/router.local/router.lan/192.168.0.1';
 
 		o = s.taboption('general', form.DynamicList, 'ipset',
 			_('IP sets'),
