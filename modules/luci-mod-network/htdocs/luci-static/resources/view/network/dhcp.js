@@ -256,6 +256,7 @@ return view.extend({
 		s.tab('leases', _('Static Leases'));
 		s.tab('hosts', _('Hostnames'));
 		s.tab('srvhosts', _('SRV'));
+		s.tab('mxhosts', _('MX'));
 		s.tab('ipsets', _('IP Sets'));
 
 		s.taboption('general', form.Flag, 'domainneeded',
@@ -554,6 +555,7 @@ return view.extend({
 			+ '<br />' + _('_proto: _tcp, _udp, _sctp, _quic, … .')
 			+ '<br />' + _('You may add multiple records for the same Target.')
 			+ '<br />' + _('Larger weights (of the same prio) are given a proportionately higher probability of being selected.'));
+
 		ss = o.subsection;
 
 		ss.addremove = true;
@@ -585,6 +587,33 @@ return view.extend({
 		so.rmempty = true;
 		so.datatype = 'range(0,65535)';
 		so.placeholder = '50';
+
+		o = s.taboption('mxhosts', form.SectionValue, '__mxhosts__', form.TableSection, 'mxhost', null,
+			_('Bind service records to a domain name: specify the location of services.')
+			 + '<br />' + _('You may add multiple records for the same domain.'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable  = true;
+		ss.rowcolors = true;
+		ss.nodescriptions = true;
+
+		so = ss.option(form.Value, 'domain', _('Domain'));
+		so.rmempty = false;
+		so.datatype = 'hostname';
+		so.placeholder = 'example.com';
+
+		so = ss.option(form.Value, 'relay', _('Relay'));
+		so.rmempty = false;
+		so.datatype = 'hostname';
+		so.placeholder = 'relay.example.com';
+
+		so = ss.option(form.Value, 'pref', _('Priority'), _('Ordinal: lower comes first.'));
+		so.rmempty = true;
+		so.datatype = 'range(0,65535)';
+		so.placeholder = '0';
 
 		o = s.taboption('hosts', form.SectionValue, '__hosts__', form.GridSection, 'domain', null,
 			_('Hostnames are used to bind a domain name to an IP address. This setting is redundant for hostnames already configured with static leases, but it can be useful to rebind an FQDN.'));
