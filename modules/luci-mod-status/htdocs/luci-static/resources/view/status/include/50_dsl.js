@@ -45,10 +45,12 @@ return baseclass.extend({
 	title: _('DSL'),
 
 	load: function() {
-		if (!network.getDSLModemType())
-			return Promise.reject();
+		return network.getDSLModemType().then(function(type) {
+			if (!type)
+				return Promise.reject();
 
-		return L.resolveDefault(callDSLMetrics(), {});
+			return L.resolveDefault(callDSLMetrics(), {});
+		});
 	},
 
 	render: function(dsl) {
