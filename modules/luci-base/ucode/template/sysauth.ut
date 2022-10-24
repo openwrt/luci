@@ -1,0 +1,74 @@
+{#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2012 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{% include('header') %}
+
+<form method="post">
+	{% if (fuser): %}
+		<div class="alert-message warning">
+			<p>{{ _('Invalid username and/or password! Please try again.') }}</p>
+		</div>
+	{% endif %}
+
+	<div class="cbi-map">
+		<h2 name="content">{{ _('Authorization Required') }}</h2>
+		<div class="cbi-map-descr">
+			{{ _('Please enter your username and password.') }}
+		</div>
+		<div class="cbi-section"><div class="cbi-section-node">
+			<div class="cbi-value">
+				<label class="cbi-value-title">{{ _('Username') }}</label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-text" type="text" name="luci_username" value="{{ entityencode(duser, true) }}" />
+				</div>
+			</div>
+			<div class="cbi-value cbi-value-last">
+				<label class="cbi-value-title">{{ _('Password') }}</label>
+				<div class="cbi-value-field">
+					<input class="cbi-input-text" type="password" name="luci_password" />
+				</div>
+			</div>
+		</div></div>
+	</div>
+
+	<div class="cbi-page-actions">
+		<input type="submit" value="{{ _('Login') }}" class="btn cbi-button cbi-button-apply" />
+		<input type="reset" value="{{ _('Reset') }}" class="btn cbi-button cbi-button-reset" />
+	</div>
+</form>
+
+{%
+	let https_ports = uci.get('uhttpd', 'main', 'listen_https') ?? [];
+
+	https_ports = uniq(filter(
+		map(
+			(type(https_ports) == 'string') ? split(https_port, /\s+/) : https_ports,
+			e => +match(e, /\d+$/)?.[0]
+		),
+		p => (p >= 0 && p <= 65535)
+	));
+%}
+
+<script type="text/javascript">//<![CDATA[
+	var input = document.getElementsByName('luci_password')[0];
+
+	if (input)
+		input.focus();
+
+	if (document.location.protocol != 'https:') {
+		{{ https_ports }}.forEach(function(port) {
+			var url = 'https://' + window.location.hostname + ':' + port + window.location.pathname;
+			var img = new Image();
+
+			img.onload = function() { window.location = url };
+			img.src = 'https://' + window.location.hostname + ':' + port + '{{ resource }}/icons/loading.gif?' + Math.random();
+
+			setTimeout(function() { img.src = '' }, 5000);
+		});
+	}
+//]]></script>
+
+{% include('footer') %}

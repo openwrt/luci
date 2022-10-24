@@ -502,17 +502,17 @@ static const luaL_reg ucode_ud_methods[] = {
 static uc_value_t *
 uc_lua_vm_claim_result(uc_vm_t *vm, lua_State *L, int oldtop)
 {
-	int nargs = lua_gettop(L) - oldtop, i;
+	int nargs = lua_gettop(L) - oldtop - 1, i;
 	uc_value_t *uv;
 
 	if (nargs > 1) {
 		uv = ucv_array_new_length(vm, nargs);
 
-		for (i = 1; i <= nargs; i++)
+		for (i = 2; i <= nargs; i++)
 			ucv_array_push(uv, lua_to_ucv(L, oldtop + i, vm, NULL));
 	}
 	else if (nargs == 1) {
-		uv = lua_to_ucv(L, oldtop + 1, vm, NULL);
+		uv = lua_to_ucv(L, oldtop + 2, vm, NULL);
 	}
 	else {
 		uv = NULL;
@@ -521,18 +521,57 @@ uc_lua_vm_claim_result(uc_vm_t *vm, lua_State *L, int oldtop)
 	return uv;
 }
 
+static int
+uc_lua_vm_pcall_error_cb(lua_State *L)
+{
+	const char *message = luaL_checkstring(L, 1);
+	uc_stringbuf_t *buf = xprintbuf_new();
+	lua_Debug ar;
+	int level;
+
+	ucv_stringbuf_printf(buf, "%s\n", message);
+
+	for (level = 1; lua_getstack(L, level, &ar) == 1; level++) {
+		if (lua_getinfo(L, "Snl", &ar) == 0)
+			continue;
+
+		if (level == 1) {
+			ucv_stringbuf_printf(buf, "\nIn %s(), file %s",
+				ar.name ? ar.name : "[anonymous function]", ar.short_src);
+
+			if (ar.currentline > -1)
+				ucv_stringbuf_printf(buf, ", line %d", ar.currentline);
+
+			ucv_stringbuf_append(buf, "\n");
+		}
+		else {
+			ucv_stringbuf_printf(buf, "  called from function %s (%s",
+				ar.name ? ar.name : "[anonymous function]", ar.short_src);
+
+			if (ar.currentline > -1)
+				ucv_stringbuf_printf(buf, ":%d", ar.currentline);
+
+			ucv_stringbuf_append(buf, ")\n");
+		}
+	}
+
+	lua_pushstring(L, buf->buf);
+	printbuf_free(buf);
+
+	return 1;
+}
+
 static uc_value_t *
 uc_lua_vm_pcall(uc_vm_t *vm, lua_State *L, int oldtop)
 {
 	uc_value_t *uv;
 
-	switch (lua_pcall(L, lua_gettop(L) - oldtop - 1, LUA_MULTRET, 0)) {
+	switch (lua_pcall(L, lua_gettop(L) - oldtop - 2, LUA_MULTRET, oldtop + 1)) {
 	case LUA_ERRRUN:
 	case LUA_ERRMEM:
 	case LUA_ERRERR:
 		uc_vm_raise_exception(vm, EXCEPTION_RUNTIME,
-			"Lua raised runtime exception: %s",
-			lua_tostring(L, -1));
+			"%s", lua_tostring(L, -1));
 
 		uv = NULL;
 		break;
@@ -559,6 +598,7 @@ uc_lua_vm_invoke(uc_vm_t *vm, size_t nargs)
 
 	top = lua_gettop(*L);
 
+	lua_pushcfunction(*L, uc_lua_vm_pcall_error_cb);
 	lua_getglobal(*L, ucv_string_get(name));
 
 	for (i = 1; i < nargs; i++) {
@@ -586,11 +626,12 @@ uc_lua_vm_eval(uc_vm_t *vm, size_t nargs)
 
 	top = lua_gettop(*L);
 
+	lua_pushcfunction(*L, uc_lua_vm_pcall_error_cb);
+
 	switch (luaL_loadstring(*L, ucv_string_get(source))) {
 	case LUA_ERRSYNTAX:
 		uc_vm_raise_exception(vm, EXCEPTION_SYNTAX,
-			"Syntax error while compiling Lua code: %s",
-			lua_tostring(*L, -1));
+			"%s", lua_tostring(*L, -1));
 
 		break;
 
@@ -623,6 +664,8 @@ uc_lua_vm_include(uc_vm_t *vm, size_t nargs)
 		return NULL;
 
 	top = lua_gettop(*L);
+
+	lua_pushcfunction(*L, uc_lua_vm_pcall_error_cb);
 
 	switch (luaL_loadfile(*L, ucv_string_get(path))) {
 	case LUA_ERRSYNTAX:
@@ -750,6 +793,7 @@ uc_lua_lv_call(uc_vm_t *vm, size_t nargs)
 
 	oldtop = lua_gettop(L);
 
+	lua_pushcfunction(L, uc_lua_vm_pcall_error_cb);
 	lua_rawgeti(L, LUA_REGISTRYINDEX, (*lv)->ref);
 
 	for (i = 0; i < nargs; i++)
@@ -777,6 +821,7 @@ uc_lua_lv_invoke(uc_vm_t *vm, size_t nargs)
 
 	oldtop = lua_gettop(L);
 
+	lua_pushcfunction(L, uc_lua_vm_pcall_error_cb);
 	lua_rawgeti(L, LUA_REGISTRYINDEX, (*lv)->ref);
 	ucv_to_lua(vm, method, L, NULL);
 	lua_gettable(L, -2);

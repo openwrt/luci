@@ -1,0 +1,284 @@
+#!/usr/bin/env ucode
+/*
+Luci statistics - collectd configuration generator
+(c) 2008-2022 Jo-Philipp Wich <jo@mein.io>
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+		http://www.apache.org/licenses/LICENSE-2.0
+
+*/
+
+'use strict';
+
+import { lsdir, open } from 'fs';
+import { cursor } from 'uci';
+
+const uci = cursor();
+const sections = uci.get_all('luci_statistics');
+
+const plugins = {
+	collectd: [
+		[ 'BaseDir', 'Include', 'PIDFile', 'PluginDir', 'TypesDB', 'Interval', 'ReadThreads', 'Hostname' ],
+		[],
+		[]
+	],
+	logfile: [
+		[ 'LogLevel', 'File' ],
+		[ 'Timestamp' ],
+		[]
+	],
+};
+
+function parse_units(ustr) {
+	let val = 0;
+
+	// unit map
+	const map = {
+		y  : 60 * 60 * 24 * 366,
+		m  : 60 * 60 * 24 * 31,
+		w  : 60 * 60 * 24 * 7,
+		d  : 60 * 60 * 24,
+		h  : 60 * 60,
+		min: 60
+	};
+
+	// parse input string
+	for (let spec in match(lc(ustr), /([0-9.]+)([a-z]*)/g)) {
+		let num = +spec[1];
+		let mul = map[spec[2]] ?? map[substr(spec[2], 0, 1)] ?? 1;
+
+		val += num * mul;
+	}
+
+	return int(val);
+}
+
+const preprocess = {
+	RRATimespans: function(val) {
+		return join(' ', map(split(val, /\s+/), parse_units));
+	}
+};
+
+
+function _bool(s, n, nopad) {
+	if (s == '1')
+		return `${nopad ? '' : '\t'}${n} true\n`;
+
+	if (s == '0')
+		return `${nopad ? '' : '\t'}${n} false\n`;
+
+	return '';
+}
+
+function _string(s, n, nopad) {
+	if (s) {
+		if (n == 'Port' || n == 'Irq' || match(s, /[^0-9]/)) {
+			if (!match(s, /[^\w]/) && n != 'Port' && n != 'Irq')
+				return `${nopad ? '' : '\t'}${n} ${trim(s)}\n`;
+			else
+				return `${nopad ? '' : '\t'}${n} "${trim(s)}"\n`;
+		}
+		else {
+			return `${nopad ? '' : '\t'}${n} ${trim(s)}\n`;
+		}
+	}
+
+	return '';
+}
+
+function _expand(s, n, nopad) {
+	let str = "";
+
+	if (type(s) == 'string') {
+		for (let v in split(s, /\s+/))
+			str += _string(v, n, nopad);
+	}
+	else if (type(s) == 'array') {
+		for (let v in s)
+			str += _string(v, n, nopad);
+	}
+
+	return str;
+}
+
+function _list_expand(c, l, nopad) {
+	let str = '';
+
+	for (let n in l) {
+		if (c[n]) {
+			if (preprocess[n])
+				c[n] = preprocess[n](c[n]);
+
+			let m = match(n, /^(\w+)ses$/);
+			let k;
+
+			if (m)
+				k = `${m[1]}s`;
+			else
+				k = replace(n, /^(\w+)s$/, '$1');
+
+			str += _expand(c[n], k, nopad);
+		}
+	}
+
+	return str;
+}
+
+
+function config_generic(c, singles, bools, lists, nopad) {
+	let str = '';
+
+	if (c) {
+		for (let key in singles) {
+			if (preprocess[key])
+				c[key] = preprocess[key](c[key]);
+
+			str += _string(c[key], key, nopad);
+		}
+
+		for (let key in bools) {
+			if (preprocess[key])
+				c[key] = preprocess[key](c[key]);
+
+			str += _bool(c[key], key, nopad);
+		}
+
+		if (lists)
+			str += _list_expand(c, lists, nopad);
+	}
+
+	return str;
+}
+
+function config_exec(c) {
+	let str = "";
+
+	for (let k, s in sections) {
+		for (let key, type in { Exec: 'collectd_exec_input', NotificationExec: 'collectd_exec_notify' }) {
+			if (s['.type'] == type) {
+				let cmd   = replace(trim(s.cmdline), /\s+/g, '" "');
+				let user  = s.cmduser ?? 'nobody';
+				let group = s.cmdgroup;
+
+				if (cmd)
+					str += `\t${key} "${user}${group ? `:${group}` : ''}" "${cmd}"\n`;
+			}
+		}
+	}
+
+	return str;
+}
+
+function config_curl(c) {
+	let str = "";
+
+	for (let k, s in sections) {
+		if (s['.type'] == 'collectd_curl_page') {
+			str += `\t<Page "${s.name}">\n`
+			     + `\t\tURL "${s.url}"\n`
+			     + `\t\tMeasureResponseTime true\n`
+			     + `\t</Page>\n`;
+		}
+	}
+
+	return str;
+}
+
+function config_iptables(c) {
+	let str = "";
+
+	for (let k, s in sections) {
+		for (let type, verb in { collectd_iptables_match: 'Chain', collectd_iptables_match6: 'Chain6' }) {
+			if (s['.type'] == type) {
+				let tname = `${s.table}`;
+				let chain = `${s.chain}`;
+
+				if (match(tname, /^\S+$/) && match(chain, /^\S+$/) && match(rule, /^\S+$/) && match(name, /^\S+$/)) {
+					str += `\t${verb} "${tname}" "${chain}"`;
+
+					let rule = `${s.rule}`;
+
+					if (match(rule, /^\S+$/)) {
+						str += ` "${rule}"`;
+
+						let name = `${s.name}`;
+
+						if (match(name, /^\S+$/))
+							str += ` "${name}"`;
+					}
+
+					str += '\n';
+				}
+			}
+		}
+	}
+
+	return str;
+}
+
+function config_network(c) {
+	let str = '';
+
+	for (let k, s in sections) {
+		for (let key, type in { Listen: 'collectd_network_listen', Server: 'collectd_network_server' }) {
+			if (s['.type'] == type && s.host) {
+				if (s.port)
+					str += `\t${key} "${s.host}" "${s.port}"\n`;
+				else
+					str += `\t${key} "${s.host}"\n`;
+			}
+		}
+	}
+
+	return str
+		+ _string(c.MaxPacketSize, 'MaxPacketSize')
+		+ _string(c.TimeToLive, 'TimeToLive')
+		+ _bool(c.Forward, 'Forward')
+		+ _bool(c.ReportStats, 'ReportStats')
+	;
+}
+
+function section(plugin) {
+	let config = sections[`collectd_${plugin}`] ?? sections.collectd;
+
+	if (config && (plugin == 'collectd' || config.enable == '1')) {
+		let params;
+
+		if (type(plugins[plugin]) == 'function')
+			params = plugins[plugin](config);
+		else
+			params = config_generic(config, ...plugins[plugin], plugin == 'collectd');
+
+		if (plugin != 'collectd')
+			print(`LoadPlugin ${plugin}\n${length(params) ? `<Plugin ${plugin}>\n${params}</Plugin>\n` : ''}\n`);
+		else
+			print(`${params ?? ''}\n`);
+	}
+}
+
+
+let plugin_dir = '/usr/share/luci/statistics/plugins';
+
+for (let filename in lsdir(plugin_dir)) {
+	let name = replace(filename, /\.json$/, '');
+
+	switch (name) {
+	case 'exec':     plugins[name] = config_exec;     break;
+	case 'iptables': plugins[name] = config_iptables; break;
+	case 'curl':     plugins[name] = config_curl;     break;
+	case 'network':  plugins[name] = config_network;  break;
+	default:
+		plugins[name] = json(open(`${plugin_dir}/${filename}`))?.legend;
+	}
+}
+
+
+section('collectd');
+section('logfile');
+
+for (let plugin in plugins)
+	if (plugin != 'collectd' && plugin != 'logfile')
+		section(plugin);

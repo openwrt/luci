@@ -408,7 +408,7 @@ msgstr ""
 msgid "ATM device number"
 msgstr "ATM 设备号码"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:37
 msgid "ATU-C System Vendor ID"
 msgstr "ATU-C 系统供应商 ID"
 
@@ -645,7 +645,7 @@ msgstr "老化时间"
 msgid "Aggregate Originator Messages"
 msgstr "聚合发起者消息"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:28
 msgid "Aggregate Transmit Power (ACTATP)"
 msgstr "总发射功率（ACTATP）"
 
@@ -797,7 +797,7 @@ msgid "An optional, short description for this device"
 msgstr "此设备的可选简短描述"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1484
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:21
 msgid "Annex"
 msgstr "Annex"
 
@@ -1009,7 +1009,7 @@ msgstr "身份验证类型"
 msgid "Authoritative"
 msgstr "唯一授权"
 
-#: modules/luci-base/luasrc/view/sysauth.htm:17
+#: modules/luci-base/ucode/template/sysauth.ut:17
 #: themes/luci-theme-bootstrap/htdocs/luci-static/resources/view/bootstrap/sysauth.js:11
 msgid "Authorization Required"
 msgstr "需要授权"
@@ -1114,10 +1114,6 @@ msgstr "返回"
 msgid "Back to Overview"
 msgstr "返回至概览"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:48
-msgid "Back to configuration"
-msgstr "返回至配置"
-
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:826
 msgid "Back to peer configuration"
 msgstr "返回 peer 配置"
@@ -1131,7 +1127,6 @@ msgid "Backup / Flash Firmware"
 msgstr "备份与升级"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:351
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:12
 msgid "Backup file list"
 msgstr "文件备份列表"
 
@@ -1177,7 +1172,6 @@ msgid "Beacon Interval"
 msgstr "信标间隔"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:352
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:46
 msgid ""
 "Below is the determined list of files to backup. It consists of changed "
 "configuration files marked by opkg, essential base files and the user "
@@ -1568,10 +1562,6 @@ msgid ""
 "persist connection"
 msgstr "在给定时间（秒）后关闭非活动链接，0 为保持连接"
 
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:49
-msgid "Close list..."
-msgstr "关闭列表…"
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:44
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:63
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2184
@@ -1946,11 +1936,11 @@ msgid "DS-Lite AFTR address"
 msgstr "DS-Lite AFTR 地址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1481
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:44
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:45
 msgid "DSL"
 msgstr "DSL"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:14
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:15
 msgid "DSL Status"
 msgstr "DSL 状态"
 
@@ -1968,7 +1958,7 @@ msgstr "DTIM 间隔"
 msgid "DUID"
 msgstr "DUID"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:21
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:22
 msgid "Data Rate"
 msgstr "数据速率"
 
@@ -2799,7 +2789,7 @@ msgstr "错误"
 msgid "Error getting PublicKey"
 msgstr "获取公钥时出错"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:29
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:30
 msgid "Errored seconds (ES)"
 msgstr "错误秒数（ES）"
 
@@ -3145,7 +3135,7 @@ msgstr "强制升级"
 msgid "Force use of NAT-T"
 msgstr "强制使用 NAT-T"
 
-#: modules/luci-base/luasrc/view/csrftoken.htm:8
+#: modules/luci-base/ucode/template/csrftoken.ut:8
 msgid "Form token mismatch"
 msgstr "表单令牌不匹配"
 
@@ -3179,7 +3169,7 @@ msgid ""
 "downstream interfaces."
 msgstr "在指定的主接口和下游接口之间转发 DHCPv6 消息。"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:28
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:29
 msgid "Forward Error Correction Seconds (FECS)"
 msgstr "前向纠错秒数（FECS）"
 
@@ -3338,14 +3328,14 @@ msgstr "全局设置"
 msgid "Global network options"
 msgstr "全局网络选项"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:82
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:70
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:89
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:74
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:92
 msgid "Go to firmware upgrade..."
 msgstr "转到固件升级…"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:72
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:60
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:64
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:82
 msgid "Go to password configuration..."
@@ -3487,7 +3477,7 @@ msgstr "HTTP(S) 访问"
 msgid "Hang Up"
 msgstr "挂起"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:34
 msgid "Header Error Code Errors (HEC)"
 msgstr "请求头错误代码错误（HEC）"
 
@@ -4044,7 +4034,7 @@ msgstr ""
 "在桥接 LAN 设置中，建议启用桥接环路避免功能，以避免可导致整个 LAN 停止的广播"
 "环路。"
 
-#: modules/luci-base/luasrc/view/csrftoken.htm:13
+#: modules/luci-base/ucode/template/csrftoken.ut:13
 msgid ""
 "In order to prevent unauthorized access to the system, your request has been "
 "blocked. Click \"Continue »\" below to return to the previous page."
@@ -4242,10 +4232,6 @@ msgstr "接口"
 msgid "Internal"
 msgstr "内部"
 
-#: modules/luci-base/luasrc/view/error500.htm:8
-msgid "Internal Server Error"
-msgstr "内部服务器错误"
-
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:285
 msgid "Interval For Sending Learning Packets"
 msgstr "学习包发送间隔"
@@ -4316,8 +4302,8 @@ msgstr "无效命令"
 msgid "Invalid hexadecimal value"
 msgstr "无效 16 进制值"
 
-#: modules/luci-base/luasrc/view/sysauth.htm:12
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/sysauth.htm:37
+#: modules/luci-base/ucode/template/sysauth.ut:12
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:32
 msgid "Invalid username and/or password! Please try again."
 msgstr "无效的用户名和/或密码！请重试。"
 
@@ -4339,7 +4325,7 @@ msgid ""
 "flash memory, please verify the image file!"
 msgstr "您尝试刷写的固件与此设备不兼容，请检查固件文件！"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:89
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:77
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:96
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:72
 msgid "JavaScript required!"
@@ -4482,7 +4468,7 @@ msgstr "较大的权重（相同的优先级下）被赋予相应较高的被选
 msgid "Last member interval"
 msgstr "最后成员间隔"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:23
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:24
 msgid "Latency"
 msgstr "延迟"
 
@@ -4548,19 +4534,19 @@ msgstr "图例："
 msgid "Limit"
 msgstr "客户数"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:24
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
 msgid "Line Attenuation (LATN)"
 msgstr "线路衰减（LATN）"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:18
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:19
 msgid "Line Mode"
 msgstr "线路模式"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:17
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:18
 msgid "Line State"
 msgstr "线路状态"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:19
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:20
 msgid "Line Uptime"
 msgstr "线路运行时间"
 
@@ -4676,9 +4662,9 @@ msgid "Loading directory contents…"
 msgstr "正在载入目录内容…"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:1942
-#: modules/luci-base/luasrc/view/view.htm:4
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:12
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/sysauth.htm:45
+#: modules/luci-base/ucode/template/view.ut:4
+#: modules/luci-mod-status/ucode/template/admin_status/index.ut:12
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:40
 msgid "Loading view…"
 msgstr "正在载入视图…"
 
@@ -4794,8 +4780,8 @@ msgstr ""
 msgid "Logical network to which the tunnel will be added (bridged) (optional)."
 msgstr "隧道将要被添加（桥接）到的逻辑网络（可选）。"
 
-#: modules/luci-base/luasrc/view/sysauth.htm:38
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/sysauth.htm:41
+#: modules/luci-base/ucode/template/sysauth.ut:38
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:36
 msgid "Login"
 msgstr "登录"
 
@@ -4807,13 +4793,17 @@ msgstr "退出"
 msgid "Loose filtering"
 msgstr "宽松过滤"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:31
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:32
 msgid "Loss of Signal Seconds (LOSS)"
 msgstr "信号丢失秒数（LOSS）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:669
 msgid "Lowest leased address as offset from the network address."
 msgstr "网络地址的起始分配基址。"
+
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/footer.ut:12
+msgid "Lua compatibility mode active"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:48
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:83
@@ -4926,7 +4916,7 @@ msgstr "主设备"
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
 msgstr "最长 <abbr title=\"路由器通告\">RA</abbr> 间隔"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:22
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:23
 msgid "Max. Attainable Data Rate (ATTNDR)"
 msgstr "最大可达数据速率（ATTNDR）"
 
@@ -5447,7 +5437,7 @@ msgstr "无 NAT-T"
 msgid "No RX signal"
 msgstr "无接收信号"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:80
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:68
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:87
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:72
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:90
@@ -5491,10 +5481,6 @@ msgstr "没有可用的条目"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2908
 msgid "No entries in this directory"
 msgstr "此目录中没有内容"
-
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:82
-msgid "No files found"
-msgstr "未找到文件"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:833
 msgid ""
@@ -5540,7 +5526,7 @@ msgstr "禁用无效信息缓存"
 msgid "No nftables ruleset loaded."
 msgstr "未加载 nftables 规则集。"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:69
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:57
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:61
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:79
 msgid "No password set!"
@@ -5581,7 +5567,7 @@ msgstr "未指定区域"
 msgid "Noise"
 msgstr "噪声"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:26
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
 msgid "Noise Margin (SNR)"
 msgstr "噪声容限（SNR）"
 
@@ -5589,7 +5575,7 @@ msgstr "噪声容限（SNR）"
 msgid "Noise:"
 msgstr "噪声："
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:34
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:35
 msgid "Non Pre-emptive CRC errors (CRC_P)"
 msgstr "非抢占 CRC 错误（CRC_P）"
 
@@ -5608,7 +5594,7 @@ msgstr "无"
 msgid "Normal"
 msgstr "正常"
 
-#: modules/luci-base/luasrc/view/error404.htm:8
+#: modules/luci-base/ucode/template/error404.ut:9
 msgid "Not Found"
 msgstr "未找到"
 
@@ -5744,7 +5730,6 @@ msgid "Open iptables rules overview…"
 msgstr "打开 iptables 规则概况…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:472
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:19
 msgid "Open list..."
 msgstr "打开列表…"
 
@@ -6195,13 +6180,13 @@ msgctxt "MACVLAN mode"
 msgid "Pass-through (Mirror physical device to single MAC VLAN)"
 msgstr "直通（将物理设备镜像到单个 MAC VLAN）"
 
-#: modules/luci-base/luasrc/view/sysauth.htm:29
+#: modules/luci-base/ucode/template/sysauth.ut:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1690
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:103
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/sysauth.htm:24
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:19
 msgid "Password"
 msgstr "密码"
 
@@ -6374,7 +6359,7 @@ msgstr "Ping"
 msgid "Pkts."
 msgstr "Pkts."
 
-#: modules/luci-base/luasrc/view/sysauth.htm:19
+#: modules/luci-base/ucode/template/sysauth.ut:19
 msgid "Please enter your username and password."
 msgstr "请输入用户名和密码。"
 
@@ -6408,11 +6393,11 @@ msgstr "端口状态："
 msgid "Potential negation of: %s"
 msgstr "可能存在的冲突：%s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:37
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:38
 msgid "Power Management Mode"
 msgstr "电源管理模式"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:35
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:36
 msgid "Pre-emptive CRC errors (CRCP_P)"
 msgstr "抢占式 CRC 错误（CRCP_P）"
 
@@ -6968,7 +6953,7 @@ msgid "Reselection policy for primary slave"
 msgstr "主从属设备的重选策略"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2197
-#: modules/luci-base/luasrc/view/sysauth.htm:39
+#: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:66
@@ -7459,7 +7444,7 @@ msgstr "设置"
 msgid "Setup routes for proxied IPv6 neighbours."
 msgstr "设置已代理 IPv6 邻居的路由。"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:30
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:31
 msgid "Severely Errored Seconds (SES)"
 msgstr "严重误码秒（SES）"
 
@@ -7473,7 +7458,6 @@ msgid "Short Preamble"
 msgstr "Short Preamble"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:470
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:18
 msgid "Show current backup file list"
 msgstr "显示当前备份文件列表"
 
@@ -7507,7 +7491,7 @@ msgstr "信号"
 msgid "Signal / Noise"
 msgstr "信号/噪声"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:26
 msgid "Signal Attenuation (SATN)"
 msgstr "信号衰减（SATN）"
 
@@ -7564,13 +7548,9 @@ msgstr "软件 VLAN"
 msgid "Some fields are invalid, cannot save values!"
 msgstr "一些字段的值无效，无法保存！"
 
-#: modules/luci-base/luasrc/view/error404.htm:9
+#: modules/luci-base/ucode/template/error404.ut:10
 msgid "Sorry, the object you requested was not found."
 msgstr "对不起，请求的目标未找到。"
-
-#: modules/luci-base/luasrc/view/error500.htm:9
-msgid "Sorry, the server encountered an unexpected error."
-msgstr "对不起，服务器遇到未知错误。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:442
 msgid ""
@@ -8019,7 +7999,7 @@ msgstr "非活动站点限制"
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:16
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:541
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:929
-#: modules/luci-mod-status/luasrc/view/admin_status/index.htm:9
+#: modules/luci-mod-status/ucode/template/admin_status/index.ut:9
 msgid "Status"
 msgstr "状态"
 
@@ -8148,7 +8128,7 @@ msgstr "系统属性"
 msgid "System log buffer size"
 msgstr "系统日志缓冲区大小"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:79
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:67
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:86
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:71
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:89
@@ -8619,7 +8599,7 @@ msgstr ""
 msgid "The selected %s mode is incompatible with %s encryption"
 msgstr "模式 %s 与 %s 加密方法不兼容"
 
-#: modules/luci-base/luasrc/view/csrftoken.htm:11
+#: modules/luci-base/ucode/template/csrftoken.ut:11
 msgid "The submitted security token is invalid or already expired!"
 msgstr "提交的安全令牌无效或已过期！"
 
@@ -8708,7 +8688,7 @@ msgstr "没有已分配的租约"
 msgid "There are no changes to apply"
 msgstr "没有待应用的更改"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:70
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:58
 #: themes/luci-theme-openwrt-2020/luasrc/view/themes/openwrt2020/header.htm:62
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:80
 msgid ""
@@ -8730,7 +8710,6 @@ msgid "This does not look like a valid PEM file"
 msgstr "这不是有效的 PEM 文件"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:454
-#: modules/luci-mod-system/luasrc/model/cbi/admin_system/backupfiles.lua:16
 msgid ""
 "This is a list of shell glob patterns for matching files and directories to "
 "include during sysupgrade. Modified files in /etc/config/ and certain other "
@@ -9019,7 +8998,7 @@ msgstr "无法确认外部 IP 地址"
 msgid "Unable to determine upstream interface"
 msgstr "无法确认上游接口"
 
-#: modules/luci-base/luasrc/view/error404.htm:11
+#: modules/luci-base/ucode/template/error404.ut:12
 msgid "Unable to dispatch"
 msgstr "无法调度"
 
@@ -9074,7 +9053,7 @@ msgstr "无法保存内容：%s"
 msgid "Unable to verify PIN"
 msgstr "无法验证 PIN"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:32
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:33
 msgid "Unavailable Seconds (UAS)"
 msgstr "不可用秒数（UAS）"
 
@@ -9402,11 +9381,11 @@ msgstr "用户标识符"
 msgid "User key (PEM encoded)"
 msgstr "用户密钥（PEM）"
 
-#: modules/luci-base/luasrc/view/sysauth.htm:23
+#: modules/luci-base/ucode/template/sysauth.ut:23
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:101
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/sysauth.htm:18
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:13
 msgid "Username"
 msgstr "用户名"
 
@@ -9795,7 +9774,7 @@ msgstr "你可以为同一目标添加多条记录。"
 msgid "You may add multiple records for the same domain."
 msgstr "你可以为同一个域添加多条记录。"
 
-#: themes/luci-theme-bootstrap/luasrc/view/themes/bootstrap/header.htm:90
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:78
 #: themes/luci-theme-material/luasrc/view/themes/material/header.htm:97
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:73
 msgid ""
@@ -10379,6 +10358,21 @@ msgstr "是"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 后退"
+
+#~ msgid "Back to configuration"
+#~ msgstr "返回至配置"
+
+#~ msgid "Close list..."
+#~ msgstr "关闭列表…"
+
+#~ msgid "Internal Server Error"
+#~ msgstr "内部服务器错误"
+
+#~ msgid "No files found"
+#~ msgstr "未找到文件"
+
+#~ msgid "Sorry, the server encountered an unexpected error."
+#~ msgstr "对不起，服务器遇到未知错误。"
 
 #~ msgid "Do not forward queries that cannot be answered by public resolvers."
 #~ msgstr "不转发公共域名服务器无法回应的请求。"

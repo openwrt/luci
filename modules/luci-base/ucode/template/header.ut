@@ -1,0 +1,32 @@
+{#
+ Copyright 2022 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{%
+	include(`themes/${theme}/header`);
+-%}
+
+<script type="text/javascript" src="{{ resource }}/promis.min.js"></script>
+<script type="text/javascript" src="{{ resource }}/luci.js"></script>
+<script type="text/javascript">
+	L = new LuCI({{ {
+		media          : media,
+		resource       : resource,
+		scriptname     : http.getenv("SCRIPT_NAME"),
+		pathinfo       : http.getenv("PATH_INFO"),
+		documentroot   : http.getenv("DOCUMENT_ROOT"),
+		requestpath    : ctx.request_path,
+		dispatchpath   : ctx.path,
+		pollinterval   : +config.main.pollinterval || 5,
+		ubuspath       : config.main.ubuspath || '/ubus/',
+		sessionid      : ctx.authsession,
+		token          : ctx.authtoken,
+		nodespec       : node,
+		apply_rollback : max(+config.apply.rollback ||  90, 90),
+		apply_holdoff  : max(+config.apply.holdoff  ||   4,  1),
+		apply_timeout  : max(+config.apply.timeout  ||   5,  1),
+		apply_display  : max(+config.apply.display  || 1.5,  1),
+		rollback_token : rollback_token
+	} }});
+</script>

@@ -61,7 +61,7 @@
 
 	"admin/translations/*": {
 		"action": {
-			"type": "call",
+			"type": "function",
 			"module": "luci.controller.admin.index",
 			"function": "action_translations"
 		},
@@ -70,7 +70,7 @@
 
 	"admin/ubus/*": {
 		"action": {
-			"type": "call",
+			"type": "function",
 			"module": "luci.controller.admin.index",
 			"function": "action_ubus"
 		},
@@ -81,7 +81,7 @@
 		"title": "Logout",
 		"order": 999,
 		"action": {
-			"type": "call",
+			"type": "function",
 			"module": "luci.controller.admin.index",
 			"function": "action_logout"
 		},
@@ -99,7 +99,7 @@
 
 	"admin/uci/revert": {
 		"action": {
-			"type": "call",
+			"type": "function",
 			"module": "luci.controller.admin.uci",
 			"function": "action_revert",
 			"post": true
@@ -109,7 +109,7 @@
 	"admin/uci/apply_rollback": {
 		"cors": true,
 		"action": {
-			"type": "call",
+			"type": "function",
 			"module": "luci.controller.admin.uci",
 			"function": "action_apply_rollback",
 			"post": true
@@ -122,7 +122,7 @@
 	"admin/uci/apply_unchecked": {
 		"cors": true,
 		"action": {
-			"type": "call",
+			"type": "function",
 			"module": "luci.controller.admin.uci",
 			"function": "action_apply_unchecked",
 			"post": true
@@ -135,7 +135,7 @@
 	"admin/uci/confirm": {
 		"cors": true,
 		"action": {
-			"type": "call",
+			"type": "function",
 			"module": "luci.controller.admin.uci",
 			"function": "action_confirm"
 		},
@@ -144,7 +144,7 @@
 
 	"admin/menu": {
 		"action": {
-			"type": "call",
+			"type": "function",
 			"module": "luci.controller.admin.index",
 			"function": "action_menu"
 		},
