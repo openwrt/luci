@@ -103,6 +103,8 @@ function determine_request_language() {
 
 	if (lang == 'auto')
 		lang = 'en';
+	else
+		lang = replace(lang, '_', '-');
 
 	if (load_catalog(lang, '/usr/lib/lua/luci/i18n'))
 		change_catalog(lang);
