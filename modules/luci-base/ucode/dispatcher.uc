@@ -183,6 +183,10 @@ function check_fs_depends(spec) {
 			if (fstat?.type != 'file')
 				return false;
 		}
+		else if (kind == 'absent') {
+			if (stat(path) != null)
+				return false;
+		}
 	}
 
 	return true;
