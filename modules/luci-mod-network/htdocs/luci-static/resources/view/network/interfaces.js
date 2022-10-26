@@ -1199,7 +1199,7 @@ return view.extend({
 					'class': 'ifacebox-head',
 					'style': firewall.getZoneColorStyle(zone),
 					'title': zone ? _('Part of zone %q').format(zone.getName()) : _('No zone assigned')
-				}, E('strong', net.getName().toUpperCase())),
+				}, E('strong', net.getName())),
 				E('div', {
 					'class': 'ifacebox-body',
 					'id': '%s-ifc-devices'.format(section_id),
