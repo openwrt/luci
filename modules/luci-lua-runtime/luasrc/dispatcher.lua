@@ -392,7 +392,7 @@ function cbi(model, config)
 		["type"] = "call",
 		["module"] = "luci.dispatcher",
 		["function"] = "invoke_cbi_action",
-		["parameters"] = { model, config },
+		["parameters"] = { model, config or {} },
 		["post"] = {
 			["cbi.submit"] = true
 		}
