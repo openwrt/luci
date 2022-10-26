@@ -267,7 +267,7 @@ function invoke_cbi_action(model, config, ...)
 	http:header("X-CBI-State", state or 0)
 
 	if not config.noheader then
-		tpl.render("cbi/header", {state = state})
+		_G.L.include("cbi/header", {state = state})
 	end
 
 	local redirect
@@ -318,7 +318,7 @@ function invoke_cbi_action(model, config, ...)
 	end
 
 	if not config.nofooter then
-		tpl.render("cbi/footer", {
+		_G.L.include("cbi/footer", {
 			flow          = config,
 			pageaction    = pageaction,
 			redirect      = redirect,
