@@ -10,7 +10,7 @@ lib/plural_formula.c: lib/plural_formula.y contrib/lemon
 lib/lmo.c: lib/plural_formula.c
 
 core.so: lib/luci.o lib/lmo.o lib/plural_formula.o
-	$(CC) $(LDFLAGS) -shared -o $@ $^
+	$(CC) $(LDFLAGS) -shared -lcrypt -o $@ $^
 
 version.uc:
 	echo "export const revision = '$(LUCI_VERSION)', branch = '$(LUCI_GITBRANCH)';" > $@
