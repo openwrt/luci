@@ -925,6 +925,14 @@ dispatch = function(_http, path) {
 			resolved.ctx.authtoken ??= session.data?.token;
 			resolved.ctx.authuser ??= session.data?.username;
 			resolved.ctx.authacl ??= session.acls;
+
+			/* In case the Lua runtime was already initialized, e.g. by probing legacy
+			 * theme header templates, make sure to update the session ID of the uci
+			 * module. */
+			if (runtime.L) {
+				runtime.L.invoke('require', 'luci.model.uci');
+				runtime.L.get('luci', 'model', 'uci').invoke('set_session_id', session.sid);
+			}
 		}
 
 		if (length(resolved.ctx.acls)) {
