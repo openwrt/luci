@@ -480,7 +480,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 		this.toggleWifiBand(elem);
 
 		bwdt.value = htval;
-		chan.value = chval || chan.options[0].value;
+		chan.value = chval || (chan.options[0] ? chan.options[0].value : 'auto');
 
 		return elem;
 	},
