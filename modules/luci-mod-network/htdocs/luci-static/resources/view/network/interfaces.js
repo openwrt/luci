@@ -488,7 +488,7 @@ return view.extend({
 		};
 
 		s.modaltitle = function(section_id) {
-			return _('Interfaces') + ' » ' + section_id.toUpperCase();
+			return _('Interfaces') + ' » ' + section_id;
 		};
 
 		s.renderRowActions = function(section_id) {
