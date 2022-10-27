@@ -137,6 +137,7 @@ export default function(env) {
 
 	if (status !== true) {
 		media = null;
+		self.env.media_error = status;
 
 		for (let k, v in uci.get_all('luci', 'themes')) {
 			if (substr(k, 0, 1) != '.') {

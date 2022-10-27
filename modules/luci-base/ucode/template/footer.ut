@@ -18,6 +18,25 @@
 	</script>
 {% endif %}
 
+{% if (media_error): %}
+	<script type="text/javascript">
+		L.require('ui').then(function(ui) {
+			ui.showIndicator('media_error', _('Theme fallback'), function(ev) {
+				ui.showModal(_('Error loading theme'), [
+					E('p', [
+						_('A fallback is used since the configured theme failed to load with the error below.')
+					]),
+					E('hr'),
+					E('div', { 'style': 'white-space:pre-line' }, {{ sprintf('%J', trim(media_error)) }}),
+					E('div', { 'class': 'right' }, [
+						E('button', { 'class': 'btn cbi-button', 'click': ui.hideModal }, _('Dismiss'))
+					])
+				]);
+			});
+		});
+	</script>
+{% endif %}
+
 {% include(`themes/${theme}/footer`) %}
 
 <!-- Lua compatibility mode active: {{ lua_active ? 'yes' : 'no' }} -->
