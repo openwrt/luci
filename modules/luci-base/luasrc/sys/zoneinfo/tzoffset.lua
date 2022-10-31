@@ -17,7 +17,6 @@ OFFSET = {
 	ast   = -14400,	-- AST
 	est   = -18000,	-- EST
 	cst   = -21600,	-- CST
-	cdt   = -18000,	-- CDT
 	mst   = -25200,	-- MST
 	mdt   = -21600,	-- MDT
 	pst   = -28800,	-- PST
