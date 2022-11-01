@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:35+0200\n"
-"PO-Revision-Date: 2022-01-09 11:15+0000\n"
+"PO-Revision-Date: 2022-10-29 20:58+0000\n"
 "Last-Translator: drax red <drax@outlook.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenvpn/da/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:364
 msgid "'net30', 'p2p', or 'subnet'"
@@ -103,7 +103,7 @@ msgstr "Skift procesprioritet"
 msgid "Change to directory before initialization"
 msgstr "Skift til mappe før initialisering"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:776
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:780
 msgid "Check peer certificate against a CRL"
 msgstr "Tjek peer-certifikat mod en CRL"
 
@@ -188,7 +188,7 @@ msgstr "Du skal ikke udføre ifconfig"
 msgid "Don't add routes automatically"
 msgstr "Tilføj ikke ruter automatisk"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:760
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:764
 msgid "Don't cache --askpass or --auth-user-pass passwords"
 msgstr "Gem ikke adgangskoderne --askpass eller --auth-user-pass i cache"
 
@@ -265,6 +265,12 @@ msgstr "Aktiveret"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:752
 msgid "Encrypt and authenticate all control channel packets with the key"
 msgstr "Krypterer og autentificerer alle kontrolkanalpakker med nøglen"
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:756
+msgid ""
+"Encrypt and authenticate all control channel packets with the key, version 2."
+msgstr ""
+"Krypterer og autentificerer alle kontrolkanalpakker med nøglen, version 2."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:622
 msgid "Encryption cipher for packets"
@@ -390,7 +396,7 @@ msgstr "Antal linjer for logfilens historik"
 msgid "OVPN configuration file upload"
 msgstr "OVPN-konfigurationsfil upload"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:764
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:768
 msgid "Only accept connections from given X509 name"
 msgstr "Accepter kun forbindelser fra det givne X509-navn"
 
@@ -515,11 +521,11 @@ msgstr "Genforhandle data kæde. nøgle efter sekunder"
 msgid "Replay protection sliding window size"
 msgstr "Størrelsen af det glidende vindue til beskyttelse mod gentagelse"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:768
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:772
 msgid "Require explicit designation on certificate"
 msgstr "Krav om explicit betegnelse på certifikatet"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:772
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:776
 msgid "Require explicit key usage on certificate"
 msgstr "Kræv eksplicit brug af nøgle på certifikatet"
 
@@ -527,7 +533,7 @@ msgstr "Kræv eksplicit brug af nøgle på certifikatet"
 msgid "Restart after remote ping timeout"
 msgstr "Genstart efter timeout for fjern-ping"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:796
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:800
 msgid "Restrict the allowed ciphers to be negotiated"
 msgstr "Begrænser de tilladte cifre, der kan forhandles"
 
@@ -755,16 +761,16 @@ msgstr ""
 "OVPN-konfigurationsfilen (%s) kunne ikke findes, tjek venligst din "
 "konfiguration."
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:784
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:788
 msgid "The highest supported TLS version"
 msgstr "Den højeste understøttede TLS-version"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:788
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:792
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:69
 msgid "The key direction for 'tls-auth' and 'secret' options"
 msgstr "Den vigtigste retning for 'tls-auth' og 'hemmelige' indstillinger"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:780
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:784
 msgid "The lowest supported TLS version"
 msgstr "Den lavest understøttede TLS-version"
 
@@ -776,7 +782,7 @@ msgstr ""
 "Størrelsen af OVPN-konfigurationsfilen (%s) er for stor til online "
 "redigering i LuCI (&ge; 100 KB)."
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:792
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:796
 msgid "This completely disables cipher negotiation"
 msgstr "Dette deaktiverer fuldstændig krypteringsforhandling"
 

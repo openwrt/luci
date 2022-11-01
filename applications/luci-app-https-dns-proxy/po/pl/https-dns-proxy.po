@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-01-11 05:19+0000\n"
+"PO-Revision-Date: 2022-10-17 13:26+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationshttps-dns-proxy/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:92
 msgid "%s DoH at %s:%s"
@@ -103,6 +103,22 @@ msgstr "BlahDNS - JP"
 msgid "BlahDNS - SG"
 msgstr "BlahDNS - SG"
 
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:141
+msgid ""
+"Blocks access to Mozilla resolvers, forcing local devices to use router for "
+"DNS resolution (%smore information%s)."
+msgstr ""
+"Blokuje dostęp do resolwerów Mozilli, zmuszając urządzenia lokalne do "
+"używania routera do rozwiązywania DNS (%swięcej informacji%s)."
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:136
+msgid ""
+"Blocks access to iCloud Private Relay resolvers, forcing local devices to "
+"use router for DNS resolution (%smore information%s)."
+msgstr ""
+"Blokuje dostęp do resolwerów iCloud Private Relay, zmuszając urządzenia "
+"lokalne do używania routera do rozwiązywania DNS (%swięcej informacji%s)."
+
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/net.cfiec.dns.lua:3
 msgid "CFIEC Public DNS (IPv6 Only)"
 msgstr "CFIEC Public DNS (tylko IPv6)"
@@ -118,6 +134,14 @@ msgstr "Tarcza Kanadyjska CIRA (prywatna)"
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/ca.cira.canadianshield.protected.lua:3
 msgid "CIRA Canadian Shield (Protected)"
 msgstr "Tarcza Kanadyjska CIRA (chroniona)"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:141
+msgid "Canary Domains Mozilla"
+msgstr "Domeny kanarkowe Mozilli"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:136
+msgid "Canary Domains iCloud"
+msgstr "Domeny kanarkowe iCloud"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/org.cleanbrowsing.doh-adult.lua:3
 msgid "CleanBrowsing (Adult Filter)"
@@ -215,7 +239,7 @@ msgstr "DNSPod Public DNS - CN"
 msgid "DNSlify DNS"
 msgstr "DNSlify DNS"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:195
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:205
 msgid "DSCP Codepoint"
 msgstr "Punkt kodowy DSCP"
 
@@ -245,13 +269,15 @@ msgstr "FFMUC DNS - DE"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:29
 msgid "For more information on different options check"
-msgstr "Aby uzyskać więcej informacji o różnych opcjach, sprawdź"
+msgstr "Aby uzyskać więcej informacji o różnych opcjach, sprawdź:"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:132
 msgid "Force Router DNS"
 msgstr "Wymuś DNS routera"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:134
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:138
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:143
 msgid "Force Router DNS server to all local devices"
 msgstr "Wymuś serwer DNS routera na wszystkich urządzeniach lokalnych"
 
@@ -283,21 +309,30 @@ msgstr "IIJ Public DNS - JP"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:123
 msgid ""
-"If update option is selected, the 'DNS forwardings' section of %sDHCP and "
-"DNS%s will be automatically updated to use selected DoH providers (%smore "
+"If update option is selected, the 'DNS forwardings' section of %sDHCP and DNS"
+"%s will be automatically updated to use selected DoH providers (%smore "
 "information%s)."
 msgstr ""
 "Jeśli opcja aktualizacji jest wybrana, sekcja 'Przekazywania DNS' w %sDHCP i "
 "DNS%s zostanie automatycznie zaktualizowana, aby używać wybranych dostawców "
 "DoH (%swięcej informacji%s)."
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:138
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:148
 msgid "Instances"
 msgstr "Instancje"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/fi.lelux.resolver-eu.lua:3
 msgid "Lelux DNS - FI"
 msgstr "Lelux DNS - FI"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:142
+msgid "Let local devices use Mozilla resolvers"
+msgstr "Pozwól urządzeniom lokalnym korzystać z resolwerów Mozilli"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:137
+msgid "Let local devices use iCloud Private Relay"
+msgstr ""
+"Pozwól urządzeniom lokalnym korzystać z resolwerów iCloud Private Relay"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:133
 msgid "Let local devices use their own DNS servers if set"
@@ -312,13 +347,13 @@ msgstr "LibreDNS - GR"
 msgid "LibreDNS - GR (No Ads)"
 msgstr "LibreDNS - GR (bez reklam)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:178
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:188
 msgid "Listen Address"
-msgstr "Nasłuchiwany adres"
+msgstr "Adres nasłuchiwania"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:191
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:201
 msgid "Listen Port"
-msgstr "Port nasłuchu"
+msgstr "Port nasłuchiwania"
 
 #: applications/luci-app-https-dns-proxy/luasrc/view/https-dns-proxy/js.htm:52
 msgid "Loading"
@@ -356,7 +391,7 @@ msgstr "OpenDNS"
 msgid "OpenDNS (Family Shield)"
 msgstr "OpenDNS (filtr rodzinny)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:199
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:209
 msgid "Proxy Server"
 msgstr "Serwer proxy"
 
@@ -384,7 +419,7 @@ msgstr "Quad 9 (niezabezpieczony)"
 msgid "Reload"
 msgstr "Przeładuj"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:145
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:155
 msgid "Resolver"
 msgstr "Dostawca"
 

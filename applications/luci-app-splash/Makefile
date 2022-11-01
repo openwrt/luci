@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Freifunk DHCP-Splash application
-LUCI_DEPENDS:=+luci-compat +luci-lib-nixio +luci-lib-iptparser +tc +kmod-sched +iptables-mod-nat-extra +iptables-mod-ipopt
+LUCI_DEPENDS:=+luci-compat +luci-lib-nixio +luci-lib-iptparser +luci-lua-runtime +tc +kmod-sched +iptables-mod-nat-extra +iptables-mod-ipopt
 
 define Package/luci-app-splash/conffiles
 /etc/config/luci_splash

@@ -1,7 +1,9 @@
 module("luci.tools.ieee80211", package.seeall)
 
 function frequency_to_channel(freq)
-	if (freq == 2484) then
+	if (freq <= 2400) then
+		return 0;
+	elseif (freq == 2484) then
 		return 14;
 	elseif (freq < 2484) then
 		return (freq - 2407) / 5;

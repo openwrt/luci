@@ -153,20 +153,25 @@ local methods = {
 	},
 	get_ddns_state = {
 		call = function()
-			local ipkg = require "luci.model.ipkg"
 			local uci = UCI.cursor()
 			local dateformat = uci:get("ddns", "global", "ddns_dateformat") or "%F %R"
 			local services_mtime = fs.stat(ddns_package_path .. "/list", 'mtime')
 			uci:unload("ddns")
-			local ver, srv_ver_cmd
 			local res = {}
+			local ver
 
-			if ipkg then
-				ver = ipkg.info(srv_name)[srv_name].Version
-			else
-				srv_ver_cmd = luci_helper .. " -V | awk {'print $2'} "
-				ver = util.exec(srv_ver_cmd)
+			local ok, ctrl = pcall(io.lines, "/usr/lib/opkg/info/%s.control" % srv_name)
+			if ok then
+				for line in ctrl do
+					ver = line:match("^Version: (.+)$")
+
+					if ver then
+						break
+					end
+				end
 			end
+
+			ver = ver or util.trim(util.exec("%s -V | awk {'print $2'}" % luci_helper))
 
 			res['_version'] = ver and #ver > 0 and ver or nil
 			res['_enabled'] = sys.init.enabled("ddns")

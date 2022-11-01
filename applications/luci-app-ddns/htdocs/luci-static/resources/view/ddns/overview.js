@@ -91,6 +91,8 @@ return view.extend({
 				_this.services[service.name.replace('.json','')] = true
 			});
 
+			this.services = Object.fromEntries(Object.entries(this.services).sort());
+
 			list_service.forEach(function (service) {
 				if (!_this.services[service])
 					_this.services[service] = false;
@@ -475,7 +477,9 @@ return view.extend({
 
 			return m.save(function() {
 				uci.add('ddns', 'service', section_id);
-				uci.set('ddns', section_id, 'service_name', service_value);
+				if (service_value != '-') {
+					uci.set('ddns', section_id, 'service_name', service_value);
+				}
 				uci.set('ddns', section_id, 'use_ipv6', ipv6_value);
 			}).then(L.bind(m.children[1].renderMoreOptionsModal, m.children[1], section_id));
 		};
@@ -1010,7 +1014,7 @@ return view.extend({
 
 					o = s.taboption("timer", form.ListValue, "force_unit",
 						_('Force Unit'),
-						_("Interval unit to force updates send to DDNS Provider"));
+						_("Interval unit to force updates sent to DDNS Provider."));
 					o.modalonly = true;
 					o.optional = true;
 					o.default  = "minutes"
@@ -1020,9 +1024,9 @@ return view.extend({
 
 					o = s.taboption("timer", form.Value, "retry_count",
 						_("Error Retry Counter"),
-						_("On Error the script will stop execution after given number of retrys")
+						_("On Error the script will stop execution after given number of retrys.")
 						+ "<br />" +
-						_("The default setting of '0' will retry infinite."));
+						_("The default setting of '0' will retry infinitely."));
 					o.placeholder = "0";
 					o.optional = true;
 					o.modalonly = true;
@@ -1030,9 +1034,7 @@ return view.extend({
 
 					o = s.taboption("timer", form.Value, "retry_interval",
 						_("Error Retry Interval"),
-						_("On Error the script will stop execution after given number of retrys")
-						+ "<br />" +
-						_("The default setting of '0' will retry infinite."));
+  						_("The interval between which each succesive retry will commence."));
 					o.placeholder = "60";
 					o.optional = true;
 					o.modalonly = true;
@@ -1040,7 +1042,7 @@ return view.extend({
 
 					o = s.taboption("timer", form.ListValue, "retry_unit",
 						_('Retry Unit'),
-						_("On Error the script will retry the failed action after given time"));
+						_("Which time units to use for retry counters."));
 					o.modalonly = true;
 					o.optional = true;
 					o.default  = "seconds"
@@ -1067,7 +1069,7 @@ return view.extend({
 
 					log_box.render = L.bind(function() {
 						return E([
-							E('p', {}, _('This is the current content of the log file in ') + logdir + ' for this service.'),
+							E('p', {}, _('This is the current content of the log file in %h for this service.').format(logdir)),
 							E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 20, 'readonly' : 'readonly', 'id' : 'log_area' }, _('Please press [Read] button') ))
 						]);
 					}, o, this);

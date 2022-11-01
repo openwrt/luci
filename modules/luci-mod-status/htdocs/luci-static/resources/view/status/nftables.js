@@ -46,8 +46,8 @@ var expr_translations = {
 	'ip.dport': _('Destination port', 'nft ip dport'),
 	'ip6.saddr': _('Source IPv6', 'nft ip6 saddr'),
 	'ip6.daddr': _('Destination IPv6', 'nft ip6 daddr'),
-	'icmp.code': _('ICMPv6 code', 'nft icmpv6 code'),
-	'icmp.type': _('ICMPv6 type', 'nft icmpv6 type'),
+	'icmp.code': _('ICMP code', 'nft icmp code'),
+	'icmp.type': _('ICMP type', 'nft icmp type'),
 	'icmpv6.code': _('ICMPv6 code', 'nft icmpv6 code'),
 	'icmpv6.type': _('ICMPv6 type', 'nft icmpv6 type'),
 	'tcp.sport': _('TCP source port', 'nft tcp sport'),
@@ -133,7 +133,7 @@ var action_translations = {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--json', 'list', 'ruleset' ], 'json'), {}),
+			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--terse', '--json', 'list', 'ruleset' ], 'json'), {}),
 			L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-save'), ''),
 			L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-save'), '')
 		]);

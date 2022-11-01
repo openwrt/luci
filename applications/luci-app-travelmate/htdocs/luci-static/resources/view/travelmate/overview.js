@@ -185,9 +185,9 @@ return view.extend({
 							if (station_mac && info) {
 								station_mac.textContent = info.data.station_mac || '-';
 							}
-							var station_interface = document.getElementById('station_interface');
-							if (station_interface && info) {
-								station_interface.textContent = info.data.station_interface || '-';
+							var station_interfaces = document.getElementById('station_interfaces');
+							if (station_interfaces && info) {
+								station_interfaces.textContent = info.data.station_interfaces || '-';
 							}
 							var wpa_flags = document.getElementById('wpa_flags');
 							if (wpa_flags && info) {
@@ -236,8 +236,8 @@ return view.extend({
 					E('div', { 'class': 'cbi-value-field', 'id': 'station_mac', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station Interface')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'station_interface', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station Interfaces')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'station_interfaces', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('WPA Flags')),
@@ -315,6 +315,17 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'trm_captive', _('Captive Portal Detection'), _('Check the internet availability, handle captive portal redirections and keep the uplink connection \'alive\'.'));
 		o.default = 1;
 		o.rmempty = false;
+
+		o = s.taboption('general', form.Flag, 'trm_vpn', _('VPN processing'), _('VPN connections will be managed by travelmate.'));
+		o.default = 1;
+		o.rmempty = false;
+
+		o = s.taboption('general', widgets.NetworkSelect, 'trm_vpnifacelist', _('Limit VPN processing'), _('Limit VPN processing to certain interfaces.'));
+		o.depends('trm_vpn', '1');
+		o.unspecified = true;
+		o.multiple = true;
+		o.nocreate = true;
+		o.rmempty = true;
 
 		o = s.taboption('general', form.Flag, 'trm_netcheck', _('Net Error Check'), _('Treat missing internet availability as an error.'));
 		o.depends('trm_captive', '1');

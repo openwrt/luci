@@ -4,29 +4,31 @@
 contrib/lemon: contrib/lemon.c contrib/lempar.c
 	cc -o contrib/lemon $<
 
-plural_formula.c: plural_formula.y contrib/lemon
+lib/plural_formula.c: lib/plural_formula.y contrib/lemon
 	./contrib/lemon -q $<
 
-template_lmo.c: plural_formula.c
+lib/lmo.c: lib/plural_formula.c
+
+core.so: lib/luci.o lib/lmo.o lib/plural_formula.o
+	$(CC) $(LDFLAGS) -shared -lcrypt -o $@ $^
+
+version.uc:
+	echo "export const revision = '$(LUCI_VERSION)', branch = '$(LUCI_GITBRANCH)';" > $@
 
 clean:
-	rm -f contrib/lemon po2lmo parser.so version.lua plural_formula.c plural_formula.h *.o
+	rm -f contrib/lemon lib/*.o lib/plural_formula.c lib/plural_formula.h core.so version.uc
 
 jsmin: jsmin.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
-po2lmo: po2lmo.o template_lmo.o plural_formula.o
+po2lmo: po2lmo.o lib/lmo.o lib/plural_formula.o
 	$(CC) $(LDFLAGS) -o $@ $^
 
-parser.so: template_parser.o template_utils.o template_lmo.o template_lualib.o plural_formula.o
-	$(CC) $(LDFLAGS) -shared -o $@ $^
-
-version.lua:
-	./mkversion.sh $@ $(LUCI_VERSION) "$(LUCI_GITBRANCH)"
-
-compile: parser.so version.lua
+compile: core.so version.uc
 
 install: compile
-	mkdir -p $(DESTDIR)/usr/lib/lua/luci/template
-	cp parser.so $(DESTDIR)/usr/lib/lua/luci/template/parser.so
-	cp version.lua $(DESTDIR)/usr/lib/lua/luci/version.lua
+	mkdir -p $(DESTDIR)/usr/lib/ucode/luci
+	cp core.so $(DESTDIR)/usr/lib/ucode/luci/core.so
+
+	mkdir -p $(DESTDIR)/usr/share/ucode/luci
+	cp version.uc $(DESTDIR)/usr/share/ucode/luci/version.uc

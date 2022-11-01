@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-05-13 01:23+0000\n"
-"Last-Translator: semih <semiht@gmail.com>\n"
+"PO-Revision-Date: 2022-10-28 15:05+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenvpn/tr/>\n"
 "Language: tr\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:364
 msgid "'net30', 'p2p', or 'subnet'"
@@ -101,7 +101,7 @@ msgstr "İşlem önceliğini değiştir"
 msgid "Change to directory before initialization"
 msgstr "Başlatma öncesinde dizine geç"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:776
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:780
 msgid "Check peer certificate against a CRL"
 msgstr "Eş sertifikayı bir CRL'ye göre kontrol edin"
 
@@ -186,7 +186,7 @@ msgstr "İfconfig'i gerçekte çalıştırmayın"
 msgid "Don't add routes automatically"
 msgstr "Rotaları otomatik olarak ekleme"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:760
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:764
 msgid "Don't cache --askpass or --auth-user-pass passwords"
 msgstr "--askpass veya --auth-user-pass parolalarını önbelleğe almayın"
 
@@ -263,6 +263,12 @@ msgstr "Etkin"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:752
 msgid "Encrypt and authenticate all control channel packets with the key"
 msgstr "Anahtarla tüm kontrol kanalı paketlerini şifreleyin ve doğrulayın"
+
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:756
+msgid ""
+"Encrypt and authenticate all control channel packets with the key, version 2."
+msgstr ""
+"Anahtar, sürüm 2 ile tüm denetim kanalı paketlerini şifreleyin ve doğrulayın."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:622
 msgid "Encryption cipher for packets"
@@ -388,7 +394,7 @@ msgstr "Günlük dosyası geçmişi için satır sayısı"
 msgid "OVPN configuration file upload"
 msgstr "OVPN yapılandırma dosyası yükleme"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:764
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:768
 msgid "Only accept connections from given X509 name"
 msgstr "Yalnızca verilen X509 adından gelen bağlantıları kabul edin"
 
@@ -513,11 +519,11 @@ msgstr "Saniyeden sonra veri kanalı anahtarını yeniden görüşün"
 msgid "Replay protection sliding window size"
 msgstr "Tekrar koruma sürgülü pencere boyutu"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:768
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:772
 msgid "Require explicit designation on certificate"
 msgstr "Sertifikada açık atama gerektir"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:772
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:776
 msgid "Require explicit key usage on certificate"
 msgstr "Sertifikada açık anahtar kullanımını zorunlu kılın"
 
@@ -525,7 +531,7 @@ msgstr "Sertifikada açık anahtar kullanımını zorunlu kılın"
 msgid "Restart after remote ping timeout"
 msgstr "Uzak ping zaman aşımından sonra yeniden başlat"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:796
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:800
 msgid "Restrict the allowed ciphers to be negotiated"
 msgstr "Müzakere edilmesine izin verilen şifreleri kısıtlayın"
 
@@ -755,16 +761,16 @@ msgstr ""
 "OVPN yapılandırma dosyası (%s) bulunamadı, lütfen yapılandırmanızı kontrol "
 "edin."
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:784
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:788
 msgid "The highest supported TLS version"
 msgstr "Desteklenen en yüksek TLS sürümü"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:788
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:792
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:69
 msgid "The key direction for 'tls-auth' and 'secret' options"
 msgstr "'tls-auth' ve 'secret' seçeneklerinin temel yönü"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:780
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:784
 msgid "The lowest supported TLS version"
 msgstr "Desteklenen en düşük TLS sürümü"
 
@@ -776,7 +782,7 @@ msgstr ""
 "OVPN yapılandırma dosyasının (%s) boyutu, LuCI'de çevrimiçi düzenleme için "
 "çok büyük (&ge; 100 KB)."
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:792
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:796
 msgid "This completely disables cipher negotiation"
 msgstr "Bu, şifre pazarlığını tamamen devre dışı bırakır"
 

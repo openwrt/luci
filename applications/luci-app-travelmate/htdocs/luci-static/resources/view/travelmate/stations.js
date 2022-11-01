@@ -698,7 +698,7 @@ return view.extend({
 			return handleSectionsVal('set', section_id, 'vpnservice', value);
 		}
 
-		o = s.taboption('vpn', widgets.NetworkSelect, '_vpniface', _('VPN Interface'), _('The logical vpn network interface, e.g. \'wg0\' or \'tun0\'.'));
+		o = s.taboption('vpn', widgets.NetworkSelect, '_vpniface', _('VPN Interface'), _('The logical vpn network interface like \'wg0\'.'));
 		o.unspecified = false;
 		o.nocreate = true;
 		o.optional = true;

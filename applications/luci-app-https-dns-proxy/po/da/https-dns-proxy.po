@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-04-30 19:07+0000\n"
+"PO-Revision-Date: 2022-10-18 21:23+0000\n"
 "Last-Translator: drax red <drax@outlook.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationshttps-dns-proxy/da/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:92
 msgid "%s DoH at %s:%s"
@@ -102,6 +102,22 @@ msgstr "BlahDNS - JP"
 msgid "BlahDNS - SG"
 msgstr "BlahDNS - SG"
 
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:141
+msgid ""
+"Blocks access to Mozilla resolvers, forcing local devices to use router for "
+"DNS resolution (%smore information%s)."
+msgstr ""
+"Blokerer adgangen til Mozilla-resolvere og tvinger lokale enheder til at "
+"bruge routeren til DNS-opløsning (%flere oplysninger%s)."
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:136
+msgid ""
+"Blocks access to iCloud Private Relay resolvers, forcing local devices to "
+"use router for DNS resolution (%smore information%s)."
+msgstr ""
+"Blokerer adgangen til iCloud Private Relay-resolvere og tvinger lokale "
+"enheder til at bruge routeren til DNS-opløsning (%flere oplysninger%s)."
+
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/net.cfiec.dns.lua:3
 msgid "CFIEC Public DNS (IPv6 Only)"
 msgstr "CFIEC Offentlig DNS (kun IPv6)"
@@ -117,6 +133,14 @@ msgstr "CIRA Canadian Shield (privat)"
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/ca.cira.canadianshield.protected.lua:3
 msgid "CIRA Canadian Shield (Protected)"
 msgstr "CIRA canadiske skjold (beskyttet)"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:141
+msgid "Canary Domains Mozilla"
+msgstr "Canary Domæner Mozilla"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:136
+msgid "Canary Domains iCloud"
+msgstr "Canary Domæner iCloud"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/org.cleanbrowsing.doh-adult.lua:3
 msgid "CleanBrowsing (Adult Filter)"
@@ -214,7 +238,7 @@ msgstr "DNSPod Offentlig DNS - CN"
 msgid "DNSlify DNS"
 msgstr "DNSlify DNS"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:195
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:205
 msgid "DSCP Codepoint"
 msgstr "DSCP kodepunkt"
 
@@ -251,6 +275,8 @@ msgid "Force Router DNS"
 msgstr "Tving router DNS"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:134
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:138
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:143
 msgid "Force Router DNS server to all local devices"
 msgstr "Tving router DNS-server til alle lokale enheder"
 
@@ -289,13 +315,21 @@ msgstr ""
 "i %sDHCP og DNS%s automatisk blive opdateret til at bruge udvalgte DoH-"
 "udbydere (%smore information%s)."
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:138
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:148
 msgid "Instances"
 msgstr "Instanser"
 
 #: applications/luci-app-https-dns-proxy/luasrc/https-dns-proxy/providers/fi.lelux.resolver-eu.lua:3
 msgid "Lelux DNS - FI"
 msgstr "Lelux DNS - FI"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:142
+msgid "Let local devices use Mozilla resolvers"
+msgstr "Lad lokale enheder bruge Mozilla-resolvere"
+
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:137
+msgid "Let local devices use iCloud Private Relay"
+msgstr "Lad lokale enheder bruge iCloud Private Relay"
 
 #: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:133
 msgid "Let local devices use their own DNS servers if set"
@@ -309,11 +343,11 @@ msgstr "LibreDNS - GR"
 msgid "LibreDNS - GR (No Ads)"
 msgstr "LibreDNS - GR (ingen reklamer)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:178
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:188
 msgid "Listen Address"
 msgstr "Lyt adresse"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:191
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:201
 msgid "Listen Port"
 msgstr "Lytteport"
 
@@ -353,7 +387,7 @@ msgstr "OpenDNS"
 msgid "OpenDNS (Family Shield)"
 msgstr "OpenDNS (Family Shield)"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:199
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:209
 msgid "Proxy Server"
 msgstr "Proxy Server"
 
@@ -381,7 +415,7 @@ msgstr "Quad 9 (usikret)"
 msgid "Reload"
 msgstr "Genindlæs"
 
-#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:145
+#: applications/luci-app-https-dns-proxy/luasrc/model/cbi/https-dns-proxy.lua:155
 msgid "Resolver"
 msgstr "Resolver"
 

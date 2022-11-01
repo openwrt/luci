@@ -1,5 +1,41 @@
-#!/usr/bin/lua
-require "luci.cacheloader"
-require "luci.sgi.cgi"
-luci.dispatcher.indexcache = "/tmp/luci-indexcache"
-luci.sgi.cgi.run()
+#!/usr/bin/env ucode
+
+'use strict';
+
+import { stdin, stdout } from 'fs';
+
+import dispatch from 'luci.dispatcher';
+import request from 'luci.http';
+
+const input_bufsize = 4096;
+let input_available = +getenv('CONTENT_LENGTH') || 0;
+
+function read(len) {
+	if (input_available == 0) {
+		stdin.close();
+
+		return null;
+	}
+
+	let chunk = stdin.read(min(input_available, len ?? input_bufsize, input_bufsize));
+
+	if (chunk == null) {
+		input_available = 0;
+		stdin.close();
+	}
+	else {
+		input_available -= length(chunk);
+	}
+
+	return chunk;
+}
+
+function write(data) {
+	return stdout.write(data);
+}
+
+let req = request(getenv(), read, write);
+
+dispatch(req);
+
+req.close();

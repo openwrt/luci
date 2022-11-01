@@ -488,7 +488,7 @@ return view.extend({
 		};
 
 		s.modaltitle = function(section_id) {
-			return _('Interfaces') + ' » ' + section_id.toUpperCase();
+			return _('Interfaces') + ' » ' + section_id;
 		};
 
 		s.renderRowActions = function(section_id) {
@@ -535,7 +535,7 @@ return view.extend({
 				var protocols = network.getProtocols();
 
 				protocols.sort(function(a, b) {
-					return a.getProtocol() > b.getProtocol();
+					return L.naturalCompare(a.getProtocol(), b.getProtocol());
 				});
 
 				o = s.taboption('general', form.DummyValue, '_ifacestat_modal', _('Status'));
@@ -1091,7 +1091,7 @@ return view.extend({
 			    proto, name, device;
 
 			protocols.sort(function(a, b) {
-				return a.getProtocol() > b.getProtocol();
+				return L.naturalCompare(a.getProtocol(), b.getProtocol());
 			});
 
 			s2.render = function() {
@@ -1199,7 +1199,7 @@ return view.extend({
 					'class': 'ifacebox-head',
 					'style': firewall.getZoneColorStyle(zone),
 					'title': zone ? _('Part of zone %q').format(zone.getName()) : _('No zone assigned')
-				}, E('strong', net.getName().toUpperCase())),
+				}, E('strong', net.getName())),
 				E('div', {
 					'class': 'ifacebox-body',
 					'id': '%s-ifc-devices'.format(section_id),
@@ -1253,7 +1253,7 @@ return view.extend({
 
 		s.cfgsections = function() {
 			var sections = uci.sections('network', 'device'),
-			    section_ids = sections.sort(function(a, b) { return a.name > b.name }).map(function(s) { return s['.name'] });
+			    section_ids = sections.sort(function(a, b) { return L.naturalCompare(a.name, b.name) }).map(function(s) { return s['.name'] });
 
 			for (var i = 0; i < netDevs.length; i++) {
 				if (sections.filter(function(s) { return s.name == netDevs[i].getName() }).length)
@@ -1450,7 +1450,7 @@ return view.extend({
 			    mac = dev ? dev.getMAC() : null;
 
 			return val ? E('strong', {
-				'data-tooltip': _('The value is overridden by configuration. Original: %s').format(mac || _('unknown'))
+				'data-tooltip': _('The value is overridden by configuration.')
 			}, [ val.toUpperCase() ]) : (mac || '-');
 		};
 
@@ -1462,7 +1462,7 @@ return view.extend({
 			    mtu = dev ? dev.getMTU() : null;
 
 			return val ? E('strong', {
-				'data-tooltip': _('The value is overridden by configuration. Original: %s').format(mtu || _('unknown'))
+				'data-tooltip': _('The value is overridden by configuration.')
 			}, [ val ]) : (mtu || '-').toString();
 		};
 

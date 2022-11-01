@@ -115,7 +115,7 @@ function parsePeerData(peer) {
 		['endpoint', _('Endpoint'),
 			peer.endpoint == '(none)' ? null : peer.endpoint],
 		['allowed_ips', _('Allowed IPs'),
-			peer.allowed_ips.length == 0 ? null : peer.allowed_ips.join('\n')],
+			peer.allowed_ips.length == 0 ? null : peer.allowed_ips.join(', ')],
 		['persistent_keepalive', _('Persistent Keepalive'),
 			peer.persistent_keepalive == 'off' ? null : peer.persistent_keepalive + 's'],
 		['latest_handshake', _('Latest Handshake'),
