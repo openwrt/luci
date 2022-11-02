@@ -775,7 +775,8 @@ function run_action(request_path, lang, tree, resolved, action) {
 		break;
 
 	case 'call':
-		http.write(render(() => {
+		http.write_headers();
+		http.output(render(() => {
 			runtime.call(action.module, action.function,
 				...(action.parameters ?? []),
 				...resolved.ctx.request_args
@@ -789,7 +790,8 @@ function run_action(request_path, lang, tree, resolved, action) {
 		assert(type(mod[action.function]) == 'function',
 			`Module '${action.module}' does not export function '${action.function}'`);
 
-		http.write(render(() => {
+		http.write_headers();
+		http.output(render(() => {
 			call(mod[action.function], mod, runtime.env,
 				...(action.parameters ?? []),
 				...resolved.ctx.request_args
@@ -798,7 +800,8 @@ function run_action(request_path, lang, tree, resolved, action) {
 		break;
 
 	case 'cbi':
-		http.write(render(() => {
+		http.write_headers();
+		http.output(render(() => {
 			runtime.call('luci.dispatcher', 'invoke_cbi_action',
 				action.path, null,
 				...resolved.ctx.request_args
@@ -807,7 +810,8 @@ function run_action(request_path, lang, tree, resolved, action) {
 		break;
 
 	case 'form':
-		http.write(render(() => {
+		http.write_headers();
+		http.output(render(() => {
 			runtime.call('luci.dispatcher', 'invoke_form_action',
 				action.path,
 				...resolved.ctx.request_args

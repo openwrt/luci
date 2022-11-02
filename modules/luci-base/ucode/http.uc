@@ -524,7 +524,7 @@ const Class = {
 
 	// If the content chunk is nil this function will automatically invoke close.
 	write: function(content) {
-		if (content != null) {
+		if (content != null && !this.closed) {
 			this.write_headers();
 			this.output(content);
 

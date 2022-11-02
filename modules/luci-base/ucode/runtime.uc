@@ -48,8 +48,10 @@ const Class = {
 			let bridge = this.env.dispatcher.load_luabridge(optional);
 
 			if (bridge) {
+				let http = this.env.http;
+
 				this.L = bridge.create();
-				this.L.set('L', proto({ write: print }, this.env));
+				this.L.set('L', proto({ write: (...args) => http.closed || print(...args) }, this.env));
 				this.L.invoke('require', 'luci.ucodebridge');
 
 				this.env.lua_active = true;
@@ -61,7 +63,11 @@ const Class = {
 
 	render_ucode: function(path, scope) {
 		let tmplfunc = loadfile(path, { raw_mode: false });
-		call(tmplfunc, null, scope ?? {});
+
+		if (this.env.http.closed)
+			render(call, tmplfunc, null, scope ?? {});
+		else
+			call(tmplfunc, null, scope ?? {});
 	},
 
 	render_lua: function(path, scope) {
