@@ -423,8 +423,23 @@ function build_pagetree() {
 	return tree;
 }
 
+function apply_tree_acls(node, acl) {
+	for (let name, spec in node?.children)
+		apply_tree_acls(spec, acl);
+
+	if (node?.depends?.acl) {
+		switch (check_acl_depends(node.depends.acl, acl["access-group"])) {
+		case null:  node.satisfied = false; break;
+		case false: node.readonly = true;   break;
+		}
+	}
+}
+
 function menu_json(acl) {
 	tree ??= build_pagetree();
+
+	if (acl)
+		apply_tree_acls(tree, acl);
 
 	return tree;
 }
