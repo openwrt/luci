@@ -432,7 +432,7 @@ const Class = {
 				let data = value.fd.read(1024);
 				let eof = (data == null || data == '');
 
-				callback(value, data, eof);
+				this.filehandler(value, data, eof);
 
 				if (eof) {
 					value.fd.close();
