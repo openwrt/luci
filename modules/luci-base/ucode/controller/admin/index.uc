@@ -23,8 +23,10 @@ function ubus_reply(id, data, code, errmsg) {
 		reply.error = { code, message: errmsg };
 	else if (type(code) == 'object')
 		reply.result = code;
-	else
+	else if (data != null)
 		reply.result = [ code, data ];
+	else
+		reply.result = [ code ];
 
 	return reply;
 }
