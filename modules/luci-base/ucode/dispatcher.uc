@@ -764,6 +764,13 @@ function rollback_pending() {
 
 let dispatch;
 
+function render_action(fn) {
+	const data = render(fn);
+
+	http.write_headers();
+	http.output(data);
+}
+
 function run_action(request_path, lang, tree, resolved, action) {
 	switch (action?.type) {
 	case 'template':
@@ -775,13 +782,12 @@ function run_action(request_path, lang, tree, resolved, action) {
 		break;
 
 	case 'call':
-		http.write_headers();
-		http.output(render(() => {
+		render_action(() => {
 			runtime.call(action.module, action.function,
 				...(action.parameters ?? []),
 				...resolved.ctx.request_args
 			);
-		}));
+		});
 		break;
 
 	case 'function':
@@ -790,33 +796,30 @@ function run_action(request_path, lang, tree, resolved, action) {
 		assert(type(mod[action.function]) == 'function',
 			`Module '${action.module}' does not export function '${action.function}'`);
 
-		http.write_headers();
-		http.output(render(() => {
+		render_action(() => {
 			call(mod[action.function], mod, runtime.env,
 				...(action.parameters ?? []),
 				...resolved.ctx.request_args
 			);
-		}));
+		});
 		break;
 
 	case 'cbi':
-		http.write_headers();
-		http.output(render(() => {
+		render_action(() => {
 			runtime.call('luci.dispatcher', 'invoke_cbi_action',
 				action.path, null,
 				...resolved.ctx.request_args
 			);
-		}));
+		});
 		break;
 
 	case 'form':
-		http.write_headers();
-		http.output(render(() => {
+		render_action(() => {
 			runtime.call('luci.dispatcher', 'invoke_form_action',
 				action.path,
 				...resolved.ctx.request_args
 			);
-		}));
+		});
 		break;
 
 	case 'alias':
