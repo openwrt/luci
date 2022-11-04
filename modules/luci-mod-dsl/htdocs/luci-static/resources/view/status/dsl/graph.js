@@ -103,23 +103,23 @@ let bitsChart = {
 		"stepX": Math.max(dsBitsData.maxX, usBitsData.maxX) / 16,
 		"graphWidth" : document.getElementById("bitsChart").width - 2 * marginX,
 		"lineWidth" : 1,
-		"titleX" : "Sub-carrier",
+		"titleX" : _("Sub-carrier"),
 		"minY" : 0,
 		"maxY" : 16,
 		"stepY": 2,
 		"graphHeight" : document.getElementById("bitsChart").height - 2 * marginY,
-		"titleY" : "bits",
+		"titleY" : _("bits")
 	},
 	"dataSet" : [
 		{
 			"data" :usBitsData.data,
 			"color":"YellowGreen",
-			"title": "Upstream bits allocation"
+			"title": ("Upstream bits allocation")
 		},
 		{
 			"data" : dsBitsData.data,
 			"color": "navy",
-		"title": "Downstream bits allocation"
+			"title": _("Downstream bits allocation")
 		}
 	]
 };
@@ -133,23 +133,23 @@ let dBChart = {
 		"stepX": Math.max(dsSnrData.maxX, usSnrData.maxX) / 16,
 		"graphWidth" : document.getElementById("dbChart").width - 2 * marginX,
 		"lineWidth": 4,
-		"titleX" : "Sub-carrier",
+		"titleX" : _("Sub-carrier"),
 		"minY" : -40,
 		"maxY" : 100,
 		"stepY": 10,
 		"graphHeight" : document.getElementById("dbChart").height - 2 * marginY,
-		"titleY" : "dB"
+		"titleY" : _("dB")
 	},
 	"dataSet" : [
 		{
 			"data" :usSnrData.data,
 			"color":"Turquoise",
-			"title": "Upstream SNR"
+			"title": _("Upstream SNR")
 		},
 		{
 			"data" : dsSnrData.data,
 			"color": "Coral",
-			"title" : "Downstream SNR"
+			"title" : _("Downstream SNR")
 		}
 	]
 };
@@ -163,23 +163,23 @@ let qLNChart = {
 		"stepX": Math.max(dsQLNData.maxX, usQLNData.maxX) / 16,
 		"graphWidth" : document.getElementById("qlnChart").width - 2 * marginX,
 		"lineWidth": 4,
-		"titleX" : "Sub-carrier",
+		"titleX" : _("Sub-carrier"),
 		"minY" : -150,
 		"maxY" : -20,
 		"stepY": 10,
 		"graphHeight" : document.getElementById("qlnChart").height - 2 * marginY,
-		"titleY" : "dBm/Hz"
+		"titleY" : _("dBm/Hz")
 	},
 	"dataSet" : [
 		{
 			"data" :usQLNData.data,
 			"color":"brown",
-			"title": "Upstream QLN"
+			"title": _("Upstream QLN")
 		},
 		{
 			"data" : dsQLNData.data,
 			"color": "teal",
-			"title" : "Downstream QLN"
+			"title" : _("Downstream QLN")
 		}
 	]
 };
@@ -193,23 +193,23 @@ let hLogChart = {
 		"stepX": Math.max(dsHLOGData.maxX, usHLOGData.maxX) / 16,
 		"graphWidth" : document.getElementById("hlogChart").width - 2 * marginX,
 		"lineWidth": 4,
-		"titleX" : "Sub-carrier",
+		"titleX" : _("Sub-carrier"),
 		"minY" : -100,
 		"maxY" : 14,
 		"stepY": 10,
 		"graphHeight" : document.getElementById("hlogChart").height - 2 * marginY,
-		"titleY" : "dB"
+		"titleY" : _("dB")
 	},
 	"dataSet" : [
 		{
 			"data" :usHLOGData.data,
 			"color":"#E8E800",
-			"title": "Upstream HLOG"
+			"title": _("Upstream HLOG")
 		},
 		{
 			"data" : dsHLOGData.data,
 			"color": "darkmagenta",
-			"title" : "Downstream HLOG"
+			"title" : _("Downstream HLOG")
 		}
 	]
 };

@@ -22,7 +22,7 @@ return view.extend({
 
 		var v = E([], [
 			E('h2', {'style': "height: 40px"}, [ _('DSL line spectrum') ]),
-			E('p', {}, 'Graphs below show Signal-to-noise ratio, Bit allocation, Quiet line noise and Channel characteristics function (HLOG) per sub-carrier.'),
+			E('p', {}, _('Graphs below show Signal-to-noise ratio, Bit allocation, Quiet line noise and Channel characteristics function (HLOG) per sub-carrier.')),
 			E('div', {'style': "height: 360px; width: 1024px"},
 				E('canvas', {
 					'id': 'dbChart',
