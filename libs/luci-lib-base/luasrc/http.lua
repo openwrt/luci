@@ -140,6 +140,6 @@ context = {
 		content        = function(self, ...) return content(...)        end;
 		getcookie      = function(self, ...) return getcookie(...)      end;
 		setfilehandler = function(self, ...) return setfilehandler(...) end;
-		message        = L.http.message
+		message        = L and L.http.message
 	}
 }
