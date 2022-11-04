@@ -2,13 +2,16 @@
 	"admin/services/simple-adblock": {
 		"title": "Simple AdBlock",
 		"action": {
-			"type": "cbi",
-			"path": "simple-adblock",
-			"post": { "cbi.submit": true }
+			"type": "view",
+			"path": "simple-adblock/overview"
 		},
 		"depends": {
-			"acl": [ "luci-app-simple-adblock" ],
-			"uci": { "simple-adblock": true }
+			"acl": [
+				"luci-app-simple-adblock"
+			],
+			"uci": {
+				"simple-adblock": true
+			}
 		}
 	}
 }
