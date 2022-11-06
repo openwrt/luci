@@ -694,12 +694,11 @@ return network.registerProtocol('wireguard', {
 
 		o.modalonly = true;
 
-		o.createPeerConfig = function(section_id, endpoint) {
+		o.createPeerConfig = function(section_id, endpoint, ips) {
 			var pub = s.formvalue(s.section, 'public_key'),
 			    port = s.formvalue(s.section, 'listen_port') || '51820',
 			    prv = this.section.formvalue(section_id, 'private_key'),
 			    psk = this.section.formvalue(section_id, 'preshared_key'),
-			    ips = L.toArray(this.section.formvalue(section_id, 'allowed_ips')),
 			    eport = this.section.formvalue(section_id, 'endpoint_port'),
 			    keep = this.section.formvalue(section_id, 'persistent_keepalive');
 
@@ -711,7 +710,7 @@ return network.registerProtocol('wireguard', {
 				'[Peer]',
 				'PublicKey = ' + pub,
 				psk ? 'PresharedKey = ' + psk : '# PresharedKey not used',
-				'AllowedIPs = ' + (ips.length ? ips.join(', ') : '0.0.0.0/0, ::/0'),
+				ips && ips.length ? 'AllowedIPs = ' + ips.join(', ') : '# AllowedIPs not defined',
 				endpoint ? 'Endpoint = ' + endpoint + ':' + port : '# Endpoint not defined',
 				keep ? 'PersistentKeepAlive = ' + keep : '# PersistentKeepAlive not defined'
 			].join('\n');
@@ -748,32 +747,43 @@ return network.registerProtocol('wireguard', {
 				for (var i = 0; i < data[1].length; i++)
 					hostnames.push.apply(hostnames, data[1][i].getIP6Addrs().map(function(ip) { return ip.split('/')[0] }));
 
+				var ips = [ '0.0.0.0/0', '::/0' ];
 
 				var qrm, qrs, qro;
 
-				qrm = new form.JSONMap({ endpoint: { endpoint: hostnames[0] } }, null, _('The generated configuration can be imported into a WireGuard client application to setup a connection towards this device.'));
+				qrm = new form.JSONMap({ config: { endpoint: hostnames[0], allowed_ips: ips } }, null, _('The generated configuration can be imported into a WireGuard client application to setup a connection towards this device.'));
 				qrm.parent = parent;
 
-				qrs = qrm.section(form.NamedSection, 'endpoint');
+				qrs = qrm.section(form.NamedSection, 'config');
 
-				qro = qrs.option(form.Value, 'endpoint', _('Connection endpoint'), _('The public hostname or IP address of this system the peer should connect to. This usually is a static public IP address, a static hostname or a DDNS domain.'));
-				qro.datatype = 'or(ipaddr,hostname)';
-				hostnames.forEach(function(hostname) { qro.value(hostname) });
-				qro.onchange = function(ev, section_id, value) {
+				function handleConfigChange(ev, section_id, value) {
 					var code = this.map.findElement('.qr-code'),
-					    conf = this.map.findElement('.client-config');
+					    conf = this.map.findElement('.client-config'),
+					    endpoint = this.section.getUIElement(section_id, 'endpoint'),
+					    ips = this.section.getUIElement(section_id, 'allowed_ips');
 
 					if (this.isValid(section_id)) {
-						conf.firstChild.data = configGenerator(value);
+						conf.firstChild.data = configGenerator(endpoint.getValue(), ips.getValue());
 						code.style.opacity = '.5';
 
 						invokeQREncode(conf.firstChild.data, code);
 					}
 				};
 
+				qro = qrs.option(form.Value, 'endpoint', _('Connection endpoint'), _('The public hostname or IP address of this system the peer should connect to. This usually is a static public IP address, a static hostname or a DDNS domain.'));
+				qro.datatype = 'or(ipaddr,hostname)';
+				hostnames.forEach(function(hostname) { qro.value(hostname) });
+				qro.onchange = handleConfigChange;
+
+				qro = qrs.option(form.DynamicList, 'allowed_ips', _('Allowed IPs'), _('IP addresses that are allowed inside the tunnel. The peer will accept tunnelled packets with source IP addresses matching this list and route back packets with matching destination IP.'));
+				qro.datatype = 'ipaddr';
+				qro.default = ips;
+				ips.forEach(function(ip) { qro.value(ip) });
+				qro.onchange = handleConfigChange;
+
 				qro = qrs.option(form.DummyValue, 'output');
 				qro.renderWidget = function() {
-					var peer_config = configGenerator(hostnames[0]);
+					var peer_config = configGenerator(hostnames[0], ips);
 
 					var node = E('div', {
 						'style': 'display:flex;flex-wrap:wrap;align-items:center;gap:.5em;width:100%'
