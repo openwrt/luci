@@ -14,8 +14,7 @@ return view.extend({
 			buttons[i].setAttribute('disabled', 'true');
 
 		return fs.exec(exec, args).then(function(res) {
-			var out = document.querySelector('.command-output');
-			    out.style.display = '';
+			var out = document.querySelector('textarea');
 
 			dom.content(out, [ res.stdout || '', res.stderr || '' ]);
 		}).catch(function(err) {
@@ -75,9 +74,7 @@ return view.extend({
 			ping_host = uci.get('luci', 'diag', 'ping') || 'openwrt.org',
 			route_host = uci.get('luci', 'diag', 'route') || 'openwrt.org';
 
-		return E([], [
-			E('h2', {}, [ _('Network Utilities') ]),
-			E('table', { 'class': 'table' }, [
+		var table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr' }, [
 					E('td', { 'class': 'td left' }, [
 						E('input', {
@@ -156,9 +153,26 @@ return view.extend({
 						])
 					]) : E([]),
 				])
-			]),
-			E('pre', { 'class': 'command-output', 'style': 'display:none' })
+			]);
+
+		var view = E('div', { 'class': 'cbi-map'}, [
+			E('h2', {}, [ _('Diagnostics') ]),
+			E('div', { 'class': 'cbi-map-descr'}, _('Execution of various network commands to check the connection and name resolution to other systems.')),
+			table,
+			E('div', {'class': 'cbi-section'}, [
+				E('div', { 'id' : 'command-output'},
+					E('textarea', {
+						'id': 'widget.command-output',
+						'style': 'width: 100%',
+						'readonly': true,
+						'wrap': 'off',
+						'rows': '20'
+					})
+				)
+			])
 		]);
+
+		return view;
 	},
 
 	handleSaveApply: null,
