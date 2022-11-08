@@ -95,7 +95,7 @@ context.viewns = setmetatable({
 	end;
 	translate   = i18n.translate;
 	translatef  = i18n.translatef;
-	export      = function(k, v) if tpl.context.viewns[k] == nil then tpl.context.viewns[k] = v end end;
+	export      = function(k, v) if context.viewns[k] == nil then context.viewns[k] = v end end;
 	striptags   = xml.striptags;
 	pcdata      = xml.pcdata;
 	ifattr      = function(...) return _ifattr(...) end;
