@@ -60,7 +60,6 @@ return view.extend({
 				(replyPlatform[pkg.Name].leds).forEach(element => {
 					o.value(element);
 				});
-				o.rmempty = false;
 			}
 			var text = _("DNS resolution option, see the %sREADME%s for details.")
 			.format("<a href=\"" + pkg.URL + "#dns-resolution-option\" target=\"_blank\">", "</a>");
