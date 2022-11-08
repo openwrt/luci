@@ -1,0 +1,312 @@
+#!/bin/sh
+# Copyright 2022 Stan Grishin (stangri@melmac.ca)
+# shellcheck disable=SC1091,SC2018,SC2019,SC2039,SC3043,SC3057,SC3060
+
+# TechRef: https://openwrt.org/docs/techref/rpcd
+# TESTS
+# ubus -v list luci.simple-adblock
+# ubus -S call luci.simple-adblock getInitList '{"name": "simple-adblock" }'
+# ubus -S call luci.simple-adblock getInitStatus '{"name": "simple-adblock" }'
+# ubus -S call luci.simple-adblock getPlatformSupport '{"name": "simple-adblock" }'
+
+. /lib/functions.sh
+. /lib/functions/network.sh
+. /usr/share/libubox/jshn.sh
+
+readonly packageName="simple-adblock"
+readonly dnsmasqAddnhostsFile="/var/run/${packageName}/dnsmasq.addnhosts"
+readonly dnsmasqAddnhostsCache="/var/run/${packageName}/dnsmasq.addnhosts.cache"
+readonly dnsmasqAddnhostsGzip="/etc/${packageName}.dnsmasq.addnhosts.gz"
+readonly dnsmasqConfFile="/tmp/dnsmasq.d/${packageName}"
+readonly dnsmasqConfCache="/var/run/${packageName}/dnsmasq.conf.cache"
+readonly dnsmasqConfGzip="/etc/${packageName}.dnsmasq.conf.gz"
+readonly dnsmasqIpsetFile="/tmp/dnsmasq.d/${packageName}.ipset"
+readonly dnsmasqIpsetCache="/var/run/${packageName}/dnsmasq.ipset.cache"
+readonly dnsmasqIpsetGzip="/etc/${packageName}.dnsmasq.ipset.gz"
+readonly dnsmasqNftsetFile="/tmp/dnsmasq.d/${packageName}.nftset"
+readonly dnsmasqNftsetCache="/var/run/${packageName}/dnsmasq.nftset.cache"
+readonly dnsmasqNftsetGzip="/etc/${packageName}.dnsmasq.nftset.gz"
+readonly dnsmasqServersFile="/var/run/${packageName}/dnsmasq.servers"
+readonly dnsmasqServersCache="/var/run/${packageName}/dnsmasq.servers.cache"
+readonly dnsmasqServersGzip="/etc/${packageName}.dnsmasq.servers.gz"
+readonly unboundFile="/var/lib/unbound/adb_list.${packageName}"
+readonly unboundCache="/var/run/${packageName}/unbound.cache"
+readonly unboundGzip="/etc/${packageName}.unbound.gz"
+readonly jsonFile="/var/run/${packageName}/${packageName}.json"
+
+str_contains() { [ -n "$1" ] &&[ -n "$2" ] && [ "${1//$2}" != "$1" ]; }
+str_contains_word() { echo "$1" | grep -q -w "$2"; }
+str_to_lower() { echo "$1" | tr 'A-Z' 'a-z'; }
+str_to_upper() { echo "$1" | tr 'a-z' 'A-Z'; }
+is_enabled() { uci -q get "${1}.config.enabled"; }
+get_version() { grep -m1 -A2 -w "^Package: $1$" /usr/lib/opkg/status | sed -n 's/Version: //p'; }
+print_json_bool() { json_init; json_add_boolean "$1" "$2"; json_dump; json_cleanup; }
+print_json_string() { json_init; json_add_string "$1" "$2"; json_dump; json_cleanup; }
+logger() { /usr/bin/logger -t "$packageName" "$@"; }
+ubus_get_status() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.${1}"; }
+ubus_get_ports() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.firewall.*.dest_port"; }
+json() {
+# shellcheck disable=SC2034
+	local action="$1" param="$2" value="$3" i
+	if [ -s "$jsonFile" ]; then
+		json_load_file "$jsonFile" 2>/dev/null
+		json_select 'data' 2>/dev/null
+		for i in status message error stats reload restart; do
+			json_get_var $i "$i" 2>/dev/null
+		done
+	fi
+	case "$action" in
+		get)
+			case "$param" in
+				*)
+					printf "%b" "$(eval echo "\$$param")"; return;;
+			esac
+		;;
+	esac
+}
+
+get_init_list() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	json_init
+	json_add_object "$name"
+	json_add_boolean 'enabled' "$(is_enabled "$name")"
+	if is_running "$name"; then
+		json_add_boolean 'running' '1'
+	else
+		json_add_boolean 'running' '0'
+	fi
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+set_init_action() {
+	local name action="$2" cmd
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	if [ ! -f "/etc/init.d/$name" ]; then
+		print_json_string 'error' 'Init script not found!'
+		return
+	fi
+	case $action in
+		enable)
+			cmd="uci -q set ${name}.config.enabled=1 && uci commit $name";;
+		disable)
+			cmd="uci -q set ${name}.config.enabled=0 && uci commit $name";;
+		start|stop|reload|restart)
+			cmd="/etc/init.d/${name} ${action}";;
+	esac
+	if [ -n "$cmd" ] && eval "${cmd}" 1>/dev/null 2>&1; then
+		print_json_bool "result" '1'
+	else
+		print_json_bool "result" '0'
+	fi
+}
+
+get_init_status() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	local errors ports dns outputFile outputCache outputGzip
+	local i
+	errors="$(ubus_get_status errors)"
+	ports="$(ubus_get_ports)"
+	dns="$(uci -q get $packageName.config.dns)"
+	case "$dns" in
+		dnsmasq.addnhosts)
+			outputFile="$dnsmasqAddnhostsFile"
+			outputCache="$dnsmasqAddnhostsCache"
+			outputGzip="$dnsmasqAddnhostsGzip"
+		;;
+		dnsmasq.conf)
+			outputFile="$dnsmasqConfFile"
+			outputCache="$dnsmasqConfCache"
+			outputGzip="$dnsmasqConfGzip"
+		;;
+		dnsmasq.ipset)
+			outputFile="$dnsmasqIpsetFile"
+			outputCache="$dnsmasqIpsetCache"
+			outputGzip="$dnsmasqIpsetGzip"
+		;;
+		dnsmasq.nftset)
+			outputFile="$dnsmasqNftsetFile"
+			outputCache="$dnsmasqNftsetCache"
+			outputGzip="$dnsmasqNftsetGzip"
+		;;
+		dnsmasq.servers)
+			outputFile="$dnsmasqServersFile"
+			outputCache="$dnsmasqServersCache"
+			outputGzip="$dnsmasqServersGzip"
+		;;
+		unbound.adb_list)
+			outputFile="$unboundFile"
+			outputCache="$unboundCache"
+			outputGzip="$unboundGzip"
+		;;
+	esac
+	json_init
+	json_add_object  "$name"
+	json_add_boolean 'enabled' "$(is_enabled "$name")"
+	i="$(json 'get' 'status')"
+	json_add_string 'status' "$i"
+	if [ "$i" = 'statusSuccess' ]; then
+		json_add_boolean 'running' '1'
+	else
+		json_add_boolean 'running' '0'
+	fi
+	json_add_string 'version' "$(get_version "$name")"
+	json_add_array 'errors'
+		for i in $errors; do json_add_string '' "$i"; done
+	json_close_array
+	if [ -n "$ports" ]; then
+		json_add_boolean 'force_dns_active' '1'
+		json_add_array 'force_dns_ports'
+			for i in $ports; do json_add_int '' "$i"; done
+		json_close_array
+	else
+		json_add_boolean 'force_dns_active' '0'
+	fi
+	json_add_int 'entries' "$(ubus_get_status entries)"
+	json_add_string 'dns' "$dns"
+	json_add_string 'outputFile' "$outputFile"
+	json_add_string 'outputCache' "$outputCache"
+	json_add_string 'outputGzip' "$outputGzip"
+	if [ -s "$outputFile" ]; then 
+		json_add_boolean 'outputFileExists' '1'
+	else
+		json_add_boolean 'outputFileExists' '0'
+	fi
+	if [ -s "$outputCache" ]; then 
+		json_add_boolean 'outputCacheExists' '1'
+	else
+		json_add_boolean 'outputCacheExists' '0'
+	fi
+	if [ -s "$outputGzip" ]; then 
+		json_add_boolean 'outputGzipExists' '1'
+	else
+		json_add_boolean 'outputGzipExists' '0'
+	fi
+	json_add_array 'leds'
+		for i in /sys/class/leds/*; do json_add_string '' "$(basename "$i")"; done
+	json_close_array
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+check_ipset() { { command -v ipset && /usr/sbin/ipset help hash:net; } >/dev/null 2>&1; }
+check_nft() { command -v nft >/dev/null 2>&1; }
+check_dnsmasq() { command -v dnsmasq >/dev/null 2>&1; }
+check_unbound() { command -v unbound >/dev/null 2>&1; }
+check_dnsmasq_ipset() {
+	local o;
+	check_dnsmasq || return 1
+	o="$(dnsmasq -v 2>/dev/null)"
+	check_ipset && ! echo "$o" | grep -q 'no-ipset' && echo "$o" | grep -q 'ipset'
+}
+check_dnsmasq_nftset() {
+	local o;
+	check_dnsmasq || return 1
+	o="$(dnsmasq -v 2>/dev/null)"
+	check_nft && ! echo "$o" | grep -q 'no-nftset' && echo "$o" | grep -q 'nftset'
+}
+
+get_platform_support() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	json_init
+	json_add_object "$name"
+	if check_ipset; then
+		json_add_boolean 'ipset_installed' '1'
+	else
+		json_add_boolean 'ipset_installed' '0'
+	fi
+	if check_nft; then
+		json_add_boolean 'nft_installed' '1'
+	else
+		json_add_boolean 'nft_installed' '0'
+	fi
+	if check_dnsmasq; then
+		json_add_boolean 'dnsmasq_installed' '1'
+	else
+		json_add_boolean 'dnsmasq_installed' '0'
+	fi
+	if check_unbound; then
+		json_add_boolean 'unbound_installed' '1'
+	else
+		json_add_boolean 'unbound_installed' '0'
+	fi
+	if check_dnsmasq_ipset; then
+		json_add_boolean 'dnsmasq_ipset_support' '1'
+	else
+		json_add_boolean 'dnsmasq_ipset_support' '0'
+	fi
+	if check_dnsmasq_nftset; then
+		json_add_boolean 'dnsmasq_nftset_support' '1'
+	else
+		json_add_boolean 'dnsmasq_nftset_support' '0'
+	fi
+	json_add_array 'leds'
+		for i in /sys/class/leds/*; do json_add_string '' "$(basename "$i")"; done
+	json_close_array
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "getInitList"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getInitStatus"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getPlatformSupport"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "setInitAction"
+			json_add_string 'name' 'name'
+			json_add_string 'action' 'action'
+		json_close_object
+		json_dump
+		json_cleanup
+		;;
+	call)
+		case "$2" in
+			getInitList)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_init_list "$name"
+				;;
+			getInitStatus)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_init_status "$name"
+				;;
+			getPlatformSupport)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_platform_support "$name"
+				;;
+			setInitAction)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_get_var action 'action'
+				json_cleanup
+				set_init_action "$name" "$action"
+				;;
+		esac
+	;;
+esac
