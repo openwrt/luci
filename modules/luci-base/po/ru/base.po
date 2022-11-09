@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2022-10-25 10:20+0000\n"
-"Last-Translator: sergio <sergio+it@outerface.net>\n"
+"PO-Revision-Date: 2022-11-08 16:02+0000\n"
+"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.14.2\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -1294,6 +1294,7 @@ msgstr "Политика объединения"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:402
 msgid "Both Listen addr and Relay To must be specified."
 msgstr ""
+"Должны быть указаны оба параметра: адрес прослушивания и адрес передачи."
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2995
 #: modules/luci-compat/luasrc/model/network.lua:1421
@@ -2947,6 +2948,8 @@ msgid ""
 "Execution of various network commands to check the connection and name "
 "resolution to other systems."
 msgstr ""
+"Выполнение различных сетевых команд для проверки соединения и разрешения "
+"имен с другими системами."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:315
 msgid ""
@@ -2966,7 +2969,7 @@ msgstr "Расширять имена узлов"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:397
 msgid "Expected port number."
-msgstr ""
+msgstr "Ожидается номер порта."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:994
 msgid "Expecting a hexadecimal assignment hint"
@@ -3750,7 +3753,7 @@ msgstr "Тип ICMPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:364
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:53
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:48
@@ -4809,11 +4812,11 @@ msgstr "Порт для входящих соединений"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:373
 msgid "Listen address"
-msgstr ""
+msgstr "Адрес прослушивания"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:408
 msgid "Listen and Relay To IP family must be homogeneous."
-msgstr ""
+msgstr "Версии IP для адреса прослушивания и адреса передачи должны совпадать."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:340
 msgid "Listen interfaces"
@@ -5852,6 +5855,9 @@ msgid ""
 "Note: you may also need a DHCP Proxy (currently unavailable) when specifying "
 "a non-standard Relay To port(<code>addr#port</code>)."
 msgstr ""
+"Примечание: при указании нестандартного порта передачи "
+"(<code>addr#port</code>) вам также может понадобиться DHCP прокси (в "
+"настоящее время недоступен)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Notes"
@@ -7060,10 +7066,12 @@ msgid ""
 "Relay DHCP requests elsewhere. OK: v4<->v4, v6<->v6. Not OK: v4<->v6, v6<-"
 ">v4."
 msgstr ""
+"Передача запросов DHCP в другие места. OK: v4<->v4, v6<->v6. Не OK: v4<->v6, "
+"v6<->v4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:385
 msgid "Relay To address"
-msgstr ""
+msgstr "Адрес передачи"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:154
 msgid "Relay between networks"
@@ -10266,6 +10274,8 @@ msgstr "Вы можете добавить несколько записей д�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:354
 msgid "You may add multiple unique Relay To on the same Listen addr."
 msgstr ""
+"Вы можете добавить несколько уникальных адресов передачи для одного и того "
+"же адреса прослушивания."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:78
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:92
