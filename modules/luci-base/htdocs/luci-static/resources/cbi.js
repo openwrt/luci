@@ -796,5 +796,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			L.hideTooltip(ev);
 	});
 
-	document.querySelectorAll('.table').forEach(cbi_update_table);
+	L.require('ui').then(function(ui) {
+		document.querySelectorAll('.table').forEach(cbi_update_table);
+	});
 });
