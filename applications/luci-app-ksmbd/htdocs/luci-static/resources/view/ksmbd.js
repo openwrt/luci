@@ -46,14 +46,14 @@ return view.extend({
 
 		o = s.taboption('template', form.TextValue, '_tmpl',
 			null,
-			_("This is the content of the file '/etc/ksmbd/smb.conf.template' from which your ksmbd configuration will be generated. \
+			_("This is the content of the file '/etc/ksmbd/ksmbd.conf.template' from which your ksmbd configuration will be generated. \
 			Values enclosed by pipe symbols ('|') should not be changed. They get their values from the 'General Settings' tab."));
 		o.rows = 20;
 		o.cfgvalue = function(section_id) {
-			return fs.trimmed('/etc/ksmbd/smb.conf.template');
+			return fs.trimmed('/etc/ksmbd/ksmbd.conf.template');
 		};
 		o.write = function(section_id, formvalue) {
-			return fs.write('/etc/ksmbd/smb.conf.template', formvalue.trim().replace(/\r\n/g, '\n') + '\n');
+			return fs.write('/etc/ksmbd/ksmbd.conf.template', formvalue.trim().replace(/\r\n/g, '\n') + '\n');
 		};
 
 
@@ -76,7 +76,7 @@ return view.extend({
 		o = s.option(form.Flag, 'read_only', _('Read-only'));
 		o.enabled = 'yes';
 		o.disabled = 'no';
-		o.default = 'no'; // smb.conf default is 'yes'
+		o.default = 'no'; // ksmbd.conf default is 'yes'
 		o.rmempty = false;
 
 		s.option(form.Flag, 'force_root', _('Force Root'));
@@ -87,7 +87,7 @@ return view.extend({
 		o = s.option(form.Flag, 'guest_ok', _('Allow guests'));
 		o.enabled = 'yes';
 		o.disabled = 'no';
-		o.default = 'yes'; // smb.conf default is 'no'
+		o.default = 'yes'; // ksmbd.conf default is 'no'
 		o.rmempty = false;
 
 		o = s.option(form.Flag, 'inherit_owner', _('Inherit owner'));
@@ -102,13 +102,13 @@ return view.extend({
 
 		o = s.option(form.Value, 'create_mask', _('Create mask'));
 		o.maxlength = 4;
-		o.default = '0666'; // smb.conf default is '0744'
+		o.default = '0666'; // ksmbd.conf default is '0744'
 		o.placeholder = '0666';
 		o.rmempty = false;
 
 		o = s.option(form.Value, 'dir_mask', _('Directory mask'));
 		o.maxlength = 4;
-		o.default = '0777'; // smb.conf default is '0755'
+		o.default = '0777'; // ksmbd.conf default is '0755'
 		o.placeholder = '0777';
 		o.rmempty = false;
 
