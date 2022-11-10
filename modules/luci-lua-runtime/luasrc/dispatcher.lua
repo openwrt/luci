@@ -186,6 +186,11 @@ function process_lua_controller(path)
 			entry.auth = {}
 		end
 
+		if entry.action == nil and type(entry.target) == "table" then
+			entry.action = entry.target
+			entry.target = nil
+		end
+
 		entry.leaf = nil
 
 		entry.file_depends = nil
