@@ -159,20 +159,25 @@ const methods = {
 		call: function() {
 			const uci = cursor();
 			let helpers = [];
+			let package;
 
-			uci.load('/usr/share/firewall4/helpers');
-			uci.load('/usr/share/fw3/helpers.conf');
+			if (uci.load('/usr/share/firewall4/helpers'))
+				package = 'helpers';
+			else if (uci.load('/usr/share/fw3/helpers.conf'))
+				package = 'helpers.conf';
 
-			uci.foreach('helpers', 'helper', (s) => {
-				push(helpers, {
-					name: s.name,
-					description: s.description,
-					module: s.module,
-					family: s.family,
-					proto: s.proto,
-					port: s.port
+			if (package) {
+				uci.foreach(package, 'helper', (s) => {
+					push(helpers, {
+						name: s.name,
+						description: s.description,
+						module: s.module,
+						family: s.family,
+						proto: s.proto,
+						port: s.port
+					});
 				});
-			});
+			}
 
 			return { result: helpers };
 		}
