@@ -2,10 +2,11 @@
 -- Licensed to the public under the Apache License 2.0.
 
 local coroutine, assert, error, type, require = coroutine, assert, error, type, require
-local tmpl = require "luci.template"
-local util = require "luci.util"
-local http = require "luci.http"
-local sys  = require "luci.sys"
+local tmpl  = require "luci.template"
+local util  = require "luci.util"
+local http  = require "luci.http"
+local sys   = require "luci.sys"
+local ltn12 = require "luci.ltn12"
 
 
 --- LuCI ucode bridge library.
