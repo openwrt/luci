@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 17:57+0200\n"
-"PO-Revision-Date: 2022-07-24 16:11+0000\n"
-"Last-Translator: Hannu Nyman <hannu.nyman@iki.fi>\n"
+"PO-Revision-Date: 2022-11-02 22:11+0000\n"
+"Last-Translator: tdt-hv <hvoit@tdt.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/"
 ">\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -1564,6 +1564,10 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Compute outgoing checksum (optional)."
 msgstr "Prüfsummen für zu sendende Pakete berechnet (optional)"
+
+#: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
+msgid "Config File"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4367
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:454
@@ -3564,12 +3568,20 @@ msgid "Hybrid"
 msgstr "Hybrid"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:49
+msgctxt "nft icmp code"
+msgid "ICMP code"
+msgstr ""
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:50
+msgctxt "nft icmp type"
+msgid "ICMP type"
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:51
 msgctxt "nft icmpv6 code"
 msgid "ICMPv6 code"
 msgstr "ICMPv6-Code"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:50
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:52
 msgctxt "nft icmpv6 type"
 msgid "ICMPv6 type"
@@ -4796,9 +4808,8 @@ msgid "Logout"
 msgstr "Abmelden"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:628
-#, fuzzy
 msgid "Loose filtering"
-msgstr "offene Filterung"
+msgstr "Lockere Filterung"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:31
 msgid "Loss of Signal Seconds (LOSS)"
@@ -5286,6 +5297,10 @@ msgstr "Name des neuen Netzwerkes"
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
 msgid "Navigation"
 msgstr "Navigation"
+
+#: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:10
+msgid "Nebula Network"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:653
 msgid "Neighbour cache validity"
@@ -6857,6 +6872,10 @@ msgstr ""
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
 msgid "Required. Base64-encoded private key for this interface."
 msgstr "Benötigt. Base64-kodierter privater Schlüssel für diese Schnittstelle."
+
+#: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
+msgid "Required. Path to the .yml config file for this interface."
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
 msgid "Required. Public key of the WireGuard peer."
@@ -8887,8 +8906,8 @@ msgid ""
 "This list gives an overview over currently running system processes and "
 "their status."
 msgstr ""
-"Diese Tabelle gibt eine Übersicht über aktuell laufende Systemprozesse und "
-"deren Status."
+"Diese Tabelle gibt einen Überblick über die aktuell laufenden Systemprozesse "
+"und deren Status."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1587
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1645
@@ -8920,7 +8939,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1172
 msgid "Time interval for rekeying GTK"
-msgstr "Zeitintervall für die neubestimmung des Gruppenschlüssels"
+msgstr "Zeitintervall für die Neubestimmung des Gruppenschlüssels"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:15
 msgid "Timed-out"
@@ -8952,6 +8971,10 @@ msgid ""
 "provider supplied) configuration file, use the <strong><a class=\"full-"
 "import\" href=\"#\">configuration import</a></strong> instead."
 msgstr ""
+"Um die lokale WireGuard-Schnittstelle vollständig aus einer bestehenden (z."
+"B. vom Provider gelieferten) Konfigurationsdatei zu konfigurieren, verwenden "
+"Sie stattdessen den <strong><a class=\"full-import\" "
+"href=\"#\">Konfigurationsimport</a></strong>."
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
 msgid "To login…"
@@ -9442,7 +9465,7 @@ msgstr "Gleiche Quelle, gleiches Ziel für jede Verbindung"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1580
 msgid "Use system certificates"
-msgstr "Benutze Systemzertifikate"
+msgstr "Benutze System-Zertifikate"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1638
 msgid "Use system certificates for inner-tunnel"

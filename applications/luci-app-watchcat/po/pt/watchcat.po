@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-06-13 21:32+0000\n"
+"PO-Revision-Date: 2022-11-01 16:34+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/pt/>\n"
@@ -10,17 +10,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
 "<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
 "> Specify the interface to monitor and react if a ping over it fails."
 msgstr ""
+"<i>Aplica-se aos modos Ping Reboot, Restart Interface e Executar Script</i> "
+"<br /> Especifique a interface para monitorar e reagir se um ping por ele "
+"falhar."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "Família de endereços para pingar o host"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -30,12 +33,12 @@ msgid ""
 "fail. Enter the number of seconds to wait for the soft reboot to fail or use "
 "0 to disable the forced reboot delay."
 msgstr ""
-"Se aplica aos modos ping reboot e a reinicialização periódica</i> <br /> Ao "
-"reiniciar o roteador o serviço acionará uma reinicialização suave. Inserindo "
-"um valor diferente de zero aqui desencadeará uma reinicialização completa "
-"com atraso caso a reinicialização suave falhe. Insira a quantidade em "
-"segundos para esperar a falha da reinicialização suave ou use 0 para "
-"desativar o atraso de reinicialização forçada."
+"Aplica-se aos modos de reinicialização de ping e reinicialização periódica</"
+"i> <br /> Ao reinicializar o roteador, o serviço acionará uma "
+"reinicialização suave. A inserção de um valor diferente a zero aqui acionará "
+"uma reinicialização forçada atrasada se a reinicialização suave falhar. "
+"Insira a quantidade de segundos para aguardar a falha da reinicialização "
+"suave ou use 0 para desativar o atraso da reinicialização forçada."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
 msgid ""
@@ -104,7 +107,7 @@ msgstr "Enorme: 1492 bytes"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "Endereço IP ou nome do host a pingar."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
@@ -127,6 +130,16 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"No modo de reinicialização periódica, define a frequência de "
+"reinicialização. <br /> No modo Ping Reboot, define o maior período sem uma "
+"resposta do host a ser analisado antes que uma reinicialização seja "
+"iniciada. <br /> No modo Network Restart ou Executar Script, define o maior "
+"período sem uma resposta do host a ser analisado antes que a interface seja "
+"reiniciada ou o script, seja executado. <br /><br />A unidade padrão é "
+"segundos, sem sufixo, mas pode usar o sufixo <b>m</b> para minutos, <b>h</b> "
+"para horas ou <b>d </b> por dias. <br /><br />Exemplos:<ul><li>10 segundos "
+"seriam: <b>10</b> ou <b>10s</b></li><li>5 minutos seriam: <b>5m</b></li><li> "
+"1 hora seria: <b>1h</b></li><li>1 semana seria: <b>7d</b></ li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -173,6 +186,13 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Ping Reboot: reinicializar este aparelho se um ping para um host "
+"especificado falhar por um período especificado. <br /> Reinicialização "
+"Periódica: reinicializar este aparelho após um intervalo de tempo "
+"especificado. <br /> Reiniciar interface: reiniciar uma interface de rede se "
+"um ping para um host especificado falhar por um período especificado. <br /> "
+"Executar script: executa um script se um ping para um host especificado "
+"falhar por um período especificado. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
@@ -180,17 +200,19 @@ msgstr "Interface de reinicialização"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Executar script"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Script a executar"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"O script a ser executado quando o host não respondeu no tempo especificado. "
+"O script recebe o nome da interface como $1"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"

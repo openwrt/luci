@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-04-25 11:11+0000\n"
+"PO-Revision-Date: 2022-11-08 00:12+0000\n"
 "Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/openwrt/"
 "luci/nb_NO/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.1-dev\n"
+"X-Generator: Weblate 4.14.2\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -57,7 +57,7 @@ msgstr "(ingen grensesnitt tilknyttet)"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:637
 msgctxt "Label indicating further amount of allowed ips"
 msgid "+ %d more"
-msgstr ""
+msgstr "+ %d til"
 
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
@@ -229,12 +229,12 @@ msgstr "<abbr title=\"Router Advertisement\">RA</abbr>-tjeneste"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:87
 msgctxt "nft relational \">\" operator expression"
 msgid "<var>%s</var> greater than <strong>%s</strong>"
-msgstr ""
+msgstr "<var>%s</var> større enn <strong>%s</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:85
 msgctxt "nft relational \">=\" operator expression"
 msgid "<var>%s</var> greater than or equal to <strong>%s</strong>"
-msgstr ""
+msgstr "<var>%s</var> større enn eller lik <strong>%s</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:90
 msgctxt "nft set match expression"
@@ -336,7 +336,7 @@ msgstr "APR terskel for nytt forsøk"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:631
 msgid "ARP traffic table \"%h\""
-msgstr ""
+msgstr "ARP-trafikktabell «%h»"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1511
 msgid "ATM (Asynchronous Transfer Mode)"
@@ -440,7 +440,7 @@ msgstr "Aktive IPv4 Ruter"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:258
 msgid "Active IPv4 Rules"
-msgstr ""
+msgstr "Aktive IPv4-regler"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:265
 msgid "Active IPv6 Routes"
@@ -448,7 +448,7 @@ msgstr "Aktive IPv6 Ruter"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:268
 msgid "Active IPv6 Rules"
-msgstr ""
+msgstr "Aktive IPv6-regler"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:205
 msgid "Active-Backup policy (active-backup, 1)"
@@ -540,7 +540,7 @@ msgstr "Legg til i svarteliste"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:335
 msgid "Add to Whitelist"
-msgstr ""
+msgstr "Legg til i hvitliste"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:367
 msgid "Additional hosts files"
@@ -578,7 +578,7 @@ msgstr "Adresse for tilgang til lokal relébro"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:289
 msgid "Addresses"
-msgstr ""
+msgstr "Adresser"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:3
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:15
@@ -603,7 +603,7 @@ msgstr "Avanserte enhetsvalg"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:513
 msgid "Ageing time"
-msgstr ""
+msgstr "Aldringstid"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
 msgid "Aggregate Transmit Power (ACTATP)"
@@ -639,7 +639,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:146
 msgid "Alias of \"%s\""
-msgstr ""
+msgstr "Alias for «%s»"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:426
 msgid "All servers"
@@ -1509,6 +1509,10 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Compute outgoing checksum (optional)."
+msgstr ""
+
+#: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
+msgid "Config File"
 msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4367
@@ -3435,12 +3439,20 @@ msgid "Hybrid"
 msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:49
+msgctxt "nft icmp code"
+msgid "ICMP code"
+msgstr ""
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:50
+msgctxt "nft icmp type"
+msgid "ICMP type"
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:51
 msgctxt "nft icmpv6 code"
 msgid "ICMPv6 code"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:50
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:52
 msgctxt "nft icmpv6 type"
 msgid "ICMPv6 type"
@@ -5087,6 +5099,10 @@ msgstr "Navnet til det nye nettverket"
 msgid "Navigation"
 msgstr "Navigasjon"
 
+#: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:10
+msgid "Nebula Network"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:653
 msgid "Neighbour cache validity"
 msgstr ""
@@ -6576,6 +6592,10 @@ msgstr "Er nødvendig for noen nettleverandører, f.eks Charter med DOCSIS 3"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:151
 msgid "Required. Base64-encoded private key for this interface."
+msgstr ""
+
+#: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
+msgid "Required. Path to the .yml config file for this interface."
 msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
