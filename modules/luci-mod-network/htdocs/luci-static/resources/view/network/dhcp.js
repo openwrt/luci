@@ -456,6 +456,17 @@ return view.extend({
 			_('Avoid uselessly triggering dial-on-demand links (filters SRV/SOA records and names with underscores).') + '<br />' +
 			_('May prevent VoIP or other services from working.'));
 
+		o = s.taboption('advanced', form.Flag, 'filter_aaaa',
+			_('Filter IPv6 AAAA records'),
+			_('Remove IPv6 addresses from the results and only return IPv4 addresses.') + '<br />' +
+			_('Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing.'));
+		o.optional = true;
+
+		o = s.taboption('advanced', form.Flag, 'filter_a',
+			_('Filter IPv4 A records'),
+			_('Remove IPv4 addresses from the results and only return IPv6 addresses.'));
+		o.optional = true;
+
 		s.taboption('advanced', form.Flag, 'localise_queries',
 			_('Localise queries'),
 			_('Return answers to DNS queries matching the subnet from which the query was received if multiple IPs are available.'));
