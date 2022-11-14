@@ -110,8 +110,14 @@ return view.extend({
 
 			o = s.taboption("tab_advanced", form.Value, "download_timeout", _("Download time-out (in seconds)"),
 				_("Stop the download if it is stalled for set number of seconds."));
-			o.default = "10";
+			o.default = "20";
 			o.datatype = "range(1,60)";
+
+			o = s.taboption("tab_advanced", form.Value, "curl_max_file_size", _("Curl maximum file size (in bytes)"),
+				_("If curl is installed and detected, it would not download files bigger than this."));
+			o.default = "";
+			o.datatype = "uinteger";
+			o.rmempty = true;
 
 			o = s.taboption("tab_advanced", form.Value, "curl_retry", _("Curl download retry"),
 				_("If curl is installed and detected, it would retry download this many times on timeout/fail."));
@@ -138,21 +144,31 @@ return view.extend({
 
 			s = m.section(form.NamedSection, "config", "simple-adblock", 
 				_("Allowed and Blocked Lists Management"));
+			o = s.option(form.Value, "dnsmasq_config_file_url", _("Dnsmasq Config File URL"),
+				_("URL to the external dnsmasq config file, see the %sREADME%s for details.")
+					.format("<a href=\"" + pkg.URL + "#dnsmasq_config_file_url\" target=\"_blank\">", "</a>"));
+			o.addremove = true;
+			o.rmempty = true;
 			o = s.option(form.DynamicList, "allowed_domain", _("Allowed Domains"),
 				_("Individual domains to be allowed."));
-			o.addremove = false;
+			o.depends('dnsmasq_config_file_url', '');
+			o.addremove = true;
 			o = s.option(form.DynamicList, "allowed_domains_url", _("Allowed Domain URLs"),
 				_("URLs to lists of domains to be allowed."));
-			o.addremove = false;
+			o.depends('dnsmasq_config_file_url', '');
+			o.addremove = true;
 			o = s.option(form.DynamicList, "blocked_domain", _("Blocked Domains"),
 				_("Individual domains to be blocked."));
-			o.addremove = false;
+			o.depends('dnsmasq_config_file_url', '');
+			o.addremove = true;
 			o = s.option(form.DynamicList, "blocked_domains_url", _("Blocked Domain URLs"),
 				_("URLs to lists of domains to be blocked."));
-			o.addremove = false;
+			o.depends('dnsmasq_config_file_url', '');
+			o.addremove = true;
 			o = s.option(form.DynamicList, "blocked_hosts_url", _("Blocked Hosts URLs"),
 				_("URLs to lists of hosts to be blocked."));
-			o.addremove = false;
+			o.depends('dnsmasq_config_file_url', '');
+			o.addremove = true;
 
 			return Promise.all([status.render(), m.render()]);
 		})

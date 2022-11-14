@@ -109,11 +109,16 @@ get_init_status() {
 	local name
 	name="$(basename "$1")"
 	name="${name:-$packageName}" 
-	local errors ports dns outputFile outputCache outputGzip
+	local errors warnings ports dns outputFile outputCache outputGzip
 	local i
 	errors="$(ubus_get_status errors)"
+	warnings="$(ubus_get_status warnings)"
 	ports="$(ubus_get_ports)"
-	dns="$(uci -q get $packageName.config.dns)"
+	if [ -n "$(uci -q get $packageName.config.dnsmasq_config_file_url)" ]; then
+		dns="dnsmasq.conf"
+	else
+		dns="$(uci -q get $packageName.config.dns)"
+	fi
 	case "$dns" in
 		dnsmasq.addnhosts)
 			outputFile="$dnsmasqAddnhostsFile"
@@ -160,6 +165,7 @@ get_init_status() {
 	json_add_array 'errors'
 		for i in $errors; do json_add_string '' "$i"; done
 	json_close_array
+#	json_add_string 'warnings' "$warnings"
 	if [ -n "$ports" ]; then
 		json_add_boolean 'force_dns_active' '1'
 		json_add_array 'force_dns_ports'
