@@ -228,6 +228,22 @@ function get_netmask(s, use_cfgvalue) {
 	return subnetmask;
 }
 
+function has_peerdns(proto) {
+	switch (proto) {
+	case 'dhcp':
+	case 'qmi':
+	case 'ppp':
+	case 'pppoe':
+	case 'pppoa':
+	case 'pptp':
+	case 'openvpn':
+	case 'sstp':
+		return true;
+	}
+
+	return false;
+}
+
 var cbiRichListValue = form.ListValue.extend({
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var choices = this.transformChoices();
@@ -936,13 +952,13 @@ return view.extend({
 				o = nettools.replaceOption(s, 'advanced', form.Flag, 'defaultroute', _('Use default gateway'), _('If unchecked, no default route is configured'));
 				o.default = o.enabled;
 
-				if (protoval != 'static') {
+				if (has_peerdns(protoval)) {
 					o = nettools.replaceOption(s, 'advanced', form.Flag, 'peerdns', _('Use DNS servers advertised by peer'), _('If unchecked, the advertised DNS server addresses are ignored'));
 					o.default = o.enabled;
 				}
 
 				o = nettools.replaceOption(s, 'advanced', form.DynamicList, 'dns', _('Use custom DNS servers'));
-				if (protoval != 'static')
+				if (has_peerdns(protoval))
 					o.depends('peerdns', '0');
 				o.datatype = 'ipaddr';
 
