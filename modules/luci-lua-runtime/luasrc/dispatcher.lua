@@ -6,16 +6,14 @@ module("luci.dispatcher", package.seeall)
 
 local http = _G.L.http
 
-context = setmetatable({
-	request = _G.L.ctx.request_path;
-	requested = _G.L.node;
-	dispatched = _G.L.node;
-}, {
+context = setmetatable({}, {
 	__index = function(t, k)
-		if k == "requestpath" then
+		if k == "request" or k == "requestpath" then
 			return _G.L.ctx.request_path
 		elseif k == "requestargs" then
 			return _G.L.ctx.request_args
+		elseif k == "requested" or k == "dispatched" then
+			return _G.L.node
 		else
 			return _G.L.ctx[k]
 		end
