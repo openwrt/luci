@@ -314,7 +314,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 			this.channels = {
 				'2g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
 				'5g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
-				'6g': [],
+				'6g': L.hasSystemFeature('hostapd', 'acs') ? [ 'auto', 'auto', true ] : [],
 				'60g': []
 			};
 
@@ -387,7 +387,8 @@ var CBIWifiFrequencyValue = form.Value.extend({
 				],
 				'ax': [
 					'2g', '2.4 GHz', this.channels['2g'].length > 3,
-					'5g', '5 GHz', this.channels['5g'].length > 3
+					'5g', '5 GHz', this.channels['5g'].length > 3,
+					'6g', '6 GHz', this.channels['6g'].length > 3
 				]
 			};
 		}, this));
