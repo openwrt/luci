@@ -452,8 +452,8 @@ return view.extend({
 		o.default = o.enabled;
 
 		s.taboption('advanced', form.Flag, 'filterwin2k',
-			_('Filter useless'),
-			_('Avoid uselessly triggering dial-on-demand links (filters SRV/SOA records and names with underscores).') + '<br />' +
+			_('Filter SRV/SOA service discovery'),
+			_('Filters SRV/SOA service discovery, to avoid triggering dial-on-demand links.') + '<br />' +
 			_('May prevent VoIP or other services from working.'));
 
 		o = s.taboption('advanced', form.Flag, 'filter_aaaa',
