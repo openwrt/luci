@@ -121,7 +121,7 @@ context.viewns = setmetatable({
 	elseif key == "resource" then
 		return L.config.main.resourcebase
 	else
-		return rawget(tbl, key) or disp[key] or _G[key] or L[key]
+		return rawget(tbl, key) or _G[key] or L[key]
 	end
 end})
 

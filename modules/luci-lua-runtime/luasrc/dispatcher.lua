@@ -354,6 +354,12 @@ function invoke_form_action(model, ...)
 	_G.L.include("footer")
 end
 
+function render_lua_template(path)
+	local tpl = require "luci.template"
+
+	tpl.render(path, getfenv(1))
+end
+
 
 function call(name, ...)
 	return {
