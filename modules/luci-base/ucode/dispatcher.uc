@@ -921,6 +921,7 @@ dispatch = function(_http, path) {
 						runtime.render(`themes/${basename(runtime.env.media)}/sysauth`, scope);
 					}
 					catch (e) {
+						runtime.env.media_error = `${e}`;
 						runtime.render('sysauth', scope);
 					}
 
