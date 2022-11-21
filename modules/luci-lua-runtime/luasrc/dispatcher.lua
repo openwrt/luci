@@ -12,8 +12,6 @@ context = setmetatable({}, {
 			return _G.L.ctx.request_path
 		elseif k == "requestargs" then
 			return _G.L.ctx.request_args
-		elseif k == "requested" or k == "dispatched" then
-			return _G.L.node
 		else
 			return _G.L.ctx[k]
 		end

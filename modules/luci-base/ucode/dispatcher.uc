@@ -856,7 +856,7 @@ dispatch = function(_http, path) {
 	let version = determine_version();
 	let lang = determine_request_language();
 
-	runtime = LuCIRuntime({
+	runtime = runtime || LuCIRuntime({
 		http,
 		ubus,
 		uci,
@@ -892,7 +892,8 @@ dispatch = function(_http, path) {
 		let resolved = resolve_page(menu, path);
 
 		runtime.env.ctx = resolved.ctx;
-		runtime.env.node = resolved.node;
+		runtime.env.dispatched = resolved.node;
+		runtime.env.requested ??= resolved.node;
 
 		if (length(resolved.ctx.auth)) {
 			let session = is_authenticated(resolved.ctx.auth);
