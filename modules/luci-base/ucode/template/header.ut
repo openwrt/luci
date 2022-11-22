@@ -22,7 +22,7 @@
 		ubuspath       : config.main.ubuspath || '/ubus/',
 		sessionid      : ctx.authsession,
 		token          : ctx.authtoken,
-		nodespec       : node,
+		nodespec       : dispatched,
 		apply_rollback : max(+config.apply.rollback ||  90, 90),
 		apply_holdoff  : max(+config.apply.holdoff  ||   4,  1),
 		apply_timeout  : max(+config.apply.timeout  ||   5,  1),
