@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-10-23 17:26+0000\n"
-"Last-Translator: Zeik0s <zeik0s@zeik0s.at>\n"
+"PO-Revision-Date: 2022-11-19 23:04+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsyggdrasil/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/status.js:33
 msgid "Active peers"
@@ -97,6 +97,10 @@ msgid ""
 "that SOCKS peerings will NOT be affected by this option and should go in the "
 "\"Peers\" section instead."
 msgstr ""
+"Liste der Verbindungszeichenfolgen für ausgehende Peer-Verbindungen im URI-"
+"Format, geordnet nach Quellschnittstelle, z. B. { \"eth0\": [ tcp://a.b.c.d:"
+"e ] }. Beachten Sie, dass SOCKS-Peerings von dieser Option NICHT betroffen "
+"sind und stattdessen in den Abschnitt \"Peers\" aufgenommen werden sollten."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:12
 msgid ""
@@ -105,10 +109,15 @@ msgid ""
 "the operating system routing table, therefore you should use this section "
 "when you may connect via different interfaces."
 msgstr ""
+"Liste der Verbindungszeichenfolgen für ausgehende Peer-Verbindungen im URI-"
+"Format, z. B. tcp://a.b.c.d:e oder socks://a.b.c.d:e/f.g.h.i:j. Diese "
+"Verbindungen richten sich nach der Routing-Tabelle des Betriebssystems, "
+"daher sollten Sie diesen Abschnitt verwenden, wenn Sie eine Verbindung über "
+"verschiedene Schnittstellen herstellen möchten."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:33
 msgid "Listen addresses"
-msgstr ""
+msgstr "Listen-Adresse"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:34
 msgid ""
@@ -118,6 +127,12 @@ msgid ""
 "should be specified in URI format as above, e.g. tcp://0.0.0.0:0 or tcp://"
 "[::]:0 to listen on all interfaces."
 msgstr ""
+"Listen-Adressen für eingehende Verbindungen. Sie müssen Listener hinzufügen, "
+"um eingehende Peerings von nicht-lokalen Knoten zu akzeptieren. Die "
+"Erkennung von Multicast-Peers funktioniert unabhängig von den hier "
+"eingestellten Listenern. Jeder Listener sollte im URI-Format wie oben "
+"angegeben werden, z. B. tcp://0.0.0.0:0 oder tcp://[::]:0, um auf allen "
+"Schnittstellen zu lauschen."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:51
 msgid "Listen for beacons"
@@ -125,11 +140,11 @@ msgstr ""
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:31
 msgid "MTU size for the interface"
-msgstr ""
+msgstr "MTU-Größe für die Schnittstelle"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:44
 msgid "Multicast interface"
-msgstr ""
+msgstr "Multicast-Schnittstelle"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:23
 msgid "NodeInfo"
@@ -141,6 +156,9 @@ msgid ""
 "null. This is entirely optional but, if set, is visible to the whole network "
 "on request."
 msgstr ""
+"Optionale Knoteninformationen. Dies muss eine { \"key\": \"value\", ... }-"
+"Map oder als null festgelegt sein. Dies ist völlig optional, ist aber, wenn "
+"eingestellt, auf Anfrage für das gesamte Netzwerk sichtbar."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:23
@@ -149,11 +167,11 @@ msgstr "Partner"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:49
 msgid "Regular expression"
-msgstr ""
+msgstr "Regulärer Ausdruck"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:50
 msgid "Send beacons"
-msgstr ""
+msgstr "Beacons senden"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:32
 msgid "Settings"
@@ -165,19 +183,19 @@ msgstr "Status"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:3
 msgid "Yggdrasil"
-msgstr ""
+msgstr "Yggdrasil"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/status.js:30
 msgid "Yggdrasil node status"
-msgstr ""
+msgstr "Yggdrasil Knotenstatus"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:14
 msgid "Yggdrasil's network interface name"
-msgstr ""
+msgstr "Yggdrasils Netzwerkschnittstellenname"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:40
 msgid "e.g. tcp://0.0.0.0:0 or tcp://[::]:0"
-msgstr ""
+msgstr "z.B. tcp://0.0.0.0:0 oder tcp://[::]:0"
 
 #~ msgid "Address to listen for incoming connections"
 #~ msgstr "Adresse für eingehende Verbindungen"
