@@ -61,6 +61,10 @@ const Class = {
 		return this.L;
 	},
 
+	is_ucode_template: function(path) {
+		return access(`${template_directory}/${path}.ut`);
+	},
+
 	render_ucode: function(path, scope) {
 		let tmplfunc = loadfile(path, { raw_mode: false });
 

@@ -774,9 +774,12 @@ function render_action(fn) {
 function run_action(request_path, lang, tree, resolved, action) {
 	switch (action?.type) {
 	case 'template':
-		render_action(() => {
-			runtime.call('luci.dispatcher', 'render_lua_template', action.path);
-		});
+		if (runtime.is_ucode_template(action.path))
+			runtime.render_ucode(action.path);
+		else
+			render_action(() => {
+				runtime.call('luci.dispatcher', 'render_lua_template', action.path);
+			});
 		break;
 
 	case 'view':
