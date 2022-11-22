@@ -775,7 +775,7 @@ function run_action(request_path, lang, tree, resolved, action) {
 	switch (action?.type) {
 	case 'template':
 		if (runtime.is_ucode_template(action.path))
-			runtime.render_ucode(action.path);
+			runtime.render(action.path, {});
 		else
 			render_action(() => {
 				runtime.call('luci.dispatcher', 'render_lua_template', action.path);
