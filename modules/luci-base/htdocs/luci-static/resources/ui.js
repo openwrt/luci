@@ -3241,10 +3241,13 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 
 			for (var i = 0; i < headings.length; i++) {
 				var text = (headings[i].innerText || '').trim();
+				var raw_val = Array.isArray(row[i]) ? row[i][0] : null;
+				var disp_val = Array.isArray(row[i]) ? row[i][1] : row[i];
 				var td = trows[n].appendChild(E('td', {
 					'class': 'td',
-					'data-title': (text !== '') ? text : null
-				}, (row[i] != null) ? row[i] : ''));
+					'data-title': (text !== '') ? text : null,
+					'data-value': raw_val
+				}, (disp_val != null) ? ((disp_val instanceof DocumentFragment) ? disp_val.cloneNode(true) : disp_val) : ''));
 
 				if (typeof(captionClasses) == 'object')
 					DOMTokenList.prototype.add.apply(td.classList, L.toArray(captionClasses[i]));
@@ -3321,8 +3324,12 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		else if (typeof( opts.sortable) == 'object')
 			hint =  opts.sortable[index];
 
-		if (dom.elem(value))
-			value = value.innerText.trim();
+		if (dom.elem(value)) {
+			if (value.hasAttribute('data-value'))
+				value = value.getAttribute('data-value');
+			else
+				value = (value.innerText || '').trim();
+		}
 
 		switch (hint || 'auto') {
 		case true:
