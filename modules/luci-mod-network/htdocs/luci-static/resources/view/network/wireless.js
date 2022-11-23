@@ -319,18 +319,10 @@ var CBIWifiFrequencyValue = form.Value.extend({
 			};
 
 			for (var i = 0; i < data[1].length; i++) {
-				var band;
-
-				if (data[1][i].mhz >= 2412 && data[1][i].mhz <= 2484)
-					band = '2g';
-				else if (data[1][i].mhz >= 5160 && data[1][i].mhz <= 5885)
-					band = '5g';
-				else if (data[1][i].mhz >= 5925 && data[1][i].mhz <= 7125)
-					band = '6g';
-				else if (data[1][i].mhz >= 58320 && data[1][i].mhz <= 69120)
-					band = '60g';
-				else
+				if (!data[1][i].band)
 					continue;
+
+				var band = '%dg'.format(data[1][i].band);
 
 				this.channels[band].push(
 					data[1][i].channel,
