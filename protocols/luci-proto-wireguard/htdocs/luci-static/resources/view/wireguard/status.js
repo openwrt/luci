@@ -30,43 +30,6 @@ function timestampToStr(timestamp) {
 	return (new Date(timestamp * 1000)).toUTCString() + ' (' + ago + ')';
 }
 
-/*
-{
-	"jow": {
-		"public_key": "o4iLoC1pl8+vEUshV7eUyKrryo7cr0WJkjS/Dlixxy8=",
-		"name": "jow",
-		"fwmark": "off",
-		"listen_port": "51821",
-		"peers": [
-			{
-				"endpoint": "45.13.105.118:51821",
-				"public_key": "672KLy/R4miKXdvw2unuf9jQzVEmNnqen5kF+zVjMX0=",
-				"name": "m300",
-				"latest_handshake": "1668680574",
-				"persistent_keepalive": "off",
-				"allowed_ips": [
-					"192.168.220.10/32"
-				],
-				"transfer_tx": "308",
-				"transfer_rx": "220"
-			},
-			{
-				"endpoint": "171.22.3.161:51821",
-				"public_key": "yblNj1s41F8m1MdXhxD2U+Aew6ZR6Miy8OcNK/fkAks=",
-				"name": "ac2",
-				"latest_handshake": "0",
-				"persistent_keepalive": "off",
-				"allowed_ips": [
-					"192.168.220.11/32"
-				],
-				"transfer_tx": "2960",
-				"transfer_rx": "0"
-			}
-		]
-	}
-}
-*/
-
 function handleInterfaceDetails(iface) {
 	ui.showModal(_('Instance Details'), [
 		ui.itemlist(E([]), [

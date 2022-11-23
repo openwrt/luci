@@ -52,6 +52,8 @@ const methods = {
 			const wg_dump = popen("wg show all dump 2>/dev/null");
 
 			if (wg_dump) {
+				uci.load("network");
+
 				for (let line = wg_dump.read('line'); length(line); line = wg_dump.read('line')) {
 					const record = split(rtrim(line, '\n'), '\t');
 
