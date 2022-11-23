@@ -126,7 +126,7 @@ function validateHostname(sid, s) {
 	if (s.length > 256)
 		return _('Expecting: %s').format(_('valid hostname'));
 
-	var labels = s.replace(/^\.+|\.$/g, '').split(/\./);
+	var labels = s.replace(/^\*?\.?|\.$/g, '').split(/\./);
 
 	for (var i = 0; i < labels.length; i++)
 		if (!labels[i].match(/^[a-z0-9_](?:[a-z0-9-]{0,61}[a-z0-9])?$/i))
@@ -156,13 +156,15 @@ function validateServerSpec(sid, s) {
 	if (s == null || s == '')
 		return true;
 
-	var m = s.match(/^(?:\/(.+)\/)?(.*)$/);
+	var m = s.match(/^(\/.*\/)?(.*)$/);
 	if (!m)
 		return _('Expecting: %s').format(_('valid hostname'));
 
-	var res = validateAddressList(sid, m[1]);
-	if (res !== true)
-		return res;
+	if (m[1] != '//' && m[1] != '/#/') {
+		var res = validateAddressList(sid, m[1]);
+		if (res !== true)
+			return res;
+	}
 
 	if (m[2] == '' || m[2] == '#')
 		return true;
