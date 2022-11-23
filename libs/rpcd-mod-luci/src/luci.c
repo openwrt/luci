@@ -81,6 +81,7 @@ static iw_text_t *iw_modenames, *iw_authnames, *iw_kmgmtnames,
                  *iw_ciphernames, *iw_htmodenames, *iw_80211names;
 static struct iwinfo_ops *(*iw_backend)(const char *);
 static void (*iw_close)(void);
+static size_t (*iw_format_hwmodes)(int, char *, size_t);
 
 static void
 invoke_data_cb(struct ubus_request *req, int type, struct blob_attr *msg)
@@ -938,8 +939,9 @@ static bool rpc_luci_get_iwinfo(struct blob_buf *buf, const char *devname,
 	void *o, *o2, *a;
 	glob_t paths;
 	int nret, i;
+	char text[32];
 
-	if (!iw_backend || !iw_close || !iw_modenames || !iw_80211names ||
+	if (!iw_backend || !iw_close || !iw_format_hwmodes || !iw_modenames || !iw_80211names ||
 	    !iw_htmodenames || !iw_authnames || !iw_kmgmtnames || !iw_ciphernames) {
 		if (glob("/usr/lib/libiwinfo.so*", 0, NULL, &paths) != 0)
 			return false;
@@ -954,6 +956,7 @@ static bool rpc_luci_get_iwinfo(struct blob_buf *buf, const char *devname,
 
 		iw_backend = dlsym(iwlib, "iwinfo_backend");
 		iw_close = dlsym(iwlib, "iwinfo_close");
+		iw_format_hwmodes = dlsym(iwlib, "iwinfo_format_hwmodes");
 		iw_modenames = dlsym(iwlib, "IWINFO_OPMODE_NAMES");
 		iw_80211names = dlsym(iwlib, "IWINFO_80211_NAMES");
 		iw_htmodenames = dlsym(iwlib, "IWINFO_HTMODE_NAMES");
@@ -961,7 +964,7 @@ static bool rpc_luci_get_iwinfo(struct blob_buf *buf, const char *devname,
 		iw_kmgmtnames = dlsym(iwlib, "IWINFO_KMGMT_NAMES");
 		iw_ciphernames = dlsym(iwlib, "IWINFO_CIPHER_NAMES");
 
-		if (!iw_backend || !iw_close || !iw_modenames || !iw_80211names ||
+		if (!iw_backend || !iw_close || !iw_format_hwmodes || !iw_modenames || !iw_80211names ||
 		    !iw_htmodenames || !iw_authnames || !iw_kmgmtnames || !iw_ciphernames)
 			return false;
 	}
@@ -983,9 +986,13 @@ static bool rpc_luci_get_iwinfo(struct blob_buf *buf, const char *devname,
 	iw_call_num(iw->frequency, devname, buf, "frequency");
 	iw_call_num(iw->frequency_offset, devname, buf, "frequency_offset");
 
-	if (!iw->hwmodelist(devname, &nret))
+	if (!iw->hwmodelist(devname, &nret)) {
 		iw_add_bit_array(buf, "hwmodes", nret,
 				iw_80211names, IWINFO_80211_COUNT, true, 0);
+
+		if (iw_format_hwmodes(nret, text, sizeof(text)) > 0)
+			blobmsg_add_string(buf, "hwmodes_text", text);
+	}
 
 	if (!iw->htmodelist(devname, &nret))
 		iw_add_bit_array(buf, "htmodes", nret & ~IWINFO_HTMODE_NOHT,
