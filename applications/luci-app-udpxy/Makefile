@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for udpxy
-LUCI_DEPENDS:=+luci-compat +udpxy
+LUCI_DEPENDS:=+udpxy
 
 include ../../luci.mk
 
