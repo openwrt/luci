@@ -922,16 +922,18 @@ dispatch = function(_http, path) {
 					http.header('X-LuCI-Login-Required', 'yes');
 
 					let scope = { duser: 'root', fuser: user };
+					let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;
 
-					try {
-						runtime.render(`themes/${basename(runtime.env.media)}/sysauth`, scope);
-					}
-					catch (e) {
-						runtime.env.media_error = `${e}`;
-						runtime.render('sysauth', scope);
+					if (runtime.is_ucode_template(theme_sysauth) || runtime.is_lua_template(theme_sysauth)) {
+						try {
+							return runtime.render(theme_sysauth, scope);
+						}
+						catch (e) {
+							runtime.env.media_error = `${e}`;
+						}
 					}
 
-					return;
+					return runtime.render('sysauth', scope);
 				}
 
 				let cookie_name = (http.getenv('HTTPS') == 'on') ? 'sysauth_https' : 'sysauth_http',
