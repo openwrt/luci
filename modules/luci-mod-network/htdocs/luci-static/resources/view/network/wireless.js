@@ -343,10 +343,10 @@ var CBIWifiFrequencyValue = form.Value.extend({
 				.reduce(function(o, v) { o[v] = true; return o }, {});
 
 			this.modes = [
-				'', 'Legacy', true,
+				'', 'Legacy', hwmodelist.a || hwmodelist.b || hwmodelist.g,
 				'n', 'N', hwmodelist.n,
-				'ac', 'AC', hwmodelist.ac,
-				'ax', 'AX', hwmodelist.ax
+				'ac', 'AC', L.hasSystemFeature('hostapd', '11ac') && hwmodelist.ac,
+				'ax', 'AX', L.hasSystemFeature('hostapd', '11ax') && hwmodelist.ax
 			];
 
 			var htmodelist = L.toArray(data[0] ? data[0].getHTModes() : null)
