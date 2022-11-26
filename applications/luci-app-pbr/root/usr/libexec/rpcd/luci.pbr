@@ -1,0 +1,373 @@
+#!/bin/sh
+# Copyright 2022 Stan Grishin (stangri@melmac.ca)
+# shellcheck disable=SC1091,SC2018,SC2019,SC2039,SC3043,SC3057,SC3060
+
+# TechRef: https://openwrt.org/docs/techref/rpcd
+# TESTS
+# ubus -v list luci.pbr
+# ubus -S call luci.pbr getInitList '{"name": "pbr" }'
+# ubus -S call luci.pbr getInitStatus '{"name": "pbr" }'
+# ubus -S call luci.pbr getPlatformSupport '{"name": "pbr" }'
+# ubus -S call luci.pbr getGateways '{"name": "pbr" }'
+# ubus -S call luci.pbr getInterfaces '{"name": "pbr" }'
+
+. /lib/functions.sh
+. /lib/functions/network.sh
+. /usr/share/libubox/jshn.sh
+
+readonly packageName="pbr"
+# shellcheck disable=SC2155
+readonly ipset="$(command -v ipset)"
+# shellcheck disable=SC2155
+readonly agh="$(command -v AdGuardHome)"
+readonly aghConfigFile='/etc/adguardhome.yaml'
+# shellcheck disable=SC2155
+readonly nft="$(command -v nft)"
+
+is_enabled() { uci -q get "${1}.config.enabled"; }
+is_running_iptables() { iptables -t mangle -L | grep -q PBR_PREROUTING >/dev/null 2>&1; }
+is_running_nft() { "$nft" list table inet fw4 | grep chain | grep -q pbr_mark_ >/dev/null 2>&1; }
+is_running() { is_running_iptables || is_running_nft; }
+get_version() { grep -m1 -A2 -w "^Package: $1$" /usr/lib/opkg/status | sed -n 's/Version: //p'; }
+print_json_bool() { json_init; json_add_boolean "$1" "$2"; json_dump; json_cleanup; }
+print_json_string() { json_init; json_add_string "$1" "$2"; json_dump; json_cleanup; }
+logger() { /usr/bin/logger -t "$packageName" "$@"; }
+ubus_get_status() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.status.${1}"; }
+ubus_get_gateway() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.gateways[@.name='${1}']${2:+.$2}"; }
+is_greater_or_equal() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" = "$2"; }
+
+get_init_list() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	json_init
+	json_add_object "$name"
+	json_add_boolean 'enabled' "$(is_enabled "$name")"
+	if is_running "$name"; then
+		json_add_boolean 'running' '1'
+	else
+		json_add_boolean 'running' '0'
+	fi
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+set_init_action() {
+	local name action="$2" cmd
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	if [ ! -f "/etc/init.d/$name" ]; then
+		print_json_string 'error' 'Init script not found!'
+		return
+	fi
+	case $action in
+		enable)
+			cmd="uci -q set ${name}.config.enabled=1 && uci commit $name";;
+		disable)
+			cmd="uci -q set ${name}.config.enabled=0 && uci commit $name";;
+		start|stop|reload|restart)
+			cmd="/etc/init.d/${name} ${action}";;
+	esac
+	if [ -n "$cmd" ] && eval "${cmd}" 1>/dev/null 2>&1; then
+		print_json_bool "result" '1'
+	else
+		print_json_bool "result" '0'
+	fi
+}
+
+get_init_status() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	local version gateways warnings errors
+	[ -z "$version" ] && version="$(get_version "$name")"
+	[ -z "$version" ] && version="$(get_version "${name}-iptables")"
+	[ -z "$version" ] && version="$(get_version "${name}-netifd")"
+	gateways="$(ubus_get_status gateways | sed "s|\\\n|<br />|g;s|\(\\\033[^<]*\)|✓|g;")"
+	warnings="$(ubus_get_status warnings)"
+	errors="$(ubus_get_status errors)"
+	json_init
+	json_add_object  "$name"
+	json_add_boolean 'enabled' "$(is_enabled "$name")"
+	if is_running "$name"; then
+		json_add_boolean 'running' '1'
+	else
+		json_add_boolean 'running' '0'
+	fi
+	if is_running_iptables "$name"; then
+		json_add_boolean 'running_iptables' '1'
+	else
+		json_add_boolean 'running_iptables' '0'
+	fi
+	if is_running_nft "$name"; then
+		json_add_boolean 'running_nft' '1'
+	else
+		json_add_boolean 'running_nft' '0'
+	fi
+	json_add_string 'version' "$version"
+	json_add_string 'gateways' "$gateways"
+	json_add_array 'errors'
+	if [ -n "$errors" ]; then
+		while read -r line; do
+			if str_contains "$line" ' '; then
+				error_id="${line% *}"
+				error_extra="${line#* }"
+			else
+				error_id="$line"
+				unset error_extra
+			fi
+			json_add_object
+			json_add_string 'id' "$error_id"
+			json_add_string 'extra' "$error_extra"
+			json_close_object
+		done <<EOF
+$(echo "$errors" | tr \# \\n)
+EOF
+	fi
+	json_close_array
+	json_add_array 'warnings'
+	if [ -n "$warnings" ]; then
+		while read -r line; do
+			if str_contains "$line" ' '; then
+				error_id="${line% *}"
+				error_extra="${line#* }"
+			else
+				error_id="$line"
+				unset error_extra
+			fi
+			json_add_object
+			json_add_string 'id' "$error_id"
+			json_add_string 'extra' "$error_extra"
+			json_close_object
+		done <<EOF
+$(echo "$warnings" | tr \# \\n)
+EOF
+	fi
+	json_close_array
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+check_ipset() { { [ -n "$ipset" ] && "$ipset" help hash:net; } >/dev/null 2>&1; }
+check_nft() { [ -n "$nft" ]; }
+check_agh() { [ -n "$agh" ] && [ -s "$aghConfigFile" ]; }
+check_dnsmasq() { command -v dnsmasq >/dev/null 2>&1; }
+check_unbound() { command -v unbound >/dev/null 2>&1; }
+check_agh_ipset() {
+	check_ipset || return 1
+	check_agh || return 1
+	is_greater_or_equal "$($agh --version | sed 's|AdGuard Home, version v\(.*\)|\1|')" '0.107.13'
+}
+check_dnsmasq_ipset() {
+	local o;
+	check_ipset || return 1
+	check_dnsmasq || return 1
+	o="$(dnsmasq -v 2>/dev/null)"
+	! echo "$o" | grep -q 'no-ipset' && echo "$o" | grep -q 'ipset'
+}
+check_dnsmasq_nftset() {
+	local o;
+	check_nft || return 1
+	check_dnsmasq || return 1
+	o="$(dnsmasq -v 2>/dev/null)"
+	! echo "$o" | grep -q 'no-nftset' && echo "$o" | grep -q 'nftset'
+}
+
+get_platform_support() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	json_init
+	json_add_object "$name"
+	if check_ipset; then
+		json_add_boolean 'ipset_installed' '1'
+	else
+		json_add_boolean 'ipset_installed' '0'
+	fi
+	if check_nft; then
+		json_add_boolean 'nft_installed' '1'
+	else
+		json_add_boolean 'nft_installed' '0'
+	fi
+	if check_agh; then
+		json_add_boolean 'adguardhome_installed' '1'
+	else
+		json_add_boolean 'adguardhome_installed' '0'
+	fi
+	if check_dnsmasq; then
+		json_add_boolean 'dnsmasq_installed' '1'
+	else
+		json_add_boolean 'dnsmasq_installed' '0'
+	fi
+	if check_unbound; then
+		json_add_boolean 'unbound_installed' '1'
+	else
+		json_add_boolean 'unbound_installed' '0'
+	fi
+	if check_agh_ipset; then
+		json_add_boolean 'adguardhome_ipset_support' '1'
+	else
+		json_add_boolean 'adguardhome_ipset_support' '0'
+	fi
+	if check_dnsmasq_ipset; then
+		json_add_boolean 'dnsmasq_ipset_support' '1'
+	else
+		json_add_boolean 'dnsmasq_ipset_support' '0'
+	fi
+	if check_dnsmasq_nftset; then
+		json_add_boolean 'dnsmasq_nftset_support' '1'
+	else
+		json_add_boolean 'dnsmasq_nftset_support' '0'
+	fi
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+# shellcheck disable=SC3037
+get_gateways() {
+	local name="${1:-$packageName}"
+	echo -en "{\"$name\":{\"gateways\":"
+	ubus call service list "{ 'name': '$name' }" | jsonfilter -e "@.${name}.instances.main.data.gateways"
+	echo -en "}}"
+}
+
+str_contains() { [ -n "$1" ] &&[ -n "$2" ] && [ "${1//$2}" != "$1" ]; }
+str_contains_word() { echo "$1" | grep -q -w "$2"; }
+str_to_lower() { echo "$1" | tr 'A-Z' 'a-z'; }
+str_to_upper() { echo "$1" | tr 'a-z' 'A-Z'; }
+is_ignore_target() { [ "$(str_to_lower "$1")" = 'ignore' ]; }
+is_dslite() { local proto; proto=$(uci -q get network."$1".proto); [ "${proto:0:6}" = "dslite" ]; }
+is_l2tp() { local proto; proto=$(uci -q get network."$1".proto); [ "${proto:0:4}" = "l2tp" ]; }
+is_oc() { local proto; proto=$(uci -q get network."$1".proto); [ "${proto:0:11}" = "openconnect" ]; }
+is_ovpn() { local dev; network_get_device dev "$1"; [ "${dev:0:3}" = "tun" ] || [ "${dev:0:3}" = "tap" ] || [ -f "/sys/devices/virtual/net/${dev}/tun_flags" ]; }
+is_pptp() { local proto; proto=$(uci -q get network."$1".proto); [ "${proto:0:4}" = "pptp" ]; }
+is_softether() { local dev; network_get_device dev "$1"; [ "${dev:0:4}" = "vpn_" ]; }
+is_tor() { [ "$(str_to_lower "$1")" = "tor" ]; }
+is_wg() { local proto; proto=$(uci -q get network."$1".proto); [ "${proto:0:9}" = "wireguard" ]; }
+is_tunnel() { is_dslite "$1" || is_l2tp "$1" || is_oc "$1" || is_ovpn "$1" || is_pptp "$1" || is_softether "$1" || is_tor "$1" || is_wg "$1"; }
+is_wan() { [ "$1" = "$wanIface4" ] || { [ "${1##wan}" != "$1" ] && [ "${1##wan6}" = "$1" ]; } || [ "${1%%wan}" != "$1" ]; }
+is_wan6() { [ -n "$wanIface6" ] && [ "$1" = "$wanIface6" ] || [ "${1/#wan6}" != "$1" ] || [ "${1/%wan6}" != "$1" ]; }
+is_ignored_interface() { str_contains_word "$ignored_interface" "$1"; }
+is_supported_interface() { str_contains_word "$supported_interface" "$1" || { ! is_ignored_interface "$1" && { is_wan "$1" || is_wan6 "$1" || is_tunnel "$1"; }; } || is_ignore_target "$1"; }
+pbr_find_iface() {
+	local iface i param="$2"
+	[ "$param" = 'wan6' ] || param='wan'
+	"network_find_${param}" iface
+	is_tunnel "$iface" && unset iface
+	if [ -z "$iface" ]; then
+		for i in $ifacesAll; do
+			if "is_${param}" "$i"; then break; else unset i; fi
+		done
+	fi
+	eval "$1"='${iface:-$i}'
+}
+_build_ifaces_all() { ifacesAll="${ifacesAll}${1} "; }
+_build_ifaces_supported() { is_supported_interface "$1" && ifacesSupported="${ifacesSupported}${1} "; }
+get_supported_interfaces() {
+	local name i
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	local ifacesAll ifacesSupported
+	local webui_show_ignore_target
+	local ignored_interface supported_interface
+	local wanIface4 wanIface6
+	config_load "$name"
+	config_get_bool webui_show_ignore_target 'config' 'webui_show_ignore_target' '0'
+	config_get ignored_interface             'config' 'ignored_interface'
+	config_get supported_interface           'config' 'supported_interface'
+	config_load 'network'
+	config_foreach _build_ifaces_all 'interface'
+	pbr_find_iface wanIface4 'wan'
+	pbr_find_iface wanIface6 'wan6'
+	config_foreach _build_ifaces_supported 'interface'
+	if [ "$webui_show_ignore_target" -eq "1" ]; then
+		ifacesSupported="$ifacesSupported ignore"
+	fi
+	json_init
+	json_add_object "$name"
+	json_add_array 'interfaces'
+	for i in $ifacesSupported; do
+		json_add_string '' "$i"
+	done
+	json_close_array
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "getGateways"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getInitList"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getInitStatus"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getInterfaces"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getPlatformSupport"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "setInitAction"
+			json_add_string 'name' 'name'
+			json_add_string 'action' 'action'
+		json_close_object
+		json_dump
+		json_cleanup
+		;;
+	call)
+		case "$2" in
+			getGateways)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_gateways "$name"
+				;;
+			getInitList)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_init_list "$name"
+				;;
+			getInitStatus)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_init_status "$name"
+				;;
+			getInterfaces)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_supported_interfaces "$name"
+				;;
+			getPlatformSupport)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_platform_support "$name"
+				;;
+			setInitAction)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_get_var action 'action'
+				json_cleanup
+				set_init_action "$name" "$action"
+				;;
+		esac
+	;;
+esac

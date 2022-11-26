@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-11-08 00:12+0000\n"
+"PO-Revision-Date: 2022-11-23 11:36+0000\n"
 "Last-Translator: Eric <hamburger1024@mailbox.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -1353,7 +1353,7 @@ msgstr "调用失败"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:462
 msgid ""
 "Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing."
-msgstr ""
+msgstr "如果你的 ISP 有 IPv6 名称服务器但不提供 IPv6 路由，本选项可能会有用。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2933
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4162
@@ -3048,11 +3048,11 @@ msgstr "文件系统"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:466
 msgid "Filter IPv4 A records"
-msgstr ""
+msgstr "过滤 IPv4 A 记录"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:460
 msgid "Filter IPv6 AAAA records"
-msgstr ""
+msgstr "过滤 IPv6 AAAA 记录"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:450
 msgid "Filter private"
@@ -3712,7 +3712,8 @@ msgid ""
 "IP addresses that are allowed inside the tunnel. The peer will accept "
 "tunnelled packets with source IP addresses matching this list and route back "
 "packets with matching destination IP."
-msgstr ""
+msgstr "隧道内允许的 IP 地址。对端接受源 IP 地址匹配此列表的隧道报文，并将目的地 IP "
+"匹配该列表的数据包路由回去。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:36
 msgctxt "nft ip protocol"
@@ -4221,15 +4222,13 @@ msgid "Instance"
 msgstr "实例"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:162
-#, fuzzy
 msgctxt "WireGuard instance heading"
 msgid "Instance \"%h\""
-msgstr "实例"
+msgstr "实例 \"%h\""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:71
-#, fuzzy
 msgid "Instance Details"
-msgstr "实例"
+msgstr "实例详情"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2046
 msgid ""
@@ -4436,7 +4435,7 @@ msgstr "保留当前配置"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
 msgid "Keep-Alive"
-msgstr ""
+msgstr "保活"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:20
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
@@ -5489,7 +5488,6 @@ msgid "Never"
 msgstr "永不"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:16
-#, fuzzy
 msgctxt "No WireGuard peer handshake yet"
 msgid "Never"
 msgstr "永不"
@@ -5642,9 +5640,8 @@ msgid "No password set!"
 msgstr "未设置密码！"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:121
-#, fuzzy
 msgid "No peers connected"
-msgstr "未连接"
+msgstr "未连接对端"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:512
 msgid "No peers defined yet."
@@ -6404,7 +6401,7 @@ msgstr "对端"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:88
 msgid "Peer Details"
-msgstr ""
+msgstr "对端详情"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:89
 msgid "Peer IP address to assign"
@@ -6512,10 +6509,9 @@ msgid "Port"
 msgstr "端口"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:174
-#, fuzzy
 msgctxt "WireGuard listen port"
 msgid "Port %d"
-msgstr "端口 %s"
+msgstr "端口 %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:702
 msgid "Port isolation"
@@ -6856,9 +6852,8 @@ msgid "Receive"
 msgstr "接收"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:94
-#, fuzzy
 msgid "Received Data"
-msgstr "接收"
+msgstr "已接收的数据"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "Recommended. IP addresses of the WireGuard interface."
@@ -6933,9 +6928,8 @@ msgid "Relay Bridge"
 msgstr "中继桥"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:352
-#, fuzzy
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
-msgstr "在别处中继 DHCP 请求。OK: v4<->v4, v6<->v6. Not OK: v4<->v6, v6<->v4。"
+msgstr "在别处中继 DHCP 请求。OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:385
 msgid "Relay To address"
@@ -6978,11 +6972,11 @@ msgstr "移除"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:467
 msgid "Remove IPv4 addresses from the results and only return IPv6 addresses."
-msgstr ""
+msgstr "从结果中删除 IPv4 地址，只返回 IPv6 地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:461
 msgid "Remove IPv6 addresses from the results and only return IPv4 addresses."
-msgstr ""
+msgstr "从结果中删除 IPv6 地址，只返回 IPv4 地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1318
 msgid "Remove related device settings from the configuration"
@@ -9059,9 +9053,8 @@ msgid "Transmit Hash Policy"
 msgstr "传输散列策略"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:95
-#, fuzzy
 msgid "Transmitted Data"
-msgstr "传送天线"
+msgstr "已传输的数据"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:79
 msgctxt "nft @th,off,len"
@@ -10111,7 +10104,7 @@ msgstr "比如： dump"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
 msgctxt "WireGuard keep alive interval"
 msgid "every %ds"
-msgstr ""
+msgstr "每 %d 秒"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:871
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:901
