@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2022-11-08 01:55+0000\n"
+"PO-Revision-Date: 2022-11-23 11:36+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luci/pt_BR/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -1426,6 +1426,8 @@ msgstr "A chamada falhou"
 msgid ""
 "Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing."
 msgstr ""
+"Pode ser útil caso o provedor tenha servidores de nomes IPv6, mas não "
+"forneça o roteamento IPv6."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2933
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4162
@@ -2921,7 +2923,7 @@ msgstr "Criptografia"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:92
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:112
 msgid "Endpoint"
-msgstr "Endpoint"
+msgstr "Extremidade"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:664
 msgid "Endpoint Host"
@@ -3206,11 +3208,11 @@ msgstr "Sistema de arquivo"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:466
 msgid "Filter IPv4 A records"
-msgstr ""
+msgstr "Filtrar os registros IPv4 A"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:460
 msgid "Filter IPv6 AAAA records"
-msgstr ""
+msgstr "Filtrar os registros IPv6 AAAA"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:450
 msgid "Filter private"
@@ -3891,6 +3893,9 @@ msgid ""
 "tunnelled packets with source IP addresses matching this list and route back "
 "packets with matching destination IP."
 msgstr ""
+"Endereços IP permitidos dentro do túnel. O par aceitará pacotes no túnel com "
+"endereços IP de origem correspondentes a esta lista e roteará de volta os "
+"pacotes com IP de destino correspondente."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:36
 msgctxt "nft ip protocol"
@@ -4419,15 +4424,13 @@ msgid "Instance"
 msgstr "Instância"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:162
-#, fuzzy
 msgctxt "WireGuard instance heading"
 msgid "Instance \"%h\""
-msgstr "Instância"
+msgstr "Instância \"%h\""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:71
-#, fuzzy
 msgid "Instance Details"
-msgstr "Instância"
+msgstr "Detalhes da instância"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2046
 msgid ""
@@ -4646,7 +4649,7 @@ msgstr "Mantenha as configurações e preserve a configuração atual"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
 msgid "Keep-Alive"
-msgstr ""
+msgstr "Manter vivo"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:20
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
@@ -5725,7 +5728,6 @@ msgid "Never"
 msgstr "Nunca"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:16
-#, fuzzy
 msgctxt "No WireGuard peer handshake yet"
 msgid "Never"
 msgstr "Nunca"
@@ -5883,9 +5885,8 @@ msgid "No password set!"
 msgstr "Nenhuma senha definida!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:121
-#, fuzzy
 msgid "No peers connected"
-msgstr "Não conectado"
+msgstr "Nenhum par conectado"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:512
 msgid "No peers defined yet."
@@ -6681,7 +6682,7 @@ msgstr "Parceiro"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:88
 msgid "Peer Details"
-msgstr ""
+msgstr "Detalhes do par"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:89
 msgid "Peer IP address to assign"
@@ -6789,10 +6790,9 @@ msgid "Port"
 msgstr "Porta"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:174
-#, fuzzy
 msgctxt "WireGuard listen port"
 msgid "Port %d"
-msgstr "Porta %s"
+msgstr "Porta %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:702
 msgid "Port isolation"
@@ -7147,9 +7147,8 @@ msgid "Receive"
 msgstr "Receber"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:94
-#, fuzzy
 msgid "Received Data"
-msgstr "Receber"
+msgstr "Dados recebidos"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "Recommended. IP addresses of the WireGuard interface."
@@ -7226,11 +7225,10 @@ msgid "Relay Bridge"
 msgstr "Ponte por Retransmissão"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:352
-#, fuzzy
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
 msgstr ""
-"Redistribuir as solicitações do DHCP em outro lugar. OK: v4<->v4, v6<->v6. "
-"Não está ok: v4<->v6, v6<->v4."
+"Retransmita as solicitações DHCP em outro lugar. OK: v4 v4↔, v6 v6↔. Não "
+"está OK: v4 v6, v6↔v4↔."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:385
 msgid "Relay To address"
@@ -7274,10 +7272,12 @@ msgstr "Remover"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:467
 msgid "Remove IPv4 addresses from the results and only return IPv6 addresses."
 msgstr ""
+"Remova os endereços IPv4 dos resultados e retorne apenas endereços IPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:461
 msgid "Remove IPv6 addresses from the results and only return IPv4 addresses."
 msgstr ""
+"Remova os endereços IPv6 dos resultados e retorne apenas endereços IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1318
 msgid "Remove related device settings from the configuration"
@@ -9545,9 +9545,8 @@ msgid "Transmit Hash Policy"
 msgstr "Política de transmissão do hash"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:95
-#, fuzzy
 msgid "Transmitted Data"
-msgstr "Antena de Transmissão"
+msgstr "Dados transmitidos"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:79
 msgctxt "nft @th,off,len"
@@ -10629,7 +10628,7 @@ msgstr "desativar"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:91
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:25
 msgid "disabled"
-msgstr "desabilitado"
+msgstr "desativado"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:577
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:611
@@ -10647,7 +10646,7 @@ msgstr "por exemplo: despejo"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
 msgctxt "WireGuard keep alive interval"
 msgid "every %ds"
-msgstr ""
+msgstr "a cada %ds"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:871
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:901

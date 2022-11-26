@@ -2,24 +2,24 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2022-11-08 16:02+0000\n"
-"Last-Translator: Anton Kikin <a.a.kikin@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/"
-">\n"
+"PO-Revision-Date: 2022-11-25 14:34+0000\n"
+"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
+"\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
 msgid "\"%h\" table \"%h\""
-msgstr "«%h» таблица «%h»"
+msgstr "\"%h\" таблица \"%h\""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1539
 msgid "%.1f dB"
@@ -47,7 +47,7 @@ msgstr "%d сек. назад"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:35
 msgid "%s is untagged in multiple VLANs!"
-msgstr "%s не тегирован в множестве VLAN!"
+msgstr "%s не тегирован в нескольких VLAN-ах!"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:296
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:405
@@ -1411,6 +1411,8 @@ msgstr "Ошибка вызова"
 msgid ""
 "Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing."
 msgstr ""
+"Может быть полезно, когда провайдер имеет IPv6 серверы имён, но не "
+"предоставляет IPv6 маршрутизацию."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2933
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4162
@@ -3176,11 +3178,11 @@ msgstr "Файловая система"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:466
 msgid "Filter IPv4 A records"
-msgstr ""
+msgstr "Фильтровать IPv4 A записи"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:460
 msgid "Filter IPv6 AAAA records"
-msgstr ""
+msgstr "Фильтровать IPv6 AAAA записи"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:450
 msgid "Filter private"
@@ -3850,6 +3852,9 @@ msgid ""
 "tunnelled packets with source IP addresses matching this list and route back "
 "packets with matching destination IP."
 msgstr ""
+"IP-адреса, которые разрешены внутри туннеля. Пир будет принимать туннельные "
+"пакеты с IP-адресами источника, соответствующими этому списку, и направлять "
+"обратно пакеты с соответствующими IP-адресами назначения."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:36
 msgctxt "nft ip protocol"
@@ -4373,15 +4378,13 @@ msgid "Instance"
 msgstr "Экземпляр"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:162
-#, fuzzy
 msgctxt "WireGuard instance heading"
 msgid "Instance \"%h\""
-msgstr "Экземпляр"
+msgstr "Экземпляр «%h»"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:71
-#, fuzzy
 msgid "Instance Details"
-msgstr "Экземпляр"
+msgstr "Сведения об экземпляре"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2046
 msgid ""
@@ -4600,7 +4603,7 @@ msgstr "Сохранить настройки и оставить текущую
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
 msgid "Keep-Alive"
-msgstr ""
+msgstr "Keep-Alive"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:20
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
@@ -5678,7 +5681,6 @@ msgid "Never"
 msgstr "Никогда"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:16
-#, fuzzy
 msgctxt "No WireGuard peer handshake yet"
 msgid "Never"
 msgstr "Никогда"
@@ -5837,9 +5839,8 @@ msgid "No password set!"
 msgstr "Пароль не установлен!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:121
-#, fuzzy
 msgid "No peers connected"
-msgstr "Не подключен"
+msgstr "Нет подключенных узлов"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:512
 msgid "No peers defined yet."
@@ -6626,7 +6627,7 @@ msgstr "Узел"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:88
 msgid "Peer Details"
-msgstr ""
+msgstr "Сведения об узле"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:89
 msgid "Peer IP address to assign"
@@ -6734,10 +6735,9 @@ msgid "Port"
 msgstr "Порт"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:174
-#, fuzzy
 msgctxt "WireGuard listen port"
 msgid "Port %d"
-msgstr "Порт %s"
+msgstr "Порт %d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:702
 msgid "Port isolation"
@@ -7094,9 +7094,8 @@ msgid "Receive"
 msgstr "Приём"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:94
-#, fuzzy
 msgid "Received Data"
-msgstr "Приём"
+msgstr "Принятые данные"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "Recommended. IP addresses of the WireGuard interface."
@@ -7173,11 +7172,9 @@ msgid "Relay Bridge"
 msgstr "Мост-Ретранслятор"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:352
-#, fuzzy
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
 msgstr ""
-"Передача запросов DHCP в другие места. OK: v4<->v4, v6<->v6. Не OK: v4<->v6, "
-"v6<->v4."
+"Передача запросов DHCP в другие места. OK: v4↔v4, v6↔v6. Не OK: v4↔v6, v6↔v4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:385
 msgid "Relay To address"
@@ -7220,11 +7217,11 @@ msgstr "Удалить"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:467
 msgid "Remove IPv4 addresses from the results and only return IPv6 addresses."
-msgstr ""
+msgstr "Удалить адреса IPv4 из результатов и возвращать только адреса IPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:461
 msgid "Remove IPv6 addresses from the results and only return IPv4 addresses."
-msgstr ""
+msgstr "Удалить адреса IPv6 из результатов и возвращать только адреса IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1318
 msgid "Remove related device settings from the configuration"
@@ -9471,7 +9468,6 @@ msgid "Transmit Hash Policy"
 msgstr "Хэш политика передачи пакетов"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:95
-#, fuzzy
 msgid "Transmitted Data"
 msgstr "Переданные данные"
 
@@ -10572,7 +10568,7 @@ msgstr "например: dump"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
 msgctxt "WireGuard keep alive interval"
 msgid "every %ds"
-msgstr ""
+msgstr "каждые %dс"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:871
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:901
