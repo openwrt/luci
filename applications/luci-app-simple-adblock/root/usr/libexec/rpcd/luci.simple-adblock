@@ -163,9 +163,40 @@ get_init_status() {
 	fi
 	json_add_string 'version' "$(get_version "$name")"
 	json_add_array 'errors'
-		for i in $errors; do json_add_string '' "$i"; done
+	if [ -n "$errors" ]; then
+		for i in $errors; do
+			if str_contains "$i" '|'; then
+				error_extra="${i##*|}"
+				error_id="${i%|*}"
+			else
+				error_id="$i"
+				unset error_extra
+			fi
+			json_add_object
+			json_add_string 'id' "$error_id"
+			json_add_string 'extra' "$error_extra"
+			json_close_object
+		done
+	fi
 	json_close_array
-#	json_add_string 'warnings' "$warnings"
+	json_add_array 'warnings'
+	if [ -n "$warnings" ]; then
+		for i in $warnings; do
+			if str_contains "$i" '|'; then
+				error_extra="${i##*|}"
+				error_id="${i%|*}"
+			else
+				error_id="$i"
+				unset error_extra
+			fi
+			json_add_object
+			json_add_string 'id' "$error_id"
+			json_add_string 'extra' "$error_extra"
+			json_close_object
+		done
+	fi
+	json_close_array
+
 	if [ -n "$ports" ]; then
 		json_add_boolean 'force_dns_active' '1'
 		json_add_array 'force_dns_ports'
