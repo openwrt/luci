@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 19:03+0200\n"
-"PO-Revision-Date: 2022-10-09 16:44+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2022-11-30 16:44+0000\n"
+"Last-Translator: Gonçalo Pereira <goncalo_pereira@outlook.pt>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/luci/"
 "pt/>\n"
 "Language: pt\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15-dev\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:643
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -73,7 +73,7 @@ msgstr "(sem interfaces ligadas)"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:637
 msgctxt "Label indicating further amount of allowed ips"
 msgid "+ %d more"
-msgstr ""
+msgstr "+ %d mais"
 
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:48
 msgid "-- Additional Field --"
@@ -252,12 +252,16 @@ msgid ""
 "<code>/#/</code> matches any domain. <code>/example.com/</code> returns "
 "NXDOMAIN."
 msgstr ""
+"<code>/#/</code> corresponde a qualquer domínio. <code>/example.com/</code> "
+"retorna NXDOMAIN."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:298
 msgid ""
 "<code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</code> and "
 "<code>::</code>) for example.com and its subdomains."
 msgstr ""
+"<code>/example.com/#</code> retorna endereços nulos (<code>0.0.0.0</code> e "
+"<code>::</code>) para example.com e os seus subdomínios."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:87
 msgctxt "nft relational \">\" operator expression"
@@ -311,6 +315,10 @@ msgid ""
 "internet connection in the mesh) or having the gateway support turned off "
 "entirely (which is the default setting)."
 msgstr ""
+"Um nó batman-adv pode ser executado no modo servidor (partilhando a sua "
+"ligação à Internet com a rede) ou no modo cliente (onde é procurada a "
+"conexão de internet mais conveniente na rede) ou ter o suporte por gateway "
+"totalmente desativado (que é a configuração padrão)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:370
 msgid "A configuration for the device \"%s\" already exists"
@@ -385,6 +393,9 @@ msgid ""
 "to the STA MAC address. Note: This is not Directed Multicast Service (DMS) "
 "in 802.11v. Note: might break receiver STA multicast expectations."
 msgstr ""
+"ARP, IPv4 e IPv6 (mesmo 802.1Q) com MACs de destino multicast são unicast "
+"para o endereço MAC STA. Nota: Este não é o Directed Multicast Service (DMS) "
+"em 802.11v. Nota: pode quebrar as expectativas de multicast STA do recetor."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1527
 msgid "ATM (Asynchronous Transfer Mode)"
@@ -459,7 +470,7 @@ msgstr "Ponto de Acesso"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:60
 msgid "Access Point Isolation"
-msgstr ""
+msgstr "Isolamento do Access Point"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:388
 msgid "Actions"
@@ -622,7 +633,7 @@ msgstr "Família de endereços"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:284
 msgid "Address setting is invalid"
-msgstr ""
+msgstr "A configuração de endereço não é válida"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
 msgid "Address to access local relay bridge"
@@ -779,7 +790,7 @@ msgstr "Endereços IP autorizados"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:315
 msgid "AllowedIPs setting is invalid"
-msgstr ""
+msgstr "A configuração de IPs permitidos é inválida"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:708
 msgid "Always"
@@ -796,8 +807,7 @@ msgstr "Sempre ligado (kernel: ligado por predefinição)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:617
 msgid "Always send DHCP Options. Sometimes needed, with e.g. PXELinux."
 msgstr ""
-"Sempre enviar as opções de DHCP. É às vezes necessário com, por exemplo, "
-"PXELinux."
+"Enviar sempre DHCP Options. Por vezes é necessário, por exemplo com PXELinux."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:971
 msgid ""
@@ -815,7 +825,7 @@ msgstr ""
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:119
 msgid "Amount of seconds to wait for the modem to become ready"
-msgstr ""
+msgstr "Quantidade de segundos para esperar que o modem esteja pronto"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:608
 msgid "An error occurred while saving the form:"
@@ -953,7 +963,7 @@ msgstr "Aplicar as opções de DHCP a esta rede. (Vazio = todos os clientes)."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4659
 msgid "Apply and keep settings"
-msgstr ""
+msgstr "Aplicar e manter configurações"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
@@ -971,7 +981,7 @@ msgstr "Aplicar desmarcado"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4655
 msgid "Apply with revert after connectivity loss"
-msgstr ""
+msgstr "Aplicar com reversão após perda de ligação"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4595
 msgid "Applying configuration changes… %ds"
@@ -1193,11 +1203,11 @@ msgstr ""
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:10
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:41
 msgid "Batman Device"
-msgstr ""
+msgstr "Dispositivo Batman"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:10
 msgid "Batman Interface"
-msgstr ""
+msgstr "Interface Batman"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:81
 msgid ""
@@ -1226,7 +1236,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:287
 msgid "Bind NTP server"
-msgstr ""
+msgstr "Vincular servidor NTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:334
 msgid "Bind dynamically to interfaces rather than wildcard address."
@@ -2487,9 +2497,7 @@ msgstr "Transferir o bloco mtd"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1535
 msgid "Downstream SNR offset"
-msgstr ""
-"Deslocamento <abbr title=\"Signal to Noise Ratio\">SNR</abbr> do sinal "
-"recebido"
+msgstr "Deslocamento do SNR a jusante"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:437
 msgid ""
@@ -3520,7 +3528,7 @@ msgstr "Conceder acesso à configuração do DHCP"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:22
 msgid "Grant access to DHCP status display"
-msgstr "Conceder o acesso à visualização do estado do DHCP"
+msgstr "Conceder acesso à visualização do estado do DHCP"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:31
 msgid "Grant access to DSL status display"
@@ -3560,7 +3568,7 @@ msgstr "Conceder acesso às operações flash"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:3
 msgid "Grant access to main status display"
-msgstr "Conceder o acesso à visualização do estado principal"
+msgstr "Conceder acesso à visualização do estado principal"
 
 #: protocols/luci-proto-modemmanager/root/usr/share/rpcd/acl.d/luci-proto-modemmanager.json:3
 msgid "Grant access to mmcli"
@@ -4875,7 +4883,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:518
 msgid "Listening port for inbound DNS queries."
-msgstr "Porta de escuta para entrada de consultas DNS"
+msgstr "Porta de escuta para a entrada de consultas DNS."
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:130
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:54
@@ -5839,9 +5847,7 @@ msgstr "Ruído"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:27
 msgid "Noise Margin (SNR)"
-msgstr ""
-"Margem de Ruído (<abbr title=\"Razão entre Sinal e Ruído/Signal to Noise "
-"Ratio\">SNR</abbr>)"
+msgstr "Margem de Ruído (SNR)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:272
 msgid "Noise:"
