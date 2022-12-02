@@ -83,62 +83,64 @@ var status = baseclass.extend({
 		]).then(function (data) {
 			var replyStatus = data[0];
 			var text ="";
-			var status = replyStatus[pkg.Name];
-			var outputFile = status.outputFile;
-			var outputCache = status.outputCache;
+			var reply = replyStatus[pkg.Name];
+			var outputFile = reply.outputFile;
+			var outputCache = reply.outputCache;
 			var statusTable = {
-			  statusNoInstall: _("%s is not installed or not found").format(pkg.Name),
-			  statusStopped: _("Stopped"),
-			  statusStarting: _("Starting"),
-			  statusRestarting: _("Restarting"),
-			  statusForceReloading: _("Force Reloading"),
-			  statusDownloading: _("Downloading"),
-			  statusError: _("Error"),
-			  statusWarning: _("Warning"),
-			  statusFail: _("Fail"),
-			  statusSuccess: _("Active")
+				statusNoInstall: _("%s is not installed or not found").format(pkg.Name),
+				statusStopped: _("Stopped"),
+				statusStarting: _("Starting"),
+				statusProcessing: _("Processing lists"),
+				statusRestarting: _("Restarting"),
+				statusForceReloading: _("Force Reloading"),
+				statusDownloading: _("Downloading lists"),
+				statusError: _("Error"),
+				statusWarning: _("Warning"),
+				statusFail: _("Fail"),
+				statusSuccess: _("Active")
 			};
 
 			var header = E('h2', {}, _("Simple AdBlock - Status"))
 			var statusTitle = E('label', { class: 'cbi-value-title' }, _("Service Status"));
-			if (status.version) {
-				text += _("Version: %s").format(status.version) + " - ";
-				switch (status.status) {
+			if (reply.version) {
+				text += _("Version: %s").format(reply.version) + " - ";
+				switch (reply.status) {
 					case 'statusSuccess':
-						text += statusTable[status.status] + ".";
-						text += "<br />" + _("Blocking %s domains (with %s).").format(status.entries, status.dns);
-						if (status.outputGzipExists) {
+						text += statusTable[reply.status] + ".";
+						text += "<br />" + _("Blocking %s domains (with %s).").format(reply.entries, reply.dns);
+						if (reply.outputGzipExists) {
 							text += "<br />" + _("Compressed cache file created.");
 						}
-						if (status.force_dns_active) {
+						if (reply.force_dns_active) {
 							text += "<br />" + _("Force DNS ports:");
-							status.force_dns_ports.forEach(element => {
+							reply.force_dns_ports.forEach(element => {
 								text += " " + element;
 							});
 							text += ".";
 						}
 						break;
 					case 'statusStopped':
-						if (status.enabled) {
-							text += statusTable[status.status] + ".";
+						if (reply.enabled) {
+							text += statusTable[reply.status] + ".";
 						}
 						else {
-							text += statusTable[status.status] + _("disabled") + "."
+							text += statusTable[reply.status] + _("disabled") + "."
 						}
-						if (status.outputCacheExists) {
+						if (reply.outputCacheExists) {
 							text += "<br />" + _("Cache file found.");
 						}
-						else if (status.outputGzipExists) {
+						else if (reply.outputGzipExists) {
 							text += "<br />" + _("Compressed cache file found.");
 						}
 						break;
 					case 'statusRestarting':
 					case 'statusForceReloading':
 					case 'statusDownloading':
-						text += statusTable[status.status] + "...";
+					case 'statusProcessing':
+						text += statusTable[reply.status] + "...";
 						break;
 					default:
-						text += statusTable[status.status] + ".";
+						text += statusTable[reply.status] + ".";
 						break;
 				}
 			}
@@ -150,16 +152,33 @@ var status = baseclass.extend({
 			var statusDiv = E('div', { class: 'cbi-value' }, [statusTitle, statusField]);
 
 			var warningsDiv = [];
-			if (status.warnings) {
+			if (reply.warnings && reply.warnings.length) {
+				var warningTable = {
+					warningExternalDnsmasqConfig: _("use of external dnsmasq config file detected, please set '%s' option to '%s'").format("dns", "dnsmasq.conf"),
+					warningMissingRecommendedPackages: _("some recommended packages are missing")
+				}
 				var warningsTitle = E('label', { class: 'cbi-value-title' }, _("Service Warnings"));
-				var warningsText = E('div', {}, status.warnings);
+				var text = "";
+				(reply.warnings).forEach(element => {
+					text += (warningTable[element.id]).format(element.extra || ' ') + "<br />";
+				});
+				var warningsText = E('div', {}, text);
 				var warningsField = E('div', { class: 'cbi-value-field' }, warningsText);
 				warningsDiv = E('div', { class: 'cbi-value' }, [warningsTitle, warningsField]);
 			}
 
 			var errorsDiv = [];
-			if ((status.errors).length) {
+			if (reply.errors && reply.errors.length) {
 				var errorTable = {
+					errorConfigValidationFail: _("Config (%s) validation failure!").format('/etc/config/' + pkg.Name),
+					errorServiceDisabled: _("%s is currently disabled").format(pkg.Name),
+					errorNoDnsmasqIpset: _("dnsmasq ipset support is enabled, but dnsmasq is either not installed or installed dnsmasq does not support ipset"),
+					errorNoIpset: _("dnsmasq ipset support is enabled, but ipset is either not installed or installed ipset does not support '%s' type").format("hash:net"),
+					errorNoDnsmasqNftset: _("dnsmasq nft set support is enabled, but dnsmasq is either not installed or installed dnsmasq does not support nft set"),
+					errorNoNft: _("dnsmasq nft sets support is enabled, but nft is not installed"),
+					errorMkdirFail: _("Unable to create directory for '%s'"),
+					errorNoWanGateway: _("The %s service failed to discover WAN gateway!").format(pkg.Name),
+					errorOutputDirCreate: _("failed to create directory for %s file"),
 					errorOutputFileCreate: _("failed to create '%s' file").format(outputFile),
 					errorFailDNSReload: _("failed to restart/reload DNS resolver"),
 					errorSharedMemory: _("failed to access shared memory"),
@@ -184,8 +203,8 @@ var status = baseclass.extend({
 				}
 				var errorsTitle = E('label', { class: 'cbi-value-title' }, _("Service Errors"));
 				var text = "";
-				(status.errors).forEach(element => {
-					text += errorTable[element] + ".<br />";
+				(reply.errors).forEach(element => {
+					text += (errorTable[element.id]).format(element.extra || ' ') + "<br />";
 				});
 				var errorsText = E('div', {}, text);
 				var errorsField = E('div', { class: 'cbi-value-field' }, errorsText);
@@ -250,10 +269,10 @@ var status = baseclass.extend({
 				}
 			}, _('Disable'));
 
-			if (status.enabled) {
+			if (reply.enabled) {
 				btn_enable.disabled = true;
 				btn_disable.disabled = false;
-				switch (status.status) {
+				switch (reply.status) {
 					case 'statusSuccess':
 						btn_start.disabled = true;
 						btn_action.disabled = false;
@@ -285,7 +304,7 @@ var status = baseclass.extend({
 			var buttonsTitle = E('label', { class: 'cbi-value-title' }, _("Service Control"))
 			var buttonsText = E('div', {}, [btn_start, btn_gap, btn_action, btn_gap, btn_stop, btn_gap_long, btn_enable, btn_gap, btn_disable]);
 			var buttonsField = E('div', { class: 'cbi-value-field' }, buttonsText);
-			if (status.version) {
+			if (reply.version) {
 				buttonsDiv = E('div', { class: 'cbi-value' }, [buttonsTitle, buttonsField]);
 			}
 
