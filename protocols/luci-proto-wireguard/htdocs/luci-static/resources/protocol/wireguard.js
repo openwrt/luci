@@ -361,10 +361,8 @@ return network.registerProtocol('wireguard', {
 					s.getOption('listen_port').getUIElement(s.section).setValue(config.interface_listenport || '');
 					s.getOption('addresses').getUIElement(s.section).setValue(config.interface_address);
 
-					if (config.interface_dns) {
-						s.getOption('peerdns').getUIElement(s.section).setValue('0');
+					if (config.interface_dns)
 						s.getOption('dns').getUIElement(s.section).setValue(config.interface_dns);
-					}
 
 					for (var i = 0; i < config.peers.length; i++) {
 						var pconf = config.peers[i];
