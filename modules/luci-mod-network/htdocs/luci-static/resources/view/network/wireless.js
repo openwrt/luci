@@ -742,7 +742,8 @@ return view.extend({
 	load: function() {
 		return Promise.all([
 			uci.changes(),
-			uci.load('wireless')
+			uci.load('wireless'),
+			uci.load('system')
 		]);
 	},
 
@@ -1073,6 +1074,41 @@ return view.extend({
 					    bssid = ss.children[5],
 					    encr;
 
+					/* 802.11v settings start */
+					// Probe 802.11v support (needs full hostapd/wpad) via EAP support (full hostapd has EAP)
+					if (L.hasSystemFeature('hostapd', 'eap'))
+					{
+						o = ss.taboption('advanced', form.ListValue, 'time_advertisement', _('Time advertisement'), _('802.11v: Time Advertisement in management frames.'));
+						o.value('0', _('Disabled'));
+						o.value('2', _('Enabled'));
+						o.write = function (section_id, value) {
+							return this.super('write', [section_id, (value == 2) ? value: null]);
+						}
+
+						//Pull current System TZ setting
+						var tz = uci.get('system', '@system[0]', 'timezone');
+						o = ss.taboption('advanced', form.Value, 'time_zone', _('Time zone'), _('802.11v: Local Time Zone Advertisement in management frames.'));
+						o.value(tz);
+						o.rmempty = true;
+
+						o = ss.taboption('advanced', form.Flag, 'wnm_sleep_mode', _('WNM Sleep Mode'), _('802.11v: Wireless Network Management (WNM) Sleep Mode (extended sleep mode for stations).'));
+						o.rmempty = true;
+
+						/* wnm_sleep_mode_no_keys: https://git.openwrt.org/?p=openwrt/openwrt.git;a=commitdiff;h=bf98faaac8ed24cf7d3d93dd4fcd7304d109363b */
+						o = ss.taboption('advanced', form.Flag, 'wnm_sleep_mode_no_keys', _('WNM Sleep Mode Fixes'), _('802.11v: Wireless Network Management (WNM) Sleep Mode Fixes: Prevents reinstallation attacks.'));
+						o.rmempty = true;
+
+						o = ss.taboption('advanced', form.Flag, 'bss_transition', _('BSS Transition'), _('802.11v: Basic Service Set (BSS) transition management.'));
+						o.rmempty = true;
+
+						/* in master, but not 21.02.1: proxy_arp */
+						o = ss.taboption('advanced', form.Flag, 'proxy_arp', _('ProxyARP'), _('802.11v: Proxy ARP enables non-AP STA to remain in power-save for longer.'));
+						o.rmempty = true;
+
+						/* TODO: na_mcast_to_ucast is missing: needs adding to hostapd.sh - nice to have */
+					}
+					/* 802.11v settings end */
+
 					mode.value('mesh', '802.11s');
 					mode.value('ahdemo', _('Pseudo Ad-Hoc (ahdemo)'));
 					mode.value('monitor', _('Monitor'));
@@ -1201,7 +1237,7 @@ return view.extend({
 					o.optional    = true;
 					o.datatype    = 'uinteger';
 
-					o = ss.taboption('advanced', form.Value, 'max_inactivity', _('Station inactivity limit'), _('sec'));
+					o = ss.taboption('advanced', form.Value, 'max_inactivity', _('Station inactivity limit'), _('802.11v: BSS Max Idle. Units: seconds.'));
 					o.optional    = true;
 					o.placeholder = 300;
 					o.datatype    = 'uinteger';
