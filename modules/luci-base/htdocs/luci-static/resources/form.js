@@ -2259,7 +2259,7 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 			if (this.map.readonly !== true) {
 				ui.addValidator(nameEl, 'uciname', true, function(v) {
-					var button = document.querySelector('.cbi-section-create > .cbi-button-add');
+					var button = createEl.querySelector('.cbi-section-create > .cbi-button-add');
 					if (v !== '') {
 						button.disabled = null;
 						return true;
