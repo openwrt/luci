@@ -2222,13 +2222,15 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 		var createEl = E('div', { 'class': 'cbi-section-create' }),
 		    config_name = this.uciconfig || this.map.config,
-		    btn_title = this.titleFn('addbtntitle');
+		    btn_title = this.titleFn('addbtntitle'),
+		    section_type = this.sectiontype;
 
 		if (extra_class != null)
 			createEl.classList.add(extra_class);
 
 		if (this.anonymous) {
 			createEl.appendChild(E('button', {
+				'id': 'cbi-button-add-%s-%s'.format(config_name, section_type),
 				'class': 'cbi-button cbi-button-add',
 				'title': btn_title || _('Add'),
 				'click': ui.createHandlerFn(this, 'handleAdd'),
@@ -2245,6 +2247,7 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 			dom.append(createEl, [
 				E('div', {}, nameEl),
 				E('button', {
+					'id': 'cbi-button-add-%s-%s'.format(config_name, section_type),
 					'class': 'cbi-button cbi-button-add',
 					'title': btn_title || _('Add'),
 					'click': ui.createHandlerFn(this, function(ev) {
@@ -2259,7 +2262,8 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 			if (this.map.readonly !== true) {
 				ui.addValidator(nameEl, 'uciname', true, function(v) {
-					var button = document.querySelector('.cbi-section-create > .cbi-button-add');
+					var button = document.querySelector('#cbi-button-add-%s-%s'.format(
+						config_name, section_type));
 					if (v !== '') {
 						button.disabled = null;
 						return true;
