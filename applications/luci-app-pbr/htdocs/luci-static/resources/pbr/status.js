@@ -164,7 +164,12 @@ var status = baseclass.extend({
 				var warningsTitle = E('label', { class: 'cbi-value-title' }, _("Service Warnings"));
 				var text = "";
 				(reply.warnings).forEach(element => {
-					text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+					if (element.id && textLabelsTable[element.id]) {
+						text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+					}
+					else {
+						text += _("Unknown Warning!") + "<br />";
+					}
 				});
 				var warningsText = E('div', {}, text);
 				var warningsField = E('div', { class: 'cbi-value-field' }, warningsText);
@@ -175,7 +180,8 @@ var status = baseclass.extend({
 			if (reply.errors && reply.errors.length) {
 				var textLabelsTable = {
 					errorConfigValidation: _("Config (%s) validation failure!").format('/etc/config/' + pkg.Name),
-					errorNoIpFull: _("ip-full binary cannot be found!"),
+					errorNoIpFull: _("%s binary cannot be found!").formate('ip-full'),
+					errorNoIptables: _("%s binary cannot be found!").formate('iptables'),
 					errorNoIpset: _("Resolver set support (%s) requires ipset, but ipset binary cannot be found!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
 					errorNoNft: _("Resolver set support (%s) requires nftables, but nft binary cannot be found!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
 					errorResolverNotSupported: _("Resolver set (%s) is not supported on this system!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
@@ -187,7 +193,7 @@ var status = baseclass.extend({
 					errorPolicyNoSrcDest: _("Policy '%s' has no source/destination parameters!"),
 					errorPolicyNoInterface: _("Policy '%s' has no assigned interface!"),
 					errorPolicyUnknownInterface: _("Policy '%s' has an unknown interface!"),
-					errorPolicyProcess: _("%s"),
+					errorPolicyProcess: _("Policy processing error (%s)!"),
 					errorFailedSetup: _("Failed to set up '%s'!"),
 					errorFailedReload: _("Failed to reload '%s'!"),
 					errorUserFileNotFound: _("Custom user file '%s' not found or empty!"),
@@ -199,7 +205,12 @@ var status = baseclass.extend({
 				var errorsTitle = E('label', { class: 'cbi-value-title' }, _("Service Errors"));
 				var text = "";
 				(reply.errors).forEach(element => {
-					text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+					if (element.id && textLabelsTable[element.id]) {
+						text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+					}
+					else {
+						text += _("Unknown Error!") + "<br />";
+					}
 				});
 				var errorsText = E('div', {}, text);
 				var errorsField = E('div', { class: 'cbi-value-field' }, errorsText);
