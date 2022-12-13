@@ -25,6 +25,7 @@ var expr_translations = {
 
 	'meta.mark': _('Packet mark', 'nft meta mark'),
 
+	'meta.time': _('Packet receive time', 'nft meta time'),
 	'meta.hour': _('Current time', 'nft meta hour'),
 	'meta.day': _('Current weekday', 'nft meta day'),
 
@@ -95,6 +96,7 @@ var action_translations = {
 	'accept': _('Accept packet', 'nft accept action'),
 	'drop': _('Drop packet', 'nft drop action'),
 	'jump': _('Continue in <strong><a href="#%q.%q">%h</a></strong>', 'nft jump action'),
+	'log': _('Log event "<strong>%h</strong>…"', 'nft log action'),
 
 	'reject.tcp reset': _('Reject packet with <strong>TCP reset</strong>', 'nft reject with tcp reset'),
 	'reject.icmp': _('Reject IPv4 packet with <strong>ICMP type %h</strong>', 'nft reject with icmp type'),
@@ -154,6 +156,7 @@ return view.extend({
 				case 'masquerade':
 				case 'return':
 				case 'flow':
+				case 'log':
 					return true;
 				}
 			}
@@ -355,8 +358,7 @@ return view.extend({
 			var k = 'reject.%s'.format(spec.type);
 
 			return E('span', {
-				'class': 'ifacebadge',
-				'data-tooltip': JSON.stringify(spec)
+				'class': 'ifacebadge'
 			}, (action_translations[k] || k).format(this.exprToString(spec.expr)));
 
 		case 'accept':
@@ -444,6 +446,11 @@ return view.extend({
 			return E('span', {
 				'class': 'ifacebadge'
 			}, action_translations.flow.format(spec.flowtable.replace(/^@/, '')));
+
+		case 'log':
+			return E('span', {
+				'class': 'ifacebadge'
+			}, action_translations.log.format(spec.prefix));
 
 		default:
 			return E('span', {
