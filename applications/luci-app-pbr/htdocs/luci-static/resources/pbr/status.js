@@ -111,8 +111,25 @@ var status = baseclass.extend({
 		]).then(function (data) {
 //			var replyStatus = data[0];
 //			var replyGateways = data[1];
-			var reply = data[0][pkg.Name];
+			var reply;
 			var text;
+
+			if (data[0] && data[0][pkg.Name]) {
+				reply = data[0][pkg.Name];
+			}
+			else {
+				reply = {
+					enabled: null,
+					running: null,
+					running_iptables: null,
+					running_nft: null,
+					version: null,
+					gateways: null,
+					errors: [],
+					warnings: [],
+				};
+			}
+
 			var header = E('h2', {}, _("Policy Based Routing - Status"));
 			var statusTitle = E('label', { class: 'cbi-value-title' }, _("Service Status"));
 			if (reply.version) {
