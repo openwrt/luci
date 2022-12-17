@@ -7,6 +7,7 @@ import { stdin, access, dirname, basename, open, popen, glob, lsdir, readfile, r
 import { cursor } from 'uci';
 
 import { init_list, init_index, init_enabled, init_action, conntrack_list, process_list } from 'luci.sys';
+import { revision, branch } from 'luci.version';
 import { statvfs } from 'luci.core';
 
 import timezones from 'luci.zoneinfo';
@@ -17,6 +18,12 @@ function shellquote(s) {
 }
 
 const methods = {
+	getVersion: {
+		call: function(request) {
+			return { revision, branch };
+		}
+	},
+
 	getInitList: {
 		args: { name: 'name' },
 		call: function(request) {
