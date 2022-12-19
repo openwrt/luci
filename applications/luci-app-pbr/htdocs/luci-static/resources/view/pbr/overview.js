@@ -25,9 +25,32 @@ return view.extend({
 			L.resolveDefault(pbr.getInterfaces(), {}),
 			L.resolveDefault(pbr.getPlatformSupport(), {}),
 		]).then(function (data) {
-			var arrInterfaces = data[0][pkg.Name].interfaces;
-			var replyPlatform = data[1][pkg.Name];
+			var arrInterfaces;
+			var replyPlatform;
 			var status, m, s, o;
+
+			if (data[0] && data[0][pkg.Name] && data[0][pkg.Name].interfaces) {
+				arrInterfaces = data[0][pkg.Name].interfaces;
+			}
+			else {
+				arrInterfaces = ["wan"];
+			}
+
+			if (data[1] && data[1][pkg.Name]) {
+				replyPlatform = data[1][pkg.Name];
+			}
+			else {
+				replyPlatform = {
+					ipset_installed: null,
+					nft_installed: null,
+					adguardhome_installed: null,
+					dnsmasq_installed: null,
+					unbound_installed: null,
+					adguardhome_ipset_support: null,
+					dnsmasq_ipset_support: null,
+					dnsmasq_nftset_support: null,
+				};
+			}
 
 			status = new pbr.status();
 			m = new form.Map(pkg.Name, _("Policy Based Routing - Configuration"));
@@ -56,13 +79,22 @@ return view.extend({
 			o.default = "1";
 
 			var text = "";
-			if (!(replyPlatform.adguardhome_ipset_support)) {
+			if (replyPlatform.adguardhome_ipset_support === null) {
+				text += _("The %s support is unknown.").format("<i>adguardhome.ipset</i>") + "<br />"
+			}
+			else if (!(replyPlatform.adguardhome_ipset_support)) {
 				text += _("The %s is not supported on this system.").format("<i>adguardhome.ipset</i>") + "<br />"
 			}
-			if (!(replyPlatform.dnsmasq_ipset_support)) {
+			if (replyPlatform.dnsmasq_ipset_support === null) {
+				text += _("The %s support is unknown.").format("<i>dnsmasq.ipset</i>") + "<br />"
+			}
+			else if (!(replyPlatform.dnsmasq_ipset_support)) {
 				text += _("The %s is not supported on this system.").format("<i>dnsmasq.ipset</i>") + "<br />"
 			}
-			if (!(replyPlatform.dnsmasq_nftset_support)) {
+			if (replyPlatform.dnsmasq_nftset_support === null) {
+				text += _("The %s support is unknown.").format("<i>dnsmasq.nftset</i>") + "<br />"
+			}
+			else if (!(replyPlatform.dnsmasq_nftset_support)) {
 				text += _("The %s is not supported on this system.").format("<i>dnsmasq.nftset</i>") + "<br />"
 			}
 			text += _("Please check the %sREADME%s before changing this option.").format(

@@ -111,8 +111,25 @@ var status = baseclass.extend({
 		]).then(function (data) {
 //			var replyStatus = data[0];
 //			var replyGateways = data[1];
-			var reply = data[0][pkg.Name];
+			var reply;
 			var text;
+
+			if (data[0] && data[0][pkg.Name]) {
+				reply = data[0][pkg.Name];
+			}
+			else {
+				reply = {
+					enabled: null,
+					running: null,
+					running_iptables: null,
+					running_nft: null,
+					version: null,
+					gateways: null,
+					errors: [],
+					warnings: [],
+				};
+			}
+
 			var header = E('h2', {}, _("Policy Based Routing - Status"));
 			var statusTitle = E('label', { class: 'cbi-value-title' }, _("Service Status"));
 			if (reply.version) {
@@ -159,13 +176,19 @@ var status = baseclass.extend({
 				var textLabelsTable = {
 					warningResolverNotSupported: _("Resolver set (%s) is not supported on this system.").format(uci.get(pkg.Name, 'config', 'resolver_set')),
 					warningAGHVersionTooLow: _("Installed AdGuardHome (%s) doesn't support 'ipset_file' option."),
-					warningPolicyProcess: _("%s")
+					warningPolicyProcessCMD: _("%s"),
+					warningTorUnsetParams: _("Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'"),
+					warningTorUnsetProto: _("Please unset 'proto' or set 'proto' to 'all' for policy '%s'"),
+					warningTorUnsetChainIpt: _("Please unset 'chain' or set 'chain' to 'PREROUTING' for policy '%s'"),
+					warningTorUnsetChainNft: _("Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'"),
 				};
 				var warningsTitle = E('label', { class: 'cbi-value-title' }, _("Service Warnings"));
 				var text = "";
 				(reply.warnings).forEach(element => {
 					if (element.id && textLabelsTable[element.id]) {
-						text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+						if (element.id !== 'warningPolicyProcessCMD') {
+							text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+						}
 					}
 					else {
 						text += _("Unknown Warning!") + "<br />";
@@ -180,8 +203,8 @@ var status = baseclass.extend({
 			if (reply.errors && reply.errors.length) {
 				var textLabelsTable = {
 					errorConfigValidation: _("Config (%s) validation failure!").format('/etc/config/' + pkg.Name),
-					errorNoIpFull: _("%s binary cannot be found!").formate('ip-full'),
-					errorNoIptables: _("%s binary cannot be found!").formate('iptables'),
+					errorNoIpFull: _("%s binary cannot be found!").format('ip-full'),
+					errorNoIptables: _("%s binary cannot be found!").format('iptables'),
 					errorNoIpset: _("Resolver set support (%s) requires ipset, but ipset binary cannot be found!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
 					errorNoNft: _("Resolver set support (%s) requires nftables, but nft binary cannot be found!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
 					errorResolverNotSupported: _("Resolver set (%s) is not supported on this system!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
@@ -193,20 +216,29 @@ var status = baseclass.extend({
 					errorPolicyNoSrcDest: _("Policy '%s' has no source/destination parameters!"),
 					errorPolicyNoInterface: _("Policy '%s' has no assigned interface!"),
 					errorPolicyUnknownInterface: _("Policy '%s' has an unknown interface!"),
-					errorPolicyProcess: _("Policy processing error (%s)!"),
+					errorPolicyProcessCMD: _("%s"),
 					errorFailedSetup: _("Failed to set up '%s'!"),
 					errorFailedReload: _("Failed to reload '%s'!"),
 					errorUserFileNotFound: _("Custom user file '%s' not found or empty!"),
 					ererrorUserFileSyntax: _("Syntax error in custom user file '%s'!"),
 					errorUserFileRunning: _("Error running custom user file '%s'!"),
 					errorUserFileNoCurl: _("Use of 'curl' is detected in custom user file '%s', but 'curl' isn't installed!"),
-					errorNoGateways: _("Failed to set up any gateway!")
+					errorNoGateways: _("Failed to set up any gateway!"),
+					errorResolver: _("Resolver %s"),
+					errorPolicyProcessNoIpv6: _("Skipping IPv6 policy '%s' as IPv6 support is disabled"),
+					errorPolicyProcessUnknownFwmark: _("Unknown packet mark for interface '%s'"),
+					errorPolicyProcessMismatchFamily: _("Mismatched IP family between in policy %s"),
+					errorPolicyProcessUnknownProtocol: _("Unknown protocol in policy %s"),
+					errorPolicyProcessInsertionFailed: _("Insertion failed for both IPv4 and IPv6 for policy %s"),
+					errorPolicyProcessInsertionFailedIpv4: _("Insertion failed for IPv4 for policy %s"),
 				};
 				var errorsTitle = E('label', { class: 'cbi-value-title' }, _("Service Errors"));
 				var text = "";
 				(reply.errors).forEach(element => {
 					if (element.id && textLabelsTable[element.id]) {
-						text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+						if (element.id !== 'errorPolicyProcessCMD') {
+							text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+						}
 					}
 					else {
 						text += _("Unknown Error!") + "<br />";
