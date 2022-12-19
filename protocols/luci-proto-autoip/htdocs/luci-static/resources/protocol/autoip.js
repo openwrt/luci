@@ -1,7 +1,7 @@
 'use strict';
 'require network';
 
-return network.registerProtocol('3g', {
+return network.registerProtocol('autoip', {
 	getI18n: function() {
 		return _('Avahi IPv4LL');
 	},
