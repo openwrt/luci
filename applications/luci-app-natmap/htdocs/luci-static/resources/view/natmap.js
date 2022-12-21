@@ -79,7 +79,7 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.modalonly = true;
 
-		o = s.option(form.Value, 'stun_server', _('STUN server'), _('For UDP mode'));
+		o = s.option(form.Value, 'stun_server', _('STUN server'));
 		o.datatype = 'host';
 		o.modalonly = true;
 		o.optional = false;
@@ -88,12 +88,10 @@ return view.extend({
 		o = s.option(form.Value, 'http_server', _('HTTP server'), _('For TCP mode'));
 		o.datatype = 'host';
 		o.modalonly = true;
-		o.optional = false;
 		o.rmempty = false;
 
-		o = s.option(form.Value, 'port', _('Port'));
+		o = s.option(form.Value, 'port', _('Bind port'));
 		o.datatype = 'port';
-		o.optional = false;
 		o.rmempty = false;
 
 		o = s.option(form.Flag, '_forward_mode', _('Forward mode'));
@@ -106,6 +104,11 @@ return view.extend({
 
 		o = s.option(form.Value, 'forward_target', _('Forward target'));
 		o.datatype = 'host';
+		o.modalonly = true;
+		o.depends('_forward_mode', '1');
+
+		o = s.option(form.Value, 'forward_port', _('Forward target port'));
+		o.datatype = 'port';
 		o.modalonly = true;
 		o.depends('_forward_mode', '1');
 
