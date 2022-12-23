@@ -231,7 +231,7 @@ return view.extend({
 
 			results.sort(function(a, b) {
 				if (a.channel - b.channel)
-					return diff;
+					return 1;
 
 				if (a.ssid < b.ssid)
 					return -1;
