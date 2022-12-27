@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-07-28 17:05+0000\n"
-"Last-Translator: SangHoon Kim <hts.sanghoon.kim@outlook.com>\n"
+"PO-Revision-Date: 2022-12-27 13:49+0000\n"
+"Last-Translator: somni <me@somni.one>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/ko/>\n"
 "Language: ko\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -48,7 +48,7 @@ msgstr "챌린지 확인"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:144
 msgid "Custom ACME CA"
-msgstr "커스텀 ACME 인증서"
+msgstr "사용자 지정 ACME CA"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:150
 msgid "Custom ACME server directory URL."
@@ -75,7 +75,6 @@ msgid "Domain Alias"
 msgstr "도메인 별칭"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:70
-#, fuzzy
 msgid "Domain names"
 msgstr "도메인 네임"
 
@@ -91,15 +90,15 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:65
 msgid "ECC 256 bits"
-msgstr "ECC 256 bits"
+msgstr "ECC 256비트"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:66
 msgid "ECC 384 bits"
-msgstr "ECC 384 bits"
+msgstr "ECC 384비트"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:35
 msgid "Email address to associate with account key."
-msgstr "계정 키와 연결할 이메일 주소."
+msgstr "계정 키에 연결할 이메일 주소입니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:39
 msgid "Enable debug logging"
@@ -117,9 +116,8 @@ msgstr "기본 설정"
 msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
-msgstr ""
-"암호화 준비 서버에서 인증서를 가져옵니다 (테스트에 사용하며; 인증서가 유효하"
-"지 않습니다)."
+msgstr "Let's Encrypt 테스트 서버에서 인증서를 가져옵니다 (테스트 용이며, 발급된 "
+"인증서는 유효하지 않음)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
@@ -135,15 +133,15 @@ msgstr "생성된 인증서의 키 크기(및 유형)."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:62
 msgid "RSA 2048 bits"
-msgstr "RSA 2048 bits"
+msgstr "RSA 2048비트"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:63
 msgid "RSA 3072 bits"
-msgstr "RSA 3072 bits"
+msgstr "RSA 3072비트"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:64
 msgid "RSA 4096 bits"
-msgstr "RSA 4096 bits"
+msgstr "RSA 4096비트"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:99
 msgid "Standalone"
@@ -163,7 +161,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "State directory"
-msgstr ""
+msgstr "상태 디렉터리"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:130
 msgid ""
@@ -171,6 +169,9 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
+"\"모든\" 도메인에 사용될 챌린지 별칭입니다. https://github.com/"
+"acmesh-official/acme.sh/wiki/DNS-alias-mode 에서 자세한 내용을 확인하세요. "
+"LuCI에서는 개별 인증서마다 하나의 챌린지 별칭만 지원합니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:122
 msgid ""
@@ -179,6 +180,10 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
+"위에서 선택한 DNS API 모드에서 사용될 자격 증명입니다. 각 API마다 필요한 "
+"자격 증명의 포맷은 https://github.com/acmesh-official/acme.sh/wiki/dnsapi "
+"에서 참고해주세요. KEY=VAL 쉘 변수 포맷에 따라 여러 개의 자격 증명을 추가할 "
+"수 있습니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:137
 msgid ""
@@ -186,6 +191,9 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
+"\"모든\" 도메인에 사용될 도메인 별칭입니다. https://github.com/"
+"acmesh-official/acme.sh/wiki/DNS-alias-mode 에서 자세한 내용을 확인하세요. "
+"LuCI에서는 개별 인증서마다 하나의 챌린지 도메인만 지원합니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
 msgid ""
@@ -196,6 +204,11 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"라우터 웹 인터페이스에서 Let's Encrypt SSL 인증서를 사용하기 위해 여기에서 "
+"ACME (Let's Encrypt) 인증서 자동 설치를 구성할 수 있습니다. 인증서의 도메인 "
+"네임은 라우터의 공인 IP 주소를 가리키도록 이미 설정되어 있어야 합니다. 처음 "
+"구성하는 경우, 인증서 발급에 시간이 걸릴 수 있습니다. 진행 상황 및 오류는 "
+"로그에서 확인할 수 있습니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:113
 msgid ""
@@ -206,6 +219,11 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"acme.sh에서 지원하는 DNS API의 명칭을 입력하세요. 사용 가능한 API 목록은 "
+"https://github.com/acmesh-official/acme.sh/wiki/dnsapi 에서 참고하실 수 "
+"있습니다. DNS 모드에서는 도메인 네임이 라우터의 IP를 가리키지 않아도 되며, "
+"와일드카드 인증서를 지원합니다. DNS 모드를 사용하기 위해선 acme-dnsapi "
+"패키지가 설치되어 있어야 합니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:87
 msgid ""
@@ -213,6 +231,9 @@ msgid ""
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"인증서가 발급되었을 때 nginx 설정을 업데이트합니다 (1개의 인증서에서만 이 "
+"옵션을 선택하세요). SSL 지원을 사용하도록 컴파일된 nginx를 사용해야 하며, "
+"그렇지 않은 경우 nginx가 시작되지 않습니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:78
 msgid ""
@@ -220,26 +241,29 @@ msgid ""
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"인증서가 발급되었을 때 uhttpd 설정을 업데이트합니다 (1개의 인증서에서만 이 "
+"옵션을 선택하세요). luci-app-uhttpd 패키지를 통해 LuCI 인터페이스에서 "
+"uhttpd의 설정을 수정할 수도 있습니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:144
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr ""
+msgstr "Let's Encrypt 대신 사용자 지정 CA를 사용합니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:86
 msgid "Use for nginx"
-msgstr ""
+msgstr "nginx에 적용"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:77
 msgid "Use for uhttpd"
-msgstr ""
+msgstr "uhttpd에 적용"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:54
 msgid "Use staging server"
-msgstr ""
+msgstr "테스트 서버 사용"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:95
 msgid "Validation method"
-msgstr ""
+msgstr "유효성 검증 방법"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
 msgid "Webroot"
@@ -247,7 +271,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:104
 msgid "Webroot directory"
-msgstr ""
+msgstr "Webroot 디렉터리"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:105
 msgid ""
@@ -255,7 +279,9 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
+"ACME를 웹루트(Webroot) 모드로 실행하기 위해선 웹 서버 문서 루트 디렉터리를 "
+"설정하세요. 웹 서버는 80번 포트에서 인터넷 접근이 가능해야 합니다."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
 msgid "Where certs and other state files are kept."
-msgstr ""
+msgstr "인증서와 기타 상태 파일이 저장되는 경로입니다."
