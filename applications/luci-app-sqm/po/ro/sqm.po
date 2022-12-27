@@ -11,6 +11,14 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Weblate 4.10-dev\n"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
+msgid "Advanced Configuration"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
+msgid "Advanced Linklayer Options"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
 msgid ""
 "Advanced option string to pass to the egress queueing disciplines; no error "
@@ -27,6 +35,16 @@ msgstr ""
 "Șir de opțiuni avansate care trebuie transmise disciplinelor de intrare în "
 "coada de așteptare; fără verificare a erorilor, utilizați cu mare atenție."
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
+msgid ""
+"Advanced options will only be used as long as this box is checked (only "
+"needed if MTU > 1500)."
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
+msgid "Advanced options will only be used as long as this box is checked."
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:72
 msgid "Basic Settings"
 msgstr "Setări de bază"
@@ -39,35 +57,51 @@ msgstr ""
 "Creați un fișier jurnal pentru această instanță SQM în /var/run/sqm/"
 "${Interface_name}.[start|stop]-sqm.log."
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
+msgid "Dangerous Configuration"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
+msgid "Dangerous options will only be used as long as this box is checked."
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:92
+msgid "Download speed (ingress)"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:92
 msgid ""
 "Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress "
-"shaping:"
+"shaping"
 msgstr ""
-"Viteza de descărcare (kbit/s) (intrare) se setează la 0 pentru a dezactiva "
-"selectiv modelarea intrării:"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
+msgid "ECN (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
+msgid "ECN (ingress)"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:58
 msgid "Enable SQM"
 msgstr "Activați SQM"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:100
+msgid "Enable debug logging"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:78
 msgid "Enable this SQM instance."
 msgstr "Activează această instanță SQM."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
-msgid ""
-"Explicit congestion notification (ECN) status on inbound packets (ingress):"
+msgid "Explicit congestion notification (ECN) status on inbound packets"
 msgstr ""
-"Starea ECN (Explicit congestion notification (notificare explicită de "
-"congestie) pe pachetele de intrare (intrare):"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
-msgid ""
-"Explicit congestion notification (ECN) status on outbound packets (egress)."
+msgid "Explicit congestion notification (ECN) status on outbound packets"
 msgstr ""
-"Starea ECN (Explicit congestion notification (notificare explicită de "
-"congestie) pe pachetele de ieșire (egress)."
 
 #: applications/luci-app-sqm/root/usr/share/rpcd/acl.d/luci-app-sqm.json:3
 msgid "Grant UCI access for luci-app-sqm"
@@ -82,13 +116,33 @@ msgid "Hard limit on ingress queues; leave empty for default."
 msgstr ""
 "Limita dură a cozilor de intrare; lăsați gol pentru valoarea implicită."
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
+msgid "Hard queue limit (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:164
+msgid "Hard queue limit (ingress)"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
-msgid "Ignore DSCP on ingress:"
-msgstr "Ignoră DSCP la intrare:"
+msgid "Ignore DSCP (ingress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
+msgid "Ignore DSCP markings on inbound packets"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:89
 msgid "Interface name"
 msgstr "Numele interfeței"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:176
+msgid "Latency target (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:172
+msgid "Latency target (ingress)"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:176
 msgid ""
@@ -112,32 +166,60 @@ msgstr ""
 msgid "Link Layer Adaptation"
 msgstr "Adaptarea nivelului de legătură"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
+msgid "Link layer"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
+msgid "Linklayer adaptation mechanism"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
+msgid ""
+"Lists queuing disciplines useable on this system. After installing a new "
+"qdisc, you need to restart the router to see updates!"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
+msgid "Log verbosity"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
 msgid ""
 "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
-"interface MTU + overhead:"
+"interface MTU + overhead"
 msgstr ""
-"Dimensiunea maximă pentru calcularea mărimii și a ratei, tcMTU (byte); "
-"trebuie să fie >= MTU al interfeței + overhead:"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
+msgid "Maximum packet size"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
 msgid ""
-"Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables:"
+"Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables"
 msgstr ""
-"Dimensiunea minimă a pachetului, MPU (byte); trebuie să fie > 0 pentru "
-"tabelele de dimensiuni ethernet:"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
+msgid "Minimum packet size"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
 msgid ""
 "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = (tcMTU "
-"+ 1) / 16:"
+"+ 1) / 16"
 msgstr ""
-"Numărul de intrări în tabelele de mărime/taxe, TSIZE; pentru ATM, alegeți "
-"TSIZE = (tcMTU + 1) / 16:"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:193
-msgid "Per Packet Overhead (byte):"
-msgstr "Per Pachet Overhead (byte):"
+msgid "Per Packet Overhead (bytes)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
+msgid "Qdisc options (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:180
+msgid "Qdisc options (ingress)"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:73
 msgid "Queue Discipline"
@@ -147,55 +229,33 @@ msgstr "Disciplina cozii"
 msgid "Queue setup script"
 msgstr "Script de configurare a cozilor de așteptare"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
+msgid "Queueing discipline"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:71
 msgid "Queues"
 msgstr "Cozi de așteptare"
 
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
-msgid ""
-"Queuing disciplines useable on this system. After installing a new qdisc, "
-"you need to restart the router to see updates!"
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
+msgid "Rate table size"
 msgstr ""
-"Discipline de coadă de așteptare utilizabile pe acest sistem. După "
-"instalarea unui nou qdisc, trebuie să reporniți routerul pentru a vedea "
-"actualizările!"
 
 #: applications/luci-app-sqm/root/usr/share/luci/menu.d/luci-app-sqm.json:3
 msgid "SQM QoS"
 msgstr "SQM QoS"
-
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
-msgid ""
-"Show Advanced Linklayer Options, (only needed if MTU > 1500). Advanced "
-"options will only be used as long as this box is checked."
-msgstr ""
-"Afișează opțiunile avansate pentru Linklayer (necesar numai dacă MTU > 1500)"
-". Opțiunile avansate vor fi utilizate numai atâta timp cât această casetă "
-"este bifată."
-
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
-msgid ""
-"Show and Use Advanced Configuration. Advanced options will only be used as "
-"long as this box is checked."
-msgstr ""
-"Afișați și utilizați Configurație avansată. Opțiunile avansate vor fi "
-"utilizate numai atât timp cât această casetă este bifată."
-
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
-msgid ""
-"Show and Use Dangerous Configuration. Dangerous options will only be used as "
-"long as this box is checked."
-msgstr ""
-"Afișare și utilizare Configurație periculoasă. Opțiunile periculoase vor fi "
-"utilizate numai atât timp cât această casetă este bifată."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:64
 msgid "Smart Queue Management"
 msgstr "Gestionarea inteligentă a cozilor de așteptare"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
-msgid "Squash DSCP on inbound packets (ingress):"
-msgstr "Zdrobiți DSCP pe pachetele de intrare (intrare):"
+msgid "Squash DSCP (ingress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
+msgid "Squash DSCP markings on inbound packets"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:83
 msgid ""
@@ -216,20 +276,21 @@ msgstr ""
 "jos pentru a activa acest serviciu."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
-msgid ""
-"Upload speed (kbit/s) (egress) set to 0 to selectively disable egress "
-"shaping:"
+msgid "Upload speed (egress)"
 msgstr ""
-"Viteza de încărcare (kbit/s) (ieșire) se setează la 0 pentru a dezactiva "
-"selectiv modelarea la ieșire:"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
+msgid ""
+"Upload speed (kbit/s) (egress) set to 0 to selectively disable egress shaping"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Verbosity of SQM's output into the system log."
 msgstr "Verbalitatea ieșirii SQM în jurnalul sistemului."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
-msgid "Which link layer to account for:"
-msgstr "Ce strat de legătură trebuie luat în considerare:"
+msgid "Which link layer technology to account for"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
 msgid "Which linklayer adaptation mechanism to use; for testing only"
@@ -255,3 +316,93 @@ msgstr ""
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:219
 msgid "default"
 msgstr "implicit"
+
+#~ msgid ""
+#~ "Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress "
+#~ "shaping:"
+#~ msgstr ""
+#~ "Viteza de descărcare (kbit/s) (intrare) se setează la 0 pentru a "
+#~ "dezactiva selectiv modelarea intrării:"
+
+#~ msgid ""
+#~ "Explicit congestion notification (ECN) status on inbound packets "
+#~ "(ingress):"
+#~ msgstr ""
+#~ "Starea ECN (Explicit congestion notification (notificare explicită de "
+#~ "congestie) pe pachetele de intrare (intrare):"
+
+#~ msgid ""
+#~ "Explicit congestion notification (ECN) status on outbound packets "
+#~ "(egress)."
+#~ msgstr ""
+#~ "Starea ECN (Explicit congestion notification (notificare explicită de "
+#~ "congestie) pe pachetele de ieșire (egress)."
+
+#~ msgid "Ignore DSCP on ingress:"
+#~ msgstr "Ignoră DSCP la intrare:"
+
+#~ msgid ""
+#~ "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
+#~ "interface MTU + overhead:"
+#~ msgstr ""
+#~ "Dimensiunea maximă pentru calcularea mărimii și a ratei, tcMTU (byte); "
+#~ "trebuie să fie >= MTU al interfeței + overhead:"
+
+#~ msgid ""
+#~ "Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables:"
+#~ msgstr ""
+#~ "Dimensiunea minimă a pachetului, MPU (byte); trebuie să fie > 0 pentru "
+#~ "tabelele de dimensiuni ethernet:"
+
+#~ msgid ""
+#~ "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = "
+#~ "(tcMTU + 1) / 16:"
+#~ msgstr ""
+#~ "Numărul de intrări în tabelele de mărime/taxe, TSIZE; pentru ATM, alegeți "
+#~ "TSIZE = (tcMTU + 1) / 16:"
+
+#~ msgid "Per Packet Overhead (byte):"
+#~ msgstr "Per Pachet Overhead (byte):"
+
+#~ msgid ""
+#~ "Queuing disciplines useable on this system. After installing a new qdisc, "
+#~ "you need to restart the router to see updates!"
+#~ msgstr ""
+#~ "Discipline de coadă de așteptare utilizabile pe acest sistem. După "
+#~ "instalarea unui nou qdisc, trebuie să reporniți routerul pentru a vedea "
+#~ "actualizările!"
+
+#~ msgid ""
+#~ "Show Advanced Linklayer Options, (only needed if MTU > 1500). Advanced "
+#~ "options will only be used as long as this box is checked."
+#~ msgstr ""
+#~ "Afișează opțiunile avansate pentru Linklayer (necesar numai dacă MTU > "
+#~ "1500). Opțiunile avansate vor fi utilizate numai atâta timp cât această "
+#~ "casetă este bifată."
+
+#~ msgid ""
+#~ "Show and Use Advanced Configuration. Advanced options will only be used "
+#~ "as long as this box is checked."
+#~ msgstr ""
+#~ "Afișați și utilizați Configurație avansată. Opțiunile avansate vor fi "
+#~ "utilizate numai atât timp cât această casetă este bifată."
+
+#~ msgid ""
+#~ "Show and Use Dangerous Configuration. Dangerous options will only be used "
+#~ "as long as this box is checked."
+#~ msgstr ""
+#~ "Afișare și utilizare Configurație periculoasă. Opțiunile periculoase vor "
+#~ "fi utilizate numai atât timp cât această casetă este bifată."
+
+#~ msgid "Squash DSCP on inbound packets (ingress):"
+#~ msgstr "Zdrobiți DSCP pe pachetele de intrare (intrare):"
+
+#~ msgid ""
+#~ "Upload speed (kbit/s) (egress) set to 0 to selectively disable egress "
+#~ "shaping:"
+#~ msgstr ""
+#~ "Viteza de încărcare (kbit/s) (ieșire) se setează la 0 pentru a dezactiva "
+#~ "selectiv modelarea la ieșire:"
+
+#~ msgid "Which link layer to account for:"
+#~ msgstr "Ce strat de legătură trebuie luat în considerare:"

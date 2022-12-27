@@ -10,6 +10,14 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.8-dev\n"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
+msgid "Advanced Configuration"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
+msgid "Advanced Linklayer Options"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
 msgid ""
 "Advanced option string to pass to the egress queueing disciplines; no error "
@@ -22,6 +30,16 @@ msgid ""
 "checking, use very carefully."
 msgstr "傳遞到入站佇列規則的進階選項字串，沒有錯誤檢查，請謹慎使用。"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
+msgid ""
+"Advanced options will only be used as long as this box is checked (only "
+"needed if MTU > 1500)."
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
+msgid "Advanced options will only be used as long as this box is checked."
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:72
 msgid "Basic Settings"
 msgstr "基本設定"
@@ -32,29 +50,51 @@ msgid ""
 "[start|stop]-sqm.log."
 msgstr "建立日誌檔案 (/var/run/sqm/${Interface_name}.[start|stop]-sqm.log)。"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
+msgid "Dangerous Configuration"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
+msgid "Dangerous options will only be used as long as this box is checked."
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:92
+msgid "Download speed (ingress)"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:92
 msgid ""
 "Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress "
-"shaping:"
-msgstr "下載速度 (kbit/s) (0-無限制)："
+"shaping"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
+msgid "ECN (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
+msgid "ECN (ingress)"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:58
 msgid "Enable SQM"
 msgstr "啟用 SQM"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:100
+msgid "Enable debug logging"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:78
 msgid "Enable this SQM instance."
 msgstr "啟用 SQM。"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
-msgid ""
-"Explicit congestion notification (ECN) status on inbound packets (ingress):"
-msgstr "傳入封包(入口)上的顯式擁塞通知 (ECN)狀態："
+msgid "Explicit congestion notification (ECN) status on inbound packets"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
-msgid ""
-"Explicit congestion notification (ECN) status on outbound packets (egress)."
-msgstr "傳出封包(出口)上的顯式擁塞通知(ECN)狀態。"
+msgid "Explicit congestion notification (ECN) status on outbound packets"
+msgstr ""
 
 #: applications/luci-app-sqm/root/usr/share/rpcd/acl.d/luci-app-sqm.json:3
 msgid "Grant UCI access for luci-app-sqm"
@@ -68,13 +108,33 @@ msgstr "嚴格限制出口隊列；預設保留為空。"
 msgid "Hard limit on ingress queues; leave empty for default."
 msgstr "對入口隊列的硬限制；預設保留為空。"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
+msgid "Hard queue limit (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:164
+msgid "Hard queue limit (ingress)"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
-msgid "Ignore DSCP on ingress:"
-msgstr "在進入時忽略DSCP："
+msgid "Ignore DSCP (ingress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
+msgid "Ignore DSCP markings on inbound packets"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:89
 msgid "Interface name"
 msgstr "介面名稱"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:176
+msgid "Latency target (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:172
+msgid "Latency target (ingress)"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:176
 msgid ""
@@ -96,26 +156,60 @@ msgstr ""
 msgid "Link Layer Adaptation"
 msgstr "連結層適應"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
+msgid "Link layer"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
+msgid "Linklayer adaptation mechanism"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
+msgid ""
+"Lists queuing disciplines useable on this system. After installing a new "
+"qdisc, you need to restart the router to see updates!"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
+msgid "Log verbosity"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
 msgid ""
 "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
-"interface MTU + overhead:"
-msgstr "用於大小和速率計算的最大大小，tcMTU (位元組)；需要≧介面MTU +開銷："
+"interface MTU + overhead"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
+msgid "Maximum packet size"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
 msgid ""
-"Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables:"
-msgstr "最小封包大小，MPU(位元組)；對於乙太網大小表，必須＞0："
+"Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
+msgid "Minimum packet size"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
 msgid ""
 "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = (tcMTU "
-"+ 1) / 16:"
-msgstr "大小/費率表中的條目數，TSIZE；對於ATM，選擇TSIZE = (tcMTU + 1)/ 16："
+"+ 1) / 16"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:193
-msgid "Per Packet Overhead (byte):"
-msgstr "每個封包開銷(位元組)："
+msgid "Per Packet Overhead (bytes)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
+msgid "Qdisc options (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:180
+msgid "Qdisc options (ingress)"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:73
 msgid "Queue Discipline"
@@ -125,47 +219,33 @@ msgstr "佇列規則"
 msgid "Queue setup script"
 msgstr "佇列設定指令碼"
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
+msgid "Queueing discipline"
+msgstr ""
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:71
 msgid "Queues"
 msgstr "佇列"
 
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
-msgid ""
-"Queuing disciplines useable on this system. After installing a new qdisc, "
-"you need to restart the router to see updates!"
-msgstr "安裝新的佇列規則後，需要重新啟動路由器！"
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
+msgid "Rate table size"
+msgstr ""
 
 #: applications/luci-app-sqm/root/usr/share/luci/menu.d/luci-app-sqm.json:3
 msgid "SQM QoS"
 msgstr "SQM QoS頻寬管理"
-
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
-msgid ""
-"Show Advanced Linklayer Options, (only needed if MTU > 1500). Advanced "
-"options will only be used as long as this box is checked."
-msgstr ""
-"顯示 高級連接層選項 , (僅當MTU> 1500時才需要)。僅在選中此框時，才使用高級選"
-"項。"
-
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
-msgid ""
-"Show and Use Advanced Configuration. Advanced options will only be used as "
-"long as this box is checked."
-msgstr "顯示使用進階選項，只有選取此選取框時，才會使用進階選項。"
-
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
-msgid ""
-"Show and Use Dangerous Configuration. Dangerous options will only be used as "
-"long as this box is checked."
-msgstr "顯示和使用危險組態。僅在選中此復選框後，才會使用危險選項。"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:64
 msgid "Smart Queue Management"
 msgstr "智慧隊列管理"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
-msgid "Squash DSCP on inbound packets (ingress):"
-msgstr "在傳入封包(入口)上壓縮DSCP："
+msgid "Squash DSCP (ingress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
+msgid "Squash DSCP markings on inbound packets"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:83
 msgid ""
@@ -183,18 +263,21 @@ msgid ""
 msgstr "SQM 服務似乎已被停用。請使用下面的按鈕來啟動這項服務。"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
+msgid "Upload speed (egress)"
+msgstr ""
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
 msgid ""
-"Upload speed (kbit/s) (egress) set to 0 to selectively disable egress "
-"shaping:"
-msgstr "上傳速度 (kbit/s) (0-無限制)："
+"Upload speed (kbit/s) (egress) set to 0 to selectively disable egress shaping"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Verbosity of SQM's output into the system log."
 msgstr "日誌等級。"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
-msgid "Which link layer to account for:"
-msgstr "連結層："
+msgid "Which link layer technology to account for"
+msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
 msgid "Which linklayer adaptation mechanism to use; for testing only"
@@ -216,3 +299,72 @@ msgstr ""
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:219
 msgid "default"
 msgstr "預設"
+
+#~ msgid ""
+#~ "Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress "
+#~ "shaping:"
+#~ msgstr "下載速度 (kbit/s) (0-無限制)："
+
+#~ msgid ""
+#~ "Explicit congestion notification (ECN) status on inbound packets "
+#~ "(ingress):"
+#~ msgstr "傳入封包(入口)上的顯式擁塞通知 (ECN)狀態："
+
+#~ msgid ""
+#~ "Explicit congestion notification (ECN) status on outbound packets "
+#~ "(egress)."
+#~ msgstr "傳出封包(出口)上的顯式擁塞通知(ECN)狀態。"
+
+#~ msgid "Ignore DSCP on ingress:"
+#~ msgstr "在進入時忽略DSCP："
+
+#~ msgid ""
+#~ "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
+#~ "interface MTU + overhead:"
+#~ msgstr "用於大小和速率計算的最大大小，tcMTU (位元組)；需要≧介面MTU +開銷："
+
+#~ msgid ""
+#~ "Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables:"
+#~ msgstr "最小封包大小，MPU(位元組)；對於乙太網大小表，必須＞0："
+
+#~ msgid ""
+#~ "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = "
+#~ "(tcMTU + 1) / 16:"
+#~ msgstr ""
+#~ "大小/費率表中的條目數，TSIZE；對於ATM，選擇TSIZE = (tcMTU + 1)/ 16："
+
+#~ msgid "Per Packet Overhead (byte):"
+#~ msgstr "每個封包開銷(位元組)："
+
+#~ msgid ""
+#~ "Queuing disciplines useable on this system. After installing a new qdisc, "
+#~ "you need to restart the router to see updates!"
+#~ msgstr "安裝新的佇列規則後，需要重新啟動路由器！"
+
+#~ msgid ""
+#~ "Show Advanced Linklayer Options, (only needed if MTU > 1500). Advanced "
+#~ "options will only be used as long as this box is checked."
+#~ msgstr ""
+#~ "顯示 高級連接層選項 , (僅當MTU> 1500時才需要)。僅在選中此框時，才使用高級"
+#~ "選項。"
+
+#~ msgid ""
+#~ "Show and Use Advanced Configuration. Advanced options will only be used "
+#~ "as long as this box is checked."
+#~ msgstr "顯示使用進階選項，只有選取此選取框時，才會使用進階選項。"
+
+#~ msgid ""
+#~ "Show and Use Dangerous Configuration. Dangerous options will only be used "
+#~ "as long as this box is checked."
+#~ msgstr "顯示和使用危險組態。僅在選中此復選框後，才會使用危險選項。"
+
+#~ msgid "Squash DSCP on inbound packets (ingress):"
+#~ msgstr "在傳入封包(入口)上壓縮DSCP："
+
+#~ msgid ""
+#~ "Upload speed (kbit/s) (egress) set to 0 to selectively disable egress "
+#~ "shaping:"
+#~ msgstr "上傳速度 (kbit/s) (0-無限制)："
+
+#~ msgid "Which link layer to account for:"
+#~ msgstr "連結層："
