@@ -3231,19 +3231,21 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		this.placeholder = placeholder;
 
 		var n = 0,
-		    rows = this.node.querySelectorAll('tr'),
+		    rows = this.node.querySelectorAll('tr, .tr'),
 		    trows = [],
-		    headings = [].slice.call(this.node.firstElementChild.querySelectorAll('th')),
-		    captionClasses = this.options.captionClasses;
+		    headings = [].slice.call(this.node.firstElementChild.querySelectorAll('th, .th')),
+		    captionClasses = this.options.captionClasses,
+		    trTag = (rows[0] && rows[0].nodeName == 'DIV') ? 'div' : 'tr',
+		    tdTag = (headings[0] && headings[0].nodeName == 'DIV') ? 'div' : 'td';
 
 		data.forEach(function(row) {
-			trows[n] = E('tr', { 'class': 'tr' });
+			trows[n] = E(trTag, { 'class': 'tr' });
 
 			for (var i = 0; i < headings.length; i++) {
 				var text = (headings[i].innerText || '').trim();
 				var raw_val = Array.isArray(row[i]) ? row[i][0] : null;
 				var disp_val = Array.isArray(row[i]) ? row[i][1] : row[i];
-				var td = trows[n].appendChild(E('td', {
+				var td = trows[n].appendChild(E(tdTag, {
 					'class': 'td',
 					'data-title': (text !== '') ? text : null,
 					'data-value': raw_val
@@ -3270,8 +3272,8 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 			this.node.removeChild(rows[n]);
 
 		if (placeholder && this.node.firstElementChild === this.node.lastElementChild) {
-			var trow = this.node.appendChild(E('tr', { 'class': 'tr placeholder' })),
-			    td = trow.appendChild(E('td', { 'class': 'td' }, placeholder));
+			var trow = this.node.appendChild(E(trTag, { 'class': 'tr placeholder' })),
+			    td = trow.appendChild(E(tdTag, { 'class': 'td' }, placeholder));
 
 			if (typeof(captionClasses) == 'object')
 				DOMTokenList.prototype.add.apply(td.classList, L.toArray(captionClasses[0]));
