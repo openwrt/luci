@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 17:57+0200\n"
-"PO-Revision-Date: 2022-11-02 22:11+0000\n"
-"Last-Translator: tdt-hv <hvoit@tdt.de>\n"
+"PO-Revision-Date: 2022-12-27 13:49+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/"
 ">\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1513
 msgid "%.1f dB"
@@ -246,7 +246,7 @@ msgstr "<abbr title=\"Router Advertisement\">RA</abbr> Flags"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:851
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Hop Limit"
-msgstr "<abbr title=\"Router Advertisement\">RA</abbr> Hop Limit"
+msgstr "<abbr title=\"Router Advertisement\">RA</abbr> Hop-Limit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Lifetime"
@@ -400,7 +400,7 @@ msgstr "Lokale Quelle akzeptieren"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:647
 msgid "Accept packets with local source addresses"
-msgstr "Akzeptiere eingehende Pakete mit einer lokalen Quell-Adresse."
+msgstr "Pakete mit lokalen Quelladressen akzeptieren"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 msgid "Access Concentrator"
@@ -1449,7 +1449,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Compute outgoing checksum (optional)."
-msgstr "Prüfsummen für zu sendende Pakete berechnet (optional)"
+msgstr "Berechnen der ausgehenden Prüfsumme (optional)."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4060
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:454
@@ -1491,7 +1491,7 @@ msgid ""
 "Advertisement\">RA</abbr> messages."
 msgstr ""
 "Konfiguriert die Default-Router-Ankündigung in <abbr title=\"Router "
-"Advertisement\">RA</abbr>-Nachrichten"
+"Advertisement\">RA</abbr>-Nachrichten."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:764
 msgid ""
@@ -1539,7 +1539,7 @@ msgstr "Verbindungsversuch fehlgeschlagen"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:40
 msgid "Connection attempt failed."
-msgstr "Verbindungsversuch gescheitert"
+msgstr "Verbindungsversuch gescheitert."
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Connection lost"
@@ -1558,7 +1558,8 @@ msgstr ""
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:377
 msgid "Consider the slave up when any ARP IP target is reachable (any, 0)"
 msgstr ""
-"Follower als online markieren, wenn irgendein Typ von ARP IP erreichbar ist."
+"Der Slave gilt als betriebsbereit, wenn ein beliebiges ARP-IP-Ziel "
+"erreichbar ist (any, 0)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:18
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:368
@@ -1791,16 +1792,16 @@ msgid ""
 "Defines a mapping of Linux internal packet priority to VLAN header priority "
 "but for outgoing frames"
 msgstr ""
-"Definiert eine Übersetzung von Linux-internen Paket-Prioritäten auf VLAN-"
-"Header-Prioritäten in ausgehenden Paketen."
+"Definiert eine Zuordnung der Linux-internen Paketpriorität zur VLAN-Header-"
+"Priorität, jedoch für ausgehende Frames"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:456
 msgid ""
 "Defines a mapping of VLAN header priority to the Linux internal packet "
 "priority on incoming frames"
 msgstr ""
-"Definiert eine Übersetzung von VLAN-Header-Prioritäten in eingehenden "
-"Paketen auf Linux-interne Paket-Prioritäten."
+"Definiert eine Zuordnung der VLAN-Header-Priorität zur Linux-internen "
+"Paketpriorität bei eingehenden Frames"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:970
 msgid "Delegate IPv6 prefixes"
@@ -3665,7 +3666,7 @@ msgstr "Schnittstelle stoppt..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1152
 msgid "Interface name"
-msgstr "Adaptername"
+msgstr "Schnittstellenname"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:123
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:304
@@ -4710,7 +4711,7 @@ msgstr "Netzwerk"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:72
 msgid "Network Mode"
-msgstr ""
+msgstr "Netzwerkmodus"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1998
 msgid "Network SSID"
@@ -5769,9 +5770,9 @@ msgstr ""
 "Öffentliche Schlüssel erlauben eine passwortlose SSH-Anmeldung mit höherer "
 "Sicherheit im Vergleich zur Benutzung einfacher Passwörter. Um einen neuen "
 "Schlüssel auf dem Gerät zu hinterlegen, kann entweder eine OpenSSH-"
-"kompatible öffentliche Schlüsselzeile in das Eingabefeld kopiert, oder eine "
-"eine Schlüsseldatei mit der Endung <code>.pub</code> in das Eingabefeld "
-"gezogen werden."
+"kompatible öffentliche Schlüsselzeile in das Eingabefeld kopiert oder eine "
+"Schlüsseldatei mit der Endung <code>.pub</code> in das Eingabefeld gezogen "
+"werden."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:192
 msgid "Public prefix routed to this device for distribution to clients."
@@ -6008,7 +6009,7 @@ msgstr "Serialisierung eingehender Pakete erforderlich (optional)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1682
 msgid "Required"
-msgstr "Benötigt"
+msgstr "Erforderlich"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
@@ -6446,7 +6447,7 @@ msgid ""
 "options of sent <abbr title=\"Router Advertisement\">RA</abbr> messages. "
 "When enabled, clients will perform stateless IPv6 address autoconfiguration."
 msgstr ""
-"Setzt den Marker für autonome Adresskonfiguration in den Präfix-Informations-"
+"Setzt den Flag für autonome Adresskonfiguration in den Präfix-Informations-"
 "Optionen gesendeter <abbr title=\"Router Advertisement\">RA</abbr>-"
 "Nachrichten. Wenn diese Option aktiviert ist, werden IPv6-Clients "
 "zustandslose, autonome Adressen-Autokonfiguration durchführen."
@@ -6466,8 +6467,7 @@ msgstr "Auf aktuell aktiven Slave setzen (aktiv, 1)"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:307
 msgid "Set to first slave added to the bond (follow, 2)"
 msgstr ""
-"Auf den ersten Slave setzen, der der Bindung hinzugefügt wurde (folgen Sie, "
-"2)"
+"Auf den ersten Slave setzen, der der Bindung hinzugefügt wurde (folgen, 2)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:646
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:662
@@ -6685,7 +6685,7 @@ msgid ""
 "stateful DHCPv6."
 msgstr ""
 "Konfiguriert die in <abbr title=\"Router Advertisement\">RA</abbr>-"
-"Nachrichten gesendeten Marker, z.B. um Clients anzuweisen, weitere "
+"Nachrichten gesendeten Flags, z.B. um Clients anzuweisen, weitere "
 "Information mittels DHCPv6-Anfragen zu beziehen."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:254
@@ -6879,10 +6879,9 @@ msgid ""
 "header inherits the value of the inner header) or an hexadecimal value "
 "<code>00..FF</code> (optional)."
 msgstr ""
-"Konfiguriert einen festen <abbr title=\"Type of Service\">TOS</abbr>-Code. "
-"Mögliche Werte sind <code>inherit</code> um den TOS-Code für den äußeren "
-"Header aus dem gekapselten Paket-Header zu kopieren oder ein hexadezimaler "
-"Wert im Bereich <code>00..FF</code>."
+"Geben Sie einen TOS (Type of Service) an. Kann <code>inherit</code> sein "
+"(der äußere Header erbt den Wert des inneren Headers) oder ein hexadezimaler "
+"Wert <code>00..FF</code> (optional)."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:74
@@ -6911,10 +6910,9 @@ msgid ""
 "inherits the value of the inner header) or an hexadecimal value <code>00.."
 "FF</code> (optional)."
 msgstr ""
-"Konfiguriert einen festen <abbr title=\"Type of Service\">TOS</abbr>-Code. "
-"Mögliche Werte sind <code>inherit</code> um den TOS-Code für den äußeren "
-"Header aus dem gekapselten Paket-Header zu kopieren oder ein hexadezimaler "
-"Wert im Bereich <code>00..FF</code>."
+"Geben Sie eine Verkehrsklasse an. Kann <code>inherit</code> sein (der äußere "
+"Header erbt den Wert des inneren Headers) oder ein hexadezimaler Wert "
+"<code>00..FF</code> (optional)."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:64
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:69
