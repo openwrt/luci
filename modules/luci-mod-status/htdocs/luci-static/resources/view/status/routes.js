@@ -87,7 +87,7 @@ return view.extend({
 		    res = [];
 
 		for (var i = 0; i < lines.length; i++) {
-			var m = lines[i].match(/^([0-9a-f:.]+) (.+) (\S+)$/),
+			var m = lines[i].match(/^([0-9a-f:.]+) (.+) (\S+) *$/),
 			    addr = m ? m[1] : null,
 			    flags = m ? m[2].trim().split(/\s+/) : [],
 			    state = (m ? m[3] : null) || 'FAILED';
