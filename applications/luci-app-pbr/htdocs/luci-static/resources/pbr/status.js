@@ -231,6 +231,8 @@ var status = baseclass.extend({
 					errorPolicyProcessUnknownProtocol: _("Unknown protocol in policy %s"),
 					errorPolicyProcessInsertionFailed: _("Insertion failed for both IPv4 and IPv6 for policy %s"),
 					errorPolicyProcessInsertionFailedIpv4: _("Insertion failed for IPv4 for policy %s"),
+					errorInterfaceRoutingEmptyValues: _("Received empty tid/mark or interface name when setting up routing"),
+					errorFailedToResolve: _("Failed to resolve %s"),
 				};
 				var errorsTitle = E('label', { class: 'cbi-value-title' }, _("Service Errors"));
 				var text = "";
