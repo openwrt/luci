@@ -303,7 +303,7 @@ return view.extend({
 
 		o = s.taboption('general', form.DynamicList, 'ipset',
 			_('IP sets'),
-			_('List of IP sets to populate with the specified domain IPs.'));
+			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
 		o.optional = true;
 		o.placeholder = '/example.org/ipset,ipset6';
 
@@ -725,7 +725,7 @@ return view.extend({
 		});
 
 		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
-			_('List of IP sets to populate with the specified domain IPs.'));
+			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
 
 		ss = o.subsection;
 
