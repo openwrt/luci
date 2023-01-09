@@ -329,10 +329,9 @@ function display(pattern)
 	for (var i = 0; i < pagers.length; i++) {
 		pagers[i].parentNode.style.display = '';
 		pagers[i].setAttribute('data-offset', 100);
-
-		if (i == 0)
-			handlePage({ target: pagers[i].querySelector('.prev') });
 	}
+
+	handlePage({ target: pagers[0].querySelector('.prev') });
 }
 
 function handlePage(ev)
