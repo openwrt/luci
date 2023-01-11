@@ -50,6 +50,9 @@ return view.extend({
 		};
 		o.modalonly = false;
 
+		o = s.option(form.DummyValue, 'redirect', _('Redirect'));
+		o.modalonly = false;
+
 		o = s.option(form.DummyValue, 'disable', _('Enabled'));
 		o.cfgvalue = function(section) {
 			return (uci.get('xinetd', section, 'disable') == "no") ? _("yes") : _("no");
@@ -128,6 +131,10 @@ return view.extend({
 		o.value('raw', _('direct access to IP service'));
 		o.value('seqpacket', _('sequential datagram transmission service'));
 		o.rmempty = false;
+		o.modalonly = true;
+
+		o = s.taboption('basic', form.Value, 'redirect', _('Redirect'), _('Redirect incoming requests to this IP address:port.'));
+		o.datatype = 'ipaddrport(1)';
 		o.modalonly = true;
 
 		o = s.taboption('basic', form.Value, 'server', _('Server'), _('Complete path to the executable server file'));
