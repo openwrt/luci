@@ -892,7 +892,7 @@ dispatch = function(_http, path) {
 	try {
 		let menu = menu_json();
 
-		path ??= map(match(http.getenv('PATH_INFO'), /[^\/]+/g), m => m[0]);
+		path ??= map(match(http.getenv('PATH_INFO'), /[^\/]+/g), m => urldecode(m[0]));
 
 		let resolved = resolve_page(menu, path);
 
