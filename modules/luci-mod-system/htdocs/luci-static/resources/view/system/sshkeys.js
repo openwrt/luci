@@ -204,7 +204,7 @@ function removeKey(ev) {
 
 	L.showModal(_('Delete key'), [
 		E('div', _('Do you really want to delete the following SSH key?')),
-		E('pre', delkey),
+		E('pre', [ delkey ]),
 		E('div', { class: 'right' }, [
 			E('div', { class: 'btn', click: L.hideModal }, _('Cancel')),
 			' ',
