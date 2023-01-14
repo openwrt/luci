@@ -9,7 +9,7 @@ module("luci.controller.dockerman",package.seeall)
 
 function index()
 	entry({"admin", "docker"},
-		alias("admin", "docker", "config"),
+		firstchild(),
 		_("Docker"),
 		40).acl_depends = { "luci-app-dockerman" }
 
