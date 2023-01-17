@@ -281,7 +281,7 @@ var CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement.p
 	 * The input string to clean.
 	 *
 	 * @returns {string}
-	 * The cleaned input string with HTML removes removed.
+	 * The cleaned input string with HTML tags removed.
 	 */
 	stripTags: function(s) {
 		if (typeof(s) == 'string' && !s.match(/[<>]/))
