@@ -156,7 +156,8 @@ return view.extend({
 		p[1].default = fwDefaults.getOutput();
 		p[2].default = fwDefaults.getForward();
 
-		o = s.taboption('general', form.Flag, 'masq', _('Masquerading'));
+		o = s.taboption('general', form.Flag, 'masq', _('Masquerading'),
+			_('Enable network address and port translation (NAT or NAPT) for outbound traffic on this zone. This is typically enabled on the <em>wan</em> zone.'));
 		o.editable = true;
 		o.tooltip = function(section_id) {
 			var masq_src = uci.get('firewall', section_id, 'masq_src')
