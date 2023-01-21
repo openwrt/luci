@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2022-12-21 21:49+0000\n"
+"PO-Revision-Date: 2022-12-28 07:01+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspbr/es/>\n"
@@ -21,7 +21,7 @@ msgstr "%s"
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:206
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:207
 msgid "%s binary cannot be found!"
-msgstr ""
+msgstr "¡No se puede encontrar el binario %s!"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:61
 msgid ""
@@ -120,7 +120,7 @@ msgstr "Etiquetado DSCP"
 msgid "Default ICMP Interface"
 msgstr "Interfaz ICMP predeterminada"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:308
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:310
 msgid "Disable"
 msgstr "Desactivar"
 
@@ -130,7 +130,7 @@ msgstr "Desactivar"
 msgid "Disabled"
 msgstr "Desactivado"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:304
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:306
 msgid "Disabling %s service"
 msgstr "Desactivando el servicio %s"
 
@@ -154,7 +154,7 @@ msgstr "conjunto nft dnsmasq"
 msgid "Do not enforce policies when their gateway is down"
 msgstr "No aplique políticas cuando su puerta de enlace esté inactiva"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:297
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:299
 msgid "Enable"
 msgstr "Activar"
 
@@ -165,7 +165,7 @@ msgstr "Activar"
 msgid "Enabled"
 msgstr "Activado"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:293
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:295
 msgid "Enabling %s service"
 msgstr "Activando el servicio %s"
 
@@ -184,6 +184,10 @@ msgstr ""
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:221
 msgid "Failed to reload '%s'!"
 msgstr "¡Error al recargar '%s'!"
+
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:235
+msgid "Failed to resolve %s"
+msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:220
 msgid "Failed to set up '%s'!"
@@ -216,11 +220,11 @@ msgstr "Insertar"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:233
 msgid "Insertion failed for IPv4 for policy %s"
-msgstr ""
+msgstr "La inserción falló para IPv4 para la política %s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:232
 msgid "Insertion failed for both IPv4 and IPv6 for policy %s"
-msgstr ""
+msgstr "La inserción falló tanto para IPv4 como para IPv6 para la política %s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:178
 msgid "Installed AdGuardHome (%s) doesn't support 'ipset_file' option."
@@ -241,7 +245,7 @@ msgstr "Puertos locales"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:230
 msgid "Mismatched IP family between in policy %s"
-msgstr ""
+msgstr "Familia de IP no coincidente entre la política %s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:193
 msgid "Name"
@@ -283,18 +287,20 @@ msgstr "Verifique %sREADME%s antes de cambiar esta opción."
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:182
 msgid "Please unset 'chain' or set 'chain' to 'PREROUTING' for policy '%s'"
 msgstr ""
+"Desactive 'cadena' o configure 'cadena' en 'PREROUTING' para la política '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:183
 msgid "Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'"
 msgstr ""
+"Desactive 'cadena' o configure 'cadena' en 'prerouting' para la política '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:181
 msgid "Please unset 'proto' or set 'proto' to 'all' for policy '%s'"
-msgstr ""
+msgstr "Desactive 'proto' o configure 'proto' en 'all' para la política '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:180
 msgid "Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'"
-msgstr ""
+msgstr "Desactive 'src_addr', 'src_port' y 'dest_port' para la política '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:180
 msgid "Policies"
@@ -329,6 +335,10 @@ msgstr "Políticas de enrutamiento"
 msgid "Protocol"
 msgstr "Protocolo"
 
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:234
+msgid "Received empty tid/mark or interface name when setting up routing"
+msgstr ""
+
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:206
 msgid "Remote addresses / domains"
 msgstr "Direcciones/Dominios remotos"
@@ -338,8 +348,9 @@ msgid "Remote ports"
 msgstr "Puertos remotos"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:227
+#, fuzzy
 msgid "Resolver %s"
-msgstr ""
+msgstr "Resolutor %s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:210
 msgid "Resolver set (%s) is not supported on this system!"
@@ -363,11 +374,11 @@ msgstr ""
 "La compatibilidad con el conjunto de resolución (%s) requiere nftables, "
 "¡pero no se puede encontrar el binario nft!"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:275
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:277
 msgid "Restart"
 msgstr "Reiniciar"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:271
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:273
 msgid "Restarting %s service"
 msgstr "Reiniciando el servicio %s"
 
@@ -405,11 +416,11 @@ msgstr "Ver %sREADME%s para más detalles."
 msgid "Select Add for -A/add and Insert for -I/Insert."
 msgstr "Seleccione Agregar para -A/agregar e Insertar para -I/Insertar."
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:332
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:334
 msgid "Service Control"
 msgstr "Control de servicio"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:235
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:237
 msgid "Service Errors"
 msgstr "Errores de servicio"
 
@@ -441,12 +452,14 @@ msgstr ""
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:228
 msgid "Skipping IPv6 policy '%s' as IPv6 support is disabled"
 msgstr ""
+"Omitiendo la política de IPv6 '%s' ya que la compatibilidad con IPv6 está "
+"desactivada"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:264
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:266
 msgid "Start"
 msgstr "Iniciar"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:260
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:262
 msgid "Starting %s service"
 msgstr "Iniciando el servicio %s"
 
@@ -464,7 +477,7 @@ msgid "Starting (WAN) Table ID number for tables created by the service."
 msgstr ""
 "Número de ID de tabla de inicio (WAN) para tablas creadas por el servicio."
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:286
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:288
 msgid "Stop"
 msgstr "Detener"
 
@@ -476,7 +489,7 @@ msgstr "Detenido (desactivado)"
 msgid "Stopped (version: %s)"
 msgstr "Detenido (versión: %s)"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:282
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:284
 msgid "Stopping %s service"
 msgstr "Deteniendo el servicio %s"
 
@@ -529,7 +542,7 @@ msgstr "¡El servicio %s está actualmente desactivado!"
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:89
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:95
 msgid "The %s support is unknown."
-msgstr ""
+msgstr "Se desconoce el soporte de %s."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:213
 msgid "The ipset name '%s' is longer than allowed 31 characters!"
@@ -546,21 +559,21 @@ msgstr ""
 msgid "Unexpected exit or service termination: '%s'!"
 msgstr "Salida inesperada o terminación del servicio: '%s'!"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:244
+#: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:246
 msgid "Unknown Error!"
-msgstr ""
+msgstr "¡Error desconocido!"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:194
 msgid "Unknown Warning!"
-msgstr ""
+msgstr "¡Advertencia desconocida!"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:229
 msgid "Unknown packet mark for interface '%s'"
-msgstr ""
+msgstr "Marca de paquete desconocido para la interfaz '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:231
 msgid "Unknown protocol in policy %s"
-msgstr ""
+msgstr "Protocolo desconocido en la política %s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:225
 msgid ""
