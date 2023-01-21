@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2022-12-01 10:17+0000\n"
+"PO-Revision-Date: 2023-01-13 15:13+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1513
 msgid "%.1f dB"
@@ -701,7 +701,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:143
 msgid "Allowed IPs"
-msgstr "Dozwolone IP"
+msgstr "Dozwolone adresy IP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:708
 msgid "Always"
@@ -2438,7 +2438,7 @@ msgstr "Egzekwuj IGMPv1"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:685
 msgid "Enforce IGMPv2"
-msgstr "Ezekwuj IGMPv2"
+msgstr "Egzekwuj IGMPv2"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:686
 msgid "Enforce IGMPv3"
@@ -2485,7 +2485,7 @@ msgstr "Karta Ethernet"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3018
 #: modules/luci-compat/luasrc/model/network.lua:1423
 msgid "Ethernet Switch"
-msgstr "Switch Ethernet"
+msgstr "Przełącznik ethernetowy"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:272
 msgid "Every 30 seconds (slow, 0)"
@@ -3237,7 +3237,7 @@ msgstr "Tylko IPv4"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:52
 msgid "IPv4 prefix"
-msgstr "Prefix IPv4"
+msgstr "Prefiks IPv4"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:61
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:55
@@ -3251,7 +3251,7 @@ msgstr "IPv4+IPv6"
 #: modules/luci-compat/luasrc/model/network/proto_ipip.lua:9
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:10
 msgid "IPv4-in-IPv4 (RFC2003)"
-msgstr "IPv4-in-IPv4 (RFC2003)"
+msgstr "IPv4-w-IPv4 (RFC2003)"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:127
 msgid "IPv4/IPv6 (both - defaults to IPv4)"
@@ -3295,7 +3295,7 @@ msgstr "Ustawienia IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1463
 msgid "IPv6 ULA-Prefix"
-msgstr "IPv6 Prefiks-ULA"
+msgstr "Prefiks ULA IPv6"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:29
 msgid "IPv6 Upstream"
@@ -3413,8 +3413,8 @@ msgstr ""
 msgid ""
 "If specified, mount the device by its UUID instead of a fixed device node"
 msgstr ""
-"Jeśli podano, zainstaluj urządzenie poprzez jego UUID zamiast <abbr "
-"title=\"fixed device node\">ustalonego węzła urządzenia</abbr>"
+"Jeśli określono, zamontuj urządzenie według jego UUID zamiast ustalonego "
+"węzła urządzenia"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:267
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:376
@@ -3422,8 +3422,8 @@ msgid ""
 "If specified, mount the device by the partition label instead of a fixed "
 "device node"
 msgstr ""
-"Jeśli podano, zainstaluj urządzenie poprzez nazwę partycji zamiast <abbr "
-"title=\"fixed device node\">ustalonego węzła urządzenia</abbr>"
+"Jeśli określono, zamontuj urządzenie według etykiety partycji zamiast "
+"ustalonego węzła urządzenia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:929
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:64
@@ -3445,11 +3445,12 @@ msgid ""
 "very slow process as the swap-device cannot be accessed with the high "
 "datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
-"Jeśli ilość Twojej pamięci fizycznej jest niewystarczająca, nieużywane "
-"miejsce na dysku może być tymczasowo wykorzystane na plik wymiany. W "
-"rezultacie większa ilość pamięci <abbr title=\"Random Access Memory\">RAM</"
-"abbr> będzie dostępna. Uwaga - plik wymiany jest dużo wolniejszy niż pamięć "
-"<abbr title=\"Random Access Memory\">RAM</abbr>."
+"Jeśli pamięć fizyczna urządzenia jest niewystarczająca, nieużywaną "
+"przestrzeń można tymczasowo zamienić na urządzenie wymiany, co zwiększy "
+"ilość użytecznej pamięci <abbr title=\"Random Access Memory\">RAM</abbr>. "
+"Należy pamiętać, że wymiana danych jest bardzo powolnym procesem, ponieważ "
+"urządzenie wymiany nie jest w stanie uzyskać szybkości transmisji danych na "
+"poziomie pamięci <abbr title=\"Random Access Memory\">RAM</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:286
 msgid "Ignore <code>/etc/hosts</code>"
@@ -4772,7 +4773,7 @@ msgstr "Nie otrzymano danych"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:683
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:690
 msgid "No enforcement"
-msgstr "Nie egzekwuj"
+msgstr "Brak egzekwowania"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2899
 msgid "No entries in this directory"
@@ -5109,8 +5110,9 @@ msgid ""
 "Optional. Base64-encoded preshared key. Adds in an additional layer of "
 "symmetric-key cryptography for post-quantum resistance."
 msgstr ""
-"Opcjonalnie. Base64-zakodowany klucz współdzielony. Dodaje dodatkową warstwę "
-"symetrycznej kryptografii klucza dla uzyskania odporności po kwantowej."
+"Opcjonalne. Zakodowany w formacie Base64 klucz współdzielony. Dodaje "
+"dodatkową warstwę symetrycznej kryptografii klucza dla uzyskania odporności "
+"postkwantowej."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -5118,7 +5120,7 @@ msgstr "Opcjonalny. Tworzenie tras dozwolonych adresów IP dla tego peera."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:129
 msgid "Optional. Description of peer."
-msgstr "Opcjonalny. Opis peera."
+msgstr "Opcjonalne. Opis peera."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:87
 msgid "Optional. Do not create host routes to peers."
@@ -5161,7 +5163,7 @@ msgstr ""
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:78
 msgid "Optional. UDP port used for outgoing and incoming packets."
 msgstr ""
-"Opcjonalny. Port UDP używany dla pakietów wychodzących i przychodzących."
+"Opcjonalne. Port UDP używany dla pakietów wychodzących i przychodzących."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:72
 msgid "Options"
@@ -6151,7 +6153,7 @@ msgstr "Polityka Round-Robin (bilans-rr, 0)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:147
 msgid "Route Allowed IPs"
-msgstr "Trasuj dozwolone IPs"
+msgstr "Trasuj dozwolone adresy IP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:78
 msgid "Route table"
@@ -6195,8 +6197,7 @@ msgstr "Reguła"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:335
 msgid "Run a filesystem check before mounting the device"
-msgstr ""
-"Sprawdź czy system plików nie zawiera błędów przed zamontowaniem urządzenia"
+msgstr "Uruchom sprawdzanie systemu plików przed zamontowaniem urządzenia"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:335
 msgid "Run filesystem check"
@@ -6304,7 +6305,7 @@ msgstr "Usunięto sekcję"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:331
 msgid "See \"mount\" manpage for details"
-msgstr "Aby poznać szczegóły przeczytaj stronę instrukcji \"mount\""
+msgstr "Przeczytaj podręcznik \"mount\", aby uzyskać szczegółowe informacje"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:283
 msgid ""
@@ -6350,8 +6351,8 @@ msgid ""
 "Send LCP echo requests at the given interval in seconds, only effective in "
 "conjunction with failure threshold"
 msgstr ""
-"Wysyłaj żądania echa LCP w określonym przedziale czasowym, efektywne tylko "
-"wtedy gdy jest ustawiony próg błedu LCP"
+"Wysyłaj żądania echa LCP w określonych odstępach czasu w sekundach, "
+"skuteczne tylko w połączeniu z progiem błędu"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:24
 msgid "Send the hostname of this device"
@@ -6630,7 +6631,7 @@ msgstr "Określa logikę wyboru agregacji, która ma być używana"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:292
 msgid "Specifies the directory the device is attached to"
-msgstr "Podaje katalog do którego jest podłączone urządzenie"
+msgstr "Określa katalog, do którego podłączone jest urządzenie"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:792
 msgid ""
@@ -8149,9 +8150,9 @@ msgstr ""
 "Użyj przycisku <em>Dodaj</em>, aby dodać nowy wpis dzierżawy. <em>Adres MAC</"
 "em> identyfikuje hosta, <em>Adres IPv4</em> określa, którego stałego adresu "
 "użyć, natomiast <em>Nazwa hosta</em> jest przypisana jako symboliczna nazwa "
-"do określonego hosta. Opcjonalne <em>Czas trwania dzierżawy</em> może być "
-"użyty do ustawienia niestandardowego, specyficznego dla hosta czasu "
-"dzierżawy, np. 12h, 3d lub infinite (nieskończony)."
+"do określonego hosta. Opcjonalne <em>Czas dzierżawy</em> może być użyty do "
+"ustawienia niestandardowego, specyficznego dla hosta czasu dzierżawy, np. "
+"12h, 3d lub infinite (nieskończony)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:324
 msgid "Use upper layer protocol information (layer3+4)"
