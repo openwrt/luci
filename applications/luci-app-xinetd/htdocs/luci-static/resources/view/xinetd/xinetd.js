@@ -133,7 +133,7 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
-		o = s.taboption('basic', form.Value, 'redirect', _('Redirect'), _('Redirect incoming requests to this IP address:port.'));
+		o = s.taboption('basic', form.Value, 'redirect', _('Redirect'), _('Redirect incoming TCP requests to this IP address:port.'));
 		o.datatype = 'ipaddrport(1)';
 		o.modalonly = true;
 
