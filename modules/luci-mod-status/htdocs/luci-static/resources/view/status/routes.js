@@ -248,7 +248,7 @@ return view.extend({
 			E('h2', {}, [ _('Routing') ]),
 			E('p', {}, [ _('The following rules are currently active on this system.') ]),
 			E('div', {}, [
-				E('div', { 'data-tab': 'ipv4routing', 'data-tab-title': _('IPv4 Routing') }, [
+				E('div', { 'class': 'cbi-section', 'data-tab': 'ipv4routing', 'data-tab-title': _('IPv4 Routing') }, [
 					E('h3', {}, [ _('IPv4 Neighbours') ]),
 					neigh4tbl,
 
@@ -258,7 +258,7 @@ return view.extend({
 					E('h3', {}, [ _('Active IPv4 Rules') ]),
 					rule4tbl
 				]),
-				E('div', { 'data-tab': 'ipv6routing', 'data-tab-title': _('IPv6 Routing') }, [
+				E('div', { 'class': 'cbi-section', 'data-tab': 'ipv6routing', 'data-tab-title': _('IPv6 Routing') }, [
 					E('h3', {}, [ _('IPv6 Neighbours') ]),
 					neigh6tbl,
 
