@@ -163,7 +163,7 @@ return view.extend({
 				E('div', { 'id' : 'command-output'},
 					E('textarea', {
 						'id': 'widget.command-output',
-						'style': 'width: 100%',
+						'style': 'width: 100%; font-family:monospace; white-space:pre',
 						'readonly': true,
 						'wrap': 'off',
 						'rows': '20'
