@@ -89,6 +89,7 @@ const usQLNData  = new DataSet(window.json['qln']['upstream'], myQLNFunction);
 const dsQLNData  = new DataSet(window.json['qln']['downstream'], myQLNFunction);
 const usHLOGData = new DataSet(window.json['hlog']['upstream'], myHLOGFunction);
 const dsHLOGData = new DataSet(window.json['hlog']['downstream'], myHLOGFunction);
+const pilotTonesData = window.json['pilot_tones'] || [];
 
 const marginX = 50;
 const marginY = 80;
@@ -120,6 +121,12 @@ let bitsChart = {
 			"data" : dsBitsData.data,
 			"color": "navy",
 			"title": _("Downstream bits allocation")
+		},
+		{
+			"lines": true,
+			"data": pilotTonesData,
+			"color": "red",
+			"title": _("Pilot tones")
 		}
 	]
 };
@@ -221,12 +228,36 @@ function drawChart (info) {
 	drawLegend(info.config, info.dataSet);
 
 	for (let item of info.dataSet) {
-		drawData(info.config, item.data, item.color);
+		if (item.lines === true) {
+			drawLines(info.config, item.data, item.color);
+		} else {
+			drawData(info.config, item.data, item.color);
+		}
 	}
 }
 
 function drawBlocks(config, dataPoints, color, borders) {
 	borders.map(drawBlock, {config, dataPoints, color, borders});
+}
+
+function drawLines(config, dataPoints, color) {
+	let ctx = config.ctx;
+	let len = dataPoints.length;
+	let minX = config.minX;
+	let maxX = config.maxX;
+	let minY = config.minY;
+	let maxY = config.maxY;
+
+	ctx.strokeStyle = color;
+	ctx.beginPath();
+
+	for (let item of dataPoints) {
+		let relX = (item - minX) / (maxX - minX);
+		ctx.moveTo(relX * config.graphWidth + marginX, marginY);
+		ctx.lineTo(relX * config.graphWidth + marginX, marginY + config.graphHeight);
+	}
+
+	ctx.stroke();
 }
 
 function drawData(config, dataPoints, color) {
