@@ -220,8 +220,9 @@ function drawChart (info) {
 
 	drawLegend(info.config, info.dataSet);
 
-	drawData(info.config, info.dataSet[0].data, info.dataSet[0].color);
-	drawData(info.config, info.dataSet[1].data, info.dataSet[1].color);
+	for (let item of info.dataSet) {
+		drawData(info.config, item.data, item.color);
+	}
 }
 
 function drawBlocks(config, dataPoints, color, borders) {
@@ -263,35 +264,35 @@ function drawLegend(config, dataSet){
 	let graphHeight = config.graphHeight;
 
 	ctx.font = "12px Arial";
-	ctx.fillStyle = dataSet[0].color;
-	ctx.fillRect(0.5 * graphWidth + marginX - ctx.measureText(dataSet[0].title).width - 50, config.canvas.height - marginY*1/4 - 8, 30, 10);
-	ctx.strokeStyle = "#C0C0C0";
-	ctx.strokeRect(0.5 * graphWidth + marginX - ctx.measureText(dataSet[0].title).width - 50, config.canvas.height - marginY*1/4 - 8, 30, 10);
 
-	if (darkMode == "true") {
-		ctx.strokeStyle = "#505050";
-		ctx.fillStyle = "#A0A0A0";
-	} else {
-		ctx.strokeStyle = "#303030";
-		ctx.fillStyle = "#303030";
+	let legendWidth = -10;
+	for (let item of dataSet) {
+		legendWidth += 50 + ctx.measureText(item.title).width;
 	}
 
-	ctx.textAlign = "right"
-	ctx.fillText(dataSet[0].title, 0.5 * graphWidth + marginX - 10, config.canvas.height - marginY*1/4);
+	var x = 0.5 * (graphWidth - legendWidth) + marginX;
+	var y = config.canvas.height - marginY*1/4;
 
-	ctx.fillStyle = dataSet[1].color;
-	ctx.fillRect(0.5 * graphWidth + marginX, config.canvas.height - marginY*1/4 - 8, 30, 10);
-	ctx.strokeStyle = "#C0C0C0";
-	ctx.strokeRect(0.5 * graphWidth + marginX, config.canvas.height - marginY*1/4 - 8, 30, 10);
+	for (let item of dataSet) {
+		ctx.fillStyle = item.color;
+		ctx.fillRect(x, y - 8, 30, 10);
+		ctx.strokeStyle = "#C0C0C0";
+		ctx.strokeRect(x, y - 8, 30, 10);
 
-	if (darkMode == "true") {
-		ctx.fillStyle = "#A0A0A0";
-	} else {
-		ctx.fillStyle = "#303030";
+		if (darkMode == "true") {
+			ctx.fillStyle = "#A0A0A0";
+		} else {
+			ctx.fillStyle = "#303030";
+		}
+
+		x += 40;
+
+		ctx.textAlign = "left"
+		ctx.fillText(item.title, x, y);
+
+		x += ctx.measureText(item.title).width;
+		x += 10;
 	}
-
-	ctx.textAlign = "left"
-	ctx.fillText(dataSet[1].title, 0.5 * graphWidth + marginX + 40, config.canvas.height - marginY*1/4);
 }
 
 function drawAxisX(config, minValue, maxValue, step, title) {
