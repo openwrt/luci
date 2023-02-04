@@ -3213,10 +3213,13 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 			var m;
 
-			if (parent instanceof CBIJSONMap)
-				m = new CBIJSONMap(parent.data.data, null, null);
-			else
+			if (parent instanceof CBIJSONMap) {
+				m = new CBIJSONMap(null, null, null);
+				m.data = parent.data;
+			}
+			else {
 				m = new CBIMap(parent.config, null, null);
+			}
 
 			var s = m.section(CBINamedSection, section_id, this.sectiontype);
 
