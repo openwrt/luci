@@ -9,8 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TYPE:=col
 LUCI_BASENAME:=ssl
 
-LUCI_TITLE:=LuCI with HTTPS support (WolfSSL as SSL backend)
-LUCI_DEPENDS:=+luci-light +libustream-wolfssl +px5g-wolfssl
+LUCI_TITLE:=LuCI with HTTPS support (mbedtls as SSL backend)
+LUCI_DEPENDS:=+luci-light +libustream-mbedtls +px5g-mbedtls
 
 PKG_LICENSE:=Apache-2.0
 
