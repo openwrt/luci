@@ -1347,6 +1347,9 @@ return view.extend({
 				for (var i = 0; i < map.addedVLANs.length; i++)
 					uci.remove('network', map.addedVLANs[i]);
 
+			if (this.addedSection)
+				uci.remove('network', this.addedSection);
+
 			return form.GridSection.prototype.handleModalCancel.apply(this, arguments);
 		};
 
