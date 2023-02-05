@@ -3486,8 +3486,17 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	__init__: function() {
 		modalDiv = document.body.appendChild(
-			dom.create('div', { id: 'modal_overlay' },
-				dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
+			dom.create('div', {
+				id: 'modal_overlay',
+				tabindex: -1,
+				keydown: this.cancelModal
+			}, [
+				dom.create('div', {
+					class: 'modal',
+					role: 'dialog',
+					'aria-modal': true
+				})
+			]));
 
 		tooltipDiv = document.body.appendChild(
 			dom.create('div', { class: 'cbi-tooltip' }));
@@ -3551,6 +3560,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 		document.body.classList.add('modal-overlay-active');
 		modalDiv.scrollTop = 0;
+		modalDiv.focus();
 
 		return dlg;
 	},
@@ -3567,6 +3577,17 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 */
 	hideModal: function() {
 		document.body.classList.remove('modal-overlay-active');
+		modalDiv.blur();
+	},
+
+	/** @private */
+	cancelModal: function(ev) {
+		if (ev.key == 'Escape') {
+			var btn = modalDiv.querySelector('.right > button, .right > .btn');
+
+			if (btn)
+				btn.click();
+		}
 	},
 
 	/** @private */
