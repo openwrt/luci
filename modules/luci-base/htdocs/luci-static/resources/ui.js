@@ -1050,7 +1050,8 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			'class': 'cbi-dropdown',
 			'multiple': this.options.multiple ? '' : null,
 			'optional': this.options.optional ? '' : null,
-			'disabled': this.options.disabled ? '' : null
+			'disabled': this.options.disabled ? '' : null,
+			'tabindex': -1
 		}, E('ul'));
 
 		var keys = Object.keys(this.choices);
@@ -1186,11 +1187,11 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		}
 		else {
 			sb.addEventListener('mouseover', this.handleMouseover.bind(this));
+			sb.addEventListener('mouseout', this.handleMouseout.bind(this));
 			sb.addEventListener('focus', this.handleFocus.bind(this));
 
 			canary.addEventListener('focus', this.handleCanaryFocus.bind(this));
 
-			window.addEventListener('mouseover', this.setFocus);
 			window.addEventListener('click', this.closeAllDropdowns);
 		}
 
@@ -1343,7 +1344,12 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 		sb.lastElementChild.setAttribute('tabindex', 0);
 
-		this.setFocus(sb, sel || li[0], true);
+		var focusFn = L.bind(function(el) {
+			this.setFocus(sb, el, true);
+			ul.removeEventListener('transitionend', focusFn);
+		}, this, sel || li[0]);
+
+		ul.addEventListener('transitionend', focusFn);
 	},
 
 	/** @private */
@@ -1559,26 +1565,33 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 	/** @private */
 	setFocus: function(sb, elem, scroll) {
-		if (sb && sb.hasAttribute && sb.hasAttribute('locked-in'))
+		if (sb.hasAttribute('locked-in'))
 			return;
 
-		if (sb.target && findParent(sb.target, 'ul.dropdown'))
-			return;
-
-		document.querySelectorAll('.focus').forEach(function(e) {
-			if (!matchesElem(e, 'input')) {
-				e.classList.remove('focus');
-				e.blur();
-			}
+		sb.querySelectorAll('.focus').forEach(function(e) {
+			e.classList.remove('focus');
 		});
 
-		if (elem) {
-			elem.focus();
-			elem.classList.add('focus');
+		elem.classList.add('focus');
 
-			if (scroll)
-				elem.parentNode.scrollTop = elem.offsetTop - elem.parentNode.offsetTop;
-		}
+		if (scroll)
+			elem.parentNode.scrollTop = elem.offsetTop - elem.parentNode.offsetTop;
+
+		elem.focus();
+	},
+
+	/** @private */
+	handleMouseout: function(ev) {
+		var sb = ev.currentTarget;
+
+		if (!sb.hasAttribute('open'))
+			return;
+
+		sb.querySelectorAll('.focus').forEach(function(e) {
+			e.classList.remove('focus');
+		});
+
+		sb.querySelector('ul.dropdown').focus();
 	},
 
 	/** @private */
@@ -1758,7 +1771,8 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 	/** @private */
 	handleKeydown: function(ev) {
-		var sb = ev.currentTarget;
+		var sb = ev.currentTarget,
+		    ul = sb.querySelector('ul.dropdown');
 
 		if (matchesElem(ev.target, 'input'))
 			return;
@@ -1779,6 +1793,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			switch (ev.keyCode) {
 			case 27:
 				this.closeDropdown(sb);
+				ev.stopPropagation();
 				break;
 
 			case 13:
@@ -1802,11 +1817,19 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 					this.setFocus(sb, active.previousElementSibling);
 					ev.preventDefault();
 				}
+				else if (document.activeElement === ul) {
+					this.setFocus(sb, ul.lastElementChild);
+					ev.preventDefault();
+				}
 				break;
 
 			case 40:
 				if (active && active.nextElementSibling) {
 					this.setFocus(sb, active.nextElementSibling);
+					ev.preventDefault();
+				}
+				else if (document.activeElement === ul) {
+					this.setFocus(sb, ul.firstElementChild);
 					ev.preventDefault();
 				}
 				break;
