@@ -788,13 +788,13 @@ rpc_luci_parse_network_device_sys(const char *name, struct ifaddrs *ifaddr)
 	blobmsg_close_table(&blob, o2);
 
 	o2 = blobmsg_open_table(&blob, "flags");
-	blobmsg_add_u8(&blob, "up", ifa_flags & IFF_UP);
-	blobmsg_add_u8(&blob, "broadcast", ifa_flags & IFF_BROADCAST);
-	blobmsg_add_u8(&blob, "promisc", ifa_flags & IFF_PROMISC);
-	blobmsg_add_u8(&blob, "loopback", ifa_flags & IFF_LOOPBACK);
-	blobmsg_add_u8(&blob, "noarp", ifa_flags & IFF_NOARP);
-	blobmsg_add_u8(&blob, "multicast", ifa_flags & IFF_MULTICAST);
-	blobmsg_add_u8(&blob, "pointtopoint", ifa_flags & IFF_POINTOPOINT);
+	blobmsg_add_u8(&blob, "up", !!(ifa_flags & IFF_UP));
+	blobmsg_add_u8(&blob, "broadcast", !!(ifa_flags & IFF_BROADCAST));
+	blobmsg_add_u8(&blob, "promisc", !!(ifa_flags & IFF_PROMISC));
+	blobmsg_add_u8(&blob, "loopback", !!(ifa_flags & IFF_LOOPBACK));
+	blobmsg_add_u8(&blob, "noarp", !!(ifa_flags & IFF_NOARP));
+	blobmsg_add_u8(&blob, "multicast", !!(ifa_flags & IFF_MULTICAST));
+	blobmsg_add_u8(&blob, "pointtopoint", !!(ifa_flags & IFF_POINTOPOINT));
 	blobmsg_close_table(&blob, o2);
 
 	o2 = blobmsg_open_table(&blob, "link");
