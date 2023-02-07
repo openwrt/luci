@@ -820,7 +820,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 						'type': this.options.multiple ? 'checkbox' : 'radio',
 						'class': this.options.multiple ? 'cbi-input-checkbox' : 'cbi-input-radio',
 						'value': keys[i],
-						'checked': (this.values.indexOf(keys[i]) > -1) ? '' : null,
+						'checked': ((!i && !this.values.length) || this.values.indexOf(keys[i]) > -1) ? '' : null,
 						'disabled': this.options.disabled ? '' : null
 					}),
 					E('label', { 'for': this.options.id ? 'widget.%s.%d'.format(this.options.id, i) : null }),
@@ -832,6 +832,9 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 				]));
 
 				frameEl.appendChild(brEl.cloneNode());
+
+				if (!frameEl.querySelector('> span > input[checked]')
+					frameEl.querySelector('> span > input').checked = true;
 			}
 		}
 
