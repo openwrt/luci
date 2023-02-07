@@ -1,4 +1,5 @@
 'use strict';
+'require fs';
 'require ui';
 'require dom';
 'require uci';
@@ -149,25 +150,77 @@ function updatePlaceholders(opt, section_id) {
 	}
 }
 
+var cbiFlagTristate = form.ListValue.extend({
+	__init__: function(/* ... */) {
+		this.super('__init__', arguments);
+		this.keylist = [ '', '0!', '1!' ];
+		this.vallist = [ _('automatic'), _('disabled'), _('enabled') ];
+	},
+
+	load: function(section_id) {
+		var invert = false, sysfs = this.sysfs;
+
+		if (sysfs) {
+			if (sysfs.charAt(0) == '!') {
+				invert = true;
+				sysfs = sysfs.substring(1);
+			}
+
+			return L.resolveDefault(fs.read(sysfs), '').then(L.bind(function(res) {
+				res = (res || '').trim();
+
+				if (res == '0')
+					this.sysfs_default = invert;
+				else if (res == '1')
+					this.sysfs_default = !invert;
+
+				return this.super('load', [section_id]);
+			}, this));
+		}
+
+		return this.super('load', [section_id]);
+	},
+
+	write: function(section_id, formvalue) {
+		if (formvalue == '1!')
+			return this.super('write', [section_id, '1']);
+		else if (formvalue == '0!')
+			return this.super('write', [section_id, '0']);
+		else
+			return this.super('remove', [section_id]);
+	},
+
+	renderWidget: function(section_id, option_index, cfgvalue) {
+		var sysdef = this.sysfs_default;
+
+		if (this.sysfs_default !== null) {
+			this.keylist[0] = sysdef ? '1' : '0';
+			this.vallist[0] = sysdef ? _('automatic (enabled)') : _('automatic (disabled)');
+		}
+
+		return this.super('renderWidget', [section_id, option_index, cfgvalue]);
+	}
+});
+
 
 var cbiTagValue = form.Value.extend({
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var widget = new ui.Dropdown(cfgvalue || ['-'], {
 			'-': E([], [
 				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ '—' ]),
-				E('span', { 'class': 'hide-close' }, [ _('Do not participate', 'VLAN port state') ])
+				E('span', { 'class': 'hide-close' }, [ _('Not Member', 'VLAN port state') ])
 			]),
 			'u': E([], [
-				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ 'u' ]),
-				E('span', { 'class': 'hide-close' }, [ _('Egress untagged', 'VLAN port state') ])
+				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ 'U' ]),
+				E('span', { 'class': 'hide-close' }, [ _('Untagged', 'VLAN port state') ])
 			]),
 			't': E([], [
-				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ 't' ]),
-				E('span', { 'class': 'hide-close' }, [ _('Egress tagged', 'VLAN port state') ])
+				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ 'T' ]),
+				E('span', { 'class': 'hide-close' }, [ _('Tagged', 'VLAN port state') ])
 			]),
 			'*': E([], [
 				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ '*' ]),
-				E('span', { 'class': 'hide-close' }, [ _('Primary VLAN ID', 'VLAN port state') ])
+				E('span', { 'class': 'hide-close' }, [ _('Is Primary VLAN', 'VLAN port state') ])
 			])
 		}, {
 			id: this.cbid(section_id),
@@ -331,6 +384,7 @@ return baseclass.extend({
 
 	addDeviceOptions: function(s, dev, isNew) {
 		var parent_dev = dev ? dev.getParent() : null,
+		    devname = dev ? dev.getName() : null,
 		    o, ss;
 
 		s.tab('devgeneral', _('General device options'));
@@ -619,8 +673,8 @@ return baseclass.extend({
 		o.placeholder = dev ? dev._devstate('qlen') : '';
 		o.datatype = 'uinteger';
 
-		o = this.replaceOption(s, 'devadvanced', form.Flag, 'promisc', _('Enable promiscuous mode'));
-		o.default = o.disabled;
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'promisc', _('Enable promiscuous mode'));
+		o.sysfs_default = (dev && dev.dev && dev.dev.flags) ? dev.dev.flags.promisc : null;
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'rpfilter', _('Reverse path filter'));
 		o.default = '';
@@ -644,11 +698,17 @@ return baseclass.extend({
 			}
 		};
 
-		o = this.replaceOption(s, 'devadvanced', form.Flag, 'acceptlocal', _('Accept local'), _('Accept packets with local source addresses'));
-		o.default = o.disabled;
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'acceptlocal', _('Accept local'), _('Accept packets with local source addresses'));
+		o.sysfs = '/proc/sys/net/ipv4/conf/%s/accept_local'.format(devname || 'default');
 
-		o = this.replaceOption(s, 'devadvanced', form.Flag, 'sendredirects', _('Send ICMP redirects'));
-		o.default = o.enabled;
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'sendredirects', _('Send ICMP redirects'));
+		o.sysfs = '/proc/sys/net/ipv4/conf/%s/send_redirects'.format(devname || 'default');
+
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'arp_accept ', _('Honor gratuitous ARP'), _('When enabled, new ARP table entries are added from received gratuitous APR requests or replies, otherwise only preexisting table entries are updated, but no new hosts are learned.'));
+		o.sysfs = '/proc/sys/net/ipv4/conf/%s/arp_accept'.format(devname || 'default');
+
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'drop_gratuitous_arp', _('Drop gratuitous ARP'), _('Drop all gratuitous ARP frames, for example if there’s a known good ARP proxy on the network and such frames need not be used or in the case of 802.11, must not be used to prevent attacks.'));
+		o.sysfs = '/proc/sys/net/ipv4/conf/%s/drop_gratuitous_arp'.format(devname || 'default');
 
 		o = this.replaceOption(s, 'devadvanced', form.Value, 'neighreachabletime', _('Neighbour cache validity'), _('Time in milliseconds'));
 		o.placeholder = '30000';
@@ -662,59 +722,75 @@ return baseclass.extend({
 		o.placeholder = '0';
 		o.datatype = 'uinteger';
 
-		o = this.replaceOption(s, 'devgeneral', form.Flag, 'ipv6', _('Enable IPv6'));
+		o = this.replaceOption(s, 'devgeneral', cbiFlagTristate, 'ipv6', _('Enable IPv6'));
+		o.sysfs = '!/proc/sys/net/ipv6/conf/%s/disable_ipv6'.format(devname || 'default');
 		o.migrate = false;
-		o.default = o.enabled;
+
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'ip6segmentrouting', _('Enable IPv6 segment routing'));
+		o.sysfs = '/proc/sys/net/ipv6/conf/%s/seg6_enabled'.format(devname || 'default');
+		o.depends('ipv6', /1/);
+
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'drop_unsolicited_na', _('Drop unsolicited NA'), _('Drop all unsolicited neighbor advertisements, for example if there’s a known good NA proxy on the network and such frames need not be used or in the case of 802.11, must not be used to prevent attacks.'));
+		o.sysfs = '/proc/sys/net/ipv6/conf/%s/drop_unsolicited_na'.format(devname || 'default');
+		o.depends('ipv6', /1/);
 
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'mtu6', _('IPv6 MTU'));
 		o.datatype = 'max(9200)';
-		o.depends('ipv6', '1');
+		o.depends('ipv6', /1/);
 
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'dadtransmits', _('DAD transmits'), _('Amount of Duplicate Address Detection probes to send'));
 		o.placeholder = '1';
 		o.datatype = 'uinteger';
-		o.depends('ipv6', '1');
+		o.depends('ipv6', /1/);
 
 
-		o = this.replaceOption(s, 'devadvanced', form.Flag, 'multicast', _('Enable multicast support'));
-		o.default = o.enabled;
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'multicast', _('Enable multicast support'));
+		o.sysfs_default = (dev && dev.dev && dev.dev.flags) ? dev.dev.flags.multicast : null;
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'igmpversion', _('Force IGMP version'));
 		o.value('', _('No enforcement'));
 		o.value('1', _('Enforce IGMPv1'));
 		o.value('2', _('Enforce IGMPv2'));
 		o.value('3', _('Enforce IGMPv3'));
-		o.depends('multicast', '1');
+		o.depends('multicast', /1/);
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'mldversion', _('Force MLD version'));
 		o.value('', _('No enforcement'));
 		o.value('1', _('Enforce MLD version 1'));
 		o.value('2', _('Enforce MLD version 2'));
-		o.depends('multicast', '1');
+		o.depends('multicast', /1/);
 
 		if (isBridgePort(dev)) {
-			o = this.replaceOption(s, 'brport', form.Flag, 'learning', _('Enable MAC address learning'));
-			o.default = o.enabled;
+			o = this.replaceOption(s, 'brport', cbiFlagTristate, 'learning', _('Enable MAC address learning'));
+			o.sysfs = '/sys/class/net/%s/brport/learning'.format(devname || 'default');
 
-			o = this.replaceOption(s, 'brport', form.Flag, 'unicast_flood', _('Enable unicast flooding'));
-			o.default = o.enabled;
+			o = this.replaceOption(s, 'brport', cbiFlagTristate, 'unicast_flood', _('Enable unicast flooding'));
+			o.sysfs = '/sys/class/net/%s/brport/unicast_flood'.format(devname || 'default');
 
-			o = this.replaceOption(s, 'brport', form.Flag, 'isolate', _('Port isolation'), _('Only allow communication with non-isolated bridge ports when enabled'));
-			o.default = o.disabled;
+			o = this.replaceOption(s, 'brport', cbiFlagTristate, 'isolate', _('Port isolation'), _('Only allow communication with non-isolated bridge ports when enabled'));
+			o.sysfs = '/sys/class/net/%s/brport/isolated'.format(devname || 'default');
 
 			o = this.replaceOption(s, 'brport', form.ListValue, 'multicast_router', _('Multicast routing'));
 			o.value('', _('Never'));
 			o.value('1', _('Learn'));
 			o.value('2', _('Always'));
-			o.depends('multicast', '1');
+			o.depends('multicast', /1/);
 
-			o = this.replaceOption(s, 'brport', form.Flag, 'multicast_to_unicast', _('Multicast to unicast'), _('Forward multicast packets as unicast packets on this device.'));
-			o.default = o.disabled;
-			o.depends('multicast', '1');
+			o = this.replaceOption(s, 'brport', cbiFlagTristate, 'multicast_to_unicast', _('Multicast to unicast'), _('Forward multicast packets as unicast packets on this device.'));
+			o.sysfs = '/sys/class/net/%s/brport/multicast_to_unicast'.format(devname || 'default');
+			o.depends('multicast', /1/);
 
-			o = this.replaceOption(s, 'brport', form.Flag, 'multicast_fast_leave', _('Enable multicast fast leave'));
-			o.default = o.disabled;
-			o.depends('multicast', '1');
+			o = this.replaceOption(s, 'brport', cbiFlagTristate, 'multicast_fast_leave', _('Enable multicast fast leave'));
+			o.sysfs = '/sys/class/net/%s/brport/multicast_fast_leave'.format(devname || 'default');
+			o.depends('multicast', /1/);
+
+			o = this.replaceOption(s, 'brport', cbiFlagTristate, 'drop_v4_unicast_in_l2_multicast', _('Drop nested IPv4 unicast'), _('Drop layer 2 multicast frames containing IPv4 unicast packets.'));
+			o.sysfs = '/proc/sys/net/ipv4/conf/%s/drop_unicast_in_l2_multicast'.format(devname || 'default');
+			o.depends('multicast', /1/);
+
+			o = this.replaceOption(s, 'brport', cbiFlagTristate, 'drop_v6_unicast_in_l2_multicast', _('Drop nested IPv6 unicast'), _('Drop layer 2 multicast frames containing IPv6 unicast packets.'));
+			o.sysfs = '/proc/sys/net/ipv6/conf/%s/drop_unicast_in_l2_multicast'.format(devname || 'default');
+			o.depends('multicast', /1/);
 		}
 
 		o = this.replaceOption(s, 'bridgevlan', form.Flag, 'vlan_filtering', _('Enable VLAN filtering'));
