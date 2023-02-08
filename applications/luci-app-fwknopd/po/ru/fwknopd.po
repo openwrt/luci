@@ -2,17 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: fwknopd\n"
 "POT-Creation-Date: 2017-12-01 12:15+0300\n"
-"PO-Revision-Date: 2022-07-25 17:15+0000\n"
-"Last-Translator: Alexey Carterline <consulive@live.com>\n"
+"PO-Revision-Date: 2023-02-07 07:40+0000\n"
+"Last-Translator: st7105 <st7105@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.16-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -55,6 +55,9 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
+"Определите набор портов и протоколов (tcp или udp), которые явно не "
+"разрешены независимо от действительности входящего пакета SPA. Несколько "
+"записей разделяются запятыми."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
 msgid ""
@@ -74,12 +77,16 @@ msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
+"Определите ключ аутентификации HMAC (в кодировке Base64), используемый для "
+"проверки подлинности пакета SPA перед расшифровкой пакета."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:554
 msgid ""
 "Define the HMAC authentication key used for verifying the authenticity of "
 "the SPA packet before the packet is decrypted."
 msgstr ""
+"Определите ключ аутентификации HMAC, используемый для проверки подлинности "
+"пакета SPA перед расшифровкой пакета."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:585
 msgid ""
@@ -99,6 +106,9 @@ msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Определите симметричный ключ (в кодировке Base64), используемый для "
+"расшифровки входящего SPA-пакета, зашифрованного клиентом fwknop с помощью "
+"Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:532
 msgid ""
@@ -124,7 +134,7 @@ msgstr "Демон Firewall Knock"
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid "Firewall Knock Operator Daemon"
-msgstr ""
+msgstr "Демон оператора брандмауэра Knock"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:590
 msgid ""
@@ -156,6 +166,10 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
+"Генерирует симметричный ключ, используемый для расшифровки входящего SPA-"
+"пакета, который зашифрован клиентом fwknop с помощью блочного шифра "
+"Rijndael, и ключ аутентификации HMAC, используемый для проверки подлинности "
+"входящего SPA-пакета перед его расшифровкой."
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
@@ -191,7 +205,7 @@ msgstr "Конфигурация сети"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:315
 msgid "No stanza found."
-msgstr ""
+msgstr "Строфа не найдена."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:440
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:457
@@ -206,6 +220,9 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
+"Анализирует файл /etc/fwknop/access.conf (и включенные файлы/папки/ключи) и "
+"генерирует QR-коды для всех найденных разделов. Обрабатывает только файлы в "
+"папке /etc/fwknop из-за ограничений прав доступа."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:422
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:506
@@ -214,7 +231,7 @@ msgstr "QR-код"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:489
 msgid "Show access.conf QR codes"
-msgstr ""
+msgstr "Показать QR-коды access.conf"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:601
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
@@ -225,7 +242,7 @@ msgstr "Укажите ethernet интерфейс, пакеты которог�
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:559
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:568
 msgid "The HMAC authentication key has to be specified."
-msgstr ""
+msgstr "Необходимо указать ключ аутентификации HMAC."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:517
 msgid ""
@@ -235,6 +252,11 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Адрес назначения, для которого будет принят SPA-пакет. Строка \"ANY\" также "
+"принимается, если действительный SPA-пакет должен быть принят на любой IP-"
+"адрес назначения. Сети должны быть указаны в нотации CIDR (например, \"192."
+"168.10.0/24\"), также могут быть указаны отдельные IP-адреса. Несколько "
+"записей разделяются запятыми."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
 msgid ""
@@ -242,6 +264,8 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
+"Сеть, которую прослушивает демон. Демон автоматически запускается при "
+"включении сети. Эта опция имеет приоритет над опцией \"PCAP_INTF\"."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:508
 msgid ""
@@ -251,17 +275,22 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Адрес источника, с которого будет принят SPA-пакет. Строка \"ANY\" также "
+"принимается, если действительный SPA-пакет должен быть принят с любого IP-"
+"адреса источника. Сети должны быть указаны в нотации CIDR (например, \"192."
+"168.10.0/24\"), также могут быть указаны отдельные IP-адреса. Несколько "
+"записей разделяются запятыми."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:514
 msgid "The source address has to be specified."
-msgstr ""
+msgstr "Необходимо указать адрес источника."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:430
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:537
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:546
 msgid "The symmetric key has to be specified."
-msgstr ""
+msgstr "Необходимо указать симметричный ключ."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
 msgid ""
@@ -270,6 +299,10 @@ msgid ""
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
+"Это указывает fwknopd принимать полные команды, содержащиеся в пакете "
+"авторизации. Любая такая команда будет выполнена на сервере fwknopd "
+"пользователем, указанным в параметре \"CMD_EXEC_USER\", или пользователем, "
+"который запустил fwknopd, если этот параметр не задан."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
 msgid ""
