@@ -1,13 +1,30 @@
 {
 	"admin/status/dsl": {
-		"title": "DSL line spectrum",
+		"title": "DSL Status",
 		"order": 7,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-mod-dsl" ]
+		}
+	},
+
+	"admin/status/dsl/stats": {
+		"title": "Stats",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "status/dsl/stats"
+		}
+	},
+
+	"admin/status/dsl/spectrum": {
+		"title": "Spectrum",
+		"order": 2,
 		"action": {
 			"type": "view",
 			"path": "status/dsl/spectrum"
-		},
-		"depends": {
-			"acl": [ "luci-mod-dsl-spectrum" ]
 		}
 	}
 }
