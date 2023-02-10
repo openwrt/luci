@@ -294,8 +294,7 @@ return view.extend({
 		o.multiple = true;
 		o.custom = true;
 		o.cast = 'table';
-		o.placeholder = _('any');
-		o.value('', 'any');
+		o.placeholder = _('any/all');
 		o.value('address-mask-reply');
 		o.value('address-mask-request');
 		o.value('address-unreachable'); /* ipv6 */
