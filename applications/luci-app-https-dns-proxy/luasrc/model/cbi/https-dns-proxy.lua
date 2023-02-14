@@ -120,7 +120,7 @@ if packageStatusCode ~= -1 then
 end
 
 c = m:section(NamedSection, "config", "https-dns-proxy", translate("Configuration"))
-d1 = c:option(ListValue, "update_dnsmasq_config", translate("Update DNSMASQ Config on Start/Stop"), translatef("If update option is selected, the 'DNS forwardings' section of %sDHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s).", "<a href=\"" .. dispatcher.build_url("admin/network/dhcp") .. "\">", "</a>", "<a href=\"" .. readmeURL .. "#default-settings" .. "\" target=\"_blank\">", "</a>"))
+d1 = c:option(ListValue, "dnsmasq_config_update", translate("Update DNSMASQ Config on Start/Stop"), translatef("If update option is selected, the 'DNS forwardings' section of %sDHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s).", "<a href=\"" .. dispatcher.build_url("admin/network/dhcp") .. "\">", "</a>", "<a href=\"" .. readmeURL .. "#default-settings" .. "\" target=\"_blank\">", "</a>"))
 d1:value('*', translate("Update all configs"))
 local dnsmasq_num = 0
 uci:foreach("dhcp", "dnsmasq", function(s)
