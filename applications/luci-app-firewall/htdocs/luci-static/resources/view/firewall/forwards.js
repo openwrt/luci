@@ -240,6 +240,14 @@ return view.extend({
 		o.nocreate = true;
 		o.default = 'wan';
 
+		o = s.taboption('advanced', form.Value, 'ipset', _('Use ipset'));
+		uci.sections('firewall', 'ipset', function(s) {
+			if (typeof(s.name) == 'string')
+				this.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
+		});
+		o.modalonly = true;
+		o.rmempty = true;
+
 		o = fwtool.addMACOption(s, 'advanced', 'src_mac', _('Source MAC address'),
 			_('Only match incoming traffic from these MACs.'), hosts);
 		o.rmempty = true;
