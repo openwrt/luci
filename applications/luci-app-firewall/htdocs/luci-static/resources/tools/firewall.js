@@ -477,6 +477,7 @@ return baseclass.extend({
 
 	addLocalIPOption: function(s, tab, name, label, description, devices) {
 		var o = s.taboption(tab, form.Value, name, label, description);
+		var have_fw4 = L.hasSystemFeature('firewall4');
 
 		o.modalonly = true;
 		o.datatype = 'ip4addr("nomask")';
@@ -484,8 +485,9 @@ return baseclass.extend({
 
 		L.sortedKeys(devices, 'name').forEach(function(dev) {
 			var ip4addrs = devices[dev].ipaddrs;
+			var ip6addrs = devices[dev].ip6addrs;
 
-			if (!L.isObject(devices[dev].flags) || !Array.isArray(ip4addrs) || devices[dev].flags.loopback)
+			if (!L.isObject(devices[dev].flags) || (!Array.isArray(ip4addrs) && !Array.isArray(ip6addrs)) || devices[dev].flags.loopback)
 				return;
 
 			for (var i = 0; i < ip4addrs.length; i++) {
@@ -496,6 +498,15 @@ return baseclass.extend({
 					ip4addrs[i].address, ' (', E('strong', {}, [dev]), ')'
 				]));
 			}
+			if (have_fw4)
+				for (var i = 0; i < ip6addrs.length; i++) {
+					if (!L.isObject(ip6addrs[i]) || !ip6addrs[i].address)
+						continue;
+
+					o.value(ip6addrs[i].address, E([], [
+						ip6addrs[i].address, ' (', E('strong', {}, [dev]), ')'
+					]));
+				}
 		});
 
 		return o;

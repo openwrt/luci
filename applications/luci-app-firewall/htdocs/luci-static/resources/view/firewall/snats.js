@@ -9,6 +9,8 @@
 'require tools.widgets as widgets';
 
 function rule_proto_txt(s) {
+	var f = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:any|\*)$/, '');
+
 	var proto = L.toArray(uci.get('firewall', s, 'proto')).filter(function(p) {
 		return (p != '*' && p != 'any' && p != 'all');
 	}).map(function(p) {
@@ -20,16 +22,18 @@ function rule_proto_txt(s) {
 	});
 
 	m = String(uci.get('firewall', s, 'mark')).match(/^(!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
-	var f = m ? {
+	var w = m ? {
 		val:  m[0].toUpperCase().replace(/X/g, 'x'),
 		inv:  m[1],
 		num:  '0x%02X'.format(+m[2]),
 		mask: m[3] ? '0x%02X'.format(+m[3]) : null
 	} : null;
 
-	return fwtool.fmt(_('Forwarded IPv4%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}'), {
+	return fwtool.fmt(_('Forwarded %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}'), {
+		ipv4: (!f || f == 'ipv4'),
+		ipv6: (!f || f == 'ipv6'),
 		proto: proto,
-		mark:  f
+		mark:  w
 	});
 }
 
@@ -122,7 +126,10 @@ return view.extend({
 	renderNats: function(data) {
 		var hosts = data[0],
 		    devs = data[1],
+		    have_fw4,
 		    m, s, o;
+
+		have_fw4 = L.hasSystemFeature('firewall4');
 
 		m = new form.Map('firewall', _('Firewall - NAT Rules'),
 			_('NAT rules allow fine grained control over the source IP to use for outbound or forwarded traffic.'));
@@ -178,9 +185,9 @@ return view.extend({
 		o.default = 'lan';
 
 		o = fwtool.addIPOption(s, 'general', 'src_ip', _('Source address'),
-			_('Match forwarded traffic from this IP or range.'), 'ipv4', hosts);
+			_('Match forwarded traffic from this IP or range.'), !have_fw4?'ipv4':'', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4("true"))';
+		o.datatype = !have_fw4?'ip4addr("nomask")':'ipaddr("nomask")';
 
 		o = s.taboption('general', form.Value, 'src_port', _('Source port'),
 			_('Match forwarded traffic originating from the given source port or port range.'));
@@ -192,9 +199,9 @@ return view.extend({
 		o.depends({ proto: 'udp', '!contains': true });
 
 		o = fwtool.addIPOption(s, 'general', 'dest_ip', _('Destination address'),
-			_('Match forwarded traffic directed at the given IP address.'), 'ipv4', hosts);
+			_('Match forwarded traffic directed at the given IP address.'), !have_fw4?'ipv4':'', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4("true"))';
+		o.datatype = !have_fw4?'ip4addr("nomask")':'ipaddr("nomask")';
 
 		o = s.taboption('general', form.Value, 'dest_port', _('Destination port'),
 			_('Match forwarded traffic directed at the given destination port or port range.'));
@@ -214,6 +221,7 @@ return view.extend({
 
 		o = fwtool.addLocalIPOption(s, 'general', 'snat_ip', _('Rewrite IP address'),
 			_('Rewrite matched traffic to the specified source IP address.'), devs);
+		o.datatype = 'ipaddr("nomask")';
 		o.placeholder = null;
 		o.depends('target', 'SNAT');
 		o.validate = function(section_id, value) {
@@ -241,11 +249,25 @@ return view.extend({
 		o.modalonly = true;
 		o.rmempty = true;
 
+		if (have_fw4) {
+			o = s.taboption('advanced', form.ListValue, 'family', _('Restrict to address family'));
+			o.modalonly = true;
+			o.rmempty = true;
+			o.value('', _('IPv4 and IPv6'));
+			o.value('ipv4', _('IPv4 only'));
+			o.value('ipv6', _('IPv6 only'));
+			o.validate = function(section_id, value) {
+				fwtool.updateHostHints(this.map, section_id, 'src_ip', value, hosts);
+				fwtool.updateHostHints(this.map, section_id, 'dest_ip', value, hosts);
+				return true;
+			};			
+		}
+
 		fwtool.addMarkOption(s, false);
 		fwtool.addLimitOption(s);
 		fwtool.addLimitBurstOption(s);
 
-		if (!L.hasSystemFeature('firewall4')) {
+		if (!have_fw4) {
 			o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
 				_('Passes additional arguments to iptables. Use with care!'));
 			o.modalonly = true;
