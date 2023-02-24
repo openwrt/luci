@@ -267,10 +267,12 @@ return view.extend({
 			o = s.option(form.Flag, "enabled", _("Enabled"));
 			o.optional = false;
 			o.editable = true;
+			o.rmempty = false;
 
 			o = s.option(form.Value, "path", _("Path"));
 			o.optional = false;
 			o.editable = true;
+			o.rmempty = false;
 
 			return Promise.all([status.render(), m.render()]);
 		})

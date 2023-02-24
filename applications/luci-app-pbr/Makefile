@@ -5,12 +5,14 @@ include $(TOPDIR)/rules.mk
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
-PKG_VERSION:=1.0.1-10
+PKG_VERSION:=1.1.0-1
 
 LUCI_TITLE:=Policy Based Routing Service Web UI
 LUCI_DESCRIPTION:=Provides Web UI for Policy Based Routing Service.
 LUCI_DEPENDS:=+luci-base +jsonfilter +pbr
 LUCI_PKGARCH:=all
+
+PKG_PROVIDES:=luci-app-vpnbypass luci-app-vpn-policy-routing
 
 include ../../luci.mk
 
