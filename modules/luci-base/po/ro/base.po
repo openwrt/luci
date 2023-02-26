@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-02-15 15:58+0000\n"
+"PO-Revision-Date: 2023-02-16 13:38+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/luci/ro/"
 ">\n"
@@ -3928,6 +3928,9 @@ msgid ""
 "tunnelled packets with source IP addresses matching this list and route back "
 "packets with matching destination IP."
 msgstr ""
+"Adresele IP care sunt permise în interiorul tunelului. Omologul va accepta "
+"pachetele prin tunel cu adrese IP sursă care corespund acestei liste și va "
+"redirecționa pachetele cu adrese IP de destinație corespunzătoare."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:37
 msgctxt "nft ip protocol"
@@ -4671,7 +4674,7 @@ msgstr "Păstrați setările și păstrați configurația curentă"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:60
 msgid "Keep-Alive"
-msgstr ""
+msgstr "Păstrați-viața"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:20
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
@@ -5916,9 +5919,8 @@ msgid "No password set!"
 msgstr "Nu este setată nicio parolă!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:84
-#, fuzzy
 msgid "No peers connected"
-msgstr "Nu este conectat"
+msgstr "Nu sunt conectați omologi"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:510
 msgid "No peers defined yet."
@@ -6087,6 +6089,8 @@ msgid ""
 "Off: <code>vlanXXX</code>, e.g., <code>vlan1</code>. On: "
 "<code>vlan_tagged_interface.XXX</code>, e.g. <code>eth0.1</code>."
 msgstr ""
+"Închideți: <code>vlanXXX</code>, e.g., <code>vlan1</code>. Deschideți: "
+"<code>vlan_tagged_interface.XXX</code>, e.g. <code>eth0.1</code>."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:19
 msgid "On"
@@ -6713,13 +6717,12 @@ msgid "Peak:"
 msgstr "Maxim:"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:74
-#, fuzzy
 msgid "Peer"
-msgstr "Perechi"
+msgstr "Omologi"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:51
 msgid "Peer Details"
-msgstr ""
+msgstr "Detalii de Peer"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:89
 msgid "Peer IP address to assign"
@@ -7108,23 +7111,23 @@ msgstr "Radius-Autentificare-Server"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1443
 msgid "RADIUS Dynamic VLAN Assignment"
-msgstr ""
+msgstr "Atribuirea dinamică a VLAN-urilor RADIUS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1452
 msgid "RADIUS Per STA VLAN"
-msgstr ""
+msgstr "RADIUS Pe STA VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1469
 msgid "RADIUS VLAN Bridge Naming Scheme"
-msgstr ""
+msgstr "Schema de denumire a punților RADIUS VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1456
 msgid "RADIUS VLAN Naming"
-msgstr ""
+msgstr "Denumirea VLAN-urilor RADIUS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1459
 msgid "RADIUS VLAN Tagged Interface"
-msgstr ""
+msgstr "Interfața RADIUS VLAN etichetată RADIUS"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:88
 msgid "RFC3947 NAT-T mode"
@@ -7160,6 +7163,8 @@ msgid ""
 "Radio Resource Measurement - Sends beacons to assist roaming. Not all "
 "clients support this."
 msgstr ""
+"Măsurarea resurselor radio - trimite semnale de avertizare pentru a ajuta la "
+"roaming. Nu toți clienții acceptă acest lucru."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:62
 msgctxt "nft nat flag random"
@@ -7295,11 +7300,10 @@ msgid "Relay Bridge"
 msgstr "Releu punte"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:354
-#, fuzzy
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
 msgstr ""
-"Redistribuiți cererile DHCP în altă parte. OK: v4<->v4, v6<->v6. Nu este OK: "
-"v4<->v6, v6<->v4."
+"Redistribuiți cererile DHCP în altă parte. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, "
+"v6↔v4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:387
 msgid "Relay To address"
@@ -7422,6 +7426,8 @@ msgid ""
 "Required: Rejects auth if RADIUS server does not provide appropriate VLAN "
 "attributes."
 msgstr ""
+"Este necesar: Respinge autentificarea dacă serverul RADIUS nu furnizează "
+"atributele VLAN corespunzătoare."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1326
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1327
