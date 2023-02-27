@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-09-17 06:52+0000\n"
-"Last-Translator: masta0f1eave <lomskoff.dima@gmail.com>\n"
+"PO-Revision-Date: 2023-02-22 12:40+0000\n"
+"Last-Translator: DroidSU-GI <droid.sugi@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsshadowsocks-libev/ru/>\n"
 "Language: ru\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:45
 msgid "-- instance type --"
@@ -25,7 +25,7 @@ msgstr "Дополнительные настройки"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:88
 msgid "Bypass ss-redir for packets with dst address in this list"
-msgstr ""
+msgstr "Обход ss-redir для пакетов с адресом dst в этом списке"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:74
 msgid "Bypass ss-redir for packets with src address in this list"
@@ -40,6 +40,7 @@ msgid ""
 "Continue to have dst address checked for packets with src address in this "
 "list"
 msgstr ""
+"Продолжить проверку адреса dst на наличие пакетов с адресом src в этом списке"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:60
 msgid "Default action for locally generated TCP packets"
@@ -50,22 +51,28 @@ msgid ""
 "Default action for packets whose dst address do not match any of the dst ip "
 "list"
 msgstr ""
+"Действие по умолчанию для пакетов, чей адрес dst не соответствует ни одному "
+"из списка dst ip"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:83
 msgid ""
 "Default action for packets whose src address do not match any of the src ip/"
 "net list"
 msgstr ""
+"Действие по умолчанию для пакетов, src-адрес которых не соответствует ни "
+"одному из списка src ip/net"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:15
 msgid ""
 "Definition of remote shadowsocks servers. Disable any of them will also "
 "disable instances referring to it."
 msgstr ""
+"Определение удаленных серверов shadowsocks. Отключение любого из них также "
+"приведет к отключению экземпляров, ссылающихся на него."
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:44
 msgid "Destination Settings"
-msgstr ""
+msgstr "Настройки назначения"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:79
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:46
@@ -79,35 +86,35 @@ msgstr "Отключено"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:103
 msgid "Dst default"
-msgstr ""
+msgstr "Dst по умолчанию"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:87
 msgid "Dst ip/net bypass"
-msgstr ""
+msgstr "Обход ip/net для Dst"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:95
 msgid "Dst ip/net bypass file"
-msgstr ""
+msgstr "Файл обхода Dst ip/net"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:90
 msgid "Dst ip/net forward"
-msgstr ""
+msgstr "Пересылка Dst ip/net"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:99
 msgid "Dst ip/net forward file"
-msgstr ""
+msgstr "Пересылка файла Dst ip/net"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:195
 msgid "Enable SO_REUSEPORT"
-msgstr ""
+msgstr "Включить SO_REUSEPORT"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:193
 msgid "Enable TCP Fast Open"
-msgstr ""
+msgstr "Включить быстрое открытие TCP"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:194
 msgid "Enable TCP_NODELAY"
-msgstr ""
+msgstr "Включить TCP_NODELAY"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:132
 msgid "Enable/Disable"
@@ -124,12 +131,14 @@ msgstr "Дополнительные аргументы"
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:96
 msgid ""
 "File containing ip/net for the purposes as with <em>Dst ip/net bypass</em>"
-msgstr ""
+msgstr "Файл, содержащий ip/net, для целей, как при <em>обходе Dst ip/net</em>"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:100
 msgid ""
 "File containing ip/net for the purposes as with <em>Dst ip/net forward</em>"
 msgstr ""
+"Файл, содержащий ip/net для целей, как в случае с <em>пересылкой Dst ip/net</"
+"em>"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:119
 msgid "Forward recentrst"
@@ -142,11 +151,11 @@ msgstr ""
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:91
 msgid "Forward through ss-redir for packets with dst address in this list"
-msgstr ""
+msgstr "Пересылка через ss-redir для пакетов с адресом dst в этом списке"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:77
 msgid "Forward through ss-redir for packets with src address in this list"
-msgstr ""
+msgstr "Пересылка через ss-redir для пакетов с адресом src в этом списке"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:77
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:42
@@ -159,7 +168,7 @@ msgstr "Предоставить доступ LuCI к приложению shado
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:192
 msgid "IPv6 First"
-msgstr ""
+msgstr "Сначала IPv6"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:51
 msgid "Import"
@@ -169,15 +178,15 @@ msgstr "Импорт"
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:59
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:61
 msgid "Import Links"
-msgstr ""
+msgstr "Ссылки на импорт"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:63
 msgid "Ingress interfaces"
-msgstr ""
+msgstr "Входные интерфейсы"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:249
 msgid "Install package"
-msgstr ""
+msgstr "Установите пакет"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:112
 msgid "Install package iptables-mod-conntrack-extra"
@@ -189,10 +198,13 @@ msgid ""
 "tunnel, ss-server, etc. To enable an instance it is required to enable both "
 "the instance itself and the remote server it refers to."
 msgstr ""
+"Экземпляры компонентов shadowsocks-libev, например, ss-local, ss-redir, ss-"
+"tunnel, ss-server и т.д. Для включения экземпляра необходимо включить как "
+"сам экземпляр, так и удаленный сервер, на который он ссылается."
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:169
 msgid "Key (base64)"
-msgstr ""
+msgstr "Ключ (base64)"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:93
 msgid "Local IPv4 address"
@@ -205,20 +217,20 @@ msgstr "Локальный IPv6-адрес"
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:26
 #: applications/luci-app-shadowsocks-libev/root/usr/share/luci/menu.d/luci-app-shadowsocks-libev.json:14
 msgid "Local Instances"
-msgstr ""
+msgstr "Локальные экземпляры"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:127
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:88
 msgid "Local address"
-msgstr ""
+msgstr "Локальный адрес"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:131
 msgid "Local port"
-msgstr ""
+msgstr "Локальный порт"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:59
 msgid "Local-out default"
-msgstr ""
+msgstr "Локальный выход по умолчанию"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:185
 msgid "MTU"
@@ -226,13 +238,14 @@ msgstr "MTU"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:160
 msgid "Method"
-msgstr ""
+msgstr "Метод"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:180
 msgid "Mode of operation"
-msgstr ""
+msgstr "Режим работы"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:32
+#, fuzzy
 msgid ""
 "On this page you can configure how traffics are to be forwarded to ss-redir "
 "instances. If enabled, packets will first have their src ip addresses "
@@ -241,10 +254,18 @@ msgid ""
 "give the default action to be taken. If the prior check results in action "
 "<em>checkdst</em>, packets will continue to have their dst addresses checked."
 msgstr ""
+"На этой странице вы можете настроить, как трафик должен перенаправляться "
+"экземплярам ss-redir. Если включено, сначала ip-адреса пакетов src будут "
+"проверены на соответствие <em>обхода Src ip/net</em>, <em>перенаправление "
+"Src ip/net</em>, <em>Src ip/net checkdst</em> и, если ни один из них не "
+"соответствует <em>Src по умолчанию<<em>/em> укажет действие по умолчанию, "
+"которое необходимо предпринять. Если в результате предыдущей проверки "
+"действие <em>будет проверено</em>, для пакетов будут по-прежнему проверяться "
+"их адреса dst."
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:64
 msgid "Only apply rules on packets from these network interfaces"
-msgstr ""
+msgstr "Применяйте правила только к пакетам из этих сетевых интерфейсов"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:115
 msgid "Overview"
@@ -252,7 +273,7 @@ msgstr "Обзор"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:248
 msgid "Package is not installed"
-msgstr ""
+msgstr "Пакет не установлен"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:70
 msgid "Passes additional arguments to iptables. Use with care!"
@@ -266,33 +287,33 @@ msgstr "Пароль"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:175
 msgid "Plugin"
-msgstr ""
+msgstr "Плагин"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:177
 msgid "Plugin Options"
-msgstr ""
+msgstr "Параметры плагина"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:192
 msgid "Prefer IPv6 addresses when resolving names"
-msgstr ""
+msgstr "Отдавайте предпочтение IPv6-адресам при разрешении имен"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:31
 #: applications/luci-app-shadowsocks-libev/root/usr/share/luci/menu.d/luci-app-shadowsocks-libev.json:32
 msgid "Redir Rules"
-msgstr ""
+msgstr "Правила Redir"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/servers.js:14
 #: applications/luci-app-shadowsocks-libev/root/usr/share/luci/menu.d/luci-app-shadowsocks-libev.json:23
 msgid "Remote Servers"
-msgstr ""
+msgstr "Удаленные серверы"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:125
 msgid "Remote server"
-msgstr ""
+msgstr "Удаленный сервер"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:189
 msgid "Run as"
-msgstr ""
+msgstr "Выполнить как"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:127
 msgid "Running"
@@ -308,51 +329,51 @@ msgstr "Порт сервера"
 
 #: applications/luci-app-shadowsocks-libev/root/usr/share/luci/menu.d/luci-app-shadowsocks-libev.json:3
 msgid "Shadowsocks-libev"
-msgstr ""
+msgstr "Shadowsocks-libev"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:43
 msgid "Source Settings"
-msgstr ""
+msgstr "Настройки источника"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:82
 msgid "Src default"
-msgstr ""
+msgstr "Src по умолчанию"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:73
 msgid "Src ip/net bypass"
-msgstr ""
+msgstr "Src ip/net обход"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:79
 msgid "Src ip/net checkdst"
-msgstr ""
+msgstr "Src ip/net checkdst"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:76
 msgid "Src ip/net forward"
-msgstr ""
+msgstr "Пересылка Src ip/net"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:94
 msgid "The IPv4 address ss-server will initiate IPv4 connections from"
-msgstr ""
+msgstr "SS-сервер с IPv4-адресом инициирует IPv4-соединения с"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:99
 msgid "The IPv6 address ss-server will initiate IPv6 connections from"
-msgstr ""
+msgstr "ss-сервер с IPv6-адресом инициирует IPv6-соединения с"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:89
 msgid "The address ss-server will initiate connections from"
-msgstr ""
+msgstr "Адрес ss-сервера будет инициировать соединения с"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:107
 msgid "The address ss-tunnel will forward traffic to"
-msgstr ""
+msgstr "Адрес ss-туннеля будет перенаправлять трафик на"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:187
 msgid "Timeout (sec)"
-msgstr ""
+msgstr "Тайм-аут (сек)"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/instances.js:106
 msgid "Tunnel address"
-msgstr ""
+msgstr "Адрес туннеля"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/shadowsocks-libev.js:191
 msgid "Verbose"
@@ -360,8 +381,8 @@ msgstr "Подробный журнал"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:52
 msgid "ss-redir for TCP"
-msgstr ""
+msgstr "ss-redir для TCP"
 
 #: applications/luci-app-shadowsocks-libev/htdocs/luci-static/resources/view/shadowsocks-libev/rules.js:55
 msgid "ss-redir for UDP"
-msgstr ""
+msgstr "ss-redir для UDP"

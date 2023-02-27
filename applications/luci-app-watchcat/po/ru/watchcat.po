@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: watchcat\n"
 "POT-Creation-Date: 2013-10-06 11:15+0300\n"
-"PO-Revision-Date: 2022-10-19 10:29+0000\n"
-"Last-Translator: sergio <sergio+it@outerface.net>\n"
+"PO-Revision-Date: 2023-02-07 07:40+0000\n"
+"Last-Translator: st7105 <st7105@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.16-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -30,6 +30,13 @@ msgid ""
 "fail. Enter the number of seconds to wait for the soft reboot to fail or use "
 "0 to disable the forced reboot delay."
 msgstr ""
+"Применимо к режимам Ping Reboot и Periodic Reboot</i> <br /> При "
+"перезагрузке маршрутизатора служба будет запускать мягкую перезагрузку. Если "
+"ввести здесь ненулевое значение, то в случае неудачи мягкой перезагрузки "
+"будет запущена отложенная жесткая перезагрузка. Введите количество секунд, в "
+"течение которых нужно ждать, пока мягкая перезагрузка не завершится "
+"неудачей, или используйте 0, чтобы отключить принудительную задержку "
+"перезагрузки."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:88
 msgid ""
@@ -37,6 +44,9 @@ msgid ""
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
 "specifying its name."
 msgstr ""
+"Применяется к режимам Ping Reboot и Restart Interface</i> <br /> Если "
+"используется ModemManager, вы можете заставить Watchcat перезапустить ваш "
+"интерфейс ModemManger, указав его имя."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:63
 msgid "Big: 248 bytes"
@@ -64,6 +74,9 @@ msgid ""
 "host becomes unreachable. Click the <b>Add</b> button at the bottom to set "
 "up more than one action."
 msgstr ""
+"Здесь вы можете настроить несколько проверок и действий, которые необходимо "
+"предпринять в случае, если хост становится недоступным. Нажмите кнопку "
+"<b>Добавить</b> внизу, чтобы настроить несколько действий."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:43
 msgid "Host To Check"
@@ -78,6 +91,12 @@ msgid ""
 "b></li><li>1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
 "li><ul>"
 msgstr ""
+"Как часто пинговать указанный выше хост. <br /><br />По умолчанию единицей "
+"измерения являются секунды, без суффикса, но вы можете использовать суффикс "
+"<b>m</b> для минут, <b>h</b> для часов или <b>d</b> для дней. <br /><br /> "
+"Примеры:<ul><li>10 секунд будет: <b>10</b> или <b>10s</b></li><li>5 минут "
+"будет: <b>5m</b></li><li>1 час будет: <b>1h</b></li><li>1 неделя будет: "
+"<b>7d</b></li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:64
 msgid "Huge: 1492 bytes"
@@ -92,6 +111,8 @@ msgid ""
 "If using ModemManager, then before restarting the interface, set the modem "
 "to be allowed to use any band."
 msgstr ""
+"Если используется ModemManager, то перед перезапуском интерфейса установите "
+"для модема разрешение использовать любой диапазон."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:32
 msgid ""
@@ -125,7 +146,7 @@ msgstr "Режим"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:87
 msgid "Name of ModemManager Interface"
-msgstr ""
+msgstr "Имя интерфейса ModemManager"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:31
 msgid "Period"
@@ -141,7 +162,7 @@ msgstr "Размер пакета Ping"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:26
 msgid "Ping Reboot"
-msgstr ""
+msgstr "Ping Reboot"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:23
 msgid ""
@@ -167,10 +188,12 @@ msgstr "Стандартный: 56 байт"
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
 msgid "These rules will govern how this device reacts to network events."
 msgstr ""
+"Эти правила будут определять, как это устройство будет реагировать на "
+"сетевые события."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid "Unlock Modem Bands"
-msgstr ""
+msgstr "Разблокировка диапазонов модема"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:11
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
