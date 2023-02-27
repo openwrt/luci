@@ -10,11 +10,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 3.11-dev\n"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
 msgid "Allowed IP ranges"
 msgstr "Povolené IP rozsahy"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:34
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:26
 msgid ""
 "Attempt to automatically detect if the upstream IP will be blocked by the "
 "configuration, and add an exception if it will. If this does not work "
@@ -24,24 +24,24 @@ msgstr ""
 "blokována. Pokud ano, bude přidána výjimka. Pokud toto nezafunguje správně, "
 "můžete níže přidat výjimky ručně."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:33
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid "Auto-detect upstream IP"
 msgstr "Autodetekovat upstream IP adresu"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:20
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
 msgid "BCP38"
 msgstr "BCP38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:27
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:18
 msgid "BCP38 config"
 msgstr "Konfigurace BCP38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:56
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:38
 msgid "Blocked IP ranges"
 msgstr "Blokované IP rozsahy"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:30
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:21
 msgid "Enable"
 msgstr "Povolit"
 
@@ -49,18 +49,16 @@ msgstr "Povolit"
 msgid "Grant UCI access for luci-app-bcp38"
 msgstr ""
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid "Interface name"
 msgstr "Název rozhraní"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:32
 msgid ""
-"Interface to apply the blocking to (should be the upstream WAN interface)."
+"Interface to apply the blocking to should be the upstream WAN interface)."
 msgstr ""
-"Rozhraní, na kterém bude použito blokování (mělo by se jednat o rozhraní "
-"WAN)."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
@@ -69,7 +67,7 @@ msgstr ""
 "nadřazené sítě, pokud jste za dvojitým NAT překladem adres a automatické "
 "rozpoznání nefunguje."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:21
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
 "This function blocks packets with private address destinations from going "
 "out onto the internet as per <a href=\"http://tools.ietf.org/html/"
@@ -81,3 +79,9 @@ msgstr ""
 "tools.ietf.org/html/bcp38\">BCP 38</a>. V případě protokolu IPv6 jsou "
 "instalovány pouze zdrojově specifické výchozí trasy, takže na bráně firewall "
 "nejsou BCP38 trasy zapotřebí."
+
+#~ msgid ""
+#~ "Interface to apply the blocking to (should be the upstream WAN interface)."
+#~ msgstr ""
+#~ "Rozhraní, na kterém bude použito blokování (mělo by se jednat o rozhraní "
+#~ "WAN)."

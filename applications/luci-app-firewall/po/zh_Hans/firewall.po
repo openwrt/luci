@@ -15,31 +15,31 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
 "%{src?%{dest?Forwarded:Incoming}:Outgoing} %{ipv6?%{ipv4?<var>IPv4</var> and "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#"
-"%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item.name}"
-"<span class=\"cbi-tooltip\">ICMP with types %{item.types#%{next?, }<var>"
-"%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var"
-"%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? with "
-"mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value with "
-"%{mark.mask} before compare.\"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp.inv?"
-"<var data-tooltip=\"Match DSCP classifications except %{dscp.num?:%{dscp."
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP with types %{item.types#%{next?, }"
+"<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
+"<var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? "
+"with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value "
+"with %{mark.mask} before compare.\"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp."
+"inv?<var data-tooltip=\"Match DSCP classifications except %{dscp.num?:%{dscp."
 "name}}\">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, helper "
 "%{helper.inv?<var data-tooltip=\"Match any helper except &quot;%{helper.name}"
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper."
 "val}</var>}}"
 msgstr ""
 "%{src?%{dest?转发:入站}:出站} %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</"
-"var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, 协议 %{proto#"
-"%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item.name}"
-"<span class=\"cbi-tooltip\">具有类型 %{item.types#%{next?, }<var>%{item}</"
-"var>} 的 ICMP</span></var>:<var>%{item.name}</var>}}}%{mark?, 标记 <var"
-"%{mark.inv? data-tooltip=\"匹配除 %{mark.num}%{mark.mask? 带有掩码 %{mark."
-"mask}} 的 fwmarks。\":%{mark.mask? data-tooltip=\"在比较前使用 %{mark.mask} "
-"掩盖 fwmark 值。\"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp.inv?<var data-"
-"tooltip=\"匹配除 %{dscp.num?:%{dscp.name}} 以外的 DSCP 类型。\">%{dscp.val}</"
-"var>:<var>%{dscp.val}</var>}}%{helper?, 助手 %{helper.inv?<var data-tooltip="
-"\"匹配除 &quot;%{helper.name}&quot; 以外的任意助手。\">%{helper.val}</var>:"
-"<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
+"var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, 协议 "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">具有类型 %{item.types#%{next?, }<var>%{item}"
+"</var>} 的 ICMP</span></var>:<var>%{item.name}</var>}}}%{mark?, 标记 "
+"<var%{mark.inv? data-tooltip=\"匹配除 %{mark.num}%{mark.mask? 带有掩码 "
+"%{mark.mask}} 的 fwmarks。\":%{mark.mask? data-tooltip=\"在比较前使用 %{mark."
+"mask} 掩盖 fwmark 值。\"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp.inv?<var "
+"data-tooltip=\"匹配除 %{dscp.num?:%{dscp.name}} 以外的 DSCP 类型。\">%{dscp."
+"val}</var>:<var>%{dscp.val}</var>}}%{helper?, 助手 %{helper.inv?<var data-"
+"tooltip=\"匹配除 &quot;%{helper.name}&quot; 以外的任意助手。\">%{helper.val}"
+"</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:461
 msgid "-- add IP --"
@@ -60,8 +60,8 @@ msgstr "<var data-tooltip=\"ACCEPT\">防止重写源</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:81
 msgid ""
-"<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP <var>"
-"%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
+"<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP "
+"<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
 "<var data-tooltip=\"DNAT\">转发</var> 至 %{dest}%{dest_ip? IP <var>%{dest_ip}"
 "</var>}%{dest_port? 端口 <var>%{dest_port}</var>}"
@@ -79,19 +79,19 @@ msgstr "<var data-tooltip=\"DSCP\">分配 DSCP</var> 分类 <var>%{set_dscp}</va
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:127
 msgid ""
-"<var data-tooltip=\"HELPER\">Assign conntrack</var> helper <var"
-"%{helper_name? data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
+"<var data-tooltip=\"HELPER\">Assign conntrack</var> helper "
+"<var%{helper_name? data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
 msgstr ""
 "<var data-tooltip=\"HELPER\">分配 conntrack</var> 助手 <var%{helper_name? "
 "data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:130
 msgid ""
-"<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark <var>"
-"%{set_mark?:%{set_xmark}}</var>"
+"<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark "
+"<var>%{set_mark?:%{set_xmark}}</var>"
 msgstr ""
-"<var data-tooltip=\"MARK\">%{set_mark?分配:异或}</var> 防火墙标记 <var>"
-"%{set_mark?:%{set_xmark}}</var>"
+"<var data-tooltip=\"MARK\">%{set_mark?分配:异或}</var> 防火墙标记 "
+"<var>%{set_mark?:%{set_xmark}}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:84
 msgid "<var data-tooltip=\"MASQUERADE\">Automatically rewrite</var> source IP"
@@ -133,7 +133,7 @@ msgstr "接受 - 禁用地址重写"
 msgid "Action"
 msgstr "操作"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:290
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:291
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone destination "
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
@@ -142,7 +142,7 @@ msgstr ""
 "用于对区域目标流量进行分类的额外 <em>iptables</em> 参数。如：<code>-p tcp --"
 "dport 443</code> 表示仅匹配出站 HTTPS 流量。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:280
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:281
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
@@ -157,15 +157,15 @@ msgstr ""
 msgid "Advanced Settings"
 msgstr "高级设置"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:251
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:252
 msgid "Allow \"invalid\" traffic"
 msgstr "允许“无效”流量"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:353
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:354
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "允许来自<em>源区域</em>的转发："
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:312
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:313
 msgid "Allow forward to <em>destination zones</em>:"
 msgstr "允许转发到<em>目标区域</em>："
 
@@ -197,11 +197,11 @@ msgstr "将给定的 DSCP 类或值应用于已建立的连接。"
 msgid "Assign the specified connection tracking helper to matched traffic."
 msgstr "将指定的连接跟踪助手分配给匹配的流量。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:254
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:255
 msgid "Automatic helper assignment"
 msgstr "自动助手分配"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:254
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:255
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr "根据流量协议和端口自动分配 conntrack 助手"
@@ -210,7 +210,7 @@ msgstr "根据流量协议和端口自动分配 conntrack 助手"
 msgid "Conntrack Settings"
 msgstr "连接跟踪设置"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:258
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:259
 msgid "Conntrack helpers"
 msgstr "连接跟踪助手"
 
@@ -222,15 +222,15 @@ msgstr "内容已保存。"
 msgid "Continue"
 msgstr "继续"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:221
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:222
 msgid "Covered devices"
 msgstr "涵盖的设备"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:173
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:174
 msgid "Covered networks"
 msgstr "涵盖的网络"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:226
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:227
 msgid "Covered subnets"
 msgstr "涵盖的子网"
 
@@ -277,7 +277,7 @@ msgstr "目标区域"
 msgid "Device name"
 msgstr "设备名"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:251
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:252
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
@@ -303,9 +303,15 @@ msgstr "启用 NAT 环回"
 msgid "Enable SYN-flood protection"
 msgstr "启用 SYN-flood 防御"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:264
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:265
 msgid "Enable logging on this zone"
 msgstr "启用此区域的日志记录"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:160
+msgid ""
+"Enable network address and port translation (NAT or NAPT) for outbound "
+"traffic on this zone. This is typically enabled on the <em>wan</em> zone."
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "Expecting: %s"
@@ -315,7 +321,7 @@ msgstr "请输入：%s"
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
 msgstr "实验特性。与 QoS/SQM 不完全兼容。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:258
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:259
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
 msgstr "为区域流量明确选择允许的连接跟踪助手"
 
@@ -333,7 +339,7 @@ msgstr "外部端口"
 msgid "Extra arguments"
 msgstr "额外参数"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:290
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:291
 msgid "Extra destination arguments"
 msgstr "额外的目标参数"
 
@@ -341,7 +347,7 @@ msgstr "额外的目标参数"
 msgid "Extra iptables arguments"
 msgstr "额外的 iptables 参数"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:280
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:281
 msgid "Extra source arguments"
 msgstr "额外的源参数"
 
@@ -382,13 +388,14 @@ msgstr "转发"
 msgid ""
 "Forwarded IPv4%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</"
 "var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks except "
-"%{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-tooltip="
-"\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}</var>}"
+"%{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-"
+"tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
+"</var>}"
 msgstr ""
 "转发的 IPv4%{proto?, 协议 %{proto#%{next?, }<var>%{item.name}</"
 "var>}}%{mark?, 标记 <var%{mark.inv? data-tooltip=\"匹配除 %{mark.num}%{mark."
-"mask? 带有掩码 %{mark.mask}} 以外的 fwmarks。\":%{mark.mask? data-tooltip="
-"\"在比较前使用 %{mark.mask} 掩盖 fwmark 值。\"}}>%{mark.val}</var>}"
+"mask? 带有掩码 %{mark.mask}} 以外的 fwmarks。\":%{mark.mask? data-"
+"tooltip=\"在比较前使用 %{mark.mask} 掩盖 fwmark 值。\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:451
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:265
@@ -405,9 +412,9 @@ msgid ""
 msgstr ""
 "来自 %{src}%{src_device?, 接口 <var>%{src_device}</var>}%{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"匹配除 %{item.val} 以外的 "
-"IP 地址。\"}>%{item.ival}</var>}}%{src_port?, 端口 %{src_port#%{next?, }<var"
-"%{item.inv? data-tooltip=\"匹配除 %{item.val} 以外的端口。\"}>%{item.ival}</"
-"var>}}"
+"IP 地址。\"}>%{item.ival}</var>}}%{src_port?, 端口 %{src_port#%{next?, }"
+"<var%{item.inv? data-tooltip=\"匹配除 %{item.val} 以外的端口。\"}>%{item."
+"ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:64
 msgid ""
@@ -422,22 +429,22 @@ msgid ""
 msgstr ""
 "来自 %{src}%{src_device?, 接口 <var>%{src_device}</var>}%{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"匹配除 %{item.val} 以外的 "
-"IP 地址。\"}>%{item.ival}</var>}}%{src_port?, 端口 %{src_port#%{next?, }<var"
-"%{item.inv? data-tooltip=\"匹配除 %{item.val} 以外的端口。\"}>%{item.ival}</"
-"var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var%{item.inv? data-tooltip=\"匹配"
-"除 %{item.val}%{item.hint.name? 或称为 %{item.hint.name}} 以外的 MAC 地"
-"址。\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</"
-"var>}}"
+"IP 地址。\"}>%{item.ival}</var>}}%{src_port?, 端口 %{src_port#%{next?, }"
+"<var%{item.inv? data-tooltip=\"匹配除 %{item.val} 以外的端口。\"}>%{item."
+"ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var%{item.inv? data-"
+"tooltip=\"匹配除 %{item.val}%{item.hint.name? 或称为 %{item.hint.name}} 以外"
+"的 MAC 地址。\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}"
+">%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:48
 msgid ""
-"From %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="
-"\"Match IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
-"port %{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
-"%{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var"
-"%{item.inv? data-tooltip=\"Match MACs except %{item.val}%{item.hint.name? a."
-"k.a. %{item.hint.name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint."
-"name}\"}}>%{item.ival}</var>}}"
+"From %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Match IP addresses except %{item.val}.\"}>%{item.ival}</"
+"var>}}%{src_port?, port %{src_port#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, "
+"MAC %{src_mac#%{next?, }<var%{item.inv? data-tooltip=\"Match MACs except "
+"%{item.val}%{item.hint.name? a.k.a. %{item.hint.name}}.\":%{item.hint.name? "
+"data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 msgstr ""
 "来自 %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"匹"
 "配除 %{item.val} 以外的 IP 地址。\"}>%{item.ival}</var>}}%{src_port?, 端口 "
@@ -465,17 +472,17 @@ msgid "Hardware flow offloading"
 msgstr "硬件流量分载"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:279
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:232
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:233
 msgid "IPv4 and IPv6"
 msgstr "IPv4 和 IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:280
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:233
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:234
 msgid "IPv4 only"
 msgstr "仅 IPv4"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:281
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:234
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:235
 msgid "IPv6 only"
 msgstr "仅 IPv6"
 
@@ -485,15 +492,15 @@ msgstr "入站设备"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:38
 msgid ""
-"Incoming IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="
-"\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP with "
-"types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item."
-"name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks "
-"except %{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-"
-"tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
-"</var>}%{helper?, helper %{helper.inv?<var data-tooltip=\"Match any helper "
-"except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip="
-"\"%{helper.name}\">%{helper.val}</var>}}"
+"Incoming IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var "
+"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
+"with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:"
+"<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match "
+"fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark."
+"mask? data-tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}"
+">%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip=\"Match "
+"any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
+"tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
 "入站 IPv4%{proto?, 协议 %{proto#%{next?, }%{item.types?<var class=\"cbi-"
 "tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">具有类型 %{item."
@@ -534,7 +541,7 @@ msgstr "无效的限制值"
 msgid "Limit burst"
 msgstr "限制突发"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:267
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:268
 msgid "Limit log messages"
 msgstr "限制日志信息"
 
@@ -552,7 +559,7 @@ msgstr ""
 "限制匹配到 <var>%{limit.num}</var> 包每 <var>%{limit.unit}</var>%{limit."
 "burst? 突发 <var>%{limit.burst}</var>}"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:165
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:166
 msgid "Limited masquerading enabled"
 msgstr "已启用有限伪装"
 
@@ -568,7 +575,7 @@ msgstr "环回源 IP"
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
 msgstr "MASQUERADE - 自动重写源地址为出站接口 IP"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:170
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:171
 msgid "MSS clamping"
 msgstr "MSS 钳制"
 
@@ -716,7 +723,7 @@ msgstr "出站数据"
 msgid "Passes additional arguments to iptables. Use with care!"
 msgstr "传递到 iptables 的额外参数。小心使用！"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:277
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:278
 msgid ""
 "Passing raw iptables arguments to source and destination traffic "
 "classification rules allows to match packets based on other criteria than "
@@ -758,16 +765,16 @@ msgstr "重定向匹配的入站流量到指定的内部主机"
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
 msgstr "需要硬件 NAT 支持。目前 mt7621 已实现"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:244
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:245
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "要限制 IP 动态伪装的目标子网"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:237
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:238
 msgid "Restrict Masquerading to given source subnets"
 msgstr "要限制 IP 动态伪装的源子网"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:276
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:231
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:232
 msgid "Restrict to address family"
 msgstr "地址族限制"
 
@@ -894,8 +901,8 @@ msgid ""
 "traffic flow."
 msgstr "防火墙通过在网络接口上创建区域来控制网络流量。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:217
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:308
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:218
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:309
 msgid ""
 "The options below control the forwarding policies between this zone (%s) and "
 "other zones. <em>Destination zones</em> cover forwarded traffic "
@@ -970,15 +977,15 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:57
 msgid ""
-"To %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="
-"\"Match IP addresses except %{item.val}.\"}>%{item.ival}</"
-"var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="
-"\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}"
+"To %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Match IP addresses except %{item.val}.\"}>%{item.ival}</"
+"var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
-"到 %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="
-"\"匹配除 %{item.val} 以外的 IP 地址。\"}>%{item.ival}</var>}}%{dest_port?, 端"
-"口 %{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"匹配除 %{item.val} 以"
-"外的端口。\"}>%{item.ival}</var>}}"
+"到 %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-"
+"tooltip=\"匹配除 %{item.val} 以外的 IP 地址。\"}>%{item.ival}</"
+"var>}}%{dest_port?, 端口 %{dest_port#%{next?, }<var%{item.inv? data-"
+"tooltip=\"匹配除 %{item.val} 以外的端口。\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:405
 msgid "Tracking helper"
@@ -1052,13 +1059,13 @@ msgstr "使用外部 IP 地址"
 msgid "Use internal IP address"
 msgstr "使用内部 IP 地址"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:221
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:222
 msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
 msgstr "此选项可对原始的、非 <em>uci</em> 托管的网络设备进行区域流量分类。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:226
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:227
 msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
@@ -1187,8 +1194,8 @@ msgid "this device"
 msgstr "此设备"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:116
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:216
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:307
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:217
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:308
 msgid "this new zone"
 msgstr "此新区域"
 

@@ -10,11 +10,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.16-dev\n"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
 msgid "Allowed IP ranges"
 msgstr "Intervalli IP permessi"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:34
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:26
 msgid ""
 "Attempt to automatically detect if the upstream IP will be blocked by the "
 "configuration, and add an exception if it will. If this does not work "
@@ -25,24 +25,24 @@ msgstr ""
 "non funziona correttamente, è possibile aggiungere manualmente le eccezioni "
 "di seguito."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:33
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid "Auto-detect upstream IP"
 msgstr "Rilevamento automatico IP upstream"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:20
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
 msgid "BCP38"
 msgstr "BCP38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:27
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:18
 msgid "BCP38 config"
 msgstr "Configurazione BCP38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:56
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:38
 msgid "Blocked IP ranges"
 msgstr "Intervalli IP bloccati"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:30
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:21
 msgid "Enable"
 msgstr "Abilita"
 
@@ -50,18 +50,16 @@ msgstr "Abilita"
 msgid "Grant UCI access for luci-app-bcp38"
 msgstr "Concedere l'accesso UCI per luci-app-bcp38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid "Interface name"
 msgstr "Nome interfaccia"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:32
 msgid ""
-"Interface to apply the blocking to (should be the upstream WAN interface)."
+"Interface to apply the blocking to should be the upstream WAN interface)."
 msgstr ""
-"Interfaccia a cui applicare il blocco (dovrebbe essere l'interfaccia WAN "
-"upstream)."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
@@ -70,7 +68,7 @@ msgstr ""
 "rete upstream se si è dietro un doppio NAT e il rilevamento automatico non "
 "funziona."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:21
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
 "This function blocks packets with private address destinations from going "
 "out onto the internet as per <a href=\"http://tools.ietf.org/html/"
@@ -78,6 +76,12 @@ msgid ""
 "installed, so no BCP38 firewall routes are needed."
 msgstr ""
 "Questa funzione blocca i pacchetti con indirizzi privati in uscita su "
-"Internet seguendo le specifiche <a href=\"http://tools.ietf.org/html/bcp38\""
-">BCP 38</a>. Per IPv6, sono installate solo route predefinite specifiche "
-"dell'origine, quindi non sono necessarie route firewall BCP38."
+"Internet seguendo le specifiche <a href=\"http://tools.ietf.org/html/"
+"bcp38\">BCP 38</a>. Per IPv6, sono installate solo route predefinite "
+"specifiche dell'origine, quindi non sono necessarie route firewall BCP38."
+
+#~ msgid ""
+#~ "Interface to apply the blocking to (should be the upstream WAN interface)."
+#~ msgstr ""
+#~ "Interfaccia a cui applicare il blocco (dovrebbe essere l'interfaccia WAN "
+#~ "upstream)."
