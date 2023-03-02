@@ -426,6 +426,15 @@ var ValidatorFactory = baseclass.extend({
 			return this.assert(this.value.match(/^[a-zA-Z0-9_]+$/), _('valid UCI identifier'));
 		},
 
+		netdevname: function() {
+			var v = this.value;
+
+			if (v == '.' || v == '..')
+				return this.assert(false, _('valid network device name, not "." or ".."'));
+
+			return this.assert(v.match(/^[^:/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
+		},
+
 		range: function(min, max) {
 			var val = this.factory.parseDecimal(this.value);
 			return this.assert(val >= +min && val <= +max, _('value between %f and %f').format(min, max));
