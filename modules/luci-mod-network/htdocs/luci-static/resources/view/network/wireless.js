@@ -1150,9 +1150,9 @@ return view.extend({
 					o.depends('mode', 'ap');
 					o.depends('mode', 'ap-wds');
 
-					o = ss.taboption('advanced', form.Value, 'ifname', _('Interface name'), _('Override default interface name'));
+					o = ss.taboption('advanced', form.Value, 'ifname', _('Interface name'), _('Override default interface name - the name can not be ".", "..", nor contain the characters :, /, %, or whitespace and must contain from 1 to 15 characters'));
 					o.optional = true;
-					o.datatype = 'maxlength(15)';
+					o.datatype = 'netdevname';
 					o.placeholder = radioNet.getIfname();
 					if (/^radio\d+\.network/.test(o.placeholder))
 						o.placeholder = '';
