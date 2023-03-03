@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-02-04 07:14+0000\n"
+"PO-Revision-Date: 2023-03-03 05:42+0000\n"
 "Last-Translator: drax red <drax@outlook.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/openwrt/luci/da/>"
 "\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -2557,6 +2557,9 @@ msgid ""
 "proxy on the network and such frames need not be used or in the case of "
 "802.11, must not be used to prevent attacks."
 msgstr ""
+"Drop alle gratuitous ARP frames, for eksempel hvis der er en kendt god ARP "
+"proxy på netværket, og sådanne frames ikke skal bruges eller i tilfælde af "
+"802.11, må ikke bruges til at forhindre angreb."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:733
 msgid ""
@@ -2564,26 +2567,29 @@ msgid ""
 "good NA proxy on the network and such frames need not be used or in the case "
 "of 802.11, must not be used to prevent attacks."
 msgstr ""
+"Drop alle uopfordrede naboannoncer, f.eks. hvis der er en kendt god NA-proxy "
+"på netværket, og sådanne frames ikke behøver at blive brugt, eller i "
+"tilfælde af 802.11, ikke må bruges for at forhindre angreb."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:710
 msgid "Drop gratuitous ARP"
-msgstr ""
+msgstr "Drop gratuitous ARP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:787
 msgid "Drop layer 2 multicast frames containing IPv4 unicast packets."
-msgstr ""
+msgstr "Drop lag 2 multicast frames der indeholder IPv4 unicast-pakker."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:791
 msgid "Drop layer 2 multicast frames containing IPv6 unicast packets."
-msgstr ""
+msgstr "Drop lag 2 multicast frames der indeholder IPv6 unicast-pakker."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:787
 msgid "Drop nested IPv4 unicast"
-msgstr ""
+msgstr "Drop indlejret IPv4 unicast"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:791
 msgid "Drop nested IPv6 unicast"
-msgstr ""
+msgstr "Drop indlejret IPv6 unicast"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:96
 msgctxt "nft drop action"
@@ -2597,7 +2603,7 @@ msgstr "Drop umatchede pakker"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:733
 msgid "Drop unsolicited NA"
-msgstr ""
+msgstr "Drop uopfordret NA"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:12
 msgid "Dropbear Instance"
@@ -2778,7 +2784,7 @@ msgstr "Aktiver IPv6-forhandling på PPP-forbindelsen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:729
 msgid "Enable IPv6 segment routing"
-msgstr ""
+msgstr "Aktiver IPv6 segment routing"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:194
 msgid "Enable Jumbo Frame passthrough"
@@ -3761,7 +3767,7 @@ msgstr "Høj"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:707
 msgid "Honor gratuitous ARP"
-msgstr ""
+msgstr "Ære gratuitous ARP"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:593
 msgctxt "Chain hook description"
@@ -4568,7 +4574,7 @@ msgstr "Ugyldig Base64-nøglestreng"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:117
 msgid "Invalid IPv6 address"
-msgstr ""
+msgstr "Ugyldig IPv6-adresse"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:78
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:83
@@ -4610,15 +4616,15 @@ msgstr "Ugyldig hexadecimal værdi"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:126
 msgid "Invalid hostname or IPv4 address"
-msgstr ""
+msgstr "Ugyldigt værtsnavn eller IPv4-adresse"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:134
 msgid "Invalid port"
-msgstr ""
+msgstr "Ugyldig port"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
 msgid "Invalid server URL"
-msgstr ""
+msgstr "Ugyldig server URL"
 
 #: modules/luci-base/ucode/template/sysauth.ut:12
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:32
@@ -4636,7 +4642,7 @@ msgstr "Omvendt match"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:223
 msgctxt "VLAN port state"
 msgid "Is Primary VLAN"
-msgstr ""
+msgstr "Er primært VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1149
 msgid "Isolate Clients"
@@ -5937,7 +5943,7 @@ msgstr "Støj"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:30
 msgid "Noise Margin"
-msgstr ""
+msgstr "Støjmargin"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:272
 msgid "Noise:"
@@ -5965,7 +5971,7 @@ msgstr "Blev ikke fundet"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:211
 msgctxt "VLAN port state"
 msgid "Not Member"
-msgstr ""
+msgstr "Ikke medlem"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:75
 msgid "Not associated"
@@ -8763,7 +8769,7 @@ msgstr "Tabel"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:219
 msgctxt "VLAN port state"
 msgid "Tagged"
-msgstr ""
+msgstr "Tagget"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:56
@@ -9807,7 +9813,7 @@ msgstr "Ikke understøttet modem"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
 msgid "Unsupported protocol"
-msgstr ""
+msgstr "Ikke understøttet protokol"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:315
 msgid "Unsupported protocol type."
@@ -9816,7 +9822,7 @@ msgstr "Ikke-understøttet protokoltype."
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:215
 msgctxt "VLAN port state"
 msgid "Untagged"
-msgstr ""
+msgstr "Utagget"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:532
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
@@ -10351,6 +10357,9 @@ msgid ""
 "requests or replies, otherwise only preexisting table entries are updated, "
 "but no new hosts are learned."
 msgstr ""
+"Når det er aktiveret, tilføjes nye ARP-tabelposter fra modtagne gratuitous "
+"APR-anmodninger eller svar, ellers kun eksisterende tabelposter opdateres, "
+"men ingen nye værter er lært."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:14
 msgid ""
@@ -10592,11 +10601,11 @@ msgstr "automatisk"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (disabled)"
-msgstr ""
+msgstr "automatisk (deaktiveret)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (enabled)"
-msgstr ""
+msgstr "automatisk (aktiveret)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:82
 msgid "baseT"
@@ -10689,7 +10698,7 @@ msgstr "f.eks.: dump"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:157
 msgid "enabled"
-msgstr ""
+msgstr "aktiveret"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:60
 msgctxt "WireGuard keep alive interval"
