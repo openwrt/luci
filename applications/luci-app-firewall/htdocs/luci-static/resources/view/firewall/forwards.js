@@ -34,8 +34,11 @@ function rule_proto_txt(s, ctHelpers) {
 		num:  '0x%02X'.format(+m[2]),
 		mask: m[3] ? '0x%02X'.format(+m[3]) : null
 	} : null;
+	
+	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:any|\*)$/, '');
 
-	return fwtool.fmt(_('Incoming IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="cbi-tooltip-container">%{item.name}<span class="cbi-tooltip">ICMP with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip="Match any helper except &quot;%{helper.name}&quot;">%{helper.val}</var>:<var data-tooltip="%{helper.name}">%{helper.val}</var>}}'), {
+	return fwtool.fmt(_('Incoming %{ipv4?<var>IPv4</var>:<var>IPv6</var>}%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="cbi-tooltip-container">%{item.name}<span class="cbi-tooltip">ICMP with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip="Match any helper except &quot;%{helper.name}&quot;">%{helper.val}</var>:<var data-tooltip="%{helper.name}">%{helper.val}</var>}}'), {
+		ipv4: (!family || family == 'ipv4'),
 		proto: proto,
 		helper: h,
 		mark:   f
@@ -188,6 +191,18 @@ return view.extend({
 		o.modalonly = true;
 		o.default = 'tcp udp';
 
+		o = s.taboption('general', form.ListValue, 'family', _('Address family'));
+		o.modalonly = true;
+		o.rmempty = true;
+		o.value('ipv4', _('IPv4'));
+		o.value('ipv6', _('IPv6'));
+		o.default = 'ipv4';
+		o.validate = function(section_id, value) {
+			fwtool.updateHostHints(this.map, section_id, 'src_ip', value, hosts);
+			fwtool.updateHostHints(this.map, section_id, 'dest_ip', value, hosts);
+			return true;
+		};
+
 		o = s.taboption('general', widgets.ZoneSelect, 'src', _('Source zone'));
 		o.modalonly = true;
 		o.rmempty = false;
@@ -200,9 +215,8 @@ return view.extend({
 		o.datatype = 'list(neg(macaddr))';
 
 		o = fwtool.addIPOption(s, 'advanced', 'src_ip', _('Source IP address'),
-			_('Only match incoming traffic from this IP or range.'), 'ipv4', hosts);
+			_('Only match incoming traffic from this IP or range.'), '', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4("true"))';
 
 		o = s.taboption('advanced', form.Value, 'src_port', _('Source port'),
 			_('Only match incoming traffic originating from the given source port or port range on the client host'));
@@ -232,9 +246,8 @@ return view.extend({
 		o.nocreate = true;
 
 		o = fwtool.addIPOption(s, 'general', 'dest_ip', _('Internal IP address'),
-			_('Redirect matched incoming traffic to the specified internal host'), 'ipv4', hosts);
+			_('Redirect matched incoming traffic to the specified internal host'), '', hosts);
 		o.rmempty = true;
-		o.datatype = 'ipmask4';
 
 		o = s.taboption('general', form.Value, 'dest_port', _('Internal port'),
 			_('Redirect matched incoming traffic to the given port on the internal host'));
