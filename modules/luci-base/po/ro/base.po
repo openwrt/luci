@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-02-16 13:38+0000\n"
+"PO-Revision-Date: 2023-03-03 05:41+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/luci/ro/"
 ">\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -877,7 +877,7 @@ msgstr "O scurtă descriere opțională pentru acest dispozitiv"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1503
 msgid "Annex"
-msgstr "Anexa"
+msgstr "Anexă"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1504
 msgid "Annex A + L + M (all)"
@@ -2582,6 +2582,9 @@ msgid ""
 "proxy on the network and such frames need not be used or in the case of "
 "802.11, must not be used to prevent attacks."
 msgstr ""
+"Renunțați la toate cadrele ARP gratuite, de exemplu în cazul în care există "
+"un proxy ARP bun cunoscut în rețea și astfel de cadre nu trebuie utilizate "
+"sau, în cazul 802.11, nu trebuie utilizate pentru a preveni atacurile."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:733
 msgid ""
@@ -2589,26 +2592,30 @@ msgid ""
 "good NA proxy on the network and such frames need not be used or in the case "
 "of 802.11, must not be used to prevent attacks."
 msgstr ""
+"Renunțați la toate anunțurile nesolicitate ale vecinilor, de exemplu, dacă "
+"există un proxy NA bun cunoscut în rețea și astfel de cadre nu trebuie să "
+"fie utilizate sau, în cazul 802.11, nu trebuie să fie utilizate pentru a "
+"preveni atacurile."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:710
 msgid "Drop gratuitous ARP"
-msgstr ""
+msgstr "Aruncă ARP gratuit"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:787
 msgid "Drop layer 2 multicast frames containing IPv4 unicast packets."
-msgstr ""
+msgstr "Aruncă cadrele multicast de nivel 2 care conțin pachete unicast IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:791
 msgid "Drop layer 2 multicast frames containing IPv6 unicast packets."
-msgstr ""
+msgstr "Aruncă cadrele multicast de nivel 2 care conțin pachete unicast IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:787
 msgid "Drop nested IPv4 unicast"
-msgstr ""
+msgstr "Renunță la unicast IPv4 imbricate"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:791
 msgid "Drop nested IPv6 unicast"
-msgstr ""
+msgstr "Renunță la unicast IPv4 îmbinat"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:96
 msgctxt "nft drop action"
@@ -2622,7 +2629,7 @@ msgstr "Aruncă pachetele nepotrivite"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:733
 msgid "Drop unsolicited NA"
-msgstr ""
+msgstr "Aruncă NA nesolicitat"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:12
 msgid "Dropbear Instance"
@@ -2803,7 +2810,7 @@ msgstr "Activați negocierea IPv6 pe legătura PPP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:729
 msgid "Enable IPv6 segment routing"
-msgstr ""
+msgstr "Activați rutarea segmentului IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:194
 msgid "Enable Jumbo Frame passthrough"
@@ -3789,7 +3796,7 @@ msgstr "Mare"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:707
 msgid "Honor gratuitous ARP"
-msgstr ""
+msgstr "Onor gratuit ARP"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:593
 msgctxt "Chain hook description"
@@ -4594,7 +4601,7 @@ msgstr "Șir de chei Base64 nevalabil"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:117
 msgid "Invalid IPv6 address"
-msgstr ""
+msgstr "Adresă IPv6 invalidă"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:78
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:83
@@ -4636,15 +4643,15 @@ msgstr "Valoare hexazecimală invalidă"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:126
 msgid "Invalid hostname or IPv4 address"
-msgstr ""
+msgstr "Nume de gazdă sau adresă IPv4 invalidă"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:134
 msgid "Invalid port"
-msgstr ""
+msgstr "Port invalid"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
 msgid "Invalid server URL"
-msgstr ""
+msgstr "URL server invalid"
 
 #: modules/luci-base/ucode/template/sysauth.ut:12
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:32
@@ -4663,7 +4670,7 @@ msgstr "Potrivire inversă"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:223
 msgctxt "VLAN port state"
 msgid "Is Primary VLAN"
-msgstr ""
+msgstr "Este VLAN primar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1149
 msgid "Isolate Clients"
@@ -4897,15 +4904,15 @@ msgstr "Limită"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
 msgid "Line Mode"
-msgstr "Mod linie"
+msgstr "Modul linie"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:24
 msgid "Line State"
-msgstr "Stare de linie"
+msgstr "Starea liniei"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:26
 msgid "Line Uptime"
-msgstr "Timpul de funcționare a liniei"
+msgstr "Timp de funcționare a liniei"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:125
 msgid "Link Aggregation (Channel Bonding)"
@@ -5974,7 +5981,7 @@ msgstr "Zgomot"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:30
 msgid "Noise Margin"
-msgstr ""
+msgstr "Marja de zgomot"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:272
 msgid "Noise:"
@@ -6002,7 +6009,7 @@ msgstr "Nu a fost găsit"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:211
 msgctxt "VLAN port state"
 msgid "Not Member"
-msgstr ""
+msgstr "Nu este membru"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:75
 msgid "Not associated"
@@ -8829,7 +8836,7 @@ msgstr "Tabelul"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:219
 msgctxt "VLAN port state"
 msgid "Tagged"
-msgstr ""
+msgstr "Etichetat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:56
@@ -9895,7 +9902,7 @@ msgstr "Modem neacceptat"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
 msgid "Unsupported protocol"
-msgstr ""
+msgstr "Protocol neacceptat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:315
 msgid "Unsupported protocol type."
@@ -9904,7 +9911,7 @@ msgstr "Tipul de protocol nesuportat."
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:215
 msgctxt "VLAN port state"
 msgid "Untagged"
-msgstr ""
+msgstr "Neetichetat"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:532
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
@@ -10444,6 +10451,9 @@ msgid ""
 "requests or replies, otherwise only preexisting table entries are updated, "
 "but no new hosts are learned."
 msgstr ""
+"Atunci când este activată, se adaugă noi intrări în tabela ARP din cererile "
+"sau răspunsurile gratuite APR primite, în caz contrar, se actualizează numai "
+"intrările preexistente din tabel, dar nu sunt învățate noi gazde."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:14
 msgid ""
@@ -10689,11 +10699,11 @@ msgstr "automat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (disabled)"
-msgstr ""
+msgstr "automat (dezactivat)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (enabled)"
-msgstr ""
+msgstr "automat (activat)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:82
 msgid "baseT"
@@ -10786,7 +10796,7 @@ msgstr "de exemplu: dump"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:157
 msgid "enabled"
-msgstr ""
+msgstr "activat"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:60
 msgctxt "WireGuard keep alive interval"

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2023-02-15 09:03+0000\n"
-"Last-Translator: Mc Giver <mcgivergim@gmail.com>\n"
+"PO-Revision-Date: 2023-03-01 12:40+0000\n"
+"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/>"
 "\n"
 "Language: es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16-rc\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -2600,6 +2600,9 @@ msgid ""
 "proxy on the network and such frames need not be used or in the case of "
 "802.11, must not be used to prevent attacks."
 msgstr ""
+"Descarte todas las tramas ARP gratuitas, por ejemplo, si hay un buen proxy "
+"ARP conocido en la red y dichas tramas no necesitan usarse o, en el caso de "
+"802.11, no deben usarse para evitar ataques."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:733
 msgid ""
@@ -2607,26 +2610,33 @@ msgid ""
 "good NA proxy on the network and such frames need not be used or in the case "
 "of 802.11, must not be used to prevent attacks."
 msgstr ""
+"Elimine todos los anuncios de vecinos no solicitados, por ejemplo, si hay un "
+"buen proxy NA conocido en la red y no es necesario usar dichos marcos o, en "
+"el caso de 802.11, no deben usarse para evitar ataques."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:710
 msgid "Drop gratuitous ARP"
-msgstr ""
+msgstr "Descartar ARP gratuito"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:787
 msgid "Drop layer 2 multicast frames containing IPv4 unicast packets."
 msgstr ""
+"Descartar tramas de multidifusión de capa 2 que contengan paquetes de "
+"unidifusión IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:791
 msgid "Drop layer 2 multicast frames containing IPv6 unicast packets."
 msgstr ""
+"Descartar tramas de multidifusión de capa 2 que contengan paquetes de "
+"unidifusión IPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:787
 msgid "Drop nested IPv4 unicast"
-msgstr ""
+msgstr "Descartar la unidifusión de IPv4 anidada"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:791
 msgid "Drop nested IPv6 unicast"
-msgstr ""
+msgstr "Descartar unidifusión IPv6 anidada"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:96
 msgctxt "nft drop action"
@@ -2640,7 +2650,7 @@ msgstr "Descartar paquetes no coincidentes"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:733
 msgid "Drop unsolicited NA"
-msgstr ""
+msgstr "Descartar NA no solicitado"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:12
 msgid "Dropbear Instance"
@@ -2825,7 +2835,7 @@ msgstr "Activar negociación IPv6 en el enlace PPP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:729
 msgid "Enable IPv6 segment routing"
-msgstr ""
+msgstr "Activar el enrutamiento de segmentos IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:194
 msgid "Enable Jumbo Frame passthrough"
@@ -3824,7 +3834,7 @@ msgstr "Alto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:707
 msgid "Honor gratuitous ARP"
-msgstr ""
+msgstr "Honor ARP gratuito"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:593
 #, fuzzy
@@ -4641,7 +4651,7 @@ msgstr "Cadena de clave Base64 no válida"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:117
 msgid "Invalid IPv6 address"
-msgstr ""
+msgstr "Dirección IPv6 no válida"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:78
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:83
@@ -4683,15 +4693,15 @@ msgstr "Valor hexadecimal inválido"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:126
 msgid "Invalid hostname or IPv4 address"
-msgstr ""
+msgstr "Nombre de host o dirección IPv4 no válidos"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:134
 msgid "Invalid port"
-msgstr ""
+msgstr "Puerto no válido"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
 msgid "Invalid server URL"
-msgstr ""
+msgstr "URL del servidor no válida"
 
 #: modules/luci-base/ucode/template/sysauth.ut:12
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:32
@@ -4709,7 +4719,7 @@ msgstr "Invertir coincidencia"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:223
 msgctxt "VLAN port state"
 msgid "Is Primary VLAN"
-msgstr ""
+msgstr "Es la VLAN principal"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1149
 msgid "Isolate Clients"
@@ -6026,7 +6036,7 @@ msgstr "Ruido"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:30
 msgid "Noise Margin"
-msgstr ""
+msgstr "Margen de ruido"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:272
 msgid "Noise:"
@@ -6054,7 +6064,7 @@ msgstr "No encontrado"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:211
 msgctxt "VLAN port state"
 msgid "Not Member"
-msgstr ""
+msgstr "No miembro"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:75
 msgid "Not associated"
@@ -7181,8 +7191,9 @@ msgid "RADIUS Dynamic VLAN Assignment"
 msgstr "Asignación de VLAN dinámica de RADIUS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1445
+#, fuzzy
 msgid "RADIUS Per STA VLAN"
-msgstr ""
+msgstr "RADIUS Per STA VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1462
 #, fuzzy
@@ -7191,11 +7202,12 @@ msgstr "Esquema de nomenclatura del puente RADIUS VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1449
 msgid "RADIUS VLAN Naming"
-msgstr ""
+msgstr "Nomenclatura de VLAN RADIUS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1452
+#, fuzzy
 msgid "RADIUS VLAN Tagged Interface"
-msgstr ""
+msgstr "Interfaz etiquetada RADIUS VLAN"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:88
 msgid "RFC3947 NAT-T mode"
@@ -7500,6 +7512,8 @@ msgid ""
 "Required: Rejects auth if RADIUS server does not provide appropriate VLAN "
 "attributes."
 msgstr ""
+"Obligatorio: rechaza la autenticación si el servidor RADIUS no proporciona "
+"los atributos de VLAN adecuados."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1319
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1320
@@ -8905,7 +8919,7 @@ msgstr "Tabla"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:219
 msgctxt "VLAN port state"
 msgid "Tagged"
-msgstr ""
+msgstr "Etiquetado"
 
 # Target = Meta --> Objetivo --> Destino?
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
@@ -9971,7 +9985,7 @@ msgstr "Módem no soportado"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
 msgid "Unsupported protocol"
-msgstr ""
+msgstr "Protocolo no compatible"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:315
 msgid "Unsupported protocol type."
@@ -9980,7 +9994,7 @@ msgstr "Tipo de protocolo no soportado."
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:215
 msgctxt "VLAN port state"
 msgid "Untagged"
-msgstr ""
+msgstr "Sin etiquetar"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:532
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
@@ -10522,6 +10536,10 @@ msgid ""
 "requests or replies, otherwise only preexisting table entries are updated, "
 "but no new hosts are learned."
 msgstr ""
+"Cuando está activado, se agregan nuevas entradas de la tabla ARP a partir de "
+"solicitudes o respuestas APR gratuitas recibidas; de lo contrario, solo se "
+"actualizan las entradas de la tabla preexistentes, pero no se aprenden "
+"nuevos hosts."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:14
 msgid ""
@@ -10769,11 +10787,11 @@ msgstr "automático"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (disabled)"
-msgstr ""
+msgstr "automático (desactivado)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (enabled)"
-msgstr ""
+msgstr "automático (activado)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:82
 msgid "baseT"
@@ -10866,7 +10884,7 @@ msgstr "p. ej: vertedero"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:157
 msgid "enabled"
-msgstr ""
+msgstr "activado"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:60
 msgctxt "WireGuard keep alive interval"
