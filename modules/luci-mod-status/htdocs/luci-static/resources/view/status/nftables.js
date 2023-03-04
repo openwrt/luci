@@ -515,7 +515,7 @@ return view.extend({
 		}
 
 		if (empty)
-			dom.content(row.childNodes[0], E('em', [ _('Any packet', 'nft match any traffic') ]));
+			dom.append(row.childNodes[0], E('span', { 'class': 'ifacebadge' }, '<em>%h</em>'.format(_('Any packet', 'nft match any traffic'))));
 
 		return row;
 	},
