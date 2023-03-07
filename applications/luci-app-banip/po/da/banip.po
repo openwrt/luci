@@ -141,20 +141,18 @@ msgstr ""
 msgid "Base working directory while banIP processing."
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blacklist.js:15
-msgid ""
-"Blacklist changes have been saved. Refresh your banIP lists that changes "
-"take effect."
-msgstr ""
-"Ændringerne på sortlisten er blevet gemt. Opdater dine banIP-lister, så "
-"ændringerne træder i kraft."
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:413
 msgid "Blocklist Expiry"
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:223
 msgid "Blocklist Feeds"
+msgstr ""
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:15
+msgid ""
+"Blocklist modifications have been saved, restart banIP that changes take "
+"effect."
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:335
@@ -637,17 +635,12 @@ msgid ""
 "IPv6 address or domain name per line."
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blacklist.js:23
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:23
 msgid ""
-"This is the local banIP blacklist to always-deny certain IP/CIDR addresses."
-"<br /> <em><b>Please note:</b></em> add only one IPv4 address, IPv6 address "
-"or domain name per line. Comments introduced with '#' are allowed - "
-"wildcards and regex are not."
+"This is the local banIP blocklist that will prevent certain MAC/IP/CIDR "
+"addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/IPv4/"
+"IPv6 address or domain name per line."
 msgstr ""
-"Dette er den lokale banIP-blacklist, der altid afviser visse IP/CIDR-"
-"adresser.<br /> <em><b>Bemærk:</b></em> tilføjer kun én IPv4-adresse, IPv6-"
-"adresse eller domænenavn pr. linje. Kommentarer, der indledes med \"#\", er "
-"tilladt - wildcards og regex er ikke tilladt."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:180
 msgid ""
@@ -667,11 +660,8 @@ msgstr "Emne for banIP-meddelelses-e-mails."
 msgid "Trigger Delay"
 msgstr "Udløserforsinkelse"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blacklist.js:17
-msgid "Unable to save changes: %s"
-msgstr "Kunne ikke gemme ændringer: %s"
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:17
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:17
 msgid "Unable to save modifications: %s"
 msgstr ""
 
@@ -710,6 +700,27 @@ msgstr ""
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:3
 msgid "banIP"
 msgstr "banIP"
+
+#~ msgid ""
+#~ "Blacklist changes have been saved. Refresh your banIP lists that changes "
+#~ "take effect."
+#~ msgstr ""
+#~ "Ændringerne på sortlisten er blevet gemt. Opdater dine banIP-lister, så "
+#~ "ændringerne træder i kraft."
+
+#~ msgid ""
+#~ "This is the local banIP blacklist to always-deny certain IP/CIDR "
+#~ "addresses.<br /> <em><b>Please note:</b></em> add only one IPv4 address, "
+#~ "IPv6 address or domain name per line. Comments introduced with '#' are "
+#~ "allowed - wildcards and regex are not."
+#~ msgstr ""
+#~ "Dette er den lokale banIP-blacklist, der altid afviser visse IP/CIDR-"
+#~ "adresser.<br /> <em><b>Bemærk:</b></em> tilføjer kun én IPv4-adresse, "
+#~ "IPv6-adresse eller domænenavn pr. linje. Kommentarer, der indledes med "
+#~ "\"#\", er tilladt - wildcards og regex er ikke tilladt."
+
+#~ msgid "Unable to save changes: %s"
+#~ msgstr "Kunne ikke gemme ændringer: %s"
 
 #~ msgid "-m limit --limit 2/sec (default)"
 #~ msgstr "-m grænse --limit 2/sek (standard)"
