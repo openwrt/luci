@@ -5,7 +5,10 @@
 
 return view.extend({
 	load: function () {
-		return L.resolveDefault(fs.read_direct('/etc/banip/banip.blocklist'), '');
+		return Promise.all([
+			L.resolveDefault(fs.stat('/etc/banip/banip.blocklist'), {}),
+			L.resolveDefault(fs.read_direct('/etc/banip/banip.blocklist'), '')
+		]);
 	},
 	handleSave: function (ev) {
 		var value = ((document.querySelector('textarea').value || '').trim().toLowerCase().replace(/\r\n/g, '\n')) + '\n';
@@ -18,6 +21,9 @@ return view.extend({
 			});
 	},
 	render: function (blocklist) {
+		if (blocklist[0].size >= 100000) {
+			ui.addNotification(null, E('p', _('The blocklist is too big, unable to save modifications.')), 'error');
+		}
 		return E([
 			E('p', {},
 				_('This is the local banIP blocklist that will prevent certain MAC/IP/CIDR addresses.<br /> \
@@ -28,7 +34,7 @@ return view.extend({
 					'spellcheck': 'false',
 					'wrap': 'off',
 					'rows': 25
-				}, [blocklist != null ? blocklist : ''])
+				}, [blocklist[1] != null ? blocklist[1] : ''])
 			)
 		]);
 	},

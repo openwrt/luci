@@ -362,6 +362,10 @@ return view.extend({
 		o.placeholder = '/tmp/banIP-report';
 		o.rmempty = true;
 
+		o = s.taboption('advanced', form.Flag, 'ban_reportelements', _('Report Elements'), _('List Set elements in the report, disable this to speed up the report significantly.'));
+		o.default = 1
+		o.optional = true;
+
 		o = s.taboption('advanced', form.Flag, 'ban_fetchinsecure', _('Download Insecure'), _('Don\'t check SSL server certificates during download.'));
 		o.rmempty = true;
 

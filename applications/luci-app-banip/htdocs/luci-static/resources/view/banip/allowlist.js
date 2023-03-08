@@ -5,7 +5,10 @@
 
 return view.extend({
 	load: function () {
-		return L.resolveDefault(fs.read_direct('/etc/banip/banip.allowlist'), '');
+		return Promise.all([
+			L.resolveDefault(fs.stat('/etc/banip/banip.allowlist'), {}),
+			L.resolveDefault(fs.read_direct('/etc/banip/banip.allowlist'), '')
+		]);
 	},
 	handleSave: function (ev) {
 		var value = ((document.querySelector('textarea').value || '').trim().toLowerCase().replace(/\r\n/g, '\n')) + '\n';
@@ -18,6 +21,9 @@ return view.extend({
 			});
 	},
 	render: function (allowlist) {
+		if (allowlist[0].size >= 100000) {
+			ui.addNotification(null, E('p', _('The allowlist is too big, unable to save modifications.')), 'error');
+		}
 		return E([
 			E('p', {},
 				_('This is the local banIP allowlist that will permit certain MAC/IP/CIDR addresses.<br /> \
@@ -28,7 +34,7 @@ return view.extend({
 					'spellcheck': 'false',
 					'wrap': 'off',
 					'rows': 25
-				}, [allowlist != null ? allowlist : ''])
+				}, [allowlist[1] != null ? allowlist[1] : ''])
 			)
 		]);
 	},

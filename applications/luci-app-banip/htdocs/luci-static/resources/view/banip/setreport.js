@@ -132,7 +132,7 @@ return view.extend({
 	load: function () {
 		return Promise.all([
 			L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['report', 'json']), '{}'),
-			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', ['-tj', 'list', 'table', 'inet', 'banIP']), '{}')
+			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', ['-tj', 'list', 'ruleset']), '{}')
 		]);
 	},
 
