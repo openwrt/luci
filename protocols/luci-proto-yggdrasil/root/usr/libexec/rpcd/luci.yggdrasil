@@ -1,0 +1,27 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "generateKeyPair"
+		json_close_object
+		json_dump
+	;;
+	call)
+		case "$2" in
+			generateKeyPair)
+				json_load "$(yggdrasil -genconf -json)"
+				json_get_vars PublicKey PrivateKey
+				json_cleanup
+				json_init
+				json_add_object "keys"
+				json_add_string "priv" "$PrivateKey"
+				json_add_string "pub" "$PublicKey"
+				json_close_object
+				json_dump
+			;;
+		esac
+	;;
+esac
