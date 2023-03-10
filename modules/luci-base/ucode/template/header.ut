@@ -10,7 +10,7 @@
 <script type="text/javascript" src="{{ resource }}/promis.min.js"></script>
 <script type="text/javascript" src="{{ resource }}/luci.js"></script>
 <script type="text/javascript">
-	L = new LuCI({{ {
+	L = new LuCI({{ replace(`${ {
 		media          : media,
 		resource       : resource,
 		scriptname     : http.getenv("SCRIPT_NAME"),
@@ -28,5 +28,5 @@
 		apply_timeout  : max(+config.apply.timeout  ||   5,  1),
 		apply_display  : max(+config.apply.display  || 1.5,  1),
 		rollback_token : rollback_token
-	} }});
+	} }`, '/', '\\/') }});
 </script>

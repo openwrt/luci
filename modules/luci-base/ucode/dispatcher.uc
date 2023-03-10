@@ -845,7 +845,7 @@ function run_action(request_path, lang, tree, resolved, action) {
 			         "Install luci-mod-admin-full and retry. " +
 			         "If the module is already installed, try removing the /tmp/luci-indexcache file.");
 		else
-			error404(`No page is registered at '/${join("/", resolved.ctx.request_path)}'.\n` +
+			error404(`No page is registered at '/${entityencode(join("/", resolved.ctx.request_path))}'.\n` +
 			         "If this url belongs to an extension, make sure it is properly installed.\n" +
 			         "If the extension was recently installed, try removing the /tmp/luci-indexcache file.");
 		break;
