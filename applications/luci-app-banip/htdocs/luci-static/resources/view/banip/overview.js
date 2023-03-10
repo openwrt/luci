@@ -32,8 +32,8 @@ return view.extend({
 		/*
 			poll runtime information
 		*/
-		var rt_res, inf_stat, inf_version, inf_elements, inf_feeds, inf_feedarray, inf_devices, inf_devicearray, inf_interfaces, inf_interfacearray
-		var inf_subnets, inf_subnetarray, inf_infos, inf_flags, inf_run, inf_system
+		var rt_res, inf_stat, inf_version, inf_elements, inf_feeds, inf_feedarray, inf_devices, inf_devicearray
+		var inf_subnets, inf_subnetarray, nft_infos, run_infos, inf_flags, last_run, inf_system
 
 		pollData: poll.add(function () {
 			return L.resolveDefault(fs.read_direct('/var/run/banip_runtime.json'), 'null').then(function (res) {
@@ -80,27 +80,27 @@ return view.extend({
 				}
 				inf_devices = document.getElementById('devices');
 				inf_devicearray = [];
-				if (inf_devices && rt_res) {
+				if (inf_devices && rt_res && rt_res.active_devices.length > 1) {
 					for (var i = 0; i < rt_res.active_devices.length; i++) {
-						if (i < rt_res.active_devices.length - 1) {
-							inf_devicearray += rt_res.active_devices[i].device + ', ';
-						} else {
+						if (i === 0 && rt_res.active_devices[i].device && rt_res.active_devices[i+1].interface) {
+							inf_devicearray += rt_res.active_devices[i].device + ' ::: ' + rt_res.active_devices[i+1].interface;
+							i++;
+						}
+						else if (i === 0) {
 							inf_devicearray += rt_res.active_devices[i].device
+						}
+						else if (i > 0 && rt_res.active_devices[i].device && rt_res.active_devices[i+1].interface) {
+							inf_devicearray += ', ' + rt_res.active_devices[i].device + ' ::: ' + rt_res.active_devices[i+1].interface;
+							i++;
+						}
+						else if (i > 0 && rt_res.active_devices[i].device) {
+							inf_devicearray += ', ' + rt_res.active_devices[i].device;
+						}
+						else if (i > 0 && rt_res.active_devices[i].interface) {
+							inf_devicearray += ', ' + rt_res.active_devices[i].interface;
 						}
 					}
 					inf_devices.textContent = inf_devicearray || '-';
-				}
-				inf_interfaces = document.getElementById('interfaces');
-				inf_interfacearray = [];
-				if (inf_interfaces && rt_res) {
-					for (var i = 0; i < rt_res.active_interfaces.length; i++) {
-						if (i < rt_res.active_interfaces.length - 1) {
-							inf_interfacearray += rt_res.active_interfaces[i].interface + ', ';
-						} else {
-							inf_interfacearray += rt_res.active_interfaces[i].interface
-						}
-					}
-					inf_interfaces.textContent = inf_interfacearray || '-';
 				}
 				inf_subnets = document.getElementById('subnets');
 				inf_subnetarray = [];
@@ -114,17 +114,21 @@ return view.extend({
 					}
 					inf_subnets.textContent = inf_subnetarray || '-';
 				}
-				inf_infos = document.getElementById('infos');
-				if (inf_infos && rt_res) {
-					inf_infos.textContent = rt_res.run_info || '-';
+				nft_infos = document.getElementById('nft');
+				if (nft_infos && rt_res) {
+					nft_infos.textContent = rt_res.nft_info || '-';
+				}
+				run_infos = document.getElementById('run');
+				if (run_infos && rt_res) {
+					run_infos.textContent = rt_res.run_info || '-';
 				}
 				inf_flags = document.getElementById('flags');
 				if (inf_flags && rt_res) {
 					inf_flags.textContent = rt_res.run_flags || '-';
 				}
-				inf_run = document.getElementById('run');
-				if (inf_run && rt_res) {
-					inf_run.textContent = rt_res.last_run || '-';
+				last_run = document.getElementById('last');
+				if (last_run && rt_res) {
+					last_run.textContent = rt_res.last_run || '-';
 				}
 				inf_system = document.getElementById('system');
 				if (inf_system && rt_res) {
@@ -161,16 +165,16 @@ return view.extend({
 					E('div', { 'class': 'cbi-value-field', 'id': 'devices', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Interfaces')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'interfaces', 'style': 'color:#37c' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Subnets')),
 					E('div', { 'class': 'cbi-value-field', 'id': 'subnets', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('NFT Information')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'nft', 'style': 'color:#37c' }, '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'infos', 'style': 'color:#37c' }, '-')
+					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Flags')),
@@ -178,7 +182,7 @@ return view.extend({
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Last Run')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'color:#37c' }, '-')
+					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('System Information')),
@@ -354,15 +358,15 @@ return view.extend({
 		o.placeholder = '/tmp';
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.Value, 'ban_backupdir', _('Backup Directory'), _('Target directory for compressed source list backups.'));
+		o = s.taboption('advanced', form.Value, 'ban_backupdir', _('Backup Directory'), _('Target directory for compressed feed backups.'));
 		o.placeholder = '/tmp/banIP-backup';
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.Value, 'ban_reportdir', _('Report Directory'), _('Target directory for IPSet related report files.'));
+		o = s.taboption('advanced', form.Value, 'ban_reportdir', _('Report Directory'), _('Target directory for banIP-related report files.'));
 		o.placeholder = '/tmp/banIP-report';
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.Flag, 'ban_reportelements', _('Report Elements'), _('List Set elements in the report, disable this to speed up the report significantly.'));
+		o = s.taboption('advanced', form.Flag, 'ban_reportelements', _('Report Elements'), _('List Set elements in the status and report, disable this to reduce the CPU load.'));
 		o.default = 1
 		o.optional = true;
 
@@ -375,6 +379,12 @@ return view.extend({
 		o = s.taboption('adv_chain', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em><b>Changes on this tab needs a banIP service restart to take effect.</b></em>';
+
+		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpolicy', _('Set Policy'), _('Set the nft policy for banIP-related sets.'));
+		o.value('memory', _('memory (default)'));
+		o.value('performance', _('performance'));
+		o.optional = true;
+		o.rmempty = true;
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('Chain Priority'), _('Set the nft chain priority within the banIP table. Please note: lower values means higher priority.'));
 		o.value('0', _('0'));
@@ -429,6 +439,19 @@ return view.extend({
 		o = s.taboption('adv_log', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em><b>Changes on this tab needs a banIP service restart to take effect.</b></em>';
+
+		o = s.taboption('adv_log', form.ListValue, 'ban_nftloglevel', _('Log Level'), _('Set the syslog level for NFT logging.'));
+		o.value('emerg', _('emerg'));
+		o.value('alert', _('alert'));
+		o.value('crit', _('crit'));
+		o.value('err', _('err'));
+		o.value('warn', _('warn (default)'));
+		o.value('notice', _('notice'));
+		o.value('info', _('info'));
+		o.value('debug', _('debug'));
+		o.value('audit', _('audit'));
+		o.optional = true;
+		o.rmempty = true;
 
 		o = s.taboption('adv_log', form.ListValue, 'ban_loglimit', _('Log Limit'), _('Parse only the last stated number of log entries for suspicious events.'));
 		o.value('50', _('50'));
