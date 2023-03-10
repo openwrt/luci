@@ -1064,7 +1064,7 @@ function dispatch(request)
 			         "Install luci-mod-admin-full and retry. " ..
 			         "If the module is already installed, try removing the /tmp/luci-indexcache file.")
 		else
-			error404("No page is registered at '/" .. table.concat(lookup_ctx.request_path, "/") .. "'.\n" ..
+			error404("No page is registered at '/" .. xml.pcdata(table.concat(lookup_ctx.request_path, "/")) .. "'.\n" ..
 			         "If this url belongs to an extension, make sure it is properly installed.\n" ..
 			         "If the extension was recently installed, try removing the /tmp/luci-indexcache file.")
 		end
