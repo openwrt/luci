@@ -730,8 +730,8 @@ return network.registerProtocol('wireguard', {
 				var hostnames = [];
 
 				uci.sections('ddns', 'service', function(s) {
-					if (typeof(s.domain) == 'string' && s.enabled == '1')
-						hostnames.push(s.domain);
+					if (typeof(s.lookup_host) == 'string' && s.enabled == '1')
+						hostnames.push(s.lookup_host);
 				});
 
 				uci.sections('system', 'system', function(s) {
