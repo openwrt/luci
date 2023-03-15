@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LUCI DSL spectrum graph
-LUCI_DEPENDS:=+luci-base +ltq-dsl-base
+LUCI_DEPENDS:=+luci-base
 
 PKG_LICENSE:=Apache-2.0
 
