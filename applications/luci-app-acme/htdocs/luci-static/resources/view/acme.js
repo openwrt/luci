@@ -26,11 +26,6 @@ return view.extend({
 		s = m.section(form.TypedSection, "acme", _("ACME global config"));
 		s.anonymous = true;
 
-		o = s.option(form.Value, "state_dir", _("State directory"),
-			_("Where certs and other state files are kept."));
-		o.rmempty = false;
-		o.datatype = "directory";
-
 		o = s.option(form.Value, "account_email", _("Account email"),
 			_("Email address to associate with account key."))
 		o.rmempty = false;
