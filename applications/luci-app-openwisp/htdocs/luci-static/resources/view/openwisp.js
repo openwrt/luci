@@ -28,6 +28,7 @@ return view.extend({
 			_("Enable or disable the OpenWISP service."));
 		o.value('disabled', _('Disabled'));
 		o.value('monitoring', _('Enabled'));
+		o.default = 'monitoring'
 
 		o = s.taboption('general', form.Value, 'url', _('Server URL'), _('The URL to the OpenWISP server. Example: https://openwisp2.mynetwork.com'))
 		o.placeholder = 'https://openwisp2.mynetwork.com'
@@ -37,49 +38,60 @@ return view.extend({
 
 		o = s.taboption('general', form.Value, 'interval', _('Update Interval'), 'How often to check in with the OpenWISP server. Expressed in seconds.')
 		o.placeholder = '120'
+		o.rmempty = true
 		o.datatype = 'uinteger';
 
 		// Advanced settings
 		o = s.taboption('advanced', form.Flag, 'verify_ssl', _('Verify SSL'), _('Verify the server SSL certificate.'))
-		o.rmempty = false
+		o.rmempty = true
+		o.default = true
 
 		o = s.taboption('advanced', form.Flag, 'consistent_key', _('Consistent Key'), _('When using Automatic registration, this feature allows devices to keep the same configuration even if reset or re-flashed.  This feature is enabled by default, but must be enabled also in the controller application in order to work.'))
-		o.rmempty = false
+		o.rmempty = true
+		o.default = true
 
 		o = s.taboption('advanced', widgets.DeviceSelect, 'mac_interface', _('MAC Interface'), _('The interface to use for getting the MAC for this device.'))
-		o.rmempty = false
+		o.default = 'eth0'
 
 		o = s.taboption('advanced', widgets.NetworkSelect, 'management_interface', _('Management Interface'), _('The interface to use for management and control.'))
-		o.rmempty = false
+		o.placeholder = 'tun0'
+		o.rmempty = true
 
 		o = s.taboption('advanced', form.Flag, 'merge_config', _('Merge Config'), _('If selected, in the event a config item is present in both the remote and local configuration, the remote configuration takes precedence over local configuration.'))
-		o.rmempty = false
+		o.rmempty = true
+		o.default = true
 
 		o = s.taboption('advanced', form.DynamicList, 'tags', _('Tags'), _('Tags applied to this device.'))
 
 		o = s.taboption('advanced', form.Flag, 'test_config', _('Test Config'), _('If the agent is unable to reach the controller after applying the downloaded config it will be reverted.'))
+		o.default = true
+		o.rmempty = true
 
 		o = s.taboption('advanced', form.Value, 'test_script', _('Test Script'), 'Path to a custom test script if the default Test Config script does not meet your needs.')
 		o.depends({ test_config: '1' })
 		o.datatype = "file"
 
 		o = s.taboption('advanced', form.Flag, 'hardware_id_key', _('Hardware ID Key'), _('Use a unique hardware ID for device identification, for example a serial number.'))
-		o.rmempty = false
+		o.default = false
+		o.rmempty = true
 
 		o = s.taboption('advanced', form.Value, 'hardware_id_script', _('Hardware ID Script'), 'Path to the script used to return the value of the hardware key.')
 		o.depends({ hardware_id_key: '1' })
 		o.datatype = "file"
 
 		o = s.taboption('advanced', form.Value, 'bootup_delay', _('Boot Delay'), 'Maximum value of the delay after boot before starting OpenWISP service. Expressed in seconds.')
-		o.placeholder = '0'
+		o.placeholder = '10'
+		o.rmempty = true
 		o.datatype = 'uinteger';
 
 		o = s.taboption('advanced', form.Value, 'connect_timeout', _('Connect Timeout'), 'Value passed to curl --connect-timeout argument, defaults to 15. Expressed in seconds.')
 		o.placeholder = '15'
+		o.rmempty = true
 		o.datatype = 'uinteger';
 
 		o = s.taboption('advanced', form.Value, 'max_time', _('Max Time'), _('Value passed to curl --max-time argument, defaults to 30. Expressed in seconds.'))
 		o.placeholder = '30'
+		o.rmempty = true
 		o.datatype = 'uinteger';
 
 		o = s.taboption('advanced', form.Value, 'capath', _('CA Path'), _('Use the specified certificate file to verify the peer. The file may contain multiple CA certificates. The certificate(s) must be in PEM format.'))
