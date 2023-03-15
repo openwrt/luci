@@ -95,6 +95,7 @@ return view.extend({
 		s.addremove = true;
 		s.anonymous = true;
 		s.sortable  = true;
+		s.nodescriptions = true;
 
 		s.handleRemove = function(section_id, ev) {
 			return firewall.deleteZone(section_id).then(L.bind(function() {
