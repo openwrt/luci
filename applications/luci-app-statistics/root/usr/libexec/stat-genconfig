@@ -241,6 +241,33 @@ function config_network(c) {
 	;
 }
 
+function config_mqtt(c) {
+	let str = "";
+
+	for (let k, s in sections) {
+			if (s['.type'] === 'collectd_mqtt_block') {
+					const isPublish = s['blocktype'] === 'Publish';
+
+					str += isPublish ? `\t<Publish "${s.name}">\n` : `\t<Subscribe "${s.name}">\n`;
+
+					str += `\t\tHost "${s.Host}"\n`;
+					str += s['Port'] ? `\t\tPort ${s.Port}\n` : '';
+					str += s['User'] ? `\t\tUser "${s.User}"\n` : '';
+					str += s['Password'] ? `\t\tPassword "${s.Password}"\n` : '';
+					str += s['Qos'] ? `\t\tQos ${s.Qos}\n` : '';
+					str += s['Prefix'] ? `\t\tPrefix ${s.Prefix}\n` : '';
+					str += s['Retain'] ? `\t\tRetain ${s.Retain}\n` : '';
+					str += s['StoreRates'] ? `\t\tRetain ${s.StoreRates}\n` : '';
+					str += s['CleanSession'] ? `\t\tRetain ${s.CleanSession}\n` : '';
+					str += s['Topic'] ? `\t\tTopic "${s.Topic}"\n` : '';
+
+					str += isPublish ? `\t</Publish>\n` : `\t</Subscribe>\n`;
+			}
+	}
+
+	return str;
+}
+
 function section(plugin) {
 	let config = sections[`collectd_${plugin}`] ?? sections.collectd;
 
@@ -270,6 +297,7 @@ for (let filename in lsdir(plugin_dir)) {
 	case 'iptables': plugins[name] = config_iptables; break;
 	case 'curl':     plugins[name] = config_curl;     break;
 	case 'network':  plugins[name] = config_network;  break;
+	case 'mqtt':     plugins[name] = config_mqtt;     break;
 	default:
 		plugins[name] = json(open(`${plugin_dir}/${filename}`))?.legend;
 	}
