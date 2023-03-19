@@ -7,12 +7,20 @@
 			"path": "admin/services/banip/overview"
 		},
 		"depends": {
-			"acl": [ "luci-app-banip" ],
+			"acl": [
+				"luci-app-banip"
+			],
 			"fs": {
-				"/usr/bin/banip.sh": "executable",
-				"/etc/init.d/banip": "executable"
+				"/usr/bin/banip-service.sh": "executable",
+				"/etc/init.d/banip": "executable",
+				"/etc/banip/banip.feeds": "file",
+				"/etc/banip/banip.allowlist": "file",
+				"/etc/banip/banip.blocklist": "file",
+				"/etc/banip/banip.countries": "file"
 			},
-			"uci": { "banip": true }
+			"uci": {
+				"banip": true
+			}
 		}
 	},
 	"admin/services/banip/overview": {
@@ -23,44 +31,44 @@
 			"path": "banip/overview"
 		}
 	},
-	"admin/services/banip/ipsetreport": {
-		"title": "IPSet Report",
+	"admin/services/banip/allowlist": {
+		"title": "Edit Allowlist",
 		"order": 20,
 		"action": {
 			"type": "view",
-			"path": "banip/ipsetreport"
+			"path": "banip/allowlist"
 		}
 	},
-	"admin/services/banip/blacklist": {
-		"title": "Edit Blacklist",
+	"admin/services/banip/blocklist": {
+		"title": "Edit Blocklist",
 		"order": 30,
 		"action": {
 			"type": "view",
-			"path": "banip/blacklist"
+			"path": "banip/blocklist"
 		}
 	},
-	"admin/services/banip/whitelist": {
-		"title": "Edit Whitelist",
+	"admin/services/banip/setreport": {
+		"title": "Set Reporting",
 		"order": 40,
 		"action": {
 			"type": "view",
-			"path": "banip/whitelist"
+			"path": "banip/setreport"
 		}
 	},
-	"admin/services/banip/maclist": {
-		"title": "Edit Maclist",
+	"admin/services/banip/firewall_log": {
+		"title": "Firewall Log",
 		"order": 50,
 		"action": {
 			"type": "view",
-			"path": "banip/maclist"
+			"path": "banip/firewall_log"
 		}
 	},
-	"admin/services/banip/logread": {
-		"title": "Log View",
+	"admin/services/banip/processing_log": {
+		"title": "Processing Log",
 		"order": 60,
 		"action": {
 			"type": "view",
-			"path": "banip/logread"
+			"path": "banip/processing_log"
 		}
 	}
 }
