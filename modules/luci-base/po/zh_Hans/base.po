@@ -1378,6 +1378,10 @@ msgstr "CLAT 配置失败"
 msgid "CNAME or fqdn"
 msgstr "CNAME 或 fqdn"
 
+#: protocols/luci-proto-cni/htdocs/luci-static/resources/protocol/cni.js:6
+msgid "CNI (Externally managed interface)"
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:72
 msgid "CPU usage (%)"
 msgstr "CPU 使用率（%）"
@@ -2475,17 +2479,18 @@ msgid ""
 "Drop all gratuitous ARP frames, for example if there’s a known good ARP "
 "proxy on the network and such frames need not be used or in the case of "
 "802.11, must not be used to prevent attacks."
-msgstr "丢弃所有不必要的 ARP 帧，"
-"如果网络上有一个已知的好的ARP代理并且这样的帧无需使用或者就 802.11 "
-"而言，不准使用这样的帧以防止攻击。"
+msgstr ""
+"丢弃所有不必要的 ARP 帧，如果网络上有一个已知的好的ARP代理并且这样的帧无需使"
+"用或者就 802.11 而言，不准使用这样的帧以防止攻击。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:733
 msgid ""
 "Drop all unsolicited neighbor advertisements, for example if there’s a known "
 "good NA proxy on the network and such frames need not be used or in the case "
 "of 802.11, must not be used to prevent attacks."
-msgstr "丢弃所有不请自来的邻居广播，如果网络上有已知的好的 NA "
-"代理并且这样的帧无需使用或者就 802.11 而言不准使用它们以防止攻击。"
+msgstr ""
+"丢弃所有不请自来的邻居广播，如果网络上有已知的好的 NA 代理并且这样的帧无需使"
+"用或者就 802.11 而言不准使用它们以防止攻击。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:710
 msgid "Drop gratuitous ARP"
@@ -5928,7 +5933,7 @@ msgstr "On-Link 路由"
 msgid "One of hostname or MAC address must be specified!"
 msgstr "请指定主机名或 MAC 地址！"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:481
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:490
 msgid "One of the following: %s"
 msgstr "可选值：%s"
 
@@ -6638,7 +6643,7 @@ msgstr "端口隔离"
 msgid "Port status:"
 msgstr "端口状态："
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:507
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:516
 msgid "Potential negation of: %s"
 msgstr "可能存在的冲突：%s"
 
@@ -9966,8 +9971,9 @@ msgid ""
 "When enabled, new ARP table entries are added from received gratuitous APR "
 "requests or replies, otherwise only preexisting table entries are updated, "
 "but no new hosts are learned."
-msgstr "启用后，从接收到的非必要 ARP 请求或回复添加新的 ARP 表项，"
-"否则只更新先前存在的 ARP 表项，但不学习新的 hosts。"
+msgstr ""
+"启用后，从接收到的非必要 ARP 请求或回复添加新的 ARP 表项，否则只更新先前存在"
+"的 ARP 表项，但不学习新的 hosts。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:14
 msgid ""
@@ -10328,7 +10334,7 @@ msgstr "全双工"
 msgid "half-duplex"
 msgstr "半双工"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:584
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:593
 msgid "hexadecimal encoded value"
 msgstr "十六进制编码值"
 
@@ -10513,7 +10519,7 @@ msgstr ""
 "uHTTPd 提供 <abbr title=\"Hypertext Transfer Protocol\">HTTP</abbr> 或 <abbr "
 "title=\"Hypertext Transfer Protocol Secure\">HTTPS</abbr> 网络访问。"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:574
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:583
 msgid "unique value"
 msgstr "唯一值"
 
@@ -10635,8 +10641,8 @@ msgstr "有效 UCI 标识符，主机名或 IP 地址"
 msgid "valid address:port"
 msgstr "有效 address:port"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:548
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:552
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:557
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:561
 msgid "valid date (YYYY-MM-DD)"
 msgstr "有效日期（YYYY-MM-DD）"
 
@@ -10676,11 +10682,15 @@ msgstr "有效整数值"
 msgid "valid multicast MAC address"
 msgstr "有效的多播 MAC 地址"
 
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:433
+msgid "valid network device name, not \".\" or \"..\""
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:323
 msgid "valid network in address/netmask notation"
 msgstr "地址/网络掩码表示法中的有效网络"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:523
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:532
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
 msgstr "有效电话号码（0-9、“*”、“#”、“!”或“.”）"
 
@@ -10694,35 +10704,35 @@ msgstr "有效端口或端口范围（port1-port2）"
 msgid "valid port value"
 msgstr "有效端口值"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:528
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:537
 msgid "valid time (HH:MM:SS)"
 msgstr "有效时间（HH:MM:SS）"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:450
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:459
 msgid "value between %d and %d characters"
 msgstr "%d 和 %d 字符之间的值"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:431
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:440
 msgid "value between %f and %f"
 msgstr "%f 和 %f 之间的值"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:435
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:444
 msgid "value greater or equal to %f"
 msgstr "值大于或等于 %f"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:439
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:448
 msgid "value smaller or equal to %f"
 msgstr "值小于或等于 %f"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:444
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:453
 msgid "value with %d characters"
 msgstr "值有 %d 个字符"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:455
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:464
 msgid "value with at least %d characters"
 msgstr "值至少为 %d 个字符"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:460
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:469
 msgid "value with at most %d characters"
 msgstr "值至多为 %d 个字符"
 
