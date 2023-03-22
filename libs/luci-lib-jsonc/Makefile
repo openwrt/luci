@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Lua binding for JSON-C
 LUCI_DEPENDS:=+liblua +libjson-c
 
+PKG_BUILD_FLAGS:=no-lto
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

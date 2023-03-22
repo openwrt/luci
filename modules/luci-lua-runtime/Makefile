@@ -23,6 +23,8 @@ LUCI_DEPENDS:= \
 	+liblucihttp-lua \
 	+ucode-mod-lua
 
+PKG_BUILD_FLAGS:=no-lto
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

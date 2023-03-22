@@ -28,6 +28,8 @@ LUCI_DEPENDS:=\
 
 PKG_LICENSE:=MIT
 
+PKG_BUILD_FLAGS:=no-lto
+
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)
 
 include $(INCLUDE_DIR)/host-build.mk

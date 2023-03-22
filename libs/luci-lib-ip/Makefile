@@ -11,6 +11,8 @@ LUCI_DEPENDS:=+liblua +libnl-tiny
 
 PKG_LICENSE:=Apache-2.0
 
+PKG_BUILD_FLAGS:=no-lto
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
