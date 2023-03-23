@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2023-03-08 10:38+0000\n"
+"PO-Revision-Date: 2023-03-23 14:42+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsfirewall/pt_BR/>\n"
@@ -167,13 +167,15 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
 msgid "Address family, Internal IP address must match"
-msgstr ""
+msgstr "Família de endereços, o endereço IP interno deve corresponder"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:135
 msgid ""
 "Address family, source address, destination address, rewrite IP address must "
 "match"
 msgstr ""
+"Família de endereços, endereço de origem, endereço de destino, a reescrita "
+"do endereço IP deve corresponder"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:161
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
@@ -430,6 +432,12 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
+"Encaminhado %{ipv6?%{ipv4?<var>IPv4</var> e "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? "
+"data-tooltip=\"Coincide com fwmarks menos %{mark.num}%{mark.mask? com mask "
+"%{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mascara o valor do fwmark com "
+"%{mark.mask} antes compare.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:473
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:343
@@ -542,6 +550,17 @@ msgid ""
 "any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
 "tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
+"Chegando %{ipv6?%{ipv4?<var>IPv4</var> e "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP com tipos %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
+"<var%{mark.inv? data-tooltip=\"Coincide com fwmarks menos %{mark.num}%{"
+"mark.mask? com máscara %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mascara "
+"valores fwmark com %{mark.mask} antes de comparar.\"}}>%{mark.val}</var>}%{"
+"helper?, helper %{helper.inv?<var data-tooltip=\"Coincide qualquer auxiliar "
+"menos &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\""
+"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:144
@@ -1219,7 +1238,7 @@ msgstr "qualquer zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:297
 msgid "any/all"
-msgstr ""
+msgstr "qualquer/tudo"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:407
 msgid "apply firewall mark"
@@ -1232,7 +1251,7 @@ msgstr "atribuir auxiliar conntrack"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:192
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:220
 msgid "automatic"
-msgstr ""
+msgstr "automático"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89

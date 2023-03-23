@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2023-02-28 10:31+0000\n"
+"PO-Revision-Date: 2023-03-23 14:42+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/pl/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -168,13 +168,15 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
 msgid "Address family, Internal IP address must match"
-msgstr ""
+msgstr "Rodzina adresów, wewnętrzny adres IP muszą być zgodne"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:135
 msgid ""
 "Address family, source address, destination address, rewrite IP address must "
 "match"
 msgstr ""
+"Rodzina adresów, adres źródłowy, adres docelowy, przepisany adres IP muszą "
+"być zgodne"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:161
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
@@ -189,7 +191,7 @@ msgstr "Zezwól na \"nieprawidłowy\" ruch"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:355
 msgid "Allow forward from <em>source zones</em>:"
-msgstr "Zezwól na przekazywanie z <em>strefy źródłowej</em>:"
+msgstr "Zezwól na przekazywanie ze <em>strefy źródłowej</em>:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:314
 msgid "Allow forward to <em>destination zones</em>:"
@@ -430,6 +432,12 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
+"Przekazano %{ipv6?%{ipv4?<var>IPv4</var> i "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protokół {proto#%{"
+"next?, }<var>%{item.name}</var>}}%{mark?, znacznik <var%{mark.inv? data-"
+"tooltip=\"Dopasuj fwmarki oprócz %{mark.num}%{mark.mask? z maską %{mark."
+"mask}}.\":%{mark.mask? data-tooltip=\"Maskuj wartość fwmark z %{mark.mask} "
+"przed porównaniem.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:473
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:343
@@ -542,6 +550,17 @@ msgid ""
 "any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
 "tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
+"Przychodzące %{ipv6?%{ipv4?<var>IPv4</var> i "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protokół "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP z typami %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, "
+"znacznik <var%{mark.inv? data-tooltip=\"Dopasuj fwmarki oprócz %{mark.num}%{"
+"mark.mask? z maską %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Maskuj "
+"wartość fwmark z %{mark.mask} przed porównaniem.\"}}>%{mark.val}</var>}%{"
+"helper?, pomocnik %{helper.inv?<var data-tooltip=\"Dopasuj dowolnego "
+"pomocnika oprócz &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
+"tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:144
@@ -1208,7 +1227,7 @@ msgstr "dowolna strefa"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:297
 msgid "any/all"
-msgstr ""
+msgstr "dowolny/wszystkie"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:407
 msgid "apply firewall mark"
@@ -1221,7 +1240,7 @@ msgstr "przydziel pomocnika conntrack"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:192
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:220
 msgid "automatic"
-msgstr ""
+msgstr "automatyczne"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
