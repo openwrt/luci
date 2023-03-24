@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=RSA/X.509 Key Generator (required for LuCId SSL support)
 LUCI_DEPENDS:=+lua +luci-lib-nixio
 
-PKG_USE_MIPS16:=0
+PKG_BUILD_FLAGS:=no-mips16
 PKG_LICENSE:=LGPL-2.1
 
 include ../../luci.mk
