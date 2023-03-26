@@ -47,6 +47,11 @@ return view.extend({
 						if (!inf_stat.classList.contains("spinning")) {
 							inf_stat.classList.add("spinning");
 						}
+					} else if (rt_res.status === "disabled") {
+						if (inf_stat.classList.contains("spinning")) {
+							inf_stat.classList.remove("spinning");
+						}
+						poll.stop();
 					} else {
 						if (inf_stat.classList.contains("spinning")) {
 							inf_stat.classList.remove("spinning");
@@ -297,6 +302,13 @@ return view.extend({
 		o.datatype = 'range(1,300)';
 		o.rmempty = true;
 
+		o = s.taboption('general', form.ListValue, 'ban_triggeraction', _('Trigger Action'), _('Trigger action on ifup interface events.'));
+		o.value('start', _('start (default)'));
+		o.value('reload', _('reload'));
+		o.value('restart', _('restart'));
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('general', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active sets and and tidy up the local blocklist.'));
 		o.default = 1
 		o.rmempty = false;
@@ -400,6 +412,8 @@ return view.extend({
 			feeds = JSON.parse(result[0]);
 
 			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockinput', _('WAN-Input Chain'), _('Limit certain feeds to the WAN-Input chain.'));
+			o.value('allowlist', _('local allowlist'));
+			o.value('blocklist', _('local blocklist'));
 			for (var i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
@@ -408,6 +422,8 @@ return view.extend({
 			o.rmempty = true;
 
 			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockforwardwan', _('WAN-Forward Chain'), _('Limit certain feeds to the WAN-Forward chain.'));
+			o.value('allowlist', _('local allowlist'));
+			o.value('blocklist', _('local blocklist'));
 			for (var i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
@@ -416,6 +432,8 @@ return view.extend({
 			o.rmempty = true;
 
 			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockforwardlan', _('LAN-Forward Chain'), _('Limit certain feeds to the LAN-Forward chain.'));
+			o.value('allowlist', _('local allowlist'));
+			o.value('blocklist', _('local blocklist'));
 			for (var i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
@@ -477,6 +495,9 @@ return view.extend({
 		o = s.taboption('adv_email', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em><b>To enable email notifications, set up the \'msmtp\' package and specify a vaild E-Mail receiver address.</b></em>';
+
+		o = s.taboption('adv_email', form.Flag, 'ban_mailnotification', _('E-Mail Notification'), _('Receive E-Mail notifications with every banIP run.'));
+		o.rmempty = true;
 
 		o = s.taboption('adv_email', form.Value, 'ban_mailreceiver', _('E-Mail Receiver Address'), _('Receiver address for banIP notification E-Mails, this information is required to enable E-Mail functionality.'));
 		o.placeholder = 'name@example.com';
