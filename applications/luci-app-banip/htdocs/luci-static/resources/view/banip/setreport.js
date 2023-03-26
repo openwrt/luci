@@ -67,7 +67,11 @@ function handleAction(report, ev) {
 	if (ev === 'survey') {
 		var content, selectO;
 
-		content = JSON.parse(report[1]);
+		if (report[1]) {
+			content = JSON.parse(report[1]);
+		} else {
+			content = "";
+		}
 		selectO = [E('option', { value: '' }, [_('-- Set Selection --')])];
 		for (var i = 0; i < Object.keys(content.nftables).length; i++) {
 			if (content.nftables[i].set !== undefined && content.nftables[i].set.name !== undefined) {
@@ -131,15 +135,19 @@ function handleAction(report, ev) {
 return view.extend({
 	load: function () {
 		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['report', 'json']), '{}'),
-			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', ['-tj', 'list', 'ruleset']), '{}')
+			L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['report', 'json']), ''),
+			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', ['-tj', 'list', 'ruleset']), '')
 		]);
 	},
 
 	render: function (report) {
 		var content;
-		content = JSON.parse(report[0]);
 
+		if (report[0]) {
+			content = JSON.parse(report[0]);
+		} else {
+			content = "";
+		}
 		var rows_sets = [];
 		var tbl_sets = E('table', { 'class': 'table', 'id': 'sets' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
