@@ -22,7 +22,7 @@ return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(callServiceList('transmission')),
-			L.resolveDefault(fs.stat('/usr/share/transmission/web/index.html')),
+			L.resolveDefault(fs.stat('/usr/share/transmission/public_html/index.html')),
 			uci.load('transmission')
 		]);
 	},
