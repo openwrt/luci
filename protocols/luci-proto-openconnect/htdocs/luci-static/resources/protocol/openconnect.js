@@ -38,8 +38,8 @@ function sanitizeCert(s) {
 }
 
 function validateCert(priv, section_id, value) {
-	var beg = priv ? /^-----BEGIN RSA PRIVATE KEY-----$/ : /^-----BEGIN CERTIFICATE-----$/,
-	    end = priv ? /^-----END RSA PRIVATE KEY-----$/ : /^-----END CERTIFICATE-----$/,
+	var beg = priv ? /^-----BEGIN (RSA )?PRIVATE KEY-----$/ : /^-----BEGIN CERTIFICATE-----$/,
+	    end = priv ? /^-----END (RSA )?PRIVATE KEY-----$/ : /^-----END CERTIFICATE-----$/,
 	    lines = value.trim().split(/[\r\n]/),
 	    start = false,
 	    i;
