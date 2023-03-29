@@ -73,7 +73,13 @@
 		<div id="maincontent">
 			<div class="container">
 				{% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
-					<!-- no password set -->
+					<div class="alert-message warning">
+						<h4>{{ _('No password set!') }}</h4>
+						<p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p>
+						{% if (dispatcher.lookup("admin/system/admin")): %}
+						  <div class="right"><a class="btn" href="{{ dispatcher.build_url("admin/system/admin") }}">{{ _('Go to password configuration...') }}</a></div>
+						{% endif %}
+					</div>
 				{% endif %}
 
 				{% if (boardinfo?.rootfs_type == "initramfs"): %}
