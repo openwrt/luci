@@ -329,7 +329,7 @@ return view.extend({
 		*/
 		o = s.taboption('advanced', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>Changes on this tab needs a banIP service restart to take effect.</b></em>';
+		o.default = '<em><b>' + _('Changes on this tab needs a banIP service restart to take effect.') + '</b></em>';
 
 		o = s.taboption('advanced', form.ListValue, 'ban_nicelimit', _('Nice Level'), _('The selected priority will be used for banIP background processing.'));
 		o.value('-20', _('Highest Priority'));
@@ -390,7 +390,7 @@ return view.extend({
 		*/
 		o = s.taboption('adv_chain', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>Changes on this tab needs a banIP service restart to take effect.</b></em>';
+		o.default = '<em><b>' + _('Changes on this tab needs a banIP service restart to take effect.') + '</b></em>';
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpolicy', _('Set Policy'), _('Set the nft policy for banIP-related sets.'));
 		o.value('memory', _('memory (default)'));
@@ -456,7 +456,7 @@ return view.extend({
 		*/
 		o = s.taboption('adv_log', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>Changes on this tab needs a banIP service restart to take effect.</b></em>';
+		o.default = '<em><b>' + _('Changes on this tab needs a banIP service restart to take effect.') + '</b></em>';
 
 		o = s.taboption('adv_log', form.ListValue, 'ban_nftloglevel', _('Log Level'), _('Set the syslog level for NFT logging.'));
 		o.value('emerg', _('emerg'));
@@ -494,7 +494,7 @@ return view.extend({
 		*/
 		o = s.taboption('adv_email', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>To enable email notifications, set up the \'msmtp\' package and specify a vaild E-Mail receiver address.</b></em>';
+		o.default = '<em><b>' + _('To enable email notifications, set up the \'msmtp\' package and specify a vaild E-Mail receiver address.') + '</b></em>';
 
 		o = s.taboption('adv_email', form.Flag, 'ban_mailnotification', _('E-Mail Notification'), _('Receive E-Mail notifications with every banIP run.'));
 		o.rmempty = true;
@@ -521,7 +521,7 @@ return view.extend({
 		*/
 		o = s.taboption('feeds', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>List of supported and fully pre-configured banIP feeds.</b></em>';
+		o.default = '<em><b>' + _('List of supported and fully pre-configured banIP feeds.') + '</b></em>';
 
 		if (result[0]) {
 			var focus, feed, feeds;
