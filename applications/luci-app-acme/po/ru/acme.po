@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-02-05 16:57+0000\n"
-"Last-Translator: Vlad <Vlad.Slepov@gmail.com>\n"
+"PO-Revision-Date: 2023-03-28 09:41+0000\n"
+"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/ru/>\n"
 "Language: ru\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -52,6 +52,7 @@ msgid "Custom ACME CA"
 msgstr "Персонализированный ACME CA"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
+#, fuzzy
 msgid "Custom ACME server directory URL."
 msgstr "Своя ссылка на директорию ACME сервера."
 
@@ -72,8 +73,9 @@ msgid "Days until renewal"
 msgstr "Дней до продления"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:131
+#, fuzzy
 msgid "Domain Alias"
-msgstr "Доменный алиас"
+msgstr "Алиас домена"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:65
 msgid "Domain names"
@@ -85,8 +87,8 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
-"Доменные имена для включения в сертификат. Первое имя — имя субъекта "
-"(subject name), последующие имена — дополнительные (alt names). Все доменные "
+"Доменные имена для включения в сертификат. Первое имя — имя субъекта ("
+"subject name), следующие имена — дополнительные (alt names). Все доменные "
 "имена должны указывать на маршрутизатор в глобальной DNS."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
@@ -103,7 +105,7 @@ msgstr "E-mail адрес для привязки ключа аккаунта."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:34
 msgid "Enable debug logging"
-msgstr "Включить логирование отладочной информации"
+msgstr "Записывать в журнал данные для отладки"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:46
 msgid "Enabled"
@@ -118,7 +120,7 @@ msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
-"Получить сертификат с промежуточного сервера Letsencrypt (использовать для "
+"Получить сертификат с тестового сервера Letsencrypt (пригоден только для "
 "тестирования; сертификат не будет действительным)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
@@ -162,6 +164,7 @@ msgstr ""
 "провайдера DNS для выпуска сертификата."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:125
+#, fuzzy
 msgid ""
 "The challenge alias to use for ALL domains. See https://github.com/acmesh-"
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
@@ -172,6 +175,7 @@ msgstr ""
 "поддерживает только один псевдоним вызова для каждого сертификата."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:117
+#, fuzzy
 msgid ""
 "The credentials for the DNS API mode selected above. See https://github.com/"
 "acmesh-official/acme.sh/wiki/dnsapi for the format of credentials required "
@@ -184,16 +188,18 @@ msgstr ""
 "оболочки KEY=VAL, чтобы предоставить несколько переменных учетных данных."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:132
+#, fuzzy
 msgid ""
 "The domain alias to use for ALL domains. See https://github.com/acmesh-"
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
-"Псевдоним домена для ВСЕХ доменов. Подробнее об этом процессе см. https://"
-"github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode. LUCI поддерживает "
-"только один контрольный домен для каждого сертификата."
+"Псевдоним домена для ВСЕХ доменов. Подробнее об этом процессе см. "
+"https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode. LUCI "
+"поддерживает только один контрольный домен для каждого сертификата."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
+#, fuzzy
 msgid ""
 "This configures ACME (Letsencrypt) automatic certificate installation. "
 "Simply fill out this to have the router configured with Letsencrypt-issued "
@@ -211,6 +217,7 @@ msgstr ""
 "ошибок."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
+#, fuzzy
 msgid ""
 "To use DNS mode to issue certificates, set this to the name of a DNS API "
 "supported by acme.sh. See https://github.com/acmesh-official/acme.sh/wiki/"
@@ -220,36 +227,38 @@ msgid ""
 "package to be installed."
 msgstr ""
 "Чтобы использовать DNS-режим для выпуска сертификатов, установите его на имя "
-"DNS API, поддерживаемого acme.sh. См. Https://github.com/acmesh-fopicial/"
-"acme.sh/wiki/dnsapi для списка доступных API. В DNS-режиме доменное имя не "
+"DNS API, поддерживаемого acme.sh. См. Https://github.com/acmesh-fopicial/acme"
+".sh/wiki/dnsapi для списка доступных API. В DNS-режиме доменное имя не "
 "должно разрешать IP -адрес маршрутизатора. DNS-режим также является "
 "единственным режимом, который поддерживает сертификаты подстановочных "
 "знаков. Использование этого режима требует установки пакета acme-dnsapi."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:82
+#, fuzzy
 msgid ""
 "Update the nginx config with this certificate once issued (only select this "
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
-"Обновите конфигурацию nginx с помощью этого сертификата после его выпуска "
-"(выберите это только для одного сертификата). Nginx должен поддерживать ssl, "
+"Обновите конфигурацию nginx с помощью этого сертификата после его выпуска ("
+"выберите это только для одного сертификата). Nginx должен поддерживать ssl, "
 "в противном случае он не запустится, так как его необходимо скомпилировать с "
 "поддержкой ssl для использования параметров сертификата"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:73
+#, fuzzy
 msgid ""
 "Update the uhttpd config with this certificate once issued (only select this "
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
-"Обновите конфигурацию uhttpd с помощью этого сертификата после его выпуска "
-"(выберите это только для одного сертификата). Также доступен luci-app-uhttpd "
-"для настройки uhttpd из интерфейса LuCI."
+"Обновить конфигурацию uhttpd этим сертификатом после его выпуска (выберите "
+"это только для одного сертификата). Настройка uhttpd из интерфейса LuCI "
+"доступна с пакетом luci-app-uhttpd."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr "Использовать другой центр сертификации вместо Let's Encrypt."
+msgstr "Использовать сторонний центр сертификации вместо Let's Encrypt."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
 msgid "Use for nginx"
@@ -257,11 +266,11 @@ msgstr "Использовать для nginx"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:72
 msgid "Use for uhttpd"
-msgstr "Использовать для uHTTPd"
+msgstr "Использовать для uhttpd"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:49
 msgid "Use staging server"
-msgstr "Использовать промежуточный сервер"
+msgstr "Использовать тестовый сервер"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:90
 msgid "Validation method"
@@ -281,9 +290,8 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
-"Корневой каталог веб-сервера. Установите это на корень документа веб-"
-"сервера, чтобы запустить Acme в режиме webroot. Веб-сервер должен быть "
-"доступен из Интернета через порт 80."
+"Укажите здесь корневой каталог веб-сервера, чтобы запустить Acme в режиме "
+"webroot. Веб-сервер должен быть доступен из интернета на 80 порту."
 
 #~ msgid "State directory"
 #~ msgstr "Директория хранения данных"
