@@ -243,7 +243,7 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'ipset', _('Use ipset'));
 		uci.sections('firewall', 'ipset', function(s) {
 			if (typeof(s.name) == 'string')
-				this.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
+				o.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
 		});
 		o.modalonly = true;
 		o.rmempty = true;
