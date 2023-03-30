@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-03-07 07:28+0000\n"
-"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"PO-Revision-Date: 2023-03-29 07:02+0000\n"
+"Last-Translator: Jos Santa <josetsantamaria@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmosquitto/es/>\n"
 "Language: es\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:61
 msgid "Allow anonymous connections"
@@ -80,18 +80,17 @@ msgid "CRL to use if require_certificate is enabled"
 msgstr "CRL para usar si require_certificate está activado"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:128
-#, fuzzy
 msgid "Ciphers control. Should match 'openssl ciphers' format"
-msgstr "Control de cifrados. Debe coincidir con el formato de 'openssl ciphers'"
+msgstr ""
+"Control de cifrados. Debe coincidir con el formato de cifrado(s) de OpenSSL"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:161
 msgid "Clean session"
 msgstr "Limpiar sesión"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:77
-#, fuzzy
 msgid "Client expiration"
-msgstr "Caducidad del cliente"
+msgstr "Expiración del cliente"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:168
 #, fuzzy
@@ -110,39 +109,44 @@ msgstr "Nombre de la conexión"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:118
 msgid "Depends on your openssl version, empty to support all"
-msgstr ""
+msgstr "Depende de su versión de OpenSSL, vacío para soportar todas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:222
 msgid "Directory to search for CA files"
-msgstr ""
+msgstr "Directorio para buscar archivos de CA"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:52
+#, fuzzy
 msgid "Disallow remote access to this broker"
-msgstr ""
+msgstr "Prohibir el acceso remoto a este intermediario"
 
 #: applications/luci-app-mosquitto/root/usr/share/rpcd/acl.d/luci-app-mosquitto.json:3
+#, fuzzy
 msgid "Grant UCI access for luci-app-mosquitto"
-msgstr ""
+msgstr "Conceder acceso UCI para luci-app-mosquitto"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:181
 msgid "How long to wait before disconnecting"
-msgstr ""
+msgstr "Cuánto tiempo a esperar antes de desconectar"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:178
 msgid "How long to wait before reconnecting"
-msgstr ""
+msgstr "Cuanto tiempo a esperar para volver a conectar"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:184
+#, fuzzy
 msgid "How many messages to queue before restarting lazy bridge"
-msgstr ""
+msgstr "Cuántos mensajes poner en cola antes de reiniciar el lazy bridge"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:172
+#, fuzzy
 msgid "How should this bridge be started"
-msgstr ""
+msgstr "Como debería ser iniciado este puente"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:195
+#, fuzzy
 msgid "Identity for TLS-PSK"
-msgstr ""
+msgstr "La Identidad para TLS-PSK"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:36
 msgid ""
@@ -150,154 +154,169 @@ msgid ""
 "UCI directly) If unchecked, mosquitto runs with the config in /etc/mosquitto/"
 "mosquitto.conf (and this page is ignored)"
 msgstr ""
+"Si está marcado, mosquitto se ejecuta con una configuración generada desde "
+"esta página. (O directamente desde UCI) Si no está marcado, mosquitto se "
+"ejecuta con la configuración en etc/mosquitto/mosquitto.conf (y esta página "
+"es ignorada)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:169
 msgid "Keepalive interval for this bridge"
-msgstr ""
+msgstr "Intervalo de actividad para este puente"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:205
 msgid "Key for TLS-PSK"
-msgstr ""
+msgstr "Clave para TLS-PSK"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:62
+#, fuzzy
 msgid "Limit for message allowed inflight"
-msgstr ""
+msgstr "Límite de mensajes permitidos en tránsito"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:65
 msgid "Limit for message queue when offline"
-msgstr ""
+msgstr "Límite para la cola de mensajes cuando está fuera de línea"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:68
 msgid "Limit for message queue when offline, zero to disable)"
 msgstr ""
+"Límite para la cola de mensajes cuando está fuera de línea (cero para "
+"deshabilitar)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:92
+#, fuzzy
 msgid "Listeners"
-msgstr ""
+msgstr "Oyentes (Procesadores de solicitudes)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:44
 msgid "Log destination"
-msgstr ""
+msgstr "Destino de registro"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:99
+#, fuzzy
 msgid "MQTT"
-msgstr ""
+msgstr "MQTT (Transporte de telemetría de Servidor de Cola de Mensajes)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:62
+#, fuzzy
 msgid "Max Inflight Messages"
-msgstr ""
+msgstr "Máximo de Mensajes en Tránsito"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:65
 msgid "Max Queued Messages"
-msgstr ""
+msgstr "Máximo de mensajes en cola"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:68
 msgid "Max Queued bytes"
-msgstr ""
+msgstr "Máximo de bytes en cola"
 
 #: applications/luci-app-mosquitto/root/usr/share/luci/menu.d/luci-app-mosquitto.json:3
 msgid "Mosquitto"
-msgstr ""
+msgstr "Mosquito"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:26
 msgid "Mosquitto MQTT Broker"
-msgstr ""
+msgstr "Negociador MQTT Mosquitto"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:165
 msgid "Notifications local only"
-msgstr ""
+msgstr "Solo notificaciones locales"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:202
 msgid "Only hex numbers are allowed (use A-F characters and 0-9 digits)"
 msgstr ""
+"Solo se permiten números hexadecimales (use caracteres A-F y dígitos 0-9)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:53
 msgid ""
 "Outbound bridges will still work, but this will make the primary listener "
 "only available from localhost"
 msgstr ""
+"Los puentes salientes seguirán funcionando, pero esto hará que el oyente "
+"principal solo esté disponible desde localhost"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:195
 msgid "PSK Bridge Identity"
-msgstr ""
+msgstr "Identidad del Puente PSK"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:129
 msgid "PSK Hint to provide to connecting clients"
-msgstr ""
+msgstr "Sugerencia de PSK para proporcionar a los clientes que se conectan"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:219
 msgid "Path to CA file"
-msgstr ""
+msgstr "Ruta de Archivo CA"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:228
 msgid "Path to PEM encoded keyfile"
-msgstr ""
+msgstr "Ruta al archivo de claves codificado en PEM"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:225
 msgid "Path to PEM encoded server certificate file"
-msgstr ""
+msgstr "Ruta al archivo de certificado de servidor codificado con PEM"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:88
 msgid "Path to persistent file"
-msgstr ""
+msgstr "Ruta al archivo persistente"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:73
 msgid "Persistence"
-msgstr ""
+msgstr "Persistencia"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:76
 msgid "Persistence enabled"
-msgstr ""
+msgstr "Persistencia habilitada"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:85
 msgid "Persistent file name"
-msgstr ""
+msgstr "Nombre de archivo persistente"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:88
 msgid "Persistent file path (with trailing/)"
-msgstr ""
+msgstr "Ruta de archivo persistente (con final/ )"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:150
 msgid "Please enter a hostname or an IP address"
-msgstr ""
+msgstr "Ingrese un nombre de host o una dirección IP"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:145
 msgid "Please enter a valid port after the :"
-msgstr ""
+msgstr "Introduzca un puerto válido después de:"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:95
 msgid "Port"
-msgstr ""
+msgstr "Puerto"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:97
 msgid "Protocol to use when listening"
-msgstr ""
+msgstr "Protocolo a utilizar al escuchar (oír)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:191
 msgid "Remote password"
-msgstr ""
+msgstr "Contraseña remota"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:190
 msgid "Remote username"
-msgstr ""
+msgstr "Nombre de usuario remoto"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:77
 msgid ""
 "Remove persistent clients if they haven't reconnected in this period, eg 6h, "
 "3d, 2w"
 msgstr ""
+"Elimine los clientes persistentes si no se han vuelto a conectar en este "
+"período, por ejemplo, 6h, 3d, 2w"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:125
 msgid "Require clients to present a certificate"
-msgstr ""
+msgstr "Exigir a los clientes que presenten un certificado"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:82
 msgid "Save persistence file after this many seconds or changes"
-msgstr ""
+msgstr "Guarde el archivo de persistencia después de tantos segundos o cambios"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:57
 msgid "Set to zero to disable"
-msgstr ""
+msgstr "Establecer en cero para deshabilitar"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:76
 msgid "Should persistence to disk be enabled at all"
@@ -306,69 +325,82 @@ msgstr ""
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:117
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:211
 msgid "TLS Version"
-msgstr ""
+msgstr "TLS Versión"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:212
 msgid ""
 "The remote broker must support the same version of TLS for the connection to "
 "succeed."
 msgstr ""
+"El intermediario remoto debe admitir la misma versión de TLS para que la "
+"conexión se realice correctamente."
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:57
+#, fuzzy
 msgid "Time in seconds between updates of the $SYS tree"
-msgstr ""
+msgstr "Tiempo en segundos entre actualizaciones del árbol $SYS"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:164
 msgid "Topic to use for local+remote remote for notifications."
 msgstr ""
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:35
+#, fuzzy
 msgid "Use this LuCI configuration page"
-msgstr ""
+msgstr "Utilice esta página de configuración de LuCI"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:100
+#, fuzzy
 msgid "WebSockets"
-msgstr ""
+msgstr "Sockets Web"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:92
 msgid "You can configure additional listeners here"
-msgstr ""
+msgstr "Puede configurar oyentes adicionales aquí"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:133
+#, fuzzy
 msgid "You can configure multiple bridge connections here"
-msgstr ""
+msgstr "Puede configurar varias conexiones de puente aquí"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:45
+#, fuzzy
 msgid "You can have multiple, but 'none' will override all others"
-msgstr ""
+msgstr "Puede tener varios, pero 'ninguno' anulará todos los demás"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:153
 msgid "address"
-msgstr ""
+msgstr "dirección"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:153
 msgid "address[:port] of remote broker"
-msgstr ""
+msgstr "direccion[:puerto] de intermediario remoto"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:189
+#, fuzzy
 msgid ""
 "attempt to notify the remote broker that this is a bridge, not all brokers "
 "support this."
 msgstr ""
+"intente notificar al intermediario remoto que se trata de un puente, no "
+"todos los intermediarios lo admiten."
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:159
+#, fuzzy
 msgid "full topic string for mosquitto.conf, eg: 'power/# out 2'"
 msgstr ""
+"cadena de tema completa para mosquitto.conf, por ejemplo: 'power/# out 2'"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:102
 msgid "http_dir to serve on websockets listeners"
-msgstr ""
+msgstr "http_dir para servir en oyentes de websockets"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:113
 msgid "keyfile (PEM encoded)"
-msgstr ""
+msgstr "archivo de claves (codificado con PEM)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:27
+#, fuzzy
 msgid ""
 "mosquitto - the <a href='http://www.mosquitto.org'>blood thirsty</a> MQTT "
 "messaging broker. Note, only some of the available configuration files are "
@@ -376,19 +408,25 @@ msgid ""
 "this page, or the stock mosquitto configuration file in /etc/mosquitto/"
 "mosquitto.conf"
 msgstr ""
+"mosquitto - el agente de mensajería MQTT <a href='http://"
+"www.mosquitto.org'>sediento de sangre</a>. Tenga en cuenta que solo algunos "
+"de los archivos de configuración disponibles son compatibles en esta etapa, "
+"use la casilla de verificación a continuación para usar la configuración "
+"generada por esta página, o el archivo de configuración de stock de "
+"mosquitto en /etc/mosquitto/mosquitto.conf"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:162
 msgid "notifications"
-msgstr ""
+msgstr "notificaciones"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:110
 msgid "server certificate file (PEM encoded)"
-msgstr ""
+msgstr "archivo de certificado de servidor (codificado con PEM)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:158
 msgid "topic"
-msgstr ""
+msgstr "tema"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:138
 msgid "unique name for this bridge configuration"
-msgstr ""
+msgstr "nombre único para esta configuración de puente"
