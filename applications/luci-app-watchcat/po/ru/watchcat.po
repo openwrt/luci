@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: watchcat\n"
 "POT-Creation-Date: 2013-10-06 11:15+0300\n"
-"PO-Revision-Date: 2023-02-07 07:40+0000\n"
-"Last-Translator: st7105 <st7105@gmail.com>\n"
+"PO-Revision-Date: 2023-03-26 21:07+0000\n"
+"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -30,13 +30,12 @@ msgid ""
 "fail. Enter the number of seconds to wait for the soft reboot to fail or use "
 "0 to disable the forced reboot delay."
 msgstr ""
-"Применимо к режимам Ping Reboot и Periodic Reboot</i> <br /> При "
-"перезагрузке маршрутизатора служба будет запускать мягкую перезагрузку. Если "
-"ввести здесь ненулевое значение, то в случае неудачи мягкой перезагрузки "
-"будет запущена отложенная жесткая перезагрузка. Введите количество секунд, в "
-"течение которых нужно ждать, пока мягкая перезагрузка не завершится "
-"неудачей, или используйте 0, чтобы отключить принудительную задержку "
-"перезагрузки."
+"Используется в режимах \"Перезагрузка на основе пинга\" и \"Периодическая "
+"перезагрузка\"</i> <br /> При перезагрузке маршрутизатора служба попробует "
+"выполнить корректную перезагрузку. Если она затянется, будет выполнена "
+"принудительная перезагрузка. Этим параметром задается время в секундах, "
+"отведенное для корректной перезагрузки. Установка 0 приведёт к отключению "
+"принудительной перезагрузки."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:88
 msgid ""
@@ -44,9 +43,10 @@ msgid ""
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
 "specifying its name."
 msgstr ""
-"Применяется к режимам Ping Reboot и Restart Interface</i> <br /> Если "
-"используется ModemManager, вы можете заставить Watchcat перезапустить ваш "
-"интерфейс ModemManger, указав его имя."
+"Используется в режимах \"Перезагрузка на основе пинга\" и \"Перезагрузка "
+"интерфейса\"</i> <br /> Если используется ModemManager, вы можете "
+"использовать Watchcat для перезагрузки вашего интерфейса ModemManger, указав "
+"его имя."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:63
 msgid "Big: 248 bytes"
@@ -54,7 +54,7 @@ msgstr "Большой: 248 байт"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:50
 msgid "Check Interval"
-msgstr "Интервал проверки"
+msgstr "Период проверки"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
 msgid "Force Reboot Delay"
@@ -74,13 +74,13 @@ msgid ""
 "host becomes unreachable. Click the <b>Add</b> button at the bottom to set "
 "up more than one action."
 msgstr ""
-"Здесь вы можете настроить несколько проверок и действий, которые необходимо "
-"предпринять в случае, если хост становится недоступным. Нажмите кнопку "
-"<b>Добавить</b> внизу, чтобы настроить несколько действий."
+"Здесь вы можете задать несколько условий и действий на случай, если внешнее "
+"устройство станет недоступным. Нажмите кнопку <b>Добавить</b> внизу, чтобы "
+"добавить ещё одно действие."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:43
 msgid "Host To Check"
-msgstr "Хост для проверки"
+msgstr "Устройство для проверки"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:51
 msgid ""
@@ -91,12 +91,12 @@ msgid ""
 "b></li><li>1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
 "li><ul>"
 msgstr ""
-"Как часто пинговать указанный выше хост. <br /><br />По умолчанию единицей "
-"измерения являются секунды, без суффикса, но вы можете использовать суффикс "
-"<b>m</b> для минут, <b>h</b> для часов или <b>d</b> для дней. <br /><br /> "
-"Примеры:<ul><li>10 секунд будет: <b>10</b> или <b>10s</b></li><li>5 минут "
-"будет: <b>5m</b></li><li>1 час будет: <b>1h</b></li><li>1 неделя будет: "
-"<b>7d</b></li><ul>"
+"Как часто отправлять пинги на указанное выше устройство. <br /><br />По "
+"умолчанию единицей измерения являются секунды (без суффикса). Вы можете "
+"использовать суффикс <b>m</b> для минут, <b>h</b> для часов или <b>d</b> для "
+"дней. <br /><br /> Примеры:<ul><li>10 секунд будет: <b>10</b> или <b>10s</"
+"b></li><li>5 минут будет: <b>5m</b></li><li>1 час будет: <b>1h</b></li><li>1 "
+"неделя будет: <b>7d</b></li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:64
 msgid "Huge: 1492 bytes"
@@ -138,7 +138,7 @@ msgstr "Интерфейс для мониторинга и/или переза�
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
 msgid "Jumbo: 9000 bytes"
-msgstr "Гигантский: 9000 байт"
+msgstr "Jumbo: 9000 байт"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:22
 msgid "Mode"
@@ -162,7 +162,7 @@ msgstr "Размер пакета Ping"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:26
 msgid "Ping Reboot"
-msgstr "Ping Reboot"
+msgstr "Перезагрузка на основе ping"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:23
 msgid ""
@@ -175,7 +175,7 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Restart Interface"
-msgstr "Перезагрузить интерфейс"
+msgstr "Перезагрузка сетевого интерфейса"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Small: 1 byte"
@@ -188,12 +188,12 @@ msgstr "Стандартный: 56 байт"
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
 msgid "These rules will govern how this device reacts to network events."
 msgstr ""
-"Эти правила будут определять, как это устройство будет реагировать на "
-"сетевые события."
+"Правила ниже определят, как это устройство будет реагировать на сетевые "
+"события."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid "Unlock Modem Bands"
-msgstr "Разблокировка диапазонов модема"
+msgstr "Разблокировать диапазоны модема"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:11
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
