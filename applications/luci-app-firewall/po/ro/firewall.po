@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-03-30 14:54+0000\n"
+"PO-Revision-Date: 2023-03-31 16:57+0000\n"
 "Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/ro/>\n"
@@ -430,6 +430,12 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
+"Redirecționate %{ipv6?%{ipv4?<var>IPv4</var> și "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? "
+"data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark."
+"mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value with %{mark.mask} "
+"before compare.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:473
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:343
@@ -542,6 +548,17 @@ msgid ""
 "any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
 "tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
+"Intrări %{ipv6?%{ipv4?<var>IPv4</var> și "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP with types %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
+"<var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? "
+"with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value "
+"with %{mark.mask} before compare.\"}}>%{mark.val}</var>}%{helper?, helper %{"
+"helper.inv?<var data-tooltip=\"Match any helper except &quot;%{helper."
+"name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\""
+">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:61
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:144
@@ -1219,7 +1236,7 @@ msgstr "orice zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:297
 msgid "any/all"
-msgstr ""
+msgstr "orice/toate"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:407
 msgid "apply firewall mark"
@@ -1232,7 +1249,7 @@ msgstr "atribuirea ajutorului conntrack"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:192
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:220
 msgid "automatic"
-msgstr ""
+msgstr "automat"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
