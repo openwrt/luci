@@ -432,7 +432,7 @@ var ValidatorFactory = baseclass.extend({
 			if (v == '.' || v == '..')
 				return this.assert(false, _('valid network device name, not "." or ".."'));
 
-			return this.assert(v.match(/^[^:/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
+			return this.assert(v.match(/^[^:\/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
 		},
 
 		range: function(min, max) {
