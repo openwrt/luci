@@ -2,17 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: dnscrypt-proxy\n"
 "POT-Creation-Date: 2017-10-17 14:30+0300\n"
-"PO-Revision-Date: 2021-04-09 12:29+0000\n"
-"Last-Translator: The_BadUser <vanjavs@mail.ru>\n"
+"PO-Revision-Date: 2023-04-03 07:17+0000\n"
+"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsdnscrypt-proxy/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.6-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.17-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -27,14 +27,12 @@ msgstr "Дополнительно"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:215
 msgid "Alternate Resolver List"
-msgstr "Альтернативный список разрешенных серверов"
+msgstr "Альтернативный список серверов"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:258
 msgid ""
 "Apply DNSCrypt-Proxy specific settings to the Dnsmasq configuration.<br />"
-msgstr ""
-"Применить специальные настройки DNSCrypt-Proxy для Dnsmasq config файла.<br /"
-">"
+msgstr "Настроить dnsmasq для работы с DNSCrypt-Proxy.<br />"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:228
 msgid "Blacklist"
@@ -49,7 +47,8 @@ msgid ""
 "By default the DNSCrypt-Proxy startup will be triggered by ifup events of "
 "'All' available network interfaces.<br />"
 msgstr ""
-"По дефолту DNSCrypt-Proxy стартует на всех доступных интерфейсах 'All'.<br />"
+"По умолчанию DNSCrypt-Proxy запускается после события ifup для любого из "
+"интерфейсов.<br />"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:59
 msgid "Configuration of the DNSCrypt-Proxy package."
@@ -60,22 +59,22 @@ msgid ""
 "Create '/etc/resolv-crypt.conf' with 'options timeout:1' to reduce DNS "
 "upstream timeouts with multiple DNSCrypt instances.<br />"
 msgstr ""
-"Создать config файл /etc/resolv-crypt.none со строкой 'options timeout:1' "
-"для уменьшения времени ожидания ответов DNS серверов внешней сети с "
-"многократной обработкой запросов DNSCrypt-ом.<br />"
+"Создать файл /etc/resolv-crypt.conf с 'options timeout:1' для уменьшения "
+"времени ожидания ответа от вышестоящего DNS-сервера в случае указания "
+"нескольких серверов DNSCrypt.<br />"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:150
 msgid "Create Config File"
-msgstr "Создать сonfig файл"
+msgstr "Создать файл настроек"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:145
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:158
 msgid "Create Custom Config File"
-msgstr "Создать config"
+msgstr "Создать пользовательский файл настроек"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:245
 msgid "DNS Query Logfile"
-msgstr "Файл системного журнала запроса DNS"
+msgstr "Журнал DNS-запросов"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:15
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:58
@@ -84,41 +83,42 @@ msgstr "DNSCrypt-Proxy"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:39
 msgid "DNSCrypt-Proxy Logfile"
-msgstr "Файл системного журнала DNSCrypt-Proxy"
+msgstr "Журнал DNSCrypt-Proxy"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:30
 msgid "DNSCrypt-Proxy Resolver List"
-msgstr "DNSCrypt-Proxy список разрешенных серверов"
+msgstr "Список серверов DNSCrypt-Proxy"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:102
 msgid "Default Resolver List"
-msgstr "Дефолтный список разрешенных серверов"
+msgstr "Список серверов по умолчанию"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:234
 msgid "Disable IPv6 to speed up DNSCrypt-Proxy."
-msgstr "Отключить IPv6 для DNSCrypt-Proxy."
+msgstr "Отключить IPv6 для ускорения работы DNSCrypt-Proxy."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:254
 msgid "Dnsmasq Options"
-msgstr "Настройка Dnsmasq"
+msgstr "Настройка dnsmasq"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:124
 msgid ""
 "Download the current resolver list from 'github.com/dyne/dnscrypt-proxy'."
 msgstr ""
-"Загрузить текущий список resolver-ов из 'github.com/dyne/dnscrypt-proxy'."
+"Загрузить свежий список серверов из репозитория 'github.com/dyne/dnscrypt-"
+"proxy'."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:22
 msgid "Edit DNSCrypt-Proxy Configuration"
-msgstr "Настройка config файла DNSCrypt-Proxy"
+msgstr "Изменить конфиг DNSCrypt-Proxy"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:23
 msgid "Edit Dnsmasq Configuration"
-msgstr "Настройка config файла Dnsmasq"
+msgstr "Изменить конфиг dnsmasq"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:24
 msgid "Edit Resolvcrypt Configuration"
-msgstr "Настройка config файла Resolvcrypt"
+msgstr "Изменить resolv-crypt.conf"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:240
 msgid "Enable Caching to speed up DNSCcrypt-Proxy."
@@ -130,11 +130,11 @@ msgstr "Эфемерные ключи"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:114
 msgid "File Checksum"
-msgstr "Контрольная сумма файла"
+msgstr "Контрольная сумма файла по алгоритму SHA-256"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:106
 msgid "File Date"
-msgstr "Дата и время<br />создания файла"
+msgstr "Дата изменения файла"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:60
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:147
@@ -142,8 +142,8 @@ msgid ""
 "For further information <a href=\"%s\" target=\"_blank\">see the wiki "
 "online</a>"
 msgstr ""
-"Для более подробной информации <a href=\"%s\" target=\"_blank\">обратитесь к "
-"wiki онлайн</a>"
+"За подробностями обратитесь к <a href=\"%s\" target=\"_blank\""
+">wiki-страничке</a>"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:97
 msgid "General Options"
@@ -151,7 +151,7 @@ msgstr "Основные настройки"
 
 #: applications/luci-app-dnscrypt-proxy/root/usr/share/rpcd/acl.d/luci-app-dnscrypt-proxy.json:3
 msgid "Grant UCI access for luci-app-dnscrypt-proxy"
-msgstr "Предоставить UCI доступ для luci-app-dnscrypt-proxy"
+msgstr "Предоставить UCI доступ к luci-app-dnscrypt-proxy"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:189
 msgid "IP Address"
@@ -160,18 +160,17 @@ msgstr "IP-адрес"
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:221
 msgid "Improve privacy by using an ephemeral public key for each query."
 msgstr ""
-"Улучшить безопасность, используя эфемерный Публичный ключ для каждого "
-"запроса."
+"Улучшить безопасность, генерируя отдельный открытый ключ для каждого запроса."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/cfg_dnsmasq_tab.lua:9
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/cfg_resolvcrypt_tab.lua:9
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/configuration_tab.lua:9
 msgid "Input file not found, please check your configuration."
-msgstr "Config файл не найден, пожалуйста, проверьте ваши настройки."
+msgstr "Файл не найден. Пожалуйста, проверьте ваши настройки."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:185
 msgid "Instance Options"
-msgstr "Дополнительные настройки"
+msgstr "Настройки экземпляров приложения"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:239
 msgid "Local Cache"
@@ -181,32 +180,32 @@ msgstr "Локальный кэш"
 msgid ""
 "Local blacklists allow you to block abuse sites by domains or ip addresses."
 msgstr ""
-"Локальные Черные списки, позволяют блокировать сайты по их доменам или IP-"
-"адресам."
+"Локальный черный список позволяет блокировать сайты по домену или IP-адресу."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:246
 msgid ""
 "Log the received DNS queries to a file, so you can watch in real-time what "
 "is happening on the network."
 msgstr ""
-"Записывайте в журнал полученные запросы DNS. Таким образом, Вы сможете "
-"наблюдать в режиме реального времени, что происходит в сети."
+"Записывать в журнал полученные DNS-запросы. Глядя в него вы можете наблюдать "
+"в режиме реального времени, что происходит в сети."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:201
 msgid ""
 "Name of the remote DNS service for resolving queries incl. Location, DNSSEC- "
 "and NOLOG-Flag."
 msgstr ""
-"Имя удаленного сервера DNS для разрешения запросов к нему.<br /"
-">Расположение, DNSSEC- и NOLOG-Flag (LOC/SEC/NOLOG)."
+"Имя DNS-сервера, которому будут пересылаться DNS-запросы. Флаги: location, "
+"DNSSEC, и NOLOG."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:137
 msgid "No SSL support available.<br />"
-msgstr "Отсутствует поддержка SSL.<br />"
+msgstr "SSL не поддерживается.<br />"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:21
 msgid "No default resolver list and no SSL support available.<br />"
-msgstr "Отсутствует список разрешенных серверов и не поддерживается SSL.<br />"
+msgstr ""
+"Отсутствует как список серверов по умолчанию, так и поддержка SSL.<br />"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:19
 msgid "Overview"
@@ -214,31 +213,31 @@ msgstr "Обзор"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:160
 msgid "Please edit the file manually in the 'Advanced' section."
-msgstr "Отредактируйте файл вручную в разделе 'Дополнительно'."
+msgstr "Пожалуйста, отредактируйте файл вручную в разделе 'Дополнительно'."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:138
 msgid ""
 "Please install a 'libustream-ssl' library to download the current resolver "
 "list from 'github.com/dyne/dnscrypt-proxy'."
 msgstr ""
-"Установите библиотеку 'libustream-ssl', чтобы скачать текущий список "
-"клиентов с адреса 'github.com/dyne/dnscrypt-proxy'."
+"Пожалуйста, установите библиотеку 'libustream-ssl', чтобы скачать актуальный "
+"список серверов из репозитория 'github.com/dyne/dnscrypt-proxy'."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:22
 msgid ""
 "Please install a resolver list to '/usr/share/dnscrypt-proxy/dnscrypt-"
 "resolvers.csv' to use this package."
 msgstr ""
-"Установите список разрешенных серверов в /usr/share/dnscrypt-proxy/dnscrypt-"
-"resolvers.csv для использования данного сервиса."
+"Для использования этого пакета, пожалуйста, расположите список серверов по "
+"пути /usr/share/dnscrypt-proxy/dnscrypt-resolvers.csv."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:259
 msgid ""
 "Please note: This may change the values for 'noresolv', 'resolvfile', "
 "'allservers' and the list 'server' settings."
 msgstr ""
-"Примечание: Этот режим, может изменить значения для 'noresolv', "
-"'resolvfile', 'allservers' и параметры настройки списка 'серверов'."
+"Внимание: эта опция изменит значения параметров 'noresolv', 'resolvfile', "
+"'allservers', а так же список 'servers' dnsmasq."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:194
 msgid "Port"
@@ -251,11 +250,11 @@ msgstr "Обновить список"
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:123
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:136
 msgid "Refresh Resolver List"
-msgstr "Обновить список разрешенных серверов"
+msgstr "Обновить список серверов"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:200
 msgid "Resolver (LOC/SEC/NOLOG)"
-msgstr "Разрешено<br />(LOC/SEC/NOLOG)"
+msgstr "Сервер (LOC/SEC/NOLOG)"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/cfg_dnsmasq_tab.lua:17
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/cfg_resolvcrypt_tab.lua:17
@@ -265,96 +264,96 @@ msgstr "Сохранить"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:216
 msgid "Specify a non-default Resolver List."
-msgstr "Специальный не дефолтный список разрешенных серверов."
+msgstr "Укажите альтернативный список серверов."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:168
 msgid "Startup Trigger"
-msgstr "Автозапуск после"
+msgstr "Стартовать после"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:159
 msgid "The config file '/etc/resolv-crypt.conf' already exist.<br />"
-msgstr "Config файл /etc/resolv-crypt.conf уже существует.<br />"
+msgstr "Файл /etc/resolv-crypt.conf уже существует.<br />"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:195
 msgid "The listening port for DNS queries."
-msgstr "Прослушивание порта для DNS запросов."
+msgstr "Порт для прослушивания DNS-запросов."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:190
 msgid ""
 "The local IPv4 or IPv6 address. The latter one should be specified within "
 "brackets, e.g. '[::1]'."
 msgstr ""
-"Локальные IPv4 или IPv6 адреса. Заключить в скобки, как образец '[::1]'."
+"Локальный IPv4 или IPv6-адрес. IPv6-адрес должен быть заключен в квадратные "
+"скобки: '[::1]'."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:230
 msgid ""
 "The value for this property is the blocklist type and path to the file, e."
 "g.'domains:/path/to/dbl.txt' or 'ips:/path/to/ipbl.txt'."
 msgstr ""
-"Обозначить содержимое Черного списка, используя в его названии содержимое "
-"его списка и указав путь к файлу соответствующим образом 'domains:/path/to/"
-"dbl.txt' или 'ips:/path/to/ipbl.txt'."
+"Укажите тип (домены или IP-адреса), а так же путь к файлу с чёрным списком, "
+"разделив их двоеточием: 'domains:/path/to/dbl.txt' или 'ips:/path/to/ipbl."
+"txt'."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/configuration_tab.lua:21
 msgid ""
 "This form allows you to modify the content of the main DNSCrypt-Proxy "
 "configuration file (/etc/config/dnscrypt-proxy)."
 msgstr ""
-"Страница позволяет изменять содержимое config файла DNSCrypt-Proxy (/etc/"
-"config/dnscrypt-proxy)."
+"Здесь вы можете изменить содержимое основного файла с настройками DNSCrypt-"
+"Proxy (/etc/config/dnscrypt-proxy)."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/cfg_dnsmasq_tab.lua:21
 msgid ""
 "This form allows you to modify the content of the main Dnsmasq configuration "
 "file (/etc/config/dhcp)."
 msgstr ""
-"Страница позволяет изменять содержимое config файла Dnsmasq (/etc/config/"
-"dhcp)."
+"Здесь вы можете изменить содержимое основного файла с настройками dnsmasq (/"
+"etc/config/dhcp)."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/cfg_resolvcrypt_tab.lua:21
 msgid ""
 "This form allows you to modify the content of the resolv-crypt configuration "
 "file (/etc/resolv-crypt.conf)."
 msgstr ""
-"Страница позволяет изменять содержимое config файла resolv-crypt (/etc/"
-"resolv-crypt.conf)."
+"Здесь вы можете изменить содержимое файла настроек resolv-crypt (/etc/resolv-"
+"crypt.conf)."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/view/dnscrypt-proxy/view_reslist.htm:10
 msgid "This form shows the content of the current DNSCrypt Resolver List."
-msgstr ""
-"Страница демонстрирует содержимое DNSCrypt списка разрешенных серверов."
+msgstr "Здесь вы можете ознакомиться с текущим списком серверов DNSCrypt."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/view/dnscrypt-proxy/logread.htm:10
 msgid ""
 "This form shows the syslog output, pre-filtered for DNSCrypt-Proxy related "
 "messages only."
 msgstr ""
-"Страница показывает вывод системного журнала, предварительно фильтруемый "
-"только для DNSCrypt-Proxy."
+"Здесь вы можете посмотреть сообщения системного журнала (syslog), касающиеся "
+"DNSCrypt-Proxy."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:222
 msgid ""
 "This option requires extra CPU cycles and is useless with most DNSCrypt "
 "server."
 msgstr ""
-"Этот режим нагружает CPU и большинством DNSCrypt серверов не поддерживается."
+"Этот режим нагружает ЦП и большинством DNSCrypt-серверов не поддерживается."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:170
 msgid ""
 "To restrict the trigger, select only the relevant network interface. Usually "
 "the 'wan' interface should work for most users."
 msgstr ""
-"Выберите только соответствующий сетевой интерфейс.<br />Обычно интерфейса "
-"'wan', достаточно для большинства пользователей."
+"Чтобы уменьшить количество сработок, выберите только необходимый сетевой "
+"интерфейс. Для большинства пользователей обычно достаточно интерфейса 'wan'."
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/model/cbi/dnscrypt-proxy/overview_tab.lua:257
 msgid "Transfer Options To Dnsmasq"
-msgstr "Режим передачи Dnsmasq-у"
+msgstr "Интегрироваться с dnsmasq"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:20
 msgid "View Logfile"
-msgstr "Показать системный журнал"
+msgstr "Журнал работы"
 
 #: applications/luci-app-dnscrypt-proxy/luasrc/controller/dnscrypt-proxy.lua:25
 msgid "View Resolver List"
-msgstr "Список разрешенных серверов"
+msgstr "Список серверов"
