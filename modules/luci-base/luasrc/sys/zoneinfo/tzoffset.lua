@@ -9,6 +9,7 @@ OFFSET = {
 	wat   =   3600,	-- WAT
 	cat   =   7200,	-- CAT
 	eet   =   7200,	-- EET
+	eest  =  10800,	-- EEST
 	sast  =   7200,	-- SAST
 	hst   = -36000,	-- HST
 	hdt   = -32400,	-- HDT
