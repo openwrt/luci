@@ -136,6 +136,13 @@ return view.extend({
 			o.value("1", _("Store compressed cache"));
 			o.default = ("0", _("Do not store compressed cache"));
 
+			o = s.taboption("tab_advanced", form.Value, "compressed_cache_dir", _("Directory for compressed cache file"),
+				_("Directory for compressed cache file of block-list in the persistent memory."));
+			o.datatype = 'string';
+			o.rmempty = true;
+			o.default = ("/etc");
+			o.depends('compressed_cache', '1');
+			
 			o = s.taboption("tab_advanced", form.ListValue, "debug", _("Enable Debugging"),
 				_("Enables debug output to /tmp/simple-adblock.log."));
 			o.value("0", _("Disable Debugging"));
@@ -155,6 +162,10 @@ return view.extend({
 			o.addremove = true;
 			o = s.option(form.DynamicList, "allowed_domains_url", _("Allowed Domain URLs"),
 				_("URLs to lists of domains to be allowed."));
+			o.depends('dnsmasq_config_file_url', '');
+			o.addremove = true;
+			o = s.option(form.DynamicList, "blocked_adblockplus_url", _("Blocked AdBlockPlus-style URLs"),
+				_("URLs to lists of AdBlockPlus-style formatted domains to be blocked."));
 			o.depends('dnsmasq_config_file_url', '');
 			o.addremove = true;
 			o = s.option(form.DynamicList, "blocked_domain", _("Blocked Domains"),
