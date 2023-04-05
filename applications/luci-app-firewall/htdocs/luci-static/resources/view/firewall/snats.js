@@ -32,8 +32,8 @@ function rule_proto_txt(s) {
 	} : null;
 
 	return fwtool.fmt(_('Forwarded %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}'), {
-		ipv4: (family == 'ipv4' || (!family && (sip.indexOf(':') == -1 && dip.indexOf(':') == -1 && rwip.indexOf(':') == -1))),
-		ipv6: (family == 'ipv6' || (!family && (sip.indexOf(':') != -1 || dip.indexOf(':') != -1 || rwip.indexOf(':') != -1))),
+		ipv4: (family == 'ipv4' || (!family && sip.indexOf(':') == -1 && dip.indexOf(':') == -1 && rwip.indexOf(':') == -1)),
+		ipv6: (family == 'ipv6' || (!family && (!sip || !dip || !rwip)) || (!family && (sip.indexOf(':') != -1 || dip.indexOf(':') != -1 || rwip.indexOf(':') != -1))),
 		proto: proto,
 		mark:  f
 	});
