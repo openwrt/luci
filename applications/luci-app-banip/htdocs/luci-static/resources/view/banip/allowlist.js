@@ -15,9 +15,9 @@ return view.extend({
 		return fs.write('/etc/banip/banip.allowlist', value)
 			.then(function (rc) {
 				document.querySelector('textarea').value = value;
-				ui.addNotification(null, E('p', _('Allowlist modifications have been saved, restart banIP that changes take effect.')), 'info');
+				ui.addNotification(null, E('p', _('Allowlist modifications have been saved, start the Domain Lookup or restart banIP that changes take effect.')), 'info');
 			}).catch(function (e) {
-				ui.addNotification(null, E('p', _('Unable to save modifications: %s').format(e.message)));
+				ui.addNotification(null, E('p', _('Unable to save modifications: %s').format(e.message)), 'error');
 			});
 	},
 	render: function (allowlist) {
