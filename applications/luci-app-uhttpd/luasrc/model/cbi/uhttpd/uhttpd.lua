@@ -84,6 +84,8 @@ function lhttps.validate(self, value, section)
 end
 
 o = ucs:taboption("general", Flag, "redirect_https", translate("Redirect all HTTP to HTTPS"))
+o.enabled = "on"
+o.disabled = "off"
 o.default = o.enabled
 o.rmempty = false
 
