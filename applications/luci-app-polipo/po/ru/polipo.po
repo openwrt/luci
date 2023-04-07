@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: polipo\n"
 "POT-Creation-Date: 2012-08-15 17:51+0300\n"
-"PO-Revision-Date: 2023-02-16 13:38+0000\n"
-"Last-Translator: Дмитрий Михирев <bizdelnick@gmail.com>\n"
+"PO-Revision-Date: 2023-04-04 14:42+0000\n"
+"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspolipo/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -26,14 +26,14 @@ msgstr "Разрешённые клиенты"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:67
 msgid "Always use system DNS resolver"
-msgstr "Всегда использовать системный DNS-клиент"
+msgstr "Использовать системные DNS сервера"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:88
 msgid ""
 "Basic HTTP authentication supported. Provide username and password in "
 "username:password format."
 msgstr ""
-"Поддерживается обычная HTTP-аутентификация. Введите имя пользователя и "
+"Поддерживается базовая HTTP-аутентификация. Введите имя пользователя и "
 "пароль в формате 'имя:пароль'."
 
 #: applications/luci-app-polipo/root/usr/share/luci/menu.d/luci-app-polipo.json:24
@@ -46,15 +46,15 @@ msgstr "Настройка DNS и запросов"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:46
 msgid "DNS server address"
-msgstr "Адрес DNS сервера"
+msgstr "Адрес сервера DNS"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:154
 msgid "Delete cache files time"
-msgstr "Время удаления кэш-файлов"
+msgstr "Время жизни кэша"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:125
 msgid "Disk cache location"
-msgstr "Местоположение<br />кэша на диске"
+msgstr "Расположение кэша на диске"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:60
 msgid "Do not query IPv6"
@@ -62,7 +62,8 @@ msgstr "Не запрашивать IPv6"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:133
 msgid "Enable if cache (proxy) is shared by multiple users."
-msgstr "Включить, чтобы кэш (прокси) был общим для нескольких пользователей."
+msgstr ""
+"Включите, если кэш (прокси) будет использоваться несколькими пользователями."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:173
 msgid "First PMM segment size (in bytes)"
@@ -75,23 +76,23 @@ msgstr "Общие настройки"
 
 #: applications/luci-app-polipo/root/usr/share/rpcd/acl.d/luci-app-polipo.json:3
 msgid "Grant UCI access for luci-app-polipo"
-msgstr "Предоставить UCI доступ для luci-app-polipo"
+msgstr "Предоставить UCI доступ к luci-app-polipo"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:113
 msgid "How much RAM should Polipo use for its cache."
-msgstr "Размер оперативной памяти (RAM), отведенной для кэша."
+msgstr "Объём оперативной памяти, отведенной для кэша."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:112
 msgid "In RAM cache size (in bytes)"
-msgstr "Размер кэша<br />в RAM (в байтах)"
+msgstr "Размер кэша<br />в ОЗУ (в байтах)"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:18
 msgid "Listen address"
-msgstr "Адрес прослушивания"
+msgstr "Адрес сервера"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:26
 msgid "Listen port"
-msgstr "Порт"
+msgstr "Порт сервера"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:126
 msgid ""
@@ -99,29 +100,29 @@ msgid ""
 "devices is recommended, because the cache can grow considerably. Leave it "
 "empty to disable on-disk cache."
 msgstr ""
-"Папка где Polipo хранит кэш-файлы. Рекомендуется использовать внешние "
-"накопители, так как кэш может значительно увеличиваться. Оставьте это поле "
-"пустым, чтобы отключить кэш на диске."
+"Папка, в которую Polipo будет кэшировать файлы. Рекомендуется использовать "
+"внешний накопитель, так как размер кэша может значительно увеличиваться. "
+"Оставьте это поле пустым, чтобы отключить кэш на диске."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:103
 msgid "Log file location"
-msgstr "Местоположение<br />файла журнала"
+msgstr "Файл журнала"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:96
 msgid "Log to syslog"
-msgstr "Запись в syslog"
+msgstr "Записывать в syslog"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:13
 msgid "Logging and RAM"
-msgstr "Журналирование и RAM"
+msgstr "Журналирование и ОЗУ"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:73
 msgid "Never use system DNS resolver"
-msgstr "Не использовать системный DNS-клиент"
+msgstr "Не использовать системные DNS сервера"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:119
 msgid "On-Disk Cache"
-msgstr "Настройка кэширования"
+msgstr "Настройка кэша на диске"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:169
 msgid "PMM segments size (in bytes)"
@@ -129,23 +130,23 @@ msgstr "Размер PMM-сегментов<br />(в байтах)"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:12
 msgid "Parent Proxy"
-msgstr "Родительский прокси"
+msgstr "Вышестоящий прокси"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:78
 msgid "Parent proxy address"
-msgstr "Адрес родительского прокси"
+msgstr "Адрес вышестоящего прокси"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:79
 msgid ""
 "Parent proxy address (in host:port format), to which Polipo will forward the "
 "requests."
 msgstr ""
-"Адрес родительского прокси (в формате 'хост:порт'), на который Polipo будет "
+"Адрес вышестоящего прокси (в формате 'адрес:порт'), на который Polipo будет "
 "перенаправлять запросы."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:87
 msgid "Parent proxy authentication"
-msgstr "Аутентификация родительского прокси"
+msgstr "Аутентификация на вышестоящем прокси"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:4
 #: applications/luci-app-polipo/root/usr/share/luci/menu.d/luci-app-polipo.json:3
