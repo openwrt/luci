@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-04-07 17:13+0000\n"
+"PO-Revision-Date: 2023-04-11 15:37+0000\n"
 "Last-Translator: st7105 <st7105@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsunbound/ru/>\n"
@@ -54,7 +54,7 @@ msgstr "Разрешить открытую рекурсию, когда зап�
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:38
 msgid "Authoritative (zone file)"
-msgstr "Authoritative (zone file)"
+msgstr "Авторитетный (файл зоны)"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:42
 msgid "Basic"
@@ -79,7 +79,7 @@ msgstr "Выберите порт, на котором Unbound будет ожи
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:238
 msgid "Chose the IP versions used upstream and downstream"
-msgstr "Выберите версию IP для восходящих и нисходящих соединений"
+msgstr "Выбор версий IP используемых для загрузки и выгрузки"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:64
 msgid "Connect to servers using TLS"
@@ -125,7 +125,7 @@ msgstr "По умолчанию"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:181
 msgid "Denied (nxdomain)"
-msgstr "Denied (nxdomain)"
+msgstr "Отказано (nxdomain)"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:22
 msgid "Directed Zone"
@@ -133,7 +133,7 @@ msgstr "Управляемая зона"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:85
 msgid "Directory only part of URL"
-msgstr "Только путь, а не полный URL директории"
+msgstr "Каталог только частей URL"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:115
 msgid "Domain Insecure"
@@ -141,7 +141,7 @@ msgstr "Небезопасные домены"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:80
 msgid "Domain name to verify TLS certificate"
-msgstr "Имя домена для проверки сертификата TLS"
+msgstr "Доменное имя для проверки сертификата TLS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:173
 msgid "Domain suffix for this router and DHCP clients"
@@ -165,8 +165,8 @@ msgid ""
 "Edit a forward, stub, or zone-file-cache zone for Unbound to use instead of "
 "recursion."
 msgstr ""
-"Отредактируйте зону forward, stub или zone-file-cache для Unbound, чтобы "
-"использовать ее вместо рекурсии."
+"Отредактируйте зону пересылки, заглушки или зону кэширования файлов для "
+"использования Unbound вместо рекурсии."
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/extended.lua:15
 msgid "Edit clauses such as 'forward-zone:' for 'include:"
@@ -321,7 +321,7 @@ msgstr "Как ввести LAN или маршрутизатор локальн
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:179
 msgid "How to treat queries of this local domain"
-msgstr ""
+msgstr "Как обрабатывать запросы этого локального домена"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:241
 msgid "IP4 All and IP6 Local"
@@ -329,7 +329,7 @@ msgstr "Все IP4 и локальные IP6"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:240
 msgid "IP4 Only"
-msgstr "Только IP4"
+msgstr "Только IPv4"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:244
 msgid "IP4 and IP6"
@@ -358,7 +358,7 @@ msgstr "LAN DNS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:130
 msgid "LAN Networks"
-msgstr ""
+msgstr "Локальные сети"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:254
 msgid "Large"
@@ -368,6 +368,8 @@ msgstr "Большой"
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:304
 msgid "Limit days between RFC5011 copies to reduce flash writes"
 msgstr ""
+"Ограничение дней между копиями RFC5011 для уменьшения количества записей на "
+"флэш-память"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:280
 msgid "Limit extended DNS packet size"
@@ -440,15 +442,17 @@ msgstr "Ресурс памяти"
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:149
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:314
 msgid "Networks that may trigger Unbound to reload (avoid wan6)"
-msgstr ""
+msgstr "Сети, которые могут вызвать перезагрузку Unbound (избегайте wan6)"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:131
 msgid "Networks to consider LAN (served) beyond those served by DHCP"
 msgstr ""
+"Сети, которые следует рассматривать LAN (обслуживаемые) помимо тех, которые "
+"обслуживаются DHCP"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:140
 msgid "Networks to consider WAN (unserved)"
-msgstr ""
+msgstr "Сети для рассмотрения WAN (необслуживаемые)"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:192
 msgid "No Entry"
@@ -466,26 +470,32 @@ msgstr "Нет удаленного управления"
 msgid ""
 "Note: SSL/TLS library is missing an API. Please review syslog. >> logread ..."
 msgstr ""
+"Примечание: В библиотеке SSL/TLS отсутствует API. Пожалуйста, просмотрите "
+"syslog. >> logread ..."
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:36
 msgid ""
 "Note: local DNS is configured to look at odhpcd, but odhpcd UCI lease "
 "trigger is incorrectly set:"
 msgstr ""
+"Примечание: локальный DNS настроен на просмотр odhpcd, но триггер аренды "
+"odhpcd UCI установлен неправильно:"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:16
 msgid ""
 "Organize directed forward, stub, and authoritative zones <a href=\"%s\" "
 "target=\"_blank\">(help)</a>."
 msgstr ""
+"Организация направленных вперед, заглушек и авторитетных зон <a href=\"%s\" "
+"target=\"_blank\">(помощь)</a>."
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:202
 msgid "Override the WAN side router entry in DNS"
-msgstr ""
+msgstr "Переопределить запись маршрутизатора на стороне WAN в DNS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:261
 msgid "Passive"
-msgstr "Пассивный"
+msgstr "Пассивно"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:68
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:74
@@ -498,27 +508,27 @@ msgstr "Префикс для генерации адресов DNS64"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:292
 msgid "Prevent client query overload; zero is off"
-msgstr ""
+msgstr "Предотвращение перегрузки запросов клиента; ноль - выключено"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:286
 msgid "Prevent excessively short cache periods"
-msgstr ""
+msgstr "Предотвращение чрезмерно коротких периодов кэширования"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:91
 msgid "Protect against upstream response of 127.0.0.0/8"
-msgstr ""
+msgstr "Защита от ответа восходящего потока 127.0.0.0/8"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:96
 msgid "Protect against upstream responses within local subnets"
-msgstr ""
+msgstr "Защита от восходящих ответов в локальных подсетях"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:266
 msgid "Query Minimize"
-msgstr ""
+msgstr "Минимизация запросов"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:291
 msgid "Query Rate Limit"
-msgstr ""
+msgstr "Ограничение скорости запроса"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:75
 msgid "Recurse"
@@ -543,7 +553,7 @@ msgstr "Рекурсивный DNS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:182
 msgid "Refused"
-msgstr "Refused"
+msgstr "Отказ"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:49
 msgid "Resource"
@@ -601,7 +611,7 @@ msgstr "Маленький"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:183
 msgid "Static (local only)"
-msgstr ""
+msgstr "Статический (только локально)"
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:48
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:60
@@ -614,19 +624,19 @@ msgstr "Состояние"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:273
 msgid "Strict Minimize"
-msgstr ""
+msgstr "Строгая минимизация"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:274
 msgid "Strict version of 'query minimize' but it can break DNS"
-msgstr ""
+msgstr "Строгая версия \"минимизации запросов\", но она может нарушить DNS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:39
 msgid "Stub (forced recursion)"
-msgstr ""
+msgstr "Заглушка (принудительная рекурсия)"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:79
 msgid "TLS Name Index"
-msgstr ""
+msgstr "Индекс имен TLS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:285
 msgid "TTL Minimum"
@@ -646,24 +656,28 @@ msgstr "Это показывает '"
 msgid ""
 "This shows 'ubound-control dump_cache' for auditing records including DNSSEC."
 msgstr ""
+"Это показывает 'ubound-control dump_cache' для аудита записей, включая "
+"DNSSEC."
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:139
 msgid ""
 "This shows Unbound 'local-data:' entries from default, .conf, or control."
 msgstr ""
+"Здесь показаны записи Unbound 'local-data:' по умолчанию, .conf или control."
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:151
 msgid ""
 "This shows Unbound 'local-zone:' entries from default, .conf, or control."
 msgstr ""
+"Здесь показаны записи Unbound 'local-zone:' по умолчанию, .conf или control."
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:127
 msgid "This shows Unbound self reported performance statistics."
-msgstr ""
+msgstr "Здесь отображается статистика производительности Unbound."
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:115
 msgid "This shows syslog filtered for events involving Unbound."
-msgstr ""
+msgstr "Здесь показан syslog, отфильтрованный для событий, связанных с Unbound."
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:251
 msgid "Tiny"
@@ -671,12 +685,12 @@ msgstr "Крошечный"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:184
 msgid "Transparent (local/global)"
-msgstr ""
+msgstr "Прозрачный (локальный/глобальный)"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:148
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:313
 msgid "Trigger Networks"
-msgstr ""
+msgstr "Триггерные сети"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:27
 msgid "Type"
@@ -723,11 +737,11 @@ msgstr "Использовать вышестоящий"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:214
 msgid "Use extra DNS entries found in /etc/config/dhcp"
-msgstr ""
+msgstr "Используйте дополнительные записи DNS, найденные в /etc/config/dhcp"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:249
 msgid "Use menu System/Processes to observe any memory growth"
-msgstr ""
+msgstr "Используйте меню Система/Процессы для наблюдения за ростом памяти"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:201
 msgid "WAN DNS"
@@ -781,7 +795,6 @@ msgid "prefetch zone files for"
 msgstr "кэширует файлы зон для"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:115
-#, fuzzy
 msgid "select recursion for"
 msgstr "выбирает рекурсию для"
 
