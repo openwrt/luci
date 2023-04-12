@@ -7,9 +7,6 @@
 'require form';
 'require tools.widgets as widgets';
 
-/*
-	button handling
-*/
 function handleAction(ev) {
 	fs.exec_direct('/etc/init.d/banip', [ev])
 }
@@ -32,115 +29,116 @@ return view.extend({
 		/*
 			poll runtime information
 		*/
-		var rt_res, inf_stat, inf_version, inf_elements, inf_feeds, inf_feedarray, inf_devices, inf_devicearray
-		var inf_subnets, inf_subnetarray, nft_infos, run_infos, inf_flags, last_run, inf_system
+		var buttons, rt_res, inf_stat, inf_version, inf_elements, inf_feeds, inf_devices, inf_subnets, inf_system, nft_infos, run_infos, inf_flags, last_run
 
 		pollData: poll.add(function () {
-			return L.resolveDefault(fs.read_direct('/var/run/banip_runtime.json'), 'null').then(function (res) {
-				rt_res = JSON.parse(res);
+			return L.resolveDefault(fs.stat('/var/run/banip.lock')).then(function (stat) {
+				buttons = document.querySelectorAll('.cbi-button');
 				inf_stat = document.getElementById('status');
-				if (inf_stat && rt_res) {
-					L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['status', 'update'])).then(function (update_res) {
-						inf_stat.textContent = (rt_res.status + ' (' + update_res.trim() + ')' || '-');
-					});
-					if (rt_res.status === "processing") {
-						if (!inf_stat.classList.contains("spinning")) {
-							inf_stat.classList.add("spinning");
+				if (stat) {
+					for (var i = 0; i < buttons.length; i++) {
+						buttons[i].setAttribute('disabled', 'true');
+					}
+					if (inf_stat && !inf_stat.classList.contains('spinning')) {
+						inf_stat.classList.add('spinning');
+					}
+				} else {
+					for (var i = 0; i < buttons.length; i++) {
+						buttons[i].removeAttribute('disabled');
+					}
+					if (inf_stat && inf_stat.classList.contains('spinning')) {
+						inf_stat.classList.remove('spinning');
+					}
+				}
+				L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['status'])).then(function (result) {
+					if (result) {
+						rt_res = result.trim().split('\n');
+						if (rt_res) {
+							for (var i = 0; i < rt_res.length; i++) {
+								if (rt_res[i].match(/^\s+\+\sstatus\s+\:\s+(.*)$/)) {
+									rt_res.status = rt_res[i].match(/^\s+\+\sstatus\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\sversion\s+\:\s+(.*)$/)) {
+									rt_res.version = rt_res[i].match(/^\s+\+\sversion\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\selement_count\s+\:\s+(.*)$/)) {
+									rt_res.element_count = rt_res[i].match(/^\s+\+\selement_count\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)) {
+									rt_res.active_feeds = rt_res[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)) {
+									rt_res.active_devices = rt_res[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\sactive_subnets\s+\:\s+(.*)$/)) {
+									rt_res.active_subnets = rt_res[i].match(/^\s+\+\sactive_subnets\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)) {
+									rt_res.nft_info = rt_res[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)) {
+									rt_res.run_info = rt_res[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\srun_flags\s+\:\s+(.*)$/)) {
+									rt_res.run_flags = rt_res[i].match(/^\s+\+\srun_flags\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)) {
+									rt_res.last_run = rt_res[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)[1];
+								} else if (rt_res[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)) {
+									rt_res.system_info = rt_res[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)[1];
+								}
+							}
 						}
-					} else if (rt_res.status === "disabled") {
-						if (inf_stat.classList.contains("spinning")) {
-							inf_stat.classList.remove("spinning");
+						if (rt_res) {
+							inf_stat = document.getElementById('status');
+							if (inf_stat) {
+								inf_stat.textContent = rt_res.status || '-';
+							}
+							inf_version = document.getElementById('version');
+							if (inf_version) {
+								inf_version.textContent = rt_res.version || '-';
+							}
+							inf_elements = document.getElementById('elements');
+							if (inf_elements) {
+								inf_elements.textContent = rt_res.element_count || '-';
+							}
+							inf_feeds = document.getElementById('feeds');
+							if (inf_feeds) {
+								inf_feeds.textContent = rt_res.active_feeds || '-';
+							}
+							inf_devices = document.getElementById('devices');
+							if (inf_devices) {
+								inf_devices.textContent = rt_res.active_devices || '-';
+							}
+							inf_subnets = document.getElementById('subnets');
+							if (inf_subnets) {
+								inf_subnets.textContent = rt_res.active_subnets || '-';
+							}
+							nft_infos = document.getElementById('nft');
+							if (nft_infos) {
+								nft_infos.textContent = rt_res.nft_info || '-';
+							}
+							run_infos = document.getElementById('run');
+							if (run_infos) {
+								run_infos.textContent = rt_res.run_info || '-';
+							}
+							inf_flags = document.getElementById('flags');
+							if (inf_flags) {
+								inf_flags.textContent = rt_res.run_flags || '-';
+							}
+							last_run = document.getElementById('last');
+							if (last_run) {
+								last_run.textContent = rt_res.last_run || '-';
+							}
+							inf_system = document.getElementById('system');
+							if (inf_system) {
+								inf_system.textContent = rt_res.system_info || '-';
+							}
 						}
-						poll.stop();
 					} else {
-						if (inf_stat.classList.contains("spinning")) {
-							inf_stat.classList.remove("spinning");
+						inf_stat = document.getElementById('status');
+						if (inf_stat) {
+							inf_stat.textContent = '-';
+							poll.stop();
+							if (inf_stat.classList.contains('spinning')) {
+								inf_stat.classList.remove('spinning');
+							}
 						}
 					}
-				} else if (inf_stat) {
-					inf_stat.textContent = '-';
-					if (inf_stat.classList.contains("spinning")) {
-						inf_stat.classList.remove("spinning");
-					}
-				}
-				inf_version = document.getElementById('version');
-				if (inf_version && rt_res) {
-					inf_version.textContent = rt_res.version || '-';
-				}
-				inf_elements = document.getElementById('elements');
-				if (inf_elements && rt_res) {
-					inf_elements.textContent = rt_res.element_count || '-';
-				}
-				inf_feeds = document.getElementById('feeds');
-				inf_feedarray = [];
-				if (inf_feeds && rt_res) {
-					for (var i = 0; i < rt_res.active_feeds.length; i++) {
-						if (i < rt_res.active_feeds.length - 1) {
-							inf_feedarray += rt_res.active_feeds[i].feed + ', ';
-						} else {
-							inf_feedarray += rt_res.active_feeds[i].feed
-						}
-					}
-					inf_feeds.textContent = inf_feedarray || '-';
-				}
-				inf_devices = document.getElementById('devices');
-				inf_devicearray = [];
-				if (inf_devices && rt_res && rt_res.active_devices.length > 1) {
-					for (var i = 0; i < rt_res.active_devices.length; i++) {
-						if (i === 0 && rt_res.active_devices[i].device && rt_res.active_devices[i+1].interface) {
-							inf_devicearray += rt_res.active_devices[i].device + ' ::: ' + rt_res.active_devices[i+1].interface;
-							i++;
-						}
-						else if (i === 0) {
-							inf_devicearray += rt_res.active_devices[i].device
-						}
-						else if (i > 0 && rt_res.active_devices[i].device && rt_res.active_devices[i+1].interface) {
-							inf_devicearray += ', ' + rt_res.active_devices[i].device + ' ::: ' + rt_res.active_devices[i+1].interface;
-							i++;
-						}
-						else if (i > 0 && rt_res.active_devices[i].device) {
-							inf_devicearray += ', ' + rt_res.active_devices[i].device;
-						}
-						else if (i > 0 && rt_res.active_devices[i].interface) {
-							inf_devicearray += ', ' + rt_res.active_devices[i].interface;
-						}
-					}
-					inf_devices.textContent = inf_devicearray || '-';
-				}
-				inf_subnets = document.getElementById('subnets');
-				inf_subnetarray = [];
-				if (inf_subnets && rt_res) {
-					for (var i = 0; i < rt_res.active_subnets.length; i++) {
-						if (i < rt_res.active_subnets.length - 1) {
-							inf_subnetarray += rt_res.active_subnets[i].subnet + ', ';
-						} else {
-							inf_subnetarray += rt_res.active_subnets[i].subnet
-						}
-					}
-					inf_subnets.textContent = inf_subnetarray || '-';
-				}
-				nft_infos = document.getElementById('nft');
-				if (nft_infos && rt_res) {
-					nft_infos.textContent = rt_res.nft_info || '-';
-				}
-				run_infos = document.getElementById('run');
-				if (run_infos && rt_res) {
-					run_infos.textContent = rt_res.run_info || '-';
-				}
-				inf_flags = document.getElementById('flags');
-				if (inf_flags && rt_res) {
-					inf_flags.textContent = rt_res.run_flags || '-';
-				}
-				last_run = document.getElementById('last');
-				if (last_run && rt_res) {
-					last_run.textContent = rt_res.last_run || '-';
-				}
-				inf_system = document.getElementById('system');
-				if (inf_system && rt_res) {
-					inf_system.textContent = rt_res.system_info || '-';
-				}
+				});
 			});
-		}, 1);
+		}, 2);
 
 		/*
 			runtime information and buttons
@@ -194,6 +192,13 @@ return view.extend({
 					E('div', { 'class': 'cbi-value-field', 'id': 'system', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { class: 'right' }, [
+					E('button', {
+						'class': 'btn cbi-button cbi-button-apply',
+						'click': ui.createHandlerFn(this, function () {
+							return handleAction('lookup');
+						})
+					}, [_('Domain Lookup')]),
+					'\xa0\xa0\xa0',
 					E('button', {
 						'class': 'btn cbi-button cbi-button-negative',
 						'click': ui.createHandlerFn(this, function () {
