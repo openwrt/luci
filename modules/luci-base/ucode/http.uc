@@ -29,7 +29,7 @@ export let HTTP_MAX_CONTENT = 1024*100;		// 100 kB maximum content size
 //  o Boolean which indicates whether the current chunk is the last one (eof)
 export function mimedecode_message_body(src, msg, file_cb) {
 	let len = 0, maxlen = +msg.env.CONTENT_LENGTH;
-	let header, field, parser;
+	let err, header, field, parser;
 
 	parser = multipart_parser(msg.env.CONTENT_TYPE, function(what, buffer, length) {
 		if (what == parser.PART_INIT) {
