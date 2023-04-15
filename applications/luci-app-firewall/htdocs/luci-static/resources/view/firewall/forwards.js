@@ -10,7 +10,7 @@
 
 function rule_proto_txt(s, ctHelpers) {
 	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:any|\*)$/, '');
-	var dip = uci.get('firewall', s, 'dest_ip') || ''
+	var dip = uci.get('firewall', s, 'dest_ip') || '';
 	var proto = L.toArray(uci.get('firewall', s, 'proto')).filter(function(p) {
 		return (p != '*' && p != 'any' && p != 'all');
 	}).map(function(p) {
@@ -38,8 +38,8 @@ function rule_proto_txt(s, ctHelpers) {
 	} : null;
 
 	return fwtool.fmt(_('Incoming %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="cbi-tooltip-container">%{item.name}<span class="cbi-tooltip">ICMP with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip="Match any helper except &quot;%{helper.name}&quot;">%{helper.val}</var>:<var data-tooltip="%{helper.name}">%{helper.val}</var>}}'), {
-		ipv4: ((!family && (dip.indexOf(':') == -1)) || family == 'ipv4'),
-		ipv6: ((!family && (dip.indexOf(':') != -1)) || family == 'ipv6'),
+		ipv4: ((!family && dip.indexOf(':') == -1) || family == 'ipv4'),
+		ipv6: ((!family && dip.indexOf(':') != -1) || (!family && !dip) || family == 'ipv6'),
 		proto: proto,
 		helper: h,
 		mark:   f
