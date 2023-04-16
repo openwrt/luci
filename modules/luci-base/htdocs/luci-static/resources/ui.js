@@ -4554,7 +4554,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					E('p', _('Failed to confirm apply within %ds, waiting for rollback…')
 						.format(L.env.apply_rollback)));
 
-				var call = function(r, data, duration) {
+				var call = function(r) {
 					if (r.status === 204) {
 						UI.prototype.changes.displayStatus('warning', [
 							E('h4', _('Configuration changes have been rolled back!')),
@@ -4578,13 +4578,13 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						return;
 					}
 
-					var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
+					var delay = isNaN(r.duration) ? 0 : Math.max(1000 - r.duration, 0);
 					window.setTimeout(function() {
 						request.request(L.url('admin/uci/confirm'), {
 							method: 'post',
 							timeout: L.env.apply_timeout * 1000,
 							query: { sid: L.env.sessionid, token: L.env.token }
-						}).then(call, call.bind(null, { status: 0 }, null, 0));
+						}).then(call, call.bind(null, { status: 0, duration: 0 }));
 					}, delay);
 				};
 
@@ -4608,13 +4608,13 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 			if (override_token)
 				this.confirm_auth = { token: override_token };
 
-			var call = function(r, data, duration) {
+			var call = function(r) {
 				if (Date.now() >= deadline) {
 					window.clearTimeout(tt);
 					UI.prototype.changes.rollback(checked);
 					return;
 				}
-				else if (r && (r.status === 200 || r.status === 204)) {
+				else if (r.status === 200 || r.status === 204) {
 					document.dispatchEvent(new CustomEvent('uci-applied'));
 
 					UI.prototype.changes.setIndicator(0);
@@ -4630,13 +4630,13 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					return;
 				}
 
-				var delay = isNaN(duration) ? 0 : Math.max(1000 - duration, 0);
+				var delay = isNaN(r.duration) ? 0 : Math.max(1000 - r.duration, 0);
 				window.setTimeout(function() {
 					request.request(L.url('admin/uci/confirm'), {
 						method: 'post',
 						timeout: L.env.apply_timeout * 1000,
 						query: UI.prototype.changes.confirm_auth
-					}).then(call, call);
+					}).then(call, call.bind(null, { status: 0, duration: 0 }));
 				}, delay);
 			};
 
@@ -4657,7 +4657,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 			tick();
 
 			/* wait a few seconds for the settings to become effective */
-			window.setTimeout(call, Math.max(L.env.apply_holdoff * 1000 - ((ts + L.env.apply_rollback * 1000) - deadline), 1));
+			window.setTimeout(call.bind(null, { status: 0 }), L.env.apply_holdoff * 1000);
 		},
 
 		/**
