@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-04-11 15:37+0000\n"
-"Last-Translator: st7105 <st7105@gmail.com>\n"
+"PO-Revision-Date: 2023-04-16 06:28+0000\n"
+"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/ru/>\n"
 "Language: ru\n"
@@ -43,10 +43,11 @@ msgid ""
 "resources from. If this value is \"\", assets will be loaded from the "
 "bundled executable using statik.<br />By default, this value is \"\"."
 msgstr ""
-"AssetsDir указывает локальный каталог, из которого панель мониторинга будет "
-"загружать ресурсы. Если это значение равно \"\", ресурсы будут загружены из "
-"комплектного исполняемого файла с помощью statik.<br />По умолчанию это "
-"значение равно \"\"."
+"AssetsDir указывает локальную директорию, из которой сервер "
+"администрирования будет загружать ресурсы. Если это значение равно \"\", то "
+"ресурсы будут загружаться из исполняемого файла fprc с помощью statik ("
+"библиотека на Go для встраивания ресурсов).<br />По умолчанию это значение "
+"равно \"\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:19
 msgid "Bind address"
@@ -278,8 +279,9 @@ msgid ""
 "OS environments pass to frp for config file template, see <a href=\"https://"
 "github.com/fatedier/frp#configuration-file-template\">frp README</a>"
 msgstr ""
-"Среды ОС передают в frp шаблон файла конфигурации, см. <a href=\"https"
-"://github.com/fatedier/frp#configuration-file-template\">frp README</a>"
+"Переменные среды, передаваемые frp, используются для подстановки в шаблоны в "
+"файле конфигурации. Подробнее читай в <a href=\"https://github.com/fatedier/"
+"frp#using-environment-variables\">справке frp</a>"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
 msgid "Proxy bind address"
@@ -331,7 +333,7 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid "Subdomain host"
-msgstr "Хост поддомена"
+msgstr "Зона для поддоменов"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid "TCP mux"
