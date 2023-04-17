@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: openvpn\n"
 "POT-Creation-Date: 2013-09-06 10:01+0200\n"
-"PO-Revision-Date: 2023-04-11 15:37+0000\n"
+"PO-Revision-Date: 2023-04-16 17:23+0000\n"
 "Last-Translator: st7105 <st7105@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenvpn/ru/>\n"
@@ -121,7 +121,7 @@ msgstr "Клиент отключен"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm:20
 msgid "Configuration category"
-msgstr "Категория конфигурации"
+msgstr "Разделы настроек:"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:477
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:53
@@ -330,10 +330,7 @@ msgstr "Алгоритм расчета HMAC кода для аутентифи�
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:491
 msgid "Handling of authentication failures"
-msgstr ""
-"Настройка реакции на ошибки проверки имени пользователя / пароля, такие как "
-"ответ клиента на AUTH_FAILED сообщение от сервера или провал проверки пароля "
-"закрытого ключа"
+msgstr "Обработка отказов аутентификации"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:308
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:49
@@ -516,7 +513,8 @@ msgstr "Случайно выбирать удаленный сервер"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:432
 msgid "Refuse connection if no custom client config"
 msgstr ""
-"Разорвать соединение, если пользовательский config файл клиента отсутствует"
+"Разорвать соединение, если пользовательский конфигурационный файл клиента "
+"отсутствует"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:92
 msgid "Remap SIGUSR1 signals"
@@ -708,7 +706,7 @@ msgstr "Ограничение полосы пропускания"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:108
 msgid "Shell cmd to execute after tun device open"
-msgstr "Выполнить shell команду после старта виртуального устройства TUN"
+msgstr "Выполнить команду оболочки после открытия виртуального устройства TUN"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:116
 msgid "Shell cmd to run after tun device close"
@@ -716,7 +714,7 @@ msgstr "Выполнить shell команду после закрытия ви
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:141
 msgid "Shell command to verify X509 name"
-msgstr "Команда shell для проверки имени X.509-сертификата"
+msgstr "Команда оболочки для проверки имени X.509-сертификата"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:640
 msgid "Silence the output of replay warnings"
@@ -792,7 +790,7 @@ msgstr "Конфигурация на основе шаблонов"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:437
 msgid "Temporary directory for client-connect return file"
-msgstr "Временная папка для файла возврата '-client-connect'"
+msgstr "Временный каталог для файла возврата клиентского соединения"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:12
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:40
@@ -884,7 +882,7 @@ msgstr "Виртуальный TUN/TAP-интерфейс"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:304
 msgid "tun/tap inactivity timeout"
-msgstr "Промежуток времени простоя TUN/TAP"
+msgstr "Тайм-аут бездействия tun/tap"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
