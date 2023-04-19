@@ -686,7 +686,7 @@ return network.registerProtocol('wireguard', {
 
 		o.modalonly = true;
 
-		o.createPeerConfig = function(section_id, endpoint, ips, eips) {
+		o.createPeerConfig = function(section_id, endpoint, ips, eips, dns) {
 			var pub = s.formvalue(s.section, 'public_key'),
 			    port = s.formvalue(s.section, 'listen_port') || '51820',
 			    prv = this.section.formvalue(section_id, 'private_key'),
@@ -704,6 +704,7 @@ return network.registerProtocol('wireguard', {
 				'PrivateKey = ' + prv,
 				eips && eips.length ? 'Address = ' + eips.join(', ') : '# Address not defined',
 				eport ? 'ListenPort = ' + eport : '# ListenPort not defined',
+				dns && dns.length ? 'DNS = ' + dns.join(', ') : '# DNS not defined',
 				'',
 				'[Peer]',
 				'PublicKey = ' + pub,
@@ -724,6 +725,7 @@ return network.registerProtocol('wireguard', {
 			return Promise.all([
 				network.getWANNetworks(),
 				network.getWAN6Networks(),
+				network.getNetwork('lan'),
 				L.resolveDefault(uci.load('ddns')),
 				L.resolveDefault(uci.load('system')),
 				parent.save(null, true)
@@ -748,9 +750,19 @@ return network.registerProtocol('wireguard', {
 
 				var ips = [ '0.0.0.0/0', '::/0' ];
 
+				var dns = [];
+
+				var lan = data[2];
+				if (lan) {
+					var lanIp = lan.getIPAddr();
+					if (lanIp) {
+						dns.unshift(lanIp)
+					}
+				}
+
 				var qrm, qrs, qro;
 
-				qrm = new form.JSONMap({ config: { endpoint: hostnames[0], allowed_ips: ips, addresses: eips } }, null, _('The generated configuration can be imported into a WireGuard client application to set up a connection towards this device.'));
+				qrm = new form.JSONMap({ config: { endpoint: hostnames[0], allowed_ips: ips, addresses: eips, dns_servers: dns } }, null, _('The generated configuration can be imported into a WireGuard client application to set up a connection towards this device.'));
 				qrm.parent = parent;
 
 				qrs = qrm.section(form.NamedSection, 'config');
@@ -761,9 +773,10 @@ return network.registerProtocol('wireguard', {
 					    endpoint = this.section.getUIElement(section_id, 'endpoint'),
 					    ips = this.section.getUIElement(section_id, 'allowed_ips');
 					    eips = this.section.getUIElement(section_id, 'addresses');
+					    dns = this.section.getUIElement(section_id, 'dns_servers');
 
 					if (this.isValid(section_id)) {
-						conf.firstChild.data = configGenerator(endpoint.getValue(), ips.getValue(), eips.getValue());
+						conf.firstChild.data = configGenerator(endpoint.getValue(), ips.getValue(), eips.getValue(), dns.getValue());
 						code.style.opacity = '.5';
 
 						invokeQREncode(conf.firstChild.data, code);
@@ -784,12 +797,13 @@ return network.registerProtocol('wireguard', {
 				qro = qrs.option(form.DynamicList, 'addresses', _('Addresses'), _('IP addresses for the peer to use inside the tunnel. Some clients require this setting.'));
 				qro.datatype = 'ipaddr';
 				qro.default = eips;
+				qro.default = dns;
 				eips.forEach(function(eip) { qro.value(eip) });
 				qro.onchange = handleConfigChange;
 
 				qro = qrs.option(form.DummyValue, 'output');
 				qro.renderWidget = function() {
-					var peer_config = configGenerator(hostnames[0], ips, eips);
+					var peer_config = configGenerator(hostnames[0], ips, eips, dns);
 
 					var node = E('div', {
 						'style': 'display:flex;flex-wrap:wrap;align-items:center;gap:.5em;width:100%'
