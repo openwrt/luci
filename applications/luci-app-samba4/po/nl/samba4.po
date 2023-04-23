@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-22 15:23+0100\n"
-"PO-Revision-Date: 2022-09-22 11:24+0000\n"
-"Last-Translator: Raymond Minneboo <raymond@minneboo.net>\n"
+"PO-Revision-Date: 2023-04-22 21:01+0000\n"
+"Last-Translator: xtz1983 <xtz1983@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssamba4/nl/>\n"
 "Language: nl\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:120
 msgid "Allow guests"
@@ -78,11 +78,11 @@ msgstr ""
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:57
 msgid "Enable extra Tuning"
-msgstr ""
+msgstr "Extra afstemming inschakelen"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:64
 msgid "Enable macOS compatible shares"
-msgstr ""
+msgstr "MacOS-compatibele shares inschakelen"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:58
 msgid ""
@@ -90,20 +90,26 @@ msgid ""
 "speeds and better operation via WiFi. Not recommend if multiple clients "
 "write to the same files, at the same time!"
 msgstr ""
+"Schakel enkele door de gemeenschap aangestuurde afstemmingsparameters in, "
+"die de schrijfsnelheden en een betere werking via wifi kunnen verbeteren. "
+"Niet aan te raden als meerdere clients tegelijkertijd naar dezelfde "
+"bestanden schrijven!"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:65
 msgid ""
 "Enables Apple's AAPL extension globally and adds macOS compatibility options "
 "to all shares."
 msgstr ""
+"Maakt de AAPL-extensie van Apple wereldwijd mogelijk en voegt macOS-"
+"compatibiliteitsopties toe aan alle shares."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:115
 msgid "Force Root"
-msgstr ""
+msgstr "Root forceren"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:61
 msgid "Force synchronous I/O"
-msgstr ""
+msgstr "Synchrone I/O forceren"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:31
 msgid "General Settings"
@@ -111,23 +117,24 @@ msgstr "Algemene instellingen"
 
 #: applications/luci-app-samba4/root/usr/share/rpcd/acl.d/luci-app-samba4.json:3
 msgid "Grant access to LuCI app samba4"
-msgstr ""
+msgstr "Toegang verlenen tot LuCI app samba4"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:126
 msgid "Guests only"
-msgstr ""
+msgstr "Alleen voor gasten"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:131
 msgid "Inherit owner"
-msgstr ""
+msgstr "Eigenaar erven"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:34
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:35
 msgid "Listen only on the given interface or, if unspecified, on lan"
 msgstr ""
+"Luister alleen op de gegeven interface of, indien niet gespecificeerd, op lan"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:98
 msgid "Name"
@@ -136,13 +143,15 @@ msgstr "Naam"
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:23
 #: applications/luci-app-samba4/root/usr/share/luci/menu.d/luci-app-samba4.json:3
 msgid "Network Shares"
-msgstr ""
+msgstr "Netwerk shares"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:62
 msgid ""
 "On lower-end devices may increase speeds, by forceing synchronous I/O "
 "instead of the default asynchronous."
 msgstr ""
+"Op lagere apparaten kunnen de snelheden worden verhoogd door synchrone I/O "
+"te forceren in plaats van de standaard asynchrone."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:99
 msgid "Path"
@@ -153,14 +162,16 @@ msgid ""
 "Please add directories to share. Each directory refers to a folder on a "
 "mounted device."
 msgstr ""
+"Voeg mappen toe om te delen. Elke map verwijst naar een map op een "
+"aangekoppeld apparaat."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:109
 msgid "Read-only"
-msgstr ""
+msgstr "Alleen-lezen"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:93
 msgid "Shared Directories"
-msgstr ""
+msgstr "Gedeelde mappen"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:82
 msgid ""
@@ -169,18 +180,22 @@ msgid ""
 "('|') should not be changed. They get their values from the 'General "
 "Settings' tab."
 msgstr ""
+"Dit is de inhoud van het bestand '/etc/samba/smb.conf.template' waaruit je "
+"samba-configuratie wordt gegenereerd. Waarden ingesloten door pijpsymbolen "
+"('|') moeten niet veranderd worden. Ze krijgen hun waarde van het tabblad "
+"'Algemene instellingen'."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:153
 msgid "Time-machine size in GB"
-msgstr ""
+msgstr "Tijdmachine grootte in GB"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:148
 msgid "Vfs objects"
-msgstr ""
+msgstr "Vfs-objecten"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:51
 msgid "Workgroup"
-msgstr ""
+msgstr "Werkgroep"
 
 #~ msgid ""
 #~ "Allow system users to reach their home directories via network shares"
