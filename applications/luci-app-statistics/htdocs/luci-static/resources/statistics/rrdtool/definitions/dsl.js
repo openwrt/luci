@@ -7,8 +7,9 @@ return L.Class.extend({
 
 	rrdargs:  function(graph, host, plugin, plugin_instance, dtype) {
 		var g = [];
+		var dtypes = graph.dataTypes(host, plugin, plugin_instance);
 
-		g.push({
+		const d_snr = {
 			title: "DSL Signal",
 			vlabel: "dB",
 			data: {
@@ -46,8 +47,8 @@ return L.Class.extend({
 					},
 				}
 			}
-		});
-		g.push({
+		};
+		const d_uptime = {
 			title: "DSL Line Uptime",
 			vlabel: "seconds",
 			data: {
@@ -59,8 +60,8 @@ return L.Class.extend({
 					}
 				}
 			}
-		});
-		g.push({
+		};
+		const d_flags = {
 			title: "DSL Flags",
 			data: {
 				instances: {
@@ -94,8 +95,8 @@ return L.Class.extend({
 					},
 				}
 			}
-		});
-		g.push({
+		};
+		const d_bitrate = {
 			title: "Bitrate",
 			vlabel: "b/s",
 			data: {
@@ -130,8 +131,8 @@ return L.Class.extend({
 					}
 				}
 			}
-		});
-		g.push({
+		};
+			const d_count = {
 			title: "Errors",
 			vlabel: "count",
 			data: {
@@ -169,7 +170,24 @@ return L.Class.extend({
 					},
 				}
 			}
-		});
+		};
+
+		if (dtypes.includes("snr")) {
+			g.push(d_snr);
+		}
+		if (dtypes.includes("uptime")) {
+			g.push(d_uptime);
+		}
+		if (dtypes.includes("bool")) {
+			g.push(d_flags);
+		}
+		if (dtypes.includes("bitrate")) {
+			g.push(d_bitrate);
+		}
+		if (dtypes.includes("count")) {
+			g.push(d_count);
+		}
+
 		return g;
 	}
 });
