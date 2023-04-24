@@ -3412,6 +3412,20 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 			if (m)
 				return '%010d%s'.format(+m[1], m[2]);
 
+			m = /^~?((?:\d+)(?:[.]\d+)?)\s(?:(K|M|G)i)?B$/.exec(value);
+
+			if (m)
+				switch (m[2]) {
+					default:
+						return +m[1];
+					case 'K':
+						return +m[1] * 1024;
+					case 'M':
+						return +m[1] * 1024 * 1024;
+					case 'G':
+						return +m[1] * 1024 * 1024 * 1024;
+				}
+
 			return String(value);
 
 		case 'ignorecase':
