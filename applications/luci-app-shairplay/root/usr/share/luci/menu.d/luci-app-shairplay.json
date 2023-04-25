@@ -1,0 +1,14 @@
+{
+	"admin/services/shairplay": {
+		"title": "Shairplay",
+		"action": {
+			"type": "cbi",
+			"path": "shairplay",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-shairplay" ],
+			"uci": { "shairplay": true }
+		}
+	}
+}

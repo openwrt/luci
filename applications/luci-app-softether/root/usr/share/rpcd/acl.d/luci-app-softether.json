@@ -1,0 +1,12 @@
+{
+	"luci-app-softether": {
+		"description": "Grant access to softether management",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/usr/libexec/vpncmd-call account-list": [ "exec" ],
+				"/usr/libexec/vpncmd-call account-status-get *": [ "exec" ]
+			}
+		}
+	}
+}

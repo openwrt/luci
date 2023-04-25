@@ -1,0 +1,346 @@
+#!/usr/bin/env lua
+
+local json = require "luci.jsonc"
+local nixio = require "nixio"
+local fs   = require "nixio.fs"
+local UCI = require "luci.model.uci"
+local sys  = require "luci.sys"
+local util = require "luci.util"
+
+local ddns_package_path = "/usr/share/ddns"
+local luci_helper = "/usr/lib/ddns/dynamic_dns_lucihelper.sh"
+local srv_name    = "ddns-scripts"
+
+-- convert epoch date to given format
+local function epoch2date(epoch, format)
+	if not format or #format < 2 then
+		local uci = UCI.cursor()
+		format    = uci:get("ddns", "global", "ddns_dateformat") or "%F %R"
+		uci:unload("ddns")
+	end
+	format = format:gsub("%%n", "<br />")	-- replace newline
+	format = format:gsub("%%t", "    ")	-- replace tab
+	return os.date(format, epoch)
+end
+
+-- function to calculate seconds from given interval and unit
+local function calc_seconds(interval, unit)
+	if not tonumber(interval) then
+		return nil
+	elseif unit == "days" then
+		return (tonumber(interval) * 86400)	-- 60 sec * 60 min * 24 h
+	elseif unit == "hours" then
+		return (tonumber(interval) * 3600)	-- 60 sec * 60 min
+	elseif unit == "minutes" then
+		return (tonumber(interval) * 60)	-- 60 sec
+	elseif unit == "seconds" then
+		return tonumber(interval)
+	else
+		return nil
+	end
+end
+
+local methods = {
+	get_services_log = {
+		args = { service_name = "service_name" },
+		call = function(args)
+			local result = "File not found or empty"
+			local uci = UCI.cursor()
+
+			local dirlog = uci:get('ddns', 'global', 'ddns_logdir') or "/var/log/ddns"
+
+			-- Fallback to default logdir with unsecure path
+			if dirlog:match('%.%.%/') then dirlog = "/var/log/ddns" end
+
+			if args and args.service_name and fs.access("%s/%s.log" % { dirlog, args.service_name }) then
+				result = fs.readfile("%s/%s.log" % { dirlog, args.service_name })
+			end
+
+			uci.unload()
+
+			return { result = result }
+		end
+	},
+	get_services_status = {
+		call = function()
+			local uci = UCI.cursor()
+
+			local rundir = uci:get("ddns", "global", "ddns_rundir") or "/var/run/ddns"
+			local date_format = uci:get("ddns", "global", "ddns_dateformat")
+			local res = {}
+
+			uci:foreach("ddns", "service", function (s)
+				local ip, last_update, next_update
+				local section	= s[".name"]
+				if fs.access("%s/%s.ip" % { rundir, section }) then
+					ip = fs.readfile("%s/%s.ip" % { rundir, section })
+				else
+					local dnsserver	= s["dns_server"] or ""
+					local force_ipversion = tonumber(s["force_ipversion"] or 0)
+					local force_dnstcp = tonumber(s["force_dnstcp"] or 0)
+					local is_glue = tonumber(s["is_glue"] or 0)
+					local command = { luci_helper , [[ -]] }
+					local lookup_host = s["lookup_host"] or "_nolookup_"
+
+					if (use_ipv6 == 1) then command[#command+1] = [[6]] end
+					if (force_ipversion == 1) then command[#command+1] = [[f]] end
+					if (force_dnstcp == 1) then command[#command+1] = [[t]] end
+					if (is_glue == 1) then command[#command+1] = [[g]] end
+					command[#command+1] = [[l ]]
+					command[#command+1] = lookup_host
+					command[#command+1] = [[ -S ]]
+					command[#command+1] = section
+					if (#dnsserver > 0) then command[#command+1] = [[ -d ]] .. dnsserver end
+					command[#command+1] = [[ -- get_registered_ip]]
+					line = util.exec(table.concat(command))
+				end
+
+				local last_update = tonumber(fs.readfile("%s/%s.update" % { rundir, section } ) or 0)
+				local next_update, converted_last_update
+				local pid  = tonumber(fs.readfile("%s/%s.pid" % { rundir, section } ) or 0)
+
+				if pid > 0 and not nixio.kill(pid, 0) then
+					pid = 0
+				end
+
+				local uptime   = sys.uptime()
+
+				local force_seconds = calc_seconds(
+					tonumber(s["force_interval"]) or 72,
+					s["force_unit"] or "hours" )
+
+				local check_seconds = calc_seconds(
+					tonumber(s["check_interval"]) or 10,
+					s["check_unit"] or "minutes" )
+
+				if last_update > 0 then
+					local epoch = os.time() - uptime + last_update
+					-- use linux date to convert epoch
+					converted_last_update = epoch2date(epoch,date_format)
+					next_update = epoch2date(epoch + force_seconds + check_seconds)
+				end
+
+				if pid > 0 and ( last_update + force_seconds + check_seconds - uptime ) <= 0 then
+					next_update = "Verify"
+
+				-- run once
+				elseif force_seconds == 0 then
+					next_update = "Run once"
+
+				-- no process running and NOT enabled
+				elseif pid == 0 and s['enabled'] == '0' then
+					next_update  = "Disabled"
+
+				-- no process running and enabled
+				elseif pid == 0 and s['enabled'] ~= '0' then
+					next_update = "Stopped"
+				end
+
+				res[section] = {
+					ip = ip and ip:gsub("\n","") or nil,
+					last_update = last_update ~= 0 and converted_last_update or nil,
+					next_update = next_update or nil,
+					pid = pid or nil,
+				} 
+			end
+			)
+
+			uci:unload("ddns")
+
+			return res
+
+		end
+	},
+	get_ddns_state = {
+		call = function()
+			local uci = UCI.cursor()
+			local dateformat = uci:get("ddns", "global", "ddns_dateformat") or "%F %R"
+			local services_mtime = fs.stat(ddns_package_path .. "/list", 'mtime')
+			uci:unload("ddns")
+			local res = {}
+			local ver
+
+			local ok, ctrl = pcall(io.lines, "/usr/lib/opkg/info/%s.control" % srv_name)
+			if ok then
+				for line in ctrl do
+					ver = line:match("^Version: (.+)$")
+
+					if ver then
+						break
+					end
+				end
+			end
+
+			ver = ver or util.trim(util.exec("%s -V | awk {'print $2'}" % luci_helper))
+
+			res['_version'] = ver and #ver > 0 and ver or nil
+			res['_enabled'] = sys.init.enabled("ddns")
+			res['_curr_dateformat'] = os.date(dateformat)
+			res['_services_list'] = services_mtime and os.date(dateformat, services_mtime) or 'NO_LIST'
+
+			return res
+		end
+	},
+	get_env = {
+		call = function()
+			local res = {}
+			local cache = {}
+
+			local function has_wget()
+				return (sys.call( [[command -v wget >/dev/null 2>&1]] ) == 0)
+			end
+
+			local function has_wgetssl()
+				if cache['has_wgetssl'] then return cache['has_wgetssl'] end
+				local res = has_wget() and (sys.call( [[wget --version | grep -qF +https >/dev/null 2>&1]] ) == 0)
+				cache['has_wgetssl'] = res
+				return res
+			end
+
+			local function has_curlssl()
+				return (sys.call( [[$(command -v curl) -V 2>&1 | grep -qF "https"]] ) == 0)
+			end
+
+			local function has_fetch()
+				if cache['has_fetch'] then return cache['has_fetch'] end
+				local res = (sys.call( [[command -v uclient-fetch >/dev/null 2>&1]] ) == 0)
+				cache['has_fetch'] = res
+				return res
+			end
+
+			local function has_fetchssl()
+				return fs.access("/lib/libustream-ssl.so")
+			end
+
+			local function has_curl()
+				if cache['has_curl'] then return cache['has_curl'] end
+				local res = (sys.call( [[command -v curl >/dev/null 2>&1]] ) == 0)
+				cache['has_curl'] = res
+				return res
+			end
+
+			local function has_curlpxy()
+				return (sys.call( [[grep -i "all_proxy" /usr/lib/libcurl.so* >/dev/null 2>&1]] ) == 0)
+			end
+
+			local function has_bbwget()
+				return (sys.call( [[$(command -v wget) -V 2>&1 | grep -iqF "busybox"]] ) == 0)
+			end
+
+			res['has_wget'] = has_wget() or false
+			res['has_curl'] = has_curl() or false
+
+			res['has_ssl'] = has_wgetssl() or has_curlssl() or (has_fetch() and has_fetchssl()) or false
+			res['has_proxy'] = has_wgetssl() or has_curlpxy() or has_fetch() or has_bbwget or false
+			res['has_forceip'] = has_wgetssl() or has_curl() or has_fetch() or false
+			res['has_bindnet'] = has_curl() or has_wgetssl() or false
+
+			local function has_bindhost()
+				if cache['has_bindhost'] then return cache['has_bindhost'] end
+				local res = (sys.call( [[command -v host >/dev/null 2>&1]] ) == 0)
+				if res then
+					cache['has_bindhost'] = res
+					return true
+				end
+				res = (sys.call( [[command -v khost >/dev/null 2>&1]] ) == 0)
+				if res then
+					cache['has_bindhost'] = res
+					return true
+				end
+				res = (sys.call( [[command -v drill >/dev/null 2>&1]] ) == 0)
+				if res then
+					cache['has_bindhost'] = res
+					return true
+				end
+				cache['has_bindhost'] = false
+				return false
+			end
+
+			res['has_bindhost'] = cache['has_bindhost'] or has_bindhost() or false
+
+			local function has_hostip()
+				return (sys.call( [[command -v hostip >/dev/null 2>&1]] ) == 0)
+			end
+
+			local function has_nslookup()
+				return (sys.call( [[command -v nslookup >/dev/null 2>&1]] ) == 0)
+			end
+
+			res['has_dnsserver'] = cache['has_bindhost'] or has_nslookup() or has_hostip() or has_bindhost() or false
+
+			local function check_certs()
+				local _, v = fs.glob("/etc/ssl/certs/*.crt")
+				if ( v == 0 ) then _, v = fs.glob("/etc/ssl/certs/*.pem") end
+				return (v > 0)
+			end
+
+			res['has_cacerts'] = check_certs() or false
+			
+			res['has_ipv6'] = (fs.access("/proc/net/ipv6_route") and
+				(fs.access("/usr/sbin/ip6tables") or fs.access("/usr/sbin/nft")))
+
+			return res
+		end
+	}
+}
+
+local function parseInput()
+	local parse = json.new()
+	local done, err
+
+	while true do
+		local chunk = io.read(4096)
+		if not chunk then
+			break
+		elseif not done and not err then
+			done, err = parse:parse(chunk)
+		end
+	end
+
+	if not done then
+		print(json.stringify({ error = err or "Incomplete input" }))
+		os.exit(1)
+	end
+
+	return parse:get()
+end
+
+local function validateArgs(func, uargs)
+	local method = methods[func]
+	if not method then
+		print(json.stringify({ error = "Method not found" }))
+		os.exit(1)
+	end
+
+	if type(uargs) ~= "table" then
+		print(json.stringify({ error = "Invalid arguments" }))
+		os.exit(1)
+	end
+
+	uargs.ubus_rpc_session = nil
+
+	local k, v
+	local margs = method.args or {}
+	for k, v in pairs(uargs) do
+		if margs[k] == nil or
+		   (v ~= nil and type(v) ~= type(margs[k]))
+		then
+			print(json.stringify({ error = "Invalid arguments" }))
+			os.exit(1)
+		end
+	end
+
+	return method
+end
+
+if arg[1] == "list" then
+	local _, method, rv = nil, nil, {}
+	for _, method in pairs(methods) do rv[_] = method.args or {} end
+	print((json.stringify(rv):gsub(":%[%]", ":{}")))
+elseif arg[1] == "call" then
+	local args = parseInput()
+	local method = validateArgs(arg[2], args)
+	local result, code = method.call(args)
+	print((json.stringify(result):gsub("^%[%]$", "{}")))
+	os.exit(code or 0)
+end

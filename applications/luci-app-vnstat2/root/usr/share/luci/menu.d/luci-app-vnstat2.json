@@ -1,0 +1,34 @@
+{
+	"admin/status/vnstat2": {
+		"title": "Traffic Monitor",
+		"order": 90,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-vnstat2" ],
+			"fs": {
+				"/usr/bin/vnstat": "executable",
+				"/usr/bin/vnstati": "executable"
+			}
+		}
+	},
+
+	"admin/status/vnstat2/graphs": {
+		"title": "Graphs",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "vnstat2/graphs"
+		}
+	},
+
+	"admin/status/vnstat2/config": {
+		"title": "Configuration",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "vnstat2/config"
+		}
+	}
+}

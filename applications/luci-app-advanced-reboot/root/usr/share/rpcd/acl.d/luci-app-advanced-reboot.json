@@ -1,0 +1,16 @@
+{
+	"luci-app-advanced-reboot": {
+		"description": "Grant UCI and file access for luci-app-advanced-reboot",
+		"read": {
+			"ubus": {
+				"luci.advanced_reboot": [ "obtain_device_info", "toggle_boot_partition" ],
+				"system": [ "reboot" ]
+			},
+			"file": {
+				"/usr/sbin/fw_printenv": [ "list" ],
+				"/usr/sbin/fw_setenv": [ "list" ],
+				"/sbin/poweroff": [ "list", "exec" ]
+			}
+		}
+	}
+}

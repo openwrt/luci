@@ -1,0 +1,342 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: 2022-12-27 13:49+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsfwknopd/de/>\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.15.1-dev\n"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:602
+msgid ""
+"Allow SPA clients to request access to services through an iptables firewall "
+"instead of just to it."
+msgstr ""
+"Ermögliche SPA-Clients Zugriff auf Dienste über eine iptables-Firewall "
+"anzufordern anstatt direkten Zugriff zu gewähren."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:603
+msgid "Allow SPA clients to request forwarding destination by DNS name."
+msgstr "Erlaube SPA-Clients die Forward-destination via DNS-Namen zu setzen."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:441
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:458
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:551
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:573
+msgid "Base64 key"
+msgstr "Base64-Schlüssel"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:308
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:319
+msgid "Close"
+msgstr "Schließen"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
+msgid "Custom configuration"
+msgstr "Benutzerdefinierte Einstellungen"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
+msgid "Custom configuration read from /etc/fwknop/access.conf."
+msgstr "Benutzerdefinierte Einstellungen aus /etc/fwknop/access.conf."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:581
+msgid ""
+"Define a set of ports and protocols (tcp or udp) that are explicitly not "
+"allowed regardless of the validity of the incoming SPA packet. Multiple "
+"entries are comma-separated."
+msgstr ""
+"Definieren Sie eine Reihe von Ports und Protokollen (tcp oder udp), die "
+"unabhängig von der Gültigkeit des eingehenden SPA-Pakets ausdrücklich nicht "
+"zugelassen sind. Mehrere Einträge werden durch Komma getrennt."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
+msgid ""
+"Define a set of ports and protocols (tcp or udp) that will be opened if a "
+"valid knock sequence is seen. If this entry is not set, fwknopd will attempt "
+"to honor any proto/port request specified in the SPA data (unless of it "
+"matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
+msgstr ""
+"Definiere ein Set an Ports und Protokollen (TCP oder UDP), das bei "
+"erfolgreicher Port-Knock-Sequenz geöffnet wird. Falls diese Option nicht "
+"gesetzt wird, wird fwknopd versuchen, alle Protokoll/Port-Anfragen aus dem "
+"SPA-Feld zu ermöglichen (außer es deckt sich mit \"RESTRICT_PORTS\""
+"-Einträgen). Mehrere Einträge werden per Komma getrennt."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:562
+msgid ""
+"Define the HMAC authentication key (in Base64 encoding) used for verifying "
+"the authenticity of the SPA packet before the packet is decrypted."
+msgstr ""
+"Definieren Sie den HMAC-Authentifizierungsschlüssel (in Base64-Kodierung), "
+"der zur Überprüfung der Authentizität des SPA-Pakets verwendet wird, bevor "
+"das Paket entschlüsselt wird."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:554
+msgid ""
+"Define the HMAC authentication key used for verifying the authenticity of "
+"the SPA packet before the packet is decrypted."
+msgstr ""
+"Definieren Sie den HMAC-Authentifizierungsschlüssel, der zur Überprüfung der "
+"Authentizität des SPA-Pakets vor der Entschlüsselung des Pakets verwendet "
+"wird."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:585
+msgid ""
+"Define the length of time access will be granted by fwknopd through the "
+"firewall after a valid knock sequence from a source IP address. If "
+"“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
+"automatically be set."
+msgstr ""
+"Definiere die Zeit, während der fwknopd einer IP-Adresse Zugriff durch die "
+"Firewall gewährt, nachdem eine valide Port-Knock-Sequenz von dieser IP "
+"erkannt wurde. Falls \"FW_ACCESS_TIMEOUT\" nicht gesetzt ist, wird die "
+"Voreinstellung von 30s automatisch gesetzt."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:540
+msgid ""
+"Define the symmetric key (in Base64 encoding) used for decrypting an "
+"incoming SPA packet that is encrypted by the fwknop client with Rijndael."
+msgstr ""
+"Definieren Sie den symmetrischen Schlüssel (in Base64-Kodierung), der zum "
+"Entschlüsseln eines eingehenden SPA-Pakets verwendet wird, das vom fwknop-"
+"Client mit Rijndael verschlüsselt wurde."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:532
+msgid ""
+"Define the symmetric key used for decrypting an incoming SPA packet that is "
+"encrypted by the fwknop client with Rijndael."
+msgstr ""
+"Lege den symmetrischen Schlüssel fest, der für die Entschlüsselung der "
+"eingehenden SPA-Pakete des fwknop-Clients (Rijndael-Algorithmus) genutzt "
+"wird."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:480
+msgid "Enable Uci/Luci control"
+msgstr "Aktiviere Uci/Luci-Zugriff"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
+msgid "Enable config overwrite"
+msgstr "Erlaube das Überschreiben der Konfiguration"
+
+#: applications/luci-app-fwknopd/root/usr/share/luci/menu.d/luci-app-fwknopd.json:3
+msgid "Firewall Knock Daemon"
+msgstr "Firewall-Knock-Daemon"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:303
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
+msgid "Firewall Knock Operator Daemon"
+msgstr "Firewall-Knock-Operator-Daemon"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:590
+msgid ""
+"Force all SPA packets to contain a real IP address within the encrypted "
+"data. This makes it impossible to use the -s command line argument on the "
+"fwknop client command line, so either -R has to be used to automatically "
+"resolve the external address (if the client behind a NAT) or the client must "
+"know the external IP and set it via the -a argument."
+msgstr ""
+"Erwinge, dass alle SPA-Pakete echte IP-Adressen verschlüsselt enthalten "
+"müssen. Dies verhindert, dass der \"-s\"-Kommandozeilenparameter von fwknop "
+"verwendet wird, d.h. es muss entweder \"-R\" zu automatischen Auflösung der "
+"externen Adresse verwendet werden (falls der Client hinter einem NAT sitzt) "
+"oder der die externe IP muss bekannt sein und beim Client per \"-a\"-"
+"Argument mitgegeben werden."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:527
+msgid "Generate Keys"
+msgstr "Schlüssel erzeugen"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
+msgid "Generate keys"
+msgstr "Schlüssel erzeugen"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
+msgid ""
+"Generates the symmetric key used for decrypting an incoming SPA packet, that "
+"is encrypted by the fwknop client with Rijndael block cipher, and HMAC "
+"authentication key used to verify the authenticity of the incoming SPA "
+"packet before the packet is decrypted."
+msgstr ""
+"Erzeugt den symmetrischen Schlüssel, der zur Entschlüsselung eines "
+"eingehenden SPA-Pakets verwendet wird, das vom fwknop-Client mit Rijndael-"
+"Blockchiffre verschlüsselt wurde, sowie den HMAC-"
+"Authentifizierungsschlüssel, der zur Überprüfung der Authentizität des "
+"eingehenden SPA-Pakets vor der Entschlüsselung des Pakets verwendet wird."
+
+#: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
+msgid "Grant UCI access for luci-app-fwknopd"
+msgstr "Gewähre UCI Zugriff auf luci-app-fwknopd"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:571
+msgid "HMAC key type"
+msgstr "HMAC-Schlüsseltyp"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:549
+msgid "Key type"
+msgstr "Schlüsseltyp"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:178
+msgid "Loading…"
+msgstr "Laden…"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:600
+msgid ""
+"Maximum age in seconds that an SPA packet will be accepted. Defaults to 120 "
+"seconds."
+msgstr ""
+"Maximale Zeit in Sekunden, nach der ein SPA-Paket noch als gültig akzeptiert "
+"wird. Voreinstellung sind 120s."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
+msgid "Network"
+msgstr "Netzwerk"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:492
+msgid "Network configuration"
+msgstr "Netzwerkkonfiguration"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:315
+msgid "No stanza found."
+msgstr "Keine Stanza gefunden."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:440
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:457
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:550
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:572
+msgid "Normal key"
+msgstr "Normal-Schlüssel"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
+msgid ""
+"Parses the /etc/fwknop/access.conf file (and included files/folders/keys) "
+"and generates QR codes for all found stanzas. Handles only files in /etc/"
+"fwknop folder due to access rights restrictions."
+msgstr ""
+"Analysiert die Datei /etc/fwknop/access.conf (und darin enthaltene Dateien/"
+"Ordner/Schlüssel) und generiert QR-Codes für alle gefundenen Stanzas. "
+"Bearbeitet aufgrund von Zugriffsrechtsbeschränkungen nur Dateien im Ordner /"
+"etc/fwknop."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:422
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:506
+msgid "QR code"
+msgstr "QR-Code"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:489
+msgid "Show access.conf QR codes"
+msgstr "QR-Codes der access.conf anzeigen"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:601
+msgid "Specify the ethernet interface on which fwknopd will sniff packets."
+msgstr ""
+"Lege die Ethernet-Schnittstelle fest, die fwknopd für das sniffen auf Pakete "
+"nutzen soll."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:447
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:453
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:559
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:568
+msgid "The HMAC authentication key has to be specified."
+msgstr "Der HMAC-Authentifizierungsschlüssel muss angegeben werden."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:517
+msgid ""
+"The destination address for which the SPA packet will be accepted. The "
+"string “ANY” is also accepted if a valid SPA packet should be honored to any "
+"destination IP. Networks should be specified in CIDR notation (e.g. "
+"“192.168.10.0/24”), and individual IP addresses can be specified as well. "
+"Multiple entries are comma-separated."
+msgstr ""
+"Die Zieladresse, für die das SPA-Paket akzeptiert werden soll. Die "
+"Zeichenkette \"ANY\" wird ebenfalls akzeptiert, wenn ein gültiges SPA-Paket "
+"für eine beliebige Ziel-IP-Adresse angenommen werden soll. Netzwerke sollten "
+"in CIDR-Notation angegeben werden (z. B. \"192.168.10.0/24\"), es können "
+"aber auch einzelne IP-Adressen angegeben werden. Mehrere Einträge sind durch "
+"Komma zu trennen."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
+msgid ""
+"The network on which the daemon listens. The daemon is automatically started "
+"when the network is up-and-running. This option has precedence over "
+"“PCAP_INTF” option."
+msgstr ""
+"Das Netzwerk, auf dem der Daemon lauscht. Der Daemon wird automatisch "
+"gestartet, wenn das Netzwerk in Betrieb ist. Diese Option hat Vorrang vor "
+"der Option \"PCAP_INTF\"."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:508
+msgid ""
+"The source address from which the SPA packet will be accepted. The string "
+"“ANY” is also accepted if a valid SPA packet should be honored from any "
+"source IP. Networks should be specified in CIDR notation (e.g. "
+"“192.168.10.0/24”), and individual IP addresses can be specified as well. "
+"Multiple entries are comma-separated."
+msgstr ""
+"Die Quelladresse, von der das SPA-Paket akzeptiert werden soll. Die "
+"Zeichenfolge \"ANY\" wird ebenfalls akzeptiert, wenn ein gültiges SPA-Paket "
+"von einer beliebigen Quell-IP-Adresse akzeptiert werden soll. Netzwerke "
+"sollten in CIDR-Notation angegeben werden (z. B. \"192.168.10.0/24\"), es "
+"können aber auch einzelne IP-Adressen angegeben werden. Mehrere Einträge "
+"sind durch Komma zu trennen."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:514
+msgid "The source address has to be specified."
+msgstr "Die Quelladresse muss angegeben werden."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:430
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:537
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:546
+msgid "The symmetric key has to be specified."
+msgstr "Der symmetrische Schlüssel muss angegeben werden."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
+msgid ""
+"This instructs fwknopd to accept complete commands that are contained within "
+"an authorization packet. Any such command will be executed on the fwknopd "
+"server as the user specified by the “CMD_EXEC_USER” or as the user that "
+"started fwknopd if that is not set."
+msgstr ""
+"Dies weist fwknopd an, vollständige Befehle zu akzeptieren, die in einem "
+"Autorisierungspaket enthalten sind. Jeder dieser Befehle wird auf dem "
+"fwknopd-Server als der durch \"CMD_EXEC_USER\" angegebene Benutzer "
+"ausgeführt oder, wenn dieser nicht festgelegt ist, als der Benutzer, der "
+"fwknopd gestartet hat."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
+msgid ""
+"When unchecked, the config files in /etc/fwknopd will be used as is, "
+"ignoring any settings here."
+msgstr ""
+"Dies deaktivieren um die Konfigurationsdateien unter /etc/fwknopd zu nutzen, "
+"anstatt der Einstellungen hier."
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:419
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:502
+msgid "access.conf stanzas"
+msgstr "access.conf-Einträge"
+
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:598
+msgid "fwknopd.conf config options"
+msgstr "fwknopd.conf-Konfigurationsoptionen"
+
+#~ msgid "Firewall Knock Operator"
+#~ msgstr "Firewall-Knock-Operator"
+
+#~ msgid "The Base64 HMAC key"
+#~ msgstr "Der Base 64-HMAC-Schlüssel"
+
+#~ msgid "Use ANY for any source IP"
+#~ msgstr "Nutze ANY für alle Source-IPs"
+
+#~ msgid "Enter custom access.conf variables below:"
+#~ msgstr "Enter custom access.conf variables below:"
+
+#~ msgid "Enter custom fwknopd.conf variables below:"
+#~ msgstr "Enter custom fwknopd.conf variables below:"

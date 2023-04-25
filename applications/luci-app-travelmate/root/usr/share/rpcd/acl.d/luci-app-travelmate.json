@@ -1,0 +1,32 @@
+{
+	"luci-app-travelmate": {
+		"description": "Grant access to LuCI app travelmate",
+		"write": {
+			"file": {
+				"/var/state/travelmate.refresh": [ "write" ]
+			},
+			"uci": [ "travelmate" ]
+		},
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/etc/travelmate/*.login": [ "list" ],
+				"/var/run/travelmate.pid": [ "read" ],
+				"/var/state/travelmate.refresh": [ "read" ],
+				"/tmp/trm_runtime.json": [ "read" ],
+				"/sbin/logread -e trm-": [ "exec" ],
+				"/usr/sbin/logread -e trm-": [ "exec" ],
+				"/usr/sbin/ifup *": [ "exec" ],
+				"/etc/init.d/travelmate start" : [ "exec" ],
+				"/etc/init.d/travelmate stop" : [ "exec" ],
+				"/etc/init.d/travelmate reload" : [ "exec" ],
+				"/etc/init.d/travelmate restart" : [ "exec" ],
+				"/etc/init.d/travelmate assoc" : [ "exec" ],
+				"/etc/init.d/travelmate setup [0-9a-z_]* [0-9a-z_]* [0-9]*" : [ "exec" ],
+				"/etc/init.d/travelmate scan radio[0-9]" : [ "exec" ],
+				"/usr/bin/qrencode --inline --8bit --type=SVG --output=- *" : [ "exec" ]
+			},
+			"uci": [ "travelmate", "wireless" ]
+		}
+	}
+}

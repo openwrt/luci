@@ -1,0 +1,31 @@
+{
+	"admin/status/vnstat": {
+		"title": "VnStat Traffic Monitor",
+		"order": 90,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-vnstat" ]
+		}
+	},
+
+	"admin/status/vnstat/graphs": {
+		"title": "Graphs",
+		"order": 1,
+		"action": {
+			"type": "template",
+			"path": "vnstat"
+		}
+	},
+
+	"admin/status/vnstat/config": {
+		"title": "Configuration",
+		"order": 2,
+		"action": {
+			"type": "cbi",
+			"path": "vnstat",
+			"post": { "cbi.submit": true }
+		}
+	}
+}

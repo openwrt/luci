@@ -1,0 +1,17 @@
+{
+	"admin/services/fwknopd": {
+		"title": "Firewall Knock Daemon",
+		"action": {
+			"type": "view",
+			"path": "fwknopd"
+		},
+		"depends": {
+			"acl": [ "luci-app-fwknopd" ],
+			"fs": {
+				"/usr/bin/qrencode": "executable",
+				"/usr/sbin/fwknopd": "executable"
+			},
+			"uci": { "fwknopd": true }
+		}
+	}
+}

@@ -1,0 +1,30 @@
+{
+  "admin/example/": {
+    "title": "Example",
+    "order": 60,
+    "action": {
+      "type": "firstchild"
+    },
+    "depends": {
+      "acl": [ "luci-app-example" ]
+    }
+  },
+
+  "admin/example/form": {
+    "title": "Form View",
+    "order": 1,
+    "action": {
+      "type": "view",
+      "path": "example/form"
+    }
+  },
+
+  "admin/example/html": {
+    "title": "HTML Page",
+    "order": 2,
+    "action": {
+      "type": "view",
+      "path": "example/htmlview"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+	"admin/services/mjpg-streamer": {
+		"title": "MJPG-streamer",
+		"action": {
+			"type": "cbi",
+			"path": "mjpg-streamer",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-mjpg-streamer" ],
+			"uci": { "mjpg-streamer": true }
+		}
+	}
+}

@@ -1,0 +1,14 @@
+{
+	"admin/services/rp-pppoe-server": {
+		"title": "RP PPPoE Server",
+		"action": {
+			"type": "cbi",
+			"path": "rp-pppoe-server",
+			"post": { "cbi.submit": true }
+		},
+		"depends": {
+			"acl": [ "luci-app-rp-pppoe-server" ],
+			"uci": { "pppoe": true }
+		}
+	}
+}

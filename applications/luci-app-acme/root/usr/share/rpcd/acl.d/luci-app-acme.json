@@ -1,0 +1,15 @@
+{
+        "luci-app-acme": {
+                "description": "Grant UCI access for luci-app-acme",
+                "read": {
+                        "file": {
+                                "/usr/sbin/nginx": [ "read" ],
+                                "/usr/sbin/uhttpd": [ "read" ]
+                        },
+                        "uci": [ "acme" ]
+                },
+                "write": {
+                        "uci": [ "acme" ]
+                }
+        }
+}

@@ -1,0 +1,13 @@
+{
+	"admin/services/snmpd": {
+		"title": "SNMPD",
+		"action": {
+			"type": "view",
+			"path": "snmpd/snmpd"
+		},
+		"depends": {
+			"acl": [ "luci-app-snmpd" ],
+			"uci": { "snmpd":  true }
+		}
+	}
+}

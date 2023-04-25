@@ -1,0 +1,428 @@
+header h3 a, header .brand {
+	display:none !important;
+}
+
+@media screen and (max-device-width: 600px) {
+	.modal {
+		margin: 1.5em auto;
+	}
+
+	.tabs, .cbi-tabmenu {
+		background: linear-gradient(var(--background-color-high) 20%, var(--border-color-medium) 100%);
+		background-size: 1px 34px;
+		margin-bottom: 10px;
+	}
+
+	.tabs > li, .cbi-tabmenu > li {
+		height: 30px;
+	}
+
+	.tabs > li > a, .cbi-tabmenu > li > a {
+		padding: 0 8px;
+		line-height: 30px;
+	}
+
+	.table {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+
+	.tr {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: flex-end;
+		border-top: 1px solid var(--border-color-medium);
+		padding: 5px 0;
+		margin: 0 -3px;
+	}
+
+	.table .th,
+	.table .td,
+	.table .tr::before {
+		flex: 1 1 50%;
+		align-self: flex-start;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		word-wrap: break-word;
+		display: inline-block;
+		border-top: none;
+		padding: 3px;
+		box-sizing: border-box;
+	}
+
+	.table .td.cbi-dropdown-open {
+		overflow: visible;
+	}
+
+	.col-1 { flex: 1 1 30px !important; -webkit-flex: 1 1 30px !important; }
+	.col-2 { flex: 2 2 60px !important; -webkit-flex: 2 2 60px !important; }
+	.col-3 { flex: 3 3 90px !important; -webkit-flex: 3 3 90px !important; }
+	.col-4 { flex: 4 4 120px !important; -webkit-flex: 4 4 120px !important; }
+	.col-5 { flex: 5 5 150px !important; -webkit-flex: 5 5 150px !important; }
+	.col-6 { flex: 6 6 180px !important; -webkit-flex: 6 6 180px !important; }
+	.col-7 { flex: 7 7 210px !important; -webkit-flex: 7 7 210px !important; }
+	.col-8 { flex: 8 8 240px !important; -webkit-flex: 8 8 240px !important; }
+	.col-9 { flex: 9 9 270px !important; -webkit-flex: 9 9 270px !important; }
+	.col-10 { flex: 10 10 300px !important; -webkit-flex: 10 10 300px !important; }
+
+	.td select {
+		word-wrap: normal;
+	}
+
+	.td[data-widget="button"],
+	.td[data-widget="fvalue"] {
+		flex: 1 1 17%;
+		text-align: left;
+	}
+
+	.td.cbi-value-field {
+		align-self: flex-start;
+		flex-basis: 100%;
+		margin-bottom: .3em;
+	}
+
+	.td.cbi-value-field .cbi-button {
+		width: 100%;
+	}
+
+	.table.cbi-section-table {
+		border: none;
+		background: none;
+		margin: 0;
+	}
+
+	.tr.table-titles,
+	.cbi-section-table-titles,
+	.cbi-section-table-descr {
+		display: none;
+	}
+
+	.cbi-section-table-row {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: wrap;
+		margin: 0 0 .5em 0;
+	}
+
+	.cbi-section-table + .cbi-section-create {
+		padding-top: 0;
+	}
+
+	.tr[data-title]::before {
+		display: block;
+		flex: 1 1 100%;
+		background: var(--background-color-low) !important;
+		font-size: 16px;
+		border-bottom: 1px solid var(--border-color-medium);
+	}
+
+	.td[data-title]::before {
+		content: attr(data-title);
+		font-weight: bold;
+		display: block;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: pre-line;
+	}
+
+	.td[data-description]::after {
+		display: block;
+	}
+
+	.td[data-title] ~ .td.cbi-section-actions {
+		align-self: flex-start;
+	}
+
+	.td.cbi-section-actions {
+		overflow: initial;
+		max-width: 100%;
+		padding: 3px 2px;
+		flex-basis: 100%;
+	}
+
+	.hide-sm,
+	.hide-xs {
+		display: none !important;
+	}
+
+	.td.cbi-value-field[data-widget="CBI.DummyValue"],
+	.td.cbi-value-field[data-widget="CBI.Button"],
+	.td.cbi-value-field[data-widget="CBI.FlagValue"],
+	.td.cbi-value-field[data-widget="dvalue"],
+	.td.cbi-value-field[data-widget="button"],
+	.td.cbi-value-field[data-widget="fvalue"] {
+		flex-basis: 50%;
+		text-align: left;
+	}
+
+	.cbi-section-table .tr:hover .td,
+	.cbi-section-table .tr:hover .th,
+	.cbi-section-table .tr:hover::before {
+		background-color: transparent;
+	}
+
+	.cbi-tab-descr {
+		margin: 0 0 .5em 0;
+	}
+
+	.cbi-value {
+		padding-bottom: .5em;
+		border-bottom: 1px solid var(--border-color-high);
+		margin-bottom: .5em;
+		display: block;
+	}
+
+	.cbi-value.hidden {
+		display: none;
+	}
+
+	.cbi-value .cbi-value:last-child {
+		border-bottom: none;
+		padding-bottom: inherit;
+		margin-bottom: inherit;
+	}
+
+	.cbi-value label.cbi-value-title {
+		font-weight: bold;
+	}
+
+	.cbi-value-field, .cbi-select, .cbi-dynlist, .cbi-dropdown:not(.btn):not(.cbi-button) {
+		width: 100%;
+		margin: 0;
+	}
+
+	.cbi-dynlist > .item {
+		min-height: 30px;
+		display: flex;
+		align-items: center;
+	}
+
+	input, textarea, select,
+	.cbi-dropdown > ul > li {
+		font-size: 16px !important;
+		height: auto;
+	}
+
+	.cbi-dropdown > ul > li input[type="text"] {
+		line-height: 28px;
+	}
+
+	select, input[type="text"], input[type="password"],
+	.cbi-dropdown > ul > li input[type="text"],
+	.cbi-value-field .control-group {
+		width: 100%;
+		height: 30px;
+	}
+
+	input.cbi-input-password {
+		width: calc(100% - 25px);
+	}
+
+	input[type="text"] + .cbi-button,
+	input[type="password"] + .cbi-button,
+	select + .cbi-button {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.cbi-value-field input[type="checkbox"],
+	.cbi-value-field input[type="radio"] {
+		margin: 0;
+	}
+
+	button, .btn, .cbi-button {
+		font-size: 14px !important;
+		padding: 0 8px;
+	}
+
+	.actions,
+	.cbi-page-actions {
+		border-top: none;
+		margin-top: -.5em;
+		padding: 8px;
+	}
+
+	[data-page="admin-status-overview"] .td[width="33%"] {
+		flex-basis: 33%;
+	}
+
+	header .pull-right .label {
+		white-space: normal;
+		display: inline-block;
+		text-align: center;
+		line-height: 12px;
+		margin: 1px 0;
+	}
+
+	header > .fill {
+		padding: 1px;
+	}
+
+	header > .fill > .container {
+		display: flex;
+		flex-direction: row;
+	}
+
+	header .nav {
+		flex: 3 3 80%;
+		margin: 2px 5px 2px 0;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+	}
+
+	header .nav a {
+		padding: 2px 6px;
+	}
+
+	header .pull-right {
+		flex: 0 1 20%;
+		display: flex;
+		flex-direction: column;
+		padding: 0;
+		justify-content: space-around;
+		margin: .2em 5px .2em auto;
+	}
+
+	.menu-dropdown, .dropdown-menu {
+		top: 23px;
+	}
+
+	.cbi-optionals,
+	.cbi-section-create {
+		padding: 0 0 14px 0;
+	}
+
+	#cbi-network-switch_vlan .th,
+	#cbi-network-switch_vlan .td {
+		flex-basis: 12%;
+	}
+
+	#cbi-network-switch_vlan .td.cbi-section-actions > * {
+		width: auto;
+		display: block;
+	}
+
+	#wifi_assoclist_table .td,
+	[data-page="admin-status-processes"] .td {
+		flex-basis: 50% !important;
+	}
+
+	[data-page="admin-status-processes"] .td[data-widget="button"] {
+		flex-basis: 33% !important;
+	}
+
+	[data-page="admin-status-processes"] .td[data-name="PID"],
+	[data-page="admin-status-processes"] .td[data-name="USER"] {
+		flex-basis: 25% !important;
+	}
+
+	[data-page="admin-system-fstab"] .td[data-widget="button"]::before,
+	[data-page="admin-system-startup"] .td[data-widget="button"]::before,
+	[data-page="admin-status-processes"] .td[data-widget="button"]::before {
+		display: none;
+	}
+
+	[data-name="bridge-vlan"] > div {
+		overflow: visible !important;
+	}
+
+	[data-name="bridge-vlan"] .td[data-title] {
+		flex-basis: 33%;
+	}
+
+	[data-name="bridge-vlan"] .td[data-title]::before {
+		content: attr(data-title);
+	}
+
+	[data-page="admin-network-network"] .td[data-name="_ifacebox"] {
+		flex-basis: 40%;
+	}
+
+	[data-page="admin-network-network"] .td[data-name="_ifacestat"] {
+		flex-basis: 60%;
+	}
+}
+
+@media screen and (max-device-width: 375px) {
+	.cbi-page-actions {
+		display: flex;
+		justify-content: space-between;
+		margin: 0 -1px;
+		padding: 0;
+	}
+
+	.cbi-page-actions button {
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+
+	.cbi-page-actions .cbi-button {
+		flex: 1;
+		margin: 1px !important;
+		line-height: 2em;
+	}
+
+	.cbi-page-actions .cbi-button-negative,
+	.cbi-page-actions .cbi-button-primary,
+	.cbi-page-actions .cbi-button-apply {
+		flex: 3;
+	}
+
+	.cbi-section-actions .cbi-button {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		margin: 1px !important;
+	}
+
+	body[data-page="admin-network-wireless"] .td[data-name="_badge"] {
+		max-width: 50px;
+		align-self: center;
+	}
+
+	body[data-page="admin-network-wireless"] .td[data-name="_badge"] .ifacebadge {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	body[data-page="admin-network-wireless"] .td[data-name="_stat"] {
+		flex-basis: 60%;
+	}
+
+	body[data-page="admin-network-network"] .td.cbi-section-actions::before,
+	body[data-page="admin-network-wireless"] .td.cbi-section-actions::before {
+		content: none !important;
+	}
+
+	[data-page="admin-network-network"] .td[data-name="_ifacebox"],
+	[data-page="admin-network-network"] .td[data-name="_ifacestat"] {
+		flex-basis: 100%;
+	}
+
+	.td .ifacebox {
+		width: 100%;
+		margin: 0 !important;
+		flex-direction: row;
+	}
+
+	.td .ifacebox .ifacebox-head {
+		min-width: 25%;
+		justify-content: space-around;
+		border-radius: 4px 0 0 4px;
+	}
+
+	.td .ifacebox .ifacebox-head,
+	.td .ifacebox .ifacebox-body {
+		display: flex;
+		border-bottom: none;
+		align-items: center;
+	}
+
+	.td .ifacebox .ifacebox-head > *,
+	.ifacebox .ifacebox-body > * {
+		margin: .125em;
+	}
+}

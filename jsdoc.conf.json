@@ -1,0 +1,25 @@
+{
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "source": {
+        "include": ["modules/luci-base/htdocs/luci-static/resources"],
+        "includePattern": ".+\\.js(doc|x)?$"
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "templates": {
+        "cleverLinks": true,
+        "monospaceLinks": true,
+        "default": {
+                "outputSourceFiles": true
+        }
+    },
+    "opts": {
+        "destination": "docs/jsapi",
+        "recurse": true,
+        "readme": "docs/jsapi/README.md"
+    }
+}

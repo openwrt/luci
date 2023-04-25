@@ -1,0 +1,396 @@
+#!/bin/sh
+# Copyright 2017-2020 Stan Grishin (stangri@melmac.net)
+# shellcheck disable=SC2039,SC1091,SC3043,SC3057,SC3060
+
+readonly devices_dir="/usr/share/advanced-reboot/devices/"
+
+. /lib/functions.sh
+. /usr/share/libubox/jshn.sh
+
+logger() { /usr/bin/logger -t advanced-reboot "$1"; }
+is_present() { command -v "$1" >/dev/null 2>&1; }
+
+is_alt_mountable() {
+	local p1_mtd="$1" p2_mtd="$2"
+	if [ "${p1_mtd:0:3}" = "mtd" ] && [ "${p2_mtd:0:3}" = "mtd" ] && \
+		is_present 'ubiattach' && \
+		is_present 'ubiblock' && \
+		is_present 'mount'; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+alt_partition_mount() {
+	local ubi_dev op_ubi="$1"
+	mkdir -p /var/alt_rom
+	ubi_dev="$(ubiattach -m "$op_ubi")"
+	ubi_dev="$(echo "$ubi_dev" | sed -n "s/^UBI device number\s*\(\d*\),.*$/\1/p")"
+	if [ -z "$ubi_dev" ]; then 
+		ubidetach -m "$op_ubi"
+		return 1
+	fi
+	ubiblock --create "/dev/ubi${ubi_dev}_0" && \
+	mount -t squashfs -r "/dev/ubiblock${ubi_dev}_0" /var/alt_rom
+}
+
+alt_partition_unmount() {
+	local mtdCount i=0 op_ubi="$1"
+	mtdCount="$(ubinfo | grep 'Present UBI devices' | tr ',' '\n' | grep -c 'ubi')"
+	[ -z "$mtdCount" ] && mtdCount=10
+	[ -d /var/alt_rom ] && umount /var/alt_rom
+	while [ "$i" -le "$mtdCount" ]; do
+		if [ ! -e "/sys/devices/virtual/ubi/ubi${i}/mtd_num" ]; then
+			break
+		fi
+		ubi_mtd="$(cat /sys/devices/virtual/ubi/ubi${i}/mtd_num)"
+		if [ -n "$ubi_mtd" ] && [ "$ubi_mtd" = "$op_ubi" ]; then
+			ubiblock --remove /dev/ubi${i}_0
+			ubidetach -m "$op_ubi"
+			rm -rf /var/alt_rom
+		fi
+		i=$((i + 1))
+	done
+}
+
+get_main_partition_os_info(){
+	local cp_info
+	if [ -s "/etc/os-release" ]; then
+		cp_info="$(. /etc/os-release && echo "$PRETTY_NAME")"
+		if [ "${cp_info//SNAPSHOT}" != "$cp_info" ]; then
+			cp_info="$(. /etc/os-release && echo "${OPENWRT_RELEASE%%-*}")"
+		fi
+	fi
+	echo "$cp_info"
+}
+
+get_alt_partition_os_info(){
+	local op_info op_ubi="$1"
+	logger "attempting to mount alternative partition (mtd${op_ubi})"
+	alt_partition_unmount "$op_ubi"
+	alt_partition_mount "$op_ubi"
+	if [ -s "/var/alt_rom/etc/os-release" ]; then
+		op_info="$(. /var/alt_rom/etc/os-release && echo "$PRETTY_NAME")"
+		if [ "${op_info//SNAPSHOT}" != "$op_info" ]; then
+			op_info="$(. /var/alt_rom/etc/os-release && echo "${OPENWRT_RELEASE%%-*}")"
+		fi
+	fi
+	logger "attempting to unmount alternative partition (mtd${op_ubi})"
+	alt_partition_unmount "$op_ubi"
+	echo "$op_info"
+}
+
+find_device_data(){
+	local boardNames filename i romBoardName="$1"
+	for filename in "${devices_dir}"*.json; do
+		[ "$filename" = "${devices_dir}*.json" ] && return
+		json_load_file "$filename"
+		json_get_values boardNames 'boardNames'
+		json_cleanup
+		for i in $boardNames; do 
+			if [ "$i" = "$romBoardName" ]; then
+				echo "$filename"
+				return
+			fi
+		done
+	done
+}
+
+print_json() { json_init; json_add_string "$1" "$2"; json_dump; json_cleanup; }
+
+obtain_device_info(){
+	local romBoardName p zyxelFlagPartition i
+	local vendorName deviceName partition1MTD partition2MTD labelOffset
+	local bootEnv1 bootEnv1Partition1Value bootEnv1Partition2Value
+	local bootEnv2 bootEnv2Partition1Value bootEnv2Partition2Value
+	local p1_label p1_version p2_label p2_version p1_os p2_os
+	local current_partition op_ubi cp_info op_info
+
+	romBoardName="$(cat /tmp/sysinfo/board_name)"
+	if [ -z "$romBoardName" ]; then
+		print_json 'error' 'NO_BOARD_NAME'
+		return
+	fi
+
+	p="$(find_device_data "$romBoardName")"
+	if [ -z "$p" ] || [ ! -s "$p" ]; then
+		print_json 'rom_board_name' "$romBoardName"
+		return
+	fi
+
+	json_load_file "$p"
+	for i in vendorName deviceName partition1MTD partition2MTD labelOffset \
+		bootEnv1 bootEnv1Partition1Value bootEnv1Partition2Value \
+		bootEnv2 bootEnv2Partition1Value bootEnv2Partition2Value; do
+		json_get_var $i "$i"
+	done
+	json_cleanup
+
+	if [ -n "$labelOffset" ]; then
+		if [ -n "$partition1MTD" ]; then
+			p1_label="$(dd if="/dev/${partition1MTD}" bs=1 skip="${labelOffset}" count=64 2>/dev/null)"
+			if [ -n "$p1_label" ]; then
+				p1_version="$(echo "$p1_label" | sed -n "s/\(.*\)Linux-\([0-9.]\+\).*$/\2/p")"
+				if [ "${p1_label//LEDE}" != "$p1_label" ]; then p1_os="LEDE"; fi
+				if [ "${p1_label//OpenWrt}" != "$p1_label" ]; then p1_os="OpenWrt"; fi
+				if [ -n "$vendorName" ] && [ "${p1_label//$vendorName}" != "$p1_label" ]; then 
+					p1_os="$vendorName"
+				fi
+			fi
+			if [ -z "$p1_os" ]; then
+				p1_os="${vendorName:-Unknown}/Unknown"
+			fi
+		fi
+
+		if [ -n "$partition2MTD" ]; then
+			p2_label="$(dd if="/dev/${partition2MTD}" bs=1 skip="${labelOffset}" count=64 2>/dev/null)"
+			if [ -n "$p2_label" ]; then
+				p2_version="$(echo "$p2_label" | sed -n "s/\(.*\)Linux-\([0-9.]\+\).*$/\2/p")"
+				if [ "${p2_label//LEDE}" != "$p2_label" ]; then p2_os="LEDE"; fi
+				if [ "${p2_label//OpenWrt}" != "$p2_label" ]; then p2_os="OpenWrt"; fi
+				if [ -n "$vendorName" ] && [ "${p2_label//$vendorName}" != "$p2_label" ]; then 
+					p2_os="$vendorName"
+				fi
+			fi
+			if [ -z "$p2_os" ]; then
+				p2_os="${vendorName:-Unknown}/Unknown"
+			fi
+		fi
+	else
+		p1_os="${vendorName}/Unknown (Compressed)"
+		p2_os="${vendorName}/Unknown (Compressed)"
+	fi
+
+	if [ -n "$bootEnv1" ]; then
+		if [ -x "/usr/sbin/fw_printenv" ] && [ -x "/usr/sbin/fw_setenv" ]; then
+			current_partition="$(/usr/sbin/fw_printenv -n "${bootEnv1}")"
+		fi
+	else
+		for i in '0:dual_flag' '0:DUAL_FLAG'; do
+			zyxelFlagPartition="$(find_mtd_part "$i" 2>/dev/null)"
+			[ -n "$zyxelFlagPartition" ] && break
+		done
+		if [ -z "$zyxelFlagPartition" ]; then
+			print_json 'error' 'NO_DUAL_FLAG'
+			logger "Unable to find Dual Boot Environment or Dual Boot Flag Partition."
+			return
+		elif [ ! -b "$zyxelFlagPartition" ]; then
+			print_json 'error' 'NO_DUAL_FLAG_BLOCK'
+			logger "The Dual Boot Flag Partition: $zyxelFlagPartition is not block device."
+			return
+		else
+			current_partition="$(dd if="${zyxelFlagPartition}" bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 "%d"')"
+		fi
+	fi
+
+	if is_alt_mountable "$partition1MTD" "$partition2MTD"; then
+		if [ "$current_partition" = "$bootEnv1Partition1Value" ]; then
+			op_ubi=$(( ${partition2MTD:3:3} + 1 ))
+		else
+			op_ubi=$(( ${partition1MTD:3:3} + 1 ))
+		fi
+		cp_info="$(get_main_partition_os_info $op_ubi)"
+		op_info="$(get_alt_partition_os_info $op_ubi)"
+		if [ "$current_partition" = "$bootEnv1Partition1Value" ]; then
+			p1_os="${cp_info:-$p1_os}"
+			p2_os="${op_info:-$p2_os}"
+		else
+			p1_os="${op_info:-$p1_os}"
+			p2_os="${cp_info:-$p2_os}"
+		fi
+	fi
+	if [ -n "$p1_os" ] && [ -n "$p1_version" ]; then
+		p1_os="$p1_os (Linux ${p1_version})"
+	fi
+	if [ -n "$p2_os" ] && [ -n "$p2_version" ]; then
+		p2_os="$p2_os (Linux ${p2_version})"
+	fi
+
+	json_init
+	json_add_int 'current_partition' "$current_partition"
+	json_add_string 'device_name' "$vendorName $deviceName"
+	json_add_array 'partitions'
+	json_add_object
+	if [ "$bootEnv1Partition1Value" = "$current_partition" ]; then
+		json_add_string 'state' "Current"
+	else
+		json_add_string 'state' "Alternative"
+	fi
+	json_add_string 'os' "$p1_os"
+	json_add_int 'number' "$bootEnv1Partition1Value"
+	json_close_object
+	json_add_object
+	if [ "$bootEnv1Partition2Value" = "$current_partition" ]; then
+		json_add_string 'state' "Current"
+	else
+		json_add_string 'state' "Alternative"
+	fi
+	json_add_string 'os' "$p2_os"
+	json_add_int 'number' "$bootEnv1Partition2Value"
+	json_close_object
+	json_close_array
+	json_add_string 'rom_board_name' "$romBoardName"
+	json_dump; json_cleanup;
+}
+
+toggle_boot_partition(){
+	local zyxelFlagPartition i zyxelBootFlag zyxelNewBootFlag curEnvSetting newEnvSetting
+	local romBoardName p
+	local bev1 bev2 bev1p1 bev1p2 bev2p1 bev2p2
+	local vendorName deviceName partition1MTD partition2MTD labelOffset
+	local bootEnv1 bootEnv1Partition1Value bootEnv1Partition2Value
+	local bootEnv2 bootEnv2Partition1Value bootEnv2Partition2Value
+
+	romBoardName="$(cat /tmp/sysinfo/board_name)"
+	if [ -z "$romBoardName" ]; then
+		print_json 'error' 'NO_BOARD_NAME'
+		return
+	fi
+
+	p="$(find_device_data "$romBoardName")"
+	if [ -z "$p" ] || [ ! -s "$p" ]; then
+		print_json 'rom_board_name' "$romBoardName"
+		return
+	fi
+
+	json_load_file "$p"
+	for i in vendorName deviceName partition1MTD partition2MTD labelOffset \
+		bootEnv1 bootEnv1Partition1Value bootEnv1Partition2Value \
+		bootEnv2 bootEnv2Partition1Value bootEnv2Partition2Value; do
+		json_get_var $i "$i"
+	done
+	json_cleanup
+
+	bev1="$bootEnv1"
+	bev2="$bootEnv2"
+
+	if [ -n "${bev1}${bev2}" ]; then # Linksys devices
+		if [ -n "$bev1" ]; then
+			curEnvSetting="$(fw_printenv -n "${bev1}")"
+			if [ -z "$curEnvSetting" ]; then
+				logger "$(printf "Unable to obtain firmware environment variable: %s." "$bev1")"
+				json_init
+				json_add_string 'error' 'NO_FIRM_ENV'
+				json_add_array 'args'
+				json_add_string "$bev1"
+				json_close_array
+				json_add_string 'rom_board_name' "$romBoardName"
+				json_dump; json_cleanup;
+				return
+			else
+				bev1p1="$bootEnv1Partition1Value"
+				bev1p2="$bootEnv1Partition2Value"
+				if [ "$curEnvSetting" = "$bev1p1" ]; then
+					newEnvSetting="$bev1p2"
+				else
+					newEnvSetting="$bev1p1"
+				fi
+				if ! fw_setenv "$bev1" "$newEnvSetting"; then
+					logger "$(printf "Unable to set firmware environment variable: %s to %s." "$bev1" "$newEnvSetting")"
+					json_init
+					json_add_string 'error' 'ERR_SET_ENV'
+					json_add_array 'args'
+					json_add_string "$bev1"
+					json_add_string "$newEnvSetting"
+					json_close_array
+					json_add_string 'rom_board_name' "$romBoardName"
+					json_dump; json_cleanup;
+					return
+				fi
+			fi
+		fi
+		if [ -n "$bev2" ]; then
+			curEnvSetting="$(fw_printenv -n "${bev2}")"
+			if [ -z "$curEnvSetting" ]; then
+				logger "$(printf "Unable to obtain firmware environment variable: %s." "$bev2")"
+				json_init
+				json_add_string 'error' 'NO_FIRM_ENV'
+				json_add_array 'args'
+				json_add_string "$bev2"
+				json_close_array
+				json_add_string 'rom_board_name' "$romBoardName"
+				json_dump; json_cleanup;
+				return
+			else
+				bev2p1="$bootEnv2Partition1Value"
+				bev2p2="$bootEnv2Partition2Value"
+				if [ "$curEnvSetting" = "$bev2p1" ]; then
+					newEnvSetting="$bev2p2"
+				else
+					newEnvSetting="$bev2p1"
+				fi
+				if ! fw_setenv "$bev2" "$newEnvSetting"; then
+					logger "$(printf "Unable to set firmware environment variable: %s to %s." "$bev2" "$newEnvSetting")"
+					json_init
+					json_add_string 'error' 'ERR_SET_ENV'
+					json_add_array 'args'
+					json_add_string "$bev2"
+					json_add_string "$newEnvSetting"
+					json_close_array
+					json_add_string 'rom_board_name' "$romBoardName"
+					json_dump; json_cleanup;
+					return
+				fi
+			fi
+		fi
+		json_init
+		json_dump; json_cleanup;
+	else # NetGear device
+		for i in '0:dual_flag' '0:DUAL_FLAG'; do
+			zyxelFlagPartition="$(find_mtd_part "$i" 2>/dev/null)"
+			[ -n "$zyxelFlagPartition" ] && break
+		done
+		if [ -z "$zyxelFlagPartition" ]; then
+			print_json 'error' 'NO_DUAL_FLAG'
+			logger "Unable to find Dual Boot Environment or Dual Boot Flag Partition."
+			return
+		elif [ ! -b "$zyxelFlagPartition" ]; then
+			print_json 'error' 'NO_DUAL_FLAG_BLOCK'
+			logger "The Dual Boot Flag Partition: $zyxelFlagPartition is not block device."
+			return
+		else
+			zyxelBootFlag="$(dd if="${zyxelFlagPartition}" bs=1 count=1 2>/dev/null | hexdump -n 1 -e '1/1 "%d"')"
+			if [ "$zyxelBootFlag" = "1" ]; then
+				zyxelNewBootFlag="\\xff"
+			else
+				zyxelNewBootFlag="\\x01"
+			fi
+			if [ -n "$zyxelNewBootFlag" ]; then
+				if ! printf "%b" "$zyxelNewBootFlag" > "$zyxelFlagPartition"; then
+					logger "$(printf "Unable to set Dual Boot Flag Partition entry for partition: %s." "$zyxelFlagPartition")"
+					json_init
+					json_add_string 'error' 'ERR_SET_DUAL_FLAG'
+					json_add_array 'args'
+					json_add_string "$zyxelFlagPartition"
+					json_close_array
+					json_add_string 'rom_board_name' "$romBoardName"
+					json_dump; json_cleanup;
+					return
+				fi
+			fi
+		fi
+		json_init
+		json_dump; json_cleanup;
+	fi
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "obtain_device_info"
+		json_close_object
+		json_add_object "toggle_boot_partition"
+		json_close_object
+		json_dump
+		json_cleanup
+		;;
+	call)
+		case "$2" in
+			obtain_device_info)
+				obtain_device_info;;
+			toggle_boot_partition)
+				toggle_boot_partition;;
+		esac
+	;;
+esac

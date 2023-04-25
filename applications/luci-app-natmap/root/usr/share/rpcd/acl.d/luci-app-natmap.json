@@ -1,0 +1,17 @@
+{
+	"luci-app-natmap": {
+		"description": "Grant access to LuCI app natmap",
+		"read": {
+			"file": {
+				"/var/run/natmap/*": [ "read" ]
+			},
+			"ubus": {
+				"service": [ "list" ]
+			},
+			"uci": ["natmap"]
+		},
+		"write": {
+			"uci": ["natmap"]
+		}
+	}
+}

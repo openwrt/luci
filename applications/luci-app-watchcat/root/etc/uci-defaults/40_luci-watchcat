@@ -1,0 +1,10 @@
+#!/bin/sh
+
+uci -q batch <<-EOF >/dev/null
+	delete ucitrack.@watchcat[-1]
+	add ucitrack watchcat
+	set ucitrack.@watchcat[-1].init=watchcat
+	commit ucitrack
+EOF
+
+exit 0

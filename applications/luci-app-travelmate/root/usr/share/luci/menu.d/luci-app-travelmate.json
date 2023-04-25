@@ -1,0 +1,42 @@
+{
+	"admin/services/travelmate": {
+		"title": "Travelmate",
+		"order": "60",
+		"action": {
+			"type": "alias",
+			"path": "admin/services/travelmate/overview"
+		},
+		"depends": {
+			"acl": [ "luci-app-travelmate" ],
+			"fs": {
+				"/usr/bin/travelmate.sh": "executable",
+				"/etc/init.d/travelmate": "executable"
+			},
+			"uci": { "travelmate": true }
+		}
+	},
+	"admin/services/travelmate/overview": {
+		"title": "Overview",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "travelmate/overview"
+		}
+	},
+	"admin/services/travelmate/stations": {
+		"title": "Wireless Stations",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "travelmate/stations"
+		}
+	},
+	"admin/services/travelmate/logread": {
+		"title": "Log View",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "travelmate/logread"
+		}
+	}
+}
