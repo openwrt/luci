@@ -488,6 +488,30 @@ local methods = {
 
 				block:close()
 
+				local swaps = io.open("/proc/swaps", "r")
+				if swaps then
+					while true do
+						local ln = swaps:read("*l")
+						if not ln then
+							break
+						end
+
+						local dev, s = ln:match("^(/%S+)%s+%S+%s+(%d+)")
+						if dev and s then
+							rv["swap:" .. dev] = {
+								dev = dev:gsub("\\(%d%d%d)",
+									function(n)
+										return string.char(tonumber(n, 8))
+									end),
+								size = s * 1024,
+								type = "swap"
+							}
+						end
+					end
+
+					swaps:close()
+				end
+
 				return rv
 			else
 				return { error = "Unable to execute block utility" }
