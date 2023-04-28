@@ -73,6 +73,11 @@ function handleEdit(ev) {
 							});
 							return;
 						}
+					} else {
+						fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
+							ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
+						});
+						return;
 					}
 					location.reload();
 				} else {
@@ -122,6 +127,9 @@ function handleEdit(ev) {
 		for (const element of elements) {
 			let key = element.id.split('.')[4];
 			let value = element.value || "";
+			if (value === "") {
+				continue;
+			}
 			switch (key) {
 				case 'url_4':
 					subElements.url_4 = value;
@@ -143,9 +151,13 @@ function handleEdit(ev) {
 					break;
 			}
 		}
-		sumSubElements.push(nodeKeys[i].value, subElements);
+		if (nodeKeys[i].value !== "" && subElements.descr !== "") {
+			sumSubElements.push(nodeKeys[i].value, subElements);
+		}
 	}
-	exportJson = JSON.stringify(sumSubElements).replace(/^\[/, '{\n').replace(/\}]$/, '\n\t}\n}\n').replace(/,{"/g, ':{\n\t"').replace(/"},"/g, '"\n\t},\n"').replace(/","/g, '",\n\t"');
+	if (sumSubElements.length > 0) {
+		exportJson = JSON.stringify(sumSubElements).replace(/^\[/, '{\n').replace(/\}]$/, '\n\t}\n}\n').replace(/,{"/g, ':{\n\t"').replace(/"},"/g, '"\n\t},\n"').replace(/","/g, '",\n\t"');
+	}
 	return fs.write('/etc/banip/banip.custom.feeds', exportJson).then(function () {
 		location.reload();
 	});
