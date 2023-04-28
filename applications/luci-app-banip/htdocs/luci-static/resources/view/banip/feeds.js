@@ -58,8 +58,22 @@ observer.observe(targetNode, observerConfig);
 function handleEdit(ev) {
 	if (ev === 'upload') {
 		return ui.uploadFile('/etc/banip/banip.custom.feeds').then(function () {
-			L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "").then(function (res) {
-				if (res) {
+			L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "").then(function (data) {
+				if (data) {
+					let dataLength = Object.keys(data).length || 0;
+					if (dataLength > 0) {
+						for (let i = 0; i < dataLength; i++) {
+							let feed = Object.keys(data)[i];
+							let descr = data[feed].descr;
+							if (feed && descr) {
+								continue;
+							}
+							fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
+								ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
+							});
+							return;
+						}
+					}
 					location.reload();
 				} else {
 					fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
@@ -131,7 +145,7 @@ function handleEdit(ev) {
 		}
 		sumSubElements.push(nodeKeys[i].value, subElements);
 	}
-	exportJson = JSON.stringify(sumSubElements).replace(/,{/g, ':{').replace(/^\[/, '{').replace(/\]$/, '}');
+	exportJson = JSON.stringify(sumSubElements).replace(/^\[/, '{\n').replace(/\}]$/, '\n\t}\n}\n').replace(/,{"/g, ':{\n\t"').replace(/"},"/g, '"\n\t},\n"').replace(/","/g, '",\n\t"');
 	return fs.write('/etc/banip/banip.custom.feeds', exportJson).then(function () {
 		location.reload();
 	});
@@ -145,7 +159,7 @@ return view.extend({
 	render: function (data) {
 		let m, s, o, feed, url_4, url_6, rule_4, rule_6, descr, flag;
 
-		m = new form.JSONMap(data, 'Custom Feed Editor', _('With this editor you can upload your local custom feed file or fill up an initial one (a 1:1 copy of the version shipped with the package). \
+		m = new form.JSONMap(data, _('Custom Feed Editor'), _('With this editor you can upload your local custom feed file or fill up an initial one (a 1:1 copy of the version shipped with the package). \
 			The file is located at \'/etc/banip/banip.custom.feeds\'. \
 			Then you can edit this file, delete entries, add new ones or make a local backup. To go back to the maintainers version just empty the custom feed file again (do not delete it!).'));
 		for (let i = 0; i < Object.keys(m.data.data).length; i++) {
