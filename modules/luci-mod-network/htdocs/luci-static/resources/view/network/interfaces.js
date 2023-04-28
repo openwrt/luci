@@ -231,6 +231,7 @@ function get_netmask(s, use_cfgvalue) {
 function has_peerdns(proto) {
 	switch (proto) {
 	case 'dhcp':
+	case 'dhcpv6':
 	case 'qmi':
 	case 'ppp':
 	case 'pppoe':
