@@ -14,6 +14,7 @@
 				"/usr/bin/banip-service.sh": "executable",
 				"/etc/init.d/banip": "executable",
 				"/etc/banip/banip.feeds": "file",
+				"/etc/banip/banip.custom.feeds": "file",
 				"/etc/banip/banip.allowlist": "file",
 				"/etc/banip/banip.blocklist": "file",
 				"/etc/banip/banip.countries": "file"
@@ -47,9 +48,17 @@
 			"path": "banip/blocklist"
 		}
 	},
+	"admin/services/banip/feeds": {
+		"title": "Edit Custom Feeds",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "banip/feeds"
+		}
+	},
 	"admin/services/banip/setreport": {
 		"title": "Set Reporting",
-		"order": 40,
+		"order": 50,
 		"action": {
 			"type": "view",
 			"path": "banip/setreport"
@@ -57,7 +66,7 @@
 	},
 	"admin/services/banip/firewall_log": {
 		"title": "Firewall Log",
-		"order": 50,
+		"order": 60,
 		"action": {
 			"type": "view",
 			"path": "banip/firewall_log"
@@ -65,7 +74,7 @@
 	},
 	"admin/services/banip/processing_log": {
 		"title": "Processing Log",
-		"order": 60,
+		"order": 70,
 		"action": {
 			"type": "view",
 			"path": "banip/processing_log"

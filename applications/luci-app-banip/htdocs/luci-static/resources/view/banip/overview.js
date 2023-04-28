@@ -7,6 +7,9 @@
 'require form';
 'require tools.widgets as widgets';
 
+/*
+	button handling
+*/
 function handleAction(ev) {
 	fs.exec_direct('/etc/init.d/banip', [ev])
 }
@@ -14,6 +17,7 @@ function handleAction(ev) {
 return view.extend({
 	load: function () {
 		return Promise.all([
+			L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds'), ''),
 			L.resolveDefault(fs.read_direct('/etc/banip/banip.feeds'), ''),
 			L.resolveDefault(fs.read_direct('/etc/banip/banip.countries'), ''),
 			uci.load('banip')
@@ -21,7 +25,7 @@ return view.extend({
 	},
 
 	render: function (result) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('banip', 'banIP', _('Configuration of the banIP package to ban incoming and outgoing ip addresses/subnets via sets in nftables. \
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/banip/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>'));
@@ -29,110 +33,110 @@ return view.extend({
 		/*
 			poll runtime information
 		*/
-		var buttons, rt_res, inf_stat, inf_version, inf_elements, inf_feeds, inf_devices, inf_subnets, inf_system, nft_infos, run_infos, inf_flags, last_run
+		let buttons, rtRes, infStat, infVer, infElements, infFeeds, infDevices, infSubnets, infSystem, nftInfos, runInfos, infFlags, last_run
 
 		pollData: poll.add(function () {
 			return L.resolveDefault(fs.stat('/var/run/banip.lock')).then(function (stat) {
 				buttons = document.querySelectorAll('.cbi-button');
-				inf_stat = document.getElementById('status');
+				infStat = document.getElementById('status');
 				if (stat) {
-					for (var i = 0; i < buttons.length; i++) {
+					for (let i = 0; i < buttons.length; i++) {
 						buttons[i].setAttribute('disabled', 'true');
 					}
-					if (inf_stat && !inf_stat.classList.contains('spinning')) {
-						inf_stat.classList.add('spinning');
+					if (infStat && !infStat.classList.contains('spinning')) {
+						infStat.classList.add('spinning');
 					}
 				} else {
-					for (var i = 0; i < buttons.length; i++) {
+					for (let i = 0; i < buttons.length; i++) {
 						buttons[i].removeAttribute('disabled');
 					}
-					if (inf_stat && inf_stat.classList.contains('spinning')) {
-						inf_stat.classList.remove('spinning');
+					if (infStat && infStat.classList.contains('spinning')) {
+						infStat.classList.remove('spinning');
 					}
 				}
 				L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['status'])).then(function (result) {
 					if (result) {
-						rt_res = result.trim().split('\n');
-						if (rt_res) {
-							for (var i = 0; i < rt_res.length; i++) {
-								if (rt_res[i].match(/^\s+\+\sstatus\s+\:\s+(.*)$/)) {
-									rt_res.status = rt_res[i].match(/^\s+\+\sstatus\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\sversion\s+\:\s+(.*)$/)) {
-									rt_res.version = rt_res[i].match(/^\s+\+\sversion\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\selement_count\s+\:\s+(.*)$/)) {
-									rt_res.element_count = rt_res[i].match(/^\s+\+\selement_count\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)) {
-									rt_res.active_feeds = rt_res[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)) {
-									rt_res.active_devices = rt_res[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\sactive_subnets\s+\:\s+(.*)$/)) {
-									rt_res.active_subnets = rt_res[i].match(/^\s+\+\sactive_subnets\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)) {
-									rt_res.nft_info = rt_res[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)) {
-									rt_res.run_info = rt_res[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\srun_flags\s+\:\s+(.*)$/)) {
-									rt_res.run_flags = rt_res[i].match(/^\s+\+\srun_flags\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)) {
-									rt_res.last_run = rt_res[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)[1];
-								} else if (rt_res[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)) {
-									rt_res.system_info = rt_res[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)[1];
+						rtRes = result.trim().split('\n');
+						if (rtRes) {
+							for (let i = 0; i < rtRes.length; i++) {
+								if (rtRes[i].match(/^\s+\+\sstatus\s+\:\s+(.*)$/)) {
+									rtRes.status = rtRes[i].match(/^\s+\+\sstatus\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\sversion\s+\:\s+(.*)$/)) {
+									rtRes.version = rtRes[i].match(/^\s+\+\sversion\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\selement_count\s+\:\s+(.*)$/)) {
+									rtRes.elementCount = rtRes[i].match(/^\s+\+\selement_count\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)) {
+									rtRes.activeFeeds = rtRes[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)) {
+									rtRes.activeDevices = rtRes[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\sactive_subnets\s+\:\s+(.*)$/)) {
+									rtRes.activeSubnets = rtRes[i].match(/^\s+\+\sactive_subnets\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)) {
+									rtRes.nftInfo = rtRes[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)) {
+									rtRes.runInfo = rtRes[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\srun_flags\s+\:\s+(.*)$/)) {
+									rtRes.runFlags = rtRes[i].match(/^\s+\+\srun_flags\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)) {
+									rtRes.lastRun = rtRes[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)) {
+									rtRes.systemInfo = rtRes[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)[1];
 								}
 							}
 						}
-						if (rt_res) {
-							inf_stat = document.getElementById('status');
-							if (inf_stat) {
-								inf_stat.textContent = rt_res.status || '-';
+						if (rtRes) {
+							infStat = document.getElementById('status');
+							if (infStat) {
+								infStat.textContent = rtRes.status || '-';
 							}
-							inf_version = document.getElementById('version');
-							if (inf_version) {
-								inf_version.textContent = rt_res.version || '-';
+							infVer = document.getElementById('version');
+							if (infVer) {
+								infVer.textContent = rtRes.version || '-';
 							}
-							inf_elements = document.getElementById('elements');
-							if (inf_elements) {
-								inf_elements.textContent = rt_res.element_count || '-';
+							infElements = document.getElementById('elements');
+							if (infElements) {
+								infElements.textContent = rtRes.elementCount || '-';
 							}
-							inf_feeds = document.getElementById('feeds');
-							if (inf_feeds) {
-								inf_feeds.textContent = rt_res.active_feeds || '-';
+							infFeeds = document.getElementById('feeds');
+							if (infFeeds) {
+								infFeeds.textContent = rtRes.activeFeeds || '-';
 							}
-							inf_devices = document.getElementById('devices');
-							if (inf_devices) {
-								inf_devices.textContent = rt_res.active_devices || '-';
+							infDevices = document.getElementById('devices');
+							if (infDevices) {
+								infDevices.textContent = rtRes.activeDevices || '-';
 							}
-							inf_subnets = document.getElementById('subnets');
-							if (inf_subnets) {
-								inf_subnets.textContent = rt_res.active_subnets || '-';
+							infSubnets = document.getElementById('subnets');
+							if (infSubnets) {
+								infSubnets.textContent = rtRes.activeSubnets || '-';
 							}
-							nft_infos = document.getElementById('nft');
-							if (nft_infos) {
-								nft_infos.textContent = rt_res.nft_info || '-';
+							nftInfos = document.getElementById('nft');
+							if (nftInfos) {
+								nftInfos.textContent = rtRes.nftInfo || '-';
 							}
-							run_infos = document.getElementById('run');
-							if (run_infos) {
-								run_infos.textContent = rt_res.run_info || '-';
+							runInfos = document.getElementById('run');
+							if (runInfos) {
+								runInfos.textContent = rtRes.runInfo || '-';
 							}
-							inf_flags = document.getElementById('flags');
-							if (inf_flags) {
-								inf_flags.textContent = rt_res.run_flags || '-';
+							infFlags = document.getElementById('flags');
+							if (infFlags) {
+								infFlags.textContent = rtRes.runFlags || '-';
 							}
 							last_run = document.getElementById('last');
 							if (last_run) {
-								last_run.textContent = rt_res.last_run || '-';
+								last_run.textContent = rtRes.lastRun || '-';
 							}
-							inf_system = document.getElementById('system');
-							if (inf_system) {
-								inf_system.textContent = rt_res.system_info || '-';
+							infSystem = document.getElementById('system');
+							if (infSystem) {
+								infSystem.textContent = rtRes.systemInfo || '-';
 							}
 						}
 					} else {
-						inf_stat = document.getElementById('status');
-						if (inf_stat) {
-							inf_stat.textContent = '-';
+						infStat = document.getElementById('status');
+						if (infStat) {
+							infStat.textContent = '-';
 							poll.stop();
-							if (inf_stat.classList.contains('spinning')) {
-								inf_stat.classList.remove('spinning');
+							if (infStat.classList.contains('spinning')) {
+								infStat.classList.remove('spinning');
 							}
 						}
 					}
@@ -193,7 +197,7 @@ return view.extend({
 				]),
 				E('div', { class: 'right' }, [
 					E('button', {
-						'class': 'btn cbi-button cbi-button-apply',
+						'class': 'btn cbi-button cbi-button-action',
 						'click': ui.createHandlerFn(this, function () {
 							return handleAction('lookup');
 						})
@@ -397,13 +401,13 @@ return view.extend({
 		o.rawhtml = true;
 		o.default = '<em><b>' + _('Changes on this tab needs a banIP service restart to take effect.') + '</b></em>';
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpolicy', _('Set Policy'), _('Set the nft policy for banIP-related sets.'));
+		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpolicy', _('NFT Set Policy'), _('Set the nft policy for banIP-related Sets.'));
 		o.value('memory', _('memory (default)'));
 		o.value('performance', _('performance'));
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('Chain Priority'), _('Set the nft chain priority within the banIP table. Please note: lower values means higher priority.'));
+		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('NFT Chain Priority'), _('Set the nft chain priority within the banIP table. Please note: lower values means higher priority.'));
 		o.value('0', _('0'));
 		o.value('-100', _('-100'));
 		o.value('-200', _('-200 (default)'));
@@ -412,14 +416,24 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		if (result[0]) {
-			var feed, feeds;
-			feeds = JSON.parse(result[0]);
+		o = s.taboption('adv_chain', form.ListValue, 'ban_blockpolicy', _('Default Block Policy'), _('By default each feed is active in all supported chains. Limit the default block policy to a certain chain.'));
+		o.value('input', _('WAN-Input Chain'));
+		o.value('forwardwan', _('WAN-Forward Chain'));
+		o.value('forwardlan', _('LAN-Forward Chain'));
+		o.optional = true;
+		o.rmempty = true;
 
+		let feed, feeds, descr;
+		if (result[0]) {
+			feeds = JSON.parse(result[0]);
+		} else if (result[1]) {
+			feeds = JSON.parse(result[1]);
+		}
+		if (feeds) {
 			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockinput', _('WAN-Input Chain'), _('Limit certain feeds to the WAN-Input chain.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
-			for (var i = 0; i < Object.keys(feeds).length; i++) {
+			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
 			}
@@ -429,7 +443,7 @@ return view.extend({
 			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockforwardwan', _('WAN-Forward Chain'), _('Limit certain feeds to the WAN-Forward chain.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
-			for (var i = 0; i < Object.keys(feeds).length; i++) {
+			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
 			}
@@ -439,7 +453,7 @@ return view.extend({
 			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockforwardlan', _('LAN-Forward Chain'), _('Limit certain feeds to the LAN-Forward chain.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
-			for (var i = 0; i < Object.keys(feeds).length; i++) {
+			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
 			}
@@ -472,11 +486,11 @@ return view.extend({
 		o.value('notice', _('notice'));
 		o.value('info', _('info'));
 		o.value('debug', _('debug'));
-		o.value('audit', _('audit'));
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_log', form.ListValue, 'ban_loglimit', _('Log Limit'), _('Parse only the last stated number of log entries for suspicious events.'));
+		o = s.taboption('adv_log', form.ListValue, 'ban_loglimit', _('Log Limit'), _('Parse only the last stated number of log entries for suspicious events. To disable the log monitor at all set it to \'0\'.'));
+		o.value('0', _('0 (disable)'));
 		o.value('50', _('50'));
 		o.value('100', _('100 (default)'));
 		o.value('250', _('250'));
@@ -528,15 +542,12 @@ return view.extend({
 		o.rawhtml = true;
 		o.default = '<em><b>' + _('List of supported and fully pre-configured banIP feeds.') + '</b></em>';
 
-		if (result[0]) {
-			var focus, feed, feeds;
-			feeds = JSON.parse(result[0]);
-
+		if (feeds) {
 			o = s.taboption('feeds', form.MultiValue, 'ban_feed', _('Feed Selection'));
-			for (var i = 0; i < Object.keys(feeds).length; i++) {
+			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
-				focus = feeds[feed].focus.trim();
-				o.value(feed, feed + ' (' + focus + ')');
+				descr = feeds[feed].descr.trim() || '-';
+				o.value(feed, feed + ' (' + descr + ')');
 			}
 			o.optional = true;
 			o.rmempty = true;
@@ -545,12 +556,12 @@ return view.extend({
 		/*
 			prepare country data
 		*/
-		var code, country, countries = [];
-		if (result[1]) {
-			countries = result[1].trim().split('\n');
+		let code, country, countries = [];
+		if (result[2]) {
+			countries = result[2].trim().split('\n');
 
 			o = s.taboption('feeds', form.MultiValue, 'ban_country', _('Countries'));
-			for (var i = 0; i < countries.length; i++) {
+			for (let i = 0; i < countries.length; i++) {
 				code = countries[i].match(/^(\w+);/)[1].trim();
 				country = countries[i].match(/^\w+;(.*$)/)[1].trim();
 				o.value(code, country);

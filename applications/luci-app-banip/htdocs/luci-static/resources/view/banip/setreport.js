@@ -41,13 +41,13 @@ function handleAction(report, ev) {
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function (ev) {
-						var ip = document.getElementById('search').value.trim().toLowerCase();
+						let ip = document.getElementById('search').value.trim().toLowerCase();
 						if (ip) {
 							document.getElementById('run').classList.add("spinning");
 							document.getElementById('search').value = ip;
 							document.getElementById('result').textContent = 'The search is running, please wait...';
 							L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['search', ip])).then(function (res) {
-								var result = document.getElementById('result');
+								let result = document.getElementById('result');
 								if (res) {
 									result.textContent = res.trim();
 								} else {
@@ -65,17 +65,17 @@ function handleAction(report, ev) {
 		document.getElementById('search').focus();
 	}
 	if (ev === 'survey') {
-		var content, selectO;
+		let content, selectOption;
 
 		if (report[1]) {
 			content = JSON.parse(report[1]);
 		} else {
 			content = "";
 		}
-		selectO = [E('option', { value: '' }, [_('-- Set Selection --')])];
-		for (var i = 0; i < Object.keys(content.nftables).length; i++) {
-			if (content.nftables[i].set !== undefined && content.nftables[i].set.name !== undefined) {
-				selectO.push(E('option', { 'value': content.nftables[i].set.name }, content.nftables[i].set.name));
+		selectOption = [E('option', { value: '' }, [_('-- Set Selection --')])];
+		for (let i = 0; i < Object.keys(content.nftables).length; i++) {
+			if (content.nftables[i].set && content.nftables[i].set.name !== undefined && content.nftables[i].set.table !== undefined && content.nftables[i].set.table === 'banIP') {
+				selectOption.push(E('option', { 'value': content.nftables[i].set.name }, content.nftables[i].set.name));
 			}
 		}
 		L.ui.showModal(_('Set Survey'), [
@@ -84,7 +84,7 @@ function handleAction(report, ev) {
 				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em', 'id': 'run' }, [
 					E('h5', _('Set')),
 					E('select', { 'class': 'cbi-input-select', 'id': 'set' },
-						selectO
+						selectOption
 					)
 				]),
 			]),
@@ -108,12 +108,12 @@ function handleAction(report, ev) {
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function (ev) {
-						var set = document.getElementById('set').value;
+						let set = document.getElementById('set').value;
 						if (set) {
 							document.getElementById('run').classList.add("spinning");
 							document.getElementById('result').textContent = 'The survey is running, please wait...';
 							L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['survey', set])).then(function (res) {
-								var result = document.getElementById('result');
+								let result = document.getElementById('result');
 								if (res) {
 									result.textContent = res.trim();
 								} else {
@@ -141,15 +141,15 @@ return view.extend({
 	},
 
 	render: function (report) {
-		var content;
+		let content, rowSets, tblSets;
 
 		if (report[0]) {
 			content = JSON.parse(report[0]);
 		} else {
 			content = "";
 		}
-		var rows_sets = [];
-		var tbl_sets = E('table', { 'class': 'table', 'id': 'sets' }, [
+		rowSets = [];
+		tblSets = E('table', { 'class': 'table', 'id': 'sets' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Set')),
 				E('th', { 'class': 'th right', 'style': 'padding-right: 20px' }, _('Elements')),
@@ -160,12 +160,12 @@ return view.extend({
 		]);
 
 		if (content.sets) {
-			var cnt1, cnt2, cnt3;
+			let cnt1, cnt2, cnt3;
 			Object.keys(content.sets).forEach(function (key) {
 				cnt1 = content.sets[key].cnt_input ? ': (' + content.sets[key].cnt_input + ')' : '';
 				cnt2 = content.sets[key].cnt_forwardwan ? ': (' + content.sets[key].cnt_forwardwan + ')' : '';
 				cnt3 = content.sets[key].cnt_forwardlan ? ': (' + content.sets[key].cnt_forwardlan + ')' : '';
-				rows_sets.push([
+				rowSets.push([
 					E('em', key),
 					E('em', { 'style': 'padding-right: 20px' }, content.sets[key].cnt_elements),
 					E('em', content.sets[key].input + cnt1),
@@ -173,7 +173,7 @@ return view.extend({
 					E('em', content.sets[key].lan_forward + cnt3)
 				]);
 			});
-			rows_sets.push([
+			rowSets.push([
 				E('em', { 'style': 'font-weight: bold' }, content.sum_sets),
 				E('em', { 'style': 'font-weight: bold; padding-right: 20px' }, content.sum_setelements),
 				E('em', { 'style': 'font-weight: bold' }, content.sum_setinput + ' (' + content.sum_cntinput + ')'),
@@ -181,7 +181,7 @@ return view.extend({
 				E('em', { 'style': 'font-weight: bold' }, content.sum_setforwardlan + ' (' + content.sum_cntforwardlan + ')')
 			]);
 		}
-		cbi_update_table(tbl_sets, rows_sets);
+		cbi_update_table(tblSets, rowSets);
 
 		return E('div', { 'class': 'cbi-map', 'id': 'map' }, [
 			E('div', { 'class': 'cbi-section' }, [
@@ -216,8 +216,7 @@ return view.extend({
 					'\xa0\xa0\xa0',
 					E('button', {
 						'class': 'btn cbi-button cbi-button-positive',
-						'click': ui.createHandlerFn(this, async function () {
-							L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['report', 'json']), '');
+						'click': ui.createHandlerFn(this, function () {
 							location.reload();
 						})
 					}, [_('Refresh')])
@@ -228,7 +227,7 @@ return view.extend({
 			E('div', { 'class': 'cbi-section' }, [
 				E('div', { 'class': 'left' }, [
 					E('h3', _('Set details')),
-					tbl_sets
+					tblSets
 				])
 			])
 		]);
