@@ -4203,7 +4203,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							'class': 'btn',
 							'click': function() {
 								UI.prototype.hideModal();
-								rejectFn(new Error('Upload has been cancelled'));
+								rejectFn(new Error(_('Upload has been cancelled')));
 							}
 						}, [ _('Cancel') ]),
 						' ',
