@@ -12,9 +12,6 @@ return view.extend({
 		s.addremove = false;
 
 		o = s.option(form.Flag, 'redirect_https', _('Redirect to HTTPS'), _('Enable automatic redirection of <abbr title="Hypertext Transfer Protocol">HTTP</abbr> requests to <abbr title="Hypertext Transfer Protocol Secure">HTTPS</abbr> port.'));
-		o.enabled  = 'on';
-		o.disabled = 'off';
-		o.default  = o.disabled;
 		o.rmempty = false;
 
 		return m.render();
