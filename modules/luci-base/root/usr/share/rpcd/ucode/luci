@@ -419,12 +419,32 @@ const methods = {
 							size: +readfile(`/sys/class/block/${dev}/size`) * 512
 						};
 
-						for (m in match(line, / (\w+)="([^"]+)"/g))
+						for (let m in match(line, / (\w+)="([^"]+)"/g))
 							e[lc(m[1])] = m[2];
 					}
 				}
 
 				block.close();
+
+				const swaps = open('/proc/swaps', 'r');
+
+				if (swaps) {
+					for (let line = swaps.read('line'); length(line); line = swaps.read('line')) {
+						let m = match(line, /^(\/\S+)\s+\S+\s+(\d+)/);
+
+						if (m) {
+							let dev = replace(m[1], /\\(\d\d\d)/g, (_, n) => chr(int(n, 8)));
+
+							result[`swap:${m[1]}`] = {
+								dev,
+								type: 'swap',
+								size: +m[2] * 1024
+							};
+						}
+					}
+
+					swaps.close();
+				}
 
 				return result;
 			}
