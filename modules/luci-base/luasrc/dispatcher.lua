@@ -348,7 +348,7 @@ local function tree_to_json(node, json)
 				elseif subname == "rpc" and subnode.module == "luci.controller.rpc" then
 					spec.auth = {
 						login = false,
-						methods = { "query:auth", "cookie:sysauth_https", "cookie:sysauth_http" }
+						methods = { "query:auth", "cookie:sysauth_https", "cookie:sysauth_http", "cookie:sysauth" }
 					}
 				elseif subnode.module == "luci.controller.admin.uci" then
 					spec.auth = {
