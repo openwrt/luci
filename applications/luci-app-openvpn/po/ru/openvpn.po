@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: openvpn\n"
 "POT-Creation-Date: 2013-09-06 10:01+0200\n"
-"PO-Revision-Date: 2023-03-30 14:54+0000\n"
+"PO-Revision-Date: 2023-04-16 17:23+0000\n"
 "Last-Translator: st7105 <st7105@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenvpn/ru/>\n"
@@ -225,7 +225,6 @@ msgid "Don't use adaptive lzo compression"
 msgstr "Не использовать адаптивное сжатие по алгоритму LZO"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:221
-#, fuzzy
 msgid "Don't warn on ifconfig inconsistencies"
 msgstr ""
 "Не выводить предупреждение проверки согласованности параметров, если "
@@ -233,7 +232,6 @@ msgstr ""
 "стороной"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:88
-#, fuzzy
 msgid "Echo parameters to log"
 msgstr "Записывать параметры эхо-ответов в системный журнал"
 
@@ -276,7 +274,7 @@ msgstr "Включить интерфейс управления, по <em>IP-а
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:104
 msgid "Enabled"
-msgstr "Включено"
+msgstr "Включен"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:752
 msgid "Encrypt and authenticate all control channel packets with the key"
@@ -288,17 +286,14 @@ msgid "Encryption cipher for packets"
 msgstr "Алгоритм шифрования для пакетов"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:128
-#, fuzzy
 msgid "Execute shell cmd after routes are added"
 msgstr "Выполнить shell команду после добавления маршрутов"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:132
-#, fuzzy
 msgid "Execute shell command on remote IP change"
 msgstr "Выполнить shell команду при изменении IP-адреса удалённого хоста"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:157
-#, fuzzy
 msgid ""
 "Executed in server mode on new client connections, when the client is still "
 "untrusted"
@@ -307,7 +302,6 @@ msgstr ""
 "соединений, если к клиенту ещё нет доверия"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:153
-#, fuzzy
 msgid ""
 "Executed in server mode whenever an IPv4 address/route or MAC address is "
 "added to OpenVPN's internal routing table"
@@ -316,7 +310,6 @@ msgstr ""
 "IPv4 или MAC-адрес добавлен в таблицу маршрутизации OpenVPN"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:744
-#, fuzzy
 msgid "Exit on TLS negotiation failure"
 msgstr "Выйти при ошибке согласования использования протокола TLS"
 
@@ -329,12 +322,8 @@ msgid "HMAC authentication for packets"
 msgstr "Алгоритм расчета HMAC кода для аутентификации пакетов"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:491
-#, fuzzy
 msgid "Handling of authentication failures"
-msgstr ""
-"Настройка реакции на ошибки проверки имени пользователя / пароля, такие как "
-"ответ клиента на AUTH_FAILED сообщение от сервера или провал проверки пароля "
-"закрытого ключа"
+msgstr "Обработка отказов аутентификации"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:308
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:49
@@ -471,7 +460,6 @@ msgid "Ping remote every n seconds over TCP/UDP port"
 msgstr "Выполнять пинг-запрос каждые n секунд, используя порт TCP/UDP"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:32
-#, fuzzy
 msgid "Please edit this file directly in a terminal session."
 msgstr "Редактируйте данный файл только в терминале."
 
@@ -504,7 +492,6 @@ msgid "Push an ifconfig option to remote"
 msgstr "Выполнить команду ifconfig на удаленном узле"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:382
-#, fuzzy
 msgid "Push options to peer"
 msgstr "Параметры узла - 'Push options'"
 
@@ -517,10 +504,10 @@ msgid "Randomly choose remote server"
 msgstr "Случайно выбирать удаленный сервер"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:432
-#, fuzzy
 msgid "Refuse connection if no custom client config"
 msgstr ""
-"Разорвать соединение, если пользовательский config файл клиента отсутствует"
+"Разорвать соединение, если пользовательский конфигурационный файл клиента "
+"отсутствует"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:92
 msgid "Remap SIGUSR1 signals"
@@ -711,18 +698,16 @@ msgid "Shaping for peer bandwidth"
 msgstr "Ограничение полосы пропускания"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:108
-#, fuzzy
 msgid "Shell cmd to execute after tun device open"
-msgstr "Выполнить shell команду после старта виртуального устройства TUN"
+msgstr "Выполнить команду оболочки после открытия виртуального устройства TUN"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:116
 msgid "Shell cmd to run after tun device close"
 msgstr "Выполнить shell команду после закрытия виртуального устройства TUN"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:141
-#, fuzzy
 msgid "Shell command to verify X509 name"
-msgstr "Команда shell для проверки имени X.509-сертификата"
+msgstr "Команда оболочки для проверки имени X.509-сертификата"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:640
 msgid "Silence the output of replay warnings"
@@ -797,9 +782,8 @@ msgid "Template based configuration"
 msgstr "Конфигурация на основе шаблонов"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:437
-#, fuzzy
 msgid "Temporary directory for client-connect return file"
-msgstr "Временная папка для файла возврата '-client-connect'"
+msgstr "Временный каталог для файла возврата клиентского соединения"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:12
 #: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:40
@@ -818,7 +802,6 @@ msgstr "Самая высокая поддерживаемая версия пр
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:788
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:69
-#, fuzzy
 msgid "The key direction for 'tls-auth' and 'secret' options"
 msgstr "Изменить направление ключа для параметров 'tls-auth' и 'secret'"
 
@@ -866,7 +849,6 @@ msgid "Use tun/tap device node"
 msgstr "Виртуальный TUN/TAP-интерфейс узла"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:472
-#, fuzzy
 msgid "Use username as common name"
 msgstr "Использовать имя пользователя в качестве общего имени"
 
@@ -892,9 +874,8 @@ msgid "tun/tap device"
 msgstr "Виртуальный TUN/TAP-интерфейс"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:304
-#, fuzzy
 msgid "tun/tap inactivity timeout"
-msgstr "Промежуток времени простоя TUN/TAP"
+msgstr "Тайм-аут бездействия tun/tap"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
