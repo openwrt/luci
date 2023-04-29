@@ -167,12 +167,12 @@ function process_lua_controller(path)
 					login = true,
 					methods = { "cookie:sysauth_https", "cookie:sysauth_http" }
 				}
-			elseif subname == "rpc" and entry.module == "luci.controller.rpc" then
+			elseif path == "rpc" and modname == "luci.controller.rpc" then
 				entry.auth = {
 					login = false,
-					methods = { "query:auth", "cookie:sysauth_https", "cookie:sysauth_http" }
+					methods = { "query:auth", "cookie:sysauth_https", "cookie:sysauth_http", "cookie:sysauth" }
 				}
-			elseif entry.module == "luci.controller.admin.uci" then
+			elseif modname == "luci.controller.admin.uci" then
 				entry.auth = {
 					login = false,
 					methods = { "param:sid" }
