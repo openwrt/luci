@@ -5,6 +5,11 @@
 'require uci';
 'require fs';
 
+var pkg = {
+	get Name() { return 'luci-app-advanced-reboot'; },
+	get URL() { return 'https://docs.openwrt.melmac.net/' + pkg.Name + '/'; }
+};
+
 return view.extend({
 	translateTable: {
 		NO_BOARD_NAME : function(args) { return _('Unable to find Device Board Name.')},
@@ -213,9 +218,13 @@ return view.extend({
 			body.appendChild(partitions_table);
 		} else {
 			body.appendChild(E('p', { 'class' : 'alert-message warning'},
-			device_info.rom_board_name ? _("Warning: Device (%s) is unknown or isn't a dual-partition device!").format(device_info.rom_board_name)
+			device_info.rom_board_name ? _("Warning: Device (%s) is unknown or isn't a dual-firmware device!" + "%s" +
+					"If you are seeing this on an OpenWrt dual-firmware supported device," + "%s" + "please refer to " +
+					"%sHow to add a new device section of the README%s.").format(device_info.rom_board_name, "<br /><br />", "<br />",
+						"<a href=\"" + pkg.URL + "#how-to-add-a-new-device\" target=\"_blank\">", "</a>" )
 				: _('Warning: Unable to obtain device information!')
 			));
+
 		}
 
 		body.appendChild(E('hr'));
