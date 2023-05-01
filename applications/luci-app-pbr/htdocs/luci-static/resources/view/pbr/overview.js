@@ -61,7 +61,7 @@ return view.extend({
 				_("%sWARNING:%s Please make sure to check the %sREADME%s before changing anything in this section! " +
 					"Change any of the settings below with extreme caution!%s").format(
 						"<br/>&#160;&#160;&#160;&#160;<b>", "</b>",
-						"<a href=\"" + pkg.URL + "#service-configuration-settings \" target=\"_blank\">", "</a>", "<br/><br/>"));
+						"<a href=\"" + pkg.URL + "#service-configuration-settings\" target=\"_blank\">", "</a>", "<br/><br/>"));
 			s.tab("tab_webui", _("Web UI Configuration"))
 
 			o = s.taboption("tab_basic", form.ListValue, "verbosity", _("Output verbosity"),
