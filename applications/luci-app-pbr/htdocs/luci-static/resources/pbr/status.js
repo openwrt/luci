@@ -181,17 +181,19 @@ var status = baseclass.extend({
 					warningTorUnsetProto: _("Please unset 'proto' or set 'proto' to 'all' for policy '%s'"),
 					warningTorUnsetChainIpt: _("Please unset 'chain' or set 'chain' to 'PREROUTING' for policy '%s'"),
 					warningTorUnsetChainNft: _("Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'"),
+					warningInvalidOVPNConfig: _("Invalid OpenVPN config for %s interface"),
+					warningOutdatedWebUIApp: _("The WebUI application is outdated (version %s), please update it"),
 				};
 				var warningsTitle = E('label', { class: 'cbi-value-title' }, _("Service Warnings"));
 				var text = "";
 				(reply.warnings).forEach(element => {
 					if (element.id && textLabelsTable[element.id]) {
 						if (element.id !== 'warningPolicyProcessCMD') {
-							text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+							text += (textLabelsTable[element.id] + '.').format(element.extra || ' ') + "<br />";
 						}
 					}
 					else {
-						text += _("Unknown Warning!") + "<br />";
+						text += _("Unknown Warning.") + "<br />";
 					}
 				});
 				var warningsText = E('div', {}, text);
@@ -202,28 +204,28 @@ var status = baseclass.extend({
 			var errorsDiv = [];
 			if (reply.errors && reply.errors.length) {
 				var textLabelsTable = {
-					errorConfigValidation: _("Config (%s) validation failure!").format('/etc/config/' + pkg.Name),
-					errorNoIpFull: _("%s binary cannot be found!").format('ip-full'),
-					errorNoIptables: _("%s binary cannot be found!").format('iptables'),
-					errorNoIpset: _("Resolver set support (%s) requires ipset, but ipset binary cannot be found!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
-					errorNoNft: _("Resolver set support (%s) requires nftables, but nft binary cannot be found!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
-					errorResolverNotSupported: _("Resolver set (%s) is not supported on this system!").format(uci.get(pkg.Name, 'config', 'resolver_set')),
-					errorServiceDisabled: _("The %s service is currently disabled!").format(pkg.Name),
-					errorNoWanGateway: _("The %s service failed to discover WAN gateway!").format(pkg.Name),
-					errorIpsetNameTooLong: _("The ipset name '%s' is longer than allowed 31 characters!"),
-					errorNftsetNameTooLong: _("The nft set name '%s' is longer than allowed 31 characters!"),
-					errorUnexpectedExit: _("Unexpected exit or service termination: '%s'!"),
-					errorPolicyNoSrcDest: _("Policy '%s' has no source/destination parameters!"),
-					errorPolicyNoInterface: _("Policy '%s' has no assigned interface!"),
-					errorPolicyUnknownInterface: _("Policy '%s' has an unknown interface!"),
+					errorConfigValidation: _("Config (%s) validation failure").format('/etc/config/' + pkg.Name),
+					errorNoIpFull: _("%s binary cannot be found").format('ip-full'),
+					errorNoIptables: _("%s binary cannot be found").format('iptables'),
+					errorNoIpset: _("Resolver set support (%s) requires ipset, but ipset binary cannot be found").format(uci.get(pkg.Name, 'config', 'resolver_set')),
+					errorNoNft: _("Resolver set support (%s) requires nftables, but nft binary cannot be found").format(uci.get(pkg.Name, 'config', 'resolver_set')),
+					errorResolverNotSupported: _("Resolver set (%s) is not supported on this system").format(uci.get(pkg.Name, 'config', 'resolver_set')),
+					errorServiceDisabled: _("The %s service is currently disabled").format(pkg.Name),
+					errorNoWanGateway: _("The %s service failed to discover WAN gateway").format(pkg.Name),
+					errorIpsetNameTooLong: _("The ipset name '%s' is longer than allowed 31 characters"),
+					errorNftsetNameTooLong: _("The nft set name '%s' is longer than allowed 31 characters"),
+					errorUnexpectedExit: _("Unexpected exit or service termination: '%s'"),
+					errorPolicyNoSrcDest: _("Policy '%s' has no source/destination parameters"),
+					errorPolicyNoInterface: _("Policy '%s' has no assigned interface"),
+					errorPolicyUnknownInterface: _("Policy '%s' has an unknown interface"),
 					errorPolicyProcessCMD: _("%s"),
-					errorFailedSetup: _("Failed to set up '%s'!"),
-					errorFailedReload: _("Failed to reload '%s'!"),
-					errorUserFileNotFound: _("Custom user file '%s' not found or empty!"),
-					ererrorUserFileSyntax: _("Syntax error in custom user file '%s'!"),
-					errorUserFileRunning: _("Error running custom user file '%s'!"),
-					errorUserFileNoCurl: _("Use of 'curl' is detected in custom user file '%s', but 'curl' isn't installed!"),
-					errorNoGateways: _("Failed to set up any gateway!"),
+					errorFailedSetup: _("Failed to set up '%s'"),
+					errorFailedReload: _("Failed to reload '%s'"),
+					errorUserFileNotFound: _("Custom user file '%s' not found or empty"),
+					errorUserFileSyntax: _("Syntax error in custom user file '%s'"),
+					errorUserFileRunning: _("Error running custom user file '%s'"),
+					errorUserFileNoCurl: _("Use of 'curl' is detected in custom user file '%s', but 'curl' isn't installed"),
+					errorNoGateways: _("Failed to set up any gateway"),
 					errorResolver: _("Resolver %s"),
 					errorPolicyProcessNoIpv6: _("Skipping IPv6 policy '%s' as IPv6 support is disabled"),
 					errorPolicyProcessUnknownFwmark: _("Unknown packet mark for interface '%s'"),
@@ -233,13 +235,14 @@ var status = baseclass.extend({
 					errorPolicyProcessInsertionFailedIpv4: _("Insertion failed for IPv4 for policy %s"),
 					errorInterfaceRoutingEmptyValues: _("Received empty tid/mark or interface name when setting up routing"),
 					errorFailedToResolve: _("Failed to resolve %s"),
+					errorInvalidOVPNConfig: _("Invalid OpenVPN config for %s interface"),
 				};
 				var errorsTitle = E('label', { class: 'cbi-value-title' }, _("Service Errors"));
 				var text = "";
 				(reply.errors).forEach(element => {
 					if (element.id && textLabelsTable[element.id]) {
 						if (element.id !== 'errorPolicyProcessCMD') {
-							text += (textLabelsTable[element.id]).format(element.extra || ' ') + "<br />";
+							text += (textLabelsTable[element.id] + '!').format(element.extra || ' ') + "<br />";
 						}
 					}
 					else {
