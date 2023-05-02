@@ -7,6 +7,8 @@
 # ubus -v list luci.simple-adblock
 # ubus -S call luci.simple-adblock getInitList '{"name": "simple-adblock" }'
 # ubus -S call luci.simple-adblock getInitStatus '{"name": "simple-adblock" }'
+# ubus -S call luci.simple-adblock setInitAction '{"name": "simple-adblock", "action": "start" }'
+# ubus -S call luci.simple-adblock setInitAction '{"name": "simple-adblock", "action": "stop" }'
 # ubus -S call luci.simple-adblock getPlatformSupport '{"name": "simple-adblock" }'
 
 . /lib/functions.sh
@@ -16,22 +18,22 @@
 readonly packageName="simple-adblock"
 readonly dnsmasqAddnhostsFile="/var/run/${packageName}/dnsmasq.addnhosts"
 readonly dnsmasqAddnhostsCache="/var/run/${packageName}/dnsmasq.addnhosts.cache"
-readonly dnsmasqAddnhostsGzip="/etc/${packageName}.dnsmasq.addnhosts.gz"
+readonly dnsmasqAddnhostsGzip="${packageName}.dnsmasq.addnhosts.gz"
 readonly dnsmasqConfFile="/tmp/dnsmasq.d/${packageName}"
 readonly dnsmasqConfCache="/var/run/${packageName}/dnsmasq.conf.cache"
-readonly dnsmasqConfGzip="/etc/${packageName}.dnsmasq.conf.gz"
+readonly dnsmasqConfGzip="${packageName}.dnsmasq.conf.gz"
 readonly dnsmasqIpsetFile="/tmp/dnsmasq.d/${packageName}.ipset"
 readonly dnsmasqIpsetCache="/var/run/${packageName}/dnsmasq.ipset.cache"
-readonly dnsmasqIpsetGzip="/etc/${packageName}.dnsmasq.ipset.gz"
+readonly dnsmasqIpsetGzip="${packageName}.dnsmasq.ipset.gz"
 readonly dnsmasqNftsetFile="/tmp/dnsmasq.d/${packageName}.nftset"
 readonly dnsmasqNftsetCache="/var/run/${packageName}/dnsmasq.nftset.cache"
-readonly dnsmasqNftsetGzip="/etc/${packageName}.dnsmasq.nftset.gz"
+readonly dnsmasqNftsetGzip="${packageName}.dnsmasq.nftset.gz"
 readonly dnsmasqServersFile="/var/run/${packageName}/dnsmasq.servers"
 readonly dnsmasqServersCache="/var/run/${packageName}/dnsmasq.servers.cache"
-readonly dnsmasqServersGzip="/etc/${packageName}.dnsmasq.servers.gz"
+readonly dnsmasqServersGzip="${packageName}.dnsmasq.servers.gz"
 readonly unboundFile="/var/lib/unbound/adb_list.${packageName}"
 readonly unboundCache="/var/run/${packageName}/unbound.cache"
-readonly unboundGzip="/etc/${packageName}.unbound.gz"
+readonly unboundGzip="${packageName}.unbound.gz"
 readonly jsonFile="/var/run/${packageName}/${packageName}.json"
 
 str_contains() { [ -n "$1" ] &&[ -n "$2" ] && [ "${1//$2}" != "$1" ]; }
@@ -45,6 +47,7 @@ print_json_string() { json_init; json_add_string "$1" "$2"; json_dump; json_clea
 logger() { /usr/bin/logger -t "$packageName" "$@"; }
 ubus_get_status() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.${1}"; }
 ubus_get_ports() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.firewall.*.dest_port"; }
+sanitize_dir() { [ -d "$(readlink -fn "$1")" ] && readlink -fn "$1"; }
 json() {
 # shellcheck disable=SC2034
 	local action="$1" param="$2" value="$3" i
@@ -68,7 +71,7 @@ json() {
 get_init_list() {
 	local name
 	name="$(basename "$1")"
-	name="${name:-$packageName}" 
+	name="${name:-$packageName}"
 	json_init
 	json_add_object "$name"
 	json_add_boolean 'enabled' "$(is_enabled "$name")"
@@ -85,7 +88,7 @@ get_init_list() {
 set_init_action() {
 	local name action="$2" cmd
 	name="$(basename "$1")"
-	name="${name:-$packageName}" 
+	name="${name:-$packageName}"
 	if [ ! -f "/etc/init.d/$name" ]; then
 		print_json_string 'error' 'Init script not found!'
 		return
@@ -108,9 +111,18 @@ set_init_action() {
 get_init_status() {
 	local name
 	name="$(basename "$1")"
-	name="${name:-$packageName}" 
+	name="${name:-$packageName}"
 	local errors warnings ports dns outputFile outputCache outputGzip
-	local i
+	local i j
+# shellcheck disable=SC2034
+	local compressed_cache_dir
+	config_load "$name"
+	config_get compressed_cache_dir 'config' 'compressed_cache_dir' '/etc'
+	if [ -n "$(sanitize_dir "$compressed_cache_dir")" ]; then
+		compressed_cache_dir="$(sanitize_dir "$compressed_cache_dir")"
+	else
+		compressed_cache_dir="/etc"
+	fi
 	errors="$(ubus_get_status errors)"
 	warnings="$(ubus_get_status warnings)"
 	ports="$(ubus_get_ports)"
@@ -123,38 +135,42 @@ get_init_status() {
 		dnsmasq.addnhosts)
 			outputFile="$dnsmasqAddnhostsFile"
 			outputCache="$dnsmasqAddnhostsCache"
-			outputGzip="$dnsmasqAddnhostsGzip"
+			outputGzip="${compressed_cache_dir}/${dnsmasqAddnhostsGzip}"
 		;;
 		dnsmasq.conf)
 			outputFile="$dnsmasqConfFile"
 			outputCache="$dnsmasqConfCache"
-			outputGzip="$dnsmasqConfGzip"
+			outputGzip="${compressed_cache_dir}/${dnsmasqConfGzip}"
 		;;
 		dnsmasq.ipset)
 			outputFile="$dnsmasqIpsetFile"
 			outputCache="$dnsmasqIpsetCache"
-			outputGzip="$dnsmasqIpsetGzip"
+			outputGzip="${compressed_cache_dir}/${dnsmasqIpsetGzip}"
 		;;
 		dnsmasq.nftset)
 			outputFile="$dnsmasqNftsetFile"
 			outputCache="$dnsmasqNftsetCache"
-			outputGzip="$dnsmasqNftsetGzip"
+			outputGzip="${compressed_cache_dir}/${dnsmasqNftsetGzip}"
 		;;
 		dnsmasq.servers)
 			outputFile="$dnsmasqServersFile"
 			outputCache="$dnsmasqServersCache"
-			outputGzip="$dnsmasqServersGzip"
+			outputGzip="${compressed_cache_dir}/${dnsmasqServersGzip}"
 		;;
 		unbound.adb_list)
 			outputFile="$unboundFile"
 			outputCache="$unboundCache"
-			outputGzip="$unboundGzip"
+			outputGzip="${compressed_cache_dir}/${unboundGzip}"
 		;;
 	esac
 	json_init
 	json_add_object  "$name"
 	json_add_boolean 'enabled' "$(is_enabled "$name")"
 	i="$(json 'get' 'status')"
+	j="$(ubus_get_status 'status')"
+	if [ "$i" = 'statusSuccess' ] && [ "$i" != "$j" ]; then
+		i='statusStopped'
+	fi
 	json_add_string 'status' "$i"
 	if [ "$i" = 'statusSuccess' ]; then
 		json_add_boolean 'running' '1'
@@ -253,7 +269,7 @@ check_dnsmasq_nftset() {
 get_platform_support() {
 	local name
 	name="$(basename "$1")"
-	name="${name:-$packageName}" 
+	name="${name:-$packageName}"
 	json_init
 	json_add_object "$name"
 	if check_ipset; then
