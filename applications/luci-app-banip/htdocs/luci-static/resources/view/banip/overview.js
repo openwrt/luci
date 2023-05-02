@@ -27,13 +27,13 @@ return view.extend({
 	render: function (result) {
 		let m, s, o;
 
-		m = new form.Map('banip', 'banIP', _('Configuration of the banIP package to ban incoming and outgoing ip addresses/subnets via sets in nftables. \
+		m = new form.Map('banip', 'banIP', _('Configuration of the banIP package to ban incoming and outgoing ip addresses/subnets via Sets in nftables. \
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/banip/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>'));
 
 		/*
 			poll runtime information
 		*/
-		let buttons, rtRes, infStat, infVer, infElements, infFeeds, infDevices, infSubnets, infSystem, nftInfos, runInfos, infFlags, last_run
+		let buttons, rtRes, infStat, infVer, infElements, infFeeds, infDevices, infUplink, infSystem, nftInfos, runInfos, infFlags, last_run
 
 		pollData: poll.add(function () {
 			return L.resolveDefault(fs.stat('/var/run/banip.lock')).then(function (stat) {
@@ -69,8 +69,8 @@ return view.extend({
 									rtRes.activeFeeds = rtRes[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)[1];
 								} else if (rtRes[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)) {
 									rtRes.activeDevices = rtRes[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\sactive_subnets\s+\:\s+(.*)$/)) {
-									rtRes.activeSubnets = rtRes[i].match(/^\s+\+\sactive_subnets\s+\:\s+(.*)$/)[1];
+								} else if (rtRes[i].match(/^\s+\+\sactive_uplink\s+\:\s+(.*)$/)) {
+									rtRes.activeUplink = rtRes[i].match(/^\s+\+\sactive_uplink\s+\:\s+(.*)$/)[1];
 								} else if (rtRes[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)) {
 									rtRes.nftInfo = rtRes[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)[1];
 								} else if (rtRes[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)) {
@@ -105,9 +105,9 @@ return view.extend({
 							if (infDevices) {
 								infDevices.textContent = rtRes.activeDevices || '-';
 							}
-							infSubnets = document.getElementById('subnets');
-							if (infSubnets) {
-								infSubnets.textContent = rtRes.activeSubnets || '-';
+							infUplink = document.getElementById('uplink');
+							if (infUplink) {
+								infUplink.textContent = rtRes.activeUplink || '-';
 							}
 							nftInfos = document.getElementById('nft');
 							if (nftInfos) {
@@ -172,8 +172,8 @@ return view.extend({
 					E('div', { 'class': 'cbi-value-field', 'id': 'devices', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Subnets')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'subnets', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Uplink')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'uplink', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('NFT Information')),
@@ -318,7 +318,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('general', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active sets and and tidy up the local blocklist.'));
+		o = s.taboption('general', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and and tidy up the local blocklist.'));
 		o.default = 1
 		o.rmempty = false;
 
@@ -349,7 +349,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.ListValue, 'ban_filelimit', _('Max Open Files'), _('Increase the maximal number of open files, e.g. to handle the amount of temporary split files while loading the sets.'));
+		o = s.taboption('advanced', form.ListValue, 'ban_filelimit', _('Max Open Files'), _('Increase the maximal number of open files, e.g. to handle the amount of temporary split files while loading the Sets.'));
 		o.value('512', _('512'));
 		o.value('1024', _('1024 (default)'));
 		o.value('2048', _('2048'));
@@ -578,6 +578,14 @@ return view.extend({
 		o = s.taboption('feeds', form.Flag, 'ban_autoallowlist', _('Auto Allowlist'), _('Automatically transfers uplink IPs to the banIP allowlist.'));
 		o.default = 1
 		o.rmempty = false;
+
+		o = s.taboption('feeds', form.ListValue, 'ban_autoallowuplink', _('Auto Allow Uplink'), _('Limit the uplink autoallow function.'));
+		o.value('disable', _('Disable'));
+		o.value('subnet', _('Subnet (default)'));
+		o.value('ip', _('IP'));
+		o.optional = true;
+		o.rmempty = true;
+		o.depends('ban_autoallowlist', '1');
 
 		o = s.taboption('feeds', form.Flag, 'ban_autoblocklist', _('Auto Blocklist'), _('Automatically transfers suspicious IPs to the banIP blocklist.'));
 		o.default = 1
