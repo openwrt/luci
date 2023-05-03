@@ -35,7 +35,7 @@ return baseclass.extend({
 						memory_buffered: { color: "0000ff", title: "Buffered" },
 						memory_cached: { color: "ff00ff", title: "Cached" },
 						memory_used: { color: "ff0000", title: "Used" },
-						memory_active: { color: "880000", title: "Active" },
+						memory_active: { color: "e00000", title: "Active" },
 						memory_cache: { color: "ff00ff", title: "Cache" },
 						memory_inactive: { color: "0000ff", title: "Inactive" },
 						memory_wired: { color: "ff0000", title: "Wired" }
@@ -58,7 +58,7 @@ return baseclass.extend({
 						percent_buffered: { color: "0000ff", title: "Buffered" },
 						percent_cached: { color: "ff00ff", title: "Cached" },
 						percent_used: { color: "ff0000", title: "Used" },
-						percent_active: { color: "880000", title: "Active" },
+						percent_active: { color: "e00000", title: "Active" },
 						percent_cache: { color: "ff00ff", title: "Cache" },
 						percent_inactive: { color: "0000ff", title: "Inactive" },
 						percent_wired: { color: "ff0000", title: "Wired" }
