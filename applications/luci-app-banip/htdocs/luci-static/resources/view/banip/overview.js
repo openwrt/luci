@@ -575,7 +575,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('feeds', form.Flag, 'ban_autoallowlist', _('Auto Allowlist'), _('Automatically transfers uplink IPs to the banIP allowlist.'));
+		o = s.taboption('feeds', form.Flag, 'ban_autoallowlist', _('Auto Allowlist'), _('Automatically add resolved domains and uplink IPs to the local banIP allowlist.'));
 		o.default = 1
 		o.rmempty = false;
 
@@ -587,7 +587,7 @@ return view.extend({
 		o.rmempty = true;
 		o.depends('ban_autoallowlist', '1');
 
-		o = s.taboption('feeds', form.Flag, 'ban_autoblocklist', _('Auto Blocklist'), _('Automatically transfers suspicious IPs to the banIP blocklist.'));
+		o = s.taboption('feeds', form.Flag, 'ban_autoblocklist', _('Auto Blocklist'), _('Automatically add resolved domains and suspicious IPs to the local banIP blocklist.'));
 		o.default = 1
 		o.rmempty = false;
 

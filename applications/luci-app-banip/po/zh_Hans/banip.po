@@ -87,8 +87,8 @@ msgid "Active Feeds"
 msgstr "活跃源"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:175
-msgid "Active Subnets"
-msgstr "活动子网"
+msgid "Active Uplink"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:309
 msgid ""
@@ -99,7 +99,7 @@ msgstr "banIP 处理实际开始前以秒为单位的附加触发延迟。"
 msgid "Advanced Settings"
 msgstr "高级设置"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:586
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:594
 msgid "Allowlist Only"
 msgstr "仅白名单"
 
@@ -109,11 +109,15 @@ msgid ""
 "banIP that changes take effect."
 msgstr "已保存白名单更改，启动域名查询或要让更改生效请重启 banIP。"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+msgid "Auto Allow Uplink"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:578
 msgid "Auto Allowlist"
 msgstr "自动白名单"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:590
 msgid "Auto Blocklist"
 msgstr "自动黑名单"
 
@@ -121,13 +125,17 @@ msgstr "自动黑名单"
 msgid "Auto Detection"
 msgstr "自动检测"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
-msgid "Automatically transfers suspicious IPs to the banIP blocklist."
-msgstr "自动将可疑 IP 转移到 banIP 黑名单。"
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:590
+msgid ""
+"Automatically add resolved domains and suspicious IPs to the local banIP "
+"blocklist."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:578
-msgid "Automatically transfers uplink IPs to the banIP allowlist."
-msgstr "自动将 uplink IP 地址转移到 banIP 白名单。"
+msgid ""
+"Automatically add resolved domains and uplink IPs to the local banIP "
+"allowlist."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:382
 msgid "Backup Directory"
@@ -159,7 +167,8 @@ msgstr "已保存黑名单更改，启动域名查询或要让更改生效请重
 msgid ""
 "By default each feed is active in all supported chains. Limit the default "
 "block policy to a certain chain."
-msgstr "每个订阅源默认在所有受支持的链中处于活跃状态。将默认拦截策略限制到特定的链。"
+msgstr ""
+"每个订阅源默认在所有受支持的链中处于活跃状态。将默认拦截策略限制到特定的链。"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:360
 msgid "CPU Cores"
@@ -187,14 +196,11 @@ msgstr "清除自定义源"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:30
 msgid ""
 "Configuration of the banIP package to ban incoming and outgoing ip addresses/"
-"subnets via sets in nftables. For further information <a href=\"https://"
+"subnets via Sets in nftables. For further information <a href=\"https://"
 "github.com/openwrt/packages/blob/master/net/banip/files/README.md\" "
 "target=\"_blank\" rel=\"noreferrer noopener\" >check the online "
 "documentation</a>"
 msgstr ""
-"配置 banIP 包通过 nftables 中的集封禁传入和传出 ip 地址/子网。进一步信息<a "
-"href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
-"README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >请查阅在线文档</a>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:563
 msgid "Countries"
@@ -206,9 +212,9 @@ msgstr "自定义源的编辑器"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:321
 msgid ""
-"Deduplicate IP addresses across all active sets and and tidy up the local "
+"Deduplicate IP addresses across all active Sets and and tidy up the local "
 "blocklist."
-msgstr "去除所有活跃集中的重复 IP 地址并整理本地黑名单。"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:321
 msgid "Deduplicate IPs"
@@ -227,6 +233,10 @@ msgid ""
 "Detect relevant network devices, interfaces, subnets, protocols and "
 "utilities automatically."
 msgstr "自动检测相关的网络设备、接口、子网、协议和工具。"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:583
+msgid "Disable"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:204
 msgid "Domain Lookup"
@@ -365,6 +375,10 @@ msgstr "较高优先级"
 msgid "Highest Priority"
 msgstr "最高优先级"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:585
+msgid "IP"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:11
 msgid "IP Search"
 msgstr "IP 搜索"
@@ -384,8 +398,8 @@ msgstr "IPv6 支持"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:352
 msgid ""
 "Increase the maximal number of open files, e.g. to handle the amount of "
-"temporary split files while loading the sets."
-msgstr "提升打开文件的最大数目便于在加载集时处理临时分割文件等任务。"
+"temporary split files while loading the Sets."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:153
 msgid "Information"
@@ -435,6 +449,10 @@ msgstr "限制特定源到广域网输入链。"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:360
 msgid "Limit the cpu cores used by banIP to save RAM."
 msgstr "限制 banIP 使用的 cpu 核心数来节省内存。"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+msgid "Limit the uplink autoallow function."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:390
 msgid ""
@@ -563,7 +581,8 @@ msgstr "概览"
 msgid ""
 "Parse only the last stated number of log entries for suspicious events. To "
 "disable the log monitor at all set it to '0'."
-msgstr "仅解析可疑事件日志条目最后声明的数量。如需完全禁用日志监控，请将其设为 '0'。"
+msgstr ""
+"仅解析可疑事件日志条目最后声明的数量。如需完全禁用日志监控，请将其设为 '0'。"
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:76
 msgid "Processing Log"
@@ -608,7 +627,7 @@ msgstr "报告元素"
 msgid "Restart"
 msgstr "重启"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:586
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:594
 msgid "Restrict the internet access from/to a small number of secure IPs."
 msgstr "限制来自/对少量安全 IP 的互联网访问。"
 
@@ -723,6 +742,10 @@ msgstr "状态"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:211
 msgid "Stop"
 msgstr "停止"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:584
+msgid "Subnet (default)"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:128
 msgid "Survey"
@@ -876,10 +899,10 @@ msgid ""
 "maintainers version just empty the custom feed file again (do not delete "
 "it!)."
 msgstr ""
-"你可以使用此编辑器上传本地自定义源或填充初始自定义源（随包分发版本的 1:1 "
-"拷贝）。该文件位于 '/etc/banip/banip.custom.feeds'。接着你可以编辑此文件，删"
-"除或添加条目或进行本地备份。要返回维护者版本，只需再次清空自定义源的文件（不"
-"是删除！）。"
+"你可以使用此编辑器上传本地自定义源或填充初始自定义源（随包分发版本的 1:1 拷"
+"贝）。该文件位于 '/etc/banip/banip.custom.feeds'。接着你可以编辑此文件，删除"
+"或添加条目或进行本地备份。要返回维护者版本，只需再次清空自定义源的文件（不是"
+"删除！）。"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:482
 msgid "alert"
@@ -956,6 +979,37 @@ msgstr "启动（默认）"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:485
 msgid "warn (default)"
 msgstr "警告（默认）"
+
+#~ msgid "Active Subnets"
+#~ msgstr "活动子网"
+
+#~ msgid "Automatically transfers suspicious IPs to the banIP blocklist."
+#~ msgstr "自动将可疑 IP 转移到 banIP 黑名单。"
+
+#~ msgid "Automatically transfers uplink IPs to the banIP allowlist."
+#~ msgstr "自动将 uplink IP 地址转移到 banIP 白名单。"
+
+#~ msgid ""
+#~ "Configuration of the banIP package to ban incoming and outgoing ip "
+#~ "addresses/subnets via sets in nftables. For further information <a "
+#~ "href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
+#~ "README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >check the "
+#~ "online documentation</a>"
+#~ msgstr ""
+#~ "配置 banIP 包通过 nftables 中的集封禁传入和传出 ip 地址/子网。进一步信息"
+#~ "<a href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
+#~ "README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >请查阅在线文档"
+#~ "</a>"
+
+#~ msgid ""
+#~ "Deduplicate IP addresses across all active sets and and tidy up the local "
+#~ "blocklist."
+#~ msgstr "去除所有活跃集中的重复 IP 地址并整理本地黑名单。"
+
+#~ msgid ""
+#~ "Increase the maximal number of open files, e.g. to handle the amount of "
+#~ "temporary split files while loading the sets."
+#~ msgstr "提升打开文件的最大数目便于在加载集时处理临时分割文件等任务。"
 
 #~ msgid "Chain Priority"
 #~ msgstr "链优先级"

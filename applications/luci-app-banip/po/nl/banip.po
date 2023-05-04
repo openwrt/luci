@@ -87,8 +87,8 @@ msgid "Active Feeds"
 msgstr "Actieve feeds"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:175
-msgid "Active Subnets"
-msgstr "Actieve subnetten"
+msgid "Active Uplink"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:309
 msgid ""
@@ -101,7 +101,7 @@ msgstr ""
 msgid "Advanced Settings"
 msgstr "Geavanceerde instellingen"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:586
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:594
 msgid "Allowlist Only"
 msgstr "Alleen toelatingslijst"
 
@@ -113,11 +113,15 @@ msgstr ""
 "Wijzigingen op de toelatingslijst zijn opgeslagen, start de Domain Lookup of "
 "herstart banIP om de wijzigingen door te voeren."
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+msgid "Auto Allow Uplink"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:578
 msgid "Auto Allowlist"
 msgstr "Automatische toelatingslijst"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:590
 msgid "Auto Blocklist"
 msgstr "Automatische blokkeerlijst"
 
@@ -125,13 +129,17 @@ msgstr "Automatische blokkeerlijst"
 msgid "Auto Detection"
 msgstr "Autodetectie"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
-msgid "Automatically transfers suspicious IPs to the banIP blocklist."
-msgstr "Verplaatst automatisch verdachte IP's naar de banIP-blokkeerlijst."
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:590
+msgid ""
+"Automatically add resolved domains and suspicious IPs to the local banIP "
+"blocklist."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:578
-msgid "Automatically transfers uplink IPs to the banIP allowlist."
-msgstr "Zet automatisch uplink IP's over naar de banIP toelatingslijst."
+msgid ""
+"Automatically add resolved domains and uplink IPs to the local banIP "
+"allowlist."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:382
 msgid "Backup Directory"
@@ -197,16 +205,11 @@ msgstr "Aangepaste feeds wissen"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:30
 msgid ""
 "Configuration of the banIP package to ban incoming and outgoing ip addresses/"
-"subnets via sets in nftables. For further information <a href=\"https://"
+"subnets via Sets in nftables. For further information <a href=\"https://"
 "github.com/openwrt/packages/blob/master/net/banip/files/README.md\" "
 "target=\"_blank\" rel=\"noreferrer noopener\" >check the online "
 "documentation</a>"
 msgstr ""
-"Configuratie van het banIP pakket om inkomende en uitgaande ip adressen/"
-"subnetten te bannen via sets in nftables. Voor meer informatie <a "
-"href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
-"README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >bekijk de online "
-"documentatie</a>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:563
 msgid "Countries"
@@ -218,11 +221,9 @@ msgstr "Aangepaste feededitor"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:321
 msgid ""
-"Deduplicate IP addresses across all active sets and and tidy up the local "
+"Deduplicate IP addresses across all active Sets and and tidy up the local "
 "blocklist."
 msgstr ""
-"Ontdubbel IP-adressen over alle actieve sets en ruim de lokale blokkeerlijst "
-"op."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:321
 msgid "Deduplicate IPs"
@@ -243,6 +244,10 @@ msgid ""
 msgstr ""
 "Detecteer automatisch relevante netwerkapparaten, interfaces, subnetten, "
 "protocollen en hulpprogramma's."
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:583
+msgid "Disable"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:204
 msgid "Domain Lookup"
@@ -383,6 +388,10 @@ msgstr "Hoge prioriteit"
 msgid "Highest Priority"
 msgstr "Hoogste prioriteit"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:585
+msgid "IP"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:11
 msgid "IP Search"
 msgstr "IP zoeken"
@@ -402,10 +411,8 @@ msgstr "IPv6 ondersteuning"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:352
 msgid ""
 "Increase the maximal number of open files, e.g. to handle the amount of "
-"temporary split files while loading the sets."
+"temporary split files while loading the Sets."
 msgstr ""
-"Verhoog het maximale aantal geopende bestanden, b.v. om het aantal "
-"tijdelijke gesplitste bestanden te verwerken tijdens het laden van de sets."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:153
 msgid "Information"
@@ -455,6 +462,10 @@ msgstr "Beperk bepaalde feeds tot de WAN-invoer reeks."
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:360
 msgid "Limit the cpu cores used by banIP to save RAM."
 msgstr "Beperk de cpu-cores die banIP gebruikt om RAM te besparen."
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+msgid "Limit the uplink autoallow function."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:390
 msgid ""
@@ -641,7 +652,7 @@ msgstr "Rapporteer elementen"
 msgid "Restart"
 msgstr "Herstart"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:586
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:594
 msgid "Restrict the internet access from/to a small number of secure IPs."
 msgstr "Beperk de internettoegang van/tot een klein aantal beveiligde IP's."
 
@@ -758,6 +769,10 @@ msgstr "Status"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:211
 msgid "Stop"
 msgstr "Stop"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:584
+msgid "Subnet (default)"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:128
 msgid "Survey"
@@ -927,11 +942,11 @@ msgid ""
 msgstr ""
 "Met deze editor kunt u uw lokale aangepaste feedbestand uploaden of een "
 "eerste bestand aanvullen (een 1:1-kopie van de versie die bij het pakket "
-"wordt geleverd). Het bestand bevindt zich in '/etc/banip/"
-"banip.custom.feeds'. Vervolgens kunt u dit bestand bewerken, vermeldingen "
-"verwijderen, nieuwe toevoegen of een lokale back-up maken. Om terug te gaan "
-"naar de versie van de beheerder leegt u het aangepaste feedbestand opnieuw ("
-"niet verwijderen!)."
+"wordt geleverd). Het bestand bevindt zich in '/etc/banip/banip.custom."
+"feeds'. Vervolgens kunt u dit bestand bewerken, vermeldingen verwijderen, "
+"nieuwe toevoegen of een lokale back-up maken. Om terug te gaan naar de "
+"versie van de beheerder leegt u het aangepaste feedbestand opnieuw (niet "
+"verwijderen!)."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:482
 msgid "alert"
@@ -1008,6 +1023,43 @@ msgstr "start (standaard)"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:485
 msgid "warn (default)"
 msgstr "waarschuwen (standaard)"
+
+#~ msgid "Active Subnets"
+#~ msgstr "Actieve subnetten"
+
+#~ msgid "Automatically transfers suspicious IPs to the banIP blocklist."
+#~ msgstr "Verplaatst automatisch verdachte IP's naar de banIP-blokkeerlijst."
+
+#~ msgid "Automatically transfers uplink IPs to the banIP allowlist."
+#~ msgstr "Zet automatisch uplink IP's over naar de banIP toelatingslijst."
+
+#~ msgid ""
+#~ "Configuration of the banIP package to ban incoming and outgoing ip "
+#~ "addresses/subnets via sets in nftables. For further information <a "
+#~ "href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
+#~ "README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >check the "
+#~ "online documentation</a>"
+#~ msgstr ""
+#~ "Configuratie van het banIP pakket om inkomende en uitgaande ip adressen/"
+#~ "subnetten te bannen via sets in nftables. Voor meer informatie <a "
+#~ "href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
+#~ "README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >bekijk de "
+#~ "online documentatie</a>"
+
+#~ msgid ""
+#~ "Deduplicate IP addresses across all active sets and and tidy up the local "
+#~ "blocklist."
+#~ msgstr ""
+#~ "Ontdubbel IP-adressen over alle actieve sets en ruim de lokale "
+#~ "blokkeerlijst op."
+
+#~ msgid ""
+#~ "Increase the maximal number of open files, e.g. to handle the amount of "
+#~ "temporary split files while loading the sets."
+#~ msgstr ""
+#~ "Verhoog het maximale aantal geopende bestanden, b.v. om het aantal "
+#~ "tijdelijke gesplitste bestanden te verwerken tijdens het laden van de "
+#~ "sets."
 
 #~ msgid "Chain Priority"
 #~ msgstr "Reeks Prioriteit"
