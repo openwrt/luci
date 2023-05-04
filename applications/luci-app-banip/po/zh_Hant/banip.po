@@ -87,8 +87,8 @@ msgid "Active Feeds"
 msgstr "使用中來源"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:175
-msgid "Active Subnets"
-msgstr "作用中子網路"
+msgid "Active Uplink"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:309
 msgid ""
@@ -99,7 +99,7 @@ msgstr "banIP 處理實際開始前以秒為單位的附加觸發延遲。"
 msgid "Advanced Settings"
 msgstr "進階設定"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:586
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:594
 msgid "Allowlist Only"
 msgstr "僅白名單"
 
@@ -109,11 +109,15 @@ msgid ""
 "banIP that changes take effect."
 msgstr ""
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+msgid "Auto Allow Uplink"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:578
 msgid "Auto Allowlist"
 msgstr "自動白名單"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:590
 msgid "Auto Blocklist"
 msgstr "自動黑名單"
 
@@ -121,13 +125,17 @@ msgstr "自動黑名單"
 msgid "Auto Detection"
 msgstr "自動偵測"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
-msgid "Automatically transfers suspicious IPs to the banIP blocklist."
-msgstr "自動將可疑 IP 轉移到 banIP 黑名單。"
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:590
+msgid ""
+"Automatically add resolved domains and suspicious IPs to the local banIP "
+"blocklist."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:578
-msgid "Automatically transfers uplink IPs to the banIP allowlist."
-msgstr "自動將 uplink IP 位址轉移到 banIP 白名單。"
+msgid ""
+"Automatically add resolved domains and uplink IPs to the local banIP "
+"allowlist."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:382
 msgid "Backup Directory"
@@ -187,14 +195,11 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:30
 msgid ""
 "Configuration of the banIP package to ban incoming and outgoing ip addresses/"
-"subnets via sets in nftables. For further information <a href=\"https://"
+"subnets via Sets in nftables. For further information <a href=\"https://"
 "github.com/openwrt/packages/blob/master/net/banip/files/README.md\" "
 "target=\"_blank\" rel=\"noreferrer noopener\" >check the online "
 "documentation</a>"
 msgstr ""
-"設定 bnIP 套件包透過 nftables 中的集合禁止傳入和傳出 ip 位址/子網路。進一步資"
-"訊<a href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
-"README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >請查閱線上文件</a>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:563
 msgid "Countries"
@@ -206,9 +211,9 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:321
 msgid ""
-"Deduplicate IP addresses across all active sets and and tidy up the local "
+"Deduplicate IP addresses across all active Sets and and tidy up the local "
 "blocklist."
-msgstr "去除所有使用中集合中的重複 IP 位址並整理本地黑名單。"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:321
 msgid "Deduplicate IPs"
@@ -227,6 +232,10 @@ msgid ""
 "Detect relevant network devices, interfaces, subnets, protocols and "
 "utilities automatically."
 msgstr "自動偵測相關的網路裝置、介面、子網路、協定和工具。"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:583
+msgid "Disable"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:204
 msgid "Domain Lookup"
@@ -365,6 +374,10 @@ msgstr "較高優先順序"
 msgid "Highest Priority"
 msgstr "最高優先順序"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:585
+msgid "IP"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:11
 msgid "IP Search"
 msgstr "IP 搜尋"
@@ -384,8 +397,8 @@ msgstr "支援 IPv6"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:352
 msgid ""
 "Increase the maximal number of open files, e.g. to handle the amount of "
-"temporary split files while loading the sets."
-msgstr "提升開啟檔案的最大數目便於在載入集合時處理臨時分割檔案等任務。"
+"temporary split files while loading the Sets."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:153
 msgid "Information"
@@ -435,6 +448,10 @@ msgstr "限制特定來源到廣域網路輸入鏈。"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:360
 msgid "Limit the cpu cores used by banIP to save RAM."
 msgstr "限制 banIP 使用的 cpu 核心數來節省記憶體。"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+msgid "Limit the uplink autoallow function."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:390
 msgid ""
@@ -608,7 +625,7 @@ msgstr "報告元素"
 msgid "Restart"
 msgstr "重新啟動"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:586
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:594
 msgid "Restrict the internet access from/to a small number of secure IPs."
 msgstr "限制來自/對少量安全 IP 的網際網路存取。"
 
@@ -723,6 +740,10 @@ msgstr "狀態"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:211
 msgid "Stop"
 msgstr "停止"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:584
+msgid "Subnet (default)"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:128
 msgid "Survey"
@@ -952,3 +973,34 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:485
 msgid "warn (default)"
 msgstr "警告 (預設)"
+
+#~ msgid "Active Subnets"
+#~ msgstr "作用中子網路"
+
+#~ msgid "Automatically transfers suspicious IPs to the banIP blocklist."
+#~ msgstr "自動將可疑 IP 轉移到 banIP 黑名單。"
+
+#~ msgid "Automatically transfers uplink IPs to the banIP allowlist."
+#~ msgstr "自動將 uplink IP 位址轉移到 banIP 白名單。"
+
+#~ msgid ""
+#~ "Configuration of the banIP package to ban incoming and outgoing ip "
+#~ "addresses/subnets via sets in nftables. For further information <a "
+#~ "href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
+#~ "README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >check the "
+#~ "online documentation</a>"
+#~ msgstr ""
+#~ "設定 bnIP 套件包透過 nftables 中的集合禁止傳入和傳出 ip 位址/子網路。進一"
+#~ "步資訊<a href=\"https://github.com/openwrt/packages/blob/master/net/banip/"
+#~ "files/README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >請查閱線"
+#~ "上文件</a>"
+
+#~ msgid ""
+#~ "Deduplicate IP addresses across all active sets and and tidy up the local "
+#~ "blocklist."
+#~ msgstr "去除所有使用中集合中的重複 IP 位址並整理本地黑名單。"
+
+#~ msgid ""
+#~ "Increase the maximal number of open files, e.g. to handle the amount of "
+#~ "temporary split files while loading the sets."
+#~ msgstr "提升開啟檔案的最大數目便於在載入集合時處理臨時分割檔案等任務。"

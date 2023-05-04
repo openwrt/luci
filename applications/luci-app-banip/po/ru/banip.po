@@ -88,8 +88,8 @@ msgid "Active Feeds"
 msgstr "Активные каналы"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:175
-msgid "Active Subnets"
-msgstr "Активные подсети"
+msgid "Active Uplink"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:309
 msgid ""
@@ -102,7 +102,7 @@ msgstr ""
 msgid "Advanced Settings"
 msgstr "Расширенные настройки"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:586
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:594
 msgid "Allowlist Only"
 msgstr "Только список разрешений"
 
@@ -114,11 +114,15 @@ msgstr ""
 "Изменения в списке Allowlist были сохранены, запустите программу Domain "
 "Lookup или перезапустите banIP, чтобы изменения вступили в силу."
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+msgid "Auto Allow Uplink"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:578
 msgid "Auto Allowlist"
 msgstr "Автоматический список разрешений"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:590
 msgid "Auto Blocklist"
 msgstr "Автоматический блок-лист"
 
@@ -126,16 +130,17 @@ msgstr "Автоматический блок-лист"
 msgid "Auto Detection"
 msgstr "Автоопределение"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
-msgid "Automatically transfers suspicious IPs to the banIP blocklist."
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:590
+msgid ""
+"Automatically add resolved domains and suspicious IPs to the local banIP "
+"blocklist."
 msgstr ""
-"Автоматически переносит подозрительные IP-адреса в список блокировки banIP."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:578
-msgid "Automatically transfers uplink IPs to the banIP allowlist."
+msgid ""
+"Automatically add resolved domains and uplink IPs to the local banIP "
+"allowlist."
 msgstr ""
-"Автоматически переносит IP-адреса восходящего канала в список разрешений "
-"banIP."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:382
 msgid "Backup Directory"
@@ -201,16 +206,11 @@ msgstr "Очистить пользовательские каналы"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:30
 msgid ""
 "Configuration of the banIP package to ban incoming and outgoing ip addresses/"
-"subnets via sets in nftables. For further information <a href=\"https://"
+"subnets via Sets in nftables. For further information <a href=\"https://"
 "github.com/openwrt/packages/blob/master/net/banip/files/README.md\" "
 "target=\"_blank\" rel=\"noreferrer noopener\" >check the online "
 "documentation</a>"
 msgstr ""
-"Конфигурация пакета banIP для запрета входящих и исходящих ip-адресов/"
-"подсетей через наборы в nftables. Для получения дополнительной информации <a "
-"href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
-"README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >ознакомьтесь с "
-"онлайн-документацией</a>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:563
 msgid "Countries"
@@ -222,11 +222,9 @@ msgstr "Пользовательский редактор каналов"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:321
 msgid ""
-"Deduplicate IP addresses across all active sets and and tidy up the local "
+"Deduplicate IP addresses across all active Sets and and tidy up the local "
 "blocklist."
 msgstr ""
-"Дублируйте IP-адреса во всех активных наборах и приведите в порядок "
-"локальный список блокировки."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:321
 msgid "Deduplicate IPs"
@@ -247,6 +245,10 @@ msgid ""
 msgstr ""
 "Автоматическое обнаружение соответствующих сетевых устройств, интерфейсов, "
 "подсетей, протоколов и утилит."
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:583
+msgid "Disable"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:204
 msgid "Domain Lookup"
@@ -387,6 +389,10 @@ msgstr "Высокий приоритет"
 msgid "Highest Priority"
 msgstr "Наивысший приоритет"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:585
+msgid "IP"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:11
 msgid "IP Search"
 msgstr "Поиск IP-адресов"
@@ -406,10 +412,8 @@ msgstr "Поддержка IPv6"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:352
 msgid ""
 "Increase the maximal number of open files, e.g. to handle the amount of "
-"temporary split files while loading the sets."
+"temporary split files while loading the Sets."
 msgstr ""
-"Увеличьте максимальное количество открытых файлов, например, чтобы "
-"справиться с количеством временных разделенных файлов при загрузке наборов."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:153
 msgid "Information"
@@ -461,6 +465,10 @@ msgid "Limit the cpu cores used by banIP to save RAM."
 msgstr ""
 "Ограничьте количество ядер процессора, используемых banIP для экономии "
 "оперативной памяти."
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:582
+msgid "Limit the uplink autoallow function."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:390
 msgid ""
@@ -648,7 +656,7 @@ msgstr "Элементы отчета"
 msgid "Restart"
 msgstr "Перезапустить"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:586
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:594
 msgid "Restrict the internet access from/to a small number of secure IPs."
 msgstr ""
 "Ограничить доступ в Интернет с/на небольшое количество защищенных IP-адресов."
@@ -768,6 +776,10 @@ msgstr "Состояние"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:211
 msgid "Stop"
 msgstr "Остановить"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:584
+msgid "Subnet (default)"
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:128
 msgid "Survey"
@@ -1015,3 +1027,44 @@ msgstr "старт (по умолчанию)"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:485
 msgid "warn (default)"
 msgstr "предупреждение (по умолчанию)"
+
+#~ msgid "Active Subnets"
+#~ msgstr "Активные подсети"
+
+#~ msgid "Automatically transfers suspicious IPs to the banIP blocklist."
+#~ msgstr ""
+#~ "Автоматически переносит подозрительные IP-адреса в список блокировки "
+#~ "banIP."
+
+#~ msgid "Automatically transfers uplink IPs to the banIP allowlist."
+#~ msgstr ""
+#~ "Автоматически переносит IP-адреса восходящего канала в список разрешений "
+#~ "banIP."
+
+#~ msgid ""
+#~ "Configuration of the banIP package to ban incoming and outgoing ip "
+#~ "addresses/subnets via sets in nftables. For further information <a "
+#~ "href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
+#~ "README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >check the "
+#~ "online documentation</a>"
+#~ msgstr ""
+#~ "Конфигурация пакета banIP для запрета входящих и исходящих ip-адресов/"
+#~ "подсетей через наборы в nftables. Для получения дополнительной информации "
+#~ "<a href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
+#~ "README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >ознакомьтесь с "
+#~ "онлайн-документацией</a>"
+
+#~ msgid ""
+#~ "Deduplicate IP addresses across all active sets and and tidy up the local "
+#~ "blocklist."
+#~ msgstr ""
+#~ "Дублируйте IP-адреса во всех активных наборах и приведите в порядок "
+#~ "локальный список блокировки."
+
+#~ msgid ""
+#~ "Increase the maximal number of open files, e.g. to handle the amount of "
+#~ "temporary split files while loading the sets."
+#~ msgstr ""
+#~ "Увеличьте максимальное количество открытых файлов, например, чтобы "
+#~ "справиться с количеством временных разделенных файлов при загрузке "
+#~ "наборов."
