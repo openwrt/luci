@@ -7,6 +7,9 @@ case "$1" in
 		json_init
 		json_add_object "generateKeyPair"
 		json_close_object
+		json_add_object "getPeers"
+		json_add_string "interface"
+		json_close_object
 		json_dump
 	;;
 	call)
@@ -21,6 +24,12 @@ case "$1" in
 				json_add_string "pub" "$PublicKey"
 				json_close_object
 				json_dump
+			;;
+			getPeers)
+				read -r input
+				json_load "$input"
+				json_get_vars interface
+				echo "$(yggdrasilctl -endpoint=unix:///tmp/yggdrasil/${interface}.sock -json getPeers)"
 			;;
 		esac
 	;;
