@@ -34,7 +34,9 @@ print_json_string() { json_init; json_add_string "$1" "$2"; json_dump; json_clea
 logger() { /usr/bin/logger -t "$packageName" "$@"; }
 ubus_get_status() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.status.${1}"; }
 ubus_get_gateway() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.gateways[@.name='${1}']${2:+.$2}"; }
+is_greater() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
 is_greater_or_equal() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" = "$2"; }
+opkg_get_version() { grep -m1 -A1 "$1" '/usr/lib/opkg/status' | grep -m1 'Version: ' | sed 's|Version: \(.*\)|\1|'; }
 
 get_init_list() {
 	local name
@@ -130,19 +132,25 @@ EOF
 	if [ -n "$warnings" ]; then
 		while read -r line; do
 			if str_contains "$line" ' '; then
-				error_id="${line% *}"
-				error_extra="${line#* }"
+				warning_id="${line% *}"
+				warning_extra="${line#* }"
 			else
-				error_id="$line"
-				unset error_extra
+				warning_id="$line"
+				unset warning_extra
 			fi
 			json_add_object
-			json_add_string 'id' "$error_id"
-			json_add_string 'extra' "$error_extra"
+			json_add_string 'id' "$warning_id"
+			json_add_string 'extra' "$warning_extra"
 			json_close_object
 		done <<EOF
 $(echo "$warnings" | tr \# \\n)
 EOF
+	fi
+	if is_greater "$(opkg_get_version "${name}")" "$(opkg_get_version "luci-app-${name}")"; then
+		json_add_object
+		json_add_string 'id' 'warningOutdatedWebUIApp'
+		json_add_string 'extra' "$(opkg_get_version "luci-app-${name}")"
+		json_close_object
 	fi
 	json_close_array
 	json_close_object
@@ -158,7 +166,7 @@ check_unbound() { command -v unbound >/dev/null 2>&1; }
 check_agh_ipset() {
 	check_ipset || return 1
 	check_agh || return 1
-	is_greater_or_equal "$($agh --version | sed 's|AdGuard Home, version v\(.*\)|\1|')" '0.107.13'
+	is_greater_or_equal "$($agh --version | sed 's|AdGuard Home, version v\(.*\)|\1|' | sed 's|-.*||')" '0.107.13'
 }
 check_dnsmasq_ipset() {
 	local o;
@@ -246,6 +254,15 @@ is_ovpn() { local dev; network_get_device dev "$1"; [ "${dev:0:3}" = "tun" ] || 
 is_pptp() { local proto; proto=$(uci -q get network."$1".proto); [ "${proto:0:4}" = "pptp" ]; }
 is_softether() { local dev; network_get_device dev "$1"; [ "${dev:0:4}" = "vpn_" ]; }
 is_tor() { [ "$(str_to_lower "$1")" = "tor" ]; }
+is_tor_running() {
+	local ret=0
+	if [ -s "/etc/tor/torrc" ]; then
+		json_load "$(ubus call service list "{ 'name': 'tor' }")"
+		json_select 'tor'; json_select 'instances'; json_select 'instance1';
+		json_get_var ret 'running'; json_cleanup
+	fi
+	if [ "$ret" = "0" ]; then return 1; else return 0; fi
+}
 is_wg() { local proto; proto=$(uci -q get network."$1".proto); [ "${proto:0:9}" = "wireguard" ]; }
 is_tunnel() { is_dslite "$1" || is_l2tp "$1" || is_oc "$1" || is_ovpn "$1" || is_pptp "$1" || is_softether "$1" || is_tor "$1" || is_wg "$1"; }
 is_wan() { [ "$1" = "$wanIface4" ] || { [ "${1##wan}" != "$1" ] && [ "${1##wan6}" = "$1" ]; } || [ "${1%%wan}" != "$1" ]; }
@@ -264,25 +281,37 @@ pbr_find_iface() {
 	fi
 	eval "$1"='${iface:-$i}'
 }
+_find_firewall_wan_zone() { [ "$(uci -q get "firewall.${1}.name")" = "wan" ] && firewallWanZone="$1"; }
 _build_ifaces_all() { ifacesAll="${ifacesAll}${1} "; }
-_build_ifaces_supported() { is_supported_interface "$1" && ifacesSupported="${ifacesSupported}${1} "; }
+_build_ifaces_supported() { is_supported_interface "$1" && ! str_contains "$ifacesSupported" "$1" && ifacesSupported="${ifacesSupported}${1} "; }
 get_supported_interfaces() {
 	local name i
 	name="$(basename "$1")"
 	name="${name:-$packageName}" 
+	local firewallWanZone
 	local ifacesAll ifacesSupported
 	local webui_show_ignore_target
 	local ignored_interface supported_interface
 	local wanIface4 wanIface6
-	config_load "$name"
+	config_load "$packageName"
 	config_get_bool webui_show_ignore_target 'config' 'webui_show_ignore_target' '0'
 	config_get ignored_interface             'config' 'ignored_interface'
 	config_get supported_interface           'config' 'supported_interface'
+	local i
 	config_load 'network'
 	config_foreach _build_ifaces_all 'interface'
 	pbr_find_iface wanIface4 'wan'
 	pbr_find_iface wanIface6 'wan6'
+	config_load 'firewall'
+	config_foreach _find_firewall_wan_zone 'zone'
+	for i in $(uci -q get "firewall.${firewallWanZone}.network"); do
+		is_supported_interface "$i" && ! str_contains "$ifacesSupported" "$1" && ifacesSupported="${ifacesSupported}${i} "
+	done
+	config_load 'network'
 	config_foreach _build_ifaces_supported 'interface'
+	if is_tor_running; then
+		ifacesSupported="$ifacesSupported tor"
+	fi
 	if [ "$webui_show_ignore_target" -eq "1" ]; then
 		ifacesSupported="$ifacesSupported ignore"
 	fi
