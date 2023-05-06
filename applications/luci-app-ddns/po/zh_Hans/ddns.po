@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2023-04-01 09:21+0000\n"
+"PO-Revision-Date: 2023-05-06 14:50+0000\n"
 "Last-Translator: Eric <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsddns/zh_Hans/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:432
 msgid "\"../\" not allowed in path for Security Reason."
@@ -112,7 +112,7 @@ msgstr "当前配置："
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:198
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:276
 msgid "Currently DDNS updates are not started at boot or on interface events."
-msgstr "当前的 DDNS 不会在系统启动时或者网口事件时运行。"
+msgstr "当前的 DDNS更新 不会在系统启动时或者接口事件时运行。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:721
 msgid "Custom update script to be used for updating your DDNS Provider."
@@ -186,12 +186,12 @@ msgstr "设定哪一个 IP 地址（IPv4 或 IPv6）会被发送给 DDNS 提供�
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:426
 msgid "Directory contains Log files for each running section."
-msgstr "用于存在每一个项目运行日志的的目录。"
+msgstr "用于存放各个项目运行日志的的目录。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:420
 msgid ""
 "Directory contains PID and other status information for each running section."
-msgstr "包含了每一个项目运行的PID和其他状态信息的目录。"
+msgstr "用于存放各个项目运行时的PID和其他状态信息的目录。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:17
 msgid "Disabled"
@@ -217,7 +217,7 @@ msgstr "编辑"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:770
 msgid "Enable secure communication with DDNS provider"
-msgstr "启用安全连接与 DDNS 提供商联系"
+msgstr "与 DDNS 提供商通信时使用安全连接"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:613
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1132
@@ -309,7 +309,7 @@ msgstr "不支持 HTTPS"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:623
 msgid "Hostname/FQDN to validate, if IP update happen or necessary"
-msgstr "主机名/FQDN 验证，如果 IP 更新发生或必要"
+msgstr "IP发生更新或需要更新时，用于验证的 主机名 / FQDN"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:789
 msgid "IP address source"
@@ -495,7 +495,7 @@ msgstr "找不到证书"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:945
 msgid "No logging"
-msgstr "无日志"
+msgstr "不记录"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:402
 msgid "Non-public and by default blocked IP's"
@@ -552,7 +552,7 @@ msgstr "可选：替换更新 URL（已编码 URL）中的 [PARAMENC]"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:763
 msgid "Optional: Replaces [PARAMOPT] in Update-URL (NOT URL-encoded)"
-msgstr "可选：替换更新 URL（未编码 URL）中的 [PARAMENC]"
+msgstr "可选：替换更新 URL（未编码 URL）中的 [PARAMOPT]"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:928
 msgid "PROXY-Server"
@@ -598,7 +598,7 @@ msgstr "重启这个服务项"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:738
 msgid "Replaces [DOMAIN] in Update-URL (URL-encoded)"
-msgstr "替换 Update-URL 中的 [DOMAIN] (URL-encoded)"
+msgstr "替换更新 URL 中的 [DOMAIN] (已编码 URL)"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:750
 msgid "Replaces [PASSWORD] in Update-URL (URL-encoded)"
@@ -723,9 +723,8 @@ msgstr "这是此服务 %h 中日志文件的当前内容。"
 msgid ""
 "This is the default if you run DDNS scripts by yourself (i.e. via cron with "
 "force_interval set to '0')"
-msgstr ""
-"如果您自己运行 DDNS 脚本（即通过 cron force_interval设置为\"0\"），则这是默认"
-"值"
+msgstr "如果您自己运行 DDNS 脚本（即使用 cron 并将强制更新周期设置为\"0\""
+"），则这是默认值"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:876
 msgid "This will be autoset to the selected interface"
@@ -755,7 +754,7 @@ msgstr "更新 DDns 服务列表"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:702
 msgid "Update URL to be used for updating your DDNS Provider."
-msgstr "用于更新到DDNS提供商的更新URL。"
+msgstr "用于向 DDNS 提供商进行更新的 更新URL。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:457
 msgid ""
@@ -812,7 +811,7 @@ msgstr "向日志中写入详细信息。文件将自动缩小。"
 msgid ""
 "Writes log messages to syslog. Critical Errors will always be written to "
 "syslog."
-msgstr "把日志写入系统日志。无论是否启用这项，错误信息总是会被写入系统日志。"
+msgstr "把日志写入syslog。无论是否启用这项，严重错误始终被写入syslog。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:384
 msgid ""
