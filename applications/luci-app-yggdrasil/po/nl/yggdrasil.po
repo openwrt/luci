@@ -1,12 +1,18 @@
 msgid ""
 msgstr ""
+"PO-Revision-Date: 2023-05-07 23:51+0000\n"
+"Last-Translator: xtz1983 <xtz1983@gmail.com>\n"
+"Language-Team: Dutch <https://hosted.weblate.org/projects/openwrt/"
+"luciapplicationsyggdrasil/nl/>\n"
 "Language: nl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/status.js:33
 msgid "Active peers"
-msgstr ""
+msgstr "Actieve peers"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:17
 msgid ""
@@ -16,6 +22,12 @@ msgid ""
 "prevents this, so that only items specified in \"NodeInfo\" are sent back if "
 "specified."
 msgstr ""
+"Nodeinfo bevat standaard enkele standaardinstellingen, waaronder het "
+"platform, de architectuur en de Yggdrasil-versie. Deze kunnen helpen bij het "
+"onderzoeken van het netwerk en het diagnosticeren van "
+"netwerkrouteringsproblemen. Het inschakelen van nodeinfo-privacy voorkomt "
+"dit, zodat alleen items die zijn opgegeven in \"NodeInfo\" worden "
+"teruggestuurd indien gespecificeerd."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:45
 msgid ""
@@ -27,47 +39,55 @@ msgid ""
 "connections on Port. Listen controls whether or not the node listens for "
 "multicast beacons and opens outgoing connections."
 msgstr ""
+"Configuratie voor welke interfaces multicast-peerdetectie moet zijn "
+"ingeschakeld. Regex is een reguliere expressie die wordt vergeleken met een "
+"interfacenaam, en interfaces gebruiken de eerste configuratie waarmee ze "
+"overeenkomen. Beacon configureert of het knooppunt al dan niet link-local "
+"multicast-bakens moet verzenden om hun aanwezigheid te adverteren, terwijl "
+"het luistert naar inkomende verbindingen op Port. Listen bepaalt of het "
+"knooppunt al dan niet luistert naar multicast-bakens en uitgaande "
+"verbindingen opent."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:16
 msgid "Enable NodeInfo privacy"
-msgstr ""
+msgstr "NodeInfo-privacy inschakelen"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:41
 msgid "Encryption keys"
-msgstr ""
+msgstr "Encryptiesleutels"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:15
 msgid "Encryption private key"
-msgstr ""
+msgstr "Encryptie privé sleutel"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:14
 msgid "Encryption public key"
-msgstr ""
+msgstr "Encryptie openbare sleutel"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:11
 msgid "General settings"
-msgstr ""
+msgstr "Algemene instellingen"
 
 #: applications/luci-app-yggdrasil/root/usr/share/rpcd/acl.d/luci-app-yggdrasil.json:3
 msgid "Grant access to LuCI app yggdrasil"
-msgstr ""
+msgstr "Verleen toegang tot de LuCI-app yggdrasil"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:25
 msgid "Interface"
-msgstr ""
+msgstr "Interface"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:20
 msgid "Interface peers"
-msgstr ""
+msgstr "Interface peers"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:16
 msgid "Keep this private. When compromised, generate a new keypair and IPv6."
-msgstr ""
+msgstr "Houd dit privé. Genereer bij inbraak een nieuw sleutelpaar en IPv6."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:52
 msgid "Link-local port"
-msgstr ""
+msgstr "Link-lokale poort"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:21
 msgid ""
@@ -76,6 +96,10 @@ msgid ""
 "that SOCKS peerings will NOT be affected by this option and should go in the "
 "\"Peers\" section instead."
 msgstr ""
+"Lijst met verbindingsreeksen voor uitgaande peerverbindingen in URI-"
+"indeling, gerangschikt op broninterface, b.v. { \"eth0\": [ tcp://a.b.c.d:e ]"
+" }. Houd er rekening mee dat SOCKS-peerings NIET worden beïnvloed door deze "
+"optie en in plaats daarvan in de sectie \"Peers\" moeten worden geplaatst."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:12
 msgid ""
@@ -84,10 +108,15 @@ msgid ""
 "the operating system routing table, therefore you should use this section "
 "when you may connect via different interfaces."
 msgstr ""
+"Lijst met verbindingsreeksen voor uitgaande peerverbindingen in URI-"
+"indeling, b.v. tcp://a.b.c.d:e of sokken://a.b.c.d:e/f.g.h.i:j. Deze "
+"verbindingen volgen de routeringstabel van het besturingssysteem, daarom "
+"moet u deze sectie gebruiken wanneer u via verschillende interfaces "
+"verbinding kunt maken."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:33
 msgid "Listen addresses"
-msgstr ""
+msgstr "Luister adressen"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:34
 msgid ""
@@ -97,22 +126,28 @@ msgid ""
 "should be specified in URI format as above, e.g. tcp://0.0.0.0:0 or tcp://"
 "[::]:0 to listen on all interfaces."
 msgstr ""
+"Luister naar adressen voor inkomende verbindingen. U moet luisteraars "
+"toevoegen om inkomende peerings van niet-lokale knooppunten te accepteren. "
+"Multicast-peerdetectie werkt ongeacht eventuele luisteraars die hier zijn "
+"ingesteld. Elke luisteraar moet worden opgegeven in URI-indeling zoals "
+"hierboven, b.v. tcp://0.0.0.0:0 of tcp://[::]:0 om op alle interfaces te "
+"luisteren."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:51
 msgid "Listen for beacons"
-msgstr ""
+msgstr "Luister naar bakens"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:31
 msgid "MTU size for the interface"
-msgstr ""
+msgstr "MTU-grootte voor de interface"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:44
 msgid "Multicast interface"
-msgstr ""
+msgstr "Multicast-interface"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:23
 msgid "NodeInfo"
-msgstr ""
+msgstr "NodeInfo"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:24
 msgid ""
@@ -120,40 +155,43 @@ msgid ""
 "null. This is entirely optional but, if set, is visible to the whole network "
 "on request."
 msgstr ""
+"Optionele knooppuntinfo. Dit moet een { \"key\": \"value\", ... } map zijn "
+"of ingesteld als null. Dit is geheel optioneel, maar indien ingesteld, is "
+"het op verzoek zichtbaar voor het hele netwerk."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:23
 msgid "Peers"
-msgstr ""
+msgstr "Peers"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:49
 msgid "Regular expression"
-msgstr ""
+msgstr "Reguliere expressie"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:50
 msgid "Send beacons"
-msgstr ""
+msgstr "Bakens verzenden"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:32
 msgid "Settings"
-msgstr ""
+msgstr "Instellingen"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:14
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:3
 msgid "Yggdrasil"
-msgstr ""
+msgstr "Yggdrasil"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/status.js:30
 msgid "Yggdrasil node status"
-msgstr ""
+msgstr "Yggdrasil knooppunt status"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:14
 msgid "Yggdrasil's network interface name"
-msgstr ""
+msgstr "Yggdrasil's netwerk interface naam"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:40
 msgid "e.g. tcp://0.0.0.0:0 or tcp://[::]:0"
-msgstr ""
+msgstr "bijv. tcp://0.0.0.0:0 of tcp://[::]:0"
