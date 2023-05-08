@@ -93,12 +93,11 @@ function handleAction(ev) {
 						w_enc = w_sections[w_sid].encryption;
 						w_key = w_sections[w_sid].key;
 						w_hidden = (w_sections[w_sid].hidden == 1 ? 'true' : 'false');
-						if (w_enc.startsWith('psk')) {
-							w_enc = 'WPA';
-						}
-						else if (w_enc === 'none') {
+						if (w_enc === 'none') {
 							w_enc = 'nopass';
 							w_key = 'nokey';
+						} else {
+							w_enc = 'WPA';
 						}
 						L.resolveDefault(fs.exec_direct('/usr/bin/qrencode', ['--inline', '--8bit', '--type=SVG', '--output=-', 'WIFI:S:' + w_ssid + ';T:' + w_enc + ';P:' + w_key + ';H:' + w_hidden + ';']), null).then(function (res) {
 							if (res) {
