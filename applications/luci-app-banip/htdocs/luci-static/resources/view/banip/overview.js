@@ -27,7 +27,7 @@ return view.extend({
 	render: function (result) {
 		let m, s, o;
 
-		m = new form.Map('banip', 'banIP', _('Configuration of the banIP package to ban incoming and outgoing ip addresses/subnets via Sets in nftables. \
+		m = new form.Map('banip', 'banIP', _('Configuration of the banIP package to ban incoming and outgoing IPs via named nftables Sets. \
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/banip/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>'));
 
 		/*
@@ -238,7 +238,7 @@ return view.extend({
 		s.tab('adv_chain', _('Chain/Set Settings'));
 		s.tab('adv_log', _('Log Settings'));
 		s.tab('adv_email', _('E-Mail Settings'));
-		s.tab('feeds', _('Blocklist Feeds'));
+		s.tab('feeds', _('Feed Selection'));
 
 		/*
 			general settings tab
@@ -318,20 +318,18 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('general', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and and tidy up the local blocklist.'));
-		o.default = 1
-		o.rmempty = false;
+		o = s.taboption('general', form.ListValue, 'ban_fetchretry', _('Download Retries'), _('Number of download attempts in case of an error (not supported by uclient-fetch).'));
+		o.value('1', _('1'));
+		o.value('3', _('3'));
+		o.value('5', _('5 (default)'));
+		o.value('10', _('10'));
+		o.value('20', _('20'));
 
-		o = s.taboption('general', form.Flag, 'ban_loginput', _('Log WAN-Input'), _('Log suspicious incoming WAN packets (dropped).'));
-		o.default = 1
-		o.rmempty = false;
+		o.optional = true;
+		o.rmempty = true;
 
-		o = s.taboption('general', form.Flag, 'ban_logforwardwan', _('Log WAN-Forward'), _('Log suspicious forwarded WAN packets (dropped).'));
-		o.default = 1
-		o.rmempty = false;
-
-		o = s.taboption('general', form.Flag, 'ban_logforwardlan', _('Log LAN-Forward'), _('Log suspicious forwarded LAN packets (rejected).'));
-		o.rmempty = false;
+		o = s.taboption('general', form.Flag, 'ban_fetchinsecure', _('Download Insecure'), _('Don\'t check SSL server certificates during download.'));
+		o.rmempty = true;
 
 		/*
 			additional settings tab
@@ -387,12 +385,13 @@ return view.extend({
 		o.placeholder = '/tmp/banIP-report';
 		o.rmempty = true;
 
+		o = s.taboption('advanced', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and and tidy up the local blocklist.'));
+		o.default = 1
+		o.rmempty = false;
+
 		o = s.taboption('advanced', form.Flag, 'ban_reportelements', _('Report Elements'), _('List Set elements in the status and report, disable this to reduce the CPU load.'));
 		o.default = 1
 		o.optional = true;
-
-		o = s.taboption('advanced', form.Flag, 'ban_fetchinsecure', _('Download Insecure'), _('Don\'t check SSL server certificates during download.'));
-		o.rmempty = true;
 
 		/*
 			advanced chain/set settings tab
@@ -489,6 +488,17 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('adv_log', form.Flag, 'ban_loginput', _('Log WAN-Input'), _('Log suspicious incoming WAN packets (dropped).'));
+		o.default = 1
+		o.rmempty = false;
+
+		o = s.taboption('adv_log', form.Flag, 'ban_logforwardwan', _('Log WAN-Forward'), _('Log suspicious forwarded WAN packets (dropped).'));
+		o.default = 1
+		o.rmempty = false;
+
+		o = s.taboption('adv_log', form.Flag, 'ban_logforwardlan', _('Log LAN-Forward'), _('Log suspicious forwarded LAN packets (rejected).'));
+		o.rmempty = false;
+
 		o = s.taboption('adv_log', form.ListValue, 'ban_loglimit', _('Log Limit'), _('Parse only the last stated number of log entries for suspicious events. To disable the log monitor at all set it to \'0\'.'));
 		o.value('0', _('0 (disable)'));
 		o.value('50', _('50'));
@@ -536,14 +546,14 @@ return view.extend({
 		o.rmempty = true;
 
 		/*
-			blocklist feeds tab
+			feeds tab
 		*/
 		o = s.taboption('feeds', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>' + _('List of supported and fully pre-configured banIP feeds.') + '</b></em>';
+		o.default = '<em><b>' + _('External blocklist feeds') + '</b></em>';
 
 		if (feeds) {
-			o = s.taboption('feeds', form.MultiValue, 'ban_feed', _('Feed Selection'));
+			o = s.taboption('feeds', form.MultiValue, 'ban_feed', _('Blocklist Feed Selection'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				descr = feeds[feed].descr.trim() || '-';
@@ -574,6 +584,27 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.optional = true;
 		o.rmempty = true;
+
+		o = s.taboption('feeds', form.DummyValue, '_feeds');
+		o.rawhtml = true;
+		o.default = '<hr style="width: 200px; height: 1px;" /><em><b>' + _('External allowlist feeds') + '</b></em>';
+
+		o = s.taboption('feeds', form.DynamicList, 'ban_allowurl', _('Allowlist Feed Selection'));
+		o.optional = true;
+		o.rmempty = true;
+		o.validate = function (section_id, value) {
+			if (!value) {
+				return true;
+			}
+			if (!value.match(/^(http:\/\/|https:\/\/)[A-Za-z0-9\/\.\-_\?\&\+=:~#]+$/)) {
+				return _('Protocol/URL format not supported');
+			}
+			return true;
+		}
+
+		o = s.taboption('feeds', form.DummyValue, '_feeds');
+		o.rawhtml = true;
+		o.default = '<hr style="width: 200px; height: 1px;" /><em><b>' + _('Local feed settings') + '</b></em>';
 
 		o = s.taboption('feeds', form.Flag, 'ban_autoallowlist', _('Auto Allowlist'), _('Automatically add resolved domains and uplink IPs to the local banIP allowlist.'));
 		o.default = 1
