@@ -36,7 +36,7 @@ ubus_get_status() { ubus call service list "{ 'name': '$packageName' }" | jsonfi
 ubus_get_gateway() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.gateways[@.name='${1}']${2:+.$2}"; }
 is_greater() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" != "$1"; }
 is_greater_or_equal() { test "$(printf '%s\n' "$@" | sort -V | head -n 1)" = "$2"; }
-opkg_get_version() { grep -m1 -A1 "$1" '/usr/lib/opkg/status' | grep -m1 'Version: ' | sed 's|Version: \(.*\)|\1|'; }
+opkg_get_version() { grep -m1 -A1 "Package: $1$" '/usr/lib/opkg/status' | grep -m1 'Version: ' | sed 's|Version: \(.*\)|\1|'; }
 
 get_init_list() {
 	local name
@@ -242,7 +242,7 @@ get_gateways() {
 	echo -en "}}"
 }
 
-str_contains() { [ -n "$1" ] &&[ -n "$2" ] && [ "${1//$2}" != "$1" ]; }
+str_contains() { [ -n "$1" ] && [ -n "$2" ] && [ "${1//$2}" != "$1" ]; }
 str_contains_word() { echo "$1" | grep -q -w "$2"; }
 str_to_lower() { echo "$1" | tr 'A-Z' 'a-z'; }
 str_to_upper() { echo "$1" | tr 'a-z' 'A-Z'; }
