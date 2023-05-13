@@ -324,7 +324,6 @@ return view.extend({
 		o.value('5', _('5 (default)'));
 		o.value('10', _('10'));
 		o.value('20', _('20'));
-
 		o.optional = true;
 		o.rmempty = true;
 
@@ -460,15 +459,6 @@ return view.extend({
 			o.rmempty = true;
 		}
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_nftexpiry', _('Blocklist Expiry'), _('Expiry time for auto added blocklist set members.'));
-		o.value('10s');
-		o.value('1m');
-		o.value('5m');
-		o.value('1h');
-		o.value('2h');
-		o.optional = true;
-		o.rmempty = true;
-
 		/*
 			advanced log settings tab
 		*/
@@ -563,9 +553,6 @@ return view.extend({
 			o.rmempty = true;
 		}
 
-		/*
-			prepare country data
-		*/
 		let code, country, countries = [];
 		if (result[2]) {
 			countries = result[2].trim().split('\n');
@@ -611,16 +598,26 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.taboption('feeds', form.ListValue, 'ban_autoallowuplink', _('Auto Allow Uplink'), _('Limit the uplink autoallow function.'));
+		o.depends('ban_autoallowlist', '1');
 		o.value('disable', _('Disable'));
 		o.value('subnet', _('Subnet (default)'));
 		o.value('ip', _('IP'));
 		o.optional = true;
 		o.rmempty = true;
-		o.depends('ban_autoallowlist', '1');
 
 		o = s.taboption('feeds', form.Flag, 'ban_autoblocklist', _('Auto Blocklist'), _('Automatically add resolved domains and suspicious IPs to the local banIP blocklist.'));
 		o.default = 1
 		o.rmempty = false;
+
+		o = s.taboption('feeds', form.ListValue, 'ban_nftexpiry', _('Blocklist Set Expiry'), _('Expiry time for auto added blocklist Set members.'));
+		o.value('10s');
+		o.value('1m');
+		o.value('5m');
+		o.value('1h');
+		o.value('2h');
+		o.value('1d');
+		o.optional = true;
+		o.rmempty = true;
 
 		o = s.taboption('feeds', form.Flag, 'ban_allowlistonly', _('Allowlist Only'), _('Restrict the internet access from/to a small number of secure IPs.'));
 		o.rmempty = false;
