@@ -325,6 +325,9 @@ return view.extend({
 		o.value('mobile-prefix-advertisement'); /* icmpv6 147 */
 		o.value('mobile-prefix-solicitation'); /* icmpv6 146 */
 		o.value('mpl-control-message'); /* icmpv6 159 */
+		o.value('multicast-listener-query'); /* icmpv6 130 */
+		o.value('multicast-listener-report'); /* icmpv6 131 */
+		o.value('multicast-listener-done'); /* icmpv6 132 */
 		o.value('multicast-router-advertisement'); /* icmpv6 151 */
 		o.value('multicast-router-solicitation'); /* icmpv6 152 */
 		o.value('multicast-router-termination'); /* icmpv6 153 */
