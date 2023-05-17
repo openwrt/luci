@@ -8,9 +8,6 @@ LUCI_TITLE:=LuCI for Zerotier
 LUCI_DEPENDS:=+zerotier +jsonfilter +ucode
 LUCI_PKGARCH:=all
 
-PKG_NAME:=luci-app-zerotier
-PKG_RELEASE:=$(COMMITCOUNT)
-
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
