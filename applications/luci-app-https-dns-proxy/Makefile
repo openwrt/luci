@@ -5,7 +5,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
-PKG_VERSION:=2022-10-15-11
+PKG_VERSION:=2022-10-15-14
 
 LUCI_TITLE:=DNS Over HTTPS Proxy Web UI
 LUCI_DESCRIPTION:=Provides Web UI for DNS Over HTTPS Proxy
