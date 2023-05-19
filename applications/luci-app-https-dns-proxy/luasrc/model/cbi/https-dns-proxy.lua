@@ -103,7 +103,7 @@ else
 	end
 end
 
-if sys.call("curl --version | grep -q HTTP2") == 0 then
+if sys.call("grep -q 'Provides: libnghttp2' /usr/lib/opkg/status") == 0 then
 	http2Supported = true
 end
 
