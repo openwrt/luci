@@ -307,6 +307,12 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = '/example.org/ipset,ipset6';
 
+		o = s.taboption('general', form.DynamicList, 'nftset',
+			_('nft sets'),
+			_('List of nft sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
+		o.optional = true;
+		o.placeholder = '/example.org/nftset,nftset6';
+
 		o = s.taboption('general', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
 			_('Discard upstream responses containing <a href="%s">RFC1918</a> addresses.').format('https://datatracker.ietf.org/doc/html/rfc1918'));
@@ -724,9 +730,6 @@ return view.extend({
 			so.value(ipv4, '%s (%s)'.format(ipv4, ipaddrs[ipv4]));
 		});
 
-		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
-			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
-
 		ss = o.subsection;
 
 		ss.addremove = true;
@@ -740,6 +743,26 @@ return view.extend({
 		so = ss.option(form.DynamicList, 'domain', _('Domain'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
+
+		o = s.taboption('nftsets', form.SectionValue, '__nftsets__', form.GridSection, 'nftset', null,
+			_('List of nft sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable  = true;
+
+		so = ss.option(form.DynamicList, 'name', _('nft set'));
+		so.rmempty = false;
+		so.datatype = 'string';
+
+		so = ss.option(form.DynamicList, 'domain', _('Domain'));
+		so.rmempty = false;
+		so.datatype = 'hostname';
+
+		o = s.taboption('nftsets', form.SectionValue, '__nftsets__', form.GridSection, 'nftset', null,
+			_('List of nft sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
 
 		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
 			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br />' +
