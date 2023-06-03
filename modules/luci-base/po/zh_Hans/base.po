@@ -386,6 +386,7 @@ msgid "ANSI T1.413"
 msgstr "ANSI T1.413"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:95
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:65
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:94
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:91
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:68
@@ -1051,6 +1052,7 @@ msgstr "认证组"
 msgid "Authentication"
 msgstr "身份验证"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:76
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:82
 msgid "Authentication Type"
@@ -1068,6 +1070,8 @@ msgstr "需要授权"
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:120
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:24
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:107
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:116
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:113
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:51
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:96
@@ -1369,6 +1373,10 @@ msgstr "CA 证书（PEM 编码；而不是使用系统范围的存储来验证�
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:182
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr "CA 证书，如果留空，则证书将在第一次连接后被保存。"
+
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:79
+msgid "CHAP"
+msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:7
 msgid "CLAT configuration failed"
@@ -2268,6 +2276,8 @@ msgstr "禁用此网络"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:13
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:121
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:108
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:117
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:114
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:52
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:97
@@ -2682,6 +2692,7 @@ msgstr "启用 HE.net 动态终端更新"
 msgid "Enable IPv6"
 msgstr "启用 IPv6"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:101
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
 msgid "Enable IPv6 negotiation"
 msgstr "启用 IPv6 协商"
@@ -2821,6 +2832,8 @@ msgstr "启用单播泛洪"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:243
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:353
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:109
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:118
 msgid "Enabled"
 msgstr "启用"
 
@@ -3840,6 +3853,7 @@ msgstr "IPsec XFRM"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:88
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:89
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:90
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:96
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:87
 msgid "IPv4"
 msgstr "IPv4"
@@ -3919,6 +3933,10 @@ msgstr "IPv4+IPv6"
 msgid "IPv4-in-IPv4 (RFC2003)"
 msgstr "IPv4-in-IPv4（RFC2003）"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:95
+msgid "IPv4/IPv6"
+msgstr ""
+
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:127
 msgid "IPv4/IPv6 (both - defaults to IPv4)"
 msgstr "IPv4/IPv6（双栈 - 默认 IPv4）"
@@ -3939,6 +3957,7 @@ msgstr "IPv4/IPv6 流量表 \"%h\""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:98
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:99
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:100
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:97
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:89
 msgid "IPv6"
 msgstr "IPv6"
@@ -4117,12 +4136,14 @@ msgstr ""
 "确认设置，否则修改将被还原。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:953
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:134
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:122
 msgid "If unchecked, no default route is configured"
 msgstr "留空则不配置默认路由"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:145
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
 msgid "If unchecked, the advertised DNS server addresses are ignored"
@@ -4429,6 +4450,7 @@ msgid "Invalid"
 msgstr "无效"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:68
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:100
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:97
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:74
@@ -5067,6 +5089,10 @@ msgstr "MAP / LW4over6配置"
 msgid "MAP rule is invalid"
 msgstr "MAP 规则无效"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:24
+msgid "MBIM Cellular"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:223
 msgid "MD5"
 msgstr "MD5"
@@ -5158,6 +5184,7 @@ msgid "Maximum allowed size of EDNS0 UDP packets."
 msgstr "EDNS0 UDP 数据包的最大允许大小。"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
 msgid "Maximum amount of seconds to wait for the modem to become ready"
 msgstr "调制解调器就绪的最大等待时间（秒）"
@@ -5328,6 +5355,7 @@ msgid "Modem default"
 msgstr "调制解调器默认"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:73
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:54
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:82
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:65
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:73
@@ -5344,6 +5372,7 @@ msgid "Modem information query failed"
 msgstr "调制解调器信息查询失败"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:119
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
 msgid "Modem init timeout"
@@ -5797,6 +5826,7 @@ msgstr "非全部地址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:159
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:183
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:80
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:112
 msgid "None"
 msgstr "无"
@@ -6212,6 +6242,7 @@ msgstr "覆盖 IPv6 路由表"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:69
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:74
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:132
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:194
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
@@ -6283,11 +6314,20 @@ msgstr "用导入的配置覆盖当前设置？"
 msgid "Owner"
 msgstr "用户名"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:78
+msgid "PAP"
+msgstr ""
+
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:77
+msgid "PAP/CHAP"
+msgstr ""
+
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:109
 msgid "PAP/CHAP (both)"
 msgstr "PAP/CHAP（均使用）"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:111
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:88
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:120
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:107
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:45
@@ -6301,6 +6341,7 @@ msgid "PAP/CHAP password"
 msgstr "PAP/CHAP 密码"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:109
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:83
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:115
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:105
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:43
@@ -6313,6 +6354,7 @@ msgstr "PAP/CHAP 密码"
 msgid "PAP/CHAP username"
 msgstr "PAP/CHAP 用户名"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:94
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:114
 msgid "PDP Type"
 msgstr "PDP 类型"
@@ -6322,6 +6364,7 @@ msgid "PID"
 msgstr "PID"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:106
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:73
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:105
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:102
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:79
@@ -9546,6 +9589,10 @@ msgstr "运行时间"
 msgid "Use <code>/etc/ethers</code>"
 msgstr "使用 <code>/etc/ethers</code> 配置"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:106
+msgid "Use DHCP"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:295
 msgid "Use DHCP advertised servers"
 msgstr "使用 DHCP 通告的服务器"
@@ -9554,7 +9601,12 @@ msgstr "使用 DHCP 通告的服务器"
 msgid "Use DHCP gateway"
 msgstr "使用 DHCP 网关"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:115
+msgid "Use DHCPv6"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:144
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:132
 msgid "Use DNS servers advertised by peer"
@@ -9611,16 +9663,19 @@ msgid "Use builtin IPv6-management"
 msgstr "使用内置的 IPv6 管理"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:961
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:148
 msgid "Use custom DNS servers"
 msgstr "使用自定义的 DNS 服务器"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:953
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:133
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:121
 msgid "Use default gateway"
 msgstr "使用默认网关"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:975
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:138
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:164
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:126
 msgid "Use gateway metric"
@@ -10761,1259 +10816,3 @@ msgstr "是"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 后退"
-
-#~ msgid "ATU-C System Vendor ID"
-#~ msgstr "ATU-C 系统供应商 ID"
-
-#~ msgid "Aggregate Transmit Power (ACTATP)"
-#~ msgstr "总发射功率（ACTATP）"
-
-#~ msgctxt "VLAN port state"
-#~ msgid "Do not participate"
-#~ msgstr "不参与"
-
-#~ msgctxt "VLAN port state"
-#~ msgid "Egress tagged"
-#~ msgstr "已标记的出口"
-
-#~ msgctxt "VLAN port state"
-#~ msgid "Egress untagged"
-#~ msgstr "未标记的出口"
-
-#~ msgid "Errored seconds (ES)"
-#~ msgstr "错误秒数（ES）"
-
-#~ msgid "Forward Error Correction Seconds (FECS)"
-#~ msgstr "前向纠错秒数（FECS）"
-
-#~ msgid "Header Error Code Errors (HEC)"
-#~ msgstr "请求头错误代码错误（HEC）"
-
-#~ msgid "Latency"
-#~ msgstr "延迟"
-
-#~ msgid "Line Attenuation (LATN)"
-#~ msgstr "线路衰减（LATN）"
-
-#~ msgid "Loss of Signal Seconds (LOSS)"
-#~ msgstr "信号丢失秒数（LOSS）"
-
-#~ msgid "Max. Attainable Data Rate (ATTNDR)"
-#~ msgstr "最大可达数据速率（ATTNDR）"
-
-#~ msgid "Noise Margin (SNR)"
-#~ msgstr "噪声容限（SNR）"
-
-#~ msgid "Non Pre-emptive CRC errors (CRC_P)"
-#~ msgstr "非抢占 CRC 错误（CRC_P）"
-
-#~ msgid "Power Management Mode"
-#~ msgstr "电源管理模式"
-
-#~ msgid "Pre-emptive CRC errors (CRCP_P)"
-#~ msgstr "抢占式 CRC 错误（CRCP_P）"
-
-#~ msgctxt "VLAN port state"
-#~ msgid "Primary VLAN ID"
-#~ msgstr "主 VLAN ID"
-
-#~ msgid "Severely Errored Seconds (SES)"
-#~ msgstr "严重误码秒（SES）"
-
-#~ msgid "Signal Attenuation (SATN)"
-#~ msgstr "信号衰减（SATN）"
-
-#~ msgid "Unavailable Seconds (UAS)"
-#~ msgstr "不可用秒数（UAS）"
-
-#~ msgid ""
-#~ "Avoid uselessly triggering dial-on-demand links (filters SRV/SOA records "
-#~ "and names with underscores)."
-#~ msgstr "避免无用地触发按需拨号链接（过滤 SRV/SOA 记录和带有下划线的名称）。"
-
-#~ msgid "Filter useless"
-#~ msgstr "过滤无用包"
-
-#~ msgid "Network Utilities"
-#~ msgstr "网络工具"
-
-#~ msgid "Back to configuration"
-#~ msgstr "返回至配置"
-
-#~ msgid "Close list..."
-#~ msgstr "关闭列表…"
-
-#~ msgid "Internal Server Error"
-#~ msgstr "内部服务器错误"
-
-#~ msgid "No files found"
-#~ msgstr "未找到文件"
-
-#~ msgid "Sorry, the server encountered an unexpected error."
-#~ msgstr "对不起，服务器遇到未知错误。"
-
-#~ msgid "Do not forward queries that cannot be answered by public resolvers."
-#~ msgstr "不转发公共域名服务器无法回应的请求。"
-
-#~ msgid "Import peer configuration…"
-#~ msgstr "导入对端配置…"
-
-#~ msgid "Paste or drag WireGuard configuration file…"
-#~ msgstr "粘贴或拖动 WireGuard 配置文件…"
-
-#~ msgid "PublicKey setting is missing or invalid"
-#~ msgstr "PublicKey 设置丢失或无效"
-
-#~ msgid "Sytem running in recovery (initramfs) mode."
-#~ msgstr "系统在恢复 (initramfs) 模式下运行。"
-
-#~ msgid ""
-#~ "To import a WireGuard client configuration, e.g. provided by a commercial "
-#~ "VPN provider, drag the <em>*.conf</em> file or paste its contents into "
-#~ "the text field below. The relevant settings will be automatically "
-#~ "extracted from the configuration."
-#~ msgstr ""
-#~ "要导入 WireGuard 客户端配置，例如由商业 VPN 提供商提供的配置，请将<em>*."
-#~ "conf</em>文件拖动或粘贴到下面的文本字段。 相关设置将从配置中自动提取。"
-
-#~ msgid ""
-#~ "A random, on the fly generated \"PrivateKey\", the key will not be saved "
-#~ "on the router"
-#~ msgstr "一枚随机、运行中生成的\"PrivateKey\"，此密钥不会被保存在路由器上"
-
-#~ msgid "For QR-Code support please install the qrencode package!"
-#~ msgstr "二维码支持，请安装 qrencode 包！"
-
-#~ msgid "Generate Key"
-#~ msgstr "生成密钥"
-
-#~ msgid "Generate New QR-Code"
-#~ msgstr "生成新的二维码"
-
-#~ msgid "Generate new QR-Code"
-#~ msgstr "生成新的二维码"
-
-#~ msgid "Hide QR-Code"
-#~ msgstr "隐藏二维码"
-
-#~ msgid "If available, the client's \"PresharedKey\""
-#~ msgstr "如可用，使用客户端的 \"PresharedKey\""
-
-#~ msgid ""
-#~ "If there are any unsaved changes for this client, please save the "
-#~ "configuration before generating a QR-Code"
-#~ msgstr "如果此客户端有任何未保存的更改，请在生成二维码之前保存配置"
-
-#~ msgid "Loading QR-Code..."
-#~ msgstr "加载二维码中…"
-
-#~ msgid "No peers defined yet"
-#~ msgstr "尚未定义对端"
-
-#~ msgid "QR-Code"
-#~ msgstr "二维码"
-
-#~ msgid "Required. Base64-encoded public key of peer."
-#~ msgstr "必须，对端的 Base64 编码公钥。"
-
-#~ msgid "The \"PublicKey\" of that wg interface"
-#~ msgstr "wireguard 接口的 \"PublicKey\""
-
-#~ msgid ""
-#~ "The QR-Code works per wg interface, it will be refreshed with every "
-#~ "button click and transfers the following information:"
-#~ msgstr ""
-#~ "每个 wireguard 接口的二维码都不相同，每次点击按钮都会刷新二维码并传递下列"
-#~ "信息："
-
-#~ msgid ""
-#~ "The list of this client's \"AllowedIPs\" or \"0.0.0.0/0, ::/0\" if not "
-#~ "configured"
-#~ msgstr "此客户端的 \"AllowedIPs\" 列表，如未配置将使用 \"0.0.0.0/0, ::/0\""
-
-#~ msgid "The value is overridden by configuration. Original: %s"
-#~ msgstr "该值被配置覆盖。 原始：%s"
-
-#~ msgctxt "nft meta oif"
-#~ msgid "Engress device id"
-#~ msgstr "出口设备 id"
-
-#~ msgid "Firewall (iptables)"
-#~ msgstr "防火墙 (iptables)"
-
-#~ msgid "Firewall (nftables)"
-#~ msgstr "防火墙 (nftables)"
-
-#~ msgid "No nftables ruleset load"
-#~ msgstr "未加载 nftables 规则集"
-
-#~ msgid ""
-#~ "When enabled, gateway is on link even if the gateway does not match any "
-#~ "interface prefix"
-#~ msgstr "启用后，即使网关没有匹配任何接口前缀，网关也处于链路状态"
-
-#~ msgid "Default %d"
-#~ msgstr "默认 %d"
-
-#~ msgid "The login request failed with error: %h"
-#~ msgstr "登录请求失败，错误为：%h"
-
-#~ msgid "Storage usage"
-#~ msgstr "存储空间使用"
-
-#~ msgid "Root directory for files served via TFTP."
-#~ msgstr "通过 TFTP 提供的文件的根目录。"
-
-#~ msgid "TFTP Settings"
-#~ msgstr "TFTP 设置"
-
-#~ msgid "Auto Refresh"
-#~ msgstr "自动刷新"
-
-#~ msgid "on"
-#~ msgstr "开"
-
-#~ msgid ""
-#~ "Required. IP addresses and prefixes that this peer is allowed to use "
-#~ "inside the tunnel. Usually the peer's tunnel IP addresses and the "
-#~ "networks the peer routes through the tunnel."
-#~ msgstr ""
-#~ "必须，允许该对端在隧道中使用的 IP 地址和前缀，通常是对端的隧道 IP 地址和对"
-#~ "端通过隧道路由的网络。"
-
-#~ msgid "Value must not be empty"
-#~ msgstr "值不能为空"
-
-#~ msgid ""
-#~ "Force upgrade: Select 'Force upgrade' to flash the image even if the "
-#~ "image format check fails. Use only if you are sure that the firmware is "
-#~ "correct and meant for your device!"
-#~ msgstr ""
-#~ "即使映像文件检查失败，也“强制升级”以烧录映像。仅在您确定固件正确且适用于您"
-#~ "的设备时使用！"
-
-#~ msgid "Grant access to the system route status"
-#~ msgstr "授予访问系统路由状态的权限"
-
-#~ msgid "Host entries"
-#~ msgstr "主机/域名列表"
-
-#~ msgid ""
-#~ "<br/>Note: you need to manually restart the cron service if the crontab "
-#~ "file was empty before editing."
-#~ msgstr ""
-#~ "<br/>注意：如果 crontab 文件在编辑前为空，则需要手动重新启动 cron 服务。"
-
-#~ msgid ""
-#~ "Specify a TOS (Type of Service). Can be <code>inherit</code> (the outer "
-#~ "header inherits the value of the inner header), or an hexadecimal value "
-#~ "<code>00..FF</code> (optional)."
-#~ msgstr ""
-#~ "明确一个 TOS （服务类型）。可以是<code>继承</code>（外层消息头继承内部消息"
-#~ "头的值）或一个十六进制值<code>00..FF</code>（可选）。"
-
-#~ msgid ""
-#~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router advertises itself as the default IPv6 gateway via <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages (to "
-#~ "<code>ff02::1</code>) and provides <abbr title=\"Prefix Delegation\">PD</"
-#~ "abbr> to downstream devices.</li> <li><strong>relay mode</strong>: Router "
-#~ "relays <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
-#~ "from upstream, and extends upstream (e.g. WAN) interface config and "
-#~ "prefix to downstream (e.g. LAN) interfaces.</li> <li><strong>hybrid mode</"
-#~ "strong>: Router does both server+relay; extends upstream config and "
-#~ "prefix downstream, and uses <abbr title=\"Prefix Delegation\">PD</abbr> "
-#~ "locally.</li></ul>"
-#~ msgstr ""
-#~ "<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>：路由"
-#~ "器通过 <abbr title=\"路由器通告，ICMPv6 类型 134\">RA</abbr> 报文（发送至 "
-#~ "<code>ff02::1</code>）通告自己是默认的 IPv6 网关，并向下游设备提供 <abbr "
-#~ "title=\"前缀授权\">PD</abbr>。</li> <li><strong>中继模式</strong>：路由器"
-#~ "从上游中继 <abbr title=\"路由器通告，ICMPv6 类型 134\">RA</abbr>，并将上游"
-#~ "（如 WAN）接口的配置和前缀扩展到下游（如 LAN）接口。</li> <li><strong>混合"
-#~ "模式</strong>：路由器同时做服务器 + 中继，将上游配置和前缀扩展到下游，并在"
-#~ "本地使用 <abbr title=\"前缀授权\">PD</abbr>。</li></ul>"
-
-#~ msgid ""
-#~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr>) to downstream interfaces.</li> <li><strong>relay "
-#~ "mode</strong>: Router relays WAN interface config downstream. Helps "
-#~ "support upstream links that lack <abbr title=\"Prefix Delegation\">PD</"
-#~ "abbr>.</li> <li><strong>hybrid mode</strong>: Router does combination of "
-#~ "server+relay.</li></ul>"
-#~ msgstr ""
-#~ "<ul style=\"list-style-type:none;\"> <li><strong>服务器模式</strong>：路由"
-#~ "器向下游接口分配IP和委托前缀（<abbr title=\"前缀授权\">PD</abbr>）。</li> "
-#~ "<li><strong>中继模式</strong>：路由器向下游中继 WAN 接口的配置，以支持缺"
-#~ "少 <abbr title=\"前缀授权\">PD</abbr> 的上行链路。</li> <li><strong>混合模"
-#~ "式</strong>：服务器+中继的组合。</li></ul>"
-
-#~ msgid "Always, even if no public prefix is available."
-#~ msgstr "始终，即使没有可用的公共前缀。"
-
-#~ msgid "Announce as default router"
-#~ msgstr "通告为默认路由器"
-
-#~ msgid "Announced DNS servers"
-#~ msgstr "通告的 DNS 服务器"
-
-#~ msgid "DHCPv6-Mode"
-#~ msgstr "DHCPv6 模式"
-
-#~ msgid "Default is on."
-#~ msgstr "默认是开启的。"
-
-#~ msgid ""
-#~ "Default is stateless + stateful<br /> <ul style=\"list-style-type:none;"
-#~ "\"> <li><strong>stateless</strong>: Router advertises prefixes, host uses "
-#~ "<abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> to self assign "
-#~ "its own address. No DHCPv6.</li> <li><strong>stateless + stateful</"
-#~ "strong>: SLAAC. In addition, router assigns an IPv6 address to a host via "
-#~ "DHCPv6.</li> <li><strong>stateful-only</strong>: No SLAAC. Router assigns "
-#~ "an IPv6 address to a host via DHCPv6.</li></ul>"
-#~ msgstr ""
-#~ "默认值是有状态 + 无状态<br /> <ul style=\"list-style-type:none;\"> "
-#~ "<li><strong>无状态</strong>：路由器广播前缀，主机使用 <abbr title=\"无状态"
-#~ "地址自动配置\">SLAAC</abbr> 自行分配自己的地址，不使用 DHCPv6。</li> "
-#~ "<li><strong>无状态 + 有状态</strong>：使用 SLAAC 的同时， 路由器通过 "
-#~ "DHCPv6 将 IPv6 地址分配给主机。</li> <li><strong>仅有状态</strong>：不使"
-#~ "用 SLAAC，路由器通过 DHCPv6 将 IPv6 地址分配给主机。</li></ul>"
-
-#~ msgid "Learn routes from NDP"
-#~ msgstr "从 NDP 学习路由"
-
-#~ msgid ""
-#~ "Maximum time allowed between sending unsolicited <abbr title=\"Router "
-#~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds "
-#~ "(<code>600</code>)."
-#~ msgstr ""
-#~ "发送未被请求的<abbr title=\"路由器通告, ICMPv6 类型134\">RA</abbr>间所允许"
-#~ "的最长时间。默认值是600秒 (<code>600</code>)。"
-
-#~ msgid ""
-#~ "Minimum time allowed between sending unsolicited <abbr title=\"Router "
-#~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds "
-#~ "(<code>200</code>)."
-#~ msgstr ""
-#~ "发送未经请求的<abbr title=\"路由器通告，ICMPv6 类型 134\">RA</abbr>间隔间"
-#~ "所允许的最短时间。默认是200秒 (<code>200</code>)。"
-
-#~ msgid "Override MAC address"
-#~ msgstr "重设 MAC 地址"
-
-#~ msgid ""
-#~ "Reverts to disabled internally if there are no interfaces with boolean "
-#~ "<code>ndproxy_slave</code> set to 1. Think of <abbr title=\"Neighbour "
-#~ "Discovery Protocol\">NDP</abbr> Proxy as Proxy ARP for IPv6: unify hosts "
-#~ "on different physical hardware segments into the same IP subnet. Consists "
-#~ "of <abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr "
-#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr> messages. <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr>-Proxy listens for <abbr "
-#~ "title=\"Neighbour Solicitation, Type 135\">NS</abbr> on an interface "
-#~ "marked with boolean <code>master</code> as 1 (i.e. upstream), then "
-#~ "queries the slave/internal interfaces for that target IP before finally "
-#~ "sending an <abbr title=\"Neighbour Advertisement, Type 136\">NA</abbr> "
-#~ "message. <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> is "
-#~ "effectively ARP for IPv6. <abbr title=\"Neighbour Solicitation, Type "
-#~ "135\">NS</abbr> and <abbr title=\"Neighbour Advertisement, Type 136\">NA</"
-#~ "abbr> detect reachability and duplicate addresses on a link, themselves "
-#~ "also a prerequisite for SLAAC autoconfig.<br /> <ul style=\"list-style-"
-#~ "type:none;\"> <li><strong>disabled</strong>: No <abbr title=\"Neighbour "
-#~ "Discovery Protocol\">NDP</abbr> messages are proxied through to "
-#~ "<code>ndproxy_slave</code> true interfaces.</li> <li><strong>relay mode</"
-#~ "strong>: Proxies <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
-#~ "messages from <code>master</code> to <code>ndproxy_slave</code> true "
-#~ "interfaces. Helps to support provider links without <abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr>, and to firewall proxied hosts.</li> "
-#~ "<li><strong>hybrid mode</strong>: Relay mode is disabled unless the "
-#~ "interface boolean <code>master</code> is 1.</li></ul>"
-#~ msgstr ""
-#~ "如果没有将布尔值 <code>ndproxy_slave</code> 设置为 1 的接口，则在内部恢复"
-#~ "为禁用状态。将 <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> 代"
-#~ "理视为 IPv6 的代理 ARP：将不同物理硬件段上的主机统一到同一 IP 子网中。由 "
-#~ "<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 <abbr "
-#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr> 消息组成。<abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr> 代理在布尔值 "
-#~ "<code>master</code> 为 1（即上游）的接口上侦听 <abbr title=\"Neighbour "
-#~ "Solicitation, Type 135\">NS</abbr>，然后查询该目标 IP 的从属/内部接口，最"
-#~ "后发送 <abbr title=\"Neighbour Advertisement, Type 136\">NA</abbr> 消息。 "
-#~ "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> 实际上是用于 IPv6 "
-#~ "的 ARP。<abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> 和 "
-#~ "<abbr title=\"Neighbour Advertisement, Type 136\">NA</abbr> 用于检测链路上"
-#~ "的可达性及重复地址，它们本身也是 SLAAC 自动配置的先决条件。<br /> <ul "
-#~ "style=\"list-style-type:none;\"> <li><strong>已禁用</strong>：没有 <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr> 消息将会被被代理到 "
-#~ "<code>ndproxy_slave</code> 为真的接口。</li> <li><strong>中继模式</"
-#~ "strong>：将 <code>master</code> 的 <abbr title=\"Neighbour Discovery "
-#~ "Protocol\">NDP</abbr> 消息代理到 <code>ndproxy_slave</code> 为真的接口。有"
-#~ "助于支持没有 <abbr title=\"Prefix Delegation\">PD</abbr> 的提供商链路，并"
-#~ "支持防火墙代理的主机。</li> <li><strong>混合模式</strong>：除非接口布尔值 "
-#~ "<code>master</code> 为 1，否则禁用中继模式。</li></ul>"
-
-#~ msgid ""
-#~ "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 "
-#~ "Type 134\">RA</abbr> messages. Default is 1800 seconds (<code>1800</"
-#~ "code>). Max 9000 seconds."
-#~ msgstr ""
-#~ "在 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> 消息中"
-#~ "通告的路由寿命。默认为 1800 秒（<code>1800</code>）。最长 9000 秒。"
-
-#~ msgid "Set this interface as master for the dhcpv6 relay."
-#~ msgstr "将此接口设置为 dhcpv6 中继的主接口。"
-
-#~ msgid "Static NDP-Proxy prefixes"
-#~ msgstr "静态NDP代理前缀"
-
-#~ msgid ""
-#~ "The <abbr title=\"Maximum Transmission Unit\">MTU</abbr> to be published "
-#~ "in <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
-#~ "messages. Default is 0 (<code>0</code>). Min 1280."
-#~ msgstr ""
-#~ "将要发布的<abbr title=\"Maximum Transmission Unit\">MTU</abbr>，发布形式为"
-#~ "<abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>消息。默认"
-#~ "值为0 (<code>0</code>)。最小值1280。"
-
-#~ msgid ""
-#~ "The maximum hops to be published in <abbr title=\"Router "
-#~ "Advertisement\">RA</abbr> messages.<br />Default is 0 (<code>0</code>), "
-#~ "meaning unspecified. Max 255."
-#~ msgstr ""
-#~ "在 <abbr title=\"Router Advertisement\">RA</abbr> 报文中通告的最大跳数。"
-#~ "<br />默认为 0（<code>0</code>），表示未指定。最大为 255。"
-
-#~ msgid "stateful-only"
-#~ msgstr "有状态"
-
-#~ msgid "stateless"
-#~ msgstr "无状态"
-
-#~ msgid "stateless + stateful"
-#~ msgstr "无状态 + 有状态"
-
-#~ msgid "Bridge interfaces"
-#~ msgstr "桥接接口"
-
-#~ msgid "Creates a bridge over specified interface(s)"
-#~ msgstr "为指定接口创建桥接"
-
-#~ msgid ""
-#~ "Default is stateless + stateful<br /> <ul style=\"list-style-type:none;"
-#~ "\"> <li><strong>stateless</strong>: Router advertises prefixes, host uses "
-#~ "<abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> to self assign "
-#~ "its own address. No DHCPv6.</li> <li><strong>stateless + stateful</"
-#~ "strong>: SLAAC. In addition, router assigns an IPv6 address to a host via "
-#~ "DHCPv6.</li> <li><strong>stateful-only</strong>: No SLAAC. Router assigns "
-#~ "an IPv6 address to a host via DHCPv6.</li><ul>"
-#~ msgstr ""
-#~ "默认为无状态 + 有状态。<br /> <ul style=\"list-style-type:none;\"> "
-#~ "<li><strong>无状态</strong>：路由器广播前缀，主机使用 <abbr "
-#~ "title=\"Stateless Address Auto Config\">SLAAC</abbr> 来自分配自己的地址，"
-#~ "不使用 DHCPv6。</li> <li><strong>无状态 + 有状态</strong>：使用 SLAAC 的同"
-#~ "时，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地址。</li> <li><strong>仅有"
-#~ "状态</strong>：不使用 SLAAC，路由器通过 DHCPv6 给一个主机分配一个 IPv6 地"
-#~ "址。</li><ul>"
-
-#~ msgid ""
-#~ "The maximum hops to be published in <abbr title=\"Router "
-#~ "Advertisement\">RA</abbr> messages.<br>Default is 0 (<code>0</code>), "
-#~ "meaning unspecified. Max 255."
-#~ msgstr ""
-#~ "将以<abbr title=\"Router Advertisement\">RA</abbr>消息形式发布的最大跳数。"
-#~ "<br>默认值为0 (<code>0</code>)，意味着未指定。最大值255。"
-
-#~ msgid "Always announce default router"
-#~ msgstr "总是通告默认路由"
-
-#~ msgid "Announce as default router even if no public prefix is available."
-#~ msgstr "即使没有可用的公网前缀，也仍通告自己为默认路由。"
-
-#~ msgid "Default is stateless + stateful"
-#~ msgstr "默认是无状态的 + 有状态的"
-
-#~ msgid "NDP-Proxy"
-#~ msgstr "NDP 代理"
-
-#~ msgid "Router Advertisement-Service"
-#~ msgstr "路由通告服务"
-
-#~ msgid "Custom delegated IPv6-prefix"
-#~ msgstr "自定义分配的 IPv6 前缀"
-
-#~ msgid "Default Route"
-#~ msgstr "默认路由"
-
-#~ msgid "Default gateway"
-#~ msgstr "默认网关"
-
-#~ msgid "Gateway metric"
-#~ msgstr "网关跃点"
-
-#~ msgid "Number of parallel threads used for compression"
-#~ msgstr "用于压缩的并行线程数"
-
-#~ msgid "Set VPN as Default Route"
-#~ msgstr "将 VPN 设置为默认路由"
-
-#~ msgid "ZRam Compression Streams"
-#~ msgstr "ZRam 压缩流"
-
-#~ msgid "Profile"
-#~ msgstr "配置文件"
-
-#~ msgid ""
-#~ "Requires the 'full' version of wpad/hostapd and support from the wifi "
-#~ "driver <br />(as of Jan 2019: ath9k, ath10k, mwlwifi and mt76)"
-#~ msgstr ""
-#~ "需要完整版本的 wpad/hostapd，并且 WiFi 驱动支持<br />（截止 2019.01，已知"
-#~ "支持此特性的驱动有 ath9k、ath10k、mwlwifi 和 mt76）"
-
-#~ msgid "default-on (kernel)"
-#~ msgstr "默认开启（内核）"
-
-#~ msgid "heartbeat (kernel)"
-#~ msgstr "心跳（内核）"
-
-#~ msgid "netdev (kernel)"
-#~ msgstr "网络设备（内核）"
-
-#~ msgid "none (kernel)"
-#~ msgstr "无（内核）"
-
-#~ msgid "timer (kernel)"
-#~ msgstr "计时器（内核）"
-
-#~ msgid "Enable/Disable"
-#~ msgstr "启用/禁用"
-
-#~ msgid "No signal"
-#~ msgstr "无信号"
-
-#~ msgid "Free"
-#~ msgstr "空闲数"
-
-#~ msgid "Switch Port Mask"
-#~ msgstr "交换机端口掩码"
-
-#~ msgid "Switch Speed Mask"
-#~ msgstr "交换机速率掩码"
-
-#~ msgid "USB Device"
-#~ msgstr "USB 设备"
-
-#~ msgid "USB Ports"
-#~ msgstr "USB 接口"
-
-#~ msgid "Define a name for this network."
-#~ msgstr "为网络定义名称。"
-
-#~ msgid "Leasetime remaining"
-#~ msgstr "剩余租赁时间"
-
-#~ msgid "Bad address specified!"
-#~ msgstr "指定了错误的地址！"
-
-#~ msgid "Install iputils-traceroute6 for IPv6 traceroute"
-#~ msgstr "安装 iputils-traceroute6 以进行 IPv6 路由追踪"
-
-#~ msgid "Loading"
-#~ msgstr "加载中"
-
-#~ msgid "Waiting for command to complete..."
-#~ msgstr "等待命令执行完成…"
-
-#~ msgid "Assign interfaces..."
-#~ msgstr "分配接口…"
-
-#~ msgid "MB/s"
-#~ msgstr "MB/s"
-
-#~ msgid "Network without interfaces."
-#~ msgstr "无接口的网络。"
-
-#~ msgid ""
-#~ "Really delete this interface? The deletion cannot be undone! You might "
-#~ "lose access to this device if you are connected via this interface"
-#~ msgstr ""
-#~ "确定要删除此接口？删除操作无法撤消！若您删除此接口，可能导致无法再访问此设"
-#~ "备"
-
-#~ msgid "Realtime Connections"
-#~ msgstr "实时连接"
-
-#~ msgid "Realtime Load"
-#~ msgstr "实时负载"
-
-#~ msgid "Realtime Traffic"
-#~ msgstr "实时流量"
-
-#~ msgid "Realtime Wireless"
-#~ msgstr "实时无线"
-
-#~ msgid "Swap"
-#~ msgstr "Swap"
-
-#~ msgid "The firstboot command failed with code %d"
-#~ msgstr "firstboot 命令失败，代码 %d"
-
-#~ msgid "There are no active leases."
-#~ msgstr "没有已分配的租约。"
-
-#~ msgid ""
-#~ "This page gives an overview over currently active network connections."
-#~ msgstr "活跃的网络连接概况。"
-
-#~ msgid "dB"
-#~ msgstr "dB"
-
-#~ msgid "kB/s"
-#~ msgstr "kB/s"
-
-#~ msgid "kbit/s"
-#~ msgstr "kbit/s"
-
-#~ msgid "Caution: Configuration files will be erased"
-#~ msgstr "注意：配置文件将被删除"
-
-#~ msgid "Changes applied."
-#~ msgstr "更改已应用。"
-
-#~ msgid "Configuration files will be kept"
-#~ msgstr "将保留配置文件"
-
-#~ msgid "Delete permission denied"
-#~ msgstr "删除没有权限"
-
-#~ msgid "Delete request failed: %d %s"
-#~ msgstr "删除请求失败：%d %s"
-
-#~ msgid "Device is rebooting..."
-#~ msgstr "设备正在重启…"
-
-#~ msgid "Keep settings"
-#~ msgstr "保留配置"
-
-#~ msgid "Rebooting..."
-#~ msgstr "正在重启…"
-
-#~ msgid ""
-#~ "Upload a sysupgrade-compatible image here to replace the running "
-#~ "firmware. Check \"Keep settings\" to retain the current configuration "
-#~ "(requires a compatible firmware image)."
-#~ msgstr ""
-#~ "上传一个 sysupgrade 格式的固件映像文件以替换当前运行的固件。勾选“保留配"
-#~ "置”以使更新后的系统仍然使用当前的系统配置（新的固件需要和当前固件兼容）。"
-
-#~ msgid ""
-#~ "Used for two different purposes: RADIUS NAS ID and 802.11r R0KH-ID. Not "
-#~ "needed with normal WPA(2)-PSK/WPA3-SAE."
-#~ msgstr ""
-#~ "用于两种不同的用途：RADIUS NAS ID 和 802.11r R0KH-ID，普通 WPA(2)-PSK/"
-#~ "WPA3-SAE 不需要。"
-
-#~ msgid "Waiting for changes to be applied..."
-#~ msgstr "正在应用更改…"
-
-#~ msgid "(%s available)"
-#~ msgstr "（%s 可用）"
-
-#~ msgid "-- match by device --"
-#~ msgstr "-- 根据设备匹配 --"
-
-#~ msgid "Caution: System upgrade will be forced"
-#~ msgstr "注意：将强制进行系统升级"
-
-#~ msgid "Check"
-#~ msgstr "检查"
-
-#~ msgid "Checksum"
-#~ msgstr "校验值"
-
-#~ msgid "Enable this mount"
-#~ msgstr "启用此挂载点"
-
-#~ msgid "Enable this swap"
-#~ msgstr "启用此 swap 分区"
-
-#~ msgid "Flash Firmware"
-#~ msgstr "刷新固件"
-
-#~ msgid "Flashing..."
-#~ msgstr "正在刷写…"
-
-#~ msgid "Mount Entry"
-#~ msgstr "挂载项目"
-
-#~ msgid "Proceed"
-#~ msgstr "执行"
-
-#~ msgid "Really reset all changes?"
-#~ msgstr "确定要放弃所有更改？"
-
-#~ msgid "Root"
-#~ msgstr "Root"
-
-#~ msgid "Swap Entry"
-#~ msgstr "Swap 节点"
-
-#~ msgid "The backup archive does not appear to be a valid gzip file."
-#~ msgstr "备份存档似乎不是有效的 gzip 文件。"
-
-#~ msgid ""
-#~ "The filesystem that was used to format the memory (<abbr title=\"for "
-#~ "example\">e.g.</abbr> <samp><abbr title=\"Third Extended "
-#~ "Filesystem\">ext3</abbr></samp>)"
-#~ msgstr ""
-#~ "用于格式化存储器的文件系统（例如：<samp><abbr title=\"Third Extended "
-#~ "Filesystem\">ext3</abbr></samp>）"
-
-#~ msgid ""
-#~ "The flash image was uploaded. Below is the checksum and file size listed, "
-#~ "compare them with the original file to ensure data integrity.<br /> Click "
-#~ "\"Proceed\" below to start the flash procedure."
-#~ msgstr ""
-#~ "固件已上传，请注意核对文件大小和校验值！<br />点击下面的“继续”开始刷写，刷"
-#~ "新过程中切勿断电！"
-
-#~ msgid "Verify"
-#~ msgstr "验证"
-
-#~ msgid "overlay"
-#~ msgstr "覆盖"
-
-#~ msgid "Change login password"
-#~ msgstr "更改登录密码"
-
-#~ msgid "Changing password…"
-#~ msgstr "正在更改密码…"
-
-#~ msgid "Disabled (default)"
-#~ msgstr "已禁用（默认）"
-
-#~ msgid "Loading SSH keys…"
-#~ msgstr "正在加载 SSH 密钥…"
-
-#~ msgid "Saving keys…"
-#~ msgstr "正在保存密钥…"
-
-#~ msgid "Specifies the listening port of this <em>Dropbear</em> instance"
-#~ msgstr "指定此 <em>Dropbear</em> 实例的监听端口"
-
-#~ msgid "Switch %q (%s)"
-#~ msgstr "交换机 %q（%s）"
-
-#~ msgid "VLANs on %q (%s)"
-#~ msgstr "%q（%s）上的 VLAN"
-
-#~ msgid "Antenna 1"
-#~ msgstr "天线 1"
-
-#~ msgid "Antenna 2"
-#~ msgstr "天线 2"
-
-#~ msgid "Antenna Configuration"
-#~ msgstr "天线配置"
-
-#~ msgid "Back to overview"
-#~ msgstr "返回至概况"
-
-#~ msgid "Back to scan results"
-#~ msgstr "返回至扫描结果"
-
-#~ msgid "Broadcom 802.11%s Wireless Controller"
-#~ msgstr "Broadcom 802.11%s 无线控制器"
-
-#~ msgid "Broadcom BCM%04x 802.11 Wireless Controller"
-#~ msgstr "Broadcom BCM%04x 802.11 无线控制器"
-
-#~ msgid ""
-#~ "Channel %d is not available in the %s regulatory domain and has been auto-"
-#~ "adjusted to %d."
-#~ msgstr "信道 %d 在 %s 监管区域内不可用并已自动调整到 %d。"
-
-#~ msgid "Common Configuration"
-#~ msgstr "一般配置"
-
-#~ msgid "Connect"
-#~ msgstr "连接"
-
-#~ msgid "Connection Limit"
-#~ msgstr "连接数限制"
-
-#~ msgid "Cover the following interface"
-#~ msgstr "包括以下接口"
-
-#~ msgid "Cover the following interfaces"
-#~ msgstr "包括以下接口"
-
-#~ msgid "Create Interface"
-#~ msgstr "创建新接口"
-
-#~ msgid "Create a bridge over multiple interfaces"
-#~ msgstr "在多个接口上创建桥接"
-
-#~ msgid "Diversity"
-#~ msgstr "差异"
-
-#~ msgid "Edit this interface"
-#~ msgstr "编辑此接口"
-
-#~ msgid "Frame Bursting"
-#~ msgstr "帧突发"
-
-#~ msgid ""
-#~ "Further information about WireGuard interfaces and peers at <a "
-#~ "href=\"http://wireguard.com\">wireguard.com</a>."
-#~ msgstr ""
-#~ "有关 WireGuard 接口和 Peer 的更多信息：<a href=\"http://wireguard."
-#~ "com\">wireguard.com</a>。"
-
-#~ msgid "Generic 802.11%s Wireless Controller"
-#~ msgstr "通用 802.11%s 无线控制器"
-
-#~ msgid "HT mode (802.11n)"
-#~ msgstr "HT 模式（802.11n）"
-
-#~ msgid "Install package %q"
-#~ msgstr "安装软件包 %q"
-
-#~ msgid "Interface Overview"
-#~ msgstr "接口总览"
-
-#~ msgid "Locked to channel %s used by: %s"
-#~ msgstr "信道道已被锁定为 %s，因为该信道被 %s 使用"
-
-#~ msgid ""
-#~ "Maximum length of the name is 15 characters including the automatic "
-#~ "protocol/bridge prefix (br-, 6in4-, pppoe- etc.)"
-#~ msgstr ""
-#~ "名称的最大长度为 15 个字符，包含根据协议类型，网桥自动添加上的名字前缀"
-#~ "（br-、6in4-、pppoe- 等）"
-
-#~ msgid "Missing protocol extension for proto %q"
-#~ msgstr "缺少协议 %q 的协议扩展"
-
-#~ msgid "Name of the new interface"
-#~ msgstr "新接口的名称"
-
-#~ msgid "No network configured on this device"
-#~ msgstr "本设备未配置网络"
-
-#~ msgid "No network name specified"
-#~ msgstr "未指定网络名"
-
-#~ msgid "No scan results available yet..."
-#~ msgstr "还没有可用的扫描结果…"
-
-#~ msgid "Note: interface name length"
-#~ msgstr "注意：接口名称长度"
-
-#~ msgid ""
-#~ "On this page you can configure the network interfaces. You can bridge "
-#~ "several interfaces by ticking the \"bridge interfaces\" field and enter "
-#~ "the names of several network interfaces separated by spaces. You can also "
-#~ "use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation "
-#~ "<samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: "
-#~ "<samp>eth0.1</samp>)."
-#~ msgstr ""
-#~ "在此页面，您可以配置网络接口。您可以勾选“桥接接口”，并输入由空格分隔的多个"
-#~ "网络接口的名称来桥接多个接口。接口名称中可以使用 <abbr title=\"Virtual "
-#~ "Local Area Network\">VLAN</abbr> 记号 <samp>INTERFACE.VLANNR</samp>（例"
-#~ "如：<samp>eth0.1</samp>）。"
-
-#~ msgid "Package libiwinfo required!"
-#~ msgstr "需要 libiwinfo 软件包！"
-
-#~ msgid "Protocol of the new interface"
-#~ msgstr "新接口的协议"
-
-#~ msgid "Protocol support is not installed"
-#~ msgstr "未安装协议支持"
-
-#~ msgid ""
-#~ "Really delete this wireless network? The deletion cannot be undone! You "
-#~ "might lose access to this device if you are connected via this network."
-#~ msgstr ""
-#~ "确定要删除此无线网络？删除操作无法撤销！若您删除此无线网络，可能导致无法再"
-#~ "访问此设备。"
-
-#~ msgid "Receiver Antenna"
-#~ msgstr "接收天线"
-
-#~ msgid "Repeat scan"
-#~ msgstr "重新扫描"
-
-#~ msgid "Replace entry"
-#~ msgstr "重置条目"
-
-#~ msgid "Scan request failed"
-#~ msgstr "扫描请求失败"
-
-#~ msgid "Separate Clients"
-#~ msgstr "隔离客户端"
-
-#~ msgid "Slot time"
-#~ msgstr "时隙"
-
-#~ msgid ""
-#~ "The <em>Device Configuration</em> section covers physical settings of the "
-#~ "radio hardware such as channel, transmit power or antenna selection which "
-#~ "are shared among all defined wireless networks (if the radio hardware is "
-#~ "multi-SSID capable). Per network settings like encryption or operation "
-#~ "mode are grouped in the <em>Interface Configuration</em>."
-#~ msgstr ""
-#~ "“设备配置”区域可配置无线的硬件参数，比如：信道、发射功率或发射天线，如果此"
-#~ "无线硬件支持多 SSID，则全部 SSID 共用此设备配置。“接口配置”区域则可配置接"
-#~ "口各自参数，如工作模式、加密方式等。"
-
-#~ msgid ""
-#~ "The <em>libiwinfo-lua</em> package is not installed. You must install "
-#~ "this component for working wireless configuration!"
-#~ msgstr "软件包 <em>libiwinfo-lua</em> 未安装，必须安装此组件以配置无线！"
-
-#~ msgid "The given network name is not unique"
-#~ msgstr "给定的网络名重复"
-
-#~ msgid ""
-#~ "The hardware is not multi-SSID capable and the existing configuration "
-#~ "will be replaced if you proceed."
-#~ msgstr "本机的硬件不支持多 SSID，如果继续，现有配置将被替换。"
-
-#~ msgid "The selected protocol needs a device assigned"
-#~ msgstr "所选的协议需要分配设备"
-
-#~ msgid ""
-#~ "There is no device assigned yet, please attach a network device in the "
-#~ "\"Physical Settings\" tab"
-#~ msgstr "尚未分配设备，请在“物理设置”选项卡中选择网络设备"
-
-#~ msgid "Transmission Rate"
-#~ msgstr "传送速率"
-
-#~ msgid "Transmit Power"
-#~ msgstr "无线电功率"
-
-#~ msgid "Uploaded File"
-#~ msgstr "上传的文件"
-
-#~ msgid "Wireless is restarting..."
-#~ msgstr "无线重启中…"
-
-#~ msgid "mixed WPA/WPA2"
-#~ msgstr "混合 WPA/WPA2"
-
-#~ msgid "open"
-#~ msgstr "开放式"
-
-#~ msgid "Advanced"
-#~ msgstr "高级"
-
-#~ msgid "Always off (%s)"
-#~ msgstr "总是关闭（%s）"
-
-#~ msgid "Always on (%s)"
-#~ msgstr "总是开启（%s）"
-
-#~ msgid "Apply anyway"
-#~ msgstr "强制应用"
-
-#~ msgid "Custom flash interval (%s)"
-#~ msgstr "自定义闪烁间隔（%s）"
-
-#~ msgid "Expecting %s"
-#~ msgstr "期望 %s"
-
-#~ msgid "Heartbeat interval (%s)"
-#~ msgstr "心跳间隔（%s）"
-
-#~ msgid "KiB"
-#~ msgstr "KiB"
-
-#~ msgid "Netmask"
-#~ msgstr "子网掩码"
-
-#~ msgid "Network device activity (%s)"
-#~ msgstr "网络设备活动（%s）"
-
-#~ msgid "Polling interval"
-#~ msgstr "轮询间隔"
-
-#~ msgid "Polling interval for status queries in seconds"
-#~ msgstr "状态查询的轮询间隔，以秒为单位"
-
-#~ msgid "Set up Time Synchronization"
-#~ msgstr "设置时间同步"
-
-#~ msgid "Switchport activity (%s)"
-#~ msgstr "交换口活动（%s）"
-
-#~ msgid "Synchronizing..."
-#~ msgstr "正在同步…"
-
-#~ msgid ""
-#~ "The device could not be reached within %d seconds after applying the "
-#~ "pending changes, which caused the configuration to be rolled back for "
-#~ "safety reasons. If you believe that the configuration changes are correct "
-#~ "nonetheless, proceed by applying anyway. Alternatively, you can dismiss "
-#~ "this warning and edit changes before attempting to apply again, or revert "
-#~ "all pending changes to keep the currently working configuration state."
-#~ msgstr ""
-#~ "在应用挂起的更改后 %d 秒内无法连接到此设备，出于安全原因导致配置回滚。如果"
-#~ "您认为配置的更改是正确的，请执行强制应用。或者您可以在再次尝试应用之前解除"
-#~ "此警告并编辑配置，或者恢复所有挂起的更改以保持当前正在工作的配置状态。"
-
-#~ msgid "The following changes have been reverted"
-#~ msgstr "以下更改已恢复"
-
-#~ msgid "Theme"
-#~ msgstr "主题"
-
-#~ msgid "There are no changes to apply."
-#~ msgstr "没有待应用的更改。"
-
-#~ msgid "There are no pending changes to revert!"
-#~ msgstr "没有挂起的更改可恢复！"
-
-#~ msgid "There are no pending changes!"
-#~ msgstr "没有挂起的更改！"
-
-#~ msgid ""
-#~ "This file may contain lines like 'server=/domain/1.2.3.4' or "
-#~ "'server=1.2.3.4' fordomain-specific or full upstream <abbr title=\"Domain "
-#~ "Name System\">DNS</abbr> servers."
-#~ msgstr ""
-#~ "此文件包含类似于“server=/domain/1.2.3.4”或“server=1.2.3.4”的行，用于解析特"
-#~ "定域名或指定上游 <abbr title=\"Domain Name System\">DNS</abbr> 服务器。"
-
-#~ msgid "Time Synchronization is not configured yet."
-#~ msgstr "尚未配置时间同步。"
-
-#~ msgid "Waiting for configuration to be applied… %ds"
-#~ msgstr "等待应用配置… %d 秒"
-
-#~ msgid "Wi-Fi activity (%s)"
-#~ msgstr "Wi-Fi 活动（%s）"
-
-#~ msgid "Wi-Fi client association (%s)"
-#~ msgstr "Wi-Fi 客户端关联（%s）"
-
-#~ msgid "Wi-Fi data reception (%s)"
-#~ msgstr "Wi-Fi 数据接收（%s）"
-
-#~ msgid "Wi-Fi data transmission (%s)"
-#~ msgstr "Wi-Fi 数据传输（%s）"
-
-#~ msgid "Wi-Fi on (%s)"
-#~ msgstr "Wi-Fi 开启（%s）"
-
-#~ msgid "Flashmemory write access (%s)"
-#~ msgstr "闪存写访问（%s）"
-
-#~ msgid ""
-#~ "one of:\n"
-#~ " - %s"
-#~ msgstr ""
-#~ "其一：\n"
-#~ " - %s"
-
-#~ msgid ""
-#~ "Your Internet Explorer is too old to display this page correctly. Please "
-#~ "upgrade it to at least version 7 or use another browser like Firefox, "
-#~ "Opera or Safari."
-#~ msgstr ""
-#~ "您的 IE 浏览器太老了，无法正常显示这个页面！请更新到 IE7 及以上或使用其他"
-#~ "浏览器，如 Firefox、Opera、Safari。"
-
-#~ msgid "kB"
-#~ msgstr "kB"
-
-#~ msgid ""
-#~ "When using a PSK, the PMK can be generated locally without inter AP "
-#~ "communications"
-#~ msgstr "当使用 PSK 时，PMK 可以在没有 AP 间通信的情况下在本地生成"
-
-#~ msgid ""
-#~ "Here you can paste public SSH-Keys (one per line) for SSH public-key "
-#~ "authentication."
-#~ msgstr "请在此处粘贴 SSH 公钥，每行一个，用于 SSH 公钥认证。"
-
-#~ msgid "Password successfully changed!"
-#~ msgstr "密码更改成功！"
-
-#~ msgid "Unknown Error, password not changed!"
-#~ msgstr "未知错误，密码未更改！"
-
-#~ msgid "Available packages"
-#~ msgstr "可用软件包"
-
-#~ msgid "Bind only to specific interfaces rather than wildcard address."
-#~ msgstr "仅绑定到特定接口，而不是全部地址。"
-
-#~ msgid ""
-#~ "Build/distribution specific feed definitions. This file will NOT be "
-#~ "preserved in any sysupgrade."
-#~ msgstr "由固件指定的软件源。此处的设置在任何系统升级中都不会被保留。"
-
-#~ msgid ""
-#~ "Custom feed definitions, e.g. private feeds. This file can be preserved "
-#~ "in a sysupgrade."
-#~ msgstr "自定义软件源地址，例如：私有的软件源。此文件在系统升级时将被保留。"
-
-#~ msgid "Custom feeds"
-#~ msgstr "自定义软件源"
-
-#~ msgid "Displaying only packages containing"
-#~ msgstr "只显示有内容的软件包"
-
-#~ msgid "Distribution feeds"
-#~ msgstr "发行版软件源"
-
-#~ msgid "Download and install package"
-#~ msgstr "下载并安装软件包"
-
-#~ msgid "Filter"
-#~ msgstr "过滤器"
-
-#~ msgid "Find package"
-#~ msgstr "查找软件包"
-
-#~ msgid "Free space"
-#~ msgstr "空闲空间"
-
-#~ msgid "General options for opkg"
-#~ msgstr "OPKG 基础配置"
-
-#~ msgid "Install"
-#~ msgstr "安装"
-
-#~ msgid "Installed packages"
-#~ msgstr "已安装软件包"
-
-#~ msgid "No package lists available"
-#~ msgstr "无可用软件列表"
-
-#~ msgid "OK"
-#~ msgstr "确认"
-
-#~ msgid "OPKG-Configuration"
-#~ msgstr "OPKG 配置"
-
-#~ msgid "Package lists are older than 24 hours"
-#~ msgstr "软件包列表已超过 24 小时未更新"
-
-#~ msgid "Package name"
-#~ msgstr "软件包名称"
-
-#~ msgid "Please update package lists first"
-#~ msgstr "请先更新软件包列表"
-
-#~ msgid "Size (.ipk)"
-#~ msgstr "大小（.ipk）"
-
-#~ msgid "Software"
-#~ msgstr "软件包"
-
-#~ msgid "Update lists"
-#~ msgstr "刷新列表"
-
-#~ msgid "Version"
-#~ msgstr "版本"
-
-#~ msgid "Disable DNS setup"
-#~ msgstr "停用 DNS 设定"
-
-#~ msgid "IPv4 and IPv6"
-#~ msgstr "IPv4 和 IPv6"
-
-#~ msgid "Lease validity time"
-#~ msgstr "有效租期"
-
-#~ msgid "Multicast address"
-#~ msgstr "多播地址"
-
-#~ msgid "Protocol family"
-#~ msgstr "协议族"
-
-#~ msgid "No chains in this table"
-#~ msgstr "本表中没有链"
-
-#~ msgid "Configuration files will be kept."
-#~ msgstr "配置文件将被保留。"
-
-#~ msgid "Note: Configuration files will be erased."
-#~ msgstr "注意：配置文件将被删除。"
-
-#~ msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-#~ msgstr "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-
-#~ msgid "Activate this network"
-#~ msgstr "激活此网络"
-
-#~ msgid "Hermes 802.11b Wireless Controller"
-#~ msgstr "Hermes 802.11b 无线控制器"
-
-#~ msgid "Interface reconnected"
-#~ msgstr "接口已重新连接"
-
-#~ msgid "Interface shut down"
-#~ msgstr "接口已关闭"
-
-#~ msgid "Prism2/2.5/3 802.11b Wireless Controller"
-#~ msgstr "Prism2/2.5/3 802.11b 无线控制器"
-
-#~ msgid "RaLink 802.11%s Wireless Controller"
-#~ msgstr "RaLink 802.11%s 无线控制器"
-
-#~ msgid ""
-#~ "Really shutdown interface \"%s\"? You might lose access to this device if "
-#~ "you are connected via this interface."
-#~ msgstr ""
-#~ "确定要关闭接口 \"%s\"？\\n如果您正在使用此接口连接路由器，关闭此网络可能导"
-#~ "致连接断开！"
-
-#~ msgid "Reconnecting interface"
-#~ msgstr "重连接口中..."
-
-#~ msgid "Shutdown this network"
-#~ msgstr "关闭此网络"
-
-#~ msgid "Wireless restarted"
-#~ msgstr "无线已重启"
-
-#~ msgid "Wireless shut down"
-#~ msgstr "无线已关闭"
-
-#~ msgid "Device unreachableX"
-#~ msgstr "无法连接到设备！"
-
-#~ msgid "DHCP Leases"
-#~ msgstr "DHCP 分配"
-
-#~ msgid "DHCPv6 Leases"
-#~ msgstr "DHCPv6 分配"
-
-#~ msgid ""
-#~ "Really delete this interface? The deletion cannot be undone! You might "
-#~ "lose access to this device if you are connected via this interface."
-#~ msgstr ""
-#~ "确定要删除此接口？删除操作无法撤销！\\n删除此接口，可能导致无法再访问路由"
-#~ "器！"
-
-#~ msgid ""
-#~ "Really shut down network? You might lose access to this device if you are "
-#~ "connected via this interface."
-#~ msgstr ""
-#~ "确定要关闭此网络？\\n如果您正在使用此接口连接路由器，关闭此网络可能导致连"
-#~ "接断开！"
-
-#~ msgid "Sort"
-#~ msgstr "排序"
-
-#~ msgid "help"
-#~ msgstr "帮助"
-
-#~ msgid "IPv4 WAN Status"
-#~ msgstr "IPv4 WAN 状态"
-
-#~ msgid "IPv6 WAN Status"
-#~ msgstr "IPv6 WAN 状态"

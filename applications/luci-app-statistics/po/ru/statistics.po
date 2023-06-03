@@ -676,9 +676,9 @@ msgstr "Мониторить процессы"
 msgid "Monitor remote ports"
 msgstr "Мониторить удаленные порты"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
-msgid "Monitoring %s and %s"
-msgstr "Мониторинг %s и %s"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
+msgid "Monitoring %s and %s, %s %s"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
@@ -772,10 +772,6 @@ msgstr "Мониторинг всех термальных зон"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:46
 msgid "Monitoring all thermal zones except %s"
 msgstr "Мониторинг всех термальных зон, кроме %s"
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
-msgid "Monitoring local listen ports"
-msgstr "Мониторинг локальных прослушиваемых портов"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
 msgid "Monitoring one OpenVPN instance"
@@ -1192,6 +1188,10 @@ msgstr "Сохраняемые промежутки времени"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:24
 msgid "Storing CSV data in %s"
 msgstr "Сохранение CSV данных в %s"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
+msgid "Summary of all ports"
+msgstr ""
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
 msgid "Syslog"
@@ -1637,6 +1637,10 @@ msgstr ""
 "Вам необходимо настроить <em>collectd</em> для сбора данных в файлы <em>."
 "rrd</em>."
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
+msgid "all local listening ports,"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
 msgstr "cURL плагин включён"
@@ -1649,6 +1653,10 @@ msgstr "cUrl"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
 msgstr "Настройка плагина «cUrl»"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "no summary"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
@@ -1668,12 +1676,12 @@ msgstr[0] "один тип файловой системы"
 msgstr[1] "%d типа файловых систем"
 msgstr[2] "%d типов файловых систем"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
-msgid "one local port"
-msgid_plural "%d local ports"
-msgstr[0] "один локальный порт"
-msgstr[1] "%d локальных порта"
-msgstr[2] "%d локальных портов"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
+msgid "one local"
+msgid_plural "%d local"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
@@ -1682,7 +1690,7 @@ msgstr[0] "одна точка монтирования"
 msgstr[1] "%d точки монтирования"
 msgstr[2] "%d точек монтирования"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] "один удалённый порт"
@@ -1693,95 +1701,6 @@ msgstr[2] "%d удалённых портов"
 msgid "reduces rrd size"
 msgstr "позволяет уменьшить размер RRD"
 
-#~ msgid ""
-#~ "When a host has not replied to this number of packets in a row, re-"
-#~ "resolve the hostname in DNS. Useful for dynamic DNS hosts."
-#~ msgstr ""
-#~ "Если хост не ответил на такое количество пакетов подряд, повторно "
-#~ "разрешить имя хоста в DNS. Полезно для хостов с динамической DNS."
-
-#~ msgid "Cache flush interval"
-#~ msgstr "Интервал сброса кэша"
-
-#~ msgid ""
-#~ "The statistics package uses <a href=\"https://collectd.org/\">Collectd</"
-#~ "a> to gather data and <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</"
-#~ "a> to render diagram images."
-#~ msgstr ""
-#~ "Приложение статистики использует <a href=\"https://collectd.org/"
-#~ "\">collectd</a> для сбора данных и <a href=\"http://oss.oetiker.ch/"
-#~ "rrdtool/\">RRDtool</a> для представления их в виде графиков."
-
-#~ msgid ""
-#~ "You can install additional collectd-mod-* plugins to enable more "
-#~ "statistics."
-#~ msgstr ""
-#~ "Вы можете установить плагины collectd-mod-* для включения дополнительной "
-#~ "статистики."
-
-#~ msgid "Action (target)"
-#~ msgstr "Действие (цель)"
-
-#~ msgid "Add matching rule"
-#~ msgstr "Добавить правило выборки"
-
-#~ msgid "Add multiple hosts separated by space."
-#~ msgstr "Добавить несколько хостов, разделённых пробелом"
-
-#~ msgid ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-#~ msgstr ""
-#~ "Collectd — это сервис для сбора данных из разных источников при помощи "
-#~ "плагинов. На этой странице вы можете изменить настройки collectd."
-
-#~ msgid "Destination ip range"
-#~ msgstr "Диапазон IP-адресов назначения"
-
-#~ msgid "Hold Ctrl to select multiple items or to deselect entries."
-#~ msgstr ""
-#~ "Удерживая нажатой клавишу Ctrl, выберите несколько элементов или отмените "
-#~ "выбор записей."
-
-#~ msgid "Incoming interface"
-#~ msgstr "Входящий интерфейс"
-
-#~ msgid "Monitor all sensors"
-#~ msgstr "Мониторить все сенсоры"
-
-#~ msgid "Name of the rule"
-#~ msgstr "Имя правила"
-
-#~ msgid "Network protocol"
-#~ msgstr "Сетевой протокол"
-
-#~ msgid "Options"
-#~ msgstr "Опции"
-
-#~ msgid "Outgoing interface"
-#~ msgstr "Исходящий интерфейс"
-
-#~ msgid "Processes to monitor separated by space"
-#~ msgstr "Процессы для мониторинга (разделённые пробелом)"
-
-#~ msgid "Source ip range"
-#~ msgstr "Диапазон IP-адресов источника"
-
-#~ msgid "e.g. br-ff"
-#~ msgstr "напр. br-ff"
-
-#~ msgid "e.g. br-lan"
-#~ msgstr "напр. br-lan"
-
-#~ msgid "e.g. reject-with tcp-reset"
-#~ msgstr "напр. reject-with tcp-reset"
-
-#~ msgid "max. 16 chars"
-#~ msgstr "не более 16 символов"
-
-#~ msgid "seconds; multiple separated by space"
-#~ msgstr "секунд; значения разделенные пробелом"
-
-#~ msgid "server interfaces"
-#~ msgstr "Интерфейсы сервера"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "summary of all ports"
+msgstr ""

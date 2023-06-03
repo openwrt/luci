@@ -666,8 +666,8 @@ msgstr "Sledovat procesy"
 msgid "Monitor remote ports"
 msgstr "Sledovat vzdálené porty"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
-msgid "Monitoring %s and %s"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
+msgid "Monitoring %s and %s, %s %s"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
@@ -761,10 +761,6 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:46
 msgid "Monitoring all thermal zones except %s"
-msgstr ""
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
-msgid "Monitoring local listen ports"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
@@ -1177,6 +1173,10 @@ msgstr "Uložené časové rozsahy"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:24
 msgid "Storing CSV data in %s"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
+msgid "Summary of all ports"
 msgstr ""
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
@@ -1614,6 +1614,10 @@ msgid ""
 "files."
 msgstr ""
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
+msgid "all local listening ports,"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
 msgstr ""
@@ -1626,6 +1630,10 @@ msgstr "cUrl"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
 msgstr "Nastavení modulu cUrl"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "no summary"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
@@ -1645,9 +1653,9 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
-msgid "one local port"
-msgid_plural "%d local ports"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
+msgid "one local"
+msgid_plural "%d local"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -1659,7 +1667,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] ""
@@ -1670,89 +1678,6 @@ msgstr[2] ""
 msgid "reduces rrd size"
 msgstr "redukovaná velikost rrd"
 
-#~ msgid "Cache flush interval"
-#~ msgstr "Interval vyprazdňování mezipaměti"
-
-#~ msgid ""
-#~ "The statistics package uses <a href=\"https://collectd.org/\">Collectd</"
-#~ "a> to gather data and <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</"
-#~ "a> to render diagram images."
-#~ msgstr ""
-#~ "Balíček statistiky používá <a href=\"https://collectd.org/\">Collectd</a> "
-#~ "ke sběru dat a <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</a> pro "
-#~ "vykreslování diagramů."
-
-#~ msgid ""
-#~ "You can install additional collectd-mod-* plugins to enable more "
-#~ "statistics."
-#~ msgstr ""
-#~ "Pro povolení dalších statistik můžete nainstalovat další collectd-mod-* "
-#~ "zásuvné moduly."
-
-#~ msgid "Action (target)"
-#~ msgstr "Akce (cíl)"
-
-#~ msgid "Add matching rule"
-#~ msgstr "Přidat pravidlo pro výběr"
-
-#~ msgid "Add multiple hosts separated by space."
-#~ msgstr "Přidat více hostů, oddělených mezerou"
-
-#~ msgid ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-#~ msgstr ""
-#~ "Collectd je malý daemon pro shromažďování dat z nejrůznějších zdrojů zkrz "
-#~ "rozdílné pluginy. Na této stránce můžete změnit obecná nastavení daemonu "
-#~ "collectd."
-
-#~ msgid "Destination ip range"
-#~ msgstr "Rozsah cílových IP adres"
-
-#~ msgid "Hold Ctrl to select multiple items or to deselect entries."
-#~ msgstr ""
-#~ "Chcete-li vybrat více nebo zrušit výběr některých položek, podržte "
-#~ "klávesu Ctrl."
-
-#~ msgid "Incoming interface"
-#~ msgstr "Příchozí rozhraní"
-
-#~ msgid "Monitor all sensors"
-#~ msgstr "Sledovat všechny senzory"
-
-#~ msgid "Name of the rule"
-#~ msgstr "Název pravidla"
-
-#~ msgid "Network protocol"
-#~ msgstr "Síťový protokol"
-
-#~ msgid "Options"
-#~ msgstr "Možnosti"
-
-#~ msgid "Outgoing interface"
-#~ msgstr "Odchozí rozhraní"
-
-#~ msgid "Processes to monitor separated by space"
-#~ msgstr "Sledované procesy (oddělte mezerou)"
-
-#~ msgid "Source ip range"
-#~ msgstr "Rozsah zdrojových IP"
-
-#~ msgid "e.g. br-ff"
-#~ msgstr "např. br-ff"
-
-#~ msgid "e.g. br-lan"
-#~ msgstr "např. br-lan"
-
-#~ msgid "e.g. reject-with tcp-reset"
-#~ msgstr "např. reject-with tcp-reset"
-
-#~ msgid "max. 16 chars"
-#~ msgstr "max. 16 znaků"
-
-#~ msgid "seconds; multiple separated by space"
-#~ msgstr "sekundy, více hodnot oddělte pomocí mezery"
-
-#~ msgid "server interfaces"
-#~ msgstr "rozhraní serveru"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "summary of all ports"
+msgstr ""

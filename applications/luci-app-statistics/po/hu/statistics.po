@@ -668,8 +668,8 @@ msgstr "Folyamatok megfigyelése"
 msgid "Monitor remote ports"
 msgstr "Távoli portok megfigyelése"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
-msgid "Monitoring %s and %s"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
+msgid "Monitoring %s and %s, %s %s"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
@@ -758,10 +758,6 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:46
 msgid "Monitoring all thermal zones except %s"
-msgstr ""
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
-msgid "Monitoring local listen ports"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
@@ -1171,6 +1167,10 @@ msgstr "Tárolt időszakok"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:24
 msgid "Storing CSV data in %s"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
+msgid "Summary of all ports"
 msgstr ""
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
@@ -1626,6 +1626,10 @@ msgid ""
 "files."
 msgstr ""
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
+msgid "all local listening ports,"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
 msgstr ""
@@ -1638,6 +1642,10 @@ msgstr "cUrl"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
 msgstr "cUrl bővítmény beállítása"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "no summary"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
@@ -1655,9 +1663,9 @@ msgid_plural "%d filesystem types"
 msgstr[0] ""
 msgstr[1] ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
-msgid "one local port"
-msgid_plural "%d local ports"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
+msgid "one local"
+msgid_plural "%d local"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -1667,7 +1675,7 @@ msgid_plural "%d mounts"
 msgstr[0] ""
 msgstr[1] ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] ""
@@ -1677,89 +1685,6 @@ msgstr[1] ""
 msgid "reduces rrd size"
 msgstr "csökkenti az RRD méretét"
 
-#~ msgid "Cache flush interval"
-#~ msgstr "Gyorsítótár-ürítés időköze"
-
-#~ msgid ""
-#~ "The statistics package uses <a href=\"https://collectd.org/\">Collectd</"
-#~ "a> to gather data and <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</"
-#~ "a> to render diagram images."
-#~ msgstr ""
-#~ "A statisztikák csomag a <a href=\"https://collectd.org/\">Collectd</a> "
-#~ "démont használja adatgyűjtéshez, valamint az <a href=\"http://oss.oetiker."
-#~ "ch/rrdtool/\">RRDtool</a> eszközt a diagramok megjelenítéséhez."
-
-#~ msgid ""
-#~ "You can install additional collectd-mod-* plugins to enable more "
-#~ "statistics."
-#~ msgstr ""
-#~ "Telepíthet további collectd-mod-* bővítményeket is több statisztika "
-#~ "engedélyezéséhez."
-
-#~ msgid "Action (target)"
-#~ msgstr "Művelet (cél)"
-
-#~ msgid "Add matching rule"
-#~ msgstr "Illeszkedési szabály hozzáadása"
-
-#~ msgid "Add multiple hosts separated by space."
-#~ msgstr "Több gép hozzáadása szóközzel elválasztva."
-
-#~ msgid ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-#~ msgstr ""
-#~ "A collectd változatos forrásokból különféle bővítményeken keresztül "
-#~ "történő adatgyűjtésre szolgáló kis méretű démon. Ezen az oldalon "
-#~ "változtathatja meg a collectd démon általános beállításait."
-
-#~ msgid "Destination ip range"
-#~ msgstr "Cél IP-tartomány"
-
-#~ msgid "Hold Ctrl to select multiple items or to deselect entries."
-#~ msgstr ""
-#~ "Tartsa nyomva a Ctrl billentyűt több elem kijelöléséhez vagy bejegyzések "
-#~ "kijelölésének eltávolításához."
-
-#~ msgid "Incoming interface"
-#~ msgstr "Bejövő csatoló"
-
-#~ msgid "Monitor all sensors"
-#~ msgstr "Összes érzékelő megfigyelése"
-
-#~ msgid "Name of the rule"
-#~ msgstr "A szabály neve"
-
-#~ msgid "Network protocol"
-#~ msgstr "Hálózati protokoll"
-
-#~ msgid "Options"
-#~ msgstr "Beállítások"
-
-#~ msgid "Outgoing interface"
-#~ msgstr "Kimenő csatoló"
-
-#~ msgid "Processes to monitor separated by space"
-#~ msgstr "Megfigyelendő folyamatok szóközzel elválasztva"
-
-#~ msgid "Source ip range"
-#~ msgstr "Forrás IP-tartomány"
-
-#~ msgid "e.g. br-ff"
-#~ msgstr "például br-ff"
-
-#~ msgid "e.g. br-lan"
-#~ msgstr "például br-lan"
-
-#~ msgid "e.g. reject-with tcp-reset"
-#~ msgstr "például reject-with tcp-reset"
-
-#~ msgid "max. 16 chars"
-#~ msgstr "legfeljebb 16 karakter"
-
-#~ msgid "seconds; multiple separated by space"
-#~ msgstr "másodpercek; több is lehet szóközzel elválasztva"
-
-#~ msgid "server interfaces"
-#~ msgstr "kiszolgáló csatolók"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "summary of all ports"
+msgstr ""

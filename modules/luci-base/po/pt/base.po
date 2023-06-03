@@ -400,6 +400,7 @@ msgid "ANSI T1.413"
 msgstr "ANSI T1.413"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:95
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:65
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:94
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:91
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:68
@@ -1090,6 +1091,7 @@ msgstr "Grupo de Autenticação"
 msgid "Authentication"
 msgstr "Autenticação"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:76
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:82
 msgid "Authentication Type"
@@ -1107,6 +1109,8 @@ msgstr "Autorização Requerida"
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:120
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:24
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:107
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:116
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:113
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:51
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:96
@@ -1429,6 +1433,10 @@ msgstr ""
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
 "Certificado da CA; se em branco, será salvo depois da primeira ligação."
+
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:79
+msgid "CHAP"
+msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:7
 msgid "CLAT configuration failed"
@@ -2368,6 +2376,8 @@ msgstr "Desativar esta rede"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:13
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:121
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:108
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:117
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:114
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:52
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:97
@@ -2802,6 +2812,7 @@ msgstr "Ativar a atualização dinâmica do endpoint HE.net"
 msgid "Enable IPv6"
 msgstr "Ativar o IPv6"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:101
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
 msgid "Enable IPv6 negotiation"
 msgstr "Ativar a negociação de IPv6"
@@ -2944,6 +2955,8 @@ msgstr "Ative a inundação unicast"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:243
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:353
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:109
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:118
 msgid "Enabled"
 msgstr "Ativado"
 
@@ -3993,6 +4006,7 @@ msgstr "IPsec XFRM"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:88
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:89
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:90
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:96
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:87
 msgid "IPv4"
 msgstr "IPv4"
@@ -4072,6 +4086,10 @@ msgstr "IPv4+IPv6"
 msgid "IPv4-in-IPv4 (RFC2003)"
 msgstr "IPv4-in-IPv4 (RFC2003)"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:95
+msgid "IPv4/IPv6"
+msgstr ""
+
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:127
 msgid "IPv4/IPv6 (both - defaults to IPv4)"
 msgstr "IPv4/IPv6 (ambos - predefinição é IPv4)"
@@ -4092,6 +4110,7 @@ msgstr "Tabela de tráfego IPv4/IPv6 \"%h\""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:98
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:99
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:100
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:97
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:89
 msgid "IPv6"
 msgstr "IPv6"
@@ -4278,12 +4297,14 @@ msgstr ""
 "confirmar as configurações, caso contrário, as alterações serão revertidas."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:953
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:134
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:122
 msgid "If unchecked, no default route is configured"
 msgstr "Se desmarcado, não é configurada uma rota pré-definida"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:145
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
 msgid "If unchecked, the advertised DNS server addresses are ignored"
@@ -4601,6 +4622,7 @@ msgid "Invalid"
 msgstr "Inválido"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:68
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:100
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:97
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:74
@@ -5254,6 +5276,10 @@ msgstr "MAP / LW4over6"
 msgid "MAP rule is invalid"
 msgstr "A regra MAC é inválida"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:24
+msgid "MBIM Cellular"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:223
 msgid "MD5"
 msgstr "MD5"
@@ -5352,6 +5378,7 @@ msgid "Maximum allowed size of EDNS0 UDP packets."
 msgstr "Tamanho máximo permitido dos pacotes UDP EDNS0."
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
 msgid "Maximum amount of seconds to wait for the modem to become ready"
 msgstr ""
@@ -5529,6 +5556,7 @@ msgid "Modem default"
 msgstr "Predefinição do modem"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:73
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:54
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:82
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:65
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:73
@@ -5545,6 +5573,7 @@ msgid "Modem information query failed"
 msgstr "A consulta das informações do modem falhou"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:119
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
 msgid "Modem init timeout"
@@ -6005,6 +6034,7 @@ msgstr "Sem caracter curinga"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:159
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:183
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:80
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:112
 msgid "None"
 msgstr "Nenhum"
@@ -6440,6 +6470,7 @@ msgstr "Substitua a tabela de roteamento IPv6"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:69
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:74
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:132
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:194
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
@@ -6519,11 +6550,20 @@ msgstr ""
 msgid "Owner"
 msgstr "Dono"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:78
+msgid "PAP"
+msgstr ""
+
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:77
+msgid "PAP/CHAP"
+msgstr ""
+
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:109
 msgid "PAP/CHAP (both)"
 msgstr "PAP/CHAP (ambos)"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:111
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:88
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:120
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:107
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:45
@@ -6537,6 +6577,7 @@ msgid "PAP/CHAP password"
 msgstr "Password PAP/CHAP"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:109
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:83
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:115
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:105
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:43
@@ -6549,6 +6590,7 @@ msgstr "Password PAP/CHAP"
 msgid "PAP/CHAP username"
 msgstr "Utilizador PAP/CHAP"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:94
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:114
 msgid "PDP Type"
 msgstr "Tipo de PDP"
@@ -6558,6 +6600,7 @@ msgid "PID"
 msgstr "PID"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:106
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:73
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:105
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:102
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:79
@@ -10002,6 +10045,10 @@ msgstr "Tempo de atividade"
 msgid "Use <code>/etc/ethers</code>"
 msgstr "Usar <code>/etc/ethers</code>"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:106
+msgid "Use DHCP"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:295
 msgid "Use DHCP advertised servers"
 msgstr "Usar servidores DHCP anunciados"
@@ -10010,7 +10057,12 @@ msgstr "Usar servidores DHCP anunciados"
 msgid "Use DHCP gateway"
 msgstr "Usar a gateway do DHCP"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:115
+msgid "Use DHCPv6"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:144
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:132
 msgid "Use DNS servers advertised by peer"
@@ -10071,16 +10123,19 @@ msgid "Use builtin IPv6-management"
 msgstr "Use o gestão do IPv6 embarcado"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:961
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:148
 msgid "Use custom DNS servers"
 msgstr "Usar servidores DNS personalizados"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:953
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:133
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:121
 msgid "Use default gateway"
 msgstr "Usar gateway pre-definida"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:975
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:138
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:164
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:126
 msgid "Use gateway metric"
@@ -11260,1142 +11315,3 @@ msgstr "sim"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Voltar"
-
-#~ msgid "ATU-C System Vendor ID"
-#~ msgstr "ID do vendedor de sistema ATU-C"
-
-#~ msgid "Aggregate Transmit Power (ACTATP)"
-#~ msgstr ""
-#~ "Potência de Transmissão Agregada (<abbr title=\"Aggregate Transmit "
-#~ "Power\">ACTATP</abbr>)"
-
-#~ msgctxt "VLAN port state"
-#~ msgid "Do not participate"
-#~ msgstr "Não participar"
-
-#~ msgctxt "VLAN port state"
-#~ msgid "Egress tagged"
-#~ msgstr "Egresso marcado"
-
-#~ msgctxt "VLAN port state"
-#~ msgid "Egress untagged"
-#~ msgstr "Egresso desmarcado"
-
-#~ msgid "Errored seconds (ES)"
-#~ msgstr "Segundos com erro (ES)"
-
-#~ msgid "Forward Error Correction Seconds (FECS)"
-#~ msgstr ""
-#~ "Encaminhar segundos da correção de erros ( <abbr title=\"Forward Error "
-#~ "Correction Seconds\">FECS</abbr>)"
-
-#~ msgid "Header Error Code Errors (HEC)"
-#~ msgstr ""
-#~ "Erros de Código de Erro de Cabeçalho (<abbr title=\"Header Error "
-#~ "Code\">HEC</abbr>)"
-
-#~ msgid "Latency"
-#~ msgstr "Latência"
-
-#~ msgid "Line Attenuation (LATN)"
-#~ msgstr "Atenuação de Linha (<abbr title=\"Line Attenuation\">LATN</abbr>)"
-
-#~ msgid "Loss of Signal Seconds (LOSS)"
-#~ msgstr ""
-#~ "Segundos de Perda de Sinal (<abbr title=\"Loss of Signal Seconds\">LOSS</"
-#~ "abbr>)"
-
-#~ msgid "Max. Attainable Data Rate (ATTNDR)"
-#~ msgstr ""
-#~ "Taxa de Dados Atingível Máxima (<abbr title=\"Maximum Attainable Data "
-#~ "Rate\">ATTNDR</abbr>)"
-
-#~ msgid "Noise Margin (SNR)"
-#~ msgstr "Margem de Ruído (SNR)"
-
-#~ msgid "Non Pre-emptive CRC errors (CRC_P)"
-#~ msgstr ""
-#~ "Erros CRC Não Preemptivos<abbr title=\"Non Pre-emptive CRC "
-#~ "errors\">CRC_P</abbr>"
-
-#~ msgid "Power Management Mode"
-#~ msgstr "Modo de Gestão de Energia"
-
-#~ msgid "Pre-emptive CRC errors (CRCP_P)"
-#~ msgstr ""
-#~ "Erros CRC Preemptivos<abbr title=\"Pre-emptive CRC errors\">CRCP_P</abbr>"
-
-#~ msgctxt "VLAN port state"
-#~ msgid "Primary VLAN ID"
-#~ msgstr "ID primária da VLAN"
-
-#~ msgid "Severely Errored Seconds (SES)"
-#~ msgstr ""
-#~ "Segundos com erro severos (<abbr title=\"Severely Errored Seconds\">SES</"
-#~ "abbr>)"
-
-#~ msgid "Signal Attenuation (SATN)"
-#~ msgstr "Atenuação do Sinal (<abbr title=\"Signal Attenuation\">SATN</abbr>)"
-
-#~ msgid "Unavailable Seconds (UAS)"
-#~ msgstr ""
-#~ "Segundos de indisponibilidade (<abbr title=\"Unavailable Seconds\">UAS</"
-#~ "abbr>)"
-
-#~ msgid ""
-#~ "Avoid uselessly triggering dial-on-demand links (filters SRV/SOA records "
-#~ "and names with underscores)."
-#~ msgstr ""
-#~ "Evite acionar inutilmente as ligações de discagem sob demanda (faz o "
-#~ "filtro dos registos SRV/SOA e os nomes com sublinhados)."
-
-#~ msgid "Filter useless"
-#~ msgstr "Filtrar inúteis"
-
-#~ msgid "Network Utilities"
-#~ msgstr "Ferramentas de Rede"
-
-#~ msgid "Back to configuration"
-#~ msgstr "Voltar à configuração"
-
-#~ msgid "Close list..."
-#~ msgstr "Fechar lista..."
-
-#~ msgid "Internal Server Error"
-#~ msgstr "Erro Interno do Servidor"
-
-#~ msgid "No files found"
-#~ msgstr "Não foram encontrados ficheiros"
-
-#~ msgid "Sorry, the server encountered an unexpected error."
-#~ msgstr "Lamento, o servidor encontrou um erro inesperado."
-
-#~ msgid "Do not forward queries that cannot be answered by public resolvers."
-#~ msgstr ""
-#~ "Não encaminhar pedidos que não possam ser respondidos por servidores "
-#~ "públicos de nomes."
-
-#~ msgid "Sytem running in recovery (initramfs) mode."
-#~ msgstr "Sistema em execução no modo de recuperação (initramfs)."
-
-#~ msgid ""
-#~ "A random, on the fly generated \"PrivateKey\", the key will not be saved "
-#~ "on the router"
-#~ msgstr ""
-#~ "Uma \"chave privada\" gerada aleatoriamente, a chave não será salva no "
-#~ "roteador"
-
-#~ msgid "For QR-Code support please install the qrencode package!"
-#~ msgstr "Para o suporte ao QR-Code, instale o pacote qrencode!"
-
-#~ msgid "Generate Key"
-#~ msgstr "Gerar chave"
-
-#~ msgid "Generate New QR-Code"
-#~ msgstr "Gere um novo QR-Code"
-
-#~ msgid "Generate new QR-Code"
-#~ msgstr "Gere um novo QR-Code"
-
-#~ msgid "Hide QR-Code"
-#~ msgstr "Oculte o QR-Code"
-
-#~ msgid "If available, the client's \"PresharedKey\""
-#~ msgstr "Caso esteja disponível, a \"PresharedKey\" do cliente"
-
-#~ msgid ""
-#~ "If there are any unsaved changes for this client, please save the "
-#~ "configuration before generating a QR-Code"
-#~ msgstr ""
-#~ "Caso haja alguma alteração não armazenada para este cliente, guarde a "
-#~ "configuração antes de gerar um QR-Code"
-
-#~ msgid "Loading QR-Code..."
-#~ msgstr "Carregando o QR-Code..."
-
-#~ msgid "No peers defined yet"
-#~ msgstr "Ainda não há pares definidos"
-
-#~ msgid "QR-Code"
-#~ msgstr "QR-Code"
-
-#~ msgid "Required. Base64-encoded public key of peer."
-#~ msgstr "Necessário. Chave Pública do parceiro codificada como Base64."
-
-#~ msgid "The \"PublicKey\" of that wg interface"
-#~ msgstr "A \"PublicKey\" daquela interface wg"
-
-#~ msgid ""
-#~ "The QR-Code works per wg interface, it will be refreshed with every "
-#~ "button click and transfers the following information:"
-#~ msgstr ""
-#~ "O QR-Code funciona através da interface wg, ela será atualizada a cada "
-#~ "clique do botão e transfere as seguintes informações:"
-
-#~ msgid ""
-#~ "The list of this client's \"AllowedIPs\" or \"0.0.0.0/0, ::/0\" if not "
-#~ "configured"
-#~ msgstr ""
-#~ "A lista dos \"IPs permitidos\" ou \"0.0.0.0/0, ::/0\" deste cliente caso "
-#~ "não esteja configurado"
-
-#~ msgid "Firewall (iptables)"
-#~ msgstr "Firewall (iptables)"
-
-#~ msgid "Firewall (nftables)"
-#~ msgstr "Firewall (nftables)"
-
-#~ msgid "Default %d"
-#~ msgstr "Predefinição %d"
-
-#~ msgid "The login request failed with error: %h"
-#~ msgstr "A solicitação de login falhou com o erro: %h"
-
-#~ msgid "Root directory for files served via TFTP."
-#~ msgstr "Diretório raiz para ficheiros disponibilizados pelo TFTP"
-
-#~ msgid "TFTP Settings"
-#~ msgstr "Definições TFTP"
-
-#~ msgid "Auto Refresh"
-#~ msgstr "Atualização Automática"
-
-#~ msgid "on"
-#~ msgstr "ligado"
-
-#~ msgid ""
-#~ "Required. IP addresses and prefixes that this peer is allowed to use "
-#~ "inside the tunnel. Usually the peer's tunnel IP addresses and the "
-#~ "networks the peer routes through the tunnel."
-#~ msgstr ""
-#~ "Obrigatório. Endereços IP e prefixos que este parceiro está autorizado a "
-#~ "usar dentro do túnel. Normalmente é o endereço IP do parceiro no túnel e "
-#~ "as redes que o parceiro roteia através do túnel."
-
-#~ msgid "Value must not be empty"
-#~ msgstr "O valor não pode ser vazio"
-
-#~ msgid ""
-#~ "Force upgrade: Select 'Force upgrade' to flash the image even if the "
-#~ "image format check fails. Use only if you are sure that the firmware is "
-#~ "correct and meant for your device!"
-#~ msgstr ""
-#~ "Atualização forçada: Selecione 'Atualização forçada' para gravar a imagem "
-#~ "ainda que a verificação do formato da imagem falhe. Use somente caso "
-#~ "tenha certeza que o firmware está correto e é compatível com o seu "
-#~ "aparelho!"
-
-#~ msgid "Grant access to the system route status"
-#~ msgstr "Conceder acesso ao estado de rota do sistema"
-
-#~ msgid "Host entries"
-#~ msgstr "Entradas de hosts"
-
-#~ msgid ""
-#~ "<br/>Note: you need to manually restart the cron service if the crontab "
-#~ "file was empty before editing."
-#~ msgstr ""
-#~ "<br/>Nota: você precisa reiniciar manualmente o serviço da cron se o "
-#~ "ficheiro crontab estava vazio antes da edição."
-
-#~ msgid ""
-#~ "Specify a TOS (Type of Service). Can be <code>inherit</code> (the outer "
-#~ "header inherits the value of the inner header), or an hexadecimal value "
-#~ "<code>00..FF</code> (optional)."
-#~ msgstr ""
-#~ "Especifique um TOS (Type of Service, tipo de serviço). Pode ser "
-#~ "<code>inherit</code> (o cabeçalho externo herda o valor do cabeçalho "
-#~ "interno) ou um valor hexadecimal <code>00...FF</code> (opcional)."
-
-#~ msgid ""
-#~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router advertises itself as the default IPv6 gateway via <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> messages (to "
-#~ "<code>ff02::1</code>) and provides <abbr title=\"Prefix Delegation\">PD</"
-#~ "abbr> to downstream devices.</li> <li><strong>relay mode</strong>: Router "
-#~ "relays <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
-#~ "from upstream, and extends upstream (e.g. WAN) interface config and "
-#~ "prefix to downstream (e.g. LAN) interfaces.</li> <li><strong>hybrid mode</"
-#~ "strong>: Router does both server+relay; extends upstream config and "
-#~ "prefix downstream, and uses <abbr title=\"Prefix Delegation\">PD</abbr> "
-#~ "locally.</li></ul>"
-#~ msgstr ""
-#~ "<ul style=\"list-style-type:none;\"> <li><strong>modo do servidor</"
-#~ "strong>: O roteador se anuncia como o gateway IPv6 padrão através das "
-#~ "mensagens do <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</"
-#~ "abbr> (para <code>ff02::1</code>) e fornece a <abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr> (delegação do prefixo) para os aparelhos.</li> "
-#~ "<li><strong>modo de distribuição</strong>: O roteador transmite o <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> através da base "
-#~ "e a expande a configuração através da interface (como a WAN) e o prefixo "
-#~ "para os aparelhos (como a LAN).</li> <li><strong>modo híbrido</strong>: O "
-#~ "roteados faz ambos servidor+distribuidor; expande a configuração e os "
-#~ "prefixos para os aparelhos e usa <abbr title=\"Prefix Delegation\">PD</"
-#~ "abbr> (delegação do prefixo) localmente.</li></ul>"
-
-#~ msgid ""
-#~ "<ul style=\"list-style-type:none;\"> <li><strong>server mode</strong>: "
-#~ "Router assigns IPs and delegates prefixes (<abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr>) to downstream interfaces.</li> <li><strong>relay "
-#~ "mode</strong>: Router relays WAN interface config downstream. Helps "
-#~ "support upstream links that lack <abbr title=\"Prefix Delegation\">PD</"
-#~ "abbr>.</li> <li><strong>hybrid mode</strong>: Router does combination of "
-#~ "server+relay.</li></ul>"
-#~ msgstr ""
-#~ "<ul style=\"list-style-type:none;\"> <li><strong> Modo servidor</strong>: "
-#~ "O roteador atribui os IPs e delega os prefixos (<abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr>) para as interfaces dos aparelhos.</li> "
-#~ "<li><strong>modo de distribuição</strong>: O roteador distribui a "
-#~ "configuração da interface WAN para os aparelhos. Ajuda o suporte dos "
-#~ "links que não possuem <abbr title=\"Prefix Delegation\">PD</abbr> "
-#~ "(delegação de prefixo).</li> <li><strong>modo híbrido</strong>: O "
-#~ "roteador faz a combinação de servidor+distribuidor.</li></ul>"
-
-#~ msgid "Always, even if no public prefix is available."
-#~ msgstr "Sempre, ainda que nenhum prefixo público esteja disponível."
-
-#~ msgid "Announce as default router"
-#~ msgstr "Anuncie como o roteador padrão"
-
-#~ msgid "Announced DNS servers"
-#~ msgstr "Servidores DNS anunciados"
-
-#~ msgid "DHCPv6-Mode"
-#~ msgstr "Modo DHCPv6"
-
-#~ msgid "Default is on."
-#~ msgstr "A predefinição é estar ligado."
-
-#~ msgid ""
-#~ "Default is stateless + stateful<br /> <ul style=\"list-style-type:none;"
-#~ "\"> <li><strong>stateless</strong>: Router advertises prefixes, host uses "
-#~ "<abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> to self assign "
-#~ "its own address. No DHCPv6.</li> <li><strong>stateless + stateful</"
-#~ "strong>: SLAAC. In addition, router assigns an IPv6 address to a host via "
-#~ "DHCPv6.</li> <li><strong>stateful-only</strong>: No SLAAC. Router assigns "
-#~ "an IPv6 address to a host via DHCPv6.</li></ul>"
-#~ msgstr ""
-#~ "O padrão é stateless + stateful<br /> <ul style=\"list-style-type:none;"
-#~ "\"> <li><strong> stateless</strong>: O roteador faz o anúncio dos "
-#~ "prefixos, o host usa <abbr title=\"Stateless Address Auto Config\">SLAAC</"
-#~ "abbr> para a atribuição automática do próprio endereço. Sem o DHCPv6.</"
-#~ "li> <li><strong>stateless + stateful</strong>: SLAAC. Além disso, o "
-#~ "roteador atribui um endereço IPv6 a um host através do DHCPv6.</li> "
-#~ "<li><strong>stateful-only</strong>: Sem o SLAAC. O roteador atribui um "
-#~ "endereço IPv6 a um host através do DHCPv6.</li></ul>"
-
-#~ msgid "Learn routes from NDP"
-#~ msgstr "Aprenda as rotas a partir do NDP"
-
-#~ msgid ""
-#~ "Maximum time allowed between sending unsolicited <abbr title=\"Router "
-#~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds "
-#~ "(<code>600</code>)."
-#~ msgstr ""
-#~ "O tempo máximo permitido entre o envio não solicitado do <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. O tempo "
-#~ "predefinido são 600 segundos (<code>600</code>)."
-
-#~ msgid ""
-#~ "Minimum time allowed between sending unsolicited <abbr title=\"Router "
-#~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds "
-#~ "(<code>200</code>)."
-#~ msgstr ""
-#~ "O tempo mínimo permitido entre o envio não solicitado do <abbr "
-#~ "title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. O tempo "
-#~ "predefinido são 200 segundos (<code>200</code>)."
-
-#~ msgid "Override MAC address"
-#~ msgstr "Sobrescrever o endereço MAC"
-
-#~ msgid ""
-#~ "Reverts to disabled internally if there are no interfaces with boolean "
-#~ "<code>ndproxy_slave</code> set to 1. Think of <abbr title=\"Neighbour "
-#~ "Discovery Protocol\">NDP</abbr> Proxy as Proxy ARP for IPv6: unify hosts "
-#~ "on different physical hardware segments into the same IP subnet. Consists "
-#~ "of <abbr title=\"Neighbour Solicitation, Type 135\">NS</abbr> and <abbr "
-#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr> messages. <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr>-Proxy listens for <abbr "
-#~ "title=\"Neighbour Solicitation, Type 135\">NS</abbr> on an interface "
-#~ "marked with boolean <code>master</code> as 1 (i.e. upstream), then "
-#~ "queries the slave/internal interfaces for that target IP before finally "
-#~ "sending an <abbr title=\"Neighbour Advertisement, Type 136\">NA</abbr> "
-#~ "message. <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> is "
-#~ "effectively ARP for IPv6. <abbr title=\"Neighbour Solicitation, Type "
-#~ "135\">NS</abbr> and <abbr title=\"Neighbour Advertisement, Type 136\">NA</"
-#~ "abbr> detect reachability and duplicate addresses on a link, themselves "
-#~ "also a prerequisite for SLAAC autoconfig.<br /> <ul style=\"list-style-"
-#~ "type:none;\"> <li><strong>disabled</strong>: No <abbr title=\"Neighbour "
-#~ "Discovery Protocol\">NDP</abbr> messages are proxied through to "
-#~ "<code>ndproxy_slave</code> true interfaces.</li> <li><strong>relay mode</"
-#~ "strong>: Proxies <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> "
-#~ "messages from <code>master</code> to <code>ndproxy_slave</code> true "
-#~ "interfaces. Helps to support provider links without <abbr title=\"Prefix "
-#~ "Delegation\">PD</abbr>, and to firewall proxied hosts.</li> "
-#~ "<li><strong>hybrid mode</strong>: Relay mode is disabled unless the "
-#~ "interface boolean <code>master</code> is 1.</li></ul>"
-#~ msgstr ""
-#~ "Reverte internamente para desativado caso não haja interfaces com "
-#~ "<code>ndproxy_slave</code> com valor boleano definido como 1. Pense em "
-#~ "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> Proxy como um "
-#~ "Proxy ARP para o IPv6: unifique os hosts em diferentes segmentos de "
-#~ "hardware físico na mesma sub-rede IP. Consiste em <abbr title=\"Neighbour "
-#~ "Solicitation, Type 135\">NS</abbr> e nas mensagens <abbr "
-#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr>. <abbr "
-#~ "title=\"Neighbour Discovery Protocol\">NDP</abbr>-O Proxy escuta o <abbr "
-#~ "title=\"Neighbour Solicitation, Type 135\">NS</abbr> numa interface "
-#~ "marcada como <code>master</code> com valor boleano como 1 (ou seja, o "
-#~ "principal), depois consulta as interfaces escravo/interno para este IP "
-#~ "alvo antes de finalmente enviar uma mensagem <abbr title=\"Neighbour "
-#~ "Advertisement, Type 136\">NA</abbr>. <abbr title=\"Neighbour Discovery "
-#~ "Protocol\">O NDP</abbr> é um ARP efetivo para o IPv6. <abbr "
-#~ "title=\"Neighbour Solicitation, Type 135\">NS</abbr> e <abbr "
-#~ "title=\"Neighbour Advertisement, Type 136\">NA</abbr> detectam se os "
-#~ "endereços são alcançáveis e se estão duplicados num enlace, é um pré-"
-#~ "requisito próprio para a auto configuração do SLAAC.<br /> <ul "
-#~ "style=\"list-style-type:none;\"> <li><strong> desativado</strong>: Não as "
-#~ "mensagens do <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> são "
-#~ "enviadas pelas interfaces verdadeiras do proxy <code>ndproxy_slave</code>."
-#~ "</li> <li><strong>modo de distribuição</strong>: As mensagens dos proxies "
-#~ "<abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> a partir das "
-#~ "interfaces verdadeiras do <code>master</code> para o <code>ndproxy_slave</"
-#~ "code>. Ajuda a compatibilidade dos provedores dos enlaces sem <abbr "
-#~ "title=\"Prefix Delegation\">PD</abbr> e para os hosts que forem um proxy "
-#~ "do firewall.</li> <li><strong>modo híbrido</strong>: O modo de "
-#~ "distribuição está desativado até que a interface <code>master</code> "
-#~ "tenha um valor boleano igual a 1.</li></ul>"
-
-#~ msgid ""
-#~ "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 "
-#~ "Type 134\">RA</abbr> messages. Default is 1800 seconds (<code>1800</"
-#~ "code>). Max 9000 seconds."
-#~ msgstr ""
-#~ "O tempo de vida do roteador publicado nas mensagens <abbr title=\"Router "
-#~ "Advertisement, ICMPv6 Type 134\">RA</abbr>. O tempo predefinido são 1800 "
-#~ "segundos (<code>1800</code>). Com o máximo de 9000 segundos."
-
-#~ msgid "Set this interface as master for the dhcpv6 relay."
-#~ msgstr "Defina esta interface como mestre para o relé dhcpv6."
-
-#~ msgid "Static NDP-Proxy prefixes"
-#~ msgstr "Prefixos estáticos do PDN-Proxy"
-
-#~ msgid ""
-#~ "The <abbr title=\"Maximum Transmission Unit\">MTU</abbr> to be published "
-#~ "in <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
-#~ "messages. Default is 0 (<code>0</code>). Min 1280."
-#~ msgstr ""
-#~ "O <abbr title=\"Maximum Transmission Unit\">MTU</abbr> que será publicada "
-#~ "nas mensagens do <abbr title=\"Router Advertisement, ICMPv6 Type "
-#~ "134\">RA</abbr>. O valor predefinido é 0 (<code>0</code>). Com o mínimo "
-#~ "de 1280."
-
-#~ msgid ""
-#~ "The maximum hops to be published in <abbr title=\"Router "
-#~ "Advertisement\">RA</abbr> messages.<br />Default is 0 (<code>0</code>), "
-#~ "meaning unspecified. Max 255."
-#~ msgstr ""
-#~ "A quantidade de saltos máximos que serão publicados nas mensagens <abbr "
-#~ "title=\"Router Advertisement\">RA</abbr>.<br />O padrão é 0 (<code>0</"
-#~ "code>), ou seja, não definido. O valor máximo é 255."
-
-#~ msgid "stateful-only"
-#~ msgstr "somente com estado"
-
-#~ msgid "stateless"
-#~ msgstr "sem estado"
-
-#~ msgid "stateless + stateful"
-#~ msgstr "sem estado + com estado"
-
-#~ msgid "Bridge interfaces"
-#~ msgstr "Ativar brigde nas interfaces"
-
-#~ msgid "Creates a bridge over specified interface(s)"
-#~ msgstr "cria uma bridge sobre determinada(s) interface(s)"
-
-#~ msgid "Always announce default router"
-#~ msgstr "Anunciar sempre o router predefinido"
-
-#~ msgid "Announce as default router even if no public prefix is available."
-#~ msgstr ""
-#~ "Anunciar-se como gateway mesmo se não existir um prefixo público "
-#~ "disponível."
-
-#~ msgid "Default is stateless + stateful"
-#~ msgstr "A predefinição é sem estado + com estado"
-
-#~ msgid "NDP-Proxy"
-#~ msgstr "Proxy NDP"
-
-#~ msgid "Router Advertisement-Service"
-#~ msgstr "Serviço de Anúncio de Roteador"
-
-#~ msgid "Custom delegated IPv6-prefix"
-#~ msgstr "Prefixo IPv6 delegado personalizado"
-
-#~ msgid "Default Route"
-#~ msgstr "Rota Padrão"
-
-#~ msgid "Default gateway"
-#~ msgstr "Gateway predefinido"
-
-#~ msgid "Gateway metric"
-#~ msgstr "Métrica de Gateway"
-
-#~ msgid "Number of parallel threads used for compression"
-#~ msgstr "Quantidade de threads paralelas utilizadas para compressão"
-
-#~ msgid "Set VPN as Default Route"
-#~ msgstr "Definir VPN como a Rota Padrão"
-
-#~ msgid "ZRam Compression Streams"
-#~ msgstr "Fluxos de Compressão ZRam"
-
-#~ msgid "Profile"
-#~ msgstr "Perfil"
-
-#~ msgid ""
-#~ "Requires the 'full' version of wpad/hostapd and support from the wifi "
-#~ "driver <br />(as of Jan 2019: ath9k, ath10k, mwlwifi and mt76)"
-#~ msgstr ""
-#~ "Requer a versão 'completa' do wpad/hostapd e suporte do driver wifi <br /"
-#~ ">(a partir de Jan 2019: ath9k, ath10k, mwlwifi e mt76)"
-
-#~ msgid "Invalid value"
-#~ msgstr "Valor inválido"
-
-#~ msgid ""
-#~ "Specify a TOS (Type of Service). Can be either <code>inherit</code> (the "
-#~ "outer header inherits the value of the inner header) or an hexadecimal "
-#~ "value starting with <code>0x</code> (optional)."
-#~ msgstr ""
-#~ "Especifique um TOS (Tipo de Serviço). Pode ser <code>inherit</code> (o "
-#~ "cabeçalho externo herda o valor do cabeçalho interno) ou um valor "
-#~ "hexadecimal começando com <code>0x</code> (opcional)."
-
-#~ msgid ""
-#~ "Specify a Traffic Class. Can be either <code>inherit</code> (the outer "
-#~ "header inherits the value of the inner header) or an hexadecimal value "
-#~ "starting with <code>0x</code> (optional)."
-#~ msgstr ""
-#~ "Defina uma Classe de Trânsito. Pode ser <code>inherit</code> (o cabeçalho "
-#~ "externo herda o valor do cabeçalho interno) ou um valor hexadecimal "
-#~ "começando com <code>0x</code> (opcional)."
-
-#~ msgid "default-on (kernel)"
-#~ msgstr "default-on (kernel)"
-
-#~ msgid "heartbeat (kernel)"
-#~ msgstr "heartbeat (kernel)"
-
-#~ msgid "netdev (kernel)"
-#~ msgstr "netdev (kernel)"
-
-#~ msgid "none (kernel)"
-#~ msgstr "nenhum (kernel)"
-
-#~ msgid "timer (kernel)"
-#~ msgstr "temporizador (kernel)"
-
-#~ msgid "Enable/Disable"
-#~ msgstr "Ativar/Desativar"
-
-#~ msgid "No signal"
-#~ msgstr "Sem sinal"
-
-#~ msgid "Free"
-#~ msgstr "Livre"
-
-#~ msgid "Port %s"
-#~ msgstr "Porto %s"
-
-#~ msgid "Switch Port Mask"
-#~ msgstr "Máscara da porta do Switch"
-
-#~ msgid "Switch Speed Mask"
-#~ msgstr "Máscara da velocidade do Switch"
-
-#~ msgid "USB Device"
-#~ msgstr "Aparelho USB"
-
-#~ msgid "USB Ports"
-#~ msgstr "Portas USB"
-
-#~ msgid "Define a name for this network."
-#~ msgstr "Defina um nome para esta rede."
-
-#~ msgid "Bad address specified!"
-#~ msgstr "Endereço incorreto especificado!"
-
-#~ msgid "Install iputils-traceroute6 for IPv6 traceroute"
-#~ msgstr "Instale o iputils-traceroute6 para ver o rasto das rotas IPv6"
-
-#~ msgid "Loading"
-#~ msgstr "A carregar"
-
-#~ msgid "Waiting for command to complete..."
-#~ msgstr "A aguardar que o comando termine..."
-
-#~ msgid "Assign interfaces..."
-#~ msgstr "Atribuir interfaces..."
-
-#~ msgid "MB/s"
-#~ msgstr "MB/s"
-
-#~ msgid "Network without interfaces."
-#~ msgstr "Rede sem interfaces."
-
-#~ msgid ""
-#~ "Really delete this interface? The deletion cannot be undone! You might "
-#~ "lose access to this device if you are connected via this interface"
-#~ msgstr ""
-#~ "Você realmente quer apagar esta interface? Esta operação não pode ser "
-#~ "desfeita! Você pode perder acesso a este aparelho se você estiver "
-#~ "conectado por meio desta interface"
-
-#~ msgid "Realtime Connections"
-#~ msgstr "Ligações em Tempo Real"
-
-#~ msgid "Realtime Load"
-#~ msgstr "Carga em Tempo Real"
-
-#~ msgid "Realtime Traffic"
-#~ msgstr "Tráfego em Tempo Real"
-
-#~ msgid "Realtime Wireless"
-#~ msgstr "Wireless em Tempo Real"
-
-#~ msgid "There are no active leases."
-#~ msgstr "Não existem concessões ativas."
-
-#~ msgid ""
-#~ "This page gives an overview over currently active network connections."
-#~ msgstr "Esta página fornece informações sobre as ligações de rede ativas."
-
-#~ msgid "dB"
-#~ msgstr "dB"
-
-#~ msgid "kB/s"
-#~ msgstr "kB/s"
-
-#~ msgid "kbit/s"
-#~ msgstr "kbit/s"
-
-#~ msgid "Changes applied."
-#~ msgstr "Alterações aplicadas."
-
-#~ msgid "Keep settings"
-#~ msgstr "Manter definições"
-
-#~ msgid "Rebooting..."
-#~ msgstr "A reiniciar..."
-
-#~ msgid "Waiting for changes to be applied..."
-#~ msgstr "A aguardar que as mudanças sejam aplicadas..."
-
-#~ msgid "(%s available)"
-#~ msgstr "(%s disponível)"
-
-#~ msgid "Check"
-#~ msgstr "Verificar"
-
-#~ msgid "Checksum"
-#~ msgstr "Checksum"
-
-#~ msgid "Enable this mount"
-#~ msgstr "Ativar este mount"
-
-#~ msgid "Enable this swap"
-#~ msgstr "Ativar esta swap"
-
-#~ msgid "Flash Firmware"
-#~ msgstr "Gravar Firmware"
-
-#~ msgid "Flashing..."
-#~ msgstr "A programar...."
-
-#~ msgid "Mount Entry"
-#~ msgstr "Montar Entrada"
-
-#~ msgid "Proceed"
-#~ msgstr "Proceder"
-
-#~ msgid "Really reset all changes?"
-#~ msgstr "Deseja mesmo limpar todas as alterações?"
-
-#~ msgid ""
-#~ "The filesystem that was used to format the memory (<abbr title=\"for "
-#~ "example\">e.g.</abbr> <samp><abbr title=\"Third Extended "
-#~ "Filesystem\">ext3</abbr></samp>)"
-#~ msgstr ""
-#~ "O sistema que foi usado para formatar a memória (<abbr title=\"por "
-#~ "exemplo\">ex.</abbr> <samp><abbr title=\"Sistema de Arquivos ext3\">ext3</"
-#~ "abbr></samp>)"
-
-#~ msgid ""
-#~ "The flash image was uploaded. Below is the checksum and file size listed, "
-#~ "compare them with the original file to ensure data integrity.<br /> Click "
-#~ "\"Proceed\" below to start the flash procedure."
-#~ msgstr ""
-#~ "A imagem foi carregada. Abaixo está o checksum e o tamanho dos ficheiros, "
-#~ "compare com o ficheiro original para assegurar a integração de dados.<br /"
-#~ "> Click em \"Proceder\" para iniciar o procedimento."
-
-#~ msgid "Verify"
-#~ msgstr "Verificar"
-
-#~ msgid "Specifies the listening port of this <em>Dropbear</em> instance"
-#~ msgstr "Especifica as portas de escuta desta instância <em>Dropbear</em>"
-
-#~ msgid "VLANs on %q (%s)"
-#~ msgstr "VLANs em %q (%s)"
-
-#~ msgid "Antenna 1"
-#~ msgstr "Antena 1"
-
-#~ msgid "Antenna 2"
-#~ msgstr "Antena 2"
-
-#~ msgid "Antenna Configuration"
-#~ msgstr "Configuração das Antenas"
-
-#~ msgid "Back to overview"
-#~ msgstr "Voltar à vista global"
-
-#~ msgid "Back to scan results"
-#~ msgstr "Voltar aos resultados do scan"
-
-#~ msgid "Broadcom 802.11%s Wireless Controller"
-#~ msgstr "Controlador Wireless Broadcom 802.11%s"
-
-#~ msgid "Broadcom BCM%04x 802.11 Wireless Controller"
-#~ msgstr "Controlador Wireless Broadcom BCM%04x 802.11"
-
-#~ msgid "Common Configuration"
-#~ msgstr "Configuração comum"
-
-#~ msgid "Connect"
-#~ msgstr "Ligar"
-
-#~ msgid "Connection Limit"
-#~ msgstr "Limite de Ligações"
-
-#~ msgid "Cover the following interface"
-#~ msgstr "Abranger a seguinte interface"
-
-#~ msgid "Cover the following interfaces"
-#~ msgstr "Abranger as seguintes interfaces"
-
-#~ msgid "Create Interface"
-#~ msgstr "Criar interface"
-
-#~ msgid "Create a bridge over multiple interfaces"
-#~ msgstr "Criar uma bridge entre múltiplas interfaces "
-
-#~ msgid "Diversity"
-#~ msgstr "Diversidade"
-
-#~ msgid "Edit this interface"
-#~ msgstr "Editar esta interface"
-
-#~ msgid "Frame Bursting"
-#~ msgstr "Frame Bursting"
-
-#~ msgid "Generic 802.11%s Wireless Controller"
-#~ msgstr "Controlador Wireless Genérico 802.11%s"
-
-#~ msgid "Install package %q"
-#~ msgstr "Instalar pacote %q"
-
-#~ msgid "Interface Overview"
-#~ msgstr "Visão Geral da Interface"
-
-#~ msgid "Missing protocol extension for proto %q"
-#~ msgstr "Falta a extensão de protocolo para o protocolo %q"
-
-#~ msgid "Name of the new interface"
-#~ msgstr "Nome da nova interface"
-
-#~ msgid "No network configured on this device"
-#~ msgstr "Nenhuma rede configurada no dispositivo"
-
-#~ msgid "No network name specified"
-#~ msgstr "Nome de rede não especificado"
-
-#~ msgid ""
-#~ "On this page you can configure the network interfaces. You can bridge "
-#~ "several interfaces by ticking the \"bridge interfaces\" field and enter "
-#~ "the names of several network interfaces separated by spaces. You can also "
-#~ "use <abbr title=\"Virtual Local Area Network\">VLAN</abbr> notation "
-#~ "<samp>INTERFACE.VLANNR</samp> (<abbr title=\"for example\">e.g.</abbr>: "
-#~ "<samp>eth0.1</samp>)."
-#~ msgstr ""
-#~ "Nesta página pode configurar as interfaces de rede. Pode ter várias "
-#~ "interfaces do tipo bridge, assinalando o campo \"interfaces bridge\" e "
-#~ "inserir os nomes de várias interfaces de rede separadas por espaços. Pode "
-#~ "também usar a notação para <abbr title=\"Rede Local Virtual\">VLAN</abbr> "
-#~ "<samp>INTERFACE.VLANNR</samp> (<abbr title=\"por exemplo\">ex.</abbr>: "
-#~ "<samp>eth0.1</samp>)."
-
-#~ msgid "Package libiwinfo required!"
-#~ msgstr "O pacote libiwinfo é necessário!"
-
-#~ msgid "Protocol of the new interface"
-#~ msgstr "Protocolo da nova interface"
-
-#~ msgid "Protocol support is not installed"
-#~ msgstr "O protocolo suportado não está instalado"
-
-#~ msgid ""
-#~ "Really delete this wireless network? The deletion cannot be undone! You "
-#~ "might lose access to this device if you are connected via this network."
-#~ msgstr ""
-#~ "Deseja mesmo apagar esta rede? A eliminação não poder desfeita!\n"
-#~ "Pode perde a ligação ao dispositivo, caso esta ligado através desta rede."
-
-#~ msgid "Receiver Antenna"
-#~ msgstr "Antena de Recepção"
-
-#~ msgid "Repeat scan"
-#~ msgstr "Repetir scan"
-
-#~ msgid "Replace entry"
-#~ msgstr "Substituir entrada"
-
-#~ msgid "Separate Clients"
-#~ msgstr "Isolar Clientes"
-
-#~ msgid ""
-#~ "The <em>libiwinfo-lua</em> package is not installed. You must install "
-#~ "this component for working wireless configuration!"
-#~ msgstr ""
-#~ "O pacote <em>libiwinfo-lua</em> não está instalado. Precisa de instalar "
-#~ "este pacote para que a configuração wireless funcione!"
-
-#~ msgid "The given network name is not unique"
-#~ msgstr "O nome dado não é único"
-
-#, fuzzy
-#~ msgid ""
-#~ "The hardware is not multi-SSID capable and the existing configuration "
-#~ "will be replaced if you proceed."
-#~ msgstr ""
-#~ "O hardware não é comporta multi-SSIDs a configuração será substituída se "
-#~ "prosseguir."
-
-#~ msgid "The selected protocol needs a device assigned"
-#~ msgstr "O protocolo escolhido precisa de um dispositivo atribuído."
-
-#~ msgid ""
-#~ "There is no device assigned yet, please attach a network device in the "
-#~ "\"Physical Settings\" tab"
-#~ msgstr ""
-#~ "Ainda não há um dispositivo atribuído, por favor ligue um dispositivo de "
-#~ "rede nas \"Definições Físicas\""
-
-#~ msgid "Transmission Rate"
-#~ msgstr "Taxa de Transmissão"
-
-#~ msgid "Transmit Power"
-#~ msgstr "Potência de Transmissão"
-
-#~ msgid "Uploaded File"
-#~ msgstr "Ficheiro carregado"
-
-#~ msgid "Wireless is restarting..."
-#~ msgstr "A Wireless está a reiniciar..."
-
-#~ msgid "open"
-#~ msgstr "abrir"
-
-#~ msgid "Netmask"
-#~ msgstr "Mascara de rede"
-
-#, fuzzy
-#~ msgid "Set up Time Synchronization"
-#~ msgstr "Configurar Sincronização Horária"
-
-#~ msgid "Synchronizing..."
-#~ msgstr "A sincronizar..."
-
-#~ msgid "The following changes have been reverted"
-#~ msgstr "Foram recuperadas as seguintes alterações "
-
-#~ msgid "Theme"
-#~ msgstr "Tema"
-
-#~ msgid "There are no pending changes to revert!"
-#~ msgstr "Não há alterações pendentes para reverter!"
-
-#~ msgid "There are no pending changes!"
-#~ msgstr "Não há alterações pendentes!"
-
-#~ msgid "Time Synchronization is not configured yet."
-#~ msgstr "A sincronização horária ainda não está configurada."
-
-#~ msgid "kB"
-#~ msgstr "kB"
-
-#~ msgid ""
-#~ "Here you can paste public SSH-Keys (one per line) for SSH public-key "
-#~ "authentication."
-#~ msgstr ""
-#~ "Aqui pode colar as chaves SSH (uma por linha) para a autenticação SSH por "
-#~ "chave pública."
-
-#~ msgid "Password successfully changed!"
-#~ msgstr "Password alterada com sucesso!"
-
-#~ msgid "Unknown Error, password not changed!"
-#~ msgstr "Erro Desconhecido, a password não foi alterada!"
-
-#~ msgid "Available packages"
-#~ msgstr "Pacotes disponíveis"
-
-#~ msgid "Displaying only packages containing"
-#~ msgstr "Mostrar somente pacotes contendo"
-
-#~ msgid "Download and install package"
-#~ msgstr "Descarregar e instalar pacote"
-
-#~ msgid "Filter"
-#~ msgstr "Filtro"
-
-#~ msgid "Find package"
-#~ msgstr "Procurar pacote"
-
-#~ msgid "Free space"
-#~ msgstr "Espaço livre"
-
-#~ msgid "Install"
-#~ msgstr "Instalar"
-
-#~ msgid "Installed packages"
-#~ msgstr "Instalar pacotes"
-
-#~ msgid "No package lists available"
-#~ msgstr "Não há listas de pacotes disponiveis"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "OPKG-Configuration"
-#~ msgstr "Configuração-OPKG"
-
-#~ msgid "Package lists are older than 24 hours"
-#~ msgstr "As listas de pacotes têm mais de 24 horas"
-
-#~ msgid "Package name"
-#~ msgstr "Nome do pacote"
-
-#~ msgid "Software"
-#~ msgstr "Software"
-
-#~ msgid "Update lists"
-#~ msgstr "Actualizar listas"
-
-#~ msgid "Version"
-#~ msgstr "Versão"
-
-#~ msgid "Disable DNS setup"
-#~ msgstr "Desativar configuração de DNS"
-
-#~ msgid "IPv4 and IPv6"
-#~ msgstr "IPv4 e IPv6"
-
-#~ msgid "Lease validity time"
-#~ msgstr "Tempo de validade da concessão"
-
-#~ msgid "Multicast address"
-#~ msgstr "Endereço de multicast"
-
-#~ msgid "Protocol family"
-#~ msgstr "Família do protocolo"
-
-#~ msgid "No chains in this table"
-#~ msgstr "Tabela sem chains"
-
-#~ msgid "Configuration files will be kept."
-#~ msgstr "Os ficheiros de configuração serão mantidos."
-
-#~ msgid "Note: Configuration files will be erased."
-#~ msgstr "Nota: Os ficheiros de configuração serão apagados."
-
-#~ msgid "<abbr title='Pairwise: %s / Group: %s'>%s - %s</abbr>"
-#~ msgstr "<abbr title='Emparelhada: %s / Grupo: %s'>%s - %s</abbr>"
-
-#~ msgid "Activate this network"
-#~ msgstr "Ativar esta rede"
-
-#~ msgid "Hermes 802.11b Wireless Controller"
-#~ msgstr "Controlador Wireless Hermes 802.11b"
-
-#~ msgid "Interface reconnected"
-#~ msgstr "Interface religada"
-
-#~ msgid "Interface shut down"
-#~ msgstr "Desligar interface"
-
-#~ msgid "Prism2/2.5/3 802.11b Wireless Controller"
-#~ msgstr "Controlador Wireless Prism2/2.5/3 802.11b"
-
-#~ msgid "RaLink 802.11%s Wireless Controller"
-#~ msgstr "Controlador Wireless RaLink 802.11%s"
-
-#~ msgid ""
-#~ "Really shutdown interface \"%s\"? You might lose access to this device if "
-#~ "you are connected via this interface."
-#~ msgstr ""
-#~ "Deseja mesmo desligar a interface \"%s\" ?\n"
-#~ "Pode perder o acesso ao dispositivo se estiver ligado através desta "
-#~ "interface."
-
-#~ msgid "Reconnecting interface"
-#~ msgstr "A reconectar interface"
-
-#~ msgid "Shutdown this network"
-#~ msgstr "Desligar esta rede"
-
-#~ msgid "Wireless restarted"
-#~ msgstr "Rede wireless reiniciada"
-
-#~ msgid "Wireless shut down"
-#~ msgstr "Desligar wireless"
-
-#~ msgid "DHCP Leases"
-#~ msgstr "Concessões DHCP"
-
-#~ msgid "DHCPv6 Leases"
-#~ msgstr "Concessões DHCPv6"
-
-#~ msgid ""
-#~ "Really delete this interface? The deletion cannot be undone! You might "
-#~ "lose access to this device if you are connected via this interface."
-#~ msgstr ""
-#~ "Deseja mesmo apagar esta interface? A eliminação não poder desfeita!\n"
-#~ "Pode perde a ligação ao dispositivo, caso esta ligado através desta "
-#~ "interface."
-
-#, fuzzy
-#~ msgid ""
-#~ "Really shut down network? You might lose access to this device if you are "
-#~ "connected via this interface."
-#~ msgstr ""
-#~ "Deseja mesmo desligar esta rede?\n"
-#~ "Pode perder o acesso ao dispositivo se estiver ligado através desta rede."
-
-#~ msgid "Sort"
-#~ msgstr "Ordenar"
-
-#~ msgid "help"
-#~ msgstr "ajuda"
-
-#~ msgid "IPv4 WAN Status"
-#~ msgstr "Estado WAN IPv4"
-
-#~ msgid "IPv6 WAN Status"
-#~ msgstr "Estado WAN IPv6"
-
-#~ msgid "Apply"
-#~ msgstr "Aplicar"
-
-#~ msgid "Applying changes"
-#~ msgstr "A aplicar as alterações"
-
-#~ msgid "Configuration applied."
-#~ msgstr "Configuração aplicada."
-
-#~ msgid "Save &#38; Apply"
-#~ msgstr "Salvar &#38; Aplicar"
-
-#~ msgid "The following changes have been committed"
-#~ msgstr "As seguintes alterações foram escritas"
-
-#~ msgid "There are no pending changes to apply!"
-#~ msgstr "Não há alterações pendentes para aplicar!"
-
-#~ msgid "Action"
-#~ msgstr "Acção"
-
-#~ msgid "Buttons"
-#~ msgstr "Botões"
-
-#~ msgid "Handler"
-#~ msgstr "Handler"
-
-#~ msgid "Maximum hold time"
-#~ msgstr "Tempo máximo de espera"
-
-#~ msgid "Minimum hold time"
-#~ msgstr "Tempo de retenção mínimo"
-
-#~ msgid "Path to executable which handles the button event"
-#~ msgstr "Caminho do executável que lida com o botão de eventos"
-
-#~ msgid "This page allows the configuration of custom button actions"
-#~ msgstr ""
-#~ "Esta página permite a configuração de botões para acções personalizadas."
-
-#~ msgid "Leasetime"
-#~ msgstr "Tempo de concessão"
-
-#~ msgid "AR Support"
-#~ msgstr "Suporte AR"
-
-#~ msgid "Atheros 802.11%s Wireless Controller"
-#~ msgstr "Controlador Wireless Atheros 802.11%s"
-
-#~ msgid "Background Scan"
-#~ msgstr "Procurar em Segundo Plano"
-
-#~ msgid "Compression"
-#~ msgstr "Compressão"
-
-#~ msgid "Disable HW-Beacon timer"
-#~ msgstr "Desativar temporizador de HW-Beacon"
-
-#~ msgid "Do not send probe responses"
-#~ msgstr "Não enviar respostas a sondas"
-
-#~ msgid "Fast Frames"
-#~ msgstr "Frames Rápidas"
-
-#~ msgid "Maximum Rate"
-#~ msgstr "Taxa Máxima"
-
-#~ msgid "Minimum Rate"
-#~ msgstr "Taxa Mínima"
-
-#~ msgid "Multicast Rate"
-#~ msgstr "Taxa de Multicast"
-
-#~ msgid "Outdoor Channels"
-#~ msgstr "Canais de Outdoor"
-
-#~ msgid "Regulatory Domain"
-#~ msgstr "Domínio Regulatório"
-
-#~ msgid "Separate WDS"
-#~ msgstr "Separar WDS"
-
-#~ msgid "Static WDS"
-#~ msgstr "WDS Estático"
-
-#~ msgid "Turbo Mode"
-#~ msgstr "Modo Turbo"
-
-#~ msgid "XR Support"
-#~ msgstr "Suporte XR"
-
-#~ msgid "An additional network will be created if you leave this unchecked."
-#~ msgstr "Uma rede adicional será criada se deixar isto desmarcado."
-
-#~ msgid "Join Network: Settings"
-#~ msgstr "Associar Rede: Definições"
-
-#~ msgid "CPU"
-#~ msgstr "CPU"
-
-#~ msgid "VLAN Interface"
-#~ msgstr "Interface VLAN"

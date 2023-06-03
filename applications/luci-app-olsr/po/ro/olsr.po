@@ -364,8 +364,8 @@ msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
 msgstr ""
-"Adresa IPv4 src pentru pachetele OLSR de ieșire. Valoarea implicită este \"0."
-"0.0.0\", care declanșează utilizarea IP-ului interfeței."
+"Adresa IPv4 src pentru pachetele OLSR de ieșire. Valoarea implicită este "
+"\"0.0.0.0\", care declanșează utilizarea IP-ului interfeței."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:62
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:114
@@ -415,8 +415,8 @@ msgid ""
 "of a not-linklocal interface IP."
 msgstr ""
 "Prefixul IPv6 src. OLSRd va alege unul dintre IP-urile interfeței care se "
-"potrivește cu prefixul din acest parametru. Valoarea implicită este \"0::/0\""
-", care declanșează utilizarea unui IP de interfață nelinklocal."
+"potrivește cu prefixul din acest parametru. Valoarea implicită este "
+"\"0::/0\", care declanșează utilizarea unui IP de interfață nelinklocal."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:184
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:178
@@ -435,9 +435,9 @@ msgstr ""
 "În cazul în care traseul către poarta de acces curentă urmează să fie "
 "modificat, valoarea ETX a acestei porți de acces se înmulțește cu această "
 "valoare înainte de a fi comparată cu cea nouă. Parametrul poate fi o valoare "
-"între 0,1 și 1,0, dar ar trebui să fie aproape de 1,0 dacă este "
-"modificat.<br /><b>Atenție:</b> Acest parametru nu trebuie utilizat împreună "
-"cu metrica etx_ffeth!<br />Defectul implicit este \"1,0\"."
+"între 0,1 și 1,0, dar ar trebui să fie aproape de 1,0 dacă este modificat."
+"<br /><b>Atenție:</b> Acest parametru nu trebuie utilizat împreună cu "
+"metrica etx_ffeth!<br />Defectul implicit este \"1,0\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:166
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:160
@@ -502,8 +502,8 @@ msgstr ""
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrdiface6.lua:93
 msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
 msgstr ""
-"Valoare invalidă pentru LQMult-Value. Trebuie să fie cuprinsă între 0.01 și 1"
-".0."
+"Valoare invalidă pentru LQMult-Value. Trebuie să fie cuprinsă între 0.01 și "
+"1.0."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:271
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:265
@@ -597,12 +597,12 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
-"Algoritm de calitate a legăturii (numai pentru nivelul 2 de lq). <br "
-"/><b>etx_float</b>: ETX în virgulă mobilă cu îmbătrânire exponențială<br "
-"/><b>etx_fpm</b> : același lucru ca și etx_float, dar cu aritmetică de "
-"numere întregi<br /><b>etx_ff</b> : ETX freifunk, o variantă de etx care "
-"utilizează tot traficul OLSR (în loc de doar hellos) pentru calculul ETX<br "
-"/><b>etx_ffeth</b>: variantă incompatibilă de etx_ff care permite legături "
+"Algoritm de calitate a legăturii (numai pentru nivelul 2 de lq). <br /"
+"><b>etx_float</b>: ETX în virgulă mobilă cu îmbătrânire exponențială<br /"
+"><b>etx_fpm</b> : același lucru ca și etx_float, dar cu aritmetică de numere "
+"întregi<br /><b>etx_ff</b> : ETX freifunk, o variantă de etx care utilizează "
+"tot traficul OLSR (în loc de doar hellos) pentru calculul ETX<br /"
+"><b>etx_ffeth</b>: variantă incompatibilă de etx_ff care permite legături "
 "ethernet cu ETX 0. 1.<br />Defaults la \"etx_ff\""
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:83
@@ -827,7 +827,8 @@ msgstr "Prezentare generală"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/hna.htm:87
 msgid "Overview of currently active OLSR host net announcements"
-msgstr "Prezentare generală a anunțurilor de rețea gazdă OLSR active în prezent"
+msgstr ""
+"Prezentare generală a anunțurilor de rețea gazdă OLSR active în prezent"
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/neighbors.htm:122
 msgid "Overview of currently established OLSR connections"
@@ -939,8 +940,8 @@ msgid ""
 "the first interface."
 msgstr ""
 "Stabilește IP-ul principal (originator ip) al routerului. Acest IP nu se va "
-"schimba NICIODATĂ pe durata de funcționare a olsrd. Valoarea implicită este "
-"::, care declanșează utilizarea IP-ului primei interfețe."
+"schimba NICIODATĂ pe durata de funcționare a olsrd. Valoarea implicită "
+"este ::, care declanșează utilizarea IP-ului primei interfețe."
 
 #: applications/luci-app-olsr/luasrc/view/status-olsr/common_js.htm:20
 msgid "Show IPv4"
@@ -1190,8 +1191,8 @@ msgid ""
 "Default setting is \"both\"."
 msgstr ""
 "Ce tip de legătură ascendentă este exportată către celelalte noduri de "
-"plasă. O legătură ascendentă este detectată prin căutarea unui HNA local de 0"
-".0.0.0/0, ::ffff:0:0/96 ori 2000::/3. Setarea implicită este \"ambele\" ."
+"plasă. O legătură ascendentă este detectată prin căutarea unui HNA local de "
+"0.0.0.0/0, ::ffff:0:0/96 ori 2000::/3. Setarea implicită este \"ambele\" ."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:149
 msgid ""
@@ -1200,8 +1201,8 @@ msgid ""
 "setting is \"both\"."
 msgstr ""
 "Ce tip de legătură ascendentă este exportată către celelalte noduri de "
-"plasă. O legătură ascendentă este detectată prin căutarea unui HNA6 local "
-"::ffff:0:0/96 sau 2000::/3. Setarea implicită este \"ambele\"."
+"plasă. O legătură ascendentă este detectată prin căutarea unui HNA6 local ::"
+"ffff:0:0/96 sau 2000::/3. Setarea implicită este \"ambele\"."
 
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd.lua:193
 #: applications/luci-app-olsr/luasrc/model/cbi/olsr/olsrd6.lua:187
@@ -1245,6 +1246,3 @@ msgstr "sus"
 #: applications/luci-app-olsr/luasrc/view/status-olsr/smartgw.htm:139
 msgid "yes"
 msgstr "da"
-
-#~ msgid "Status"
-#~ msgstr "Stare"

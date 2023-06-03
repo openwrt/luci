@@ -11,8 +11,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.14.1\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
@@ -674,9 +674,9 @@ msgstr "Monitoriši procese"
 msgid "Monitor remote ports"
 msgstr "Monitoriši udaljene port-ove"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
-msgid "Monitoring %s and %s"
-msgstr "Monitoriši %s i %s"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
+msgid "Monitoring %s and %s, %s %s"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
@@ -770,10 +770,6 @@ msgstr "Monitoriši sve termalne zone"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:46
 msgid "Monitoring all thermal zones except %s"
 msgstr "Monitoriši sve termalne zone osim %s%s"
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
-msgid "Monitoring local listen ports"
-msgstr "Monitoriši lokalne listen port-ove"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
 msgid "Monitoring one OpenVPN instance"
@@ -1189,6 +1185,10 @@ msgstr "Sačuvani vremenski rasponi"
 msgid "Storing CSV data in %s"
 msgstr "Čuvanje CSV podataka u %s"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
+msgid "Summary of all ports"
+msgstr ""
+
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
 msgid "Syslog"
 msgstr "Syslog"
@@ -1577,6 +1577,10 @@ msgid ""
 "files."
 msgstr ""
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
+msgid "all local listening ports,"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
 msgstr ""
@@ -1588,6 +1592,10 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "no summary"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
@@ -1608,9 +1616,9 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
-msgid "one local port"
-msgid_plural "%d local ports"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
+msgid "one local"
+msgid_plural "%d local"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
@@ -1622,7 +1630,7 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] ""
@@ -1633,59 +1641,6 @@ msgstr[2] ""
 msgid "reduces rrd size"
 msgstr ""
 
-#~ msgid "Cache flush interval"
-#~ msgstr "Cache flush interval"
-
-#~ msgid "Action (target)"
-#~ msgstr "Action (target)"
-
-#~ msgid "Add matching rule"
-#~ msgstr "Add matching rule"
-
-#~ msgid ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-#~ msgstr ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-
-#~ msgid "Destination ip range"
-#~ msgstr "Destination ip range"
-
-#~ msgid "Incoming interface"
-#~ msgstr "Incoming interface"
-
-#~ msgid "Name of the rule"
-#~ msgstr "Name of the rule"
-
-#~ msgid "Network protocol"
-#~ msgstr "Network protocol"
-
-#~ msgid "Options"
-#~ msgstr "Options"
-
-#~ msgid "Outgoing interface"
-#~ msgstr "Outgoing interface"
-
-#~ msgid "Source ip range"
-#~ msgstr "Source ip range"
-
-#~ msgid "e.g. br-ff"
-#~ msgstr "e.g. br-ff"
-
-#~ msgid "e.g. br-lan"
-#~ msgstr "e.g. br-lan"
-
-#~ msgid "e.g. reject-with tcp-reset"
-#~ msgstr "e.g. reject-with tcp-reset"
-
-#~ msgid "max. 16 chars"
-#~ msgstr "max. 16 chars"
-
-#~ msgid "seconds; multiple separated by space"
-#~ msgstr "seconds; multiple separated by space"
-
-#~ msgid "server interfaces"
-#~ msgstr "server interfaces"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "summary of all ports"
+msgstr ""

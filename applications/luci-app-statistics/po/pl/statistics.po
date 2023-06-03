@@ -678,9 +678,9 @@ msgstr "Monitoruj procesy"
 msgid "Monitor remote ports"
 msgstr "Monitoruj porty zdalne"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
-msgid "Monitoring %s and %s"
-msgstr "Monitorowanie %s i %s"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
+msgid "Monitoring %s and %s, %s %s"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
@@ -774,10 +774,6 @@ msgstr "Monitorowanie wszystkich stref termicznych"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:46
 msgid "Monitoring all thermal zones except %s"
 msgstr "Monitorowanie wszystkich stref termicznych z wyjątkiem %s"
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
-msgid "Monitoring local listen ports"
-msgstr "Monitorowanie lokalnych portów nasłuchiwania"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
 msgid "Monitoring one OpenVPN instance"
@@ -1193,6 +1189,10 @@ msgstr "Przechowywane okresy czasu"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:24
 msgid "Storing CSV data in %s"
 msgstr "Przechowywanie danych CSV w %s"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
+msgid "Summary of all ports"
+msgstr ""
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
 msgid "Syslog"
@@ -1650,6 +1650,10 @@ msgstr ""
 "Musisz skonfigurować <em>collectd</em>, aby zbierać dane do plików <em>.rrd</"
 "em>."
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
+msgid "all local listening ports,"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
 msgstr "Wtyczka cURL włączona"
@@ -1662,6 +1666,10 @@ msgstr "cURL"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
 msgstr "Konfiguracja wtyczki cURL"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "no summary"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
@@ -1681,12 +1689,12 @@ msgstr[0] "jeden typ systemu plików"
 msgstr[1] "%d typów systemu plików"
 msgstr[2] "inne typy systemu plików"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
-msgid "one local port"
-msgid_plural "%d local ports"
-msgstr[0] "jeden port lokalny"
-msgstr[1] "%d portów lokalnych"
-msgstr[2] "inne porty lokalne"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
+msgid "one local"
+msgid_plural "%d local"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
@@ -1695,7 +1703,7 @@ msgstr[0] "jeden zamontowany"
 msgstr[1] "%d zamontowanych"
 msgstr[2] "inne zamontowane"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] "jeden zdalny port"
@@ -1706,96 +1714,6 @@ msgstr[2] "inne zdalne porty"
 msgid "reduces rrd size"
 msgstr "zmniejsza rozmiar RRD"
 
-#~ msgid ""
-#~ "When a host has not replied to this number of packets in a row, re-"
-#~ "resolve the hostname in DNS. Useful for dynamic DNS hosts."
-#~ msgstr ""
-#~ "Jeśli host nie odpowiedział na taką liczbę pakietów z rzędu, ponownie "
-#~ "ustal nazwę hosta w DNS. Przydatne dla hostów dynamicznego DNS."
-
-#~ msgid "Cache flush interval"
-#~ msgstr "Interwał opróżniania pamięci podręcznej"
-
-#~ msgid ""
-#~ "The statistics package uses <a href=\"https://collectd.org/\">Collectd</"
-#~ "a> to gather data and <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</"
-#~ "a> to render diagram images."
-#~ msgstr ""
-#~ "Pakiet statystyk używa <a href=\"https://collectd.org/\">Collectd</a> do "
-#~ "zbierania danych i <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</a> "
-#~ "do renderowania obrazów diagramu."
-
-#~ msgid ""
-#~ "You can install additional collectd-mod-* plugins to enable more "
-#~ "statistics."
-#~ msgstr ""
-#~ "Możesz zainstalować dodatkowe wtyczki collectd-mod-*, aby włączyć więcej "
-#~ "statystyk."
-
-#~ msgid "Action (target)"
-#~ msgstr "Akcja (cel)"
-
-#~ msgid "Add matching rule"
-#~ msgstr "Dodaj pasującą regułę"
-
-#~ msgid "Add multiple hosts separated by space."
-#~ msgstr "Dodaj wiele hostów rozdzielonych spacjami."
-
-#~ msgid ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-#~ msgstr ""
-#~ "Collectd jest małym demonem do zbieranie danych z różnych źródeł za "
-#~ "pomocą różnych wtyczek. Na tej stronie można zmienić ogólne ustawienia "
-#~ "demona collectd."
-
-#~ msgid "Destination ip range"
-#~ msgstr "Zakres docelowych adresów IP"
-
-#~ msgid "Hold Ctrl to select multiple items or to deselect entries."
-#~ msgstr ""
-#~ "Przytrzymaj klawisz Ctrl, aby wybrać wiele elementów lub odznaczyć "
-#~ "pozycje."
-
-#~ msgid "Incoming interface"
-#~ msgstr "Interfejs przychodzący"
-
-#~ msgid "Monitor all sensors"
-#~ msgstr "Monitorowanie wszystkich czujników"
-
-#~ msgid "Name of the rule"
-#~ msgstr "Nazwa tej reguły"
-
-#~ msgid "Network protocol"
-#~ msgstr "Protokoły sieciowe"
-
-#~ msgid "Options"
-#~ msgstr "Opcje"
-
-#~ msgid "Outgoing interface"
-#~ msgstr "Interfejs wychodzący"
-
-#~ msgid "Processes to monitor separated by space"
-#~ msgstr "Monitorowane procesy oddzielone spacją"
-
-#~ msgid "Source ip range"
-#~ msgstr "Zakres źródłowych adresów ip"
-
-#~ msgid "e.g. br-ff"
-#~ msgstr "np. br-ff"
-
-#~ msgid "e.g. br-lan"
-#~ msgstr "np. br-lan"
-
-#~ msgid "e.g. reject-with tcp-reset"
-#~ msgstr "np. reject-with tcp-reset"
-
-#~ msgid "max. 16 chars"
-#~ msgstr "max. 16 znaków"
-
-#~ msgid "seconds; multiple separated by space"
-#~ msgstr "sekundy; wielokrotnie oddzielone spacją"
-
-#~ msgid "server interfaces"
-#~ msgstr "Interfejsy serwera"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "summary of all ports"
+msgstr ""
