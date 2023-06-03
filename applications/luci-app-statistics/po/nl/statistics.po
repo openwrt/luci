@@ -676,9 +676,9 @@ msgstr "Processen bewaken"
 msgid "Monitor remote ports"
 msgstr "Externe poorten bewaken"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
-msgid "Monitoring %s and %s"
-msgstr "Bewaking van %s en %s"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
+msgid "Monitoring %s and %s, %s %s"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
@@ -767,10 +767,6 @@ msgstr "Bewaking van alle thermische zones"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:46
 msgid "Monitoring all thermal zones except %s"
 msgstr "Bewaking van alle thermische zones behalve %s"
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
-msgid "Monitoring local listen ports"
-msgstr "Bewaking van lokale luisterpoorten"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
 msgid "Monitoring one OpenVPN instance"
@@ -1181,6 +1177,10 @@ msgstr "Opgeslagen tijdspannes"
 msgid "Storing CSV data in %s"
 msgstr "CSV-gegevens opslaan in %s"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
+msgid "Summary of all ports"
+msgstr ""
+
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
 msgid "Syslog"
 msgstr "Syslogboek"
@@ -1292,7 +1292,8 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
 msgid "The dhcpleases plugin collects information about assigned DHCP leases."
-msgstr "De dhcpleases-plug-in verzamelt informatie over toegewezen DHCP-leases."
+msgstr ""
+"De dhcpleases-plug-in verzamelt informatie over toegewezen DHCP-leases."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:8
 msgid ""
@@ -1319,13 +1320,14 @@ msgid ""
 msgstr ""
 "De e-mailplug-in maakt een unix-socket die kan worden gebruikt om e-"
 "mailstatistieken naar een draaiende verzamelde daemon te verzenden. Deze "
-"plug-in is voornamelijk bedoeld voor gebruik in combinatie met "
-"Mail::SpamAssasin::Plugin::Collectd, maar kan ook op andere manieren worden "
+"plug-in is voornamelijk bedoeld voor gebruik in combinatie met Mail::"
+"SpamAssasin::Plugin::Collectd, maar kan ook op andere manieren worden "
 "gebruikt."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/entropy.js:7
 msgid "The entropy plugin collects statistics about the available entropy."
-msgstr "De entropie plugin verzamelt statistieken over de beschikbare entropie."
+msgstr ""
+"De entropie plugin verzamelt statistieken over de beschikbare entropie."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:8
 msgid ""
@@ -1485,7 +1487,8 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/uptime.js:7
 msgid "The uptime plugin collects statistics about the uptime of the system."
-msgstr "De uptime plugin verzamelt statistieken over de uptime van het systeem."
+msgstr ""
+"De uptime plugin verzamelt statistieken over de uptime van het systeem."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:179
 msgid "There is no RRD data available yet to render graphs."
@@ -1643,6 +1646,10 @@ msgstr ""
 "U moet <em>collected</em> configureren om gegevens te verzamelen in <em>."
 "rrd</em>-bestanden."
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
+msgid "all local listening ports,"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
 msgstr "cURL plugin ingeschakeld"
@@ -1655,6 +1662,10 @@ msgstr "cUrl"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
 msgstr "cUrl Plugin Configuratie"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "no summary"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
@@ -1672,11 +1683,11 @@ msgid_plural "%d filesystem types"
 msgstr[0] "één type bestandssysteem"
 msgstr[1] "%d bestandssysteemtypen"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
-msgid "one local port"
-msgid_plural "%d local ports"
-msgstr[0] "een lokale poort"
-msgstr[1] "%d lokale poorten"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
+msgid "one local"
+msgid_plural "%d local"
+msgstr[0] ""
+msgstr[1] ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
@@ -1684,7 +1695,7 @@ msgid_plural "%d mounts"
 msgstr[0] "één mount"
 msgstr[1] "%d mounts"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] "één externe poort"
@@ -1693,6 +1704,21 @@ msgstr[1] "%d externe poorten"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
 msgid "reduces rrd size"
 msgstr "vermindert de grootte van de rrd"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "summary of all ports"
+msgstr ""
+
+#~ msgid "Monitoring %s and %s"
+#~ msgstr "Bewaking van %s en %s"
+
+#~ msgid "Monitoring local listen ports"
+#~ msgstr "Bewaking van lokale luisterpoorten"
+
+#~ msgid "one local port"
+#~ msgid_plural "%d local ports"
+#~ msgstr[0] "een lokale poort"
+#~ msgstr[1] "%d lokale poorten"
 
 #~ msgid "Cache flush interval"
 #~ msgstr "Cache flush interval"

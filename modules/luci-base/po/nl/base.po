@@ -392,6 +392,7 @@ msgid "ANSI T1.413"
 msgstr "ANSI T1.413"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:95
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:65
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:94
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:91
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:68
@@ -1081,6 +1082,7 @@ msgstr "Authenticatie Groep"
 msgid "Authentication"
 msgstr "Authenticatie"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:76
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:82
 msgid "Authentication Type"
@@ -1098,6 +1100,8 @@ msgstr "Autorisatie Vereist"
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:120
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:24
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:107
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:116
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:113
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:51
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:96
@@ -1416,6 +1420,10 @@ msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
 "CA-certificaat; indien leeg, wordt het na de eerste verbinding opgeslagen."
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:79
+msgid "CHAP"
+msgstr ""
+
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:7
 msgid "CLAT configuration failed"
 msgstr "CLAT configuratie mislukt"
@@ -1525,8 +1533,8 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
-"Certificaatbeperking subtekenreeks - bijv. /CN=wifi.mycompany.com<br />Zie `"
-"logread -f` tijdens de handshake voor de werkelijke waarden"
+"Certificaatbeperking subtekenreeks - bijv. /CN=wifi.mycompany.com<br />Zie "
+"`logread -f` tijdens de handshake voor de werkelijke waarden"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1689
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1747
@@ -1552,8 +1560,8 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
-"Certificaatbeperking(en) via alternatieve naamwaarden voor onderwerp<br />("
-"ondersteunde kenmerken: E-MAIL, DNS, URI) - bijv. DNS:wifi.mijnbedrijf.com"
+"Certificaatbeperking(en) via alternatieve naamwaarden voor onderwerp<br /"
+">(ondersteunde kenmerken: E-MAIL, DNS, URI) - bijv. DNS:wifi.mijnbedrijf.com"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:54
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:57
@@ -1796,8 +1804,8 @@ msgid ""
 "Configures the operation mode of the <abbr title=\"Router "
 "Advertisement\">RA</abbr> service on this interface."
 msgstr ""
-"Configureert de werkingsmodus van de <abbr title=\"Router Advertisement\""
-">RA</abbr> dienst op deze interface."
+"Configureert de werkingsmodus van de <abbr title=\"Router "
+"Advertisement\">RA</abbr> dienst op deze interface."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:896
 msgid "Configures the operation mode of the DHCPv6 service on this interface."
@@ -1806,7 +1814,8 @@ msgstr "Configureert de werkingsmodus van de DHCPv6-dienst op deze interface."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:932
 msgid ""
 "Configures the operation mode of the NDP proxy service on this interface."
-msgstr "Configureert de werkingsmodus van de NDP-proxydienst op deze interface."
+msgstr ""
+"Configureert de werkingsmodus van de NDP-proxydienst op deze interface."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1315
 msgid "Configure…"
@@ -1979,8 +1988,8 @@ msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting "
 "Diode\">LED</abbr>s if possible."
 msgstr ""
-"Past indien mogelijk het gedrag van de <abbr title=\"Light Emitting Diode\""
-">LED</abbr>s van het apparaat aan."
+"Past indien mogelijk het gedrag van de <abbr title=\"Light Emitting "
+"Diode\">LED</abbr>s van het apparaat aan."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:741
 msgid "DAD transmits"
@@ -2136,8 +2145,8 @@ msgid ""
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients."
 msgstr ""
-"Definieer extra DHCP-opties, bijvoorbeeld \"<code>6,192.168.2.1,192.168.2."
-"2</code>\" die verschillende DNS-servers adverteert aan cliënten."
+"Definieer extra DHCP-opties, bijvoorbeeld \"<code>6,192.168.2.1,192.168.2.2</"
+"code>\" die verschillende DNS-servers adverteert aan cliënten."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:516
 msgid ""
@@ -2350,6 +2359,8 @@ msgstr "Dit netwerk uitschakelen"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:13
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:121
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:108
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:117
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:114
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:52
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:97
@@ -2785,6 +2796,7 @@ msgstr "HE.net dynamische eindpuntupdate inschakelen"
 msgid "Enable IPv6"
 msgstr "IPv6 inschakelen"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:101
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
 msgid "Enable IPv6 negotiation"
 msgstr "IPv6-onderhandeling inschakelen"
@@ -2841,8 +2853,8 @@ msgid ""
 "Secure\">HTTPS</abbr> port."
 msgstr ""
 "Automatische omleiding van <abbr title=\"Hypertext Transfer Protocol\">HTTP</"
-"abbr> verzoeken naar <abbr title=\"Hypertext Transfer Protocol Secure\""
-">HTTPS</abbr> poort inschakelen."
+"abbr> verzoeken naar <abbr title=\"Hypertext Transfer Protocol "
+"Secure\">HTTPS</abbr> poort inschakelen."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:994
 msgid ""
@@ -2929,6 +2941,8 @@ msgstr "Unicast-flooding inschakelen"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:243
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:353
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:109
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:118
 msgid "Enabled"
 msgstr "Ingeschakeld"
 
@@ -3125,7 +3139,8 @@ msgstr "Verloopt"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:696
 msgid ""
 "Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>)."
-msgstr "Vervaltijd van gehuurde adressen, minimaal 2 minuten (<code>2m</code>)."
+msgstr ""
+"Vervaltijd van gehuurde adressen, minimaal 2 minuten (<code>2m</code>)."
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:19
 msgid "External"
@@ -3185,7 +3200,8 @@ msgstr "Kan modem niet configureren"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4548
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
-msgstr "Kan de toepassing niet bevestigen binnen %ds, wachtend op terugdraaien…"
+msgstr ""
+"Kan de toepassing niet bevestigen binnen %ds, wachtend op terugdraaien…"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:22
 msgid "Failed to connect"
@@ -3242,7 +3258,8 @@ msgstr "Bestandsnaam"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:574
 msgid "Filename of the boot image advertised to clients."
-msgstr "Bestandsnaam van het boot image dat aan de cliënten wordt geadverteerd."
+msgstr ""
+"Bestandsnaam van het boot image dat aan de cliënten wordt geadverteerd."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:191
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:315
@@ -3419,10 +3436,10 @@ msgid ""
 "title=\"Neighbour Advertisement, Type 136\">NA</abbr> messages between the "
 "designated master interface and downstream interfaces."
 msgstr ""
-"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr title="
-"\"Neighbour Solicitation, Type 135\">NS</abbr> en <abbr title=\"Neighbour "
-"Advertisement, Type 136\">NA</abbr> berichten tussen de aangewezen "
-"masterinterface en downstream interfaces."
+"Forward <abbr title=\"Neighbour Discovery Protocol\">NDP</abbr> <abbr "
+"title=\"Neighbour Solicitation, Type 135\">NS</abbr> en <abbr "
+"title=\"Neighbour Advertisement, Type 136\">NA</abbr> berichten tussen de "
+"aangewezen masterinterface en downstream interfaces."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:787
 msgid ""
@@ -3460,7 +3477,8 @@ msgstr "Forward mesh peer-verkeer"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:779
 msgid "Forward multicast packets as unicast packets on this device."
-msgstr "Forward multicast-pakketten door als unicast-pakketten op dit apparaat."
+msgstr ""
+"Forward multicast-pakketten door als unicast-pakketten op dit apparaat."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1594
 msgid "Forwarding mode"
@@ -3484,8 +3502,8 @@ msgid ""
 "Further information about WireGuard interfaces and peers at <a href='http://"
 "wireguard.com'>wireguard.com</a>."
 msgstr ""
-"Meer informatie over WireGuard interfaces en peers op <a "
-"href='http://wireguard.com'>wireguard.com</a>."
+"Meer informatie over WireGuard interfaces en peers op <a href='http://"
+"wireguard.com'>wireguard.com</a>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:128
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:184
@@ -3969,6 +3987,7 @@ msgstr "IPsec XFRM"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:88
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:89
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:90
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:96
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:87
 msgid "IPv4"
 msgstr "IPv4"
@@ -4048,6 +4067,10 @@ msgstr "IPv4+IPv6"
 msgid "IPv4-in-IPv4 (RFC2003)"
 msgstr "IPv4-in-IPv4 (RFC2003)"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:95
+msgid "IPv4/IPv6"
+msgstr ""
+
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:127
 msgid "IPv4/IPv6 (both - defaults to IPv4)"
 msgstr "IPv4/IPv6 (beide - standaard ingesteld op IPv4)"
@@ -4068,6 +4091,7 @@ msgstr "IPv4/IPv6-verkeerstabel \"%h\""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:98
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:99
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:100
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:97
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:89
 msgid "IPv6"
 msgstr "IPv6"
@@ -4256,12 +4280,14 @@ msgstr ""
 "worden wijzigingen teruggedraaid."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:953
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:134
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:122
 msgid "If unchecked, no default route is configured"
 msgstr "Indien niet aangevinkt, is er geen standaardroute geconfigureerd"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:145
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
 msgid "If unchecked, the advertised DNS server addresses are ignored"
@@ -4580,6 +4606,7 @@ msgid "Invalid"
 msgstr "Ongeldig"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:68
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:100
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:97
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:74
@@ -4607,7 +4634,8 @@ msgstr "Ongeldige waarde voor verkeersklasse, verwacht 00..FF of overnemen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:285
 msgid "Invalid VLAN ID given! Only IDs between %d and %d are allowed."
-msgstr "Ongeldige VLAN ID gegeven! Alleen ID's tussen %d en %d zijn toegestaan."
+msgstr ""
+"Ongeldige VLAN ID gegeven! Alleen ID's tussen %d en %d zijn toegestaan."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:294
 msgid "Invalid VLAN ID given! Only unique IDs are allowed"
@@ -4876,8 +4904,8 @@ msgid ""
 "interoperate. Airtime efficiency may be significantly reduced where these "
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
-"Voor verouderde of zich slecht gedragende apparaten kunnen verouderde 802."
-"11b-snelheden nodig zijn om te kunnen samenwerken. Waar deze worden "
+"Voor verouderde of zich slecht gedragende apparaten kunnen verouderde "
+"802.11b-snelheden nodig zijn om te kunnen samenwerken. Waar deze worden "
 "gebruikt, kan de airtime-efficiëntie aanzienlijk afnemen. Aanbevolen wordt "
 "waar mogelijk geen 802.11b-snelheden toe te staan."
 
@@ -5237,6 +5265,10 @@ msgstr "KAART / LW4over6"
 msgid "MAP rule is invalid"
 msgstr "MAP-regel is ongeldig"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:24
+msgid "MBIM Cellular"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:223
 msgid "MD5"
 msgstr "MD5"
@@ -5334,6 +5366,7 @@ msgid "Maximum allowed size of EDNS0 UDP packets."
 msgstr "Maximaal toegestane grootte van EDNS0 UDP-pakketten."
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
 msgid "Maximum amount of seconds to wait for the modem to become ready"
 msgstr "Maximum aantal seconden om te wachten tot de modem klaar is"
@@ -5351,8 +5384,8 @@ msgid ""
 "Maximum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds."
 msgstr ""
-"Maximale toegestane tijd tussen het verzenden van ongevraagde <abbr title="
-"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Standaard is 600 "
+"Maximale toegestane tijd tussen het verzenden van ongevraagde <abbr "
+"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Standaard is 600 "
 "seconden."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:941
@@ -5457,8 +5490,8 @@ msgid ""
 "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds."
 msgstr ""
-"Minimum toegestane tijd tussen het verzenden van ongevraagde <abbr title="
-"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Standaard is 200 "
+"Minimum toegestane tijd tussen het verzenden van ongevraagde <abbr "
+"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Standaard is 200 "
 "seconden."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:204
@@ -5508,6 +5541,7 @@ msgid "Modem default"
 msgstr "Modem standaard"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:73
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:54
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:82
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:65
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:73
@@ -5524,6 +5558,7 @@ msgid "Modem information query failed"
 msgstr "Het opvragen van modemgegevens is mislukt"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:119
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
 msgid "Modem init timeout"
@@ -5984,6 +6019,7 @@ msgstr "Niet-wildcard"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:159
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:183
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:80
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:112
 msgid "None"
 msgstr "Geen"
@@ -6149,8 +6185,8 @@ msgstr ""
 msgid ""
 "Only if current active slave fails and the primary slave is up (failure, 2)"
 msgstr ""
-"Alleen als de huidige actieve slave uitvalt en de primaire slave actief is ("
-"storing, 2)"
+"Alleen als de huidige actieve slave uitvalt en de primaire slave actief is "
+"(storing, 2)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:682
 msgid "Open iptables rules overview…"
@@ -6246,8 +6282,8 @@ msgid ""
 "server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
 "for the interface."
 msgstr ""
-"Optioneel. Toegestane waarden: 'eui64', 'willekeurig', vaste waarde zoals '::"
-"1' of '::1:2'. Wanneer het IPv6-voorvoegsel (zoals 'a:b:c:d::') wordt "
+"Optioneel. Toegestane waarden: 'eui64', 'willekeurig', vaste waarde zoals "
+"'::1' of '::1:2'. Wanneer het IPv6-voorvoegsel (zoals 'a:b:c:d::') wordt "
 "ontvangen van een delegerende server, gebruikt u het achtervoegsel (zoals "
 "'::1') om het IPv6-adres te vormen ('a:b:c:d: :1') voor de interface."
 
@@ -6339,10 +6375,10 @@ msgid ""
 "code>\" for default route. <code>0.0.0.0</code> means \"the address of the "
 "system running dnsmasq\"."
 msgstr ""
-"Opties voor de netwerk-ID. (Opmerking: heeft ook netwerk-ID nodig.) Bijv. \""
-"<code>42,192.168.1.4</code>\" voor NTP-server, \"<code>3,192.168.4.4</code>\""
-" voor standaardroute. <code>0.0.0.0</code> betekent \"het adres van het "
-"systeem waarop dnsmasq draait\"."
+"Opties voor de netwerk-ID. (Opmerking: heeft ook netwerk-ID nodig.) Bijv. "
+"\"<code>42,192.168.1.4</code>\" voor NTP-server, \"<code>3,192.168.4.4</"
+"code>\" voor standaardroute. <code>0.0.0.0</code> betekent \"het adres van "
+"het systeem waarop dnsmasq draait\"."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:125
 msgid "Options:"
@@ -6422,6 +6458,7 @@ msgstr "IPv6-routingtabel overschrijven"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:69
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:74
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:132
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:194
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
@@ -6498,11 +6535,20 @@ msgstr ""
 msgid "Owner"
 msgstr "Eigenaar"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:78
+msgid "PAP"
+msgstr ""
+
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:77
+msgid "PAP/CHAP"
+msgstr ""
+
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:109
 msgid "PAP/CHAP (both)"
 msgstr "PAP/CHAP (beide)"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:111
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:88
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:120
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:107
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:45
@@ -6516,6 +6562,7 @@ msgid "PAP/CHAP password"
 msgstr "PAP/CHAP-wachtwoord"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:109
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:83
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:115
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:105
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:43
@@ -6528,6 +6575,7 @@ msgstr "PAP/CHAP-wachtwoord"
 msgid "PAP/CHAP username"
 msgstr "PAP/CHAP gebruikersnaam"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:94
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:114
 msgid "PDP Type"
 msgstr "PDP-type"
@@ -6537,6 +6585,7 @@ msgid "PID"
 msgstr "PID"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:106
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:73
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:105
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:102
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:79
@@ -6913,8 +6962,8 @@ msgid ""
 "packets without any VLAN tag (untagged packets)."
 msgstr ""
 "Voorkomt dat de ene draadloze client met de andere communiceert. Deze "
-"instelling is alleen van invloed op pakketten zonder enige VLAN-tag ("
-"ongetagde pakketten)."
+"instelling is alleen van invloed op pakketten zonder enige VLAN-tag "
+"(ongetagde pakketten)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:213
 msgid "Primary Slave"
@@ -8212,11 +8261,13 @@ msgstr "Specificeert de TOS-waarde die moet overeenkomen in IP-headers"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:261
 msgid "Specifies the aggregation selection logic to use"
-msgstr "Specificeert de logica voor aggregatieselectie die moet worden gebruikt"
+msgstr ""
+"Specificeert de logica voor aggregatieselectie die moet worden gebruikt"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:159
 msgid "Specifies the destination subnet to match (CIDR notation)"
-msgstr "Specificeert het bestemmingssubnet dat moet overeenkomen (CIDR-notatie)"
+msgstr ""
+"Specificeert het bestemmingssubnet dat moet overeenkomen (CIDR-notatie)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Specifies the directory the device is attached to"
@@ -8530,16 +8581,16 @@ msgid ""
 "Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
 "bytes) (optional)."
 msgstr ""
-"Geef een andere MTU (Maximum Transmission Unit) op dan de standaardwaarde ("
-"1280 bytes) (optioneel)."
+"Geef een andere MTU (Maximum Transmission Unit) op dan de standaardwaarde "
+"(1280 bytes) (optioneel)."
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 msgid ""
 "Specify an MTU (Maximum Transmission Unit) other than the default (1280 "
 "bytes)."
 msgstr ""
-"Geef een andere MTU (Maximum Transmission Unit) op dan de standaardwaarde ("
-"1280 bytes)."
+"Geef een andere MTU (Maximum Transmission Unit) op dan de standaardwaarde "
+"(1280 bytes)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2118
 msgid "Specify the secret encryption key here."
@@ -8844,8 +8895,8 @@ msgid ""
 "Minimum is 1280 bytes."
 msgstr ""
 "De <abbr title=\"Maximum Transmission Unit\">MTU</abbr> die moet worden "
-"gepubliceerd in <abbr title=\"Router Advertisement, ICMPv6 Type 134\""
-">RA</abbr>-berichten. Het minimum is 1280 bytes."
+"gepubliceerd in <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</"
+"abbr>-berichten. Het minimum is 1280 bytes."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:811
 msgid ""
@@ -8981,7 +9032,8 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:640
 msgid "The MTU must not exceed the parent device MTU of %d bytes"
-msgstr "De MTU mag de MTU van het ouderapparaat van %d bytes niet overschrijden"
+msgstr ""
+"De MTU mag de MTU van het ouderapparaat van %d bytes niet overschrijden"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:942
 msgid "The VLAN ID must be unique"
@@ -9141,8 +9193,8 @@ msgid ""
 "The length of the IPv4 prefix in bits, the remainder is used in the IPv6 "
 "addresses."
 msgstr ""
-"De lengte van het IPv4-prefix in bits, de rest wordt gebruikt in de "
-"IPv6-adressen."
+"De lengte van het IPv4-prefix in bits, de rest wordt gebruikt in de IPv6-"
+"adressen."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:57
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:63
@@ -9204,8 +9256,8 @@ msgid ""
 "The maximum hops to be published in <abbr title=\"Router Advertisement\">RA</"
 "abbr> messages. Maximum is 255 hops."
 msgstr ""
-"Het maximale aantal hops dat moet worden gepubliceerd in <abbr title=\"Router"
-" Advertisement\">RA</abbr>-berichten. Maximaal is 255 hops."
+"Het maximale aantal hops dat moet worden gepubliceerd in <abbr "
+"title=\"Router Advertisement\">RA</abbr>-berichten. Maximaal is 255 hops."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4691
 msgid ""
@@ -9555,7 +9607,8 @@ msgstr "Time-out in seconden"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:567
 msgid "Timeout in seconds for learned MAC addresses in the forwarding database"
-msgstr "Time-out in seconden voor geleerde MAC-adressen in de doorstuurdatabase"
+msgstr ""
+"Time-out in seconden voor geleerde MAC-adressen in de doorstuurdatabase"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:586
 msgid "Timeout in seconds until topology updates on link loss"
@@ -9571,8 +9624,8 @@ msgid ""
 "provider supplied) configuration file, use the <strong><a class=\"full-"
 "import\" href=\"#\">configuration import</a></strong> instead."
 msgstr ""
-"Gebruik in plaats daarvan de <strong><a class=\"full-import\" href"
-"=\"#\">configuratie-import</a></strong> om de lokale WireGuard-interface "
+"Gebruik in plaats daarvan de <strong><a class=\"full-import\" "
+"href=\"#\">configuratie-import</a></strong> om de lokale WireGuard-interface "
 "volledig te configureren vanuit een bestaand (bijv. door de provider "
 "geleverd) configuratiebestand."
 
@@ -9981,6 +10034,10 @@ msgstr "Bedrijfstijd"
 msgid "Use <code>/etc/ethers</code>"
 msgstr "Gebruik <code>/etc/ethers</code>"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:106
+msgid "Use DHCP"
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:295
 msgid "Use DHCP advertised servers"
 msgstr "Gebruik DHCP geadverteerde servers"
@@ -9989,7 +10046,12 @@ msgstr "Gebruik DHCP geadverteerde servers"
 msgid "Use DHCP gateway"
 msgstr "Gebruik de DHCP-gateway"
 
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:115
+msgid "Use DHCPv6"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:144
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:132
 msgid "Use DNS servers advertised by peer"
@@ -10048,16 +10110,19 @@ msgid "Use builtin IPv6-management"
 msgstr "Gebruik ingebouwd IPv6-beheer"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:961
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:148
 msgid "Use custom DNS servers"
 msgstr "Aangepaste DNS-servers gebruiken"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:953
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:133
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:121
 msgid "Use default gateway"
 msgstr "Gebruik de standaardgateway"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:975
+#: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:138
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:164
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:126
 msgid "Use gateway metric"
@@ -10290,7 +10355,8 @@ msgstr "Leverancier"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 msgid "Vendor Class to send when requesting DHCP"
-msgstr "Leveranciersklasse die moet worden verzonden bij het aanvragen van DHCP"
+msgstr ""
+"Leveranciersklasse die moet worden verzonden bij het aanvragen van DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:484
 msgid "Verify unsigned domain responses really come from unsigned domains."
@@ -10587,8 +10653,8 @@ msgid ""
 "scripts like \"network\", your device might become inaccessible!</strong>"
 msgstr ""
 "U kunt geïnstalleerde init-scripts hier in- of uitschakelen. Wijzigingen "
-"worden toegepast nadat het apparaat opnieuw is opgestart.<br "
-"/><strong>Waarschuwing: als u essentiële init-scripts zoals \"netwerk\" "
+"worden toegepast nadat het apparaat opnieuw is opgestart.<br /"
+"><strong>Waarschuwing: als u essentiële init-scripts zoals \"netwerk\" "
 "uitschakelt, kan uw apparaat ontoegankelijk worden!</strong>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:635
