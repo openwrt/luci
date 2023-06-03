@@ -63,6 +63,7 @@ return view.extend({
 		o.value("ec-384", _("ECC 384 bits"));
 		o.default = "2048";
 		o.rmempty = false;
+		o.modalonly = true;
 
 		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
 			_("Domain names to include in the certificate. " +
@@ -154,6 +155,7 @@ return view.extend({
 		o.optional    = true;
 		o.placeholder = 90;
 		o.datatype    = 'uinteger';
+		o.modalonly = true;
 
 		return m.render()
 	}
