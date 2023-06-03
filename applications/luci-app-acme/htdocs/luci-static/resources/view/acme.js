@@ -36,7 +36,8 @@ return view.extend({
 		s.nodescriptions = true;
 
 		o = s.tab("general", _("General Settings"));
-		o = s.tab("challenge", _("Challenge Validation"));
+		o = s.tab('challenge_webroot', _('Webroot Challenge Validation'));
+		o = s.tab('challenge_dns', _('DNS Challenge Validation'));
 		o = s.tab("advanced", _('Advanced Settings'));
 
 		o = s.taboption('general', form.Flag, "enabled", _("Enabled"));
@@ -48,24 +49,26 @@ return view.extend({
 				"Note that all domain names must point at the router in the global DNS."));
 		o.datatype = "list(string)";
 
-		o = s.taboption('challenge', form.ListValue, "validation_method", _("Validation method"),
+		o = s.taboption('general', form.ListValue, 'validation_method', _('Validation method'),
 			_("Standalone mode will use the built-in webserver of acme.sh to issue a certificate. " +
 			"Webroot mode will use an existing webserver to issue a certificate. " +
 			"DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate."));
 		o.value("standalone", _("Standalone"));
 		o.value("webroot", _("Webroot"));
 		o.value("dns", _("DNS"));
-		o.default = "standalone";
+		o.default = 'webroot';
 
-		o = s.taboption('challenge', form.Value, "webroot", _("Webroot directory"),
+		o = s.taboption('challenge_webroot', form.Value, 'webroot', _('Webroot directory'),
 			_("Webserver root directory. Set this to the webserver " +
 				"document root to run Acme in webroot mode. The web " +
-				"server must be accessible from the internet on port 80."));
+				"server must be accessible from the internet on port 80.") + '<br/>' +
+			_("Default") + " <em>/var/run/acme/challenge/</em>"
+		);
 		o.optional = true;
 		o.depends("validation_method", "webroot");
 		o.modalonly = true;
 
-		o = s.taboption('challenge', form.Value, "dns", _("DNS API"),
+		o = s.taboption('challenge_dns', form.Value, 'dns', _('DNS API'),
 			_("To use DNS mode to issue certificates, set this to the name of a DNS API supported by acme.sh. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/dnsapi for the list of available APIs. " +
 				"In DNS mode, the domain name does not have to resolve to the router IP. " +
@@ -74,7 +77,7 @@ return view.extend({
 		o.depends("validation_method", "dns");
 		o.modalonly = true;
 
-		o = s.taboption('challenge', form.DynamicList, "credentials", _("DNS API credentials"),
+		o = s.taboption('challenge_dns', form.DynamicList, 'credentials', _('DNS API credentials'),
 			_("The credentials for the DNS API mode selected above. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/dnsapi for the format of credentials required by each API. " +
 				"Add multiple entries here in KEY=VAL shell variable format to supply multiple credential variables."))
@@ -82,14 +85,14 @@ return view.extend({
 		o.depends("validation_method", "dns");
 		o.modalonly = true;
 
-		o = s.taboption('challenge', form.Value, "calias", _("Challenge Alias"),
+		o = s.taboption('challenge_dns', form.Value, 'calias', _('Challenge Alias'),
 			_("The challenge alias to use for ALL domains. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode for the details of this process. " +
 				"LUCI only supports one challenge alias per certificate."));
 		o.depends("validation_method", "dns");
 		o.modalonly = true;
 
-		o = s.taboption('challenge', form.Value, "dalias", _("Domain Alias"),
+		o = s.taboption('challenge_dns', form.Value, 'dalias', _('Domain Alias'),
 			_("The domain alias to use for ALL domains. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-mode for the details of this process. " +
 				"LUCI only supports one challenge domain per certificate."));
