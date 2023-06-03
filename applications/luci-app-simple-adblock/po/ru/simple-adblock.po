@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: simple-adblock\n"
 "POT-Creation-Date: 2017-12-07 14:00+0300\n"
-"PO-Revision-Date: 2023-03-21 21:39+0000\n"
-"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
+"PO-Revision-Date: 2023-05-05 22:53+0000\n"
+"Last-Translator: st7105 <st7105@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssimple-adblock/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -40,15 +40,15 @@ msgstr "Добавление записей IPv6 в чёрный список."
 msgid "Advanced Configuration"
 msgstr "Расширенные настройки"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:156
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:163
 msgid "Allowed Domain URLs"
 msgstr "Разрешённые URL-адреса доменов"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:152
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:159
 msgid "Allowed Domains"
 msgstr "Разрешённые домены"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:146
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:153
 msgid "Allowed and Blocked Lists Management"
 msgstr "Управление списками разрешения и блокировки"
 
@@ -65,15 +65,19 @@ msgstr "Автоматическое обновление конфигураци
 msgid "Basic Configuration"
 msgstr "Основная конфигурация"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:164
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:167
+msgid "Blocked AdBlockPlus-style URLs"
+msgstr "Заблокированные URL-адреса в стиле AdBlockPlus"
+
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:175
 msgid "Blocked Domain URLs"
 msgstr "URL-адреса блокируемых доменов"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:160
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:171
 msgid "Blocked Domains"
 msgstr "Блокируемые домены"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:168
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:179
 msgid "Blocked Hosts URLs"
 msgstr "URL-адреса блокируемых хостов"
 
@@ -92,10 +96,6 @@ msgstr "Создан сжатый файл кеша."
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:133
 msgid "Compressed cache file found."
 msgstr "Найден сжатый кэш-файл."
-
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:173
-msgid "Config (%s) validation failure!"
-msgstr "Конфигурация (%s) не прошла проверку!"
 
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:42
 msgid "Controls system log and console output verbosity."
@@ -117,22 +117,31 @@ msgstr "Служба DNS"
 msgid "DNS resolution option, see the %sREADME%s for details."
 msgstr "Опция разрешения DNS, подробности см. в %sREADME%s."
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:270
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:139
+msgid "Directory for compressed cache file"
+msgstr "Каталог для сжатого файла кэша"
+
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:140
+msgid ""
+"Directory for compressed cache file of block-list in the persistent memory."
+msgstr "Каталог для сжатого кэш-файла блок-листа в постоянной памяти."
+
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:269
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:37
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:39
 msgid "Disable"
 msgstr "Отключить"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:141
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:143
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:148
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:150
 msgid "Disable Debugging"
 msgstr "Отключить отладку"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:266
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:265
 msgid "Disabling %s service"
 msgstr "Отключение %s сервиса"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:147
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:154
 msgid "Dnsmasq Config File URL"
 msgstr "URL-адрес файла конфигурации Dnsmasq"
 
@@ -158,21 +167,21 @@ msgstr "Время ожидания загрузки (в секундах)"
 msgid "Downloading lists"
 msgstr "Загрузка списков"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:259
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:258
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:38
 msgid "Enable"
 msgstr "Включить"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:139
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:142
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:146
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:149
 msgid "Enable Debugging"
 msgstr "Включить отладку"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:140
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:147
 msgid "Enables debug output to /tmp/simple-adblock.log."
 msgstr "Включает вывод отладочной информации в /tmp/simple-adblock.log."
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:255
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:254
 msgid "Enabling %s service"
 msgstr "Включение %s сервиса"
 
@@ -188,7 +197,7 @@ msgstr "Ошибка"
 msgid "Force DNS ports:"
 msgstr "Принудительное использование портов DNS:"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:237
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:236
 msgid "Force Re-Download"
 msgstr "Принудительно загрузить"
 
@@ -205,7 +214,7 @@ msgstr "Назначить DNS роутера"
 msgid "Force Router DNS server to all local devices"
 msgstr "Назначить DNS роутера всем локальным устройствам"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:233
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:232
 msgid "Force re-downloading %s block lists"
 msgstr "Принудительная повторная загрузка блок-списков %s"
 
@@ -239,11 +248,11 @@ msgstr ""
 "Если curl установлен и обнаружен, данное значение устанавливает количество "
 "повторных попыток загрузки в случае неудачи."
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:153
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:160
 msgid "Individual domains to be allowed."
 msgstr "Отдельные домены, которые будут разрешены."
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:161
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:172
 msgid "Individual domains to be blocked."
 msgstr "Отдельные домены, которые будут заблокированы."
 
@@ -300,11 +309,11 @@ msgstr "Обработка списков"
 msgid "Restarting"
 msgstr "Перезапуск"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:304
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:303
 msgid "Service Control"
 msgstr "Управление службой"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:204
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:203
 msgid "Service Errors"
 msgstr "Ошибки службы"
 
@@ -336,7 +345,7 @@ msgstr "Одновременная обработка"
 msgid "Some output"
 msgstr "Частичная запись"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:226
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:225
 msgid "Start"
 msgstr "Запустить"
 
@@ -344,11 +353,11 @@ msgstr "Запустить"
 msgid "Starting"
 msgstr "Запуск"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:222
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:221
 msgid "Starting %s service"
 msgstr "Запуск %s службы"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:248
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:247
 msgid "Stop"
 msgstr "Остановить"
 
@@ -361,7 +370,7 @@ msgstr ""
 msgid "Stopped"
 msgstr "Остановлена"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:244
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:243
 msgid "Stopping %s service"
 msgstr "Остановка %s службы"
 
@@ -377,31 +386,27 @@ msgstr "Хранить сжатый файл кэша на роутере"
 msgid "Suppress output"
 msgstr "Запрет записи"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:180
-msgid "The %s service failed to discover WAN gateway!"
-msgstr "Службе %s не удалось обнаружить шлюз WAN!"
-
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:148
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:155
 msgid ""
 "URL to the external dnsmasq config file, see the %sREADME%s for details."
 msgstr ""
 "URL-адрес внешнего файла конфигурации dnsmasq, подробности см. в %sREADME%s."
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:157
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:168
+msgid "URLs to lists of AdBlockPlus-style formatted domains to be blocked."
+msgstr "URL-адреса списков блокируемых доменов в стиле AdBlockPlus."
+
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:164
 msgid "URLs to lists of domains to be allowed."
 msgstr "URL списков разрешаемых доменов."
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:165
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:176
 msgid "URLs to lists of domains to be blocked."
 msgstr "URL списков блокируемых доменов."
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:169
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:180
 msgid "URLs to lists of hosts to be blocked."
 msgstr "URL списков блокируемых хостов."
-
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:179
-msgid "Unable to create directory for '%s'"
-msgstr "Не удалось создать каталог для '%s'"
 
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:130
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:131
@@ -420,6 +425,10 @@ msgstr "Версия: %s"
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:98
 msgid "Warning"
 msgstr "Внимание"
+
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:173
+msgid "config (%s) validation failure!"
+msgstr "ошибка проверки конфигурации (%s)!"
 
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:127
 msgid "disabled"
@@ -474,91 +483,91 @@ msgstr "поддержка наборов dnsmasq nft включена, но nft
 msgid "dnsmasq servers file"
 msgstr "файл серверов dnsmasq"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:184
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:183
 msgid "failed to access shared memory"
 msgstr "не удалось получить доступ к общей памяти"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:182
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:181
 msgid "failed to create '%s' file"
 msgstr "не удалось создать файл '%s'"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:194
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:193
 msgid "failed to create block-list or restart DNS resolver"
 msgstr "не удалось создать чёрный список или перезапустить службу DNS"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:190
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:189
 msgid "failed to create compressed cache"
 msgstr "не удалось создать сжатый кэш"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:181
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:180
 msgid "failed to create directory for %s file"
 msgstr "не удалось создать каталог для файла %s"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:202
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:201
 msgid "failed to create output/cache/gzip file directory"
 msgstr "не удалось создать каталог файлов output/cache/gzip"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:198
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:197
 msgid "failed to download"
 msgstr "не удалось загрузить"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:197
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:196
 msgid "failed to download Config Update file"
 msgstr "не удалось загрузить файл обновления конфигурации"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:188
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:187
 msgid "failed to format data file"
 msgstr "не удалось отформатировать файл данных"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:193
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:192
 msgid "failed to move '%s' to '%s'"
 msgstr "не удалось переместить '%s' в '%s'"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:189
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:188
 msgid "failed to move temporary data file to '%s'"
 msgstr "не удалось переместить временный файл данных в '%s'"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:186
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:185
 msgid "failed to optimize data file"
 msgstr "не удалось оптимизировать файл данных"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:200
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:199
 msgid "failed to parse"
 msgstr "не удалось обработать"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:199
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:198
 msgid "failed to parse Config Update file"
 msgstr "не удалось обработать файл обновления конфигурации"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:187
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:186
 msgid "failed to process allow-list"
 msgstr "не удалось обработать список разрешения"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:196
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:195
 msgid "failed to reload/restart DNS resolver"
 msgstr "не удалось перезапустить службу DNS"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:191
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:190
 msgid "failed to remove temporary files"
 msgstr "не удалось удалить временные файлы"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:183
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:182
 msgid "failed to restart/reload DNS resolver"
 msgstr "не удалось перезапустить службу DNS"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:185
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:184
 msgid "failed to sort data file"
 msgstr "не удалось отсортировать файл данных"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:195
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:194
 msgid "failed to stop %s"
 msgstr "не удалось остановить %s"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:192
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:191
 msgid "failed to unpack compressed cache"
 msgstr "не удалось распаковать сжатый кэш"
 
-#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:201
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:200
 msgid "no HTTPS/SSL support on device"
 msgstr "нет поддержки HTTPS/SSL на устройстве"
 
@@ -569,6 +578,10 @@ msgstr "ничего"
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:158
 msgid "some recommended packages are missing"
 msgstr "некоторые рекомендуемые пакеты отсутствуют"
+
+#: applications/luci-app-simple-adblock/htdocs/luci-static/resources/simple-adblock/status.js:179
+msgid "the %s failed to discover WAN gateway"
+msgstr "%s не удалось обнаружить WAN-шлюз"
 
 #: applications/luci-app-simple-adblock/htdocs/luci-static/resources/view/simple-adblock/overview.js:98
 msgid "unbound adblock list"
