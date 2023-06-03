@@ -1,0 +1,14 @@
+{
+	"luci-app-apfree-wifidog": {
+		"description": "Grant access to LuCI app apfree-wifidog",
+		"read": {
+			"ubus": {
+				"service": [ "list" ]
+			},
+			"uci": ["wifidogx"]
+		},
+		"write": {
+			"uci": ["wifidogx"]
+		}
+	}
+}
