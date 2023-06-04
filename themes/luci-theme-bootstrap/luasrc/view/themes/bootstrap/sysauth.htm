@@ -17,13 +17,13 @@
 				<div class="cbi-value">
 					<label class="cbi-value-title" for="luci_username"><%:Username%></label>
 					<div class="cbi-value-field">
-						<input name="luci_username" type="text"<%=attr("value", duser)%>>
+						<input name="luci_username" id="luci_username" type="text" autocomplete="username" <%=attr("value", duser)%>>
 					</div>
 				</div>
 				<div class="cbi-value">
 					<label class="cbi-value-title" for="luci_password"><%:Password%></label>
 					<div class="cbi-value-field">
-						<input name="luci_password" type="password">
+						<input name="luci_password" id="luci_password" type="password" autocomplete="current-password">
 					</div>
 				</div>
 			</div>

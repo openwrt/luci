@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-10-03 09:47+0000\n"
-"Last-Translator: pisquan8 <cimurro@outlook.de>\n"
+"PO-Revision-Date: 2022-12-26 08:48+0000\n"
+"Last-Translator: Daniele Luisetto <daniele.luisetto1@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsyggdrasil/it/>\n"
 "Language: it\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/status.js:33
 msgid "Active peers"
-msgstr ""
+msgstr "Peers attivi"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:17
 msgid ""
@@ -22,6 +22,12 @@ msgid ""
 "prevents this, so that only items specified in \"NodeInfo\" are sent back if "
 "specified."
 msgstr ""
+"Per impostazione predefinita, nodeinfo contiene alcuni valori predefiniti, "
+"tra cui la piattaforma, l'architettura e la versione di Yggdrasil. Questi "
+"possono essere utili per rilevare la rete e diagnosticare problemi di "
+"routing della rete. Abilitando la privacy di nodeinfo viene impedito questo, "
+"in modo che solo gli elementi specificati in \"NodeInfo\" vengano inviati "
+"indietro se specificati."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:45
 msgid ""
@@ -33,10 +39,17 @@ msgid ""
 "connections on Port. Listen controls whether or not the node listens for "
 "multicast beacons and opens outgoing connections."
 msgstr ""
+"Configurazione per le interfacce su cui deve essere abilitato il multicast "
+"peer discovery. Regex è un'espressione regolare che viene confrontata con un "
+"nome di interfaccia; le interfacce utilizzano la prima configurazione a cui "
+"corrispondono. Beacon configura se il nodo deve inviare o meno segnali "
+"multicast link-local per segnalare la loro presenza, mentre ascolta le "
+"connessioni in entrata sulla porta. Listen controlla se il nodo ascolta i "
+"segnali multicast e apre connessioni in uscita."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:16
 msgid "Enable NodeInfo privacy"
-msgstr ""
+msgstr "Attiva privacy NodeInfo"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:41

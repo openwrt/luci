@@ -83,9 +83,9 @@ return view.extend({
 	},
 
 	handle200: function (response) {
-		res = response.json();
+		response = response.json();
 		var image;
-		for (image of res.images) {
+		for (image of response.images) {
 			if (this.firmware.filesystem == image.filesystem) {
 				if (this.data.efi) {
 					if (image.type == 'combined-efi') {
@@ -100,21 +100,21 @@ return view.extend({
 		}
 
 		if (image.name != undefined) {
-			var sysupgrade_url = `${this.data.url}/store/${res.bin_dir}/${image.name}`;
+			var sysupgrade_url = `${this.data.url}/store/${response.bin_dir}/${image.name}`;
 
 			var keep = E('input', { type: 'checkbox' });
 			keep.checked = true;
 
 			var fields = [
-				_('Version'), `${res.version_number} ${res.version_code}`,
+				_('Version'), `${response.version_number} ${response.version_code}`,
 				_('SHA256'), image.sha256,
 			];
 
 			if (this.data.advanced_mode == 1) {
 				fields.push(
-					_('Profile'), res.id,
-					_('Target'), res.target,
-					_('Build Date'), res.build_at,
+					_('Profile'), response.id,
+					_('Target'), response.target,
+					_('Build Date'), response.build_at,
 					_('Filename'), image.name,
 					_('Filesystem'), image.filesystem,
 				)
@@ -155,7 +155,7 @@ return view.extend({
 
 	handle202: function (response) {
 		response = response.json();
-		this.data.request_hash = res.request_hash;
+		this.data.request_hash = response.request_hash;
 
 		if ('queue_position' in response) {
 			ui.showModal(_('Queued...'), [
@@ -341,6 +341,11 @@ return view.extend({
 					}
 				}
 
+				// allow to re-install running firmware in advanced mode
+				if (this.data.advanced_mode == 1) {
+					candidates.unshift([version, revision])
+				}
+
 				if (candidates.length) {
 					var m, s, o;
 
@@ -357,7 +362,12 @@ return view.extend({
 					s = map.section(form.NamedSection, 'request', '', '', 'Use defaults for the safest update');
 					o = s.option(form.ListValue, 'version', 'Select firmware version');
 					for (let candidate of candidates) {
-						o.value(candidate[0], candidate[1] ? `${candidate[0]} - ${candidate[1]}` : candidate[0]);
+						if (candidate[0] == version && candidate[1] == revision) {
+							o.value(candidate[0], _('[installed] %s')
+								.format(candidate[1] ? `${candidate[0]} - ${candidate[1]}` : candidate[0]));
+						} else {
+							o.value(candidate[0], candidate[1] ? `${candidate[0]} - ${candidate[1]}` : candidate[0]);
+						}
 					}
 
 					if (this.data.advanced_mode == 1) {
@@ -407,18 +417,21 @@ return view.extend({
 		]);
 	},
 
-	render: function (res) {
-		this.data.app_version = res[0].packages['luci-app-attendedsysupgrade'];
-		this.firmware.packages = res[0].packages;
+	render: function (response) {
+		this.firmware.client = 'luci/' + response[0].packages['luci-app-attendedsysupgrade'];
+		this.firmware.packages = response[0].packages;
 
-		this.firmware.profile = res[1].board_name;
-		this.firmware.target = res[1].release.target;
-		this.firmware.version = res[1].release.version;
-		this.data.branch = get_branch(res[1].release.version);
-		this.data.revision = res[1].release.revision;
-		this.data.efi = res[2];
-		if (res[1].rootfs_type) {
-			this.firmware.filesystem = res[1].rootfs_type;
+		this.firmware.profile = response[1].board_name;
+		this.firmware.target = response[1].release.target;
+		this.firmware.version = response[1].release.version;
+		this.data.branch = get_branch(response[1].release.version);
+		this.firmware.filesystem = response[1].rootfs_type;
+		this.data.revision = response[1].release.revision;
+
+		this.data.efi = response[2];
+
+		if (response[1].rootfs_type) {
+			this.firmware.filesystem = response[1].rootfs_type;
 		} else {
 			L.resolveDefault(fs.read("/proc/mounts"), '')
 			.then(mounts => {

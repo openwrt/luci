@@ -295,7 +295,7 @@ function net.conntrack(callback)
 			tuples = rest
 		end
 
-		if fam and l3 and l4 and timeout and not tuples:match("^TIME_WAIT ") then
+		if fam and l3 and l4 and not tuples:match("^TIME_WAIT ") then
 			l4 = nixio.getprotobynumber(l4)
 
 			local entry = {

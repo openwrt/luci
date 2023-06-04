@@ -69,7 +69,7 @@ return network.registerProtocol('ncm', {
 			}, this));
 		};
 
-		o = s.taboption('general', form.Value, 'service', _('Service Type'));
+		o = s.taboption('general', form.Value, 'mode', _('Network Mode'));
 		o.value('', _('Modem default'));
 		o.value('preferlte', _('Prefer LTE'));
 		o.value('preferumts', _('Prefer UMTS'));

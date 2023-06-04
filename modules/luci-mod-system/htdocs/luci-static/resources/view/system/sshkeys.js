@@ -112,7 +112,7 @@ function renderKeyItem(pubkey) {
 		click: isReadonlyView ? null : removeKey,
 		'data-key': pubkey.src
 	}, [
-		E('strong', pubkey.comment || _('Unnamed key')), E('br'),
+		E('strong', [ pubkey.comment || _('Unnamed key') ]), E('br'),
 		E('small', [
 			'%s, %s'.format(pubkey.type, pubkey.curve || _('%d Bit').format(pubkey.bits)),
 			pubkey.options ? E([], [
@@ -198,7 +198,7 @@ function removeKey(ev) {
 
 	L.showModal(_('Delete key'), [
 		E('div', _('Do you really want to delete the following SSH key?')),
-		E('pre', delkey),
+		E('pre', [ delkey ]),
 		E('div', { class: 'right' }, [
 			E('div', { class: 'btn', click: L.hideModal }, _('Cancel')),
 			' ',

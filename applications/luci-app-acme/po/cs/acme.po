@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-08-11 21:12+0000\n"
-"Last-Translator: Marek Ľach <graweeld@googlemail.com>\n"
+"PO-Revision-Date: 2023-03-23 14:42+0000\n"
+"Last-Translator: David Rapaň <david@rapan.cz>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/cs/>\n"
 "Language: cs\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -16,7 +16,7 @@ msgstr "Certifikáty ACME"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certs"
-msgstr "ACME certifikáty"
+msgstr "Certifikáty ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:26
 msgid "ACME global config"
@@ -40,11 +40,11 @@ msgstr "Konfigurace certifikátu"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:122
 msgid "Challenge Alias"
-msgstr ""
+msgstr "Aliasy"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:47
 msgid "Challenge Validation"
-msgstr ""
+msgstr "Validace"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Custom ACME CA"
@@ -64,7 +64,7 @@ msgstr "DNS API"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:115
 msgid "DNS API credentials"
-msgstr "DNS API ověření"
+msgstr "DNS API pověření"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
 msgid "Days until renewal"
@@ -169,6 +169,10 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
+"Alias výzvy, který se má použít pro VŠECHNY domény. Podrobnosti o tomto "
+"procesu naleznete na adrese https://github.com/acmesh-official/acme.sh/wiki/"
+"DNS-alias-mode. Rozhraní LUCI podporuje pouze jeden alias výzvy na "
+"certifikát."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:116
 msgid ""
@@ -177,6 +181,11 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
+"Přihlašovací údaje pro zvolený režim DNS API. Podívejte se na adresu https://"
+"github.com/acmesh-official/acme.sh/wiki/dnsapi, jaký formát přihlašovacích "
+"údajů je požadován pro každé API. Přidejte zde více položek v formátu "
+"proměnné shellu KLÍČ=HODNOTA, abyste mohli poskytnout více přihlašovacích "
+"proměnných."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:129
 msgid ""
@@ -214,6 +223,12 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"Aby bylo možné vydávání certifikátů pomocí režimu DNS, nastavte název DNS "
+"API podporovaného aplikací acme.sh. Seznam dostupných API naleznete na "
+"adrese https://github.com/acmesh-official/acme.sh/wiki/dnsapi. V režimu DNS "
+"nemusí být doménové jméno přeloženo na IP adresu směrovače. Režim DNS je "
+"také jediným režimem, který podporuje vydávání wildcard certifikátů. Použití "
+"tohoto režimu vyžaduje instalaci balíčku acme-dnsapi."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:84
 msgid ""
@@ -221,6 +236,10 @@ msgid ""
 "for one certificate). Nginx must support ssl, if not it won't start as it "
 "needs to be compiled with ssl support to use cert options"
 msgstr ""
+"Aktualizovat konfiguraci nginx s tímto certifikátem po jeho vydání (zvolte "
+"pouze pro jeden certifikát). Nginx musí podporovat SSL, pokud ne, nebude "
+"spuštěn, protože musí být kompilován s podporou SSL pro použití "
+"certifikačních možností"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid ""
@@ -228,6 +247,9 @@ msgid ""
 "for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
 "form the LuCI interface."
 msgstr ""
+"Aktualizovat konfiguraci uhttpd s tímto certifikátem po jeho vydání (zvolte "
+"pouze pro jeden certifikát). Je také k dispozici luci-app-uhttpd pro "
+"konfiguraci uhttpd z rozhraní LuCI."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:135
 msgid "Use a custom CA instead of Let's Encrypt."

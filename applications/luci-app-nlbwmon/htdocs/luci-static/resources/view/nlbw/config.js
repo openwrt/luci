@@ -102,6 +102,9 @@ return view.extend({
 
 			return m ? m[1] : null;
 		};
+		o.validate = function(section_id, value) {
+			return /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.exec(value) ? true : _('Require a valid date in the form "YYYY-MM-DD"');
+		};
 		o.write = writePeriod;
 		o.depends('_period', 'absolute');
 
