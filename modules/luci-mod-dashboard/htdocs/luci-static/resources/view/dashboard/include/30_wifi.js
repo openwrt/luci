@@ -262,6 +262,8 @@ return baseclass.extend({
 
 		this.renderUpdateData(data[0], data[1], data[2]);
 
-		return this.renderHtml();
+		if (this.params.wifi.radios.length)
+			return this.renderHtml();
+		return E([]);
 	}
 });
