@@ -882,7 +882,7 @@ return view.extend({
 					};
 
 					if (env['has_bindnet']) {
-						o = s.taboption('advanced', widgets.ZoneSelect, 'bind_network',
+						o = s.taboption('advanced', widgets.NetworkSelect, 'bind_network',
 							_("Bind Network"),
 							_('OPTIONAL: Network to use for communication')
 							+ '<br />' +
