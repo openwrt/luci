@@ -374,6 +374,7 @@ var UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
 			'disabled': this.options.disabled ? '' : null,
 			'maxlength': this.options.maxlength,
 			'placeholder': this.options.placeholder,
+			'autocomplete': this.options.password ? 'new-password' : null,
 			'value': this.value,
 		});
 
