@@ -5,7 +5,19 @@
 'require view';
 
 return view.extend({
-	render: function (stats) {
+	load: function() {
+		return L.resolveDefault(fs.list('/etc/ssl/acme/'), []).then(function(entries) {
+			var certs = [];
+			for (var i = 0; i < entries.length; i++) {
+				if (entries[i].type == 'file' && entries[i].name.match(/\.key$/)) {
+					certs.push(entries[i]);
+				}
+			}
+			return certs;
+		});
+	},
+
+	render: function (certs) {
 		let wikiUrl = 'https://github.com/acmesh-official/acme.sh/wiki/';
 		var wikiInstructionUrl = wikiUrl + 'dnsapi';
 		var m, s, o;
@@ -512,7 +524,12 @@ return view.extend({
 		o.datatype    = 'uinteger';
 		o.modalonly = true;
 
-		return m.render()
+
+		s = m.section(form.GridSection, '_certificates');
+
+		s.render = L.bind(_renderCerts, this, certs);
+
+		return m.render();
 	}
 })
 
@@ -559,4 +576,31 @@ function _extractParamValue(paramsKeyVals, paramName) {
 
 function _handleCheckService(c, event, curVal, newVal) {
 	document.getElementById('wikiInstructionUrl').href = 'https://github.com/acmesh-official/acme.sh/wiki/dnsapi#' + newVal;
+}
+
+function _renderCerts(certs) {
+	var table = E('table', {'class': 'table cbi-section-table', 'id': 'certificates_table'}, [
+		E('tr', {'class': 'tr table-titles'}, [
+			E('th', {'class': 'th'}, _('Main Domain')),
+			E('th', {'class': 'th'}, _('Private Key')),
+			E('th', {'class': 'th'}, _('Public Certificate')),
+			E('th', {'class': 'th'}, _('Issued on')),
+		])
+	]);
+
+	var rows = certs.map(function (cert) {
+		let domain = cert.name.substring(0, cert.name.length - 4);
+		let issueDate = new Date(cert.mtime * 1000).toLocaleDateString();
+		return [
+			domain,
+			'/etc/ssl/acme/' + domain + '.key',
+			'/etc/ssl/acme/' + domain + '.fullchain.crt',
+			issueDate,
+		];
+	});
+
+	cbi_update_table(table, rows);
+
+	return E('div', {'class': 'cbi-section cbi-tblsection'}, [
+		E('h3', _('Certificates')), table]);
 }
