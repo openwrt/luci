@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-12-26 08:48+0000\n"
+"PO-Revision-Date: 2023-06-12 20:53+0000\n"
 "Last-Translator: Daniele Luisetto <daniele.luisetto1@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/it/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:433
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -16,11 +16,11 @@ msgstr "<abbr title=\"Local Peer Discovery\">LPD</abbr> abilitato"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:551
 msgid "Additional BT tracker"
-msgstr "BitTorrent tracker addizionale"
+msgstr "Tracker BT aggiuntivo"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:556
 msgid "Advanced Options"
-msgstr "Opzioni avanzate"
+msgstr "Opzioni Avanzate"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:309
 msgid "All proxy"
@@ -120,8 +120,9 @@ msgid ""
 "Disable IPv6. This is useful if you have to use broken DNS and want to avoid "
 "terribly slow AAAA record lookup."
 msgstr ""
-"Disabilita IPv6. Questo è utile se devi usare DNS non funzionanti e vuoi "
-"evitare una ricerca di record AAAA terribilmente lenta."
+"Disabilita IPv6. Questa opzione è utile se si deve usare un DNS non "
+"funzionante e si vuole evitare una ricerca del record AAAA terribilmente "
+"lenta."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:577
 msgid "Disk cache"
@@ -525,6 +526,9 @@ msgid ""
 "Save error/unfinished downloads to session file every N seconds. If 0 is "
 "given, file will be saved only when aria2 exits."
 msgstr ""
+"Salva gli errori/download non completati nel file di sessione ogni N "
+"secondi. Se viene fornito il valore 0, il file verrà salvato solo quando "
+"aria2 viene chiuso."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:453
 msgid ""
@@ -532,30 +536,35 @@ msgid ""
 "BitTorrent Magnet URI is used. The file name is hex encoded info hash with "
 "suffix \".torrent\"."
 msgstr ""
+"Salva i metadati come file \".torrent\". Questa opzione ha effetto solo "
+"quando viene utilizzato un BitTorrent Magnet URI. Il nome del file è l'info "
+"hash codificato in esadecimale con il suffisso \".torrent\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:452
 msgid "Save metadata"
-msgstr ""
+msgstr "Salva i metadati"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:571
 msgid "Save session interval"
-msgstr ""
+msgstr "Salva intervallo di sessione"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:467
 msgid "Seed previously downloaded files without verifying piece hashes."
 msgstr ""
+"Condividi i file precedentemente scaricati senza verificare gli hash delle "
+"parti."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:538
 msgid "Seed ratio"
-msgstr ""
+msgstr "Rapporto di condivisione"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:545
 msgid "Seed time"
-msgstr ""
+msgstr "Tempo di condivisione"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:466
 msgid "Seed unverified"
-msgstr ""
+msgstr "Condividi non verificati"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:348
 msgid ""
@@ -563,6 +572,9 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
+"Invia l'intestazione di richiesta <code>Accept: deflate, gzip</code> e "
+"decomprimi la risposta se il server remoto risponde con <code>Content-"
+"Encoding: gzip</code> o <code>Content-Encoding: deflate</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:357
 msgid ""
@@ -571,6 +583,10 @@ msgid ""
 "you can add Cache-Control header with a directive you like using \"Header\" "
 "option."
 msgstr ""
+"Invia l'intestazione <code>Cache-Control: no-cache</code> e <code>Pragma: no-"
+"cache</code> per evitare contenuti in cache. Se disabilitato, queste "
+"intestazioni non vengono inviate e puoi aggiungere l'intestazione Cache-"
+"Control con la direttiva desiderata utilizzando l'opzione \"Header\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:473
 msgid ""
@@ -578,30 +594,44 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
+"Imposta il numero di porta TCP per i download BitTorrent. Accetta formati "
+"come \"6881,6885\", \"6881-6999\" e \"6881-6889,6999\". Assicurati che le "
+"porte specificate siano aperte per il traffico TCP in entrata."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:479
 msgid ""
 "Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
 msgstr ""
+"Imposta la porta di ascolto UDP utilizzata da DHT (IPv4, IPv6) e il tracker "
+"UDP. Assicurati che le porte specificate siano aperte per il traffico UDP in "
+"entrata."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:614
 msgid ""
 "Set max download speed per each download in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Imposta la velocità massima di download per ogni download in byte/secondo. 0 "
+"significa senza restrizioni."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:607
 msgid "Set max overall download speed in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Imposta la velocità massima complessiva di download in byte/secondo. 0 "
+"significa senza restrizioni."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:492
 msgid "Set max overall upload speed in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Imposta la velocità massima complessiva di upload in byte/secondo. 0 "
+"significa senza restrizioni."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:499
 msgid ""
 "Set max upload speed per each torrent in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Imposta la velocità massima di upload per ogni torrent in byte/secondo. 0 "
+"significa senza restrizioni."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:368
 msgid ""
@@ -609,14 +639,17 @@ msgid ""
 "server. After the connection is established, this option makes no effect and "
 "\"Timeout\" option is used instead."
 msgstr ""
+"Imposta il timeout di connessione in secondi per stabilire la connessione al "
+"server HTTP/FTP/proxy. Dopo che la connessione è stata stabilita, questa "
+"opzione non ha effetto e viene utilizzata l'opzione \"Timeout\" al suo posto."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:404
 msgid "Set the seconds to wait between retries."
-msgstr ""
+msgstr "Imposta il numero di secondi da attendere tra i tentativi di riprova."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:409
 msgid "Set user agent for HTTP(S) downloads."
-msgstr ""
+msgstr "Imposta l'user agent per i download HTTP(S)."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:188
 msgid "Settings"
@@ -625,10 +658,11 @@ msgstr "Impostazioni"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:620
 msgid "Settings in this section will be added to config file."
 msgstr ""
+"Le impostazioni in questa sezione saranno aggiunte al file di configurazione."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:624
 msgid "Settings list"
-msgstr ""
+msgstr "Elenco impostazioni"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:585
 msgid ""
@@ -640,12 +674,22 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
+"Specificare il metodo di allocazione dei file. Se si utilizzano i file "
+"system più recenti, come ext4 (con il supporto degli extent), btrfs, xfs o "
+"NTFS (solo per la versione MinGW), \"falloc\" è la scelta migliore. Alloca "
+"file di grandi dimensioni (pochi GiB) quasi istantaneamente, ma potrebbe non "
+"essere disponibile se il vostro sistema non ha la funzione posix_fallocate(3)"
+". Non usate \"falloc\" con i file system tradizionali, come ext3 e FAT32, "
+"perché impiega quasi lo stesso tempo di \"prealloc\" e blocca completamente "
+"aria2 fino al termine dell'allocazione."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:505
 msgid ""
 "Specify maximum number of files to open in multi-file BitTorrent download "
 "globally."
 msgstr ""
+"Specificare il numero massimo di file da aprire nel download multi-file di "
+"BitTorrent a livello globale."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:546
 msgid ""
@@ -653,6 +697,10 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
+"Specificare il tempo di condivisione in minuti. Se l'opzione \"Rapporto di "
+"condivisione\" è specificata insieme a questa opzione, la condivisione "
+"termina quando almeno una delle condizioni è soddisfatta. Specificando 0 si "
+"disattiva la condivisione al termine del download."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:539
 msgid ""
@@ -660,10 +708,16 @@ msgid ""
 "RATIO. You are strongly encouraged to specify equals or more than 1.0 here. "
 "Specify 0.0 if you intend to do seeding regardless of share ratio."
 msgstr ""
+"Specificare il rapporto di condivisione. Condividi i torrent completati "
+"finché il rapporto di condivisione non raggiunge il valore RATIO. Si "
+"consiglia vivamente di specificare qui un valore uguale o superiore a 1,0. "
+"Specificare 0.0 se si intende eseguire la condivisione indipendentemente dal "
+"rapporto di condivisione."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:510
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
 msgstr ""
+"Specificare il numero massimo di peer per torrent, 0 significa illimitato."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:531
 msgid ""
@@ -672,42 +726,53 @@ msgid ""
 "than 20 bytes are specified, random byte data are added to make its length "
 "20 bytes."
 msgstr ""
+"Specificare il prefisso dell'ID peer. L'ID peer in BitTorrent ha una "
+"lunghezza di 20 byte. Se vengono specificati più di 20 byte, vengono "
+"utilizzati solo i primi 20 byte. Se sono specificati meno di 20 byte, "
+"vengono aggiunti byte casuali per raggiungere la lunghezza di 20 byte."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:525
 msgid ""
 "Stop BitTorrent download if download speed is 0 in consecutive N seconds. If "
 "0 is given, this feature is disabled."
 msgstr ""
+"Interrompe il download di BitTorrent se la velocità di download è 0 per N "
+"secondi consecutivi. Se viene dato 0, questa funzione è disabilitata."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:524
 msgid "Stop timeout"
-msgstr ""
+msgstr "Timeout di arresto"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:36
 msgid "The Aria2 service is not running."
-msgstr ""
+msgstr "Il servizio Aria2 non è in esecuzione."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:35
 msgid "The Aria2 service is running."
-msgstr ""
+msgstr "Il servizio Aria2 è in esecuzione."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:217
 msgid "The directory to store the config file, session file and DHT file."
 msgstr ""
+"La directory in cui memorizzare il file di configurazione, il file di "
+"sessione e il file DHT."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:213
 msgid ""
 "The directory to store the downloaded file. For example <code>/mnt/sda1</"
 "code>."
 msgstr ""
+"La directory in cui memorizzare il file scaricato. Per esempio <code>/mnt/"
+"sda1</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:224
 msgid "The file name of the log file."
-msgstr ""
+msgstr "Il nome del file di log."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:386
 msgid "The maximum number of connections to one server for each download."
 msgstr ""
+"Il numero massimo di connessioni ad un singolo server per ogni download."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:418
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:428
@@ -715,28 +780,32 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:445
 msgid "This option will be ignored if a private flag is set in a torrent."
 msgstr ""
+"Questa opzione viene ignorata se in un torrent è impostato un flag privato."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:373
 msgid "Timeout"
-msgstr "Tempo scaduto"
+msgstr "Timeout"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:260
 msgid "Token"
-msgstr ""
+msgstr "Token"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:486
 msgid "True"
-msgstr ""
+msgstr "True"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:310
 msgid "Use a proxy server for all protocols."
-msgstr ""
+msgstr "Usa un server proxy per tutti i protocolli."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:330
 msgid ""
 "Use the certificate authorities in FILE to verify the peers. The certificate "
 "file must be in PEM format and can contain multiple CA certificates."
 msgstr ""
+"Utilizzare le autorità di certificazione presenti nel FILE per verificare i "
+"peer. Il file del certificato deve essere in formato PEM e può contenere più "
+"certificati CA."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:284
 msgid ""
@@ -746,6 +815,12 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"RPC private key\" as well."
 msgstr ""
+"Utilizzare il certificato in FILE per il server RPC. Il certificato deve "
+"essere in formato PKCS12 (.p12, .pfx) o in formato PEM.<br/>I file PKCS12 "
+"devono contenere il certificato, una chiave ed eventualmente una catena di "
+"certificati aggiuntivi. È possibile aprire solo i file PKCS12 con una "
+"password di importazione vuota!<br/>Quando si utilizza PEM, è necessario "
+"specificare anche la \"chiave privata RPC\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:335
 msgid ""
@@ -755,35 +830,48 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
+"Utilizzare il certificato del client in FILE. Il certificato deve essere in "
+"formato PKCS12 (.p12, .pfx) o in formato PEM.<br/>I file PKCS12 devono "
+"contenere il certificato, una chiave ed eventualmente una catena di "
+"certificati aggiuntivi. È possibile aprire solo i file PKCS12 con una "
+"password di importazione vuota!<br/>Quando si utilizza PEM, è necessario "
+"specificare anche la \"Chiave privata\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:294
 msgid ""
 "Use the private key in FILE for RPC server. The private key must be "
 "decrypted and in PEM format."
 msgstr ""
+"Utilizzare la chiave privata in FILE per il server RPC. La chiave privata "
+"deve essere decifrata e in formato PEM."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:342
 msgid ""
 "Use the private key in FILE. The private key must be decrypted and in PEM "
 "format. The behavior when encrypted one is given is undefined."
 msgstr ""
+"Utilizzare la chiave privata in FILE. La chiave privata deve essere "
+"decifrata e in formato PEM. Il comportamento se viene fornita una chiave "
+"criptata è indefinito."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:408
 msgid "User agent"
-msgstr ""
+msgstr "User agent"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:259
 msgid "Username & Password"
-msgstr ""
+msgstr "Nome utente e Password"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:323
 msgid ""
 "Verify the peer using certificates specified in \"CA certificate\" option."
 msgstr ""
+"Verificare il peer utilizzando i certificati specificati nell'opzione "
+"\"Certificato CA\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:233
 msgid "Warn"
-msgstr ""
+msgstr "Avviso"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:381
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:493
@@ -793,16 +881,16 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:608
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:615
 msgid "You can append K or M."
-msgstr ""
+msgstr "È possibile aggiungere K o M."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:594
 msgid "falloc"
-msgstr ""
+msgstr "falloc"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:592
 msgid "prealloc"
-msgstr ""
+msgstr "prealloc"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:593
 msgid "trunc"
-msgstr ""
+msgstr "trunc"

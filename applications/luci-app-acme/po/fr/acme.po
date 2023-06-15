@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-12-30 07:50+0000\n"
-"Last-Translator: Samuel Chéreau <bnorus@gmail.com>\n"
+"PO-Revision-Date: 2023-06-11 22:12+0000\n"
+"Last-Translator: viking76 <liaudetgael@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/fr/>\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -20,7 +20,7 @@ msgstr "Certificats ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:26
 msgid "ACME global config"
-msgstr "Configuration globale d’ACME"
+msgstr "Configuration globale ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:144
 msgid "ACME server URL"
@@ -28,7 +28,7 @@ msgstr "URL du serveur ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "Account email"
-msgstr "Compte e-mail"
+msgstr "Compte email"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:44
 msgid "Advanced Settings"
@@ -40,7 +40,7 @@ msgstr "Configuration du certificat"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:124
 msgid "Challenge Alias"
-msgstr "Alias vers l'URL de défi"
+msgstr "Alias du challenge"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:43
 msgid "Challenge Validation"
@@ -60,11 +60,11 @@ msgstr "DNS"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:107
 msgid "DNS API"
-msgstr "API DNS"
+msgstr "API du DNS"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:116
 msgid "DNS API credentials"
-msgstr "Identifiant de l'API du DNS"
+msgstr "Identités de API du DNS"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:151
 msgid "Days until renewal"
@@ -72,7 +72,7 @@ msgstr "Nombre de jour avant renouvellement"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:131
 msgid "Domain Alias"
-msgstr "Alias de domaine"
+msgstr "Alias du Domaine"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:65
 msgid "Domain names"
@@ -84,9 +84,9 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
-"Noms de domaines à inclure dans le certificat. Le premier sera le sujets "
-"(subject), les suivants seront mis en alternatifs. Veuillez notez que tous "
-"les domaines doivent pointer vers le routeur dans le DNS global."
+"Noms de domaine à inclure dans le certificat. Le premier nom sera le sujet "
+"principal, les noms suivants seront les noms alternatifs. Notez que tous les "
+"noms de domaine doivent pointer sur le router dans le DNS global."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "ECC 256 bits"
@@ -98,11 +98,11 @@ msgstr "ECC 384 bits"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
 msgid "Email address to associate with account key."
-msgstr "Adresse de courriel à associer à la clé de compte."
+msgstr "Adresse email à associer avec la clé du compte."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:34
 msgid "Enable debug logging"
-msgstr "Activer la journalisation détaillée"
+msgstr "Activer les logs de type debug"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:46
 msgid "Enabled"
@@ -122,7 +122,7 @@ msgstr ""
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
-msgstr "Autoriser luci-app-acme à accéder à l'UCI"
+msgstr "Autoriser les accès UCI pour luci-app-acme"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:55
 msgid "Key size"
@@ -188,8 +188,8 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
-"L 'alias de domaine à utiliser pour TOUS les domaines. Voir https://github."
-"com/acmesh-official/acme.sh/wiki/DNS-alias-mode pour plus de détail. LUCI ne "
+"Alias de domaine à utiliser pour TOUS les domaines. Voir https://github.com/"
+"acmesh-official/acme.sh/wiki/DNS-alias-mode pour plus de détail. LUCI ne "
 "supporte qu'un seul domaine par certificat pour le challenge."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
@@ -253,15 +253,15 @@ msgstr "Utiliser un CA personnalisé à la place de celui de Let's Encryt."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
 msgid "Use for nginx"
-msgstr "Utiliser nginx"
+msgstr "Utiliser pour nginx"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:72
 msgid "Use for uhttpd"
-msgstr "Utiliser uhttpd"
+msgstr "Utiliser pour uhttpd"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:49
 msgid "Use staging server"
-msgstr "Utiliser le serveur de test"
+msgstr "Utiliser le serveur de qualification"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:90
 msgid "Validation method"
