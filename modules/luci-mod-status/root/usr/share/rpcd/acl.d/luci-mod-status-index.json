@@ -19,9 +19,10 @@
 	},
 
 	"luci-mod-status-index-storage": {
-		"description": "Grant access to Storage status display",
+		"description": "Grant access to Storage and Mount status display",
 		"read": {
 			"ubus": {
+				"luci": [ "getMountPoints" ],
 				"system": [ "info" ]
 			}
 		}
