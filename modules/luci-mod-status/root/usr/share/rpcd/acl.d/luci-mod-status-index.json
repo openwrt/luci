@@ -18,6 +18,15 @@
 		}
 	},
 
+	"luci-mod-status-index-storage": {
+		"description": "Grant access to Storage status display",
+		"read": {
+			"ubus": {
+				"system": [ "info" ]
+			}
+		}
+	},
+
 	"luci-mod-status-index-dhcp": {
 		"description": "Grant access to DHCP status display",
 		"read": {
