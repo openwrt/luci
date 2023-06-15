@@ -89,7 +89,9 @@ return view.extend({
 		for (image of images) {
 			if (this.firmware.filesystem == image.filesystem) {
 				if (this.data.efi) {
-					if (image.type == 'combined-efi') {
+					if (this.firmware.target.indexOf("armsr") == 0 && image.type == 'combined') {
+						return image;
+					} else if (image.type == 'combined-efi') {
 						return image;
 					}
 				} else {
