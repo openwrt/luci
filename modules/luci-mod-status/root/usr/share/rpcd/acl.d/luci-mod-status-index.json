@@ -19,6 +19,16 @@
 		}
 	},
 
+	"luci-mod-status-index-storage": {
+		"description": "Grant access to Storage and Mount status display",
+		"read": {
+			"ubus": {
+				"luci": [ "getMountPoints" ],
+				"system": [ "info" ]
+			}
+		}
+	},
+
 	"luci-mod-status-index-dhcp": {
 		"description": "Grant access to DHCP status display",
 		"read": {
