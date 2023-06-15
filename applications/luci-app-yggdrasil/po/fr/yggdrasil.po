@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-08-08 14:26+0000\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"PO-Revision-Date: 2023-06-12 20:53+0000\n"
+"Last-Translator: viking76 <liaudetgael@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsyggdrasil/fr/>\n"
 "Language: fr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.2-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/status.js:33
 msgid "Active peers"
@@ -22,6 +22,12 @@ msgid ""
 "prevents this, so that only items specified in \"NodeInfo\" are sent back if "
 "specified."
 msgstr ""
+"Par défaut, nodeinfo contient certaines valeurs par défaut, notamment la "
+"plate-forme, l'architecture et la version d'Yggdrasil. Ceux-ci peuvent aider "
+"lors de l'examen du réseau et du diagnostic des problèmes de routage du "
+"réseau. L'activation de la confidentialité nodeinfo empêche cela, de sorte "
+"que seuls les éléments spécifiés dans \"NodeInfo\" sont renvoyés s'ils sont "
+"spécifiés."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:45
 msgid ""
@@ -33,6 +39,14 @@ msgid ""
 "connections on Port. Listen controls whether or not the node listens for "
 "multicast beacons and opens outgoing connections."
 msgstr ""
+"Configuration pour laquelle la découverte d’homologues de multidiffusion "
+"doit être activée. Regex est une expression régulière qui est mise en "
+"correspondance avec un nom d’interface, et les interfaces utilisent la "
+"première configuration à laquelle elles correspondent. La balise configure "
+"si le nœud doit ou non envoyer des balises de multidiffusion locales pour "
+"annoncer leur présence, tout en écoutant les connexions entrantes sur le "
+"port. Listen contrôle si le nœud écoute ou non les balises de multidiffusion "
+"et ouvre les connexions sortantes."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:16
 msgid "Enable NodeInfo privacy"
@@ -65,15 +79,17 @@ msgstr "Interface"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:20
 msgid "Interface peers"
-msgstr ""
+msgstr "Interface pairs"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/keys.js:16
 msgid "Keep this private. When compromised, generate a new keypair and IPv6."
 msgstr ""
+"Gardez ceci privé. En cas de compromission, générez une nouvelle paire de "
+"clés et IPv6."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:52
 msgid "Link-local port"
-msgstr ""
+msgstr "Port lien-local"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:21
 msgid ""
@@ -82,6 +98,10 @@ msgid ""
 "that SOCKS peerings will NOT be affected by this option and should go in the "
 "\"Peers\" section instead."
 msgstr ""
+"Liste des chaînes de connexion pour les connexions d'homologues sortantes au "
+"format URI, classées par interface source, par exemple { \"eth0\" : [ tcp://a"
+".b.c.d:e ] }. Notez que les connexions SOCKS ne sont PAS affectées par cette "
+"option et doivent être placées dans la section \"Peers\"."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:12
 msgid ""
@@ -90,10 +110,15 @@ msgid ""
 "the operating system routing table, therefore you should use this section "
 "when you may connect via different interfaces."
 msgstr ""
+"Liste des chaînes de connexion pour les connexions sortantes entre pairs au "
+"format URI, par exemple tcp://a.b.c.d:e ou socks://a.b.c.d:e/f.g.h.i:j. Ces "
+"connexions obéissent à la table de routage du système d'exploitation, c'est "
+"pourquoi vous devez utiliser cette section lorsque vous pouvez vous "
+"connecter via différentes interfaces."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:33
 msgid "Listen addresses"
-msgstr ""
+msgstr "Adresses d’écoute"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:34
 msgid ""
@@ -103,10 +128,16 @@ msgid ""
 "should be specified in URI format as above, e.g. tcp://0.0.0.0:0 or tcp://"
 "[::]:0 to listen on all interfaces."
 msgstr ""
+"Adresses d'écoute pour les connexions entrantes. Vous devrez ajouter des "
+"auditeurs afin d'accepter les connexions entrantes provenant de nœuds non "
+"locaux. La découverte d'homologues par multidiffusion fonctionnera sans "
+"tenir compte des adresses d'écoute définies ici. Chaque auditeur doit être "
+"spécifié au format URI comme ci-dessus, par exemple tcp ://0.0.0.0 :0 ou tcp "
+"://[ : :] :0 pour écouter sur toutes les interfaces."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:51
 msgid "Listen for beacons"
-msgstr ""
+msgstr "Écouter les balises"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:31
 msgid "MTU size for the interface"
@@ -114,7 +145,7 @@ msgstr "Taille MTU pour l’interface"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:44
 msgid "Multicast interface"
-msgstr ""
+msgstr "Interface multicast"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:23
 msgid "NodeInfo"
@@ -126,6 +157,10 @@ msgid ""
 "null. This is entirely optional but, if set, is visible to the whole network "
 "on request."
 msgstr ""
+"Informations facultatives sur le nœud. Il doit s'agir d'une carte { \"key\" :"
+" \"value\", ... } ou être définie comme nulle. Cette information est "
+"entièrement facultative mais, si elle est définie, elle est visible par "
+"l'ensemble du réseau sur demande."
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/peers.js:11
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:23
@@ -134,11 +169,11 @@ msgstr "Pairs"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:49
 msgid "Regular expression"
-msgstr ""
+msgstr "Expression régulière"
 
 #: applications/luci-app-yggdrasil/htdocs/luci-static/resources/view/yggdrasil/settings.js:50
 msgid "Send beacons"
-msgstr ""
+msgstr "Envoyer des balises"
 
 #: applications/luci-app-yggdrasil/root/usr/share/luci/menu.d/luci-app-yggdrasil.json:32
 msgid "Settings"
