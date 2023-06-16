@@ -1,0 +1,86 @@
+#!/usr/bin/env lua
+
+local json = require "luci.jsonc"
+local fs   = require "nixio.fs"
+
+local function readfile(path)
+	if fs.stat(path, "type") == "reg" then
+		local s = fs.readfile(path)
+		return s and (s:gsub("^%s+", ""):gsub("%s+$", ""))
+	else
+		return null
+	end
+end
+
+local function writefile(path, data)
+	local n = fs.writefile(path, data)
+	return (n == #data)
+end
+
+local function parseInput()
+	local parse = json.new()
+	local done, err
+
+	while true do
+		local chunk = io.read(4096)
+		if not chunk then
+			break
+		elseif not done and not err then
+			done, err = parse:parse(chunk)
+		end
+	end
+
+	if not done then
+		print(json.stringify({ error = err or "Incomplete input" }))
+		os.exit(1)
+	end
+
+	return parse:get()
+end
+
+if arg[1] == "list" then
+	print(json.stringify({
+		getCertificates = {
+			interface = "interface"
+		},
+		setCertificates = {
+			interface = "interface",
+			user_cert = "user_cert",
+			user_key = "user_key",
+			ca_file = "ca_file"
+		}
+	}))
+elseif arg[1] == "call" then
+	local args = parseInput()
+
+	if not args.interface or
+	   type(args.interface) ~= "string" or
+	   not args.interface:match("^[a-zA-Z0-9_]+$")
+	then
+		print(json.stringify({ error = "Invalid interface name" }))
+		os.exit(1)
+	end
+
+	local user_cert_pem = string.format("/etc/openfortivpn/user-cert-%s.pem", args.interface)
+	local user_key_pem = string.format("/etc/openfortivpn/user-key-%s.pem", args.interface)
+	local ca_file_pem = string.format("/etc/openfortivpn/ca-%s.pem", args.interface)
+
+	if arg[2] == "getCertificates" then
+		print(json.stringify({
+			user_cert = readfile(user_cert_pem),
+			user_key = readfile(user_key_pem),
+			ca_file = readfile(ca_file_pem)
+		}))
+	elseif arg[2] == "setCertificates" then
+		if args.user_cert then
+			writefile(user_cert_pem, args.user_cert)
+		end
+		if args.user_key then
+			writefile(user_key_pem, args.user_key)
+		end
+		if args.ca_file then
+			writefile(ca_file_pem, args.ca_file)
+		end
+		print(json.stringify({ result = true }))
+	end
+end

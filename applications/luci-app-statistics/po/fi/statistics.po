@@ -313,7 +313,7 @@ msgstr "Ota tilastot käyttöön"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:12
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:21
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:22
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:12
@@ -607,7 +607,7 @@ msgstr "Muistin valvonta käytössä"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:45
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:41
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:47
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:48
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:34
 msgid "Monitor all except specified"
@@ -667,9 +667,9 @@ msgstr "Valvo prosesseja"
 msgid "Monitor remote ports"
 msgstr "Etäporttien valvonta"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:38
-msgid "Monitoring %s and %s"
-msgstr "Valvotaan kohdetta %s ja %s"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
+msgid "Monitoring %s and %s, %s %s"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
@@ -719,7 +719,7 @@ msgid_plural "Monitoring all but %d interrupts"
 msgstr[0] "Kaikkien paitsi yhden keskeytyksen seuranta"
 msgstr[1] "Kaikkien paitsi %d keskeytysten seuranta"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:56
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:57
 msgid "Monitoring all but one sensor"
 msgid_plural "Monitoring all but %d sensors"
 msgstr[0] "Kaikkien paitsi yhden anturin valvonta"
@@ -748,7 +748,7 @@ msgstr "Kaikkien keskeytysten valvonta"
 msgid "Monitoring all partitions"
 msgstr "Kaikkien osioiden valvonta"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:60
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:61
 msgid "Monitoring all sensors"
 msgstr "Kaikkien anturien valvonta"
 
@@ -759,10 +759,6 @@ msgstr "Kaikkien lämpövyöhykkeiden valvonta"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:46
 msgid "Monitoring all thermal zones except %s"
 msgstr "Kaikkien lämpövyöhykkeiden valvonta paitsi %s"
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:36
-msgid "Monitoring local listen ports"
-msgstr "Paikallisten kuunteluporttien valvonta"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
 msgid "Monitoring one OpenVPN instance"
@@ -809,7 +805,7 @@ msgid_plural "Monitoring %d processes"
 msgstr[0] "Valvotaan yhtä prosessia"
 msgstr[1] "Valvotaan %d prosessia"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:58
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:59
 msgid "Monitoring one sensor"
 msgid_plural "Monitoring %d sensors"
 msgstr[0] "Valvotaan yhtä sensoria"
@@ -1036,7 +1032,7 @@ msgstr "Komentojono"
 msgid "Seconds"
 msgstr "Sekuntia"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:23
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:24
 msgid "Sensor list"
 msgstr "Sensorien luettelo"
 
@@ -1045,7 +1041,7 @@ msgstr "Sensorien luettelo"
 msgid "Sensors"
 msgstr "Sensorit"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:15
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:16
 msgid "Sensors Plugin Configuration"
 msgstr "Sensorit-lisäosan asetukset"
 
@@ -1168,6 +1164,10 @@ msgstr "Tallennettavat ajanjaksot"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:24
 msgid "Storing CSV data in %s"
 msgstr "Tallennetaan CSV-tiedostot kohteeseen %s"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
+msgid "Summary of all ports"
+msgstr ""
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
 msgid "Syslog"
@@ -1407,7 +1407,7 @@ msgstr ""
 "korkeaan RAM-muistin käyttöön /tmp-hakemistossa. Tämä voi tehdä laitteesta "
 "käyttökelvottoman!</strong>"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:16
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
 msgid ""
 "The sensors plugin uses the Linux Sensors framework to gather environmental "
 "statistics."
@@ -1601,6 +1601,10 @@ msgstr ""
 "Sinun täytyy asettaa <em>collectd</em> keräämään tiedot <em>RRD-"
 "tiedostoihin</em>."
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
+msgid "all local listening ports,"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
 msgstr "cURL-lisäosa päällä"
@@ -1613,6 +1617,10 @@ msgstr "cUrl"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
 msgstr "cUrl-laajennuksen määritys"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "no summary"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
@@ -1630,11 +1638,11 @@ msgid_plural "%d filesystem types"
 msgstr[0] "Yksi tiedostojärjestelmä"
 msgstr[1] "%d tiedostojärjestelmää"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:39
-msgid "one local port"
-msgid_plural "%d local ports"
-msgstr[0] "Yksi paikallinen portti"
-msgstr[1] "%d paikallista porttia"
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
+msgid "one local"
+msgid_plural "%d local"
+msgstr[0] ""
+msgstr[1] ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
@@ -1642,7 +1650,7 @@ msgid_plural "%d mounts"
 msgstr[0] "Yksi liitoskohta"
 msgstr[1] "%s liitoskohtaa"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:40
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] "Yksi vastapuolen portti"
@@ -1651,6 +1659,21 @@ msgstr[1] "%d vastapuolen porttia"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
 msgid "reduces rrd size"
 msgstr "Pienentää RRD-tiedoston kokoa"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
+msgid "summary of all ports"
+msgstr ""
+
+#~ msgid "Monitoring %s and %s"
+#~ msgstr "Valvotaan kohdetta %s ja %s"
+
+#~ msgid "Monitoring local listen ports"
+#~ msgstr "Paikallisten kuunteluporttien valvonta"
+
+#~ msgid "one local port"
+#~ msgid_plural "%d local ports"
+#~ msgstr[0] "Yksi paikallinen portti"
+#~ msgstr[1] "%d paikallista porttia"
 
 #~ msgid "Cache flush interval"
 #~ msgstr "Cache flush interval"

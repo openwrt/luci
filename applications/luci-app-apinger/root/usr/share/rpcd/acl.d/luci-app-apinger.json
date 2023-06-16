@@ -1,0 +1,19 @@
+{
+	"luci-app-apinger" : {
+		"description" : "Grant access to LuCI app Apinger",
+		"read" : {
+			"ubus" : {
+				"apinger" : [ "*" ],
+				"file": [ "stat" ],
+				"service": [ "list" ]
+			},
+			"uci": [ "apinger" ]
+		},
+		"write" : {
+			"ubus" : {
+				"apinger" : [ "*" ]
+			},
+			"uci": [ "apinger" ]
+		}
+	}
+}

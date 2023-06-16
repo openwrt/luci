@@ -100,32 +100,8 @@ end
 -- Scope manipulation routines
 --
 
-coxpt = setmetatable({}, { __mode = "kv" })
-
-local tl_meta = {
-	__mode = "k",
-
-	__index = function(self, key)
-		local t = rawget(self, coxpt[coroutine.running()]
-		 or coroutine.running() or 0)
-		return t and t[key]
-	end,
-
-	__newindex = function(self, key, value)
-		local c = coxpt[coroutine.running()] or coroutine.running() or 0
-		local r = rawget(self, c)
-		if not r then
-			rawset(self, c, { [key] = value })
-		else
-			r[key] = value
-		end
-	end
-}
-
--- the current active coroutine. A thread local store is private a table object
--- whose values can't be accessed from outside of the running coroutine.
 function threadlocal(tbl)
-	return setmetatable(tbl or {}, tl_meta)
+	return tbl or {}
 end
 
 
@@ -772,7 +748,6 @@ function coxpcall(f, err, ...)
 			co = coroutine.create(newf)
 		end
 		coromap[co] = current
-		coxpt[co] = coxpt[current] or current or 0
 		return performResume(err, co, ...)
 	end
 end

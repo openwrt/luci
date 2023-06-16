@@ -1,18 +1,18 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-02-24 06:56+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2022-11-02 22:11+0000\n"
+"Last-Translator: tdt-hv <hvoit@tdt.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrpc/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 4.14.2-dev\n"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:204
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:214
 msgid "Add new proxy..."
-msgstr ""
+msgstr "Neuen Proxy hinzufügen..."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:16
 msgid "Additional configs"
@@ -87,11 +87,11 @@ msgstr ""
 "mitgelieferten ausführbaren Datei mittels statik geladen.<br />Standardwert "
 "ist \"\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:180
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:190
 msgid "Collecting data ..."
-msgstr "Ermittle Daten..."
+msgstr "Sammle Daten..."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:188
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:198
 msgid "Common Settings"
 msgstr "Gemeinsame Einstellungen"
 
@@ -131,7 +131,7 @@ msgstr "Umgebungsvariable"
 msgid "Exit when login fail"
 msgstr "Beende Programm bei Loginfehler"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:208
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:218
 msgid "General Settings"
 msgstr "Allgemeine Einstellungen"
 
@@ -139,11 +139,12 @@ msgstr "Allgemeine Einstellungen"
 msgid "Grant access to LuCI app frpc"
 msgstr "Zugriff auf LuCI-App frpc gewähren"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:209
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:219
 msgid "HTTP Settings"
 msgstr "HTTP-Einstellungen"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:64
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:78
 msgid "HTTP password"
 msgstr "HTTP-Passwort"
 
@@ -152,6 +153,7 @@ msgid "HTTP proxy"
 msgstr "HTTP-Proxy"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:63
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:77
 msgid "HTTP user"
 msgstr "HTTP-User"
 
@@ -204,12 +206,12 @@ msgstr ""
 "zuweisen"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:48
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:213
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:224
 msgid "Local IP"
 msgstr "Lokale IP"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:49
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:214
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:225
 msgid "Local port"
 msgstr "Lokaler Port"
 
@@ -229,7 +231,7 @@ msgstr "Standorte"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:23
 msgid "Log file"
-msgstr ""
+msgstr "Protokolldatei"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:24
 msgid "Log level"
@@ -237,15 +239,15 @@ msgstr "Protokollierungsstufe"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:25
 msgid "Log max days"
-msgstr ""
+msgstr "Maximale Tage protokollieren"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:11
 msgid "Log stderr"
-msgstr "Logge stderr"
+msgstr "Stderr protokollieren"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:10
 msgid "Log stdout"
-msgstr "Logge stdout"
+msgstr "Stdout protokollieren"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:23
 msgid ""
@@ -253,12 +255,15 @@ msgid ""
 "be used if LogWay is set appropriately.<br />By default, this value is "
 "\"console\"."
 msgstr ""
+"LogFile gibt eine Datei an, in die Protokolle geschrieben werden. Dieser "
+"Wert wird nur verwendet, wenn LogWay entsprechend eingestellt ist.<br />In "
+"der Voreinstellung ist dieser Wert \"console\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:24
 msgid ""
-"LogLevel specifies the minimum log level. Valid values are \"trace\", \"debug"
-"\", \"info\", \"warn\", and \"error\".<br />By default, this value is \"info"
-"\"."
+"LogLevel specifies the minimum log level. Valid values are \"trace\", "
+"\"debug\", \"info\", \"warn\", and \"error\".<br />By default, this value is "
+"\"info\"."
 msgstr ""
 "LogLevel spezifiziert den minimalen Log-Level. Gültige Werte sind \"trace\", "
 "\"debug\", \"info\", \"warn\" und \"error\".<br />Standartwert hierfür ist "
@@ -270,6 +275,9 @@ msgid ""
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
 "this value is 0."
 msgstr ""
+"LogMaxDays gibt die maximale Anzahl von Tagen an, die die "
+"Protokollinformationen vor dem Löschen gespeichert werden sollen. Dies wird "
+"nur verwendet, wenn LogWay == \"file\".<br />Standardmäßig ist dieser Wert 0."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:35
 msgid ""
@@ -281,7 +289,7 @@ msgstr ""
 "Loginversuch beenden soll. Falls es auf falsch steht, wir es der client so "
 "oft versuchen, bis es erfolgreich war.<br />Standardwert hierfür ist wahr."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:155
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
 msgid "NOT RUNNING"
 msgstr "LÄUFT NICHT"
 
@@ -293,6 +301,14 @@ msgstr ""
 "Betriebssystemumgebungsvariablen welche an frp für das Konfig-Datei-Template "
 "weitergereicht werden, siehe <a href=\"https://github.com/fatedier/"
 "frp#configuration-file-template\">frp README</a>"
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:76
+msgid "Plugin"
+msgstr "Plugin"
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:220
+msgid "Plugin Settings"
+msgstr "Plugin-Einstellungen"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:36
 msgid "Protocol"
@@ -308,17 +324,17 @@ msgstr ""
 "verwendet werden soll. Gültige Werte sind \"tcp\", \"kcp\" und \"websocket\"."
 "<br />Standardwert hierfür ist \"tcp\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:200
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:210
 msgid "Proxy Settings"
 msgstr "Proxy-Einstellungen"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:44
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:211
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:222
 msgid "Proxy name"
-msgstr ""
+msgstr "Name des Proxies"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:212
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:223
 msgid "Proxy type"
 msgstr "Proxy-Typ"
 
@@ -332,11 +348,12 @@ msgstr ""
 "\"tcp\", \"udp\", \"https\", \"stcp\" und \"xtcp\".<br />Standardwert "
 "hierfür ist \"tcp\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:153
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 msgid "RUNNING"
 msgstr "LÄUFT"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:53
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:226
 msgid "Remote port"
 msgstr "Remote-Port"
 
@@ -356,13 +373,21 @@ msgstr "Daemon als Gruppe ausführen"
 msgid "Run daemon as user"
 msgstr "Daemon als Gruppe ausführen"
 
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:80
+msgid "SOCKS5 password"
+msgstr "SOCKS5-Passwort"
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:79
+msgid "SOCKS5 user"
+msgstr "SOCKS5-Benutzer"
+
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:20
 msgid "Server address"
 msgstr "Server-Adresse"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:71
 msgid "Server name"
-msgstr ""
+msgstr "Servername"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:21
 msgid "Server port"
@@ -388,8 +413,8 @@ msgstr ""
 msgid "Sk"
 msgstr "Sk"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:189
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:193
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:199
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:203
 msgid "Startup Settings"
 msgstr "Startparameter"
 
@@ -448,6 +473,10 @@ msgstr ""
 "ein gleichlautendes Token zur Authorisation eingestellt haben.<br /"
 ">Standardwert hierfür ist \"\"."
 
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
+msgid "Unix domain socket path"
+msgstr "Unix-Domänensocketpfad"
+
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:47
 msgid ""
 "UseCompression controls whether or not communication with the server will be "
@@ -480,9 +509,9 @@ msgstr ""
 "Clients. Falls dieser Wert \"\" beträgt, werden Proxy-Namen automatisch zu "
 "\"{user} {proxy_name} \" umgeschrieben.<br />Standardwert hierfür ist \"\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:153
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:155
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:175
 #: applications/luci-app-frpc/root/usr/share/luci/menu.d/luci-app-frpc.json:3
 msgid "frp Client"
 msgstr "frp Client"

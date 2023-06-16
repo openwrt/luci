@@ -1,0 +1,179 @@
+{#
+ Copyright 2012-2022 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{%
+	include('header', { css: `
+		.commands {
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		.commandbox {
+			flex: 0 0 30%;
+			margin: .5em;
+			display: flex;
+			flex-direction: column;
+		}
+
+		.commandbox > p,
+		.commandbox > p > * {
+			display: block;
+		}
+
+		.commandbox div {
+			margin-top: auto;
+		}
+	` });
+-%}
+
+<script type="text/javascript">//<![CDATA[
+	var stxhr = new XHR();
+
+	function command_run(ev, id)
+	{
+		var args;
+		var field = document.getElementById(id);
+		if (field)
+			args = encodeURIComponent(field.value);
+
+		var legend = document.getElementById('command-rc-legend');
+		var output = document.getElementById('command-rc-output');
+
+		if (legend && output)
+		{
+			output.innerHTML =
+				'<img src="{{ resource }}/icons/loading.gif" alt="{{ _('Loading') }}" style="vertical-align:middle" /> ' +
+				'{{ _('Waiting for command to complete...') }}'
+			;
+
+			legend.parentNode.style.display = 'block';
+			legend.style.display = 'inline';
+
+			stxhr.get('{{ dispatcher.build_url('admin/system/commands/run') }}/' + id + (args ? '?args=' + args : ''), null,
+				function(x, st)
+				{
+					if (st)
+					{
+						if (st.binary)
+							st.stdout = '[{{ _('Binary data not displayed, download instead.') }}]';
+
+						legend.style.display = 'none';
+						output.innerHTML = String.format(
+							'<pre><strong># %h\n</strong>%h<span style="color:red">%h</span></pre>' +
+							'<div class="alert-message warning">%s ({{ _('Code:') }} %d)</div>',
+							st.command, st.stdout, st.stderr,
+							(st.exitcode == 0) ? '{{ _('Command successful') }}' : '{{ _('Command failed') }}',
+							st.exitcode);
+					}
+					else
+					{
+						legend.style.display = 'none';
+						output.innerHTML = '<span class="error">{{ _('Failed to execute command!') }}</span>';
+					}
+
+					location.hash = '#output';
+				}
+			);
+		}
+
+		ev.preventDefault();
+	}
+
+	function command_download(ev, id)
+	{
+		var args;
+		var field = document.getElementById(id);
+		if (field)
+			args = encodeURIComponent(field.value);
+
+		location.href = '{{ dispatcher.build_url('admin/system/commands/download') }}/' + id + (args ? '/' + args : '');
+
+		ev.preventDefault();
+	}
+
+	function command_link(ev, id)
+	{
+		var legend = document.getElementById('command-rc-legend');
+		var output = document.getElementById('command-rc-output');
+
+		var args;
+		var field = document.getElementById(id);
+		if (field)
+			args = encodeURIComponent(field.value);
+
+		if (legend && output)
+		{
+			var prefix = location.protocol + '//' + location.host + '{{ dispatcher.build_url('command') }}/';
+			var suffix = (args ? '?args=' + args : '');
+
+			var link = prefix + id + suffix;
+			var link_nodownload = prefix + id + "s" + suffix;
+
+			legend.style.display = 'none';
+			output.parentNode.style.display = 'block';
+			output.innerHTML = String.format(
+				'<div class="alert-message"><p>{{ _('Download execution result') }} <a href="%s">%s</a></p><p>{{ _('Or display result') }} <a href="%s">%s</a></p></div>',
+				link, link, link_nodownload, link_nodownload
+			);
+
+			location.hash = '#output';
+		}
+
+		ev.preventDefault();
+	}
+
+//]]></script>
+
+{%
+	const commands = [];
+
+	uci.foreach('luci', 'command', s => push(commands, s));
+-%}
+
+<form method="get" action="{{ entityencode(FULL_REQUEST_URI) }}">
+	<div class="cbi-map">
+		<h2 name="content">{{ _('Custom Commands') }}</h2>
+
+		{% if (length(commands) == 0): %}
+			<div class="cbi-section">
+				<div class="table cbi-section-table">
+					<div class="tr cbi-section-table-row">
+						<p>
+							<em>{{ _('This section contains no values yet') }}</em>
+						</p>
+					</div>
+				</div>
+			</div>
+		{% else %}
+			<div class="commands">
+				{% for (let command in commands): %}
+				<div class="commandbox">
+					<h3>{{ entityencode(command.name) }}</h3>
+					<p>{{ _('Command:') }} <code>{{ entityencode(command.command) }}</code></p>
+					{% if (command.param == "1"): %}
+						<p>{{ _('Arguments:') }} <input type="text" id="{{ command['.name'] }}" /></p>
+					{% endif %}
+					<div>
+						<button class="cbi-button cbi-button-apply" onclick="command_run(event, '{{ command['.name'] }}')">{{ _('Run') }}</button>
+						<button class="cbi-button cbi-button-download" onclick="command_download(event, '{{ command['.name'] }}')">{{ _('Download') }}</button>
+						{% if (command.public == "1"): %}
+							<button class="cbi-button cbi-button-link" onclick="command_link(event, '{{ command['.name'] }}')">{{ _('Link') }}</button>
+						{% endif %}
+					</div>
+				</div>
+				{% endfor %}
+
+				<a name="output"></a>
+			</div>
+		{% endif %}
+	</div>
+
+	<fieldset class="cbi-section" style="display:none">
+		<legend id="command-rc-legend">{{ _('Collecting data...') }}</legend>
+		<span id="command-rc-output"></span>
+	</fieldset>
+</form>
+
+{% include('footer') %}

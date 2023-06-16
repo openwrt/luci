@@ -22,7 +22,7 @@ var SSHPubkeyDecoder = baseclass.singleton({
 
 	decode: function(s)
 	{
-		var parts = s.trim().match(/^((?:(?:^|,)[^ =,]+(?:=(?:[^ ",]+|"(?:[^"\\]|\\.)*"))?)+ +)?(ssh-dss|ssh-rsa|ssh-ed25519|ecdsa-sha2-nistp[0-9]+) +([^ ]+)( +.*)?$/);
+		var parts = s.trim().match(/^((?:(?:^|,)[^ =,]+(?:=(?:[^ ",]+|"(?:[^"\\]|\\.)*"))?)+ +)?(ssh-dss|ssh-rsa|ssh-ed25519|ecdsa-sha2-nistp[0-9]+|sk-ecdsa-sha2-nistp256@openssh\.com|sk-ssh-ed25519@openssh\.com) +([^ ]+)( +.*)?$/);
 
 		if (!parts)
 			return null;
@@ -99,6 +99,12 @@ var SSHPubkeyDecoder = baseclass.singleton({
 
 		case 'ecdsa-sha2':
 			return { type: 'ECDSA', curve: curve, comment: comment, options: options, fprint: fprint, src: s };
+		
+		case 'sk-ecdsa-sha2-nistp256@openssh.com':
+			return { type: 'ECDSA-SK', curve: 'NIST P-256', comment: comment, options: options, fprint: fprint, src: s };
+		
+		case 'sk-ssh-ed25519@openssh.com':
+			return { type: 'EdDSA-SK', curve: 'Curve25519', comment: comment, options: options, fprint: fprint, src: s };
 
 		default:
 			return null;
@@ -112,7 +118,7 @@ function renderKeyItem(pubkey) {
 		click: isReadonlyView ? null : removeKey,
 		'data-key': pubkey.src
 	}, [
-		E('strong', pubkey.comment || _('Unnamed key')), E('br'),
+		E('strong', [ pubkey.comment || _('Unnamed key') ]), E('br'),
 		E('small', [
 			'%s, %s'.format(pubkey.type, pubkey.curve || _('%d Bit').format(pubkey.bits)),
 			pubkey.options ? E([], [
@@ -198,7 +204,7 @@ function removeKey(ev) {
 
 	L.showModal(_('Delete key'), [
 		E('div', _('Do you really want to delete the following SSH key?')),
-		E('pre', delkey),
+		E('pre', [ delkey ]),
 		E('div', { class: 'right' }, [
 			E('div', { class: 'btn', click: L.hideModal }, _('Cancel')),
 			' ',

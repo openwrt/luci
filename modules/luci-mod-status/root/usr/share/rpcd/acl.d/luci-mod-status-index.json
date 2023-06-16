@@ -5,10 +5,10 @@
 			"file": {
 				"/proc/sys/net/netfilter/nf_conntrack_count": [ "read" ],
 				"/proc/sys/net/netfilter/nf_conntrack_max": [ "read" ],
-				"/usr/lib/lua/luci/version.lua": [ "read" ],
 				"/www/luci-static/resources/view/status/include": [ "list" ]
 			},
 			"ubus": {
+				"luci": [ "getVersion" ],
 				"file": [ "list", "read" ],
 				"system": [ "board", "info" ]
 			}

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-05-03 22:19+0000\n"
+"PO-Revision-Date: 2023-05-18 23:53+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstinyproxy/pl/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12.1\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:219
 msgid ""
@@ -28,7 +28,7 @@ msgid ""
 "Adds an \"X-Tinyproxy\" HTTP header with the client IP address to forwarded "
 "requests"
 msgstr ""
-"Dodaje nagłówek http \"X-Tinyproxy\" z adresem IP klienta do przekazywanych "
+"Dodaje nagłówek HTTP \"X-Tinyproxy\" z adresem IP klienta do przekazywanych "
 "żądań"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:126
@@ -64,16 +64,16 @@ msgid ""
 "By default, filtering is done based on domain names. Enable this to match "
 "against URLs instead"
 msgstr ""
-"Domyślnie filtrowanie jest wykonywane w oparciu o nazwy domen. Włącz tę "
-"opcję, aby dopasować się do adresów URL zamiast"
+"Domyślnie filtrowanie odbywa się na podstawie nazw domen. Włącz tę opcję, "
+"aby zamiast tego dopasowywać do adresów URL"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:157
 msgid ""
 "By default, the filter rules act as blacklist. Enable this option to only "
 "allow matched URLs or domain names"
 msgstr ""
-"Domyślnie, reguły filtra działają jako czarna lista. Zaznacz tę opcję, aby "
-"zezwalać wyłącznie na pasujące URL-e lub nazwy domen"
+"Domyślnie reguły filtrowania działają jako czarna lista. Zaznacz tę opcję, "
+"aby zezwalać wyłącznie na pasujące adresy URL lub nazwy domen"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:226
 msgid ""
@@ -113,7 +113,7 @@ msgstr "Filtruj z użyciem RegExp"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:144
 msgid "Filter by URLs"
-msgstr "Filtruj po adresach URL"
+msgstr "Filtruj według adresów URL"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:152
 msgid "Filter case-sensitive"
@@ -125,7 +125,7 @@ msgstr "Plik z filtrami"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:13
 msgid "Filtering and ACLs"
-msgstr "Filtrowanie i Listy kontroli dostępu"
+msgstr "Filtrowanie i listy kontroli dostępu (ACL)"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:11
 msgid "General settings"
@@ -240,7 +240,7 @@ msgstr ""
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:141
 msgid "Plaintext file with URLs or domains to filter. One entry per line"
 msgstr ""
-"Plik tekstowy z URL-ami lub domenami do filtrowania. Jeden wpis na linię"
+"Plik tekstowy z adresami URL lub domenami do filtrowania. Jeden wpis na linię"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:218
 msgid "Policy"
@@ -282,7 +282,7 @@ msgstr "Określa nazwę hosta używaną przez Tinyproxy w nagłówku HTTP \"Via\
 msgid ""
 "Specifies the address Tinyproxy binds to for outbound forwarded requests"
 msgstr ""
-"Określ adres, z którym zostanie powiązane Tinyproxy dla wychodzących "
+"Określ adres, z którym zostanie powiązany Tinyproxy dla wychodzących "
 "przekazywanych żądań"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:40
@@ -356,12 +356,12 @@ msgstr "Użytkownik"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:111
 msgid "Via hostname"
-msgstr "Nazwa hosta via"
+msgstr "Nazwa hosta \"Via\""
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:221
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:233
 msgid "Via proxy"
-msgstr "Proxy via"
+msgstr "Przez proxy"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:70
 msgid "Writes log messages to syslog instead of a log file"

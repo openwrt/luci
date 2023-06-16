@@ -17,7 +17,7 @@ start_service() {
 	fi
 
 	### create config
-	/usr/bin/stat-genconfig > /var/etc/collectd.conf
+	/usr/libexec/stat-genconfig > /var/etc/collectd.conf
 
 	### workaround broken permissions on /tmp
 	chmod 1777 /tmp

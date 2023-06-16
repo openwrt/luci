@@ -74,7 +74,7 @@ var CBIJSONConfig = baseclass.extend({
 			if (indexA != indexB)
 				return (indexA - indexB);
 
-			return (a > b);
+			return L.naturalCompare(a, b);
 		}, this));
 
 		for (var i = 0; i < section_ids.length; i++)
@@ -281,7 +281,7 @@ var CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement.p
 	 * The input string to clean.
 	 *
 	 * @returns {string}
-	 * The cleaned input string with HTML removes removed.
+	 * The cleaned input string with HTML tags removed.
 	 */
 	stripTags: function(s) {
 		if (typeof(s) == 'string' && !s.match(/[<>]/))
@@ -2259,7 +2259,7 @@ var CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSectio
 
 			if (this.map.readonly !== true) {
 				ui.addValidator(nameEl, 'uciname', true, function(v) {
-					var button = document.querySelector('.cbi-section-create > .cbi-button-add');
+					var button = createEl.querySelector('.cbi-section-create > .cbi-button-add');
 					if (v !== '') {
 						button.disabled = null;
 						return true;
@@ -3042,7 +3042,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		}
 
 		return saveTasks
-			.then(L.bind(this.handleModalCancel, this, modalMap, ev))
+			.then(L.bind(this.handleModalCancel, this, modalMap, ev, true))
 			.catch(function() {});
 	},
 
@@ -3080,13 +3080,9 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		}, this));
 
 		list.sort(function(a, b) {
-			if (a[0] < b[0])
-				return descending ? 1 : -1;
-
-			if (a[0] > b[0])
-				return descending ? -1 : 1;
-
-			return 0;
+			return descending
+				? -L.naturalCompare(a[0], b[0])
+				: L.naturalCompare(a[0], b[0]);
 		});
 
 		window.requestAnimationFrame(L.bind(function() {
@@ -3215,8 +3211,17 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		return (stackedMap ? activeMap.save(null, true) : Promise.resolve()).then(L.bind(function() {
 			section_id = sref['.name'];
 
-			var m = new CBIMap(parent.config, null, null),
-			    s = m.section(CBINamedSection, section_id, this.sectiontype);
+			var m;
+
+			if (parent instanceof CBIJSONMap) {
+				m = new CBIJSONMap(null, null, null);
+				m.data = parent.data;
+			}
+			else {
+				m = new CBIMap(parent.config, null, null);
+			}
+
+			var s = m.section(CBINamedSection, section_id, this.sectiontype);
 
 			m.parent = parent;
 			m.section = section_id;
@@ -3365,20 +3370,19 @@ var CBIGridSection = CBITableSection.extend(/** @lends LuCI.form.GridSection.pro
 		var mapNode = this.getPreviousModalMap(),
 		    prevMap = mapNode ? dom.findClassInstance(mapNode) : this.map;
 
-		return this.super('handleModalSave', arguments)
-			.then(function() { delete prevMap.addedSection });
+		return this.super('handleModalSave', arguments);
 	},
 
 	/** @private */
-	handleModalCancel: function(/* ... */) {
+	handleModalCancel: function(modalMap, ev, isSaving) {
 		var config_name = this.uciconfig || this.map.config,
 		    mapNode = this.getPreviousModalMap(),
 		    prevMap = mapNode ? dom.findClassInstance(mapNode) : this.map;
 
-		if (prevMap.addedSection != null) {
+		if (prevMap.addedSection != null && !isSaving)
 			this.map.data.remove(config_name, prevMap.addedSection);
-			delete prevMap.addedSection;
-		}
+
+		delete prevMap.addedSection;
 
 		return this.super('handleModalCancel', arguments);
 	},

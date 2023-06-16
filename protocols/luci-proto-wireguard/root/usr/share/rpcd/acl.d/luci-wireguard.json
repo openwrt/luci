@@ -5,6 +5,11 @@
 			"file": {
 				"/usr/bin/qrencode --inline --8bit --type=SVG --output=- -- *": [ "exec" ]
 			},
+			"ubus": {
+				"luci.wireguard": [
+					"getWgInstances"
+				]
+			},
 			"uci": [ "ddns", "system" ]
 		},
 		"write": {

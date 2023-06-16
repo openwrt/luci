@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use IPC::Open2;
 use POSIX;
+use Text::Balanced qw(gen_extract_tagged);
 
 $ENV{'LC_ALL'} = 'C';
 POSIX::setlocale(POSIX::LC_ALL, 'C');
@@ -13,6 +14,8 @@ POSIX::setlocale(POSIX::LC_ALL, 'C');
 
 my %keywords = (
 	'.js' => [ '_:1', '_:1,2c', 'N_:2,3', 'N_:2,3,4c' ],
+	'.ut' => [ '_:1', '_:1,2c', 'N_:2,3', 'N_:2,3,4c' ],
+	'.uc' => [ '_:1', '_:1,2c', 'translate:1', 'translate:1,2c', 'N_:2,3', 'N_:2,3,4c', 'ntranslate:2,3', 'ntranslate:2,3,4c' ],
 	'.lua' => [ '_:1', '_:1,2c', 'translate:1', 'translate:1,2c', 'translatef:1', 'N_:2,3', 'N_:2,3,4c', 'ntranslate:2,3', 'ntranslate:2,3,4c' ],
 	'.htm' => [ '_:1', '_:1,2c', 'translate:1', 'translate:1,2c', 'translatef:1', 'N_:2,3', 'N_:2,3,4c', 'ntranslate:2,3', 'ntranslate:2,3,4c' ],
 	'.json' => [ '_:1', '_:1,2c' ]
@@ -27,7 +30,7 @@ sub xgettext($@) {
 	if ($ext eq '.htm' || $ext eq '.lua') {
 		push @cmd, '--language=Lua';
 	}
-	elsif ($ext eq '.js' || $ext eq '.json') {
+	elsif ($ext eq '.ut' || $ext eq '.uc' || $ext eq '.js' || $ext eq '.json') {
 		push @cmd, '--language=JavaScript';
 	}
 
@@ -153,6 +156,59 @@ sub preprocess_htm($$) {
 	return ("[==[$source]==]", @extra_function_keywords);
 }
 
+sub preprocess_ut($$) {
+	my ($path, $source) = @_;
+
+	# Translate the .ut source into valid JavaScript code by enclosing template text
+	# in multiline comments and extracting blocks as plain code.
+	my $comt = gen_extract_tagged('{#', '#}', '(?s).*?(?=\{[#{%])');
+	my $expr = gen_extract_tagged('{{', '}}', '(?s).*?(?=\{[#{%])');
+	my $stmt = gen_extract_tagged('{%', '%}', '(?s).*?(?=\{[#{%])');
+
+	my $res = '';
+
+	while (length($source)) {
+		my ($block, $remain, $prefix);
+
+		($block, $remain, $prefix) = $comt->($source);
+		($block, $remain, $prefix) = $expr->($source) unless defined $block;
+		($block, $remain, $prefix) = $stmt->($source) unless defined $block;
+
+		last unless defined $block;
+
+		$source = $remain;
+
+		$prefix =~ s!\*/!*\\/!g;
+		$res .= '/*' . $prefix . '*/';
+
+		if ($block =~ s!^\{#(.*)#}$!$1!s) {
+			$block =~ s!\*/!*\\/!g;
+			$res .= '/*' . $block . '*/';
+		}
+		elsif ($block =~ s!^\{\{(.*)}}$!$1!s) {
+			$block =~ s!^[+-]!!;
+			$block =~ s![+-]$!!;
+			$res .= '(' . $block . ')';
+		}
+		elsif ($block =~ s!^\{%(.*)%}$!$1!s) {
+			$block =~ s!^[+-]!!;
+			$block =~ s![+-]$!!;
+			$res .= '{' . $block . '}';
+		}
+	}
+
+	if ($source =~ m!^(.*)\{%[+-]?(.*)$!s) {
+		my $prefix = $1;
+		my $block = $2;
+
+		$prefix =~ s!\*/!*\\/!g;
+		$res .= '/*' . $prefix . '*/';
+		$res .= '{' . $block . '}';
+	}
+
+	return ($res);
+}
+
 sub preprocess_lua($$) {
 	my ($path, $source) = @_;
 
@@ -181,7 +237,7 @@ my $msguniq_pid = open2($msguniq_out, $msguniq_in, 'msguniq', '-s');
 
 print $msguniq_in "msgid \"\"\nmsgstr \"Content-Type: text/plain; charset=UTF-8\"\n";
 
-if (open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' -o -path '*/menu.d/*.json' -o -path '*/acl.d/*.json' -o -path '*/statistics/plugins/*.json' ')' |")
+if (open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' -o -name '*.uc' -o -name '*.ut' -o -path '*/menu.d/*.json' -o -path '*/acl.d/*.json' -o -path '*/statistics/plugins/*.json' ')' |")
 {
 	while (defined( my $file = readline F))
 	{
@@ -196,6 +252,10 @@ if (open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.j
 			if ($file =~ m!\.htm$!)
 			{
 				($source, @extra_function_keywords) = preprocess_htm($file, $source);
+			}
+			elsif ($file =~ m!\.ut$!)
+			{
+				($source, @extra_function_keywords) = preprocess_ut($file, $source);
 			}
 			elsif ($file =~ m!\.lua$!)
 			{

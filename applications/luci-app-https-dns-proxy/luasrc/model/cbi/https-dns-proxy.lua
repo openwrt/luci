@@ -103,7 +103,7 @@ else
 	end
 end
 
-if sys.call("curl --version | grep -q HTTP2") == 0 then
+if sys.call("grep -q 'Provides: libnghttp2' /usr/lib/opkg/status") == 0 then
 	http2Supported = true
 end
 
@@ -120,7 +120,7 @@ if packageStatusCode ~= -1 then
 end
 
 c = m:section(NamedSection, "config", "https-dns-proxy", translate("Configuration"))
-d1 = c:option(ListValue, "update_dnsmasq_config", translate("Update DNSMASQ Config on Start/Stop"), translatef("If update option is selected, the 'DNS forwardings' section of %sDHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s).", "<a href=\"" .. dispatcher.build_url("admin/network/dhcp") .. "\">", "</a>", "<a href=\"" .. readmeURL .. "#default-settings" .. "\" target=\"_blank\">", "</a>"))
+d1 = c:option(ListValue, "dnsmasq_config_update", translate("Update DNSMASQ Config on Start/Stop"), translatef("If update option is selected, the 'DNS forwardings' section of %sDHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s).", "<a href=\"" .. dispatcher.build_url("admin/network/dhcp") .. "\">", "</a>", "<a href=\"" .. readmeURL .. "#default-settings" .. "\" target=\"_blank\">", "</a>"))
 d1:value('*', translate("Update all configs"))
 local dnsmasq_num = 0
 uci:foreach("dhcp", "dnsmasq", function(s)
@@ -132,7 +132,17 @@ d1.default = '*'
 f1 = c:option(ListValue, "force_dns", translate("Force Router DNS"), translate("Forces Router DNS use on local devices, also known as DNS Hijacking."))
 f1:value("0", translate("Let local devices use their own DNS servers if set"))
 f1:value("1", translate("Force Router DNS server to all local devices"))
-f1.default = '1'
+f1.default = "1"
+cdi = c:option(ListValue, "canary_domains_icloud", translate("Canary Domains iCloud"), translatef("Blocks access to iCloud Private Relay resolvers, forcing local devices to use router for DNS resolution (%smore information%s).", "<a href=\"" .. readmeURL .. "#canary_domains_icloud" .. "\" target=\"_blank\">", "</a>"))
+cdi:value("0", translate("Let local devices use iCloud Private Relay"))
+cdi:value("1", translate("Force Router DNS server to all local devices"))
+cdi:depends({force_dns="1"}) 
+cdi.default = "1"
+cdm = c:option(ListValue, "canary_domains_mozilla", translate("Canary Domains Mozilla"), translatef("Blocks access to Mozilla resolvers, forcing local devices to use router for DNS resolution (%smore information%s).", "<a href=\"" .. readmeURL .. "#canary_domains_mozilla" .. "\" target=\"_blank\">", "</a>"))
+cdm:value("0", translate("Let local devices use Mozilla resolvers"))
+cdm:value("1", translate("Force Router DNS server to all local devices"))
+cdm:depends({force_dns="1"}) 
+cdm.default = "1"
 
 createHelperText()
 s3 = m:section(TypedSection, "https-dns-proxy", translate("Instances"), 

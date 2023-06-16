@@ -65,8 +65,7 @@ return network.registerProtocol('qmi', {
 			}, this));
 		};
 
-		o = s.taboption('general', form.Value, 'apn', _('APN'));
-		o.validate = function(section_id, value) {
+		var validate_apn = function(section_id, value) {
 			if (value == null || value == '')
 				return true;
 
@@ -74,6 +73,14 @@ return network.registerProtocol('qmi', {
 				return _('Invalid APN provided');
 
 			return true;
+		};
+		o = s.taboption('general', form.Value, 'apn', _('APN'));
+		o.validate = validate_apn;
+
+		if (L.hasSystemFeature('ipv6')) {
+			o = s.taboption('general', form.Value, 'v6apn', _('IPv6 APN'));
+			o.validate = validate_apn;
+			o.depends('pdptype', 'ipv4v6')
 		};
 
 		o = s.taboption('general', form.Value, 'pincode', _('PIN'));
@@ -133,5 +140,17 @@ return network.registerProtocol('qmi', {
 			_('If unchecked, the advertised DNS server addresses are ignored'));
 		o.default = o.enabled;
 
+		o = s.taboption('advanced', form.Value, 'profile',
+			_('APN profile index'));
+		o.placeholder = '1';
+		o.datatype = 'uinteger';
+
+		if (L.hasSystemFeature('ipv6')) {
+			o = s.taboption('advanced', form.Value, 'v6profile',
+				_('IPv6 APN profile index'));
+			o.placeholder = '1';
+			o.datatype = 'uinteger';
+			o.depends('pdptype', 'ipv4v6');
+		};
 	}
 });

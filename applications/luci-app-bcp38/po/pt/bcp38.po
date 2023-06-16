@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-05-02 10:21+0000\n"
+"PO-Revision-Date: 2023-03-01 12:40+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/pt/>\n"
@@ -8,13 +8,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.16-rc\n"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
 msgid "Allowed IP ranges"
 msgstr "Intervalos de IP permitidos"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:34
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:26
 msgid ""
 "Attempt to automatically detect if the upstream IP will be blocked by the "
 "configuration, and add an exception if it will. If this does not work "
@@ -24,24 +24,24 @@ msgstr ""
 "configuração e adicione uma exceção se for o caso. Se isso não funcionar "
 "corretamente, pode adicionar exceções manualmente abaixo."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:33
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid "Auto-detect upstream IP"
 msgstr "Deteção automática de IP upstream"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:20
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
 msgid "BCP38"
 msgstr "BCP38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:27
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:18
 msgid "BCP38 config"
 msgstr "Configuração do BCP38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:56
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:38
 msgid "Blocked IP ranges"
 msgstr "Intervalos de IP bloqueados"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:30
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:21
 msgid "Enable"
 msgstr "Ativar"
 
@@ -49,17 +49,17 @@ msgstr "Ativar"
 msgid "Grant UCI access for luci-app-bcp38"
 msgstr "Conceder acesso UCI ao luci-app-bcp38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid "Interface name"
 msgstr "Nome da interface"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:32
 msgid ""
-"Interface to apply the blocking to (should be the upstream WAN interface)."
+"Interface to apply the blocking to should be the upstream WAN interface)."
 msgstr ""
-"Interface ao qual aplicar o bloqueio (deve ser a interface WAN a montante)."
+"A interface ao qual aplicar o bloqueio deve ser a interface WAN a montante)."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
@@ -68,7 +68,7 @@ msgstr ""
 "upstream se estiver atrás de um NAT duplo e a deteção automática não "
 "funcionar."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:21
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
 "This function blocks packets with private address destinations from going "
 "out onto the internet as per <a href=\"http://tools.ietf.org/html/"
@@ -79,3 +79,9 @@ msgstr ""
 "a Internet como por <a href=\"http://tools.ietf.org/html/bcp38\">BCP 38</a>. "
 "Para IPv6, somente rotas padrão específicas de fontes são instaladas, então "
 "nenhuma rota de firewall BCP38 é necessária."
+
+#~ msgid ""
+#~ "Interface to apply the blocking to (should be the upstream WAN interface)."
+#~ msgstr ""
+#~ "Interface ao qual aplicar o bloqueio (deve ser a interface WAN a "
+#~ "montante)."

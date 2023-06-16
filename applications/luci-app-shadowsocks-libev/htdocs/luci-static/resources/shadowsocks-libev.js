@@ -170,7 +170,7 @@ return baseclass.extend({
 		o.datatype = 'base64';
 		o.password = true;
 		o.size = 12;
-		o.modalonly = true;;
+		o.modalonly = true;
 
 		optfunc(form.Value, 'plugin', _('Plugin')).modalonly = true;
 

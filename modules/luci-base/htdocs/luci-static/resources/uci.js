@@ -2,6 +2,14 @@
 'require rpc';
 'require baseclass';
 
+function isEmpty(object, ignore) {
+	for (var property in object)
+		if (object.hasOwnProperty(property) && property != ignore)
+			return false;
+
+	return true;
+}
+
 /**
  * @class uci
  * @memberof LuCI
@@ -570,16 +578,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 
 			/* undelete option */
 			if (d[conf] && d[conf][sid]) {
-				var empty = true;
-
-				for (var key in d[conf][sid]) {
-					if (key != opt && d[conf][sid].hasOwnProperty(key)) {
-						empty = false;
-						break;
-					}
-				}
-
-				if (empty)
+				if (isEmpty(d[conf][sid], opt))
 					delete d[conf][sid];
 				else
 					delete d[conf][sid][opt];
@@ -589,8 +588,12 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		}
 		else {
 			/* revert any change for to-be-deleted option */
-			if (c[conf] && c[conf][sid])
-				delete c[conf][sid][opt];
+			if (c[conf] && c[conf][sid]) {
+				if (isEmpty(c[conf][sid], opt))
+					delete c[conf][sid];
+				else
+					delete c[conf][sid][opt];
+			}
 
 			/* only delete existing options */
 			if (v[conf] && v[conf][sid] && v[conf][sid].hasOwnProperty(opt)) {

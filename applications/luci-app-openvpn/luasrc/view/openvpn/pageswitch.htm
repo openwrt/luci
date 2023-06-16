@@ -9,7 +9,7 @@
 <div class="cbi-section">
 	<h3>
 		<a href="<%=url('admin/vpn/openvpn')%>"><%:Overview%></a> &#187;
-		<%=luci.i18n.translatef("Instance \"%s\"", self.instance)%>
+		<%=luci.i18n.translatef("Instance \"%s\"", pcdata(self.instance))%>
 	</h3>
 	<% if self.mode == "basic" then %>
 		<a href="<%=url('admin/vpn/openvpn/advanced', self.instance)%>"><%:Switch to advanced configuration%> &#187;</a><p/>

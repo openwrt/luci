@@ -1,0 +1,544 @@
+// Copyright 2022 Jo-Philipp Wich <jo@mein.io>
+// Licensed to the public under the Apache License 2.0.
+
+'use strict';
+
+import { stdin, access, dirname, basename, open, popen, glob, lsdir, readfile, readlink, error } from 'fs';
+import { cursor } from 'uci';
+
+import { init_list, init_index, init_enabled, init_action, conntrack_list, process_list } from 'luci.sys';
+import { revision, branch } from 'luci.version';
+import { statvfs } from 'luci.core';
+
+import timezones from 'luci.zoneinfo';
+
+
+function shellquote(s) {
+	return `'${replace(s, "'", "'\\''")}'`;
+}
+
+const methods = {
+	getVersion: {
+		call: function(request) {
+			return { revision, branch };
+		}
+	},
+
+	getInitList: {
+		args: { name: 'name' },
+		call: function(request) {
+			let scripts = {};
+
+			for (let name in filter(init_list(), i => !request.args.name || i == request.args.name)) {
+				let idx = init_index(name);
+
+				scripts[name] = {
+					index: idx?.[0],
+					stop: idx?.[1],
+					enabled: init_enabled(name)
+				};
+			}
+
+			return length(scripts) ? scripts : { error: 'No such init script' };
+		}
+	},
+
+	setInitAction: {
+		args: { name: 'name', action: 'action' },
+		call: function(request) {
+			switch (request.args.action) {
+			case 'enable':
+			case 'disable':
+			case 'start':
+			case 'stop':
+			case 'restart':
+			case 'reload':
+				const rc = init_action(request.args.name, request.args.action);
+
+				if (rc === false)
+					return { error: 'No such init script' };
+
+				return { result: rc == 0 };
+
+			default:
+				return { error: 'Invalid action' };
+			}
+		}
+	},
+
+	getLocaltime: {
+		call: function(request) {
+			return { result: time() };
+		}
+	},
+
+	setLocaltime: {
+		args: { localtime: 0 },
+		call: function(request) {
+			let t = localtime(request.args.localtime);
+
+			if (t) {
+				system(sprintf('date -s "%04d-%02d-%02d %02d:%02d:%02d" >/dev/null', t.year, t.mon, t.mday, t.hour, t.min, t.sec));
+				system('/etc/init.d/sysfixtime restart >/dev/null');
+			}
+
+			return { result: request.args.localtime };
+		}
+	},
+
+	getTimezones: {
+		call: function(request) {
+			let tz = trim(readfile('/etc/TZ'));
+			let zn = cursor()?.get?.('system', '@system[0]', 'zonename');
+			let result = {};
+
+			for (let zone, tzstring in timezones) {
+				result[zone] = { tzstring };
+
+				if (zn == zone)
+					result[zone].active = true;
+			};
+
+			return result;
+		}
+	},
+
+	getLEDs: {
+		call: function() {
+			let result = {};
+
+			for (let led in lsdir('/sys/class/leds')) {
+				let s;
+
+				result[led] = { triggers: [] };
+
+				s = trim(readfile(`/sys/class/leds/${led}/trigger`));
+				for (let trigger in split(s, ' ')) {
+					push(result[led].triggers, trim(trigger, '[]'));
+
+					if (trigger != result[led].triggers[-1])
+						result[led].active_trigger = result[led].triggers[-1];
+				}
+
+				s = readfile(`/sys/class/leds/${led}/brightness`);
+				result[led].brightness = +s;
+
+				s = readfile(`/sys/class/leds/${led}/max_brightness`);
+				result[led].max_brightness = +s;
+			}
+
+			return result;
+		}
+	},
+
+	getUSBDevices: {
+		call: function() {
+			let result = { devices: [], ports: [] };
+
+			for (let path in glob('/sys/bus/usb/devices/[0-9]*/manufacturer')) {
+				let id = basename(dirname(path));
+
+				push(result.devices, {
+					id,
+					vid:     trim(readfile(`/sys/bus/usb/devices/${id}/idVendor`)),
+					pid:     trim(readfile(`/sys/bus/usb/devices/${id}/idProduct`)),
+					vendor:  trim(readfile(path)),
+					product: trim(readfile(`/sys/bus/usb/devices/${id}/product`)),
+					speed:   +readfile(`/sys/bus/usb/devices/${id}/speed`)
+				});
+			}
+
+			for (let path in glob('/sys/bus/usb/devices/*/*-port[0-9]*')) {
+				let port = basename(path);
+				let link = readlink(`${path}/device`);
+
+				push(result.ports, {
+					port,
+					device: basename(link)
+				});
+			}
+
+			return result;
+		}
+	},
+
+	getConntrackHelpers: {
+		call: function() {
+			const uci = cursor();
+			let helpers = [];
+			let package;
+
+			if (uci.load('/usr/share/firewall4/helpers'))
+				package = 'helpers';
+			else if (uci.load('/usr/share/fw3/helpers.conf'))
+				package = 'helpers.conf';
+
+			if (package) {
+				uci.foreach(package, 'helper', (s) => {
+					push(helpers, {
+						name: s.name,
+						description: s.description,
+						module: s.module,
+						family: s.family,
+						proto: s.proto,
+						port: s.port
+					});
+				});
+			}
+
+			return { result: helpers };
+		}
+	},
+
+	getFeatures: {
+		call: function() {
+			let result = {
+				firewall:   access('/sbin/fw3') == true,
+				firewall4:  access('/sbin/fw4') == true,
+				opkg:       access('/bin/opkg') == true,
+				offloading: access('/sys/module/xt_FLOWOFFLOAD/refcnt') == true || access('/sys/module/nft_flow_offload/refcnt') == true,
+				br2684ctl:  access('/usr/sbin/br2684ctl') == true,
+				swconfig:   access('/sbin/swconfig') == true,
+				odhcpd:     access('/usr/sbin/odhcpd') == true,
+				zram:       access('/sys/class/zram-control') == true,
+				sysntpd:    readlink('/usr/sbin/ntpd') != null,
+				ipv6:       access('/proc/net/ipv6_route') == true,
+				dropbear:   access('/usr/sbin/dropbear') == true,
+				cabundle:   access('/etc/ssl/certs/ca-certificates.crt') == true,
+				relayd:     access('/usr/sbin/relayd') == true,
+			};
+
+			const wifi_features = [ 'eap', '11ac', '11ax', '11r', 'acs', 'sae', 'owe', 'suiteb192', 'wep', 'wps' ];
+
+			if (access('/usr/sbin/hostapd')) {
+				result.hostapd = { cli: access('/usr/sbin/hostapd_cli') == true };
+
+				for (let feature in wifi_features)
+					result.hostapd[feature] = system(`/usr/sbin/hostapd -v${feature} >/dev/null 2>/dev/null`) == 0;
+			}
+
+			if (access('/usr/sbin/wpa_supplicant')) {
+				result.wpasupplicant = { cli: access('/usr/sbin/wpa_cli') == true };
+
+				for (let feature in wifi_features)
+					result.wpasupplicant[feature] = system(`/usr/sbin/wpa_supplicant -v${feature} >/dev/null 2>/dev/null`) == 0;
+			}
+
+			let fd = popen('dnsmasq --version 2>/dev/null');
+
+			if (fd) {
+				const m = match(fd.read('all'), /^Compile time options: (.+)$/s);
+
+				for (let opt in split(m?.[1], ' ')) {
+					let f = replace(opt, 'no-', '', 1);
+
+					result.dnsmasq ??= {};
+					result.dnsmasq[lc(f)] = (f == opt);
+				}
+
+				fd.close();
+			}
+
+			fd = popen('ipset --help 2>/dev/null');
+
+			if (fd) {
+				for (let line = fd.read('line'), flag = false; length(line); line = fd.read('line')) {
+					if (line == 'Supported set types:\n') {
+						flag = true;
+					}
+					else if (flag) {
+						const m = match(line, /^ +([\w:,]+)\t+([0-9]+)\t/);
+
+						if (m) {
+							result.ipset ??= {};
+							result.ipset[m[1]] ??= +m[2];
+						}
+					}
+				}
+
+				fd.close();
+			}
+
+			return result;
+		}
+	},
+
+	getSwconfigFeatures: {
+		args: { switch: 'switch0' },
+		call: function(request) {
+			// Parse some common switch properties from swconfig help output.
+			const swc = popen(`swconfig dev ${shellquote(request.args.switch)} help 2>/dev/null`);
+
+			if (swc) {
+				let is_port_attr = false;
+				let is_vlan_attr = false;
+				let result = {};
+
+				for (let line = swc.read('line'); length(line); line = swc.read('line')) {
+					if (match(line, /^\s+--vlan/)) {
+						is_vlan_attr = true;
+					}
+					else if (match(line, /^\s+--port/)) {
+						is_vlan_attr = false;
+						is_port_attr = true;
+					}
+					else if (match(line, /cpu @/)) {
+						result.switch_title = match(line, /^switch[0-9]+: \w+\((.+)\)/)?.[1];
+						result.num_vlans    = match(line, /vlans: ([0-9]+)/)?.[1] ?? 16;
+						result.min_vid      = 1;
+					}
+					else if (match(line, /: (pvid|tag|vid)/)) {
+						if (is_vlan_attr)
+							result.vid_option = match(line, /: (\w+)/)?.[1];
+					}
+					else if (match(line, /: enable_vlan4k/)) {
+						result.vlan4k_option = 'enable_vlan4k';
+					}
+					else if (match(line, /: enable_vlan/)) {
+						result.vlan_option = 'enable_vlan';
+					}
+					else if (match(line, /: enable_learning/)) {
+						result.learning_option = 'enable_learning';
+					}
+					else if (match(line, /: enable_mirror_rx/)) {
+						result.mirror_option = 'enable_mirror_rx';
+					}
+					else if (match(line, /: max_length/)) {
+						result.jumbo_option = 'max_length';
+					}
+				}
+
+				swc.close();
+
+				if (!length(result))
+					return { error: 'No such switch' };
+
+				return result;
+			}
+			else {
+				return { error: error() };
+			}
+		}
+	},
+
+	getSwconfigPortState: {
+		args: { switch: 'switch0' },
+		call: function(request) {
+			const swc = popen(`swconfig dev ${shellquote(request.args.switch)} show 2>/dev/null`);
+
+			if (swc) {
+				let ports = [], port;
+
+				for (let line = swc.read('line'); length(line); line = swc.read('line')) {
+					if (match(line, /^VLAN [0-9]+:/) && length(ports))
+						break;
+
+					let pnum = match(line, /^Port ([0-9]+):/)?.[1];
+
+					if (pnum) {
+						port = {
+							port: +pnum,
+							duplex: false,
+							speed: 0,
+							link: false,
+							auto: false,
+							rxflow: false,
+							txflow: false
+						};
+
+						push(ports, port);
+					}
+
+					if (port) {
+						let m;
+
+						if (match(line, /full[ -]duplex/))
+							port.duplex = true;
+
+						if ((m = match(line, / speed:([0-9]+)/)) != null)
+							port.speed = +m[1];
+
+						if ((m = match(line, /([0-9]+) Mbps/)) != null && !port.speed)
+							port.speed = +m[1];
+
+						if ((m = match(line, /link: ([0-9]+)/)) != null && !port.speed)
+							port.speed = +m[1];
+
+						if (match(line, /(link|status): ?up/))
+							port.link = true;
+
+						if (match(line, /auto-negotiate|link:.*auto/))
+							port.auto = true;
+
+						if (match(line, /link:.*rxflow/))
+							port.rxflow = true;
+
+						if (match(line, /link:.*txflow/))
+							port.txflow = true;
+					}
+				}
+
+				swc.close();
+
+				if (!length(ports))
+					return { error: 'No such switch' };
+
+				return { result: ports };
+			}
+			else {
+				return { error: error() };
+			}
+		}
+	},
+
+	setPassword: {
+		args: { username: 'root', password: 'password' },
+		call: function(request) {
+			const u = shellquote(request.args.username);
+			const p = shellquote(request.args.password);
+
+			return {
+				result: system(`(echo ${p}; sleep 1; echo ${p}) | /bin/busybox passwd ${u} >/dev/null 2>&1`) == 0
+			};
+		}
+	},
+
+	getBlockDevices: {
+		call: function() {
+			const block = popen('/sbin/block info 2>/dev/null');
+
+			if (block) {
+				let result = {};
+
+				for (let line = block.read('line'); length(line); line = block.read('line')) {
+					let dev = match(line, /^\/dev\/([^:]+):/)?.[1];
+
+					if (dev) {
+						let e = result[dev] = {
+							dev: `/dev/${dev}`,
+							size: +readfile(`/sys/class/block/${dev}/size`) * 512
+						};
+
+						for (let m in match(line, / (\w+)="([^"]+)"/g))
+							e[lc(m[1])] = m[2];
+					}
+				}
+
+				block.close();
+
+				const swaps = open('/proc/swaps', 'r');
+
+				if (swaps) {
+					for (let line = swaps.read('line'); length(line); line = swaps.read('line')) {
+						let m = match(line, /^(\/\S+)\s+\S+\s+(\d+)/);
+
+						if (m) {
+							let dev = replace(m[1], /\\(\d\d\d)/g, (_, n) => chr(int(n, 8)));
+
+							result[`swap:${m[1]}`] = {
+								dev,
+								type: 'swap',
+								size: +m[2] * 1024
+							};
+						}
+					}
+
+					swaps.close();
+				}
+
+				return result;
+			}
+			else {
+				return { error: 'Unable to execute block utility' };
+			}
+		}
+	},
+
+	setBlockDetect: {
+		call: function() {
+			return { result: system('/sbin/block detect > /etc/config/fstab') == 0 };
+		}
+	},
+
+	getMountPoints: {
+		call: function() {
+			const fd = open('/proc/mounts', 'r');
+
+			if (fd) {
+				let result = [];
+
+				for (let line = fd.read('line'); length(line); line = fd.read('line')) {
+					const m = split(line, ' ');
+					const device = replace(m[0], /\\([0-9][0-9][0-9])/g, (m, n) => char(int(n, 8)));
+					const mount  = replace(m[1], /\\([0-9][0-9][0-9])/g, (m, n) => char(int(n, 8)));
+					const stat = statvfs(mount);
+
+					if (stat?.blocks > 0) {
+						push(result, {
+							device, mount,
+							size:  stat.bsize * stat.blocks,
+							avail: stat.bsize * stat.bavail,
+							free:  stat.bsize * stat.bfree
+						});
+					}
+				}
+
+				fd.close();
+
+				return { result };
+			}
+			else {
+				return { error: error() };
+			}
+		}
+	},
+	getRealtimeStats: {
+		args: { mode: 'interface', device: 'eth0' },
+		call: function(request) {
+			let flags;
+
+			if (request.args.mode == 'interface')
+				flags = `-i ${shellquote(request.args.device)}`;
+			else if (request.args.mode == 'wireless')
+				flags = `-r ${shellquote(request.args.device)}`;
+			else if (request.args.mode == 'conntrack')
+				flags = '-c';
+			else if (request.args.mode == 'load')
+				flags = '-l';
+			else
+				return { error: 'Invalid mode' };
+
+			const fd = popen(`luci-bwc ${flags}`, 'r');
+
+			if (fd) {
+				let result;
+
+				try {
+					result = { result: json(`[${fd.read('all')}]`) };
+				}
+				catch (err) {
+					result = { error: err };
+				}
+
+				return result;
+			}
+			else {
+				return { error: error() };
+			}
+		}
+	},
+
+	getConntrackList: {
+		call: function() {
+			return { result: conntrack_list() };
+		}
+	},
+
+	getProcessList: {
+		call: function() {
+			return { result: process_list() };
+		}
+	}
+};
+
+return { luci: methods };

@@ -45,10 +45,13 @@ MIME_TYPES = {
     ["mp3"]   = "audio/mpeg";
     ["ogg"]   = "audio/x-vorbis+ogg";
     ["wav"]   = "audio/x-wav";
+    ["aac"]   = "audio/aac";
 
     ["mpg"]   = "video/mpeg";
     ["mpeg"]  = "video/mpeg";
     ["avi"]   = "video/x-msvideo";
+    ["mov"]   = "video/quicktime";
+    ["mp4"]   = "video/mp4";
 }
 
 -- "application/octet-stream" if the extension is unknown.

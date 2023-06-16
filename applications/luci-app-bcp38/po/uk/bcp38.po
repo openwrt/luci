@@ -11,11 +11,11 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.12-dev\n"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
 msgid "Allowed IP ranges"
 msgstr "Діапазон дозволених IP"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:34
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:26
 msgid ""
 "Attempt to automatically detect if the upstream IP will be blocked by the "
 "configuration, and add an exception if it will. If this does not work "
@@ -25,24 +25,24 @@ msgstr ""
 "зовнішньої мережі, і додати подію у виключення. Якщо автоматично не вийде, "
 "можна додати виключення вручну нижче."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:33
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid "Auto-detect upstream IP"
 msgstr "Автоматичне визначення зовнішнього IP"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:20
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
 msgid "BCP38"
 msgstr "BCP38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:27
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:18
 msgid "BCP38 config"
 msgstr "Конфігурація BCP38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:56
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:38
 msgid "Blocked IP ranges"
 msgstr "Діапазон заборонених IP"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:30
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:21
 msgid "Enable"
 msgstr "Увімкнути"
 
@@ -50,18 +50,16 @@ msgstr "Увімкнути"
 msgid "Grant UCI access for luci-app-bcp38"
 msgstr "Надати UCI доступ до luci-app-bcp38"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid "Interface name"
 msgstr "Назва інтерфейсу"
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:39
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:32
 msgid ""
-"Interface to apply the blocking to (should be the upstream WAN interface)."
+"Interface to apply the blocking to should be the upstream WAN interface)."
 msgstr ""
-"Інтерфейс для застосування блокування (повинен бути WAN інтерфейсом для "
-"зовнішньої мережі)."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:61
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
@@ -70,7 +68,7 @@ msgstr ""
 "Білого списку зовнішньої мережі, якщо ви перебуваєте за подвійним NAT-ом і "
 "автоматичне виявлення не працює."
 
-#: applications/luci-app-bcp38/luasrc/model/cbi/bcp38.lua:21
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
 "This function blocks packets with private address destinations from going "
 "out onto the internet as per <a href=\"http://tools.ietf.org/html/"
@@ -81,3 +79,9 @@ msgstr ""
 "відповідно до <a href=\"http://tools.ietf.org/html/ bcp38\">BCP 38</a>. Для "
 "IPv6 встановлюються тільки усталені вихідні маршрути, тому BCP38 не "
 "використовується мережевим екраном."
+
+#~ msgid ""
+#~ "Interface to apply the blocking to (should be the upstream WAN interface)."
+#~ msgstr ""
+#~ "Інтерфейс для застосування блокування (повинен бути WAN інтерфейсом для "
+#~ "зовнішньої мережі)."
