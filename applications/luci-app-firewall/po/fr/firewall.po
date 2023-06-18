@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2023-06-12 21:54+0000\n"
+"PO-Revision-Date: 2023-06-18 10:26+0000\n"
 "Last-Translator: viking76 <liaudetgael@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/fr/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -475,6 +475,12 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
+"Transféré %{ipv6?%{ipv4?<var>IPv4</var> et "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto? protocol %{proto#%{"
+"next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip="
+"\"Match fwmarks except %{mark.num}%{mark.mask? avec le mask %{mark.mask}}.\""
+":%{mark.mask? data-tooltip=\"Valeur de Mask fwmark de %{mark.mask} avant "
+"comparaison.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:481
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:354
@@ -619,6 +625,17 @@ msgid ""
 "any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
 "tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
+"Entrant %{ipv6?%{ipv4?<var>IPv4</var> et "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP with types %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
+"<var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? "
+"with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Valeur de Masque "
+"fwmark de %{mark.mask} avant comparaison.\"}}>%{mark.val}</var>}%{helper?, "
+"helper %{helper.inv?<var data-tooltip=\"Match any helper except "
+"&quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper"
+".name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:173
 msgid "Initial Hash Size"
@@ -949,7 +966,6 @@ msgid "Redirect matched incoming traffic to the specified internal host"
 msgstr "Rediriger le trafic entrant correspondant vers l'hôte interne spécifié"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:115
-#, fuzzy
 msgid "Refer To External Set"
 msgstr "Reportez-vous à l'ensemble externe"
 
@@ -1514,9 +1530,8 @@ msgid "minute"
 msgstr "minute"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:77
-#, fuzzy
 msgid "net: (sub)net"
-msgstr "net : (sub)net"
+msgstr "réseau : (sous-)réseau"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:75
 msgid "port: Port"
