@@ -475,7 +475,7 @@ return baseclass.extend({
 			    vid = this.section.formvalue(section_id, 'vid'),
 			    name = this.section.getUIElement(section_id, 'name_complex');
 
-			if (base && vid && name && !name.isChanged()) {
+			if (base && vid && name && !name.isChanged() && isNew) {
 				name.setValue('%s.%d'.format(base, vid));
 				name.triggerValidation();
 			}
