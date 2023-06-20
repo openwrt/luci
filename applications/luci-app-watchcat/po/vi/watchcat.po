@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-03-26 16:40+0000\n"
-"Last-Translator: Nguyễn văn tuyên <admin@tuyen.vn>\n"
+"PO-Revision-Date: 2023-06-20 13:51+0000\n"
+"Last-Translator: Quy <haonguyen93056@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/vi/>\n"
 "Language: vi\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
@@ -23,7 +23,7 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "Address family for pinging the host"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -33,6 +33,11 @@ msgid ""
 "fail. Enter the number of seconds to wait for the soft reboot to fail or use "
 "0 to disable the forced reboot delay."
 msgstr ""
+"Áp dụng cho chế độ Khởi động lại Ping và Khởi động lại định kỳ</i> <br />Khi "
+"khởi động lại bộ định tuyến, dịch vụ sẽ kích hoạt khởi động lại mềm. Nhập "
+"một giá trị khác không ở đây sẽ kích hoạt khởi động lại cứng bị trì hoãn nếu "
+"khởi động lại mềm không thành công. Nhập số giây để chờ khởi động lại mềm "
+"không thành công hoặc sử dụng 0 để vô hiệu hóa độ trễ khởi động lại bắt buộc."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
 msgid ""
@@ -40,26 +45,29 @@ msgid ""
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
 "specifying its name."
 msgstr ""
+"Áp dụng cho chế độ Khởi động lại Ping và Khởi động lại giao diện</i> <br /"
+">Nếu sử dụng ModemManager, bạn có thể yêu cầu Watchcat khởi động lại giao "
+"diện ModemManger của mình bằng cách chỉ định tên của nó."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:84
 msgid "Big: 248 bytes"
-msgstr ""
+msgstr "Big: 248 bytes"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:70
 msgid "Check Interval"
-msgstr ""
+msgstr "Kiểm tra khoảng thời gian"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:93
 msgid "Force Reboot Delay"
-msgstr ""
+msgstr "Force Reboot Delay"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:19
 msgid "General Settings"
-msgstr ""
+msgstr "Các cài đặt chung"
 
 #: applications/luci-app-watchcat/root/usr/share/rpcd/acl.d/luci-app-watchcat.json:3
 msgid "Grant access to LuCI app watchcat"
-msgstr ""
+msgstr "Cấp quyền truy cập vào ứng dụng LuCI watchcat"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:12
 msgid ""
@@ -67,10 +75,13 @@ msgid ""
 "host becomes unreachable. Click the <b>Add</b> button at the bottom to set "
 "up more than one action."
 msgstr ""
+"Tại đây, bạn có thể thiết lập một số kiểm tra và hành động cần thực hiện "
+"trong trường hợp máy chủ không thể truy cập được. Nhấp vào nút <b>Thêm</b> ở "
+"dưới cùng để thiết lập nhiều hành động."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "Host To Check"
-msgstr ""
+msgstr "Máy chủ để kiểm tra"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
 msgid ""
@@ -81,20 +92,28 @@ msgid ""
 "b></li><li>1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
 "li><ul>"
 msgstr ""
+"Tần suất ping máy chủ được chỉ định ở trên. <br /><br />Đơn vị mặc định là "
+"giây, không có hậu tố, nhưng bạn có thể sử dụng hậu tố <b>m</b> cho phút, "
+"<b>h</b> cho giờ hoặc <b>d </b> trong nhiều ngày. <br /><br /> Ví dụ:"
+"<ul><li>10 giây sẽ là: <b>10</b> hoặc <b>10 giây</b></li><li>5 phút sẽ là: "
+"<b>5 phút</b></li><li>1 giờ sẽ là: <b>1h</b></li><li>1 tuần sẽ là: <b>7 "
+"ngày</b></ li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:85
 msgid "Huge: 1492 bytes"
-msgstr ""
+msgstr "Huge: 1492 bytes"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "Địa chỉ IP hoặc tên máy chủ để ping."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
 "If using ModemManager, then before restarting the interface, set the modem "
 "to be allowed to use any band."
 msgstr ""
+"Nếu sử dụng ModemManager, thì trước khi khởi động lại giao diện, hãy đặt "
+"modem được phép sử dụng bất kỳ băng tần nào."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:41
 msgid ""
@@ -109,42 +128,53 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"Trong chế độ Khởi động lại định kỳ, nó xác định tần suất khởi động lại. <br /"
+">Trong chế độ Khởi động lại Ping, nó xác định khoảng thời gian dài nhất mà "
+"Máy chủ không có phản hồi để kiểm tra trước khi thực hiện khởi động lại. <br "
+"/>Trong chế độ Khởi động lại mạng hoặc Chạy tập lệnh, nó xác định khoảng "
+"thời gian dài nhất mà Máy chủ không phản hồi để Kiểm tra trước khi giao diện "
+"được khởi động lại hoặc tập lệnh được chạy. <br /><br />Đơn vị mặc định là "
+"giây, không có hậu tố, nhưng bạn có thể sử dụng hậu tố <b>m</b> cho phút, "
+"<b>h</b> cho giờ hoặc <b>d </b> trong nhiều ngày. <br /><br />Ví dụ:"
+"<ul><li>10 giây sẽ là: <b>10</b> hoặc <b>10 giây</b></li><li>5 phút sẽ là: "
+"<b>5 phút</b></li><li> 1 giờ sẽ là: <b>1h</b></li><li>1 tuần sẽ là: <b>7 "
+"ngày</b></ li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
-msgstr ""
+msgstr "Giao diện"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:103
 msgid "Interface to monitor and/or restart"
-msgstr ""
+msgstr "Giao diện để theo dõi và/hoặc khởi động lại"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:86
 msgid "Jumbo: 9000 bytes"
-msgstr ""
+msgstr "Jumbo: 9000 bytes"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:22
 msgid "Mode"
-msgstr ""
+msgstr "Chế độ"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:110
 msgid "Name of ModemManager Interface"
-msgstr ""
+msgstr "Tên giao diện ModemManager"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:40
 msgid "Period"
-msgstr ""
+msgstr "Giai đoạn"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Periodic Reboot"
-msgstr ""
+msgstr "Khởi động lại định kỳ"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
 msgid "Ping Packet Size"
-msgstr ""
+msgstr "Kích thước gói Ping"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
 msgid "Ping Reboot"
-msgstr ""
+msgstr "Khởi động lại Ping"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:23
 msgid ""
@@ -155,47 +185,57 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Khởi động lại Ping: Khởi động lại thiết bị này nếu ping đến một máy chủ được "
+"chỉ định không thành công trong một khoảng thời gian nhất định. <br />Khởi "
+"động lại định kỳ: Khởi động lại thiết bị này sau một khoảng thời gian nhất "
+"định. <br />Khởi động lại giao diện: Khởi động lại giao diện mạng nếu ping "
+"đến một máy chủ cụ thể không thành công trong một khoảng thời gian cụ thể. "
+"<br />Chạy tập lệnh: Chạy tập lệnh nếu lệnh ping đến một máy chủ cụ thể "
+"không thành công trong một khoảng thời gian cụ thể. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
-msgstr ""
+msgstr "Khởi động lại giao thức"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Chạy Script"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Đoạn mã để chạy"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"Tập lệnh chạy khi máy chủ không phản hồi trong khoảng thời gian đã chỉ định. "
+"Tập lệnh được chuyển tên giao diện là $1"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
-msgstr ""
+msgstr "Small: 1 byte"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:83
 msgid "Standard: 56 bytes"
-msgstr ""
+msgstr "Standard: 56 bytes"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
 msgid "These rules will govern how this device reacts to network events."
 msgstr ""
+"Các quy tắc này sẽ chi phối cách thiết bị này phản ứng với các sự kiện mạng."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:117
 msgid "Unlock Modem Bands"
-msgstr ""
+msgstr "Mở khóa băng tần modem"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:11
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
 #: applications/luci-app-watchcat/root/usr/share/luci/menu.d/luci-app-watchcat.json:3
 msgid "Watchcat"
-msgstr ""
+msgstr "Watchcat"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
 msgid "Windows: 32 bytes"
-msgstr ""
+msgstr "Windows: 32 bytes"
