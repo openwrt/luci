@@ -2,16 +2,18 @@
 	"luci-app-uhttpd": {
 		"description": "Grant UCI access for luci-app-uhttpd",
 		"read": {
-			"uci": [ "uhttpd" ],
+			"uci": ["uhttpd"],
 			"file": {
-				"/*": ["read"]
+				"/*": ["read"],
+				"/etc/init.d/uhttpd restart": ["exec"]
 			}
 		},
 		"write": {
-			"uci": [ "uhttpd" ],
+			"uci": ["uhttpd"],
 			"file": {
-				"/*": ["write"],
-				"/etc/init.d/uhttpd restart": ["exec"]
+				"/etc/luci-uploads/*": ["write"],
+				"/etc/uhttpd.key": ["write"],
+				"/etc/uhttpd.crt": ["write"]
 			}
 		}
 	}
