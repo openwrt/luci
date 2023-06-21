@@ -251,10 +251,10 @@ msgid ""
 "rel=\"noreferrer noopener\" >check the online documentation</a>"
 msgstr ""
 "Configurazione del pacchetto banIP per vietare gli IP in entrata e in uscita "
-"tramite set nftables denominati. Per ulteriori informazioni, <a href=\"https"
-"://github.com/openwrt/packages/blob/master/net/banip/files/README.md\" "
-"target=\"_blank\" rel=\"noreferrer noopener\" >consultare la documentazione "
-"online</a>"
+"tramite set nftables denominati. Per ulteriori informazioni, <a "
+"href=\"https://github.com/openwrt/packages/blob/master/net/banip/files/"
+"README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >consultare la "
+"documentazione online</a>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:560
 msgid "Countries"
@@ -266,11 +266,9 @@ msgstr "Editor di feed personalizzato"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:387
 msgid ""
-"Deduplicate IP addresses across all active Sets and and tidy up the local "
+"Deduplicate IP addresses across all active Sets and tidy up the local "
 "blocklist."
 msgstr ""
-"Deduplica gli indirizzi IP in tutti i set attivi e riordina la blocklist "
-"locale."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:387
 msgid "Deduplicate IPs"
@@ -869,16 +867,18 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:32
 msgid ""
-"This is the local banIP allowlist that will permit certain MAC/IP/CIDR "
-"addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/IPv4/"
-"IPv6 address or domain name per line."
+"This is the local banIP allowlist that will permit certain MAC-, IP-"
+"addresses or domain names.<br /> <em><b>Please note:</b></em> add only "
+"exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
+"notation and MAC/IP-bindings are allowed."
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:32
 msgid ""
-"This is the local banIP blocklist that will prevent certain MAC/IP/CIDR "
-"addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/IPv4/"
-"IPv6 address or domain name per line."
+"This is the local banIP blocklist that will prevent certain MAC-, IP-"
+"addresses or domain names.<br /> <em><b>Please note:</b></em> add only "
+"exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
+"notation and MAC/IP-bindings are allowed."
 msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:188
@@ -1047,6 +1047,13 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:474
 msgid "warn (default)"
 msgstr ""
+
+#~ msgid ""
+#~ "Deduplicate IP addresses across all active Sets and and tidy up the local "
+#~ "blocklist."
+#~ msgstr ""
+#~ "Deduplica gli indirizzi IP in tutti i set attivi e riordina la blocklist "
+#~ "locale."
 
 #~ msgid "Unable to save changes: %s"
 #~ msgstr "Impossibile salvare le modifiche: %s"
