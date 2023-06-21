@@ -108,11 +108,15 @@ o = s:taboption("privacy", Flag, "XTinyproxy", translate("X-Tinyproxy header"),
 	translate("Adds an \"X-Tinyproxy\" HTTP header with the client IP address to forwarded requests"))
 
 
+o = s:taboption("privacy", Flag, "DisableViaHeader", translate("Disable Via header"))
+
+
 o = s:taboption("privacy", Value, "ViaProxyName", translate("Via hostname"),
 	translate("Specifies the Tinyproxy hostname to use in the Via HTTP header"))
 
 o.placeholder = "tinyproxy"
 o.datatype = "hostname"
+o:depends("DisableViaHeader", 0)
 
 
 s:taboption("privacy", DynamicList, "Anonymous", translate("Header whitelist"),
