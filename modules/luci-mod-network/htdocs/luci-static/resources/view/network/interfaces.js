@@ -832,6 +832,13 @@ return view.extend({
 						}
 					};
 
+					so = ss.taboption('ipv6-ra', form.Value, 'ra_pref64', _('NAT64 prefix'), _('Announce NAT64 prefix in <abbr title="Router Advertisement">RA</abbr> messages.'));
+					so.optional = true;
+					so.datatype = 'cidr6';
+					so.placeholder = '64:ff9b::/96';
+					so.depends('ra', 'server');
+					so.depends({ ra: 'hybrid', master: '0' });
+
 					so = ss.taboption('ipv6-ra', form.Value, 'ra_maxinterval', _('Max <abbr title="Router Advertisement">RA</abbr> interval'), _('Maximum time allowed  between sending unsolicited <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr>. Default is 600 seconds.'));
 					so.optional = true;
 					so.datatype = 'uinteger';
