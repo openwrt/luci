@@ -29,8 +29,8 @@ return view.extend({
 		}
 		return E([
 			E('p', {},
-				_('This is the local banIP blocklist that will prevent certain MAC/IP/CIDR addresses.<br /> \
-				<em><b>Please note:</b></em> add only exactly one MAC/IPv4/IPv6 address or domain name per line.')),
+				_('This is the local banIP blocklist that will prevent certain MAC-, IP-addresses or domain names.<br /> \
+				<em><b>Please note:</b></em> add only exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR notation and MAC/IP-bindings are allowed.')),
 			E('p', {},
 				E('textarea', {
 					'style': 'width: 100% !important; padding: 5px; font-family: monospace',
