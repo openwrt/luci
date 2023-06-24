@@ -126,7 +126,7 @@ msgstr "Setări avansate"
 msgid "Allowlist Feed Selection"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:622
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:627
 msgid "Allowlist Only"
 msgstr "Doar Allowlist"
 
@@ -146,6 +146,10 @@ msgstr ""
 msgid "Auto Allowlist"
 msgstr "Allowlist Automată"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
+msgid "Auto Block Subnet"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:608
 msgid "Auto Blocklist"
 msgstr "Lista de blocare automată"
@@ -153,6 +157,12 @@ msgstr "Lista de blocare automată"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:252
 msgid "Auto Detection"
 msgstr "Detecție automată"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
+msgid ""
+"Automatically add entire subnets to the blocklist Set based on an additional "
+"RDAP request with the suspicious IP."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:608
 msgid ""
@@ -182,7 +192,7 @@ msgstr "Directorul de lucru de bază în timpul procesării banIP."
 msgid "Blocklist Feed Selection"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:617
 msgid "Blocklist Set Expiry"
 msgstr ""
 
@@ -243,7 +253,7 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:387
 msgid ""
-"Deduplicate IP addresses across all active Sets and and tidy up the local "
+"Deduplicate IP addresses across all active Sets and tidy up the local "
 "blocklist."
 msgstr ""
 
@@ -369,7 +379,7 @@ msgstr "Activează suportul IPv4."
 msgid "Enables IPv6 support."
 msgstr "Activează suportul IPv6."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:617
 msgid "Expiry time for auto added blocklist Set members."
 msgstr ""
 
@@ -689,7 +699,7 @@ msgstr "Elemente de raport"
 msgid "Restart"
 msgstr "Reporniți"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:622
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:627
 msgid "Restrict the internet access from/to a small number of secure IPs."
 msgstr ""
 "Restricționați accesul la internet de la/către un număr mic de IP-uri "
@@ -794,10 +804,8 @@ msgid "Settings"
 msgstr "Setări"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:366
-msgid "Split external set loading after every n members to save RAM."
+msgid "Split external Set loading after every n members to save RAM."
 msgstr ""
-"Împărțiți încărcarea setului extern după fiecare n membri pentru a economisi "
-"RAM."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:303
 msgid "Startup Trigger Interface"
@@ -868,23 +876,19 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:32
 msgid ""
-"This is the local banIP allowlist that will permit certain MAC/IP/CIDR "
-"addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/IPv4/"
-"IPv6 address or domain name per line."
+"This is the local banIP allowlist that will permit certain MAC-, IP-"
+"addresses or domain names.<br /> <em><b>Please note:</b></em> add only "
+"exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
+"notation and MAC/IP-bindings are allowed."
 msgstr ""
-"Aceasta este lista de permisiuni banIP locală care va permite anumite adrese "
-"MAC/IP/CIDR.<br /> <em><b>Vă rugăm să rețineți:</b></em> adăugați exact o "
-"singură adresă MAC/IPv4/IPv6 sau un singur nume de domeniu pe linie."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:32
 msgid ""
-"This is the local banIP blocklist that will prevent certain MAC/IP/CIDR "
-"addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/IPv4/"
-"IPv6 address or domain name per line."
+"This is the local banIP blocklist that will prevent certain MAC-, IP-"
+"addresses or domain names.<br /> <em><b>Please note:</b></em> add only "
+"exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
+"notation and MAC/IP-bindings are allowed."
 msgstr ""
-"Aceasta este lista de blocare locală banIP care va împiedica anumite adrese "
-"MAC/IP/CIDR.<br /> <em><b>Vă rugăm să rețineți:</b></em> adăugați exact o "
-"singură adresă MAC/IPv4/IPv6 sau un singur nume de domeniu pe linie."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:188
 msgid ""
@@ -1056,3 +1060,28 @@ msgstr "start (implicit)"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:474
 msgid "warn (default)"
 msgstr "avertisment (implicit)"
+
+#~ msgid "Split external set loading after every n members to save RAM."
+#~ msgstr ""
+#~ "Împărțiți încărcarea setului extern după fiecare n membri pentru a "
+#~ "economisi RAM."
+
+#~ msgid ""
+#~ "This is the local banIP allowlist that will permit certain MAC/IP/CIDR "
+#~ "addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/"
+#~ "IPv4/IPv6 address or domain name per line."
+#~ msgstr ""
+#~ "Aceasta este lista de permisiuni banIP locală care va permite anumite "
+#~ "adrese MAC/IP/CIDR.<br /> <em><b>Vă rugăm să rețineți:</b></em> adăugați "
+#~ "exact o singură adresă MAC/IPv4/IPv6 sau un singur nume de domeniu pe "
+#~ "linie."
+
+#~ msgid ""
+#~ "This is the local banIP blocklist that will prevent certain MAC/IP/CIDR "
+#~ "addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/"
+#~ "IPv4/IPv6 address or domain name per line."
+#~ msgstr ""
+#~ "Aceasta este lista de blocare locală banIP care va împiedica anumite "
+#~ "adrese MAC/IP/CIDR.<br /> <em><b>Vă rugăm să rețineți:</b></em> adăugați "
+#~ "exact o singură adresă MAC/IPv4/IPv6 sau un singur nume de domeniu pe "
+#~ "linie."

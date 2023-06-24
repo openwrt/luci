@@ -125,7 +125,7 @@ msgstr "Erweiterte Einstellungen"
 msgid "Allowlist Feed Selection"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:622
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:627
 msgid "Allowlist Only"
 msgstr "Nur Zulassungsliste"
 
@@ -143,6 +143,10 @@ msgstr ""
 msgid "Auto Allowlist"
 msgstr "Automatische Zulassungsliste"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
+msgid "Auto Block Subnet"
+msgstr ""
+
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:608
 msgid "Auto Blocklist"
 msgstr "Automatische Sperrliste"
@@ -150,6 +154,12 @@ msgstr "Automatische Sperrliste"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:252
 msgid "Auto Detection"
 msgstr "Automatische Erkennung"
+
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
+msgid ""
+"Automatically add entire subnets to the blocklist Set based on an additional "
+"RDAP request with the suspicious IP."
+msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:608
 msgid ""
@@ -179,7 +189,7 @@ msgstr "Basisarbeitsverzeichnis während der BanIP-Verarbeitung."
 msgid "Blocklist Feed Selection"
 msgstr ""
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:617
 msgid "Blocklist Set Expiry"
 msgstr ""
 
@@ -236,7 +246,7 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:387
 msgid ""
-"Deduplicate IP addresses across all active Sets and and tidy up the local "
+"Deduplicate IP addresses across all active Sets and tidy up the local "
 "blocklist."
 msgstr ""
 
@@ -361,7 +371,7 @@ msgstr "Aktiviert die IPv4-Unterstützung."
 msgid "Enables IPv6 support."
 msgstr "Aktiviert die IPv6-Unterstützung."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:617
 msgid "Expiry time for auto added blocklist Set members."
 msgstr ""
 
@@ -681,7 +691,7 @@ msgstr "Berichtselemente"
 msgid "Restart"
 msgstr "Neustart"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:622
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:627
 msgid "Restrict the internet access from/to a small number of secure IPs."
 msgstr ""
 "Beschränken des Internetzugangs von/zu einer kleinen Anzahl von sicheren IPs."
@@ -788,10 +798,8 @@ msgid "Settings"
 msgstr "Einstellungen"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:366
-msgid "Split external set loading after every n members to save RAM."
+msgid "Split external Set loading after every n members to save RAM."
 msgstr ""
-"Aufteilen des Ladens externer Sets nach jeweils n Mitgliedern, um RAM zu "
-"sparen."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:303
 msgid "Startup Trigger Interface"
@@ -864,23 +872,19 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:32
 msgid ""
-"This is the local banIP allowlist that will permit certain MAC/IP/CIDR "
-"addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/IPv4/"
-"IPv6 address or domain name per line."
+"This is the local banIP allowlist that will permit certain MAC-, IP-"
+"addresses or domain names.<br /> <em><b>Please note:</b></em> add only "
+"exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
+"notation and MAC/IP-bindings are allowed."
 msgstr ""
-"Dies ist die lokale banIP-Zulassungsliste, die bestimmte MAC/IP/CIDR-"
-"Adressen zulässt.<br /> <em><b> Bitte beachten Sie:</b></em> fügen Sie nur "
-"genau eine MAC/IPv4/IPv6-Adresse oder einen Domänennamen pro Zeile hinzu."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:32
 msgid ""
-"This is the local banIP blocklist that will prevent certain MAC/IP/CIDR "
-"addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/IPv4/"
-"IPv6 address or domain name per line."
+"This is the local banIP blocklist that will prevent certain MAC-, IP-"
+"addresses or domain names.<br /> <em><b>Please note:</b></em> add only "
+"exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
+"notation and MAC/IP-bindings are allowed."
 msgstr ""
-"Dies ist die lokale banIP-Sperrliste, die bestimmte MAC/IP/CIDR-Adressen "
-"verhindert.<br /> <em><b> Bitte beachten Sie:</b></em> fügen Sie nur genau "
-"eine MAC/IPv4/IPv6-Adresse oder einen Domainnamen pro Zeile hinzu."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:188
 msgid ""
@@ -1050,3 +1054,27 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:474
 msgid "warn (default)"
 msgstr "warn (Standard)"
+
+#~ msgid "Split external set loading after every n members to save RAM."
+#~ msgstr ""
+#~ "Aufteilen des Ladens externer Sets nach jeweils n Mitgliedern, um RAM zu "
+#~ "sparen."
+
+#~ msgid ""
+#~ "This is the local banIP allowlist that will permit certain MAC/IP/CIDR "
+#~ "addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/"
+#~ "IPv4/IPv6 address or domain name per line."
+#~ msgstr ""
+#~ "Dies ist die lokale banIP-Zulassungsliste, die bestimmte MAC/IP/CIDR-"
+#~ "Adressen zulässt.<br /> <em><b> Bitte beachten Sie:</b></em> fügen Sie "
+#~ "nur genau eine MAC/IPv4/IPv6-Adresse oder einen Domänennamen pro Zeile "
+#~ "hinzu."
+
+#~ msgid ""
+#~ "This is the local banIP blocklist that will prevent certain MAC/IP/CIDR "
+#~ "addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/"
+#~ "IPv4/IPv6 address or domain name per line."
+#~ msgstr ""
+#~ "Dies ist die lokale banIP-Sperrliste, die bestimmte MAC/IP/CIDR-Adressen "
+#~ "verhindert.<br /> <em><b> Bitte beachten Sie:</b></em> fügen Sie nur "
+#~ "genau eine MAC/IPv4/IPv6-Adresse oder einen Domainnamen pro Zeile hinzu."

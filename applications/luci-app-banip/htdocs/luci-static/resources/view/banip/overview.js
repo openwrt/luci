@@ -384,7 +384,7 @@ return view.extend({
 		o.placeholder = '/tmp/banIP-report';
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and and tidy up the local blocklist.'));
+		o = s.taboption('advanced', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and tidy up the local blocklist.'));
 		o.default = 1
 		o.rmempty = false;
 
