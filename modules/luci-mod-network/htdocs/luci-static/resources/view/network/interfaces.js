@@ -909,6 +909,10 @@ return view.extend({
 						_('Forward DHCPv6 messages between the designated master interface and downstream interfaces.'));
 					so.value('hybrid', _('hybrid mode'), ' ');
 
+					so = ss.taboption('ipv6', form.Value, 'dhcpv6_pd_min_len', _('<abbr title="Prefix Delegation">PD</abbr> minimum length'),
+						_('Configures the minimum delegated prefix length assigned to a requesting downstream router, potentially overriding a requested prefix length. If left unspecified, the device will assign the smallest available prefix greater than or equal to the requested prefix.'));
+					so.datatype = 'range(1,62)';
+					so.depends('dhcpv6', 'server');
 
 					so = ss.taboption('ipv6', form.DynamicList, 'dns', _('Announced IPv6 DNS servers'),
 						_('Specifies a fixed list of IPv6 DNS server addresses to announce via DHCPv6. If left unspecified, the device will announce itself as IPv6 DNS server unless the <em>Local IPv6 DNS server</em> option is disabled.'));
