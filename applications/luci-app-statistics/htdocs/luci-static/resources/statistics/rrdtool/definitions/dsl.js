@@ -110,12 +110,12 @@ return L.Class.extend({
 				},
 				options: {
 					bitrate_attndr_up: {
-						title: "Attenuation Up (ATTNDR)",
+						title: "Max. Attainable Data Rate (ATTNDR) Up",
 						noarea: true,
 						overlay: true
 					},
 					bitrate_attndr_down: {
-						title: "Attenuation Down (ATTNDR)",
+						title: "Max. Attainable Data Rate (ATTNDR) Down",
 						noarea: true,
 						overlay: true
 					},
