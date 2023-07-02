@@ -1509,21 +1509,27 @@ return view.extend({
 			s.anonymous = true;
 
 			o = s.option(form.ListValue, 'annex', _('Annex'));
-			o.value('a', _('Annex A + L + M (all)'));
-			o.value('b', _('Annex B (all)'));
-			o.value('j', _('Annex J (all)'));
-			o.value('m', _('Annex M (all)'));
-			o.value('bdmt', _('Annex B G.992.1'));
-			o.value('b2', _('Annex B G.992.3'));
-			o.value('b2p', _('Annex B G.992.5'));
+			if (dslModemType == 'vdsl') {
+				o.value('a', _('ADSL (all variants) Annex A/L/M + VDSL2 Annex A/B/C'));
+				o.value('b', _('ADSL (all variants) Annex B + VDSL2 Annex A/B/C'));
+				o.value('j', _('ADSL (all variants) Annex B/J + VDSL2 Annex A/B/C'));
+			} else {
+				o.value('a', _('ADSL (all variants) Annex A/L/M'));
+				o.value('b', _('ADSL (all variants) Annex B'));
+				o.value('j', _('ADSL (all variants) Annex B/J'));
+			}
+			o.value('m', _('ADSL (all variants) Annex M'));
 			o.value('at1', _('ANSI T1.413'));
-			o.value('admt', _('Annex A G.992.1'));
-			o.value('alite', _('Annex A G.992.2'));
-			o.value('a2', _('Annex A G.992.3'));
-			o.value('a2p', _('Annex A G.992.5'));
-			o.value('l', _('Annex L G.992.3 POTS 1'));
-			o.value('m2', _('Annex M G.992.3'));
-			o.value('m2p', _('Annex M G.992.5'));
+			o.value('admt', _('ADSL (G.992.1) Annex A'));
+			o.value('bdmt', _('ADSL (G.992.1) Annex B'));
+			o.value('alite', _('Splitterless ADSL (G.992.2) Annex A'));
+			o.value('a2', _('ADSL2 (G.992.3) Annex A'));
+			o.value('b2', _('ADSL2 (G.992.3) Annex B'));
+			o.value('l', _('ADSL2 (G.992.3) Annex L'));
+			o.value('m2', _('ADSL2 (G.992.3) Annex M'));
+			o.value('a2p', _('ADSL2+ (G.992.5) Annex A'));
+			o.value('b2p', _('ADSL2+ (G.992.5) Annex B'));
+			o.value('m2p', _('ADSL2+ (G.992.5) Annex M'));
 
 			o = s.option(form.ListValue, 'tone', _('Tone'));
 			o.value('', _('auto'));
