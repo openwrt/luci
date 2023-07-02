@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-10-23 17:26+0000\n"
-"Last-Translator: Amaury <y0da@live.fr>\n"
+"PO-Revision-Date: 2023-06-18 10:26+0000\n"
+"Last-Translator: viking76 <liaudetgael@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/fr/>\n"
 "Language: fr\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
@@ -23,7 +23,7 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "Famille d'adresses pour le ping de l'hôte"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -107,7 +107,7 @@ msgstr "Énorme : 1492 octets"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "Adresse IP ou nom d'hôte à interroger."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
@@ -130,6 +130,17 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"En mode Redémarrage périodique, elle définit la fréquence de redémarrage. "
+"<br />En mode Redémarrage par ping, elle définit la plus longue période sans "
+"réponse de l'hôte à vérifier avant qu'un redémarrage ne soit engagé. <br /"
+">En mode Redémarrage du réseau, elle définit la plus longue période sans "
+"réponse de l'hôte à vérifier avant que l'interface ne soit redémarrée. <br /"
+"><br />L'unité par défaut est la seconde, sans suffixe, mais vous pouvez "
+"utiliser le suffixe <b>m</b> pour les minutes, <b>h</b> pour les heures ou "
+"<b>d</b> pour les jours. <br /><br />Exemples :<ul><li>10 secondes "
+"seraient : <b>10</b> ou <b>10s</b></li><li>5 minutes seraient : <b>5m</b></"
+"li><li><li>1 heure serait : <b>1h</b></li><li>1 semaine serait : <b>7j</b></"
+"li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -176,6 +187,13 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Ping Reboot : Redémarrez ce périphérique si un ping vers un hôte spécifié "
+"échoue pendant une durée spécifiée. <br /> Redémarrage périodique : "
+"Redémarrez cet appareil après un intervalle de temps spécifié. <br /> "
+"Redémarrer l'interface : Redémarrez une interface réseau si un ping vers un "
+"hôte spécifié échoue pendant une durée spécifiée. <br /> Exécuter le "
+"script : exécutez un script si un ping vers un hôte spécifié échoue pendant "
+"une durée spécifiée. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
@@ -183,17 +201,19 @@ msgstr "Redémarrer l'interface"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Script de lancement"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Script à exécuter"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"Script à exécuter lorsque l'hôte n'a pas répondu pendant la durée spécifiée. "
+"Le script reçoit le nom de l'interface en tant que $1"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"

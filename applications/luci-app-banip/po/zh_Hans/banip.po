@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-05-14 10:50+0000\n"
+"PO-Revision-Date: 2023-06-22 19:55+0000\n"
 "Last-Translator: Eric <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsbanip/zh_Hans/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:75
 msgid "-- Set Selection --"
@@ -143,7 +143,7 @@ msgstr "自动白名单"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:612
 msgid "Auto Block Subnet"
-msgstr ""
+msgstr "自动拦截子网"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:608
 msgid "Auto Blocklist"
@@ -157,7 +157,7 @@ msgstr "自动检测"
 msgid ""
 "Automatically add entire subnets to the blocklist Set based on an additional "
 "RDAP request with the suspicious IP."
-msgstr ""
+msgstr "基于和可疑 IP 地址的额外 RDAP 请求自动添加条目子网到黑名单集。"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:608
 msgid ""
@@ -250,7 +250,7 @@ msgstr "自定义源的编辑器"
 msgid ""
 "Deduplicate IP addresses across all active Sets and tidy up the local "
 "blocklist."
-msgstr ""
+msgstr "去除所有活跃集合中的重复 IP 地址并整理本地黑名单。"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:387
 msgid "Deduplicate IPs"
@@ -784,7 +784,7 @@ msgstr "设置"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:366
 msgid "Split external Set loading after every n members to save RAM."
-msgstr ""
+msgstr "每 n 个成员后分割外部集加载来节省内存。"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:303
 msgid "Startup Trigger Interface"
@@ -853,6 +853,9 @@ msgid ""
 "exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
 "notation and MAC/IP-bindings are allowed."
 msgstr ""
+"这是本地 banIP 白名单，会允许特定的 MAC、IP 地址或域名。<br /><em><b>请注意："
+"</b></em>每行只能添加一个 MAC/IPv4/IPv6 地址或域名。允许 CIDR 格式的 IP 范围"
+"和 MAC/IP 绑定。"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:32
 msgid ""
@@ -861,6 +864,9 @@ msgid ""
 "exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
 "notation and MAC/IP-bindings are allowed."
 msgstr ""
+"这是本地 banIP 黑名单，会拦截特定的 MAC、IP 地址或域名。<br /><em><b>请注意："
+"</b></em>每行只能添加一个 MAC/IPv4/IPv6 地址或域名。允许 CIDR 格式的 IP 范围"
+"和 MAC/IP 绑定。"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:188
 msgid ""
@@ -1032,27 +1038,3 @@ msgstr "启动（默认）"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:474
 msgid "warn (default)"
 msgstr "警告（默认）"
-
-#~ msgid ""
-#~ "Deduplicate IP addresses across all active Sets and and tidy up the local "
-#~ "blocklist."
-#~ msgstr "去除所有活跃集中的重复 IP 地址并整理本地黑名单。"
-
-#~ msgid "Split external set loading after every n members to save RAM."
-#~ msgstr "每 n 名成员后分割外部集加载来节省内存。"
-
-#~ msgid ""
-#~ "This is the local banIP allowlist that will permit certain MAC/IP/CIDR "
-#~ "addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/"
-#~ "IPv4/IPv6 address or domain name per line."
-#~ msgstr ""
-#~ "这是允许特定 MAC/IP/CIDR 地址的本地 banIP 白名单。<br /><em><b>请注意：</"
-#~ "b></em>一行只能添加一个 MAC/IPv4/IPv6 地址或域名。"
-
-#~ msgid ""
-#~ "This is the local banIP blocklist that will prevent certain MAC/IP/CIDR "
-#~ "addresses.<br /> <em><b>Please note:</b></em> add only exactly one MAC/"
-#~ "IPv4/IPv6 address or domain name per line."
-#~ msgstr ""
-#~ "这是封禁特定 MAC/IP/CIDR 地址的 banIP 黑名单。<br /> <em><b>请注意：</b></"
-#~ "em>一行只能添加一个 MAC/IPv4/IPv6 地址或域名。"

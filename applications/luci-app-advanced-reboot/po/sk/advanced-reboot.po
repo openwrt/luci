@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2022-11-07 09:03+0000\n"
+"PO-Revision-Date: 2023-06-17 00:51+0000\n"
 "Last-Translator: MaycoH <hudec.marian@hotmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadvanced-reboot/sk/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:188
 #: applications/luci-app-advanced-reboot/root/usr/share/luci/menu.d/luci-app-advanced-reboot.json:3
@@ -49,7 +49,7 @@ msgstr ""
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:122
 msgid "No access to fw_printenv or fw_printenv!"
-msgstr ""
+msgstr "Žiadny prístup k fw_printenv alebo fw_printenv!"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:204
 msgid "Partition"
@@ -61,7 +61,7 @@ msgstr "Oddiely"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:226
 msgid "Perform power off..."
-msgstr "Prebieha vypínanie..."
+msgstr "Vykonať vypnutie..."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:46
 msgid "Power Off Device"
@@ -105,7 +105,7 @@ msgstr "Stav"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:12
 msgid "The Dual Boot Flag Partition: %s is not a block device."
-msgstr ""
+msgstr "Oddiel s príznakom Dual Boot: %s nie je blokové zariadenie."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:66
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:95
@@ -119,6 +119,10 @@ msgid ""
 "might be necessary to renew the address of your computer to reach the device "
 "again, depending on your settings."
 msgstr ""
+"Systém sa práve reštartuje do alternatívneho oddielu.<br /> NEVYPÍNAJTE "
+"ZARIADENIE!<br /> Počkajte niekoľko minút, kým sa pokúsite znova pripojiť. V "
+"závislosti od vašich nastavení môže byť potrebné obnoviť IP adresu vášho "
+"počítača, aby ste sa znova dostali k zariadeniu."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:39
 msgid ""
@@ -126,9 +130,9 @@ msgid ""
 "might be necessary to renew the address of your computer to reach the device "
 "again, depending on your settings."
 msgstr ""
-"Systém sa teraz vypína. <br /> ZARIADENIE NEODPÁJAJTE!<br /> Môže byť "
-"potreba obnoviť adresu vášho počítača, aby ste zariadenie znovu dosiahli, v "
-"závislosti od vašich nastavení."
+"Systém sa teraz vypína. <br /> NEVYPÍNAJTE ZARIADENIE!<br /> V závislosti od "
+"vašich nastavení môže byť potrebné obnoviť IP adresu vášho počítača, aby ste "
+"sa znova dostali k zariadeniu."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:10
 msgid "Unable to find Device Board Name."
@@ -136,19 +140,19 @@ msgstr "Nie je možné nájsť názov dosky zariadenia."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:11
 msgid "Unable to find Dual Boot Flag Partition."
-msgstr ""
+msgstr "Nie je možné nájsť druhý oddiel s príznakom pre spustenie."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:14
 msgid "Unable to obtain firmware environment variable: %s."
-msgstr ""
+msgstr "Nie je možné získať premennú prostredia firmvéru: %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:13
 msgid "Unable to set Dual Boot Flag Partition entry for partition: %s."
-msgstr ""
+msgstr "Nie je možné nastaviť príznak duálneho spustenia pre oddiel: %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:15
 msgid "Unable to set firmware environment variable: %s to %s."
-msgstr ""
+msgstr "Nie je možné nastaviť premennú prostredia firmvéru: %s na %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:163
 msgid "Unknown"
@@ -165,6 +169,14 @@ msgid ""
 "back to the currently active partition.<br /><br /> Click \"Proceed\" below "
 "to reboot device to an alternative partition."
 msgstr ""
+"UPOZORNENIE: Alternatívny oddiel môže mať svoje vlastné nastavenia a úplne "
+"odlišný firmvér.<br /><br /> Keďže konfigurácia siete a WiFi SSID/heslo na "
+"alternatívnom oddiele sa môžu líšiť, možno budete musieť upraviť nastavenia "
+"počítača, aby bol možný prístup k vášmu zariadeniu po jeho reštartovaní.<br /"
+"><br /> Uvedomte si tiež, že alternatívny firmvér oddielu nemusí poskytovať "
+"jednoduchý spôsob, ako prepnúť aktívny oddiel a zaviesť systém späť do "
+"aktuálne aktívneho oddielu.<br /><br /> Kliknutím na tlačidlo „Pokračovať“ "
+"nižšie reštartujte zariadenie na alternatívny oddiel."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:47
 msgid ""
@@ -172,9 +184,9 @@ msgid ""
 "support power off.<br /><br /> Click \"Proceed\" below to power off your "
 "device."
 msgstr ""
-"VAROVANIE: Vypínanie môže spôsobiť reštart pri zariadení, ktoré nepodporuje "
-"odpájanie.<br /><br /> Kliknite na \"Pokračovať\" nižšie pre vypnutie vášho "
-"zariadenia."
+"VAROVANIE: Vypnutie môže viesť k reštartu zariadenia, ktoré nepodporuje "
+"vypnutie.<br /><br /> Ak chcete zariadenie vypnúť, kliknite na tlačidlo "
+"\"Pokračovať\" nižšie."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:71
 msgid "Waiting for device..."

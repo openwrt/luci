@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-10-30 16:50+0000\n"
+"PO-Revision-Date: 2023-06-17 00:51+0000\n"
 "Last-Translator: MaycoH <hudec.marian@hotmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/openwrt/luci/sk/"
 ">\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.2-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -719,7 +719,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:25
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
-msgstr ""
+msgstr "Povoliť <abbr title=\"Secure Shell\">SSH</abbr> overenie heslom"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1199
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
@@ -752,6 +752,8 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
+"Povoliť vzdialeným hostiteľom pripojenie k miestnym portom presmerovaným "
+"pomocou SSH"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 msgid "Allow root logins with password"
@@ -2130,7 +2132,7 @@ msgstr "Zariadenie nie je dosiahnuteľné! Na zariadenie sa stále čaká..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1266
 msgid "Devices"
-msgstr ""
+msgstr "Zariadenia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:159
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:76
@@ -2433,6 +2435,8 @@ msgid ""
 "Dropbear offers <abbr title=\"Secure Shell\">SSH</abbr> network shell access "
 "and an integrated <abbr title=\"Secure Copy\">SCP</abbr> server"
 msgstr ""
+"Dropbear poskytuje <abbr title=\"Secure Shell\">SSH</abbr> sieťový prístup a "
+"integrovaný <abbr title=\"Secure Copy\">SCP</abbr> server"
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:14
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:11
@@ -2925,7 +2929,7 @@ msgstr "Protokol externého servera systémového denníka"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:79
 msgid "Extra SSH command options"
-msgstr ""
+msgstr "Ďalšie možnosti príkazového riadku SSH"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:68
 msgid "Extra pppd options"
@@ -3378,7 +3382,7 @@ msgstr ""
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:22
 msgid "Grant access to DHCP status display"
-msgstr ""
+msgstr "Udeliť prístup k zobrazeniu stavu DHCP"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:31
 msgid "Grant access to DSL status display"
@@ -3398,7 +3402,7 @@ msgstr ""
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:20
 msgid "Grant access to SSH configuration"
-msgstr ""
+msgstr "Povoliť prístup ku konfigurácii SSH"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:12
 msgid "Grant access to basic LuCI procedures"
@@ -3650,7 +3654,7 @@ msgstr "Protokol IP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:265
 msgid "IP Sets"
-msgstr ""
+msgstr "IP sety"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:126
 msgid "IP Type"
@@ -3886,7 +3890,7 @@ msgstr ""
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:59
 msgid "IPv6 prefix"
-msgstr ""
+msgstr "IPv6 prefix"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1019
 msgid "IPv6 prefix filter"
@@ -4634,7 +4638,7 @@ msgstr ""
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:82
 msgid "List of SSH key files for auth"
-msgstr ""
+msgstr "Zoznam súborov s kľúčmi SSH pre autentifikáciu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:322
 msgid "List of domains to allow RFC1918 responses for."
@@ -6571,6 +6575,10 @@ msgid ""
 "device, paste an OpenSSH compatible public key line or drag a <code>.pub</"
 "code> file into the input field."
 msgstr ""
+"Verejné kľúče umožňujú prihlásenie SSH bez hesla s vyššou bezpečnosťou v "
+"porovnaní s použitím obyčajných hesiel. Ak chcete do zariadenia nahrať nový "
+"kľúč, vložte riadok verejného kľúča kompatibilného s OpenSSH alebo presuňte "
+"súbor <code>.pub</code> do vstupného poľa."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:192
 msgid "Public prefix routed to this device for distribution to clients."
@@ -7265,7 +7273,7 @@ msgstr "SSID"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:9
 msgid "SSTP"
-msgstr ""
+msgstr "SSTP"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:41
 msgid "SSTP Server"
@@ -7330,6 +7338,9 @@ msgid ""
 "fails. Use only if you are sure that the firmware is correct and meant for "
 "your device!"
 msgstr ""
+"Vyberte „Vynútiť aktualizáciu“, ak chcete nahrať firmvér, aj keď kontrola "
+"formátu obrazu zlyhá. Používajte iba vtedy, ak ste si istí, že firmvér je "
+"správny a určený pre vaše zariadenie!"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2680
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2820
@@ -7452,7 +7463,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:11
 msgid "Settings"
-msgstr ""
+msgstr "Nastavenia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:990
 msgid ""
@@ -9967,7 +9978,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 msgid "no"
-msgstr ""
+msgstr "nie"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:104
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:76
