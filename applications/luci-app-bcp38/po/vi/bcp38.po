@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-03-26 16:40+0000\n"
-"Last-Translator: Nguyễn văn tuyên <admin@tuyen.vn>\n"
+"PO-Revision-Date: 2023-06-21 04:37+0000\n"
+"Last-Translator: Quy <haonguyen93056@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/vi/>\n"
 "Language: vi\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
 msgid "Allowed IP ranges"
@@ -20,49 +20,51 @@ msgid ""
 "configuration, and add an exception if it will. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
-"Cố gắng tự động phát hiện xem IP ngược dòng có bị chặn bởi cấu hình hay "
-"không và thêm một ngoại lệ nếu có. Nếu điều này không hoạt động chính xác, "
-"bạn có thể thêm ngoại lệ theo cách thủ công bên dưới."
+"Thử tự động dò tìm nếu IP nguồn bị chặn bởi cấu hình, và thêm một ngoại lệ "
+"nếu nó đúng. Nếu điều này không đúng, bạn có thể thêm ngoại lệ thủ công phía "
+"dưới."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid "Auto-detect upstream IP"
-msgstr ""
+msgstr "Tự động phát hiện địa chỉ IP upstream"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
 msgid "BCP38"
-msgstr ""
+msgstr "BCP38"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:18
 msgid "BCP38 config"
-msgstr ""
+msgstr "Cấu hình BCP38"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:38
 msgid "Blocked IP ranges"
-msgstr ""
+msgstr "Dải IP bị chặn"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:21
 msgid "Enable"
-msgstr "Kích hoạt"
+msgstr "Bật lên"
 
 #: applications/luci-app-bcp38/root/usr/share/rpcd/acl.d/luci-app-bcp38.json:3
 msgid "Grant UCI access for luci-app-bcp38"
-msgstr ""
+msgstr "Cấp quyền truy cập UCI cho luci-app-bcp38"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid "Interface name"
-msgstr ""
+msgstr "Tên giao diện"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:32
 msgid ""
 "Interface to apply the blocking to should be the upstream WAN interface)."
-msgstr ""
+msgstr "Giao diện để áp dụng chặn nên là giao diện WAN upstream."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
 msgstr ""
+"Các phạm vi chặn được ưu tiên. Sử dụng để tạo danh sách trắng mạng nguồn của "
+"bạn nếu bạn ở trong một NAT kép và tự động dò không hoạt động."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
@@ -71,3 +73,7 @@ msgid ""
 "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
 "installed, so no BCP38 firewall routes are needed."
 msgstr ""
+"Chức năng này chặn gói tin với địa chỉ đích cá nhân từ việc đi ra ngoài "
+"internet như từng <a href=\"http://tools.ietf.org/html/bcp38\">BCP 38</a>. "
+"Đối với IPv6, chỉ nguồn chỉ rõ định tuyến mặc định được cài đặt, vì vậy "
+"không cần tường lửa định tuyến BCP38."
