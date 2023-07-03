@@ -4,10 +4,10 @@
 		"read": {
 			"cgi-io": [ "exec" ],
 			"file": {
-				"/usr/bin/mmcli -L": [ "exec" ],
-				"/usr/bin/mmcli -m [0-9]": [ "exec" ],
-				"/usr/bin/mmcli -m [0-9][0-9]": [ "exec" ],
-				"/usr/bin/mmcli -m [0-9][0-9][0-9]": [ "exec" ]
+				"/usr/bin/mmcli -L -J": [ "exec" ],
+				"/usr/bin/mmcli -m [0-9]* -J": [ "exec" ],
+				"/usr/bin/mmcli -i [0-9]* -J": [ "exec" ],
+				"/usr/bin/mmcli -m [0-9]* --location-get -J": [ "exec" ]
 			}
 		}
 	}
