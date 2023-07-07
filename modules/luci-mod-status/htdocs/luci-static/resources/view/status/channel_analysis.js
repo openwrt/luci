@@ -191,6 +191,7 @@ return view.extend({
 					scanCache[results[i].bssid] = {};
 
 				scanCache[results[i].bssid].data = results[i];
+				scanCache[results[i].bssid].data.stale = false;
 			}
 
 			if (scanCache[local_wifi.bssid] == null)
@@ -226,7 +227,7 @@ return view.extend({
 			}
 
 			for (var k in scanCache)
-				if (scanCache[k].stale)
+				if (scanCache[k].data.stale)
 					results.push(scanCache[k].data);
 
 			results.sort(function(a, b) {
@@ -302,7 +303,7 @@ return view.extend({
 					E('span', { 'style': s }, '%h'.format(res.bssid))
 				]);
 
-				res.stale = true;
+				scanCache[results[i].bssid].data.stale = true;
 			}
 
 			cbi_update_table(table, rows);
