@@ -313,6 +313,12 @@ return view.extend({
 			uci.set('firewall', section_id, 'reflection_src', (value != 'internal') ? value : null);
 		};
 
+		o = s.taboption('advanced', widgets.ZoneSelect, 'reflection_zone', _('Reflection zones'), _('Zones from which reflection rules shall be created. If unset, only the destination zone is used.'));
+		o.nocreate = true;
+		o.multiple = true;
+		o.modalonly = true;
+		o.depends('reflection', '1');
+
 		o = s.taboption('advanced', form.Value, 'helper', _('Match helper'), _('Match traffic using the specified connection tracking helper.'));
 		o.modalonly = true;
 		o.placeholder = _('any');
