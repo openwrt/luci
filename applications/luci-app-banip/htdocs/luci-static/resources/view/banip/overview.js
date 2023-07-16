@@ -414,6 +414,20 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanallow', _('Allow VLAN Forwads'), _('Always allow certain VLAN forwards.'));
+		o.unspecified = true;
+		o.multiple = true;
+		o.nocreate = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanblock', _('Block VLAN Forwads'), _('Always block certain VLAN forwards.'));
+		o.unspecified = true;
+		o.multiple = true;
+		o.nocreate = true;
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('adv_chain', form.ListValue, 'ban_blockpolicy', _('Default Block Policy'), _('By default each feed is active in all supported chains. Limit the default block policy to a certain chain.'));
 		o.value('input', _('WAN-Input Chain'));
 		o.value('forwardwan', _('WAN-Forward Chain'));
