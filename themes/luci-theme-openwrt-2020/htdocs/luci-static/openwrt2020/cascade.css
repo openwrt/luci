@@ -383,6 +383,8 @@ tr.placeholder > td {
 	justify-content: space-around;
 	max-width: 120px;
 	padding: .2em;
+	white-space: normal;
+	text-align: center;
 }
 
 .assoclist td > .ifacebadge::after {
@@ -675,7 +677,7 @@ p > a {
 	flex-direction: column;
 	padding: 0;
 	text-align: center;
-	width: 100%;
+	min-width: 100%;
 	max-width: 150px;
 }
 
@@ -685,6 +687,7 @@ p > a {
 }
 
 .ifacebox-body {
+	width: 100%;
 	text-align: center;
 	padding: .3em .25em .25em .25em;
 	white-space: nowrap;
@@ -718,7 +721,7 @@ p > a {
 
 .network-status-table > .ifacebox {
 	max-width: none;
-	flex: 1 1 45%;
+	flex-grow: 1;
 	margin: .25em;
 	min-width: 250px;
 }
