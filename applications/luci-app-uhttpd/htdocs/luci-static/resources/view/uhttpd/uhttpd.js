@@ -24,7 +24,7 @@ return view.extend({
 		ucs.tab('server', _('Full Web Server Settings'), _('For settings primarily geared to serving more than the web UI'));
 		ucs.tab('advanced', _('Advanced Settings'), _('Settings which are either rarely needed or which affect serving the WebUI'));
 
-		lhttp = ucs.taboption('general', form.DynamicList, 'listen_http', _('HTTP listeners (address:port)'), _('Bind to specific interface:port (by specifying interface address'));
+		lhttp = ucs.taboption('general', form.DynamicList, 'listen_http', _('HTTP listeners (address:port)'), _('Bind to specific interface:port (by specifying interface address)'));
 		lhttp.datatype = 'list(ipaddrport(1))';
 
 		lhttp.validate = function (section_id, value) {
@@ -52,7 +52,7 @@ return view.extend({
 			return true;
 		};
 
-		lhttps = ucs.taboption('general', form.DynamicList, 'listen_https', _('HTTPS listener (address:port)'), _('Bind to specific interface:port (by specifying interface address'));
+		lhttps = ucs.taboption('general', form.DynamicList, 'listen_https', _('HTTPS listener (address:port)'), _('Bind to specific interface:port (by specifying interface address)'));
 		lhttps.datatype = 'list(ipaddrport(1))';
 
 		var cert = uci.get('uhttpd', 'main', 'cert');
