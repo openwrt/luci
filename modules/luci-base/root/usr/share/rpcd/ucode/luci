@@ -538,6 +538,25 @@ const methods = {
 		call: function() {
 			return { result: process_list() };
 		}
+	},
+
+	getOnlineUsers: {
+		call: function() {
+			const fd = open('/proc/net/arp', 'r');
+			if (fd) {
+				let onlineusers = 0;
+
+				for (let line = fd.read('line'); length(line); line = fd.read('line'))
+					if (match(trim(line), /^.*(0x2).*(br-lan)$/))
+						onlineusers++;
+
+				fd.close();
+
+				return { onlineusers: onlineusers };
+			} else {
+				return { onlineusers: error() };
+			}
+		}
 	}
 };
 
