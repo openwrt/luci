@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2023-06-29 14:15+0000\n"
+"PO-Revision-Date: 2023-07-26 13:48+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/pl/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -406,7 +406,7 @@ msgstr "Zewnętrzne adresy IP"
 msgid "External port"
 msgstr "Port zewnętrzny"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:339
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:345
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:466
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:338
 msgid "Extra arguments"
@@ -752,7 +752,7 @@ msgstr ""
 "Dopasuj przekazywany ruch pochodzący z danego portu źródłowego lub zakresu "
 "portów."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:322
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:442
 msgid "Match helper"
 msgstr "Pomocnik dopasowania"
@@ -769,7 +769,7 @@ msgstr ""
 msgid "Match mark"
 msgstr "Znacznik dopasowania"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:322
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:442
 msgid "Match traffic using the specified connection tracking helper."
 msgstr "Dopasuj ruch, używając określonego pomocnika śledzenia połączeń."
@@ -892,7 +892,7 @@ msgstr ""
 "opcjonalne.<br />*Uwaga: typ danych <code>set</code> nie jest obsługiwany w "
 "fw4."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:340
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:346
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:467
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:339
 msgid "Passes additional arguments to iptables. Use with care!"
@@ -955,6 +955,10 @@ msgstr "Przekieruj ruch przychodzący do wskazanego hosta w sieci wewnętrznej"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:115
 msgid "Refer To External Set"
 msgstr "Patrz zestaw zewnętrzny"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+msgid "Reflection zones"
+msgstr "Strefy odbicia"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
@@ -1241,7 +1245,7 @@ msgstr ""
 "Jednostka: sekundy. Domyślnie <code>0</code> oznacza, że wpis jest dodany na "
 "stałe do zestawu.<br />Maks.: 2147483 sekundy."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:331
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:337
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:457
 msgid "Unknown or not installed conntrack helper \"%s\""
 msgstr "Nieznany lub niezainstalowany pomocnik conntrack \"%s\""
@@ -1351,6 +1355,14 @@ msgstr "Strefa ⇒ Przekazywanie"
 msgid "Zones"
 msgstr "Strefy"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+msgid ""
+"Zones from which reflection rules shall be created. If unset, only the "
+"destination zone is used."
+msgstr ""
+"Strefy, z których mają być tworzone reguły odbicia. Jeśli opcja nie jest "
+"ustawiona, używana jest tylko strefa docelowa."
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:411
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:70
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:153
@@ -1362,7 +1374,7 @@ msgstr "akceptuj"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:484
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:266
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:297
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:318
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:324
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:388
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:403
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:437

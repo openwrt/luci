@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2023-05-12 16:28+0000\n"
-"Last-Translator: mewsf <w1sh2f3@gmail.com>\n"
+"PO-Revision-Date: 2023-07-27 06:17+0000\n"
+"Last-Translator: Eric <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsfirewall/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -377,7 +377,7 @@ msgstr "外部 IP 地址"
 msgid "External port"
 msgstr "外部端口"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:339
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:345
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:466
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:338
 msgid "Extra arguments"
@@ -718,7 +718,7 @@ msgid ""
 "Match forwarded traffic originating from the given source port or port range."
 msgstr "匹配来自给定源端口或端口范围的转发流量。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:322
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:442
 msgid "Match helper"
 msgstr "匹配助手"
@@ -733,7 +733,7 @@ msgstr "匹配指向此主机上指定目标端口或目标端口范围的入站
 msgid "Match mark"
 msgstr "匹配标记"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:322
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:442
 msgid "Match traffic using the specified connection tracking helper."
 msgstr "使用指定的连接跟踪助手匹配流量。"
@@ -846,7 +846,7 @@ msgstr ""
 "型：<code>ip, port, mac, net, set</code>。<br />方向前缀可选。<br />*注意："
 "datatype<code>set</code>在 fw4 中不受支持。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:340
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:346
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:467
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:339
 msgid "Passes additional arguments to iptables. Use with care!"
@@ -901,6 +901,10 @@ msgstr "重定向匹配的入站流量到指定的内部主机"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:115
 msgid "Refer To External Set"
 msgstr "参考外部集合"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+msgid "Reflection zones"
+msgstr "反射区"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
@@ -1173,7 +1177,7 @@ msgstr ""
 "单位：秒。默认值<code>0</code>表示该条目被永久添加到该集合。<br />最大值："
 "2147483 秒。"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:331
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:337
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:457
 msgid "Unknown or not installed conntrack helper \"%s\""
 msgstr "未知或未安装的连接跟踪助手 \"%s\""
@@ -1278,6 +1282,12 @@ msgstr "区域 ⇒ 转发"
 msgid "Zones"
 msgstr "区域"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+msgid ""
+"Zones from which reflection rules shall be created. If unset, only the "
+"destination zone is used."
+msgstr "应从中创建反射规则的区域。如威慑hi，将仅使用目标区域。"
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:411
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:70
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:153
@@ -1289,7 +1299,7 @@ msgstr "接受"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:484
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:266
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:297
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:318
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:324
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:388
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:403
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:437

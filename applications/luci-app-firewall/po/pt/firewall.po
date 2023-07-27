@@ -410,7 +410,7 @@ msgstr "Endereço IP externo"
 msgid "External port"
 msgstr "Porta externa"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:339
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:345
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:466
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:338
 msgid "Extra arguments"
@@ -760,7 +760,7 @@ msgstr ""
 "Encaminha o tráfego que obteve correspondência originado de uma determinada "
 "porta de origem ou faixa de portas."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:322
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:442
 msgid "Match helper"
 msgstr "Auxiliar de correspondência"
@@ -777,7 +777,7 @@ msgstr ""
 msgid "Match mark"
 msgstr "Marca de correspondência"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:322
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:442
 msgid "Match traffic using the specified connection tracking helper."
 msgstr ""
@@ -906,7 +906,7 @@ msgstr ""
 "<br /> Os prefixos de direção são opcionais. <br />*Nota: o tipo de dados "
 "<code>set</code> não é suportado no fw4."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:340
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:346
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:467
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:339
 msgid "Passes additional arguments to iptables. Use with care!"
@@ -967,6 +967,10 @@ msgstr "Redirecionar o tráfego de entrada correspondente para o host interno"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:115
 msgid "Refer To External Set"
 msgstr "Consulte o conjunto externo"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+msgid "Reflection zones"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
 msgid "Requires hardware NAT support. Implemented at least for mt7621"
@@ -1259,7 +1263,7 @@ msgstr ""
 "Unidade: segundos. Padrão <code>0</code> significa que a entrada é "
 "adicionada permanentemente ao conjunto.<br /> Max: 2147483 segundos."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:331
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:337
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:457
 msgid "Unknown or not installed conntrack helper \"%s\""
 msgstr "Auxiliar conntrack desconhecido ou não instalado \"%s\""
@@ -1369,6 +1373,12 @@ msgstr "Zona ⇒ Encaminhamentos"
 msgid "Zones"
 msgstr "Zonas"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
+msgid ""
+"Zones from which reflection rules shall be created. If unset, only the "
+"destination zone is used."
+msgstr ""
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:411
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:70
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:153
@@ -1380,7 +1390,7 @@ msgstr "aceitar"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:484
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:266
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:297
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:318
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:324
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:388
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:403
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:437
