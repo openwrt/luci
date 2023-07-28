@@ -79,7 +79,7 @@ var RPC = {
 var status = baseclass.extend({
 	render: function () {
 		return Promise.all([
-			L.resolveDefault(getInitStatus(), {}),
+			L.resolveDefault(getInitStatus(pkg.Name), {}),
 		]).then(function (data) {
 			var replyStatus = data[0];
 			var text ="";
@@ -103,7 +103,7 @@ var status = baseclass.extend({
 			var header = E('h2', {}, _("Simple AdBlock - Status"))
 			var statusTitle = E('label', { class: 'cbi-value-title' }, _("Service Status"));
 			if (reply.version) {
-				text += _("Version: %s").format(reply.version) + " - ";
+				text += _("Version %s").format(reply.version) + " - ";
 				switch (reply.status) {
 					case 'statusSuccess':
 						text += statusTable[reply.status] + ".";
