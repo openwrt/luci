@@ -21,7 +21,7 @@ return view.extend({
 
 	render: function () {
 		return Promise.all([
-			L.resolveDefault(adb.getPlatformSupport(), {}),
+			L.resolveDefault(adb.getPlatformSupport(pkg.Name), {}),
 		]).then(function (data) {
 			var replyPlatform = data[0];
 			var status, m, s, o;
@@ -71,10 +71,10 @@ return view.extend({
 			}
 			else {
 				if (!(replyPlatform[pkg.Name].dnsmasq_ipset_support)) {
-					text += _("Please note that %s is not supported on this system.").format("<i>dnsmasq.ipset</i>") + "<br />";
+					text += "<br />" + _("Please note that %s is not supported on this system.").format("<i>dnsmasq.ipset</i>");
 				}
 				if (!(replyPlatform[pkg.Name].dnsmasq_nftset_support)) {
-					text += _("Please note that %s is not supported on this system.").format("<i>dnsmasq.nftset</i>") + "<br />";
+					text += "<br />" + _("Please note that %s is not supported on this system.").format("<i>dnsmasq.nftset</i>");
 				}
 			}
 			if (!(replyPlatform[pkg.Name].unbound_installed)) {
