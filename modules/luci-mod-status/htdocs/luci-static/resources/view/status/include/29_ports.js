@@ -217,7 +217,7 @@ function formatSpeed(speed, duplex) {
 }
 
 function formatStats(portdev) {
-	var stats = portdev._devstate('stats');
+	var stats = portdev._devstate('stats') || {};
 
 	return ui.itemlist(E('span'), [
 		_('Received bytes'), '%1024mB'.format(stats.rx_bytes),
