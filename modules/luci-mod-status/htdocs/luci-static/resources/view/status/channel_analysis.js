@@ -132,7 +132,13 @@ return view.extend({
 			chan_analysis.offset_tbl[channel] = curr_offset+step;
 
 			createGraphHLine(G,curr_offset+step);
-			createGraphText(G,curr_offset+step, channel);
+			if (is5GHz)
+				if (channel < 100)
+					createGraphText(G,curr_offset-(step/2), channel);
+				else
+					createGraphText(G,curr_offset-step, channel);
+			else
+				createGraphText(G,curr_offset+step, channel);
 			curr_offset += step;
 
 			if (is5GHz && freq_tbl[i+1]) {
