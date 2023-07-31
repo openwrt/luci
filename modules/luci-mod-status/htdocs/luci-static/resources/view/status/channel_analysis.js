@@ -205,36 +205,38 @@ return view.extend({
 				scanCache[results[i].bssid].data.stale = false;
 			}
 
-			if (scanCache[local_wifi.bssid] == null)
-				scanCache[local_wifi.bssid] = {};
+			if (band + 'g' == radio.dev.get('band')) {
+				if (scanCache[local_wifi.bssid] == null)
+					scanCache[local_wifi.bssid] = {};
 
-			scanCache[local_wifi.bssid].data = local_wifi;
+				scanCache[local_wifi.bssid].data = local_wifi;
 
-			if (chan_analysis.offset_tbl[local_wifi.channel] != null && local_wifi.center_chan1) {
-				var center_channels = [local_wifi.center_chan1],
-				    chan_width_text = local_wifi.htmode.replace(/(V)*H[TE]/,''), /* Handle HT VHT HE */
-				    chan_width = parseInt(chan_width_text)/10;
+				if (chan_analysis.offset_tbl[local_wifi.channel] != null && local_wifi.center_chan1) {
+					var center_channels = [local_wifi.center_chan1],
+					    chan_width_text = local_wifi.htmode.replace(/(V)*H[TE]/,''), /* Handle HT VHT HE */
+					    chan_width = parseInt(chan_width_text)/10;
 
-				if (local_wifi.center_chan2) {
-					center_channels.push(local_wifi.center_chan2);
-					chan_width = 8;
+					if (local_wifi.center_chan2) {
+						center_channels.push(local_wifi.center_chan2);
+						chan_width = 8;
+					}
+
+					local_wifi.signal = -10;
+					local_wifi.ssid = 'Local Interface';
+
+					this.add_wifi_to_graph(chan_analysis, local_wifi, scanCache, center_channels, chan_width);
+					rows.push([
+						this.render_signal_badge(q, local_wifi.signal),
+						[
+							E('span', { 'style': 'color:'+scanCache[local_wifi.bssid].color }, '⬤ '),
+							local_wifi.ssid
+						],
+						'%d'.format(local_wifi.channel),
+						'%h MHz'.format(chan_width_text),
+						'%h'.format(local_wifi.mode),
+						'%h'.format(local_wifi.bssid)
+					]);
 				}
-
-				local_wifi.signal = -10;
-				local_wifi.ssid = 'Local Interface';
-
-				this.add_wifi_to_graph(chan_analysis, local_wifi, scanCache, center_channels, chan_width);
-				rows.push([
-					this.render_signal_badge(q, local_wifi.signal),
-					[
-						E('span', { 'style': 'color:'+scanCache[local_wifi.bssid].color }, '⬤ '),
-						local_wifi.ssid
-					],
-					'%d'.format(local_wifi.channel),
-					'%h MHz'.format(chan_width_text),
-					'%h'.format(local_wifi.mode),
-					'%h'.format(local_wifi.bssid)
-				]);
 			}
 
 			for (var k in scanCache)
@@ -266,6 +268,8 @@ return view.extend({
 					chan_width = 2;
 
 				/* Skip WiFi not supported by the current band */
+				if (band != res.band)
+					continue;
 				if (chan_analysis.offset_tbl[res.channel] == null)
 					continue;
 
