@@ -97,9 +97,8 @@ return view.extend({
 		})
 	},
 
-	create_channel_graph: function(chan_analysis, freq_tbl, freq) {
-		var is5GHz = freq == '5GHz',
-		    columns = is5GHz ? freq_tbl.length * 4 : freq_tbl.length + 3,
+	create_channel_graph: function(chan_analysis, freq_tbl, band) {
+		var columns = (band != 2) ? freq_tbl.length * 4 : freq_tbl.length + 3,
 		    chan_graph = chan_analysis.graph,
 		    G = chan_graph.firstElementChild,
 		    step = (chan_graph.offsetWidth - 2) / columns,
@@ -131,7 +130,7 @@ return view.extend({
 			var channel = freq_tbl[i]
 			chan_analysis.offset_tbl[channel] = curr_offset+step;
 
-			if (is5GHz) {
+			if (band != 2) {
 				createGraphHLine(G,curr_offset+step, 0.1, 3);
 				if (channel < 100)
 					createGraphText(G,curr_offset-(step/2), channel);
@@ -143,7 +142,7 @@ return view.extend({
 			}
 			curr_offset += step;
 
-			if (is5GHz && freq_tbl[i+1]) {
+			if ((band != 2) && freq_tbl[i+1]) {
 				var next_channel = freq_tbl[i+1];
 				/* Check if we are transitioning to another 5Ghz band range */
 				if ((next_channel - channel) == 4) {
@@ -193,7 +192,8 @@ return view.extend({
 			    local_wifi = data[1],
 			    table = radio.table,
 			    chan_analysis = radio.graph,
-			    scanCache = radio.scanCache;
+			    scanCache = radio.scanCache,
+			    band = radio.band;
 
 			var rows = [];
 
@@ -376,22 +376,19 @@ return view.extend({
 		var tabs = E('div', {}, E('div'));
 
 		for (var ifname in wifiDevs) {
-			var freq_tbl = {
-				['2.4GHz'] : [],
-				['5GHz'] : [],
+			var bands = {
+				[2] : { title: '2.4GHz', channels: [] },
+				[5] : { title: '5GHz', channels: [] },
 			};
 
 			/* Split FrequencyList in Bands */
 			wifiDevs[ifname].freq.forEach(function(freq) {
-				if (freq.mhz >= 5000) {
-					freq_tbl['5GHz'].push(freq.channel);
-				} else {
-					freq_tbl['2.4GHz'].push(freq.channel);
-				}
+				if (bands[freq.band])
+					bands[freq.band].channels.push(freq.channel);
 			});
 
-			for (var freq in freq_tbl) {
-				if (freq_tbl[freq].length == 0)
+			for (var band in bands) {
+				if (bands[band].channels.length == 0)
 					continue;
 
 				var csvg = svg.cloneNode(true),
@@ -405,7 +402,7 @@ return view.extend({
 						E('th', { 'class': 'th col-3 middle left hide-xs' }, _('BSSID'))
 					])
 				]),
-				tab = E('div', { 'data-tab': ifname+freq, 'data-tab-title': ifname+' ('+freq+')' },
+				tab = E('div', { 'data-tab': ifname+band, 'data-tab-title': ifname+' ('+bands[band].title+')' },
 						[E('br'),csvg,E('br'),table,E('br')]),
 				graph_data = {
 					graph: csvg,
@@ -414,8 +411,9 @@ return view.extend({
 					tab: tab,
 				};
 
-				this.radios[ifname+freq] = {
+				this.radios[ifname+band] = {
 					dev: wifiDevs[ifname].dev,
+					band: band,
 					graph: graph_data,
 					table: table,
 					scanCache: {},
@@ -426,7 +424,7 @@ return view.extend({
 
 				tabs.firstElementChild.appendChild(tab)
 
-				requestAnimationFrame(L.bind(this.create_channel_graph, this, graph_data, freq_tbl[freq], freq));
+				requestAnimationFrame(L.bind(this.create_channel_graph, this, graph_data, bands[band].channels, band));
 			}
 		}
 
