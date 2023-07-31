@@ -144,7 +144,7 @@ return view.extend({
 
 			if ((band != 2) && freq_tbl[i+1]) {
 				var next_channel = freq_tbl[i+1];
-				/* Check if we are transitioning to another 5Ghz band range */
+				/* Check if we are transitioning to another 5/6Ghz band range */
 				if ((next_channel - channel) == 4) {
 					for (var j=1; j < 4; j++) {
 						chan_analysis.offset_tbl[channel+j] = curr_offset+step;
@@ -383,6 +383,7 @@ return view.extend({
 			var bands = {
 				[2] : { title: '2.4GHz', channels: [] },
 				[5] : { title: '5GHz', channels: [] },
+				[6] : { title: '6GHz', channels: [] },
 			};
 
 			/* Split FrequencyList in Bands */
