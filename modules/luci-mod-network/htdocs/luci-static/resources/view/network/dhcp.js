@@ -742,16 +742,22 @@ return view.extend({
 		so.datatype = 'hostname';
 
 		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
-			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br />' +
-			_('Use the <em>Add</em> Button to add a new lease entry. The <em>MAC address</em> identifies the host, the <em>IPv4 address</em> specifies the fixed address to use, and the <em>Hostname</em> is assigned as a symbolic name to the requesting host. The optional <em>Lease time</em> can be used to set non-standard host-specific lease time, e.g. 12h, 3d or infinite.'));
+			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new lease entry. The <em>MAC address</em> identifies the host, the <em>IPv4 address</em> specifies the fixed address to use, and the <em>Hostname</em> is assigned as a symbolic name to the requesting host. The optional <em>Lease time</em> can be used to set non-standard host-specific lease time, e.g. 12h, 3d or infinite.') + '<br /><br />' +
+			_('The tag construct filters which host directives are used; more than one tag can be provided, in this case the request must match all of them. Tagged directives are used in preference to untagged ones. Note that one of mac, duid or hostname still needs to be specified (can be a wildcard).'));
 
 		ss = o.subsection;
 
 		ss.addremove = true;
 		ss.anonymous = true;
 		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.max_cols = 8;
+		ss.modaltitle = _('Edit static lease');
 
-		so = ss.option(form.Value, 'name', _('Hostname'));
+		so = ss.option(form.Value, 'name', 
+			_('Hostname'),
+			_('Optional hostname to assign'));
 		so.validate = validateHostname;
 		so.rmempty  = true;
 		so.write = function(section, value) {
@@ -763,20 +769,35 @@ return view.extend({
 			uci.unset('dhcp', section, 'dns');
 		};
 
-		so = ss.option(form.Value, 'mac', _('MAC address'));
-		so.datatype = 'list(macaddr)';
+		so = ss.option(form.Value, 'mac',
+			_('MAC address(es)'),
+			_('The hardware address(es) of this entry/host, separated by spaces.') + '<br /><br />' + 
+			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
+		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
+		so.validate = function(section_id, value) {
+			var macaddrs = L.toArray(value);
+
+			for (var i = 0; i < macaddrs.length; i++)
+				if (!macaddrs[i].match(/^([a-fA-F0-9]{2}|\*):([a-fA-F0-9]{2}:|\*:){4}(?:[a-fA-F0-9]{2}|\*)$/))
+					return _('Expecting a valid MAC address, optionally including wildcards');
+
+			return true;
+		};
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
 			var macs = L.toArray(uci.get('dhcp', section, 'mac')),
 			    result = [];
 
 			for (var i = 0, mac; (mac = macs[i]) != null; i++)
-				if (/^([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2}):([0-9a-fA-F]{1,2})$/.test(mac))
-					result.push('%02X:%02X:%02X:%02X:%02X:%02X'.format(
+				if (/^([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*)$/.test(mac)) {
+					var m = [
 						parseInt(RegExp.$1, 16), parseInt(RegExp.$2, 16),
 						parseInt(RegExp.$3, 16), parseInt(RegExp.$4, 16),
-						parseInt(RegExp.$5, 16), parseInt(RegExp.$6, 16)));
+						parseInt(RegExp.$5, 16), parseInt(RegExp.$6, 16)
+					];
 
+					result.push(m.map(function(n) { return isNaN(n) ? '*' : '%02X'.format(n) }).join(':'));
+				}
 			return result.length ? result.join(' ') : null;
 		};
 		so.renderWidget = function(section_id, option_index, cfgvalue) {
@@ -809,7 +830,8 @@ return view.extend({
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
-		so = ss.option(form.Value, 'ip', _('IPv4 address'));
+		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IP address to be used for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
+		so.value('ignore', _('Ignore'));
 		so.datatype = 'or(ip4addr,"ignore")';
 		so.validate = function(section, value) {
 			var m = this.section.formvalue(section, 'mac'),
@@ -841,16 +863,60 @@ return view.extend({
 			so.value(ipv4, ipaddrs[ipv4] ? '%s (%s)'.format(ipv4, ipaddrs[ipv4]) : ipv4);
 		});
 
-		so = ss.option(form.Value, 'leasetime', _('Lease time'));
+		so = ss.option(form.Value, 'leasetime', 
+			_('Lease time'),
+			_('Host-specific lease time, e.g. <code>5m</code>, <code>3h</code>, <code>7d</code>.'));
 		so.rmempty = true;
+		so.value('5m', _('5m (5 minutes)'));
+		so.value('3h', _('3h (3 hours)'));
+		so.value('12h', _('12h (12 hours - default)'));
+		so.value('7d', _('7d (7 days)'));
+		so.value('infinite', _('infinite (lease does not expire)'));
 
-		so = ss.option(form.Value, 'duid', _('DUID'));
+		so = ss.option(form.Value, 'duid',
+			_('DUID'),
+			_('The DHCPv6-DUID (DHCP unique identifier) of this host.'));
 		so.datatype = 'and(rangelength(20,36),hexstring)';
 		Object.keys(duids).forEach(function(duid) {
 			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
 		});
 
-		so = ss.option(form.Value, 'hostid', _('IPv6 suffix (hex)'));
+		so = ss.option(form.Value, 'hostid',
+			_('IPv6-Suffix (hex)'),
+			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 8 chars).'));
+		so.datatype = 'and(rangelength(0,8),hexstring)';
+
+		so = ss.option(form.DynamicList, 'tag',
+			_('Tag'),
+			_('Assign new, freeform tags to this entry.'));
+
+		so = ss.option(form.DynamicList, 'match_tag',
+			_('Match Tag'),
+			_('When a host matches an entry then the special tag <em>known</em> is set. Use <em>known</em> to match all known hosts.') + '<br /><br />' +
+			_('Ignore requests from unknown machines using <em>!known</em>.') + '<br /><br />' +
+			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag <em>known-othernet</em> is set.'));
+		so.value('known', _('known'));
+		so.value('!known', _('!known (not known)'));
+		so.value('known-othernet', _('known-othernet (on different subnet)'));
+		so.optional = true;
+
+		so = ss.option(form.Value, 'instance',
+			_('Instance'),
+			_('Dnsmasq instance to which this DHCP host section is bound. If unspecified, the section is valid for all dnsmasq instances.'));
+		so.optional = true;
+
+		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
+			so.value(index, '%s (Domain: %s, Local: %s)'.format(index, val.domain || '?', val.local || '?'));
+		});
+
+
+		so = ss.option(form.Flag, 'broadcast',
+			_('Broadcast'),
+			_('Force broadcast DHCP response.'));
+
+		so = ss.option(form.Flag, 'dns',
+			_('Forward/reverse DNS'),
+			_('Add static forward and reverse DNS entries for this host.'));
 
 		o = s.taboption('leases', CBILeaseStatus, '__status__');
 
