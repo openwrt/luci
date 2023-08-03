@@ -86,7 +86,7 @@ return view.extend({
 
 			o = s.option(form.Flag, 'flow_offloading_hw',
 				_('Hardware flow offloading'),
-				_('Requires hardware NAT support. Implemented at least for mt7621'));
+				_('Requires hardware NAT support.'));
 			o.optional = true;
 			o.depends('flow_offloading', '1');
 		}
