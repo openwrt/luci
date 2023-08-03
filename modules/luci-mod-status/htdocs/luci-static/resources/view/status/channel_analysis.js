@@ -105,13 +105,13 @@ return view.extend({
 		    step = (chan_graph.offsetWidth - 2) / columns,
 		    curr_offset = step;
 
-		function createGraphHLine(graph, pos) {
+		function createGraphHLine(graph, pos, width, dash) {
 			var elem = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 			elem.setAttribute('x1', pos);
 			elem.setAttribute('y1', 0);
 			elem.setAttribute('x2', pos);
 			elem.setAttribute('y2', '100%');
-			elem.setAttribute('style', 'stroke:black;stroke-width:0.1');
+			elem.setAttribute('style', 'stroke:black;stroke-width:'+width+';stroke-dasharray:'+dash);
 			graph.appendChild(elem);
 		}
 
@@ -126,13 +126,21 @@ return view.extend({
 
 		chan_analysis.col_width = step;
 
-		createGraphHLine(G,curr_offset);
+		createGraphHLine(G,curr_offset, 0.1, 1);
 		for (var i=0; i< freq_tbl.length;i++) {
 			var channel = freq_tbl[i]
 			chan_analysis.offset_tbl[channel] = curr_offset+step;
 
-			createGraphHLine(G,curr_offset+step);
-			createGraphText(G,curr_offset+step, channel);
+			if (is5GHz) {
+				createGraphHLine(G,curr_offset+step, 0.1, 3);
+				if (channel < 100)
+					createGraphText(G,curr_offset-(step/2), channel);
+				else
+					createGraphText(G,curr_offset-step, channel);
+			} else {
+				createGraphHLine(G,curr_offset+step, 0.1, 0);
+				createGraphText(G,curr_offset+step, channel);
+			}
 			curr_offset += step;
 
 			if (is5GHz && freq_tbl[i+1]) {
@@ -141,25 +149,28 @@ return view.extend({
 				if ((next_channel - channel) == 4) {
 					for (var j=1; j < 4; j++) {
 						chan_analysis.offset_tbl[channel+j] = curr_offset+step;
-						createGraphHLine(G,curr_offset+step);
+						if (j == 2)
+							createGraphHLine(G,curr_offset+step, 0.1, 0);
+						else
+							createGraphHLine(G,curr_offset+step, 0.1, 1);
 						curr_offset += step;
 					}
 				} else {
 					chan_analysis.offset_tbl[channel+1] = curr_offset+step;
-					createGraphHLine(G,curr_offset+step);
+					createGraphHLine(G,curr_offset+step, 0.1, 1);
 					curr_offset += step;
 
 					chan_analysis.offset_tbl[next_channel-2] = curr_offset+step;
-					createGraphHLine(G,curr_offset+step);
+					createGraphHLine(G,curr_offset+step, 0.5, 0);
 					curr_offset += step;
 
 					chan_analysis.offset_tbl[next_channel-1] = curr_offset+step;
-					createGraphHLine(G,curr_offset+step);
+					createGraphHLine(G,curr_offset+step, 0.1, 1);
 					curr_offset += step;
 				}
 			}
 		}
-		createGraphHLine(G,curr_offset+step);
+		createGraphHLine(G,curr_offset+step, 0.1, 1);
 
 		chan_analysis.tab.addEventListener('cbi-tab-active', L.bind(function(ev) {
 			this.active_tab = ev.detail.tab;
