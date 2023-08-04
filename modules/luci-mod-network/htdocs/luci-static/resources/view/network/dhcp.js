@@ -830,9 +830,8 @@ return view.extend({
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
-		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IP address to be used for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
-		so.value('ignore', _('Ignore'));
-		so.datatype = 'or(ip4addr,"ignore")';
+		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IP address to be used for this host.'));
+		so.datatype = 'ip4addr';
 		so.validate = function(section, value) {
 			var m = this.section.formvalue(section, 'mac'),
 			    n = this.section.formvalue(section, 'name');
@@ -865,13 +864,14 @@ return view.extend({
 
 		so = ss.option(form.Value, 'leasetime', 
 			_('Lease time'),
-			_('Host-specific lease time, e.g. <code>5m</code>, <code>3h</code>, <code>7d</code>.'));
+			_('Host-specific lease time, e.g. <code>5m</code>, <code>3h</code>, <code>7d</code>, or <code>ignore</code> to ignore DHCP requests from this host.'));
 		so.rmempty = true;
 		so.value('5m', _('5m (5 minutes)'));
 		so.value('3h', _('3h (3 hours)'));
 		so.value('12h', _('12h (12 hours - default)'));
 		so.value('7d', _('7d (7 days)'));
 		so.value('infinite', _('infinite (lease does not expire)'));
+		so.value('ignore', _('ignore requests from this host'));
 
 		so = ss.option(form.Value, 'duid',
 			_('DUID'),
@@ -892,9 +892,9 @@ return view.extend({
 
 		so = ss.option(form.DynamicList, 'match_tag',
 			_('Match Tag'),
-			_('When a host matches an entry then the special tag <em>known</em> is set. Use <em>known</em> to match all known hosts.') + '<br /><br />' +
-			_('Ignore requests from unknown machines using <em>!known</em>.') + '<br /><br />' +
-			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag <em>known-othernet</em> is set.'));
+			_('When a host matches an entry then the special tag <code>known</code> is set. Use <code>known</code> to match all known hosts.') + '<br /><br />' +
+			_('Ignore requests from unknown machines using <code>!known</code>.') + '<br /><br />' +
+			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag <code>known-othernet</code> is set.'));
 		so.value('known', _('known'));
 		so.value('!known', _('!known (not known)'));
 		so.value('known-othernet', _('known-othernet (on different subnet)'));
