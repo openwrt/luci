@@ -37,9 +37,8 @@ local function urlbuilder(tls_enabled, host, port, path)
 end
 
 local function get_credentials()
-    -- AdGuard Home stores credentials encrypted, so the a secondary
+    -- AdGuard Home stores credentials encrypted, so a secondary
     -- copy has to be stored in /etc/config/adguardhome.
-    local creds = {}
     local uci = UCI.cursor()
     local username = uci:get("adguardhome", "config", "web_username")
     local password = uci:get("adguardhome", "config", "web_password")
@@ -79,7 +78,7 @@ local function call_rest_api(api_name)
                            agh_table.bind_port, api_name)
 
     -- Call the REST API, see what comes back
-    local _body, code, _headers, _status = http.request {
+    local _, code, _, _ = http.request {
         url = url,
         method = "GET",
         headers = {
@@ -160,7 +159,7 @@ local function validateArgs(func, uargs)
     -- Lua has no length operator for tables, so iterate to get the count
     -- of the keys.
     local n = 0
-    for k, v in pairs(uargs) do n = n + 1 end
+    for _, _ in pairs(uargs) do n = n + 1 end
 
     -- If the method defines an args table (so empty tables are not allowed),
     -- and there were no args, then give a useful error message about that.
@@ -195,7 +194,9 @@ if arg[1] == "list" then
 elseif arg[1] == "call" then
     local args = parseInput()
     local method = validateArgs(arg[2], args)
-    local run = method.call(args)
+    -- If any method in the dispatch table takes an args, then this would need to pass the
+    -- args. Passing args blindly triggers a redundant-parameters from the lua language server.
+    local run = method.call()
     print(run.result)
     os.exit(run.code or 0)
 elseif arg[1] == "help" then
