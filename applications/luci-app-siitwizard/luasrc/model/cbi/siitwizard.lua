@@ -49,8 +49,8 @@ ula = ula:add(find_ll())
 
 
 -------------------- View --------------------
-f = SimpleForm("siitwizward", "SIIT-Wizzard",
- "This wizzard helps to setup SIIT (IPv4-over-IPv6) translation according to RFC2765.")
+f = SimpleForm("siitwizard", "SIIT-Wizard",
+ "This wizard helps to set up SIIT (IPv4-over-IPv6) translation according to RFC2765.")
 
 f:field(DummyValue, "info_ula", "Mesh ULA address").value = ula:string()
 
