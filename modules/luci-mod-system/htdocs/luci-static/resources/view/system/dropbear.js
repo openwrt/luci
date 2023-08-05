@@ -28,7 +28,7 @@ return view.extend({
 		o.default  = o.enabled;
 		o.rmempty  = false;
 
-		o = s.option(form.Flag, 'RootPasswordAuth', _('Allow root logins with password'), _('Allow the <em>root</em> user to login with password'));
+		o = s.option(form.Flag, 'RootPasswordAuth', _('Allow root logins with password'), _('Allow the <em>root</em> user to log in with password'));
 		o.enabled  = 'on';
 		o.disabled = 'off';
 		o.default  = o.enabled;
