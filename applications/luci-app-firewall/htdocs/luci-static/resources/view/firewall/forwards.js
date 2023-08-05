@@ -22,7 +22,7 @@ function rule_proto_txt(s, ctHelpers) {
 		};
 	});
 
-	m = String(uci.get('firewall', s, 'helper') || '').match(/^(!\s*)?(\S+)$/);
+	var m = String(uci.get('firewall', s, 'helper') || '').match(/^(!\s*)?(\S+)$/);
 	var h = m ? {
 		val:  m[0].toUpperCase(),
 		inv:  m[1],
@@ -312,6 +312,12 @@ return view.extend({
 		o.write = function(section_id, value) {
 			uci.set('firewall', section_id, 'reflection_src', (value != 'internal') ? value : null);
 		};
+
+		o = s.taboption('advanced', widgets.ZoneSelect, 'reflection_zone', _('Reflection zones'), _('Zones from which reflection rules shall be created. If unset, only the destination zone is used.'));
+		o.nocreate = true;
+		o.multiple = true;
+		o.modalonly = true;
+		o.depends('reflection', '1');
 
 		o = s.taboption('advanced', form.Value, 'helper', _('Match helper'), _('Match traffic using the specified connection tracking helper.'));
 		o.modalonly = true;

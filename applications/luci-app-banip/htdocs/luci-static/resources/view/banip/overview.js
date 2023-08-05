@@ -384,7 +384,7 @@ return view.extend({
 		o.placeholder = '/tmp/banIP-report';
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and and tidy up the local blocklist.'));
+		o = s.taboption('advanced', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and tidy up the local blocklist.'));
 		o.default = 1
 		o.rmempty = false;
 
@@ -411,6 +411,20 @@ return view.extend({
 		o.value('-200', _('-200 (default)'));
 		o.value('-300', _('-300'));
 		o.value('-400', _('-400'));
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanallow', _('Allow VLAN Forwads'), _('Always allow certain VLAN forwards.'));
+		o.unspecified = true;
+		o.multiple = true;
+		o.nocreate = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanblock', _('Block VLAN Forwads'), _('Always block certain VLAN forwards.'));
+		o.unspecified = true;
+		o.multiple = true;
+		o.nocreate = true;
 		o.optional = true;
 		o.rmempty = true;
 

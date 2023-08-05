@@ -174,10 +174,6 @@ if limit_enable == "1" and limit_type == "static" then
 		o.titleref = luci.dispatcher.build_url("admin", "status", "overview")
 	end
 
-	o = y:option(Value, "macaddr", translate("MAC (optional)"))
-	o.rmempty = true
-	o.datatype = "macaddr"
-
 	o = y:option(Value, "rate", translate("Rate"))
 	o.default = def_rate_ul or '50'
 	o.size = 4

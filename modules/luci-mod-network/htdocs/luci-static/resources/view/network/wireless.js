@@ -1143,7 +1143,7 @@ return view.extend({
 
 					/* https://w1.fi/cgit/hostap/commit/?id=34f7c699a6bcb5c45f82ceb6743354ad79296078  */
 					/* multicast_to_unicast https://github.com/openwrt/openwrt/commit/7babb978ad9d7fc29acb1ff86afb1eb343af303a */
-					o = ss.taboption('advanced', form.Flag, 'multicast_to_unicast', _('Multi To Unicast'), _('ARP, IPv4 and IPv6 (even 802.1Q) with multicast destination MACs are unicast to the STA MAC address. Note: This is not Directed Multicast Service (DMS) in 802.11v. Note: might break receiver STA multicast expectations.'));
+					o = ss.taboption('advanced', form.Flag, 'multicast_to_unicast_all', _('Multi To Unicast'), _('ARP, IPv4 and IPv6 (even 802.1Q) with multicast destination MACs are unicast to the STA MAC address. Note: This is not Directed Multicast Service (DMS) in 802.11v. Note: might break receiver STA multicast expectations.'));
 					o.rmempty = true;
 
 					o = ss.taboption('advanced', form.Flag, 'isolate', _('Isolate Clients'), _('Prevents client-to-client communication'));
@@ -1157,10 +1157,11 @@ return view.extend({
 					if (/^radio\d+\.network/.test(o.placeholder))
 						o.placeholder = '';
 
+					var macaddr = uci.get('wireless', radioNet.getName(), 'macaddr');
 					o = ss.taboption('advanced', form.Value, 'macaddr', _('MAC address'), _('Override default MAC address - the range of usable addresses might be limited by the driver'));
-					o.optional = true;
-					o.placeholder = radioNet.getActiveBSSID();
-					o.datatype = 'macaddr';
+					o.value('', _('driver default (%s)').format(!macaddr ? radioNet.getActiveBSSID() : _('no override')));
+					o.value('random', _('randomly generated'));
+					o.datatype = "or('random',macaddr)";
 
 					o = ss.taboption('advanced', form.Flag, 'short_preamble', _('Short Preamble'));
 					o.default = o.enabled;

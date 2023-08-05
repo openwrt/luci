@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:35+0200\n"
-"PO-Revision-Date: 2023-04-24 17:51+0000\n"
+"PO-Revision-Date: 2023-07-17 17:20+0000\n"
 "Last-Translator: drax red <drax@outlook.dk>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/da/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/apcups.json:2
@@ -71,6 +71,18 @@ msgstr "Grundlæggende overvågning"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:25
 msgid "Basic process monitoring enabled"
 msgstr "Grundlæggende procesovervågning aktiveret"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:100
+msgid "Bitrate"
+msgstr "Bitrate"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:82
+msgid "Bitswap Down"
+msgstr "Bitswap ned"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:77
+msgid "Bitswap Up"
+msgstr "Bitswap op"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:15
 msgid "By setting this, CPU is not aggregate of all processors on the system"
@@ -215,6 +227,30 @@ msgstr "DNS"
 msgid "DNS Plugin Configuration"
 msgstr "DNS-plugin-konfiguration"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:6
+msgid "DSL"
+msgstr "DSL"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:65
+msgid "DSL Flags"
+msgstr "DSL Flag"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:52
+msgid "DSL Line Uptime"
+msgstr "DSL Linje oppetid"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:13
+msgid "DSL Signal"
+msgstr "DSL-signal"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:128
+msgid "Data Rate Down"
+msgstr "Datahastighed ned"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:123
+msgid "Data Rate Up"
+msgstr "Datahastighed op"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:74
 msgid "Data collection interval"
 msgstr "Dataindsamlingsinterval"
@@ -339,6 +375,10 @@ msgstr "Entropi Plugin Konfiguration"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/entropy.js:10
 msgid "Entropy monitoring enabled"
 msgstr "Entropiovervågning aktiveret"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:136
+msgid "Errors"
+msgstr "Fejl"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:206
 msgid "Every 30 seconds"
@@ -526,6 +566,14 @@ msgid "Leave unselected to automatically determine interfaces to monitor."
 msgstr ""
 "Lad være umarkeret for automatisk at bestemme interfaces, der skal overvåges."
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:24
+msgid "Line Attenuation Down (LATN)"
+msgstr "Linjedæmpning ned (LATN)"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:19
+msgid "Line Attenuation Up (LATN)"
+msgstr "Linjedæmpning op (LATN)"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:39
 msgid ""
 "List of time spans to be stored in RRD database. E.g. \"1hour 1day 14day\". "
@@ -580,6 +628,14 @@ msgid ""
 msgstr ""
 "Maks. værdier for en periode kan bruges i stedet for gennemsnit, når der "
 "ikke bruges 'kun gennemsnitlige RRA'er'"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:118
+msgid "Max. Attainable Data Rate (ATTNDR) Down"
+msgstr "Maks. opnåelig datahastighed (ATTNDR) ned"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:113
+msgid "Max. Attainable Data Rate (ATTNDR) Up"
+msgstr "Maks. opnåelig datahastighed (ATTNDR) op"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:36
 msgid "Maximum Missed Packets"
@@ -674,7 +730,7 @@ msgstr "Overvåg fjernporte"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
 msgid "Monitoring %s and %s, %s %s"
-msgstr ""
+msgstr "Overvågning af % og %, %s %"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
@@ -860,6 +916,14 @@ msgstr "Netværks plugins"
 msgid "No RRD data found"
 msgstr "Ingen RRD-data fundet"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:44
+msgid "Noise Margin Down (SNR)"
+msgstr "Støjmargen ned (SNR)"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:39
+msgid "Noise Margin Up (SNR)"
+msgstr "Støjmargen op (SNR)"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:15
 msgid ""
 "Note: as pages are rendered by user 'nobody', the *.rrd files, the storage "
@@ -1005,6 +1069,22 @@ msgstr "Rækker til RRA"
 msgid "Rule monitoring enabled"
 msgstr "Regelovervågning aktiveret"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:142
+msgid "Rx Corrupted Far"
+msgstr "Rx Korrupt langt"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:147
+msgid "Rx Corrupted Near"
+msgstr "Rx Korrupt nær"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:152
+msgid "Rx Retransmitted Far"
+msgstr "Rx gentransmitteret langt"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:162
+msgid "Rx Retransmitted Near"
+msgstr "Rx Gentransmitteret nær"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/snmp6.js:7
 msgid "SNMP6"
 msgstr "SNMP6"
@@ -1090,6 +1170,14 @@ msgstr "Vis inaktiv tilstand"
 msgid "Show max values instead of averages"
 msgstr "Vis maks. værdier i stedet for gennemsnit"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:34
+msgid "Signal Attenuation Down (SATN)"
+msgstr "Signaldæmpning ned (SATN)"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:29
+msgid "Signal Attenuation Up (SATN)"
+msgstr "Signaldæmpning op (SATN)"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:23
 msgid "Simple CPU frequency monitoring enabled"
 msgstr "Enkel CPU-frekvensovervågning aktiveret"
@@ -1173,7 +1261,7 @@ msgstr "Gemmer CSV-data i %s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
 msgid "Summary of all ports"
-msgstr ""
+msgstr "Oversigt over alle porte"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
 msgid "Syslog"
@@ -1518,6 +1606,14 @@ msgstr "Timeout for polling chrony"
 msgid "Try to lookup fully qualified hostname"
 msgstr "Prøv at slå et fuldt kvalificeret værtsnavn op"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:157
+msgid "Tx Retransmitted Far"
+msgstr "Tx Gentransmitteret langt"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:167
+msgid "Tx Retransmitted Near"
+msgstr "Tx Gentransmitteret nær"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/nut.js:7
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:14
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/nut.json:2
@@ -1544,6 +1640,7 @@ msgstr "UnixSock"
 msgid "Unixsock Plugin Configuration"
 msgstr "Unixsock Plugin-konfiguration"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:58
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/uptime.js:15
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/uptime.json:2
 msgid "Uptime"
@@ -1569,6 +1666,14 @@ msgstr "Brugt PID-fil"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:47
 msgid "User"
 msgstr "Bruger"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:92
+msgid "Vectoring Down"
+msgstr "Vektor ned"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:87
+msgid "Vectoring Up"
+msgstr "Vektor op"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:21
 msgid "Verbose monitoring"
@@ -1629,7 +1734,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
 msgid "all local listening ports,"
-msgstr ""
+msgstr "alle lokale lytteporte,"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
@@ -1646,7 +1751,7 @@ msgstr "cUrl Plugin-konfiguration"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "no summary"
-msgstr ""
+msgstr "ingen oversigt"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
@@ -1667,8 +1772,8 @@ msgstr[1] "%d filsystemtyper"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
 msgid "one local"
 msgid_plural "%d local"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "en lokal"
+msgstr[1] "%d lokale"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
@@ -1688,7 +1793,7 @@ msgstr "reducerer rrd-størrelsen"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "summary of all ports"
-msgstr ""
+msgstr "Oversigt over alle porte"
 
 #~ msgid "Monitoring %s and %s"
 #~ msgstr "Overvågning af %s og %s"

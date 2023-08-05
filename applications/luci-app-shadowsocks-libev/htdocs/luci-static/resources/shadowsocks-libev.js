@@ -12,6 +12,7 @@ var names_options_server = [
 	'password',
 	'plugin',
 	'plugin_opts',
+	'local_address',
 ];
 
 var names_options_client = [
@@ -21,7 +22,6 @@ var names_options_client = [
 ];
 
 var names_options_common = [
-	'local_address',
 	'verbose',
 	'ipv6_first',
 	'fast_open',

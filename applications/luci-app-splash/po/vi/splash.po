@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-11-13 14:05+0200\n"
-"PO-Revision-Date: 2023-03-26 16:39+0000\n"
-"Last-Translator: Nguyễn văn tuyên <admin@tuyen.vn>\n"
+"PO-Revision-Date: 2023-06-21 04:33+0000\n"
+"Last-Translator: Quy <haonguyen93056@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssplash/vi/>\n"
 "Language: vi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:53
 msgid "%s with the operator of this access point."
@@ -30,6 +30,11 @@ msgid ""
 "few connections are shared between all users. That means available bandwidth "
 "is limited and because of this we ask you not to do any of the following:"
 msgstr ""
+"Tuy nhiên, vẫn có thể truy cập internet vì một số nhà hoạt động của dự án "
+"này chia sẻ các kết nối internet riêng của họ. Một vài kết nối này được chia "
+"sẻ giữa tất cả người dùng. Điều đó có nghĩa là băng thông khả dụng bị hạn "
+"chế và vì điều này, chúng tôi yêu cầu bạn không thực hiện bất kỳ thao tác "
+"nào sau đây:"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:112
 msgid ""
@@ -37,20 +42,26 @@ msgid ""
 "without notice for any reason, for certain devices, and/or may be blocked "
 "for certain users."
 msgstr ""
+"Truy cập vào mạng không được đảm bảo. Nó có thể bị gián đoạn bất cứ lúc nào "
+"mà không cần thông báo vì bất kỳ lý do gì, đối với một số thiết bị và/hoặc "
+"có thể bị chặn đối với một số người dùng."
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:199
 msgid "Active Clients"
-msgstr ""
+msgstr "Máy khách đang hoạt động"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:70
 msgid "Allowed hosts/subnets"
-msgstr ""
+msgstr "Máy chủ/mạng con được phép"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splashtext.lua:36
 msgid ""
 "As an alternative to editing the complete splash text you can also just "
 "include some custom text in the default splash page by entering it here."
 msgstr ""
+"Để thay thế cho việc chỉnh sửa toàn bộ văn bản giới thiệu, bạn cũng có thể "
+"đưa một số văn bản tùy chỉnh vào trang giới thiệu mặc định bằng cách nhập "
+"văn bản đó vào đây."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:18
 msgid ""
@@ -58,11 +69,16 @@ msgid ""
 "limit are set. Use a value of 0 here to completely disable this limitation. "
 "Whitelisted clients are not limited."
 msgstr ""
+"Giới hạn băng thông cho máy khách chỉ được kích hoạt khi cả giới hạn tải lên "
+"và tải xuống được đặt. Sử dụng giá trị 0 ở đây để tắt hoàn toàn giới hạn "
+"này. Khách hàng trong danh sách trắng không bị giới hạn."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:95
 msgid ""
 "Become an active member of this community and help by operating your own node"
 msgstr ""
+"Trở thành thành viên tích cực của cộng đồng này và trợ giúp bằng cách vận "
+"hành nút của riêng bạn"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:62
 msgid "Blacklist"
@@ -70,121 +86,130 @@ msgstr "Danh sách đen"
 
 #: applications/luci-app-splash/luasrc/view/splash/blocked.htm:12
 msgid "Blocked"
-msgstr ""
+msgstr "Đã chặn"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:56
 msgid ""
 "By accepting these rules you can use this network for %s hour(s). After this "
 "time you need to accept these rules again."
 msgstr ""
+"Bằng cách chấp nhận các quy tắc này, bạn có thể sử dụng mạng này trong %s "
+"giờ. Sau thời gian này, bạn cần phải chấp nhận lại các quy tắc này."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:10
 msgid "Clearance time"
-msgstr ""
+msgstr "Clearance time"
 
 #: applications/luci-app-splash/luasrc/controller/splash/splash.lua:8
 #: applications/luci-app-splash/luasrc/controller/splash/splash.lua:20
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:5
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:197
 msgid "Client-Splash"
-msgstr ""
+msgstr "Client-Splash"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:5
 msgid ""
 "Client-Splash is a hotspot authentication system for wireless mesh networks."
 msgstr ""
+"Client-Splash là một hệ thống xác thực điểm nóng cho các mạng lưới không dây."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:11
 msgid ""
 "Clients are redirected to this page after they have accepted the splash. If "
 "this is left empty they are redirected to the page they had requested."
 msgstr ""
+"Khách hàng được chuyển hướng đến trang này sau khi họ đã chấp nhận giật gân. "
+"Nếu phần này để trống, họ sẽ được chuyển hướng đến trang họ đã yêu cầu."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:15
 msgid "Clients download speed is limited to this value (kbyte/s)"
-msgstr ""
+msgstr "Tốc độ tải xuống của khách hàng bị giới hạn ở giá trị này (kbyte/s)"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:10
 msgid ""
 "Clients that have accepted the splash are allowed to use the network for "
 "that many hours."
 msgstr ""
+"Clients that have accepted the splash are allowed to use the network for "
+"that many hours."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:14
 msgid "Clients upload speed is limited to this value (kbyte/s)"
-msgstr ""
+msgstr "Tốc độ tải lên của khách hàng bị giới hạn ở giá trị này (kbyte/s)"
 
 #: applications/luci-app-splash/luasrc/view/splash/blocked.htm:15
 msgid "Contact the owner"
-msgstr ""
+msgstr "Liên hệ với chủ sở hữu"
 
 #: applications/luci-app-splash/luasrc/view/splash_splash/splash.htm:12
 msgid "Decline"
-msgstr ""
+msgstr "Không chấp nhận"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:71
 msgid ""
 "Destination hosts and networks that are excluded from splashing, i.e. they "
 "are always allowed."
-msgstr ""
+msgstr "Máy chủ đích và mạng được loại trừ khỏi, tức là chúng luôn được phép."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:97
 msgid "Donate some money to help us keep this project alive."
-msgstr ""
+msgstr "Quyên góp một số tiền để giúp chúng tôi duy trì dự án này."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:15
 msgid "Download limit"
-msgstr ""
+msgstr "Giới hạn tải xuống"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splashtext.lua:12
 msgid "Edit the complete splash text"
-msgstr ""
+msgstr "Chỉnh sửa văn bản hoàn chỉnh"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:121
 msgid "Fair Use Policy"
-msgstr ""
+msgstr "Chính sách sử dụng hợp lý"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:29
 msgid "Firewall zone"
-msgstr ""
+msgstr "Vùng tường lửa"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:7
 msgid "General"
-msgstr ""
+msgstr "Tổng quát"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:54
 msgid "Get in contact"
-msgstr ""
+msgstr "Giữ liên lạc"
 
 #: applications/luci-app-splash/root/usr/share/rpcd/acl.d/luci-app-splash.json:3
 msgid "Grant UCI access for luci-app-splash"
-msgstr ""
+msgstr "Cấp quyền truy cập UCI cho luci-app-splash"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:205
 msgid "Hostname"
-msgstr ""
+msgstr "Tên máy chủ (hostname)"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:76
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:206
 msgid "IP Address"
-msgstr ""
+msgstr "Địa chỉ IP"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:98
 msgid ""
 "If you operate your own wifi equipment use channels different from ours."
 msgstr ""
+"Nếu bạn vận hành thiết bị wifi của riêng mình, hãy sử dụng các kênh khác với "
+"kênh của chúng tôi."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:93
 msgid "If you use this network on a regular basis we ask for your support:"
-msgstr ""
+msgstr "Nếu bạn sử dụng mạng này thường xuyên, chúng tôi yêu cầu bạn hỗ trợ:"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splashtext.lua:35
 msgid "Include your own text in the default splash"
-msgstr ""
+msgstr "Bao gồm văn bản của riêng bạn trong giật gân mặc định"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:38
 msgid "Intercept client traffic on this Interface"
-msgstr ""
+msgstr "Chặn lưu lượng khách hàng trên Giao diện này"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:21
 msgid "Interfaces"
@@ -192,87 +217,95 @@ msgstr "Giao diện"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:21
 msgid "Interfaces that are used for Splash."
-msgstr ""
+msgstr "Các giao diện được sử dụng cho Splash."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:49
 msgid ""
 "KB/s (Download/Upload). You may be able to remove this limit by actively "
 "contributing to this project."
 msgstr ""
+"KB/s (Tải xuống/Tải lên). Bạn có thể loại bỏ giới hạn này bằng cách đóng góp "
+"tích cực cho dự án này."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:115
 msgid "Legally Prohibited Activities"
-msgstr ""
+msgstr "Các hoạt động bị pháp luật cấm"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:118
 msgid "Legally Prohibited content"
-msgstr ""
+msgstr "Nội dung bị cấm"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:59
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:68
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:207
 msgid "MAC Address"
-msgstr ""
+msgstr "Địa chỉ MAC"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:63
 msgid "MAC addresses in this list are blocked."
-msgstr ""
+msgstr "Địa chỉ MAC trong danh sách này bị chặn."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:54
 msgid ""
 "MAC addresses of whitelisted clients. These do not need to accept the splash "
 "and are not bandwidth limited."
 msgstr ""
+"Địa chỉ MAC của khách hàng trong danh sách trắng. Những thứ này không cần "
+"phải chấp nhận giật gân và không bị giới hạn băng thông."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:77
 msgid "Netmask"
-msgstr ""
+msgstr "Netmask"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:37
 msgid "Network"
-msgstr ""
+msgstr "Mạng"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:147
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:261
 msgid "No clients connected"
-msgstr ""
+msgstr "Không có máy khách nào được kết nối"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:78
 msgid ""
 "Please note that we are not an internet service provider but an experimental "
 "community network."
 msgstr ""
+"Xin lưu ý rằng chúng tôi không phải là nhà cung cấp dịch vụ internet mà là "
+"một mạng cộng đồng thử nghiệm."
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:210
 msgid "Policy"
-msgstr ""
+msgstr "Chính sách"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:11
 msgid "Redirect target"
-msgstr ""
+msgstr "Redirect target"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:124
 msgid "Safety"
-msgstr ""
+msgstr "An toàn"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:182
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:248
 msgid "Save"
-msgstr ""
+msgstr "Lưu"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:30
 msgid "Splash rules are integrated in this firewall zone"
-msgstr ""
+msgstr "Quy tắc Splash được tích hợp trong vùng tường lửa này"
 
 #: applications/luci-app-splash/luasrc/controller/splash/splash.lua:9
 msgid "Splashtext"
-msgstr ""
+msgstr "Splashtext"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:125
 msgid ""
 "The network, like the Internet, is unencrypted and open. Each participant is "
 "responsible for the safety of their own connections and devices."
 msgstr ""
+"Mạng, giống như Internet, không được mã hóa và mở. Mỗi người tham gia chịu "
+"trách nhiệm về sự an toàn của các kết nối và thiết bị của riêng họ."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:110
 msgid ""
@@ -280,6 +313,9 @@ msgid ""
 "the necessary equipment and Internet connections (\"Infrastructure\") at "
 "their own expense."
 msgstr ""
+"Mạng không dây mở và miễn phí của các tình nguyện viên (\"Người điều hành\") "
+"cung cấp các thiết bị cần thiết và kết nối Internet (\"Cơ sở hạ tầng\") bằng "
+"chi phí của họ."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:128
 msgid ""
@@ -287,56 +323,69 @@ msgid ""
 "damage to devices, or financial losses that participants may suffer from the "
 "use of the network."
 msgstr ""
+"Nhà điều hành tuyên bố không chịu trách nhiệm pháp lý đối với việc mất dữ "
+"liệu, truy cập trái phép/làm hỏng thiết bị hoặc tổn thất tài chính mà người "
+"tham gia có thể phải chịu khi sử dụng mạng."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:116
 msgid ""
 "The participant agrees to not perform any action and refrain from acts which "
 "may violate the law or infringe upon the rights of third parties."
 msgstr ""
+"Người tham gia đồng ý không thực hiện bất kỳ hành động nào và không thực "
+"hiện các hành vi có thể vi phạm pháp luật hoặc xâm phạm quyền của bên thứ ba."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:119
 msgid ""
 "The participant agrees to not transfer content over the network which "
 "violates the law."
 msgstr ""
+"Người tham gia đồng ý không truyền tải nội dung vi phạm pháp luật qua mạng."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:122
 msgid ""
 "The participant agrees to not use the network in any way which will harm the "
 "infrastructure, the network itself, its operators or other participants."
 msgstr ""
+"Người tham gia đồng ý không sử dụng mạng theo bất kỳ cách nào sẽ gây hại cho "
+"cơ sở hạ tầng, bản thân mạng, nhà điều hành mạng hoặc những người tham gia "
+"khác."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:111
 msgid ""
 "These Terms of Use govern the use of the network by its participants' "
 "computer, PDA, or similar device (\"Devices\") within the network."
 msgstr ""
+"Các Điều khoản Sử dụng này chi phối việc sử dụng mạng bằng máy tính, PDA "
+"hoặc thiết bị tương tự (\"Thiết bị\") của người tham gia trong mạng."
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:208
 msgid "Time remaining"
-msgstr ""
+msgstr "Thời gian còn lại"
 
 #: applications/luci-app-splash/luasrc/view/splash/blocked.htm:15
 msgid ""
 "To ask for the reason why you have been blocked or ask for access again you "
 "can try to contact the owner of this access point:"
 msgstr ""
+"Để hỏi lý do tại sao bạn bị chặn hoặc yêu cầu cấp lại quyền truy cập, bạn có "
+"thể thử liên hệ với chủ sở hữu của điểm truy cập này:"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:209
 msgid "Traffic in/out"
-msgstr ""
+msgstr "Lưu lượng vào/ra"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:14
 msgid "Upload limit"
-msgstr ""
+msgstr "giới hạn tải lên"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:108
 msgid "Usage Agreement"
-msgstr ""
+msgstr "Thỏa thuận sử dụng"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:75
 msgid "Welcome"
-msgstr ""
+msgstr "Chào mừng"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:53
 msgid "Whitelist"
@@ -344,7 +393,7 @@ msgstr "Danh sách trắng"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:77
 msgid "You are now connected to the free wireless mesh network"
-msgstr ""
+msgstr "Bây giờ bạn đã được kết nối với mạng lưới không dây miễn phí"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splashtext.lua:13
 msgid ""
@@ -352,61 +401,66 @@ msgid ""
 "possible to use the following markers: ###COMMUNITY###, ###COMMUNITY_URL###, "
 "###CONTACTURL###, ###LEASETIME###, ###LIMIT### and ###ACCEPT###."
 msgstr ""
+"Bạn có thể nhập văn bản của riêng mình được hiển thị cho khách hàng tại "
+"đây.<br />Có thể sử dụng các dấu sau: ###COMMUNITY###, ###COMMUNITY_URL###, "
+"###CONTACTURL###, ###LEASETIME###, ###GIỚI HẠN### và ###CHẤP NHẬN###."
 
 #: applications/luci-app-splash/luasrc/view/splash/blocked.htm:14
 msgid ""
 "Your access to this network has been blocked, most likely because you did "
 "something that our rules explicitly forbid."
 msgstr ""
+"Quyền truy cập của bạn vào mạng này đã bị chặn, rất có thể là do bạn đã làm "
+"điều gì đó mà các quy tắc của chúng tôi nghiêm cấm rõ ràng."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:48
 msgid "Your bandwidth is limited to"
-msgstr ""
+msgstr "Băng thông của bạn được giới hạn ở"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:176
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:178
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:243
 msgid "blacklisted"
-msgstr ""
+msgstr "Đưa vào danh sách đen"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:235
 msgid "expired"
-msgstr ""
+msgstr "Hết hạn"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:77
 msgid "optional when using host addresses"
-msgstr ""
+msgstr "Tùy chọn khi sử dụng địa chỉ máy chủ"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:85
 msgid "perform any kind of illegal activities"
-msgstr ""
+msgstr "Thực hiện bất kỳ loại hoạt động bất hợp pháp"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:170
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:173
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:242
 msgid "splashed"
-msgstr ""
+msgstr "splashed"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:171
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:245
 msgid "temporarily blocked"
-msgstr ""
+msgstr "Tạm thời bị chặn"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:230
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:231
 msgid "unknown"
-msgstr ""
+msgstr "Không xác định"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:83
 msgid "use filesharing applications on this network"
-msgstr ""
+msgstr "Sử dụng các ứng dụng chia sẻ tệp trên mạng này"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:84
 msgid "waste bandwidth with unnecessary downloads or streams"
-msgstr ""
+msgstr "lãng phí băng thông với các lượt tải xuống hoặc luồng không cần thiết"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:165
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:167
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:241
 msgid "whitelisted"
-msgstr ""
+msgstr "đưa vào danh sách trắng"
