@@ -1,0 +1,248 @@
+#!/usr/bin/env lua
+
+-- If you need filesystem access, use nixio.fs
+local fs = require "nixio.fs"
+
+-- LuCI JSON is used for checking the arguments and converting tables to JSON.
+local jsonc = require "luci.jsonc"
+
+-- Nixio provides syslog functionality
+local nixio = require "nixio"
+
+-- To access /etc/config files, use the uci module
+local UCI = require "luci.model.uci"
+
+-- Slight overkill, but leaving room to do log_info etcetera.
+local function log_to_syslog(level, message) nixio.syslog(level, message) end
+
+local function log_error(message)
+    log_to_syslog("err", "[luci.example]: " .. message)
+end
+
+local function using_uci_directly(section)
+    -- Rather than parse files in /etc/config, you can rely on the
+    -- luci.model.uci module.
+    local uci = UCI.cursor()
+
+    -- https://openwrt.github.io/luci/api/modules/luci.model.uci.html
+    local config_name = uci:get("example", section)
+
+    uci.unload("example")
+
+    if not config_name then
+        local msg = "'" .. section .. "' not found in /etc/config/example"
+        -- Send the log message to syslog so it can be found with logread
+        log_error(msg)
+
+        -- Convert a lua table into JSON notation and print to stdout
+        -- .stringify() is equivalent to cjson's .encode()
+        print(jsonc.stringify({uci_error = msg}))
+
+        -- Indicate failure in the return code
+        os.exit(1)
+    end
+
+    return config_name
+end
+
+-- The methods table defines all of the APIs to expose to rpcd.
+-- rpcd will execute this Lua file with the 'list' argument to discover the
+-- method names that can be presented over ubus, as well as any arguments
+-- those methods take.
+local methods = {
+    -- How to call this API:
+    -- echo '{"section": "first"}' | lua /usr/libexec/rpcd/luci.example call get_uci_value
+    -- echo '{"section": "does_not_exist"}' | lua /usr/libexec/rpcd/luci.example call get_uci_value
+    get_uci_value = {
+        -- Args are specified as a table, where the argument type is specified by example
+        -- The value is not used as a default.
+        args = {section = "a_string"},
+        -- A special key of 'call' points to a function definition for execution.
+        call = function(args)
+            -- A table for the result.
+            local r = {}
+            r.result = jsonc.stringify({
+                example_section = using_uci_directly(args.section)
+            })
+            -- The 'call' handler will refer to '.code', but also defaults if not found.
+            r.code = 0
+            -- Return the table object; the call handler will access the attributes
+            -- of the table.
+            return r
+        end
+    },
+    -- How to call this API:
+    -- echo '{}' | lua /usr/libexec/rpcd/luci.example call get_sample1
+    -- ubus call luci.example get_sample1
+    get_sample1 = {
+        call = function()
+            local r = {}
+            -- This structure does not map well to a JSONMap in the LuCI form setup.
+            -- It can be rendered as a table easily enough with loops.
+            r.result = jsonc.stringify({
+                num_cats = 1,
+                num_dogs = 2,
+                num_parakeets = 4,
+                is_this_real = false,
+                not_found = nil
+            })
+            return r
+        end
+    },
+    -- How to call this API:
+    -- echo '{}' | lua /usr/libexec/rpcd/luci.example call get_sample2
+    -- ubus call luci.example get_sample2
+    get_sample2 = {
+        call = function()
+            local r = {}
+            -- This is the structural data that JSONMap will work with in the JS file
+            local data = {
+                option_one = {
+                    name = "Some string value",
+                    value = "A value string",
+                    parakeets = {"one", "two", "three"},
+                },
+                option_two = {
+                    name = "Another string value",
+                    value = "And another value",
+                    parakeets = {3, 4, 5},
+                }
+            }
+            r.result = jsonc.stringify(data)
+            return r
+        end
+    }
+}
+
+local function parseInput()
+    -- Input parsing - the RPC daemon calls the Lua script and
+    -- sends input to it via stdin, not as an argument on the CLI.
+    -- Thus, any testing via the lua interpreter needs to be in the form
+    -- echo '{jsondata}' | lua /usr/libexec/rpcd/script call method_name
+    local parse = jsonc.new()
+    local done, err
+
+    while true do
+        local chunk = io.read(4096)
+        if not chunk then
+            break
+        elseif not done and not err then
+            done, err = parse:parse(chunk)
+        end
+    end
+
+    if not done then
+        print(jsonc.stringify({
+            error = err or "Incomplete input for argument parsing"
+        }))
+        os.exit(1)
+    end
+
+    return parse:get()
+end
+
+local function validateArgs(func, uargs)
+    -- Validates that arguments picked out by parseInput actually match
+    -- up to the arguments expected by the function being called.
+    local method = methods[func]
+    if not method then
+        print(jsonc.stringify({error = "Method not found in methods table"}))
+        os.exit(1)
+    end
+
+    -- Lua has no length operator for tables, so iterate to get the count
+    -- of the keys.
+    local n = 0
+    for _, _ in pairs(uargs) do n = n + 1 end
+
+    -- If the method defines an args table (so empty tables are not allowed),
+    -- and there were no args, then give a useful error message about that.
+    if method.args and n == 0 then
+        print(jsonc.stringify({
+            error = "Received empty arguments for " .. func ..
+                " but it requires " .. jsonc.stringify(method.args)
+        }))
+        os.exit(1)
+    end
+
+    uargs.ubus_rpc_session = nil
+
+    local margs = method.args or {}
+    for k, v in pairs(uargs) do
+        if margs[k] == nil or (v ~= nil and type(v) ~= type(margs[k])) then
+            print(jsonc.stringify({
+                error = "Invalid argument '" .. k .. "' for " .. func ..
+                    " it requires " .. jsonc.stringify(method.args)
+            }))
+            os.exit(1)
+        end
+    end
+
+    return method
+end
+
+if arg[1] == "list" then
+    -- When rpcd starts up, it executes all scripts in /usr/libexec/rpcd
+    -- passing 'list' as the first argument. This block of code examines
+    -- all of the entries in the methods table, and looks for an attribute
+    -- called 'args' to see if there are arguments for the method.
+    --
+    -- The end result is a JSON struct like
+    -- {
+    --   "api_name": {},
+    --   "api2_name": {"host": "some_string"}
+    -- }
+    --
+    -- Which will be converted by ubus to 
+    --  "api_name":{}
+    --  "api2_name":{"host":"String"}
+    local _, rv = nil, {}
+    for _, method in pairs(methods) do rv[_] = method.args or {} end
+    print((jsonc.stringify(rv):gsub(":%[%]", ":{}")))
+elseif arg[1] == "call" then
+    -- rpcd will execute the Lua script with a first argument of 'call',
+    -- a second argument of the method name, and a third argument that's
+    -- stringified JSON.
+    --
+    -- To debug your script, it's probably easiest to start with direct
+    -- execution, as calling via ubus will hide execution errors. For example:
+    -- echo '{}' | lua /usr/libexec/rpcd/luci.example call get_sample2
+    --
+    -- or
+    --
+    -- echo '{"section": "firstf"}' | /usr/libexec/rpcd/luci.example call get_uci_value
+    --
+    -- See https://openwrt.org/docs/techref/ubus for more details on using
+    -- ubus to call your RPC script (which is what LuCI will be doing).
+    local args = parseInput()
+    local method = validateArgs(arg[2], args)
+    local run = method.call(args)
+    -- Use the result from the table which we know to be JSON already.
+    -- Anything printed on stdout is sent via rpcd to the caller. Use
+    -- the syslog functions, or logging to a file, if you need debug
+    -- logs.
+    print(run.result)
+    -- And exit with the code supplied.
+    os.exit(run.code or 0)
+elseif arg[1] == "help" then
+    local helptext = [[
+Usage:
+
+ To see what methods are exported by this script:
+
+    lua luci.example list
+
+ To call a method that has no arguments:
+
+    echo '{}' | lua luci.example call method_name
+
+ To call a method that takes arguments:
+
+    echo '{"valid": "json", "argument": "value"}' | lua luci.example call method_name
+
+ To call this script via ubus:
+
+    ubus call luci.example method_name '{"valid": "json", "argument": "value"}'
+]]
+    print(helptext)
+end
