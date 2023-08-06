@@ -109,13 +109,6 @@ return view.extend({
                         this.render_sample1_using_array(sample1)
                     ]),
                 ]),
-                E('div', { 'class': 'cbi-section', 'id': 'cbi-sample-yaml' }, [
-                    E('div', { 'class': 'left' }, [
-                        E('h3', _('Sample YAML via RPC')),
-                        E('div', {}), _("YAML transformed to JSON, table built explicitly"),
-                        this.render_sample_yaml(sample_yaml),
-                    ]),
-                ]),
             ]),
         ]);
     },

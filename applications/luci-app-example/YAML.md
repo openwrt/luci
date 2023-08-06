@@ -94,6 +94,18 @@ Add this declaration to the `view.extend()` call
     },
 ```
 
+Add this code to the `render` function in `view.extend()`
+
+```
+                E('div', { 'class': 'cbi-section', 'id': 'cbi-sample-yaml' }, [
+                    E('div', { 'class': 'left' }, [
+                        E('h3', _('Sample YAML via RPC')),
+                        E('div', {}), _("YAML transformed to JSON, table built explicitly"),
+                        this.render_sample_yaml(sample_yaml),
+                    ]),
+                ]),
+```
+
 ## root/usr/share/rpcd/acl.d/luci-app-example.json
 
 Allow access to the new RPC API

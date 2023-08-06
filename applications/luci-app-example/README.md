@@ -1,12 +1,23 @@
 # Example app for js based Luci
 
-This app is meant to be a kind of template, example or starting point for developing new LuCI apps.
+This app is meant to be a starting point for developing new LuCI apps using the modern JavaScript client-rendered approach (versus the older Lua server-side render approach).
 
-## Application structure
+# Installation
 
-See `structure.md` for details on how to lay out a LuCI application.
+In all cases, you'll want to log out of the web interface and back in to force a cache refresh after installing the new package.
 
-## Working with this example app
+## From git
+
+To install the luci-app-example to your OpenWrt instance (assuming your OpenWRT instance is on 192.168.1.1):
+
+```
+scp -r root/* root@192.168.1.1:/
+scp -r htdocs/* root@192.168.1.1:/www/
+# execute the UCI defaults script to create the /etc/config/example
+ssh root@192.168.1.1 "sh /etc/uci-defaults/80_example"
+```
+
+## From packages
 
 Install the app on your OpenWrt installation. This can be an actual router/device, or something like a QEMU virtual machine.
 
@@ -14,7 +25,11 @@ Install the app on your OpenWrt installation. This can be an actual router/devic
 
 Visit the web UI for the device/virtual machine where the package was installed, log in to OpenWrt, and **Example** should be present in the navigation menu.
 
-## Editing the code
+# Application structure
+
+See `structure.md` for details on how to lay out a LuCI application.
+
+# Editing the code
 
 You can either do direct editing on the device/virtual machine, or use something like sshfs to have remote access from your development computer.
 
@@ -40,7 +55,7 @@ This code relies on the same ACL grants as form.js.
 
 The signature for `E()` is `E(node_type, {node attributes}, [child nodes])`.
 
-## rpc.js
+## [rpc.js](./htdocs/luci-static/resources/view/example/rpc.js)
 
 The RPC JS page is read-only, and demonstrates using RPC calls to get data. It also demonstrates using the JSONMap form object for mapping a configuration to a form, but makes the form read-only for display purposes.
 
@@ -52,18 +67,16 @@ It relies on RPC access, and the relevant ACL declarations are in `root/usr/shar
 
 The declaration is `luci-app-example > read > ubus > luci.example`; the list of names under this key is the list of APIs that can be called.
 
-# Installation
-
-To install the luci-app-example to your OpenWrt instance (assuming your OpenWRT instance is on 192.168.1.1):
-```
-scp -r root/* root@192.168.1.1:/
-scp -r htdocs/* root@192.168.1.1:/www/
-# execute the UCI defaults script to create the /etc/config/example
-ssh root@192.168.1.1 "sh /etc/uci-defaults/80_example"
-```
-
-Then you need to re-login to the web interface and you'll see a new Example item in main menu.
-
 # ACLs
 
 A small note on ACLs. They are global for the entire web UI - the declaration of **luci-app-example** in a file called `acl.d/luci-app-example` is just a naming convention; nothing enforces that only the code in **luci-app-example** is mutating `/etc/config/example`. Once the ACL is defined to allow reads/writes to a UCI node, any code running from the web UI can make changes to that node.
+
+# YAML
+
+You may wish to work with YAML data. See [YAML.md](YAML.md) for details on how to integrate YAML read support.
+
+# Translations
+
+For a real world application (or changes to this example one that you wish to submit upstream), translations should be kept up to date.
+
+To rebuild the translations file, from the root of the repository execute `./build/i18n-scan.pl applications/luci-app-example > applications/luci-app-example/po/templates/example.pot`
