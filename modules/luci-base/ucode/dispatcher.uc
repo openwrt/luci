@@ -886,7 +886,7 @@ dispatch = function(_http, path) {
 		striptags,
 		entityencode,
 		_: (...args) => translate(...args) ?? args[0],
-		N_: (...args) => ntranslate(...args) ?? (n[0] == 1 ? n[1] : n[2]),
+		N_: (...args) => ntranslate(...args) ?? (args[0] == 1 ? args[1] : args[2]),
 	});
 
 	try {
