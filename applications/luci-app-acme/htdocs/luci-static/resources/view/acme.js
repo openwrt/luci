@@ -49,43 +49,6 @@ return view.extend({
 		o = s.taboption('general', form.Flag, "enabled", _("Enabled"));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Flag, "use_staging", _("Use staging server"),
-			_("Get certificate from the Letsencrypt staging server " +
-				"(use for testing; the certificate won't be valid)."));
-		o.rmempty = false;
-		o.modalonly = true;
-
-		o = s.taboption('general', form.ListValue, 'key_type', _("Key size"),
-			_("Key size (and type) for the generated certificate."));
-		o.value('rsa2048', _('RSA 2048 bits'));
-		o.value('rsa3072', _('RSA 3072 bits'));
-		o.value('rsa4096', _('RSA 4096 bits'));
-		o.value('ec256', _('ECC 256 bits'));
-		o.value('ec384', _('ECC 384 bits'));
-		o.rmempty = false;
-		o.optional = true;
-		o.modalonly = true;
-		o.cfgvalue = function(section_id, set_value) {
-			var keylength = uci.get('acme', section_id, 'keylength');
-			if (keylength) {
-				// migrate the old keylength to a new keytype
-				switch (keylength) {
-					case '2048': return 'rsa2048';
-					case '3072': return 'rsa3072';
-					case '4096': return 'rsa4096';
-					case 'ec-256': return 'ec256';
-					case 'ec-384': return 'ec384';
-					default: return ''; // bad value
-				}
-			}
-			return set_value;
-		};
-		o.write = function(section_id, value) {
-			// remove old keylength
-			uci.unset('acme', section_id, 'keylength');
-			uci.set('acme', section_id, 'key_type', value);
-		};
-
 		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
 			_("Domain names to include in the certificate. " +
 				"The first name will be the subject name, subsequent names will be alt names. " +
@@ -158,6 +121,48 @@ return view.extend({
 				"LUCI only supports one challenge domain per certificate."));
 		o.depends("validation_method", "dns");
 		o.modalonly = true;
+
+
+		o = s.taboption('advanced', form.Flag, 'use_staging', _('Use staging server'),
+			_(
+				'Get certificate from the Letsencrypt staging server ' +
+				'(use for testing; the certificate won\'t be valid).'
+			)
+		);
+		o.rmempty = false;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.ListValue, 'key_type', _('Key size'),
+			_('Key size (and type) for the generated certificate.')
+		);
+		o.value('rsa2048', _('RSA 2048 bits'));
+		o.value('rsa3072', _('RSA 3072 bits'));
+		o.value('rsa4096', _('RSA 4096 bits'));
+		o.value('ec256', _('ECC 256 bits'));
+		o.value('ec384', _('ECC 384 bits'));
+		o.rmempty = false;
+		o.optional = true;
+		o.modalonly = true;
+		o.cfgvalue = function(section_id, set_value) {
+			var keylength = uci.get('acme', section_id, 'keylength');
+			if (keylength) {
+				// migrate the old keylength to a new keytype
+				switch (keylength) {
+					case '2048': return 'rsa2048';
+					case '3072': return 'rsa3072';
+					case '4096': return 'rsa4096';
+					case 'ec-256': return 'ec256';
+					case 'ec-384': return 'ec384';
+					default: return ''; // bad value
+				}
+			}
+			return set_value;
+		};
+		o.write = function(section_id, value) {
+			// remove old keylength
+			uci.unset('acme', section_id, 'keylength');
+			uci.set('acme', section_id, 'key_type', value);
+		};
 
 		o = s.taboption('advanced', form.Flag, "use_acme_server",
 			_("Custom ACME CA"), _("Use a custom CA instead of Let's Encrypt."));
