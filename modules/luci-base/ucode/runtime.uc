@@ -173,7 +173,7 @@ export default function(env) {
 		}
 
 		if (!media)
-			error500(`Unable to render any theme header template, last error was:\n${status}`);
+			env.dispatcher.error500(`Unable to render any theme header template, last error was:\n${status}`);
 	}
 
 	self.env.media = media;
