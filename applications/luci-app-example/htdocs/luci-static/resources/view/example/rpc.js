@@ -85,8 +85,7 @@ return view.extend({
     */
     load: function () {
         return Promise.all([
-            load_sample1(),
-            load_sample_yaml()
+            load_sample1()
         ]);
     },
     // render() is called by the LuCI framework to do any data manipulation, and the

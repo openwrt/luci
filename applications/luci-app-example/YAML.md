@@ -94,6 +94,17 @@ Add this declaration to the `view.extend()` call
     },
 ```
 
+Add a call to the `load` function in `view.extend()`
+
+```
+    load: function () {
+        return Promise.all([
+            load_sample_yaml(),
+            load_sample1()
+        ]);
+    },
+```
+
 Add this code to the `render` function in `view.extend()`
 
 ```
