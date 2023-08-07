@@ -21,7 +21,9 @@ return view.extend({
 				"Note that the domain names in the certificate must already be configured to " +
 				"point at the router's public IP address. " +
 				"Once configured, issuing certificates can take a while. " +
-				"Check the logs for progress and any errors."));
+				"Check the logs for progress and any errors.") + '<br/>' +
+				_("Cert files are stored in") + ' <em>/etc/ssl/acme<em>'
+		);
 
 		s = m.section(form.TypedSection, "acme", _("ACME global config"));
 		s.anonymous = true;
