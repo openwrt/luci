@@ -5,13 +5,6 @@
 'require view';
 
 return view.extend({
-	load: function () {
-		return Promise.all([
-			L.resolveDefault(fs.stat('/usr/sbin/nginx'), {}),
-			L.resolveDefault(fs.stat('/usr/sbin/uhttpd'), {})
-		]);
-	},
-
 	render: function (stats) {
 		var m, s, o;
 
@@ -54,25 +47,6 @@ return view.extend({
 				"The first name will be the subject name, subsequent names will be alt names. " +
 				"Note that all domain names must point at the router in the global DNS."));
 		o.datatype = "list(string)";
-
-		if (stats[1].type === 'file') {
-			o = s.taboption('general', form.Flag, "update_uhttpd", _("Use for uhttpd"),
-				_("Update the uhttpd config with this certificate once issued " +
-					"(only select this for one certificate). " +
-					"Is also available luci-app-uhttpd to configure uhttpd form the LuCI interface."));
-			o.rmempty = false;
-			o.modalonly = true;
-		}
-
-		if (stats[0].type === 'file') {
-			o = s.taboption('general', form.Flag, "update_nginx", _("Use for nginx"),
-				_("Update the nginx config with this certificate once issued " +
-					"(only select this for one certificate). " +
-					"Nginx must support ssl, if not it won't start as it needs to be " +
-					"compiled with ssl support to use cert options"));
-			o.rmempty = false;
-			o.modalonly = true;
-		}
 
 		o = s.taboption('challenge', form.ListValue, "validation_method", _("Validation method"),
 			_("Standalone mode will use the built-in webserver of acme.sh to issue a certificate. " +
