@@ -54,15 +54,15 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
-		o = s.taboption('general', form.ListValue, "keylength", _("Key size"),
+		o = s.taboption('general', form.ListValue, 'key_type', _("Key size"),
 			_("Key size (and type) for the generated certificate."));
-		o.value("2048", _("RSA 2048 bits"));
-		o.value("3072", _("RSA 3072 bits"));
-		o.value("4096", _("RSA 4096 bits"));
-		o.value("ec-256", _("ECC 256 bits"));
-		o.value("ec-384", _("ECC 384 bits"));
-		o.default = "2048";
+		o.value('rsa2048', _('RSA 2048 bits'));
+		o.value('rsa3072', _('RSA 3072 bits'));
+		o.value('rsa4096', _('RSA 4096 bits'));
+		o.value('ec256', _('ECC 256 bits'));
+		o.value('ec384', _('ECC 384 bits'));
 		o.rmempty = false;
+		o.optional = true;
 		o.modalonly = true;
 
 		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
