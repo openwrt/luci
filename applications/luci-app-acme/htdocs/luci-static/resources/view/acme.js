@@ -1,6 +1,7 @@
 'use strict';
 'require form';
 'require fs';
+'require uci';
 'require view';
 
 return view.extend({
@@ -64,6 +65,26 @@ return view.extend({
 		o.rmempty = false;
 		o.optional = true;
 		o.modalonly = true;
+		o.cfgvalue = function(section_id, set_value) {
+			var keylength = uci.get('acme', section_id, 'keylength');
+			if (keylength) {
+				// migrate the old keylength to a new keytype
+				switch (keylength) {
+					case '2048': return 'rsa2048';
+					case '3072': return 'rsa3072';
+					case '4096': return 'rsa4096';
+					case 'ec-256': return 'ec256';
+					case 'ec-384': return 'ec384';
+					default: return ''; // bad value
+				}
+			}
+			return set_value;
+		};
+		o.write = function(section_id, value) {
+			// remove old keylength
+			uci.unset('acme', section_id, 'keylength');
+			uci.set('acme', section_id, 'key_type', value);
+		};
 
 		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
 			_("Domain names to include in the certificate. " +
