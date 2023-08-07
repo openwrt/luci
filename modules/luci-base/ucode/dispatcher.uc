@@ -52,7 +52,7 @@ function error500(msg, ex) {
 	}
 	catch {
 		http.write('<!--]]>--><!--\'>--><!--">-->\n');
-		http.write(`<p>${trim(ex)}</p>\n`);
+		http.write(`<p>${trim(msg)}</p>\n`);
 
 		if (ex) {
 			http.write(`<p>${trim(ex.message)}</p>\n`);
