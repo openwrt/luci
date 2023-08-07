@@ -25,7 +25,9 @@ return view.extend({
 		s.anonymous = true;
 
 		o = s.option(form.Value, "account_email", _("Account email"),
-			_("Email address to associate with account key."))
+			_('Email address to associate with account key.') + '<br/>' +
+			_('If a certificate wasn\'t renewed in time then you\'ll receive a notice at 20 days before expiry.')
+		)
 		o.rmempty = false;
 		o.datatype = "minlength(1)";
 
