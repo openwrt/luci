@@ -473,7 +473,7 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.ListValue, 'key_type', _('Key size'),
+		o = s.taboption('advanced', form.ListValue, 'key_type', _('Key type'),
 			_('Key size (and type) for the generated certificate.')
 		);
 		o.value('rsa2048', _('RSA 2048 bits'));
