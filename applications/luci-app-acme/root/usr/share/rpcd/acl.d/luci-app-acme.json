@@ -3,8 +3,7 @@
                 "description": "Grant UCI access for luci-app-acme",
                 "read": {
                         "file": {
-                                "/usr/sbin/nginx": [ "read" ],
-                                "/usr/sbin/uhttpd": [ "read" ]
+                                "/etc/ssl/acme": [ "list" ]
                         },
                         "uci": [ "acme" ]
                 },

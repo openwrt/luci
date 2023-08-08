@@ -10,75 +10,88 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Weblate 4.16.2-dev\n"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:25
+#: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certificates"
 msgstr "Certifikáty ACME"
 
-#: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
-msgid "ACME certs"
-msgstr "Certifikáty ACME"
-
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:26
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:36
 msgid "ACME global config"
 msgstr "Globální konfigurace ACME"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:144
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:514
 msgid "ACME server URL"
 msgstr "URL serveru ACME"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:39
 msgid "Account email"
 msgstr "E-mail k účtu"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:44
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:57
 msgid "Advanced Settings"
 msgstr "Pokročilá nastavení"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:37
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:433
+msgid "Base64 content of private key. Use instead of YC_SA_Key_File_Path"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:33
+msgid "Cert files are stored in"
+msgstr "Kde jsou uchovávány certifikáty a další stavové soubory."
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:49
 msgid "Certificate config"
 msgstr "Konfigurace certifikátu"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:124
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:605
+msgid "Certificates"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:452
 msgid "Challenge Alias"
 msgstr "Aliasy"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:43
-msgid "Challenge Validation"
-msgstr "Validace"
-
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:509
 msgid "Custom ACME CA"
 msgstr "Vlastní ACME CA"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:515
 msgid "Custom ACME server directory URL."
 msgstr "Adresář URL vlastního serveru ACME."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:96
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:74
 msgid "DNS"
 msgstr "DNS"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:107
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:87
 msgid "DNS API"
 msgstr "DNS API"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:116
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:444
 msgid "DNS API credentials"
 msgstr "DNS API pověření"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:151
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:56
+msgid "DNS Challenge Validation"
+msgstr "DNS Validace"
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:521
 msgid "Days until renewal"
 msgstr "Dny do obnovení"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:131
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
+msgid "Default"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:459
 msgid "Domain Alias"
 msgstr "Alias domény"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:65
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:62
 msgid "Domain names"
 msgstr "Doménové názvy"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:66
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:63
 msgid ""
 "Domain names to include in the certificate. The first name will be the "
 "subject name, subsequent names will be alt names. Note that all domain names "
@@ -88,31 +101,37 @@ msgstr ""
 "jméno subjektu, další jsou alternativní názvy. Mějte na paměti, že všechny "
 "doménové názvy musejí v globálním DNS ukazovat na router."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:410
+msgid ""
+"E.g. <code>_acme-challenge.example.com:12345:98765 alias.example.com:11111</"
+"code>"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:482
 msgid "ECC 256 bits"
 msgstr "ECC 256 bitů"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:61
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:483
 msgid "ECC 384 bits"
 msgstr "ECC 384 bitů"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:30
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:40
 msgid "Email address to associate with account key."
 msgstr "E-mailová adresa pro přiřazení ke klíči účtu."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:34
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:46
 msgid "Enable debug logging"
 msgstr "Povolit ladicí protokolování"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:46
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
 msgid "Enabled"
 msgstr "Zapnuto"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:42
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:54
 msgid "General Settings"
 msgstr "Obecná nastavení"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:50
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:469
 msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
@@ -124,31 +143,78 @@ msgstr ""
 msgid "Grant UCI access for luci-app-acme"
 msgstr "Udělit přístup UCI pro luci-app-acme"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:55
-msgid "Key size"
-msgstr "Velikost klíče"
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:41
+msgid ""
+"If a certificate wasn't renewed in time then you'll receive a notice at 20 "
+"days before expiry."
+msgstr ""
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:56
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:587
+msgid "Issued on"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:477
 msgid "Key size (and type) for the generated certificate."
 msgstr "Velikost (a typ) klíče pro generovaný certifikát."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:57
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:476
+msgid "Key type"
+msgstr "Velikost klíče"
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:584
+msgid "Main Domain"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:369
+msgid "OCID of tenancy that contains the target DNS zone"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:372
+msgid "OCID of user with permission to add/remove records from zones"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:275
+msgid ""
+"Open <a href=\"https://www.duckdns.org/\">DuckDNS</a> and copy a token here"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:378
+msgid "Path to private API signing key file in PEM format"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:585
+msgid "Private Key"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:586
+msgid "Public Certificate"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:479
 msgid "RSA 2048 bits"
 msgstr "RSA 2048 bitů"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:58
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:480
 msgid "RSA 3072 bits"
 msgstr "RSA 3072 bitů"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:481
 msgid "RSA 4096 bits"
 msgstr "RSA 4096 bitů"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:94
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:236
+msgid "See instructions"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:375
+msgid "Should point to the tenancy home region"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:72
 msgid "Standalone"
 msgstr "Samostatný"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:91
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:69
 msgid ""
 "Standalone mode will use the built-in webserver of acme.sh to issue a "
 "certificate. Webroot mode will use an existing webserver to issue a "
@@ -159,7 +225,7 @@ msgstr ""
 "acme.sh. Režim webroot bude používat existující webový server. DNS režim "
 "bude umožňovat použití DNS API vašeho poskytovatele DNS."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:125
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:453
 msgid ""
 "The challenge alias to use for ALL domains. See https://github.com/acmesh-"
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
@@ -170,20 +236,20 @@ msgstr ""
 "DNS-alias-mode. Rozhraní LUCI podporuje pouze jeden alias výzvy na "
 "certifikát."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:117
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:445
 msgid ""
 "The credentials for the DNS API mode selected above. See https://github.com/"
 "acmesh-official/acme.sh/wiki/dnsapi for the format of credentials required "
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
-"Přihlašovací údaje pro zvolený režim DNS API. Podívejte se na adresu "
-"https://github.com/acmesh-official/acme.sh/wiki/dnsapi, jaký formát "
-"přihlašovacích údajů je požadován pro každé API. Přidejte zde více položek v "
-"formátu proměnné shellu KLÍČ=HODNOTA, abyste mohli poskytnout více "
-"přihlašovacích proměnných."
+"Přihlašovací údaje pro zvolený režim DNS API. Podívejte se na adresu https://"
+"github.com/acmesh-official/acme.sh/wiki/dnsapi, jaký formát přihlašovacích "
+"údajů je požadován pro každé API. Přidejte zde více položek v formátu "
+"proměnné shellu KLÍČ=HODNOTA, abyste mohli poskytnout více přihlašovacích "
+"proměnných."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:132
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:460
 msgid ""
 "The domain alias to use for ALL domains. See https://github.com/acmesh-"
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
@@ -193,7 +259,11 @@ msgstr ""
 "official/acme.sh/wiki/DNS-alias-mode pro více informací o tomto procesu. "
 "LUCI podporuje jen jednu challenge doménu pro každý certifikát."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:381
+msgid "The private API signing key in PEM format"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:26
 msgid ""
 "This configures ACME (Letsencrypt) automatic certificate installation. "
 "Simply fill out this to have the router configured with Letsencrypt-issued "
@@ -210,7 +280,11 @@ msgstr ""
 "bude chvíli trvat. Kontrolujte protokoly, kde uvidíte průběh a jakékoli "
 "chyby."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:297
+msgid "This is usually NOT an email address"
+msgstr ""
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:88
 msgid ""
 "To use DNS mode to issue certificates, set this to the name of a DNS API "
 "supported by acme.sh. See https://github.com/acmesh-official/acme.sh/wiki/"
@@ -226,56 +300,31 @@ msgstr ""
 "také jediným režimem, který podporuje vydávání wildcard certifikátů. Použití "
 "tohoto režimu vyžaduje instalaci balíčku acme-dnsapi."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:82
-msgid ""
-"Update the nginx config with this certificate once issued (only select this "
-"for one certificate). Nginx must support ssl, if not it won't start as it "
-"needs to be compiled with ssl support to use cert options"
-msgstr ""
-"Aktualizovat konfiguraci nginx s tímto certifikátem po jeho vydání (zvolte "
-"pouze pro jeden certifikát). Nginx musí podporovat SSL, pokud ne, nebude "
-"spuštěn, protože musí být kompilován s podporou SSL pro použití "
-"certifikačních možností"
-
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:73
-msgid ""
-"Update the uhttpd config with this certificate once issued (only select this "
-"for one certificate). Is also available luci-app-uhttpd to configure uhttpd "
-"form the LuCI interface."
-msgstr ""
-"Aktualizovat konfiguraci uhttpd s tímto certifikátem po jeho vydání (zvolte "
-"pouze pro jeden certifikát). Je také k dispozici luci-app-uhttpd pro "
-"konfiguraci uhttpd z rozhraní LuCI."
-
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:509
 msgid "Use a custom CA instead of Let's Encrypt."
 msgstr "Namísto Let's Encrypt použít vlastní CA."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
-msgid "Use for nginx"
-msgstr "Použít pro nginx"
-
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:72
-msgid "Use for uhttpd"
-msgstr "Použít pro uhttpd"
-
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:49
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:467
 msgid "Use staging server"
 msgstr "Použijte pracovní server"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:90
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:68
 msgid "Validation method"
 msgstr "Metoda ověření"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:95
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:73
 msgid "Webroot"
 msgstr "Webroot"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:99
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:55
+msgid "Webroot Challenge Validation"
+msgstr "Webroot Validace"
+
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:77
 msgid "Webroot directory"
 msgstr "Adresář Webroot"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:78
 msgid ""
 "Webserver root directory. Set this to the webserver document root to run "
 "Acme in webroot mode. The web server must be accessible from the internet on "
@@ -285,8 +334,5 @@ msgstr ""
 "nastavte tento adresář jako kořen webu ve webovém serveru. Server musí být "
 "přístupný z Internetu na portu 80."
 
-#~ msgid "State directory"
-#~ msgstr "Stavový adresář"
-
-#~ msgid "Where certs and other state files are kept."
-#~ msgstr "Kde jsou uchovávány certifikáty a další stavové soubory."
+#~ msgid "ACME certs"
+#~ msgstr "Certifikáty ACME"
