@@ -82,6 +82,44 @@ return network.registerProtocol('modemmanager', {
 		o.value('none', _('None'));
 		o.default = 'none';
 
+		o = s.taboption('general', form.ListValue, 'allowedmode', _('Allowed network technology'),
+			_('Setting the allowed network technology.'));
+		o.value('2g');
+		o.value('3g');
+		o.value('3g|2g');
+		o.value('4g');
+		o.value('4g|2g');
+		o.value('4g|3g');
+		o.value('4g|3g|2g');
+		o.value('5g');
+		o.value('5g|2g');
+		o.value('5g|3g');
+		o.value('5g|3g|2g');
+		o.value('5g|4g');
+		o.value('5g|4g|2g');
+		o.value('5g|4g|3g');
+		o.value('5g|4g|3g|2g');
+		o.value('',_('any'));
+		o.default = '';
+
+		o = s.taboption('general', form.ListValue, 'preferredmode', _('Preferred network technology'),
+			_('Setting the preferred network technology.'));
+		o.value('2g');
+		o.value('3g');
+		o.value('4g');
+		o.value('5g');
+		o.depends('allowedmode','3g|2g');
+		o.depends('allowedmode','4g|2g');
+		o.depends('allowedmode','4g|3g');
+		o.depends('allowedmode','4g|3g|2g');
+		o.depends('allowedmode','5g|2g');
+		o.depends('allowedmode','5g|3g');
+		o.depends('allowedmode','5g|3g|2g');
+		o.depends('allowedmode','5g|4g');
+		o.depends('allowedmode','5g|4g|2g');
+		o.depends('allowedmode','5g|4g|3g');
+		o.depends('allowedmode','5g|4g|3g|2g');
+
 		o = s.taboption('general', form.Value, 'username', _('PAP/CHAP username'));
 		o.depends('auth', 'pap');
 		o.depends('auth', 'chap');
