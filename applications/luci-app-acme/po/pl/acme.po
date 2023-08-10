@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2020-12-16 11:01+0000\n"
-"Last-Translator: Marcin Net <marcin.net@linux.pl>\n"
+"PO-Revision-Date: 2023-08-08 12:50+0000\n"
+"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/pl/>\n"
 "Language: pl\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -49,7 +49,7 @@ msgstr "Weryfikacja wyzwań"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
 msgid "Custom ACME CA"
-msgstr "Niestandardowy ACME CA"
+msgstr "Niestandardowy CA ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
 msgid "Custom ACME server directory URL."
@@ -61,7 +61,7 @@ msgstr "DNS"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:107
 msgid "DNS API"
-msgstr "DNS API"
+msgstr "API DNS"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:116
 msgid "DNS API credentials"
@@ -73,7 +73,7 @@ msgstr "Dni do czasu odnowienia"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:131
 msgid "Domain Alias"
-msgstr "Alias Domeny"
+msgstr "Alias domeny"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:65
 msgid "Domain names"
@@ -85,9 +85,9 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
-"Nazwy domen, które należy uwzględnić w certyfikacie. Imię będzie imieniem "
-"podmiotu, kolejne imiona będą imionami alternatywnymi. Pamiętaj, że "
-"wszystkie nazwy domen muszą wskazywać na router w globalnym DNS."
+"Nazwy domen, które mają być zawarte w certyfikacie. Pierwszy nazwa to nazwa "
+"podmiotu, kolejne nazwy są nazwami alternatywnymi. Pamiętaj, że wszystkie "
+"nazwy domen w globalnym DNS muszą wskazywać na router."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "ECC 256 bits"
@@ -118,8 +118,8 @@ msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
-"Uzyskaj certyfikat z serwera pomostowego Letsencrypt (użyj go do testowania; "
-"certyfikat nie będzie ważny)."
+"Uzyskaj certyfikat z serwera pomostowego Let's Encrypt (użyj go do "
+"testowania; certyfikat nie będzie ważny)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
@@ -157,8 +157,8 @@ msgid ""
 "to issue a certificate."
 msgstr ""
 "W trybie autonomicznym do wystawienia certyfikatu zostanie użyty wbudowany "
-"webserwerver acme.sh. Tryb Webroot wykorzysta istniejący webserwerver do "
-"wystawienia certyfikatu. Tryb DNS pozwala na użycie DNS API dostawcy DNS do "
+"serwer WWW acme.sh. Tryb Webroot wykorzysta istniejący serwer WWW do "
+"wystawienia certyfikatu. Tryb DNS pozwala na użycie API DNS dostawcy DNS do "
 "wystawienia certyfikatu."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:125
@@ -169,7 +169,7 @@ msgid ""
 msgstr ""
 "Alias wyzwania do użycia dla WSZYSTKICH domen. Zobacz https://github.com/"
 "acmesh-official/acme.sh/wiki/DNS-alias-mode, aby uzyskać szczegółowe "
-"informacje na temat tego procesu. LUCI obsługuje tylko jeden alias wyzwania "
+"informacje na temat tego procesu. LuCI obsługuje tylko jeden alias wyzwania "
 "na certyfikat."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:117
@@ -203,9 +203,9 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
-"To konfiguruje automatyczną instalację certyfikatu ACME (Letsencrypt). "
+"To konfiguruje automatyczną instalację certyfikatu ACME (Let's Encrypt). "
 "Wystarczy wypełnić to, aby router skonfigurował certyfikaty wydane przez "
-"Letsencrypt dla interfejsu internetowego. Pamiętaj, że nazwy domen w "
+"Let's Encrypt dla interfejsu internetowego. Pamiętaj, że nazwy domen w "
 "certyfikacie muszą być już skonfigurowane tak, aby wskazywały na publiczny "
 "adres IP routera. Po skonfigurowaniu wydawanie certyfikatów może chwilę "
 "potrwać. Sprawdź dzienniki pod kątem postępu i ewentualnych błędów."
@@ -282,5 +282,5 @@ msgid ""
 "port 80."
 msgstr ""
 "Katalog główny serwera WWW. Ustaw to na katalog główny serwera WWW, aby "
-"uruchomić Acme w trybie webroot. Serwer WWW musi być dostępny z Internetu na "
+"uruchomić ACME w trybie Webroot. Serwer WWW musi być dostępny z Internetu na "
 "porcie 80."
