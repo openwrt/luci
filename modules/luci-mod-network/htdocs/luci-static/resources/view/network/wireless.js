@@ -2265,5 +2265,7 @@ return view.extend({
 
 			return E([ nodes, E('h3', _('Associated Stations')), table ]);
 		}, this, m));
-	}
+	},
+
+	handleReset: null
 });
