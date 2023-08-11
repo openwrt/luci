@@ -182,7 +182,7 @@ return view.extend({
 				E('button', {
 					'class': 'cbi-button',
 					'click': function(ev) { location.href = 'collectd' }
-				}, [ _('Setup collectd') ])
+				}, [ _('Set up collectd') ])
 			])
 		]);
 	},
