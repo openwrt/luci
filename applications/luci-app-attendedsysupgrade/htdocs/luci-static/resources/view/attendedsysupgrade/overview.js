@@ -62,7 +62,7 @@ return view.extend({
 	steps: {
 		init: [10, _('Received build request')],
 		download_imagebuilder: [20, _('Downloading ImageBuilder archive')],
-		unpack_imagebuilder: [40, _('Setup ImageBuilder')],
+		unpack_imagebuilder: [40, _('Setting Up ImageBuilder')],
 		calculate_packages_hash: [60, _('Validate package selection')],
 		building_image: [80, _('Generating firmware image')],
 	},

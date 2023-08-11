@@ -948,7 +948,7 @@ return view.extend({
 					so.value('hybrid', _('hybrid mode'), ' ');
 
 
-					so = ss.taboption('ipv6', form.Flag, 'ndproxy_routing', _('Learn routes'), _('Setup routes for proxied IPv6 neighbours.'));
+					so = ss.taboption('ipv6', form.Flag, 'ndproxy_routing', _('Learn routes'), _('Set up routes for proxied IPv6 neighbours.'));
 					so.default = so.enabled;
 					so.depends('ndp', 'relay');
 					so.depends('ndp', 'hybrid');

@@ -2671,7 +2671,7 @@
 							var loc = window.location;
 							window.location = loc.protocol + '//' + loc.host + loc.pathname + loc.search;
 						}
-					}, _('To login…')))
+					}, _('Log in…')))
 			]);
 
 			LuCI.prototype.raise('SessionError', 'Login session is expired');
