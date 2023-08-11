@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=MJPG-Streamer service configuration module
-LUCI_DEPENDS:=+luci-compat +mjpg-streamer
+LUCI_DEPENDS:= +mjpg-streamer
 
 include ../../luci.mk
 
