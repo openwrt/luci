@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-08-10 08:05+0000\n"
+"PO-Revision-Date: 2023-08-14 00:51+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/lt/>\n"
@@ -30,37 +30,54 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper."
 "val}</var>}}"
 msgstr ""
+"%{src?%{dest?Forwarded:Incoming}:Outgoing} %{ipv6?%{ipv4?<var>IPv4</var> and "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP with types %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
+"<var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? "
+"with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value "
+"with %{mark.mask} before compare.\"}}>%{mark.val}</var>}%{dscp?, DSCP %{"
+"dscp.inv?<var data-tooltip=\"Match DSCP classifications except %{dscp."
+"num?:%{dscp.name}}\">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, "
+"helper %{helper.inv?<var data-tooltip=\"Match any helper except "
+"&quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper"
+".name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:461
 msgid "-- add IP --"
-msgstr ""
+msgstr "-- Pridėti „IP“ --"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:519
 msgid "-- add MAC --"
-msgstr ""
+msgstr "-- Pridėti „MAC“ --"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:192
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:175
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:118
 msgid ""
 "<var data-tooltip=\"ACCEPT\">Accept</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
+"<var data-tooltip=\"ACCEPT\">Priimti</var> "
+"%{src?%{dest?forward:input}:output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:93
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
-msgstr ""
+msgstr "<var data-tooltip=\"ACCEPT\">Neleisti išteklio perrašymo</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:85
 msgid ""
 "<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP "
 "<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
+"<var data-tooltip=\"DNAT\">Persiųsti</var> to %{dest}%{dest_ip? IP "
+"<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:115
 msgid ""
@@ -105,6 +122,8 @@ msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
+"<var data-tooltip=\"SNAT\">Statistiškai perrašyti</var> to source %{"
+"snat_ip?IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:302
 msgid "A rewrite IP must be specified!"
@@ -120,7 +139,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:203
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:283
 msgid "Action"
-msgstr ""
+msgstr "Veiksmas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:316
 msgid ""
@@ -150,7 +169,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:181
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:108
 msgid "Advanced Settings"
-msgstr ""
+msgstr "Pažangūs nustatymai"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:277
 msgid "Allow \"invalid\" traffic"
@@ -202,7 +221,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:54
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:55
 msgid "Comment"
-msgstr ""
+msgstr "Komentuoti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:109
 msgid "Conntrack Settings"
@@ -218,7 +237,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:698
 msgid "Continue"
-msgstr ""
+msgstr "Tęsti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:197
 msgid "Counters"
@@ -249,15 +268,15 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:420
 msgid "DSCP classification"
-msgstr ""
+msgstr "„DSCP“ klasifikacija"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:262
 msgid "DSCP mark"
-msgstr ""
+msgstr "„DSCP“ žymė"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:296
 msgid "DSCP mark required"
-msgstr ""
+msgstr "„DSCP“ žymė reikalinga"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:401
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:266
@@ -267,7 +286,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:403
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:274
 msgid "Destination port"
-msgstr ""
+msgstr "Galutinio tikslo/įrenginio prievadas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:395
 msgid "Destination zone"
@@ -275,7 +294,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:268
 msgid "Device name"
-msgstr ""
+msgstr "Įrenginio vardas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:277
 msgid ""
@@ -344,7 +363,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:275
 msgid "External port"
-msgstr ""
+msgstr "Išorinis prievadas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:345
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:469
@@ -366,7 +385,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:60
 msgid "Family"
-msgstr ""
+msgstr "Šeima"
 
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:3
 msgid "Firewall"
@@ -386,7 +405,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:152
 msgid "Firewall - Port Forwards"
-msgstr ""
+msgstr "Užkarda – Prievadų persiuntimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:173
 msgid "Firewall - Traffic Rules"
@@ -403,7 +422,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:64
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:147
 msgid "Forward"
-msgstr ""
+msgstr "Persiųsti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:34
 msgid ""
@@ -414,11 +433,17 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
+"Persiųsta %{ipv6?%{ipv4?<var>IPv4</var> and "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? "
+"data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark."
+"mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value with %{mark.mask} "
+"before compare.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:484
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:354
 msgid "Friday"
-msgstr ""
+msgstr "Penktadienis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:45
 msgid ""
@@ -428,6 +453,11 @@ msgid ""
 "<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
 "ival}</var>}}"
 msgstr ""
+"Iš %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
+"%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
+"%{item.val}.\"}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, "
+"}<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
+"ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:64
 msgid ""
@@ -440,6 +470,14 @@ msgid ""
 "name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}"
 "</var>}}"
 msgstr ""
+"Iš %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP "
+"%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
+"%{item.val}.\"}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, "
+"}<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
+"ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Match MACs except %{item.val}%{item.hint.name? a.k.a. %{item.hint."
+"name}}.\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item."
+"ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:52
 msgid ""
@@ -451,6 +489,13 @@ msgid ""
 "%{item.val}%{item.hint.name? a.k.a. %{item.hint.name}}.\":%{item.hint.name? "
 "data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 msgstr ""
+"Iš %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="
+"\"Match IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
+"port %{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
+"%{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, MAC %{src_mac#%{next?, "
+"}<var%{item.inv? data-tooltip=\"Match MACs except %{item.val}%{"
+"item.hint.name? a.k.a. %{item.hint.name}}.\":%{item.hint.name? data-tooltip="
+"\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:160
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:181
@@ -459,7 +504,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:107
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:17
 msgid "General Settings"
-msgstr ""
+msgstr "Bendri nustatymai"
 
 #: applications/luci-app-firewall/root/usr/share/rpcd/acl.d/luci-app-firewall.json:3
 msgid "Grant access to firewall configuration"
@@ -554,7 +599,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:293
 msgid "Internal port"
-msgstr ""
+msgstr "Vidinis prievadas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:283
 msgid "Internal zone"
@@ -698,17 +743,17 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:480
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:350
 msgid "Monday"
-msgstr ""
+msgstr "Pirmadienis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:490
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:360
 msgid "Month Days"
-msgstr ""
+msgstr "Mėnesis/Mėnuo, dienos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:175
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:44
 msgid "NAT Rules"
-msgstr ""
+msgstr "„NAT“ taisyklės"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:173
 msgid ""
@@ -723,7 +768,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:188
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:123
 msgid "Name"
-msgstr ""
+msgstr "Vardas/Pavadinimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:159
 msgid "Netmask"
@@ -795,17 +840,20 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:155
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:26
 msgid "Port Forwards"
-msgstr ""
+msgstr "Prievadų persiuntimai"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:153
 msgid ""
 "Port forwarding allows remote computers on the Internet to connect to a "
 "specific computer or service within the private LAN."
 msgstr ""
+"Prievadų persiuntimas leidžia išoriniams kompiuteriams internete prisijungti "
+"prie Jūsų specifinio kompiuterio ar paslaugos veikiančio Jūsų privačiame "
+"vietiniame („LAN“) tinkle."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:151
 msgid "Port range"
-msgstr ""
+msgstr "Prievadų pasiekiamumas/numatomas apribojimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:233
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:288
@@ -851,7 +899,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:293
 msgid "Rewrite IP address"
-msgstr ""
+msgstr "Perrašyti „IP“ adresą"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:294
 msgid "Rewrite matched traffic to the specified source IP address."
@@ -863,7 +911,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:307
 msgid "Rewrite port"
-msgstr ""
+msgstr "Perrašyti prievadą"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:76
 msgid "Routing/NAT Offloading"
@@ -876,7 +924,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:485
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:355
 msgid "Saturday"
-msgstr ""
+msgstr "Šeštadienis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:315
 msgid "Set mark"
@@ -936,31 +984,31 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:509
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:379
 msgid "Start Date (yyyy-mm-dd)"
-msgstr ""
+msgstr "Pradžios data (Metai-Mėnuo-Diena/pvz:1990-03-11)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:501
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:371
 msgid "Start Time (hh:mm:ss)"
-msgstr ""
+msgstr "Pradėti laiką (val:min:sek)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:513
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:383
 msgid "Stop Date (yyyy-mm-dd)"
-msgstr ""
+msgstr "Pabaigos data (Metai-Mėnuo-Diena/pvz:1993-08-31)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:505
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:375
 msgid "Stop Time (hh:mm:ss)"
-msgstr ""
+msgstr "Stabdyti laiką (val:min:sek)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:123
 msgid "Storage Method"
-msgstr ""
+msgstr "Talpos metodas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:479
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:349
 msgid "Sunday"
-msgstr ""
+msgstr "Sekmadienis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:692
 msgid ""
@@ -997,12 +1045,12 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:483
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:353
 msgid "Thursday"
-msgstr ""
+msgstr "Ketvirtadienis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:183
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:182
 msgid "Time Restrictions"
-msgstr ""
+msgstr "Laiko ribojimai"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:517
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:387
@@ -1025,6 +1073,11 @@ msgid ""
 "<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
 "ival}</var>}}"
 msgstr ""
+"Į %{dest}%{dest_device?, interface <var>%{dest_device}</var>}%{dest_ip?, IP "
+"%{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses except "
+"%{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{next?, "
+"}<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
+"ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:55
 msgid ""
@@ -1034,6 +1087,11 @@ msgid ""
 "%{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
 "%{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
+"Į %{dest}%{dest_device?, via interface <var>%{dest_device}</var>}%{dest_ip?, "
+"IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Match IP addresses "
+"except %{item.val}.\"}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{"
+"next?, }<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\""
+"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:61
 msgid ""
@@ -1042,10 +1100,14 @@ msgid ""
 "var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-"
 "tooltip=\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
+"Į %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="
+"\"Match IP addresses except %{item.val}.\"}>%{item.ival}</var>}}%{"
+"dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match "
+"ports except %{item.val}.\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:438
 msgid "Tracking helper"
-msgstr ""
+msgstr "Sekimo pagalbininkas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:176
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:35
@@ -1062,7 +1124,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:481
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:351
 msgid "Tuesday"
-msgstr ""
+msgstr "Antradienis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:19
 msgid "Unable to save contents: %s"
@@ -1115,11 +1177,11 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:311
 msgid "Use external IP address"
-msgstr ""
+msgstr "Naudoti išorinį „IP“ adresą"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:310
 msgid "Use internal IP address"
-msgstr ""
+msgstr "Naudoti vidinį „IP“ adresą"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:243
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:377
@@ -1146,12 +1208,12 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:482
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:352
 msgid "Wednesday"
-msgstr ""
+msgstr "Trečiadienis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:474
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:344
 msgid "Week Days"
-msgstr ""
+msgstr "Savaitės dienos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:419
 msgid "XOR firewall mark"
@@ -1163,19 +1225,19 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:28
 msgid "Your device does not run firewall4."
-msgstr ""
+msgstr "Jūsų įrenginyje neveikia „firewall4“."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:26
 msgid "Your device runs firewall4."
-msgstr ""
+msgstr "Jūsų įrenginyje veikia „firewall4“."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:137
 msgid "Zone ⇒ Forwardings"
-msgstr ""
+msgstr "Zona ⇒ Perleidimai"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:95
 msgid "Zones"
-msgstr ""
+msgstr "Zonos"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
 msgid ""
@@ -1187,7 +1249,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:70
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:153
 msgid "accept"
-msgstr ""
+msgstr "priimti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:267
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:461
@@ -1228,7 +1290,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:192
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:220
 msgid "automatic"
-msgstr ""
+msgstr "automatinis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:124
 msgid "bitmap"
@@ -1242,27 +1304,27 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:67
 msgid "day"
-msgstr ""
+msgstr "diena"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:86
 msgid "dest_ip: Destination IP"
-msgstr ""
+msgstr "dest_ip: Paskirties „IP“"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:88
 msgid "dest_mac: Destination MAC addr"
-msgstr ""
+msgstr "dest_mac: Paskirties „MAC“ adresas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:89
 msgid "dest_net: Destination (sub)net"
-msgstr ""
+msgstr "dest_net: Paskirties „(sub)net“"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:87
 msgid "dest_port: Destination Port"
-msgstr ""
+msgstr "dest_port: Paskirties Prievadas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:91
 msgid "dest_set: Destination ipset*"
-msgstr ""
+msgstr "dest_set: Paskirties „ipset“*"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:311
 msgid "do not rewrite"
@@ -1270,7 +1332,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:416
 msgid "don't track"
-msgstr ""
+msgstr "Nesekti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:413
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:69
@@ -1297,15 +1359,15 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:67
 msgid "hour"
-msgstr ""
+msgstr "valanda"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:74
 msgid "ip: IP addr"
-msgstr ""
+msgstr "ip: „IP“ adresas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:146
 msgid "ip[/cidr]<br />"
-msgstr ""
+msgstr "ip[/cidr]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:138
 msgid "ip[/cidr]<br />For use with Match datatypes: <code>*_ip</code>."
@@ -1313,7 +1375,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:63
 msgid "ipv4"
-msgstr ""
+msgstr "„ipv4“"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:126
 msgid "list"
@@ -1321,17 +1383,17 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:76
 msgid "mac: MAC addr"
-msgstr ""
+msgstr "mac: „MAC“ adresas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:101
 msgid "macaddr|ip[/cidr]<br />"
-msgstr ""
+msgstr "macaddr|ip[/cidr]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:67
 msgid "minute"
-msgstr ""
+msgstr "minutė"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:77
 msgid "net: (sub)net"
@@ -1339,7 +1401,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:75
 msgid "port: Port"
-msgstr ""
+msgstr "port: Prievadas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:415
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:68
@@ -1351,7 +1413,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:67
 msgid "second"
-msgstr ""
+msgstr "sekundė"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:79
 msgid "set: ipset*"
@@ -1384,17 +1446,17 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:78
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:56
 msgid "this device"
-msgstr ""
+msgstr "šis įrenginys"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:118
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:220
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:333
 msgid "this new zone"
-msgstr ""
+msgstr "ši nauja zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:353
 msgid "unlimited"
-msgstr ""
+msgstr "neribotas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:250
 msgid "unspecified"
