@@ -11,6 +11,10 @@ network.registerErrorCode('DEVICE_NOT_MANAGED', _('Device not managed by ModemMa
 network.registerErrorCode('INVALID_BEARER_LIST', _('Invalid bearer list. Possibly too many bearers created.  This protocol supports one and only one bearer.'));
 network.registerErrorCode('UNKNOWN_METHOD', _('Unknown and unsupported connection method.'));
 network.registerErrorCode('DISCONNECT_FAILED', _('Disconnection attempt failed.'));
+network.registerErrorCode('MM_INVALID_ALLOWED_MODES_LIST', _('Unable to set allowed mode list.'));
+network.registerErrorCode('MM_NO_PREFERRED_MODE_CONFIGURED', _('No preferred mode configuration found.'));
+network.registerErrorCode('MM_NO_ALLOWED_MODE_CONFIGURED', _('No allowed mode configuration found.'));
+network.registerErrorCode('MM_FAILED_SETTING_PREFERRED_MODE', _('Unable to set preferred mode.'));
 
 return network.registerProtocol('modemmanager', {
 	getI18n: function() {
