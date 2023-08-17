@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2023-08-11 23:51+0000\n"
+"PO-Revision-Date: 2023-08-16 20:53+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:921
 msgid "!known (not known)"
-msgstr "!znany (nieznany)"
+msgstr "!known (nieznany)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -4382,7 +4382,7 @@ msgid ""
 "address on a different subnet, the tag <em>known-othernet</em> is set."
 msgstr ""
 "Jeśli host pasuje do wpisu, którego nie można użyć, ponieważ określa adres w "
-"innej podsieci, ustawiany jest tag <em>znany-inna sieć</em>."
+"innej podsieci, ustawiany jest tag <em>known-othernet</em>."
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "If checked, 1DES is enabled"
@@ -4479,7 +4479,7 @@ msgstr "Ignoruj interfejs"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:918
 msgid "Ignore requests from unknown machines using <em>!known</em>."
-msgstr "Ignoruj żądania z nieznanych maszyn za pomocą <em>!znany</em>."
+msgstr "Ignoruj żądania z nieznanych maszyn za pomocą tagu <em>!known</em>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:423
 msgid "Ignore resolv file"
@@ -5526,7 +5526,7 @@ msgstr "Główny"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:916
 msgid "Match Tag"
-msgstr "Dopasuj tag"
+msgstr "Tag dopasowania"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:842
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
@@ -9751,7 +9751,8 @@ msgstr ""
 "Konstrukcja tagu filtruje używane dyrektywy hosta; można podać więcej niż "
 "jeden tag, w takim przypadku żądanie musi pasować do wszystkich. Dyrektywy "
 "tagowane są używane zamiast nieotagowanych. Pamiętaj, że wciąż trzeba podać "
-"jedną z wartośi: MAC, DUID lub nazwę hosta (może to być symbol wieloznaczny)."
+"jedną z wartości: MAC, DUID lub nazwę hosta (może to być symbol "
+"wieloznaczny)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:120
 msgid ""
@@ -10547,11 +10548,11 @@ msgid ""
 "standard host-specific lease time, e.g. 12h, 3d or infinite."
 msgstr ""
 "Użyj przycisku <em>Dodaj</em>, aby dodać nowy wpis dzierżawy. <em>Adres MAC</"
-"em> identyfikuje hosta, <em>Adres IPv4</em> określa, którego stałego adresu "
-"użyć, natomiast <em>Nazwa hosta</em> jest przypisana jako symboliczna nazwa "
-"do określonego hosta. Opcjonalne <em>Czas dzierżawy</em> może być użyty do "
+"em> identyfikuje hosta, <em>Adres IPv4</em> określa stały adres do użycia, "
+"natomiast <em>Nazwa hosta</em> jest przypisana jako symboliczna nazwa do "
+"określonego hosta. Opcjonalne <em>Czas dzierżawy</em> może być użyty do "
 "ustawienia niestandardowego, specyficznego dla hosta czasu dzierżawy, np. "
-"12h, 3d lub infinite (nieskończony)."
+"12h, 3d lub infinite."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:324
 msgid "Use upper layer protocol information (layer3+4)"
@@ -10841,8 +10842,8 @@ msgid ""
 "When a host matches an entry then the special tag <em>known</em> is set. Use "
 "<em>known</em> to match all known hosts."
 msgstr ""
-"Gdy host pasuje do wpisu, ustawiany jest specjalny tag <em>znany</em>. Użyj "
-"tagu <em>znany</em>, aby dopasować wszystkie znane hosty."
+"Gdy host pasuje do wpisu, ustawiany jest specjalny tag <em>known</em>. Użyj "
+"tagu <em>known</em>, aby dopasować wszystkie znane hosty."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1057
 msgid ""
@@ -11294,7 +11295,7 @@ msgstr "ignoruj"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:896
 msgid "infinite (lease does not expire)"
-msgstr "nieskończony (dzierżawa nie wygasa)"
+msgstr "infinite (dzierżawa nie wygasa)"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:69
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:192
@@ -11312,11 +11313,11 @@ msgstr "klucz z 5 lub 13 znakami"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:920
 msgid "known"
-msgstr "znany"
+msgstr "known (znany)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:922
 msgid "known-othernet (on different subnet)"
-msgstr "znany-innasieć (w innej podsieci)"
+msgstr "known-othernet (znany w innej podsieci)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:810
 msgid "managed config (M)"
@@ -11352,7 +11353,7 @@ msgstr "nie"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:76
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:216
 msgid "no link"
-msgstr "niepowiązane"
+msgstr "bez łącza"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1162
 msgid "no override"
