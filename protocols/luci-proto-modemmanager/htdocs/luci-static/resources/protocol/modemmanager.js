@@ -6,10 +6,7 @@
 
 network.registerPatternVirtual(/^mobiledata-.+$/);
 network.registerErrorCode('MM_CONNECT_FAILED', _('Connection attempt failed.'));
-network.registerErrorCode('MM_DISCONNECT_IN_PROGRESS', _('Modem disconnection in progress. Please wait.'));
 network.registerErrorCode('MM_CONNECT_IN_PROGRESS', _('Modem connection in progress. Please wait. This process will timeout after 2 minutes.'));
-network.registerErrorCode('MM_TEARDOWN_IN_PROGRESS', _('Modem bearer teardown in progress.'));
-network.registerErrorCode('MM_MODEM_DISABLED', _('Modem is disabled.'));
 network.registerErrorCode('DEVICE_NOT_MANAGED', _('Device not managed by ModemManager.'));
 network.registerErrorCode('INVALID_BEARER_LIST', _('Invalid bearer list. Possibly too many bearers created.  This protocol supports one and only one bearer.'));
 network.registerErrorCode('UNKNOWN_METHOD', _('Unknown and unsupported connection method.'));
