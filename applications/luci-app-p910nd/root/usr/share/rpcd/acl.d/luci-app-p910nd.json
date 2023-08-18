@@ -1,11 +1,23 @@
 {
 	"luci-app-p910nd": {
-		"description": "Grant UCI access for luci-app-p910nd",
+		"description": "Grant UCI access for luci-app-p910nd to hotplug.d in case hotplug scripts are necessary.",
 		"read": {
-			"uci": [ "p910nd" ]
+			"cgi-io": [ "exec" ],
+			"uci": [ "p910nd" ],
+			"file": {
+				"TODO: /etc/hotplug.d/usb/50_usb_printer_hotplug": [ "read, exec" ],
+				"/bin/cat /sys/*": ["exec"],
+				"/bin/grep -RH *": ["exec"],
+				"/sys/bus*": ["read"],
+			},
+			"ubus": {
+				"luci": [ "p910nd" ],
+				"file": [ "stat" ]
+			}
 		},
 		"write": {
-			"uci": [ "p910nd" ]
+			"cgi-io": [ "exec" ],
+			"uci": [ "p910nd" ],
 		}
 	}
 }
