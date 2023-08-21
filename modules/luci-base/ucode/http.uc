@@ -430,7 +430,7 @@ const Class = {
 		for (let name, value in this.message.params) {
 			while (value?.fd) {
 				let data = value.fd.read(1024);
-				let eof = (data == null || data == '');
+				let eof = (length(data) == 0);
 
 				this.filehandler(value, data, eof);
 
