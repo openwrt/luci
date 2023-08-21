@@ -772,7 +772,7 @@ function render_action(fn) {
 }
 
 function run_action(request_path, lang, tree, resolved, action) {
-	switch (action?.type) {
+	switch ((type(action) == 'object') ? action.type : 'none') {
 	case 'template':
 		if (runtime.is_ucode_template(action.path))
 			runtime.render(action.path, {});
@@ -840,14 +840,19 @@ function run_action(request_path, lang, tree, resolved, action) {
 		break;
 
 	case 'firstchild':
-		if (!length(tree.children))
+		if (!length(tree.children)) {
 			error404("No root node was registered, this usually happens if no module was installed.\n" +
 			         "Install luci-mod-admin-full and retry. " +
 			         "If the module is already installed, try removing the /tmp/luci-indexcache file.");
-		else
-			error404(`No page is registered at '/${entityencode(join("/", resolved.ctx.request_path))}'.\n` +
-			         "If this url belongs to an extension, make sure it is properly installed.\n" +
-			         "If the extension was recently installed, try removing the /tmp/luci-indexcache file.");
+			break;
+		}
+
+		/* fall through */
+
+	case 'none':
+		error404(`No page is registered at '/${entityencode(join("/", resolved.ctx.request_path))}'.\n` +
+		         "If this url belongs to an extension, make sure it is properly installed.\n" +
+		         "If the extension was recently installed, try removing the /tmp/luci-indexcache file.");
 		break;
 
 	default:
