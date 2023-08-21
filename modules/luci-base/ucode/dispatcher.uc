@@ -395,7 +395,7 @@ function build_pagetree() {
 						}
 
 						node.children ??= {};
-						node.children[s[0]] ??= {};
+						node.children[s[0]] ??= { satisfied: true };
 						node = node.children[s[0]];
 					}
 
