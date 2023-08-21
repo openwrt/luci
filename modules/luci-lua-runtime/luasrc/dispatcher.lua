@@ -360,6 +360,22 @@ function render_lua_template(path)
 	tpl.render(path, getfenv(1))
 end
 
+function test_post_security()
+	if http:getenv("REQUEST_METHOD") ~= "POST" then
+		http:status(405, "Method Not Allowed")
+		http:header("Allow", "POST")
+		return false
+	end
+
+	if http:formvalue("token") ~= context.authtoken then
+		http:status(403, "Forbidden")
+		_G.L.include("csrftoken")
+		return false
+	end
+
+	return true
+end
+
 
 function call(name, ...)
 	return {
