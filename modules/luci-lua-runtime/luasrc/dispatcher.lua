@@ -386,14 +386,18 @@ function call(name, ...)
 	}
 end
 
-function post(name, ...)
+function post_on(params, name, ...)
 	return {
 		["type"] = "call",
 		["module"] = __controller,
 		["function"] = name,
 		["parameters"] = select('#', ...) > 0 and {...} or nil,
-		["post"] = true
+		["post"] = params
 	}
+end
+
+function post(...)
+	return post_on(true, ...)
 end
 
 function view(name)
