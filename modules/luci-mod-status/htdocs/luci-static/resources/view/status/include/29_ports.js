@@ -3,8 +3,15 @@
 'require fs';
 'require ui';
 'require uci';
+'require rpc';
 'require network';
 'require firewall';
+
+var callGetBuiltinEthernetPorts = rpc.declare({
+	object: 'luci',
+	method: 'getBuiltinEthernetPorts',
+	expect: { result: [] }
+});
 
 function isString(v)
 {
@@ -284,6 +291,7 @@ return baseclass.extend({
 
 	load: function() {
 		return Promise.all([
+			L.resolveDefault(callGetBuiltinEthernetPorts(), []),
 			L.resolveDefault(fs.read('/etc/board.json'), '{}'),
 			firewall.getZones(),
 			network.getNetworks(),
@@ -295,28 +303,36 @@ return baseclass.extend({
 		if (L.hasSystemFeature('swconfig'))
 			return null;
 
-		var board = JSON.parse(data[0]),
+		var board = JSON.parse(data[1]),
 		    known_ports = [],
-		    port_map = buildInterfaceMapping(data[1], data[2]);
+		    port_map = buildInterfaceMapping(data[2], data[3]);
 
-		if (L.isObject(board) && L.isObject(board.network)) {
-			for (var k = 'lan'; k != null; k = (k == 'lan') ? 'wan' : null) {
-				if (!L.isObject(board.network[k]))
-					continue;
+		if (Array.isArray(data[0]) && data[0].length > 0) {
+			known_ports = data[0].map(port => ({
+				...port,
+				netdev: network.instantiateDevice(port.device)
+			}));
+		}
+		else {
+			if (L.isObject(board) && L.isObject(board.network)) {
+				for (var k = 'lan'; k != null; k = (k == 'lan') ? 'wan' : null) {
+					if (!L.isObject(board.network[k]))
+						continue;
 
-				if (Array.isArray(board.network[k].ports))
-					for (let i = 0; i < board.network[k].ports.length; i++)
+					if (Array.isArray(board.network[k].ports))
+						for (let i = 0; i < board.network[k].ports.length; i++)
+							known_ports.push({
+								role: k,
+								device: board.network[k].ports[i],
+								netdev: network.instantiateDevice(board.network[k].ports[i])
+							});
+					else if (typeof(board.network[k].device) == 'string')
 						known_ports.push({
 							role: k,
-							device: board.network[k].ports[i],
-							netdev: network.instantiateDevice(board.network[k].ports[i])
+							device: board.network[k].device,
+							netdev: network.instantiateDevice(board.network[k].device)
 						});
-				else if (typeof(board.network[k].device) == 'string')
-					known_ports.push({
-						role: k,
-						device: board.network[k].device,
-						netdev: network.instantiateDevice(board.network[k].device)
-					});
+				}
 			}
 		}
 
