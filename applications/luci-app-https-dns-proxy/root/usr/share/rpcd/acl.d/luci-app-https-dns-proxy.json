@@ -2,28 +2,29 @@
 	"luci-app-https-dns-proxy": {
 		"description": "Grant UCI and file access for luci-app-https-dns-proxy",
 		"read": {
-			"cgi-io": [
-				"exec"
-			],
-			"file": {
-				"/usr/lib/opkg/status": [
-					"read"
-				],
-				"/usr/lib/lua/luci/https-dns-proxy/providers/*": [
-					"read"
-				],
-				"/etc/init.d/https-dns-proxy *": [
-					"exec"
+			"ubus": {
+				"luci.https-dns-proxy": [
+					"getInitList",
+					"getInitStatus",
+					"getPlatformSupport",
+					"getProviders",
+					"getRuntime"
 				]
 			},
 			"uci": [
+				"dhcp",
 				"https-dns-proxy"
 			]
 		},
 		"write": {
 			"uci": [
 				"https-dns-proxy"
-			]
+			],
+			"ubus": {
+				"luci.https-dns-proxy": [
+					"setInitAction"
+				]
+			}
 		}
 	}
 }
