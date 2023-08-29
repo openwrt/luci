@@ -1,0 +1,206 @@
+#!/bin/sh
+# Copyright 2023 MOSSDeF, Stan Grishin (stangri@melmac.ca)
+# shellcheck disable=SC1091,SC2039,SC3043
+
+# TechRef: https://openwrt.org/docs/techref/rpcd
+
+# ubus -v list luci.https-dns-proxy
+# ubus -S call luci.https-dns-proxy getInitList '{"name": "https-dns-proxy" }'
+# ubus -S call luci.https-dns-proxy getInitStatus '{"name": "https-dns-proxy" }'
+# ubus -S call luci.https-dns-proxy getPlatformSupport '{"name": "https-dns-proxy" }'
+# ubus -S call luci.https-dns-proxy getProviders '{"name": "https-dns-proxy" }'
+# ubus -S call luci.https-dns-proxy getRuntime '{"name": "https-dns-proxy" }'
+
+readonly packageName="https-dns-proxy"
+readonly providersDir="/usr/share/${packageName}/providers"
+
+. /lib/functions.sh
+. /usr/share/libubox/jshn.sh
+
+is_enabled() { "/etc/init.d/${1}" enabled; }
+is_running() { [ "$(ubus call service list "{ 'name': '$1' }" | jsonfilter -q -e "@['$1'].instances[*].running" | uniq)" = 'true' ]; }
+get_version() { grep -m1 -A2 -w "^Package: $1$" /usr/lib/opkg/status | sed -n 's/Version: //p'; }
+check_http2() { grep -q 'Provides: libnghttp2' /usr/lib/opkg/status; }
+check_http3() { grep -q 'Provides: libnghttp3' /usr/lib/opkg/status; }
+ubus_get_ports() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances[*].data.firewall.*.dest_port"; }
+logger() { /usr/bin/logger -t "$packageName" "$@"; }
+print_json_bool() { json_init; json_add_boolean "$1" "$2"; json_dump; json_cleanup; }
+
+get_init_list() {
+	local name="$1"
+	json_init
+	json_add_object "$name"
+	if is_enabled "$name"; then
+		json_add_boolean 'enabled' '1'
+	else
+		json_add_boolean 'enabled' '0'
+	fi
+	if is_running "$name"; then
+		json_add_boolean 'running' '1'
+	else
+		json_add_boolean 'running' '0'
+	fi
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+get_init_status() {
+	local name
+	local i ports
+	local version
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	ports="$(ubus_get_ports)"
+	[ -z "$version" ] && version="$(get_version "$name")"
+	json_init
+	json_add_object  "$name"
+	if is_enabled "$name"; then
+		json_add_boolean 'enabled' '1'
+	else
+		json_add_boolean 'enabled' '0'
+	fi
+	if is_running "$name"; then
+		json_add_boolean 'running' '1'
+	else
+		json_add_boolean 'running' '0'
+	fi
+	if [ -n "$ports" ]; then
+		json_add_boolean 'force_dns_active' '1'
+		json_add_array 'force_dns_ports'
+			for i in $ports; do json_add_int '' "$i"; done
+		json_close_array
+	else
+		json_add_boolean 'force_dns_active' '0'
+	fi
+	json_add_string 'version' "$version"
+	json_close_array
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+get_platform_support() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}" 
+	json_init
+	json_add_object "$name"
+	if check_http2; then
+		json_add_boolean 'http2_support' '1'
+	else
+		json_add_boolean 'http2_support' '0'
+	fi
+	if check_http3; then
+		json_add_boolean 'http3_support' '1'
+	else
+		json_add_boolean 'http3_support' '0'
+	fi
+	json_close_object
+	json_dump
+	json_cleanup
+}
+
+get_providers() {
+	local f
+	echo '{"https-dns-proxy":['
+	for f in "$providersDir"/*; do
+		cat "$f"
+		echo ','
+	done
+#	echo '{ "title": "Custom", "template": "{option}", "params": { "option": { "type": "text", }, }, },'
+	echo ']}'
+}
+
+get_runtime() { ubus call service list "{ 'verbose': true, 'name': '$1' }"; }
+
+set_init_action() {
+	local name="$1" action="$2" cmd
+	case $action in
+		enable)
+			cmd="/etc/init.d/${name} enable";;
+		disable)
+			cmd="/etc/init.d/${name} disable";;
+		start|stop|restart)
+			cmd="/etc/init.d/${name} ${action}";;
+	esac
+	if [ -n "$cmd" ] && eval "${cmd}" >/dev/null 2>&1; then
+		print_json_bool "result" '1'
+	else
+		print_json_bool "result" '0'
+	fi
+}
+
+case "$1" in
+	list)
+		json_init
+		json_add_object "getInitList"
+			json_add_string 'name' "name"
+		json_close_object
+		json_add_object "getInitStatus"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getPlatformSupport"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getProviders"
+			json_add_string 'name' "name"
+		json_close_object
+		json_add_object "getRuntime"
+			json_add_string 'name' "name"
+		json_close_object
+		json_add_object "setInitAction"
+			json_add_string 'name' "name"
+			json_add_string 'action' "action"
+		json_close_object
+		json_dump
+		json_cleanup
+		;;
+	call)
+		case "$2" in
+			getInitList)
+				read -r input
+				json_load "$input"
+				json_get_var name "name"
+				json_cleanup
+				get_init_list "$name"
+				;;
+			getInitStatus)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_init_status "$name"
+				;;
+			getPlatformSupport)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_platform_support "$name"
+				;;
+			getProviders)
+				read -r input
+				json_load "$input"
+				json_get_var name "name"
+				json_cleanup
+				get_providers "$name"
+				;;
+			getRuntime)
+				read -r input
+				json_load "$input"
+				json_get_var name "name"
+				json_cleanup
+				get_runtime "$name"
+				;;
+			setInitAction)
+				read -r input
+				json_load "$input"
+				json_get_var name "name"
+				json_get_var action "action"
+				json_cleanup
+				set_init_action "$name" "$action"
+				;;
+		esac
+	;;
+esac
