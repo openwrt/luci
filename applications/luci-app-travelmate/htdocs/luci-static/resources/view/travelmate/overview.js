@@ -321,7 +321,6 @@ return view.extend({
 
 		o = s.taboption('general', widgets.NetworkSelect, 'trm_vpnifacelist', _('Limit VPN processing'), _('Limit VPN processing to certain interfaces.'));
 		o.depends('trm_vpn', '1');
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = true;
 		o.rmempty = true;

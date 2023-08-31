@@ -557,7 +557,6 @@ return view.extend({
 		o.ucisection = 'uplink';
 		o.ucioption = 'macaddr';
 		o.nocreate = false;
-		o.unspecified = true;
 		o.rmempty = true;
 		o.datatype = 'macaddr';
 		o.cfgvalue = function (section_id) {
@@ -699,7 +698,6 @@ return view.extend({
 		}
 
 		o = s.taboption('vpn', widgets.NetworkSelect, '_vpniface', _('VPN Interface'), _('The logical vpn network interface like \'wg0\'.'));
-		o.unspecified = false;
 		o.nocreate = true;
 		o.optional = true;
 		o.modalonly = true;
