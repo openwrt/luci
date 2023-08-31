@@ -23,7 +23,6 @@ return view.extend({
 
 		o = s.option(widgets.DeviceSelect, 'interface', _('Interface'), _('Network interface to bind (eg: eth0), or UNIX domain socket path (eg: /var/run/ttyd.sock)'));
 		o.nocreate    = true;
-		o.unspecified = true;
 
 		o = s.option(form.Value, 'credential', _('Credential'), _('Credential for Basic Authentication'));
 		o.placeholder = 'username:password';
