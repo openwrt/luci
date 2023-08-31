@@ -264,7 +264,6 @@ return view.extend({
 
 		o = s.taboption('general', widgets.DeviceSelect, 'ban_dev', _('Network Devices'), _('Select the WAN network device(s).'));
 		o.depends('ban_autodetect', '0');
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = true;
 		o.optional = true;
@@ -272,7 +271,6 @@ return view.extend({
 
 		o = s.taboption('general', widgets.NetworkSelect, 'ban_ifv4', _('Network Interfaces'), _('Select the logical WAN IPv4 network interface(s).'));
 		o.depends('ban_autodetect', '0');
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = true;
 		o.optional = true;
@@ -280,7 +278,6 @@ return view.extend({
 
 		o = s.taboption('general', widgets.NetworkSelect, 'ban_ifv6', _('Network Interfaces'), _('Select the logical WAN IPv6 network interface(s).'));
 		o.depends('ban_autodetect', '0');
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = true;
 		o.optional = true;
@@ -301,7 +298,6 @@ return view.extend({
 		o.retain = true;
 
 		o = s.taboption('general', widgets.NetworkSelect, 'ban_trigger', _('Startup Trigger Interface'), _('List of available network interfaces to trigger the banIP start.'));
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = true;
 		o.rmempty = true;
@@ -415,14 +411,12 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanallow', _('Allow VLAN Forwads'), _('Always allow certain VLAN forwards.'));
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = true;
 		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanblock', _('Block VLAN Forwads'), _('Always block certain VLAN forwards.'));
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = true;
 		o.optional = true;
