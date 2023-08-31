@@ -4543,11 +4543,21 @@ var CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype */
 	__init__: function(/* ... */) {
 		this.super('__init__', arguments);
 
+		this.browser = false;
 		this.show_hidden = false;
 		this.enable_upload = true;
 		this.enable_remove = true;
 		this.root_directory = '/etc/luci-uploads';
 	},
+
+
+	/**
+	 * Open in a file browser mode instead of selecting for a file
+	 *
+	 * @name LuCI.form.FileUpload.prototype#browser
+	 * @type boolean
+	 * @default false
+	 */
 
 	/**
 	 * Toggle display of hidden files.
@@ -4614,6 +4624,7 @@ var CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype */
 		var browserEl = new ui.FileUpload((cfgvalue != null) ? cfgvalue : this.default, {
 			id: this.cbid(section_id),
 			name: this.cbid(section_id),
+			browser: this.browser,
 			show_hidden: this.show_hidden,
 			enable_upload: this.enable_upload,
 			enable_remove: this.enable_remove,

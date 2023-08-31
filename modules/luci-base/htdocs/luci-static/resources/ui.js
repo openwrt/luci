@@ -2613,6 +2613,9 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
 	 * @memberof LuCI.ui.FileUpload
 	 *
+	 * @property {boolean} [browser=false]
+	 * Use a file browser mode.
+	 *
 	 * @property {boolean} [show_hidden=false]
 	 * Specifies whether hidden files should be displayed when browsing remote
 	 * files. Note that this is not a security feature, hidden files are always
@@ -2643,6 +2646,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 	__init__: function(value, options) {
 		this.value = value;
 		this.options = Object.assign({
+			browser: false,
 			show_hidden: false,
 			enable_upload: true,
 			enable_remove: true,
@@ -2664,7 +2668,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 
 	/** @override */
 	render: function() {
-		return L.resolveDefault(this.value != null ? fs.stat(this.value) : null).then(L.bind(function(stat) {
+		var renderFileBrowser = L.resolveDefault(this.value != null ? fs.stat(this.value) : null).then(L.bind(function(stat) {
 			var label;
 
 			if (L.isObject(stat) && stat.type != 'directory')
@@ -2676,13 +2680,13 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 				label = [ this.iconForType('file'), ' %s (%s)'.format(this.truncatePath(this.value), _('File not accessible')) ];
 			else
 				label = [ _('Select file…') ];
-
-			return this.bind(E('div', { 'id': this.options.id }, [
-				E('button', {
-					'class': 'btn',
-					'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser'),
-					'disabled': this.options.disabled ? '' : null
-				}, label),
+			let btnOpenFileBrowser = E('button', {
+				'class': 'btn open-file-browser',
+				'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser'),
+				'disabled': this.options.disabled ? '' : null
+			}, label);
+			var fileBrowserEl = E('div', { 'id': this.options.id }, [
+				btnOpenFileBrowser,
 				E('div', {
 					'class': 'cbi-filebrowser'
 				}),
@@ -2691,8 +2695,18 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 					'name': this.options.name,
 					'value': this.value
 				})
-			]));
+			]);
+			return this.bind(fileBrowserEl);
 		}, this));
+		// in a browser mode open dir listing after render by clicking on a Select button
+		if (this.options.browser) {
+			return renderFileBrowser.then(function (fileBrowserEl) {
+				var btnOpenFileBrowser = fileBrowserEl.getElementsByClassName('open-file-browser').item(0);
+				btnOpenFileBrowser.click();
+				return fileBrowserEl;
+			});
+		}
+		return renderFileBrowser
 	},
 
 	/** @private */
@@ -2947,11 +2961,11 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 			rows,
 			E('div', { 'class': 'right' }, [
 				this.renderUpload(path, list),
-				E('a', {
+				!this.options.browser ? E('a', {
 					'href': '#',
 					'class': 'btn',
 					'click': UI.prototype.createHandlerFn(this, 'handleCancel')
-				}, _('Cancel'))
+				}, _('Cancel')) : ''
 			]),
 		]);
 	},
@@ -2989,7 +3003,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 			dom.content(ul, E('em', { 'class': 'spinning' }, _('Loading directory contents…')));
 			L.resolveDefault(fs.list(path), []).then(L.bind(this.renderListing, this, browser, path));
 		}
-		else {
+		else if (!this.options.browser) {
 			var button = this.node.firstElementChild,
 			    hidden = this.node.lastElementChild;
 
