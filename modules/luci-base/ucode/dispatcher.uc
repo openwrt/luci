@@ -12,6 +12,8 @@ import { revision as luciversion, branch as luciname } from 'luci.version';
 import { default as LuCIRuntime } from 'luci.runtime';
 import { urldecode } from 'luci.http';
 
+const WS_TICKET_TIMEOUT = 5000;
+
 let ubus = connect();
 let uci = cursor();
 
@@ -660,6 +662,26 @@ function resolve_page(tree, request_path) {
 	ctx.authtoken = session?.data?.token;
 	ctx.authuser = session?.data?.username;
 	ctx.authacl = session?.acls;
+
+	if (ctx.authsession) {
+		const now_tv = clock(true);
+		const now_ms = now_tv[0] * 1000 + now_tv[1] / 1000000;
+		const ticket = session?.data?.ws_auth_ticket ?? [ null, 0 ];
+
+		if (now_ms > ticket[1]) {
+			ticket[0] = randomid(32);
+			ticket[1] = now_ms + WS_TICKET_TIMEOUT;
+
+			ubus.call('session', 'set', {
+				ubus_rpc_session: ctx.authsession,
+				values: {
+					ws_auth_ticket: ticket
+				}
+			});
+		}
+
+		ctx.authticket = ticket[0];
+	}
 
 	node = tree;
 
