@@ -353,7 +353,7 @@ msgstr "Włącz statystyki"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:12
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:22
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:23
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:12
@@ -674,7 +674,7 @@ msgstr "Monitorowanie pamięci włączone"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:45
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:41
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:48
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:49
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:34
 msgid "Monitor all except specified"
@@ -789,7 +789,7 @@ msgstr[0] "Monitorowanie wszystkich przerwań z wyjątkiem jednego"
 msgstr[1] "Monitorowanie wszystkich przerwań oprócz %d"
 msgstr[2] "Monitorowanie wszystkich przerwań oprócz %d"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:57
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:58
 msgid "Monitoring all but one sensor"
 msgid_plural "Monitoring all but %d sensors"
 msgstr[0] "Monitorowanie wszystkich czujników poza jednym"
@@ -819,7 +819,7 @@ msgstr "Monitorowanie wszystkich przerwań"
 msgid "Monitoring all partitions"
 msgstr "Monitorowanie wszystkich partycji"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:61
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:62
 msgid "Monitoring all sensors"
 msgstr "Monitorowanie wszystkich czujników"
 
@@ -883,7 +883,7 @@ msgstr[0] "Monitorowanie jednego procesu"
 msgstr[1] "Monitorowanie %d procesów"
 msgstr[2] "Monitorowanie innych procesów"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:59
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:60
 msgid "Monitoring one sensor"
 msgid_plural "Monitoring %d sensors"
 msgstr[0] "Monitorowanie jednego czujnika"
@@ -1136,7 +1136,7 @@ msgstr "Skrypt"
 msgid "Seconds"
 msgstr "Sekundy"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:24
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:25
 msgid "Sensor list"
 msgstr "Lista czujników"
 
@@ -1145,7 +1145,7 @@ msgstr "Lista czujników"
 msgid "Sensors"
 msgstr "Czujniki"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:16
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
 msgid "Sensors Plugin Configuration"
 msgstr "Konfiguracja wtyczek czujników"
 
@@ -1165,6 +1165,10 @@ msgstr "Port serwera"
 msgid "Set the maximum size for datagrams sent over the network"
 msgstr "Ustawienie maksymalnej wielkości datagramów wysyłanych przez sieć"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
+msgid "Set up collectd"
+msgstr "Konfiguracja collectd"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
 msgid "Sets the syslog log-level."
 msgstr "Ustawia poziom dziennika systemowego."
@@ -1172,10 +1176,6 @@ msgstr "Ustawia poziom dziennika systemowego."
 #: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:24
 msgid "Setup"
 msgstr "Konfiguracja"
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
-msgid "Set up collectd"
-msgstr "Konfiguracja collectd"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:31
 msgid "Shaping class monitoring"
@@ -1475,7 +1475,8 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/load.js:7
 msgid "The load plugin collects statistics about the general system load."
-msgstr "Wtyczka load gromadzi statystyki dotyczące ogólnego obciążenia systemu."
+msgstr ""
+"Wtyczka load gromadzi statystyki dotyczące ogólnego obciążenia systemu."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:7
 msgid "The memory plugin collects statistics about the memory usage."
@@ -1530,7 +1531,7 @@ msgstr ""
 "katalogu tymczasowym. Może to sprawić, że urządzenie nie będzie nadawało się "
 "do użytku! </strong>"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
 msgid ""
 "The sensors plugin uses the Linux Sensors framework to gather environmental "
 "statistics."
@@ -1564,8 +1565,8 @@ msgid ""
 "read from /sys/class/thermal/*/temp ( '*' denotes the thermal device to be "
 "read, e.g. thermal_zone1 )"
 msgstr ""
-"Wtyczka thermal monitoruje temperaturę systemu. Dane są zwykle odczytywane z "
-"/sys/class/thermal/*/temp ( '*' oznacza urządzenie termiczne, które ma być "
+"Wtyczka thermal monitoruje temperaturę systemu. Dane są zwykle odczytywane "
+"z /sys/class/thermal/*/temp ( '*' oznacza urządzenie termiczne, które ma być "
 "odczytywane, np. thermal_zone1 )"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:8

@@ -71,7 +71,7 @@ msgstr "（空）"
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:352
 #: modules/luci-compat/luasrc/view/cbi/network_netinfo.htm:23
 #: modules/luci-compat/luasrc/view/cbi/network_netlist.htm:58
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:255
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:262
 msgid "(no interfaces attached)"
 msgstr "（インターフェースが接続されていません）"
 
@@ -474,7 +474,7 @@ msgstr "ANSI T1.413"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:95
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:65
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:64
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:91
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:77
 msgid "APN"
@@ -780,7 +780,7 @@ msgstr "管理"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:650
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1599
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:39
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:127
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:128
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:918
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:982
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:241
@@ -848,7 +848,7 @@ msgstr "利用可能な最小IPアドレスから順番に割り当てる"
 msgid "Allocate IPs sequentially"
 msgstr "順次IP割り当て"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:25
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:24
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "<abbr title=\"Secure Shell\">SSH</abbr>パスワード認証を許可"
 
@@ -880,11 +880,11 @@ msgstr "ローカルホストを許可"
 msgid "Allow rebooting the device"
 msgstr "デバイスの再起動を許可"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr "リモートホストがSSH転送されたローカルのポートに接続することを許可"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:30
 msgid "Allow root logins with password"
 msgstr "パスワードでの root ログインを許可"
 
@@ -892,7 +892,7 @@ msgstr "パスワードでの root ログインを許可"
 msgid "Allow system feature probing"
 msgstr "システム機能の調査を許可"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:30
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "パスワードでの <em>root</em> 権限へのログインを許可します"
 
@@ -901,6 +901,10 @@ msgstr "パスワードでの <em>root</em> 権限へのログインを許可し
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:56
 msgid "Allowed IPs"
 msgstr "許可されたIP"
+
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:86
+msgid "Allowed network technology"
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:315
 msgid "AllowedIPs setting is invalid"
@@ -1111,7 +1115,7 @@ msgid "Authentication"
 msgstr "認証"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:76
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:78
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:79
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:89
 msgid "Authentication Type"
 msgstr "認証タイプ"
@@ -1738,7 +1742,7 @@ msgstr ""
 msgid "Collecting data..."
 msgstr "データを収集中..."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:234
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:241
 msgid "Collisions seen"
 msgstr ""
 
@@ -2197,7 +2201,7 @@ msgstr ""
 "VLAN ヘッダー優先度フィールドから Linux 内部パケット優先度へのマッピングを定"
 "義します（受信フレーム用）"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:86
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:87
 msgid "Defines a specific MTU for this route"
 msgstr ""
 
@@ -2252,7 +2256,7 @@ msgstr "デザイン"
 msgid "Designated master"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:159
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:160
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:386
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:71
 msgid "Destination"
@@ -2320,7 +2324,7 @@ msgstr "デバイスを再起動中…"
 msgid "Device name"
 msgstr "デバイス名"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:13
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:10
 msgid "Device not managed by ModemManager."
 msgstr "モデムマネージャーはデバイスを管理していません。"
 
@@ -2357,8 +2361,8 @@ msgstr "ダイヤル番号"
 msgid "Directory"
 msgstr "ディレクトリ"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:113
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:200
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:114
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:201
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:891
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:931
 msgid "Disable"
@@ -2433,7 +2437,7 @@ msgstr "切断"
 msgid "Disconnection attempt failed"
 msgstr "切断の試行に失敗しました"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:16
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:13
 msgid "Disconnection attempt failed."
 msgstr "切断の試行に失敗しました。"
 
@@ -3374,7 +3378,7 @@ msgstr "ファイアウォール設定"
 msgid "Firewall Status"
 msgstr "ファイアウォールステータス"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:176
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:177
 msgid "Firewall mark"
 msgstr ""
 
@@ -3571,7 +3575,7 @@ msgstr "IPv4上のGRETAPトンネル"
 msgid "GRETAP tunnel over IPv6"
 msgstr "IPv6上のGRETAPトンネル"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:75
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:76
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:44
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:188
 msgid "Gateway"
@@ -3581,7 +3585,7 @@ msgstr "ゲートウェイ"
 msgid "Gateway Mode"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:36
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Gateway Ports"
 msgstr "ゲートウェイポート"
 
@@ -3593,7 +3597,7 @@ msgstr "無効なゲートウェイアドレス"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:256
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:494
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:38
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:126
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:127
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:240
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:122
 msgid "General Settings"
@@ -3970,7 +3974,7 @@ msgstr "IPプロトコル"
 msgid "IP Sets"
 msgstr ""
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:96
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:136
 msgid "IP Type"
 msgstr "IPの種類"
 
@@ -4047,7 +4051,7 @@ msgstr ""
 msgid "IPv4 Routing"
 msgstr "IPv4 ルーティング"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:120
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:121
 msgid "IPv4 Rules"
 msgstr "IPv4 ルール"
 
@@ -4084,7 +4088,7 @@ msgstr "IPv4ネットマスク"
 msgid "IPv4 network in address/netmask notation"
 msgstr "IPv4ネットワーク（アドレス/ネットマスク表記）"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:98
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:138
 msgid "IPv4 only"
 msgstr "IPv4のみ"
 
@@ -4114,7 +4118,7 @@ msgstr "IPv4-in-IPv4（RFC2003）"
 msgid "IPv4/IPv6"
 msgstr ""
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:97
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:137
 msgid "IPv4/IPv6 (both - defaults to IPv4)"
 msgstr "IPv4/IPv6（両方 - デフォルトはIPv4）"
 
@@ -4167,7 +4171,7 @@ msgstr "IPv6 RA 設定"
 msgid "IPv6 Routing"
 msgstr "IPv6 ルーティング"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:120
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:121
 msgid "IPv6 Rules"
 msgstr "IPv6 ルール"
 
@@ -4206,7 +4210,7 @@ msgstr "IPv6ゲートウェイ"
 msgid "IPv6 network in address/netmask notation"
 msgstr "IPv6ネットワーク（アドレス/ネットマスク表記）"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:99
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:139
 msgid "IPv6 only"
 msgstr "IPv6のみ"
 
@@ -4300,7 +4304,7 @@ msgid ""
 "classes."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:196
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:197
 msgid "If set, the meaning of the match options is inverted"
 msgstr ""
 
@@ -4432,7 +4436,7 @@ msgstr ""
 "システムへの不正アクセスを防ぐために、リクエストはブロックされました。下の"
 "\"続行\"をクリックして、前のページに戻ります。"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:106
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:146
 msgid "In seconds"
 msgstr ""
 
@@ -4464,7 +4468,7 @@ msgstr ""
 msgid "Incoming checksum"
 msgstr "受信チェックサム"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:144
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:145
 msgid "Incoming interface"
 msgstr ""
 
@@ -4671,7 +4675,7 @@ msgstr "無効"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:68
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:70
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:71
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:97
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:73
 msgid "Invalid APN provided"
@@ -4708,7 +4712,7 @@ msgstr "無効なVLAN IDです！重複しないIDを入力してください"
 msgid "Invalid argument"
 msgstr "無効な引数"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:14
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:11
 msgid ""
 "Invalid bearer list. Possibly too many bearers created. This protocol "
 "supports one and only one bearer."
@@ -4747,7 +4751,7 @@ msgstr ""
 msgid "Invert blinking"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:196
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:197
 msgid "Invert match"
 msgstr ""
 
@@ -4786,7 +4790,7 @@ msgstr "ネットワークに接続: 無線スキャン"
 msgid "Joining Network: %q"
 msgstr "ネットワークに接続中: %q"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:171
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:172
 msgid "Jump to rule"
 msgstr ""
 
@@ -5225,6 +5229,19 @@ msgctxt "nft log action"
 msgid "Log event \"<strong>%h</strong>…\""
 msgstr ""
 
+#: modules/luci-base/ucode/template/sysauth.ut:38
+#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:36
+msgid "Log in"
+msgstr "ログイン"
+
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2674
+msgid "Log in…"
+msgstr "ログイン…"
+
+#: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:81
+msgid "Log out"
+msgstr "ログアウト"
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
 msgid "Log output level"
 msgstr "ログ出力レベル"
@@ -5254,15 +5271,6 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
 msgid "Logical network to which the tunnel will be added (bridged) (optional)."
 msgstr "トンネルが追加される（ブリッジされる）論理ネットワーク（オプション）。"
-
-#: modules/luci-base/ucode/template/sysauth.ut:38
-#: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:36
-msgid "Log in"
-msgstr "ログイン"
-
-#: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:81
-msgid "Log out"
-msgstr "ログアウト"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:682
 msgid "Loose filtering"
@@ -5361,7 +5369,7 @@ msgstr "MII間隔"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:634
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1488
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:86
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:87
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:53
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:46
@@ -5526,7 +5534,7 @@ msgstr "リンクを監視する方法"
 msgid "Method to determine link status"
 msgstr "リンクの状態を確認する方法"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:79
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:80
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:189
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:215
 msgid "Metric"
@@ -5611,12 +5619,7 @@ msgstr "モデル"
 msgid "Modem Info"
 msgstr ""
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:11
-#, fuzzy
-msgid "Modem bearer teardown in progress."
-msgstr "モデムベアラを終了中です。"
-
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:10
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:9
 msgid ""
 "Modem connection in progress. Please wait. This process will timeout after 2 "
 "minutes."
@@ -5630,16 +5633,12 @@ msgstr "モデムデフォルト"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:73
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:54
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:50
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:51
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:65
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:73
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:57
 msgid "Modem device"
 msgstr "モデムデバイス"
-
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:9
-msgid "Modem disconnection in progress. Please wait."
-msgstr "モデム切断中です。しばらくお待ちください。"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:66
 msgid "Modem information query failed"
@@ -5652,11 +5651,7 @@ msgstr "モデム情報の問い合わせに失敗しました"
 msgid "Modem init timeout"
 msgstr "モデム初期化タイムアウト"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:12
-msgid "Modem is disabled."
-msgstr "モデムは無効です。"
-
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:20
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:21
 msgid "ModemManager"
 msgstr "モデムマネージャー"
 
@@ -5852,7 +5847,7 @@ msgstr ""
 msgid "Network SSID"
 msgstr "ネットワークSSID"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:56
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:57
 msgid "Network address"
 msgstr ""
 
@@ -5964,6 +5959,10 @@ msgstr "RX信号なし"
 msgid "No WireGuard interfaces configured."
 msgstr ""
 
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:16
+msgid "No allowed mode configuration found."
+msgstr ""
+
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:68
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:88
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:65
@@ -6070,6 +6069,10 @@ msgstr "未接続"
 msgid "No peers defined yet."
 msgstr ""
 
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:15
+msgid "No preferred mode configuration found."
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:146
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:283
 msgid "No public keys present yet."
@@ -6090,7 +6093,7 @@ msgstr "検証またはフィルタリングなし"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1229
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:243
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:250
 msgid "No zone assigned"
 msgstr "割り当てられたゾーンがありません"
 
@@ -6117,7 +6120,8 @@ msgstr "非ワイルドカード"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:159
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:183
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:80
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:82
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:83
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:112
 msgid "None"
 msgstr "なし"
 
@@ -6241,7 +6245,7 @@ msgstr "オン"
 msgid "On-State Delay"
 msgstr "点灯時間"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:109
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:110
 msgid "On-link"
 msgstr "On-Linkルート"
 
@@ -6497,7 +6501,7 @@ msgstr "送信:"
 msgid "Outgoing checksum"
 msgstr "送信チェックサム"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:155
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:156
 msgid "Outgoing interface"
 msgstr ""
 
@@ -6544,7 +6548,7 @@ msgstr "IPv6 ルーティング テーブルのオーバーライド"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:74
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:102
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:142
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:194
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:132
@@ -6629,13 +6633,13 @@ msgstr ""
 msgid "PAP/CHAP"
 msgstr ""
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:79
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:80
 msgid "PAP/CHAP (both)"
 msgstr "PAP/CHAP（両方）"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:111
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:88
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:90
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:130
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:107
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:45
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:90
@@ -6649,7 +6653,7 @@ msgstr "PAP/CHAPパスワード"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:109
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:83
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:85
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:125
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:105
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:43
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:88
@@ -6672,7 +6676,7 @@ msgstr "PID"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:106
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:73
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:75
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:76
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:102
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:86
 msgid "PIN"
@@ -6763,14 +6767,14 @@ msgstr "パケット"
 msgid "Packets To Transmit Before Moving To Next Slave"
 msgstr "次のスレーブに移動する前に送信するパケット"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:275
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:282
 msgid "Part of network:"
 msgid_plural "Part of networks:"
 msgstr[0] ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1229
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:243
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:250
 msgid "Part of zone %q"
 msgstr "ゾーン%qの一部"
 
@@ -6789,7 +6793,7 @@ msgstr "パススルー（物理デバイスを単一の MAC ベース VLAN へ�
 msgid "Password"
 msgstr "パスワード"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:25
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:24
 msgid "Password authentication"
 msgstr "パスワード認証"
 
@@ -6982,7 +6986,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:656
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:21
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
 msgid "Port"
 msgstr "ポート"
 
@@ -6992,7 +6996,7 @@ msgctxt "WireGuard listen port"
 msgid "Port %d"
 msgstr "ポート %s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:277
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:284
 msgid "Port is not part of any network"
 msgstr ""
 
@@ -7000,7 +7004,7 @@ msgstr ""
 msgid "Port isolation"
 msgstr "ポート分離"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:283
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:290
 msgid "Port status"
 msgstr ""
 
@@ -7025,11 +7029,15 @@ msgstr "LTEを優先"
 msgid "Prefer UMTS"
 msgstr "UMTSを優先"
 
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:106
+msgid "Preferred network technology"
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
 msgid "Prefix Delegated"
 msgstr "委任されたプレフィックス（PD）"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:191
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid "Prefix suppressor"
 msgstr ""
 
@@ -7088,7 +7096,7 @@ msgstr "プライマリが復旧するとアクティブスレーブになりま
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:562
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:661
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:693
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:129
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:130
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:197
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:223
 msgid "Priority"
@@ -7372,11 +7380,11 @@ msgstr "デバイスのオペレーティングシステムを再起動"
 msgid "Receive"
 msgstr "受信"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:227
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:234
 msgid "Receive dropped"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:226
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:233
 msgid "Receive errors"
 msgstr ""
 
@@ -7385,15 +7393,15 @@ msgstr ""
 msgid "Received Data"
 msgstr "受信"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:223
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:230
 msgid "Received bytes"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:225
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:232
 msgid "Received multicast"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:224
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:231
 msgid "Received packets"
 msgstr ""
 
@@ -7459,7 +7467,7 @@ msgctxt "nft reject with tcp reset"
 msgid "Reject packet with <strong>TCP reset</strong>"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:191
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid ""
 "Reject routing decisions that have a prefix length less than or equal to the "
 "specified value"
@@ -7835,7 +7843,7 @@ msgstr "許可されたIPのルート"
 msgid "Route action chain \"%h\""
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:46
 msgid "Route type"
 msgstr "ルートタイプ"
 
@@ -7892,7 +7900,7 @@ msgstr ""
 msgid "Rule matches"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:136
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:137
 msgid "Rule type"
 msgstr ""
 
@@ -8160,6 +8168,10 @@ msgstr "bondに追加された最初のスレーブに設定（follow、2）"
 msgid "Set up DHCP Server"
 msgstr "DHCPサーバーをセットアップ"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:951
+msgid "Set up routes for proxied IPv6 neighbours."
+msgstr ""
+
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:55
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:55
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:23
@@ -8170,6 +8182,14 @@ msgstr "PLMNの設定に失敗しました"
 msgid "Setting operation mode failed"
 msgstr "操作モードの設定に失敗しました"
 
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:87
+msgid "Setting the allowed network technology."
+msgstr ""
+
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:107
+msgid "Setting the preferred network technology."
+msgstr ""
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:11
 msgid "Settings"
 msgstr "設定"
@@ -8178,10 +8198,6 @@ msgstr "設定"
 msgid ""
 "Settings for assisting wireless clients in roaming between multiple APs: "
 "802.11r, 802.11k and 802.11v"
-msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:951
-msgid "Set up routes for proxied IPv6 neighbours."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:210
@@ -8231,7 +8247,7 @@ msgstr "信号強度 / ノイズ"
 msgid "Signal Quality"
 msgstr ""
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:106
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:146
 msgid "Signal Refresh Rate"
 msgstr "信号のリフレッシュ レート"
 
@@ -8299,8 +8315,8 @@ msgstr ""
 "は手動で行う必要があります。このデバイスへのインストール方法については、wiki"
 "を参照してください。"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:99
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:148
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:100
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:149
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:385
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:70
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:214
@@ -8349,7 +8365,7 @@ msgstr ""
 "す。未指定である場合、<em>ローカル IPv6 DNS サーバー</em>オプションが無効でな"
 "い限り、デバイスは自身を IPv6 DNS サーバーとしてアナウンスします。"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:186
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:187
 msgid ""
 "Specifies an individual UID or range of UIDs to match, e.g. 1000 to match "
 "corresponding UID or 1000-1005 to inclusively match all UIDs within the "
@@ -8375,7 +8391,7 @@ msgstr "ARPモニタリングに使用するIPアドレスを指定"
 msgid "Specifies the MII link monitoring frequency in milliseconds"
 msgstr "MIIリンクのモニタリング頻度をミリ秒単位で指定"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:181
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:182
 msgid "Specifies the TOS value to match in IP headers"
 msgstr ""
 
@@ -8383,7 +8399,7 @@ msgstr ""
 msgid "Specifies the aggregation selection logic to use"
 msgstr "使用するアグリゲーション選択ロジックを指定"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:159
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:160
 msgid "Specifies the destination subnet to match (CIDR notation)"
 msgstr ""
 
@@ -8398,13 +8414,13 @@ msgid ""
 "stateful DHCPv6."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:176
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:177
 msgid ""
 "Specifies the fwmark and optionally its mask to match, e.g. 0xFF to match "
 "mark 255 or 0x0/0x1 to match any even mark value"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:144
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:145
 msgid "Specifies the incoming logical interface name"
 msgstr ""
 
@@ -8455,7 +8471,7 @@ msgstr ""
 msgid "Specifies the mode to be used for this bonding interface"
 msgstr "このボンディングインターフェースに使用するモードを指定"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:75
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:76
 msgid ""
 "Specifies the network gateway. If omitted, the gateway from the parent "
 "interface is taken if any, otherwise creates a link scope route. If set to "
@@ -8494,15 +8510,15 @@ msgstr ""
 "ボンディングドライバが各スレーブピアスイッチにラーニングパケットを送信するイ"
 "ンスタンス間の秒数を指定"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:129
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:130
 msgid "Specifies the ordering of the IP rules"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:155
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:156
 msgid "Specifies the outgoing logical interface name"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:99
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:100
 msgid ""
 "Specifies the preferred source address when sending to destinations covered "
 "by the target"
@@ -8528,19 +8544,19 @@ msgstr ""
 "アクティブなスレーブの障害またはプライマリスレーブのリカバリが発生した際の、"
 "プライマリスレーブの再選択ポリシーを指定"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:79
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:80
 msgid "Specifies the route metric to use"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:46
 msgid "Specifies the route type to be created"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:136
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:137
 msgid "Specifies the rule target routing action"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:148
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:149
 msgid "Specifies the source subnet to match (CIDR notation)"
 msgstr ""
 
@@ -8684,7 +8700,7 @@ msgstr "デフォルト（1280バイト）以外のMTU（最大伝送単位）�
 msgid "Specify the secret encryption key here."
 msgstr "ここで秘密暗号鍵を指定します。"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:199
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:206
 msgid "Speed: %d Mibit/s, Duplex: %s"
 msgstr ""
 
@@ -8950,8 +8966,8 @@ msgstr "送信レート"
 msgid "TX queue length"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:91
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:166
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:92
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:167
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:18
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
@@ -8969,7 +8985,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:651
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:714
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:56
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:57
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:66
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:187
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
@@ -9382,13 +9398,13 @@ msgid ""
 "increased. IGMP is robust to (Robustness-1) packet losses"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:171
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:172
 msgid ""
 "The rule target is a jump to another rule specified by its priority value"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:91
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:166
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:92
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:167
 msgid ""
 "The rule target is a table lookup ID: a numeric table index ranging from 0 "
 "to 65535 or symbol alias declared in /etc/iproute2/rt_tables. Special "
@@ -9672,10 +9688,6 @@ msgid ""
 "import\" href=\"#\">configuration import</a></strong> instead."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2674
-msgid "Log in…"
-msgstr "ログイン…"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:400
 msgid ""
 "To restore configuration files, you can upload a previously generated backup "
@@ -9736,11 +9748,11 @@ msgstr "送信"
 msgid "Transmit Hash Policy"
 msgstr "送信ハッシュポリシー"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:232
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:239
 msgid "Transmit dropped"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:231
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:238
 msgid "Transmit errors"
 msgstr ""
 
@@ -9749,11 +9761,11 @@ msgstr ""
 msgid "Transmitted Data"
 msgstr "送信済みデータ"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:229
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:236
 msgid "Transmitted bytes"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:230
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:237
 msgid "Transmitted packets"
 msgstr ""
 
@@ -9810,7 +9822,7 @@ msgstr "送信出力"
 msgid "Type"
 msgstr "タイプ"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:181
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:182
 msgid "Type of service"
 msgstr ""
 
@@ -9910,6 +9922,14 @@ msgstr "ファイアウォールを再起動できません: %s"
 msgid "Unable to save contents: %s"
 msgstr "内容を保存できません: %s"
 
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:14
+msgid "Unable to set allowed mode list."
+msgstr ""
+
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:17
+msgid "Unable to set preferred mode."
+msgstr ""
+
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:29
 msgid "Unable to verify PIN"
 msgstr ""
@@ -9940,7 +9960,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "不明"
 
-#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:15
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:12
 msgid "Unknown and unsupported connection method."
 msgstr "不明およびサポートされていない接続方法です。"
 
@@ -10259,7 +10279,7 @@ msgstr "ユーザーグループ"
 msgid "User certificate (PEM encoded)"
 msgstr "ユーザー証明書（PEMエンコード）"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:186
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:187
 msgid "User identifier"
 msgstr ""
 
@@ -10526,7 +10546,7 @@ msgid ""
 "much delay."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:109
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:110
 msgid ""
 "When enabled, gateway is on-link even if the gateway does not match any "
 "interface prefix"
@@ -10747,16 +10767,17 @@ msgid ""
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:531
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:152
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:163
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:153
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:164
+#: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:103
 msgid "any"
 msgstr "すべて"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1539
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1547
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1552
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:102
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:133
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:103
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:134
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1238
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:83
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:48
@@ -10988,7 +11009,7 @@ msgstr "いいえ"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:104
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:76
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:216
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:223
 msgid "no link"
 msgstr "リンクなし"
 
@@ -11353,6 +11374,16 @@ msgstr "はい"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 戻る"
+
+#, fuzzy
+#~ msgid "Modem bearer teardown in progress."
+#~ msgstr "モデムベアラを終了中です。"
+
+#~ msgid "Modem disconnection in progress. Please wait."
+#~ msgstr "モデム切断中です。しばらくお待ちください。"
+
+#~ msgid "Modem is disabled."
+#~ msgstr "モデムは無効です。"
 
 #~ msgid "IPv6 suffix (hex)"
 #~ msgstr ""
