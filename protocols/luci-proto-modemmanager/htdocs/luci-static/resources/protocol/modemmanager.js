@@ -109,6 +109,7 @@ return network.registerProtocol('modemmanager', {
 		o.value('3g');
 		o.value('4g');
 		o.value('5g');
+		o.value('none', _('None'));
 		o.depends('allowedmode','3g|2g');
 		o.depends('allowedmode','4g|2g');
 		o.depends('allowedmode','4g|3g');
