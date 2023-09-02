@@ -767,11 +767,11 @@ elseif action == "stats" then
 		s.template = "dockerman/container_stats"
 		table_stats = {
 			cpu={
-				key=translate("CPU Useage"),
+				key=translate("CPU Usage"),
 				value='-'
 			},
 			memory={
-				key=translate("Memory Useage"),
+				key=translate("Memory Usage"),
 				value='-'
 			}
 		}
