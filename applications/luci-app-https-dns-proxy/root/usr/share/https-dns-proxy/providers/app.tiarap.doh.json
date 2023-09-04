@@ -1,0 +1,24 @@
+{
+	"title": "Tiarap Public DNS (JP)",
+	"template": "https://doh.{option}/dns-query",
+	"bootstrap_dns": "172.104.93.80,2400:8902::f03c:91ff:feda:c514",
+	"help_link": "https://tiarap.org/",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(tiar.app|tiarap.org)",
+			"options": [
+				{
+					"value": "tiar.app",
+					"description": "Direct"
+				},
+				{
+					"value": "tiarap.org",
+					"description": "Cloudlfare Cached"
+				}
+			],
+			"default": "tiar.app"
+		}
+	}
+}

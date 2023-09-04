@@ -1,0 +1,32 @@
+{
+	"title": "Quad 9",
+	"template": "https://{option}.quad9.net/dns-query",
+	"bootstrap_dns": "9.9.9.9,149.112.112.112,2620:fe::fe,2620:fe::9",
+	"help_link": "https://www.quad9.net/doh-quad9-dns-servers/",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(dns|dns9|dns10|dns11)",
+			"options": [
+				{
+					"value": "dns",
+					"description": "Standard"
+				},
+				{
+					"value": "dns9",
+					"description": "Secured"
+				},
+				{
+					"value": "dns10",
+					"description": "Unsecured"
+				},
+				{
+					"value": "dns11",
+					"description": "Secured with ECS Support"
+				}
+			],
+			"default": "dns"
+		}
+	}
+}
