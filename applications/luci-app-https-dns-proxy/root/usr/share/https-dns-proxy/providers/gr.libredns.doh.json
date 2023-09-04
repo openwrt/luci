@@ -1,0 +1,24 @@
+{
+	"title": "LibreDNS (GR)",
+	"template": "https://doh.libredns.gr/{option}",
+	"bootstrap_dns": "116.202.176.26",
+	"help_link": "https://libredns.gr/",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(ads|dns-query)",
+			"options": [
+				{
+					"value": "ads",
+					"description": "AdBlocking Filter"
+				},
+				{
+					"value": "dns-query",
+					"description": "Standard"
+				}
+			],
+			"default": "dns-query"
+		}
+	}
+}
