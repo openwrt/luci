@@ -1,0 +1,46 @@
+config 'ipsec'
+  # useful so traffic isn't sourced from internal addresses,
+  # which would then requiring NATting and port 4500, etc.
+  list 'interface' 'wan'
+  option 'zone' 'lan'
+
+config 'remote' 'acme'
+  option 'enabled' '0'
+  # address of wan device
+  option 'local_ip' '6.6.6.6'
+  # peer has routable DHCP'd address which changes
+  option 'gateway' 'acme.example.com'
+  option 'authentication_method' 'psk'
+  option 'local_identifier' 'C=US, O=Acme Corporation, CN=headquarters'
+  option 'remote_identifier' 'C=US, O=Acme Corporation, CN=soho'
+  option 'local_cert' 'headquarters.crt'
+  option 'local_key' 'headquarters.key'
+  option 'ca_cert' 'acme.crt'
+  option 'rekeytime' '4h'
+  option 'keyingretries' '0'
+  option 'mobike' '0'
+  option 'fragmentation' '1'
+  list   'crypto_proposal' 'ike_proposal'
+  list   'tunnel' 'tun_soho'
+
+config 'crypto_proposal' 'ike_proposal'
+  option 'encryption_algorithm' 'aes256gcm'
+  # no hash_algorithm allowed with AEAD
+  option 'dh_group' 'modp3072'
+  option prf_algorithm 'prfsha512'
+
+# we don't specify subnets because we're going to use XFRM-interfaced based routes instead
+config 'tunnel' 'tun_soho'
+  list   'local_subnet' '0.0.0.0/0'
+  list   'remote_subnet' '0.0.0.0/0'
+  option 'if_id' '357'
+  option 'rekeytime' '1h'
+  # other end is behind NAT or we'd use 'route' to initiate
+  option 'startaction' 'none'
+  option 'closeaction' 'none'
+  list   'crypto_proposal' 'esp_proposal'
+
+config 'crypto_proposal' 'esp_proposal'
+  option 'encryption_algorithm' 'aes256gcm'
+  # no hash_algorithm with allowed with AEAD
+  option 'dh_group' 'modp3072'
