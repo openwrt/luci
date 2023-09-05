@@ -173,7 +173,7 @@ return view.extend({
 					srcnet,
 					dstnet,
 					options,
-					[ comment ]
+					[ comment, '%h'.format(comment) ]
 				]);
 
 				if (target) {
