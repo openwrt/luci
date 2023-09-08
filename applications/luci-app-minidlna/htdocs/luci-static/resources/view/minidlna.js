@@ -77,7 +77,7 @@ return view.extend({
 
 		o = s.taboption('general', form.DynamicList, 'media_dir', _('Media directories'), _('Set this to the directory you want scanned. If you want to restrict the directory to a specific content type, you can prepend the type (\'A\' for audio, \'V\' for video, \'P\' for images), followed by a comma, to the directory (eg. A,/mnt/media/Music). Multiple directories can be specified.'));
 
-		o = s.taboption('general', form.DynamicList, 'album_art_names', _('Album art names'), _('This is a list of file names to check for when searching for album art.'));
+		o = s.taboption('advanced', form.DynamicList, 'album_art_names', _('Album art names'), _('This is a list of file names to check for when searching for album art.'));
 		o.cfgvalue = function(section_id) {
 			return L.toArray(uci.get('minidlna', section_id, 'album_art_names')).join('/').split(/\//);
 		};
@@ -88,7 +88,6 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'db_dir', _('Database directory'), _('Set this if you would like to specify the directory where you want MiniDLNA to store its database and album art cache.'));
 
 		o = s.taboption('advanced', form.Flag, 'inotify', _('Enable inotify'), _('Set this to enable inotify monitoring to automatically discover new files.'));
-		o.default = o.enabled;
 
 		o = s.taboption('advanced', form.Flag, 'enable_tivo', _('Enable TIVO'), _('Set this to enable support for streaming .jpg and .mp3 files to a TiVo supporting HMO.'));
 
