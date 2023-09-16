@@ -1,16 +1,16 @@
-# OpenWrt luci feed
+# CapOS luci feed
 
 [![Translation status](https://hosted.weblate.org/widgets/openwrt/-/svg-badge.svg)](https://hosted.weblate.org/engage/openwrt/?utm_source=widget)
 
 ## Description
 
-This is the OpenWrt "luci"-feed containing LuCI - OpenWrt Configuration Interface.
+This is the CapOS "luci"-feed containing LuCI - CapOS Configuration Interface.
 
 ## Usage
 
 This feed is enabled by default. Your feeds.conf.default (or feeds.conf) should contain a line like:
 ```
-src-git luci https://github.com/openwrt/luci.git
+src-git luci https://github.com/fwerkor/capos-luci.git
 ```
 
 To install all its package definitions, run:
