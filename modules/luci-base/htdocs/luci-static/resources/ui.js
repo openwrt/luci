@@ -2636,6 +2636,9 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 	 * remotely depends on the ACL setup for the current session. This option
 	 * merely controls whether the file remove controls are rendered or not.
 	 *
+	 * @property {boolean} [enable_download=false]
+	 * Specifies whether the widget allows the user to download files.
+	 *
 	 * @property {string} [root_directory=/etc/luci-uploads]
 	 * Specifies the remote directory the upload and file browsing actions take
 	 * place in. Browsing to directories outside the root directory is
@@ -2650,6 +2653,7 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 			show_hidden: false,
 			enable_upload: true,
 			enable_remove: true,
+			enable_download: false,
 			root_directory: '/etc/luci-uploads'
 		}, options);
 	},
@@ -2931,6 +2935,10 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 						'class': 'btn',
 						'click': UI.prototype.createHandlerFn(this, 'handleReset')
 					}, [ _('Deselect') ]) : '',
+					this.options.enable_download && list[i].type == 'file' ? E('button', {
+						'class': 'btn',
+						'click': UI.prototype.createHandlerFn(this, 'handleDownload', entrypath, list[i])
+					}, [ _('Download') ]) : '',
 					this.options.enable_remove ? E('button', {
 						'class': 'btn cbi-button-negative',
 						'click': UI.prototype.createHandlerFn(this, 'handleDelete', entrypath, list[i])
@@ -2992,6 +3000,22 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 		dom.content(button, _('Select file…'));
 
 		this.handleCancel(ev);
+	},
+
+	/** @private */
+	handleDownload: function(path, fileStat, ev) {
+		fs.read_direct(path, 'blob').then(function (blob) {
+			var url = window.URL.createObjectURL(blob);
+			var a = document.createElement('a');
+			a.style.display = 'none';
+			a.href = url;
+			a.download = fileStat.name;
+			document.body.appendChild(a);
+			a.click();
+			window.URL.revokeObjectURL(url);
+		}).catch(function(err) {
+			alert(_('Download failed: %s').format(err.message));
+		});
 	},
 
 	/** @private */
