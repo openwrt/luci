@@ -4547,6 +4547,7 @@ var CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype */
 		this.show_hidden = false;
 		this.enable_upload = true;
 		this.enable_remove = true;
+		this.enable_download = false;
 		this.root_directory = '/etc/luci-uploads';
 	},
 
@@ -4604,6 +4605,14 @@ var CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype */
 	 */
 
 	/**
+	 * Toggle download file functionality.
+	 *
+	 * @name LuCI.form.FileUpload.prototype#enable_download
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
 	 * Specify the root directory for file browsing.
 	 *
 	 * This property defines the topmost directory the file browser widget may
@@ -4628,6 +4637,7 @@ var CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype */
 			show_hidden: this.show_hidden,
 			enable_upload: this.enable_upload,
 			enable_remove: this.enable_remove,
+			enable_download: this.enable_download,
 			root_directory: this.root_directory,
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
