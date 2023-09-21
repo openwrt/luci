@@ -23,6 +23,7 @@ return view.extend({
 		o.show_hidden = true;
 		o.enable_upload = true;
 		o.enable_remove = true;
+		o.enable_download = true;
 
 		return m.render();
 	},
