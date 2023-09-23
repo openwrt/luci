@@ -2802,7 +2802,7 @@
 		 * omitted, it defaults to an empty string.
 		 *
 		 * @param {string[]} [parts]
-		 * An array of parts to join into an URL path. Parts may contain
+		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
 		 * @return {string}
@@ -2822,7 +2822,7 @@
 		},
 
 		/**
-		 * Construct an URL  pathrelative to the script path of the server
+		 * Construct a URL  pathrelative to the script path of the server
 		 * side LuCI application (usually `/cgi-bin/luci`).
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
@@ -2833,7 +2833,7 @@
 		 * @memberof LuCI
 		 *
 		 * @param {string[]} [parts]
-		 * An array of parts to join into an URL path. Parts may contain
+		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
 		 * @return {string}
@@ -2844,7 +2844,7 @@
 		},
 
 		/**
-		 * Construct an URL path relative to the global static resource path
+		 * Construct a URL path relative to the global static resource path
 		 * of the LuCI ui (usually `/luci-static/resources`).
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
@@ -2855,7 +2855,7 @@
 		 * @memberof LuCI
 		 *
 		 * @param {string[]} [parts]
-		 * An array of parts to join into an URL path. Parts may contain
+		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
 		 * @return {string}
@@ -2866,7 +2866,7 @@
 		},
 
 		/**
-		 * Construct an URL path relative to the media resource path of the
+		 * Construct a URL path relative to the media resource path of the
 		 * LuCI ui (usually `/luci-static/$theme_name`).
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
@@ -2877,7 +2877,7 @@
 		 * @memberof LuCI
 		 *
 		 * @param {string[]} [parts]
-		 * An array of parts to join into an URL path. Parts may contain
+		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
 		 * @return {string}

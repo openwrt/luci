@@ -4326,7 +4326,7 @@ var CBIDummyValue = CBIValue.extend(/** @lends LuCI.form.DummyValue.prototype */
 	__name__: 'CBI.DummyValue',
 
 	/**
-	 * Set an URL which is opened when clicking on the dummy value text.
+	 * Set a URL which is opened when clicking on the dummy value text.
 	 *
 	 * By setting this property, the dummy value text is wrapped in an `<a>`
 	 * element with the property value used as `href` attribute.
