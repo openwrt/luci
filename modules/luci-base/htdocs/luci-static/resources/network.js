@@ -210,8 +210,8 @@ function getWifiNetidBySid(sid) {
 	var s = uci.get('wireless', sid);
 	if (s != null && s['.type'] == 'wifi-iface') {
 		var radioname = s.device;
-		if (typeof(s.device) == 'string') {
-			var i = 0, netid = null, sections = uci.sections('wireless', 'wifi-iface');
+		if (typeof(radioname) == 'string') {
+			var sections = uci.sections('wireless', 'wifi-iface');
 			for (var i = 0, n = 0; i < sections.length; i++) {
 				if (sections[i].device != s.device)
 					continue;
