@@ -9,15 +9,10 @@ include $(TOPDIR)/rules.mk
 LUCI_TYPE:=col
 LUCI_BASENAME:=light
 
-LUCI_TITLE:=LuCI interface with Uhttpd as Webserver (light)
-LUCI_DESCRIPTION:=Light OpenWrt set including admin support and the default Bootstrap theme
+LUCI_TITLE:=LuCI Configuration Interface with light Uhttpd as webserver
+LUCI_DESCRIPTION:=Standard set including full admin with ppp support, package management and the default Bootstrap theme
 LUCI_DEPENDS:= \
-	+IPV6:luci-proto-ipv6 \
-	+luci-app-firewall \
-	+luci-mod-admin-full \
-	+luci-proto-ppp \
-	+luci-theme-bootstrap \
-	+rpcd-mod-rrdns \
+	+luci \
 	+uhttpd \
 	+uhttpd-mod-ubus
 

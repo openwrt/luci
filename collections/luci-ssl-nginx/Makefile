@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TYPE:=col
 LUCI_BASENAME:=ssl
 
-LUCI_TITLE:=LuCI with HTTPS support on Nginx (OpenSSL as SSL backend)
+LUCI_TITLE:=LuCI with Nginx and HTTPS support (OpenSSL as SSL backend)
 LUCI_DESCRIPTION:=LuCI with OpenSSL as the SSL backend (libustream-openssl). \
  OpenSSL cmd tools (openssl-util) are used by nginx for SSL key generation. \
  
