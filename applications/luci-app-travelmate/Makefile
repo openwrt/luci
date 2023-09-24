@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for Travelmate
-LUCI_DEPENDS:=+travelmate
+LUCI_DEPENDS:=+luci-base +travelmate
 LUCI_PKGARCH:=all
 
 PKG_LICENSE:=Apache-2.0

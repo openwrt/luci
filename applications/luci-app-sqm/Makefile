@@ -8,7 +8,7 @@ LUCI_DESCRIPTION:=Luci interface for the SQM scripts queue management package
 
 PKG_MAINTAINER:=Toke Høiland-Jørgensen <toke@toke.dk>
 
-LUCI_DEPENDS:=+sqm-scripts
+LUCI_DEPENDS:=+luci-base +sqm-scripts
 LUCI_PKGARCH:=all
 
 include ../../luci.mk

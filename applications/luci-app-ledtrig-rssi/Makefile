@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:= LuCI Support for ledtrigger rssi
-LUCI_DEPENDS:=+rssileds
+LUCI_DEPENDS:=+luci-base +rssileds
 LUCI_PKGARCH:=all
 
 include ../../luci.mk

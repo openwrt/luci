@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for NextDNS
-LUCI_DEPENDS:=+nextdns
+LUCI_DEPENDS:=+luci-base +nextdns
 LUCI_PKGARCH:=all
 
 include ../../luci.mk

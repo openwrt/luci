@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for Adblock
-LUCI_DEPENDS:=+adblock
+LUCI_DEPENDS:=+luci-base +adblock
 LUCI_PKGARCH:=all
 
 PKG_LICENSE:=Apache-2.0

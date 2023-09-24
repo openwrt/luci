@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for the MWAN3 MultiWAN Manager
-LUCI_DEPENDS:=+mwan3
+LUCI_DEPENDS:=+luci-base +mwan3
 LUCI_PKGARCH:=all
 PKG_LICENSE:=GPLv2
 
