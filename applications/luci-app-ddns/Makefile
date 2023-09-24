@@ -13,7 +13,6 @@ PKG_MAINTAINER:=Ansuel Smith <ansuelsmth@gmail.com>
 
 LUCI_TITLE:=LuCI Support for Dynamic DNS Client (ddns-scripts)
 LUCI_DEPENDS:=+luci-base +luci-lua-runtime +ddns-scripts
-LUCI_PKGARCH:=all
 
 include ../../luci.mk
 

@@ -13,7 +13,6 @@ LUCI_DESCRIPTION:=Provides Web UI (found under System/Advanced Reboot) to reboot
 	an alternative partition. Also provides Web UI to shut down (power off) your device. 	Supported dual-partition\
 	routers are listed at https://docs.openwrt.melmac.net/luci-app-advanced-reboot/
 LUCI_DEPENDS:=+luci-base +jshn
-LUCI_PKGARCH:=all
 
 include ../../luci.mk
 

@@ -7,7 +7,6 @@ LUCI_DEPENDS:=@(aarch64||arm||x86_64) \
 	+luci-lib-docker \
 	+docker \
 	+ttyd
-LUCI_PKGARCH:=all
 
 PKG_LICENSE:=AGPL-3.0
 PKG_MAINTAINER:=lisaac <lisaac.cn@gmail.com> \

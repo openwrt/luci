@@ -22,7 +22,6 @@ PKG_MAINTAINER:=
 # LuCI specific settings
 LUCI_TITLE:=LuCI Support for Privoxy WEB proxy
 LUCI_DEPENDS:=+luci-compat +luci-lib-ipkg +luci-base +privoxy
-LUCI_PKGARCH:=all
 
 define Package/$(PKG_NAME)/config
 # shown in make menuconfig <Help>
