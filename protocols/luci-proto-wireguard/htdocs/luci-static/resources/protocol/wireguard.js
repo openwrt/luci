@@ -700,6 +700,11 @@ return network.registerProtocol('wireguard', {
 			    eport = this.section.formvalue(section_id, 'endpoint_port'),
 			    keep = this.section.formvalue(section_id, 'persistent_keepalive');
 
+			// If endpoint is IPv6 we must escape it with []
+			if (endpoint.indexOf(':') > 0) {
+				endpoint = '['+endpoint+']';
+			}
+
 			return [
 				'[Interface]',
 				'PrivateKey = ' + prv,
