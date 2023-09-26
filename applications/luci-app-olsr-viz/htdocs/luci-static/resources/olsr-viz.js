@@ -34,8 +34,6 @@ Changes:
 2010-12-11: Changed some paths to make it work with Kamikaze and Luci -- soma
 */
 
-var cgi_url = "/cgi-bin/vizdata.sh";
-
 var maxmetric = 3;
 var iconvariant = "-mini";
 var nodes = new Array();
@@ -63,62 +61,39 @@ var now_secs = 5;
 
 // dom elements
 var IFrameObj;
-var maindiv;
-var nodediv;
-var edgediv;
-
-/******* CALL TO SERVER ********/
-function callToServer(URL) {
-	var IFrameDoc;
-
-	if (IFrameObj.document) {
-		// For IE5 + opera
-		IFrameDoc = IFrameObj.document;
-	}
-	else if (IFrameObj.contentDocument) {
-		// For NS6
-		IFrameDoc = IFrameObj.contentDocument;
-	}
-	else if (IFrameObj.contentWindow) {
-		// For IE5.5 and IE6
-		IFrameDoc = IFrameObj.contentWindow.document;
-	}
- 	else {
-		// opera? hmmmm
-		return true;
-	}
-
-	IFrameDoc.location.replace(URL);
-	return false;
-}
+var mainDiv;
+var nodeDiv;
+var edgeDiv;
+var zoomInput;
+var maxmetricInput;
+var debugSpan;
 
 
 /******** EDGE CLASS ********/
-function edge(n1,n2){
-	this.getHTML = function()
-	{
+function edge(n1, n2) {
+	this.getHTML = function () {
 		var nh = "";
 
-		if(this.n1.metric > maxmetric || this.n2.metric > maxmetric) {
+		if (this.n1.metric > maxmetric || this.n2.metric > maxmetric) {
 			return "";
 		}
 
-		var x = this.n1.x*scale;
-		var y = this.n1.y*scale;
-		var dx = this.n2.x*scale - x;
-		var dy = this.n2.y*scale - y;
+		var x = this.n1.x * scale;
+		var y = this.n1.y * scale;
+		var dx = this.n2.x * scale - x;
+		var dy = this.n2.y * scale - y;
 
-		x += xoff*scale + 75;
-		y += yoff*scale + 15;
+		x += xoff * scale + 75;
+		y += yoff * scale + 15;
 
 		var imgtag = "<img src='/luci-static/resources/olsr-viz/dot_"
 		if (this.etx > 0 && this.etx < 2) {
 			imgtag += "good.gif'";
 		}
-		else if(this.etx > 2 && this.etx < 5) {
+		else if (this.etx > 2 && this.etx < 5) {
 			imgtag += "ok.gif'";
 		}
-		else if(this.etx > 5 && this.etx < 10) {
+		else if (this.etx > 5 && this.etx < 10) {
 			imgtag += "weak.gif'";
 		}
 		else {
@@ -126,43 +101,40 @@ function edge(n1,n2){
 		}
 		imgtag += " alt='ETX: " + this.etx + "' title='ETX: " + this.etx + "' ";
 
-		var d = Math.sqrt(dx*dx+dy*dy);
+		var d = Math.sqrt(dx * dx + dy * dy);
 
 		for (var j = 0; j < d; j += 15) {
 			nh += imgtag + "style='top:"
-			+ parseInt(y+dy * j / d) + "px; left:"
-			+ parseInt(x+dx * j / d) + "px; "
-			+ "width: 4px; height: 4px; position: absolute; z-index: 2' >";
+				+ parseInt(y + dy * j / d) + "px; left:"
+				+ parseInt(x + dx * j / d) + "px; "
+				+ "width: 4px; height: 4px; position: absolute; z-index: 2' >";
 		}
 
 		nh += "<div style='top:"
-		+ parseInt(y+dy * 0.5 - 5) + "px; left:"
-		+ parseInt(x+dx * 0.5 - 24) + "px; "
-		+ "position: absolute; z-index: 3; width: 48px; text-align: center;' >"
-		+ "<span class='label etx' >" + this.etx + "</span></div>";
+			+ parseInt(y + dy * 0.5 - 5) + "px; left:"
+			+ parseInt(x + dx * 0.5 - 24) + "px; "
+			+ "position: absolute; z-index: 3; width: 48px; text-align: center;' >"
+			+ "<span class='label etx' >" + this.etx + "</span></div>";
 
 		return nh;
 	}
 
-	this.isIdle = function()
-	{
+	this.isIdle = function () {
 		return (now_secs - this.lastseen > idle_timeout);
 	}
 
-	this.isDead = function()
-	{
+	this.isDead = function () {
 		return (now_secs - this.lastseen > erase_timeout);
 	}
 
-	this.cleanup = function()
-	{
-		if(this.n1 && this.n1.weight) {
+	this.cleanup = function () {
+		if (this.n1 && this.n1.weight) {
 			this.n1.weight--;
 		}
-		if(this.n2 && this.n2.weight) {
+		if (this.n2 && this.n2.weight) {
 			this.n2.weight--;
 		}
-		if(this.n1 && this.n2) {
+		if (this.n1 && this.n2) {
 			delete this.n1.edges[n2.ip];
 			delete this.n2.edges[n1.ip];
 		}
@@ -180,10 +152,9 @@ function edge(n1,n2){
 	return this;
 }
 
-function getEdgeKey(ip1,ip2)
-{
+function getEdgeKey(ip1, ip2) {
 	var key = "";
-	if(ip1 > ip2) {
+	if (ip1 > ip2) {
 		key = ip2 + "-" + ip1;
 	}
 	else {
@@ -192,12 +163,11 @@ function getEdgeKey(ip1,ip2)
 	return key;
 }
 
-function touch_edge(n1,n2,etx)
-{
-	var key = getEdgeKey(n1.ip,n2.ip);
+function touch_edge(n1, n2, etx) {
+	var key = getEdgeKey(n1.ip, n2.ip);
 	var e = edges[key];
-	if(!e) {
-		e = new edge(n1,n2);
+	if (!e) {
+		e = new edge(n1, n2);
 		edges[key] = e;
 	}
 	e.etx = etx;
@@ -207,71 +177,67 @@ function touch_edge(n1,n2,etx)
 
 /******** NODE CLASS ********/
 function node(ip) {
-	this.getHTML = function()
-	{
+	this.getHTML = function () {
 		var nh;
 
-		if(this.metric > maxmetric) {
+		if (this.metric > maxmetric) {
 			return "";
 		}
 		var igw = 0;
-		for(var h in this.hna) {
-			if(h == "0.0.0.0") {
+		for (var h in this.hna) {
+			if (h == "0.0.0.0") {
 				igw = 1;
 				break;
 			}
 		}
 		nh =
 			"<div id='node_" + this.ip + "' onmousedown='dragstart(this)' style="
-			+ "'top: " + parseInt((this.y+yoff)*scale) + "px; "
-			+ "left: " + parseInt((this.x+xoff)*scale) + "px; "
+			+ "'top: " + parseInt((this.y + yoff) * scale) + "px; "
+			+ "left: " + parseInt((this.x + xoff) * scale) + "px; "
 			+ "width: 150px; height: 1px; z-index: 4; "
 			+ "position: absolute; background-color: transparent;' >"
-			+ "<div><img src='/luci-static/resources/olsr-viz/node"+(igw ? "-hna" : "")+iconvariant + ".gif'"
+			+ "<div><img src='/luci-static/resources/olsr-viz/node" + (igw ? "-hna" : "") + iconvariant + ".gif'"
 			+ " alt='node " + this.ip + "' style='border: none;'><br />"
-			+ 	"<a href='http://" + this.ip + "/'>"
-			+ 	"<span class='label ip'>" + this.ip + "</span></a>"
-			+ 	(showdesc && this.desc != "" ? 
-						"<br /><span class='label desc'>" + this.desc + "</span>" : "")
+			+ "<a href='http://" + this.ip + "/'>"
+			+ "<span class='label ip'>" + this.ip + "</span></a>"
+			+ (showdesc && this.desc != "" ?
+				"<br /><span class='label desc'>" + this.desc + "</span>" : "")
 			+ "</div></div>";
 		return nh;
 	}
 
-	this.isIdle = function()
-	{
+	this.isIdle = function () {
 		return (now_secs - this.lastseen > idle_timeout);
 	}
 
-	this.isDead = function()
-	{
+	this.isDead = function () {
 		return (now_secs - this.lastseen > erase_timeout);
 	}
 
-	this.cleanup = function()
-	{
+	this.cleanup = function () {
 		ncount--;
 	}
-	
-	this.set_metric = function(metric) {
+
+	this.set_metric = function (metric) {
 		this.metric = metric;
 		return this;
 	}
-	
-	this.set_desc = function(desc) {
+
+	this.set_desc = function (desc) {
 		this.desc = desc
 		return this;
 	}
-	
-	this.update = function() {
+
+	this.update = function () {
 		this.lastseen = now_secs;
 		return this;
 	}
-	
+
 	this.ip = ip;
 	this.x = 0;
 	this.y = 0;
-	this.dx_last=0;
-	this.dy_last=0;
+	this.dx_last = 0;
+	this.dy_last = 0;
 	this.placed = false;
 	this.weight = 0;
 	this.edges = new Array();
@@ -286,7 +252,7 @@ function node(ip) {
 
 function touch_node(ip) {
 	var n = nodes[ip];
-	if(!n) {
+	if (!n) {
 		n = new node(ip);
 		nodes[ip] = n;
 		// newnodes.push(n);
@@ -298,24 +264,24 @@ function touch_node(ip) {
 
 function place_new_nodes() {
 	var nc = 0;
-	for(var i = 0;i<newnodes.length;i++){
+	for (var i = 0; i < newnodes.length; i++) {
 		var n = newnodes[i];
-		if(n.placed){continue;}
+		if (n.placed) { continue; }
 		var sp;
-		if(sp = getCookie("node_"+n.ip)) {
+		if (sp = getCookie("node_" + n.ip)) {
 			var xy = sp.split("x");
-			debug_writeln("sp: "+sp+" xy[0]: "+xy[0]+" xy[1]: "+xy[1]);
+			debug_writeln(("sp: " + sp + " xy[0]: " + xy[0] + " xy[1]: " + xy[1]));
 			n.x = parseFloat(xy[0]);
 			n.y = parseFloat(xy[1]);
 		}
-		else if(n.weight>1){
+		else if (n.weight > 1) {
 			// see if we find already placed nodes
-			var ox=0, oy=0;
-			var dx=0, dy=0;
-			var c=0;
-			for(var e in n.edges){
-				if(nodes[e] && nodes[e].placed){
-					if(!ox && !oy) {
+			var ox = 0, oy = 0;
+			var dx = 0, dy = 0;
+			var c = 0;
+			for (var e in n.edges) {
+				if (nodes[e] && nodes[e].placed) {
+					if (!ox && !oy) {
 						ox = nodes[e].x;
 						oy = nodes[e].y;
 					}
@@ -326,35 +292,35 @@ function place_new_nodes() {
 					c++;
 				}
 			}
-			if(c>0) {
-				n.x = ox + dx/c + Math.random()*iel/2-iel/4;
-				n.y = oy + dy/c + Math.random()*iel/2-iel/4;
+			if (c > 0) {
+				n.x = ox + dx / c + Math.random() * iel / 2 - iel / 4;
+				n.y = oy + dy / c + Math.random() * iel / 2 - iel / 4;
 			}
 		}
 		else {
 			// begin somewhere
-			n.x = Math.random()*400;
-			n.y = Math.random()*400;
+			n.x = Math.random() * 400;
+			n.y = Math.random() * 400;
 		}
 		n.placed = true;
 		nc++;
 	}
-	newnodes.length=0;
+	newnodes.length = 0;
 	return nc;
 }
 
 /******** HNA CLASS ********/
-function hna(gw,net,mask) {
+function hna(gw, net, mask) {
 	this.gw = gw;
 	this.net = net;
 	this.mask = mask;
 	return this;
 }
 
-function touch_hna(node,net,mask) {
+function touch_hna(node, net, mask) {
 	var h = node.hna[net];
-	if(!h) {
-		h = new hna(node.ip,net,mask);
+	if (!h) {
+		h = new hna(node.ip, net, mask);
 		node.hna[net] = h;
 	}
 
@@ -363,42 +329,39 @@ function touch_hna(node,net,mask) {
 }
 
 /******** VIZ SETUP AND SETTINGS ********/
-function viz_setup(iframeid,maindivid,nodedivid,edgedivid) {
+function viz_setup(iframe, maindiv, nodediv, edgediv, debugspan, zoominput, maxmetricinput) {
 	// assign a reference to the
 	// object to our global variable IFrameObj.
-	IFrameObj=document.getElementById(iframeid);
-	if (document.frames) {
-		// this is for IE5 Mac, because it will only
-		// allow access to the document object
-		// of the IFrame if we access it through
-		// the document.frames array
-		IFrameObj = document.frames[iframeid];
-	}
+	IFrameObj = iframe;
 
 	draginit();
 
-	maindiv=document.getElementById(maindivid);
-	nodediv=document.getElementById(nodedivid);
-	edgediv=document.getElementById(edgedivid);
+	mainDiv = maindiv;
+	nodeDiv = nodediv;
+	edgeDiv = edgediv;
+	debugSpan = debugspan;
+	zoomInput = zoominput;
+	maxmetricInput = maxmetricinput;
 
 	// autosave on exit?
 	var autosave;
-	if((autosave = getCookie("prefs_autosave"))) {
+	if ((autosave = getCookie("prefs_autosave"))) {
 		auto_save = parseInt(autosave);
 	}
 	viz_autosave(auto_save);
 
 	// maximum metric of surrounding nodes
-	var mmx;
-	if(mmx = getCookie("prefs_maxmetric")) {
-		set_maxmetric(mmx,true,true);
-	}
+	var mmx = (getCookie("prefs_maxmetric"))||3; 
+	set_maxmetric(mmx, true, true);
 
 	// scale of view
 	var savescale;
-	if((savescale = getCookie("prefs_scale")) &&
-		 (savescale = parseFloat(savescale))) {
-			set_scale(savescale,true);
+	if ((savescale = getCookie("prefs_scale")) &&
+		(savescale = parseFloat(savescale))) {
+		set_scale(savescale, true);
+	}
+	else {
+		set_scale(2.0, true);
 	}
 
 	// scroll - FIXME
@@ -417,53 +380,49 @@ function viz_setup(iframeid,maindivid,nodedivid,edgedivid) {
 	*/
 }
 
-function viz_save()
-{
+function viz_save() {
 	// let cookie survive a month
 	var exp = new Date();
 	exp.setTime(exp.getTime() + 2592000000);
 	// save node positions
-	for(var ip in nodes)
-	{
-		if(nodes[ip].metric > maxmetric) {
+	for (var ip in nodes) {
+		if (nodes[ip].metric > maxmetric) {
 			continue;
 		}
-		setCookie("node_"+ip,nodes[ip].x+"x"+nodes[ip].y,exp);
+		// setCookie("node_"+ip,nodes[ip].x+"x"+nodes[ip].y,exp);
 	}
 
 	// save maxmetric
-	setCookie("prefs_maxmetric",maxmetric,exp);
+	setCookie("prefs_maxmetric", maxmetric, exp);
 
 	// save zooming
-	setCookie("prefs_scale",scale,exp);
+	setCookie("prefs_scale", scale, exp);
 
 	// save scroll - FIXME
 	setCookie("prefs_innerview",
-		parseInt(maindiv.scrollLeft)+"x"+parseInt(maindiv.scrollTop)+"x"+
-		parseInt(vwidth*scale)+"x"+parseInt(vheight*scale),exp);
+		parseInt(mainDiv.scrollLeft) + "x" + parseInt(mainDiv.scrollTop) + "x" +
+		parseInt(vwidth * scale) + "x" + parseInt(vheight * scale), exp);
 }
 
-function viz_autosave(autosave)
-{
+function viz_autosave(autosave) {
 	auto_save = autosave;
-	if(auto_save) {
-		document.body.onunload=viz_save;
+	if (auto_save) {
+		document.body.onunload = viz_save;
 	}
 	else {
 		deleteCookie("prefs_autosave");
 	}
 }
 
-function viz_reset()
-{
+function viz_reset() {
 	deleteAllCookies();
-	for(var ip in nodes) {
+	for (var ip in nodes) {
 		delete nodes[ip];
 	}
-	for(var e in edges) {
+	for (var e in edges) {
 		delete edges[e];
 	}
-	viz_update();
+	window.location.reload();
 }
 
 var updateTimer = 0;
@@ -471,8 +430,7 @@ function viz_update() {
 	if (updateTimer) {
 		clearTimeout(updateTimer);
 	}
-	now_secs = new Date().getTime()/1000;
-	callToServer(cgi_url);
+	now_secs = new Date().getTime() / 1000;
 }
 
 function viz_callback() {
@@ -480,7 +438,7 @@ function viz_callback() {
 		clearTimeout(updateTimer);
 	}
 
-	if(place_new_nodes() > 0 && auto_declump) {
+	if (place_new_nodes() > 0 && auto_declump) {
 		declump();
 	}
 	refresh();
@@ -489,7 +447,7 @@ function viz_callback() {
 
 var refresh_running = false;
 function refresh() {
-	if(refresh_running) {
+	if (refresh_running) {
 		return;
 	}
 	refresh_running = true;
@@ -499,7 +457,7 @@ function refresh() {
 	// refresh nodes
 	nh = "";
 	for (var n in nodes) {
-		if(nodes[n].isDead()) {
+		if (nodes[n].isDead()) {
 			nodes[n].cleanup();
 			delete nodes[n];
 		}
@@ -507,13 +465,13 @@ function refresh() {
 			nh += nodes[n].getHTML();
 		}
 	}
-	nodediv.innerHTML = nh;
+	nodeDiv.innerHTML = nh;
 
 	// refresh edges
 
-		nh = "";
+	nh = "";
 	for (var e in edges) {
-		if(edges[e].isDead()) {
+		if (edges[e].isDead()) {
 			edges[e].cleanup();
 			delete edges[e];
 		}
@@ -521,20 +479,18 @@ function refresh() {
 			nh += edges[e].getHTML();
 		}
 	}
-	edgediv.innerHTML = nh;
+	edgeDiv.innerHTML = nh;
 	refresh_running = false;
 }
 
-function set_showdesc(doit)
-{
+function set_showdesc(doit) {
 	showdesc = doit;
-	if(!noupdate) refresh();
+	if (!noupdate) refresh();
 }
 
-function set_autodeclump(doit)
-{
+function set_autodeclump(doit) {
 	auto_declump = doit;
-	if(doit) {
+	if (doit) {
 		declump();
 	}
 	else {
@@ -542,36 +498,34 @@ function set_autodeclump(doit)
 	}
 }
 
-function set_scale(inscale,noupdate)
-{
-	if(!inscale) {
-		inscale = parseFloat(document.getElementById("zoom").value/2);
+function set_scale(inscale, noupdate) {
+	if (!inscale) {
+		inscale = parseFloat(zoomInput.value / 2);
 	}
-	scale = Math.round(inscale*100)/100;
-	if(!scale || scale<0.1) {
+	scale = Math.round(inscale * 100) / 100;
+	if (!scale || scale < 0.1) {
 		scale = 0.1;
 	}
-	document.getElementById("zoom").value = scale*2;
-	if(!noupdate) refresh();
+	zoomInput.value = scale * 2;
+	if (!noupdate) refresh();
 }
 
-function set_maxmetric(inmetric,noupdate,noconfirm)
-{
+function set_maxmetric(inmetric, noupdate, noconfirm) {
 	inmetric = parseInt(inmetric);
-	if(inmetric > 0 || !noconfirm || confirm("warning. setting the maximum metric to zero can lead to expensive calculations if you are connected to a network with many nodes. do you want to proceed?")) {
+	if (inmetric > 0 || !noconfirm || confirm("warning. setting the maximum metric to zero can lead to expensive calculations if you are connected to a network with many nodes. do you want to proceed?")) {
 		maxmetric = inmetric;
 	}
-	document.getElementById("maxmetric").value = maxmetric;
-	if(!noupdate) refresh();
+	maxmetricInput.value = maxmetric;
+	if (!noupdate) refresh();
 }
 
 // k = area / nodes
 function fr(x) {
-	return Math.pow((iel*iel)/x,2);
+	return Math.pow((iel * iel) / x, 2);
 }
 
 function fa(x) {
-	return Math.pow((x*x)/iel,2);
+	return Math.pow((x * x) / iel, 2);
 }
 
 var dclTimer = 0;
@@ -582,10 +536,10 @@ function declump(t) {
 	var d;
 
 	// clear declump timer
-	if(dclTimer) {
+	if (dclTimer) {
 		clearTimeout(dclTimer);
 	}
-	if(declump_running) {
+	if (declump_running) {
 		return;
 	}
 	declump_running = true;
@@ -593,16 +547,16 @@ function declump(t) {
 	// nodes
 	var nc = 0;
 	for (var ip1 in nodes) {
-		nodes[ip1].fr_x=0;
-		nodes[ip1].fr_y=0;
-		nodes[ip1].fa_x=0;
-		nodes[ip1].fa_y=0;
+		nodes[ip1].fr_x = 0;
+		nodes[ip1].fr_y = 0;
+		nodes[ip1].fa_x = 0;
+		nodes[ip1].fa_y = 0;
 		nodes[ip1].x_next = nodes[ip1].x;
 		nodes[ip1].y_next = nodes[ip1].y;
 		nodes[ip1].randdisplace = 0;
 	}
 	for (var ip1 in nodes) {
-		if(nodes[ip1].metric > maxmetric || nodes[ip1].pinned) {
+		if (nodes[ip1].metric > maxmetric || nodes[ip1].pinned) {
 			continue;
 		}
 		for (var ip2 in nodes) {
@@ -611,17 +565,17 @@ function declump(t) {
 			}
 			dx = (nodes[ip1].x_next - nodes[ip2].x_next);
 			dy = (nodes[ip1].y_next - nodes[ip2].y_next);
-			d = Math.sqrt(dx*dx+dy*dy);
-			d = Math.max(d-optsize,(d+optsize)/optsize);
+			d = Math.sqrt(dx * dx + dy * dy);
+			d = Math.max(d - optsize, (d + optsize) / optsize);
 
-			nodes[ip1].fr_x += (dx/d) * fr(d);
-			nodes[ip1].fr_y += (dy/d) * fr(d);
+			nodes[ip1].fr_x += (dx / d) * fr(d);
+			nodes[ip1].fr_y += (dy / d) * fr(d);
 		}
 
 		dx = nodes[ip1].fr_x;
 		dy = nodes[ip1].fr_y;
-		d = Math.sqrt(dx*dx+dy*dy);
-		var md = Math.min(d,iel/nodes[ip1].weight);
+		d = Math.sqrt(dx * dx + dy * dy);
+		var md = Math.min(d, iel / nodes[ip1].weight);
 		nodes[ip1].x_next += (dx / d) * md;
 		nodes[ip1].y_next += (dy / d) * md;
 		nc++;
@@ -636,59 +590,59 @@ function declump(t) {
 		}
 		dx = (edges[e].n1.x_next - edges[e].n2.x_next);
 		dy = (edges[e].n1.y_next - edges[e].n2.y_next);
-		d = Math.sqrt(dx*dx+dy*dy);
-//		d = Math.max(d-optsize,(d+optsize)/optsize);
+		d = Math.sqrt(dx * dx + dy * dy);
+		//		d = Math.max(d-optsize,(d+optsize)/optsize);
 
-		edges[e].n1.fa_x -= (dx/d) * fa(d);
-		edges[e].n1.fa_y -= (dy/d) * fa(d);
-		edges[e].n2.fa_x += (dx/d) * fa(d);
-		edges[e].n2.fa_y += (dy/d) * fa(d);
+		edges[e].n1.fa_x -= (dx / d) * fa(d);
+		edges[e].n1.fa_y -= (dy / d) * fa(d);
+		edges[e].n2.fa_x += (dx / d) * fa(d);
+		edges[e].n2.fa_y += (dy / d) * fa(d);
 		ec++;
 	}
 
 	// displacement
-	var xmin=-20;
-	var ymin=-20;
-	var xmax=20;
-	var ymax=20;
-	var dsum=0;
+	var xmin = -20;
+	var ymin = -20;
+	var xmax = 20;
+	var ymax = 20;
+	var dsum = 0;
 	for (var ip in nodes) {
-		if(nodes[ip].metric > maxmetric || nodes[ip].pinned) {
+		if (nodes[ip].metric > maxmetric || nodes[ip].pinned) {
 			continue;
 		}
 
 		dx = nodes[ip].fa_x;
 		dy = nodes[ip].fa_y;
-		d = Math.sqrt(dx*dx+dy*dy);
-		dx = (dx / d) * Math.min(d,iel/nodes[ip].weight) * 0.75 + nodes[ip].dx_last * 0.25;
-		dy = (dy / d) * Math.min(d,iel/nodes[ip].weight) * 0.75 + nodes[ip].dy_last * 0.25;
+		d = Math.sqrt(dx * dx + dy * dy);
+		dx = (dx / d) * Math.min(d, iel / nodes[ip].weight) * 0.75 + nodes[ip].dx_last * 0.25;
+		dy = (dy / d) * Math.min(d, iel / nodes[ip].weight) * 0.75 + nodes[ip].dy_last * 0.25;
 
 		nodes[ip].dx_last = dx;
 		nodes[ip].dy_last = dy;
 		nodes[ip].x_next += dx;
 		nodes[ip].y_next += dy;
 
-		if(!nodes[ip].x_next || !nodes[ip].y_next) {
+		if (!nodes[ip].x_next || !nodes[ip].y_next) {
 			continue;
 		}
 
 		dx = (nodes[ip].x - nodes[ip].x_next);
 		dy = (nodes[ip].y - nodes[ip].y_next);
-		dsum += Math.sqrt(dx*dx+dy*dy);
+		dsum += Math.sqrt(dx * dx + dy * dy);
 
 		nodes[ip].x = nodes[ip].x_next;
 		nodes[ip].y = nodes[ip].y_next;
 
-		xmin = Math.min(xmin,nodes[ip].x);
-		xmax = Math.max(xmax,nodes[ip].x);
-		ymin = Math.min(ymin,nodes[ip].y);
-		ymax = Math.max(ymax,nodes[ip].y);
+		xmin = Math.min(xmin, nodes[ip].x);
+		xmax = Math.max(xmax, nodes[ip].x);
+		ymin = Math.min(ymin, nodes[ip].y);
+		ymax = Math.max(ymax, nodes[ip].y);
 	}
-	vwidth=(xmax-xmin);
-	vheight=(ymax-ymin);
+	vwidth = (xmax - xmin);
+	vheight = (ymax - ymin);
 
-	xoff=-xmin;
-	yoff=-ymin;
+	xoff = -xmin;
+	yoff = -ymin;
 	/*
 	document.getElementById('debug').innerHTML = "<br />" +
 		"offset: " + xoff + "x" + yoff + " dsum: " + dsum + "<br />" +
@@ -696,8 +650,8 @@ function declump(t) {
 		"optsize: " + optsize + "<br />";
 		*/
 	refresh();
-	if(auto_declump) {
-		dclTimer = setTimeout("declump()", dsum>ncount ? dcl_timeout : dcllow_timeout );
+	if (auto_declump) {
+		dclTimer = setTimeout("declump()", dsum > ncount ? dcl_timeout : dcllow_timeout);
 	}
 	declump_running = false;
 }
@@ -728,7 +682,7 @@ function dragstart(element) {
 	dragy = posy - element.offsetTop;
 
 	var n = nodes[dragip];
-	if(n) {
+	if (n) {
 		n.pinned = true;
 	}
 }
@@ -738,11 +692,11 @@ function dragstop() {
 	//Wird aufgerufen, wenn ein Objekt nicht mehr bewegt werden soll.
 
 	var n = nodes[dragip];
-	if(n) {
+	if (n) {
 		n.pinned = false;
 	}
 	refresh();
-	dragip=null;
+	dragip = null;
 }
 
 
@@ -751,21 +705,20 @@ function drag(ereignis) {
 
 	posx = document.all ? window.event.clientX : ereignis.pageX;
 	posy = document.all ? window.event.clientY : ereignis.pageY;
-	if(dragip != null) {
+	if (dragip != null) {
 		var n = nodes[dragip];
-		if(n) {
-			n.x = (posx - dragx)/scale - xoff;
-			n.y = (posy - dragy)/scale - yoff;
+		if (n) {
+			n.x = (posx - dragx) / scale - xoff;
+			n.y = (posy - dragy) / scale - yoff;
 		}
-		var e = document.getElementById('node_'+dragip);
-		e.style.left = parseInt((n.x+xoff)*scale) + "px";
-		e.style.top = parseInt((n.y+yoff)*scale) + "px";
+		var e = document.getElementById('node_' + dragip);
+		e.style.left = parseInt((n.x + xoff) * scale) + "px";
+		e.style.top = parseInt((n.y + yoff) * scale) + "px";
 	}
 }
 
-function debug_writeln(line)
-{
-	document.getElementById('debug').innerHTML = line + "<br />" + document.getElementById('debug').innerHTML;
+function debug_writeln(line) {
+	debugSpan.innerHTML = line + "<br />" + debugSpan.innerHTML;
 }
 
 /**
@@ -782,7 +735,7 @@ function debug_writeln(line)
  */
 
 function setCookie(name, value, expires, path, domain, secure) {
-	document.cookie= name + "=" + escape(value) +
+	document.cookie = name + "=" + escape(value) +
 		((expires) ? "; expires=" + expires.toGMTString() : "") +
 		((path) ? "; path=" + path : "") +
 		((domain) ? "; domain=" + domain : "") +
@@ -798,9 +751,8 @@ function setCookie(name, value, expires, path, domain, secure) {
  *	 or null if cookie does not exist.
  */
 
-function getCookie(name)
-{
-	var results = document.cookie.match ( name + '=(.*?)(;|$)' );
+function getCookie(name) {
+	var results = document.cookie.match(name + '=(.*?)(;|$)');
 	if (results) {
 		return unescape(results[1]);
 	}
@@ -826,7 +778,7 @@ function deleteCookie(name, path, domain) {
 
 function deleteAllCookies() {
 	var cookies = document.cookie.split("; ");
-	for(var i=0;i<cookies.length;i++) {
+	for (var i = 0; i < cookies.length; i++) {
 		deleteCookie(cookies[i].split("=")[0]);
 	}
 }
