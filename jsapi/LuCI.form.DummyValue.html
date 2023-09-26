@@ -3873,7 +3873,7 @@ option to the section.</p></td>
 <dd>
     
     <div class="description">
-        <p>Set an URL which is opened when clicking on the dummy value text.</p>
+        <p>Set a URL which is opened when clicking on the dummy value text.</p>
 <p>By setting this property, the dummy value text is wrapped in an <code>&lt;a&gt;</code>
 element with the property value used as <code>href</code> attribute.</p>
     </div>
@@ -4436,7 +4436,7 @@ with.</p>
     
     <div class="description">
         <p>If set to <code>true</code>, the underlying ui input widget value is not cleared
-from the configuration on unsatisfied depedencies. The default behavior
+from the configuration on unsatisfied dependencies. The default behavior
 is to remove the values of all options whose dependencies are not
 fulfilled.</p>
     </div>
@@ -4799,7 +4799,7 @@ table section elements.</p>
             
                 <span class="inherited"><a href="LuCI.form.AbstractElement.html#append">inherited</a></span>
             
-            append<span class="signature">(element)</span>
+            append<span class="signature">(obj)</span>
         </h4>
     
         
@@ -4846,7 +4846,7 @@ table section elements.</p>
 	
         <tr>
             
-                <td class="name"><code>element</code></td>
+                <td class="name"><code>obj</code></td>
             
             
             <td class="type">
@@ -5273,7 +5273,7 @@ different way.</p>
             
                 <span class="inherited"><a href="LuCI.form.AbstractValue.html#depends">inherited</a></span>
             
-            depends<span class="signature">(optionname_or_depends, optionvalue|RegExp)</span>
+            depends<span class="signature">(field, value)</span>
         </h4>
     
         
@@ -5289,9 +5289,9 @@ different way.</p>
     
     
     <div class="description">
-        <p>Add a dependency contraint to the option.</p>
+        <p>Add a dependency constraint to the option.</p>
 <p>Dependency constraints allow making the presence of option elements
-dependant on the current values of certain other options within the
+dependent on the current values of certain other options within the
 same form. An option element with unsatisfied dependencies will be
 hidden from the view and its current value is omitted when saving.</p>
 <p>Multiple constraints (that is, multiple calls to <code>depends()</code>) are
@@ -5300,7 +5300,7 @@ treated as alternatives, forming a logical &quot;or&quot; expression.</p>
 possible to depend on multiple options simultaneously, allowing to form
 a logical &quot;and&quot; expression.</p>
 <p>Option names may be given in &quot;dot notation&quot; which allows to reference
-option elements outside of the current form section. If a name without
+option elements outside the current form section. If a name without
 dot is specified, it refers to an option within the same configuration
 section. If specified as <code>configname.sectionid.optionname</code>,
 options anywhere within the same form may be specified.</p>
@@ -5391,7 +5391,7 @@ is ignored. The recognized tags are:</p>
 	
         <tr>
             
-                <td class="name"><code>optionname_or_depends</code></td>
+                <td class="name"><code>field</code></td>
             
             
             <td class="type">
@@ -5411,20 +5411,23 @@ is ignored. The recognized tags are:</p>
             <td class="description last">
                 
                 <p>The name of the option to depend on or an object describing multiple
-dependencies which must be satified (a logical &quot;and&quot; expression).</p></td>
+dependencies which must be satisfied (a logical &quot;and&quot; expression).</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>optionvalue|RegExp</code></td>
+                <td class="name"><code>value</code></td>
             
             
             <td class="type">
             
                 
 <span class="param-type">string</span>
+|
+
+<span class="param-type">RegExp</span>
 
 
             
@@ -6750,7 +6753,7 @@ implement alternative removal logic, e.g. to retain the original value.</p>
             
                 <span class="inherited"><a href="LuCI.form.AbstractElement.html#stripTags">inherited</a></span>
             
-            stripTags<span class="signature">(input)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
+            stripTags<span class="signature">(s)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
         </h4>
     
         
@@ -6797,7 +6800,7 @@ implement alternative removal logic, e.g. to retain the original value.</p>
 	
         <tr>
             
-                <td class="name"><code>input</code></td>
+                <td class="name"><code>s</code></td>
             
             
             <td class="type">
@@ -7272,7 +7275,7 @@ was neither a string nor a function.</td>
             
                 <span class="inherited"><a href="LuCI.form.Value.html#value">inherited</a></span>
             
-            value<span class="signature">(key, value)</span>
+            value<span class="signature">(key, val)</span>
         </h4>
     
         
@@ -7345,7 +7348,7 @@ custom value.</p>
 	
         <tr>
             
-                <td class="name"><code>value</code></td>
+                <td class="name"><code>val</code></td>
             
             
             <td class="type">
@@ -7584,7 +7587,7 @@ before it is written.</p>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Sep 26 2023 07:47:33 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Sep 26 2023 07:48:05 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

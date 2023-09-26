@@ -3685,7 +3685,7 @@ corresponding headline element will not be rendered.</p></td>
                     
                 
                 <p>The description text of the form which is usually rendered as text
-paragraph below the form title and before the actual form conents.
+paragraph below the form title and before the actual form contents.
 If omitted, the corresponding paragraph element will not be rendered.</p></td>
         </tr>
 	
@@ -3819,7 +3819,7 @@ permissions are granted.</p>
             
                 <span class="inherited"><a href="LuCI.form.AbstractElement.html#append">inherited</a></span>
             
-            append<span class="signature">(element)</span>
+            append<span class="signature">(obj)</span>
         </h4>
     
         
@@ -3866,7 +3866,7 @@ permissions are granted.</p>
 	
         <tr>
             
-                <td class="name"><code>element</code></td>
+                <td class="name"><code>obj</code></td>
             
             
             <td class="type">
@@ -4616,7 +4616,7 @@ an error.</td>
             
                 <span class="inherited"><a href="LuCI.form.Map.html#lookupOption">inherited</a></span>
             
-            lookupOption<span class="signature">(name_or_id, <span class="optional">section_id</span>, <span class="optional">config</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Array.&lt;<a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>, string>|null}</span>
+            lookupOption<span class="signature">(name, <span class="optional">section_id</span>, <span class="optional">config_name</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Array.&lt;<a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>, string>|null}</span>
         </h4>
     
         
@@ -4663,7 +4663,7 @@ an error.</td>
 	
         <tr>
             
-                <td class="name"><code>name_or_id</code></td>
+                <td class="name"><code>name</code></td>
             
             
             <td class="type">
@@ -4722,7 +4722,7 @@ omitted if a full ID is passed as first argument.</p></td>
 	
         <tr>
             
-                <td class="name"><code>config</code></td>
+                <td class="name"><code>config_name</code></td>
             
             
             <td class="type">
@@ -4745,7 +4745,7 @@ omitted if a full ID is passed as first argument.</p></td>
                         
                     
                 
-                <p>The name of the UCI configuration the option instance is belonging to.
+                <p>The name of the UCI configuration the option instance belongs to.
 Defaults to the main UCI configuration of the map if omitted.</p></td>
         </tr>
 	
@@ -4854,7 +4854,7 @@ Returns <code>null</code> if the option could not be found.</td>
         <p>Parse the form input values.</p>
 <p>The <code>parse()</code> function recursively walks the form element tree and
 triggers input value reading and validation for each child element.</p>
-<p>Elements which are hidden due to unsatisified dependencies are skipped.</p>
+<p>Elements which are hidden due to unsatisfied dependencies are skipped.</p>
     </div>
     
 
@@ -5266,7 +5266,7 @@ additional data manipulation steps before saving the changes.</p></td>
                     
                 
                 <p>If set to <code>true</code>, trigger an alert message to the user in case saving
-the form data failes. Otherwise fail silently.</p></td>
+the form data failures. Otherwise fail silently.</p></td>
         </tr>
 	
 	
@@ -5430,7 +5430,7 @@ documentation of the different section classes for details.</p>
                 
                 <p>The section class to use for rendering the configuration section.
 Note that this value must be the class itself, not a class instance
-obtained from calling <code>new</code>. It must also be a class dervied from
+obtained from calling <code>new</code>. It must also be a class derived from
 <code>LuCI.form.AbstractSection</code>.</p></td>
         </tr>
 	
@@ -5461,7 +5461,7 @@ obtained from calling <code>new</code>. It must also be a class dervied from
                         <span class="repeatable">repeatable</span>
                     
                 
-                <p>Additional arguments which are passed as-is to the contructor of the
+                <p>Additional arguments which are passed as-is to the constructor of the
 given section class. Refer to the class specific constructor
 documentation for details.</p></td>
         </tr>
@@ -5547,7 +5547,7 @@ documentation for details.</p></td>
             
                 <span class="inherited"><a href="LuCI.form.AbstractElement.html#stripTags">inherited</a></span>
             
-            stripTags<span class="signature">(input)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
+            stripTags<span class="signature">(s)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
         </h4>
     
         
@@ -5594,7 +5594,7 @@ documentation for details.</p></td>
 	
         <tr>
             
-                <td class="name"><code>input</code></td>
+                <td class="name"><code>s</code></td>
             
             
             <td class="type">
@@ -5900,7 +5900,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Sep 26 2023 07:47:33 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Sep 26 2023 07:48:05 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

@@ -3686,7 +3686,7 @@ external JavaScript, use <code>L.require(&quot;ui&quot;).then(...)</code>.</p></
     <div class="nameContainer">
         <h4 class="name" id="addNotification">
             
-            addNotification<span class="signature">(<span class="optional">title</span>, contents, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
+            addNotification<span class="signature">(<span class="optional">title</span>, children, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
         </h4>
     
         
@@ -3704,10 +3704,10 @@ external JavaScript, use <code>L.require(&quot;ui&quot;).then(...)</code>.</p></
     <div class="description">
         <p>Add a notification banner at the top of the current view.</p>
 <p>A notification banner is an alert message usually displayed at the
-top of the current view, spanning the entire availibe width.
+top of the current view, spanning the entire available width.
 Notification banners will stay in place until dismissed by the user.
 Multiple banners may be shown at the same time.</p>
-<p>Additional CSS class names may be passed to influence the appearence of
+<p>Additional CSS class names may be passed to influence the appearance of
 the banner. Valid values for the classes depend on the underlying theme.</p>
     </div>
     
@@ -3770,7 +3770,7 @@ will be rendered.</p></td>
 	
         <tr>
             
-                <td class="name"><code>contents</code></td>
+                <td class="name"><code>children</code></td>
             
             
             <td class="type">
@@ -4609,7 +4609,7 @@ valid function value.</td>
     
     
     <div class="description">
-        <p>Remove an header area indicator.</p>
+        <p>Remove a header area indicator.</p>
 <p>This function removes the given indicator label from the header indicator
 area. When the given indicator is not found, this function does nothing.</p>
     </div>
@@ -4840,7 +4840,7 @@ resulting class instance is a descendant of
 <a href="LuCI.view.html"><code>LuCI.view</code></a>.</p>
 <p>By instantiating the view class, its corresponding contents are
 rendered and included into the view area. Any runtime errors are
-catched and rendered using <a href="LuCI.html#error"><code>LuCI.error()</code></a>.</p>
+caught and rendered using <a href="LuCI.html#error"><code>LuCI.error()</code></a>.</p>
     </div>
     
 
@@ -4993,7 +4993,7 @@ separators and appends the resulting nodes to the given parent DOM node.</p>
 <code>&lt;strong&gt;</code> element and the value corresponding to the label are
 subsequently wrapped into a <code>&lt;span class=&quot;nowrap&quot;&gt;</code> element.</p>
 <p>The resulting <code>&lt;span&gt;</code> element tuples are joined by the given separators
-to form the final markup which is appened to the given parent DOM node.</p>
+to form the final markup which is appended to the given parent DOM node.</p>
     </div>
     
 
@@ -5211,7 +5211,7 @@ accepted by <code>LuCI.dom.content()</code>.</p></td>
     <div class="nameContainer">
         <h4 class="name" id="pingDevice">
             
-            pingDevice<span class="signature">(<span class="optional">proto</span>, <span class="optional">host</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;Event>}</span>
+            pingDevice<span class="signature">(<span class="optional">proto</span>, <span class="optional">ipaddr</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;Event>}</span>
         </h4>
     
         
@@ -5228,7 +5228,7 @@ accepted by <code>LuCI.dom.content()</code>.</p></td>
     
     <div class="description">
         <p>Perform a device connectivity test.</p>
-<p>Attempt to fetch a well known ressource from the remote device via HTTP
+<p>Attempt to fetch a well known resource from the remote device via HTTP
 in order to test connectivity. This function is mainly useful to wait
 for the router to come back online after a reboot or reconfiguration.</p>
     </div>
@@ -5300,7 +5300,7 @@ for the router to come back online after a reboot or reconfiguration.</p>
 	
         <tr>
             
-                <td class="name"><code>host</code></td>
+                <td class="name"><code>ipaddr</code></td>
             
             
             <td class="type">
@@ -5430,7 +5430,7 @@ or rejecting with <code>null</code> when the connectivity check timed out.</td>
     
     
     <div class="description">
-        <p>Display or update an header area indicator.</p>
+        <p>Display or update a header area indicator.</p>
 <p>An indicator is a small label displayed in the header area of the screen
 providing few amounts of status information such as item counts or state
 toggle indicators.</p>
@@ -5579,7 +5579,10 @@ existing labels it is ignored.</p></td>
             <td class="type">
             
                 
-<span class="param-type">string</span>
+<span class="param-type">"active"</span>
+|
+
+<span class="param-type">"inactive"</span>
 
 
             
@@ -5685,7 +5688,7 @@ changes were made.</td>
     <div class="nameContainer">
         <h4 class="name" id="showModal">
             
-            showModal<span class="signature">(<span class="optional">title</span>, contents, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
+            showModal<span class="signature">(<span class="optional">title</span>, children, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
         </h4>
     
         
@@ -5706,7 +5709,7 @@ changes were made.</td>
 with the underlying view contents. Only one modal dialog instance can
 be opened. Invoking showModal() while a modal dialog is already open will
 replace the open dialog with a new one having the specified contents.</p>
-<p>Additional CSS class names may be passed to influence the appearence of
+<p>Additional CSS class names may be passed to influence the appearance of
 the dialog. Valid values for the classes depend on the underlying theme.</p>
     </div>
     
@@ -5768,7 +5771,7 @@ the dialog. Valid values for the classes depend on the underlying theme.</p>
 	
         <tr>
             
-                <td class="name"><code>contents</code></td>
+                <td class="name"><code>children</code></td>
             
             
             <td class="type">
@@ -5914,7 +5917,7 @@ element.</p></td>
     <div class="nameContainer">
         <h4 class="name" id="uploadFile">
             
-            uploadFile<span class="signature">(path, <span class="optional">progessStatusNode</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;<a href="LuCI.ui.html#.FileUploadReply">LuCI.ui.FileUploadReply</a>>}</span>
+            uploadFile<span class="signature">(path, <span class="optional">progressStatusNode</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;<a href="LuCI.ui.html#.FileUploadReply">LuCI.ui.FileUploadReply</a>>}</span>
         </h4>
     
         
@@ -5991,7 +5994,7 @@ upload a file to a predefined remote destination path.</p>
 	
         <tr>
             
-                <td class="name"><code>progessStatusNode</code></td>
+                <td class="name"><code>progressStatusNode</code></td>
             
             
             <td class="type">
@@ -6277,7 +6280,7 @@ cancelled by the user.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Sep 26 2023 07:47:33 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Sep 26 2023 07:48:05 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

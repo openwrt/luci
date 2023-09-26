@@ -3548,7 +3548,7 @@ elements added with <a href="LuCI.form.GridSection.html#taboption"><code>tabopti
 are displayed in the modal popup.</p>
 <p>Another important difference is that the table cells show a readonly text
 preview of the corresponding option elements by default, unless the child
-option element is explicitely made writable by setting the <code>editable</code>
+option element is explicitly made writable by setting the <code>editable</code>
 property to <code>true</code>.</p>
 <p>Additionally, the grid section honours a <code>modalonly</code> property of child
 option elements. Refer to the <a href="LuCI.form.AbstractValue.html"><code>AbstractValue</code></a>
@@ -4763,7 +4763,7 @@ e.g. query additional data or to inject further option elements.</p>
             </td>
             <td class="description last">Return values of this function are ignored but if a promise is returned,
 it is run to completion before the rendering is continued, allowing
-custom logic to perform asynchroneous work before the modal dialog
+custom logic to perform asynchronous work before the modal dialog
 is shown.</td>
         </tr>
     
@@ -4783,7 +4783,7 @@ is shown.</td>
             
                 <span class="inherited"><a href="LuCI.form.AbstractElement.html#append">inherited</a></span>
             
-            append<span class="signature">(element)</span>
+            append<span class="signature">(obj)</span>
         </h4>
     
         
@@ -4830,7 +4830,7 @@ is shown.</td>
 	
         <tr>
             
-                <td class="name"><code>element</code></td>
+                <td class="name"><code>obj</code></td>
             
             
             <td class="type">
@@ -5991,7 +5991,7 @@ should be used instead if this form section element uses tabs.</p>
                 
                 <p>The option class to use for rendering the configuration option. Note
 that this value must be the class itself, not a class instance obtained
-from calling <code>new</code>. It must also be a class dervied from
+from calling <code>new</code>. It must also be a class derived from
 <a href="LuCI.form.AbstractSection.html"><code>LuCI.form.AbstractSection</code></a>.</p></td>
         </tr>
 	
@@ -6022,7 +6022,7 @@ from calling <code>new</code>. It must also be a class dervied from
                         <span class="repeatable">repeatable</span>
                     
                 
-                <p>Additional arguments which are passed as-is to the contructor of the
+                <p>Additional arguments which are passed as-is to the constructor of the
 given option class. Refer to the class specific constructor
 documentation for details.</p></td>
         </tr>
@@ -6156,7 +6156,7 @@ descendent of <code>AbstractValue</code>.</p>
 <p>The <code>parse()</code> function recursively walks the section element tree and
 triggers input value reading and validation for each encountered child
 option element.</p>
-<p>Options which are hidden due to unsatisified dependencies are skipped.</p>
+<p>Options which are hidden due to unsatisfied dependencies are skipped.</p>
     </div>
     
 
@@ -6244,7 +6244,7 @@ not meeting the validation constraints of their respective elements.</td>
             
                 <span class="inherited"><a href="LuCI.form.AbstractElement.html#stripTags">inherited</a></span>
             
-            stripTags<span class="signature">(input)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
+            stripTags<span class="signature">(s)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
         </h4>
     
         
@@ -6291,7 +6291,7 @@ not meeting the validation constraints of their respective elements.</td>
 	
         <tr>
             
-                <td class="name"><code>input</code></td>
+                <td class="name"><code>s</code></td>
             
             
             <td class="type">
@@ -6573,7 +6573,7 @@ contents. If omitted, no description will be rendered.</p></td>
 <dl>
     <dt>
         <div class="param-desc">
-        <p>Throws an exeption if a tab with the same <code>name</code> already exists.</p>
+        <p>Throws an exception if a tab with the same <code>name</code> already exists.</p>
         </div>
     </dt>
     <dt>
@@ -6607,7 +6607,7 @@ contents. If omitted, no description will be rendered.</p></td>
             
                 <span class="inherited"><a href="LuCI.form.AbstractSection.html#taboption">inherited</a></span>
             
-            taboption<span class="signature">(tabname, optionclass, classargs)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>}</span>
+            taboption<span class="signature">(tabName, optionclass, classargs)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>}</span>
         </h4>
     
         
@@ -6654,7 +6654,7 @@ contents. If omitted, no description will be rendered.</p></td>
 	
         <tr>
             
-                <td class="name"><code>tabname</code></td>
+                <td class="name"><code>tabName</code></td>
             
             
             <td class="type">
@@ -6705,7 +6705,7 @@ contents. If omitted, no description will be rendered.</p></td>
                 
                 <p>The option class to use for rendering the configuration option. Note
 that this value must be the class itself, not a class instance obtained
-from calling <code>new</code>. It must also be a class dervied from
+from calling <code>new</code>. It must also be a class derived from
 <a href="LuCI.form.AbstractSection.html"><code>LuCI.form.AbstractSection</code></a>.</p></td>
         </tr>
 	
@@ -6736,7 +6736,7 @@ from calling <code>new</code>. It must also be a class dervied from
                         <span class="repeatable">repeatable</span>
                     
                 
-                <p>Additional arguments which are passed as-is to the contructor of the
+                <p>Additional arguments which are passed as-is to the constructor of the
 given option class. Refer to the class specific constructor
 documentation for details.</p></td>
         </tr>
@@ -7082,7 +7082,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Sep 26 2023 07:47:33 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Sep 26 2023 07:48:05 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
