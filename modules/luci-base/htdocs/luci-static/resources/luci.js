@@ -81,7 +81,7 @@
 		 * subclass.
 		 *
 		 * @returns {LuCI.baseclass}
-		 * Returns a new LuCI.baseclass sublassed from this class, extended
+		 * Returns a new LuCI.baseclass subclassed from this class, extended
 		 * by the given properties and with its prototype set to this base
 		 * class to enable inheritance. The resulting value represents a
 		 * class constructor and can be instantiated with `new`.
@@ -218,7 +218,7 @@
 			 * would copy all values till the end.
 			 *
 			 * @param {...*} [extra_args]
-			 * Extra arguments to add to prepend to the resultung array.
+			 * Extra arguments to add to prepend to the resulting array.
 			 *
 			 * @returns {Array<*>}
 			 * Returns a new array consisting of the optional extra arguments
@@ -836,7 +836,7 @@
 		 *
 		 * @instance
 		 * @memberof LuCI.request
-		 * @param {string} target
+		 * @param {string} url
 		 * The URL to request.
 		 *
 		 * @param {LuCI.request.RequestOptions} [options]
@@ -854,7 +854,7 @@
 		 *
 		 * @instance
 		 * @memberof LuCI.request
-		 * @param {string} target
+		 * @param {string} url
 		 * The URL to request.
 		 *
 		 * @param {*} [data]
@@ -925,7 +925,7 @@
 		 * @hideconstructor
 		 * @classdesc
 		 *
-		 * The `Request.poll` class provides some convience wrappers around
+		 * The `Request.poll` class provides some convince wrappers around
 		 * {@link LuCI.poll} mainly to simplify registering repeating HTTP
 		 * request calls as polling functions.
 		 */
@@ -1055,7 +1055,7 @@
 
 		/**
 		 * Add a new operation to the polling loop. If the polling loop is not
-		 * already started at this point, it will be implicitely started.
+		 * already started at this point, it will be implicitly started.
 		 *
 		 * @instance
 		 * @memberof LuCI.poll
@@ -1098,8 +1098,8 @@
 		},
 
 		/**
-		 * Remove an operation from the polling loop. If no further operatons
-		 * are registered, the polling loop is implicitely stopped.
+		 * Remove an operation from the polling loop. If no further operations
+		 * are registered, the polling loop is implicitly stopped.
 		 *
 		 * @instance
 		 * @memberof LuCI.poll
@@ -1161,7 +1161,7 @@
 		 * @instance
 		 * @memberof LuCI.poll
 		 * @returns {boolean}
-		 * Returns `true` if polling has been stopped or `false` if it din't
+		 * Returns `true` if polling has been stopped or `false` if it didn't
 		 * run to begin with.
 		 */
 		stop: function() {
@@ -1331,7 +1331,7 @@
 		 * The `Node` argument to append the children to.
 		 *
 		 * @param {*} [children]
-		 * The childrens to append to the given node.
+		 * The children to append to the given node.
 		 *
 		 * When `children` is an array, then each item of the array
 		 * will be either appended as child element or text node,
@@ -1346,11 +1346,11 @@
 		 * as first and the return value of the `children` function as
 		 * second parameter.
 		 *
-		 * When `children` is is a DOM `Node` instance, it will be
+		 * When `children` is a DOM `Node` instance, it will be
 		 * appended to the given `node`.
 		 *
 		 * When `children` is any other non-`null` value, it will be
-		 * converted to a string and appened to the `innerHTML` property
+		 * converted to a string and appended to the `innerHTML` property
 		 * of the given `node`.
 		 *
 		 * @returns {Node|null}
@@ -1389,7 +1389,7 @@
 		 * Replaces the content of the given node with the given children.
 		 *
 		 * This function first removes any children of the given DOM
-		 * `Node` and then adds the given given children following the
+		 * `Node` and then adds the given children following the
 		 * rules outlined below.
 		 *
 		 * @instance
@@ -1398,7 +1398,7 @@
 		 * The `Node` argument to replace the children of.
 		 *
 		 * @param {*} [children]
-		 * The childrens to replace into the given node.
+		 * The children to replace into the given node.
 		 *
 		 * When `children` is an array, then each item of the array
 		 * will be either appended as child element or text node,
@@ -1413,11 +1413,11 @@
 		 * as first and the return value of the `children` function as
 		 * second parameter.
 		 *
-		 * When `children` is is a DOM `Node` instance, it will be
+		 * When `children` is a DOM `Node` instance, it will be
 		 * appended to the given `node`.
 		 *
 		 * When `children` is any other non-`null` value, it will be
-		 * converted to a string and appened to the `innerHTML` property
+		 * converted to a string and appended to the `innerHTML` property
 		 * of the given `node`.
 		 *
 		 * @returns {Node|null}
@@ -1471,7 +1471,7 @@
 		 *
 		 * When `val` is of any other type, it will be added as attribute
 		 * to the given `node` as-is, with the underlying `setAttribute()`
-		 * call implicitely turning it into a string.
+		 * call implicitly turning it into a string.
 		 */
 		attr: function(node, key, val) {
 			if (!this.elem(node))
@@ -2034,7 +2034,7 @@
 		 * Any return values of this function are discarded, but
 		 * passed through `Promise.resolve()` to ensure that any
 		 * returned promise runs to completion before the button
-		 * is reenabled.
+		 * is re-enabled.
 		 */
 		handleSave: function(ev) {
 			var tasks = [];
@@ -2078,7 +2078,7 @@
 		 * Any return values of this function are discarded, but
 		 * passed through `Promise.resolve()` to ensure that any
 		 * returned promise runs to completion before the button
-		 * is reenabled.
+		 * is re-enabled.
 		 */
 		handleSaveApply: function(ev, mode) {
 			return this.handleSave(ev).then(function() {
@@ -2115,7 +2115,7 @@
 		 * Any return values of this function are discarded, but
 		 * passed through `Promise.resolve()` to ensure that any
 		 * returned promise runs to completion before the button
-		 * is reenabled.
+		 * is re-enabled.
 		 */
 		handleReset: function(ev) {
 			var tasks = [];
@@ -2327,7 +2327,7 @@
 
 		/**
 		 * A wrapper around {@link LuCI#raise raise()} which also renders
-		 * the error either as modal overlay when `ui.js` is already loaed
+		 * the error either as modal overlay when `ui.js` is already loaded
 		 * or directly into the view body.
 		 *
 		 * @instance
@@ -2802,7 +2802,7 @@
 		 * omitted, it defaults to an empty string.
 		 *
 		 * @param {string[]} [parts]
-		 * An array of parts to join into an URL path. Parts may contain
+		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
 		 * @return {string}
@@ -2822,7 +2822,7 @@
 		},
 
 		/**
-		 * Construct an URL  pathrelative to the script path of the server
+		 * Construct a URL with path relative to the script path of the server
 		 * side LuCI application (usually `/cgi-bin/luci`).
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
@@ -2833,7 +2833,7 @@
 		 * @memberof LuCI
 		 *
 		 * @param {string[]} [parts]
-		 * An array of parts to join into an URL path. Parts may contain
+		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
 		 * @return {string}
@@ -2844,7 +2844,7 @@
 		},
 
 		/**
-		 * Construct an URL path relative to the global static resource path
+		 * Construct a URL path relative to the global static resource path
 		 * of the LuCI ui (usually `/luci-static/resources`).
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
@@ -2855,7 +2855,7 @@
 		 * @memberof LuCI
 		 *
 		 * @param {string[]} [parts]
-		 * An array of parts to join into an URL path. Parts may contain
+		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
 		 * @return {string}
@@ -2866,7 +2866,7 @@
 		},
 
 		/**
-		 * Construct an URL path relative to the media resource path of the
+		 * Construct a URL path relative to the media resource path of the
 		 * LuCI ui (usually `/luci-static/$theme_name`).
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
@@ -2877,7 +2877,7 @@
 		 * @memberof LuCI
 		 *
 		 * @param {string[]} [parts]
-		 * An array of parts to join into an URL path. Parts may contain
+		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
 		 * @return {string}
@@ -2931,14 +2931,14 @@
 		 * The object to extract the keys from. If the given value is
 		 * not an object, the function will return an empty array.
 		 *
-		 * @param {string} [key]
+		 * @param {string|null} [key]
 		 * Specifies the key to order by. This is mainly useful for
 		 * nested objects of objects or objects of arrays when sorting
 		 * shall not be performed by the primary object keys but by
 		 * some other key pointing to a value within the nested values.
 		 *
-		 * @param {string} [sortmode]
-		 * May be either `addr` or `num` to override the natural
+		 * @param {"addr"|"num"} [sortmode]
+		 * Can be either `addr` or `num` to override the natural
 		 * lexicographic sorting with a sorting suitable for IP/MAC style
 		 * addresses or numeric values respectively.
 		 *
@@ -3049,7 +3049,7 @@
 		},
 
 		/**
-		 * Returns a promise resolving with either the given value or or with
+		 * Returns a promise resolving with either the given value or with
 		 * the given default in case the input value is a rejecting promise.
 		 *
 		 * @instance
