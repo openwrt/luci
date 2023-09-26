@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for BMX7
-LUCI_DEPENDS:=+luci-compat +luci-lib-json +luci-mod-admin-full +bmx7 +bmx7-json
+LUCI_DEPENDS:=+luci-compat +luci-lib-json +luci-base +bmx7 +bmx7-json
 PKG_MAINTAINER:= Roger Pueyo <roger.pueyo@guifi.net> \
 	Pau Escrich <p4u@dabax.net>
 PKG_LICENSE:=GPL-2.0-or-later

@@ -8,8 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Network UPS Tools Configuration
-LUCI_DEPENDS:=+luci-compat
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=+luci-base +luci-compat
 PKG_RELEASE:=1
 
 include ../../luci.mk

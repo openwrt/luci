@@ -10,7 +10,6 @@ PKG_VERSION:=1.0.0-1
 LUCI_TITLE:=AdBlock-Fast Web UI
 LUCI_DESCRIPTION:=Provides Web UI for adblock-fast service.
 LUCI_DEPENDS:=+luci-base +adblock-fast +jsonfilter
-LUCI_PKGARCH:=all
 
 include ../../luci.mk
 

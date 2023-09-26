@@ -5,7 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Softether management application
-LUCI_DEPENDS:=+softethervpn5-client
+LUCI_DEPENDS:=+luci-base +softethervpn5-client
 
 include ../../luci.mk
 
