@@ -276,6 +276,9 @@ var status = baseclass.extend({
 							"Failed to create output/cache/gzip file directory"
 						),
 						errorDetectingFileType: _("Failed to detect format %s"),
+						errorNothingToDo: _(
+							"No blocked list URLs nor blocked-domains enabled"
+						),
 					};
 					var errorsTitle = E(
 						"label",
