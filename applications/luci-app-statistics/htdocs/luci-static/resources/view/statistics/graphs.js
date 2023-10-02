@@ -244,6 +244,10 @@ return view.extend({
 
 		requestAnimationFrame(L.bind(this.updateGraphs, this, hostSel, spanSel, timeSel, graphDiv));
 
+		var resizeTimeout;
+		var rgCallback = L.bind(this.refreshGraphs, this, hostSel, spanSel, timeSel, graphDiv);
+		addEventListener('resize', function() { clearTimeout(resizeTimeout); resizeTimeout = setTimeout(rgCallback, 250); });
+
 		return view;
 	},
 
