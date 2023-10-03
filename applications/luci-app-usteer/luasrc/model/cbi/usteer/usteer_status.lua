@@ -34,10 +34,8 @@ function clientoverview.render(self, sid)
                                                 <th class="th">rrm_nr mac</th>
                                                 <th class="th">rrm_nr ssid</th>
 						<th class="th">rrm_nr hex</th> 
-  
 					</tr>
 					<%
-
 						local sorted_stat = {}
 						for name, data in pairs(statrem) do
 						    table.insert(sorted_stat, {name = name, data = data})
@@ -58,7 +56,7 @@ function clientoverview.render(self, sid)
 					
 						%>
 						<tr class="tr">
-							<td class="td"><%= entry.name %></td>
+							<td class="td"><nobr><%= entry.name  %></nobr></td>
 							<td class="td"><%= entry.data.bssid %></td>
 							<td class="td"><%= "%d" % entry.data.freq %></td>
                                                         <td class="td"><%= "%d" % entry.data.n_assoc %></td>
@@ -71,7 +69,7 @@ function clientoverview.render(self, sid)
 							local name2, data2
 							for name2, data2 in pairs(entry.data.rrm_nr) do
 							%>
-                                                        <td class="td"><%= data2 %></td>
+                                                        <td class="td"><nobr><%= data2 %></nobr></td>
 							<%
 							end
 							%>
@@ -117,8 +115,8 @@ function clientoverview.render(self, sid)
 						
 					%>
 						<tr class="tr">
-							<td class="td"><%= entry.name %></td>
-                                                        <td class="td"><%= entry.data.rrm_nr[2] %></td>
+							<td class="td"><nobr><%= entry.name %></nobr></td>
+                                                        <td class="td"><nobr><%= entry.data.rrm_nr[2] %></nobr></td>
 							<td class="td"><%= "%d" % entry.data.freq %></td>
 							<td class="td"><%= "%d" % entry.data.load %></td>
                                                         <td class="td"><%= "%d" % entry.data.n_assoc %></td>
@@ -140,13 +138,13 @@ function clientoverview.render(self, sid)
 												local start_position = nslookupstring:find("name = ")
 												if start_position~=nil then  
 													hostname="%s    "  %{nslookupstring:sub(start_position + 7)}  
-											%><b><%= hostname:sub(1,1) %></b><%= hostname:sub(2) %>   <%
+											%><nobr><b><%= hostname:sub(1,1) %></b><%= hostname:sub(2) %></nobr>   <%
 												else 
-                                                                                        %><b><%= tostring(ip_address):sub(1,1) %></b><%= tostring(ip_address):sub(2) %>   <%
+                                                                                        %><nobr><b><%= tostring(ip_address):sub(1,1) %></b><%= tostring(ip_address):sub(2) %></nobr>   <%
 												end
 												ip_address="IP %s" %{ip_address}
 											else
-                                                                                        %><b><%= tostring(mac):sub(1,1) %></b><%= tostring(mac):sub(2) %>   <%
+                                                                                        %><nobr><b><%= tostring(mac):sub(1,1) %></b><%= tostring(mac):sub(2) %></nobr>   <%
 
 											end
 										
@@ -203,15 +201,15 @@ function hearingmap.render(self, sid)
 					nslookupstring=tostring(utl.exec("nslookup %s" %{tostring(ip_address)}))
 					local start_position = nslookupstring:find("name = ")
 					if start_position~=nil then  
-					hostname="Host: %s "  %{nslookupstring:sub(start_position + 7)}  
+					hostname="  Host: <nobr>%s</nobr> "  %{nslookupstring:sub(start_position + 7)}  
 					end
-					ip_address="IP %s" %{ip_address}
+					ip_address="  IP: %s " %{ip_address}
 				end
 
 		%>
 			<div class="cbi-section-node">
 
-				<h3>mac: <%= entry.mac %> <%= ip_address  %> <%=  aa3 %>  </h3>
+				<h3>mac: <%= entry.mac %> <%= ip_address  %> <%=  hostname %>  </h3>
 				<table class="table" id="usteer_client_map">
 					<tr class="tr table-titles">
 						<th class="th">wlan</th>
@@ -233,7 +231,7 @@ function hearingmap.render(self, sid)
 						 for _, entry2 in ipairs(sorted_entry) do
 					%>
 						<tr class="tr">
-							<td class="td"><%= entry2.name %></td>
+							<td class="td"><nobr><%= entry2.name %></nobr></td>
 							<td class="td"><%= entry2.connected %></td>
 							<td class="td"><%= "%d" % entry2.signal %></td>
 						</tr>
