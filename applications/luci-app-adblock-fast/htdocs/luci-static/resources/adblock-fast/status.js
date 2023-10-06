@@ -288,11 +288,11 @@ var status = baseclass.extend({
 					var text = "";
 					reply.status.errors.forEach((element) => {
 						text +=
-							errorTable[element.id].format(element.extra || " ") + "<br />";
+							errorTable[element.id].format(element.extra || " ") + "!<br />";
 					});
-					text += _("Errors encountered, please check the %sREADME%s!").format(
+					text += _("Errors encountered, please check the %sREADME%s").format(
 						'<a href="' + pkg.URL + '" target="_blank">',
-						"</a><br />"
+						"</a>!<br />"
 					);
 					var errorsText = E("div", {}, text);
 					var errorsField = E("div", { class: "cbi-value-field" }, errorsText);

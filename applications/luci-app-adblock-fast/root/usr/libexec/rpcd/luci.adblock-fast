@@ -10,6 +10,7 @@
 # ubus -S call luci.adblock-fast getInitStatus '{"name": "adblock-fast" }'
 # ubus -S call luci.adblock-fast getPlatformSupport '{"name": "adblock-fast" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "start" }'
+# ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "dl" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "stop" }'
 
 . /lib/functions.sh
@@ -134,7 +135,7 @@ set_init_action() {
 			cmd="uci -q set ${name}.config.enabled=1 && uci commit $name";;
 		disable)
 			cmd="uci -q set ${name}.config.enabled=0 && uci commit $name";;
-		start|stop|reload|restart)
+		start|stop|reload|restart|dl)
 			cmd="/etc/init.d/${name} ${action}";;
 	esac
 	if [ -n "$cmd" ] && eval "${cmd}" 1>/dev/null 2>&1; then
