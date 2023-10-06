@@ -410,15 +410,22 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanallow', _('Allow VLAN Forwads'), _('Always allow certain VLAN forwards.'));
+		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanallow', _('Allow VLAN Forwards'), _('Always allow certain VLAN forwards.'));
 		o.multiple = true;
 		o.nocreate = true;
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanblock', _('Block VLAN Forwads'), _('Always block certain VLAN forwards.'));
+		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanblock', _('Block VLAN Forwards'), _('Always block certain VLAN forwards.'));
 		o.multiple = true;
 		o.nocreate = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('general', form.ListValue, 'ban_triggeraction', _('Trigger Action'), _('Trigger action on ifup interface events.'));
+		o.value('start', _('start (default)'));
+		o.value('reload', _('reload'));
+		o.value('restart', _('restart'));
 		o.optional = true;
 		o.rmempty = true;
 
