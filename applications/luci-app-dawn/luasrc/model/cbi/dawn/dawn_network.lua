@@ -57,6 +57,7 @@ function s.render(self, sid)
 							<td class="td" style="vertical-align: top;">
 								<table class="table" id="clients-<%= mac %>">
 									<tr class="tr table-titles">
+										<th class="th">Hostname</th>
 										<th class="th">MAC</th>
 										<th class="th">HT</th>
 										<th class="th">VHT</th>
@@ -68,6 +69,7 @@ function s.render(self, sid)
 											if (type(clientvals) == "table") then
 									%>
 										<tr class="tr">
+											<td class="td"><%= hosts[clientmac] and hosts[clientmac].name and pcdata(hosts[clientmac].name) or "-" %></td>
 											<td class="td"><%= clientmac %></td>
 											<td class="td"><%= (clientvals.ht == true) and "available" or "not available" %></td>
 											<td class="td"><%= (clientvals.vht == true) and "available" or "not available" %></td>
