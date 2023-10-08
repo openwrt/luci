@@ -7,8 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for the Apinger
-LUCI_DEPENDS:=+apinger +apinger-rrd
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=+luci-base +apinger +apinger-rrd
 PKG_LICENSE:=GPL-2.0
 
 PKG_MAINTAINER:=Jaymin Patel <jem.patel@gmail.com>

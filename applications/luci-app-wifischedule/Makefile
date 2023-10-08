@@ -15,7 +15,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Turns WiFi on and off according to a schedule
-LUCI_DEPENDS:=+luci-compat +wifischedule
+LUCI_DEPENDS:=+luci-base +luci-compat +wifischedule
 
 include ../../luci.mk
 

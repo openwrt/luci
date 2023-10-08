@@ -956,6 +956,18 @@ return view.extend({
 					so = ss.taboption('ipv6', form.Flag, 'ndproxy_slave', _('NDP-Proxy slave'), _('Set interface as NDP-Proxy external slave. Default is off.'));
 					so.depends({ ndp: 'relay', master: '0' });
 					so.depends({ ndp: 'hybrid', master: '0' });
+
+					so = ss.taboption('ipv6', form.Value, 'preferred_lifetime', _('IPv6 Prefix Lifetime'), _('Preferred lifetime for a prefix.'));
+					so.optional = true;
+					so.placeholder = '12h';
+					so.value('5m', _('5m (5 minutes)'));
+					so.value('3h', _('3h (3 hours)'));
+					so.value('12h', _('12h (12 hours - default)'));
+					so.value('7d', _('7d (7 days)'));
+
+					//This is a ra_* setting, but its placement is more logical/findable under IPv6 settings.
+					so = ss.taboption('ipv6', form.Flag, 'ra_useleasetime', _('Follow IPv4 Lifetime'), _('DHCPv4 <code>leasetime</code> is used as limit and preferred lifetime of the IPv6 prefix.'));
+					so.optional = true;
 				}
 
 				ifc.renderFormOptions(s);

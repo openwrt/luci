@@ -8,7 +8,7 @@ PKG_MAINTAINER:=Nicholas Smith <nicholas@nbembedded.com>
 
 LUCI_TITLE:=LuCI support for OpenWISP
 LUCI_DESCRIPTION:=Allows configuration of OpenWISP agent settings
-LUCI_DEPENDS:=+openwisp-config
+LUCI_DEPENDS:=+luci-base +openwisp-config
 
 include ../../luci.mk
 

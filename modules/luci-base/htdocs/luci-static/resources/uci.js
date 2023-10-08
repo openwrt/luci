@@ -18,7 +18,7 @@ function isEmpty(object, ignore) {
  *
  * The `LuCI.uci` class utilizes {@link LuCI.rpc} to declare low level
  * remote UCI `ubus` procedures and implements a local caching and data
- * manipulation layer on top to allow for synchroneous operations on
+ * manipulation layer on top to allow for synchronous operations on
  * UCI configuration data.
  */
 return baseclass.extend(/** @lends LuCI.uci.prototype */ {
@@ -93,7 +93,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * identifier in the form `cfgXXXXXX` once the configuration is saved
 	 * by the remote `ubus` UCI api.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The configuration to generate the new section ID for.
 	 *
 	 * @returns {string}
@@ -116,7 +116,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Resolves a given section ID in extended notation to the internal
 	 * section ID value.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The configuration to resolve the section ID for.
 	 *
 	 * @param {string} sid
@@ -209,7 +209,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * To force reloading a configuration, it has to be unloaded with
 	 * {@link LuCI.uci#unload uci.unload()} first.
 	 *
-	 * @param {string|string[]} config
+	 * @param {string|string[]} packages
 	 * The name of the configuration or an array of configuration
 	 * names to load.
 	 *
@@ -245,7 +245,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	/**
 	 * Unloads the given UCI configurations from the local cache.
 	 *
-	 * @param {string|string[]} config
+	 * @param {string|string[]} packages
 	 * The name of the configuration or an array of configuration
 	 * names to unload.
 	 */
@@ -267,7 +267,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Adds a new section of the given type to the given configuration,
 	 * optionally named according to the given name.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to add the section to.
 	 *
 	 * @param {string} type
@@ -302,7 +302,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	/**
 	 * Removes the section with the given ID from the given configuration.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to remove the section from.
 	 *
 	 * @param {string} sid
@@ -334,7 +334,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * enclosed within a configuration section, as well as some additional
 	 * meta data such as sort indexes and internal ID.
 	 *
-	 * Any internal metadata fields are prefixed with a dot which is isn't
+	 * Any internal metadata fields are prefixed with a dot which isn't
 	 * an allowed character for normal option names.
 	 *
 	 * @typedef {Object<string, boolean|number|string|string[]>} SectionObject
@@ -345,7 +345,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * anonymous (`true`) or named (`false`).
 	 *
 	 * @property {number} .index
-	 * The `.index` property specifes the sort order of the section.
+	 * The `.index` property specifies the sort order of the section.
 	 *
 	 * @property {string} .name
 	 * The `.name` property holds the name of the section object. It may be
@@ -383,7 +383,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Enumerates the sections of the given configuration, optionally
 	 * filtered by type.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to enumerate the sections for.
 	 *
 	 * @param {string} [type]
@@ -436,13 +436,13 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * of the given configuration or the entire section object if the
 	 * option name is omitted.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to read the value from.
 	 *
 	 * @param {string} sid
 	 * The name or ID of the section to read.
 	 *
-	 * @param {string} [option]
+	 * @param {string} [opt]
 	 * The option name to read the value from. If the option name is
 	 * omitted or `null`, the entire section is returned instead.
 	 *
@@ -530,16 +530,16 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * If either config, section or option is null, or if `option` begins
 	 * with a dot, the function will do nothing.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to set the option value in.
 	 *
 	 * @param {string} sid
 	 * The name or ID of the section to set the option value in.
 	 *
-	 * @param {string} option
+	 * @param {string} opt
 	 * The option name to set the value for.
 	 *
-	 * @param {null|string|string[]} value
+	 * @param {null|string|string[]} val
 	 * The option value to set. If the value is `null` or an empty string,
 	 * the option will be removed, otherwise it will be set or overwritten
 	 * with the given value.
@@ -616,13 +616,13 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * This function is a convenience wrapper around
 	 * `uci.set(config, section, option, null)`.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to remove the option from.
 	 *
 	 * @param {string} sid
 	 * The name or ID of the section to remove the option from.
 	 *
-	 * @param {string} option
+	 * @param {string} opt
 	 * The name of the option to remove.
 	 */
 	unset: function(conf, sid, opt) {
@@ -632,9 +632,9 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	/**
 	 * Gets the value of the given option or the entire section object of
 	 * the first found section of the specified type or the first found
-	 * section of the entire configuration if no type is specfied.
+	 * section of the entire configuration if no type is specified.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to read the value from.
 	 *
 	 * @param {string} [type]
@@ -642,7 +642,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * section of the entire config is read, otherwise the first section
 	 * matching the given type.
 	 *
-	 * @param {string} [option]
+	 * @param {string} [opt]
 	 * The option name to read the value from. If the option name is
 	 * omitted or `null`, the entire section is returned instead.
 	 *
@@ -675,7 +675,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * If either config, type or option is null, or if `option` begins
 	 * with a dot, the function will do nothing.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to set the option value in.
 	 *
 	 * @param {string} [type]
@@ -683,10 +683,10 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * section of the entire config is written to, otherwise the first
 	 * section matching the given type is used.
 	 *
-	 * @param {string} option
+	 * @param {string} opt
 	 * The option name to set the value for.
 	 *
-	 * @param {null|string|string[]} value
+	 * @param {null|string|string[]} val
 	 * The option value to set. If the value is `null` or an empty string,
 	 * the option will be removed, otherwise it will be set or overwritten
 	 * with the given value.
@@ -710,7 +710,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * This function is a convenience wrapper around
 	 * `uci.set_first(config, type, option, null)`.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The name of the configuration to set the option value in.
 	 *
 	 * @param {string} [type]
@@ -718,7 +718,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * section of the entire config is written to, otherwise the first
 	 * section matching the given type is used.
 	 *
-	 * @param {string} option
+	 * @param {string} opt
 	 * The option name to set the value for.
 	 */
 	unset_first: function(conf, type, opt) {
@@ -729,7 +729,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Move the first specified section within the given configuration
 	 * before or after the second specified section.
 	 *
-	 * @param {string} config
+	 * @param {string} conf
 	 * The configuration to move the section within.
 	 *
 	 * @param {string} sid1
