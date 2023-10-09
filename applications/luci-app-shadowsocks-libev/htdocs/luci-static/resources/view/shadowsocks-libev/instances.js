@@ -108,12 +108,6 @@ return view.extend({
 							o.datatype = 'hostport';
 						}
 					}
-					if (stype === 'ss_local' || stype === 'ss_server') {
-						o = s.taboption('advanced', form.FileUpload, 'acl',
-							_('ACL file'),
-							_('File containing Access Control List'));
-						o.root_directory = '/etc/shadowsocks-libev';
-					}
 				}, this));
 			}
 		};
