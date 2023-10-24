@@ -70,6 +70,7 @@ function handleSectionsAdd(iface) {
 
 	w_sections = uci.sections('wireless', 'wifi-iface');
 	t_sections = uci.sections('travelmate', 'uplink');
+
 	for (var i = 0; i < w_sections.length; i++) {
 		if (w_sections[i].mode !== 'sta' || w_sections[i].network !== iface) {
 			continue;
@@ -82,13 +83,21 @@ function handleSectionsAdd(iface) {
 			}
 		}
 		if (match === false) {
+			var vpn_stdservice = uci.get('travelmate', 'global', 'trm_stdvpnservice');
+			var vpn_stdiface = uci.get('travelmate', 'global', 'trm_stdvpniface');
 			var sid = uci.add('travelmate', 'uplink');
+
 			uci.set('travelmate', sid, 'enabled', '1');
 			uci.set('travelmate', sid, 'device', w_sections[i].device);
 			uci.set('travelmate', sid, 'ssid', w_sections[i].ssid);
 			uci.set('travelmate', sid, 'bssid', w_sections[i].bssid);
 			uci.set('travelmate', sid, 'con_start_expiry', '0');
 			uci.set('travelmate', sid, 'con_end_expiry', '0');
+			if (vpn_stdservice && vpn_stdiface) {
+				uci.set('travelmate', sid, 'vpn', '1');	
+				uci.set('travelmate', sid, 'vpnservice', vpn_stdservice);
+				uci.set('travelmate', sid, 'vpniface', vpn_stdiface);
+			}
 		}
 	}
 }
