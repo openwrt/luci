@@ -1,7 +1,36 @@
 #!/bin/sh /etc/rc.common
 
+# run luci_statistics before collectd starts (80) and stop after
+# collectd stops (10):
 START=79
+STOP=11
 USE_PROCD=1
+
+BACKUP_DIR="/etc/luci_statistics"
+BACKUP_FILE="${BACKUP_DIR}/rrdbackup.tgz"
+SYSUPGRADE_BACKUP_FILE="${BACKUP_DIR}/rrdbackup.sysupgrade.tgz"
+SYSUPGRADE_BACKUP_TWIN_A="${BACKUP_DIR}/sysupgrade.trustme.txt"
+SYSUPGRADE_BACKUP_TWIN_B="${BACKUP_DIR}/sysupgrade.dont.trustme.txt"
+EXTRA_COMMANDS="backup sysupgrade_backup"
+EXTRA_HELP="\ backup Backup
+current rrd database if configured to do so\n\ sysupgrade_backup Take
+a special backup for sysupgrade/configuration saving"
+
+TRACE=0
+
+doing_backups() {
+	### Determine if we should do backups/restores
+	local rrd_enabled=$(uci -q get luci_statistics.collectd_rrdtool.enable)
+	local rrd_backups_enabled=$(uci -q get luci_statistics.collectd_rrdtool.backup)
+	rrd_dir=$(uci -q get luci_statistics.collectd_rrdtool.DataDir)
+
+	[ "$rrd_enabled" = "1" \
+			 -a "$rrd_backups_enabled" = "1" \
+			 -a -n "$rrd_dir" ] && {
+		return 0
+	}
+	return 1
+}
 
 service_triggers()
 {
@@ -21,6 +50,83 @@ start_service() {
 
 	### workaround broken permissions on /tmp
 	chmod 1777 /tmp
+
+	### restore if necessary
+	rrd_restore
+
+	### stop collectd if it was running before us
+	/etc/init.d/collectd status >/dev/null 2>&1 && /etc/init.d/collectd stop >/dev/null 2>&1
+	### always start it so we have functioning statistics
+	/etc/init.d/collectd start
+}
+
+matched_twins() {
+	cmp -s "${SYSUPGRADE_BACKUP_TWIN_A}" "${SYSUPGRADE_BACKUP_TWIN_B}"
+}
+
+remove_sysupgrade_backup() {
+	[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics removing stale sysupgrade backup
+	rm -f "${SYSUPGRADE_BACKUP_FILE}"
+	rm -f "${SYSUPGRADE_BACKUP_TWIN_A}" "${SYSUPGRADE_BACKUP_TWIN_B}"
+}
+
+rrd_restore() {
+	[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics rrd_restore
+	doing_backups && {
+		### Restore backup if backups enabled and we have a
+		### nonzero backup file and the twins are unequal
+		### (absent or one missing or both present but
+		### mismatched).
+		[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics checking sysupgrade backup
+		[ -s "${SYSUPGRADE_BACKUP_FILE}" ] && ! matched_twins && {
+			### restore sysupgrade file to replace any
+			### backup temporarily in place during various
+			### upgrades or reboots
+			[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics restoring sysupgrade backup
+			mv -f "${SYSUPGRADE_BACKUP_FILE}" "${BACKUP_FILE}"
+		}
+		[ -s "${BACKUP_FILE}" ] && {
+			[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics restoring backup
+			### unpack only files/directories under the configured rrd_dir
+			data_relative=${rrd_dir#/}
+			[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics restoring only ${data_relative}
+			tar -xzf "${BACKUP_FILE}" -C / ${data_relative}
+		}
+	}
+}
+
+rrd_backup() {
+	[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics rrd_backup
+	doing_backups && [ -d "$rrd_dir" ] && {
+		[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics making backup
+		local tmp_file=$(mktemp -u)
+		tar -czf "$tmp_file" -C / "$rrd_dir" 2>/dev/null
+		mkdir -p "${BACKUP_DIR}"
+		mv "$tmp_file" "${BACKUP_FILE}"
+		rm -f "$tmp_file"
+
+		### remove backup if it's stale
+		matched_twins && remove_sysupgrade_backup
+	}
+}
+
+backup() {
+	[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics backup
+	/etc/init.d/collectd status >/dev/null 2>&1 && {
+		[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics stopping collectd
+		collectd_restart=yes
+		/etc/init.d/collectd stop >/dev/null 2>&1
+	}
+	rrd_backup
+	[ "$collectd_restart" = "yes" ] && {
+		[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics starting collectd
+		/etc/init.d/collectd start >/dev/null 2>&1
+	}
+}
+
+stop_service() {
+	/etc/init.d/collectd stop
+	backup
 }
 
 reload_service() {
@@ -28,9 +134,37 @@ reload_service() {
 }
 
 restart() {
+	### Stop data collection (and make a backup if configured)
+	stop
+
 	### regenerate config / prepare environment
 	start
+}
 
-	### restart collectd
-	/etc/init.d/collectd restart
+copy_backup_for_sysupgrade() {
+	local backup_date=$(date -Iseconds)
+	cp -p ${BACKUP_FILE} ${SYSUPGRADE_BACKUP_FILE}
+	echo ${backup_date} >${SYSUPGRADE_BACKUP_TWIN_A}
+	echo ${backup_date} >${SYSUPGRADE_BACKUP_TWIN_B}
+}
+
+sysupgrade_backup() {
+	local filelist="$1"
+	[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics sysupgrade_backup CONF_BACKUP_LIST=${CONF_BACKUP_LIST}
+	doing_backups && {
+		### CONF_BACKUP_LIST=1 means we are generating the
+		### list, so we don't make the actual backup.
+		[ "$CONF_BACKUP_LIST" != "1" ] && {
+			### backup now if running
+			status >/dev/null 2>&1 && backup
+			### Copy the backup to use for sysupgrade
+			copy_backup_for_sysupgrade
+		}
+		### Edit the backup file list to remove everything else
+		sed -i -e /${BACKUP_DIR//\//\\/}/d $filelist
+		### Add only the files we need to ensure proper
+		### restore behavior
+		echo ${SYSUPGRADE_BACKUP_FILE} >>$filelist
+		echo ${SYSUPGRADE_BACKUP_TWIN_A} >>$filelist
+	}
 }
