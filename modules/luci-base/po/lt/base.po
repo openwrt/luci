@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-10-21 06:20+0000\n"
+"PO-Revision-Date: 2023-10-25 13:51+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/luci/"
 "lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.1\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:925
 msgid "!known (not known)"
@@ -709,8 +709,8 @@ msgstr "Pridėti raktą"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:496
 msgid "Add local domain suffix to names served from hosts files."
 msgstr ""
-"Pridėti vietinio domeno-srities priesagą į vardus, pateikiamų iš pagrindinio "
-"kompiuterio failų."
+"Pridėti vietinio domeno-srities priesagą į vardus, pateikiamų iš skleidėjo/"
+"p.k – vedėjo failų."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:482
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1176
@@ -734,9 +734,8 @@ msgid "Add to Whitelist"
 msgstr "Pridėti į baltąjį sąrašą"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:442
-#, fuzzy
 msgid "Additional hosts files"
-msgstr "Papildomi pagrindinio kompiuterio failai"
+msgstr "Papildomi skleidėjo/p.k – vedėjo/-ų failai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:503
 msgid "Additional servers file"
@@ -2963,7 +2962,7 @@ msgstr "Galutinis taškas"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:662
 msgid "Endpoint Host"
-msgstr ""
+msgstr "Galūtinio taško p.k – vedėjas"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:678
 msgid "Endpoint Port"
@@ -3790,11 +3789,11 @@ msgstr "Peršokimo nuobauda"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:134
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:234
 msgid "Host"
-msgstr "Skleidėjas"
+msgstr "Skleidėjas/P.k – vedėjas"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:171
 msgid "Host expiry timeout"
-msgstr "Skleidėjo atjungimo laikas"
+msgstr "Skleidėjo/P.k – vedėjo atjungimo laikas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:594
 msgid "Host requests this filename from the boot server."
@@ -3821,7 +3820,7 @@ msgstr "Įrenginio pavadinimas"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:22
 msgid "Hostname to send when requesting DHCP"
-msgstr "Kokį įranginio pavadinimą siųsti, kai prašoma „DHCP“"
+msgstr "Kokį įrenginio pavadinimą siųsti, kai prašoma „DHCP“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:260
 msgid "Hostnames"
@@ -4468,7 +4467,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:628
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:930
 msgid "Instance"
-msgstr ""
+msgstr "Egzempliorius"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:125
 msgctxt "WireGuard instance heading"
@@ -4649,7 +4648,7 @@ msgstr ""
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:126
 msgid "Invalid hostname or IPv4 address"
-msgstr ""
+msgstr "Negalimas įrenginio pavadinimas arba „IPv4“ adresas"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:134
 msgid "Invalid port"
@@ -4816,7 +4815,7 @@ msgstr "„LLC“"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:268
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:377
 msgid "Label"
-msgstr ""
+msgstr "Etiketė"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:225
 msgid "Language"
@@ -4895,7 +4894,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4438
 msgid "Legend:"
-msgstr ""
+msgstr "Legenda (už.):"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:691
 msgid "Limit"
@@ -7931,7 +7930,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:24
 msgid "Send the hostname of this device"
-msgstr "Siųsti pagrindinio kompiuterio vardą šio įrenginio"
+msgstr "Siųsti šio įrenginio pavadinimą"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:89
 msgid "Server"
@@ -10834,7 +10833,7 @@ msgstr "serverio režimas"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:54
 msgid "sstpc Log-level"
-msgstr ""
+msgstr "„sstpc“ žurnalo lygis"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1396
 msgid "strong security"
@@ -10860,7 +10859,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:583
 msgid "unique value"
-msgstr ""
+msgstr "unikali vertė"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:585
 msgid "unknown"
@@ -10953,7 +10952,7 @@ msgstr "tinkamas „IPv6“ adresas ar prielinksnis"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:318
 msgid "valid IPv6 host id"
-msgstr "tinkamas „IPv6 host id“"
+msgstr "tinkamas „IPv6 skleidėjo/p.k – vedėjo id“"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:333
 msgid "valid IPv6 network"
@@ -10969,11 +10968,12 @@ msgstr "tinkamas „MAC“ adresas"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:426
 msgid "valid UCI identifier"
-msgstr ""
+msgstr "tinkamas „UCI“ identifikatorius"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:377
 msgid "valid UCI identifier, hostname or IP address range"
 msgstr ""
+"tinkamas „UCI“ identifikatorius, įrenginio pavadinimas ar „IP“ adreso rėžis"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:398
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:401
@@ -10987,19 +10987,19 @@ msgstr "tinkama data (MMMM-MM-DD)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:248
 msgid "valid decimal value"
-msgstr ""
+msgstr "tinkama dešimtainės reikšmė"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:420
 msgid "valid hexadecimal WEP key"
-msgstr ""
+msgstr "tinkamas šešioliktainis „WEP“ raktas"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:408
 msgid "valid hexadecimal WPA key"
-msgstr ""
+msgstr "tinkamas šešioliktainis „WPA“ raktas"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:383
 msgid "valid host:port"
-msgstr ""
+msgstr "tinkamas skleidėjo/p.k – vedėjo:prievadas"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:370
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:372
@@ -11015,7 +11015,7 @@ msgstr "tinkamas įrenginio pavadinimas ar „IP“ adresas"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:240
 msgid "valid integer value"
-msgstr ""
+msgstr "tinkamas sveikojo skaičiaus reikšmė"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:355
 msgid "valid multicast MAC address"
@@ -11026,23 +11026,25 @@ msgid ""
 "valid network device name between 1 and 15 characters not containing \":\", "
 "\"/\", \"%\" or spaces"
 msgstr ""
+"tinkamas tinklo įrenginio pavadinimas tarp 1 ir 15 simbolių, kuriame nėra „:“"
+", „/“, „%“ ar tarpų"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:433
 msgid "valid network device name, not \".\" or \"..\""
-msgstr ""
+msgstr "tinkamas tinklo įrenginio pavadinimas, ne „.“ ar „..“"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:323
 msgid "valid network in address/netmask notation"
-msgstr ""
+msgstr "tinkamas tinklas adrese/tinklo kaukės užrašas"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:532
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
-msgstr ""
+msgstr "tinkami telefono skaitmenys (0-9, „*“, „#“, „!“ ar „.“)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:346
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:349
 msgid "valid port or port range (port1-port2)"
-msgstr ""
+msgstr "tinkamas prievadas ar prievado rėžis (prievadas1–prievadas2)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:338
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:192
@@ -11055,7 +11057,7 @@ msgstr "tinkamas laikas (VV:MM:SS)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:459
 msgid "value between %d and %d characters"
-msgstr ""
+msgstr "reikšmė tarp %d ir %d simbolių"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:440
 msgid "value between %f and %f"
@@ -11071,11 +11073,11 @@ msgstr "reikšmė, kuri mažesnė arba lygi: %f"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:453
 msgid "value with %d characters"
-msgstr ""
+msgstr "reikšmė su %d simboliais"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:464
 msgid "value with at least %d characters"
-msgstr ""
+msgstr "reikšmė, kurioje yra bent %d simbolių"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:469
 msgid "value with at most %d characters"
