@@ -2,6 +2,7 @@
 // This code wouldn't have been possible without help from:
 // - [@stokito](https://github.com/stokito)
 // - [@vsviridov](https://github.com/vsviridov)
+// noinspection JSAnnotator
 
 "require ui";
 "require rpc";
@@ -241,7 +242,7 @@ var status = baseclass.extend({
 									});
 									name += " (" + option + ")";
 								} else {
-									if (match[1] != "") name += " (" + match[1] + ")";
+									if (match[1] !== "") name += " (" + match[1] + ")";
 								}
 							}
 						}
