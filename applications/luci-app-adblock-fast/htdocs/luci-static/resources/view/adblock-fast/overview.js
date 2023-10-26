@@ -378,7 +378,7 @@ return view.extend({
 		s3.anonymous = true;
 		s3.addremove = true;
 
-		o = s3.option(form.DummyValue, "_size", "Size");
+		o = s3.option(form.DummyValue, "_size", _("Size"));
 		o.modalonly = false;
 		o.cfgvalue = function (section_id) {
 			let url = uci.get(pkg.Name, section_id, "url");
@@ -399,6 +399,10 @@ return view.extend({
 		o.value("allow", _("Allow"));
 		o.value("block", _("Block"));
 		o.default = "block";
+		o.textvalue = function (section_id) {
+			var val = this.cfgvalue(section_id);
+			return val == "allow" ? _("Allow") : _("Block");
+		};
 
 		o = s3.option(form.Value, "url", _("URL"));
 		o.optional = false;
