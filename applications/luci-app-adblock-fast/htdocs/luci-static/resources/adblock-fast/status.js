@@ -328,7 +328,7 @@ var status = baseclass.extend({
 					_("Start")
 				);
 
-				var btn_action = E(
+				var btn_action_dl = E(
 					"button",
 					{
 						class: "btn cbi-button cbi-button-apply",
@@ -338,13 +338,28 @@ var status = baseclass.extend({
 								E(
 									"p",
 									{ class: "spinning" },
-									_("Force re-downloading %s block lists").format(pkg.Name)
+									_("Force redownloading %s block lists").format(pkg.Name)
 								),
 							]);
 							return RPC.setInitAction(pkg.Name, "dl");
 						},
 					},
-					_("Force Re-Download")
+					_("Redownload")
+				);
+
+				var btn_action_pause = E(
+					"button",
+					{
+						class: "btn cbi-button cbi-button-apply",
+						disabled: true,
+						click: function (ev) {
+							ui.showModal(null, [
+								E("p", { class: "spinning" }, _("Pausing %s").format(pkg.Name)),
+							]);
+							return RPC.setInitAction(pkg.Name, "pause");
+						},
+					},
+					_("Pause")
 				);
 
 				var btn_stop = E(
@@ -410,17 +425,20 @@ var status = baseclass.extend({
 					switch (reply.status.status) {
 						case "statusSuccess":
 							btn_start.disabled = true;
-							btn_action.disabled = false;
+							btn_action_dl.disabled = false;
+							btn_action_pause.disabled = false;
 							btn_stop.disabled = false;
 							break;
 						case "statusStopped":
 							btn_start.disabled = false;
-							btn_action.disabled = true;
+							btn_action_dl.disabled = true;
+							btn_action_pause.disabled = true;
 							btn_stop.disabled = true;
 							break;
 						default:
 							btn_start.disabled = false;
-							btn_action.disabled = true;
+							btn_action_dl.disabled = true;
+							btn_action_pause.disabled = true;
 							btn_stop.disabled = false;
 							btn_enable.disabled = true;
 							btn_disable.disabled = true;
@@ -428,7 +446,8 @@ var status = baseclass.extend({
 					}
 				} else {
 					btn_start.disabled = true;
-					btn_action.disabled = true;
+					btn_action_dl.disabled = true;
+					btn_action_pause.disabled = true;
 					btn_stop.disabled = true;
 					btn_enable.disabled = false;
 					btn_disable.disabled = true;
@@ -442,8 +461,10 @@ var status = baseclass.extend({
 				);
 				var buttonsText = E("div", {}, [
 					btn_start,
+					// btn_gap,
+					// btn_action_pause,
 					btn_gap,
-					btn_action,
+					btn_action_dl,
 					btn_gap,
 					btn_stop,
 					btn_gap_long,
