@@ -3,6 +3,7 @@
 // - [@jow-](https://github.com/jow-)
 // - [@stokito](https://github.com/stokito)
 // - [@vsviridov](https://github.com/vsviridov)
+// noinspection JSAnnotator
 
 "use strict";
 "require form";
@@ -12,12 +13,15 @@
 "require https-dns-proxy.status as hdp";
 
 var pkg = {
+
 	get Name() {
 		return "https-dns-proxy";
 	},
+
 	get URL() {
 		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
 	},
+
 	templateToRegexp: function (template) {
 		return RegExp(
 			"^" +
@@ -32,6 +36,7 @@ var pkg = {
 				"$"
 		);
 	},
+
 	templateToResolver: function (template, args) {
 		return template.replace(/{(\w+)}/g, (_, v) => args[v]);
 	},
@@ -72,6 +77,7 @@ return view.extend({
 		m = new form.Map(pkg.Name, _("HTTPS DNS Proxy - Configuration"));
 
 		s = m.section(form.NamedSection, "config", pkg.Name);
+
 		o = s.option(
 			form.ListValue,
 			"dnsmasq_config_update",
@@ -86,6 +92,7 @@ return view.extend({
 			)
 		);
 		o.value("*", _("Update all configs"));
+
 		var sections = uci.sections("dhcp", "dnsmasq");
 		sections.forEach((element) => {
 			var description;
@@ -317,48 +324,57 @@ return view.extend({
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
 		o.datatype = "ipaddr";
 		o.default = "";
 		o.optional = true;
 		o.placeholder = "127.0.0.1";
-		var n = 0;
+
 		o = s.option(form.Value, "listen_port", _("Listen Port"));
 		o.datatype = "port";
 		o.default = "";
 		o.optional = true;
-		o.placeholder = n + 5053;
+		o.placeholder = "5053";
+
 		o = s.option(form.Value, "user", _("Run As User"));
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+
 		o = s.option(form.Value, "group", _("Run As Group"));
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+
 		o = s.option(form.Value, "dscp_codepoint", _("DSCP Codepoint"));
 		o.datatype = "and(uinteger, range(0,63))";
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+
 		o = s.option(form.Value, "verbosity", _("Logging Verbosity"));
 		o.datatype = "and(uinteger, range(0,4))";
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+
 		o = s.option(form.Value, "logfile", _("Logging File Path"));
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+
 		o = s.option(form.Value, "polling_interval", _("Polling Interval"));
 		o.datatype = "and(uinteger, range(5,3600))";
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+
 		o = s.option(form.Value, "proxy_server", _("Proxy Server"));
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+
 		o = s.option(form.ListValue, "use_http1", _("Use HTTP/1"));
 		o.modalonly = true;
 		o.optional = true;
@@ -366,6 +382,7 @@ return view.extend({
 		o.value("", _("Use negotiated HTTP version"));
 		o.value("1", _("Force use of HTTP/1"));
 		o.default = "";
+
 		o = s.option(
 			form.ListValue,
 			"use_ipv6_resolvers_only",
