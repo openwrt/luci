@@ -1,0 +1,30 @@
+{
+	"admin/dawn/": {
+		"title": "DAWN",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-dawn" ]
+		}
+	},
+
+	"admin/dawn/network_overview": {
+		"title": "Network Overview",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "dawn/network_overview"
+		}
+	},
+
+	"admin/dawn/hearing_map": {
+		"title": "Hearing Map",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "dawn/hearing_map"
+		}
+	}
+}
