@@ -1,0 +1,28 @@
+{
+  "admin/usteer/": {
+    "title": "Usteer",
+    "order": 60,
+    "action": {
+      "type": "firstchild"
+    },
+    "depends": {
+      "acl": [ "luci-app-usteer" ]
+    }
+  },
+  "admin/usteer/status": {
+    "title": "Status page",
+    "order": 1,
+    "action": {
+      "type": "view",
+      "path": "usteer/status"
+    }
+  },
+  "admin/usteer/settings": {
+    "title": "Settings",
+    "order": 1,
+    "action": {
+      "type": "view",
+      "path": "usteer/settings"
+    }
+  }
+}
