@@ -1,0 +1,279 @@
+'use strict';
+'require view';
+'require rpc';
+'require poll';
+'require dom';
+'require ui';
+
+ 
+ // https://github.com/openwrt/luci/blob/eabf1d020fad5f866ea6742c02fc808d0c43b349/applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/peers.js#L7
+
+
+return view.extend({
+	
+	callHostHints: rpc.declare({
+		object: 'luci-rpc',
+		method: 'getHostHints',
+		expect: { '': {} }
+	}),
+    callGetRemotehosts: rpc.declare({
+		object: 'usteer',
+		method: 'remote_hosts',
+		expect: {  '': {}}
+	}),
+	callGetRemoteinfo: rpc.declare({
+		object: 'usteer',
+		method: 'remote_info',
+		expect: { '': {} }
+	}),
+	callGetLocalinfo: rpc.declare({
+		object: 'usteer',
+		method: 'local_info',
+		expect: { '': {} }
+	}),
+	callGetClients: rpc.declare({
+		object: 'usteer',
+		method: 'get_clients',
+		expect: { '': {} }
+	}),
+
+
+	load: function() {
+		return Promise.all([
+			this.callHostHints(),
+			this.callGetRemotehosts(),
+			this.callGetRemoteinfo(),
+			this.callGetLocalinfo(),
+			this.callGetClients()
+			
+		]);
+	},
+	handleReset: null,
+	handleSaveApply: null,
+	handleSave: null,
+	
+	render: function(data) {
+	
+		var hosts = data[0];
+		var Remotehosts=data[1];
+		var Remoteinfo=data[2];
+		var Localinfo=data[3];
+		var Clients=data[4];
+
+
+
+		var body = E([
+			E('h2', _('Usteer status'))
+		]);
+
+
+/////////////////////////
+		body.appendChild(
+			E('h3', 'Remotehosts')
+		);
+		var remotehost_table = E('table', { 'class': 'table cbi-section-table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('IP address')),
+				E('th', { 'class': 'th' }, _('identifier'))
+			])
+		]);
+		
+		var remotehosttableentries =[];
+		for(var IPaddr in Remotehosts) {
+			remotehosttableentries.push([
+							IPaddr, Remotehosts[IPaddr]['id']
+						]);
+				}	
+
+		cbi_update_table(remotehost_table, remotehosttableentries, E('em', _('No data')));
+		body.appendChild(remotehost_table);
+		
+/////////////////////////
+		body.appendChild(
+			E('h3', 'Client list')
+		);
+		var conenctioninfo_table = E('table', { 'class': 'table cbi-section-table' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('wlan')),
+				E('th', { 'class': 'th' }, _('bssid')),
+				E('th', { 'class': 'th' }, _('ssid')),
+				E('th', { 'class': 'th' }, _('freq')),
+				E('th', { 'class': 'th' }, _('n assoc')),
+				E('th', { 'class': 'th' }, _('noise')),
+				E('th', { 'class': 'th' }, _('load')),
+				E('th', { 'class': 'th' }, _('max assoc')),
+				E('th', { 'class': 'th' }, _('roam src')),
+				E('th', { 'class': 'th' }, _('roam tgt')),
+				E('th', { 'class': 'th' }, _('rrm_nr mac')),
+				E('th', { 'class': 'th' }, _('rrm_nr ssid')),
+				E('th', { 'class': 'th' }, _('rrm_nr hex'))
+				
+			])
+		]);
+	
+		var conenctioninfo_table_entries =[];
+		for(var wlan in Localinfo) {
+			conenctioninfo_table_entries.push([
+							'<nobr>'+wlan+'</nobr>', 
+							Localinfo[wlan]['bssid'],
+							Localinfo[wlan]['ssid'],
+							Localinfo[wlan]['freq'],
+							Localinfo[wlan]['n_assoc'],														
+							Localinfo[wlan]['noise'],														
+							Localinfo[wlan]['load'],														
+							Localinfo[wlan]['max_assoc'],														
+							Localinfo[wlan]['roam_events']['source'],														
+							Localinfo[wlan]['roam_events']['target'],														
+							Localinfo[wlan]['rrm_nr'][0],																					
+							Localinfo[wlan]['rrm_nr'][2]		
+						]);
+				}	
+		for(var wlan in Remoteinfo) {
+			conenctioninfo_table_entries.push([
+							'<nobr>'+wlan+'</nobr>', 
+							Remoteinfo[wlan]['bssid'],
+							Remoteinfo[wlan]['ssid'],
+							Remoteinfo[wlan]['freq'],
+							Remoteinfo[wlan]['n_assoc'],														
+							Remoteinfo[wlan]['noise'],														
+							Remoteinfo[wlan]['load'],														
+							Remoteinfo[wlan]['max_assoc'],														
+							Remoteinfo[wlan]['roam_events']['source'],														
+							Remoteinfo[wlan]['roam_events']['target'],														
+							Remoteinfo[wlan]['rrm_nr'][0],																					
+							Remoteinfo[wlan]['rrm_nr'][2]		
+
+						]);
+				}	
+		cbi_update_table(conenctioninfo_table, conenctioninfo_table_entries, E('em', _('No data')));
+		body.appendChild(conenctioninfo_table);
+/////////////////////////////////////////
+
+
+		var compactconenctioninfo_table = E('table', { 'class': 'table cbi-section-table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, _('wlan')),
+					E('th', { 'class': 'th' }, _('ssid')),
+					E('th', { 'class': 'th' }, _('freq')),
+					E('th', { 'class': 'th' }, _('load')),
+					E('th', { 'class': 'th' }, _('n')),
+					E('th', { 'class': 'th' }, _('host'))
+					
+				])
+			]);
+		var compactconenctioninfo_table_entries =[];
+		for(var wlan in Localinfo) {
+			var hostl=''
+			for(var mac in Clients) {
+				for(var wlanc in Clients[mac]) {
+					if ((String(Clients[mac][wlanc]['connected']).valueOf()==String("true").valueOf()) && 
+					   (wlan===wlanc)) {
+							var foundname=mac;
+							for(var mac2 in hosts) {								
+								if ((String(mac).toLowerCase()).valueOf()==(String(mac2).toLowerCase()).valueOf()) {
+									foundname=hosts[mac2]['ipaddrs'][0];
+									if ((String(hosts[mac2]['name']).length>0) &&
+										(!(String(hosts[mac2]['name']).valueOf()==String("undefined").valueOf()) )) 
+										foundname=hosts[mac2]['name'];
+								}									
+							}
+							hostl=hostl+ foundname+'&emsp;';
+				   }
+				}	
+			}		
+			compactconenctioninfo_table_entries.push([
+								'<nobr>'+wlan+'</nobr>', 
+								Localinfo[wlan]['ssid'],
+								Localinfo[wlan]['freq'],
+								Localinfo[wlan]['load'],
+								Localinfo[wlan]['n_assoc'],
+								hostl
+							]);			
+		}
+		for(var wlan in Remoteinfo) {
+			var hostl=''
+			for(var mac in Clients) {
+				for(var wlanc in Clients[mac]) {
+					if ((String(Clients[mac][wlanc]['connected']).valueOf()==String("true").valueOf()) && 
+					   (wlan===wlanc)) {
+							var foundname=mac;
+							for(var mac2 in hosts) {								
+								if ((String(mac).toLowerCase()).valueOf()==(String(mac2).toLowerCase()).valueOf()) {
+									foundname=hosts[mac2]['ipaddrs'][0];
+									if ((String(hosts[mac2]['name']).length>0) &&
+										(!(String(hosts[mac2]['name']).valueOf()==String("undefined").valueOf()) )) 
+										foundname=hosts[mac2]['name'];
+								}									
+							}
+							hostl=hostl+ foundname+'&emsp;';
+				   }
+				}	
+			}	
+			compactconenctioninfo_table_entries.push([
+								'<nobr>'+wlan+'</nobr>', 
+								Remoteinfo[wlan]['ssid'],
+								Remoteinfo[wlan]['freq'],
+								Remoteinfo[wlan]['load'],
+								Remoteinfo[wlan]['n_assoc'],
+								hostl
+							]);			
+		}		
+		
+		cbi_update_table(compactconenctioninfo_table, compactconenctioninfo_table_entries, E('em', _('No data')));
+		body.appendChild(compactconenctioninfo_table);
+
+
+/////////////////////////
+		body.appendChild(
+			E('h3', 'Hearing map')
+		);
+		for(var mac in Clients) {
+			var maciphost='';
+			maciphost='Mac: '+mac;
+			for(var mac2 in hosts) {
+				if ((String(mac).toLowerCase()).valueOf()==(String(mac2).toLowerCase()).valueOf()) {
+					maciphost=maciphost+'&emsp;IP: '+hosts[mac2]['ipaddrs'];
+					if ((String(hosts[mac2]['name']).length>0) &&
+					      (!(String(hosts[mac2]['name']).valueOf()==String("undefined").valueOf()) )) 
+						maciphost=maciphost+'&emsp;Host: '+hosts[mac2]['name'];
+				}
+			}
+				
+			
+			body.appendChild(
+				E('h4', maciphost)
+			);
+			var client_table = E('table', { 'class': 'table cbi-section-table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', { 'class': 'th' }, _('wlan')),
+					E('th', { 'class': 'th' }, _('connected')),
+					E('th', { 'class': 'th' }, _('signal'))
+					
+				])
+			]);
+		
+			var client_table_entries =[];
+			for(var wlanc in Clients[mac]) {
+				
+				client_table_entries.push([
+								'<nobr>'+wlanc+'</nobr>', 
+								(String(Clients[mac][wlanc]['connected']).valueOf()==String("true").valueOf()) ? "True" : "",
+								Clients[mac][wlanc]['signal']
+							]);
+					}	
+
+			cbi_update_table(client_table, client_table_entries, E('em', _('No data')));
+			body.appendChild(client_table);
+		}
+
+		
+		return body;
+
+		
+		
+
+	}
+
+
+});
+
