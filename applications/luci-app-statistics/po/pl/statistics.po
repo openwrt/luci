@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-07-05 13:51+0000\n"
+"PO-Revision-Date: 2023-10-25 20:42+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/pl/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/apcups.json:2
@@ -24,7 +24,7 @@ msgstr "APC UPS"
 msgid "APCUPS Plugin Configuration"
 msgstr "Konfiguracja wtyczki APCUPS"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "Absolute values"
 msgstr "Wartości bezwzględne"
 
@@ -353,7 +353,7 @@ msgstr "Włącz statystyki"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:12
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:22
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:23
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:12
@@ -501,6 +501,18 @@ msgid ""
 msgstr ""
 "Tutaj można zdefiniować różne kryteria według których wybierane są "
 "monitorowane reguły iptables."
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+msgid "Hide free memory"
+msgstr "Ukryj wolną pamięć"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:15
+msgid ""
+"Hiding the free memory item makes the graph to scale to actual memory usage, "
+"not to 100%."
+msgstr ""
+"Ukrycie pozycji wolnej pamięci powoduje, że wykres jest skalowany do "
+"rzeczywistego wykorzystania pamięci, a nie do 100%."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:14
 msgid "Host"
@@ -655,7 +667,7 @@ msgstr "Maksymalne dozwolone połączenia"
 msgid "Maximum packet size"
 msgstr "Maksymalny rozmiar pakietu"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:10
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:11
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/memory.json:2
 msgid "Memory"
 msgstr "Pamięć"
@@ -664,7 +676,7 @@ msgstr "Pamięć"
 msgid "Memory Plugin Configuration"
 msgstr "Konfiguracja wtyczki pamięci"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:28
 msgid "Memory monitoring enabled"
 msgstr "Monitorowanie pamięci włączone"
 
@@ -674,7 +686,7 @@ msgstr "Monitorowanie pamięci włączone"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:45
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:41
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:48
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:49
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:34
 msgid "Monitor all except specified"
@@ -789,7 +801,7 @@ msgstr[0] "Monitorowanie wszystkich przerwań z wyjątkiem jednego"
 msgstr[1] "Monitorowanie wszystkich przerwań oprócz %d"
 msgstr[2] "Monitorowanie wszystkich przerwań oprócz %d"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:57
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:58
 msgid "Monitoring all but one sensor"
 msgid_plural "Monitoring all but %d sensors"
 msgstr[0] "Monitorowanie wszystkich czujników poza jednym"
@@ -819,7 +831,7 @@ msgstr "Monitorowanie wszystkich przerwań"
 msgid "Monitoring all partitions"
 msgstr "Monitorowanie wszystkich partycji"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:61
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:62
 msgid "Monitoring all sensors"
 msgstr "Monitorowanie wszystkich czujników"
 
@@ -883,7 +895,7 @@ msgstr[0] "Monitorowanie jednego procesu"
 msgstr[1] "Monitorowanie %d procesów"
 msgstr[2] "Monitorowanie innych procesów"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:59
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:60
 msgid "Monitoring one sensor"
 msgid_plural "Monitoring %d sensors"
 msgstr[0] "Monitorowanie jednego czujnika"
@@ -994,7 +1006,7 @@ msgstr "Wtyczki wyjściowe"
 msgid "Overview"
 msgstr "Przegląd"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "Percent values"
 msgstr "Wartości procentowe"
 
@@ -1136,7 +1148,7 @@ msgstr "Skrypt"
 msgid "Seconds"
 msgstr "Sekundy"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:24
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:25
 msgid "Sensor list"
 msgstr "Lista czujników"
 
@@ -1145,7 +1157,7 @@ msgstr "Lista czujników"
 msgid "Sensors"
 msgstr "Czujniki"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:16
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
 msgid "Sensors Plugin Configuration"
 msgstr "Konfiguracja wtyczek czujników"
 
@@ -1526,12 +1538,12 @@ msgid ""
 "directory. This can render the device unusable!</strong>"
 msgstr ""
 "Wtyczki rrdtool przechowuje zebrane dane w plikach RRD, które są "
-"wykorzystywane do tworzenia diagramów. <br/> <br /> <strong> Ostrzeżenie:. "
-"Ustawianie błędnej wartości może spowodować bardzo wysokie zużycie pamięci w "
+"wykorzystywane do tworzenia diagramów.<br /><br /><strong>Ostrzeżenie: "
+"ustawianie błędnej wartości może spowodować bardzo wysokie zużycie pamięci w "
 "katalogu tymczasowym. Może to sprawić, że urządzenie nie będzie nadawało się "
-"do użytku! </strong>"
+"do użytku!</strong>"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
 msgid ""
 "The sensors plugin uses the Linux Sensors framework to gather environmental "
 "statistics."
@@ -1723,12 +1735,12 @@ msgstr ""
 "Po ustawieniu wartości true raportuje dane dotyczące stanu (system, "
 "użytkownik, stan bezczynności)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "When set to true, we request absolute values"
 msgstr "Po ustawieniu true, żądamy wartości bezwzględnych"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:33
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "When set to true, we request percentage values"
 msgstr "Po ustawieniu true, żądamy wartości procentowych"
 
