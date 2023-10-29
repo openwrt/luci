@@ -161,26 +161,26 @@ return view.extend({
 			});
 
 			await Promise.all(networkPromises);
-			var res	= '';
+			var res = '';
 			var self = this;
-			await (async function() {
-			try	{
-				res = await self.callGetHosts();
-			}
-			catch (e) {
-				console.error(e);
-			}
-		})();
+			await (async function () {
+				try {
+					res = await self.callGetHosts();
+				}
+				catch (e) {
+					console.error(e);
+				}
+			})();
 
 			function matchHostnames(ip) {
 				var lines = res.hosts.split('\n');
 				for (var i = 0; i < lines.length; i++) {
 					var ipandhostname = lines[i].trim().split(/\s+/);
 					if (ipandhostname[0] === ip) {
-							return ipandhostname[1];
+						return ipandhostname[1];
 					}
-			}
-			return null;
+				}
+				return null;
 			}
 			var modifiedData = await Promise.all(
 				data.map(async function (v) {
@@ -197,7 +197,7 @@ return view.extend({
 							v.hostname = hostname;
 						}
 					}
-     var hosthints = await network.getHostHints();
+					var hosthints = await network.getHostHints();
 					var interfac = await network.getStatusByAddress(v.localIP);
 					var lmac = await hosthints.getMACAddrByIPAddr(v.localIP);
 					var rmac = await hosthints.getMACAddrByIPAddr(v.remoteIP);
@@ -281,7 +281,7 @@ return view.extend({
 				var rv = [];
 				for (var k = 0; k < neigh_res.length; k++) {
 					var link = neigh_res[k];
-					link.linkCost = parseInt(link.linkCost) || 0;
+					link.linkCost = (link.linkCost).toFixed(3) || 0;
 					if (link.linkCost === 4194304) {
 						link.linkCost = 0;
 					}
@@ -299,7 +299,7 @@ return view.extend({
 						ifn: link.interface,
 						lq: link.linkQuality.toFixed(3),
 						nlq: link.neighborLinkQuality.toFixed(3),
-						cost: link.linkCost.toFixed(3),
+						cost: link.linkCost,
 						snr: link.snr,
 						signal: link.signal,
 						noise: link.noise,
@@ -365,7 +365,7 @@ return view.extend({
 							'<div class="td cbi-section-table-cell left" style="background-color:' +
 							neigh.dfgcolor +
 							'">' +
-						 (neigh?.ifn?.interface ?? '?') +
+							(neigh?.ifn?.interface ?? '?') +
 							'</div>' +
 							'<div class="td cbi-section-table-cell left" style="background-color:' +
 							neigh.dfgcolor +
@@ -406,7 +406,7 @@ return view.extend({
 
 				for (var k = 0; k < neigh_res.length; k++) {
 					var link = neigh_res[k];
-					link.linkCost = parseInt(link.linkCost) || 0;
+					link.linkCost = Number(link.linkCost).toFixed(3) || 0;
 					if (link.linkCost === 4194304) {
 						link.linkCost = 0;
 					}
@@ -431,37 +431,37 @@ return view.extend({
 						[
 							link.proto === '6'
 								? E(
-										'div',
-										{
-											'class': 'td cbi-section-table-cell left',
-											'style': 'background-color:' + defaultgw_color,
-										},
-										[
-											E(
-												'a',
-												{
-													'href': 'http://[' + link.remoteIP + ']/cgi-bin-status.html',
-												},
-												link.remoteIP
-											),
-										]
-								  )
+									'div',
+									{
+										'class': 'td cbi-section-table-cell left',
+										'style': 'background-color:' + defaultgw_color,
+									},
+									[
+										E(
+											'a',
+											{
+												'href': 'http://[' + link.remoteIP + ']/cgi-bin-status.html',
+											},
+											link.remoteIP
+										),
+									]
+								)
 								: E(
-										'div',
-										{
-											'class': 'td cbi-section-table-cell left',
-											'style': 'background-color:' + defaultgw_color,
-										},
-										[
-											E(
-												'a',
-												{
-													'href': 'http://' + link.remoteIP + '/cgi-bin-status.html',
-												},
-												link.remoteIP
-											),
-										]
-								  ),
+									'div',
+									{
+										'class': 'td cbi-section-table-cell left',
+										'style': 'background-color:' + defaultgw_color,
+									},
+									[
+										E(
+											'a',
+											{
+												'href': 'http://' + link.remoteIP + '/cgi-bin-status.html',
+											},
+											link.remoteIP
+										),
+									]
+								),
 							E(
 								'div',
 								{
@@ -508,7 +508,7 @@ return view.extend({
 									'class': 'td cbi-section-table-cell left',
 									'style': 'background-color:' + color,
 								},
-								[E('div', {}, link.linkCost.toFixed(3))]
+								[E('div', {}, link.linkCost)]
 							),
 							E(
 								'div',
