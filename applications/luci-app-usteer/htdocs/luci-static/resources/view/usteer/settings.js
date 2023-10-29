@@ -3,40 +3,34 @@
 'require form';
 
 return view.extend({
-  render: function() {
-    var m, s, o;
+	render: function() {
+	var m, s, o;
 
-    m = new form.Map('usteer', _('usteer'), _('usteer Configuration.'));
+	m = new form.Map('usteer', _('usteer'), _('usteer Configuration.'));
 
-    s = m.section(form.TypedSection, 'usteer', _('options'), _('First four are mandatory'));
-    s.anonymous = true;
+	s = m.section(form.TypedSection, 'usteer', _('options'), _('First four are mandatory'));
+	s.anonymous = true;
 
-    s.option(form.Value, 'network', _('network'), _('The network interface for inter-AP communication)'));
+	s.option(form.Value, 'network', _('network'), _('The network interface for inter-AP communication)'));
 
+	o = s.option(form.Flag, 'syslog', _('Syslog'), _('Log messages to syslog (0/1)'));
+	o.default = '1';
+	o.rmempty = false;
 
+	o = s.option(form.Flag, 'ipv6', _('ipv6 mode'), _('Use IPv6 for remote exchange'));
+	o.default = '0';
+	o.rmempty = false;
 
-//    s = m.section(form.TypedSection, 'usteer', _('second section'));
-//    s.anonymous = true;
-
-    o = s.option(form.Flag, 'syslog', _('Syslog'), _('Log messages to syslog (0/1)'));
-    o.default = '1';
-    o.rmempty = false;
-
-
-    o = s.option(form.Flag, 'ipv6', _('ipv6 mode'), _('Use IPv6 for remote exchange'));
-    o.default = '0';
-    o.rmempty = false;
-
-    o = s.option(form.ListValue, 'debug_level', _('debug level'), _('Debug level'));
-    o.placeholder = 'lan';
-    o.value('0','0 Fatal');
-    o.value('1','1 info');
+	o = s.option(form.ListValue, 'debug_level', _('debug level'), _('Debug level'));
+	o.placeholder = 'lan';
+	o.value('0','0 Fatal');
+	o.value('1','1 info');
 	o.value('2','2 Verbose');
 	o.value('3','3 Some debug');
 	o.value('4','4 network packet info');
 	o.value('5','5 all debug messages');
-    o.rmempty = false;
-    o.editable = true;
+	o.rmempty = false;
+	o.editable = true;
 	
 	o = s.option(form.Value, 'max_neighbour_reports', _('max neighbour reports'), _('Maximum number of neighbor reports set for a node'));
 	o.optional    = true;
@@ -98,9 +92,8 @@ return view.extend({
 	o.placeholder = 10;
 	o.datatype    = 'uinteger';	
 
-    o = s.option(form.Flag, 'assoc_steering', _('assoc_steering'), _('Allow rejecting assoc requests for steering purposes (0/1)'));
-    o.optional    = true;
-	o.placeholder = 0;
+	o = s.option(form.Flag, 'assoc_steering', _('assoc_steering'), _('Allow rejecting assoc requests for steering purposes (0/1)'));
+	o.optional    = true;
 	
 	o = s.option(form.Value, 'min_connect_snr', _('min_connect_snr'), _('Minimum signal-to-noise ratio or signal level (dBm) to allow connections'));
 	o.optional    = true;
@@ -126,7 +119,6 @@ return view.extend({
 	o.optional    = true;
 	o.placeholder = 0;
 	o.datatype    = 'uinteger';	 
-
 
 	o = s.option(form.Value, 'roam_scan_tries', _('roam_scan_tries'), _('Maximum number of client roaming scan trigger attempts'));
 	o.optional    = true;
@@ -169,7 +161,7 @@ return view.extend({
 	o.datatype    = 'uinteger';	
 
 	o = s.option(form.Value, 'load_kick_enabled', _('load_kick_enabled'), _('Enable kicking client on excessive channel load (0/1)'));
-    o.optional    = true;
+	o.optional    = true;
 	o.placeholder = 0;
 	
 	o = s.option(form.Value, 'load_kick_threshold', _('load_kick_threshold'), _('Minimum channel load (%) before kicking clients'));
@@ -194,24 +186,16 @@ return view.extend({
 
 	o = s.option(form.Value, 'node_up_script', _('node_up_script'), _('Script to run after bringing up a node'));
 	o.optional    = true;
-	o.placeholder = '';
 	o.datatype    = 'string';	
 
 	o = s.option(form.Value, 'event_log_types', _('event_log_types'), _('Message types to include in log. Available types: probe_req_accept probe_req_deny, auth_req_accept, auth_req_deny, assoc_req_accept, assoc_req_deny, load_kick_trigger, load_kick_reset, load_kick_min_clients, load_kick_no_client, load_kick_client, signal_kick'));
 	o.optional    = true;
-	o.placeholder = '';
 	o.datatype    = 'list(string)';	
 
 	o = s.option(form.Value, 'ssid_list', _('ssid_list'), _('List of SSIDs to enable steering on'));
 	o.optional    = true;
-	o.placeholder = '';
 	o.datatype    = 'list(string)';	
 
-
-
-
-
-
-    return m.render();
-  },
+	return m.render();
+	},
 });
