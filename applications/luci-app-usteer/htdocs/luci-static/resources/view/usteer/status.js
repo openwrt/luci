@@ -5,10 +5,6 @@
 'require dom';
 'require ui';
 
- 
- // https://github.com/openwrt/luci/blob/eabf1d020fad5f866ea6742c02fc808d0c43b349/applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/peers.js#L7
-
-
 return view.extend({
 	
 	callHostHints: rpc.declare({
@@ -16,7 +12,7 @@ return view.extend({
 		method: 'getHostHints',
 		expect: { '': {} }
 	}),
-    callGetRemotehosts: rpc.declare({
+	callGetRemotehosts: rpc.declare({
 		object: 'usteer',
 		method: 'remote_hosts',
 		expect: {  '': {}}
@@ -92,7 +88,7 @@ return view.extend({
 		body.appendChild(
 			E('h3', 'Client list')
 		);
-		var conenctioninfo_table = E('table', { 'class': 'table cbi-section-table' }, [
+		var connectioninfo_table = E('table', { 'class': 'table cbi-section-table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('wlan')),
 				E('th', { 'class': 'th' }, _('bssid')),
@@ -105,15 +101,14 @@ return view.extend({
 				E('th', { 'class': 'th' }, _('roam src')),
 				E('th', { 'class': 'th' }, _('roam tgt')),
 				E('th', { 'class': 'th' }, _('rrm_nr mac')),
-				E('th', { 'class': 'th' }, _('rrm_nr ssid')),
 				E('th', { 'class': 'th' }, _('rrm_nr hex'))
 				
 			])
 		]);
 	
-		var conenctioninfo_table_entries =[];
+		var connectioninfo_table_entries =[];
 		for(var wlan in Localinfo) {
-			conenctioninfo_table_entries.push([
+			connectioninfo_table_entries.push([
 							'<nobr>'+wlan+'</nobr>', 
 							Localinfo[wlan]['bssid'],
 							Localinfo[wlan]['ssid'],
@@ -129,7 +124,7 @@ return view.extend({
 						]);
 				}	
 		for(var wlan in Remoteinfo) {
-			conenctioninfo_table_entries.push([
+			connectioninfo_table_entries.push([
 							'<nobr>'+wlan+'</nobr>', 
 							Remoteinfo[wlan]['bssid'],
 							Remoteinfo[wlan]['ssid'],
@@ -145,12 +140,12 @@ return view.extend({
 
 						]);
 				}	
-		cbi_update_table(conenctioninfo_table, conenctioninfo_table_entries, E('em', _('No data')));
-		body.appendChild(conenctioninfo_table);
+		cbi_update_table(connectioninfo_table, connectioninfo_table_entries, E('em', _('No data')));
+		body.appendChild(connectioninfo_table);
 /////////////////////////////////////////
 
 
-		var compactconenctioninfo_table = E('table', { 'class': 'table cbi-section-table' }, [
+		var compactconnectioninfo_table = E('table', { 'class': 'table cbi-section-table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('wlan')),
 					E('th', { 'class': 'th' }, _('ssid')),
@@ -161,7 +156,7 @@ return view.extend({
 					
 				])
 			]);
-		var compactconenctioninfo_table_entries =[];
+		var compactconnectioninfo_table_entries =[];
 		for(var wlan in Localinfo) {
 			var hostl=''
 			for(var mac in Clients) {
@@ -181,7 +176,7 @@ return view.extend({
 				   }
 				}	
 			}		
-			compactconenctioninfo_table_entries.push([
+			compactconnectioninfo_table_entries.push([
 								'<nobr>'+wlan+'</nobr>', 
 								Localinfo[wlan]['ssid'],
 								Localinfo[wlan]['freq'],
@@ -209,7 +204,7 @@ return view.extend({
 				   }
 				}	
 			}	
-			compactconenctioninfo_table_entries.push([
+			compactconnectioninfo_table_entries.push([
 								'<nobr>'+wlan+'</nobr>', 
 								Remoteinfo[wlan]['ssid'],
 								Remoteinfo[wlan]['freq'],
@@ -219,8 +214,8 @@ return view.extend({
 							]);			
 		}		
 		
-		cbi_update_table(compactconenctioninfo_table, compactconenctioninfo_table_entries, E('em', _('No data')));
-		body.appendChild(compactconenctioninfo_table);
+		cbi_update_table(compactconnectioninfo_table, compactconnectioninfo_table_entries, E('em', _('No data')));
+		body.appendChild(compactconnectioninfo_table);
 
 
 /////////////////////////
@@ -265,12 +260,8 @@ return view.extend({
 			cbi_update_table(client_table, client_table_entries, E('em', _('No data')));
 			body.appendChild(client_table);
 		}
-
-		
+	
 		return body;
-
-		
-		
 
 	}
 
