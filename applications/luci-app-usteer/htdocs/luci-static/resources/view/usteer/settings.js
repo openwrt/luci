@@ -8,7 +8,7 @@ return view.extend({
 
 	m = new form.Map('usteer', _('usteer'), _('usteer Configuration.'));
 
-	s = m.section(form.TypedSection, 'usteer', _('options'), _('First four are mandatory'));
+	s = m.section(form.TypedSection, 'usteer', _('options'), _('First four options are mandatory. Also be sure to enable rrm reports, 80211kvr, etc see: https://openwrt.org/docs/guide-user/network/wifi/usteer'));
 	s.anonymous = true;
 
 	s.option(form.Value, 'network', _('network'), _('The network interface for inter-AP communication)'));
