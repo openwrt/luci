@@ -3,7 +3,7 @@
     "description": "Grant UCI access to LuCI app usteer",
     "read": {
       "ubus": {
-        "uci": [ "get"   ],
+        "uci": [ "get" ],
 		"usteer": [ "remote_info","remote_hosts", "local_info", "get_clients"],
 		"luci-rpc": [ "getHostHints" ]
       },
@@ -13,7 +13,7 @@
     },
     "write": {
       "ubus": {
-        "uci": [      "set", "commit"  ]
+        "uci": [ "set", "commit"  ]
       },
       "uci": [ "usteer" ]
     }
