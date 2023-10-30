@@ -97,12 +97,12 @@ return view.extend({
 	o = s.option(form.Value, 'min_connect_snr', _('min_connect_snr'), _('Minimum signal-to-noise ratio or signal level (dBm) to allow connections'));
 	o.optional    = true;
 	o.placeholder = 0;
-	o.datatype    = 'uinteger';
+	o.datatype    = 'integer';
 
 	o = s.option(form.Value, 'min_snr', _('min_snr'), _('Minimum signal-to-noise ratio or signal level (dBm) to remain connected'));
 	o.optional    = true;
 	o.placeholder = 0;
-	o.datatype    = 'uinteger';
+	o.datatype    = 'integer';
 
 	o = s.option(form.Value, 'min_snr_kick_delay', _('min_snr_kick_delay'), _('Timeout after which a station with snr < min_snr will be kicked'));
 	o.optional    = true;
@@ -117,7 +117,7 @@ return view.extend({
 	o = s.option(form.Value, 'roam_scan_snr', _('roam_scan_snr'), _('Minimum signal-to-noise ratio or signal level (dBm) before attempting to trigger client scans for roam'));
 	o.optional    = true;
 	o.placeholder = 0;
-	o.datatype    = 'uinteger';
+	o.datatype    = 'integer';
 
 	o = s.option(form.Value, 'roam_scan_tries', _('roam_scan_tries'), _('Maximum number of client roaming scan trigger attempts'));
 	o.optional    = true;
@@ -137,7 +137,7 @@ return view.extend({
 	o = s.option(form.Value, 'roam_trigger_snr', _('roam_trigger_snr'), _('Minimum signal-to-noise ratio or signal level (dBm) before attempting to trigger forced client roaming'));
 	o.optional    = true;
 	o.placeholder = 0;
-	o.datatype    = 'uinteger';
+	o.datatype    = 'integer';
 
 	o = s.option(form.Value, 'roam_trigger_interval', _('roam_trigger_interval'), _('Minimum time (ms) between client roaming trigger attempts'));
 	o.optional    = true;
