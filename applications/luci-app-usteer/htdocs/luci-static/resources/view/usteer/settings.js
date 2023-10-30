@@ -186,11 +186,23 @@ return view.extend({
 	o.optional    = true;
 	o.datatype    = 'string';
 
-	o = s.option(form.Value, 'event_log_types', _('event_log_types'), _('Message types to include in log. Available types: probe_req_accept probe_req_deny, auth_req_accept, auth_req_deny, assoc_req_accept, assoc_req_deny, load_kick_trigger, load_kick_reset, load_kick_min_clients, load_kick_no_client, load_kick_client, signal_kick'));
+	o = s.option(form.MultiValue, 'event_log_types', _('event_log_types'), _('Message types to include in log. Available types: probe_req_accept probe_req_deny, auth_req_accept, auth_req_deny, assoc_req_accept, assoc_req_deny, load_kick_trigger, load_kick_reset, load_kick_min_clients, load_kick_no_client, load_kick_client, signal_kick'));
+	o.value('probe_req_accept');
+	o.value('probe_req_deny');
+	o.value('auth_req_accept');
+	o.value('auth_req_deny');
+	o.value('assoc_req_accept');
+	o.value('assoc_req_deny');
+	o.value('load_kick_trigger');
+	o.value('load_kick_reset');
+	o.value('load_kick_min_clients');
+	o.value('load_kick_no_client');
+	o.value('load_kick_client');
+	o.value('signal_kick');
 	o.optional    = true;
 	o.datatype    = 'list(string)';
 
-	o = s.option(form.Value, 'ssid_list', _('ssid_list'), _('List of SSIDs to enable steering on'));
+	o = s.option(form.DynamicList, 'ssid_list', _('ssid_list'), _('List of SSIDs to enable steering on'));
 	o.optional    = true;
 	o.datatype    = 'list(string)';
 
