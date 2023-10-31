@@ -166,7 +166,9 @@ return view.extend({
 							var foundname=mac;
 							for(var mac2 in hosts) {								
 								if ((String(mac).toLowerCase()).valueOf()==(String(mac2).toLowerCase()).valueOf()) {
-									foundname=hosts[mac2]['ipaddrs'][0];
+									if ((String(hosts[mac2]['ipaddrs'][0]).length>0) &&
+										(!(String(hosts[mac2]['ipaddrs'][0]).valueOf()==String("undefined").valueOf()) )) 
+										foundname=hosts[mac2]['ipaddrs'][0];
 									if ((String(hosts[mac2]['name']).length>0) &&
 										(!(String(hosts[mac2]['name']).valueOf()==String("undefined").valueOf()) )) 
 										foundname=hosts[mac2]['name'];
@@ -194,7 +196,9 @@ return view.extend({
 							var foundname=mac;
 							for(var mac2 in hosts) {								
 								if ((String(mac).toLowerCase()).valueOf()==(String(mac2).toLowerCase()).valueOf()) {
-									foundname=hosts[mac2]['ipaddrs'][0];
+									if ((String(hosts[mac2]['ipaddrs'][0]).length>0) &&
+										(!(String(hosts[mac2]['ipaddrs'][0]).valueOf()==String("undefined").valueOf()) )) 
+										foundname=hosts[mac2]['ipaddrs'][0];
 									if ((String(hosts[mac2]['name']).length>0) &&
 										(!(String(hosts[mac2]['name']).valueOf()==String("undefined").valueOf()) )) 
 										foundname=hosts[mac2]['name'];
