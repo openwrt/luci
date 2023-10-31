@@ -36,7 +36,7 @@ return view.extend({
 	o.placeholder = 8;
 	o.datatype    = 'uinteger';
 
-	o = s.option(form.Value, 'sta_block_timeout', _('sta block timeout reports'), _('Maximum amount of time (ms) a station may be blocked due to policy decisions'));
+	o = s.option(form.Value, 'sta_block_timeout', _('sta block timeout'), _('Maximum amount of time (ms) a station may be blocked due to policy decisions'));
 	o.optional    = true;
 	o.placeholder = 30000;
 	o.datatype    = 'uinteger';
@@ -67,11 +67,6 @@ return view.extend({
 	o.datatype    = 'uinteger';
 
 	o = s.option(form.Value, 'load_balancing_threshold', _('load_balancing_threshold'), _('Minimum number of stations delta between APs before load balancing policy is active'));
-	o.optional    = true;
-	o.placeholder = 5;
-	o.datatype    = 'uinteger';
-
-	o = s.option(form.Value, 'band_steering_threshold', _('band_steering_threshold'), _('Minimum number of stations delta between bands before band steering policy is active'));
 	o.optional    = true;
 	o.placeholder = 5;
 	o.datatype    = 'uinteger';
@@ -121,7 +116,7 @@ return view.extend({
 
 	o = s.option(form.Value, 'roam_scan_tries', _('roam_scan_tries'), _('Maximum number of client roaming scan trigger attempts'));
 	o.optional    = true;
-	o.placeholder = 0;
+	o.placeholder = 3;
 	o.datatype    = 'uinteger';
 
 	o = s.option(form.Value, 'roam_scan_timeout', _('roam_scan_timeout'), _('Retry scanning when roam_scan_tries is exceeded after this timeout (in ms). In case this option is set to 0, the client is kicked instead'));
