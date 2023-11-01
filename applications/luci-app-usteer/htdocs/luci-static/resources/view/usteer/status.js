@@ -160,23 +160,21 @@ return view.extend({
 		for(var wlan in Localinfo) {
 			var hostl=''
 			for(var mac in Clients) {
-				for(var wlanc in Clients[mac]) {
-					if ((String(Clients[mac][wlanc]['connected']).valueOf()==String("true").valueOf()) && 
-					   (wlan===wlanc)) {
+				if (typeof Clients[mac] !== 'undefined') 
+					if (typeof Clients[mac][wlan] !== 'undefined') 
+					if (String(Clients[mac][wlan]['connected']).valueOf()==String("true").valueOf()) {
 							var foundname=mac;
-							for(var mac2 in hosts) {								
-								if ((String(mac).toLowerCase()).valueOf()==(String(mac2).toLowerCase()).valueOf()) {
-									if ((String(hosts[mac2]['ipaddrs'][0]).length>0) &&
-										(!(String(hosts[mac2]['ipaddrs'][0]).valueOf()==String("undefined").valueOf()) )) 
-										foundname=hosts[mac2]['ipaddrs'][0];
-									if ((String(hosts[mac2]['name']).length>0) &&
-										(!(String(hosts[mac2]['name']).valueOf()==String("undefined").valueOf()) )) 
-										foundname=hosts[mac2]['name'];
-								}									
-							}
+							var macUp=String(mac).toUpperCase()
+							if (typeof hosts[macUp] !== 'undefined') {
+								if ((String(hosts[macUp]['ipaddrs'][0]).length>0) &&
+									(typeof hosts[macUp]['ipaddrs'][0] !== 'undefined')) 
+										foundname=hosts[macUp]['ipaddrs'][0];
+								if ((String(hosts[macUp]['name']).length>0) &&
+									(typeof hosts[macUp]['name'] !== 'undefined')) 
+										foundname=hosts[macUp]['name'];
+								}
 							hostl=hostl+ foundname+'&emsp;';
-				   }
-				}	
+				}
 			}		
 			compactconnectioninfo_table_entries.push([
 								'<nobr>'+wlan+'</nobr>', 
@@ -190,23 +188,21 @@ return view.extend({
 		for(var wlan in Remoteinfo) {
 			var hostl=''
 			for(var mac in Clients) {
-				for(var wlanc in Clients[mac]) {
-					if ((String(Clients[mac][wlanc]['connected']).valueOf()==String("true").valueOf()) && 
-					   (wlan===wlanc)) {
+				if (typeof Clients[mac] !== 'undefined') 
+					if (typeof Clients[mac][wlan] !== 'undefined') 
+					if (String(Clients[mac][wlan]['connected']).valueOf()==String("true").valueOf()) {
 							var foundname=mac;
-							for(var mac2 in hosts) {								
-								if ((String(mac).toLowerCase()).valueOf()==(String(mac2).toLowerCase()).valueOf()) {
-									if ((String(hosts[mac2]['ipaddrs'][0]).length>0) &&
-										(!(String(hosts[mac2]['ipaddrs'][0]).valueOf()==String("undefined").valueOf()) )) 
-										foundname=hosts[mac2]['ipaddrs'][0];
-									if ((String(hosts[mac2]['name']).length>0) &&
-										(!(String(hosts[mac2]['name']).valueOf()==String("undefined").valueOf()) )) 
-										foundname=hosts[mac2]['name'];
-								}									
-							}
+							var macUp=String(mac).toUpperCase()
+							if (typeof hosts[macUp] !== 'undefined') {
+								if ((String(hosts[macUp]['ipaddrs'][0]).length>0) &&
+									(typeof hosts[macUp]['ipaddrs'][0] !== 'undefined')) 
+										foundname=hosts[macUp]['ipaddrs'][0];
+								if ((String(hosts[macUp]['name']).length>0) &&
+									(typeof hosts[macUp]['name'] !== 'undefined')) 
+										foundname=hosts[macUp]['name'];
+								}
 							hostl=hostl+ foundname+'&emsp;';
-				   }
-				}	
+				}
 			}	
 			compactconnectioninfo_table_entries.push([
 								'<nobr>'+wlan+'</nobr>', 
@@ -229,16 +225,13 @@ return view.extend({
 		for(var mac in Clients) {
 			var maciphost='';
 			maciphost='Mac: '+mac;
-			for(var mac2 in hosts) {
-				if ((String(mac).toLowerCase()).valueOf()==(String(mac2).toLowerCase()).valueOf()) {
-					maciphost=maciphost+'&emsp;IP: '+hosts[mac2]['ipaddrs'];
-					if ((String(hosts[mac2]['name']).length>0) &&
-					      (!(String(hosts[mac2]['name']).valueOf()==String("undefined").valueOf()) )) 
-						maciphost=maciphost+'&emsp;Host: '+hosts[mac2]['name'];
+			var macUp=String(mac).toUpperCase()
+				if (typeof hosts[macUp] !== 'undefined') {
+					if (typeof hosts[macUp]['ipaddrs'] !== 'undefined') 
+					maciphost=maciphost+'&emsp;IP: '+hosts[macUp]['ipaddrs'];
+					if (typeof hosts[macUp]['name'] !== 'undefined') 
+						maciphost=maciphost+'&emsp;Host: '+hosts[macUp]['name'];
 				}
-			}
-				
-			
 			body.appendChild(
 				E('h4', maciphost)
 			);
