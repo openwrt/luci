@@ -166,13 +166,13 @@ return view.extend({
 							var foundname=mac;
 							var macUp=String(mac).toUpperCase()
 							if (typeof hosts[macUp] !== 'undefined') {
-								if ((String(hosts[macUp]['ipaddrs'][0]).length>0) &&
-									(typeof hosts[macUp]['ipaddrs'][0] !== 'undefined')) 
-										foundname=hosts[macUp]['ipaddrs'][0];
-								if ((String(hosts[macUp]['name']).length>0) &&
-									(typeof hosts[macUp]['name'] !== 'undefined')) 
-										foundname=hosts[macUp]['name'];
+								if ((String(hosts[macUp]['ipaddrs'][0]).length>0) && (typeof hosts[macUp]['ipaddrs'][0] !== 'undefined')) {
+									foundname=hosts[macUp]['ipaddrs'][0];
 								}
+								if ((String(hosts[macUp]['name']).length>0) && (typeof hosts[macUp]['name'] !== 'undefined')) {
+									foundname=hosts[macUp]['name'];
+								}
+							}
 							hostl=hostl+ foundname+'&emsp;';
 				}
 			}		
@@ -194,13 +194,13 @@ return view.extend({
 							var foundname=mac;
 							var macUp=String(mac).toUpperCase()
 							if (typeof hosts[macUp] !== 'undefined') {
-								if ((String(hosts[macUp]['ipaddrs'][0]).length>0) &&
-									(typeof hosts[macUp]['ipaddrs'][0] !== 'undefined')) 
-										foundname=hosts[macUp]['ipaddrs'][0];
-								if ((String(hosts[macUp]['name']).length>0) &&
-									(typeof hosts[macUp]['name'] !== 'undefined')) 
-										foundname=hosts[macUp]['name'];
+								if ((String(hosts[macUp]['ipaddrs'][0]).length>0) && (typeof hosts[macUp]['ipaddrs'][0] !== 'undefined')) {
+									foundname=hosts[macUp]['ipaddrs'][0]; 
 								}
+								if ((String(hosts[macUp]['name']).length>0) &&	(typeof hosts[macUp]['name'] !== 'undefined')) {
+									foundname=hosts[macUp]['name'];
+								}
+							}
 							hostl=hostl+ foundname+'&emsp;';
 				}
 			}	
@@ -228,7 +228,7 @@ return view.extend({
 			var macUp=String(mac).toUpperCase()
 				if (typeof hosts[macUp] !== 'undefined') {
 					if (typeof hosts[macUp]['ipaddrs'] !== 'undefined') 
-					maciphost=maciphost+'&emsp;IP: '+hosts[macUp]['ipaddrs'];
+						maciphost=maciphost+'&emsp;IP: '+hosts[macUp]['ipaddrs'];
 					if (typeof hosts[macUp]['name'] !== 'undefined') 
 						maciphost=maciphost+'&emsp;Host: '+hosts[macUp]['name'];
 				}
@@ -239,21 +239,18 @@ return view.extend({
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('wlan')),
 					E('th', { 'class': 'th' }, _('connected')),
-					E('th', { 'class': 'th' }, _('signal'))
-					
+					E('th', { 'class': 'th' }, _('signal'))					
 				])
 			]);
 		
 			var client_table_entries =[];
-			for(var wlanc in Clients[mac]) {
-				
+			for(var wlanc in Clients[mac]) {				
 				client_table_entries.push([
-								'<nobr>'+wlanc+'</nobr>', 
-								(String(Clients[mac][wlanc]['connected']).valueOf()==String("true").valueOf()) ? "True" : "",
-								Clients[mac][wlanc]['signal']
-							]);
-					}	
-
+					'<nobr>'+wlanc+'</nobr>', 
+					(String(Clients[mac][wlanc]['connected']).valueOf()==String("true").valueOf()) ? "True" : "",
+					Clients[mac][wlanc]['signal']
+				]);
+			}	
 			cbi_update_table(client_table, client_table_entries, E('em', _('No data')));
 			body.appendChild(client_table);
 		}
