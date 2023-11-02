@@ -367,7 +367,7 @@ return baseclass.extend({
 					E([], pzones.map(function(zone) {
 						return E('div', {
 							'class': 'zonebadge',
-							'style': 'cursor:help;flex:1;height:3px;' + firewall.getZoneColorStyle(zone)
+							'style': 'cursor:help;flex:1;height:3px;opacity:' + (carrier ? 1 : 0.25) + ';' + firewall.getZoneColorStyle(zone)
 						});
 					})),
 					E('span', { 'class': 'cbi-tooltip left' }, [ renderNetworksTooltip(pmap) ])
