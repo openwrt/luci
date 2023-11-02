@@ -79,7 +79,7 @@ return view.extend({
 			remotehosttableentries.push([
 							IPaddr, Remotehosts[IPaddr]['id']
 						]);
-				}	
+				}
 
 		cbi_update_table(remotehost_table, remotehosttableentries, E('em', _('No data')));
 		body.appendChild(remotehost_table);
@@ -113,14 +113,14 @@ return view.extend({
 							Localinfo[wlan]['bssid'],
 							Localinfo[wlan]['ssid'],
 							Localinfo[wlan]['freq'],
-							Localinfo[wlan]['n_assoc'],														
-							Localinfo[wlan]['noise'],														
-							Localinfo[wlan]['load'],														
-							Localinfo[wlan]['max_assoc'],														
-							Localinfo[wlan]['roam_events']['source'],														
-							Localinfo[wlan]['roam_events']['target'],														
-							Localinfo[wlan]['rrm_nr'][0],																					
-							Localinfo[wlan]['rrm_nr'][2]		
+							Localinfo[wlan]['n_assoc'],
+							Localinfo[wlan]['noise'],
+							Localinfo[wlan]['load'],
+							Localinfo[wlan]['max_assoc'],
+							Localinfo[wlan]['roam_events']['source'],
+							Localinfo[wlan]['roam_events']['target'],
+							Localinfo[wlan]['rrm_nr'][0],
+							Localinfo[wlan]['rrm_nr'][2]
 						]);
 				}	
 		for(var wlan in Remoteinfo) {
@@ -129,14 +129,14 @@ return view.extend({
 							Remoteinfo[wlan]['bssid'],
 							Remoteinfo[wlan]['ssid'],
 							Remoteinfo[wlan]['freq'],
-							Remoteinfo[wlan]['n_assoc'],														
-							Remoteinfo[wlan]['noise'],														
-							Remoteinfo[wlan]['load'],														
-							Remoteinfo[wlan]['max_assoc'],														
-							Remoteinfo[wlan]['roam_events']['source'],														
-							Remoteinfo[wlan]['roam_events']['target'],														
-							Remoteinfo[wlan]['rrm_nr'][0],																					
-							Remoteinfo[wlan]['rrm_nr'][2]		
+							Remoteinfo[wlan]['n_assoc'],
+							Remoteinfo[wlan]['noise'],
+							Remoteinfo[wlan]['load'],
+							Remoteinfo[wlan]['max_assoc'],
+							Remoteinfo[wlan]['roam_events']['source'],
+							Remoteinfo[wlan]['roam_events']['target'],
+							Remoteinfo[wlan]['rrm_nr'][0],
+							Remoteinfo[wlan]['rrm_nr'][2]
 
 						]);
 				}	
@@ -183,7 +183,7 @@ return view.extend({
 								Localinfo[wlan]['load'],
 								Localinfo[wlan]['n_assoc'],
 								hostl
-							]);			
+							]);
 		}
 		for(var wlan in Remoteinfo) {
 			var hostl=''
@@ -211,9 +211,9 @@ return view.extend({
 								Remoteinfo[wlan]['load'],
 								Remoteinfo[wlan]['n_assoc'],
 								hostl
-							]);			
-		}		
-		
+							]);
+		}
+
 		cbi_update_table(compactconnectioninfo_table, compactconnectioninfo_table_entries, E('em', _('No data')));
 		body.appendChild(compactconnectioninfo_table);
 
@@ -239,12 +239,12 @@ return view.extend({
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('wlan')),
 					E('th', { 'class': 'th' }, _('connected')),
-					E('th', { 'class': 'th' }, _('signal'))					
+					E('th', { 'class': 'th' }, _('signal'))
 				])
 			]);
 		
 			var client_table_entries =[];
-			for(var wlanc in Clients[mac]) {				
+			for(var wlanc in Clients[mac]) {
 				client_table_entries.push([
 					'<nobr>'+wlanc+'</nobr>', 
 					(String(Clients[mac][wlanc]['connected']).valueOf()==String("true").valueOf()) ? "True" : "",
