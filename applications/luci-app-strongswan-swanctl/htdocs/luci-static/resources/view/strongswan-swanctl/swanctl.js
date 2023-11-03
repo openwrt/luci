@@ -8,11 +8,11 @@ return view.extend({
         var m, s, o;
 
         m = new form.Map('ipsec',
-        _('IPsec Configuration'),
-        _("Configure IPsec for secure VPN connections."));
+        _('strongSwan Configuration'),
+        _("Configure strongSwan for secure VPN connections."));
 
-        // IPsec General Settings
-        s = m.section(form.TypedSection, 'ipsec', _('IPsec General Settings'));
+        // strongSwan General Settings
+        s = m.section(form.TypedSection, 'ipsec', _('strongSwan General Settings'));
         s.anonymous = true;
 
         o = s.option(widgets.ZoneSelect, 'zone', _('Zone'), _('Firewall zone that has to match the defined firewall zone'));
@@ -87,7 +87,7 @@ return view.extend({
         o = s.option(form.Value, 'authentication_method', _('Authentication Method'), _('IKE authentication (phase 1)'));
         o.datatype = 'string';
 
-        s = m.section(form.TypedSection, 'ipsec', _('IPsec General Settings'));
+        s = m.section(form.TypedSection, 'ipsec', _('strongSwan General Settings'));
         s.anonymous = true;
 
         o = s.option(form.ListValue, 'encryption_algorithm', _('Encryption Algorithm'), _('Encryption method (aes128, aes192, aes256, 3des)'));
