@@ -3,6 +3,17 @@
 'require form';
 'require uci';
 'require tools.widgets as widgets';
+'require strongswan_algorithms';
+
+function addAlgorithms(o, algorithms) {
+	algorithms.forEach(function (algorithm) {
+		if (strongswan_algorithms.isInsecure(algorithm)) {
+			o.value(algorithm, '%s*'.format(algorithm));
+		} else {
+			o.value(algorithm);
+		}
+	});
+}
 
 return view.extend({
 	render: function () {
@@ -103,12 +114,26 @@ return view.extend({
 		o.default = 'yes';
 		o.modalonly = true;
 
-		o = s.option(form.ListValue, 'crypto_proposal', _('Crypto Proposal'),
+		o = s.option(form.MultiValue, 'crypto_proposal', _('Crypto Proposal'),
 			_('List of IKE (phase 1) proposals to use for authentication'));
-		o.value('encryption_algorithm');
-		o.value('hash_algorithm');
-		o.value('dh_group');
-		o.value('prf_algorithm');
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var sections = uci.sections('ipsec', 'crypto_proposal');
+			if (sections.length == 0) {
+				this.value('', _('Please create a Proposal first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					if (section.is_esp != '1') {
+						this.value(section['.name']);
+					}
+				}, this));
+			}
+
+			return this.super('load', [section_id]);
+		};
+		o.rmempty = false;
 
 		o = s.option(form.MultiValue, 'tunnel', _('Tunnel'),
 			_('Name of ESP (phase 2) section'));
@@ -128,61 +153,6 @@ return view.extend({
 			return this.super('load', [section_id]);
 		};
 		o.rmempty = false;
-
-		o = s.option(form.Value, 'authentication_method',
-			_('Authentication Method'), _('IKE authentication (phase 1)'));
-		o.datatype = 'string';
-
-		s = m.section(form.TypedSection, 'ipsec',
-			_('strongSwan General Settings'));
-		s.anonymous = true;
-
-		o = s.option(form.ListValue, 'encryption_algorithm',
-			_('Encryption Algorithm'),
-			'%s (aes128, aes192, aes256, 3des)'.format(_('Encryption method')));
-		o.value('aes128');
-		o.value('aes192');
-		o.value('aes256');
-		o.value('3des');
-		o.rmempty = false;
-
-		o = s.option(form.ListValue, 'hash_algorithm', _('Hash Algorithm'),
-			'%s (md5, sha1, sha2, ...)'.format(_('Hash algorithm')));
-		o.value('md5');
-		o.value('sha1');
-		o.value('sha2');
-		o.value('sha256');
-		o.value('sha384');
-		o.value('sha512');
-		o.value('sha3_256');
-		o.value('sha3_384');
-		o.value('sha3_512');
-		o.value('blake2s256');
-		o.value('blake2b512');
-		o.value('blake2s256');
-		o.value('blake2b512');
-		o.value('whirlpool');
-		o.value('tiger');
-		o.rmempty = false;
-
-		o = s.option(form.ListValue, 'dh_group', _('Diffie-Hellman Group'),
-			'%s (modp768, modp1024, ...)'.format(_('Diffie-Hellman exponentiation')));
-		o.value('modp768');
-		o.value('modp1024');
-		o.value('modp1536');
-		o.value('modp2048');
-		o.value('modp3072');
-		o.value('modp4096');
-		o.rmempty = false;
-
-		o = s.option(form.ListValue, 'prf_algorithm', _('PRF Algorithm'),
-			_('Pseudo-Random Functions to use with IKE'));
-		o.value('prf_hmac_md5');
-		o.value('prfmd5');
-		o.value('prfsha1');
-		o.value('prfsha256');
-		o.value('pfsha384');
-		o.value('prfsha512');
 
 		// Tunnel Configuration
 		s = m.section(form.GridSection, 'tunnel', _('Tunnel Configuration'),
@@ -207,13 +177,27 @@ return view.extend({
 		o.datatype = 'subnet';
 		o.modalonly = true;
 
-		o = s.option(form.ListValue, 'crypto_proposal',
-			_('Crypto Proposal (Phase 2)'), _('List of ESP (phase two) proposals'));
-		o.value('encryption_algorithm');
-		o.value('hash_algorithm');
-		o.value('dh_group');
-		o.value('prf_algorithm');
-		o.required = true;
+		o = s.option(form.MultiValue, 'crypto_proposal',
+			_('Crypto Proposal (Phase 2)'),
+			_('List of ESP (phase two) proposals. Only Proposals with checked ESP flag are selectable'));
+		o.load = function (section_id) {
+			this.keylist = [];
+			this.vallist = [];
+
+			var sections = uci.sections('ipsec', 'crypto_proposal');
+			if (sections.length == 0) {
+				this.value('', _('Please create an ESP Proposal first'));
+			} else {
+				sections.forEach(L.bind(function (section) {
+					if (section.is_esp == '1') {
+						this.value(section['.name']);
+					}
+				}, this));
+			}
+
+			return this.super('load', [section_id]);
+		};
+		o.rmempty = false;
 
 		o = s.option(form.ListValue, 'startaction', _('Start Action'),
 			_('Action on initial configuration load'));
@@ -227,6 +211,54 @@ return view.extend({
 			_('Path to script to run on CHILD_SA up/down events'));
 		o.datatype = 'file';
 		o.modalonly = true;
+
+		// Crypto Proposals
+		s = m.section(form.GridSection, 'crypto_proposal',
+			_('Encryption Proposals'),
+			_('Configure Cipher Suites to define IKE (Phase 1) or ESP (Phase 2) Proposals.'));
+		s.addremove = true;
+		s.nodescriptions = true;
+
+		o = s.option(form.Flag, 'is_esp', _('ESP Proposal'),
+			_('Whether this is an ESP (phase 2) proposal or not'));
+
+		o = s.option(form.ListValue, 'encryption_algorithm',
+			_('Encryption Algorithm'),
+			_('Algorithms marked with * are considered insecure'));
+		o.default = 'aes256gcm128';
+		addAlgorithms(o, strongswan_algorithms.getEncryptionAlgorithms());
+		addAlgorithms(o, strongswan_algorithms.getAuthenticatedEncryptionAlgorithms());
+
+
+		o = s.option(form.ListValue, 'hash_algorithm', _('Hash Algorithm'),
+			_('Algorithms marked with * are considered insecure'));
+		strongswan_algorithms.getEncryptionAlgorithms().forEach(function (algorithm) {
+			o.depends('encryption_algorithm', algorithm);
+		});
+		o.default = 'sha512';
+		o.rmempty = false;
+		addAlgorithms(o, strongswan_algorithms.getHashAlgorithms());
+
+		o = s.option(form.ListValue, 'dh_group', _('Diffie-Hellman Group'),
+			_('Algorithms marked with * are considered insecure'));
+		o.default = 'modp3072';
+		addAlgorithms(o, strongswan_algorithms.getDiffieHellmanAlgorithms());
+
+		o = s.option(form.ListValue, 'prf_algorithm', _('PRF Algorithm'),
+			_('Algorithms marked with * are considered insecure'));
+		o.validate = function (section_id, value) {
+			var encryptionAlgorithm = this.section.formvalue(section_id, 'encryption_algorithm');
+
+			if (strongswan_algorithms.getAuthenticatedEncryptionAlgorithms().includes(
+					encryptionAlgorithm) && !value) {
+				return _('PRF Algorithm must be configured when using an Authenticated Encryption Algorithm');
+			}
+
+			return true;
+		};
+		o.optional = true;
+		o.depends('is_esp', '0');
+		addAlgorithms(o, strongswan_algorithms.getPrfAlgorithms());
 
 		return m.render();
 	}
