@@ -30,13 +30,13 @@ function validatePublicKey(section_id,value) {
 };
 
 function validateYggdrasilUri(section_id,value) {
-	if (!value.match(/^(tls|tcp|unix):\/\//))
+	if (!value.match(/^(tls|tcp|unix|quic):\/\//))
 		return _('URI scheme not supported');
 	return true;
 };
 
 function validateYggdrasilPeerUri(section_id,value) {
-	if (!value.match(/^(tls|tcp|unix|socks):\/\//))
+	if (!value.match(/^(tls|tcp|unix|socks|quic):\/\//))
 		return _('URI scheme not supported');
 	return true;
 };
@@ -249,6 +249,9 @@ return network.registerProtocol('yggdrasil',
 			o=ss.option(form.Value,"port",_("Port"));
 			o.optional=true;
 			o.datatype='range(1, 65535)';
+
+			o=ss.option(form.Value,"password",_("Password"));
+			o.optional=true;
 
 			return;
 		},
