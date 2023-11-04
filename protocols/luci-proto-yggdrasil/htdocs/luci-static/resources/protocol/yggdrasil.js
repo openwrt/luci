@@ -68,27 +68,30 @@ function updateActivePeers(ifname) {
 			peers.forEach(function(peer) {
 				var row = table.insertRow(-1);
 				row.style.fontSize = "xx-small";
+				if (!peer.up) {
+					row.style.opacity = "66%";
+				}
 				var cell = row.insertCell(-1)
 				cell.className = "td"
 				cell.textContent = peer.remote;
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
-				cell.textContent = peer.address
+				cell.textContent = peer.up ? "Up" : "Down";
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
-				cell.textContent = "[" + peer.coords.toString() + "]";
+				cell.textContent = peer.inbound ? "In" : "Out";
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
+				cell.innerHTML = "<u style='cursor: default'>" + peer.address + "</u>"
 				cell.dataToggle = "tooltip";
-				cell.title = peer.key;
-				cell.textContent = peer.key.substr(0, 8) + "..." +  peer.key.substr(-8);
+				cell.title = "Key: " + peer.key;
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
-				cell.textContent = peer.port;
+				cell.textContent = '%t'.format(peer.uptime);
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
@@ -100,7 +103,17 @@ function updateActivePeers(ifname) {
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
-				cell.textContent = '%t'.format(peer.uptime);
+				cell.textContent = peer.priority;
+
+				cell = row.insertCell(-1)
+				cell.className = "td"
+				if (!peer.up) {
+					cell.innerHTML = "<u style='cursor: default'>%t ago</u>".format(peer.last_error_time)
+					cell.dataToggle = "tooltip"
+					cell.title = peer.last_error
+				} else {
+					cell.innerHTML = "-"
+				}
 			});
 			setTimeout(updateActivePeers.bind(this, ifname), 5000);
 		}
@@ -116,14 +129,15 @@ var cbiActivePeers = form.DummyValue.extend({
 			'id': 'yggdrasil-active-peerings-' + this.option,
 		},[
 			E('tr', {'class': 'tr'}, [
-				E('th', {'class': 'th'}, _('Endpoint')),
-				E('th', {'class': 'th'}, _('Address')),
-				E('th', {'class': 'th'}, _('Coords')),
-				E('th', {'class': 'th'}, _('Key')),
-				E('th', {'class': 'th'}, _('Port')),
+				E('th', {'class': 'th'}, _('URI')),
+				E('th', {'class': 'th'}, _('State')),
+				E('th', {'class': 'th'}, _('Dir')),
+				E('th', {'class': 'th'}, _('IP Address')),
+				E('th', {'class': 'th'}, _('Uptime')),
 				E('th', {'class': 'th'}, _('RX')),
 				E('th', {'class': 'th'}, _('TX')),
-				E('th', {'class': 'th'}, _('Uptime')),
+				E('th', {'class': 'th'}, _('Priority')),
+				E('th', {'class': 'th'}, _('Last Error')),
 			])
 		]);
 	}
@@ -203,7 +217,7 @@ return network.registerProtocol('yggdrasil',
 			o=s.taboption('peers', form.SectionValue, '_listen', form.NamedSection, this.sid, "interface", _("Listen for peers"))
 			ss=o.subsection;
 
-			o=ss.option(form.DynamicList,'listen_address',_('Listen addresses'),_('Listen addresses for incoming connections. You will need to add listeners in order to accept incoming peerings from non-local nodes. Multicast peer discovery will work regardless of any listeners sethere. Each listener should be specified in URI format, e.g.tls://0.0.0.0:0 or tls://[::]:0 to listen on all interfaces.'));
+			o=ss.option(form.DynamicList,'listen_address',_('Listen addresses'),_('Listen addresses for incoming connections. You will need to add listeners in order to accept incoming peerings from non-local nodes. Multicast peer discovery will work regardless of any listeners set here. Each listener should be specified in URI format, e.g.tls://0.0.0.0:0 or tls://[::]:0 to listen on all interfaces.'));
 			o.placeholder="tls://0.0.0.0:0"
 
 			o=s.taboption('peers',form.DynamicList,'allowed_public_key',_('Allowed public keys'),_('List of peer public keys to allow incoming peering connections from. If left empty then all connections will be allowed by default. This does not affect outgoing peerings, nor does it affect link-local peers discovered via multicast.'));
