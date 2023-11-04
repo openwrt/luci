@@ -8,10 +8,23 @@ function s.render(self, sid)
 	tpl.render_string([[
 		<%
 			local utl = require "luci.util"
+			local sys = require "luci.sys"
 			local xml = require "luci.xml"
 			local status = require "luci.tools.ieee80211"
+			local hosts = sys.net.host_hints()
 			local stat = utl.ubus("dawn", "get_hearing_map", { })
+			local network = utl.ubus("dawn", "get_network", { })
 			local name, macs
+
+			local ap_map = {}
+
+			for name, macs in pairs(network) do
+
+				local mac, data
+				for mac, data in pairs(macs) do
+					ap_map[mac] = data.hostname
+				end
+			end
 
 			for name, macs in pairs(stat) do
 		%>
@@ -19,8 +32,8 @@ function s.render(self, sid)
 				<h3>SSID: <%= xml.pcdata(name) %></h3>
 				<table class="table" id="dawn_hearing_map">
 					<tr class="tr table-titles">
-						<th class="th">Client MAC</th>
-						<th class="th">AP MAC</th>
+						<th class="th">Client</th>
+						<th class="th">AP</th>
 						<th class="th">Frequency</th>
 						<th class="th">HT Sup</th>
 						<th class="th">VHT Sup</th>
@@ -41,8 +54,8 @@ function s.render(self, sid)
 								if data2.freq ~= 0 then --prevent empty entry crashes
 					%>
 						<tr class="tr">
-							<td class="td"><%= (count_loop == 0) and mac or "" %></td>
-							<td class="td"><%= mac2 %></td>
+							<td class="td"><%= (count_loop == 0) and mac or "" %><br/><%= (count_loop == 0) and hosts[mac] and (hosts[mac].name and pcdata(hosts[mac].name) or hosts[mac].ipv4)%></td>
+							<td class="td"><%= mac2 %><br/><%= ap_map[mac2] %></td>
 							<td class="td"><%= "%.3f" %( data2.freq / 1000 ) %> GHz Channel: <%= "%d" %( status.frequency_to_channel(data2.freq) ) %></td>
 							<td class="td"><%= (data2.ht_capabilities == true and data2.ht_support == true) and "True" or "False" %></td>
 							<td class="td"><%= (data2.vht_capabilities == true and data2.vht_support == true) and "True" or "False" %></td>
