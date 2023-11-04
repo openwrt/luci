@@ -740,12 +740,35 @@ return view.extend({
 						var hybrid_downstream_desc = _('Operate in <em>relay mode</em> if a designated master interface is configured and active, otherwise fall back to <em>server mode</em>.'),
 						    ndp_downstream_desc = _('Operate in <em>relay mode</em> if a designated master interface is configured and active, otherwise disable <abbr title="Neighbour Discovery Protocol">NDP</abbr> proxying.'),
 						    hybrid_master_desc = _('Operate in <em>relay mode</em> if an upstream IPv6 prefix is present, otherwise disable service.'),
+						    ra_server_allowed = true,
 						    checked = this.formvalue(section_id),
 						    dhcpv6 = this.section.getOption('dhcpv6').getUIElement(section_id),
 						    ndp = this.section.getOption('ndp').getUIElement(section_id),
 						    ra = this.section.getOption('ra').getUIElement(section_id);
 
-						if (checked == '1' || protoval != 'static') {
+						/* Assume that serving RAs by default is fine, but disallow it for certain
+						   interface protocols such as DHCP, DHCPv6 or the various PPP flavors.
+						   The intent is to only allow RA serving for interface protocols doing
+						   some kind of static IP config over something resembling a layer 2
+						   ethernet device. */
+						switch (protoval) {
+						case 'dhcp':
+						case 'dhcpv6':
+						case '3g':
+						case 'l2tp':
+						case 'ppp':
+						case 'pppoa':
+						case 'pppoe':
+						case 'pptp':
+						case 'pppossh':
+						case 'ipip':
+						case 'gre':
+						case 'grev6':
+							ra_server_allowed = false;
+							break;
+						}
+
+						if (checked == '1' || !ra_server_allowed) {
 							dhcpv6.node.querySelector('li[data-value="server"]').setAttribute('unselectable', '');
 
 							if (dhcpv6.getValue() == 'server')
@@ -763,7 +786,7 @@ return view.extend({
 							ndp.node.querySelector('li[data-value="hybrid"] > div > span').innerHTML = hybrid_master_desc;
 						}
 						else {
-							if (protoval == 'static') {
+							if (ra_server_allowed) {
 								dhcpv6.node.querySelector('li[data-value="server"]').removeAttribute('unselectable');
 								ra.node.querySelector('li[data-value="server"]').removeAttribute('unselectable');
 							}

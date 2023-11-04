@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-11-17 12:16+0000\n"
+"PO-Revision-Date: 2023-10-26 14:37+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.9.1-dev\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:433
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -300,8 +300,8 @@ msgid ""
 "List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/."
 "netrc</code>."
 msgstr ""
-"Lista dodatkowych ustawień. Format: option=value, np. <code>netrc-path=/tmp/."
-"netrc</code>."
+"Lista dodatkowych ustawień. Format: opcja=wartość, np. <code>netrc-path=/tmp/"
+".netrc</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/log.js:49
 msgid "Loading"
@@ -373,7 +373,7 @@ msgstr "Minimalny rozmiar części"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:258
 msgid "No Authentication"
-msgstr "Brak autoryzacji"
+msgstr "Brak uwierzytelnienia"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/log.js:33
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/log.js:38
@@ -430,7 +430,7 @@ msgstr "Opcje RPC"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:257
 msgid "RPC authentication method"
-msgstr "metoda uwierzytelnienia RPC"
+msgstr "Metoda uwierzytelnienia RPC"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:283
 msgid "RPC certificate"
@@ -461,8 +461,9 @@ msgid ""
 "RPC transport will be encrypted by SSL/TLS. The RPC clients must use https "
 "scheme to access the server. For WebSocket client, use wss scheme."
 msgstr ""
-"Transmisja RPC będzie szyfrowana przez SSL/TLs. Klient RPC musi używać https "
-"aby połączyć się z tym serwerem. Dla klienta WebSocket, użyj schematu wss."
+"Transmisja RPC będzie szyfrowana przez SSL/TLS. Klient RPC musi używać "
+"https, aby połączyć się z tym serwerem. Dla klienta WebSocket, użyj schematu "
+"wss."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:262
 msgid "RPC username"
@@ -495,7 +496,7 @@ msgstr "Ponów oczekiwanie"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:209
 msgid "Run daemon as user"
-msgstr "Uruchom daemona jako użytkownik"
+msgstr "Uruchom demona jako użytkownik"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:194
 msgid "Running Status"
@@ -560,7 +561,7 @@ msgstr "Czas seedowania"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:466
 msgid "Seed unverified"
-msgstr "Niezweryfikowane Seedy"
+msgstr "Niezweryfikowane seedy"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:348
 msgid ""
@@ -568,9 +569,9 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
-"Wyślij <code>Accept: deflate, gzip</code> żądaj nagłówka i wywołaj "
-"odpowiedź, jeśli zdalny serwer zareaguje z <code>Content-Encoding: gzip</"
-"code> lub <code>Content-Encoding: deflate</code>."
+"Wyślij <code>Accept: deflate, gzip</code>, żądaj nagłówka i wywołaj "
+"odpowiedź, jeśli zdalny serwer zareaguje za pomocą <code>Content-Encoding: "
+"gzip</code> lub <code>Content-Encoding: deflate</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:357
 msgid ""
@@ -668,13 +669,14 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
-"Określ metodę alokacji plików. Jeśli używasz nowszych systemów plików takich "
-"jak ext4 (z obsługą extentów), btrfs, xfs lub NTFS (tylko MinGW build), "
-"\"falloc\" jest najlepszym wyborem. Przydziela on duże(kilka) plików GiB) "
-"prawie natychmiast, ale może nie być dostępny, jeśli system nie posiada "
+"Określ metodę alokacji plików. Jeśli używasz nowszych systemów plików, "
+"takich jak ext4 (z obsługą ekstentów), btrfs, xfs lub NTFS (tylko kompilacja "
+"MinGW), najlepszym wyborem będzie \"falloc\". Przydziela duże pliki (kilka "
+"GiB) niemal natychmiast, ale może nie być dostępna, jeśli system nie ma "
 "funkcji posix_fallocate(3). Nie używaj \"falloc\" ze starszymi systemami "
 "plików, takimi jak ext3 i FAT32, ponieważ zajmuje to prawie tyle samo czasu "
-"co \"prealloc\" i blokuje całkowicie arię2, aż do zakończenia alokacji."
+"co \"prealloc\" i całkowicie blokuje program aria2 aż do zakończenia "
+"alokacji."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:505
 msgid ""

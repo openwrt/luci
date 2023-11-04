@@ -41,6 +41,12 @@ return view.extend({
 			o = s.option(form.Value, 'name', _('Name'));
 			o.optional = false;
 			o.rmempty = false;
+			o.validate = function (section_id, value) {
+				if (!/^[a-zA-Z_.][a-zA-Z0-9\/_.-]*$/.test(value))
+					return _('Invalid set name');
+
+				return true;
+			};
 		} else {
 			o = s.option(form.Value, 'name', _('Name'));
 			o.depends({ external: '' });

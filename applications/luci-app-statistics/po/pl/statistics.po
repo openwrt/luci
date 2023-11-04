@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-07-05 13:51+0000\n"
+"PO-Revision-Date: 2023-10-25 20:42+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/pl/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/apcups.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/apcups.json:2
@@ -24,7 +24,7 @@ msgstr "APC UPS"
 msgid "APCUPS Plugin Configuration"
 msgstr "Konfiguracja wtyczki APCUPS"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "Absolute values"
 msgstr "Wartości bezwzględne"
 
@@ -502,6 +502,18 @@ msgstr ""
 "Tutaj można zdefiniować różne kryteria według których wybierane są "
 "monitorowane reguły iptables."
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+msgid "Hide free memory"
+msgstr "Ukryj wolną pamięć"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:15
+msgid ""
+"Hiding the free memory item makes the graph to scale to actual memory usage, "
+"not to 100%."
+msgstr ""
+"Ukrycie pozycji wolnej pamięci powoduje, że wykres jest skalowany do "
+"rzeczywistego wykorzystania pamięci, a nie do 100%."
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:14
 msgid "Host"
 msgstr "Host"
@@ -655,7 +667,7 @@ msgstr "Maksymalne dozwolone połączenia"
 msgid "Maximum packet size"
 msgstr "Maksymalny rozmiar pakietu"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:10
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:11
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/memory.json:2
 msgid "Memory"
 msgstr "Pamięć"
@@ -664,7 +676,7 @@ msgstr "Pamięć"
 msgid "Memory Plugin Configuration"
 msgstr "Konfiguracja wtyczki pamięci"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:28
 msgid "Memory monitoring enabled"
 msgstr "Monitorowanie pamięci włączone"
 
@@ -994,7 +1006,7 @@ msgstr "Wtyczki wyjściowe"
 msgid "Overview"
 msgstr "Przegląd"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "Percent values"
 msgstr "Wartości procentowe"
 
@@ -1526,10 +1538,10 @@ msgid ""
 "directory. This can render the device unusable!</strong>"
 msgstr ""
 "Wtyczki rrdtool przechowuje zebrane dane w plikach RRD, które są "
-"wykorzystywane do tworzenia diagramów. <br/> <br /> <strong> Ostrzeżenie:. "
-"Ustawianie błędnej wartości może spowodować bardzo wysokie zużycie pamięci w "
+"wykorzystywane do tworzenia diagramów.<br /><br /><strong>Ostrzeżenie: "
+"ustawianie błędnej wartości może spowodować bardzo wysokie zużycie pamięci w "
 "katalogu tymczasowym. Może to sprawić, że urządzenie nie będzie nadawało się "
-"do użytku! </strong>"
+"do użytku!</strong>"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
 msgid ""
@@ -1723,12 +1735,12 @@ msgstr ""
 "Po ustawieniu wartości true raportuje dane dotyczące stanu (system, "
 "użytkownik, stan bezczynności)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "When set to true, we request absolute values"
 msgstr "Po ustawieniu true, żądamy wartości bezwzględnych"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:33
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "When set to true, we request percentage values"
 msgstr "Po ustawieniu true, żądamy wartości procentowych"
 
