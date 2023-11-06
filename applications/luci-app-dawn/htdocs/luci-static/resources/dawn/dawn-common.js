@@ -7,13 +7,13 @@ let callDawnGetNetwork, callDawnGetHearingMap, callHostHints;
 callDawnGetNetwork = rpc.declare({
 	object: 'dawn',
 	method: 'get_network',
-	expect: {  }
+	expect: { }
 });
 
 callDawnGetHearingMap = rpc.declare({
 	object: 'dawn',
 	method: 'get_hearing_map',
-	expect: {  }
+	expect: { }
 });
 
 callHostHints = rpc.declare({
@@ -21,6 +21,12 @@ callHostHints = rpc.declare({
 	method: 'getHostHints',
 	expect: { }
 });
+
+function isDawnRPCAvailable() {
+    return rpc.list("dawn").then(function(signatures) {
+        return 'dawn' in signatures && 'get_network' in signatures.dawn && 'get_hearing_map' in signatures.dawn;
+    });
+}
 
 function getAvailableText(available) {
 	return ( available ? _('Available') : _('Not available') );
@@ -59,16 +65,26 @@ function getFormattedNumber(num, decimals, divider = 1) {
 }
 
 function getHostnameFromMAC(hosthints, mac) {
-	return ( hosthints[mac] && hosthints[mac].name ? hosthints[mac].name + ' (' + mac + ')' : mac);
+	return ( hosthints[mac] && hosthints[mac].name ? hosthints[mac].name + ' (' + mac + ')' : mac );
+}
+
+function getDawnServiceNotRunningErrorMessage() {
+	return E('div', { 'class': 'alert-message fade-in warning' }, [
+		E('h4', _('DAWN service unavailable')),
+		E('p', _('Unable to query the DAWN service via ubus, the service appears to be stopped.')),
+		E('a', { 'href': L.url('admin/system/startup') }, _('Check Startup services'))
+	]);
 }
 
 return L.Class.extend({
 	callDawnGetNetwork: callDawnGetNetwork, 
 	callDawnGetHearingMap: callDawnGetHearingMap,
 	callHostHints: callHostHints,
+	isDawnRPCAvailable: isDawnRPCAvailable,
 	getAvailableText: getAvailableText,
 	getYesText: getYesText,
 	getChannelFromFrequency: getChannelFromFrequency,
 	getFormattedNumber: getFormattedNumber,
-	getHostnameFromMAC: getHostnameFromMAC
+	getHostnameFromMAC: getHostnameFromMAC,
+	getDawnServiceNotRunningErrorMessage: getDawnServiceNotRunningErrorMessage
 });
