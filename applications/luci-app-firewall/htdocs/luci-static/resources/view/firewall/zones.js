@@ -158,7 +158,7 @@ return view.extend({
 		p[1].default = fwDefaults.getOutput();
 		p[2].default = fwDefaults.getForward();
 
-		o = s.taboption('general', form.Flag, 'masq', _('Masquerading'),
+		o = s.taboption('general', form.Flag, 'masq', _('Masquerading IPv4'),
 			_('Enable network address and port translation IPv4 (NAT4 or NAPT4) for outbound traffic on this zone. This is typically enabled on the <em>wan</em> zone.'));
 		o.editable = true;
 		o.tooltip = function(section_id) {
@@ -170,6 +170,9 @@ return view.extend({
 
 			return null;
 		};
+
+		o = s.taboption('general', form.Flag, 'masq6', _('Masquerading IPv6'));
+		o.modalonly = true;
 
 		o = s.taboption('general', form.Flag, 'mtu_fix', _('MSS clamping'));
 		o.modalonly = true;
