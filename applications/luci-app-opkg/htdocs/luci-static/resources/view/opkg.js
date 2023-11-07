@@ -310,8 +310,9 @@ function display(pattern)
 		currentDisplayRows.push([
 			name,
 			ver,
-			pkg.size ? '%1024mB'.format(pkg.size)
-			         : (altsize ? '~%1024mB'.format(altsize) : '-'),
+			[ pkg.size || 0,
+			   pkg.size ? '%1024mB'.format(pkg.size)
+			         : (altsize ? '~%1024mB'.format(altsize) : '-') ],
 			desc,
 			btn
 		]);
