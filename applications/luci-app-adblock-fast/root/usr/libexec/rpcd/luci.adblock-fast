@@ -1,6 +1,6 @@
 #!/bin/sh
 # Copyright 2023 MOSSDeF, Stan Grishin (stangri@melmac.ca)
-# shellcheck disable=SC1091,SC2018,SC2019,SC2039,SC3043,SC3057,SC3060
+# shellcheck disable=SC2018,SC2019,SC3043,SC3060
 
 # TechRef: https://openwrt.org/docs/techref/rpcd
 # TESTS
@@ -14,86 +14,26 @@
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "pause" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "stop" }'
 
-. /lib/functions.sh
-. /lib/functions/network.sh
-. /usr/share/libubox/jshn.sh
-
-readonly packageName="adblock-fast"
-readonly dnsmasqAddnhostsFile="/var/run/${packageName}/dnsmasq.addnhosts"
-readonly dnsmasqAddnhostsCache="/var/run/${packageName}/dnsmasq.addnhosts.cache"
-readonly dnsmasqAddnhostsGzip="${packageName}.dnsmasq.addnhosts.gz"
-readonly dnsmasqConfFile="/tmp/dnsmasq.d/${packageName}"
-readonly dnsmasqConfCache="/var/run/${packageName}/dnsmasq.conf.cache"
-readonly dnsmasqConfGzip="${packageName}.dnsmasq.conf.gz"
-readonly dnsmasqIpsetFile="/tmp/dnsmasq.d/${packageName}.ipset"
-readonly dnsmasqIpsetCache="/var/run/${packageName}/dnsmasq.ipset.cache"
-readonly dnsmasqIpsetGzip="${packageName}.dnsmasq.ipset.gz"
-readonly dnsmasqNftsetFile="/tmp/dnsmasq.d/${packageName}.nftset"
-readonly dnsmasqNftsetCache="/var/run/${packageName}/dnsmasq.nftset.cache"
-readonly dnsmasqNftsetGzip="${packageName}.dnsmasq.nftset.gz"
-readonly dnsmasqServersFile="/var/run/${packageName}/dnsmasq.servers"
-readonly dnsmasqServersCache="/var/run/${packageName}/dnsmasq.servers.cache"
-readonly dnsmasqServersGzip="${packageName}.dnsmasq.servers.gz"
-readonly unboundFile="/var/lib/unbound/adb_list.${packageName}"
-readonly unboundCache="/var/run/${packageName}/unbound.cache"
-readonly unboundGzip="${packageName}.unbound.gz"
-readonly jsonFile="/dev/shm/$packageName-status.json"
-
-str_contains() { [ -n "$1" ] &&[ -n "$2" ] && [ "${1//$2}" != "$1" ]; }
-str_contains_word() { echo "$1" | grep -q -w "$2"; }
-str_to_lower() { echo "$1" | tr 'A-Z' 'a-z'; }
-str_to_upper() { echo "$1" | tr 'a-z' 'A-Z'; }
-is_enabled() { uci -q get "${1}.config.enabled"; }
-get_version() { grep -m1 -A2 -w "^Package: $1$" /usr/lib/opkg/status | sed -n 's/Version: //p'; }
-print_json_bool() { json_init; json_add_boolean "$1" "$2"; json_dump; json_cleanup; }
-print_json_int() { json_init; json_add_int "$1" "$2"; json_dump; json_cleanup; }
-print_json_string() { json_init; json_add_string "$1" "$2"; json_dump; json_cleanup; }
-logger() { /usr/bin/logger -t "$packageName" "$@"; }
-ubus_get_status() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.${1}"; }
-ubus_get_ports() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances.main.data.firewall.*.dest_port"; }
-is_present() { command -v "$1" >/dev/null 2>&1; }
-sanitize_dir() { [ -d "$(readlink -fn "$1")" ] && readlink -fn "$1"; }
-json() {
-# shellcheck disable=SC2034
-	local action="$1" param="$2" value="$3" i
-	if [ -s "$jsonFile" ]; then
-		json_load_file "$jsonFile" 2>/dev/null
-		json_select 'data' 2>/dev/null
-		for i in status message error stats reload restart; do
-			json_get_var $i "$i" 2>/dev/null
-		done
-	fi
-	case "$action" in
-		get)
-			case "$param" in
-				*)
-					printf "%b" "$(eval echo "\$$param")"; return;;
-			esac
-		;;
-	esac
-}
-
-get_url_filesize() {
-	local url="$1" size size_command
-	[ -n "$url" ] || { print_json_int 'size' '0'; return 0; }
-	is_present 'curl' || { print_json_int 'size' '0'; return 0; }
-	size_command='curl --silent --insecure --fail --head --request GET'
-	size="$($size_command "$url" | grep -i 'content-length:' | awk '{print $2}'; )"
-	echo "$size"
-}
-
-_get_file_url_size() {
-	local url size
-	config_get url "$1" 'url'
-	config_get size "$1" 'size'
-	[ -n "$size" ] || size="$(get_url_filesize "$url")"
-	json_add_object
-	json_add_string 'url' "$url"
-	json_add_int 'size' "$size"
-	json_close_object
-}
+readonly adbFunctionsFile='/etc/init.d/adblock-fast'
+if [ -s "$adbFunctionsFile" ]; then
+# shellcheck source=../../../../../adblock-fast/files/etc/init.d/adblock-fast
+	. "$adbFunctionsFile"
+else
+	logger -t adblock-fast 'error' "adblock-fast init.d file ($adbFunctionsFile) not found!"
+	print_json_string 'error' "adblock-fast init.d file ($adbFunctionsFile) not found!"
+fi
 
 get_file_url_filesizes() {
+	_get_file_url_size() {
+		local url size
+		config_get url "$1" 'url'
+		config_get size "$1" 'size'
+		[ -n "$size" ] || size="$(get_url_filesize "$url")"
+		json_add_object
+		json_add_string 'url' "$url"
+		json_add_int 'size' "$size"
+		json_close_object
+	}
 	local name="$1" i
 	json_init
 	json_add_object "$name"
@@ -201,19 +141,14 @@ get_init_status() {
 	json_init
 	json_add_object  "$name"
 	json_add_boolean 'enabled' "$(is_enabled "$name")"
-	i="$(json 'get' 'status')"
-	j="$(ubus_get_status 'status')"
-	if [ "$i" = 'statusSuccess' ] && [ "$i" != "$j" ]; then
-		i='statusStopped'
-	fi
-	json_add_string 'status' "$i"
-	if [ "$i" = 'statusSuccess' ]; then
+	json_add_string 'status' "$(json 'get' 'status')"
+	if is_running "$name"; then
 		json_add_boolean 'running' '1'
 	else
 		json_add_boolean 'running' '0'
 	fi
 	json_add_string 'version' "$(get_version "$name")"
-	errors="$(ubus_get_status errors)"
+	errors="$(ubus_get_data errors)"
 	json_add_array 'errors'
 	if [ -n "$errors" ]; then
 		for i in $errors; do
@@ -231,7 +166,7 @@ get_init_status() {
 		done
 	fi
 	json_close_array
-	warnings="$(ubus_get_status warnings)"
+	warnings="$(ubus_get_data warnings)"
 	json_add_array 'warnings'
 	if [ -n "$warnings" ]; then
 		for i in $warnings; do
@@ -259,7 +194,7 @@ get_init_status() {
 	else
 		json_add_boolean 'force_dns_active' '0'
 	fi
-	json_add_int 'entries' "$(ubus_get_status entries)"
+	json_add_int 'entries' "$(ubus_get_data entries)"
 	json_add_string 'dns' "$dns"
 	json_add_string 'outputFile' "$outputFile"
 	json_add_string 'outputCache' "$outputCache"
@@ -285,23 +220,6 @@ get_init_status() {
 	json_close_object
 	json_dump
 	json_cleanup
-}
-
-check_ipset() { { command -v ipset && /usr/sbin/ipset help hash:net; } >/dev/null 2>&1; }
-check_nft() { command -v nft >/dev/null 2>&1; }
-check_dnsmasq() { command -v dnsmasq >/dev/null 2>&1; }
-check_unbound() { command -v unbound >/dev/null 2>&1; }
-check_dnsmasq_ipset() {
-	local o;
-	check_dnsmasq || return 1
-	o="$(dnsmasq -v 2>/dev/null)"
-	check_ipset && ! echo "$o" | grep -q 'no-ipset' && echo "$o" | grep -q 'ipset'
-}
-check_dnsmasq_nftset() {
-	local o;
-	check_dnsmasq || return 1
-	o="$(dnsmasq -v 2>/dev/null)"
-	check_nft && ! echo "$o" | grep -q 'no-nftset' && echo "$o" | grep -q 'nftset'
 }
 
 get_platform_support() {

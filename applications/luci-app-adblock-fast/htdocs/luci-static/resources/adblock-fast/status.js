@@ -112,9 +112,7 @@ var status = baseclass.extend({
 					statusRestarting: _("Restarting"),
 					statusForceReloading: _("Force Reloading"),
 					statusDownloading: _("Downloading lists"),
-					statusError: _("Error"),
-					statusWarning: _("Warning"),
-					statusFail: _("Fail"),
+					statusFail: _("Failed to start"),
 					statusSuccess: _("Active"),
 				};
 
@@ -191,6 +189,10 @@ var status = baseclass.extend({
 						warningMissingRecommendedPackages: _(
 							"Some recommended packages are missing"
 						),
+						warningInvalidCompressedCacheDir: _(
+							"Invalid compressed cache directory '%s'"
+						),
+						warningFreeRamCheckFail: _("Can't detect free RAM"),
 					};
 					var warningsTitle = E(
 						"label",
@@ -278,6 +280,9 @@ var status = baseclass.extend({
 						errorDetectingFileType: _("Failed to detect format %s"),
 						errorNothingToDo: _(
 							"No blocked list URLs nor blocked-domains enabled"
+						),
+						errorTooLittleRam: _(
+							"Free ram (%s) is not enough to process all enabled block-lists"
 						),
 					};
 					var errorsTitle = E(
@@ -461,9 +466,9 @@ var status = baseclass.extend({
 				);
 				var buttonsText = E("div", {}, [
 					btn_start,
-					// btn_gap,
-					// btn_action_pause,
 					btn_gap,
+					// btn_action_pause,
+					// btn_gap,
 					btn_action_dl,
 					btn_gap,
 					btn_stop,
