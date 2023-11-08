@@ -10,8 +10,12 @@ return view.extend({
 
 	load: function() {
 		return Promise.all([
-			dawn.callDawnGetHearingMap(),
-			dawn.callDawnGetNetwork(),
+			dawn.isDawnRPCAvailable().then(function(isAvailable) {
+				return ( isAvailable ? dawn.callDawnGetHearingMap() : null )
+			}),
+			dawn.isDawnRPCAvailable().then(function(isAvailable) {
+				return ( isAvailable ? dawn.callDawnGetNetwork() : null )
+			}),
 			dawn.callHostHints()
 		]);
 	},
@@ -35,6 +39,10 @@ return view.extend({
 					}
 				}
 			});
+		}
+
+		if (!dawnHearingMapData || !dawnNetworkData) {
+			return dawn.getDawnServiceNotRunningErrorMessage();
 		}
 
 		const body = E([
