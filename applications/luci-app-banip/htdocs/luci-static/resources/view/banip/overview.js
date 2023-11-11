@@ -269,14 +269,14 @@ return view.extend({
 		o.optional = true;
 		o.retain = true;
 
-		o = s.taboption('general', widgets.NetworkSelect, 'ban_ifv4', _('Network Interfaces'), _('Select the logical WAN IPv4 network interface(s).'));
+		o = s.taboption('general', widgets.NetworkSelect, 'ban_ifv4', _('IPv4 Network Interfaces'), _('Select the logical WAN IPv4 network interface(s).'));
 		o.depends('ban_autodetect', '0');
 		o.multiple = true;
 		o.nocreate = true;
 		o.optional = true;
 		o.retain = true;
 
-		o = s.taboption('general', widgets.NetworkSelect, 'ban_ifv6', _('Network Interfaces'), _('Select the logical WAN IPv6 network interface(s).'));
+		o = s.taboption('general', widgets.NetworkSelect, 'ban_ifv6', _('IPv6 Network Interfaces'), _('Select the logical WAN IPv6 network interface(s).'));
 		o.depends('ban_autodetect', '0');
 		o.multiple = true;
 		o.nocreate = true;
@@ -473,7 +473,7 @@ return view.extend({
 		o.rawhtml = true;
 		o.default = '<em><b>' + _('Changes on this tab needs a banIP service restart to take effect.') + '</b></em>';
 
-		o = s.taboption('adv_log', form.ListValue, 'ban_nftloglevel', _('Log Level'), _('Set the syslog level for NFT logging.'));
+		o = s.taboption('adv_log', form.ListValue, 'ban_nftloglevel', _('NFT Log Level'), _('Set the syslog level for NFT logging.'));
 		o.value('emerg', _('emerg'));
 		o.value('alert', _('alert'));
 		o.value('crit', _('crit'));
@@ -495,6 +495,10 @@ return view.extend({
 
 		o = s.taboption('adv_log', form.Flag, 'ban_logforwardlan', _('Log LAN-Forward'), _('Log suspicious forwarded LAN packets (rejected).'));
 		o.rmempty = false;
+
+		o = s.taboption('adv_log', form.Value, 'ban_logreadfile', _('Logfile Location'), _('Location for parsing the log file, e.g. via syslog-ng, to deactivate the standard parsing via logread.'));
+		o.placeholder = '/var/log/messages';
+		o.rmempty = true;
 
 		o = s.taboption('adv_log', form.ListValue, 'ban_loglimit', _('Log Limit'), _('Parse only the last stated number of log entries for suspicious events. To disable the log monitor at all set it to \'0\'.'));
 		o.value('0', _('0 (disable)'));

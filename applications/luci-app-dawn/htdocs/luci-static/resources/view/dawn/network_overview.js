@@ -10,7 +10,9 @@ return view.extend({
 
 	load: function() {
 		return Promise.all([
-			dawn.callDawnGetNetwork(),
+			dawn.isDawnRPCAvailable().then(function(isAvailable) {
+				return ( isAvailable ? dawn.callDawnGetNetwork() : null );
+			}),
 			dawn.callHostHints()
 		]);
 	},
@@ -19,6 +21,10 @@ return view.extend({
 
 		const dawnNetworkData = data[0];
 		const hostHintsData = data[1];
+
+		if (!dawnNetworkData) {
+			return dawn.getDawnServiceNotRunningErrorMessage();
+		}
 
 		const body = E([
 			E('h2', _('Network Overview'))

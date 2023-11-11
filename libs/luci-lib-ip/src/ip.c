@@ -406,28 +406,28 @@ static int _cidr_new(lua_State *L, int index, int family, bool mask)
 
 	if (lua_type(L, index) == LUA_TNUMBER)
 	{
-		n = htonl(lua_tointeger(L, index));
+		n = lua_tointeger(L, index);
 
 		if (family == AF_INET6)
 		{
 			cidr.family = AF_INET6;
-			cidr.addr.v6.s6_addr[12] = n;
-			cidr.addr.v6.s6_addr[13] = (n >> 8);
-			cidr.addr.v6.s6_addr[14] = (n >> 16);
-			cidr.addr.v6.s6_addr[15] = (n >> 24);
+			cidr.addr.v6.s6_addr[12] = n / 0x1000000;
+			cidr.addr.v6.s6_addr[13] = n % 0x1000000 / 0x10000;
+			cidr.addr.v6.s6_addr[14] = n % 0x10000 / 0x100;
+			cidr.addr.v6.s6_addr[15] = n % 0x100;
 		}
 		else if (family == AF_INET)
 		{
 			cidr.family = AF_INET;
-			cidr.addr.v4.s_addr = n;
+			cidr.addr.v4.s_addr = htonl(n);
 		}
 		else
 		{
 			cidr.family = AF_PACKET;
-			cidr.addr.mac.ether_addr_octet[2] = n;
-			cidr.addr.mac.ether_addr_octet[3] = (n >> 8);
-			cidr.addr.mac.ether_addr_octet[4] = (n >> 16);
-			cidr.addr.mac.ether_addr_octet[5] = (n >> 24);
+			cidr.addr.mac.ether_addr_octet[2] = n / 0x1000000;
+			cidr.addr.mac.ether_addr_octet[3] = n % 0x1000000 / 0x10000;
+			cidr.addr.mac.ether_addr_octet[4] = n % 0x10000 / 0x100;
+			cidr.addr.mac.ether_addr_octet[5] = n % 0x100;
 		}
 
 		cidr.bits = AF_BITS(cidr.family);

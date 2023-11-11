@@ -53,6 +53,7 @@ return view.extend({
 			o.value('prohibit');
 			o.value('blackhole');
 			o.value('anycast');
+			o.value('throw');
 
 			o = s.taboption('general', form.Value, 'target', _('Target'), _('Network address'));
 			o.rmempty = false;
