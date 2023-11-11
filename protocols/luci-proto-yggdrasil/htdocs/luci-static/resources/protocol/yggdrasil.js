@@ -29,14 +29,17 @@ function validatePublicKey(section_id,value) {
 	return true;
 };
 
-function validateYggdrasilUri(section_id,value) {
+function validateYggdrasilListenUri(section_id,value) {
+	if (value.length == 0) {
+		return true;
+	};
 	if (!value.match(/^(tls|tcp|unix|quic):\/\//))
 		return _('URI scheme not supported');
 	return true;
 };
 
 function validateYggdrasilPeerUri(section_id,value) {
-	if (!value.match(/^(tls|tcp|unix|socks|quic):\/\//))
+	if (!value.match(/^(tls|tcp|unix|quic|socks|socktls):\/\//))
 		return _('URI scheme not supported');
 	return true;
 };
@@ -219,6 +222,7 @@ return network.registerProtocol('yggdrasil',
 
 			o=ss.option(form.DynamicList,'listen_address',_('Listen addresses'),_('Listen addresses for incoming connections. You will need to add listeners in order to accept incoming peerings from non-local nodes. Multicast peer discovery will work regardless of any listeners set here. Each listener should be specified in URI format, e.g.tls://0.0.0.0:0 or tls://[::]:0 to listen on all interfaces.'));
 			o.placeholder="tls://0.0.0.0:0"
+			o.validate=validateYggdrasilListenUri;
 
 			o=s.taboption('peers',form.DynamicList,'allowed_public_key',_('Allowed public keys'),_('List of peer public keys to allow incoming peering connections from. If left empty then all connections will be allowed by default. This does not affect outgoing peerings, nor does it affect link-local peers discovered via multicast.'));
 			o.validate=validatePublicKey;
@@ -231,6 +235,7 @@ return network.registerProtocol('yggdrasil',
 
 			o=ss.option(form.Value,"address",_("Peer URI"));
 			o.placeholder="tls://0.0.0.0:0"
+			o.validate=validateYggdrasilPeerUri;
 			ss.option(widgets.NetworkSelect,"interface",_("Peer interface"));
 
 			o=s.taboption('peers', form.SectionValue, '_interfaces', form.TableSection, 'yggdrasil_%s_interface'.format(this.sid), _("Multicast rules"))
