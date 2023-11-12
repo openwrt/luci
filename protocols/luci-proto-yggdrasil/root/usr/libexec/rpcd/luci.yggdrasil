@@ -29,7 +29,7 @@ case "$1" in
 				read -r input
 				json_load "$input"
 				json_get_vars interface
-				echo "$(yggdrasilctl -endpoint=unix:///tmp/yggdrasil/${interface}.sock -json getPeers)"
+				yggdrasilctl -endpoint="unix:///tmp/yggdrasil/${interface}.sock" -json getPeers
 			;;
 		esac
 	;;
