@@ -79,17 +79,15 @@ return view.extend({
 		var view = init_view();
 
 		if (info[0] && info[1] && info[1].code === 0) {
-			var obj = JSON.parse(info[1].stdout.trim())["self"];
+			var obj = JSON.parse(info[1].stdout.trim());
 			var peers = JSON.parse(info[2].stdout.trim())["peers"];
 
-			var address = Object.keys(obj)[0]; 
-			var r = obj[address];
-			view.querySelector('#self-address').innerText = address;
-			view.querySelector('#self-subnet').innerText = r.subnet;
-			view.querySelector('#self-coords').innerText = "[" + r.coords + "]";
-			view.querySelector('#self-key').innerText = r.key;
-			view.querySelector('#self-buildname').innerText = r.build_name;
-			view.querySelector('#self-version').innerText = r.build_version;
+			view.querySelector('#self-address').innerText = obj["address"];
+			view.querySelector('#self-subnet').innerText = obj["subnet"];
+            		view.querySelector('#self-coords').innerText = "[" + obj["coords"] + "]";
+            		view.querySelector('#self-key').innerText = obj["key"];
+            		view.querySelector('#self-buildname').innerText = obj["build_name"];
+            		view.querySelector('#self-version').innerText = obj["build_version"];
 
 			update_active_peers();
 		} else {
