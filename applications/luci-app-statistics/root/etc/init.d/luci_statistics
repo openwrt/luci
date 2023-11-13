@@ -12,10 +12,8 @@ SYSUPGRADE_BACKUP_FILE="${BACKUP_DIR}/rrdbackup.sysupgrade.tgz"
 SYSUPGRADE_BACKUP_TWIN_A="${BACKUP_DIR}/sysupgrade.trustme.txt"
 SYSUPGRADE_BACKUP_TWIN_B="${BACKUP_DIR}/sysupgrade.dont.trustme.txt"
 EXTRA_COMMANDS="backup sysupgrade_backup"
-EXTRA_HELP="\ backup Backup
-current rrd database if configured to do so\n\ sysupgrade_backup Take
-a special backup for sysupgrade/configuration saving"
-
+EXTRA_HELP="\
+	backup          Backup current rrd database if configured to do so"
 TRACE=0
 
 doing_backups() {
@@ -150,6 +148,10 @@ copy_backup_for_sysupgrade() {
 
 sysupgrade_backup() {
 	local filelist="$1"
+	[ -z "$filelist" -o ! -f "$filelist" ] && {
+	    echo sysupgrade_backup requires an existing filename argument 1>&2
+	    exit 1
+	}
 	[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics sysupgrade_backup CONF_BACKUP_LIST=${CONF_BACKUP_LIST}
 	doing_backups && {
 		### CONF_BACKUP_LIST=1 means we are generating the
