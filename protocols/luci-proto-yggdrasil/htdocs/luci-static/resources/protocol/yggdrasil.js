@@ -13,7 +13,7 @@ function validatePrivateKey(section_id,value) {
 	};
 	if (!value.match(/^([0-9a-fA-F]){128}$/)) {
 		if (value != "auto") {
-			return _('Invalid private key string');
+			return _('Invalid private key string %s').format(value);
 		}
 		return true;
 	}
@@ -25,7 +25,7 @@ function validatePublicKey(section_id,value) {
 		return true;
 	};
 	if (!value.match(/^([0-9a-fA-F]){64}$/))
-		return _('Invalid public key string');
+		return _('Invalid public key string %s').format(value);
 	return true;
 };
 
@@ -34,13 +34,13 @@ function validateYggdrasilListenUri(section_id,value) {
 		return true;
 	};
 	if (!value.match(/^(tls|tcp|unix|quic):\/\//))
-		return _('URI scheme not supported');
+		return _('Unsupported URI scheme in %s').format(value);
 	return true;
 };
 
 function validateYggdrasilPeerUri(section_id,value) {
-	if (!value.match(/^(tls|tcp|unix|quic|socks|socktls):\/\//))
-		return _('URI scheme not supported');
+	if (!value.match(/^(tls|tcp|unix|quic|socks|sockstls):\/\//))
+		return _('URI scheme %s not supported').format(value);
 	return true;
 };
 
@@ -50,12 +50,10 @@ var cbiKeyPairGenerate = form.DummyValue.extend({
 			'class':'btn',
 			'click':ui.createHandlerFn(this, function(section_id,ev) {
 				var prv = this.section.getUIElement(section_id,'private_key'),
-					pub = this.section.getUIElement(section_id,'public_key'),
 					map = this.map;
-				if ((prv.getValue()||pub.getValue()) && !confirm(_('Do you want to replace the current keys?')))
-					return;
-				return generateKey().then(function(keypair){prv.setValue(keypair.priv);
-					pub.setValue(keypair.pub);
+
+				return generateKey().then(function(keypair){
+					prv.setValue(keypair.priv);
 					map.save(null,true);
 				});
 			},section_id)
@@ -122,7 +120,6 @@ function updateActivePeers(ifname) {
 		}
 	});
 }
-
 
 var cbiActivePeers = form.DummyValue.extend({
 	cfgvalue: function(section_id, value) {
@@ -192,22 +189,18 @@ return network.registerProtocol('yggdrasil',
 			o.password=true;
 			o.validate=validatePrivateKey;
 
-			o=s.taboption('general',form.Value,'public_key',_('Public key'),_('The public key for your Yggdrasil node'));
-			o.optional=false;
-			o.validate=validatePublicKey;
-
 			s.taboption('general',cbiKeyPairGenerate,'_gen_server_keypair',' ');
 
-			o=s.taboption('advanced',form.Value,'mtu',_('MTU'),_('Specify an MTU (Maximum Transmission Unit) for your local TUN interface. Default is the largest supported size for your platform. The lowest possible value is 1280.'));
+			o=s.taboption('advanced',form.Value,'mtu',_('MTU'),_('A default MTU of 65535 is set by Yggdrasil. It is recomended to utilize the default.'));
 			o.optional=true;
-			o.placeholder=1280;
+			o.placeholder=65535;
 			o.datatype='range(1280, 65535)';
 
 			o=s.taboption('general',form.TextValue,'node_info',_('Node info'),_('Optional node info. This must be a { "key": "value", ... } map or set as null. This is entirely optional but, if set, is visible to the whole network on request.'));
 			o.optional=true;
 			o.placeholder="{}";
 
-			o=s.taboption('general',form.Flag,'node_info_privacy',_('Node info privacy'),_('By default, node info contains some defaults including the platform, architecture and Yggdrasil version. These can help when surveying the network and diagnosing network routing problems. Enabling node info privacy prevents this, so that only items specified in "Node info" are sent back if specified.'));
+			o=s.taboption('general',form.Flag,'node_info_privacy',_('Node info privacy'),_('Enable node info privacy so that only items specified in "Node info" are sent back. Otherwise defaults including the platform, architecture and Yggdrasil version are included.'));
 			o.default=o.disabled;
 
 			try {
@@ -220,11 +213,11 @@ return network.registerProtocol('yggdrasil',
 			o=s.taboption('peers', form.SectionValue, '_listen', form.NamedSection, this.sid, "interface", _("Listen for peers"))
 			ss=o.subsection;
 
-			o=ss.option(form.DynamicList,'listen_address',_('Listen addresses'),_('Listen addresses for incoming connections. You will need to add listeners in order to accept incoming peerings from non-local nodes. Multicast peer discovery will work regardless of any listeners set here. Each listener should be specified in URI format, e.g.tls://0.0.0.0:0 or tls://[::]:0 to listen on all interfaces.'));
+			o=ss.option(form.DynamicList,'listen_address',_('Listen addresses'), _('Add listeners in order to accept incoming peerings from non-local nodes. Multicast peer discovery works regardless of listeners set here. URI Format: <code>tls://0.0.0.0:0</code> or <code>tls://[::]:0</code> to listen on all interfaces. Choose an acceptable URI <code>tls://</code>, <code>tcp://</code>, <code>unix://</code> or <code>quic://</code>'));
 			o.placeholder="tls://0.0.0.0:0"
 			o.validate=validateYggdrasilListenUri;
 
-			o=s.taboption('peers',form.DynamicList,'allowed_public_key',_('Allowed public keys'),_('List of peer public keys to allow incoming peering connections from. If left empty then all connections will be allowed by default. This does not affect outgoing peerings, nor does it affect link-local peers discovered via multicast.'));
+			o=s.taboption('peers',form.DynamicList,'allowed_public_key',_('Accept from public keys'),_('If empty, all incoming connections will be allowed (default). This does not affect outgoing peerings, nor link-local peers discovered via multicast.'));
 			o.validate=validatePublicKey;
 
 			o=s.taboption('peers', form.SectionValue, '_peers', form.TableSection, 'yggdrasil_%s_peer'.format(this.sid), _("Peer addresses"))
