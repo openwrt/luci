@@ -240,7 +240,7 @@ return view.extend({
 		bits.datatype = 'min(1024)';
 
 		var commonname = certParam.option(form.Value, 'commonname', _('Server Hostname'), _('a.k.a CommonName'));
-		commonname.default = window.location.hostname || 'OpenWrt';
+		commonname.default = window.location.hostname || 'CapOS';
 
 		var organization = certParam.option(form.Value, 'organization', _('Organization'), _('If empty, a random/unique value is used in cert generation'));
 
