@@ -9,7 +9,7 @@
 'require tools.widgets as widgets';
 
 function rule_proto_txt(s, ctHelpers) {
-	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:any|\*)$/, '');
+	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:all|\*)$/, 'any');
 	var dip = uci.get('firewall', s, 'dest_ip') || '';
 	var proto = L.toArray(uci.get('firewall', s, 'proto')).filter(function(p) {
 		return (p != '*' && p != 'any' && p != 'all');
@@ -38,8 +38,8 @@ function rule_proto_txt(s, ctHelpers) {
 	} : null;
 
 	return fwtool.fmt(_('Incoming %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="cbi-tooltip-container">%{item.name}<span class="cbi-tooltip">ICMP with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip="Match any helper except &quot;%{helper.name}&quot;">%{helper.val}</var>:<var data-tooltip="%{helper.name}">%{helper.val}</var>}}'), {
-		ipv4: ((!family && dip.indexOf(':') == -1) || family == 'ipv4'),
-		ipv6: ((!family && dip.indexOf(':') != -1) || (!family && !dip) || family == 'ipv6'),
+		ipv4: ((!family && dip.indexOf(':') == -1) || family == 'any' || (!family && !dip) || family == 'ipv4'),
+		ipv6: ((!family && dip.indexOf(':') != -1) || family == 'any' || family == 'ipv6'),
 		proto: proto,
 		helper: h,
 		mark:   f
@@ -101,7 +101,7 @@ function validate_opt_family(m, section_id, opt) {
 	var dip = dopt.formvalue(section_id) || '',
 	    fm = fmopt.formvalue(section_id) || '';
 
-	if (fm == '' || (fm == 'ipv6' && (dip.indexOf(':') != -1 || dip == '')) || (fm == 'ipv4' && dip.indexOf(':') == -1))
+	if (fm == '' || (fm == 'any' && dip == '') || (fm == 'ipv6' && (dip.indexOf(':') != -1 || dip == '')) || (fm == 'ipv4' && dip.indexOf(':') == -1))
 		return true;
 
 	return _('Address family, Internal IP address must match');
@@ -187,14 +187,17 @@ return view.extend({
 			o = s.taboption('general', form.ListValue, 'family', _('Restrict to address family'));
 			o.modalonly = true;
 			o.rmempty = true;
+			o.value('any', _('IPv4 and IPv6'));
 			o.value('ipv4', _('IPv4 only'));
 			o.value('ipv6', _('IPv6 only'));
 			o.value('', _('automatic'));  // infer from zone or used IP addresses
 			o.cfgvalue = function(section_id) {
 				var val = this.map.data.get(this.map.config, section_id, 'family');
 
-				if (!val || val == 'any' || val == 'all' || val == '*')
+				if (!val)
 					return '';
+				else if (val == 'any' || val == 'all' || val == '*')
+					return 'any';
 				else if (val == 'inet' || String(val).indexOf('4') != -1)
 					return 'ipv4';
 				else if (String(val).indexOf('6') != -1)
