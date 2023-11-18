@@ -50,10 +50,12 @@ var cbiKeyPairGenerate = form.DummyValue.extend({
 			'class':'btn',
 			'click':ui.createHandlerFn(this, function(section_id,ev) {
 				var prv = this.section.getUIElement(section_id,'private_key'),
+					pub = this.section.getUIElement(section_id,'public_key'),
 					map = this.map;
 
 				return generateKey().then(function(keypair){
 					prv.setValue(keypair.priv);
+					pub.setValue(keypair.pub);
 					map.save(null,true);
 				});
 			},section_id)
@@ -188,6 +190,10 @@ return network.registerProtocol('yggdrasil',
 			o.optional=false;
 			o.password=true;
 			o.validate=validatePrivateKey;
+
+			o=s.taboption('general',form.Value,'public_key',_('Public key'),_('The public key for your Yggdrasil node'));
+			o.optional=true;
+			o.validate=validatePublicKey;
 
 			s.taboption('general',cbiKeyPairGenerate,'_gen_server_keypair',' ');
 

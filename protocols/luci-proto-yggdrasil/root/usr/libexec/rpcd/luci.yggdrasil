@@ -16,12 +16,12 @@ case "$1" in
 		case "$2" in
 			generateKeyPair)
 				json_load "$(yggdrasil -genconf -json)"
-				json_get_vars PublicKey PrivateKey
+				json_get_vars PrivateKey
 				json_cleanup
 				json_init
 				json_add_object "keys"
 				json_add_string "priv" "$PrivateKey"
-				json_add_string "pub" "$PublicKey"
+				json_add_string "pub" "${PrivateKey:64}"
 				json_close_object
 				json_dump
 			;;
