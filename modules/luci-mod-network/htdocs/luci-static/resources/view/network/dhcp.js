@@ -727,21 +727,40 @@ return view.extend({
 		});
 
 		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
-			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
+			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.') + '<br />' +
+			_('The netfilter components below are only regarded when running fw4.'));
 
 		ss = o.subsection;
 
 		ss.addremove = true;
 		ss.anonymous = true;
 		ss.sortable  = true;
+		ss.rowcolors = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit IP set');
 
-		so = ss.option(form.DynamicList, 'name', _('IP set'));
+		so = ss.option(form.DynamicList, 'name', _('Name of the set'));
 		so.rmempty = false;
+		so.editable = true;
 		so.datatype = 'string';
 
-		so = ss.option(form.DynamicList, 'domain', _('Domain'));
+		so = ss.option(form.DynamicList, 'domain', _('FQDN'));
 		so.rmempty = false;
+		so.editable = true;
 		so.datatype = 'hostname';
+
+		so = ss.option(form.Value, 'table', _('Netfilter table name'), _('Defaults to fw4.'));
+		so.editable = true;
+		so.placeholder = 'fw4';
+		so.rmempty = true;
+
+		so = ss.option(form.ListValue, 'table_family', _('Table IP family'), _('Defaults to IPv4+6.') + ' ' + _('Can be hinted by adding 4 or 6 to the name.') + '<br />' +
+			_('Adding an IPv6 to an IPv4 set and vice-versa silently fails.'));
+		so.editable = true;
+		so.rmempty = true;
+		so.value('inet', _('IPv4+6'));
+		so.value('ip', _('IPv4'));
+		so.value('ip6', _('IPv6'));
 
 		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
 			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br />' +
