@@ -9,7 +9,7 @@ var expr_translations = {
 	'meta.iifname': _('Ingress device name', 'nft meta iifname'),
 	'meta.oifname': _('Egress device name', 'nft meta oifname'),
 	'meta.iif': _('Ingress device id', 'nft meta iif'),
-	'meta.iif': _('Egress device id', 'nft meta oif'),
+	'meta.oif': _('Egress device id', 'nft meta oif'),
 
 	'meta.l4proto': _('IP protocol', 'nft meta l4proto'),
 	'meta.l4proto.tcp': 'TCP',
