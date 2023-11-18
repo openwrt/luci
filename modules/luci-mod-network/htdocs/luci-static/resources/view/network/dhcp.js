@@ -365,6 +365,11 @@ return view.extend({
 			_('Write received DNS queries to syslog.') + ' ' + _('Dump cache on SIGUSR1, include requesting IP.'));
 		o.optional = true;
 
+		o = s.taboption('logging', form.Flag, 'logdhcp',
+			_('Extra DHCP logging'),
+			_('Log all options sent to DHCP clients and the tags used to determine them.'));
+		o.optional = true;
+
 		o = s.taboption('forward', form.DynamicList, 'server',
 			_('DNS forwardings'),
 			_('Forward specific domain queries to specific upstream servers.'));
