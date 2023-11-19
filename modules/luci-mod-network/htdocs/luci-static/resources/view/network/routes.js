@@ -82,7 +82,7 @@ return view.extend({
 			o.datatype = 'uinteger';
 			o.placeholder = 0;
 			o.textvalue = function(section_id) {
-				return this.cfgvalue(section_id) || 0;
+				return this.cfgvalue(section_id) || E('em', _('auto'));
 			};
 
 			o = s.taboption('advanced', form.Value, 'mtu', _('MTU'), _('Defines a specific MTU for this route'));
@@ -95,13 +95,12 @@ return view.extend({
 			for (var i = 0; i < rtTables.length; i++)
 				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
 			o.textvalue = function(section_id) {
-				return this.cfgvalue(section_id) || 'main';
+				return this.cfgvalue(section_id) || E('em', _('auto'));
 			};
 
 			o = s.taboption('advanced', form.Value, 'source', _('Source'), _('Specifies the preferred source address when sending to destinations covered by the target'));
 			o.modalonly = true;
 			o.datatype = (family == 6) ? 'ip6addr' : 'ip4addr';
-			o.placeholder = E('em', _('auto'));
 			for (var i = 0; i < netDevs.length; i++) {
 				var addrs = (family == 6) ? netDevs[i].getIP6Addrs() : netDevs[i].getIPAddrs();
 				for (var j = 0; j < addrs.length; j++)
