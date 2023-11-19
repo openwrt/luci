@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Diagnostics Tools (Core)
-LUCI_DEPENDS:=
+LUCI_DEPENDS:=+luci-base
 
 include ../../luci.mk
 

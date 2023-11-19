@@ -311,7 +311,6 @@ return view.extend({
 
 		o = s.taboption('general', widgets.NetworkSelect, 'adb_trigger', _('Startup Trigger Interface'), _('List of available network interfaces to trigger the adblock start. \
 			Choose \'unspecified\' to use a classic startup timeout instead of a network trigger.'));
-		o.unspecified = true;
 		o.nocreate = true;
 		o.rmempty = true;
 
@@ -320,14 +319,12 @@ return view.extend({
 
 		o = s.taboption('general', widgets.ZoneSelect, 'adb_zonelist', _('Forced Zones'), _('Firewall source zones that should be forced locally.'));
 		o.depends('adb_forcedns', '1');
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = true;
 		o.rmempty = true;
 
 		o = s.taboption('general', form.DynamicList, 'adb_portlist', _('Forced Ports'), _('Firewall ports that should be forced locally.'));
 		o.depends('adb_forcedns', '1');
-		o.unspecified = true;
 		o.multiple = true;
 		o.nocreate = false;
 		o.datatype = 'port';
@@ -484,7 +481,6 @@ return view.extend({
 		o.default = '<em><b>Changes on this tab needs a full adblock service restart to take effect.</b></em>';
 
 		o = s.taboption('adv_report', widgets.DeviceSelect, 'adb_repiface', _('Report Interface'), _('List of available network devices used by tcpdump.'));
-		o.unspecified = true;
 		o.nocreate = false;
 		o.rmempty = true;
 

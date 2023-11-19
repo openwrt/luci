@@ -37,6 +37,15 @@
 		}
 	},
 
+	"luci-mod-status-index-ports": {
+		"description": "Grant access to port status display",
+		"read": {
+			"ubus": {
+				"luci": [ "getBuiltinEthernetPorts" ]
+			}
+		}
+	},
+
 	"luci-mod-status-index-wifi": {
 		"description": "Grant access to wireless status display",
 		"read": {

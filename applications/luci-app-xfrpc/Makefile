@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for xfrpc
-LUCI_DEPENDS:=+xfrpc
+LUCI_DEPENDS:=+luci-base +xfrpc
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Dengfeng Liu <liu_df@qq.com>

@@ -234,7 +234,7 @@ return view.extend({
 			callHostHints(),
 			callDUIDHints(),
 			getDHCPPools(),
-			network.getDevices()
+			network.getNetworks()
 		]);
 	},
 
@@ -243,7 +243,7 @@ return view.extend({
 		    hosts = hosts_duids_pools[0],
 		    duids = hosts_duids_pools[1],
 		    pools = hosts_duids_pools[2],
-		    ndevs = hosts_duids_pools[3],
+		    networks = hosts_duids_pools[3],
 		    m, s, o, ss, so;
 
 		m = new form.Map('dhcp', _('DHCP and DNS'),
@@ -364,28 +364,27 @@ return view.extend({
 		ss.rowcolors = true;
 		ss.nodescriptions = true;
 
-		so = ss.option(form.Value, 'id', _('ID'));
-		so.rmempty = false;
-		so.optional = true;
-
-		so = ss.option(widgets.NetworkSelect, 'interface', _('Interface'));
-		so.optional = true;
-		so.rmempty = false;
-		so.placeholder = 'lan';
-
-		so = ss.option(form.Value, 'local_addr', _('Listen address'));
+		so = ss.option(form.Value, 'local_addr', _('Relay from'));
 		so.rmempty = false;
 		so.datatype = 'ipaddr';
 
 		for (var family = 4; family <= 6; family += 2) {
-			for (var i = 0; i < ndevs.length; i++) {
-				var addrs = (family == 6) ? ndevs[i].getIP6Addrs() : ndevs[i].getIPAddrs();
-				for (var j = 0; j < addrs.length; j++)
-					so.value(addrs[j].split('/')[0]);
+			for (var i = 0; i < networks.length; i++) {
+				if (networks[i].getName() != 'loopback') {
+					var addrs = (family == 6) ? networks[i].getIP6Addrs() : networks[i].getIPAddrs();
+					for (var j = 0; j < addrs.length; j++) {
+						var addr = addrs[j].split('/')[0];
+						so.value(addr, E([], [
+							addr, ' (',
+							widgets.NetworkSelect.prototype.renderIfaceBadge(networks[i]),
+							')'
+						]));
+					}
+				}
 			}
 		}
 
-		so = ss.option(form.Value, 'server_addr', _('Relay To address'));
+		so = ss.option(form.Value, 'server_addr', _('Relay to address'));
 		so.rmempty = false;
 		so.optional = false;
 		so.placeholder = '192.168.10.1#535';
@@ -402,14 +401,19 @@ return view.extend({
 					n = p[0];
 
 			if ((m == null || m == '') && (n == null || n == ''))
-				return _('Both Listen addr and Relay To must be specified.');
+				return _('Both "Relay from" and "Relay to address" must be specified.');
 
 			if ((validation.parseIPv6(m) && validation.parseIPv6(n)) ||
 				validation.parseIPv4(m) && validation.parseIPv4(n))
 				return true;
 			else
-				return _('Listen and Relay To IP family must be homogeneous.')
+				return _('Address families of "Relay from" and "Relay to address" must match.')
 		};
+
+		so = ss.option(widgets.NetworkSelect, 'interface', _('Only accept replies via'));
+		so.optional = true;
+		so.rmempty = false;
+		so.placeholder = 'lan';
 
 		s.taboption('files', form.Flag, 'readethers',
 			_('Use <code>/etc/ethers</code>'),
