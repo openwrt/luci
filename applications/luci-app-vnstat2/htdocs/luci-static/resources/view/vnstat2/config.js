@@ -58,13 +58,10 @@ return view.extend({
 		o = s.option(form.DummyValue, '_database');
 
 		o.load = function(section_id) {
-			return fs.exec('/usr/bin/vnstat', ['--json', 'f', '1']).then(L.bind(function(result) {
+			return fs.exec('/usr/bin/vnstat', ['--dbiflist', '1']).then(L.bind(function(result) {
 				var databaseInterfaces = [];
 				if (result.code == 0) {
-					var vnstatData = JSON.parse(result.stdout);
-					for (var i = 0; i < vnstatData.interfaces.length; i++) {
-						databaseInterfaces.push(vnstatData.interfaces[i].name);
-					}
+					databaseInterfaces = result.stdout.trim().split('\n');
 				}
 
 				var configInterfaces = uci.get_first('vnstat', 'vnstat', 'interface') || [];
