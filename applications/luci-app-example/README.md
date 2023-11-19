@@ -29,6 +29,12 @@ Visit the web UI for the device/virtual machine where the package was installed,
 
 See `structure.md` for details on how to lay out a LuCI application.
 
+# Code format
+
+The LuCI Javascript code should be indented with tabs. js-beautify/jsbeautifier can help with this; the examples in this application were formatted with
+
+`js-beautify -t -a -j -w 110 -r <filename>`
+
 # Editing the code
 
 You can either do direct editing on the device/virtual machine, or use something like sshfs to have remote access from your development computer.
@@ -80,3 +86,5 @@ You may wish to work with YAML data. See [YAML.md](YAML.md) for details on how t
 For a real world application (or changes to this example one that you wish to submit upstream), translations should be kept up to date.
 
 To rebuild the translations file, from the root of the repository execute `./build/i18n-scan.pl applications/luci-app-example > applications/luci-app-example/po/templates/example.pot`
+
+If the scan command fails with an error about being unable to open/find `msguniq`, install the GNU `gettext` package for your operating system.
