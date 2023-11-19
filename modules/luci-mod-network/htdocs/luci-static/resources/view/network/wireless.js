@@ -1456,7 +1456,6 @@ return view.extend({
 				o.rmempty = true;
 				o.multiple = false;
 				o.noaliases = true;
-				o.nobridges = true;
 				o.nocreate = true;
 				o.noinactive = true;
 
