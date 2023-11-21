@@ -24,8 +24,8 @@ function invokeIncludesLoad(includes) {
 	return has_load ? Promise.all(tasks) : Promise.resolve(null);
 }
 
-function startPolling(includes, containers) {
-	var step = function() {
+return view.extend({
+	poll_status: function(includes, containers) {
 		return network.flushCache().then(function() {
 			return invokeIncludesLoad(includes);
 		}).then(function(results) {
@@ -59,14 +59,8 @@ function startPolling(includes, containers) {
 				ssi.classList.add('fade-in');
 			}
 		});
-	};
+	},
 
-	return step().then(function() {
-		poll.add(step);
-	});
-}
-
-return view.extend({
 	load: function() {
 		return L.resolveDefault(fs.list('/www' + L.resource('view/status/include')), []).then(function(entries) {
 			return Promise.all(entries.filter(function(e) {
@@ -103,7 +97,9 @@ return view.extend({
 			containers.push(container);
 		}
 
-		return startPolling(includes, containers).then(function() {
+		return this.poll_status(includes, containers).then(function() {
+			return poll.add(L.bind(this.poll_status, this, includes, containers))
+		}).then(function() {
 			return rv;
 		});
 	},
