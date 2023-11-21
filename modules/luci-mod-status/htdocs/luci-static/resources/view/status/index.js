@@ -5,30 +5,30 @@
 'require fs';
 'require network';
 
-function invokeIncludesLoad(includes) {
-	var tasks = [], has_load = false;
-
-	for (var i = 0; i < includes.length; i++) {
-		if (typeof(includes[i].load) == 'function') {
-			tasks.push(includes[i].load().catch(L.bind(function() {
-				this.failed = true;
-			}, includes[i])));
-
-			has_load = true;
-		}
-		else {
-			tasks.push(null);
-		}
-	}
-
-	return has_load ? Promise.all(tasks) : Promise.resolve(null);
-}
-
 return view.extend({
+	invokeIncludesLoad: function(includes) {
+		var tasks = [], has_load = false;
+
+		for (var i = 0; i < includes.length; i++) {
+			if (typeof(includes[i].load) == 'function') {
+				tasks.push(includes[i].load().catch(L.bind(function() {
+					this.failed = true;
+				}, includes[i])));
+
+				has_load = true;
+			}
+			else {
+				tasks.push(null);
+			}
+		}
+
+		return has_load ? Promise.all(tasks) : Promise.resolve(null);
+	},
+
 	poll_status: function(includes, containers) {
-		return network.flushCache().then(function() {
-			return invokeIncludesLoad(includes);
-		}).then(function(results) {
+		return network.flushCache().then(L.bind(
+			this.invokeIncludesLoad, this, includes
+		)).then(function(results) {
 			for (var i = 0; i < includes.length; i++) {
 				var content = null;
 
