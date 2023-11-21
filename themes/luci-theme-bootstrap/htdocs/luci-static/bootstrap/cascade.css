@@ -2014,6 +2014,38 @@ form.inline { display: inline; margin-bottom: 0; }
 	font-family: monospace;
 }
 
+.cbi-title {
+	display: flex;
+}
+
+.cbi-title div {
+	margin-left: 5px;
+	margin-right: auto;
+	align-self: center;
+}
+
+.cbi-title [data-indicator] {
+	padding: 3px 3px 2px;
+	font-size: 9.75px;
+	font-weight: bold;
+	color: var(--text-color-high);
+	text-transform: uppercase;
+	white-space: nowrap;
+	background-color: var(--background-color-low);
+	border-radius: 3px;
+	text-shadow: none;
+	margin: .125em 0 .125em .4em;
+}
+
+.cbi-title [data-indicator][data-style="active"] {
+	color: var(--on-primary-color);
+	background-color: var(--primary-color-high);
+}
+
+.cbi-title [data-indicator][data-clickable] {
+	cursor: pointer;
+}
+
 .cbi-section-table .tr:hover .td,
 .cbi-section-table .tr:hover .th,
 .cbi-section-table .tr:hover::before {

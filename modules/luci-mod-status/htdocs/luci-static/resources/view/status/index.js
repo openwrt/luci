@@ -4,12 +4,42 @@
 'require poll';
 'require fs';
 'require network';
+'require ui';
 
 return view.extend({
-	invokeIncludesLoad: function(includes) {
+	handleToggleSection: function(include, container, ev) {
+		var btn = ev.currentTarget;
+
+		include.hide = !include.hide;
+
+		btn.setAttribute('data-style', include.hide ? 'active' : 'inactive');
+		btn.firstChild.data = include.hide ? _('Show') : _('Hide');
+		btn.blur();
+
+		container.style.display = include.hide ? 'none' : 'block';
+
+		if (include.hide) {
+			localStorage.setItem(include.id, 'hide');
+		} else {
+			dom.content(container,
+				E('p', {}, E('em', { 'class': 'spinning' },
+					[ _('Collecting data...') ])
+				)
+			);
+
+			localStorage.removeItem(include.id);
+		}
+	},
+
+	invokeIncludesLoad: function(includes, first_load) {
 		var tasks = [], has_load = false;
 
 		for (var i = 0; i < includes.length; i++) {
+			if (includes[i].hide && !first_load) {
+				tasks.push(null);
+				continue;
+			}
+
 			if (typeof(includes[i].load) == 'function') {
 				tasks.push(includes[i].load().catch(L.bind(function() {
 					this.failed = true;
@@ -25,12 +55,15 @@ return view.extend({
 		return has_load ? Promise.all(tasks) : Promise.resolve(null);
 	},
 
-	poll_status: function(includes, containers) {
+	poll_status: function(includes, containers, first_load) {
 		return network.flushCache().then(L.bind(
-			this.invokeIncludesLoad, this, includes
+			this.invokeIncludesLoad, this, includes, first_load
 		)).then(function(results) {
 			for (var i = 0; i < includes.length; i++) {
 				var content = null;
+
+				if (includes[i].hide && !first_load)
+					continue;
 
 				if (includes[i].failed)
 					continue;
@@ -49,7 +82,8 @@ return view.extend({
 					containers[i].parentNode.style.display = '';
 					containers[i].parentNode.classList.add('fade-in');
 
-					dom.content(containers[i], content);
+					if (!includes[i].hide)
+						dom.content(containers[i], content);
 				}
 			}
 
@@ -87,19 +121,33 @@ return view.extend({
 						function(m, s, c) { return (s ? ' ' : '') + c.toUpperCase() })
 					});
 
+			includes[i].id = title;
+			includes[i].hide = localStorage.getItem(includes[i].id) == 'hide';
+
 			var container = E('div');
 
-			rv.appendChild(E('div', { 'class': 'cbi-section', 'style': 'display:none' }, [
-				title != '' ? E('h3', title) : '',
+			rv.appendChild(E('div', { 'class': 'cbi-section', 'style': 'display: none' }, [
+				E('div', { 'class': 'cbi-title' },[
+					title != '' ? E('h3', title) : '',
+					E('div', [
+						E('span', {
+							'data-style': includes[i].hide ? 'active' : 'inactive',
+							'data-indicator': 'poll-status',
+							'data-clickable': 'true',
+							'click': ui.createHandlerFn(this, 'handleToggleSection',
+										    includes[i], container)
+						}, [ _(includes[i].hide ? 'Show' : 'Hide') ])
+					]),
+				]),
 				container
 			]));
 
 			containers.push(container);
 		}
 
-		return this.poll_status(includes, containers).then(function() {
+		return this.poll_status(includes, containers, true).then(L.bind(function() {
 			return poll.add(L.bind(this.poll_status, this, includes, containers))
-		}).then(function() {
+		}, this)).then(function() {
 			return rv;
 		});
 	},
