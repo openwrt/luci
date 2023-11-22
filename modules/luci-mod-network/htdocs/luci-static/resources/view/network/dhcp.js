@@ -909,8 +909,8 @@ return view.extend({
 
 		so = ss.option(form.Value, 'hostid',
 			_('IPv6-Suffix (hex)'),
-			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 8 chars).'));
-		so.datatype = 'and(rangelength(0,8),hexstring)';
+			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 16 chars).'));
+		so.datatype = 'and(rangelength(0,16),hexstring)';
 
 		so = ss.option(form.DynamicList, 'tag',
 			_('Tag'),
