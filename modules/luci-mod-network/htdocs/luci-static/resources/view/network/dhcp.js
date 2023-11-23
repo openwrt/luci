@@ -209,6 +209,34 @@ function validateServerSpec(sid, s) {
 	return true;
 }
 
+function expandAndFormatMAC(macs) {
+	let result = [];
+
+	macs.forEach(mac => {
+		if (isValidMAC(mac)) {
+			const expandedMac = mac.split(':').map(part => {
+				return (part.length === 1 && part !== '*') ? '0' + part : part;
+			}).join(':').toUpperCase();
+			result.push(expandedMac);
+		}
+	});
+
+	return result.length ? result.join(' ') : null;
+}
+
+function isValidMAC(sid, s) {
+	if (!s)
+		return true;
+
+	let macaddrs = L.toArray(s);
+
+	for (var i = 0; i < macaddrs.length; i++)
+		if (!macaddrs[i].match(/^(([0-9a-f]{1,2}|\*)[:-]){5}([0-9a-f]{1,2}|\*)$/i))
+			return _('Expecting a valid MAC address, optionally including wildcards') + _('; invalid MAC: ') + macaddrs[i];
+
+	return true;
+}
+
 function validateMACAddr(pools, sid, s) {
 	if (s == null || s == '')
 		return true;
@@ -240,7 +268,7 @@ function validateMACAddr(pools, sid, s) {
 		}
 	}
 
-	return true;
+	return isValidMAC(sid, s);
 }
 
 return view.extend({
@@ -890,31 +918,10 @@ return view.extend({
 			_('The hardware address(es) of this entry/host.') + '<br /><br />' + 
 			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
 		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
-		so.validate = function(section_id, value) {
-			var macaddrs = L.toArray(value);
-
-			for (var i = 0; i < macaddrs.length; i++)
-				if (!macaddrs[i].match(/^([a-fA-F0-9]{2}|\*):([a-fA-F0-9]{2}:|\*:){4}(?:[a-fA-F0-9]{2}|\*)$/))
-					return _('Expecting a valid MAC address, optionally including wildcards');
-
-			return true;
-		};
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
-			var macs = L.toArray(uci.get('dhcp', section, 'mac')),
-			    result = [];
-
-			for (var i = 0, mac; (mac = macs[i]) != null; i++)
-				if (/^([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*)$/.test(mac)) {
-					var m = [
-						parseInt(RegExp.$1, 16), parseInt(RegExp.$2, 16),
-						parseInt(RegExp.$3, 16), parseInt(RegExp.$4, 16),
-						parseInt(RegExp.$5, 16), parseInt(RegExp.$6, 16)
-					];
-
-					result.push(m.map(function(n) { return isNaN(n) ? '*' : '%02X'.format(n) }).join(':'));
-				}
-			return result.length ? result.join(' ') : null;
+			var macs = L.toArray(uci.get('dhcp', section, 'mac'));
+			return expandAndFormatMAC(macs);
 		};
 		so.renderWidget = function(section_id, option_index, cfgvalue) {
 			var node = form.Value.prototype.renderWidget.apply(this, [section_id, option_index, cfgvalue]),
