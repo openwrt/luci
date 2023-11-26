@@ -63,7 +63,7 @@ return view.extend({
 		if (scanCache[res.bssid].graph == null)
 			scanCache[res.bssid].graph = [];
 
-		channels.forEach(function(channel) {
+		function add_channel_to_graph(chan_analysis, res, scanCache, i, channel, channel_width) {
 			var chan_offset = offset_tbl[channel],
 				points = [
 				(chan_offset-(step*channel_width))+','+height,
@@ -94,7 +94,14 @@ return view.extend({
 			scanCache[res.bssid].graph[i].line.setAttribute('points', points);
 			scanCache[res.bssid].graph[i].group.style.zIndex = res.signal*-1;
 			scanCache[res.bssid].graph[i].group.style.opacity = res.stale ? '0.5' : null;
+		}
+
+		channels.forEach(function(channel) {
+			add_channel_to_graph(chan_analysis, res, scanCache, i, channel, channel_width);
 		})
+		if (channel_width > 2) {
+			add_channel_to_graph(chan_analysis, res, scanCache, i+1, res.channel, 2);
+		}
 	},
 
 	create_channel_graph: function(chan_analysis, freq_tbl, band) {
