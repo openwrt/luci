@@ -63,38 +63,50 @@ return view.extend({
 		if (scanCache[res.bssid].graph == null)
 			scanCache[res.bssid].graph = [];
 
-		channels.forEach(function(channel) {
+		function add_channel_to_graph(chan_analysis, res, scanCache, i, channel, channel_width, label) {
 			var chan_offset = offset_tbl[channel],
 				points = [
-				(chan_offset-(step*channel_width))+','+height,
+				(chan_offset-(step*(channel_width  )))+','+height,
 				(chan_offset-(step*(channel_width-1)))+','+height_diff,
 				(chan_offset+(step*(channel_width-1)))+','+height_diff,
-				(chan_offset+(step*(channel_width)))+','+height
+				(chan_offset+(step*(channel_width  )))+','+height
 			];
 
 			if (scanCache[res.bssid].graph[i] == null) {
 				var group = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
 					line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline'),
-					text = document.createElementNS('http://www.w3.org/2000/svg', 'text'),
+					text = null,
 					color = scanCache[res.bssid].color;
 
 				line.setAttribute('style', 'fill:'+color+'4f'+';stroke:'+color+';stroke-width:0.5');
-				text.setAttribute('style', 'fill:'+color+';font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
-				text.appendChild(document.createTextNode(res.ssid || res.bssid));
-
 				group.appendChild(line)
-				group.appendChild(text)
+
+				if (label != null) {
+					text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+					text.setAttribute('style', 'fill:'+color+';font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
+					text.appendChild(document.createTextNode(label));
+					group.appendChild(text)
+				}
 
 				chan_analysis.graph.firstElementChild.appendChild(group);
 				scanCache[res.bssid].graph[i] = { group : group, line : line, text : text };
 			}
 
-			scanCache[res.bssid].graph[i].text.setAttribute('x', chan_offset-step);
-			scanCache[res.bssid].graph[i].text.setAttribute('y', height_diff - 2);
+			if (scanCache[res.bssid].graph[i].text != null) {
+				scanCache[res.bssid].graph[i].text.setAttribute('x', offset_tbl[res.channel]-step);
+				scanCache[res.bssid].graph[i].text.setAttribute('y', height_diff - 2);
+			}
 			scanCache[res.bssid].graph[i].line.setAttribute('points', points);
 			scanCache[res.bssid].graph[i].group.style.zIndex = res.signal*-1;
 			scanCache[res.bssid].graph[i].group.style.opacity = res.stale ? '0.5' : null;
+		}
+
+		channels.forEach(function(channel) {
+			add_channel_to_graph(chan_analysis, res, scanCache, i, channel, channel_width, res.ssid || res.bssid);
 		})
+		if (channel_width > 2) {
+			add_channel_to_graph(chan_analysis, res, scanCache, i+1, res.channel, 2, null);
+		}
 	},
 
 	create_channel_graph: function(chan_analysis, freq_tbl, band) {
