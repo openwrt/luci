@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=Support for CNI protocol
-LUCI_DEPENDS:=+cni-protocol
+LUCI_TITLE:=Support for externally managed protocol
+LUCI_DEPENDS:=+external-protocol
 
 include ../../luci.mk
 
