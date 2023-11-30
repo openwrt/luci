@@ -2,13 +2,13 @@
 'require form';
 'require network';
 
-return network.registerProtocol('cni', {
+return network.registerProtocol('external', {
 	getI18n: function () {
-		return _('CNI (Externally managed interface)');
+		return _('Externally managed interface');
 	},
 
 	getOpkgPackage: function() {
-		return "cni-protocol";
+		return "external-protocol";
 	},
 
 	isFloating: function() {
@@ -31,10 +31,15 @@ return network.registerProtocol('cni', {
 		o.optional = false;
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Value, '_delay', _('Delay'), _('Afer making changes to network using CNI protocol, network must be manually restarted.'));
+		o = s.taboption('general', form.Value, '_delay', _('Delay'), _('Afer making changes to network using external protocol, network must be manually restarted.'));
 		o.ucioption = 'delay';
 		o.placeholder = '10';
 		o.datatype = 'min(1)';
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('general', form.Value, '_searchdomain', _('Search domain'));
+		o.ucioption = 'searchdomain'
 		o.optional = true;
 		o.rmempty = true;
 	}
