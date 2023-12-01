@@ -290,11 +290,11 @@ return view.extend({
 					}
 
 				if (res.vht_operation != null) {
+					/* if channel_width < 80, refer to HT for actual channel width */
+					if (res.vht_operation.channel_width <= 40)
+						continue;
 					center_channels[0] = res.vht_operation.center_freq_1;
-					if (res.vht_operation.channel_width == 40) {
-						chan_width = 4;
-						res.channel_width = "40 MHz";
-					} else if (res.vht_operation.channel_width == 80) {
+					if (res.vht_operation.channel_width == 80) {
 						chan_width = 8;
 						res.channel_width = "80 MHz";
 					} else if (res.vht_operation.channel_width == 8080) {
