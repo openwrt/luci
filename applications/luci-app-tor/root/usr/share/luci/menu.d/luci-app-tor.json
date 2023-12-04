@@ -1,0 +1,23 @@
+{
+	"admin/services/tor": {
+		"title": "Tor onion router",
+		"order": 60,
+		"action": {
+			"type": "alias",
+			"path": "admin/services/tor/tor-hs"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-tor"
+			]
+		}
+	},
+	"admin/services/tor/tor-hs": {
+		"title": "Tor Onion Services",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "tor/tor-hs"
+		}
+	}
+}
