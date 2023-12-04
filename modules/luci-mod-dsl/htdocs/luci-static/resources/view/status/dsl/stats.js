@@ -154,7 +154,7 @@ return view.extend({
 
 			E('h4', {}, [ _('Data Path Counters') ]),
 			this.renderTable([
-				[ _('ATM Header Error Code Errors (HEC-P)'), '%d', data.errors.near.hec, data.errors.far.hec ],
+				[ _('ATM Header Error Control Errors (HEC-P)'), '%d', data.errors.near.hec, data.errors.far.hec ],
 				[ _('PTM Non Pre-emptive CRC Errors (CRC-P)'), '%d', data.errors.near.crc_p, data.errors.far.crc_p ],
 				[ _('PTM Pre-emptive CRC Errors (CRCP-P)'), '%d', data.errors.near.crcp_p, data.errors.far.crcp_p ]
 			]),
