@@ -343,7 +343,7 @@ return view.extend({
 					cfgvalue = 'WPA2 Pers. (CCMP)';
 					break;
 				case 'psk2+tkip':
-					cfgvalue = 'WPA2 Ent. (TKIP)';
+					cfgvalue = 'WPA2 Pers. (TKIP)';
 					break;
 				case 'psk':
 					cfgvalue = 'WPA Pers.';
