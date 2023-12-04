@@ -145,5 +145,17 @@ return network.registerProtocol('modemmanager', {
 
 		o = s.taboption('general', form.Value, 'signalrate', _('Signal Refresh Rate'), _("In seconds"));
 		o.datatype = 'uinteger';
+		
+		s.taboption('general', form.Value, 'metric', _('Gateway metric'));
+		
+		s.taboption('advanced', form.Flag, 'debugmode', _('Enable Debugmode'));
+
+		o = s.taboption('advanced', form.ListValue, 'loglevel', _('Log output level'));
+		o.value('ERR', _('Error'))
+		o.value('WARN', _('Warning'));
+		o.value('INFO', _('Info'));
+		o.value('DEBUG', _('Debug'));
+		o.default = 'ERR';
+		
 	}
 });

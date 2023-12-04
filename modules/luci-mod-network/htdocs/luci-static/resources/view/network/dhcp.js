@@ -89,6 +89,21 @@ function calculateNetwork(addr, mask) {
 	];
 }
 
+function generateDnsmasqInstanceEntry(data) {
+	const nameValueMap = new Map(Object.entries(data));
+	let formatString = nameValueMap.get('.index') + ' (' +  _('Name') + (nameValueMap.get('.anonymous') ? ': dnsmasq[' + nameValueMap.get('.index') + ']': ': ' + nameValueMap.get('.name'));
+
+	if (data.domain) {
+		formatString += ', ' +  _('Domain')  + ': ' + data.domain;
+	}
+	if (data.local) {
+		formatString += ', ' +  _('Local')  + ': ' + data.local;
+	}
+	formatString += ')';
+
+	return nameValueMap.get('.name'), formatString;
+}
+
 function getDHCPPools() {
 	return uci.load('dhcp').then(function() {
 		let sections = uci.sections('dhcp', 'dhcp'),
@@ -310,7 +325,8 @@ return view.extend({
 
 		o = s.taboption('general', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
-			_('Discard upstream responses containing <a href="%s">RFC1918</a> addresses.').format('https://datatracker.ietf.org/doc/html/rfc1918'));
+			_('Discard upstream responses containing <a href="%s">RFC1918</a> addresses.').format('https://www.rfc-editor.org/rfc/rfc1918') + '<br />' +
+			_('Discard also upstream responses containing <a href="%s">RFC4193</a>, Link-Local and private IPv4-Mapped <a href="%s">RFC4291</a> IPv6 Addresses.').format('https://www.rfc-editor.org/rfc/rfc4193', 'https://www.rfc-editor.org/rfc/rfc4291'));
 		o.rmempty = false;
 
 		o = s.taboption('general', form.Flag, 'rebind_localhost',
@@ -630,7 +646,7 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			so.value(index, '%s (Domain: %s, Local: %s)'.format(index, val.domain || '?', val.local || '?'));
+			so.value(generateDnsmasqInstanceEntry(val));
 		});
 
 		o = s.taboption('srvhosts', form.SectionValue, '__srvhosts__', form.TableSection, 'srvhost', null,
@@ -647,15 +663,15 @@ return view.extend({
 		ss.sortable  = true;
 		ss.rowcolors = true;
 
-		so = ss.option(form.Value, 'srv', _('SRV'), _('Syntax: <code>_service._proto.example.com</code>.'));
+		so = ss.option(form.Value, 'srv', _('SRV'), _('Syntax: <code>_service._proto.example.com.</code>'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = '_sip._tcp.example.com';
+		so.placeholder = '_sip._tcp.example.com.';
 
 		so = ss.option(form.Value, 'target', _('Target'), _('CNAME or fqdn'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'sip.example.com';
+		so.placeholder = 'sip.example.com.';
 
 		so = ss.option(form.Value, 'port', _('Port'));
 		so.rmempty = false;
@@ -687,12 +703,12 @@ return view.extend({
 		so = ss.option(form.Value, 'domain', _('Domain'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'example.com';
+		so.placeholder = 'example.com.';
 
 		so = ss.option(form.Value, 'relay', _('Relay'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'relay.example.com';
+		so.placeholder = 'relay.example.com.';
 
 		so = ss.option(form.Value, 'pref', _('Priority'), _('Ordinal: lower comes first.'));
 		so.rmempty = true;
@@ -713,12 +729,12 @@ return view.extend({
 		so = ss.option(form.Value, 'cname', _('Domain'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'www.example.com';
+		so.placeholder = 'www.example.com.';
 
 		so = ss.option(form.Value, 'target', _('Target'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'example.com';
+		so.placeholder = 'example.com.';
 
 		o = s.taboption('hosts', form.SectionValue, '__hosts__', form.GridSection, 'domain', null,
 			_('Hostnames are used to bind a domain name to an IP address. This setting is redundant for hostnames already configured with static leases, but it can be useful to rebind an FQDN.'));
@@ -932,7 +948,7 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			so.value(index, '%s (Domain: %s, Local: %s)'.format(index, val.domain || '?', val.local || '?'));
+			so.value(generateDnsmasqInstanceEntry(val));
 		});
 
 
