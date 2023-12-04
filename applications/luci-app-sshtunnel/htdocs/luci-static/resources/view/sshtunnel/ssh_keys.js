@@ -92,7 +92,8 @@ function _renderSshKeys(sshKeys) {
 	return E('div', {'class': 'cbi-section cbi-tblsection'}, [
 		E('h3', _('SSH Keys')),
 		E('div', {'class': 'cbi-section-descr'},
-			_('Add the pub key to <code>/root/.ssh/authorized_keys</code> or <code>/etc/dropbear/authorized_keys</code>.') + ' ' +
+			_('Add the pub key to %s or %s.')
+				.format('<code>/root/.ssh/authorized_keys</code>', '<code>/etc/dropbear/authorized_keys</code>') + ' ' +
 			_('In LuCI you can do that with <a %s>System / Administration / SSH-Keys</a>')
 				.format('href="/cgi-bin/luci/admin/system/admin/sshkeys"')
 		),

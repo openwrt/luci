@@ -43,7 +43,7 @@ function _renderKnownHosts(knownHosts) {
 	return E('div', {'class': 'cbi-section cbi-tblsection'}, [
 		E('h3', _('Known hosts ')),
 		E('div', {'class': 'cbi-section-descr'},
-			_('Keys of SSH servers found in <code>/root/.ssh/known_hosts</code>.')
+			_('Keys of SSH servers found in %s.').format('<code>/root/.ssh/known_hosts</code>')
 		),
 		table
 	]);
