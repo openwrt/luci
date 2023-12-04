@@ -26,8 +26,8 @@ msgid "Allowed actions"
 msgstr "Dozwolone działania"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:20
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "As configured by NUT"
 msgstr "Zgodnie z konfiguracją NUT"
 
@@ -35,7 +35,7 @@ msgstr "Zgodnie z konfiguracją NUT"
 msgid "Bytes to read from interrupt pipe"
 msgstr "Bajty do odczytania z potoku przerwań"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "CA Certificate path"
 msgstr "Ścieżka certyfikatu CA"
 
@@ -138,6 +138,7 @@ msgstr ""
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:150
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:158
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:166
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
 msgid "Execute notify command"
 msgstr "Wykonaj polecenie powiadomienia"
 
@@ -169,8 +170,8 @@ msgstr "Host"
 msgid "Hostname or IP address"
 msgstr "Nazwa hosta lub adres IP"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:199
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:228
 msgid "Hostname or address of UPS"
 msgstr "Nazwa hosta lub adres UPS'a"
 
@@ -192,6 +193,7 @@ msgstr "Adres IP"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:152
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:160
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:168
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:176
 msgid "Ignore"
 msgstr "Ignoruj"
 
@@ -268,8 +270,8 @@ msgstr "Dostęp do NUT CGI"
 msgid "NUT Users"
 msgstr "Użytkownicy NUT"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "Name of UPS"
 msgstr "Nazwa UPS"
 
@@ -332,32 +334,39 @@ msgstr "Polecenie powiadomienia"
 msgid "Notify when back online"
 msgstr "Powiadom, gdy będzie ponownie online"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
 msgid "Notify when battery needs replacing"
 msgstr "Powiadom, kiedy bateria wymaga wymiany"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
 msgid "Notify when communications lost"
 msgstr "Powiadom o utracie łączności"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
 msgid "Notify when communications restored"
 msgstr "Powiadom o przywróceniu komunikacji"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when force shutdown"
 msgstr "Powiadom o wymuszonym wyłączeniu"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:115
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when low battery"
 msgstr "Powiadamiaj o niskim poziomie baterii"
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+msgid "Notify when no communications"
+msgstr ""
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:171
+msgid "Notify when no parent process"
+msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:107
 msgid "Notify when on battery"
 msgstr "Powiadamiaj kiedy jest bateria"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
 msgid "Notify when shutting down"
 msgstr "Powiadamianie o zamykaniu"
 
@@ -377,13 +386,13 @@ msgstr "Komunikat o stanie baterii"
 msgid "Online message"
 msgstr "Wiadomość online"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:216
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:245
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:19
 msgid "Password"
 msgstr "Hasło"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "Path containing ca certificates to match against host certificate"
 msgstr ""
 "Ścieżka zawierająca certyfikaty urzędów certyfikacji, które odpowiadają "
@@ -418,15 +427,15 @@ msgid "Polling Frequency(s)"
 msgstr "Częstotliwość sondowań"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:27
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:195
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:224
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:203
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:232
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:46
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:202
 msgid "Port"
 msgstr "Port"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:200
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:229
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
 msgid "Power value"
 msgstr "Wartość mocy"
 
@@ -438,7 +447,7 @@ msgstr "Produkt (regex)"
 msgid "Replace battery message"
 msgstr "Komunikat o wymianie baterii"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Require SSL and make sure server CN matches hostname"
 msgstr "Wymagaj SSL i upewnij się, że serwer CN pasuje do nazwy hosta"
 
@@ -530,7 +539,7 @@ msgid "Time in seconds that upsdrvctl will wait for driver to finish starting"
 msgstr ""
 "Czas w sekundach, jaki upsdrvctl będzie czekać na zakończenie uruchamiania"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:183
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
 msgid "UPS Master"
 msgstr "Nadrzędny UPS"
 
@@ -538,7 +547,7 @@ msgstr "Nadrzędny UPS"
 msgid "UPS Server Global Settings"
 msgstr "Ustawienia globalne serwera UPS"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:212
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
 msgid "UPS Slave"
 msgstr "Podrzędny UPS"
 
@@ -575,8 +584,8 @@ msgstr ""
 "którego sterownik ma dostęp, był dla tego użytkownika odczytywany i "
 "zapisywany."
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:205
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:234
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:213
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:242
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:16
 msgid "Username"
 msgstr "Nazwa użytkownika"
@@ -585,7 +594,7 @@ msgstr "Nazwa użytkownika"
 msgid "Vendor (regex)"
 msgstr "Dostawca (regex)"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Verify all connection with SSL"
 msgstr "Zweryfikuj wszystkie połączenia z SSL"
 
@@ -603,6 +612,7 @@ msgstr "Obejście dla błędnego firmware"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:151
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:159
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:167
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:175
 msgid "Write to syslog"
 msgstr "Zapis do dziennika systemowego"
 

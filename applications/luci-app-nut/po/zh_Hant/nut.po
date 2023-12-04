@@ -29,8 +29,8 @@ msgid "Allowed actions"
 msgstr "允許的動作"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:20
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "As configured by NUT"
 msgstr "由 NUT 配置"
 
@@ -38,7 +38,7 @@ msgstr "由 NUT 配置"
 msgid "Bytes to read from interrupt pipe"
 msgstr "從中斷管道讀取的位元組數"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "CA Certificate path"
 msgstr "CA 證書路徑"
 
@@ -136,6 +136,7 @@ msgstr ""
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:150
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:158
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:166
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
 msgid "Execute notify command"
 msgstr "執行 notify 命令"
 
@@ -167,8 +168,8 @@ msgstr "主機"
 msgid "Hostname or IP address"
 msgstr "主機名或 IP 地址"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:199
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:228
 msgid "Hostname or address of UPS"
 msgstr "UPS 的主機名或地址"
 
@@ -190,6 +191,7 @@ msgstr "IP 位址"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:152
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:160
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:168
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:176
 msgid "Ignore"
 msgstr "忽視"
 
@@ -266,8 +268,8 @@ msgstr "NUT CGI 訪問"
 msgid "NUT Users"
 msgstr "NUT 使用者"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "Name of UPS"
 msgstr "UPS 的名稱"
 
@@ -330,32 +332,39 @@ msgstr "通知命令"
 msgid "Notify when back online"
 msgstr "重新聯機時通知"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
 msgid "Notify when battery needs replacing"
 msgstr "電池需要更換時通知"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
 msgid "Notify when communications lost"
 msgstr "通訊丟失時通知"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
 msgid "Notify when communications restored"
 msgstr "通訊恢復時通知"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when force shutdown"
 msgstr "強行關閉時通知"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:115
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when low battery"
 msgstr "低電量時通知"
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+msgid "Notify when no communications"
+msgstr ""
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:171
+msgid "Notify when no parent process"
+msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:107
 msgid "Notify when on battery"
 msgstr "使用電池時通知"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
 msgid "Notify when shutting down"
 msgstr "關機時通知"
 
@@ -375,13 +384,13 @@ msgstr "開啟電池訊息"
 msgid "Online message"
 msgstr "在線訊息"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:216
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:245
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:19
 msgid "Password"
 msgstr "密碼"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "Path containing ca certificates to match against host certificate"
 msgstr "匹配主機證書的 ca 證書路徑"
 
@@ -414,15 +423,15 @@ msgid "Polling Frequency(s)"
 msgstr "輪詢頻率（秒）"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:27
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:195
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:224
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:203
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:232
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:46
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:202
 msgid "Port"
 msgstr "連接埠"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:200
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:229
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
 msgid "Power value"
 msgstr "功率值"
 
@@ -434,7 +443,7 @@ msgstr "產品（正則表示式）"
 msgid "Replace battery message"
 msgstr "替換電池訊息"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Require SSL and make sure server CN matches hostname"
 msgstr "需要 SSL 並確保伺服器 CN 與主機名匹配"
 
@@ -525,7 +534,7 @@ msgstr "驅動程式重試之間的間隔（秒）。"
 msgid "Time in seconds that upsdrvctl will wait for driver to finish starting"
 msgstr "upsdrvctl 等待驅動程式完成啟動的時間（秒）"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:183
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
 msgid "UPS Master"
 msgstr "UPS 主裝置"
 
@@ -533,7 +542,7 @@ msgstr "UPS 主裝置"
 msgid "UPS Server Global Settings"
 msgstr "UPS 伺服器全域性設定"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:212
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
 msgid "UPS Slave"
 msgstr "UPS 從裝置"
 
@@ -565,8 +574,8 @@ msgid ""
 "be read-write for that user."
 msgstr "執行驅動程式的使用者；要求驅動程式訪問的裝置檔案對該使用者是可讀寫的。"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:205
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:234
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:213
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:242
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:16
 msgid "Username"
 msgstr "用戶名稱"
@@ -575,7 +584,7 @@ msgstr "用戶名稱"
 msgid "Vendor (regex)"
 msgstr "供應商（正則表示式）"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Verify all connection with SSL"
 msgstr "驗證所有 SSL 連線"
 
@@ -593,6 +602,7 @@ msgstr "有缺陷的韌體的解決方法"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:151
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:159
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:167
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:175
 msgid "Write to syslog"
 msgstr "寫入 syslog"
 
