@@ -33,7 +33,7 @@ function index()
 		return
 	end
 
-	entry({"admin", "docker", "overview"},cbi("dockerman/overview"),_("Overview"), 2).leaf=true
+	entry({"admin", "docker", "overview"}, form("dockerman/overview"),_("Overview"), 2).leaf=true
 	entry({"admin", "docker", "containers"}, form("dockerman/containers"), _("Containers"), 3).leaf=true
 	entry({"admin", "docker", "images"}, form("dockerman/images"), _("Images"), 4).leaf=true
 	entry({"admin", "docker", "networks"}, form("dockerman/networks"), _("Networks"), 5).leaf=true
