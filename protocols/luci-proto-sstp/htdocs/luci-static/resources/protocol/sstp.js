@@ -41,6 +41,10 @@ return network.registerProtocol('sstp', {
 		o = s.taboption('general', form.Value, 'server', _('SSTP Server'));
 		o.datatype = 'host';
 
+		o = s.taboption('general', form.Value, 'port', _('SSTP Port'));
+		o.placeholder = '443';
+		o.datatype = 'port';
+
 		o = s.taboption('general', form.Value, 'username', _('PAP/CHAP username'));
 
 		o = s.taboption('general', form.Value, 'password', _('PAP/CHAP password'));
