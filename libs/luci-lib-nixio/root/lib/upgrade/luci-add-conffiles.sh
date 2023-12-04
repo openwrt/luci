@@ -3,7 +3,7 @@ add_luci_conffiles()
 	add_luci_conffiles_helper()
 	{
 		[ ! -f $1 ] && return
-		grep $1 $2 >/dev/null && return
+		grep -q $1 $2 && return
 		echo $1 >> $2
 	}
 
