@@ -252,7 +252,11 @@ return view.extend({
 		    elem = document.getElementById('rule_%s_%s'.format(table.toLowerCase(), chain));
 
 		if (elem) {
-			(document.documentElement || document.body.parentNode || document.body).scrollTop = elem.offsetTop - 40;
+			if (elem.scrollIntoView) {
+				elem.scrollIntoView();
+			} else {
+				(document.documentElement || document.body.parentNode || document.body).scrollTop = elem.offsetTop - 40;
+			}
 			elem.classList.remove('flash');
 			void elem.offsetWidth;
 			elem.classList.add('flash');
