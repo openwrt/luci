@@ -97,9 +97,6 @@ var cbiKeyPairGenerate = form.DummyValue.extend({
 				    pub = this.section.getUIElement(section_id, 'public_key'),
 				    map = this.map;
 
-				if ((prv.getValue() || pub.getValue()) && !confirm(_('Do you want to replace the current keys?')))
-					return;
-
 				return generateKey().then(function(keypair) {
 					prv.setValue(keypair.priv);
 					pub.setValue(keypair.pub);
@@ -609,9 +606,6 @@ return network.registerProtocol('wireguard', {
 				'click': ui.createHandlerFn(this, function(section_id, ev) {
 					var psk = this.section.getUIElement(section_id, 'preshared_key'),
 					    map = this.map;
-
-					if (psk.getValue() && !confirm(_('Do you want to replace the current PSK?')))
-						return;
 
 					return generatePsk().then(function(key) {
 						psk.setValue(key);
