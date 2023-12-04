@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI app to configure Tor
-LUCI_DEPENDS:=+luci-base
+LUCI_DEPENDS:=+luci-base +tor +tor-hs
 
 include ../../luci.mk
 
