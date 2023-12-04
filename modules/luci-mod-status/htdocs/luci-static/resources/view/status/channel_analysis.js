@@ -97,9 +97,8 @@ return view.extend({
 		})
 	},
 
-	create_channel_graph: function(chan_analysis, freq_tbl, freq) {
-		var is5GHz = freq == '5GHz',
-		    columns = is5GHz ? freq_tbl.length * 4 : freq_tbl.length + 3,
+	create_channel_graph: function(chan_analysis, freq_tbl, band) {
+		var columns = (band != 2) ? freq_tbl.length * 4 : freq_tbl.length + 3,
 		    chan_graph = chan_analysis.graph,
 		    G = chan_graph.firstElementChild,
 		    step = (chan_graph.offsetWidth - 2) / columns,
@@ -131,7 +130,7 @@ return view.extend({
 			var channel = freq_tbl[i]
 			chan_analysis.offset_tbl[channel] = curr_offset+step;
 
-			if (is5GHz) {
+			if (band != 2) {
 				createGraphHLine(G,curr_offset+step, 0.1, 3);
 				if (channel < 100)
 					createGraphText(G,curr_offset-(step/2), channel);
@@ -143,9 +142,9 @@ return view.extend({
 			}
 			curr_offset += step;
 
-			if (is5GHz && freq_tbl[i+1]) {
+			if ((band != 2) && freq_tbl[i+1]) {
 				var next_channel = freq_tbl[i+1];
-				/* Check if we are transitioning to another 5Ghz band range */
+				/* Check if we are transitioning to another 5/6Ghz band range */
 				if ((next_channel - channel) == 4) {
 					for (var j=1; j < 4; j++) {
 						chan_analysis.offset_tbl[channel+j] = curr_offset+step;
@@ -193,7 +192,8 @@ return view.extend({
 			    local_wifi = data[1],
 			    table = radio.table,
 			    chan_analysis = radio.graph,
-			    scanCache = radio.scanCache;
+			    scanCache = radio.scanCache,
+			    band = radio.band;
 
 			var rows = [];
 
@@ -205,36 +205,38 @@ return view.extend({
 				scanCache[results[i].bssid].data.stale = false;
 			}
 
-			if (scanCache[local_wifi.bssid] == null)
-				scanCache[local_wifi.bssid] = {};
+			if (band + 'g' == radio.dev.get('band')) {
+				if (scanCache[local_wifi.bssid] == null)
+					scanCache[local_wifi.bssid] = {};
 
-			scanCache[local_wifi.bssid].data = local_wifi;
+				scanCache[local_wifi.bssid].data = local_wifi;
 
-			if (chan_analysis.offset_tbl[local_wifi.channel] != null && local_wifi.center_chan1) {
-				var center_channels = [local_wifi.center_chan1],
-				    chan_width_text = local_wifi.htmode.replace(/(V)*H[TE]/,''), /* Handle HT VHT HE */
-				    chan_width = parseInt(chan_width_text)/10;
+				if (chan_analysis.offset_tbl[local_wifi.channel] != null && local_wifi.center_chan1) {
+					var center_channels = [local_wifi.center_chan1],
+					    chan_width_text = local_wifi.htmode.replace(/(V)*H[TE]/,''), /* Handle HT VHT HE */
+					    chan_width = parseInt(chan_width_text)/10;
 
-				if (local_wifi.center_chan2) {
-					center_channels.push(local_wifi.center_chan2);
-					chan_width = 8;
+					if (local_wifi.center_chan2) {
+						center_channels.push(local_wifi.center_chan2);
+						chan_width = 8;
+					}
+
+					local_wifi.signal = -10;
+					local_wifi.ssid = 'Local Interface';
+
+					this.add_wifi_to_graph(chan_analysis, local_wifi, scanCache, center_channels, chan_width);
+					rows.push([
+						this.render_signal_badge(q, local_wifi.signal),
+						[
+							E('span', { 'style': 'color:'+scanCache[local_wifi.bssid].color }, '⬤ '),
+							local_wifi.ssid
+						],
+						'%d'.format(local_wifi.channel),
+						'%h MHz'.format(chan_width_text),
+						'%h'.format(local_wifi.mode),
+						'%h'.format(local_wifi.bssid)
+					]);
 				}
-
-				local_wifi.signal = -10;
-				local_wifi.ssid = 'Local Interface';
-
-				this.add_wifi_to_graph(chan_analysis, local_wifi, scanCache, center_channels, chan_width);
-				rows.push([
-					this.render_signal_badge(q, local_wifi.signal),
-					[
-						E('span', { 'style': 'color:'+scanCache[local_wifi.bssid].color }, '⬤ '),
-						local_wifi.ssid
-					],
-					'%d'.format(local_wifi.channel),
-					'%h MHz'.format(chan_width_text),
-					'%h'.format(local_wifi.mode),
-					'%h'.format(local_wifi.bssid)
-				]);
 			}
 
 			for (var k in scanCache)
@@ -266,6 +268,8 @@ return view.extend({
 					chan_width = 2;
 
 				/* Skip WiFi not supported by the current band */
+				if (band != res.band)
+					continue;
 				if (chan_analysis.offset_tbl[res.channel] == null)
 					continue;
 
@@ -376,22 +380,20 @@ return view.extend({
 		var tabs = E('div', {}, E('div'));
 
 		for (var ifname in wifiDevs) {
-			var freq_tbl = {
-				['2.4GHz'] : [],
-				['5GHz'] : [],
+			var bands = {
+				[2] : { title: '2.4GHz', channels: [] },
+				[5] : { title: '5GHz', channels: [] },
+				[6] : { title: '6GHz', channels: [] },
 			};
 
 			/* Split FrequencyList in Bands */
 			wifiDevs[ifname].freq.forEach(function(freq) {
-				if (freq.mhz >= 5000) {
-					freq_tbl['5GHz'].push(freq.channel);
-				} else {
-					freq_tbl['2.4GHz'].push(freq.channel);
-				}
+				if (bands[freq.band])
+					bands[freq.band].channels.push(freq.channel);
 			});
 
-			for (var freq in freq_tbl) {
-				if (freq_tbl[freq].length == 0)
+			for (var band in bands) {
+				if (bands[band].channels.length == 0)
 					continue;
 
 				var csvg = svg.cloneNode(true),
@@ -405,7 +407,7 @@ return view.extend({
 						E('th', { 'class': 'th col-3 middle left hide-xs' }, _('BSSID'))
 					])
 				]),
-				tab = E('div', { 'data-tab': ifname+freq, 'data-tab-title': ifname+' ('+freq+')' },
+				tab = E('div', { 'data-tab': ifname+band, 'data-tab-title': ifname+' ('+bands[band].title+')' },
 						[E('br'),csvg,E('br'),table,E('br')]),
 				graph_data = {
 					graph: csvg,
@@ -414,8 +416,9 @@ return view.extend({
 					tab: tab,
 				};
 
-				this.radios[ifname+freq] = {
+				this.radios[ifname+band] = {
 					dev: wifiDevs[ifname].dev,
+					band: band,
 					graph: graph_data,
 					table: table,
 					scanCache: {},
@@ -426,7 +429,7 @@ return view.extend({
 
 				tabs.firstElementChild.appendChild(tab)
 
-				requestAnimationFrame(L.bind(this.create_channel_graph, this, graph_data, freq_tbl[freq], freq));
+				requestAnimationFrame(L.bind(this.create_channel_graph, this, graph_data, bands[band].channels, band));
 			}
 		}
 

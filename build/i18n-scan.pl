@@ -237,7 +237,7 @@ my $msguniq_pid = open2($msguniq_out, $msguniq_in, 'msguniq', '-s');
 
 print $msguniq_in "msgid \"\"\nmsgstr \"Content-Type: text/plain; charset=UTF-8\"\n";
 
-if (open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' -o -name '*.uc' -o -name '*.ut' -o -path '*/menu.d/*.json' -o -path '*/acl.d/*.json' -o -path '*/statistics/plugins/*.json' ')' |")
+if (open F, "find @ARGV -type f '(' -name '*.htm' -o -name '*.lua' -o -name '*.js' -o -name '*.uc' -o -name '*.ut' -o -path '*/menu.d/*.json' -o -path '*/acl.d/*.json' -o -path '*/statistics/plugins/*.json' -o -path '*/https-dns-proxy/providers/*.json' ')' |")
 {
 	while (defined( my $file = readline F))
 	{

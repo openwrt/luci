@@ -78,9 +78,9 @@ o.optional = true
 validatenotify = function(self, value)
 	val = StaticList.validate(self, value)
 	if val then
-		for k, v in pairs(val) do
-			if (v == 'IGNORE') then
-				return nil, "Ignore must the only option selected, when selected"
+		for i, v in ipairs(val) do
+			if (i > 1) and (v == 'IGNORE') then
+				return nil, "If selected, Ignore must be the only option."
 			end
 		end
 	end
@@ -112,15 +112,7 @@ o:value("SYSLOG", translate("Write to syslog"))
 o:value("IGNORE", translate("Ignore"))
 o.validate = validatenotify
 
-o = s:option(StaticList, "nowbattnotify", translate("Notify when low battery"))
-o.optional = true
-o.widget = "select"
-o:value("EXEC", translate("Execute notify command"))
-o:value("SYSLOG", translate("Write to syslog"))
-o:value("IGNORE", translate("Ignore"))
-o.validate = validatenotify
-
-o = s:option(StaticList, "nowbattnotify", translate("Notify when low battery"))
+o = s:option(StaticList, "lowbattnotify", translate("Notify when low battery"))
 o.optional = true
 o.widget = "select"
 o:value("EXEC", translate("Execute notify command"))
@@ -161,6 +153,22 @@ o:value("IGNORE", translate("Ignore"))
 o.validate = validatenotify
 
 o = s:option(StaticList, "replbattnotify", translate("Notify when battery needs replacing"))
+o.optional = true
+o.widget = "select"
+o:value("EXEC", translate("Execute notify command"))
+o:value("SYSLOG", translate("Write to syslog"))
+o:value("IGNORE", translate("Ignore"))
+o.validate = validatenotify
+
+o = s:option(StaticList, "nocommnotify", translate("Notify when no communications"))
+o.optional = true
+o.widget = "select"
+o:value("EXEC", translate("Execute notify command"))
+o:value("SYSLOG", translate("Write to syslog"))
+o:value("IGNORE", translate("Ignore"))
+o.validate = validatenotify
+
+o = s:option(StaticList, "noparentnotify", translate("Notify when no parent process"))
 o.optional = true
 o.widget = "select"
 o:value("EXEC", translate("Execute notify command"))

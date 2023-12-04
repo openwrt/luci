@@ -16,7 +16,6 @@ return view.extend({
 
 		o = s.option(widgets.NetworkSelect, 'Interface', _('Interface'), _('Listen only on the given interface or, if unspecified, on all'));
 		o.nocreate    = true;
-		o.unspecified = true;
 
 		o = s.option(form.Value, 'Port', _('Port'));
 		o.datatype    = 'port';

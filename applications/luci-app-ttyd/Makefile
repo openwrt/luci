@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=ttyd - Command-line tool for sharing terminal over the web
-LUCI_DEPENDS:=+ttyd
+LUCI_DEPENDS:=+luci-base +ttyd
 
 include ../../luci.mk
 

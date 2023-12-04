@@ -1,0 +1,28 @@
+{
+	"title": "CleanBrowsing",
+	"template": "https://doh.cleanbrowsing.org/doh/{option}-filter/",
+	"bootstrap_dns": "185.228.168.168",
+	"help_link": "https://cleanbrowsing.org/guides/dnsoverhttps",
+	"params": {
+		"option": {
+			"description": "Filter",
+			"type": "select",
+			"regex": "(adult|family|security)",
+			"options": [
+				{
+					"value": "adult",
+					"description": "Adult Content Filter"
+				},
+				{
+					"value": "family",
+					"description": "Family Filter"
+				},
+				{
+					"value": "security",
+					"description": "Security Filter"
+				}
+			],
+			"default": "security"
+		}
+	}
+}

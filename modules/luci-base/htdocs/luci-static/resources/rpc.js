@@ -186,7 +186,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 *    the corresponding args object sent to the remote procedure will be
 	 *    `{ foo: true, bar: false }`.
 	 *  - `params: [ "test" ], filter: function(reply, args, extra) { ... }` -
-	 *    When the resultung generated function is invoked with
+	 *    When the resulting generated function is invoked with
 	 *    `fn("foo", "bar", "baz")` then `{ "test": "foo" }` will be sent as
 	 *    argument to the remote procedure and the filter function will be
 	 *    invoked with `filterFn(reply, [ "foo" ], "bar", "baz")`
@@ -226,7 +226,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 *    be returned as default instead.
 	 *
 	 * @property {LuCI.rpc~filterFn} [filter]
-	 * Specfies an optional filter function which is invoked to transform the
+	 * Specifies an optional filter function which is invoked to transform the
 	 * received reply data before it is returned to the caller.
 	 *
 	 * @property {boolean} [reject=false]
@@ -379,7 +379,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	/**
 	 * Set the RPC base URL to use.
 	 *
-	 * @param {string} sid
+	 * @param {string} url
 	 * Sets the RPC URL endpoint to issue requests against.
 	 */
 	setBaseURL: function(url) {
@@ -454,7 +454,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * Registers a new interceptor function.
 	 *
 	 * @param {LuCI.rpc~interceptorFn} interceptorFn
-	 * The inteceptor function to register.
+	 * The interceptor function to register.
 	 *
 	 * @returns {LuCI.rpc~interceptorFn}
 	 * Returns the given function value.
@@ -469,7 +469,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * Removes a registered interceptor function.
 	 *
 	 * @param {LuCI.rpc~interceptorFn} interceptorFn
-	 * The inteceptor function to remove.
+	 * The interceptor function to remove.
 	 *
 	 * @returns {boolean}
 	 * Returns `true` if the given function has been removed or `false`

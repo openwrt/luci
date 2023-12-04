@@ -11,8 +11,7 @@ PKG_RELEASE:=1
 
 LUCI_TITLE:=LuCI for smartdns
 LUCI_DESCRIPTION:=Provides Luci for smartdns
-LUCI_DEPENDS:=+smartdns
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=+luci-base +smartdns
 
 define Package/$(PKG_NAME)/config
 # shown in make menuconfig <Help>

@@ -294,7 +294,7 @@ static bool visited(struct seen **sp, const void *ptr) {
 static struct json_object * _lua_to_json_rec(lua_State *L, int index,
                                              struct seen **seen)
 {
-	lua_Number nd, ni;
+	lua_Number nd;
 	struct json_object *obj;
 	const char *key;
 	int i, max;
@@ -364,10 +364,12 @@ static struct json_object * _lua_to_json_rec(lua_State *L, int index,
 		return json_object_new_boolean(lua_toboolean(L, index));
 
 	case LUA_TNUMBER:
-		nd = lua_tonumber(L, index);
-		ni = lua_tointeger(L, index);
+		if (lua_isinteger(L, index))
+			return json_object_new_int64(lua_tointeger(L, index));
 
-		if (nd == ni)
+		nd = lua_tonumber(L, index);
+
+		if (isfinite(nd) && trunc(nd) == nd)
 			return json_object_new_int64(nd);
 
 		return json_object_new_double(nd);
