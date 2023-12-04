@@ -2,9 +2,9 @@ add_luci_conffiles()
 {
 	add_luci_conffiles_helper()
 	{
-		[ ! -f $1 ] && return
-		grep -q $1 $2 && return
-		echo $1 >> $2
+		[ ! -f "$1" ] && return
+		grep -q "$1" "$2" && return
+		echo "$1" >> "$2"
 	}
 
 	local filelist="$1"
@@ -12,13 +12,13 @@ add_luci_conffiles()
 	# save ssl certs
 	if [ -d /etc/nixio ]; then
 		find /etc/nixio -type f | while read ff; do
-			add_luci_conffiles_helper $ff $filelist
+			add_luci_conffiles_helper "$ff" "$filelist"
 		done
 	fi
 
 	# save uhttpd certs
-	add_luci_conffiles_helper /etc/uhttpd.key $filelist
-	add_luci_conffiles_helper /etc/uhttpd.crt $filelist
+	add_luci_conffiles_helper /etc/uhttpd.key "$filelist"
+	add_luci_conffiles_helper /etc/uhttpd.crt "$filelist"
 
 	unset -f add_luci_conffiles_helper
 }
