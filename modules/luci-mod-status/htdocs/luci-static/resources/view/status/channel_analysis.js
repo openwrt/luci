@@ -290,8 +290,8 @@ return view.extend({
 					}
 
 				/* if channel_width <= 40, refer to HT (above) for actual channel width,
-         * as vht_operation.channel_width == 40 really only means that the used
-         * bandwidth is <= 40 and could be 20 Mhz as well */
+				 * as vht_operation.channel_width == 40 really only means that the used
+				 * bandwidth is <= 40 and could be 20 Mhz as well */
 				if (res.vht_operation != null && res.vht_operation.channel_width > 40) {
 					center_channels[0] = res.vht_operation.center_freq_1;
 					if (res.vht_operation.channel_width == 80) {
