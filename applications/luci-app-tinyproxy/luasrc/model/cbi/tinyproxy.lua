@@ -231,10 +231,21 @@ ta.datatype = "host(1)"
 
 
 v = s:option(Value, "via", translate("Via proxy"),
-	translate("Specifies the upstream proxy to use for accessing the target host. Format is <code>address:port</code>"))
+	translate("Specifies the upstream proxy to use for accessing the target host. Format is <code>address:port</code> or <code>socks5 address:port</code>"))
 
 v:depends({type="proxy"})
 v.placeholder = "10.0.0.1:8080"
-v.datatype = "ip4addrport"
+
+function v.write(self, section, value)
+
+	local pattern1 = "^%d+%.%d+%.%d+%.%d+:%d+$"
+	local pattern2 = "^socks5 %d+%.%d+%.%d+%.%d+:%d+$"
+
+	if string.match(value, pattern1) or string.match(value, pattern2) then
+		Value.write(self, section, value)
+	else
+		return
+	end
+end	
 
 return m
