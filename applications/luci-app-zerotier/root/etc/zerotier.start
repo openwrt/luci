@@ -1,0 +1,37 @@
+#!/bin/sh
+
+zero_enable="$(uci get zerotier.sample_config.enabled)"
+
+[ "${zero_enable}" -eq "1" ] || exit 1
+
+count=0
+[ -f "/tmp/zero.log" ] && {
+	while [ -z "$(ifconfig | grep 'zt' | awk '{print $1}')" ]
+	do
+		sleep 2
+		let count++
+		[ "${count}" -lt 5 ] || exit 19
+	done
+}
+
+nat_enable="$(uci get zerotier.sample_config.nat)"
+zt0="$(ifconfig | grep 'zt' | awk '{print $1}')"
+echo "${zt0}" > "/tmp/zt.nif"
+rm -f "/usr/share/nftables.d/chain-pre/forward/zerotier.nft" "/usr/share/nftables.d/chain-pre/srcnat/zerotier.nft" > /dev/null 2>&1
+
+[ "${nat_enable}" -eq "1" ] && {
+	[ ! -d "/usr/share/nftables.d/chain-pre/forward" ] && mkdir -p "/usr/share/nftables.d/chain-pre/forward"
+	[ ! -d "/usr/share/nftables.d/chain-pre/srcnat" ] && mkdir -p "/usr/share/nftables.d/chain-pre/srcnat"
+	for i in ${zt0}
+	do
+		ip_segment="$(ip route | grep "dev $i proto kernel" | awk '{print $1}')"
+		echo 'iifname '$i' counter accept comment "!fw4: Zerotier allow inbound forward '$i'"' >> /usr/share/nftables.d/chain-pre/forward/zerotier.nft
+		echo 'oifname '$i' counter accept comment "!fw4: Zerotier allow outbound forward '$i'"' >> /usr/share/nftables.d/chain-pre/forward/zerotier.nft
+		echo 'oifname '$i' counter masquerade comment "!fw4: Zerotier '$i' outbound postrouting masq"' >> /usr/share/nftables.d/chain-pre/srcnat/zerotier.nft
+		[ ! -z $ip_segment ] && echo 'ip saddr '$ip_segment' counter masquerade comment "!fw4: Zerotier '$ip_segment' postrouting masq"' >> /usr/share/nftables.d/chain-pre/srcnat/zerotier.nft
+	done
+	echo "zt interface rules added!" > /tmp/zero.log 2>&1 &
+	uci -q set firewall.@defaults[0].auto_includes="1"
+	uci commit firewall
+	fw4 reload
+}
