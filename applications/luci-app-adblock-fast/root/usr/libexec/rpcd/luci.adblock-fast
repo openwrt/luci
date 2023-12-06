@@ -251,16 +251,6 @@ get_platform_support() {
 	else
 		json_add_boolean 'dnsmasq_installed' '0'
 	fi
-	if check_smartdns; then
-		json_add_boolean 'smartdns_installed' '1'
-	else
-		json_add_boolean 'smartdns_installed' '0'
-	fi
-	if check_unbound; then
-		json_add_boolean 'unbound_installed' '1'
-	else
-		json_add_boolean 'unbound_installed' '0'
-	fi
 	if check_dnsmasq_ipset; then
 		json_add_boolean 'dnsmasq_ipset_support' '1'
 	else
@@ -270,6 +260,26 @@ get_platform_support() {
 		json_add_boolean 'dnsmasq_nftset_support' '1'
 	else
 		json_add_boolean 'dnsmasq_nftset_support' '0'
+	fi
+	if check_smartdns; then
+		json_add_boolean 'smartdns_installed' '1'
+	else
+		json_add_boolean 'smartdns_installed' '0'
+	fi
+	if check_smartdns_ipset; then
+		json_add_boolean 'smartdns_ipset_support' '1'
+	else
+		json_add_boolean 'smartdns_ipset_support' '0'
+	fi
+	if check_smartdns_nftset; then
+		json_add_boolean 'smartdns_nftset_support' '1'
+	else
+		json_add_boolean 'smartdns_nftset_support' '0'
+	fi
+	if check_unbound; then
+		json_add_boolean 'unbound_installed' '1'
+	else
+		json_add_boolean 'unbound_installed' '0'
 	fi
 	json_add_array 'leds'
 		for i in /sys/class/leds/*; do json_add_string '' "$(basename "$i")"; done
