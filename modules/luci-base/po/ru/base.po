@@ -2,17 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2023-11-08 14:51+0000\n"
-"Last-Translator: Vintage Vintage <vintagepublic@gmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/"
-">\n"
+"PO-Revision-Date: 2023-12-05 09:48+0000\n"
+"Last-Translator: st7105 <st7105@gmail.com>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
+"\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -412,6 +412,8 @@ msgid ""
 "A default MTU of 65535 is set by Yggdrasil. It is recomended to utilize the "
 "default."
 msgstr ""
+"По умолчанию Yggdrasil устанавливает MTU 65535. Рекомендуется использовать "
+"это значение по умолчанию."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2779
 msgid "A directory with the same name already exists."
@@ -602,7 +604,7 @@ msgstr "Ограничение сервиса DNS, для подсетей ин�
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:226
 msgid "Accept from public keys"
-msgstr ""
+msgstr "Принимать от открытых ключей"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:701
 msgid "Accept local"
@@ -675,7 +677,7 @@ msgstr "Активные IPv6 правила"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:215
 msgid "Active peers"
-msgstr ""
+msgstr "Активные пиры"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:205
 msgid "Active-Backup policy (active-backup, 1)"
@@ -756,6 +758,12 @@ msgid ""
 "interfaces. Choose an acceptable URI <code>tls://</code>, <code>tcp://</"
 "code>, <code>unix://</code> or <code>quic://</code>"
 msgstr ""
+"Добавьте слушателей, чтобы принимать входящие пиринги от нелокальных узлов. "
+"Обнаружение многоадресных пиров работает независимо от установленных здесь "
+"слушателей. Формат URI: <code>tls://0.0.0.0:0</code> или <code>tls://[::]:0</"
+"code> для прослушивания на всех интерфейсах. Выберите приемлемый URI "
+"<code>tls://</code>, <code>tcp://</code>, <code>unix://</code> или "
+"<code>quic://</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "Add local domain suffix to names served from hosts files."
@@ -764,7 +772,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:242
 msgid "Add multicast rule"
-msgstr ""
+msgstr "Добавить правило многоадресной рассылки"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:482
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1199
@@ -777,7 +785,7 @@ msgstr "Добавить узел (peer)"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:233
 msgid "Add peer address"
-msgstr ""
+msgstr "Добавить адрес пира"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:962
 msgid "Add static forward and reverse DNS entries for this host."
@@ -862,6 +870,8 @@ msgid ""
 "Afer making changes to network using external protocol, network must be "
 "manually restarted."
 msgstr ""
+"После внесения изменений в сеть с помощью внешнего протокола сеть необходимо "
+"перезапустить вручную."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:567
 msgid "Ageing time"
@@ -2495,7 +2505,7 @@ msgstr "Dial номер"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:136
 msgid "Dir"
-msgstr ""
+msgstr "Каталог"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2724
 msgid "Directory"
@@ -2565,6 +2575,9 @@ msgid ""
 "Discard also upstream responses containing <a href=\"%s\">RFC4193</a>, Link-"
 "Local and private IPv4-Mapped <a href=\"%s\">RFC4291</a> IPv6 Addresses."
 msgstr ""
+"Отбрасывайте также ответы восходящего потока, содержащие <a href=\"%s\""
+">RFC4193</a>, Link-Local и частные IPv4-Mapped <a href=\"%s\">RFC4291</a> "
+"IPv6-адреса."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:328
 msgid ""
@@ -2613,6 +2626,8 @@ msgid ""
 "Distance to farthest network member in meters. Set only for distances above "
 "one kilometer; otherwise it is harmful."
 msgstr ""
+"Расстояние до самого дальнего участника сети в метрах. Устанавливается "
+"только для расстояний свыше одного километра; в противном случае это вредно."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
@@ -2990,7 +3005,7 @@ msgstr "Разрешить DNS-запросы"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:151
 msgid "Enable Debugmode"
-msgstr ""
+msgstr "Включить режим отладки"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:294
 msgid "Enable Dynamic Shuffling Of Flows"
@@ -3105,6 +3120,10 @@ msgid ""
 "sent back. Otherwise defaults including the platform, architecture and "
 "Yggdrasil version are included."
 msgstr ""
+"Включите конфиденциальность информации об узле, чтобы обратно отправлялись "
+"только элементы, указанные в \"Информация об узле\". В противном случае "
+"будут переданы значения по умолчанию, включая платформу, архитектуру и "
+"версию Yggdrasil."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1542
 msgid ""
@@ -3391,7 +3410,7 @@ msgstr "Протокол внешнего сервера системного ж
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:7
 msgid "Externally managed interface"
-msgstr ""
+msgstr "Интерфейс с внешним управлением"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:79
 msgid "Extra SSH command options"
@@ -3908,7 +3927,7 @@ msgstr "Предоставить доступ к LuCI WireGuard процедур
 
 #: protocols/luci-proto-yggdrasil/root/usr/share/rpcd/acl.d/luci-proto-yggdrasil.json:3
 msgid "Grant access to LuCI Yggdrasil procedures"
-msgstr ""
+msgstr "Предоставление доступа к процедурам LuCI Yggdrasil"
 
 #: protocols/luci-proto-openfortivpn/root/usr/share/rpcd/acl.d/luci-openfortivpn.json:3
 msgid "Grant access to LuCI openfortivpn procedures"
@@ -4174,7 +4193,7 @@ msgstr "IMEI"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:137
 msgid "IP Address"
-msgstr ""
+msgstr "IP-адрес"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "IP Addresses"
@@ -4213,6 +4232,8 @@ msgid ""
 "IP addresses for the peer to use inside the tunnel. Some clients require "
 "this setting."
 msgstr ""
+"IP-адреса, которые будут использоваться в туннеле. Некоторые клиенты требуют "
+"эти настройки."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:784
 msgid ""
@@ -4533,6 +4554,9 @@ msgid ""
 "If empty, all incoming connections will be allowed (default). This does not "
 "affect outgoing peerings, nor link-local peers discovered via multicast."
 msgstr ""
+"Если пусто, все входящие соединения будут разрешены (по умолчанию). Это не "
+"влияет на исходящие соединения, а также на локальные соединения, "
+"обнаруженные с помощью многоадресной рассылки."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1065
 msgid ""
@@ -5002,11 +5026,11 @@ msgstr "Неверный порт"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:16
 msgid "Invalid private key string %s"
-msgstr ""
+msgstr "Недопустимая строка закрытого ключа %s"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:28
 msgid "Invalid public key string %s"
-msgstr ""
+msgstr "Недопустимая строка открытого ключа %s"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
 msgid "Invalid server URL"
@@ -5189,7 +5213,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:142
 msgid "Last Error"
-msgstr ""
+msgstr "Последняя ошибка"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:629
 msgid "Last member interval"
@@ -5353,11 +5377,11 @@ msgstr "Порт для входящих соединений"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:222
 msgid "Listen addresses"
-msgstr ""
+msgstr "Слушать адреса"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:219
 msgid "Listen for peers"
-msgstr ""
+msgstr "Слушатель для пиров"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:359
 msgid "Listen interfaces"
@@ -5377,7 +5401,7 @@ msgstr "Ограничьте прослушивание этих интерфе�
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:251
 msgid "Listen to multicast beacons"
-msgstr ""
+msgstr "Слушатель многоадресных маяков"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:299
 msgid "ListenPort setting is invalid"
@@ -6044,7 +6068,7 @@ msgstr "Многоадресная (multicast) маршрутизация"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:240
 msgid "Multicast rules"
-msgstr ""
+msgstr "Правила многоадресной рассылки"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:779
 msgid "Multicast to unicast"
@@ -6402,11 +6426,11 @@ msgstr "Зона не присвоена"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:205
 msgid "Node info"
-msgstr ""
+msgstr "Информация об узле"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:209
 msgid "Node info privacy"
-msgstr ""
+msgstr "Конфиденциальность информации об узле"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:58
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:84
@@ -6696,6 +6720,9 @@ msgid ""
 "null. This is entirely optional but, if set, is visible to the whole network "
 "on request."
 msgstr ""
+"Необязательная информация об узле. Это должно быть { \"ключ\": \"value\", "
+"... } или задана как null. Это совершенно необязательный параметр, но если "
+"он установлен, то будет виден всей сети по запросу."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Optional, free-form notes about this device"
@@ -7252,7 +7279,7 @@ msgstr "MAC-адрес узла"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:235
 msgid "Peer URI"
-msgstr ""
+msgstr "URI пира"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:14
 #: modules/luci-compat/luasrc/model/network.lua:32
@@ -7261,7 +7288,7 @@ msgstr "Отсутствует адрес узла"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:229
 msgid "Peer addresses"
-msgstr ""
+msgstr "Адреса пира"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:648
 msgid "Peer device name"
@@ -7273,7 +7300,7 @@ msgstr "Узел отключен"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:238
 msgid "Peer interface"
-msgstr ""
+msgstr "Интерфейс пира"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:213
@@ -7496,7 +7523,7 @@ msgstr "Приватный ключ"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:189
 msgid "Private key"
-msgstr ""
+msgstr "Закрытый ключ"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:564
 msgid "Private key present"
@@ -7570,7 +7597,7 @@ msgstr "Публичный ключ"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:194
 msgid "Public key"
-msgstr ""
+msgstr "Публичный ключ"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:547
 msgid "Public key is missing"
@@ -8432,7 +8459,7 @@ msgstr "Планировщик"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:41
 msgid "Search domain"
-msgstr ""
+msgstr "Поиск домена"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:39
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:62
@@ -8498,7 +8525,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:249
 msgid "Send multicast beacon"
-msgstr ""
+msgstr "Отправка многоадресного маяка"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:24
 msgid "Send the hostname of this device"
@@ -9364,7 +9391,7 @@ msgstr "Синтаксис: <code>/fqdn[/fqdn…]/[ipaddr]</code>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:667
 msgid "Syntax: <code>_service._proto.example.com.</code>"
-msgstr ""
+msgstr "Синтаксис: <code>_service._proto.example.com.</code>"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:26
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:22
@@ -9595,6 +9622,8 @@ msgid ""
 "The IPv6 interface identifier (address suffix) as hexadecimal number (max. "
 "16 chars)."
 msgstr ""
+"Идентификатор интерфейса IPv6 (суффикс адреса) в виде шестнадцатеричного "
+"числа (не более 16 символов)."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:59
@@ -9887,7 +9916,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:189
 msgid "The private key for your Yggdrasil node"
-msgstr ""
+msgstr "Закрытый ключ для вашего узла Yggdrasil"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:779
 msgid ""
@@ -9901,7 +9930,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:194
 msgid "The public key for your Yggdrasil node"
-msgstr ""
+msgstr "Публичный ключ для вашего узла Yggdrasil"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:623
 msgid "The query response interval must be lower than the query interval value"
@@ -10403,11 +10432,11 @@ msgstr "UMTS/GPRS/EV-DO"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:134
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:43
 msgid "URI scheme %s not supported"
-msgstr ""
+msgstr "Схема URI %s не поддерживается"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:255
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:361
@@ -10567,7 +10596,7 @@ msgstr "Не поддерживаемый тип MAP"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:37
 msgid "Unsupported URI scheme in %s"
-msgstr ""
+msgstr "Неподдерживаемая схема URI в %s"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:69
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:31
@@ -11298,7 +11327,7 @@ msgstr "Да (none, 0)"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:164
 msgid "Yggdrasil Network"
-msgstr ""
+msgstr "Сеть Yggdrasil"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:177
 msgid ""

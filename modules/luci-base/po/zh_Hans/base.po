@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-11-08 08:26+0000\n"
+"PO-Revision-Date: 2023-12-06 01:24+0000\n"
 "Last-Translator: Eric <zxmegaxqug@hldrive.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:942
 msgid "!known (not known)"
@@ -394,7 +394,7 @@ msgstr "设备 “%s” 的配置已存在"
 msgid ""
 "A default MTU of 65535 is set by Yggdrasil. It is recomended to utilize the "
 "default."
-msgstr ""
+msgstr "Yggdrasil 设置了默认 MTU 值 65535。推荐使用该默认值。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2779
 msgid "A directory with the same name already exists."
@@ -582,7 +582,7 @@ msgstr "仅在网卡所属的子网中提供 DNS 服务。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:226
 msgid "Accept from public keys"
-msgstr ""
+msgstr "接受公钥"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:701
 msgid "Accept local"
@@ -655,7 +655,7 @@ msgstr "活跃的 IPv6 规则"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:215
 msgid "Active peers"
-msgstr ""
+msgstr "活跃 Peers"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:205
 msgid "Active-Backup policy (active-backup, 1)"
@@ -736,6 +736,10 @@ msgid ""
 "interfaces. Choose an acceptable URI <code>tls://</code>, <code>tcp://</"
 "code>, <code>unix://</code> or <code>quic://</code>"
 msgstr ""
+"添加 listener 以接受来自非本地节点的传入 peering。不论此处 listener "
+"如何设置，多播 peer 发现都会工作。URI 格式：<code>tls://0.0.0.0:0</code>或 "
+"<code>tls://[::]:0</code>来侦听所有接口。选择可接受的 URI <code>tls://</"
+"code>, <code>tcp://</code>, <code>unix://</code> 或 <code>quic://</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
 msgid "Add local domain suffix to names served from hosts files."
@@ -743,7 +747,7 @@ msgstr "添加本地域名后缀到 HOSTS 文件中的域名。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:242
 msgid "Add multicast rule"
-msgstr ""
+msgstr "添加多播规则"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:482
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1199
@@ -756,7 +760,7 @@ msgstr "添加对端"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:233
 msgid "Add peer address"
-msgstr ""
+msgstr "添加 peer 地址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:962
 msgid "Add static forward and reverse DNS entries for this host."
@@ -838,7 +842,7 @@ msgstr "高级设备选项"
 msgid ""
 "Afer making changes to network using external protocol, network must be "
 "manually restarted."
-msgstr ""
+msgstr "在对使用外部协议的网络做出更改后，必须手动重启网络。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:567
 msgid "Ageing time"
@@ -2390,7 +2394,7 @@ msgstr "拨号号码"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:136
 msgid "Dir"
-msgstr ""
+msgstr "目录"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2724
 msgid "Directory"
@@ -2458,6 +2462,8 @@ msgid ""
 "Discard also upstream responses containing <a href=\"%s\">RFC4193</a>, Link-"
 "Local and private IPv4-Mapped <a href=\"%s\">RFC4291</a> IPv6 Addresses."
 msgstr ""
+"同样丢弃包含 <a href=\"%s\">RFC4193</a>、 Link-Local 和私有 IPv4 映射的 <a "
+"href=\"%s\">RFC4291</a> IPv6 地址的上游响应。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:328
 msgid ""
@@ -2503,7 +2509,7 @@ msgstr "距离优化"
 msgid ""
 "Distance to farthest network member in meters. Set only for distances above "
 "one kilometer; otherwise it is harmful."
-msgstr ""
+msgstr "和最远网络成员之间的距离，单位为米。请仅为超出1千米的距离设置，否则有害。"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
@@ -2861,7 +2867,7 @@ msgstr "启用 DNS 查找"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:151
 msgid "Enable Debugmode"
-msgstr ""
+msgstr "启用调试模式"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:294
 msgid "Enable Dynamic Shuffling Of Flows"
@@ -2972,7 +2978,8 @@ msgid ""
 "Enable node info privacy so that only items specified in \"Node info\" are "
 "sent back. Otherwise defaults including the platform, architecture and "
 "Yggdrasil version are included."
-msgstr ""
+msgstr "节点信息隐私，开启后将只发回“节点信息”中指定的项目。否则，默认值包括平台、"
+"架构和 Yggdrasil 版本。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1542
 msgid ""
@@ -3247,7 +3254,7 @@ msgstr "外部系统日志服务器协议"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:7
 msgid "Externally managed interface"
-msgstr ""
+msgstr "外部管理的接口"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:79
 msgid "Extra SSH command options"
@@ -3754,7 +3761,7 @@ msgstr "授予访问 LuCI Wireguard 程序的权限"
 
 #: protocols/luci-proto-yggdrasil/root/usr/share/rpcd/acl.d/luci-proto-yggdrasil.json:3
 msgid "Grant access to LuCI Yggdrasil procedures"
-msgstr ""
+msgstr "授予访问 LuCI Yggdrasil 流程的权限"
 
 #: protocols/luci-proto-openfortivpn/root/usr/share/rpcd/acl.d/luci-openfortivpn.json:3
 msgid "Grant access to LuCI openfortivpn procedures"
@@ -4016,7 +4023,7 @@ msgstr "IMEI"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:137
 msgid "IP Address"
-msgstr ""
+msgstr "IP 地址"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:181
 msgid "IP Addresses"
@@ -4054,7 +4061,7 @@ msgstr "IP 地址缺失"
 msgid ""
 "IP addresses for the peer to use inside the tunnel. Some clients require "
 "this setting."
-msgstr ""
+msgstr "peer 在隧道内部使用的 IP 地址。某些客户端需要此设置。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:784
 msgid ""
@@ -4372,7 +4379,8 @@ msgstr "如果选中，则禁用加密"
 msgid ""
 "If empty, all incoming connections will be allowed (default). This does not "
 "affect outgoing peerings, nor link-local peers discovered via multicast."
-msgstr ""
+msgstr "若为空，所有传入连接都将被允许（默认）。这不影响传出 peering，"
+"也不影响通过多播发现的 link-local peers。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1065
 msgid ""
@@ -4815,11 +4823,11 @@ msgstr "无效的端口"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:16
 msgid "Invalid private key string %s"
-msgstr ""
+msgstr "无效的私钥字符串 %s"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:28
 msgid "Invalid public key string %s"
-msgstr ""
+msgstr "无效公钥字符串 %s"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
 msgid "Invalid server URL"
@@ -4998,7 +5006,7 @@ msgstr "较大的权重（相同的优先级下）被赋予相应较高的被选
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:142
 msgid "Last Error"
-msgstr ""
+msgstr "上个错误"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:629
 msgid "Last member interval"
@@ -5156,11 +5164,11 @@ msgstr "监听端口"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:222
 msgid "Listen addresses"
-msgstr ""
+msgstr "侦听地址"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:219
 msgid "Listen for peers"
-msgstr ""
+msgstr "侦听 peers"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:359
 msgid "Listen interfaces"
@@ -5178,7 +5186,7 @@ msgstr "仅监听这些接口和环回接口。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:251
 msgid "Listen to multicast beacons"
-msgstr ""
+msgstr "侦听多播信标"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:299
 msgid "ListenPort setting is invalid"
@@ -5824,7 +5832,7 @@ msgstr "多播路由"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:240
 msgid "Multicast rules"
-msgstr ""
+msgstr "多播规则"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:779
 msgid "Multicast to unicast"
@@ -6176,11 +6184,11 @@ msgstr "未指定区域"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:205
 msgid "Node info"
-msgstr ""
+msgstr "节点信息"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:209
 msgid "Node info privacy"
-msgstr ""
+msgstr "节点信息隐私"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:58
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:84
@@ -6459,6 +6467,8 @@ msgid ""
 "null. This is entirely optional but, if set, is visible to the whole network "
 "on request."
 msgstr ""
+"可选的节点信息。这必须是 { \"key\": \"value\", ... } 地图或者设为 "
+"null。这完全是可选的，但设置后在受请求时对整个网络可见。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Optional, free-form notes about this device"
@@ -6997,7 +7007,7 @@ msgstr "对端 MAC 地址"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:235
 msgid "Peer URI"
-msgstr ""
+msgstr "Peer URI"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:14
 #: modules/luci-compat/luasrc/model/network.lua:32
@@ -7006,7 +7016,7 @@ msgstr "对端地址缺失"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:229
 msgid "Peer addresses"
-msgstr ""
+msgstr "Peer 地址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:648
 msgid "Peer device name"
@@ -7018,7 +7028,7 @@ msgstr "已禁用对端"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:238
 msgid "Peer interface"
-msgstr ""
+msgstr "Peer 接口"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:214
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:213
@@ -7237,7 +7247,7 @@ msgstr "私钥"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:189
 msgid "Private key"
-msgstr ""
+msgstr "私钥"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:564
 msgid "Private key present"
@@ -7308,7 +7318,7 @@ msgstr "公钥"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:194
 msgid "Public key"
-msgstr ""
+msgstr "公钥"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:547
 msgid "Public key is missing"
@@ -8140,7 +8150,7 @@ msgstr "计划任务"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:41
 msgid "Search domain"
-msgstr ""
+msgstr "搜素域名"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:39
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:62
@@ -8203,7 +8213,7 @@ msgstr "定时发送 LCP 响应（秒），仅在结合了故障阈值时有效"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:249
 msgid "Send multicast beacon"
-msgstr ""
+msgstr "发送多播信标"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:24
 msgid "Send the hostname of this device"
@@ -8993,7 +9003,7 @@ msgstr "语法： <code>/fqdn[/fqdn…]/[ipaddr]</code>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:667
 msgid "Syntax: <code>_service._proto.example.com.</code>"
-msgstr ""
+msgstr "语法：<code>_service._proto.example.com.</code>"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:26
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:22
@@ -9213,7 +9223,7 @@ msgstr "远程隧道端的 IPv6 地址或全称域名。"
 msgid ""
 "The IPv6 interface identifier (address suffix) as hexadecimal number (max. "
 "16 chars)."
-msgstr ""
+msgstr "十六进制数形式的IPv6接口识别符（地址后缀）（最长 16 个字符）。"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:59
@@ -9475,7 +9485,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:189
 msgid "The private key for your Yggdrasil node"
-msgstr ""
+msgstr "Yggdrasil 节点私钥"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:779
 msgid ""
@@ -9488,7 +9498,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:194
 msgid "The public key for your Yggdrasil node"
-msgstr ""
+msgstr "Yggdrasil 节点公钥"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:623
 msgid "The query response interval must be lower than the query interval value"
@@ -9951,11 +9961,11 @@ msgstr "UMTS/GPRS/EV-DO"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:134
 msgid "URI"
-msgstr ""
+msgstr "URI"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:43
 msgid "URI scheme %s not supported"
-msgstr ""
+msgstr "URI scheme %s 不被支持"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:255
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:361
@@ -10114,7 +10124,7 @@ msgstr "不支持的 MAP 类型"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:37
 msgid "Unsupported URI scheme in %s"
-msgstr ""
+msgstr "不受支持的 URI scheme %s"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:69
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:31
@@ -10808,7 +10818,7 @@ msgstr "好（无，0）"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:164
 msgid "Yggdrasil Network"
-msgstr ""
+msgstr "Yggdrasil 网络"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:177
 msgid ""
