@@ -60,7 +60,7 @@ return view.extend({
 		o.load = function(section_id) {
 			return fs.exec('/usr/bin/vnstat', ['--dbiflist', '1']).then(L.bind(function(result) {
 				var databaseInterfaces = [];
-				if (result.code == 0) {
+				if (result.code == 0 && result.stdout) {
 					databaseInterfaces = result.stdout.trim().split('\n');
 				}
 
