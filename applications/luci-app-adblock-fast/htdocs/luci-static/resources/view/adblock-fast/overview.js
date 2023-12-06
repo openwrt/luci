@@ -38,9 +38,12 @@ return view.extend({
 				ipset_installed: false,
 				nft_installed: false,
 				dnsmasq_installed: false,
-				unbound_installed: false,
 				dnsmasq_ipset_support: false,
 				dnsmasq_nftset_support: false,
+				smartdns_installed: false,
+				smartdns_ipset_support: false,
+				smartdns_nftset_support: false,
+				unbound_installed: false,
 				leds: [],
 			},
 		};
@@ -102,6 +105,21 @@ return view.extend({
 				_("Please note that %s is not supported on this system.").format(
 					"<i>smartdns.domainset</i>"
 				);
+		} else {
+			if (!reply.platform.smartdns_ipset_support) {
+				text +=
+					"<br />" +
+					_("Please note that %s is not supported on this system.").format(
+						"<i>smartdns.ipset</i>"
+					);
+			}
+			if (!reply.platform.smartdns_nftset_support) {
+				text +=
+					"<br />" +
+					_("Please note that %s is not supported on this system.").format(
+						"<i>smartdns.nftset</i>"
+					);
+			}
 		}
 		if (!reply.platform.unbound_installed) {
 			text =
@@ -132,6 +150,12 @@ return view.extend({
 		}
 		if (reply.platform.smartdns_installed) {
 			o.value("smartdns.domainset", _("smartdns domain set"));
+			if (reply.platform.smartdns_ipset_support) {
+				o.value("smartdns.ipset", _("smartdns ipset"));
+			}
+			if (reply.platform.smartdns_nftset_support) {
+				o.value("smartdns.nftset", _("smartdns nft set"));
+			}
 		}
 		if (reply.platform.unbound_installed) {
 			o.value("unbound.adb_list", _("unbound adblock list"));
