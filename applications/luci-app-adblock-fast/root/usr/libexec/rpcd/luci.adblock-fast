@@ -73,13 +73,18 @@ set_init_action() {
 	fi
 	case $action in
 		enable)
-			cmd="uci -q set ${name}.config.enabled=1 && uci commit $name";;
+			cmd="/etc/init.d/${name} ${action}"
+			cmd="${cmd} && uci_set ${name} config enabled 1 && uci_commit $name"
+		;;
 		disable)
-			cmd="uci -q set ${name}.config.enabled=0 && uci commit $name";;
+			cmd="/etc/init.d/${name} ${action}"
+			cmd="${cmd} && uci_set ${name} config enabled 0 && uci_commit $name"
+		;;
 		start|stop|reload|restart|dl|pause)
-			cmd="/etc/init.d/${name} ${action}";;
+			cmd="/etc/init.d/${name} ${action}"
+		;;
 	esac
-	if [ -n "$cmd" ] && eval "${cmd}" >/dev/null 2>&1; then
+	if [ -n "$cmd" ] && eval "$cmd" >/dev/null 2>&1; then
 		print_json_bool "result" '1'
 	else
 		print_json_bool "result" '0'
@@ -96,15 +101,12 @@ get_init_status() {
 	local compressed_cache_dir
 	config_load "$name"
 	config_get compressed_cache_dir 'config' 'compressed_cache_dir' '/etc'
-	if [ -n "$(sanitize_dir "$compressed_cache_dir")" ]; then
-		compressed_cache_dir="$(sanitize_dir "$compressed_cache_dir")"
-	else
-		compressed_cache_dir="/etc"
-	fi
-	if [ -n "$(uci -q get $packageName.config.dnsmasq_config_file_url)" ]; then
+	compressed_cache_dir="$(sanitize_dir "$compressed_cache_dir")"
+	compressed_cache_dir="${compressed_cache_dir:-/etc}"
+	if [ -n "$(uci_get "$packageName" 'config' 'dnsmasq_config_file_url')" ]; then
 		dns="dnsmasq.conf"
 	else
-		dns="$(uci -q get $packageName.config.dns)"
+		dns="$(uci_get "$packageName" 'config' 'dns')"
 	fi
 	case "$dns" in
 		dnsmasq.addnhosts)
@@ -131,6 +133,12 @@ get_init_status() {
 			outputFile="$dnsmasqServersFile"
 			outputCache="$dnsmasqServersCache"
 			outputGzip="${compressed_cache_dir}/${dnsmasqServersGzip}"
+		;;
+		smartdns.domainset)
+			outputFilter="$smartdnsDomainSetFilter"
+			outputFile="$smartdnsDomainSetFile"
+			outputCache="$smartdnsDomainSetCache"
+			outputGzip="${compressed_cache_dir}/${smartdnsDomainSetGzip}"
 		;;
 		unbound.adb_list)
 			outputFile="$unboundFile"
@@ -242,6 +250,11 @@ get_platform_support() {
 		json_add_boolean 'dnsmasq_installed' '1'
 	else
 		json_add_boolean 'dnsmasq_installed' '0'
+	fi
+	if check_smartdns; then
+		json_add_boolean 'smartdns_installed' '1'
+	else
+		json_add_boolean 'smartdns_installed' '0'
 	fi
 	if check_unbound; then
 		json_add_boolean 'unbound_installed' '1'
