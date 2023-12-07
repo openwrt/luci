@@ -320,12 +320,14 @@ msgstr ""
 "<code>/#/</code> 相符任何網域名稱。<code>/example.com/</code> 返回 NXDOMAIN。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:301
+msgctxt "hint: <code>/example.com/#</code> returns NULL addresses "
+"(<code>0.0.0.0</code>, <code>::</code>) for example.com and its subdomains."
 msgid ""
-"<code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</code> and "
-"<code>::</code>) for example.com and its subdomains."
+"{example_null} returns {null_addr} addresses ({null_ipv4},"
+"{null_ipv6}) for {example_com} and its subdomains."
 msgstr ""
-"<code>/example.com/#</code> 對 example.com 及其子網域名稱返回無效位址 "
-"(<code>0.0.0.0</code> 和 <code>::</code>) 。"
+"{example_null} 對 {example_com} 及其子網域名稱返回{null_addr}位址 "
+"({null_ipv4} 和 {null_ipv6}) 。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:87
 msgctxt "nft relational \">\" operator expression"
@@ -8782,7 +8784,7 @@ msgid "Sync with browser"
 msgstr "與瀏覽器同步時間"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:299
-msgid "Syntax: <code>/fqdn[/fqdn…]/[ipaddr]</code>."
+msgid "Syntax: {code_syntax}."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
