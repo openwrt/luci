@@ -324,12 +324,14 @@ msgstr ""
 "example.com/</code> は NXDOMAIN を返します。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:316
+msgctxt "hint: <code>/example.com/#</code> returns NULL addresses "
+"(<code>0.0.0.0</code>, <code>::</code>) for example.com and its subdomains."
 msgid ""
-"<code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</code> and "
-"<code>::</code>) for example.com and its subdomains."
+"{example_null} returns {null_addr} addresses ({null_ipv4},"
+"{null_ipv6}) for {example_com} and its subdomains."
 msgstr ""
-"<code>/example.com/#</code> は example.com とそのサブドメインに対して NULL ア"
-"ドレス (<code>0.0.0.0</code> 及び <code>::</code>) を返します。"
+"{example_null} は {example_com} とそのサブドメインに対して {null_addr} ア"
+"ドレス ({null_ipv4} 及び {null_ipv6}) を返します。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:87
 msgctxt "nft relational \">\" operator expression"
@@ -9086,8 +9088,8 @@ msgid "Sync with browser"
 msgstr "ブラウザと同期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:314
-msgid "Syntax: <code>/fqdn[/fqdn…]/[ipaddr]</code>."
-msgstr "文法: <code>/fqdn[/fqdn…]/[ipaddr]</code>."
+msgid "Syntax: {code_syntax}."
+msgstr "文法: {code_syntax}."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:667
 msgid "Syntax: <code>_service._proto.example.com.</code>"

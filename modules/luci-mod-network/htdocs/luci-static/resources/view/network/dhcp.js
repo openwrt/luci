@@ -308,12 +308,32 @@ return view.extend({
 		o.placeholder = '/example.org/10.1.2.3';
 		o.validate = validateServerSpec;
 
+		function customi18n(template, values) {
+			return template.replace(/\{(\w+)\}/g, (match, key) => values[key] || match);
+		};
+
 		o = s.taboption('general', form.DynamicList, 'address',
 			_('Addresses'),
 			_('Resolve specified FQDNs to an IP.') + '<br />' +
-			_('Syntax: <code>/fqdn[/fqdn…]/[ipaddr]</code>.') + '<br />' +
-			_('<code>/#/</code> matches any domain. <code>/example.com/</code> returns NXDOMAIN.') + '<br />' +
-			_('<code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</code> and <code>::</code>) for example.com and its subdomains.'));
+			customi18n(_('Syntax: {code_syntax}.'),
+				{code_syntax: '<code>/fqdn[/fqdn…]/[ipaddr]</code>'}) + '<br />' +
+			customi18n(_('{example_nx} returns {nxdomain}.',
+				'hint: <code>/example.com/</code> returns <code>NXDOMAIN</code>.'),
+				{example_nx: '<code>/example.com/</code>', nxdomain: '<code>NXDOMAIN</code>'}) + '<br />' +
+			customi18n(_('{any_domain} matches any domain (and returns {nxdomain}).',
+				'hint: <code>/#/</code> matches any domain (and returns NXDOMAIN).'),
+				{any_domain:'<code>/#/</code>', nxdomain: '<code>NXDOMAIN</code>'}) + '<br />' +
+			customi18n(
+				_('{example_null} returns {null_addr} addresses ({null_ipv4}, {null_ipv6}) for {example_com} and its subdomains.',
+					'hint: <code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</code>, <code>::</code>) for example.com and its subdomains.'),
+				{	example_null: '<code>/example.com/#</code>',
+					null_addr: '<code>NULL</code>', 
+					null_ipv4: '<code>0.0.0.0</code>',
+					null_ipv6: '<code>::</code>',
+					example_com: '<code>example.com</code>',
+				}
+			)
+		);
 		o.optional = true;
 		o.placeholder = '/router.local/router.lan/192.168.0.1';
 
