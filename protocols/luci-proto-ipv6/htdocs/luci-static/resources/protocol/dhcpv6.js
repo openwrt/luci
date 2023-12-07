@@ -15,9 +15,9 @@ return network.registerProtocol('dhcpv6', {
 		var o;
 
 		o = s.taboption('general', form.ListValue, 'reqaddress', _('Request IPv6-address'));
-		o.value('try, _('try'));
-		o.value('force, _('force'));
-		o.value('none', _('disabled'));
+		o.value('try');
+		o.value('force');
+		o.value('none', 'disabled');
 		o.default = 'try';
 
 		o = s.taboption('general', form.Value, 'reqprefix', _('Request IPv6-prefix of length'));
