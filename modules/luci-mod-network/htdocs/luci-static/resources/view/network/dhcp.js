@@ -935,9 +935,10 @@ return view.extend({
 
 		so = ss.option(form.DynamicList, 'match_tag',
 			_('Match Tag'),
-			_('When a host matches an entry then the special tag <em>known</em> is set. Use <em>known</em> to match all known hosts.') + '<br /><br />' +
-			_('Ignore requests from unknown machines using <em>!known</em>.') + '<br /><br />' +
-			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag <em>known-othernet</em> is set.'));
+			_('When a host matches an entry then the special tag %s is set. Use %s to match all known hosts.').format('<code>known</code>', 
+'<code>known</code>') + '<br /><br />' +
+			_('Ignore requests from unknown machines using %s.').format('<code>!known</code>') + '<br /><br />' +
+			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag %s is set.').format('<code>known-othernet</code>'));
 		so.value('known', _('known'));
 		so.value('!known', _('!known (not known)'));
 		so.value('known-othernet', _('known-othernet (on different subnet)'));
