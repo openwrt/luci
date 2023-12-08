@@ -3837,7 +3837,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `Unknown`
 	 */
 	getActiveMode: function() {
-		var mode = this.ubus('net', 'iwinfo', 'mode') || this.ubus('net', 'config', 'mode') || this.get('mode') || 'ap';
+		var mode = this.ubus('net', 'iwinfo', 'mode') || this.getMode();
 
 		switch (mode) {
 		case 'ap':      return 'Master';
