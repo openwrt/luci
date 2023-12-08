@@ -588,6 +588,7 @@ return view.extend({
 				o.nobridges = false;
 				o.optional = false;
 				o.network = ifc.getName();
+				o.exclude = '@' + ifc.getName();
 
 				o = s.taboption('general', form.Flag, 'auto', _('Bring up on boot'));
 				o.modalonly = true;
