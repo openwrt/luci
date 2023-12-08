@@ -198,7 +198,7 @@ var cbiFlagTristate = form.ListValue.extend({
 			this.vallist[0] = sysdef ? _('automatic (enabled)') : _('automatic (disabled)');
 		}
 
-		return this.super('renderWidget', [section_id, option_index, cfgvalue]);
+		return this.super('renderWidget', [section_id, option_index, cfgvalue ? cfgvalue + '!' : null]);
 	}
 });
 
