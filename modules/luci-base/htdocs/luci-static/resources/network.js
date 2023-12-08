@@ -3861,7 +3861,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 		var mode = this.getActiveMode();
 
 		switch (mode) {
-		case 'Master':       return _('Master');
+		case 'Master':       return _('Access Point');
 		case 'Ad-Hoc':       return _('Ad-Hoc');
 		case 'Client':       return _('Client');
 		case 'Monitor':      return _('Monitor');
