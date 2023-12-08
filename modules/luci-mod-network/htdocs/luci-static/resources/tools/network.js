@@ -724,7 +724,6 @@ return baseclass.extend({
 
 		o = this.replaceOption(s, 'devgeneral', cbiFlagTristate, 'ipv6', _('Enable IPv6'));
 		o.sysfs = '!/proc/sys/net/ipv6/conf/%s/disable_ipv6'.format(devname || 'default');
-		o.migrate = false;
 
 		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'ip6segmentrouting', _('Enable IPv6 segment routing'));
 		o.sysfs = '/proc/sys/net/ipv6/conf/%s/seg6_enabled'.format(devname || 'default');
