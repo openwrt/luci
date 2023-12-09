@@ -25,9 +25,9 @@ return view.extend({
 		return Promise.all([
 			L.resolveDefault(adb.getFileUrlFilesizes(pkg.Name), {}),
 			L.resolveDefault(adb.getPlatformSupport(pkg.Name), {}),
-			L.uci.load(pkg.Name),
-			L.uci.load("dhcp"),
-			L.uci.load("smartdns"),
+			L.resolveDefault(L.uci.load(pkg.Name), {}),
+			L.resolveDefault(L.uci.load("dhcp"), {}),
+			L.resolveDefault(L.uci.load("smartdns"), {}),
 		]);
 	},
 
@@ -241,6 +241,8 @@ return view.extend({
 		o.value("-", _("No AdBlock on SmartDNS"));
 		o.default = "*";
 		o.depends("dns", "smartdns.domainset");
+		o.depends("dns", "smartdns.ipset");
+		o.depends("dns", "smartdns.nftset");
 		o.retain = true;
 
 		o = s1.taboption(
