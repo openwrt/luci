@@ -8,12 +8,10 @@
 "use strict";
 "require form";
 "require rpc";
-"require uci";
 "require view";
 "require https-dns-proxy.status as hdp";
 
 var pkg = {
-
 	get Name() {
 		return "https-dns-proxy";
 	},
@@ -47,8 +45,8 @@ return view.extend({
 		return Promise.all([
 			L.resolveDefault(hdp.getPlatformSupport(pkg.Name), {}),
 			L.resolveDefault(hdp.getProviders(pkg.Name), {}),
-			uci.load(pkg.Name),
-			uci.load("dhcp"),
+			L.resolveDefault(L.uci.load(pkg.Name), {}),
+			L.resolveDefault(L.uci.load("dhcp"), {}),
 		]);
 	},
 
@@ -80,7 +78,7 @@ return view.extend({
 
 		o = s.option(
 			form.ListValue,
-			"dnsmasq_config_update",
+			"dnsmasq_config_update_option",
 			_("Update DNSMASQ Config on Start/Stop"),
 			_(
 				"If update option is selected, the %s'DNS forwardings' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
@@ -92,22 +90,49 @@ return view.extend({
 			)
 		);
 		o.value("*", _("Update all configs"));
+		o.value("+", _("Update select configs"));
+		o.value("-", _("Do not update configs"));
+		o.default = "*";
+		o.retain = true;
+		o.cfgvalue = function (section_id) {
+			let val = this.map.data.get(
+				this.map.config,
+				section_id,
+				"dnsmasq_config_update"
+			);
+			switch (val) {
+				case "*":
+				case "-":
+					return val;
+				default:
+					return "+";
+			}
+		};
+		o.write = function (section_id, formvalue) {
+			L.uci.set(pkg.Name, section_id, "dnsmasq_config_update", formvalue);
+		};
 
-		var sections = uci.sections("dhcp", "dnsmasq");
-		sections.forEach((element) => {
+		o = s.option(
+			form.MultiValue,
+			"dnsmasq_config_update",
+			_("Select the DNSMASQ Configs to update")
+		);
+		Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(function (
+			element
+		) {
 			var description;
 			var key;
-			if (element[".name"] === uci.resolveSID("dhcp", element[".name"])) {
+			if (element[".name"] === L.uci.resolveSID("dhcp", element[".name"])) {
 				key = element[".index"];
 				description = "dnsmasq[" + element[".index"] + "]";
 			} else {
 				key = element[".name"];
 				description = element[".name"];
 			}
-			o.value(key, _("Update %s only").format(description));
+			o.value(key, _("%s").format(description));
 		});
-		o.value("-", _("Do not update configs"));
-		o.default = "*";
+		o.depends("dnsmasq_config_update_option", "+");
+		o.retain = true;
 
 		o = s.option(
 			form.ListValue,
@@ -191,7 +216,7 @@ return view.extend({
 			reply.providers.forEach((prov) => {
 				var option;
 				let regexp = pkg.templateToRegexp(prov.template);
-				let resolver = uci.get(pkg.Name, section_id, "resolver_url");
+				let resolver = L.uci.get(pkg.Name, section_id, "resolver_url");
 				resolver = resolver === undefined ? null : resolver;
 				if (!found && resolver && regexp.test(resolver)) {
 					found = true;
@@ -240,7 +265,7 @@ return view.extend({
 			return ret || "";
 		};
 		_provider.write = function (section_id, formvalue) {
-			uci.set(pkg.Name, section_id, "resolver_url", formvalue);
+			L.uci.set(pkg.Name, section_id, "resolver_url", formvalue);
 		};
 
 		reply.providers.forEach((prov, i) => {
@@ -276,7 +301,7 @@ return view.extend({
 					let resolver = pkg.templateToResolver(template, {
 						option: formvalue || "",
 					});
-					uci.set(pkg.Name, section_id, "resolver_url", resolver);
+					L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
 				};
 				_paramList.remove = _paramList.write;
 			} else if (
@@ -314,7 +339,7 @@ return view.extend({
 					let resolver = pkg.templateToResolver(template, {
 						option: formvalue || "",
 					});
-					uci.set(pkg.Name, section_id, "resolver_url", resolver);
+					L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
 				};
 				_paramText.remove = _paramText.write;
 			}
