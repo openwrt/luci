@@ -519,6 +519,26 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('adv_log', form.Flag, 'ban_remotelog', _('Enable Remote Logging'), _('Enable the cgi interface to receive remote logging events.'));
+		o.default = 0
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_log', form.Value, 'ban_remotetoken', _('Remote Token'), _('Token to communicate with the cgi interface.'));
+		o.depends('ban_remotelog', '1');
+		o.datatype = 'and(minlength(3),maxlength(20))';
+		o.validate = function (section_id, value) {
+			if (!value) {
+				return _('Empty field not allowed');
+			}
+			if (!value.match(/^[A-Za-z0-9\.\:]+$/)) {
+				return _('Invalid characters');
+			}
+			return true;
+		}
+		o.optional = true;
+		o.rmempty = true;
+
 		/*
 			advanced email settings tab
 		*/
