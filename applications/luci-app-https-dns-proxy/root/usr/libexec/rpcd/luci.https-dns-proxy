@@ -117,14 +117,11 @@ get_runtime() { ubus call service list "{ 'verbose': true, 'name': '$1' }"; }
 set_init_action() {
 	local name="$1" action="$2" cmd
 	case $action in
-		enable)
-			cmd="/etc/init.d/${name} enable";;
-		disable)
-			cmd="/etc/init.d/${name} disable";;
-		start|stop|restart)
-			cmd="/etc/init.d/${name} ${action}";;
+		enable|disable|start|stop|restart)
+			cmd="/etc/init.d/${name} ${action}"
+		;;
 	esac
-	if [ -n "$cmd" ] && eval "${cmd}" >/dev/null 2>&1; then
+	if [ -n "$cmd" ] && eval "$cmd" >/dev/null 2>&1; then
 		print_json_bool "result" '1'
 	else
 		print_json_bool "result" '0'
