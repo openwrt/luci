@@ -6,7 +6,6 @@
 
 "require ui";
 "require rpc";
-"require uci";
 "require form";
 "require baseclass";
 
@@ -414,11 +413,9 @@ var status = baseclass.extend({
 				btn_disable,
 			]);
 			var buttonsField = E("div", { class: "cbi-value-field" }, buttonsText);
-			var buttonsDiv = reply.status.version ?
-				E('div', {class: 'cbi-value'}, [
-					buttonsTitle,
-					buttonsField,
-				]) : '';
+			var buttonsDiv = reply.status.version
+				? E("div", { class: "cbi-value" }, [buttonsTitle, buttonsField])
+				: "";
 			return E("div", {}, [header, statusDiv, instancesDiv, buttonsDiv]);
 		});
 	},
