@@ -16,6 +16,11 @@ return baseclass.extend({
 		o.default = '/tmp/rrd';
 		o.depends('enable', '1');
 
+		o = s.option(form.Flag, 'backup', _('Backup RRD statistics'),
+			     _('Backup and restore RRD statistics to/from non-volatile storage around shutdown, reboot, and/or sysupgrade'));
+		o.default = '0';
+		o.depends('enable', '1');
+
 		o = s.option(form.Value, 'StepSize', _('RRD step interval'), _('Seconds'));
 		o.placeholder = '30';
 		o.datatype = 'uinteger';

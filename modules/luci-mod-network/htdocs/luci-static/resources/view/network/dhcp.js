@@ -89,6 +89,21 @@ function calculateNetwork(addr, mask) {
 	];
 }
 
+function generateDnsmasqInstanceEntry(data) {
+	const nameValueMap = new Map(Object.entries(data));
+	let formatString = nameValueMap.get('.index') + ' (' +  _('Name') + (nameValueMap.get('.anonymous') ? ': dnsmasq[' + nameValueMap.get('.index') + ']': ': ' + nameValueMap.get('.name'));
+
+	if (data.domain) {
+		formatString += ', ' +  _('Domain')  + ': ' + data.domain;
+	}
+	if (data.local) {
+		formatString += ', ' +  _('Local')  + ': ' + data.local;
+	}
+	formatString += ')';
+
+	return nameValueMap.get('.name'), formatString;
+}
+
 function getDHCPPools() {
 	return uci.load('dhcp').then(function() {
 		let sections = uci.sections('dhcp', 'dhcp'),
@@ -234,7 +249,7 @@ return view.extend({
 			callHostHints(),
 			callDUIDHints(),
 			getDHCPPools(),
-			network.getDevices()
+			network.getNetworks()
 		]);
 	},
 
@@ -243,7 +258,7 @@ return view.extend({
 		    hosts = hosts_duids_pools[0],
 		    duids = hosts_duids_pools[1],
 		    pools = hosts_duids_pools[2],
-		    ndevs = hosts_duids_pools[3],
+		    networks = hosts_duids_pools[3],
 		    m, s, o, ss, so;
 
 		m = new form.Map('dhcp', _('DHCP and DNS'),
@@ -293,12 +308,32 @@ return view.extend({
 		o.placeholder = '/example.org/10.1.2.3';
 		o.validate = validateServerSpec;
 
+		function customi18n(template, values) {
+			return template.replace(/\{(\w+)\}/g, (match, key) => values[key] || match);
+		};
+
 		o = s.taboption('general', form.DynamicList, 'address',
 			_('Addresses'),
 			_('Resolve specified FQDNs to an IP.') + '<br />' +
-			_('Syntax: <code>/fqdn[/fqdn…]/[ipaddr]</code>.') + '<br />' +
-			_('<code>/#/</code> matches any domain. <code>/example.com/</code> returns NXDOMAIN.') + '<br />' +
-			_('<code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</code> and <code>::</code>) for example.com and its subdomains.'));
+			customi18n(_('Syntax: {code_syntax}.'),
+				{code_syntax: '<code>/fqdn[/fqdn…]/[ipaddr]</code>'}) + '<br />' +
+			customi18n(_('{example_nx} returns {nxdomain}.',
+				'hint: <code>/example.com/</code> returns <code>NXDOMAIN</code>.'),
+				{example_nx: '<code>/example.com/</code>', nxdomain: '<code>NXDOMAIN</code>'}) + '<br />' +
+			customi18n(_('{any_domain} matches any domain (and returns {nxdomain}).',
+				'hint: <code>/#/</code> matches any domain (and returns NXDOMAIN).'),
+				{any_domain:'<code>/#/</code>', nxdomain: '<code>NXDOMAIN</code>'}) + '<br />' +
+			customi18n(
+				_('{example_null} returns {null_addr} addresses ({null_ipv4}, {null_ipv6}) for {example_com} and its subdomains.',
+					'hint: <code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</code>, <code>::</code>) for example.com and its subdomains.'),
+				{	example_null: '<code>/example.com/#</code>',
+					null_addr: '<code>NULL</code>', 
+					null_ipv4: '<code>0.0.0.0</code>',
+					null_ipv6: '<code>::</code>',
+					example_com: '<code>example.com</code>',
+				}
+			)
+		);
 		o.optional = true;
 		o.placeholder = '/router.local/router.lan/192.168.0.1';
 
@@ -310,7 +345,8 @@ return view.extend({
 
 		o = s.taboption('general', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
-			_('Discard upstream responses containing <a href="%s">RFC1918</a> addresses.').format('https://datatracker.ietf.org/doc/html/rfc1918'));
+			_('Discard upstream responses containing <a href="%s">RFC1918</a> addresses.').format('https://www.rfc-editor.org/rfc/rfc1918') + '<br />' +
+			_('Discard also upstream responses containing <a href="%s">RFC4193</a>, Link-Local and private IPv4-Mapped <a href="%s">RFC4291</a> IPv6 Addresses.').format('https://www.rfc-editor.org/rfc/rfc4193', 'https://www.rfc-editor.org/rfc/rfc4291'));
 		o.rmempty = false;
 
 		o = s.taboption('general', form.Flag, 'rebind_localhost',
@@ -339,17 +375,18 @@ return view.extend({
 		o.optional = false;
 		o.rmempty = true;
 
-		o = s.taboption('general', form.DynamicList, 'interface',
+		o = s.taboption('general', widgets.NetworkSelect, 'interface',
 			_('Listen interfaces'),
 			_('Listen only on the specified interfaces, and loopback if not excluded explicitly.'));
-		o.optional = true;
-		o.placeholder = 'lan';
+		o.multiple = true;
+		o.nocreate = true;
 
-		o = s.taboption('general', form.DynamicList, 'notinterface',
+		o = s.taboption('general', widgets.NetworkSelect, 'notinterface',
 			_('Exclude interfaces'),
 			_('Do not listen on the specified interfaces.'));
-		o.optional = true;
-		o.placeholder = 'loopback';
+		o.loopback = true;
+		o.multiple = true;
+		o.nocreate = true;
 
 		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
 			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
@@ -364,28 +401,27 @@ return view.extend({
 		ss.rowcolors = true;
 		ss.nodescriptions = true;
 
-		so = ss.option(form.Value, 'id', _('ID'));
-		so.rmempty = false;
-		so.optional = true;
-
-		so = ss.option(widgets.NetworkSelect, 'interface', _('Interface'));
-		so.optional = true;
-		so.rmempty = false;
-		so.placeholder = 'lan';
-
-		so = ss.option(form.Value, 'local_addr', _('Listen address'));
+		so = ss.option(form.Value, 'local_addr', _('Relay from'));
 		so.rmempty = false;
 		so.datatype = 'ipaddr';
 
 		for (var family = 4; family <= 6; family += 2) {
-			for (var i = 0; i < ndevs.length; i++) {
-				var addrs = (family == 6) ? ndevs[i].getIP6Addrs() : ndevs[i].getIPAddrs();
-				for (var j = 0; j < addrs.length; j++)
-					so.value(addrs[j].split('/')[0]);
+			for (var i = 0; i < networks.length; i++) {
+				if (networks[i].getName() != 'loopback') {
+					var addrs = (family == 6) ? networks[i].getIP6Addrs() : networks[i].getIPAddrs();
+					for (var j = 0; j < addrs.length; j++) {
+						var addr = addrs[j].split('/')[0];
+						so.value(addr, E([], [
+							addr, ' (',
+							widgets.NetworkSelect.prototype.renderIfaceBadge(networks[i]),
+							')'
+						]));
+					}
+				}
 			}
 		}
 
-		so = ss.option(form.Value, 'server_addr', _('Relay To address'));
+		so = ss.option(form.Value, 'server_addr', _('Relay to address'));
 		so.rmempty = false;
 		so.optional = false;
 		so.placeholder = '192.168.10.1#535';
@@ -402,14 +438,19 @@ return view.extend({
 					n = p[0];
 
 			if ((m == null || m == '') && (n == null || n == ''))
-				return _('Both Listen addr and Relay To must be specified.');
+				return _('Both "Relay from" and "Relay to address" must be specified.');
 
 			if ((validation.parseIPv6(m) && validation.parseIPv6(n)) ||
 				validation.parseIPv4(m) && validation.parseIPv4(n))
 				return true;
 			else
-				return _('Listen and Relay To IP family must be homogeneous.')
+				return _('Address families of "Relay from" and "Relay to address" must match.')
 		};
+
+		so = ss.option(widgets.NetworkSelect, 'interface', _('Only accept replies via'));
+		so.optional = true;
+		so.rmempty = false;
+		so.placeholder = 'lan';
 
 		s.taboption('files', form.Flag, 'readethers',
 			_('Use <code>/etc/ethers</code>'),
@@ -626,7 +667,7 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			so.value(index, '%s (Domain: %s, Local: %s)'.format(index, val.domain || '?', val.local || '?'));
+			so.value(generateDnsmasqInstanceEntry(val));
 		});
 
 		o = s.taboption('srvhosts', form.SectionValue, '__srvhosts__', form.TableSection, 'srvhost', null,
@@ -643,15 +684,15 @@ return view.extend({
 		ss.sortable  = true;
 		ss.rowcolors = true;
 
-		so = ss.option(form.Value, 'srv', _('SRV'), _('Syntax: <code>_service._proto.example.com</code>.'));
+		so = ss.option(form.Value, 'srv', _('SRV'), _('Syntax: <code>_service._proto.example.com.</code>'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = '_sip._tcp.example.com';
+		so.placeholder = '_sip._tcp.example.com.';
 
 		so = ss.option(form.Value, 'target', _('Target'), _('CNAME or fqdn'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'sip.example.com';
+		so.placeholder = 'sip.example.com.';
 
 		so = ss.option(form.Value, 'port', _('Port'));
 		so.rmempty = false;
@@ -683,12 +724,12 @@ return view.extend({
 		so = ss.option(form.Value, 'domain', _('Domain'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'example.com';
+		so.placeholder = 'example.com.';
 
 		so = ss.option(form.Value, 'relay', _('Relay'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'relay.example.com';
+		so.placeholder = 'relay.example.com.';
 
 		so = ss.option(form.Value, 'pref', _('Priority'), _('Ordinal: lower comes first.'));
 		so.rmempty = true;
@@ -709,12 +750,12 @@ return view.extend({
 		so = ss.option(form.Value, 'cname', _('Domain'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'www.example.com';
+		so.placeholder = 'www.example.com.';
 
 		so = ss.option(form.Value, 'target', _('Target'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
-		so.placeholder = 'example.com';
+		so.placeholder = 'example.com.';
 
 		o = s.taboption('hosts', form.SectionValue, '__hosts__', form.GridSection, 'domain', null,
 			_('Hostnames are used to bind a domain name to an IP address. This setting is redundant for hostnames already configured with static leases, but it can be useful to rebind an FQDN.'));
@@ -793,7 +834,7 @@ return view.extend({
 
 		so = ss.option(form.Value, 'mac',
 			_('MAC address(es)'),
-			_('The hardware address(es) of this entry/host, separated by spaces.') + '<br /><br />' + 
+			_('The hardware address(es) of this entry/host.') + '<br /><br />' + 
 			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
 		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
 		so.validate = function(section_id, value) {
@@ -905,8 +946,8 @@ return view.extend({
 
 		so = ss.option(form.Value, 'hostid',
 			_('IPv6-Suffix (hex)'),
-			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 8 chars).'));
-		so.datatype = 'and(rangelength(0,8),hexstring)';
+			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 16 chars).'));
+		so.datatype = 'and(rangelength(0,16),hexstring)';
 
 		so = ss.option(form.DynamicList, 'tag',
 			_('Tag'),
@@ -914,9 +955,9 @@ return view.extend({
 
 		so = ss.option(form.DynamicList, 'match_tag',
 			_('Match Tag'),
-			_('When a host matches an entry then the special tag <em>known</em> is set. Use <em>known</em> to match all known hosts.') + '<br /><br />' +
-			_('Ignore requests from unknown machines using <em>!known</em>.') + '<br /><br />' +
-			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag <em>known-othernet</em> is set.'));
+			_('When a host matches an entry then the special tag %s is set. Use %s to match all known hosts.').format('<code>known</code>', '<code>known</code>') + '<br /><br />' +
+			_('Ignore requests from unknown machines using %s.').format('<code>!known</code>') + '<br /><br />' +
+			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag %s is set.').format('<code>known-othernet</code>'));
 		so.value('known', _('known'));
 		so.value('!known', _('!known (not known)'));
 		so.value('known-othernet', _('known-othernet (on different subnet)'));
@@ -928,7 +969,7 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			so.value(index, '%s (Domain: %s, Local: %s)'.format(index, val.domain || '?', val.local || '?'));
+			so.value(generateDnsmasqInstanceEntry(val));
 		});
 
 

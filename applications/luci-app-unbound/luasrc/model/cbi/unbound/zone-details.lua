@@ -55,6 +55,7 @@ else
     ast:value("dnsmasq", "dnsmasq")
     ast:value("ipset-dns", "ipset-dns")
     ast:value("nsd", "nsd")
+    ast:value("unprotected-loop", "unprotected-loop")
 
     rlv = s7:option(Flag, "resolv_conf", translate("Use 'resolv.conf.auto'"),
         translate("Forward to upstream nameservers (ISP)"))

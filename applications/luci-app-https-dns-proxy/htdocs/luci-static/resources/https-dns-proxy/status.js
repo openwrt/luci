@@ -2,10 +2,10 @@
 // This code wouldn't have been possible without help from:
 // - [@stokito](https://github.com/stokito)
 // - [@vsviridov](https://github.com/vsviridov)
+// noinspection JSAnnotator
 
 "require ui";
 "require rpc";
-"require uci";
 "require form";
 "require baseclass";
 
@@ -241,7 +241,7 @@ var status = baseclass.extend({
 									});
 									name += " (" + option + ")";
 								} else {
-									if (match[1] != "") name += " (" + match[1] + ")";
+									if (match[1] !== "") name += " (" + match[1] + ")";
 								}
 							}
 						}
@@ -413,11 +413,9 @@ var status = baseclass.extend({
 				btn_disable,
 			]);
 			var buttonsField = E("div", { class: "cbi-value-field" }, buttonsText);
-			var buttonsDiv = reply.status.version ?
-				E('div', {class: 'cbi-value'}, [
-					buttonsTitle,
-					buttonsField,
-				]) : '';
+			var buttonsDiv = reply.status.version
+				? E("div", { class: "cbi-value" }, [buttonsTitle, buttonsField])
+				: "";
 			return E("div", {}, [header, statusDiv, instancesDiv, buttonsDiv]);
 		});
 	},

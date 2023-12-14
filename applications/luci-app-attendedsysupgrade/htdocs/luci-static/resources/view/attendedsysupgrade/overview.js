@@ -89,7 +89,7 @@ return view.extend({
 		for (image of images) {
 			if (this.firmware.filesystem == image.filesystem) {
 				// x86 images can be combined-efi (EFI) or combined (BIOS)
-				if(this.firmware.target.indexOf("x86")) {
+				if(this.firmware.target.indexOf("x86") != -1) {
 					if (this.data.efi && image.type == 'combined-efi') {
 						return image;
 					} else if (image.type == 'combined') {

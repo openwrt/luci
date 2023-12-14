@@ -1,0 +1,45 @@
+{
+	"admin/services/sshtunnel": {
+		"title": "SSH Tunnels",
+		"order": 50,
+		"action": {
+			"type": "alias",
+			"path": "admin/services/sshtunnel/ssh_tunnels"
+		},
+		"depends": {
+			"acl": [ "luci-app-sshtunnel" ]
+		}
+	},
+	"admin/services/sshtunnel/ssh_keys": {
+		"title": "SSH Keys",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "sshtunnel/ssh_keys"
+		}
+	},
+	"admin/services/sshtunnel/ssh_servers": {
+		"title": "Servers",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "sshtunnel/ssh_servers"
+		}
+	},
+	"admin/services/sshtunnel/ssh_tunnels": {
+		"title": "SSH Tunnels",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "sshtunnel/ssh_tunnels"
+		}
+	},
+	"admin/services/sshtunnel/ssh_hosts": {
+		"title": "Known Hosts",
+		"order": 40,
+		"action": {
+			"type": "view",
+			"path": "sshtunnel/ssh_hosts"
+		}
+	}
+}

@@ -3233,6 +3233,17 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		if (!Array.isArray(data))
 			return;
 
+		this.data = data;
+		this.placeholder = placeholder;
+
+		var n = 0,
+		    rows = this.node.querySelectorAll('tr, .tr'),
+		    trows = [],
+		    headings = [].slice.call(this.node.firstElementChild.querySelectorAll('th, .th')),
+		    captionClasses = this.options.captionClasses,
+		    trTag = (rows[0] && rows[0].nodeName == 'DIV') ? 'div' : 'tr',
+		    tdTag = (headings[0] && headings[0].nodeName == 'DIV') ? 'div' : 'td';
+
 		if (sorting) {
 			var list = data.map(L.bind(function(row) {
 				return [ this.deriveSortKey(row[sorting[0]], sorting[0]), row ];
@@ -3249,18 +3260,14 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 			list.forEach(function(item) {
 				data.push(item[1]);
 			});
+
+			headings.forEach(function(th, i) {
+				if (i == sorting[0])
+					th.setAttribute('data-sort-direction', sorting[1] ? 'desc' : 'asc');
+				else
+					th.removeAttribute('data-sort-direction');
+			});
 		}
-
-		this.data = data;
-		this.placeholder = placeholder;
-
-		var n = 0,
-		    rows = this.node.querySelectorAll('tr, .tr'),
-		    trows = [],
-		    headings = [].slice.call(this.node.firstElementChild.querySelectorAll('th, .th')),
-		    captionClasses = this.options.captionClasses,
-		    trTag = (rows[0] && rows[0].nodeName == 'DIV') ? 'div' : 'tr',
-		    tdTag = (headings[0] && headings[0].nodeName == 'DIV') ? 'div' : 'td';
 
 		data.forEach(function(row) {
 			trows[n] = E(trTag, { 'class': 'tr' });
@@ -3324,6 +3331,7 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		if (!headrow)
 			return;
 
+		options.id = node.id;
 		options.classes = [].slice.call(node.classList).filter(function(c) { return c != 'table' });
 		options.sortable = [];
 		options.captionClasses = [];
@@ -3422,8 +3430,11 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		if (this.sortState)
 			return this.sortState;
 
+		if (!this.options.id)
+			return null;
+
 		var page = document.body.getAttribute('data-page'),
-		    key = page + '.' + this.id,
+		    key = page + '.' + this.options.id,
 		    state = session.getLocalData('tablesort');
 
 		if (L.isObject(state) && Array.isArray(state[key]))
@@ -3440,7 +3451,7 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 			return;
 
 		var page = document.body.getAttribute('data-page'),
-		    key = page + '.' + this.id,
+		    key = page + '.' + this.options.id,
 		    state = session.getLocalData('tablesort');
 
 		if (!L.isObject(state))
@@ -3456,18 +3467,14 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		if (!ev.target.matches('th[data-sortable-row]'))
 			return;
 
-		var th = ev.target,
-		    direction = (th.getAttribute('data-sort-direction') == 'asc'),
-		    index = 0;
+		var index, direction;
 
-		this.node.firstElementChild.querySelectorAll('th').forEach(function(other_th, i) {
-			if (other_th !== th)
-				other_th.removeAttribute('data-sort-direction');
-			else
+		this.node.firstElementChild.querySelectorAll('th, .th').forEach(function(th, i) {
+			if (th === ev.target) {
 				index = i;
+				direction = th.getAttribute('data-sort-direction') == 'asc';
+			}
 		});
-
-		th.setAttribute('data-sort-direction', direction ? 'desc' : 'asc');
 
 		this.setActiveSortState(index, direction);
 		this.update(this.data, this.placeholder);

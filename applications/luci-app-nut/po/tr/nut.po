@@ -25,8 +25,8 @@ msgid "Allowed actions"
 msgstr "İzin verilen eylemler"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:20
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "As configured by NUT"
 msgstr "NUT tarafından yapılandırıldığı gibi"
 
@@ -34,7 +34,7 @@ msgstr "NUT tarafından yapılandırıldığı gibi"
 msgid "Bytes to read from interrupt pipe"
 msgstr "Kesinti hattından okunacak bayt sayısı"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "CA Certificate path"
 msgstr "CA Sertifikası yolu"
 
@@ -135,6 +135,7 @@ msgstr ""
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:150
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:158
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:166
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
 msgid "Execute notify command"
 msgstr "Bildirim komutunu yürütün"
 
@@ -166,8 +167,8 @@ msgstr "Ana bilgisayar"
 msgid "Hostname or IP address"
 msgstr "Ana makine adı veya IP adresi"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:199
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:228
 msgid "Hostname or address of UPS"
 msgstr "UPS'in ana bilgisayar adı veya adresi"
 
@@ -189,6 +190,7 @@ msgstr "IP Adresi"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:152
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:160
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:168
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:176
 msgid "Ignore"
 msgstr "Göz ardı et"
 
@@ -265,8 +267,8 @@ msgstr "NUT CGI Erişimi"
 msgid "NUT Users"
 msgstr "NUT Kullanıcıları"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "Name of UPS"
 msgstr "UPS adı"
 
@@ -329,32 +331,39 @@ msgstr "Bildir komutu"
 msgid "Notify when back online"
 msgstr "Tekrar çevrimiçi olduğunda bildir"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
 msgid "Notify when battery needs replacing"
 msgstr "Pilin değiştirilmesi gerektiğinde haber ver"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
 msgid "Notify when communications lost"
 msgstr "İletişim kaybolduğunda bildir"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
 msgid "Notify when communications restored"
 msgstr "İletişim yeniden kurulduğunda bildir"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when force shutdown"
 msgstr "Kapatmaya zorlandığında bildir"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:115
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when low battery"
 msgstr "Düşük pil olduğunda bildir"
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+msgid "Notify when no communications"
+msgstr ""
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:171
+msgid "Notify when no parent process"
+msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:107
 msgid "Notify when on battery"
 msgstr "Pildeyken bildir"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
 msgid "Notify when shutting down"
 msgstr "Kapatırken bildir"
 
@@ -374,13 +383,13 @@ msgstr "Pilde mesajı"
 msgid "Online message"
 msgstr "Çevrimiçi mesajı"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:216
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:245
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:19
 msgid "Password"
 msgstr "Parola"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "Path containing ca certificates to match against host certificate"
 msgstr ""
 "Ana bilgisayar sertifikasıyla eşleştirmek için ca sertifikalarını içeren yol"
@@ -414,15 +423,15 @@ msgid "Polling Frequency(s)"
 msgstr "Örnek alma sıklığı(s)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:27
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:195
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:224
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:203
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:232
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:46
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:202
 msgid "Port"
 msgstr "Bağlantı noktası"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:200
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:229
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
 msgid "Power value"
 msgstr "Güç değeri"
 
@@ -434,7 +443,7 @@ msgstr "Ürün (regex)"
 msgid "Replace battery message"
 msgstr "Pili değiştirin mesajı"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Require SSL and make sure server CN matches hostname"
 msgstr ""
 "SSL gerektir ve sunucu CN'nin ana bilgisayar adıyla eşleştiğinden emin ol"
@@ -520,7 +529,8 @@ msgstr "Bu bölümün adı, başka bir yerde UPS adı olarak kullanılacaktır"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:96
 msgid "Time in seconds between driver start retry attempts."
-msgstr "Sürücünün yeniden başlatma denemeleri arasındaki saniye cinsinden süre."
+msgstr ""
+"Sürücünün yeniden başlatma denemeleri arasındaki saniye cinsinden süre."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:158
 msgid "Time in seconds that upsdrvctl will wait for driver to finish starting"
@@ -528,7 +538,7 @@ msgstr ""
 "Upsdrvctl'nin sürücünün başlatmayı bitirmesini bekleyeceği saniye cinsinden "
 "süre"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:183
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
 msgid "UPS Master"
 msgstr "UPS Ana"
 
@@ -536,7 +546,7 @@ msgstr "UPS Ana"
 msgid "UPS Server Global Settings"
 msgstr "UPS Sunucusu Global Ayarları"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:212
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
 msgid "UPS Slave"
 msgstr "UPS İkincil"
 
@@ -572,8 +582,8 @@ msgstr ""
 "Sürücünün çalıştırılacağı kullanıcı; sürücü tarafından erişilen aygıt "
 "dosyasının o kullanıcı için okuma-yazma özelliğine sahip olmasını gerektirir."
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:205
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:234
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:213
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:242
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:16
 msgid "Username"
 msgstr "Kullanıcı adı"
@@ -582,7 +592,7 @@ msgstr "Kullanıcı adı"
 msgid "Vendor (regex)"
 msgstr "Satıcı (regex)"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Verify all connection with SSL"
 msgstr "Tüm bağlantıyı SSL ile doğrulayın"
 
@@ -600,6 +610,7 @@ msgstr "Hatalı ürün yazılımı için geçici çözüm"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:151
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:159
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:167
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:175
 msgid "Write to syslog"
 msgstr "Sistem günlüğüne yaz"
 

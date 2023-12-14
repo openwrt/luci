@@ -5,7 +5,6 @@
 
 "use strict";
 "require form";
-"require uci";
 "require view";
 "require adblock-fast.status as adb";
 
@@ -26,8 +25,9 @@ return view.extend({
 		return Promise.all([
 			L.resolveDefault(adb.getFileUrlFilesizes(pkg.Name), {}),
 			L.resolveDefault(adb.getPlatformSupport(pkg.Name), {}),
-			uci.load(pkg.Name),
-			uci.load("dhcp"),
+			L.resolveDefault(L.uci.load(pkg.Name), {}),
+			L.resolveDefault(L.uci.load("dhcp"), {}),
+			L.resolveDefault(L.uci.load("smartdns"), {}),
 		]);
 	},
 
@@ -38,9 +38,12 @@ return view.extend({
 				ipset_installed: false,
 				nft_installed: false,
 				dnsmasq_installed: false,
-				unbound_installed: false,
 				dnsmasq_ipset_support: false,
 				dnsmasq_nftset_support: false,
+				smartdns_installed: false,
+				smartdns_ipset_support: false,
+				smartdns_nftset_support: false,
+				unbound_installed: false,
 				leds: [],
 			},
 		};
@@ -95,6 +98,29 @@ return view.extend({
 					);
 			}
 		}
+		if (!reply.platform.smartdns_installed) {
+			text =
+				text +
+				"<br />" +
+				_("Please note that %s is not supported on this system.").format(
+					"<i>smartdns.domainset</i>"
+				);
+		} else {
+			if (!reply.platform.smartdns_ipset_support) {
+				text +=
+					"<br />" +
+					_("Please note that %s is not supported on this system.").format(
+						"<i>smartdns.ipset</i>"
+					);
+			}
+			if (!reply.platform.smartdns_nftset_support) {
+				text +=
+					"<br />" +
+					_("Please note that %s is not supported on this system.").format(
+						"<i>smartdns.nftset</i>"
+					);
+			}
+		}
 		if (!reply.platform.unbound_installed) {
 			text =
 				text +
@@ -122,6 +148,15 @@ return view.extend({
 			}
 			o.value("dnsmasq.servers", _("dnsmasq servers file"));
 		}
+		if (reply.platform.smartdns_installed) {
+			o.value("smartdns.domainset", _("smartdns domain set"));
+			if (reply.platform.smartdns_ipset_support) {
+				o.value("smartdns.ipset", _("smartdns ipset"));
+			}
+			if (reply.platform.smartdns_nftset_support) {
+				o.value("smartdns.nftset", _("smartdns nft set"));
+			}
+		}
 		if (reply.platform.unbound_installed) {
 			o.value("unbound.adb_list", _("unbound adblock list"));
 		}
@@ -144,50 +179,122 @@ return view.extend({
 		o = s1.taboption(
 			"tab_basic",
 			form.ListValue,
-			"dnsmasq_instance",
+			"dnsmasq_instance_option",
 			_("Use AdBlocking on the dnsmasq instance(s)"),
 			_(
-				"You can limit the AdBlocking to a specific dnsmasq instance(s) (%smore information%s)."
+				"You can limit the AdBlocking to the specific dnsmasq instance(s) (%smore information%s)."
 			).format(
 				'<a href="' + pkg.URL + "#dnsmasq_instance" + '" target="_blank">',
 				"</a>"
 			)
 		);
 		o.value("*", _("AdBlock on all instances"));
+		o.value("+", _("AdBlock on select instances"));
+		o.value("-", _("No AdBlock on dnsmasq"));
+		o.default = "*";
+		o.depends("dns", "dnsmasq.addnhosts");
+		o.depends("dns", "dnsmasq.servers");
+		o.retain = true;
+		o.cfgvalue = function (section_id) {
+			let val = this.map.data.get(
+				this.map.config,
+				section_id,
+				"dnsmasq_instance"
+			);
+			switch (val) {
+				case "*":
+				case "-":
+					return val;
+				default:
+					return "+";
+			}
+		};
+		o.write = function (section_id, formvalue) {
+			L.uci.set(pkg.Name, section_id, "dnsmasq_instance", formvalue);
+		};
 
-		//		Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(function (
-		//			val,
-		//			index
-		//		) {
-		//			const nameValueMap = new Map(Object.entries(val));
-		//			so.value(
-		//				nameValueMap.get(".name"),
-		//				"%s (Name: %s, Domain: %s, Local: %s)".format(
-		//					nameValueMap.get(".index"),
-		//					nameValueMap.get(".name") || "noname",
-		//					val.domain || "unset",
-		//					val.local || "unset"
-		//				)
-		//			);
-		//		});
-
-		var sections = uci.sections("dhcp", "dnsmasq");
-		sections.forEach((element) => {
+		o = s1.taboption(
+			"tab_basic",
+			form.MultiValue,
+			"dnsmasq_instance",
+			_("Pick the dnsmasq instance(s) for AdBlocking")
+		);
+		Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(function (
+			element
+		) {
 			var description;
 			var key;
-			if (element[".name"] === uci.resolveSID("dhcp", element[".name"])) {
+			if (element[".name"] === L.uci.resolveSID("dhcp", element[".name"])) {
 				key = element[".index"];
 				description = "dnsmasq[" + element[".index"] + "]";
 			} else {
 				key = element[".name"];
 				description = element[".name"];
 			}
-			o.value(key, _("AdBlock on %s only").format(description));
+			o.value(key, _("%s").format(description));
 		});
-		o.value("-", _("No AdBlock on dnsmasq"));
+		o.depends("dnsmasq_instance_option", "+");
+		o.retain = true;
+
+		o = s1.taboption(
+			"tab_basic",
+			form.ListValue,
+			"smartdns_instance_option",
+			_("Use AdBlocking on the SmartDNS instance(s)"),
+			_(
+				"You can limit the AdBlocking to the specific SmartDNS instance(s) (%smore information%s)."
+			).format(
+				'<a href="' + pkg.URL + "#smartdns_instance" + '" target="_blank">',
+				"</a>"
+			)
+		);
+		o.value("*", _("AdBlock on all instances"));
+		o.value("+", _("AdBlock on select instances"));
+		o.value("-", _("No AdBlock on SmartDNS"));
 		o.default = "*";
-		o.depends("dns", "dnsmasq.addnhosts");
-		o.depends("dns", "dnsmasq.servers");
+		o.depends("dns", "smartdns.domainset");
+		o.depends("dns", "smartdns.ipset");
+		o.depends("dns", "smartdns.nftset");
+		o.retain = true;
+		o.cfgvalue = function (section_id) {
+			let val = this.map.data.get(
+				this.map.config,
+				section_id,
+				"smartdns_instance"
+			);
+			switch (val) {
+				case "*":
+				case "-":
+					return val;
+				default:
+					return "+";
+			}
+		};
+		o.write = function (section_id, formvalue) {
+			L.uci.set(pkg.Name, section_id, "smartdns_instance", formvalue);
+		};
+
+		o = s1.taboption(
+			"tab_basic",
+			form.MultiValue,
+			"smartdns_instance",
+			_("Pick the SmartDNS instance(s) for AdBlocking")
+		);
+		Object.values(L.uci.sections("smartdns", "smartdns")).forEach(function (
+			element
+		) {
+			var description;
+			var key;
+			if (element[".name"] === L.uci.resolveSID("smartdns", element[".name"])) {
+				key = element[".index"];
+				description = "smartdns[" + element[".index"] + "]";
+			} else {
+				key = element[".name"];
+				description = element[".name"];
+			}
+			o.value(key, _("%s").format(description));
+		});
+		o.depends("smartdns_instance_option", "+");
 		o.retain = true;
 
 		o = s1.taboption(
@@ -378,10 +485,10 @@ return view.extend({
 		s3.anonymous = true;
 		s3.addremove = true;
 
-		o = s3.option(form.DummyValue, "_size", "Size");
+		o = s3.option(form.DummyValue, "_size", _("Size"));
 		o.modalonly = false;
 		o.cfgvalue = function (section_id) {
-			let url = uci.get(pkg.Name, section_id, "url");
+			let url = L.uci.get(pkg.Name, section_id, "url");
 			let ret = _("Unknown");
 			reply.sizes.forEach((element) => {
 				if (element.url === url) {
@@ -399,6 +506,10 @@ return view.extend({
 		o.value("allow", _("Allow"));
 		o.value("block", _("Block"));
 		o.default = "block";
+		o.textvalue = function (section_id) {
+			var val = this.cfgvalue(section_id);
+			return val == "allow" ? _("Allow") : _("Block");
+		};
 
 		o = s3.option(form.Value, "url", _("URL"));
 		o.optional = false;

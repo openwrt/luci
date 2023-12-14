@@ -138,15 +138,24 @@ function buildVLANMappings(mapping)
 	}
 }
 
-function resolveVLANPorts(ifname, mapping)
+function resolveVLANPorts(ifname, mapping, seen)
 {
 	var ports = [];
 
-	if (mapping[ifname])
-		for (var i = 0; i < mapping[ifname].length; i++)
-			ports.push.apply(ports, resolveVLANPorts(mapping[ifname][i], mapping));
-	else
+	if (!seen)
+		seen = {};
+
+	if (mapping[ifname]) {
+		for (var i = 0; i < mapping[ifname].length; i++) {
+			if (!seen[mapping[ifname][i]]) {
+				seen[mapping[ifname][i]] = true;
+				ports.push.apply(ports, resolveVLANPorts(mapping[ifname][i], mapping, seen));
+			}
+		}
+	}
+	else {
 		ports.push(ifname);
+	}
 
 	return ports.sort(L.naturalCompare);
 }
@@ -200,7 +209,7 @@ function buildInterfaceMapping(zones, networks) {
 	return portmap;
 }
 
-function formatSpeed(speed, duplex) {
+function formatSpeed(carrier, speed, duplex) {
 	if (speed && duplex) {
 		var d = (duplex == 'half') ? '\u202f(H)' : '',
 		    e = E('span', { 'title': _('Speed: %d Mibit/s, Duplex: %s').format(speed, duplex) });
@@ -220,7 +229,7 @@ function formatSpeed(speed, duplex) {
 		return e;
 	}
 
-	return _('no link');
+	return carrier ? _('Connected') : _('no link');
 }
 
 function formatStats(portdev) {
@@ -343,21 +352,22 @@ return baseclass.extend({
 		return E('div', { 'style': 'display:grid;grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));margin-bottom:1em' }, known_ports.map(function(port) {
 			var speed = port.netdev.getSpeed(),
 			    duplex = port.netdev.getDuplex(),
+			    carrier = port.netdev.getCarrier(),
 			    pmap = port_map[port.netdev.getName()],
 			    pzones = (pmap && pmap.zones.length) ? pmap.zones.sort(function(a, b) { return L.naturalCompare(a.getName(), b.getName()) }) : [ null ];
 
 			return E('div', { 'class': 'ifacebox', 'style': 'margin:.25em;min-width:70px;max-width:100px' }, [
 				E('div', { 'class': 'ifacebox-head', 'style': 'font-weight:bold' }, [ port.netdev.getName() ]),
 				E('div', { 'class': 'ifacebox-body' }, [
-					E('img', { 'src': L.resource('icons/port_%s.png').format((speed && duplex) ? 'up' : 'down') }),
+					E('img', { 'src': L.resource('icons/port_%s.png').format(carrier ? 'up' : 'down') }),
 					E('br'),
-					formatSpeed(speed, duplex)
+					formatSpeed(carrier, speed, duplex)
 				]),
 				E('div', { 'class': 'ifacebox-head cbi-tooltip-container', 'style': 'display:flex' }, [
 					E([], pzones.map(function(zone) {
 						return E('div', {
 							'class': 'zonebadge',
-							'style': 'cursor:help;flex:1;height:3px;' + firewall.getZoneColorStyle(zone)
+							'style': 'cursor:help;flex:1;height:3px;opacity:' + (carrier ? 1 : 0.25) + ';' + firewall.getZoneColorStyle(zone)
 						});
 					})),
 					E('span', { 'class': 'cbi-tooltip left' }, [ renderNetworksTooltip(pmap) ])
