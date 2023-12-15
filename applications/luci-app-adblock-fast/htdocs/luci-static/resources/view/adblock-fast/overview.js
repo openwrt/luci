@@ -262,8 +262,6 @@ return view.extend({
 			o.value("-", _("No AdBlock on SmartDNS"));
 			o.default = "*";
 			o.depends("dns", "smartdns.domainset");
-			o.depends("dns", "smartdns.ipset");
-			o.depends("dns", "smartdns.nftset");
 			o.retain = true;
 			o.cfgvalue = function (section_id) {
 				let val = this.map.data.get(
