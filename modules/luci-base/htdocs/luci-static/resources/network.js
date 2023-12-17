@@ -3823,8 +3823,8 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * Query the current operation mode from runtime information.
 	 *
 	 * @returns {string}
-	 * Returns the human readable mode name as reported by `ubus` runtime
-	 * state. Possible returned values are:
+	 * Returns the human readable mode name as reported by iwinfo or uci mode.
+	 * Possible returned values are:
 	 *  - `Master`
 	 *  - `Ad-Hoc`
 	 *  - `Client`
@@ -3837,13 +3837,13 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `Unknown`
 	 */
 	getActiveMode: function() {
-		var mode = this.ubus('net', 'iwinfo', 'mode') || this.ubus('net', 'config', 'mode') || this.get('mode') || 'ap';
+		var mode = this.ubus('net', 'iwinfo', 'mode') || this.getMode();
 
 		switch (mode) {
 		case 'ap':      return 'Master';
 		case 'sta':     return 'Client';
 		case 'adhoc':   return 'Ad-Hoc';
-		case 'mesh':    return 'Mesh';
+		case 'mesh':    return 'Mesh Point';
 		case 'monitor': return 'Monitor';
 		default:        return mode;
 		}
@@ -3861,12 +3861,17 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 		var mode = this.getActiveMode();
 
 		switch (mode) {
-		case 'Master':  return _('Master');
-		case 'Client':  return _('Client');
-		case 'Ad-Hoc':  return _('Ad-Hoc');
-		case 'Mash':    return _('Mesh');
-		case 'Monitor': return _('Monitor');
-		default:        return mode;
+		case 'Master':       return _('Access Point');
+		case 'Ad-Hoc':       return _('Ad-Hoc');
+		case 'Client':       return _('Client');
+		case 'Monitor':      return _('Monitor');
+		case 'Master(VLAN)': return _('Master (VLAN)');
+		case 'WDS':          return _('WDS');
+		case 'Mesh Point':   return _('Mesh Point');
+		case 'P2P Client':   return _('P2P Client');
+		case 'P2P Go':       return _('P2P Go');
+		case 'Unknown':      return _('Unknown');
+		default:             return mode;
 		}
 	},
 

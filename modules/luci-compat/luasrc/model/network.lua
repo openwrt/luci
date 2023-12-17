@@ -1761,7 +1761,7 @@ function wifinet.active_mode(self)
 	if     m == "ap"      then m = "Master"
 	elseif m == "sta"     then m = "Client"
 	elseif m == "adhoc"   then m = "Ad-Hoc"
-	elseif m == "mesh"    then m = "Mesh"
+	elseif m == "mesh"    then m = "Mesh Point"
 	elseif m == "monitor" then m = "Monitor"
 	end
 
