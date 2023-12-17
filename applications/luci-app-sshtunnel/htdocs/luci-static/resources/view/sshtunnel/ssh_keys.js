@@ -67,16 +67,17 @@ function _renderSshKeys(sshKeys) {
 	cbi_update_table(table, rows, null);
 
 	var keyGenBtn = E('div', {}, [
+		E('h4', _('Generate a new key')),
 		E('form', {
 			'submit': _handleKeyGenSubmit,
 		}, [
-			E('label', {}, _('Generate a new key') + ': '),
+			E('label', {}, _('Name') + ': '),
 			E('span', {'class': 'control-group'}, [
 				E('input', {
 					'type': 'text',
 					'name': 'keyName',
 					'value': 'id_ed25519',
-					'pattern': '^[a-zA-Z][a-zA-Z0-9_\.]+',
+					'pattern': '^[a-zA-Z][a-zA-Z0-9_.@\\-+]+',
 					'required': 'required',
 					'maxsize': '35',
 					'autocomplete': 'off',
@@ -97,13 +98,14 @@ function _renderSshKeys(sshKeys) {
 			_('In LuCI you can do that with <a %s>System / Administration / SSH-Keys</a>')
 				.format('href="/cgi-bin/luci/admin/system/admin/sshkeys"')
 		),
-		keyGenBtn, table
+		table, keyGenBtn,
 	]);
 }
 
 function _handleKeyGenSubmit(event) {
 	event.preventDefault();
 	var keyName = document.querySelector('input[name="keyName"]').value;
+	keyName = keyName.startsWith('id_') ? keyName : 'id_' + keyName;
 	if (allSshKeys[keyName]) {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
 		ui.addNotification(null, E('p', _('A key with that name already exists.'), 'error'));
