@@ -16,4 +16,21 @@
 
 	<line x1="0" y1="90%" x2="100%" y2="90%" style="stroke:black;stroke-width:0.1" />
 	<text id="label_10" x="10" y="89%" style="fill:#eee; font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000">-90 dbm</text>
+	<defs>
+		<linearGradient id="GradientVerticalCenteredBlack">
+			<stop class="stopinvis" offset="0%" />
+			<stop class="stopblack" offset="50%" />
+			<stop class="stopinvis" offset="100%" />
+		</linearGradient>
+	</defs>
+	<style>
+		.stopinvis {
+			stop-color: "transparent";
+			stop-opacity: 0;
+		}
+		.stopblack {
+			stop-color: "black";
+			stop-opacity: .1;
+		}
+	</style>
 </svg>
