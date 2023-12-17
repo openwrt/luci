@@ -11,14 +11,16 @@ return view.extend({
 	load: function () {
 		return L.resolveDefault(fs.list('/root/.ssh/'), []).then(function (entries) {
 			var tasks = [
+				// detect if OpenSSH ssh-keygen is installed
 				L.resolveDefault(fs.stat('/usr/bin/ssh-keygen'), {}),
 			];
+			var sshKeyNames = _findAllPossibleIdKeys(entries);
+
 			// read pub keys
-			for (var i = 0; i < entries.length; i++) {
-				if (entries[i].type === 'file' && entries[i].name.match(/\.pub$/)) {
-					tasks.push(Promise.resolve(entries[i].name));
-					tasks.push(fs.lines('/root/.ssh/' + entries[i].name));
-				}
+			for (var sshKeyName of sshKeyNames) {
+				var sshPubKeyName = sshKeyName + '.pub';
+				tasks.push(Promise.resolve(sshKeyName));
+				tasks.push(fs.lines('/root/.ssh/' + sshPubKeyName));
 			}
 			return Promise.all(tasks);
 		});
@@ -42,12 +44,37 @@ return view.extend({
 	},
 });
 
+function _findAllPossibleIdKeys(entries) {
+	var sshKeyNames = [];
+	for (var item of entries) {
+		if (item.type !== 'file') {
+			continue
+		}
+		// a key file should have a corresponding .pub file
+		if (item.name.endsWith('.pub')) {
+			var sshPubKeyName = item.name;
+			var sshKeyName = sshPubKeyName.substring(0, sshPubKeyName.length - 4);
+			if (!sshKeyNames.includes(sshKeyName)) {
+				sshKeyNames.push(sshKeyName)
+			}
+		} else {
+			// or at least it should start with id_ e.g. id_dropbear
+			if (item.name.startsWith('id_')) {
+				var sshKeyName = item.name;
+				if (!sshKeyNames.includes(sshKeyName)) {
+					sshKeyNames.push(sshKeyName)
+				}
+			}
+		}
+	}
+	return sshKeyNames;
+}
+
 function _splitSshKeys(sshFiles) {
 	var sshKeys = {};
 	for (var i = 0; i < sshFiles.length; i++) {
-		var sshPubKeyName = sshFiles[i];
-		var sshKeyName = sshPubKeyName.substring(0, sshPubKeyName.length - 4);
-		i++;
+		var sshKeyName = sshFiles[i];
+		i++; // next is a .pub content
 		var sshPub = sshFiles[i];
 		sshKeys[sshKeyName] = '<small><code>' + sshPub + '</code></small>';
 	}

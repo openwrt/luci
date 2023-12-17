@@ -5,24 +5,17 @@
 'require ui';
 'require view';
 
-var allSshKeys = {};
-
 return view.extend({
 	load: function () {
 		return L.resolveDefault(fs.list('/root/.ssh/'), []).then(function (entries) {
-			var tasks = [];
-			for (var i = 0; i < entries.length; i++) {
-				if (entries[i].type === 'file' && entries[i].name.match(/\.pub$/)) {
-					tasks.push(Promise.resolve(entries[i].name));
-				}
-			}
-			return Promise.all(tasks);
+			var sshKeyNames = _findAllPossibleIdKeys(entries);
+			return Promise.resolve(sshKeyNames);
 		});
 	},
 
 	render: function (data) {
-		var sshKeys = _splitSshKeys(data);
-		if (sshKeys.length === 0) {
+		var sshKeyNames = data;
+		if (sshKeyNames.length === 0) {
 			ui.addNotification(null, E('p', _('No SSH keys found, <a %s>generate a new one</a>').format('href="./ssh_keys"')), 'warning');
 		}
 
@@ -58,9 +51,9 @@ return view.extend({
 				'See <em>ssh_config IdentityFile</em>')
 		);
 		o.value('');
-		Object.keys(sshKeys).forEach(function (keyName) {
-			o.value('/root/.ssh/' + keyName, keyName);
-		});
+		for (var sshKeyName of sshKeyNames) {
+			o.value('/root/.ssh/' + sshKeyName, sshKeyName);
+		}
 		o.optional = true;
 
 
@@ -135,13 +128,28 @@ return view.extend({
 	},
 });
 
-function _splitSshKeys(sshFiles) {
-	var sshKeys = {};
-	for (var i = 0; i < sshFiles.length; i++) {
-		var sshPubKeyName = sshFiles[i];
-		var sshKeyName = sshPubKeyName.substring(0, sshPubKeyName.length - 4);
-		sshKeys[sshKeyName] = '';
+function _findAllPossibleIdKeys(entries) {
+	var sshKeyNames = [];
+	for (var item of entries) {
+		if (item.type !== 'file') {
+			continue
+		}
+		// a key file should have a corresponding .pub file
+		if (item.name.endsWith('.pub')) {
+			var sshPubKeyName = item.name;
+			var sshKeyName = sshPubKeyName.substring(0, sshPubKeyName.length - 4);
+			if (!sshKeyNames.includes(sshKeyName)) {
+				sshKeyNames.push(sshKeyName)
+			}
+		} else {
+			// or at least it should start with id_ e.g. id_dropbear
+			if (item.name.startsWith('id_')) {
+				var sshKeyName = item.name;
+				if (!sshKeyNames.includes(sshKeyName)) {
+					sshKeyNames.push(sshKeyName)
+				}
+			}
+		}
 	}
-	allSshKeys = sshKeys;
-	return sshKeys;
+	return sshKeyNames;
 }
