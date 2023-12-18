@@ -934,6 +934,10 @@ return view.extend({
 				o = ss.taboption('general', CBIWifiFrequencyValue, '_freq', '<br />' + _('Operating frequency'));
 				o.ucisection = s.section;
 
+				o = ss.taboption('general', form.Value, 'channels', _('Limit auto scan channels'),
+					_('Define ranges or individual channels e.g. 100 140 34-100'));
+				o.optional = true;
+
 				if (hwtype == 'mac80211') {
 					o = ss.taboption('general', form.Flag, 'legacy_rates', _('Allow legacy 802.11b rates'), _('Legacy or badly behaving devices may require legacy 802.11b rates to interoperate. Airtime efficiency may be significantly reduced where these are used. It is recommended to not allow 802.11b rates where possible.'));
 					o.depends({'_freq': '2g', '!contains': true});
