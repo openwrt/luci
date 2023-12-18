@@ -301,6 +301,29 @@ return view.extend({
 			_('Log all options sent to DHCP clients and the tags used to determine them.'));
 		o.optional = true;
 
+		o = s.taboption('logging', form.Value, 'logfacility',
+			_('Log facility'),
+			_('Set log class/facility for syslog entries.'));
+		o.optional = true;
+		o.value('KERN');
+		o.value('USER');
+		o.value('MAIL');
+		o.value('DAEMON');
+		o.value('AUTH');
+		o.value('LPR');
+		o.value('NEWS');
+		o.value('UUCP');
+		o.value('CRON');
+		o.value('LOCAL0');
+		o.value('LOCAL1');
+		o.value('LOCAL2');
+		o.value('LOCAL3');
+		o.value('LOCAL4');
+		o.value('LOCAL5');
+		o.value('LOCAL6');
+		o.value('LOCAL7');
+		o.value('-', _('stderr'));
+
 		o = s.taboption('forward', form.DynamicList, 'server',
 			_('DNS forwardings'),
 			_('List of upstream resolvers to forward queries to.'));
