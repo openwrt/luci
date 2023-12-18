@@ -656,6 +656,7 @@ return view.extend({
 		ss = o.subsection;
 		ss.addremove = true;
 		ss.anonymous = true;
+		ss.modaltitle = _('Edit PXE/TFTP/BOOTP Host');
 		ss.nodescriptions = true;
 
 		so = ss.option(form.Value, 'filename',
@@ -678,19 +679,20 @@ return view.extend({
 
 		so = ss.option(form.DynamicList, 'dhcp_option',
 			_('DHCP Options'),
-			_('Options for the Network-ID. (Note: needs also Network-ID.) E.g. "<code>42,192.168.1.4</code>" for NTP server, "<code>3,192.168.4.4</code>" for default route. <code>0.0.0.0</code> means "the address of the system running dnsmasq".'));
+			_('Additional options to send to the below match tags.') + '<br />' +
+			_('%s means "the address of the system running dnsmasq".').format('<code>0.0.0.0</code>'));
 		so.optional = true;
-		so.placeholder = '42,192.168.1.4';
+		so.placeholder = 'option:root-path,192.168.1.2:/data/netboot/root';
 
-		so = ss.option(widgets.DeviceSelect, 'networkid',
-			_('Network-ID'),
-			_('Apply DHCP Options to this net. (Empty = all clients).'));
+		so = ss.option(form.Value, 'networkid',
+			_('Match this Tag'),
+			_('Only DHCP Clients with this tag are sent this boot option.'));
 		so.optional = true;
 		so.noaliases = true;
 
 		so = ss.option(form.Flag, 'force',
 			_('Force'),
-			_('Always send DHCP Options. Sometimes needed, with e.g. PXELinux.'));
+			_('Always send the chosen DHCP options. Sometimes needed, with e.g. PXELinux.'));
 		so.optional = true;
 
 		so = ss.option(form.Value, 'instance',
