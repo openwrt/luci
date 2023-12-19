@@ -263,7 +263,18 @@ return view.extend({
 
 		let noi18nstrings = {
 			etc_hosts: '<code>/etc/hosts</code>',
+			etc_ethers: '<code>/etc/ethers</code>',
+			localhost_v6: '<code>::1</code>',
+			loopback_slash_8_v4: '<code>127.0.0.0/8</code>',
 			not_found: '<code>Not found</code>',
+			nxdomain: '<code>NXDOMAIN</code>',
+			rfc_1918_link: '<a href="https://www.rfc-editor.org/rfc/rfc1918">RFC1918</a>',
+			rfc_4193_link: '<a href="https://www.rfc-editor.org/rfc/rfc4193">RFC4193</a>',
+			rfc_4291_link: '<a href="https://www.rfc-editor.org/rfc/rfc4291">RFC4291</a>',
+			rfc_6303_link: '<a href="https://www.rfc-editor.org/rfc/rfc6303">RFC6303</a>',
+			reverse_arpa: '<code>*.IN-ADDR.ARPA,*.IP6.ARPA</code>',
+			servers_file_entry01: '<code>server=1.2.3.4</code>',
+			servers_file_entry02: '<code>server=/domain/1.2.3.4</code>',
 
 		};
 
@@ -356,17 +367,22 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
 			customi18n(_('Discard upstream responses containing {rfc_1918_link} addresses.') ) + '<br />' +
-			_('Discard also upstream responses containing <a href="%s">RFC4193</a>, Link-Local and private IPv4-Mapped <a href="%s">RFC4291</a> IPv6 Addresses.').format('https://www.rfc-editor.org/rfc/rfc4193', 'https://www.rfc-editor.org/rfc/rfc4291'));
+			customi18n(_('Discard also upstream responses containing {rfc_4193_link}, Link-Local and private IPv4-Mapped {rfc_4291_link} IPv6 Addresses.') )	
+		);
 		o.rmempty = false;
 
 		o = s.taboption('general', form.Flag, 'rebind_localhost',
 			_('Allow localhost'),
-			_('Exempt <code>127.0.0.0/8</code> and <code>::1</code> from rebinding checks, e.g. for RBL services.'));
+			customi18n(
+			_('Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. for <abbr title="Real-time Block List">RBL</abbr> services.')
+			)
+		);
 		o.depends('rebind_protection', '1');
 
 		o = s.taboption('general', form.DynamicList, 'rebind_domain',
 			_('Domain whitelist'),
-			_('List of domains to allow RFC1918 responses for.'));
+			customi18n(_('List of domains to allow {rfc_1918_link} responses for.') )
+		);
 		o.depends('rebind_protection', '1');
 		o.optional = true;
 		o.placeholder = 'ihost.netflix.com';
@@ -380,7 +396,7 @@ return view.extend({
 
 		o = s.taboption('general', form.Flag, 'nonwildcard',
 			_('Non-wildcard'),
-			_('Bind dynamically to interfaces rather than wildcard address.'));
+			_('Bind only to configured interface addresses, instead of the wildcard address.'));
 		o.default = o.enabled;
 		o.optional = false;
 		o.rmempty = true;
@@ -463,8 +479,9 @@ return view.extend({
 		so.placeholder = 'lan';
 
 		s.taboption('files', form.Flag, 'readethers',
-			_('Use <code>/etc/ethers</code>'),
-			_('Read <code>/etc/ethers</code> to configure the DHCP server.'));
+			customi18n(_('Use {etc_ethers}') ),
+			customi18n(_('Read {etc_ethers} to configure the DHCP server.') )
+			);
 
 		s.taboption('files', form.Value, 'leasefile',
 			_('Lease file'),
@@ -482,7 +499,8 @@ return view.extend({
 		o.optional = true;
 
 		o = s.taboption('files', form.Flag, 'nohosts',
-			_('Ignore <code>/etc/hosts</code>'));
+			customi18n(_('Ignore {etc_hosts}') )
+		);
 		o.optional = true;
 
 		o = s.taboption('files', form.DynamicList, 'addnhosts',
@@ -502,7 +520,9 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Flag, 'boguspriv',
 			_('Filter private'),
-			_('Do not forward reverse lookups for local networks.'));
+			customi18n(
+			_('Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in {etc_hosts}.') )
+		); 
 		o.default = o.enabled;
 
 		s.taboption('advanced', form.Flag, 'filterwin2k',
@@ -523,7 +543,9 @@ return view.extend({
 
 		s.taboption('advanced', form.Flag, 'localise_queries',
 			_('Localise queries'),
-			_('Return answers to DNS queries matching the subnet from which the query was received if multiple IPs are available.'));
+			customi18n(_('Limit response records (from {etc_hosts}) to those that fall within the subnet of the querying interface.') ) + '<br />' +
+			_('This prevents unreachable IPs in subnets not accessible to you.') + '<br />' +
+			_('Note: IPv4 only.'));
 
 		if (L.hasSystemFeature('dnsmasq', 'dnssec')) {
 			o = s.taboption('advanced', form.Flag, 'dnssec',
@@ -548,7 +570,8 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Value, 'serversfile',
 			_('Additional servers file'),
-			_('File listing upstream resolvers, optionally domain-specific, e.g. <code>server=1.2.3.4</code>, <code>server=/domain/1.2.3.4</code>.'));
+			customi18n(_('File listing upstream resolvers, optionally domain-specific, e.g. {servers_file_entry01}, {servers_file_entry02}.') )
+		);
 		o.placeholder = '/etc/dnsmasq.servers';
 
 		o = s.taboption('advanced', form.Flag, 'strictorder',
@@ -562,8 +585,9 @@ return view.extend({
 		o.optional = true;
 
 		o = s.taboption('advanced', form.DynamicList, 'bogusnxdomain',
-			_('IPs to override with NXDOMAIN'),
-			_('List of IP addresses to convert into NXDOMAIN responses.'));
+			customi18n(_('IPs to override with {nxdomain}') ),
+			customi18n(_('Transform replies which contain the specified addresses or subnets into {nxdomain} responses.') )
+		);
 		o.optional = true;
 		o.placeholder = '64.94.110.11';
 

@@ -2427,10 +2427,10 @@ msgstr "在低 Ack 应答时断开连接"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:349
 msgid ""
-"Discard also upstream responses containing <a href=\"%s\">RFC4193</a>, Link-"
-"Local and private IPv4-Mapped <a href=\"%s\">RFC4291</a> IPv6 Addresses."
+"Discard also upstream responses containing {rfc_4193_link}, Link-"
+"Local and private IPv4-Mapped {rfc_4291_link} IPv6 Addresses."
 msgstr ""
-"同样丢弃包含 <a href=\"%s\">RFC4193</a>、 Link-Local 和私有 IPv4 映射的 <a "
+"同样丢弃包含 {rfc_4193_link}、 Link-Local 和私有 IPv4 映射的 <a "
 "href=\"%s\">RFC4291</a> IPv6 地址的上游响应。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:348
@@ -3126,10 +3126,10 @@ msgstr "执行各种网络命令以检查到其他系统的连接和名称解析
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:354
 msgid ""
-"Exempt <code>127.0.0.0/8</code> and <code>::1</code> from rebinding checks, "
-"e.g. for RBL services."
+"Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, "
+"e.g. for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
-"将 <code>127.0.0.0/8</code>和<code>::1</code>排除在重新绑定检查外，比如实时黑"
+"将 {loopback_slash_8_v4}和{localhost_v6}排除在重新绑定检查外，比如实时黑"
 "名单列表服务。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:410
@@ -3289,10 +3289,10 @@ msgstr "文件"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:541
 msgid ""
 "File listing upstream resolvers, optionally domain-specific, e.g. "
-"<code>server=1.2.3.4</code>, <code>server=/domain/1.2.3.4</code>."
+"{servers_file_entry01}, {servers_file_entry02}."
 msgstr ""
-"列出上游解析器的文件，可以特定于域名，比如 <code>server=1.2.3.4</code>，"
-"<code>server=/domain/1.2.3.4</code>。"
+"列出上游解析器的文件，可以特定于域名，比如 {servers_file_entry01}，"
+"{servers_file_entry02}。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2679
 msgid "File not accessible"
@@ -4057,7 +4057,7 @@ msgid "IP sets"
 msgstr "IP 集"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:555
-msgid "IPs to override with NXDOMAIN"
+msgid "IPs to override with {nxdomain}"
 msgstr "忽略虚假空域名解析"
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:9
@@ -5108,8 +5108,8 @@ msgid "List of SSH key files for auth"
 msgstr "用于认证的 SSH 密钥文件列表"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:359
-msgid "List of domains to allow RFC1918 responses for."
-msgstr "允许 RFC1918 响应的域名列表。"
+msgid "List of domains to allow {rfc_1918_link} responses for."
+msgstr "允许 {rfc_1918_link} 响应的域名列表。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:306
 msgid "List of upstream resolvers to forward queries to."
@@ -7433,8 +7433,8 @@ msgid "Raw hex-encoded bytes. Leave empty unless your ISP require this"
 msgstr "原始 16 进制编码的字节。除非您的运营商要求，否则请留空"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:457
-msgid "Read <code>/etc/ethers</code> to configure the DHCP server."
-msgstr "读取 <code>/etc/ethers</code>来配置 DHCP 服务器。"
+msgid "Read {etc_ethers} to configure the DHCP server."
+msgstr "读取 {etc_ethers}来配置 DHCP 服务器。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:576
 msgid "Really switch protocol?"
@@ -10198,8 +10198,8 @@ msgid "Uptime"
 msgstr "运行时间"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:456
-msgid "Use <code>/etc/ethers</code>"
-msgstr "使用 <code>/etc/ethers</code> 配置"
+msgid "Use {etc_ethers}"
+msgstr "使用 {etc_ethers} 配置"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:106
 msgid "Use DHCP"
