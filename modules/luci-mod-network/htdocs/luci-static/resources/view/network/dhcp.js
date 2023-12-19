@@ -718,7 +718,7 @@ return view.extend({
 		ss.sortable  = true;
 		ss.rowcolors = true;
 
-		so = ss.option(form.Value, 'srv', _('SRV'), _('Syntax: <code>_service._proto.example.com.</code>'));
+		so = ss.option(form.Value, 'srv', _('SRV'), _('Syntax:') + ' ' + '<code>_service._proto.example.com.</code>');
 		so.rmempty = false;
 		so.datatype = 'hostname';
 		so.placeholder = '_sip._tcp.example.com.';
