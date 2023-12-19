@@ -77,7 +77,7 @@ return view.extend({
 		o = s.option(form.Value, 'ReadThreads', _('Number of threads for data collection'));
 		o.default = '5';
 
-		o = s.option(form.Flag, 'FQDNLookup', _('Try to lookup fully qualified hostname'));
+		o = s.option(form.Flag, 'FQDNLookup', _('Try to look up fully qualified hostname'));
 		o.default = o.disabled;
 		o.optional = true;
 		o.depends('Hostname', '');
