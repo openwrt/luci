@@ -261,6 +261,18 @@ return view.extend({
 		    networks = hosts_duids_pools[3],
 		    m, s, o, ss, so;
 
+		let noi18nstrings = {
+			etc_hosts: '<code>/etc/hosts</code>',
+			not_found: '<code>Not found</code>',
+
+		};
+
+		function customi18n(template, values) {
+			if (!values)
+				values = noi18nstrings;
+			return template.replace(/\{(\w+)\}/g, (match, key) => values[key] || match);
+		};
+
 		m = new form.Map('dhcp', _('DHCP and DNS'),
 			_('Dnsmasq is a lightweight <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> server and <abbr title="Domain Name System">DNS</abbr> forwarder.'));
 
@@ -282,15 +294,17 @@ return view.extend({
 
 		s.taboption('general', form.Flag, 'domainneeded',
 			_('Domain required'),
-			_('Do not forward DNS queries without dots or domain parts.'));
-
+			_('Never forward DNS queries which lack dots or domain parts.') + '<br />' +
+			customi18n(_('Names not in {etc_hosts} are answered {not_found}.') )
+		);
 		s.taboption('general', form.Flag, 'authoritative',
 			_('Authoritative'),
 			_('This is the only DHCP server in the local network.'));
 
-		s.taboption('general', form.Value, 'local',
-			_('Local server'),
-			_('Never forward matching domains and subdomains, resolve from DHCP or hosts files only.'));
+		o = s.taboption('general', form.Value, 'local',
+			_('Resolve these locally'),
+			_('Never forward these matching domains or subdomains; resolve from DHCP or hosts files only.'));
+		o.placeholder = '/internal.example.com/private.example.com/example.org';
 
 		s.taboption('general', form.Value, 'domain',
 			_('Local domain'),
@@ -298,19 +312,15 @@ return view.extend({
 
 		o = s.taboption('general', form.Flag, 'logqueries',
 			_('Log queries'),
-			_('Write received DNS queries to syslog.'));
+			_('Write received DNS queries to syslog.') + ' ' + _('Dump cache on SIGUSR1, include requesting IP.'));
 		o.optional = true;
 
 		o = s.taboption('general', form.DynamicList, 'server',
 			_('DNS forwardings'),
-			_('List of upstream resolvers to forward queries to.'));
+			_('Forward specific domain queries to specific upstream servers.'));
 		o.optional = true;
-		o.placeholder = '/example.org/10.1.2.3';
+		o.placeholder = '/*.example.org/10.1.2.3';
 		o.validate = validateServerSpec;
-
-		function customi18n(template, values) {
-			return template.replace(/\{(\w+)\}/g, (match, key) => values[key] || match);
-		};
 
 		o = s.taboption('general', form.DynamicList, 'address',
 			_('Addresses'),
@@ -345,7 +355,7 @@ return view.extend({
 
 		o = s.taboption('general', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
-			_('Discard upstream responses containing <a href="%s">RFC1918</a> addresses.').format('https://www.rfc-editor.org/rfc/rfc1918') + '<br />' +
+			customi18n(_('Discard upstream responses containing {rfc_1918_link} addresses.') ) + '<br />' +
 			_('Discard also upstream responses containing <a href="%s">RFC4193</a>, Link-Local and private IPv4-Mapped <a href="%s">RFC4291</a> IPv6 Addresses.').format('https://www.rfc-editor.org/rfc/rfc4193', 'https://www.rfc-editor.org/rfc/rfc4291'));
 		o.rmempty = false;
 
