@@ -46,9 +46,12 @@ return view.extend({
 		o = s.taboption('general', form.Value, 'user', _('User'));
 		o.default = 'root';
 
-		o = s.taboption('general', form.ListValue, 'IdentityFile', _('Key file'),
-			_('Private key file with authentication identity. ' +
-				'See <em>ssh_config IdentityFile</em>')
+		o = s.taboption('general', form.ListValue, 'IdentityFile', _('Identity Key'),
+			_('Private key file with authentication identity.') + '<br />' +
+			_('If not specified then a default will be used.') + '<br />' +
+			_('For Dropbear %s').format('<code>id_dropbear</code>') + '<br />' +
+			_('For OpenSSH %s').format('<code>id_rsa, id_ed25519, id_ecdsa</code>') +
+			_manSshConfig('IdentityFile')
 		);
 		o.value('');
 		for (var sshKeyName of sshKeyNames) {
@@ -57,7 +60,7 @@ return view.extend({
 		o.optional = true;
 
 
-		o = s.taboption('advanced', form.ListValue, 'LogLevel', _('Log level'), 'See <em>ssh_config LogLevel</em>');
+		o = s.taboption('advanced', form.ListValue, 'LogLevel', _('Log level'));
 		o.value('QUIET', 'QUIET');
 		o.value('FATAL', 'FATAL');
 		o.value('ERROR', 'ERROR');
@@ -70,8 +73,8 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'Compression', _('Use compression'),
-			_('Compression may be useful on slow connections. ' +
-				'See <em>ssh_config Compression</em>')
+			_('Compression may be useful on slow connections.') +
+			_manSshConfig('Compression')
 		);
 		o.value('yes', _('Yes'));
 		o.value('no', _('No'));
@@ -87,18 +90,17 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'ServerAliveCountMax', _('Server alive count max'),
-			_('The number of server alive messages which may be sent before SSH disconnects from the server. ' +
-				'See <em>ssh_config ServerAliveCountMax</em>')
+		o = s.taboption('advanced', form.Value, 'ServerAliveCountMax', _('Server keep alive attempts'),
+			_('The number of server alive messages which may be sent before SSH disconnects from the server.') +
+			_manSshConfig('ServerAliveCountMax')
 		);
 		o.placeholder = '3';
 		o.datatype = 'uinteger';
 		o.optional = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'ServerAliveInterval', _('Server alive interval'),
-			_('Keep-alive interval (seconds). ' +
-				'See <em>ssh_config ServerAliveInterval</em>')
+		o = s.taboption('advanced', form.Value, 'ServerAliveInterval', _('Server keep alive interval (seconds)'),
+			_manSshConfig('ServerAliveInterval')
 		);
 		o.optional = true;
 		o.default = '60';
@@ -106,9 +108,9 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'CheckHostIP', _('Check host IP'),
-			_('Check the host IP address in the <code>known_hosts</code> file. ' +
-				'This allows ssh to detect whether a host key changed due to DNS spoofing. ' +
-				'See <em>ssh_config CheckHostIP</em>')
+			_('Check the host IP address in the %s file.').format('<code>known_hosts</code>') + '<br />' +
+			_('This allows SSH to detect whether a host key changed due to DNS spoofing.') +
+			_manSshConfig('CheckHostIP')
 		);
 		o.value('yes', _('Yes'));
 		o.value('no', _('No'));
@@ -116,8 +118,9 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'StrictHostKeyChecking', _('Strict host key checking'),
-			_('Refuse to connect to hosts whose host key has changed. ' +
-				'See <em>ssh_config StrictHostKeyChecking</em>'));
+			_('Refuse to connect to hosts whose host key has changed.') +
+			_manSshConfig('StrictHostKeyChecking')
+		);
 		o.value('accept-new', _('Accept new and check if not changed'));
 		o.value('yes', _('Yes'));
 		o.value('no', _('No'));
@@ -149,3 +152,9 @@ function _findAllPossibleIdKeys(entries) {
 	}
 	return Array.from(sshKeyNames);
 }
+
+function _manSshConfig(opt) {
+	return '<br />' + _('See %s.')
+			.format('<a target="_blank" href="https://manpages.debian.org/testing/openssh-client/ssh_config.5#'+ opt + '">ssh_config ' + opt + '</a>');
+}
+
