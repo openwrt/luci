@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-12-19 15:10+0000\n"
+"PO-Revision-Date: 2023-12-21 21:49+0000\n"
 "Last-Translator: Mc Giver <mcgivergim@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsusteer/es/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:333
 msgid "All debug messages"
@@ -193,75 +193,83 @@ msgstr "Umbral para expulsión por carga"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:347
 msgid "Local sta timeout"
-msgstr ""
+msgstr "Tiempo excedido estación local"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:357
 msgid "Local sta update"
-msgstr ""
+msgstr "Tiempo actualización estación local"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:357
 msgid "Local station information update interval (ms)"
-msgstr ""
+msgstr "Intervalo (ms) para actualización de información de una estación local"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:320
 msgid "Log messages to syslog"
-msgstr ""
+msgstr "Registrar mensajes en el registro del sistema"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:161
 msgctxt "Max associated clients in usteer overview"
 msgid "Max assoc"
-msgstr ""
+msgstr "Asociaciones máximas"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:337
 msgid "Max neighbour reports"
-msgstr ""
+msgstr "Informes de vecinos máximos"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:362
 msgid "Max retry band"
-msgstr ""
+msgstr "Reintentos de banda máximos"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:347
 msgid "Maximum amount of time (ms) a local unconnected station is tracked"
 msgstr ""
+"Cantidad máxima de tiempo (ms) que se rastrea una estación local no conectada"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:352
 msgid "Maximum amount of time (ms) a measurement report is stored"
-msgstr ""
+msgstr "Cantidad máxima de tiempo (ms) que se almacena un informe de medición"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:342
 msgid ""
 "Maximum amount of time (ms) a station may be blocked due to policy decisions"
 msgstr ""
+"Cantidad máxima de tiempo (mx) que una estación puede ser bloquedada debido "
+"a decisiones de la política"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:367
 msgid ""
 "Maximum idle time of a station entry (ms) to be considered for policy "
 "decisions"
 msgstr ""
+"Tiempo máximo de inactividad (ms) desde la entrada de la estación para ser "
+"considerada para decisiones de la política"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:423
 msgid "Maximum number of client roaming scan trigger attempts"
 msgstr ""
+"Número máximo de intentos de ejecutar escaneos de itinerancia de clientes"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:362
 msgid "Maximum number of consecutive times a station may be blocked by policy"
 msgstr ""
+"Número máximo de veces consecutivas que una estación puede ser bloqueada por "
+"política"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:337
 msgid "Maximum number of neighbor reports set for a node"
-msgstr ""
+msgstr "Número máximo de informes de vecinos configurados para un nodo"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:352
 msgid "Measurement report timeout"
-msgstr ""
+msgstr "Tiempo de espera del informe de medición"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:513
 msgid "Message types to include in log."
-msgstr ""
+msgstr "Tipos de mensajes para incluir en el registro"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:403
 msgid "Min SNR"
-msgstr ""
+msgstr "SNR mínimo"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:408
 msgid "Min SNR kick delay"
@@ -269,13 +277,16 @@ msgstr "Retraso para expusión por SNR mínimo"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:398
 msgid "Min connect SNR"
-msgstr ""
+msgstr "SNR de conexión mínimo"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:496
+#, fuzzy
 msgid ""
 "Minimal SNR or absolute signal a device has to maintain over "
 "band_steering_interval to be steered to a higher frequency band."
 msgstr ""
+"SNR mínimo o señal absoluta que un dispositivo tiene que mantener sobre "
+"band_steering_interval para ser dirigido a una banda de frecuencia superior"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:474
 msgid ""
@@ -301,6 +312,8 @@ msgid ""
 "Minimum number of stations delta between APs before load balancing policy is "
 "active"
 msgstr ""
+"Delta del número mínimo de estaciones entre APs antes de que la política de "
+"balanceo se active"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:377
 msgid ""
@@ -317,35 +330,43 @@ msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) before attempting to "
 "trigger client scans for roam"
 msgstr ""
+"Relación señal-ruido mínima o nivel de señal (dBm) antes de intentar activar "
+"escaneos de itineracia para los clientes"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:441
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) before attempting to "
 "trigger forced client roaming"
 msgstr ""
+"Relación señal-ruido mínima o nivel de señal (dBm) antes de intentar forzar "
+"la itinerancia del cliente"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:398
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) to allow connections"
 msgstr ""
+"Relación señal-ruido mínima o nivel de señal (dBm) para permitir conexiones"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:403
 msgid "Minimum signal-to-noise ratio or signal level (dBm) to remain connected"
 msgstr ""
+"Relación señal-ruido mínima o nivel de señal (dBm) para seguir conectado"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:436
 msgid "Minimum time (ms) between client roaming scan trigger attempts"
 msgstr ""
+"Tiempo mínimo (ms) entre intentos de activar el escaneo de itinerancia del "
+"cliente"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:446
 msgid "Minimum time (ms) between client roaming trigger attempts"
-msgstr ""
+msgstr "Tiempo mínimo (ms) entre intentos de activar la itineracia del cliente"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:158
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:178
 msgctxt "Number of associated clients in usteer overview"
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:318
 msgid "Network"
@@ -353,7 +374,7 @@ msgstr "Red"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:332
 msgid "Network packet info"
-msgstr ""
+msgstr "Información de paquetes de red"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:69
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:147
@@ -400,16 +421,18 @@ msgstr "Hosts remotos"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:387
 msgid "Remote node timeout"
-msgstr ""
+msgstr "Tiempo de espera para el nodo remoto"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:382
 msgid "Remote update interval"
-msgstr ""
+msgstr "Intervalo de actualización del remoto"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:429
 msgid ""
 "Retry scanning when roam_scan_tries is exceeded after this timeout (in ms)."
 msgstr ""
+"Reintentar escanear cuando se exceda roam_scan_tries después de este tiempo "
+"de espera (en ms)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:451
 msgid "Roam kick delay"
@@ -482,7 +505,7 @@ msgstr ""
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:194
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:307
 msgid "Settings"
-msgstr ""
+msgstr "Configuración"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:64
 msgctxt "Signal strength reported by wireless station in usteer overview"
@@ -503,15 +526,15 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:305
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:196
 msgid "The first four options below are mandatory."
-msgstr ""
+msgstr "Las primeras cuatro opciones son obligatorias."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:318
 msgid "The network interface for inter-AP communication"
-msgstr ""
+msgstr "La interfaz de red para comunicación inter-AP"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:451
 msgid "Timeout (in 100ms beacon intervals) for client roam requests"
@@ -529,11 +552,11 @@ msgstr "Tiempo después del cual una estación con SNR < min_SNR será expulsada
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:290
 msgid "To start it running try %s"
-msgstr ""
+msgstr "Para iniciar la ejecución prueba con %s"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:324
 msgid "Use IPv6 for remote exchange"
-msgstr ""
+msgstr "Usar IPv6 para intercambio remoto"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:288
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:295
