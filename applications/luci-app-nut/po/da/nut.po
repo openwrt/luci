@@ -25,8 +25,8 @@ msgid "Allowed actions"
 msgstr "Tilladte handlinger"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:20
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "As configured by NUT"
 msgstr "Som konfigureret af NUT"
 
@@ -34,7 +34,7 @@ msgstr "Som konfigureret af NUT"
 msgid "Bytes to read from interrupt pipe"
 msgstr "Bytes, der skal læses fra interrupt pipe"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "CA Certificate path"
 msgstr "CA-certifikatsti"
 
@@ -135,6 +135,7 @@ msgstr ""
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:150
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:158
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:166
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
 msgid "Execute notify command"
 msgstr "Kør underretningskommando"
 
@@ -166,8 +167,8 @@ msgstr "Vært"
 msgid "Hostname or IP address"
 msgstr "Værtsnavn eller IP-adresse"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:199
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:228
 msgid "Hostname or address of UPS"
 msgstr "Værtsnavn eller adresse på UPS"
 
@@ -189,6 +190,7 @@ msgstr "IP Address"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:152
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:160
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:168
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:176
 msgid "Ignore"
 msgstr "Ignorer"
 
@@ -265,8 +267,8 @@ msgstr "NUT CGI adgang"
 msgid "NUT Users"
 msgstr "NUT-brugere"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "Name of UPS"
 msgstr "Navn på UPS"
 
@@ -329,32 +331,39 @@ msgstr "Underret kommando"
 msgid "Notify when back online"
 msgstr "Giv besked, når du er online igen"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
 msgid "Notify when battery needs replacing"
 msgstr "Meddelelse, når batteriet skal udskiftes"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
 msgid "Notify when communications lost"
 msgstr "Meddelelse ved tab af kommunikation"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
 msgid "Notify when communications restored"
 msgstr "Meddelelse, når kommunikationen er genoprettet"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when force shutdown"
 msgstr "Meddelelse ved tvungen nedlukning"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:115
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when low battery"
 msgstr "Meddelelse ved lavt batteri"
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+msgid "Notify when no communications"
+msgstr ""
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:171
+msgid "Notify when no parent process"
+msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:107
 msgid "Notify when on battery"
 msgstr "Meddelelse, når batteriet er tændt"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
 msgid "Notify when shutting down"
 msgstr "Meddelelse ved nedlukning"
 
@@ -374,13 +383,13 @@ msgstr "Meddelelse om batteri"
 msgid "Online message"
 msgstr "Online-besked"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:216
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:245
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:19
 msgid "Password"
 msgstr "Adgangskode"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "Path containing ca certificates to match against host certificate"
 msgstr "Sti med ca-certifikater, der skal matches med værtscertifikatet"
 
@@ -413,15 +422,15 @@ msgid "Polling Frequency(s)"
 msgstr "Polling frekvens(er)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:27
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:195
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:224
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:203
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:232
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:46
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:202
 msgid "Port"
 msgstr "Port"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:200
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:229
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
 msgid "Power value"
 msgstr "Effektværdi"
 
@@ -433,7 +442,7 @@ msgstr "Produkt (regex)"
 msgid "Replace battery message"
 msgstr "Meddelelse om udskiftning af batteri"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Require SSL and make sure server CN matches hostname"
 msgstr "Kræv SSL, og sørg for, at serverens CN passer til værtsnavnet"
 
@@ -526,7 +535,7 @@ msgstr ""
 "Tid i sekunder, som upsdrvctl vil vente på, at driveren er færdig med at "
 "starte"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:183
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
 msgid "UPS Master"
 msgstr "UPS Master"
 
@@ -534,7 +543,7 @@ msgstr "UPS Master"
 msgid "UPS Server Global Settings"
 msgstr "Globale indstillinger for UPS Server"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:212
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
 msgid "UPS Slave"
 msgstr "UPS Slave"
 
@@ -570,8 +579,8 @@ msgstr ""
 "Bruger, som driveren skal udføres af; kræver, at en enhedsfil, som driveren "
 "har adgang til, skal være skrive- og læsevenlig for den pågældende bruger."
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:205
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:234
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:213
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:242
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:16
 msgid "Username"
 msgstr "Brugernavn"
@@ -580,7 +589,7 @@ msgstr "Brugernavn"
 msgid "Vendor (regex)"
 msgstr "Leverandør (regex)"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Verify all connection with SSL"
 msgstr "Kontroller alle forbindelser med SSL"
 
@@ -598,6 +607,7 @@ msgstr "Løsning for fejlbehæftet firmware"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:151
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:159
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:167
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:175
 msgid "Write to syslog"
 msgstr "Skriv til syslog"
 
