@@ -876,6 +876,7 @@ return view.extend({
 		dnss.tab('srvhosts', _('SRV'));
 		dnss.tab('mxhosts', _('MX'));
 		dnss.tab('cnamehosts', _('CNAME'));
+		dnss.tab('dnsrr', _('DNS-RR'));
 
 		o = dnss.taboption('srvhosts', form.SectionValue, '__srvhosts__', form.TableSection, 'srvhost', null,
 			_('Bind service records to a domain name: specify the location of services. See <a href="%s">RFC2782</a>.').format('https://datatracker.ietf.org/doc/html/rfc2782')
@@ -993,6 +994,70 @@ return view.extend({
 		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
 			so.value(ipv4, '%s (%s)'.format(ipv4, ipaddrs[ipv4]));
 		});
+
+		o = dnss.taboption('dnsrr', form.SectionValue, '__dnsrr__', form.TableSection, 'dnsrr', null, 
+			_('Set an arbitrary resource record (RR) type.') + '<br/>' + 
+			_('Hexdata is automatically en/decoded on save and load'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable  = true;
+		ss.rowcolors = true;
+		ss.nodescriptions = true;
+
+		function hexdecodeload(section_id) {
+			let arr = uci.get('dhcp', section_id, this.option) || [];
+			// Remove any spaces or colons from the hex string - they're allowed
+			arr = arr.replace(/[\s:]/g, '');
+			// Hex-decode the string before displaying
+			let decodedString = '';
+			for (let i = 0; i < arr.length; i += 2) {
+				decodedString += String.fromCharCode(parseInt(arr.substr(i, 2), 16));
+			}
+			return decodedString;
+		}
+
+		function hexencodesave(section, value) {
+			if (!value || value.length === 0) {
+				uci.unset('dhcp', section, 'hexdata');
+				return;
+			}
+			// Hex-encode the string before saving
+			const encodedArr = value.split('').map(c => c.charCodeAt(0).toString(16).padStart(2, '0')).join('');
+			uci.set('dhcp', section, this.option, encodedArr);
+		}
+
+		so = ss.option(form.Value, 'dnsrr', _('Resource Record Name'));
+		so.rmempty = false;
+		so.datatype = 'hostname';
+		so.placeholder = 'svcb.example.com.';
+
+		so = ss.option(form.Value, 'rrnumber', _('Resource Record Number'));
+		so.rmempty = false;
+		so.datatype = 'uinteger';
+		so.placeholder = '64';
+
+		so = ss.option(form.Value, 'hexdata', _('Raw Data'));
+		so.rmempty = true;
+		so.datatype = 'string';
+		so.placeholder = 'free-form string';
+		so.load = hexdecodeload;
+		so.write = hexencodesave;
+
+		so = ss.option(form.DummyValue, '_hexdata', _('Hex Data'));
+		so.width = '10%';
+		so.rawhtml = true;
+		so.load = function(section_id) {
+			let hexdata = uci.get('dhcp', section_id, 'hexdata') || [];
+			hexdata = hexdata.replace(/[:]/g, '');
+			if (hexdata) {
+				return hexdata.replace(/(.{20})/g, '$1<br/>'); // Inserts <br> after every 2 characters (hex pair)
+			} else {
+				return '';
+			}
+		}
 
 		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
 			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.') + '<br />' +
