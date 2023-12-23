@@ -647,7 +647,7 @@ var Hosts, Network, Protocol, Device, WifiDevice, WifiNetwork;
  * @hideconstructor
  * @classdesc
  *
- * The `LuCI.network` class combines data from multiple `ubus` apis to
+ * The `LuCI.network` class combines data from multiple `ubus` APIs to
  * provide an abstraction of the current network configuration state.
  *
  * It provides methods to enumerate interfaces and devices, to query
@@ -759,11 +759,11 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	},
 
 	/**
-	 * Instantiates the given {@link LuCI.network.Protocol Protocol} backend,
+	 * Instantiates the given {@link LuCI.network.Protocol Protocol} back-end,
 	 * optionally using the given network name.
 	 *
 	 * @param {string} protoname
-	 * The protocol backend to use, e.g. `static` or `dhcp`.
+	 * The protocol back-end to use, e.g. `static` or `dhcp`.
 	 *
 	 * @param {string} [netname=__dummy__]
 	 * The network name to use for the instantiated protocol. This should be
@@ -772,7 +772,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * without the need for an existing interface.
 	 *
 	 * @returns {null|LuCI.network.Protocol}
-	 * Returns the instantiated protocol backend class or `null` if the given
+	 * Returns the instantiated protocol back-end class or `null` if the given
 	 * protocol isn't known.
 	 */
 	getProtocol: function(protoname, netname) {
@@ -785,7 +785,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 
 	/**
 	 * Obtains instances of all known {@link LuCI.network.Protocol Protocol}
-	 * backend classes.
+	 * back-end classes.
 	 *
 	 * @returns {Array<LuCI.network.Protocol>}
 	 * Returns an array of protocol class instances.
@@ -1345,7 +1345,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * the given wireless radio.
 	 *
 	 * @param {string} devname
-	 * The configuration name of the wireless radio to lookup, e.g. `radio0`
+	 * The configuration name of the wireless radio to look up, e.g. `radio0`
 	 * for the first mac80211 phy on the system.
 	 *
 	 * @returns {Promise<null|LuCI.network.WifiDevice>}
@@ -1392,7 +1392,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * the given wireless network.
 	 *
 	 * @param {string} netname
-	 * The name of the wireless network to lookup. This may be either an uci
+	 * The name of the wireless network to look up. This may be either an uci
 	 * configuration section ID, a network ID in the form `radio#.network#`
 	 * or a Linux network device name like `wlan0` which is resolved to the
 	 * corresponding configuration section through `ubus` runtime information.
@@ -1790,10 +1790,10 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	},
 
 	/**
-	 * Lookup the hostname associated with the given MAC address.
+	 * Look up the hostname associated with the given MAC address.
 	 *
 	 * @param {string} mac
-	 * The MAC address to lookup.
+	 * The MAC address to look up.
 	 *
 	 * @returns {null|string}
 	 * Returns the hostname associated with the given MAC or `null` if
@@ -1807,10 +1807,10 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	},
 
 	/**
-	 * Lookup the IPv4 address associated with the given MAC address.
+	 * Look up the IPv4 address associated with the given MAC address.
 	 *
 	 * @param {string} mac
-	 * The MAC address to lookup.
+	 * The MAC address to look up.
 	 *
 	 * @returns {null|string}
 	 * Returns the IPv4 address associated with the given MAC or `null` if
@@ -1824,10 +1824,10 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	},
 
 	/**
-	 * Lookup the IPv6 address associated with the given MAC address.
+	 * Look up the IPv6 address associated with the given MAC address.
 	 *
 	 * @param {string} mac
-	 * The MAC address to lookup.
+	 * The MAC address to look up.
 	 *
 	 * @returns {null|string}
 	 * Returns the IPv6 address associated with the given MAC or `null` if
@@ -1841,10 +1841,10 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	},
 
 	/**
-	 * Lookup the hostname associated with the given IPv4 address.
+	 * Look up the hostname associated with the given IPv4 address.
 	 *
 	 * @param {string} ipaddr
-	 * The IPv4 address to lookup.
+	 * The IPv4 address to look up.
 	 *
 	 * @returns {null|string}
 	 * Returns the hostname associated with the given IPv4 or `null` if
@@ -1867,10 +1867,10 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	},
 
 	/**
-	 * Lookup the MAC address associated with the given IPv4 address.
+	 * Look up the MAC address associated with the given IPv4 address.
 	 *
 	 * @param {string} ipaddr
-	 * The IPv4 address to lookup.
+	 * The IPv4 address to look up.
 	 *
 	 * @returns {null|string}
 	 * Returns the MAC address associated with the given IPv4 or `null` if
@@ -1890,10 +1890,10 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	},
 
 	/**
-	 * Lookup the hostname associated with the given IPv6 address.
+	 * Look up the hostname associated with the given IPv6 address.
 	 *
 	 * @param {string} ip6addr
-	 * The IPv6 address to lookup.
+	 * The IPv6 address to look up.
 	 *
 	 * @returns {null|string}
 	 * Returns the hostname associated with the given IPv6 or `null` if
@@ -1916,10 +1916,10 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
 	},
 
 	/**
-	 * Lookup the MAC address associated with the given IPv6 address.
+	 * Look up the MAC address associated with the given IPv6 address.
 	 *
 	 * @param {string} ip6addr
-	 * The IPv6 address to lookup.
+	 * The IPv6 address to look up.
 	 *
 	 * @returns {null|string}
 	 * Returns the MAC address associated with the given IPv6 or `null` if
@@ -2254,7 +2254,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 *
 	 * @returns {string[]}
 	 * Returns an array of IPv4 DNS servers registered by the remote
-	 * protocol backend.
+	 * protocol back-end.
 	 */
 	getDNSAddrs: function() {
 		var addrs = this._ubus('dns-server'),
@@ -2342,7 +2342,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 *
 	 * @returns {string[]}
 	 * Returns an array of IPv6 DNS servers registered by the remote
-	 * protocol backend.
+	 * protocol back-end.
 	 */
 	getDNS6Addrs: function() {
 		var addrs = this._ubus('dns-server'),
@@ -2433,7 +2433,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
-	 * Check function for the protocol handler if a new interface is createable.
+	 * Check function for the protocol handler if a new interface is creatable.
 	 *
 	 * This function should be overwritten by protocol specific subclasses.
 	 *
@@ -2443,7 +2443,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * The name of the interface to be created.
 	 *
 	 * @returns {Promise<void>}
-	 * Returns a promise resolving if new interface is createable, else
+	 * Returns a promise resolving if new interface is creatable, else
 	 * rejects with an error message string.
 	 */
 	isCreateable: function(ifname) {
@@ -2548,7 +2548,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
-	 * Checks whether this logical interface is "empty", meaning that ut
+	 * Checks whether this logical interface is "empty", where empty means that it
 	 * has no network devices attached.
 	 *
 	 * @returns {boolean}
@@ -2673,7 +2673,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
-	 * Returns the layer 2 linux network device currently associated
+	 * Returns the layer 2 Linux network device currently associated
 	 * with this logical interface.
 	 *
 	 * @returns {LuCI.network.Device}
@@ -2686,7 +2686,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
-	 * Returns the layer 3 linux network device currently associated
+	 * Returns the layer 3 Linux network device currently associated
 	 * with this logical interface.
 	 *
 	 * @returns {LuCI.network.Device}
@@ -2871,7 +2871,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 *
 	 * @returns {null|string}
 	 * Returns the MAC address of the device or `null` if not applicable,
-	 * e.g. for non-ethernet tunnel devices.
+	 * e.g. for non-Ethernet tunnel devices.
 	 */
 	getMAC: function() {
 		var mac = this._devstate('macaddr');
@@ -2948,8 +2948,8 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * Get a short description string for the device.
 	 *
 	 * @returns {string}
-	 * Returns the device name for non-wifi devices or a string containing
-	 * the operation mode and SSID for wifi devices.
+	 * Returns the device name for non-WiFi devices or a string containing
+	 * the operation mode and SSID for WiFi devices.
 	 */
 	getShortName: function() {
 		if (this.wif != null)
@@ -2963,7 +2963,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 *
 	 * @returns {string}
 	 * Returns a string containing the type description and device name
-	 * for non-wifi devices or operation mode and ssid for wifi ones.
+	 * for non-WiFi devices or operation mode and SSID for WiFi ones.
 	 */
 	getI18n: function() {
 		if (this.wif != null) {
@@ -3143,7 +3143,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 *
 	 * @returns {boolean}
 	 * Returns true if the device has a carrier, e.g. when a cable is
-	 * inserted into an ethernet port of false if there is none.
+	 * inserted into an Ethernet port of false if there is none.
 	 */
 	getCarrier: function() {
 		var link = this._devstate('link');
@@ -3155,8 +3155,8 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 *
 	 * @returns {number|null}
 	 * Returns the current speed of the network device in Mbps. If the
-	 * device supports no ethernet speed levels, null is returned.
-	 * If the device supports ethernet speeds but has no carrier, -1 is
+	 * device supports no Ethernet speed levels, null is returned.
+	 * If the device supports Ethernet speeds but has no carrier, -1 is
 	 * returned.
 	 */
 	getSpeed: function() {
@@ -3471,7 +3471,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 * Get the wifi network of the given name belonging to this radio device
 	 *
 	 * @param {string} network
-	 * The name of the wireless network to lookup. This may be either an uci
+	 * The name of the wireless network to look up. This may be either an uci
 	 * configuration section ID, a network ID in the form `radio#.network#`
 	 * or a Linux network device name like `wlan0` which is resolved to the
 	 * corresponding configuration section through `ubus` runtime information.
@@ -3539,7 +3539,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 * radio device.
 	 *
 	 * @param {string} network
-	 * The name of the wireless network to lookup. This may be either an uci
+	 * The name of the wireless network to look up. This may be either an uci
 	 * configuration section ID, a network ID in the form `radio#.network#`
 	 * or a Linux network device name like `wlan0` which is resolved to the
 	 * corresponding configuration section through `ubus` runtime information.
@@ -3771,7 +3771,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Get the name of the corresponding wifi radio device.
+	 * Get the name of the corresponding WiFi radio device.
 	 *
 	 * @returns {null|string}
 	 * Returns the name of the radio device this network is configured on
@@ -3782,11 +3782,11 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Get the corresponding wifi radio device.
+	 * Get the corresponding WiFi radio device.
 	 *
 	 * @returns {null|LuCI.network.WifiDevice}
 	 * Returns a `Network.WifiDevice` instance representing the corresponding
-	 * wifi radio device or `null` if the related radio device could not be
+	 * WiFi radio device or `null` if the related radio device could not be
 	 * found.
 	 */
 	getWifiDevice: function() {
@@ -4125,7 +4125,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Query the current average bitrate of all peers associated to this
+	 * Query the current average bit-rate of all peers associated to this
 	 * wireless network.
 	 *
 	 * @returns {null|number}
@@ -4333,10 +4333,10 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Check whether this wifi network supports de-authenticating clients.
+	 * Check whether this WiFi network supports de-authenticating clients.
 	 *
 	 * @returns {boolean}
-	 * Returns `true` when this wifi network instance supports forcibly
+	 * Returns `true` when this WiFi network instance supports forcibly
 	 * de-authenticating clients, otherwise `false`.
 	 */
 	isClientDisconnectSupported: function() {
