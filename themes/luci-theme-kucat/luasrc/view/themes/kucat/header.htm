@@ -75,7 +75,8 @@
 	local primary_rgbs = '132,188,218'
 	local primary_rgbs_ts = '0.1'
 	local primary_opacity = '0'
-	local bkuse = '1'
+	local bkuse = '0'
+	local bk_use='none'
 	local bklock = '1'
 	local dayword = '0'
 	if fs.access('/etc/config/advancedplus') then
@@ -230,7 +231,7 @@ elseif background == "3" then
 elseif background == "4" then
 		    pcall(downbirdUrl)
 end
-pcall(downIcibaword)
+
 if bklock == '1' then
 	bg_lock = bg_url
 else
@@ -257,7 +258,13 @@ else
 		    bg_lock = currentbk.url
 		end
 end
+if dayword == '1' then
+   pcall(downIcibaword)
+end
+if bkuse == '1'  then
+   bk_use="url("..bg_lock..")"
 %>
+
 <!DOCTYPE html>
 <html lang="<%=luci.i18n.context.lang%>">
 <head>
@@ -293,7 +300,6 @@ end
 	<% if mode == 'dark' then %>
 		<%=dark_css%>
 	<% end -%>
-	<% if  bkuse == '1'  then %>
 	:root {
 		--primary-rgbbody:<%=primary_rgbbody%>;
 		--primary-rgbm: <%=primary_rgbm%>;
@@ -304,26 +310,11 @@ end
 		--font-d: <%=fontd%>;
 		--font-z: <%=fontz%>;
 		--font-x: <%=fontx%>;
-		--theme-background: url(<%=bg_lock%>);
+		--theme-background: <%=bk_use%>;
 		--bgqs-image: <%=bgqs_image%>;
 		--bgqs-color: <%=bgqs_color%>;
 	}
-	<% else %>
-		:root {
-		--primary-rgbbody: <%=primary_rgbbody%>;
-		--primary-rgbm: <%=primary_rgbm%>;
-		--primary-rgbm-ts: 1;
-		--primary-rgbs: <%=primary_rgbs%>;
-		--primary-rgbs-ts: <%=primary_rgbs_ts%>;
-		--primary-ufilter: <%=primary_ufilter%>;
-		--font-d: <%=fontd%>;
-		--font-z: <%=fontz%>;
-		--font-x: <%=fontx%>;
-		--theme-background: none; 
-		--bgqs-image: <%=bg_image%>;
-		--bgqs-color: <%=bgqs_color%>;
-	}
-	<% end -%>
+
 	<% if setbar == "1" then %>
 	header.bar-primary .container-bar-left {
  	   width: 300px;
