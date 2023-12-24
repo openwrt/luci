@@ -91,25 +91,46 @@ function collectWlanAPInfoEntries(connectioninfo_table_entries, wlanAPInfos) {
 	}
 };
 
+function tootltip(mac, IP, hostname) {
+	var body= E([]);
+	body.appendChild(E('div', mac));
+	if (typeof IP !== 'undefined') {
+		for (var IPaddr in IP['ipaddrs']) body.appendChild(E('div', IP['ipaddrs'][IPaddr]));
+		for (var IPaddr in IP['ip6addrs']) body.appendChild(E('div', IP['ip6addrs'][IPaddr]));;
+	}
+	if (hostname !== '') {
+		body.appendChild(E('div', '%h'.format(hostname)));
+	}
+	return body;
+}
 
 function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 	for (var wlan in wlanAPInfos) {
-		var hostl = '';
+		var hostl = E([]);
 		for (var mac in Clients) {
 			if (typeof Clients[mac] !== 'undefined')
 				if (typeof Clients[mac][wlan] !== 'undefined')
-					if (String(Clients[mac][wlan]['connected']).valueOf() == String('true').valueOf()) {
+					if (String(Clients[mac][wlan]['connected']).valueOf() === 'true') {
 						var foundname = mac;
+						var IP = '';
+						var hostname = '';
 						var macUp = mac.toUpperCase();
 						if (typeof Hosts[macUp] !== 'undefined') {
-							if ((String(Hosts[macUp]['ipaddrs'][0]).length > 0) && (typeof Hosts[macUp]['ipaddrs'][0] !== 'undefined')) {
-								foundname = Hosts[macUp]['ipaddrs'][0];
+							if ((typeof Hosts[macUp]['ipaddrs'][0] !== 'undefined') && (String(Hosts[macUp]['ipaddrs'][0]).length > 0)) {
+								IP = Hosts[macUp]['ipaddrs'][0];
+								foundname = IP;
 							}
-							if ((String(Hosts[macUp]['name']).length > 0) && (typeof Hosts[macUp]['name'] !== 'undefined')) {
-								foundname = Hosts[macUp]['name'];
+							if ((typeof Hosts[macUp]['name'] !== 'undefined') && (String(Hosts[macUp]['name']).length > 0)) {
+								hostname =  Hosts[macUp]['name'];
+								foundname = hostname;
 							}
 						}
-						hostl += '%h\u2003'.format(foundname);
+						hostl.appendChild(
+							E('span', { 'class': 'cbi-tooltip-container' }, [
+								'%h\u2003'.format(foundname),
+								E('div', { 'class': 'cbi-tooltip' }, tootltip(mac, Hosts[macUp], hostname))
+							])
+						);
 					}
 		}
 		compactconnectioninfo_table_entries.push([
