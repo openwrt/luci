@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2023-12-20 10:09+0000\n"
+"PO-Revision-Date: 2023-12-24 21:47+0000\n"
 "Last-Translator: st7105 <st7105@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
@@ -10,9 +10,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.4-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -1418,6 +1418,7 @@ msgstr "Открытый интерфейс"
 msgid ""
 "Bind only to configured interface addresses, instead of the wildcard address."
 msgstr ""
+"Привязка только к настроенным адресам интерфейсов, вместо wildcard-адреса."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:747
 msgid ""
@@ -2671,7 +2672,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:32
 msgid "Do not send a Release when restarting"
-msgstr ""
+msgstr "Не отправлять сообщение Release при перезапуске"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
@@ -2833,7 +2834,7 @@ msgstr "Двойной Стек, Облегченный (RFC6333)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
 msgid "Dump cache on SIGUSR1, include requesting IP."
-msgstr ""
+msgstr "Сбросить кэш на SIGUSR1, включая запрашивающий IP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:701
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -3136,6 +3137,7 @@ msgstr "Включить данную сеть"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:33
 msgid "Enable to minimise the chance of prefix change after a restart"
 msgstr ""
+"Возможность минимизировать вероятность изменения префикса после перезапуска"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:75
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:75
@@ -3714,6 +3716,8 @@ msgstr "Пересылать мультикаст пакеты в виде юн�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:331
 msgid "Forward specific domain queries to specific upstream servers."
 msgstr ""
+"Переадресуйте определенные запросы домена на определенные серверы верхнего "
+"уровня."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1015
 msgid "Forward/reverse DNS"
@@ -4627,7 +4631,7 @@ msgstr "Игнорировать файл resolv"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:502
 msgid "Ignore {etc_hosts}"
-msgstr ""
+msgstr "Игнорировать {etc_hosts}"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
 msgid "Image"
@@ -5273,6 +5277,8 @@ msgid ""
 "Limit response records (from {etc_hosts}) to those that fall within the "
 "subnet of the querying interface."
 msgstr ""
+"Ограничить записи ответа (из {etc_hosts}) теми, которые находятся в подсети "
+"запрашивающего интерфейса."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
 msgid "Line Mode"
@@ -6105,7 +6111,7 @@ msgstr "Имя туннельного устройства"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:309
 msgid "Names not in {etc_hosts} are answered {not_found}."
-msgstr ""
+msgstr "Имена, отсутствующие в {etc_hosts}, получают ответ {not_found}."
 
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:39
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
@@ -6211,12 +6217,16 @@ msgstr "Никогда"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:308
 msgid "Never forward DNS queries which lack dots or domain parts."
 msgstr ""
+"Никогда не пересылать DNS-запросы, в которых отсутствуют точки или части "
+"домена."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:317
 msgid ""
 "Never forward these matching domains or subdomains; resolve from DHCP or "
 "hosts files only."
 msgstr ""
+"Никогда не пересылать эти совпадающие домены или поддомены; разрешайте их "
+"только из файлов DHCP или hosts."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1220
 msgid "New interface for \"%s\" can not be created: %s"
@@ -6479,7 +6489,7 @@ msgstr "Не поддерживается"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:548
 msgid "Note: IPv4 only."
-msgstr ""
+msgstr "Примечание: только IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1776
 msgid ""
@@ -7878,6 +7888,8 @@ msgid ""
 "Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in "
 "{etc_hosts}."
 msgstr ""
+"Отклонять обратный поиск по {rfc_6303_link} IP-диапазоны ({reverse_arpa}), "
+"отсутствующие в {etc_hosts}."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid ""
@@ -8127,7 +8139,7 @@ msgstr "Список доменов для принудительного пре
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:316
 msgid "Resolve these locally"
-msgstr ""
+msgstr "Разрешить локально"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:405
 msgid "Resource not found"
@@ -9384,7 +9396,7 @@ msgstr "Скопир. из браузера"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:721
 msgid "Syntax:"
-msgstr ""
+msgstr "Синтаксис:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
 msgid "Syntax: {code_syntax}."
@@ -10206,6 +10218,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:547
 msgid "This prevents unreachable IPs in subnets not accessible to you."
 msgstr ""
+"Это предотвращает появление недоступных IP-адресов в недоступных для вас "
+"подсетях."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2280
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
@@ -10328,6 +10342,8 @@ msgid ""
 "Transform replies which contain the specified addresses or subnets into "
 "{nxdomain} responses."
 msgstr ""
+"Преобразование ответов, содержащих указанные адреса или подсети, в ответы "
+"{nxdomain}."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:25
 msgid "Transmit"

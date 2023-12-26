@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-12-22 09:25+0000\n"
-"Last-Translator: Zheng Qian <sotux82@gmail.com>\n"
+"PO-Revision-Date: 2023-12-25 10:11+0000\n"
+"Last-Translator: try496 <pinghejk@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -1358,7 +1358,7 @@ msgstr "绑定接口"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:399
 msgid ""
 "Bind only to configured interface addresses, instead of the wildcard address."
-msgstr ""
+msgstr "只绑定到配置好的接口地址，而不是通配地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:747
 msgid ""
@@ -2555,7 +2555,7 @@ msgstr "不代理任何 <abbr title=\"邻居发现协议\">NDP</abbr> 数据包�
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:32
 msgid "Do not send a Release when restarting"
-msgstr ""
+msgstr "重启时不要发送 Release"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
@@ -2711,7 +2711,7 @@ msgstr "轻型双栈（RFC6333）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
 msgid "Dump cache on SIGUSR1, include requesting IP."
-msgstr ""
+msgstr "转储 SIGUSR1 缓存，包括请求 IP。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:701
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -2998,7 +2998,7 @@ msgstr "启用此网络"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:33
 msgid "Enable to minimise the chance of prefix change after a restart"
-msgstr ""
+msgstr "启用后最大程度减少重启后前缀更改的可能性"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:75
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:75
@@ -3556,7 +3556,7 @@ msgstr "在此设备上将多播数据包转发为单播数据包。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:331
 msgid "Forward specific domain queries to specific upstream servers."
-msgstr ""
+msgstr "转发指定的域名查询到指定的上游服务器。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1015
 msgid "Forward/reverse DNS"
@@ -4451,7 +4451,7 @@ msgstr "忽略解析文件"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:502
 msgid "Ignore {etc_hosts}"
-msgstr ""
+msgstr "忽略 {etc_hosts}"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
 msgid "Image"
@@ -5076,7 +5076,7 @@ msgstr "客户数"
 msgid ""
 "Limit response records (from {etc_hosts}) to those that fall within the "
 "subnet of the querying interface."
-msgstr ""
+msgstr "对于（ {etc_hosts}），只记录落在查询接口子网内的响应记录。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
 msgid "Line Mode"
@@ -5882,7 +5882,7 @@ msgstr "隧道设备名"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:309
 msgid "Names not in {etc_hosts} are answered {not_found}."
-msgstr ""
+msgstr "查询不在 {etc_hosts} 中的主机，应答将是 {not_found}。"
 
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:39
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
@@ -5987,13 +5987,13 @@ msgstr "永不"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:308
 msgid "Never forward DNS queries which lack dots or domain parts."
-msgstr ""
+msgstr "永不转发缺少点或域名部分的 DNS 查询。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:317
 msgid ""
 "Never forward these matching domains or subdomains; resolve from DHCP or "
 "hosts files only."
-msgstr ""
+msgstr "永不转发那些匹配的域名或子域名；只从 DHCP 或 hosts 文件进行解析。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1220
 msgid "New interface for \"%s\" can not be created: %s"
@@ -6253,7 +6253,7 @@ msgstr "不支持"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:548
 msgid "Note: IPv4 only."
-msgstr ""
+msgstr "注：仅 IPv4。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1776
 msgid ""
@@ -7603,7 +7603,7 @@ msgstr "拒绝 <strong>TCP 重置</strong>数据包"
 msgid ""
 "Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in "
 "{etc_hosts}."
-msgstr ""
+msgstr "拒绝反向查询不在 {etc_hosts} 中的 {rfc_6303_link} IP 段 ({reverse_arpa})。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid ""
@@ -7845,7 +7845,7 @@ msgstr "此列表将域名强制指向某个 IP 地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:316
 msgid "Resolve these locally"
-msgstr ""
+msgstr "本地解析这些项目"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:405
 msgid "Resource not found"
@@ -9013,7 +9013,7 @@ msgstr "同步浏览器时间"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:721
 msgid "Syntax:"
-msgstr ""
+msgstr "语法："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
 msgid "Syntax: {code_syntax}."
@@ -9757,7 +9757,7 @@ msgstr "此选项不可用，因为 ca-bundle 软件包未安装。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:547
 msgid "This prevents unreachable IPs in subnets not accessible to you."
-msgstr ""
+msgstr "这防止你无法访问子网中不可抵达的 IP。"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2280
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
@@ -9873,7 +9873,7 @@ msgstr "传输"
 msgid ""
 "Transform replies which contain the specified addresses or subnets into "
 "{nxdomain} responses."
-msgstr ""
+msgstr "将包含指定地址或子网的响应转换为 {nxdomain} 响应。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:25
 msgid "Transmit"
