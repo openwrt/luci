@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2023-12-19 15:10+0000\n"
+"PO-Revision-Date: 2023-12-24 01:12+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -11,9 +11,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.3\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:996
 msgid "!known (not known)"
@@ -1408,6 +1408,8 @@ msgstr "Interfejs wiązań"
 msgid ""
 "Bind only to configured interface addresses, instead of the wildcard address."
 msgstr ""
+"Powiąż tylko ze skonfigurowanymi adresami interfejsów, zamiast z adresem "
+"wieloznacznym."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:747
 msgid ""
@@ -2653,7 +2655,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:32
 msgid "Do not send a Release when restarting"
-msgstr ""
+msgstr "Nie wysyłaj zwolnienia podczas ponownego uruchamiania"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
@@ -2820,7 +2822,7 @@ msgstr "Dual-Stack Lite (RFC6333)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
 msgid "Dump cache on SIGUSR1, include requesting IP."
-msgstr ""
+msgstr "Zrzuć pamięć podręczną przy SIGUSR1, uwzględnij żądający adres IP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:701
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -3121,6 +3123,7 @@ msgstr "Włącz tą sieć"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:33
 msgid "Enable to minimise the chance of prefix change after a restart"
 msgstr ""
+"Włącz, aby zminimalizować ryzyko zmiany prefiksu po ponownym uruchomieniu"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:75
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:75
@@ -3703,6 +3706,8 @@ msgstr "Przekazuj pakiety multicast jako unicast na tym urządzeniu."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:331
 msgid "Forward specific domain queries to specific upstream servers."
 msgstr ""
+"Przekazuj określone zapytania dotyczące domeny do określonych serwerów "
+"nadrzędnych."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1015
 msgid "Forward/reverse DNS"
@@ -4619,7 +4624,7 @@ msgstr "Ignoruj plik resolv"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:502
 msgid "Ignore {etc_hosts}"
-msgstr ""
+msgstr "Ignoruj {etc_hosts}"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
 msgid "Image"
@@ -5263,6 +5268,8 @@ msgid ""
 "Limit response records (from {etc_hosts}) to those that fall within the "
 "subnet of the querying interface."
 msgstr ""
+"Ogranicz rekordy odpowiedzi (z {etc_hosts}) do tych, które mieszczą się w "
+"podsieci interfejsu wysyłającego zapytania."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
 msgid "Line Mode"
@@ -6090,7 +6097,7 @@ msgstr "Nazwa urządzenia tunelowego"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:309
 msgid "Names not in {etc_hosts} are answered {not_found}."
-msgstr ""
+msgstr "Nazwy, których nie ma w {etc_hosts}, otrzymują odpowiedź {not_found}."
 
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:39
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
@@ -6196,12 +6203,15 @@ msgstr "Nigdy"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:308
 msgid "Never forward DNS queries which lack dots or domain parts."
 msgstr ""
+"Nigdy nie przekazuj zapytań DNS, w których brakuje kropek lub części domeny."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:317
 msgid ""
 "Never forward these matching domains or subdomains; resolve from DHCP or "
 "hosts files only."
 msgstr ""
+"Nigdy nie przekazuj pasujących domen lub subdomen; rozwiązuj tylko z plików "
+"DHCP lub hostów."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1220
 msgid "New interface for \"%s\" can not be created: %s"
@@ -6464,7 +6474,7 @@ msgstr "Nieobsługiwane"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:548
 msgid "Note: IPv4 only."
-msgstr ""
+msgstr "Uwaga: tylko IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1776
 msgid ""
@@ -7866,6 +7876,8 @@ msgid ""
 "Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in "
 "{etc_hosts}."
 msgstr ""
+"Odrzuć wyszukiwania wsteczne do zakresów adresów IP {rfc_6303_link} "
+"({reverse_arpa}) spoza {etc_hosts}."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid ""
@@ -8113,7 +8125,7 @@ msgstr "Lista wymuszonych domen na adres IP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:316
 msgid "Resolve these locally"
-msgstr ""
+msgstr "Rozwiązuj te lokalnie"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:405
 msgid "Resource not found"
@@ -9365,7 +9377,7 @@ msgstr "Synchronizuj z przeglądarką"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:721
 msgid "Syntax:"
-msgstr ""
+msgstr "Składnia:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
 msgid "Syntax: {code_syntax}."
@@ -10197,6 +10209,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:547
 msgid "This prevents unreachable IPs in subnets not accessible to you."
 msgstr ""
+"Zapobiega to nieosiągalnym adresom IP w podsieciach, do których nie masz "
+"dostępu."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2280
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
@@ -10318,6 +10332,8 @@ msgid ""
 "Transform replies which contain the specified addresses or subnets into "
 "{nxdomain} responses."
 msgstr ""
+"Przekształć odpowiedzi zawierające określone adresy lub podsieci w "
+"odpowiedzi {nxdomain}."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:25
 msgid "Transmit"
