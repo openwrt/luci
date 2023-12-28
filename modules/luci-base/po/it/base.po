@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2023-12-19 15:10+0000\n"
+"PO-Revision-Date: 2023-12-28 14:49+0000\n"
 "Last-Translator: Random <random-r@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/openwrt/luci/it/>"
 "\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:996
 msgid "!known (not known)"
@@ -1420,6 +1420,8 @@ msgstr "Vincola interfaccia"
 msgid ""
 "Bind only to configured interface addresses, instead of the wildcard address."
 msgstr ""
+"Lega solo agli indirizzi di interfaccia configurati, invece dell'indirizzo "
+"jolly."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:747
 msgid ""
@@ -2676,7 +2678,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:32
 msgid "Do not send a Release when restarting"
-msgstr ""
+msgstr "Non inviare un Release quando si riavvia"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
@@ -3140,6 +3142,8 @@ msgstr "Attiva questa rete"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:33
 msgid "Enable to minimise the chance of prefix change after a restart"
 msgstr ""
+"Attiva per ridurre al minimo le possibilità di cambiamento di prefisso dopo "
+"un riavvio"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:75
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:75
@@ -3713,7 +3717,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:331
 msgid "Forward specific domain queries to specific upstream servers."
-msgstr ""
+msgstr "Inoltra specifiche richieste di dominio a specifici server a monte."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1015
 msgid "Forward/reverse DNS"
@@ -4630,7 +4634,7 @@ msgstr "Ignora il file resolv"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:502
 msgid "Ignore {etc_hosts}"
-msgstr ""
+msgstr "Ignora {etc_hosts}"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
 msgid "Image"
@@ -5275,6 +5279,8 @@ msgid ""
 "Limit response records (from {etc_hosts}) to those that fall within the "
 "subnet of the querying interface."
 msgstr ""
+"Limita i record di risposta (da {etc_hosts}) a quelli che rientrano nella "
+"sottorete dell'interfaccia richiedente."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
 msgid "Line Mode"
@@ -6098,7 +6104,7 @@ msgstr "Nome del dispositivo tunnel"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:309
 msgid "Names not in {etc_hosts} are answered {not_found}."
-msgstr ""
+msgstr "I nomi non in {etc_hosts} vengono risposti come {not_found}."
 
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:39
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
@@ -6203,13 +6209,15 @@ msgstr "Mai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:308
 msgid "Never forward DNS queries which lack dots or domain parts."
-msgstr ""
+msgstr "Non inoltrare mai richieste DNS a cui mancano punti o parti di dominio."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:317
 msgid ""
 "Never forward these matching domains or subdomains; resolve from DHCP or "
 "hosts files only."
 msgstr ""
+"Non inoltrare mai questi domini o sottodomini; risolvi solo da DHCP o file "
+"di host."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1220
 msgid "New interface for \"%s\" can not be created: %s"
@@ -6473,7 +6481,7 @@ msgstr "Non supportato"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:548
 msgid "Note: IPv4 only."
-msgstr ""
+msgstr "Nota: solo IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1776
 msgid ""
@@ -7871,6 +7879,8 @@ msgid ""
 "Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in "
 "{etc_hosts}."
 msgstr ""
+"Rifiuta le ricerche inverse su intervalli IP {rfc_6303_link} ({reverse_arpa})"
+" non in {etc_hosts}."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid ""
@@ -8120,7 +8130,7 @@ msgstr "Elenco di domini da forzare a un indirizzo IP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:316
 msgid "Resolve these locally"
-msgstr ""
+msgstr "Risolvi questi localmente"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:405
 msgid "Resource not found"
@@ -9378,7 +9388,7 @@ msgstr "Sincronizza con il browser"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:721
 msgid "Syntax:"
-msgstr ""
+msgstr "Sintassi:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
 msgid "Syntax: {code_syntax}."
@@ -10226,7 +10236,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:547
 msgid "This prevents unreachable IPs in subnets not accessible to you."
-msgstr ""
+msgstr "Ciò impedisce IP non accessibili in sottoreti non accessibili a te."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2280
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
@@ -10350,6 +10360,8 @@ msgid ""
 "Transform replies which contain the specified addresses or subnets into "
 "{nxdomain} responses."
 msgstr ""
+"Trasforma le risposte che contengono gli indirizzi o sottoreti specificati "
+"in risposte {nxdomain}."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:25
 msgid "Transmit"
