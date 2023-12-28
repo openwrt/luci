@@ -127,6 +127,14 @@ return view.extend({
 		o.default = 'accept-new';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Value, 'ProxyCommand', _('Proxy tunnel command'),
+			_('The command to use to connect to the server.') + '<br />' +
+			_('For example, the following command would connect via an HTTP proxy:') + '<br />' +
+			'<code>ncat --proxy-type http --proxy-auth alice:secret --proxy 192.168.1.2:8080 %h %p</code>' +
+			_manSshConfig('ProxyCommand')
+		);
+		o.modalonly = true;
+
 		return m.render();
 	},
 });
