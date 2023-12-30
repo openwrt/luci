@@ -9,159 +9,347 @@ return L.Class.extend({
 		var g = [];
 		var dtypes = graph.dataTypes(host, plugin, plugin_instance);
 
-		const d_snr = {
-			title: _('DSL Signal'),
-			vlabel: 'dB',
-			data: {
-				types: ['snr'],
-				options: {
-					snr_latn_up: {
-						title: _('Line Attenuation Up (LATN)'),
-						noarea: true,
-						overlay: true,
-					},
-					snr_latn_down: {
-						title: _('Line Attenuation Down (LATN)'),
-						noarea: true,
-						overlay: true,
-					},
-					snr_satn_up: {
-						title: _('Signal Attenuation Up (SATN)'),
-						noarea: true,
-						overlay: true,
-					},
-					snr_satn_down: {
-						title: _('Signal Attenuation Down (SATN)'),
-						noarea: true,
-						overlay: true,
-					},
-					snr_snr_up: {
-						title: _('Noise Margin Up (SNR)'),
-						noarea: true,
-						overlay: true,
-					},
-					snr_snr_down: {
-						title: _('Noise Margin Down (SNR)'),
-						noarea: true,
-						overlay: true,
-					},
-				},
-			},
-		};
 		const d_uptime = {
-			title: _('DSL Line Uptime'),
+			title: _('%H: Line uptime on %pi'),
 			vlabel: 'seconds',
+			number_format: '%8.0lf s',
+			alt_autoscale_max: true,
+			y_min: 0,
 			data: {
 				types: ['uptime'],
 				options: {
 					uptime: {
 						title: _('Uptime'),
 						noarea: true,
+						noavg: true,
 					},
 				},
 			},
 		};
-		const d_flags = {
-			title: _('DSL Flags'),
+
+		const d_snr = {
+			title: _('%H: SNR on %pi'),
+			vlabel: 'dB',
+			number_format: '%5.1lf dB',
 			data: {
+				types: ['snr'],
 				instances: {
-					bool: ['bitswap_up', 'bitswap_down', 'vector_up', 'vector_down'],
+					snr: ['down', 'up'],
 				},
 				options: {
-					bool_bitswap_up: {
-						title: _('Bitswap Up'),
+					snr_down: {
+						title: _('SNR Margin Down'),
+						weight: 1,
+					},
+					snr_up: {
+						title: _('SNR Margin Up'),
+						flip: true,
+						weight: 2,
+					},
+				},
+			},
+		};
+
+		const d_atn = {
+			title: _('%H: Attenuation on %pi'),
+			vlabel: 'dB',
+			number_format: '%5.1lf dB',
+			data: {
+				types: ['gauge'],
+				instances: {
+					snr: ['latn_down', 'satn_down', 'latn_up', 'satn_up'],
+				},
+				options: {
+					gauge_latn_down: {
+						title: _('Line Attenuation Down'),
 						noarea: true,
 						overlay: true,
+						weight: 1,
 					},
+					gauge_satn_down: {
+						title: _('Signal Attenuation Down'),
+						flip: false,
+						noarea: true,
+						overlay: true,
+						weight: 1,
+					},
+					gauge_latn_up: {
+						title: _('Line Attenuation Up'),
+						flip: true,
+						noarea: true,
+						overlay: true,
+						weight: 2,
+					},
+					gauge_satn_up: {
+						title: _('Signal Attenuation Up'),
+						flip: true,
+						noarea: true,
+						overlay: true,
+						weight: 2,
+					},
+				},
+			},
+		};
+
+		const d_flags = {
+			title: _('%H: Line flags on %pi'),
+			data: {
+				types: ['bool'],
+				instances: {
+					bool: ['bitswap_down', 'vector_down', 'bitswap_up', 'vector_up'],
+				},
+				options: {
 					bool_bitswap_down: {
 						title: _('Bitswap Down'),
 						noarea: true,
 						overlay: true,
-					},
-					bool_vector_up: {
-						title: _('Vectoring Up'),
-						noarea: true,
-						overlay: true,
+						weight: 1,
 					},
 					bool_vector_down: {
 						title: _('Vectoring Down'),
 						noarea: true,
 						overlay: true,
+						weight: 1,
+					},
+					bool_bitswap_up: {
+						title: _('Bitswap Up'),
+						flip: true,
+						noarea: true,
+						overlay: true,
+						weight: 2,
+					},
+					bool_vector_up: {
+						title: _('Vectoring Up'),
+						flip: true,
+						noarea: true,
+						overlay: true,
+						weight: 2,
 					},
 				},
 			},
 		};
+
 		const d_bitrate = {
-			title: _('Bitrate'),
+			title: _('%H: Data rate on %pi'),
 			vlabel: 'b/s',
+			number_format: '%5.1lf%sb/s',
 			data: {
+				types: ['bitrate'],
 				instances: {
 					bitrate: [
-						'attndr_up',
+						'data_rate_down',
 						'attndr_down',
 						'data_rate_up',
-						'data_rate_down',
+						'attndr_up',
 					],
 				},
 				options: {
-					bitrate_attndr_up: {
-						title: _('Max. Attainable Data Rate (ATTNDR) Up'),
-						noarea: true,
+					bitrate_data_rate_down: {
+						title: _('Data Rate Down'),
+						noarea: false,
 						overlay: true,
+						weight: 1,
 					},
 					bitrate_attndr_down: {
-						title: _('Max. Attainable Data Rate (ATTNDR) Down'),
+						title: _('Attainable Data Rate Down'),
 						noarea: true,
 						overlay: true,
+						weight: 1,
 					},
 					bitrate_data_rate_up: {
 						title: _('Data Rate Up'),
-						noarea: true,
+						flip: true,
+						noarea: false,
 						overlay: true,
+						weight: 2,
 					},
-					bitrate_data_rate_down: {
-						title: _('Data Rate Down'),
+					bitrate_attndr_up: {
+						title: _('Attainable Data Rate Up'),
+						flip: true,
 						noarea: true,
 						overlay: true,
+						weight: 2,
 					},
 				},
 			},
 		};
-		const d_count = {
-			title: _('Errors'),
-			vlabel: 'count',
+
+		const d_errors = {
+			title: _('%H: Errored seconds on %pi'),
+			number_format: '%8.0lf',
+			totals_format: '%5.0lf%s',
+			vlabel: 'seconds',
 			data: {
 				types: ['errors'],
+				instances: {
+					errors: [
+						'es',
+						'ses',
+						'loss',
+						'uas',
+						'f_es',
+						'f_ses',
+						'f_loss',
+						'f_uas',
+					],
+				},
 				options: {
-					errors_rx_corrupted_far: {
-						title: _('Rx Corrupted Far'),
-						noarea: true,
+					errors_es: {
+						title: _('Errored seconds'),
 						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 1,
 					},
-					errors_rx_corrupted_near: {
-						title: _('Rx Corrupted Near'),
-						noarea: true,
+					errors_ses: {
+						title: _('Severely Errored Seconds'),
 						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 1,
 					},
-					errors_rx_retransmitted_far: {
-						title: _('Rx Retransmitted Far'),
-						noarea: true,
+					errors_loss: {
+						title: _('Loss of Signal Seconds'),
 						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 1,
 					},
-					errors_tx_retransmitted_far: {
-						title: _('Tx Retransmitted Far'),
-						noarea: true,
+					errors_uas: {
+						title: _('Unavailable Seconds'),
 						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 1,
 					},
-					errors_rx_retransmitted_near: {
-						title: _('Rx Retransmitted Near'),
-						noarea: true,
+					errors_f_es: {
+						title: _('Far Errored Seconds'),
 						overlay: true,
+						noarea: true,
+						flip: true,
+						total: true,
+						weight: 2,
 					},
-					errors_tx_retransmitted_near: {
-						title: _('Tx Retransmitted Near'),
-						noarea: true,
+					errors_f_ses: {
+						title: _('Far Severely Errored Seconds'),
 						overlay: true,
+						noarea: true,
+						flip: true,
+						total: true,
+						weight: 2,
+					},
+					errors_f_loss: {
+						title: _('Far Loss of Signal Seconds'),
+						overlay: true,
+						noarea: true,
+						flip: true,
+						total: true,
+						weight: 2,
+					},
+					errors_f_uas: {
+						title: _('Far Unavailable Seconds'),
+						overlay: true,
+						noarea: true,
+						flip: true,
+						total: true,
+						weight: 2,
+					},
+				},
+			},
+		};
+
+		const d_retx = {
+			title: _('%H: RETX Errors %pi'),
+			vlabel: 'count',
+			number_format: '%8.0lf',
+			totals_format: '%5.0lf%s',
+			data: {
+				types: ['errors'],
+				instances: {
+					errors: [
+						'rx_corrupted',
+						'rx_uncorrected_protected',
+						'rx_retransmitted',
+						'rx_corrected',
+						'tx_retransmitted',
+					],
+				},
+				options: {
+					errors_rx_corrupted: {
+						title: _('RX Corrupted'),
+						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 1,
+					},
+					errors_rx_uncorrected_protected: {
+						title: _('RX Uncorrected Protected'),
+						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 1,
+					},
+					errors_rx_retransmitted: {
+						title: _('RX Retransmitted'),
+						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 1,
+					},
+					errors_rx_corrected: {
+						title: _('RX Corrected'),
+						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 1,
+					},
+					errors_tx_retransmitted: {
+						title: _('TX Retransmitted'),
+						overlay: true,
+						noarea: true,
+						total: true,
+						weight: 2,
+					},
+				},
+			},
+		};
+
+		const d_crc = {
+			title: _('%H: CRC Errors on %pi'),
+			vlabel: 'errors',
+			number_format: '%8.0lf',
+			totals_format: '%5.0lf%s',
+			data: {
+				types: ['errors'],
+				instances: {
+					errors: ['crc', 'crcp', 'f_crc', 'f_crcp'],
+				},
+				options: {
+					errors_crc: {
+						title: _('CRC Errors'),
+						overlay: true,
+						noarea: true,
+						total: true,
+					},
+					errors_crcp: {
+						title: _('Pre-emptive CRC Errors'),
+						overlay: true,
+						noarea: true,
+						total: true,
+					},
+					errors_f_crc: {
+						title: _('Far CRC Errors'),
+						overlay: true,
+						noarea: true,
+						total: true,
+						flip: true,
+					},
+					errors_f_crcp: {
+						title: _('Far Pre-emptive CRC Errors'),
+						overlay: true,
+						noarea: true,
+						total: true,
+						flip: true,
 					},
 				},
 			},
@@ -169,6 +357,9 @@ return L.Class.extend({
 
 		if (dtypes.includes('snr')) {
 			g.push(d_snr);
+		}
+		if (dtypes.includes('gauge')) {
+			g.push(d_atn);
 		}
 		if (dtypes.includes('uptime')) {
 			g.push(d_uptime);
@@ -179,8 +370,28 @@ return L.Class.extend({
 		if (dtypes.includes('bitrate')) {
 			g.push(d_bitrate);
 		}
-		if (dtypes.includes('count')) {
-			g.push(d_count);
+		if (dtypes.includes('errors')) {
+			var dinsts = graph.dataInstances(host, plugin, plugin_instance, 'errors');
+			var e = 0,
+				c = 0,
+				r = 0;
+			for (var i = 0; i < dinsts.length; i++) {
+				if (
+					!e &&
+					(dinsts[i].indexOf('es') > -1 ||
+						dinsts[i].indexOf('loss') > -1 ||
+						dinsts[i].indexOf('uas') > -1)
+				) {
+					e = g.push(d_errors);
+				} else if (!c && dinsts[i].indexOf('crc') > -1) {
+					c = g.push(d_crc);
+				} else if (
+					!r &&
+					(dinsts[i].indexOf('rx_') == 0 || dinsts[i].indexOf('tx_') == 0)
+				) {
+					r = g.push(d_retx);
+				}
+			}
 		}
 
 		return g;
