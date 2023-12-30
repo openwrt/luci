@@ -194,35 +194,35 @@ return L.Class.extend({
 					],
 				},
 				options: {
-					errors_es: {
+					errors_es_near: {
 						title: _('Errored seconds'),
 						overlay: true,
 						noarea: true,
 						total: true,
 						weight: 1,
 					},
-					errors_ses: {
+					errors_ses_near: {
 						title: _('Severely Errored Seconds'),
 						overlay: true,
 						noarea: true,
 						total: true,
 						weight: 1,
 					},
-					errors_loss: {
+					errors_loss_near: {
 						title: _('Loss of Signal Seconds'),
 						overlay: true,
 						noarea: true,
 						total: true,
 						weight: 1,
 					},
-					errors_uas: {
+					errors_uas_near: {
 						title: _('Unavailable Seconds'),
 						overlay: true,
 						noarea: true,
 						total: true,
 						weight: 1,
 					},
-					errors_f_es: {
+					errors_es_far: {
 						title: _('Far Errored Seconds'),
 						overlay: true,
 						noarea: true,
@@ -230,7 +230,7 @@ return L.Class.extend({
 						total: true,
 						weight: 2,
 					},
-					errors_f_ses: {
+					errors_ses_far: {
 						title: _('Far Severely Errored Seconds'),
 						overlay: true,
 						noarea: true,
@@ -238,7 +238,7 @@ return L.Class.extend({
 						total: true,
 						weight: 2,
 					},
-					errors_f_loss: {
+					errors_loss_far: {
 						title: _('Far Loss of Signal Seconds'),
 						overlay: true,
 						noarea: true,
@@ -246,7 +246,7 @@ return L.Class.extend({
 						total: true,
 						weight: 2,
 					},
-					errors_f_uas: {
+					errors_uas_far: {
 						title: _('Far Unavailable Seconds'),
 						overlay: true,
 						noarea: true,
@@ -325,26 +325,26 @@ return L.Class.extend({
 					errors: ['crc', 'crcp', 'f_crc', 'f_crcp'],
 				},
 				options: {
-					errors_crc: {
+					errors_crc_p_near: {
 						title: _('CRC Errors'),
 						overlay: true,
 						noarea: true,
 						total: true,
 					},
-					errors_crcp: {
+					errors_crcp_p_near: {
 						title: _('Pre-emptive CRC Errors'),
 						overlay: true,
 						noarea: true,
 						total: true,
 					},
-					errors_f_crc: {
+					errors_crc_p_far: {
 						title: _('Far CRC Errors'),
 						overlay: true,
 						noarea: true,
 						total: true,
 						flip: true,
 					},
-					errors_f_crcp: {
+					errors_crcp_p_far: {
 						title: _('Far Pre-emptive CRC Errors'),
 						overlay: true,
 						noarea: true,
