@@ -209,6 +209,34 @@ function validateServerSpec(sid, s) {
 	return true;
 }
 
+function expandAndFormatMAC(macs) {
+	let result = [];
+
+	macs.forEach(mac => {
+		if (isValidMAC(mac)) {
+			const expandedMac = mac.split(':').map(part => {
+				return (part.length === 1 && part !== '*') ? '0' + part : part;
+			}).join(':').toUpperCase();
+			result.push(expandedMac);
+		}
+	});
+
+	return result.length ? result.join(' ') : null;
+}
+
+function isValidMAC(sid, s) {
+	if (!s)
+		return true;
+
+	let macaddrs = L.toArray(s);
+
+	for (var i = 0; i < macaddrs.length; i++)
+		if (!macaddrs[i].match(/^(([0-9a-f]{1,2}|\*)[:-]){5}([0-9a-f]{1,2}|\*)$/i))
+			return _('Expecting a valid MAC address, optionally including wildcards') + _('; invalid MAC: ') + macaddrs[i];
+
+	return true;
+}
+
 function validateMACAddr(pools, sid, s) {
 	if (s == null || s == '')
 		return true;
@@ -240,7 +268,7 @@ function validateMACAddr(pools, sid, s) {
 		}
 	}
 
-	return true;
+	return isValidMAC(sid, s);
 }
 
 return view.extend({
@@ -822,21 +850,40 @@ return view.extend({
 		});
 
 		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
-			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
+			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.') + '<br />' +
+			_('The netfilter components below are only regarded when running fw4.'));
 
 		ss = o.subsection;
 
 		ss.addremove = true;
 		ss.anonymous = true;
 		ss.sortable  = true;
+		ss.rowcolors = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit IP set');
 
-		so = ss.option(form.DynamicList, 'name', _('IP set'));
+		so = ss.option(form.DynamicList, 'name', _('Name of the set'));
 		so.rmempty = false;
+		so.editable = true;
 		so.datatype = 'string';
 
-		so = ss.option(form.DynamicList, 'domain', _('Domain'));
+		so = ss.option(form.DynamicList, 'domain', _('FQDN'));
 		so.rmempty = false;
+		so.editable = true;
 		so.datatype = 'hostname';
+
+		so = ss.option(form.Value, 'table', _('Netfilter table name'), _('Defaults to fw4.'));
+		so.editable = true;
+		so.placeholder = 'fw4';
+		so.rmempty = true;
+
+		so = ss.option(form.ListValue, 'table_family', _('Table IP family'), _('Defaults to IPv4+6.') + ' ' + _('Can be hinted by adding 4 or 6 to the name.') + '<br />' +
+			_('Adding an IPv6 to an IPv4 set and vice-versa silently fails.'));
+		so.editable = true;
+		so.rmempty = true;
+		so.value('inet', _('IPv4+6'));
+		so.value('ip', _('IPv4'));
+		so.value('ip6', _('IPv6'));
 
 		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
 			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br /><br />' +
@@ -866,61 +913,18 @@ return view.extend({
 			uci.unset('dhcp', section, 'dns');
 		};
 
-		so = ss.option(form.Value, 'mac',
+		//this can be a .DynamicList or a .Value with a widget and dnsmasq handles multimac OK.
+		so = ss.option(form.DynamicList, 'mac',
 			_('MAC address(es)'),
 			_('The hardware address(es) of this entry/host.') + '<br /><br />' + 
 			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
 		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
-		so.validate = function(section_id, value) {
-			var macaddrs = L.toArray(value);
-
-			for (var i = 0; i < macaddrs.length; i++)
-				if (!macaddrs[i].match(/^([a-fA-F0-9]{2}|\*):([a-fA-F0-9]{2}:|\*:){4}(?:[a-fA-F0-9]{2}|\*)$/))
-					return _('Expecting a valid MAC address, optionally including wildcards');
-
-			return true;
-		};
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
-			var macs = L.toArray(uci.get('dhcp', section, 'mac')),
-			    result = [];
-
-			for (var i = 0, mac; (mac = macs[i]) != null; i++)
-				if (/^([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*):([0-9a-fA-F]{1,2}|\*)$/.test(mac)) {
-					var m = [
-						parseInt(RegExp.$1, 16), parseInt(RegExp.$2, 16),
-						parseInt(RegExp.$3, 16), parseInt(RegExp.$4, 16),
-						parseInt(RegExp.$5, 16), parseInt(RegExp.$6, 16)
-					];
-
-					result.push(m.map(function(n) { return isNaN(n) ? '*' : '%02X'.format(n) }).join(':'));
-				}
-			return result.length ? result.join(' ') : null;
+			var macs = L.toArray(uci.get('dhcp', section, 'mac'));
+			return expandAndFormatMAC(macs);
 		};
-		so.renderWidget = function(section_id, option_index, cfgvalue) {
-			var node = form.Value.prototype.renderWidget.apply(this, [section_id, option_index, cfgvalue]),
-			    ipopt = this.section.children.filter(function(o) { return o.option == 'ip' })[0];
-
-			node.addEventListener('cbi-dropdown-change', L.bind(function(ipopt, section_id, ev) {
-				var mac = ev.detail.value.value;
-				if (mac == null || mac == '' || !hosts[mac])
-					return;
-
-				var iphint = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
-				if (iphint == null)
-					return;
-
-				var ip = ipopt.formvalue(section_id);
-				if (ip != null && ip != '')
-					return;
-
-				var node = ipopt.map.findElement('id', ipopt.cbid(section_id));
-				if (node)
-					dom.callClassMethod(node, 'setValue', iphint);
-			}, this, ipopt, section_id));
-
-			return node;
-		};
+		//removed jows renderwidget function which hindered multi-mac entry
 		so.validate = validateMACAddr.bind(so, pools);
 		Object.keys(hosts).forEach(function(mac) {
 			var hint = hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];

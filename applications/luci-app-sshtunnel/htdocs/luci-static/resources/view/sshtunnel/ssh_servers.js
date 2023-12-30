@@ -5,31 +5,24 @@
 'require ui';
 'require view';
 
-var allSshKeys = {};
-
 return view.extend({
 	load: function () {
 		return L.resolveDefault(fs.list('/root/.ssh/'), []).then(function (entries) {
-			var tasks = [];
-			for (var i = 0; i < entries.length; i++) {
-				if (entries[i].type === 'file' && entries[i].name.match(/\.pub$/)) {
-					tasks.push(Promise.resolve(entries[i].name));
-				}
-			}
-			return Promise.all(tasks);
+			var sshKeyNames = _findAllPossibleIdKeys(entries);
+			return Promise.resolve(sshKeyNames);
 		});
 	},
 
 	render: function (data) {
-		var sshKeys = _splitSshKeys(data);
-		if (sshKeys.length === 0) {
+		var sshKeyNames = data;
+		if (sshKeyNames.length === 0) {
 			ui.addNotification(null, E('p', _('No SSH keys found, <a %s>generate a new one</a>').format('href="./ssh_keys"')), 'warning');
 		}
 
 		var m, s, o;
 
 		m = new form.Map('sshtunnel', _('SSH Tunnels'),
-			_('This configures <a %s>SSH Tunnels</a>')
+			_('This configures <a %s>SSH Tunnels</a>.')
 				.format('href="https://openwrt.org/docs/guide-user/services/ssh/sshtunnel"')
 		);
 
@@ -53,18 +46,21 @@ return view.extend({
 		o = s.taboption('general', form.Value, 'user', _('User'));
 		o.default = 'root';
 
-		o = s.taboption('general', form.ListValue, 'IdentityFile', _('Key file'),
-			_('Private key file with authentication identity. ' +
-				'See <em>ssh_config IdentityFile</em>')
+		o = s.taboption('general', form.ListValue, 'IdentityFile', _('Identity Key'),
+			_('Private key file with authentication identity.') + '<br />' +
+			_('If not specified then a default will be used.') + '<br />' +
+			_('For Dropbear %s').format('<code>id_dropbear</code>') + '<br />' +
+			_('For OpenSSH %s').format('<code>id_rsa, id_ed25519, id_ecdsa</code>') +
+			_manSshConfig('IdentityFile')
 		);
 		o.value('');
-		Object.keys(sshKeys).forEach(function (keyName) {
-			o.value('/root/.ssh/' + keyName, keyName);
-		});
+		for (var sshKeyName of sshKeyNames) {
+			o.value('/root/.ssh/' + sshKeyName, sshKeyName);
+		}
 		o.optional = true;
 
 
-		o = s.taboption('advanced', form.ListValue, 'LogLevel', _('Log level'), 'See <em>ssh_config LogLevel</em>');
+		o = s.taboption('advanced', form.ListValue, 'LogLevel', _('Log level'));
 		o.value('QUIET', 'QUIET');
 		o.value('FATAL', 'FATAL');
 		o.value('ERROR', 'ERROR');
@@ -77,8 +73,8 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'Compression', _('Use compression'),
-			_('Compression may be useful on slow connections. ' +
-				'See <em>ssh_config Compression</em>')
+			_('Compression may be useful on slow connections.') +
+			_manSshConfig('Compression')
 		);
 		o.value('yes', _('Yes'));
 		o.value('no', _('No'));
@@ -94,18 +90,17 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'ServerAliveCountMax', _('Server alive count max'),
-			_('The number of server alive messages which may be sent before SSH disconnects from the server. ' +
-				'See <em>ssh_config ServerAliveCountMax</em>')
+		o = s.taboption('advanced', form.Value, 'ServerAliveCountMax', _('Server keep alive attempts'),
+			_('The number of server alive messages which may be sent before SSH disconnects from the server.') +
+			_manSshConfig('ServerAliveCountMax')
 		);
 		o.placeholder = '3';
 		o.datatype = 'uinteger';
 		o.optional = true;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'ServerAliveInterval', _('Server alive interval'),
-			_('Keep-alive interval (seconds). ' +
-				'See <em>ssh_config ServerAliveInterval</em>')
+		o = s.taboption('advanced', form.Value, 'ServerAliveInterval', _('Server keep alive interval (seconds)'),
+			_manSshConfig('ServerAliveInterval')
 		);
 		o.optional = true;
 		o.default = '60';
@@ -113,9 +108,9 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'CheckHostIP', _('Check host IP'),
-			_('Check the host IP address in the <code>known_hosts</code> file. ' +
-				'This allows ssh to detect whether a host key changed due to DNS spoofing. ' +
-				'See <em>ssh_config CheckHostIP</em>')
+			_('Check the host IP address in the %s file.').format('<code>known_hosts</code>') + '<br />' +
+			_('This allows SSH to detect whether a host key changed due to DNS spoofing.') +
+			_manSshConfig('CheckHostIP')
 		);
 		o.value('yes', _('Yes'));
 		o.value('no', _('No'));
@@ -123,25 +118,51 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.ListValue, 'StrictHostKeyChecking', _('Strict host key checking'),
-			_('Refuse to connect to hosts whose host key has changed. ' +
-				'See <em>ssh_config StrictHostKeyChecking</em>'));
+			_('Refuse to connect to hosts whose host key has changed.') +
+			_manSshConfig('StrictHostKeyChecking')
+		);
 		o.value('accept-new', _('Accept new and check if not changed'));
 		o.value('yes', _('Yes'));
 		o.value('no', _('No'));
 		o.default = 'accept-new';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Value, 'ProxyCommand', _('Proxy tunnel command'),
+			_('The command to use to connect to the server.') + '<br />' +
+			_('For example, the following command would connect via an HTTP proxy:') + '<br />' +
+			'<code>ncat --proxy-type http --proxy-auth alice:secret --proxy 192.168.1.2:8080 %h %p</code>' +
+			_manSshConfig('ProxyCommand')
+		);
+		o.modalonly = true;
+
 		return m.render();
 	},
 });
 
-function _splitSshKeys(sshFiles) {
-	var sshKeys = {};
-	for (var i = 0; i < sshFiles.length; i++) {
-		var sshPubKeyName = sshFiles[i];
-		var sshKeyName = sshPubKeyName.substring(0, sshPubKeyName.length - 4);
-		sshKeys[sshKeyName] = '';
+function _findAllPossibleIdKeys(entries) {
+	var sshKeyNames = new Set();
+	var fileNames = entries.filter(item => item.type === 'file').map(item => item.name);
+	for (var fileName of fileNames) {
+		// a key file should have a corresponding .pub file
+		if (fileName.endsWith('.pub')) {
+			var sshKeyName = fileName.slice(0, -4);
+			// if such a key exists then add it
+			if (fileNames.includes(sshKeyName)) {
+				sshKeyNames.add(sshKeyName);
+			}
+		} else {
+			// or at least it should start with id_ e.g. id_dropbear
+			if (fileName.startsWith('id_')) {
+				var sshKeyName = fileName;
+				sshKeyNames.add(sshKeyName);
+			}
+		}
 	}
-	allSshKeys = sshKeys;
-	return sshKeys;
+	return Array.from(sshKeyNames);
 }
+
+function _manSshConfig(opt) {
+	return '<br />' + _('See %s.')
+			.format('<a target="_blank" href="https://manpages.debian.org/testing/openssh-client/ssh_config.5#'+ opt + '">ssh_config ' + opt + '</a>');
+}
+
