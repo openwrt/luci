@@ -183,40 +183,40 @@ return L.Class.extend({
 				types: ['errors'],
 				instances: {
 					errors: [
-						'es',
-						'ses',
-						'loss',
-						'uas',
-						'f_es',
-						'f_ses',
-						'f_loss',
-						'f_uas',
+						'es_near',
+						'ses_near',
+						'loss_near',
+						'uas_near',
+						'es_far',
+						'ses_far',
+						'loss_far',
+						'uas_far',
 					],
 				},
 				options: {
 					errors_es_near: {
-						title: _('Errored seconds'),
+						title: _('Near Errored seconds'),
 						overlay: true,
 						noarea: true,
 						total: true,
 						weight: 1,
 					},
 					errors_ses_near: {
-						title: _('Severely Errored Seconds'),
+						title: _('Near Severely Errored Seconds'),
 						overlay: true,
 						noarea: true,
 						total: true,
 						weight: 1,
 					},
 					errors_loss_near: {
-						title: _('Loss of Signal Seconds'),
+						title: _('Near Loss of Signal Seconds'),
 						overlay: true,
 						noarea: true,
 						total: true,
 						weight: 1,
 					},
 					errors_uas_near: {
-						title: _('Unavailable Seconds'),
+						title: _('Near Unavailable Seconds'),
 						overlay: true,
 						noarea: true,
 						total: true,
@@ -367,17 +367,17 @@ return L.Class.extend({
 			data: {
 				types: ['errors'],
 				instances: {
-					errors: ['crc', 'crcp', 'f_crc', 'f_crcp'],
+					errors: ['crc_p_near', 'crcp_p_near', 'crc_p_far', 'crcp_p_far'],
 				},
 				options: {
 					errors_crc_p_near: {
-						title: _('CRC Errors'),
+						title: _('Near CRC Errors'),
 						overlay: true,
 						noarea: true,
 						total: true,
 					},
 					errors_crcp_p_near: {
-						title: _('Pre-emptive CRC Errors'),
+						title: _('Near Pre-emptive CRC Errors'),
 						overlay: true,
 						noarea: true,
 						total: true,
