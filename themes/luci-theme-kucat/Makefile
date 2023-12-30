@@ -11,6 +11,14 @@ PKG_NAME:=luci-theme-kucat
 LUCI_DEPENDS:=
 PKG_VERSION:=2.3.9
 
+define Package/luci-theme-kucat/postrm
+#!/bin/sh
+[ -n "$${IPKG_INSTROOT}" ] || {
+	uci -q delete luci.themes.OpenWrt
+	uci commit luci
+}
+endef
+
 define Package/luci-theme-kucat/postinst
 #!/bin/sh
 
@@ -20,6 +28,6 @@ exit 0
 
 endef
 
-include ../../luci.mk
+include $(TOPDIR)/feeds/luci/luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
