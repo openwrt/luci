@@ -34,14 +34,14 @@ return L.Class.extend({
 			data: {
 				types: ["snr"],
 				instances: {
-					snr: ["down", "up"]
+					snr: ["snr_down", "snr_up"]
 				},
 				options: {
-					snr_down: {
+					snr_snr_down: {
 						title: _("SNR Margin Down"),
 						weight: 1
 					},
-					snr_up: {
+					snr_snr_up: {
 						title: _("SNR Margin Up"),
 						flip: true,
 						weight: 2
