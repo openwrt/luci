@@ -28,6 +28,8 @@ return baseclass.extend({
 		var droprate = {
 			title: "%H: ICMP Drop Rate",
 			vlabel: "%",
+			y_min: "0",
+			y_max: "4",
 			number_format: "%5.2lf %%",
 			data: {
 				types: [ "ping_droprate" ],
@@ -45,6 +47,8 @@ return baseclass.extend({
 		var stddev = {
 			title: "%H: ICMP Standard Deviation",
 			vlabel: "ms",
+			y_min: "0",
+			y_max: "1",
 			number_format: "%5.1lf ms",
 			data: {
 				types: [ "ping_stddev" ],

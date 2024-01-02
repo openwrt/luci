@@ -24,7 +24,7 @@
 	},
 
 	"admin/status/iptables": {
-		"title": "Firewall (iptables)",
+		"title": "Firewall",
 		"order": 3,
 		"action": {
 			"type": "view",
@@ -33,14 +33,14 @@
 		"depends": {
 			"acl": [ "luci-mod-status-firewall" ],
 			"fs": [
-				{ "/usr/sbin/iptables": "executable" },
-				{ "/usr/sbin/ip6tables": "executable" }
+				{ "/usr/sbin/nft": "absent", "/usr/sbin/iptables": "executable" },
+				{ "/usr/sbin/nft": "absent", "/usr/sbin/ip6tables": "executable" }
 			]
 		}
 	},
 
 	"admin/status/nftables": {
-		"title": "Firewall (nftables)",
+		"title": "Firewall",
 		"order": 3,
 		"action": {
 			"type": "view",
@@ -49,6 +49,13 @@
 		"depends": {
 			"acl": [ "luci-mod-status-firewall" ],
 			"fs": { "/usr/sbin/nft": "executable" }
+		}
+	},
+
+	"admin/status/nftables/iptables": {
+		"action": {
+			"type": "view",
+			"path": "status/iptables"
 		}
 	},
 

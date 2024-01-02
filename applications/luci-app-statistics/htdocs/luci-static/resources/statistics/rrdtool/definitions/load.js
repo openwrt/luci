@@ -11,6 +11,7 @@ return baseclass.extend({
 			title: "%H: Load",
 			vlabel: "Load",
 			y_min: "0",
+			y_max: "0.2",
 			units_exponent: "0",
 			number_format: "%5.2lf",
 			data: {

@@ -1,5 +1,4 @@
 #!/bin/sh
-
-/etc/init.d/rpcd reload
 rm -rf /var/luci-modulecache/; rm -f /var/luci-indexcache;
+[ -x /etc/init.d/rpcd ] && /etc/init.d/rpcd reload
 exit 0

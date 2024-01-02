@@ -18,9 +18,11 @@ function byte_format(byte)
 	end
 end
 
-m = Map("dockerd",
+m = SimpleForm("dockerd",
 	translate("Docker - Overview"),
 	translate("An overview with the relevant data is displayed here with which the LuCI docker client is connected."))
+m.submit=false
+m.reset=false
 
 local docker_info_table = {}
 docker_info_table['3ServerVersion'] = {_key=translate("Docker Version"),_value='-'}
@@ -65,7 +67,7 @@ if docker.new():_ping().code == 200 then
 	end
 
 	docker_info_table['8IndexServerAddress']._value = docker_info.body.IndexServerAddress
-	for i, v in ipairs(docker_info.body.RegistryConfig.Mirrors) do
+	for i, v in ipairs(docker_info.body.RegistryConfig.Mirrors or {}) do
 		docker_info_table['9RegistryMirrors']._value = docker_info_table['9RegistryMirrors']._value == "-" and v or (docker_info_table['9RegistryMirrors']._value .. ", " .. v)
 	end
 

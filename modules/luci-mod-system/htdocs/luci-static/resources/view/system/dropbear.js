@@ -16,7 +16,6 @@ return view.extend({
 
 		o = s.option(widgets.NetworkSelect, 'Interface', _('Interface'), _('Listen only on the given interface or, if unspecified, on all'));
 		o.nocreate    = true;
-		o.unspecified = true;
 
 		o = s.option(form.Value, 'Port', _('Port'));
 		o.datatype    = 'port';
@@ -28,7 +27,7 @@ return view.extend({
 		o.default  = o.enabled;
 		o.rmempty  = false;
 
-		o = s.option(form.Flag, 'RootPasswordAuth', _('Allow root logins with password'), _('Allow the <em>root</em> user to login with password'));
+		o = s.option(form.Flag, 'RootPasswordAuth', _('Allow root logins with password'), _('Allow the <em>root</em> user to log in with password'));
 		o.enabled  = 'on';
 		o.disabled = 'off';
 		o.default  = o.enabled;

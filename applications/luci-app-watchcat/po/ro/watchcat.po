@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2022-01-12 11:22+0000\n"
-"Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
+"PO-Revision-Date: 2022-10-07 17:18+0000\n"
+"Last-Translator: Simona Iacob <s@zp1.net>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/ro/>\n"
 "Language: ro\n"
@@ -11,18 +11,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.14.1\n"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
-"<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify the "
-"interface to monitor and restart if a ping over it fails."
+"<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
+"> Specify the interface to monitor and react if a ping over it fails."
 msgstr ""
-"<i>Se aplică la modurile Ping Reboot și Restart Interface</i> <br /> "
-"Specificați interfața care urmează să fie monitorizată și repornită în cazul "
-"în care un ping pe aceasta eșuează."
+"<i>Se aplică în modurile Ping Reboot, Restart Interface și Run Script</i> "
+"<br /> Specificați interfața care trebuie monitorizată și reacționează în "
+"cazul în care un ping pe aceasta eșuează."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:72
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
+msgid "Address family for pinging the host"
+msgstr "Familia de adrese pentru ping la gazdă"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
 "Applies to Ping Reboot and Periodic Reboot modes</i> <br /> When rebooting "
 "the router, the service will trigger a soft reboot. Entering a non-zero "
@@ -37,7 +41,7 @@ msgstr ""
 "secunde de așteptare pentru ca repornirea soft să eșueze sau utilizați 0 "
 "pentru a dezactiva întârzierea repornirii forțate."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:88
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
 msgid ""
 "Applies to Ping Reboot and Restart Interface modes</i> <br /> If using "
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
@@ -47,15 +51,15 @@ msgstr ""
 "folosiți ModemManager, puteți face ca Watchcat să repornească interfața "
 "ModemManger prin specificarea numelui acesteia."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:63
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:84
 msgid "Big: 248 bytes"
 msgstr "Mare: 248 bytes"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:50
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:70
 msgid "Check Interval"
 msgstr "Interval de verificare"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:93
 msgid "Force Reboot Delay"
 msgstr "Întârziere forțată a repornirii"
 
@@ -78,11 +82,11 @@ msgstr ""
 "butonul <b>Add</b> (Adăugare) din partea de jos pentru a configura mai multe "
 "acțiuni."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:43
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "Host To Check"
 msgstr "Gazdă de verificat"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:51
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
 msgid ""
 "How often to ping the host specified above. <br /><br />The default unit is "
 "seconds, without a suffix, but you can use the suffix <b>m</b> for minutes, "
@@ -98,15 +102,15 @@ msgstr ""
 "ar fi: <b>5m</b></li><li>1 oră ar fi: <b>1h</b></li><li>1 săptămână ar fi: "
 "<b>7d</b></li><ul>"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:64
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:85
 msgid "Huge: 1492 bytes"
 msgstr "Imens: 1492 bytes"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:43
-msgid "IPv4 address or hostname to ping."
-msgstr "Adresa IPv4 sau numele de gazdă pentru ping."
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
+msgid "IP address or hostname to ping."
+msgstr "Adresa IP sau numele de gazdă pentru ping."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:95
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
 "If using ModemManager, then before restarting the interface, set the modem "
 "to be allowed to use any band."
@@ -114,40 +118,40 @@ msgstr ""
 "În cazul în care se utilizează ModemManager, înainte de a reporni interfața, "
 "setați modemul pentru a fi autorizat să utilizeze orice bandă."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:32
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:41
 msgid ""
 "In Periodic Reboot mode, it defines how often to reboot. <br /> In Ping "
 "Reboot mode, it defines the longest period of time without a reply from the "
-"Host To Check before a reboot is engaged. <br /> In Network Restart mode, it "
-"defines the longest period of time without a reply from the Host to Check "
-"before the interface is restarted. <br /><br />The default unit is seconds, "
-"without a suffix, but you can use the suffix <b>m</b> for minutes, <b>h</b> "
-"for hours or <b>d</b> for days. <br /><br />Examples:<ul><li>10 seconds "
-"would be: <b>10</b> or <b>10s</b></li><li>5 minutes would be: <b>5m</b></"
-"li><li> 1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
-"li><ul>"
+"Host To Check before a reboot is engaged. <br /> In Network Restart or Run "
+"Script mode, it defines the longest period of time without a reply from the "
+"Host to Check before the interface is restarted or the script is run. <br /"
+"><br />The default unit is seconds, without a suffix, but you can use the "
+"suffix <b>m</b> for minutes, <b>h</b> for hours or <b>d</b> for days. <br /"
+"><br />Examples:<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></"
+"li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
+"li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
-"În modul Periodic Reboot (Repornire periodică), se definește frecvența de "
-"repornire. <br /> În modul Ping Reboot (Repornire prin ping), definește cea "
-"mai lungă perioadă de timp fără răspuns de la Host To Check (Gazdă de "
-"verificat) înainte de a se angaja o repornire. <br /> În modul Repornire "
-"rețea, definește cea mai lungă perioadă de timp fără răspuns din partea "
-"Gazdei de verificat înainte ca interfața să fie repornită. <br /><br /"
+"În modul Repornire periodică, se definește cât de des trebuie să se "
+"repornească. <br /> În modul Ping Reboot, definește cea mai lungă perioadă "
+"de timp fără un răspuns din partea gazdei de verificat înainte de repornire. "
+"<br /> În modul Repornire rețea sau Executare script, definește cea mai "
+"lungă perioadă de timp fără un răspuns din partea gazdei la Check înainte ca "
+"interfața să fie repornită sau scriptul să fie executat. <br /><br /"
 ">Unitatea implicită este secundele, fără sufix, dar se poate folosi sufixul "
-"<b>m</b> for minutes, <b>h</b> timp de câteva ore sau <b>d</b> pentru zile. "
-"<br /><br />Exemple:<ul><li>10 secunde pot fi: <b>10</b> or <b>10s</b></"
-"li><li>5 minute ar fi: <b>5m</b></li><li> 1 oră ar fi: <b>1h</b></li><li>1 "
-"săptămână ar fi: <b>7d</b></li><ul>"
+"<b>m</b> pentru minute, <b>h</b> pentru ore sau <b>d</b> pentru zile. <br /"
+"><br />Examples:<ul><li>10 secunde ar fi: <b>10</b> or <b>10s</b></li><li>5 "
+"minute ar fi: <b>5m</b></li><li> 1 oră ar fi: <b>1h</b></li><li>1 săptămână "
+"ar fi: <b>7d</b></li><ul>"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
 msgstr "Interfață"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:103
 msgid "Interface to monitor and/or restart"
 msgstr "Interfața de monitorizare și/sau repornire"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:86
 msgid "Jumbo: 9000 bytes"
 msgstr "Jumbo: 9000 octeți"
 
@@ -155,23 +159,23 @@ msgstr "Jumbo: 9000 octeți"
 msgid "Mode"
 msgstr "Mod"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:87
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:110
 msgid "Name of ModemManager Interface"
 msgstr "Numele interfeței ModemManager"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:31
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:40
 msgid "Period"
 msgstr "Perioadă"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Periodic Reboot"
 msgstr "Repornire periodică"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:59
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
 msgid "Ping Packet Size"
 msgstr "Dimensiunea pachetului Ping"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:26
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
 msgid "Ping Reboot"
 msgstr "Repornire Ping"
 
@@ -181,24 +185,42 @@ msgid ""
 "specified duration of time. <br /> Periodic Reboot: Reboot this device after "
 "a specified interval of time. <br /> Restart Interface: Restart a network "
 "interface if a ping to a specified host fails for a specified duration of "
-"time."
+"time. <br /> Run Script: Run a script if a ping to a specified host fails "
+"for a specified duration of time. <br />"
 msgstr ""
 "Ping Reboot: Reporniți acest dispozitiv în cazul în care un ping către o "
 "gazdă specificată eșuează pentru o anumită perioadă de timp. <br /> "
 "Repornire periodică: Reporniți acest dispozitiv după un interval de timp "
-"specificat. <br /> Repornire interfață: Reporniți o interfață de rețea dacă "
-"un ping către o gazdă specificată eșuează pentru o durată de timp "
-"specificată."
+"specificat. <br /> Reporniți interfața: Reporniți o interfață de rețea dacă "
+"un ping către o gazdă specificată nu reușește pentru o anumită perioadă de "
+"timp. <br /> Rulați scriptul: Executați un script dacă un ping către o gazdă "
+"specificată eșuează pentru o anumită perioadă de timp. <br />"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
 msgstr "Reporniți interfața"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
+msgid "Run Script"
+msgstr "Rulați scriptul"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
+msgid "Script to run"
+msgstr "Script pentru a rula"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
+msgid ""
+"Script to run when the host has not responded for the specified duration of "
+"time. The script is passed the interface name as $1"
+msgstr ""
+"Script care se execută atunci când gazda nu a răspuns pentru o perioadă de "
+"timp specificată. Scriptului i se transmite numele interfeței ca $1"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
 msgstr "Mic: 1 octet"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:62
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:83
 msgid "Standard: 56 bytes"
 msgstr "Standard: 56 octeți"
 
@@ -208,7 +230,7 @@ msgstr ""
 "Aceste reguli vor guverna modul în care acest dispozitiv reacționează la "
 "evenimentele din rețea."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:117
 msgid "Unlock Modem Bands"
 msgstr "Deblocarea benzilor de modem"
 
@@ -218,6 +240,55 @@ msgstr "Deblocarea benzilor de modem"
 msgid "Watchcat"
 msgstr "Priveștepisica"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:61
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
 msgid "Windows: 32 bytes"
 msgstr "Ferestre: 32 octeți"
+
+#~ msgid ""
+#~ "<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify "
+#~ "the interface to monitor and restart if a ping over it fails."
+#~ msgstr ""
+#~ "<i>Se aplică la modurile Ping Reboot și Restart Interface</i> <br /> "
+#~ "Specificați interfața care urmează să fie monitorizată și repornită în "
+#~ "cazul în care un ping pe aceasta eșuează."
+
+#~ msgid "IPv4 address or hostname to ping."
+#~ msgstr "Adresa IPv4 sau numele de gazdă pentru ping."
+
+#~ msgid ""
+#~ "In Periodic Reboot mode, it defines how often to reboot. <br /> In Ping "
+#~ "Reboot mode, it defines the longest period of time without a reply from "
+#~ "the Host To Check before a reboot is engaged. <br /> In Network Restart "
+#~ "mode, it defines the longest period of time without a reply from the Host "
+#~ "to Check before the interface is restarted. <br /><br />The default unit "
+#~ "is seconds, without a suffix, but you can use the suffix <b>m</b> for "
+#~ "minutes, <b>h</b> for hours or <b>d</b> for days. <br /><br />Examples:"
+#~ "<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></li><li>5 minutes "
+#~ "would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></li><li>1 week "
+#~ "would be: <b>7d</b></li><ul>"
+#~ msgstr ""
+#~ "În modul Periodic Reboot (Repornire periodică), se definește frecvența de "
+#~ "repornire. <br /> În modul Ping Reboot (Repornire prin ping), definește "
+#~ "cea mai lungă perioadă de timp fără răspuns de la Host To Check (Gazdă de "
+#~ "verificat) înainte de a se angaja o repornire. <br /> În modul Repornire "
+#~ "rețea, definește cea mai lungă perioadă de timp fără răspuns din partea "
+#~ "Gazdei de verificat înainte ca interfața să fie repornită. <br /><br /"
+#~ ">Unitatea implicită este secundele, fără sufix, dar se poate folosi "
+#~ "sufixul <b>m</b> for minutes, <b>h</b> timp de câteva ore sau <b>d</b> "
+#~ "pentru zile. <br /><br />Exemple:<ul><li>10 secunde pot fi: <b>10</b> or "
+#~ "<b>10s</b></li><li>5 minute ar fi: <b>5m</b></li><li> 1 oră ar fi: <b>1h</"
+#~ "b></li><li>1 săptămână ar fi: <b>7d</b></li><ul>"
+
+#~ msgid ""
+#~ "Ping Reboot: Reboot this device if a ping to a specified host fails for a "
+#~ "specified duration of time. <br /> Periodic Reboot: Reboot this device "
+#~ "after a specified interval of time. <br /> Restart Interface: Restart a "
+#~ "network interface if a ping to a specified host fails for a specified "
+#~ "duration of time."
+#~ msgstr ""
+#~ "Ping Reboot: Reporniți acest dispozitiv în cazul în care un ping către o "
+#~ "gazdă specificată eșuează pentru o anumită perioadă de timp. <br /> "
+#~ "Repornire periodică: Reporniți acest dispozitiv după un interval de timp "
+#~ "specificat. <br /> Repornire interfață: Reporniți o interfață de rețea "
+#~ "dacă un ping către o gazdă specificată eșuează pentru o durată de timp "
+#~ "specificată."

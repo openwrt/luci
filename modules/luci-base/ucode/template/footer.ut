@@ -1,0 +1,42 @@
+{#
+ Copyright 2022 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{% const rollback = dispatcher.rollback_pending() %}
+{% if (rollback || trigger_apply || trigger_revert): %}
+	<script type="text/javascript">
+		document.addEventListener("luci-loaded", function() {
+			{% if (trigger_apply): %}
+				L.ui.changes.apply(true);
+			{% elif (trigger_revert): %}
+				L.ui.changes.revert();
+			{% else %}
+				L.ui.changes.confirm(true, Date.now() + {{rollback.remaining * 1000}}, {{sprintf('%J', rollback.token)}});
+			{% endif %}
+		});
+	</script>
+{% endif %}
+
+{% if (media_error): %}
+	<script type="text/javascript">
+		L.require('ui').then(function(ui) {
+			ui.showIndicator('media_error', _('Theme fallback'), function(ev) {
+				ui.showModal(_('Error loading theme'), [
+					E('p', [
+						_('A fallback is used since the configured theme failed to load with the error below.')
+					]),
+					E('hr'),
+					E('div', { 'style': 'white-space:pre-line' }, {{ sprintf('%J', trim(media_error)) }}),
+					E('div', { 'class': 'right' }, [
+						E('button', { 'class': 'btn cbi-button', 'click': ui.hideModal }, _('Dismiss'))
+					])
+				]);
+			});
+		});
+	</script>
+{% endif %}
+
+{% include(`themes/${theme}/footer`) %}
+
+<!-- Lua compatibility mode active: {{ lua_active ? 'yes' : 'no' }} -->

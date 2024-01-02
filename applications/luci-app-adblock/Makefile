@@ -1,11 +1,10 @@
-# Copyright 2017-2021 Dirk Brenken (dev@brenken.org)
+# Copyright 2017-2023 Dirk Brenken (dev@brenken.org)
 # This is free software, licensed under the Apache License, Version 2.0
 
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for Adblock
-LUCI_DEPENDS:=+adblock +luci-lib-jsonc
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=+luci-base +adblock
 
 PKG_LICENSE:=Apache-2.0
 

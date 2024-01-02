@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Support for OpenFortivpn
-LUCI_DEPENDS:=+openfortivpn
+LUCI_DEPENDS:=+openfortivpn +luci-lua-runtime
 
 include ../../luci.mk
 

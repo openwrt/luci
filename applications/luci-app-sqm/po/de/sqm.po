@@ -1,14 +1,22 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-02-08 04:46+0000\n"
-"Last-Translator: Zocker1012 <julian.schoemer.1997@gmail.com>\n"
+"PO-Revision-Date: 2023-01-01 13:21+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssqm/de/>\n"
 "Language: de\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.15.1-dev\n"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
+msgid "Advanced Configuration"
+msgstr "Erweiterte Konfiguration"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
+msgid "Advanced Linklayer Options"
+msgstr "Erweiterte Optionen Verbindungsschicht (Linklayer)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
 msgid ""
@@ -23,8 +31,22 @@ msgid ""
 "Advanced option string to pass to the ingress queueing disciplines; no error "
 "checking, use very carefully."
 msgstr ""
-"Erweiterte Optionszeichenkette zur Übergabe an die in die Warteschlange "
-"einsteigenden Disziplinen; keine Fehlerprüfung, sehr vorsichtig verwenden."
+"Erweiterte Optionszeichenkette zur Übergabe an die Eingangs-"
+"Warteschlangendisziplinen; keine Fehlerprüfung, sehr vorsichtig verwenden."
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
+msgid ""
+"Advanced options will only be used as long as this box is checked (only "
+"needed if MTU > 1500)."
+msgstr ""
+"Die erweiterten Optionen werden nur verwendet, wenn dieses Kästchen "
+"aktiviert ist (nur erforderlich, wenn MTU > 1500)."
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
+msgid "Advanced options will only be used as long as this box is checked."
+msgstr ""
+"Die erweiterten Optionen werden nur verwendet, wenn dieses Kästchen markiert "
+"ist."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:72
 msgid "Basic Settings"
@@ -38,31 +60,54 @@ msgstr ""
 "Logdatei für diese SQM-Instanz unter /var/run/sqm/${Interface_name}.[start|"
 "stop]-sqm.log erstellen."
 
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
+msgid "Dangerous Configuration"
+msgstr "Gefährliche Konfiguration"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
+msgid "Dangerous options will only be used as long as this box is checked."
+msgstr ""
+"Gefährliche Optionen werden nur verwendet, wenn dieses Feld markiert ist."
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:92
+msgid "Download speed (ingress)"
+msgstr "Download-Geschwindigkeit (Eingang)"
+
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:92
 msgid ""
 "Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress "
-"shaping:"
+"shaping"
 msgstr ""
-"Download-Geschwindigkeit (kbit/s) (Ingress) auf 0 setzen, um Ingress-Shaping "
-"selektiv zu deaktivieren:"
+"Download-Geschwindigkeit (kbit/s) (Eingang) auf 0 setzen, um Eingang-Shaping "
+"selektiv zu deaktivieren"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
+msgid "ECN (egress)"
+msgstr "ECN (ausgehend)"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
+msgid "ECN (ingress)"
+msgstr "ECN (Eingang)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:58
 msgid "Enable SQM"
-msgstr ""
+msgstr "SQM aktivieren"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:100
+msgid "Enable debug logging"
+msgstr "Aktiviere Debug-Protokollierung"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:78
 msgid "Enable this SQM instance."
-msgstr "Diese SQM-Instanz aktivieren"
+msgstr "Diese SQM-Instanz aktivieren."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
-msgid ""
-"Explicit congestion notification (ECN) status on inbound packets (ingress):"
-msgstr ""
+msgid "Explicit congestion notification (ECN) status on inbound packets"
+msgstr "Explizite Überlastungsanzeige (ECN) bei eingehenden Paketen"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
-msgid ""
-"Explicit congestion notification (ECN) status on outbound packets (egress)."
-msgstr ""
+msgid "Explicit congestion notification (ECN) status on outbound packets"
+msgstr "Explizite Überlastungsanzeige (ECN) bei ausgehenden Paketen"
 
 #: applications/luci-app-sqm/root/usr/share/rpcd/acl.d/luci-app-sqm.json:3
 msgid "Grant UCI access for luci-app-sqm"
@@ -76,103 +121,156 @@ msgstr ""
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:164
 msgid "Hard limit on ingress queues; leave empty for default."
 msgstr ""
+"Harte Begrenzung der Eingangswarteschlangen; Standardmäßig leer lassen."
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
+msgid "Hard queue limit (egress)"
+msgstr "Harte Warteschlangenbegrenzung (Ausgang)"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:164
+msgid "Hard queue limit (ingress)"
+msgstr "Harte Warteschlangenbegrenzung (Eingang)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
-msgid "Ignore DSCP on ingress:"
-msgstr ""
+msgid "Ignore DSCP (ingress)"
+msgstr "DSCP ignorieren (Eingang)"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
+msgid "Ignore DSCP markings on inbound packets"
+msgstr "DSCP-Markierungen auf eingehenden Paketen ignorieren"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:89
 msgid "Interface name"
 msgstr "Schnittstellenname"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:176
+msgid "Latency target (egress)"
+msgstr "Latenzziel (Ausgang)"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:172
+msgid "Latency target (ingress)"
+msgstr "Latenzziel (Eingang)"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:176
 msgid ""
 "Latency target for egress, e.g. 5ms [units: s, ms, or us]; leave empty for "
 "automatic selection, put in the word default for the qdisc's default."
 msgstr ""
+"Latenzziel für Ausgangswarteschlange, z.B. 5ms [Einheit: s, ms oder us]; "
+"Leer lassen für automatische Auswahl, das Wort 'default' eintragen für qdisc "
+"Standard."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:172
 msgid ""
 "Latency target for ingress, e.g 5ms [units: s, ms, or us]; leave empty for "
 "automatic selection, put in the word default for the qdisc's default."
 msgstr ""
+"Latenzziel für Eingangswarteschlange, z.B. 5ms [Einheit: s, ms oder us]; "
+"Leer lassen für automatische Auswahl, das Wort 'default' eintragen für qdisc "
+"Standard."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:74
 msgid "Link Layer Adaptation"
+msgstr "Anpassung der Verbindungsschicht"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
+msgid "Link layer"
+msgstr "Link-Layer"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
+msgid "Linklayer adaptation mechanism"
+msgstr "Linklayer-Anpassungsmechanismus"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
+msgid ""
+"Lists queuing disciplines useable on this system. After installing a new "
+"qdisc, you need to restart the router to see updates!"
 msgstr ""
+"Listet die Warteschlangendisziplinen auf, die auf diesem System verwendet "
+"werden können. Nach der Installation einer neuen qdisc müssen Sie den Router "
+"neu starten, um Updates zu sehen!"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
+msgid "Log verbosity"
+msgstr "Ausführlichkeit des Protokolls"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
 msgid ""
 "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
-"interface MTU + overhead:"
+"interface MTU + overhead"
 msgstr ""
+"Maximale Größe für Größen- und Ratenberechnungen, tcMTU (Byte); muss >= "
+"Schnittstellen-MTU + Overhead sein"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
+msgid "Maximum packet size"
+msgstr "Maximale Paketgröße"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
 msgid ""
-"Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables:"
+"Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables"
 msgstr ""
+"Minimale Paketgröße, MPU (Byte); muss bei Ethernet-Größentabellen > 0 sein"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
+msgid "Minimum packet size"
+msgstr "Minimale Paketgröße"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
 msgid ""
 "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = (tcMTU "
-"+ 1) / 16:"
+"+ 1) / 16"
 msgstr ""
+"Anzahl der Einträge in Größen-/Raten-Tabellen, TSIZE; für ATM wählen Sie "
+"TSIZE = (tcMTU + 1) / 16"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:193
-msgid "Per Packet Overhead (byte):"
-msgstr ""
+msgid "Per Packet Overhead (bytes)"
+msgstr "Overhead pro Paket (Bytes)"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
+msgid "Qdisc options (egress)"
+msgstr "Qdisc-Optionen (Ausgang)"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:180
+msgid "Qdisc options (ingress)"
+msgstr "Qdisc-Optionen (Eingang)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:73
 msgid "Queue Discipline"
-msgstr ""
+msgstr "Queue Discipline"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:120
 msgid "Queue setup script"
-msgstr ""
+msgstr "Skript zum Aufsetzen der Warteschlange"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
+msgid "Queueing discipline"
+msgstr "Warteschlangendisziplin"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:71
 msgid "Queues"
-msgstr ""
+msgstr "Warteschlangen"
 
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
-msgid ""
-"Queuing disciplines useable on this system. After installing a new qdisc, "
-"you need to restart the router to see updates!"
-msgstr ""
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
+msgid "Rate table size"
+msgstr "Größe der Ratentabelle"
 
 #: applications/luci-app-sqm/root/usr/share/luci/menu.d/luci-app-sqm.json:3
 msgid "SQM QoS"
 msgstr "SQM QoS"
 
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:199
-msgid ""
-"Show Advanced Linklayer Options, (only needed if MTU > 1500). Advanced "
-"options will only be used as long as this box is checked."
-msgstr ""
-
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
-msgid ""
-"Show and Use Advanced Configuration. Advanced options will only be used as "
-"long as this box is checked."
-msgstr ""
-"Erweiterte Konfiguration anzeigen und verwenden. Die erweiterten Optionen "
-"werden nur verwendet, wenn diese Option ausgewählt ist."
-
-#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
-msgid ""
-"Show and Use Dangerous Configuration. Dangerous options will only be used as "
-"long as this box is checked."
-msgstr ""
-"Gefährliche Einstellungen anzeigen und nutzen. Gefährliche Optionen werden "
-"nur benutzt, solange diese Box ausgewählt ist."
-
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:64
 msgid "Smart Queue Management"
-msgstr ""
+msgstr "Smart Queue Management"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
-msgid "Squash DSCP on inbound packets (ingress):"
-msgstr ""
+msgid "Squash DSCP (ingress)"
+msgstr "Squash-DSCP (Eingang)"
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
+msgid "Squash DSCP markings on inbound packets"
+msgstr "DSCP-Markierungen auf eingehenden Paketen unterdrücken"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:83
 msgid ""
@@ -180,30 +278,42 @@ msgid ""
 "disable the sqm initscript manually under System Startup menu in case this "
 "change was not wished for."
 msgstr ""
+"Die SQM-GUI hat soeben das sqm-Initskript in Ihrem Namen aktiviert. Denken "
+"Sie daran, das sqm-Initscript manuell im Systemstartmenü zu deaktivieren, "
+"falls diese Änderung nicht gewünscht wurde."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:48
 msgid ""
 "The SQM service seems to be disabled. Please use the button below to "
 "activate this service."
 msgstr ""
+"Der SQM-Dienst scheint deaktiviert zu sein. Bitte verwenden Sie die "
+"Schaltfläche unten, um diesen Dienst zu aktivieren."
+
+#: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
+msgid "Upload speed (egress)"
+msgstr "Hochladegeschwindigkeit (Ausgang)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
 msgid ""
-"Upload speed (kbit/s) (egress) set to 0 to selectively disable egress "
-"shaping:"
+"Upload speed (kbit/s) (egress) set to 0 to selectively disable egress shaping"
 msgstr ""
+"Upload-Geschwindigkeit (kbit/s) (Ausgang) auf 0 gesetzt, um Ausgang-Shaping "
+"selektiv zu deaktivieren"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Verbosity of SQM's output into the system log."
-msgstr "Festlegen, wie ausführlich SQM ins Systemlog schreiben soll"
+msgstr "Festlegen, wie ausführlich SQM ins Systemlog schreiben soll."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
-msgid "Which link layer to account for:"
-msgstr ""
+msgid "Which link layer technology to account for"
+msgstr "Welche Link-Layer-Technologie zu berücksichtigen ist"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
 msgid "Which linklayer adaptation mechanism to use; for testing only"
 msgstr ""
+"Welcher Verbindungsschicht-Anpassungsmechanismus verwendet werden soll; nur "
+"zum Testen"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:65
 msgid ""
@@ -211,6 +321,9 @@ msgid ""
 "traffic shaping, better mixing (Fair Queueing), active queue length "
 "management (AQM) and prioritisation on one network interface."
 msgstr ""
+"Mit <abbr title=\"Smart Queue Management\">SQM</abbr> können Sie Traffic "
+"Shaping, besseres Mischen (Fair Queueing), aktives Queue Length Management "
+"(AQM) und Priorisierung auf einer Netzwerkschnittstelle aktivieren."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:107
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:149
@@ -219,3 +332,93 @@ msgstr ""
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:219
 msgid "default"
 msgstr "Standardeinstellung"
+
+#~ msgid ""
+#~ "Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress "
+#~ "shaping:"
+#~ msgstr ""
+#~ "Download-Geschwindigkeit (kbit/s) (Ingress) auf 0 setzen, um Ingress-"
+#~ "Shaping selektiv zu deaktivieren:"
+
+#~ msgid ""
+#~ "Explicit congestion notification (ECN) status on inbound packets "
+#~ "(ingress):"
+#~ msgstr ""
+#~ "Explicit congestion notification (ECN) Status für eingehende Pakete "
+#~ "(ingress):"
+
+#~ msgid ""
+#~ "Explicit congestion notification (ECN) status on outbound packets "
+#~ "(egress)."
+#~ msgstr ""
+#~ "Explicit congestion notification (ECN) Status für ausgehende Pakete "
+#~ "(egress)."
+
+#~ msgid "Ignore DSCP on ingress:"
+#~ msgstr "DSCP bei Paketeingang ignorieren:"
+
+#~ msgid ""
+#~ "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
+#~ "interface MTU + overhead:"
+#~ msgstr ""
+#~ "Maximale Größe für Größen- und Ratenberechnungen, tcMTU (Byte); muss >= "
+#~ "Schnittstellen-MTU + Overhead sein:"
+
+#~ msgid ""
+#~ "Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables:"
+#~ msgstr ""
+#~ "Minimale Paketgröße, MPU (Byte); muss > 0 für Ethernet-Größentabellen "
+#~ "sein:"
+
+#~ msgid ""
+#~ "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = "
+#~ "(tcMTU + 1) / 16:"
+#~ msgstr ""
+#~ "Anzahl der Einträge in Größen/Raten-Tabellen, TSIZE; für ATM wählen Sie "
+#~ "TSIZE = (tcMTU + 1) / 16:"
+
+#~ msgid "Per Packet Overhead (byte):"
+#~ msgstr "Overhead pro Paket (Byte):"
+
+#~ msgid ""
+#~ "Queuing disciplines useable on this system. After installing a new qdisc, "
+#~ "you need to restart the router to see updates!"
+#~ msgstr ""
+#~ "Warteschlangenstrukturen die auf diesem System benutzbar sind. Der Router "
+#~ "muss nach der Installation einer neuen qdisc neu gestartet werden, um die "
+#~ "Änderungen sehen zu können."
+
+#~ msgid ""
+#~ "Show Advanced Linklayer Options, (only needed if MTU > 1500). Advanced "
+#~ "options will only be used as long as this box is checked."
+#~ msgstr ""
+#~ "Erweiterte Verbindungsschicht-Optionen anzeigen, (nur erforderlich, wenn "
+#~ "MTU > 1500). Die erweiterten Optionen werden nur verwendet, solange "
+#~ "dieses Kästchen markiert ist."
+
+#~ msgid ""
+#~ "Show and Use Advanced Configuration. Advanced options will only be used "
+#~ "as long as this box is checked."
+#~ msgstr ""
+#~ "Erweiterte Konfiguration anzeigen und verwenden. Die erweiterten Optionen "
+#~ "werden nur verwendet, wenn diese Option ausgewählt ist."
+
+#~ msgid ""
+#~ "Show and Use Dangerous Configuration. Dangerous options will only be used "
+#~ "as long as this box is checked."
+#~ msgstr ""
+#~ "Gefährliche Einstellungen anzeigen und nutzen. Gefährliche Optionen "
+#~ "werden nur benutzt, solange diese Box ausgewählt ist."
+
+#~ msgid "Squash DSCP on inbound packets (ingress):"
+#~ msgstr "Squash DSCP bei eingehenden Paketen (Ingress):"
+
+#~ msgid ""
+#~ "Upload speed (kbit/s) (egress) set to 0 to selectively disable egress "
+#~ "shaping:"
+#~ msgstr ""
+#~ "Upload-Geschwindigkeit (kbit/s) (egress) auf 0 setzen, um die egress "
+#~ "Paketflusskontrolle abzuschalten:"
+
+#~ msgid "Which link layer to account for:"
+#~ msgstr "Welche Verbindungsschicht zu berücksichtigen ist:"

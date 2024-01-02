@@ -7,6 +7,20 @@ var callSystemInfo = rpc.declare({
 	method: 'info'
 });
 
+var callMountPoints = rpc.declare({
+	object: 'luci',
+	method: 'getMountPoints',
+	expect: { result: [] }
+});
+
+var MountSkipList = [
+	"/rom",
+	"/tmp",
+	"/dev",
+	"/overlay",
+	"/",
+]
+
 function progressbar(value, max, byte) {
 	var vn = parseInt(value) || 0,
 	    mn = parseInt(max) || 100,
@@ -24,27 +38,49 @@ return baseclass.extend({
 	title: _('Storage'),
 
 	load: function() {
-		return L.resolveDefault(callSystemInfo(), {});
+		return Promise.all([
+			L.resolveDefault(callSystemInfo(), {}),
+			L.resolveDefault(callMountPoints(), {}),
+		]);
 	},
 
-	render: function(systeminfo) {
-		var root = L.isObject(systeminfo.root) ? systeminfo.root : {},
+	render: function(data) {
+		var systeminfo = data[0],
+		    mounts = data[1],
+		    root = L.isObject(systeminfo.root) ? systeminfo.root : {},
 		    tmp = L.isObject(systeminfo.tmp) ? systeminfo.tmp : {};
 
-		var fields = [];
-		fields.push(_('Disk space'), root.used*1024, root.total*1024);
-		fields.push(_('Temp space'), tmp.used*1024, tmp.total*1024);
+		const existenceChk = function(fields, name, values) {
+			if (!fields.hasOwnProperty(name))
+				fields[name] = values;
+		};
+
+		var fields = {};
+		existenceChk(fields, _('Disk space'), { used: root.used * 1024, size: root.total * 1024 });
+		existenceChk(fields, _('Temp space'), { used: tmp.used * 1024, size: tmp.total * 1024 });
+
+		for (var i = 0; i < mounts.length; i++) {
+			var entry = mounts[i];
+
+			if (MountSkipList.includes(entry.mount))
+				continue;
+
+			var name = entry.device + ' (' + entry.mount +')',
+			    used = entry.size - entry.free;
+
+			existenceChk(fields, name, { used: used, size: entry.size });
+		}
 
 		var table = E('table', { 'class': 'table' });
 
-		for (var i = 0; i < fields.length; i += 3) {
+		Object.keys(fields).forEach(function(key) {
 			table.appendChild(E('tr', { 'class': 'tr' }, [
-				E('td', { 'class': 'td left', 'width': '33%' }, [ fields[i] ]),
+				E('td', { 'class': 'td left', 'width': '33%' }, [ key ]),
 				E('td', { 'class': 'td left' }, [
-					(fields[i + 1] != null) ? progressbar(fields[i + 1], fields[i + 2], true) : '?'
+					(fields[key].used != null) ? progressbar(fields[key].used, fields[key].size, true) : '?'
 				])
 			]));
-		}
+		});
 
 		return table;
 	}

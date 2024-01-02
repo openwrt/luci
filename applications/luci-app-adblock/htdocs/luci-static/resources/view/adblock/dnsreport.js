@@ -139,7 +139,20 @@ function handleAction(ev) {
 		L.ui.showModal(_('Refresh DNS Report'), [
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
-					E('select', { 'class': 'cbi-input-select', 'id': 'count' }, [
+					E('select', { 'class': 'cbi-input-select', 'id': 'top_count' }, [
+						E('option', { 'value': '10' }, '10'),
+						E('option', { 'value': '20' }, '20'),
+						E('option', { 'value': '30' }, '30'),
+						E('option', { 'value': '40' }, '40'),
+						E('option', { 'value': '50' }, '50')
+					]),
+					'\xa0\xa0\xa0',
+					_('max. top statistics')
+				])
+			]),
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
+					E('select', { 'class': 'cbi-input-select', 'id': 'res_count' }, [
 						E('option', { 'value': '50' }, '50'),
 						E('option', { 'value': '100' }, '100'),
 						E('option', { 'value': '150' }, '150'),
@@ -166,9 +179,10 @@ function handleAction(ev) {
 					'class': 'btn cbi-button-action',
 					'id': 'refresh',
 					'click': ui.createHandlerFn(this, async function(ev) {
-						var count = document.getElementById('count').value;
+						var top_count = document.getElementById('top_count').value;
+						var res_count = document.getElementById('res_count').value;
 						var search = document.getElementById('search').value.trim().replace(/[^\w\.\-\:]/g,'') || '+';
-						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', count, search]),'');
+						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]),'');
 						var running = 1;
 						while (running === 1) {
 							await new Promise(r => setTimeout(r, 1000));
@@ -190,7 +204,7 @@ function handleAction(ev) {
 
 return view.extend({
 	load: function() {
-		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '50', '+']),'');
+		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '10', '50', '+']),'');
 	},
 
 	render: function(dnsreport) {
@@ -331,7 +345,7 @@ return view.extend({
 			]),
 			E('div', { 'class': 'cbi-section' }, [
 				E('div', { 'class': 'left' }, [
-					E('h3', _('Top 10 Statistics')),
+					E('h3', _('Top Statistics')),
 					tbl_top
 				])
 			]),

@@ -1,0 +1,14 @@
+{#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2022 Jo-Philipp Wich <jo@mein.io>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{% include('header') %}
+
+<h2 name="content">404 {{ _('Not Found') }}</h2>
+<p>{{ _('Sorry, the object you requested was not found.') }}</p>
+<p>{{ message }}</p>
+<tt>{{ _('Unable to dispatch') }}: {{ dispatcher.build_url(...ctx.request_path) }}</tt>
+
+{% include('footer') %}

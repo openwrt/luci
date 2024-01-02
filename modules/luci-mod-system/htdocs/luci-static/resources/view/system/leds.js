@@ -97,7 +97,7 @@ return view.extend({
 			for (var i = 0; i < plugins.length; i++) {
 				var plugin = plugins[i];
 				if ( plugin.name === trigger)
-					this.description = plugin.form.description || '';
+					this.description = plugin.form.description || ' ';
 			}
 			return trigger;
 		};

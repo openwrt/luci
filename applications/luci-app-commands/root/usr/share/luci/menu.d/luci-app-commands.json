@@ -1,0 +1,56 @@
+{
+	"admin/system/commands": {
+		"title": "Custom Commands",
+		"order": 80,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-commands" ]
+		}
+	},
+
+	"admin/system/commands/dashboard": {
+		"title": "Dashboard",
+		"order": 1,
+		"action": {
+			"type": "template",
+			"path": "commands"
+		}
+	},
+
+	"admin/system/commands/config": {
+		"title": "Configure",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "commands"
+		}
+	},
+
+	"admin/system/commands/run/*": {
+		"order": 3,
+		"action": {
+			"type": "function",
+			"module": "luci.controller.commands",
+			"function": "action_run"
+		}
+	},
+
+	"admin/system/commands/download/*": {
+		"order": 4,
+		"action": {
+			"type": "function",
+			"module": "luci.controller.commands",
+			"function": "action_download"
+		}
+	},
+
+	"command/*": {
+		"action": {
+			"type": "function",
+			"module": "luci.controller.commands",
+			"function": "action_public"
+		}
+	}
+}

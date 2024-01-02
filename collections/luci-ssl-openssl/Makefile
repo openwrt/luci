@@ -14,7 +14,7 @@ LUCI_DESCRIPTION:=LuCI with OpenSSL as the SSL backend (libustream-openssl). \
  OpenSSL cmd tools (openssl-util) are used by uhttpd for SSL key generation \
  instead of the default px5g. (If px5g is installed, uhttpd will prefer that.)
 
-LUCI_DEPENDS:=+luci +libustream-openssl +openssl-util
+LUCI_DEPENDS:=+luci-light +libustream-openssl +openssl-util
 
 include ../../luci.mk
 

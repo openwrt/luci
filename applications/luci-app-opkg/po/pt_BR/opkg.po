@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2020-05-02 15:55+0000\n"
+"PO-Revision-Date: 2022-08-03 00:21+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsopkg/pt_BR/>\n"
@@ -12,21 +12,25 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1044
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
 msgid "Actions"
 msgstr "Ações"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:850
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:792
+msgid "Allow overwriting conflicting package files"
+msgstr "Permite a substituição dos arquivos dos pacotes com conflito"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:953
 msgid "Automatically remove unused dependencies"
 msgstr "Remover automaticamente dependentes não-utilizados"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1054
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1210
 msgid "Available"
 msgstr "Disponível"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:775
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:878
 msgid ""
 "Below is a listing of the various configuration files used by <em>opkg</em>. "
 "Use <em>opkg.conf</em> for global settings and <em>customfeeds.conf</em> for "
@@ -39,61 +43,77 @@ msgstr ""
 "configurações em outros arquivos podem ser alterados, mas normalmente não "
 "são preservados por <em>sysupgrade</em>."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:697
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:743
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:790
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:856
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:949
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:800
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:846
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:893
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:959
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1056
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1031
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1142
 msgid "Clear"
 msgstr "Limpar"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1048
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1159
 msgid "Configure opkg…"
 msgstr "Configurar o opkg…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:669
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:744
 msgid "Dependencies"
 msgstr "Dependentes"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:675
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:835
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1072
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:750
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:938
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1228
 msgid "Description"
 msgstr "Descrição"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:680
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:755
 msgid "Details for package <em>%h</em>"
 msgstr "Detalhes para o pacote <em>%h</em>"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:923
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1030
 msgid "Dismiss"
 msgstr "Dispensar"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:332
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1164
+msgid "Display LuCI translation packages"
+msgstr "Exibe os pacotes de tradução do LuCI"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1181
+msgid "Display all available translation packages"
+msgstr "Exibe todos os pacotes de tradução disponíveis"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1167
+msgid ""
+"Display base translation packages and translation packages for already "
+"installed languages only"
+msgstr ""
+"Exibe os pacotes base de tradução e os pacotes de tradução apenas para os "
+"idiomas já instalados"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:354
 msgid "Displaying %d-%d of %d"
 msgstr "Exibindo %d-%d de %d"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1036
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1147
 msgid "Download and install package"
 msgstr "Baixe e instale o pacote"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:901
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1008
 msgid "Errors"
 msgstr "Erros"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:878
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:982
 msgid "Executing package manager"
 msgstr "Executando o gerenciador de pacotes"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1028
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1139
 msgid "Filter"
 msgstr "Filtro"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1023
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1134
 msgid "Free space"
 msgstr "Espaço livre"
 
@@ -101,20 +121,28 @@ msgstr "Espaço livre"
 msgid "Grant access to opkg management"
 msgstr "Conceder acesso ao gerenciador opkg"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:705
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:721
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:959
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1194
+msgid "Hide all translation packages"
+msgstr "Oculte todos os pacotes de tradução"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:808
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:824
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1066
 msgid "Install"
 msgstr "Instalar"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:283
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:494
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1055
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:780
+msgid "Install suggested translation packages as well"
+msgstr "Instale também os pacotes sugeridos de tradução"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:299
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:522
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1211
 msgid "Installed"
 msgstr "Instalado"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:727
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:936
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:830
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1043
 msgid ""
 "Installing packages from untrusted sources is a potential security risk! "
 "Really attempt to install <em>%h</em>?"
@@ -122,155 +150,160 @@ msgstr ""
 "Instalar pacotes de fontes não confiáveis é um risco de segurança em "
 "potencial! Realmente deseja tentar a instalação de <em>%h</em>?"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:272
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:288
 msgid "Install…"
 msgstr "Instalar…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:754
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:857
 msgid "Loading configuration data…"
 msgstr "Carregando dados de configuração…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:977
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1084
 msgid "Loading package information…"
 msgstr "Carregando informações de pacotes…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:939
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1046
 msgid "MD5"
 msgstr "MD5"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:737
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:935
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:840
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1042
 msgid "Manually install package"
 msgstr "Instalar o pacote manualmente"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:482
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:510
 msgid "Needs upgrade"
 msgstr "Precisa de atualização"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1063
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1219
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1237
 msgid "Next page"
 msgstr "Próxima página"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:345
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:368
 msgid "No information available"
 msgstr "Nenhuma informação disponível"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:333
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:355
 msgid "No packages"
 msgstr "Sem pacotes"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:349
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:372
 msgid "No packages matching \"<strong>%h</strong>\"."
 msgstr "Não há pacotes que correspondam a \"<strong>%h</strong>\"."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:514
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:542
 msgid "Not available"
 msgstr "Não disponível"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:499
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:527
 msgid "Not installed"
 msgstr "Não instalado"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1039
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1150
 msgid "OK"
 msgstr "OK"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:753
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:801
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:815
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:856
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:904
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:918
 msgid "OPKG Configuration"
 msgstr "Configuração do OPKG"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:692
-msgid "Overwrite files from other package(s)"
-msgstr "Sobrescrever arquivos de outro(s) pacote(s)"
-
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1069
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1225
 msgid "Package name"
 msgstr "Nome do Pacote"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1038
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1149
 msgid "Package name or URL…"
 msgstr "Nome do pacote ou URL…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1061
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1217
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1235
 msgid "Previous page"
 msgstr "Página anterior"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:734
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:837
 msgid "Really attempt to install <em>%h</em>?"
 msgstr "Realmente tentar instalar <em>%h</em>?"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:864
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:967
 msgid "Remove"
 msgstr "Remover"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:840
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:943
 msgid "Remove package <em>%h</em>"
 msgstr "Remover o pacote <em>%h</em>"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:260
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:276
 msgid "Remove…"
 msgstr "Remover…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:665
-msgid "Require approx. %.1024mB size for %d package(s) to install."
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:737
+msgid "Require approx. %1024mB size for %d package(s) to install."
 msgstr ""
-"Requer aprox. %.1024mB de tamanho para que o(s) pacote(s) %d sejam "
-"instalados."
+"Requer aprox. %1024mB de tamanho para que o(s) pacote(s) %d sejam instalados."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:489
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:507
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:517
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:535
 msgid "Require version %h %h, installed %h"
 msgstr "Requer a versão%h %h, instalada %h"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:512
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:540
 msgid ""
 "Required dependency package <em>%h</em> is not available in any repository."
 msgstr ""
 "Requer o pacote <em>%h</em> para suprir uma dependência que não está "
 "disponível em nenhum repositório."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:480
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:508
 msgid "Requires update to %h %h"
 msgstr "Requer uma atualização para %h %h"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:350
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:373
 msgid "Reset"
 msgstr "Limpar"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:940
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1047
 msgid "SHA256"
 msgstr "SHA256"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:812
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:915
 msgid "Save"
 msgstr "Salvar"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:802
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:905
 msgid "Saving configuration data…"
 msgstr "Salvando os dados de configuração…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:683
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:843
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:938
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:758
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:946
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1045
 msgid "Size"
 msgstr "Tamanho"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1071
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1227
 msgid "Size (.ipk)"
 msgstr "Tamanho (.ipk)"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1019
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1130
 #: applications/luci-app-opkg/root/usr/share/luci/menu.d/luci-app-opkg.json:3
 msgid "Software"
 msgstr "Software"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:906
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:761
+msgid "Suggested translations"
+msgstr "Traduções sugeridas"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:740
+msgid "Suggested translations require approx. %1024mB additional space."
+msgstr "As traduções sugeridas precisam de aprox. %1024mB de espaço adicional."
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1013
 msgid "The <em>opkg %h</em> command failed with code <code>%d</code>."
 msgstr "O comando <em>opkg %h</em> falhou com o código <code>%d</code>."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:485
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:513
 msgid ""
 "The installed version of package <em>%h</em> is not compatible, require %s "
 "while %s is installed."
@@ -278,13 +311,13 @@ msgstr ""
 "A versão instalada do pacote <em>%h</em> não é compatível, requer o %s "
 "enquanto o %s estiver instalado."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:730
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:833
 msgid "The package <em>%h</em> is not available in any configured repository."
 msgstr ""
 "O pacote <em>%h</em> não está disponível em nenhum repositório previamente "
 "configurado."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:502
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:530
 msgid ""
 "The repository version of package <em>%h</em> is not compatible, require %s "
 "but only %s is available."
@@ -292,66 +325,84 @@ msgstr ""
 "A versão do repositório do pacote <em>%h</em> não é compatível, requer o %s "
 "mas apenas o %s está disponível."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1030
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1141
 msgid "Type to filter…"
 msgstr "Digite para filtrar…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:925
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1032
 msgid "Unable to execute <em>opkg %s</em> command: %s"
 msgstr "Impossível executar o comando <em>opkg %s</em> : %s"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:768
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:871
 msgid "Unable to read %s: %s"
 msgstr "Impossível ler %s: %s"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:807
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:910
 msgid "Unable to save %s: %s"
 msgstr "Impossível salvar %s: %s"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1046
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1157
 msgid "Update lists…"
 msgstr "Atualizar listas…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1056
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1212
 msgid "Updates"
 msgstr "Atualizações"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:249
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:278
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:265
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:294
 msgid "Upgrade…"
 msgstr "Atualizar…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1047
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1158
 msgid "Upload Package…"
 msgstr "Enviar Pacote…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:682
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:842
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1070
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:757
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:945
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1226
 msgid "Version"
 msgstr "Versão"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:491
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:509
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:519
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:537
 msgid "Version incompatible"
 msgstr "Versão incompatível"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:880
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:984
 msgid "Waiting for the <em>opkg %h</em> command to complete…"
 msgstr "Aguardando a conclusão do comando <em>opkg %h</em>…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:643
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:831
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1024
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1190
+msgctxt "Display translation packages"
+msgid "all"
+msgstr "todos"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1177
+msgctxt "Display translation packages"
+msgid "filtered"
+msgstr "filtrado"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1203
+msgctxt "Display translation packages"
+msgid "none"
+msgstr "nenhum"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:673
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:934
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1135
 msgid "unknown"
 msgstr "desconhecido"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:641
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:829
-msgid "~%.1024mB compressed"
-msgstr "~%.1024mB comprimido"
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:671
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:932
+msgid "~%1024mB compressed"
+msgstr "~%1024mB comprimido"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:639
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:827
-msgid "~%.1024mB installed"
-msgstr "~%.1024mB instalado"
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:669
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:930
+msgid "~%1024mB installed"
+msgstr "~%1024mB instalado"
+
+#~ msgid "Overwrite files from other package(s)"
+#~ msgstr "Sobrescrever arquivos de outro(s) pacote(s)"

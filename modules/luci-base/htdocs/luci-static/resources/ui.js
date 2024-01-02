@@ -26,7 +26,7 @@ var modalDiv = null,
  * events.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -134,7 +134,7 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 	 * @memberof LuCI.ui.AbstractElement
 	 * @returns {boolean}
 	 * Returns `true` if the input value has been altered by the user or
-	 * `false` if it is unchaged. Note that if the user modifies the initial
+	 * `false` if it is unchanged. Note that if the user modifies the initial
 	 * value and changes it back to the original state, it is still reported
 	 * as changed.
 	 */
@@ -316,7 +316,7 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
  * The `Textfield` class implements a standard single line text input field.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -374,6 +374,7 @@ var UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
 			'disabled': this.options.disabled ? '' : null,
 			'maxlength': this.options.maxlength,
 			'placeholder': this.options.placeholder,
+			'autocomplete': this.options.password ? 'new-password' : null,
 			'value': this.value,
 		});
 
@@ -440,7 +441,7 @@ var UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
  * The `Textarea` class implements a multiline text area input field.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -556,7 +557,7 @@ var UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
  * The `Checkbox` class implements a simple checkbox input field.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -695,7 +696,7 @@ var UICheckbox = UIElement.extend(/** @lends LuCI.ui.Checkbox.prototype */ {
  * values are enabled or not.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -725,7 +726,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 	 * @property {boolean} [multiple=false]
 	 * Specifies whether multiple choice values may be selected.
 	 *
-	 * @property {string} [widget=select]
+	 * @property {"select"|"individual"} [widget=select]
 	 * Specifies the kind of widget to render. May be either `select` or
 	 * `individual`. When set to `select` an HTML `<select>` element will be
 	 * used, otherwise a group of checkbox or radio button elements is created,
@@ -777,7 +778,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
 		    keys = Object.keys(this.choices);
 
 		if (this.options.sort === true)
-			keys.sort();
+			keys.sort(L.naturalCompare);
 		else if (Array.isArray(this.options.sort))
 			keys = this.options.sort;
 
@@ -903,7 +904,7 @@ var UISelect = UIElement.extend(/** @lends LuCI.ui.Select.prototype */ {
  * supports non-text choice labels.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -1050,13 +1051,14 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			'class': 'cbi-dropdown',
 			'multiple': this.options.multiple ? '' : null,
 			'optional': this.options.optional ? '' : null,
-			'disabled': this.options.disabled ? '' : null
+			'disabled': this.options.disabled ? '' : null,
+			'tabindex': -1
 		}, E('ul'));
 
 		var keys = Object.keys(this.choices);
 
 		if (this.options.sort === true)
-			keys.sort();
+			keys.sort(L.naturalCompare);
 		else if (Array.isArray(this.options.sort))
 			keys = this.options.sort;
 
@@ -1186,11 +1188,11 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		}
 		else {
 			sb.addEventListener('mouseover', this.handleMouseover.bind(this));
+			sb.addEventListener('mouseout', this.handleMouseout.bind(this));
 			sb.addEventListener('focus', this.handleFocus.bind(this));
 
 			canary.addEventListener('focus', this.handleCanaryFocus.bind(this));
 
-			window.addEventListener('mouseover', this.setFocus);
 			window.addEventListener('click', this.closeAllDropdowns);
 		}
 
@@ -1343,7 +1345,12 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 		sb.lastElementChild.setAttribute('tabindex', 0);
 
-		this.setFocus(sb, sel || li[0], true);
+		var focusFn = L.bind(function(el) {
+			this.setFocus(sb, el, true);
+			ul.removeEventListener('transitionend', focusFn);
+		}, this, sel || li[0]);
+
+		ul.addEventListener('transitionend', focusFn);
 	},
 
 	/** @private */
@@ -1559,26 +1566,33 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 	/** @private */
 	setFocus: function(sb, elem, scroll) {
-		if (sb && sb.hasAttribute && sb.hasAttribute('locked-in'))
+		if (sb.hasAttribute('locked-in'))
 			return;
 
-		if (sb.target && findParent(sb.target, 'ul.dropdown'))
-			return;
-
-		document.querySelectorAll('.focus').forEach(function(e) {
-			if (!matchesElem(e, 'input')) {
-				e.classList.remove('focus');
-				e.blur();
-			}
+		sb.querySelectorAll('.focus').forEach(function(e) {
+			e.classList.remove('focus');
 		});
 
-		if (elem) {
-			elem.focus();
-			elem.classList.add('focus');
+		elem.classList.add('focus');
 
-			if (scroll)
-				elem.parentNode.scrollTop = elem.offsetTop - elem.parentNode.offsetTop;
-		}
+		if (scroll)
+			elem.parentNode.scrollTop = elem.offsetTop - elem.parentNode.offsetTop;
+
+		elem.focus();
+	},
+
+	/** @private */
+	handleMouseout: function(ev) {
+		var sb = ev.currentTarget;
+
+		if (!sb.hasAttribute('open'))
+			return;
+
+		sb.querySelectorAll('.focus').forEach(function(e) {
+			e.classList.remove('focus');
+		});
+
+		sb.querySelector('ul.dropdown').focus();
 	},
 
 	/** @private */
@@ -1758,7 +1772,8 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 	/** @private */
 	handleKeydown: function(ev) {
-		var sb = ev.currentTarget;
+		var sb = ev.currentTarget,
+		    ul = sb.querySelector('ul.dropdown');
 
 		if (matchesElem(ev.target, 'input'))
 			return;
@@ -1779,6 +1794,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			switch (ev.keyCode) {
 			case 27:
 				this.closeDropdown(sb);
+				ev.stopPropagation();
 				break;
 
 			case 13:
@@ -1802,11 +1818,19 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 					this.setFocus(sb, active.previousElementSibling);
 					ev.preventDefault();
 				}
+				else if (document.activeElement === ul) {
+					this.setFocus(sb, ul.lastElementChild);
+					ev.preventDefault();
+				}
 				break;
 
 			case 40:
 				if (active && active.nextElementSibling) {
 					this.setFocus(sb, active.nextElementSibling);
+					ev.preventDefault();
+				}
+				else if (document.activeElement === ul) {
+					this.setFocus(sb, ul.firstElementChild);
 					ev.preventDefault();
 				}
 				break;
@@ -1964,7 +1988,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
  * with a set of enforced default properties for easier instantiation.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -2031,7 +2055,7 @@ var UICombobox = UIDropdown.extend(/** @lends LuCI.ui.Combobox.prototype */ {
  * into a dropdown to chose from a set of different action choices.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -2054,7 +2078,7 @@ var UIComboButton = UIDropdown.extend(/** @lends LuCI.ui.ComboButton.prototype *
 	/**
 	 * ComboButtons support the same properties as
 	 * [Dropdown.InitOptions]{@link LuCI.ui.Dropdown.InitOptions} but enforce
-	 * specific values for some properties and add aditional button specific
+	 * specific values for some properties and add additional button specific
 	 * properties.
 	 *
 	 * @typedef {LuCI.ui.Dropdown.InitOptions} InitOptions
@@ -2148,7 +2172,7 @@ var UIComboButton = UIDropdown.extend(/** @lends LuCI.ui.ComboButton.prototype *
  * from a set of predefined choices.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -2171,7 +2195,7 @@ var UIComboButton = UIDropdown.extend(/** @lends LuCI.ui.ComboButton.prototype *
  */
 var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */ {
 	/**
-	 * In case choices are passed to the dynamic list contructor, the widget
+	 * In case choices are passed to the dynamic list constructor, the widget
 	 * supports the same properties as [Dropdown.InitOptions]{@link LuCI.ui.Dropdown.InitOptions}
 	 * but enforces specific values for some dropdown properties.
 	 *
@@ -2208,7 +2232,7 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 			'id': this.options.id,
 			'class': 'cbi-dynlist',
 			'disabled': this.options.disabled ? '' : null
-		}, E('div', { 'class': 'add-item' }));
+		}, E('div', { 'class': 'add-item control-group' }));
 
 		if (this.choices) {
 			if (this.options.placeholder != null)
@@ -2503,7 +2527,7 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
  * which allows to store form data without exposing it to the user.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -2569,7 +2593,7 @@ var UIHiddenfield = UIElement.extend(/** @lends LuCI.ui.Hiddenfield.prototype */
  * browse, select and delete files beneath a predefined remote directory.
  *
  * UI widget instances are usually not supposed to be created by view code
- * directly, instead they're implicitely created by `LuCI.form` when
+ * directly, instead they're implicitly created by `LuCI.form` when
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
@@ -2614,9 +2638,9 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 	 *
 	 * @property {string} [root_directory=/etc/luci-uploads]
 	 * Specifies the remote directory the upload and file browsing actions take
-	 * place in. Browsing to directories outside of the root directory is
+	 * place in. Browsing to directories outside the root directory is
 	 * prevented by the widget. Note that this is not a security feature.
-	 * Whether remote directories are browseable or not solely depends on the
+	 * Whether remote directories are browsable or not solely depends on the
 	 * ACL setup for the current session.
 	 */
 	__init__: function(value, options) {
@@ -2859,13 +2883,8 @@ var UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */ {
 		    rows = E('ul');
 
 		list.sort(function(a, b) {
-			var isDirA = (a.type == 'directory'),
-			    isDirB = (b.type == 'directory');
-
-			if (isDirA != isDirB)
-				return isDirA < isDirB;
-
-			return a.name > b.name;
+			return L.naturalCompare(a.type == 'directory', b.type == 'directory') ||
+			       L.naturalCompare(a.name, b.name);
 		});
 
 		for (var i = 0; i < list.length; i++) {
@@ -3066,7 +3085,7 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 	 * @property {string} name - The internal name of the node, as used in the URL
 	 * @property {number} order - The sort index of the menu node
 	 * @property {string} [title] - The title of the menu node, `null` if the node should be hidden
-	 * @property {satisified} boolean - Boolean indicating whether the menu enries dependencies are satisfied
+	 * @property {satisfied} boolean - Boolean indicating whether the menu entries dependencies are satisfied
 	 * @property {readonly} [boolean] - Boolean indicating whether the menu entries underlying ACLs are readonly
 	 * @property {LuCI.ui.menu.MenuNode[]} [children] - Array of child menu nodes.
 	 */
@@ -3125,7 +3144,24 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 			if (!node.children[k].hasOwnProperty('title'))
 				continue;
 
-			children.push(Object.assign(node.children[k], { name: k }));
+			var subnode = Object.assign(node.children[k], { name: k });
+
+			if (L.isObject(subnode.action) && subnode.action.path != null &&
+			    (subnode.action.type == 'alias' || subnode.action.type == 'rewrite')) {
+				var root = this.menu,
+				    path = subnode.action.path.split('/');
+
+				for (var i = 0; root != null && i < path.length; i++)
+					root = L.isObject(root.children) ? root.children[path[i]] : null;
+
+				if (root)
+					subnode = Object.assign({}, subnode, {
+						children: root.children,
+						action: root.action
+					});
+			}
+
+			children.push(subnode);
 		}
 
 		return children.sort(function(a, b) {
@@ -3135,7 +3171,7 @@ var UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 			if (wA != wB)
 				return wA - wB;
 
-			return a.name > b.name;
+			return L.naturalCompare(a.name, b.name);
 		});
 	}
 });
@@ -3197,19 +3233,26 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		if (!Array.isArray(data))
 			return;
 
+		this.data = data;
+		this.placeholder = placeholder;
+
+		var n = 0,
+		    rows = this.node.querySelectorAll('tr, .tr'),
+		    trows = [],
+		    headings = [].slice.call(this.node.firstElementChild.querySelectorAll('th, .th')),
+		    captionClasses = this.options.captionClasses,
+		    trTag = (rows[0] && rows[0].nodeName == 'DIV') ? 'div' : 'tr',
+		    tdTag = (headings[0] && headings[0].nodeName == 'DIV') ? 'div' : 'td';
+
 		if (sorting) {
 			var list = data.map(L.bind(function(row) {
 				return [ this.deriveSortKey(row[sorting[0]], sorting[0]), row ];
 			}, this));
 
 			list.sort(function(a, b) {
-				if (a[0] < b[0])
-					return sorting[1] ? 1 : -1;
-
-				if (a[0] > b[0])
-					return sorting[1] ? -1 : 1;
-
-				return 0;
+				return sorting[1]
+					? -L.naturalCompare(a[0], b[0])
+					: L.naturalCompare(a[0], b[0]);
 			});
 
 			data.length = 0;
@@ -3217,26 +3260,27 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 			list.forEach(function(item) {
 				data.push(item[1]);
 			});
+
+			headings.forEach(function(th, i) {
+				if (i == sorting[0])
+					th.setAttribute('data-sort-direction', sorting[1] ? 'desc' : 'asc');
+				else
+					th.removeAttribute('data-sort-direction');
+			});
 		}
 
-		this.data = data;
-		this.placeholder = placeholder;
-
-		var n = 0,
-		    rows = this.node.querySelectorAll('tr'),
-		    trows = [],
-		    headings = [].slice.call(this.node.firstElementChild.querySelectorAll('th')),
-		    captionClasses = this.options.captionClasses;
-
 		data.forEach(function(row) {
-			trows[n] = E('tr', { 'class': 'tr' });
+			trows[n] = E(trTag, { 'class': 'tr' });
 
 			for (var i = 0; i < headings.length; i++) {
 				var text = (headings[i].innerText || '').trim();
-				var td = trows[n].appendChild(E('td', {
+				var raw_val = Array.isArray(row[i]) ? row[i][0] : null;
+				var disp_val = Array.isArray(row[i]) ? row[i][1] : row[i];
+				var td = trows[n].appendChild(E(tdTag, {
 					'class': 'td',
-					'data-title': (text !== '') ? text : null
-				}, (row[i] != null) ? row[i] : ''));
+					'data-title': (text !== '') ? text : null,
+					'data-value': raw_val
+				}, (disp_val != null) ? ((disp_val instanceof DocumentFragment) ? disp_val.cloneNode(true) : disp_val) : ''));
 
 				if (typeof(captionClasses) == 'object')
 					DOMTokenList.prototype.add.apply(td.classList, L.toArray(captionClasses[i]));
@@ -3256,11 +3300,11 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		}
 
 		while (rows[++n])
-			target.removeChild(rows[n]);
+			this.node.removeChild(rows[n]);
 
 		if (placeholder && this.node.firstElementChild === this.node.lastElementChild) {
-			var trow = this.node.appendChild(E('tr', { 'class': 'tr placeholder' })),
-			    td = trow.appendChild(E('td', { 'class': 'td' }, placeholder));
+			var trow = this.node.appendChild(E(trTag, { 'class': 'tr placeholder' })),
+			    td = trow.appendChild(E(tdTag, { 'class': 'td' }, placeholder));
 
 			if (typeof(captionClasses) == 'object')
 				DOMTokenList.prototype.add.apply(td.classList, L.toArray(captionClasses[0]));
@@ -3287,6 +3331,7 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		if (!headrow)
 			return;
 
+		options.id = node.id;
 		options.classes = [].slice.call(node.classList).filter(function(c) { return c != 'table' });
 		options.sortable = [];
 		options.captionClasses = [];
@@ -3313,8 +3358,12 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		else if (typeof( opts.sortable) == 'object')
 			hint =  opts.sortable[index];
 
-		if (dom.elem(value))
-			value = value.innerText.trim();
+		if (dom.elem(value)) {
+			if (value.hasAttribute('data-value'))
+				value = value.getAttribute('data-value');
+			else
+				value = (value.innerText || '').trim();
+		}
 
 		switch (hint || 'auto') {
 		case true:
@@ -3381,8 +3430,11 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		if (this.sortState)
 			return this.sortState;
 
+		if (!this.options.id)
+			return null;
+
 		var page = document.body.getAttribute('data-page'),
-		    key = page + '.' + this.id,
+		    key = page + '.' + this.options.id,
 		    state = session.getLocalData('tablesort');
 
 		if (L.isObject(state) && Array.isArray(state[key]))
@@ -3399,7 +3451,7 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 			return;
 
 		var page = document.body.getAttribute('data-page'),
-		    key = page + '.' + this.id,
+		    key = page + '.' + this.options.id,
 		    state = session.getLocalData('tablesort');
 
 		if (!L.isObject(state))
@@ -3415,18 +3467,14 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		if (!ev.target.matches('th[data-sortable-row]'))
 			return;
 
-		var th = ev.target,
-		    direction = (th.getAttribute('data-sort-direction') == 'asc'),
-		    index = 0;
+		var index, direction;
 
-		this.node.firstElementChild.querySelectorAll('th').forEach(function(other_th, i) {
-			if (other_th !== th)
-				other_th.removeAttribute('data-sort-direction');
-			else
+		this.node.firstElementChild.querySelectorAll('th, .th').forEach(function(th, i) {
+			if (th === ev.target) {
 				index = i;
+				direction = th.getAttribute('data-sort-direction') == 'asc';
+			}
 		});
-
-		th.setAttribute('data-sort-direction', direction ? 'desc' : 'asc');
 
 		this.setActiveSortState(index, direction);
 		this.update(this.data, this.placeholder);
@@ -3446,8 +3494,17 @@ var UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	__init__: function() {
 		modalDiv = document.body.appendChild(
-			dom.create('div', { id: 'modal_overlay' },
-				dom.create('div', { class: 'modal', role: 'dialog', 'aria-modal': true })));
+			dom.create('div', {
+				id: 'modal_overlay',
+				tabindex: -1,
+				keydown: this.cancelModal
+			}, [
+				dom.create('div', {
+					class: 'modal',
+					role: 'dialog',
+					'aria-modal': true
+				})
+			]));
 
 		tooltipDiv = document.body.appendChild(
 			dom.create('div', { class: 'cbi-tooltip' }));
@@ -3477,7 +3534,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * be opened. Invoking showModal() while a modal dialog is already open will
 	 * replace the open dialog with a new one having the specified contents.
 	 *
-	 * Additional CSS class names may be passed to influence the appearence of
+	 * Additional CSS class names may be passed to influence the appearance of
 	 * the dialog. Valid values for the classes depend on the underlying theme.
 	 *
 	 * @see LuCI.dom.content
@@ -3485,7 +3542,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * @param {string} [title]
 	 * The title of the dialog. If `null`, no title element will be rendered.
 	 *
-	 * @param {*} contents
+	 * @param {*} children
 	 * The contents to add to the modal dialog. This should be a DOM node or
 	 * a document fragment in most cases. The value is passed as-is to the
 	 * `dom.content()` function - refer to its documentation for applicable
@@ -3511,6 +3568,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 		document.body.classList.add('modal-overlay-active');
 		modalDiv.scrollTop = 0;
+		modalDiv.focus();
 
 		return dlg;
 	},
@@ -3527,6 +3585,17 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 */
 	hideModal: function() {
 		document.body.classList.remove('modal-overlay-active');
+		modalDiv.blur();
+	},
+
+	/** @private */
+	cancelModal: function(ev) {
+		if (ev.key == 'Escape') {
+			var btn = modalDiv.querySelector('.right > button, .right > .btn');
+
+			if (btn)
+				btn.click();
+		}
 	},
 
 	/** @private */
@@ -3597,11 +3666,11 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * Add a notification banner at the top of the current view.
 	 *
 	 * A notification banner is an alert message usually displayed at the
-	 * top of the current view, spanning the entire availibe width.
+	 * top of the current view, spanning the entire available width.
 	 * Notification banners will stay in place until dismissed by the user.
 	 * Multiple banners may be shown at the same time.
 	 *
-	 * Additional CSS class names may be passed to influence the appearence of
+	 * Additional CSS class names may be passed to influence the appearance of
 	 * the banner. Valid values for the classes depend on the underlying theme.
 	 *
 	 * @see LuCI.dom.content
@@ -3610,7 +3679,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * The title of the notification banner. If `null`, no title element
 	 * will be rendered.
 	 *
-	 * @param {*} contents
+	 * @param {*} children
 	 * The contents to add to the notification banner. This should be a DOM
 	 * node or a document fragment in most cases. The value is passed as-is
 	 * to the `dom.content()` function - refer to its documentation for
@@ -3661,7 +3730,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	},
 
 	/**
-	 * Display or update an header area indicator.
+	 * Display or update a header area indicator.
 	 *
 	 * An indicator is a small label displayed in the header area of the screen
 	 * providing few amounts of status information such as item counts or state
@@ -3688,7 +3757,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * Note that this parameter only applies to new indicators, when updating
 	 * existing labels it is ignored.
 	 *
-	 * @param {string} [style=active]
+	 * @param {"active"|"inactive"} [style=active]
 	 * The indicator style to use. May be either `active` or `inactive`.
 	 *
 	 * @returns {boolean}
@@ -3731,7 +3800,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	},
 
 	/**
-	 * Remove an header area indicator.
+	 * Remove a header area indicator.
 	 *
 	 * This function removes the given indicator label from the header indicator
 	 * area. When the given indicator is not found, this function does nothing.
@@ -3765,7 +3834,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * subsequently wrapped into a `<span class="nowrap">` element.
 	 *
 	 * The resulting `<span>` element tuples are joined by the given separators
-	 * to form the final markup which is appened to the given parent DOM node.
+	 * to form the final markup which is appended to the given parent DOM node.
 	 *
 	 * @param {Node} node
 	 * The parent DOM node to append the markup to. Any previous child elements
@@ -4092,7 +4161,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * @param {string} path
 	 * The remote file path to upload the local file to.
 	 *
-	 * @param {Node} [progessStatusNode]
+	 * @param {Node} [progressStatusNode]
 	 * An optional DOM text node whose content text is set to the progress
 	 * percentage value during file upload.
 	 *
@@ -4142,7 +4211,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							'class': 'btn',
 							'click': function() {
 								UI.prototype.hideModal();
-								rejectFn(new Error('Upload has been cancelled'));
+								rejectFn(new Error(_('Upload has been cancelled')));
 							}
 						}, [ _('Cancel') ]),
 						' ',
@@ -4206,7 +4275,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	/**
 	 * Perform a device connectivity test.
 	 *
-	 * Attempt to fetch a well known ressource from the remote device via HTTP
+	 * Attempt to fetch a well known resource from the remote device via HTTP
 	 * in order to test connectivity. This function is mainly useful to wait
 	 * for the router to come back online after a reboot or reconfiguration.
 	 *
@@ -4214,7 +4283,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * The protocol to use for fetching the resource. May be either `http`
 	 * (the default) or `https`.
 	 *
-	 * @param {string} [host=window.location.host]
+	 * @param {string} [ipaddr=window.location.host]
 	 * Override the host address to probe. By default the current host as seen
 	 * in the address bar is probed.
 	 *
@@ -4303,7 +4372,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		 *
 		 * @instance
 		 * @memberof LuCI.ui.changes
-		 * @param {number} numChanges
+		 * @param {number} n
 		 * The number of changes to indicate.
 		 */
 		setIndicator: function(n) {
@@ -4382,10 +4451,16 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							'class': 'btn',
 							'click': UI.prototype.hideModal
 						}, [ _('Close') ]), ' ',
-						E('button', {
-							'class': 'cbi-button cbi-button-positive important',
-							'click': L.bind(this.apply, this, true)
-						}, [ _('Save & Apply') ]), ' ',
+						new UIComboButton('0', {
+							0: [ _('Save & Apply') ],
+							1: [ _('Apply unchecked') ]
+						}, {
+							classes: {
+								0: 'btn cbi-button cbi-button-positive important',
+								1: 'btn cbi-button cbi-button-negative important'
+							},
+							click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
+						}).render(), ' ',
 						E('button', {
 							'class': 'cbi-button cbi-button-reset',
 							'click': L.bind(this.revert, this)
@@ -4455,6 +4530,26 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		},
 
 		/** @private */
+		checkConnectivityAffected: function() {
+			return L.resolveDefault(fs.exec_direct('/usr/libexec/luci-peeraddr', null, 'json')).then(L.bind(function(info) {
+				if (L.isObject(info) && Array.isArray(info.inbound_interfaces)) {
+					for (var i = 0; i < info.inbound_interfaces.length; i++) {
+						var iif = info.inbound_interfaces[i];
+
+						for (var j = 0; this.changes && this.changes.network && j < this.changes.network.length; j++) {
+							var chg = this.changes.network[j];
+
+							if (chg[0] == 'set' && chg[1] == iif && (chg[2] == 'proto' || chg[2] == 'ipaddr' || chg[2] == 'netmask'))
+								return iif;
+						}
+					}
+				}
+
+				return null;
+			}, this));
+		},
+
+		/** @private */
 		rollback: function(checked) {
 			if (checked) {
 				this.displayStatus('warning spinning',
@@ -4491,7 +4586,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							method: 'post',
 							timeout: L.env.apply_timeout * 1000,
 							query: { sid: L.env.sessionid, token: L.env.token }
-						}).then(call);
+						}).then(call, call.bind(null, { status: 0 }, null, 0));
 					}, delay);
 				};
 
@@ -4591,35 +4686,65 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 			this.displayStatus('notice spinning',
 				E('p', _('Starting configuration apply…')));
 
-			request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
-				method: 'post',
-				query: { sid: L.env.sessionid, token: L.env.token }
-			}).then(function(r) {
-				if (r.status === (checked ? 200 : 204)) {
-					var tok = null; try { tok = r.json(); } catch(e) {}
-					if (checked && tok !== null && typeof(tok) === 'object' && typeof(tok.token) === 'string')
-						UI.prototype.changes.confirm_auth = tok;
+			(new Promise(function(resolveFn, rejectFn) {
+				if (!checked)
+					return resolveFn(false);
 
-					UI.prototype.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
-				}
-				else if (checked && r.status === 204) {
-					UI.prototype.changes.displayStatus('notice',
-						E('p', _('There are no changes to apply')));
+				UI.prototype.changes.checkConnectivityAffected().then(function(affected) {
+					if (!affected)
+						return resolveFn(true);
 
-					window.setTimeout(function() {
-						UI.prototype.changes.displayStatus(false);
-					}, L.env.apply_display * 1000);
-				}
-				else {
-					UI.prototype.changes.displayStatus('warning',
-						E('p', _('Apply request failed with status <code>%h</code>')
-							.format(r.responseText || r.statusText || r.status)));
+					UI.prototype.changes.displayStatus('warning', [
+						E('h4', _('Connectivity change')),
+						E('p', _('The network access to this device could be interrupted by changing settings of the "%h" interface.').format(affected)),
+						E('p', _('If the IP address used to access LuCI changes, a <strong>manual reconnect to the new IP</strong> is required within %d seconds to confirm the settings, otherwise modifications will be reverted.').format(L.env.apply_rollback)),
+						E('div', { 'class': 'right' }, [
+							E('button', {
+								'class': 'btn',
+								'click': rejectFn,
+							}, [ _('Cancel') ]), ' ',
+							E('button', {
+								'class': 'btn cbi-button-action important',
+								'click': resolveFn.bind(null, true)
+							}, [ _('Apply with revert after connectivity loss') ]), ' ',
+							E('button', {
+								'class': 'btn cbi-button-negative important',
+								'click': resolveFn.bind(null, false)
+							}, [ _('Apply and keep settings') ])
+						])
+					]);
+				});
+			})).then(function(checked) {
+				request.request(L.url('admin/uci', checked ? 'apply_rollback' : 'apply_unchecked'), {
+					method: 'post',
+					query: { sid: L.env.sessionid, token: L.env.token }
+				}).then(function(r) {
+					if (r.status === (checked ? 200 : 204)) {
+						var tok = null; try { tok = r.json(); } catch(e) {}
+						if (checked && tok !== null && typeof(tok) === 'object' && typeof(tok.token) === 'string')
+							UI.prototype.changes.confirm_auth = tok;
 
-					window.setTimeout(function() {
-						UI.prototype.changes.displayStatus(false);
-					}, L.env.apply_display * 1000);
-				}
-			});
+						UI.prototype.changes.confirm(checked, Date.now() + L.env.apply_rollback * 1000);
+					}
+					else if (checked && r.status === 204) {
+						UI.prototype.changes.displayStatus('notice',
+							E('p', _('There are no changes to apply')));
+
+						window.setTimeout(function() {
+							UI.prototype.changes.displayStatus(false);
+						}, L.env.apply_display * 1000);
+					}
+					else {
+						UI.prototype.changes.displayStatus('warning',
+							E('p', _('Apply request failed with status <code>%h</code>')
+								.format(r.responseText || r.statusText || r.status)));
+
+						window.setTimeout(function() {
+							UI.prototype.changes.displayStatus(false);
+						}, L.env.apply_display * 1000);
+					}
+				});
+			}, this.displayStatus.bind(this, false));
 		},
 
 		/**
@@ -4788,7 +4913,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 *
 	 * By instantiating the view class, its corresponding contents are
 	 * rendered and included into the view area. Any runtime errors are
-	 * catched and rendered using [LuCI.error()]{@link LuCI#error}.
+	 * caught and rendered using [LuCI.error()]{@link LuCI#error}.
 	 *
 	 * @param {string} path
 	 * The view path to render.

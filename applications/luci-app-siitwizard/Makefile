@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=SIIT IPv4-over-IPv6 configuration wizard
-LUCI_DEPENDS:=+luci-compat +kmod-siit
+LUCI_DEPENDS:=+luci-base +luci-compat +kmod-siit
 
 include ../../luci.mk
 

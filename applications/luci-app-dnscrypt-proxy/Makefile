@@ -5,8 +5,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for DNSCrypt-Proxy
-LUCI_DEPENDS:=+luci-compat +uclient-fetch +dnscrypt-proxy +luci-lib-httpprotoutils
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=+luci-base +luci-compat +uclient-fetch +dnscrypt-proxy +luci-lib-httpprotoutils
 
 include ../../luci.mk
 

@@ -22,7 +22,7 @@ function rule_proto_txt(s, ctHelpers) {
 		};
 	});
 
-	m = String(uci.get('firewall', s, 'helper') || '').match(/^(!\s*)?(\S+)$/);
+	var m = String(uci.get('firewall', s, 'helper') || '').match(/^(!\s*)?(\S+)$/);
 	var h = m ? {
 		val:  m[0].toUpperCase(),
 		inv:  m[1],
@@ -240,7 +240,7 @@ return view.extend({
 			var stop_date = uci.get('firewall', section_id, 'stop_date');
 
 			if (weekdays || monthdays || start_time || stop_time || start_date || stop_date )
-				return _('Time restritions are enabled for this rule');
+				return _('Time restrictions are enabled for this rule');
 
 			return null;
 		};
@@ -294,30 +294,52 @@ return view.extend({
 		o.multiple = true;
 		o.custom = true;
 		o.cast = 'table';
-		o.placeholder = _('any');
-		o.value('', 'any');
+		o.placeholder = _('any/all');
 		o.value('address-mask-reply');
 		o.value('address-mask-request');
-		o.value('address-unreachable'); /* ipv6 */
-		o.value('bad-header');  /* ipv6 */
+		o.value('address-unreachable'); /* icmpv6 1:3 */
+		o.value('bad-header');  /* icmpv6 4:0 */
+		o.value('certification-path-solicitation-message'); /* icmpv6 148 */
+		o.value('certification-path-advertisement-message'); /* icmpv6 149 */
 		o.value('communication-prohibited');
 		o.value('destination-unreachable');
+		o.value('duplicate-address-request'); /* icmpv6 157 */
+		o.value('duplicate-address-confirmation'); /* icmpv6 158 */
 		o.value('echo-reply');
 		o.value('echo-request');
+		o.value('extended-echo-request'); /* icmpv6 160 */
+		o.value('extended-echo-reply'); /* icmpv6 161 */
+		o.value('fmipv6-message'); /* icmpv6 154 */
 		o.value('fragmentation-needed');
+		o.value('home-agent-address-discovery-reply-message'); /* icmpv6 145 */
+		o.value('home-agent-address-discovery-request-message'); /* icmpv6 144 */
 		o.value('host-precedence-violation');
 		o.value('host-prohibited');
 		o.value('host-redirect');
 		o.value('host-unknown');
 		o.value('host-unreachable');
+		o.value('ilnpv6-locator-update-message'); /* icmpv6 156 */
+		o.value('inverse-neighbour-discovery-advertisement-message'); /* icmpv6 142 */
+		o.value('inverse-neighbour-discovery-solicitation-message'); /* icmpv6 141 */
 		o.value('ip-header-bad');
+		o.value('mobile-prefix-advertisement'); /* icmpv6 147 */
+		o.value('mobile-prefix-solicitation'); /* icmpv6 146 */
+		o.value('mpl-control-message'); /* icmpv6 159 */
+		o.value('multicast-listener-query'); /* icmpv6 130 */
+		o.value('multicast-listener-report'); /* icmpv6 131 */
+		o.value('multicast-listener-done'); /* icmpv6 132 */
+		o.value('multicast-router-advertisement'); /* icmpv6 151 */
+		o.value('multicast-router-solicitation'); /* icmpv6 152 */
+		o.value('multicast-router-termination'); /* icmpv6 153 */
 		o.value('neighbour-advertisement');
 		o.value('neighbour-solicitation');
 		o.value('network-prohibited');
 		o.value('network-redirect');
 		o.value('network-unknown');
 		o.value('network-unreachable');
-		o.value('no-route');  /* ipv6 */
+		o.value('no-route'); /* icmpv6 1:0 */
+		o.value('node-info-query'); /* icmpv6 139 */
+		o.value('node-info-response'); /* icmpv6 140 */
 		o.value('packet-too-big');
 		o.value('parameter-problem');
 		o.value('port-unreachable');
@@ -326,7 +348,9 @@ return view.extend({
 		o.value('redirect');
 		o.value('required-option-missing');
 		o.value('router-advertisement');
+		o.value('router-renumbering'); /* icmpv6 138 */
 		o.value('router-solicitation');
+		o.value('rpl-control-message'); /* icmpv6 155 */
 		o.value('source-quench');
 		o.value('source-route-failed');
 		o.value('time-exceeded');
@@ -338,8 +362,9 @@ return view.extend({
 		o.value('TOS-network-unreachable');
 		o.value('ttl-zero-during-reassembly');
 		o.value('ttl-zero-during-transit');
-		o.value('unknown-header-type');  /* ipv6 */
-		o.value('unknown-option');  /* ipv6 */
+		o.value('v2-multicast-listener-report'); /* icmpv6 143 */
+		o.value('unknown-header-type'); /* icmpv6 4:1 */
+		o.value('unknown-option'); /* icmpv6 4:2 */
 		o.depends({ proto: 'icmp', '!contains': true });
 		o.depends({ proto: 'icmpv6', '!contains': true });
 
@@ -348,6 +373,14 @@ return view.extend({
 		o.nocreate = true;
 		o.allowany = true;
 		o.allowlocal = 'src';
+
+		o = s.taboption('advanced', form.Value, 'ipset', _('Use ipset'));
+		uci.sections('firewall', 'ipset', function(s) {
+			if (typeof(s.name) == 'string')
+				o.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
+		});
+		o.modalonly = true;
+		o.rmempty = true;
 
 		fwtool.addMACOption(s, 'advanced', 'src_mac', _('Source MAC address'), null, hosts);
 		fwtool.addIPOption(s, 'general', 'src_ip', _('Source address'), null, '', hosts, true);

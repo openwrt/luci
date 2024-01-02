@@ -93,12 +93,11 @@ function handleAction(ev) {
 						w_enc = w_sections[w_sid].encryption;
 						w_key = w_sections[w_sid].key;
 						w_hidden = (w_sections[w_sid].hidden == 1 ? 'true' : 'false');
-						if (w_enc.startsWith('psk')) {
-							w_enc = 'WPA';
-						}
-						else if (w_enc === 'none') {
+						if (w_enc === 'none') {
 							w_enc = 'nopass';
 							w_key = 'nokey';
+						} else {
+							w_enc = 'WPA';
 						}
 						L.resolveDefault(fs.exec_direct('/usr/bin/qrencode', ['--inline', '--8bit', '--type=SVG', '--output=-', 'WIFI:S:' + w_ssid + ';T:' + w_enc + ';P:' + w_key + ';H:' + w_hidden + ';']), null).then(function (res) {
 							if (res) {
@@ -185,9 +184,9 @@ return view.extend({
 							if (station_mac && info) {
 								station_mac.textContent = info.data.station_mac || '-';
 							}
-							var station_interface = document.getElementById('station_interface');
-							if (station_interface && info) {
-								station_interface.textContent = info.data.station_interface || '-';
+							var station_interfaces = document.getElementById('station_interfaces');
+							if (station_interfaces && info) {
+								station_interfaces.textContent = info.data.station_interfaces || '-';
 							}
 							var wpa_flags = document.getElementById('wpa_flags');
 							if (wpa_flags && info) {
@@ -236,8 +235,8 @@ return view.extend({
 					E('div', { 'class': 'cbi-value-field', 'id': 'station_mac', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station Interface')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'station_interface', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Station Interfaces')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'station_interfaces', 'style': 'color:#37c' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('WPA Flags')),
@@ -316,6 +315,27 @@ return view.extend({
 		o.default = 1;
 		o.rmempty = false;
 
+		o = s.taboption('general', form.Flag, 'trm_vpn', _('VPN processing'), _('VPN connections will be managed by travelmate.'));
+		o.default = 1;
+		o.rmempty = false;
+
+		o = s.taboption('general', widgets.NetworkSelect, 'trm_vpnifacelist', _('Limit VPN processing'), _('Limit VPN processing to certain interfaces.'));
+		o.depends('trm_vpn', '1');
+		o.multiple = true;
+		o.nocreate = true;
+		o.rmempty = true;
+
+		o = s.taboption('general', form.Value, 'trm_stdvpnservice', _('Standard VPN Service'), _('Standard VPN service which will be automatically added to new STA profiles.'));
+		o.depends('trm_vpn', '1');
+		o.value('wireguard');
+		o.value('openvpn');
+		o.rmempty = true;
+
+		o = s.taboption('general', widgets.NetworkSelect, 'trm_stdvpniface', _('Standard VPN interface'), _('Standard VPN interface which will be automatically added to new STA profiles.'));
+		o.depends('trm_vpn', '1');
+		o.nocreate = true;
+		o.rmempty = true;
+
 		o = s.taboption('general', form.Flag, 'trm_netcheck', _('Net Error Check'), _('Treat missing internet availability as an error.'));
 		o.depends('trm_captive', '1');
 		o.default = 0;
@@ -382,11 +402,11 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.ListValue, 'trm_useragent', _('User Agent'), _('The selected user agent will be used for connectivity- and captive portal checks.'));
-		o.value('Mozilla/5.0 (X11; Linux x86_64; rv:90.0) Gecko/20100101 Firefox/90.0', 'Firefox (default)');
-		o.value('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36', 'Chromium');
-		o.value('Mozilla/5.0 (Macintosh; Intel Mac OS X 11_5_1) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15', 'Safari');
-		o.value('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 Edg/92.0.902.55', 'Edge');
-		o.value('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36 OPR/77.0.4054.277', 'Opera');
+		o.value('Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0', 'Firefox (default)');
+		o.value('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', 'Chromium');
+		o.value('Mozilla/5.0 (Macintosh; Intel Mac OS X 14_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36', 'Safari');
+		o.value('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 Edg/118.0.2088.61', 'Edge');
+		o.value('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36 OPR/103.0.0.0', 'Opera');
 		o.optional = true;
 		o.rmempty = true;
 

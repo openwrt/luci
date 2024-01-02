@@ -16,7 +16,7 @@
  *  limitations under the License.
  */
 
-#include "template_lmo.h"
+#include "lib/lmo.h"
 
 static void die(const char *msg)
 {
@@ -169,8 +169,11 @@ static void print_msg(struct msg *msg, FILE *out)
 			else
 				snprintf(key, sizeof(key), "%s", msg->id);
 
-			key_id = sfh_hash(key, strlen(key));
-			val_id = sfh_hash(msg->val[i], strlen(msg->val[i]));
+			len = strlen(key);
+			key_id = sfh_hash(key, len, len);
+
+			len = strlen(msg->val[i]);
+			val_id = sfh_hash(msg->val[i], len, len);
 
 			if (key_id != val_id) {
 				n_entries++;

@@ -77,6 +77,7 @@ if (valman == "0") then
         translate("DNSSEC NTP Fix"),
         translate("Break the loop where DNSSEC needs NTP and NTP needs DNS"))
     nvd.optional = true
+    nvd.default = true
     nvd:depends("validator", true)
 
     prt = s1:taboption("basic", Value, "listen_port",

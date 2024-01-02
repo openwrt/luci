@@ -8,8 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for xinetd
-LUCI_DEPENDS:=+xinetd
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=+luci-base +xinetd
 
 PKG_MAINTAINER:=Helge Mader <ma@dev.tdt.de>
 

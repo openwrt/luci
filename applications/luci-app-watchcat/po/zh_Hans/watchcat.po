@@ -4,8 +4,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-08-12 12:55+0000\n"
-"Last-Translator: Eric <spice2wolf@gmail.com>\n"
+"PO-Revision-Date: 2022-12-08 06:15+0000\n"
+"Last-Translator: MkQtS <onewordwrong@aliyun.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationswatchcat/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -13,17 +13,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.8-dev\n"
+"X-Generator: Weblate 4.15-dev\n"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
-"<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify the "
-"interface to monitor and restart if a ping over it fails."
-msgstr ""
-"<i>应用于 Ping Reboot 和 Restart 接口模式</i><br />指定监视接口并在对该接口"
-"的 ping 失败时重新启动。"
+"<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
+"> Specify the interface to monitor and react if a ping over it fails."
+msgstr "<i>应用于 Ping重启、重启接口 和 执行脚本 模式</i> <br />指定要监视的接口并在 "
+"ping 失败时做出反应。"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:72
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
+msgid "Address family for pinging the host"
+msgstr "Ping 主机的地址簇"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
 "Applies to Ping Reboot and Periodic Reboot modes</i> <br /> When rebooting "
 "the router, the service will trigger a soft reboot. Entering a non-zero "
@@ -31,28 +34,28 @@ msgid ""
 "fail. Enter the number of seconds to wait for the soft reboot to fail or use "
 "0 to disable the forced reboot delay."
 msgstr ""
-"应用于 Ping Reboot 和定期 Rebbot 模式</i> <br />当重新启动路由器时，该服务将"
-"触发软重启。如果软重启失败，在这里输入非零值将触发延迟的硬重启。输入等待软重"
-"启失败的秒数或使用 0 来禁用强制重启延迟。"
+"应用于 Ping 重启 和 定时重启 模式</i> <br />当重新启动路由器时，该服务将触发"
+"软重启。如果软重启失败，在这里输入非零值将触发延迟的硬重启。输入等待软重启失"
+"败的秒数或使用 0 来禁用强制重启延迟。"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:88
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
 msgid ""
 "Applies to Ping Reboot and Restart Interface modes</i> <br /> If using "
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
 "specifying its name."
 msgstr ""
-"应用于 Ping Reboot 和 Restart 接口模式</i> <br />如果使用 ModemManager，你可"
-"以通过指定名称让 Watchcat 重新启动你的 ModemManager 接口。"
+"应用于 Ping 重启 和 重启接口 模式</i> <br />如果使用 ModemManager，你可以通过"
+"指定名称让 Watchcat 重新启动你的 ModemManager 接口。"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:63
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:84
 msgid "Big: 248 bytes"
 msgstr "大：248 字节"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:50
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:70
 msgid "Check Interval"
 msgstr "检查间隔"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:93
 msgid "Force Reboot Delay"
 msgstr "强制重启延迟"
 
@@ -69,15 +72,14 @@ msgid ""
 "Here you can set up several checks and actions to take in the event that a "
 "host becomes unreachable. Click the <b>Add</b> button at the bottom to set "
 "up more than one action."
-msgstr ""
-"你可以在此处设置几个在一个主机变得不可访问时采取的检查和操作。点击底部的<b>添"
-"加</b>按钮来设置一个以上的操作。"
+msgstr "你可以在此处设置数个检查以及在特定主机变得不可访问时要采取的操作。点击底部的<"
+"b>添加</b>按钮可以设置多条规则。"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:43
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "Host To Check"
 msgstr "要检查的主机"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:51
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
 msgid ""
 "How often to ping the host specified above. <br /><br />The default unit is "
 "seconds, without a suffix, but you can use the suffix <b>m</b> for minutes, "
@@ -87,19 +89,19 @@ msgid ""
 "li><ul>"
 msgstr ""
 "多长时间 ping 一次上面指定的主机。<br /><br />默认单位是秒，不带后缀，但你可"
-"以使用后缀<b>m</b>代表分钟， <b>h</b> 代表小时或 <b>d</b>代表天数。<br /"
-"><br />样例：<ul><li>10秒是：<b>10</b> o或<b>10s</b></li><li>5 分钟是：: "
-"<b>5m</b></li><li>1 小时是：<b>1h</b></li><li>1 周是：<b>7d</b></li><ul>"
+"以使用后缀<b>m</b>代表分钟， <b>h</b>代表小时或<b>d</b>代表天数。<br /><br />"
+"示例：<ul><li>10秒是：<b>10</b> 或 <b>10s</b></li><li>5 分钟是：<b>5m</b></"
+"li><li>1 小时是：<b>1h</b></li><li>1 周是：<b>7d</b></li><ul>"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:64
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:85
 msgid "Huge: 1492 bytes"
 msgstr "巨大：1492 字节"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:43
-msgid "IPv4 address or hostname to ping."
-msgstr "要执行 ping 操作的 IPv4 地址或主机名。"
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
+msgid "IP address or hostname to ping."
+msgstr "要 ping 的 IP 地址或主机名。"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:95
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
 "If using ModemManager, then before restarting the interface, set the modem "
 "to be allowed to use any band."
@@ -107,36 +109,37 @@ msgstr ""
 "如果使用 ModemManager，则在重新启动接口之前，将调制解调器设置为允许使用任何频"
 "段。"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:32
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:41
 msgid ""
 "In Periodic Reboot mode, it defines how often to reboot. <br /> In Ping "
 "Reboot mode, it defines the longest period of time without a reply from the "
-"Host To Check before a reboot is engaged. <br /> In Network Restart mode, it "
-"defines the longest period of time without a reply from the Host to Check "
-"before the interface is restarted. <br /><br />The default unit is seconds, "
-"without a suffix, but you can use the suffix <b>m</b> for minutes, <b>h</b> "
-"for hours or <b>d</b> for days. <br /><br />Examples:<ul><li>10 seconds "
-"would be: <b>10</b> or <b>10s</b></li><li>5 minutes would be: <b>5m</b></"
-"li><li> 1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
-"li><ul>"
+"Host To Check before a reboot is engaged. <br /> In Network Restart or Run "
+"Script mode, it defines the longest period of time without a reply from the "
+"Host to Check before the interface is restarted or the script is run. <br /"
+"><br />The default unit is seconds, without a suffix, but you can use the "
+"suffix <b>m</b> for minutes, <b>h</b> for hours or <b>d</b> for days. <br /"
+"><br />Examples:<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></"
+"li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
+"li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
-"在定期重启模式下，它定义重启的间隔。 <br />在 Ping 重启模式下，它定义在重启前"
-"没有收到来自要检查的主机的回复的最长时间。<br />在网络重启模式下，它定义接口"
-"重启前，没有收到要检查的主机的回复的最长时间。<br /><br />默认单位是秒，不带"
-"后缀，但你可以使用后缀<b>m</b>代表分钟， <b>h</b> 代表小时或 <b>d</b>代表天"
-"数。<br /><br />样例：<ul><li>10秒是：<b>10</b> o或<b>10s</b></li><li>5 分钟"
-"是：: <b>5m</b></li><li>1 小时是：<b>1h</b></li><li>1 周是：<b>7d</b></"
-"li><ul>"
+"对于 定时重启 模式，它定义了重启的频率。<br />对于 Ping 重启 "
+"模式，它定义了在重启前未收到来自要检查的主机的回复的最长时间。<br />对于 "
+"重启接口 或 执行脚本 "
+"模式，它定义了在重启接口或执行脚本前未收到要检查的主机的回复的最长时间。<br /"
+"><br />默认单位是秒，不带后缀，但你可以使用后缀 <b>m</b> 代表分钟， <b>h</b> "
+"代表小时或 <b>d</b> 代表天。<br /><br />示例：<ul><li>10秒是：<b>10</b> 或 "
+"<b>10s</b></li><li>5 分钟是：<b>5m</b></li><li>1 小时是：<b>1h</b></li><li>1 "
+"周是：<b>7d</b></li><ul>"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
 msgstr "接口"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:103
 msgid "Interface to monitor and/or restart"
 msgstr "要监视和/或重启的接口"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:86
 msgid "Jumbo: 9000 bytes"
 msgstr "巨无霸：9000 字节"
 
@@ -144,23 +147,23 @@ msgstr "巨无霸：9000 字节"
 msgid "Mode"
 msgstr "模式"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:87
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:110
 msgid "Name of ModemManager Interface"
 msgstr "ModemManager 接口的名称"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:31
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:40
 msgid "Period"
 msgstr "周期"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Periodic Reboot"
-msgstr "定期重启"
+msgstr "定时重启"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:59
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
 msgid "Ping Packet Size"
 msgstr "Ping 包大小"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:26
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
 msgid "Ping Reboot"
 msgstr "Ping 重启"
 
@@ -170,21 +173,38 @@ msgid ""
 "specified duration of time. <br /> Periodic Reboot: Reboot this device after "
 "a specified interval of time. <br /> Restart Interface: Restart a network "
 "interface if a ping to a specified host fails for a specified duration of "
-"time."
+"time. <br /> Run Script: Run a script if a ping to a specified host fails "
+"for a specified duration of time. <br />"
 msgstr ""
-"Ping 重启：如果在指定的一段时间内，ping 指定主机始终失败，则重新启动该设备。"
-"<br />定期重启：在指定的时间间隔后重新启动该设备。<br />重启接口：如果在指定"
-"的时间内，ping 指定主机始终失败，则重新启动网络接口。"
+"Ping 重启：如果在指定的时间内，ping 指定主机始终失败，则重新启动本设备。<br "
+"/>定时重启：在指定的时间间隔后重新启动本设备。<br "
+"/>重启接口：如果在指定的时间内，ping "
+"指定主机始终失败，则重新启动特定网络接口。<br "
+"/>执行脚本：如果在指定的时间内，ping 指定主机始终失败，则执行特定脚本。<br />"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
-msgstr "重启实例"
+msgstr "重启接口"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
+msgid "Run Script"
+msgstr "执行脚本"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
+msgid "Script to run"
+msgstr "要执行的脚本"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
+msgid ""
+"Script to run when the host has not responded for the specified duration of "
+"time. The script is passed the interface name as $1"
+msgstr "当特定主机在指定的时间内未回复时要执行的脚本。脚本将接口名称作为 $1 传递"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
 msgstr "小：1 字节"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:62
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:83
 msgid "Standard: 56 bytes"
 msgstr "标准：56 字节"
 
@@ -192,7 +212,7 @@ msgstr "标准：56 字节"
 msgid "These rules will govern how this device reacts to network events."
 msgstr "这些规则将控制此设备如何对网络事件做出反应。"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:117
 msgid "Unlock Modem Bands"
 msgstr "解锁调制解调器频段"
 
@@ -202,9 +222,50 @@ msgstr "解锁调制解调器频段"
 msgid "Watchcat"
 msgstr "Watchcat"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:61
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
 msgid "Windows: 32 bytes"
-msgstr "窗口：32 字节"
+msgstr "Windows：32 字节"
+
+#~ msgid ""
+#~ "<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify "
+#~ "the interface to monitor and restart if a ping over it fails."
+#~ msgstr ""
+#~ "<i>应用于 Ping 重启 和 重启接口 模式</i><br />指定监视接口并在对该接口的 "
+#~ "ping 失败时重新启动。"
+
+#~ msgid "IPv4 address or hostname to ping."
+#~ msgstr "要执行 ping 操作的 IPv4 地址或主机名。"
+
+#~ msgid ""
+#~ "In Periodic Reboot mode, it defines how often to reboot. <br /> In Ping "
+#~ "Reboot mode, it defines the longest period of time without a reply from "
+#~ "the Host To Check before a reboot is engaged. <br /> In Network Restart "
+#~ "mode, it defines the longest period of time without a reply from the Host "
+#~ "to Check before the interface is restarted. <br /><br />The default unit "
+#~ "is seconds, without a suffix, but you can use the suffix <b>m</b> for "
+#~ "minutes, <b>h</b> for hours or <b>d</b> for days. <br /><br />Examples:"
+#~ "<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></li><li>5 minutes "
+#~ "would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></li><li>1 week "
+#~ "would be: <b>7d</b></li><ul>"
+#~ msgstr ""
+#~ "在 定时重启 模式下，它定义重启的间隔。<br />在 Ping 重启 模式下，它定义在"
+#~ "重启前没有收到来自要检查的主机的回复的最长时间。<br />在 重启接口 模式下，"
+#~ "它定义在重启接口前没有收到要检查的主机的回复的最长时间。<br /><br />默认单"
+#~ "位是秒，不带后缀，但你可以使用后缀<b>m</b>代表分钟， <b>h</b>代表小时或"
+#~ "<b>d</b>代表天数。<br /><br />示例：<ul><li>10秒是：<b>10</b> 或 <b>10s</"
+#~ "b></li><li>5 分钟是：<b>5m</b></li><li>1 小时是：<b>1h</b></li><li>1 周"
+#~ "是：<b>7d</b></li><ul>"
+
+#~ msgid ""
+#~ "Ping Reboot: Reboot this device if a ping to a specified host fails for a "
+#~ "specified duration of time. <br /> Periodic Reboot: Reboot this device "
+#~ "after a specified interval of time. <br /> Restart Interface: Restart a "
+#~ "network interface if a ping to a specified host fails for a specified "
+#~ "duration of time."
+#~ msgstr ""
+#~ "Ping 重启：如果在指定的一段时间内，ping 指定主机始终失败，则重新启动该设"
+#~ "备。<br />定时重启：在指定的时间间隔后重新启动该设备。<br />重启接口：如果"
+#~ "在指定的时间内，ping 指定主机始终失败，则重新启动网络接口。"
 
 #~ msgid ""
 #~ "<i>Applies to Ping Reboot and Restart Interface modes</i> <br> Specify "

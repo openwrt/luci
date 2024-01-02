@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Roaring Penguin PPPoE Server
-LUCI_DEPENDS:=+luci-compat +rp-pppoe-server
+LUCI_DEPENDS:=+luci-base +luci-compat +rp-pppoe-server
 
 include ../../luci.mk
 

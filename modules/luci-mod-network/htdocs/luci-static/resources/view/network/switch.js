@@ -224,7 +224,7 @@ return view.extend({
 
 			s.filter = function(section_id) {
 				var device = uci.get('network', section_id, 'device');
-				return (device == switch_name);
+				return (device == this.device);
 			};
 
 			s.cfgsections = function() {
@@ -248,7 +248,7 @@ return view.extend({
 				    max_vid = 0;
 
 				for (var j = 0; j < sections.length; j++) {
-					if (sections[j].device != s.device)
+					if (sections[j].device != this.device)
 						continue;
 
 					var vlan = +sections[j].vlan,
@@ -261,7 +261,7 @@ return view.extend({
 						max_vid = vid;
 				}
 
-				uci.set('network', section_id, 'device', s.device);
+				uci.set('network', section_id, 'device', this.device);
 				uci.set('network', section_id, 'vlan', max_vlan + 1);
 
 				if (feat.vid_option)
@@ -269,8 +269,6 @@ return view.extend({
 
 				return this.map.save(null, true);
 			};
-
-			var port_opts = [];
 
 			o = s.option(form.Value, feat.vid_option || 'vlan', 'VLAN ID');
 			o.rmempty = false;
@@ -299,21 +297,23 @@ return view.extend({
 				return true;
 			};
 
+			var port_opts = o.port_opts = [];
+
 			o.write = function(section_id, value) {
 				var topology = this.section.topology,
 				    values = [];
 
-				for (var i = 0; i < port_opts.length; i++) {
-					var tagging = port_opts[i].formvalue(section_id),
+				for (var i = 0; i < this.port_opts.length; i++) {
+					var tagging = this.port_opts[i].formvalue(section_id),
 					    portspec = Array.isArray(topology.ports) ? topology.ports[i] : null;
 
 					if (tagging == 't')
-						values.push(port_opts[i].option + tagging);
+						values.push(this.port_opts[i].option + tagging);
 					else if (tagging == 'u')
-						values.push(port_opts[i].option);
+						values.push(this.port_opts[i].option);
 
 					if (portspec && portspec.device) {
-						var old_tag = port_opts[i].cfgvalue(section_id),
+						var old_tag = this.port_opts[i].cfgvalue(section_id),
 						    old_vid = this.cfgvalue(section_id);
 
 						if (old_tag != tagging || old_vid != value) {

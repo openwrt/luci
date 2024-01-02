@@ -39,11 +39,16 @@ return network.registerProtocol('vxlan6', {
 
 		o = s.taboption('general', form.Value, 'peer6addr', _('Remote IPv6 address'), _('The IPv6 address or the fully-qualified domain name of the remote end.'));
 		o.optional = false;
-		o.datatype = 'or(hostname,cidr6)';
+		o.datatype = 'or(hostname,ip6addr("nomask"))';
 
 		o = s.taboption('general', form.Value, 'ip6addr', _('Local IPv6 address'), _('The local IPv6 address over which the tunnel is created (optional).'));
 		o.optional = true;
-		o.datatype = 'cidr6';
+		o.datatype = 'ip6addr("nomask")';
+
+		o = s.taboption('general', form.Value, 'port', _('Destination port'));
+		o.optional = true;
+		o.placeholder = 4789;
+		o.datatype = 'port';
 
 		o = s.taboption('general', form.Value, 'vid', _('VXLAN network identifier'), _('ID used to uniquely identify the VXLAN'));
 		o.optional = true;

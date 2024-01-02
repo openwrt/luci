@@ -15,7 +15,7 @@ LUCI_DESCRIPTION:=LuCI with OpenSSL as the SSL backend (libustream-openssl). \
  
 LUCI_DEPENDS:= \
 	+nginx-ssl +nginx-mod-luci-ssl +luci-mod-admin-full +luci-theme-bootstrap \
-	+luci-app-firewall +luci-app-opkg +luci-proto-ppp +libiwinfo-lua +IPV6:luci-proto-ipv6 \
+	+luci-app-firewall +luci-app-opkg +luci-proto-ppp +IPV6:luci-proto-ipv6 \
 	+rpcd-mod-rrdns +openssl-util
 
 PKG_LICENSE:=Apache-2.0

@@ -10,32 +10,46 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.0-dev\n"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:57
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:113
 msgid "5 Minute"
 msgstr "5 perc"
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:21
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:40
 msgid "Cancel"
 msgstr "Mégse"
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:130
+msgid "Clear data for all interfaces"
+msgstr ""
 
 #: applications/luci-app-vnstat2/root/usr/share/luci/menu.d/luci-app-vnstat2.json:27
 msgid "Configuration"
 msgstr "Beállítás"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:59
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:78
+msgid "Could not load graph, no data available:"
+msgstr ""
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:115
 msgid "Daily"
 msgstr "Napi"
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:26
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:82
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:79
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:59
 msgid "Delete"
 msgstr "Törlés"
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:34
+msgid "Delete data for ALL interfaces"
+msgstr ""
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:15
 msgid "Delete interface <em>%h</em>"
 msgstr "A(z) <em>%h</em> csatoló törlése"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:95
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:92
 msgid "Delete…"
 msgstr "Törlés…"
 
@@ -47,11 +61,11 @@ msgstr ""
 msgid "Graphs"
 msgstr "Grafikonok"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:58
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:114
 msgid "Hourly"
 msgstr "Óránként"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:81
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:78
 msgid "Interface"
 msgstr "Csatoló"
 
@@ -59,7 +73,7 @@ msgstr "Csatoló"
 msgid "Interfaces"
 msgstr "Csatolók"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:15
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:71
 msgid "Loading graphs…"
 msgstr "Grafikonok betöltése…"
 
@@ -67,11 +81,11 @@ msgstr "Grafikonok betöltése…"
 msgid "Monitor interfaces"
 msgstr "Csatolók megfigyelése"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:60
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:116
 msgid "Monthly"
 msgstr "Havi"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:62
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:118
 msgid ""
 "No monitored interfaces have been found. Go to the configuration to enable "
 "monitoring for one or more interfaces."
@@ -79,13 +93,19 @@ msgstr ""
 "Nem találhatók megfigyelt csatolók. Menjen a beállításokhoz egy vagy több "
 "csatoló megfigyelésének engedélyezéséhez."
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:99
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:96
 msgid "No unconfigured interfaces found in database."
 msgstr "Nem találhatók beállítatlan csatolók az adatbázisban."
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:55
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:111
 msgid "Summary"
 msgstr "Összegzés"
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:35
+msgid ""
+"The data will be removed from the database permanently. This cannot be "
+"undone."
+msgstr ""
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:16
 msgid ""
@@ -103,7 +123,7 @@ msgstr ""
 "A kiválasztott csatolók automatikusan hozzá lesznek adva indításkor a vnStat "
 "adatbázishoz."
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:104
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:101
 msgid ""
 "These interfaces are present in the vnStat database, but are not configured "
 "above."
@@ -111,15 +131,23 @@ msgstr ""
 "Ezek a csatolók jelen vannak a vnStat adatbázisban, de nincsenek beállítva "
 "fent."
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:56
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:112
 msgid "Top"
 msgstr "Legtöbb"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:102
+#: applications/luci-app-vnstat2/root/usr/share/luci/menu.d/luci-app-vnstat2.json:3
+msgid "Traffic Monitor"
+msgstr ""
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:99
 msgid "Unconfigured interfaces"
 msgstr "Beállítatlan csatolók"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:61
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:108
+msgid "Warning: The service is not running, graphs will not be updated!"
+msgstr ""
+
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:117
 msgid "Yearly"
 msgstr "Évente"
 
@@ -127,13 +155,9 @@ msgstr "Évente"
 msgid "vnStat"
 msgstr "vnStat"
 
-#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:53
+#: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/graphs.js:106
 msgid "vnStat Graphs"
 msgstr "vnStat grafikonok"
-
-#: applications/luci-app-vnstat2/root/usr/share/luci/menu.d/luci-app-vnstat2.json:3
-msgid "vnStat Traffic Monitor"
-msgstr "vnStat forgalom-megfigyelő"
 
 #: applications/luci-app-vnstat2/htdocs/luci-static/resources/view/vnstat2/config.js:43
 msgid ""
@@ -142,3 +166,6 @@ msgid ""
 msgstr ""
 "A vnStat egy hálózatiforgalom-megfigyelő a Linuxhoz, amely megtartja a "
 "kiválasztott csatolók hálózati forgalmának naplóját."
+
+#~ msgid "vnStat Traffic Monitor"
+#~ msgstr "vnStat forgalom-megfigyelő"

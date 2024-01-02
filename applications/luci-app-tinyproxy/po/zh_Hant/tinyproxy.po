@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-01-28 10:32+0000\n"
-"Last-Translator: akibou <jinwenxin1997@icloud.com>\n"
+"PO-Revision-Date: 2022-07-18 03:20+0000\n"
+"Last-Translator: Hulen <shift0106@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstinyproxy/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -10,14 +10,16 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.5-dev\n"
+"X-Generator: Weblate 4.14-dev\n"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:219
 msgid ""
 "<em>Via proxy</em> routes requests to the given target via the specified "
 "upstream proxy, <em>Reject access</em> disables any upstream proxy for the "
 "target"
-msgstr "<em>通過代理</em>通過指定的上游代理將請求路由到給定目標，<em>拒絕存取</em>為目標禁用任何上游代理"
+msgstr ""
+"<em>通過代理</em>通過指定的上游代理將請求路由到給定目標，<em>拒絕存取</em>為"
+"目標禁用任何上游代理"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:108
 msgid ""
@@ -142,9 +144,9 @@ msgstr "允許使用代理伺服器的IP地址或範圍的列表"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:134
 msgid ""
-"List of allowed ports for the CONNECT method. A single value \"0\" allows "
-"all ports"
-msgstr "CONNECT方式允許的埠號列表。單個值“ 0”允許所有埠"
+"List of allowed ports for the CONNECT method. A single value \"0\" disables "
+"CONNECT completely, an empty list allows all ports"
+msgstr "CONNECT 方法允許的端口列表。 單個值“0”完全禁用 CONNECT，空列表允許所有端口"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:39
 msgid "Listen address"
@@ -156,7 +158,7 @@ msgstr "監聽埠"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:73
 msgid "Log file"
-msgstr "日誌檔"
+msgstr "日誌檔案"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:74
 msgid "Log file to use for dumping messages"
@@ -266,8 +268,8 @@ msgstr "指定運行Tinyproxy程序的群組名稱"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:234
 msgid ""
 "Specifies the upstream proxy to use for accessing the target host. Format is "
-"<code>address:port</code>"
-msgstr "指定用於存取目標主機的上游代理。格式為<code>位址：埠號 </code>"
+"<code>address:port</code> or <code>socks5 address:port</code>"
+msgstr "指定用於存取目標主機的上游代理。格式為<code>位址：埠號 </code> 或 <code>socks5 位址：埠號 </code>"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:92
 msgid "Specifies the user name the Tinyproxy process is running as"
@@ -336,3 +338,8 @@ msgstr "將日誌消息寫入syslog而不是日誌文件"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:107
 msgid "X-Tinyproxy header"
 msgstr "X-Tinyproxy標頭"
+
+#~ msgid ""
+#~ "List of allowed ports for the CONNECT method. A single value \"0\" allows "
+#~ "all ports"
+#~ msgstr "CONNECT方式允許的埠號列表。單個值“ 0”允許所有埠"

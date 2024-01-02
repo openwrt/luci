@@ -20,8 +20,10 @@ var commonConf = [
 	[form.Value, 'server_addr', _('Server address'), _('ServerAddr specifies the address of the server to connect to.<br />By default, this value is "0.0.0.0".'), {datatype: 'host'}],
 	[form.Value, 'server_port', _('Server port'), _('ServerPort specifies the port to connect to the server on.<br />By default, this value is 7000.'), {datatype: 'port'}],
 	[form.Value, 'http_proxy', _('HTTP proxy'), _('HttpProxy specifies a proxy address to connect to the server through. If this value is "", the server will be connected to directly.<br />By default, this value is read from the "http_proxy" environment variable.')],
+	[form.Value, 'log_file', _('Log file'), _('LogFile specifies a file where logs will be written to. This value will only be used if LogWay is set appropriately.<br />By default, this value is "console".')],
 	[form.ListValue, 'log_level', _('Log level'), _('LogLevel specifies the minimum log level. Valid values are "trace", "debug", "info", "warn", and "error".<br />By default, this value is "info".'), {values: ['trace', 'debug', 'info', 'warn', 'error']}],
-	[form.Flag, 'disable_log_color', _('Disable log color'), _('DisableLogColor disables log colors when LogWay == "console" when set to true.'), {datatype: 'bool', default: 'true'}],
+	[form.Value, 'log_max_days', _('Log max days'), _('LogMaxDays specifies the maximum number of days to store log information before deletion. This is only used if LogWay == "file".<br />By default, this value is 0.'), {datatype: 'uinteger'}],
+	[form.Flag, 'disable_log_color', _('Disable log color'), _('DisableLogColor disables log colors when LogWay == "console" when set to true.'), {datatype: 'bool', default: 'false'}],
 	[form.Value, 'token', _('Token'), _('Token specifies the authorization token used to create keys to be sent to the server. The server must have a matching token for authorization to succeed. <br />By default, this value is "".')],
 	[form.Value, 'admin_addr', _('Admin address'), _('AdminAddr specifies the address that the admin server binds to.<br />By default, this value is "127.0.0.1".'), {datatype: 'ipaddr'}],
 	[form.Value, 'admin_port', _('Admin port'), _('AdminPort specifies the port for the admin server to listen on. If this value is 0, the admin server will not be started.<br />By default, this value is 0.'), {datatype: 'port'}],
@@ -39,10 +41,11 @@ var commonConf = [
 ];
 
 var baseProxyConf = [
+	[form.Value, 'name', _('Proxy name'), undefined, {rmempty: false, optional: false}],
 	[form.ListValue, 'type', _('Proxy type'), _('ProxyType specifies the type of this proxy. Valid values include "tcp", "udp", "http", "https", "stcp", and "xtcp".<br />By default, this value is "tcp".'), {values: ['tcp', 'udp', 'http', 'https', 'stcp', 'xtcp']}],
 	[form.Flag, 'use_encryption', _('Encryption'), _('UseEncryption controls whether or not communication with the server will be encrypted. Encryption is done using the tokens supplied in the server and client configuration.<br />By default, this value is false.'), {datatype: 'bool'}],
 	[form.Flag, 'use_compression', _('Compression'), _('UseCompression controls whether or not communication with the server will be compressed.<br />By default, this value is false.'), {datatype: 'bool'}],
-	[form.Value, 'local_ip', _('Local IP'), _('LocalIp specifies the IP address or host name to proxy to.'), {datatype: 'ipaddr'}],
+	[form.Value, 'local_ip', _('Local IP'), _('LocalIp specifies the IP address or host name to proxy to.'), {datatype: 'host'}],
 	[form.Value, 'local_port', _('Local port'), _('LocalPort specifies the port to proxy to.'), {datatype: 'port'}],
 ];
 
@@ -65,7 +68,18 @@ var httpProxyConf = [
 
 var stcpProxyConf = [
 	[form.ListValue, 'role', _('Role'), undefined, {values: ['server', 'visitor']}],
+	[form.Value, 'server_name', _('Server name'), undefined, {depends: [{role: 'visitor'}]}],
 	[form.Value, 'sk', _('Sk')],
+];
+
+var pluginConf = [
+	[form.ListValue, 'plugin', _('Plugin'), undefined, {values: ['', 'http_proxy', 'socks5', 'unix_domain_socket'], rmempty: true}],
+	[form.Value, 'plugin_http_user', _('HTTP user'), undefined, {depends: {plugin: 'http_proxy'}}],
+	[form.Value, 'plugin_http_passwd', _('HTTP password'), undefined, {depends: {plugin: 'http_proxy'}}],
+	[form.Value, 'plugin_user', _('SOCKS5 user'), undefined, {depends: {plugin: 'socks5'}}],
+	[form.Value, 'plugin_passwd', _('SOCKS5 password'), undefined, {depends: {plugin: 'socks5'}}],
+	[form.Value, 'plugin_unix_path', _('Unix domain socket path'), undefined, {depends: {plugin: 'unix_domain_socket'}, optional: false, rmempty: false,
+		datatype: 'file', placeholder: '/var/run/docker.sock', default: '/var/run/docker.sock'}],
 ];
 
 function setParams(o, params) {
@@ -82,12 +96,20 @@ function setParams(o, params) {
 		} else if (key === 'depends') {
 			if (!Array.isArray(val))
 				val = [val];
+
+			var deps = [];
 			for (var j = 0; j < val.length; j++) {
-				var args = val[j];
-				if (!Array.isArray(args))
-					args = [args];
-				o.depends.apply(o, args);
+				var d = {};
+				for (var vkey in val[j])
+					d[vkey] = val[j][vkey];
+				for (var k = 0; k < o.deps.length; k++) {
+					for (var dkey in o.deps[k]) {
+						d[dkey] = o.deps[k][dkey];
+					}
+				}
+				deps.push(d);
 			}
+			o.deps = deps;
 		} else {
 			o[key] = params[key];
 		}
@@ -135,7 +157,7 @@ function getServiceStatus() {
 
 function renderStatus(isRunning) {
 	var renderHTML = "";
-	var spanTemp = "<span style=\"color:%s;font-weight:bold;margin-left:15px\">%s - %s</span>";
+	var spanTemp = '<em><span style="color:%s"><strong>%s %s</strong></span></em>';
 
 	if (isRunning) {
 		renderHTML += String.format(spanTemp, 'green', _("frp Client"), _("RUNNING"));
@@ -163,8 +185,8 @@ return view.extend({
 			});
 
 			return E('div', { class: 'cbi-map' },
-				E('div', { class: 'cbi-section'}, [
-					E('div', { id: 'service_status' },
+				E('fieldset', { class: 'cbi-section'}, [
+					E('p', { id: 'service_status' },
 						_('Collecting data ...'))
 				])
 			);
@@ -186,24 +208,29 @@ return view.extend({
 		defOpts(s, startupConf);
 
 		s = m.section(form.GridSection, 'conf', _('Proxy Settings'));
+		s.anonymous = true;
 		s.addremove = true;
+		s.sortable = true;
+		s.addbtntitle = _('Add new proxy...');
+
 		s.filter = function(s) { return s !== 'common'; };
-		s.renderSectionAdd = function(extra_class) {
-			var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
-				nameEl = el.querySelector('.cbi-section-create-name');
-			ui.addValidator(nameEl, 'uciname', true, function(v) {
-				if (v === 'common') return _('Name can not be "common"');
-				return true;
-			}, 'blur', 'keyup');
-			return el;
-		}
 
 		s.tab('general', _('General Settings'));
 		s.tab('http', _('HTTP Settings'));
+		s.tab('plugin', _('Plugin Settings'));
 
+		s.option(form.Value, 'name', _('Proxy name')).modalonly = false;
 		s.option(form.Value, 'type', _('Proxy type')).modalonly = false;
 		s.option(form.Value, 'local_ip', _('Local IP')).modalonly = false;
 		s.option(form.Value, 'local_port', _('Local port')).modalonly = false;
+		o = s.option(form.Value, 'remote_port', _('Remote port'));
+		o.modalonly = false;
+		o.depends('type', 'tcp');
+		o.depends('type', 'udp');
+		o.cfgvalue = function() {
+			var v = this.super('cfgvalue', arguments);
+			return v&&v!='0'?v:'#';
+		};
 
 		defTabOpts(s, 'general', baseProxyConf, {modalonly: true});
 
@@ -218,6 +245,9 @@ return view.extend({
 
 		// STCP and XTCP
 		defTabOpts(s, 'general', stcpProxyConf, {modalonly: true, depends: [{type: 'stcp'}, {type: 'xtcp'}]});
+
+		// Plugin
+		defTabOpts(s, 'plugin', pluginConf, {modalonly: true});
 
 		return m.render();
 	}

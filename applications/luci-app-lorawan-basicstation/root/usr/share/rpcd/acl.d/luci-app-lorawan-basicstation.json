@@ -1,0 +1,14 @@
+{
+	"luci-app-lorawan-basicstation": {
+		"description": "Grant UCI access for luci-app-lorawan-basicstation",
+		"read": {
+			"file": {
+				"/tmp/basicstation/log": [ "read" ]
+			},
+			"uci": [ "basicstation" ]
+		},
+		"write": {
+			"uci": [ "basicstation" ]
+		}
+	}
+}

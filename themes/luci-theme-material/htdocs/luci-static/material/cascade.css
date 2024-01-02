@@ -76,7 +76,8 @@
 	background: inherit;
 }
 
-.td[width="33%"] {
+.td[width="33%"], 
+.td[width="33%"]~.td {
 	padding: 1.1em;
 }
 
@@ -199,6 +200,7 @@ input,
 	background-color: transparent;
 	background-image: none;
 	box-shadow: none;
+	align-items: center;
 }
 
 select,
@@ -402,7 +404,7 @@ header > .fill > .container > #logo {
 
 header > .fill > .container > #logo > img {
 	width: calc(0% + 10rem);
-	margin-top: -.1rem;
+	margin-top: -.5rem;
 }
 
 header > .fill > .container > .brand {
@@ -464,7 +466,7 @@ header > .fill > .container > .status > * {
 }
 
 #modemenu > li > a.active {
-	background-color: #5bc0de !important;
+	background-color: #002B49 !important;
 }
 
 #modemenu > li.divider {
@@ -494,7 +496,7 @@ header > .fill > .container > .status > * {
 
 .notice,
 [data-indicator]:not([data-style="inactive"]) {
-	background-color: #5bc0de !important;
+	background-color: #002B49 !important;
 }
 
 .error {
@@ -582,8 +584,7 @@ header > .fill > .container > .status > * {
 }
 
 .main > .main-left > .nav > .slide > .menu,
-.main > .main-left > .nav > li > [data-title="Logout"],
-.main > .main-left > .nav > li > [data-title="Dashboard"] {
+.main > .main-left > .nav > li > [data-title] {
 	font-size: 1.15rem;
 	font-weight: 500;
 	display: flex;
@@ -1650,7 +1651,6 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 
 .cbi-progressbar::after {
 	font-family: monospace;
-	font-size: 1.3em;
 	font-weight: bold;
 	font-size-adjust: .38;
 	line-height: normal;
@@ -1735,6 +1735,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .modal p {
 	padding-left: .25rem;
 	word-break: break-word;
+	color: #fff;
 }
 
 .modal label.btn {
@@ -1836,6 +1837,7 @@ body.modal-overlay-active #modal_overlay {
 
 .ifacebadge {
 	display: inline-flex;
+	gap: .2rem;
 	padding: .5rem .8rem;
 	border-bottom: thin solid #ccc;
 	background: #eee;
@@ -1852,11 +1854,6 @@ td > .ifacebadge,
 .ifacebadge > img {
 	display: inline-block;
 	align-self: flex-start;
-	margin: 0 .2rem;
-}
-
-.ifacebadge > img + img {
-	margin: 0 .2rem 0 0;
 }
 
 .network-status-table {
@@ -2341,6 +2338,12 @@ input[name="nslookup"] {
 	margin-bottom: .2rem;
 }
 
+.control-group {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 2px;
+}
+
 [data-page="admin-system-opkg"] div.btn {
 	line-height: 3;
 	display: inline;
@@ -2650,7 +2653,7 @@ input[name="nslookup"] {
 	.main > .main-left > .nav > li,
 	.main > .main-left > .nav > li a,
 	.main > .main-left > .nav > .slide > .menu,
-	.main > .main-left > .nav > li > [data-title="Logout"] {
+	.main > .main-left > .nav > li > [data-title] {
 		font-size: .9rem;
 	}
 
@@ -2929,7 +2932,7 @@ input[name="nslookup"] {
 	}
 
 	.main > .main-left > .nav > .slide > .menu,
-	.main > .main-left > .nav > li > [data-title="Logout"] {
+	.main > .main-left > .nav > li > [data-title] {
 		font-size: 1.2rem;
 	}
 

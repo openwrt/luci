@@ -77,6 +77,7 @@ return baseclass.extend({
 			var percent = {
 				title: title,
 				y_min: "0",
+				y_max: "2",
 				alt_autoscale_max: true,
 				vlabel: "Percent",
 				number_format: "%5.1lf%%",
@@ -142,6 +143,7 @@ return baseclass.extend({
 			p = {
 				title: title,
 				y_min: "0",
+				y_max: "2",
 				alt_autoscale_max: true,
 				vlabel: "Percent",
 				number_format: "%5.1lf%%",

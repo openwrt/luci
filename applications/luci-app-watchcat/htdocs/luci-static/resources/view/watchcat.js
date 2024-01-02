@@ -22,29 +22,49 @@ return view.extend({
 			_('Mode'),
 			_("Ping Reboot: Reboot this device if a ping to a specified host fails for a specified duration of time. <br /> \
 				Periodic Reboot: Reboot this device after a specified interval of time. <br /> \
-				Restart Interface: Restart a network interface if a ping to a specified host fails for a specified duration of time."));
+				Restart Interface: Restart a network interface if a ping to a specified host fails for a specified duration of time. <br />\
+				Run Script: Run a script if a ping to a specified host fails for a specified duration of time. <br />"));
 		o.value('ping_reboot', _('Ping Reboot'));
 		o.value('periodic_reboot', _('Periodic Reboot'));
 		o.value('restart_iface', _('Restart Interface'));
+		o.value('run_script', _('Run Script'));
+
+		o = s.taboption('general', form.Value, 'script',
+				_('Script to run'),
+				_(`Script to run when the host has not responded for the specified duration of time. The script is passed the interface name as $1`));
+		o.datatype = 'file';
+		o.default = "/etc/watchcat.user.sh";
+		o.depends({ mode: "run_script" });
 
 		o = s.taboption('general', form.Value, 'period', 
 			_('Period'), 
 			_("In Periodic Reboot mode, it defines how often to reboot. <br /> \
 				In Ping Reboot mode, it defines the longest period of \
 				time without a reply from the Host To Check before a reboot is engaged. <br /> \
-				In Network Restart mode, it defines the longest period of \
-				time without a reply from the Host to Check before the interface is restarted. \
+				In Network Restart or Run Script mode, it defines the longest period of \
+				time without a reply from the Host to Check before the interface is restarted or the script is run. \
 				<br /><br />The default unit is seconds, without a suffix, but you can use the \
 				suffix <b>m</b> for minutes, <b>h</b> for hours or <b>d</b> \
 				for days. <br /><br />Examples:<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></li><li>5 minutes would be: <b>5m</b></li><li> \
 				1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></li><ul>"));
 		o.default = '6h';
 
-		o = s.taboption('general', form.Value, 'pinghosts', _('Host To Check'), _(`IPv4 address or hostname to ping.`));
-		o.datatype = 'host(1)';
+		o = s.taboption('general', form.Value, 'pinghosts', _('Host To Check'), _(`IP address or hostname to ping.`));
+		o.datatype = 'host';
 		o.default = '8.8.8.8';
 		o.depends({ mode: "ping_reboot" });
 		o.depends({ mode: "restart_iface" });
+		o.depends({ mode: "run_script" });
+
+		o = s.taboption('general', form.ListValue, 'addressfamily',
+				_('Address family for pinging the host'));
+		o.default = 'any';
+		o.depends({ mode: 'ping_reboot' });
+		o.depends({ mode: 'restart_iface' });
+		o.depends({ mode: "run_script" });
+		o.value('any');
+		o.value('ipv4');
+		o.value('ipv6');
 
 		o = s.taboption('general', form.Value, 'pingperiod', 
 			_('Check Interval'), 
@@ -54,6 +74,7 @@ return view.extend({
 		o.default = '30s';
 		o.depends({ mode: "ping_reboot" });
 		o.depends({ mode: "restart_iface" });
+		o.depends({ mode: "run_script" });
 
 		o = s.taboption('general', form.ListValue, 'pingsize', 
 			_('Ping Packet Size'));
@@ -66,6 +87,7 @@ return view.extend({
 		o.default = 'standard';
 		o.depends({ mode: 'ping_reboot' });
 		o.depends({ mode: 'restart_iface' });
+		o.depends({ mode: "run_script" });
 
 		o = s.taboption('general', form.Value, 'forcedelay',
 			_('Force Reboot Delay'),
@@ -79,9 +101,10 @@ return view.extend({
 		o = s.taboption('general', widgets.DeviceSelect, 'interface',
 			_('Interface'),
 			_('Interface to monitor and/or restart'),
-			_('<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify the interface to monitor and restart if a ping over it fails.'));
+			_('<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /> Specify the interface to monitor and react if a ping over it fails.'));
 		o.depends({ mode: 'ping_reboot' });
 		o.depends({ mode: 'restart_iface' });
+		o.depends({ mode: 'run_script' });
 
 		o = s.taboption('general', widgets.NetworkSelect, 'mmifacename',
 			_('Name of ModemManager Interface'), 

@@ -477,23 +477,33 @@ return baseclass.extend({
 
 	addLocalIPOption: function(s, tab, name, label, description, devices) {
 		var o = s.taboption(tab, form.Value, name, label, description);
+		var fw4 = L.hasSystemFeature('firewall4');
 
 		o.modalonly = true;
-		o.datatype = 'ip4addr("nomask")';
+		o.datatype = !fw4?'ip4addr("nomask")':'ipaddr("nomask")';
 		o.placeholder = _('any');
 
 		L.sortedKeys(devices, 'name').forEach(function(dev) {
 			var ip4addrs = devices[dev].ipaddrs;
+			var ip6addrs = devices[dev].ip6addrs;
 
-			if (!L.isObject(devices[dev].flags) || !Array.isArray(ip4addrs) || devices[dev].flags.loopback)
+			if (!L.isObject(devices[dev].flags) || devices[dev].flags.loopback)
 				return;
 
-			for (var i = 0; i < ip4addrs.length; i++) {
+			for (var i = 0; Array.isArray(ip4addrs) && i < ip4addrs.length; i++) {
 				if (!L.isObject(ip4addrs[i]) || !ip4addrs[i].address)
 					continue;
 
 				o.value(ip4addrs[i].address, E([], [
 					ip4addrs[i].address, ' (', E('strong', {}, [dev]), ')'
+				]));
+			}
+			for (var i = 0; fw4 && Array.isArray(ip6addrs) && i < ip6addrs.length; i++) {
+				if (!L.isObject(ip6addrs[i]) || !ip6addrs[i].address)
+					continue;
+
+				o.value(ip6addrs[i].address, E([], [
+					ip6addrs[i].address, ' (', E('strong', {}, [dev]), ')'
 				]));
 			}
 		});

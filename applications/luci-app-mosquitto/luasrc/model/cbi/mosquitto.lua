@@ -58,6 +58,7 @@ o = s:option(Value, "sys_interval", _("Time in seconds between updates of the $S
 o.datatype = "uinteger"
 o.optional = true
 
+OptionalFlag(s, "allow_anonymous", _("Allow anonymous connections"), _("Allow to connect without providing a username and password"))
 o = s:option(Value, "max_inflight_messages", _("Max Inflight Messages"), _("Limit for message allowed inflight"))
 o.datatype = "uinteger"
 o.optional = true
@@ -159,9 +160,9 @@ topics = s:option(DynamicList, "topic", _("topic"),
 
 OptionalFlag(s, "cleansession", _("Clean session"))
 OptionalFlag(s, "notifications", _("notifications"),
-    _("Attempt to notify the local and remote broker of connection status, defaults to $SYS/broker/connections/<clientid>/state"))
+    _("Attempt to notify the local and remote broker of connection status, defaults to $SYS/broker/connections/&lt;clientid&gt;/state"))
 s:option(Value, "notification_topic", _("Topic to use for local+remote remote for notifications.")).optional = true
-OptionalFlag(s, "notification_local_only", _("Notifications local only"), _("Bridge connection states should only be published locally"))
+OptionalFlag(s, "notifications_local_only", _("Notifications local only"), _("Bridge connection states should only be published locally"))
 
 s:option(Value, "remote_clientid", _("Client id to use on remote end of this bridge connection")).optional = true
 s:option(Value, "local_clientid", _("Client id to use locally. Important when bridging to yourself")).optional = true

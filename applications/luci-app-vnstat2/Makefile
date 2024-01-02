@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for vnStat 2
-LUCI_DEPENDS:=+luci-lib-jsonc +vnstat2 +vnstati2
+LUCI_DEPENDS:=+luci-base +luci-lib-jsonc +vnstat2 +vnstati2
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Jan Hoffmann <jan@3e8.eu>

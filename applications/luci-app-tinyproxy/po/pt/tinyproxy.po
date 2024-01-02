@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 19:03+0200\n"
-"PO-Revision-Date: 2020-12-10 19:29+0000\n"
+"PO-Revision-Date: 2022-06-12 16:30+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstinyproxy/pt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.4-dev\n"
+"X-Generator: Weblate 4.13-dev\n"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:219
 msgid ""
@@ -161,11 +161,11 @@ msgstr ""
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:134
 msgid ""
-"List of allowed ports for the CONNECT method. A single value \"0\" allows "
-"all ports"
+"List of allowed ports for the CONNECT method. A single value \"0\" disables "
+"CONNECT completely, an empty list allows all ports"
 msgstr ""
-"List as portas que podem utilizar o método CONNECT. Um valor \"0\" único "
-"permitirá todas as portas"
+"Lista de portas permitidas para o método CONNECT. Um único valor \"0\" "
+"desativa o CONNECT completamente, uma lista vazia permite todas as portas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:39
 msgid "Listen address"
@@ -298,10 +298,10 @@ msgstr ""
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:234
 msgid ""
 "Specifies the upstream proxy to use for accessing the target host. Format is "
-"<code>address:port</code>"
+"<code>address:port</code> or <code>socks5 address:port</code>"
 msgstr ""
 "Especifica o proxy superior para usar quando acessar o alvo. Formato é "
-"<code>address:port</code>"
+"<code>address:port</code> or <code>socks5 address:port</code>"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:92
 msgid "Specifies the user name the Tinyproxy process is running as"
@@ -373,6 +373,13 @@ msgstr "Escreve as mensagens para o syslog ao invés do ficheiro de log"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:107
 msgid "X-Tinyproxy header"
 msgstr "Cabeçalho do X-Tinyproxy"
+
+#~ msgid ""
+#~ "List of allowed ports for the CONNECT method. A single value \"0\" allows "
+#~ "all ports"
+#~ msgstr ""
+#~ "List as portas que podem utilizar o método CONNECT. Um valor \"0\" único "
+#~ "permitirá todas as portas"
 
 #~ msgid "Allow access from"
 #~ msgstr "Permitir acesso de"

@@ -1,5 +1,6 @@
 'use strict';
 'require baseclass';
+'require network';
 'require rpc';
 
 var callDSLMetrics = rpc.declare({
@@ -7,6 +8,12 @@ var callDSLMetrics = rpc.declare({
 	method: 'metrics',
 	expect: { '': {} }
 });
+
+function format_values(format, val1, val2) {
+	var val1Str = (val1 != null) ? format.format(val1) : '-';
+	var val2Str = (val2 != null) ? format.format(val2) : '-';
+	return val1Str + ' / ' + val2Str;
+}
 
 function renderbox(dsl) {
 	return E('div', { class: 'ifacebox' }, [
@@ -17,24 +24,10 @@ function renderbox(dsl) {
 				_('Line State'), dsl.state || '-',
 				_('Line Mode'), dsl.mode || '-',
 				_('Line Uptime'), '%t'.format(dsl.uptime),
-				_('Annex'), dsl.annex || '-',
-				_('Data Rate'), '%1000.3mb/s / %1000.3mb/s'.format(dsl.downstream.data_rate, dsl.upstream.data_rate),
-				_('Max. Attainable Data Rate (ATTNDR)'), '%1000.3mb/s / %1000.3mb/s'.format(dsl.downstream.attndr, dsl.upstream.attndr),
-				_('Latency'), '%.2f ms / %.2f ms'.format(dsl.downstream.interleave_delay / 1000, dsl.upstream.interleave_delay / 1000),
-				_('Line Attenuation (LATN)'), '%.1f dB / %.1f dB'.format(dsl.downstream.latn, dsl.upstream.latn),
-				_('Signal Attenuation (SATN)'), '%.1f dB / %.1f dB'.format(dsl.downstream.satn, dsl.upstream.satn),
-				_('Noise Margin (SNR)'), '%.1f dB / %.1f dB'.format(dsl.downstream.snr, dsl.upstream.snr),
-				_('Aggregate Transmit Power (ACTATP)'), '%.1f dB / %.1f dB'.format(dsl.downstream.actatp, dsl.upstream.actatp),
-				_('Forward Error Correction Seconds (FECS)'), '%d / %d'.format(dsl.errors.near.fecs, dsl.errors.far.fecs),
-				_('Errored seconds (ES)'), '%d / %d'.format(dsl.errors.near.es, dsl.errors.far.es),
-				_('Severely Errored Seconds (SES)'), '%d / %d'.format(dsl.errors.near.ses, dsl.errors.far.ses),
-				_('Loss of Signal Seconds (LOSS)'), '%d / %d'.format(dsl.errors.near.loss, dsl.errors.far.loss),
-				_('Unavailable Seconds (UAS)'), '%d / %d'.format(dsl.errors.near.uas, dsl.errors.far.uas),
-				_('Header Error Code Errors (HEC)'), '%d / %d'.format(dsl.errors.near.hec, dsl.errors.far.hec),
-				_('Non Pre-emptive CRC errors (CRC_P)'), '%d / %d'.format(dsl.errors.near.crc_p, dsl.errors.far.crc_p),
-				_('Pre-emptive CRC errors (CRCP_P)'), '%d / %d'.format(dsl.errors.near.crcp_p, dsl.errors.far.crcp_p),
-				_('ATU-C System Vendor ID'), dsl.atu_c.vendor || dsl.atu_c.vendor_id,
-				_('Power Management Mode'), dsl.power_state
+			]),
+			L.itemlist(E('span'), [
+				_('Data Rate'), format_values('%1000.3mb/s', dsl.downstream.data_rate, dsl.upstream.data_rate),
+				_('Noise Margin'), format_values('%.1f dB', dsl.downstream.snr, dsl.upstream.snr),
 			])
 		])
 	]);
@@ -44,10 +37,12 @@ return baseclass.extend({
 	title: _('DSL'),
 
 	load: function() {
-		if (!L.hasSystemFeature('dsl'))
-			return Promise.reject();
+		return network.getDSLModemType().then(function(type) {
+			if (!type)
+				return Promise.reject();
 
-		return L.resolveDefault(callDSLMetrics(), {});
+			return L.resolveDefault(callDSLMetrics(), {});
+		});
 	},
 
 	render: function(dsl) {

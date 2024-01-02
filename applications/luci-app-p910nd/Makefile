@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=p910nd - Printer server module
-LUCI_DEPENDS:=+luci-compat +p910nd
+LUCI_DEPENDS:=+luci-base +luci-compat +p910nd
 
 include ../../luci.mk
 

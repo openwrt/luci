@@ -51,7 +51,7 @@ function file.cfgvalue()
 end
 
 function file.write(self, section, data1)
-	return fs.writefile(cfg_file, "\n" .. util.trim(data1:gsub("\r\n", "\n")) .. "\n")
+	return fs.writefile(cfg_file, util.trim(data1:gsub("\r\n", "\n")) .. "\n")
 end
 
 function file.remove(self, section, value)

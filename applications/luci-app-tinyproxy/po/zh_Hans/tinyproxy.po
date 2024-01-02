@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-01-13 00:56+0000\n"
-"Last-Translator: 孤爺仔 <7312140@qq.com>\n"
+"PO-Revision-Date: 2023-03-11 13:38+0000\n"
+"Last-Translator: Eric <hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationstinyproxy/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.4.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:219
 msgid ""
@@ -18,7 +18,8 @@ msgid ""
 "upstream proxy, <em>Reject access</em> disables any upstream proxy for the "
 "target"
 msgstr ""
-"<em>Via proxy</em> 通过指定的上游代理将请求路由到给定的目标，<em>Reject access</em> 禁用目标的任何上游代理"
+"<em>Via proxy</em> 通过指定的上游代理将请求路由到给定的目标，<em>Reject "
+"access</em> 禁用目标的任何上游代理"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:108
 msgid ""
@@ -42,7 +43,8 @@ msgstr "绑定地址"
 msgid ""
 "By default, basic POSIX expressions are used for filtering. Enable this to "
 "activate extended regular expressions"
-msgstr "默认情况下，使用基本的POSIX表达式进行过滤。启用它来激活扩展的正则表达式"
+msgstr ""
+"默认情况下，使用基本的POSIX表达式进行过滤。启用它来激活扩展的正则表达式"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:153
 msgid ""
@@ -143,9 +145,9 @@ msgstr "允许访问代理服务器的IP或IP段列表"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:134
 msgid ""
-"List of allowed ports for the CONNECT method. A single value \"0\" allows "
-"all ports"
-msgstr "值CONNECT方法允许的端口列表。单个值“0”代表允许所有端口"
+"List of allowed ports for the CONNECT method. A single value \"0\" disables "
+"CONNECT completely, an empty list allows all ports"
+msgstr "CONNECT 方式允许的端口列表。单一值“0”完全禁用 CONNECT，空列表允许所有端口"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:39
 msgid "Listen address"
@@ -267,8 +269,8 @@ msgstr "指定Tinyproxy进程所属组"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:234
 msgid ""
 "Specifies the upstream proxy to use for accessing the target host. Format is "
-"<code>address:port</code>"
-msgstr "指定上级代理. 格式 <code>IP地址:端口</code>"
+"<code>address:port</code> or <code>socks5 address:port</code>"
+msgstr "指定上级代理. 格式 <code>IP地址:端口</code> 或 <code>socks5 IP地址:端口</code>"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:92
 msgid "Specifies the user name the Tinyproxy process is running as"
@@ -337,3 +339,8 @@ msgstr "将日志写入系统日志以代替指定的日志文件"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:107
 msgid "X-Tinyproxy header"
 msgstr "X-Tinyproxy头"
+
+#~ msgid ""
+#~ "List of allowed ports for the CONNECT method. A single value \"0\" allows "
+#~ "all ports"
+#~ msgstr "值CONNECT方法允许的端口列表。单个值“0”代表允许所有端口"

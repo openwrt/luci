@@ -333,15 +333,15 @@ return view.extend({
 					'data-col':     'ip',
 					'data-tooltip': _('Source IP')
 				}, (mac !== '00:00:00:00:00:00') ? mac : _('other')),
-				E('a', {
+				[ rec.conns, E('a', {
 					'href':         '#' + rec.mac,
 					'data-col':     'layer7',
 					'data-tooltip': _('Protocol')
-				}, '%1000.2m'.format(rec.conns)),
-				'%1024.2mB'.format(rec.rx_bytes),
-				'%1000.2mP'.format(rec.rx_pkts),
-				'%1024.2mB'.format(rec.tx_bytes),
-				'%1000.2mP'.format(rec.tx_pkts)
+				}, '%1000.2m'.format(rec.conns)) ],
+				[ rec.rx_bytes, '%1024.2mB'.format(rec.rx_bytes) ],
+				[ rec.rx_pkts,  '%1000.2mP'.format(rec.rx_pkts)  ],
+				[ rec.tx_bytes, '%1024.2mB'.format(rec.tx_bytes) ],
+				[ rec.tx_pkts,  '%1000.2mP'.format(rec.tx_pkts)  ]
 			]);
 
 			trafData.push({
@@ -389,11 +389,11 @@ return view.extend({
 
 			rows.push([
 				cell,
-				'%1000m'.format(rec.conns),
-				'%1024.2mB'.format(rec.rx_bytes),
-				'%1000.2mP'.format(rec.rx_pkts),
-				'%1024.2mB'.format(rec.tx_bytes),
-				'%1000.2mP'.format(rec.tx_pkts)
+				[ rec.conns,    '%1000m'.format(rec.conns)       ],
+				[ rec.rx_bytes, '%1024.2mB'.format(rec.rx_bytes) ],
+				[ rec.rx_pkts,  '%1000.2mP'.format(rec.rx_pkts)  ],
+				[ rec.tx_bytes, '%1024.2mB'.format(rec.tx_bytes) ],
+				[ rec.tx_pkts,  '%1000.2mP'.format(rec.tx_pkts)  ]
 			]);
 
 			rxData.push({
@@ -501,16 +501,41 @@ return view.extend({
 			rows.push([
 				this.formatHostname(dns),
 				mac,
-				[ E('span', _('IPv4')),
-				  E('span', _('IPv6')) ],
-				[ E('span', rec4 ? '%1024.2mB'.format(rec4.rx_bytes) : '-'),
-				  E('span', rec6 ? '%1024.2mB'.format(rec6.rx_bytes) : '-') ],
-				[ E('span', rec4 ? '%1000.2mP'.format(rec4.rx_pkts)  : '-'),
-				  E('span', rec6 ? '%1000.2mP'.format(rec6.rx_pkts)  : '-') ],
-				[ E('span', rec4 ? '%1024.2mB'.format(rec4.tx_bytes) : '-'),
-				  E('span', rec6 ? '%1024.2mB'.format(rec6.tx_bytes) : '-') ],
-				[ E('span', rec4 ? '%1000.2mP'.format(rec4.tx_pkts)  : '-'),
-				  E('span', rec6 ? '%1000.2mP'.format(rec6.tx_pkts)  : '-') ]
+				[
+					0,
+					E([], [
+						E('span', _('IPv4')),
+						E('span', _('IPv6'))
+					])
+				],
+				[
+					(rec4 ? rec4.rx_bytes : 0) + (rec6 ? rec6.rx_bytes : 0),
+					E([], [
+						E('span', rec4 ? '%1024.2mB'.format(rec4.rx_bytes) : '-'),
+						E('span', rec6 ? '%1024.2mB'.format(rec6.rx_bytes) : '-')
+					])
+				],
+				[
+					(rec4 ? rec4.rx_pkts : 0) + (rec6 ? rec6.rx_pkts : 0),
+					E([], [
+						E('span', rec4 ? '%1000.2mP'.format(rec4.rx_pkts)  : '-'),
+						E('span', rec6 ? '%1000.2mP'.format(rec6.rx_pkts)  : '-')
+					])
+				],
+				[
+					(rec4 ? rec4.tx_bytes : 0) + (rec6 ? rec6.tx_bytes : 0),
+					E([], [
+						E('span', rec4 ? '%1024.2mB'.format(rec4.tx_bytes) : '-'),
+						E('span', rec6 ? '%1024.2mB'.format(rec6.tx_bytes) : '-')
+					])
+				],
+				[
+					(rec4 ? rec4.tx_pkts : 0) + (rec6 ? rec6.tx_pkts : 0),
+					E([], [
+						E('span', rec4 ? '%1000.2mP'.format(rec4.tx_pkts)  : '-'),
+						E('span', rec6 ? '%1000.2mP'.format(rec6.tx_pkts)  : '-')
+					])
+				]
 			]);
 		}
 
@@ -617,11 +642,11 @@ return view.extend({
 
 			rows.push([
 				cell,
-				'%1000.2m'.format(rec.conns),
-				'%1024.2mB'.format(rec.rx_bytes),
-				'%1000.2mP'.format(rec.rx_pkts),
-				'%1024.2mB'.format(rec.tx_bytes),
-				'%1000.2mP'.format(rec.tx_pkts)
+				[ rec.conns,    '%1000.2m'.format(rec.conns)     ],
+				[ rec.rx_bytes, '%1024.2mB'.format(rec.rx_bytes) ],
+				[ rec.rx_pkts,  '%1000.2mP'.format(rec.rx_pkts)  ],
+				[ rec.tx_bytes, '%1024.2mB'.format(rec.tx_bytes) ],
+				[ rec.tx_pkts,  '%1000.2mP'.format(rec.tx_pkts)  ]
 			]);
 
 			rxData.push({

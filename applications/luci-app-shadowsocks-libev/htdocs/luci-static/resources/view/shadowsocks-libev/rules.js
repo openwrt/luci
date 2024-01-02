@@ -16,8 +16,7 @@ function src_dst_option(s /*, ... */) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(fs.stat('/usr/lib/iptables/libxt_recent.so'), {}),
-			L.resolveDefault(fs.stat('/usr/bin/ss-rules'), null),
+			L.resolveDefault(fs.stat('/usr/share/ss-rules'), null),
 			uci.load(conf).then(function() {
 				if (!uci.get_first(conf, 'ss_rules')) {
 					uci.set(conf, uci.add(conf, 'ss_rules', 'ss_rules'), 'disabled', '1');
@@ -44,7 +43,7 @@ return view.extend({
 		s.tab('dst', _('Destination Settings'));
 
 		s.taboption('general', form.Flag, 'disabled', _('Disable'));
-		if (!stats[1]) {
+		if (!stats[0]) {
 			ss.option_install_package(s, 'general');
 		}
 
@@ -65,9 +64,12 @@ return view.extend({
 		o.multiple = true;
 		o.noaliases = true;
 		o.noinactive = true;
-		s.taboption('general', form.Value, 'ipt_args',
-			_('Extra arguments'),
-			_('Passes additional arguments to iptables. Use with care!'));
+		s.taboption('general', form.Value, 'nft_tcp_extra',
+			_('Extra tcp expression'),
+			_('Extra nftables expression for matching tcp traffics, e.g. "tcp dport { 80, 443 }"'));
+		s.taboption('general', form.Value, 'nft_udp_extra',
+			_('Extra udp expression'),
+			_('Extra nftables expression for matching udp traffics, e.g. "udp dport { 53 }"'));
 
 		src_dst_option(s, 'src', form.DynamicList, 'src_ips_bypass',
 			_('Src ip/net bypass'),
@@ -103,21 +105,6 @@ return view.extend({
 			_('Dst default'),
 			_('Default action for packets whose dst address do not match any of the dst ip list'));
 		ss.values_actions(o);
-
-		if (stats[0].type === 'file') {
-			o = s.taboption('dst', form.Flag, 'dst_forward_recentrst');
-		} else {
-			uci.set(conf, 'ss_rules', 'dst_forward_recentrst', '0');
-			o = s.taboption('dst', form.Button, '_install');
-			o.inputtitle = _('Install package iptables-mod-conntrack-extra');
-			o.inputstyle = 'apply';
-			o.onclick = function() {
-				window.open(L.url('admin/system/opkg') +
-					'?query=iptables-mod-conntrack-extra', '_blank', 'noopener');
-			}
-		}
-		o.title = _('Forward recentrst');
-		o.description = _('Forward those packets whose dst have recently sent to us multiple tcp-rst');
 
 		return m.render();
 	},

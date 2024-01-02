@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for DynaPoint
-LUCI_DEPENDS:=+luci-compat +luci-lib-ipkg +dynapoint
+LUCI_DEPENDS:=+luci-base +luci-compat +luci-lib-ipkg +dynapoint
 
 PKG_LICENSE:=GPL-3.0+
 PKG_MAINTAINER:=Tobias Ilte <tobias.ilte@campus.tu-berlin.de>

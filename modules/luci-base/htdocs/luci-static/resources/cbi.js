@@ -370,12 +370,7 @@ function cbi_validate_form(form, errmsg)
 function cbi_validate_named_section_add(input)
 {
 	var button = input.parentNode.parentNode.querySelector('.cbi-button-add');
-	if (input.value !== '') {
-		button.disabled = false;
-	}
-	else {
-		button.disabled = true;
-	}
+	button.disabled = input.value === '';
 }
 
 function cbi_validate_reset(form)
@@ -796,5 +791,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			L.hideTooltip(ev);
 	});
 
-	document.querySelectorAll('.table').forEach(cbi_update_table);
+	L.require('ui').then(function(ui) {
+		document.querySelectorAll('.table').forEach(cbi_update_table);
+	});
 });

@@ -30,9 +30,9 @@ s = m:section(TypedSection, "default", translate("NFT-QoS Settings"))
 s.addremove = false
 s.anonymous = true
 
-s:tab("limit", "Limit Rate by IP Address")
-s:tab("limitmac", "Limit Rate by Mac Address")
-s:tab("priority", "Traffic Priority")
+s:tab("limit", translate("Limit Rate by IP Address"))
+s:tab("limitmac", translate("Limit Rate by Mac Address"))
+s:tab("priority", translate("Traffic Priority"))
 
 --
 -- Static
@@ -173,10 +173,6 @@ if limit_enable == "1" and limit_type == "static" then
 	if nixio.fs.access("/tmp/dhcp.leases") or nixio.fs.access("/var/dhcp6.leases") then
 		o.titleref = luci.dispatcher.build_url("admin", "status", "overview")
 	end
-
-	o = y:option(Value, "macaddr", translate("MAC (optional)"))
-	o.rmempty = true
-	o.datatype = "macaddr"
 
 	o = y:option(Value, "rate", translate("Rate"))
 	o.default = def_rate_ul or '50'

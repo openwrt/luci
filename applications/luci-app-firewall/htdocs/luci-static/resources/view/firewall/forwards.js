@@ -9,6 +9,8 @@
 'require tools.widgets as widgets';
 
 function rule_proto_txt(s, ctHelpers) {
+	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:all|\*)$/, 'any');
+	var dip = uci.get('firewall', s, 'dest_ip') || '';
 	var proto = L.toArray(uci.get('firewall', s, 'proto')).filter(function(p) {
 		return (p != '*' && p != 'any' && p != 'all');
 	}).map(function(p) {
@@ -20,7 +22,7 @@ function rule_proto_txt(s, ctHelpers) {
 		};
 	});
 
-	m = String(uci.get('firewall', s, 'helper') || '').match(/^(!\s*)?(\S+)$/);
+	var m = String(uci.get('firewall', s, 'helper') || '').match(/^(!\s*)?(\S+)$/);
 	var h = m ? {
 		val:  m[0].toUpperCase(),
 		inv:  m[1],
@@ -35,7 +37,9 @@ function rule_proto_txt(s, ctHelpers) {
 		mask: m[3] ? '0x%02X'.format(+m[3]) : null
 	} : null;
 
-	return fwtool.fmt(_('Incoming IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="cbi-tooltip-container">%{item.name}<span class="cbi-tooltip">ICMP with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip="Match any helper except &quot;%{helper.name}&quot;">%{helper.val}</var>:<var data-tooltip="%{helper.name}">%{helper.val}</var>}}'), {
+	return fwtool.fmt(_('Incoming %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%{next?, }%{item.types?<var class="cbi-tooltip-container">%{item.name}<span class="cbi-tooltip">ICMP with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip="Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.":%{mark.mask? data-tooltip="Mask fwmark value with %{mark.mask} before compare."}}>%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip="Match any helper except &quot;%{helper.name}&quot;">%{helper.val}</var>:<var data-tooltip="%{helper.name}">%{helper.val}</var>}}'), {
+		ipv4: ((!family && dip.indexOf(':') == -1) || family == 'any' || (!family && !dip) || family == 'ipv4'),
+		ipv6: ((!family && dip.indexOf(':') != -1) || family == 'any' || family == 'ipv6'),
 		proto: proto,
 		helper: h,
 		mark:   f
@@ -85,6 +89,24 @@ function rule_target_txt(s) {
 	});
 }
 
+function validate_opt_family(m, section_id, opt) {
+	var dopt = m.section.getOption('dest_ip'),
+	    fmopt = m.section.getOption('family');
+
+	if (!dopt.isValid(section_id) && opt != 'dest_ip')
+		return true;
+	if (!fmopt.isValid(section_id) && opt != 'family')
+		return true;
+
+	var dip = dopt.formvalue(section_id) || '',
+	    fm = fmopt.formvalue(section_id) || '';
+
+	if (fm == '' || (fm == 'any' && dip == '') || (fm == 'ipv6' && (dip.indexOf(':') != -1 || dip == '')) || (fm == 'ipv4' && dip.indexOf(':') == -1))
+		return true;
+
+	return _('Address family, Internal IP address must match');
+}
+
 return view.extend({
 	callHostHints: rpc.declare({
 		object: 'luci-rpc',
@@ -125,6 +147,7 @@ return view.extend({
 		    ctHelpers = data[1],
 		    devs = data[2],
 		    m, s, o;
+		var fw4 = L.hasSystemFeature('firewall4');
 
 		m = new form.Map('firewall', _('Firewall - Port Forwards'),
 			_('Port forwarding allows remote computers on the Internet to connect to a specific computer or service within the private LAN.'));
@@ -160,6 +183,32 @@ return view.extend({
 		o.placeholder = _('Unnamed forward');
 		o.modalonly = true;
 
+		if (fw4) {
+			o = s.taboption('general', form.ListValue, 'family', _('Restrict to address family'));
+			o.modalonly = true;
+			o.rmempty = true;
+			o.value('any', _('IPv4 and IPv6'));
+			o.value('ipv4', _('IPv4 only'));
+			o.value('ipv6', _('IPv6 only'));
+			o.value('', _('automatic'));  // infer from zone or used IP addresses
+			o.cfgvalue = function(section_id) {
+				var val = this.map.data.get(this.map.config, section_id, 'family');
+
+				if (!val)
+					return '';
+				else if (val == 'any' || val == 'all' || val == '*')
+					return 'any';
+				else if (val == 'inet' || String(val).indexOf('4') != -1)
+					return 'ipv4';
+				else if (String(val).indexOf('6') != -1)
+					return 'ipv6';
+			};
+			o.validate = function(section_id, value) {
+				fwtool.updateHostHints(this.map, section_id, 'dest_ip', value, hosts);
+				return !fw4?true:validate_opt_family(this, section_id, 'family');
+			};
+		}
+
 		o = s.option(form.DummyValue, '_match', _('Match'));
 		o.modalonly = false;
 		o.textvalue = function(s) {
@@ -194,15 +243,23 @@ return view.extend({
 		o.nocreate = true;
 		o.default = 'wan';
 
+		o = s.taboption('advanced', form.Value, 'ipset', _('Use ipset'));
+		uci.sections('firewall', 'ipset', function(s) {
+			if (typeof(s.name) == 'string')
+				o.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
+		});
+		o.modalonly = true;
+		o.rmempty = true;
+
 		o = fwtool.addMACOption(s, 'advanced', 'src_mac', _('Source MAC address'),
 			_('Only match incoming traffic from these MACs.'), hosts);
 		o.rmempty = true;
 		o.datatype = 'list(neg(macaddr))';
 
 		o = fwtool.addIPOption(s, 'advanced', 'src_ip', _('Source IP address'),
-			_('Only match incoming traffic from this IP or range.'), 'ipv4', hosts);
+			_('Only match incoming traffic from this IP or range.'), !fw4?'ipv4':'', hosts);
 		o.rmempty = true;
-		o.datatype = 'neg(ipmask4("true"))';
+		o.datatype = !fw4?'neg(ipmask4("true"))':'neg(ipmask("true"))';
 
 		o = s.taboption('advanced', form.Value, 'src_port', _('Source port'),
 			_('Only match incoming traffic originating from the given source port or port range on the client host'));
@@ -215,7 +272,7 @@ return view.extend({
 
 		o = fwtool.addLocalIPOption(s, 'advanced', 'src_dip', _('External IP address'),
 			_('Only match incoming traffic directed at the given IP address.'), devs);
-		o.datatype = 'neg(ipmask4("true"))';
+		o.datatype = !fw4?'neg(ipmask4("true"))':'neg(ipmask("true"))';
 		o.rmempty = true;
 
 		o = s.taboption('general', form.Value, 'src_dport', _('External port'),
@@ -232,9 +289,9 @@ return view.extend({
 		o.nocreate = true;
 
 		o = fwtool.addIPOption(s, 'general', 'dest_ip', _('Internal IP address'),
-			_('Redirect matched incoming traffic to the specified internal host'), 'ipv4', hosts);
+			_('Redirect matched incoming traffic to the specified internal host'), !fw4?'ipv4':'', hosts);
 		o.rmempty = true;
-		o.datatype = 'ipmask4';
+		o.datatype = !fw4?'ipmask4':'ipmask';
 
 		o = s.taboption('general', form.Value, 'dest_port', _('Internal port'),
 			_('Redirect matched incoming traffic to the given port on the internal host'));
@@ -258,6 +315,12 @@ return view.extend({
 		o.write = function(section_id, value) {
 			uci.set('firewall', section_id, 'reflection_src', (value != 'internal') ? value : null);
 		};
+
+		o = s.taboption('advanced', widgets.ZoneSelect, 'reflection_zone', _('Reflection zones'), _('Zones from which reflection rules shall be created. If unset, only the destination zone is used.'));
+		o.nocreate = true;
+		o.multiple = true;
+		o.modalonly = true;
+		o.depends('reflection', '1');
 
 		o = s.taboption('advanced', form.Value, 'helper', _('Match helper'), _('Match traffic using the specified connection tracking helper.'));
 		o.modalonly = true;

@@ -98,6 +98,8 @@ var packages = {
 	installed: { providers: {}, pkgs: {} }
 };
 
+var languages = ['en'];
+
 var currentDisplayMode = 'available', currentDisplayRows = [];
 
 function parseList(s, dest)
@@ -201,12 +203,23 @@ function display(pattern)
 {
 	var src = packages[currentDisplayMode === 'updates' ? 'installed' : currentDisplayMode],
 	    table = document.querySelector('#packages'),
-	    pager = document.querySelector('#pager');
+	    pagers = document.querySelectorAll('.controls > .pager'),
+	    i18n_filter = null;
 
 	currentDisplayRows.length = 0;
 
 	if (typeof(pattern) === 'string' && pattern.length > 0)
 		pattern = new RegExp(pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'ig');
+
+	switch (document.querySelector('input[name="filter_i18n"]:checked').value) {
+	case 'all':
+		i18n_filter = /^luci-i18n-/;
+		break;
+
+	case 'lang':
+		i18n_filter = new RegExp('^luci-i18n-(base-.+|.+-(' + languages.join('|') + '))$');
+		break;
+	}
 
 	for (var name in src.pkgs) {
 		var pkg = src.pkgs[name],
@@ -224,6 +237,9 @@ function display(pattern)
 
 		if ((pattern instanceof RegExp) &&
 		    !name.match(pattern) && !desc.match(pattern))
+			continue;
+
+		if (name.indexOf('luci-i18n-') === 0 && (!(i18n_filter instanceof RegExp) || !name.match(i18n_filter)))
 			continue;
 
 		var btn, ver;
@@ -294,8 +310,9 @@ function display(pattern)
 		currentDisplayRows.push([
 			name,
 			ver,
-			pkg.size ? '%.1024mB'.format(pkg.size)
-			         : (altsize ? '~%.1024mB'.format(altsize) : '-'),
+			[ pkg.size || 0,
+			   pkg.size ? '%1024mB'.format(pkg.size)
+			         : (altsize ? '~%1024mB'.format(altsize) : '-') ],
 			desc,
 			btn
 		]);
@@ -310,37 +327,43 @@ function display(pattern)
 			return 0;
 	});
 
-	pager.parentNode.style.display = '';
-	pager.setAttribute('data-offset', 100);
-	handlePage({ target: pager.querySelector('.prev') });
+	for (var i = 0; i < pagers.length; i++) {
+		pagers[i].parentNode.style.display = '';
+		pagers[i].setAttribute('data-offset', 100);
+	}
+
+	handlePage({ target: pagers[0].querySelector('.prev') });
 }
 
 function handlePage(ev)
 {
 	var filter = document.querySelector('input[name="filter"]'),
-	    pager = ev.target.parentNode,
-	    offset = +pager.getAttribute('data-offset'),
-	    next = ev.target.classList.contains('next');
+	    offset = +ev.target.parentNode.getAttribute('data-offset'),
+	    next = ev.target.classList.contains('next'),
+	    pagers = document.querySelectorAll('.controls > .pager');
 
 	if ((next && (offset + 100) >= currentDisplayRows.length) ||
 	    (!next && (offset < 100)))
 	    return;
 
 	offset += next ? 100 : -100;
-	pager.setAttribute('data-offset', offset);
-	pager.querySelector('.text').firstChild.data = currentDisplayRows.length
-		? _('Displaying %d-%d of %d').format(1 + offset, Math.min(offset + 100, currentDisplayRows.length), currentDisplayRows.length)
-		: _('No packages');
 
-	if (offset < 100)
-		pager.querySelector('.prev').setAttribute('disabled', 'disabled');
-	else
-		pager.querySelector('.prev').removeAttribute('disabled');
+	for (var i = 0; i < pagers.length; i++) {
+		pagers[i].setAttribute('data-offset', offset);
+		pagers[i].querySelector('.text').firstChild.data = currentDisplayRows.length
+			? _('Displaying %d-%d of %d').format(1 + offset, Math.min(offset + 100, currentDisplayRows.length), currentDisplayRows.length)
+			: _('No packages');
 
-	if ((offset + 100) >= currentDisplayRows.length)
-		pager.querySelector('.next').setAttribute('disabled', 'disabled');
-	else
-		pager.querySelector('.next').removeAttribute('disabled');
+		if (offset < 100)
+			pagers[i].querySelector('.prev').setAttribute('disabled', 'disabled');
+		else
+			pagers[i].querySelector('.prev').removeAttribute('disabled');
+
+		if ((offset + 100) >= currentDisplayRows.length)
+			pagers[i].querySelector('.next').setAttribute('disabled', 'disabled');
+		else
+			pagers[i].querySelector('.next').removeAttribute('disabled');
+	}
 
 	var placeholder = _('No information available');
 
@@ -374,6 +397,11 @@ function handleMode(ev)
 
 	ev.target.blur();
 	ev.preventDefault();
+}
+
+function handleI18nFilter(ev)
+{
+	display(document.querySelector('input[name="filter"]').value);
 }
 
 function orderOf(c)
@@ -515,7 +543,7 @@ function pkgStatus(pkg, vop, ver, info)
 	}
 }
 
-function renderDependencyItem(dep, info)
+function renderDependencyItem(dep, info, flat)
 {
 	var li = E('li'),
 	    vop = dep.version ? dep.version[0] : null,
@@ -533,9 +561,9 @@ function renderDependencyItem(dep, info)
 		var text = pkg.name;
 
 		if (pkg.installsize)
-			text += ' (%.1024mB)'.format(pkg.installsize);
+			text += ' (%1024mB)'.format(pkg.installsize);
 		else if (pkg.size)
-			text += ' (~%.1024mB)'.format(pkg.size);
+			text += ' (~%1024mB)'.format(pkg.size);
 
 		li.appendChild(E('span', { 'data-tooltip': pkg.description },
 			[ text, ' ', pkgStatus(pkg, vop, ver, info) ]));
@@ -551,14 +579,16 @@ function renderDependencyItem(dep, info)
 			[ dep.name, ' ',
 			  pkgStatus({ name: dep.name, missing: true }, vop, ver, info) ]));
 
-	var subdeps = renderDependencies(depends, info);
-	if (subdeps)
-		li.appendChild(subdeps);
+	if (!flat) {
+		var subdeps = renderDependencies(depends, info);
+		if (subdeps)
+			li.appendChild(subdeps);
+	}
 
 	return li;
 }
 
-function renderDependencies(depends, info)
+function renderDependencies(depends, info, flat)
 {
 	var deps = depends || [],
 	    items = [];
@@ -571,7 +601,7 @@ function renderDependencies(depends, info)
 		if (deps[i] === 'libc')
 			continue;
 
-		if (deps[i].match(/^(.+)\s+\((<=|<|>|>=|=|<<|>>)(.+)\)$/)) {
+		if (deps[i].match(/^(.+?)\s+\((<=|>=|<<|>>|<|>|=)(.+?)\)/)) {
 			dep = RegExp.$1.trim();
 			vop = RegExp.$2.trim();
 			ver = RegExp.$3.trim();
@@ -600,7 +630,7 @@ function renderDependencies(depends, info)
 			version: [vop, ver]
 		};
 
-		items.push(renderDependencyItem(info.seen[dep], info));
+		items.push(renderDependencyItem(info.seen[dep], info, flat));
 	}
 
 	if (items.length)
@@ -636,9 +666,9 @@ function handleInstall(ev)
 	    size;
 
 	if (pkg.installsize)
-		size = _('~%.1024mB installed').format(pkg.installsize);
+		size = _('~%1024mB installed').format(pkg.installsize);
 	else if (pkg.size)
-		size = _('~%.1024mB compressed').format(pkg.size);
+		size = _('~%1024mB compressed').format(pkg.size);
 	else
 		size = _('unknown');
 
@@ -653,7 +683,8 @@ function handleInstall(ev)
 	}
 
 	var totalsize = pkg.installsize || pkg.size || 0,
-	    totalpkgs = 1;
+	    totalpkgs = 1,
+	    suggestsize = 0;
 
 	if (depcache.install && depcache.install.length)
 		depcache.install.forEach(function(ipkg) {
@@ -661,9 +692,53 @@ function handleInstall(ev)
 			totalpkgs++;
 		});
 
-	inst = E('p', {},
-		_('Require approx. %.1024mB size for %d package(s) to install.')
-			.format(totalsize, totalpkgs));
+	var luci_basename = pkg.name.match(/^luci-([^-]+)-(.+)$/),
+	    i18n_packages = [],
+	    i18n_tree;
+
+	if (luci_basename && (luci_basename[1] != 'i18n' || luci_basename[2].indexOf('base-') === 0)) {
+		var i18n_filter;
+
+		if (luci_basename[1] == 'i18n') {
+			var basenames = [];
+
+			for (var pkgname in packages.installed.pkgs) {
+				var m = pkgname.match(/^luci-([^-]+)-(.+)$/);
+
+				if (m && m[1] != 'i18n')
+					basenames.push(m[2]);
+			}
+
+			if (basenames.length)
+				i18n_filter = new RegExp('^luci-i18n-(' + basenames.join('|') + ')-' + pkg.name.replace(/^luci-i18n-base-/, '') + '$');
+		}
+		else {
+			i18n_filter = new RegExp('^luci-i18n-' + luci_basename[2] + '-(' + languages.join('|') + ')$');
+		}
+
+		if (i18n_filter) {
+			for (var pkgname in packages.available.pkgs)
+				if (pkgname != pkg.name && pkgname.match(i18n_filter))
+					i18n_packages.push(pkgname);
+
+			var i18ncache = {};
+
+			i18n_tree = renderDependencies(i18n_packages, i18ncache, true);
+
+			if (i18ncache.install && i18ncache.install.length) {
+				i18ncache.install.forEach(function(ipkg) {
+					suggestsize += ipkg.installsize || ipkg.size || 0;
+				});
+			}
+		}
+	}
+
+	inst = E('p', [
+		_('Require approx. %1024mB size for %d package(s) to install.')
+			.format(totalsize, totalpkgs),
+		' ',
+		suggestsize ? _('Suggested translations require approx. %1024mB additional space.').format(suggestsize) : ''
+	]);
 
 	if (deps) {
 		tree = E('li', '<strong>%s:</strong>'.format(_('Dependencies')));
@@ -682,15 +757,43 @@ function handleInstall(ev)
 			E('li', '<strong>%s:</strong> %h'.format(_('Version'), pkg.version)),
 			E('li', '<strong>%s:</strong> %h'.format(_('Size'), size)),
 			tree || '',
+			i18n_packages.length ? E('li', [
+				E('strong', [_('Suggested translations'), ':']),
+				i18n_tree
+			]) : ''
 		]),
 		desc || '',
 		errs || inst || '',
+		E('div', [
+			E('hr'),
+			i18n_packages.length ? E('p', [
+				E('label', { 'class': 'cbi-checkbox' }, [
+					E('input', {
+						'id': 'i18ninstall-cb',
+						'type': 'checkbox',
+						'name': 'i18ninstall',
+						'data-packages': i18n_packages.join(' '),
+						'disabled': isReadonlyView,
+						'checked': true
+					}), ' ',
+					E('label', { 'for': 'i18ninstall-cb' }), ' ',
+					_('Install suggested translation packages as well')
+				])
+			]) : '',
+			E('p', [
+				E('label', { 'class': 'cbi-checkbox' }, [
+					E('input', {
+						'id': 'overwrite-cb',
+						'type': 'checkbox',
+						'name': 'overwrite',
+						'disabled': isReadonlyView
+					}), ' ',
+					E('label', { 'for': 'overwrite-cb' }), ' ',
+					_('Allow overwriting conflicting package files')
+				])
+			])
+		]),
 		E('div', { 'class': 'right' }, [
-			E('label', { 'class': 'cbi-checkbox', 'style': 'float:left' }, [
-				E('input', { 'id': 'overwrite-cb', 'type': 'checkbox', 'name': 'overwrite', 'disabled': isReadonlyView }), ' ',
-				E('label', { 'for': 'overwrite-cb' }), ' ',
-				_('Overwrite files from other package(s)')
-			]),
 			E('div', {
 				'class': 'btn',
 				'click': ui.hideModal
@@ -824,9 +927,9 @@ function handleRemove(ev)
 	    size, desc;
 
 	if (avail.installsize)
-		size = _('~%.1024mB installed').format(avail.installsize);
+		size = _('~%1024mB installed').format(avail.installsize);
 	else if (avail.size)
-		size = _('~%.1024mB compressed').format(avail.size);
+		size = _('~%1024mB compressed').format(avail.size);
 	else
 		size = _('unknown');
 
@@ -873,7 +976,8 @@ function handleOpkg(ev)
 		var cmd = ev.target.getAttribute('data-command'),
 		    pkg = ev.target.getAttribute('data-package'),
 		    rem = document.querySelector('input[name="autoremove"]'),
-		    owr = document.querySelector('input[name="overwrite"]');
+		    owr = document.querySelector('input[name="overwrite"]'),
+		    i18n = document.querySelector('input[name="i18ninstall"]');
 
 		var dlg = ui.showModal(_('Executing package manager'), [
 			E('p', { 'class': 'spinning' },
@@ -887,6 +991,9 @@ function handleOpkg(ev)
 
 		if (owr && owr.checked)
 			argv.push('--force-overwrite');
+
+		if (i18n && i18n.checked)
+			argv.push.apply(argv, i18n.getAttribute('data-packages').split(' '));
 
 		if (pkg != null)
 			argv.push(pkg);
@@ -985,10 +1092,14 @@ function updateLists(data)
 		    	.sort(function(a, b) { return a.mount > b.mount })[0] || { size: 0, free: 0 };
 
 		pg.firstElementChild.style.width = Math.floor(mount.size ? ((100 / mount.size) * mount.free) : 100) + '%';
-		pg.setAttribute('title', '%s (%.1024mB)'.format(pg.firstElementChild.style.width, mount.free));
+		pg.setAttribute('title', '%s (%1024mB)'.format(pg.firstElementChild.style.width, mount.free));
 
 		parseList(data[1], packages.available);
 		parseList(data[2], packages.installed);
+
+		for (var pkgname in packages.installed.pkgs)
+			if (pkgname.indexOf('luci-i18n-base-') === 0)
+				languages.push(pkgname.substring(15));
 
 		display(document.querySelector('input[name="filter"]').value);
 	});
@@ -1047,6 +1158,51 @@ return view.extend({
 						E('button', { 'class': 'btn cbi-button-action', 'click': handleUpload, 'disabled': isReadonlyView }, [ _('Upload Package…') ]), ' ',
 						E('button', { 'class': 'btn cbi-button-neutral', 'click': handleConfig }, [ _('Configure opkg…') ])
 					])
+				]),
+
+				E('div', {}, [
+					E('label', {}, _('Display LuCI translation packages') + ':'), ' ',
+					E('div', [
+						E('label', {
+							'data-tooltip': _('Display base translation packages and translation packages for already installed languages only')
+						}, [
+							E('input', {
+								'type': 'radio',
+								'name': 'filter_i18n',
+								'value': 'lang',
+								'change': handleI18nFilter,
+								'checked': true
+							}),
+							' ',
+							_('filtered', 'Display translation packages')
+						]),
+						' \u00a0 ',
+						E('label', {
+							'data-tooltip': _('Display all available translation packages')
+						}, [
+							E('input', {
+								'type': 'radio',
+								'name': 'filter_i18n',
+								'value': 'all',
+								'change': handleI18nFilter
+							}),
+							' ',
+							_('all', 'Display translation packages')
+						]),
+						' \u00a0 ',
+						E('label', {
+							'data-tooltip': _('Hide all translation packages')
+						}, [
+							E('input', {
+								'type': 'radio',
+								'name': 'filter_i18n',
+								'value': 'none',
+								'change': handleI18nFilter
+							}),
+							' ',
+							_('none', 'Display translation packages')
+						])
+					])
 				])
 			]),
 
@@ -1057,7 +1213,7 @@ return view.extend({
 			]),
 
 			E('div', { 'class': 'controls', 'style': 'display:none' }, [
-				E('div', { 'id': 'pager', 'class': 'center' }, [
+				E('div', { 'class': 'pager center' }, [
 					E('button', { 'class': 'btn cbi-button-neutral prev', 'aria-label': _('Previous page'), 'click': handlePage }, [ '«' ]),
 					E('div', { 'class': 'text' }, [ 'dummy' ]),
 					E('button', { 'class': 'btn cbi-button-neutral next', 'aria-label': _('Next page'), 'click': handlePage }, [ '»' ])
@@ -1071,6 +1227,14 @@ return view.extend({
 					E('th', { 'class': 'th col-1 center size'}, [ _('Size (.ipk)') ]),
 					E('th', { 'class': 'th col-10 left' }, [ _('Description') ]),
 					E('th', { 'class': 'th right cbi-section-actions' }, [ '\u00a0' ])
+				])
+			]),
+
+			E('div', { 'class': 'controls', 'style': 'display:none' }, [
+				E('div', { 'class': 'pager center' }, [
+					E('button', { 'class': 'btn cbi-button-neutral prev', 'aria-label': _('Previous page'), 'click': handlePage }, [ '«' ]),
+					E('div', { 'class': 'text' }, [ 'dummy' ]),
+					E('button', { 'class': 'btn cbi-button-neutral next', 'aria-label': _('Next page'), 'click': handlePage }, [ '»' ])
 				])
 			])
 		]);

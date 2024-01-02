@@ -33,6 +33,7 @@ return baseclass.extend({
 			vlabel: "Percent",
 			number_format: "%5.1lf%%",
 			y_min: "0",
+			y_max: "2",
 			alt_autoscale_max: true,
 			data: {
 				instances: {

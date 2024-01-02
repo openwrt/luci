@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=ClamAV LuCI interface
-LUCI_DEPENDS:=+luci-compat +luci-mod-admin-full +clamav
+LUCI_DEPENDS:=+luci-compat +luci-base +clamav
 
 PKG_MAINTAINER:=Marko Ratkaj <marko.ratkaj@sartura.hr>
 PKG_LICENSE:=Apache-2.0

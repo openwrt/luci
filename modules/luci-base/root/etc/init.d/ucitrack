@@ -41,10 +41,10 @@ register_trigger() {
 	fi
 
 	for affected in $affects; do
-		logger -t "ucitrack" "Setting up /etc/config/$config reload dependency on /etc/config/$affected"
-		procd_add_config_trigger "config.change" "$affected" \
+		logger -t "ucitrack" "Setting up /etc/config/$affected reload dependency on /etc/config/$config"
+		procd_add_config_trigger "config.change" "$config" \
 			ubus call service event \
-			"$(printf '{"type":"config.change","data":{"package":"%s"}}' $config)"
+			"$(printf '{"type":"config.change","data":{"package":"%s"}}' $affected)"
 	done
 }
 

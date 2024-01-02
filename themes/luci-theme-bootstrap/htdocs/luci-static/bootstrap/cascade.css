@@ -155,6 +155,10 @@
  * ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- */
 
 * {
+	scroll-margin-top: 40px;
+}
+
+*, *::before, *::after {
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -255,6 +259,18 @@ input[type="search"]::-webkit-search-decoration {
 textarea {
 	overflow: auto;
 	vertical-align: top;
+}
+
+.control-group {
+	display: inline-flex;
+	gap: .2em;
+}
+
+.control-group > input + :not(input):not(select),
+.control-group > select + :not(input):not(select) {
+	margin-left: calc(-.2em + -2px);
+	border-radius: 0 3px 3px 0;
+	padding: 0 6px;
 }
 
 /*
@@ -546,6 +562,7 @@ textarea {
 	color: var(--text-color-high);
 }
 
+.cbi-value > .cbi-section,
 .cbi-value > .cbi-tblsection {
 	width: 100%;
 }
@@ -601,7 +618,7 @@ select,
 	margin-bottom: 4px;
 	box-shadow: 0 0 2px var(--border-color-high);
 	background: var(--background-color-high);
-	padding: 2px 2em 2px 4px;
+	padding: 6px 2em 6px 4px;
 	border: 1px solid var(--border-color-high);
 	border-radius: 3px;
 	color: var(--text-color-high);
@@ -639,10 +656,16 @@ select,
 	white-space: nowrap;
 }
 
-.cbi-value-field > .cbi-checkbox {
+.cbi-value-field > .cbi-checkbox,
+.cbi-value-field > div > .cbi-radio {
 	height: 30px;
-	display: flex;
+	display: inline-flex;
 	align-items: center;
+}
+
+.cbi-radio {
+	cursor: pointer;
+	gap: .125em;
 }
 
 .cbi-select {
@@ -696,7 +719,6 @@ select,
 }
 
 input[type=file] {
-	background-color: #fff;
 	padding: initial;
 	border: initial;
 	line-height: initial;
@@ -741,8 +763,8 @@ input[type="radio"]::after {
 
 input[type="checkbox"]::before,
 input[type="radio"]::before {
-	top: -1px;
-	left: -1px;
+	top: 0;
+	left: 0;
 	width: 14px;
 	height: 14px;
 	background: linear-gradient(var(--background-color-high), var(--background-color-low));
@@ -772,7 +794,7 @@ input[type="radio"]:checked::after {
 }
 
 input[type="radio"]:checked:after {
-	--checkmark-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='8'/></svg>");
+	--checkmark-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20'><circle cx='10' cy='10' r='7'/></svg>");
 }
 
 input[type="checkbox"].cbi-input-invalid,
@@ -801,7 +823,7 @@ input[type="radio"].cbi-input-invalid {
 .cbi-dynlist > .item,
 input[type="checkbox"]::before,
 input[type="radio"]::before,
-input, button, textarea {
+input, button, textarea, select {
 	transition: border linear 0.2s, box-shadow linear 0.2s;
 	box-shadow: inset 0 1px 3px hsla(var(--border-color-low-hsl), .01);
 }
@@ -814,7 +836,7 @@ input, button, textarea {
 .cbi-dynlist > .item:focus,
 input[type="checkbox"]:focus::before,
 input[type="radio"]:focus::before,
-input:focus, button:hover, textarea:focus {
+input:focus, button:hover, textarea:focus, select:focus {
 	--focus-color-rgb: 82, 168, 236;
 
 	outline: 0;
@@ -1212,6 +1234,10 @@ a.menu:after {
 	outline: none;
 }
 
+.tabs > li > a:focus-visible, .cbi-tabmenu > li > a:focus-visible {
+	text-decoration: underline;
+}
+
 .tabs > li:not(.active):hover, .cbi-tabmenu > .cbi-tab-disabled:hover {
 	background: linear-gradient(var(--tab-inactive-hover-background-color) 90%, var(--tab-inactive-border-color) 100%);
 }
@@ -1225,12 +1251,16 @@ a.menu:after {
 	content: attr(data-errors);
 	background: #c43c35;
 	color: #fff;
-	min-width: 12px;
-	line-height: 14px;
-	border-radius: 7px;
+	height: 16px;
+	min-width: 16px;
+	border-radius: 8px;
 	text-align: center;
 	margin: 0 5px 0 0;
-	padding: 1px 2px;
+	padding: 3px 2px 1px 2px;
+	display: inline-flex;
+	flex-direction: column;
+	justify-content: center;
+	font-size: 12px;
 }
 
 .cbi-tabmenu.map {
@@ -1307,7 +1337,7 @@ footer {
 	align-items: baseline;
 	justify-content: space-between;
 	font-size: 12px;
-	color: var(--text-color-low);
+	color: var(--text-color-medium);
 	/* the redundant properties below work around a csstidy bug */
 	padding-left: calc((100% - 940px) / 2);
 	padding-right: calc((100% - 940px) / 2);
@@ -1708,25 +1738,6 @@ body.modal-overlay-active #modal_overlay {
 	width: 100%;
 }
 
-input[type="text"] + .cbi-button,
-input[type="password"] + .cbi-button,
-select + .cbi-button,
-.cbi-select + .cbi-button {
-	border-radius: 0 3px 3px 0;
-	border-color: var(--border-color-high);
-	margin-left: -2px;
-	padding: 0 6px;
-	vertical-align: top;
-	height: 30px;
-	font-size: 14px;
-	line-height: 28px;
-}
-
-select + .cbi-button,
-.cbi-select + .cbi-button {
-	position: relative;
-}
-
 .cbi-title-ref {
 	color: #37c;
 }
@@ -1960,6 +1971,7 @@ form.inline { display: inline; margin-bottom: 0; }
 	width: 100%;
 	color: var(--text-color-highest);
 	margin-bottom: 18px;
+	font-family: monospace;
 }
 
 .cbi-section-table .tr:hover .td,
@@ -2542,4 +2554,8 @@ div.cbi-value var.cbi-tooltip-container,
 
 [data-darkmode="true"] [data-page="admin-statistics-graphs"] [data-plugin] img {
 	filter: invert(100%) hue-rotate(150deg);
+}
+
+[data-page="admin-system-admin-sshkeys"] .cbi-dynlist {
+	max-width: none;
 }

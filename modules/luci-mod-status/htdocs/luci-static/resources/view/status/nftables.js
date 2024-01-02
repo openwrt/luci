@@ -4,13 +4,12 @@
 'require fs';
 'require ui';
 'require dom';
-'require tools.firewall as fwtool';
 
 var expr_translations = {
 	'meta.iifname': _('Ingress device name', 'nft meta iifname'),
 	'meta.oifname': _('Egress device name', 'nft meta oifname'),
 	'meta.iif': _('Ingress device id', 'nft meta iif'),
-	'meta.iif': _('Engress device id', 'nft meta oif'),
+	'meta.oif': _('Egress device id', 'nft meta oif'),
 
 	'meta.l4proto': _('IP protocol', 'nft meta l4proto'),
 	'meta.l4proto.tcp': 'TCP',
@@ -24,6 +23,10 @@ var expr_translations = {
 	'meta.nfproto.ipv6': 'IPv6',
 
 	'meta.mark': _('Packet mark', 'nft meta mark'),
+
+	'meta.time': _('Packet receive time', 'nft meta time'),
+	'meta.hour': _('Current time', 'nft meta hour'),
+	'meta.day': _('Current weekday', 'nft meta day'),
 
 	'ct.state': _('Conntrack state', 'nft ct state'),
 
@@ -43,8 +46,8 @@ var expr_translations = {
 	'ip.dport': _('Destination port', 'nft ip dport'),
 	'ip6.saddr': _('Source IPv6', 'nft ip6 saddr'),
 	'ip6.daddr': _('Destination IPv6', 'nft ip6 daddr'),
-	'icmp.code': _('ICMPv6 code', 'nft icmpv6 code'),
-	'icmp.type': _('ICMPv6 type', 'nft icmpv6 type'),
+	'icmp.code': _('ICMP code', 'nft icmp code'),
+	'icmp.type': _('ICMP type', 'nft icmp type'),
 	'icmpv6.code': _('ICMPv6 code', 'nft icmpv6 code'),
 	'icmpv6.type': _('ICMPv6 type', 'nft icmpv6 type'),
 	'tcp.sport': _('TCP source port', 'nft tcp sport'),
@@ -52,6 +55,8 @@ var expr_translations = {
 	'udp.sport': _('UDP source port', 'nft udp sport'),
 	'udp.dport': _('UDP destination port', 'nft udp dport'),
 	'tcp.flags': _('TCP flags', 'nft tcp flags'),
+	'th.sport': _('Transport header source port', 'nft th sport'),
+	'th.dport': _('Transport header destination port', 'nft th dport'),
 
 	'natflag.random': _('Randomize source port mapping', 'nft nat flag random'),
 	'natflag.fully-random': _('Full port randomization', 'nft nat flag fully-random'),
@@ -68,6 +73,10 @@ var expr_translations = {
 	'unit.day': _('day', 'nft unit'),
 	'unit.hour': _('hour', 'nft unit'),
 	'unit.minute': _('minute', 'nft unit'),
+
+	'payload.ll': _('Link layer header bits %d-%d', 'nft @ll,off,len'),
+	'payload.nh': _('Network header bits %d-%d', 'nft @nh,off,len'),
+	'payload.th': _('Transport header bits %d-%d', 'nft @th,off,len')
 };
 
 var op_translations = {
@@ -86,6 +95,7 @@ var action_translations = {
 	'accept': _('Accept packet', 'nft accept action'),
 	'drop': _('Drop packet', 'nft drop action'),
 	'jump': _('Continue in <strong><a href="#%q.%q">%h</a></strong>', 'nft jump action'),
+	'log': _('Log event "<strong>%h</strong>…"', 'nft log action'),
 
 	'reject.tcp reset': _('Reject packet with <strong>TCP reset</strong>', 'nft reject with tcp reset'),
 	'reject.icmp': _('Reject IPv4 packet with <strong>ICMP type %h</strong>', 'nft reject with icmp type'),
@@ -123,7 +133,11 @@ var action_translations = {
 
 return view.extend({
 	load: function() {
-		return L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--json', 'list', 'ruleset' ], 'json'), {});
+		return Promise.all([
+			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--terse', '--json', 'list', 'ruleset' ], 'json'), {}),
+			L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-save'), ''),
+			L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-save'), '')
+		]);
 	},
 
 	isActionExpression: function(expr) {
@@ -141,6 +155,7 @@ return view.extend({
 				case 'masquerade':
 				case 'return':
 				case 'flow':
+				case 'log':
 					return true;
 				}
 			}
@@ -167,9 +182,6 @@ return view.extend({
 		case 'ct':
 		case 'rt':
 			return '%h.%h'.format(kind, spec.key);
-
-		case 'payload':
-			return '%h.%h'.format(spec.protocol, spec.field);
 
 		case 'tcp option':
 			return 'tcpoption.%h.%h'.format(spec.name, spec.field);
@@ -242,6 +254,18 @@ return view.extend({
 
 		case 'range':
 			return '%s-%s'.format(this.exprToString(spec[0], hint), this.exprToString(spec[1], hint));
+
+		case 'payload':
+			if (spec.protocol && spec.field) {
+				var k = '%h.%h'.format(spec.protocol, spec.field);
+				return expr_translations[k] || '<em>%s</em>'.format(k);
+			}
+			else if (spec.base && spec.offset != null && spec.len != null) {
+				var k = 'payload.%h'.format(spec.base);
+				return (expr_translations[k] || '<em>@%s,%%d,%%d</em>'.format(spec.base)).format(spec.offset + 1, spec.offset + spec.len + 1);
+			}
+
+			return 'payload: %s'.format(kind, JSON.stringify(spec));
 
 		case '&':
 		case '|':
@@ -333,8 +357,7 @@ return view.extend({
 			var k = 'reject.%s'.format(spec.type);
 
 			return E('span', {
-				'class': 'ifacebadge',
-				'data-tooltip': JSON.stringify(spec)
+				'class': 'ifacebadge'
 			}, (action_translations[k] || k).format(this.exprToString(spec.expr)));
 
 		case 'accept':
@@ -423,6 +446,11 @@ return view.extend({
 				'class': 'ifacebadge'
 			}, action_translations.flow.format(spec.flowtable.replace(/^@/, '')));
 
+		case 'log':
+			return E('span', {
+				'class': 'ifacebadge'
+			}, action_translations.log.format(spec.prefix));
+
 		default:
 			return E('span', {
 				'class': 'ifacebadge',
@@ -487,7 +515,7 @@ return view.extend({
 		}
 
 		if (empty)
-			dom.content(row.childNodes[0], E('em', [ _('Any packet', 'nft match any traffic') ]));
+			dom.append(row.childNodes[0], E('span', { 'class': 'ifacebadge' }, '<em>%h</em>'.format(_('Any packet', 'nft match any traffic'))));
 
 		return row;
 	},
@@ -644,15 +672,32 @@ return view.extend({
 		return node;
 	},
 
+	checkLegacyRules: function(ipt4save, ipt6save) {
+		if (ipt4save.match(/\n-A /) || ipt6save.match(/\n-A /)) {
+			ui.addNotification(_('Legacy rules detected'), [
+				E('p', _('There are legacy iptables rules present on the system. Mixing iptables and nftables rules is discouraged and may lead to incomplete traffic filtering.')),
+				E('button', {
+					'class': 'btn cbi-button',
+					'click': function() { location.href = 'nftables/iptables' }
+				}, _('Open iptables rules overview…'))
+			], 'warning');
+		}
+	},
+
 	render: function(data) {
-		var view = E('div');
+		var view = E('div'),
+		    nft = data[0],
+		    ipt = data[1],
+		    ipt6 = data[2];
 
-		if (!Array.isArray(data.nftables))
-			return E('em', _('No nftables ruleset load'));
+		this.checkLegacyRules(ipt, ipt6);
 
-		for (var i = 0; i < data.nftables.length; i++)
-			if (data.nftables[i].hasOwnProperty('table'))
-				view.appendChild(this.renderTable(data.nftables, data.nftables[i].table));
+		if (!Array.isArray(nft.nftables))
+			return E('em', _('No nftables ruleset loaded.'));
+
+		for (var i = 0; i < nft.nftables.length; i++)
+			if (nft.nftables[i].hasOwnProperty('table'))
+				view.appendChild(this.renderTable(nft.nftables, nft.nftables[i].table));
 
 		return view;
 	},

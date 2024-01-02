@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-05-28 17:32+0000\n"
-"Last-Translator: Oğuz Ersen <oguzersen@protonmail.com>\n"
+"PO-Revision-Date: 2022-09-25 14:22+0000\n"
+"Last-Translator: semih <semiht@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/tr/>\n"
 "Language: tr\n"
@@ -10,18 +10,22 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 4.14.1\n"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
-"<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify the "
-"interface to monitor and restart if a ping over it fails."
+"<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
+"> Specify the interface to monitor and react if a ping over it fails."
 msgstr ""
-"<i> Ping Yeniden Başlatma ve Yeniden Başlatma Arayüzü modları için "
-"geçerlidir </i> <br /> Ping işlemi başarısız olursa izlemek ve yeniden "
-"başlatmak için kullanılacak arayüzü belirtin."
+"<i>Ping Yeniden Başlatma, Arabirimi Yeniden Başlatma ve Komut Dosyasını "
+"Çalıştırma modları için geçerlidir</i> <br /> Üzerinde bir ping başarısız "
+"olursa izlenecek ve tepki verecek arabirimi belirt."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:72
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
+msgid "Address family for pinging the host"
+msgstr "Ana bilgisayara ping atmak için adres ailesi"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
 "Applies to Ping Reboot and Periodic Reboot modes</i> <br /> When rebooting "
 "the router, the service will trigger a soft reboot. Entering a non-zero "
@@ -37,7 +41,7 @@ msgstr ""
 "beklenecek saniye sayısını girin veya zorunlu yeniden başlatma gecikmesini "
 "devre dışı bırakmak için 0'ı kullanın."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:88
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
 msgid ""
 "Applies to Ping Reboot and Restart Interface modes</i> <br /> If using "
 "ModemManager, you can have Watchcat restart your ModemManger interface by "
@@ -47,15 +51,15 @@ msgstr ""
 "i> <br /> ModemManager kullanıyorsanız, Watchcat'in adını belirterek "
 "ModemManger arayüzünüzü yeniden başlatmasını sağlayabilirsiniz."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:63
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:84
 msgid "Big: 248 bytes"
 msgstr "Büyük: 248 bayt"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:50
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:70
 msgid "Check Interval"
 msgstr "Kontrol etme aralığı"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:93
 msgid "Force Reboot Delay"
 msgstr "Zorla Yeniden Başlatma Gecikmesi"
 
@@ -77,11 +81,11 @@ msgstr ""
 "gerçekleştirilecek çeşitli kontroller ve eylemler ayarlayabilirsiniz. Birden "
 "fazla eylem ayarlamak için alttaki <b>Ekle</b> düğmesini tıklayın."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:43
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "Host To Check"
 msgstr "Kontrol Edilecek Alan Adı"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:51
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
 msgid ""
 "How often to ping the host specified above. <br /><br />The default unit is "
 "seconds, without a suffix, but you can use the suffix <b>m</b> for minutes, "
@@ -97,15 +101,15 @@ msgstr ""
 "li><li>5 dakika şöyle olur: <b>5m</b></li><li>1 saat: <b>1h</b></li><li>1 "
 "hafta: <b>7d</b></li><ul>"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:64
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:85
 msgid "Huge: 1492 bytes"
 msgstr "Çok Büyük: 1492 bayt"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:43
-msgid "IPv4 address or hostname to ping."
-msgstr "Ping atılacak IPv4 adresi veya ana makine adı."
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
+msgid "IP address or hostname to ping."
+msgstr "Ping için IP adresi veya ana bilgisayar adı."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:95
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
 "If using ModemManager, then before restarting the interface, set the modem "
 "to be allowed to use any band."
@@ -113,39 +117,40 @@ msgstr ""
 "ModemManager kullanılıyorsa, arayüzü yeniden başlatmadan önce modemin "
 "herhangi bir bandı kullanmasına izin verilecek şekilde ayarlayın."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:32
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:41
 msgid ""
 "In Periodic Reboot mode, it defines how often to reboot. <br /> In Ping "
 "Reboot mode, it defines the longest period of time without a reply from the "
-"Host To Check before a reboot is engaged. <br /> In Network Restart mode, it "
-"defines the longest period of time without a reply from the Host to Check "
-"before the interface is restarted. <br /><br />The default unit is seconds, "
-"without a suffix, but you can use the suffix <b>m</b> for minutes, <b>h</b> "
-"for hours or <b>d</b> for days. <br /><br />Examples:<ul><li>10 seconds "
-"would be: <b>10</b> or <b>10s</b></li><li>5 minutes would be: <b>5m</b></"
-"li><li> 1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></"
-"li><ul>"
+"Host To Check before a reboot is engaged. <br /> In Network Restart or Run "
+"Script mode, it defines the longest period of time without a reply from the "
+"Host to Check before the interface is restarted or the script is run. <br /"
+"><br />The default unit is seconds, without a suffix, but you can use the "
+"suffix <b>m</b> for minutes, <b>h</b> for hours or <b>d</b> for days. <br /"
+"><br />Examples:<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></"
+"li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
+"li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
-"Periyodik Yeniden Başlatma modunda, ne sıklıkla yeniden başlatılacağını "
-"tanımlar. <br /> Pinge dayalı yeniden başlatma modunda, yeniden başlatma "
-"devreye girmeden önce kontrol edilecek alanadından bir cevap olmadan "
-"geçebileck en uzun süreyi tanımlar. <br /> Ağ Yeniden Başlatma modunda, "
-"arayüz yeniden başlatılmadan önce kontrol edilecek adresten bir yanıt "
-"olmaksızın en geçecek uzun süreyi tanımlar. <br /><br />Varsayılan birim son "
-"ek olmadan saniyedir, ancak son ek kullanabilirsiniz. <b>m</b> Dakika için, "
-"<b>h</b> Saat için veya <b>d</b> Gün için. <br /><br />Örnekler:<ul><li>10 "
-"saniye için: <b>10</b> veya<b>10s</b></li><li>5 Dakika için: <b>5m</b></"
-"li><li> 1 saat için: <b>1h</b></li><li>1 hafta için: <b>7d</b></li><ul>"
+"Periyodik Yeniden Başlatma modunda, ne sıklıkta yeniden başlatılacağı "
+"tanımlanır. <br /> Ping Yeniden Başlatma modunda, yeniden başlatma "
+"yapılmadan önce Kontrol Edilecek Ana Bilgisayardan yanıt alınmaksızın en "
+"uzun süreyi tanımlar. <br /> Ağ Yeniden Başlatma veya Komut Dosyasını "
+"Çalıştırma modunda, arayüz yeniden başlatılmadan veya komut dosyası "
+"çalıştırılmadan önce Ana Bilgisayardan Kontrol edilecek en uzun süreyi "
+"tanımlar. <br /><br />Varsayılan birim saniyedir, son ek yoktur, ancak "
+"dakika için <b>m</b>, saat için <b>h</b> veya gün için <b>d</b> son ekini "
+"kullanabilirsiniz. <br /><br />Örnekler:<ul><li>10 saniye: <b>10</b> veya "
+"<b>10s</b></li><li>5 dakika: <b>5m</b></li><li> 1 saat: <b>1h</b></li><li>1 "
+"hafta: <b>7d</b></ li><ul>"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
 msgstr "Arayüz"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:103
 msgid "Interface to monitor and/or restart"
 msgstr "İzlenenecek ve/ya yeniden başlatılacak arayüz"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:86
 msgid "Jumbo: 9000 bytes"
 msgstr "Jumbo: 9000 bayt"
 
@@ -153,23 +158,23 @@ msgstr "Jumbo: 9000 bayt"
 msgid "Mode"
 msgstr "Mod"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:87
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:110
 msgid "Name of ModemManager Interface"
 msgstr "ModemManager Arayüzünün Adı"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:31
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:40
 msgid "Period"
 msgstr "Periyot"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Periodic Reboot"
 msgstr "Periyodik Yeniden Başlatma"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:59
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
 msgid "Ping Packet Size"
 msgstr "Ping Paketi Boyutu"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:26
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
 msgid "Ping Reboot"
 msgstr "Ping tabanlı yeniden başlatma"
 
@@ -179,23 +184,42 @@ msgid ""
 "specified duration of time. <br /> Periodic Reboot: Reboot this device after "
 "a specified interval of time. <br /> Restart Interface: Restart a network "
 "interface if a ping to a specified host fails for a specified duration of "
-"time."
+"time. <br /> Run Script: Run a script if a ping to a specified host fails "
+"for a specified duration of time. <br />"
 msgstr ""
-"Ping Yeniden Başlatma: Belirli bir ana bilgisayara gönderilen ping belirli "
-"bir süre başarısız olursa bu cihazı yeniden başlatır. <br /> Periyodik "
-"Yeniden Başlatma: Bu cihazı belirli bir süre sonra yeniden başlatır. <br /> "
-"Arayüzü Yeniden Başlat: Belirli bir ana bilgisayara gönderilen ping belirli "
-"bir süre başarısız olursa bir ağ arayüzünü yeniden başlatır."
+"Ping Yeniden Başlatma: Belirtilen bir ana bilgisayara ping belirli bir süre "
+"boyunca başarısız olursa bu cihazı yeniden başlat. <br /> Periyodik Yeniden "
+"Başlatma: Belirli bir zaman aralığından sonra bu cihazı yeniden başlat. <br /"
+"> Arabirimi Yeniden Başlat: Belirtilen bir ana bilgisayara ping belirli bir "
+"süre boyunca başarısız olursa, bir ağ arabirimini yeniden başlat. <br /> "
+"Komut Dosyasını Çalıştır: Belirtilen bir ana bilgisayara ping belirli bir "
+"süre boyunca başarısız olursa bir komut dosyası çalıştır. <br />"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
 msgstr "Arayüzü yeniden başlat"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
+msgid "Run Script"
+msgstr "Komut Dosyasını Çalıştır"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
+msgid "Script to run"
+msgstr "Çalıştırılacak komut dosyası"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
+msgid ""
+"Script to run when the host has not responded for the specified duration of "
+"time. The script is passed the interface name as $1"
+msgstr ""
+"Ana bilgisayar belirtilen süre boyunca yanıt vermediğinde çalıştırılacak "
+"komut dosyası. Komut dosyası, arabirim adına $1 olarak iletilir"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
 msgstr "Küçük: 1 bayt"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:62
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:83
 msgid "Standard: 56 bytes"
 msgstr "Standart: 56 bayt"
 
@@ -204,7 +228,7 @@ msgid "These rules will govern how this device reacts to network events."
 msgstr ""
 "Bu kurallar cihazın ağ olaylarına hangi şekilde tepki vereceğini yönetir."
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:117
 msgid "Unlock Modem Bands"
 msgstr "Modem Bantlarının Kilidini Açın"
 
@@ -214,9 +238,58 @@ msgstr "Modem Bantlarının Kilidini Açın"
 msgid "Watchcat"
 msgstr "Watchcat"
 
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:61
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
 msgid "Windows: 32 bytes"
 msgstr "Windows: 32 bayt"
+
+#~ msgid ""
+#~ "<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> Specify "
+#~ "the interface to monitor and restart if a ping over it fails."
+#~ msgstr ""
+#~ "<i> Ping Yeniden Başlatma ve Yeniden Başlatma Arayüzü modları için "
+#~ "geçerlidir </i> <br /> Ping işlemi başarısız olursa izlemek ve yeniden "
+#~ "başlatmak için kullanılacak arayüzü belirtin."
+
+#~ msgid "IPv4 address or hostname to ping."
+#~ msgstr "Ping atılacak IPv4 adresi veya ana makine adı."
+
+#~ msgid ""
+#~ "In Periodic Reboot mode, it defines how often to reboot. <br /> In Ping "
+#~ "Reboot mode, it defines the longest period of time without a reply from "
+#~ "the Host To Check before a reboot is engaged. <br /> In Network Restart "
+#~ "mode, it defines the longest period of time without a reply from the Host "
+#~ "to Check before the interface is restarted. <br /><br />The default unit "
+#~ "is seconds, without a suffix, but you can use the suffix <b>m</b> for "
+#~ "minutes, <b>h</b> for hours or <b>d</b> for days. <br /><br />Examples:"
+#~ "<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></li><li>5 minutes "
+#~ "would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></li><li>1 week "
+#~ "would be: <b>7d</b></li><ul>"
+#~ msgstr ""
+#~ "Periyodik Yeniden Başlatma modunda, ne sıklıkla yeniden başlatılacağını "
+#~ "tanımlar. <br /> Pinge dayalı yeniden başlatma modunda, yeniden başlatma "
+#~ "devreye girmeden önce kontrol edilecek alanadından bir cevap olmadan "
+#~ "geçebileck en uzun süreyi tanımlar. <br /> Ağ Yeniden Başlatma modunda, "
+#~ "arayüz yeniden başlatılmadan önce kontrol edilecek adresten bir yanıt "
+#~ "olmaksızın en geçecek uzun süreyi tanımlar. <br /><br />Varsayılan birim "
+#~ "son ek olmadan saniyedir, ancak son ek kullanabilirsiniz. <b>m</b> Dakika "
+#~ "için, <b>h</b> Saat için veya <b>d</b> Gün için. <br /><br />Örnekler:"
+#~ "<ul><li>10 saniye için: <b>10</b> veya<b>10s</b></li><li>5 Dakika için: "
+#~ "<b>5m</b></li><li> 1 saat için: <b>1h</b></li><li>1 hafta için: <b>7d</"
+#~ "b></li><ul>"
+
+#~ msgid ""
+#~ "Ping Reboot: Reboot this device if a ping to a specified host fails for a "
+#~ "specified duration of time. <br /> Periodic Reboot: Reboot this device "
+#~ "after a specified interval of time. <br /> Restart Interface: Restart a "
+#~ "network interface if a ping to a specified host fails for a specified "
+#~ "duration of time."
+#~ msgstr ""
+#~ "Ping Yeniden Başlatma: Belirli bir ana bilgisayara gönderilen ping "
+#~ "belirli bir süre başarısız olursa bu cihazı yeniden başlatır. <br /> "
+#~ "Periyodik Yeniden Başlatma: Bu cihazı belirli bir süre sonra yeniden "
+#~ "başlatır. <br /> Arayüzü Yeniden Başlat: Belirli bir ana bilgisayara "
+#~ "gönderilen ping belirli bir süre başarısız olursa bir ağ arayüzünü "
+#~ "yeniden başlatır."
 
 #~ msgid "Forced reboot delay"
 #~ msgstr "Zorla yeniden başlatma gecikmesi"

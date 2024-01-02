@@ -166,8 +166,9 @@ return view.extend({
 
 		o = s.option(form.ListValue, "timeout", _("Ping timeout"));
 		o.default = '4';
-		for (var i = 1; i <= 10; i++)
-			o.value(String(i), N_(i, '%d second', '%d seconds').format(i));
+		o.value('1', _('%d second').format('1'));
+		for (var i = 2; i <= 10; i++)
+			o.value(String(i), _('%d seconds').format(i));
 		o.modalonly = true;
 
 		o = s.option(form.ListValue, 'interval', _('Ping interval'));

@@ -19,25 +19,30 @@ return baseclass.extend({
 		o = s.option(form.DynamicList, 'LocalPorts', _('Monitor local ports'));
 		o.optional = true;
 		o.datatype = 'port';
-		o.default = '22 80';
-		o.depends({ enable: '1', ListeningPorts: '0' });
+		o.default = '22';
+		o.depends('enable', '1');
 
 		o = s.option(form.DynamicList, 'RemotePorts', _('Monitor remote ports'));
 		o.optional = true;
 		o.datatype = 'port';
-		o.depends({ enable: '1', ListeningPorts: '0' });
+		o.depends('enable', '1');
+
+		o = s.option(form.Flag, 'AllPortsSummary', _('Summary of all ports'));
+		o.rmempty = false;
+		o.depends('enable', '1');
 	},
 
 	configSummary: function(section) {
 		var lports = L.toArray(section.LocalPorts),
-		    rports = L.toArray(section.RemotePorts);
+		    rports = L.toArray(section.RemotePorts),
+		    listen = section.ListeningPorts == '1',
+		    summary = section.AllPortsSummary == '1';
 
-		if (section.ListeningPorts == '1')
-			return _('Monitoring local listen ports');
-		else
-			return _('Monitoring %s and %s').format(
-				N_(lports.length, 'one local port', '%d local ports').format(lports.length),
-				N_(rports.length, 'one remote port', '%d remote ports').format(rports.length)
-			);
+		return _('Monitoring %s and %s, %s %s').format(
+			N_(lports.length, 'one local', '%d local').format(lports.length),
+			N_(rports.length, 'one remote port', '%d remote ports').format(rports.length),
+			listen ? _('all local listening ports,') : '',
+			summary ? _('summary of all ports') : _('no summary')
+		);
 	}
 });

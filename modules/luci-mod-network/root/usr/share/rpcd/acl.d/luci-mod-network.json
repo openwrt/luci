@@ -8,7 +8,9 @@
 				"/proc/sys/net/ipv6/conf/*/mtu": [ "read" ],
 				"/proc/sys/net/ipv6/conf/*/hop_limit": [ "read" ],
 				"/usr/libexec/luci-peeraddr": [ "exec" ],
-				"/usr/lib/opkg/info/netifd.control": [ "read" ]
+				"/usr/lib/opkg/info/netifd.control": [ "read" ],
+				"/proc/sys/net/ipv[46]/conf/*": [ "read" ],
+				"/sys/class/net/*/brport/*": [ "read" ]
 			},
 			"ubus": {
 				"file": [ "exec" ],

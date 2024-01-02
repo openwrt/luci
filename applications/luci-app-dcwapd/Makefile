@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Dual Channel Wi-Fi AP Daemon configuration module
-LUCI_DEPENDS:=+luci-compat +dcwapd
+LUCI_DEPENDS:=+luci-base +luci-compat +dcwapd
 
 include ../../luci.mk
 
