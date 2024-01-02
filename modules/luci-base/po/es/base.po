@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2023-12-27 22:32+0000\n"
+"PO-Revision-Date: 2024-01-01 08:05+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/>"
 "\n"
@@ -4662,7 +4662,7 @@ msgstr "Ignorar el archivo resolve"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:502
 msgid "Ignore {etc_hosts}"
-msgstr ""
+msgstr "Ignorar {etc_hosts}"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
 msgid "Image"
@@ -5048,7 +5048,7 @@ msgstr "Cadena de clave privada %s no válida"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:28
 msgid "Invalid public key string %s"
-msgstr ""
+msgstr "Cadena de clave pública %s no válida"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
 msgid "Invalid server URL"
@@ -5232,7 +5232,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:142
 msgid "Last Error"
-msgstr ""
+msgstr "Último error"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:629
 msgid "Last member interval"
@@ -5312,6 +5312,8 @@ msgid ""
 "Limit response records (from {etc_hosts}) to those that fall within the "
 "subnet of the querying interface."
 msgstr ""
+"Limita los registros de respuesta (de {etc_hosts}) a aquellos que se "
+"encuentran dentro de la subred de la interfaz de consulta."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:25
 msgid "Line Mode"
@@ -5395,8 +5397,9 @@ msgid "Listen Port"
 msgstr "Puerto de Escucha"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:222
+#, fuzzy
 msgid "Listen addresses"
-msgstr ""
+msgstr "Escuchar direcciones"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:219
 msgid "Listen for peers"
@@ -5727,7 +5730,7 @@ msgstr "Fabricante"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3868
 msgid "Master (VLAN)"
-msgstr ""
+msgstr "Punto de acceso (VLAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:991
 #, fuzzy
@@ -5837,7 +5840,7 @@ msgstr "ID de malla"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3870
 msgid "Mesh Point"
-msgstr ""
+msgstr "Punto de malla"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 #, fuzzy
@@ -6080,7 +6083,7 @@ msgstr "Enrutamiento de multidifusión"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:240
 msgid "Multicast rules"
-msgstr ""
+msgstr "Reglas de multidifusión"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:778
 msgid "Multicast to unicast"
@@ -6142,8 +6145,9 @@ msgid "Name of the tunnel device"
 msgstr "Nombre del dispositivo de túnel"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:309
+#, fuzzy
 msgid "Names not in {etc_hosts} are answered {not_found}."
-msgstr ""
+msgstr "Los nombres que no están en {etc_hosts} se responden {not_found}."
 
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:39
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:50
@@ -6252,12 +6256,15 @@ msgstr "Nunca"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:308
 msgid "Never forward DNS queries which lack dots or domain parts."
 msgstr ""
+"Nunca reenviar consultas de DNS que carezcan de puntos o partes del dominio."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:317
 msgid ""
 "Never forward these matching domains or subdomains; resolve from DHCP or "
 "hosts files only."
 msgstr ""
+"Nunca reenviar estos dominios o subdominios coincidentes; resolver desde "
+"DHCP o archivos de hosts únicamente."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1220
 msgid "New interface for \"%s\" can not be created: %s"
@@ -9461,7 +9468,7 @@ msgstr "Sincronizar con el navegador"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:721
 msgid "Syntax:"
-msgstr ""
+msgstr "Sintaxis:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
 msgid "Syntax: {code_syntax}."
@@ -10306,8 +10313,10 @@ msgstr ""
 "Esta opción no se puede usar porque el paquete ca-bundle no está instalado."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:547
+#, fuzzy
 msgid "This prevents unreachable IPs in subnets not accessible to you."
 msgstr ""
+"Esto evita IP inalcanzables en subredes a las que usted no puede acceder."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2280
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
@@ -11641,7 +11650,7 @@ msgstr "desactivado"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:20
 msgctxt "DHCPv6 address request mode"
 msgid "disabled"
-msgstr ""
+msgstr "desactivado"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:570
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:604
@@ -11677,9 +11686,10 @@ msgid "expired"
 msgstr "expirado"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:19
+#, fuzzy
 msgctxt "DHCPv6 address request mode"
 msgid "force"
-msgstr ""
+msgstr "forzar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:821
 msgid "forced"
@@ -11904,9 +11914,10 @@ msgid "time units (TUs / 1.024 ms) [1000-65535]"
 msgstr "unidades de tiempo (TUs / 1.024 ms) [1000-65535]"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:18
+#, fuzzy
 msgctxt "DHCPv6 address request mode"
 msgid "try"
-msgstr ""
+msgstr "intentar"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:9
 msgid ""
