@@ -6,7 +6,7 @@ if [ "$#" -eq 0 ]; then
 	echo "Hint: run in the root of the luci repo or in your luci-app-* folder."
 
 	# get existing language codes from luci.mk
-	language_codes=$(grep -o 'LUCI_LANG\.[a-zA-Z]*' $(dirname "$0")/../luci.mk | cut -d '.' -f 2 | sort -u)
+	language_codes=$(grep -o 'LUCI_LANG\.[a-zA-Z_-]*' $(dirname "$0")/../luci.mk | cut -d '.' -f 2 | sort -u)
 	LANGS=$language_codes
 
 else
