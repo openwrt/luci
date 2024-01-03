@@ -344,8 +344,9 @@ msgid ""
 "Enable network address and port translation IPv4 (NAT4 or NAPT4) for "
 "outbound traffic on this zone. This is typically enabled on the <em>wan</em> "
 "zone."
-msgstr "為此區域的出站流量開啟網路位址和端口轉換 IPv4 （NAT4 或 NAPT4）。 "
-"<em>wan</em>區域通常開啟此功能。"
+msgstr ""
+"為此區域的出站流量開啟網路位址和端口轉換 IPv4 （NAT4 或 NAPT4）。 <em>wan</"
+"em>區域通常開啟此功能。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:237
 msgid ""
@@ -436,7 +437,6 @@ msgid "Firewall configuration migration"
 msgstr "防火牆設定移轉"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:64
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:147
 msgid "Forward"
 msgstr "轉發"
 
@@ -449,12 +449,11 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
-"轉發 %{ipv6?%{ipv4?<var>IPv4</var> and "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, 協定 %{proto#%{"
-"next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? data-tooltip="
-"\"匹配 fwmarks 除了 %{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{"
-"mark.mask? data-tooltip=\"遮罩 fwmark 值 %{mark.mask} before compare.\""
-"}}>%{mark.val}</var>}"
+"轉發 %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:"
+"<var>IPv4</var>}%{proto?, 協定 %{proto#%{next?, }<var>%{item.name}</"
+"var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"匹配 fwmarks 除了 %{mark."
+"num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"遮罩 "
+"fwmark 值 %{mark.mask} before compare.\"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:484
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:354
@@ -600,17 +599,16 @@ msgid ""
 "any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
 "tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"傳入 %{ipv6?%{ipv4?<var>IPv4</var> and "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, 協定 %{proto#%{"
-"next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item.name}<span "
-"class=\"cbi-tooltip\">ICMP with types %{item.types#%{next?, "
-"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
-"<var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? "
-"with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value "
-"with %{mark.mask} before compare.\"}}>%{mark.val}</var>}%{helper?, helper %{"
-"helper.inv?<var data-tooltip=\"Match any helper except &quot;%{helper."
-"name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\""
-">%{helper.val}</var>}}"
+"傳入 %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:"
+"<var>IPv4</var>}%{proto?, 協定 %{proto#%{next?, }%{item.types?<var "
+"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
+"with types %{item.types#%{next?, }<var>%{item}</var>}</span></var>:"
+"<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match "
+"fwmarks except %{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark."
+"mask? data-tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}"
+">%{mark.val}</var>}%{helper?, helper %{helper.inv?<var data-tooltip=\"Match "
+"any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
+"tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:179
 msgid "Initial Hash Size"
@@ -632,6 +630,10 @@ msgstr "內部埠"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:286
 msgid "Internal zone"
 msgstr "內部區域"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:147
+msgid "Intra zone forward"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:304
 msgid "Invalid DSCP mark"
@@ -854,9 +856,9 @@ msgid ""
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
 "要進行匹配的封包字段。<br />語法：<em>direction_datatype</em>。如："
-"<code>src_port, dest_net</code>。<br />方向：<code>src, "
-"dst</code>。數據類型：<code>ip, port, mac, net, set</code>。<br "
-"/>方向前綴可選。<br />*注意：datatype <code>set</code> 在 fw4 中不受支持。"
+"<code>src_port, dest_net</code>。<br />方向：<code>src, dst</code>。數據類"
+"型：<code>ip, port, mac, net, set</code>。<br />方向前綴可選。<br />*注意："
+"datatype <code>set</code> 在 fw4 中不受支持。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:349
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:470
@@ -1186,7 +1188,8 @@ msgstr "無法儲存內容：%s"
 msgid ""
 "Unit: seconds. Default <code>0</code> means the entry is added permanently "
 "to the set.<br />Max: 2147483 seconds."
-msgstr "單位：秒。默認值<code>0</code>表示該條目被永久添加到該集合。<br />最大值："
+msgstr ""
+"單位：秒。默認值<code>0</code>表示該條目被永久添加到該集合。<br />最大值："
 "2147483 秒。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:340
