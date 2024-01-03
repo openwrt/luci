@@ -294,7 +294,7 @@ waitpid $msguniq_pid, 0;
 while (@pot > 0) {
 	my $line = shift @pot;
 
-	# Reorder the location comments in a detemrinistic way to
+	# Reorder the location comments in a deterministic way to
 	# reduce SCM noise when frequently updating templates.
 	if ($line =~ m!^#: !) {
 		my @locs = ($line);
