@@ -95,7 +95,7 @@ get_init_status() {
 	local name
 	name="$(basename "$1")"
 	name="${name:-$packageName}"
-	local errors warnings ports dns outputFile outputCache outputGzip
+	local errors warnings ports dns outputFile outputCache outputGzip outputConfig
 	local i j
 # shellcheck disable=SC2034
 	local compressed_cache_dir
@@ -106,46 +106,11 @@ get_init_status() {
 	if [ -n "$(uci_get "$packageName" 'config' 'dnsmasq_config_file_url')" ]; then
 		dns="dnsmasq.conf"
 	else
-		dns="$(uci_get "$packageName" 'config' 'dns')"
+		dns="$(uci_get "$packageName" 'config' 'dns' 'dnsmasq.servers')"
 	fi
-	case "$dns" in
-		dnsmasq.addnhosts)
-			outputFile="$dnsmasqAddnhostsFile"
-			outputCache="$dnsmasqAddnhostsCache"
-			outputGzip="${compressed_cache_dir}/${dnsmasqAddnhostsGzip}"
-		;;
-		dnsmasq.conf)
-			outputFile="$dnsmasqConfFile"
-			outputCache="$dnsmasqConfCache"
-			outputGzip="${compressed_cache_dir}/${dnsmasqConfGzip}"
-		;;
-		dnsmasq.ipset)
-			outputFile="$dnsmasqIpsetFile"
-			outputCache="$dnsmasqIpsetCache"
-			outputGzip="${compressed_cache_dir}/${dnsmasqIpsetGzip}"
-		;;
-		dnsmasq.nftset)
-			outputFile="$dnsmasqNftsetFile"
-			outputCache="$dnsmasqNftsetCache"
-			outputGzip="${compressed_cache_dir}/${dnsmasqNftsetGzip}"
-		;;
-		dnsmasq.servers)
-			outputFile="$dnsmasqServersFile"
-			outputCache="$dnsmasqServersCache"
-			outputGzip="${compressed_cache_dir}/${dnsmasqServersGzip}"
-		;;
-		smartdns.domainset)
-			outputFilter="$smartdnsDomainSetFilter"
-			outputFile="$smartdnsDomainSetFile"
-			outputCache="$smartdnsDomainSetCache"
-			outputGzip="${compressed_cache_dir}/${smartdnsDomainSetGzip}"
-		;;
-		unbound.adb_list)
-			outputFile="$unboundFile"
-			outputCache="$unboundCache"
-			outputGzip="${compressed_cache_dir}/${unboundGzip}"
-		;;
-	esac
+
+	dns_set_output_values "$dns"
+
 	json_init
 	json_add_object  "$name"
 	json_add_boolean 'enabled' "$(is_enabled "$name")"

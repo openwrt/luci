@@ -537,6 +537,11 @@ return view.extend({
 				tdEl.lastChild.childNodes[3].disabled = true;
 			}
 
+			if (dynamic) {
+				//disable the 'Edit' button on dynamic interfaces
+				tdEl.lastChild.childNodes[2].disabled = true;
+			}
+
 			return tdEl;
 		};
 

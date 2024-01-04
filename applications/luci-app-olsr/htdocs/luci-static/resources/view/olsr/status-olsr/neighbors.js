@@ -198,13 +198,13 @@ return view.extend({
 						}
 					}
 					var hosthints = await network.getHostHints();
-					var interfac = await network.getStatusByAddress(v.localIP);
+					var networkStatus = await network.getStatusByAddress(v.localIP);
 					var lmac = await hosthints.getMACAddrByIPAddr(v.localIP);
 					var rmac = await hosthints.getMACAddrByIPAddr(v.remoteIP);
 
 					for (let i = 0; i < assoclist.length; i++) {
 						var val = assoclist[i];
-						if (val.network === interfac.interface && val.list) {
+						if (networkStatus != undefined && val.network === networkStatus.interface && val.list) {
 							for (var assocmac in val.list) {
 								var assot = val.list[assocmac];
 								if (rmac == assot.mac) {
@@ -216,8 +216,8 @@ return view.extend({
 						}
 					}
 
-					if (interfac) {
-						v.interface = interfac;
+					if (networkStatus) {
+						v.interface = networkStatus;
 					}
 					v.snr = snr || null;
 					v.signal = signal || null;

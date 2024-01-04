@@ -16,7 +16,7 @@ return view.extend({
 		var m, s, o;
 
 		m = new form.Map('sshtunnel', _('SSH Tunnels'),
-			_('This configures <a %s>SSH Tunnels</a>')
+			_('This configures <a %s>SSH Tunnels</a>.')
 				.format('href="https://openwrt.org/docs/guide-user/services/ssh/sshtunnel"')
 		);
 

@@ -7,7 +7,7 @@ LUCI_TITLE:=LuCI support for SSH Tunnels (sshtunnel package)
 
 PKG_MAINTAINER:=Sergey Ponomarev <stokito@gmail.com>
 LUCI_DEPENDS:=+luci-base +sshtunnel
-PKG_VERSION:=1.0.0
+PKG_VERSION:=1.1.0
 PKG_RELEASE:=1
 
 include ../../luci.mk

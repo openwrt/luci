@@ -64,14 +64,6 @@ return view.extend({
 			scanCache[res.bssid].graph = [];
 
 		channels.forEach(function(channel) {
-			var chan_offset = offset_tbl[channel],
-				points = [
-				(chan_offset-(step*channel_width))+','+height,
-				(chan_offset-(step*(channel_width-1)))+','+height_diff,
-				(chan_offset+(step*(channel_width-1)))+','+height_diff,
-				(chan_offset+(step*(channel_width)))+','+height
-			];
-
 			if (scanCache[res.bssid].graph[i] == null) {
 				var group = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
 					line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline'),
@@ -88,8 +80,33 @@ return view.extend({
 				chan_analysis.graph.firstElementChild.appendChild(group);
 				scanCache[res.bssid].graph[i] = { group : group, line : line, text : text };
 			}
+			if (channel_width > 2) {
+				if (!("main" in scanCache[res.bssid].graph[i])) {
+					var main = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+					main.setAttribute('style', 'fill:url(#GradientVerticalCenteredBlack)');
+					scanCache[res.bssid].graph[i].group.appendChild(main)
+					chan_analysis.graph.firstElementChild.lastElementChild.appendChild(main);
+					scanCache[res.bssid].graph[i]["main"] = main;
+				}
+				var main_offset = offset_tbl[res.channel],
+					points = [
+					(main_offset-(step*(2  )))+','+height,
+					(main_offset-(step*(2-1)))+','+height_diff,
+					(main_offset+(step*(2-1)))+','+height_diff,
+					(main_offset+(step*(2  )))+','+height
+				];
+				scanCache[res.bssid].graph[i].main.setAttribute('points', points);
+			}
 
-			scanCache[res.bssid].graph[i].text.setAttribute('x', chan_offset-step);
+			var chan_offset = offset_tbl[channel],
+				points = [
+				(chan_offset-(step*(channel_width  )))+','+height,
+				(chan_offset-(step*(channel_width-1)))+','+height_diff,
+				(chan_offset+(step*(channel_width-1)))+','+height_diff,
+				(chan_offset+(step*(channel_width  )))+','+height
+			];
+
+			scanCache[res.bssid].graph[i].text.setAttribute('x', offset_tbl[res.channel]-step);
 			scanCache[res.bssid].graph[i].text.setAttribute('y', height_diff - 2);
 			scanCache[res.bssid].graph[i].line.setAttribute('points', points);
 			scanCache[res.bssid].graph[i].group.style.zIndex = res.signal*-1;

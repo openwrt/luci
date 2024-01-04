@@ -18,6 +18,9 @@ var pkg = {
 	humanFileSize: function (bytes, si = false, dp = 2) {
 		return `%${si ? 1000 : 1024}.${dp ?? 0}mB`.format(bytes);
 	},
+	isObjEmpty: function (obj) {
+		return Object.keys(obj).length === 0;
+	},
 };
 
 return view.extend({
@@ -46,6 +49,9 @@ return view.extend({
 				unbound_installed: false,
 				leds: [],
 			},
+			pkg: (!pkg.isObjEmpty(data[2]) && data[2]) || null,
+			dhcp: (!pkg.isObjEmpty(data[3]) && data[3]) || null,
+			smartdns: (!pkg.isObjEmpty(data[4]) && data[4]) || null,
 		};
 		var status, m, s1, s2, s3, o;
 
@@ -176,127 +182,130 @@ return view.extend({
 		);
 		o.depends("dns", "dnsmasq.conf");
 
-		o = s1.taboption(
-			"tab_basic",
-			form.ListValue,
-			"dnsmasq_instance_option",
-			_("Use AdBlocking on the dnsmasq instance(s)"),
-			_(
-				"You can limit the AdBlocking to the specific dnsmasq instance(s) (%smore information%s)."
-			).format(
-				'<a href="' + pkg.URL + "#dnsmasq_instance" + '" target="_blank">',
-				"</a>"
-			)
-		);
-		o.value("*", _("AdBlock on all instances"));
-		o.value("+", _("AdBlock on select instances"));
-		o.value("-", _("No AdBlock on dnsmasq"));
-		o.default = "*";
-		o.depends("dns", "dnsmasq.addnhosts");
-		o.depends("dns", "dnsmasq.servers");
-		o.retain = true;
-		o.cfgvalue = function (section_id) {
-			let val = this.map.data.get(
-				this.map.config,
-				section_id,
-				"dnsmasq_instance"
+		if (reply.platform.dnsmasq_installed && reply.dhcp) {
+			o = s1.taboption(
+				"tab_basic",
+				form.ListValue,
+				"dnsmasq_instance_option",
+				_("Use AdBlocking on the dnsmasq instance(s)"),
+				_(
+					"You can limit the AdBlocking to the specific dnsmasq instance(s) (%smore information%s)."
+				).format(
+					'<a href="' + pkg.URL + "#dnsmasq_instance" + '" target="_blank">',
+					"</a>"
+				)
 			);
-			switch (val) {
-				case "*":
-				case "-":
-					return val;
-				default:
-					return "+";
-			}
-		};
-		o.write = function (section_id, formvalue) {
-			L.uci.set(pkg.Name, section_id, "dnsmasq_instance", formvalue);
-		};
+			o.value("*", _("AdBlock on all instances"));
+			o.value("+", _("AdBlock on select instances"));
+			o.value("-", _("No AdBlock on dnsmasq"));
+			o.default = "*";
+			o.depends("dns", "dnsmasq.addnhosts");
+			o.depends("dns", "dnsmasq.servers");
+			o.retain = true;
+			o.cfgvalue = function (section_id) {
+				let val = this.map.data.get(
+					this.map.config,
+					section_id,
+					"dnsmasq_instance"
+				);
+				switch (val) {
+					case "*":
+					case "-":
+						return val;
+					default:
+						return "+";
+				}
+			};
+			o.write = function (section_id, formvalue) {
+				L.uci.set(pkg.Name, section_id, "dnsmasq_instance", formvalue);
+			};
 
-		o = s1.taboption(
-			"tab_basic",
-			form.MultiValue,
-			"dnsmasq_instance",
-			_("Pick the dnsmasq instance(s) for AdBlocking")
-		);
-		Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(function (
-			element
-		) {
-			var description;
-			var key;
-			if (element[".name"] === L.uci.resolveSID("dhcp", element[".name"])) {
-				key = element[".index"];
-				description = "dnsmasq[" + element[".index"] + "]";
-			} else {
-				key = element[".name"];
-				description = element[".name"];
-			}
-			o.value(key, _("%s").format(description));
-		});
-		o.depends("dnsmasq_instance_option", "+");
-		o.retain = true;
-
-		o = s1.taboption(
-			"tab_basic",
-			form.ListValue,
-			"smartdns_instance_option",
-			_("Use AdBlocking on the SmartDNS instance(s)"),
-			_(
-				"You can limit the AdBlocking to the specific SmartDNS instance(s) (%smore information%s)."
-			).format(
-				'<a href="' + pkg.URL + "#smartdns_instance" + '" target="_blank">',
-				"</a>"
-			)
-		);
-		o.value("*", _("AdBlock on all instances"));
-		o.value("+", _("AdBlock on select instances"));
-		o.value("-", _("No AdBlock on SmartDNS"));
-		o.default = "*";
-		o.depends("dns", "smartdns.domainset");
-		o.depends("dns", "smartdns.ipset");
-		o.depends("dns", "smartdns.nftset");
-		o.retain = true;
-		o.cfgvalue = function (section_id) {
-			let val = this.map.data.get(
-				this.map.config,
-				section_id,
-				"smartdns_instance"
+			o = s1.taboption(
+				"tab_basic",
+				form.MultiValue,
+				"dnsmasq_instance",
+				_("Pick the dnsmasq instance(s) for AdBlocking")
 			);
-			switch (val) {
-				case "*":
-				case "-":
-					return val;
-				default:
-					return "+";
-			}
-		};
-		o.write = function (section_id, formvalue) {
-			L.uci.set(pkg.Name, section_id, "smartdns_instance", formvalue);
-		};
+			Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(function (
+				element
+			) {
+				var description;
+				var key;
+				if (element[".name"] === L.uci.resolveSID("dhcp", element[".name"])) {
+					key = element[".index"];
+					description = "dnsmasq[" + element[".index"] + "]";
+				} else {
+					key = element[".name"];
+					description = element[".name"];
+				}
+				o.value(key, _("%s").format(description));
+			});
+			o.depends("dnsmasq_instance_option", "+");
+			o.retain = true;
+		}
 
-		o = s1.taboption(
-			"tab_basic",
-			form.MultiValue,
-			"smartdns_instance",
-			_("Pick the SmartDNS instance(s) for AdBlocking")
-		);
-		Object.values(L.uci.sections("smartdns", "smartdns")).forEach(function (
-			element
-		) {
-			var description;
-			var key;
-			if (element[".name"] === L.uci.resolveSID("smartdns", element[".name"])) {
-				key = element[".index"];
-				description = "smartdns[" + element[".index"] + "]";
-			} else {
-				key = element[".name"];
-				description = element[".name"];
-			}
-			o.value(key, _("%s").format(description));
-		});
-		o.depends("smartdns_instance_option", "+");
-		o.retain = true;
+		if (reply.platform.smartdns_installed && reply.smartdns) {
+			o = s1.taboption(
+				"tab_basic",
+				form.ListValue,
+				"smartdns_instance_option",
+				_("Use AdBlocking on the SmartDNS instance(s)"),
+				_(
+					"You can limit the AdBlocking to the specific SmartDNS instance(s) (%smore information%s)."
+				).format(
+					'<a href="' + pkg.URL + "#smartdns_instance" + '" target="_blank">',
+					"</a>"
+				)
+			);
+			o.value("*", _("AdBlock on all instances"));
+			o.value("+", _("AdBlock on select instances"));
+			o.value("-", _("No AdBlock on SmartDNS"));
+			o.default = "*";
+			o.depends("dns", "smartdns.domainset");
+			o.retain = true;
+			o.cfgvalue = function (section_id) {
+				let val = this.map.data.get(
+					this.map.config,
+					section_id,
+					"smartdns_instance"
+				);
+				switch (val) {
+					case "*":
+					case "-":
+						return val;
+					default:
+						return "+";
+				}
+			};
+			o.write = function (section_id, formvalue) {
+				L.uci.set(pkg.Name, section_id, "smartdns_instance", formvalue);
+			};
 
+			o = s1.taboption(
+				"tab_basic",
+				form.MultiValue,
+				"smartdns_instance",
+				_("Pick the SmartDNS instance(s) for AdBlocking")
+			);
+			Object.values(L.uci.sections("smartdns", "smartdns")).forEach(function (
+				element
+			) {
+				var description;
+				var key;
+				if (
+					element[".name"] === L.uci.resolveSID("smartdns", element[".name"])
+				) {
+					key = element[".index"];
+					description = "smartdns[" + element[".index"] + "]";
+				} else {
+					key = element[".name"];
+					description = element[".name"];
+				}
+				o.value(key, _("%s").format(description));
+			});
+			o.depends("smartdns_instance_option", "+");
+			o.retain = true;
+		}
 		o = s1.taboption(
 			"tab_basic",
 			form.ListValue,
