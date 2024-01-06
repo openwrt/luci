@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-10-18 05:43+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"PO-Revision-Date: 2024-01-06 10:09+0000\n"
+"Last-Translator: Hannu Nyman <hannu.nyman@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/luci/fi/>"
 "\n"
 "Language: fi\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1000
 msgid "!known (not known)"
@@ -821,7 +821,7 @@ msgstr "Lisäasetukset"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:391
 msgid "Advanced device options"
-msgstr "Edistyneet laiteasetukset"
+msgstr "Monipuolisemmat laiteasetukset"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -1004,25 +1004,30 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:955
 msgid "Announce this device as IPv6 DNS server."
-msgstr ""
+msgstr "Esittele tämä laite IPv6 DNS-palvelimena."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:823
 msgid ""
 "Announce this device as default router if a local IPv6 default route is "
 "present."
 msgstr ""
+"Esittele tämä laite oletusreitittimenä, jos IPv6 -oletusreitti on olemassa."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
 msgid ""
 "Announce this device as default router if a public IPv6 prefix is available, "
 "regardless of local default route availability."
 msgstr ""
+"Esittele tämä laite oletusreitittimenä, jos julkinen IPv6-prefix on "
+"olemassa, riippumatta siitä, onko oletusreittiä olemassa."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:827
 msgid ""
 "Announce this device as default router regardless of whether a prefix or "
 "default route is present."
 msgstr ""
+"Esittele tämä laite oletusreitittimenä huolimatta siitä, onko prefix tai "
+"oletusreitti olemassa."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:962
 msgid "Announced DNS domains"
@@ -1030,7 +1035,7 @@ msgstr "Ilmoitetut DNS-toimialueet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:946
 msgid "Announced IPv6 DNS servers"
-msgstr ""
+msgstr "Julkistetut IPv6 DNS-palvelimet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1766
 msgid "Anonymous Identity"
@@ -1407,7 +1412,7 @@ msgstr "Silta"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:491
 msgctxt "MACVLAN mode"
 msgid "Bridge (Support direct communication between MAC VLANs)"
-msgstr "Silta (Tue suoraa kommunikointia MAC VLAN:ien välillä)"
+msgstr "Silta (tukee suoraa kommunikaatiota MAC VLAN:ien välillä)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:393
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:498
@@ -1422,7 +1427,7 @@ msgstr "Siltalaite"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:392
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:497
 msgid "Bridge port specific options"
-msgstr ""
+msgstr "Sillan portin asetukset"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:522
 msgid "Bridge ports"
@@ -2656,7 +2661,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2698
 msgid "Drag to reorder"
-msgstr "Vedä järjestääksesi uudelleen"
+msgstr "Järjestä raahaten"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:342
 msgid "Drop Duplicate Frames"
@@ -3184,8 +3189,8 @@ msgid ""
 "Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. "
 "for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
-"Salli ylävirran vastaukset alueella {loopback_slash_8_v4}, esim. RBL-"
-"palveluille"
+"Salli ylävirran vastaukset alueella {loopback_slash_8_v4} ja {localhost_v6}, "
+"esim. <abbr title=\"Real-time Block List\">RBL</abbr> -palveluille"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:410
 msgid "Existing device"
@@ -3364,15 +3369,11 @@ msgstr "Tiedostoa ei voida lukea"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:516
 msgid "File to store DHCP lease information."
-msgstr ""
-"tiedosto, johon annetut <abbr title = \"Dynamic Host Configuration "
-"Protocol\"> DHCP </abbr> -lainat tallennetaan"
+msgstr "Tiedosto, johon annetut DHCP-lainat tallennetaan."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:524
 msgid "File with upstream resolvers."
-msgstr ""
-"paikallinen <abbr title = \"Verkkotunnusten nimijärjestelmä\">DNS</abbr>-"
-"tiedosto"
+msgstr "Tiedosto, jossa ulkoiset nimipalvelimet."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2870
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:692
@@ -3381,7 +3382,7 @@ msgstr "Tiedostonimi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:678
 msgid "Filename of the boot image advertised to clients."
-msgstr "Asiakkaille mainostetun käynnistysnäköistiedoston tiedostonimi"
+msgstr "Asiakkaille kerrottavan käynnistystiedoston nimi."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:191
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:315
@@ -4553,7 +4554,7 @@ msgstr ""
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:146
 msgid "In seconds"
-msgstr ""
+msgstr "Sekunneissa"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:156
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:128
@@ -4835,6 +4836,8 @@ msgid ""
 "Invalid bearer list. Possibly too many bearers created. This protocol "
 "supports one and only one bearer."
 msgstr ""
+"Epäkelpo valinta. Mahdollisesti liian monta välitystapaa valittu. Tämä "
+"protokollaa tukee vain ja ainoastaan yhtä."
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:402
 msgid "Invalid command"
@@ -5566,7 +5569,7 @@ msgstr "Samanaikaisten DNS-kyselyiden suurin sallittu määrä"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:645
 msgid "Maximum allowed size of EDNS0 UDP packets."
-msgstr "EDNS.0 UDP -pakettien suurin sallittu koko"
+msgstr "EDNS0 UDP -pakettien suurin sallittu koko."
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
@@ -6343,8 +6346,7 @@ msgstr "IGMP-jäsenraporttien määrä"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:659
 msgid "Number of cached DNS entries, 10000 is maximum, 0 is no caching."
 msgstr ""
-"Välimuistissa olevien DNS-merkintöjen määrä (max on 10000, 0 poistaa "
-"välimuistiin tallentamisen käytöstä)"
+"DNS-tietojen välimuistin koko. Max 10000, 0 poistaa välimuistin käytöstä."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:311
 msgid "Number of peer notifications after failover event"
@@ -7418,9 +7420,7 @@ msgstr "Laatu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:612
 msgid "Query all available upstream resolvers."
-msgstr ""
-"Käytä kaikkia määriteltyjä<abbr title=\"Domain Name System\">DNS</abbr> -"
-"palvelimia kyselyihin"
+msgstr "Käytä kaikkia määriteltyjä DNS-palvelimia."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:610
 msgid "Query interval"
@@ -8321,7 +8321,7 @@ msgstr "Istunto on vanhentunut"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:126
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:175
 msgid "Set Static"
-msgstr "Aseta staattinen"
+msgstr "Aseta kiinteä"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:802
 msgid "Set an alias for a hostname."
@@ -8942,7 +8942,7 @@ msgstr "Aloitetaan määrityksen käyttöönotto…"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1853
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/channel_analysis.js:448
 msgid "Starting wireless scan..."
-msgstr "Aloitetaan langattoman verkon etsintä..."
+msgstr "Aloitetaan langattoman verkon hakeminen..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:108
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:78
@@ -9038,7 +9038,7 @@ msgstr "Estä kirjaaminen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:541
 msgid "Suppress logging of the routine operation for the DHCP protocol."
-msgstr "Estä näiden protokollien rutiinitoimintojen kirjaaminen"
+msgstr "Estä DHCP-rutiinitoimintojen kirjaaminen lokiin."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:46
 msgid "Swap free"
@@ -10341,9 +10341,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:607
 msgid "Upstream resolvers will be queried in the order of the resolv file."
-msgstr ""
-"<abbr title = \"Verkkotunnusten nimijärjestelmä\"> DNS </abbr> -palvelimet "
-"kysytään resolvfile-järjestyksessä"
+msgstr "DNS-palvelimilta kysytään resolv-tiedoston mukaisessa järjestyksessä."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:62
@@ -10644,8 +10642,8 @@ msgid ""
 "Validate DNS replies and cache DNSSEC data, requires upstream to support "
 "DNSSEC."
 msgstr ""
-"Vaatii tukea DNSSEC prokollalle; vahvista että allekirjoittamattomat "
-"toimialuevastaukset todella tulevat allekirjoittamattomista toimialueista"
+"Tarkista DNS-vastaukset ja tallenna DNSSEC-tiedot välimuistiin. Vaatii tuen "
+"DNSSEC-prokollalle."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1668
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1726
