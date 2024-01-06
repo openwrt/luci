@@ -1,16 +1,16 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-10-18 05:43+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"PO-Revision-Date: 2024-01-06 10:09+0000\n"
+"Last-Translator: Hannu Nyman <hannu.nyman@iki.fi>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/luci/fi/"
 ">\n"
 "Language: fi\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1\n"
+"X-Generator: Weblate 5.4-dev\n"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:996
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1000
 msgid "!known (not known)"
 msgstr ""
 
@@ -139,7 +139,7 @@ msgid_plural "%d flags"
 msgstr[0] "1 lippu"
 msgstr[1] "%d lippua"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:969
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:973
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:985
 msgid "12h (12 hours - default)"
 msgstr "12 h (12 tuntia - oletus)"
@@ -158,7 +158,7 @@ msgctxt "sstp log level value"
 msgid "3"
 msgstr "3"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:968
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:972
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:984
 msgid "3h (3 hours)"
 msgstr "3 h (3 tuntia)"
@@ -181,7 +181,7 @@ msgstr "464XLAT (CLAT)"
 msgid "5 Minute Load:"
 msgstr "5 minuutin kuorma:"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:967
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:971
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:983
 msgid "5m (5 minutes)"
 msgstr "5 min (5 minuuttia)"
@@ -190,7 +190,7 @@ msgstr "5 min (5 minuuttia)"
 msgid "6-octet identifier as a hex string - no colons"
 msgstr "6 oktettia heksadesimaalimerkkijonona - ilman kaksoispisteitä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:970
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:974
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:986
 msgid "7d (7 days)"
 msgstr ""
@@ -263,6 +263,10 @@ msgstr "802.11w enimmäisaikakatkaisu"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1802
 msgid "802.11w retry timeout"
 msgstr "802.11w uudelleenaikakatkaisu"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:235
+msgid "; invalid MAC:"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1015
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
@@ -546,7 +550,7 @@ msgstr "ATM-laitteen numero"
 msgid "Absent Interface"
 msgstr "Puuttuva sovitin"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:393
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:421
 msgid "Accept DNS queries only from hosts whose address is on a local subnet."
 msgstr "Rajoita DNS-palvelu aliverkkoihin joille tarjoamme DNS:ää."
 
@@ -708,7 +712,7 @@ msgid ""
 "code>, <code>unix://</code> or <code>quic://</code>"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:565
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:593
 msgid "Add local domain suffix to names served from hosts files."
 msgstr ""
 "Lisää paikallisen verkkotunnuksen pääte nimiin, jotka tarjotaan hosts-"
@@ -731,7 +735,7 @@ msgstr "Lisää vertaiskone"
 msgid "Add peer address"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1016
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1020
 msgid "Add static forward and reverse DNS entries for this host."
 msgstr ""
 
@@ -743,11 +747,15 @@ msgstr "Lisää estolistalle"
 msgid "Add to Whitelist"
 msgstr "Lisää sallittujen listalle"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:507
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:881
+msgid "Adding an IPv6 to an IPv4 set and vice-versa silently fails."
+msgstr ""
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:535
 msgid "Additional hosts files"
 msgstr "Hosts-tiedostot"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:572
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:600
 msgid "Additional servers file"
 msgstr "Lisäpalvelimien tiedosto"
 
@@ -764,7 +772,7 @@ msgstr "Lisäpalvelimien tiedosto"
 msgid "Address"
 msgstr "Osoite"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:473
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:501
 msgid "Address families of \"Relay from\" and \"Relay to address\" must match."
 msgstr ""
 
@@ -781,7 +789,7 @@ msgstr ""
 msgid "Address to access local relay bridge"
 msgstr "Paikallisen välityssillan osoite"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:337
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:365
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:797
 msgid "Addresses"
 msgstr "Osoitteet"
@@ -791,7 +799,7 @@ msgstr "Osoitteet"
 msgid "Administration"
 msgstr "Hallinta"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:295
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:323
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:495
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:651
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1631
@@ -805,7 +813,7 @@ msgstr "Lisäasetukset"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:391
 msgid "Advanced device options"
-msgstr "Edistyneet laiteasetukset"
+msgstr "Monipuolisemmat laiteasetukset"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -856,18 +864,18 @@ msgstr "Sovittimen alias"
 msgid "Alias of \"%s\""
 msgstr "Kohteen %s alias"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:583
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:611
 msgid "All servers"
 msgstr "Kaikki palvelimet"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:518
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:546
 msgid ""
 "Allocate IP addresses sequentially, starting from the lowest available "
 "address."
 msgstr ""
 "Varaa IP-osoitteet alkaen pienimmästä käytettävissä olevasta osoitteesta"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:517
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:545
 msgid "Allocate IPs sequentially"
 msgstr "Jaa IP:t järjestyksessä"
 
@@ -896,7 +904,7 @@ msgstr "Salli vanhat 802.11b-nopeudet"
 msgid "Allow listed only"
 msgstr "Salli vain luetellut"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:375
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:403
 msgid "Allow localhost"
 msgstr "Salli localhost"
 
@@ -948,7 +956,7 @@ msgstr "Aina pois päältä (ydin: ei mitään)"
 msgid "Always on (kernel: default-on)"
 msgstr "Aina päällä (ydin: oletus-päällä)"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:695
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:723
 msgid "Always send DHCP Options. Sometimes needed, with e.g. PXELinux."
 msgstr ""
 
@@ -988,25 +996,30 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:946
 msgid "Announce this device as IPv6 DNS server."
-msgstr ""
+msgstr "Esittele tämä laite IPv6 DNS-palvelimena."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:818
 msgid ""
 "Announce this device as default router if a local IPv6 default route is "
 "present."
 msgstr ""
+"Esittele tämä laite oletusreitittimenä, jos IPv6 -oletusreitti on olemassa."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:820
 msgid ""
 "Announce this device as default router if a public IPv6 prefix is available, "
 "regardless of local default route availability."
 msgstr ""
+"Esittele tämä laite oletusreitittimenä, jos julkinen IPv6-prefix on "
+"olemassa, riippumatta siitä, onko oletusreittiä olemassa."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:822
 msgid ""
 "Announce this device as default router regardless of whether a prefix or "
 "default route is present."
 msgstr ""
+"Esittele tämä laite oletusreitittimenä huolimatta siitä, onko prefix tai "
+"oletusreitti olemassa."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:953
 msgid "Announced DNS domains"
@@ -1014,7 +1027,7 @@ msgstr "Ilmoitetut DNS-toimialueet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:937
 msgid "Announced IPv6 DNS servers"
-msgstr ""
+msgstr "Julkistetut IPv6 DNS-palvelimet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1766
 msgid "Anonymous Identity"
@@ -1040,7 +1053,7 @@ msgstr "Mikä tahansa paketti"
 msgid "Any zone"
 msgstr "Mikä tahansa vyöhyke"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:689
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:717
 msgid "Apply DHCP Options to this net. (Empty = all clients)."
 msgstr ""
 
@@ -1085,7 +1098,7 @@ msgstr ""
 "Määritä osa jokaisen julkisen IPv6-etuliitteen tietystä pituudesta tähän "
 "liittymään"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:988
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:992
 msgid "Assign new, freeform tags to this entry."
 msgstr ""
 
@@ -1139,7 +1152,7 @@ msgstr "Todennus"
 msgid "Authentication Type"
 msgstr "Todennuksen tyyppi"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:312
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:340
 msgid "Authoritative"
 msgstr "Määräävä"
 
@@ -1337,17 +1350,17 @@ msgstr ""
 msgid "Bind interface"
 msgstr "Yhdistä sovitin"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:399
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:427
 msgid ""
 "Bind only to configured interface addresses, instead of the wildcard address."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:747
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:775
 msgid ""
 "Bind service records to a domain name: specify the location of services."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:708
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:736
 msgid ""
 "Bind service records to a domain name: specify the location of services. See "
 "<a href=\"%s\">RFC2782</a>."
@@ -1379,7 +1392,7 @@ msgstr ""
 msgid "Bonding Policy"
 msgstr "Sidoskäytäntö"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:467
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:495
 msgid "Both \"Relay from\" and \"Relay to address\" must be specified."
 msgstr ""
 
@@ -1391,7 +1404,7 @@ msgstr "Silta"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:491
 msgctxt "MACVLAN mode"
 msgid "Bridge (Support direct communication between MAC VLANs)"
-msgstr "Silta (Tue suoraa kommunikointia MAC VLAN:ien välillä)"
+msgstr "Silta (tukee suoraa kommunikaatiota MAC VLAN:ien välillä)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:393
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:498
@@ -1406,7 +1419,7 @@ msgstr "Siltalaite"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:392
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:497
 msgid "Bridge port specific options"
-msgstr ""
+msgstr "Sillan portin asetukset"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:522
 msgid "Bridge ports"
@@ -1432,7 +1445,7 @@ msgstr "Päälle käynnistettäessä"
 msgid "Bring up the bridge interface even if no ports are attached"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1011
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1015
 msgid "Broadcast"
 msgstr ""
 
@@ -1467,11 +1480,11 @@ msgstr "CHAP"
 msgid "CLAT configuration failed"
 msgstr "CLAT-määritys epäonnistui"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:303
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:331
 msgid "CNAME"
 msgstr "CNAME"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:726
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:754
 msgid "CNAME or fqdn"
 msgstr "CNAME tai fqdn"
 
@@ -1489,7 +1502,11 @@ msgstr "Välimuistissa"
 msgid "Call failed"
 msgstr "Kutsu epäonnistui"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:536
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:880
+msgid "Can be hinted by adding 4 or 6 to the name."
+msgstr ""
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:564
 msgid ""
 "Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing."
 msgstr ""
@@ -2045,7 +2062,7 @@ msgstr "DAE-portti"
 msgid "DAE-Secret"
 msgstr "Dae-salaisuus"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:682
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:710
 msgid "DHCP Options"
 msgstr "DHCP-asetukset"
 
@@ -2053,7 +2070,7 @@ msgstr "DHCP-asetukset"
 msgid "DHCP Server"
 msgstr "DHCP-palvelin"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:287
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:315
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:62
 msgid "DHCP and DNS"
 msgstr "DHCP ja DNS"
@@ -2091,11 +2108,11 @@ msgstr "DHCPv6-palvelu"
 msgid "DNS"
 msgstr "DNS"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:330
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:358
 msgid "DNS forwardings"
 msgstr "DNS-edelleenvälitys"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:602
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:630
 msgid "DNS query port"
 msgstr ""
 "<abbr title = \"Verkkotunnusten nimijärjestelmä\">DNS</abbr>-kyselyportti"
@@ -2104,7 +2121,7 @@ msgstr ""
 msgid "DNS search domains"
 msgstr "DNS-hakutoimialueet"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:595
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:623
 msgid "DNS server port"
 msgstr ""
 "<abbr title = \"Verkkotunnusten nimijärjestelmä\">DNS</abbr>-palvelinportti"
@@ -2121,11 +2138,11 @@ msgstr "DNS-paino"
 msgid "DNS-Label / FQDN"
 msgstr "DNS-nimi / FQDN"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:552
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:580
 msgid "DNSSEC"
 msgstr "DNSSEC"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:557
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:585
 msgid "DNSSEC check unsigned"
 msgstr "DNSSEC tarkista allekirjoittamaton"
 
@@ -2155,7 +2172,7 @@ msgid "DTIM Interval"
 msgstr "DTIM-aikaväli"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:59
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:974
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:978
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:136
 msgid "DUID"
 msgstr "DUID"
@@ -2185,6 +2202,14 @@ msgstr "Oletusreititin"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:12
 msgid "Default state"
 msgstr "Oletustila"
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:880
+msgid "Defaults to IPv4+6."
+msgstr ""
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:875
+msgid "Defaults to fw4."
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:725
 msgid ""
@@ -2437,13 +2462,13 @@ msgstr "Poissa käytöstä"
 msgid "Disassociate On Low Acknowledgement"
 msgstr "Poista heikon kuittauksen yhteydet"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:370
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:398
 msgid ""
 "Discard also upstream responses containing {rfc_4193_link}, Link-Local and "
 "private IPv4-Mapped {rfc_4291_link} IPv6 Addresses."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:369
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:397
 msgid "Discard upstream responses containing {rfc_1918_link} addresses."
 msgstr "Hylkää ulkoverkosta tulevat {rfc_1918_link}-vastaukset."
 
@@ -2492,19 +2517,19 @@ msgstr ""
 msgid "Distributed ARP Table"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1002
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1006
 msgid ""
 "Dnsmasq instance to which this DHCP host section is bound. If unspecified, "
 "the section is valid for all dnsmasq instances."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:700
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:728
 msgid ""
 "Dnsmasq instance to which this boot section is bound. If unspecified, the "
 "section is valid for all dnsmasq instances."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:288
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:316
 msgid ""
 "Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
 "Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
@@ -2514,7 +2539,7 @@ msgstr ""
 "Protocol\">DHCP</abbr>-palvelin ja <abbr title=\"Domain Name System\">DNS</"
 "abbr>-välittäjä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:569
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:597
 msgid "Do not cache negative replies, e.g. for non-existent domains."
 msgstr ""
 "Älä tallenna välimuistiin negatiivisia vastauksia, esim. olemattomien "
@@ -2528,7 +2553,7 @@ msgstr ""
 msgid "Do not create host route to peer (optional)."
 msgstr "Älä luo reittiä kohteelle (valinnainen)."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:412
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:440
 msgid "Do not listen on the specified interfaces."
 msgstr "Estä näiden sovittimien kuuntelu."
 
@@ -2573,17 +2598,16 @@ msgid "Do you really want to recursively delete the directory \"%s\" ?"
 msgstr "Haluatko todella poistaa hakemiston '%s' alihakemistoineen?"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:97
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:758
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:784
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:837
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:786
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:812
 msgid "Domain"
 msgstr "Verkkotunnus"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:307
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:335
 msgid "Domain required"
 msgstr "Vaadi verkkotunnus"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:383
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:411
 msgid "Domain whitelist"
 msgstr "Sallitut verkkotunnukset"
 
@@ -2621,7 +2645,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2698
 msgid "Drag to reorder"
-msgstr "Vedä järjestääksesi uudelleen"
+msgstr "Järjestä raahaten"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:342
 msgid "Drop Duplicate Frames"
@@ -2692,7 +2716,7 @@ msgstr ""
 msgid "Dual-Stack Lite (RFC6333)"
 msgstr "Dual-Stack-Lite (RFC6333)"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:354
 msgid "Dump cache on SIGUSR1, include requesting IP."
 msgstr ""
 
@@ -2756,11 +2780,15 @@ msgstr ""
 msgid "Edit"
 msgstr "Muokkaa"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:863
+msgid "Edit IP set"
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:223
 msgid "Edit peer"
 msgstr "Muokkaa vertaista"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:853
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:900
 msgid "Edit static lease"
 msgstr ""
 
@@ -2885,7 +2913,7 @@ msgstr "Ota NTP-asiakas käyttöön"
 msgid "Enable Single DES"
 msgstr "Ota käyttöön yksittäinen DES"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:637
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:665
 msgid "Enable TFTP server"
 msgstr "TFTP-palvelin käytössä"
 
@@ -2980,7 +3008,7 @@ msgstr "Lisää tuki multicast -liikenteelle (valinnainen)"
 msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
 msgstr "Ota käyttöön kapselointipakettien DF (Don't Fragment) -lippu."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:638
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:666
 msgid "Enable the built-in single-instance TFTP server."
 msgstr ""
 
@@ -3130,7 +3158,7 @@ msgstr "30 sekunnin välein (hidas, 0)"
 msgid "Every second (fast, 1)"
 msgstr "Joka sekunti (nopea, 1)"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:411
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:439
 msgid "Exclude interfaces"
 msgstr "Älä huomioi sovittimia"
 
@@ -3140,23 +3168,23 @@ msgid ""
 "resolution to other systems."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:377
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:405
 msgid ""
 "Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. "
 "for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
-"Salli ylävirran vastaukset alueella {loopback_slash_8_v4}, esim. RBL-"
-"palveluille"
+"Salli ylävirran vastaukset alueella {loopback_slash_8_v4} ja {localhost_v6}, "
+"esim. <abbr title=\"Real-time Block List\">RBL</abbr> -palveluille"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:410
 msgid "Existing device"
 msgstr "Olemassa oleva laite"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:564
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:592
 msgid "Expand hosts"
 msgstr "Laajenna palvelimet"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:462
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:490
 msgid "Expected port number."
 msgstr ""
 
@@ -3172,7 +3200,7 @@ msgstr "Odotetaan kelvollista IPv4-osoitetta"
 msgid "Expecting a valid IPv6 address"
 msgstr "Odotetaan kelvollista IPv6-osoitetta"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:879
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:235
 msgid "Expecting a valid MAC address, optionally including wildcards"
 msgstr ""
 
@@ -3248,6 +3276,10 @@ msgstr "Pppd-lisävalinnat"
 msgid "Extra sstpc options"
 msgstr "Sstpc-lisävalinnat"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:870
+msgid "FQDN"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1576
 msgid "FT over DS"
 msgstr "FT over DS"
@@ -3306,7 +3338,7 @@ msgstr ""
 msgid "File"
 msgstr "Tiedosto"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:573
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:601
 msgid ""
 "File listing upstream resolvers, optionally domain-specific, e.g. "
 "{servers_file_entry01}, {servers_file_entry02}."
@@ -3319,45 +3351,41 @@ msgstr ""
 msgid "File not accessible"
 msgstr "Tiedostoa ei voida lukea"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:488
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:516
 msgid "File to store DHCP lease information."
-msgstr ""
-"tiedosto, johon annetut <abbr title = \"Dynamic Host Configuration "
-"Protocol\"> DHCP </abbr> -lainat tallennetaan"
+msgstr "Tiedosto, johon annetut DHCP-lainat tallennetaan."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:496
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:524
 msgid "File with upstream resolvers."
-msgstr ""
-"paikallinen <abbr title = \"Verkkotunnusten nimijärjestelmä\">DNS</abbr>-"
-"tiedosto"
+msgstr "Tiedosto, jossa ulkoiset nimipalvelimet."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2870
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:664
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:692
 msgid "Filename"
 msgstr "Tiedostonimi"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:678
 msgid "Filename of the boot image advertised to clients."
-msgstr "Asiakkaille mainostetun käynnistysnäköistiedoston tiedostonimi"
+msgstr "Asiakkaille kerrottavan käynnistystiedoston nimi."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:191
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:315
 msgid "Filesystem"
 msgstr "Tiedostojärjestelmä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:540
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:568
 msgid "Filter IPv4 A records"
 msgstr "Suodata IPv4:n A-tietueet"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:534
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:562
 msgid "Filter IPv6 AAAA records"
 msgstr "Suodata IPv6:n AAAA-tietueet"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:529
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:557
 msgid "Filter SRV/SOA service discovery"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:522
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:550
 msgid "Filter private"
 msgstr "Suodata yksityinen"
 
@@ -3373,7 +3401,7 @@ msgstr "Suodatus kaikille orjille, tarkistus vain aktiiviselle orjalle"
 msgid "Filtering for all slaves, validation only for backup slaves"
 msgstr "Suodatus kaikille orjille, tarkistus vain vara-orjille"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:530
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:558
 msgid ""
 "Filters SRV/SOA service discovery, to avoid triggering dial-on-demand links."
 msgstr ""
@@ -3429,7 +3457,7 @@ msgstr "Laiteohjelmisto-tiedosto"
 msgid "Firmware Version"
 msgstr "Laiteohjelmiston versio"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:603
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:631
 msgid "Fixed source port for outbound DNS queries."
 msgstr "Kiinteä lähdeportti lähteville DNS-kyselyille."
 
@@ -3459,7 +3487,7 @@ msgstr "Kirjoitetaan laiteohjelmistoa…"
 msgid "Follow IPv4 Lifetime"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:694
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:722
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:704
 msgid "Force"
 msgstr "Pakota"
@@ -3492,7 +3520,7 @@ msgstr "Pakota TKIP"
 msgid "Force TKIP and CCMP (AES)"
 msgstr "Pakota TKIP ja CCMP (AES)"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1012
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1016
 msgid "Force broadcast DHCP response."
 msgstr ""
 
@@ -3553,11 +3581,11 @@ msgstr "Välitä mesh peer liikennettä"
 msgid "Forward multicast packets as unicast packets on this device."
 msgstr "Välitä multicast-paketit unicast-paketteina tällä laitteella."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:331
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:359
 msgid "Forward specific domain queries to specific upstream servers."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1015
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1019
 msgid "Forward/reverse DNS"
 msgstr ""
 
@@ -3636,7 +3664,7 @@ msgstr "Yhdyskäytävän osoite ei kelpaa"
 msgid "Gateway metric"
 msgstr "Yhdyskäytävän mittari"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:294
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:322
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:494
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:38
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:127
@@ -3920,7 +3948,7 @@ msgstr "Palvelin"
 msgid "Host expiry timeout"
 msgstr "Palvelimen vanhenemisaika"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:665
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:693
 msgid "Host requests this filename from the boot server."
 msgstr "Isäntä pyytää tätä tiedostonimeä käynnistyspalvelimelta."
 
@@ -3928,15 +3956,15 @@ msgstr "Isäntä pyytää tätä tiedostonimeä käynnistyspalvelimelta."
 msgid "Host-Uniq tag content"
 msgstr "Host-Uniq-tunnisteen sisältö"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:969
 msgid ""
 "Host-specific lease time, e.g. <code>5m</code>, <code>3h</code>, <code>7d</"
 "code>."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:38
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:803
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:856
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:831
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:903
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:55
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:87
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:135
@@ -3947,11 +3975,11 @@ msgstr "Laitenimi"
 msgid "Hostname to send when requesting DHCP"
 msgstr "Asiakastunnus, joka lähetetään DHCP:tä pyydettäessä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:298
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
 msgid "Hostnames"
 msgstr "Isäntänimet"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:795
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:823
 msgid ""
 "Hostnames are used to bind a domain name to an IP address. This setting is "
 "redundant for hostnames already configured with static leases, but it can be "
@@ -4023,7 +4051,7 @@ msgstr "IP-osoitteet"
 msgid "IP Protocol"
 msgstr "IP-protokolla"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:299
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:327
 msgid "IP Sets"
 msgstr ""
 
@@ -4031,7 +4059,7 @@ msgstr ""
 msgid "IP Type"
 msgstr "IP-tyyppi"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:807
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:835
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:178
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:204
 msgid "IP address"
@@ -4070,15 +4098,11 @@ msgctxt "nft meta l4proto"
 msgid "IP protocol"
 msgstr "IP-protokolla"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:833
-msgid "IP set"
-msgstr ""
-
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:362
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:390
 msgid "IP sets"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:588
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:616
 msgid "IPs to override with {nxdomain}"
 msgstr "Väärän {nxdomain} ohitus"
 
@@ -4086,6 +4110,7 @@ msgstr "Väärän {nxdomain} ohitus"
 msgid "IPsec XFRM"
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:885
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:87
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:110
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:86
@@ -4120,7 +4145,7 @@ msgstr "IPv4-ylävirta"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:178
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:39
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:930
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:934
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:88
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:164
 msgid "IPv4 address"
@@ -4164,6 +4189,10 @@ msgstr "IPv4-etuliitteen pituus"
 msgid "IPv4 traffic table \"%h\""
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:884
+msgid "IPv4+6"
+msgstr ""
+
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:88
 msgid "IPv4+IPv6"
 msgstr "IPv4+IPv6"
@@ -4185,6 +4214,7 @@ msgstr "IPv4/IPv6 (molemmat - oletuksena IPv4)"
 msgid "IPv4/IPv6 traffic table \"%h\""
 msgstr ""
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:886
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:88
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:111
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:91
@@ -4312,7 +4342,7 @@ msgstr ""
 msgid "IPv6-PD"
 msgstr "IPv6-PD"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:982
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:986
 msgid "IPv6-Suffix (hex)"
 msgstr ""
 
@@ -4335,7 +4365,7 @@ msgstr "IPv6-yli-IPv4 (6to4)"
 msgid "Identity"
 msgstr "Identiteetti"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:994
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:998
 msgid ""
 "If a host matches an entry which cannot be used because it specifies an "
 "address on a different subnet, the tag %s is set."
@@ -4418,7 +4448,7 @@ msgstr ""
 "hidas prosessi, koska vaihtolaite ei toimi <abbr title=\"Random Access "
 "Memory\">RAM</abbr>-muistin nopeudella."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:931
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:935
 msgid "Ignore"
 msgstr ""
 
@@ -4426,15 +4456,15 @@ msgstr ""
 msgid "Ignore interface"
 msgstr "Älä huomioi sovitinta"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:993
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:997
 msgid "Ignore requests from unknown machines using %s."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:491
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:519
 msgid "Ignore resolv file"
 msgstr "Ohita resolv-tiedosto"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:502
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:530
 msgid "Ignore {etc_hosts}"
 msgstr ""
 
@@ -4476,7 +4506,7 @@ msgstr ""
 msgid "In"
 msgstr "Sisään"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:872
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:920
 msgid ""
 "In DHCPv4, it is possible to include more than one mac address. This allows "
 "an IP address to be associated with multiple macaddrs, and dnsmasq abandons "
@@ -4500,7 +4530,7 @@ msgstr ""
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:146
 msgid "In seconds"
-msgstr ""
+msgstr "Sekunneissa"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:156
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:128
@@ -4602,8 +4632,8 @@ msgstr "Sisäinen varmennerajoitus (jokerimerkki)"
 msgid "Install protocol extensions..."
 msgstr "Asenna protokollalaajennukset..."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:699
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1001
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:727
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1005
 msgid "Instance"
 msgstr "Instanssi"
 
@@ -4782,6 +4812,8 @@ msgid ""
 "Invalid bearer list. Possibly too many bearers created. This protocol "
 "supports one and only one bearer."
 msgstr ""
+"Epäkelpo valinta. Mahdollisesti liian monta välitystapaa valittu. Tämä "
+"protokollaa tukee vain ja ainoastaan yhtä."
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:402
 msgid "Invalid command"
@@ -4978,7 +5010,7 @@ msgstr "Kieli"
 msgid "Language and Style"
 msgstr "Kieli ja tyyli"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:712
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:740
 msgid ""
 "Larger weights (of the same prio) are given a proportionately higher "
 "probability of being selected."
@@ -5009,11 +5041,11 @@ msgstr ""
 msgid "Learn routes"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:487
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:515
 msgid "Lease file"
 msgstr "Lainatiedosto"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:964
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:968
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:697
 msgid "Lease time"
 msgstr "Laina-aika"
@@ -5060,7 +5092,7 @@ msgstr "Tietoja:"
 msgid "Limit"
 msgstr "Raja"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:546
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:574
 msgid ""
 "Limit response records (from {etc_hosts}) to those that fall within the "
 "subnet of the querying interface."
@@ -5095,8 +5127,8 @@ msgctxt "nft @ll,off,len"
 msgid "Link layer header bits %d-%d"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:363
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:825
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:391
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:853
 msgid ""
 "List of IP sets to populate with the IPs of DNS lookup results of the FQDNs "
 "also specified here."
@@ -5135,7 +5167,7 @@ msgstr ""
 msgid "List of SSH key files for auth"
 msgstr "Luettelo autentikoinnin SSH-avaintiedostoista"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:384
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:412
 msgid "List of domains to allow {rfc_1918_link} responses for."
 msgstr ""
 "Luettelo verkkotunnuksista, joille sallitaan {rfc_1918_link}-vastaukset"
@@ -5153,7 +5185,7 @@ msgstr ""
 msgid "Listen for peers"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:405
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:433
 msgid "Listen interfaces"
 msgstr "Kuuntelevat sovittimet"
 
@@ -5162,7 +5194,7 @@ msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Kuuntele vain määritetyissä sovittimissa tai kaikissa jos määrittelemättä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:406
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:434
 msgid ""
 "Listen only on the specified interfaces, and loopback if not excluded "
 "explicitly."
@@ -5176,7 +5208,7 @@ msgstr ""
 msgid "ListenPort setting is invalid"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:596
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:624
 msgid "Listening port for inbound DNS queries."
 msgstr "Saapuvien DNS-kyselyiden kuunteluportti"
 
@@ -5265,16 +5297,16 @@ msgstr "Paikallinen aika"
 msgid "Local ULA"
 msgstr "Paikallinen ULA"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:321
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:349
 msgid "Local domain"
 msgstr "Paikallinen verkkotunnus"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:322
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:350
 msgid "Local domain suffix appended to DHCP names and hosts file entries."
 msgstr ""
 "DHCP-nimiin ja hosts-tiedoston kohteisiin liitettävä paikallinen verkkotunnus"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:392
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:420
 msgid "Local service only"
 msgstr "Palvele vain paikallisesti"
 
@@ -5282,7 +5314,7 @@ msgstr "Palvele vain paikallisesti"
 msgid "Local wireguard key"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:545
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:573
 msgid "Localise queries"
 msgstr "Lokalisoi kyselyt"
 
@@ -5317,7 +5349,7 @@ msgstr "Kirjaudu ulos"
 msgid "Log output level"
 msgstr "Lokin tulostustaso"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:325
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:353
 msgid "Log queries"
 msgstr "Lokikyselyt"
 
@@ -5389,7 +5421,7 @@ msgstr ""
 msgid "MAC address"
 msgstr "MAC-osoite"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:870
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:918
 msgid "MAC address(es)"
 msgstr ""
 
@@ -5446,7 +5478,7 @@ msgstr "MII-väli"
 msgid "MTU"
 msgstr "MTU"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:302
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:330
 msgid "MX"
 msgstr ""
 
@@ -5476,7 +5508,7 @@ msgstr "Valmistaja"
 msgid "Master (VLAN)"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:991
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:995
 msgid "Match Tag"
 msgstr ""
 
@@ -5484,19 +5516,19 @@ msgstr ""
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:609
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:637
 msgid "Max. DHCP leases"
 msgstr ""
 "<abbr title = \"maximal\"> Max. </abbr> <abbr title = \"Dynamic Host "
 "Configuration Protocol\"> DHCP </abbr> laina"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:616
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:644
 msgid "Max. EDNS0 packet size"
 msgstr ""
 "<abbr title = \"maximal\"> Max. </abbr> <abbr title = \"Domain Name System -"
 "laajennusmekanismit\"> EDNS0 </abbr> paketin koko"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:623
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:651
 msgid "Max. concurrent queries"
 msgstr "<abbr title = \"maximal\"> Max. </abbr> samanaikaiset kyselyt"
 
@@ -5508,17 +5540,17 @@ msgstr "Enimmäisikä"
 msgid "Maximum allowed Listen Interval"
 msgstr "Suurin sallittu kuunteluväli"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:610
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:638
 msgid "Maximum allowed number of active DHCP leases."
 msgstr "Aktiivisten DHCP-lainojen sallittu enimmäismäärä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:624
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:652
 msgid "Maximum allowed number of concurrent DNS queries."
 msgstr "Samanaikaisten DNS-kyselyiden suurin sallittu määrä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:617
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:645
 msgid "Maximum allowed size of EDNS0 UDP packets."
-msgstr "EDNS.0 UDP -pakettien suurin sallittu koko"
+msgstr "EDNS0 UDP -pakettien suurin sallittu koko."
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
@@ -5544,7 +5576,7 @@ msgstr ""
 msgid "Maximum transmit power"
 msgstr "Suurin lähetysteho"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:531
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:559
 msgid "May prevent VoIP or other services from working."
 msgstr ""
 
@@ -5876,11 +5908,15 @@ msgstr "Nimi"
 msgid "Name of the new network"
 msgstr "Uuden verkon nimi"
 
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:865
+msgid "Name of the set"
+msgstr ""
+
 #: protocols/luci-proto-unet/htdocs/luci-static/resources/protocol/unet.js:38
 msgid "Name of the tunnel device"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:309
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:337
 msgid "Names not in {etc_hosts} are answered {not_found}."
 msgstr ""
 
@@ -5899,6 +5935,10 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:713
 msgid "Neighbour cache validity"
+msgstr ""
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:875
+msgid "Netfilter table name"
 msgstr ""
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:45
@@ -5932,7 +5972,7 @@ msgstr "Verkon SSID"
 msgid "Network address"
 msgstr "Verkon osoite"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:649
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:677
 msgid "Network boot image"
 msgstr "Verkon käynnistyskuva"
 
@@ -5972,7 +6012,7 @@ msgstr ""
 msgid "Network interface"
 msgstr "Sovitin"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:688
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:716
 msgid "Network-ID"
 msgstr ""
 
@@ -5985,11 +6025,11 @@ msgctxt "No WireGuard peer handshake yet"
 msgid "Never"
 msgstr "Ei koskaan"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:308
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:336
 msgid "Never forward DNS queries which lack dots or domain parts."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:317
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:345
 msgid ""
 "Never forward these matching domains or subdomains; resolve from DHCP or "
 "hosts files only."
@@ -6124,7 +6164,7 @@ msgstr "Enempää orjia ei ole saatavilla"
 msgid "No more slaves available, can not save interface"
 msgstr "Ei enempää orjia saatavilla, sovitinta ei voi tallentaa"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:568
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:596
 msgid "No negative cache"
 msgstr "Ei negatiivista välimuistia"
 
@@ -6200,7 +6240,7 @@ msgstr ""
 msgid "Noise:"
 msgstr "Kohina:"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:398
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:426
 msgid "Non-wildcard"
 msgstr "Ei-yleismerkki"
 
@@ -6250,7 +6290,7 @@ msgstr "Ei käynnistetty käynnistettäessä"
 msgid "Not supported"
 msgstr "Ei tuettu"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:548
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:576
 msgid "Note: IPv4 only."
 msgstr ""
 
@@ -6262,7 +6302,7 @@ msgstr ""
 "Huomautus: Jotkut langattomien verkkolaitteiden ajurit eivät täysin tue "
 "802.11w -standardia. Esim. mwlwifi -ajureilla voi esiintyä ongelmia"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:419
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:447
 msgid ""
 "Note: you may also need a DHCP Proxy (currently unavailable) when specifying "
 "a non-standard Relay To port(<code>addr#port</code>)."
@@ -6284,11 +6324,10 @@ msgstr "Nslookup"
 msgid "Number of IGMP membership reports"
 msgstr "IGMP-jäsenraporttien määrä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:631
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:659
 msgid "Number of cached DNS entries, 10000 is maximum, 0 is no caching."
 msgstr ""
-"Välimuistissa olevien DNS-merkintöjen määrä (max on 10000, 0 poistaa "
-"välimuistiin tallentamisen käytöstä)"
+"DNS-tietojen välimuistin koko. Max 10000, 0 poistaa välimuistin käytöstä."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:311
 msgid "Number of peer notifications after failover event"
@@ -6341,7 +6380,7 @@ msgstr "Ylöstulon viive"
 msgid "On-link"
 msgstr "Reitti aina ylhäällä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:938
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:942
 msgid "One of hostname or MAC address must be specified!"
 msgstr "Palvelinnimi tai MAC-osoite on määritettävä!"
 
@@ -6363,7 +6402,7 @@ msgstr "Yksi tai useampi virheellinen / vaadittu arvo välilehdellä"
 msgid "One or more required fields have no value!"
 msgstr "Vähintään yhdellä pakollisella kentällä ei ole arvoa!"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:476
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:504
 msgid "Only accept replies via"
 msgstr ""
 
@@ -6452,7 +6491,7 @@ msgstr "Vaihtoehto poistettu"
 msgid "Optional"
 msgstr "Valinnainen"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:857
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:904
 msgid "Optional hostname to assign"
 msgstr ""
 
@@ -6562,7 +6601,7 @@ msgstr "Valinnainen. Lähtevien ja saapuvien pakettien UDP-portti."
 msgid "Options"
 msgstr "Valinnat"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:683
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:711
 msgid ""
 "Options for the Network-ID. (Note: needs also Network-ID.) E.g. "
 "\"<code>42,192.168.1.4</code>\" for NTP server, \"<code>3,192.168.4.4</"
@@ -6574,8 +6613,8 @@ msgstr ""
 msgid "Options:"
 msgstr "Valinnat:"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:736
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:768
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:764
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:796
 msgid "Ordinal: lower comes first."
 msgstr ""
 
@@ -6846,7 +6885,7 @@ msgstr "PSK"
 msgid "PTM/EFM (Packet Transfer Mode)"
 msgstr "PTM/EFM (Packet Transfer Mode)"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:304
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:332
 msgid "PXE/TFTP Settings"
 msgstr "PXE/TFTP-asetukset"
 
@@ -7109,7 +7148,7 @@ msgctxt "Chain hook policy"
 msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Käytäntö: <strong>%h</strong> (%h)"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:731
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:759
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:21
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:253
 msgid "Port"
@@ -7222,8 +7261,8 @@ msgstr ""
 "(aina, 0)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:562
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:736
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:768
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:764
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:796
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:130
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:197
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:223
@@ -7360,11 +7399,9 @@ msgstr "QMI Cellular"
 msgid "Quality"
 msgstr "Laatu"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:584
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:612
 msgid "Query all available upstream resolvers."
-msgstr ""
-"Käytä kaikkia määriteltyjä<abbr title=\"Domain Name System\">DNS</abbr> -"
-"palvelimia kyselyihin"
+msgstr "Käytä kaikkia määriteltyjä DNS-palvelimia."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:610
 msgid "Query interval"
@@ -7473,7 +7510,7 @@ msgstr ""
 "Raa'at heksakoodatut tavut. Jätä tyhjäksi, ellei palveluntarjoajasi vaadi "
 "tätä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:483
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:511
 msgid "Read {etc_ethers} to configure the DHCP server."
 msgstr "Lue {etc_ethers} määrittääksesi DHCP-palvelin"
 
@@ -7489,7 +7526,7 @@ msgstr "Reaaliaikaiset kaaviot"
 msgid "Reassociation Deadline"
 msgstr "Uudelleenyhdistämisen määräaika"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:368
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:396
 msgid "Rebind protection"
 msgstr "Rebind-suoja"
 
@@ -7600,7 +7637,7 @@ msgctxt "nft reject with tcp reset"
 msgid "Reject packet with <strong>TCP reset</strong>"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:524
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:552
 msgid ""
 "Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in "
 "{etc_hosts}."
@@ -7613,8 +7650,8 @@ msgid ""
 msgstr ""
 
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:153
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:300
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:763
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:328
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:791
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:39
 msgid "Relay"
 msgstr "Välitys"
@@ -7624,7 +7661,7 @@ msgstr "Välitys"
 msgid "Relay Bridge"
 msgstr "Välityssilta"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:418
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:446
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
 msgstr ""
 
@@ -7637,11 +7674,11 @@ msgstr "Välitä verkkojen välillä"
 msgid "Relay bridge"
 msgstr "Välityssilta"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:430
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:458
 msgid "Relay from"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:450
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:478
 msgid "Relay to address"
 msgstr ""
 
@@ -7671,11 +7708,11 @@ msgstr "Etäpään IPv6-osoite tai FQDN-nimi"
 msgid "Remove"
 msgstr "Poista"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:541
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:569
 msgid "Remove IPv4 addresses from the results and only return IPv6 addresses."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:535
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:563
 msgid "Remove IPv6 addresses from the results and only return IPv4 addresses."
 msgstr ""
 
@@ -7833,19 +7870,19 @@ msgstr "Nollaa laskurit"
 msgid "Reset to defaults"
 msgstr "Palauta oletusasetuksiin"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:297
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:325
 msgid "Resolv and Hosts Files"
 msgstr "Resolv- ja Hosts-tiedostot"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:495
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:523
 msgid "Resolv file"
 msgstr "Resolve-tiedosto"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:338
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:366
 msgid "Resolve specified FQDNs to an IP."
 msgstr "Lista verkkoalueista sekä käytettävistä IP-osoitteista."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:316
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:344
 msgid "Resolve these locally"
 msgstr ""
 
@@ -7959,7 +7996,7 @@ msgstr ""
 msgid "Robustness"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:643
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:671
 msgid ""
 "Root directory for files served via TFTP. <em>Enable TFTP server</em> and "
 "<em>TFTP server root</em> turn on the TFTP server and serve files from "
@@ -8072,8 +8109,8 @@ msgstr ""
 msgid "SNR"
 msgstr "SNR"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:301
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:721
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:329
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:749
 msgid "SRV"
 msgstr ""
 
@@ -8238,11 +8275,11 @@ msgstr "Lähetä tämän laitteen nimi"
 msgid "Server"
 msgstr "Palvelin"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:676
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:704
 msgid "Server address"
 msgstr "Palvelimen osoite"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:670
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:698
 msgid "Server name"
 msgstr "Palvelimen nimi"
 
@@ -8265,9 +8302,9 @@ msgstr "Istunto on vanhentunut"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:126
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:175
 msgid "Set Static"
-msgstr "Aseta staattinen"
+msgstr "Aseta kiinteä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:774
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:802
 msgid "Set an alias for a hostname."
 msgstr ""
 
@@ -8408,7 +8445,7 @@ msgstr "Signaali:"
 msgid "Size"
 msgstr "Koko"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:630
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:658
 msgid "Size of DNS query cache"
 msgstr "DNS-kyselyvälimuistin koko"
 
@@ -8489,7 +8526,7 @@ msgctxt "nft ip sport"
 msgid "Source port"
 msgstr "Lähdeportti"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:657
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:685
 msgid ""
 "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
 "options for Dnsmasq."
@@ -8886,7 +8923,7 @@ msgstr "Aloitetaan määrityksen käyttöönotto…"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1853
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/channel_analysis.js:442
 msgid "Starting wireless scan..."
-msgstr "Aloitetaan langattoman verkon etsintä..."
+msgstr "Aloitetaan langattoman verkon hakeminen..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:109
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:78
@@ -8911,7 +8948,7 @@ msgstr "Pysyvät IPv6-reitit"
 msgid "Static Lease"
 msgstr "Pysyvä laina"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:296
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:324
 msgid "Static Leases"
 msgstr "Pysyvät lainat"
 
@@ -8921,7 +8958,7 @@ msgstr "Pysyvät lainat"
 msgid "Static address"
 msgstr "Staattinen osoite"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:842
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:889
 msgid ""
 "Static leases are used to assign fixed IP addresses and symbolic hostnames "
 "to DHCP clients. They are also required for non-dynamic interface "
@@ -8963,7 +9000,7 @@ msgstr "Tallennustila"
 msgid "Strict filtering"
 msgstr "Tiukka suodatus"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:578
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:606
 msgid "Strict order"
 msgstr "Tiukka järjestys"
 
@@ -8976,13 +9013,13 @@ msgstr "Vahva"
 msgid "Submit"
 msgstr "Lähetä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:512
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:540
 msgid "Suppress logging"
 msgstr "Estä kirjaaminen"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:513
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:541
 msgid "Suppress logging of the routine operation for the DHCP protocol."
-msgstr "Estä näiden protokollien rutiinitoimintojen kirjaaminen"
+msgstr "Estä DHCP-rutiinitoimintojen kirjaaminen lokiin."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:46
 msgid "Swap free"
@@ -9034,11 +9071,11 @@ msgstr "Synkronoi NTP-palvelimen kanssa"
 msgid "Sync with browser"
 msgstr "Synkronoi selaimen kanssa"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:721
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:749
 msgid "Syntax:"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:367
 msgid "Syntax: {code_syntax}."
 msgstr ""
 
@@ -9098,7 +9135,7 @@ msgstr "TCP-lähdeportti"
 msgid "TCP:"
 msgstr "TCP:"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:642
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:670
 msgid "TFTP server root"
 msgstr "TFTP-palvelimen pääkansio"
 
@@ -9124,7 +9161,11 @@ msgstr "TX-jonon pituus"
 msgid "Table"
 msgstr "Taulukko"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:987
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:880
+msgid "Table IP family"
+msgstr ""
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:991
 msgid "Tag"
 msgstr ""
 
@@ -9133,8 +9174,8 @@ msgctxt "VLAN port state"
 msgid "Tagged"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:726
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:789
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:754
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:817
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:58
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:66
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:187
@@ -9196,7 +9237,7 @@ msgid ""
 "the configuration."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:975
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:979
 msgid "The DHCPv6-DUID (DHCP unique identifier) of this host."
 msgstr ""
 
@@ -9214,19 +9255,19 @@ msgstr ""
 "HE.net-päätepisteen määritys on muuttunut, sinun on nyt käytettävä "
 "käyttäjätunnusta käyttäjä-ID:n sijaan!"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:947
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:951
 msgid "The IP address %h is already used by another static lease"
 msgstr "IP-osoite %h on jo toisen pysyvän lainan käytössä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:956
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:960
 msgid "The IP address is outside of any DHCP pool address range"
 msgstr "IP-osoite ei ole minkään DHCP-varannon osoitealueen sisällä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:677
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:705
 msgid "The IP address of the boot server"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:930
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:934
 msgid ""
 "The IP address to be used for this host, or <em>ignore</em> to ignore any "
 "DHCP request from this host."
@@ -9254,7 +9295,7 @@ msgid ""
 "The IPv6 address or the fully-qualified domain name of the remote tunnel end."
 msgstr "Etäpään IPv6 osoite tai sen täydellinen verkkonimi."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:983
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:987
 msgid ""
 "The IPv6 interface identifier (address suffix) as hexadecimal number (max. "
 "16 chars)."
@@ -9289,7 +9330,7 @@ msgstr ""
 msgid "The LED is always in default state on."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:239
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:267
 msgid ""
 "The MAC address %h is already used by another static lease in the same DHCP "
 "pool"
@@ -9414,7 +9455,7 @@ msgstr ""
 "Annettu julkinen SSH-avain ei kelpaa. Anna kelvollinen julkinen RSA-, "
 "ED25519- tai ECDSA-avain."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:871
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:919
 msgid "The hardware address(es) of this entry/host."
 msgstr ""
 
@@ -9426,7 +9467,7 @@ msgid ""
 "to be received and retransmitted which costs airtime)"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:671
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:699
 msgid "The hostname of the boot server"
 msgstr ""
 
@@ -9500,6 +9541,10 @@ msgid ""
 msgstr ""
 "<abbr title=\"Router Advertisement\">RA</abbr>-viesteissä julkaistava "
 "hyppyjen enimmäismäärä. Suurin mahdollinen on 255 hyppyä."
+
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:854
+msgid "The netfilter components below are only regarded when running fw4."
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4699
 msgid ""
@@ -9619,7 +9664,7 @@ msgstr "Järjestelmän salasana on vaihdettu onnistuneesti."
 msgid "The sysupgrade command failed with code %d"
 msgstr "Sysupgrade-komento epäonnistui koodilla %d"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:844
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:891
 msgid ""
 "The tag construct filters which host directives are used; more than one tag "
 "can be provided, in this case the request must match all of them. Tagged "
@@ -9670,8 +9715,8 @@ msgid ""
 "nftables rules is discouraged and may lead to incomplete traffic filtering."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1056
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1088
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1060
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1092
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:130
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:179
 msgid "There are no active leases"
@@ -9751,7 +9796,7 @@ msgstr ""
 "Tämä on tunnelin välittäjän määrittämä paikallinen päätepisteosoite, joka "
 "päättyy yleensä <code>... :2/64</code>"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:313
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:341
 msgid "This is the only DHCP server in the local network."
 msgstr "Tämä on paikallisen verkon ainoa DHCP-palvelin."
 
@@ -9790,7 +9835,7 @@ msgid ""
 msgstr ""
 "Tätä vaihtoehtoa ei voi käyttää, koska ca-bundle -pakettia ei ole asennettu."
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:547
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:575
 msgid "This prevents unreachable IPs in subnets not accessible to you."
 msgstr ""
 
@@ -9903,7 +9948,7 @@ msgstr ""
 msgid "Transfer"
 msgstr "Siirto"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:589
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:617
 msgid ""
 "Transform replies which contain the specified addresses or subnets into "
 "{nxdomain} responses."
@@ -10275,11 +10320,9 @@ msgid ""
 "will be restarted to apply the updated configuration."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:579
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:607
 msgid "Upstream resolvers will be queried in the order of the resolv file."
-msgstr ""
-"<abbr title = \"Verkkotunnusten nimijärjestelmä\"> DNS </abbr> -palvelimet "
-"kysytään resolvfile-järjestyksessä"
+msgstr "DNS-palvelimilta kysytään resolv-tiedoston mukaisessa järjestyksessä."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:62
@@ -10408,7 +10451,7 @@ msgstr "Käytä järjestelmävarmenteita"
 msgid "Use system certificates for inner-tunnel"
 msgstr "Käytä järjestelmävarmenteita sisätunneliin"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:843
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:890
 msgid ""
 "Use the <em>Add</em> Button to add a new lease entry. The <em>MAC address</"
 "em> identifies the host, the <em>IPv4 address</em> specifies the fixed "
@@ -10434,7 +10477,7 @@ msgstr ""
 "Käytä ylemmän kerroksen protokollatietoja, luota skb_flow_dissect (encap3 + "
 "4)"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:482
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:510
 msgid "Use {etc_ethers}"
 msgstr "Käytä {etc_ethers}"
 
@@ -10575,13 +10618,13 @@ msgstr "VXLAN-verkon tunnus"
 msgid "VXLANv6 (RFC7348)"
 msgstr "VXLANv6 (RFC7348)"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:553
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:581
 msgid ""
 "Validate DNS replies and cache DNSSEC data, requires upstream to support "
 "DNSSEC."
 msgstr ""
-"Vaatii tukea DNSSEC prokollalle; vahvista että allekirjoittamattomat "
-"toimialuevastaukset todella tulevat allekirjoittamattomista toimialueista"
+"Tarkista DNS-vastaukset ja tallenna DNSSEC-tiedot välimuistiin. Vaatii tuen "
+"DNSSEC-prokollalle."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1668
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1726
@@ -10612,7 +10655,7 @@ msgstr "Toimittaja"
 msgid "Vendor Class to send when requesting DHCP"
 msgstr "Toimittajaluokka, joka lähetetään DHCP-pyynnössä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:558
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:586
 msgid "Verify unsigned domain responses really come from unsigned domains."
 msgstr ""
 
@@ -10704,11 +10747,11 @@ msgstr ""
 msgid "Weak"
 msgstr "Heikko"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:741
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:769
 msgid "Weight"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:992
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:996
 msgid ""
 "When a host matches an entry then the special tag %s is set. Use %s to match "
 "all known hosts."
@@ -10859,7 +10902,7 @@ msgstr "Langaton verkko on poistettu käytöstä"
 msgid "Wireless network is enabled"
 msgstr "Langaton verkko on käytössä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:326
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:354
 msgid "Write received DNS queries to syslog."
 msgstr "Kirjoita vastaanotetut DNS-pyynnöt syslogiin."
 
@@ -10904,15 +10947,15 @@ msgstr ""
 "<strong> Varoitus: Jos poistat käytöstä välttämättömät aloituskomentosarjat, "
 "kuten \"verkko\", saatat kadottaa pääsyn laitteeseesi! </strong>"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:711
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:739
 msgid "You may add multiple records for the same Target."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:748
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:776
 msgid "You may add multiple records for the same domain."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:420
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:448
 msgid "You may add multiple unique Relay To on the same Listen addr."
 msgstr ""
 
@@ -10948,17 +10991,17 @@ msgstr "ZRam-asetukset"
 msgid "ZRam Size"
 msgstr "ZRam-koko"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:710
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:738
 msgid "_proto: _tcp, _udp, _sctp, _quic, … ."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:709
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:737
 msgid ""
 "_service: _sip, _ldap, _imap, _stun, _xmpp-client, … . (Note: while _http is "
 "possible, no browsers support SRV records.)"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:606
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:634
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:164
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:103
@@ -11094,8 +11137,8 @@ msgctxt "WireGuard keep alive interval"
 msgid "every %ds"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1036
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1066
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1040
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1070
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:101
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:148
 msgid "expired"
@@ -11145,7 +11188,7 @@ msgstr "hybridi-tila"
 msgid "ignore"
 msgstr "ohita"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:971
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:975
 msgid "infinite (lease does not expire)"
 msgstr ""
 
@@ -11163,11 +11206,11 @@ msgstr "8 - 63 merkkiä pitkä avain"
 msgid "key with either 5 or 13 characters"
 msgstr "5 tai 13 merkkiä pitkä avain"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:995
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:999
 msgid "known"
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:997
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1001
 msgid "known-othernet (on different subnet)"
 msgstr ""
 
@@ -11340,9 +11383,9 @@ msgstr "tuntematon"
 msgid "unknown version"
 msgstr "tuntematon versio"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:613
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1034
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1064
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:641
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1038
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1068
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:99
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:146
 msgid "unlimited"
@@ -11564,12 +11607,12 @@ msgstr "viikko"
 msgid "yes"
 msgstr "kyllä"
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:344
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:372
 msgctxt "hint: <code>/#/</code> matches any domain (and returns NXDOMAIN)."
 msgid "{any_domain} matches any domain (and returns {nxdomain})."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:348
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:376
 msgctxt ""
 "hint: <code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</"
 "code>, <code>::</code>) for example.com and its subdomains."
@@ -11578,7 +11621,7 @@ msgid ""
 "{example_com} and its subdomains."
 msgstr ""
 
-#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:341
+#: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:369
 msgctxt "hint: <code>/example.com/</code> returns <code>NXDOMAIN</code>."
 msgid "{example_nx} returns {nxdomain}."
 msgstr ""
