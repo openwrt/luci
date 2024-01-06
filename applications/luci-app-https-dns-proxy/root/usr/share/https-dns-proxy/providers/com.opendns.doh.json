@@ -1,0 +1,24 @@
+{
+	"title": "OpenDNS",
+	"template": "https://doh.{option}opendns.com/dns-query",
+	"bootstrap_dns": "208.67.222.222,208.67.220.220",
+	"help_link": "https://support.opendns.com/hc/en-us/articles/360038086532-Using-DNS-over-HTTPS-DoH-with-OpenDNS",
+	"params": {
+		"option": {
+			"description": "Variant",
+			"type": "select",
+			"regex": "(family.|)",
+			"options": [
+				{
+					"value": "family.",
+					"description": "Family Filter"
+				},
+				{
+					"value": "",
+					"description": "Standard"
+				}
+			],
+			"default": ""
+		}
+	}
+}

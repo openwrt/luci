@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-03-30 16:55+0000\n"
-"Last-Translator: CakesTwix <cakestwix1@gmail.com>\n"
+"PO-Revision-Date: 2023-10-19 04:13+0000\n"
+"Last-Translator: Oleksandr Shvets <oleksandr.shvets@icloud.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadvanced-reboot/uk/>\n"
 "Language: uk\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 5.1\n"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:193
 #: applications/luci-app-advanced-reboot/root/usr/share/luci/menu.d/luci-app-advanced-reboot.json:3
@@ -60,7 +60,7 @@ msgstr "Розділи"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:235
 msgid "Perform power off..."
-msgstr "Вимкнути..."
+msgstr "Вимкнути живлення..."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:51
 msgid "Power Off Device"
@@ -77,15 +77,15 @@ msgstr "Перезавантаження"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:130
 msgid "Reboot Device to an Alternative Partition"
-msgstr "Перезавантажити пристрій в інший розділ"
+msgstr "Перезавантажити пристрій з іншого розділу"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:162
 msgid "Reboot to alternative partition..."
-msgstr "Перезавантажити в інший розділ..."
+msgstr "Перезавантажити з іншого розділу..."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:159
 msgid "Reboot to current partition"
-msgstr "Перезавантажити в поточний розділ"
+msgstr "Перезавантажити з поточного роздіу"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:75
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:80
@@ -147,7 +147,7 @@ msgstr "Не вдається отримати змінну середовища
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:18
 msgid "Unable to set Dual Boot Flag Partition entry for partition: %s."
-msgstr ""
+msgstr "Для цього розділу не можна вмикнути флаг подвійного завантаження: %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:20
 msgid "Unable to set firmware environment variable: %s to %s."
@@ -184,10 +184,13 @@ msgid ""
 "support power off.<br /><br /> Click \"Proceed\" below to power off your "
 "device."
 msgstr ""
+"ПОПЕРЕДЖЕННЯ: вимкнення живлення може довести  до постійного "
+"перезавантаження пристрою, якщо він не підтримує вимкнутий стан. <br /><br /"
+">Ви дійсно бажаєте вимкнути цей пристрій?"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:76
 msgid "Waiting for device..."
-msgstr ""
+msgstr "Очикую пристрій..,"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:221
 msgid ""
@@ -195,6 +198,9 @@ msgid ""
 "seeing this on an OpenWrt dual-firmware supported device,%splease refer to "
 "%sHow to add a new device section of the README%s."
 msgstr ""
+"Попередження! Пристрій (%s) не впізнано, або він не підтримує подвійної "
+"загрузки! %s якщо ви бачите це на OpenWrt dual-firmware пристрою, будь ласка "
+"зверніться до розділу «Як додати новий пристрій» README."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:198
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
@@ -203,11 +209,11 @@ msgstr ""
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:238
 msgid "Warning: This system does not support powering off!"
-msgstr ""
+msgstr "Обережно! Ця система не підтримує вимкнення живлення!"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:225
 msgid "Warning: Unable to obtain device information!"
-msgstr ""
+msgstr "Попередження: Немає можливості зчитати дані пристрою!"
 
 #~ msgid "Alternative"
 #~ msgstr "Альтернатива"

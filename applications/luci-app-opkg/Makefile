@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=OPKG package management application
-LUCI_DEPENDS:=+opkg
+LUCI_DEPENDS:=+luci-base +opkg
 
 include ../../luci.mk
 

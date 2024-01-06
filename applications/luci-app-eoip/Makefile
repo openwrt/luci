@@ -9,7 +9,6 @@ PKG_LICENSE:=Apache-2.0
 
 LUCI_TITLE:=LuCI Support for EoIP
 LUCI_DEPENDS:=+eoip +luci-base
-LUCI_PKGARCH:=all
 
 include ../../luci.mk
 

@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Show services announced with the nameservice plugin
-LUCI_DEPENDS:=+luci-app-olsr +olsrd +olsrd-mod-nameservice
+LUCI_DEPENDS:=+luci-base +luci-app-olsr +olsrd +olsrd-mod-nameservice
 
 include ../../luci.mk
 

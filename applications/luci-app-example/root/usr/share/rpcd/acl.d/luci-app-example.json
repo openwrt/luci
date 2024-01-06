@@ -1,10 +1,11 @@
 {
   "luci-app-example": {
-    "description": "Grant UCI access to LuCI app example",
+    "description": "Grant UCI and RPC access to LuCI app example",
     "read": {
       "ubus": {
-        "uci": [
-          "get"
+        "luci.example": [
+          "get_sample1",
+          "get_sample2"
         ]
       },
       "uci": [
@@ -12,11 +13,6 @@
       ]
     },
     "write": {
-      "ubus": {
-        "uci": [
-          "set", "commit"
-        ]
-      },
       "uci": [
         "example"
       ]

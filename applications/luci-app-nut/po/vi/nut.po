@@ -25,8 +25,8 @@ msgid "Allowed actions"
 msgstr "Các hành động được cho phép"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:20
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "As configured by NUT"
 msgstr "Như đã cấu hình bởi NUT"
 
@@ -34,7 +34,7 @@ msgstr "Như đã cấu hình bởi NUT"
 msgid "Bytes to read from interrupt pipe"
 msgstr "Số byte đọc từ ống nối trực tiếp"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "CA Certificate path"
 msgstr "Đường dẫn Chứng chỉ CA"
 
@@ -133,6 +133,7 @@ msgstr ""
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:150
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:158
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:166
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
 msgid "Execute notify command"
 msgstr "Thực thi lệnh notify"
 
@@ -164,8 +165,8 @@ msgstr "Host"
 msgid "Hostname or IP address"
 msgstr "Tên máy chủ hoặc địa chỉ IP"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:199
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:228
 msgid "Hostname or address of UPS"
 msgstr "Tên máy chủ hoặc địa chỉ của UPS"
 
@@ -187,6 +188,7 @@ msgstr "Địa chỉ IP"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:152
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:160
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:168
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:176
 msgid "Ignore"
 msgstr "Bỏ qua"
 
@@ -263,8 +265,8 @@ msgstr "Truy cập NUT CGI"
 msgid "NUT Users"
 msgstr "Người dùng NUT"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:188
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:217
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "Name of UPS"
 msgstr "Tên của UPS"
 
@@ -327,32 +329,39 @@ msgstr "Lệnh thông báo"
 msgid "Notify when back online"
 msgstr "Thông báo khi trở lại trực tuyến"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
 msgid "Notify when battery needs replacing"
 msgstr "Thông báo khi cần thay pin"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
 msgid "Notify when communications lost"
 msgstr "Thông báo khi mất kết nối"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
 msgid "Notify when communications restored"
 msgstr "Thông báo khi khôi phục kết nối"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when force shutdown"
 msgstr "Thông báo khi tắt nguồn ép buộc"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:115
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when low battery"
 msgstr "Thông báo khi pin yếu"
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
+msgid "Notify when no communications"
+msgstr ""
+
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:171
+msgid "Notify when no parent process"
+msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:107
 msgid "Notify when on battery"
 msgstr "Thông báo khi sử dụng pin"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
 msgid "Notify when shutting down"
 msgstr "Thông báo khi tắt nguồn"
 
@@ -372,13 +381,13 @@ msgstr "Thông báo khi sử dụng pin"
 msgid "Online message"
 msgstr "Thông báo trực tuyến"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:216
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:245
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:19
 msgid "Password"
 msgstr "Mật khẩu"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "Path containing ca certificates to match against host certificate"
 msgstr "Đường dẫn chứa chứng chỉ ca để so khớp với chứng chỉ máy chủ"
 
@@ -411,15 +420,15 @@ msgid "Polling Frequency(s)"
 msgstr "Tần suất (các) khảo sát"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:27
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:195
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:224
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:203
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:232
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:46
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:202
 msgid "Port"
 msgstr "Cổng"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:200
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:229
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:208
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:237
 msgid "Power value"
 msgstr "Giá trị công suất"
 
@@ -431,7 +440,7 @@ msgstr "Sản phẩm (regex)"
 msgid "Replace battery message"
 msgstr "Thông báo thay pin"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Require SSL and make sure server CN matches hostname"
 msgstr "Yêu cầu SSL và đảm bảo CN máy chủ khớp với tên máy chủ"
 
@@ -525,7 +534,7 @@ msgstr ""
 "Thời gian tính bằng giây mà upsdrvctl sẽ chờ trình điều khiển hoàn thành quá "
 "trình khởi động"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:183
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
 msgid "UPS Master"
 msgstr "UPS Chủ"
 
@@ -533,7 +542,7 @@ msgstr "UPS Chủ"
 msgid "UPS Server Global Settings"
 msgstr "Cài đặt toàn cầu của máy chủ UPS"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:212
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
 msgid "UPS Slave"
 msgstr "UPS Phục vụ"
 
@@ -558,8 +567,8 @@ msgid ""
 "Use upscmd -l to see full list which the commands your UPS supports "
 "(requires upscmd package)"
 msgstr ""
-"Sử dụng upscmd -l để xem danh sách đầy đủ các lệnh mà UPS của bạn hỗ trợ ("
-"yêu cầu gói upscmd)"
+"Sử dụng upscmd -l để xem danh sách đầy đủ các lệnh mà UPS của bạn hỗ trợ "
+"(yêu cầu gói upscmd)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:110
 msgid ""
@@ -569,8 +578,8 @@ msgstr ""
 "Người dùng thực thi trình điều khiển; yêu cầu tệp thiết bị mà trình điều "
 "khiển truy cập phải được đọc và ghi cho người dùng đó."
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:205
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:234
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:213
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:242
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:16
 msgid "Username"
 msgstr "Tên người dùng"
@@ -579,7 +588,7 @@ msgstr "Tên người dùng"
 msgid "Vendor (regex)"
 msgstr "Nhà sản xuất (regex)"
 
-#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:178
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Verify all connection with SSL"
 msgstr "Xác minh tất cả kết nối bằng SSL"
 
@@ -597,6 +606,7 @@ msgstr "Giải pháp tạm thời cho firmware lỗi"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:151
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:159
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:167
+#: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:175
 msgid "Write to syslog"
 msgstr "Ghi vào syslog"
 

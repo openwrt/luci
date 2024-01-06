@@ -7,8 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Cloudshark capture tool Web UI
-LUCI_DEPENDS:=+luci-compat +cshark
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=+luci-base +luci-compat +cshark
 
 PKG_MAINTAINER:=Luka Perkov <luka@openwrt.org>
 

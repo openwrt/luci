@@ -23,7 +23,7 @@ msgstr "APC UPS"
 msgid "APCUPS Plugin Configuration"
 msgstr "APCUPS プラグイン設定"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "Absolute values"
 msgstr "絶対値"
 
@@ -58,6 +58,16 @@ msgstr "間隔を適用 »"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:47
 msgid "Awaiting email input at %s"
 msgstr "%s でメール入力を待機中"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
+msgid "Backup RRD statistics"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:20
+msgid ""
+"Backup and restore RRD statistics to/from non-volatile storage around "
+"shutdown, reboot, and/or sysupgrade"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:59
 msgid "Base Directory"
@@ -119,7 +129,7 @@ msgstr "CSV 出力"
 msgid "CSV Plugin Configuration"
 msgstr "CSV プラグイン設定"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:70
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:75
 msgid "Cache collected data for"
 msgstr "収集データのキャッシュ期間"
 
@@ -351,7 +361,7 @@ msgstr "統計を有効化"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:12
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:22
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:23
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:12
@@ -401,7 +411,7 @@ msgstr "Exec"
 msgid "Exec Plugin Configuration"
 msgstr "Exec プラグイン設定"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:67
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:72
 msgid "Expecting decimal value lower than one"
 msgstr "1 より小さい 10進数値が必要です"
 
@@ -409,7 +419,7 @@ msgstr "1 より小さい 10進数値が必要です"
 msgid "Expecting permssions in octal notation"
 msgstr "8進表記のアクセス許可が必要です"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:49
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:54
 msgid "Expecting valid time range"
 msgstr "期待される値: 有効な時間の範囲"
 
@@ -434,7 +444,7 @@ msgstr "ファイアウォール"
 msgid "Firewall (IPv6)"
 msgstr "ファイアウォール (IPv6)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:90
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:95
 msgid "Flush cache after"
 msgstr "指定時間後のキャッシュ クリア"
 
@@ -496,6 +506,16 @@ msgid ""
 "are selected."
 msgstr ""
 "ここでは、監視するiptable規則が選択される様々な基準を設定することができます。"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+msgid "Hide free memory"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:15
+msgid ""
+"Hiding the free memory item makes the graph to scale to actual memory usage, "
+"not to 100%."
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:14
 msgid "Host"
@@ -572,7 +592,7 @@ msgstr ""
 msgid "Line Attenuation Up (LATN)"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:39
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:44
 msgid ""
 "List of time spans to be stored in RRD database. E.g. \"1hour 1day 14day\". "
 "Allowed timespan types: min, h, hour(s), d, day(s), w, week(s), m, month(s), "
@@ -619,7 +639,7 @@ msgstr "対象の IPv4 iptables ルール"
 msgid "Match IPv6 iptables rules"
 msgstr "対象の IPv6 iptables ルール"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:35
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:40
 msgid ""
 "Max values for a period can be used instead of averages when not using 'only "
 "average RRAs'"
@@ -647,7 +667,7 @@ msgstr "許可された最大接続数"
 msgid "Maximum packet size"
 msgstr "パケットの最大サイズ"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:10
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:11
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/memory.json:2
 msgid "Memory"
 msgstr "メモリ"
@@ -656,7 +676,7 @@ msgstr "メモリ"
 msgid "Memory Plugin Configuration"
 msgstr "メモリー プラグイン設定"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:28
 msgid "Memory monitoring enabled"
 msgstr "メモリー監視が有効"
 
@@ -666,7 +686,7 @@ msgstr "メモリー監視が有効"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:45
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:41
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:48
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:49
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:34
 msgid "Monitor all except specified"
@@ -774,7 +794,7 @@ msgid "Monitoring all but one interrupt"
 msgid_plural "Monitoring all but %d interrupts"
 msgstr[0] "%d 個を除いた全割り込みを監視中"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:57
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:58
 msgid "Monitoring all but one sensor"
 msgid_plural "Monitoring all but %d sensors"
 msgstr[0] "%d 個を除いた全センサーを監視中"
@@ -802,7 +822,7 @@ msgstr "全割り込みを監視中"
 msgid "Monitoring all partitions"
 msgstr "全パーティションを監視中"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:61
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:62
 msgid "Monitoring all sensors"
 msgstr "全センサーを監視中"
 
@@ -852,7 +872,7 @@ msgid "Monitoring one process"
 msgid_plural "Monitoring %d processes"
 msgstr[0] "%d 個のプロセスを監視中"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:59
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:60
 msgid "Monitoring one sensor"
 msgid_plural "Monitoring %d sensors"
 msgstr[0] "%d 個のセンサーを監視中"
@@ -936,7 +956,7 @@ msgstr "OLSRd"
 msgid "OLSRd Plugin Configuration"
 msgstr "OLSRd プラグイン設定"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "Only create average RRAs"
 msgstr "平均値の RRA のみ作成する"
 
@@ -961,7 +981,7 @@ msgstr "出力プラグイン"
 msgid "Overview"
 msgstr "概要"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "Percent values"
 msgstr "パーセント値"
 
@@ -1012,15 +1032,15 @@ msgstr "プロセッサー"
 msgid "Qdisc monitoring"
 msgstr "Qdisc モニタリング"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:57
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:62
 msgid "RRD XFiles Factor"
 msgstr "RRD XFiles ファクター"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
 msgid "RRD heart beat interval"
 msgstr "RRD ハートビート間隔"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
 msgid "RRD step interval"
 msgstr "RRD 記録間隔"
 
@@ -1048,7 +1068,7 @@ msgstr "ステート毎のレポート"
 msgid "Report in percent"
 msgstr "パーセントでのレポート"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:52
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:57
 msgid "Rows per RRA"
 msgstr "RRA ごとの行数"
 
@@ -1096,14 +1116,14 @@ msgstr "スクリプト"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:74
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:31
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:70
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:90
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:75
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:95
 msgid "Seconds"
 msgstr "秒"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:24
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:25
 msgid "Sensor list"
 msgstr "センサー一覧"
 
@@ -1112,7 +1132,7 @@ msgstr "センサー一覧"
 msgid "Sensors"
 msgstr "センサー"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:16
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
 msgid "Sensors Plugin Configuration"
 msgstr "センサー プラグイン設定"
 
@@ -1132,6 +1152,10 @@ msgstr "サーバーのポート"
 msgid "Set the maximum size for datagrams sent over the network"
 msgstr "ネットワーク経由で送信されるデータグラムの最大サイズを設定"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
+msgid "Set up collectd"
+msgstr "collectd のセットアップ"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
 msgid "Sets the syslog log-level."
 msgstr "syslog ログレベルを設定します。"
@@ -1139,10 +1163,6 @@ msgstr "syslog ログレベルを設定します。"
 #: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:24
 msgid "Setup"
 msgstr "設定"
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
-msgid "Setup collectd"
-msgstr "collectd のセットアップ"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:31
 msgid "Shaping class monitoring"
@@ -1152,7 +1172,7 @@ msgstr ""
 msgid "Show Idle state"
 msgstr "アイドル状態を表示"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:39
 msgid "Show max values instead of averages"
 msgstr "平均値の代わりに最大値を表示する"
 
@@ -1236,7 +1256,7 @@ msgstr "CSVファイルの保存先ディレクトリ"
 msgid "Store data values as rates instead of absolute values"
 msgstr "データ値を絶対値の代わりにレートとして保存します。"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:38
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:43
 msgid "Stored timespans"
 msgstr "保存する期間の範囲"
 
@@ -1496,7 +1516,7 @@ msgstr ""
 "ディレクトリによってメモリー消費量が非常に多くなります。これはデバイスを使用"
 "不能にする可能性があります！</strong>"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
 msgid ""
 "The sensors plugin uses the Linux Sensors framework to gather environmental "
 "statistics."
@@ -1589,7 +1609,7 @@ msgid "Timeout for polling chrony"
 msgstr "chrony ポーリングのタイムアウト"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:80
-msgid "Try to lookup fully qualified hostname"
+msgid "Try to look up fully qualified hostname"
 msgstr "完全修飾ドメイン名のルックアップを試行する"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:157
@@ -1684,12 +1704,12 @@ msgid "When set to true, reports per-state metric (system, user, idle)"
 msgstr ""
 "設定した場合、ステートごとのメトリックをレポートします。 (system, user, idle)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "When set to true, we request absolute values"
 msgstr "設定した場合、絶対値をリクエストします。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:33
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "When set to true, we request percentage values"
 msgstr "設定した場合、パーセント値をリクエストします。"
 
@@ -1702,7 +1722,7 @@ msgstr "無線"
 msgid "Wireless iwinfo Plugin Configuration"
 msgstr "無線LAN iwinfo プラグイン設定"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:97
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:102
 msgid "Writing *.rrd files to %s"
 msgstr "*.rrd ファイルを %s に書き込み中"
 
@@ -1764,7 +1784,7 @@ msgid "one remote port"
 msgid_plural "%d remote ports"
 msgstr[0] "%d 個のリモート・ポート"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "reduces rrd size"
 msgstr "rrdファイルのサイズを小さくします。"
 

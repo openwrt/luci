@@ -7,8 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LXC management Web UI
-LUCI_DEPENDS:=@!arc +luci-compat +luci-mod-admin-full +lxc +lxc-attach +lxc-console +lxc-create +liblxc +rpcd-mod-lxc +getopt +!LXC_BUSYBOX_OPTIONS:tar
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=@!arc +luci-compat +luci-base +lxc +lxc-attach +lxc-console +lxc-create +liblxc +rpcd-mod-lxc +getopt +!LXC_BUSYBOX_OPTIONS:tar
 
 define Package/luci-app-lxc/conffiles
 /etc/config/lxc

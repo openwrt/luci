@@ -5,12 +5,14 @@
 
 'use strict';
 'require baseclass';
+'require uci';
 
 return baseclass.extend({
 	title: _('Memory'),
 
 	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
 		var p = [];
+		var hide_free = uci.get("luci_statistics", "collectd_memory", "HideFree") == "1" ? true : false;
 
 		var memory = {
 			title: "%H: Memory usage",
@@ -21,7 +23,7 @@ return baseclass.extend({
 			data: {
 				instances: {
 					memory: [
-						"free",
+						...(hide_free ? [] : ["free"]),
 						"buffered",
 						"cached",
 						"used"
@@ -58,7 +60,7 @@ return baseclass.extend({
 			data: {
 				instances: {
 					percent: [
-						"free",
+						...(hide_free ? [] : ["free"]),
 						"buffered",
 						"cached",
 						"used"

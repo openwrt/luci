@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:= LuCI Support for ledtrigger switch
-LUCI_PKGARCH:=all
+LUCI_DEPENDS:=+luci-base
 
 include ../../luci.mk
 

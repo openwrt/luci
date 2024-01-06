@@ -9,6 +9,7 @@ var sensorTypes = [
 	/^(?:cpu_temp|remote_temp|temp)[0-9]*$/,					'temperature',
 	/^(?:fan)[0-9]*$/,											'fanspeed',
 	/^(?:humidity)[0-9]*$/,										'humidity',
+	/^(?:curr)[0-9]*$/,											'current',
 	/^(?:power)[0-9]*$/,										'power'
 ];
 

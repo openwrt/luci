@@ -1,0 +1,10 @@
+{
+	"luci-proto-yggdrasil": {
+		"description": "Grant access to LuCI Yggdrasil procedures",
+		"write": {
+			"ubus": {
+				"luci.yggdrasil": [ "generateKeyPair", "getPeers" ]
+			}
+		}
+	}
+}

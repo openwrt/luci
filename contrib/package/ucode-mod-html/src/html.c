@@ -2599,6 +2599,7 @@ tokenize_html(const char *s, size_t len, html_token_callback_t cb, void *ud)
 
 		case END:
 			/* not reached */
+			break;
 		}
 	}
 

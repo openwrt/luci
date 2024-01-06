@@ -8,7 +8,7 @@ import { cursor } from 'uci';
 
 import { init_list, init_index, init_enabled, init_action, conntrack_list, process_list } from 'luci.sys';
 import { revision, branch } from 'luci.version';
-import { statvfs } from 'luci.core';
+import { statvfs, uname } from 'luci.core';
 
 import timezones from 'luci.zoneinfo';
 
@@ -537,6 +537,49 @@ const methods = {
 	getProcessList: {
 		call: function() {
 			return { result: process_list() };
+		}
+	},
+
+	getBuiltinEthernetPorts: {
+		call: function() {
+			let fd = open('/etc/board.json', 'r');
+			let board = fd ? json(fd) : {};
+			let ports = [];
+
+			for (let k in [ 'lan', 'wan' ]) {
+				if (!board?.network?.[k])
+					continue;
+
+				if (type(board.network[k].ports) == 'array') {
+					for (let ifname in board.network[k].ports) {
+						push(ports, { role: k, device: ifname });
+					}
+				}
+				else if (type(board.network[k].device) == 'string') {
+					push(ports, { role: k, device: board.network[k].device });
+				}
+			}
+
+			/* Workaround for targets that do not enumerate  all netdevs in board.json */
+			if (uname().machine in [ 'x86_64' ] &&
+			    match(ports[0]?.device, /^eth\d+$/)) {
+				let bus = readlink(`/sys/class/net/${ports[0].device}/device/subsystem`);
+
+				for (let netdev in lsdir('/sys/class/net')) {
+					if (!match(netdev, /^eth\d+$/))
+						continue;
+
+					if (length(filter(ports, port => port.device == netdev)))
+						continue;
+
+					if (readlink(`/sys/class/net/${netdev}/device/subsystem`) != bus)
+						continue;
+
+					push(ports, { role: 'unknown', device: netdev });
+				}
+			}
+
+			return { result: ports };
 		}
 	}
 };

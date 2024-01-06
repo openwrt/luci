@@ -1,0 +1,59 @@
+#!/bin/sh
+. /usr/share/libubox/jshn.sh
+
+case "$1" in
+list)
+	json_init
+	json_add_object "getolsrvizdata"
+	json_close_object
+	json_dump
+	;;
+call)
+	case "$2" in
+	getolsrvizdata)
+
+		jsonreq4=$(
+			cat <<EOF
+<script language='JavaScript1.2' type='text/javascript'>
+EOF
+
+			# sed + txtinfo plugin
+			re_ip='[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}\.[0-9]\{1,\}'
+			re_sep='[[:space:]]\{1,\}'
+			re_nosep='[^[:space:]]\{1,\}'
+			wget http://127.0.0.1:2006/all -qO - | sed -n "
+/^Table: Links$/,/^$/ {
+s#		#	-	#g
+s#\($re_ip\)$re_sep\($re_ip\)\($re_sep$re_nosep\)\{3\}$re_sep\($re_nosep\)#touch_edge(touch_node('\1').set_metric(1).update(),touch_node('\2').set_metric(1).update(),'\4');#p
+}
+/^Table: Topology$/,/^$/ {
+s#\($re_ip\)$re_sep\($re_ip\)\($re_sep$re_nosep\)\{2\}$re_sep\($re_nosep\)#touch_edge(touch_node('\1').update(),touch_node('\2').update(),'\4');#p
+}
+/^Table: HNA$/,/^$/ {
+s#\($re_ip\)/\([0-9]\{1,\}\)$re_sep\($re_ip\)#touch_hna(touch_node('\3'),'\1','\2');#p
+}
+/^Table: Routes$/,/^$/ {
+s#\($re_ip\)/32$re_sep$re_nosep$re_sep\($re_nosep\).*#touch_node('\1').set_metric('\2').update();#p
+}
+"
+
+			hosts=$(uci show olsrd | grep hosts_file | cut -d "=" -f 2)
+			if [ -n $hosts ]; then
+				sed -n "
+s#\($re_ip\)$re_sep\($re_nosep\)$re_sep.*#touch_node('\1').set_desc('\2');#p
+" <$hosts
+			fi
+
+			cat <<EOF
+	viz_callback();
+</script>
+EOF
+		)
+
+		json_init
+		json_add_string "jsonreq4" "$jsonreq4"
+		json_dump
+		;;
+	esac
+	;;
+esac

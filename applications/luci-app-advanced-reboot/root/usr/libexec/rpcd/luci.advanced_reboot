@@ -23,7 +23,7 @@ is_alt_mountable() {
 }
 
 alt_partition_mount() {
-	local ubi_dev op_ubi="$1"
+	local ubi_dev op_ubi="$1" ubi_vol="${2:-0}"
 	mkdir -p /var/alt_rom
 	ubi_dev="$(ubiattach -m "$op_ubi")"
 	ubi_dev="$(echo "$ubi_dev" | sed -n "s/^UBI device number\s*\(\d*\),.*$/\1/p")"
@@ -31,12 +31,12 @@ alt_partition_mount() {
 		ubidetach -m "$op_ubi"
 		return 1
 	fi
-	ubiblock --create "/dev/ubi${ubi_dev}_0" && \
-	mount -t squashfs -r "/dev/ubiblock${ubi_dev}_0" /var/alt_rom
+	ubiblock --create "/dev/ubi${ubi_dev}_${ubi_vol}" && \
+	mount -t squashfs -r "/dev/ubiblock${ubi_dev}_${ubi_vol}" /var/alt_rom
 }
 
 alt_partition_unmount() {
-	local mtdCount i=0 op_ubi="$1"
+	local mtdCount i=0 op_ubi="$1" ubi_vol="${2:-0}"
 	mtdCount="$(ubinfo | grep 'Present UBI devices' | tr ',' '\n' | grep -c 'ubi')"
 	[ -z "$mtdCount" ] && mtdCount=10
 	[ -d /var/alt_rom ] && umount /var/alt_rom
@@ -46,7 +46,7 @@ alt_partition_unmount() {
 		fi
 		ubi_mtd="$(cat /sys/devices/virtual/ubi/ubi${i}/mtd_num)"
 		if [ -n "$ubi_mtd" ] && [ "$ubi_mtd" = "$op_ubi" ]; then
-			ubiblock --remove /dev/ubi${i}_0
+			ubiblock --remove /dev/ubi${i}_${ubi_vol}
 			ubidetach -m "$op_ubi"
 			rm -rf /var/alt_rom
 		fi
@@ -66,18 +66,21 @@ get_main_partition_os_info(){
 }
 
 get_alt_partition_os_info(){
-	local op_info op_ubi="$1"
+	local op_info op_ubi="$1" vendor_name="$2" ubi_vol="$3"
 	logger "attempting to mount alternative partition (mtd${op_ubi})"
-	alt_partition_unmount "$op_ubi"
-	alt_partition_mount "$op_ubi"
+	alt_partition_unmount "$op_ubi" "$ubi_vol"
+	alt_partition_mount "$op_ubi" "$ubi_vol"
 	if [ -s "/var/alt_rom/etc/os-release" ]; then
 		op_info="$(. /var/alt_rom/etc/os-release && echo "$PRETTY_NAME")"
 		if [ "${op_info//SNAPSHOT}" != "$op_info" ]; then
 			op_info="$(. /var/alt_rom/etc/os-release && echo "${OPENWRT_RELEASE%%-*}")"
 		fi
 	fi
+	if [ -s "/var/alt_rom/etc/partition_config/soft-version" ]; then
+		op_info="${vendor_name:+$vendor_name }$(awk -F: '$1=="soft_ver" { print $2 ;}' /var/alt_rom/etc/partition_config/soft-version)"
+	fi
 	logger "attempting to unmount alternative partition (mtd${op_ubi})"
-	alt_partition_unmount "$op_ubi"
+	alt_partition_unmount "$op_ubi" "$ubi_vol"
 	echo "$op_info"
 }
 
@@ -102,6 +105,7 @@ print_json() { json_init; json_add_string "$1" "$2"; json_dump; json_cleanup; }
 obtain_device_info(){
 	local romBoardName p zyxelFlagPartition i
 	local vendorName deviceName partition1MTD partition2MTD labelOffset
+	local opOffset ubiVolume
 	local bootEnv1 bootEnv1Partition1Value bootEnv1Partition2Value
 	local bootEnv2 bootEnv2Partition1Value bootEnv2Partition2Value
 	local p1_label p1_version p2_label p2_version p1_os p2_os
@@ -122,7 +126,8 @@ obtain_device_info(){
 	json_load_file "$p"
 	for i in vendorName deviceName partition1MTD partition2MTD labelOffset \
 		bootEnv1 bootEnv1Partition1Value bootEnv1Partition2Value \
-		bootEnv2 bootEnv2Partition1Value bootEnv2Partition2Value; do
+		bootEnv2 bootEnv2Partition1Value bootEnv2Partition2Value \
+		opOffset ubiVolume; do
 		json_get_var $i "$i"
 	done
 	json_cleanup
@@ -185,13 +190,15 @@ obtain_device_info(){
 	fi
 
 	if is_alt_mountable "$partition1MTD" "$partition2MTD"; then
+		opOffset="${opOffset:-1}"
+		ubiVolume="${ubiVolume:-0}"
 		if [ "$current_partition" = "$bootEnv1Partition1Value" ]; then
-			op_ubi=$(( ${partition2MTD:3:3} + 1 ))
+			op_ubi=$(( ${partition2MTD:3:3} + $opOffset ))
 		else
-			op_ubi=$(( ${partition1MTD:3:3} + 1 ))
+			op_ubi=$(( ${partition1MTD:3:3} + $opOffset ))
 		fi
 		cp_info="$(get_main_partition_os_info $op_ubi)"
-		op_info="$(get_alt_partition_os_info $op_ubi)"
+		op_info="$(get_alt_partition_os_info $op_ubi $vendorName $ubiVolume)"
 		if [ "$current_partition" = "$bootEnv1Partition1Value" ]; then
 			p1_os="${cp_info:-$p1_os}"
 			p2_os="${op_info:-$p2_os}"

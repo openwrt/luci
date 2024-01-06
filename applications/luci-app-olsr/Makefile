@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=OLSR configuration and status module
-LUCI_DEPENDS:=+olsrd
+LUCI_DEPENDS:=+luci-base +olsrd
 
 include ../../luci.mk
 

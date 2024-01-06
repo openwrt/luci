@@ -195,6 +195,10 @@ local knownParams = {
 			"nobind",
 			0,
 			translate("Do not bind to local address and port") },
+		{ Flag,
+			"multihome",
+			0,
+			translate("When you have more than one IP address (e.g. multiple interfaces, or secondary IP addresses), and do not use --local to force binding to one specific address only") },
 		{ Value,
 			"dev",
 			"tun0",
@@ -797,6 +801,10 @@ local knownParams = {
 		{ Value,
 			"ncp_ciphers",
 			"AES-256-GCM:AES-128-GCM",
+			translate("Restrict the allowed ciphers to be negotiated") },
+		{ Value,
+			"data_ciphers",
+			"CHACHA20-POLY1305:AES-256-GCM:AES-128-GCM:AES-256-CBC",  
 			translate("Restrict the allowed ciphers to be negotiated") },
 	} }
 }

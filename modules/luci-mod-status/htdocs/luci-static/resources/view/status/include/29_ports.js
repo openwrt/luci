@@ -3,8 +3,15 @@
 'require fs';
 'require ui';
 'require uci';
+'require rpc';
 'require network';
 'require firewall';
+
+var callGetBuiltinEthernetPorts = rpc.declare({
+	object: 'luci',
+	method: 'getBuiltinEthernetPorts',
+	expect: { result: [] }
+});
 
 function isString(v)
 {
@@ -131,15 +138,24 @@ function buildVLANMappings(mapping)
 	}
 }
 
-function resolveVLANPorts(ifname, mapping)
+function resolveVLANPorts(ifname, mapping, seen)
 {
 	var ports = [];
 
-	if (mapping[ifname])
-		for (var i = 0; i < mapping[ifname].length; i++)
-			ports.push.apply(ports, resolveVLANPorts(mapping[ifname][i], mapping));
-	else
+	if (!seen)
+		seen = {};
+
+	if (mapping[ifname]) {
+		for (var i = 0; i < mapping[ifname].length; i++) {
+			if (!seen[mapping[ifname][i]]) {
+				seen[mapping[ifname][i]] = true;
+				ports.push.apply(ports, resolveVLANPorts(mapping[ifname][i], mapping, seen));
+			}
+		}
+	}
+	else {
 		ports.push(ifname);
+	}
 
 	return ports.sort(L.naturalCompare);
 }
@@ -193,7 +209,7 @@ function buildInterfaceMapping(zones, networks) {
 	return portmap;
 }
 
-function formatSpeed(speed, duplex) {
+function formatSpeed(carrier, speed, duplex) {
 	if (speed && duplex) {
 		var d = (duplex == 'half') ? '\u202f(H)' : '',
 		    e = E('span', { 'title': _('Speed: %d Mibit/s, Duplex: %s').format(speed, duplex) });
@@ -213,7 +229,7 @@ function formatSpeed(speed, duplex) {
 		return e;
 	}
 
-	return _('no link');
+	return carrier ? _('Connected') : _('no link');
 }
 
 function formatStats(portdev) {
@@ -284,6 +300,7 @@ return baseclass.extend({
 
 	load: function() {
 		return Promise.all([
+			L.resolveDefault(callGetBuiltinEthernetPorts(), []),
 			L.resolveDefault(fs.read('/etc/board.json'), '{}'),
 			firewall.getZones(),
 			network.getNetworks(),
@@ -295,28 +312,36 @@ return baseclass.extend({
 		if (L.hasSystemFeature('swconfig'))
 			return null;
 
-		var board = JSON.parse(data[0]),
+		var board = JSON.parse(data[1]),
 		    known_ports = [],
-		    port_map = buildInterfaceMapping(data[1], data[2]);
+		    port_map = buildInterfaceMapping(data[2], data[3]);
 
-		if (L.isObject(board) && L.isObject(board.network)) {
-			for (var k = 'lan'; k != null; k = (k == 'lan') ? 'wan' : null) {
-				if (!L.isObject(board.network[k]))
-					continue;
+		if (Array.isArray(data[0]) && data[0].length > 0) {
+			known_ports = data[0].map(port => ({
+				...port,
+				netdev: network.instantiateDevice(port.device)
+			}));
+		}
+		else {
+			if (L.isObject(board) && L.isObject(board.network)) {
+				for (var k = 'lan'; k != null; k = (k == 'lan') ? 'wan' : null) {
+					if (!L.isObject(board.network[k]))
+						continue;
 
-				if (Array.isArray(board.network[k].ports))
-					for (let i = 0; i < board.network[k].ports.length; i++)
+					if (Array.isArray(board.network[k].ports))
+						for (let i = 0; i < board.network[k].ports.length; i++)
+							known_ports.push({
+								role: k,
+								device: board.network[k].ports[i],
+								netdev: network.instantiateDevice(board.network[k].ports[i])
+							});
+					else if (typeof(board.network[k].device) == 'string')
 						known_ports.push({
 							role: k,
-							device: board.network[k].ports[i],
-							netdev: network.instantiateDevice(board.network[k].ports[i])
+							device: board.network[k].device,
+							netdev: network.instantiateDevice(board.network[k].device)
 						});
-				else if (typeof(board.network[k].device) == 'string')
-					known_ports.push({
-						role: k,
-						device: board.network[k].device,
-						netdev: network.instantiateDevice(board.network[k].device)
-					});
+				}
 			}
 		}
 
@@ -327,21 +352,22 @@ return baseclass.extend({
 		return E('div', { 'style': 'display:grid;grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));margin-bottom:1em' }, known_ports.map(function(port) {
 			var speed = port.netdev.getSpeed(),
 			    duplex = port.netdev.getDuplex(),
+			    carrier = port.netdev.getCarrier(),
 			    pmap = port_map[port.netdev.getName()],
 			    pzones = (pmap && pmap.zones.length) ? pmap.zones.sort(function(a, b) { return L.naturalCompare(a.getName(), b.getName()) }) : [ null ];
 
 			return E('div', { 'class': 'ifacebox', 'style': 'margin:.25em;min-width:70px;max-width:100px' }, [
 				E('div', { 'class': 'ifacebox-head', 'style': 'font-weight:bold' }, [ port.netdev.getName() ]),
 				E('div', { 'class': 'ifacebox-body' }, [
-					E('img', { 'src': L.resource('icons/port_%s.png').format((speed && duplex) ? 'up' : 'down') }),
+					E('img', { 'src': L.resource('icons/port_%s.png').format(carrier ? 'up' : 'down') }),
 					E('br'),
-					formatSpeed(speed, duplex)
+					formatSpeed(carrier, speed, duplex)
 				]),
 				E('div', { 'class': 'ifacebox-head cbi-tooltip-container', 'style': 'display:flex' }, [
 					E([], pzones.map(function(zone) {
 						return E('div', {
 							'class': 'zonebadge',
-							'style': 'cursor:help;flex:1;height:3px;' + firewall.getZoneColorStyle(zone)
+							'style': 'cursor:help;flex:1;height:3px;opacity:' + (carrier ? 1 : 0.25) + ';' + firewall.getZoneColorStyle(zone)
 						});
 					})),
 					E('span', { 'class': 'cbi-tooltip left' }, [ renderNetworksTooltip(pmap) ])

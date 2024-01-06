@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: statistics\n"
 "POT-Creation-Date: 2017-10-17 22:00+0300\n"
-"PO-Revision-Date: 2023-07-07 02:23+0000\n"
-"Last-Translator: st7105 <st7105@gmail.com>\n"
+"PO-Revision-Date: 2023-12-29 05:42+0000\n"
+"Last-Translator: Sergey Ponomarev <stokito@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -25,7 +25,7 @@ msgstr "APC ИБП"
 msgid "APCUPS Plugin Configuration"
 msgstr "Настройка плагина «APCUPS»"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "Absolute values"
 msgstr "Абсолютные значения"
 
@@ -61,6 +61,18 @@ msgstr "Применить интервал »"
 msgid "Awaiting email input at %s"
 msgstr "Ожидание входящей почты через сокет %s"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
+msgid "Backup RRD statistics"
+msgstr "Резервное копирование статистики RRD"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:20
+msgid ""
+"Backup and restore RRD statistics to/from non-volatile storage around "
+"shutdown, reboot, and/or sysupgrade"
+msgstr ""
+"Резервное копирование и восстановление статистики RRD в/из энергонезависимой "
+"памяти при выключении, перезагрузке и/или обновлении системы"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:59
 msgid "Base Directory"
 msgstr "Базовый каталог"
@@ -80,11 +92,11 @@ msgstr "Битрейт"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:82
 msgid "Bitswap Down"
-msgstr "Bitswap Down"
+msgstr "Bitswap Выключено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:77
 msgid "Bitswap Up"
-msgstr "Bitswap Up"
+msgstr "Bitswap Включено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:15
 msgid "By setting this, CPU is not aggregate of all processors on the system"
@@ -121,7 +133,7 @@ msgstr "CSV вывод"
 msgid "CSV Plugin Configuration"
 msgstr "Настройка плагина «CSV»"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:70
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:75
 msgid "Cache collected data for"
 msgstr "Кэшировать собранную статистику в течении"
 
@@ -353,7 +365,7 @@ msgstr "Включить статистику"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:12
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:22
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:23
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:13
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:12
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:12
@@ -403,7 +415,7 @@ msgstr "Exec"
 msgid "Exec Plugin Configuration"
 msgstr "Настройка плагина «Exec»"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:67
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:72
 msgid "Expecting decimal value lower than one"
 msgstr "Ожидается десятичное число меньше единицы"
 
@@ -411,7 +423,7 @@ msgstr "Ожидается десятичное число меньше един
 msgid "Expecting permssions in octal notation"
 msgstr "Разрешения должны быть указаны в восьмеричной нотации"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:49
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:54
 msgid "Expecting valid time range"
 msgstr "Необходимо указать правильный диапазон времени"
 
@@ -436,7 +448,7 @@ msgstr "Межсетевой экран"
 msgid "Firewall (IPv6)"
 msgstr "Межсетевой экран (IPv6)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:90
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:95
 msgid "Flush cache after"
 msgstr "Сбросить кэш после"
 
@@ -502,9 +514,21 @@ msgstr ""
 "Здесь вы можете указать различные критерии, по которым будут выбраны правила "
 "для сбора статистики."
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+msgid "Hide free memory"
+msgstr "Скрыть свободную память"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:15
+msgid ""
+"Hiding the free memory item makes the graph to scale to actual memory usage, "
+"not to 100%."
+msgstr ""
+"Скрытие элемента свободной памяти приводит к тому, что график масштабируется "
+"не до 100%, а до фактического использования памяти."
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:14
 msgid "Host"
-msgstr "Хост"
+msgstr "Устройство"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:14
 msgid "Host running chrony"
@@ -572,13 +596,13 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:24
 msgid "Line Attenuation Down (LATN)"
-msgstr "Уменьшение затухания линии (LATN)"
+msgstr "Затухание линии (LATN) выключено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:19
 msgid "Line Attenuation Up (LATN)"
-msgstr "Увеличение затухания линии (LATN)"
+msgstr "Затухание линии (LATN) включено"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:39
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:44
 msgid ""
 "List of time spans to be stored in RRD database. E.g. \"1hour 1day 14day\". "
 "Allowed timespan types: min, h, hour(s), d, day(s), w, week(s), m, month(s), "
@@ -625,7 +649,7 @@ msgstr "Соответствие IPv4 правилам iptables"
 msgid "Match IPv6 iptables rules"
 msgstr "Соответствие IPv6 правилам iptables"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:35
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:40
 msgid ""
 "Max values for a period can be used instead of averages when not using 'only "
 "average RRAs'"
@@ -653,7 +677,7 @@ msgstr "Максимум разрешенных соединений"
 msgid "Maximum packet size"
 msgstr "Максимальный размер пакета"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:10
+#: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:11
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/memory.json:2
 msgid "Memory"
 msgstr "Оперативная память (RAM)"
@@ -662,7 +686,7 @@ msgstr "Оперативная память (RAM)"
 msgid "Memory Plugin Configuration"
 msgstr "Настройка плагина «Оперативная память (RAM)»"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:28
 msgid "Memory monitoring enabled"
 msgstr "Мониторинг памяти включён"
 
@@ -672,7 +696,7 @@ msgstr "Мониторинг памяти включён"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:45
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:41
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:48
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:49
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:34
 msgid "Monitor all except specified"
@@ -787,7 +811,7 @@ msgstr[0] "Мониторинг всех прерываний, кроме одн
 msgstr[1] "Мониторинг всех прерываний, кроме %d"
 msgstr[2] "Мониторинг всех прерываний, кроме %d"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:57
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:58
 msgid "Monitoring all but one sensor"
 msgid_plural "Monitoring all but %d sensors"
 msgstr[0] "Мониторинг всех сенсоров, кроме одного"
@@ -817,7 +841,7 @@ msgstr "Мониторинг всех прерываний"
 msgid "Monitoring all partitions"
 msgstr "Мониторинг всех разделов"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:61
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:62
 msgid "Monitoring all sensors"
 msgstr "Мониторинг всех сенсоров"
 
@@ -881,7 +905,7 @@ msgstr[0] "Мониторинг одного процесса"
 msgstr[1] "Мониторинг %d процессов"
 msgstr[2] "Мониторинг %d процессов"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:59
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:60
 msgid "Monitoring one sensor"
 msgid_plural "Monitoring %d sensors"
 msgstr[0] "Мониторинг одного сенсора"
@@ -966,7 +990,7 @@ msgstr "OLSRd"
 msgid "OLSRd Plugin Configuration"
 msgstr "Настройка плагина «OLSRd»"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "Only create average RRAs"
 msgstr "Создавать только средние RRA"
 
@@ -991,7 +1015,7 @@ msgstr "Плагины вывода"
 msgid "Overview"
 msgstr "Обзор"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "Percent values"
 msgstr "Значения в процентах"
 
@@ -1042,18 +1066,18 @@ msgstr "CPU"
 msgid "Qdisc monitoring"
 msgstr "Мониторинг Qdisc"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:57
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:62
 msgid "RRD XFiles Factor"
 msgstr ""
 "Часть интервала консолидации, которая может состоять из неопределенных "
 "значений (*UNKNOWN*), если консолидированное значение может быть определено "
 "(известно)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
 msgid "RRD heart beat interval"
 msgstr "Максимальное количество секунд между двумя обновлениями (HeartBeat)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
 msgid "RRD step interval"
 msgstr "Базовый интервал между данными в RRD (StepSize)"
 
@@ -1081,7 +1105,7 @@ msgstr "Отдельно для каждого состояния"
 msgid "Report in percent"
 msgstr "Отображать в процентах"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:52
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:57
 msgid "Rows per RRA"
 msgstr "Количество «поколений» данных в архиве RRA"
 
@@ -1129,14 +1153,14 @@ msgstr "Скрипт"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:74
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:31
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:19
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:24
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:70
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:90
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:75
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:95
 msgid "Seconds"
 msgstr "Секунд(ы)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:24
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:25
 msgid "Sensor list"
 msgstr "Список сенсоров"
 
@@ -1145,7 +1169,7 @@ msgstr "Список сенсоров"
 msgid "Sensors"
 msgstr "Сенсоры"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:16
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
 msgid "Sensors Plugin Configuration"
 msgstr "Настройка плагина «Сенсоры»"
 
@@ -1165,6 +1189,10 @@ msgstr "Порт сервера"
 msgid "Set the maximum size for datagrams sent over the network"
 msgstr "Установка максимального размера датаграмм, отправляемых по сети"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
+msgid "Set up collectd"
+msgstr "Настройка collectd"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
 msgid "Sets the syslog log-level."
 msgstr "Устанавливает уровень журналирования syslog."
@@ -1172,10 +1200,6 @@ msgstr "Устанавливает уровень журналирования s
 #: applications/luci-app-statistics/root/usr/share/luci/menu.d/luci-app-statistics.json:24
 msgid "Setup"
 msgstr "Настройка"
-
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
-msgid "Setup collectd"
-msgstr "Настройка collectd"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:31
 msgid "Shaping class monitoring"
@@ -1185,17 +1209,17 @@ msgstr "Мониторинг классов Shaping"
 msgid "Show Idle state"
 msgstr "Показывать состояние простоя (idle)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:39
 msgid "Show max values instead of averages"
 msgstr "Показывать максимальные значения, а не средние"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:34
 msgid "Signal Attenuation Down (SATN)"
-msgstr "Уменьшение затухания сигнала (SATN)"
+msgstr "Затухания сигнала (SATN) выключено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:29
 msgid "Signal Attenuation Up (SATN)"
-msgstr "Усиление затухания сигнала (SATN)"
+msgstr "Затухания сигнала (SATN) включено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:23
 msgid "Simple CPU frequency monitoring enabled"
@@ -1269,7 +1293,7 @@ msgstr "Папка для CSV-файлов"
 msgid "Store data values as rates instead of absolute values"
 msgstr "Хранить данные в виде коэффициентов вместо абсолютных значений"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:38
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:43
 msgid "Stored timespans"
 msgstr "Сохраняемые промежутки времени"
 
@@ -1525,7 +1549,7 @@ msgstr ""
 "параметров может привести к высокому потреблению памяти устройства. Это "
 "может привести к зависанию устройства!</strong>"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:17
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
 msgid ""
 "The sensors plugin uses the Linux Sensors framework to gather environmental "
 "statistics."
@@ -1613,7 +1637,7 @@ msgid "Timeout for polling chrony"
 msgstr "Таймаут пуллинга chrony"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:80
-msgid "Try to lookup fully qualified hostname"
+msgid "Try to look up fully qualified hostname"
 msgstr "Пытаться определять полное имя хоста"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:157
@@ -1679,11 +1703,11 @@ msgstr "Пользователь"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:92
 msgid "Vectoring Down"
-msgstr "Vectoring Down"
+msgstr "Векторинг выключено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:87
 msgid "Vectoring Up"
-msgstr "Vectoring Up"
+msgstr "Векторинг включено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:21
 msgid "Verbose monitoring"
@@ -1712,12 +1736,12 @@ msgstr ""
 "При включении, отображаются метрики для каждого состояния (system, user, "
 "idle)"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:14
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "When set to true, we request absolute values"
 msgstr "При включении, отображаются абсолютные значения"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:33
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:18
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "When set to true, we request percentage values"
 msgstr "При включении, отображаются значения в процентах"
 
@@ -1730,7 +1754,7 @@ msgstr "Беспроводная сеть"
 msgid "Wireless iwinfo Plugin Configuration"
 msgstr "Настройка плагина «Wi-Fi»"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:97
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:102
 msgid "Writing *.rrd files to %s"
 msgstr "Запись *.rrd файлов в %s"
 
@@ -1802,7 +1826,7 @@ msgstr[0] "один удалённый порт"
 msgstr[1] "%d удалённых порта"
 msgstr[2] "%d удалённых портов"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:29
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "reduces rrd size"
 msgstr "позволяет уменьшить размер RRD"
 

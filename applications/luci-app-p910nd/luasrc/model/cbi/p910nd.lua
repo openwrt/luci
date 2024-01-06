@@ -22,7 +22,6 @@ s:option(Value, "device", translate("Device")).rmempty = true
 b = s:option(Value, "bind", translate("Interface"), translate("Specifies the interface to listen on."))
 b.template = "cbi/network_netlist"
 b.nocreate = true
-b.unspecified = true
 
 function b.cfgvalue(...)
 	local v = Value.cfgvalue(...)

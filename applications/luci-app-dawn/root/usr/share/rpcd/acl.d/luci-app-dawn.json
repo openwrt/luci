@@ -2,7 +2,11 @@
 	"luci-app-dawn": {
 		"description": "Grant UCI access for luci-app-dawn",
 		"read": {
-			"uci": [ "dawn" ]
+			"uci": [ "dawn" ],
+			"ubus": {
+				"dawn": [ "get_network", "get_hearing_map" ],
+				"luci-rpc": [ "getHostHints" ]
+			}
 		},
 		"write": {
 			"uci": [ "dawn" ]

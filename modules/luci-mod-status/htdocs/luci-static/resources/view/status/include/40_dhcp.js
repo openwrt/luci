@@ -82,7 +82,7 @@ return baseclass.extend({
 			}
 		};
 
-		var table = E('table', { 'class': 'table lases' }, [
+		var table = E('table', { 'id': 'status_leases', 'class': 'table lases' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('IPv4 address')),
@@ -129,7 +129,7 @@ return baseclass.extend({
 			return rows;
 		}, this)), E('em', _('There are no active leases')));
 
-		var table6 = E('table', { 'class': 'table leases6' }, [
+		var table6 = E('table', { 'id': 'status_leases6', 'class': 'table leases6' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Host')),
 				E('th', { 'class': 'th' }, _('IPv6 address')),
