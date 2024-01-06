@@ -26,6 +26,10 @@ If you go to `Services > AdGuard Home > Logs`, you can see the last 50 log lines
 
 This app provides a link to the AdGuard Home web UI, making it easy to see more detailed statistics, and the query log.
 
+## How it works
+
+The Lua code in `rpcd/luci.adguardhome` makes API calls to the AdGuard Home service defined by `/etc/adguardhome.yaml` of your OpenWrt-enabled router, and renders the responses.
+
 ## Dependencies
 
 Dependencies are declared in the Makefile, but are
@@ -34,3 +38,8 @@ Dependencies are declared in the Makefile, but are
 * luasocket, for talking to the AdGuard Home REST API
 * luci-lib-jsonc, for doing JSON encoding
 * lyaml, for parsing the AdGuard home YAML configuration
+
+## Developing
+
+* JS code is formatted with `js-beautify -t -a -j -w 110 -r <filename>`
+* Lua is formatted with `stylua --indent-type Spaces --sort-requires <filename>`

@@ -1,17 +1,19 @@
 #!/usr/bin/env lua
 
-local fs = require "nixio.fs"
-local http = require "socket.http"
-local json = require "luci.jsonc"
-local ltn12 = require "ltn12"
-local lyaml = require "lyaml"
-local mime = require "mime"
-local nixio = require "nixio"
-local sock_url = require "socket.url"
-local UCI = require "luci.model.uci"
+local UCI = require("luci.model.uci")
+local fs = require("nixio.fs")
+local http = require("socket.http")
+local json = require("luci.jsonc")
+local ltn12 = require("ltn12")
+local lyaml = require("lyaml")
+local mime = require("mime")
+local nixio = require("nixio")
+local sock_url = require("socket.url")
 
 -- Slight overkill, but leaving room to do log_info etcetera.
-local function log_to_syslog(level, message) nixio.syslog(level, message) end
+local function log_to_syslog(level, message)
+    nixio.syslog(level, message)
+end
 
 local function log_error(message)
     -- The prefix is camel case because the 3rd party software emits logs
@@ -25,15 +27,23 @@ local function readfile(path)
     return s and (s:gsub("^%s+", ""):gsub("%s+$", ""))
 end
 
+local function log_error_and_abort(message)
+    -- Used when a condition is hit that should log an error, and also
+    -- send the error back in JSON for the JS code to render.
+    log_error(message)
+    print(json.stringify({ error = message }))
+    os.exit(1)
+end
+
 -- Builds a URL very simply. Probably flawed.
-local function urlbuilder(tls_enabled, host, port, path)
+local function urlbuilder(tls_enabled, address, path)
     local proto = nil
     if tls_enabled then
-        proto = 'https'
+        proto = "https"
     else
-        proto = 'http'
+        proto = "http"
     end
-    return proto .. "://" .. host .. ":" .. port .. "/control/" .. path
+    return proto .. "://" .. address .. "/control/" .. path
 end
 
 local function get_credentials()
@@ -46,13 +56,13 @@ local function get_credentials()
     if not username then
         local msg = "Username not found in uci adguardhome"
         log_error(msg)
-        print(json.stringify({auth_error = msg}))
+        print(json.stringify({ auth_error = msg }))
         os.exit(1)
     end
     if not password then
         local msg = "Password not found in uci adguardhome"
         log_error(msg)
-        print(json.stringify({auth_error = msg}))
+        print(json.stringify({ auth_error = msg }))
         os.exit(1)
     end
     return username, password
@@ -72,21 +82,34 @@ local function call_rest_api(api_name)
     -- These have to be passed in, the yaml config uses a salted store
     -- (which is good)
     local username, password = get_credentials()
+    -- Adguardhome ~107.21 uses these options
+    local agh_host = agh_table.bind_host
+    local agh_port = agh_table.bind_port
+    -- Adguardhome ~107.36 uses this option
+    local agh_address = agh_table.http.address
+
+    if agh_address == nil then
+        if agh_host ~= nil and agh_port ~= nil then
+            agh_address = agh_host .. ":" .. agh_port
+        else
+            log_error_and_abort(
+                "Could not retrieve AdGuardHome address from /etc/adguardhome.yaml; tried http.address, and bind_host/bind_port"
+            )
+        end
+    end
 
     -- Build the URL to chat to for REST API queries
-    local url = urlbuilder(agh_table.tls.enabled, agh_table.bind_host,
-                           agh_table.bind_port, api_name)
+    local url = urlbuilder(agh_table.tls.enabled, agh_address, api_name)
 
     -- Call the REST API, see what comes back
-    local _, code, _, _ = http.request {
+    local _, code, _, _ = http.request({
         url = url,
         method = "GET",
         headers = {
-            ["Authorization"] = "Basic " ..
-                (mime.b64(username .. ":" .. sock_url.unescape(password)))
+            ["Authorization"] = "Basic " .. (mime.b64(username .. ":" .. sock_url.unescape(password))),
         },
-        sink = ltn12.sink.table(resp)
-    }
+        sink = ltn12.sink.table(resp),
+    })
     local result = resp[1]
     if code == 200 then
         -- Make the shell happy; 0 is good. All else is an error exit code.
@@ -94,7 +117,7 @@ local function call_rest_api(api_name)
     else
         local msg = "REST call failed with '" .. resp[1] .. "'. Are the credentials correct?"
         log_error(msg)
-        result = json.stringify({error = msg})
+        result = json.stringify({ error = msg })
     end
     r.code = code
     r.result = result
@@ -102,7 +125,7 @@ local function call_rest_api(api_name)
 end
 
 local methods = {
-    -- Converts the AGH YAML configuration into JSON for consumption by 
+    -- Converts the AGH YAML configuration into JSON for consumption by
     -- the LuCI app.
     get_config = {
         call = function()
@@ -112,12 +135,20 @@ local methods = {
             r.result = json.stringify(agh_table)
             r.code = 200
             return r
-        end
+        end,
     },
     -- Calls the /control/stat(istic)s REST API, returns the JSON
-    get_statistics = {call = function() return call_rest_api("stats") end},
+    get_statistics = {
+        call = function()
+            return call_rest_api("stats")
+        end,
+    },
     -- Calls the /control/status REST API, returns the JSON
-    get_status = {call = function() return call_rest_api("status") end}
+    get_status = {
+        call = function()
+            return call_rest_api("status")
+        end,
+    },
 }
 
 local function parseInput()
@@ -139,7 +170,7 @@ local function parseInput()
 
     if not done then
         print(json.stringify({
-            error = err or "Incomplete input for argument parsing"
+            error = err or "Incomplete input for argument parsing",
         }))
         os.exit(1)
     end
@@ -152,23 +183,22 @@ local function validateArgs(func, uargs)
     -- up to the arguments expected by the function being called.
     local method = methods[func]
     if not method then
-        print(json.stringify({error = "Method not found in methods table"}))
-        os.exit(1)
+        log_error_and_abort("Method '" .. func .. "' not found in methods table")
     end
 
     -- Lua has no length operator for tables, so iterate to get the count
     -- of the keys.
     local n = 0
-    for _, _ in pairs(uargs) do n = n + 1 end
+    for _, _ in pairs(uargs) do
+        n = n + 1
+    end
 
     -- If the method defines an args table (so empty tables are not allowed),
     -- and there were no args, then give a useful error message about that.
     if method.args and n == 0 then
-        print(json.stringify({
-            error = "Received empty arguments for " .. func ..
-                " but it requires " .. json.stringify(method.args)
-        }))
-        os.exit(1)
+        log_error_and_abort(
+            "Received empty arguments for " .. func .. " but it requires " .. json.stringify(method.args)
+        )
     end
 
     uargs.ubus_rpc_session = nil
@@ -176,11 +206,9 @@ local function validateArgs(func, uargs)
     local margs = method.args or {}
     for k, v in pairs(uargs) do
         if margs[k] == nil or (v ~= nil and type(v) ~= type(margs[k])) then
-            print(json.stringify({
-                error = "Invalid argument '" .. k .. "' for " .. func ..
-                    " it requires " .. json.stringify(method.args)
-            }))
-            os.exit(1)
+            log_error_and_abort(
+                "Invalid argument '" .. k .. "' for " .. func .. " it requires " .. json.stringify(method.args)
+            )
         end
     end
 
@@ -189,7 +217,9 @@ end
 
 if arg[1] == "list" then
     local _, rv = nil, {}
-    for _, method in pairs(methods) do rv[_] = method.args or {} end
+    for _, method in pairs(methods) do
+        rv[_] = method.args or {}
+    end
     print((json.stringify(rv):gsub(":%[%]", ":{}")))
 elseif arg[1] == "call" then
     local args = parseInput()
