@@ -94,7 +94,7 @@ function handleSectionsAdd(iface) {
 			uci.set('travelmate', sid, 'con_start_expiry', '0');
 			uci.set('travelmate', sid, 'con_end_expiry', '0');
 			if (vpn_stdservice && vpn_stdiface) {
-				uci.set('travelmate', sid, 'vpn', '1');	
+				uci.set('travelmate', sid, 'vpn', '1');
 				uci.set('travelmate', sid, 'vpnservice', vpn_stdservice);
 				uci.set('travelmate', sid, 'vpniface', vpn_stdiface);
 			}
@@ -145,7 +145,7 @@ function handleStatus() {
 	poll.add(function () {
 		L.resolveDefault(fs.stat('/var/state/travelmate.refresh'), null).then(function (res) {
 			if (res) {
-				L.resolveDefault(fs.read_direct('/var/state/travelmate.refresh'), null).then(async function (res) {
+				L.resolveDefault(fs.read('/var/state/travelmate.refresh'), null).then(async function (res) {
 					fs.remove('/var/state/travelmate.refresh');
 					if (res && res === 'ui_reload') {
 						location.reload();
@@ -172,7 +172,7 @@ function handleStatus() {
 		});
 		return L.resolveDefault(fs.stat('/tmp/trm_runtime.json'), null).then(function (res) {
 			if (res) {
-				L.resolveDefault(fs.read_direct('/tmp/trm_runtime.json'), null).then(function (res) {
+				L.resolveDefault(fs.read('/tmp/trm_runtime.json'), null).then(function (res) {
 					if (res) {
 						var info = JSON.parse(res);
 						if (info) {
@@ -229,7 +229,7 @@ function handleStatus() {
 return view.extend({
 	load: function () {
 		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/etc/init.d/travelmate', ['assoc']), {}),
+			L.resolveDefault(fs.exec('/etc/init.d/travelmate', ['assoc']), null),
 			uci.load('wireless'),
 			uci.load('travelmate')
 		]);
@@ -488,8 +488,8 @@ return view.extend({
 			modal travelmate tab
 		*/
 		var mac, mac_array = [];
-		if (result[0]) {
-			mac_array = result[0].trim().split('\n');
+		if (result[0] && result[0].code === 0) {
+			mac_array = result[0].stdout.trim().split('\n');
 		}
 
 		o = s.taboption('travelmate', form.Value, '_ssid', _('SSID'));
@@ -748,6 +748,7 @@ return view.extend({
 			modal 'scan' dialog
 		*/
 		s.handleScan = function (radio) {
+			poll.stop();
 			var table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th col-1 middle left' }, _('Strength')),
@@ -778,107 +779,106 @@ return view.extend({
 			md.style.maxWidth = '90%';
 			md.style.maxHeight = 'none';
 
-			return L.resolveDefault(fs.exec_direct('/etc/init.d/travelmate', ['scan', radio]), null)
-				.then(L.bind(function (res) {
-					var lines, strength, channel, encryption, tbl_encryption, bssid, ssid, tbl_ssid, rows = [];
-					if (res) {
-						lines = res.trim().split('\n');
-						for (var i = 0; i < lines.length; i++) {
-							if (lines[i].match(/^\s+[0-9]/)) {
-								encryption = lines[i].slice(80).trim();
-								if (!encryption.includes('WEP')) {
-									strength = lines[i].slice(4, 7).trim();
-									channel = lines[i].slice(15, 18).trim();
-									bssid = lines[i].slice(60, 77).trim();
-									ssid = lines[i].slice(25, 59).trim();
-									if (ssid.startsWith('"')) {
-										ssid = ssid.slice(1, ssid.length - 1);
-										tbl_ssid = ssid;
+			return L.resolveDefault(fs.exec('/etc/init.d/travelmate', ['scan', radio]), null)
+				.then(L.bind(function () {
+					return L.resolveDefault(fs.read('/var/run/travelmate.scan'), '')
+						.then(L.bind(function (res) {
+							var lines, strength, channel, encryption, tbl_encryption, bssid, ssid, tbl_ssid, rows = [];
+							if (res) {
+								lines = res.split('\n');
+								for (var i = 0; i < lines.length; i++) {
+									if (lines[i].match(/^\s+[0-9]/)) {
+										encryption = lines[i].slice(80).trim();
+										if (!encryption.includes('WEP')) {
+											strength = lines[i].slice(4, 7).trim();
+											channel = lines[i].slice(15, 18).trim();
+											bssid = lines[i].slice(60, 77).trim();
+											ssid = lines[i].slice(25, 59).trim();
+											if (ssid.startsWith('"')) {
+												ssid = ssid.slice(1, ssid.length - 1);
+												tbl_ssid = ssid;
+											}
+											else {
+												ssid = "hidden";
+												tbl_ssid = "<em>hidden</em>";
+											}
+											switch (encryption) {
+												case 'WPA3 PSK (SAE)':
+													encryption = 'sae';
+													tbl_encryption = 'WPA3 Pers. (SAE)';
+													break;
+												case 'mixed WPA2/WPA3 PSK/SAE (CCMP)':
+													encryption = 'sae-mixed';
+													tbl_encryption = 'WPA2/WPA3 Pers. (CCMP)';
+													break;
+												case 'WPA2 PSK (CCMP)':
+													encryption = 'psk2+ccmp';
+													tbl_encryption = 'WPA2 Pers. (CCMP)';
+													break;
+												case 'WPA2 PSK (TKIP)':
+													encryption = 'psk2+tkip';
+													tbl_encryption = 'WPA2 Pers. (TKIP)';
+													break;
+												case 'mixed WPA/WPA2 PSK (TKIP, CCMP)':
+													encryption = 'psk-mixed+ccmp';
+													tbl_encryption = 'WPA/WPA2 Pers. (CCMP)';
+													break;
+												case 'WPA PSK (CCMP)':
+													encryption = 'psk2+ccmp';
+													tbl_encryption = 'WPA Pers. (CCMP)';
+													break;
+												case 'WPA PSK (TKIP)':
+													encryption = 'psk2+tkip';
+													tbl_encryption = 'WPA Pers. (TKIP)';
+													break;
+												case 'WPA3 802.1X (CCMP)':
+													encryption = 'wpa3';
+													tbl_encryption = 'WPA3 Ent. (CCMP)';
+													break;
+												case 'mixed WPA2/WPA3 802.1X (CCMP)':
+													encryption = 'wpa3-mixed';
+													tbl_encryption = 'WPA2/WPA3 Ent. (CCMP)';
+													break;
+												case 'WPA2 802.1X':
+													encryption = 'wpa2';
+													tbl_encryption = 'WPA2 Ent.';
+													break;
+												case 'WPA2 802.1X (CCMP)':
+													encryption = 'wpa2+ccmp';
+													tbl_encryption = 'WPA2 Ent. (CCMP)';
+													break;
+												case 'WPA3 OWE (CCMP)':
+													encryption = 'owe';
+													tbl_encryption = 'WPA3 OWE (CCMP)';
+													break;
+												case 'none':
+													encryption = 'none';
+													tbl_encryption = 'none';
+													break;
+											}
+											rows.push([
+												strength,
+												channel,
+												tbl_ssid,
+												bssid,
+												tbl_encryption,
+												E('div', { 'class': 'right' }, E('button', {
+													'class': 'cbi-button cbi-button-action',
+													'click': ui.createHandlerFn(this, 'handleAdd', radio, iface, ssid, bssid, encryption)
+												}, _('Add Uplink...')))
+											]);
+										}
 									}
-									else {
-										ssid = "hidden";
-										tbl_ssid = "<em>hidden</em>";
-									}
-									switch (encryption) {
-										case 'WPA3 PSK (SAE)':
-											encryption = 'sae';
-											tbl_encryption = 'WPA3 Pers. (SAE)';
-											break;
-										case 'mixed WPA2/WPA3 PSK/SAE (CCMP)':
-											encryption = 'sae-mixed';
-											tbl_encryption = 'WPA2/WPA3 Pers. (CCMP)';
-											break;
-										case 'WPA2 PSK (CCMP)':
-											encryption = 'psk2+ccmp';
-											tbl_encryption = 'WPA2 Pers. (CCMP)';
-											break;
-										case 'WPA2 PSK (TKIP)':
-											encryption = 'psk2+tkip';
-											tbl_encryption = 'WPA2 Pers. (TKIP)';
-											break;
-										case 'mixed WPA/WPA2 PSK (TKIP, CCMP)':
-											encryption = 'psk-mixed+ccmp';
-											tbl_encryption = 'WPA/WPA2 Pers. (CCMP)';
-											break;
-										case 'WPA PSK (CCMP)':
-											encryption = 'psk2+ccmp';
-											tbl_encryption = 'WPA Pers. (CCMP)';
-											break;
-										case 'WPA PSK (TKIP)':
-											encryption = 'psk2+tkip';
-											tbl_encryption = 'WPA Pers. (TKIP)';
-											break;
-										case 'WPA3 802.1X (CCMP)':
-											encryption = 'wpa3';
-											tbl_encryption = 'WPA3 Ent. (CCMP)';
-											break;
-										case 'mixed WPA2/WPA3 802.1X (CCMP)':
-											encryption = 'wpa3-mixed';
-											tbl_encryption = 'WPA2/WPA3 Ent. (CCMP)';
-											break;
-										case 'WPA2 802.1X':
-											encryption = 'wpa2';
-											tbl_encryption = 'WPA2 Ent.';
-											break;
-										case 'WPA2 802.1X (CCMP)':
-											encryption = 'wpa2+ccmp';
-											tbl_encryption = 'WPA2 Ent. (CCMP)';
-											break;
-										case 'WPA3 OWE (CCMP)':
-											encryption = 'owe';
-											tbl_encryption = 'WPA3 OWE (CCMP)';
-											break;
-										case 'none':
-											encryption = 'none';
-											tbl_encryption = 'none';
-											break;
-									}
-									rows.push([
-										strength,
-										channel,
-										tbl_ssid,
-										bssid,
-										tbl_encryption,
-										E('div', { 'class': 'right' }, E('button', {
-											'class': 'cbi-button cbi-button-action',
-											'click': ui.createHandlerFn(this, 'handleAdd', radio, iface, ssid, bssid, encryption)
-										}, _('Add Uplink...')))
-									]);
 								}
 							}
-							else if (lines[i] === '::: Empty resultset') {
+							else {
 								rows.push([
-									'No scan results (empty resultset)'
+									'Empty resultset'
 								]);
 							}
-						}
-					}
-					else {
-						rows.push([
-							'No scan results (timeout)'
-						]);
-					}
-					cbi_update_table(table, rows);
+							cbi_update_table(table, rows);
+							poll.start();
+						}, this));
 				}, this));
 		};
 
@@ -999,7 +999,7 @@ return view.extend({
 			o2.depends({ encryption: 'sae', '!contains': true });
 			o2.depends({ encryption: 'owe', '!contains': true });
 			o2.depends({ encryption: 'wpa', '!contains': true });
-			o2.depends({ encryption: 'psk', '!contains': true });	
+			o2.depends({ encryption: 'psk', '!contains': true });
 			o2.value('', _('Disabled'));
 			o2.value('1', _('Optional'));
 			o2.value('2', _('Required'));
