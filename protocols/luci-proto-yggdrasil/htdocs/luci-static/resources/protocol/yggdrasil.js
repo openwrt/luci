@@ -158,6 +158,42 @@ var getPeers = rpc.declare({
 	expect:{peers:[]}
 });
 
+var callIsJumperInstalled = rpc.declare({
+	object:'luci.yggdrasil-jumper',
+	method:'isInstalled',
+	expect:{isInstalled: false}
+});
+
+var callValidateJumperConfig = rpc.declare({
+	object:'luci.yggdrasil-jumper',
+	method:'validateConfig',
+	params:['config'],
+	expect:{output: "Unknown error."}
+});
+
+function validateJumperConfig(section) {
+	var last_input = "", last_output = "";
+
+	return function(section_id, input) {
+		if (last_input != input) {
+			last_input = input
+
+			callValidateJumperConfig(input).then(function(output) {
+				last_output = output;
+
+				var option = section.getUIElement(section_id).jumper_config;
+				option.triggerValidation(section_id);
+			});
+		}
+
+		if (last_output.length == 0) {
+			return true;
+		}
+
+		return _(last_output);
+	};
+};
+
 return network.registerProtocol('yggdrasil',
 	{
 		getI18n: function() {
@@ -256,6 +292,87 @@ return network.registerProtocol('yggdrasil',
 
 			o=ss.option(form.Value,"password",_("Password"));
 			o.optional=true;
+
+			// Jumper tab
+			try {
+				s.tab('jumper',_('Jumper'));
+			} catch(e) {};
+
+			o=s.taboption(
+				'jumper',
+				form.HiddenValue,
+				'hidden_value',
+				' ',
+				_('%s is an independent project that aims to transparently reduce latency of a connection over Yggdrasil network, utilizing NAT traversal to bypass intermediary nodes.'.format('<a href="https://github.com/one-d-wide/yggdrasil-jumper">Yggdrasil Jumper</a>'))
+					+ ' ' + _('It periodically probes for active sessions and automatically establishes direct peerings over internet with remote nodes running Yggdrasil Jumper without requiring firewall or port configuration.')
+			);
+
+			o=s.taboption(
+				'jumper',
+				form.Flag,
+				'jumper_enable',
+				_('Enable Yggdrasil Jumper'),
+				_('The checkbox cannot be modified unless the <code>yggdrasil-jumper</code> package is installed.')
+			);
+			o.default=false;
+			o.rmempty=false;
+			o.readonly=true;
+
+			// Unlock enable option if jumper is installed
+			callIsJumperInstalled().then(function(isInstalled) {
+				if (isInstalled) {
+					var o = s.children.find(function(o) { return o.option == "jumper_enable"; });
+					o.readonly = false;
+					// Explicit rerendering request isn't needed because the protocol tab
+					// is constructed only after all async functions is done
+				}
+			});
+
+			o=s.taboption(
+				'jumper',
+				form.ListValue,
+				'jumper_loglevel',
+				_('Log level'),
+				_('')
+			);
+			o.value('off', _('Off'));
+			o.value('error', _('Error'));
+			o.value('warn', _('Warn'));
+			o.value('info', _('Info'));
+			o.value('debug', _('Debug'));
+			o.value('trace', _('Trace'));
+			o.default='info';
+			o.rmempty=false;
+
+			o=s.taboption(
+				'jumper',
+				form.Flag,
+				'allocate_listen_addresses',
+				_('Allocate listen addresses'),
+				_('Allow Yggdrasil Jumper to automatically configure Yggdrasil with proper listen address and random port.')
+			);
+			o.default=true;
+			o.rmempty=false;
+
+			o=s.taboption(
+				'jumper',
+				form.Flag,
+				'jumper_autofill_listen_addresses',
+				_('Autofill listen addresses'),
+				_('Retrieve the listener addresses from the Yggdrasil interface configuration.')
+			);
+			o.default=true;
+			o.rmempty=false;
+
+			o=s.taboption(
+				'jumper',
+				form.TextValue,
+				'jumper_config',
+				_('Extra config'),
+				_('Additional configuration settings (in TOML format).')
+			);
+			o.optional=true;
+			o.validate=validateJumperConfig(s);
 
 			return;
 		},
