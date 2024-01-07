@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Support for Yggdrasil Network
 LUCI_DEPENDS:=+yggdrasil
 LUCI_PKGARCH:=all
-PKG_VERSION:=1.0.0
+PKG_VERSION:=1.1.0
 
 PKG_PROVIDES:=luci-proto-yggdrasil
 
