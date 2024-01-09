@@ -9,6 +9,9 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Tinyproxy - HTTP(S)-Proxy configuration
 LUCI_DEPENDS:=+luci-base +luci-compat +tinyproxy
 
+PKG_MAINTAINER:=Steven Barth <steven@midlink.org> \
+	Jo-Philipp Wich <jo@mein.io>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

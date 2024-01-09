@@ -10,6 +10,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Dual Channel Wi-Fi AP Daemon configuration module
 LUCI_DEPENDS:=+luci-base +luci-compat +dcwapd
 
+PKG_MAINTAINER:=Carey Sonsino <csonsino@gmail.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

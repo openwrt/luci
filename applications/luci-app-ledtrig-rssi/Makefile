@@ -10,6 +10,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:= LuCI Support for ledtrigger rssi
 LUCI_DEPENDS:=+luci-base +rssileds
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

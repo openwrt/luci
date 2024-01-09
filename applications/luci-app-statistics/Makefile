@@ -21,6 +21,8 @@ LUCI_DEPENDS:= \
 	+collectd-mod-load \
 	+collectd-mod-network
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
+
 define Package/luci-app-statistics/conffiles
 /etc/config/luci_statistics
 endef
