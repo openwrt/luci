@@ -7,6 +7,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI app for AList
 LUCI_DEPENDS:=+alist
 
+PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

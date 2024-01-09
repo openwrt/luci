@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Support for ModemManager
 LUCI_DEPENDS:=+modemmanager
 
+PKG_MAINTAINER:=Nicholas Smith <nicholas@nbembedded.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

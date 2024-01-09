@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Support for OpenFortivpn
 LUCI_DEPENDS:=+openfortivpn +luci-lua-runtime
 
+PKG_MAINTAINER:=Aaron Goodman <aaronjg@stanford.edu>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

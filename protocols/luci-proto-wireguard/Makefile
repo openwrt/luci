@@ -11,6 +11,7 @@ LUCI_DEPENDS:=+wireguard-tools +ucode
 LUCI_PKGARCH:=all
 
 PKG_PROVIDES:=luci-app-wireguard
+PKG_MAINTAINER:=Dan Luedtke <mail@danrl.com>
 
 include ../../luci.mk
 

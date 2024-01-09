@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=BCP38 LuCI interface
 LUCI_DEPENDS:=+luci-base +bcp38
 
-PKG_MAINTAINER:=Toke Høiland-Jørgensen <toke@toke.dk>
+PKG_MAINTAINER:=Dan Luedtke <mail@danrl.com>
 PKG_LICENSE:=Apache-2.0
 
 include ../../luci.mk

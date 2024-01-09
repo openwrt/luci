@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Support for QMI
 LUCI_DEPENDS:=+uqmi
 
+PKG_MAINTAINER:=David Thornley <david.thornley@touchstargroup.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

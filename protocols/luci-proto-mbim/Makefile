@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Support for MBIM
 LUCI_DEPENDS:=+umbim
 
+PKG_MAINTAINER:=Howard Chu <hyc@symas.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

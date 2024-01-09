@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Support for the batman-adv protocol
 LUCI_DEPENDS:=+kmod-batman-adv
 
+PKG_MAINTAINER:=Marc Ahlgrim <marc@onemarcfifty.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

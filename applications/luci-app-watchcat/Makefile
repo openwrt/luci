@@ -5,6 +5,9 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Support for Watchcat
 LUCI_DEPENDS:=+luci-base +watchcat
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io> \
+	Nicholas Smith <nicholas@nbembedded.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

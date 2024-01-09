@@ -5,6 +5,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI account management module
 LUCI_DEPENDS:=+luci-base
 
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
