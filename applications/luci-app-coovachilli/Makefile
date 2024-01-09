@@ -9,6 +9,9 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Support for Coova Chilli
 LUCI_DEPENDS:=+luci-base +luci-compat @BROKEN
 
+PKG_MAINTAINER:=Steven Barth <steven@midlink.org> \
+	Jo-Philipp Wich <jo@mein.io>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

@@ -10,6 +10,7 @@ LUCI_TITLE:=Support for Yggdrasil Network
 LUCI_DEPENDS:=+yggdrasil
 LUCI_PKGARCH:=all
 PKG_VERSION:=1.1.0
+PKG_MAINTAINER:=William Fleurant <meshnet@protonmail.com>
 
 include ../../luci.mk
 
