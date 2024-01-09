@@ -10,6 +10,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Roaring Penguin PPPoE Server
 LUCI_DEPENDS:=+luci-base +luci-compat +rp-pppoe-server
 
+PKG_MAINTAINER:=Daniel F. Dickinson <dfdpublic@wildtechgarden.ca>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

@@ -6,6 +6,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI usteer app for js based luci
 LUCI_DEPENDS:=+luci-base +usteer
 
+PKG_MAINTAINER:=Ramon Van Gorkom <github@flightfoil.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

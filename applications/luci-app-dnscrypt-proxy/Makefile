@@ -7,6 +7,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI support for DNSCrypt-Proxy
 LUCI_DEPENDS:=+luci-base +luci-compat +uclient-fetch +dnscrypt-proxy +luci-lib-httpprotoutils
 
+PKG_MAINTAINER:=Dirk Brenken <dev@brenken.org>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

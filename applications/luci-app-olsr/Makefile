@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=OLSR configuration and status module
 LUCI_DEPENDS:=+luci-base +olsrd
 
+PKG_MAINTAINER:=Manuel Munz <munz@comuno.net>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

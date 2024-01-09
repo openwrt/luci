@@ -5,6 +5,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Network Shares - Ksmbd the SMB kernel fileserver
 LUCI_DEPENDS:=+luci-base +ksmbd-server
 
+PKG_MAINTAINER:=Richard Yu <yurichard3839@gmail.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

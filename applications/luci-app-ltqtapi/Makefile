@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Support for Lantiq Devices
 LUCI_DEPENDS:=+luci-base +luci-compat @BROKEN
 
+PKG_MAINTAINER:=John Crispin <blogic@openwrt.org>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

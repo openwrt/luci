@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Support for OpenConnect VPN
 LUCI_DEPENDS:=+luci-base +luci-compat +ocserv +certtool
 
+PKG_MAINTAINER:=Nikos Mavrogiannopoulos <n.mavrogiannopoulos@gmail.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

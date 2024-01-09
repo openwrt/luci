@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Unbound Recursive DNS Resolver Configuration
 LUCI_DEPENDS:=+luci-base +luci-compat +unbound-daemon
 
+PKG_MAINTAINER:=Eric Luehrsen <ericluehrsen@hotmail.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

@@ -11,6 +11,8 @@ LUCI_TITLE:=Network UPS Tools Configuration
 LUCI_DEPENDS:=+luci-base +luci-compat
 PKG_RELEASE:=1
 
+PKG_MAINTAINER:=Daniel F. Dickinson <dfdpublic@wildtechgarden.ca>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

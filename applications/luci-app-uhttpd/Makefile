@@ -11,7 +11,7 @@ LUCI_TITLE:=uHTTPd Webserver Configuration
 LUCI_DEPENDS:=+luci-base +uhttpd
 
 PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=Daniel Dickinson <openwrt@daniel.thecshore.com>
+PKG_MAINTAINER:=Daniel F. Dickinson <dfdpublic@wildtechgarden.ca>
 
 include ../../luci.mk
 
