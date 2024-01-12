@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-01-10 18:13+0000\n"
+"PO-Revision-Date: 2024-01-12 17:55+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/luci/"
 "lt/>\n"
@@ -7153,14 +7153,14 @@ msgstr "Lygiarangiai"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:80
 msgid "Perfect Forward Secrecy"
-msgstr ""
+msgstr "Puikus persiuntimo slaptumas"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
 msgid "Perform outgoing packets serialization (optional)."
-msgstr ""
+msgstr "Atlikti išeinančių paketų serializavimą (pasirenkamas)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:34
 msgid "Perform reboot"
@@ -7287,15 +7287,17 @@ msgstr "Priešdėlio slopintuvas"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:596
 msgid "Preshared Key"
-msgstr ""
+msgstr "Išankstinis bendras raktas"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:567
 msgid "Preshared key in use"
-msgstr ""
+msgstr "išankstinis bendras raktas yra naudojamas"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:305
 msgid "PresharedKey setting is invalid"
 msgstr ""
+"Išankstinio bendro rakto nustatymas negalioja arba yra negaliojantis/"
+"negalimas"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
@@ -7307,30 +7309,38 @@ msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
 msgstr ""
+"Laikyti lygiarangį negyvu po tam tikro „LCP“ aido nesėkmių, jei norite "
+"ignoruoti nesėkmes, naudokite – 0"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1149
 msgid "Prevents client-to-client communication"
-msgstr ""
+msgstr "Užkerta kelią komunikacijai tarp klientų"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:61
 msgid ""
 "Prevents one wireless client to talk to another. This setting only affects "
 "packets without any VLAN tag (untagged packets)."
 msgstr ""
+"Neleidžia vienam belaidžio ryšio klientui bendrauti su kitu. Šis nustatymas "
+"veikia tik paketus be „VLAN“ žymų (nežymėtus paketus)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:213
 msgid "Primary Slave"
-msgstr ""
+msgstr "Pirminis valdomasis"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:230
 msgid ""
 "Primary becomes active slave when it comes back up if speed and duplex "
 "better than current slave (better, 1)"
 msgstr ""
+"Pirminis tampa aktyviu pavaldžiuoju įrenginiu, kai atsinaujina, jei greitis "
+"ir dvipusis duomenų perdavimo režimas geresni nei dabartinio pavaldžiojo "
+"įrenginio (geriau, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:229
 msgid "Primary becomes active slave whenever it comes back up (always, 0)"
 msgstr ""
+"Pirminis tampa aktyviu pavaldžiuoju įrenginiu, kai tik grįžta (visada, 0)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:562
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:764
@@ -7376,7 +7386,7 @@ msgstr "Procesai"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:67
 msgid "Prot."
-msgstr ""
+msgstr "Protokolas."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:80
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:576
@@ -7397,6 +7407,8 @@ msgid ""
 "Provide a DHCPv6 server on this interface and reply to DHCPv6 solicitations "
 "and requests."
 msgstr ""
+"Suteikti „DHCPv6“ serverį šioje/-iame sąsajoje ir/arba sietuve ir atsakyti į "
+"„DHCPv6“ prašymus ir užklausas."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:877
 msgid "Provide new network"
@@ -7407,6 +7419,8 @@ msgid ""
 "Provide the NTP server to the selected interface or, if unspecified, to all "
 "interfaces"
 msgstr ""
+"Suteikti „NTP“ serverio pasirinktai/-am sąsajai ir/arba sietuvui arba, jei "
+"nenurodyta, visoms/-iems sąsajoms ir/arba sietuvams"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:155
 msgid "Proxy Server"
@@ -7448,10 +7462,16 @@ msgid ""
 "device, paste an OpenSSH compatible public key line or drag a <code>.pub</"
 "code> file into the input field."
 msgstr ""
+"Viešieji raktai leidžia prisijungti be slaptažodžių „SSH“ su didesne "
+"apsauga, palyginus su paprastų slaptažodžių naudojimu. Norėdami į įrenginį "
+"įkelti naują raktą, įklijuokite su „OpenSSH“ suderinamą viešojo rakto eilutę "
+"arba vilkite „<code>.pub</code>“ failą į įvesties lauką."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:192
 msgid "Public prefix routed to this device for distribution to clients."
 msgstr ""
+"Viešasis prielinksnis, nukreiptas į šį įrenginį, kad būtų platinamas "
+"klientams."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:302
 msgid "PublicKey setting is invalid"
@@ -7468,7 +7488,7 @@ msgstr "Kokybė"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:612
 msgid "Query all available upstream resolvers."
-msgstr ""
+msgstr "Užklausa visiems prieinamiems aukštesnės pakopos skirstytuvams."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:610
 msgid "Query interval"
@@ -7480,11 +7500,11 @@ msgstr "Užklausos atsakos intervalas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1584
 msgid "R0 Key Lifetime"
-msgstr ""
+msgstr "„R0“ rakto gyvavimo laikas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1590
 msgid "R1 Key Holder"
-msgstr ""
+msgstr "„R1“ rakto/-ų laikiklis"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1425
 msgid "RADIUS Accounting Port"
@@ -7512,15 +7532,15 @@ msgstr "„RADIUS“ autentifikavimo serveris"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1437
 msgid "RADIUS Dynamic VLAN Assignment"
-msgstr ""
+msgstr "„RADIUS“ dinaminis „VLAN“ priskyrimas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1446
 msgid "RADIUS Per STA VLAN"
-msgstr ""
+msgstr "„RADIUS“ kiekvienam „STA VLAN“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1462
 msgid "RADIUS VLAN Bridge Naming Scheme"
-msgstr ""
+msgstr "„RADIUS VLAN“ tiltų pavadinimų schema"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1450
 msgid "RADIUS VLAN Naming"
@@ -7528,7 +7548,7 @@ msgstr "„RADIUS VLAN įvardijimas“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1453
 msgid "RADIUS VLAN Tagged Interface"
-msgstr ""
+msgstr "„RADIUS VLAN“ pažymėta sąsają ir/arba sietuvas"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:88
 msgid "RFC3947 NAT-T mode"
@@ -7536,15 +7556,15 @@ msgstr "„RFC3947 NAT-T“ režimas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1484
 msgid "RSN Preauth"
-msgstr ""
+msgstr "„RSN Preauth“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:998
 msgid "RSSI threshold for joining"
-msgstr ""
+msgstr "„RSSI“ slenkstis prisijungimui"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:961
 msgid "RTS/CTS Threshold"
-msgstr ""
+msgstr "„RTS/CTS“ slenkstis"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:49
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:84
@@ -7565,19 +7585,23 @@ msgid ""
 "Radio Resource Measurement - Sends beacons to assist roaming. Not all "
 "clients support this."
 msgstr ""
+"Radijo išteklių matavimas – Siunčia signalus, kad padėtų klajojimui. Ne visi "
+"klientai tai palaiko."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:61
 msgctxt "nft nat flag random"
 msgid "Randomize source port mapping"
-msgstr ""
+msgstr "Atsitiktinai nustatyti šaltinio prievado atvaizdavimą"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:88
 msgid "Raw hex-encoded bytes. Leave empty unless your ISP require this"
 msgstr ""
+"Neapdoroti šešiaženkliai baitai. Palikite tuščią, nebent to reikalauja Jūsų "
+"interneto paslaugų tiekėjas („ISP“)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:511
 msgid "Read {etc_ethers} to configure the DHCP server."
-msgstr ""
+msgstr "Skaityti „{etc_ethers}“, kad sukonfigūruotumėte „DHCP“ serverį."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:581
 msgid "Really switch protocol?"
@@ -7589,7 +7613,7 @@ msgstr "Realaus laiko grafikai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1567
 msgid "Reassociation Deadline"
-msgstr ""
+msgstr "Resocijavimo terminas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:396
 msgid "Rebind protection"
@@ -7706,6 +7730,8 @@ msgid ""
 "Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in "
 "{etc_hosts}."
 msgstr ""
+"Atmesti atvirkštines paieškas į „{rfc_6303_link}“ „IP“ diapazonus – "
+"„({reverse_arpa})“, neįtrauktus į „{etc_hosts}“."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid ""
@@ -7833,7 +7859,7 @@ msgstr "Reikalaujama. „Base64“ užkoduotas privatus raktas šiai sąsajai."
 
 #: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
 msgid "Required. Path to the .yml config file for this interface."
-msgstr ""
+msgstr "Reikalingas. Kelias į šios sąsajos „.yml“ konfigūracijos failą."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:582
 msgid "Required. Public key of the WireGuard peer."
@@ -7921,7 +7947,7 @@ msgstr "Reikalauja „wpa-supplicant“ su „WEP“ palaikymu"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:226
 msgid "Reselection policy for primary slave"
-msgstr ""
+msgstr "Pirminio valdomojo perrinkimo politika"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2197
 #: modules/luci-base/ucode/template/sysauth.ut:39
