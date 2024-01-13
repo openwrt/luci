@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-3.0-only
  *
- * Copyright (C) 2024 ImmortalWrt.org
+ * Copyright (C) 2024 Hilman Maulana <hilman0.0maulana@gmail.com>
  */
 
 'use strict';
