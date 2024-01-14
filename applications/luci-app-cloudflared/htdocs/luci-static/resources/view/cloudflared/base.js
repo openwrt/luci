@@ -66,7 +66,8 @@ return view.extend({
 		o.value = _("Collectiong data...");
 
 		o = s.option(form.Flag, 'enabled', _('Enable'));
-		o.rmempty = true;
+		o.default = '0';
+		o.rmempty = false;
 
 		o = s.option(form.DynamicList, 'token', _('Token'));
 		o.rmempty = false;
