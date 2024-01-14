@@ -50,7 +50,7 @@ return view.extend({
 		var m, s, o;
 
 		m = new form.Map('cloudflared', _('Cloudflared'),
-			_('Zero Trust Security services from Cloudflare to help you get maximum security both from outside and within the network. <br/><br/><a href="https://github.com/animegasan" target="_blank">Powered by animegasan</a>'));
+			_('Zero Trust Security services from Cloudflare to help you get maximum security both from outside and within the network.'));
 
 		s = m.section(form.NamedSection, 'config', 'cloudflared');
 
@@ -63,11 +63,10 @@ return view.extend({
 				});
 			});
 		}
-		o.value = _("Collectiong data ...");
+		o.value = _("Collectiong data...");
 
 		o = s.option(form.Flag, 'enabled', _('Enable'));
-		o.default = o.disabled;
-		o.rmempty = false;
+		o.rmempty = true;
 
 		o = s.option(form.DynamicList, 'token', _('Token'));
 		o.rmempty = false;
