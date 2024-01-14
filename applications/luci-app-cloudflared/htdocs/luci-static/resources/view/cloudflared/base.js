@@ -58,12 +58,12 @@ return view.extend({
 		o.load = function () {
 			poll.add(function () {
 				return L.resolveDefault(getServiceStatus()).then(function (res) {
-					var view = document.getElementById("cbi-cloudflared-config-service_status");
+					var view = document.getElementById('cbi-cloudflared-config-service_status');
 					view.innerHTML = renderStatus(res);
 				});
 			});
 		}
-		o.value = _("Collectiong data...");
+		o.value = _('Collectiong data...');
 
 		o = s.option(form.Flag, 'enabled', _('Enable'));
 		o.default = '0';
@@ -77,7 +77,7 @@ return view.extend({
 		o.inputtitle = _('Open website');
 		o.inputstyle = 'apply';
 		o.onclick = function () {
-			window.open("https://one.dash.cloudflare.com", '_blank');
+			window.open('https://one.dash.cloudflare.com', '_blank');
 		}
 
 		return m.render();
