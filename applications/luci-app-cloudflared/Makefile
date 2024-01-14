@@ -9,7 +9,7 @@ LUCI_DEPENDS:=+cloudflared
 LUCI_DESCRIPTION:=LuCI support for Cloudflared
 
 PKG_MAINTAINER:=Hilman Maulana <hilman0.0maulana@gmail.com>
-PKG_VERSION:=1
+PKG_VERSION:=1.1
 
 include ../../luci.mk
 
