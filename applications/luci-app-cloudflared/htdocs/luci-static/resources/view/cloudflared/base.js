@@ -1,4 +1,4 @@
-/* SPDX-License-Identifier: GPL-3.0-only
+/* This is free software, licensed under the Apache License, Version 2.0
  *
  * Copyright (C) 2024 Hilman Maulana <hilman0.0maulana@gmail.com>
  */
