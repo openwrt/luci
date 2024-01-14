@@ -4539,7 +4539,8 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						for (var j = 0; this.changes && this.changes.network && j < this.changes.network.length; j++) {
 							var chg = this.changes.network[j];
 
-							if (chg[0] == 'set' && chg[1] == iif && (chg[2] == 'proto' || chg[2] == 'ipaddr' || chg[2] == 'netmask'))
+							if (chg[0] == 'set' && chg[1] == iif &&
+								((chg[2] == 'disabled' && chg[3] == '1') || chg[2] == 'proto' || chg[2] == 'ipaddr' || chg[2] == 'netmask'))
 								return iif;
 						}
 					}
