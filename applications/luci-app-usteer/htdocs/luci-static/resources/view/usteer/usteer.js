@@ -10,6 +10,22 @@
 
 var Hosts, Remotehosts, Remoteinfo, Localinfo, Clients;
 
+var dns_cache = [];
+
+function SplitWlan(wlan) {
+	var wlansplit = [];
+	if (typeof wlan.split('#')[1] !== 'undefined') {
+		wlansplit=wlan.split('#');
+		if (typeof dns_cache[wlansplit[0]] !== 'undefined') {
+			wlansplit[0]=dns_cache[wlansplit[0]];
+		}
+	} else {
+		wlansplit[0]=_('This AP'); 
+		wlansplit[1]=wlan; 
+	}
+	return wlansplit;
+}
+
 
 function collectHearingClient(client_table_entries, mac) {
 	if (typeof Clients[mac] !== 'undefined') {
@@ -24,8 +40,10 @@ function collectHearingClient(client_table_entries, mac) {
 				SSID = Remoteinfo[wlanc]['ssid'];
 				freq = Remoteinfo[wlanc]['freq'];
 			}
+			var wlansplit=SplitWlan(wlanc);
 			client_table_entries.push([
-				'<nobr>' + wlanc + '</nobr>',
+				'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
+				'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
 				SSID,
 				freq,
 				Clients[mac][wlanc]['connected'] === true ? 'Yes' : 'No',
@@ -57,7 +75,8 @@ var HearingMap = form.DummyValue.extend({
 			);
 			var client_table = E('table', {'class': 'table cbi-section-table','id':'client_table'+macn}, [
 				E('tr', {'class': 'tr table-titles'}, [
-					E('th', {'class': 'th', 'style': 'width:35%'}, _('IP & Interface','Combination of IP and interface name in usteer overview')),
+					E('th', {'class': 'th'}, _('AP','Name or IP address of access point')),
+					E('th', {'class': 'th'}, _('Interface name','interface name in usteer overview')),
 					E('th', {'class': 'th', 'style': 'width:25%'}, _('SSID')),
 					E('th', {'class': 'th', 'style': 'width:15%'}, _('Frequency','BSS operating frequency in usteer overview')),
 					E('th', {'class': 'th', 'style': 'width:15%'}, _('Connected','Connection state in usteer overview')),
@@ -74,10 +93,14 @@ var HearingMap = form.DummyValue.extend({
 });
 
 
+
+
 function collectWlanAPInfoEntries(connectioninfo_table_entries, wlanAPInfos) {
 	for (var wlan in wlanAPInfos) {
+		var wlansplit=SplitWlan(wlan);
 		connectioninfo_table_entries.push([
-			'<nobr>' + wlan + '</nobr>',
+			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
+			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
 			wlanAPInfos[wlan]['bssid'],
 			wlanAPInfos[wlan]['ssid'],
 			wlanAPInfos[wlan]['freq'],
@@ -133,8 +156,10 @@ function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 						);
 					}
 		}
+		var wlansplit=SplitWlan(wlan);
 		compactconnectioninfo_table_entries.push([
-			'<nobr>'+wlan+'</nobr>', 
+			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
+			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
 			wlanAPInfos[wlan]['ssid'],
 			wlanAPInfos[wlan]['freq'],
 			wlanAPInfos[wlan]['load'],
@@ -144,15 +169,46 @@ function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 	}
 };
 
+var callNetworkRrdnsLookup = rpc.declare({
+	object: 'network.rrdns',
+	method: 'lookup',
+	params: [ 'addrs', 'timeout', 'limit' ],
+	expect: { '': {} }
+});
+
+
 function collectRemoteHosts (remotehosttableentries,Remotehosts) {
+	const getUndefinedDnsCacheIPs = (Remotehosts, dns_cache) =>
+		Object.keys(Remotehosts).filter(IPaddr => !dns_cache.hasOwnProperty(IPaddr));
+
+	var ipAddrs = getUndefinedDnsCacheIPs(Remotehosts, dns_cache);
+
+	L.resolveDefault(callNetworkRrdnsLookup(ipAddrs, 1000, 1000), {}).then(function(replies) {
+				for (var address of ipAddrs) {
+					if (!address)
+						continue;
+					if (replies[address]) {
+						dns_cache[address] = replies[address];
+						continue;
+					} else {
+						dns_cache[address]=Hosts[
+							Object.keys(Hosts).find(mac =>   
+								((typeof Hosts[mac]['name'] !== 'undefined') && 
+									((Object.keys(Hosts[mac]['ip6addrs']).find(IPaddr2 => (address === Hosts[mac]['ip6addrs'][IPaddr2]))) ||
+									(Object.keys(Hosts[mac]['ipaddrs']).find(IPaddr2 => (address === Hosts[mac]['ipaddrs'][IPaddr2])))))
+									)
+							]['name'];
+					}
+				}
+	});
+
 	for (var IPaddr in Remotehosts) {
-			remotehosttableentries.push([IPaddr, Remotehosts[IPaddr]['id']]);
-		}
+		remotehosttableentries.push([IPaddr,'%h'.format(dns_cache[IPaddr]),Remotehosts[IPaddr]['id']]);
+	}
 }
 
 
 var Clientinfooverview = form.DummyValue.extend({
-
 	renderWidget: function () {
 		var body = E([
 			E('h3', _('Remote hosts'))
@@ -160,6 +216,7 @@ var Clientinfooverview = form.DummyValue.extend({
 		var remotehost_table = E('table', {'class': 'table cbi-section-table', 'id': 'remotehost_table'}, [
 			E('tr', {'class': 'tr table-titles'}, [
 				E('th', {'class': 'th'}, _('IP address')),
+				E('th', {'class': 'th'}, _('Hostname')),
 				E('th', {'class': 'th'}, _('Identifier'))
 			])
 		]);
@@ -172,7 +229,8 @@ var Clientinfooverview = form.DummyValue.extend({
 		);
 		var connectioninfo_table = E('table', {'class': 'table cbi-section-table', 'id': 'connectioninfo_table'}, [
 			E('tr', {'class': 'tr table-titles'}, [
-				E('th', {'class': 'th'}, _('IP & Interface name','Combination of IP and interface name in usteer overview')),
+				E('th', {'class': 'th'}, _('AP','Name or IP address of access point')),
+				E('th', {'class': 'th'}, _('Interface name','interface name in usteer overview')),
 				E('th', {'class': 'th'}, _('BSSID')),
 				E('th', {'class': 'th'}, _('SSID')),
 				E('th', {'class': 'th'}, _('Frequency','BSS operating frequency in usteer overview')),
@@ -192,7 +250,8 @@ var Clientinfooverview = form.DummyValue.extend({
 		body.appendChild(connectioninfo_table);
 		var compactconnectioninfo_table = E('table', {'class': 'table cbi-section-table','id': 'compactconnectioninfo_table'}, [
 			E('tr', {'class': 'tr table-titles'}, [
-				E('th', {'class': 'th'}, _('IP & Interface name', 'Combination of IP and interface name in usteer overview')),
+				E('th', {'class': 'th'}, _('AP','Name or IP address of access point')),
+				E('th', {'class': 'th'}, _('Interface name','interface name in usteer overview')),
 				E('th', {'class': 'th'}, _('SSID')),
 				E('th', {'class': 'th'}, _('Frequency', 'BSS operating frequency in usteer overview')),
 				E('th', {'class': 'th'}, _('Load', 'Channel load in usteer overview')),
