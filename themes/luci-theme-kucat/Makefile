@@ -11,14 +11,6 @@ PKG_NAME:=luci-theme-kucat
 LUCI_DEPENDS:=
 PKG_VERSION:=2.3.9
 
-define Package/luci-theme-kucat/postrm
-#!/bin/sh
-[ -n "$${IPKG_INSTROOT}" ] || {
-	uci -q delete luci.themes.OpenWrt
-	uci commit luci
-}
-endef
-
 define Package/luci-theme-kucat/postinst
 #!/bin/sh
 

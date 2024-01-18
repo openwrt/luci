@@ -569,10 +569,8 @@ header .fill .container .flex1 .brand {
 	text-shadow: none;
 }
 .status > span {
-    /* text-transform: uppercase; */
     text-shadow: none;
     display: inline-block;
-    width: 30px;
     box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 2px 0 rgba(0,0,0,0.12);
     margin: 0 0.6rem;
 }
@@ -582,7 +580,7 @@ span[data-indicator="poll-status"] {
     cursor: pointer;
     line-height: 0.9;
     border-radius: 1rem;
-    padding: 0.5rem;
+    padding: 0.5rem 0rem!important;
     background-repeat: no-repeat;
     background-position: center;
     color: transparent !important;
@@ -592,7 +590,7 @@ span[data-indicator="poll-status"] {
     transition: all .3s;
 }
 
-.status > span:hover,
+
 .pdboy-qlogout:hover,
 .showSide:hover {
 	background-color: var(--menu-item-hover-bgcolor);
@@ -1315,6 +1313,8 @@ button:hover, .btn:hover, .cbi-button:hover ,.item:hover{
 	border: thin solid rgba(var(--primary-rgbm), 1);
 	background-color: rgba(var(--primary-rgbm), 0.9);
 }
+
+
 
 /* red */
 .btn.danger, .cbi-section-remove > .cbi-button, .cbi-button-remove, .cbi-button-reset, .cbi-button-negative, .cbi-button[value="Stop"], .cbi-button[value="Kill"], .cbi-button[onclick="reboot(this)"], .cbi-button-neutral[value="Restart"] {
@@ -2204,27 +2204,16 @@ body.modal-overlay-active #modal_overlay {
 	align-items: center;
 }
 .ifacebox-head {
-    display: inline-flex;
-    padding: 1rem;
-    align-items: center;
+	padding: 1rem;
     min-width: 7rem;
-    background-color: rgba(var(--primary-rgbm), 0.2);
-    justify-content: center;
+	background-color: rgba(var(--primary-rgbm), 0.2);
 }
-
 .ifacebox-head.active {
 	background: #5bc0de;
 	background-color: rgba(var(--primary-rgbm), 0.1);
 }
 .ifacebox-body {
-    padding: 0.5em;
-    display: inline-flex;
-    align-items: center;
-    flex-direction: column;
-}
-.ifacebox-body>span {
-margin: 0;
-    padding: 0;
+	padding: .5em
 }
 .cbi-image-button {
 	margin-left: .5rem;
@@ -2902,17 +2891,11 @@ body.lang_pl.node-main-login .cbi-value-title {
 .cbi-page-actions.control-group .cbi-dropdown.btn.cbi-button.important {
         padding: 0.6rem 0rem 0.6rem 1rem;
 }
-.cbi-page-actions .cbi-dropdown.important > ul,
+
 .cbi-page-actions.control-group .cbi-dropdown.btn.cbi-button.cbi-button-negative.important > ul,
 .cbi-page-actions.control-group .cbi-dropdown.btn.cbi-button.cbi-button-apply.important > ul {
 overflow-y: hidden;
 }
-.cbi-page-actions .cbi-dropdown.important .cbi-button-apply,
-.cbi-page-actions.control-group .cbi-dropdown.btn.cbi-button.cbi-button-negative.important ,
-.cbi-page-actions.control-group .cbi-dropdown.btn.cbi-button.cbi-button-apply.important  {
-    padding: 0 0 0 1rem;
-}
-
 .cbi-dropdown.btn.cbi-button.cbi-button-action {
 	padding-right: 5px;
 }
@@ -3326,7 +3309,6 @@ table>tbody>tr>td, table>tfoot>tr>td, table>thead>tr>td {
 @media screen and (max-width:600px) {
 .main-left {
     width: calc(0% + 17rem);
-    overflow: hidden;
 }
 .table {
     display: block;
