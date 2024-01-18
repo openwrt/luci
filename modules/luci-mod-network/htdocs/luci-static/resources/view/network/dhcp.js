@@ -322,6 +322,7 @@ return view.extend({
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
 		s.tab('leases', _('Static Leases'));
+		s.tab('tags', _('Tag'));
 		s.tab('files', _('Resolv and Hosts Files'));
 		s.tab('hosts', _('Hostnames'));
 		s.tab('ipsets', _('IP Sets'));
@@ -1027,6 +1028,20 @@ return view.extend({
 
 		if (has_dhcpv6)
 			o = s.taboption('leases', CBILease6Status, '__status6__');
+
+		o = s.taboption('tags', form.SectionValue, '__tags__', form.GridSection, 'tag', null,
+			_('Use tags to advertise different gateway and/or DNS to different hosts. Hosts can be associated with tags in "%s" tab').format(_('Static Leases')) + '<br />' +
+			_('DHCP Options') + ': ' + _('Define additional DHCP options,  for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients.') +
+			_('"<code>3,192.168.2.1</code>" which advertises different gateway to clients.') + '<br />' +
+			_('Note: Do not use "odhcpd" or network interface (such as "lan", "wan", "wan6", etc.) as name when adding tags, conflicts will occur. It is recommended to prefix the name with "t_" to avoid such conflicts.'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = false;
+		ss.sortable = true;
+
+		so = ss.option(form.DynamicList, 'dhcp_option', _('DHCP Options'));
 
 		return m.render().then(function(mapEl) {
 			poll.add(function() {
