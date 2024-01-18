@@ -991,6 +991,10 @@ return view.extend({
 			_('Tag'),
 			_('Assign new, freeform tags to this entry.'));
 
+		Object.values(L.uci.sections('dhcp', 'tag')).forEach(function(val) {
+			so.value(val['.name']);
+		});
+
 		so = ss.option(form.DynamicList, 'match_tag',
 			_('Match Tag'),
 			_('When a host matches an entry then the special tag %s is set. Use %s to match all known hosts.').format('<code>known</code>', '<code>known</code>') + '<br /><br />' +
