@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2023-11-01 10:39+0000\n"
-"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"PO-Revision-Date: 2024-01-16 01:03+0000\n"
+"Last-Translator: Mc Giver <mcgivergim@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/es/>\n"
 "Language: es\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -348,11 +348,11 @@ msgstr "Descartar paquetes inválidos"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:230
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:209
 msgid "Enable"
-msgstr "Activar"
+msgstr "Habilitar"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:305
 msgid "Enable NAT Loopback"
-msgstr "Activar bucle invertido de NAT"
+msgstr "Activar bucle de retorno de NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:45
 msgid "Enable SYN-flood protection"
@@ -617,7 +617,6 @@ msgid "Include File"
 msgstr "Incluir archivo"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:40
-#, fuzzy
 msgid ""
 "Incoming %{ipv6?%{ipv4?<var>IPv4</var> and <var>IPv6</var>:<var>IPv6</var>}:"
 "<var>IPv4</var>}%{proto?, protocol %{proto#%{next?, }%{item.types?<var "
@@ -630,17 +629,17 @@ msgid ""
 "any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
 "tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"Entrada %{ipv6?%{ipv4?<var>IPv4</var> e <var>IPv6</var>:<var>IPv6</var>}:"
-"<var>IPv4</var>}%{proto?, protocolo %{proto#%{next?, }%{item.types?<var "
-"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
-"con tipos %{item.types#%{next?, }<var>%{item}</var>}</span></var>:"
-"<var>%{item.name}</var>}}}%{mark?, marca <var%{mark.inv? data-"
-"tooltip=\"Hacer coincidir fwmarks excepto %{mark.num}%{mark.mask? con "
-"máscara %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Enmascarar el valor de "
-"fwmark con %{mark.mask} antes de comparar.\"}}>%{mark.val}</var>}%{helper?, "
-"ayudante %{helper.inv?<var data-tooltip=\"Coincidir con cualquier ayudante "
-"excepto &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
-"tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
+"Entrada %{ipv6?%{ipv4?<var>IPv4</var> and "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
+"name}<span class=\"cbi-tooltip\">ICMP with types %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
+"<var%{mark.inv? data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? "
+"with mask %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value "
+"with %{mark.mask} before compare.\"}}>%{mark.val}</var>}%{helper?, helper %{"
+"helper.inv?<var data-tooltip=\"Match any helper except &quot;%{helper."
+"name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\""
+">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:179
 msgid "Initial Hash Size"
@@ -665,7 +664,7 @@ msgstr "Zona interna"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:147
 msgid "Intra zone forward"
-msgstr ""
+msgstr "Avance dentro de la zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:304
 msgid "Invalid DSCP mark"
@@ -712,7 +711,7 @@ msgstr "Limita el tráfico que coincide con la velocidad especificada."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:310
 msgid "Loopback source IP"
-msgstr "IP de origen de bucle invertido"
+msgstr "IP de origen de bucle de retorno"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:287
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"

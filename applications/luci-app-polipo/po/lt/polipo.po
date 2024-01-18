@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-12-02 18:04+0000\n"
+"PO-Revision-Date: 2024-01-09 10:43+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspolipo/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:121
 msgid "Advanced Settings"
@@ -20,7 +20,7 @@ msgstr "Pažangūs nustatymai"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:35
 msgid "Allowed clients"
-msgstr ""
+msgstr "Leidžiami klientai"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:67
 msgid "Always use system DNS resolver"
@@ -75,11 +75,11 @@ msgstr "Suteikti „UCI“ prieigą – „luci-app-polipo“"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:113
 msgid "How much RAM should Polipo use for its cache."
-msgstr ""
+msgstr "Kiek atminties „Polipo“ tūrėtų naudoti savo talpyklai."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:112
 msgid "In RAM cache size (in bytes)"
-msgstr ""
+msgstr "Atminties talpyklos dydis (baitais)"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:18
 msgid "Listen address"
@@ -102,11 +102,11 @@ msgstr "Žurnalo failo vietovė"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:96
 msgid "Log to syslog"
-msgstr ""
+msgstr "Žurnalinti į „syslog“"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:13
 msgid "Logging and RAM"
-msgstr ""
+msgstr "Žurnalinimas ir atmintis"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:73
 msgid "Never use system DNS resolver"
@@ -114,42 +114,44 @@ msgstr ""
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:119
 msgid "On-Disk Cache"
-msgstr ""
+msgstr "Ant-Disko talpykla"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:169
 msgid "PMM segments size (in bytes)"
-msgstr ""
+msgstr "„PMM“ segmentų dydis (baitais)"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:12
 msgid "Parent Proxy"
-msgstr ""
+msgstr "Teikiamojo įgaliotas"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:78
 msgid "Parent proxy address"
-msgstr ""
+msgstr "Teikiamojo įgaliotojo adresas"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:79
 msgid ""
 "Parent proxy address (in host:port format), to which Polipo will forward the "
 "requests."
 msgstr ""
+"Teikiamojo įgaliotojo adresas („host:port“ formatu), į kurį „Polipo“ persiųs "
+"prašymus."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:87
 msgid "Parent proxy authentication"
-msgstr ""
+msgstr "Teikiamojo įgaliotojo autentifikavimas"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:4
 #: applications/luci-app-polipo/root/usr/share/luci/menu.d/luci-app-polipo.json:3
 msgid "Polipo"
-msgstr ""
+msgstr "„Polipo“"
 
 #: applications/luci-app-polipo/luasrc/view/polipo_status.htm:12
 msgid "Polipo Status"
-msgstr ""
+msgstr "„Polipo“ būsena"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:5
 msgid "Polipo is a small and fast caching web proxy."
-msgstr ""
+msgstr "„Polipo“ yra mažai apkraunanti ir greitas tinklo talpyklos įgaliotojas."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:163
 msgid "Poor Man's Multiplexing"
@@ -169,7 +171,7 @@ msgstr ""
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:8
 msgid "Proxy"
-msgstr ""
+msgstr "Įgaliotas"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:64
 msgid "Query DNS by hostname"
@@ -207,13 +209,15 @@ msgstr ""
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:132
 msgid "Shared cache"
-msgstr ""
+msgstr "Bendrinama talpykla"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:174
 msgid ""
 "Size of the first PMM segment. If not defined, it defaults to twice the PMM "
 "segment size."
 msgstr ""
+"Pirmo „PMM“ segmento dydis. Jeigu nenustatytas, numatytai nusistato į "
+"dvigubą „PMM“ segmento dydį."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:138
 msgid "Size to which cached files should be truncated"
@@ -235,15 +239,17 @@ msgstr ""
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:155
 msgid "Time after which cached files will be deleted"
-msgstr ""
+msgstr "Laikas, po kurio talpinti failai bus pašalinti"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:147
 msgid "Time after which cached files will be truncated"
-msgstr ""
+msgstr "Laikas, po kurio talpinti failai bus nupjauti/patrumpinti"
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:170
 msgid "To enable PMM, PMM segment size must be set to some positive value."
 msgstr ""
+"Kad įjungtumėte „PMM“; „PMM“ segmento dydis turi būti nustatytas į teigiamą "
+"reikšmę."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:137
 msgid "Truncate cache files size (in bytes)"
@@ -258,6 +264,8 @@ msgid ""
 "Use of external storage device is recommended, because the log file is "
 "written frequently and can grow considerably."
 msgstr ""
+"Išorinės talpos/vietovės naudojimas yra rekomenduojamas, nes žurnalo failas "
+"yra įrašomas dažnai ir gali išaugti pakankamai daug."
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:36
 msgid ""
@@ -268,4 +276,4 @@ msgstr ""
 
 #: applications/luci-app-polipo/luasrc/model/cbi/polipo.lua:16
 msgid "enable"
-msgstr "Įjungti/Įgalinti"
+msgstr "įjungti/įgalinti"
