@@ -4007,7 +4007,7 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 	 * Sets the input value to use for the checkbox checked state.
 	 *
 	 * @name LuCI.form.FlagValue.prototype#enabled
-	 * @type number
+	 * @type string
 	 * @default 1
 	 */
 
@@ -4015,7 +4015,7 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 	 * Sets the input value to use for the checkbox unchecked state.
 	 *
 	 * @name LuCI.form.FlagValue.prototype#disabled
-	 * @type number
+	 * @type string
 	 * @default 0
 	 */
 
