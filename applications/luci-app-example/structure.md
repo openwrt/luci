@@ -3,31 +3,31 @@
 ```
 .
 ├── htdocs
-│   └── luci-static
-│       └── resources
-│           └── view
-│               └── example
-│                   ├── form.js
-│                   ├── htmlview.js
-│                   └── rpc.js
+│   └── luci-static
+│       └── resources
+│           └── view
+│               └── example
+│                   ├── form.js
+│                   ├── htmlview.js
+│                   └── rpc.js
 ├── Makefile
 ├── po
-│   ├── templates
-│   │   └── example.pot
+│   ├── templates
+│   │   └── example.pot
 ├── README.md
 └── root
     ├── etc
-    │   ├── luci.example.yaml
-    │   └── uci-defaults
-    │       └── 80_example
+    │   ├── luci.example.yaml
+    │   └── uci-defaults
+    │       └── 80_example
     └── usr
         ├── libexec
-        │   └── rpcd
-        │       └── luci.example
+        │   └── rpcd
+        │       └── luci.example
         └── share
             ├── luci
-            │   └── menu.d
-            │       └── luci-app-example.json
+            │   └── menu.d
+            │       └── luci-app-example.json
             └── rpcd
                 └── acl.d
                     └── luci-app-example.json
