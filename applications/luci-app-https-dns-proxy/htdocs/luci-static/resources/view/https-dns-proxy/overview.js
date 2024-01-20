@@ -129,7 +129,7 @@ return view.extend({
 				key = element[".name"];
 				description = element[".name"];
 			}
-			o.value(key, _("%s").format(description));
+			o.value(key, description);
 		});
 		o.depends("dnsmasq_config_update_option", "+");
 		o.retain = true;
