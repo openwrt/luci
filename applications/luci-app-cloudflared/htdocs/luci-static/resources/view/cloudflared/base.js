@@ -63,13 +63,12 @@ return view.extend({
 				});
 			});
 		}
-		o.value = _('Collectiong data...');
+		o.value = _('Collecting data...');
 
 		o = s.option(form.Flag, 'enabled', _('Enable'));
-		o.default = '0';
 		o.rmempty = false;
 
-		o = s.option(form.DynamicList, 'token', _('Token'));
+		o = s.option(form.Value, 'token', _('Token'));
 		o.rmempty = false;
 
 		o = s.option(form.Button, '_panel', _('Cloudflare Zero Trust'),
