@@ -52,6 +52,8 @@ return view.extend({
 
 		m = new form.Map('cloudflared', _('Cloudflared'),
 			_('Zero Trust Security services from Cloudflare to help you get maximum security both from outside and within the network.') + '<br />' +
+			_('Create and manage your cloudflared network on the <a %s>Cloudflare Zero Trust</a> website.')
+				.format('href="https://one.dash.cloudflare.com" target="_blank"') + '<br />' +
 			_('See <a %s>documentation</a> about the tunnel configuration parameters.')
 				.format('href="' + docsUrl + '" target="_blank"')
 		);
@@ -101,14 +103,6 @@ return view.extend({
 		o.value('info', _('Info'));
 		o.value('debug', _('Debug'));
 		o.default = 'info';
-
-		o = s.option(form.Button, '_panel', _('Cloudflare Zero Trust'),
-			_('Create or manage your cloudflared network.'));
-		o.inputtitle = _('Open website');
-		o.inputstyle = 'apply';
-		o.onclick = function () {
-			window.open('https://one.dash.cloudflare.com', '_blank');
-		}
 
 		return m.render();
 	}
