@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-01-20 10:36+0000\n"
+"PO-Revision-Date: 2024-01-20 16:53+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/lt/>\n"
@@ -139,11 +139,11 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:302
 msgid "A rewrite IP must be specified!"
-msgstr ""
+msgstr "Turi būti nurodytas perrašymo IP!"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:288
 msgid "ACCEPT - Disable address rewriting"
-msgstr ""
+msgstr "PRIIMTI – išjungti adreso perrašymą"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:223
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:224
@@ -159,22 +159,30 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
+"Papildomi neapdoroti „<em>iptables</em>“ argumentai, skirti klasifikuoti "
+"zonos paskirties srautą, pvz. „<code>-p tcp --dport 443</code>“, kad "
+"atitiktų tik išsiunčiamą „HTTPS“ srautą."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:306
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
+"Papildomi neapdoroti „<em>iptables</em>“ argumentai zonos šaltinio srautui "
+"klasifikuoti, pvz. „<code>-p tcp --sport 443</code>“, kad atitiktų tik "
+"gaunamą „HTTPS“ srautą."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
 msgid "Address family, Internal IP address must match"
-msgstr ""
+msgstr "Adresų šeima, vidinis IP adresas turi atitikti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:135
 msgid ""
 "Address family, source address, destination address, rewrite IP address must "
 "match"
 msgstr ""
+"Adresų šeima, šaltinio adresas, paskirties adresas, perrašymo IP adresas "
+"turi atitikti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:161
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
@@ -212,23 +220,28 @@ msgid ""
 "established connections. Format is value[/mask]. If a mask is specified then "
 "those bits set in the mask are zeroed out."
 msgstr ""
+"Taikyti duotosios vertės ir esamos žymos reikšmės bitinį „XOR“ sukurtiems "
+"ryšiams. Formatas yra „value[/mask]“. Jei nurodyta kaukė, tada tie kaukėje "
+"nustatyti bitai yra nuliniai."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "Apply the given DSCP class or value to established connections."
-msgstr ""
+msgstr "Taikyti nurodyta „DSCP“ klasę arba reikšmę užmegztiems ryšiams."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:438
 msgid "Assign the specified connection tracking helper to matched traffic."
-msgstr ""
+msgstr "Priskirti nurodytą ryšio sekimo pagelbiklį atitinkančiam srautui."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:280
 msgid "Automatic helper assignment"
-msgstr ""
+msgstr "Automatinis pagelbiklio paskyrimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:280
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
+"Automatiškai priskirti „conntrack“ pagelbiklius pagal srauto protokolą ir "
+"prievadą"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:60
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:61
@@ -237,11 +250,11 @@ msgstr "Komentuoti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:109
 msgid "Conntrack Settings"
-msgstr ""
+msgstr "„Conntrack“ nustatymai"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:284
 msgid "Conntrack helpers"
-msgstr ""
+msgstr "„Conntrack“ pagelbikliai"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:16
 msgid "Contents have been saved."
@@ -269,7 +282,7 @@ msgstr "Įtraukti/Apgaubti potinkliai"
 
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:62
 msgid "Custom Rules"
-msgstr ""
+msgstr "Pasirinktinės taisyklės"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:26
 msgid ""
@@ -277,6 +290,10 @@ msgid ""
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
+"Pasirinktinės taisyklės leidžia vykdyti savavališkas „iptables“ komandas, "
+"kurių užkardo sistema kitaip neapima. Komandos vykdomos po kiekvieno užkardo "
+"paleidimo iš naujo, iškart po to, kai įkeliamas numatytasis taisyklių "
+"rinkinys."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:420
 msgid "DSCP classification"
@@ -313,10 +330,13 @@ msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
 msgstr ""
+"Neįdiegkite papildomų taisyklių, kad atmestumėte persiųstą srautą, kai "
+"„conntrack“ būsena „<em>netinkama</em>“. To gali prireikti nustatant "
+"sudėtingus asimetrinius maršrutus."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:59
 msgid "Drop invalid packets"
-msgstr ""
+msgstr "Atmesti netinkamus paketus"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:231
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:230
@@ -360,7 +380,7 @@ msgstr "Įjungta/Įgalinta"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:204
 msgid "Enables packet and byte count tracking for the set."
-msgstr ""
+msgstr "Įgalina rinkinio paketų ir baitų skaičiaus sekimą."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:338
 msgid "Expecting: %s"
@@ -368,11 +388,11 @@ msgstr "Tikimasi: „%s“"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:77
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
-msgstr ""
+msgstr "Eksperimentinė funkcija. Nepilnai suderinamas su „QoS“/„SQM“."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:284
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
-msgstr ""
+msgstr "Aiškiai pasirenka leistinus ryšio sekimo pagelbiklius zonos srautui"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:273
 msgid "External IP address"
@@ -529,7 +549,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:88
 msgid "Hardware flow offloading"
-msgstr ""
+msgstr "Aparatinės įrangos srauto iškrovimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:143
 msgid "IP (range)"
@@ -571,7 +591,7 @@ msgstr "IPv6 – Interneto protokolo versija 6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
 msgid "IPv6 Masquerading"
-msgstr ""
+msgstr "IPv6 privataus IP į viešojo IP konvertavimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:192
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:281
@@ -582,11 +602,11 @@ msgstr "Tik IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:251
 msgid "Inbound device"
-msgstr ""
+msgstr "Įeinantis/gaunamas įrenginys"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:186
 msgid "Include File"
-msgstr ""
+msgstr "Įtraukti failą"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:40
 msgid ""
@@ -615,7 +635,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:179
 msgid "Initial Hash Size"
-msgstr ""
+msgstr "Pradinis maišos dydis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:145
@@ -636,15 +656,15 @@ msgstr "Vidinė zona"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:147
 msgid "Intra zone forward"
-msgstr ""
+msgstr "Tarpzoninis persiuntimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:304
 msgid "Invalid DSCP mark"
-msgstr ""
+msgstr "Netinkamą „DSCP“ žymę"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:372
 msgid "Invalid limit value"
-msgstr ""
+msgstr "Netinkama ribinė reikšmė"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:46
 msgid "Invalid set name"
