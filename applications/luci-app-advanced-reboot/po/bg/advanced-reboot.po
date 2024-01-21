@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-10-05 12:02+0000\n"
-"Last-Translator: Iskren Mihaylov <iskren.mihaylov91@gmail.com>\n"
+"PO-Revision-Date: 2024-01-16 16:28+0000\n"
+"Last-Translator: Boyan Alexiev <nneauu@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadvanced-reboot/bg/>\n"
 "Language: bg\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.9-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:193
 #: applications/luci-app-advanced-reboot/root/usr/share/luci/menu.d/luci-app-advanced-reboot.json:3
@@ -63,7 +63,7 @@ msgstr "Изпълни изключване..."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:51
 msgid "Power Off Device"
-msgstr "Изключи устройство"
+msgstr "Изключване на устройство"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:62
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:145
@@ -99,11 +99,12 @@ msgstr "Изключване..."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:210
 msgid "Status"
-msgstr "Статус"
+msgstr "Състояние"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:17
 msgid "The Dual Boot Flag Partition: %s is not a block device."
 msgstr ""
+"Разделът с флаг за двойно зареждане (dual boot): %s не е блоково устройство."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:71
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:100
@@ -117,6 +118,10 @@ msgid ""
 "might be necessary to renew the address of your computer to reach the device "
 "again, depending on your settings."
 msgstr ""
+"Сега системата се рестартира в алтернативен дял.<br /> НЕ ИЗКЛЮЧВАЙТЕ "
+"УСТРОЙСТВОТО!<br /> Изчакайте няколко минути, преди да се опитате да се "
+"свържете отново. Може да се наложи да подновите адреса на компютъра си, за "
+"да достигнете отново до устройството, в зависимост от настройките ви."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:44
 msgid ""
@@ -124,6 +129,9 @@ msgid ""
 "might be necessary to renew the address of your computer to reach the device "
 "again, depending on your settings."
 msgstr ""
+"Системата се изключва.<br /> НЕ ИЗКЛЮЧВАЙТЕ УСТРОЙСТВОТО!<br /> Може да се "
+"наложи да подновите адреса на компютъра си, за да достигнете отново до "
+"устройството, в зависимост от настройките."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:15
 msgid "Unable to find Device Board Name."
@@ -132,22 +140,25 @@ msgstr "Не може да се намери името на платката н
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:16
 msgid "Unable to find Dual Boot Flag Partition."
 msgstr ""
+"Неуспех при намиране на флаг на раздела за двойно зареждане (dual boot)."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:19
 msgid "Unable to obtain firmware environment variable: %s."
 msgstr ""
+"Неуспех при получаването на фърмуеър променлива стойност (environment "
+"variable): %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:18
 msgid "Unable to set Dual Boot Flag Partition entry for partition: %s."
-msgstr ""
+msgstr "Невъзможност да се флаг за стойността на dual boot partition: %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:20
 msgid "Unable to set firmware environment variable: %s to %s."
-msgstr ""
+msgstr "Невъзможност да се зададе фърмуеър променлива: %s към 5s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:168
 msgid "Unknown"
-msgstr ""
+msgstr "Неизвестно"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:131
 msgid ""
@@ -160,6 +171,15 @@ msgid ""
 "back to the currently active partition.<br /><br /> Click \"Proceed\" below "
 "to reboot device to an alternative partition."
 msgstr ""
+"ПРЕДУПРЕЖДЕНИЕ: Алтернативният дял може да има свои собствени настройки и "
+"напълно различен фърмуер. <br /><br /> Тъй като мрежовата конфигурация и "
+"SSID/паролата за WiFi на алтернативния дял може да са различни, може да се "
+"наложи да коригирате настройките на компютъра си, за да можете да получите "
+"достъп до устройството си, след като то се рестартира. <br /><br />Моля, "
+"имайте предвид също, че фърмуерът на алтернативния дял може да не предоставя "
+"лесен начин за превключване на активния дял и за зареждане обратно на "
+"текущия активен дял. <br /><br />Щракнете върху \"Продължи\" по-долу, за да "
+"рестартирате устройството към алтернативен дял."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:52
 msgid ""
