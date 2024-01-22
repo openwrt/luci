@@ -245,6 +245,24 @@ function has_peerdns(proto) {
 	return false;
 }
 
+function has_sourcefilter(proto) {
+	switch (proto) {
+	case '3g':
+	case 'dhcpv6':
+	case 'directip':
+	case 'mbim':
+	case 'ncm':
+	case 'ppp':
+	case 'pppoa':
+	case 'pppoe':
+	case 'pptp':
+	case 'qmi':
+		return true;
+	}
+
+	return false;
+}
+
 var cbiRichListValue = form.ListValue.extend({
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var choices = this.transformChoices();
@@ -987,7 +1005,7 @@ return view.extend({
 				for (var i = 0; i < rtTables.length; i++)
 					o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
 
-				if (protoval == 'dhcpv6') {
+				if (has_sourcefilter(protoval)) {
 					o = nettools.replaceOption(s, 'advanced', form.Flag, 'sourcefilter', _('IPv6 source routing'), _('Automatically handle multiple uplink interfaces using source-based policy routing.'));
 					o.default = o.enabled;
 				}
