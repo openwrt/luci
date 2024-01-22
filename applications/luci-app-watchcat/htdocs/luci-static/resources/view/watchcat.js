@@ -62,7 +62,7 @@ return view.extend({
 		o.depends({ mode: 'ping_reboot' });
 		o.depends({ mode: 'restart_iface' });
 		o.depends({ mode: "run_script" });
-		o.value('any');
+		o.value('any', _('Any'));
 		o.value('ipv4');
 		o.value('ipv6');
 
