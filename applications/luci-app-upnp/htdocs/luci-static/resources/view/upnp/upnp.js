@@ -200,8 +200,8 @@ return view.extend({
 		o.placeholder = '0-65535'
 
 		o = s.option(form.ListValue, 'action', _('Action'))
-		o.value('allow')
-		o.value('deny')
+		o.value('allow', _('Allow'));
+		o.value('deny', _('Deny'));
 
 		return m.render().then(L.bind(function(m, nodes) {
 			poll.add(L.bind(function() {
