@@ -345,7 +345,7 @@ var FileSystem = baseclass.extend(/** @lends LuCI.fs.prototype */ {
 	 * @param {string} path
 	 * The file path to read.
 	 *
-	 * @param {"blob"|"text"|"blob"} [type=text]
+	 * @param {"blob"|"text"|"json"} [type=text]
 	 * The expected type of read file contents. Valid values are `text` to
 	 * interpret the contents as string, `json` to parse the contents as JSON
 	 * or `blob` to return the contents as Blob instance.
@@ -387,7 +387,7 @@ var FileSystem = baseclass.extend(/** @lends LuCI.fs.prototype */ {
 	 * @param {string[]} [params]
 	 * The arguments to pass to the command.
 	 *
-	 * @param {"blob"|"text"|"blob"} [type=text]
+	 * @param {"blob"|"text"|"json"} [type=text]
 	 * The expected output type of the invoked program. Valid values are
 	 * `text` to interpret the output as string, `json` to parse the output
 	 * as JSON or `blob` to return the output as Blob instance.

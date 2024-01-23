@@ -1,6 +1,10 @@
 # Building a LuCI package
 
-Essentially, you follow the [build system](https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem) instructions to fetch the OpenWrt repository, update the `feeds.conf.default` to point `luci` at a local directory, build out the full toolchain, and then follow the instructions for a [single package](https://openwrt.org/docs/guide-developer/toolchain/single.package) to build the `.opkg` file for the example app.
+Essentially, you follow the [build system](https://openwrt.org/docs/guide-developer/toolchain/use-buildsystem) instructions: 
+1. Fetch the OpenWrt repository.
+2. Update the `feeds.conf.default` to point `luci` at a local directory
+3. Build out the full toolchain
+4. Then follow the instructions for a [single package](https://openwrt.org/docs/guide-developer/toolchain/single.package) to build the `.opkg` file for the example app.
 
 Wiki documentation overrides this file.
 
@@ -32,7 +36,8 @@ If you're doing a whole new application, instead of editing this one, you can us
 
 ## Toolchain build
 
-Even though you're only building a simple JS + Lua package, you'll need the whole toolchain. Though the command says "install", nothing is actually installed outside of the working directory (`~/src/openwrt` in this case).
+Even though you're only building a simple JS + Lua package, you'll need the whole toolchain.
+Though the command says "install", nothing is actually installed outside of the working directory (`~/src/openwrt` in this case).
 
 * Run `make tools/install`
 * Run `make toolchain/install`
