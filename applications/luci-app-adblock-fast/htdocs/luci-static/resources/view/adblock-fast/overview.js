@@ -57,6 +57,7 @@ return view.extend({
 
 		status = new adb.status();
 		m = new form.Map(pkg.Name, _("AdBlock-Fast - Configuration"));
+
 		s1 = m.section(form.NamedSection, "config", pkg.Name);
 		s1.tab("tab_basic", _("Basic Configuration"));
 		s1.tab("tab_advanced", _("Advanced Configuration"));
@@ -238,7 +239,7 @@ return view.extend({
 					key = element[".name"];
 					description = element[".name"];
 				}
-				o.value(key, _("%s").format(description));
+				o.value(key, description);
 			});
 			o.depends("dnsmasq_instance_option", "+");
 			o.retain = true;
@@ -301,7 +302,7 @@ return view.extend({
 					key = element[".name"];
 					description = element[".name"];
 				}
-				o.value(key, _("%s").format(description));
+				o.value(key, description);
 			});
 			o.depends("smartdns_instance_option", "+");
 			o.retain = true;
