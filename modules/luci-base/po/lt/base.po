@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-01-20 10:36+0000\n"
+"PO-Revision-Date: 2024-01-23 06:36+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/luci/"
 "lt/>\n"
@@ -1367,6 +1367,14 @@ msgid ""
 "the other end. Per default fragmentation is enabled and inactive if the "
 "packet fits but it is possible to deactivate the fragmentation entirely."
 msgstr ""
+"„Batman-adv“ turi įmontuotą antro sluoksnio fragmentaciją, skirtą "
+"vienadresinio transliavimo duomenims, tekantiems per tinklelį, kuris leis "
+"paleisti „batman-adv“ per sąsajas / jungtis, kurios neleidžia padidinti „MTU“"
+" daugiau nei standartinis „eterneto“ paketo dydis – 1500 baitų. Kai "
+"fragmentaciją yra įjungtą, „batman-adv“ automatiškai fragmentuoja per "
+"didelius paketus ir defragmentuos juos kitame gale. Pagal numatytuosius "
+"nustatymus fragmentavimas yra įjungtas ir neaktyvus, jei paketas tinka, "
+"tačiau galima visiškai išjungti fragmentavimą."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:968
 msgid "Beacon Interval"
@@ -1491,7 +1499,7 @@ msgstr "Jungimo vieneto numeris"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:558
 msgid "Bring up empty bridge"
-msgstr "Įtraukti tuščią tiltą"
+msgstr "Įtraukti tuščią „tiltą – jungimą“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:598
 msgid "Bring up on boot"
@@ -1707,7 +1715,9 @@ msgstr "Pakeitimai buvo sugrąžinti."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 msgid "Changes the administrator password for accessing the device"
-msgstr "Pakeičia administratoriaus slaptažodį norint pasiekti įrenginį"
+msgstr ""
+"Pakeičia administratoriaus slaptažodį, norint pasiekti šio įrenginio tinklo "
+"tarpuvartę"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:162
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:128
@@ -1867,6 +1877,10 @@ msgid ""
 "workaround might cause interoperability issues and reduced robustness of key "
 "negotiation especially in environments with heavy traffic load."
 msgstr ""
+"Kliento pusėje apsunkinamos rakto perdiegimo atakos, nes išjungiamas „EAPOL-"
+"rakto“ retransliavimo kadrai, kurie naudojami raktams įdiegti. Dėl šio "
+"apėjimo būdo gali kilti sąveikos problemų ir sumažėti derybų dėl raktų "
+"patikimumas, ypač aplinkoje su didele duomenų srauto apkrova."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
@@ -1911,6 +1925,13 @@ msgid ""
 "the basic rate. Supported rates lower than the minimum basic rate are not "
 "offered."
 msgstr ""
+"Konfigūruoja duomenų perdavimo spartą pagal aprėpties langelių tankį. "
+"Įprasta sukonfigūruoja pagrindinius 6, 12, 24 Mbps greičius, jei nenaudojami "
+"senieji „802.11b“ greičiai, o 5.5, 11 Mbps. Aukštas sukonfigūruoja "
+"pagrindinius 12, 24 Mbps greičius, jei nenaudojami senieji „802.11b“ "
+"greičiai, skirti 11 Mbps greičiui. „Very High“ kaip pagrindinį greitį "
+"sukonfigūruoja 24 Mbps. Palaikomi greičiai, mažesni už minimalų bazinį "
+"greitį yra nesiūlomi."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:821
 msgid ""
@@ -1927,6 +1948,10 @@ msgid ""
 "unspecified, the device will assign the smallest available prefix greater "
 "than or equal to the requested prefix."
 msgstr ""
+"Konfigūruoja minimalu deleguoto priešdėlio ilgį, priskirtas prašančiam "
+"atsiuntimo srauto maršrutizatoriui, galimai nepaisydamas prašomo priešdėlio "
+"ilgio. Jei nenurodyta, įrenginys priskirs mažiausią galimą priešdėlį, "
+"didesnį už prašomą priešdėlį arba jam lygų."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:810
 msgid ""
@@ -2667,7 +2692,7 @@ msgstr "Nesiųsti „Release (išleidimo)“, kai paleidžiama iš naujo"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
-msgstr "Nęsiųsti vedėjo"
+msgstr "Nesiųsti skleidėjo/p.k – vedėjo įrenginio pavadinimą"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:812
 msgid ""
@@ -2719,7 +2744,7 @@ msgstr "Žemyn"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:403
 msgid "Down Delay"
-msgstr ""
+msgstr "Išjungimo/sustabdymo atidėjimas"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:394
 msgid "Download backup"
@@ -3287,12 +3312,17 @@ msgid ""
 "Execution of various network commands to check the connection and name "
 "resolution to other systems."
 msgstr ""
+"Įvairių tinklo komandų vykdymas, norint patikrinti ryšį ir pavadinimo "
+"skiriamąją gebą su kitomis sistemomis."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:405
 msgid ""
 "Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. "
 "for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
+"Išskirti „{loopback_slash_8_v4}“ ir „{localhost_v6}“ nuo susiejimo "
+"patikrinimų, pvz. „<abbr title=\"Real-time Block List\">RBL</abbr>“ "
+"tarnyboms."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:410
 msgid "Existing device"
@@ -3525,6 +3555,8 @@ msgstr ""
 msgid ""
 "Filters SRV/SOA service discovery, to avoid triggering dial-on-demand links."
 msgstr ""
+"Filtruoja „SRV/SOA“ tarnybų aptikimą, kad nebūtų suaktyvintos skambinimo "
+"pagal pareikalavimą nuorodos."
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:24
@@ -3536,6 +3568,8 @@ msgid ""
 "Find all currently attached filesystems and swap and replace configuration "
 "with defaults based on what was detected"
 msgstr ""
+"Rasti visas šiuo metu prijungtas failų sistemas ir pakeisti konfigūraciją "
+"numatytaisiais nustatymais pagal tai, kas buvo aptikta"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:872
 msgid "Find and join network"
@@ -4541,22 +4575,29 @@ msgid ""
 "If empty, all incoming connections will be allowed (default). This does not "
 "affect outgoing peerings, nor link-local peers discovered via multicast."
 msgstr ""
+"Jei tuščia, bus leidžiami visi įeinantys ryšiai (numatytasis). Tai neturi "
+"įtakos išsiunčiamiems lygiarangiams ar nuorodų vietiniams lygiarangiams, "
+"aptiktiems naudojant daugiaadresinės transliacijas."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1071
 msgid ""
 "If set, downstream subnets are only allocated from the given IPv6 prefix "
 "classes."
 msgstr ""
+"Jei nustatyta, atsiuntimo sluoksnio potinkliai skiriami tik iš nurodytų IPv6 "
+"priešdėlių klasių."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:197
 msgid "If set, the meaning of the match options is inverted"
-msgstr ""
+msgstr "Jei nustatyta, atitikties parinkčių reikšmė yra apverčiama"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:255
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:361
 msgid ""
 "If specified, mount the device by its UUID instead of a fixed device node"
 msgstr ""
+"Jei nurodyta, įrenkite įrenginį naudodami jo „UUID“, o ne fiksuotą įrenginio "
+"mazgą"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:268
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:377
@@ -4564,6 +4605,8 @@ msgid ""
 "If specified, mount the device by the partition label instead of a fixed "
 "device node"
 msgstr ""
+"Jei nurodyta, įrenkite įrenginį pagal skaidinio etiketę, o ne fiksuotą "
+"įrenginio mazgą"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4700
 msgid ""
@@ -4571,20 +4614,23 @@ msgid ""
 "the new IP</strong> is required within %d seconds to confirm the settings, "
 "otherwise modifications will be reverted."
 msgstr ""
+"Jei pasikeičia IP adresas, naudojamas „LuCI“ pasiekti, <strong>rankiniu būdu "
+"iš naujo prisijungti prie naujo IP</strong> reikia per %d sekundžių/-es/-ę, "
+"kad būtų patvirtinti nustatymai, kitaip pakeitimai bus grąžinti/anuliuoti."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1005
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:134
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:129
 msgid "If unchecked, no default route is configured"
-msgstr ""
+msgstr "Jei nepažymėta, numatytasis maršrutas nėra sukonfigūruotas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1009
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:145
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:140
 msgid "If unchecked, the advertised DNS server addresses are ignored"
-msgstr ""
+msgstr "Jei nepažymėta, reklamuojami „DNS“ serverio adresai yra ignoruojami"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:340
 msgid ""
@@ -4594,6 +4640,12 @@ msgid ""
 "very slow process as the swap-device cannot be accessed with the high "
 "datarates of the <abbr title=\"Random Access Memory\">RAM</abbr>."
 msgstr ""
+"Jei Jūsų fizinės atminties nepakanka, nenaudojamus duomenis galima laikinai "
+"pakeisti į „Linux“ talpyklos įrenginį, todėl bus daugiau naudojamos „<abbr "
+"title=\"Random Access Memory\">RAM</abbr>“. Atminkite, kad duomenų keitimas "
+"yra labai lėtas procesas, nes talpyklos įrenginio negalima pasiekti "
+"naudojant didelius „<abbr title=\"Random Access Memory\">RAM</abbr>“ duomenų "
+"perdavimo greičius."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:935
 msgid "Ignore"
@@ -4605,7 +4657,7 @@ msgstr "Ignoruoti sąsaja ir/arba sietuvą"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:997
 msgid "Ignore requests from unknown machines using %s."
-msgstr ""
+msgstr "Ignoruoti užklausas iš nežinomų mašinų naudojant „%s“."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:519
 msgid "Ignore resolv file"
@@ -4613,7 +4665,7 @@ msgstr "Ignoruoti „resolv“ failą"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:530
 msgid "Ignore {etc_hosts}"
-msgstr ""
+msgstr "Ignoruoti „{etc_hosts}“"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:447
 msgid "Image"
@@ -4661,18 +4713,28 @@ msgid ""
 "a DHCP lease to one of the macaddrs when another asks for a lease. It only "
 "works reliably if only one of the macaddrs is active at any time."
 msgstr ""
+"Per „DHCPv4“ galima įtraukti daugiau nei vieną „MAC“ adresą. Tai leidžia IP "
+"adresą susieti su keliais „macaddrs“, o „dnsmasq“ atsisako „DHCP“ nuomos "
+"vienam iš „macaddr“, kai kitas prašo nuomos. Jis veikia patikimai tik tuo "
+"atveju, jei bet kuriuo metu aktyvus tik vienas iš „macaddrs“."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:71
 msgid ""
 "In bridged LAN setups it is advisable to enable the bridge loop avoidance in "
 "order to avoid broadcast loops that can bring the entire LAN to a standstill."
 msgstr ""
+"Sujungtoje („tinklo tilto“) „LAN“ sąrankose, patartina įjungti „tilto“ "
+"ciklavimo vengimą, kad būtų išvengta transliavimo ciklavimas, dėl kurių "
+"visas „LAN“ gali sustoti."
 
 #: modules/luci-base/ucode/template/csrftoken.ut:13
 msgid ""
 "In order to prevent unauthorized access to the system, your request has been "
 "blocked. Click \"Continue »\" below to return to the previous page."
 msgstr ""
+"Siekiant užkirsti kelią neteisėtai prieigai prie sistemos, Jūsų užklausa "
+"buvo užblokuota. Norėdami grįžti į ankstesnį puslapį, spustelėkite toliau "
+"esantį mygtuką „Tęsti »“."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:146
 msgid "In seconds"
@@ -4696,17 +4758,19 @@ msgid ""
 "Include in backup a list of current installed packages at /etc/backup/"
 "installed_packages.txt"
 msgstr ""
+"Įtraukti Į atsarginę kopiją dabartinių įdiegtų paketų sąrašą ties „/etc/"
+"backup/installed_packages.txt“"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:100
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:105
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:107
 msgid "Incoming checksum"
-msgstr ""
+msgstr "Gaunamoji kontrolinė suma"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:145
 msgid "Incoming interface"
-msgstr ""
+msgstr "Gaunamoji/-asis sąsają ir/arba sietuvas"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:92
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:97
@@ -4714,14 +4778,14 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:99
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:64
 msgid "Incoming key"
-msgstr ""
+msgstr "Gaunamas raktas"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:107
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:104
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:109
 msgid "Incoming serialization"
-msgstr ""
+msgstr "Gaunamas serializavimas"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:187
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:156
@@ -4734,21 +4798,21 @@ msgstr "Informacija"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:510
 msgid "Ingress QoS mapping"
-msgstr ""
+msgstr "Įeinančios „QoS“ atvaizdavimas"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:11
 msgctxt "nft meta iif"
 msgid "Ingress device id"
-msgstr ""
+msgstr "Įeinančio įrengio ID"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:9
 msgctxt "nft meta iifname"
 msgid "Ingress device name"
-msgstr ""
+msgstr "Įeinančio įrenginio pavadinimas"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:67
 msgid "Initialization failure"
-msgstr ""
+msgstr "Inicijavimo nesėkmė"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:76
 msgid "Initscript"
@@ -4760,11 +4824,11 @@ msgstr "„Initscripts“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1747
 msgid "Inner certificate constraint (Domain)"
-msgstr ""
+msgstr "Vidinis sertifikato apribojimas (domenas-sritis)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1744
 msgid "Inner certificate constraint (SAN)"
-msgstr ""
+msgstr "Vidinis sertifikato apribojimas („SAN“)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1741
 msgid "Inner certificate constraint (Subject)"
@@ -6447,7 +6511,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Notes"
-msgstr "Pastabos"
+msgstr "Užrašai/Pastabos"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:188
 msgid "Notice"
@@ -7815,8 +7879,8 @@ msgstr "Retransliavimo tiltas"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:446
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
 msgstr ""
-"Retransliuoti „DHCP“ prašymus kitur. OK: „v4↔v4“, „v6↔v6“. Ne OK: „v4↔v6“, "
-"„v6↔v4“."
+"Retransliuoti „DHCP“ prašymus kitur. Gerai: „v4↔v4“, „v6↔v6“. Negerai: "
+"„v4↔v6“, „v6↔v4“."
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:154
 msgid "Relay between networks"
@@ -10339,7 +10403,7 @@ msgid ""
 "generated at first install."
 msgstr ""
 "Unikalus vietinis adresas – diapazone „<code>fc00::/7</code>“. Paprastai tik "
-"„&#8216;“ vietinėje „&#8217;“ pusė „<code>fd00::/8</code>“. IPv6 „ULA“ yra "
+"&#8216; vietinėje &#8217; pusė „<code>fd00::/8</code>“. IPv6 „ULA“ yra "
 "analogiška IPv4 privataus tinklo adresavimui. Šis priešdėlis sugeneruojamas "
 "atsitiktinai pirmą kartą įdiegiant."
 
