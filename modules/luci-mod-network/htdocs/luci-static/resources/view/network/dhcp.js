@@ -574,6 +574,22 @@ return view.extend({
 		o.datatype = 'port';
 		o.placeholder = _('any');
 
+		o = s.taboption('devices', form.Value, 'minport',
+			_('Minimum source port #'),
+			_('Min valid value %s.').format('<code>1024</code>') + ' ' + _('Useful for systems behind firewalls.'));
+		o.optional = true;
+		o.datatype = 'port';
+		o.placeholder = 1024;
+		o.depends('queryport', '');
+
+		o = s.taboption('devices', form.Value, 'maxport',
+			_('Maximum source port #'),
+			_('Max valid value %s.').format('<code>65535</code>') + ' ' + _('Useful for systems behind firewalls.'));
+		o.optional = true;
+		o.datatype = 'port';
+		o.placeholder = 50000;
+		o.depends('queryport', '');
+
 		o = s.taboption('limits', form.Value, 'dhcpleasemax',
 			_('Max. DHCP leases'),
 			_('Maximum allowed number of active DHCP leases.'));
