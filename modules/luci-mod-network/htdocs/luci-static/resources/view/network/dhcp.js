@@ -394,21 +394,24 @@ return view.extend({
 			var m = this.section.formvalue(section, 'local_addr'),
 			    n = this.section.formvalue(section, 'server_addr'),
 			    p;
-			if (n != null && n != '')
-			    p = n.split('#');
+
+			if (!m || !n) {
+				return _('Both "Relay from" and "Relay to address" must be specified.');
+			}
+			else {
+				p = n.split('#');
 				if (p.length > 1 && !/^[0-9]+$/.test(p[1]))
 					return _('Expected port number.');
 				else
 					n = p[0];
 
-			if ((m == null || m == '') && (n == null || n == ''))
-				return _('Both "Relay from" and "Relay to address" must be specified.');
-
-			if ((validation.parseIPv6(m) && validation.parseIPv6(n)) ||
-				validation.parseIPv4(m) && validation.parseIPv4(n))
-				return true;
-			else
-				return _('Address families of "Relay from" and "Relay to address" must match.')
+				if ((validation.parseIPv6(m) && validation.parseIPv6(n)) ||
+					validation.parseIPv4(m) && validation.parseIPv4(n))
+					return true;
+				else
+					return _('Address families of "Relay from" and "Relay to address" must match.')
+			}
+			return true;
 		};
 
 		so = ss.option(widgets.NetworkSelect, 'interface', _('Only accept replies via'));
