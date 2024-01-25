@@ -942,10 +942,10 @@ return view.extend({
 			var m = this.section.formvalue(section, 'mac'),
 			    n = this.section.formvalue(section, 'name');
 
-			if ((m == null || m == '') && (n == null || n == ''))
+			if ((m && !m.length > 0) && !n)
 				return _('One of hostname or MAC address must be specified!');
 
-			if (value == null || value == '' || value == 'ignore')
+			if (!value || value == 'ignore')
 				return true;
 
 			var leases = uci.sections('dhcp', 'host');
