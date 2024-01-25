@@ -2376,39 +2376,6 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	__name__: 'CBI.TableSection',
 
 	/**
-	 * If set to `true`, the user may add or remove instances from the form
-	 * section widget, otherwise only preexisting sections may be edited.
-	 * The default is `false`.
-	 *
-	 * @name LuCI.form.TableSection.prototype#addremove
-	 * @type boolean
-	 * @default false
-	 */
-
-	/**
-	 * If set to `true`, mapped section instances are treated as anonymous
-	 * UCI sections, which means that section instance elements will be
-	 * rendered without title element and that no name is required when adding
-	 * new sections. The default is `false`.
-	 *
-	 * @name LuCI.form.TableSection.prototype#anonymous
-	 * @type boolean
-	 * @default false
-	 */
-
-	/**
-	 * Override the caption used for the section add button at the bottom of
-	 * the section form element. If set to a string, it will be used as-is,
-	 * if set to a function, the function will be invoked and its return value
-	 * is used as caption, after converting it to a string. If this property
-	 * is not set, the default is `Add`.
-	 *
-	 * @name LuCI.form.TableSection.prototype#addbtntitle
-	 * @type string|function
-	 * @default null
-	 */
-
-	/**
 	 * Override the per-section instance title caption shown in the first
 	 * column of the table unless `anonymous` is set to true. If set to a
 	 * string, it will be used as `String.format()` pattern with the name of
@@ -2435,17 +2402,6 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	 *
 	 * @name LuCI.form.TableSection.prototype#modaltitle
 	 * @type string|function
-	 * @default null
-	 */
-
-	/**
-	 * Override the UCI configuration name to read the section IDs from. By
-	 * default, the configuration name is inherited from the parent `Map`.
-	 * By setting this property, a deviating configuration may be specified.
-	 * The default is `null`, means inheriting from the parent form.
-	 *
-	 * @name LuCI.form.TableSection.prototype#uciconfig
-	 * @type string
 	 * @default null
 	 */
 
@@ -4028,18 +3984,18 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 	 * value will be shown as a tooltip. If the return value of the function
 	 * is `null` no tooltip will be set.
 	 *
-	 * @name LuCI.form.TypedSection.prototype#tooltip
+	 * @name LuCI.form.FlagValue.prototype#tooltip
 	 * @type string|function
 	 * @default null
 	 */
 
 	/**
-	 * Set a tooltip icon.
+	 * Set a tooltip icon for the flag option.
 	 *
 	 * If set, this icon will be shown for the default one.
 	 * This could also be a png icon from the resources directory.
 	 *
-	 * @name LuCI.form.TypedSection.prototype#tooltipicon
+	 * @name LuCI.form.FlagValue.prototype#tooltipicon
 	 * @type string
 	 * @default 'ℹ️';
 	 */
