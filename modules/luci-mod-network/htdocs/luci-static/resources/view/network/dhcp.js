@@ -316,8 +316,8 @@ return view.extend({
 			_('Dnsmasq is a lightweight <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> server and <abbr title="Domain Name System">DNS</abbr> forwarder.'));
 
 		s = m.section(form.TypedSection, 'dnsmasq');
-		s.anonymous = true;
-		s.addremove = false;
+		s.anonymous = false;
+		s.addremove = true;
 
 
 
