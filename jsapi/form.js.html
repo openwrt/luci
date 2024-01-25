@@ -819,6 +819,10 @@
             
                 <li data-name="LuCI.form.FlagValue##enabled"><a href="LuCI.form.FlagValue.html#enabled">enabled</a></li>
             
+                <li data-name="LuCI.form.FlagValue##tooltip"><a href="LuCI.form.FlagValue.html#tooltip">tooltip</a></li>
+            
+                <li data-name="LuCI.form.FlagValue##tooltipicon"><a href="LuCI.form.FlagValue.html#tooltipicon">tooltipicon</a></li>
+            
                 <li data-name="LuCI.form.FlagValue#datatype"><a href="LuCI.form.FlagValue.html#datatype">datatype</a></li>
             
                 <li data-name="LuCI.form.FlagValue#default"><a href="LuCI.form.FlagValue.html#default">default</a></li>
@@ -934,10 +938,6 @@
                 <li data-name="LuCI.form.GridSection#sortable"><a href="LuCI.form.GridSection.html#sortable">sortable</a></li>
             
                 <li data-name="LuCI.form.GridSection#tabbed"><a href="LuCI.form.GridSection.html#tabbed">tabbed</a></li>
-            
-                <li data-name="LuCI.form.GridSection#tooltip"><a href="LuCI.form.GridSection.html#tooltip">tooltip</a></li>
-            
-                <li data-name="LuCI.form.GridSection#tooltipicon"><a href="LuCI.form.GridSection.html#tooltipicon">tooltipicon</a></li>
             
                 <li data-name="LuCI.form.GridSection#uciconfig"><a href="LuCI.form.GridSection.html#uciconfig">uciconfig</a></li>
             
@@ -1545,12 +1545,6 @@
             
             <span class="subtitle">Members</span>
             
-                <li data-name="LuCI.form.TableSection##addbtntitle"><a href="LuCI.form.TableSection.html#addbtntitle">addbtntitle</a></li>
-            
-                <li data-name="LuCI.form.TableSection##addremove"><a href="LuCI.form.TableSection.html#addremove">addremove</a></li>
-            
-                <li data-name="LuCI.form.TableSection##anonymous"><a href="LuCI.form.TableSection.html#anonymous">anonymous</a></li>
-            
                 <li data-name="LuCI.form.TableSection##extedit"><a href="LuCI.form.TableSection.html#extedit">extedit</a></li>
             
                 <li data-name="LuCI.form.TableSection##max_cols"><a href="LuCI.form.TableSection.html#max_cols">max_cols</a></li>
@@ -1565,8 +1559,6 @@
             
                 <li data-name="LuCI.form.TableSection##sortable"><a href="LuCI.form.TableSection.html#sortable">sortable</a></li>
             
-                <li data-name="LuCI.form.TableSection##uciconfig"><a href="LuCI.form.TableSection.html#uciconfig">uciconfig</a></li>
-            
                 <li data-name="LuCI.form.TableSection#addbtntitle"><a href="LuCI.form.TableSection.html#addbtntitle">addbtntitle</a></li>
             
                 <li data-name="LuCI.form.TableSection#addremove"><a href="LuCI.form.TableSection.html#addremove">addremove</a></li>
@@ -1576,10 +1568,6 @@
                 <li data-name="LuCI.form.TableSection#parentoption"><a href="LuCI.form.TableSection.html#parentoption">parentoption</a></li>
             
                 <li data-name="LuCI.form.TableSection#tabbed"><a href="LuCI.form.TableSection.html#tabbed">tabbed</a></li>
-            
-                <li data-name="LuCI.form.TableSection#tooltip"><a href="LuCI.form.TableSection.html#tooltip">tooltip</a></li>
-            
-                <li data-name="LuCI.form.TableSection#tooltipicon"><a href="LuCI.form.TableSection.html#tooltipicon">tooltipicon</a></li>
             
                 <li data-name="LuCI.form.TableSection#uciconfig"><a href="LuCI.form.TableSection.html#uciconfig">uciconfig</a></li>
             
@@ -1742,10 +1730,6 @@
                 <li data-name="LuCI.form.TypedSection##anonymous"><a href="LuCI.form.TypedSection.html#anonymous">anonymous</a></li>
             
                 <li data-name="LuCI.form.TypedSection##tabbed"><a href="LuCI.form.TypedSection.html#tabbed">tabbed</a></li>
-            
-                <li data-name="LuCI.form.TypedSection##tooltip"><a href="LuCI.form.TypedSection.html#tooltip">tooltip</a></li>
-            
-                <li data-name="LuCI.form.TypedSection##tooltipicon"><a href="LuCI.form.TypedSection.html#tooltipicon">tooltipicon</a></li>
             
                 <li data-name="LuCI.form.TypedSection##uciconfig"><a href="LuCI.form.TypedSection.html#uciconfig">uciconfig</a></li>
             
@@ -5910,39 +5894,6 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	__name__: 'CBI.TableSection',
 
 	/**
-	 * If set to `true`, the user may add or remove instances from the form
-	 * section widget, otherwise only preexisting sections may be edited.
-	 * The default is `false`.
-	 *
-	 * @name LuCI.form.TableSection.prototype#addremove
-	 * @type boolean
-	 * @default false
-	 */
-
-	/**
-	 * If set to `true`, mapped section instances are treated as anonymous
-	 * UCI sections, which means that section instance elements will be
-	 * rendered without title element and that no name is required when adding
-	 * new sections. The default is `false`.
-	 *
-	 * @name LuCI.form.TableSection.prototype#anonymous
-	 * @type boolean
-	 * @default false
-	 */
-
-	/**
-	 * Override the caption used for the section add button at the bottom of
-	 * the section form element. If set to a string, it will be used as-is,
-	 * if set to a function, the function will be invoked and its return value
-	 * is used as caption, after converting it to a string. If this property
-	 * is not set, the default is `Add`.
-	 *
-	 * @name LuCI.form.TableSection.prototype#addbtntitle
-	 * @type string|function
-	 * @default null
-	 */
-
-	/**
 	 * Override the per-section instance title caption shown in the first
 	 * column of the table unless `anonymous` is set to true. If set to a
 	 * string, it will be used as `String.format()` pattern with the name of
@@ -5969,17 +5920,6 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	 *
 	 * @name LuCI.form.TableSection.prototype#modaltitle
 	 * @type string|function
-	 * @default null
-	 */
-
-	/**
-	 * Override the UCI configuration name to read the section IDs from. By
-	 * default, the configuration name is inherited from the parent `Map`.
-	 * By setting this property, a deviating configuration may be specified.
-	 * The default is `null`, means inheriting from the parent form.
-	 *
-	 * @name LuCI.form.TableSection.prototype#uciconfig
-	 * @type string
 	 * @default null
 	 */
 
@@ -7562,18 +7502,18 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 	 * value will be shown as a tooltip. If the return value of the function
 	 * is `null` no tooltip will be set.
 	 *
-	 * @name LuCI.form.TypedSection.prototype#tooltip
+	 * @name LuCI.form.FlagValue.prototype#tooltip
 	 * @type string|function
 	 * @default null
 	 */
 
 	/**
-	 * Set a tooltip icon.
+	 * Set a tooltip icon for the flag option.
 	 *
 	 * If set, this icon will be shown for the default one.
 	 * This could also be a png icon from the resources directory.
 	 *
-	 * @name LuCI.form.TypedSection.prototype#tooltipicon
+	 * @name LuCI.form.FlagValue.prototype#tooltipicon
 	 * @type string
 	 * @default 'ℹ️';
 	 */
@@ -8405,7 +8345,7 @@ return baseclass.extend(/** @lends LuCI.form.prototype */ {
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Thu Jan 25 2024 00:40:54 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Thu Jan 25 2024 02:53:28 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
