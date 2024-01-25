@@ -701,6 +701,19 @@ return view.extend({
 		o.datatype = 'range(0,10000)';
 		o.placeholder = 1000;
 
+		o = s.taboption('limits', form.Value, 'min_cache_ttl',
+			_('Min cache TTL'),
+			_('Extend short TTL values to the seconds value given when caching them. Use with caution.') +
+			_(' (Max 1h == 3600)'));
+		o.optional = true;
+		o.placeholder = 60;
+
+		o = s.taboption('limits', form.Value, 'max_cache_ttl',
+			_('Max cache TTL'),
+			_('Set a maximum seconds TTL value for entries in the cache.'));
+		o.optional = true;
+		o.placeholder = 3600;
+
 		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
 			_('Enable TFTP server'),
 			_('Enable the built-in single-instance TFTP server.'));
