@@ -319,19 +319,26 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = false;
 
-		s.tab('general', _('General Settings'));
-		s.tab('advanced', _('Advanced Settings'));
+
+
+		s.tab('general', _('General'));
+		s.tab('devices', _('Devices &amp; Ports'));
+		s.tab('dnssecopt', _('DNSSEC'));
+		s.tab('filteropts', _('Filter'));
+		s.tab('forward', _('Forwards'));
+		s.tab('limits', _('Limits'));
+		s.tab('logging', _('Log'));
+		s.tab('files', _('Resolv &amp; Hosts Files'));
 		s.tab('leases', _('Static Leases'));
-		s.tab('files', _('Resolv and Hosts Files'));
 		s.tab('hosts', _('Hostnames'));
 		s.tab('ipsets', _('IP Sets'));
 		s.tab('relay', _('Relay'));
 		s.tab('srvhosts', _('SRV'));
 		s.tab('mxhosts', _('MX'));
 		s.tab('cnamehosts', _('CNAME'));
-		s.tab('pxe_tftp', _('PXE/TFTP Settings'));
+		s.tab('pxe_tftp', _('PXE/TFTP'));
 
-		s.taboption('general', form.Flag, 'domainneeded',
+		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
 			_('Never forward DNS queries which lack dots or domain parts.') + '<br />' +
 			customi18n(_('Names not in {etc_hosts} are answered {not_found}.') )
@@ -349,12 +356,16 @@ return view.extend({
 			_('Local domain'),
 			_('Local domain suffix appended to DHCP names and hosts file entries.'));
 
-		o = s.taboption('general', form.Flag, 'logqueries',
+		s.taboption('general', form.Flag, 'expandhosts',
+			_('Expand hosts'),
+			_('Add local domain suffix to names served from hosts files.'));
+
+		o = s.taboption('logging', form.Flag, 'logqueries',
 			_('Log queries'),
 			_('Write received DNS queries to syslog.') + ' ' + _('Dump cache on SIGUSR1, include requesting IP.'));
 		o.optional = true;
 
-		o = s.taboption('general', form.DynamicList, 'server',
+		o = s.taboption('forward', form.DynamicList, 'server',
 			_('DNS forwardings'),
 			_('Forward specific domain queries to specific upstream servers.'));
 		o.optional = true;
@@ -392,14 +403,14 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = '/example.org/ipset,ipset6';
 
-		o = s.taboption('general', form.Flag, 'rebind_protection',
+		o = s.taboption('filteropts', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
 			customi18n(_('Discard upstream responses containing {rfc_1918_link} addresses.') ) + '<br />' +
 			customi18n(_('Discard also upstream responses containing {rfc_4193_link}, Link-Local and private IPv4-Mapped {rfc_4291_link} IPv6 Addresses.') )	
 		);
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Flag, 'rebind_localhost',
+		o = s.taboption('filteropts', form.Flag, 'rebind_localhost',
 			_('Allow localhost'),
 			customi18n(
 			_('Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. for <abbr title="Real-time Block List">RBL</abbr> services.')
@@ -407,7 +418,7 @@ return view.extend({
 		);
 		o.depends('rebind_protection', '1');
 
-		o = s.taboption('general', form.DynamicList, 'rebind_domain',
+		o = s.taboption('filteropts', form.DynamicList, 'rebind_domain',
 			_('Domain whitelist'),
 			customi18n(_('List of domains to allow {rfc_1918_link} responses for.') )
 		);
@@ -416,26 +427,26 @@ return view.extend({
 		o.placeholder = 'ihost.netflix.com';
 		o.validate = validateAddressList;
 
-		o = s.taboption('general', form.Flag, 'localservice',
+		o = s.taboption('filteropts', form.Flag, 'localservice',
 			_('Local service only'),
 			_('Accept DNS queries only from hosts whose address is on a local subnet.'));
 		o.optional = false;
 		o.rmempty = false;
 
-		o = s.taboption('general', form.Flag, 'nonwildcard',
+		o = s.taboption('devices', form.Flag, 'nonwildcard',
 			_('Non-wildcard'),
 			_('Bind only to configured interface addresses, instead of the wildcard address.'));
 		o.default = o.enabled;
 		o.optional = false;
 		o.rmempty = true;
 
-		o = s.taboption('general', widgets.NetworkSelect, 'interface',
+		o = s.taboption('devices', widgets.NetworkSelect, 'interface',
 			_('Listen interfaces'),
 			_('Listen only on the specified interfaces, and loopback if not excluded explicitly.'));
 		o.multiple = true;
 		o.nocreate = true;
 
-		o = s.taboption('general', widgets.NetworkSelect, 'notinterface',
+		o = s.taboption('devices', widgets.NetworkSelect, 'notinterface',
 			_('Exclude interfaces'),
 			_('Do not listen on the specified interfaces.'));
 		o.loopback = true;
@@ -530,6 +541,11 @@ return view.extend({
 		o.placeholder = '/tmp/resolv.conf.d/resolv.conf.auto';
 		o.optional = true;
 
+		o = s.taboption('files', form.Flag, 'strictorder',
+			_('Strict order'),
+			_('Query upstream resolvers in the order they appear in the resolv file.'));
+		o.optional = true;
+
 		o = s.taboption('files', form.Flag, 'nohosts',
 			customi18n(_('Ignore {etc_hosts}') )
 		);
@@ -540,125 +556,117 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = '/etc/dnsmasq.hosts';
 
-		o = s.taboption('advanced', form.Flag, 'quietdhcp',
+		o = s.taboption('logging', form.Flag, 'quietdhcp',
 			_('Suppress logging'),
 			_('Suppress logging of the routine operation for the DHCP protocol.'));
 		o.optional = true;
+		o.depends('logdhcp', '0');
 
-		o = s.taboption('advanced', form.Flag, 'sequential_ip',
+		o = s.taboption('general', form.Flag, 'sequential_ip',
 			_('Allocate IPs sequentially'),
 			_('Allocate IP addresses sequentially, starting from the lowest available address.'));
 		o.optional = true;
 
-		o = s.taboption('advanced', form.Flag, 'boguspriv',
+		o = s.taboption('filteropts', form.Flag, 'boguspriv',
 			_('Filter private'),
 			customi18n(
 			_('Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in {etc_hosts}.') )
 		); 
 		o.default = o.enabled;
 
-		s.taboption('advanced', form.Flag, 'filterwin2k',
+		s.taboption('filteropts', form.Flag, 'filterwin2k',
 			_('Filter SRV/SOA service discovery'),
 			_('Filters SRV/SOA service discovery, to avoid triggering dial-on-demand links.') + '<br />' +
 			_('May prevent VoIP or other services from working.'));
 
-		o = s.taboption('advanced', form.Flag, 'filter_aaaa',
+		o = s.taboption('filteropts', form.Flag, 'filter_aaaa',
 			_('Filter IPv6 AAAA records'),
 			_('Remove IPv6 addresses from the results and only return IPv4 addresses.') + '<br />' +
 			_('Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing.'));
 		o.optional = true;
 
-		o = s.taboption('advanced', form.Flag, 'filter_a',
+		o = s.taboption('filteropts', form.Flag, 'filter_a',
 			_('Filter IPv4 A records'),
 			_('Remove IPv4 addresses from the results and only return IPv6 addresses.'));
 		o.optional = true;
 
-		s.taboption('advanced', form.Flag, 'localise_queries',
+		s.taboption('filteropts', form.Flag, 'localise_queries',
 			_('Localise queries'),
 			customi18n(_('Limit response records (from {etc_hosts}) to those that fall within the subnet of the querying interface.') ) + '<br />' +
 			_('This prevents unreachable IPs in subnets not accessible to you.') + '<br />' +
 			_('Note: IPv4 only.'));
 
 		if (L.hasSystemFeature('dnsmasq', 'dnssec')) {
-			o = s.taboption('advanced', form.Flag, 'dnssec',
+			o = s.taboption('dnssecopt', form.Flag, 'dnssec',
 				_('DNSSEC'),
 				_('Validate DNS replies and cache DNSSEC data, requires upstream to support DNSSEC.'));
 			o.optional = true;
 
-			o = s.taboption('advanced', form.Flag, 'dnsseccheckunsigned',
+			o = s.taboption('dnssecopt', form.Flag, 'dnsseccheckunsigned',
 				_('DNSSEC check unsigned'),
 				_('Verify unsigned domain responses really come from unsigned domains.'));
 			o.default = o.enabled;
 			o.optional = true;
 		}
 
-		s.taboption('advanced', form.Flag, 'expandhosts',
-			_('Expand hosts'),
-			_('Add local domain suffix to names served from hosts files.'));
-
-		s.taboption('advanced', form.Flag, 'nonegcache',
+		s.taboption('filteropts', form.Flag, 'nonegcache',
 			_('No negative cache'),
 			_('Do not cache negative replies, e.g. for non-existent domains.'));
 
-		o = s.taboption('advanced', form.Value, 'serversfile',
+		o = s.taboption('forward', form.Value, 'serversfile',
 			_('Additional servers file'),
 			customi18n(_('File listing upstream resolvers, optionally domain-specific, e.g. {servers_file_entry01}, {servers_file_entry02}.') )
 		);
 		o.placeholder = '/etc/dnsmasq.servers';
 
-		o = s.taboption('advanced', form.Flag, 'strictorder',
-			_('Strict order'),
-			_('Upstream resolvers will be queried in the order of the resolv file.'));
-		o.optional = true;
-
-		o = s.taboption('advanced', form.Flag, 'allservers',
+		o = s.taboption('general', form.Flag, 'allservers',
 			_('All servers'),
-			_('Query all available upstream resolvers.'));
+			_('Query all available upstream resolvers.') + ' ' + _('First answer wins.'));
 		o.optional = true;
 
-		o = s.taboption('advanced', form.DynamicList, 'bogusnxdomain',
+		o = s.taboption('filteropts', form.DynamicList, 'bogusnxdomain',
 			customi18n(_('IPs to override with {nxdomain}') ),
 			customi18n(_('Transform replies which contain the specified addresses or subnets into {nxdomain} responses.') )
 		);
 		o.optional = true;
 		o.placeholder = '64.94.110.11';
 
-		o = s.taboption('advanced', form.Value, 'port',
+		o = s.taboption('devices', form.Value, 'port',
 			_('DNS server port'),
 			_('Listening port for inbound DNS queries.'));
 		o.optional = true;
 		o.datatype = 'port';
 		o.placeholder = 53;
 
-		o = s.taboption('advanced', form.Value, 'queryport',
+		o = s.taboption('devices', form.Value, 'queryport',
 			_('DNS query port'),
 			_('Fixed source port for outbound DNS queries.'));
 		o.optional = true;
 		o.datatype = 'port';
 		o.placeholder = _('any');
 
-		o = s.taboption('advanced', form.Value, 'dhcpleasemax',
+		o = s.taboption('limits', form.Value, 'dhcpleasemax',
 			_('Max. DHCP leases'),
 			_('Maximum allowed number of active DHCP leases.'));
 		o.optional = true;
 		o.datatype = 'uinteger';
-		o.placeholder = _('unlimited');
+		o.placeholder = 150;
 
-		o = s.taboption('advanced', form.Value, 'ednspacket_max',
+		o = s.taboption('limits', form.Value, 'ednspacket_max',
 			_('Max. EDNS0 packet size'),
 			_('Maximum allowed size of EDNS0 UDP packets.'));
 		o.optional = true;
 		o.datatype = 'uinteger';
 		o.placeholder = 1280;
 
-		o = s.taboption('advanced', form.Value, 'dnsforwardmax',
+		o = s.taboption('limits', form.Value, 'dnsforwardmax',
 			_('Max. concurrent queries'),
 			_('Maximum allowed number of concurrent DNS queries.'));
 		o.optional = true;
 		o.datatype = 'uinteger';
 		o.placeholder = 150;
 
-		o = s.taboption('advanced', form.Value, 'cachesize',
+		o = s.taboption('limits', form.Value, 'cachesize',
 			_('Size of DNS query cache'),
 			_('Number of cached DNS entries, 10000 is maximum, 0 is no caching.'));
 		o.optional = true;
