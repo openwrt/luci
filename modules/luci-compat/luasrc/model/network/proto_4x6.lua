@@ -16,6 +16,8 @@ for _, p in ipairs({"dslite", "map", "464xlat"}) do
 			return luci.i18n.translate("MAP / LW4over6")
 		elseif p == "464xlat" then
 			return luci.i18n.translate("464XLAT (CLAT)")
+		elseif p == "ipip6" then
+			return luci.i18n.translate("IPv4 over IPv6 (RFC 2473)")
 		end
 	end
 
