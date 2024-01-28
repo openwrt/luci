@@ -89,6 +89,21 @@ function calculateNetwork(addr, mask) {
 	];
 }
 
+function generateDnsmasqInstanceEntry(data) {
+	const nameValueMap = new Map(Object.entries(data));
+	let formatString = nameValueMap.get('.index') + ' (' +  _('Name') + (nameValueMap.get('.anonymous') ? ': dnsmasq[' + nameValueMap.get('.index') + ']': ': ' + nameValueMap.get('.name'));
+
+	if (data.domain) {
+		formatString += ', ' +  _('Domain')  + ': ' + data.domain;
+	}
+	if (data.local) {
+		formatString += ', ' +  _('Local')  + ': ' + data.local;
+	}
+	formatString += ')';
+
+	return nameValueMap.get('.name'), formatString;
+}
+
 function getDHCPPools() {
 	return uci.load('dhcp').then(function() {
 		let sections = uci.sections('dhcp', 'dhcp'),
@@ -701,7 +716,7 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			so.value(index, '%s (Domain: %s, Local: %s)'.format(index, val.domain || '?', val.local || '?'));
+			so.value(generateDnsmasqInstanceEntry(val));
 		});
 
 		o = s.taboption('srvhosts', form.SectionValue, '__srvhosts__', form.TableSection, 'srvhost', null,
@@ -946,6 +961,14 @@ return view.extend({
 		});
 
 		so = ss.option(form.Value, 'hostid', _('IPv6 suffix (hex)'));
+
+		so = ss.option(form.Value, 'instance',
+			_('Instance'));
+		so.optional = true;
+
+		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
+			so.value(generateDnsmasqInstanceEntry(val));
+		});
 
 		o = s.taboption('leases', CBILeaseStatus, '__status__');
 
