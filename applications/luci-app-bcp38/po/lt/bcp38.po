@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-01-19 22:40+0000\n"
+"PO-Revision-Date: 2024-01-28 06:39+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/lt/>\n"
@@ -24,10 +24,13 @@ msgid ""
 "configuration, and add an exception if it will. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
+"Automatiškai bandyti aptikti, ar išsiunčiamas IP bus užblokuotas "
+"konfigūracijos ir pridėti išimtį, jei tai darytų. Jeigu šis neveikia "
+"tinkamai, tada galite pridėti išimtis rankiniu būdu apačioje."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid "Auto-detect upstream IP"
-msgstr ""
+msgstr "Automatiškai aptikti išsiunčiamo srauto IP"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
@@ -58,12 +61,17 @@ msgstr "Sąsajos ir/arba Sietuvo pavadinimas"
 msgid ""
 "Interface to apply the blocking to should be the upstream WAN interface)."
 msgstr ""
+"Sąsają ir/arba sietuvas, prie kurio pritaikyti blokavimą į išsiunčiamąją "
+"„WAN“ sąsają ir/arba sietuvą."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
 msgstr ""
+"Priima pirmenybę virš blokuotus diapazonus. Naudoti, norint įkelti į "
+"leidžiamąjį sąrašą savo išsiunčiamąjį tinklą, jeigu Jūs esate prieš dvigubo "
+"„NAT“ ir automatinis aptikimas neveikia."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
@@ -72,3 +80,7 @@ msgid ""
 "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
 "installed, so no BCP38 firewall routes are needed."
 msgstr ""
+"Ši funkcija blokuoja paketus su privačiu adreso paskirtimis, kad nepatektų į "
+"viešąjį internetą kaip per „<a href=\"http://tools.ietf.org/html/bcp38\">BCP "
+"38</a>“. Dėl IPv6, tik šaltiniui specifiški numatomi maršrutai yra įdiegti, "
+"tai jokie „BCP38“ užkardos maršrutai nereikalingi."
