@@ -22,7 +22,7 @@ jobs:
           echo "Building for $BRANCH"
           echo "BRANCH=$BRANCH" >> $GITHUB_ENV
 
-      - name: Test formalities
+      - name: Test for merge, subject and S.O.B.
         run: |
           source .github/workflows/ci_helpers.sh
 
@@ -45,7 +45,7 @@ jobs:
             body="$(git show -s --format=%b $commit)"
             sob="$(git show -s --format='Signed-off-by: %aN <%aE>' $commit)"
             if echo "$body" | grep -qF "$sob"; then
-              success "Signed-off-by match author"
+              success "Signed-off-by matches author"
             else
               err "Signed-off-by is missing or doesn't match author (should be '$sob')"
               RET=1
