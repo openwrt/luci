@@ -1,0 +1,15 @@
+name: Check PR source branch
+
+on:
+  pull_request_target:
+    types: [opened, synchronize]
+
+jobs:
+  check-source-branch-is-not-main-or-master:
+    runs-on: ubuntu-latest
+    if:  contains(fromJSON('["main", "master"]'), github.head_ref)
+    # or github.event.pull_request.head.ref
+    steps:
+      - run: |
+          echo "Error: Pull requests should not be from your 'main' or 'master' branch. :("
+          exit 1
