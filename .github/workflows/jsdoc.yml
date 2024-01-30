@@ -4,6 +4,12 @@ on:
   push:
     branches:
       - master
+    paths:
+      # One day we might include all htdocs folders:
+      # - '**/htdocs/**'
+      # Until then, follow jsdoc.conf.json:source directive
+      - 'modules/luci-base/htdocs/luci-static/resources/**'
+      - 'docs/**'
 
 jobs:
   deploy:
