@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-01-28 06:39+0000\n"
+"PO-Revision-Date: 2024-01-30 15:06+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/lt/>\n"
@@ -909,6 +909,11 @@ msgid ""
 "invalid values could render the firewall ruleset broken, completely exposing "
 "all services."
 msgstr ""
+"Perduodant neapdorotus „iptables“ argumentus į šaltinio ir paskirties srauto "
+"klasifikavimo taisyklės leidžia suderinti paketus pagal kitus kriterijus nei "
+"sąsajos ar potinklius. Šias parinktis reikia naudoti labai atsargiai, nes "
+"dėl netinkamų reikšmių užkardos taisyklių rinkinys gali būti sugadintas, "
+"visiškai atskleisti visas tarnybas."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:187
 msgid "Path to file of CIDRs, subnets, host IPs, etc.<br />"
@@ -982,7 +987,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:215
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
 msgid "Restrict to address family"
-msgstr ""
+msgstr "Apriboti į adreso „šeimą“"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:293
 msgid "Rewrite IP address"
@@ -1145,6 +1150,11 @@ msgid ""
 "forwarded traffic between different networks within the zone. <em>Covered "
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
+"Šiame skyriuje apibrėžiamos bendrosios %q savybės. <em>Įvesties</em> ir "
+"<em>išvesties</em> parinktys nustato numatytąsias srauto, patenkančio į šią "
+"zoną ir išeinančio iš jos politiką, o „persiųsti“ <em>parinktis</em> aprašo "
+"politikos persiuntimo srautą tarp skirtingų tinklų zonos viduje. "
+"<em>Padengti tinklai</em> nurodo, kurie galimi tinklai yra šios zonos nariai."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:483
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:353
@@ -1361,6 +1371,8 @@ msgid ""
 "Zones from which reflection rules shall be created. If unset, only the "
 "destination zone is used."
 msgstr ""
+"Zonos, iš kurių turi būti kuriamos atspindžio taisyklės. Jei nenustatyta, "
+"bus naudojama tik paskirties zona."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:414
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:70
@@ -1411,11 +1423,11 @@ msgstr "automatinis"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:130
 msgid "bitmap"
-msgstr ""
+msgstr "„bitmap“"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:136
 msgid "bitmap is ipv4 only"
-msgstr ""
+msgstr "„bitmap“ yra tik IPv4"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
@@ -1455,7 +1467,7 @@ msgstr "Nesekti"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:69
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:152
 msgid "drop"
-msgstr ""
+msgstr "mesti/atmesti"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:21
 msgid ""
