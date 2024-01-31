@@ -613,6 +613,9 @@ return view.extend({
 				o.network = ifc.getName();
 				o.exclude = '@' + ifc.getName();
 
+				o = s.taboption('general', form.Flag, 'disabled', _('Disable this interface'));
+				o.modalonly = true;
+
 				o = s.taboption('general', form.Flag, 'auto', _('Bring up on boot'));
 				o.modalonly = true;
 				o.default = o.enabled;
