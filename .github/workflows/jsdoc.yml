@@ -13,7 +13,7 @@ on:
 
 jobs:
   deploy:
-    if: github.repository == 'openwrt/luci'
+    if: endsWith( github.repository, 'luci' )
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
