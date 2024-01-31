@@ -589,7 +589,7 @@ var ValidatorFactory = baseclass.extend({
 		},
 
 		hexstring: function() {
-			return this.assert(this.value.match(/^([a-f0-9][a-f0-9]|[A-F0-9][A-F0-9])+$/),
+			return this.assert(this.value.match(/^([A-F0-9]{2})+$/i),
 				_('hexadecimal encoded value'));
 		},
 
