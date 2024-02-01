@@ -5,9 +5,7 @@
 
 'use strict';
 'require form';
-'require poll';
 'require rpc';
-'require uci';
 'require view';
 
 var callServiceList = rpc.declare({
@@ -27,26 +25,15 @@ function getServiceStatus() {
 	});
 }
 
-function renderStatus(isRunning) {
-	var spanTemp = '<label class="cbi-value-title">Status</label><div class="cbi-value-field"><em><span style="color:%s">%s</span></em></div>';
-	var renderHTML;
-	if (isRunning) {
-		renderHTML = String.format(spanTemp, 'green', _('Running'));
-	} else {
-		renderHTML = String.format(spanTemp, 'red', _('Not Running'));
-	}
-
-	return renderHTML;
-}
-
 return view.extend({
 	load: function () {
 		return Promise.all([
-			uci.load('cloudflared')
+			getServiceStatus()
 		]);
 	},
 
 	render: function (data) {
+		let isRunning = data[0];
 		var m, s, o;
 
 		m = new form.Map('cloudflared', _('Cloudflare Zero Trust Tunnel'),
@@ -59,18 +46,15 @@ return view.extend({
 
 		s = m.section(form.NamedSection, 'config', 'cloudflared');
 
-		o = s.option(form.DummyValue, 'service_status', _('Status'));
-		o.load = function () {
-			poll.add(function () {
-				return L.resolveDefault(getServiceStatus()).then(function (res) {
-					var view = document.getElementById('cbi-cloudflared-config-service_status');
-					if (view) {
-						view.innerHTML = renderStatus(res);
-					}
-				});
-			});
+		o = s.option(form.DummyValue, '_status', _('Status'));
+		o.rawhtml = true;
+		o.cfgvalue = function(section_id) {
+			var span = '<b><span style="color:%s">%s</span></b>';
+			var renderHTML = isRunning ?
+				String.format(span, 'green', _('Running')) :
+				String.format(span, 'red', _('Not Running'));
+			return renderHTML;
 		};
-		o.value = _('Collecting data...');
 
 		o = s.option(form.Flag, 'enabled', _('Enable'));
 		o.rmempty = false;
