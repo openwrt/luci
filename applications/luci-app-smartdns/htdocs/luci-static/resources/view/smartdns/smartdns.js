@@ -639,21 +639,21 @@ return view.extend({
 		s.tab('advanced', _('Advanced Settings'));
 
 		// enable flag;
-		o = s.taboption("general", form.Flag, "enabled", _("Enable"), _("Enable"));
+		o = s.taboption("general", form.Flag, "enabled", _("Enable"));
 		o.rmempty = false;
 		o.default = o.enabled;
 		o.editable = true;
 
 		// name;
-		o = s.taboption("general", form.Value, "name", _("DNS Server Name"), _("DNS Server Name"));
+		o = s.taboption("general", form.Value, "name", _("DNS Server Name"));
 
 		// IP address;
-		o = s.taboption("general", form.Value, "ip", _("ip"), _("DNS Server ip"));
+		o = s.taboption("general", form.Value, "ip", _("DNS Server ip"));
 		o.datatype = "or(ipaddr, string)";
 		o.rmempty = false;
 
 		// port;
-		o = s.taboption("general", form.Value, "port", _("port"), _("DNS Server port"));
+		o = s.taboption("general", form.Value, "port", _("DNS Server port"));
 		o.placeholder = "default";
 		o.datatype = "port";
 		o.rempty = true;
@@ -662,7 +662,7 @@ return view.extend({
 		o.depends("type", "tls");
 
 		// type;
-		o = s.taboption("general", form.ListValue, "type", _("type"), _("DNS Server type"));
+		o = s.taboption("general", form.ListValue, "type", _("DNS Server type"));
 		o.placeholder = "udp";
 		o.value("udp", _("udp"));
 		o.value("tcp", _("tcp"));
@@ -672,7 +672,7 @@ return view.extend({
 		o.rempty = false;
 
 		// server group
-		o = s.taboption("general", form.Value, "server_group", _("Server Group"), _("DNS Server group"))
+		o = s.taboption("general", form.Value, "server_group", _("DNS Server group"))
 		o.rmempty = true;
 		o.placeholder = "default";
 		o.datatype = "hostname";
