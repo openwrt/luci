@@ -85,24 +85,24 @@ return view.extend({
 	},
 
 	selectImage: function (images) {
-		let image;
-		for (image of images) {
-			if (this.firmware.filesystem == image.filesystem) {
+		let firmware = this.firmware;
+		let data = this.data;
+		var filesystemFilter = function(e) {
+			return (e.filesystem == firmware.filesystem);
+		}
+		var typeFilter = function(e) {
+			if (firmware.target.indexOf("x86") != -1) {
 				// x86 images can be combined-efi (EFI) or combined (BIOS)
-				if(this.firmware.target.indexOf("x86") != -1) {
-					if (this.data.efi && image.type == 'combined-efi') {
-						return image;
-					} else if (image.type == 'combined') {
-						return image;
-					}
+				if (data.efi) {
+					return (e.type == 'combined-efi');
 				} else {
-					if (image.type == 'sysupgrade' || image.type == 'combined') {
-						return image;
-					}
+					return (e.type == 'combined');
 				}
+			} else {
+				return (e.type == 'sysupgrade' || e.type == 'combined');
 			}
 		}
-		return null;
+		return images.filter(filesystemFilter).filter(typeFilter)[0];
 	},
 
 	handle200: function (response) {
