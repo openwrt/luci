@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-01 08:53+0000\n"
+"PO-Revision-Date: 2024-02-02 18:54+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/lt/>\n"
@@ -618,7 +618,7 @@ msgstr "Laukiamo prisijungimo/jungties ryšio prievadas"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:32
 msgid "Listener interfaces"
-msgstr ""
+msgstr "Klausytojo sąsajos ir sietuvai"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/load.js:6
 msgid "Load Plugin Configuration"
@@ -654,7 +654,6 @@ msgstr ""
 "nenaudojamos „tik vidutinės RRA“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:118
-#, fuzzy
 msgid "Max. Attainable Data Rate (ATTNDR) Down"
 msgstr "Maks. Pasiekiamas duomenų perdavimo greitis („ATTNDR“) išjungtas"
 
@@ -910,7 +909,6 @@ msgstr[1] "Stebimi %d jutikliai"
 msgstr[2] "Stebima %d jutiklių"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/splash_leases.js:10
-#, fuzzy
 msgid "Monitoring splash leases"
 msgstr "Stebimos „splash“ nuomos"
 
@@ -1111,20 +1109,24 @@ msgid "Rule monitoring enabled"
 msgstr "Taisyklių stebėjimas įjungtas"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:142
+#, fuzzy
 msgid "Rx Corrupted Far"
-msgstr ""
+msgstr "Atsiųsti/Gauti reaktyviai „tolimai korumpuotas/-i“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:147
+#, fuzzy
 msgid "Rx Corrupted Near"
-msgstr ""
+msgstr "Atsiųsti/Gauti reaktyviai „artimai korumpuotas/-i“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:152
+#, fuzzy
 msgid "Rx Retransmitted Far"
-msgstr ""
+msgstr "Atsiųsti/Gauti reaktyviai „tolimai retransliuotas/-i“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:162
+#, fuzzy
 msgid "Rx Retransmitted Near"
-msgstr ""
+msgstr "Atsiųsti/Gauti reaktyviai „artimai retransliuotas/-i“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/snmp6.js:7
 msgid "SNMP6"
@@ -1355,6 +1357,8 @@ msgid ""
 "The OLSRd plugin reads information about meshed networks from the txtinfo "
 "plugin of OLSRd."
 msgstr ""
+"„OLSRd“ papildinys nuskaito informaciją apie junglusius tinklus iš „txtinfo“ "
+"papildinio iš „OLSRd“."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:8
 msgid ""
@@ -1438,6 +1442,10 @@ msgid ""
 "to be used in conjunction with Mail::SpamAssasin::Plugin::Collectd but can "
 "be used in other ways as well."
 msgstr ""
+"El. pašto papildinys sukuria „unix“ lizdą, kuris gali būti naudojamas siųsti "
+"el. pašto statistiką į veikiantį „collectd“ tarnybą. Šis papildinys visų "
+"pirma skirtas naudoti kartu su „Mail::SpamAssasin::Plugin::Collectd“, bet "
+"gali būti naudojamas ir kitais būdais."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/entropy.js:7
 msgid "The entropy plugin collects statistics about the available entropy."
@@ -1520,6 +1528,11 @@ msgid ""
 "client mode locally collected data is transferred to a collectd server "
 "instance, in server mode the local instance receives data from other hosts."
 msgstr ""
+"Tinklo papildinys suteikią tinklo pagrįstą komunikaciją tarp skirtingų "
+"„collectd“ egzempliorių. „Collectd“ gali veikti tiek kliento, tiek serverio "
+"režimu. Kliento režimu vietovėje surinkti duomenys yra perduodami į surinktą "
+"serverio egzempliorių, serverio režimu vietinis egzempliorius gauna duomenys "
+"iš kitų skleidėjų/p.k – vedėjų."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:7
 msgid ""
@@ -1534,6 +1547,8 @@ msgid ""
 "The processes plugin collects information like cpu time, page faults and "
 "memory usage of selected processes."
 msgstr ""
+"Procesų papildinys renka tokią informaciją kaip „CPU“ laiką, puslapio trikč"
+"ius/gedimus atminties naudojimą iš pasirinktų procesų."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:7
 msgid ""
@@ -1542,28 +1557,39 @@ msgid ""
 "values will result in a very high memory consumption in the temporary "
 "directory. This can render the device unusable!</strong>"
 msgstr ""
+"„RRDTool“ papildinys saugo surinktus duomenis „RRD“ duomenų bazės failuose, "
+"o tai yra diagramų pagrindas.<br /><br /><strong>Įspėjimas: Nustačius "
+"neteisingas reikšmes laikinajame kataloge sunaudos labai daug atminties. Dėl "
+"to įrenginys gali tapti netinkamas naudoti!</strong>"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
 msgid ""
 "The sensors plugin uses the Linux Sensors framework to gather environmental "
 "statistics."
 msgstr ""
+"Jutiklių papildinys naudoja „Linux Sensors“ pagrindų sistemą renkant "
+"aplinkos statistikas."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:8
 msgid "The snmp6 plugin collects IPv6 statistics for selected interfaces."
 msgstr ""
+"„SNMP6“ papildinys renka IPv6 statistiką pasirinktoms sąsajoms ir sietuvams."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/splash_leases.js:7
 msgid ""
 "The splash leases plugin uses libuci to collect statistics about splash "
 "leases."
 msgstr ""
+"„Splash“ nuomų papildinys naudoja „libuci“, kad rinktų statistikas apie "
+"„splash“ nuomas."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:7
 msgid ""
 "The tcpconns plugin collects information about open tcp connections on "
 "selected ports."
 msgstr ""
+"„TCPConns“ papildinys renka informaciją apie atidarytus „TCP“ ryšius "
+"pasirinktuose prievaduose."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:8
 msgid ""
@@ -1571,12 +1597,17 @@ msgid ""
 "read from /sys/class/thermal/*/temp ( '*' denotes the thermal device to be "
 "read, e.g. thermal_zone1 )"
 msgstr ""
+"Termos papildinys stebės sistemos temperatūrą. Duomenys paprastai yra "
+"nuskaitomi iš „/sys/class/thermal/*/temp“ („*“ reiškia/rodo šiluminį "
+"įrenginį, kurį reikia nuskaityti, pvz., „thermo_zone1“ )"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:8
 msgid ""
 "The unixsock plugin creates a unix socket which can be used to read "
 "collected data from a running collectd instance."
 msgstr ""
+"„Unixsock“ papildinys sukuria „Unix“ lizdą, kurį galima naudoti surinktiems "
+"duomenims skaityti iš veikiančio „collectd“ egzemplioriaus."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/uptime.js:7
 msgid "The uptime plugin collects statistics about the uptime of the system."
@@ -1627,12 +1658,13 @@ msgid "Try to look up fully qualified hostname"
 msgstr "Pabandykite surasti/paieškoti pilnai kvalifikuotą Įrenginio pavadinimą"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:157
+#, fuzzy
 msgid "Tx Retransmitted Far"
-msgstr ""
+msgstr "Nusiųsti reaktyviai „tolimai retransliuotas/-i“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:167
 msgid "Tx Retransmitted Near"
-msgstr ""
+msgstr "Nusiųsti reaktyviai „artimai retransliuotas/-i“"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/nut.js:7
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:14
@@ -1688,12 +1720,10 @@ msgid "User"
 msgstr "Naudotojas/Vartotojas"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:92
-#, fuzzy
 msgid "Vectoring Down"
 msgstr "Vektoriavimas išjungtas"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:87
-#, fuzzy
 msgid "Vectoring Up"
 msgstr "Vektoriavimas įjungtas"
 
@@ -1803,21 +1833,21 @@ msgstr[2] "%d vietinių"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
 msgid_plural "%d mounts"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "vienas įrengimas"
+msgstr[1] "%d įrengimai"
+msgstr[2] "%d įrengimų"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "vienas nuotolinis prievadas"
+msgstr[1] "%d nuotoliniai prievadai"
+msgstr[2] "%d nuotolinių prievadų"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "reduces rrd size"
-msgstr ""
+msgstr "sumažina „rrd“ dydį"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "summary of all ports"
-msgstr ""
+msgstr "visų prievadų santrauka"
