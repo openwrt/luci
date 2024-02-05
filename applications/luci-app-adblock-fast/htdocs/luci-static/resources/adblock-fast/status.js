@@ -201,8 +201,11 @@ var status = baseclass.extend({
 					);
 					var text = "";
 					reply.status.warnings.forEach((element) => {
-						text +=
-							warningTable[element.id].format(element.extra || " ") + "<br />";
+						if (element.id && warningTable[element.id])
+							text +=
+								warningTable[element.id].format(element.extra || " ") +
+								"<br />";
+						else text += _("Unknown warning") + "<br />";
 					});
 					var warningsText = E("div", {}, text);
 					var warningsField = E(
@@ -292,8 +295,10 @@ var status = baseclass.extend({
 					);
 					var text = "";
 					reply.status.errors.forEach((element) => {
-						text +=
-							errorTable[element.id].format(element.extra || " ") + "!<br />";
+						if (element.id && errorTable[element.id])
+							text +=
+								errorTable[element.id].format(element.extra || " ") + "!<br />";
+						else text += _("Unknown error") + "<br />";
 					});
 					text += _("Errors encountered, please check the %sREADME%s").format(
 						'<a href="' + pkg.URL + '" target="_blank">',
