@@ -6,9 +6,10 @@
 'require ui';
 'require form';
 'require uci';
+'require network';
 'require tools.widgets as widgets';
 
-var Hosts, Remotehosts, Remoteinfo, Localinfo, Clients;
+var Hosts, Remotehosts, Remoteinfo, Localinfo, Clients, WifiNetworks;
 
 var dns_cache = [];
 
@@ -326,7 +327,8 @@ return view.extend({
 			this.callGetRemotehosts().catch (function (){return null;}),
 			this.callGetRemoteinfo().catch (function (){return null;}),
 			this.callGetLocalinfo().catch (function (){return null;}),
-			this.callGetClients().catch (function (){return null;})
+			this.callGetClients().catch (function (){return null;}),
+			network.getWifiNetworks()
 		]);
 	},
 
@@ -379,6 +381,7 @@ return view.extend({
 		Remoteinfo = data[3];
 		Localinfo = data[4];
 		Clients = data[5];
+		WifiNetworks = data[6];
 
 		s = m.section(form.TypedSection);
 		s.anonymous = true;
@@ -606,7 +609,12 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'list(string)';
 
-		o = s.taboption('settings', form.DynamicList, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on'));
+		o = s.taboption('settings', form.MultiValue, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on'));
+		WifiNetworks.forEach(function (wifiNetwork) {
+			if (wifiNetwork.getSSID()) {
+				o.value(wifiNetwork.getSSID())
+			}
+		});
 		o.optional = true;
 		o.datatype = 'list(string)';
 
