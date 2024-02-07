@@ -89,7 +89,7 @@ return view.extend({
 		o.value('us', _('United States'));
 		o.optional = true;
 
-		o = s.option(form.ListValue, 'loglevel', _('Debug level'));
+		o = s.option(form.ListValue, 'loglevel', _('Logging level'));
 		o.value('fatal', _('Fatal'));
 		o.value('error', _('Error'));
 		o.value('warn', _('Warning'));
