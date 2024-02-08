@@ -61,6 +61,8 @@ jobs:
               success "Commit subject line seems ok ($subject)"
             elif echo "$subject" | grep -iq '^Translated using Weblate.*'; then
               success "Weblate commit subject line exception OK: $subject"
+            elif echo "$subject" | grep -iq '^Added translation using Weblate.*'; then
+              success "Weblate commit subject line exception OK: $subject"
             else
               err "Commit subject line MUST start with '<package name>: ' ($subject)"
               RET=1
