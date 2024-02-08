@@ -8,12 +8,23 @@ return baseclass.extend({
 	addFormOptions(s){
 		var o;
 
-		o = s.option(form.Value, 'port_mask', _('Switch Port Mask'));
+		o = s.option(form.Value, 'switch0_port_mask', _('Switch Port Mask'));
+		o.ucioption = "port_mask";
 		o.modalonly = true;
 		o.depends('trigger', 'switch0');
 
-		o = s.option(form.Value, 'speed_mask', _('Switch Speed Mask'));
+		o = s.option(form.Value, 'switch0_speed_mask', _('Switch Speed Mask'));
+		o.ucioption = "speed_mask";
 		o.modalonly = true;
 		o.depends('trigger', 'switch0');
+
+		o = s.option(form.MultiValue, 'switch0_mode', _('Trigger Mode'));
+		o.ucioption = "mode";
+		o.rmempty = true;
+		o.modalonly = true;
+		o.depends('trigger', 'switch0');
+		o.value('link', _('Link On'));
+		o.value('tx', _('Transmit'));
+		o.value('rx', _('Receive'));
 	}
 });
