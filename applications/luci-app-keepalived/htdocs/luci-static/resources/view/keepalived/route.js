@@ -16,7 +16,7 @@ return view.extend({
 		var s, o;
 
 		s = m.section(form.GridSection, 'route', _('Routes'),
-			_('Routes would be refereenced into Static and Virtual Routes of VRRP instances'));
+			_('Routes would be referenced into Static and Virtual Routes of VRRP instances'));
 		s.anonymous = true;
 		s.addremove = true;
 		s.nodescriptions = true;
