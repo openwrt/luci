@@ -81,7 +81,7 @@ return view.extend({
 			"dnsmasq_config_update_option",
 			_("Update DNSMASQ Config on Start/Stop"),
 			_(
-				"If update option is selected, the %s'DNS forwardings' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
+				"If update option is selected, the %s'DNS Forwards' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
 			).format(
 				'<a href="' + L.url("admin", "network", "dhcp") + '">',
 				"</a>",
