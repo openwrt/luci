@@ -394,7 +394,7 @@ return view.extend({
 		o.value('-', _('stderr'));
 
 		o = s.taboption('forward', form.DynamicList, 'server',
-			_('DNS forwardings'),
+			_('DNS Forwards'),
 			_('Forward specific domain queries to specific upstream servers.'));
 		o.optional = true;
 		o.placeholder = '/*.example.org/10.1.2.3';
