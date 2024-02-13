@@ -609,7 +609,7 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'list(string)';
 
-		o = s.taboption('settings', form.MultiValue, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on'));
+		o = s.taboption('settings', form.DynamicList, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on'));
 		WifiNetworks.forEach(function (wifiNetwork) {
 			if (wifiNetwork.getSSID()) {
 				o.value(wifiNetwork.getSSID())
