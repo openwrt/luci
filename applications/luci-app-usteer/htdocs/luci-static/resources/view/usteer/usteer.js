@@ -611,7 +611,7 @@ return view.extend({
 
 		o = s.taboption('settings', form.DynamicList, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on'));
 		WifiNetworks.forEach(function (wifiNetwork) {
-			if (wifiNetwork.getSSID()) {
+			if (wifiNetwork.getSSID() && (!o.keylist || o.keylist.indexOf(wifiNetwork.getSSID()) === -1)) {
 				o.value(wifiNetwork.getSSID())
 			}
 		});
