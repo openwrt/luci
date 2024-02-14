@@ -6,7 +6,7 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=Universal Plug & Play configuration module
+LUCI_TITLE:=UPnP IGD & PCP/NAT-PMP (Universal Plug and Play) conf. module
 LUCI_DEPENDS:=+luci-base +miniupnpd +rpcd-mod-ucode
 
 include ../../luci.mk

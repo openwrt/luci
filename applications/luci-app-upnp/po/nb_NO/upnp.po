@@ -12,36 +12,37 @@ msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:182
 msgid ""
-"ACLs specify which external ports may be redirected to which internal "
-"addresses and ports"
+"ACLs specify which external ports can be forwarded to which client addresses "
+"and ports, IPv6 always allowed."
 msgstr ""
-"ACL angir hvilke eksterne porter som kan bli viderekoblet, og til hvilke "
-"interne adresser og porter."
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:202
 msgid "Action"
 msgstr "Handling"
 
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:31
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:113
-msgid "Active UPnP Redirects"
-msgstr "Aktive UPnP Viderekoblinger"
+msgid "Active Service Port Forwards"
+msgstr ""
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:31
+msgid "Active UPnP IGD & PCP/NAT-PMP Port Forwards"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:119
 msgid "Advanced Settings"
 msgstr "Avanserte innstillinger"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:131
-msgid "Advertise as IGDv1 device instead of IGDv2"
-msgstr "Annonser som IGDv1-enhet istedenfor IGDv2"
+msgid "Advertise as UPnP IGDv1 device (no IPv6) instead of IGDv2"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:203
 msgid "Allow"
 msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:128
-msgid "Allow adding forwards only to requesting ip addresses"
-msgstr "Tillat videkobling kun til IP adresser som ber om det"
+msgid "Allow adding port forwards only to requesting IP addresses"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:150
 msgid "Announced model number"
@@ -61,11 +62,13 @@ msgstr "Nullstill UPnP terskel"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:45
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:85
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:194
 msgid "Client Address"
 msgstr "Klient adresse"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:47
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:87
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:198
 msgid "Client Port"
 msgstr "Klient port"
 
@@ -93,20 +96,20 @@ msgid "Device UUID"
 msgstr "Enhet UUID"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:136
-msgid "Downlink"
-msgstr "Nedlinje"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:130
-msgid "Enable IGDv1 mode"
-msgstr "Skru på IGDv1-modus"
+msgid "Download speed"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:125
-msgid "Enable NAT-PMP functionality"
-msgstr "Aktiver NAT-PMP funksjonalitet"
+msgid "Enable PCP/NAT-PMP protocol"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:124
-msgid "Enable UPnP functionality"
-msgstr "Aktiver UPnP funksjonalitet"
+msgid "Enable UPnP IGD protocol"
+msgstr ""
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:130
+msgid "Enable UPnP IGDv1 mode"
+msgstr "Skru på UPnP IGDv1-modus"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:133
 msgid "Enable additional logging"
@@ -118,42 +121,22 @@ msgstr "Aktiver sikker modus"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:44
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:84
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:190
 msgid "External Port"
 msgstr "Ekstern port"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:190
-msgid "External ports"
-msgstr "Eksterne porter"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:118
 msgid "General Settings"
 msgstr "Generelle innstillinger"
 
 #: applications/luci-app-upnp/root/usr/share/rpcd/acl.d/luci-app-upnp.json:3
-#, fuzzy
-msgid "Grant access to upnp procedures"
-msgstr "Innvilg tilgang til UPnP-muligheter"
+msgid "Grant access to UPnP IGD & PCP/NAT-PMP"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:46
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:86
 msgid "Host"
 msgstr "Vert"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:194
-msgid "Internal addresses"
-msgstr "Interne adresser"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:198
-msgid "Internal ports"
-msgstr "Interne porter"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:181
-msgid "MiniUPnP ACLs"
-msgstr "MiniUPnP ACL'er"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:116
-msgid "MiniUPnP settings"
-msgstr "MiniUPnP Innstillinger"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:152
 msgid "Notify interval"
@@ -177,8 +160,8 @@ msgid "Puts extra debugging information into the system log"
 msgstr "Setter ekstra debugging informasjon i systemloggen"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:146
-msgid "Report system instead of daemon uptime"
-msgstr "Rapporter systemets oppetid istedenfor daemon oppetid"
+msgid "Report system instead of service uptime"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:172
 msgid "STUN Host"
@@ -188,35 +171,41 @@ msgstr "STUN-vert"
 msgid "STUN Port"
 msgstr "STUN-port"
 
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:181
+msgid "Service ACLs"
+msgstr ""
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:116
+msgid "Service Settings"
+msgstr ""
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:167
+msgid "Service lease file"
+msgstr ""
+
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:121
-msgid "Start UPnP and NAT-PMP service"
-msgstr "Start UPnP og NAT-PMP tjenesten"
+msgid "Start service"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:70
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:66
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:110
-msgid "There are no active redirects."
-msgstr "Det finnes ingen aktive viderekoblinger"
+msgid "There are no active port forwards."
+msgstr ""
 
 #: applications/luci-app-upnp/root/usr/share/luci/menu.d/luci-app-upnp.json:3
-msgid "UPnP"
-msgstr "UPnP"
+msgid "UPnP IGD & PCP/NAT-PMP"
+msgstr ""
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:75
+msgid "UPnP IGD & PCP/NAT-PMP Service"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:76
 msgid ""
-"UPnP allows clients in the local network to automatically configure the "
-"router."
+"UPnP IGD & PCP/NAT-PMP allows clients on the local network to automatically "
+"configure port forwards on the router. Also called Universal Plug and Play."
 msgstr ""
-"UPnP gjør at klientene i det lokale nettverket automatisk kan konfigurere "
-"ruteren."
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:167
-msgid "UPnP lease file"
-msgstr "UPnP leie fil"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:75
-msgid "Universal Plug & Play"
-msgstr "Universal Plug & Play"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:60
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:56
@@ -225,8 +214,8 @@ msgid "Unknown"
 msgstr "Ukjent"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:139
-msgid "Uplink"
-msgstr "Opplinje"
+msgid "Upload speed"
+msgstr ""
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:170
 msgid "Use STUN"
@@ -237,18 +226,74 @@ msgstr "Bruk STUN"
 msgid "Value in KByte/s, informational only"
 msgstr "Verdi i KByte/sek, kun for informasjon"
 
-#~ msgid "Collecting data..."
-#~ msgstr "Samler inn data…"
+#~ msgid ""
+#~ "ACLs specify which external ports may be redirected to which internal "
+#~ "addresses and ports"
+#~ msgstr ""
+#~ "ACL angir hvilke eksterne porter som kan bli viderekoblet, og til hvilke "
+#~ "interne adresser og porter."
 
-#~ msgid "Delete Redirect"
-#~ msgstr "Fjern Viderekobling"
+#~ msgid "Active UPnP Redirects"
+#~ msgstr "Aktive UPnP Viderekoblinger"
+
+#~ msgid "Advertise as IGDv1 device instead of IGDv2"
+#~ msgstr "Annonser som IGDv1-enhet istedenfor IGDv2"
+
+#~ msgid "Allow adding forwards only to requesting ip addresses"
+#~ msgstr "Tillat videkobling kun til IP adresser som ber om det"
+
+#~ msgid "Downlink"
+#~ msgstr "Nedlinje"
+
+#~ msgid "Enable NAT-PMP functionality"
+#~ msgstr "Aktiver NAT-PMP funksjonalitet"
+
+#~ msgid "Enable UPnP functionality"
+#~ msgstr "Aktiver UPnP funksjonalitet"
+
+#~ msgid "External ports"
+#~ msgstr "Eksterne porter"
+
+#, fuzzy
+#~ msgid "Grant access to upnp procedures"
+#~ msgstr "Innvilg tilgang til UPnP-muligheter"
+
+#~ msgid "Internal addresses"
+#~ msgstr "Interne adresser"
+
+#~ msgid "Internal ports"
+#~ msgstr "Interne porter"
+
+#~ msgid "MiniUPnP ACLs"
+#~ msgstr "MiniUPnP ACL'er"
+
+#~ msgid "MiniUPnP settings"
+#~ msgstr "MiniUPnP Innstillinger"
+
+#~ msgid "Report system instead of daemon uptime"
+#~ msgstr "Rapporter systemets oppetid istedenfor daemon oppetid"
+
+#~ msgid "Start UPnP and NAT-PMP service"
+#~ msgstr "Start UPnP og NAT-PMP tjenesten"
+
+#~ msgid "There are no active redirects."
+#~ msgstr "Det finnes ingen aktive viderekoblinger"
+
+#~ msgid "UPnP"
+#~ msgstr "UPnP"
 
 #~ msgid ""
-#~ "UPNP allows clients in the local network to automatically configure the "
+#~ "UPnP allows clients in the local network to automatically configure the "
 #~ "router."
 #~ msgstr ""
 #~ "UPnP gjør at klientene i det lokale nettverket automatisk kan konfigurere "
 #~ "ruteren."
 
-#~ msgid "enable"
-#~ msgstr "Aktiver"
+#~ msgid "UPnP lease file"
+#~ msgstr "UPnP leie fil"
+
+#~ msgid "Universal Plug & Play"
+#~ msgstr "Universal Plug & Play"
+
+#~ msgid "Uplink"
+#~ msgstr "Opplinje"
