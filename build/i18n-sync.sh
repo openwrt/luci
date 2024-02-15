@@ -25,6 +25,7 @@ esac
 
 [ -n "$1" ] && set -- "${1%/}"
 
+[ -n "$1" ] || ./build/mkbasepot.sh
 
 # Absent a [folder] parameter, use the current path
 find "${1:-.}" -name '*.pot' -and -not -name base.pot | sort | \
