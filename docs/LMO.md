@@ -3,8 +3,8 @@
 See [online wiki](https://github.com/openwrt/luci/wiki/LMO) for latest version.
 
 LMO is a simple binary format to pack language strings into a more efficient form.
-Although it's suitable to store any kind of key-value table, it's only used for the LuCI *.po based translation system at the moment.
-The abbreviation "LMO" stands for "Lua Machine Objects" in the style of the GNU gettext *.mo format.
+Although it's suitable to store any kind of key-value table, it's only used for the LuCI \*.po based translation system at the moment.
+The abbreviation "LMO" stands for "Lua Machine Objects" in the style of the GNU gettext \*.mo format.
 
 ## Format Specification
 
@@ -83,7 +83,7 @@ In order to process a LMO file, an implementation would have to do the following
 
 ## Hash Function
 
-The current LuCI-LMO implementation uses the "Super Fast Hash" function which was kindly put in the public domain by it's original author. See http://www.azillionmonkeys.com/qed/hash.html for details. Below is the C-Implementation of this function:
+The current LuCI-LMO implementation uses the "Super Fast Hash" function which was kindly put in the public domain by its original author. See http://www.azillionmonkeys.com/qed/hash.html for details. Below is the C-Implementation of this function:
 
 ```c
 #if (defined(__GNUC__) && defined(__i386__))
