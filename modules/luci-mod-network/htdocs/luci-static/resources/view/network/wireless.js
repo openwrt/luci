@@ -1609,8 +1609,8 @@ return view.extend({
 
 					// Probe 802.11k and 802.11v support via EAP support (full hostapd has EAP)
 					if (L.hasSystemFeature('hostapd', 'eap')) {
-						/* 802.11k settings start */						o =
-						 ss.taboption('roaming', form.Flag, 'ieee80211k', _('802.11k RRM'), _('Radio Resource Measurement - Sends beacons to assist roaming. Not all clients support this.'));
+						/* 802.11k settings start */
+						o = ss.taboption('roaming', form.Flag, 'ieee80211k', _('802.11k RRM'), _('Radio Resource Measurement - Sends beacons to assist roaming. Not all clients support this.'));
 						// add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk', 'psk2', 'psk-mixed', 'sae', 'sae-mixed'] });
 						o.depends('mode', 'ap');
 						o.depends('mode', 'ap-wds');
