@@ -800,7 +800,8 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			so.value(generateDnsmasqInstanceEntry(val));
+			var name, display_str = generateDnsmasqInstanceEntry(val);
+			so.value(index, display_str);
 		});
 
 		o = s.taboption('srvhosts', form.SectionValue, '__srvhosts__', form.TableSection, 'srvhost', null,
@@ -1078,7 +1079,8 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			so.value(generateDnsmasqInstanceEntry(val));
+			var name, display_str = generateDnsmasqInstanceEntry(val);
+			so.value(index, display_str);
 		});
 
 
