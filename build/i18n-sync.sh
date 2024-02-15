@@ -1,8 +1,10 @@
 #!/bin/sh
 
 print_help() {	
-	echo "Execute as ./build/i18n-sync.sh" >&2
-	echo "Or run as: ./build/i18n-sync.sh [module folder e.g. applications/luci-app-example]" >&2
+	echo "Execute as ./build/i18n-sync.sh [-b]" >&2
+	echo "Or run as: ./build/i18n-sync.sh [-b] [module folder e.g. applications/luci-app-example]" >&2
+	echo "Options:"
+	echo "	-b: Generate the base .pot file ( invokes ./build/mkbasepot.sh )"
 }
 
 [ -d ./build ] || {
@@ -15,11 +17,14 @@ case $1 in
 		print_help
 		exit 0
 		;;
+	-b )
+		./build/mkbasepot.sh
+		shift
+		;;
 esac
 
 [ -n "$1" ] && set -- "${1%/}"
 
-[ -n "$1" ] || ./build/mkbasepot.sh
 
 # Absent a [folder] parameter, use the current path
 find "${1:-.}" -name '*.pot' -and -not -name base.pot | sort | \
