@@ -1,9 +1,0 @@
-#!/bin/sh
-
-zero_enable="$(uci get zerotier.sample_config.enabled)"
-nat_enable="$(uci get zerotier.sample_config.nat)"
-
-[ "$ACTION" = ifup -o "$ACTION" = ifupdate ] || exit 0
-[ "$ACTION" = ifupdate -a -z "$IFUPDATE_ADDRESSES" -a -z "$IFUPDATE_DATA" ] && exit 0
-[ "$zero_enable" -eq "1" -a "${nat_enable}" -eq "1" ] || exit 0
-/etc/zerotier.start > /tmp/zero.log 2>&1 &
