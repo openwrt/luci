@@ -794,10 +794,14 @@ return network.registerProtocol('wireguard', {
 				ips.forEach(function(ip) { qro.value(ip) });
 				qro.onchange = handleConfigChange;
 
+				qro = qrs.option(form.DynamicList, 'dns_servers', _('DNS Servers'), _('DNS servers for the remote clients using this tunnel to your openwrt device. Some wireguard clients require this to be set.'));
+				qro.datatype = 'ipaddr';
+				qro.default = dns;
+				qro.onchange = handleConfigChange;
+
 				qro = qrs.option(form.DynamicList, 'addresses', _('Addresses'), _('IP addresses for the peer to use inside the tunnel. Some clients require this setting.'));
 				qro.datatype = 'ipaddr';
 				qro.default = eips;
-				qro.default = dns;
 				eips.forEach(function(eip) { qro.value(eip) });
 				qro.onchange = handleConfigChange;
 
