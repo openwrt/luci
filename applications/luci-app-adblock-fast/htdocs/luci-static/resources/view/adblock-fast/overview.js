@@ -209,13 +209,15 @@ return view.extend({
 					section_id,
 					"dnsmasq_instance"
 				);
-				switch (val) {
-					case "*":
-					case "-":
-						return val;
-					default:
-						return "+";
-				}
+				if (val && val[0]) {
+					switch (val[0]) {
+						case "*":
+						case "-":
+							return val[0];
+						default:
+							return "+";
+					}
+				} else return "*";
 			};
 			o.write = function (section_id, formvalue) {
 				L.uci.set(pkg.Name, section_id, "dnsmasq_instance", formvalue);
@@ -270,13 +272,15 @@ return view.extend({
 					section_id,
 					"smartdns_instance"
 				);
-				switch (val) {
-					case "*":
-					case "-":
-						return val;
-					default:
-						return "+";
-				}
+				if (val && val[0]) {
+					switch (val[0]) {
+						case "*":
+						case "-":
+							return val[0];
+						default:
+							return "+";
+					}
+				} else return "*";
 			};
 			o.write = function (section_id, formvalue) {
 				L.uci.set(pkg.Name, section_id, "smartdns_instance", formvalue);
