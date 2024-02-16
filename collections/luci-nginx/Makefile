@@ -9,12 +9,12 @@ include $(TOPDIR)/rules.mk
 LUCI_TYPE:=col
 LUCI_BASENAME:=nginx
 
-LUCI_TITLE:=LuCI interface with Nginx as Webserver
-LUCI_DESCRIPTION:=Standard OpenWrt set including full admin with ppp support and the default Bootstrap theme
+LUCI_TITLE:=LuCI Configuration Interface with Nginx as webserver
+LUCI_DESCRIPTION:=Standard set including full admin with ppp support, package management and the default Bootstrap theme
 LUCI_DEPENDS:= \
-	+nginx +nginx-mod-luci +luci-mod-admin-full +luci-theme-bootstrap \
-	+luci-app-firewall +luci-app-opkg +luci-proto-ppp +IPV6:luci-proto-ipv6 \
-	+rpcd-mod-rrdns
+	+luci \
+	+nginx \
+	+nginx-mod-luci
 
 PKG_LICENSE:=Apache-2.0
 

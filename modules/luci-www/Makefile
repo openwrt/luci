@@ -1,19 +1,17 @@
 #
-# Copyright (C) 2008-2020 The LuCI Team
+# Copyright (C) 2008-2014 The LuCI Team <luci@lists.subsignal.org>
 #
 # This is free software, licensed under the Apache License, Version 2.0 .
 #
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TYPE:=col
-LUCI_BASENAME:=ssl
-
-LUCI_TITLE:=LuCI with Uhttpd and HTTPS support (mbedtls as SSL backend)
-LUCI_DEPENDS:=+luci-light +libustream-mbedtls +px5g-mbedtls
+LUCI_TITLE:=Redirect from www root to LuCI
+LUCI_DEPENDS:=+luci-base
 
 PKG_LICENSE:=Apache-2.0
 
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
+
