@@ -227,6 +227,7 @@ return view.extend({
 		o.ucisection = 'main';
 		o.ucioption = 'lang';
 		o.value('auto', _('Auto', 'Language selection'));
+		o.value('auto', _('Auto'));
 
 		var l = Object.assign({ en: 'English' }, uci.get('luci', 'languages')),
 		    k = Object.keys(l).sort();
