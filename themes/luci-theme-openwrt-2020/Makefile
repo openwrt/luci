@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI modern OpenWrt theme
-LUCI_DEPENDS:=
+LUCI_DEPENDS:=+luci-base
 
 define Package/luci-theme-openwrt-2020/postrm
 #!/bin/sh
