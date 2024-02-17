@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Material Theme
-LUCI_DEPENDS:=
+LUCI_DEPENDS:=+luci-base
 
 define Package/luci-theme-material/postrm
 #!/bin/sh
