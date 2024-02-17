@@ -519,19 +519,19 @@ msgstr "已分配的 DHCP 租用"
 msgid "Active DHCPv6 Leases"
 msgstr "已分配的 DHCPv6 租用"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:255
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:263
 msgid "Active IPv4 Routes"
 msgstr "活動的 IPv4 路由"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:258
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:266
 msgid "Active IPv4 Rules"
 msgstr "活動的 IPv4 規則"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:265
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:273
 msgid "Active IPv6 Routes"
 msgstr "活動的 IPv6 路由"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:268
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:276
 msgid "Active IPv6 Rules"
 msgstr "活動的 IPv6 規則"
 
@@ -1658,6 +1658,10 @@ msgstr "指令失敗"
 msgid "Comment"
 msgstr "註解"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:180
+msgid "Common name or numeric ID of the %s in which this route is found"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1841
 msgid ""
 "Complicates key reinstallation attacks on the client side by disabling "
@@ -2183,6 +2187,8 @@ msgstr "目標區域"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1160
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1462
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:55
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:194
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:220
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:13
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:248
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:281
@@ -3479,7 +3485,7 @@ msgstr "IPv6上的GRETAP隧道"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:44
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:188
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:196
 msgid "Gateway"
 msgstr "閘道器"
 
@@ -3879,8 +3885,8 @@ msgid "IP Type"
 msgstr "IP 類型"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:907
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:178
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:204
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:186
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:212
 msgid "IP address"
 msgstr "IP位址"
 
@@ -3947,11 +3953,11 @@ msgstr "IPv4"
 msgid "IPv4 Firewall"
 msgstr "IPv4防火牆"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:252
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:260
 msgid "IPv4 Neighbours"
 msgstr "IPv4 鄰居"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:251
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:259
 msgid "IPv4 Routing"
 msgstr "IPv4 路由"
 
@@ -4055,7 +4061,7 @@ msgstr "IPv6防火牆"
 msgid "IPv6 MTU"
 msgstr "IPv6 MTU"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:262
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:270
 msgid "IPv6 Neighbours"
 msgstr "IPv6 鄰居"
 
@@ -4063,7 +4069,7 @@ msgstr "IPv6 鄰居"
 msgid "IPv6 RA Settings"
 msgstr "IPv6 RA 設定"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:261
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:269
 msgid "IPv6 Routing"
 msgstr "IPv6 路由"
 
@@ -4448,8 +4454,8 @@ msgid "Insufficient permissions to read UCI configuration."
 msgstr "權限不足以讀取 UCI 組態。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:41
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:180
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:206
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:188
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:214
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Interface"
 msgstr "介面"
@@ -5144,8 +5150,8 @@ msgstr "MAC VLAN"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:89
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:233
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:179
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:205
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:187
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
 msgid "MAC address"
 msgstr "MAC 位址"
 
@@ -5369,8 +5375,8 @@ msgid "Method to determine link status"
 msgstr "確定連接狀態的方式"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:79
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:189
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:215
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:197
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:223
 msgid "Metric"
 msgstr "公測數"
 
@@ -5666,8 +5672,6 @@ msgstr "Netfilter表名稱"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:383
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:63
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:232
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:186
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:212
 msgid "Network"
 msgstr "網路"
 
@@ -5682,6 +5686,14 @@ msgstr "網路SSID"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:56
 msgid "Network address"
 msgstr "網路地址"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:177
+msgid "Network and its mask that define the size of the destination"
+msgstr ""
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:182
+msgid "Network and its mask that define which source addresses use this route"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:746
 msgid "Network boot image"
@@ -5812,12 +5824,12 @@ msgstr "未收到任何資料"
 msgid "No enforcement"
 msgstr "不強制"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:229
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:232
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:235
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:238
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:241
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:244
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:237
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:240
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:243
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:246
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:249
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:252
 msgid "No entries available"
 msgstr "沒有可用的項目"
 
@@ -6835,8 +6847,8 @@ msgstr "邏輯主控在恢復後, 始終變為活動的實體界面 (永遠, 0�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:836
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:868
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:128
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:197
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:223
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:205
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:231
 msgid "Priority"
 msgstr "優先順序"
 
@@ -6877,8 +6889,8 @@ msgstr "協定."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1157
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:384
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:32
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:191
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:199
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:225
 msgid "Protocol"
 msgstr "協定"
 
@@ -6955,6 +6967,13 @@ msgstr "QMI手機"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:146
 msgid "Quality"
 msgstr "品質"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:179
+msgid ""
+"Quantifies the cost or distance to a destination in a way that allows "
+"routers to make informed decisions about the optimal path to forward data "
+"packets"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:652
 msgid "Query all available upstream resolvers."
@@ -7558,7 +7577,7 @@ msgstr "路由器密碼"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:248
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:256
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:15
 msgid "Routing"
 msgstr "路由"
@@ -7570,8 +7589,8 @@ msgid ""
 msgstr "路由器指定介面導出到特定主機或者能夠到達的網路."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:218
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:198
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:224
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:206
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:232
 msgid "Rule"
 msgstr "規則"
 
@@ -8015,7 +8034,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:147
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:385
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:70
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:214
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:222
 msgid "Source"
 msgstr "來源位址"
 
@@ -8629,8 +8648,9 @@ msgstr "TX 佇列長度"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:91
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:165
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:18
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:180
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:198
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:224
 msgid "Table"
 msgstr "表格"
 
@@ -8651,8 +8671,10 @@ msgstr "已標記的"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:889
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:66
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:187
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:176
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:178
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:195
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:221
 msgid "Target"
 msgstr "目標"
 
@@ -8817,6 +8839,10 @@ msgstr "MTU 不能超過父裝置 MTU 的 %d 位元組"
 msgid "The VLAN ID must be unique"
 msgstr "VLAN ID 必須是唯一的"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:178
+msgid "The address through which this %s is reachable"
+msgstr ""
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2135
 msgid ""
 "The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</"
@@ -8884,7 +8910,7 @@ msgstr ""
 "映像檔已上傳。下方是效驗碼和大小，請與原始檔比較確認無誤。<br />按下方「執"
 "行」開始燒錄程序。"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:249
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:257
 msgid "The following rules are currently active on this system."
 msgstr "以下的規則現正作用在系統中."
 
@@ -9054,6 +9080,10 @@ msgid ""
 msgstr ""
 "健壯性值允許對網路上的預期數據包丟失進行調整。如果預計網路是有損的，則健壯性"
 "值可能會增加。IGMP 對（魯棒性-1）數據包丟失具有魯棒性"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:181
+msgid "The routing protocol identifier of this route"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:170
 msgid ""
@@ -10154,6 +10184,10 @@ msgid ""
 "Where the ESSID is hidden, clients may fail to roam and airtime efficiency "
 "may be significantly reduced."
 msgstr "隱藏ESSID的地方，客戶端可能無法漫遊，並且通話時間效率可能會大大降低。"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:176
+msgid "Which is used to access this %s"
+msgstr ""
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:166
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:520
