@@ -883,7 +883,7 @@ return view.extend({
 
 		so = ss.option(form.Value, 'cname', _('Domain'));
 		so.rmempty = false;
-		so.datatype = 'hostname';
+		so.validate = validateHostname;
 		so.placeholder = 'www.example.com.';
 
 		so = ss.option(form.Value, 'target', _('Target'));
