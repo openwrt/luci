@@ -1186,8 +1186,6 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			window.addEventListener('touchstart', this.closeAllDropdowns);
 		}
 		else {
-			sb.addEventListener('mouseover', this.handleMouseover.bind(this));
-			sb.addEventListener('mouseout', this.handleMouseout.bind(this));
 			sb.addEventListener('focus', this.handleFocus.bind(this));
 
 			canary.addEventListener('focus', this.handleCanaryFocus.bind(this));
@@ -1339,7 +1337,8 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		sb.insertBefore(pv, ul.nextElementSibling);
 
 		li.forEach(function(l) {
-			l.setAttribute('tabindex', 0);
+			if (!l.hasAttribute('unselectable'))
+				l.setAttribute('tabindex', 0);
 		});
 
 		sb.lastElementChild.setAttribute('tabindex', 0);
@@ -1581,20 +1580,6 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 	},
 
 	/** @private */
-	handleMouseout: function(ev) {
-		var sb = ev.currentTarget;
-
-		if (!sb.hasAttribute('open'))
-			return;
-
-		sb.querySelectorAll('.focus').forEach(function(e) {
-			e.classList.remove('focus');
-		});
-
-		sb.querySelector('ul.dropdown').focus();
-	},
-
-	/** @private */
 	createChoiceElement: function(sb, value, label) {
 		var tpl = sb.querySelector(this.options.create_template),
 		    markup = null;
@@ -1825,7 +1810,12 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 			case 40:
 				if (active && active.nextElementSibling) {
-					this.setFocus(sb, active.nextElementSibling);
+					var li = active.nextElementSibling;
+					this.setFocus(sb, li);
+					if (this.options.create && li == li.parentNode.lastElementChild) {
+						var input = li.querySelector('input');
+						if (input) input.focus();
+					}
 					ev.preventDefault();
 				}
 				else if (document.activeElement === ul) {
@@ -1857,19 +1847,6 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 	},
 
 	/** @private */
-	handleMouseover: function(ev) {
-		var sb = ev.currentTarget;
-
-		if (!sb.hasAttribute('open'))
-			return;
-
-		var li = findParent(ev.target, 'li');
-
-		if (li && li.parentNode.classList.contains('dropdown'))
-			this.setFocus(sb, li);
-	},
-
-	/** @private */
 	handleFocus: function(ev) {
 		var sb = ev.currentTarget;
 
@@ -1887,7 +1864,8 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 	/** @private */
 	handleCreateKeydown: function(ev) {
 		var input = ev.currentTarget,
-		    sb = findParent(input, '.cbi-dropdown');
+		    li = findParent(input, 'li'),
+		    sb = findParent(li, '.cbi-dropdown');
 
 		switch (ev.keyCode) {
 		case 13:
@@ -1900,19 +1878,28 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			input.value = '';
 			input.blur();
 			break;
+
+		case 38:
+			if (li.previousElementSibling) {
+				this.handleCreateBlur(ev);
+				this.setFocus(sb, li.previousElementSibling, true);
+			}
+			break;
 		}
 	},
 
 	/** @private */
 	handleCreateFocus: function(ev) {
 		var input = ev.currentTarget,
-		    cbox = findParent(input, 'li').querySelector('input[type="checkbox"]'),
+		    li = findParent(input, 'li'),
+		    cbox = li.querySelector('input[type="checkbox"]'),
 		    sb = findParent(input, '.cbi-dropdown');
 
 		if (cbox)
 			cbox.checked = true;
 
 		sb.setAttribute('locked-in', '');
+		this.setFocus(sb, li, true);
 	},
 
 	/** @private */
