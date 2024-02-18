@@ -173,7 +173,7 @@ return view.extend({
 		    ip6route = data[5].stdout || '',
 		    ip6rule = data[6].stdout || '';
 
-		var device_title = _('Which is used to access this %s').format(_('Target');
+		var device_title = _('Which is used to access this %s').format(_('Target'));
 		var target_title = _('Network and its mask that define the size of the destination');
 		var gateway_title = _('The address through which this %s is reachable').format(_('Target'));
 		var metric_title = _('Quantifies the cost or distance to a destination in a way that allows routers to make informed decisions about the optimal path to forward data packets');
