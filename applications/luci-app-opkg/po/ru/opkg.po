@@ -20,7 +20,12 @@ msgstr ""
 msgid "%s used (%1024mB used of %1024mB, %1024mB free)"
 msgstr "%s использовано (%1024mB использовано из %1024mB, %1024mB свободно)"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1135
+msgid ""
+"<strong>Warning!</strong> Package operations can <a %s>break your system</a>."
+msgstr ""
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1163
 msgid "Actions"
 msgstr "Действия"
 
@@ -32,7 +37,7 @@ msgstr "Разрешить перезапись конфликтующих фа�
 msgid "Automatically remove unused dependencies"
 msgstr "Удалить неиспользуемые зависимости"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1210
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1218
 msgid "Available"
 msgstr "Доступно"
 
@@ -57,11 +62,11 @@ msgstr ""
 msgid "Cancel"
 msgstr "Отмена"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1142
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1150
 msgid "Clear"
 msgstr "Очистить"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1159
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1167
 msgid "Configure opkg…"
 msgstr "Настройки"
 
@@ -71,7 +76,7 @@ msgstr "Зависимости"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:750
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:938
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1228
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1236
 msgid "Description"
 msgstr "Описание"
 
@@ -79,7 +84,7 @@ msgstr "Описание"
 msgid "Details for package <em>%h</em>"
 msgstr "Подробная информация о пакете <em>%h</em>"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1134
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1142
 msgid "Disk space"
 msgstr "Дисковое пространство"
 
@@ -87,15 +92,15 @@ msgstr "Дисковое пространство"
 msgid "Dismiss"
 msgstr "Закрыть"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1164
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1172
 msgid "Display LuCI translation packages"
 msgstr "Отображение пакетов перевода LuCI"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1181
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1189
 msgid "Display all available translation packages"
 msgstr "Показывать все доступные переводы пакетов"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1167
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1175
 msgid ""
 "Display base translation packages and translation packages for already "
 "installed languages only"
@@ -107,7 +112,7 @@ msgstr ""
 msgid "Displaying %d-%d of %d"
 msgstr "Показано %d-%d из %d"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1147
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
 msgid "Download and install package"
 msgstr "Загрузить и установить пакет"
 
@@ -119,7 +124,7 @@ msgstr "Ошибки"
 msgid "Executing package manager"
 msgstr "Выполнение..."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1139
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1147
 msgid "Filter"
 msgstr "Фильтр"
 
@@ -127,7 +132,7 @@ msgstr "Фильтр"
 msgid "Grant access to opkg management"
 msgstr "Предоставить доступ к управлению opkg"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1194
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1202
 msgid "Hide all translation packages"
 msgstr "Скрывать все пакеты переводов"
 
@@ -137,13 +142,17 @@ msgstr "Скрывать все пакеты переводов"
 msgid "Install"
 msgstr "Установить"
 
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1133
+msgid "Install additional software and upgrade existing packages with opkg."
+msgstr ""
+
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:780
 msgid "Install suggested translation packages as well"
 msgstr "Также установить рекомендуемые пакеты перевода"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:299
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:522
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1211
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1219
 msgid "Installed"
 msgstr "Установлено"
 
@@ -181,8 +190,8 @@ msgstr "Ручная установка пакета"
 msgid "Needs upgrade"
 msgstr "Требуется обновление"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1219
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1237
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1227
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1245
 msgid "Next page"
 msgstr "Следующая страница"
 
@@ -206,7 +215,7 @@ msgstr "Не доступно"
 msgid "Not installed"
 msgstr "Не установлено"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1150
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1158
 msgid "OK"
 msgstr "OK"
 
@@ -216,16 +225,16 @@ msgstr "OK"
 msgid "OPKG Configuration"
 msgstr "Настройка OPKG"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1225
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1233
 msgid "Package name"
 msgstr "Имя пакета"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1149
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1157
 msgid "Package name or URL…"
 msgstr "Имя пакета или URL…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1217
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1235
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1225
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1243
 msgid "Previous page"
 msgstr "Предыдущая страница"
 
@@ -288,7 +297,7 @@ msgstr "Сохранение данных конфигурации…"
 msgid "Size"
 msgstr "Размер"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1227
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1235
 msgid "Size (.ipk)"
 msgstr "Размер (.ipk)"
 
@@ -330,7 +339,7 @@ msgstr ""
 "Версия пакета <em>%h</em>, доступная в репозитории, несовместима. Требуется "
 "%s, но доступна только %s."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1141
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1149
 msgid "Type to filter…"
 msgstr "Введите для фильтрации"
 
@@ -346,11 +355,11 @@ msgstr "Не удалось прочитать %s: %s"
 msgid "Unable to save %s: %s"
 msgstr "Не удалось сохранить %s: %s"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1157
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1165
 msgid "Update lists…"
 msgstr "Обновить списки"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1212
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1220
 msgid "Updates"
 msgstr "Обновления"
 
@@ -359,13 +368,13 @@ msgstr "Обновления"
 msgid "Upgrade…"
 msgstr "Обновление…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1158
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1166
 msgid "Upload Package…"
 msgstr "Загрузить пакет"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:757
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:945
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1226
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1234
 msgid "Version"
 msgstr "Версия"
 
@@ -378,24 +387,24 @@ msgstr "Версия несовместима"
 msgid "Waiting for the <em>opkg %h</em> command to complete…"
 msgstr "Выполнение команды <em>opkg %h</em>…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1190
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1198
 msgctxt "Display translation packages"
 msgid "all"
 msgstr "все"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1177
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1185
 msgctxt "Display translation packages"
 msgid "filtered"
 msgstr "отфильтровать"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1203
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1211
 msgctxt "Display translation packages"
 msgid "none"
 msgstr "нет"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:673
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:934
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1135
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1143
 msgid "unknown"
 msgstr "неизвестный"
 

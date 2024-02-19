@@ -1129,6 +1129,14 @@ return view.extend({
 
 			E('h2', {}, _('Software')),
 
+			E('div', { 'class': 'cbi-map-descr' }, [
+				E('span', _('Install additional software and upgrade existing packages with opkg.')),
+				E('br'),
+				E('span', _('<strong>Warning!</strong> Package operations can <a %s>break your system</a>.').format(
+					'href="https://openwrt.org/meta/infobox/upgrade_packages_warning" target="_blank" rel="noreferrer"'
+				))
+			]),
+
 			E('div', { 'class': 'controls' }, [
 				E('div', {}, [
 					E('label', {}, _('Disk space') + ':'),

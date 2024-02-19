@@ -18,7 +18,12 @@ msgstr ""
 msgid "%s used (%1024mB used of %1024mB, %1024mB free)"
 msgstr ""
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1135
+msgid ""
+"<strong>Warning!</strong> Package operations can <a %s>break your system</a>."
+msgstr ""
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1163
 msgid "Actions"
 msgstr "操作"
 
@@ -30,7 +35,7 @@ msgstr ""
 msgid "Automatically remove unused dependencies"
 msgstr "使用されない依存パッケージを自動的に削除"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1210
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1218
 msgid "Available"
 msgstr "利用可能"
 
@@ -54,11 +59,11 @@ msgstr ""
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1142
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1150
 msgid "Clear"
 msgstr "クリア"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1159
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1167
 msgid "Configure opkg…"
 msgstr "opkg設定…"
 
@@ -68,7 +73,7 @@ msgstr "依存関係"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:750
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:938
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1228
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1236
 msgid "Description"
 msgstr "説明"
 
@@ -76,7 +81,7 @@ msgstr "説明"
 msgid "Details for package <em>%h</em>"
 msgstr "<em>%h</em> パッケージの詳細"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1134
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1142
 msgid "Disk space"
 msgstr ""
 
@@ -84,15 +89,15 @@ msgstr ""
 msgid "Dismiss"
 msgstr "閉じる"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1164
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1172
 msgid "Display LuCI translation packages"
 msgstr ""
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1181
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1189
 msgid "Display all available translation packages"
 msgstr ""
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1167
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1175
 msgid ""
 "Display base translation packages and translation packages for already "
 "installed languages only"
@@ -102,7 +107,7 @@ msgstr ""
 msgid "Displaying %d-%d of %d"
 msgstr "%d - %d 個を表示中（全 %d 個）"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1147
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
 msgid "Download and install package"
 msgstr "パッケージのダウンロードとインストール"
 
@@ -114,7 +119,7 @@ msgstr "エラー"
 msgid "Executing package manager"
 msgstr "パッケージマネージャーが実行中"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1139
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1147
 msgid "Filter"
 msgstr "フィルター"
 
@@ -122,7 +127,7 @@ msgstr "フィルター"
 msgid "Grant access to opkg management"
 msgstr "opkg 管理へのアクセスを許可"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1194
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1202
 msgid "Hide all translation packages"
 msgstr ""
 
@@ -132,13 +137,17 @@ msgstr ""
 msgid "Install"
 msgstr "インストール"
 
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1133
+msgid "Install additional software and upgrade existing packages with opkg."
+msgstr ""
+
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:780
 msgid "Install suggested translation packages as well"
 msgstr ""
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:299
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:522
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1211
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1219
 msgid "Installed"
 msgstr "インストール済"
 
@@ -176,8 +185,8 @@ msgstr "パッケージの手動インストール"
 msgid "Needs upgrade"
 msgstr "要アップグレード"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1219
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1237
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1227
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1245
 msgid "Next page"
 msgstr "次のページ"
 
@@ -201,7 +210,7 @@ msgstr "利用不可"
 msgid "Not installed"
 msgstr "未インストール"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1150
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1158
 msgid "OK"
 msgstr "OK"
 
@@ -211,16 +220,16 @@ msgstr "OK"
 msgid "OPKG Configuration"
 msgstr "OPKG 設定"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1225
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1233
 msgid "Package name"
 msgstr "パッケージ名"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1149
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1157
 msgid "Package name or URL…"
 msgstr "パッケージ名または URL…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1217
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1235
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1225
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1243
 msgid "Previous page"
 msgstr "前のページ"
 
@@ -282,7 +291,7 @@ msgstr "設定データを保存中…"
 msgid "Size"
 msgstr "サイズ"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1227
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1235
 msgid "Size (.ipk)"
 msgstr "サイズ (.ipk)"
 
@@ -323,7 +332,7 @@ msgstr ""
 "<em>%h</em> パッケージのリポジトリ バージョンは互換性がありません。 %s が必要"
 "ですが、 %s のみ利用可能です。"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1141
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1149
 msgid "Type to filter…"
 msgstr "検索…"
 
@@ -339,11 +348,11 @@ msgstr "%s を読み取れません: %s"
 msgid "Unable to save %s: %s"
 msgstr "%s を保存できません: %s"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1157
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1165
 msgid "Update lists…"
 msgstr "リストを更新…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1212
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1220
 msgid "Updates"
 msgstr "アップデート"
 
@@ -352,13 +361,13 @@ msgstr "アップデート"
 msgid "Upgrade…"
 msgstr "アップグレード…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1158
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1166
 msgid "Upload Package…"
 msgstr "パッケージをアップロード…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:757
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:945
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1226
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1234
 msgid "Version"
 msgstr "バージョン"
 
@@ -371,24 +380,24 @@ msgstr "互換性の無いバージョン"
 msgid "Waiting for the <em>opkg %h</em> command to complete…"
 msgstr "<em>opkg %h</em> コマンドが完了するのを待っています…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1190
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1198
 msgctxt "Display translation packages"
 msgid "all"
 msgstr ""
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1177
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1185
 msgctxt "Display translation packages"
 msgid "filtered"
 msgstr ""
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1203
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1211
 msgctxt "Display translation packages"
 msgid "none"
 msgstr ""
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:673
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:934
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1135
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1143
 msgid "unknown"
 msgstr "不明"
 
