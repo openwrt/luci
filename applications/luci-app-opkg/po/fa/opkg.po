@@ -14,7 +14,12 @@ msgstr ""
 msgid "%s used (%1024mB used of %1024mB, %1024mB free)"
 msgstr ""
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1135
+msgid ""
+"<strong>Warning!</strong> Package operations can <a %s>break your system</a>."
+msgstr ""
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1163
 msgid "Actions"
 msgstr "اقدام ها"
 
@@ -26,7 +31,7 @@ msgstr "بازنویسی فایل های بسته متضاد را مجاز کن�
 msgid "Automatically remove unused dependencies"
 msgstr "حذف اتوماتیک پیش نیازهای بدون استفاده"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1210
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1218
 msgid "Available"
 msgstr "در دسترس"
 
@@ -50,11 +55,11 @@ msgstr ""
 msgid "Cancel"
 msgstr "لغو"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1142
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1150
 msgid "Clear"
 msgstr "پاک کردن"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1159
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1167
 msgid "Configure opkg…"
 msgstr "پیکربندی opkg…"
 
@@ -64,7 +69,7 @@ msgstr "وابستگی ها"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:750
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:938
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1228
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1236
 msgid "Description"
 msgstr "شرح"
 
@@ -72,7 +77,7 @@ msgstr "شرح"
 msgid "Details for package <em>%h</em>"
 msgstr "جزئیات مربوط به بسته بندی <em>%h</em>"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1134
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1142
 msgid "Disk space"
 msgstr ""
 
@@ -80,15 +85,15 @@ msgstr ""
 msgid "Dismiss"
 msgstr "رد کردن"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1164
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1172
 msgid "Display LuCI translation packages"
 msgstr "نمایش بسته های ترجمه LuCI"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1181
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1189
 msgid "Display all available translation packages"
 msgstr "نمایش همه موارد موجود در بسته های ترجمه"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1167
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1175
 msgid ""
 "Display base translation packages and translation packages for already "
 "installed languages only"
@@ -99,7 +104,7 @@ msgstr ""
 msgid "Displaying %d-%d of %d"
 msgstr "نمایش %d-%d از %d"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1147
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
 msgid "Download and install package"
 msgstr "دانلود و نصب بسته"
 
@@ -111,7 +116,7 @@ msgstr "خطاها"
 msgid "Executing package manager"
 msgstr "در حال اجرای مدیر بسته"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1139
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1147
 msgid "Filter"
 msgstr "فیلتر"
 
@@ -119,7 +124,7 @@ msgstr "فیلتر"
 msgid "Grant access to opkg management"
 msgstr "اعطای دسترسی به مدیریت opkg"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1194
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1202
 msgid "Hide all translation packages"
 msgstr "پنهان کردن تمام بسته های ترجمه"
 
@@ -129,13 +134,17 @@ msgstr "پنهان کردن تمام بسته های ترجمه"
 msgid "Install"
 msgstr "نصب"
 
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1133
+msgid "Install additional software and upgrade existing packages with opkg."
+msgstr ""
+
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:780
 msgid "Install suggested translation packages as well"
 msgstr "بسته های ترجمه پیشنهادی را نیز نصب کنید"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:299
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:522
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1211
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1219
 msgid "Installed"
 msgstr "نصب شد"
 
@@ -173,8 +182,8 @@ msgstr "بسته را به صورت دستی نصب کنید"
 msgid "Needs upgrade"
 msgstr "نیاز به ارتقا دارد"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1219
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1237
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1227
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1245
 msgid "Next page"
 msgstr "صفحه بعد"
 
@@ -198,7 +207,7 @@ msgstr "در دسترس نیست"
 msgid "Not installed"
 msgstr "نصب نشده است"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1150
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1158
 msgid "OK"
 msgstr "تایید"
 
@@ -208,16 +217,16 @@ msgstr "تایید"
 msgid "OPKG Configuration"
 msgstr "پیکربندی OPKG"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1225
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1233
 msgid "Package name"
 msgstr "نام بسته"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1149
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1157
 msgid "Package name or URL…"
 msgstr "نام بسته یا نشانی وب…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1217
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1235
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1225
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1243
 msgid "Previous page"
 msgstr "صفحه قبلی"
 
@@ -277,7 +286,7 @@ msgstr "در حال ذخیره داده های پیکربندی…"
 msgid "Size"
 msgstr "اندازه"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1227
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1235
 msgid "Size (.ipk)"
 msgstr "اندازه (ipk.)"
 
@@ -317,7 +326,7 @@ msgid ""
 msgstr ""
 "نسخه مخزن بسته <em>%h</em> سازگار نیست، به %s نیاز دارد اما فقط %s موجود است."
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1141
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1149
 msgid "Type to filter…"
 msgstr "برای فیلتر کردن تایپ کنید …"
 
@@ -333,11 +342,11 @@ msgstr "قادر به خواندن %s: %s نیست"
 msgid "Unable to save %s: %s"
 msgstr "قادر به ذخیره %s: %s نیست"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1157
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1165
 msgid "Update lists…"
 msgstr "به روز رسانی لیست ها…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1212
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1220
 msgid "Updates"
 msgstr "به روز رسانی ها"
 
@@ -346,13 +355,13 @@ msgstr "به روز رسانی ها"
 msgid "Upgrade…"
 msgstr "ارتقا…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1158
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1166
 msgid "Upload Package…"
 msgstr "آپلود بسته…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:757
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:945
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1226
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1234
 msgid "Version"
 msgstr "نسخه"
 
@@ -365,24 +374,24 @@ msgstr "نسخه ناسازگار است"
 msgid "Waiting for the <em>opkg %h</em> command to complete…"
 msgstr "در انتظار تکمیل شدن دستور <em>opkg %h</em>…"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1190
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1198
 msgctxt "Display translation packages"
 msgid "all"
 msgstr "همه"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1177
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1185
 msgctxt "Display translation packages"
 msgid "filtered"
 msgstr "فیلتر شده"
 
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1203
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1211
 msgctxt "Display translation packages"
 msgid "none"
 msgstr "هیچکدام"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:673
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:934
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1135
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1143
 msgid "unknown"
 msgstr "ناشناخته"
 
