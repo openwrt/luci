@@ -5,6 +5,19 @@ function bytelen(x) {
 	return new Blob([x]).size;
 }
 
+function arrayle(a, b) {
+	if (!Array.isArray(a) || !Array.isArray(b))
+		return false;
+
+	for (var i = 0; i < a.length; i++)
+		if (a[i] > b[i])
+			return false;
+		else if (a[i] < b[i])
+			return true;
+
+	return true;
+}
+
 var Validator = baseclass.extend({
 	__name__: 'Validation',
 
@@ -331,6 +344,23 @@ var ValidatorFactory = baseclass.extend({
 		ipmask6: function(negative) {
 			return this.assert(this.apply('cidr6', null, [negative]) || this.apply('ipnet6') || this.apply('ip6addr'),
 				_('valid IPv6 network'));
+		},
+
+		iprange: function(negative) {
+			return this.assert(this.apply('iprange4', null, [negative]) || this.apply('iprange6', null, [negative]),
+				_('valid IP address range'));
+		},
+
+		iprange4: function(negative) {
+			var m = this.value.split('-');
+			return this.assert(m.length == 2 && arrayle(this.factory.parseIPv4(m[0]), this.factory.parseIPv4(m[1])),
+				_('valid IPv4 address range'));
+		},
+
+		iprange6: function(negative) {
+			var m = this.value.split('-');
+			return this.assert(m.length == 2 && arrayle(this.factory.parseIPv6(m[0]), this.factory.parseIPv6(m[1])),
+				_('valid IPv6 address range'));
 		},
 
 		port: function() {
