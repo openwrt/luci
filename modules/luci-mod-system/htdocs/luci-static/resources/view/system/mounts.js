@@ -333,8 +333,6 @@ return view.extend({
 		o.textvalue = function(section_id) { return this.cfgvalue(section_id) || 'defaults' };
 		o.placeholder = 'defaults';
 
-		s.taboption('advanced', form.Flag, 'enabled_fsck', _('Run filesystem check'), _('Run a filesystem check before mounting the device'));
-
 
 		// Swaps
 		s = m.section(form.GridSection, 'swap', _('SWAP'), _('If your physical memory is insufficient unused data can be temporarily swapped to a swap-device resulting in a higher amount of usable <abbr title="Random Access Memory">RAM</abbr>. Be aware that swapping data is a very slow process as the swap-device cannot be accessed with the high datarates of the <abbr title="Random Access Memory">RAM</abbr>.'));
