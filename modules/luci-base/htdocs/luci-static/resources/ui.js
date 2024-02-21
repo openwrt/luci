@@ -1458,7 +1458,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			li.setAttribute('display', 0);
 			li.setAttribute('selected', '');
 
-			this.closeDropdown(sb, true);
+			this.closeDropdown(sb);
 		}
 
 		this.saveValues(sb, ul);
@@ -1604,6 +1604,9 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 		if (this.options.multiple)
 			this.transformItem(sb, new_item);
+
+		if (!new_item.hasAttribute('unselectable'))
+			new_item.setAttribute('tabindex', 0);
 
 		return new_item;
 	},
@@ -1814,7 +1817,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 					var li = active.nextElementSibling;
 					this.setFocus(sb, li);
 					if (this.options.create && li == li.parentNode.lastElementChild) {
-						var input = li.querySelector('input');
+						var input = li.querySelector('input:not([type="hidden"]):not([type="checkbox"]');
 						if (input) input.focus();
 					}
 					ev.preventDefault();
@@ -1875,9 +1878,16 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 			if (input.classList.contains('cbi-input-invalid'))
 				return;
 
+			this.handleCreateBlur(ev);
 			this.createItems(sb, input.value);
 			input.value = '';
-			input.blur();
+			break;
+
+		case 27:
+			this.handleCreateBlur(ev);
+			this.closeDropdown(sb);
+			ev.stopPropagation();
+			input.value = '';
 			break;
 
 		case 38:
