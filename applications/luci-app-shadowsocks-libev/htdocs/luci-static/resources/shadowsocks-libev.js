@@ -46,6 +46,8 @@ var methods = [
 	'aes-256-gcm',
 	'chacha20-ietf-poly1305',
 	'xchacha20-ietf-poly1305',
+	// none
+	'none',
 	// stream
 	'table',
 	'rc4',
