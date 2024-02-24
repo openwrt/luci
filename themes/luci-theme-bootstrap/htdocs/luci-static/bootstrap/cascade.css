@@ -1716,12 +1716,14 @@ body.modal-overlay-active #modal_overlay {
 	color: var(--on-primary-color);
 }
 
-.cbi-dropdown[open] > ul.dropdown > li.focus {
+.cbi-dropdown[open] > ul.dropdown > li.focus,
+.cbi-dropdown[open] > ul.dropdown > li:hover {
 	background: var(--primary-color-low);
 	color: var(--on-primary-color);
 }
 
-.cbi-dropdown[open] > ul.dropdown > li[selected].focus {
+.cbi-dropdown[open] > ul.dropdown > li[selected].focus,
+.cbi-dropdown[open] > ul.dropdown > li[selected]:hover {
 	background: linear-gradient(90deg, var(--primary-color-medium) 50%, var(--primary-color-low));
 }
 
@@ -2142,6 +2144,10 @@ th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
 
 .ifacebox .ifacebox-body {
 	padding: .25em;
+}
+
+#cbi-network-interface .ifacebox-body {
+	white-space: normal;
 }
 
 .ifacebadge {

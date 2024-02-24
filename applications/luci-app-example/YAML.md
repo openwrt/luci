@@ -7,14 +7,14 @@ These are the changes you would need in the `usr/libexec/rpcd/luci.example` file
 
 First, declare that you want YAML libraries:
 
-```
+```lua
 -- If you need to process YAML, opkg install lyaml
 local lyaml = require "lyaml"
 ```
 
 Then, declare a function to handle the YAML data, and a helper to read the file
 
-```
+```lua
 local function readfile(path)
     local s = fs.readfile(path)
     return s and (s:gsub("^%s+", ""):gsub("%s+$", ""))
@@ -38,7 +38,7 @@ end
 
 Declare the method in the `methods` table
 
-```
+```lua
     -- Converts the AGH YAML configuration into JSON for consumption by
     -- the LuCI app.
     get_yaml_file_sample = {
@@ -62,7 +62,7 @@ These are the changes you need in the `rpc.js` file.
 
 Declare the RPC call
 
-```
+```js
 var load_sample_yaml = rpc.declare({
     object: 'luci.example',
     method: 'get_yaml_file_sample'
@@ -71,7 +71,7 @@ var load_sample_yaml = rpc.declare({
 
 Add this declaration to the `view.extend()` call
 
-```
+```js
     render_sample_yaml: function(sample) {
         console.log('render_sample_yaml()');
         console.log(sample);
@@ -96,7 +96,7 @@ Add this declaration to the `view.extend()` call
 
 Add a call to the `load` function in `view.extend()`
 
-```
+```js
     load: function () {
         return Promise.all([
             load_sample_yaml(),
@@ -107,7 +107,7 @@ Add a call to the `load` function in `view.extend()`
 
 Add this code to the `render` function in `view.extend()`
 
-```
+```js
                 E('div', { 'class': 'cbi-section', 'id': 'cbi-sample-yaml' }, [
                     E('div', { 'class': 'left' }, [
                         E('h3', _('Sample YAML via RPC')),
@@ -121,7 +121,7 @@ Add this code to the `render` function in `view.extend()`
 
 Allow access to the new RPC API
 
-```
+```json
     "read": {
       "ubus": {
         "luci.example": [
@@ -138,7 +138,7 @@ Set up the sample YAML file, by placing it either in `root/etc` of the developme
 in `/etc` on the target machine and call it `luci.example.yaml` to match up to the `reading_from_yaml`
 function's expectations.
 
-```
+```yaml
 top_level_string: example
 top_level_int: 8080
 top_level:

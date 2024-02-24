@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-12-17 23:19+0000\n"
+"PO-Revision-Date: 2024-02-02 12:51+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:187
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:203
@@ -72,32 +72,37 @@ msgid ""
 "%s: Name of Physical device which interface went up or down (e.g. \"eth0\" "
 "or \"wwan0\")"
 msgstr ""
+"%s: Šio fizinio įrenginio pavadinimas, kurio sąsają ir/arba sietuvas pakilo "
+"arba nusileido (pvz: „eth0“ arba „wwan0“)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:39
 msgid "%s: Name of the action that triggered this event"
-msgstr ""
+msgstr "%s: Šio veiksmo pavadinimas, dėl kurio įvyko šis įvykis"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:44
 msgid ""
 "%s: Name of the interface which went up or down (e.g. \"wan\" or \"wwan\")"
 msgstr ""
+"%s: Šio/-s sąsajos ir/arba sietuvo pavadinimas, kuris pakilo arba nusileido "
+"(pvz: „wan“ arba „wwan“)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:40
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:41
 msgid "* %s: Is called by netifd and mwan3track"
-msgstr ""
+msgstr "* %s: Yra pavadintas pagal „netifd“ ir „mwan3track“"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:43
 msgid "* %s: Is only called by mwan3track if tracking has failed"
-msgstr ""
+msgstr "* %s: Yra pavadintas tik pagal „mwan3track“, jeigu sekimas nepavyko"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:42
 msgid "* %s: Is only called by mwan3track if tracking was successful"
 msgstr ""
+"* %s: Yra pavadintas tik pagal „mwan3track“, jeigu sekimas buvo sėkmingas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:71
 msgid "-- Interface Selection --"
-msgstr ""
+msgstr "-- Sąsają ir/arba Sietuvo pasirinkimas --"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:85
 msgid "-- Please choose --"
@@ -111,11 +116,11 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:38
 msgid "Acceptable values: 1-1000. Defaults to 1 if not set"
-msgstr ""
+msgstr "Tinkamos reikšmės: 1-1000. Numatomas į 1, jeigu nenustatytas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:34
 msgid "Acceptable values: 1-256. Defaults to 1 if not set"
-msgstr ""
+msgstr "Tinkamos reikšmės: 1-256. Numatomas į 1, jeigu nenustatytas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:26
 msgid "Alert"
@@ -127,15 +132,15 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:65
 msgid "Check IP rules"
-msgstr ""
+msgstr "Patikrinti IP taisykles"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:116
 msgid "Check link quality"
-msgstr ""
+msgstr "Patikrinti sujungimo kokybę"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:66
 msgid "Check routing table"
-msgstr ""
+msgstr "Patikrinti kelvados lentelę"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:95
 msgid "Collecting data ..."
@@ -151,7 +156,7 @@ msgstr "Kritinė/-is"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:32
 msgid "Debug"
-msgstr ""
+msgstr "Derinimas/Trukdžių šalinimas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:61
 msgid "Destination address"
@@ -190,7 +195,7 @@ msgstr "Įjungti „SSL“ sekimą"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:31
 msgid "Enabled"
-msgstr "Įjungta"
+msgstr "Įjungta/-as"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:94
 msgid ""
@@ -223,11 +228,11 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:189
 msgid "Failure interval"
-msgstr ""
+msgstr "Trikties/Gedimo intervalas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:121
 msgid "Failure latency [ms]"
-msgstr ""
+msgstr "Trikties/Gedimo intervalas [ms]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:134
 msgid "Failure packet loss [%]"
@@ -235,7 +240,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:23
 msgid "Firewall loglevel"
-msgstr ""
+msgstr "Užkardos žurnalo lygis"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:14
 msgid "Firewall mask"
@@ -271,27 +276,27 @@ msgstr "„IPset“"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:43
 msgid "IPv4"
-msgstr "„IPv4“"
+msgstr "IPv4 – Interneto protokolo versija 4"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:37
 msgid "IPv4 and IPv6"
-msgstr "„IPv4“ ir „IPv6“"
+msgstr "IPv4 ir IPv6"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:38
 msgid "IPv4 only"
-msgstr "Tik „IPv4“"
+msgstr "Tik IPv4"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:44
 msgid "IPv6"
-msgstr "„IPv6“"
+msgstr "IPv6 – Interneto protokolo versija 6"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:39
 msgid "IPv6 only"
-msgstr "Tik „IPv6“"
+msgstr "Tik IPv6"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:31
 msgid "Info"
-msgstr "Info"
+msgstr "Informacija"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:34
 msgid "Initial state"
@@ -358,7 +363,7 @@ msgstr "Žurnalininimas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:22
 msgid "Loglevel"
-msgstr ""
+msgstr "Žurnalo lygis"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:103
 msgid "Max TTL"
@@ -385,7 +390,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:30
 msgid "Member used"
-msgstr ""
+msgstr "Naudotas narys"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:17
 msgid ""
@@ -419,7 +424,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:20
 msgid "MultiWAN Manager - Interfaces"
-msgstr ""
+msgstr "„MultiWAN“ tvarkytuvas/tvarkytuvė – Sąsajos ir/arba Sietuvai"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:16
 msgid "MultiWAN Manager - Members"
@@ -427,7 +432,7 @@ msgstr "„MultiWAN“ tvarkytuvas/tvarkytuvė – Nariai"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:26
 msgid "MultiWAN Manager - Notify"
-msgstr ""
+msgstr "„MultiWAN“ tvarkytuvas/tvarkytuvė – Pranešti"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:92
 msgid "MultiWAN Manager - Overview"
@@ -498,7 +503,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:31
 msgid "Notes:"
-msgstr ""
+msgstr "Užrašai:"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:30
 msgid "Notice"
@@ -534,7 +539,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:174
 msgid "Ping interval"
-msgstr ""
+msgstr "Ryšio atsako intervalas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:190
 msgid "Ping interval during failure detection"
@@ -546,7 +551,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:88
 msgid "Ping size"
-msgstr ""
+msgstr "Ryšio atsako dydis"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:167
 msgid "Ping timeout"
@@ -574,7 +579,7 @@ msgstr "Politika"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:97
 msgid "Policy assigned"
-msgstr ""
+msgstr "Politika priskirta"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:42
 msgid "Protocol"
@@ -592,7 +597,7 @@ msgstr "Atsigavimo intervalas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:144
 msgid "Recovery latency [ms]"
-msgstr ""
+msgstr "Atsigavimo atsakas [ms]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:157
 msgid "Recovery packet loss [%]"
@@ -653,7 +658,7 @@ msgstr "Būklė/Būsena"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:70
 msgid "Sticky"
-msgstr ""
+msgstr "Lipnus"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:77
 msgid "Sticky timeout"

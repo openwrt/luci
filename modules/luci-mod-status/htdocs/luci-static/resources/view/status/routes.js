@@ -173,6 +173,14 @@ return view.extend({
 		    ip6route = data[5].stdout || '',
 		    ip6rule = data[6].stdout || '';
 
+		var device_title = _('Which is used to access this %s').format(_('Target'));
+		var target_title = _('Network and its mask that define the size of the destination');
+		var gateway_title = _('The address through which this %s is reachable').format(_('Target'));
+		var metric_title = _('Quantifies the cost or distance to a destination in a way that allows routers to make informed decisions about the optimal path to forward data packets');
+		var table_title = _('Common name or numeric ID of the %s in which this route is found').format(_('Table'));
+		var proto_title = _('The routing protocol identifier of this route');
+		var source_title = _('Network and its mask that define which source addresses use this route');
+
 		var neigh4tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, [ _('IP address') ]),
@@ -183,12 +191,12 @@ return view.extend({
 
 		var route4tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, [ _('Network') ]),
-				E('th', { 'class': 'th' }, [ _('Target') ]),
-				E('th', { 'class': 'th' }, [ _('Gateway') ]),
-				E('th', { 'class': 'th' }, [ _('Metric') ]),
-				E('th', { 'class': 'th' }, [ _('Table') ]),
-				E('th', { 'class': 'th' }, [ _('Protocol') ])
+				E('th', { 'class': 'th', 'title': device_title }, [ _('Device') ]),
+				E('th', { 'class': 'th', 'title': target_title }, [ _('Target') ]),
+				E('th', { 'class': 'th', 'title': gateway_title }, [ _('Gateway') ]),
+				E('th', { 'class': 'th', 'title': metric_title }, [ _('Metric') ]),
+				E('th', { 'class': 'th', 'title': table_title }, [ _('Table') ]),
+				E('th', { 'class': 'th', 'title': proto_title }, [ _('Protocol') ])
 			])
 		]);
 
@@ -209,12 +217,12 @@ return view.extend({
 
 		var route6tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, [ _('Network') ]),
-				E('th', { 'class': 'th' }, [ _('Target') ]),
-				E('th', { 'class': 'th' }, [ _('Source') ]),
-				E('th', { 'class': 'th' }, [ _('Metric') ]),
-				E('th', { 'class': 'th' }, [ _('Table') ]),
-				E('th', { 'class': 'th' }, [ _('Protocol') ])
+				E('th', { 'class': 'th', 'title': device_title }, [ _('Device') ]),
+				E('th', { 'class': 'th', 'title': target_title }, [ _('Target') ]),
+				E('th', { 'class': 'th', 'title': source_title }, [ _('Source') ]),
+				E('th', { 'class': 'th', 'title': metric_title }, [ _('Metric') ]),
+				E('th', { 'class': 'th', 'title': table_title }, [ _('Table') ]),
+				E('th', { 'class': 'th', 'title': proto_title }, [ _('Protocol') ])
 			])
 		]);
 

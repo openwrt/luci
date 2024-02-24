@@ -3,7 +3,7 @@
 		"description": "Grant UCI access for luci-app-tor",
 		"read": {
 			"ubus": {
-				"tor_rpcd.sh": [
+				"tor-hs-rpc": [
 					"list-hs"
 				]
 			},
@@ -16,7 +16,10 @@
 			"uci": [
 				"tor",
 				"tor-hs"
-			]
+			],
+			"file": {
+				"/etc/tor/*": [ "write" ]
+			}
 		}
 	}
 }

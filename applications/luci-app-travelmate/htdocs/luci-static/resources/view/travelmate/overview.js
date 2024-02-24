@@ -387,11 +387,6 @@ return view.extend({
 		o.datatype = 'range(30,300)';
 		o.rmempty = true;
 
-		o = s.taboption('additional', form.Value, 'trm_maxscan', _('Scan Limit'), _('Limit the nearby scan results to process only the strongest uplinks.'));
-		o.placeholder = '10';
-		o.datatype = 'range(1,30)';
-		o.rmempty = true;
-
 		o = s.taboption('additional', form.ListValue, 'trm_captiveurl', _('Captive Portal URL'), _('The selected URL will be used for connectivity- and captive portal checks.'));
 		o.value('http://detectportal.firefox.com', 'Firefox (default)');
 		o.value('http://connectivity-check.ubuntu.com', 'Ubuntu');

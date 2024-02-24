@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-10-14 02:30+0000\n"
+"PO-Revision-Date: 2024-02-13 22:55+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopkg/lt/>\n"
@@ -9,10 +9,13 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
-"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
-"1 : 2);\n"
-"X-Generator: Weblate 5.1-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
+"n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.4-dev\n"
+
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1095
+msgid "%s used (%1024mB used of %1024mB, %1024mB free)"
+msgstr "%s naudota (%1024mB naudojama iš %1024mB, %1024mB laisva)"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
 msgid "Actions"
@@ -38,10 +41,10 @@ msgid ""
 "changed but is usually not preserved by <em>sysupgrade</em>."
 msgstr ""
 "Žemyn šio teksto yra įvairių konfigūracijų sąrašas, kurios naudoja "
-"<em>„opkg“</em>. Naudoti <em>opkg.conf</em> visiems nustatymams ir "
-"<em>customfeeds.conf</em> pasirinktinėms atsisiuntimo šaltinių įvestims. "
+"„<em>opkg</em>“. Naudoti „<em>opkg.conf</em>“ visiems nustatymams ir "
+"„<em>customfeeds.conf</em>“ pasirinktinėms atsisiuntimo šaltinių įvestims. "
 "Konfigūracijos kitose failuose gali būti pakeistos, bet dažniausiai nėra "
-"išlaikomas <em>„sysupgrade“</em>."
+"išlaikomas „<em>sysupgrade</em>“."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:800
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:846
@@ -73,6 +76,10 @@ msgstr "Aprašymas"
 msgid "Details for package <em>%h</em>"
 msgstr "Išsami informacija paketui <em>„%h“</em>"
 
+#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1134
+msgid "Disk space"
+msgstr "Disko talpa/vietovė"
+
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1030
 msgid "Dismiss"
 msgstr "Nepaisyti"
@@ -95,7 +102,7 @@ msgstr ""
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:354
 msgid "Displaying %d-%d of %d"
-msgstr "Rodoma %d-%d of %d"
+msgstr "Rodoma %d-%d iš %d"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1147
 msgid "Download and install package"
@@ -111,11 +118,7 @@ msgstr "Paleidžiama paketų tvarkyklė"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1139
 msgid "Filter"
-msgstr "Filtruoti/Filtras"
-
-#: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1134
-msgid "Free space"
-msgstr "Laisva vieta/-ovė"
+msgstr "Filtruoti"
 
 #: applications/luci-app-opkg/root/usr/share/rpcd/acl.d/luci-app-opkg.json:3
 msgid "Grant access to opkg management"
@@ -216,7 +219,7 @@ msgstr "Paketo pavadinimas"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1149
 msgid "Package name or URL…"
-msgstr "Paketo pavadinimas arba „URL“…"
+msgstr "Paketo pavadinimas arba „URL – Saitas“…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1217
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1235
@@ -382,7 +385,7 @@ msgstr "Visi"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1177
 msgctxt "Display translation packages"
 msgid "filtered"
-msgstr "Filtruoti"
+msgstr "filtruotas"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1203
 msgctxt "Display translation packages"
@@ -404,3 +407,6 @@ msgstr "~%1024mB kompresuota/suspausta"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:930
 msgid "~%1024mB installed"
 msgstr "~%1024mB įdiegtą"
+
+#~ msgid "Free space"
+#~ msgstr "Laisva vieta/-ovė"

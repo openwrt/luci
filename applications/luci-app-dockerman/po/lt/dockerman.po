@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-12-19 21:33+0000\n"
+"PO-Revision-Date: 2024-02-02 12:51+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsdockerman/lt/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newcontainer.lua:604
 msgid "A list of kernel capabilities to add to the container"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newcontainer.lua:483
 msgid "Always pull image first"
-msgstr "Visada traukti „image“ pirmą"
+msgstr "Visada traukti laikmeną pirmą"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/overview.lua:23
 msgid ""
@@ -241,7 +241,7 @@ msgstr "„DNS“"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:56
 msgid "Debug"
-msgstr "Išsamus derinimas"
+msgstr "Derinimas/Trukdžių šalinimas"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:41
 msgid "Default bridge"
@@ -334,7 +334,7 @@ msgstr "Dublikuoti/Redaguoti"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:110
 msgid "Enable IPv6"
-msgstr "Įjungti „IPv6“"
+msgstr "Įjungti/Įgalinti IPv6"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/container.lua:343
 msgid "Env"
@@ -363,7 +363,7 @@ msgstr "Pavyzdys: tcp://0.0.0.0:2375"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:106
 msgid "Exclude IPs"
-msgstr "Išskirti „IPs“"
+msgstr "Išskirti IP(dgs.)"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newcontainer.lua:570
 msgid "Exposed All Ports(-P)"
@@ -375,7 +375,7 @@ msgstr "Atviri prievadai"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:60
 msgid "Fatal"
-msgstr "Kritinė"
+msgstr "Kritinis"
 
 #: applications/luci-app-dockerman/luasrc/view/dockerman/container.htm:6
 msgid "File"
@@ -416,7 +416,9 @@ msgstr "Skleidėjo vardas/pavadinimas"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:19
 msgid "Host or IP Address for the connection to a remote docker instance"
-msgstr "Skleidėjo arba „IP“ adresas sujungimui į nuotolinį „Docker“ įrengimą"
+msgstr ""
+"Skleidėjo/p.k –vedėjo arba IP adresas sujungimui į nuotolinį „Docker“ "
+"įrengimą"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/container.lua:292
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/containers.lua:122
@@ -427,23 +429,23 @@ msgstr "ID"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:36
 msgid "IP VLAN"
-msgstr "„IP VLAN“"
+msgstr "IP „VLAN“"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:101
 msgid "IP range"
-msgstr "„IP“ atstumas"
+msgstr "IP diapazonas"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newcontainer.lua:507
 msgid "IPv4 Address"
-msgstr "„IPv4“ adresas"
+msgstr "IPv4 adresas"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:122
 msgid "IPv6 Gateway"
-msgstr "„IPv6“ šliuzas"
+msgstr "IPv6 šliuzas"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:116
 msgid "IPv6 Subnet"
-msgstr "„IPv6 Subnet“"
+msgstr "IPv6 potinklis"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/container.lua:296
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/containers.lua:139
@@ -701,7 +703,7 @@ msgstr "Prašome įvesti <docker create/run> komandinę eilutę:"
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/container.lua:347
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/containers.lua:135
 msgid "Ports"
-msgstr "Prievadai („Port'ai“)"
+msgstr "Prievadai"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:52
 msgid "Private (Prevent communication between MAC VLANs)"
@@ -813,8 +815,8 @@ msgid ""
 "Specifies where the Docker daemon will listen for client connections "
 "(default: unix:///var/run/docker.sock)"
 msgstr ""
-"Nurodo kur „Docker daemon“ klausys kliento prisijungimus (numatyta: unix:///"
-"var/run/docker.sock)"
+"Nurodo kur „Docker daemon“ lauks prisijungimo/jungties ryšio kliento "
+"prisijungimams (numatyta: unix:///var/run/docker.sock)"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/container.lua:218
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/containers.lua:193

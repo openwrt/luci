@@ -99,6 +99,7 @@ return network.registerProtocol('openconnect', {
 		o.value('nc', 'Juniper Network Connect');
 		o.value('gp', 'GlobalProtect SSL VPN');
 		o.value('pulse', 'Pulse Connect Secure SSL VPN');
+		o.value('array', 'Array Networks SSL VPN');
 
 		o = s.taboption('general', form.Value, 'server', _('VPN Server'));
 		o.validate = function(section_id, value) {

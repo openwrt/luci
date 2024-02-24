@@ -15,7 +15,7 @@ jobs:
             target: x86-64
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -59,13 +59,13 @@ jobs:
         run: cp bin/packages/${{ matrix.arch }}/packages_ci/*.ipk . || true
 
       - name: Store packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.arch}}-packages
           path: "*.ipk"
 
       - name: Store logs
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.arch}}-logs
           path: logs/

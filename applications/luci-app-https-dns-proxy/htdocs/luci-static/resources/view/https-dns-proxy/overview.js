@@ -81,7 +81,7 @@ return view.extend({
 			"dnsmasq_config_update_option",
 			_("Update DNSMASQ Config on Start/Stop"),
 			_(
-				"If update option is selected, the %s'DNS forwardings' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
+				"If update option is selected, the %s'DNS Forwards' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
 			).format(
 				'<a href="' + L.url("admin", "network", "dhcp") + '">',
 				"</a>",
@@ -100,13 +100,15 @@ return view.extend({
 				section_id,
 				"dnsmasq_config_update"
 			);
-			switch (val) {
-				case "*":
-				case "-":
-					return val;
-				default:
-					return "+";
-			}
+			if (val && val[0]) {
+				switch (val[0]) {
+					case "*":
+					case "-":
+						return val[0];
+					default:
+						return "+";
+				}
+			} else return "*";
 		};
 		o.write = function (section_id, formvalue) {
 			L.uci.set(pkg.Name, section_id, "dnsmasq_config_update", formvalue);
@@ -129,7 +131,7 @@ return view.extend({
 				key = element[".name"];
 				description = element[".name"];
 			}
-			o.value(key, _("%s").format(description));
+			o.value(key, description);
 		});
 		o.depends("dnsmasq_config_update_option", "+");
 		o.retain = true;
@@ -297,8 +299,8 @@ return view.extend({
 						section_id,
 						"resolver_url"
 					);
-					if (_paramList.template !== template) return 0;
-					let resolver = pkg.templateToResolver(template, {
+					if (!formvalue && _paramList.template !== template) return 0;
+					let resolver = pkg.templateToResolver(_paramList.template, {
 						option: formvalue || "",
 					});
 					L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
@@ -335,8 +337,8 @@ return view.extend({
 						section_id,
 						"resolver_url"
 					);
-					if (_paramText.template !== template) return 0;
-					let resolver = pkg.templateToResolver(template, {
+					if (!formvalue && _paramText.template !== template) return 0;
+					let resolver = pkg.templateToResolver(_paramText.template, {
 						option: formvalue || "",
 					});
 					L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
