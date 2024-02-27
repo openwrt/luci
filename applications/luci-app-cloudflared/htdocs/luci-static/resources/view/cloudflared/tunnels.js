@@ -19,7 +19,6 @@ function listTunnels() {
 	});
 }
 
-
 return view.extend({
 	handleSaveApply: null,
 	handleSave: null,
@@ -34,53 +33,69 @@ return view.extend({
 	render: function (data) {
 		var tunnels = data[0];
 
-		var tunnelsElList = [];
-		for (var tunnel of tunnels) {
-			var connectionsSection = [];
-			if (tunnel.connections.length > 0) {
-				var connectionsElList = [];
-				for (let connection of tunnel.connections) {
-					var dateOpenedAt = new Date(connection.opened_at).toLocaleString();
-					connectionsElList.push(
-						E('tr', [
-							E('td', connection.id),
-							E('td', connection.origin_ip),
-							E('td', dateOpenedAt),
-							E('td', connection.colo_name)
-						])
-					);
-				}
+		var tunnelRows = tunnels.map(function (tunnel, index) {
+			var rowClass = index % 2 === 0 ? 'cbi-rowstyle-1' : 'cbi-rowstyle-2';
+			var tunneldate = new Date(tunnel.created_at).toLocaleString();
+			return E('tr', { 'class': 'tr ' + rowClass }, [
+				E('td', {'class': 'td'}, tunnel.name),
+				E('td', {'class': 'td'}, tunnel.id),
+				E('td', {'class': 'td'}, tunneldate),
+				E('td', {'class': 'td'}, tunnel.connections.length)
+			]);
+		});
 
-				connectionsSection = [
-					E('h5', _('Connections')),
-					E('table', {'class': 'table cbi-section-table'}, [
-						E('thead', [
-							E('tr', {'class': 'tr table-titles'}, [
-								E('th', {'class': 'th'}, 'ID'),
-								E('th', {'class': 'th'}, _('Origin IP')),
-								E('th', {'class': 'th'}, _('Opened At')),
-								E('th', {'class': 'th'}, _('Data center')),
-							]),
-						]),
-						E('tbody', connectionsElList)
-					])
-				];
+		var tunnelTable = [
+			E('h3', _('Tunnels Information')),
+			E('table', { 'class': 'table cbi-section-table' }, [
+				E('tr', { 'class': 'tr table-titles' }, [
+					E('th', {'class': 'th'}, _('Name')),
+					E('th', {'class': 'th'}, _('ID')),
+					E('th', {'class': 'th'}, _('Created At')),
+					E('th', {'class': 'th'}, _('Connections'))
+				]),
+				E(tunnelRows)
+			])
+		];
+
+		var connectionsTables = tunnels.map(function (tunnel) {
+			var connectionsTable;
+			if (tunnel.connections.length > 0) {
+				var connectionRows = tunnel.connections.map(function (connection, index) {
+					var rowClass = index % 2 === 0 ? 'cbi-rowstyle-1' : 'cbi-rowstyle-2';
+					var connectiondate = new Date(connection.opened_at).toLocaleString();
+					return E('tr', { 'class': 'tr ' + rowClass }, [
+						E('td', {'class': 'td'}, connection.id),
+						E('td', {'class': 'td'}, connection.origin_ip),
+						E('td', {'class': 'td'}, connectiondate),
+						E('td', {'class': 'td'}, connection.colo_name)
+					]);
+				});
+
+				connectionsTable = E('table', { 'class': 'table cbi-section-table' }, [
+					E('tr', { 'class': 'tr table-titles' }, [
+						E('th', {'class': 'th'}, _('Connection ID')),
+						E('th', {'class': 'th'}, _('Origin IP')),
+						E('th', {'class': 'th'}, _('Opened At')),
+						E('th', {'class': 'th'}, _('Data Center'))
+					]),
+					E(connectionRows)
+				]);
 			} else {
-				connectionsSection = [E('em', _('No connections'))];
+				connectionsTable = E('div', {'class':'cbi-value center'}, [
+					E('em', _('No connections'))
+				]);
 			}
 
-			var tunnelEl = E('div', [
-					E('h4', tunnel.name),
-					E('span', 'ID '),
-					E('span', tunnel.id),
-					E('div', connectionsSection)
-				]
-			);
-			tunnelsElList.push(tunnelEl);
-		}
+			return E('div', {'class': 'cbi-section'}, [
+				E('h3', _('Connections') + ' ' + tunnel.name),
+				E(connectionsTable)
+			]);
+		});
+
 		return E([], [
-			E('h2', {'class': 'section-title'}, _('Tunnels')),
-			E('div', {'id': 'tunnels'}, tunnelsElList),
+			E('h2', { 'class': 'section-title' }, _('Tunnels')),
+			E('div', {'class': 'cbi-section'}, tunnelTable),
+			E(connectionsTables)
 		]);
 	}
 });
