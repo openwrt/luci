@@ -395,6 +395,7 @@ return view.extend({
 	},
 
 	handleCheck: function (data, firmware) {
+		this.request_hash = '';
 		let { url, revision, advanced_mode, branch } = data;
 		let { version, target, profile, packages } = firmware;
 		let candidates = [];
