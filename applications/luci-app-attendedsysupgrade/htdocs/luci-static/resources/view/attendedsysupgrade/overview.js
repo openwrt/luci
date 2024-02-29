@@ -567,34 +567,36 @@ return view.extend({
 		});
 	},
 
-	load: function () {
-		return Promise.all([
+	load: async function () {
+		const promises = await Promise.all([
 			L.resolveDefault(callPackagelist(), {}),
 			L.resolveDefault(callSystemBoard(), {}),
 			L.resolveDefault(fs.stat('/sys/firmware/efi'), null),
 			uci.load('attendedsysupgrade'),
 		]);
-	},
-
-	render: function (response) {
 		const data = {
 			url: uci.get_first('attendedsysupgrade', 'server', 'url'),
-			branch: get_branch(response[1].release.version),
-			revision: response[1].release.revision,
-			efi: response[2],
+			branch: get_branch(promises[1].release.version),
+			revision: promises[1].release.revision,
+			efi: promises[2],
 			advanced_mode: uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0,
 			rebuilder: uci.get_first('attendedsysupgrade', 'server', 'rebuilder')
 		};
-
 		const firmware = {
-			client: 'luci/' + response[0].packages['luci-app-attendedsysupgrade'],
-			packages: response[0].packages,
-			profile: response[1].board_name,
-			target: response[1].release.target,
-			version: response[1].release.version,
+			client: 'luci/' + promises[0].packages['luci-app-attendedsysupgrade'],
+			packages: promises[0].packages,
+			profile: promises[1].board_name,
+			target: promises[1].release.target,
+			version: promises[1].release.version,
 			diff_packages: true,
-			filesystem: response[1].rootfs_type
+			filesystem: promises[1].rootfs_type
 		};
+		return [data, firmware];
+	},
+
+	render: function (response) {
+		const data = response[0];
+		const firmware = response[1];
 
 		return E('p', [
 			E('h2', _('Attended Sysupgrade')),
