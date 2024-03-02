@@ -403,26 +403,22 @@ var ParseButton = form.Button.extend({
 	},
 
 	renderStanzas: function(stanzas) {
-		var svgJobs = [];
 		var config = {};
 		config.access = stanzas;
 
 		var m, s, o;
 
-		var accessSection;
-		var sourceValue;
-
 		m = new form.JSONMap(config, null, _('Custom configuration read from /etc/fwknop/access.conf.'));
 		m.readonly = true;
 
 		// set the access.conf settings
-		accessSection = s = m.section(form.TypedSection, 'access', _('access.conf stanzas'));
+		s = m.section(form.TypedSection, 'access', _('access.conf stanzas'));
 		s.anonymous = true;
 
-		var qrCode = s.option(QrCodeValue, 'qr', _('QR code'), ('QR code to configure fwknopd Android application.'));
+		o = s.option(QrCodeValue, 'qr', _('QR code'), ('QR code to configure fwknopd Android application.'));
 
-		sourceValue = s.option(form.Value, 'SOURCE', 'SOURCE');
-		s.option(form.Value, 'DESTINATION', 'DESTINATION');
+		o = s.option(form.Value, 'SOURCE', 'SOURCE');
+		o = s.option(form.Value, 'DESTINATION', 'DESTINATION');
 
 		o = s.option(form.Value, 'KEY', 'KEY');
 		o.depends('keytype', 'KEY');
