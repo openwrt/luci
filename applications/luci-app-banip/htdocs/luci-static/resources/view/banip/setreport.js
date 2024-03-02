@@ -155,7 +155,8 @@ return view.extend({
 				E('th', { 'class': 'th right', 'style': 'padding-right: 20px' }, _('Elements')),
 				E('th', { 'class': 'th' }, _('WAN-Input (packets)')),
 				E('th', { 'class': 'th' }, _('WAN-Forward (packets)')),
-				E('th', { 'class': 'th' }, _('LAN-Forward (packets)'))
+				E('th', { 'class': 'th' }, _('LAN-Forward (packets)')),
+				E('th', { 'class': 'th' }, _('Port/Protocol Limit'))
 			])
 		]);
 
@@ -170,7 +171,8 @@ return view.extend({
 					E('em', { 'style': 'padding-right: 20px' }, content.sets[key].cnt_elements),
 					E('em', content.sets[key].input + cnt1),
 					E('em', content.sets[key].wan_forward + cnt2),
-					E('em', content.sets[key].lan_forward + cnt3)
+					E('em', content.sets[key].lan_forward + cnt3),
+					E('em', content.sets[key].port)
 				]);
 			});
 			rowSets.push([
