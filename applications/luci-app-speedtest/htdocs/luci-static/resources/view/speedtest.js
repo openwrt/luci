@@ -112,9 +112,9 @@ return view.extend({
 						})
 						.catch(function(err) {
 							if (!err.response) {
-								status.textContent = _('No response received from speedtest. Please check your internet connection or try again later.');
+								status.textContent = _('No response received, please check your internet connection or try again later.');
 							} else if (err.response.data && err.response.data.error === 'unable to retrieve your ip info') {
-								status.textContent = _('Unable to retrieve IP information. Please check your internet connection.');
+								status.textContent = _('Unable to retrieve IP information, please check your internet connection.');
 							} else {
 								status.textContent = err;
 							}
