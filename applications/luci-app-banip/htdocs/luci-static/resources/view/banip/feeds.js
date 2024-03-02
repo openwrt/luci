@@ -236,12 +236,11 @@ return view.extend({
 			}
 
 			o = s.option(form.Value, 'flag', _('Flag'));
-			o.datatype = 'and(minlength(2),maxlength(2))';
 			o.validate = function (section_id, value) {
 				if (!value) {
 					return true;
 				}
-				if (!value.match(/^gz$/)) {
+				if (!value.match(/^(\bgz\b|\btcp\b|\budp\b|\b[0-9\-]+\b| )*$/)) {
 					return _('Flag not supported');
 				}
 				return true;
