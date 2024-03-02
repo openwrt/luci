@@ -563,7 +563,7 @@ var ValidatorFactory = baseclass.extend({
 		},
 
 		timehhmmss: function() {
-			return this.assert(this.value.match(/^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$/),
+			return this.assert(this.value.match(/^(?:[01]\d|2[0-3]):[0-5]\d:(?:[0-5]\d|60)$/),
 				_('valid time (HH:MM:SS)'));
 		},
 
