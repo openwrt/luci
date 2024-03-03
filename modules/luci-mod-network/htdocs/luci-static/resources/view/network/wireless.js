@@ -2129,7 +2129,9 @@ return view.extend({
 
 			replace = s2.option(form.Flag, 'replace', _('Replace wireless configuration'), _('Check this option to delete the existing networks from this radio.'));
 
-			name = s2.option(form.Value, 'name', _('Name of the new network'), _('The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</code> and <code>_</code>'));
+			name = s2.option(form.Value, 'name', _('Name of the new network'),
+				_('Name for OpenWrt network configuration. (No relation to wireless network name/SSID)') + '<br />' +
+				_('The allowed characters are: <code>A-Z</code>, <code>a-z</code>, <code>0-9</code> and <code>_</code>'));
 			name.datatype = 'uciname';
 			name.default = 'wwan';
 			name.rmempty = false;
