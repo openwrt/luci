@@ -222,7 +222,7 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 	},
 
 	/**
-	 * Setup listeners for native DOM events that may update the widget value.
+	 * Set up listeners for native DOM events that may update the widget value.
 	 *
 	 * Sets up event handlers on the given target DOM node for the given event
 	 * names which may cause the input value to update, such as `keyup` or
@@ -265,7 +265,7 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 	},
 
 	/**
-	 * Setup listeners for native DOM events that may change the widget value.
+	 * Set up listeners for native DOM events that may change the widget value.
 	 *
 	 * Sets up event handlers on the given target DOM node for the given event
 	 * names which may cause the input value to change completely, such as
@@ -292,7 +292,7 @@ var UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype */
 	},
 
 	/**
-	 * Render the widget, setup event listeners and return resulting markup.
+	 * Render the widget, set up event listeners and return resulting markup.
 	 *
 	 * @instance
 	 * @memberof LuCI.ui.AbstractElement
@@ -3506,7 +3506,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		tooltipDiv = document.body.appendChild(
 			dom.create('div', { class: 'cbi-tooltip' }));
 
-		/* setup old aliases */
+		/* set up old aliases */
 		L.showModal = this.showModal;
 		L.hideModal = this.hideModal;
 		L.showTooltip = this.showTooltip;
@@ -3577,7 +3577,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * behaviour. It has no effect if no modal dialog is currently open.
 	 *
 	 * Note that this function is stand-alone, it does not rely on `this` and
-	 * will not invoke other class functions so it suitable to be used as event
+	 * will not invoke other class functions so it is suitable to be used as event
 	 * handler as-is without the need to bind it first.
 	 */
 	hideModal: function() {
