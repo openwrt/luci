@@ -3833,7 +3833,7 @@ var CBIDynamicList = CBIValue.extend(/** @lends LuCI.form.DynamicList.prototype 
  * @classdesc
  *
  * The `ListValue` class implements a simple static HTML select element
- * allowing the user chose a single value from a set of predefined choices.
+ * allowing the user to choose a single value from a set of predefined choices.
  * It builds upon the {@link LuCI.ui.Select} widget.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
