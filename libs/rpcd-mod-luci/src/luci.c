@@ -19,7 +19,7 @@
 #define _GNU_SOURCE
 
 #include <stdio.h>
-#include <string.h>
+#include <libgen.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdarg.h>
