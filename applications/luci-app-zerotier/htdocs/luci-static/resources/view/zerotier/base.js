@@ -50,7 +50,10 @@ return view.extend({
 		var m, s, o;
 
 		m = new form.Map('zerotier', _('ZeroTier'),
-			_('ZeroTier is an open source, cross-platform and easy to use virtual LAN.'));
+			_('ZeroTier is an open source, cross-platform and easy to use virtual LAN.') + '<br />' +
+			_('Create or manage your ZeroTier network, and auth clients who could access on <a %s>ZeroTier Central</a>.')
+				.format('href="https://my.zerotier.com/network" target="_blank"')
+		);
 
 		s = m.section(form.TypedSection);
 		s.anonymous = true;
@@ -80,14 +83,6 @@ return view.extend({
 			_('Allow ZeroTier clients access your LAN network.'));
 		o.default = o.disabled;
 		o.rmempty = false;
-
-		o = s.option(form.Button, '_panel', _('ZeroTier Central'),
-			_('Create or manage your ZeroTier network, and auth clients who could access.'));
-		o.inputtitle = _('Open website');
-		o.inputstyle = 'apply';
-		o.onclick = function () {
-			window.open("https://my.zerotier.com/network", '_blank');
-		}
 
 		return m.render();
 	}
