@@ -63,7 +63,7 @@ return view.extend({
 			];
 		});
 
-		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active redirects.')));
+		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active port forwards.')));
 
 		return;
 	},
@@ -72,8 +72,8 @@ return view.extend({
 
 		var m, s, o;
 
-		m = new form.Map('upnpd', [_('Universal Plug & Play')],
-			_('UPnP allows clients in the local network to automatically configure the router.'));
+		m = new form.Map('upnpd', [_('UPnP IGD & PCP/NAT-PMP Service')],
+			_('UPnP IGD & PCP/NAT-PMP allows clients on the local network to automatically configure port forwards on the router. Also called Universal Plug and Play.'));
 
 		s = m.section(form.GridSection, '_active_rules');
 
@@ -107,43 +107,43 @@ return view.extend({
 				];
 			});
 
-			cbi_update_table(table, rows, E('em', _('There are no active redirects.')));
+			cbi_update_table(table, rows, E('em', _('There are no active port forwards.')));
 
 			return E('div', { 'class': 'cbi-section cbi-tblsection' }, [
-					E('h3', _('Active UPnP Redirects')), table ]);
+					E('h3', _('Active Port Forwards')), table ]);
 		}, o, this);
 
-		s = m.section(form.NamedSection, 'config', 'upnpd', _('MiniUPnP settings'));
+		s = m.section(form.NamedSection, 'config', 'upnpd', _('Service Settings'));
 		s.addremove = false;
 		s.tab('general',  _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
 
-		o = s.taboption('general', form.Flag, 'enabled', _('Start UPnP and NAT-PMP service'));
+		o = s.taboption('general', form.Flag, 'enabled', _('Start service'));
 		o.rmempty  = false;
 
-		s.taboption('general', form.Flag, 'enable_upnp', _('Enable UPnP functionality')).default = '1'
-		s.taboption('general', form.Flag, 'enable_natpmp', _('Enable NAT-PMP functionality')).default = '1'
+		s.taboption('general', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol')).default = '1'
+		s.taboption('general', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocol')).default = '1'
 
 		s.taboption('general', form.Flag, 'secure_mode', _('Enable secure mode'),
-			_('Allow adding forwards only to requesting ip addresses')).default = '1'
+			_('Allow adding port forwards only to requesting IP addresses')).default = '1'
 
-		s.taboption('general', form.Flag, 'igdv1', _('Enable IGDv1 mode'),
-			_('Advertise as IGDv1 device instead of IGDv2')).default = '0'
+		s.taboption('general', form.Flag, 'igdv1', _('Enable UPnP IGDv1 mode'),
+			_('Advertise as UPnP IGDv1 device (no IPv6) instead of IGDv2')).default = '0'
 
 		s.taboption('general', form.Flag, 'log_output', _('Enable additional logging'),
 			_('Puts extra debugging information into the system log'))
 
-		s.taboption('general', form.Value, 'download', _('Downlink'),
+		s.taboption('general', form.Value, 'download', _('Download speed'),
 			_('Value in KByte/s, informational only')).rmempty = true
 
-		s.taboption('general', form.Value, 'upload', _('Uplink'),
+		s.taboption('general', form.Value, 'upload', _('Upload speed'),
 			_('Value in KByte/s, informational only')).rmempty = true
 
 		o = s.taboption('general', form.Value, 'port', _('Port'))
 		o.datatype = 'port'
 		o.default  = 5000
 
-		s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of daemon uptime')).default = '1'
+		s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime')).default = '1'
 
 		s.taboption('advanced', form.Value, 'uuid', _('Device UUID'))
 		s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'))
@@ -164,7 +164,7 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'))
 		o.placeholder = 'http://192.168.1.1/'
 
-		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('UPnP lease file'))
+		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('Service lease file'))
 		o.placeholder = '/var/run/miniupnpd.leases'
 
 		s.taboption('advanced', form.Flag, 'use_stun', _('Use STUN'))
@@ -178,8 +178,8 @@ return view.extend({
 		o.datatype    = 'port'
 		o.placeholder = '0-65535'
 
-		s = m.section(form.GridSection, 'perm_rule', _('MiniUPnP ACLs'),
-			_('ACLs specify which external ports may be redirected to which internal addresses and ports'))
+		s = m.section(form.GridSection, 'perm_rule', _('Service ACLs'),
+			_('ACLs specify which external ports can be forwarded to which client addresses and ports, IPv6 always allowed.'))
 
 		s.sortable  = true
 		s.anonymous = true
@@ -187,15 +187,15 @@ return view.extend({
 
 		s.option(form.Value, 'comment', _('Comment'))
 
-		o = s.option(form.Value, 'ext_ports', _('External ports'))
+		o = s.option(form.Value, 'ext_ports', _('External Port'))
 		o.datatype    = 'portrange'
 		o.placeholder = '0-65535'
 
-		o = s.option(form.Value, 'int_addr', _('Internal addresses'))
+		o = s.option(form.Value, 'int_addr', _('Client Address'))
 		o.datatype    = 'ip4addr'
 		o.placeholder = '0.0.0.0/0'
 
-		o = s.option(form.Value, 'int_ports', _('Internal ports'))
+		o = s.option(form.Value, 'int_ports', _('Client Port'))
 		o.datatype    = 'portrange'
 		o.placeholder = '0-65535'
 
