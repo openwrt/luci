@@ -28,7 +28,7 @@ handleDelRule = function(num, ev) {
 };
 
 return baseclass.extend({
-	title: _('Active UPnP Redirects'),
+	title: _('Active Port Forwards'),
 
 	load: function() {
 		return Promise.all([
@@ -67,7 +67,7 @@ return baseclass.extend({
 			];
 		});
 
-		cbi_update_table(table, rows, E('em', _('There are no active redirects.')));
+		cbi_update_table(table, rows, E('em', _('There are no active port forwards.')));
 
 		return table;
 	}
