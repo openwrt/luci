@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-03-04 21:51+0000\n"
+"PO-Revision-Date: 2024-03-12 11:01+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/luci/"
 "lt/>\n"
@@ -614,7 +614,7 @@ msgstr "Nėra sąsajos"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:460
 msgid "Accept DNS queries only from hosts whose address is on a local subnet."
 msgstr ""
-"Priimti „DNS“ užklausas tik iš pagrindinių kompiuterių, kurių adresas yra "
+"Priimti „DNS“ užklausas tik iš skleidėjų/p.k – vedėjų, kurių adresas yra "
 "vietiniame potinklyje."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:226
@@ -4260,15 +4260,17 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:87
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:135
 msgid "Hostname"
-msgstr "Įrenginio pavadinimas"
+msgstr "Įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:22
 msgid "Hostname to send when requesting DHCP"
-msgstr "Kokį įrenginio pavadinimą siųsti, kai prašoma „DHCP“"
+msgstr ""
+"Kokį įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimą siųsti, kai prašoma "
+"„DHCP“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:333
 msgid "Hostnames"
-msgstr "Įrenginio pavadinimai"
+msgstr "Įrenginių (t.y skleidėjų/p.k – vedėjų) pavadinimai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:895
 msgid ""
@@ -4276,9 +4278,10 @@ msgid ""
 "redundant for hostnames already configured with static leases, but it can be "
 "useful to rebind an FQDN."
 msgstr ""
-"Įrenginio pavadinimas yra naudojami pririšti domeno-srities vardą prie IP "
-"adreso. Šis nustatymas yra beprasmis, jeigu jo pavadinimai jau yra "
-"nustatyti, bet gali būti naudingas perrišant „FQDN“."
+"Įrenginių (t.y skleidėjų/p.k – vedėjų) pavadinimai yra naudojami pririšti "
+"domeno-srities vardą prie IP adreso. Šis nustatymas yra beprasmis, jeigu jo "
+"pavadinimai jau yra nustatyti su statinėmis nuomomis, bet gali būti "
+"naudingas perrišant „FQDN“."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:19
 msgid "How long (in milliseconds) the LED should be off"
@@ -5157,7 +5160,9 @@ msgstr "Negalima šešioliktainė reikšmė"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:127
 msgid "Invalid hostname or IPv4 address"
-msgstr "Negalimas įrenginio pavadinimas arba IPv4 adresas"
+msgstr ""
+"Negalimas įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas arba IPv4 "
+"adresas"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:135
 msgid "Invalid port"
@@ -6485,7 +6490,7 @@ msgstr "Nėra šifravimo"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:182
 msgid "No Host Routes"
-msgstr "Nėra vedėjo maršrutų"
+msgstr "Nėra skleidėjo/p.k – vedėjo maršrutų"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:89
 msgid "No NAT-T"
@@ -6935,7 +6940,8 @@ msgstr "Pasirenkamas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:976
 msgid "Optional hostname to assign"
-msgstr "Priskirti pasirinktinį įrenginio pavadinimą"
+msgstr ""
+"Priskirti pasirinktinį įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimą"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:205
 msgid ""
@@ -8608,7 +8614,7 @@ msgstr "„SHA256“"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:145
 msgid "SIM %d"
-msgstr "SIM %d"
+msgstr "„SIM“ %d"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:147
 msgid "SIMs"
@@ -8834,7 +8840,8 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:874
 msgid "Set an alias for a hostname."
-msgstr "Nustatyti slapyvardį vedėjui."
+msgstr ""
+"Nustatyti slapyvardį įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimui."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:122
 msgctxt "nft mangle"
@@ -9192,8 +9199,8 @@ msgid ""
 "Specifies the maximum amount of failed ARP requests until hosts are presumed "
 "to be dead"
 msgstr ""
-"Nurodo maksimalų nepavykusių „ARP“ užklausų skaičių, kol vedėjai bus laikomi "
-"išjungtais"
+"Nurodo maksimalų nepavykusių „ARP“ užklausų skaičių, kol skleidėjai/p.k – "
+"vedėjai bus laikomi išjungtais"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:171
 msgid ""
@@ -10080,7 +10087,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:991
 msgid "The hardware address(es) of this entry/host."
-msgstr "Šio įrašo/vedėjo aparatinės įrangos adresas (-ai)."
+msgstr "Šio įrašo ar skleidėjo/p.k – vedėjo aparatinės įrangos adresas (-ai)."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:93
 msgid ""
@@ -10096,7 +10103,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:769
 msgid "The hostname of the boot server"
-msgstr "Įkrovos serverio vedėjo vardas/pavadinimas"
+msgstr "Įkrovos serverio įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:28
 msgid "The interface could not be found"
@@ -10169,8 +10176,8 @@ msgstr ""
 "Maksimalus atsakos laikas centisekundėmis, įterptas į periodines bendrąsias "
 "užklausas. Keisdamas šią reikšmę administratorius gali reguliuoti „IGMP“ "
 "pranešimų pliūptelėjimą potinklyje; dėl didesnių reikšmių duomenų srautas "
-"tampa mažiau sprogus, nes vedėjo atsakai pasiskirsto per didesnę laiko "
-"intervalą"
+"tampa mažiau sprogus, nes skleidėjo/p.k – vedėjo atsakai pasiskirsto per "
+"didesnę laiko intervalą"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:932
 msgid ""
@@ -10226,9 +10233,10 @@ msgid ""
 "This usually is a static public IP address, a static hostname or a DDNS "
 "domain."
 msgstr ""
-"Šios sistemos vedėjo pavadinimas arba IP adresas, prie kurio turėtų "
-"prisijungti lygiarangis. Paprastai tai būna statinis viešasis IP adresas, "
-"statinis vedėjo pavadinimas arba „DDNS“ domenas."
+"Šios sistemos įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas arba IP "
+"adresas, prie kurio turėtų prisijungti lygiarangis. Paprastai tai būna "
+"statinis viešasis IP adresas, statinis vedėjo pavadinimas arba „DDNS“ "
+"domenas."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:194
 msgid "The public key for your Yggdrasil node"
@@ -10334,7 +10342,8 @@ msgstr ""
 "naudojamos; galima pateikti daugiau nei vieną žymą, tokiu atveju užklausa "
 "turi atitikti visas. Pirmenybė teikiama pažymėtoms direktyvoms, o ne "
 "nepažymėtoms. Atminkite, kad vis tiek reikia nurodyti vieną iš „mac“, „duid“ "
-"arba įrenginio pavadinimo (gali būti pakaitos simbolis)."
+"arba įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimą (gali būti pakaitos "
+"simbolis)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:120
 msgid ""
@@ -10817,7 +10826,7 @@ msgstr "Nepavyko atstatyti „iptables“ rodiklių: %s"
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:61
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:7
 msgid "Unable to resolve AFTR host name"
-msgstr "Nepavyksta išspręsti „AFTR“ vedėjo"
+msgstr "Nepavyksta išspręsti „AFTR“ skleidėjo/p.k – vedėjo pavadinimą"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:20
 #: modules/luci-compat/luasrc/model/network.lua:38
@@ -12299,11 +12308,12 @@ msgstr "tinkamas skleidėjo/p.k – vedėjo:prievadas"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:148
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:176
 msgid "valid hostname"
-msgstr "tinkamas įrenginio pavadinimas"
+msgstr "tinkamas įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:390
 msgid "valid hostname or IP address"
-msgstr "tinkamas įrenginio pavadinimas ar IP adresas"
+msgstr ""
+"tinkamas įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas ar IP adresas"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:253
 msgid "valid integer value"
