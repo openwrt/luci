@@ -704,7 +704,7 @@ return baseclass.extend({
 		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'sendredirects', _('Send ICMP redirects'));
 		o.sysfs = '/proc/sys/net/ipv4/conf/%s/send_redirects'.format(devname || 'default');
 
-		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'arp_accept ', _('Honor gratuitous ARP'), _('When enabled, new ARP table entries are added from received gratuitous APR requests or replies, otherwise only preexisting table entries are updated, but no new hosts are learned.'));
+		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'arp_accept', _('Honor gratuitous ARP'), _('When enabled, new ARP table entries are added from received gratuitous APR requests or replies, otherwise only preexisting table entries are updated, but no new hosts are learned.'));
 		o.sysfs = '/proc/sys/net/ipv4/conf/%s/arp_accept'.format(devname || 'default');
 
 		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'drop_gratuitous_arp', _('Drop gratuitous ARP'), _('Drop all gratuitous ARP frames, for example if there’s a known good ARP proxy on the network and such frames need not be used or in the case of 802.11, must not be used to prevent attacks.'));
