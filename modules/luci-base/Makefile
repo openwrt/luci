@@ -27,7 +27,7 @@ LUCI_DEPENDS:=\
 	+ucode-mod-html \
 	+liblucihttp-ucode
 
-PKG_LICENSE:=MIT
+PKG_LICENSE:=Apache-2.0
 
 HOST_BUILD_DIR:=$(BUILD_DIR_HOST)/$(PKG_NAME)
 
