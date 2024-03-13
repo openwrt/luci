@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-10-29 19:41+0000\n"
-"Last-Translator: semih <semiht@gmail.com>\n"
+"PO-Revision-Date: 2024-03-10 22:01+0000\n"
+"Last-Translator: Oğuz Ersen <oguz@ersen.moe>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsupnp/tr/>\n"
 "Language: tr\n"
@@ -10,15 +10,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:182
 msgid ""
-"ACLs specify which external ports may be redirected to which internal "
-"addresses and ports"
+"ACLs specify which external ports can be forwarded to which client addresses "
+"and ports, IPv6 always allowed."
 msgstr ""
 "ACL'ler, hangi harici bağlantı noktalarının hangi dahili adreslere ve "
-"bağlantı noktalarına yeniden yönlendirilebileceğini belirtir"
+"bağlantı noktalarına yeniden yönlendirilebileceğini belirtir."
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:202
 msgid "Action"
@@ -26,7 +26,7 @@ msgstr "Eylem"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:31
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:113
-msgid "Active UPnP Redirects"
+msgid "Active Port Forwards"
 msgstr "Aktif UPnP Yönlendirmeleri"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:119
@@ -34,15 +34,15 @@ msgid "Advanced Settings"
 msgstr "Gelişmiş Ayarlar"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:131
-msgid "Advertise as IGDv1 device instead of IGDv2"
+msgid "Advertise as UPnP IGDv1 device (no IPv6) instead of IGDv2"
 msgstr "IGDv2 yerine IGDv1 cihazı olarak duyuru yap"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:203
 msgid "Allow"
-msgstr ""
+msgstr "İzin ver"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:128
-msgid "Allow adding forwards only to requesting ip addresses"
+msgid "Allow adding port forwards only to requesting IP addresses"
 msgstr "Yalnızca istekte bulunan ip adreslerine yönlendirme eklemeye izin ver"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:150
@@ -63,11 +63,13 @@ msgstr "Temiz kural eşiği"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:45
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:85
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:194
 msgid "Client Address"
 msgstr "İstemci Adresi"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:47
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:87
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:198
 msgid "Client Port"
 msgstr "İstemci Bağlantı Noktası"
 
@@ -83,7 +85,7 @@ msgstr "Sil"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:204
 msgid "Deny"
-msgstr ""
+msgstr "Reddet"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:48
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:88
@@ -95,20 +97,20 @@ msgid "Device UUID"
 msgstr "Cihaz UUID'si"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:136
-msgid "Downlink"
-msgstr "Downlink"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:130
-msgid "Enable IGDv1 mode"
-msgstr "IGDv1 modunu etkinleştir"
+msgid "Download speed"
+msgstr "İndirme hızı"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:125
-msgid "Enable NAT-PMP functionality"
+msgid "Enable PCP/NAT-PMP protocol"
 msgstr "NAT-PMP işlevselliğini etkinleştirin"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:124
-msgid "Enable UPnP functionality"
+msgid "Enable UPnP IGD protocol"
 msgstr "UPnP işlevselliğini etkinleştirin"
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:130
+msgid "Enable UPnP IGDv1 mode"
+msgstr "IGDv1 modunu etkinleştir"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:133
 msgid "Enable additional logging"
@@ -120,41 +122,22 @@ msgstr "Güvenli modu etkinleştir"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:44
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:84
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:190
 msgid "External Port"
 msgstr "Harici Bağlantı Noktası"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:190
-msgid "External ports"
-msgstr "Harici bağlantı noktaları"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:118
 msgid "General Settings"
 msgstr "Genel Ayarlar"
 
 #: applications/luci-app-upnp/root/usr/share/rpcd/acl.d/luci-app-upnp.json:3
-msgid "Grant access to upnp procedures"
+msgid "Grant access to UPnP IGD & PCP/NAT-PMP"
 msgstr "Upnp prosedürlerine erişim izni verin"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:46
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:86
 msgid "Host"
 msgstr "Ana bilgisayar"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:194
-msgid "Internal addresses"
-msgstr "Dahili adresler"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:198
-msgid "Internal ports"
-msgstr "Dahili bağlantı noktaları"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:181
-msgid "MiniUPnP ACLs"
-msgstr "MiniUPnP ACL'leri"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:116
-msgid "MiniUPnP settings"
-msgstr "MiniUPnP ayarları"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:152
 msgid "Notify interval"
@@ -178,7 +161,7 @@ msgid "Puts extra debugging information into the system log"
 msgstr "Sistem günlüğüne fazladan hata ayıklama bilgisi koyar"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:146
-msgid "Report system instead of daemon uptime"
+msgid "Report system instead of service uptime"
 msgstr "Arka plan programı çalışma süresi yerine sistemi rapor et"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:172
@@ -189,35 +172,43 @@ msgstr "STUN Ana Bilgisayarı"
 msgid "STUN Port"
 msgstr "STUN Bağlantı Noktası"
 
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:181
+msgid "Service ACLs"
+msgstr "MiniUPnP ACL'leri"
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:116
+msgid "Service Settings"
+msgstr "MiniUPnP ayarları"
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:167
+msgid "Service lease file"
+msgstr "UPnP kira dosyası"
+
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:121
-msgid "Start UPnP and NAT-PMP service"
+msgid "Start service"
 msgstr "UPnP ve NAT-PMP hizmetini başlatın"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:70
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:66
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:110
-msgid "There are no active redirects."
+msgid "There are no active port forwards."
 msgstr "Etkin yönlendirme yok."
 
 #: applications/luci-app-upnp/root/usr/share/luci/menu.d/luci-app-upnp.json:3
-msgid "UPnP"
-msgstr "UPnP"
+msgid "UPnP IGD & PCP/NAT-PMP"
+msgstr "UPnP IGD ve PCP/NAT-PMP"
+
+#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:75
+msgid "UPnP IGD & PCP/NAT-PMP Service"
+msgstr "Evrensel Tak ve Çalıştır"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:76
 msgid ""
-"UPnP allows clients in the local network to automatically configure the "
-"router."
+"UPnP IGD & PCP/NAT-PMP allows clients on the local network to automatically "
+"configure port forwards on the router. Also called Universal Plug and Play."
 msgstr ""
 "UPnP, yerel ağdaki istemcilerin yönlendiriciyi otomatik olarak "
 "yapılandırmasına izin verir."
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:167
-msgid "UPnP lease file"
-msgstr "UPnP kira dosyası"
-
-#: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:75
-msgid "Universal Plug & Play"
-msgstr "Evrensel Tak ve Çalıştır"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:60
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:56
@@ -226,8 +217,8 @@ msgid "Unknown"
 msgstr "Bilinmiyor"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:139
-msgid "Uplink"
-msgstr "Uplink"
+msgid "Upload speed"
+msgstr "Yükleme hızı"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:170
 msgid "Use STUN"
@@ -237,6 +228,3 @@ msgstr "STUN kullan"
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:140
 msgid "Value in KByte/s, informational only"
 msgstr "KBayt/sn cinsinden değer, yalnızca bilgi amaçlı"
-
-#~ msgid "Collecting data..."
-#~ msgstr "Veri alınıyor..."

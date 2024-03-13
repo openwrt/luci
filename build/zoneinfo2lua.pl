@@ -3,6 +3,11 @@
 # Execute from within root of Luci feed, usually feeds/luci
 # $Id$
 
+# NOTE: Darwin before 13.6.4 (22G513) may have had bugs in some TZinfo2 files.
+# Some lacked the mandatory footers detailed in RFC 8536. A complete tzdata can
+# not be built when this script is run on Darwin 13.6.3 and possibly other
+# Darwin versions released prior to 13.6.4 (e.g. even Darwin (Sonoma) 14.2.1).
+
 use strict;
 
 my %TZ;

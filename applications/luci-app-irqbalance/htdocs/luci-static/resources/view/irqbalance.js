@@ -111,6 +111,8 @@ return view.extend({
                 : true;
         }
 
+        o = s.option(form.Flag, 'debug', _('Show debug output'), _('Show debug output in system log.'));
+
         return m.render();
     }
 });

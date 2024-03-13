@@ -2,7 +2,14 @@
 	"luci-app-p910nd": {
 		"description": "Grant UCI access for luci-app-p910nd",
 		"read": {
-			"uci": [ "p910nd" ]
+			"uci": [ "p910nd" ],
+			"file": {
+				"/usr/bin/find -L /dev -maxdepth 3 -type c -name lp*": ["exec"],
+				"/usr/libexec/opkg-call list-installed": ["exec"]
+			},
+			"ubus": {
+				"luci": [ "p910nd" ]
+			}
 		},
 		"write": {
 			"uci": [ "p910nd" ]
