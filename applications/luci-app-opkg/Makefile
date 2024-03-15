@@ -6,6 +6,8 @@
 
 include $(TOPDIR)/rules.mk
 
+PKG_LICENSE:=Apache-2.0
+
 LUCI_TITLE:=OPKG package management application
 LUCI_DEPENDS:=+luci-base +opkg
 
