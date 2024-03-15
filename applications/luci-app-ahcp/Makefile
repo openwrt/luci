@@ -6,6 +6,8 @@
 
 include $(TOPDIR)/rules.mk
 
+PKG_LICENSE:=Apache-2.0
+
 LUCI_TITLE:=LuCI Support for AHCPd
 LUCI_DEPENDS:=+luci-base +luci-compat +ahcpd
 
