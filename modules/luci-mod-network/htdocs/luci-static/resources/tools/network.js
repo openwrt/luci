@@ -919,6 +919,15 @@ return baseclass.extend({
 			}, this));
 		};
 
+		ss.handleRemove = function(section_id) {
+			this.map.data.remove('network', section_id);
+			s.map.addedVLANs = s.map.addedVLANs.filter(function(sid) {
+				return sid != section_id;
+			});
+
+			return this.redraw();
+		};
+
 		o = ss.option(form.Value, 'vlan', _('VLAN ID'));
 		o.datatype = 'range(1, 4094)';
 
