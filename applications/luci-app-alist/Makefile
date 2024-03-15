@@ -4,6 +4,8 @@
 
 include $(TOPDIR)/rules.mk
 
+PKG_LICENSE:=Apache-2.0
+
 LUCI_TITLE:=LuCI app for AList
 LUCI_DEPENDS:=+alist
 
