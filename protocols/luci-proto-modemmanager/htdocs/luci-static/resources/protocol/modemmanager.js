@@ -48,6 +48,8 @@ return network.registerProtocol('modemmanager', {
 	renderFormOptions: function(s) {
 		var dev = this.getL3Device() || this.getDevice(), o;
 
+		s.taboption('general', form.Flag, 'keep_connected', _('Keep connected'));
+
 		o = s.taboption('general', form.ListValue, '_modem_device', _('Modem device'));
 		o.ucioption = 'device';
 		o.rmempty = false;
