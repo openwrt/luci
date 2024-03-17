@@ -358,7 +358,7 @@ function build_pagetree() {
 		firstchild_ineligible: 'bool'
 	};
 
-	let files = glob('/usr/share/luci/menu.d/*.json', '/etc/config/*', '/usr/lib/lua/luci/controller/*.lua', '/usr/lib/lua/luci/controller/*/*.lua');
+	let files = glob('/usr/share/luci/menu.d/*.json', '/usr/lib/lua/luci/controller/*.lua', '/usr/lib/lua/luci/controller/*/*.lua');
 	let cachefile;
 
 	if (indexcache) {

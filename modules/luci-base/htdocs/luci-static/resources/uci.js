@@ -919,8 +919,6 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 							window.setTimeout(try_confirm, 250);
 						else
 							return Promise.reject(rv);
-					} else {
-						document.dispatchEvent(new CustomEvent('uci-applied'));
 					}
 
 					return rv;
