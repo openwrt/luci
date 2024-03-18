@@ -316,7 +316,7 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.taboption('general', form.Flag, 'trm_vpn', _('VPN processing'), _('VPN connections will be managed by travelmate.'));
-		o.default = 1;
+		o.default = 0;
 		o.rmempty = false;
 
 		o = s.taboption('general', widgets.NetworkSelect, 'trm_vpnifacelist', _('Limit VPN processing'), _('Limit VPN processing to certain interfaces.'));
