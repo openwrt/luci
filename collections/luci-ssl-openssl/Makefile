@@ -16,6 +16,8 @@ LUCI_DESCRIPTION:=LuCI with OpenSSL as the SSL backend (libustream-openssl). \
 
 LUCI_DEPENDS:=+luci-light +libustream-openssl +openssl-util
 
+PKG_LICENSE:=Apache-2.0
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
