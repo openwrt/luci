@@ -10,6 +10,8 @@ LUCI_TITLE:=Support for unetd VPN
 LUCI_DEPENDS:=+unetd +unet-cli
 LUCI_PKGARCH:=all
 
+PKG_LICENSE:=Apache-2.0
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
