@@ -14,6 +14,8 @@ LUCI_BASENAME:=compat
 LUCI_TITLE:=LuCI compatibility libraries
 LUCI_DEPENDS:=+luci-lua-runtime
 
+PKG_LICENSE:=Apache-2.0
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
