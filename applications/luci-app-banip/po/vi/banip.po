@@ -254,7 +254,7 @@ msgid "Changes on this tab needs a banIP service restart to take effect."
 msgstr ""
 "Các thay đổi trên tab này cần khởi động lại dịch vụ banIP để có hiệu lực."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:288
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:287
 msgid "Clear Custom Feeds"
 msgstr "Xóa Feed Tùy chỉnh"
 
@@ -319,7 +319,7 @@ msgstr "Tra cứu tên miền"
 msgid "Don't check SSL server certificates during download."
 msgstr "Không kiểm tra chứng chỉ máy chủ SSL trong khi tải xuống."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:261
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:260
 msgid "Download Custom Feeds"
 msgstr "Tải xuống nguồn tùy chỉnh"
 
@@ -443,7 +443,7 @@ msgstr "Tên nguồn"
 msgid "Feed Selection"
 msgstr "Lựa chọn nguồn"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:279
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:278
 msgid "Fill Custom Feeds"
 msgstr "Điền thông tin nguồn tùy chỉnh"
 
@@ -455,7 +455,7 @@ msgstr "Nhật ký tường lửa"
 msgid "Flag"
 msgstr "Cờ"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
 msgid "Flag not supported"
 msgstr "Không hỗ trợ cờ"
 
@@ -483,7 +483,7 @@ msgstr "IP"
 msgid "IP Search"
 msgstr "Tìm kiếm IP"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:215
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:217
 msgid "IP Search..."
 msgstr "Tìm kiếm IP..."
 
@@ -672,10 +672,6 @@ msgstr "Không có kết quả Tìm kiếm!"
 msgid "No banIP related firewall logs yet!"
 msgstr "Chưa có log tường lửa liên quan đến banIP!"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/processing_log.js:21
-msgid "No banIP related processing logs yet!"
-msgstr "Chưa có log xử lý liên quan đến banIP!"
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:332
 msgid "Normal Priority (default)"
 msgstr "Ưu tiên Bình thường (mặc định)"
@@ -714,6 +710,10 @@ msgstr ""
 "Chỉ phân tích một số lượng cuối cùng của các mục log để xác định sự kiện "
 "đáng ngờ. Để vô hiệu hóa giám sát log hoàn toàn, đặt giá trị là '0'."
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:159
+msgid "Port/Protocol Limit"
+msgstr ""
+
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:76
 msgid "Processing Log"
 msgstr "Log Xử lý"
@@ -740,7 +740,7 @@ msgstr ""
 "Địa chỉ người nhận cho thư thông báo banIP, thông tin này là bắt buộc để "
 "kích hoạt chức năng E-Mail."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:222
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:224
 msgid "Refresh"
 msgstr "Làm mới"
 
@@ -793,7 +793,7 @@ msgstr "Run flags"
 msgid "Run Information"
 msgstr "Thông tin chạy"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:297
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:296
 msgid "Save Custom Feeds"
 msgstr "Lưu nguồn cấp dữ liệu tùy chỉnh"
 
@@ -842,11 +842,11 @@ msgstr "Đặt kích thước phân chia"
 msgid "Set Survey"
 msgstr "Đặt khảo sát"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:208
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:210
 msgid "Set Survey..."
 msgstr "Đặt khảo sát..."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:229
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:231
 msgid "Set details"
 msgstr "Chi tiết đặt"
 
@@ -929,13 +929,6 @@ msgstr ""
 "Đầu ra syslog, đã được lọc trước cho các mục nhập nhật ký tường lửa liên "
 "quan đến banIP."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/processing_log.js:28
-msgid ""
-"The syslog output, prefiltered for banIP-related processing log entries only."
-msgstr ""
-"Đầu ra syslog, đã được lọc trước cho các mục nhập nhật ký xử lý liên quan "
-"đến banIP."
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:32
 msgid ""
 "This is the local banIP allowlist that will permit certain MAC-, IP-"
@@ -958,7 +951,7 @@ msgstr ""
 "thể.<br /> <em><b>Vui lòng lưu ý:</b></em> chỉ thêm chính xác một địa chỉ "
 "MAC/IPv4/IPv6 hoặc tên miền trên mỗi dòng."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:188
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:190
 msgid ""
 "This tab shows the last generated Set Report, press the 'Refresh' button to "
 "get a new one."
@@ -966,7 +959,7 @@ msgstr ""
 "Tab này hiển thị Báo cáo Bộ sưu tập cuối cùng được tạo, nhấn nút 'Làm mới' "
 "để lấy báo cáo mới."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:191
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:193
 msgid "Timestamp"
 msgstr "Dấu thời gian"
 
@@ -1003,7 +996,7 @@ msgstr "URLv6"
 msgid "Unable to save modifications: %s"
 msgstr "Không thể lưu các thay đổi: %s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:270
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:269
 msgid "Upload Custom Feeds"
 msgstr "Tải lên Bộ sưu tập Tùy chỉnh"
 
@@ -1059,11 +1052,11 @@ msgstr ""
 msgid "alert"
 msgstr "cảnh báo"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:195
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:197
 msgid "auto-added to allowlist today"
 msgstr "tự động thêm vào danh sách cho phép hôm nay"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:199
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:201
 msgid "auto-added to blocklist today"
 msgstr "tự động thêm vào danh sách chặn hôm nay"
 
@@ -1126,6 +1119,16 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:481
 msgid "warn (default)"
 msgstr "cảnh báo (mặc định)"
+
+#~ msgid "No banIP related processing logs yet!"
+#~ msgstr "Chưa có log xử lý liên quan đến banIP!"
+
+#~ msgid ""
+#~ "The syslog output, prefiltered for banIP-related processing log entries "
+#~ "only."
+#~ msgstr ""
+#~ "Đầu ra syslog, đã được lọc trước cho các mục nhập nhật ký xử lý liên quan "
+#~ "đến banIP."
 
 #~ msgid "Log Level"
 #~ msgstr "Cấp độ ghi nhật ký"

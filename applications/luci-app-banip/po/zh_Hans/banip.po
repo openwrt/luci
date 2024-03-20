@@ -242,7 +242,7 @@ msgstr "IP 链路/集合设置"
 msgid "Changes on this tab needs a banIP service restart to take effect."
 msgstr "此标签页上进行的更改需要重启 banIP 服务才能生效。"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:288
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:287
 msgid "Clear Custom Feeds"
 msgstr "清除自定义源"
 
@@ -301,7 +301,7 @@ msgstr "域名查询"
 msgid "Don't check SSL server certificates during download."
 msgstr "下载期间不检查 SSL 服务器证书。"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:261
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:260
 msgid "Download Custom Feeds"
 msgstr "下载自定义源"
 
@@ -425,7 +425,7 @@ msgstr "源名称"
 msgid "Feed Selection"
 msgstr "源选择"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:279
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:278
 msgid "Fill Custom Feeds"
 msgstr "填写自定义源"
 
@@ -437,7 +437,7 @@ msgstr "防火墙日志"
 msgid "Flag"
 msgstr "标记"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
 msgid "Flag not supported"
 msgstr "此标记不受支持"
 
@@ -465,7 +465,7 @@ msgstr "IP"
 msgid "IP Search"
 msgstr "IP 搜索"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:215
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:217
 msgid "IP Search..."
 msgstr "IP 搜索…"
 
@@ -650,10 +650,6 @@ msgstr "无搜索结果！"
 msgid "No banIP related firewall logs yet!"
 msgstr "还没有 banIP 相关的防火墙日志！"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/processing_log.js:21
-msgid "No banIP related processing logs yet!"
-msgstr "还没有 banIP 相关的处理日志！"
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:332
 msgid "Normal Priority (default)"
 msgstr "正常优先级（默认）"
@@ -686,6 +682,10 @@ msgid ""
 msgstr ""
 "仅解析可疑事件日志条目最后声明的数量。如需完全禁用日志监控，请将其设为 '0'。"
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:159
+msgid "Port/Protocol Limit"
+msgstr ""
+
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:76
 msgid "Processing Log"
 msgstr "处理日志"
@@ -710,7 +710,7 @@ msgid ""
 "required to enable E-Mail functionality."
 msgstr "banIP 通知电子邮件的接收地址，要开启电子邮件功能必须填写此信息。"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:222
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:224
 msgid "Refresh"
 msgstr "刷新"
 
@@ -763,7 +763,7 @@ msgstr "运行标记"
 msgid "Run Information"
 msgstr "运行信息"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:297
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:296
 msgid "Save Custom Feeds"
 msgstr "保存自定义源"
 
@@ -812,11 +812,11 @@ msgstr "设置分割尺寸"
 msgid "Set Survey"
 msgstr "设置调查"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:208
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:210
 msgid "Set Survey..."
 msgstr "设置调查…"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:229
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:231
 msgid "Set details"
 msgstr "集详情"
 
@@ -893,11 +893,6 @@ msgid ""
 "The syslog output, prefiltered for banIP-related firewall log entries only."
 msgstr "预过滤的 syslog 输出，仅列出 banIP 相关的防火墙日志条目。"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/processing_log.js:28
-msgid ""
-"The syslog output, prefiltered for banIP-related processing log entries only."
-msgstr "预过滤的 syslog 输出，仅列出 banIP 相关的处理日志条目。"
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:32
 msgid ""
 "This is the local banIP allowlist that will permit certain MAC-, IP-"
@@ -920,13 +915,13 @@ msgstr ""
 "</b></em>每行只能添加一个 MAC/IPv4/IPv6 地址或域名。允许 CIDR 格式的 IP 范围"
 "和 MAC/IP 绑定。"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:188
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:190
 msgid ""
 "This tab shows the last generated Set Report, press the 'Refresh' button to "
 "get a new one."
 msgstr "此标签页显示最后生成的集报告，按下“刷新“按钮获取新报告。"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:191
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:193
 msgid "Timestamp"
 msgstr "时间戳"
 
@@ -961,7 +956,7 @@ msgstr "URLv6"
 msgid "Unable to save modifications: %s"
 msgstr "无法保存更改：%s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:270
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:269
 msgid "Upload Custom Feeds"
 msgstr "上传自定义源"
 
@@ -1015,11 +1010,11 @@ msgstr ""
 msgid "alert"
 msgstr "报警"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:195
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:197
 msgid "auto-added to allowlist today"
 msgstr "今日自动添加到白名单"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:199
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:201
 msgid "auto-added to blocklist today"
 msgstr "今日自动添加到黑名单"
 
@@ -1082,6 +1077,14 @@ msgstr "拒绝"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:481
 msgid "warn (default)"
 msgstr "警告（默认）"
+
+#~ msgid "No banIP related processing logs yet!"
+#~ msgstr "还没有 banIP 相关的处理日志！"
+
+#~ msgid ""
+#~ "The syslog output, prefiltered for banIP-related processing log entries "
+#~ "only."
+#~ msgstr "预过滤的 syslog 输出，仅列出 banIP 相关的处理日志条目。"
 
 #~ msgid "Log Level"
 #~ msgstr "日志级别"

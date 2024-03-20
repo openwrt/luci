@@ -13,20 +13,20 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.7-dev\n"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:602
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:598
 msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
 msgstr "允许 SPA 客户端请求通过 iptables 防火墙访问服务，而不仅仅是被拦截。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:603
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:599
 msgid "Allow SPA clients to request forwarding destination by DNS name."
 msgstr "允许 SPA 客户端用 DNS 名称请求转发目标。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:441
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:458
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:551
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:573
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:437
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:454
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:547
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:569
 msgid "Base64 key"
 msgstr "Base64 密钥"
 
@@ -35,15 +35,15 @@ msgstr "Base64 密钥"
 msgid "Close"
 msgstr "关闭"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:481
 msgid "Custom configuration"
 msgstr "自定义配置"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:411
 msgid "Custom configuration read from /etc/fwknop/access.conf."
 msgstr "从 /etc/fwknop/access.conf 读取自定义配置."
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:581
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:577
 msgid ""
 "Define a set of ports and protocols (tcp or udp) that are explicitly not "
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
@@ -52,7 +52,7 @@ msgstr ""
 "定义一组端口和协议(tcp或udp)，无论传入的SPA包的有效性如何，都明确不允许这些端"
 "口和协议。用英文逗号分隔多个条目。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:576
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:572
 msgid ""
 "Define a set of ports and protocols (tcp or udp) that will be opened if a "
 "valid knock sequence is seen. If this entry is not set, fwknopd will attempt "
@@ -63,20 +63,20 @@ msgstr ""
 "端口和协议。如果未设置此条目，fwknopd 将尝试遵守 SPA 数据中指定的任何协议/端"
 "口请求（除非匹配到了任何“RESTRICT_PORTS”条目）。多个条目以逗号分隔。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:562
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:558
 msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
 "定义HMAC认证密钥(使用Base64编码)，用于在数据包解密之前验证SPA数据包的真实性。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:554
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:550
 msgid ""
 "Define the HMAC authentication key used for verifying the authenticity of "
 "the SPA packet before the packet is decrypted."
 msgstr "定义HMAC认证密钥，用于在数据包被解密之前验证SPA数据包的真实性。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:585
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:581
 msgid ""
 "Define the length of time access will be granted by fwknopd through the "
 "firewall after a valid knock sequence from a source IP address. If "
@@ -86,7 +86,7 @@ msgstr ""
 "定义在源 IP 地址的有效敲门序列后，fwknopd 授予其通过防火墙访问的时间长度。如"
 "果未设置“FW_ACCESS_TIMEOUT”，则将自动设置默认超时 30 秒。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:540
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:536
 msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
@@ -94,18 +94,18 @@ msgstr ""
 "定义对称密钥(以Base64编码方式)，用于解密由fwknop客户机使用Rijndael加密的传入"
 "SPA包。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:532
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:528
 msgid ""
 "Define the symmetric key used for decrypting an incoming SPA packet that is "
 "encrypted by the fwknop client with Rijndael."
 msgstr ""
 "定义 Rijndael 对称密钥，将用于解密由 fwknop 客户端传入的加密 SPA 数据包。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:480
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:476
 msgid "Enable Uci/Luci control"
 msgstr "启用 Uci/Luci 控件"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid "Enable config overwrite"
 msgstr "启用配置覆盖"
 
@@ -115,11 +115,11 @@ msgstr "Firewall Knock 守护进程"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:303
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:474
 msgid "Firewall Knock Operator Daemon"
 msgstr "防火墙Knock Operator守护进程"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:590
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:586
 msgid ""
 "Force all SPA packets to contain a real IP address within the encrypted "
 "data. This makes it impossible to use the -s command line argument on the "
@@ -131,15 +131,15 @@ msgstr ""
 "令行上使用 -s 命令行参数，因此 -R 必须用于自动解析外部地址（如果 NAT 后面的客"
 "户端），或客户端必须通过 -a 参数知道外部 IP。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:527
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid "Generate Keys"
 msgstr "生成密钥"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:519
 msgid "Generate keys"
 msgstr "生成多个密钥"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:519
 msgid ""
 "Generates the symmetric key used for decrypting an incoming SPA packet, that "
 "is encrypted by the fwknop client with Rijndael block cipher, and HMAC "
@@ -153,11 +153,11 @@ msgstr ""
 msgid "Grant UCI access for luci-app-fwknopd"
 msgstr "授予UCI访问luci-app-fwknopd的权限"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:571
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:567
 msgid "HMAC key type"
 msgstr "HMAC 密钥类型"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:549
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:545
 msgid "Key type"
 msgstr "密钥类型"
 
@@ -165,17 +165,17 @@ msgstr "密钥类型"
 msgid "Loading…"
 msgstr "载入中…"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:600
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:596
 msgid ""
 "Maximum age in seconds that an SPA packet will be accepted. Defaults to 120 "
 "seconds."
 msgstr "SPA 数据包可被接受的最大期限（以秒为单位）。默认为120秒。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid "Network"
 msgstr "网络"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:492
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:488
 msgid "Network configuration"
 msgstr "网络配置"
 
@@ -183,14 +183,14 @@ msgstr "网络配置"
 msgid "No stanza found."
 msgstr "没有找到 stanza。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:440
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:457
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:550
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:572
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:453
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:546
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:568
 msgid "Normal key"
 msgstr "普通密钥"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:481
 msgid ""
 "Parses the /etc/fwknop/access.conf file (and included files/folders/keys) "
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
@@ -199,27 +199,27 @@ msgstr ""
 "解析/etc/fwknop/access.conf文件(以及包含的文件/文件夹/密钥)并为所有找到的"
 "stanzas生成二维码。由于访问权限的限制，只能处理/etc/fwknop文件夹中的文件。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:422
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:506
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:418
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:502
 msgid "QR code"
 msgstr "QR码"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:489
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
 msgid "Show access.conf QR codes"
 msgstr "显示 access.conf 二维码"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:601
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:597
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
 msgstr "指定 fwknopd 将要嗅探数据包的以太网接口。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:447
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:453
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:559
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:568
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:443
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:449
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:555
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:564
 msgid "The HMAC authentication key has to be specified."
 msgstr "必须指定HMAC验证密钥。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:517
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:513
 msgid ""
 "The destination address for which the SPA packet will be accepted. The "
 "string “ANY” is also accepted if a valid SPA packet should be honored to any "
@@ -231,7 +231,7 @@ msgstr ""
 "被接受。网络应该用CIDR符号指定(例如“192.168.10.0/24”)，也可以通过单独的IP地址"
 "进行指定。用英文逗号分隔多个条目。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:494
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid ""
 "The network on which the daemon listens. The daemon is automatically started "
 "when the network is up-and-running. This option has precedence over "
@@ -240,7 +240,7 @@ msgstr ""
 "守护进程侦听的网络。当网络启动并运行时，守护进程将被自动启动。此选项的优先级"
 "高于“PCAP_INTF”选项。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:508
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:504
 msgid ""
 "The source address from which the SPA packet will be accepted. The string "
 "“ANY” is also accepted if a valid SPA packet should be honored from any "
@@ -252,40 +252,41 @@ msgstr ""
 "络应该用CIDR符号中指定(例如“192.168.10.0/24”)，也可以通过单独的IPI地址进行指"
 "定。用英文逗号分隔多个条目。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:514
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:510
 msgid "The source address has to be specified."
 msgstr "必须指定源地址。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:430
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:537
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:546
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:426
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:432
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:533
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:542
 msgid "The symmetric key has to be specified."
 msgstr "必须指定对称密钥。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:590
 msgid ""
 "This instructs fwknopd to accept complete commands that are contained within "
 "an authorization packet. Any such command will be executed on the fwknopd "
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
-"这指示fwknopd接受包含在授权包中的完整命令。任何这样的命令都将在fwknopd服务器上以“CMD_EXEC_USER”指定的用户或启动fwknopd"
-"的用户(如果没有设置的话)的身份执行。"
+"这指示fwknopd接受包含在授权包中的完整命令。任何这样的命令都将在fwknopd服务器"
+"上以“CMD_EXEC_USER”指定的用户或启动fwknopd的用户(如果没有设置的话)的身份执"
+"行。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:482
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid ""
 "When unchecked, the config files in /etc/fwknopd will be used as is, "
 "ignoring any settings here."
 msgstr ""
 "取消选中时，/etc/fwknopd 中的配置文件将按原样使用，忽略此处的任何设置。"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:419
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:502
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:498
 msgid "access.conf stanzas"
 msgstr "access.conf 节"
 
-#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:598
+#: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
 msgid "fwknopd.conf config options"
 msgstr "fwknopd.conf 配置选项"
 

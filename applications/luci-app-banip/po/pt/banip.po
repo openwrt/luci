@@ -258,7 +258,7 @@ msgstr ""
 "As alterações nesta guia precisam de uma reinicialização do serviço banIP "
 "para entrar em vigor."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:288
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:287
 msgid "Clear Custom Feeds"
 msgstr "Limpar feeds personalizados"
 
@@ -323,7 +323,7 @@ msgstr "Busca por domínio"
 msgid "Don't check SSL server certificates during download."
 msgstr "Não verificar os certificados de SSL do servidor durante a descarrega."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:261
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:260
 msgid "Download Custom Feeds"
 msgstr "Baixar feeds personalizados"
 
@@ -452,7 +452,7 @@ msgstr "Nome do feed"
 msgid "Feed Selection"
 msgstr "Seleção do feed"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:279
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:278
 msgid "Fill Custom Feeds"
 msgstr "Preencher feeds personalizados"
 
@@ -464,7 +464,7 @@ msgstr "Registo do firewall"
 msgid "Flag"
 msgstr "Bandeira"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
 msgid "Flag not supported"
 msgstr "Bandeira não suportada"
 
@@ -492,7 +492,7 @@ msgstr "IP"
 msgid "IP Search"
 msgstr "Busca IP"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:215
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:217
 msgid "IP Search..."
 msgstr "Busca IP..."
 
@@ -685,10 +685,6 @@ msgstr "A busca não retornou nada!"
 msgid "No banIP related firewall logs yet!"
 msgstr "Ainda não há registos do firewall relacionados ao banIP!"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/processing_log.js:21
-msgid "No banIP related processing logs yet!"
-msgstr "Ainda não há registos do processamento relacionados ao banIP!"
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:332
 msgid "Normal Priority (default)"
 msgstr "Prioridade Normal (padrão)"
@@ -728,6 +724,10 @@ msgstr ""
 "Analisar apenas o último número declarado de entradas de log para eventos "
 "suspeitos. Para desativar o monitor de log, defina-o como '0'."
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:159
+msgid "Port/Protocol Limit"
+msgstr ""
+
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:76
 msgid "Processing Log"
 msgstr "Registo de processamento"
@@ -754,7 +754,7 @@ msgstr ""
 "Endereço de e-mail do destinatário para as notificações do banIP, esta "
 "informação é necessária para ativar a funcionalidade do e-mail."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:222
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:224
 msgid "Refresh"
 msgstr "Atualizar"
 
@@ -808,7 +808,7 @@ msgstr "Flags de Execução"
 msgid "Run Information"
 msgstr "Informações de Execução"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:297
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:296
 msgid "Save Custom Feeds"
 msgstr "Salvar feeds personalizados"
 
@@ -857,11 +857,11 @@ msgstr "Definir o tamanho da divisão"
 msgid "Set Survey"
 msgstr "Definir a pesquisa"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:208
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:210
 msgid "Set Survey..."
 msgstr "Definir a pesquisa..."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:229
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:231
 msgid "Set details"
 msgstr "Definir os detalhes"
 
@@ -951,13 +951,6 @@ msgstr ""
 "A saída syslog, pré-filtrada apenas para entradas relacionadas ao registo do "
 "firewall ao banIP."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/processing_log.js:28
-msgid ""
-"The syslog output, prefiltered for banIP-related processing log entries only."
-msgstr ""
-"A saída syslog, pré-filtrada apenas para entradas relacionadas ao registo do "
-"banIP."
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:32
 msgid ""
 "This is the local banIP allowlist that will permit certain MAC-, IP-"
@@ -982,7 +975,7 @@ msgstr ""
 "adiciona exatamente um endereço MAC/IPv4/IPv6 ou nome de domínio por linha. "
 "São permitidos intervalos na notação CIDR e associações de MAC/IP."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:188
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:190
 msgid ""
 "This tab shows the last generated Set Report, press the 'Refresh' button to "
 "get a new one."
@@ -990,7 +983,7 @@ msgstr ""
 "Esta guia mostra o último conjunto de registos gerado, pressione o botão "
 "'Atualizar' para obter um novo."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:191
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:193
 msgid "Timestamp"
 msgstr "Marca de Tempo"
 
@@ -1027,7 +1020,7 @@ msgstr "URLv6"
 msgid "Unable to save modifications: %s"
 msgstr "Não foi possível salvar as alterações: %s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:270
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:269
 msgid "Upload Custom Feeds"
 msgstr "Enviar os feeds personalizados"
 
@@ -1083,11 +1076,11 @@ msgstr ""
 msgid "alert"
 msgstr "alerta"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:195
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:197
 msgid "auto-added to allowlist today"
 msgstr "foi adicionado hoje automaticamente à lista dos permitidos"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:199
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:201
 msgid "auto-added to blocklist today"
 msgstr "foi adicionado hoje automaticamente à lista de bloqueio"
 
@@ -1150,6 +1143,16 @@ msgstr "rejeitar"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:481
 msgid "warn (default)"
 msgstr "alertar (padrão)"
+
+#~ msgid "No banIP related processing logs yet!"
+#~ msgstr "Ainda não há registos do processamento relacionados ao banIP!"
+
+#~ msgid ""
+#~ "The syslog output, prefiltered for banIP-related processing log entries "
+#~ "only."
+#~ msgstr ""
+#~ "A saída syslog, pré-filtrada apenas para entradas relacionadas ao registo "
+#~ "do banIP."
 
 #~ msgid "Log Level"
 #~ msgstr "Nível do registo"

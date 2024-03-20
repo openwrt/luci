@@ -257,7 +257,7 @@ msgstr ""
 "Bu sekmedeki değişikliklerin etkili olması için banIP hizmetinin yeniden "
 "başlatılması gerekir."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:288
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:287
 msgid "Clear Custom Feeds"
 msgstr "Özel Akışları Temizle"
 
@@ -322,7 +322,7 @@ msgstr "Alan Adı Arama"
 msgid "Don't check SSL server certificates during download."
 msgstr "İndirme sırasında SSL sunucu sertifikalarını kontrol etme."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:261
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:260
 msgid "Download Custom Feeds"
 msgstr "Özel Akışları İndir"
 
@@ -451,7 +451,7 @@ msgstr "Akış Adı"
 msgid "Feed Selection"
 msgstr "Akış Seçimi"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:279
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:278
 msgid "Fill Custom Feeds"
 msgstr "Özel Akışları Doldur"
 
@@ -463,7 +463,7 @@ msgstr "Güvenlik Duvarı Günlüğü"
 msgid "Flag"
 msgstr "Bayrak"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:245
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:244
 msgid "Flag not supported"
 msgstr "Bayrak desteklenmiyor"
 
@@ -491,7 +491,7 @@ msgstr "IP"
 msgid "IP Search"
 msgstr "IP Arama"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:215
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:217
 msgid "IP Search..."
 msgstr "IP Arama..."
 
@@ -684,10 +684,6 @@ msgstr "Arama sonucu bulunamadı!"
 msgid "No banIP related firewall logs yet!"
 msgstr "Henüz banIP ile ilgili güvenlik duvarı kaydı yok!"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/processing_log.js:21
-msgid "No banIP related processing logs yet!"
-msgstr "Henüz banIP ile ilgili işlem günlüğü yok!"
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:332
 msgid "Normal Priority (default)"
 msgstr "Normal Öncelik (varsayılan)"
@@ -728,6 +724,10 @@ msgstr ""
 "ayrıştırın. Günlük izleyiciyi tamamen devre dışı bırakmak için onu '0' "
 "olarak ayarlayın."
 
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:159
+msgid "Port/Protocol Limit"
+msgstr ""
+
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:76
 msgid "Processing Log"
 msgstr "İşlem Günlüğü"
@@ -754,7 +754,7 @@ msgstr ""
 "banIP bildirim E-Postaları için alıcı adresi, bu bilgi E-Posta işlevini "
 "etkinleştirmek için gereklidir."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:222
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:224
 msgid "Refresh"
 msgstr "Yenile"
 
@@ -807,7 +807,7 @@ msgstr "Bayrakları Çalıştır"
 msgid "Run Information"
 msgstr "Çalıştırma Bilgileri"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:297
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:296
 msgid "Save Custom Feeds"
 msgstr "Özel Akışları Kaydet"
 
@@ -856,11 +856,11 @@ msgstr "Bölme Boyutunu Ayarla"
 msgid "Set Survey"
 msgstr "Araştırmayı Ayarla"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:208
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:210
 msgid "Set Survey..."
 msgstr "Araştırmayı Ayarla..."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:229
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:231
 msgid "Set details"
 msgstr "Ayrıntıları ayarla"
 
@@ -946,13 +946,6 @@ msgstr ""
 "Yalnızca banIP ile ilgili güvenlik duvarı günlük girişleri için önceden "
 "filtrelenmiş sistem günlüğü çıkışı."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/processing_log.js:28
-msgid ""
-"The syslog output, prefiltered for banIP-related processing log entries only."
-msgstr ""
-"Yalnızca banIP ile ilgili işlem günlüğü girişleri için önceden filtrelenmiş "
-"sistem günlüğü çıkışı."
-
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:32
 msgid ""
 "This is the local banIP allowlist that will permit certain MAC-, IP-"
@@ -977,7 +970,7 @@ msgstr ""
 "olarak bir MAC/IPv4/IPv6 ekleyin satır başına adres veya alan adı. CIDR "
 "gösterimindeki ve MAC/IP bağlamalarındaki aralıklara izin verilir."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:188
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:190
 msgid ""
 "This tab shows the last generated Set Report, press the 'Refresh' button to "
 "get a new one."
@@ -985,7 +978,7 @@ msgstr ""
 "Bu sekme en son oluşturulan Set Raporunu gösterir, yeni bir rapor almak için "
 "'Yenile' düğmesine basın."
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:191
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:193
 msgid "Timestamp"
 msgstr "Zaman damgası"
 
@@ -1022,7 +1015,7 @@ msgstr "URLv6"
 msgid "Unable to save modifications: %s"
 msgstr "Düzenlemeler kaydedilemedi: %s"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:270
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:269
 msgid "Upload Custom Feeds"
 msgstr "Özel Akışları Yükle"
 
@@ -1078,11 +1071,11 @@ msgstr ""
 msgid "alert"
 msgstr "uyarı"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:195
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:197
 msgid "auto-added to allowlist today"
 msgstr "izin verilenler listesine bugün otomatik olarak eklendi"
 
-#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:199
+#: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:201
 msgid "auto-added to blocklist today"
 msgstr "engellenenler listesine bugün otomatik olarak eklendi"
 
@@ -1145,6 +1138,16 @@ msgstr "reddet"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:481
 msgid "warn (default)"
 msgstr "uyar (varsayılan)"
+
+#~ msgid "No banIP related processing logs yet!"
+#~ msgstr "Henüz banIP ile ilgili işlem günlüğü yok!"
+
+#~ msgid ""
+#~ "The syslog output, prefiltered for banIP-related processing log entries "
+#~ "only."
+#~ msgstr ""
+#~ "Yalnızca banIP ile ilgili işlem günlüğü girişleri için önceden "
+#~ "filtrelenmiş sistem günlüğü çıkışı."
 
 #~ msgid "Log Level"
 #~ msgstr "Günlük Seviyesi"
