@@ -212,7 +212,7 @@ select,
 select:not([multiple="multiple"]):focus,
 input:not(.cbi-button):focus,
 .cbi-dropdown:focus {
-	border-color: var(--primary-color);
+	border-color: var(--main-color);
 }
 
 .cbi-dropdown,
@@ -346,7 +346,7 @@ small {
 	overflow-x: auto;
 	width: calc(0% + 15rem);
 	height: calc(100% - 4rem);
-	background-color: var(--white-color);
+	background-color: var(--menu-bg-color);
 	transition: visibility 400ms, width 400ms;
 }
 
@@ -379,8 +379,8 @@ small {
 }
 
 header {
-	color: var(--secondary-color);
-	background: var(--primary-color);
+	color: var(--header-color);
+	background: var(--header-bg);
 }
 
 header > .fill > .container {
@@ -407,7 +407,7 @@ header > .fill > .container > .brand {
 	cursor: default;
 	vertical-align: text-bottom;
 	text-decoration: none;
-	color: var(--white-color);
+	color: var(--header-color);
 }
 
 header > .fill > .container > .status {
@@ -429,8 +429,8 @@ header > .fill > .container > .status > * {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	color: var(--white-color);
-	background: var(--secondary-color);
+	color: var(--header-color);
+	background: var(--header-bg);
 	padding: .5rem;
 	transition: box-shadow .2s;
 	box-shadow: 0 2px 5px rgb(0 0 0 / 26%);
@@ -463,9 +463,9 @@ header > .fill > .container > .status > * {
 #modemenu > li.divider {
 	margin-left: .25rem;
 	margin-right: .25rem;
-	border: .5rem solid var(--gray-color);
-	border-left: 1px solid var(--gray-color);
-	border-right: 1px solid var(--gray-color);
+	border: .5rem solid var(--submenu-bg-hover);
+	border-left: 1px solid var(--submenu-bg-hover);
+	border-right: 1px solid var(--submenu-bg-hover);
 	border-radius: 1rem;
 }
 
@@ -561,7 +561,7 @@ header > .fill > .container > .status > * {
 
 .main > .main-left > .nav > li a {
 	display: block;
-	color: #5f6368;
+	color: var(--menu-color);
 }
 
 .main > .main-left > .nav > li.active > a {
@@ -569,7 +569,7 @@ header > .fill > .container > .status > * {
 }
 
 .main > .main-left > .nav > li.active {
-	background-color: var(--primary-color);
+	background-color: var(--submenu-bg-hover-active);
 }
 
 .main > .main-left > .nav > li.slide.active {
@@ -597,7 +597,7 @@ header > .fill > .container > .status > * {
 	width: 100%;
 	padding: .5rem 1rem;
 	text-decoration: none;
-	color: var(--black-color-low);
+	color: var(--main-menu-color);
 }
 
 .main > .main-left > .nav > .slide > .menu::before {
@@ -635,7 +635,7 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 
 .main > .main-left > .nav > li:hover,
 .main > .main-left > .nav > .slide > .menu:hover {
-	background: var(--gray-color);
+	background: var(--submenu-bg-hover);
 }
 
 .main > .main-left > .nav > .slide:hover {
@@ -643,7 +643,7 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active {
-	background-color: var(--primary-color);
+	background-color: var(--submenu-bg-hover-active);
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li > a {
@@ -657,15 +657,15 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li:hover {
-	background: var(--gray-color);
+	background: var(--submenu-bg-hover);
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li:not(.active):hover > a {
-	color: #5f6368;
+	color: var(--menu-color-hover);
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active:hover {
-	background-color: var(--primary-color);
+	background-color: var(--main-color);
 }
 
 /* ripple effect */
@@ -1156,7 +1156,7 @@ td > table > tbody > tr > td,
 
 .tabs > li[class~="active"],
 .tabs > li:hover {
-	border-bottom-color: var(--primary-color);
+	border-bottom-color: var(--main-color);
 }
 
 .tabs > li:hover {
@@ -1172,7 +1172,7 @@ td > table > tbody > tr > td,
 }
 
 .tabs > li[class~="active"] > a {
-	color: var(--primary-color);
+	color: var(--main-color);
 }
 
 .cbi-tabmenu {
@@ -1561,7 +1561,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	border: thin solid #918e8c;
 	background: #f6f6f6;
 	box-shadow: 0 0 4px #918e8c;
-	color: var(--black-color-low);
+	color: var(--main-menu-color);
 }
 
 .cbi-dropdown > ul > li[display],
@@ -1643,7 +1643,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	width: 0;
 	height: 100%;
 	transition: width .25s ease-in;
-	background: var(--light-blue-color);
+	background: var(--bar-bg);
 }
 
 .cbi-progressbar::after {
@@ -2016,7 +2016,7 @@ td > .ifacebadge,
 }
 
 .ifacebox-head.active {
-	background: var(--light-blue-color);
+	background: var(--bar-bg);
 }
 
 .ifacebox-body {
