@@ -85,7 +85,7 @@ define findrev
       if [ -n "$$1" ]; then
         secs="$$(($$1 % 86400))"; \
         yday="$$(date --utc --date="@$$1" "+%y.%j")"; \
-        printf 'git-%s.%05d-%s' "$$yday" "$$secs" "$$2"; \
+        printf 'git-%s.%05d~%s' "$$yday" "$$secs" "$$2"; \
       else \
         echo "unknown"; \
       fi; \
