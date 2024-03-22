@@ -1,0 +1,191 @@
+#!/usr/bin/env lua
+
+local ubus = require "ubus"
+local uci = require "luci.model.uci"
+local nixio = require "nixio"
+local fs = require "nixio.fs"
+local json = require "luci.jsonc"
+local sys = require "luci.sys"
+
+local methods = {
+	tcpdumpStart = {
+		args = { domains = false,  interface = "interface", packets = "packets",
+				 duration = "duration", verbose = false, file = false, filter = "filter" },
+		call = function(args)
+			local tcpdump_cmd = "/usr/sbin/tcpdump -l "
+
+			if not args then
+				return { error = "Lack of arguments" }
+			end
+
+			if args.duration then
+			    local duration = tonumber(args.duration)
+				if duration and duration > 0 then
+					tcpdump_cmd =  "timeout " .. args.duration ..  " " .. tcpdump_cmd
+				else
+					return { error = "Incorrect duration argument" }
+				end
+			end
+
+			if args.domains then
+				tcpdump_cmd = tcpdump_cmd .. " -n"
+			end
+
+			if args.interface then
+				local ifa = nixio.getifaddrs()
+				for k, v in pairs(ifa) do
+					if ifa[k].name == args.interface then
+						tcpdump_cmd = tcpdump_cmd .. " -i " .. args.interface
+					end
+				end
+			end
+
+			if args.packets then
+			    local packets = tonumber(args.packets)
+				if packets and packets > 0 then
+					tcpdump_cmd = tcpdump_cmd .. " -c " .. args.packets
+				else
+					return { error = "Incorrect port argument" }
+				end
+			end 
+
+			if args.verbose then
+				tcpdump_cmd = tcpdump_cmd .. " -e"
+			end
+
+			if args.file then
+				local sysinfo = nixio.sysinfo()
+				local exp = math.floor(math.log10(sysinfo.totalram))
+				tcpdump_cmd = tcpdump_cmd .. " -W 2 -C " .. math.floor(sysinfo.totalram/(10^exp))*10^(exp-1) .. " -w /tmp/capture.pcap -z /usr/libexec/luci_tcpdump_stop"
+			end
+
+			if args.filter then
+				local res = sys.call("tcpdump -i lo -d " .. args.filter .. " >/dev/null 2>/dev/null")
+				if res then
+					return { error = "Incorrect filter argument" }
+				end
+				fs.writefile("/tmp/tcpdump_filter", args.filter);
+				tcpdump_cmd = tcpdump_cmd .. " -F /tmp/tcpdump_filter"
+			end
+
+			tcpdump_cmd = tcpdump_cmd .. "  2>&1"
+
+			local pid = nixio.fork()
+			if pid == 0 then
+				local conn = ubus.connect()
+				if not conn then
+					print("Failed to connect to ubus")
+					os.exit(1)
+				end
+
+				local ubus_objects = {
+					["luci.tcpdump.notify"] = {
+					}
+				}
+				conn:add( ubus_objects )
+
+				nixio.poll({}, 1000)
+
+				local pipe, err = io.popen("flock -n -x /var/lock/luci-tcpdump.lock /bin/sh -c 'echo $$ > /var/run/luci-tcpdump.pid && exec %s'" % tcpdump_cmd)
+				if pipe then
+					for line in pipe:lines() do
+					local params = {
+							data = line
+					}
+					conn:notify(ubus_objects["luci.tcpdump.notify"].__ubusobj, "luci.tcpdump.notify.data", params)
+					end
+				else
+					return { error = "Failed to execute tcpdump client: " .. err }
+				end
+
+				local pcap = fs.stat("/tmp/capture.pcap0")
+				if pcap then
+					fs.move("/tmp/capture.pcap0","/tmp/capture.pcap")
+					fs.remove("/tmp/capture.pcap1")
+				end
+
+				conn:close()
+				pipe:close()
+				fs.remove("/var/run/luci-tcpdump.pid")
+			else
+				return { result = "success " }
+			end
+		end
+	},
+	tcpdumpStop = {
+		call = function(args)
+			local pid = fs.readfile("/var/run/luci-tcpdump.pid")
+			if not pid then
+				return { error = "tcpdump process in not running" }
+			end
+			if fs.readlink("/proc/%d/exe" % pid) == "/usr/sbin/tcpdump" then
+				nixio.kill(pid, 15)
+			else
+				return { error = "tcpdump process is already stopped" }
+			end
+
+			return { result = "success" }
+		end
+	},
+}
+
+local function parseInput()
+	local parse = json.new()
+	local done, err
+
+	while true do
+		local chunk = io.read(4096)
+		if not chunk then
+			break
+		elseif not done and not err then
+			done, err = parse:parse(chunk)
+		end
+	end
+
+	if not done then
+		print(json.stringify({ error = err or "Incomplete input" }))
+		os.exit(1)
+	end
+
+	return parse:get()
+end
+
+local function validateArgs(func, uargs)
+	local method = methods[func]
+	if not method then
+		print(json.stringify({ error = "Method not found" }))
+		os.exit(1)
+	end
+
+	if type(uargs) ~= "table" then
+		print(json.stringify({ error = "Invalid arguments" }))
+		os.exit(1)
+	end
+
+	uargs.ubus_rpc_session = nil
+
+	local k, v
+	local margs = method.args or {}
+	for k, v in pairs(uargs) do
+		if margs[k] == nil or
+		   (v ~= nil and type(v) ~= type(margs[k]))
+		then
+			print(json.stringify({ error = "Invalid arguments" }))
+			os.exit(1)
+		end
+	end
+
+	return method
+end
+
+if arg[1] == "list" then
+	local _, method, rv = nil, nil, {}
+	for _, method in pairs(methods) do rv[_] = method.args or {} end
+	print((json.stringify(rv):gsub(":%[%]", ":{}")))
+elseif arg[1] == "call" then
+	local args = parseInput()
+	local method = validateArgs(arg[2], args)
+	local result, code = method.call(args)
+	print((json.stringify(result):gsub("^%[%]$", "{}")))
+	os.exit(code or 0)
+end
