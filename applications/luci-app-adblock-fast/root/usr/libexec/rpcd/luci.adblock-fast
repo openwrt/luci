@@ -120,7 +120,7 @@ get_init_status() {
 	else
 		json_add_boolean 'running' '0'
 	fi
-	json_add_string 'version' "$(get_version "$name")"
+	json_add_string 'version' "$PKG_VERSION"
 	errors="$(ubus_get_data errors)"
 	json_add_array 'errors'
 	if [ -n "$errors" ]; then
