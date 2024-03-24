@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2024-03-07 16:11+0000\n"
+"PO-Revision-Date: 2024-03-24 13:06+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -266,23 +266,23 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1824
 msgid "802.11w Association SA Query maximum timeout"
-msgstr "Maksymalny limit czasu powiązania (SA Query) 802.11w"
+msgstr "802.11w: Maksymalny limit czasu powiązania (SA Query)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1831
 msgid "802.11w Association SA Query retry timeout"
-msgstr "Interwał ponawiania prób powiązania (SA Query) 802.11w"
+msgstr "802.11w: Interwał ponawiania prób powiązania (SA Query)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1805
 msgid "802.11w Management Frame Protection"
-msgstr "Ochrona ramek zarządzania 802.11w"
+msgstr "802.11w: Ochrona ramek zarządzania"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1824
 msgid "802.11w maximum timeout"
-msgstr "Maksymalny limit czasu 802.11w"
+msgstr "802.11w: Maksymalny limit czasu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1831
 msgid "802.11w retry timeout"
-msgstr "Interwał ponawiania prób 802.11w"
+msgstr "802.11w: Interwał ponawiania prób"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:235
 msgid "; invalid MAC:"
@@ -1895,11 +1895,11 @@ msgid ""
 "workaround might cause interoperability issues and reduced robustness of key "
 "negotiation especially in environments with heavy traffic load."
 msgstr ""
-"Komplikuje kluczowe ataki reinstalacyjne po stronie klienta, wyłączając "
-"retransmisję ramek klucza EAPOL, które są używane do instalowania kluczy. To "
-"obejście może powodować problemy z interoperacyjnością i zmniejszoną "
-"odporność kluczowych negocjacji, szczególnie w środowiskach o dużym "
-"natężeniu ruchu."
+"Komplikuje ataki polegające na ponownej instalacji klucza po stronie "
+"klienta, uniemożliwiając retransmisję ramek EAPOL-Key używanych do "
+"instalacji kluczy. To rozwiązanie może powodować problemy ze współdziałaniem "
+"oraz zmniejszoną niezawodność negocjacji kluczy, szczególnie w środowiskach "
+"o dużym ruchu sieciowym."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
@@ -3103,7 +3103,7 @@ msgstr "Włącz funkcjonalność VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1842
 msgid "Enable WPS pushbutton, requires WPA(2)-PSK/WPA3-SAE"
-msgstr "Włącz przycisk WPS, wymaga WPA2-PSK/WPA3-SAE"
+msgstr "Włącz przycisk WPS, wymaga WPA(2)‑PSK/WPA3‑SAE"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
@@ -3195,7 +3195,7 @@ msgstr "Włącz wbudowany jednoinstancyjny serwer TFTP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:889
 msgid "Enable this network"
-msgstr "Włącz tą sieć"
+msgstr "Włącz tę sieć"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:33
 msgid "Enable to minimise the chance of prefix change after a restart"
@@ -4428,7 +4428,7 @@ msgstr "Tylko IPv4"
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:16
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:10
 msgid "IPv4 over IPv6 (RFC2473-IPIPv6)"
-msgstr ""
+msgstr "IPv4 poprzez IPv6 (RFC2473-IPIPv6)"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:52
 msgid "IPv4 prefix"
@@ -6267,6 +6267,8 @@ msgid ""
 "Name for OpenWrt network configuration. (No relation to wireless network "
 "name/SSID)"
 msgstr ""
+"Nazwa konfiguracji sieci OpenWrt. (Brak związku z nazwą sieci bezprzewodowej/"
+"SSID)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2132
 msgid "Name of the new network"
@@ -6573,7 +6575,7 @@ msgstr "Nie istnieją jeszcze klucze publiczne."
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:20
 msgid "No related logs yet!"
-msgstr ""
+msgstr "Nie ma jeszcze powiązanych dzienników!"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:613
 msgctxt "nft chain is empty"
@@ -10230,6 +10232,8 @@ msgstr "Zgłoszony token bezpieczeństwa jest nieważny lub wygasł!"
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:27
 msgid "The syslog output, pre-filtered for messages related to:"
 msgstr ""
+"Dane wyjściowe syslog, wstępnie przefiltrowane pod kątem komunikatów "
+"związanych z:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:98
 msgid ""
