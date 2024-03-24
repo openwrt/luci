@@ -69,10 +69,7 @@ get_init_status() {
 	local name
 	name="$(basename "$1")"
 	name="${name:-$packageName}" 
-	local version gateways warnings errors
-	[ -z "$version" ] && version="$(opkg_get_version "${name}")"
-	[ -z "$version" ] && version="$(opkg_get_version "${name}-iptables")"
-	[ -z "$version" ] && version="$(opkg_get_version "${name}-netifd")"
+	local gateways warnings errors
 	gateways="$(ubus_get_status gateways | sed "s|\\\n|<br />|g;s|\(\\\033[^<]*\)|✓|g;")"
 	warnings="$(ubus_get_status warnings)"
 	errors="$(ubus_get_status errors)"
@@ -99,7 +96,7 @@ get_init_status() {
 	else
 		json_add_boolean 'running_nft_file' '0'
 	fi
-	json_add_string 'version' "$version"
+	json_add_string 'version' "$PKG_VERSION"
 	json_add_string 'gateways' "$gateways"
 	json_add_array 'errors'
 	if [ -n "$errors" ]; then
@@ -138,12 +135,12 @@ EOF
 $(echo "$warnings" | tr \# \\n)
 EOF
 	fi
-	if is_greater "$(opkg_get_version "${name}")" "$(opkg_get_version "luci-app-${name}")"; then
-		json_add_object
-		json_add_string 'id' 'warningOutdatedWebUIApp'
-		json_add_string 'extra' "$(opkg_get_version "luci-app-${name}")"
-		json_close_object
-	fi
+#	if is_greater "$(opkg_get_version "${name}")" "$(opkg_get_version "luci-app-${name}")"; then
+#		json_add_object
+#		json_add_string 'id' 'warningOutdatedWebUIApp'
+#		json_add_string 'extra' "$(opkg_get_version "luci-app-${name}")"
+#		json_close_object
+#	fi
 	json_close_array
 	json_close_object
 	json_dump
@@ -209,12 +206,11 @@ get_gateways() {
 }
 
 get_supported_interfaces() {
-	_find_firewall_wan_zone() { [ "$(uci_get 'firewall' "$1" 'name')" = "wan" ] && firewallWanZone="$1"; }
-	_build_ifaces_all() { ifacesAll="${ifacesAll}${1} "; }
 	_build_ifaces_supported() { is_supported_interface "$1" && ! str_contains "$ifacesSupported" "$1" && ifacesSupported="${ifacesSupported}${1} "; }
+	_find_firewall_wan_zone() { [ "$(uci_get 'firewall' "$1" 'name')" = "wan" ] && firewallWanZone="$1"; }
 	local i
 	local firewallWanZone
-	local ifacesAll ifacesSupported
+	local ifacesSupported
 	local webui_show_ignore_target
 	local ignored_interface supported_interface
 	local wanIface4 wanIface6
@@ -222,11 +218,11 @@ get_supported_interfaces() {
 	config_get_bool webui_show_ignore_target 'config' 'webui_show_ignore_target' '0'
 	config_get ignored_interface             'config' 'ignored_interface'
 	config_get supported_interface           'config' 'supported_interface'
+	config_get procd_wan_interface           'config' 'procd_wan_interface'  'wan'
+	config_get procd_wan6_interface          'config' 'procd_wan6_interface' 'wan6'
 	local i
-	config_load 'network'
-	config_foreach _build_ifaces_all 'interface'
-	pbr_find_iface wanIface4 'wan'
-	pbr_find_iface wanIface6 'wan6'
+	wanIface4="$procd_wan_interface"
+	wanIface6="$procd_wan6_interface"
 	config_load 'firewall'
 	config_foreach _find_firewall_wan_zone 'zone'
 	for i in $(uci_get 'firewall' "$firewallWanZone" 'network'); do
