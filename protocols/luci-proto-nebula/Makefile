@@ -5,7 +5,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
-PKG_VERSION:=1.6.1-1
+PKG_VERSION:=1.8.2-r2
 
 LUCI_TITLE:=Support for Nebula
 LUCI_DESCRIPTION:=Provides Web UI for Nebula protocol/interface.
