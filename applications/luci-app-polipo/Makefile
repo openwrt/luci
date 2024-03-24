@@ -9,6 +9,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Support for the Polipo Proxy
 LUCI_DEPENDS:=+luci-base +luci-compat +polipo
 
+PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Aleksandar Krsteski <alekrsteski@gmail.com>
 
 include ../../luci.mk

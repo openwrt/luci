@@ -5,6 +5,7 @@ include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI app for email server configuration (EmailRelay)
 LUCI_DEPENDS:=+luci-base +emailrelay
+PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Sergey Ponomarev <stokito@gmail.com>
 
 include ../../luci.mk
