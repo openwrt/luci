@@ -10,6 +10,7 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:= LuCI Support for ledtrigger usbport
 LUCI_DEPENDS:=+luci-base +kmod-usb-ledtrig-usbport
 
+PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 
 include ../../luci.mk
