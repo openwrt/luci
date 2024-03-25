@@ -1,3 +1,10 @@
+/**
+	The CSS variables in this file should be treated as a public API. The
+	colors have been put in a separate file to allow end users to
+	override the color variables with their own values by creating their
+	own custom.css file, which mean we can't delete/rename defined
+	variables which is already used in cascade.css.
+*/
 :root {
 	/** General colors */
 	--white-color: #ffffff;
@@ -22,8 +29,18 @@
 	--light-blue-color-high: #46b8da;
 	--on-light-blue-color: var(--white-color);
 	
-	--primary-color: #00B5E2;
+	--main-color: #00B5E2;
 	--secondary-color: #0099cc;
+
+	--header-bg: #00B5E2;
+	--header-color: #fff;
+	--bar-bg: #5bc0de;
+	--menu-bg-color: #fff;
+	--menu-color: #5f6368;
+	--menu-color-hover: #202124;
+	--main-menu-color: #202124;
+	--submenu-bg-hover: #d4d4d4;
+	--submenu-bg-hover-active: #00B5E2;
 
 	--notice-color: #002B49;
 	--on-notice-color: var(--white-color);
