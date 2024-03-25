@@ -1229,7 +1229,6 @@ return view.extend({
 				o = ss.taboption('encryption', form.ListValue, 'cipher', _('Cipher'));
 				o.depends('encryption', 'wpa');
 				o.depends('encryption', 'wpa2');
-				o.depends('encryption', 'wpa3');
 				o.depends('encryption', 'wpa3-mixed');
 				o.depends('encryption', 'psk');
 				o.depends('encryption', 'psk2');
