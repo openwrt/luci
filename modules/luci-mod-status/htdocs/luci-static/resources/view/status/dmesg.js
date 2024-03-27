@@ -35,9 +35,11 @@ return view.extend({
 		});
 
 		return E([], [
-			E('h2', {}, [ _('Kernel Log') ]),
+			E('div', { 'style': 'display:flex; align-items: center; gap: 1rem; padding-bottom: 0.5rem' }, [
+				E('h2', { 'style': 'flex: 1 1 auto' }, [ _('Kernel Log') ]),
+				scrollDownButton
+         ]),
 			E('div', { 'id': 'content_syslog' }, [
-				E('div', {'style': 'padding-bottom: 20px'}, [scrollDownButton]),
 				E('textarea', {
 					'id': 'syslog',
 					'style': 'font-size:12px',
@@ -45,7 +47,7 @@ return view.extend({
 					'wrap': 'off',
 					'rows': loglines.length + 1
 				}, [ loglines.join('\n') ]),
-				E('div', {'style': 'padding-bottom: 20px'}, [scrollUpButton])
+				E('div', {'style': 'padding-bottom: 20px; text-align: right !important'}, [scrollUpButton])
 			])
 		]);
 	},
