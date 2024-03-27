@@ -1007,14 +1007,14 @@ var CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * @throws {TypeError}
 	 * Throws a `TypeError` exception in case the passed class value is not a
-	 * descendent of `AbstractValue`.
+	 * descendant of `AbstractValue`.
 	 *
 	 * @returns {LuCI.form.AbstractValue}
 	 * Returns the instantiated option class instance.
 	 */
 	option: function(cbiClass /*, ... */) {
 		if (!CBIAbstractValue.isSubclass(cbiClass))
-			throw L.error('TypeError', 'Class must be a descendent of CBIAbstractValue');
+			throw L.error('TypeError', 'Class must be a descendant of CBIAbstractValue');
 
 		var obj = cbiClass.instantiate(this.varargs(arguments, 1, this.map, this));
 		this.append(obj);
@@ -1044,7 +1044,7 @@ var CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * @throws {TypeError}
 	 * Throws a `TypeError` exception in case the passed class value is not a
-	 * descendent of `AbstractValue`.
+	 * descendant of `AbstractValue`.
 	 *
 	 * @returns {LuCI.form.AbstractValue}
 	 * Returns the instantiated option class instance.
