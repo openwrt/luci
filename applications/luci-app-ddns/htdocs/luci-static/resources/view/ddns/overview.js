@@ -856,7 +856,7 @@ return view.extend({
 					o.depends("ip_source", "script")
 					o.placeholder = "/path/to/script.sh"
 
-					o = s.taboption('advanced', widgets.DeviceSelect, 'interface',
+					o = s.taboption('advanced', widgets.NetworkSelect, 'interface',
 						_("Event Network"),
 						_("Network on which the ddns-updater scripts will be started"));
 					o.modalonly = true;
