@@ -11,6 +11,9 @@ PKG_LICENSE:=Apache-2.0
 LUCI_TITLE:=LuCI Support for Wake-on-LAN
 LUCI_DEPENDS:=+luci-base +etherwake
 
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

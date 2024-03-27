@@ -10,6 +10,7 @@ LUCI_TITLE:=Support for NCM
 LUCI_DEPENDS:=+comgt-ncm
 
 PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Lucian Cristian <lucian.cristian@gmail.com>
 
 include ../../luci.mk
 

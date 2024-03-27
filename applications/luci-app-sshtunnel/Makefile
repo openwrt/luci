@@ -5,6 +5,7 @@ include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for SSH Tunnels (sshtunnel package)
 
+PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Sergey Ponomarev <stokito@gmail.com>
 LUCI_DEPENDS:=+luci-base +sshtunnel
 PKG_VERSION:=1.1.0

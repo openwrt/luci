@@ -1,9 +1,7 @@
 #
 # Copyright (C) 2010 OpenWrt.org
 #
-# This is free software, licensed under the GNU General Public License v2.
-# See /LICENSE for more information.
-#
+# This is free software, licensed under the Apache License, Version 2.0 .
 
 include $(TOPDIR)/rules.mk
 

@@ -11,6 +11,7 @@ LUCI_DEPENDS:=+unetd +unet-cli
 LUCI_PKGARCH:=all
 
 PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Hannu Nyman <hannu.nyman@iki.fi>
 
 include ../../luci.mk
 
