@@ -22,7 +22,7 @@ return view.extend({
 			}, _('Scroll to tail', 'scroll to bottom (the tail) of the log file')
 		);
 		scrollDownButton.addEventListener('click', function() {
-			window.scrollTo(0, document.body.scrollHeight);
+			scrollUpButton.focus();
 		});
 
 		var scrollUpButton = E('button', { 
@@ -31,7 +31,7 @@ return view.extend({
 			}, _('Scroll to head', 'scroll to top (the head) of the log file')
 		);
 		scrollUpButton.addEventListener('click', function() {
-			window.scrollTo(0, 0);
+			scrollDownButton.focus();
 		});
 
 		return E([], [
