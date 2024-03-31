@@ -45,10 +45,10 @@ function collectHearingClient(client_table_entries, mac) {
 			client_table_entries.push([
 				'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 				'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
-				SSID,
-				freq,
+				'%h'.format(SSID),
+				'%h'.format(freq),
 				Clients[mac][wlanc]['connected'] === true ? 'Yes' : 'No',
-				typeof Clients[mac][wlanc]['signal'] !== 'undefined' ? Clients[mac][wlanc]['signal'] : ''
+				typeof Clients[mac][wlanc]['signal'] !== 'undefined' ? '%h'.format(Clients[mac][wlanc]['signal']) : ''
 			]);
 		}
 	}
@@ -62,7 +62,7 @@ var HearingMap = form.DummyValue.extend({
 		]);
 		for (var mac in Clients) {
 			var maciphost = '';
-			maciphost = mac;
+			maciphost = '%h'.format(mac);
 			var macUp = mac.toUpperCase();
 			var macn = macUp.replace(/:/g,'');
 			if (typeof Hosts[macUp] !== 'undefined') {
@@ -102,25 +102,25 @@ function collectWlanAPInfoEntries(connectioninfo_table_entries, wlanAPInfos) {
 		connectioninfo_table_entries.push([
 			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
-			wlanAPInfos[wlan]['bssid'],
-			wlanAPInfos[wlan]['ssid'],
-			wlanAPInfos[wlan]['freq'],
-			wlanAPInfos[wlan]['n_assoc'],
-			wlanAPInfos[wlan]['noise'],
-			wlanAPInfos[wlan]['load'],
-			wlanAPInfos[wlan]['max_assoc'],
-			typeof wlanAPInfos[wlan]['roam_events']['source'] !== 'undefined' ? wlanAPInfos[wlan]['roam_events']['source'] : '',
-			typeof wlanAPInfos[wlan]['roam_events']['target'] !== 'undefined' ? wlanAPInfos[wlan]['roam_events']['target'] : ''
+			'%h'.format(wlanAPInfos[wlan]['bssid']),
+			'%h'.format(wlanAPInfos[wlan]['ssid']),
+			'%h'.format(wlanAPInfos[wlan]['freq']),
+			'%h'.format(wlanAPInfos[wlan]['n_assoc']),
+			'%h'.format(wlanAPInfos[wlan]['noise']),
+			'%h'.format(wlanAPInfos[wlan]['load']),
+			'%h'.format(wlanAPInfos[wlan]['max_assoc']),
+			typeof wlanAPInfos[wlan]['roam_events']['source'] !== 'undefined' ? '%h'.format(wlanAPInfos[wlan]['roam_events']['source']) : '',
+			typeof wlanAPInfos[wlan]['roam_events']['target'] !== 'undefined' ? '%h'.format(wlanAPInfos[wlan]['roam_events']['target']) : ''
 		]);
 	}
 };
 
 function tootltip(mac, IP, hostname) {
 	var body= E([]);
-	body.appendChild(E('div', mac));
+	body.appendChild(E('div', '%h'.format(mac)));
 	if (typeof IP !== 'undefined') {
-		for (var IPaddr in IP['ipaddrs']) body.appendChild(E('div', IP['ipaddrs'][IPaddr]));
-		for (var IPaddr in IP['ip6addrs']) body.appendChild(E('div', IP['ip6addrs'][IPaddr]));;
+		for (var IPaddr in IP['ipaddrs']) body.appendChild(E('div', '%h'.format(IP['ipaddrs'][IPaddr])));
+		for (var IPaddr in IP['ip6addrs']) body.appendChild(E('div', '%h'.format(IP['ip6addrs'][IPaddr])));;
 	}
 	if (hostname !== '') {
 		body.appendChild(E('div', '%h'.format(hostname)));
@@ -161,10 +161,10 @@ function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 		compactconnectioninfo_table_entries.push([
 			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
-			wlanAPInfos[wlan]['ssid'],
-			wlanAPInfos[wlan]['freq'],
-			wlanAPInfos[wlan]['load'],
-			wlanAPInfos[wlan]['n_assoc'],
+			'%h'.format(wlanAPInfos[wlan]['ssid']),
+			'%h'.format(wlanAPInfos[wlan]['freq']),
+			'%h'.format(wlanAPInfos[wlan]['load']),
+			'%h'.format(wlanAPInfos[wlan]['n_assoc']),
 			hostl
 		]);
 	}
@@ -204,7 +204,7 @@ function collectRemoteHosts (remotehosttableentries,Remotehosts) {
 	});
 
 	for (var IPaddr in Remotehosts) {
-		remotehosttableentries.push([IPaddr,'%h'.format(dns_cache[IPaddr]),Remotehosts[IPaddr]['id']]);
+		remotehosttableentries.push([IPaddr,'%h'.format(dns_cache[IPaddr]),'%h'.format(Remotehosts[IPaddr]['id'])]);
 	}
 }
 
