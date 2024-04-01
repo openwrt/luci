@@ -4,9 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-03-21 13:58+0000\n"
-"Last-Translator: 大王叫我来巡山 <hamburger2048@users.noreply.hosted.weblate."
-"org>\n"
+"PO-Revision-Date: 2024-03-31 19:53+0000\n"
+"Last-Translator: try496 <pinghejk@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -742,7 +741,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:361
 msgid "Add local domain suffix to names served from hosts files."
-msgstr "添加本地域名后缀到 HOSTS 文件中的域名。"
+msgstr "将本地域名后缀添加到来自主机文件的服务名称中。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:242
 msgid "Add multicast rule"
@@ -3225,8 +3224,8 @@ msgid ""
 "Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. "
 "for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
-"将 {loopback_slash_8_v4}和{localhost_v6}排除在重新绑定检查外，比如对于<abbr "
-"title=\"Real-time Block List\">实时黑名单列表</abbr>服务。"
+"将{loopback_slash_8_v4}和{localhost_v6}排除在重新绑定检查之外，例如，"
+"用于<abbr title=\"Real-time Block List\">RBL</abbr>服务。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:410
 msgid "Existing device"
@@ -3656,7 +3655,7 @@ msgstr "在此设备上将多播数据包转发为单播数据包。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:398
 msgid "Forward specific domain queries to specific upstream servers."
-msgstr "转发指定的域名查询到指定的上游服务器。"
+msgstr "将特定域名的查询转发到特定的上游服务器。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1092
 msgid "Forward/reverse DNS"
@@ -6177,7 +6176,7 @@ msgstr "永不转发缺少点或域名部分的 DNS 查询。"
 msgid ""
 "Never forward these matching domains or subdomains; resolve from DHCP or "
 "hosts files only."
-msgstr "永不转发那些匹配的域名或子域名；只从 DHCP 或 hosts 文件进行解析。"
+msgstr "永不转发这些匹配的域名或子域名；只从 DHCP 或 hosts 文件进行解析。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1246
 msgid "New interface for \"%s\" can not be created: %s"
@@ -6454,9 +6453,8 @@ msgstr ""
 msgid ""
 "Note: you may also need a DHCP Proxy (currently unavailable) when specifying "
 "a non-standard Relay To port(<code>addr#port</code>)."
-msgstr ""
-"注意：在指定非标准 Relay To 端口时，你可能还需要 DHCP 代理（当前不可用）"
-"(<code>addr#port</code>)。"
+msgstr "注意：当指定非标准的“中继到”端口时，你可能还需要一个DHCP代理（当前不可用）(<c"
+"ode>addr#port</code>)。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Notes"
@@ -7826,7 +7824,7 @@ msgstr "中继桥"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:485
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
-msgstr "在别处中继 DHCP 请求。OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4。"
+msgstr "将DHCP请求转发到其他地方。可以是：v4↔v4，v6↔v6。不可以是：v4↔v6，v6↔v4。"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:154
 msgid "Relay between networks"
@@ -8413,8 +8411,8 @@ msgid ""
 "Send <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
 "messages advertising this device as IPv6 router."
 msgstr ""
-"发送通告此设备为 IPv6 路由器的 <abbr title=\"路由器通告，ICMPv6 类型 "
-"134\">RA</abbr> 消息。"
+"发送 <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
+"消息，以通告此设备作为IPv6路由器。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:704
 msgid "Send ICMP redirects"
@@ -9836,9 +9834,9 @@ msgid ""
 "directives are used in preference to untagged ones. Note that one of mac, "
 "duid or hostname still needs to be specified (can be a wildcard)."
 msgstr ""
-"标签用于筛选所用的主机目录；可以提供超过一个标签，但这种情况下，请求必须匹配"
-"所有标签。有标签目录的使用优先级高于没有标签的目录。请注意，你仍需指定 mac、"
-"duid 和主机名三者中的一个（可以是一个通配符）。"
+"标签用于筛选所用的主机目录；可以提供多个标签，但这种情况下，请求必须匹配所有"
+"标签。有标签目录的使用优先级高于没有标签的目录。请注意，你仍需指定 mac、duid "
+"和主机名三者中的一个（可以是一个通配符）。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:120
 msgid ""
@@ -9994,7 +9992,7 @@ msgstr "此选项不可用，因为 ca-bundle 软件包未安装。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1569
 msgid "This prefix is randomly generated at first install."
-msgstr "此前缀在首次安装时随机生成"
+msgstr "此前缀在首次安装时随机生成。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:624
 msgid "This prevents unreachable IPs in subnets not accessible to you."
@@ -10218,7 +10216,7 @@ msgstr "UDP："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1568
 msgid "ULA for IPv6 is analogous to IPv4 private network addressing."
-msgstr "用于IPv6的ULA与IPv4专用网络寻址类似。"
+msgstr "ULA在IPv6中的作用类似于IPv4中的私有网络地址。"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:91
 msgid "UMTS only"
@@ -10338,7 +10336,7 @@ msgstr "错误的数据回复格式"
 msgid ""
 "Unique Local Address (%s) - prefix <code>fd00::/8</code> (the L bit is "
 "always 1)."
-msgstr ""
+msgstr "唯一本地地址(%s) - 前缀 <code>fd00::/8</code> (L位总是1)."
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2092
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3873

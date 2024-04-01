@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-02 12:51+0000\n"
+"PO-Revision-Date: 2024-04-01 08:36+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbanip/lt/>\n"
@@ -9,10 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
-"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
-"1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
+"n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:75
 msgid "-- Set Selection --"
@@ -652,7 +651,7 @@ msgstr "Nėra paieškos rezultatų!"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/firewall_log.js:21
 msgid "No banIP related firewall logs yet!"
-msgstr ""
+msgstr "Nėra „banIP“ susijusių užkardos žurnalų (kol kas)!"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:332
 msgid "Normal Priority (default)"
@@ -663,17 +662,23 @@ msgid ""
 "Number of download attempts in case of an error (not supported by uclient-"
 "fetch)."
 msgstr ""
+"Atsisiuntimų bandymų skaičius atsiradus klaidai (nepalaikomas „uclient-"
+"fetch“)."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:513
 msgid ""
 "Number of failed login attempts of the same IP in the log before blocking."
 msgstr ""
+"Nepavykusių prisijungimų skaičius to pačio IP, kuris randamas žurnale prieš "
+"blokavimą."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:295
 msgid ""
 "Override the pre-configured download options for the selected download "
 "utility."
 msgstr ""
+"Perrašyti jau sukonfigūruotus atsisiuntimo parinktis, pasirinktam "
+"atsisiuntimo įrankiui."
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:28
 msgid "Overview"
@@ -687,7 +692,7 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:159
 msgid "Port/Protocol Limit"
-msgstr ""
+msgstr "Prievado/Protokolo limitas"
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:76
 msgid "Processing Log"
@@ -696,16 +701,17 @@ msgstr "Apdorojamas žurnalas"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:564
 msgid "Profile used by 'msmtp' for banIP notification E-Mails."
 msgstr ""
+"Profilis kurį naudoja „msmtp“, skirta „banIP“ pranešimams per el. paštą."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:209
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:222
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:618
 msgid "Protocol/URL format not supported"
-msgstr ""
+msgstr "Protokolo/„URL – Saito“ formatas yra nepalaikomas"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:549
 msgid "Receive E-Mail notifications with every banIP run."
-msgstr ""
+msgstr "Gauti el. pašto pranešimus su kiekvienu „banIP“ paleidimu."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:552
 msgid ""
@@ -835,7 +841,7 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:476
 msgid "Set the syslog level for NFT logging."
-msgstr ""
+msgstr "Nustatyti „syslog“ lygį „NFT“ žurnalinimui."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:234
 msgid "Settings"
