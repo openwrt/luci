@@ -1,24 +1,28 @@
 {
 	"title": "AdGuard",
-	"template": "https://dns{option}.adguard.com/dns-query",
-	"bootstrap_dns": "176.103.130.130,176.103.130.131",
-	"help_link": "https://adguard.com/en/adguard-dns/overview.html",
+	"template": "https://{option}.adguard-dns.com/dns-query",
+	"bootstrap_dns": "94.140.14.140,94.140.14.141",
+	"help_link": "https://adguard-dns.io/en/public-dns.html",
 	"params": {
 		"option": {
 			"description": "Variant",
 			"type": "select",
-			"regex": "(-family|)",
+			"regex": "(dns|unfiltered|family)",
 			"options": [
 				{
-					"value": "-family",
-					"description": "Family Filter"
+					"value": "dns",
+					"description": "Default (Blocks ads and trackers)"
 				},
 				{
-					"value": "",
-					"description": "Standard"
+					"value": "unfiltered",
+					"description": "Unfiltered"
+				},
+				{
+					"value": "family",
+					"description": "Family Filter"
 				}
 			],
-			"default": ""
+			"default": "dns"
 		}
 	}
 }
