@@ -9,7 +9,7 @@
 'require tools.widgets as widgets';
 
 function rule_proto_txt(s) {
-	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:any|\*)$/, '');
+	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:all|\*)$/, 'any');
 	var sip = uci.get('firewall', s, 'src_ip') || '';
 	var dip = uci.get('firewall', s, 'dest_ip') || '';
 	var rwip = uci.get('firewall', s, 'snat_ip') || '';
@@ -125,7 +125,7 @@ function validate_opt_family(m, section_id, opt) {
 		return true;
 	if (fm == 'ipv4' && (sip.indexOf(':') == -1) && (dip.indexOf(':') == -1) && ((rwip.indexOf(':') == -1 && tg == 'SNAT') || rwip == ''))
 		return true;
-	if (fm == '') {
+	if (fm == '' || fm == 'any') {
 		if ((sip.indexOf(':') != -1 || sip == '') && (dip.indexOf(':') != -1 || dip == '') && ((rwip.indexOf(':') != -1 && tg == 'SNAT') || rwip == ''))
 			return true;
 		if ((sip.indexOf(':') == -1) && (dip.indexOf(':') == -1) && ((rwip.indexOf(':') == -1 && tg == 'SNAT') || rwip == ''))
@@ -215,14 +215,17 @@ return view.extend({
 			o = s.taboption('general', form.ListValue, 'family', _('Restrict to address family'));
 			o.modalonly = true;
 			o.rmempty = true;
+			o.value('any', _('IPv4 and IPv6'));
 			o.value('ipv4', _('IPv4 only'));
 			o.value('ipv6', _('IPv6 only'));
 			o.value('', _('automatic'));  // infer from zone or used IP addresses
 			o.cfgvalue = function(section_id) {
 				var val = this.map.data.get(this.map.config, section_id, 'family');
 
-				if (!val || val == 'any' || val == 'all' || val == '*')
+				if (!val)
 					return '';
+				else if (val == 'any' || val == 'all' || val == '*')
+					return 'any';
 				else if (val == 'inet' || String(val).indexOf('4') != -1)
 					return 'ipv4';
 				else if (String(val).indexOf('6') != -1)
