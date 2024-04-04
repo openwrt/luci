@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-02 12:51+0000\n"
+"PO-Revision-Date: 2024-04-03 10:10+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsocserv/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:124
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:80
@@ -60,7 +60,7 @@ msgstr "„DNS“ serveriai"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:60
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:54
 msgid "Dead peer detection time (secs)"
-msgstr ""
+msgstr "Mirusio lygiarangio aptikimo laikas (sek.)"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:70
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:55
@@ -76,6 +76,7 @@ msgstr "Redaguoti šabloną"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:85
 msgid "Edit the template that is used for generating the ocserv configuration."
 msgstr ""
+"Redaguoti šabloną, kuris yra naudojamas sukuriant „ocserv“ konfigūraciją."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:70
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:60
@@ -88,11 +89,13 @@ msgid ""
 "Enable UDP channel support; this must be enabled unless you know what you "
 "are doing"
 msgstr ""
+"Įjungti/Įgalinti „UDP“ kanalo palaikymą; ši parinktis tūrėtų būti įjungta/"
+"įgalinta, nebendrais Jūs žinote ką darote"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:66
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:67
 msgid "Enable compression"
-msgstr ""
+msgstr "Įgalinti glaudinimą"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:106
 msgid "Enable proxy arp"
@@ -181,7 +184,7 @@ msgstr "Prievadas"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:62
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:56
 msgid "Predictable IPs"
-msgstr ""
+msgstr "Numatomi/Nuspėjami IP(dgs.)"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:107
 msgid ""
@@ -191,6 +194,13 @@ msgid ""
 "network in LAN covering 192.168.1.0/24 use 192.168.1.192/26 to reserve the "
 "upper 62 addresses."
 msgstr ""
+"Suteikia adresus klientams iš vietinio tinklo („LAN“) potinklio; jeigu į"
+"jungtas/įgalintas, tada tinklas apačioje turi būti šio vietinio tinklo "
+"(„LAN“) potinklyje. Pastaba: Pirmasis specifikuoto potinklio adresas bus "
+"rezervuotas „ocserv“, taigi jis neturėtų būti naudojamas. Jeigu Jūs turite "
+"*nustatytą* tinklą vietiniame tinkle („LAN“) kuris apima – „192.168.1.0/24“, "
+"tada naudokite – „192.168.1.192/26“, norėdami rezervuoti aukštutinius 62-ius "
+"adresus."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:143
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:122
@@ -213,12 +223,16 @@ msgstr "Būklė/Būsena"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:112
 msgid "The DNS servers to be provided to clients; can be either IPv6 or IPv4"
 msgstr ""
+"„DNS“ serveriai tūrėtų būti pateikti klientams; tai gali būti arba IPv6 ar "
+"IPv4"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:133
 msgid ""
 "The DNS servers to be provided to clients; can be either IPv6 or IPv4. "
 "Typically you should include the address of this device"
 msgstr ""
+"„DNS“ serveriai tūrėtų būti pateikti klientams; tai gali būti arba IPv6 ar "
+"IPv4. Tipiškai, šis tūrėtų įtraukti šio įrenginio adresą"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:111
 msgid ""
@@ -248,7 +262,7 @@ msgstr ""
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:45
 msgid "The firewall zone that the VPN clients will be set to"
-msgstr ""
+msgstr "Užkardos zona, į kurią „VPN“ klientai bus nustatyti"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:116
 msgid "The mask of the subnet above."
@@ -265,7 +279,7 @@ msgstr ""
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:57
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:51
 msgid "The same UDP and TCP ports will be used"
-msgstr ""
+msgstr "Tie patys „UDP“ ir „TCP“ prievadai bus naudojami"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:21
 msgid ""
@@ -336,3 +350,5 @@ msgid ""
 "View the CA certificate used by this server. You will need to save it as 'ca."
 "pem' and import it into the clients."
 msgstr ""
+"Peržiūrėti „CA“ sertifikatą, kuris naudojamas šio serverio. Jūs tūrėsite jį "
+"išsaugoti kaip – „ca.pem“ ir importuoti jį klientams."
