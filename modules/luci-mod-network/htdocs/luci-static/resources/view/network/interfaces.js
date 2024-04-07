@@ -996,15 +996,19 @@ return view.extend({
 					for(var x of uci.get('system', 'ntp', 'server') || '') {
 						so.value(x);
 					}
-					var lan_net = this.networks.filter(function(n) { return n.getName() == 'lan' })[0];
-					// If ntpd is set up, suggest our IP(v6) also
-					if(uci.get('system', 'ntp', 'enable_server')) {
-						lan_net.getIPAddrs().forEach(function(i4) {
-							so.value(i4.split('/')[0]);
-						});
-						lan_net.getIP6Addrs().forEach(function(i6) {
-							so.value(i6.split('/')[0]);
-						});
+					var local_nets = this.networks.filter(function(n) { return n.getName() != 'loopback' });
+					if(local_nets) {
+						// If ntpd is set up, suggest our IP(v6) also
+						if(uci.get('system', 'ntp', 'enable_server')) {
+							local_nets.forEach(function(n){
+								n.getIPAddrs().forEach(function(i4) {
+									so.value(i4.split('/')[0]);
+								});
+								n.getIP6Addrs().forEach(function(i6) {
+									so.value(i6.split('/')[0]);
+								});
+							});
+						}
 					}
 					so.optional = true;
 					so.rmempty = true;
