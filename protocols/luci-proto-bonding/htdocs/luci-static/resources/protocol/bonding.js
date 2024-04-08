@@ -42,8 +42,11 @@ function getSelectableSlaves(section_id) {
 	});
 }
 
-function validateEmpty(section, value) {
-	if (value) {
+function validate_netmask_empty(section, value) {
+	var opt = this.map.lookupOption('ipaddr', section);
+	var ipaddr = opt[0].formvalue(section);
+
+	if (!ipaddr || value) {
 		return true;
 	}
 	else {
@@ -164,13 +167,15 @@ return network.registerProtocol('bonding', {
 				_('IPv4 address'),
 				_('The local IPv4 address'));
 		o.datatype = 'ip4addr';
+		o.optional = true;
 		o.rmempty = false;
 
 		o = s.taboption('general', form.Value, 'netmask',
 				_('IPv4 netmask'),
 				_('The local IPv4 netmask'));
 		o.datatype = 'ip4addr';
-		o.validate = validateEmpty;
+		o.optional = true;
+		o.validate = validate_netmask_empty;
 		o.rmempty = false;
 		o.value("255.255.255.0");
 		o.value("255.255.0.0");
@@ -196,7 +201,7 @@ return network.registerProtocol('bonding', {
 		};
 		o.validate = updatePrimaries;
 		o.rmempty = false;
-		
+
 		o = s.taboption('advanced', form.ListValue, 'bonding_policy',
 				_('Bonding Policy'),
 				_('Specifies the mode to be used for this bonding interface'));
