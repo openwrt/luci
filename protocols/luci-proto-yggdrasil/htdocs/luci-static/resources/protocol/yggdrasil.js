@@ -332,8 +332,7 @@ return network.registerProtocol('yggdrasil',
 				'jumper',
 				form.ListValue,
 				'jumper_loglevel',
-				_('Log level'),
-				_('')
+				_('Log level')
 			);
 			o.value('off', _('Off'));
 			o.value('error', _('Error'));
