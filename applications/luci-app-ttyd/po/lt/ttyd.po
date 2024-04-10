@@ -14,7 +14,7 @@ msgstr ""
 "1 : 2);\n"
 "X-Generator: Weblate 5.4-dev\n"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:64
 msgid "Accept only one client and exit on disconnection"
 msgstr "Priimti tik vieną klientą ir išeiti atsijungus"
 
@@ -22,11 +22,11 @@ msgstr "Priimti tik vieną klientą ir išeiti atsijungus"
 msgid "Add instance"
 msgstr "Pridėti egzempliorių"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:39
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:48
 msgid "Allow URL args"
 msgstr "Leisti „URL – Saito“ argumentus"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:39
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:48
 msgid ""
 "Allow client to send command line arguments in URL (eg: http://"
 "localhost:7681?arg=foo&arg=bar)"
@@ -34,15 +34,19 @@ msgstr ""
 "Leisti klientui siųsti komandinės eilutės argumentus „URL – Saite“ (pvz: "
 "http://localhost:7681?arg=foo&arg=bar)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:49
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:20
+msgid "Bind to UNIX domain socket instead of IP port"
+msgstr ""
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:58
 msgid "Check origin"
 msgstr "Patikrinti kilmę"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:43
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:52
 msgid "Client option"
 msgstr "Kliento pasirinkimas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:79
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:88
 msgid "Command"
 msgstr "Komanda"
 
@@ -50,27 +54,27 @@ msgstr "Komanda"
 msgid "Config"
 msgstr "Konfigūracija"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:36
 msgid "Credential"
 msgstr "Kredencialas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:36
 msgid "Credential for Basic Authentication"
 msgstr "Kredencialas paprastam autentifikavimui"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:57
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
 msgid "Custom index.html path"
 msgstr "Pasirinktinis „index.html“ kelias"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:81
 msgid "Debug"
 msgstr "Derinimas/Trukdžių šalinimas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:41
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:50
 msgid "Do not allow clients to write to the TTY"
 msgstr "Neleisti/Neduoti klientams rašymo teisių į „TTY“"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:49
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:58
 msgid "Do not allow websocket connection from different origin"
 msgstr "Neleisti „websocket“ prisijungimus iš kitų kilmių"
 
@@ -78,15 +82,15 @@ msgstr "Neleisti „websocket“ prisijungimus iš kitų kilmių"
 msgid "Enable"
 msgstr "Įjungti/Įgalinti"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:59
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:68
 msgid "Enable IPv6 support"
 msgstr "Įjungti/Įgalinti IPv6 palaikymą"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:61
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:70
 msgid "Enable SSL"
 msgstr "Įjungti/Įgalinti „SSL“"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:73
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:82
 msgid "Error"
 msgstr "Klaida"
 
@@ -94,66 +98,74 @@ msgstr "Klaida"
 msgid "Grant UCI access for luci-app-ttyd"
 msgstr "Suteikti „UCI“ prieigą – „luci-app-ttyd“"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:33
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:42
 msgid "Group ID"
 msgstr "Grupės ID"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:33
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:42
 msgid "Group id to run with"
 msgstr "Vykdyti su grupės ID"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:59
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:68
 msgid "IPv6"
 msgstr "IPv6 – Interneto protokolo versija 6"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:57
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
 msgid "Index"
 msgstr "Indeksas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:76
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:85
 msgid "Info"
 msgstr "Informacija"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:24
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
 msgid "Interface"
 msgstr "Sąsaja ir Sietuvas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:51
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:93
+msgid "Make sure to set up another authorization method."
+msgstr ""
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:60
 msgid "Max clients"
 msgstr "Maksimalus klientų skaičius"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:51
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:60
 msgid "Maximum clients to support (default: 0, no limit)"
 msgstr ""
 "Maksimalus klientų palaikymo skaičius (numatytas: 0, nurodo, kad nėra limito)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:24
-msgid ""
-"Network interface to bind (eg: eth0), or UNIX domain socket path (eg: /var/"
-"run/ttyd.sock)"
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
+msgid "Network interface to bind (eg: eth0)"
 msgstr ""
-"Tinklo sąsają ir/ar sietuvą kurį pririšti (pvz: „eth0“), arba „UNIX“ domeno-"
-"srities lizdo kelią (pvz: „/var/run/ttyd.sock“)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:75
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:92
+msgid "Note that reverse proxied pages is NOT protected by password like LuCI."
+msgstr ""
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:84
 msgid "Notice"
 msgstr "Pranešimas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:64
 msgid "Once"
 msgstr "Tik kartą"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:20
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:91
+msgid "Override URL in Terminal tab. For use with reverse proxy."
+msgstr ""
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:22
 msgid "Port"
 msgstr "Prievadas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:20
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:22
 msgid "Port to listen (default: 7681, use `0` for random port)"
 msgstr ""
 "Prievadas, kurio laukiamas prisijungimo/jungties ryšis (numatytas: 7681, "
 "naudoti – 0 arba atsitiktinį prievadą)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/term.js:14
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/term.js:15
 msgid ""
 "Random ttyd port (port=0) is not supported.<br />Change to a fixed port and "
 "try again."
@@ -161,79 +173,103 @@ msgstr ""
 "Atsitiktinis „ttyd“ prievadas (prievadas=0) yra nepalaikomas. <br /"
 ">Pakeiskite į fiksuotą prievadą ir bandykite iš naujo."
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:41
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:50
 msgid "Read-only"
 msgstr "Tik skaitymui"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:61
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:70
 msgid "SSL"
 msgstr "„SSL“"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:69
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:78
 msgid "SSL CA file path for client certificate verification"
 msgstr "„SSL CA“ failo kelias, kliento sertifikato patikrinimui"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:69
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:78
 msgid "SSL ca"
 msgstr "„SSL CA“"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:63
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
 msgid "SSL cert"
 msgstr "„SSL“ sertifikatas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:63
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
 msgid "SSL certificate file path"
 msgstr "„SSL“ sertifikato failo kelias"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:75
 msgid "SSL key"
 msgstr "„SSL“ raktas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:75
 msgid "SSL key file path"
 msgstr "„SSL“ rakto failo kelias"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:43
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:52
 msgid "Send option to client"
 msgstr "Siųsti pasirinkimą klientui"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:81
 msgid "Set log level (default: 7)"
 msgstr "Nustatyti žurnalo lygį (numatytas: 7)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:36
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:45
 msgid "Signal"
 msgstr "Signalas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:36
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:45
 msgid "Signal to send to the command when exit it (default: 1, SIGHUP)"
-msgstr "Signalas, kurią siųsti į komanda, kai išeinama (numatytas: 1, „SIGHUP“)"
+msgstr ""
+"Signalas, kurią siųsti į komanda, kai išeinama (numatytas: 1, „SIGHUP“)"
 
 #: applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json:3
 #: applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json:14
 msgid "Terminal"
 msgstr "Terminalas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:46
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
 msgid "Terminal type"
 msgstr "Terminalo tipas"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:46
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
 msgid "Terminal type to report (default: xterm-256color)"
 msgstr "Pranešti terminalo tipą (numatytas: „xterm-256color“)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:30
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:31
+msgid "UNIX domain socket path (eg: /var/run/ttyd.sock)"
+msgstr ""
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:20
+msgid "UNIX socket"
+msgstr ""
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:31
+msgid "UNIX socket path"
+msgstr ""
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:90
+msgid "URL override"
+msgstr ""
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:39
 msgid "User ID"
 msgstr "Naudotojo/Vartotojo ID"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:30
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:39
 msgid "User id to run with"
 msgstr "Vykdyti su naudotojo/vartotojo ID"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:74
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:83
 msgid "Warning"
 msgstr "Įspėjimas"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:12
 msgid "ttyd Instance"
 msgstr "„ttyd“ egzempliorius"
+
+#~ msgid ""
+#~ "Network interface to bind (eg: eth0), or UNIX domain socket path (eg: /"
+#~ "var/run/ttyd.sock)"
+#~ msgstr ""
+#~ "Tinklo sąsają ir/ar sietuvą kurį pririšti (pvz: „eth0“), arba „UNIX“ "
+#~ "domeno-srities lizdo kelią (pvz: „/var/run/ttyd.sock“)"
