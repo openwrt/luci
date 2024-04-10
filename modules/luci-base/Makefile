@@ -36,7 +36,6 @@ include $(INCLUDE_DIR)/host-build.mk
 define Package/luci-base/conffiles
 /etc/luci-uploads
 /etc/config/luci
-/etc/config/ucitrack
 endef
 
 define Package/luci-base/postinst
