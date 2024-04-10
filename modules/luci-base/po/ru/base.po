@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2024-03-03 13:28+0000\n"
-"Last-Translator: st7105 <st7105@gmail.com>\n"
+"PO-Revision-Date: 2024-04-10 17:08+0000\n"
+"Last-Translator: Sergey Ponomarev <stokito@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/"
 ">\n"
 "Language: ru\n"
@@ -189,7 +189,7 @@ msgstr "4"
 msgid "4-character hexadecimal ID"
 msgstr "4-символьный шестнадцатеричный ID"
 
-#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:18
+#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:20
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:11
 msgid "464XLAT (CLAT)"
 msgstr "464XLAT (CLAT)"
@@ -499,9 +499,13 @@ msgstr "ANSI T1.413"
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:65
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:91
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:68
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:77
 msgid "APN"
 msgstr "APN"
+
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:144
+msgid "APN profile index"
+msgstr "Индекс APN профиля"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:353
 msgid "ARP"
@@ -1214,7 +1218,7 @@ msgstr "Аутентификация"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:76
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:79
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:82
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:89
 msgid "Authentication Type"
 msgstr "Тип аутентификации"
 
@@ -1654,11 +1658,11 @@ msgstr "Категория"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:114
 msgid "Cell ID"
-msgstr "Cell ID"
+msgstr "ID ячейки"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:113
 msgid "Cell Location"
-msgstr "Cell Location"
+msgstr "Местоположение ячейки"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1718
 msgid "Certificate constraint (Domain)"
@@ -2314,6 +2318,10 @@ msgstr "Переданные данные"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:157
 msgid "Debug"
 msgstr "Отладка"
+
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
+msgid "Default gateway"
+msgstr "Шлюз по умолчанию"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:841
 msgid "Default router"
@@ -3041,7 +3049,7 @@ msgid "Enable IPv6"
 msgstr "Включить IPv6"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:101
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:108
 msgid "Enable IPv6 negotiation"
 msgstr "Включить IPv6 negotiation"
 
@@ -3231,6 +3239,7 @@ msgid "Enables the Spanning Tree Protocol on this bridge"
 msgstr "Включает Spanning Tree Protocol на этом мосту"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:59
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:62
 msgid "Encapsulation limit"
 msgstr "Предел инкапсуляции"
 
@@ -3346,7 +3355,8 @@ msgid ""
 "for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
 "Разрешить ответы внешней сети в диапазоне {loopback_slash_8_v4} и "
-"{localhost_v6}. Например, для RBL-сервисов."
+"{localhost_v6}. Например, для <abbr title=\"Real-time Block List\">RBL</"
+"abbr>-сервисов."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:410
 msgid "Existing device"
@@ -4404,6 +4414,11 @@ msgstr "Сеть IPv4 в формате адрес/маска подсети"
 msgid "IPv4 only"
 msgstr "Только IPv4"
 
+#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:16
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:10
+msgid "IPv4 over IPv6 (RFC2473-IPIPv6)"
+msgstr "IPv4 поверх IPv6 (RFC2473-IPIPv6)"
+
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:52
 msgid "IPv4 prefix"
 msgstr "IPv4 префикс"
@@ -4459,6 +4474,14 @@ msgstr "Таблица IPv4/IPv6 трафика «%h»"
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:89
 msgid "IPv6"
 msgstr "IPv6"
+
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:81
+msgid "IPv6 APN"
+msgstr "IPv6 APN"
+
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:150
+msgid "IPv6 APN profile index"
+msgstr "Индекс профиля IPv6 APN"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:358
 msgid "IPv6 Firewall"
@@ -4663,16 +4686,17 @@ msgstr ""
 "противном случае изменения будут автоматически отменены."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1022
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:134
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:122
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:129
 msgid "If unchecked, no default route is configured"
 msgstr "Если не выбрано, то маршрут по умолчанию не настраивается"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1026
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:145
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:140
 msgid "If unchecked, the advertised DNS server addresses are ignored"
 msgstr "Если не выбрано, то извещаемые адреса DNS серверов игнорируются"
 
@@ -5024,7 +5048,7 @@ msgstr "Недопустимый"
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:68
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:71
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:97
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:74
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:73
 msgid "Invalid APN provided"
 msgstr "Предоставлен неверный APN"
 
@@ -5326,6 +5350,7 @@ msgstr "Оставьте поле пустым для автоопределен
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:39
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:39
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:45
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:48
 msgid "Leave empty to use the current WAN address"
 msgstr "Оставьте пустым для использования текущего адреса WAN"
 
@@ -5531,6 +5556,7 @@ msgstr "Присвоение локального IP-адреса"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:39
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:39
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:44
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:151
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:44
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:44
@@ -5545,6 +5571,7 @@ msgstr "Локальный IPv6 DNS-сервер"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:54
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:45
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:48
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:44
 msgid "Local IPv6 address"
 msgstr "Локальный IPv6-адрес"
@@ -5715,12 +5742,12 @@ msgstr "MAC-фильтр"
 msgid "MAC-List"
 msgstr "Список MAC"
 
-#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:16
+#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:18
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:13
 msgid "MAP / LW4over6"
 msgstr "MAP / LW4over6"
 
-#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:62
+#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:65
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:7
 msgid "MAP rule is invalid"
 msgstr "Неверное MAP правило"
@@ -5851,7 +5878,7 @@ msgstr "Максимально допустимый размер UDP пакет�
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:113
 msgid "Maximum amount of seconds to wait for the modem to become ready"
 msgstr "Максимальное время ожидания готовности модема (секунды)"
 
@@ -6073,7 +6100,7 @@ msgstr "Ошибка запроса информации о модеме"
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:119
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:106
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:113
 msgid "Modem init timeout"
 msgstr "Время ожидания инициализации модема"
 
@@ -6235,6 +6262,8 @@ msgid ""
 "Name for OpenWrt network configuration. (No relation to wireless network "
 "name/SSID)"
 msgstr ""
+"Имя для конфигурации сети OpenWrt. (Не имеет отношения к имени/SSID "
+"беспроводной сети)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2132
 msgid "Name of the new network"
@@ -6495,7 +6524,7 @@ msgstr "Нет маршрута"
 msgid "No information available"
 msgstr "Нет доступной информации"
 
-#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:63
+#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:66
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:8
 msgid "No matching prefix delegation"
 msgstr "Отсутствует соответствующая делегация префикса"
@@ -6540,6 +6569,10 @@ msgstr "Конфигурация предпочтительного режима
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:283
 msgid "No public keys present yet."
 msgstr "Нет публичных ключей."
+
+#: modules/luci-base/htdocs/luci-static/resources/tools/views.js:20
+msgid "No related logs yet!"
+msgstr "Никаких связанных с этим журналов пока нет!"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:613
 msgctxt "nft chain is empty"
@@ -7064,7 +7097,7 @@ msgstr "Переопределить таблицу маршрутизации I
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:118
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:96
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:105
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:110
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:117
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:66
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:55
 msgid "Override MTU"
@@ -7165,7 +7198,7 @@ msgstr "PAP/CHAP (оба)"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:76
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:44
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:63
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:94
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:50
 msgid "PAP/CHAP password"
 msgstr "Пароль PAP/CHAP"
@@ -7179,13 +7212,13 @@ msgstr "Пароль PAP/CHAP"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:74
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:42
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:61
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:89
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:96
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:48
 msgid "PAP/CHAP username"
 msgstr "Имя пользователя PAP/CHAP"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:94
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:114
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:121
 msgid "PDP Type"
 msgstr "Тип PDP"
 
@@ -7197,7 +7230,7 @@ msgstr "PID"
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:73
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:76
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:102
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:79
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:86
 msgid "PIN"
 msgstr "PIN"
 
@@ -8115,6 +8148,7 @@ msgstr "Удалённый IPv6-адрес"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:42
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:42
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:40
 msgid "Remote IPv6 address or FQDN"
 msgstr "Удаленный IPv6-адрес или FQDN"
 
@@ -8526,7 +8560,7 @@ msgstr "SIM %d"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:147
 msgid "SIMs"
-msgstr "SIMs"
+msgstr "SIMки"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:59
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:280
@@ -10187,6 +10221,11 @@ msgstr "Выбранный режим %s несовместим с шифров�
 msgid "The submitted security token is invalid or already expired!"
 msgstr "Представленный маркер безопасности недействителен или уже истек!"
 
+#: modules/luci-base/htdocs/luci-static/resources/tools/views.js:27
+msgid "The syslog output, pre-filtered for messages related to:"
+msgstr ""
+"Вывод syslog, предварительно отфильтрованный для сообщений, связанных с:"
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:98
 msgid ""
 "The system is erasing the configuration partition now and will reboot itself "
@@ -10602,6 +10641,7 @@ msgstr "Туннель"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:44
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:55
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:58
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:76
 msgid "Tunnel Link"
 msgstr "Ссылка на туннель"
@@ -10709,7 +10749,7 @@ msgstr "Невозможно сбросить счетчики ip6tables: %s"
 msgid "Unable to reset iptables counters: %s"
 msgstr "Невозможно сбросить счетчики iptables: %s"
 
-#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:61
+#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:64
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:7
 msgid "Unable to resolve AFTR host name"
 msgstr "Не удалось разрешить AFTR имя хоста"
@@ -10808,7 +10848,7 @@ msgstr "Не принятые изменения"
 msgid "Unspecified error"
 msgstr "Неопознанная ошибка"
 
-#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:64
+#: modules/luci-compat/luasrc/model/network/proto_4x6.lua:67
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:9
 msgid "Unsupported MAP type"
 msgstr "Не поддерживаемый тип MAP"
@@ -10937,7 +10977,7 @@ msgstr "Использовать DHCPv6"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1026
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:144
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:132
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:139
 msgid "Use DNS servers advertised by peer"
 msgstr "Использовать объявляемые узлом DNS сервера"
 
@@ -10950,6 +10990,7 @@ msgstr "Использовать коды стран ISO/IEC 3166 alpha2."
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:69
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:53
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:67
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:78
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:84
 msgid "Use MTU on tunnel interface"
 msgstr "Использовать MTU на интерфейсе туннеля"
@@ -11001,14 +11042,15 @@ msgstr "Использовать собственные DNS сервера"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1022
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:133
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:121
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:128
 msgid "Use default gateway"
 msgstr "Использовать шлюз по умолчанию"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1044
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:73
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:138
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:164
-#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:126
+#: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
 msgid "Use gateway metric"
 msgstr "Использовать метрику шлюза"
 
@@ -11817,6 +11859,7 @@ msgid "hybrid mode"
 msgstr "гибридный режим"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:63
+#: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:66
 msgid "ignore"
 msgstr "игнорировать"
 
