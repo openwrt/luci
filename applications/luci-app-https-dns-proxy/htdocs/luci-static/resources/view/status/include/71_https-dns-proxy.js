@@ -105,46 +105,47 @@ return baseclass.extend({
 		);
 
 		var rows = [];
-		Object.values(reply.runtime.instances).forEach((element) => {
-			var resolver;
-			var address;
-			var port;
-			var name;
-			var option;
-			var found;
-			element.command.forEach((param, index, arr) => {
-				if (param === "-r") resolver = arr[index + 1];
-				if (param === "-a") address = arr[index + 1];
-				if (param === "-p") port = arr[index + 1];
-			});
-			resolver = resolver || "Unknown";
-			address = address || "127.0.0.1";
-			port = port || "Unknown";
-			reply.providers.forEach((prov) => {
-				let regexp = pkg.templateToRegexp(prov.template);
-				if (!found && regexp.test(resolver)) {
-					found = true;
-					name = _(prov.title);
-					let match = resolver.match(regexp);
-					if (match[1] != null) {
-						if (
-							prov.params &&
-							prov.params.option &&
-							prov.params.option.options
-						) {
-							prov.params.option.options.forEach((opt) => {
-								if (opt.value === match[1]) option = _(opt.description);
-							});
-							name += " (" + option + ")";
-						} else {
-							if (match[1] !== "") name += " (" + match[1] + ")";
+		if (reply.runtime.instances) {
+			Object.values(reply.runtime.instances).forEach((element) => {
+				var resolver;
+				var address;
+				var port;
+				var name;
+				var option;
+				var found;
+				element.command.forEach((param, index, arr) => {
+					if (param === "-r") resolver = arr[index + 1];
+					if (param === "-a") address = arr[index + 1];
+					if (param === "-p") port = arr[index + 1];
+				});
+				resolver = resolver || "Unknown";
+				address = address || "127.0.0.1";
+				port = port || "Unknown";
+				reply.providers.forEach((prov) => {
+					let regexp = pkg.templateToRegexp(prov.template);
+					if (!found && regexp.test(resolver)) {
+						found = true;
+						name = _(prov.title);
+						let match = resolver.match(regexp);
+						if (match[1] != null) {
+							if (
+								prov.params &&
+								prov.params.option &&
+								prov.params.option.options
+							) {
+								prov.params.option.options.forEach((opt) => {
+									if (opt.value === match[1]) option = _(opt.description);
+								});
+								name += " (" + option + ")";
+							} else {
+								if (match[1] !== "") name += " (" + match[1] + ")";
+							}
 						}
 					}
-				}
+				});
+				rows.push([name, address, port, forceDnsText]);
 			});
-			rows.push([name, address, port, forceDnsText]);
-		});
-
+		}
 		cbi_update_table(table, rows, E("em", _("There are no active instances.")));
 
 		return table;
