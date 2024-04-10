@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-04-03 17:33+0000\n"
+"PO-Revision-Date: 2024-04-09 08:13+0000\n"
 "Last-Translator: Oğuz Han <h4n.3545@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/luci/tr/>"
 "\n"
@@ -52,6 +52,9 @@ msgid ""
 "connection over Yggdrasil network, utilizing NAT traversal to bypass "
 "intermediary nodes."
 msgstr ""
+"%s, aracı düğümleri atlamak için NAT geçişini kullanarak Yggdrasil ağı "
+"üzerindeki bir bağlantının gecikmesini şeffaf bir şekilde azaltmayı "
+"amaçlayan bağımsız bir projedir."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:35
 msgid "%s is untagged in multiple VLANs!"
@@ -784,7 +787,7 @@ msgstr "Eş adres ekle"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:321
 msgctxt "Dnsmasq instance"
 msgid "Add server instance"
-msgstr ""
+msgstr "Sunucu örneğini ekle"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1134
 msgid "Add static forward and reverse DNS entries for this host."
@@ -805,7 +808,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:371
 msgid "Additional configuration settings (in TOML format)."
-msgstr ""
+msgstr "Ek yapılandırma ayarları (TOML formatında)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:612
 msgid "Additional hosts files"
@@ -943,7 +946,7 @@ msgstr "Sırayla IP tahsis et"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:350
 msgid "Allocate listen addresses"
-msgstr ""
+msgstr "Dinleme adresleri tahsis edin"
 
 # "Secure Shell" için ne kullanılabilinir bir fikrim yok.
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:24
@@ -961,6 +964,8 @@ msgid ""
 "Allow Yggdrasil Jumper to automatically configure Yggdrasil with proper "
 "listen address and random port."
 msgstr ""
+"Yggdrasil Jumper'ın Yggdrasil'i uygun dinleme adresi ve rastgele bağlantı "
+"noktası ile otomatik olarak yapılandırmasına izin verin."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1084
 msgid "Allow all except listed"
@@ -1249,7 +1254,7 @@ msgstr "İzin Gerekli"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:360
 msgid "Autofill listen addresses"
-msgstr ""
+msgstr "Dinleme adreslerini otomatik doldur"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:120
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:18
@@ -2253,7 +2258,7 @@ msgstr "DNS iletimleri"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:358
 msgid "DNS Records"
-msgstr ""
+msgstr "DNS Kayıtları"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:797
 msgid "DNS Servers"
@@ -2358,7 +2363,7 @@ msgstr "Default ağ geçidi"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
 msgctxt "Dnsmasq instance"
 msgid "Default instance"
-msgstr ""
+msgstr "Varsayılan durum"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:842
 msgid "Default router"
@@ -3138,7 +3143,7 @@ msgstr "WPS düğmesini etkinleştirin, WPA(2)-PSK/WPA3-SAE gerektirir"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:314
 msgid "Enable Yggdrasil Jumper"
-msgstr ""
+msgstr "Yggdrasil Jumper'ı Etkinleştir"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
@@ -3507,7 +3512,7 @@ msgstr "Ekstra SSH komut seçenekleri"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:370
 msgid "Extra config"
-msgstr ""
+msgstr "Ekstra yapılandırma"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:72
 msgid "Extra pppd options"
@@ -4965,7 +4970,7 @@ msgstr "Örnek \"%h\""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:343
 msgctxt "Dnsmasq instance"
 msgid "Instance \"%q\""
-msgstr ""
+msgstr "Örnek \"%q\""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:34
 msgid "Instance Details"
@@ -5206,6 +5211,9 @@ msgid ""
 "direct peerings over internet with remote nodes running Yggdrasil Jumper "
 "without requiring firewall or port configuration."
 msgstr ""
+"Periyodik olarak aktif oturumları araştırır ve güvenlik duvarı veya bağlantı "
+"noktası yapılandırması gerektirmeden Yggdrasil Jumper çalıştıran uzak "
+"düğümlerle internet üzerinden otomatik olarak doğrudan eşleşmeler kurar."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:78
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:98
@@ -5231,7 +5239,7 @@ msgstr "Kurala git"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:298
 msgid "Jumper"
-msgstr ""
+msgstr "Jumper"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:228
 msgid "Keep settings and retain the current configuration"
@@ -5708,7 +5716,7 @@ msgstr "Giriş yap…"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:335
 msgid "Log level"
-msgstr ""
+msgstr "Günlük seviyesi"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:81
 msgid "Log out"
@@ -6463,7 +6471,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:349
 msgctxt "Dnsmasq instance"
 msgid "New instance name…"
-msgstr ""
+msgstr "Yeni örnek adı…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1272
 msgid "New interface for \"%s\" can not be created: %s"
@@ -8219,17 +8227,17 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:340
 msgctxt "Dnsmasq instance"
 msgid "Remove default instance"
-msgstr ""
+msgstr "Varsayılan örneği kaldır"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:344
 msgctxt "Dnsmasq instance"
 msgid "Remove instance \"%q\""
-msgstr ""
+msgstr "\"%q\" örneğini kaldır"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:340
 msgctxt "Dnsmasq instance"
 msgid "Remove instance #%d"
-msgstr ""
+msgstr "Örnek #%d'yi kaldır"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1418
 msgid "Remove related device settings from the configuration"
@@ -8431,7 +8439,7 @@ msgstr "Yedeklemeyi geri yükle"
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:361
 msgid ""
 "Retrieve the listener addresses from the Yggdrasil interface configuration."
-msgstr ""
+msgstr "Dinleyici adreslerini Yggdrasil arayüz yapılandırmasından alın."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:386
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:387
@@ -9980,6 +9988,8 @@ msgid ""
 "The checkbox cannot be modified unless the <code>yggdrasil-jumper</code> "
 "package is installed."
 msgstr ""
+"<code>yggdrasil-jumper</code> paketi yüklü olmadığı sürece onay kutusu "
+"değiştirilemez."
 
 #: modules/luci-compat/luasrc/view/cbi/error.htm:6
 msgid "The configuration file could not be loaded due to the following error:"
@@ -10613,7 +10623,7 @@ msgstr "Toplam Mevcut"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:342
 msgid "Trace"
-msgstr ""
+msgstr "İzleme"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:110
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:111
@@ -10917,7 +10927,7 @@ msgstr "Kaldır"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:339
 msgctxt "Dnsmasq instance"
 msgid "Unnamed instance #%d"
-msgstr ""
+msgstr "İsimsiz örnek #%d"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:121
 msgid "Unnamed key"
@@ -11457,7 +11467,7 @@ msgstr "Aygıt bekleniyor..."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:339
 msgid "Warn"
-msgstr ""
+msgstr "Uyarı"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:189
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
