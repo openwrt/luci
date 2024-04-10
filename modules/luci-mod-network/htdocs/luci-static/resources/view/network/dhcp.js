@@ -977,22 +977,22 @@ return view.extend({
 
 		so = ss.option(form.DynamicList, 'name', _('Name of the set'));
 		so.rmempty = false;
-		so.editable = true;
+		so.editable = false;
 		so.datatype = 'string';
 
 		so = ss.option(form.DynamicList, 'domain', _('FQDN'));
 		so.rmempty = false;
-		so.editable = true;
+		so.editable = false;
 		so.datatype = 'hostname';
 
 		so = ss.option(form.Value, 'table', _('Netfilter table name'), _('Defaults to fw4.'));
-		so.editable = true;
+		so.editable = false;
 		so.placeholder = 'fw4';
 		so.rmempty = true;
 
 		so = ss.option(form.ListValue, 'table_family', _('Table IP family'), _('Defaults to IPv4+6.') + ' ' + _('Can be hinted by adding 4 or 6 to the name.') + '<br />' +
 			_('Adding an IPv6 to an IPv4 set and vice-versa silently fails.'));
-		so.editable = true;
+		so.editable = false;
 		so.rmempty = true;
 		so.value('inet', _('IPv4+6'));
 		so.value('ip', _('IPv4'));
