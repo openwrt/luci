@@ -1,11 +1,5 @@
 #!/bin/sh
 
-# remove existing mwan ucitrack entry is now done with procd
-uci -q batch <<-EOF >/dev/null
-	del ucitrack.@mwan3[-1]
-	commit ucitrack
-EOF
-
 uci -q get mwan3.globals >/dev/null || {
 	uci -q add mwan3 globals >/dev/null
 	uci -q rename mwan3.@globals[-1]="globals" >/dev/null
