@@ -291,6 +291,12 @@ var status = baseclass.extend({
 					errorNoWanGateway: _(
 						"The %s service failed to discover WAN gateway"
 					).format(pkg.Name),
+					errorNoWanInterface: _(
+						"The %s inteface not found, you need to set the 'pbr.config.procd_wan_interface' option"
+					),
+					errorNoWanInterfaceHint: _(
+						"Refer to https://docs.openwrt.melmac.net/pbr/#procd_wan_interface"
+					),
 					errorIpsetNameTooLong: _(
 						"The ipset name '%s' is longer than allowed 31 characters"
 					),
@@ -354,6 +360,7 @@ var status = baseclass.extend({
 					errorFileSchemaRequiresCurl: _(
 						"The file:// schema requires curl, but it's not detected on this system!"
 					),
+					errorTryFailed: _("Command failed: %s"),
 				};
 				var errorsTitle = E(
 					"label",
