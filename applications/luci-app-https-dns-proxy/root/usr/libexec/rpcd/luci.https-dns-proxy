@@ -19,7 +19,7 @@ readonly providersDir="/usr/share/${packageName}/providers"
 
 is_enabled() { "/etc/init.d/${1}" enabled; }
 is_running() { [ "$(ubus call service list "{ 'name': '$1' }" | jsonfilter -q -e "@['$1'].instances[*].running" | uniq)" = 'true' ]; }
-get_version() { grep -m1 -A2 -w "^Package: $1$" /usr/lib/opkg/status | sed -n 's/Version: //p'; }
+get_version() { /usr/sbin/https-dns-proxy -V; }
 check_http2() { curl --version | grep -q 'nghttp2'; }
 check_http3() { curl --version | grep -q 'nghttp3'; }
 ubus_get_ports() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances[*].data.firewall.*.dest_port"; }
