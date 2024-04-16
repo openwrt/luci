@@ -3,6 +3,8 @@
 START=80
 USE_PROCD=1
 
+. "$IPKG_INSTROOT/usr/share/libubox/jshn.sh"
+
 register_init() {
 	local config="$1"
 	local init="$2"
@@ -15,13 +17,25 @@ register_init() {
 }
 
 register_trigger() {
-	local sid="$1"
-	local config init exec affects affected
+	local uci="$1"
+	local file="$2"
 
-	config_get config "$sid" TYPE
-	config_get init "$sid" init
-	config_get exec "$sid" exec
-	config_get affects "$sid" affects
+	local config init exec affects affected
+	local prev
+
+	json_set_namespace config prev
+	json_init
+	json_load_file "${file}" >/dev/null 2>&1
+	json_get_var config 'config'
+	[ "$config" = "$uci" ] || {
+		json_set_namespace "$prev"
+		return
+	}
+	json_get_var init 'init'
+	json_get_var exec 'exec'
+	json_get_values affects 'affects'
+	json_cleanup
+	json_set_namespace "$prev"
 
 	if [ -n "$init" ]; then
 		register_init "$config" "/etc/init.d/$init" "reload"
@@ -48,10 +62,19 @@ register_trigger() {
 	done
 }
 
-service_triggers() {
-	config_foreach register_trigger
+check_trigger() {
+	local config="$1"
+
+	local file
+
+	for file in /usr/share/ucitrack/*.json; do
+		[ -f "$file" ] || continue
+		register_trigger "$config" "$file"
+	done
 }
 
-start_service() {
-	config_load ucitrack
+service_triggers() {
+	for config in /etc/config/*; do
+		check_trigger "${config##*/}"
+	done
 }
