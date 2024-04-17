@@ -801,13 +801,21 @@ local knownParams = {
 			"ncp_disable",
 			0,
 			translate("This completely disables cipher negotiation") },
-		{ Value,
+		{ DynamicList,
 			"ncp_ciphers",
-			"AES-256-GCM:AES-128-GCM",
+			{
+				"AES-256-GCM",
+				"AES-128-GCM"
+			},
 			translate("Restrict the allowed ciphers to be negotiated") },
-		{ Value,
+		{ DynamicList,
 			"data_ciphers",
-			"CHACHA20-POLY1305:AES-256-GCM:AES-128-GCM:AES-256-CBC",  
+			{
+				"CHACHA20-POLY1305",
+				"AES-256-GCM",
+				"AES-128-GCM",
+				"AES-256-CBC"
+			},
 			translate("Restrict the allowed ciphers to be negotiated") },
 	} }
 }
