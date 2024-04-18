@@ -52,6 +52,11 @@ fi
 exit 0
 endef
 
+define Build/Prepare/luci-base
+	$(CP) ../../NOTICE $(PKG_BUILD_DIR)
+	$(CP) ../../LICENSE $(PKG_BUILD_DIR)
+endef
+
 include ../../luci.mk
 
 define Host/Configure
