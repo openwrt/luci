@@ -28,7 +28,7 @@ return view.extend({
 		let m, s, o;
 
 		m = new form.Map('banip', 'banIP', _('Configuration of the banIP package to ban incoming and outgoing IPs via named nftables Sets. \
-			For further information <a href="https://github.com/openwrt/packages/blob/master/net/banip/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>'));
+			For further information please check the <a style="color:#37c;font-weight:bold;" href="https://github.com/openwrt/packages/blob/master/net/banip/files/README.md" target="_blank" rel="noreferrer noopener" >online documentation</a>'));
 
 		/*
 			poll runtime information
@@ -152,48 +152,48 @@ return view.extend({
 			return E('div', { 'class': 'cbi-section' }, [
 				E('h3', _('Information')),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Status')),
-					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'color:#37c' }, '\xa0')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Status')),
+					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '\xa0')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Version')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'version', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Version')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'version', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Element Count')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'elements', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Element Count')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'elements', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Feeds')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'feeds', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Active Feeds')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'feeds', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Devices')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'devices', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Active Devices')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'devices', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Active Uplink')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'uplink', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Active Uplink')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'uplink', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('NFT Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'nft', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('NFT Information')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'nft', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Run Information')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Run Flags')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'flags', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Run Flags')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'flags', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('Last Run')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('Last Run')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'padding-top:0rem' }, _('System Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'system', 'style': 'color:#37c' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;font-weight:bold;padding-top:0rem;' }, _('System Information')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'system', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, '-')
 				]),
 				E('div', { class: 'right' }, [
 					E('button', {
@@ -235,7 +235,8 @@ return view.extend({
 		s.addremove = false;
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
-		s.tab('adv_chain', _('Chain/Set Settings'));
+		s.tab('adv_chain', _('Table/Chain Settings'));
+		s.tab('adv_set', _('Feed/Set Settings'));
 		s.tab('adv_log', _('Log Settings'));
 		s.tab('adv_email', _('E-Mail Settings'));
 		s.tab('feeds', _('Feed Selection'));
@@ -324,7 +325,7 @@ return view.extend({
 		*/
 		o = s.taboption('advanced', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>' + _('Changes on this tab needs a banIP service restart to take effect.') + '</b></em>';
+		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>';
 
 		o = s.taboption('advanced', form.ListValue, 'ban_nicelimit', _('Nice Level'), _('The selected priority will be used for banIP background processing.'));
 		o.value('-20', _('Highest Priority'));
@@ -353,11 +354,12 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('advanced', form.ListValue, 'ban_splitsize', _('Set Split Size'), _('Split external Set loading after every n members to save RAM.'));
-		o.value('256');
 		o.value('512');
 		o.value('1024');
 		o.value('2048');
 		o.value('4096');
+		o.value('8192');
+		o.value('16384');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -382,25 +384,22 @@ return view.extend({
 		o.optional = true;
 
 		/*
-			advanced chain/set settings tab
+			advanced chain settings tab
 		*/
 		o = s.taboption('adv_chain', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>' + _('Changes on this tab needs a banIP service restart to take effect.') + '</b></em>';
+		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>';
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpolicy', _('NFT Set Policy'), _('Set the nft policy for banIP-related Sets.'));
-		o.value('memory', _('memory (default)'));
-		o.value('performance', _('performance'));
+		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('Chain Priority'), _('Set the nft chain priority within the banIP table, lower values means higher priority.'));
+		o.value('0', _('0'));
+		o.value('-100', _('-100 (default)'));
+		o.value('-150', _('-150'));
+		o.value('-200', _('-200'));
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('NFT Chain Priority'), _('Set the nft chain priority within the banIP table. Please note: lower values means higher priority.'));
-		o.value('0', _('0'));
-		o.value('-100', _('-100'));
-		o.value('-200', _('-200 (default)'));
-		o.value('-300', _('-300'));
-		o.value('-400', _('-400'));
-		o.optional = true;
+		o = s.taboption('adv_chain', form.Value, 'ban_allowflag', _('Allow Protocol/Ports'), _('Always allow a protocol \(tcp/udp\) with certain ports or port ranges in WAN-Input and WAN-Forward chain.'));
+		o.placeholder = 'tcp 80 443-445';
 		o.rmempty = true;
 
 		o = s.taboption('adv_chain', widgets.DeviceSelect, 'ban_vlanallow', _('Allow VLAN Forwards'), _('Always allow certain VLAN forwards.'));
@@ -415,13 +414,56 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_blocktype', _('Block Type'), _('Drop packets silently or actively reject the traffic on WAN-Input and WAN-Forward chains.'));
+		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Treshold'), _('ICMP-Treshold in packets per second to prevent WAN-DDoS attacks.'));
+		o.value('1', _('1'));
+		o.value('10', _('10 (default)'));
+		o.value('50', _('50'));
+		o.value('100', _('100'));
+		o.value('250', _('250'));
+		o.value('500', _('500'));
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_chain', form.ListValue, 'ban_synlimit', _('SYN-Treshold'), _('SYN-Treshold in packets per second to prevent WAN-DDoS attacks.'));
+		o.value('1', _('1'));
+		o.value('10', _('10 (default)'));
+		o.value('50', _('50'));
+		o.value('100', _('100'));
+		o.value('250', _('250'));
+		o.value('500', _('500'));
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_chain', form.ListValue, 'ban_udplimit', _('UDP-Treshold'), _('UDP-Treshold in packets per second to prevent WAN-DDoS attacks.'));
+		o.value('1', _('1'));
+		o.value('10', _('10'));
+		o.value('50', _('50'));
+		o.value('100', _('100 (default)'));
+		o.value('250', _('250'));
+		o.value('500', _('500'));
+		o.optional = true;
+		o.rmempty = true;
+
+		/*
+			advanced Set settings tab
+		*/
+		o = s.taboption('adv_set', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>';
+
+		o = s.taboption('adv_set', form.ListValue, 'ban_nftpolicy', _('Set Policy'), _('Set the nft policy for banIP-related Sets.'));
+		o.value('memory', _('memory (default)'));
+		o.value('performance', _('performance'));
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_set', form.ListValue, 'ban_blocktype', _('Block Type'), _('Drop packets silently or actively reject the traffic on WAN-Input and WAN-Forward chains.'));
 		o.value('drop', _('drop (default)'));
 		o.value('reject', _('reject'));
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_blockpolicy', _('Default Block Policy'), _('By default each feed is active in all supported chains. Limit the default block policy to a certain chain.'));
+		o = s.taboption('adv_set', form.ListValue, 'ban_blockpolicy', _('Default Block Policy'), _('By default each feed is active in all supported chains. Limit the default block policy to a certain chain.'));
 		o.value('input', _('WAN-Input Chain'));
 		o.value('forwardwan', _('WAN-Forward Chain'));
 		o.value('forwardlan', _('LAN-Forward Chain'));
@@ -435,7 +477,7 @@ return view.extend({
 			feeds = JSON.parse(result[1]);
 		}
 		if (feeds) {
-			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockinput', _('WAN-Input Chain'), _('Limit certain feeds to the WAN-Input chain.'));
+			o = s.taboption('adv_set', form.MultiValue, 'ban_blockinput', _('WAN-Input Chain'), _('Limit certain feeds to the WAN-Input chain.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
@@ -445,7 +487,7 @@ return view.extend({
 			o.optional = true;
 			o.rmempty = true;
 
-			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockforwardwan', _('WAN-Forward Chain'), _('Limit certain feeds to the WAN-Forward chain.'));
+			o = s.taboption('adv_set', form.MultiValue, 'ban_blockforwardwan', _('WAN-Forward Chain'), _('Limit certain feeds to the WAN-Forward chain.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
@@ -455,7 +497,7 @@ return view.extend({
 			o.optional = true;
 			o.rmempty = true;
 
-			o = s.taboption('adv_chain', form.MultiValue, 'ban_blockforwardlan', _('LAN-Forward Chain'), _('Limit certain feeds to the LAN-Forward chain.'));
+			o = s.taboption('adv_set', form.MultiValue, 'ban_blockforwardlan', _('LAN-Forward Chain'), _('Limit certain feeds to the LAN-Forward chain.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
@@ -471,7 +513,7 @@ return view.extend({
 		*/
 		o = s.taboption('adv_log', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>' + _('Changes on this tab needs a banIP service restart to take effect.') + '</b></em>';
+		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>';
 
 		o = s.taboption('adv_log', form.ListValue, 'ban_nftloglevel', _('NFT Log Level'), _('Set the syslog level for NFT logging.'));
 		o.value('emerg', _('emerg'));
@@ -485,15 +527,16 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_log', form.Flag, 'ban_loginput', _('Log WAN-Input'), _('Log suspicious incoming WAN packets (dropped).'));
-		o.default = 1
+		o = s.taboption('adv_log', form.Flag, 'ban_logprerouting', _('Log Prerouting'), _('Log suspicious Prerouting packets.'));
 		o.rmempty = false;
 
-		o = s.taboption('adv_log', form.Flag, 'ban_logforwardwan', _('Log WAN-Forward'), _('Log suspicious forwarded WAN packets (dropped).'));
-		o.default = 1
+		o = s.taboption('adv_log', form.Flag, 'ban_loginput', _('Log WAN-Input'), _('Log suspicious incoming WAN packets.'));
 		o.rmempty = false;
 
-		o = s.taboption('adv_log', form.Flag, 'ban_logforwardlan', _('Log LAN-Forward'), _('Log suspicious forwarded LAN packets (rejected).'));
+		o = s.taboption('adv_log', form.Flag, 'ban_logforwardwan', _('Log WAN-Forward'), _('Log suspicious forwarded WAN packets.'));
+		o.rmempty = false;
+
+		o = s.taboption('adv_log', form.Flag, 'ban_logforwardlan', _('Log LAN-Forward'), _('Log suspicious forwarded LAN packets.'));
 		o.rmempty = false;
 
 		o = s.taboption('adv_log', form.Value, 'ban_logreadfile', _('Logfile Location'), _('Location for parsing the log file, e.g. via syslog-ng, to deactivate the standard parsing via logread.'));
@@ -515,7 +558,7 @@ return view.extend({
 		o.datatype = 'range(1,10)';
 		o.rmempty = true;
 
-		o = s.taboption('adv_log', form.DynamicList, 'ban_logterm', _('Log Terms'), _('The default log terms / regular expressions are filtering suspicious ssh, LuCI, nginx and asterisk traffic.'));
+		o = s.taboption('adv_log', form.DynamicList, 'ban_logterm', _('Log Terms'), _('The default regular expressions are filtering suspicious ssh, LuCI, nginx and asterisk traffic.'));
 		o.optional = true;
 		o.rmempty = true;
 
@@ -544,7 +587,7 @@ return view.extend({
 		*/
 		o = s.taboption('adv_email', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>' + _('To enable email notifications, set up the \'msmtp\' package and specify a vaild E-Mail receiver address.') + '</b></em>';
+		o.default = '<em style="color:#37c;font-weight:bold;">' + _('To enable email notifications, set up the \'msmtp\' package and specify a vaild E-Mail receiver address.') + '</em>';
 
 		o = s.taboption('adv_email', form.Flag, 'ban_mailnotification', _('E-Mail Notification'), _('Receive E-Mail notifications with every banIP run.'));
 		o.rmempty = true;
@@ -571,10 +614,10 @@ return view.extend({
 		*/
 		o = s.taboption('feeds', form.DummyValue, '_sub');
 		o.rawhtml = true;
-		o.default = '<em><b>' + _('External blocklist feeds') + '</b></em>';
+		o.default = '<em style="color:#37c;font-weight:bold;">' + _('External Blocklist Feeds') + '</em>';
 
 		if (feeds) {
-			o = s.taboption('feeds', form.MultiValue, 'ban_feed', _('Blocklist Feed Selection'));
+			o = s.taboption('feeds', form.MultiValue, 'ban_feed', _('Blocklist Feed'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				descr = feeds[feed].descr.trim() || '-';
@@ -584,19 +627,29 @@ return view.extend({
 			o.rmempty = true;
 		}
 
-		let code, country, countries = [];
+		let ccode, rir, country, countries = [];
 		if (result[2]) {
 			countries = result[2].trim().split('\n');
 
-			o = s.taboption('feeds', form.MultiValue, 'ban_country', _('Countries'));
+			o = s.taboption('feeds', form.MultiValue, 'ban_country', _('Countries (RIR)'));
 			for (let i = 0; i < countries.length; i++) {
-				code = countries[i].match(/^(\w+);/)[1].trim();
-				country = countries[i].match(/^\w+;(.*$)/)[1].trim();
-				o.value(code, country);
+				ccode = countries[i].match(/^(\w+)\t/)[1].trim();
+				rir = countries[i].match(/^\w+\t(\w+)\t/)[1].trim();
+				country = countries[i].match(/^\w+\t\w+\t(.*$)/)[1].trim();
+				o.value(ccode, country + ' (' + rir + ')');
 			}
 			o.optional = true;
 			o.rmempty = true;
 		}
+
+		o = s.taboption('feeds', form.MultiValue, 'ban_region', _('Regional Internet Registry'));
+		o.value('AFRINIC', _('AFRINIC - serving Africa and the Indian Ocean region'));
+		o.value('APNIC', _('APNIC - serving the Asia Pacific region'));
+		o.value('ARIN', _('ARIN - serving Canada and the United States'));
+		o.value('LACNIC', _('LACNIC - serving the Latin American and Caribbean region'));
+		o.value('RIPE', _('RIPE - serving Europe, Middle East and Central Asia'));
+		o.optional = true;
+		o.rmempty = true;
 
 		o = s.taboption('feeds', form.DynamicList, 'ban_asn', _('ASNs'));
 		o.datatype = 'uinteger';
@@ -605,9 +658,18 @@ return view.extend({
 
 		o = s.taboption('feeds', form.DummyValue, '_feeds');
 		o.rawhtml = true;
-		o.default = '<hr style="width: 200px; height: 1px;" /><em><b>' + _('External allowlist feeds') + '</b></em>';
+		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('External Allowlist Feeds') + '</em>';
 
-		o = s.taboption('feeds', form.DynamicList, 'ban_allowurl', _('Allowlist Feed Selection'));
+		o = s.taboption('feeds', form.DynamicList, 'ban_allowurl', _('Allowlist Feed URLs'));
+		if (countries) {
+			for (let i = 0; i < countries.length; i++) {
+				ccode = countries[i].match(/^(\w+)\t/)[1].trim();
+				rir = countries[i].match(/^\w+\t(\w+)\t/)[1].trim();
+				country = countries[i].match(/^\w+\t\w+\t(.*$)/)[1].trim();
+				o.value('https://www.ipdeny.com/ipblocks/data/aggregated/' + ccode + '-aggregated.zone', country + ' IPv4 (' + rir + ')');
+				o.value('https://www.ipdeny.com/ipv6/ipaddresses/aggregated/' + ccode + '-aggregated.zone', country + ' IPv6 (' + rir + ')');
+			}
+		}
 		o.optional = true;
 		o.rmempty = true;
 		o.validate = function (section_id, value) {
@@ -622,7 +684,7 @@ return view.extend({
 
 		o = s.taboption('feeds', form.DummyValue, '_feeds');
 		o.rawhtml = true;
-		o.default = '<hr style="width: 200px; height: 1px;" /><em><b>' + _('Local feed settings') + '</b></em>';
+		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('Local Feed Settings') + '</em>';
 
 		o = s.taboption('feeds', form.Flag, 'ban_autoallowlist', _('Auto Allowlist'), _('Automatically add resolved domains and uplink IPs to the local banIP allowlist.'));
 		o.default = 1
