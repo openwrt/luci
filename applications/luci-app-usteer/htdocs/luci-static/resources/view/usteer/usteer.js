@@ -400,12 +400,16 @@ return view.extend({
 
 		o = s.taboption('settings', widgets.NetworkSelect, 'network', _('Network'), _('The network interface for inter-AP communication'));
 
-		o = s.taboption('settings', form.Flag, 'syslog', _('Log messages to syslog'));
+		o = s.taboption('settings', form.Flag, 'syslog', _('Log messages to syslog'),_('default true'));
 		o.default = '1';
 		o.rmempty = false;
 
-		o = s.taboption('settings', form.Flag, 'ipv6', _('IPv6 mode'), _('Use IPv6 for remote exchange'));
+		o = s.taboption('settings', form.Flag, 'local_mode', _('Local mode'), _('Disable network communication')+' ('+_('default false')+')');
 		o.rmempty = false;
+
+		o = s.taboption('settings', form.Flag, 'ipv6', _('IPv6 mode'), _('Use IPv6 for remote exchange')+' ('+_('default false')+')');
+		o.rmempty = false;
+
 
 		o = s.taboption('settings', form.ListValue, 'debug_level', _('Debug level'));
 		o.value('0', _('Fatal'));
@@ -429,7 +433,7 @@ return view.extend({
 
 		o = s.taboption('settings', form.Value, 'local_sta_timeout', _('Local sta timeout'), _('Maximum amount of time (ms) a local unconnected station is tracked'));
 		o.optional = true;
-		o.placeholder = 12000;
+		o.placeholder = 120000;
 		o.datatype = 'uinteger';
 
 		o = s.taboption('settings', form.Value, 'measurement_report_timeout', _('Measurement report timeout'), _('Maximum amount of time (ms) a measurement report is stored'));
@@ -472,10 +476,10 @@ return view.extend({
 		o.placeholder = 10;
 		o.datatype = 'uinteger';
 
-		o = s.taboption('settings', form.Flag, 'assoc_steering', _('Assoc steering'), _('Allow rejecting assoc requests for steering purposes'));
+		o = s.taboption('settings', form.Flag, 'assoc_steering', _('Assoc steering'), _('Allow rejecting assoc requests for steering purposes')+' ('+_('default false')+')');
 		o.optional = true;
 
-		o = s.taboption('settings', form.Flag, 'probe_steering', _('Probe steering'), _('Allow ignoring probe requests for steering purposes'));
+		o = s.taboption('settings', form.Flag, 'probe_steering', _('Probe steering'), _('Allow ignoring probe requests for steering purposes')+' ('+_('default false')+')');
 		o.optional = true;
 
 		o = s.taboption('settings', form.Value, 'min_connect_snr', _('Min connect SNR'), _('Minimum signal-to-noise ratio or signal level (dBm) to allow connections'));
@@ -491,6 +495,11 @@ return view.extend({
 		o = s.taboption('settings', form.Value, 'min_snr_kick_delay', _('Min SNR kick delay'), _('Timeout after which a station with SNR < min_SNR will be kicked'));
 		o.optional = true;
 		o.placeholder = 5000;
+		o.datatype = 'uinteger';
+
+		o = s.taboption('settings', form.Value, 'steer_reject_timeout', _('Steer reject timeout'), _('Timeout (ms) for which a client will not be steered after rejecting a BSS-transition-request'));
+		o.optional = true;
+		o.placeholder = 60000;
 		o.datatype = 'uinteger';
 
 		o = s.taboption('settings', form.Value, 'roam_process_timeout', _('Roam process timeout'), _('Timeout (in ms) after which a association following a disassociation is not seen as a roam'));
@@ -531,9 +540,9 @@ return view.extend({
 		o.placeholder = 60000;
 		o.datatype = 'uinteger';
 
-		o = s.taboption('settings', form.Value, 'roam_kick_delay', _('Roam kick delay'), _('Timeout (in 100ms beacon intervals) for client roam requests'));
+		o = s.taboption('settings', form.Value, 'roam_kick_delay', _('Roam kick delay'), _('Timeout (ms) for client roam requests. usteer will kick the client after this times out.'));
 		o.optional = true;
-		o.placeholder = 100;
+		o.placeholder = 10000;
 		o.datatype = 'uinteger';
 
 		o = s.taboption('settings', form.Value, 'signal_diff_threshold', _('Signal diff threshold'), _('Minimum signal strength difference until AP steering policy is active'));
@@ -546,7 +555,7 @@ return view.extend({
 		o.placeholder = 0;
 		o.datatype = 'uinteger';
 
-		o = s.taboption('settings', form.Flag, 'load_kick_enabled', _('Load kick enabled'), _('Enable kicking client on excessive channel load'));
+		o = s.taboption('settings', form.Flag, 'load_kick_enabled', _('Load kick enabled'), _('Enable kicking client on excessive channel load')+' ('+_('default false')+')');
 		o.optional = true;
 
 		o = s.taboption('settings', form.Value, 'load_kick_threshold', _('Load kick threshold'), _('Minimum channel load (%) before kicking clients'));
@@ -609,7 +618,7 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'list(string)';
 
-		o = s.taboption('settings', form.DynamicList, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on'));
+		o = s.taboption('settings', form.DynamicList, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on')+' ('+_('empty means all')+')');
 		WifiNetworks.forEach(function (wifiNetwork) {
 			if (wifiNetwork.getSSID() && (!o.keylist || o.keylist.indexOf(wifiNetwork.getSSID()) === -1)) {
 				o.value(wifiNetwork.getSSID())
