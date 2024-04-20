@@ -341,13 +341,6 @@ define LuciTranslation
 			$$(1)$(LUCI_LIBRARYDIR)/i18n/$(basename $(notdir $(po))).$(1).lmo;)
   endef
 
-  define Package/luci-i18n-$(LUCI_BASENAME)-$(1)/postinst
-	[ -n "$$$${IPKG_INSTROOT}" ] || {
-		(. /etc/uci-defaults/luci-i18n-$(LUCI_BASENAME)-$(1)) && rm -f /etc/uci-defaults/luci-i18n-$(LUCI_BASENAME)-$(1)
-		exit 0
-	}
-  endef
-
   LUCI_BUILD_PACKAGES += luci-i18n-$(LUCI_BASENAME)-$(1)
 
 endef
