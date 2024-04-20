@@ -2030,6 +2030,26 @@ return view.extend({
 					uci.unset('wireless', radioDev.getName(), 'disabled');
 				}
 
+				var htmodes = radioDev.getHTModes();
+
+				if (bss.vht_operation && htmodes && htmodes.indexOf('VHT20') !== -1) {
+					for (var w = bss.vht_operation.channel_width; w >= 20; w /= 2) {
+						if (htmodes.indexOf('VHT'+w) !== -1) {
+							uci.set('wireless', radioDev.getName(), 'htmode', 'VHT'+w);
+							break;
+						}
+					}
+				}
+				else if (bss.ht_operation && htmodes && htmodes.indexOf('HT20') !== -1) {
+					var w = (bss.ht_operation.secondary_channel_offset == 'no secondary') ? 20 : 40;
+					uci.set('wireless', radioDev.getName(), 'htmode', 'HT'+w);
+				}
+				else {
+					uci.remove('wireless', radioDev.getName(), 'htmode');
+				}
+
+				uci.set('wireless', radioDev.getName(), 'channel', bss.channel);
+
 				section_id = next_free_sid(wifi_sections.length);
 
 				uci.add('wireless', 'wifi-iface', section_id);
