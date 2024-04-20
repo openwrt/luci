@@ -17,6 +17,7 @@ LUCI_DEPENDS:= \
 	+rpcd-mod-rrdns
 
 PKG_LICENSE:=Apache-2.0
+PKG_PROVIDES:=luci-ssl-nginx
 
 include ../../luci.mk
 
