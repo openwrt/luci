@@ -190,16 +190,38 @@ return view.extend({
 				E('p', _('This tab shows the last generated Set Report, press the \'Refresh\' button to get a new one.')),
 				E('p', '\xa0'),
 				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Timestamp')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, content.timestamp || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;float:left;width:230px;font-weight:bold;' }, _('Timestamp')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-bottom:-5px;float:left;color:#37c;font-weight:bold;' }, content.timestamp || '-')
+				]),
+				E('hr'),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;float:left;width:230px;font-weight:bold;' }, _('blocked syn-flood packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;float:left;color:#37c;font-weight:bold;' }, content.sum_synflood || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('auto-added to allowlist today')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, content.autoadd_allow || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;float:left;width:230px;font-weight:bold;' }, _('blocked udp-flood packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;float:left;color:#37c;font-weight:bold;' }, content.sum_udpflood || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('auto-added to blocklist today')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, content.autoadd_block || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;float:left;width:230px;font-weight:bold;' }, _('blocked icmp-flood packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;float:left;color:#37c;font-weight:bold;' }, content.sum_icmpflood || '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;float:left;width:230px;font-weight:bold;' }, _('blocked invalid ct packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;float:left;color:#37c;font-weight:bold;' }, content.sum_ctinvalid || '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;float:left;width:230px;font-weight:bold;' }, _('blocked invalid tcp packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;float:left;color:#37c;font-weight:bold;' }, content.sum_tcpinvalid || '-')
+				]),
+				E('hr'),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;float:left;width:230px;font-weight:bold;' }, _('auto-added IPs to allowlist')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;float:left;color:#37c;font-weight:bold;' }, content.autoadd_allow || '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;float:left;width:230px;font-weight:bold;' }, _('auto-added IPs to blocklist')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;float:left;color:#37c;font-weight:bold;' }, content.autoadd_block || '-')
 				]),
 				E('div', { 'class': 'right' }, [
 					E('button', {
