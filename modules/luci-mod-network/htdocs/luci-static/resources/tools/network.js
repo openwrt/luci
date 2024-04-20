@@ -921,7 +921,7 @@ return baseclass.extend({
 
 		ss.handleRemove = function(section_id) {
 			this.map.data.remove('network', section_id);
-			s.map.addedVLANs = s.map.addedVLANs.filter(function(sid) {
+			s.map.addedVLANs = (s.map.addedVLANs || []).filter(function(sid) {
 				return sid != section_id;
 			});
 
