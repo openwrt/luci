@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2024-03-07 16:11+0000\n"
+"PO-Revision-Date: 2024-04-11 03:16+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
@@ -218,7 +218,7 @@ msgstr "802.11v: Zarządzanie przenoszeniem podstawowego zestawu usług (BSS)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1669
 msgid "802.11v: Local Time Zone Advertisement in management frames."
-msgstr "802.11v: Ogłoszenie lokalnej strefy czasowej w ramkach zarządzania."
+msgstr "802.11v: Ogłaszanie lokalnej strefy czasowej w ramkach zarządzania."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1684
 msgid ""
@@ -229,7 +229,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1660
 msgid "802.11v: Time Advertisement in management frames."
-msgstr "802.11v: Ogłoszenie czasu w ramkach zarządzających."
+msgstr "802.11v: Ogłaszanie czasu w ramkach zarządzania."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1673
 msgid ""
@@ -249,23 +249,23 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1827
 msgid "802.11w Association SA Query maximum timeout"
-msgstr "Maksymalny limit czasu powiązania (SA Query) 802.11w"
+msgstr "802.11w: Maksymalny limit czasu powiązania (SA Query)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1834
 msgid "802.11w Association SA Query retry timeout"
-msgstr "Interwał ponawiania prób powiązania (SA Query) 802.11w"
+msgstr "802.11w: Interwał ponawiania prób powiązania (SA Query)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1808
 msgid "802.11w Management Frame Protection"
-msgstr "Ochrona ramek zarządzania 802.11w"
+msgstr "802.11w: Ochrona ramek zarządzania"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1827
 msgid "802.11w maximum timeout"
-msgstr "Maksymalny limit czasu 802.11w"
+msgstr "802.11w: Maksymalny limit czasu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1834
 msgid "802.11w retry timeout"
-msgstr "Interwał ponawiania prób 802.11w"
+msgstr "802.11w: Interwał ponawiania prób"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:235
 msgid "; invalid MAC:"
@@ -519,7 +519,7 @@ msgstr "Akcje"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:14
 msgid "Active"
-msgstr "Aktywne"
+msgstr "Aktywna"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:81
 msgid "Active Connections"
@@ -1735,11 +1735,11 @@ msgid ""
 "workaround might cause interoperability issues and reduced robustness of key "
 "negotiation especially in environments with heavy traffic load."
 msgstr ""
-"Komplikuje kluczowe ataki reinstalacyjne po stronie klienta, wyłączając "
-"retransmisję ramek klucza EAPOL, które są używane do instalowania kluczy. To "
-"obejście może powodować problemy z interoperacyjnością i zmniejszoną "
-"odporność kluczowych negocjacji, szczególnie w środowiskach o dużym "
-"natężeniu ruchu."
+"Komplikuje ataki polegające na ponownej instalacji klucza po stronie "
+"klienta, uniemożliwiając retransmisję ramek EAPOL-Key używanych do "
+"instalacji kluczy. To rozwiązanie może powodować problemy ze współdziałaniem "
+"oraz zmniejszoną niezawodność negocjacji kluczy, szczególnie w środowiskach "
+"o dużym ruchu sieciowym."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
@@ -2882,7 +2882,7 @@ msgstr "Włącz funkcjonalność VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1845
 msgid "Enable WPS pushbutton, requires WPA(2)-PSK/WPA3-SAE"
-msgstr "Włącz przycisk WPS, wymaga WPA2-PSK/WPA3-SAE"
+msgstr "Włącz przycisk WPS, wymaga WPA(2)‑PSK/WPA3‑SAE"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
@@ -2964,7 +2964,7 @@ msgstr "Włącz wbudowany jednoinstancyjny serwer TFTP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:896
 msgid "Enable this network"
-msgstr "Włącz tą sieć"
+msgstr "Włącz tę sieć"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:33
 msgid "Enable to minimise the chance of prefix change after a restart"
@@ -5834,6 +5834,8 @@ msgid ""
 "Name for OpenWrt network configuration. (No relation to wireless network "
 "name/SSID)"
 msgstr ""
+"Nazwa konfiguracji sieci OpenWrt. (Brak związku z nazwą sieci bezprzewodowej/"
+"SSID)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2135
 msgid "Name of the new network"
@@ -6595,7 +6597,6 @@ msgstr "Zastąp tablicę trasowania IPv6"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:132
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:118
-#: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:96
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:105
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:110
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:66
@@ -9720,7 +9721,7 @@ msgstr "Synchronizacja czasu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1660
 msgid "Time advertisement"
-msgstr "Ogłoszenie czasu"
+msgstr "Ogłaszanie czasu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:713
 msgid "Time in milliseconds"
@@ -11174,7 +11175,7 @@ msgstr "unikalna wartość"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:592
 msgid "unknown"
-msgstr "nieznane"
+msgstr "nieznany"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1111
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1141
