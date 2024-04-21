@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2018-2020, Tano Systems LLC. All Rights Reserved.
  * Anton Kikin <a.kikin@tano-systems.com>
+ * Copyright (c) 2023-2024. All Rights Reserved.
+ * Paul Donald <newtwen+github@gmail.com>
  */
 
 'use strict';
@@ -40,6 +42,11 @@
  *	18   x                       x               x
  *	19   x                       x       x
  */
+
+const etitle = _('enable filter');
+const ptitle = _('keep only one protocol');
+const ntitle = _('keep only one neighbor');
+
 var cbiFilterSelect = form.Value.extend({
 	__name__: 'CBI.LLDPD.FilterSelect',
 
@@ -98,9 +105,9 @@ var cbiFilterSelect = form.Value.extend({
 
 		// Prepend description with table legend
 		this.description = 
-			'<ul><li>' + _('E &mdash; enable filter') + '</li>' +
-			    '<li>' + _('P &mdash; keep only one protocol') + '</li>' +
-			    '<li>' + _('N &mdash; keep only one neighbor') + '</li>' +
+			'<ul><li>' + 'E &mdash; ' + etitle + '</li>' +
+			    '<li>' + 'P &mdash; ' + ptitle + '</li>' +
+			    '<li>' + 'N &mdash; ' + ntitle + '</li>' +
 			'</ul>' + this.description;
 
 		var rendered = this.super('renderFrame', arguments);
@@ -112,7 +119,8 @@ var cbiFilterSelect = form.Value.extend({
 	},
 
 	renderWidget: function(section_id, option_index, cfgvalue) {
-		var selected = parseInt(cfgvalue) - 1;
+		//default value is "15" - rows are zero based
+		var selected = parseInt(cfgvalue) || 15;
 
 		var tbody = [];
 
@@ -138,12 +146,12 @@ var cbiFilterSelect = form.Value.extend({
 					})
 				]),
 				E('td', {}, i),
-				E('td', {}, renderFilterVal(i, 0)),
-				E('td', {}, renderFilterVal(i, 1)),
-				E('td', {}, renderFilterVal(i, 2)),
-				E('td', {}, renderFilterVal(i, 3)),
-				E('td', {}, renderFilterVal(i, 4)),
-				E('td', {}, renderFilterVal(i, 5))
+				E('td', {'title': etitle}, renderFilterVal(i, 0)),
+				E('td', {'title': ptitle}, renderFilterVal(i, 1)),
+				E('td', {'title': ntitle}, renderFilterVal(i, 2)),
+				E('td', {'title': etitle}, renderFilterVal(i, 3)),
+				E('td', {'title': ptitle}, renderFilterVal(i, 4)),
+				E('td', {'title': ntitle}, renderFilterVal(i, 5))
 			]));
 		};
 
@@ -171,6 +179,29 @@ var cbiFilterSelect = form.Value.extend({
 	},
 });
 
+var CBIMultiIOSelect = form.MultiValue.extend({
+	__name__: 'CBI.MultiIOSelect',
+
+	renderWidget: function(section_id, option_index, cfgvalue) {
+		var value = (cfgvalue != null) ? cfgvalue : this.default ? this.default : '',
+		    choices = this.transformChoices() ? this.transformChoices() : '';
+
+		var widget = new ui.Dropdown(L.toArray(value), choices, {
+			id: this.cbid(section_id),
+			sort: this.keylist,
+			multiple: true,
+			optional: true,
+			display_items: 5,
+			dropdown_items: -1,
+			create: true,
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
+			validate: L.bind(this.validate, this, section_id),
+		});
+
+		return widget.render();
+	}
+});
+
 function init() {
 	return new Promise(function(resolveFn, rejectFn) {
 		var data = session.getLocalData('luci-app-lldpd');
@@ -189,5 +220,6 @@ function init() {
 
 return L.Class.extend({
 	cbiFilterSelect: cbiFilterSelect,
+	CBIMultiIOSelect: CBIMultiIOSelect,
 	init: init,
 });

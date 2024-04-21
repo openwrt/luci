@@ -1,12 +1,15 @@
 /*
  * Copyright (c) 2020 Tano Systems LLC. All Rights Reserved.
  * Author: Anton Kikin <a.kikin@tano-systems.com>
+ * Copyright (c) 2023-2024. All Rights Reserved.
+ * Paul Donald <newtwen+github@gmail.com>
  */
 
 'use strict';
 'require rpc';
 'require form';
 'require lldpd';
+'require network';
 'require uci';
 'require tools.widgets as widgets';
 
@@ -29,6 +32,25 @@ var callInitAction = rpc.declare({
 	expect: { result: false }
 });
 
+var usage = _('See syntax <a %s>here</a>.').format('href=https://lldpd.github.io/usage.html target="_blank"');
+
+const validateioentries = function(section_id, value) {
+	if (value) {
+		const emsg = _('Cannot have both interface %s and its exclusion %s');
+		const a = value.split(' ');
+		const noex = a.filter(el=> !el.startsWith('!'));
+		const ex = a.filter(el=> el.startsWith('!') && !el.startsWith('!!'));
+		for (var i of noex) {
+			for (var e of ex) {
+				if ('!'+i == e){
+					return emsg.format(i, e);
+				}
+			}
+		}
+	}
+	return true;
+};
+
 return L.view.extend({
 	__init__: function() {
 		this.super('__init__', arguments);
@@ -46,7 +68,8 @@ return L.view.extend({
 		return Promise.all([
 			callInitList('lldpd'),
 			lldpd.init(),
-			uci.load('lldpd')
+			uci.load('lldpd'),
+			network.getDevices()
 		]);
 	},
 
@@ -60,6 +83,7 @@ return L.view.extend({
 	populateBasicOptions: function(s, tab, data) {
 		var o;
 		var serviceEnabled = data[0];
+		var net_devices = data[3];
 
 		// Service enable/disable
 		o = s.taboption(tab, form.Flag, 'enabled', _('Enable service'));
@@ -71,17 +95,17 @@ return L.view.extend({
 		};
 
 		o.write = function(section_id, value) {
-			uci.set('mstpd', section_id, 'enabled', value);
+			uci.set('lldpd', section_id, 'enabled', value);
 
 			if (value == '1') {
 				// Enable and start
-				return callInitAction('lldpd', 'enable').then(function() {
+				callInitAction('lldpd', 'enable').then(function() {
 					return callInitAction('lldpd', 'start');
 				});
 			}
 			else {
 				// Stop and disable
-				return callInitAction('lldpd', 'stop').then(function() {
+				callInitAction('lldpd', 'stop').then(function() {
 					return callInitAction('lldpd', 'disable');
 				});
 			}
@@ -90,71 +114,120 @@ return L.view.extend({
 		// System description
 		o = s.taboption(tab, form.Value, 'lldp_description',
 			_('System description'),
-			_('Override system description with the provided description.'));
+			_('Override %s.').format('<code>system description</code>'));
 
 		o.placeholder = 'System description';
 
 		// System hostname
 		o = s.taboption(tab, form.Value, 'lldp_hostname',
 			_('System hostname'),
-			_('Override system hostname with the provided value.'));
+			_('Override %s.').format('<code>system hostname</code>'));
 
 		o.placeholder = 'System hostname';
 
 		// Host location
 		o = s.taboption(tab, form.Value, 'lldp_location',
 			_('Host location'),
-			_('Override the location of the host announced by lldp.'));
-
+			_('Override the announced location of the host.') + '<br />' +
+			usage);
+		// multiple syntaxes alert for location parameter
 		o.placeholder = 'address country EU';
+		o.rmempty = true;
+		o.validate = function(section_id, value) {
+			if (value) {
+				if (!value.match(/^coordinate |^address |^elin /))
+					return _("Must start: 'coordinate ...', 'address ...' or 'elin ...'");
+			}
+			return true;
+		};
+
 
 		// Platform
 		o = s.taboption(tab, form.Value, 'lldp_platform',
 			_('System platform description'),
-			_('Override the platform description with the provided value. ' +
-			  'The default description is the kernel name (Linux).'));
+			_('Override %s.').format('<code>system platform</code>') + '<br />' + 
+			_('The default description is the kernel name (Linux).'));
 
 		o.placeholder = 'System platform description';
 
-		// Management addresses of this system
-		o = s.taboption(tab, form.Value, 'lldp_mgmt_ip',
-			_('Management addresses of this system'),
-			_('Specify the management addresses of this system. ' +
-			  'If not specified, the first IPv4 and the first ' +
-			  'IPv6 are used. If an exact IP address is provided, it is used ' +
-			  'as a management address without any check. If you want to ' +
-			  'blacklist IPv6 addresses, you can use <code>!*:*</code>. ' +
-			  'See more details about available patterns ' +
-			  '<a href=\"https://vincentbernat.github.io/lldpd/usage.html\">here</a>.'));
+		o = s.taboption(tab, form.Flag, 'lldp_capability_advertisements', _('System capability advertisements'));
+		o.default = '1'; //lldpd internal default
 
-		o.placeholder = 'Management addresses';
+		// Capabilities override
+		o = s.taboption(tab, form.MultiValue, 'lldp_syscapabilities',
+			_('System capabilities'),
+			_('Override %s.').format('<code>system capabilities</code>') + '<br />' + 
+			_('The default is derived from kernel information.'));
+		o.depends({lldp_capability_advertisements: '1'});
+		o.value('bridge');
+		o.value('docsis');
+		o.value('other');
+		o.value('repeater');
+		o.value('router');
+		o.value('station');
+		o.value('telephone');
+		o.value('wlan');
+		o.cfgvalue = function(section_id) {
+			return String(this.super('load', [section_id]) || this.default).split(',');
+		};
+		o.write = function(section_id, value) {
+			return this.super('write', [ section_id, L.toArray(value).join(',') ]);
+		};
+
+		o = s.taboption(tab, form.Flag, 'lldp_mgmt_addr_advertisements', _('System management IO advertisements'));
+		o.default = '1'; //lldpd internal default
+
+		// Management addresses of this system
+		// This value: lldpd.init handles as a single value, and needs a CSV for lldpd.conf: 'configure system ip management pattern'
+		o = s.taboption(tab, lldpd.CBIMultiIOSelect, 'lldp_mgmt_ip',
+			_('System management IO'),
+			_('Defaults to the first IPv4 and IPv6. ' +
+			  'If an exact IP address is provided, it is used ' +
+			  'as a management address without any check. To ' +
+			  'blacklist IPv6 addresses, use <code>!*:*</code>.') + '<br />' +
+			  usage);
+		o.placeholder = 'Addresses and interfaces';
+		o.depends({lldp_mgmt_addr_advertisements: '1'});
+		o.cfgvalue = function(section_id) {
+			const opt = uci.get(this.config, section_id, this.option);
+			return opt ? opt.split(',') : '';
+		};
+		net_devices.forEach(nd => {
+			o.value(nd.getName());
+			o.value('!'+nd.getName());
+			nd.getIPAddrs().forEach(addr => o.value(addr.split('/')[0], E([], [addr.split('/')[0], ' (', E('strong', {}, nd.getName()), ')'])));
+			nd.getIP6Addrs().forEach(addr => o.value(addr.split('/')[0], E([], [addr.split('/')[0], ' (', E('strong', {}, nd.getName()), ')'])));
+		});
+		o.value('!*:*');
+		o.validate = validateioentries;
+		o.write = function(section_id, value, sep) {
+			return this.super('write', [ section_id, value.join(',') ]);
+		}
 
 		// LLDP tx interval
 		o = s.taboption(tab, form.Value, 'lldp_tx_interval',
 			_('Transmit delay'),
-			_('The transmit delay is the delay between two ' +
+			_('The delay between ' +
 			  'transmissions of LLDP PDU. The default value ' +
-			  'is 30 seconds.'));
-
-		o.datatype = 'uinteger';
+			  'is 30 seconds.') + '<br />' +
+			_('Suffix %s for millisecond values.').format('<code>ms</code>'));
 		o.default = 30;
 		o.placeholder = 30;
 		o.rmempty = false;
 
 		o.validate = function(section_id, value) {
-			if (value != parseInt(value))
-				return _('Must be a number');
-			else if (value <= 0)
-				return _('Transmit delay must be greater than 0');
+			const pattern = /^(\d+)(?:ms)?$/;
+			if (!value.match(pattern) || parseInt(value) <= 0)
+				return _('Must be a greater than zero number optionally suffixed with "ms"');
 			return true;
 		};
 
 		// LLDP tx hold
 		o = s.taboption(tab, form.Value, 'lldp_tx_hold',
 			_('Transmit hold value'),
-			_('This value is used to compute the TTL of transmitted ' +
-			  'packets which is the product of this value and of the ' +
-			  'transmit delay. The default value is 4 and therefore ' +
+			_('Determines the transmitted ' +
+			  'packet TTL (== this value * transmit delay). ' +
+			  'The default value is 4 &therefore; ' +
 			  'the default TTL is 120 seconds.'));
 
 		o.datatype = 'uinteger';
@@ -172,9 +245,9 @@ return L.view.extend({
 
 		// Received-only mode (-r)
 		o = s.taboption(tab, form.Flag, 'readonly_mode',
-			_('Enable receive-only mode'),
-			_('With this option, LLDPd will not send any frames. ' +
-			  'It will only listen to neighbors.'));
+			_('Receive-only mode'),
+			_("LLDPd won't send any frames; " +
+			  'only listen to neighbors.'));
 
 		o.rmempty = false;
 		o.optional = false;
@@ -190,34 +263,43 @@ return L.view.extend({
 	/** @private */
 	populateIfacesOptions: function(s, tab, data) {
 		var o;
+		var net_devices = data[3];
 
 		// Interfaces to listen on
-		o = s.taboption(tab, widgets.DeviceSelect, 'interface',
-			_('Network interfaces'),
-			_('Specify which interface to listen and send LLDPDU to. ' +
-			  'If no interfaces is specified, LLDPd will use all available physical interfaces.'));
+		// This value: lldpd.init handles as a list value, and produces a CSV for lldpd.conf: 'configure system interface pattern'
+		o = s.taboption(tab, lldpd.CBIMultiIOSelect, 'interface',
+			_('Network IO'),
+			_('Specify which interface (not) to listen upon and send LLDPDU from. ' +
+			  'Absent any value, LLDPd uses all available physical interfaces.'));
 
-		o.nobridges = true;
-		o.rmempty   = true;
-		o.multiple  = true;
-		o.nocreate  = true;
-		o.noaliases = true;
-		o.networks  = null;
+		o.value('*');
+		net_devices.forEach(nd => {
+			o.value(nd.getName());
+			o.value('!'+nd.getName());
+			o.value('!!'+nd.getName());
+		});
+		o.value('!*:*');
+		o.validate = validateioentries;
 
 		// ChassisID interfaces
-		o = s.taboption(tab, widgets.DeviceSelect, 'cid_interface',
-			_('Network interfaces for chassis ID computing'),
-			_('Specify which interfaces to use for computing chassis ID. ' +
-			  'If no interfaces is specified, all interfaces are considered. ' +
-			  'LLDPd will take the first MAC address from all the considered ' +
+		// This value: lldpd.init handles as a list value, and produces a CSV for the -C param
+		o = s.taboption(tab, lldpd.CBIMultiIOSelect, 'cid_interface',
+			_('Network IO for chassis ID'),
+			_('Specify which interfaces (not) to use for computing chassis ID. ' +
+			  'Absent any value, all interfaces are considered. ' +
+			  'LLDPd takes the first MAC address from all the considered ' +
 			  'interfaces to compute the chassis ID.'));
 
-		o.nobridges = false;
-		o.rmempty   = true;
-		o.multiple  = true;
-		o.nocreate  = true;
-		o.noaliases = true;
-		o.networks  = null;
+		o.value('*');
+		o.value('!*');
+		net_devices.forEach(nd => {
+			o.value(nd.getName());
+			o.value('!'+nd.getName());
+			o.value('!!'+nd.getName());
+		});
+		o.value('!*:*');
+		o.validate = validateioentries;
+
 	},
 
 	// -----------------------------------------------------------------------------------------
@@ -242,7 +324,7 @@ return L.view.extend({
 		// o.placeholder = '/var/run/agentx.sock';
 		// o.default = '';
 
-		// LLDP class
+		// LLDP-MED class
 		o = s.taboption(tab, form.ListValue, 'lldp_class',
 			_('LLDP-MED device class'));
 
@@ -253,12 +335,55 @@ return L.view.extend({
 
 		o.default = '4';
 
+		// LLDP-MED policy
+		o = s.taboption(tab, form.Value, 'lldp_policy',
+			_('LLDP-MED policy'));
+		o.depends({lldp_class: '2'});
+		o.depends({lldp_class: '3'});
+
+		o.rmempty = true;
+		o.placeholder = 'application streaming-video';
+		o.value('application voice');
+		o.value('application voice unknown');
+		o.value('application voice-signaling');
+		o.value('application voice-signaling unknown');
+		o.value('application guest-voice');
+		o.value('application guest-voice unknown');
+		o.value('application guest-voice-signaling');
+		o.value('application guest-voice-signaling unknown');
+		o.value('application softphone-voice');
+		o.value('application softphone-voice unknown');
+		o.value('application video-conferencing');
+		o.value('application video-conferencing unknown');
+		o.value('application streaming-video');
+		o.value('application streaming-video unknown');
+		o.value('application video-signaling');
+		o.value('application video-signaling unknown');
+
+		o.validate = function(section_id, value) {
+			if (value && !value.startsWith('application '))
+				return _('Must start: application ...');
+			return true;
+		};
+
+		// LLDP-MED fast-start
+		o = s.taboption(tab, form.Flag, 'lldpmed_fast_start',
+			_('LLDP-MED fast-start'));
+
+		// LLDP-MED fast-start
+		o = s.taboption(tab, form.Value, 'lldpmed_fast_start_tx_interval',
+			_('LLDP-MED fast-start tx-interval'));
+		o.depends({lldpmed_fast_start: '1'});
+		o.datatype = 'uinteger';
+		o.placeholder = '10';
+		o.rmempty = true;
+
 		// LLDP-MED inventory TLV transmission (-i)
 		o = s.taboption(tab, form.Flag, 'lldpmed_no_inventory',
 			_('Disable LLDP-MED inventory TLV transmission'),
 			_('LLDPd will still receive (and publish using SNMP if enabled) ' +
 			  'those LLDP-MED TLV but will not send them. Use this option ' +
-			  'if you don\'t want to transmit sensible information like serial numbers.'));
+			  'if you do not want to transmit sensitive information like serial numbers.'));
 
 		o.default = '0';
 
@@ -266,15 +391,15 @@ return L.view.extend({
 		o = s.taboption(tab, form.Flag, 'lldp_no_version',
 			_('Disable advertising of kernel release, version and machine'),
 			_('Kernel name (ie: Linux) will still be shared, and Inventory ' +
-			  'software version will be set to \'Unknown\'.'));
+			  'software version will be set to %s.').format('<code>Unknown</code>'));
 
 		o.default = '0';
 
 		// Filter neighbors (-H)
 		o = s.taboption(tab, lldpd.cbiFilterSelect, 'filter',
 			_('Specify the behaviour when detecting multiple neighbors'),
-			_('The default filter is 15. For more details see \"FILTERING NEIGHBORS\" section ' +
-			  '<a href=\"https://vincentbernat.github.io/lldpd/usage.html\">here</a>.'));
+			_('The default filter is 15. Refer to &quot;FILTERING NEIGHBORS&quot;.') + '<br />' +
+			usage);
 
 		o.default = 15;
 
@@ -291,11 +416,11 @@ return L.view.extend({
 
 		// The destination MAC address used to send LLDPDU
 		o = s.taboption(tab, form.ListValue, 'lldp_agenttype',
-			_('The destination MAC address used to send LLDPDU'),
-			_('The destination MAC address used to send LLDPDU allows an agent ' +
+			_('LLDPDU destination MAC'),
+			_('Allows an agent ' +
 			  'to control the propagation of LLDPDUs. By default, the ' +
-			  '<code>01:80:c2:00:00:0e</code> MAC address is used and limit the propagation ' +
-			  'of the LLDPDU to the nearest bridge.'));
+			  'MAC address %s is used and limits the propagation ' +
+			  'of the LLDPDU to the nearest bridge.').format('<code>01:80:c2:00:00:0e</code>'));
 
 		o.value('nearest-bridge',          '01:80:c2:00:00:0e (nearest-bridge)');
 		o.value('nearest-nontpmr-bridge',  '01:80:c2:00:00:03 (nearest-nontpmr-bridge)');
@@ -331,10 +456,10 @@ return L.view.extend({
 		o.rmempty = true;
 
 		o = ss.taboption('lldp', form.Flag, 'force_lldp',
-			_('Force to send LLDP packets'),
-			_('Force to send LLDP packets even when there is no LLDP peer ' +
-			  'detected but there is a peer speaking another protocol detected. ' +
-			  'By default, LLDP packets are sent when there is a peer speaking ' +
+			_('Force sending LLDP packets'),
+			_('Even when there is no LLDP peer ' +
+			  'detected but there is a peer speaking another protocol detected.') + '<br />' +
+			_('By default, LLDP packets are sent when there is a peer speaking ' +
 			  'LLDP detected or when there is no peer at all.'));
 
 		o.default = '0';
@@ -469,8 +594,8 @@ return L.view.extend({
 		var m, s;
 
 		m = new form.Map('lldpd', _('LLDPd Settings'),
-			_('LLDPd is a implementation of IEEE 802.1ab ' +
-			  '(<abbr title=\"Link Layer Discovery Protocol\">LLDP</abbr>).') +
+			_('LLDPd is an implementation of IEEE 802.1ab') + ' ' +
+			  '(<abbr title="Link Layer Discovery Protocol">LLDP</abbr>).' + ' ' +
 			_('On this page you may configure LLDPd parameters.'));
 
 		s = m.section(form.TypedSection, 'lldpd');

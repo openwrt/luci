@@ -3,7 +3,7 @@
 		"description": "Grant access for LLDP status information",
 		"read": {
 			"ubus": {
-				"lldpd": [
+				"luci.lldpd": [
 					"getStatus"
 				]
 			},
@@ -18,27 +18,14 @@
 		"description": "Grant access for LLDP configuration",
 		"read": {
 			"uci": [
-				"lldpd",
-				"luci",
-				"network",
-				"wireless",
-				"firewall"
+				"lldpd"
 			],
 			"ubus": {
+				"luci.lldpd": [
+					"getStatus"
+				],
 				"luci": [
 					"getInitList"
-				],
-				"luci-rpc": [
-					"getBoardJSON",
-					"getHostHints",
-					"getNetworkDevices",
-					"getWirelessDevices"
-				],
-				"network": [
-					"get_proto_handlers"
-				],
-				"network.interface": [
-					"dump"
 				]
 			}
 		},

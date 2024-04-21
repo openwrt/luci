@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2020 Tano Systems. All Rights Reserved.
  * Author: Anton Kikin <a.kikin@tano-systems.com>
+ * Copyright (c) 2023-2024. All Rights Reserved.
+ * Paul Donald <newtwen+github@gmail.com>
  */
 
 'use strict';
@@ -11,7 +13,7 @@
 'require poll';
 
 var callLLDPStatus = rpc.declare({
-	object: 'lldpd',
+	object: 'luci.lldpd',
 	method: 'getStatus',
 	expect: {}
 });
@@ -21,7 +23,7 @@ var dataMap = {
 		localChassis: null,
 	},
 	remote: {
-		neightbors: null,
+		neighbors: null,
 		statistics: null,
 	},
 };

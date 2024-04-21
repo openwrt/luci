@@ -1,6 +1,8 @@
 /*
  * Copyright (c) 2020, Tano Systems LLC. All Rights Reserved.
  * Author: Anton Kikin <a.kikin@tano-systems.com>
+ * Copyright (c) 2023-2024. All Rights Reserved.
+ * Paul Donald <newtwen+github@gmail.com>
  */
 
 /*
@@ -9,7 +11,7 @@
 table.lldpd-filter td,
 table.lldpd-filter th {
 	border: 1px solid #ccc !important;
-	padding: 2px 10px 2px 10px;
+	padding: 2px 10px;
 	text-align: center;
 }
 
@@ -25,7 +27,7 @@ table.lldpd-filter tbody tr {
 }
 
 table.lldpd-filter tr.lldpd-filter-selected td {
-	background-color: #eeeeee;
+	background-color: #EEE;
 }
 
 /*
@@ -33,18 +35,12 @@ table.lldpd-filter tr.lldpd-filter-selected td {
  */
 .lldpd-params {
 	column-count: 2;
-	-moz-column-count: 2;
-	-webkit-column-count: 2;
 	column-gap: 24px;
-	-moz-column-gap: 24px;
-	-webkit-column-gap: 24px;
 }
 
 @media only screen and (max-width: 850px) {
 	.lldpd-params {
 		column-count: 1;
-		-moz-column-count: 1;
-		-webkit-column-count: 1;
 	}
 }
 
@@ -53,9 +49,7 @@ table.lldpd-filter tr.lldpd-filter-selected td {
 	grid-template-columns: 1fr auto;
 	border-bottom: 1px solid #e6e6e6;
 	padding: 0 8px;
-	-webkit-column-break-inside: avoid;
-	-moz-column-break-inside: avoid;
-	column-break-inside: avoid;
+/*	column-break-inside: avoid;*/
 }
 
 .td .lldpd-params > div:last-of-type {
@@ -79,8 +73,6 @@ table.lldpd-filter tr.lldpd-filter-selected td {
 
 .td .lldpd-params {
 	column-count: 1;
-	-moz-column-count: 1;
-	-webkit-column-count: 1;
 }
 
 .td .lldpd-params > div {
@@ -101,8 +93,6 @@ table.lldpd-filter tr.lldpd-filter-selected td {
 	display: inline-block;
 	width: auto !important;
 	width: fit-content !important;
-	width: -moz-fit-content !important;
-	width: -webkit-fit-content !important;
 	box-shadow: 0 1px 3px 0 grey;
 	padding: 0px 8px;
 	border-radius: 5px;
