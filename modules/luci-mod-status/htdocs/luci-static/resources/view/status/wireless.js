@@ -336,7 +336,11 @@ return view.extend({
 
 		this.pollData();
 
-		return v;
+		return E([], [
+			E('h2', _('Wireless')),
+			E('div', {'class': 'cbi-map-descr'}, _('This page displays the wireless metrics, for each available radio interfaces.')),
+			v
+		]);
 	},
 
 	handleSaveApply: null,
