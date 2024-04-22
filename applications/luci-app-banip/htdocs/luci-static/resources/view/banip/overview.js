@@ -11,7 +11,7 @@
 	button handling
 */
 function handleAction(ev) {
-	fs.exec_direct('/etc/init.d/banip', [ev])
+	return fs.exec_direct('/etc/init.d/banip', [ev])
 }
 
 return view.extend({
@@ -472,9 +472,19 @@ return view.extend({
 
 		let feed, feeds, descr;
 		if (result[0]) {
-			feeds = JSON.parse(result[0]);
+			try {
+				feeds = JSON.parse(result[0]);
+			} catch (e) {
+				feeds = "";
+				ui.addNotification(null, E('p', _('Unable to parse the custom feed file: %s').format(e.message)), 'error');
+			}
 		} else if (result[1]) {
-			feeds = JSON.parse(result[1]);
+			try {
+				feeds = JSON.parse(result[1]);
+			} catch (e) {
+				feeds = "";
+				ui.addNotification(null, E('p', _('Unable to parse the default feed file: %s').format(e.message)), 'error');
+			}
 		}
 		if (feeds) {
 			o = s.taboption('adv_set', form.MultiValue, 'ban_blockinput', _('WAN-Input Chain'), _('Limit certain feeds to the WAN-Input chain.'));
