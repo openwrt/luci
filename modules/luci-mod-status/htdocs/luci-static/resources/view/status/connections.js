@@ -319,6 +319,8 @@ return view.extend({
 		var svg = data[0];
 
 		var v = E([], [
+			E('h2', _('Connections')),
+			E('div', {'class': 'cbi-map-descr'}, _('This page displays the active connections via this device.')),
 			svg,
 			E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
 			E('br'),
