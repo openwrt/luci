@@ -309,7 +309,11 @@ return view.extend({
 
 		this.pollData();
 
-		return v;
+		return  E([], [
+			E('h2', _('Bandwith')),
+			E('div', {'class': 'cbi-map-descr'}, _('This page displays the bandwidth used for all available physical interfaces.')),
+			v
+		]);
 	},
 
 	handleSaveApply: null,
