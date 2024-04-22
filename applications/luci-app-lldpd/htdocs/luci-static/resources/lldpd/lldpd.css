@@ -1,0 +1,111 @@
+/*
+ * Copyright (c) 2020, Tano Systems LLC. All Rights Reserved.
+ * Author: Anton Kikin <a.kikin@tano-systems.com>
+ * Copyright (c) 2023-2024. All Rights Reserved.
+ * Paul Donald <newtwen+github@gmail.com>
+ */
+
+/*
+ * Filter select widget
+ */
+table.lldpd-filter td,
+table.lldpd-filter th {
+	border: 1px solid #ccc !important;
+	padding: 2px 10px;
+	text-align: center;
+}
+
+table.lldpd-filter td,
+table.lldpd-filter td input[type="radio"] {
+	vertical-align: middle;
+}
+
+table.lldpd-filter th { font-weight: bold; }
+
+table.lldpd-filter tbody tr {
+	cursor: pointer;
+}
+
+table.lldpd-filter tr.lldpd-filter-selected td {
+	background-color: #EEE;
+}
+
+/*
+ * Parameters
+ */
+.lldpd-params {
+	column-count: 2;
+	column-gap: 24px;
+}
+
+@media only screen and (max-width: 850px) {
+	.lldpd-params {
+		column-count: 1;
+	}
+}
+
+.lldpd-params > div {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	border-bottom: 1px solid #e6e6e6;
+	padding: 0 8px;
+/*	column-break-inside: avoid;*/
+}
+
+.td .lldpd-params > div:last-of-type {
+	border-bottom: none;
+}
+
+.lldpd-params .lldpd-param {
+	margin-right: 10px;
+	font-weight: bold;
+}
+
+.lldpd-params .lldpd-param::after {
+	content: ':';
+}
+
+.lldpd-params .lldpd-param-value {
+	white-space: normal;
+	font-weight: normal;
+	text-align: right;
+}
+
+.td .lldpd-params {
+	column-count: 1;
+}
+
+.td .lldpd-params > div {
+	padding: 0;
+}
+
+/*
+ * Status table
+ */
+.lldpd-folded,
+.lldpd-unfolded {
+	width: 100%;
+}
+
+.lldpd-table .tr .td { cursor: pointer; }
+
+.lldpd-protocol-badge {
+	display: inline-block;
+	width: auto !important;
+	width: fit-content !important;
+	box-shadow: 0 1px 3px 0 grey;
+	padding: 0px 8px;
+	border-radius: 5px;
+	width: 100%;
+	background-color: #e6e6e6;
+	border: 0;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	color: #595959;
+}
+
+.lldpd-protocol-badge.lldpd-protocol-lldp  { background-color: #b7efcf; border-color: #2abd69; color: #165e34; }
+.lldpd-protocol-badge.lldpd-protocol-cdp   { background-color: #b2daf3; border-color: #46a6e2; color: #1a74ac; }
+.lldpd-protocol-badge.lldpd-protocol-fdp   { background-color: #f9e3b3; border-color: #b7820f; color: #b7820f; }
+.lldpd-protocol-badge.lldpd-protocol-edp   { background-color: #f9e3f9; border-color: #e380e3; color: #b70f82; }
+.lldpd-protocol-badge.lldpd-protocol-sonmp { background-color: #f4ffc4; border-color: #a7ce00; color: #7e9b00; }
