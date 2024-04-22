@@ -66,7 +66,12 @@ function handleAction(report, ev) {
 		let content, selectOption;
 
 		if (report[1]) {
-			content = JSON.parse(report[1]);
+			try {
+				content = JSON.parse(report[1]);
+			} catch (e) {
+				content = "";
+				ui.addNotification(null, E('p', _('Unable to parse the ruleset file: %s').format(e.message)), 'error');
+			}
 		} else {
 			content = "";
 		}
@@ -140,7 +145,12 @@ return view.extend({
 		let content, rowSets, tblSets;
 
 		if (report[0]) {
-			content = JSON.parse(report[0]);
+			try {
+				content = JSON.parse(report[0]);
+			} catch (e) {
+				content = "";
+				ui.addNotification(null, E('p', _('Unable to parse the report file: %s').format(e.message)), 'error');
+			}
 		} else {
 			content = "";
 		}
