@@ -361,7 +361,7 @@ return view.extend({
 
 				E('div', { 'class': 'right' }, [
 					E('button', {
-						'class': 'btn toggle-lookups',
+						'class': 'btn cbi-button cbi-button-apply toggle-lookups',
 						'click': function(ev) {
 							if (!enableLookups) {
 								ev.currentTarget.classList.add('spinning');
