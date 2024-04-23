@@ -152,6 +152,7 @@ return L.view.extend({
 
 		o = s.taboption(tab, form.Flag, 'lldp_capability_advertisements', _('System capability advertisements'));
 		o.default = '1'; //lldpd internal default
+		o.rmempty = false;
 
 		// Capabilities override
 		o = s.taboption(tab, form.MultiValue, 'lldp_syscapabilities',
@@ -176,6 +177,7 @@ return L.view.extend({
 
 		o = s.taboption(tab, form.Flag, 'lldp_mgmt_addr_advertisements', _('System management IO advertisements'));
 		o.default = '1'; //lldpd internal default
+		o.rmempty = false;
 
 		// Management addresses of this system
 		// This value: lldpd.init handles as a single value, and needs a CSV for lldpd.conf: 'configure system ip management pattern'
