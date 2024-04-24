@@ -1595,9 +1595,21 @@ return view.extend({
 			_('This prefix is randomly generated at first install.'));
 		o.datatype = 'cidr6';
 
-		o = s.option(form.Flag, 'packet_steering', _('Packet Steering'), _('Enable packet steering across all CPUs. May help or hinder network speed.'));
+		o = s.option(form.ListValue, 'packet_steering', _('Packet Steering'), _('Enable packet steering across CPUs. May help or hinder network speed.'));
+		o.value('', _('Disabled'));
+		o.value('1',_('Enabled'));
+		o.value('2',_('Enabled (all CPUs)'));
 		o.optional = true;
-
+				
+		var steer_flow = uci.get('network', 'globals', 'steering_flows');	
+		
+		o = s.option(form.Value, 'steering_flows', _('Steering flows (<abbr title="Receive Packet Steering">RPS</abbr>)'), _('Directs packet flows to specific CPUs where the local socket owner listens (the local service).') + ' ' + _('Note: this setting is for local services on the device only (not for forwarding).'));
+		o.value('', _('Standard: none'));
+		o.value('128', _('Suggested: 128'));
+		o.value('256', _('256'));
+		o.depends('packet_steering', '1');
+		o.depends('packet_steering', '2');
+		o.default = steer_flow;
 
 		if (dslModemType != null) {
 			s = m.section(form.TypedSection, 'dsl', _('DSL'));
