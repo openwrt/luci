@@ -318,77 +318,81 @@ return view.extend({
 	render: function(data) {
 		var svg = data[0];
 
-		var v = E([], [
-			svg,
-			E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
-			E('br'),
+		var v = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
+			E('h2', _('Connections')),
+			E('div', {'class': 'cbi-map-descr'}, _('This page displays the active connections via this device.')),
+			E('div', { 'class': 'cbi-section' }, [
+				svg,
+				E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
+				E('br'),
 
-			E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
-				E('tr', { 'class': 'tr' }, [
-					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('UDP:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_udp_cur' }, [ '0' ]),
+				E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid blue' }, [ _('UDP:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_udp_cur' }, [ '0' ]),
 
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_udp_avg' }, [ '0' ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_udp_avg' }, [ '0' ]),
 
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_udp_peak' }, [ '0' ])
-				]),
-				E('tr', { 'class': 'tr' }, [
-					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('TCP:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_tcp_cur' }, [ '0' ]),
-
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_tcp_avg' }, [ '0' ]),
-
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_tcp_peak' }, [ '0' ])
-				]),
-				E('tr', { 'class': 'tr' }, [
-					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid red' }, [ _('Other:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_otr_cur' }, [ '0' ]),
-
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_otr_avg' }, [ '0' ]),
-
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_otr_peak' }, [ '0' ])
-				])
-			]),
-
-			E('div', { 'class': 'right' }, [
-				E('button', {
-					'class': 'btn toggle-lookups',
-					'click': function(ev) {
-						if (!enableLookups) {
-							ev.currentTarget.classList.add('spinning');
-							ev.currentTarget.disabled = true;
-							enableLookups = true;
-						}
-						else {
-							ev.currentTarget.firstChild.data = _('Enable DNS lookups');
-							enableLookups = false;
-						}
-
-						this.blur();
-					}
-				}, [ enableLookups ? _('Disable DNS lookups') : _('Enable DNS lookups') ])
-			]),
-
-			E('br'),
-
-			E('div', { 'class': 'cbi-section-node' }, [
-				E('table', { 'class': 'table', 'id': 'connections' }, [
-					E('tr', { 'class': 'tr table-titles' }, [
-						E('th', { 'class': 'th col-2 hide-xs' }, [ _('Network') ]),
-						E('th', { 'class': 'th col-2' }, [ _('Protocol') ]),
-						E('th', { 'class': 'th col-7' }, [ _('Source') ]),
-						E('th', { 'class': 'th col-7' }, [ _('Destination') ]),
-						E('th', { 'class': 'th col-4' }, [ _('Transfer') ])
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_udp_peak' }, [ '0' ])
 					]),
-					E('tr', { 'class': 'tr placeholder' }, [
-						E('td', { 'class': 'td' }, [
-							E('em', {}, [ _('Collecting data...') ])
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid green' }, [ _('TCP:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_tcp_cur' }, [ '0' ]),
+
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_tcp_avg' }, [ '0' ]),
+
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_tcp_peak' }, [ '0' ])
+					]),
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid red' }, [ _('Other:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_otr_cur' }, [ '0' ]),
+
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_otr_avg' }, [ '0' ]),
+
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_otr_peak' }, [ '0' ])
+					])
+				]),
+
+				E('div', { 'class': 'right' }, [
+					E('button', {
+						'class': 'btn cbi-button cbi-button-apply toggle-lookups',
+						'click': function(ev) {
+							if (!enableLookups) {
+								ev.currentTarget.classList.add('spinning');
+								ev.currentTarget.disabled = true;
+								enableLookups = true;
+							}
+							else {
+								ev.currentTarget.firstChild.data = _('Enable DNS lookups');
+								enableLookups = false;
+							}
+
+							this.blur();
+						}
+					}, [ enableLookups ? _('Disable DNS lookups') : _('Enable DNS lookups') ])
+				]),
+
+				E('br'),
+
+				E('div', { 'class': 'cbi-section-node' }, [
+					E('table', { 'class': 'table', 'id': 'connections' }, [
+						E('tr', { 'class': 'tr table-titles' }, [
+							E('th', { 'class': 'th col-2 hide-xs' }, [ _('Network') ]),
+							E('th', { 'class': 'th col-2' }, [ _('Protocol') ]),
+							E('th', { 'class': 'th col-7' }, [ _('Source') ]),
+							E('th', { 'class': 'th col-7' }, [ _('Destination') ]),
+							E('th', { 'class': 'th col-4' }, [ _('Transfer') ])
+						]),
+						E('tr', { 'class': 'tr placeholder' }, [
+							E('td', { 'class': 'td' }, [
+								E('em', {}, [ _('Collecting data...') ])
+							])
 						])
 					])
 				])
