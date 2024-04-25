@@ -11,8 +11,6 @@ LUCI_DEPENDS:=+yggdrasil
 LUCI_PKGARCH:=all
 PKG_VERSION:=1.1.0
 
-PKG_PROVIDES:=luci-proto-yggdrasil
-
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
