@@ -125,22 +125,275 @@ return L.view.extend({
 
 		o.placeholder = 'System hostname';
 
+		/* This function returns the value for a specified key. Used to fill 
+		various location fields derived from an lldpd location config string */
+		function getLocationValueFromConfString(_key) {
+			var inStr = this ? this.section.formvalue('config', 'lldp_location'):
+				uci.get('lldpd', 'config', 'lldp_location');
+			inStr = inStr ? inStr: '';
+
+			const words = inStr.trim().split(/\s+/);
+			/* This function does not assume an order to the key:value parameters.
+			Only that the value comes after its key, so optional keys can be in any order. */
+			const ix = words.indexOf(_key);
+
+			if (ix !== -1) {
+				let value = words.slice(ix + 1).join(' ');
+
+				if (value.startsWith('"')) {
+					const quoteStart = value.indexOf('"');
+					const quoteEnd = value.indexOf('"', quoteStart + 1);
+					return value.substring(quoteStart + 1, quoteEnd);
+				}
+				return _key == 'altitude' ? words[ix + 1] + ' ' + words[ix + 2] : words[ix + 1];
+			} else {
+				return ''; // Element not found
+			}
+		};
+
+		function write_lldp_location() {
+			var _input = this ? this.section.formvalue('config', '_lldp_location_type'):
+				'1';
+
+			if(_input){
+				if (_input == '1') {
+					/* location coordinate latitude
+					48.85667N longitude 2.2014E altitude 117.47 m datum WGS84 */
+					var lat = this.section.formvalue('config', '_coordinate_lat'),
+					    lon = this.section.formvalue('config', '_coordinate_lon'),
+					    alt = this.section.formvalue('config', '_coordinate_alt'),
+					    dat = this.section.formvalue('config', '_coordinate_dat');
+					if(lat && lon && dat) {
+						uci.set('lldpd', 'config', 'lldp_location',
+							'coordinate latitude ' + lat +
+								' longitude ' + lon +
+								' altitude ' + (alt ? alt:'0 m') +
+								' datum ' + dat );
+					}
+				}
+				else if (_input == '2') {
+					/* location address country US
+						street "Commercial Road" city "Roseville" */
+					var cc = this.section.formvalue('config', '_civic_cc'),
+					    city = this.section.formvalue('config', '_civic_city'),
+					    str = this.section.formvalue('config', '_civic_str'),
+					    bldg = this.section.formvalue('config', '_civic_bldg'),
+					    nmbr = this.section.formvalue('config', '_civic_nmbr'),
+					    zip = this.section.formvalue('config', '_civic_zip');
+
+					uci.set('lldpd', 'config', 'lldp_location',
+						'address country ' + cc.toUpperCase()
+						+ (city ? ' city "' + city + '"': '')
+						+ (str ? ' street "' + str + '"': '')
+						+ (bldg ? ' building "' + bldg + '"': '')
+						+ (nmbr ? ' number "' + nmbr + '"': '')
+						+ (zip ? ' zip "' + zip + '"': ''));
+				}
+				else if (_input == '3') {
+					/* location elin 12345 */
+					var elin = this.section.formvalue('config', '_elin');
+					if(elin)
+						uci.set('lldpd', 'config', 'lldp_location', 'elin ' + elin);
+				}
+			}
+		};
+
 		// Host location
+		o = s.taboption(tab, form.ListValue, '_lldp_location_type',
+			_('Host location type'),
+			_('Override the announced location of the host.'));
+		o.value('1', _('Coordinate based'));
+		o.value('2', _('Civic address'));
+		o.value('3', _('ELIN'));
+		o.rmempty = true;
+		o.write = write_lldp_location;
+		o.load = function(section_id, value) {
+			const loc = uci.get(this.config, section_id, 'lldp_location');
+			if (!loc) return '1';
+			if (loc.toLowerCase().includes('coordinate')) {
+				return '1';
+			}
+			else if (loc.toLowerCase().includes('address country')) {
+				return '2';
+			}
+			else if (loc.toLowerCase().includes('elin')) {
+				return '3';
+			}
+		};
+
 		o = s.taboption(tab, form.Value, 'lldp_location',
-			_('Host location'),
-			_('Override the announced location of the host.') + '<br />' +
-			usage);
-		// multiple syntaxes alert for location parameter
+			_('Raw location config'),
+			_('Raw config string sent to lldpd, starting: [coordinate|address|elin]'));
 		o.placeholder = 'address country EU';
 		o.rmempty = true;
+		o.write = function(section_id, value) {
+			if (value) {
+				const words = value.trim().split(/\s+/),
+				      regex = /^coordinate|^address|^elin/;
+				var start;
+				words.forEach(w=>{
+					if (w.match(regex)) start = w;
+				});
+				// Retain string tail from one of the regex keywords
+				return this.super('write', [ section_id,
+					value.substring(value.indexOf(start)) ]);
+			}
+		};
 		o.validate = function(section_id, value) {
 			if (value) {
-				if (!value.match(/^coordinate |^address |^elin /))
-					return _("Must start: 'coordinate ...', 'address ...' or 'elin ...'");
+				const words = value.trim().split(/\s+/),
+				      regex = /^coordinate|^address|^elin/;
+				var _eval = _("Must contain: 'coordinate ...', 'address ...' or 'elin ...'");
+				words.forEach(w=>{
+					if (w.match(regex)) _eval = true;
+				});
+				return _eval;
 			}
 			return true;
 		};
 
+		// Coordinate based
+		o = s.taboption(tab, form.Value, '_coordinate_lat',
+			_('Latitude'), '0 .. 90.000[N|S]');
+		o.depends({ '_lldp_location_type' : '1'});
+		o.datatype = "maxlength(20)";
+		o.validate = function(section_id, value) {
+			if (!value) return true;
+			var valid = _('valid syntax: 0 .. 90.000[N|S]');
+			valid = (parseFloat(value) >= 0 && parseFloat(value) <= 90) ?
+				/^-?\d+(?:\.\d+)?[NnSs]$/.test(value) ? true : valid : valid;
+			return valid;
+		}
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('latitude');
+		}
+		o.write = write_lldp_location;
+
+		o = s.taboption(tab, form.Value, '_coordinate_lon',
+			_('Longitude'), '0 .. 180.000[E|W]');
+		o.depends({ '_lldp_location_type' : '1'});
+		o.datatype = "maxlength(20)";
+		o.validate = function(section_id, value) {
+			if (!value) return true;
+			var valid = _('valid syntax: 0 .. 180.000[E|W]');
+			valid = (parseFloat(value) >= 0 && parseFloat(value) <= 180) ?
+				/^-?\d+(?:\.\d+)?[WwEe]$/.test(value) ? true : valid : valid;
+			return valid;
+		}
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('longitude');
+		}
+		o.write = write_lldp_location;
+
+		const min_alt = -100000.00,
+		      max_alt = 42849672.95;
+		o = s.taboption(tab, form.Value, '_coordinate_alt',
+			_('Altitude'), '%f .. %f [m|f]'.format(min_alt, max_alt));
+		o.depends({ '_lldp_location_type' : '1'});
+		o.datatype = 'maxlength(20)';
+		o.validate = function(section_id, value) {
+			if (!value) return true;
+			var valid = _('valid syntax: %f .. %f [mf]').format(min_alt, max_alt);
+			valid = (parseFloat(value) >= min_alt && parseFloat(value) <=  max_alt) ?
+				/^-?\d+(?:\.\d+)?\ [mf]$/.test(value) ? true : valid : valid;
+			return valid;
+		}
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('altitude');
+		}
+		o.write = write_lldp_location;
+
+		o = s.taboption(tab, form.ListValue, '_coordinate_dat',
+			_('Datum'));
+		o.depends({ '_lldp_location_type' : '1'});
+		o.value('WGS84');
+		o.value('NAD83');
+		o.value('NAD83/MLLW');
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('datum');
+		}
+		o.write = write_lldp_location;
+
+		// Civic address based
+		/* ISO 3166-2 CC list officially assigned + exceptional:
+		https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements */
+		o = s.taboption(tab, form.Value, '_civic_cc',
+			_('Country'), '%s'.format('<a href=%s>ISO 3166-2 CC</a>').format('https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements'));
+		o.depends({ '_lldp_location_type' : '2'});
+		o.default = 'EU';
+		o.placeholder = 'EU';
+		o.validate = function(section_id, value) {
+			if(!value) return true;
+			var valid = _('Two character CC required');
+			valid = (value.length == 2) ?
+				/^[A-Z]{2}$/i.test(value) ? true : valid : valid;
+			return valid;
+		}
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('country').toUpperCase();
+		}
+		o.write = write_lldp_location;
+
+		o = s.taboption(tab, form.Value, '_civic_city',
+			_('City'));
+		o.depends({ '_lldp_location_type' : '2'});
+		o.datatype = "maxlength(100)";
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('city');
+		}
+		o.placeholder = _('Gotham');
+		o.write = write_lldp_location;
+
+		o = s.taboption(tab, form.Value, '_civic_str',
+			_('Street'));
+		o.depends({ '_lldp_location_type' : '2'});
+		o.datatype = "maxlength(100)";
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('street');
+		}
+		o.placeholder = _('Main Street');
+		o.write = write_lldp_location;
+
+		o = s.taboption(tab, form.Value, '_civic_bldg',
+			_('Building'));
+		o.depends({ '_lldp_location_type' : '2'});
+		o.datatype = "maxlength(250)";
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('building');
+		}
+		o.placeholder = _('Empire State Bldg');
+		o.write = write_lldp_location;
+		
+		o = s.taboption(tab, form.Value, '_civic_nmbr',
+			_('Number'));
+		o.depends({ '_lldp_location_type' : '2'});
+		o.datatype = "maxlength(25)";
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('number');
+		}
+		o.placeholder = _('1A');
+		o.write = write_lldp_location;
+
+		o = s.taboption(tab, form.Value, '_civic_zip',
+			_('Post-code'));
+		o.depends({ '_lldp_location_type' : '2'});
+		o.datatype = "maxlength(25)";
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('zip');
+		}
+		o.placeholder = '12345';
+		o.write = write_lldp_location;
+
+		// ELIN based
+		o = s.taboption(tab, form.Value, '_elin',
+			_('ELIN Address'));
+		o.depends({ '_lldp_location_type' : '3'});
+		o.datatype = 'and(uinteger,maxlength(25))';
+		o.load = function(section_id, value) {
+			return getLocationValueFromConfString('elin');
+		}
+		o.placeholder = '1911';
+		o.write = write_lldp_location;
 
 		// Platform
 		o = s.taboption(tab, form.Value, 'lldp_platform',
