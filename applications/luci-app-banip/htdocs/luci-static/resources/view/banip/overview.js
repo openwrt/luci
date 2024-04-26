@@ -1,4 +1,5 @@
 'use strict';
+'require dom';
 'require view';
 'require poll';
 'require fs';
@@ -11,6 +12,12 @@
 	button handling
 */
 function handleAction(ev) {
+	if (ev === 'restart') {
+		let map = document.querySelector('.cbi-map');
+		dom.callClassMethod(map, 'save').then(function() {
+			classes.ui.changes.apply(false);
+		});
+	}
 	return fs.exec_direct('/etc/init.d/banip', [ev])
 }
 
@@ -222,7 +229,7 @@ return view.extend({
 						'click': ui.createHandlerFn(this, function () {
 							return handleAction('restart');
 						})
-					}, [_('Restart')])
+					}, [_('Apply & Restart')])
 				])
 			]);
 		}, o, this);
