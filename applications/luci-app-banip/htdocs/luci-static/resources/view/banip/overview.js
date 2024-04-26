@@ -643,10 +643,15 @@ return view.extend({
 
 			o = s.taboption('feeds', form.MultiValue, 'ban_country', _('Countries (RIR)'));
 			for (let i = 0; i < countries.length; i++) {
-				ccode = countries[i].match(/^(\w+)\t/)[1].trim();
-				rir = countries[i].match(/^\w+\t(\w+)\t/)[1].trim();
-				country = countries[i].match(/^\w+\t\w+\t(.*$)/)[1].trim();
-				o.value(ccode, country + ' (' + rir + ')');
+				try {
+					ccode = countries[i].match(/^(\w+)\t/)[1].trim();
+					rir = countries[i].match(/^\w+\t(\w+)\t/)[1].trim();
+					country = countries[i].match(/^\w+\t\w+\t(.*$)/)[1].trim();
+					o.value(ccode, country + ' (' + rir + ')');
+				} catch (e) {
+					countries[i] = "";
+					ui.addNotification(null, E('p', _('Unable to parse the countries file: %s').format(e.message)), 'error');
+				}
 			}
 			o.optional = true;
 			o.rmempty = true;
@@ -673,11 +678,15 @@ return view.extend({
 		o = s.taboption('feeds', form.DynamicList, 'ban_allowurl', _('Allowlist Feed URLs'));
 		if (countries) {
 			for (let i = 0; i < countries.length; i++) {
-				ccode = countries[i].match(/^(\w+)\t/)[1].trim();
-				rir = countries[i].match(/^\w+\t(\w+)\t/)[1].trim();
-				country = countries[i].match(/^\w+\t\w+\t(.*$)/)[1].trim();
-				o.value('https://www.ipdeny.com/ipblocks/data/aggregated/' + ccode + '-aggregated.zone', country + ' IPv4 (' + rir + ')');
-				o.value('https://www.ipdeny.com/ipv6/ipaddresses/aggregated/' + ccode + '-aggregated.zone', country + ' IPv6 (' + rir + ')');
+				try {
+					ccode = countries[i].match(/^(\w+)\t/)[1].trim();
+					rir = countries[i].match(/^\w+\t(\w+)\t/)[1].trim();
+					country = countries[i].match(/^\w+\t\w+\t(.*$)/)[1].trim();
+					o.value('https://www.ipdeny.com/ipblocks/data/aggregated/' + ccode + '-aggregated.zone', country + ' IPv4 (' + rir + ')');
+					o.value('https://www.ipdeny.com/ipv6/ipaddresses/aggregated/' + ccode + '-aggregated.zone', country + ' IPv6 (' + rir + ')');
+				} catch (e) {
+					countries[i] = "";
+				}
 			}
 		}
 		o.optional = true;
