@@ -577,7 +577,7 @@ return baseclass.extend({
 		o.depends('type', '8021q');
 		o.depends('type', '8021ad');
 
-		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi', _('Bridge ports'));
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi-bridge', _('Bridge ports'));
 		o.size = 10;
 		o.rmempty = true;
 		o.multiple = true;
