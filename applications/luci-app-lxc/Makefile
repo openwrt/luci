@@ -14,7 +14,7 @@ define Package/luci-app-lxc/conffiles
 endef
 
 PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=Petar Koretic <petar.koretic@sartura.hr> \
+PKG_MAINTAINER:=Petar Koretic <petar.koretic@sartura.hr>, \
 	Dirk Brenken <dev@brenken.org>
 
 include ../../luci.mk
