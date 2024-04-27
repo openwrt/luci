@@ -662,7 +662,7 @@ return view.extend({
 		if (result[2]) {
 			countries = result[2].trim().split('\n');
 
-			o = s.taboption('feeds', form.MultiValue, 'ban_country', _('Countries (RIR)'));
+			o = s.taboption('feeds', form.MultiValue, 'ban_country', _('Countries') + ' (<abbr title="Regional Internet Registries">RIR</abbr>)');
 			for (let i = 0; i < countries.length; i++) {
 				try {
 					ccode = countries[i].match(/^(\w+)\t/)[1].trim();
