@@ -568,16 +568,16 @@ return L.view.extend({
 		var o;
 
 		// SNMP agentX socket
-		// **Note**: lldpd is compiled in OpenWrt without SNMP support by default. Setting this action will then cause the lldpd daemon to stop starting and thus lldpd will stop working. To fix this, the value must then be deleted and lldpd restarted.
-		// o = s.taboption(tab, form.Value, 'agentxsocket',
-		// 	_('SNMP agentX socket path'),
-		// 	_('If the path to the socket is set, then LLDPd will enable an ' +
-		// 	  'SNMP subagent using AgentX protocol. This allows you to get ' +
-		// 	  'information about local system and remote systems through SNMP.'));
+		/* **Note**: The init file tests for SNMP support, so agentxsocket is at worst inert. */
+		o = s.taboption(tab, form.Value, 'agentxsocket',
+			_('SNMP agentX socket path'),
+			_('When set, LLDPd enables an ' +
+			  'SNMP subagent using AgentX protocol. This enables ' +
+			  'information about other systems through SNMP.'));
 
-		// o.rmempty = true;
-		// o.placeholder = '/var/run/agentx.sock';
-		// o.default = '';
+		o.rmempty = true;
+		o.placeholder = '/var/run/agentx.sock';
+		o.default = '';
 
 		// LLDP-MED class
 		o = s.taboption(tab, form.ListValue, 'lldp_class',
