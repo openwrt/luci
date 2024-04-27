@@ -574,7 +574,7 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_log', form.ListValue, 'ban_loglimit', _('Log Limit'), _('Parse only the last stated number of log entries for suspicious events. To disable the log monitor at all set it to \'0\'.'));
-		o.value('0', _('0 (disable)'));
+		o.value('0', _('Disable'));
 		o.value('50', '50');
 		o.value('100', '100');
 		o.value('250', '250');
