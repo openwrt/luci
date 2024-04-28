@@ -428,7 +428,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Treshold'), _('ICMP-Treshold in packets per second to prevent WAN-DDoS attacks.'));
+		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Threshold'), _('ICMP-Threshold in packets per second to prevent WAN-DDoS attacks.'));
 		o.value('1', '1');
 		o.value('10', '10');
 		o.value('50', '50');
@@ -439,7 +439,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_synlimit', _('SYN-Treshold'), _('SYN-Treshold in packets per second to prevent WAN-DDoS attacks.'));
+		o = s.taboption('adv_chain', form.ListValue, 'ban_synlimit', _('SYN-Threshold'), _('SYN-Threshold in packets per second to prevent WAN-DDoS attacks.'));
 		o.value('1', '1');
 		o.value('10', '10');
 		o.value('50', '50');
@@ -450,7 +450,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_udplimit', _('UDP-Treshold'), _('UDP-Treshold in packets per second to prevent WAN-DDoS attacks.'));
+		o = s.taboption('adv_chain', form.ListValue, 'ban_udplimit', _('UDP-Threshold'), _('UDP-Threshold in packets per second to prevent WAN-DDoS attacks.'));
 		o.value('1', '1');
 		o.value('10', '10');
 		o.value('50', '50');
