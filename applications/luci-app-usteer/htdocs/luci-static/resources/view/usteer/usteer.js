@@ -368,13 +368,15 @@ return view.extend({
 
 		if (!('usteer' in data[0])) {
 			m = new form.Map('usteer', _('Usteer'),
-				_('Usteer is not running. Make sure it is installed and running.') +
+				_('Usteer is not running. Make sure it is installed and running.') +' '+
+				_('An incorrect parameter can cause usteer to fail to start up.') +' '+
 				_('To start it running try %s').format('<code>/etc/init.d/usteer start</code>')
 			);
-			return m.render();
 		}
 
-		m = new form.Map('usteer', _('Usteer'));
+		else {
+			m = new form.Map('usteer', _('Usteer'));
+		}
 
 		Hosts = data[1];
 		Remotehosts = data[2];
@@ -389,11 +391,13 @@ return view.extend({
 		s.tab('hearingmap', _('Hearing map'));
 		s.tab('settings', _('Settings'));
 
-		o = s.taboption('status', Clientinfooverview);
-		o.readonly = true;
+		if (('usteer' in data[0])) {
+			o = s.taboption('status', Clientinfooverview);
+			o.readonly = true;
 
-		o = s.taboption('hearingmap', HearingMap);
-		o.readonly = true;
+			o = s.taboption('hearingmap', HearingMap);
+			o.readonly = true;
+		}
 
 		o = s.taboption('settings', Settingstitle);
 		o.readonly = true;
