@@ -1600,9 +1600,9 @@ return view.extend({
 		o.value('1',_('Enabled'));
 		o.value('2',_('Enabled (all CPUs)'));
 		o.optional = true;
-				
+
 		var steer_flow = uci.get('network', 'globals', 'steering_flows');	
-		
+
 		o = s.option(form.Value, 'steering_flows', _('Steering flows (<abbr title="Receive Packet Steering">RPS</abbr>)'),
 			_('Directs packet flows to specific CPUs where the local socket owner listens (the local service).') + ' ' +
 			_('Note: this setting is for local services on the device only (not for forwarding).'));
