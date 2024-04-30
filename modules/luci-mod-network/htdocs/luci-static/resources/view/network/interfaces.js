@@ -1611,6 +1611,7 @@ return view.extend({
 		o.value('256', _('256'));
 		o.depends('packet_steering', '1');
 		o.depends('packet_steering', '2');
+		o.datatype = 'uinteger';
 		o.default = steer_flow;
 
 		if (dslModemType != null) {
