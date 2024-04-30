@@ -153,24 +153,25 @@ return baseclass.extend({
 		 }
 
 		var ifc = data[min_metric_i];
-
-		if (v6) {
-			var uptime = ifc.getUptime();
-			this.params.internet.v6.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
-			this.params.internet.v6.ipprefixv6.value =  ifc.getIP6Prefix() || '-';
-			this.params.internet.v6.gatewayv6.value =  ifc.getGateway6Addr() || '-';
-			this.params.internet.v6.protocol.value=  ifc.getI18n() || E('em', _('Not connected'));
-			this.params.internet.v6.addrsv6.value = ifc.getIP6Addrs() || [ '-' ];
-			this.params.internet.v6.dnsv6.value = ifc.getDNS6Addrs() || [ '-' ];
-			this.params.internet.v6.connected.value = ifc.isUp();
-		} else {
-			var uptime = ifc.getUptime();
-			this.params.internet.v4.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
-			this.params.internet.v4.protocol.value=  ifc.getI18n() || E('em', _('Not connected'));
-			this.params.internet.v4.gatewayv4.value =  ifc.getGatewayAddr() || '0.0.0.0';
-			this.params.internet.v4.connected.value = ifc.isUp();
-			this.params.internet.v4.addrsv4.value = ifc.getIPAddrs() || [ '-'];
-			this.params.internet.v4.dnsv4.value = ifc.getDNSAddrs() || [ '-' ];
+		if(ifc){
+			if (v6) {
+				var uptime = ifc.getUptime();
+				this.params.internet.v6.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
+				this.params.internet.v6.ipprefixv6.value =  ifc.getIP6Prefix() || '-';
+				this.params.internet.v6.gatewayv6.value =  ifc.getGateway6Addr() || '-';
+				this.params.internet.v6.protocol.value=  ifc.getI18n() || E('em', _('Not connected'));
+				this.params.internet.v6.addrsv6.value = ifc.getIP6Addrs() || [ '-' ];
+				this.params.internet.v6.dnsv6.value = ifc.getDNS6Addrs() || [ '-' ];
+				this.params.internet.v6.connected.value = ifc.isUp();
+			} else {
+				var uptime = ifc.getUptime();
+				this.params.internet.v4.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
+				this.params.internet.v4.protocol.value=  ifc.getI18n() || E('em', _('Not connected'));
+				this.params.internet.v4.gatewayv4.value =  ifc.getGatewayAddr() || '0.0.0.0';
+				this.params.internet.v4.connected.value = ifc.isUp();
+				this.params.internet.v4.addrsv4.value = ifc.getIPAddrs() || [ '-'];
+				this.params.internet.v4.dnsv4.value = ifc.getDNSAddrs() || [ '-' ];
+			}
 		}
 	},
 
