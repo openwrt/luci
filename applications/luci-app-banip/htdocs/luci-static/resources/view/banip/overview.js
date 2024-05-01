@@ -12,7 +12,7 @@
 	button handling
 */
 function handleAction(ev) {
-	if (ev === 'restart') {
+	if (ev === 'restart' || ev === 'reload') {
 		let map = document.querySelector('.cbi-map');
 		return dom.callClassMethod(map, 'save')
 		.then(L.bind(ui.changes.apply, ui.changes))
@@ -232,7 +232,7 @@ return view.extend({
 						'click': ui.createHandlerFn(this, function () {
 							return handleAction('restart');
 						})
-					}, [_('Apply & Restart')])
+					}, [_('Restart')])
 				])
 			]);
 		}, o, this);
@@ -319,12 +319,14 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('general', form.ListValue, 'ban_fetchretry', _('Download Retries'), _('Number of download attempts in case of an error (not supported by uclient-fetch).'));
-		o.value('1', '1');
-		o.value('3', '3');
-		o.value('5', '5');
-		o.value('10', '10');
-		o.value('20', '20');
+		o.value('1');
+		o.value('3');
+		o.value('5');
+		o.value('10');
+		o.value('20');
 		o.default = '5';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -345,15 +347,19 @@ return view.extend({
 		o.value('10', _('Less Priority'));
 		o.value('19', _('Least Priority'));
 		o.default = '0';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('advanced', form.ListValue, 'ban_filelimit', _('Max Open Files'), _('Increase the maximal number of open files, e.g. to handle the amount of temporary split files while loading the Sets.'));
-		o.value('512', '512');
-		o.value('1024', '1024');
-		o.value('2048', '2048');
-		o.value('4096', '4096');
+		o.value('512');
+		o.value('1024');
+		o.value('2048');
+		o.value('4096');
 		o.default = '1024';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -404,11 +410,13 @@ return view.extend({
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>';
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('Chain Priority'), _('Set the nft chain priority within the banIP table, lower values means higher priority.'));
-		o.value('0', '0');
-		o.value('-100', '-100');
-		o.value('-150', '-150');
-		o.value('-200', '-200');
-		o.default = '100';
+		o.value('0');
+		o.value('-100');
+		o.value('-150');
+		o.value('-200');
+		o.default = '-100';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -429,35 +437,41 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Threshold'), _('ICMP-Threshold in packets per second to prevent WAN-DDoS attacks.'));
-		o.value('1', '1');
-		o.value('10', '10');
-		o.value('50', '50');
-		o.value('100', '100');
-		o.value('250', '250');
-		o.value('500', '500');
+		o.value('1');
+		o.value('10');
+		o.value('50');
+		o.value('100');
+		o.value('250');
+		o.value('500');
 		o.default = '10';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_synlimit', _('SYN-Threshold'), _('SYN-Threshold in packets per second to prevent WAN-DDoS attacks.'));
-		o.value('1', '1');
-		o.value('10', '10');
-		o.value('50', '50');
-		o.value('100', '100');
-		o.value('250', '250');
-		o.value('500', '500');
+		o.value('1');
+		o.value('10');
+		o.value('50');
+		o.value('100');
+		o.value('250');
+		o.value('500');
 		o.default = '10';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_udplimit', _('UDP-Threshold'), _('UDP-Threshold in packets per second to prevent WAN-DDoS attacks.'));
-		o.value('1', '1');
-		o.value('10', '10');
-		o.value('50', '50');
-		o.value('100', '100');
-		o.value('250', '250');
-		o.value('500', '500');
+		o.value('1');
+		o.value('10');
+		o.value('50');
+		o.value('100');
+		o.value('250');
+		o.value('500');
 		o.default = '100';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -472,6 +486,8 @@ return view.extend({
 		o.value('memory', _('memory'));
 		o.value('performance', _('performance'));
 		o.default = 'memory';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -479,6 +495,8 @@ return view.extend({
 		o.value('drop', _('drop'));
 		o.value('reject', _('reject'));
 		o.default = 'drop';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -495,14 +513,14 @@ return view.extend({
 				feeds = JSON.parse(result[0]);
 			} catch (e) {
 				feeds = "";
-				ui.addNotification(null, E('p', _('Unable to parse the custom feed file: %s').format(e.message)), 'error');
+				ui.addNotification(null, E('p', _('Unable to parse the custom feed file!')), 'error');
 			}
 		} else if (result[1]) {
 			try {
 				feeds = JSON.parse(result[1]);
 			} catch (e) {
 				feeds = "";
-				ui.addNotification(null, E('p', _('Unable to parse the default feed file: %s').format(e.message)), 'error');
+				ui.addNotification(null, E('p', _('Unable to parse the default feed file!')), 'error');
 			}
 		}
 		if (feeds) {
@@ -554,6 +572,8 @@ return view.extend({
 		o.value('info', _('info'));
 		o.value('debug', _('debug'));
 		o.default = 'warn';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -574,13 +594,15 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_log', form.ListValue, 'ban_loglimit', _('Log Limit'), _('Parse only the last stated number of log entries for suspicious events. To disable the log monitor at all set it to \'0\'.'));
-		o.value('0', _('Disable'));
-		o.value('50', '50');
-		o.value('100', '100');
-		o.value('250', '250');
-		o.value('500', '500');
-		o.value('1000', '1000');
+		o.value('0');
+		o.value('50');
+		o.value('100');
+		o.value('250');
+		o.value('500');
+		o.value('1000');
 		o.default = '100';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -658,7 +680,7 @@ return view.extend({
 			o.rmempty = true;
 		}
 
-		let ccode, rir, country, countries = [];
+		let err, ccode, rir, country, countries = [];
 		if (result[2]) {
 			countries = result[2].trim().split('\n');
 
@@ -671,7 +693,10 @@ return view.extend({
 					o.value(ccode, country + ' (' + rir + ')');
 				} catch (e) {
 					countries[i] = "";
-					ui.addNotification(null, E('p', _('Unable to parse the countries file: %s').format(e.message)), 'error');
+					if (!err) {
+						ui.addNotification(null, E('p', _('Unable to parse the countries file!')), 'error');
+					}
+					err = e;
 				}
 			}
 			o.optional = true;
@@ -736,6 +761,8 @@ return view.extend({
 		o.value('subnet', _('Subnet'));
 		o.value('ip', _('IP'));
 		o.default = 'subnet';
+		o.placeholder = _('-- default --');
+		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
@@ -763,5 +790,7 @@ return view.extend({
 
 		return m.render();
 	},
+	handleSaveApply: null,
+	handleSave: null,
 	handleReset: null
 });
