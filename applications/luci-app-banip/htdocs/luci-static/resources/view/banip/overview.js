@@ -410,6 +410,7 @@ return view.extend({
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>';
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('Chain Priority'), _('Set the nft chain priority within the banIP table, lower values means higher priority.'));
+		o.value('10');
 		o.value('0');
 		o.value('-100');
 		o.value('-150');
@@ -436,39 +437,42 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Threshold'), _('ICMP-Threshold in packets per second to prevent WAN-DDoS attacks.'));
-		o.value('1');
+		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Threshold'), _('ICMP-Threshold in packets per second to prevent WAN-DDoS attacks. To disable this safeguard set it to \'0\'.'));
+		o.value('0');
 		o.value('10');
 		o.value('50');
 		o.value('100');
 		o.value('250');
 		o.value('500');
+		o.value('1000');
 		o.default = '10';
 		o.placeholder = _('-- default --');
 		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_synlimit', _('SYN-Threshold'), _('SYN-Threshold in packets per second to prevent WAN-DDoS attacks.'));
-		o.value('1');
+		o = s.taboption('adv_chain', form.ListValue, 'ban_synlimit', _('SYN-Threshold'), _('SYN-Threshold in packets per second to prevent WAN-DDoS attacks. To disable this safeguard set it to \'0\'.'));
+		o.value('0');
 		o.value('10');
 		o.value('50');
 		o.value('100');
 		o.value('250');
 		o.value('500');
+		o.value('1000');
 		o.default = '10';
 		o.placeholder = _('-- default --');
 		o.create = true;
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_chain', form.ListValue, 'ban_udplimit', _('UDP-Threshold'), _('UDP-Threshold in packets per second to prevent WAN-DDoS attacks.'));
-		o.value('1');
-		o.value('10');
-		o.value('50');
+		o = s.taboption('adv_chain', form.ListValue, 'ban_udplimit', _('UDP-Threshold'), _('UDP-Threshold in packets per second to prevent WAN-DDoS attacks. To disable this safeguard set it to \'0\'.'));
+		o.value('0');
 		o.value('100');
 		o.value('250');
 		o.value('500');
+		o.value('1000');
+		o.value('2500');
+		o.value('5000');
 		o.default = '100';
 		o.placeholder = _('-- default --');
 		o.create = true;
