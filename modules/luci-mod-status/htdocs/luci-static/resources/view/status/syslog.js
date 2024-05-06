@@ -1,27 +1,42 @@
 'use strict';
 'require view';
 'require fs';
+'require poll';
 'require ui';
 
 return view.extend({
-	load: function() {
+	retrieveLog: async function() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/sbin/logread'), null),
 			L.resolveDefault(fs.stat('/usr/sbin/logread'), null)
 		]).then(function(stat) {
 			var logger = stat[0] ? stat[0].path : stat[1] ? stat[1].path : null;
 
-			return fs.exec_direct(logger, [ '-e', '^' ]).catch(function(err) {
+			return fs.exec_direct(logger, [ '-e', '^' ]).then(logdata => {
+				const loglines = logdata.trim().split(/\n/);
+				return { value: loglines.join('\n'), rows: loglines.length + 1 };
+			}).catch(function(err) {
 				ui.addNotification(null, E('p', {}, _('Unable to load log data: ' + err.message)));
 				return '';
 			});
 		});
 	},
 
-	render: function(logdata) {
-		var loglines = logdata.trim().split(/\n/);
+	pollLog: async function() {
+		const element = document.getElementById('syslog');
+		if (element) {
+			const log = await this.retrieveLog();
+			element.value = log.value;
+			element.rows = log.rows;
+		}
+	},
 
+	load: async function() {
+		poll.add(this.pollLog.bind(this));
+		return await this.retrieveLog();
+	},
 
+	render: function(loglines) {
 		var scrollDownButton = E('button', { 
 				'id': 'scrollDownButton',
 				'class': 'cbi-button cbi-button-neutral'
@@ -49,8 +64,8 @@ return view.extend({
 					'style': 'font-size:12px',
 					'readonly': 'readonly',
 					'wrap': 'off',
-					'rows': loglines.length + 1
-				}, [ loglines.join('\n') ]),
+					'rows': loglines.rows,
+				}, [ loglines.value ]),
 				E('div', {'style': 'padding-bottom: 20px'}, [scrollUpButton])
 			])
 		]);
