@@ -5,7 +5,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_LICENSE:=GPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.net>
-PKG_VERSION:=1.0.1-r10
+PKG_VERSION:=1.0.1-11
 
 LUCI_TITLE:=Advanced Linksys Reboot Web UI
 LUCI_URL:=https://docs.openwrt.melmac.net/luci-app-advanced-reboot/
