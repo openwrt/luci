@@ -64,8 +64,8 @@ return view.extend({
 			_('Allows the lower priority machine to maintain the master role,') +
 			_('even when a higher priority machine comes back online.') + ' ' +
 			_('For this to work, the initial state of this entry must be BACKUP.'));
+		o.optional = true;
 		o.default = false;
-		o.rmempty = false;
 
 		ipaddress = uci.sections('keepalived', 'ipaddress');
 		o = s.taboption('general', form.DynamicList, 'virtual_ipaddress', _('Virtual IP Address'),
