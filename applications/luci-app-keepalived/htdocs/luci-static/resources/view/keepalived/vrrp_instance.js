@@ -218,7 +218,7 @@ return view.extend({
 		o.placeholder = '300';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.ListValue, 'preempt_delay', _('Debug'),
+		o = s.taboption('advanced', form.ListValue, 'debug', _('Debug'),
 			_('Debug Level'));
 		o.default = '0';
 		o.value('0');
