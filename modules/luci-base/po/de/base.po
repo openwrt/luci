@@ -5,8 +5,8 @@ msgstr ""
 "POT-Creation-Date: 2009-05-26 17:57+0200\n"
 "PO-Revision-Date: 2024-04-30 03:54+0000\n"
 "Last-Translator: David <dawin@users.noreply.hosted.weblate.org>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/>"
-"\n"
+"Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/"
+">\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -53,6 +53,9 @@ msgid ""
 "connection over Yggdrasil network, utilizing NAT traversal to bypass "
 "intermediary nodes."
 msgstr ""
+"%s ist ein unabhängiges Projekt, das darauf abzielt, die Latenz einer "
+"Verbindung über das Yggdrasil-Netzwerk transparent zu reduzieren, indem NAT-"
+"Traversal zur Umgehung zwischengeschalteter Knoten verwendet wird."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:35
 msgid "%s is untagged in multiple VLANs!"
@@ -175,7 +178,7 @@ msgstr "2"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1611
 msgid "256"
-msgstr ""
+msgstr "256"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:62
 msgctxt "sstp log level value"
@@ -947,9 +950,10 @@ msgstr "IPs sequenziell vergeben"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:350
 msgid "Allocate listen addresses"
-msgstr ""
+msgstr "Zuweisung von Listen-Adressen"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:24
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "Erlaube <abbr title=\"Secure Shell\">SSH</abbr> Passwort-Authentifizierung"
@@ -993,10 +997,12 @@ msgid "Allow rebooting the device"
 msgstr "Erlaube Neustarten des Geräts"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr "Entfernten Hosts erlauben zu lokale SSH-Tunnel-Ports zu verbinden"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:30
 msgid "Allow root logins with password"
 msgstr "\"root\" Login mit Passwort aktivieren"
 
@@ -1005,6 +1011,7 @@ msgid "Allow system feature probing"
 msgstr "Systemfunktionsprüfung zulassen"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:30
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr ""
 "Erlaubt es dem <em>root</em> Benutzer sich mit einem Passwort statt einem "
@@ -1186,7 +1193,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1105
 msgid "Assign new, freeform tags to this entry."
-msgstr ""
+msgstr "Neue, freiform Tags diesem Eintrag zuweisen."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1101
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
@@ -1260,7 +1267,7 @@ msgstr "Autorisierung benötigt"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:360
 msgid "Autofill listen addresses"
-msgstr ""
+msgstr "Automatisch Listenadressen ausfüllen"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:120
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:18
@@ -1917,7 +1924,7 @@ msgstr "Sammle Daten..."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:250
 msgid "Collisions seen"
-msgstr ""
+msgstr "Kollisionen gesehen"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:71
 msgid "Command"
@@ -2615,7 +2622,7 @@ msgstr "Einwahlnummer"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:136
 msgid "Dir"
-msgstr ""
+msgstr "Dir"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2739
 msgid "Directory"
@@ -2626,6 +2633,8 @@ msgid ""
 "Directs packet flows to specific CPUs where the local socket owner listens "
 "(the local service)."
 msgstr ""
+"Leitet Paketströme an bestimmte CPUs, auf die der lokale Socketbesitzer hört "
+"(der lokale Dienst)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:114
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:201
@@ -3263,10 +3272,15 @@ msgid ""
 "sent back. Otherwise defaults including the platform, architecture and "
 "Yggdrasil version are included."
 msgstr ""
+"Aktiviere die Node-Info-Privatsphäre, damit nur die in \"Node-Info\" "
+"angegebenen Daten zurückgesendet werden. Ansonsten werden Standardwerte wie "
+"Plattform, Architektur und Yggdrasil-Version übermittelt."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1598
 msgid "Enable packet steering across CPUs. May help or hinder network speed."
 msgstr ""
+"Aktiviert die Paketsteuerung zwischen den CPUs. Kann die "
+"Netzwerkgeschwindigkeit fördern oder behindern."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:676
 msgid "Enable promiscuous mode"
@@ -3325,7 +3339,7 @@ msgstr "Aktiviert"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1601
 msgid "Enabled (all CPUs)"
-msgstr ""
+msgstr "Aktiviert (alle CPUs)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:592
 msgid "Enables IGMP snooping on this bridge"
@@ -3775,7 +3789,7 @@ msgstr "Firmware-Version"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:681
 msgid "First answer wins."
-msgstr ""
+msgstr "Die erste Antwort gewinnt."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:700
 msgid "Fixed source port for outbound DNS queries."
@@ -3931,7 +3945,7 @@ msgstr "Weiterleitungstyp"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:361
 msgid "Forwards"
-msgstr ""
+msgstr "Weiterleitung"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:80
 msgid "Fragmentation"
@@ -3992,6 +4006,7 @@ msgid "Gateway Mode"
 msgstr "Gateway-Modus"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Gateway Ports"
 msgstr "Gateway-Ports"
 
@@ -4123,7 +4138,7 @@ msgstr "Zugriff auf LuCI Wireguard-Verfahren gewähren"
 
 #: protocols/luci-proto-yggdrasil/root/usr/share/rpcd/acl.d/luci-proto-yggdrasil.json:3
 msgid "Grant access to LuCI Yggdrasil procedures"
-msgstr ""
+msgstr "Gewährung des Zugangs zu LuCI Yggdrasil-Verfahren"
 
 #: protocols/luci-proto-openfortivpn/root/usr/share/rpcd/acl.d/luci-openfortivpn.json:3
 msgid "Grant access to LuCI openfortivpn procedures"
@@ -4135,7 +4150,7 @@ msgstr "Zugriff auf die SSH-Konfiguration gewähren"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:23
 msgid "Grant access to Storage and Mount status display"
-msgstr ""
+msgstr "Zugriff auf die Statusanzeige von Storage und Mount gewähren"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:12
 msgid "Grant access to basic LuCI procedures"
@@ -4179,7 +4194,7 @@ msgstr "Zugriff auf die Netzwerkstatus-Informationen gewähren"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:51
 msgid "Grant access to port status display"
-msgstr ""
+msgstr "Zugriff auf die Statusanzeige des Ports gewähren"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:13
 msgid "Grant access to process status"
@@ -4309,6 +4324,8 @@ msgid ""
 "Host-specific lease time, e.g. <code>5m</code>, <code>3h</code>, <code>7d</"
 "code>."
 msgstr ""
+"Host-spezifische Lease Time, z.B. <code>5m</code>, <code>3h</code>, "
+"<code>7d</code>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:38
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:944
@@ -4902,6 +4919,11 @@ msgid ""
 "a DHCP lease to one of the macaddrs when another asks for a lease. It only "
 "works reliably if only one of the macaddrs is active at any time."
 msgstr ""
+"In DHCPv4 ist es möglich, mehr als eine Mac-Adresse anzugeben. Dadurch kann "
+"eine IP-Adresse mit mehreren macaddrs verknüpft werden, und dnsmasq gibt "
+"eine DHCP-Lease für eine der macaddrs auf, wenn eine andere um eine Lease "
+"bittet. Es funktioniert nur dann zuverlässig, wenn nur eine der macaddrs zu "
+"jeder Zeit aktiv ist."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:71
 msgid ""
@@ -5067,6 +5089,7 @@ msgstr "Kennung der integrierten Schaltkreiskarte"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Interface"
 msgstr "Schnittstelle"
 
@@ -5286,6 +5309,10 @@ msgid ""
 "direct peerings over internet with remote nodes running Yggdrasil Jumper "
 "without requiring firewall or port configuration."
 msgstr ""
+"Es sucht regelmäßig nach aktiven Sitzungen und baut automatisch direkte "
+"Peerings über das Internet mit entfernten Knoten auf, auf denen Yggdrasil "
+"Jumper läuft, ohne dass eine Firewall oder Portkonfiguration erforderlich "
+"ist."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:78
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:98
@@ -5323,6 +5350,7 @@ msgstr "Keep-Alive"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:54
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:38
 msgid "Kernel Log"
 msgstr "Kernelprotokoll"
 
@@ -5572,6 +5600,11 @@ msgid ""
 "from the R0KH that the STA used during the Initial Mobility Domain "
 "Association."
 msgstr ""
+"Liste der R0KHs im gleichen Mobilitätsbereich. <br />Format: MAC-Adresse, "
+"NAS-Kennung, 256-Bit-Schlüssel als Hex-String. <br />Diese Liste wird "
+"verwendet, um die R0KH-ID (NAS Identifier) einer Ziel-MAC-Adresse "
+"zuzuordnen, wenn der PMK-R1-Schlüssel von der R0KH angefordert wird, die der "
+"STA während der anfänglichen Mobilitätsdomänenzuordnung verwendet hat."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1634
 msgid ""
@@ -5611,17 +5644,18 @@ msgstr "Listen-Port"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:258
 msgid "Listen addresses"
-msgstr ""
+msgstr "Listen Adressen"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:255
 msgid "Listen for peers"
-msgstr ""
+msgstr "Nach Peers lauschen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:501
 msgid "Listen interfaces"
 msgstr "Aktive Adapter"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Nur auf die gegebene Schnittstelle reagieren, nutze alle wenn nicht "
@@ -5974,11 +6008,11 @@ msgstr "Master (VLAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1108
 msgid "Match Tag"
-msgstr ""
+msgstr "Übereinstimmungs-Tag"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:816
 msgid "Match this Tag"
-msgstr ""
+msgstr "Übereinstimmung mit diesem Tag"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:893
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
@@ -5986,7 +6020,7 @@ msgstr "Maximales <abbr title=\"Router Advertisement\">RA</abbr>-Intervall"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:757
 msgid "Max cache TTL"
-msgstr ""
+msgstr "Max. Cache-TTL"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:715
 msgid "Max valid value %s."
@@ -6099,7 +6133,7 @@ msgstr "Mesh-ID"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3870
 msgid "Mesh Point"
-msgstr ""
+msgstr "Mesh-Punkt"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh Routing"
@@ -6138,7 +6172,7 @@ msgstr "Minimaler <abbr title=\"Router Advertisement\">RA</abbr>-Intervall"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:750
 msgid "Min cache TTL"
-msgstr ""
+msgstr "Min. Cache-TTL"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:707
 msgid "Min valid value %s."
@@ -6757,7 +6791,7 @@ msgstr "Knoten-Infos"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:245
 msgid "Node info privacy"
-msgstr ""
+msgstr "Node-Info-Datenschutz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:58
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:84
@@ -6842,6 +6876,8 @@ msgid ""
 "Note: this setting is for local services on the device only (not for "
 "forwarding)."
 msgstr ""
+"Hinweis: Diese Einstellung gilt nur für lokale Dienste auf dem Gerät (nicht "
+"für die Weiterleitung)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:515
 msgid ""
@@ -7062,6 +7098,9 @@ msgid ""
 "null. This is entirely optional but, if set, is visible to the whole network "
 "on request."
 msgstr ""
+"Optionale Node-Info. Dies muss ein { \"Schlüssel\": \"Wert\", ... } Map sein "
+"oder als Null gesetzt werden. Diese Angabe ist völlig optional, aber wenn "
+"sie gesetzt wird, ist sie auf Anfrage für das gesamte Netz sichtbar."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Optional, free-form notes about this device"
@@ -7509,9 +7548,10 @@ msgstr ""
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:293
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:19
 msgid "Password"
-msgstr "Passwort"
+msgstr "Kennwort"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:24
 msgid "Password authentication"
 msgstr "Passwortanmeldung"
 
@@ -7725,6 +7765,7 @@ msgstr "Grundregel: <strong>%h</strong> (%h)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:872
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:289
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
 msgid "Port"
 msgstr "Port"
 
@@ -7919,7 +7960,7 @@ msgstr ""
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:156
 msgid "Proxy Server"
-msgstr "Proxyserver"
+msgstr "Proxy-Server"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1681
 msgid "ProxyARP"
@@ -7989,6 +8030,9 @@ msgid ""
 "routers to make informed decisions about the optimal path to forward data "
 "packets"
 msgstr ""
+"Quantifiziert die Kosten oder die Entfernung zu einem Zielort in einer "
+"Weise, die es Routern ermöglicht, fundierte Entscheidungen über den "
+"optimalen Pfad zur Weiterleitung von Datenpaketen zu treffen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:681
 msgid "Query all available upstream resolvers."
@@ -8164,7 +8208,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:242
 msgid "Receive errors"
-msgstr ""
+msgstr "Empfangsfehler"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:57
 msgid "Received Data"
@@ -8176,7 +8220,7 @@ msgstr "Empfangene Bytes"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:241
 msgid "Received multicast"
-msgstr ""
+msgstr "Empfangener Multicast"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:240
 msgid "Received packets"
@@ -8844,12 +8888,16 @@ msgstr "Geplante Aufgaben"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:47
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:52
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:31
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:37
 msgctxt "scroll to top (the head) of the log file"
 msgid "Scroll to head"
 msgstr "Zum Kopf scrollen"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:38
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:43
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:22
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:28
 msgctxt "scroll to bottom (the tail) of the log file"
 msgid "Scroll to tail"
 msgstr "Zum Ende scrollen"
@@ -9616,7 +9664,7 @@ msgstr "Gültigkeitsdauer alter Neighbour-Cache-Einträge"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1609
 msgid "Standard: none"
-msgstr ""
+msgstr "Standard: keine"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:714
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:98
@@ -9740,7 +9788,7 @@ msgstr "Absenden"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1610
 msgid "Suggested: 128"
-msgstr ""
+msgstr "Vorgeschlagen: 128"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:617
 msgid "Suppress logging"
@@ -9820,6 +9868,7 @@ msgstr "System"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:59
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:63
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:75
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:44
 msgid "System Log"
 msgstr "Systemprotokoll"
 
@@ -10131,6 +10180,8 @@ msgid ""
 "The checkbox cannot be modified unless the <code>yggdrasil-jumper</code> "
 "package is installed."
 msgstr ""
+"Das Kontrollkästchen kann nur geändert werden, wenn das Paket "
+"<code>yggdrasil-jumper</code> installiert ist."
 
 #: modules/luci-compat/luasrc/view/cbi/error.htm:6
 msgid "The configuration file could not be loaded due to the following error:"
@@ -10508,6 +10559,11 @@ msgid ""
 "directives are used in preference to untagged ones. Note that one of mac, "
 "duid or hostname still needs to be specified (can be a wildcard)."
 msgstr ""
+"Das Tag-Konstrukt filtert, welche Host-Direktiven verwendet werden; es kann "
+"mehr als ein Tag angegeben werden, in diesem Fall muss die Anfrage allen "
+"entsprechen. Gekennzeichnete Direktiven werden gegenüber nicht "
+"gekennzeichneten bevorzugt. Beachte, dass einer der Parameter mac, duid oder "
+"hostname immer noch angegeben werden muss (kann ein Platzhalter sein)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:120
 msgid ""
@@ -11008,6 +11064,8 @@ msgstr "Fehler bei QR-Code Erzeugung: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:15
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:19
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:9
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:15
 msgid "Unable to load log data:"
 msgstr "Protokolldaten können nicht geladen werden:"
 
@@ -11078,6 +11136,8 @@ msgid ""
 "Unique Local Address (%s) - prefix <code>fd00::/8</code> (the L bit is "
 "always 1)."
 msgstr ""
+"Einzigartige lokale Adresse (%s) - Präfix <code>fd00::/8</code> (das L-Bit "
+"ist immer 1)."
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2092
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3873
@@ -11774,7 +11834,7 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:178
 msgid "Which is used to access this %s"
-msgstr ""
+msgstr "Womit auf dieses %s zugegriffen wird"
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:166
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:513
@@ -12635,6 +12695,11 @@ msgstr "{example_nx} gibt {nxdomain} zurück."
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Zurück"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:314
+#: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:139
+msgid "Bandwith"
+msgstr "Bandbreite"
 
 #~ msgid ""
 #~ "Enable packet steering across all CPUs. May help or hinder network speed."
