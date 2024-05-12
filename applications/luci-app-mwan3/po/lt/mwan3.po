@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-04-15 15:01+0000\n"
+"PO-Revision-Date: 2024-05-07 16:02+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.4-rc\n"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:187
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:203
@@ -113,6 +113,8 @@ msgid ""
 "Acceptable values: 1-100. This many Tracking IP addresses must respond for "
 "the link to be deemed up"
 msgstr ""
+"Tinkamos reikšmės: 1-100. Toks kiekis sekiamų IP adresų turi atsakyti, kad "
+"sujungimas būtų skaičiuojamas kaip aktyvus"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:38
 msgid "Acceptable values: 1-1000. Defaults to 1 if not set"
@@ -128,7 +130,7 @@ msgstr "Įspėti"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:37
 msgid "Also scan this Routing table for connected networks"
-msgstr ""
+msgstr "Tai pat, skenuoti šią kelvados lentelę dėl sujungtų tinklų"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:65
 msgid "Check IP rules"
@@ -173,7 +175,7 @@ msgstr "Diagnostika"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:56
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:65
 msgid "Disabled"
-msgstr "Išjungta/-as/-i"
+msgstr "Išjungta/Neįgalinta (-as/-i)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:243
 msgid ""
@@ -195,20 +197,22 @@ msgstr "Įjungti „SSL“ sekimą"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:31
 msgid "Enabled"
-msgstr "Įjungta/-as"
+msgstr "Įjungta/Įgalinta (-as/-i)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:94
 msgid ""
 "Enables firewall rule logging (global mwan3 logging must also be enabled)"
 msgstr ""
+"Įjungia/Įgalina užkardos žurnalinimo taisyklę (visuotinis „mwan3“ "
+"žurnalinimas tai pat, turi būti įjungtas/įgalintas)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:20
 msgid "Enables global firewall logging"
-msgstr ""
+msgstr "Įjungia/Įgalina visuotinį užkardos žurnalinimą"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:69
 msgid "Enables https tracking on ssl port 443"
-msgstr ""
+msgstr "Įjungia/Įgalina „HTTPS“ sekimą ant „SSL“ prievado 443"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:15
 msgid "Enter value in hex, starting with <code>0x</code>"
@@ -236,7 +240,7 @@ msgstr "Trikties/Gedimo intervalas [ms]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:134
 msgid "Failure packet loss [%]"
-msgstr ""
+msgstr "Trikties/Gedimo paketo praradimas [%]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:23
 msgid "Firewall loglevel"
@@ -256,7 +260,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:56
 msgid "Globals"
-msgstr ""
+msgstr "Visuotiniai"
 
 #: applications/luci-app-mwan3/root/usr/share/rpcd/acl.d/luci-app-mwan3.json:3
 msgid "Grant UCI access for luci-app-mwan3"
@@ -309,25 +313,29 @@ msgstr "Pradinė būsena"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:100
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:64
 msgid "Interface"
-msgstr "Sąsaja ir Sietuvas"
+msgstr "Sąsaja ir/arba Sietuvas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:228
 msgid "Interface down"
-msgstr ""
+msgstr "Sąsają ir/arba Sietuvas neveikia"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:242
 msgid "Interface up"
-msgstr ""
+msgstr "Sąsają ir/arba Sietuvas veikia"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:229
 msgid "Interface will be deemed down after this many failed ping tests"
 msgstr ""
+"Sąsają ir/arba Sietuvas bus skaitomas neveikiančiu, po šių nepavykusių ryšio "
+"atsako testų kiekio"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:24
 msgid ""
 "Interfaces may not share the same name as configured members, policies or "
 "rules."
 msgstr ""
+"Sąsają ir/arba Sietuvas galimai nebendrina tokį pat pavadinimą kaip "
+"konfigūruoti nariai, politikos ar taisyklės."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:41
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:35
@@ -420,7 +428,7 @@ msgstr "„MultiWAN“ tvarkytuvas/tvarkytuvė – Diagnostika"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:10
 msgid "MultiWAN Manager - Globals"
-msgstr ""
+msgstr "„MultiWAN“ tvarkytuvas/tvarkytuvė – Visuotiniai"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:20
 msgid "MultiWAN Manager - Interfaces"
@@ -452,7 +460,7 @@ msgstr "„MultiWAN“ tvarkytuvas/tvarkytuvė – Būklė/Būsena"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/troubleshooting.js:12
 msgid "MultiWAN Manager - Troubleshooting"
-msgstr ""
+msgstr "„MultiWAN“ tvarkytuvas/tvarkytuvė – Trikdžių/Gedimų derinimas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:21
 msgid ""
@@ -483,6 +491,8 @@ msgstr ""
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:22
 msgid "Names must match the interface name found in /etc/config/network."
 msgstr ""
+"Pavadinimai turi sutapti su sąsajos ir/arba sietuvo pavadinimu, kuris "
+"randasi – „/etc/config/network“."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:74
 msgid "No"
@@ -490,7 +500,7 @@ msgstr "Ne"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:20
 msgid "No MWAN interfaces found"
-msgstr ""
+msgstr "Nėra „MWAN“ sąsajų ir/arba sietuvų rasta"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:43
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:51
@@ -531,11 +541,11 @@ msgstr "Apžiūra"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:79
 msgid "Ping count"
-msgstr ""
+msgstr "Ryšio atsako skaičiavimas/-ius"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:63
 msgid "Ping default gateway"
-msgstr ""
+msgstr "Ryšio atsako numatyta tinklo tarpuvartė"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:174
 msgid "Ping interval"
@@ -543,11 +553,11 @@ msgstr "Ryšio atsako intervalas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:190
 msgid "Ping interval during failure detection"
-msgstr ""
+msgstr "Ryšio atsako intervalas per trikties gedimo aptikimą"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:212
 msgid "Ping interval during failure recovering"
-msgstr ""
+msgstr "Ryšio atsako intervalas per trikties gedimo atsigavimą"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:88
 msgid "Ping size"
@@ -555,11 +565,11 @@ msgstr "Ryšio atsako dydis"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:167
 msgid "Ping timeout"
-msgstr ""
+msgstr "Ryšio atsakas užklausos laikas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:64
 msgid "Ping tracking IP"
-msgstr ""
+msgstr "Ryšio atsako sekimo IP"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:17
 msgid ""
@@ -640,6 +650,7 @@ msgstr ""
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:78
 msgid "Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set"
 msgstr ""
+"Sekundės. Tinkamos reikšmės: 1-1000000. Numatoma į 600-ai, jeigu nenustatyta"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:52
 msgid "Source address"
@@ -716,7 +727,7 @@ msgstr "Sekimo metodas/būdas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:74
 msgid "Tracking reliability"
-msgstr ""
+msgstr "Sekimo patikimumas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:24
 msgid ""
@@ -757,7 +768,7 @@ msgstr "Aktyvumo laikas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:43
 msgid "View the content of /etc/protocols for protocol description"
-msgstr ""
+msgstr "Peržiūrėti „/etc/protocols“ aprašymo turiniu"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:29
 msgid "Warning"
@@ -775,7 +786,7 @@ msgstr "Taip"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:41
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:104
 msgid "blackhole (drop)"
-msgstr ""
+msgstr "juodoji skylė (mesti)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:260
 msgid "connected (mwan3)"
@@ -784,7 +795,7 @@ msgstr "prisijungta („mwan3“)"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:42
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:105
 msgid "default (use main routing table)"
-msgstr ""
+msgstr "Numatytas/-a (naudoti pagrindinį kelvados lentelę)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:261
 msgid "disconnected (mwan3)"
