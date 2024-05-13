@@ -93,6 +93,8 @@ return network.registerProtocol('pppoe', {
 		o.placeholder = '0';
 		o.datatype    = 'uinteger';
 
-		/* pppoe.so has no MTU option - only underlying device MTU is possible */
+		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
+		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
+		o.datatype    = 'max(9200)';
 	}
 });
