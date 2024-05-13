@@ -14,6 +14,7 @@
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "pause" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "stop" }'
 
+readonly luciCompat='1'
 readonly adbFunctionsFile='/etc/init.d/adblock-fast'
 if [ -s "$adbFunctionsFile" ]; then
 # shellcheck source=../../../../../adblock-fast/files/etc/init.d/adblock-fast
@@ -155,6 +156,15 @@ get_init_status() {
 			json_add_string 'extra' "$error_extra"
 			json_close_object
 		done
+	fi
+	if is_greater "${packageCompat:-0}" "${luciCompat:-0}"; then
+		json_add_object
+		json_add_string 'id' 'warningOutdatedLuciPackage'
+		json_close_object
+	elif is_greater "${luciCompat:-0}" "${packageCompat:-0}"; then
+		json_add_object
+		json_add_string 'id' 'warningOutdatedPrincipalPackage'
+		json_close_object
 	fi
 	json_close_array
 
