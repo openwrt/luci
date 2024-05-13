@@ -189,6 +189,12 @@ var status = baseclass.extend({
 						warningMissingRecommendedPackages: _(
 							"Some recommended packages are missing"
 						),
+						warningOutdatedLuciPackage: _(
+							"The WebUI application (luci-app-adblock-fast) is outdated, please update it"
+						),
+						warningOutdatedPrincipalPackage: _(
+							"The principal package (adblock-fast) is outdated, please update it"
+						),
 						warningInvalidCompressedCacheDir: _(
 							"Invalid compressed cache directory '%s'"
 						),
