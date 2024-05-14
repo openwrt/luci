@@ -105,7 +105,7 @@ return view.extend({
 		s.modaltitle = _('Settings');
 
 		o = s.option(form.Flag, 'enabled', _('Enabled'));
-		o.default = true;
+		o.rmempty = false;
 
 		o = s.option(form.Value, 'device', _('Device'),
 			_('Note: character device assignment can change upon reboot/reconnect with multiple USB devices.') + '<br />' +
