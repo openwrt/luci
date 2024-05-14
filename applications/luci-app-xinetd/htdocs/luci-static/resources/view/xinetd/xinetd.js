@@ -200,7 +200,7 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.MultiValue, 'log_on_success', _('Log on success'), _('Informations that should be logged for this service in case of successful connection'));
+		o = s.taboption('advanced', form.MultiValue, 'log_on_success', _('Log on success'), _('What to log for successful connections'));
 		o.value('PID', _('Server PID'));
 		o.value('HOST', _('Remote host address '));
 		o.value('USERID', _('User ID of the remote user'));
@@ -209,7 +209,7 @@ return view.extend({
 		o.value('TRAFFIC', _('Total bytes in and out for a redirected service'));
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.MultiValue, 'log_on_failure', _('Log on failure'), _('Informations that should be logged for this service in case of a failed connection'));
+		o = s.taboption('advanced', form.MultiValue, 'log_on_failure', _('Log on failure'), _('What to log for failed connections'));
 		o.value('HOST', _('Remote host address '));
 		o.value('USERID', _('User ID of the remote user'));
 		o.value('ATTEMPT', _('Failed attempts'));
