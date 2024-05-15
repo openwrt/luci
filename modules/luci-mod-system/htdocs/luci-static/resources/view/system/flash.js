@@ -172,7 +172,7 @@ return view.extend({
 	handleBlock: function(hostname, ev) {
 		var mtdblock = dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select');
 		var mtdnumber = mtdblock.value;
-		var mtdname = mtdblock.selectedOptions[0].text;
+		var mtdname = mtdblock.selectedOptions[0].text.replace(/([^a-zA-Z0-9]+)/g, '-');
 		var form = E('form', {
 			'method': 'post',
 			'action': L.env.cgi_base + '/cgi-download',
