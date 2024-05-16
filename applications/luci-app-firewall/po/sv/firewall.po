@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-12-26 04:30+0000\n"
-"Last-Translator: Kristoffer Grundström <swedishsailfishosuser@tutanota.com>\n"
+"PO-Revision-Date: 2024-05-12 20:34+0000\n"
+"Last-Translator: Daniel Nilsson <daniel.nilsson94@outlook.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/sv/>\n"
 "Language: sv\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5.4\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -43,7 +43,7 @@ msgstr "0"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:181
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:118
 msgid ""
@@ -54,7 +54,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:93
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
-msgstr ""
+msgstr "<var data-tooltip=\"ACCEPT\">Förhindra omskrivning av källan</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:85
 msgid ""
@@ -119,11 +119,11 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:302
 msgid "A rewrite IP must be specified!"
-msgstr ""
+msgstr "En IP som kan skrivas om måste specifieras!"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:288
 msgid "ACCEPT - Disable address rewriting"
-msgstr ""
+msgstr "ACCEPT - Inaktivera adressomskrivning"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:223
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:224
@@ -139,22 +139,30 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
+"Ytterligare oformaterade <em>iptables</em>-argument för att klassifiera "
+"destinationszonens trafik, t.ex. <code>-p tcp --dport 443</code> för att "
+"bara matcha utgående HTTP-trafik."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:306
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
+"Ytterligare oformaterade <em>iptables</em>-argument för att klassifiera "
+"källzonens trafik, t.ex. <code>-p tcp --dport 443</code> för att bara matcha "
+"inkommande HTTP-trafik."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
 msgid "Address family, Internal IP address must match"
-msgstr ""
+msgstr "Adressfamilj, intern IP-adress måste överensstämma"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:135
 msgid ""
 "Address family, source address, destination address, rewrite IP address must "
 "match"
 msgstr ""
+"Adressfamilj, källadress, destinationsadress, omskrivnings IP-adress måste "
+"överensstämma"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:161
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
@@ -196,6 +204,8 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:264
 msgid "Apply the given DSCP class or value to established connections."
 msgstr ""
+"Applicera den givna DSCP-klassificeringen eller värde till etablerade "
+"anslutningar."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:438
 msgid "Assign the specified connection tracking helper to matched traffic."
@@ -209,11 +219,12 @@ msgstr ""
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
+"Applicera automatiskt conntrack-hjälpare baserat på trafikprotokoll och port"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:60
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:61
 msgid "Comment"
-msgstr ""
+msgstr "Kommentar"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:109
 msgid "Conntrack Settings"
@@ -245,7 +256,7 @@ msgstr "Nätverk som omfattas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:230
 msgid "Covered subnets"
-msgstr ""
+msgstr "Subnät som omfattas"
 
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:62
 msgid "Custom Rules"
@@ -257,6 +268,9 @@ msgid ""
 "otherwise covered by the firewall framework. The commands are executed after "
 "each firewall restart, right after the default ruleset has been loaded."
 msgstr ""
+"Skräddarsydda regler tillåter dig att exekvera arbiträra iptables-kommandon "
+"som annars inte täcks av brandväggsramverket. Kommandona är exekverade efter "
+"varje omstart av brandväggen, direkt efter när standardreglerna har laddats."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:420
 msgid "DSCP classification"
@@ -264,11 +278,11 @@ msgstr "DSCP-klassificering"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "DSCP mark"
-msgstr ""
+msgstr "DSCP-märkning"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
 msgid "DSCP mark required"
-msgstr ""
+msgstr "DSCP-märkning obligatorisk"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:401
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:266
@@ -293,6 +307,9 @@ msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
 msgstr ""
+"Installera inte extra regler för att blockerade vidarebefordrad trafik med "
+"conntrack-tillståndet <em>invalid</em>. Detta kan behövas för komplexa, "
+"asymmetriska ruttuppsättningar."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:59
 msgid "Drop invalid packets"
@@ -306,7 +323,7 @@ msgstr "Aktivera"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:305
 msgid "Enable NAT Loopback"
-msgstr ""
+msgstr "Aktivera NAT Loopback"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:45
 msgid "Enable SYN-flood protection"
@@ -322,16 +339,21 @@ msgid ""
 "outbound traffic on this zone. This is typically enabled on the <em>wan</em> "
 "zone."
 msgstr ""
+"Aktivera IPv4 nätverksadress och portöversättning (NAT4 eller NAPT4) för "
+"utåtgående trafik på denna zon. Detta är vanligtvist aktiverat på <em>wan</"
+"em>-zonen."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:237
 msgid ""
 "Enable network address and port translation IPv6 (NAT6 or NAPT6) for "
 "outbound traffic on this zone."
 msgstr ""
+"Aktivera IPv6 nätverksadress och portöversättning (NAT6 eller NAPT6) för "
+"utåtgående trafik på denna zon."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:210
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiverad"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:204
 msgid "Enables packet and byte count tracking for the set."
@@ -521,7 +543,7 @@ msgstr "Endast IPv4"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:68
 msgid "IPv6"
-msgstr ""
+msgstr "IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
 msgid "IPv6 Masquerading"
