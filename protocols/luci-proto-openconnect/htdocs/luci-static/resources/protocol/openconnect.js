@@ -101,7 +101,8 @@ return network.registerProtocol('openconnect', {
 		o.value('pulse', 'Pulse Connect Secure SSL VPN');
 		o.value('array', 'Array Networks SSL VPN');
 
-		o = s.taboption('general', form.Value, 'server', _('VPN Server'));
+		o = s.taboption('general', form.Value, 'uri', _('VPN Server'));
+		o.placeholder = 'https://example.com:443/usergroup';
 		o.validate = function(section_id, value) {
 			var m = String(value).match(/^(?:(\w+):\/\/|)(?:\[([0-9a-f:.]{2,45})\]|([^\/:]+))(?::([0-9]{1,5}))?(?:\/.*)?$/i);
 
@@ -109,7 +110,7 @@ return network.registerProtocol('openconnect', {
 				return _('Invalid server URL');
 
 			if (m[1] != null) {
-				if (!m[1].match(/^(?:http|https|socks|socks4|socks5)$/i))
+				if (!m[1].match(/^(?:https|socks|socks4|socks5)$/i))
 					return _('Unsupported protocol');
 			}
 
@@ -138,13 +139,8 @@ return network.registerProtocol('openconnect', {
 			return true;
 		};
 
-		o = s.taboption('general', form.Value, 'port', _('VPN Server port'));
-		o.placeholder = '443';
-		o.datatype    = 'port';
-
 		s.taboption('general', form.Value, 'serverhash', _("VPN Server's certificate SHA1 hash"));
 		s.taboption('general', form.Value, 'authgroup', _('Auth Group'));
-		s.taboption('general', form.Value, 'usergroup', _('User Group'));
 		s.taboption("general", form.Value, "username", _("Username"));
 
 		o = s.taboption('general', form.Value, 'password', _('Password'));
