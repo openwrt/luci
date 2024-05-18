@@ -62,7 +62,7 @@ function validateCert(priv, section_id, value) {
 
 return network.registerProtocol('openconnect', {
 	getI18n: function() {
-		return _('OpenConnect (CISCO AnyConnect)');
+		return _('OpenConnect');
 	},
 
 	getIfname: function() {
