@@ -95,10 +95,12 @@ return network.registerProtocol('openconnect', {
 		    o;
 
 		o = s.taboption('general', form.ListValue, 'vpn_protocol', _('VPN Protocol'));
-		o.value('anyconnect', 'Cisco AnyConnect SSL VPN');
+		o.value('anyconnect', 'OpenConnect or Cisco AnyConnect SSL VPN');
 		o.value('nc', 'Juniper Network Connect');
-		o.value('gp', 'GlobalProtect SSL VPN');
+		o.value('gp', 'Palo Alto Networks GlobalProtect');
 		o.value('pulse', 'Pulse Connect Secure SSL VPN');
+		o.value('f5', 'F5 BIG-IP SSL VPN');
+		o.value('fortinet', 'Fortinet SSL VPN');
 		o.value('array', 'Array Networks SSL VPN');
 
 		o = s.taboption('general', form.Value, 'uri', _('VPN Server'));
