@@ -135,7 +135,7 @@ return view.extend({
 				c.layer4.toUpperCase(),
 				'%h'.format(c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src),
 				'%h'.format(c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst),
-				'%1024.2mB (%d %s)'.format(c.bytes, c.packets, _('Pkts.'))
+				[ c.bytes, '%1024.2mB (%d %s)'.format(c.bytes, c.packets, _('Pkts.')) ]
 			]);
 		}
 
