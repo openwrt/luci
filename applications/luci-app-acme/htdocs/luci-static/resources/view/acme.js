@@ -464,7 +464,7 @@ return view.extend({
 		o.modalonly = true;
 
 
-		o = s.taboption('advanced', form.Flag, 'use_staging', _('Use staging server'),
+		o = s.taboption('advanced', form.Flag, 'staging', _('Use staging server'),
 			_(
 				'Get certificate from the Letsencrypt staging server ' +
 				'(use for testing; the certificate won\'t be valid).'
@@ -507,7 +507,7 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Flag, "use_acme_server",
 			_("Custom ACME CA"), _("Use a custom CA instead of Let's Encrypt."));
-		o.depends("use_staging", "0");
+		o.depends("staging", "0");
 		o.default = false;
 		o.modalonly = true;
 
