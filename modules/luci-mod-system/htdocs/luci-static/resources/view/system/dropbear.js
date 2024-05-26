@@ -15,7 +15,7 @@ return view.extend({
 		s.addbtntitle = _('Add instance');
 
 		o = s.option(form.Flag, 'enable', _('Enable Instance'), _('Enable <abbr title="Secure Shell">SSH</abbr> service instance'));
-		o.default  = o.enabled;
+		o.default = true;
 
 		o = s.option(widgets.NetworkSelect, 'Interface', _('Interface'), _('Listen only on the given interface or, if unspecified, on all'));
 		o.nocreate    = true;
@@ -25,20 +25,13 @@ return view.extend({
 		o.placeholder = 22;
 
 		o = s.option(form.Flag, 'PasswordAuth', _('Password authentication'), _('Allow <abbr title="Secure Shell">SSH</abbr> password authentication'));
-		o.enabled  = 'on';
-		o.disabled = 'off';
-		o.default  = o.enabled;
+		o.default = true;
 		o.rmempty  = false;
 
 		o = s.option(form.Flag, 'RootPasswordAuth', _('Allow root logins with password'), _('Allow the <em>root</em> user to log in with password'));
-		o.enabled  = 'on';
-		o.disabled = 'off';
-		o.default  = o.enabled;
+		o.default = true;
 
 		o = s.option(form.Flag, 'GatewayPorts', _('Gateway Ports'), _('Allow remote hosts to connect to local SSH forwarded ports'));
-		o.enabled  = 'on';
-		o.disabled = 'off';
-		o.default  = o.disabled;
 
 		return m.render();
 	}
