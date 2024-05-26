@@ -505,15 +505,9 @@ return view.extend({
 			uci.set('acme', section_id, 'key_type', value);
 		};
 
-		o = s.taboption('advanced', form.Flag, "use_acme_server",
-			_("Custom ACME CA"), _("Use a custom CA instead of Let's Encrypt."));
-		o.depends("staging", "0");
-		o.default = false;
-		o.modalonly = true;
-
 		o = s.taboption('advanced', form.Value, "acme_server", _("ACME server URL"),
-			_("Custom ACME server directory URL."));
-		o.depends("use_acme_server", "1");
+			_('Use a custom CA instead of Let\'s Encrypt.') +	' ' + _('Custom ACME server directory URL.'));
+		o.depends("staging", "0");
 		o.placeholder = "https://api.buypass.com/acme/directory";
 		o.optional = true;
 		o.modalonly = true;
