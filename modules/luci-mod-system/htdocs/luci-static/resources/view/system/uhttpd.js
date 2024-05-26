@@ -24,6 +24,7 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.option(form.Flag, 'rfc1918_filter', _('Ignore private IPs on public interface'), _('Prevent access from private (RFC1918) IPs on an interface if it has an public IP address'));
+		o.rmempty = false;
 
 		if (httpsFirewallRule && httpsFirewallRule.enabled !== '1') {
 			o = s.option(form.Flag, '_wan_https_firewall_rule', _('Allow HTTP and HTTPS from WAN'),
@@ -37,6 +38,18 @@ return view.extend({
 				}
 			};
 		}
+
+		o = s.option(form.DynamicList, 'listen_http', _('HTTP listeners (address:port)'), _('Bind to specific interface:port (by specifying interface address)'));
+		o.datatype = 'list(ipaddrport(1))';
+		o.rmempty = false;
+
+		o = s.option(form.DynamicList, 'listen_https', _('HTTPS listener (address:port)'), _('Bind to specific interface:port (by specifying interface address)'));
+		o.datatype = 'list(ipaddrport(1))';
+		o.rmempty = false;
+
+		o = s.option(form.Flag, 'enabled', _('Enabled'), _('If LuCI use another web server then you can disable the uhttpd.'));
+		o.default = true;
+		o.rmempty = false;
 
 		return m.render();
 	}
