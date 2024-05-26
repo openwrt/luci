@@ -23,6 +23,8 @@ return view.extend({
 		o = s.option(form.Flag, 'redirect_https', _('Redirect to HTTPS'), _('Enable automatic redirection of <abbr title="Hypertext Transfer Protocol">HTTP</abbr> requests to <abbr title="Hypertext Transfer Protocol Secure">HTTPS</abbr> port.'));
 		o.rmempty = false;
 
+		o = s.option(form.Flag, 'rfc1918_filter', _('Ignore private IPs on public interface'), _('Prevent access from private (RFC1918) IPs on an interface if it has an public IP address'));
+
 		if (httpsFirewallRule && httpsFirewallRule.enabled !== '1') {
 			o = s.option(form.Flag, '_wan_https_firewall_rule', _('Allow HTTP and HTTPS from WAN'),
 				_('Enable firewall rule to allow access to the 80 and 443 ports')
