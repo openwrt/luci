@@ -978,7 +978,6 @@ return view.extend({
 
 		so = ss.option(form.DynamicList, 'name', _('Name of the set'));
 		uci.sections('firewall', 'ipset', function(s) {
-			console.log('fukt:', s);
 			if (typeof(s.name) == 'string')
 				so.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
 		});
