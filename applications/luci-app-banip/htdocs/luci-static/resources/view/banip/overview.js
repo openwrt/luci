@@ -14,11 +14,11 @@
 function handleAction(ev) {
 	if (ev === 'restart' || ev === 'reload') {
 		let map = document.querySelector('.cbi-map');
-		return dom.callClassMethod(map, 'save')
-		.then(L.bind(ui.changes.apply, ui.changes))
-		.then(function() {
-			return fs.exec_direct('/etc/init.d/banip', [ev]);
-		});
+		dom.callClassMethod(map, 'save')
+			.then(L.bind(ui.changes.apply, ui.changes))
+			.then(function () {
+				return fs.exec_direct('/etc/init.d/banip', [ev]);
+			});
 	} else {
 		return fs.exec_direct('/etc/init.d/banip', [ev]);
 	}

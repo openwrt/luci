@@ -173,7 +173,7 @@ return view.extend({
 
 		m = new form.JSONMap(data, _('Custom Feed Editor'), _('With this editor you can upload your local custom feed file or fill up an initial one (a 1:1 copy of the version shipped with the package). \
 			The file is located at \'/etc/banip/banip.custom.feeds\'. \
-			Then you can edit this file, delete entries, add new ones or make a local backup. To go back to the maintainers version just empty the custom feed file again (do not delete it!).'));
+			Then you can edit this file, delete entries, add new ones or make a local backup. To go back to the maintainers version just clear the custom feed file.'));
 		for (let i = 0; i < Object.keys(m.data.data).length; i++) {
 			feed = Object.keys(m.data.data)[i];
 			url_4 = m.data.data[feed].url_4;
