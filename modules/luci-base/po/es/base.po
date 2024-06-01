@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2024-05-13 22:00+0000\n"
+"PO-Revision-Date: 2024-05-31 05:33+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/>"
 "\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.5\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1113
 msgid "!known (not known)"
@@ -53,6 +53,9 @@ msgid ""
 "connection over Yggdrasil network, utilizing NAT traversal to bypass "
 "intermediary nodes."
 msgstr ""
+"%s es un proyecto independiente que tiene como objetivo reducir de forma "
+"transparente la latencia de una conexión a través de la red Yggdrasil, "
+"utilizando NAT transversal para evitar los nodos intermediarios."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:35
 msgid "%s is untagged in multiple VLANs!"
@@ -960,7 +963,7 @@ msgstr "Asignar IPs secuencialmente"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:350
 msgid "Allocate listen addresses"
-msgstr ""
+msgstr "Asignar direcciones de escucha"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
@@ -978,6 +981,8 @@ msgid ""
 "Allow Yggdrasil Jumper to automatically configure Yggdrasil with proper "
 "listen address and random port."
 msgstr ""
+"Permita que Yggdrasil Jumper configure automáticamente Yggdrasil con la "
+"dirección de escucha adecuada y el puerto aleatorio."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1084
 msgid "Allow all except listed"
@@ -1268,7 +1273,7 @@ msgstr "Autorización requerida"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:360
 msgid "Autofill listen addresses"
-msgstr ""
+msgstr "Autocompletar direcciones de escucha"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:120
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:18
@@ -1401,7 +1406,6 @@ msgstr "Banda"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:314
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:139
-#, fuzzy
 msgid "Bandwidth"
 msgstr "Ancho de banda"
 
@@ -3231,7 +3235,7 @@ msgstr "Activar botón WPS, requiere WPA(2)-PSK/WPA3-SAE"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:314
 msgid "Enable Yggdrasil Jumper"
-msgstr ""
+msgstr "Activar Yggdrasil Jumper"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
@@ -5328,6 +5332,9 @@ msgid ""
 "direct peerings over internet with remote nodes running Yggdrasil Jumper "
 "without requiring firewall or port configuration."
 msgstr ""
+"Busca periódicamente sesiones activas y establece automáticamente "
+"emparejamientos directos a través de Internet con nodos remotos que ejecutan "
+"Yggdrasil Jumper sin necesidad de configuración de cortafuegos o puertos."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:78
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:98
@@ -5352,8 +5359,9 @@ msgid "Jump to rule"
 msgstr "Saltar a la regla"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:298
+#, fuzzy
 msgid "Jumper"
-msgstr ""
+msgstr "Jumper"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:228
 msgid "Keep settings and retain the current configuration"
@@ -6916,7 +6924,7 @@ msgstr "Notas"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:188
 msgid "Notice"
-msgstr "Aviso"
+msgstr "Noticia"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:135
 msgid "Nslookup"
@@ -8634,6 +8642,8 @@ msgstr "Restaurar copia de seguridad"
 msgid ""
 "Retrieve the listener addresses from the Yggdrasil interface configuration."
 msgstr ""
+"Recupere las direcciones de los oyentes de la configuración de la interfaz "
+"de Yggdrasil."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:386
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:387
@@ -10229,6 +10239,8 @@ msgid ""
 "The checkbox cannot be modified unless the <code>yggdrasil-jumper</code> "
 "package is installed."
 msgstr ""
+"La casilla de verificación no se puede modificar a menos que esté instalado "
+"el paquete <code>yggdrasil-jumper</code>."
 
 #: modules/luci-compat/luasrc/view/cbi/error.htm:6
 msgid "The configuration file could not be loaded due to the following error:"
@@ -10896,7 +10908,7 @@ msgstr "Total disponible"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:342
 msgid "Trace"
-msgstr ""
+msgstr "Rastro"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:110
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:111
@@ -11745,7 +11757,7 @@ msgstr "Esperando al dispositivo..."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:339
 msgid "Warn"
-msgstr ""
+msgstr "Advertir"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:189
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
