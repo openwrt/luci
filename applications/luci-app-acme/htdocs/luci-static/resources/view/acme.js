@@ -529,7 +529,7 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Value, 'days', _('Days until renewal'));
 		o.optional    = true;
-		o.placeholder = 90;
+		o.placeholder = 60;
 		o.datatype    = 'uinteger';
 		o.modalonly = true;
 
