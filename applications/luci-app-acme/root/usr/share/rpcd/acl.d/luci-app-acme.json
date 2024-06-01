@@ -3,7 +3,8 @@
                 "description": "Grant UCI access for luci-app-acme",
                 "read": {
                         "file": {
-                                "/etc/ssl/acme": [ "list" ]
+                                "/proc/sys/kernel/hostname": [ "read" ],
+                                "/etc/ssl/acme": [ "list" ],
                         },
                         "uci": [ "acme" ]
                 },

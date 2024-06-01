@@ -17,12 +17,15 @@ return view.extend({
 				return certs;
 			}),
 			L.resolveDefault(fs.stat('/usr/lib/acme/client/dnsapi'), null),
+			L.resolveDefault(fs.lines('/proc/sys/kernel/hostname'), ''),
 		]);
 	},
 
 	render(data) {
 		let certs = data[0];
 		let hasDnsApi = data[1] != null;
+		let hostname = data[2];
+		let systemDomain = _guessDomain(hostname);
 		let wikiUrl = 'https://github.com/acmesh-official/acme.sh/wiki/';
 		let wikiInstructionUrl = wikiUrl + 'dnsapi';
 		let m, s, o;
@@ -93,6 +96,9 @@ return view.extend({
 				"The first name will be the subject name, subsequent names will be alt names. " +
 				"Note that all domain names must point at the router in the global DNS."));
 		o.datatype = "list(string)";
+		if (systemDomain) {
+			o.default = [systemDomain];
+		}
 		o.validate = function (section_id, value) {
 			if (!value) {
 				return true;
@@ -572,6 +578,15 @@ return view.extend({
 		return m.render();
 	}
 });
+
+function _isFqdn(domain) {
+	// Is not an IP i.e. starts from alphanumeric and has least one dot
+	return /[a-z0-9-]\..*$/.test(domain) && !/[0-9-]\..*$/.test(domain);
+}
+
+function _guessDomain(hostname) {
+	return _isFqdn(hostname) ? hostname : (_isFqdn(window.location.hostname) ? window.location.hostname : '');
+}
 
 
 function _addDnsProviderField(s, provider, env, title, desc) {
