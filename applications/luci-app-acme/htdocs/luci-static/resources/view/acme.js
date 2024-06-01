@@ -38,7 +38,8 @@ return view.extend({
 				"point at the router's public IP address. " +
 				"Once configured, issuing certificates can take a while. " +
 				"Check the logs for progress and any errors.") + '<br/>' +
-				_("Cert files are stored in") + ' <em>/etc/ssl/acme<em>'
+				_("Cert files are stored in") + ' <em>/etc/ssl/acme</em>'+ '<br />' +
+				'<a href="https://openwrt.org/docs/guide-user/services/tls/acmesh" target="_blank">' + _('See more') + '</a>'
 		);
 
 		s = m.section(form.TypedSection, "acme", _("ACME global config"));
