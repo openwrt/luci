@@ -68,20 +68,21 @@ return view.extend({
 		o = s.taboption('general', form.Flag, "enabled", _("Enabled"));
 		o.rmempty = false;
 
+		o = s.taboption('general', form.ListValue, 'validation_method', _('Validation method'),
+			_('Standalone mode will use the built-in webserver of acme.sh to issue a certificate. ' +
+				'Webroot mode will use an existing webserver to issue a certificate. ' +
+				'DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate.')
+		);
+		o.value('standalone', _('Standalone'));
+		o.value('webroot', _('Webroot'));
+		o.value('dns', _('DNS'));
+		o.default = 'webroot';
+
 		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
 			_("Domain names to include in the certificate. " +
 				"The first name will be the subject name, subsequent names will be alt names. " +
 				"Note that all domain names must point at the router in the global DNS."));
 		o.datatype = "list(string)";
-
-		o = s.taboption('general', form.ListValue, 'validation_method', _('Validation method'),
-			_("Standalone mode will use the built-in webserver of acme.sh to issue a certificate. " +
-			"Webroot mode will use an existing webserver to issue a certificate. " +
-			"DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate."));
-		o.value("standalone", _("Standalone"));
-		o.value("webroot", _("Webroot"));
-		o.value("dns", _("DNS"));
-		o.default = 'webroot';
 
 		o = s.taboption('challenge_webroot', form.Value, 'webroot', _('Webroot directory'),
 			_("Webserver root directory. Set this to the webserver " +
