@@ -216,7 +216,9 @@ return view.extend({
 		};
 
 		o = s.taboption('advanced', form.Value, "acme_server", _("ACME server URL"),
-			_('Use a custom CA instead of Let\'s Encrypt.') +	' ' + _('Custom ACME server directory URL.'));
+			_('Use a custom CA instead of Let\'s Encrypt.') +	' ' + _('Custom ACME server directory URL.') + '<br />' +
+			'<a href="https://github.com/acmesh-official/acme.sh/wiki/Server" target="_blank">' + _('See more') + '</a>'
+		);
 		o.depends("staging", "0");
 		o.placeholder = "https://api.buypass.com/acme/directory";
 		o.optional = true;
