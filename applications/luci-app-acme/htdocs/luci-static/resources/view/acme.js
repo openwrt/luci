@@ -2,6 +2,7 @@
 'require form';
 'require fs';
 'require uci';
+'require ui';
 'require view';
 "require view.dnsapi as dnsapi";
 
@@ -20,6 +21,7 @@ return view.extend({
 			L.resolveDefault(fs.exec_direct('/usr/libexec/acmesh-dnsinfo.sh'), ''),
 			L.resolveDefault(fs.stat('/usr/lib/acme/client/dnsapi'), null),
 			L.resolveDefault(fs.lines('/proc/sys/kernel/hostname'), ''),
+			L.resolveDefault(uci.load('ddns')),
 		]);
 	},
 
@@ -30,6 +32,7 @@ return view.extend({
 		let hasDnsApi = data[2] != null;
 		let hostname = data[3];
 		let systemDomain = _guessDomain(hostname);
+		let ddnsDomains = _collectDdnsDomains();
 		let wikiUrl = 'https://github.com/acmesh-official/acme.sh/wiki/';
 		let wikiInstructionUrl = wikiUrl + 'dnsapi';
 		let m, s, o;
@@ -58,6 +61,17 @@ return view.extend({
 
 		o = s.option(form.Flag, "debug", _("Enable debug logging"));
 		o.rmempty = false;
+
+		if (ddnsDomains && ddnsDomains.length > 0) {
+			let ddnsDomainsList = ddnsDomains.map(d => d.domains[0]);
+			o = s.option(form.Button, '_import_ddns');
+			o.title = _('Found DDNS domains');
+			o.inputtitle = _('Import') + ': ' + ddnsDomainsList.join();
+			o.inputstyle = 'apply';
+			o.onclick = function () {
+				_importDdns(ddnsDomains);
+			};
+		}
 
 		s = m.section(form.GridSection, "cert", _("Certificate config"));
 		s.anonymous = false;
@@ -286,6 +300,112 @@ function _guessDomain(hostname) {
 	return _isFqdn(hostname) ? hostname : (_isFqdn(window.location.hostname) ? window.location.hostname : '');
 }
 
+function _collectDdnsDomains() {
+	let ddnsDomains = [];
+	let ddnsServices = uci.sections('ddns', 'service');
+	for (let ddnsService of ddnsServices) {
+		let dnsApi = '';
+		let credentials = [];
+		switch (ddnsService.service_name) {
+			case 'duckdns.org':
+				dnsApi = 'dns_duckdns';
+				credentials = [
+					'DuckDNS_Token=' + ddnsService['password'],
+				];
+				break;
+			case 'dynv6.com':
+				dnsApi = 'dns_dynv6';
+				credentials = [
+					'DYNV6_TOKEN=' + ddnsService['password'],
+				];
+				break;
+			case 'afraid.org-v2-basic':
+				dnsApi = 'dns_freedns';
+				credentials = [
+					'FREEDNS_User=' + ddnsService['username'],
+					'FREEDNS_Password=' + ddnsService['password'],
+				];
+				break;
+			case 'cloudflare.com-v4':
+				dnsApi = 'dns_cf';
+				credentials = [
+					'CF_Token=' + ddnsService['password'],
+				];
+				break;
+		}
+		if (credentials.length > 0) {
+			ddnsDomains.push({
+				sectionId: ddnsService['.name'],
+				domains: [ddnsService['domain'], '*.' + ddnsService['domain']],
+				dnsApi: dnsApi,
+				credentials: credentials,
+			});
+		}
+	}
+	return ddnsDomains;
+}
+
+function _importDdns(ddnsDomains) {
+	let certSections = uci.sections('acme', 'cert');
+	let certSectionNames = new Map();
+	let certSectionDomains = new Map();
+	for (let s of certSections) {
+		certSectionNames.set(s['.name'], null);
+		if (s.domains) {
+			for (let d of s.domains) {
+				certSectionDomains.set(d, s['.name']);
+			}
+		}
+	}
+	let importedDomains = {};
+	let importedErrors = [];
+	for (let ddnsDomain of ddnsDomains) {
+		let sectionId = ddnsDomain.sectionId;
+		// ensure unique sectionId
+		if (certSectionNames.has(sectionId)) {
+			sectionId += '_' + new Date().getTime();
+		}
+		if (ddnsDomain.domains) {
+			for (let d of ddnsDomain.domains) {
+				let dupDomainSection = certSectionDomains.get(d);
+				if (dupDomainSection) {
+					let errorText = _('The domain %s in DDNS %s is already configured in %s. Please check it after the importing.')
+						.format(d, sectionId, dupDomainSection);
+					importedErrors.push(errorText);
+				}
+			}
+		}
+		importedDomains[sectionId] = {
+			'domains': ddnsDomain.domains,
+			'validation_method': 'dns',
+			'dns': ddnsDomain.dnsApi,
+			'credentials': ddnsDomain.credentials,
+		};
+	}
+	ui.showModal(_('Check the configurations of the added domain certificates'), [
+		E('p', JSON.stringify(importedDomains, null, 2)),
+		E('p', importedErrors.join('<br />')),
+		E('div', { 'class': 'right' }, [
+			E('button', {
+				'class': 'btn cbi-button',
+				'click': ui.hideModal
+			}, _('Cancel')),
+			' ',
+			E('button', {
+				'class': 'btn cbi-button-action',
+				'click': ui.createHandlerFn(this, function (ev) {
+					for (let [sectionId, opts] of Object.entries(importedDomains)) {
+						uci.add('acme', 'cert', sectionId);
+						for (let [key, val] of Object.entries(opts)) {
+							uci.set('acme', sectionId, key, val);
+						}
+					}
+					uci.save().then(() => window.location.reload());
+				})
+			}, _('Save'))
+		])
+	]);
+}
 
 function _addDnsProviderField(s, apiId, opt, isOptsAlt) {
 	let desc = '<code>' + opt.Name + '</code> ' + opt.Description;
