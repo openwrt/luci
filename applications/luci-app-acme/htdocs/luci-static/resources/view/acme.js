@@ -165,6 +165,13 @@ return view.extend({
 		o.depends("validation_method", "dns");
 		o.modalonly = true;
 
+		o = s.taboption('challenge_dns', form.Value, 'dns_wait', _('Wait for DNS update'),
+			_('Seconds to wait for a DNS record to be updated before continue.') + '<br />' +
+			'<a href="https://github.com/acmesh-official/acme.sh/wiki/dnssleep" target="_blank">' + _('See more') + '</a>'
+		);
+		o.depends('validation_method', 'dns');
+		o.modalonly = true;
+
 
 		o = s.taboption('advanced', form.Flag, 'staging', _('Use staging server'),
 			_(
