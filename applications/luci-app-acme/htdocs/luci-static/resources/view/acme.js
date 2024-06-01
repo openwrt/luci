@@ -16,11 +16,13 @@ return view.extend({
 				}
 				return certs;
 			}),
+			L.resolveDefault(fs.stat('/usr/lib/acme/client/dnsapi'), null),
 		]);
 	},
 
 	render(data) {
 		let certs = data[0];
+		let hasDnsApi = data[1] != null;
 		let wikiUrl = 'https://github.com/acmesh-official/acme.sh/wiki/';
 		let wikiInstructionUrl = wikiUrl + 'dnsapi';
 		let m, s, o;
@@ -72,6 +74,19 @@ return view.extend({
 		o.value('webroot', _('Webroot'));
 		o.value('dns', _('DNS'));
 		o.default = 'standalone';
+
+		if (!hasDnsApi) {
+			let dnsApiPkg = 'acme-acmesh-dnsapi';
+			o = s.taboption('general', form.Button, '_install');
+			o.depends('validation_method', 'dns');
+			o.title = _('Package is not installed');
+			o.inputtitle = _('Install package %s').format(dnsApiPkg);
+			o.inputstyle = 'apply';
+			o.onclick = function () {
+				let link = L.url('admin/system/package-manager') + '?query=' + dnsApiPkg;
+				window.open(link, '_blank', 'noopener');
+			};
+		}
 
 		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
 			_("Domain names to include in the certificate. " +
