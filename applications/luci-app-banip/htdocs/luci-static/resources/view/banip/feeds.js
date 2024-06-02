@@ -258,7 +258,7 @@ return view.extend({
 						return handleEdit('download');
 					})
 				}, [_('Download Custom Feeds')]),
-				'\xa0\xa0\xa0',
+				'\xa0',
 				E('button', {
 					'class': 'btn cbi-button cbi-button-action',
 					'id': 'btnUpload',
@@ -267,7 +267,7 @@ return view.extend({
 						return handleEdit('upload');
 					})
 				}, [_('Upload Custom Feeds')]),
-				'\xa0\xa0\xa0\xa0\xa0\xa0',
+				'\xa0',
 				E('button', {
 					'class': 'btn cbi-button cbi-button-action important',
 					'id': 'btnCreate',
@@ -276,7 +276,7 @@ return view.extend({
 						return handleEdit('create');
 					})
 				}, [_('Fill Custom Feeds')]),
-				'\xa0\xa0\xa0',
+				'\xa0',
 				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
 					'id': 'btnClear',
@@ -285,7 +285,7 @@ return view.extend({
 						return handleEdit('clear');
 					})
 				}, [_('Clear Custom Feeds')]),
-				'\xa0\xa0\xa0',
+				'\xa0',
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'id': 'btnSave',
@@ -293,7 +293,8 @@ return view.extend({
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('save');
 					})
-				}, [_('Save Custom Feeds')])
+				}, [_('Save Custom Feeds')]),
+				'\xa0'
 			])
 		});
 		return m.render();
