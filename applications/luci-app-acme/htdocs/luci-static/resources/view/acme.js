@@ -76,7 +76,7 @@ return view.extend({
 		o.value('standalone', _('Standalone'));
 		o.value('webroot', _('Webroot'));
 		o.value('dns', _('DNS'));
-		o.default = 'webroot';
+		o.default = 'standalone';
 
 		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
 			_("Domain names to include in the certificate. " +
