@@ -174,15 +174,6 @@ return view.extend({
 		o.modalonly = true;
 
 
-		o = s.taboption('advanced', form.Flag, 'staging', _('Use staging server'),
-			_(
-				'Get certificate from the Letsencrypt staging server ' +
-				'(use for testing; the certificate won\'t be valid).'
-			)
-		);
-		o.rmempty = false;
-		o.modalonly = true;
-
 		o = s.taboption('advanced', form.ListValue, 'key_type', _('Key type'),
 			_('Key size (and type) for the generated certificate.')
 		);
@@ -217,10 +208,21 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Value, "acme_server", _("ACME server URL"),
 			_('Use a custom CA instead of Let\'s Encrypt.') +	' ' + _('Custom ACME server directory URL.') + '<br />' +
-			'<a href="https://github.com/acmesh-official/acme.sh/wiki/Server" target="_blank">' + _('See more') + '</a>'
+			'<a href="https://github.com/acmesh-official/acme.sh/wiki/Server" target="_blank">' + _('See more') + '</a>' + '<br />'
+			+ _('Default') + ' <code>letsencrypt</code>'
 		);
-		o.depends("staging", "0");
 		o.placeholder = "https://api.buypass.com/acme/directory";
+		o.optional = true;
+		o.modalonly = true;
+
+		o = s.taboption('advanced', form.Flag, 'staging', _('Use staging server'),
+			_(
+				'Get certificate from the Letsencrypt staging server ' +
+				'(use for testing; the certificate won\'t be valid).'
+			)
+		);
+		o.depends('acme_server', '');
+		o.depends('acme_server', 'letsencrypt');
 		o.optional = true;
 		o.modalonly = true;
 
