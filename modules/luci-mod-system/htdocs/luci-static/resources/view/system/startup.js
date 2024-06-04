@@ -108,7 +108,7 @@ return view.extend({
 			E('h2', _('Startup')),
 			E('div', {}, [
 				E('div', { 'data-tab': 'init', 'data-tab-title': _('Initscripts') }, [
-					E('p', {}, _('You can enable or disable installed init scripts here. Changes will applied after a device reboot.<br /><strong>Warning: If you disable essential init scripts like "network", your device might become inaccessible!</strong>')),
+					E('p', {}, _('You can enable or disable installed init scripts here. Changes will be applied after a device reboot.<br /><strong>Warning: If you disable essential init scripts like "network", your device might become inaccessible!</strong>')),
 					table
 				]),
 				E('div', { 'data-tab': 'rc', 'data-tab-title': _('Local Startup') }, [
