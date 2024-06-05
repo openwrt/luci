@@ -4734,7 +4734,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						E('h4', _('Connectivity change')),
 						E('p', _('The network access to this device could be interrupted by changing settings of the "%h" interface.').format(affected)),
 						E('p', _('If the IP address used to access LuCI changes, a <strong>manual reconnect to the new IP</strong> is required within %d seconds to confirm the settings, otherwise modifications will be reverted.').format(L.env.apply_rollback)),
-						E('div', { 'class': 'right' }, [
+						E('div', { 'class': 'center' }, [
 							E('button', {
 								'class': 'btn cbi-button cbi-button-action important',
 								'click': resolveFn.bind(null, true)
