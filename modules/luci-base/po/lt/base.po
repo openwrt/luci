@@ -17,6 +17,10 @@ msgstr ""
 msgid "!known (not known)"
 msgstr "!žinoma (nežinoma/-as)"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
+msgid "\"%h\" interface changes could inhibit access to this device."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
 msgid "\"%h\" table \"%h\""
@@ -1162,6 +1166,12 @@ msgstr "Anoniminis įrengimas"
 msgid "Anonymous Swap"
 msgstr "Anoniminis apsikeitimas"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
+msgid ""
+"Any IP change requires <strong>connecting to the new IP</strong> within %d "
+"seconds to retain the changes."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:518
 msgctxt "nft match any traffic"
 msgid "Any packet"
@@ -1174,15 +1184,11 @@ msgstr "Bet koks paketas"
 msgid "Any zone"
 msgstr "Bet kokia zona"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4749
-msgid "Apply and keep settings"
-msgstr "Pritaikyti ir išlaikyti nustatymus"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
 msgstr "Įgalinti atkūrimą?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4775
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4776
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Nepavyko pritaikyti užklausos, kurios būsena <code>%h</code>"
 
@@ -1192,9 +1198,13 @@ msgstr "Nepavyko pritaikyti užklausos, kurios būsena <code>%h</code>"
 msgid "Apply unchecked"
 msgstr "Įgalinti nepažymėtus"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4745
-msgid "Apply with revert after connectivity loss"
-msgstr "Taikyti sugrąžinimą po ryšio praradimo"
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4750
+msgid "Apply, committing now"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4746
+msgid "Apply, reverting if GUI remains unreachable"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4685
 msgid "Applying configuration changes… %ds"
@@ -1666,7 +1676,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2976
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4251
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4741
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4742
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:188
@@ -1798,7 +1808,7 @@ msgstr "Grandinės pririšimas \"%h\""
 msgid "Changes"
 msgstr "Pakeitimai"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4811
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4812
 msgid "Changes have been reverted."
 msgstr "Pakeitimai buvo sugrąžinti."
 
@@ -1844,6 +1854,10 @@ msgstr "Tikrinamas archyvas…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:197
 msgid "Checking image…"
 msgstr "Tikrinama laikmena…"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4737
+msgid "Choose how to apply changes:"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:429
 msgid "Choose mtdblock"
@@ -4850,16 +4864,6 @@ msgid ""
 msgstr ""
 "Jei nurodyta, įrenkite įrenginį pagal skaidinio etiketę, o ne fiksuotą "
 "įrenginio mazgą"
-
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
-msgid ""
-"If the IP address used to access LuCI changes, a <strong>manual reconnect to "
-"the new IP</strong> is required within %d seconds to confirm the settings, "
-"otherwise modifications will be reverted."
-msgstr ""
-"Jei pasikeičia IP adresas, naudojamas „LuCI“ pasiekti, <strong>rankiniu būdu "
-"iš naujo prisijungti prie naujo IP</strong> reikia per %d sekundžių/-es/-ę, "
-"kad būtų patvirtinti nustatymai, kitaip pakeitimai bus grąžinti/anuliuoti."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1052
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
@@ -8647,11 +8651,11 @@ msgstr "Anuliuoti"
 msgid "Revert changes"
 msgstr "Paskelbti pakeitimus negaliojančius (Pakeitimų anuliavimas)"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4820
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4821
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "Anuliavimo prašymas nepavyko su kodu <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4800
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4801
 msgid "Reverting configuration…"
 msgstr "Visi pakeitimai grįžtą į pradinę konfigūravimą (Anuliuojama)…"
 
@@ -10435,14 +10439,6 @@ msgid "The netfilter components below are only regarded when running fw4."
 msgstr ""
 "Toliau pateikti tinklo filtro komponentai laikomi tik tada, kai veikia „fw4“."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
-msgid ""
-"The network access to this device could be interrupted by changing settings "
-"of the \"%h\" interface."
-msgstr ""
-"Keičiant sąsajos „%h“ nustatymus gali būti nutraukta tinklo prieiga prie šio "
-"įrenginio."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2160
 msgid "The network name is already used"
 msgstr "Tinklo pavadinimas jau yra naudojamas"
@@ -10648,7 +10644,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "Nėra aktyvių nuomų"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4767
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4768
 msgid "There are no changes to apply"
 msgstr "Nėra pakeitimų kurių galima įgalinti"
 
@@ -12710,6 +12706,29 @@ msgstr "„{example_nx}“ grąžina „{nxdomain}“."
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "🡐 Atgal"
+
+#~ msgid "Apply and keep settings"
+#~ msgstr "Pritaikyti ir išlaikyti nustatymus"
+
+#~ msgid "Apply with revert after connectivity loss"
+#~ msgstr "Taikyti sugrąžinimą po ryšio praradimo"
+
+#~ msgid ""
+#~ "If the IP address used to access LuCI changes, a <strong>manual reconnect "
+#~ "to the new IP</strong> is required within %d seconds to confirm the "
+#~ "settings, otherwise modifications will be reverted."
+#~ msgstr ""
+#~ "Jei pasikeičia IP adresas, naudojamas „LuCI“ pasiekti, <strong>rankiniu "
+#~ "būdu iš naujo prisijungti prie naujo IP</strong> reikia per %d sekundžių/-"
+#~ "es/-ę, kad būtų patvirtinti nustatymai, kitaip pakeitimai bus grąžinti/"
+#~ "anuliuoti."
+
+#~ msgid ""
+#~ "The network access to this device could be interrupted by changing "
+#~ "settings of the \"%h\" interface."
+#~ msgstr ""
+#~ "Keičiant sąsajos „%h“ nustatymus gali būti nutraukta tinklo prieiga prie "
+#~ "šio įrenginio."
 
 #~ msgid "User Group"
 #~ msgstr "Vartotojų grupė"

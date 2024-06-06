@@ -15,6 +15,10 @@ msgstr ""
 msgid "!known (not known)"
 msgstr "!known (neznámý)"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
+msgid "\"%h\" interface changes could inhibit access to this device."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
 msgid "\"%h\" table \"%h\""
@@ -1112,6 +1116,12 @@ msgstr "Anonymní připojení"
 msgid "Anonymous Swap"
 msgstr "Anonymní odkládací oddíl/soubor"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
+msgid ""
+"Any IP change requires <strong>connecting to the new IP</strong> within %d "
+"seconds to retain the changes."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:518
 msgctxt "nft match any traffic"
 msgid "Any packet"
@@ -1124,15 +1134,11 @@ msgstr "Jakýkoliv paket"
 msgid "Any zone"
 msgstr "Libovolná zóna"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4749
-msgid "Apply and keep settings"
-msgstr "Aplikovat a ponechat nastavení"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
 msgstr "Aplikovat zálohu?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4775
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4776
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Provádění požadavku selhalo se stavem <code>%h</code>"
 
@@ -1142,10 +1148,13 @@ msgstr "Provádění požadavku selhalo se stavem <code>%h</code>"
 msgid "Apply unchecked"
 msgstr "Použít nezkontrolované"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4745
-msgid "Apply with revert after connectivity loss"
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4750
+msgid "Apply, committing now"
 msgstr ""
-"Aplikovat s podmínkou návratu původního nastavení při ztrátě konektivity"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4746
+msgid "Apply, reverting if GUI remains unreachable"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4685
 msgid "Applying configuration changes… %ds"
@@ -1600,7 +1609,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2976
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4251
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4741
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4742
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:188
@@ -1723,7 +1732,7 @@ msgstr ""
 msgid "Changes"
 msgstr "Změny"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4811
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4812
 msgid "Changes have been reverted."
 msgstr "Změny byly vzaty zpět."
 
@@ -1768,6 +1777,10 @@ msgstr "Kontroluji archiv…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:197
 msgid "Checking image…"
 msgstr "Kontroluji obraz…"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4737
+msgid "Choose how to apply changes:"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:429
 msgid "Choose mtdblock"
@@ -4627,13 +4640,6 @@ msgid ""
 "If specified, mount the device by the partition label instead of a fixed "
 "device node"
 msgstr "Namísto pevného uzlu zařízení připojovat pomocí názvu oddílu"
-
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
-msgid ""
-"If the IP address used to access LuCI changes, a <strong>manual reconnect to "
-"the new IP</strong> is required within %d seconds to confirm the settings, "
-"otherwise modifications will be reverted."
-msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1052
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
@@ -8288,11 +8294,11 @@ msgstr "Vrátit zpět"
 msgid "Revert changes"
 msgstr "Vrátit změny"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4820
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4821
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "Požadavek na vrácení se nezdařil se stavem <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4800
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4801
 msgid "Reverting configuration…"
 msgstr "Vracení konfigurace…"
 
@@ -9894,12 +9900,6 @@ msgstr ""
 msgid "The netfilter components below are only regarded when running fw4."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
-msgid ""
-"The network access to this device could be interrupted by changing settings "
-"of the \"%h\" interface."
-msgstr ""
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2160
 msgid "The network name is already used"
 msgstr "Název sítě je již používán"
@@ -10079,7 +10079,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "Žádné aktivní zápůjčky"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4767
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4768
 msgid "There are no changes to apply"
 msgstr "Žádné změny k provedení"
 
@@ -12068,6 +12068,13 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Zpět"
+
+#~ msgid "Apply and keep settings"
+#~ msgstr "Aplikovat a ponechat nastavení"
+
+#~ msgid "Apply with revert after connectivity loss"
+#~ msgstr ""
+#~ "Aplikovat s podmínkou návratu původního nastavení při ztrátě konektivity"
 
 #~ msgid "Run a filesystem check before mounting the device"
 #~ msgstr "Spustit kontrolu souborového systému před připojením zařízení"

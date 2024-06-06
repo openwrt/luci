@@ -13,6 +13,10 @@ msgstr ""
 msgid "!known (not known)"
 msgstr ""
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
+msgid "\"%h\" interface changes could inhibit access to this device."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
 msgid "\"%h\" table \"%h\""
@@ -1112,6 +1116,12 @@ msgstr "Anoniem Monteren"
 msgid "Anonymous Swap"
 msgstr "Anoniem Verwisselen"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
+msgid ""
+"Any IP change requires <strong>connecting to the new IP</strong> within %d "
+"seconds to retain the changes."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:518
 msgctxt "nft match any traffic"
 msgid "Any packet"
@@ -1124,15 +1134,11 @@ msgstr "Elk pakket"
 msgid "Any zone"
 msgstr "Elke zone"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4749
-msgid "Apply and keep settings"
-msgstr "Instellingen toepassen en behouden"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
 msgstr "Backup toepassen?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4775
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4776
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Aanvraag is mislukt met status <code>%h</code>"
 
@@ -1142,9 +1148,13 @@ msgstr "Aanvraag is mislukt met status <code>%h</code>"
 msgid "Apply unchecked"
 msgstr "Niet aangevinkt toepassen"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4745
-msgid "Apply with revert after connectivity loss"
-msgstr "Toepassen met herstel na verbindingsverlies"
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4750
+msgid "Apply, committing now"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4746
+msgid "Apply, reverting if GUI remains unreachable"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4685
 msgid "Applying configuration changes… %ds"
@@ -1619,7 +1629,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2976
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4251
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4741
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4742
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:188
@@ -1751,7 +1761,7 @@ msgstr "Reeks haak \"%h\""
 msgid "Changes"
 msgstr "Veranderingen"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4811
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4812
 msgid "Changes have been reverted."
 msgstr "Wijzigingen zijn teruggedraaid."
 
@@ -1795,6 +1805,10 @@ msgstr "Archief controleren…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:197
 msgid "Checking image…"
 msgstr "Afbeelding controleren…"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4737
+msgid "Choose how to apply changes:"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:429
 msgid "Choose mtdblock"
@@ -4724,17 +4738,6 @@ msgid ""
 msgstr ""
 "Indien opgegeven, koppelt u het apparaat aan de hand van het partitielabel "
 "in plaats van een vast apparaatknooppunt"
-
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
-msgid ""
-"If the IP address used to access LuCI changes, a <strong>manual reconnect to "
-"the new IP</strong> is required within %d seconds to confirm the settings, "
-"otherwise modifications will be reverted."
-msgstr ""
-"Als het IP-adres dat wordt gebruikt om toegang te krijgen tot LuCI "
-"verandert, is een <strong> handmatige herverbinding met het nieuwe IP</"
-"strong> vereist binnen %d seconden om de instellingen te bevestigen, anders "
-"worden wijzigingen teruggedraaid."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1052
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
@@ -8453,11 +8456,11 @@ msgstr "Terugkeren"
 msgid "Revert changes"
 msgstr "Wijzigingen terugdraaien"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4820
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4821
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "Aanvraag terugzetten mislukt met status <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4800
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4801
 msgid "Reverting configuration…"
 msgstr "Configuratie terugdraaien…"
 
@@ -10225,14 +10228,6 @@ msgstr ""
 msgid "The netfilter components below are only regarded when running fw4."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
-msgid ""
-"The network access to this device could be interrupted by changing settings "
-"of the \"%h\" interface."
-msgstr ""
-"De netwerktoegang tot dit apparaat kan worden onderbroken door de "
-"instellingen van de \"%h\"-interface te wijzigen."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2160
 msgid "The network name is already used"
 msgstr "De netwerknaam wordt al gebruikt"
@@ -10433,7 +10428,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "Er zijn geen actieve huurcontracten"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4767
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4768
 msgid "There are no changes to apply"
 msgstr "Er zijn geen wijzigingen toe te passen"
 
@@ -12478,6 +12473,29 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Terug"
+
+#~ msgid "Apply and keep settings"
+#~ msgstr "Instellingen toepassen en behouden"
+
+#~ msgid "Apply with revert after connectivity loss"
+#~ msgstr "Toepassen met herstel na verbindingsverlies"
+
+#~ msgid ""
+#~ "If the IP address used to access LuCI changes, a <strong>manual reconnect "
+#~ "to the new IP</strong> is required within %d seconds to confirm the "
+#~ "settings, otherwise modifications will be reverted."
+#~ msgstr ""
+#~ "Als het IP-adres dat wordt gebruikt om toegang te krijgen tot LuCI "
+#~ "verandert, is een <strong> handmatige herverbinding met het nieuwe IP</"
+#~ "strong> vereist binnen %d seconden om de instellingen te bevestigen, "
+#~ "anders worden wijzigingen teruggedraaid."
+
+#~ msgid ""
+#~ "The network access to this device could be interrupted by changing "
+#~ "settings of the \"%h\" interface."
+#~ msgstr ""
+#~ "De netwerktoegang tot dit apparaat kan worden onderbroken door de "
+#~ "instellingen van de \"%h\"-interface te wijzigen."
 
 #~ msgid "User Group"
 #~ msgstr "Gebruikersgroep"

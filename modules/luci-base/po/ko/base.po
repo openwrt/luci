@@ -18,6 +18,10 @@ msgstr ""
 msgid "!known (not known)"
 msgstr ""
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
+msgid "\"%h\" interface changes could inhibit access to this device."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
 msgid "\"%h\" table \"%h\""
@@ -1101,6 +1105,12 @@ msgstr "익명 마운트"
 msgid "Anonymous Swap"
 msgstr "익명 스왑"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
+msgid ""
+"Any IP change requires <strong>connecting to the new IP</strong> within %d "
+"seconds to retain the changes."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:518
 msgctxt "nft match any traffic"
 msgid "Any packet"
@@ -1113,16 +1123,12 @@ msgstr "모든 패킷"
 msgid "Any zone"
 msgstr "모든 영역"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4749
-msgid "Apply and keep settings"
-msgstr "적용 및 설정 유지"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 #, fuzzy
 msgid "Apply backup?"
 msgstr "백업을 적용하시겠습니까?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4775
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4776
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "적용 요청 실패: 응답 코드 <code>%h</code>"
 
@@ -1132,8 +1138,12 @@ msgstr "적용 요청 실패: 응답 코드 <code>%h</code>"
 msgid "Apply unchecked"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4745
-msgid "Apply with revert after connectivity loss"
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4750
+msgid "Apply, committing now"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4746
+msgid "Apply, reverting if GUI remains unreachable"
 msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4685
@@ -1579,7 +1589,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2976
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4251
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4741
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4742
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:188
@@ -1702,7 +1712,7 @@ msgstr ""
 msgid "Changes"
 msgstr "변경 사항"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4811
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4812
 msgid "Changes have been reverted."
 msgstr ""
 
@@ -1744,6 +1754,10 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:195
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:197
 msgid "Checking image…"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4737
+msgid "Choose how to apply changes:"
 msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:429
@@ -4578,13 +4592,6 @@ msgstr ""
 msgid ""
 "If specified, mount the device by the partition label instead of a fixed "
 "device node"
-msgstr ""
-
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
-msgid ""
-"If the IP address used to access LuCI changes, a <strong>manual reconnect to "
-"the new IP</strong> is required within %d seconds to confirm the settings, "
-"otherwise modifications will be reverted."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1052
@@ -8181,11 +8188,11 @@ msgstr "변경 취소"
 msgid "Revert changes"
 msgstr "변경사항 되돌리기"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4820
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4821
 msgid "Revert request failed with status <code>%h</code>"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4800
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4801
 msgid "Reverting configuration…"
 msgstr "설정 되돌리는 중…"
 
@@ -9771,12 +9778,6 @@ msgstr ""
 msgid "The netfilter components below are only regarded when running fw4."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
-msgid ""
-"The network access to this device could be interrupted by changing settings "
-"of the \"%h\" interface."
-msgstr ""
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2160
 msgid "The network name is already used"
 msgstr "네트워크 이름이 이미 사용 중입니다"
@@ -9954,7 +9955,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "활성화 되어 있는 임대 없음"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4767
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4768
 msgid "There are no changes to apply"
 msgstr "변경된 사항이 없습니다"
 
@@ -11915,6 +11916,9 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 이전"
+
+#~ msgid "Apply and keep settings"
+#~ msgstr "적용 및 설정 유지"
 
 #~ msgid "Run a filesystem check before mounting the device"
 #~ msgstr "기기 마운트 전에 파일시스템 검사 실행"

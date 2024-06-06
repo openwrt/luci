@@ -20,6 +20,10 @@ msgstr ""
 msgid "!known (not known)"
 msgstr "!known (не известно)"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
+msgid "\"%h\" interface changes could inhibit access to this device."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
 msgid "\"%h\" table \"%h\""
@@ -1144,6 +1148,12 @@ msgstr "Неизвестный раздел"
 msgid "Anonymous Swap"
 msgstr "Неизвестный swap"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
+msgid ""
+"Any IP change requires <strong>connecting to the new IP</strong> within %d "
+"seconds to retain the changes."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:518
 msgctxt "nft match any traffic"
 msgid "Any packet"
@@ -1156,15 +1166,11 @@ msgstr "Любой пакет"
 msgid "Any zone"
 msgstr "Любая зона"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4749
-msgid "Apply and keep settings"
-msgstr "Применить и сохранить настройки"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
 msgstr "Восстановить резервную копию?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4775
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4776
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Ошибка <code>%h</code> запроса на применение"
 
@@ -1174,9 +1180,13 @@ msgstr "Ошибка <code>%h</code> запроса на применение"
 msgid "Apply unchecked"
 msgstr "Применить без проверки"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4745
-msgid "Apply with revert after connectivity loss"
-msgstr "Применить с восстановлением при потере соединения"
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4750
+msgid "Apply, committing now"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4746
+msgid "Apply, reverting if GUI remains unreachable"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4685
 msgid "Applying configuration changes… %ds"
@@ -1653,7 +1663,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2976
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4251
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4741
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4742
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:188
@@ -1785,7 +1795,7 @@ msgstr "Хук цепочки ‎«%h»"
 msgid "Changes"
 msgstr "Изменения"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4811
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4812
 msgid "Changes have been reverted."
 msgstr "Изменения отменены."
 
@@ -1830,6 +1840,10 @@ msgstr "Проверка архива…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:197
 msgid "Checking image…"
 msgstr "Проверка образа…"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4737
+msgid "Choose how to apply changes:"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:429
 msgid "Choose mtdblock"
@@ -4796,17 +4810,6 @@ msgid ""
 msgstr ""
 "Если выбрано, монтировать устройство используя название его раздела, а не "
 "фиксированный файл устройства"
-
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
-msgid ""
-"If the IP address used to access LuCI changes, a <strong>manual reconnect to "
-"the new IP</strong> is required within %d seconds to confirm the settings, "
-"otherwise modifications will be reverted."
-msgstr ""
-"Если IP-адрес, используемый для доступа к веб-интерфейсу, изменился, в "
-"течение %d секунд необходимо выполнить <strong>ручное переподключение c "
-"использованием нового IP-адреса</strong> для подтверждения настроек, в "
-"противном случае изменения будут автоматически отменены."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1052
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
@@ -8577,11 +8580,11 @@ msgstr "Вернуть"
 msgid "Revert changes"
 msgstr "Вернуть изменения"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4820
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4821
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "Ошибка <code>%h</code> отмены конфигурации"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4800
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4801
 msgid "Reverting configuration…"
 msgstr "Отмена конфигурации…"
 
@@ -10340,14 +10343,6 @@ msgid "The netfilter components below are only regarded when running fw4."
 msgstr ""
 "Приведенные ниже компоненты netfilter учитываются только при запуске fw4."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
-msgid ""
-"The network access to this device could be interrupted by changing settings "
-"of the \"%h\" interface."
-msgstr ""
-"Сетевой доступ к этому устройству может быть нарушен при изменении настроек "
-"интерфейса «%h»."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2160
 msgid "The network name is already used"
 msgstr "Имя сети уже используется"
@@ -10549,7 +10544,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "Нет активных арендованных адресов"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4767
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4768
 msgid "There are no changes to apply"
 msgstr "Нет изменений для применения"
 
@@ -12609,6 +12604,29 @@ msgstr "{example_nx} возвращает {nxdomain}."
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Назад"
+
+#~ msgid "Apply and keep settings"
+#~ msgstr "Применить и сохранить настройки"
+
+#~ msgid "Apply with revert after connectivity loss"
+#~ msgstr "Применить с восстановлением при потере соединения"
+
+#~ msgid ""
+#~ "If the IP address used to access LuCI changes, a <strong>manual reconnect "
+#~ "to the new IP</strong> is required within %d seconds to confirm the "
+#~ "settings, otherwise modifications will be reverted."
+#~ msgstr ""
+#~ "Если IP-адрес, используемый для доступа к веб-интерфейсу, изменился, в "
+#~ "течение %d секунд необходимо выполнить <strong>ручное переподключение c "
+#~ "использованием нового IP-адреса</strong> для подтверждения настроек, в "
+#~ "противном случае изменения будут автоматически отменены."
+
+#~ msgid ""
+#~ "The network access to this device could be interrupted by changing "
+#~ "settings of the \"%h\" interface."
+#~ msgstr ""
+#~ "Сетевой доступ к этому устройству может быть нарушен при изменении "
+#~ "настроек интерфейса «%h»."
 
 #~ msgid "User Group"
 #~ msgstr "Группа пользователя"

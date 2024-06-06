@@ -4732,8 +4732,9 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 					UI.prototype.changes.displayStatus('warning', [
 						E('h4', _('Connectivity change')),
-						E('p', _('The network access to this device could be interrupted by changing settings of the "%h" interface.').format(affected)),
-						E('p', _('If the IP address used to access LuCI changes, a <strong>manual reconnect to the new IP</strong> is required within %d seconds to confirm the settings, otherwise modifications will be reverted.').format(L.env.apply_rollback)),
+						E('p', _('"%h" interface changes could inhibit access to this device.').format(affected)),
+						E('p', _('Any IP change requires <strong>connecting to the new IP</strong> within %d seconds to retain the changes.').format(L.env.apply_rollback)),
+						E('p', _('Choose how to apply changes:')),
 						E('div', { 'class': 'right' }, [
 							E('button', {
 								'class': 'btn',
@@ -4742,11 +4743,11 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							E('button', {
 								'class': 'btn cbi-button-action important',
 								'click': resolveFn.bind(null, true)
-							}, [ _('Apply with revert after connectivity loss') ]), ' ',
+							}, [ _('Apply, reverting if GUI remains unreachable') ]), ' ',
 							E('button', {
 								'class': 'btn cbi-button-negative important',
 								'click': resolveFn.bind(null, false)
-							}, [ _('Apply and keep settings') ])
+							}, [ _('Apply, committing now') ])
 						])
 					]);
 				});

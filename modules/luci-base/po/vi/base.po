@@ -18,6 +18,10 @@ msgstr ""
 msgid "!known (not known)"
 msgstr "!đã biết (không biết)"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
+msgid "\"%h\" interface changes could inhibit access to this device."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
 msgid "\"%h\" table \"%h\""
@@ -1108,6 +1112,12 @@ msgstr "Gắn kết ẩn danh"
 msgid "Anonymous Swap"
 msgstr "Swap ẩn danh"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
+msgid ""
+"Any IP change requires <strong>connecting to the new IP</strong> within %d "
+"seconds to retain the changes."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:518
 msgctxt "nft match any traffic"
 msgid "Any packet"
@@ -1120,15 +1130,11 @@ msgstr "Bất kỳ gói tin nào"
 msgid "Any zone"
 msgstr "Bất kỳ khu vực nào"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4749
-msgid "Apply and keep settings"
-msgstr "Áp dụng và giữ các thiết lập"
-
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:119
 msgid "Apply backup?"
 msgstr "Chấp nhận sao lưu?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4775
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4776
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Áp dụng yêu cầu không thành công với trạng thái <code>%h</code>"
 
@@ -1138,9 +1144,13 @@ msgstr "Áp dụng yêu cầu không thành công với trạng thái <code>%h</
 msgid "Apply unchecked"
 msgstr "Áp dụng không kiểm tra"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4745
-msgid "Apply with revert after connectivity loss"
-msgstr "Áp dụng với việc hoàn nguyên sau khi mất kết nối"
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4750
+msgid "Apply, committing now"
+msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4746
+msgid "Apply, reverting if GUI remains unreachable"
+msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4685
 msgid "Applying configuration changes… %ds"
@@ -1609,7 +1619,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2976
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4251
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4741
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4742
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:188
@@ -1740,7 +1750,7 @@ msgstr "Móc chuỗi \"%h\""
 msgid "Changes"
 msgstr "Thay đổi"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4811
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4812
 msgid "Changes have been reverted."
 msgstr "Những thay đổi đã được phục hồi."
 
@@ -1783,6 +1793,10 @@ msgstr "Đang kiểm tra kho lưu trữ…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:197
 msgid "Checking image…"
 msgstr "Kiểm tra tập tin ảnh…"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4737
+msgid "Choose how to apply changes:"
+msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:429
 msgid "Choose mtdblock"
@@ -4699,16 +4713,6 @@ msgid ""
 "device node"
 msgstr ""
 "Nếu được chỉ định, gắn thiết bị theo nhãn phân vùng thay vì nốt cố định"
-
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4736
-msgid ""
-"If the IP address used to access LuCI changes, a <strong>manual reconnect to "
-"the new IP</strong> is required within %d seconds to confirm the settings, "
-"otherwise modifications will be reverted."
-msgstr ""
-"Nếu địa chỉ IP được sử dụng để truy cập LuCI thay đổi, cần <strong>kết nối "
-"lại thủ công với địa chỉ IP mới</strong> trong vòng %d giây để xác nhận các "
-"thiết lập, nếu không, các sửa đổi sẽ bị hoàn lại."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1052
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
@@ -8419,11 +8423,11 @@ msgstr "Hoàn nguyên"
 msgid "Revert changes"
 msgstr "Hoàn nguyên thay đổi"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4820
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4821
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "Yêu cầu hoàn nguyên không thành công với trạng thái <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4800
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4801
 msgid "Reverting configuration…"
 msgstr "Đang hoàn nguyên cấu hình .."
 
@@ -10151,14 +10155,6 @@ msgstr ""
 msgid "The netfilter components below are only regarded when running fw4."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
-msgid ""
-"The network access to this device could be interrupted by changing settings "
-"of the \"%h\" interface."
-msgstr ""
-"Truy cập mạng tới thiết bị này có thể bị gián đoạn bằng cách thay đổi các "
-"cài đặt của giao diện \"%h\"."
-
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2160
 msgid "The network name is already used"
 msgstr "Tên mạng đã được sử dụng"
@@ -10354,7 +10350,7 @@ msgstr ""
 msgid "There are no active leases"
 msgstr "Không có máy được cấp IP nào hoạt động"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4767
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4768
 msgid "There are no changes to apply"
 msgstr "Không có thay đổi nào để áp dụng"
 
@@ -12383,6 +12379,28 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Quay lại"
+
+#~ msgid "Apply and keep settings"
+#~ msgstr "Áp dụng và giữ các thiết lập"
+
+#~ msgid "Apply with revert after connectivity loss"
+#~ msgstr "Áp dụng với việc hoàn nguyên sau khi mất kết nối"
+
+#~ msgid ""
+#~ "If the IP address used to access LuCI changes, a <strong>manual reconnect "
+#~ "to the new IP</strong> is required within %d seconds to confirm the "
+#~ "settings, otherwise modifications will be reverted."
+#~ msgstr ""
+#~ "Nếu địa chỉ IP được sử dụng để truy cập LuCI thay đổi, cần <strong>kết "
+#~ "nối lại thủ công với địa chỉ IP mới</strong> trong vòng %d giây để xác "
+#~ "nhận các thiết lập, nếu không, các sửa đổi sẽ bị hoàn lại."
+
+#~ msgid ""
+#~ "The network access to this device could be interrupted by changing "
+#~ "settings of the \"%h\" interface."
+#~ msgstr ""
+#~ "Truy cập mạng tới thiết bị này có thể bị gián đoạn bằng cách thay đổi các "
+#~ "cài đặt của giao diện \"%h\"."
 
 #~ msgid "User Group"
 #~ msgstr "Nhóm người dùng"
