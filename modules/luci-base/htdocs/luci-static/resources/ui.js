@@ -4209,99 +4209,95 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		return new Promise(function(resolveFn, rejectFn) {
 			UI.prototype.showModal(_('Uploading file…'), [
 				E('p', _('Please select the file to upload.')),
-				E('div', { 'style': 'display:flex' }, [
-					E('div', { 'class': 'left', 'style': 'flex:1' }, [
-						E('input', {
-							type: 'file',
-							style: 'display:none',
-							change: function(ev) {
-								var modal = dom.parent(ev.target, '.modal'),
-								    body = modal.querySelector('p'),
-								    upload = modal.querySelector('.cbi-button-action.important'),
-								    file = ev.currentTarget.files[0];
+				E('div', { 'class': 'right' }, [
+					E('input', {
+						type: 'file',
+						style: 'display:none',
+						change: function(ev) {
+							var modal = dom.parent(ev.target, '.modal'),
+							    body = modal.querySelector('p'),
+							    upload = modal.querySelector('.cbi-button-action.important'),
+							    file = ev.currentTarget.files[0];
 
-								if (file == null)
-									return;
+							if (file == null)
+								return;
 
-								dom.content(body, [
-									E('ul', {}, [
-										E('li', {}, [ '%s: %s'.format(_('Name'), file.name.replace(/^.*[\\\/]/, '')) ]),
-										E('li', {}, [ '%s: %1024mB'.format(_('Size'), file.size) ])
-									])
-								]);
+							dom.content(body, [
+								E('ul', {}, [
+									E('li', {}, [ '%s: %s'.format(_('Name'), file.name.replace(/^.*[\\\/]/, '')) ]),
+									E('li', {}, [ '%s: %1024mB'.format(_('Size'), file.size) ])
+								])
+							]);
 
-								upload.disabled = false;
-								upload.focus();
-							}
-						}),
-						E('div', {
-							'class': 'btn cbi-button',
-							'click': function(ev) {
-								ev.target.previousElementSibling.click();
-							}
-						}, [ _('Browse…') ])
-					]),
-					E('div', { 'class': 'right', 'style': 'flex:1' }, [
-						E('div', {
-							'class': 'btn cbi-button',
-							'click': function() {
+							upload.disabled = false;
+							upload.focus();
+						}
+					}),
+					E('div', {
+						'class': 'btn cbi-button',
+						'click': function(ev) {
+							ev.target.previousElementSibling.click();
+						}
+					}, [ _('Browse…') ]),
+					E('div', {
+						'class': 'btn cbi-button',
+						'click': function() {
+							UI.prototype.hideModal();
+							rejectFn(new Error(_('Upload has been cancelled')));
+						}
+					}, [ _('Cancel') ]),
+					' ',
+					E('div', {
+						'class': 'btn cbi-button-action important',
+						'disabled': true,
+						'click': function(ev) {
+							var input = dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
+
+							if (!input.files[0])
+								return;
+
+							var progress = E('div', { 'class': 'cbi-progressbar', 'title': '0%' }, E('div', { 'style': 'width:0' }));
+
+							UI.prototype.showModal(_('Uploading file…'), [ progress ]);
+
+							var data = new FormData();
+
+							data.append('sessionid', rpc.getSessionID());
+							data.append('filename', path);
+							data.append('filedata', input.files[0]);
+
+							var filename = input.files[0].name;
+
+							request.post(L.env.cgi_base + '/cgi-upload', data, {
+								timeout: 0,
+								progress: function(pev) {
+									var percent = (pev.loaded / pev.total) * 100;
+
+									if (progressStatusNode)
+										progressStatusNode.data = '%.2f%%'.format(percent);
+
+									progress.setAttribute('title', '%.2f%%'.format(percent));
+									progress.firstElementChild.style.width = '%.2f%%'.format(percent);
+								}
+							}).then(function(res) {
+								var reply = res.json();
+
 								UI.prototype.hideModal();
-								rejectFn(new Error(_('Upload has been cancelled')));
-							}
-						}, [ _('Cancel') ]),
-						' ',
-						E('div', {
-							'class': 'btn cbi-button-action important',
-							'disabled': true,
-							'click': function(ev) {
-								var input = dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
 
-								if (!input.files[0])
-									return;
-
-								var progress = E('div', { 'class': 'cbi-progressbar', 'title': '0%' }, E('div', { 'style': 'width:0' }));
-
-								UI.prototype.showModal(_('Uploading file…'), [ progress ]);
-
-								var data = new FormData();
-
-								data.append('sessionid', rpc.getSessionID());
-								data.append('filename', path);
-								data.append('filedata', input.files[0]);
-
-								var filename = input.files[0].name;
-
-								request.post(L.env.cgi_base + '/cgi-upload', data, {
-									timeout: 0,
-									progress: function(pev) {
-										var percent = (pev.loaded / pev.total) * 100;
-
-										if (progressStatusNode)
-											progressStatusNode.data = '%.2f%%'.format(percent);
-
-										progress.setAttribute('title', '%.2f%%'.format(percent));
-										progress.firstElementChild.style.width = '%.2f%%'.format(percent);
-									}
-								}).then(function(res) {
-									var reply = res.json();
-
-									UI.prototype.hideModal();
-
-									if (L.isObject(reply) && reply.failure) {
-										UI.prototype.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
-										rejectFn(new Error(reply.failure));
-									}
-									else {
-										reply.name = filename;
-										resolveFn(reply);
-									}
-								}, function(err) {
-									UI.prototype.hideModal();
-									rejectFn(err);
-								});
-							}
-						}, [ _('Upload') ])
-					])
+								if (L.isObject(reply) && reply.failure) {
+									UI.prototype.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
+									rejectFn(new Error(reply.failure));
+								}
+								else {
+									reply.name = filename;
+									resolveFn(reply);
+								}
+							}, function(err) {
+								UI.prototype.hideModal();
+								rejectFn(err);
+							});
+						}
+					}, [ _('Upload') ])
 				])
 			]);
 		});
