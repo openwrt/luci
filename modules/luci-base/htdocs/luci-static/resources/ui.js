@@ -4210,6 +4210,13 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 			UI.prototype.showModal(_('Uploading file…'), [
 				E('p', _('Please select the file to upload.')),
 				E('div', { 'class': 'right' }, [
+					E('div', {
+						'class': 'btn cbi-button',
+						'click': function() {
+							UI.prototype.hideModal();
+							rejectFn(new Error(_('Upload has been cancelled')));
+						}
+					}, [ _('Cancel') ]),
 					E('input', {
 						type: 'file',
 						style: 'display:none',
@@ -4239,14 +4246,6 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							ev.target.previousElementSibling.click();
 						}
 					}, [ _('Browse…') ]),
-					E('div', {
-						'class': 'btn cbi-button',
-						'click': function() {
-							UI.prototype.hideModal();
-							rejectFn(new Error(_('Upload has been cancelled')));
-						}
-					}, [ _('Cancel') ]),
-					' ',
 					E('div', {
 						'class': 'btn cbi-button-action important',
 						'disabled': true,
