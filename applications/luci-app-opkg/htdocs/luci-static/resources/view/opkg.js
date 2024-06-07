@@ -886,7 +886,7 @@ function handleConfig(ev)
 			}, '%h'.format(conf[file])));
 		});
 
-		body.push(E('div', { 'class': 'right' }, [
+		body.push(E('div', { 'class': 'button-row' }, [
 			E('div', {
 				'class': 'btn cbi-button-neutral',
 				'click': ui.hideModal
@@ -1012,7 +1012,7 @@ function handleOpkg(ev)
 			if (res.code !== 0)
 				dlg.appendChild(E('p', _('The <em>opkg %h</em> command failed with code <code>%d</code>.').format(cmd, (res.code & 0xff) || -1)));
 
-			dlg.appendChild(E('div', { 'class': 'right' },
+			dlg.appendChild(E('div', { 'class': 'button-row' },
 				E('div', {
 					'class': 'btn',
 					'click': L.bind(function(res) {
