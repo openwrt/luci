@@ -4734,15 +4734,15 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						E('p', _('Any IP change requires <strong>connecting to the new IP</strong> within %d seconds to retain the changes.').format(L.env.apply_rollback)),
 						E('p', _('Choose how to apply changes:')),
 						E('div', { 'class': 'right' }, [
-							E('button', {
+							E('div', {
 								'class': 'btn cbi-button',
 								'click': rejectFn,
 							}, [ _('Cancel') ]), ' ',
-							E('button', {
+							E('div', {
 								'class': 'btn cbi-button-action important',
 								'click': resolveFn.bind(null, true)
 							}, [ _('Apply, reverting if GUI remains unreachable') ]), ' ',
-							E('button', {
+							E('div', {
 								'class': 'btn cbi-button-negative important',
 								'click': resolveFn.bind(null, false)
 							}, [ _('Apply, committing now') ])
