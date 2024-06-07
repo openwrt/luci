@@ -4730,9 +4730,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 					UI.prototype.changes.displayStatus('warning', [
 						E('h4', _('Connectivity change')),
-						E('p', _('"%h" interface changes could inhibit access to this device.').format(affected)),
-						E('p', _('Any IP change requires <strong>connecting to the new IP</strong> within %d seconds to retain the changes.').format(L.env.apply_rollback)),
-						E('p', _('Choose how to apply changes:')),
+						E('p', _('Changes have been made to the existing connection via "%h". This could inhibit access to this device. Any IP change requires <strong>connecting to the new IP</strong> within %d seconds to retain the changes.').format(affected, L.env.apply_rollback)),
 						E('div', { 'class': 'right' }, [
 							E('div', {
 								'class': 'btn cbi-button',
@@ -4741,11 +4739,11 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							E('div', {
 								'class': 'btn cbi-button-action important',
 								'click': resolveFn.bind(null, true)
-							}, [ _('Apply, reverting if GUI remains unreachable') ]), ' ',
+							}, [ _('Apply, reverting in case of connectivity loss') ]), ' ',
 							E('div', {
 								'class': 'btn cbi-button-negative important',
 								'click': resolveFn.bind(null, false)
-							}, [ _('Apply, committing now') ])
+							}, [ _('Apply unchecked') ])
 						])
 					]);
 				});
