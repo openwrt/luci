@@ -4735,7 +4735,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						E('p', _('Choose how to apply changes:')),
 						E('div', { 'class': 'right' }, [
 							E('button', {
-								'class': 'btn',
+								'class': 'btn cbi-button',
 								'click': rejectFn,
 							}, [ _('Cancel') ]), ' ',
 							E('button', {
