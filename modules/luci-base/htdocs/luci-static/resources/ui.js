@@ -4234,7 +4234,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 								upload.focus();
 							}
 						}),
-						E('button', {
+						E('div', {
 							'class': 'btn cbi-button',
 							'click': function(ev) {
 								ev.target.previousElementSibling.click();
@@ -4242,7 +4242,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						}, [ _('Browse…') ])
 					]),
 					E('div', { 'class': 'right', 'style': 'flex:1' }, [
-						E('button', {
+						E('div', {
 							'class': 'btn cbi-button',
 							'click': function() {
 								UI.prototype.hideModal();
@@ -4250,7 +4250,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							}
 						}, [ _('Cancel') ]),
 						' ',
-						E('button', {
+						E('div', {
 							'class': 'btn cbi-button-action important',
 							'disabled': true,
 							'click': function(ev) {
