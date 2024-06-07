@@ -4480,26 +4480,29 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							E('var', {}, E('ins', '&#160;')), ' ', _('Option changed') ]),
 						E('div', { 'class': 'uci-change-legend-label' }, [
 							E('var', {}, E('del', '&#160;')), ' ', _('Option removed') ])]),
-					E('br'), list,
-					E('div', { 'class': 'right' }, [
-						E('div', {
-							'class': 'btn cbi-button',
-							'click': UI.prototype.hideModal
-						}, [ _('Close') ]), ' ',
-						new UIComboButton('0', {
-							0: [ _('Save & Apply') ],
-							1: [ _('Apply unchecked') ]
-						}, {
-							classes: {
-								0: 'btn cbi-button cbi-button-positive important',
-								1: 'btn cbi-button cbi-button-negative important'
-							},
-							click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
-						}).render(), ' ',
-						E('div', {
-							'class': 'btn cbi-button cbi-button-reset',
-							'click': L.bind(this.revert, this)
-						}, [ _('Revert') ])])])
+					E('br'),
+					list,
+				]),
+				E('div', { 'class': 'right' }, [
+					E('div', {
+						'class': 'btn cbi-button',
+						'click': UI.prototype.hideModal
+					}, [ _('Close') ]), ' ',
+					new UIComboButton('0', {
+						0: [ _('Save & Apply') ],
+						1: [ _('Apply unchecked') ]
+					}, {
+						classes: {
+							0: 'btn cbi-button cbi-button-positive important',
+							1: 'btn cbi-button cbi-button-negative important'
+						},
+						click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
+					}).render(), ' ',
+					E('div', {
+						'class': 'btn cbi-button cbi-button-reset',
+						'click': L.bind(this.revert, this)
+					}, [ _('Revert') ])
+				])
 			]);
 
 			for (var config in this.changes) {
