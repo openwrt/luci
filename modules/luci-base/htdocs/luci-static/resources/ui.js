@@ -4482,7 +4482,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							E('var', {}, E('del', '&#160;')), ' ', _('Option removed') ])]),
 					E('br'), list,
 					E('div', { 'class': 'right' }, [
-						E('button', {
+						E('div', {
 							'class': 'btn cbi-button',
 							'click': UI.prototype.hideModal
 						}, [ _('Close') ]), ' ',
@@ -4496,7 +4496,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							},
 							click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
 						}).render(), ' ',
-						E('button', {
+						E('div', {
 							'class': 'btn cbi-button cbi-button-reset',
 							'click': L.bind(this.revert, this)
 						}, [ _('Revert') ])])])
