@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2024-06-01 07:02+0000\n"
+"PO-Revision-Date: 2024-06-07 15:02+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -22,6 +22,7 @@ msgstr "!known (nieznany)"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
 msgid "\"%h\" interface changes could inhibit access to this device."
 msgstr ""
+"Modyfikacje interfejsu \"%h\" mogą zablokować dostęp do tego urządzenia."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -68,7 +69,7 @@ msgstr "%s jest nieotagowany w wielu grupach VLAN!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:812
 msgid "%s means \"the address of the system running dnsmasq\"."
-msgstr "%s oznacza „adres systemu, na którym działa dnsmasq”."
+msgstr "%s oznacza „adres systemu z uruchomionym dnsmasq”."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:297
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:409
@@ -80,7 +81,7 @@ msgstr "(okno %d minutowe, interwał %d sekund)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:753
 msgid "(Max 1h == 3600)"
-msgstr "(Maks. 1h == 3600)"
+msgstr "(Maks. 1h == 3600)"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:118
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:124
@@ -148,7 +149,7 @@ msgstr "0"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:998
 msgid "0 = not using RSSI threshold, 1 = do not change driver default"
-msgstr "0 = nie używa progu RSSI, 1 = nie zmienia domyślnego sterownika"
+msgstr "0 = nie używa progu RSSI, 1 = nie zmienia ust. domyślnych sterownika"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:60
 msgctxt "sstp log level value"
@@ -280,7 +281,7 @@ msgid ""
 "reinstallation attacks."
 msgstr ""
 "802.11v: Poprawki trybu uśpienia Wireless Network Management (WNM): "
-"zapobiega atakom związanym z ponowną instalacją."
+"zapobiega atakom związanym z ponowną instalacją."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1824
 msgid "802.11w Association SA Query maximum timeout"
@@ -1148,6 +1149,8 @@ msgid ""
 "Any IP change requires <strong>connecting to the new IP</strong> within %d "
 "seconds to retain the changes."
 msgstr ""
+"Każda zmiana IP wymaga <strong>połączenia z nowym adresem IP</strong> w "
+"ciągu %d sekund, aby zachować zmiany."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:518
 msgctxt "nft match any traffic"
@@ -1177,11 +1180,12 @@ msgstr "Zastosuj zmiany"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4750
 msgid "Apply, committing now"
-msgstr ""
+msgstr "Zastosuj, wprowadź zmiany teraz"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4746
 msgid "Apply, reverting if GUI remains unreachable"
 msgstr ""
+"Zastosuj, przywróć zmiany, jeśli interfejs graficzny pozostanie nieosiągalny"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4685
 msgid "Applying configuration changes… %ds"
@@ -1833,7 +1837,7 @@ msgstr "Sprawdzanie obrazu…"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4737
 msgid "Choose how to apply changes:"
-msgstr ""
+msgstr "Wybierz sposób zastosowania zmian:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:429
 msgid "Choose mtdblock"
@@ -2185,11 +2189,11 @@ msgstr "Poziom rejestrowania cron"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:45
 msgid "Cross Pass (Japan only)"
-msgstr ""
+msgstr "Cross Pass (tylko Japonia)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:584
 msgid "Current power"
-msgstr "Aktualna moc nadawania"
+msgstr "Aktualna moc"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:28
 msgctxt "nft meta hour"
@@ -2753,8 +2757,8 @@ msgid ""
 "Distance to farthest network member in meters. Set only for distances above "
 "one kilometer; otherwise it is harmful."
 msgstr ""
-"Odległość do najdalszego członka sieci w metrach. Ustawiane tylko dla "
-"odległości powyżej jednego kilometra; w przeciwnym razie jest to szkodliwe."
+"Odległość do najdalszego członka sieci w metrach. Ustawiane tylko dla "
+"odległości powyżej jednego kilometra; w przeciwnym razie jest to szkodliwe."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
@@ -4903,9 +4907,9 @@ msgid ""
 "works reliably if only one of the macaddrs is active at any time."
 msgstr ""
 "W DHCPv4 możliwe jest uwzględnienie więcej niż jednego adresu MAC. Pozwala "
-"to na powiązanie adresu IP z wieloma adresami MAC, a Dnsmasq porzuca "
-"dzierżawę DHCP na rzecz jednego z adresów MAC, gdy inny prosi o dzierżawę. "
-"Działa niezawodnie tylko wtedy, gdy tylko jeden z adresów MAC jest aktywny w "
+"to na powiązanie adresu IP z wieloma adresami MAC, a Dnsmasq porzuca "
+"dzierżawę DHCP na rzecz jednego z adresów MAC, gdy inny prosi o dzierżawę. "
+"Działa niezawodnie tylko wtedy, gdy tylko jeden z adresów MAC jest aktywny w "
 "dowolnym momencie."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:71
@@ -6980,7 +6984,7 @@ msgstr "Otwórz listę..."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:65
 msgid "OpenConnect"
-msgstr ""
+msgstr "OpenConnect"
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
@@ -7036,7 +7040,7 @@ msgstr "Nazwa operatora"
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2006
 #: modules/luci-base/htdocs/luci-static/resources/form.js:4062
 msgid "Option \"%s\" contains an invalid input value."
-msgstr "Opcja \"%s\" zawiera nieważną wartość wejściową."
+msgstr "Opcja \"%s\" zawiera nieprawidłową wartość."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2021
 msgid "Option \"%s\" must not be empty."
@@ -9341,9 +9345,9 @@ msgid ""
 "on regulatory requirements and wireless usage, the actual transmit power may "
 "be reduced by the driver."
 msgstr ""
-"Określa maksymalną moc nadawania, z której może korzystać radio. W "
-"zależności od wymagań regulacyjnych i użycia sieci bezprzewodowej, faktyczna "
-"moc transmisji może zostać zmniejszona przez sterownik."
+"Określa maksymalną użyteczną moc radio-nadajnika. W zależności od wymagań "
+"prawnych i zastosowania sieci bezprzewodowej, dysponowana moc nadajnika może "
+"zostać zmniejszona przez sterownik."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:243
 msgid ""
@@ -10449,8 +10453,8 @@ msgid ""
 "address of your computer to reach the device again, depending on your "
 "settings."
 msgstr ""
-"System wykonuje flashowanie.<br /> NIE WYŁĄCZAJ URZĄDZENIA!<br /> Odczekaj "
-"kilka minut przed ponownym połączeniem. W zależności od ustawień może być "
+"Trwa przeładowanie systemu.<br /> NIE WYŁĄCZAJ URZĄDZENIA!<br /> Odczekaj "
+"kilka minut przed ponownym podłączeniem. W zależności od ustawień może być "
 "konieczne odnowienie adresu komputera, aby ponownie uzyskać dostęp do "
 "urządzenia."
 
@@ -10816,7 +10820,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"
-msgstr ""
+msgstr "Transix (tylko Japonia)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:25
 msgid "Transmit"
@@ -10836,15 +10840,15 @@ msgstr "Błędy przesyłania"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:58
 msgid "Transmitted Data"
-msgstr "Przesłane dane"
+msgstr "Wysłane dane"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:245
 msgid "Transmitted bytes"
-msgstr "Przesłane bajty"
+msgstr "Wysłane bajty"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:246
 msgid "Transmitted packets"
-msgstr "Przesłane pakiety"
+msgstr "Wysłane pakiety"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:79
 msgctxt "nft @th,off,len"
@@ -11852,8 +11856,8 @@ msgid ""
 "inaccessible!</strong>"
 msgstr ""
 "Tutaj można włączyć lub wyłączyć zainstalowane skrypty. Zmiany zostaną "
-"zastosowane po ponownym uruchomieniu urządzenia.<br/><strong>Ostrzeżenie: "
-"Jeśli wyłączysz podstawowe skrypty typu \"network\", urządzenie może stać "
+"zastosowane po ponownym uruchomieniu urządzenia.<br /><strong>Ostrzeżenie: "
+"jeśli wyłączysz podstawowe skrypty typu \"network\", urządzenie może stać "
 "się nieosiągalne!</strong>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:853
@@ -12501,8 +12505,8 @@ msgid ""
 "valid network device name between 1 and 15 characters not containing \":\", "
 "\"/\", \"%\" or spaces"
 msgstr ""
-"prawidłowa nazwa urządzenia sieciowego od 1 do 15 znaków, niezawierająca "
-"„:”, „/”, „%” ani spacji"
+"prawidłowa nazwa urządzenia sieciowego od 1 do 15 znaków, bez spacji i „:”, "
+"„/”, „%”"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:463
 msgid "valid network device name, not \".\" or \"..\""
@@ -12514,7 +12518,7 @@ msgstr "prawidłowa sieć w zapisie adresu/maski sieci"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:562
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
-msgstr "prawidłowa wartość numeru telefonu (0-9, „*”, „#”, „!” lub „.”)"
+msgstr "dozwolone znaki w numerze telefonu (0-9, „*”, „#”, „!” lub „.”)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:376
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:379
@@ -12594,7 +12598,7 @@ msgstr "{example_nx} zwraca {nxdomain}."
 
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
-msgstr "« Wróć"
+msgstr "« Wstecz"
 
 #~ msgid "Apply and keep settings"
 #~ msgstr "Zastosuj i zachowaj ustawienia"
