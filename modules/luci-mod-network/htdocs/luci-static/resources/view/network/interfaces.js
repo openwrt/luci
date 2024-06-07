@@ -175,7 +175,7 @@ function iface_updown(up, id, ev, force) {
 
 				ui.showModal(_('Confirm disconnect'), [
 					E('p', _('You appear to be currently connected to the device via the "%h" interface. Do you really want to shut down the interface?').format(id)),
-					E('div', { 'class': 'right' }, [
+					E('div', { 'class': 'button-row' }, [
 						E('div', {
 							'class': 'btn cbi-button cbi-button-neutral',
 							'click': function(ev) {
