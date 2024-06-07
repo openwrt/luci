@@ -3626,7 +3626,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	/** @private */
 	cancelModal: function(ev) {
 		if (ev.key == 'Escape') {
-			var btn = modalDiv.querySelector('.right > button, .right > .btn');
+			var btn = modalDiv.querySelector('.right > button, .right > .btn, .button-row > .btn');
 
 			if (btn)
 				btn.click();
@@ -4209,7 +4209,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		return new Promise(function(resolveFn, rejectFn) {
 			UI.prototype.showModal(_('Uploading file…'), [
 				E('p', _('Please select the file to upload.')),
-				E('div', { 'class': 'right' }, [
+				E('div', { 'class': 'button-row' }, [
 					E('div', {
 						'class': 'btn cbi-button',
 						'click': function() {
@@ -4478,7 +4478,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					E('br'),
 					list,
 				]),
-				E('div', { 'class': 'right' }, [
+				E('div', { 'class': 'button-row' }, [
 					E('div', {
 						'class': 'btn cbi-button',
 						'click': UI.prototype.hideModal
@@ -4731,7 +4731,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					UI.prototype.changes.displayStatus('warning', [
 						E('h4', _('Connectivity change')),
 						E('p', _('Changes have been made to the existing connection via "%h". This could inhibit access to this device. Any IP change requires <strong>connecting to the new IP</strong> within %d seconds to retain the changes.').format(affected, L.env.apply_rollback)),
-						E('div', { 'class': 'right' }, [
+						E('div', { 'class': 'button-row' }, [
 							E('div', {
 								'class': 'btn cbi-button',
 								'click': rejectFn,

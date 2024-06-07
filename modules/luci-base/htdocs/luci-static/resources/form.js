@@ -3218,7 +3218,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				else {
 					ui.showModal(title, [
 						nodes,
-						E('div', { 'class': 'right' }, [
+						E('div', { 'class': 'button-row' }, [
 							E('button', {
 								'class': 'btn cbi-button',
 								'click': ui.createHandlerFn(this, 'handleModalCancel', m)
