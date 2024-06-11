@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-01 07:02+0000\n"
+"PO-Revision-Date: 2024-06-09 07:09+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/lt/>\n"
@@ -39,7 +39,7 @@ msgstr "Leisti tinklo tarpuvartes su „NAT“"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:69
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:69
 msgid "Allow the selection of an outgoing IPv4 gateway with NAT"
-msgstr ""
+msgstr "Leisti pasirinkti išsiunčiama IPv4 tinklo tarpuvarte su „NAT“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:81
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:81
@@ -285,6 +285,9 @@ msgid ""
 "robustness to the link sensing but delays neighbor registration. Defaults is "
 "\"yes\""
 msgstr ""
+"Ryšio aptikimo histerezė (tik „hopcount“ metrikai). Dėl histerezės ryšio "
+"aptikimo patikimumas padidėja, tačiau kaimynų registracija užtrunka. "
+"Numatytoji reikšmė yra – „taip“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:285
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:279
@@ -354,6 +357,8 @@ msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
 msgstr ""
+"IPv6 daugiadresinio transliavimo adresas. Numatytoji reikšmė yra „FF02::6D“, "
+"„manet-router linklocal“ daugiadresinis transliavimas."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
@@ -379,6 +384,9 @@ msgid ""
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
 msgstr ""
+"IPv6 „src“ priešdėlis. „OLSRd“ pasirinks vieną iš sąsajos IP, atitinkančią "
+"šio parametro priešdėlį. Numatytoji reikšmė yra „0::/0“, kuris pajungia ne "
+"„linklocal“ naudojimą; sąsajos IP."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:113
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:113
@@ -394,6 +402,11 @@ msgid ""
 "if changed.<br /><b>WARNING:</b> This parameter should not be used together "
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
+"Jei maršrutas į esamą tinklo tarpuvartę turi būti pakeistas, šio tinklo "
+"tarpuvartės „ETX“ reikšmė yra padauginama su šią reikšmę prieš palyginant ją "
+"su nauju. Parametras gali būti vertė nuo 0,1 iki 1,0, tačiau turėtų būti "
+"artimas 1,0, jei pakeistas.<br /><b>ĮSPĖJIMAS:</b> šio parametro negalima "
+"naudoti kartu su „etx_ffeth“ metrika!<br />Numatytai nusistato į – „1.0“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:93
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:93
@@ -513,6 +526,9 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
+"Ryšio kokybės senėjimo koeficientas (tik 2 lygio „lq“). „Etx_float“ ir "
+"„etx_fpm“ derinimo parametras, mažesne vertės reiškia lėtesnis „ETX“ vertės "
+"kitimas. (leistinos reikšmės yra nuo 0,01 iki 1,0)"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:193
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:187
@@ -656,7 +672,7 @@ msgstr "Tinklo adresas"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:139
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:133
 msgid "Nic changes poll interval"
-msgstr ""
+msgstr "„Nic“ keičia apklausos intervalą"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:3
 msgid "OLSR"
@@ -664,7 +680,7 @@ msgstr "„OLSR“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:14
 msgid "OLSR - Display Options"
-msgstr ""
+msgstr "„OLSR“ – Rodymo parinktys"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:14
 msgid "OLSR - HNA-Announcements"
@@ -726,22 +742,24 @@ msgstr "Oranžinis"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:250
 msgid "Overview of currently active OLSR host net announcements"
 msgstr ""
+"Šiuo metu aktyvių „OLSR“ skleidėjo/p.k – vedėjo („HNA“) tinklo skelbimų "
+"apžvalga"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:529
 msgid "Overview of currently established OLSR connections"
-msgstr ""
+msgstr "Šiuo metu įtvirtintų „OLSR“ jungčių apžvalga"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:171
 msgid "Overview of currently known OLSR nodes"
-msgstr ""
+msgstr "Šiuo metu žinomų „OLSR“ mazgų apžvalga"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:283
 msgid "Overview of currently known routes to other OLSR nodes"
-msgstr ""
+msgstr "Šiuo metu žinomų maršrutų į kitus „OLSR“ mazgus apžvalga"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:165
 msgid "Overview of interfaces where OLSR is running"
-msgstr ""
+msgstr "Sąsajos, kuriose veikia „OLSR“, apžvalga"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:150
 msgid "Overview of known multiple interface announcements"
