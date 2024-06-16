@@ -476,6 +476,7 @@ return view.extend({
 					request: {
 						profile,
 						version: candidates[0][0],
+						version_code: revision,
 						packages: Object.keys(packages).sort(),
 					},
 				};
@@ -536,6 +537,7 @@ return view.extend({
 												...firmware,
 												packages: mapdata.request.packages,
 												version: mapdata.request.version,
+												version_code: mapdata.request.version_code,
 												profile: mapdata.request.profile
 											};
 											this.pollFn = L.bind(function () {
