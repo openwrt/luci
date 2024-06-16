@@ -86,7 +86,7 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'uinteger';
 
-		o = s.option(form.Value, 'fail', _('Fail'),
+		o = s.option(form.Value, 'fall', _('Fall'),
 			_('Required number of successes for KO transition'));
 		o.optional = true;
 		o.datatype = 'uinteger';
