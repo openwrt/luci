@@ -432,8 +432,8 @@ return view.extend({
 				]);
 				return;
 			}
+			const remote_revision = response.json().revision;
 			if (version.endsWith('SNAPSHOT')) {
-				const remote_revision = response.json().revision;
 				if (
 					get_revision_count(revision) < get_revision_count(remote_revision)
 				) {
@@ -476,7 +476,7 @@ return view.extend({
 					request: {
 						profile,
 						version: candidates[0][0],
-						version_code: revision,
+						version_code: remote_revision,
 						packages: Object.keys(packages).sort(),
 					},
 				};
