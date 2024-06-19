@@ -174,6 +174,7 @@ define Build/Prepare
 		$(CP) ./$$$$d/* $(PKG_BUILD_DIR)/$$$$d/; \
 	  fi; \
 	done
+	$(call Build/Prepare/$(LUCI_NAME))
 	$(call Build/Prepare/Default)
 endef
 
