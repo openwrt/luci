@@ -98,6 +98,10 @@ function updateActivePeers(ifname) {
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
+				cell.textContent = '%.2f ms'.format(peer.latency_ms / 10**6);
+
+				cell = row.insertCell(-1)
+				cell.className = "td"
 				cell.textContent = '%.2mB'.format(peer.bytes_recvd);
 
 				cell = row.insertCell(-1)
@@ -136,6 +140,7 @@ var cbiActivePeers = form.DummyValue.extend({
 				E('th', {'class': 'th'}, _('Dir')),
 				E('th', {'class': 'th'}, _('IP Address')),
 				E('th', {'class': 'th'}, _('Uptime')),
+				E('th', {'class': 'th'}, _('Latency')),
 				E('th', {'class': 'th'}, _('RX')),
 				E('th', {'class': 'th'}, _('TX')),
 				E('th', {'class': 'th'}, _('Priority')),
