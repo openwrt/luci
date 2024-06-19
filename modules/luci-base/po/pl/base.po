@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2024-06-15 07:10+0000\n"
-"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
+"PO-Revision-Date: 2024-06-19 18:55+0000\n"
+"Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
 "Language: pl\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1118
 msgid "!known (not known)"
@@ -4812,14 +4812,14 @@ msgstr ""
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:156
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:129
 msgid "If unchecked, no default route is configured"
-msgstr "Jeśli odznaczone, nie ma zdefiniowanej domyślnej trasy"
+msgstr "Jeśli odznaczone, nie ma zdefiniowanej trasy domyślnej"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1056
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:145
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:140
 msgid "If unchecked, the advertised DNS server addresses are ignored"
-msgstr "Jeśli odznaczone, rozgłoszane adresy serwerów DNS są ignorowane"
+msgstr "Jeśli odznaczone, rozgłaszane adresy serwerów DNS są ignorowane"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:338
 msgid ""
@@ -4888,7 +4888,7 @@ msgstr "Zaimportowana konfiguracja peera"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:185
 msgid "Imports settings from an existing WireGuard configuration file"
-msgstr "Importuje ustawienia z istniejącego pliku konfiguracyjnego WireGuard"
+msgstr "Importuje ustawienia WireGuard z istniejącego pliku konfiguracyjnego"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
 msgid "In"
@@ -4912,7 +4912,7 @@ msgid ""
 "In bridged LAN setups it is advisable to enable the bridge loop avoidance in "
 "order to avoid broadcast loops that can bring the entire LAN to a standstill."
 msgstr ""
-"W zmostkowanych konfiguracjach sieci LAN zaleca się włączenie funkcji "
+"W konfiguracjach zmostkowanych sieci LAN zaleca się włączenie funkcji "
 "unikania pętli mostowych w celu uniknięcia pętli rozgłoszeniowych, które "
 "mogą doprowadzić do zatrzymania całej sieci LAN."
 
@@ -5056,8 +5056,8 @@ msgid ""
 "Instead of joining any network with a matching SSID, only connect to the "
 "BSSID <code>%h</code>."
 msgstr ""
-"Zamiast łączyć dowolną sieć z pasującym identyfikatorem SSID, należy "
-"połączyć się tylko z identyfikatorem BSSID <code>%h</code>."
+"Zamiast dołączać do dowolnej sieci według identyfikatora SSID, należy "
+"połączyć się tylko z siecią o BSSID <code>%h</code>."
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:43
 msgid "Insufficient permissions to read UCI configuration."
@@ -5076,7 +5076,7 @@ msgstr "Interfejs"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:763
 msgid "Interface \"%h\" is already marked as designated master."
-msgstr "Interfejs \"%h\" jest już oznaczony jako wyznaczony główny."
+msgstr "Interfejs \"%h\" jest już wyznaczony jako główny."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:62
 msgid "Interface %q device auto-migrated from %q to %q."
@@ -5216,8 +5216,8 @@ msgid ""
 "Invalid bearer list. Possibly too many bearers created. This protocol "
 "supports one and only one bearer."
 msgstr ""
-"Nieprawidłowa lista nośna. Być może zbyt wielu okazicieli zostało "
-"stworzonych. Ten protokół obsługuje jedną nośną i tylko jednego okaziciela."
+"Nieprawidłowa lista nośników (bearer). Być może zbyt wielu nośników zostało "
+"stworzonych. Ten protokół obsługuje jeden i tylko jeden nośnik."
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:402
 msgid "Invalid command"
@@ -5291,7 +5291,7 @@ msgstr ""
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:98
 #: themes/luci-theme-openwrt/luasrc/view/themes/openwrt.org/header.htm:72
 msgid "JavaScript required!"
-msgstr "JavaScript jest wymagany!"
+msgstr "Wymagany JavaScript!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1950
 msgid "Join Network"
@@ -5433,7 +5433,7 @@ msgid ""
 "Larger weights (of the same prio) are given a proportionately higher "
 "probability of being selected."
 msgstr ""
-"Większe ważności (tego samego priorytetu) mają proporcjonalnie większe "
+"Większa waga (dla tego samego priorytetu) daje proporcjonalnie większe "
 "prawdopodobieństwo wyboru."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:142
@@ -5481,7 +5481,7 @@ msgstr "Pozostały czas dzierżawy"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:50
 msgid "Leave empty to autodetect"
-msgstr "Pozostaw puste, aby automatycznie wykryć"
+msgstr "Nie wypełniaj, aby wykrywać automatycznie"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:40
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:39
@@ -5489,7 +5489,7 @@ msgstr "Pozostaw puste, aby automatycznie wykryć"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:47
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:48
 msgid "Leave empty to use the current WAN address"
-msgstr "Pozostaw puste, aby użyć bieżącego adresu WAN"
+msgstr "Aby użyć bieżącego adresu WAN, nie wypełniaj"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:938
 msgid ""
@@ -5497,9 +5497,9 @@ msgid ""
 "interoperate. Airtime efficiency may be significantly reduced where these "
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
-"Starsze lub źle działające urządzenia mogą wymagać starszego standardu "
-"802.11b do współdziałania. Efektywność emisji może być znacznie zmniejszona, "
-"gdy jest stosowane to ustawienie. Zaleca się, aby w miarę możliwości nie "
+"Starsze lub kłopotliwe urządzenia mogą wymagać starszego standardu 802.11b "
+"do współdziałania. Efektywność emisji może być znacznie zmniejszona, gdy "
+"jest stosowane to ustawienie. Zaleca się, aby w miarę możliwości nie "
 "zezwalać na szybkości 802.11b."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:677
@@ -5561,8 +5561,8 @@ msgid ""
 "List of IP sets to populate with the IPs of DNS lookup results of the FQDNs "
 "also specified here."
 msgstr ""
-"Lista zestawów adresów IP, które mają być wypełnione adresami IP wyników DNS "
-"lookup dla FQDN określonych tutaj."
+"Listy adresów IP, które mają być wypełnione adresami IP wyników DNS lookup "
+"dla FQDN określonych tutaj."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1630
 msgid ""
@@ -5594,7 +5594,7 @@ msgstr ""
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:82
 msgid "List of SSH key files for auth"
-msgstr "Lista kluczy SSH do autoryzacji"
+msgstr "Lista plików-kluczy SSH do autoryzacji"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:481
 msgid "List of domains to allow {rfc_1918_link} responses for."
@@ -5603,7 +5603,7 @@ msgstr "Lista domen zezwalających na odpowiedzi {rfc_1918_link}."
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:301
 msgid "List of upstream NTP server candidates with which to synchronize."
 msgstr ""
-"Lista kandydatów na nadrzędne serwery NTP, z którymi należy przeprowadzić "
+"Lista nadrzędnych serwerów NTP, z którymi należy przeprowadzić "
 "synchronizację."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:173
@@ -5633,11 +5633,13 @@ msgstr ""
 msgid ""
 "Listen only on the specified interfaces, and loopback if not excluded "
 "explicitly."
-msgstr "Ogranicz nasłuchiwanie do tych interfesjów oraz pętli zwrotnej."
+msgstr ""
+"Ogranicz nasłuchiwanie do określonych interfejsów oraz pętli zwrotnej, jeśli "
+"nie jest jawnie wykluczona."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:287
 msgid "Listen to multicast beacons"
-msgstr "Nasłuchuj sygnałów nawigacyjnych multiemisji"
+msgstr "Nasłuchuj sygnałów multicastowych"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:296
 msgid "ListenPort setting is invalid"
@@ -5765,7 +5767,7 @@ msgstr "Zapytania lokalizujące"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:117
 msgid "Location Area Code"
-msgstr "Numer kierunkowy lokalizacji"
+msgstr "Kod Obszaru Lokalizacyjnego (LAC)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2176
 msgid "Lock to BSSID"
@@ -5789,7 +5791,7 @@ msgstr "Zdarzenie logowania \"<strong>%h</strong>…\""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:404
 msgid "Log facility"
-msgstr "Funkcja (facility) dziennika"
+msgstr "Lokalizacja dziennika"
 
 #: modules/luci-base/ucode/template/sysauth.ut:38
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:36
@@ -5863,7 +5865,7 @@ msgstr "Adres MAC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1079
 msgid "MAC Address Filter"
-msgstr "Filtrowanie adresów MAC"
+msgstr "Filtr adresów MAC"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:258
 msgid "MAC Address For The Actor"
@@ -5983,7 +5985,7 @@ msgstr "Dopasuj ten tag"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:893
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
-msgstr "Maksymalny odstęp czasu <abbr title=\"Router Advertisement\">RA</abbr>"
+msgstr "Maksymalny interwał <abbr title=\"Router Advertisement\">RA</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:758
 msgid "Max cache TTL"
@@ -5991,7 +5993,7 @@ msgstr "Maksymalny TTL pamięci podręcznej"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:716
 msgid "Max valid value %s."
-msgstr "Maksymalna ważna wartość %s."
+msgstr "Maksymalna wartość %s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:723
 msgid "Max. DHCP leases"
@@ -6058,7 +6060,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:941
 msgid "Maximum transmit power"
-msgstr "Maksymalna moc nadawania"
+msgstr "Maksymalna moc"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:638
 msgid "May prevent VoIP or other services from working."
@@ -6135,7 +6137,7 @@ msgstr "MiB"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:900
 msgid "Min <abbr title=\"Router Advertisement\">RA</abbr> interval"
-msgstr "Minimalny odstęp czasu <abbr title=\"Router Advertisement\">RA</abbr>"
+msgstr "Minimalny interwał <abbr title=\"Router Advertisement\">RA</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:751
 msgid "Min cache TTL"
@@ -6143,7 +6145,7 @@ msgstr "Minimalny TTL pamięci podręcznej"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:708
 msgid "Min valid value %s."
-msgstr "Minimalna ważna wartość %s."
+msgstr "Minimalna wartość %s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:721
 msgid "Minimum ARP validity time"
@@ -6170,9 +6172,9 @@ msgid ""
 "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds."
 msgstr ""
-"Minimalny dozwolony czas pomiędzy wysyłaniem niezamówionego <abbr "
-"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna "
-"to 200 sekund."
+"Minimalny dozwolony czas pomiędzy spontanicznym wysyłaniem <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to 200 "
+"sekund."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:204
 msgid "Mirror monitor port"
@@ -6184,7 +6186,7 @@ msgstr "Kopia portu źródłowego"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:120
 msgid "Mobile Country Code"
-msgstr "Kod kraju telefonu komórkowego"
+msgstr "Identyfikator kraju (MCC)"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:9
 msgid "Mobile Data"
@@ -6192,7 +6194,7 @@ msgstr "Dane mobilne"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:123
 msgid "Mobile Network Code"
-msgstr "Kod sieci komórkowej"
+msgstr "Kod sieci komórkowej (MNC)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1590
 msgid "Mobility Domain"
@@ -6229,7 +6231,7 @@ msgstr ""
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:77
 msgid "Modem default"
-msgstr "Domyślny modem"
+msgstr "Ust. domyślne modemu"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:73
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:54
@@ -6238,7 +6240,7 @@ msgstr "Domyślny modem"
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:73
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:57
 msgid "Modem device"
-msgstr "Urządzenie modemowe"
+msgstr "Modem"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:66
 msgid "Modem information query failed"
@@ -6300,7 +6302,7 @@ msgstr "Zamontuj podłączone urządzenia"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:162
 msgid "Mount filesystems not specifically configured"
-msgstr "Zamontuj systemy plików, które nie są odpowiednio skonfigurowane"
+msgstr "Zamontuj nieskonfigurowane systemy plików"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:332
 msgid "Mount options"
@@ -6312,7 +6314,7 @@ msgstr "Punkt montownia"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:158
 msgid "Mount swap not specifically configured"
-msgstr "Zamontuj swap, który nie jest odpowiednio skonfigurowany"
+msgstr "Zamontuj nieskonfigurowany swap"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:223
 msgid "Mounted file systems"
@@ -6447,7 +6449,7 @@ msgstr "Raport o sąsiadach"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:713
 msgid "Neighbour cache validity"
-msgstr "Ważność pamięci podręcznej sąsiada"
+msgstr "Okres ważności pamięci podręcznej sąsiadów"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:993
 msgid "Netfilter table name"
@@ -6484,16 +6486,17 @@ msgstr "Adres sieci"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:179
 msgid "Network and its mask that define the size of the destination"
-msgstr "Sieć i jej maska określająca rozmiar miejsca docelowego"
+msgstr "Identyfikator sieci i jej maska określająca rozmiar sieci"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 msgid "Network and its mask that define which source addresses use this route"
 msgstr ""
-"Sieć i jej maska definiujące, które adresy źródłowe korzystają z tej trasy"
+"Identyfikator sieci i jej maska definiujące, które adresy źródłowe "
+"korzystają z tej trasy"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:776
 msgid "Network boot image"
-msgstr "Sieciowy obraz startowy"
+msgstr "Rozruchowy obraz systemu z sieci"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:427
 msgid "Network bridge configuration migration"
@@ -6616,9 +6619,8 @@ msgid ""
 "No changes to settings will be stored and are lost after rebooting. This "
 "mode should only be used to install a firmware upgrade"
 msgstr ""
-"Zmiana ustawień nie zostanie zapisana i będzie utracona po ponownym "
-"uruchomieniu. Ten tryb powinien być używany tylko do instalacji aktualizacji "
-"firmware"
+"Zmiana ustawień nie zostanie zapisana i będzie utracona po restarcie. Ten "
+"tryb powinien być używany tylko do aktualizacji firmware"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:69
 msgid "No client associated"
