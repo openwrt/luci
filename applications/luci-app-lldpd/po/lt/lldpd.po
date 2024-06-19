@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-05-30 20:13+0000\n"
+"PO-Revision-Date: 2024-06-19 19:11+0000\n"
 "Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationslldpd/lt/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
 "n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:374
 msgid "1A"
@@ -74,6 +74,7 @@ msgstr "„CDPv1“ ir „CDPv2“"
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:39
 msgid "Cannot have both interface %s and its exclusion %s"
 msgstr ""
+"Negalima turėti ir sąsajos ir/arba sietuvo – %s, ir jos neįtraukimo – %s"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:319
 msgid "Capabilities"
@@ -85,7 +86,7 @@ msgstr "Miestas"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:206
 msgid "Civic address"
-msgstr ""
+msgstr "„Civic“ adresas"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:46
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:65
@@ -95,11 +96,11 @@ msgstr "Renkama/-i informacija (duomenys)..."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:588
 msgid "Communication Device Endpoints (Class III)"
-msgstr ""
+msgstr "Ryšio įrenginio galutiniai taškai (3-ios klasės)"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:205
 msgid "Coordinate based"
-msgstr ""
+msgstr "Koordinačių pagrindu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:321
 msgid "Country"
@@ -115,10 +116,15 @@ msgid ""
 "is used as a management address without any check. To blacklist IPv6 "
 "addresses, use <code>!*:*</code>."
 msgstr ""
+"Numatytai nusistato į pirmus IPv4 ir IPv6 adresus. Jei yra pateikiamas "
+"tikslus IP adresas, jis bus naudojamas kaip valdymo adresas be jokio "
+"patikrinimo. Jei norite įtraukti IPv6 adresą į juodąjį sąrašą, naudokite – "
+"<code>!*:*</code>."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:61
+#, fuzzy
 msgid "Delete count"
-msgstr ""
+msgstr "Ištrintų skaičius"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:273
 msgid "Description"
@@ -129,14 +135,17 @@ msgid ""
 "Determines the transmitted packet TTL (== this value * transmit delay). The "
 "default value is 4 &therefore; the default TTL is 120 seconds."
 msgstr ""
+"Nustato perduodamo paketo „TTL“ (== ši reikšmė * perdavimo delsa). "
+"Numatytoji reikšmė yra – 4, todėl; numatytasis „TTL“ yra – 120 sekundžių."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:638
 msgid "Disable LLDP-MED inventory TLV transmission"
-msgstr ""
+msgstr "Išjungti „LLDP-MED“ inventoriaus „TLV“ perdavimą"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:647
 msgid "Disable advertising of kernel release, version and machine"
 msgstr ""
+"Išjungti branduolio išleidimo, versijos ir „mašinos“ – įrenginio reklamavimą"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:152
 msgid "Disabled"
@@ -144,7 +153,7 @@ msgstr "Išjungta/Neįgalinta (-as/-i)"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:687
 msgid "Discovered Neighbors"
-msgstr ""
+msgstr "Atrasti kaimynai"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:41
 msgid "Discovered chassis"
@@ -152,7 +161,7 @@ msgstr ""
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:42
 msgid "Discovered port"
-msgstr ""
+msgstr "Atrastas prievadas"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:788
 msgid "EDP"
@@ -167,8 +176,9 @@ msgid "ELIN Address"
 msgstr "„ELIN“ adresas"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:364
+#, fuzzy
 msgid "Empire State Bldg"
-msgstr ""
+msgstr "„Empire State Bldg“"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:730
 msgid "Enable CDP"
@@ -195,34 +205,46 @@ msgid "Enable service"
 msgstr "Įjungti/Įgalinti tarnybą"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:731
+#, fuzzy
 msgid ""
 "Enable the support of CDP protocol to deal with Cisco routers that do not "
 "speak LLDP"
 msgstr ""
+"Įjungti/Įgalinti „CDP“ protokolo palaikymą, kad galėtumėte dirbti su „Cisco“ "
+"maršrutizatoriais, kurie nekalba/nemoka „LLDP“"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:791
 msgid ""
 "Enable the support of EDP protocol to deal with Extreme routers and switches "
 "that do not speak LLDP."
 msgstr ""
+"Įjungti/Įgalinti „EDP“ protokolo palaikymą, kad galėtumėte dirbti su "
+"„Extreme“ maršrutizatoriais, kurie nekalba/nemoka „LLDP“"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:771
 msgid ""
 "Enable the support of FDP protocol to deal with Foundry routers that do not "
 "speak LLDP"
 msgstr ""
+"Įjungti/Įgalinti „FDP“ protokolo palaikymą, kad galėtumėte dirbti su "
+"„Foundry“ maršrutizatoriais, kurie nekalba/nemoka „LLDP“"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:817
 msgid ""
 "Enable the support of SONMP protocol to deal with Nortel routers and "
 "switches that do not speak LLDP."
 msgstr ""
+"Įjungti/Įgalinti „SONMP“ protokolo palaikymą, kad galėtumėte dirbti su "
+"„Nortel“ maršrutizatoriais ir komutatoriais, kurie nekalba/nemoka „LLDP“"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:715
+#, fuzzy
 msgid ""
 "Even when there is no LLDP peer detected but there is a peer speaking "
 "another protocol detected."
 msgstr ""
+"Net kai nėra joks aptiktas „LLDP“ lygiarangis, tačiau yra aptiktas kitas "
+"kalbantis/mokantis protokolas."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:768
 msgid "FDP"
@@ -250,19 +272,19 @@ msgstr ""
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:344
 msgid "Gotham"
-msgstr ""
+msgstr "„Gotham“"
 
 #: applications/luci-app-lldpd/root/usr/share/rpcd/acl.d/luci-app-lldpd.json:18
 msgid "Grant access for LLDP configuration"
-msgstr ""
+msgstr "Suteikti prieigą „LLDP“ konfigūracijai"
 
 #: applications/luci-app-lldpd/root/usr/share/rpcd/acl.d/luci-app-lldpd.json:3
 msgid "Grant access for LLDP status information"
-msgstr ""
+msgstr "Suteikti prieigą prie „LLDP“ būklės/būsenos informacijos"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:203
 msgid "Host location type"
-msgstr ""
+msgstr "Skleidėjo/P.K Vedėjo vietovės tipas"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:276
 msgid "ID"
@@ -278,11 +300,11 @@ msgstr "IP adresas"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/lldpd.js:163
 msgid "Incoming"
-msgstr ""
+msgstr "Gaunama/-s/-i"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:60
 msgid "Insert count"
-msgstr ""
+msgstr "Įterpimo/-ų skaičius"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:667
 msgid "Interface MAC address"
@@ -302,6 +324,8 @@ msgid ""
 "Kernel name (ie: Linux) will still be shared, and Inventory software version "
 "will be set to %s."
 msgstr ""
+"Branduolio pavadinimas (ty: „Linux“) vis tiek bus bendrinamas, o "
+"inventoriaus programinės įrangos versija bus nustatyta į – %s."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:706
 #: applications/luci-app-lldpd/root/usr/share/luci/menu.d/luci-app-lldpd.json:3
