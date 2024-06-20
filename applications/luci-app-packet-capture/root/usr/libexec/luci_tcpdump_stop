@@ -1,0 +1,8 @@
+#!/bin/sh
+
+pid=$(cat /var/run/luci-tcpdump.pid)
+if [ -n "$pid" ] && grep -sq /usr/bin/tcpdump "/proc/$pid/cmdline"; then
+    kill -TERM $pid
+fi
+
+exit 0
