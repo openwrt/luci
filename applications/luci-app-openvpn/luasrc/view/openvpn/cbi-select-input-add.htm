@@ -68,6 +68,18 @@
 			setTimeout(function(){ output.innerHTML=""}, timeout);
 		}
 	}
+		var vpn_file = document.getElementById("ovpn_file").value;
+
+		if(!vpn_name && !vpn_name.length) {
+			let vpn_file_name = vpn_file.replace('C:\\fakepath\\','').replace('.ovpn','').replace(/[^\x00-\x7F]|[\s\.!@#$%^&*()\-+=\[\]{};':"\\|,<>\/?]/g,'');
+			if (vpn_file_name && vpn_file_name.length) {
+				vpn_name = vpn_file_name;
+				document.getElementById("instance_name2").value = vpn_name;
+			}
+		}
+
+
+	}
 //]]>
 </script>
 
@@ -98,7 +110,7 @@
 				<input type="text" maxlength="20" placeholder="Instance name" name="instance_name2" id="instance_name2" />
 			</div>
 			<div class="td left">
-				<input type="file" name="ovpn_file" id="ovpn_file" accept="application/x-openvpn-profile,.ovpn" />
+				<input type="file" name="ovpn_file" id="ovpn_file" onchange="autofill_name()" accept="application/x-openvpn-profile,.ovpn" />
 			</div>
 			<div class="td left">
 				<input class="btn cbi-button cbi-button-add" type="submit" onclick="vpn_upload(); return false;" value="<%:Upload%>" title="<%:Upload ovpn file%>" />
