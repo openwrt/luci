@@ -251,6 +251,7 @@ function has_sourcefilter(proto) {
 	case 'dhcpv6':
 	case 'directip':
 	case 'mbim':
+	case 'modemmanager':
 	case 'ncm':
 	case 'ppp':
 	case 'pppoa':
