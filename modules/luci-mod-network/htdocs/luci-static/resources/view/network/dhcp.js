@@ -677,6 +677,26 @@ return view.extend({
 		);
 		o.placeholder = '/etc/dnsmasq.servers';
 
+		s.taboption('forward', form.Flag, 'add_mac',
+			_('Add requestor MAC'),
+			_('Add the MAC address of the requestor to DNS queries which are forwarded upstream.'));
+
+		s.taboption('forward', form.Flag, 'strip_mac',
+			_('Remove MAC address before forwarding query'),
+			_('Remove any MAC address information already in downstream queries before forwarding upstream.'));
+
+		o = s.taboption('forward', form.Value, 'add_subnet',
+			_('Add subnet address to forwards'),
+			_('Add a subnet address to the DNS queries which are forwarded upstream.') + ' ' + '<br />' +
+			_('%s adds the /24 and /96 subnets of the requestor for IPv4 and IPv6 requestors, respectively.').format('<code>24,96</code>') + ' ' + '<br />' +
+			_('%s adds 1.2.3.0/24 for IPv4 requestors and ::/0 for IPv6 requestors.').format('<code>1.2.3.4/24</code>') + ' ' + '<br />' +
+			_('%s adds 1.2.3.0/24 for both IPv4 and IPv6 requestors.').format('<code>1.2.3.4/24,1.2.3.4/24</code>'));
+		o.optional = true;
+
+		s.taboption('forward', form.Flag, 'strip_subnet',
+			_('Remove subnet address before forwarding query'),
+			_('Remove any subnet address already present in a downstream query before forwarding it upstream.'));
+
 		o = s.taboption('general', form.Flag, 'allservers',
 			_('All servers'),
 			_('Query all available upstream resolvers.') + ' ' + _('First answer wins.'));
