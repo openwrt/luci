@@ -325,6 +325,16 @@ return view.extend({
 			tagcodestring:'<code>tag</code>',
 			tag_named_ov_string: '<code>option(6):&lt;opt-name&gt;,[&lt;value&gt;[,&lt;value&gt;]]</code>',
 
+			//match tags
+			dhcp_option_code: '<code>option(6)</code>',
+			dhcp_optioncolon_code: '<code>option(6):</code>',
+			dhcp_option_client_arch: '<code>option:client-arch,6</code>',
+			dhcp_value_code: '<code>,value</code>',
+			tag_match_code_name: '<code>match</code>',
+			tag_match_option_syntax: '<code>&lt;option number&gt;|option:&lt;option name&gt;[,&lt;value&gt;]</code>',
+			tag_name_efi_ia32: '<code>efi-ia32</code>',
+			wildcard_code: '<code>*</code>',
+
 		};
 
 		function customi18n(template, values) {
@@ -391,6 +401,7 @@ return view.extend({
 		s.tab('matchtags', _('Match Tags'));
 		s.tab('vc', _('VC'));
 		s.tab('uc', _('UC'));
+		s.tab('settags', _('Set Tags'));
 
 		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
@@ -1274,6 +1285,41 @@ return view.extend({
 			_('Send options to clients that did not request them.'));
 		so.rmempty = false;
 		so.optional = true;
+
+		o = s.taboption('settags', form.SectionValue, '__settags__', form.TableSection, 'match', null,
+			customi18n( _('Encountering chosen DHCP {dhcp_option_code}s (or also its {dhcp_value_code}) from clients triggers dnsmasq to set alphanumeric {tagcodestring}s.')) + '<br />' +
+			customi18n( _('In other words: "{tag_match_code_name} these {dhcp_option_code}s to set this {tagcodestring}" or "These {dhcp_option_code}s set this {tagcodestring}".')) + '<br />' +
+			customi18n( _('Internally, these configuration entries are called {tag_match_code_name}.')) + '<br />' +
+			customi18n( _('Matching option syntax: {tag_match_option_syntax}.')) + ' ' +
+			customi18n( _('Prefix named (IPv6) options with {dhcp_optioncolon_code}.')) + ' ' +
+			customi18n( _('Wildcards ({wildcard_code}) allowed.')) + '<br /><br />' +
+			customi18n( _('Match {dhcp_option_client_arch}, Tag {tag_name_efi_ia32}, sets tag {tag_name_efi_ia32}')) + ' ' +
+			_('when number %s appears in the list of architectures sent by the client in option %s.').format('<code>6</code>', '<code>93</code>') + '<br />' +
+			customi18n( _('Use the %s Button to add a new {tag_match_code_name}.').format(_('<em>Add</em>'))) );
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit Match');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'match', _('Match this client option(+value)...'));
+		so.rmempty = false;
+		so.optional = false;
+		so.placeholder = '61,8c:80:90:01:02:03';
+
+		so = ss.option(form.Value, 'networkid', _('...to Set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		so.placeholder = 'myuniqueclientid'
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
 
 		o = s.taboption('leases', CBILeaseStatus, '__status__');
 
