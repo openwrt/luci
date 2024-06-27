@@ -302,7 +302,7 @@ return view.extend({
 		    duids = hosts_duids_pools[1],
 		    pools = hosts_duids_pools[2],
 		    networks = hosts_duids_pools[3],
-		    m, s, o, ss, so, dnss;
+		    m, s, o, ss, so, dnss, tagstab;
 
 		var devices  = Object.keys(L.toArray(hosts_duids_pools[4])[0]);
 		var services = Object.keys(L.toArray(hosts_duids_pools[5])[0]);
@@ -397,11 +397,7 @@ return view.extend({
 		s.tab('ipsets', _('IP Sets'));
 		s.tab('relay', _('Relay'));
 		s.tab('pxe_tftp', _('PXE/TFTP'));
-		s.tab('mac', _('MAC'));
-		s.tab('matchtags', _('Match Tags'));
-		s.tab('vc', _('VC'));
-		s.tab('uc', _('UC'));
-		s.tab('settags', _('Set Tags'));
+		s.tab('tagsparent', _('Tags'));
 
 		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
@@ -1173,7 +1169,23 @@ return view.extend({
 			_('Forward/reverse DNS'),
 			_('Add static forward and reverse DNS entries for this host.'));
 
-		o = s.taboption('mac', form.SectionValue, '__mac__', form.TableSection, 'mac', null,
+
+
+		o = s.taboption('tagsparent', form.SectionValue, '__tagsparent__', form.TypedSection, '__tagsparent__');
+
+		tagstab = o.subsection;
+
+		tagstab.anonymous = true;
+		tagstab.cfgsections = function() { return [ '__tagsparent__' ] };
+
+		tagstab.tab('mac', _('MAC'));
+		tagstab.tab('matchtags', _('Match Tags'));
+		tagstab.tab('vc', _('VC'));
+		tagstab.tab('uc', _('UC'));
+		tagstab.tab('settags', _('Set Tags'));
+
+
+		o = tagstab.taboption('mac', form.SectionValue, '__mac__', form.TableSection, 'mac', null,
 			_('MAC hardware addresses uniquely identify clients to set tags on them.') + '<br /><br />' +
 			_('Use the <em>Add</em> Button to add a new MAC.'));
 		ss = o.subsection;
@@ -1193,7 +1205,7 @@ return view.extend({
 		so.rmempty = false;
 		so.optional = false;
 
-		o = s.taboption('matchtags', form.SectionValue, '__tags__', form.TableSection, 'tag', null,
+		o = tagstab.taboption('matchtags', form.SectionValue, '__tags__', form.TableSection, 'tag', null,
 			customi18n( _('A {tagcodestring} is an alphanumeric label. dnsmasq applies chosen DHCP options when a specific {tagcodestring} is encountered.')) + '<br />' +
 			customi18n( _('In other words: "This {tagcodestring} gets these {tag_named_ov_string}".')) + '<br />' +
 			customi18n( _('Note: invalid {tag_named_ov_string} combinations may cause dnsmasq to silently crash.')) + '<br /><br />' +
@@ -1236,7 +1248,7 @@ return view.extend({
 		so.rmempty = false;
 		so.optional = true;
 
-		o = s.taboption('vc', form.SectionValue, '__vc__', form.TableSection, 'vendorclass', null,
+		o = tagstab.taboption('vc', form.SectionValue, '__vc__', form.TableSection, 'vendorclass', null,
 			_('Match Vendor Class (VC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
 			_('Use the <em>Add</em> Button to add a new VC.'));
 		ss = o.subsection;
@@ -1261,7 +1273,7 @@ return view.extend({
 		so.rmempty = false;
 		so.optional = true;
 
-		o = s.taboption('uc', form.SectionValue, '__uc__', form.TableSection, 'userclass', null,
+		o = tagstab.taboption('uc', form.SectionValue, '__uc__', form.TableSection, 'userclass', null,
 			_('Match User Class (UC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
 			_('Use the <em>Add</em> Button to add a new UC.'));
 		ss = o.subsection;
@@ -1286,7 +1298,7 @@ return view.extend({
 		so.rmempty = false;
 		so.optional = true;
 
-		o = s.taboption('settags', form.SectionValue, '__settags__', form.TableSection, 'match', null,
+		o = tagstab.taboption('settags', form.SectionValue, '__settags__', form.TableSection, 'match', null,
 			customi18n( _('Encountering chosen DHCP {dhcp_option_code}s (or also its {dhcp_value_code}) from clients triggers dnsmasq to set alphanumeric {tagcodestring}s.')) + '<br />' +
 			customi18n( _('In other words: "{tag_match_code_name} these {dhcp_option_code}s to set this {tagcodestring}" or "These {dhcp_option_code}s set this {tagcodestring}".')) + '<br />' +
 			customi18n( _('Internally, these configuration entries are called {tag_match_code_name}.')) + '<br />' +
