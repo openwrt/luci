@@ -390,6 +390,7 @@ return view.extend({
 		s.tab('mac', _('MAC'));
 		s.tab('matchtags', _('Match Tags'));
 		s.tab('vc', _('VC'));
+		s.tab('uc', _('UC'));
 
 		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
@@ -1236,6 +1237,31 @@ return view.extend({
 		ss.rowcolors = true;
 
 		so = ss.option(form.Value, 'vendorclass', _('Match Vendor Class...'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('...to set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		o = s.taboption('uc', form.SectionValue, '__uc__', form.TableSection, 'userclass', null,
+			_('Match User Class (UC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new UC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit UC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'userclass', _('Match User Class...'));
 		so.rmempty = false;
 		so.optional = false;
 
