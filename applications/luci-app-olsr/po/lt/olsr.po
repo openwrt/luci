@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-12 15:11+0000\n"
-"Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2024-06-22 23:09+0000\n"
+"Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/lt/>\n"
 "Language: lt\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:152
 msgid "Active MID announcements"
@@ -82,7 +82,7 @@ msgstr "Rodyti"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:137
 msgid "Downlink"
-msgstr ""
+msgstr "Žemynkryptis"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:143
@@ -146,6 +146,13 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
+"„FIBMetric“ valdo skleidėjo/p.k – vedėjo maršrutų „OLSRd“ rinkinių metrinę "
+"vertę; „plokščias“ reiškia, kad metrinė vertė visada yra 2. Tai yra "
+"pageidaujama reikšmė, nes ji padeda „Linux“ branduolio kelvados parinkimui "
+"išvalyti senesnius maršrutus; „teisingas“ naudoja šuoliu skaičių kaip "
+"metrinę vertę; „apytikslė“ taip pat naudoja šuolio skaičių kaip metrikos "
+"reikšmę, bet atnaujina šuolių skaičių tik tada, jei pasikeičia ir „nexthop“. "
+"Numatytai yra \"plokščias\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:209
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:203
@@ -286,8 +293,8 @@ msgid ""
 "\"yes\""
 msgstr ""
 "Ryšio aptikimo histerezė (tik „hopcount“ metrikai). Dėl histerezės ryšio "
-"aptikimo patikimumas padidėja, tačiau kaimynų registracija užtrunka. "
-"Numatytoji reikšmė yra – „taip“"
+"aptikimo patikimumas padidėja, tačiau „kaimynų (Protokolas/Tinkl.)“ "
+"registracija užtrunka. Numatytoji reikšmė yra – „taip“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:285
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:279
@@ -540,6 +547,13 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
+"Sujungimo kokybės algoritmas (tik 2-o lygio „LQ“).<br /><b>„etx_float“</b>: "
+"slankiojo kablelio „ETX“ su eksponenciniu senėjimu<br /><b>„etx_fpm“</b>: "
+"tas pats kaip „etx_float“, bet su sveikuoju skaičiumi aritmetika<br /"
+"><b>„etx_ff“</b> : „ETX freifunk“, „ETC“ variantas, kuris naudoja visą "
+"„OLSR“ srautą (o ne tik „hellos“) „ETX“ skaičiavimui<br /><b>„etx_ffeth“</"
+"b>: nesuderinamas variantas „etx_ff“, leidžiantis susieti „eterneto“ ryšius "
+"su „ETX 0.1“.<br />Numatytieji yra – „etx_ff“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:172
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:166
@@ -548,6 +562,10 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
+"Sujungimų kokybės lygio perjungimas tarp šuolių skaičiaus ir sąnaudomis "
+"pagrįstas (dažniausiai „ETX“) kelvado parinkimas.<br /><b>0</b> = nenaudoti "
+"sujungimo kokybės<br /><b>2</b> = naudoti nuorodos kokybę „MPR“ pasirinkimui "
+"ir kelvado parinkimui<br />Numatytoji reikšmė yra – „2“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:315
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:309
@@ -618,6 +636,11 @@ msgid ""
 ">reduce LQ to 192.168.0.1 by half: 192.168.0.1 0.5<br />reduce LQ to all "
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
+"Padauginti maršrutus iš čia pateikto veiksnio/koeficiento. Leidžiamos "
+"reikšmės yra nuo 0.01 iki 1.0. Jis naudojamas tik tada, kai „LQ“ lygis yra "
+"didesnis nei 0. Pavyzdžiai:<br />sumažinti „LQ“ į 192.168.0.1 per pusę: "
+"192.168.0.1 0.5<br />sumažinti „LQ“ visuose šios sąsajos mazguose 20%: "
+"numatytai, ši reikšmė yra – 0.8"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:311
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:82
@@ -627,6 +650,11 @@ msgid ""
 ">reduce LQ to fd91:662e:3c58::1 by half: fd91:662e:3c58::1 0.5<br />reduce "
 "LQ to all nodes on this interface by 20%: default 0.8"
 msgstr ""
+"Padauginti maršrutus iš čia pateikto veiksnio/koeficiento. Leidžiamos "
+"reikšmės yra nuo 0.01 iki 1.0. Jis naudojamas tik tada, kai „LQ“ lygis yra "
+"didesnis nei 0. Pavyzdžiai:<br />sumažinti „LQ“ į fd91:662e:3c58::1 per "
+"pusę: fd91:662e:3c58::1<br />sumažinti „LQ“ visuose šios sąsajos mazguose "
+"20%: numatytai, ši reikšmė yra – 0.8"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:255
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:249
@@ -654,7 +682,7 @@ msgstr "Kaimynai"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:26
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:141
 msgid "Netmask"
-msgstr "„Tinklo kaukė – „Netmask““"
+msgstr "Tinklavimo „net-kaukė“ – 32-bitų adresas, IP užmaskãvimas"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:521
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:497
@@ -763,11 +791,11 @@ msgstr "Sąsajos, kuriose veikia „OLSR“, apžvalga"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:150
 msgid "Overview of known multiple interface announcements"
-msgstr ""
+msgstr "Žinomų kelių sąsajų ir/arba sietuvų paskelbimų apžvalga"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:129
 msgid "Overview of smart gateways in this network"
-msgstr ""
+msgstr "Išmaniųjų tarpuvarčių šiame tinkle apžvalga"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:47
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:45
@@ -784,12 +812,12 @@ msgstr "Plėtiniai"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:128
 msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
-msgstr ""
+msgstr "„OLSR“ lizdų apklausos dažnis sekundėmis. Numatyta reikšmė yra – 0.05."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:128
 msgid "Pollrate"
-msgstr ""
+msgstr "Apklausos dažnumas/intervalas"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:227
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:221
@@ -813,7 +841,7 @@ msgstr "Raudonas/-a"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:22
 msgid "Resolve"
-msgstr ""
+msgstr "Nustatyti"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:23
 msgid ""
@@ -821,6 +849,9 @@ msgid ""
 "if you use public IPs and have unstable DNS-Setup then those pages will load "
 "really slow. In this case disable it here."
 msgstr ""
+"Nustatyti skleidėjų/vedėjų būsenas puslapiuose. Paprastai yra saugu leisti, "
+"bet jei naudojate viešuosius IP ir turite nestabilią „DNS“ sąranką, tie "
+"puslapiai bus įkeliami labai lėtai. Tokiu atveju išjunkite jį čia."
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:18
 msgid "Routes"
@@ -834,7 +865,7 @@ msgstr "„SNR“:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:122
 msgid "Secondary OLSR interfaces"
-msgstr ""
+msgstr "Antrinės/-iai „OLSR“ sąsajos/sietuvai"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:133
 msgid "Selected"
@@ -846,6 +877,9 @@ msgid ""
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
 msgstr ""
+"Nustato pagrindinį maršrutizatoriaus IP (pradininko IP). Šis IP NIEKADA "
+"nepasikeis „olsrd“ veikimo metu. Numatytoji reikšmė yra – 0.0.0.0, kuri "
+"suaktyvina pirmo/-sios sietuvo/sąsajos IP naudojimą."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:231
 msgid ""
@@ -853,6 +887,9 @@ msgid ""
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
+"Nustato pagrindinį maršrutizatoriaus IP (pradininko IP). Šis IP NIEKADA "
+"nepasikeis „olsrd“ veikimo metu. Numatytoji reikšmė yra – ::, kuri "
+"suaktyvina pirmo/-sios sietuvo/sąsajos IP naudojimą."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:547
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:301
@@ -884,11 +921,14 @@ msgid ""
 "Specifies the speed of the uplink in kilobits/s. First parameter is "
 "upstream, second parameter is downstream. Default is \"128 1024\"."
 msgstr ""
+"Nurodo aukštynkryptės greitį kilobitais/s. Pirmas parametras – išsiunčiamas "
+"srautas, antras parametras – atsiuntimo srautas. Numatytoji reikšmė yra – "
+"„128 1024“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:102
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:102
 msgid "Speed of the uplink"
-msgstr ""
+msgstr "Aukštynkrypčio greitis"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:137
 msgid "State"
@@ -909,14 +949,12 @@ msgstr "Dar naudojamas (4 < „ETX“ < 10)"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:536
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:290
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:178
-#, fuzzy
 msgid "Success rate of packages received from the neighbour"
 msgstr "Paketų, gautų iš kaimyninio mazgo sėkmingumo rodiklis"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:537
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:291
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:179
-#, fuzzy
 msgid "Success rate of packages sent to the neighbour"
 msgstr "Kaimynui išsiųstų paketų sėkmingumo rodiklis"
 
@@ -946,7 +984,6 @@ msgstr "„TOS“ reikšmė"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:37
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:37
-#, fuzzy
 msgid ""
 "The OLSR daemon is an implementation of the Optimized Link State Routing "
 "protocol. As such it allows mesh routing for any network equipment. It runs "
@@ -954,12 +991,12 @@ msgid ""
 "device. Visit <a href=\"http://www.olsr.org\">olsrd.org</a> for help and "
 "documentation."
 msgstr ""
-"„OLSR“ tarnyba yra optimizuoto ryšio būsenos maršruto parinkimo protokolo "
-"įgyvendinimas. Tai suteikia junglią/tankią maršrutizavimą bet kokiai tinklo "
-"įrangai. Jis veikia bet kurioje „Wi-Fi“ kortelėje, palaikančioje „ad-hoc“ "
-"režimą, ir, žinoma, bet kuriame „eterneto“ įrenginyje. Jei reikia pagalbos "
-"ir dokumentacijos, apsilankykite <a href=\"http://www.olsr.org\">olsrd.org</"
-"a>."
+"„OLSR“ paslaugų teikimo sistema yra optimizuoto ryšio būsenos maršruto "
+"parinkimo protokolo įgyvendinimas. Tai suteikia junglią/tankią kelvadą bet "
+"kokiai tinklo įrangai. Jis veikia bet kurioje „Wi-Fi“ plokštėje, "
+"palaikančioje „ad-hoc“ režimą, ir, žinoma, bet kuriame „eterneto“ "
+"įrenginyje. Jei reikia pagalbos ir dokumentacijos, apsilankykite <a "
+"href=\"http://www.olsr.org\">olsrd.org</a>."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:18
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:18
@@ -970,6 +1007,12 @@ msgid ""
 "device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
 "documentation."
 msgstr ""
+"„OLSR“ paslaugų teikimo sistema yra optimizuoto ryšio būsenos maršruto "
+"parinkimo protokolo įgyvendinimas. Tai suteikia junglią/tankią kelvadą bet "
+"kokiai tinklo įrangai. Jis veikia bet kurioje „Wi-Fi“ plokštėje, "
+"palaikančioje „ad-hoc“ režimą, ir, žinoma, bet kuriame „eterneto“ "
+"įrenginyje. Jei reikia pagalbos ir dokumentacijos, apsilankykite <a "
+"href=\"http://www.olsr.org\">olsrd.org</a>."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:244
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:238
@@ -977,6 +1020,9 @@ msgid ""
 "The fixed willingness to use. If not set willingness will be calculated "
 "dynamically based on battery/power status. Default is \"3\"."
 msgstr ""
+"Fiksuotas noras/pasiryžimas naudojimui. Jei nenustatyta, noras/pasiryžimas "
+"bus dinamiškai apskaičiuotas pagal baterijos/maitinimo būseną. Numatytoji "
+"reikšmė yra – „3“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:50
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:50
@@ -1000,13 +1046,17 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
+"Tai gali būti naudojama norint signalizuoti išorinę IPv6 aukštynkryptės "
+"priešdėlį klientams. Tai gali leisti klientui pakeisti vietinį IPv6 adresą "
+"ir naudoti IPv6 tarpuvarte be jokio adreso vertimo. Maksimalus priešdėlio "
+"ilgis yra – 64-bitai. Numatytoji reikšmė yra – „::/0“ (be priešdėlio)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:286
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:280
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:39
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:39
 msgid "Timing and Validity"
-msgstr ""
+msgstr "Laikas ir galiojimas"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:26
 msgid "Topology"
@@ -1018,10 +1068,12 @@ msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
 msgstr ""
+"Kontrolinio srauto IP antraštės paslaugos reikšmės tipas. Numatytoji reikšmė "
+"yra „16“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:9
 msgid "Unable to connect to the OLSR daemon!"
-msgstr ""
+msgstr "Nepavyko/Negalima prisijungti prie „OLSR“ tarnybos!"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:136
 msgid "Uplink"
@@ -1030,7 +1082,7 @@ msgstr "Aukštynkryptis"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:93
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:93
 msgid "Uplink uses NAT"
-msgstr ""
+msgstr "Aukštynkryptis naudoja „NAT“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:217
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:211
@@ -1039,7 +1091,7 @@ msgstr "Naudoti „hysteresis“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:172
 msgid "Validity Time"
-msgstr ""
+msgstr "Galiojimo laikas"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:541
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:295
@@ -1063,6 +1115,8 @@ msgid ""
 "Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not "
 "work, please install it."
 msgstr ""
+"Įspėjimas: „kmod-ipip“ yra neįdiegtas. Be „kmod-ipip“, „SmartGateway“ "
+"neveiks, prašome įdiegti jį."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:298
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:292
@@ -1084,6 +1138,13 @@ msgid ""
 "0. For any other value of LinkQualityLevel, the interface ETX value is used "
 "instead."
 msgstr ""
+"Kai tarp skleidėjų/p.k – vedėjų egzistuoja keli sujungimai, sąsajų/sietuvų "
+"svoris yra naudojamas nustatant naudotiną sujungimą. Paprastai svoris "
+"automatiškai apskaičiuoja „olsrd“ pagal sąsajos/sietuvo charakteristikas, "
+"tačiau čia galite nurodyti fiksuotą reikšmę. „Olsrd“ pasirinks nuorodas su "
+"mažiausia verte.<br /><b>Pastaba:</b> sąsajos/sietuvo svoris yra naudojamas "
+"tik tada, kai „LinkQualityLevel“ yra nustatytas į 0. Bet kuriai kitai "
+"„LinkQualityLevel“ reikšmei, sąsaja/sietuvas naudoja „ETX“ reikšmę."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:82
 msgid ""
@@ -1091,6 +1152,9 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
+"Kokio tipo aukštynkryptis yra eksportuojamas į kitus junglius/tankius "
+"mazgus. Aukštynkryptis yra aptinkamas ieškant vietinės 0.0.0.0/0, ::"
+"ffff:0:0/96 arba 2000::/3 „HNA“. Numatytasis nustatymas yra –„abu“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:82
 msgid ""
@@ -1098,6 +1162,9 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
+"Kokio tipo aukštynkryptis yra eksportuojamas į kitus junglius/tankius "
+"mazgus. Aukštynkryptis yra aptinkamas ieškant vietinės 0.0.0.0/0, ::"
+"ffff:0:0/96 arba 2000::/3 „HNA6“. Numatytasis nustatymas yra –„abu“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:244
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:238

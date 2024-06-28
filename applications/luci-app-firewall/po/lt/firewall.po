@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-05-06 08:10+0000\n"
-"Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2024-06-22 23:09+0000\n"
+"Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/lt/>\n"
 "Language: lt\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -222,8 +222,9 @@ msgid ""
 "those bits set in the mask are zeroed out."
 msgstr ""
 "Taikyti duotosios vertės ir esamos žymos reikšmės bitinį „XOR“ sukurtiems "
-"ryšiams. Formatas yra „value[/mask]“. Jei nurodyta kaukė, tada tie kaukėje "
-"nustatyti bitai yra nuliniai."
+"ryšiams. Formatas yra „value[/mask]“. Jei nurodyta tinklavimo „kaukė“ – "
+"adresų segregatorius, tada tinklavimo „kaukėje“ – adresų segregatoriuje "
+"nustatyti bitai yra – nuliniai."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:264
 msgid "Apply the given DSCP class or value to established connections."
@@ -843,7 +844,7 @@ msgstr "Vardas/Pavadinimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:165
 msgid "Netmask"
-msgstr "„Tinklo kaukė – „Netmask““"
+msgstr "Tinklavimo „net-kaukė“ – 32-bitų adresas, IP užmaskãvimas"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:274
 msgid "Only match incoming traffic directed at the given IP address."
@@ -1030,8 +1031,9 @@ msgid ""
 "Set the given mark value on established connections. Format is value[/mask]. "
 "If a mask is specified then only those bits set in the mask are modified."
 msgstr ""
-"Nustatyti nurodytą žymos reikšmę užmegztiems ryšiams. Formatas yra reikšmė[/"
-"kaukė] („value[/mask]“). Jei nurodyta kaukė, keičiami tik tie kaukėje "
+"Nustatyti nurodytą žymos reikšmę užmegztiems ryšiams. Formatas yra – "
+"reikšmė[/mask] („value[/mask]“). Jei nurodyta tinklavimo „kaukė“ – adresų "
+"segregatorius, keičiami tik tie tinklavimo „kaukėje“ – adresų segregatoriuje "
 "nustatyti bitai."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:84
