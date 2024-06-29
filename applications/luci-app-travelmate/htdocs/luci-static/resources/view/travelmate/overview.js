@@ -293,7 +293,7 @@ return view.extend({
 		s.addremove = false;
 		s.tab('general', _('General Settings'));
 		s.tab('additional', _('Additional Settings'));
-		s.tab('adv_email', _('E-Mail Settings'), _('Please note: E-Mail notifications require the separate setup of the <em>mstmp</em> package.<br /><p>&#xa0;</p>'));
+		s.tab('adv_email', _('E-Mail Settings'), _('Please note: E-Mail notifications require the separate setup of the <em>msmtp</em> package.<br /><p>&#xa0;</p>'));
 
 		/*
 			general settings tab
