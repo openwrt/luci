@@ -3218,13 +3218,13 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				else {
 					ui.showModal(title, [
 						nodes,
-						E('div', { 'class': 'right' }, [
+						E('div', { 'class': 'button-row' }, [
 							E('button', {
-								'class': 'cbi-button',
+								'class': 'btn cbi-button',
 								'click': ui.createHandlerFn(this, 'handleModalCancel', m)
 							}, [ _('Dismiss') ]), ' ',
 							E('button', {
-								'class': 'cbi-button cbi-button-positive important',
+								'class': 'btn cbi-button cbi-button-positive important',
 								'click': ui.createHandlerFn(this, 'handleModalSave', m),
 								'disabled': m.readonly || null
 							}, [ _('Save') ])
