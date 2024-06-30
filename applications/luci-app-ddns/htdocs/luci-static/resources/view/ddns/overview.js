@@ -782,6 +782,7 @@ return view.extend({
 						o.depends("use_https", "1");
 						o.placeholder = "/etc/ssl/certs";
 						o.rmempty = false;
+						o.optional = true;
 					};
 
 
