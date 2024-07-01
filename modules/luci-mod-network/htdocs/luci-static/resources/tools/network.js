@@ -395,13 +395,14 @@ return baseclass.extend({
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'type', _('Device type'));
 		o.readonly = !isNew;
 		o.value('', _('Network device'));
+		o.value('bonding', _('Aggregation device'));
 		o.value('bridge', _('Bridge device'));
 		o.value('8021q', _('VLAN (802.1q)'));
 		o.value('8021ad', _('VLAN (802.1ad)'));
 		o.value('macvlan', _('MAC VLAN'));
 		o.value('veth', _('Virtual Ethernet'));
 		o.validate = function(section_id, value) {
-			if (value == 'bridge' || value == 'veth')
+			if (value == 'bonding' || value == 'bridge' || value == 'veth')
 				updatePlaceholders(this.section.getOption('name_complex'), section_id);
 
 			return true;
@@ -519,7 +520,395 @@ return baseclass.extend({
 		o.depends('type', '8021q');
 		o.depends('type', '8021ad');
 
-		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi', _('Bridge ports'));
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi-bond', _('Aggregation ports'));
+		o.size = 10;
+		o.rmempty = true;
+		o.multiple = true;
+		o.noaliases = true;
+		o.nobridges = true;
+		o.ucioption = 'ports';
+		o.default = L.toArray(dev ? dev.getPorts() : null).filter(function(p) { return p.getType() != 'wifi' }).map(function(p) { return p.getName() });
+		o.filter = function(section_id, device_name) {
+			var bridge_name = uci.get('network', section_id, 'name'),
+				choice_dev = network.instantiateDevice(device_name),
+				parent_dev = choice_dev.getParent();
+
+			/* only show wifi networks which are already present in "option ifname" */
+			if (choice_dev.getType() == 'wifi') {
+				var ifnames = L.toArray(uci.get('network', section_id, 'ports'));
+
+				for (var i = 0; i < ifnames.length; i++)
+					if (ifnames[i] == device_name)
+						return true;
+
+				return false;
+			}
+
+			return (!parent_dev || parent_dev.getName() != bridge_name);
+		};
+		o.description = _('Specifies the wired ports to attach to this bonding.')
+		o.onchange = function(ev, section_id, values) {
+			ss.updatePorts(values);
+
+			return ss.parse().then(function() {
+				ss.redraw();
+			});
+		};
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'policy', _('Bonding Policy'));
+		o.default = 'active-backup';
+		o.value('active-backup', _('Active backup'));
+		o.value('balance-rr', _('Round robin'));
+		o.value('balance-xor', _('Transmit hash - balance-xor'));
+		o.value('broadcast', _('Broadcast'));
+		o.value('802.3ad', _('LACP - 802.3ad'));
+		o.value('balance-tlb', _('Adaptive transmit load balancing'));
+		o.value('balance-alb', _('Adaptive load balancing'));
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+
+			switch (val || '') {
+			case 'active-backup':
+			case '0':
+				return 'active-backup';
+
+			case 'balance-rr':
+			case '1':
+				return 'balance-rr';
+
+			case 'balance-xor':
+			case '2':
+				return 'balance-xor';
+
+			case 'broadcast':
+			case '3':
+				return 'broadcast';
+
+			case '802.3ad':
+			case '4':
+				return '802.3ad';
+
+			case 'balance-tlb':
+			case '5':
+				return 'balance-tlb';
+
+			case 'balance-alb':
+			case '6':
+				return 'balance-alb';
+
+			default:
+				return 'active-backup';
+			}
+		};
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devgeneral', form.Flag, 'all_ports_active', _('All ports active'), _('Allow receiving on inactive ports'));
+		o.default = o.disabled;
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, '_net_device_primary', _('Primary Device'));
+		o.ucioption = 'primary';
+		o.rmempty = true;
+		o.noaliases = true;
+		o.nobridges = true;
+		o.optional = false;
+		o.depends({'type': 'bonding', 'policy': 'active-backup'});
+
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'xmit_hash_policy', _('Slave selection hash policy'));
+		o.default = '';
+		o.value('', _(''));
+		o.value('layer2', _('Layer 2'));
+		o.value('layer2+3', _('Layer 2+3'));
+		o.value('layer3+4', _('Layer 3+4'));
+		o.value('encap2+3', _('Encap 2+3'));
+		o.value('encap3+4', _('Encap 3+4'));
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+
+			switch (val || '') {
+			case 'layer2':
+			case '0':
+				return 'layer2';
+
+			case 'layer2+3':
+			case '1':
+				return 'layer2+3';
+
+			case 'layer3+4':
+			case '2':
+				return 'layer3+4';
+
+			case 'encap2+3':
+			case '4':
+				return 'encap2+3';
+
+			case 'encap3+4':
+			case '5':
+				return 'encap3+4';
+
+			default:
+				return '';
+			}
+		};
+		o.depends({'type': 'bonding', 'policy': 'balance-xor'});
+		o.depends({'type': 'bonding', 'policy': '802.3ad'});
+		o.depends({'type': 'bonding', 'policy': 'balance-tlb'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'ad_actor_system', _('MAC address for LACPDUs'));
+		o.description = _('This specifies the mac-address for the actor in protocol packet exchanges (LACPDUs). The value cannot be NULL or multicast.');
+		o.datatype = 'macaddr';
+		o.depends({'type': 'bonding', 'policy': '802.3ad'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'ad_actor_sys_prio', _('Priority'));
+		o.description = _('This specifies the AD system priority');
+		o.placeholder = '65535';
+		o.datatype = 'range(1, 65535)';
+		o.depends({'type': 'bonding', 'policy': '802.3ad'});
+
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'ad_select', _('802.3ad aggregation logic'));
+		o.default = '';
+		o.value('', _(''));
+		o.value('stable', _('Stable'));
+		o.value('bandwidth', _('Bandwidth'));
+		o.value('count', _('Count'));
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+
+			switch (val || '') {
+			case 'stable':
+			case '0':
+				return 'stable';
+
+			case 'bandwidth':
+			case '1':
+				return 'bandwidth';
+
+			case 'count':
+			case '2':
+				return 'count';
+
+			default:
+				return '';
+			}
+		};
+		o.depends({'type': 'bonding', 'policy': '802.3ad'});
+
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'lacp_rate', _('802.3ad LACPDU packet rate'));
+		o.default = '';
+		o.value('', _(''));
+		o.value('slow', _('Slow (every 30 seconds)'));
+		o.value('fast', _('Fast (every second)'));
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+
+			switch (val || '') {
+			case 'slow':
+			case '0':
+				return 'slow';
+
+			case 'fast':
+			case '1':
+				return 'fast';
+
+			default:
+				return '';
+			}
+		};
+		o.depends({'type': 'bonding', 'policy': '802.3ad'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'min_links', _('Min Links'), _('Minimum number of active links'));
+		o.placeholder = '1';
+		o.datatype = 'uinteger';
+		o.depends({'type': 'bonding', 'policy': '802.3ad'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'packets_per_slave', _('Packets per slave'));
+		o.description = _('Number of packets to transmit through a slave before moving to the next one. Slave is chosen at random when 0.');
+		o.placeholder = '1';
+		o.datatype = 'range(1, 65535)';
+		o.depends({'type': 'bonding', 'policy': 'balance-rr'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'lp_interval', _('Learning packets Interval'));
+		o.description = _('Number of seconds between sent learning packets');
+		o.placeholder = '1';
+		o.datatype = 'uinteger';
+		o.depends({'type': 'bonding', 'policy': 'balance-tlb'});
+		o.depends({'type': 'bonding', 'policy': 'balance-alb'});
+
+		o = this.replaceOption(s, 'devgeneral', form.Flag, 'dynamic_lb', _('Dynamic load balance'), _('distribute traffic according to port load'));
+		o.default = o.disabled;
+		o.depends({'type': 'bonding', 'policy': 'balance-tlb'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'resend_igmp', _('IGMP reports'));
+		o.description = _('Specifies the number of IGMP membership reports to be issued after a failover event');
+		o.placeholder = '1';
+		o.datatype = 'range(0, 255)';
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'num_peer_notif', _('Peer notifications'));
+		o.description = _('Specify the number of peer notifications to be issued after a failover event.');
+		o.placeholder = '1';
+		o.datatype = 'range(0, 255)';
+		o.depends('type', 'bonding');		
+
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'primary_reselect', _('Primary port reselection policy'));
+		o.default = '';
+		o.value('', _(''));
+		o.value('always', _('Always'));
+		o.value('better', _('Better'));
+		o.value('failure', _('Failure'));
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+
+			switch (val || '') {
+			case 'always':
+			case '0':
+				return 'always';
+
+			case 'better':
+			case '1':
+				return 'better';
+
+			case 'failure':
+			case '2':
+				return 'failure';
+
+			default:
+				return 'always';
+			}
+		};
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'failover_mac', _('MAC address selection policy'));
+		o.default = '';
+		o.value('none', _('none'));
+		o.value('active', _('Active'));
+		o.value('follow', _('Follow'));
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+
+			switch (val || '') {
+			case 'none':
+			case '0':
+				return 'none';
+
+			case 'active':
+			case '1':
+				return 'active';
+
+			case 'follow':
+			case '2':
+				return 'follow';
+
+			default:
+				return 'none';
+			}
+		};
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'monitor_mode', _('Link monitoring mode'));
+		o.default = '';
+		o.value('arp', _('ARP link monitoring'));
+		o.value('mii', _('MII link monitoring'));
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+
+			switch (val || '') {
+			case 'arp':
+			case '1':
+				return 'arp';
+
+			case 'mii':
+			case '2':
+				return 'mii';
+
+			default:
+				return 'mii';
+			}
+		};
+		o.depends('type', 'bonding');
+		
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'monitor_interval', _('Monitor Interval'));
+		o.description = _('Specifies the link monitoring frequency in milliseconds');
+		o.placeholder = '100';
+		o.datatype = 'uinteger';
+		o.depends('type', 'bonding');
+
+		o = this.replaceOption(s, 'devadvanced', form.DynamicList, 'arp_target', _('ARP monitor target IP address'));
+		o.datatype = 'ipaddr';
+		o.depends({'type': 'bonding', 'monitor_mode': 'arp'});
+
+		o = this.replaceOption(s, 'devgeneral', form.Flag, 'arp_all_targets', _('All ARP Targets'), _('All ARP targets must be reachable to consider the link valid'));
+		o.default = o.disabled;
+		o.depends({'type': 'bonding', 'monitor_mode': 'arp'});
+
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'arp_validate', _('ARP validation policy'));
+		o.default = '';
+		o.value('none', _('None'));
+		o.value('active', _('Active'));
+		o.value('backup', _('Backup'));
+		o.value('all', _('All'));
+		o.value('filter', _('Filter'));
+		o.value('filter_active', _('Filter active'));
+		o.value('filter_backup', _('Filter backup'));
+		o.cfgvalue = function(/* ... */) {
+			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+
+			switch (val || '') {
+			case 'none':
+			case '0':
+				return 'none';
+
+			case 'active':
+			case '1':
+				return 'active';
+
+			case 'backup':
+			case '2':
+				return 'backup';
+
+			case 'all':
+			case '3':
+				return 'all';
+
+			case 'filter':
+			case '4':
+				return 'filter';
+
+			case 'filter_active':
+			case '5':
+				return 'filter_active';
+
+			case 'filter_backup':
+			case '6':
+				return 'filter_backup';
+
+			default:
+				return 'none';
+			}
+		};
+		o.depends({'type': 'bonding', 'policy': 'balance-rr' , 'monitor_mode': 'arp'});
+		o.depends({'type': 'bonding', 'policy': 'active-backup' , 'monitor_mode': 'arp'});
+		o.depends({'type': 'bonding', 'policy': 'balance-xor' , 'monitor_mode': 'arp'});
+		o.depends({'type': 'bonding', 'policy': 'broadcast' , 'monitor_mode': 'arp'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Flag, 'use_carrier', _('Use Carrier'), _('Use carrier status instead of MII result'));
+		o.default = o.disabled;
+		o.depends({'type': 'bonding', 'monitor_mode': 'mii'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'updelay', _('Monitor link-up delay'));
+		o.description = _('Delay before enabling port after MII link up event (msec)');
+		o.placeholder = '0';
+		o.datatype = 'uinteger';
+		o.depends({'type': 'bonding', 'monitor_mode': 'mii'});
+
+		o = this.replaceOption(s, 'devadvanced', form.Value, 'downdelay', _('Monitor link-down delay'));
+		o.description = _('Delay before enabling port after MII link down event (msec)');
+		o.placeholder = '0';
+		o.datatype = 'uinteger';
+		o.depends({'type': 'bonding', 'monitor_mode': 'mii'});
+
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi-bridge', _('Bridge ports'));
 		o.size = 10;
 		o.rmempty = true;
 		o.multiple = true;
