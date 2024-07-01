@@ -6,9 +6,12 @@
 'require rpc';
 'require form';
 'require tools.widgets as widgets';
+'require tools.prng as random';
+'require uqr';
 
 var callRcList, callRcInit, callTimezone,
-    callGetLocaltime, callSetLocaltime, CBILocalTime;
+    callGetLocaltime, callSetLocaltime, CBILocalTime,
+    CBIGenerateOTPKey;
 
 callRcList = rpc.declare({
 	object: 'rc',
@@ -92,6 +95,28 @@ CBILocalTime = form.DummyValue.extend({
 	},
 });
 
+CBIGenerateOTPKey = form.DummyValue.extend({
+        renderWidget: function(section_id, option_id, cfgvalue) {
+                return E([], [
+			E('input', {
+				'type': 'text',
+				'value': cfgvalue
+			}),
+                        E('br'),
+                        E('span', { 'class': 'control-group' }, [
+				E('button', {
+					'class': 'cbi-button cbi-button-apply',
+					'click': ui.createHandlerFn(this, function() {
+                                                // TODO generate a random passwordbig enough
+                                                return 0;
+					}),
+					'disabled': (this.readonly != null) ? this.readonly : this.map.readonly
+				}, _('Generate Password')),
+			])
+                ]);
+        }
+})
+
 return view.extend({
 	load: function() {
 		return Promise.all([
@@ -123,6 +148,7 @@ return view.extend({
 		s.tab('logging', _('Logging'));
 		s.tab('timesync', _('Time Synchronization'));
 		s.tab('language', _('Language and Style'));
+		s.tab('2factauth', _('2-Factor Auth'));
 
 		/*
 		 * System Properties
@@ -306,6 +332,45 @@ return view.extend({
 				return uci.get('system', 'ntp', 'server');
 			};
 		}
+
+                /*
+                 * 2-Factor Autherntication
+                 */
+                o = s.taboption('2factauth', CBIGenerateOTPKey, 'key', _('Key'))
+                o.uciconfig = 'luci';
+                o.ucisection = 'root';
+
+                o = s.taboption('2factauth', form.ListValue, 'type', _('OTP Type'))
+                o.uciconfig = 'luci';
+                o.ucisection = 'root';
+                o.default = 'TOTP';
+                o.value('totp', 'TOTP');
+                o.value('hotp', 'HOTP');
+
+                o = s.taboption('2factauth', form.Value, 'counter', _('Counter'))
+                o.uciconfig = 'luci';
+                o.ucisection = 'root';
+                o.depends('type', 'hotp');
+
+                o = s.taboption('2factauth', form.Value, 'step', _('Time Step'))
+                o.uciconfig = 'luci';
+                o.ucisection = 'root';
+                o.depends('type', 'totp');
+
+                o = s.taboption('2factauth', form.DummyValue, '_otp_string', _('OTP String'))
+                o.cfgvalue = function() { 
+                        var label = 'TEST';
+                        var type = uci.get('luci','root','type');
+                        var key = uci.get('luci','root','key')
+                        if (type == 'htop')
+                                var option = 'counter=' + uci.get('luci','root','counter')
+                        else
+                                var option = 'step=' + uci.get('luci','root','step')
+
+                        var otpauth_str = 'otpauth://' + type + '/' + label + '?secret=' + key + '&' + option;
+
+                        return E(uqr.renderSVG(otpauth_str, { pixelSize: 5 }));
+                };
 
 		return m.render().then(function(mapEl) {
 			poll.add(function() {

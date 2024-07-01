@@ -581,6 +581,24 @@ const methods = {
 
 			return { result: ports };
 		}
+	},
+
+	verifyOTP: {
+		args: { otp: '' },
+		call: function(request) {
+			const otp = request.args.otp;
+
+			if (!otp)
+				return { error: 'Invalid OTP' };
+			
+			fd = popen('/usr/libexec/generate_otp.uc');
+			if (!fd)
+				return { error: 'Invalid OTP' };
+
+			const verify_otp = fd.read('all');
+
+			return { result: verify_otp == otp };
+		}
 	}
 };
 
