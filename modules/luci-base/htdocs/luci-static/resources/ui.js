@@ -511,7 +511,7 @@ var UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 			'style': style,
 			'cols': this.options.cols,
 			'rows': this.options.rows,
-			'wrap': this.options.wrap ? '' : null
+			'wrap': this.options.wrap ? 'soft' : 'off'
 		}, [ value ]));
 
 		if (this.options.monospace)
