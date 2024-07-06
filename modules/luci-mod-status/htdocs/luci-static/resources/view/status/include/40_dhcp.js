@@ -50,7 +50,7 @@ return baseclass.extend({
 
 		uci.set('dhcp', cfg, 'name', lease.hostname);
 		uci.set('dhcp', cfg, 'duid', lease.duid.toUpperCase());
-		uci.set('dhcp', cfg, 'mac', lease.macaddr);
+		uci.set('dhcp', cfg, 'mac', [lease.macaddr]);
 		if (ip6arr)
 			uci.set('dhcp', cfg, 'hostid', (ip6arr[6] * 0xFFFF + ip6arr[7]).toString(16));
 
