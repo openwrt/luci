@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-25 19:21+0000\n"
+"PO-Revision-Date: 2024-07-04 05:50+0000\n"
 "Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstransmission/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:65
 msgid "Alternative download speed"
@@ -81,6 +81,7 @@ msgstr "Konfigūracijos failo katalogas"
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:53
 msgid "Custom Web UI directory"
 msgstr ""
+"Pasirinktinis žiniatinklio naudotojo/vartotojo sąsajos katalogas/vietovė"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:133
 msgid "DHT enabled"
@@ -96,15 +97,15 @@ msgstr "Atsisiuntimo katalogas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:211
 msgid "Download queue enabled"
-msgstr ""
+msgstr "Atsisiuntimo eilė įjungta/įgalinta"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:217
 msgid "Download queue size"
-msgstr ""
+msgstr "Atsisiuntimo eilės dydis"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:121
 msgid "Enable watch directory"
-msgstr ""
+msgstr "Įgalinti stebėjimo katalogą/vietovę"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:47
 msgid "Enabled"
@@ -136,7 +137,7 @@ msgstr "Pasaulinių lygiarangių limitas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:44
 msgid "Global settings"
-msgstr ""
+msgstr "Pagrindiniai/Visuotiniai nustatymai"
 
 #: applications/luci-app-transmission/root/usr/share/rpcd/acl.d/luci-app-transmission.json:3
 msgid "Grant UCI access for luci-app-transmission"
@@ -152,11 +153,11 @@ msgstr "Budinčio dalijimo/skleidimo riba įjungtą/įgalintą"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:102
 msgid "Incomplete directory"
-msgstr ""
+msgstr "Neužbaigtas/-a katalogas/vietovė"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:99
 msgid "Incomplete directory enabled"
-msgstr ""
+msgstr "Neužbaigtas-/a katalogas/vietovė įjungtas/-a/įgalintas/-a"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:150
 msgid "Info"
@@ -168,7 +169,7 @@ msgstr "„LPD“ įjungtas/įgalintas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:141
 msgid "Lazy bitfield enabled"
-msgstr ""
+msgstr "„Lazy bitfield“ įjungtas/įgalintas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:147
 msgid "Message level"
@@ -188,6 +189,10 @@ msgid ""
 "enabled, add a value. For Sunday - 1, Monday - 2, Tuesday - 4, Wednesday - "
 "8, Thursday - 16, Friday - 32, Saturday - 64"
 msgstr ""
+"Skaičius/Bitų laukas. Pradėkite nuo – 0-io, tada kiekvienai dienai, kurią "
+"norite įjungti/įgalinti, pridėkite reikšmę. Sekmadieniui – 1-as, "
+"pirmadieniui – 2-u, antradieniui – 4-i, trečiadieniui – 8-i, ketvirtadieniui "
+"– 16-a, penktadieniui – 32-u, šeštadieniui – 64-i"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:106
 msgid "Off"
@@ -195,7 +200,7 @@ msgstr "Išjungta/-s"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:38
 msgid "Open Web Interface"
-msgstr ""
+msgstr "Atidaryti žiniatinklio naudotojo/vartotojo sąsają"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:153
 msgid "PEX enabled"
@@ -207,11 +212,11 @@ msgstr "Lygiarangio prievado nustatymai"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:178
 msgid "Peer congestion algorithm"
-msgstr ""
+msgstr "Lygiarangio perkrovos algoritmas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:185
 msgid "Peer limit per torrent"
-msgstr ""
+msgstr "Lygiarangio limitas, kiekvienam „torrentui“"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:193
 msgid "Peer port"
@@ -235,7 +240,7 @@ msgstr "Lygiarangio nustatymai"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:187
 msgid "Peer socket <abbr title=\"Type of Service\">TOS</abbr>"
-msgstr ""
+msgstr "Lygiarangio lizdas – <abbr title=\"Type of Service\">„TOS“</abbr>"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:204
 msgid "Port forwarding enabled"
@@ -243,31 +248,31 @@ msgstr "Įjungti prievadų persiuntimai"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:105
 msgid "Preallocation"
-msgstr ""
+msgstr "Išankstinis paskirstymas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:138
 msgid "Prefer encrypted"
-msgstr ""
+msgstr "Teikti pirmenybę užšifruotai"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:137
 msgid "Prefer unencrypted"
-msgstr ""
+msgstr "Teikti pirmenybę nešifruotai"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:156
 msgid "Prefetch enabled"
-msgstr ""
+msgstr "Išankstinis gavimas įjungtas/įgalintas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:214
 msgid "Queue stalled enabled"
-msgstr ""
+msgstr "Eilės pristabdymas įjungtas/įgalintas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:223
 msgid "Queue stalled minutes"
-msgstr ""
+msgstr "Eilės pristabdymo minutės"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:208
 msgid "Queueing"
-msgstr ""
+msgstr "Eilės sudarymas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:242
 msgid "RPC URL"
@@ -307,7 +312,7 @@ msgstr "„RPC“ nustatymai"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:263
 msgid "RPC username"
-msgstr "„RPC“ slapyvardis/vartotojo vardas"
+msgstr "„RPC“ naudotojo/vartotojo vardas (t.y. slapyvardis)"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:256
 msgid "RPC whitelist"
@@ -327,7 +332,7 @@ msgstr "Santykio limitas įgalintas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:181
 msgid "Recycle peer id after"
-msgstr ""
+msgstr "Perdirbti lygiarangio ID, po to"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:110
 msgid "Rename partial files"
@@ -343,23 +348,23 @@ msgstr "Vykdyti „daemon“ kaip grupę"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:51
 msgid "Run daemon as user"
-msgstr "Vykdyti „daemon“ kaip vartotoją"
+msgstr "Vykdyti paslaugų teikimo sistema kaip naudotojas/vartotojas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:271
 msgid "Scheduling"
-msgstr ""
+msgstr "Tvarkaraščio sudarymas/Planavimas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:158
 msgid "Scrape paused torrents enabled"
-msgstr ""
+msgstr "„Scrape paused torrents“ – yra įjungtas/įgalintas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:161
 msgid "Script torrent done enabled"
-msgstr ""
+msgstr "„Scrape paused torrents“ – yra įjungtas/įgalintas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:164
 msgid "Script torrent done filename"
-msgstr ""
+msgstr "„Script torrent done“ – failo pavadinimas"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:220
 msgid "Seed queue enabled"
@@ -409,19 +414,20 @@ msgstr ""
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:116
 msgid "Trash original torrent files"
-msgstr ""
+msgstr "Išmesti originalius „torrento“ failus"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:80
 msgid "Upload slots per torrent"
-msgstr ""
+msgstr "Įkėlimo lizdai, kiekvienam „torrentui“"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:124
 msgid "Watch directory"
-msgstr ""
+msgstr "Stebėjimo katalogas/vietovė"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:274
 msgid "When enabled, this will toggle the <b>alt-speed-enabled</b> setting"
 msgstr ""
+"Kai įjungtas/įgalintas, tai perjungs – <b>„alt-speed-enabled“</b>, nustatymą"
 
 #: applications/luci-app-transmission/htdocs/luci-static/resources/view/transmission.js:181
 msgid "hours"
