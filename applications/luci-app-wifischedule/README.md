@@ -26,9 +26,6 @@ Or think of an accesspoint in your kids room when you want the youngsters to sle
 You can create an arbitrary number of schedule events. Please note that there is on sanity check done whether the start / stop times overlap or make sense.
 If start and stop time are equal, this leads to disabling the WiFi at the given time.
 
-Logging if enabled is done to the file `/var/log/wifi_schedule.log` and can be reviewed through the "View Logfile" tab.
-The cron jobs created can be reviewed through the "View Cron Jobs" tab.
-
 Please note that the "Unload Modules" function is currently considered as experimental. You can manually add / remove modules in the text field.
 The button "Determine Modules Automatically" tries to make a best guess determining regarding the driver module and its dependencies.
 When un-/loading the modules, there is a certain number of retries (`module_load`) performed.
