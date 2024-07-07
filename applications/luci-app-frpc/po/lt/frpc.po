@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-26 08:59+0000\n"
+"PO-Revision-Date: 2024-07-04 05:50+0000\n"
 "Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrpc/lt/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
 "n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:214
 msgid "Add new proxy..."
@@ -39,7 +39,7 @@ msgstr "Administratoriaus prievadas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:30
 msgid "Admin user"
-msgstr "Administratoriaus vartotojas/naudotojas"
+msgstr "Administratoriaus naudotojas/vartotojas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:28
 msgid ""
@@ -74,9 +74,9 @@ msgid ""
 "AdminUser specifies the username that the admin server will use for login."
 "<br />By default, this value is \"admin\"."
 msgstr ""
-"„AdminUser“ nurodo slapyvardį/vartotojo vardą, kurį administratoriaus "
-"serveris naudos naudotojo/vartotojo prisijungimui.<br />Pagal numatytuosius "
-"nustatymus, ši reikšmė yra – „admin“."
+"„AdminUser“ nurodo naudotojo/vartotojo vardą (t.y. slapyvardį), kurį "
+"administratoriaus serveris naudos naudotojo/vartotojo prisijungimui.<br /"
+">Pagal numatytuosius nustatymus, ši reikšmė yra – „admin“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:32
 msgid "Assets dir"
@@ -88,6 +88,10 @@ msgid ""
 "resources from. If this value is \"\", assets will be loaded from the "
 "bundled executable using statik.<br />By default, this value is \"\"."
 msgstr ""
+"„Assets katalogas/vietovė“ („AssetsDir“) – nurodo vietinę katalogą/vietovę, "
+"iš kurio administratoriaus serveris įkels išteklius. Jei ši reikšmė yra – „“"
+", ištekliai bus įkeliami iš vykdomojo failo paketo naudojant – „statik“.<br /"
+">Pagal numatytuosius nustatymus, ši reikšmė yra – „“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:190
 msgid "Collecting data ..."
@@ -131,7 +135,7 @@ msgstr "Aplinkybių kintamumas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:35
 msgid "Exit when login fail"
-msgstr ""
+msgstr "Išeiti, kai nepavyksta prisijungti"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:218
 msgid "General Settings"
@@ -165,6 +169,10 @@ msgid ""
 "server, in seconds. It is not recommended to change this value.<br />By "
 "default, this value is 30."
 msgstr ""
+"„Širdies ritmo intervalas“ („HeartBeatInterval“) – nurodo, kokiu intervalu „"
+"širdies ritmai“ yra siunčiami į serverį – sekundėmis. Keisti šios reikšmės "
+"nėra rekomenduojama.<br />Pagal numatytuosius nustatymus, ši reikšmė yra – "
+"30-imt."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:39
 msgid ""
@@ -172,14 +180,18 @@ msgid ""
 "before the connection is terminated, in seconds. It is not recommended to "
 "change this value.<br />By default, this value is 90."
 msgstr ""
+"„Širdies ritmo“ pasibaigusios užklausos laikas“ („HeartBeatTimeout“) – "
+"nurodo didžiausią leistiną „širdies ritmo“ atidėjimą, prieš nutraukiant ryšį "
+"– sekundėmis. Keisti šios reikšmės nėra rekomenduojama.<br />Pagal "
+"numatytuosius nustatymus, ši reikšmė yra – 90-imt."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:38
 msgid "Heartbeat interval"
-msgstr ""
+msgstr "„Širdies ritmo“ intervalas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:39
 msgid "Heartbeat timeout"
-msgstr ""
+msgstr "„Širdies ritmo“ pasibaigusios užklausos laikas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:65
 msgid "Host header rewrite"
@@ -191,6 +203,10 @@ msgid ""
 "this value is \"\", the server will be connected to directly.<br />By "
 "default, this value is read from the \"http_proxy\" environment variable."
 msgstr ""
+"„HTTP įgaliotinis“ („HttpProxy“) – nurodo įgaliotojo adresą, per kurį reikia "
+"prisijungti prie serverio. Jei ši reikšmė yra – „“, tada serveris bus "
+"tiesiogiai prijungtas.<br />Pagal numatytuosius nustatymus, ši reikšmė yra "
+"nuskaitoma iš – „http_proxy“ aplinkos kintamojo."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:53
 msgid "If remote_port is 0, frps will assign a random port for you"
@@ -256,6 +272,9 @@ msgid ""
 "\"debug\", \"info\", \"warn\", and \"error\".<br />By default, this value is "
 "\"info\"."
 msgstr ""
+"„Žurnalo lygis“ („LogLevel“) – nurodo minimalų žurnalo lygį. Tinkamos "
+"reikšmės yra – „trace“, „debug“, „info“, „warn“ ir „error“.<br />Pagal "
+"numatytuosius nustatymus ši reikšmė yra – „info“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:25
 msgid ""
@@ -263,6 +282,10 @@ msgid ""
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
 "this value is 0."
 msgstr ""
+"„Žurnalo maksimalios dienos“ („LogMaxDays“) – nurodo žurnalo maksimalų dienų "
+"skaičių, kiek dienų reikia saugoti žurnalo informaciją prieš ištrinant. Tai "
+"yra naudojama tik tada, jei – „LogWay“ == „failas“.<br />Pagal numatytuosius "
+"nustatymus, ši reikšmė yra – 0-is."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:35
 msgid ""
@@ -270,6 +293,10 @@ msgid ""
 "login attempt. If false, the client will retry until a login attempt "
 "succeeds.<br />By default, this value is true."
 msgstr ""
+"„Prisijungimo nevykęs/nesėkmingas išėjimas“ („LoginFailExit“) – valdo, ar "
+"klientas turi išeiti po nevykusio/nesėkmingo prisijungimo bandymo. Jei "
+"„false“, tada klientas pakartos/bandys iš naujo, kol pavyks prisijungti.<br /"
+">Pagal numatytuosius nustatymus, ši reikšmė yra – „true“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
 msgid "NOT RUNNING"
@@ -280,6 +307,9 @@ msgid ""
 "OS environments pass to frp for config file template, see <a href=\"https://"
 "github.com/fatedier/frp#configuration-file-template\">frp README</a>"
 msgstr ""
+"„OS“ aplinkybės yra perduodamos į – „frp“, skirtos konfigūracijos failo "
+"šablonui, žr.: <a href=\"https://github.com/fatedier/frp#configuration-file-"
+"template\">„frp README“</a>"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:76
 msgid "Plugin"
@@ -287,7 +317,7 @@ msgstr "Plėtinys"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:220
 msgid "Plugin Settings"
-msgstr ""
+msgstr "Plėtinio nustatymai"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:36
 msgid "Protocol"
@@ -299,6 +329,9 @@ msgid ""
 "Valid values are \"tcp\", \"kcp\", and \"websocket\".<br />By default, this "
 "value is \"tcp\"."
 msgstr ""
+"„Protokolas“ („Protocol“) – nurodo protokolą, kuris bus naudojamas "
+"sąveikaujant su serveriu. Tinkamos reikšmės yra – „tcp“, „kcp“ ir „websocket“"
+".<br />Pagal numatytuosius nustatymus, ši reikšmė yra – „tcp“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:210
 msgid "Proxy Settings"
@@ -307,7 +340,7 @@ msgstr "Įgaliojimo nustatymai"
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:44
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:222
 msgid "Proxy name"
-msgstr ""
+msgstr "Įgaliotojo pavadinimas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:223
@@ -320,6 +353,9 @@ msgid ""
 "\"udp\", \"http\", \"https\", \"stcp\", and \"xtcp\".<br />By default, this "
 "value is \"tcp\"."
 msgstr ""
+"„Įgaliotojo tipas“ („ProxyType“) – nurodo šio įgaliotojo tipą. Tinkamos "
+"reikšmės apima – „tcp“, „udp“, „http“, „https“, „stcp“ ir „xtcp“.<br />Pagal "
+"numatytuosius nustatymus, ši reikšmė yra – „tcp“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 msgid "RUNNING"
@@ -332,7 +368,7 @@ msgstr "Nuotolinis prievadas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:14
 msgid "Respawn when crashed"
-msgstr ""
+msgstr "Atkurti/Perjungti (vardžiuojamai: „Atgimti“), kai užstringa"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:70
 msgid "Role"
@@ -344,15 +380,15 @@ msgstr "Vykdyti „daemon“ kaip grupę"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:12
 msgid "Run daemon as user"
-msgstr "Vykdyti „daemon“ kaip vartotoją"
+msgstr "Vykdyti paslaugų teikimo sistema kaip naudotojas/vartotojas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:80
 msgid "SOCKS5 password"
-msgstr ""
+msgstr "„SOCKS5“ slaptažodis"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:79
 msgid "SOCKS5 user"
-msgstr ""
+msgstr "„SOCKS5“ naudotojas/vartotojas"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:20
 msgid "Server address"
@@ -371,16 +407,22 @@ msgid ""
 "ServerAddr specifies the address of the server to connect to.<br />By "
 "default, this value is \"127.0.0.1\"."
 msgstr ""
+"„Serverio adresas“ („ServerAddr“) – nurodo serverio adresą, prie kurio "
+"reikia prisijungti/užmegzti ryšį.<br />Pagal numatytuosius nustatymus, ši "
+"reikšmė yra – „127.0.0.1“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:21
 msgid ""
 "ServerPort specifies the port to connect to the server on.<br />By default, "
 "this value is 7000."
 msgstr ""
+"„Serverio priedas“ („ServerPort“) – nurodo prievadą, per kurį reikia "
+"prisijungti/užmegzti ryšį prie serverio.<br />Pagal numatytuosius "
+"nustatymus, ši reikšmė yra – 7000."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
 msgid "Sk"
-msgstr ""
+msgstr "„Sk“"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:199
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:203
@@ -404,6 +446,8 @@ msgid ""
 "TLSEnable specifies whether or not TLS should be used when communicating "
 "with the server."
 msgstr ""
+"„TLS“ įjungimas/įgalinimas“ („TLSEnable“) – nurodo, ar reikia naudoti – „TLS“"
+", komunikuojant/susisiekiant su serveriu."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:33
 msgid ""
@@ -412,12 +456,19 @@ msgid ""
 "must have TCP multiplexing enabled as well.<br />By default, this value is "
 "true."
 msgstr ""
+"„„TCP“ tankintuvas/-imas““ („TcpMux“) – perjungia „TCP“ srauto tankinimą. "
+"Tai leidžia kelioms kliento užklausoms bendrinti vieną „TCP“ ryšį. Jei ši "
+"reikšmė yra „true“, tada serveryje taip pat turi būti įjungtas/įgalintas "
+"„TCP“ tankinimas.<br />Pagal numatytuosius nustatymus, ši reikšmė yra – "
+"„true“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:40
 msgid ""
 "This list can be used to specify some additional parameters which have not "
 "been included in this LuCI."
 msgstr ""
+"Šis sąrašas gali būti naudojamas nurodyti, kai kuriuos papildomus "
+"parametrus, kurie nebuvo įtraukti į šį – „LuCI“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:27
 msgid "Token"
@@ -429,16 +480,23 @@ msgid ""
 "the server. The server must have a matching token for authorization to "
 "succeed. <br />By default, this value is \"\"."
 msgstr ""
+"Žetonas nurodo prieigos žetoną, naudojamas kuriant raktus, kurie bus "
+"siunčiami į serverį. Kad leidimas būtų sėkmingas, serveris turi turėti "
+"atitinkamą prieigos žetoną. <br />Pagal numatytuosius nustatymus, ši reikšmė "
+"yra – „“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
 msgid "Unix domain socket path"
-msgstr ""
+msgstr "„Unix“ domeno-srities lizdo kelias"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:47
 msgid ""
 "UseCompression controls whether or not communication with the server will be "
 "compressed.<br />By default, this value is false."
 msgstr ""
+"„Naudoti suspaudimą/suglaudi(ni)mą“ („UseCompression“) – valdo, ar ryšys su "
+"serveriu bus suspaustas/suglaudintas, ar ne.<br />Pagal numatytuosius "
+"nustatymus, ši reikšmė yra – „false“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:46
 msgid ""
@@ -446,6 +504,10 @@ msgid ""
 "encrypted. Encryption is done using the tokens supplied in the server and "
 "client configuration.<br />By default, this value is false."
 msgstr ""
+"„Naudoti užšifravimą“ („UseEncryption“) – valdo, ar ryšys su serveriu bus "
+"užšifruotas, ar ne. Užšifruojama, naudojant žetonus, pateiktus serverio ir "
+"kliento konfigūracijoje.<br />Pagal numatytuosius nustatymus, ši reikšmė yra "
+"– „false“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:34
 msgid "User"
@@ -457,10 +519,14 @@ msgid ""
 "clients. If this value is not \"\", proxy names will automatically be "
 "changed to \"{user}.{proxy_name}\".<br />By default, this value is \"\"."
 msgstr ""
+"Naudotojas/Vartotojas nurodo priešdėlį, įgaliotojo pavadinimams , kad "
+"atskirtų juos nuo kitų klientų. Jei ši reikšmė nėra – „“, tada įgaliotųjų "
+"serverių pavadinimai bus automatiškai pakeisti į – „{user}.{proxy_name}“.<br "
+"/>Pagal numatytuosius nustatymus ši, reikšmė yra – „“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:175
 #: applications/luci-app-frpc/root/usr/share/luci/menu.d/luci-app-frpc.json:3
 msgid "frp Client"
-msgstr ""
+msgstr "„frp“ klientas"

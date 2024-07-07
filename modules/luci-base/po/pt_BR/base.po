@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2024-06-24 23:51+0000\n"
+"PO-Revision-Date: 2024-07-06 11:32+0000\n"
 "Last-Translator: Janderson Vieira Santos <jandersonvs79@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luci/pt_BR/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1118
 msgid "!known (not known)"
@@ -20,7 +20,7 @@ msgstr "!known (desconhecido)"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4735
 msgid "\"%h\" interface changes could inhibit access to this device."
-msgstr ""
+msgstr "As alterações na interface %h podem inibir o acesso a este dispositivo."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
@@ -57,6 +57,9 @@ msgid ""
 "connection over Yggdrasil network, utilizing NAT traversal to bypass "
 "intermediary nodes."
 msgstr ""
+"%s é um projeto independente que visa reduzir transparentemente a latência "
+"de uma conexão sobre a rede Yggdrasil, utilizando travessia de NAT para "
+"contornar nós intermediários."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:35
 msgid "%s is untagged in multiple VLANs!"
@@ -64,7 +67,7 @@ msgstr "%s está sem etiqueta em múltiplas VLANs!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:812
 msgid "%s means \"the address of the system running dnsmasq\"."
-msgstr ""
+msgstr "%s significa \"o endereço do sistema executando o dnsmasq\"."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:297
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:409
@@ -76,7 +79,7 @@ msgstr "(janela de %d minutos, intervalo de %d segundos)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:753
 msgid "(Max 1h == 3600)"
-msgstr ""
+msgstr "(Máx 1h == 3600)"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:118
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:124
@@ -178,7 +181,7 @@ msgstr "2"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1611
 msgid "256"
-msgstr ""
+msgstr "256"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:62
 msgctxt "sstp log level value"
@@ -302,7 +305,7 @@ msgstr "Estouro de tempo da nova tentativa do 802.11w"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:235
 msgid "; invalid MAC:"
-msgstr ""
+msgstr "; endereço MAC inválido:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1015
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
@@ -421,6 +424,8 @@ msgid ""
 "A default MTU of 65535 is set by Yggdrasil. It is recomended to utilize the "
 "default."
 msgstr ""
+"Um MTU padrão de 65535 é definido pelo Yggdrasil. É recomendado utilizar o "
+"padrão."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2794
 msgid "A directory with the same name already exists."
@@ -612,7 +617,7 @@ msgstr ""
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:262
 msgid "Accept from public keys"
-msgstr ""
+msgstr "Aceitar de chaves públicas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:701
 msgid "Accept local"
@@ -686,7 +691,7 @@ msgstr "Regras de IPv6 ativas"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:251
 msgid "Active peers"
-msgstr ""
+msgstr "Pares ativos"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:210
 msgid "Active-Backup policy (active-backup, 1)"
@@ -767,6 +772,12 @@ msgid ""
 "interfaces. Choose an acceptable URI <code>tls://</code>, <code>tcp://</"
 "code>, <code>unix://</code> or <code>quic://</code>"
 msgstr ""
+"Adicione ouvintes para aceitar peering de entrada de nós não locais. A "
+"descoberta de pares multicast funciona independentemente dos ouvintes "
+"definidos aqui. Formato da URI: <code>tls://0.0.0.0:0</code> ou "
+"<code>tls://[::]:0</code> para ouvir em todas as interfaces. Escolha uma URI "
+"aceitável <code>tls://</code>, <code>tcp://</code>, <code>unix://</code> ou "
+"<code>quic://</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:391
 msgid "Add local domain suffix to names served from hosts files."
@@ -774,7 +785,7 @@ msgstr "Adiciona um sufixo de domínio local para equipamentos conhecidos."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:278
 msgid "Add multicast rule"
-msgstr ""
+msgstr "Adicionar regra de multicast"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:500
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1252
@@ -787,12 +798,12 @@ msgstr "Adicionar parceiro"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:269
 msgid "Add peer address"
-msgstr ""
+msgstr "Adicionar endereço de par"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:322
 msgctxt "Dnsmasq instance"
 msgid "Add server instance"
-msgstr ""
+msgstr "Adicionar instância de servidor"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1139
 msgid "Add static forward and reverse DNS entries for this host."
@@ -811,10 +822,11 @@ msgstr "Adicionar à lista branca"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:999
 msgid "Adding an IPv6 to an IPv4 set and vice-versa silently fails."
 msgstr ""
+"Adicionar um IPv6 a um conjunto IPv4 e vice-versa falha silenciosamente."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:371
 msgid "Additional configuration settings (in TOML format)."
-msgstr ""
+msgstr "Configurações adicionais de configuração (em formato TOML)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:613
 msgid "Additional hosts files"
@@ -822,7 +834,7 @@ msgstr "Arquivos adicionais de equipamentos conhecidos (hosts)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:811
 msgid "Additional options to send to the below match tags."
-msgstr ""
+msgstr "Opções adicionais para enviar para as tags de correspondência abaixo."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:675
 msgid "Additional servers file"
@@ -844,6 +856,8 @@ msgstr "Endereço"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:571
 msgid "Address families of \"Relay from\" and \"Relay to address\" must match."
 msgstr ""
+"As famílias de endereços de 'Relay from' e 'Relay to address' devem "
+"corresponder."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:21
 msgctxt "nft meta nfproto"
@@ -888,6 +902,8 @@ msgid ""
 "Afer making changes to network using external protocol, network must be "
 "manually restarted."
 msgstr ""
+"Após fazer alterações na rede usando protocolo externo, a rede deve ser "
+"reiniciada manualmente."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:567
 msgid "Ageing time"
@@ -952,7 +968,7 @@ msgstr "Alocar endereços IP sequencialmente"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:350
 msgid "Allocate listen addresses"
-msgstr ""
+msgstr "Alocar endereços de escuta"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
@@ -5132,7 +5148,7 @@ msgstr "O intervalo em segundos para os pacotes de saudação do STP"
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:192
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:42
 msgid "Invalid"
-msgstr "Valor inválido"
+msgstr "Inválido"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:68

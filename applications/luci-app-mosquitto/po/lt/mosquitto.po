@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-07-01 12:21+0000\n"
+"PO-Revision-Date: 2024-07-07 19:09+0000\n"
 "Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmosquitto/lt/>\n"
@@ -20,13 +20,18 @@ msgstr "Leisti anoniminius prisijungimus"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:61
 msgid "Allow to connect without providing a username and password"
-msgstr "Leisti prisijungti nepakeitus vartotojo vardą ir slaptažodžio"
+msgstr ""
+"Leisti prisijungti nepakeitus naudotojo/vartotojo vardą (t.y. slapyvardį) ir "
+"slaptažodžio"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:163
 msgid ""
 "Attempt to notify the local and remote broker of connection status, defaults "
 "to $SYS/broker/connections/&lt;clientid&gt;/state"
 msgstr ""
+"Bandyti pranešti vietiniam ir nuotoliniam tarpininkui, apie ryšio būklę/"
+"būseną, numatytai nusistato į - „$SYS/broker/connections/"
+"&lt;clientid&gt;/state“"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:177
 msgid "Automatic, but no restarts"
@@ -90,7 +95,7 @@ msgstr "Švari sesija"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:77
 msgid "Client expiration"
-msgstr ""
+msgstr "Kliento galiojimo laikas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:168
 msgid "Client id to use locally. Important when bridging to yourself"
@@ -116,7 +121,7 @@ msgstr "Katalogas ieškoti „CA“ failus"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:52
 msgid "Disallow remote access to this broker"
-msgstr ""
+msgstr "Neleisti nuotolinės prieigos, šiam tarpininkui"
 
 #: applications/luci-app-mosquitto/root/usr/share/rpcd/acl.d/luci-app-mosquitto.json:3
 msgid "Grant UCI access for luci-app-mosquitto"
@@ -133,10 +138,12 @@ msgstr "Kiek laukti prieš iš naujo prisijungiant"
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:184
 msgid "How many messages to queue before restarting lazy bridge"
 msgstr ""
+"Kiek pranešimų reikia įrašyti į eilę, prieš paleidžiant iš naujo – „tinginio "
+"tinklo tiltą“ – jungimą"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:172
 msgid "How should this bridge be started"
-msgstr ""
+msgstr "Kaip turėtų būti pradėtas šis „tinklo tiltas“ – jungimas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:195
 msgid "Identity for TLS-PSK"
@@ -148,6 +155,10 @@ msgid ""
 "UCI directly) If unchecked, mosquitto runs with the config in /etc/mosquitto/"
 "mosquitto.conf (and this page is ignored)"
 msgstr ""
+"Jei patikrintas, „mosquitto“ veikia su konfigūracija, sugeneruota šiame "
+"puslapyje. (Arba tiesiogiai iš – „UCI“) Jei nepatikrinta, „mosquitto“ veikia "
+"su konfigūracija, esančia – „/etc/mosquitto/mosquitto.conf“ (ir šio puslapio "
+"nepaisoma)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:169
 msgid "Keepalive interval for this bridge"
@@ -160,19 +171,21 @@ msgstr "„TLS-PSK“ raktas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:62
 msgid "Limit for message allowed inflight"
-msgstr ""
+msgstr "Leidžiamų pranešimų apribojimas, skrydžio metu"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:65
 msgid "Limit for message queue when offline"
-msgstr ""
+msgstr "Pranešimų eilės apribojimas, neprisijungus"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:68
 msgid "Limit for message queue when offline, zero to disable)"
 msgstr ""
+"Pranešimų eilės apribojimas, neprisijungus (nulis, kad išjungtumėte/"
+"išgalintumėte)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:92
 msgid "Listeners"
-msgstr ""
+msgstr "Laukiantys prisijungimo/jungties ryšiai"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:44
 msgid "Log destination"
@@ -184,15 +197,15 @@ msgstr "„MQTT“"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:62
 msgid "Max Inflight Messages"
-msgstr ""
+msgstr "Maksimalus skrydžio metu pranešimų skaičius"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:65
 msgid "Max Queued Messages"
-msgstr ""
+msgstr "Maksimalių žinučių skaičius, eilėje"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:68
 msgid "Max Queued bytes"
-msgstr ""
+msgstr "Maksimalių baitų skaičius, eilėje"
 
 #: applications/luci-app-mosquitto/root/usr/share/luci/menu.d/luci-app-mosquitto.json:3
 msgid "Mosquitto"
@@ -200,7 +213,7 @@ msgstr "„Mosquitto“"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:26
 msgid "Mosquitto MQTT Broker"
-msgstr ""
+msgstr "„Mosquitto MQTT“ tarpininkas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:165
 msgid "Notifications local only"
@@ -209,12 +222,17 @@ msgstr "Tik vietiniai pranešimai"
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:202
 msgid "Only hex numbers are allowed (use A-F characters and 0-9 digits)"
 msgstr ""
+"Leidžiami tik šešioliktainiai skaičiai (naudokite – A-F simbolius ir 0-9 "
+"skaitmenys)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:53
 msgid ""
 "Outbound bridges will still work, but this will make the primary listener "
 "only available from localhost"
 msgstr ""
+"Išeinantys „tinklo tiltai“ – jungimai vis tiek veiks, tačiau, dėl to, "
+"pirminis/pagrindinis laukiantis prisijungimo/jungties ryšys bus pasiekiamas, "
+"tik iš – „localhost“"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:195
 msgid "PSK Bridge Identity"
@@ -222,7 +240,7 @@ msgstr "„PSK“; „Tinklo tilto“ – jungiamojo tapatybė"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:129
 msgid "PSK Hint to provide to connecting clients"
-msgstr ""
+msgstr "„PSK“ užuomine, kurį reikia pateikti, besijungiantiems klientams"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:219
 msgid "Path to CA file"
@@ -238,23 +256,23 @@ msgstr "Kelias į „PEM“ užkoduota serverio sertifikato failą"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:88
 msgid "Path to persistent file"
-msgstr ""
+msgstr "Kelias į pastovų failą"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:73
 msgid "Persistence"
-msgstr ""
+msgstr "Pastovumas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:76
 msgid "Persistence enabled"
-msgstr ""
+msgstr "Pastovumas įjungtas/įgalintas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:85
 msgid "Persistent file name"
-msgstr ""
+msgstr "Pastovaus failo pavadinimas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:88
 msgid "Persistent file path (with trailing/)"
-msgstr ""
+msgstr "Pastovaus failo kelias (su „/“ gale)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:150
 msgid "Please enter a hostname or an IP address"
@@ -282,13 +300,15 @@ msgstr "Nuotolinis slaptažodis"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:190
 msgid "Remote username"
-msgstr "Nuotolinis slapyvardis/vartotojo vardas"
+msgstr "Nuotolinis naudotojo/vartotojo vardas (t.y. slapyvardis)"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:77
 msgid ""
 "Remove persistent clients if they haven't reconnected in this period, eg 6h, "
 "3d, 2w"
 msgstr ""
+"Pašalinti pastovius klientus, jei jie neprisijungė iš naujo, per šį periodą; "
+"pvz.:, 6val., 3d., 2sav."
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:125
 msgid "Require clients to present a certificate"
@@ -296,7 +316,7 @@ msgstr "Reikalauti klientų, kad jie pristatytų sertifikatą"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:82
 msgid "Save persistence file after this many seconds or changes"
-msgstr ""
+msgstr "Išsaugoti pastovų failą, po tiek sekundžių ar pakeitimų –"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:57
 msgid "Set to zero to disable"
@@ -304,7 +324,7 @@ msgstr "Nustatykite į nulį, norint išjungti"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:76
 msgid "Should persistence to disk be enabled at all"
-msgstr ""
+msgstr "Ar iš viso turėtų būti įjungtas/įgalintas pastovumas, diske"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:117
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:211
@@ -316,6 +336,8 @@ msgid ""
 "The remote broker must support the same version of TLS for the connection to "
 "succeed."
 msgstr ""
+"Nuotolinis tarpininkas turi palaikyti tą pačią – „TLS“ versiją, kad ryšys "
+"būtų sėkmingas."
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:57
 msgid "Time in seconds between updates of the $SYS tree"
@@ -323,7 +345,7 @@ msgstr "Laikas sekundėmis tarp atnaujinimų „$SYS medžio“"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:164
 msgid "Topic to use for local+remote remote for notifications."
-msgstr ""
+msgstr "Tematika, kurią naudoti vietiniam+nuotoliniam, nuotolinėms pranešimams."
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:35
 msgid "Use this LuCI configuration page"
@@ -336,14 +358,16 @@ msgstr "„WebSockets“"
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:92
 msgid "You can configure additional listeners here"
 msgstr ""
+"Jūs galite sukonfigūruoti papildomus, laukiančius prisijungimo/jungties "
+"ryšius čia"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:133
 msgid "You can configure multiple bridge connections here"
-msgstr ""
+msgstr "Jūs galite sukonfigūruoti kelis, „tinklo tiltų“ – jungimų ryšius čia"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:45
 msgid "You can have multiple, but 'none' will override all others"
-msgstr ""
+msgstr "Jūs galite turėti kelis, bet – „joks“, perkeis/perrašys visus kitus"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:153
 msgid "address"
@@ -351,21 +375,25 @@ msgstr "adresas"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:153
 msgid "address[:port] of remote broker"
-msgstr ""
+msgstr "adresas[:prievadas], nuotolinio tarpininko"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:189
 msgid ""
 "attempt to notify the remote broker that this is a bridge, not all brokers "
 "support this."
 msgstr ""
+"bandyti pranešti nuotoliniam tarpininkui, kad tai yra – „tinklo tiltas“ – "
+"jungimas, ne visi tarpininkai tai palaiko."
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:159
 msgid "full topic string for mosquitto.conf, eg: 'power/# out 2'"
-msgstr ""
+msgstr "visa „mosquitto.conf“ temos eilutė, pvz.: „power/# out 2“"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:102
 msgid "http_dir to serve on websockets listeners"
 msgstr ""
+"„http_dir“, skirtas aptarnauti – „websockets“, laukiantiems prisijungimo/"
+"jungties ryšiams"
 
 #: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:113
 msgid "keyfile (PEM encoded)"
