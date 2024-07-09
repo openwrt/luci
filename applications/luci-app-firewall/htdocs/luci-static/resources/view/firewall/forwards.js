@@ -278,7 +278,7 @@ return view.extend({
 		o = s.taboption('general', form.Value, 'src_dport', _('External port'),
 			_('Match incoming traffic directed at the given destination port or port range on this host'));
 		o.modalonly = true;
-		o.rmempty = false;
+		o.rmempty = true;
 		o.datatype = 'neg(portrange)';
 		o.depends({ proto: 'tcp', '!contains': true });
 		o.depends({ proto: 'udp', '!contains': true });
