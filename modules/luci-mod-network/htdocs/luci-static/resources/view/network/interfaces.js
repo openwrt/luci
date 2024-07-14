@@ -239,6 +239,7 @@ function has_peerdns(proto) {
 	case 'pptp':
 	case 'openvpn':
 	case 'sstp':
+	case 'modemmanager':
 		return true;
 	}
 
