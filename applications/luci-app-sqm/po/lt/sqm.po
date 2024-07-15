@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-17 20:43+0000\n"
-"Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2024-07-12 19:38+0000\n"
+"Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssqm/lt/>\n"
 "Language: lt\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
 msgid "Advanced Configuration"
@@ -108,10 +108,12 @@ msgstr "Įjungti/Įgalinti šį „SQM“ egzempliorių."
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
 msgid "Explicit congestion notification (ECN) status on inbound packets"
 msgstr ""
+"Aiškios perkrovos pranešimo („ECN“) būklė/būsena, įeinančiuose paketuose"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
 msgid "Explicit congestion notification (ECN) status on outbound packets"
 msgstr ""
+"Aiškios perkrovos pranešimo („ECN“) būklė/būsena, išeinančiuose paketuose"
 
 #: applications/luci-app-sqm/root/usr/share/rpcd/acl.d/luci-app-sqm.json:3
 msgid "Grant UCI access for luci-app-sqm"
@@ -120,18 +122,22 @@ msgstr "Suteikti „UCI“ prieigą – „luci-app-sqm“"
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
 msgid "Hard limit on egress queues; leave empty for default."
 msgstr ""
+"„Kietasis“ limitas, išėjimo eilėms; pagal numatytuosius nustatymus, palikite "
+"tuščią."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:164
 msgid "Hard limit on ingress queues; leave empty for default."
 msgstr ""
+"„Kietasis“ limitas, įėjimo eilėms; pagal numatytuosius nustatymus, palikite "
+"tuščią."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
 msgid "Hard queue limit (egress)"
-msgstr ""
+msgstr "„Kietasis“ eilės limitas (išėjimas)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:164
 msgid "Hard queue limit (ingress)"
-msgstr ""
+msgstr "„Kietasis“ eilės limitas (įėjimas)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
 msgid "Ignore DSCP (ingress)"
@@ -139,7 +145,7 @@ msgstr "Ignoruoti „DSCP“ (įėjimas)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
 msgid "Ignore DSCP markings on inbound packets"
-msgstr ""
+msgstr "Ignoruoti – „DSCP“ žymėjimus, įeinančiuose paketuose"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:89
 msgid "Interface name"
@@ -188,16 +194,21 @@ msgid ""
 "Lists queuing disciplines useable on this system. After installing a new "
 "qdisc, you need to restart the router to see updates!"
 msgstr ""
+"Pateikia eilių disciplinų sąrašą, naudojamų, šioje sistemoje. Įdiegę naują – "
+"„qdisc“, turite paleisti iš naujo maršrutizatorių, kad pamatytumėte/"
+"peržiūrėtumėte naujinimus!"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Log verbosity"
-msgstr ""
+msgstr "Žurnalo išsamumas/platumas/daugiažodiškumas"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
 msgid ""
 "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
 "interface MTU + overhead"
 msgstr ""
+"Maksimalus dydis, skirtas dydžiui ir spartos skaičiavimams, „tcMTU“ (baitas);"
+" turi būti >= sąsaja ir/arba sietuvas – „MTU“ + „overhead“"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
 msgid "Maximum packet size"
@@ -207,6 +218,8 @@ msgstr "Maksimalus paketo dydis"
 msgid ""
 "Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables"
 msgstr ""
+"Minimalus paketo dydis, „MPU“ (baitas); „eterneto“ dydžio lentelėse turi "
+"būti > 0-is"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
 msgid "Minimum packet size"
@@ -217,10 +230,12 @@ msgid ""
 "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = (tcMTU "
 "+ 1) / 16"
 msgstr ""
+"Įrašų skaičius, dydžių/įvedimų/įvesčių lentelėse, „TSIZE“; skirtai – „ATM“ "
+"pasirinkite – „„TSIZE“ = („tcMTU“ + 1) / 16“"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:193
 msgid "Per Packet Overhead (bytes)"
-msgstr ""
+msgstr "Vieno paketo pridėtinė suma (baitai/-ais)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:183
 msgid "Qdisc options (egress)"
@@ -232,23 +247,23 @@ msgstr "„Qdisc“ parinktys (įėjimas)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:73
 msgid "Queue Discipline"
-msgstr ""
+msgstr "Eilės disciplina"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:120
 msgid "Queue setup script"
-msgstr ""
+msgstr "Eilės sąrankos skriptas"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
 msgid "Queueing discipline"
-msgstr ""
+msgstr "Eilių disciplina"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:71
 msgid "Queues"
-msgstr ""
+msgstr "Eilės"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:208
 msgid "Rate table size"
-msgstr ""
+msgstr "Spartos lentelės dydis"
 
 #: applications/luci-app-sqm/root/usr/share/luci/menu.d/luci-app-sqm.json:3
 msgid "SQM QoS"
@@ -256,15 +271,15 @@ msgstr "„SQM QoS“"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:64
 msgid "Smart Queue Management"
-msgstr ""
+msgstr "Išmanusis eilės/-ių valdymas"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
 msgid "Squash DSCP (ingress)"
-msgstr ""
+msgstr "„Squash DSCP“ (įėjimas)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
 msgid "Squash DSCP markings on inbound packets"
-msgstr ""
+msgstr "„Squash DSCP“ žymėjimai, ant įeinančių paketų"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:83
 msgid ""
@@ -272,12 +287,17 @@ msgid ""
 "disable the sqm initscript manually under System Startup menu in case this "
 "change was not wished for."
 msgstr ""
+"„SQM GUI“ ką tik įjungę/įgalino – „sqm initscript“, Jūsų vardu. Nepamirškite "
+"rankiniu būdu išjungti/įgalinti – „sqm initscript“, randama už – „Sistemos "
+"paleidimo“ meniu, jei šio pakeitimo nenorėjote."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:48
 msgid ""
 "The SQM service seems to be disabled. Please use the button below to "
 "activate this service."
 msgstr ""
+"Panašu, kad – „SQM“ tarnyba yra išjungta/išgalinta. Norėdami suaktyvinti šią "
+"tarnybą, naudokite žemiau esantį mygtuką."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
 msgid "Upload speed (egress)"
@@ -287,18 +307,22 @@ msgstr "Įkėlimo greitis (išėjimas)"
 msgid ""
 "Upload speed (kbit/s) (egress) set to 0 to selectively disable egress shaping"
 msgstr ""
+"Įkėlimo greitis (kbit/s) (išėjimas) yra nustatytas į – 0-į, kad būtų galima "
+"pasirinktinai išjungti/išgalinti išėjimo formavimą"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Verbosity of SQM's output into the system log."
-msgstr ""
+msgstr "Išsamumo/Platumo/Daugiažodiškumo – „SQM“ išvestis, į sistemos žurnalą."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
 msgid "Which link layer technology to account for"
-msgstr ""
+msgstr "Kurią sujungimo sluoksnio technologiją, reikia atsižvelgti į"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
 msgid "Which linklayer adaptation mechanism to use; for testing only"
 msgstr ""
+"Kurią sujungimo sluoksnio pritaikymo mechanizmą naudoti; skirtai tik "
+"testavimams"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:65
 msgid ""
@@ -306,6 +330,11 @@ msgid ""
 "traffic shaping, better mixing (Fair Queueing), active queue length "
 "management (AQM) and prioritisation on one network interface."
 msgstr ""
+"Su – <abbr title=\"angl. Smart Queue Management | liet. Išmanusis eilių "
+"valdymas\">„SQM“,</abbr> Jūs galite įjungti/įgalinti srauto formavimą, "
+"geresnį maišymą („Fair Queueing“), aktyvų eilės ilgio valdymą („AQM“) ir "
+"prioritetų nustatymą/prioretizavimą, vienoje tinklo sąsajoje ir arba/"
+"sietuvoje."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:107
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:149
