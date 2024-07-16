@@ -1238,6 +1238,9 @@ return view.extend({
 				o.depends('encryption', 'psk-mixed');
 				o.value('auto', _('auto'));
 				o.value('ccmp', _('Force CCMP (AES)'));
+				o.value('ccmp256', _('Force CCMP-256 (AES)'));
+				o.value('gcmp', _('Force GCMP (AES)'));
+				o.value('gcmp256', _('Force GCMP-256 (AES)'));
 				o.value('tkip', _('Force TKIP'));
 				o.value('tkip+ccmp', _('Force TKIP and CCMP (AES)'));
 				o.write = ss.children.filter(function(o) { return o.option == 'encryption' })[0].write;
