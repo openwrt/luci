@@ -3626,7 +3626,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	/** @private */
 	cancelModal: function(ev) {
 		if (ev.key == 'Escape') {
-			var btn = modalDiv.querySelector('.right > button, .right > .btn');
+			var btn = modalDiv.querySelector('.right > button, .right > .btn, .button-row > .btn');
 
 			if (btn)
 				btn.click();
@@ -4209,99 +4209,94 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		return new Promise(function(resolveFn, rejectFn) {
 			UI.prototype.showModal(_('Uploading file…'), [
 				E('p', _('Please select the file to upload.')),
-				E('div', { 'style': 'display:flex' }, [
-					E('div', { 'class': 'left', 'style': 'flex:1' }, [
-						E('input', {
-							type: 'file',
-							style: 'display:none',
-							change: function(ev) {
-								var modal = dom.parent(ev.target, '.modal'),
-								    body = modal.querySelector('p'),
-								    upload = modal.querySelector('.cbi-button-action.important'),
-								    file = ev.currentTarget.files[0];
+				E('div', { 'class': 'button-row' }, [
+					E('div', {
+						'class': 'btn cbi-button',
+						'click': function() {
+							UI.prototype.hideModal();
+							rejectFn(new Error(_('Upload has been cancelled')));
+						}
+					}, [ _('Cancel') ]),
+					E('input', {
+						type: 'file',
+						style: 'display:none',
+						change: function(ev) {
+							var modal = dom.parent(ev.target, '.modal'),
+							    body = modal.querySelector('p'),
+							    upload = modal.querySelector('.cbi-button-action.important'),
+							    file = ev.currentTarget.files[0];
 
-								if (file == null)
-									return;
+							if (file == null)
+								return;
 
-								dom.content(body, [
-									E('ul', {}, [
-										E('li', {}, [ '%s: %s'.format(_('Name'), file.name.replace(/^.*[\\\/]/, '')) ]),
-										E('li', {}, [ '%s: %1024mB'.format(_('Size'), file.size) ])
-									])
-								]);
+							dom.content(body, [
+								E('ul', {}, [
+									E('li', {}, [ '%s: %s'.format(_('Name'), file.name.replace(/^.*[\\\/]/, '')) ]),
+									E('li', {}, [ '%s: %1024mB'.format(_('Size'), file.size) ])
+								])
+							]);
 
-								upload.disabled = false;
-								upload.focus();
-							}
-						}),
-						E('button', {
-							'class': 'btn',
-							'click': function(ev) {
-								ev.target.previousElementSibling.click();
-							}
-						}, [ _('Browse…') ])
-					]),
-					E('div', { 'class': 'right', 'style': 'flex:1' }, [
-						E('button', {
-							'class': 'btn',
-							'click': function() {
+							upload.disabled = false;
+							upload.focus();
+						}
+					}),
+					E('div', {
+						'class': 'btn cbi-button',
+						'click': function(ev) {
+							ev.target.previousElementSibling.click();
+						}
+					}, [ _('Browse…') ]),
+					E('div', {
+						'class': 'btn cbi-button-action important',
+						'disabled': true,
+						'click': function(ev) {
+							var input = dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
+
+							if (!input.files[0])
+								return;
+
+							var progress = E('div', { 'class': 'cbi-progressbar', 'title': '0%' }, E('div', { 'style': 'width:0' }));
+
+							UI.prototype.showModal(_('Uploading file…'), [ progress ]);
+
+							var data = new FormData();
+
+							data.append('sessionid', rpc.getSessionID());
+							data.append('filename', path);
+							data.append('filedata', input.files[0]);
+
+							var filename = input.files[0].name;
+
+							request.post(L.env.cgi_base + '/cgi-upload', data, {
+								timeout: 0,
+								progress: function(pev) {
+									var percent = (pev.loaded / pev.total) * 100;
+
+									if (progressStatusNode)
+										progressStatusNode.data = '%.2f%%'.format(percent);
+
+									progress.setAttribute('title', '%.2f%%'.format(percent));
+									progress.firstElementChild.style.width = '%.2f%%'.format(percent);
+								}
+							}).then(function(res) {
+								var reply = res.json();
+
 								UI.prototype.hideModal();
-								rejectFn(new Error(_('Upload has been cancelled')));
-							}
-						}, [ _('Cancel') ]),
-						' ',
-						E('button', {
-							'class': 'btn cbi-button-action important',
-							'disabled': true,
-							'click': function(ev) {
-								var input = dom.parent(ev.target, '.modal').querySelector('input[type="file"]');
 
-								if (!input.files[0])
-									return;
-
-								var progress = E('div', { 'class': 'cbi-progressbar', 'title': '0%' }, E('div', { 'style': 'width:0' }));
-
-								UI.prototype.showModal(_('Uploading file…'), [ progress ]);
-
-								var data = new FormData();
-
-								data.append('sessionid', rpc.getSessionID());
-								data.append('filename', path);
-								data.append('filedata', input.files[0]);
-
-								var filename = input.files[0].name;
-
-								request.post(L.env.cgi_base + '/cgi-upload', data, {
-									timeout: 0,
-									progress: function(pev) {
-										var percent = (pev.loaded / pev.total) * 100;
-
-										if (progressStatusNode)
-											progressStatusNode.data = '%.2f%%'.format(percent);
-
-										progress.setAttribute('title', '%.2f%%'.format(percent));
-										progress.firstElementChild.style.width = '%.2f%%'.format(percent);
-									}
-								}).then(function(res) {
-									var reply = res.json();
-
-									UI.prototype.hideModal();
-
-									if (L.isObject(reply) && reply.failure) {
-										UI.prototype.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
-										rejectFn(new Error(reply.failure));
-									}
-									else {
-										reply.name = filename;
-										resolveFn(reply);
-									}
-								}, function(err) {
-									UI.prototype.hideModal();
-									rejectFn(err);
-								});
-							}
-						}, [ _('Upload') ])
-					])
+								if (L.isObject(reply) && reply.failure) {
+									UI.prototype.addNotification(null, E('p', _('Upload request failed: %s').format(reply.message)));
+									rejectFn(new Error(reply.failure));
+								}
+								else {
+									reply.name = filename;
+									resolveFn(reply);
+								}
+							}, function(err) {
+								UI.prototype.hideModal();
+								rejectFn(err);
+							});
+						}
+					}, [ _('Upload') ])
 				])
 			]);
 		});
@@ -4480,26 +4475,29 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							E('var', {}, E('ins', '&#160;')), ' ', _('Option changed') ]),
 						E('div', { 'class': 'uci-change-legend-label' }, [
 							E('var', {}, E('del', '&#160;')), ' ', _('Option removed') ])]),
-					E('br'), list,
-					E('div', { 'class': 'right' }, [
-						E('button', {
-							'class': 'btn',
-							'click': UI.prototype.hideModal
-						}, [ _('Close') ]), ' ',
-						new UIComboButton('0', {
-							0: [ _('Save & Apply') ],
-							1: [ _('Apply unchecked') ]
-						}, {
-							classes: {
-								0: 'btn cbi-button cbi-button-positive important',
-								1: 'btn cbi-button cbi-button-negative important'
-							},
-							click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
-						}).render(), ' ',
-						E('button', {
-							'class': 'cbi-button cbi-button-reset',
-							'click': L.bind(this.revert, this)
-						}, [ _('Revert') ])])])
+					E('br'),
+					list,
+				]),
+				E('div', { 'class': 'button-row' }, [
+					E('div', {
+						'class': 'btn cbi-button',
+						'click': UI.prototype.hideModal
+					}, [ _('Close') ]), ' ',
+					new UIComboButton('0', {
+						0: [ _('Save & Apply') ],
+						1: [ _('Apply unchecked') ]
+					}, {
+						classes: {
+							0: 'btn cbi-button cbi-button-positive important',
+							1: 'btn cbi-button cbi-button-negative important'
+						},
+						click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
+					}).render(), ' ',
+					E('div', {
+						'class': 'btn cbi-button cbi-button-reset',
+						'click': L.bind(this.revert, this)
+					}, [ _('Revert') ])
+				])
 			]);
 
 			for (var config in this.changes) {
@@ -4732,22 +4730,20 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 					UI.prototype.changes.displayStatus('warning', [
 						E('h4', _('Connectivity change')),
-						E('p', _('"%h" interface changes could inhibit access to this device.').format(affected)),
-						E('p', _('Any IP change requires <strong>connecting to the new IP</strong> within %d seconds to retain the changes.').format(L.env.apply_rollback)),
-						E('p', _('Choose how to apply changes:')),
-						E('div', { 'class': 'right' }, [
-							E('button', {
-								'class': 'btn',
+						E('p', _('Changes have been made to the existing connection via "%h". This could inhibit access to this device. Any IP change requires <strong>connecting to the new IP</strong> within %d seconds to retain the changes.').format(affected, L.env.apply_rollback)),
+						E('div', { 'class': 'button-row' }, [
+							E('div', {
+								'class': 'btn cbi-button',
 								'click': rejectFn,
 							}, [ _('Cancel') ]), ' ',
-							E('button', {
+							E('div', {
 								'class': 'btn cbi-button-action important',
 								'click': resolveFn.bind(null, true)
-							}, [ _('Apply, reverting if GUI remains unreachable') ]), ' ',
-							E('button', {
+							}, [ _('Apply, reverting in case of connectivity loss') ]), ' ',
+							E('div', {
 								'class': 'btn cbi-button-negative important',
 								'click': resolveFn.bind(null, false)
-							}, [ _('Apply, committing now') ])
+							}, [ _('Apply unchecked') ])
 						])
 					]);
 				});
