@@ -23,7 +23,7 @@ msgstr "„ACME“ sertifikatai"
 msgid "ACME global config"
 msgstr "Visuotinė „ACME“ konfigūracija"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:514
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:508
 msgid "ACME server URL"
 msgstr "„ACME“ serverio „URL“ – saitas"
 
@@ -48,7 +48,7 @@ msgstr "Sertifikatų failai yra saugomi:"
 msgid "Certificate config"
 msgstr "Sertifikato konfigūracija"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:605
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:599
 msgid "Certificates"
 msgstr "Sertifikatai"
 
@@ -57,10 +57,6 @@ msgid "Challenge Alias"
 msgstr "Atpažinimo pseudonimas"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:509
-msgid "Custom ACME CA"
-msgstr "Pasirinktinis „ACME CA“"
-
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:515
 msgid "Custom ACME server directory URL."
 msgstr "Pasirinktinis „ACME“ serverio katalogo „URL“ – saitas."
 
@@ -80,7 +76,7 @@ msgstr "„DNS API“ kredencialai"
 msgid "DNS Challenge Validation"
 msgstr "„DNS“ atpažinimo patvirtinimas/patikrinimas"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:521
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:515
 msgid "Days until renewal"
 msgstr "Dienos iki atnaujinimo"
 
@@ -112,8 +108,8 @@ msgid ""
 "E.g. <code>_acme-challenge.example.com:12345:98765 alias.example.com:11111</"
 "code>"
 msgstr ""
-"Pvz: „<code>_acme-challenge.example.com:12345:98765 alias.example."
-"com:11111</code>“"
+"Pvz: „<code>_acme-challenge.example.com:12345:98765 alias.example.com:11111</"
+"code>“"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:482
 msgid "ECC 256 bits"
@@ -159,7 +155,7 @@ msgstr ""
 "Jei sertifikatas nebuvo atnaujintas laiku, tada likus 20-imt dienų iki "
 "galiojimo pabaigos gausite pranešimą."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:587
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:581
 msgid "Issued on"
 msgstr "Įteiktas"
 
@@ -171,7 +167,7 @@ msgstr "Rakto dydis (ir tipas) sugeneruotam sertifikatui."
 msgid "Key type"
 msgstr "Rakto tipas"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:584
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:578
 msgid "Main Domain"
 msgstr "Pagrindinis domenas-sritis"
 
@@ -195,11 +191,11 @@ msgstr ""
 msgid "Path to private API signing key file in PEM format"
 msgstr "Kelias į privatų „API“ pasirašymo rakto failą „PEM“ formatu"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:585
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:579
 msgid "Private Key"
 msgstr "Privatus raktas"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:586
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:580
 msgid "Public Certificate"
 msgstr "Viešasis sertifikatas"
 
@@ -246,9 +242,9 @@ msgid ""
 "only supports one challenge alias per certificate."
 msgstr ""
 "Atpažinimo pseudonimas, skirtas naudoti VISOMS domeno-sritims. Daugiau "
-"informacijos apie šį procesą rasite adresu: https://github.com/"
-"acmesh-official/acme.sh/wiki/DNS-alias-mode. „LuCI“ palaiko, tik vieną "
-"sertifikatą, kiekviename atpažinimo pseudonime."
+"informacijos apie šį procesą rasite adresu: https://github.com/acmesh-"
+"official/acme.sh/wiki/DNS-alias-mode. „LuCI“ palaiko, tik vieną sertifikatą, "
+"kiekviename atpažinimo pseudonime."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:445
 msgid ""
@@ -269,9 +265,9 @@ msgid ""
 "only supports one challenge domain per certificate."
 msgstr ""
 "Domeno-srities pseudonimas, naudojamas VISOMS domeno-sritims. Daugiau "
-"informacijos apie šį procesą rasite adresu: https://github.com/"
-"acmesh-official/acme.sh/wiki/DNS-alias-mode. „LuCI“ palaiko, tik vieną "
-"sertifikatą, kiekviename atpažinimo pseudonime."
+"informacijos apie šį procesą rasite adresu: https://github.com/acmesh-"
+"official/acme.sh/wiki/DNS-alias-mode. „LuCI“ palaiko, tik vieną sertifikatą, "
+"kiekviename atpažinimo pseudonime."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:381
 msgid "The private API signing key in PEM format"
@@ -308,8 +304,8 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
-"Norėdami naudoti „DNS“ režimą sertifikatams išduoti, nustatykite – „DNS API“"
-", palaikomos „acme.sh“, pavadinimą. Galimų „API“ sąrašą rasite adresu – "
+"Norėdami naudoti „DNS“ režimą sertifikatams išduoti, nustatykite – „DNS "
+"API“, palaikomos „acme.sh“, pavadinimą. Galimų „API“ sąrašą rasite adresu – "
 "https://github.com/acmesh-official/acme.sh/wiki/dnsapi. „DNS“ režimu domeno-"
 "srities vardas neturi būti nukreiptas į maršrutizatoriaus IP. „DNS“ režimas "
 "taip pat yra vienintelis režimas, palaikantis pakaitos simbolių "
@@ -347,6 +343,9 @@ msgid ""
 "port 80."
 msgstr ""
 "„Webserver“ šakninis (root) katalogas. Nustatykite tai „webserver“ dokumento "
-"šaknyje (root), kad paleistumėte – „Acme“, „webroot“ režime. Šis ž"
-"iniatinklio/tinklapio serveris turi būti pasiekiamas iš interneto per 80-tą "
+"šaknyje (root), kad paleistumėte – „Acme“, „webroot“ režime. Šis "
+"žiniatinklio/tinklapio serveris turi būti pasiekiamas iš interneto per 80-tą "
 "prievadą."
+
+#~ msgid "Custom ACME CA"
+#~ msgstr "Pasirinktinis „ACME CA“"

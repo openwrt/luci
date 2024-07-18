@@ -10,21 +10,35 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.14-dev\n"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:30
-msgid "Bind IP/Interface"
-msgstr "綁定IP/介面"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:52
+msgid "-1 is all."
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:47
-msgid "Buffer messages"
-msgstr "緩衝訊息"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:56
+msgid "-1 is unlimited."
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:44
-msgid "Buffer size"
-msgstr "緩衝區大小"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:52
+msgid "Buffer message amount"
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:50
-msgid "Buffer time"
-msgstr "緩衝時間"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:56
+msgid "Buffer time limit"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:43
+msgid "Client amount upper limit"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:28
+msgid "Client statistics"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:34
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:38
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:46
+msgid "Default"
+msgstr ""
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:16
 msgid "Enabled"
@@ -34,41 +48,49 @@ msgstr "啟用"
 msgid "Grant UCI access for luci-app-udpxy"
 msgstr "授予 luci-app-udpxy 擁有 UCI 存取的權限"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:42
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:30
+msgid "HTTP Listen interface"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:49
+msgid "Ingress buffer size"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:46
 msgid "Log file"
 msgstr "日誌檔案"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:39
-msgid "Max clients"
-msgstr "最大客戶數"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:38
+msgid "Multicast subscribe source interface"
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:56
-msgid "Multicast subscription renew"
-msgstr "群播訂閱續訂"
-
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:53
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:60
 msgid "Nice increment"
 msgstr "不錯的增量"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:33
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:34
 msgid "Port"
 msgstr "連接埠"
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:64
+msgid "Renew multicast subscription periodicity"
+msgstr ""
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:22
 msgid "Respawn"
 msgstr "重生"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:36
-msgid "Source IP/Interface"
-msgstr "來源 IP/介面"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:49
+msgid "Unit: bytes, Kb, Mb; Max 2097152 bytes"
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:28
-msgid "Status"
-msgstr "狀態"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:64
+msgid "Unit: seconds; 0 is skip."
+msgstr ""
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:25
-msgid "Verbose"
-msgstr "詳細"
+msgid "Verbose logging"
+msgstr ""
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:9
 #: applications/luci-app-udpxy/root/usr/share/luci/menu.d/luci-app-udpxy.json:3
@@ -77,6 +99,38 @@ msgstr "udpxy (低頻寬免解碼IPTV串流轉向Http)"
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:10
 msgid ""
-"udpxy is a UDP-to-HTTP multicast traffic relay daemon, here you can "
-"configure the settings."
-msgstr "udpxy是UDP到HTTP的群播流量中繼常駐程序，您可以在此處配置設定值。"
+"udpxy is an IPTV stream relay, a UDP-to-HTTP multicast traffic relay daemon "
+"which forwards multicast UDP streams to HTTP clients."
+msgstr ""
+
+#~ msgid "Bind IP/Interface"
+#~ msgstr "綁定IP/介面"
+
+#~ msgid "Buffer messages"
+#~ msgstr "緩衝訊息"
+
+#~ msgid "Buffer size"
+#~ msgstr "緩衝區大小"
+
+#~ msgid "Buffer time"
+#~ msgstr "緩衝時間"
+
+#~ msgid "Max clients"
+#~ msgstr "最大客戶數"
+
+#~ msgid "Multicast subscription renew"
+#~ msgstr "群播訂閱續訂"
+
+#~ msgid "Source IP/Interface"
+#~ msgstr "來源 IP/介面"
+
+#~ msgid "Status"
+#~ msgstr "狀態"
+
+#~ msgid "Verbose"
+#~ msgstr "詳細"
+
+#~ msgid ""
+#~ "udpxy is a UDP-to-HTTP multicast traffic relay daemon, here you can "
+#~ "configure the settings."
+#~ msgstr "udpxy是UDP到HTTP的群播流量中繼常駐程序，您可以在此處配置設定值。"
