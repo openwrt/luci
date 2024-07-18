@@ -1,0 +1,28 @@
+{
+  "admin/services/hysteria-server": {
+    "title": "Hysteria Server",
+    "action": {
+      "type": "view",
+      "path": "hysteria/server"
+    },
+    "depends": {
+      "acl": [ "luci-app-hysteria" ],
+      "fs": {
+        "/etc/init.d/hysteria-serverd": "executable"
+      }
+    }
+  },
+  "admin/services/hysteria": {
+    "title": "Hysteria",
+    "action": {
+      "type": "view",
+      "path": "hysteria/client"
+    },
+    "depends": {
+      "acl": [ "luci-app-hysteria" ],
+      "fs": {
+        "/etc/init.d/hysteria": "executable"
+      }
+    }
+  }
+}
