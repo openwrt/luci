@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-26 08:59+0000\n"
+"PO-Revision-Date: 2024-06-29 16:09+0000\n"
 "Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -44,7 +44,7 @@ msgstr "Sertifikato konfigūracija"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:124
 msgid "Challenge Alias"
-msgstr ""
+msgstr "Atpažinimo pseudonimas"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:43
 msgid "Challenge Validation"
@@ -88,6 +88,10 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
+"Į sertifikatą įtraukti domenų-sričių pavadinimus. Pirmasis pavadinimas bus – "
+"objekto/temos pavadinimas, tolesni pavadinimai bus – alternatyvūs "
+"pavadinimai. Atminkite, kad visi domenų-sričių pavadinimai turi būti "
+"nukreipti į maršrutizatorių, globaliame – „DNS“."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "ECC 256 bits"
@@ -118,6 +122,8 @@ msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
+"Gauti sertifikatą iš – „Letsencrypt“ darbinio serverio (naudokite tik "
+"testavimui; sertifikatas nebus tinkamas/galiojantis)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
@@ -154,6 +160,10 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
+"Pavienis režimas naudos integruotą – „acme.sh“ žiniatinklio serverį, kad "
+"išduotu sertifikatą. „Webroot“ režimas naudos esamą žiniatinklio serverį "
+"išduoti sertifikatą. „DNS“ režimas leis naudoti savo „DNS“ teikėjo – „DNS "
+"API“, kad išduotu sertifikatą."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:125
 msgid ""
@@ -161,6 +171,10 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
+"Atpažinimo pseudonimas, skirtas naudoti VISOMS domeno-sritims. Daugiau "
+"informacijos apie šį procesą rasite adresu: https://github.com/acmesh-"
+"official/acme.sh/wiki/DNS-alias-mode. „LuCI“ palaiko, tik vieną sertifikatą, "
+"kiekviename atpažinimo pseudonime."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:117
 msgid ""
@@ -169,6 +183,10 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
+"Aukščiau pa(si)rinkti „DNS API“ režimo kredencialai. Žr.: https://github.com/"
+"acmesh-official/acme.sh/wiki/dnsapi, kad sužinotumėte kiekvienos „API“; "
+"reikalingų kredencialų formatą. Pridėkite kelis įrašus čia: KEY=VAL; "
+"apvalkalo kintamojo formatu, kad pateiktumėte kelis kredencialų kintamuosius."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:132
 msgid ""
@@ -176,6 +194,10 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
+"Domeno-srities pseudonimas, naudojamas VISOMS domeno-sritims. Daugiau "
+"informacijos apie šį procesą rasite adresu: https://github.com/acmesh-"
+"official/acme.sh/wiki/DNS-alias-mode. „LuCI“ palaiko, tik vieną sertifikatą, "
+"kiekviename atpažinimo pseudonime."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
 msgid ""
@@ -186,6 +208,14 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"Tai sukonfigūruoja „ACME“ („Letsencrypt“), automatinio sertifikato įdiegimą. "
+"Tiesiog užpildykite šią informaciją, kad maršrutizatorius būtų "
+"sukonfigūruotas su – „Letsencrypt“ išduotais žiniatinklio sąsajos ir/arba "
+"sietuvo sertifikatais. Atminkite, kad sertifikate esantys domenų-sričių "
+"pavadinimai jau turi būti sukonfigūruoti taip, kad būtų nukreipti į "
+"maršrutizatoriaus viešąjį IP adresą. Sukonfigūravus, sertifikatų išdavimas "
+"gali šiek tiek užtrukti. Patikrinkite, ar žurnaluose vyksta pažanga ir ar "
+"nėra klaidų."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
 msgid ""

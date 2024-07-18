@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-22 23:09+0000\n"
+"PO-Revision-Date: 2024-07-04 05:50+0000\n"
 "Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssamba4/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:120
 msgid "Allow guests"
@@ -32,7 +32,7 @@ msgstr ""
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:117
 msgid "Allowed users"
-msgstr "Leidžiami vartotojai"
+msgstr "Leidžiami naudotojai/vartotojai"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:151
 msgid "Apple Time-machine share"
@@ -56,7 +56,7 @@ msgstr "Tinklavimo „kaukės“ – adresų segregatoriaus katalogas/vietovė"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:74
 msgid "Disable Active Directory Domain Controller"
-msgstr ""
+msgstr "Išjungti/Išgalinti katalogo/vietovės domeno-srities valdiklį"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:71
 msgid "Disable Netbios"
@@ -73,6 +73,7 @@ msgstr "Redaguoti šabloną"
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:32
 msgid "Edit the template that is used for generating the samba configuration."
 msgstr ""
+"Redaguoti šabloną, kuris naudojamas generuoti – „samba“, konfigūraciją."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:57
 msgid "Enable extra Tuning"
@@ -80,7 +81,7 @@ msgstr "Įgalinti pažengusį derinimą/nustatymą/reguliavimą"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:64
 msgid "Enable macOS compatible shares"
-msgstr ""
+msgstr "Įjungti/Įgalinti „macOS“ suderinamus bendrinimus"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:58
 msgid ""
@@ -88,12 +89,18 @@ msgid ""
 "speeds and better operation via WiFi. Not recommend if multiple clients "
 "write to the same files, at the same time!"
 msgstr ""
+"Įjungti/Įgalinti kai kuriuos bendruomenės valdomus derinimo/nustatymo/"
+"reguliavimo parametrus, kurie gali pagerinti rašymo greitį ir veikimą per "
+"„Wi-Fi“. Nerekomenduojama, jei keli klientai įrašo į tuos pačius failus, tuo "
+"pačiu metu!"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:65
 msgid ""
 "Enables Apple's AAPL extension globally and adds macOS compatibility options "
 "to all shares."
 msgstr ""
+"Įjungia/Įgalina „Apple AAPL“ plėtinį visuotiškai ir prideda „macOS“ "
+"suderinamumo parinktis, į visus bendrinimus."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:115
 msgid "Force Root"
@@ -101,7 +108,7 @@ msgstr "Priversti „Root“"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:61
 msgid "Force synchronous I/O"
-msgstr ""
+msgstr "Priversti sinchroninį įvestį/išvestį"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:31
 msgid "General Settings"
@@ -109,7 +116,7 @@ msgstr "Bendri nustatymai"
 
 #: applications/luci-app-samba4/root/usr/share/rpcd/acl.d/luci-app-samba4.json:3
 msgid "Grant access to LuCI app samba4"
-msgstr ""
+msgstr "Duoti/Suteikti prieigą prie „LuCI“ programos – „samba4“"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:126
 msgid "Guests only"
@@ -143,6 +150,8 @@ msgid ""
 "On lower-end devices may increase speeds, by forcing synchronous I/O instead "
 "of the default asynchronous."
 msgstr ""
+"Ant silpnesnių įrenginių, tai gali padidinti greitį, priverčiant sinchroninį "
+"įvestį/išvestį, vietoj numatytojo asinchroninio."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:99
 msgid "Path"
@@ -171,6 +180,10 @@ msgid ""
 "('|') should not be changed. They get their values from the 'General "
 "Settings' tab."
 msgstr ""
+"Tai yra – „/etc/samba/smb.conf.template“ failo turinys, iš kurio bus "
+"sugeneruota Jūsų „samba“ konfigūracija. Reikšmės, pateiktos vamzdelio "
+"simboliais – („|“), neturėtų būti keičiamos. Jie gauna savo reikšmės iš "
+"skirtuko – „Bendrieji nustatymai“."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:153
 msgid "Time-machine size in GB"

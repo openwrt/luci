@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 17:57+0200\n"
-"PO-Revision-Date: 2024-06-19 19:07+0000\n"
-"Last-Translator: Hannu Nyman <hannu.nyman@iki.fi>\n"
+"PO-Revision-Date: 2024-07-17 22:44+0000\n"
+"Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/luci/de/"
 ">\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1072
 msgid "!known (not known)"
@@ -746,6 +746,12 @@ msgid ""
 "interfaces. Choose an acceptable URI <code>tls://</code>, <code>tcp://</"
 "code>, <code>unix://</code> or <code>quic://</code>"
 msgstr ""
+"Lauscher hinzufügen, um eingehende Peerings von nicht-lokalen Knoten zu "
+"akzeptieren. Multicast Peer Discovery funktioniert unabhängig von hier "
+"eingestellten Lauschern. URI-Format: <code>tls://0.0.0.0:0</code> oder "
+"<code>tls://[:]:0</code>, um auf allen Schnittstellen zu lasuchen. Wählen "
+"Sie eine akzeptable URI <code>tls://</code>, <code>tcp://</code>, "
+"<code>unix://</code> oder <code>quic://</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:361
 msgid "Add local domain suffix to names served from hosts files."
@@ -3813,7 +3819,7 @@ msgstr "Leite bestimmte Domainanfragen an bestimmte Upstream-Server weiter."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1092
 msgid "Forward/reverse DNS"
-msgstr ""
+msgstr "Weiterleitungs-/Reverse-DNS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1669
 msgid "Forwarding mode"
@@ -8023,8 +8029,9 @@ msgid "Receive"
 msgstr "Empfangen"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:243
+#, fuzzy
 msgid "Receive dropped"
-msgstr ""
+msgstr "Empfangenes fallen gelassen"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:242
 msgid "Receive errors"

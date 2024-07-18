@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-05-06 08:10+0000\n"
-"Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2024-06-29 16:09+0000\n"
+"Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenwisp/lt/>\n"
 "Language: lt\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:17
 msgid "Advanced Settings"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:87
 msgid "Connect Timeout"
-msgstr ""
+msgstr "Užmegzto ryšio pasibaigusios užklausos laikas"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:49
 msgid "Consistent Key"
@@ -131,6 +131,10 @@ msgid ""
 "point to an executable script file. This hook is called each time openwisp-"
 "config applies a configuration, but after services are reloaded."
 msgstr ""
+"Kelias, į po perleidimo iš naujo agento/įterpimo skriptą. Agentas/Įterpimas "
+"nėra iškviečiamas, jei kelias nėra nurodytas į vykdomojo skripto failą. Šis "
+"agentas/įterpimas yra iškviestas kiekvieną kartą, kai – „openwisp-config“ "
+"taiko konfigūraciją, bet po to, kai tarnybos yra perleistos iš naujo."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:103
 msgid ""
@@ -138,14 +142,18 @@ msgid ""
 "to an executable script file. This hook is called each time openwisp-config "
 "applies a configuration, but before services are reloaded."
 msgstr ""
+"Kelias, į prieš perleidimo iš naujo agento/įterpimo skriptą. Agentas/"
+"Įterpimas nėra iškviečiamas, jei kelias nėra nurodytas į vykdomojo skripto "
+"failą. Šis agentas/įterpimas yra iškviestas kiekvieną kartą, kai – „openwisp-"
+"config“ taiko konfigūraciją, bet prieš, kai tarnybos yra perleistos iš naujo."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:107
 msgid "Post-reload Hook"
-msgstr ""
+msgstr "Po perleidimo agentas/įterpimas"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:103
 msgid "Pre-reload Hook"
-msgstr ""
+msgstr "Prieš perleidimo agentas/įterpimas"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:33
 msgid "Server URL"
@@ -186,15 +194,15 @@ msgstr "Šio įrenginio „UUID“ „OpenWISP“ serveryje."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:53
 msgid "The interface to use for getting the MAC for this device."
-msgstr ""
+msgstr "Sąsaja ir/arba Sietuvas, naudojama norint gauti šio įrenginio – „MAC“."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:56
 msgid "The interface to use for management and control."
-msgstr ""
+msgstr "Sąsaja ir/arba Sietuvas, skirtas valdymui ir kontroliavimui."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:36
 msgid "The organization shared secret for auto enrollment."
-msgstr ""
+msgstr "Bendroji organizacijos automatinio registravimo paslaptis."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:20
 msgid "UUID"
@@ -209,6 +217,8 @@ msgid ""
 "Use a unique hardware ID for device identification, for example a serial "
 "number."
 msgstr ""
+"Naudoti unikalią aparatinės įrangos ID, įrenginio identifikavimui, "
+"pavyzdžiui.: serijos numerį."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:100
 msgid ""
@@ -216,26 +226,33 @@ msgid ""
 "must be in PEM format, and the directory must have been processed using the "
 "c_rehash utility supplied with openssl."
 msgstr ""
+"Naudoti nurodytą sertifikatų katalogą/vietovę, kad patikrintumėte "
+"lygiarangį. Sertifikatai turi būti – „PEM“ formato, o katalogas/vietovė turi "
+"būti apdorotas naudojant – „c_rehash“ įrankį, pateiktu kartu su –„openssl“."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:97
 msgid ""
 "Use the specified certificate file to verify the peer. The file may contain "
 "multiple CA certificates. The certificate(s) must be in PEM format."
 msgstr ""
+"Naudoti nurodytą sertifikato failą, kad patikrintumėte lygiarangį. Faile "
+"gali būti keli „CA“ sertifikatai. Sertifikatas/-ai turi būti – „PEM“ formato."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:92
 msgid ""
 "Value passed to curl --max-time argument, defaults to 30. Expressed in "
 "seconds."
 msgstr ""
+"Reikšmė perduota – „curl“, „--max-time“ argumentui, numatytoji reikšmė yra – "
+"30-imt. Išreiškiama – sekundėmis."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:45
 msgid "Verify SSL"
-msgstr ""
+msgstr "Patvirtinti/Patikrinti „SSL“"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:45
 msgid "Verify the server SSL certificate."
-msgstr ""
+msgstr "Patvirtinti/Patikrinti serverio „SSL“ sertifikatą."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:49
 msgid ""
@@ -244,3 +261,8 @@ msgid ""
 "default, but must be enabled also in the controller application in order to "
 "work."
 msgstr ""
+"Kai naudojama automatinė registracija, ši funkcija leidžia įrenginiams "
+"išlaikyti tą pačią konfigūraciją, net jei jie nustatomi iš naujo arba iš "
+"naujo perrašomi į įrangą. Ši funkcija yra įjungta/įgalinta pagal "
+"numatytuosius nustatymus, tačiau, kad ji veiktų, ji turi būti įjungta/"
+"įgalinta ir valdiklio programoje."

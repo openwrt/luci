@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-22 23:09+0000\n"
+"PO-Revision-Date: 2024-07-12 19:38+0000\n"
 "Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsocserv/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:124
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:80
@@ -20,14 +20,17 @@ msgid ""
 "<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/"
 "prefix"
 msgstr ""
+"<abbr title=\"angl. Classless Inter-Domain Routing | liet. Beklasė "
+"tarpdomeninė-sričio kelvada\">„CIDR“</abbr> – Pažymėjimas/Pateiktis: adresas/"
+"prielinksnis/priešdėlis"
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:48
 msgid "Active OpenConnect Users"
-msgstr "Aktyvūs „OpenConnect“ vartotojai/naudotojai"
+msgstr "Aktyvūs „OpenConnect“ naudotojai/vartotojai"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:61
 msgid "Active users"
-msgstr "Aktyvūs vartotojai/naudotojai"
+msgstr "Aktyvūs naudotojai/vartotojai"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:74
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:64
@@ -36,7 +39,7 @@ msgstr "„AnyConnect“ kliento palaikymas"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:17
 msgid "Available users"
-msgstr "Galimi vartotojai/naudotojai"
+msgstr "Galimi naudotojai/vartotojai"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:13
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:13
@@ -242,17 +245,23 @@ msgid ""
 "network different than the LAN addresses unless proxy ARP is enabled. Leave "
 "empty to attempt auto-configuration."
 msgstr ""
+"IPv4 potinklio adresas, kurį reikia pateikti klientams; tai turėtų būti koks "
+"nors privatus tinklas, kuris skiriasi nuo „LAN“ adresų, nebendrais "
+"įgaliotinis „ARP“ yra įjungtas. Palikite tuščią langą, jei norite pabandyti "
+"atlikti automatinę konfigūraciją."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:125
 msgid ""
 "The IPv6 subnet address to provide to clients; leave empty to attempt auto-"
 "configuration."
 msgstr ""
+"IPv6 potinklio adresas, kurį reikia pateikti klientams; palikite tuščią, jei "
+"norite pabandyti atlikti automatinę konfigūraciją.."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:63
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:57
 msgid "The assigned IPs will be selected deterministically"
-msgstr ""
+msgstr "Priskirti IP (dgs.) adresai, bus parinkti nustatyta/suplanuota tvarka"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:50
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:38
@@ -261,6 +270,10 @@ msgid ""
 "username-password pair. Use PAM modules to authenticate using another server "
 "(e.g., LDAP, Radius)."
 msgstr ""
+"Autentifikacijos/-vimo metodas naudotojams/vartotojams. Paprasčiausias yra – "
+"grynasis tekstas su vieno naudotojo/vartotojo vardų (t.y. slapyvardžių) ir "
+"slaptažodžių pora. Naudokite – „PAM“ modulius, kad autentifikuotumėte kitą "
+"serverį (pvz., „LDAP“, „Radius“)."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:45
 msgid "The firewall zone that the VPN clients will be set to"
@@ -277,6 +290,9 @@ msgid ""
 "routes, the server will send only the appropriate. Leave empty to set a "
 "default route"
 msgstr ""
+"Klientams yra teikiama kelvados lentelė. Galite maišyti IPv4 ir IPv6 "
+"maršrutus, serveris siųs tik atitinkamus maršrutus. Palikite tuščią, kad "
+"nustatytumėte numatytąjį maršrutą"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:57
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:51
@@ -288,10 +304,12 @@ msgid ""
 "The value to be communicated to the client to verify the server's "
 "certificate; this value only depends on the public key"
 msgstr ""
+"Reikšmė, kurią reikia komunikuoti/perduoti klientui, kad būtų patvirtintas/"
+"patikrintas serverio sertifikatas; ši reikšmė priklauso tik nuo viešojo rakto"
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:41
 msgid "There are no active users."
-msgstr "Nėra aktyvių vartotojų/naudotojų."
+msgstr "Nėra aktyvių naudotojų/vartotojų."
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:71
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:56
@@ -313,7 +331,7 @@ msgstr "Naudotojo/Vartotojo nustatymai"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:66
 msgid "Username"
-msgstr "Slapyvardis/Vartotojo vardas"
+msgstr "Naudotojo/Vartotojo vardas (t.y. Slapyvardis)"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:115
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:72
