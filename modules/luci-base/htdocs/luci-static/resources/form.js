@@ -2974,7 +2974,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 			if (!this.getPreviousModalMap())
 				prevNode.parentNode
-					.querySelector('div.right > button')
+					.querySelector('div.button-row > button')
 					.firstChild.data = _('Dismiss');
 		}
 		else {
@@ -3207,8 +3207,8 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 						.appendChild(E('span', title ? ' » ' + title : ''));
 
 					mapNode.parentNode
-						.querySelector('div.right > button')
-						.firstChild.data = _('Back');
+						.querySelector('div.button-row > button')
+						.firstChild.data = _('Dismiss');
 
 					mapNode.classList.add('hidden');
 					mapNode.parentNode.insertBefore(nodes, mapNode.nextElementSibling);
