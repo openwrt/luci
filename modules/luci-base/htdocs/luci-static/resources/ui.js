@@ -4210,7 +4210,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 			UI.prototype.showModal(_('Uploading file…'), [
 				E('p', _('Please select the file to upload.')),
 				E('div', { 'class': 'button-row' }, [
-					E('div', {
+					E('button', {
 						'class': 'btn cbi-button',
 						'click': function() {
 							UI.prototype.hideModal();
@@ -4240,13 +4240,13 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							upload.focus();
 						}
 					}),
-					E('div', {
+					E('button', {
 						'class': 'btn cbi-button',
 						'click': function(ev) {
 							ev.target.previousElementSibling.click();
 						}
 					}, [ _('Browse…') ]),
-					E('div', {
+					E('button', {
 						'class': 'btn cbi-button-action important',
 						'disabled': true,
 						'click': function(ev) {
@@ -4479,7 +4479,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					list,
 				]),
 				E('div', { 'class': 'button-row' }, [
-					E('div', {
+					E('button', {
 						'class': 'btn cbi-button',
 						'click': UI.prototype.hideModal
 					}, [ _('Close') ]), ' ',
@@ -4493,7 +4493,7 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						},
 						click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
 					}).render(), ' ',
-					E('div', {
+					E('button', {
 						'class': 'btn cbi-button cbi-button-reset',
 						'click': L.bind(this.revert, this)
 					}, [ _('Revert') ])
@@ -4732,15 +4732,15 @@ var UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						E('h4', _('Connectivity change')),
 						E('p', _('Changes have been made to the existing connection via "%h". This could inhibit access to this device. Any IP change requires <strong>connecting to the new IP</strong> within %d seconds to retain the changes.').format(affected, L.env.apply_rollback)),
 						E('div', { 'class': 'button-row' }, [
-							E('div', {
+							E('button', {
 								'class': 'btn cbi-button',
 								'click': rejectFn,
 							}, [ _('Cancel') ]), ' ',
-							E('div', {
+							E('button', {
 								'class': 'btn cbi-button-action important',
 								'click': resolveFn.bind(null, true)
 							}, [ _('Apply, reverting in case of connectivity loss') ]), ' ',
-							E('div', {
+							E('button', {
 								'class': 'btn cbi-button-negative important',
 								'click': resolveFn.bind(null, false)
 							}, [ _('Apply unchecked') ])
