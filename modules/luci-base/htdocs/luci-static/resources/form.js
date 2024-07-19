@@ -2672,7 +2672,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': _('Edit'),
-					'class': 'cbi-button cbi-button-edit',
+					'class': 'btn cbi-button cbi-button-edit',
 					'click': evFn
 				}, [ _('Edit') ])
 			);
@@ -2682,7 +2682,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': more_label,
-					'class': 'cbi-button cbi-button-edit',
+					'class': 'btn cbi-button cbi-button-edit',
 					'click': ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
 				}, [ more_label ])
 			);
@@ -2694,7 +2694,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': btn_title || _('Delete'),
-					'class': 'cbi-button cbi-button-remove',
+					'class': 'btn cbi-button cbi-button-remove',
 					'click': ui.createHandlerFn(this, 'handleRemove', section_id),
 					'disabled': this.map.readonly || null
 				}, [ btn_title || _('Delete') ])
@@ -2974,7 +2974,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 			if (!this.getPreviousModalMap())
 				prevNode.parentNode
-					.querySelector('div.right > button')
+					.querySelector('div.button-row > button')
 					.firstChild.data = _('Dismiss');
 		}
 		else {
@@ -3207,8 +3207,8 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 						.appendChild(E('span', title ? ' » ' + title : ''));
 
 					mapNode.parentNode
-						.querySelector('div.right > button')
-						.firstChild.data = _('Back');
+						.querySelector('div.button-row > button')
+						.firstChild.data = _('Dismiss');
 
 					mapNode.classList.add('hidden');
 					mapNode.parentNode.insertBefore(nodes, mapNode.nextElementSibling);
