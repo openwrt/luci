@@ -176,7 +176,7 @@ function iface_updown(up, id, ev, force) {
 				ui.showModal(_('Confirm disconnect'), [
 					E('p', _('You appear to be currently connected to the device via the "%h" interface. Do you really want to shut down the interface?').format(id)),
 					E('div', { 'class': 'button-row' }, [
-						E('div', {
+						E('button', {
 							'class': 'btn cbi-button cbi-button-neutral',
 							'click': function(ev) {
 								btns[1].classList.remove('spinning');
@@ -187,7 +187,7 @@ function iface_updown(up, id, ev, force) {
 							}
 						}, _('Cancel')),
 						' ',
-						E('div', {
+						E('button', {
 							'class': 'btn cbi-button cbi-button-negative important',
 							'click': function(ev) {
 								dsc.setAttribute('disconnect', '');
