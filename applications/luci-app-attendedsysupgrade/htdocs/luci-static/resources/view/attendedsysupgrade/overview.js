@@ -399,10 +399,9 @@ return view.extend({
 		let { url, revision, advanced_mode, branch } = data;
 		let { version, target, profile, packages } = firmware;
 		let candidates = [];
-		let request_url = `${url}/api/overview`;
-		if (version.endsWith('SNAPSHOT')) {
-			request_url = `${url}/api/v1/revision/${version}/${target}`;
-		}
+
+		const endpoint = version.endsWith('SNAPSHOT') ? `revision/${version}/${target}` : 'overview';
+		const request_url = `${url}/api/v1/${endpoint}`;
 
 		ui.showModal(_('Searching...'), [
 			E(
