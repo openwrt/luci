@@ -101,7 +101,7 @@ function generateDnsmasqInstanceEntry(data) {
 	}
 	formatString += ')';
 
-	return nameValueMap.get('.name'), formatString;
+	return [nameValueMap.get('.name'), formatString];
 }
 
 function getDHCPPools() {
@@ -800,8 +800,8 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			var name, display_str = generateDnsmasqInstanceEntry(val);
-			so.value(index, display_str);
+			var [name, display_str] = generateDnsmasqInstanceEntry(val);
+			so.value(name, display_str);
 		});
 
 		o = s.taboption('srvhosts', form.SectionValue, '__srvhosts__', form.TableSection, 'srvhost', null,
@@ -1079,8 +1079,8 @@ return view.extend({
 		so.optional = true;
 
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			var name, display_str = generateDnsmasqInstanceEntry(val);
-			so.value(index, display_str);
+			var [name, display_str] = generateDnsmasqInstanceEntry(val);
+			so.value(name, display_str);
 		});
 
 
