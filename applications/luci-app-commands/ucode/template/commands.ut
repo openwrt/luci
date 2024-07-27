@@ -45,7 +45,7 @@
 		{
 			output.innerHTML =
 				'<img src="{{ resource }}/icons/loading.gif" alt="{{ _('Loading') }}" style="vertical-align:middle" /> ' +
-				'{{ _('Waiting for command to complete...') }}'
+				_('Waiting for command to complete...')
 			;
 
 			legend.parentNode.style.display = 'block';
@@ -57,20 +57,20 @@
 					if (st)
 					{
 						if (st.binary)
-							st.stdout = '[{{ _('Binary data not displayed, download instead.') }}]';
+							st.stdout = '[' + _('Binary data not displayed, download instead.') + ']';
 
 						legend.style.display = 'none';
 						output.innerHTML = String.format(
 							'<pre><strong># %h\n</strong>%h<span style="color:red">%h</span></pre>' +
-							'<div class="alert-message warning">%s ({{ _('Code:') }} %d)</div>',
+							'<div class="alert-message warning">%h (%h %d)</div>',
 							st.command, st.stdout, st.stderr,
-							(st.exitcode == 0) ? '{{ _('Command successful') }}' : '{{ _('Command failed') }}',
-							st.exitcode);
+							(st.exitcode == 0) ? _('Command successful') : _('Command failed'),
+							_('Code:'), st.exitcode);
 					}
 					else
 					{
 						legend.style.display = 'none';
-						output.innerHTML = '<span class="error">{{ _('Failed to execute command!') }}</span>';
+						output.innerHTML = '<span class="error">%h</span>'.format(_('Failed to execute command!'));
 					}
 
 					location.hash = '#output';
@@ -114,8 +114,9 @@
 			legend.style.display = 'none';
 			output.parentNode.style.display = 'block';
 			output.innerHTML = String.format(
-				'<div class="alert-message"><p>{{ _('Download execution result') }} <a href="%s">%s</a></p><p>{{ _('Or display result') }} <a href="%s">%s</a></p></div>',
-				link, link, link_nodownload, link_nodownload
+				'<div class="alert-message"><p>%h <a href="%s">%s</a></p><p>%h <a href="%s">%s</a></p></div>',
+				_('Download execution result'), link, link,
+				_('Or display result'), link_nodownload, link_nodownload
 			);
 
 			location.hash = '#output';
