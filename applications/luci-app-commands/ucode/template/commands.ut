@@ -51,7 +51,7 @@
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('{{ dispatcher.build_url('admin/system/commands/run') }}/' + id + (args ? '?args=' + args : ''), null,
+			stxhr.get(L.url('admin/system/commands/run', id) + (args ? '?args=' + args : ''), null,
 				function(x, st)
 				{
 					if (st)
@@ -88,7 +88,7 @@
 		if (field)
 			args = encodeURIComponent(field.value);
 
-		location.href = '{{ dispatcher.build_url('admin/system/commands/download') }}/' + id + (args ? '/' + args : '');
+		location.href = L.url('admin/system/commands/download', id) + (args ? '/' + args : '');
 
 		ev.preventDefault();
 	}
@@ -105,7 +105,7 @@
 
 		if (legend && output)
 		{
-			var prefix = location.protocol + '//' + location.host + '{{ dispatcher.build_url('command') }}/';
+			var prefix = location.protocol + '//' + location.host + L.url('command') + '/';
 			var suffix = (args ? '?args=' + args : '');
 
 			var link = prefix + id + suffix;
