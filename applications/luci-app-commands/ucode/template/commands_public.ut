@@ -29,19 +29,19 @@
 
 <div class="alert alert-success" role="alert">
     {% if (exitcode == 0): %}
-        {{ _('Command executed successfully.') }}
+        {{ _("Command executed successfully.") }}
     {% else %}
-        {{ sprintf(_('Command exited with status code %d'), exitcode) }}
+        {{ sprintf(_("Command exited with status code %d"), exitcode) }}
     {% endif %}
 </div>
 
 {% if (length(stdout)): %}
-    <h3>{{ _('Standard Output') }}</h3>
+    <h3>{{ _("Standard Output") }}</h3>
     <pre>{{ entityencode(stdout) }}</pre>
 {% endif %}
 
 {% if (length(stderr)): %}
-    <h3>{{ _('Standard Error') }}</h3>
+    <h3>{{ _("Standard Error") }}</h3>
     <pre>{{ entityencode(stderr) }}</pre>
 {% endif %}
 

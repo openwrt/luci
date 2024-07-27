@@ -44,8 +44,8 @@
 		if (legend && output)
 		{
 			output.innerHTML =
-				'<img src="{{ resource }}/icons/loading.gif" alt="{{ _('Loading') }}" style="vertical-align:middle" /> ' +
-				'{{ _('Waiting for command to complete...') }}'
+				'<img src="{{ resource }}/icons/loading.gif" alt="{{ _("Loading") }}" style="vertical-align:middle" /> ' +
+				'{{ _("Waiting for command to complete...") }}'
 			;
 
 			legend.parentNode.style.display = 'block';
@@ -57,20 +57,20 @@
 					if (st)
 					{
 						if (st.binary)
-							st.stdout = '[{{ _('Binary data not displayed, download instead.') }}]';
+							st.stdout = '[{{ _("Binary data not displayed, download instead.") }}]';
 
 						legend.style.display = 'none';
 						output.innerHTML = String.format(
 							'<pre><strong># %h\n</strong>%h<span style="color:red">%h</span></pre>' +
-							'<div class="alert-message warning">%s ({{ _('Code:') }} %d)</div>',
+							'<div class="alert-message warning">%s ({{ _("Code:") }} %d)</div>',
 							st.command, st.stdout, st.stderr,
-							(st.exitcode == 0) ? '{{ _('Command successful') }}' : '{{ _('Command failed') }}',
+							(st.exitcode == 0) ? '{{ _("Command successful") }}' : '{{ _("Command failed") }}',
 							st.exitcode);
 					}
 					else
 					{
 						legend.style.display = 'none';
-						output.innerHTML = '<span class="error">{{ _('Failed to execute command!') }}</span>';
+						output.innerHTML = '<span class="error">{{ _("Failed to execute command!") }}</span>';
 					}
 
 					location.hash = '#output';
@@ -114,7 +114,7 @@
 			legend.style.display = 'none';
 			output.parentNode.style.display = 'block';
 			output.innerHTML = String.format(
-				'<div class="alert-message"><p>{{ _('Download execution result') }} <a href="%s">%s</a></p><p>{{ _('Or display result') }} <a href="%s">%s</a></p></div>',
+				'<div class="alert-message"><p>{{ _("Download execution result") }} <a href="%s">%s</a></p><p>{{ _("Or display result") }} <a href="%s">%s</a></p></div>',
 				link, link, link_nodownload, link_nodownload
 			);
 
@@ -134,14 +134,14 @@
 
 <form method="get" action="{{ entityencode(FULL_REQUEST_URI) }}">
 	<div class="cbi-map">
-		<h2 name="content">{{ _('Custom Commands') }}</h2>
+		<h2 name="content">{{ _("Custom Commands") }}</h2>
 
 		{% if (length(commands) == 0): %}
 			<div class="cbi-section">
 				<div class="table cbi-section-table">
 					<div class="tr cbi-section-table-row">
 						<p>
-							<em>{{ _('This section contains no values yet') }}</em>
+							<em>{{ _("This section contains no values yet") }}</em>
 						</p>
 					</div>
 				</div>
@@ -151,15 +151,15 @@
 				{% for (let command in commands): %}
 				<div class="commandbox">
 					<h3>{{ entityencode(command.name) }}</h3>
-					<p>{{ _('Command:') }} <code>{{ entityencode(command.command) }}</code></p>
+					<p>{{ _("Command:") }} <code>{{ entityencode(command.command) }}</code></p>
 					{% if (command.param == "1"): %}
-						<p>{{ _('Arguments:') }} <input type="text" id="{{ command['.name'] }}" /></p>
+						<p>{{ _("Arguments:") }} <input type="text" id="{{ command['.name'] }}" /></p>
 					{% endif %}
 					<div>
-						<button class="cbi-button cbi-button-apply" onclick="command_run(event, '{{ command['.name'] }}')">{{ _('Run') }}</button>
-						<button class="cbi-button cbi-button-download" onclick="command_download(event, '{{ command['.name'] }}')">{{ _('Download') }}</button>
+						<button class="cbi-button cbi-button-apply" onclick="command_run(event, '{{ command['.name'] }}')">{{ _("Run") }}</button>
+						<button class="cbi-button cbi-button-download" onclick="command_download(event, '{{ command['.name'] }}')">{{ _("Download") }}</button>
 						{% if (command.public == "1"): %}
-							<button class="cbi-button cbi-button-link" onclick="command_link(event, '{{ command['.name'] }}')">{{ _('Link') }}</button>
+							<button class="cbi-button cbi-button-link" onclick="command_link(event, '{{ command['.name'] }}')">{{ _("Link") }}</button>
 						{% endif %}
 					</div>
 				</div>
@@ -171,7 +171,7 @@
 	</div>
 
 	<fieldset class="cbi-section" style="display:none">
-		<legend id="command-rc-legend">{{ _('Collecting data...') }}</legend>
+		<legend id="command-rc-legend">{{ _("Collecting data...") }}</legend>
 		<span id="command-rc-output"></span>
 	</fieldset>
 </form>
