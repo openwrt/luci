@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-07-21 21:09+0000\n"
+"PO-Revision-Date: 2024-07-26 20:44+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/luci/"
 "lt/>\n"
@@ -698,7 +698,7 @@ msgstr "Aktyvūs IPv4 maršrutai"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:268
 msgid "Active IPv4 Rules"
-msgstr "Aktyvūs IPv4 taisyklės"
+msgstr "Aktyvios IPv4 taisyklės"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:275
 msgid "Active IPv6 Routes"
@@ -706,7 +706,7 @@ msgstr "Aktyvūs IPv6 maršrutai"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:278
 msgid "Active IPv6 Rules"
-msgstr "Aktyvūs IPv6 taisyklės"
+msgstr "Aktyvios IPv6 taisyklės"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:256
 msgid "Active peers"
@@ -829,8 +829,8 @@ msgstr "Pridėti serverio egzempliorių"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1139
 msgid "Add static forward and reverse DNS entries for this host."
 msgstr ""
-"Pridėti statinius persiuntimo ir atvirkštinio „DNS“ įrašus šiam skleidėjui/p."
-"k – vedėjui."
+"Pridėti nekintamus persiuntimo ir atvirkštinio „DNS“ įrašus šiam skleidėjui/"
+"p.k – vedėjui."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:335
 msgid "Add to Blacklist"
@@ -3070,7 +3070,7 @@ msgid ""
 "having static leases will be served."
 msgstr ""
 "Dinamiškai priskirti „DHCP“ adresus klientams. Jei išjungta, bus "
-"aptarnaujami tik klientai, turintys statines terminos sutartys."
+"aptarnaujami tik klientai, turintys nekintamo termino sutartis."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1497
 msgid "E.g. <code>br-vlan</code> or <code>brvlan</code>."
@@ -3116,7 +3116,7 @@ msgstr "Redaguoti lygiarangį"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1018
 msgid "Edit static lease"
-msgstr "Redaguoti statinę nuomą"
+msgstr "Redaguoti nekintamąją nuomą"
 
 #: modules/luci-compat/luasrc/view/cbi/error.htm:13
 msgid ""
@@ -4443,7 +4443,7 @@ msgid ""
 msgstr ""
 "Įrenginių (t.y skleidėjų/p.k – vedėjų) pavadinimai yra naudojami pririšti "
 "domeno-srities vardą prie IP adreso. Šis nustatymas yra beprasmis, jeigu jo "
-"pavadinimai jau yra nustatyti su statinėmis nuomomis, bet gali būti "
+"pavadinimai jau yra nustatyti su nekintamomis nuomomis, bet gali būti "
 "naudingas perrišant „FQDN“."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:19
@@ -4596,7 +4596,7 @@ msgstr "IPv4 užkarda"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:262
 msgid "IPv4 Neighbours"
-msgstr "IPv4 kaimynai"
+msgstr "IPv4 „kaimynai“ (protokolas/tinkl.)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:261
 msgid "IPv4 Routing"
@@ -4724,7 +4724,7 @@ msgstr "IPv6 „MTU“"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:272
 msgid "IPv6 Neighbours"
-msgstr "IPv6 kaimynai"
+msgstr "IPv6 „kaimynai“ (protokolas/tinkl.)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1036
 msgid "IPv6 Prefix Lifetime"
@@ -5432,11 +5432,11 @@ msgstr "„Laikyti „gyvą“/„reaguojantį““"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:54
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
 msgid "Kernel Log"
-msgstr "„Kernel“ žurnalas"
+msgstr "Branduolio („Kernel“) žurnalas"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:60
 msgid "Kernel Version"
-msgstr "„Kernel“ versija"
+msgstr "Branduolio („Kernel“) versija"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1524
 msgid "Key"
@@ -8892,7 +8892,7 @@ msgstr "Taisyklės tipas"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2360
 msgid "Runtime error"
-msgstr "Paleidimo klaida"
+msgstr "Vykdančioji klaida"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -9121,7 +9121,7 @@ msgstr "Sesiją pasibaigę"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:126
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:175
 msgid "Set Static"
-msgstr "Nustatyti statinį"
+msgstr "Nustatyti (kaip) nekintamąjį"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:759
 msgid "Set a maximum seconds TTL value for entries in the cache."
@@ -9823,20 +9823,20 @@ msgstr "Būklė"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:32
 msgid "Static IPv4 Routes"
-msgstr "Statiniai IPv4 maršrutai"
+msgstr "Nekintami IPv4 maršrutai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:32
 msgid "Static IPv6 Routes"
-msgstr "Statiniai IPv6 maršrutai"
+msgstr "Nekintami IPv6 maršrutai"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:91
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:138
 msgid "Static Lease"
-msgstr "Statinė nuoma"
+msgstr "Nekintama nuoma"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:366
 msgid "Static Leases"
-msgstr "Statinės nuomos"
+msgstr "Nekintamos nuomos"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2090
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:173
@@ -9850,10 +9850,11 @@ msgid ""
 "to DHCP clients. They are also required for non-dynamic interface "
 "configurations where only hosts with a corresponding lease are served."
 msgstr ""
-"Statinės nuomos sutartys naudojamos fiksuotiems IP adresams ir simboliniams "
-"vedėjams į „DHCP“ klientams priskirti. Jos taip pat reikalingos nedinaminėms "
-"sąsajų ir/ar sietuvų konfigūracijoms, kai aptarnaujami tik skleidėjai/p.k – "
-"vedėjai su atitinkama nuoma."
+"Nekintamų nuomų sutartys naudojamos fiksuotiems IP adresams ir simboliniams "
+"įrenginių (t.y skleidėjų/p.k – vedėjų) pavadinimams „DHCP“ klientams "
+"priskirti. Jos taip pat reikalingos ne dinaminėms sąsajų ir/ar sietuvų "
+"konfigūracijoms, kai aptarnaujami tik skleidėjai/p.k – vedėjai su atitinkama "
+"nuoma."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1183
 msgid "Station inactivity limit"
@@ -10099,7 +10100,7 @@ msgstr "Taikomasis tinklas"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/25_storage.js:60
 msgid "Temp space"
-msgstr "Laikina talpa"
+msgstr "Laikina talpa/vietovė"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:50
 msgid "Terminate"
@@ -10168,7 +10169,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1069
 msgid "The IP address %h is already used by another static lease"
-msgstr "IP adresas %h jau yra naudojamas kitai statinei nuomai"
+msgstr "IP adresas – %h jau yra naudojamas kitai nekintamajai nuomai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1078
 msgid "The IP address is outside of any DHCP pool address range"
@@ -10262,7 +10263,8 @@ msgid ""
 "The MAC address %h is already used by another static lease in the same DHCP "
 "pool"
 msgstr ""
-"„MAC“ adresą %h jau naudoja kita statinė nuoma tame pačiame „DHCP“ telkinyje"
+"„MAC“ adresą – %h jau naudoja kitą nekintamąją nuomą, tame pačiame „DHCP“ "
+"telkinyje"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:640
 msgid "The MTU must not exceed the parent device MTU of %d bytes"
@@ -11253,7 +11255,7 @@ msgstr "Nežinomos klaidos kodas"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/none.js:6
 #: modules/luci-compat/luasrc/model/network.lua:965
 msgid "Unmanaged"
-msgstr "Netvarkomas/-a/-i"
+msgstr "Netvarkoma/-s/-i"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:195
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:217
@@ -11555,7 +11557,7 @@ msgstr "Naudoti „{etc_ethers}“"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:194
 msgid "Used"
-msgstr "Naudotas/-a"
+msgstr "Naudojama/-s/-i"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1549
 msgid "Used Key Slot"
@@ -12291,7 +12293,7 @@ msgstr "šešioliktainė užkoduota vertė"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1970
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/channel_analysis.js:333
 msgid "hidden"
-msgstr "paslėpta/-as"
+msgstr "paslėpta/-s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:74
 msgctxt "nft unit"
