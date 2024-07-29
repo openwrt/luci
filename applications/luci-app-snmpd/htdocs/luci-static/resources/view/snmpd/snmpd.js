@@ -407,6 +407,84 @@ return L.view.extend({
 		go.rmempty = false;
 	},
 
+	populateLogSettings: function(tab, s, data) {
+		var g, go, o;
+
+		o = s.taboption(tab, form.SectionValue, '__log__',
+			form.GridSection, tab, null,
+			_('Here you can configure Logging settings'));
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+
+		// File logging
+		go = g.option(form.Flag, 'log_file',
+			_('Enable logging to file'));
+		go.default = '0';
+		go.rmempty = false;
+		go.optional = false;
+
+		go = g.option(form.Value, 'log_file_path',
+			_('Path to log file'));
+		go.default = '/var/log/snmpd.log';
+		go.rmempty = false;
+		go.placeholder = '/var/log/snmpd.log';
+		go.depends('log_file', '1');
+
+		go = g.option(form.ListValue, 'log_file_priority',
+			_('Priority for file logging'),
+			_('Will log messages of selected priority and above.'));
+		go.default = 'info';
+		go.value('emerg', _('LOG_EMERG'));
+		go.value('alert', _('LOG_ALERT'));
+		go.value('crit', _('LOG_CRIT'));
+		go.value('err', _('LOG_ERR'));
+		go.value('warn', _('LOG_WARNING'));
+		go.value('notice', _('LOG_NOTICE'));
+		go.value('info', _('LOG_INFO'));
+		go.value('debug', _('LOG_DEBUG'));
+		go.depends('log_file', '1');
+
+		// Syslog
+		go = g.option(form.Flag, 'log_syslog',
+			_('Enable logging to syslog'));
+		go.default = '0';
+		go.rmempty = false;
+		go.optional = false;
+
+		go = g.option(form.ListValue, 'log_syslog_facility',
+			_('Syslog facility'));
+		go.default = 'info';
+		go.value('daemon', _('LOG_DAEMON'));
+		go.value('user', _('LOG_USER'));
+		go.value('local0', _('LOG_LOCAL0'));
+		go.value('local1', _('LOG_LOCAL1'));
+		go.value('local2', _('LOG_LOCAL2'));
+		go.value('local3', _('LOG_LOCAL3'));
+		go.value('local4', _('LOG_LOCAL4'));
+		go.value('local5', _('LOG_LOCAL5'));
+		go.value('local6', _('LOG_LOCAL6'));
+		go.value('local7', _('LOG_LOCAL7'));
+		go.depends('log_syslog', '1');
+
+		go = g.option(form.ListValue, 'log_syslog_priority',
+			_('Priority for syslog logging'),
+			_('Will log messages of selected priority and above.'));
+		go.default = 'i';
+		go.value('emerg', _('LOG_EMERG'));
+		go.value('alert', _('LOG_ALERT'));
+		go.value('crit', _('LOG_CRIT'));
+		go.value('err', _('LOG_ERR'));
+		go.value('warn', _('LOG_WARNING'));
+		go.value('notice', _('LOG_NOTICE'));
+		go.value('info', _('LOG_INFO'));
+		go.value('debug', _('LOG_DEBUG'));
+		go.depends('log_syslog', '1');
+
+	},
+
 	render: function(data) {
 		var m, s, o, g, go;
 
@@ -561,6 +639,9 @@ return L.view.extend({
 		this.populateTrapsSettings('trap_HostIP', 'Traps via IP-Address',
 			s, "HostIP", data);
 
+
+		s.tab("log", _("Logging"));
+		this.populateLogSettings("log", s, data);
 
 		return m.render();
 	}
