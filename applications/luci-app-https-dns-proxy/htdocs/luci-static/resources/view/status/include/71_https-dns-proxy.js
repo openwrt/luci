@@ -3,62 +3,18 @@
 "require uci";
 "require form";
 "require baseclass";
+"require https-dns-proxy.status as hdp";
 
-var pkg = {
-	get Name() {
-		return "https-dns-proxy";
-	},
-	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
-	},
-	templateToRegexp: function (template) {
-		return RegExp(
-			"^" +
-				template
-					.split(/(\{\w+\})/g)
-					.map((part) => {
-						let placeholder = part.match(/^\{(\w+)\}$/);
-						if (placeholder) return `(?<${placeholder[1]}>.*?)`;
-						else return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-					})
-					.join("") +
-				"$"
-		);
-	},
-};
-
-var getInitStatus = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getInitStatus",
-	params: ["name"],
-});
-
-var getPlatformSupport = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getPlatformSupport",
-	params: ["name"],
-});
-
-var getProviders = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getProviders",
-	params: ["name"],
-});
-
-var getRuntime = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getRuntime",
-	params: ["name"],
-});
+var pkg = hdp.pkg;
 
 return baseclass.extend({
 	title: _("HTTPS DNS Proxy Instances"),
 
 	load: function () {
 		return Promise.all([
-			getInitStatus(pkg.Name),
-			getProviders(pkg.Name),
-			getRuntime(pkg.Name),
+			hdp.getInitStatus(pkg.Name),
+			hdp.getProviders(pkg.Name),
+			hdp.getRuntime(pkg.Name),
 		]);
 	},
 
