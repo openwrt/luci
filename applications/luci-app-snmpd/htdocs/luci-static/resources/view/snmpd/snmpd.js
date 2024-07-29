@@ -96,8 +96,48 @@ return L.view.extend({
 			return ip_protocol;
 		};
 
-		go = g.option(form.Value, 'agentaddress', _('The address the agent should listen on'),
-			_('Eg: UDP:161, or UDP:10.5.4.3:161 to only listen on a given interface'));
+		go = g.option(form.Value, 'snmp_port', _('Port'));
+		go.rmempty = false;
+		go.default = '161';
+		go.datatype = 'port';
+		go.forcewrite = true;
+		go.cfgvalue = function(section_id) {
+			const port = uci.get('snmpd', section_id, 'snmp_port');
+			if (!port)
+				return port;
+
+				const s = uci.get_first('snmpd', 'agent');
+				const rawAddr = uci.get('snmpd', s['.name'], 'agentaddress');
+				if (!rawAddr)
+					return null;
+
+				const addr = rawAddr.toUpperCase();
+				const match = addr.match(/UDP6?:(\d+)/i);
+
+			return Array.isArray(match) && match.length > 1 ?
+				match[1] : null;
+		};
+
+		go.write = L.bind(function(protocol, section_id, value) {
+			const port = parseInt(value);
+			const ip_protocol = protocol.formvalue(section_id);
+
+			const addr = [];
+
+			if (ip_protocol.match(/ipv4/g))
+				addr.push('UDP:%d'.format(port));
+
+			if (ip_protocol.match(/ipv6/g))
+				addr.push('UDP6:%d'.format(port));
+
+			if (addr.length > 0) {
+				const s = uci.get_first('snmpd', 'agent');
+				if (s)
+					uci.set('snmpd', s['.name'], 'agentaddress', addr.join(','));
+			}
+
+			return form.Value.prototype.write.apply(this, [section_id, value]);
+		}, go, this.ip_protocol);
 
 		this.snmp_version = g.option(form.ListValue, 'snmp_version',
 			_('SNMP version'),
@@ -109,9 +149,29 @@ return L.view.extend({
 		this.snmp_version.value('v1/v2c/v3', _('SNMPv1, SNMPv2c and SNMPv3'));
 		this.snmp_version.value('v3', _('Only SNMPv3'));
 
-		go = g.option(form.Value,  'agentxsocket', _('The address the agent should allow AgentX connections to'),
-			_('This is only necessary if you have subagents using the agentX '
-			+ 'socket protocol. Eg: /var/run/agentx.sock'));
+		go = g.option(form.Value, '__agentxsocket', _('AgentX socket path'),
+			_('Empty for disable AgentX'));
+		go.rmempty = true;
+		go.forcewrite = true;
+		go.cfgvalue = function(section_id) {
+			const s = uci.get_first('snmpd', 'agentx');
+			let socket = uci.get('snmpd', s['.name'], 'agentxsocket');
+			if (!socket)
+				socket = this.default;
+			return socket;
+		};
+
+		go.remove = function(section_id) {
+			const s = uci.get_first('snmpd', 'agentx');
+			if (s)
+				s.remove('snmpd', s['.name']);
+		};
+
+		go.write = function(section_id, value) {
+			const s = uci.get_first('snmpd', 'agentx');
+			var sid = s ? s['.name'] : uci.add('snmpd', 'agentx');
+			uci.set('snmpd', sid, 'agentxsocket', value);
+		};
 
 		s.tab('advanced', _('Advanced Settings'));
 
