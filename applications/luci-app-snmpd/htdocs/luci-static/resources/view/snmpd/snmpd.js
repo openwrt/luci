@@ -205,6 +205,135 @@ return L.view.extend({
 		};
 	},
 
+	populateAdvancedSettings(tab, s, data) {
+		var o, g, go;
+
+		o = s.taboption("advanced", form.SectionValue, "__advanced__",
+			form.GridSection, "com2sec", null,
+			_("Here you can configure com2sec options"));
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+		g.modaltitle = "com2sec Settings";
+
+		go = g.option(form.Value, "secname", _("Secname"),
+			_("Arbitrary label for use in group settings"));
+		go.optional = false;
+		go.rmempty = false;
+
+		go = g.option(form.Value, "source", _("Source"),
+			_("Source describes a host or network"));
+		go.rmempty = false;
+
+		go = g.option(form.Value, "community", _("Community"),
+			_("The community name that is used"));
+		go.optional = false;
+		go.rmempty = false;
+
+		o = s.taboption("advanced", form.SectionValue, "__advanced__",
+			form.GridSection, "group", null,
+			_("Here you can configure group options"));
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+		g.modaltitle = "Group Settings";
+
+		go = g.option(form.Value, "group", _("Group"),
+			_("A group maps com2sec names to access names"));
+		go.optional = false;
+		go.rmempty = false;
+
+		go = g.option(form.Value, "version", _("Version"),
+			_("The used version for the group"));
+		go.value('v1', _('SNMPv1'));
+		go.value('v2c', _('SNMPv2c'));
+		go.value('usm', _('SNMPv3'));
+		go.optional = false;
+		go.rmempty = false;
+
+		go = g.option(form.Value, "secname", _("Secname"),
+			_("Here you define which secname is mapped to the group"));
+		go.optional = false;
+		go.rmempty = false;
+
+		o = s.taboption("advanced", form.SectionValue, "__advanced__",
+			form.GridSection, "access", null,
+			_("Here you can configure access options"));
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+		g.modaltitle = "Access Settings";
+
+		go = g.option(form.Value, "group", _("Group"),
+			_("The group that is mapped to the views (Read, Write, Notify)"));
+		go.optional = false;
+		go.rmempty = false;
+
+		go = g.option(form.Value, "context", _("Context"),
+			_("The context of the request"));
+		go.default = 'none';
+		go.modalonly = true;
+
+		go = g.option(form.Value, "version", _("Version"),
+			_("The used version for access configuration"));
+		go.value('any', _('Any version'));
+		go.value('v1', _('SNMPv1'));
+		go.value('v2c', _('SNMPv2c'));
+		go.value('usm', _('SNMPv3'));
+		go.optional = false;
+		go.rmempty = false;
+
+		go = g.option(form.Value, "level", _("Level"),
+			_("Level of security"));
+		go.value('noauth', _('No authentication (standard for SNMPv1/v2c)'));
+		go.value('auth', _('Authentication'));
+		go.value('priv', _('Authentication and encryption'));
+		go.default = 'noauth';
+		go.optional = false;
+		go.rmempty = false;
+
+		go = g.option(form.Value, "prefix", _("Prefix"),
+			_("Specification how context of requests is matched to context"));
+		go.value('exact', _('Exact'));
+		go.value('prefix', _('Prefix'));
+		go.optional = false;
+		go.default = 'exact';
+		go.rmempty = false;
+
+		go = g.option(form.Value, "read", _("Read"),
+			_("Read access modification for groups"));
+		go.value('all', _('All'));
+		go.value('none', _('None'));
+		go.default = 'none';
+		go.rmempty = false;
+		go.modalonly = true;
+		go.optional = false;
+
+		go = g.option(form.Value, "write", _("Write"),
+			_("Write access modification for groups"));
+		go.value('all', _('All'));
+		go.value('none', _('None'));
+		go.default = 'none';
+		go.rmempty = false;
+		go.modalonly = true;
+		go.optional = false;
+
+		go = g.option(form.Value, "notify", _("Notify"),
+			_("Notify access modification for groups"));
+		go.value('all', _('All'));
+		go.value('none', _('None'));
+		go.default = 'none';
+		go.rmempty = false;
+		go.modalonly = true;
+		go.optional = false;
+	},
+
 	populateV1V2CSettings: function(subsection, desc, access, s, data) {
 		var g, go, o, community, community_src, mode, mask;
 
@@ -419,7 +548,6 @@ return L.view.extend({
 		g.addremove = true;
 		g.nodescriptions = true;
 
-		// File logging
 		go = g.option(form.Flag, 'log_file',
 			_('Enable logging to file'));
 		go.default = '0';
@@ -447,7 +575,6 @@ return L.view.extend({
 		go.value('debug', _('LOG_DEBUG'));
 		go.depends('log_file', '1');
 
-		// Syslog
 		go = g.option(form.Flag, 'log_syslog',
 			_('Enable logging to syslog'));
 		go.default = '0';
@@ -482,7 +609,6 @@ return L.view.extend({
 		go.value('info', _('LOG_INFO'));
 		go.value('debug', _('LOG_DEBUG'));
 		go.depends('log_syslog', '1');
-
 	},
 
 	render: function(data) {
@@ -502,125 +628,7 @@ return L.view.extend({
 		this.populateGlobalSettings('general', s, data);
 
 		s.tab("advanced", _("Advanced Settings"));
-
-		o = s.taboption("advanced", form.SectionValue, "__advanced__",
-			form.GridSection, "com2sec", null,
-			_("Here you can configure com2sec options"));
-
-		g = o.subsection;
-		g.anonymous = true;
-		g.addremove = true;
-
-		go = g.option(form.Value, "secname", _("Secname"),
-			_("Arbitrary label for use in group settings"));
-		go.optional = false;
-		go.rmempty = false;
-
-		go = g.option(form.Value, "source", _("Source"),
-			_("Source describes a host or network"));
-		go.rmempty = false;
-
-		go = g.option(form.Value, "community", _("Community"),
-			_("The community name that is used"));
-		go.optional = false;
-		go.rmempty = false;
-
-		o = s.taboption("advanced", form.SectionValue, "__advanced__",
-			form.GridSection, "group", null,
-			_("Here you can configure group options"));
-
-		g = o.subsection;
-		g.anonymous = true;
-		g.addremove = true;
-
-		go = g.option(form.Value, "group", _("Group"),
-			_("A group maps com2sec names to access names"));
-		go.optional = false;
-		go.rmempty = false;
-
-		go = g.option(form.Value, "version", _("Version"),
-			_("The used version for the group"));
-		go.value("v1", _("SNMPv1"));
-		go.value("v2c" _("SNMPv2c"));
-		go.value("usm", _("SNMPv3"));
-		go.optional = false;
-		go.rmempty = false;
-
-		go = g.option(form.Value, "secname", _("Secname"),
-			_("Here you define which secname is mapped to the group"));
-		go.optional = false;
-		go.rmempty = false;
-
-		o = s.taboption("advanced", form.SectionValue, "__advanced__",
-			form.GridSection, "access", null,
-			_("Here you can configure access options"));
-
-		g = o.subsection;
-		g.anonymous = true;
-		g.addremove = true;
-
-		go = g.option(form.Value, "group", _("Group"),
-			_("The group that is mapped to the views (Read, Write, Notify)"));
-		go.optional = false;
-		go.rmempty = false;
-
-		go = g.option(form.Value, "context", _("Context"),
-			_("The context of the request"));
-		go.default = "none";
-		go.modalonly = true;
-
-		go = g.option(form.Value, "version", _("Version"),
-			_("The used version for access configuration"));
-		go.value("any", _("Any version"));
-		go.value("v1", _("SNMPv1"));
-		go.value("v2c" _("SNMPv2c"));
-		go.value("usm", _("SNMPv3"));
-		go.optional = false;
-		go.rmempty = false;
-
-		go = g.option(form.Value, "level", _("Level"),
-			_("Level of security"));
-		go.value("noauth", _("No authentication (standard for SNMPv1/v2c)"));
-		go.value("auth", _("Authentication"));
-		go.value("priv", _("Authentication and encryption"));
-		go.default = "noauth";
-		go.optional = false;
-		go.rmempty = false;
-
-		go = g.option(form.Value, "prefix", _("Prefix"),
-			_("Specification how context of requests is matched to context"));
-		go.value("exact", _("Exact"));
-		go.value("prefix", _("Prefix"));
-		go.optional = false;
-		go.default = "excact";
-		go.rmempty = false;
-
-		go = g.option(form.Value, "read", _("Read"),
-			_("Read access modification for groups"));
-		go.value("all", _("All"));
-		go.value("none", _("None"));
-		go.default = "none";
-		go.rmempty = false;
-		go.modalonly = true;
-		go.optional = false;
-
-		go = g.option(form.Value, "write", _("Write"),
-			_("Write access modification for groups"));
-		go.value("all", _("All"));
-		go.value("none", _("None"));
-		go.default = "none";
-		go.rmempty = false;
-		go.modalonly = true;
-		go.optional = false;
-
-		go = g.option(form.Value, "notify", _("Notify"),
-			_("Notify access modification for groups"));
-		go.value("all", _("All"));
-		go.value("none", _("None"));
-		go.default = "none";
-		go.rmempty = false;
-		go.modalonly = true;
-		go.optional = false;
+		this.populateAdvancedSettings('advanced', s, data);
 
 		s.tab("v1/v2c", _("SNMPv1/SNMPv2c"));
 		this.populateV1V2CSettings("access_default",
