@@ -16,10 +16,92 @@ return L.view.extend({
 	},
 
 	__init__: function() {
-		this.super('__init__', arguments);
+		this.super("__init__", arguments);
 
+		this.ro_community = null;
+		this.ro_community_src = null;
+		this.rw_community = null;
+		this.rw_community_src = null;
+		this.oid = null;
 		this.ip_protocol = null;
 		this.snmp_version = null;
+	},
+
+	populateV1V2CSettings: function(subsection, desc, access, s, data) {
+		var g, go, o, community, community_src, mode, mask;
+
+		o = s.taboption("v1/v2c", form.SectionValue, "__v1/v2c__",
+			form.GridSection, subsection, null, desc);
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+
+		go = g.option(form.ListValue, "Mode", _("Access Control"),
+			_("Access restriction to readonly or Read/Write"));
+		go.value("rwcommunity", _("Read/Write"));
+		go.value("rocommunity", _("Readonly"));
+
+		community = g.option(form.Value, "CommunityName",
+			_("Community Name"),
+			_("Community that is used for SNMP"));
+		community.datatype = "string";
+		community.default = "";
+		community.optional = false;
+		community.rmempty = false;
+		if(access == null) {
+			if (uci.get("snmpd", "access_default", "Mode") === "rwcommunity") {
+				this.rw_community_src = "default";
+			} else {
+				this.ro_community_src = "default";
+			}
+		}
+
+		if (access !== null) {
+			community_src = g.option(form.Value, access,
+				_("Community source"),
+				_("Trusted source for SNMP read community access (hostname or IP)"));
+			community_src.value("default", _("any (default)"));
+			community_src.value("localhost", "localhost");
+			community_src.default = "default";
+			community_src.optional = false;
+			community_src.rmempty = false;
+			community_src.datatype = "host(0)";
+
+			if (access == "HostIP") {
+				mask = g.option(form.Value, "IPMask",
+					_("IPMask"),
+					_("Prefix"));
+				mask.rmempty = false;
+				mask.datatype = "and(ip6prefix, ip4prefix)";
+				mask.size = 2;
+			}
+		}
+
+		go = g.option(form.ListValue, "RestrictOID",
+			_("OID-Restriction"),
+			_("Restriction to specific OID"));
+		go.value("no", _("No"));
+		go.value("yes", _("Yes"));
+		go.default = "no";
+		go.optional = false;
+		go.rmempty = false;
+
+		this.oid = g.option(form.Value,
+			"RestrictedOID",
+			_("OID"),
+			_("Restrict to the following OID node/branch"));
+		this.oid.datatype = "string";
+		this.oid.depends("RestrictOID", "yes");
+
+		if (go === "rocommunity") {
+			this.ro_community = community;
+			this.ro_community_src = community_src;
+		} else {
+			this.rw_community = community;
+			this.rw_community_src = community_src;
+		}
 	},
 
 	render: function(data) {
@@ -60,24 +142,24 @@ return L.view.extend({
 		go.default = "0";
 		go.rmempty = false;
 
-		this.ip_protocol = g.option(form.ListValue, 'ip_protocol', _('IP version'));
-		this.ip_protocol.value('ipv4', _('Only IPv4'));
-		this.ip_protocol.value('ipv6', _('Only IPv6'));
-		this.ip_protocol.value('ipv4/ipv6', _('IPv4 and IPv6'));
+		this.ip_protocol = g.option(form.ListValue, "ip_protocol", _("IP version"));
+		this.ip_protocol.value("ipv4", _("Only IPv4"));
+		this.ip_protocol.value("ipv6", _("Only IPv6"));
+		this.ip_protocol.value("ipv4/ipv6", _("IPv4 and IPv6"));
 		this.ip_protocol.optional = false;
 		this.ip_protocol.forcewrite = true;
 		this.ip_protocol.default = "ipv4";
 		this.ip_protocol.rmempty = false;
 
 		this.ip_protocol.cfgvalue = function(section_id) {
-			var ip_protocol = uci.get('snmpd', section_id, 'ip_protocol');
+			var ip_protocol = uci.get("snmpd", section_id, "ip_protocol");
 
 			if (!ip_protocol) {
-				var s = uci.get_first('snmpd', 'agent');
+				var s = uci.get_first("snmpd", "agent");
 				if (!s)
 					return null;
 
-				var addr = uci.get('snmpd', s['.name'], 'agentaddress');
+				var addr = uci.get("snmpd", s[".name"], "agentaddress");
 				var p = [];
 
 				if (!addr)
@@ -86,12 +168,12 @@ return L.view.extend({
 				addr = addr.toUpperCase();
 
 				if (addr.match(/UDP:\d+/g))
-					p.push('ipv4');
+					p.push("ipv4");
 
 				if (addr.match(/UDP6:\d+/g))
-					p.push('ipv6');
+					p.push("ipv6");
 
-				ip_protocol = p.join('/');
+				ip_protocol = p.join("/");
 			}
 
 			return ip_protocol;
@@ -99,14 +181,14 @@ return L.view.extend({
 
 		go = g.option(form.Value, "snmp_port", _("Port"));
 		go.rmempty = false;
-		go.default = '161';
-		go.datatype = 'port';
+		go.default = "161";
+		go.datatype = "port";
 		go.forcewrite = true;
 		go.cfgvalue = function(section_id) {
-			var port = uci.get('snmpd', section_id, 'snmp_port');
+			var port = uci.get("snmpd", section_id, "snmp_port");
 			if (!port) {
-				var s = uci.get_first('snmpd', 'agent');
-				var addr = uci.get('snmpd', s['.name'], 'agentaddress');
+				var s = uci.get_first("snmpd", "agent");
+				var addr = uci.get("snmpd", s[".name"], "agentaddress");
 
 				if (!addr)
 					return null;
@@ -126,52 +208,52 @@ return L.view.extend({
 			var ip_protocol = protocol.formvalue(section_id);
 
 			if (ip_protocol.match(/ipv4/g))
-				addr.push('UDP:%d'.format(port));
+				addr.push("UDP:%d".format(port));
 
 			if (ip_protocol.match(/ipv6/g))
-				addr.push('UDP6:%d'.format(port));
+				addr.push("UDP6:%d".format(port));
 
 			if (addr.length > 0) {
-				var s = uci.get_first('snmpd', 'agent');
+				var s = uci.get_first("snmpd", "agent");
 				if (s)
-					uci.set('snmpd', s['.name'], 'agentaddress', addr.join(','));
+					uci.set("snmpd", s[".name"], "agentaddress", addr.join(","));
 			}
 
 			return form.Value.prototype.write.apply(this, [section_id, value]);
 		}, go, this.ip_protocol);
 
-		this.snmp_version = g.option(form.ListValue, 'snmp_version',
-			_('SNMP version'),
-			_('SNMP version used to monitor and control the device'));
-		this.snmp_version.default = 'v1/v2c';
+		this.snmp_version = g.option(form.ListValue, "snmp_version",
+			_("SNMP version"),
+			_("SNMP version used to monitor and control the device"));
+		this.snmp_version.default = "v1/v2c";
 		this.snmp_version.rmempty = false;
 		this.snmp_version.forcewrite = true;
-		this.snmp_version.value('v1/v2c', _('SNMPv1 and SNMPv2c'));
-		this.snmp_version.value('v1/v2c/v3', _('SNMPv1, SNMPv2c and SNMPv3'));
-		this.snmp_version.value('v3', _('Only SNMPv3'));
+		this.snmp_version.value("v1/v2c", _("SNMPv1 and SNMPv2c"));
+		this.snmp_version.value("v1/v2c/v3", _("SNMPv1, SNMPv2c and SNMPv3"));
+		this.snmp_version.value("v3", _("Only SNMPv3"));
 
 		go = g.option(form.Value, "__agentxsocket", _("AgentX socket path"),
 			_("Empty for disable AgentX"));
 		go.rmempty = true;
 		go.forcewrite = true;
 		go.cfgvalue = function(section_id) {
-			var s = uci.get_first('snmpd', 'agentx');
-			var socket = uci.get('snmpd', s['.name'], 'agentxsocket');
+			var s = uci.get_first("snmpd", "agentx");
+			var socket = uci.get("snmpd", s[".name"], "agentxsocket");
 			if (!socket)
 				socket = this.default;
 			return socket;
 		};
 
 		go.remove = function(section_id) {
-			var s = uci.get_first('snmpd', 'agentx');
+			var s = uci.get_first("snmpd", "agentx");
 			if (s)
-				s.remove('snmpd', s['.name']);
+				s.remove("snmpd", s[".name"]);
 		};
 
 		go.write = function(section_id, value) {
-			var s = uci.get_first('snmpd', 'agentx');
-			var sid = s ? s['.name'] : uci.add('snmpd', 'agentx');
-			uci.set('snmpd', sid, 'agentxsocket', value);
+			var s = uci.get_first("snmpd", "agentx");
+			var sid = s ? s[".name"] : uci.add("snmpd", "agentx");
+			uci.set("snmpd", sid, "agentxsocket", value);
 		};
 
 		s.tab("advanced", _("Advanced Settings"));
@@ -213,9 +295,9 @@ return L.view.extend({
 
 		go = g.option(form.Value, "version", _("Version"),
 			_("The used version for the group"));
-		go.value('v1', _('SNMPv1'));
-		go.value('v2c' _('SNMPv2c'));
-		go.value('usm', _('SNMPv3'));
+		go.value("v1", _("SNMPv1"));
+		go.value("v2c" _("SNMPv2c"));
+		go.value("usm", _("SNMPv3"));
 		go.optional = false;
 		go.rmempty = false;
 
@@ -239,63 +321,66 @@ return L.view.extend({
 
 		go = g.option(form.Value, "context", _("Context"),
 			_("The context of the request"));
-		go.default = 'none';
+		go.default = "none";
 		go.modalonly = true;
 
 		go = g.option(form.Value, "version", _("Version"),
 			_("The used version for access configuration"));
-		go.value('any', _('Any version'));
-		go.value('v1', _('SNMPv1'));
-		go.value('v2c' _('SNMPv2c'));
-		go.value('usm', _('SNMPv3'));
+		go.value("any", _("Any version"));
+		go.value("v1", _("SNMPv1"));
+		go.value("v2c" _("SNMPv2c"));
+		go.value("usm", _("SNMPv3"));
 		go.optional = false;
 		go.rmempty = false;
 
 		go = g.option(form.Value, "level", _("Level"),
 			_("Level of security"));
-		go.value('noauth', _('No authentication (standard for SNMPv1/v2c)'));
-		go.value('auth', _('Authentication'));
-		go.value('priv', _('Authentication and encryption'));
-		go.default = 'noauth';
+		go.value("noauth", _("No authentication (standard for SNMPv1/v2c)"));
+		go.value("auth", _("Authentication"));
+		go.value("priv", _("Authentication and encryption"));
+		go.default = "noauth";
 		go.optional = false;
 		go.rmempty = false;
 
 		go = g.option(form.Value, "prefix", _("Prefix"),
 			_("Specification how context of requests is matched to context"));
-		go.value('exact', _('Exact'));
-		go.value('prefix', _('Prefix'));
+		go.value("exact", _("Exact"));
+		go.value("prefix", _("Prefix"));
 		go.optional = false;
-		go.default = 'excact';
+		go.default = "excact";
 		go.rmempty = false;
 
 		go = g.option(form.Value, "read", _("Read"),
 			_("Read access modification for groups"));
-		go.value('all', _('All'));
-		go.value('none', _('None'));
-		go.default = 'none';
+		go.value("all", _("All"));
+		go.value("none", _("None"));
+		go.default = "none";
 		go.rmempty = false;
 		go.modalonly = true;
 		go.optional = false;
 
 		go = g.option(form.Value, "write", _("Write"),
 			_("Write access modification for groups"));
-		go.value('all', _('All'));
-		go.value('none', _('None'));
-		go.default = 'none';
+		go.value("all", _("All"));
+		go.value("none", _("None"));
+		go.default = "none";
 		go.rmempty = false;
 		go.modalonly = true;
 		go.optional = false;
 
 		go = g.option(form.Value, "notify", _("Notify"),
 			_("Notify access modification for groups"));
-		go.value('all', _('All'));
-		go.value('none', _('None'));
-		go.default = 'none';
+		go.value("all", _("All"));
+		go.value("none", _("None"));
+		go.default = "none";
 		go.rmempty = false;
 		go.modalonly = true;
 		go.optional = false;
 
-		s.tab("v2/v2c", _("SNMPv1/SNMPv2c"));
+		s.tab("v1/v2c", _("SNMPv1/SNMPv2c"));
+		this.populateV1V2CSettings("access_default", _("Communities for any hosts"), null, s, data);
+		this.populateV1V2CSettings("access_HostName", _("Communities via hostname"), "HostName", s, data);
+		this.populateV1V2CSettings("access_HostIP", _("Communities via IP-Address range"), "HostIP", s, data);
 
 		s.tab("v3", _("SNMPv3"));
 
