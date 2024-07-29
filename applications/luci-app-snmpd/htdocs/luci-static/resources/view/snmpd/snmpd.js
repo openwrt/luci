@@ -18,6 +18,11 @@ return L.view.extend({
 	__init__: function() {
 		this.super('__init__', arguments);
 
+		this.ro_community = null;
+		this.ro_community_src = null;
+		this.rw_community = null;
+		this.rw_community_src = null;
+		this.oid = null;
 		this.ip_protocol = null;
 		this.snmp_version = null;
 	},
@@ -67,6 +72,84 @@ return L.view.extend({
 		go.cfgvalue = snmpd_sys_cfgvalue;
 		go.write = snmpd_sys_write;
 		go.remove = snmpd_sys_remove;
+	},
+
+	populateV1V2CSettings: function(subsection, desc, access, s) {
+		let g, go, o, community, community_src, mode, mask;
+
+		o = s.taboption('v1/v2c', form.SectionValue, '__v1/v2c__',
+			form.GridSection, subsection, null, desc);
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+		g.modaltitle = desc;
+
+		go = g.option(form.ListValue, 'Mode', _('Access Control'),
+			_('Access restriction to readonly or Read/Write'));
+		go.value('rwcommunity', _('Read/Write'));
+		go.value('rocommunity', _('Readonly'));
+
+		community = g.option(form.Value, 'CommunityName',
+			_('Community Name'),
+			_('Community that is used for SNMP'));
+		community.datatype = 'string';
+		community.default = '';
+		community.optional = false;
+		community.rmempty = false;
+		if(access == null) {
+			if (uci.get('snmpd', 'access_default', 'Mode') === 'rwcommunity') {
+				this.rw_community_src = 'default';
+			} else {
+				this.ro_community_src = 'default';
+			}
+		}
+
+		if (access !== null) {
+			community_src = g.option(form.Value, access,
+				_('Community source'),
+				_('Trusted source for SNMP read community access (hostname or IP)'));
+			community_src.value('default', _('any (default)'));
+			community_src.value('localhost', _('localhost'));
+			community_src.default = 'default';
+			community_src.optional = false;
+			community_src.rmempty = false;
+			community_src.datatype = 'host(0)';
+
+			if (access == 'HostIP') {
+				mask = g.option(form.Value, 'IPMask',
+					_('IPMask'),
+					_('Prefix'));
+				mask.rmempty = false;
+				mask.datatype = 'and(ip6prefix, ip4prefix)';
+				mask.size = 2;
+			}
+		}
+
+		go = g.option(form.ListValue, 'RestrictOID',
+			_('OID-Restriction'),
+			_('Restriction to specific OID'));
+		go.value('no', _('No'));
+		go.value('yes', _('Yes'));
+		go.default = 'no';
+		go.optional = false;
+		go.rmempty = false;
+
+		this.oid = g.option(form.Value,
+			'RestrictedOID',
+			_('OID'),
+			_('Restrict to the following OID node/branch'));
+		this.oid.datatype = 'string';
+		this.oid.depends('RestrictOID', 'yes');
+
+		if (go === 'rocommunity') {
+			this.ro_community = community;
+			this.ro_community_src = community_src;
+		} else {
+			this.rw_community = community;
+			this.rw_community_src = community_src;
+		}
 	},
 
 	render: function(data) {
@@ -204,6 +287,14 @@ return L.view.extend({
 		go.rmempty = false;
 		go.modalonly = true;
 		go.optional = false;
+
+		s.tab('v1/v2c', _('SNMPv1/SNMPv2c'));
+		this.populateV1V2CSettings('access_default',
+			_('Communities for any hosts'), null, s);
+		this.populateV1V2CSettings('access_HostName',
+			_('Communities via hostname'), 'HostName', s);
+		this.populateV1V2CSettings('access_HostIP',
+			_('Communities via IP-Address range'), 'HostIP', s);
 
 		return m.render();
 	},
