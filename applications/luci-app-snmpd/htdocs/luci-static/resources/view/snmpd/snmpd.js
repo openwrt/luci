@@ -2,11 +2,27 @@
 // Karl Palsson <karlp@etactica.com> 2021
 'use strict';
 'require form';
+'require uci';
+'require fs';
+'require rpc';
 'require ui';
 'require view';
 
 return L.view.extend({
-	render: function() {
+	load: function() {
+		return Promise.all([
+			uci.load('snmpd'),
+		]);
+	},
+
+	__init__: function() {
+		this.super('__init__', arguments);
+
+		this.ip_protocol = null;
+		this.snmp_version = null;
+	},
+
+	render: function(data) {
 		let m, s, o, g, go;
 
 		m = new form.Map('snmpd',
@@ -44,8 +60,54 @@ return L.view.extend({
 		go.default = '0';
 		go.rmempty = false;
 
+		this.ip_protocol = g.option(form.ListValue, 'ip_protocol', _('IP version'));
+		this.ip_protocol.value('ipv4', _('Only IPv4'));
+		this.ip_protocol.value('ipv6', _('Only IPv6'));
+		this.ip_protocol.value('ipv4/ipv6', _('IPv4 and IPv6'));
+		this.ip_protocol.optional = false;
+		this.ip_protocol.forcewrite = true;
+		this.ip_protocol.default = 'ipv4';
+		this.ip_protocol.rmempty = false;
+
+		this.ip_protocol.cfgvalue = function(section_id) {
+			let ip_protocol = uci.get('snmpd', section_id, 'ip_protocol');
+
+			if (!ip_protocol) {
+				const s = uci.get_first('snmpd', 'agent');
+				if (!s)
+					return null;
+
+				const rawAddr = uci.get('snmpd', s['.name'], 'agentaddress');
+				if (!rawAddr)
+					return null;
+
+				const addr = rawAddr.toUpperCase();
+				const p = [];
+
+				if (addr.match(/UDP:\d+/g))
+					p.push('ipv4');
+
+				if (addr.match(/UDP6:\d+/g))
+					p.push('ipv6');
+
+				ip_protocol = p.join('/');
+			}
+
+			return ip_protocol;
+		};
+
 		go = g.option(form.Value, 'agentaddress', _('The address the agent should listen on'),
 			_('Eg: UDP:161, or UDP:10.5.4.3:161 to only listen on a given interface'));
+
+		this.snmp_version = g.option(form.ListValue, 'snmp_version',
+			_('SNMP version'),
+			_('SNMP version used to monitor and control the device'));
+		this.snmp_version.default = 'v1/v2c';
+		this.snmp_version.rmempty = false;
+		this.snmp_version.forcewrite = true;
+		this.snmp_version.value('v1/v2c', _('SNMPv1 and SNMPv2c'));
+		this.snmp_version.value('v1/v2c/v3', _('SNMPv1, SNMPv2c and SNMPv3'));
+		this.snmp_version.value('v3', _('Only SNMPv3'));
 
 		go = g.option(form.Value,  'agentxsocket', _('The address the agent should allow AgentX connections to'),
 			_('This is only necessary if you have subagents using the agentX '
