@@ -276,6 +276,67 @@ return L.view.extend({
 		go.rmempty = false;
 	},
 
+	populateLogSettings: function(tab, s) {
+		let g, go, o;
+
+		o = s.taboption(tab, form.SectionValue, '__log__',
+			form.GridSection, tab, null,
+			_('Here you can configure Logging settings'));
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+
+		go = g.option(form.Flag, 'file',
+			_('Enable logging to file'));
+		go.default = '0';
+		go.rmempty = false;
+		go.optional = false;
+
+		go = g.option(form.Value, 'log_file',
+			_('Path to log file'));
+		go.default = '/var/log/snmpd.log';
+		go.rmempty = false;
+		go.placeholder = '/var/log/snmpd.log';
+		go.depends('file', '1');
+
+		go = g.option(form.ListValue, 'log_file_priority',
+			_('Priority for file logging'),
+			_('Will log messages of selected priority and above.'));
+		go.default = 'i';
+		go.value('!', 'LOG_EMERG');
+		go.value('a', 'LOG_ALERT');
+		go.value('c', 'LOG_CRIT');
+		go.value('e', 'LOG_ERR');
+		go.value('w', 'LOG_WARNING');
+		go.value('n', 'LOG_NOTICE');
+		go.value('i', 'LOG_INFO');
+		go.value('d', 'LOG_DEBUG');
+		go.depends('file', '1');
+
+		go = g.option(form.Flag, 'log_syslog',
+			_('Enable logging to syslog'));
+		go.default = '0';
+		go.rmempty = false;
+		go.optional = false;
+
+		go = g.option(form.ListValue, 'log_syslog_facility',
+			_('Syslog facility'));
+		go.default = 'd';
+		go.value('d', 'LOG_DAEMON');
+		go.value('u', 'LOG_USER');
+		go.value('0', 'LOG_LOCAL0');
+		go.value('1', 'LOG_LOCAL1');
+		go.value('2', 'LOG_LOCAL2');
+		go.value('3', 'LOG_LOCAL3');
+		go.value('4', 'LOG_LOCAL4');
+		go.value('5', 'LOG_LOCAL5');
+		go.value('6', 'LOG_LOCAL6');
+		go.value('7', 'LOG_LOCAL7');
+		go.depends('log_syslog', '1');
+	},
+
 	render: function(data) {
 		let m, s, o, g, go;
 
@@ -428,6 +489,9 @@ return L.view.extend({
 			s, 'HostName');
 		this.populateTrapsSettings('trap_HostIP', 'Traps via IP-Address',
 			s, 'HostIP');
+
+		s.tab('log', _('Logging'));
+		this.populateLogSettings('log', s);
 
 		return m.render();
 	},
