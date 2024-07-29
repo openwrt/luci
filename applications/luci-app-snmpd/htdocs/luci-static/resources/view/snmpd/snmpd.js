@@ -242,7 +242,7 @@ return L.view.extend({
 				_("Community source"),
 				_("Trusted source for SNMP read community access (hostname or IP)"));
 			community_src.value("default", _("any (default)"));
-			community_src.value("localhost", "localhost");
+			community_src.value("localhost", _("localhost"));
 			community_src.default = "default";
 			community_src.optional = false;
 			community_src.rmempty = false;
@@ -281,6 +281,81 @@ return L.view.extend({
 			this.rw_community = community;
 			this.rw_community_src = community_src;
 		}
+	},
+
+	populateV3Settings: function(tab, s, data){
+		var g, go, o;
+
+		o = s.taboption(tab, form.SectionValue, '__v3__',
+			form.GridSection, 'v3',
+			null, _('Here you can configure SNMPv3 settings'));
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+		g.modaltitle = "SNMPv3";
+
+		go = g.option(form.Value, 'username',
+			_('username'),
+			_('Set username to access SNMP'));
+		go.rmempty = false;
+		go.optional = false;
+		go.modalonly = true;
+
+		go = g.option(form.Flag, 'allow_write',
+			_('Allow write'));
+		go.rmempty = false;
+		go.default = '0';
+
+		go = g.option(form.ListValue, 'auth_type',
+			_('SNMPv3 authentication type'));
+		go.value('', _('none'));
+		go.value('SHA', _('SHA'));
+		go.value('MD5', _('MD5'));
+		go.rmempty = false;
+		go.default = 'SHA';
+
+		// SNMPv3 auth pass
+		go = g.option(form.Value, 'auth_pass',
+			_('SNMPv3 authentication passphrase'));
+		go.password = true;
+		go.rmempty = false;
+		go.modalonly = true;
+		go.optional = false;
+		go.depends({'auth_type': "", "!reverse": true});
+
+		// SNMPv3 privacy/encryption type
+		go = g.option(form.ListValue, 'privacy_type',
+			_('SNMPv3 encryption type'));
+		go.value('', _('none'));
+		go.value('AES', _('AES'));
+		go.value('DES', _('DES'));
+		go.rmempty = false;
+		go.default = 'AES';
+
+		// SNMPv3 privacy/encryption pass
+		go = g.option(form.Value, 'privacy_pass',
+			_('SNMPv3 encryption passphrase'));
+		go.password = true;
+		go.rmempty = false;
+		go.modalonly = true;
+		go.optional = false;
+		go.depends({'privacy_type': "", "!reverse": true});
+
+		go = g.option(form.ListValue, 'RestrictOID',
+			_('OID-Restriction'));
+		go.value('no', _('No'));
+		go.value('yes', _('Yes'));
+		go.default = 'no';
+		go.optional = false;
+		go.rmempty = false;
+
+		this.oid = g.option(form.Value,
+			'RestrictedOID',
+			_('OID'));
+		this.oid.datatype = 'string';
+		this.oid.depends('RestrictOID', 'yes');
 	},
 
 	render: function(data) {
@@ -426,6 +501,7 @@ return L.view.extend({
 		this.populateV1V2CSettings("access_HostIP", _("Communities via IP-Address range"), "HostIP", s, data);
 
 		s.tab("v3", _("SNMPv3"));
+		this.populateV3Settings('v3', s, data);
 
 		s.tab("traps", _("Traps", "SNMP"));
 
