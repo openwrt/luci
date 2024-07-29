@@ -11,34 +11,7 @@
 "require view";
 "require https-dns-proxy.status as hdp";
 
-var pkg = {
-	get Name() {
-		return "https-dns-proxy";
-	},
-
-	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
-	},
-
-	templateToRegexp: function (template) {
-		return RegExp(
-			"^" +
-				template
-					.split(/(\{\w+\})/g)
-					.map((part) => {
-						let placeholder = part.match(/^\{(\w+)\}$/);
-						if (placeholder) return `(?<${placeholder[1]}>.*?)`;
-						else return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-					})
-					.join("") +
-				"$"
-		);
-	},
-
-	templateToResolver: function (template, args) {
-		return template.replace(/{(\w+)}/g, (_, v) => args[v]);
-	},
-};
+var pkg = hdp.pkg;
 
 return view.extend({
 	load: function () {
