@@ -38,9 +38,40 @@ return L.view.extend({
 		g.anonymous = true;
 		g.addremove = false;
 
-		go = g.option(form.Value, "sysLocation", "sysLocation");
-		go = g.option(form.Value, "sysContact", "sysContact");
-		go = g.option(form.Value, "sysName", "sysName");
+		function snmpd_sys_cfgvalue(section) {
+			var s = uci.get_first('snmpd', 'system');
+			return s && uci.get('snmpd', s['.name'], this.option || '');
+		};
+
+		function snmpd_sys_remove(section) {
+			var s = uci.get_first('snmpd', 'system');
+			if (s)
+				uci.unset('snmpd', s['.name'], this.option);
+		};
+
+		function snmpd_sys_write(section, value) {
+			var s = uci.get_first('snmpd', 'system');
+			var sid = s ? s['.name'] : uci.add('snmpd', 'system');
+			uci.set('snmpd', sid, this.option, value);
+		};
+
+		go = g.option(form.Value, "sysName", _("Name"),
+			_("System Name"));
+		go.cfgvalue = snmpd_sys_cfgvalue;
+		go.write = snmpd_sys_write;
+		go.remove = snmpd_sys_remove;
+
+		go = g.option(form.Value, "sysContact", _("Contact"),
+			_('System contact'));
+		go.cfgvalue = snmpd_sys_cfgvalue;
+		go.write = snmpd_sys_write;
+		go.remove = snmpd_sys_remove;
+		
+		go = g.option(form.Value, "sysLocation", _("Location"),
+			_('System location'));
+		go.cfgvalue = snmpd_sys_cfgvalue;
+		go.write = snmpd_sys_write;
+		go.remove = snmpd_sys_remove;
 	},
 	
 	populateGlobalSettings: function(tab, s, data) {
