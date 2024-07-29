@@ -13,8 +13,16 @@ var pkg = {
 	get Name() {
 		return "https-dns-proxy";
 	},
+	get ReadmeCompat() {
+		return "";
+	},
 	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
+		return (
+			"https://docs.openwrt.melmac.net/" +
+			pkg.Name +
+			"/" +
+			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "")
+		);
 	},
 	templateToRegexp: function (template) {
 		return RegExp(
@@ -29,6 +37,9 @@ var pkg = {
 					.join("") +
 				"$"
 		);
+	},
+	templateToResolver: function (template, args) {
+		return template.replace(/{(\w+)}/g, (_, v) => args[v]);
 	},
 };
 
@@ -428,6 +439,8 @@ RPC.on("setInitAction", function (reply) {
 
 return L.Class.extend({
 	status: status,
+	pkg: pkg,
+	getInitStatus: getInitStatus,
 	getPlatformSupport: getPlatformSupport,
 	getProviders: getProviders,
 	getRuntime: getRuntime,
