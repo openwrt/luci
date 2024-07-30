@@ -582,7 +582,7 @@ function resolve_firstchild(node, session, login_allowed, ctx) {
 			session = is_authenticated(node.auth);
 
 		let cacl = child.depends?.acl;
-		let login = login_allowed || child.auth?.login;
+		let login = !session && (login_allowed || child.auth?.login);
 
 		if (login || check_acl_depends(cacl, session?.acls?.["access-group"]) != null) {
 			if (child.title && type(child.action) == "object") {
