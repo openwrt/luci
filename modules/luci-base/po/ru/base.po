@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2024-06-07 15:02+0000\n"
+"PO-Revision-Date: 2024-07-29 21:35+0000\n"
 "Last-Translator: st7105 <st7105@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/>"
 "\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -1173,7 +1173,7 @@ msgstr "Применить без проверки"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4742
 msgid "Apply, reverting in case of connectivity loss"
-msgstr ""
+msgstr "Применять, возвращаясь в случае потери соединения"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4683
 msgid "Applying configuration changes… %ds"
@@ -1784,6 +1784,10 @@ msgid ""
 "inhibit access to this device. Any IP change requires <strong>connecting to "
 "the new IP</strong> within %d seconds to retain the changes."
 msgstr ""
+"В существующее соединение были внесены изменения через \"%h\". Это может "
+"запретить доступ к этому устройству. Любое изменение IP требует "
+"<strong>подключения к новому IP</strong> в течение %d секунд, чтобы "
+"сохранить изменения."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4808
 msgid "Changes have been reverted."
@@ -3338,7 +3342,7 @@ msgstr "Включено (все процессоры)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1849
 msgid "Enabled (workaround mode)"
-msgstr ""
+msgstr "Включено (режим обходного пути)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:592
 msgid "Enables IGMP snooping on this bridge"
@@ -3839,7 +3843,7 @@ msgstr "Назначить CCMP (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1241
 msgid "Force CCMP-256 (AES)"
-msgstr ""
+msgstr "Принудительно CCMP-256 (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:731
 msgid "Force DHCP on this network even if another server is detected."
@@ -3847,11 +3851,11 @@ msgstr "Запускать DHCP в этой сети, даже если в не�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1242
 msgid "Force GCMP (AES)"
-msgstr ""
+msgstr "Принудительно GCMP (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1243
 msgid "Force GCMP-256 (AES)"
-msgstr ""
+msgstr "Принудительно GCMP-256 (AES)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:749
 msgid "Force IGMP version"
@@ -6861,6 +6865,8 @@ msgid ""
 "Note: Workaround mode allows a STA that claims OCV capability to connect "
 "even if the STA doesn't send OCI or negotiate PMF."
 msgstr ""
+"Примечание: Режим обхода позволяет STA, заявляющему о возможности OCV, "
+"подключиться, даже если STA не отправляет OCI или не согласовывает PMF."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1608
 msgid ""
@@ -7047,7 +7053,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1846
 msgid "Operating Channel Validation"
-msgstr ""
+msgstr "Проверка рабочего канала"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:934
 msgid "Operating frequency"
@@ -11824,6 +11830,7 @@ msgstr "Беспроводная сеть включена"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1859
 msgid "Workaround mode can only be used when acting as an access point."
 msgstr ""
+"Режим обходного пути можно использовать только в качестве точки доступа."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:395
 msgid "Write received DNS queries to syslog."
