@@ -1,0 +1,53 @@
+{
+	"title": "Mullvad Regional",
+	"template": "https://{option}.mullvad.net/dns-query",
+	"bootstrap_dns": "1.1.1.1,1.0.0.1,2606:4700:4700::1111,2606:4700:4700::1001,8.8.8.8,8.8.4.4,2001:4860:4860::8888,2001:4860:4860::8844",
+	"help_link": "https://mullvad.net/en/help/dns-over-https-and-dns-over-tls/",
+	"http2_only": true,
+	"params": {
+		"option": {
+			"description": "Region",
+			"type": "select",
+			"regex": "(de-fra-dns-001|gb-lon-dns-001|gb-lon-dns-301|se-got-dns-001|se-mma-dns-001|se-sto-dns-001|sg-sin-dns-101|us-dal-dns-001|us-nyc-dns-601)",
+			"options": [
+				{
+					"value": "de-fra-dns-001",
+					"description": "Frankfurt, Germany"
+				},
+				{
+					"value": "gb-lon-dns-001",
+					"description": "London, United Kingdom (1)"
+				},
+				{
+					"value": "gb-lon-dns-301",
+					"description": "London, United Kingdom (2)"
+				},
+				{
+					"value": "se-got-dns-001",
+					"description": "Gothenburg, Sweden"
+				},
+				{
+					"value": "se-mma-dns-001",
+					"description": "Malmö, Sweden"
+				},
+				{
+					"value": "se-sto-dns-001",
+					"description": "Stockholm, Sweden"
+				},
+				{
+					"value": "sg-sin-dns-101",
+					"description": "Singapore"
+				},
+				{
+					"value": "us-dal-dns-001",
+					"description": "Dallas, United States"
+				},
+				{
+					"value": "us-nyc-dns-601",
+					"description": "New York City, United States"
+				}
+			],
+			"default": "us-nyc-dns-601"
+		}
+	}
+}
