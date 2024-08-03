@@ -11,6 +11,7 @@
 # ubus -S call luci.pbr getGateways '{"name": "pbr" }'
 # ubus -S call luci.pbr getInterfaces '{"name": "pbr" }'
 
+readonly luciCompat='5'
 readonly pbrFunctionsFile='/etc/init.d/pbr'
 if [ -s "$pbrFunctionsFile" ]; then
 # shellcheck source=../../../../../pbr/files/etc/init.d/pbr
@@ -19,6 +20,23 @@ else
 	print_json_string 'error' "pbr init.d file ($pbrFunctionsFile) not found!"
 	logger -t pbr 'error' "pbr init.d file ($pbrFunctionsFile) not found!"
 fi
+
+# compatibility with old luci app versions
+is_running_iptables() { iptables -t mangle -L | grep -q PBR_PREROUTING >/dev/null 2>&1; }
+is_running() { is_running_iptables || is_running_nft; }
+check_ipset() { { [ -n "$ipset" ] && "$ipset" help hash:net; } >/dev/null 2>&1; }
+check_agh_ipset() {
+	check_ipset || return 1
+	check_agh || return 1
+	is_greater_or_equal "$($agh --version | sed 's|AdGuard Home, version v\(.*\)|\1|' | sed 's|-.*||')" '0.107.13'
+}
+check_dnsmasq_ipset() {
+	local o;
+	check_ipset || return 1
+	check_dnsmasq || return 1
+	o="$(dnsmasq -v 2>/dev/null)"
+	! echo "$o" | grep -q 'no-ipset' && echo "$o" | grep -q 'ipset'
+}
 
 get_init_list() {
 	local name
@@ -135,12 +153,15 @@ EOF
 $(echo "$warnings" | tr \# \\n)
 EOF
 	fi
-#	if is_greater "$(opkg_get_version "${name}")" "$(opkg_get_version "luci-app-${name}")"; then
-#		json_add_object
-#		json_add_string 'id' 'warningOutdatedWebUIApp'
-#		json_add_string 'extra' "$(opkg_get_version "luci-app-${name}")"
-#		json_close_object
-#	fi
+	if is_greater "${packageCompat:-0}" "${luciCompat:-0}"; then
+		json_add_object
+		json_add_string 'id' 'warningOutdatedLuciPackage'
+		json_close_object
+	elif is_greater "${luciCompat:-0}" "${packageCompat:-0}"; then
+		json_add_object
+		json_add_string 'id' 'warningOutdatedPrincipalPackage'
+		json_close_object
+	fi
 	json_close_array
 	json_close_object
 	json_dump
@@ -234,7 +255,7 @@ get_supported_interfaces() {
 	for i in $supported_interface; do
 		is_xray "$i" && ifacesSupported="$ifacesSupported $i"
 	done
-	[ "$webui_show_ignore_target" -eq "1" ] && ifacesSupported="$ifacesSupported ignore"
+	[ "$webui_show_ignore_target" -eq '1' ] && ifacesSupported="$ifacesSupported ignore"
 	json_init
 	json_add_object "$packageName"
 	json_add_array 'interfaces'
