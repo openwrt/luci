@@ -8,20 +8,7 @@
 "require view";
 "require adblock-fast.status as adb";
 
-var pkg = {
-	get Name() {
-		return "adblock-fast";
-	},
-	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
-	},
-	humanFileSize: function (bytes, si = false, dp = 2) {
-		return `%${si ? 1000 : 1024}.${dp ?? 0}mB`.format(bytes);
-	},
-	isObjEmpty: function (obj) {
-		return Object.keys(obj).length === 0;
-	},
-};
+var pkg = adb.pkg;
 
 return view.extend({
 	load: function () {
@@ -525,7 +512,21 @@ return view.extend({
 			return val == "allow" ? _("Allow") : _("Block");
 		};
 
+		o = s3.option(form.DummyValue, "_name", _("Name/URL"));
+		o.modalonly = false;
+		o.cfgvalue = function (section_id) {
+			let name = L.uci.get(pkg.Name, section_id, "name");
+			let url = L.uci.get(pkg.Name, section_id, "url");
+			let ret = _("Unknown");
+			return name ? name : url;
+		};
+
+		o = s3.option(form.Value, "name", _("Name"));
+		o.modalonly = true;
+		o.optional = true;
+
 		o = s3.option(form.Value, "url", _("URL"));
+		o.modalonly = true;
 		o.optional = false;
 
 		return Promise.all([status.render(), m.render()]);
