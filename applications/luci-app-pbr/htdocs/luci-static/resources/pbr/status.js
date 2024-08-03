@@ -10,8 +10,25 @@ var pkg = {
 	get Name() {
 		return "pbr";
 	},
+	get ReadmeCompat() {
+		return "1.1.6-16";
+	},
 	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
+		return (
+			"https://docs.openwrt.melmac.net/" +
+			pkg.Name +
+			"/" +
+			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "")
+		);
+	},
+	get DonateURL() {
+		return (
+			"https://docs.openwrt.melmac.net/" +
+			pkg.Name +
+			"/" +
+			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "") +
+			"#Donate"
+		);
 	},
 };
 
@@ -184,13 +201,21 @@ var status = baseclass.extend({
 					{ class: "cbi-value-title" },
 					_("Service Gateways")
 				);
-				text = _(
-					"The %s indicates default gateway. See the %sREADME%s for details."
-				).format(
-					"<strong>✓</strong>",
-					'<a href="' + pkg.URL + '#AWordAboutDefaultRouting" target="_blank">',
-					"</a>"
-				);
+				text =
+					_(
+						"The %s indicates default gateway. See the %sREADME%s for details."
+					).format(
+						"<strong>✓</strong>",
+						'<a href="' +
+							pkg.URL +
+							'#AWordAboutDefaultRouting" target="_blank">',
+						"</a>"
+					) +
+					"<br />" +
+					_("Please %sdonate%s to support development of this project.").format(
+						"<a href='" + pkg.DonateURL + "' target='_blank'>",
+						"</a>"
+					);
 				var gatewaysDescr = E("div", { class: "cbi-value-description" }, text);
 				var gatewaysText = E("div", {}, reply.gateways);
 				var gatewaysField = E("div", { class: "cbi-value-field" }, [
@@ -228,8 +253,11 @@ var status = baseclass.extend({
 					warningInvalidOVPNConfig: _(
 						"Invalid OpenVPN config for %s interface"
 					),
-					warningOutdatedWebUIApp: _(
-						"The WebUI application is outdated (version %s), please update it"
+					warningOutdatedLuciPackage: _(
+						"The WebUI application (luci-app-pbr) is outdated, please update it"
+					),
+					warningOutdatedPrincipalPackage: _(
+						"The principal package (pbr) is outdated, please update it"
 					),
 					warningBadNftCallsInUserFile: _(
 						"Incompatible nft calls detected in user include file, disabling fw4 nft file support."
@@ -310,6 +338,10 @@ var status = baseclass.extend({
 						"Policy '%s' has no source/destination parameters"
 					),
 					errorPolicyNoInterface: _("Policy '%s' has no assigned interface"),
+					errorPolicyNoDns: _("Policy '%s' has no assigned DNS"),
+					errorPolicyProcessNoInterfaceDns: _(
+						"Interface '%s' has no assigned DNS"
+					),
 					errorPolicyUnknownInterface: _(
 						"Policy '%s' has an unknown interface"
 					),
@@ -380,9 +412,9 @@ var status = baseclass.extend({
 						text += _("Unknown error!") + "<br />";
 					}
 				});
-				text += _("Errors encountered, please check the %sREADME%s!").format(
+				text += _("Errors encountered, please check the %sREADME%s").format(
 					'<a href="' + pkg.URL + '" target="_blank">',
-					"</a><br />"
+					"</a>!<br />"
 				);
 				var errorsText = E("div", {}, text);
 				var errorsField = E("div", { class: "cbi-value-field" }, errorsText);
@@ -534,6 +566,29 @@ var status = baseclass.extend({
 			var buttonsDiv = reply.version
 				? E("div", { class: "cbi-value" }, [buttonsTitle, buttonsField])
 				: "";
+
+			var donateTitle = E(
+				"label",
+				{ class: "cbi-value-title" },
+				_("Donate to the Project")
+			);
+			var donateText = E(
+				"div",
+				{ class: "cbi-value-field" },
+				E(
+					"div",
+					{ class: "cbi-value-description" },
+					_("Please %sdonate%s to support development of this project.").format(
+						"<a href='" + pkg.DonateURL + "' target='_blank'>",
+						"</a>"
+					)
+				)
+			);
+
+			var donateDiv = reply.version
+				? E("div", { class: "cbi-value" }, [donateTitle, donateText])
+				: "";
+
 			return E("div", {}, [
 				header,
 				statusDiv,
@@ -541,6 +596,7 @@ var status = baseclass.extend({
 				warningsDiv,
 				errorsDiv,
 				buttonsDiv,
+				//			donateDiv,
 			]);
 		});
 	},
@@ -553,6 +609,8 @@ RPC.on("setInitAction", function (reply) {
 
 return L.Class.extend({
 	status: status,
+	pkg: pkg,
+	getInitStatus: getInitStatus,
 	getInterfaces: getInterfaces,
 	getPlatformSupport: getPlatformSupport,
 });

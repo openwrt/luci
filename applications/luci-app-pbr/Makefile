@@ -1,15 +1,16 @@
-# Copyright 2017-2023 MOSSDeF, Stan Grishin (stangri@melmac.ca)
-# This is free software, licensed under the GNU General Public License v3.
+# Copyright 2017-2024 MOSSDeF, Stan Grishin (stangri@melmac.ca).
+# This is free software, licensed under AGPL-3.0-or-later.
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-pbr
 PKG_LICENSE:=AGPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
-PKG_VERSION:=1.1.4
-PKG_RELEASE:=16
+PKG_VERSION:=1.1.6
+PKG_RELEASE:=20
 
 LUCI_TITLE:=Policy Based Routing Service Web UI
+LUCI_URL:=https://github.com/stangri/luci-app-pbr/
 LUCI_DESCRIPTION:=Provides Web UI for Policy Based Routing Service.
 LUCI_DEPENDS:=+luci-base +jsonfilter +pbr
 

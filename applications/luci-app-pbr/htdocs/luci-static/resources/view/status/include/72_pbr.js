@@ -2,27 +2,15 @@
 "require rpc";
 "require form";
 "require baseclass";
+"require pbr.status as pbr";
 
-var pkg = {
-	get Name() {
-		return "pbr";
-	},
-	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
-	},
-};
-
-var getInitStatus = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getInitStatus",
-	params: ["name"],
-});
+var pkg = pbr.pkg;
 
 return baseclass.extend({
 	title: _("Policy Based Routing"),
 
 	load: function () {
-		return Promise.all([getInitStatus(pkg.Name)]);
+		return Promise.all([pbr.getInitStatus(pkg.Name)]);
 	},
 
 	render: function (data) {
