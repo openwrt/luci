@@ -11,8 +11,19 @@ var pkg = {
 	get Name() {
 		return "adblock-fast";
 	},
+	get ReadmeCompat() {
+		return "";
+	},
 	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
+		return (
+			"https://docs.openwrt.melmac.net/" + pkg.Name + "/" + pkg.ReadmeCompat
+		);
+	},
+	humanFileSize: function (bytes, si = false, dp = 2) {
+		return `%${si ? 1000 : 1024}.${dp ?? 0}mB`.format(bytes);
+	},
+	isObjEmpty: function (obj) {
+		return Object.keys(obj).length === 0;
 	},
 };
 
@@ -515,6 +526,8 @@ RPC.on("setInitAction", function (reply) {
 
 return L.Class.extend({
 	status: status,
+	pkg: pkg,
+	getInitStatus: getInitStatus,
 	getFileUrlFilesizes: getFileUrlFilesizes,
 	getPlatformSupport: getPlatformSupport,
 });
