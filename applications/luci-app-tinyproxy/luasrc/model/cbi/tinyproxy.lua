@@ -44,8 +44,8 @@ o.datatype = "ipaddr"
 o.placeholder = "0.0.0.0"
 
 
-o = s:taboption("general", Value, "Bind", translate("Bind address"),
-	translate("Specifies the address Tinyproxy binds to for outbound forwarded requests"))
+o = s:taboption("general", DynamicList, "Bind", translate("Bind address"),
+	translate("Specifies the addresses Tinyproxy binds to for outbound forwarded requests"))
 
 o.optional = true
 o.datatype = "ipaddr"
