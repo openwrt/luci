@@ -127,33 +127,47 @@ return view.extend({
 		s.taboption('general', form.Flag, 'secure_mode', _('Enable secure mode'),
 			_('Allow adding port maps only to requesting IP addresses')).default = '1'
 
-		s.taboption('general', form.Flag, 'igdv1', _('Enable UPnP IGDv1 mode'),
-			_('Advertise as UPnP IGDv1 device (no IPv6) instead of IGDv2')).default = '1'
+		o = s.taboption('general', form.Flag, 'igdv1', _('Enable UPnP IGDv1 mode'),
+			_('Advertise as UPnP IGDv1 device (no IPv6) instead of IGDv2'))
+		o.depends('enable_upnp', '1')
+		o.default = '1'
 
 		s.taboption('general', form.Flag, 'log_output', _('Enable additional logging'),
 			_('Puts extra debugging information into the system log'))
 
-		s.taboption('general', form.Value, 'download', _('Download speed'),
-			_('Value in KByte/s, informational only')).rmempty = true
+		o = s.taboption('general', form.Value, 'download', _('Download speed'),
+			_('Value in KByte/s, informational only'))
+		o.depends('enable_upnp', '1')
+		o.rmempty = true
 
-		s.taboption('general', form.Value, 'upload', _('Upload speed'),
-			_('Value in KByte/s, informational only')).rmempty = true
+		o = s.taboption('general', form.Value, 'upload', _('Upload speed'),
+			_('Value in KByte/s, informational only'))
+		o.depends('enable_upnp', '1')
+		o.rmempty = true
 
 		o = s.taboption('general', form.Value, 'port', _('SOAP/HTTP port'))
+		o.depends('enable_upnp', '1')
 		o.datatype = 'port'
 		o.default  = 5000
 
-		s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime')).default = '1'
+		o = s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime'))
+		o.depends('enable_upnp', '1')
+		o.default = '1'
 
-		s.taboption('advanced', form.Value, 'uuid', _('Device UUID'))
-		s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'))
-		s.taboption('advanced', form.Value, 'model_number', _('Announced model number'))
+		o = s.taboption('advanced', form.Value, 'uuid', _('Device UUID'))
+		o.depends('enable_upnp', '1')
+		o = s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'))
+		o.depends('enable_upnp', '1')
+		o = s.taboption('advanced', form.Value, 'model_number', _('Announced model number'))
+		o.depends('enable_upnp', '1')
 
 		o = s.taboption('advanced', form.Value, 'notify_interval', _('Notify interval'), _('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s').format('<abbr title="Simple Service Discovery Protocol">SSDP</abbr>'))
+		o.depends('enable_upnp', '1')
 		o.datatype    = 'uinteger'
 		o.placeholder = 900
 
 		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'))
+		o.depends('enable_upnp', '1')
 		o.placeholder = 'http://192.168.1.1/'
 
 		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('Service lease file'))
