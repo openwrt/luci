@@ -153,14 +153,6 @@ return view.extend({
 		o.datatype    = 'uinteger'
 		o.placeholder = 30
 
-		o = s.taboption('advanced', form.Value, 'clean_ruleset_threshold', _('Clean rules threshold'))
-		o.datatype    = 'uinteger'
-		o.placeholder = 20
-
-		o = s.taboption('advanced', form.Value, 'clean_ruleset_interval', _('Clean rules interval'))
-		o.datatype    = 'uinteger'
-		o.placeholder = 600
-
 		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'))
 		o.placeholder = 'http://192.168.1.1/'
 
