@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-22 23:09+0000\n"
-"Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2024-08-07 18:30+0000\n"
+"Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssplash/lt/>\n"
 "Language: lt\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:53
 msgid "%s with the operator of this access point."
@@ -30,6 +30,11 @@ msgid ""
 "few connections are shared between all users. That means available bandwidth "
 "is limited and because of this we ask you not to do any of the following:"
 msgstr ""
+"Vis dėlto, prieiga prie interneto gali būti įmanoma, nes kai kurie šio "
+"projekto aktyvistai dalijasi savo privačiu interneto ryšiu. Šiais keliais "
+"ryšiais dalijasi visi naudotojai/vartotojai. Tai reiškia, kad pasiekiamas "
+"duomenų siuntimo ir perdavimo srauto pralaidumas yra apribotas, todėl "
+"prašome Jūsų nedaryti nei vieno iš toliau šių nurodytų veiksmų:"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:112
 msgid ""
@@ -37,6 +42,9 @@ msgid ""
 "without notice for any reason, for certain devices, and/or may be blocked "
 "for certain users."
 msgstr ""
+"Prieiga prie tinklo nėra garantuojama. Jis gali būti nutrauktas bet kuriuo "
+"metu be įspėjimo, dėl bet kokios priežasties tam tikruose įrenginiuose ir "
+"(arba) gali būti užblokuotas tam tikriems naudotojams/vartotojams."
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:199
 msgid "Active Clients"
@@ -44,13 +52,16 @@ msgstr "Aktyvūs klientai"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:70
 msgid "Allowed hosts/subnets"
-msgstr ""
+msgstr "Leidžiami skleidėjai/vedėjai┃potinkliai"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splashtext.lua:36
 msgid ""
 "As an alternative to editing the complete splash text you can also just "
 "include some custom text in the default splash page by entering it here."
 msgstr ""
+"Kaip alternatyvą, skirta visam „splash“ tekstui redaguoti, į numatytąjį "
+"„splash“ puslapį, kurį Jūs, taip pat galite įtraukti tam tikrą pasirinktinį "
+"tekstą, įvesdami jį čia."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:18
 msgid ""
@@ -58,11 +69,17 @@ msgid ""
 "limit are set. Use a value of 0 here to completely disable this limitation. "
 "Whitelisted clients are not limited."
 msgstr ""
+"Duomenų siuntimo ir perdavimo srauto pralaidumo limitas, skirtas klientams, "
+"yra aktyvuojamas tik tada, kai yra nustatytas ir įkėlimo, ir atsisiuntimo "
+"limitas. Norėdami visiškai išjungti šį apribojimą, naudokite reikšmę – 0-is. "
+"Į leidžiamąjį sąrašą įtraukti klientai nėra ribojami."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:95
 msgid ""
 "Become an active member of this community and help by operating your own node"
 msgstr ""
+"Tapkite aktyviu šios bendruomenės nariu ir padėkite valdydami savo tinklo "
+"mazgą"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:62
 msgid "Blacklist"
@@ -77,10 +94,12 @@ msgid ""
 "By accepting these rules you can use this network for %s hour(s). After this "
 "time you need to accept these rules again."
 msgstr ""
+"Sutikdami su šiomis taisyklėmis, Jūs galite naudoti šį tinklą %s valandą/-"
+"om/-as. Po šio laiko, Jūs turite vėl sutikti su šiomis taisyklėmis."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:10
 msgid "Clearance time"
-msgstr ""
+msgstr "Išvalymo laikas"
 
 #: applications/luci-app-splash/luasrc/controller/splash/splash.lua:8
 #: applications/luci-app-splash/luasrc/controller/splash/splash.lua:20
@@ -93,12 +112,18 @@ msgstr "„Splash“-klientas"
 msgid ""
 "Client-Splash is a hotspot authentication system for wireless mesh networks."
 msgstr ""
+"„Client-Splash“ yra viešosios interneto prieigos taško/ryšio punkto "
+"autentifikavimo sistema, skirtas belaidžio/bevielio jungliems/tankiems "
+"tinklams."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:11
 msgid ""
 "Clients are redirected to this page after they have accepted the splash. If "
 "this is left empty they are redirected to the page they had requested."
 msgstr ""
+"Klientai yra peradresuojami į šį puslapį po to, kai jie priims – „splash“. "
+"Jei jis yra paliekamas tuščias, tada jie bus nukreipiami į puslapį, kurio "
+"jie paprašė."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:15
 msgid "Clients download speed is limited to this value (kbyte/s)"
@@ -109,6 +134,8 @@ msgid ""
 "Clients that have accepted the splash are allowed to use the network for "
 "that many hours."
 msgstr ""
+"Klientams, kurie priėmę – „splash“, bus leidžiami naudotis tinklu, tiek "
+"valandų."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:14
 msgid "Clients upload speed is limited to this value (kbyte/s)"
@@ -127,6 +154,8 @@ msgid ""
 "Destination hosts and networks that are excluded from splashing, i.e. they "
 "are always allowed."
 msgstr ""
+"Paskirties/Kelionės tikslo skleidėjai/vedėjai ir tinklai, kurie yra "
+"neįtraukti nuo – „splash“, t. y. jie yra visada leidžiami."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:97
 msgid "Donate some money to help us keep this project alive."
@@ -138,11 +167,11 @@ msgstr "Atsisiuntimo limitas"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splashtext.lua:12
 msgid "Edit the complete splash text"
-msgstr ""
+msgstr "Redaguoti visą „splash“ tekstą"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:121
 msgid "Fair Use Policy"
-msgstr ""
+msgstr "Sąžiningo naudojimo politika/taisyklės"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:29
 msgid "Firewall zone"
@@ -162,7 +191,7 @@ msgstr "Suteikti „UCI“ prieigą – „luci-app-splash“"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:205
 msgid "Hostname"
-msgstr "Įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas"
+msgstr "Įrenginio (t.y skleidėjo/vedėjo) pavadinimas"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:76
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:206
@@ -173,18 +202,20 @@ msgstr "IP adresas"
 msgid ""
 "If you operate your own wifi equipment use channels different from ours."
 msgstr ""
+"Jei Jūs naudojate savo „Wi-Fi“ įrangą, naudokite kitus kanalus nei mūsų."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:93
 msgid "If you use this network on a regular basis we ask for your support:"
 msgstr ""
+"Jei Jūs naudojatės šiuo tinklu reguliariai, mes prašysime Jūsų paramos:"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splashtext.lua:35
 msgid "Include your own text in the default splash"
-msgstr ""
+msgstr "Į numatytąjį – „splash“, įtraukite savo tekstą"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:38
 msgid "Intercept client traffic on this Interface"
-msgstr ""
+msgstr "Perimti kliento srautą, šioje sąsajoje"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:21
 msgid "Interfaces"
@@ -225,6 +256,9 @@ msgid ""
 "MAC addresses of whitelisted clients. These do not need to accept the splash "
 "and are not bandwidth limited."
 msgstr ""
+"Įtrauktų „MAC“ adresų klientų leidžiamasis sąrašas. Jiems nereikia priimti – "
+"„splash“ ir jų duomenų siuntimo, ir perdavimo srauto pralaidumas nėra "
+"apribojamas."
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:77
 msgid "Netmask"
@@ -237,13 +271,15 @@ msgstr "Tinklas"
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:147
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:261
 msgid "No clients connected"
-msgstr ""
+msgstr "Nėra prisijungusių klientų"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:78
 msgid ""
 "Please note that we are not an internet service provider but an experimental "
 "community network."
 msgstr ""
+"Prašome atkreipti dėmesį, kad mes nesame interneto paslaugų teikėjai, o "
+"eksperimentinis bendruomenės tinklas."
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:210
 msgid "Policy"
@@ -251,7 +287,7 @@ msgstr "Politika"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:11
 msgid "Redirect target"
-msgstr ""
+msgstr "Peradresuoti taikomąjį/-ą"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:124
 msgid "Safety"
@@ -264,17 +300,19 @@ msgstr "Išsaugoti"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:30
 msgid "Splash rules are integrated in this firewall zone"
-msgstr ""
+msgstr "„Splash“ taisyklės yra integruotos, šioje užkardos zonoje"
 
 #: applications/luci-app-splash/luasrc/controller/splash/splash.lua:9
 msgid "Splashtext"
-msgstr ""
+msgstr "„Splash“ tekstas („Splashtext“)"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:125
 msgid ""
 "The network, like the Internet, is unencrypted and open. Each participant is "
 "responsible for the safety of their own connections and devices."
 msgstr ""
+"Tinklas, kaip ir internetas, yra nešifruotas ir atviras. Kiekvienas dalyvis "
+"yra atsakingas už savo ryšių ir įrenginių saugumą."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:110
 msgid ""
@@ -282,6 +320,8 @@ msgid ""
 "the necessary equipment and Internet connections (\"Infrastructure\") at "
 "their own expense."
 msgstr ""
+"Atviras ir nemokamas belaidis/bevielis savanorių („operatorių“) tinklas; "
+"savo lėšomis suteikia reikiamą įrangą ir interneto ryšius („infrastruktūra“)."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:128
 msgid ""
@@ -289,30 +329,39 @@ msgid ""
 "damage to devices, or financial losses that participants may suffer from the "
 "use of the network."
 msgstr ""
+"Operatorius neprisiima atsakomybės už duomenų praradimą, neteisėtą prieigą/"
+"įrenginių sugadinimą ar finansinius nuostolius, kuriuos dalyviai gali "
+"patirti, naudodamiesi tinklu."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:116
 msgid ""
 "The participant agrees to not perform any action and refrain from acts which "
 "may violate the law or infringe upon the rights of third parties."
 msgstr ""
+"Dalyvis sutinka neatlikti jokių veiksmų ir susilaikyti nuo veiksmų, kurie "
+"gali pažeisti įstatymus ar pažeisti trečiųjų šalių teises."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:119
 msgid ""
 "The participant agrees to not transfer content over the network which "
 "violates the law."
-msgstr ""
+msgstr "Dalyvis sutinka neperduoti tinkle turinio, kuris pažeidžia įstatymus."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:122
 msgid ""
 "The participant agrees to not use the network in any way which will harm the "
 "infrastructure, the network itself, its operators or other participants."
 msgstr ""
+"Dalyvis sutinka nenaudoti tinklo jokiu būdu, kuris pakenktų infrastruktūrai, "
+"pačiam tinklui, jo/jos operatoriams ar kitiems dalyviams."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:111
 msgid ""
 "These Terms of Use govern the use of the network by its participants' "
 "computer, PDA, or similar device (\"Devices\") within the network."
 msgstr ""
+"Šios naudojimo sąlygos reglamentuoja tinklo naudojimą, jo/jos dalyvių "
+"kompiuteriu, „PDA“ ar panašiu įrenginiu („įrenginiai“) tinkle."
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:208
 msgid "Time remaining"
@@ -323,10 +372,13 @@ msgid ""
 "To ask for the reason why you have been blocked or ask for access again you "
 "can try to contact the owner of this access point:"
 msgstr ""
+"Norėdami paklausti priežasties, kodėl Jūs buvote užblokuotas, arba paprašyti "
+"prieigos dar kartą, galite pabandyti susisiekti su šio prieigos taško "
+"savininku:"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:209
 msgid "Traffic in/out"
-msgstr ""
+msgstr "Į/Iš srautą/-o"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:14
 msgid "Upload limit"
@@ -334,7 +386,7 @@ msgstr "Įkėlimo limitas"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:108
 msgid "Usage Agreement"
-msgstr ""
+msgstr "Naudojimosi sutikimas"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:75
 msgid "Welcome"
@@ -347,6 +399,8 @@ msgstr "Leidžiamasis sąrašas"
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:77
 msgid "You are now connected to the free wireless mesh network"
 msgstr ""
+"Jūs dabar esate prisijungę prie nemokamo belaidžio/bevielio junglaus/tankaus "
+"tinklo"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splashtext.lua:13
 msgid ""
@@ -354,22 +408,28 @@ msgid ""
 "possible to use the following markers: ###COMMUNITY###, ###COMMUNITY_URL###, "
 "###CONTACTURL###, ###LEASETIME###, ###LIMIT### and ###ACCEPT###."
 msgstr ""
+"Čia Jūs galite įvesti savo tekstą, kuris bus rodomas klientams.<br />Galima "
+"naudoti šiuos žymeklius: „###COMMUNITY###“, „###COMMUNITY_URL###“, "
+"„###CONTACTURL###“, „###LEASETIME###“, „###LIMIT###“ ir „###ACCEPT###“."
 
 #: applications/luci-app-splash/luasrc/view/splash/blocked.htm:14
 msgid ""
 "Your access to this network has been blocked, most likely because you did "
 "something that our rules explicitly forbid."
 msgstr ""
+"Jūsų prieiga prie šio tinklo buvo užblokuota, greičiausiai todėl, nes Jūs "
+"padarėte tai, ką mūsų taisyklės aiškiai draudžia."
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:48
 msgid "Your bandwidth is limited to"
 msgstr ""
+"Jūsų duomenų siuntimo ir perdavimo srauto pralaidumas yra apribojamas iki"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:176
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:178
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:243
 msgid "blacklisted"
-msgstr ""
+msgstr "įtrauktas į draudžiamą sąrašą"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:235
 msgid "expired"
@@ -377,11 +437,11 @@ msgstr "nebegaliojantis/-i"
 
 #: applications/luci-app-splash/luasrc/model/cbi/splash/splash.lua:77
 msgid "optional when using host addresses"
-msgstr ""
+msgstr "neprivaloma, naudojant skleidėjo/vedėjo adresus"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:85
 msgid "perform any kind of illegal activities"
-msgstr ""
+msgstr "atlikti bet kokias neteisėtas/nelegalias veiklas"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:170
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:173
@@ -401,14 +461,16 @@ msgstr "nežinoma/-s/-i"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:83
 msgid "use filesharing applications on this network"
-msgstr ""
+msgstr "naudoti failų bendrinimo programas šiame tinkle"
 
 #: applications/luci-app-splash/luasrc/view/splash/splash.htm:84
 msgid "waste bandwidth with unnecessary downloads or streams"
 msgstr ""
+"eikvoti duomenų siuntimo ir perdavimo srauto pralaidumą dėl nereikalingų "
+"atsisiuntimų ar srautų"
 
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:165
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:167
 #: applications/luci-app-splash/luasrc/view/admin_status/splash.htm:241
 msgid "whitelisted"
-msgstr ""
+msgstr "įtrauktas į leidžiamą sąrašą"

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-06-25 19:21+0000\n"
-"Last-Translator: \"Džiugas Jan.\" <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2024-08-07 18:30+0000\n"
+"Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstinyproxy/lt/>\n"
 "Language: lt\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:219
 msgid ""
@@ -20,12 +20,18 @@ msgid ""
 "upstream proxy, <em>Reject access</em> disables any upstream proxy for the "
 "target"
 msgstr ""
+"<em>Per įgaliotinius maršrutus</em> nukreipia užklausas į nurodytą "
+"taikomąjį, per nurodytą įgaliotą išsiuntimo srautą, o – <em>„Atmesti "
+"prieigą“</em> išjungia bet kokią išsiuntimo srauto įgaliotinį, skirta "
+"taikomajam"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:108
 msgid ""
 "Adds an \"X-Tinyproxy\" HTTP header with the client IP address to forwarded "
 "requests"
 msgstr ""
+"Prideda – „X-Tinyproxy“, „HTTP“ antraštę su kliento IP adresu, į persiųstas "
+"užklausas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:126
 msgid "Allowed clients"
@@ -44,30 +50,44 @@ msgid ""
 "By default, basic POSIX expressions are used for filtering. Enable this to "
 "activate extended regular expressions"
 msgstr ""
+"Pagal numatytuosius nustatymus, pagrindinės – „POSIX“ išraiškos yra "
+"naudojamos filtravimui. Įjunkite/Įgalinkite tai, kad suaktyvintumėte "
+"išplėstines reguliariąsias išraiškas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:153
 msgid ""
 "By default, filter strings are treated as case-insensitive. Enable this to "
 "make the matching case-sensitive"
 msgstr ""
+"Pagal numatytuosius nustatymus, filtrų eilutės yra traktuojamos kaip "
+"neskiriančios didžiųjų ir mažųjų raidžių. Įjunkite/Įgalinkite tai, kad "
+"atitiktų didžiosios ir mažosios raidės"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:145
 msgid ""
 "By default, filtering is done based on domain names. Enable this to match "
 "against URLs instead"
 msgstr ""
+"Pagal numatytuosius nustatymus, filtravimas yra atliekamas pagal domenų-"
+"sričių pavadinimus. Įjunkite/Įgalinkite tai, kad atitiktumėte „URL“– saito "
+"adresus"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:157
 msgid ""
 "By default, the filter rules act as blacklist. Enable this option to only "
 "allow matched URLs or domain names"
 msgstr ""
+"Pagal numatytuosius nustatymus, filtro taisyklės veikia kaip draudžiamasis "
+"sąrašas. Įjunkite/Įgalinkite šią parinktį, jei norite leisti tik "
+"atitinkančius „URL“ – saitų arba domenų-sričių pavadinimus"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:226
 msgid ""
 "Can be either an IP address or range, a domain name or \".\" for any host "
 "without domain"
 msgstr ""
+"Gali būti IP adresas arba diapazonas, domeno-srities pavadinimas arba – „.“ "
+"bet kuriam skleidėjui/vedėjui be domeno-srities"
 
 #: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:23
 msgid "Configuration"
@@ -75,7 +95,7 @@ msgstr "Konfigūravimas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:164
 msgid "Connection timeout"
-msgstr ""
+msgstr "Ryšio pasibaigusios užklausos laikas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:156
 msgid "Default deny"
@@ -128,25 +148,31 @@ msgstr "Grupė"
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:63
 msgid "HTML template file to serve for stat host requests"
 msgstr ""
+"„HTML“ šablono failas, skirtas tarnauti skleidėjo/vedėjo statistikos "
+"užklausoms"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:56
 msgid "HTML template file to serve when HTTP errors occur"
-msgstr ""
+msgstr "„HTML“ šablono failas, skirtas tarnauti, kai įvyksta „HTTP“ klaidos"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:118
 msgid "Header whitelist"
-msgstr ""
+msgstr "Antraštės/-čių leidžiamasis sąrašas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:127
 msgid ""
 "List of IP addresses or ranges which are allowed to use the proxy server"
 msgstr ""
+"IP adresų arba diapazonų sąrašas, kuriems yra leidžiama naudoti įgaliotinį "
+"serverį"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:134
 msgid ""
 "List of allowed ports for the CONNECT method. A single value \"0\" disables "
 "CONNECT completely, an empty list allows all ports"
 msgstr ""
+"Leidžiamų – „CONNECT“ metodo prievadų sąrašas. Viena reikšmė – „0-is“, "
+"visiškai išjungia – „CONNECT“, o tuščias sąrašas leidžia visus prievadus"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:39
 msgid "Listen address"
@@ -162,7 +188,7 @@ msgstr "Žurnalo failas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:74
 msgid "Log file to use for dumping messages"
-msgstr ""
+msgstr "Žurnalo failas, skirtas naudoti iškraunant/išklojant pranešimus"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:80
 msgid "Log level"
@@ -170,7 +196,7 @@ msgstr "Žurnalo lygis"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:81
 msgid "Logging verbosity of the Tinyproxy process"
-msgstr ""
+msgstr "„Tinyproxy“ proceso žurnalinimo išsamumas/platumas/daugiažodiškumas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:172
 msgid "Max. clients"
@@ -178,45 +204,52 @@ msgstr "Maksimalus klientų skaičius"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:200
 msgid "Max. requests per server"
-msgstr ""
+msgstr "Maksimalios užklausos, vienam serveriui"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:186
 msgid "Max. spare servers"
-msgstr ""
+msgstr "Maksimalūs atsarginiai serveriai"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:173
 msgid "Maximum allowed number of concurrently connected clients"
 msgstr ""
+"Maksimalus leistinas vienu metu prijungtų/užmegztų ryšių, klientų skaičius"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:201
 msgid ""
 "Maximum allowed number of requests per process. If it is exeeded, the "
 "process is restarted. Zero means unlimited."
 msgstr ""
+"Maksimalus leistinas užklausų skaičius, vienam procesui. Jei jis viršijamas, "
+"procesas bus paleidžiamas iš naujo. Nulis reiškia neribotas."
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:187
 msgid "Maximum number of prepared idle processes"
-msgstr ""
+msgstr "Maksimalus paruoštų budinčių procesų skaičius"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:165
 msgid "Maximum number of seconds an inactive connection is held open"
 msgstr ""
+"Maksimalus sekundžių skaičius, kurio neaktyvus ryšys yra laikomas atidarytas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:179
 msgid "Min. spare servers"
-msgstr ""
+msgstr "Minimalūs atsarginiai serveriai"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:180
 msgid "Minimum number of prepared idle processes"
-msgstr ""
+msgstr "Minimalus paruoštų budinčių procesų skaičius"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:194
 msgid "Number of idle processes to start when launching Tinyproxy"
 msgstr ""
+"Budinčių procesų, kuriuos reikia pradėti paleidžiant – „Tinyproxy“, skaičius"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:141
 msgid "Plaintext file with URLs or domains to filter. One entry per line"
 msgstr ""
+"Atviro teksto failas su „URL“ – saitais arba domenais-sritimis, kuriuos "
+"reikia filtruoti. Viena įvestis, kiekvienai eilutėj"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:218
 msgid "Policy"
@@ -243,41 +276,57 @@ msgid ""
 "Specifies HTTP header names which are allowed to pass-through, all others "
 "are discarded. Leave empty to disable header filtering"
 msgstr ""
+"Nurodo – „HTTP“ antraščių pavadinimus, kurie yra leidžiami perduoti, visi "
+"kiti yra atmetami. Palikite tuščią, kad išjungtumėte/išgalintumėte antraštės "
+"filtravimą"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:32
 msgid "Specifies the HTTP port Tinyproxy is listening on for requests"
 msgstr ""
+"Nurodo – „HTTP“ prievadą, prie kurio – „Tinyproxy“ laukia prisijungimo/"
+"jungties ryšio užklausų"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:112
 msgid "Specifies the Tinyproxy hostname to use in the Via HTTP header"
 msgstr ""
+"Nurodo – „Tinyproxy“ įrenginio (t.y skleidėjo/vedėjo) pavadinimą, kuris bus "
+"naudojamas – „HTTP“ antraštėje"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:48
 msgid ""
 "Specifies the address Tinyproxy binds to for outbound forwarded requests"
 msgstr ""
+"Nurodo adresą prie kurio – „Tinyproxy“ prisiriša į, skirtas išeinantiems "
+"persiuntimo užklausoms"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:40
 msgid "Specifies the addresses Tinyproxy is listening on for requests"
 msgstr ""
+"Nurodo adresus, prie kurio – „Tinyproxy“ laukia prisijungimo/jungties ryšio "
+"užklausų"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:98
 msgid "Specifies the group name the Tinyproxy process is running as"
-msgstr ""
+msgstr "Nurodo grupės pavadinimą, prie kurio veikia – „Tinyproxy“ procesas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:234
 msgid ""
 "Specifies the upstream proxy to use for accessing the target host. Format is "
 "<code>address:port</code> or <code>socks5 address:port</code>"
 msgstr ""
+"Nurodo išsiunčiamą įgaliotąją, kuris bus naudojamas, norint pasiekti "
+"taikomąją skleidėją/vedėją. Formatas yra – <code>adresas:prievedas</code> "
+"arba <code>„socks5“ adresas:prievadas</code>"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:92
 msgid "Specifies the user name the Tinyproxy process is running as"
 msgstr ""
+"Nurodo naudotojo/vartotojo vardą (t.y. slapyvardį), prie kurio veikia – "
+"„Tinyproxy“ procesas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:193
 msgid "Start spare servers"
-msgstr ""
+msgstr "Paleisti atsarginius serverius"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:62
 msgid "Statistics page"
@@ -289,7 +338,7 @@ msgstr "Būklė/Būsena"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:225
 msgid "Target host"
-msgstr "Taikomasis skleidėjas/p.k – vedėjas"
+msgstr "Taikomasis skleidėjas/vedėjas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:5
 #: applications/luci-app-tinyproxy/root/usr/share/luci/menu.d/luci-app-tinyproxy.json:3
@@ -313,6 +362,8 @@ msgid ""
 "Upstream proxy rules define proxy servers to use when accessing certain IP "
 "addresses or domains."
 msgstr ""
+"Išsiunčiamo srauto įgaliotojo taisyklės apibrėžia įgaliotinius serverius, "
+"naudojamus pasiekiant tam tikrus IP adresus ar domenus-sritis."
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:69
 msgid "Use syslog"
@@ -324,7 +375,7 @@ msgstr "Naudotojas/Vartotojas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:111
 msgid "Via hostname"
-msgstr "Per įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimas"
+msgstr "Per įrenginio (t.y skleidėjo/vedėjo) pavadinimas"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:221
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:233
@@ -333,8 +384,8 @@ msgstr "Per įgaliotąjį"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:70
 msgid "Writes log messages to syslog instead of a log file"
-msgstr ""
+msgstr "Įrašo žurnalo pranešimus į „syslog“, vietoj į žurnalo failą"
 
 #: applications/luci-app-tinyproxy/luasrc/model/cbi/tinyproxy.lua:107
 msgid "X-Tinyproxy header"
-msgstr ""
+msgstr "„X-Tinyproxy“ antraštė"
