@@ -609,6 +609,22 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('sources', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>1Hosts List Selection</b></em>';
+
+		o = s.taboption('sources', form.DynamicList, 'adb_hst_sources', _('Variants'));
+		for (var i = 0; i < categories.length; i++) {
+			code = categories[i].match(/^(\w+);/)[1].trim();
+			if (code === 'hst') {
+				list = categories[i].match(/^\w+;(.*);/)[1].trim();
+				path = categories[i].match(/^.*;(.*$)/)[1].trim();
+				o.value(path, list);
+			}
+		}
+		o.optional = true;
+		o.rmempty = true;
+
 		return m.render();
 	},
 	handleReset: null
