@@ -91,7 +91,7 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.option(form.Value, 'port', _('Bind port'));
-		o.datatype = 'port';
+		o.datatype = 'portrange';
 		o.rmempty = false;
 
 		o = s.option(form.Flag, '_forward_mode', _('Forward mode'));
