@@ -1,13 +1,39 @@
 {
 	"admin/services/snmpd": {
 		"title": "SNMPD",
+		"order": 5,
+		"action": {
+			"type": "alias",
+			"path": "admin/services/snmpd/snmpd"
+		},
+		"depends": {
+			"acl": [ "luci-app-snmpd" ],
+			"uci": { "snmpd":  true }
+		}
+	},
+
+	"admin/services/snmpd/snmpd": {
+		"title": "SNMP",
+		"order": 10,
 		"action": {
 			"type": "view",
 			"path": "snmpd/snmpd"
 		},
 		"depends": {
+			"acl": [ "luci-app-snmpd" ]
+		}
+	},
+
+	"admin/services/snmpd/download": {
+		"title": "Download",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "snmpd/download"
+		},
+		"depends": {
 			"acl": [ "luci-app-snmpd" ],
-			"uci": { "snmpd":  true }
+			"fs": [ { "/usr/share/snmp/mibs/": "directory" } ]
 		}
 	}
 }
