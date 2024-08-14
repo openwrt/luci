@@ -2,7 +2,11 @@
 	"luci-app-snmpd": {
 		"description": "Grant UCI access for luci-app-snmpd",
 		"read": {
-			"uci": [ "snmpd" ]
+			"uci": [ "snmpd" ],
+			"file": {
+				"/usr/share/snmp/mibs/*": [ "read", "stat" ],
+				"/usr/bin/ldd /usr/lib/libnetsnmp.so.40": [ "exec" ]
+			}
 		},
 		"write": {
 			"uci": [ "snmpd" ]
