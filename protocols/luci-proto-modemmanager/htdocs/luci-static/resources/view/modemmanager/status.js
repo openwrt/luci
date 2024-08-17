@@ -164,7 +164,7 @@ return view.extend({
 
 	render: function (modems) {
 		var content = E([], [
-			E('h2', {}, [_('Mobile Service')]),
+			E('h2', {}, [_('Cellular Network')]),
 			E('div')
 		]);
 		var container = content.lastElementChild;

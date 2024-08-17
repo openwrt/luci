@@ -19,12 +19,17 @@ msgstr ""
 msgid ""
 "<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
 "> Specify the interface to monitor and react if a ping over it fails."
-msgstr "<i>应用于 Ping重启、重启接口 和 执行脚本 模式</i> <br />指定要监视的接口并在 "
+msgstr ""
+"<i>应用于 Ping重启、重启接口 和 执行脚本 模式</i> <br />指定要监视的接口并在 "
 "ping 失败时做出反应。"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
 msgstr "Ping 主机的地址簇"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
+msgid "Any"
+msgstr "任何"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -46,10 +51,6 @@ msgid ""
 msgstr ""
 "应用于 Ping 重启 和 重启接口 模式</i> <br />如果使用 ModemManager，你可以通过"
 "指定名称让 Watchcat 重新启动你的 ModemManager 接口。"
-
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
-msgid "Any"
-msgstr "任何"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:84
 msgid "Big: 248 bytes"
@@ -76,8 +77,9 @@ msgid ""
 "Here you can set up several checks and actions to take in the event that a "
 "host becomes unreachable. Click the <b>Add</b> button at the bottom to set "
 "up more than one action."
-msgstr "你可以在此处设置数个检查以及在特定主机变得不可访问时要采取的操作。点击底部的<"
-"b>添加</b>按钮可以设置多条规则。"
+msgstr ""
+"你可以在此处设置数个检查以及在特定主机变得不可访问时要采取的操作。点击底部的"
+"<b>添加</b>按钮可以设置多条规则。"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "Host To Check"
@@ -126,14 +128,13 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
-"对于 定时重启 模式，它定义了重启的频率。<br />对于 Ping 重启 "
-"模式，它定义了在重启前未收到来自要检查的主机的回复的最长时间。<br />对于 "
-"重启接口 或 执行脚本 "
-"模式，它定义了在重启接口或执行脚本前未收到要检查的主机的回复的最长时间。<br /"
-"><br />默认单位是秒，不带后缀，但你可以使用后缀 <b>m</b> 代表分钟， <b>h</b> "
-"代表小时或 <b>d</b> 代表天。<br /><br />示例：<ul><li>10秒是：<b>10</b> 或 "
-"<b>10s</b></li><li>5 分钟是：<b>5m</b></li><li>1 小时是：<b>1h</b></li><li>1 "
-"周是：<b>7d</b></li><ul>"
+"对于 定时重启 模式，它定义了重启的频率。<br />对于 Ping 重启 模式，它定义了在"
+"重启前未收到来自要检查的主机的回复的最长时间。<br />对于 重启接口 或 执行脚"
+"本 模式，它定义了在重启接口或执行脚本前未收到要检查的主机的回复的最长时间。"
+"<br /><br />默认单位是秒，不带后缀，但你可以使用后缀 <b>m</b> 代表分钟， "
+"<b>h</b> 代表小时或 <b>d</b> 代表天。<br /><br />示例：<ul><li>10秒是："
+"<b>10</b> 或 <b>10s</b></li><li>5 分钟是：<b>5m</b></li><li>1 小时是：<b>1h</"
+"b></li><li>1 周是：<b>7d</b></li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -180,11 +181,10 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
-"Ping 重启：如果在指定的时间内，ping 指定主机始终失败，则重新启动本设备。<br "
-"/>定时重启：在指定的时间间隔后重新启动本设备。<br "
-"/>重启接口：如果在指定的时间内，ping "
-"指定主机始终失败，则重新启动特定网络接口。<br "
-"/>执行脚本：如果在指定的时间内，ping 指定主机始终失败，则执行特定脚本。<br />"
+"Ping 重启：如果在指定的时间内，ping 指定主机始终失败，则重新启动本设备。<br /"
+">定时重启：在指定的时间间隔后重新启动本设备。<br />重启接口：如果在指定的时间"
+"内，ping 指定主机始终失败，则重新启动特定网络接口。<br />执行脚本：如果在指定"
+"的时间内，ping 指定主机始终失败，则执行特定脚本。<br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
@@ -202,7 +202,8 @@ msgstr "要执行的脚本"
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
-msgstr "当特定主机在指定的时间内未回复时要执行的脚本。脚本将接口名称作为 $1 传递"
+msgstr ""
+"当特定主机在指定的时间内未回复时要执行的脚本。脚本将接口名称作为 $1 传递"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"

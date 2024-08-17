@@ -10,6 +10,9 @@ LUCI_TITLE:=Support for SSTP
 LUCI_DEPENDS:=+sstp-client
 LUCI_PKGARCH:=all
 
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Robert Koszewski <rkkoszewski@gmail.com>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

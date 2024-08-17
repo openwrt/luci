@@ -7,9 +7,9 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Support for PPP/PPPoE/PPPoA/PPtP
-LUCI_DEPENDS:=
 
 PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 
 include ../../luci.mk
 

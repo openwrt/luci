@@ -29,15 +29,9 @@
 -%}
 
 <script type="text/javascript">//<![CDATA[
-	var stxhr = new XHR();
-
 	function command_run(ev, id)
 	{
-		var args;
 		var field = document.getElementById(id);
-		if (field)
-			args = encodeURIComponent(field.value);
-
 		var legend = document.getElementById('command-rc-legend');
 		var output = document.getElementById('command-rc-output');
 
@@ -45,37 +39,30 @@
 		{
 			output.innerHTML =
 				'<img src="{{ resource }}/icons/loading.gif" alt="{{ _('Loading') }}" style="vertical-align:middle" /> ' +
-				'{{ _('Waiting for command to complete...') }}'
+				_('Waiting for command to complete...')
 			;
 
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			stxhr.get('{{ dispatcher.build_url('admin/system/commands/run') }}/' + id + (args ? '?args=' + args : ''), null,
-				function(x, st)
-				{
-					if (st)
-					{
-						if (st.binary)
-							st.stdout = '[{{ _('Binary data not displayed, download instead.') }}]';
+			L.Request.get(L.url('admin/system/commands/run', id), field ? { args: field.value } : null).then(function(reply) {
+				var st = reply.json();
 
-						legend.style.display = 'none';
-						output.innerHTML = String.format(
-							'<pre><strong># %h\n</strong>%h<span style="color:red">%h</span></pre>' +
-							'<div class="alert-message warning">%s ({{ _('Code:') }} %d)</div>',
-							st.command, st.stdout, st.stderr,
-							(st.exitcode == 0) ? '{{ _('Command successful') }}' : '{{ _('Command failed') }}',
-							st.exitcode);
-					}
-					else
-					{
-						legend.style.display = 'none';
-						output.innerHTML = '<span class="error">{{ _('Failed to execute command!') }}</span>';
-					}
+				if (st.binary)
+					st.stdout = '[' + _('Binary data not displayed, download instead.') + ']';
 
-					location.hash = '#output';
-				}
-			);
+				output.innerHTML = String.format(
+					'<pre><strong># %h\n</strong>%h<span style="color:red">%h</span></pre>' +
+					'<div class="alert-message warning">%h (%h %d)</div>',
+					st.command, st.stdout, st.stderr,
+					(st.exitcode == 0) ? _('Command successful') : _('Command failed'),
+					_('Code:'), st.exitcode);
+			}).catch(function() {
+				output.innerHTML = '<span class="error">%h</span>'.format(_('Failed to execute command!'));
+			}).finally(function() {
+				legend.style.display = 'none';
+				location.hash = '#output';
+			});
 		}
 
 		ev.preventDefault();
@@ -88,7 +75,7 @@
 		if (field)
 			args = encodeURIComponent(field.value);
 
-		location.href = '{{ dispatcher.build_url('admin/system/commands/download') }}/' + id + (args ? '/' + args : '');
+		location.href = L.url('admin/system/commands/download', id) + (args ? '/' + args : '');
 
 		ev.preventDefault();
 	}
@@ -105,7 +92,7 @@
 
 		if (legend && output)
 		{
-			var prefix = location.protocol + '//' + location.host + '{{ dispatcher.build_url('command') }}/';
+			var prefix = location.protocol + '//' + location.host + L.url('command') + '/';
 			var suffix = (args ? '?args=' + args : '');
 
 			var link = prefix + id + suffix;
@@ -114,8 +101,9 @@
 			legend.style.display = 'none';
 			output.parentNode.style.display = 'block';
 			output.innerHTML = String.format(
-				'<div class="alert-message"><p>{{ _('Download execution result') }} <a href="%s">%s</a></p><p>{{ _('Or display result') }} <a href="%s">%s</a></p></div>',
-				link, link, link_nodownload, link_nodownload
+				'<div class="alert-message"><p>%h <a href="%s">%s</a></p><p>%h <a href="%s">%s</a></p></div>',
+				_('Download execution result'), link, link,
+				_('Or display result'), link_nodownload, link_nodownload
 			);
 
 			location.hash = '#output';

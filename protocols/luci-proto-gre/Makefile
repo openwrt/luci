@@ -15,6 +15,7 @@ LUCI_TITLE:=Support for GRE tunnels (RFC2784)
 LUCI_DEPENDS:=+gre
 
 PKG_MAINTAINER:=Jan Betik <jan.betik@svine.su>
+PKG_LICENSE:=Apache-2.0
 
 include ../../luci.mk
 

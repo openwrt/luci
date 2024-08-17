@@ -3,10 +3,10 @@
 		<footer>
 			<span>
 				Powered by
-				<a href="https://github.com/openwrt/luci">
+				<a href="https://github.com/openwrt/luci" target="_blank" rel="noreferrer">
 					{{ version.luciname }} ({{ version.luciversion }})</a>
 				/
-				<a href="{{ entityencode(version.disturl ?? '#', true) }}">
+				<a href="{{ entityencode(version.disturl ?? '#', true) }}" target="_blank" rel="noreferrer">
 					{{ version.distname }} {{ version.distversion }} ({{ version.distrevision }})</a>
 				{% if (lua_active): %}
 					/ {{ _('Lua compatibility mode active') }}

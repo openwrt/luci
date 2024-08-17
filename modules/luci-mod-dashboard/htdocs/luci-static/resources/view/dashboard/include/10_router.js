@@ -142,10 +142,19 @@ return baseclass.extend({
 
 	renderUpdateWanData: function(data, v6) {
 
+		var min_metric = 2000000000;
+		var min_metric_i = 0;
 		for (var i = 0; i < data.length; i++) {
-			 var ifc = data[i];
+			var metric = data[i].getMetric();
+			if (metric < min_metric) {
+				min_metric = metric;
+				min_metric_i = i;
+			}
+		 }
 
-			 if (v6) {
+		var ifc = data[min_metric_i];
+		if(ifc){
+			if (v6) {
 				var uptime = ifc.getUptime();
 				this.params.internet.v6.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
 				this.params.internet.v6.ipprefixv6.value =  ifc.getIP6Prefix() || '-';
@@ -154,7 +163,7 @@ return baseclass.extend({
 				this.params.internet.v6.addrsv6.value = ifc.getIP6Addrs() || [ '-' ];
 				this.params.internet.v6.dnsv6.value = ifc.getDNS6Addrs() || [ '-' ];
 				this.params.internet.v6.connected.value = ifc.isUp();
-			 } else {
+			} else {
 				var uptime = ifc.getUptime();
 				this.params.internet.v4.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
 				this.params.internet.v4.protocol.value=  ifc.getI18n() || E('em', _('Not connected'));
@@ -162,7 +171,7 @@ return baseclass.extend({
 				this.params.internet.v4.connected.value = ifc.isUp();
 				this.params.internet.v4.addrsv4.value = ifc.getIPAddrs() || [ '-'];
 				this.params.internet.v4.dnsv4.value = ifc.getDNSAddrs() || [ '-' ];
-			 }
+			}
 		}
 	},
 

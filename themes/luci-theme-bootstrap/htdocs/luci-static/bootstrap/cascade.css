@@ -259,6 +259,7 @@ input[type="search"]::-webkit-search-decoration {
 textarea {
 	overflow: auto;
 	vertical-align: top;
+	font-family: monospace;
 }
 
 .control-group {
@@ -288,6 +289,7 @@ body {
 	min-height: 100%;
 	display: flex;
 	flex-direction: column;
+	overflow-y: scroll;
 }
 
 .container {
@@ -534,8 +536,7 @@ fieldset legend {
 label,
 input,
 button,
-select,
-textarea {
+select {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-size: 13px;
 	font-weight: normal;
@@ -1393,6 +1394,19 @@ footer ul.breadcrumb {
 	width: 100%;
 }
 
+.modal > .button-row {
+	display: flex;
+	justify-content: space-between;
+}
+
+.modal > .button-row > button:not(:last-of-type) {
+	margin-right: .5em;
+}
+
+.modal > .button-row > button:first-of-type {
+	margin-right: auto;
+}
+
 body.modal-overlay-active {
 	overflow: hidden;
 	height: 100vh;
@@ -1716,12 +1730,14 @@ body.modal-overlay-active #modal_overlay {
 	color: var(--on-primary-color);
 }
 
-.cbi-dropdown[open] > ul.dropdown > li.focus {
+.cbi-dropdown[open] > ul.dropdown > li.focus,
+.cbi-dropdown[open] > ul.dropdown > li:hover {
 	background: var(--primary-color-low);
 	color: var(--on-primary-color);
 }
 
-.cbi-dropdown[open] > ul.dropdown > li[selected].focus {
+.cbi-dropdown[open] > ul.dropdown > li[selected].focus,
+.cbi-dropdown[open] > ul.dropdown > li[selected]:hover {
 	background: linear-gradient(90deg, var(--primary-color-medium) 50%, var(--primary-color-low));
 }
 
@@ -2144,6 +2160,10 @@ th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
 	padding: .25em;
 }
 
+#cbi-network-interface .ifacebox-body {
+	white-space: normal;
+}
+
 .ifacebadge {
 	display: inline-block;
 	flex-direction: row;
@@ -2558,4 +2578,20 @@ div.cbi-value var.cbi-tooltip-container,
 
 [data-page="admin-system-admin-sshkeys"] .cbi-dynlist {
 	max-width: none;
+}
+
+[data-darkmode="true"] [data-page="admin-status-channel_analysis"] #view> div > div > div > div > div[style],
+[data-darkmode="true"] [data-page="admin-status-realtime-load"] #view > div > div > div[style],
+[data-darkmode="true"] [data-page="admin-status-realtime-bandwidth"] #view > div > div > div > div[style],
+[data-darkmode="true"] [data-page="admin-status-realtime-wireless"] #view > div > div > div > div[style],
+[data-darkmode="true"] [data-page="admin-status-realtime-connections"] #view > div > div > div[style] {
+	background-color: var(--background-color-high)!important;
+}
+
+[data-darkmode="true"] [data-page="admin-status-channel_analysis"] #view> div > div > div > div > div > svg > line[style],
+[data-darkmode="true"] [data-page="admin-status-realtime-load"] #view > div > div > div > svg > line[style],
+[data-darkmode="true"] [data-page="admin-status-realtime-bandwidth"] #view > div > div > div > div > svg > line[style],
+[data-darkmode="true"] [data-page="admin-status-realtime-wireless"] #view > div > div > div > div > svg > line[style],
+[data-darkmode="true"] [data-page="admin-status-realtime-connections"] #view > div > div > div > svg > line[style] {
+	stroke: #fff!important;
 }

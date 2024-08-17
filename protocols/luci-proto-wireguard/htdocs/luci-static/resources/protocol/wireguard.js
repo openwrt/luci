@@ -7,6 +7,7 @@
 'require form';
 'require network';
 'require validation';
+'require uqr';
 
 var generateKey = rpc.declare({
 	object: 'luci.wireguard',
@@ -64,28 +65,16 @@ function generateDescription(name, texts) {
 	]);
 }
 
-function invokeQREncode(data, code) {
-	return fs.exec_direct('/usr/bin/qrencode', [
-		'--inline', '--8bit', '--type=SVG',
-		'--output=-', '--', data
-	]).then(function(svg) {
-		code.style.opacity = '';
-		dom.content(code, Object.assign(E(svg), { style: 'width:100%;height:auto' }));
-	}).catch(function(error) {
-		code.style.opacity = '';
-
-		if (L.isObject(error) && error.name == 'NotFoundError') {
-			dom.content(code, [
-				Object.assign(E(qrIcon), { style: 'width:32px;height:32px;opacity:.2' }),
-				E('p', _('The <em>qrencode</em> package is required for generating an QR code image of the configuration.'))
-			]);
-		}
-		else {
-			dom.content(code, [
-				_('Unable to generate QR code: %s').format(L.isObject(error) ? error.message : error)
-			]);
-		}
-	});
+function buildSVGQRCode(data, code) {
+	// pixel size larger than 4 clips right and bottom edges of complex configs
+	const options = {
+		pixelSize: 4,
+		whiteColor: 'white',
+		blackColor: 'black'
+	};
+	const svg = uqr.renderSVG(data, options);
+	code.style.opacity = '';
+	dom.content(code, Object.assign(E(svg), { style: 'width:100%;height:auto' }));
 }
 
 var cbiKeyPairGenerate = form.DummyValue.extend({
@@ -507,9 +496,10 @@ return network.registerProtocol('wireguard', {
 			return E('em', _('No peers defined yet.'));
 		};
 
-		o = ss.option(form.Flag, 'disabled', _('Peer disabled'), _('Enable / Disable peer. Restart wireguard interface to apply changes.'));
-		o.modalonly = true;
+		o = ss.option(form.Flag, 'disabled', _('Disabled'), _('Enable / Disable peer. Restart wireguard interface to apply changes.'));
+		o.editable = true;
 		o.optional = true;
+		o.width = '5%';
 
 		o = ss.option(form.Value, 'description', _('Description'), _('Optional. Description of peer.'));
 		o.placeholder = 'My Peer';
@@ -779,7 +769,7 @@ return network.registerProtocol('wireguard', {
 						conf.firstChild.data = configGenerator(endpoint.getValue(), ips.getValue(), eips.getValue(), dns.getValue());
 						code.style.opacity = '.5';
 
-						invokeQREncode(conf.firstChild.data, code);
+						buildSVGQRCode(conf.firstChild.data, code);
 					}
 				};
 
@@ -794,10 +784,14 @@ return network.registerProtocol('wireguard', {
 				ips.forEach(function(ip) { qro.value(ip) });
 				qro.onchange = handleConfigChange;
 
+				qro = qrs.option(form.DynamicList, 'dns_servers', _('DNS Servers'), _('DNS servers for the remote clients using this tunnel to your openwrt device. Some wireguard clients require this to be set.'));
+				qro.datatype = 'ipaddr';
+				qro.default = dns;
+				qro.onchange = handleConfigChange;
+
 				qro = qrs.option(form.DynamicList, 'addresses', _('Addresses'), _('IP addresses for the peer to use inside the tunnel. Some clients require this setting.'));
 				qro.datatype = 'ipaddr';
 				qro.default = eips;
-				qro.default = dns;
 				eips.forEach(function(eip) { qro.value(eip) });
 				qro.onchange = handleConfigChange;
 
@@ -829,7 +823,7 @@ return network.registerProtocol('wireguard', {
 						}, [ peer_config ])
 					]);
 
-					invokeQREncode(peer_config, node.firstChild);
+					buildSVGQRCode(peer_config, node.firstChild);
 
 					return node;
 				};

@@ -297,7 +297,8 @@ return view.extend({
 			o.default = o.enabled;
 			o.depends('enabled', '1');
 
-			o = s.taboption('timesync', form.DynamicList, 'server', _('NTP server candidates'));
+			o = s.taboption('timesync', form.DynamicList, 'server', _('NTP server candidates'),
+				_('List of upstream NTP server candidates with which to synchronize.'));
 			o.datatype = 'host(0)';
 			o.ucisection = 'ntp';
 			o.depends('enabled', '1');

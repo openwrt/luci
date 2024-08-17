@@ -59,7 +59,7 @@ return view.extend({
 			]));
 		}
 
-		return table;
+		return E('div', { 'class': 'cbi-section' }, table);
 	},
 
 	renderTable: function(data) {
@@ -80,7 +80,7 @@ return view.extend({
 			]));
 		}
 
-		return table;
+		return E('div', { 'class': 'cbi-section' }, table);
 	},
 
 	renderContent: function(data) {

@@ -12,6 +12,8 @@ for _, p in ipairs({"dslite", "map", "464xlat"}) do
 	function proto.get_i18n(self)
 		if p == "dslite" then
 			return luci.i18n.translate("Dual-Stack Lite (RFC6333)")
+		elseif p == "ipip6" then
+			return luci.i18n.translate("IPv4 over IPv6 (RFC2473-IPIPv6)")
 		elseif p == "map" then
 			return luci.i18n.translate("MAP / LW4over6")
 		elseif p == "464xlat" then
@@ -24,7 +26,7 @@ for _, p in ipairs({"dslite", "map", "464xlat"}) do
 	end
 
 	function proto.opkg_package(self)
-		if p == "dslite" then
+		if p == "dslite" or p == "ipip6" then
 			return "ds-lite"
 		elseif p == "map" then
 			return "map-t"
@@ -56,6 +58,7 @@ end
 
 netmod:register_pattern_virtual("^464%-%w")
 netmod:register_pattern_virtual("^ds%-%w")
+netmod:register_pattern_virtual("^ipip6%-%w")
 netmod:register_pattern_virtual("^map%-%w")
 
 netmod:register_error_code("AFTR_DNS_FAIL",		luci.i18n.translate("Unable to resolve AFTR host name"))

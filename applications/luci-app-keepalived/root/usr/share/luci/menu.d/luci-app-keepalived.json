@@ -1,19 +1,10 @@
 {
 	"admin/services/keepalived": {
-		"title": "Keepalived",
+		"title": "VRRP",
 		"order": 1,
 		"action": {
 			"type": "alias",
-			"path": "admin/services/keepalived/overview"
-		}
-	},
-
-	"admin/services/keepalived/overview": {
-		"title": "Overview",
-		"order": 10,
-		"action": {
-			"type": "view",
-			"path": "keepalived/overview"
+			"path": "admin/services/keepalived/globals"
 		}
 	},
 
@@ -104,6 +95,15 @@
 		"action": {
 			"type": "view",
 			"path": "keepalived/vrrp_sync_group"
+		}
+	},
+
+	"admin/status/keepalived": {
+		"title": "VRRP",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "keepalived/overview"
 		}
 	}
 }

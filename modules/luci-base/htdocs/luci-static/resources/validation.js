@@ -5,6 +5,19 @@ function bytelen(x) {
 	return new Blob([x]).size;
 }
 
+function arrayle(a, b) {
+	if (!Array.isArray(a) || !Array.isArray(b))
+		return false;
+
+	for (var i = 0; i < a.length; i++)
+		if (a[i] > b[i])
+			return false;
+		else if (a[i] < b[i])
+			return true;
+
+	return true;
+}
+
 var Validator = baseclass.extend({
 	__name__: 'Validation',
 
@@ -333,6 +346,23 @@ var ValidatorFactory = baseclass.extend({
 				_('valid IPv6 network'));
 		},
 
+		iprange: function(negative) {
+			return this.assert(this.apply('iprange4', null, [negative]) || this.apply('iprange6', null, [negative]),
+				_('valid IP address range'));
+		},
+
+		iprange4: function(negative) {
+			var m = this.value.split('-');
+			return this.assert(m.length == 2 && arrayle(this.factory.parseIPv4(m[0]), this.factory.parseIPv4(m[1])),
+				_('valid IPv4 address range'));
+		},
+
+		iprange6: function(negative) {
+			var m = this.value.split('-');
+			return this.assert(m.length == 2 && arrayle(this.factory.parseIPv6(m[0]), this.factory.parseIPv6(m[1])),
+				_('valid IPv6 address range'));
+		},
+
 		port: function() {
 			var p = this.factory.parseInteger(this.value);
 			return this.assert(p >= 0 && p <= 65535, _('valid port value'));
@@ -533,7 +563,7 @@ var ValidatorFactory = baseclass.extend({
 		},
 
 		timehhmmss: function() {
-			return this.assert(this.value.match(/^[0-6][0-9]:[0-6][0-9]:[0-6][0-9]$/),
+			return this.assert(this.value.match(/^(?:[01]\d|2[0-3]):[0-5]\d:(?:[0-5]\d|60)$/),
 				_('valid time (HH:MM:SS)'));
 		},
 
@@ -589,7 +619,7 @@ var ValidatorFactory = baseclass.extend({
 		},
 
 		hexstring: function() {
-			return this.assert(this.value.match(/^([a-f0-9][a-f0-9]|[A-F0-9][A-F0-9])+$/),
+			return this.assert(this.value.match(/^([A-F0-9]{2})+$/i),
 				_('hexadecimal encoded value'));
 		},
 

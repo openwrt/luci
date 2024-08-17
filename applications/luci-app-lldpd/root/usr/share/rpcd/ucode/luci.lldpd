@@ -1,0 +1,22 @@
+'use strict';
+
+import { popen } from 'fs';
+
+function lldpcli_json(section) {
+	return json(popen(`lldpcli -f json0 show ${section}`, 'r'));
+}
+
+return {
+	'luci.lldpd': {
+		getStatus: {
+			call: function() {
+				return {
+					statistics: lldpcli_json("statistics"),
+					neighbors:  lldpcli_json("neighbors details"),
+					interfaces: lldpcli_json("interfaces"),
+					chassis:    lldpcli_json("chassis")
+				};
+			}
+		}
+	}
+};

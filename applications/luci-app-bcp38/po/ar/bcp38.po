@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2021-03-03 01:50+0000\n"
-"Last-Translator: Said Zakaria <said.zakaria@gmail.com>\n"
+"PO-Revision-Date: 2024-07-13 20:44+0000\n"
+"Last-Translator: Rex_sa <rex.sa@pm.me>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/ar/>\n"
 "Language: ar\n"
@@ -9,11 +9,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.5\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
 msgid "Allowed IP ranges"
-msgstr ""
+msgstr "نطاقات IP المسموح بها"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:26
 msgid ""
@@ -21,23 +21,26 @@ msgid ""
 "configuration, and add an exception if it will. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
+"حاول اكتشاف ما إذا كان سيتم حظر عنوان IP المنبع تلقائيًا بواسطة التكوين، وأضف "
+"استثناءً إذا حدث ذلك. إذا لم يعمل هذا بشكل صحيح، فيمكنك إضافة استثناءات يدويًا "
+"أدناه."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid "Auto-detect upstream IP"
-msgstr ""
+msgstr "الكشف التلقائي عن بروتوكول الإنترنت المنبع"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
 msgid "BCP38"
-msgstr ""
+msgstr "BCP38"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:18
 msgid "BCP38 config"
-msgstr ""
+msgstr "تكوين BCP38"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:38
 msgid "Blocked IP ranges"
-msgstr ""
+msgstr "نطاقات IP المحظورة"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:21
 msgid "Enable"
@@ -45,7 +48,7 @@ msgstr "شغل"
 
 #: applications/luci-app-bcp38/root/usr/share/rpcd/acl.d/luci-app-bcp38.json:3
 msgid "Grant UCI access for luci-app-bcp38"
-msgstr ""
+msgstr "منح UCI حق الوصول إلى luci - app - bcp38"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid "Interface name"
@@ -54,13 +57,15 @@ msgstr "اسم الواجهة"
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:32
 msgid ""
 "Interface to apply the blocking to should be the upstream WAN interface)."
-msgstr ""
+msgstr "يجب أن تكون الواجهة لتطبيق الحظر هي واجهة WAN المنبع)."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
 msgstr ""
+"له الأسبقية على النطاقات المحظورة. استخدمه لإدراج شبكتك الأولية في القائمة "
+"البيضاء إذا كنت وراء NAT مزدوج ولا يعمل الاكتشاف التلقائي."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
@@ -69,3 +74,7 @@ msgid ""
 "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
 "installed, so no BCP38 firewall routes are needed."
 msgstr ""
+"تمنع هذه الوظيفة الحزم ذات وجهات العناوين الخاصة من الخروج إلى الإنترنت وفقًا "
+"<a href=\"http://tools.ietf.org/html/bcp38\">لخطة استمرارية الأعمال رقم 38</"
+"a>. بالنسبة لـ IPv6، يتم تثبيت المسارات الافتراضية الخاصة بالمصدر فقط، لذلك "
+"لا توجد حاجة إلى مسارات جدار حماية BCP38."

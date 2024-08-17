@@ -10,6 +10,7 @@ LUCI_TITLE:=Support for IPIP tunnels (IPv4-in-IPv4 RFC2003)
 LUCI_DEPENDS:=+ipip
 
 PKG_MAINTAINER:=Roger Pueyo Centelles <roger.pueyo@guifi.net>
+PKG_LICENSE:=Apache-2.0
 
 include ../../luci.mk
 

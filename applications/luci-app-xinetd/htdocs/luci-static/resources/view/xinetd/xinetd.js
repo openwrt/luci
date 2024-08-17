@@ -4,6 +4,7 @@
 'require form';
 'require view';
 'require fs';
+'require network';
 'require tools.widgets as widgets';
 
 function validateEmpty(section, value) {
@@ -16,8 +17,15 @@ function validateEmpty(section, value) {
 }
 
 return view.extend({
-	render: function() {
+	load: function() {
+		return Promise.all([
+			network.getNetworks()
+		]);
+	},
+
+	render: function(promises) {
 		var m, s, o;
+		var networks = promises[0];
 
 		m = new form.Map('xinetd', _('Xinetd Settings'), _('Here you can configure Xinetd services'));
 
@@ -97,6 +105,24 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
+		o = s.taboption('basic', form.Value, 'bind', _('Bind address'), _('To which address to bind'));
+		o.datatype = 'ipaddr';
+		[4, 6].forEach(family => {
+			networks.forEach(network => {
+				if (network.getName() !== 'loopback') {
+					const addrs = (family === 6) ? network.getIP6Addrs() : network.getIPAddrs();
+					addrs.forEach(addr => {
+						o.value(addr.split('/')[0], E([], [
+							addr.split('/')[0], ' (',
+							widgets.NetworkSelect.prototype.renderIfaceBadge(network),
+							')'
+						]));
+					});
+				}
+			});
+		});
+		o.rmempty = true;
+
 		o = s.taboption('basic', form.Value, 'id', _('Identification'), _('Required if a services can use tcp and udp.'));
 		o.datatype = 'string';
 		o.value('time-stream');
@@ -174,7 +200,7 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.MultiValue, 'log_on_success', _('Log on success'), _('Informations that should be logged for this service in case of successful connection'));
+		o = s.taboption('advanced', form.MultiValue, 'log_on_success', _('Log on success'), _('What to log for successful connections'));
 		o.value('PID', _('Server PID'));
 		o.value('HOST', _('Remote host address '));
 		o.value('USERID', _('User ID of the remote user'));
@@ -183,7 +209,7 @@ return view.extend({
 		o.value('TRAFFIC', _('Total bytes in and out for a redirected service'));
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.MultiValue, 'log_on_failure', _('Log on failure'), _('Informations that should be logged for this service in case of a failed connection'));
+		o = s.taboption('advanced', form.MultiValue, 'log_on_failure', _('Log on failure'), _('What to log for failed connections'));
 		o.value('HOST', _('Remote host address '));
 		o.value('USERID', _('User ID of the remote user'));
 		o.value('ATTEMPT', _('Failed attempts'));

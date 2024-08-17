@@ -2141,12 +2141,27 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 */
 	getExpiry: function() {
 		var u = this._ubus('uptime'),
-		    d = this._ubus('data');
+		    d = this._ubus('data'),
+		    v6_prefixes = this._ubus('ipv6-prefix'),
+		    v6_addresses = this._ubus('ipv6-address');
 
-		if (typeof(u) == 'number' && d != null &&
-		    typeof(d) == 'object' && typeof(d.leasetime) == 'number') {
-			var r = d.leasetime - (u % d.leasetime);
-			return (r > 0 ? r : 0);
+		if (typeof(u) == 'number' && d != null) {
+
+			// DHCPv4 or leasetime in data
+			if(typeof(d) == 'object' && typeof(d.leasetime) == 'number') {
+				var r = d.leasetime - (u % d.leasetime);
+				return (r > 0 ? r : 0);
+			}
+
+			// DHCPv6, we can have multiple IPs and prefixes
+			if (Array.isArray(v6_prefixes) || Array.isArray(v6_addresses)) {
+				var prefixes = [...v6_prefixes, ...v6_addresses];
+
+				if(prefixes.length && typeof(prefixes[0].valid) == 'number') {
+	          		var r = prefixes[0].valid;
+          			return (r > 0 ? r : 0);
+				}
+			}
 		}
 
 		return -1;

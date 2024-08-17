@@ -38,8 +38,8 @@ local get_networks = function ()
 			data[index]["_interface"] = v.Options.parent
 		end
 
-		data[index]["_subnet"] = v.IPAM and v.IPAM.Config[1] and v.IPAM.Config[1].Subnet or nil
-		data[index]["_gateway"] = v.IPAM and v.IPAM.Config[1] and v.IPAM.Config[1].Gateway or nil
+		data[index]["_subnet"] = v.IPAM and v.IPAM.Config and v.IPAM.Config[1] and v.IPAM.Config[1].Subnet or nil
+		data[index]["_gateway"] = v.IPAM and v.IPAM.Config and v.IPAM.Config[1] and v.IPAM.Config[1].Gateway or nil
 	end
 
 	return data

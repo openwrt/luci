@@ -1,26 +1,26 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-09-18 15:45+0000\n"
-"Last-Translator: David Rapaň <david@rapan.cz>\n"
+"PO-Revision-Date: 2024-04-01 18:21+0000\n"
+"Last-Translator: Ievgen Ievgen <jony057dev@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/uk/>\n"
 "Language: uk\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0.2\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:25
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certificates"
-msgstr "ACME сертифікати"
+msgstr "Сертифікати ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:36
 msgid "ACME global config"
 msgstr "Глобальні налаштування ACME"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:514
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:508
 msgid "ACME server URL"
 msgstr "URL-адреса сервера ACME"
 
@@ -30,11 +30,12 @@ msgstr "Електронна адреса пошти облікового зап
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:57
 msgid "Advanced Settings"
-msgstr "Додаткові налаштування"
+msgstr "Розширені налаштування"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:433
 msgid "Base64 content of private key. Use instead of YC_SA_Key_File_Path"
 msgstr ""
+"Base64 вміст приватного ключа. Використовувати замість YC_SA_Key_File_Path"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:33
 msgid "Cert files are stored in"
@@ -44,19 +45,15 @@ msgstr "Сертифікати зберігаються у каталог"
 msgid "Certificate config"
 msgstr "Параметри сертифіката"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:605
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:599
 msgid "Certificates"
-msgstr ""
+msgstr "Сертифікати"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:452
 msgid "Challenge Alias"
 msgstr "Псевдоніми виклику"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:509
-msgid "Custom ACME CA"
-msgstr "Користувацький ACME CA"
-
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:515
 msgid "Custom ACME server directory URL."
 msgstr "URL-адреса каталогу користувацького сервера ACME."
 
@@ -76,13 +73,13 @@ msgstr "Облікові дані DNS API"
 msgid "DNS Challenge Validation"
 msgstr "DNS Перевірка викликів"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:521
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:515
 msgid "Days until renewal"
 msgstr "Днів до поновлення"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
 msgid "Default"
-msgstr ""
+msgstr "За замовчуванням"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:459
 msgid "Domain Alias"
@@ -108,6 +105,8 @@ msgid ""
 "E.g. <code>_acme-challenge.example.com:12345:98765 alias.example.com:11111</"
 "code>"
 msgstr ""
+"Наприклад, <code>_acme-challenge.example.com:12345:98765 alias.example."
+"com:11111</code>"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:482
 msgid "ECC 256 bits"
@@ -151,10 +150,12 @@ msgid ""
 "If a certificate wasn't renewed in time then you'll receive a notice at 20 "
 "days before expiry."
 msgstr ""
+"Якщо сертифікат не було оновлено вчасно, ви отримаєте сповіщення за 20 днів "
+"до закінчення терміну дії."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:587
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:581
 msgid "Issued on"
-msgstr ""
+msgstr "Видано на"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:477
 msgid "Key size (and type) for the generated certificate."
@@ -162,36 +163,38 @@ msgstr "Розмір (і тип) ключа для згенерованого с
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:476
 msgid "Key type"
-msgstr "Розмір ключа"
+msgstr "Тип ключа"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:584
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:578
 msgid "Main Domain"
-msgstr ""
+msgstr "Основний домен"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:369
 msgid "OCID of tenancy that contains the target DNS zone"
-msgstr ""
+msgstr "OCID оренди, яка містить цільову DNS-зону"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:372
 msgid "OCID of user with permission to add/remove records from zones"
-msgstr ""
+msgstr "OCID користувача з правом додавання/видалення записів із зон"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:275
 msgid ""
 "Open <a href=\"https://www.duckdns.org/\">DuckDNS</a> and copy a token here"
 msgstr ""
+"Відкрийте <a href=\"https://www.duckdns.org/\">DuckDNS</a> і скопіюйте токен "
+"сюди"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:378
 msgid "Path to private API signing key file in PEM format"
-msgstr ""
+msgstr "Шлях до приватного файлу ключа підпису API у форматі PEM"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:585
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:579
 msgid "Private Key"
-msgstr ""
+msgstr "Приватний ключ"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:586
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:580
 msgid "Public Certificate"
-msgstr ""
+msgstr "Публічний сертифікат"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:479
 msgid "RSA 2048 bits"
@@ -207,11 +210,11 @@ msgstr "RSA 4096 біт"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:236
 msgid "See instructions"
-msgstr ""
+msgstr "Дивіться інструкції"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:375
 msgid "Should point to the tenancy home region"
-msgstr ""
+msgstr "Має вказувати на регіон проживання орендаря"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:72
 msgid "Standalone"
@@ -263,7 +266,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:381
 msgid "The private API signing key in PEM format"
-msgstr ""
+msgstr "Приватний ключ підпису API у форматі PEM"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:26
 msgid ""
@@ -284,7 +287,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:297
 msgid "This is usually NOT an email address"
-msgstr ""
+msgstr "Зазвичай це НЕ адреса електронної пошти"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:88
 msgid ""
@@ -336,5 +339,5 @@ msgstr ""
 "документа веб-сервера, щоб запустити Acme в режимі webroot. Веб-сервер "
 "повинен бути доступний з Інтернету через порт 80."
 
-#~ msgid "ACME certs"
-#~ msgstr "ACME сертифікати"
+#~ msgid "Custom ACME CA"
+#~ msgstr "Користувацький ACME CA"

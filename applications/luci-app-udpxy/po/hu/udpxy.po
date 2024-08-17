@@ -10,21 +10,35 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.0-dev\n"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:30
-msgid "Bind IP/Interface"
-msgstr "Kötési IP-cím/interfész"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:52
+msgid "-1 is all."
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:47
-msgid "Buffer messages"
-msgstr "Üzenetpuffer"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:56
+msgid "-1 is unlimited."
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:44
-msgid "Buffer size"
-msgstr "Pufferméret"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:52
+msgid "Buffer message amount"
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:50
-msgid "Buffer time"
-msgstr "Pufferezési idő"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:56
+msgid "Buffer time limit"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:43
+msgid "Client amount upper limit"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:28
+msgid "Client statistics"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:34
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:38
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:46
+msgid "Default"
+msgstr ""
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:16
 msgid "Enabled"
@@ -34,41 +48,49 @@ msgstr "Engedélyezve"
 msgid "Grant UCI access for luci-app-udpxy"
 msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:42
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:30
+msgid "HTTP Listen interface"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:49
+msgid "Ingress buffer size"
+msgstr ""
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:46
 msgid "Log file"
 msgstr "Naplófájl"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:39
-msgid "Max clients"
-msgstr "Max. ügyfélszám"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:38
+msgid "Multicast subscribe source interface"
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:56
-msgid "Multicast subscription renew"
-msgstr "Multicast-előfizetés megújítása"
-
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:53
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:60
 msgid "Nice increment"
 msgstr "Nice növekmény"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:33
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:34
 msgid "Port"
 msgstr "Port"
+
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:64
+msgid "Renew multicast subscription periodicity"
+msgstr ""
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:22
 msgid "Respawn"
 msgstr "Újraszármaztatás"
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:36
-msgid "Source IP/Interface"
-msgstr "Forrás IP-cím/interfész"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:49
+msgid "Unit: bytes, Kb, Mb; Max 2097152 bytes"
+msgstr ""
 
-#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:28
-msgid "Status"
-msgstr "Állapot"
+#: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:64
+msgid "Unit: seconds; 0 is skip."
+msgstr ""
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:25
-msgid "Verbose"
-msgstr "Bőbeszédű"
+msgid "Verbose logging"
+msgstr ""
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:9
 #: applications/luci-app-udpxy/root/usr/share/luci/menu.d/luci-app-udpxy.json:3
@@ -77,8 +99,40 @@ msgstr "udpxy"
 
 #: applications/luci-app-udpxy/htdocs/luci-static/resources/view/udpxy.js:10
 msgid ""
-"udpxy is a UDP-to-HTTP multicast traffic relay daemon, here you can "
-"configure the settings."
+"udpxy is an IPTV stream relay, a UDP-to-HTTP multicast traffic relay daemon "
+"which forwards multicast UDP streams to HTTP clients."
 msgstr ""
-"Az udpxy egy UDP-HTTP multicast átviteli szolgáltatás. Itt lehet módosítani "
-"a beállításait."
+
+#~ msgid "Bind IP/Interface"
+#~ msgstr "Kötési IP-cím/interfész"
+
+#~ msgid "Buffer messages"
+#~ msgstr "Üzenetpuffer"
+
+#~ msgid "Buffer size"
+#~ msgstr "Pufferméret"
+
+#~ msgid "Buffer time"
+#~ msgstr "Pufferezési idő"
+
+#~ msgid "Max clients"
+#~ msgstr "Max. ügyfélszám"
+
+#~ msgid "Multicast subscription renew"
+#~ msgstr "Multicast-előfizetés megújítása"
+
+#~ msgid "Source IP/Interface"
+#~ msgstr "Forrás IP-cím/interfész"
+
+#~ msgid "Status"
+#~ msgstr "Állapot"
+
+#~ msgid "Verbose"
+#~ msgstr "Bőbeszédű"
+
+#~ msgid ""
+#~ "udpxy is a UDP-to-HTTP multicast traffic relay daemon, here you can "
+#~ "configure the settings."
+#~ msgstr ""
+#~ "Az udpxy egy UDP-HTTP multicast átviteli szolgáltatás. Itt lehet "
+#~ "módosítani a beállításait."

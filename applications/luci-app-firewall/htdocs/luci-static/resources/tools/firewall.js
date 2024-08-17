@@ -6,6 +6,7 @@
 'require form';
 'require network';
 'require firewall';
+'require validation';
 'require tools.prng as random';
 
 var protocols = [
@@ -455,9 +456,10 @@ return baseclass.extend({
 
 	addIPOption: function(s, tab, name, label, description, family, hosts, multiple) {
 		var o = s.taboption(tab, multiple ? this.CBIDynamicMultiValueList : form.Value, name, label, description);
+		var fw4 = L.hasSystemFeature('firewall4');
 
 		o.modalonly = true;
-		o.datatype = 'list(neg(ipmask("true")))';
+		o.datatype = (fw4 && validation.types.iprange) ? 'list(neg(or(ipmask("true"),iprange)))' : 'list(neg(ipmask("true")))';
 		o.placeholder = multiple ? _('-- add IP --') : _('any');
 
 		if (family != null) {

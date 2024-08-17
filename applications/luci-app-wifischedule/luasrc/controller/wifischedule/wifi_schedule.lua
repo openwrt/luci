@@ -24,23 +24,7 @@ function index()
         return
     end
 
-    local e = entry({"admin", "services", "wifi_schedule"}, firstchild(), _("Wifi Schedule"), 60)
+    local e = entry({"admin", "services", "wifi_schedule"}, cbi("wifischedule/wifi_schedule"), _("Wifi Schedule"), 60)
     e.acl_depends = { "luci-app-wifischedule" }
     e.dependent = false
-
-    entry({"admin", "services", "wifi_schedule", "tab_from_cbi"}, cbi("wifischedule/wifi_schedule"), _("Schedule"), 1)
-    entry({"admin", "services", "wifi_schedule", "wifi_schedule"}, call("wifi_schedule_log"), _("View Logfile"), 2)
-    entry({"admin", "services", "wifi_schedule", "cronjob"}, call("view_crontab"), _("View Cron Jobs"), 3)
-end
-
-function wifi_schedule_log()
-    local logfile = fs.readfile("/tmp/log/wifi_schedule.log") or ""
-    template.render("wifischedule/file_viewer",
-        {title = i18n.translate("Wifi Schedule Logfile"), content = logfile})
-end
-
-function view_crontab()
-    local crontab = fs.readfile("/etc/crontabs/root") or ""
-    template.render("wifischedule/file_viewer",
-        {title = i18n.translate("Cron Jobs"), content = crontab})
 end

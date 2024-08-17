@@ -170,15 +170,17 @@ return view.extend({
 	},
 
 	handleBlock: function(hostname, ev) {
-		var mtdblock = dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select').value;
+		var mtdblock = dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select');
+		var mtdnumber = mtdblock.value;
+		var mtdname = mtdblock.selectedOptions[0].text.replace(/([^a-zA-Z0-9]+)/g, '-');
 		var form = E('form', {
 			'method': 'post',
 			'action': L.env.cgi_base + '/cgi-download',
 			'enctype': 'application/x-www-form-urlencoded'
 		}, [
 			E('input', { 'type': 'hidden', 'name': 'sessionid', 'value': rpc.getSessionID() }),
-			E('input', { 'type': 'hidden', 'name': 'path',      'value': '/dev/mtdblock%d'.format(mtdblock) }),
-			E('input', { 'type': 'hidden', 'name': 'filename',  'value': '%s.mtd%d.bin'.format(hostname, mtdblock) })
+			E('input', { 'type': 'hidden', 'name': 'path',      'value': '/dev/mtdblock%d'.format(mtdnumber) }),
+			E('input', { 'type': 'hidden', 'name': 'filename',  'value': '%s.mtd%d.%s.bin'.format(hostname, mtdnumber, mtdname) })
 		]);
 
 		ev.currentTarget.parentNode.appendChild(form);

@@ -11,34 +11,7 @@
 "require view";
 "require https-dns-proxy.status as hdp";
 
-var pkg = {
-	get Name() {
-		return "https-dns-proxy";
-	},
-
-	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
-	},
-
-	templateToRegexp: function (template) {
-		return RegExp(
-			"^" +
-				template
-					.split(/(\{\w+\})/g)
-					.map((part) => {
-						let placeholder = part.match(/^\{(\w+)\}$/);
-						if (placeholder) return `(?<${placeholder[1]}>.*?)`;
-						else return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-					})
-					.join("") +
-				"$"
-		);
-	},
-
-	templateToResolver: function (template, args) {
-		return template.replace(/{(\w+)}/g, (_, v) => args[v]);
-	},
-};
+var pkg = hdp.pkg;
 
 return view.extend({
 	load: function () {
@@ -81,7 +54,7 @@ return view.extend({
 			"dnsmasq_config_update_option",
 			_("Update DNSMASQ Config on Start/Stop"),
 			_(
-				"If update option is selected, the %s'DNS forwardings' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
+				"If update option is selected, the %s'DNS Forwards' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
 			).format(
 				'<a href="' + L.url("admin", "network", "dhcp") + '">',
 				"</a>",
@@ -100,13 +73,15 @@ return view.extend({
 				section_id,
 				"dnsmasq_config_update"
 			);
-			switch (val) {
-				case "*":
-				case "-":
-					return val;
-				default:
-					return "+";
-			}
+			if (val && val[0]) {
+				switch (val[0]) {
+					case "*":
+					case "-":
+						return val[0];
+					default:
+						return "+";
+				}
+			} else return "*";
 		};
 		o.write = function (section_id, formvalue) {
 			L.uci.set(pkg.Name, section_id, "dnsmasq_config_update", formvalue);

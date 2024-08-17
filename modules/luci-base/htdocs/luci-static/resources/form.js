@@ -1007,14 +1007,14 @@ var CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * @throws {TypeError}
 	 * Throws a `TypeError` exception in case the passed class value is not a
-	 * descendent of `AbstractValue`.
+	 * descendant of `AbstractValue`.
 	 *
 	 * @returns {LuCI.form.AbstractValue}
 	 * Returns the instantiated option class instance.
 	 */
 	option: function(cbiClass /*, ... */) {
 		if (!CBIAbstractValue.isSubclass(cbiClass))
-			throw L.error('TypeError', 'Class must be a descendent of CBIAbstractValue');
+			throw L.error('TypeError', 'Class must be a descendant of CBIAbstractValue');
 
 		var obj = cbiClass.instantiate(this.varargs(arguments, 1, this.map, this));
 		this.append(obj);
@@ -1044,7 +1044,7 @@ var CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * @throws {TypeError}
 	 * Throws a `TypeError` exception in case the passed class value is not a
-	 * descendent of `AbstractValue`.
+	 * descendant of `AbstractValue`.
 	 *
 	 * @returns {LuCI.form.AbstractValue}
 	 * Returns the instantiated option class instance.
@@ -2672,7 +2672,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': _('Edit'),
-					'class': 'cbi-button cbi-button-edit',
+					'class': 'btn cbi-button cbi-button-edit',
 					'click': evFn
 				}, [ _('Edit') ])
 			);
@@ -2682,7 +2682,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': more_label,
-					'class': 'cbi-button cbi-button-edit',
+					'class': 'btn cbi-button cbi-button-edit',
 					'click': ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
 				}, [ more_label ])
 			);
@@ -2694,7 +2694,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			dom.append(tdEl.lastElementChild,
 				E('button', {
 					'title': btn_title || _('Delete'),
-					'class': 'cbi-button cbi-button-remove',
+					'class': 'btn cbi-button cbi-button-remove',
 					'click': ui.createHandlerFn(this, 'handleRemove', section_id),
 					'disabled': this.map.readonly || null
 				}, [ btn_title || _('Delete') ])
@@ -2974,7 +2974,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 			if (!this.getPreviousModalMap())
 				prevNode.parentNode
-					.querySelector('div.right > button')
+					.querySelector('div.button-row > button')
 					.firstChild.data = _('Dismiss');
 		}
 		else {
@@ -3207,8 +3207,8 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 						.appendChild(E('span', title ? ' » ' + title : ''));
 
 					mapNode.parentNode
-						.querySelector('div.right > button')
-						.firstChild.data = _('Back');
+						.querySelector('div.button-row > button')
+						.firstChild.data = _('Dismiss');
 
 					mapNode.classList.add('hidden');
 					mapNode.parentNode.insertBefore(nodes, mapNode.nextElementSibling);
@@ -3218,13 +3218,13 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				else {
 					ui.showModal(title, [
 						nodes,
-						E('div', { 'class': 'right' }, [
+						E('div', { 'class': 'button-row' }, [
 							E('button', {
-								'class': 'cbi-button',
+								'class': 'btn cbi-button',
 								'click': ui.createHandlerFn(this, 'handleModalCancel', m)
 							}, [ _('Dismiss') ]), ' ',
 							E('button', {
-								'class': 'cbi-button cbi-button-positive important',
+								'class': 'btn cbi-button cbi-button-positive important',
 								'click': ui.createHandlerFn(this, 'handleModalSave', m),
 								'disabled': m.readonly || null
 							}, [ _('Save') ])
@@ -3833,7 +3833,7 @@ var CBIDynamicList = CBIValue.extend(/** @lends LuCI.form.DynamicList.prototype 
  * @classdesc
  *
  * The `ListValue` class implements a simple static HTML select element
- * allowing the user chose a single value from a set of predefined choices.
+ * allowing the user to choose a single value from a set of predefined choices.
  * It builds upon the {@link LuCI.ui.Select} widget.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
@@ -4543,11 +4543,22 @@ var CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype */
 	__init__: function(/* ... */) {
 		this.super('__init__', arguments);
 
+		this.browser = false;
 		this.show_hidden = false;
 		this.enable_upload = true;
 		this.enable_remove = true;
+		this.enable_download = false;
 		this.root_directory = '/etc/luci-uploads';
 	},
+
+
+	/**
+	 * Open in a file browser mode instead of selecting for a file
+	 *
+	 * @name LuCI.form.FileUpload.prototype#browser
+	 * @type boolean
+	 * @default false
+	 */
 
 	/**
 	 * Toggle display of hidden files.
@@ -4594,6 +4605,14 @@ var CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype */
 	 */
 
 	/**
+	 * Toggle download file functionality.
+	 *
+	 * @name LuCI.form.FileUpload.prototype#enable_download
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
 	 * Specify the root directory for file browsing.
 	 *
 	 * This property defines the topmost directory the file browser widget may
@@ -4614,9 +4633,11 @@ var CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype */
 		var browserEl = new ui.FileUpload((cfgvalue != null) ? cfgvalue : this.default, {
 			id: this.cbid(section_id),
 			name: this.cbid(section_id),
+			browser: this.browser,
 			show_hidden: this.show_hidden,
 			enable_upload: this.enable_upload,
 			enable_remove: this.enable_remove,
+			enable_download: this.enable_download,
 			root_directory: this.root_directory,
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});

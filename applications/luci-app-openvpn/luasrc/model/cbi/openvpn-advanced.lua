@@ -371,6 +371,10 @@ local knownParams = {
 			{ "net30", "p2p", "subnet" },
 			translate("'net30', 'p2p', or 'subnet'"),
 			{dev_type="tun" } },
+		{ Flag,
+			"disable_dco",
+			0,
+			translate("Disable Data Channel Offloading (DCO) support") },
 	} },
 
 	{ "vpn", translate("VPN"), {
@@ -797,13 +801,21 @@ local knownParams = {
 			"ncp_disable",
 			0,
 			translate("This completely disables cipher negotiation") },
-		{ Value,
+		{ DynamicList,
 			"ncp_ciphers",
-			"AES-256-GCM:AES-128-GCM",
+			{
+				"AES-256-GCM",
+				"AES-128-GCM"
+			},
 			translate("Restrict the allowed ciphers to be negotiated") },
-		{ Value,
+		{ DynamicList,
 			"data_ciphers",
-			"CHACHA20-POLY1305:AES-256-GCM:AES-128-GCM:AES-256-CBC",  
+			{
+				"CHACHA20-POLY1305",
+				"AES-256-GCM",
+				"AES-128-GCM",
+				"AES-256-CBC"
+			},
 			translate("Restrict the allowed ciphers to be negotiated") },
 	} }
 }

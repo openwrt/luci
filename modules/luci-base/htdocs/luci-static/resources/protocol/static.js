@@ -126,6 +126,7 @@ return network.registerProtocol('static', {
 			return form.Value.prototype.render.apply(this, [ option_index, section_id, in_table ]);
 		},
 
+		datatype: 'ip4addr("true")',
 		validate: validateBroadcast
 	}),
 

@@ -7,10 +7,11 @@
 
 include $(TOPDIR)/rules.mk
 
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Helge Mader <ma@dev.tdt.de>
+
 LUCI_TITLE:=LuCI Support for xinetd
 LUCI_DEPENDS:=+luci-base +xinetd
-
-PKG_MAINTAINER:=Helge Mader <ma@dev.tdt.de>
 
 include ../../luci.mk
 

@@ -90,9 +90,11 @@ return view.extend({
 							ap[1].score
 						]
 					}
+					return undefined;
 				})
 				
 			}).flat();
+			clients = clients.filter(client => client !== undefined);
 
 			cbi_update_table(hearing_map_table, clients, E('em', _('No clients connected.')));
 

@@ -48,24 +48,24 @@ return view.extend({
 								}
 							}
 						}
-						return  [ 
+						return  [
 							target.data.iname,
 							target.data.ifp_ifname,
 							state,
 							target.stats.advert_sent,
 							target.stats.advert_rcvd,
 							new Date(target.data.last_transition * 1000)
-						];	
+						];
 					}),
 					E('em', _('There are no active instances'))
 				);
 			});
 		});
 
-		return E([
-			E('h3', _('Keepalived Instances Status')),
-			E('br'),
-			table
+		return E('div', {'class': 'cbi-map'}, [
+			E('h2', _('VRRP')),
+			E('div', {'class': 'cbi-map-descr'}, _('This overview shows the current status of the VRRP instances on this device.')),
+			E('div', { 'class': 'cbi-section' }, table)
 		]);
 	},
 

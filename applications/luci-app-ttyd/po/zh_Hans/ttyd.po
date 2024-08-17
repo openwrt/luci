@@ -1,16 +1,16 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-11-13 19:55+0000\n"
-"Last-Translator: MkQtS <MkQtS@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-04-12 04:01+0000\n"
+"Last-Translator: try496 <pinghejk@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "openwrt/luciapplicationsttyd/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:64
 msgid "Accept only one client and exit on disconnection"
 msgstr "仅接受一个客户端并在断开连接后退出"
 
@@ -18,26 +18,30 @@ msgstr "仅接受一个客户端并在断开连接后退出"
 msgid "Add instance"
 msgstr "添加实例"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:39
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:48
 msgid "Allow URL args"
 msgstr "允许 URL 参数"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:39
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:48
 msgid ""
 "Allow client to send command line arguments in URL (eg: http://"
 "localhost:7681?arg=foo&arg=bar)"
 msgstr ""
 "允许客户端在 URL 中传递命令行参数 (如: http://localhost:7681?arg=foo&arg=bar)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:49
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:20
+msgid "Bind to UNIX domain socket instead of IP port"
+msgstr "绑定到 UNIX 域套接字而不是 IP 端口"
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:58
 msgid "Check origin"
 msgstr "检查来源"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:43
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:52
 msgid "Client option"
 msgstr "客户端选项"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:79
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:88
 msgid "Command"
 msgstr "命令"
 
@@ -45,27 +49,27 @@ msgstr "命令"
 msgid "Config"
 msgstr "配置"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:36
 msgid "Credential"
 msgstr "凭据"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:36
 msgid "Credential for Basic Authentication"
 msgstr "用于基本身份验证的凭据"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:57
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
 msgid "Custom index.html path"
 msgstr "自定义 index.html 路径"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:81
 msgid "Debug"
 msgstr "调试"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:41
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:50
 msgid "Do not allow clients to write to the TTY"
 msgstr "不允许客户端写入 TTY"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:49
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:58
 msgid "Do not allow websocket connection from different origin"
 msgstr "不允许不同来源的 websocket 连接"
 
@@ -73,15 +77,15 @@ msgstr "不允许不同来源的 websocket 连接"
 msgid "Enable"
 msgstr "启用"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:59
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:68
 msgid "Enable IPv6 support"
 msgstr "启用 IPv6 支持"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:61
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:70
 msgid "Enable SSL"
 msgstr "启用 SSL"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:73
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:82
 msgid "Error"
 msgstr "错误"
 
@@ -89,113 +93,121 @@ msgstr "错误"
 msgid "Grant UCI access for luci-app-ttyd"
 msgstr "授予UCI访问luci-app-ttyd的权限"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:33
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:42
 msgid "Group ID"
 msgstr "组 ID"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:33
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:42
 msgid "Group id to run with"
 msgstr "要运行的组 ID"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:59
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:68
 msgid "IPv6"
 msgstr "IPv6"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:57
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
 msgid "Index"
 msgstr "首页"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:76
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:85
 msgid "Info"
 msgstr "信息"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:24
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
 msgid "Interface"
 msgstr "接口"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:51
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:93
+msgid "Make sure to set up another authorization method."
+msgstr "确保设置另一种授权方式。"
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:60
 msgid "Max clients"
 msgstr "最大客户端数量"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:51
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:60
 msgid "Maximum clients to support (default: 0, no limit)"
 msgstr "最大支持的客户端数量（默认：0，无限制）"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:24
-msgid ""
-"Network interface to bind (eg: eth0), or UNIX domain socket path (eg: /var/"
-"run/ttyd.sock)"
-msgstr ""
-"要绑定的网络接口 (如: eth0), 或 UNIX domain socket 路径 (如: /var/run/ttyd."
-"sock)"
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:27
+msgid "Network interface to bind (eg: eth0)"
+msgstr "要绑定的网络接口（如：eth0）"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:75
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:92
+msgid "Note that reverse proxied pages is NOT protected by password like LuCI."
+msgstr "注意，通过反向代理的页面不会像LuCI那样受到密码保护。"
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:84
 msgid "Notice"
 msgstr "注意"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:64
 msgid "Once"
 msgstr "一次"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:20
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:91
+msgid "Override URL in Terminal tab. For use with reverse proxy."
+msgstr "在“终端”标签页中绕过 URL。用于反向代理。"
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:22
 msgid "Port"
 msgstr "端口"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:20
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:22
 msgid "Port to listen (default: 7681, use `0` for random port)"
 msgstr "要监听的端口 (默认: 7681, `0` 代表随机端口)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/term.js:14
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/term.js:15
 msgid ""
 "Random ttyd port (port=0) is not supported.<br />Change to a fixed port and "
 "try again."
 msgstr "不支持随机 ttyd 端口 (端口=0)。<br />改为固定端口然后再试一次。"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:41
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:50
 msgid "Read-only"
 msgstr "只读"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:61
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:70
 msgid "SSL"
 msgstr "SSL"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:69
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:78
 msgid "SSL CA file path for client certificate verification"
 msgstr "用于客户端证书验证的 SSL CA 文件路径"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:69
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:78
 msgid "SSL ca"
 msgstr "SSL ca"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:63
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
 msgid "SSL cert"
 msgstr "SSL 证书"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:63
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
 msgid "SSL certificate file path"
 msgstr "SSL 证书文件路径"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:75
 msgid "SSL key"
 msgstr "SSL 密钥"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:66
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:75
 msgid "SSL key file path"
 msgstr "SSL 密钥文件路径"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:43
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:52
 msgid "Send option to client"
 msgstr "发送选项到客户端"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:72
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:81
 msgid "Set log level (default: 7)"
 msgstr "设置日志级别 (默认: 7)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:36
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:45
 msgid "Signal"
 msgstr "信号"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:36
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:45
 msgid "Signal to send to the command when exit it (default: 1, SIGHUP)"
 msgstr "退出时要发送给命令的信号 (默认: 1, SIGHUP)"
 
@@ -204,29 +216,52 @@ msgstr "退出时要发送给命令的信号 (默认: 1, SIGHUP)"
 msgid "Terminal"
 msgstr "终端"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:46
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
 msgid "Terminal type"
 msgstr "终端类型"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:46
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:55
 msgid "Terminal type to report (default: xterm-256color)"
 msgstr "要报告的终端类型 (默认: xterm-256color)"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:30
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:31
+msgid "UNIX domain socket path (eg: /var/run/ttyd.sock)"
+msgstr "UNIX 域套接字路径（如：/var/run/ttyd.sock）"
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:20
+msgid "UNIX socket"
+msgstr "UNIX 域套接字"
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:31
+msgid "UNIX socket path"
+msgstr "UNIX 域套接字路径"
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:90
+msgid "URL override"
+msgstr "URL 重写"
+
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:39
 msgid "User ID"
 msgstr "用户 ID"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:30
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:39
 msgid "User id to run with"
 msgstr "要运行的用户 ID"
 
-#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:74
+#: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:83
 msgid "Warning"
 msgstr "警告"
 
 #: applications/luci-app-ttyd/htdocs/luci-static/resources/view/ttyd/config.js:12
 msgid "ttyd Instance"
 msgstr "ttyd 实例"
+
+#~ msgid ""
+#~ "Network interface to bind (eg: eth0), or UNIX domain socket path (eg: /"
+#~ "var/run/ttyd.sock)"
+#~ msgstr ""
+#~ "要绑定的网络接口（如：eth0），或 UNIX domain socket 路径（如：/var/run/"
+#~ "ttyd.sock）"
 
 #~ msgid "ttyd"
 #~ msgstr "终端"

@@ -43,17 +43,15 @@ function handleAction(report, ev) {
 					'click': ui.createHandlerFn(this, function (ev) {
 						let ip = document.getElementById('search').value.trim().toLowerCase();
 						if (ip) {
-							document.getElementById('run').classList.add("spinning");
 							document.getElementById('search').value = ip;
 							document.getElementById('result').textContent = 'The search is running, please wait...';
-							L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['search', ip])).then(function (res) {
+							return L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['search', ip])).then(function (res) {
 								let result = document.getElementById('result');
 								if (res) {
 									result.textContent = res.trim();
 								} else {
 									result.textContent = _('No Search results!');
 								}
-								document.getElementById('run').classList.remove("spinning");
 								document.getElementById('search').value = '';
 							})
 						}
@@ -68,7 +66,12 @@ function handleAction(report, ev) {
 		let content, selectOption;
 
 		if (report[1]) {
-			content = JSON.parse(report[1]);
+			try {
+				content = JSON.parse(report[1]);
+			} catch (e) {
+				content = "";
+				ui.addNotification(null, E('p', _('Unable to parse the ruleset file!')), 'error');
+			}
 		} else {
 			content = "";
 		}
@@ -110,16 +113,14 @@ function handleAction(report, ev) {
 					'click': ui.createHandlerFn(this, function (ev) {
 						let set = document.getElementById('set').value;
 						if (set) {
-							document.getElementById('run').classList.add("spinning");
 							document.getElementById('result').textContent = 'The survey is running, please wait...';
-							L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['survey', set])).then(function (res) {
+							return L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['survey', set])).then(function (res) {
 								let result = document.getElementById('result');
 								if (res) {
 									result.textContent = res.trim();
 								} else {
 									result.textContent = _('No Search results!');
 								}
-								document.getElementById('run').classList.remove("spinning");
 								document.getElementById('set').value = '';
 							})
 						}
@@ -144,7 +145,12 @@ return view.extend({
 		let content, rowSets, tblSets;
 
 		if (report[0]) {
-			content = JSON.parse(report[0]);
+			try {
+				content = JSON.parse(report[0]);
+			} catch (e) {
+				content = "";
+				ui.addNotification(null, E('p', _('Unable to parse the report file!')), 'error');
+			}
 		} else {
 			content = "";
 		}
@@ -155,7 +161,8 @@ return view.extend({
 				E('th', { 'class': 'th right', 'style': 'padding-right: 20px' }, _('Elements')),
 				E('th', { 'class': 'th' }, _('WAN-Input (packets)')),
 				E('th', { 'class': 'th' }, _('WAN-Forward (packets)')),
-				E('th', { 'class': 'th' }, _('LAN-Forward (packets)'))
+				E('th', { 'class': 'th' }, _('LAN-Forward (packets)')),
+				E('th', { 'class': 'th' }, _('Port/Protocol Limit'))
 			])
 		]);
 
@@ -170,7 +177,8 @@ return view.extend({
 					E('em', { 'style': 'padding-right: 20px' }, content.sets[key].cnt_elements),
 					E('em', content.sets[key].input + cnt1),
 					E('em', content.sets[key].wan_forward + cnt2),
-					E('em', content.sets[key].lan_forward + cnt3)
+					E('em', content.sets[key].lan_forward + cnt3),
+					E('em', content.sets[key].port)
 				]);
 			});
 			rowSets.push([
@@ -188,16 +196,38 @@ return view.extend({
 				E('p', _('This tab shows the last generated Set Report, press the \'Refresh\' button to get a new one.')),
 				E('p', '\xa0'),
 				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Timestamp')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, content.timestamp || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;width:230px;font-weight:bold;' }, _('Timestamp')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, content.timestamp || '-')
+				]),
+				E('hr'),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked syn-flood packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content.sum_synflood || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('auto-added to allowlist today')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, content.autoadd_allow || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked udp-flood packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content.sum_udpflood || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('auto-added to blocklist today')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, content.autoadd_block || '-')
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked icmp-flood packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content.sum_icmpflood || '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked invalid ct packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content.sum_ctinvalid || '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked invalid tcp packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content.sum_tcpinvalid || '-')
+				]),
+				E('hr'),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('auto-added IPs to allowlist')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content.autoadd_allow || '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('auto-added IPs to blocklist')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content.autoadd_block || '-')
 				]),
 				E('div', { 'class': 'right' }, [
 					E('button', {
@@ -206,20 +236,21 @@ return view.extend({
 							return handleAction(report, 'survey');
 						})
 					}, [_('Set Survey...')]),
-					'\xa0\xa0\xa0',
+					'\xa0',
 					E('button', {
 						'class': 'btn cbi-button cbi-button-apply',
 						'click': ui.createHandlerFn(this, function () {
 							return handleAction(report, 'search');
 						})
 					}, [_('IP Search...')]),
-					'\xa0\xa0\xa0',
+					'\xa0',
 					E('button', {
 						'class': 'btn cbi-button cbi-button-positive',
 						'click': ui.createHandlerFn(this, function () {
 							location.reload();
 						})
-					}, [_('Refresh')])
+					}, [_('Refresh')]),
+					'\xa0'
 				]),
 			])
 			,

@@ -19,7 +19,7 @@
 #define _GNU_SOURCE
 
 #include <stdio.h>
-#include <string.h>
+#include <libgen.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -329,6 +329,15 @@ duid2ea(const char *duid)
 	return &ea;
 }
 
+static void strip_colon_duid(char *str) {
+	char *pr = str, *pw = str;
+
+	while (*pr) {
+		*pw = *pr++;
+		pw += (*pw != ':');
+	}
+	*pw = '\0';
+}
 
 static struct {
 	time_t now;
@@ -591,6 +600,8 @@ lease_next(void)
 
 				if (!e.hostname || !e.duid)
 					continue;
+
+				strip_colon_duid(e.duid);
 
 				if (!strcmp(e.hostname, "*"))
 					e.hostname = NULL;

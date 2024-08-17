@@ -12,7 +12,7 @@ PKG_LICENSE:=AGPL-3.0
 PKG_MAINTAINER:=lisaac <lisaac.cn@gmail.com> \
 		Florian Eckert <fe@dev.tdt.de>
 
-PKG_VERSION:=v0.5.13-20230114
+PKG_VERSION:=v0.5.13-20240317
 
 include ../../luci.mk
 

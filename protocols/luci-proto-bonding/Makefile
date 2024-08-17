@@ -11,6 +11,7 @@ LUCI_TITLE:=Support for Link Aggregation (Channel Bonding)
 LUCI_DEPENDS:=+proto-bonding
 
 PKG_MAINTAINER:=Helge Mader <ma@dev.tdt.de>
+PKG_LICENSE:=Apache-2.0
 
 include ../../luci.mk
 

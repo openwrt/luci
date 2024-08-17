@@ -1,4 +1,4 @@
-# HowTo: Write Modules
+# HowTo: Write Lua based Modules (deprecated for client side modules)
 
 See [online wiki](https://github.com/openwrt/luci/wiki/ModulesHowTo) for latest version.
 
@@ -7,34 +7,34 @@ See [online wiki](https://github.com/openwrt/luci/wiki/ModulesHowTo) for latest 
 This tutorial describes how to write your own modules for the LuCI WebUI.
 For this tutorial we refer to your LuCI installation directory as `lucidir` (`/usr/lib/lua/luci` on your OpenWRT device) and assume your LuCI installation is reachable through your webserver via `http://192.168.1.1/cgi-bin/luci`.
 
-The recommended way to set up development environment:
+The recommended way to set up a development environment:
 
-Install OpenWRT on your router/device (You could use a QEMU or VirtualBox image instead)
+- Install OpenWRT on your router/device (You could use a QEMU or VirtualBox image instead)
 
-Install SSHFS on your host
+- Install SSHFS on your host
 
-Mount your routers' root (/) someplace on your development host (eg. /mnt/router)
+- Mount your routers' root (`/`) someplace on your development host (eg. `/mnt/router`)
 
-Then open /mnt/router/(lucidir) in your favorite development studio
+- Then open `/mnt/router/(lucidir)` in your favorite development studio
 
-Extra: Add configurations to your dev studio which will delete the luci cache (detailed below) and then open a browser window to your routers' configuration page in order to see your module/application.
+Extra:
+- Add configurations to your dev studio which will delete the luci cache (detailed below) and then open a browser window to your routers' configuration page in order to see your module/application.
 
 
 When testing, if you have edited index files, be sure to remove the folder `/tmp/luci-modulecache/*` and the file(s) `/tmp/luci-indexcache*`, then refresh the LUCI page to see your edits.
 
-## Show me the way (The dispatching process)
-To write a module you need to understand the basics of the dispatching process in LuCI.
-LuCI uses a dispatching tree that will be built by executing the index-Function of every available controller.
+## The dispatching process
+LuCI uses a dispatching tree that is built by executing the index-Function of every available controller.
 The CGI-environment variable `PATH_INFO` will be used as the path in this dispatching tree, e.g.: `/cgi-bin/luci/foo/bar/baz`
-will be resolved to `foo.bar.baz`
+resolves to `foo.bar.baz`.
 
-To register a function in the dispatching tree, you can use the `entry`-function of `luci.dispatcher`. It takes 4 arguments (2 are optional):
+To register a function in the dispatching tree, use the `entry`-function of `luci.dispatcher`. It takes 4 arguments (2 are optional):
 ```lua
 entry(path, target, title=nil, order=nil)
 ```
 
 * `path` is a table that describes the position in the dispatching tree: For example a path of `{"foo", "bar", "baz"}` would insert your node in `foo.bar.baz`.
-* `target` describes the action that will be taken when a user requests the node. There are several predefined ones of which the 3 most important (call, template, cbi) are described later on this page
+* `target` describes the action that will be taken when a user requests the node. There are several predefined actions, of which the 3 most important (call, template, cbi) are described later on this page
 * `title` defines the title that will be visible to the user in the menu (optional)
 * `order` is a number with which nodes on the same level will be sorted in the menu (optional)
 
@@ -46,8 +46,8 @@ You can assign more attributes by manipulating the node table returned by the en
 * `sysauth` requires the user to authenticate with a given system user account
 
 
-# It's all about names (Naming and the module file)
-Now that you know the basics about dispatching, we can start writing modules. Now, choose the category and name of your new digital child.
+# Naming and the module file
+Now we can start writing modules. Choose the category and name of your new digital child.
 
 Let's assume you want to create a new application `myapp` with a module `mymodule`.
 

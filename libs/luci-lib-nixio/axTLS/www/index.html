@@ -5943,10 +5943,10 @@ String.prototype.htmlEncode = function()
 	return(this.replace(/&/mg,"&amp;").replace(/</mg,"&lt;").replace(/>/mg,"&gt;").replace(/\"/mg,"&quot;"));
 }
 
-// Convert "&amp;" to &, "&lt;" to <, "&gt;" to > and "&quot;" to "
+// Convert "&lt;" to <, "&gt;" to >, "&quot;" to " and "&amp;" to & (& handled last for security reasons)
 String.prototype.htmlDecode = function()
 {
-	return(this.replace(/&amp;/mg,"&").replace(/&lt;/mg,"<").replace(/&gt;/mg,">").replace(/&quot;/mg,"\""));
+	return(this.replace(/&lt;/mg,"<").replace(/&gt;/mg,">").replace(/&quot;/mg,"\"").replace(/&amp;/mg,"&"));
 }
 
 // Parse a space-separated string of name:value parameters where:
