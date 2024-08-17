@@ -1497,7 +1497,8 @@ return view.extend({
 
 
 				o = ss.taboption('encryption', form.Value, '_wpa_key', _('Key'));
-				add_dependency_permutations(o, { encryption: ['psk', 'psk2', 'psk+psk2', 'psk-mixed'], ppsk: ['0'] });
+				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk', 'psk2', 'psk+psk2', 'psk-mixed'], ppsk: ['0'] });
+				add_dependency_permutations(o, { mode: ['sta', 'adhoc', 'mesh', 'sta-wds'], encryption: ['psk', 'psk2', 'psk+psk2', 'psk-mixed'] });
 				o.depends('encryption', 'sae');
 				o.depends('encryption', 'sae-mixed');
 				o.datatype = 'wpakey';
