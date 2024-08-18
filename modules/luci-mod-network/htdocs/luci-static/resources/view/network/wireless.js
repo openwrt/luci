@@ -1408,7 +1408,7 @@ return view.extend({
 				}
 
 
-				o = ss.taboption('encryption', form.Flag, 'ppsk', _('Enable Private PSK (PPSK)'), _('Private Pre-Shared Key (PPSK) allows the use of different Pre-Shared Key for each STA MAC address. Private MAC\'s PSKs are stored on RADIUS server.'));
+				o = ss.taboption('encryption', form.Flag, 'ppsk', _('Enable Private PSK (PPSK)'), _('Private Pre-Shared Key (PPSK) allows the use of different Pre-Shared Key for each STA MAC address. Private MACs PSKs are stored on RADIUS server.'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk', 'psk2', 'psk+psk2', 'psk-mixed'] });
 
 				o = ss.taboption('encryption', form.Value, 'auth_server', _('RADIUS Authentication Server'));
