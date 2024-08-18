@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2023-10-06 08:29+0000\n"
-"Last-Translator: Norbert Szentner <upd6la1j@duck.com>\n"
+"PO-Revision-Date: 2024-08-18 14:10+0000\n"
+"Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/hu/>\n"
 "Language: hu\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.7\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -39,16 +39,18 @@ msgstr "-- MAC-cím hozzáadása --"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:198
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:181
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:118
 msgid ""
 "<var data-tooltip=\"ACCEPT\">Accept</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
+"<var data-tooltip=\"ACCEPT\">Elfogadás</var>: "
+"%{src?%{dest?Továbbítás:Bemenet}:Kimenet}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:93
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
@@ -59,47 +61,58 @@ msgid ""
 "<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP "
 "<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"DNAT\">Továbbítás</var> ide: %{dest}%{dest_ip? IP "
+"<var data-tooltip=\"DNAT\">Továbbítás</var>: %{dest}%{dest_ip? IP "
 "<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:115
 msgid ""
 "<var data-tooltip=\"DROP\">Drop</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"DROP\">Eldobás</var> %{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"DROP\">Eldobás</var>: "
+"%{src?%{dest?Továbbítás:Bemenet}:Kimenet}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:133
 msgid ""
 "<var data-tooltip=\"DSCP\">Assign DSCP</var> classification <var>%{set_dscp}"
 "</var>"
 msgstr ""
+"<var data-tooltip=\"DSCP\">DSCP hozzárendelés</var> csoportosítás "
+"<var>%{set_dscp}</var>\""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:127
 msgid ""
 "<var data-tooltip=\"HELPER\">Assign conntrack</var> helper "
 "<var%{helper_name? data-tooltip=\"%{helper_name}\"}>%{set_helper}</var>"
 msgstr ""
+"<var data-tooltip=\"HELPER\">Kapcsolatkövetés-segítő</var> hozzárendelés "
+"<var%{helper_name? data-tooltip=\\\"%{helper_name}\\\"}>%{set_helper}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:130
 msgid ""
 "<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark "
 "<var>%{set_mark?:%{set_xmark}}</var>"
 msgstr ""
+"<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> tűzfal "
+"jelölés<var>%{set_mark?:%{set_xmark}}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:90
 msgid "<var data-tooltip=\"MASQUERADE\">Automatically rewrite</var> source IP"
-msgstr ""
+msgstr "<var data-tooltip=\"MASQUERADE\">Automatikusan átírt</var> forrás IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:124
 msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?forward:input}:"
 "output}"
 msgstr ""
+"<var data-tooltip=\"NOTRACK\">Nincs kapcsolatkövetés</var> "
+"%{src?%{dest?Továbbítás:Bemenet}:Kimenet}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:121
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
+"<var data-tooltip=\"REJECT\">Visszautasítás</var>: "
+"%{src?%{dest?Továbbítás:Bemenet}:Kimenet}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:87
 msgid ""
@@ -157,9 +170,8 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:181
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:108
-#, fuzzy
 msgid "Advanced Settings"
-msgstr "Haladó Beállítások"
+msgstr "Haladó beállítások"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:277
 msgid "Allow \"invalid\" traffic"
@@ -236,7 +248,7 @@ msgstr "A tartalom mentésre került."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:700
 msgid "Continue"
-msgstr "Tovább"
+msgstr "Folytatás"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:203
 msgid "Counters"
@@ -297,7 +309,7 @@ msgstr "Célzóna"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:268
 msgid "Device name"
-msgstr "Eszköz név"
+msgstr "Eszköznév"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:277
 msgid ""
@@ -484,7 +496,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:107
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:17
 msgid "General Settings"
-msgstr "Általános Beállítások"
+msgstr "Általános beállítások"
 
 #: applications/luci-app-firewall/root/usr/share/rpcd/acl.d/luci-app-firewall.json:3
 msgid "Grant access to firewall configuration"
@@ -501,7 +513,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:32
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:53
 msgid "IP Sets"
-msgstr ""
+msgstr "IP készletek"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:151
 msgid "IPs/Networks"
@@ -874,7 +886,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:288
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:241
 msgid "Protocol"
-msgstr "Protokol"
+msgstr "Protokoll"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:297
 msgid ""
