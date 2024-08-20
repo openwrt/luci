@@ -417,7 +417,7 @@ return view.extend({
 		o.rmempty = false;
 		o.editable = true;
 
-		o = s.taboption('settings', form.Value, 'max_neighbour_reports', _('Max neighbour reports'), _('Maximum number of neighbor reports set for a node'));
+		o = s.taboption('settings', form.Value, 'max_neighbor_reports', _('Max neighbor reports'), _('Maximum number of neighbor reports set for a node'));
 		o.optional = true;
 		o.placeholder = 8;
 		o.datatype = 'uinteger';
