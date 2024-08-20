@@ -275,16 +275,18 @@ var CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement.p
 	},
 
 	/**
-	 * Strip any HTML tags from the given input string.
+	 * Strip any HTML tags from the given input string, and decode
+	 * HTML entities.
 	 *
 	 * @param {string} s
 	 * The input string to clean.
 	 *
 	 * @returns {string}
-	 * The cleaned input string with HTML tags removed.
+	 * The cleaned input string with HTML tags removed, and HTML
+	 * entities decoded.
 	 */
 	stripTags: function(s) {
-		if (typeof(s) == 'string' && !s.match(/[<>]/))
+		if (typeof(s) == 'string' && !s.match(/[<>\&]/))
 			return s;
 
 		var x = dom.elem(s) ? s : dom.parse('<div>' + s + '</div>');
