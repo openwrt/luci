@@ -294,12 +294,14 @@ msgstr "; 无效的 MAC："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1015
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
-msgstr "<abbr title=\"Basic Service Set Identifier（基本服务集标识符）\">BSSID</abbr>"
+msgstr ""
+"<abbr title=\"Basic Service Set Identifier（基本服务集标识符）\">BSSID</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1004
 msgid "<abbr title=\"Extended Service Set Identifier\">ESSID</abbr>"
-msgstr "<abbr title=\"Extended Service Set Identifier（扩展服务集标识符）\""
-">ESSID</abbr>"
+msgstr ""
+"<abbr title=\"Extended Service Set Identifier（扩展服务集标识符）\">ESSID</"
+"abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:736
 msgid "<abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask"
@@ -396,9 +398,9 @@ msgid ""
 "internet connection in the mesh) or having the gateway support turned off "
 "entirely (which is the default setting)."
 msgstr ""
-"batman-adv 节点可以运行于在服务器模式 (与Mesh 共享其 Internet 连接) "
-"或客户端模式 (在 Mesh 中搜索最合适的 Internet 连接) 或完全关闭网关支持 "
-"(这是默认设置)。"
+"batman-adv 节点可以运行于在服务器模式 (与Mesh 共享其 Internet 连接) 或客户端"
+"模式 (在 Mesh 中搜索最合适的 Internet 连接) 或完全关闭网关支持 (这是默认设"
+"置)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:424
 msgid "A configuration for the device \"%s\" already exists"
@@ -548,9 +550,9 @@ msgid ""
 "to the STA MAC address. Note: This is not Directed Multicast Service (DMS) "
 "in 802.11v. Note: might break receiver STA multicast expectations."
 msgstr ""
-"带组播目的地 MAC 的ARP、IPv4 和 IPv6（甚至 802.1Q）是对 STA MAC "
-"地址的单播。注意：这不是 802.11v 中的定向多播服务（DMS）。注意："
-"可能会破坏接收端 STA 多播预期。"
+"带组播目的地 MAC 的ARP、IPv4 和 IPv6（甚至 802.1Q）是对 STA MAC 地址的单播。"
+"注意：这不是 802.11v 中的定向多播服务（DMS）。注意：可能会破坏接收端 STA 多播"
+"预期。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1654
 msgid "ATM (Asynchronous Transfer Mode)"
@@ -2822,8 +2824,8 @@ msgid ""
 "good NA proxy on the network and such frames need not be used or in the case "
 "of 802.11, must not be used to prevent attacks."
 msgstr ""
-"丢弃所有非请求邻居通告，例如，如果网络中存在已知的好的 NA "
-"代理，那么不需要使用这些帧；或者在 802.11 的情况下，必须禁止使用以防止攻击。"
+"丢弃所有非请求邻居通告，例如，如果网络中存在已知的好的 NA 代理，那么不需要使"
+"用这些帧；或者在 802.11 的情况下，必须禁止使用以防止攻击。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:710
 msgid "Drop gratuitous ARP"
@@ -4635,8 +4637,9 @@ msgstr "如果选中，则禁用加密"
 msgid ""
 "If empty, all incoming connections will be allowed (default). This does not "
 "affect outgoing peerings, nor link-local peers discovered via multicast."
-msgstr "如果为空，将允许所有传入连接 "
-"(默认设置)。这不会影响传出连接，也不影响通过多播发现的链路本地对等节点。"
+msgstr ""
+"如果为空，将允许所有传入连接 (默认设置)。这不会影响传出连接，也不影响通过多播"
+"发现的链路本地对等节点。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1118
 msgid ""
@@ -5003,8 +5006,8 @@ msgid ""
 "value, an administrator may tune the number of IGMP messages on the subnet; "
 "larger values cause IGMP Queries to be sent less often"
 msgstr ""
-"组播常规查询之间的时间间隔 (以毫秒为单位)。通过更改该值，"
-"管理员可以调整子网中 IGMP 消息的数量。 数值越大，IGMP 查询的发送频率越低"
+"组播常规查询之间的时间间隔 (以毫秒为单位)。通过更改该值，管理员可以调整子网"
+"中 IGMP 消息的数量。 数值越大，IGMP 查询的发送频率越低"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:576
 msgid "Interval in seconds for STP hello packets"
@@ -5420,10 +5423,10 @@ msgid ""
 "R0KH. This is also the list of authorized R1KHs in the MD that can request "
 "PMK-R1 keys."
 msgstr ""
-"同一移动域中的 R1KH 列表。<br />格式: MAC 地址，R1KH-ID (包含冒号的 6 "
-"个八位字节)， 256 位密钥 (十六进制字符串)。<br /> 当从 R0KH 发送 PMK-R1 "
-"键时，此列表用于将 R1KH-ID 映射到目标 MAC 地址。这也是可以请求 PMK-R1 键的 "
-"MD 中授权的 R1KH 的列表。"
+"同一移动域中的 R1KH 列表。<br />格式: MAC 地址，R1KH-ID (包含冒号的 6 个八位"
+"字节)， 256 位密钥 (十六进制字符串)。<br /> 当从 R0KH 发送 PMK-R1 键时，此列"
+"表用于将 R1KH-ID 映射到目标 MAC 地址。这也是可以请求 PMK-R1 键的 MD 中授权的 "
+"R1KH 的列表。"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:82
 msgid "List of SSH key files for auth"
@@ -5654,7 +5657,8 @@ msgstr "正在登录…"
 msgid ""
 "Logical network from which to select the local endpoint if local IPv6 "
 "address is empty and no WAN IPv6 is available (optional)."
-msgstr "如果本地 IPv6 地址为空，且没有广域网 IPv6 可用，则从中选择本地端点的逻辑网络 "
+msgstr ""
+"如果本地 IPv6 地址为空，且没有广域网 IPv6 可用，则从中选择本地端点的逻辑网络 "
 "(可选)。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
@@ -6651,8 +6655,8 @@ msgid ""
 "Note: you may also need a DHCP Proxy (currently unavailable) when specifying "
 "a non-standard Relay To port(<code>addr#port</code>)."
 msgstr ""
-"注意：在为“Relay To”指定非标准端口(<code>addr#port</code>) 时，"
-"您可能还需要使用DHCP代理 (当前不可用)。"
+"注意：在为“Relay To”指定非标准端口(<code>addr#port</code>) 时，您可能还需要使"
+"用DHCP代理 (当前不可用)。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Notes"
@@ -6888,9 +6892,9 @@ msgid ""
 "server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
 "for the interface."
 msgstr ""
-"可选，允许的值：“eui64”、“random”和其他固定值 (例如：“::1”或“::1:2”)。"
-"当从授权服务器获取到 IPv6 前缀（如“a:b:c:d::”），使用后缀（如 “::1”）合成 "
-"IPv6 地址（“a:b:c:d::1”）分配给此接口。"
+"可选，允许的值：“eui64”、“random”和其他固定值 (例如：“::1”或“::1:2”)。当从授"
+"权服务器获取到 IPv6 前缀（如“a:b:c:d::”），使用后缀（如 “::1”）合成 IPv6 地址"
+"（“a:b:c:d::1”）分配给此接口。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:586
 msgid ""
@@ -6899,6 +6903,10 @@ msgid ""
 msgstr ""
 "可选，Base64 编码的预共享密钥。添加在额外的对称密钥加密层中，用于抵抗未来的量"
 "子计算破解。"
+
+#: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
+msgid "Optional. Bind to a specific interface."
+msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:643
 msgid "Optional. Create routes for Allowed IPs for this peer."
@@ -6945,15 +6953,17 @@ msgid ""
 "establishing a connection but allows generating a peer configuration or QR "
 "code if available. It can be removed after the configuration has been "
 "exported."
-msgstr "可选。WireGuard 对端的私钥。 该密钥不是建立连接所必需的，"
-"但允许生成对端配置或 二维码 (如果可用)。 导出配置后可以将其删除。"
+msgstr ""
+"可选。WireGuard 对端的私钥。 该密钥不是建立连接所必需的，但允许生成对端配置"
+"或 二维码 (如果可用)。 导出配置后可以将其删除。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:667
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
-msgstr "可选。Keep-Alive 消息之间的秒数，默认为 0 (禁用)。如果此设备位于 NAT "
-"之后,建议使用的值为 25。"
+msgstr ""
+"可选。Keep-Alive 消息之间的秒数，默认为 0 (禁用)。如果此设备位于 NAT 之后,建"
+"议使用的值为 25。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
 msgid "Optional. UDP port used for outgoing and incoming packets."
@@ -7583,8 +7593,9 @@ msgstr "禁止客户端间通信"
 msgid ""
 "Prevents one wireless client to talk to another. This setting only affects "
 "packets without any VLAN tag (untagged packets)."
-msgstr "防止一个无线客户端与另一个客户端通信。 此设置仅影响没有任何 VLAN "
-"标记的数据包 (未打标记的数据包)。"
+msgstr ""
+"防止一个无线客户端与另一个客户端通信。 此设置仅影响没有任何 VLAN 标记的数据"
+"包 (未打标记的数据包)。"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:218
 msgid "Primary Slave"
@@ -8144,10 +8155,6 @@ msgstr "必填。 此接口 .yml 配置文件的路径。"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:572
 msgid "Required. Public key of the WireGuard peer."
 msgstr "必需。WireGuard 对端的公钥。"
-
-#: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
-msgid "Required. Underlying interface."
-msgstr "必需。底层接口。"
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:39
 msgid "Required. XFRM interface ID to be used for SA."
@@ -8710,8 +8717,9 @@ msgstr "将接口设置为 NDP 代理外部从属设备。默认为关闭。"
 msgid ""
 "Set interface properties regardless of the link carrier (If set, carrier "
 "sense events do not invoke hotplug handlers)."
-msgstr "不论接口的链路状态如何,总是用应用设置 "
-"(如果勾选,链路状态变更将不再触发热插拔事件处理)。"
+msgstr ""
+"不论接口的链路状态如何,总是用应用设置 (如果勾选,链路状态变更将不再触发热插拔"
+"事件处理)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:405
 msgid "Set log class/facility for syslog entries."
@@ -9022,8 +9030,9 @@ msgstr "指定该路由所属的父（或主）接口的逻辑接口名"
 msgid ""
 "Specifies the mac-address for the actor in protocol packet exchanges "
 "(LACPDUs). If empty, masters' mac address defaults to system default"
-msgstr "明确协议包交换 actor 的 MAC 地址(LACPDUs)。如果为空，master 的 mac "
-"地址默认为系统默认值"
+msgstr ""
+"明确协议包交换 actor 的 MAC 地址(LACPDUs)。如果为空，master 的 mac 地址默认为"
+"系统默认值"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid ""
@@ -9210,8 +9219,8 @@ msgid ""
 "header inherits the value of the inner header) or an hexadecimal value "
 "<code>00..FF</code> (optional)."
 msgstr ""
-"指定一个 TOS (服务类型)。可以是<code>继承</code> "
-"(外层消息头继承内部消息头的值) 或一个十六进制值<code>00..FF</code> (可选)。"
+"指定一个 TOS (服务类型)。可以是<code>继承</code> (外层消息头继承内部消息头的"
+"值) 或一个十六进制值<code>00..FF</code> (可选)。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:74
@@ -9912,9 +9921,8 @@ msgid ""
 "\"leave latency\" of the network. A reduced value results in reduced time to "
 "detect the loss of the last member of a group"
 msgstr ""
-"插入为响应离组消息而发送的特定于组的查询中的最大响应时间 "
-"(以厘秒为单位)。它也是特定于组的查询消息之间的时间量。 "
-"可以调整该值以修改网络的“离开等待时间”。 "
+"插入为响应离组消息而发送的特定于组的查询中的最大响应时间 (以厘秒为单位)。它也"
+"是特定于组的查询消息之间的时间量。 可以调整该值以修改网络的“离开等待时间”。 "
 "减小的值会降低检测组中最后一个成员丢失的时间"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:615
@@ -10311,7 +10319,8 @@ msgid ""
 "To restore configuration files, you can upload a previously generated backup "
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
-msgstr "上传备份存档以恢复配置。要将固件恢复到初始状态，请单击“执行重置” (仅 "
+msgstr ""
+"上传备份存档以恢复配置。要将固件恢复到初始状态，请单击“执行重置” (仅 "
 "squashfs 格式的镜像文件有效)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1644
@@ -10574,6 +10583,10 @@ msgstr "无法验证 PIN"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1417
 msgid "Unconfigure"
 msgstr "取消配置"
+
+#: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
+msgid "Underlying interface"
+msgstr "底层接口。"
 
 #: protocols/luci-proto-unet/htdocs/luci-static/resources/protocol/unet.js:8
 msgid "Unet"
@@ -11125,8 +11138,9 @@ msgstr "WPA 密钥"
 msgid ""
 "WPA-Encryption requires wpa_supplicant (for client mode) or hostapd (for AP "
 "and ad-hoc mode) to be installed."
-msgstr "WPA 加密需要安装 wpa_supplicant (客户端模式) 或安装 hostapd (接入点 AP、"
-"点对点 Ad-Hoc 模式)。"
+msgstr ""
+"WPA 加密需要安装 wpa_supplicant (客户端模式) 或安装 hostapd (接入点 AP、点对"
+"点 Ad-Hoc 模式)。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:153
 msgid "WPS status"
@@ -12094,6 +12108,9 @@ msgstr "{example_nx} 返回 {nxdomain}。"
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 后退"
+
+#~ msgid "Required. Underlying interface."
+#~ msgstr "必需。底层接口。"
 
 #~ msgid "PAP/CHAP (both)"
 #~ msgstr "PAP/CHAP（均使用）"
