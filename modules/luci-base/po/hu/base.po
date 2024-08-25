@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-08-20 16:40+0000\n"
+"PO-Revision-Date: 2024-08-25 18:32+0000\n"
 "Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/luci/"
 "hu/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1122
 msgid "!known (not known)"
@@ -118,7 +118,7 @@ msgstr "-- egyéni --"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:271
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:378
 msgid "-- match by label --"
-msgstr "-- illesztés címke szerint --"
+msgstr "-- egyezés címke szerint --"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:257
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:361
@@ -233,7 +233,7 @@ msgstr "802.11k: Szomszéd-jelentés engedélyezése rádiómérésen keresztül
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1586
 msgid "802.11r Fast Transition"
-msgstr "802.11r Gyors átmenet"
+msgstr "802.11r: Gyors átmenet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1183
 msgid "802.11v: BSS Max Idle. Units: seconds."
@@ -425,7 +425,7 @@ msgid ""
 "A default MTU of 65535 is set by Yggdrasil. It is recomended to utilize the "
 "default."
 msgstr ""
-"Yggdrasil alapértelmezetten 65535-re állítja az <abbr title=\"Legnagyobb "
+"Yggdrasil alapértelmezetten 65 535-re állítja az <abbr title=\"Legnagyobb "
 "átviteli egység (Maximum Transmission Unit)\">MTU</abbr>-t. Javasolt ennek a "
 "használata."
 
@@ -615,7 +615,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1714
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:62
 msgid "ATM device number"
-msgstr "ATM eszköz száma"
+msgstr "ATM eszközszám"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:266
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:548
@@ -642,7 +642,7 @@ msgstr "Csomag elfogadása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:701
 msgid "Accept packets with local source addresses"
-msgstr "Helyi forráscímű csomagok elfogadása"
+msgstr "Helyi forráscímű csomag elfogadása"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 msgid "Access Concentrator"
@@ -760,11 +760,11 @@ msgstr "VLAN hozzáadása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1428
 msgid "Add device configuration"
-msgstr "Eszköz beállítás hozzáadása"
+msgstr "Eszközbeállítás hozzáadása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1368
 msgid "Add device configuration…"
-msgstr "Eszköz beállítás hozzáadása…"
+msgstr "Eszközbeállítás hozzáadása…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:15
 msgid "Add instance"
@@ -905,7 +905,7 @@ msgstr "Haladó beállítások"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:391
 msgid "Advanced device options"
-msgstr "Haladó eszköz beállítások"
+msgstr "Haladó eszközbeállítások"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:34
 msgid ""
@@ -917,7 +917,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:567
 msgid "Ageing time"
-msgstr "Előregedési idő (prioritás)"
+msgstr "Elöregedési idő (prioritás)"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:50
 msgid "Aggregate Originator Messages"
@@ -1005,7 +1005,7 @@ msgstr "Összes engedélyezése a felsoroltakon kívül"
 
 #: modules/luci-compat/root/usr/share/rpcd/acl.d/luci-compat.json:3
 msgid "Allow full UCI access for legacy applications"
-msgstr "Teljes UCI hozzáférés engedélyezése az örökölt alkalmazásoknak"
+msgstr "Teljes <em>UCI</em> hozzáférés engedélyezése az örökölt alkalmazásoknak"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:938
 msgid "Allow legacy 802.11b rates"
@@ -1100,7 +1100,7 @@ msgstr "Hiba történt az űrlap mentése közben:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:139
 msgid "An optional, short description for this device"
-msgstr "Rövid leírása az eszköznek (elhagyható)"
+msgstr "Az eszköz rövid leírása (elhagyható)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1621
 msgid "Annex"
@@ -1132,7 +1132,7 @@ msgid ""
 "Announce this device as default router if a public IPv6 prefix is available, "
 "regardless of local default route availability."
 msgstr ""
-"Jelenti ezt az eszközt alapértelmezett útválasztóként,ha van elérhető "
+"Jelenti ezt az eszközt alapértelmezett útválasztóként, ha van elérhető "
 "nyilvános IPv6-előtag, függetlenül a helyi alapértelmezett útvonal "
 "elérhetőségétől."
 
@@ -1193,7 +1193,7 @@ msgstr "Kijelöletlenek alkalmazása"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4742
 msgid "Apply, reverting in case of connectivity loss"
-msgstr "Alkalmazás alatti kapcsolat elvesztésekor visszaállítás"
+msgstr "Alkalmazás alatt a kapcsolat elvesztésekor visszaállítás"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4683
 msgid "Applying configuration changes… %ds"
@@ -1211,8 +1211,8 @@ msgstr "ARP keresés"
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
 msgstr ""
-"Minden egyes nyilvános IPv6-előtag megadott hosszú részének hozzárendelése "
-"ehhez a csatolóhoz"
+"Minden egyes nyilvános IPv6-előtag megadott hosszúságú részének "
+"hozzárendelése ehhez a csatolóhoz."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1114
 msgid "Assign new, freeform tags to this entry."
@@ -1229,11 +1229,11 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2344
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:366
 msgid "Associated Stations"
-msgstr "Hozzárendelt állomások"
+msgstr "Csatlakozott eszközök"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:151
 msgid "Associations"
-msgstr "Hozzárendelések"
+msgstr "Csatlakozott eszköz"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:126
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:127
@@ -1472,9 +1472,10 @@ msgid ""
 "configuration files marked by opkg, essential base files and the user "
 "defined backup patterns."
 msgstr ""
-"A biztonsági mentésbe kerülő fájlok listája. A lista az opkg által megjelölt "
-"módosított beállítófájlokból, a nélkülözhetetlen alapvető fájlokból, "
-"valamint a felhasználó által meghatározott biztonsági-mentés mintákból áll."
+"A biztonsági mentésbe kerülő fájlok listája. A lista az <em>opkg</em> által "
+"megjelölt módosított beállítófájlokból, a nélkülözhetetlen alapvető "
+"fájlokból, valamint a felhasználó által meghatározott biztonsági-mentés "
+"mintákból áll."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:287
 msgid "Bind NTP server"
@@ -1590,7 +1591,7 @@ msgstr "Felhozás rendszerindításkor"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:558
 msgid "Bring up the bridge interface even if no ports are attached"
-msgstr "Híd csatoló felhozása akkor is, ha nincs port hozzárendelve"
+msgstr "Híd csatoló felhozása akkor is, ha nincs port hozzárendelve."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1138
 msgid "Broadcast"
@@ -1625,7 +1626,7 @@ msgstr ""
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:79
 msgid "CHAP"
-msgstr ""
+msgstr "CHAP"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:7
 msgid "CLAT configuration failed"
@@ -1633,7 +1634,7 @@ msgstr "A CLAT beállítása nem sikerült"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:847
 msgid "CNAME"
-msgstr ""
+msgstr "CNAME"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:868
 msgid "CNAME or fqdn"
@@ -1752,8 +1753,9 @@ msgid ""
 "Certificate constraint substring - e.g. /CN=wifi.mycompany.com<br />See "
 "`logread -f` during handshake for actual values"
 msgstr ""
-"Tanúsítványkényszer részkarakterlánca – például /CN=wifi.mycompany.com<br />("
-"tényleges értékekért nézze meg a „logread -f” kimenetét a kézfogás során)."
+"Tanúsítványkényszer részkarakterlánca – például: <code>/CN=wifi.mycompany."
+"com</code><br />(tényleges értékekért nézze meg a „logread -f” kimenetét a "
+"kézfogás során)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1725
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1783
@@ -1781,9 +1783,9 @@ msgid ""
 "Certificate constraint(s) via Subject Alternate Name values<br />(supported "
 "attributes: EMAIL, DNS, URI) - e.g. DNS:wifi.mycompany.com"
 msgstr ""
-"Tanúsítványkényszer <abbr title=\"Tárgy alternatív neve (Subject Alternative "
-"Name)\">SAN</abbr>) értékein keresztül<br />(támogatott tulajdonságok: "
-"EMAIL, DNS, URI) – például: <code>DNS:wifi.mycompany.com</code>."
+"Tanúsítványkényszer (<abbr title=\"Tárgy alternatív neve (Subject "
+"Alternative Name)\">SAN</abbr>) értékein keresztül, például: <code>DNS:wifi."
+"mycompany.com</code>.<br />Támogatott tulajdonságok: EMAIL, DNS, URI."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:54
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:57
@@ -1945,7 +1947,7 @@ msgstr "Adatok összegyűjtése…"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:250
 msgid "Collisions seen"
-msgstr "Látott ütközések"
+msgstr "Ütközések"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:71
 msgid "Command"
@@ -1966,7 +1968,8 @@ msgstr "Megjegyzés"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:182
 msgid "Common name or numeric ID of the %s in which this route is found"
 msgstr ""
-"%s általános neve vagy numerikus azonosítója, amiben ez az útvonal található."
+"Az adott útválasztáshoz használt %s általános neve vagy numerikus "
+"azonosítója."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1866
 msgid ""
@@ -2094,7 +2097,7 @@ msgstr "Kapcsolódási kísérlet sikertelen"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:8
 msgid "Connection attempt failed."
-msgstr "Csatlakozási próbálkozás sikertelen."
+msgstr "Kapcsolódási kísérlet sikertelen."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:776
 msgid "Connection endpoint"
@@ -2116,12 +2119,12 @@ msgstr "Kapcsolódási mód váltása"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:31
 msgctxt "nft ct state"
 msgid "Conntrack state"
-msgstr "Kapcsolatkövetés állapota"
+msgstr "Kapcsolatkövető állapota"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:33
 msgctxt "nft ct status"
 msgid "Conntrack status"
-msgstr "Kapcsolatkövetés állapota"
+msgstr "Kapcsolatkövető állapota"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:383
 msgid "Consider the slave up when all ARP IP targets are reachable (all, 1)"
@@ -2234,9 +2237,9 @@ msgid ""
 "Custom files (certificates, scripts) may remain on the system. To prevent "
 "this, perform a factory-reset first."
 msgstr ""
-"Egyéni fájlok (tanúsítványok, parancsfájlok) maradhatnak a rendszeren. Ha "
-"elérhető, használja a „Visszaállítás az alapértelmezettekre” funkciót ennek "
-"a megakadályozásához."
+"Egyéni fájlok (tanúsítványok, parancsfájlok) maradhatnak a rendszeren.<be /"
+">Ha elérhető, használja a „<em>Visszaállítás az alapértelmezettekre</em>” "
+"funkciót ennek a megakadályozásához."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:6
 msgid "Custom flash interval (kernel: timer)"
@@ -2309,7 +2312,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:953
 msgid "DHCPv6-Service"
-msgstr "DHCPv6-szolgáltatás"
+msgstr "DHCPv6 szolgáltatás"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
@@ -2413,7 +2416,7 @@ msgstr "Fogadott adat"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:77
 msgid "Data Transmitted"
-msgstr "Átvitt adat"
+msgstr "Küldött adat"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:186
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
@@ -2433,7 +2436,7 @@ msgstr "Alapértelmezett példány"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:842
 msgid "Default router"
-msgstr "Alapértelmezett router"
+msgstr "Alapértelmezett útválasztó"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:12
 msgid "Default state"
@@ -2465,7 +2468,7 @@ msgid ""
 "but for outgoing frames"
 msgstr ""
 "Meghatározza a Linux belső csomagprioritásának leképezését a VLAN fejléc "
-"kimenő keretének prioritására"
+"kimenő keretének prioritásához."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:510
 msgid ""
@@ -2473,7 +2476,7 @@ msgid ""
 "priority on incoming frames"
 msgstr ""
 "Meghatározza a VLAN-fejléc prioritás hozzárendelését a Linux belső "
-"csomagprioritásához a bejövő kereteken"
+"csomagprioritásához a bejövő kereteken."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:88
 msgid "Defines a specific MTU for this route"
@@ -3247,7 +3250,7 @@ msgstr "Egyszeres DES engedélyezése"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:764
 msgid "Enable TFTP server"
-msgstr "TFTP kiszolgáló engedélyezése"
+msgstr "TFTP-kiszolgáló engedélyezése"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:795
 msgid "Enable VLAN filtering"
@@ -3393,11 +3396,11 @@ msgstr "Engedélyezve"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1601
 msgid "Enabled (all CPUs)"
-msgstr ""
+msgstr "Engedélyezve (összes CPU-n)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1849
 msgid "Enabled (workaround mode)"
-msgstr ""
+msgstr "Engedélyezve (megkerülő mód)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:592
 msgid "Enables IGMP snooping on this bridge"
@@ -3539,17 +3542,17 @@ msgid ""
 "Execution of various network commands to check the connection and name "
 "resolution to other systems."
 msgstr ""
-"Különféle hálózati parancsok végrehajtása más rendszerekkel a kapcsolat és a "
-"névfeloldás ellenőrzésére."
+"Különféle hálózati parancsok végrehajtása a más rendszerekkel történő "
+"kapcsolat és a névfeloldás ellenőrzésére."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:474
 msgid ""
 "Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. "
 "for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
-"Külső válaszok engedélyezése a {loopback_slash_8_v4}-as tartományban, "
-"például <abbr title=\"Valós idejű tiltólista (Real-time Block List)\">RBL</"
-"abbr> szolgáltatások."
+"Külső válaszok engedélyezése a {loopback_slash_8_v4} tartományban, például "
+"<abbr title=\"Valós idejű tiltólista (Real-time Block List)\">RBL</abbr> "
+"szolgáltatások."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:410
 msgid "Existing device"
@@ -3577,7 +3580,7 @@ msgstr "Érvényes IPv6-cím az elvárás"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:235
 msgid "Expecting a valid MAC address, optionally including wildcards"
-msgstr "Érvényes MAC-cím az elvárás, helyettesítő karakter használható"
+msgstr "Érvényes MAC-cím az elvárás, helyettesítés használható"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:29
 msgid "Expecting two priority values separated by a colon"
@@ -3832,7 +3835,7 @@ msgstr "Tűzfal"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:39
 msgid "Firewall Mark"
-msgstr "Tűzfal jelölés"
+msgstr "Tűzfal jelölő"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:518
 msgid "Firewall Settings"
@@ -3844,7 +3847,7 @@ msgstr "Tűzfal állapota"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:177
 msgid "Firewall mark"
-msgstr "Tűzfal jelölés"
+msgstr "Tűzfal jelölő"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1669
 msgid "Firmware File"
@@ -3882,7 +3885,7 @@ msgstr "Beírás műveletei"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:319
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:321
 msgid "Flashing…"
-msgstr "Telepítés…"
+msgstr "Beírás…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1045
 msgid "Follow IPv4 Lifetime"
@@ -3949,7 +3952,7 @@ msgstr "Frissítés kényszerítése"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:90
 msgid "Force use of NAT-T"
-msgstr "NAT-T használatának kényszerítése"
+msgstr "NAT-T kényszerítése"
 
 #: modules/luci-base/ucode/template/csrftoken.ut:8
 msgid "Form token mismatch"
@@ -4238,7 +4241,7 @@ msgstr "Jogosultság adása az alapvető LuCI műveletekhez"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:78
 msgid "Grant access to crontab configuration"
-msgstr "Jogosultság adása a crontab beállításaihoz"
+msgstr "Jogosultság adása a <em>crontab</em> beállításaihoz"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:67
 msgid "Grant access to firewall status"
@@ -4246,7 +4249,7 @@ msgstr "Jogosultság adása a tűzfalállapothoz"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:131
 msgid "Grant access to flash operations"
-msgstr "Jogosultság adása a „flash” műveletekhez"
+msgstr "Jogosultság adása a <em>flash</em> műveletekhez"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:3
 msgid "Grant access to main status display"
@@ -4254,7 +4257,7 @@ msgstr "Jogosultság adása a főbb állapotkijelzéshez"
 
 #: protocols/luci-proto-modemmanager/root/usr/share/rpcd/acl.d/luci-proto-modemmanager.json:3
 msgid "Grant access to mmcli"
-msgstr "Jogosultság adása a ModemManager-nek"
+msgstr "Jogosultság adása a <em>ModemManager</em>-nek"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:99
 msgid "Grant access to mount configuration"
@@ -4302,7 +4305,7 @@ msgstr "Jogosultság adása a rendszer naplóihoz"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:45
 msgid "Grant access to uHTTPd configuration"
-msgstr "Jogosultság adása az uHTTPd beállításaihoz"
+msgstr "Jogosultság adása az <em>uHTTPd</em> beállításaihoz"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:58
 msgid "Grant access to wireless channel status"
@@ -4396,7 +4399,7 @@ msgstr "A gép ezt a fájlnevet kéri a rendszerindító kiszolgálótól."
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:88
 msgid "Host-Uniq tag content"
-msgstr "Egyedi-gép címketartalom"
+msgstr "Gép-egyediség címketartalom"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1091
 msgid ""
@@ -4559,7 +4562,7 @@ msgstr "IP készletek"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:686
 msgid "IPs to override with {nxdomain}"
-msgstr "Hamis {nxdomain} felülbírálása"
+msgstr "{nxdomain} által felülírandó IP-címek"
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:9
 msgid "IPsec XFRM"
@@ -4625,7 +4628,7 @@ msgstr "IPv4 hálózati maszk"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:318
 msgid "IPv4 network in address/netmask notation"
-msgstr "IPv4 hálózat IP-cím/maszk (CIDR) jelölésben"
+msgstr "IPv4 hálózat IP-cím/maszk (CIDR) formátumban"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:140
 msgid "IPv4 only"
@@ -4634,7 +4637,7 @@ msgstr "Csak IPv4"
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:16
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:10
 msgid "IPv4 over IPv6 (RFC2473-IPIPv6)"
-msgstr ""
+msgstr "IPv4 IPv6-on át (RFC2473-IPIPv6)"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:52
 msgid "IPv4 prefix"
@@ -4761,7 +4764,7 @@ msgstr "IPv6-átjáró"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:323
 msgid "IPv6 network in address/netmask notation"
-msgstr "IPv6 hálózat IP-cím/maszk (CIDR) jelölésben"
+msgstr "IPv6 hálózat IP-cím/maszk (CIDR) formátumban"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:141
 msgid "IPv6 only"
@@ -4822,12 +4825,12 @@ msgstr "IPv6 IPv4-ben (RFC4213)"
 #: modules/luci-compat/luasrc/model/network/proto_6x4.lua:17
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:9
 msgid "IPv6-over-IPv4 (6rd)"
-msgstr "IPv6 IPv4 felett (6rd)"
+msgstr "IPv6 IPv4-en át (6rd)"
 
 #: modules/luci-compat/luasrc/model/network/proto_6x4.lua:15
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6to4.js:9
 msgid "IPv6-over-IPv4 (6to4)"
-msgstr "IPv6 IPv4 felett (6to4)"
+msgstr "IPv6 IPv4-en át (6to4)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1799
 msgid "Identity"
@@ -5041,11 +5044,11 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:107
 msgid "Incoming checksum"
-msgstr "Bemeneti ellenőrző összeg"
+msgstr "Bejövő ellenőrző összeg"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:145
 msgid "Incoming interface"
-msgstr "Bemeneti csatoló"
+msgstr "Bemenő csatoló"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:92
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:97
@@ -5053,14 +5056,14 @@ msgstr "Bemeneti csatoló"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:99
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:64
 msgid "Incoming key"
-msgstr "Bemeneti kulcs"
+msgstr "Bemenő kulcs"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:107
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:104
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:109
 msgid "Incoming serialization"
-msgstr "Bemeneti szerializáció"
+msgstr "Bemenő szerializáció"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:187
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:158
@@ -5092,11 +5095,11 @@ msgstr "Előkészítési hiba"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:76
 msgid "Initscript"
-msgstr "Előkészítő parancsfájl"
+msgstr "Szolgáltatás"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:110
 msgid "Initscripts"
-msgstr "Előkészítő parancsfájlok"
+msgstr "Rendszer indítás"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1783
 msgid "Inner certificate constraint (Domain)"
@@ -5147,7 +5150,7 @@ msgstr ""
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:43
 msgid "Insufficient permissions to read UCI configuration."
-msgstr "Nincs megfelelő engedély az UCI beállítás olvasásához."
+msgstr "Nincs megfelelő engedély az <em>UCI</em> beállítás olvasásához."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:136
 msgid "Integrated Circuit Card Identifier"
@@ -5233,6 +5236,8 @@ msgstr ""
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:139
 msgid "International Mobile Subscriber Identity"
 msgstr ""
+"<abbr title=\"Nemzetközi mobil előfizetői azonosító (International Mobile "
+"Subscriber Identity)\">IMSI</abbr>"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:290
 msgid "Interval For Sending Learning Packets"
@@ -5263,7 +5268,7 @@ msgstr "Érvénytelen"
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:97
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:73
 msgid "Invalid APN provided"
-msgstr ""
+msgstr "Érvénytelen APN feltétel"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:38
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:41
@@ -5309,6 +5314,8 @@ msgid ""
 "Invalid bearer list. Possibly too many bearers created. This protocol "
 "supports one and only one bearer."
 msgstr ""
+"Érvénytelen hordozólista. Lehetséges, hogy túl sok hordozó jött létre. Ez a "
+"protokoll kizárólag egy hordozót támogat."
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:402
 msgid "Invalid command"
@@ -5320,23 +5327,23 @@ msgstr "Érvénytelen hexadecimális érték"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:130
 msgid "Invalid hostname or IPv4 address"
-msgstr ""
+msgstr "Érvénytelen gépnév vagy IPv4-cím"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
 msgid "Invalid port"
-msgstr ""
+msgstr "Érvénytelen port"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:16
 msgid "Invalid private key string %s"
-msgstr ""
+msgstr "Érvénytelen személyes kulcs karakterlánc %s"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:28
 msgid "Invalid public key string %s"
-msgstr ""
+msgstr "Érvénytelen nyilvános kulcs karakterlánc %s"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
 msgid "Invalid server URL"
-msgstr ""
+msgstr "Érvénytelen kiszolgáló URL"
 
 #: modules/luci-base/ucode/template/sysauth.ut:12
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:32
@@ -5407,7 +5414,7 @@ msgstr "Beállítások jelenlegi állapotának megtartása"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:60
 msgid "Keep-Alive"
-msgstr "Életbentartás"
+msgstr "Életben tartás"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:54
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
@@ -5705,6 +5712,7 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:301
 msgid "List of upstream NTP server candidates with which to synchronize."
 msgstr ""
+"Az időszinkronizáláshoz használandó külső NTP-kiszolgáló jelöltek listája."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:38
@@ -5735,15 +5743,17 @@ msgstr "Figyelés korlátozása ezekre a csatolókra és a visszacsatolásra."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:292
 msgid "Listen to multicast beacons"
-msgstr ""
+msgstr "Csoport-küldésű alapjelek figyelése"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:285
 msgid "ListenPort setting is invalid"
-msgstr ""
+msgstr "A „Figyelt port” beállítása érvénytelen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:694
 msgid "Listening port for inbound DNS queries."
-msgstr "Port figyelése a bejövő DNS-lekérdezésekhez."
+msgstr ""
+"Port figyelése a bejövő <abbr title=\"Tartománynév rendszer (Domain Name "
+"System)\">DNS</abbr>-lekérdezésekhez."
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:130
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:47
@@ -5762,13 +5772,13 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:175
 msgid "Load configuration…"
-msgstr ""
+msgstr "Beállítások betöltése…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1286
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2141
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:167
 msgid "Loading data…"
-msgstr ""
+msgstr "Adatbetöltés…"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3027
 msgid "Loading directory contents…"
@@ -5788,7 +5798,7 @@ msgstr "Helyi"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:169
 msgid "Local IP address"
-msgstr "Helyi IP cím"
+msgstr "Helyi IP-cím"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:12
 #: modules/luci-compat/luasrc/model/network.lua:30
@@ -5797,7 +5807,7 @@ msgstr "A helyi IP-cím érvénytelen"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:86
 msgid "Local IP address to assign"
-msgstr "Hozzárendelendő helyi IP-cím"
+msgstr "Helyi IP-cím hozzárendelése"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:46
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:46
@@ -5814,7 +5824,7 @@ msgstr "Helyi IPv4-cím"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:976
 msgid "Local IPv6 DNS server"
-msgstr "Helyi IPv6 DNS szerver"
+msgstr "Helyi IPv6 DNS-kiszolgáló"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:46
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:53
@@ -5836,7 +5846,7 @@ msgstr "Helyi idő"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1119
 msgid "Local ULA"
-msgstr ""
+msgstr "Egyedi helyi cím (ULA)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:386
 msgid "Local domain"
@@ -5845,8 +5855,8 @@ msgstr "Helyi tartomány"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:387
 msgid "Local domain suffix appended to DHCP names and hosts file entries."
 msgstr ""
-"A DHCP nevekhez és a hosts fájl bejegyzéseihez hozzáfűzött helyi "
-"tartományutótagok."
+"A DHCP nevekhez és a <em>hosts</em> fájl bejegyzéseihez hozzáfűzött helyi "
+"tartomány-utótagok."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:489
 msgid "Local service only"
@@ -5854,7 +5864,7 @@ msgstr "Csak helyi szolgáltatás"
 
 #: protocols/luci-proto-unet/htdocs/luci-static/resources/protocol/unet.js:41
 msgid "Local wireguard key"
-msgstr ""
+msgstr "Helyi Wireguard kulcs"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:652
 msgid "Localise queries"
@@ -5862,7 +5872,7 @@ msgstr "Lekérdezések behatárolása"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:117
 msgid "Location Area Code"
-msgstr ""
+msgstr "Körzetszám (LAC)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2204
 msgid "Lock to BSSID"
@@ -5870,21 +5880,24 @@ msgstr "Zárolás a BSSID-hoz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:364
 msgid "Log"
-msgstr ""
+msgstr "Napló"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:400
 msgid ""
 "Log all options sent to DHCP clients and the tags used to determine them."
 msgstr ""
+"Naplózza a <abbr title=\"Dinamikus állomáskonfiguráló protokoll (Dynamic "
+"Host Configuration Protocol)\">DHCP</abbr>-ügyfeleknek küldött minden "
+"lehetőséget és a meghatározásukhoz használt címkéket."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:98
 msgctxt "nft log action"
 msgid "Log event \"<strong>%h</strong>…\""
-msgstr ""
+msgstr "Eseménynapló \\\"<strong>%h</strong>…\\\""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:404
 msgid "Log facility"
-msgstr ""
+msgstr "Napló létesítménykódja"
 
 #: modules/luci-base/ucode/template/sysauth.ut:38
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:36
@@ -5893,11 +5906,11 @@ msgstr "Bejelentkezés"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2674
 msgid "Log in…"
-msgstr "Bejelentkezéshez…"
+msgstr "Bejelentkezés…"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:340
 msgid "Log level"
-msgstr ""
+msgstr "Naplózás szintje"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:81
 msgid "Log out"
@@ -5906,7 +5919,7 @@ msgstr "Kijelentkezés"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:155
 msgid "Log output level"
-msgstr "Napló kimeneti szintje"
+msgstr "Napló kimeneti szint"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:394
 msgid "Log queries"
@@ -5914,7 +5927,7 @@ msgstr "Lekérdezések naplózása"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
 msgid "Logging"
-msgstr "Naplózás"
+msgstr ""
 
 #: themes/luci-theme-bootstrap/htdocs/luci-static/resources/view/bootstrap/sysauth.js:23
 msgid "Logging in…"
@@ -5926,15 +5939,18 @@ msgid ""
 "Logical network from which to select the local endpoint if local IPv6 "
 "address is empty and no WAN IPv6 is available (optional)."
 msgstr ""
+"Logikai hálózat ahonnan kiválasztható a helyi végpont, ha a helyi IPv6-cím "
+"üres, és nincs elérhető WAN IPv6 (elhagyható)."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
 msgid "Logical network to which the tunnel will be added (bridged) (optional)."
 msgstr ""
+"Logikai hálózat, amihez az alagút (hidalt) hozzáadásra kerül (elhagyható)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:682
 msgid "Loose filtering"
-msgstr ""
+msgstr "Laza szűrés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:714
 msgid "Lowest leased address as offset from the network address."
@@ -5942,7 +5958,7 @@ msgstr "Legalacsonyabb bérelt cím a hálózati címtől való eltolásként."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/footer.ut:12
 msgid "Lua compatibility mode active"
-msgstr ""
+msgstr "Lua kompatibilitási mód aktív"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:48
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:83
@@ -5964,7 +5980,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:401
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1532
 msgid "MAC VLAN"
-msgstr ""
+msgstr "MAC VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:645
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:40
@@ -5980,7 +5996,7 @@ msgstr "MAC-cím"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1036
 msgid "MAC address(es)"
-msgstr ""
+msgstr "MAC-cím(ek)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:981
 msgid "MAC-Filter"
@@ -6003,6 +6019,8 @@ msgstr "A MAP szabály érvénytelen"
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:24
 msgid "MBIM Cellular"
 msgstr ""
+"<abbr title=\"Mobil szélessávú csatoló modell (Mobile Broadband Interface "
+"Model)\">MBIM</abbr> cellák"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:225
 msgid "MD5"
@@ -6015,15 +6033,15 @@ msgstr "MHz"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:359
 msgid "MII"
-msgstr ""
+msgstr "MII"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:427
 msgid "MII / ETHTOOL ioctls"
-msgstr ""
+msgstr "MII / ETHTOOL ioctls"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:400
 msgid "MII Interval"
-msgstr ""
+msgstr "MII időköz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:634
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1576
@@ -6037,15 +6055,15 @@ msgstr "MTU"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:846
 msgid "MX"
-msgstr ""
+msgstr "MX"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:303
 msgid ""
 "Make sure to clone the root filesystem using something like the commands "
 "below:"
 msgstr ""
-"Győződjön meg arról, hogy klónozta-e a gyökér fájlrendszert az alábbi "
-"parancsokhoz hasonló valami használatával:"
+"Ügyeljen rá, hogy a gyökér fájlrendszert klónozza az alábbi parancsokhoz "
+"hasonló módon:"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:122
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:115
@@ -6059,51 +6077,47 @@ msgstr "Kézi"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:82
 msgid "Manufacturer"
-msgstr ""
+msgstr "Gyártó"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3883
 msgid "Master (VLAN)"
-msgstr ""
+msgstr "Mester (VLAN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1117
 msgid "Match Tag"
-msgstr ""
+msgstr "Egyező címke"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:817
 msgid "Match this Tag"
-msgstr ""
+msgstr "Címke egyezés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:893
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
-msgstr ""
+msgstr "Legnagyobb RA időköz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:758
 msgid "Max cache TTL"
-msgstr ""
+msgstr "Max TTL gyorsítótár"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:716
 msgid "Max valid value %s."
-msgstr ""
+msgstr "Legnagyobb érvényes érték %s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:723
 msgid "Max. DHCP leases"
-msgstr ""
-"<abbr title=\"maximal\">Legnagyobb</abbr> <abbr title=\"Dynamic Host "
-"Configuration Protocol\">DHCP</abbr> bérletek"
+msgstr "Max DHCP bérlet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:730
 msgid "Max. EDNS0 packet size"
-msgstr ""
-"<abbr title=\"maximal\">Max.</abbr> <abbr title=\"Extension Mechanisms for "
-"Domain Name System\">EDNS0</abbr> csomagméret"
+msgstr "Legnagyobb EDNS(0) csomagméret"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:737
 msgid "Max. concurrent queries"
-msgstr "<abbr title=\"maximal\">Legtöbb</abbr> egyidejű lekérdezés"
+msgstr "Legnagyobb egyidejű lekérdezés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:586
 msgid "Maximum age"
-msgstr ""
+msgstr "Max életkor"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1188
 msgid "Maximum allowed Listen Interval"
@@ -6119,13 +6133,17 @@ msgstr "Egyidejű DNS-lekérdezések legnagyobb megengedett száma."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:731
 msgid "Maximum allowed size of EDNS0 UDP packets."
-msgstr "EDNS.0 UDP csomagok legnagyobb megengedett mérete."
+msgstr ""
+"<abbr title=\"Kiterjesztési mechanizmus tartománynév rendszerhez (Extension "
+"mechanisms for Domain Name System)\">EDNS</abbr>(0) <abbr title="
+"\"Felhasználói datagram (nem nyugtázott, egyszerű összeköttetés) protokoll ("
+"User Datagram Protocol)\">UDP</abbr> csomagok legnagyobb megengedett mérete."
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:126
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:124
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:113
 msgid "Maximum amount of seconds to wait for the modem to become ready"
-msgstr "Legnagyobb várakozási idő a modem kész állapotára másodpercben"
+msgstr "Legnagyobb várakozási idő a modem kész állapotára (másodpercben)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:719
 msgid "Maximum number of leased addresses."
@@ -6133,25 +6151,28 @@ msgstr "Bérelt címek legnagyobb száma."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:596
 msgid "Maximum snooping table size"
-msgstr ""
+msgstr "Legnagyobb szimatolási táblaméret"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:715
 msgid "Maximum source port #"
-msgstr ""
+msgstr "Legnagyobb forrásport #"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:893
 msgid ""
 "Maximum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds."
 msgstr ""
+"Legnagyobb kéretlen RA (<abbr title=\"Internet felügyeleti-üzenet protokoll "
+"6-os verziója (Internet Control Message Protocol version 6)\">ICMPv6</abbr> "
+"134-es típus) időköz (alapértelmezetten 600 másodperc)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:941
 msgid "Maximum transmit power"
-msgstr "Legnagyobb átviteli teljesítmény"
+msgstr "Legnagyobb adóteljesítmény"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:638
 msgid "May prevent VoIP or other services from working."
-msgstr ""
+msgstr "Megakadályozhatja a VoIP vagy más szolgáltatások működését."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:129
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:188
@@ -6189,15 +6210,15 @@ msgstr "Hálóazonosító"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3885
 msgid "Mesh Point"
-msgstr ""
+msgstr "Hálópont"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh Routing"
-msgstr ""
+msgstr "Hálóútválasztás"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:41
 msgid "Mesh and routing related options"
-msgstr ""
+msgstr "Háló és útválasztás lehetőségei"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:404
 msgid "Method not found"
@@ -6205,11 +6226,11 @@ msgstr "Nem található módszer"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:355
 msgid "Method of link monitoring"
-msgstr ""
+msgstr "Kapcsolatfigyelés módszere"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:424
 msgid "Method to determine link status"
-msgstr ""
+msgstr "Kapcsolatállapot meghatározásának módszere"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:81
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:199
@@ -6220,43 +6241,48 @@ msgstr "Mérőszám"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:70
 msgctxt "nft unit"
 msgid "MiB"
-msgstr ""
+msgstr "MiB"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:900
 msgid "Min <abbr title=\"Router Advertisement\">RA</abbr> interval"
-msgstr ""
+msgstr "Legkisebb RA időköz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:751
 msgid "Min cache TTL"
-msgstr ""
+msgstr "Legkisebb TTL gyorsítótár"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:708
 msgid "Min valid value %s."
-msgstr ""
+msgstr "Legkisebb érvényes érték %s."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:721
 msgid "Minimum ARP validity time"
-msgstr "Minimum ARP validálási idő"
+msgstr "Legkisebb ARP érvényességi idő"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:242
 msgid "Minimum Number of Links"
-msgstr ""
+msgstr "Kapcsolatok legkisebb száma"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:721
 msgid ""
 "Minimum required time in seconds before an ARP entry may be replaced. "
 "Prevents ARP cache thrashing."
 msgstr ""
+"Az <abbr title=\"Címfeloldási protokoll (Address Resolution Protocol)\""
+">ARP</abbr>-bejegyzések cseréjéhez szükséges legkisebb idő másodpercben. "
+"Megakadályozza az ARP-gyorsítótár feltörését."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:707
 msgid "Minimum source port #"
-msgstr ""
+msgstr "Legkisebb forrásport #"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:900
 msgid ""
 "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds."
 msgstr ""
+"Legkisebb kéretlen <abbr title=\"Útválasztó hirdetése (Router Advertisement)"
+"\">RA</abbr> (ICMPv6 134-es típus) időköz (alapértelmezetten 200 másodperc)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:204
 msgid "Mirror monitor port"
@@ -6268,7 +6294,7 @@ msgstr "Forrásport tükrözése"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:120
 msgid "Mobile Country Code"
-msgstr ""
+msgstr "Mobil országkód (MCC)"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:9
 msgid "Mobile Data"
@@ -6276,7 +6302,7 @@ msgstr "Mobil adat"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:123
 msgid "Mobile Network Code"
-msgstr ""
+msgstr "Mobilhálózati kód (MNC)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1597
 msgid "Mobility Domain"
@@ -6301,15 +6327,15 @@ msgstr "Modell"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:81
 msgid "Modem Info"
-msgstr ""
+msgstr "Modem infó"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:9
-#, fuzzy
 msgid ""
 "Modem connection in progress. Please wait. This process will timeout after 2 "
 "minutes."
 msgstr ""
-"Modem csatlakoztatása folyamatban. Kérlek várj. 2 perc után időtúllépés."
+"Modem csatlakoztatása folyamatban. Kérem várjon. Ez a folyamat 2 perc múlva "
+"leáll."
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:77
 msgid "Modem default"
@@ -6388,7 +6414,7 @@ msgstr "A fájlrendszerek csatolása nincs kifejezetten beállítva"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:332
 msgid "Mount options"
-msgstr "Csatolási beállítások"
+msgstr "Csatolási lehetőségek"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Mount point"
@@ -6412,34 +6438,34 @@ msgstr "Mozgatás fel"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1146
 msgid "Multi To Unicast"
-msgstr ""
+msgstr "Csoport-küldésből<br/>egyedi-küldés"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:89
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:94
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
 msgid "Multicast"
-msgstr ""
+msgstr "Csoport-küldés"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:99
 msgid "Multicast Mode"
-msgstr ""
+msgstr "Csoport-küldési mód"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:772
 msgid "Multicast routing"
-msgstr ""
+msgstr "Csoport-küldési útválasztás"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:281
 msgid "Multicast rules"
-msgstr ""
+msgstr "Csoport-küldési szabályok"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:778
 msgid "Multicast to unicast"
-msgstr ""
+msgstr "Csoport-küldésből<br/>egyedi-küldés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1449
 msgid "Must be in %s format."
-msgstr ""
+msgstr "%s formátumban kell lennie."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1592
 msgid "NAS ID"
@@ -6447,7 +6473,7 @@ msgstr "NAS-azonosító"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:536
 msgid "NAT action chain \"%h\""
-msgstr ""
+msgstr "NAT művelet-lánc \"%h\""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:87
 msgid "NAT-T Mode"
@@ -6459,7 +6485,7 @@ msgstr "NAT64-előtag"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:886
 msgid "NAT64 prefix"
-msgstr ""
+msgstr "NAT64-előtag"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:26
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:35
@@ -6468,7 +6494,7 @@ msgstr "NCM"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1032
 msgid "NDP-Proxy slave"
-msgstr ""
+msgstr "NDP-Proxy segéd"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:72
 msgid "NT Domain"
@@ -6476,7 +6502,7 @@ msgstr "NT-tartomány"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:993
 msgid "NTP Servers"
-msgstr ""
+msgstr "NTP-kiszolgálók"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:300
 msgid "NTP server candidates"
@@ -6497,6 +6523,8 @@ msgid ""
 "Name for OpenWrt network configuration. (No relation to wireless network "
 "name/SSID)"
 msgstr ""
+"OpenWrt hálózati beállítás neve. (Nem függ össze a vezeték nélküli hálózati "
+"névvel vagy SSID-vel)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2180
 msgid "Name of the new network"
@@ -6504,15 +6532,17 @@ msgstr "Az új hálózat neve"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:979
 msgid "Name of the set"
-msgstr ""
+msgstr "A készlet neve"
 
 #: protocols/luci-proto-unet/htdocs/luci-static/resources/protocol/unet.js:38
 msgid "Name of the tunnel device"
-msgstr ""
+msgstr "Az alagút eszköz neve"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:374
 msgid "Names not in {etc_hosts} are answered {not_found}."
 msgstr ""
+"Az {etc_hosts} mappában nem szereplő nevekre a válasz: {not_found} (nem "
+"található)."
 
 #: themes/luci-theme-openwrt-2020/ucode/template/themes/openwrt2020/header.ut:39
 #: themes/luci-theme-openwrt/ucode/template/themes/openwrt.org/header.ut:43
@@ -6521,19 +6551,19 @@ msgstr "Navigáció"
 
 #: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:10
 msgid "Nebula Network"
-msgstr ""
+msgstr "Nebula hálózat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1654
 msgid "Neighbour Report"
-msgstr ""
+msgstr "Szomszéd-jelentés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:713
 msgid "Neighbour cache validity"
-msgstr ""
+msgstr "Szomszéd-gyorsítótár érvényessége"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:993
 msgid "Netfilter table name"
-msgstr ""
+msgstr "Netfilter tábla neve"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1018
@@ -6550,7 +6580,7 @@ msgstr ""
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:76
 msgid "Network Mode"
-msgstr ""
+msgstr "Hálózati mód"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:97
 msgid "Network Registration"
@@ -6563,14 +6593,17 @@ msgstr "Hálózati SSID"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:58
 msgid "Network address"
 msgstr ""
+"Hálózati cím IP-cím/maszk (<abbr title=\"Osztály nélküli tartományok közötti "
+"útválasztás (Classless Inter-Domain Routing)\">CIDR</abbr>) formátumban."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:179
 msgid "Network and its mask that define the size of the destination"
-msgstr ""
+msgstr "Hálózat és annak maszkja, meghatározza a céltartomány méretét."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 msgid "Network and its mask that define which source addresses use this route"
 msgstr ""
+"Hálózat és maszkja, meghatározza melyik forrás használhatja ezt az útvonalat."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:776
 msgid "Network boot image"
@@ -6578,7 +6611,7 @@ msgstr "Hálózati rendszerindító lemezkép"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:427
 msgid "Network bridge configuration migration"
-msgstr ""
+msgstr "A hálózati híd beállításának áttelepítése"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:397
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1538
@@ -6596,16 +6629,16 @@ msgstr "A hálózati eszköz nincs jelen"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:645
 msgid "Network device table \"%h\""
-msgstr ""
+msgstr "Hálózat eszköztáblája: \"%h\""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:78
 msgctxt "nft @nh,off,len"
 msgid "Network header bits %d-%d"
-msgstr ""
+msgstr "Hálózati fejlécbit %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:461
 msgid "Network ifname configuration migration"
-msgstr ""
+msgstr "Hálózati <em>ifname</em> beállítások áttelepítése"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:62
@@ -6625,21 +6658,26 @@ msgstr "Soha"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:373
 msgid "Never forward DNS queries which lack dots or domain parts."
 msgstr ""
+"Soha ne továbbítsa azokat a <abbr title=\"Tartománynév rendszer (Domain Name "
+"System)\">DNS</abbr>-lekérdezéseket, amikből hiányoznak pontok vagy "
+"tartomány részek."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:382
 msgid ""
 "Never forward these matching domains or subdomains; resolve from DHCP or "
 "hosts files only."
 msgstr ""
+"Soha ne továbbítsa ezeket a tartomány- vagy altartomány neveket, csak DHCP "
+"vagy <em>hosts</em> fájlokból oldja fel."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:350
 msgctxt "Dnsmasq instance"
 msgid "New instance name…"
-msgstr ""
+msgstr "Új példánynév…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1272
 msgid "New interface for \"%s\" can not be created: %s"
-msgstr ""
+msgstr "Új csatoló \"%s\" nem hozható létre: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1223
 msgid "New interface name…"
@@ -6681,11 +6719,11 @@ msgstr "Nincs RX jel"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:148
 msgid "No WireGuard interfaces configured."
-msgstr ""
+msgstr "Nincs beállítva a WireGuard csatoló."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:16
 msgid "No allowed mode configuration found."
-msgstr ""
+msgstr "Engedélyezett mód beállítás nem található."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:69
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:89
@@ -6695,20 +6733,21 @@ msgid ""
 "No changes to settings will be stored and are lost after rebooting. This "
 "mode should only be used to install a firmware upgrade"
 msgstr ""
+"A beállítások módosításai nem kerülnek tárolásra, az újraindítás után "
+"elvesznek. Ezt a módot csak firmware-frissítés telepítésére használja."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:69
-#, fuzzy
 msgid "No client associated"
-msgstr "Nincs kliens hozzárendelve"
+msgstr "Nincs ügyfél hozzárendelve."
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:27
 msgid "No control device specified"
-msgstr ""
+msgstr "Nincs vezérlőeszköz meghatározva."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3265
 msgctxt "empty table placeholder"
 msgid "No data"
-msgstr ""
+msgstr "Nincs adat"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:406
 msgid "No data received"
@@ -6717,7 +6756,7 @@ msgstr "Nem érkezett adat"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:750
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:757
 msgid "No enforcement"
-msgstr ""
+msgstr "Nincs végrehajtás"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:239
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:242
@@ -6726,7 +6765,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:251
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:254
 msgid "No entries available"
-msgstr ""
+msgstr "Nincs elérhető bejegyzés"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2951
 msgid "No entries in this directory"
@@ -6737,6 +6776,8 @@ msgid ""
 "No fixed interface listening port defined, peers might not be able to "
 "initiate connections to this WireGuard instance!"
 msgstr ""
+"Nincs rögzített csatoló figyelési port. Előfordulhat, hogy a partnerek nem "
+"tudnak kapcsolatot kezdeményezni ehhez a WireGuard-példányhoz!"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:86
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:91
@@ -6744,7 +6785,7 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:93
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:70
 msgid "No host route"
-msgstr ""
+msgstr "Nincs gépútvonal"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:725
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:142
@@ -6756,16 +6797,16 @@ msgstr "Nincs elérhető információ"
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:66
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:8
 msgid "No matching prefix delegation"
-msgstr "Nincs egyező előtag-delegálás"
+msgstr "Nincs egyező előtag használatban"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:145
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:148
 msgid "No more slaves available"
-msgstr ""
+msgstr "Nincs több elérhető segéd"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:194
 msgid "No more slaves available, can not save interface"
-msgstr ""
+msgstr "Nincs több elérhető segéd, nem menthető a csatoló"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:671
 msgid "No negative cache"
@@ -6773,7 +6814,7 @@ msgstr "Nincs negatív gyorsítótár"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:696
 msgid "No nftables ruleset loaded."
-msgstr ""
+msgstr "Nincs betöltött nftables szabálykészlet."
 
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/header.ut:58
 #: themes/luci-theme-material/ucode/template/themes/material/header.ut:78
@@ -6783,17 +6824,16 @@ msgid "No password set!"
 msgstr "Nincs jelszó beállítva!"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:84
-#, fuzzy
 msgid "No peers connected"
-msgstr "Nincs csatlakoztatva"
+msgstr "Nincs partner csatlakoztatva"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:496
 msgid "No peers defined yet."
-msgstr ""
+msgstr "Nincs még partner meghatározva."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:15
 msgid "No preferred mode configuration found."
-msgstr ""
+msgstr "Nem található előnyben részesített mód beállítás."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:146
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:283
@@ -6807,7 +6847,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:613
 msgctxt "nft chain is empty"
 msgid "No rules in this chain"
-msgstr ""
+msgstr "Nincsenek szabályok ebben a láncban"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:91
 msgid "No rules in this chain."
@@ -6826,11 +6866,11 @@ msgstr "Nincs zóna hozzárendelve"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:246
 msgid "Node info"
-msgstr ""
+msgstr "Csomópont-infó"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:250
 msgid "Node info privacy"
-msgstr ""
+msgstr "Csomópont-infó védelme"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:58
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:84
@@ -6842,7 +6882,7 @@ msgstr "Zaj"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:30
 msgid "Noise Margin"
-msgstr ""
+msgstr "Zajhatár"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:272
 msgid "Noise:"
@@ -6850,7 +6890,7 @@ msgstr "Zaj:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:495
 msgid "Non-wildcard"
-msgstr "Nincs helyettesítő karakter"
+msgstr "Nincs helyettesítés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:159
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:183
@@ -6872,7 +6912,7 @@ msgstr "Nem található"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:211
 msgctxt "VLAN port state"
 msgid "Not Member"
-msgstr ""
+msgstr "Nem tag"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:75
 msgid "Not associated"
@@ -6892,7 +6932,7 @@ msgstr "Nincs jelen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:102
 msgid "Not started on boot"
-msgstr "Nincs elindítva rendszerindításkor"
+msgstr "Nem indult el rendszerindításkor"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:409
 msgid "Not supported"
@@ -6900,16 +6940,16 @@ msgstr "Nem támogatott"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:655
 msgid "Note: IPv4 only."
-msgstr ""
+msgstr "Megjegyzés: csak IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1812
-#, fuzzy
 msgid ""
 "Note: Some wireless drivers do not fully support 802.11w. E.g. mwlwifi may "
 "have problems"
 msgstr ""
-"Megjegyzés: néhány vezeték nélküli meghajtó nem támogatja a 802.11w "
-"szabványt. Például: mwlwifi problémát jelezhet"
+"Megjegyzés: néhány vezeték nélküli meghajtó program nem támogatja a 802.11w "
+"<abbr title=\"Kezelőkeret-védelem (Management Frame Protection)\">MFP</abbr> "
+"szabványt. Például: <em>mwlwifi</em> problémát jelezhet"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1846
 msgid ""
@@ -6928,6 +6968,8 @@ msgid ""
 "Note: you may also need a DHCP Proxy (currently unavailable) when specifying "
 "a non-standard Relay To port(<code>addr#port</code>)."
 msgstr ""
+"Megjegyzés: DHCP-proxyra is szükség lehet (jelenleg nem érhető el), ha nem "
+"szabványos „Átjátszás” portot ad meg (<code>IP#port</code>)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Notes"
@@ -6943,17 +6985,17 @@ msgstr "Nslookup"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:338
 msgid "Number of IGMP membership reports"
-msgstr ""
+msgstr "IGMP tagságjelentések száma"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 msgid "Number of cached DNS entries, 10000 is maximum, 0 is no caching."
 msgstr ""
-"Gyorsítótárazott DNS-bejegyzések száma (legfeljebb 10000, 0 megadásakor "
+"Gyorsítótárazott DNS-bejegyzések száma (legfeljebb 10 000, 0 megadásakor "
 "nincs gyorsítótárazás)."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:316
 msgid "Number of peer notifications after failover event"
-msgstr ""
+msgstr "Értesített partnerek száma feladatátvételi esemény után"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:69
 msgid "Obfuscated Group Password"
@@ -6983,13 +7025,15 @@ msgstr "Ki"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:18
 msgid "Off-State Delay"
-msgstr "Kikapcsolt állapot késleltetés"
+msgstr "\"Ki\"-állapot időzítő"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1485
 msgid ""
 "Off: <code>vlanXXX</code>, e.g., <code>vlan1</code>. On: "
 "<code>vlan_tagged_interface.XXX</code>, e.g. <code>eth0.1</code>."
 msgstr ""
+"Ki: <code>vlanXXX</code>, például: <code>vlan1</code>.<br />Be: "
+"<code>vlan_címkés_csatoló.XXX</code>, például: <code>eth0.1</code>."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:19
 msgid "On"
@@ -6997,15 +7041,15 @@ msgstr "Be"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:12
 msgid "On-State Delay"
-msgstr "Állapotkori késleltetés"
+msgstr "\"Be\"-állapot időzítő"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:110
 msgid "On-link"
-msgstr "Kapcsolatkori útválasztás"
+msgstr "Kapcsolatban"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1064
 msgid "One of hostname or MAC address must be specified!"
-msgstr "A gépnév vagy a MAC-cím egyikét meg kell adni!"
+msgstr "A gépnevet vagy a MAC-cím egyikét meg kell adni!"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:520
 msgid "One of the following: %s"
@@ -7028,23 +7072,29 @@ msgstr "Egy vagy több kötelező mezőnek nincs értéke!"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:818
 msgid "Only DHCP Clients with this tag are sent this boot option."
 msgstr ""
+"Csak ezzel a címkével rendelkező DHCP-ügyfelek kapják meg ezt a "
+"rendszerindítási lehetőséget."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:577
 msgid "Only accept replies via"
-msgstr ""
+msgstr "Válaszok elfogadása csak ezen keresztül"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:769
 msgid "Only allow communication with non-isolated bridge ports when enabled"
 msgstr ""
+"Csak akkor lehetséges kommunikáció a nem elszigetelt hídportokkal, ha "
+"engedélyezve van."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:236
 msgid ""
 "Only if current active slave fails and the primary slave is up (failure, 2)"
 msgstr ""
+"Csak akkor, ha az aktuális aktív segéd meghibásodik, és az elsődleges segéd "
+"fel van kapcsolva (hiba, 2)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:682
 msgid "Open iptables rules overview…"
-msgstr ""
+msgstr "iptables szabályok áttekintésének megnyitása…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:474
 msgid "Open list..."
@@ -7056,7 +7106,7 @@ msgstr ""
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
-msgstr "OpenConnect (CISCO AnyConnect)"
+msgstr ""
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:63
 msgid "OpenFortivpn"
@@ -7068,18 +7118,25 @@ msgid ""
 "configured and active, otherwise disable <abbr title=\"Neighbour Discovery "
 "Protocol\">NDP</abbr> proxying."
 msgstr ""
+"Működjön <em>átjátszó mód</em>-ban ha egy kijelölt mester csatoló be van "
+"állítva és aktív, ellenkező esetben tiltsa le az <abbr title=\"Szomszéd "
+"felderítő protokoll (Neighbor Discovery Protocol)\">NDP</abbr>-proxyt."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:768
 msgid ""
 "Operate in <em>relay mode</em> if a designated master interface is "
 "configured and active, otherwise fall back to <em>server mode</em>."
 msgstr ""
+"Működjön <em>átjátszó mód</em>-ban ha egy kijelölt mester csatoló be van "
+"állítva és aktív, ellenkező esetben térjen vissza <em>kiszolgáló mód</em>-ba."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:770
 msgid ""
 "Operate in <em>relay mode</em> if an upstream IPv6 prefix is present, "
 "otherwise disable service."
 msgstr ""
+"Működjön <em>átjátszó mód</em>-ban ha be van állítva külső IPv6-előtag, "
+"ellenkező esetben tiltsa le a szolgáltatást."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1846
 msgid "Operating Channel Validation"
@@ -7104,11 +7161,11 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2006
 #: modules/luci-base/htdocs/luci-static/resources/form.js:4062
 msgid "Option \"%s\" contains an invalid input value."
-msgstr ""
+msgstr "A(z) \"%s\" lehetőség érvénytelen beviteli értéket tartalmaz."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2021
 msgid "Option \"%s\" must not be empty."
-msgstr ""
+msgstr "A(z) \"%s\" lehetőség nem lehet üres."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4475
 msgid "Option changed"
@@ -7125,7 +7182,7 @@ msgstr "Elhagyható"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1022
 msgid "Optional hostname to assign"
-msgstr ""
+msgstr "Gépnév hozzárendelés (elhagyható)."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:246
 msgid ""
@@ -7133,10 +7190,13 @@ msgid ""
 "null. This is entirely optional but, if set, is visible to the whole network "
 "on request."
 msgstr ""
+"Elhagyható csomópont információ. Ennek egy <code>\"kulcs\": \"érték\", ...</"
+"code> leképezésnek kell lennie, vagy nullának, de ha be van állítva, kérésre "
+"az egész hálózat számára látható."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Optional, free-form notes about this device"
-msgstr ""
+msgstr "Az eszköz kötetlen formátumú leírása (elhagyható)."
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:147
 msgid "Optional, in seconds. If set to '0', no reconnect is attempted."
@@ -7147,8 +7207,8 @@ msgid ""
 "Optional. 32-bit mark for outgoing encrypted packets. Enter value in hex, "
 "starting with <code>0x</code>."
 msgstr ""
-"Elhagyható. 32 bites jel a kimenő titkosított csomagokhoz. Hexadecimálisan "
-"adja meg az értéket <code>0x</code> karakterrel kezdve."
+"32 bites jelzés a kimenő titkosított csomagokhoz. Hexadecimálisan adja meg "
+"az értéket <code>0x</code> karakterrel kezdve (elhagyható)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1141
 msgid ""
@@ -7157,40 +7217,39 @@ msgid ""
 "server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
 "for the interface."
 msgstr ""
-"Elhagyható. Engedélyezett értékek: „eui64”, „random”, rögzített érték, mint "
-"például „::1” vagy „::1:2”. Ha IPv6-előtag (például „a:b:c:d::”) érkezik egy "
-"delegált kiszolgálótól, akkor használja az utótagot (például „::1”) az IP-"
-"cím formázásához („a:b:c:d::1”) a csatolónál."
+"Engedélyezett értékek: <code>eui64</code>, <code>random</code> vagy "
+"rögzített érték, például: <code>::1</code>, <code>::1:2</code>. Ha IPv6-"
+"előtag (például: <code>a:b:c:d::</code>) érkezik egy kiszolgálótól, akkor "
+"használja a csatolónál az utótagot (például: <code>::1</code>) az IP-cím "
+"formázásához (a példánál maradva: <code>a:b:c:d::1</code>) (elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:586
 msgid ""
 "Optional. Base64-encoded preshared key. Adds in an additional layer of "
 "symmetric-key cryptography for post-quantum resistance."
 msgstr ""
-"Elhagyható. Base64 kódolású előre megosztott kulcs. Egy szimmetrikus kulcsú "
-"kriptográfia további rétegében adja hozzá a kvantum utáni ellenállósághoz."
+"Base64-kódolású előre megosztott kulcs, ami még egy réteg szimmetrikus "
+"kulcsú titkosítást biztosít kvantumszámítógépes támadások ellen (elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:643
 msgid "Optional. Create routes for Allowed IPs for this peer."
 msgstr ""
-"Elhagyható. Útvonalak létrehozása az engedélyezett IP-khez ennél a "
-"partnernél."
+"Útvonalak létrehozása ehhez a partnerhez az engedélyezett IP-kkel "
+"(elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:504
 msgid "Optional. Description of peer."
-msgstr "Elhagyható. A partner leírása."
+msgstr "Partner leírása (elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:171
 msgid "Optional. Do not create host routes to peers."
-msgstr "Elhagyható. Ne hozzon létre gépútvonalakat a partnerekhez."
+msgstr "Ne hozzon létre gépútvonalakat a partnerekhez (elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:646
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
-msgstr ""
-"Elhagyható. A partner gépe. A nevek a csatoló felhidazása előtt lesznek "
-"feloldva."
+msgstr "Partner gépe, a csatoló felhidalása előtt lesz feloldva (elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:608
 msgid ""
@@ -7198,18 +7257,21 @@ msgid ""
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
 "routes through the tunnel."
 msgstr ""
+"Ennek a partnernek az alagúthoz használható IP-címei és azok előtagjai, "
+"általában a partner alagút IP-címei és a hálózatok, amelyeket a partner "
+"átenged az alagúton (elhagyható)."
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:46
 msgid "Optional. Maximum Transmission Unit of the XFRM interface."
-msgstr ""
+msgstr "Az XFRM csatoló legnagyobb átviteli egysége (elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:182
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
-msgstr "Elhagyható. Az alagút csatoló legnagyobb átviteli egysége."
+msgstr "Az alagút csatoló legnagyobb átviteli egysége (elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:662
 msgid "Optional. Port of peer."
-msgstr "Elhagyható. A partner portja."
+msgstr "Partner portja (elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:577
 msgid ""
@@ -7218,35 +7280,40 @@ msgid ""
 "code if available. It can be removed after the configuration has been "
 "exported."
 msgstr ""
+"A WireGuard partner privát kulcsa (elhagyható). Nem szükséges a kapcsolat "
+"létrehozásához, de lehetővé teszi partner beállítás vagy QR-kód generálását. "
+"A beállítás exportálása után eltávolítható."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:667
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
 msgstr ""
-"Elhagyható. Az életben tartási üzenetek közti másodpercek. Alapértelmezetten "
-"0 (letiltva). Az ajánlott érték 25, ha ez az eszköz NAT mögött van."
+"Az életben tartási üzenetek közöti másodpercek. Alapértelmezetten 0 "
+"(letiltva). Az ajánlott érték 25, ha ez az eszköz <abbr title=\"Hálózati "
+"címfordítás (Network Address Translation)\">NAT</abbr> mögött van "
+"(elhagyható)."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
 msgid "Optional. UDP port used for outgoing and incoming packets."
-msgstr "Elhagyható. A kimenő és bejövő csomagokhoz használt UDP port."
+msgstr "A kimenő és bejövő csomagokhoz használt UDP port (elhagyható)."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:72
 msgid "Options"
-msgstr "Beállítások"
+msgstr "Lehetőségek"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:125
 msgid "Options:"
-msgstr "Opciók:"
+msgstr "Lehetőségek:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:878
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:910
 msgid "Ordinal: lower comes first."
-msgstr ""
+msgstr "Sorrendi: elöl az alacsonyabb."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:55
 msgid "Originator Interval"
-msgstr ""
+msgstr "Kezdeményező időköz"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:351
 msgid "Other:"
@@ -7265,11 +7332,11 @@ msgstr "Kimenő:"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:108
 msgid "Outgoing checksum"
-msgstr ""
+msgstr "Kimenő ellenőrző összeg"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:156
 msgid "Outgoing interface"
-msgstr ""
+msgstr "Kimenő csatoló"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:96
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:101
@@ -7277,14 +7344,14 @@ msgstr ""
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:103
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:68
 msgid "Outgoing key"
-msgstr ""
+msgstr "Kimenő kulcs"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
 msgid "Outgoing serialization"
-msgstr ""
+msgstr "Kimenő szerializáció"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:50
 msgid "Output Interface"
@@ -7300,14 +7367,12 @@ msgid "Overlap"
 msgstr "Átfedés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1078
-#, fuzzy
 msgid "Override IPv4 routing table"
-msgstr "IPv4 routing tábla felülírása"
+msgstr "IPv4 útválasztási tábla felülírása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1083
-#, fuzzy
 msgid "Override IPv6 routing table"
-msgstr "IPv6 routing tábla feloldása"
+msgstr "IPv6 útválasztási tábla felülírása"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:54
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:64
@@ -7335,7 +7400,8 @@ msgstr "MTU felülbírálása"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:67
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:67
 msgid "Override TOS"
-msgstr "TOS felülbírálása"
+msgstr ""
+"<abbr title=\"Szolgáltatás típusa (Type of Service)\">ToS</abbr> felülírása"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:69
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
@@ -7345,13 +7411,18 @@ msgstr "TOS felülbírálása"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:62
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:62
 msgid "Override TTL"
-msgstr "TTL felülbírálása"
+msgstr ""
+"<abbr title=\"Élettartam (Time To Live) - IPv6 megfelelője az Ugráshatár ("
+"Hop Limit)\">TTL</abbr> felülírása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1161
 msgid ""
 "Override default MAC address - the range of usable addresses might be "
 "limited by the driver"
 msgstr ""
+"Az alapértelmezett <abbr title=\"Közeghozzáférés-vezérlő (Media Access "
+"Control)\">MAC</abbr>-cím felülírása – a használható címek tartományát az "
+"illesztőprogram korlátozhatja."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1153
 msgid "Override default interface name"
@@ -7359,7 +7430,7 @@ msgstr "Alapértelmezett csatolónév felülbírálása"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:167
 msgid "Override the gateway in DHCP responses"
-msgstr "Átjáró felülbírálása a DHCP válaszokban"
+msgstr "DHCP válaszokban az átjáró felülírása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:736
 msgid ""
@@ -7383,11 +7454,11 @@ msgstr "Felülírja a meglévő „%s” fájlt?"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:341
 msgid "Overwrite the current settings with the imported configuration?"
-msgstr ""
+msgstr "Felülírja a jelenlegi beállításokat az importálttal?"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:98
 msgid "Own Numbers"
-msgstr ""
+msgstr "Tulajdonosi szám"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:70
 msgid "Owner"
@@ -7395,7 +7466,7 @@ msgstr "Tulajdonos"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3886
 msgid "P2P Client"
-msgstr ""
+msgstr "P2P ügyfél"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3887
 msgid "P2P Go"
@@ -7404,10 +7475,15 @@ msgstr ""
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:78
 msgid "PAP"
 msgstr ""
+"<abbr title=\"Jelszavas hitelesítési protokoll (Password Authentication "
+"Protocol\">PAP</abbr>"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:77
 msgid "PAP/CHAP"
 msgstr ""
+"<abbr title=\"Jelszavas hitelesítési protokoll (Password Authentication "
+"Protocol\">PAP</abbr> / <abbr title=\"Kihívás-kézfogás hitelesítési "
+"protokoll (Challenge-Handshake Authentication Protocol)\">CHAP</abbr>"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:111
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:88
@@ -7421,7 +7497,7 @@ msgstr ""
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:101
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:50
 msgid "PAP/CHAP password"
-msgstr "PAP/CHAP jelszó"
+msgstr "PAP / CHAP jelszó"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:109
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:83
@@ -7435,16 +7511,22 @@ msgstr "PAP/CHAP jelszó"
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:96
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:48
 msgid "PAP/CHAP username"
-msgstr "PAP/CHAP felhasználónév"
+msgstr ""
+"<abbr title=\"Jelszavas hitelesítési protokoll (Password Authentication "
+"Protocol\">PAP</abbr> / <abbr title=\"Kihívás-kézfogás hitelesítési "
+"protokoll (Challenge-Handshake Authentication Protocol)\">CHAP</abbr> "
+"felhasználónév"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:94
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:121
 msgid "PDP Type"
-msgstr "PDP típus"
+msgstr ""
+"<abbr title=\"Csomagátviteli protokoll (Packet Data Protocol)\">PDP</abbr> "
+"típusa"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:69
 msgid "PID"
-msgstr "PID"
+msgstr "<abbr title=\"Folyamat-azonosító (Process IDentifier)\">PID</abbr>"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:106
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:73
@@ -7452,7 +7534,9 @@ msgstr "PID"
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:102
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:86
 msgid "PIN"
-msgstr "PIN"
+msgstr ""
+"<abbr title=\"Személyi azonosító szám (Personal Identification Number)\""
+">PIN</abbr>"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:21
 #: modules/luci-compat/luasrc/model/network.lua:39
@@ -7503,33 +7587,33 @@ msgstr "PSID bitek hossza"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:558
 msgctxt "Label indicating that WireGuard peer uses a PSK"
 msgid "PSK"
-msgstr ""
+msgstr "PSK"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1655
 msgid "PTM/EFM (Packet Transfer Mode)"
-msgstr "PTM/EFM (csomagátviteli mód)"
+msgstr "PTM / EFM (csomagátviteli mód)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:369
 msgid "PXE/TFTP"
-msgstr ""
+msgstr "PXE / TFTP"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:103
 msgid "Packet Service State"
-msgstr ""
+msgstr "Csomagszolgáltatási állapot"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1598
 msgid "Packet Steering"
-msgstr ""
+msgstr "Csomagirányítás"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:25
 msgctxt "nft meta mark"
 msgid "Packet mark"
-msgstr ""
+msgstr "Csomagjelölés"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:27
 msgctxt "nft meta time"
 msgid "Packet receive time"
-msgstr ""
+msgstr "Csomagfogadási idő"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:54
 msgid "Packets"
@@ -7537,13 +7621,13 @@ msgstr "Csomagok"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:282
 msgid "Packets To Transmit Before Moving To Next Slave"
-msgstr ""
+msgstr "Következő segédre lépés előtt továbbítandó csomagok"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:291
 msgid "Part of network:"
 msgid_plural "Part of networks:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Hálózat része:"
+msgstr[1] "Hálózatok része:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1317
@@ -7554,7 +7638,7 @@ msgstr "A(z) %q zóna része"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:492
 msgctxt "MACVLAN mode"
 msgid "Pass-through (Mirror physical device to single MAC VLAN)"
-msgstr ""
+msgstr "Átengedés (Fizikai eszköz tükrözése egyetlen MAC VLAN-hoz)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1805
@@ -7597,6 +7681,8 @@ msgstr "SSH kulcsfájl beszúrása vagy idehúzása…"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:430
 msgid "Paste or drag WireGuard peer configuration (wg0.conf) file…"
 msgstr ""
+"WireGuard partner beállító fájl (<code>wg0.conf</code>) beszúrása vagy "
+"idehúzása…"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:423
 msgid ""
@@ -7604,10 +7690,15 @@ msgid ""
 "another system below to create a matching peer entry allowing that system to "
 "connect to the local WireGuard interface."
 msgstr ""
+"Másik rendszerből származó WireGuard beállító fájl (<code>wg0.conf</code>) "
+"beszúrása vagy idehúzása. Létrehozza a megfelelő partner-bejegyzést, hogy a "
+"rendszer csatlakozzon a helyi WireGuard interfészhez."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:429
 msgid "Paste or drag supplied WireGuard configuration file…"
 msgstr ""
+"Mellékelt WireGuard beállító fájl (<code>wg0.conf</code>) beszúrása vagy "
+"idehúzása…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1716
 msgid "Path to CA-Certificate"
@@ -7657,36 +7748,36 @@ msgstr "Partner"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:51
 msgid "Peer Details"
-msgstr ""
+msgstr "Partner részletek"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:89
 msgid "Peer IP address to assign"
-msgstr "Hozzárendelendő partner IP-cím"
+msgstr "Partnerhez rendelendő IP-cím"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:667
 msgid "Peer MAC address"
-msgstr ""
+msgstr "Partner MAC-címe"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:276
 msgid "Peer URI"
-msgstr ""
+msgstr "Partner URI"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:14
 #: modules/luci-compat/luasrc/model/network.lua:32
 msgid "Peer address is missing"
-msgstr "A partnercím hiányzik"
+msgstr "A partner címe hiányzik"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:270
 msgid "Peer addresses"
-msgstr ""
+msgstr "Partner címek"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:648
 msgid "Peer device name"
-msgstr ""
+msgstr "Partner eszköznév"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:279
 msgid "Peer interface"
-msgstr ""
+msgstr "Partner csatoló"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:200
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:254
@@ -7695,14 +7786,16 @@ msgstr "Partnerek"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:80
 msgid "Perfect Forward Secrecy"
-msgstr "Sérülés utáni titkosságvédelem"
+msgstr ""
+"<abbr title=\"Tökéletes továbbítási titkosság (Perfect Forward Secrecy)\""
+">PFS</abbr>"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:103
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:108
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:105
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:110
 msgid "Perform outgoing packets serialization (optional)."
-msgstr ""
+msgstr "Kimenő csomagok szerializálása (elhagyható)."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:34
 msgid "Perform reboot"
@@ -7722,15 +7815,15 @@ msgstr "Állandó életben tartás"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:147
 msgid "Persistent reconnect interval"
-msgstr ""
+msgstr "Állandó újracsatlakozási időköz"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:320
 msgid "PersistentKeepAlive setting is invalid"
-msgstr ""
+msgstr "<em>PersistentKeepAlive</em> beállítása érvénytelen"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:290
 msgid "Phy Rate:"
-msgstr "Phy sebesség:"
+msgstr "Fizikai sebesség:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:515
 msgid "Physical Settings"
@@ -7761,12 +7854,12 @@ msgstr "Válassza ki a feltöltendő fájlt."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:54
 msgid "Policy"
-msgstr "Házirend"
+msgstr "Szabályzat"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:594
 msgctxt "Chain hook policy"
 msgid "Policy: <strong>%h</strong> (%h)"
-msgstr ""
+msgstr "Szabályzat: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:873
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
@@ -7782,15 +7875,15 @@ msgstr "Port %d"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:293
 msgid "Port is not part of any network"
-msgstr ""
+msgstr "A port nem része egyetlen hálózatnak sem"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:769
 msgid "Port isolation"
-msgstr "Port izoláció"
+msgstr "Port elszigetelése"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:299
 msgid "Port status"
-msgstr ""
+msgstr "Port állapot"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:278
 msgid "Port status:"
@@ -7802,7 +7895,7 @@ msgstr "Lehetséges tagadása ennek: %s"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:89
 msgid "Power State"
-msgstr ""
+msgstr "Teljesítmény"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:78
 msgid "Prefer LTE"
@@ -7814,19 +7907,19 @@ msgstr "UMTS előnyben részesítése"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1036
 msgid "Preferred lifetime for a prefix."
-msgstr ""
+msgstr "Előtag előnyben részesített élettartama."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:108
 msgid "Preferred network technology"
-msgstr ""
+msgstr "Előnyben részesített hálózati módszer"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
 msgid "Prefix Delegated"
-msgstr "Előtag delegálva"
+msgstr "Előtag használata"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid "Prefix suppressor"
-msgstr ""
+msgstr "Előtag elnyomása"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:586
 msgid "Preshared Key"
@@ -7838,7 +7931,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:294
 msgid "PresharedKey setting is invalid"
-msgstr ""
+msgstr "<em>PresharedKey</em> beállítása érvénytelen"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:102
@@ -7850,32 +7943,37 @@ msgid ""
 "Presume peer to be dead after given amount of LCP echo failures, use 0 to "
 "ignore failures"
 msgstr ""
-"A partner halottnak tekintése a megadott mennyiségű LCP visszhang hibák "
-"után. Használjon 0 értéket a hibák figyelmen kívül hagyásához"
+"A partner halottnak minősül a megadott mennyiségű <abbr title="
+"\"Kapcsolatvezérlő protokoll (Link Control Protocol)\">LCP</abbr> visszhang "
+"hibák után.<br />Használjon 0 értéket a hibák figyelmen kívül hagyásához."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1149
 msgid "Prevents client-to-client communication"
-msgstr "Megakadályozza az ügyfél-ügyfél közti kommunikációt"
+msgstr "Megakadályozza az ügyfelek közötti közvetlen kommunikációt."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:61
 msgid ""
 "Prevents one wireless client to talk to another. This setting only affects "
 "packets without any VLAN tag (untagged packets)."
 msgstr ""
+"Megakadályozza a vezeték nélküli kliensek egymás közötti kommunikációját. Ez "
+"a beállítás csak a VLAN-címke nélküli (címkézetlen) csomagokat érinti."
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:218
 msgid "Primary Slave"
-msgstr ""
+msgstr "Elsődleges segéd"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:235
 msgid ""
 "Primary becomes active slave when it comes back up if speed and duplex "
 "better than current slave (better, 1)"
 msgstr ""
+"Az elsődleges aktív segéd lesz, amikor feljön, és a jelenlegi segédnél jobb "
+"a duplex sebessége (jobb, 1)"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:234
 msgid "Primary becomes active slave whenever it comes back up (always, 0)"
-msgstr ""
+msgstr "Az elsődleges aktív segéd lesz, amikor újra feljön (mindig, 0)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:562
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:878
@@ -7890,12 +7988,12 @@ msgstr "Prioritás"
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:552
 msgctxt "Label indicating that WireGuard peer private key is stored"
 msgid "Private"
-msgstr ""
+msgstr "Személyes"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:490
 msgctxt "MACVLAN mode"
 msgid "Private (Prevent communication between MAC VLANs)"
-msgstr ""
+msgstr "Személyes (megakadályozza a MAC VLAN-ok közötti kommunikációt)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:137
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:577
@@ -7904,15 +8002,15 @@ msgstr "Személyes kulcs"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:230
 msgid "Private key"
-msgstr ""
+msgstr "Személyes kulcs"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:551
 msgid "Private key present"
-msgstr ""
+msgstr "Személyes kulcs jelen"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:282
 msgid "PrivateKey setting is missing or invalid"
-msgstr ""
+msgstr "<emyPrivateKey</em> beállítása hiányzik vagy érvénytelen"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:93
@@ -7942,6 +8040,8 @@ msgid ""
 "Provide a DHCPv6 server on this interface and reply to DHCPv6 solicitations "
 "and requests."
 msgstr ""
+"DHCPv6 kiszolgálást biztosít ezen a csatolón, válaszol a DHCPv6 felkérésekre "
+"és kérésekre."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:877
 msgid "Provide new network"
@@ -7952,10 +8052,12 @@ msgid ""
 "Provide the NTP server to the selected interface or, if unspecified, to all "
 "interfaces"
 msgstr ""
+"NTP-kiszolgálót biztosít a kiválasztott csatolón, vagy ha nincs megadva, "
+"akkor az összes csatolón."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:154
 msgid "Proxy Server"
-msgstr ""
+msgstr "Proxy-kiszolgáló"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1688
 msgid "ProxyARP"
@@ -7974,17 +8076,17 @@ msgstr "Nyilvános kulcs"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:235
 msgid "Public key"
-msgstr ""
+msgstr "Nyilvános kulcs"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:534
 msgid "Public key is missing"
-msgstr ""
+msgstr "Nyilvános kulcs hiányzik"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:543
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:101
 msgctxt "Tooltip displaying full WireGuard peer public key"
 msgid "Public key: %h"
-msgstr ""
+msgstr "Nyilvános kulcs: %h"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:290
 msgid ""
@@ -7993,26 +8095,26 @@ msgid ""
 "OpenSSH-compatible public key or drag a <code>.pub</code> file into the "
 "input field."
 msgstr ""
-"A nyilvános kulcsok lehetővé teszik a jelszó nélküli SSH-bejelentkezéseket "
-"az egyszerű jelszavak használatához képest nagyobb biztonsággal. Ahhoz, hogy "
-"új kulcsot töltsön fel az eszközre, illesszen be egy OpenSSH kompatibilis "
+"A nyilvános kulcsok lehetővé teszik a jelszó nélküli <abbr title="
+"\"Biztonságos rendszerhéj (Secure SHell)\">SSH</abbr>-bejelentkezéseket, az "
+"egyszerű jelszavak használatához képest nagyobb biztonsággal. Ahhoz, hogy új "
+"kulcsot töltsön fel az eszközre, illesszen be egy OpenSSH kompatibilis "
 "nyilvános kulcs sort vagy húzzon egy <code>.pub</code> fájlt a beviteli "
 "mezőbe."
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:193
 msgid "Public prefix routed to this device for distribution to clients."
 msgstr ""
-"Az eszközhöz irányított nyilvános előtag az ügyfeleknek történő "
-"terjesztéshez."
+"Az eszközre irányított nyilvános előtag terjesztése az ügyfelek számára."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:291
 msgid "PublicKey setting is invalid"
-msgstr ""
+msgstr "<em>PublicKey</em> beállítása érvénytelen"
 
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:9
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:27
 msgid "QMI Cellular"
-msgstr "QMI sejtes"
+msgstr "QMI (Qualcomm MSM Interface) cellák"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:146
 msgid "Quality"
@@ -8024,24 +8126,25 @@ msgid ""
 "routers to make informed decisions about the optimal path to forward data "
 "packets"
 msgstr ""
+"Számszerűsíti a ráfordítást vagy a cél távolságát annak érdekében, hogy az "
+"útválasztók megalapozott döntéseket hozzanak az adatcsomagok továbbításának "
+"optimális útvonaláról."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:682
 msgid "Query all available upstream resolvers."
-msgstr ""
-"Az összes elérhető külső <abbr title=\"Domain Name System\">DNS</abbr>-"
-"kiszolgáló lekérdezése."
+msgstr "Az összes elérhető külső DHCP-kiszolgáló lekérdezése."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:610
 msgid "Query interval"
-msgstr ""
+msgstr "Lekérdezési időköz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:615
 msgid "Query response interval"
-msgstr ""
+msgstr "Lekérdezési-válasz időköz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:604
 msgid "Query upstream resolvers in the order they appear in the resolv file."
-msgstr ""
+msgstr "A külső feloldókat a feloldófájlban található sorrendben kérdezze le."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1620
 msgid "R0 Key Lifetime"
@@ -8053,39 +8156,39 @@ msgstr "R1 kulcstartó"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1458
 msgid "RADIUS Access-Request attributes"
-msgstr ""
+msgstr "RADIUS hozzáférés-kérelem tulajdonságai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1432
 msgid "RADIUS Accounting Port"
-msgstr "Radius-Elszámolás-Port"
+msgstr "Radius elszámolási port"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1438
 msgid "RADIUS Accounting Secret"
-msgstr "Radius-Elszámolás-Titok"
+msgstr "Radius elszámolás-titok"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1427
 msgid "RADIUS Accounting Server"
-msgstr "Radius-Elszámolás-Kiszolgáló"
+msgstr "RADIUS elszámolás-kiszolgáló"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1465
 msgid "RADIUS Accounting-Request attributes"
-msgstr ""
+msgstr "RADIUS elszámolás-kérelem tulajdonságai"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1416
 msgid "RADIUS Authentication Port"
-msgstr "Radius-Hitelesítés-Port"
+msgstr "RADIUS hitelesítési port"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1422
 msgid "RADIUS Authentication Secret"
-msgstr "Radius-Hitelesítés-Titok"
+msgstr "RADIUS hitelesítés-titok"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1411
 msgid "RADIUS Authentication Server"
-msgstr "Radius-Hitelesítés-Kiszolgáló"
+msgstr "RADIUS hitelesítés-kiszolgáló"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1472
 msgid "RADIUS Dynamic VLAN Assignment"
-msgstr ""
+msgstr "RADIUS dinamikus VLAN hozzárendelés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1481
 msgid "RADIUS Per STA VLAN"
@@ -8093,15 +8196,15 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1497
 msgid "RADIUS VLAN Bridge Naming Scheme"
-msgstr ""
+msgstr "RADIUS VLAN híd elnevezési séma"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1485
 msgid "RADIUS VLAN Naming"
-msgstr ""
+msgstr "RADIUS VLAN elnevezés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1488
 msgid "RADIUS VLAN Tagged Interface"
-msgstr ""
+msgstr "RADIUS VLAN címkézett csatoló"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:88
 msgid "RFC3947 NAT-T mode"
@@ -8109,7 +8212,7 @@ msgstr "RFC3947 NAT-T mód"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1520
 msgid "RSN Preauth"
-msgstr ""
+msgstr "RSN előhitelesítés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:998
 msgid "RSSI threshold for joining"
@@ -8117,7 +8220,7 @@ msgstr "RSSI küszöbszint a csatlakozáshoz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:961
 msgid "RTS/CTS Threshold"
-msgstr "RTS/CTS küszöbszint"
+msgstr "RTS / CTS küszöbszint"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:49
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:84
@@ -8127,34 +8230,37 @@ msgstr "RX"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:236
 msgid "RX Rate"
-msgstr "RX sebesség"
+msgstr "Vétel sebesség"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2338
 msgid "RX Rate / TX Rate"
-msgstr "RX-sebesség/TX-sebesség"
+msgstr "Vétel sebessége / Adás sebessége"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1649
 msgid ""
 "Radio Resource Measurement - Sends beacons to assist roaming. Not all "
 "clients support this."
 msgstr ""
+"Rádióerőforrás mérés - jeladást küld a barangolás segítésére (nem minden "
+"ügyfél támogatja)."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:61
 msgctxt "nft nat flag random"
 msgid "Randomize source port mapping"
-msgstr ""
+msgstr "Véletlenszerű a forrásport-leképezés"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:88
 msgid "Raw hex-encoded bytes. Leave empty unless your ISP require this"
 msgstr ""
-"Nyers hexadecimális kódolású bájtok. Hagyja üresen, hacsak az internet-"
-"szolgáltatója nem követelni meg"
+"Nyers hexadecimális kódolású bájtok. Hagyja üresen, hacsak az "
+"internetszolgáltató kifejezetten nem kéri a beállítását."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:584
 msgid "Read {etc_ethers} to configure the DHCP server."
 msgstr ""
-"Az {etc_ethers} fájl olvasása a <abbr title=\"Dynamic Host Configuration "
-"Protocol\">DHCP</abbr>-kiszolgáló beállításához."
+"Az {etc_ethers} fájl olvasása a <abbr title=\"Dinamikus állomáskonfiguráló "
+"protokoll (Dynamic Host Configuration Protocol)\">DHCP</abbr>-kiszolgáló "
+"beállításához."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:600
 msgid "Really switch protocol?"
@@ -8194,28 +8300,27 @@ msgstr "Fogadás"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:243
 msgid "Receive dropped"
-msgstr ""
+msgstr "Fogadás megszakadt"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:242
 msgid "Receive errors"
-msgstr ""
+msgstr "Fogadási hibák"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:57
-#, fuzzy
 msgid "Received Data"
-msgstr "Fogadás"
+msgstr "Fogadott adat"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:239
 msgid "Received bytes"
-msgstr ""
+msgstr "Fogadott bájtok"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:241
 msgid "Received multicast"
-msgstr ""
+msgstr "Fogadott csoport-küldés"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:240
 msgid "Received packets"
-msgstr ""
+msgstr "Fogadott csomagok"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:167
 msgid "Recommended. IP addresses of the WireGuard interface."
@@ -8223,7 +8328,7 @@ msgstr "Ajánlott. A WireGuard csatoló IP-címei."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:198
 msgid "Reconnect Timeout"
-msgstr ""
+msgstr "Újracsatlakozás időkorlátja"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:540
 msgid "Reconnect this interface"
@@ -8231,17 +8336,17 @@ msgstr "Csatoló újrakapcsolódása"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid "Redirect to HTTPS"
-msgstr ""
+msgstr "Átirányítás HTTPS-re"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:118
 msgctxt "nft redirect to port"
 msgid "Redirect to local port <strong>%h</strong>"
-msgstr ""
+msgstr "Átirányítás helyi portra: <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:117
 msgctxt "nft redirect"
 msgid "Redirect to local system"
-msgstr ""
+msgstr "Átirányítás a helyi rendszerre"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:57
 msgid "References"
@@ -8249,7 +8354,7 @@ msgstr "Hivatkozások"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/channel_analysis.js:397
 msgid "Refresh Channels"
-msgstr ""
+msgstr "Csatornák frissítése"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2721
 msgid "Refreshing"
@@ -8262,34 +8367,38 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:101
 msgctxt "nft reject with icmp type"
 msgid "Reject IPv4 packet with <strong>ICMP type %h</strong>"
-msgstr ""
+msgstr "IPv4 csomag elutasítása: <strong>ICMP %h típus</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:103
 msgctxt "nft reject with icmpx type"
 msgid "Reject packet with <strong>ICMP type %h</strong>"
-msgstr ""
+msgstr "Csomag elutasítása: <strong>ICMP %h típus</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:102
 msgctxt "nft reject with icmpv6 type"
 msgid "Reject packet with <strong>ICMPv6 type %h</strong>"
-msgstr ""
+msgstr "Csomag elutasítása: <strong>ICMPv6 %h típus</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:100
 msgctxt "nft reject with tcp reset"
 msgid "Reject packet with <strong>TCP reset</strong>"
-msgstr ""
+msgstr "Csomag elutasítása: <strong>TCP visszaállítás</strong>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:631
 msgid ""
 "Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in "
 "{etc_hosts}."
 msgstr ""
+"Fordított keresések elutasítása az {etc_hosts} fájlban nem szereplő "
+"{rfc_6303_link} (helyileg kezelt) IP-tartományokban."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:192
 msgid ""
 "Reject routing decisions that have a prefix length less than or equal to the "
 "specified value"
 msgstr ""
+"A megadott értéknél kisebb vagy egyenlő előtaghossz esetén az útválasztási "
+"döntések elutasítása."
 
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:368
@@ -8306,6 +8415,7 @@ msgstr "Átjátszó híd"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:515
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
 msgstr ""
+"DHCP kérések átjátszása: működik: v4↔v4, v6↔v6 - NEM működik: v4↔v6, v6↔v4."
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:154
 msgid "Relay between networks"
@@ -8318,11 +8428,11 @@ msgstr "Átjátszó híd"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:527
 msgid "Relay from"
-msgstr ""
+msgstr "Átjátszás innen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:547
 msgid "Relay to address"
-msgstr ""
+msgstr "Átjátszás címre"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:50
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:49
@@ -8339,13 +8449,13 @@ msgstr "Távoli IPv4-cím vagy FQDN"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:40
 msgid "Remote IPv6 address"
-msgstr ""
+msgstr "Távoli IPv6-cím"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:42
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:42
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:40
 msgid "Remote IPv6 address or FQDN"
-msgstr ""
+msgstr "Távoli IPv6-cím vagy FQDN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:901
 msgid "Remove"
@@ -8354,29 +8464,33 @@ msgstr "Eltávolítás"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:648
 msgid "Remove IPv4 addresses from the results and only return IPv6 addresses."
 msgstr ""
+"<abbr title=\"Internet protokoll 4-es verziója\">IPv4</abbr>-címek "
+"eltávolítása az eredmények közül, csak <abbr title=\"Internet protokoll 6-os "
+"verziója\">IPv6</abbr>-címek visszaadása."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:642
 msgid "Remove IPv6 addresses from the results and only return IPv4 addresses."
 msgstr ""
+"IPv6-címek eltávolítása az eredmények közül, csak IPv4-címek visszaadása."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:341
 msgctxt "Dnsmasq instance"
 msgid "Remove default instance"
-msgstr ""
+msgstr "Alapértelmezett példány eltávolítása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:345
 msgctxt "Dnsmasq instance"
 msgid "Remove instance \"%q\""
-msgstr ""
+msgstr "\"%q\" példány eltávolítása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:341
 msgctxt "Dnsmasq instance"
 msgid "Remove instance #%d"
-msgstr ""
+msgstr "#%q példány eltávolítása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1418
 msgid "Remove related device settings from the configuration"
-msgstr ""
+msgstr "Távolítsa el a kapcsolódó eszközbeállításokat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2178
 msgid "Replace wireless configuration"
@@ -8388,7 +8502,7 @@ msgstr "IPv6-cím kérése"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:23
 msgid "Request IPv6-prefix of length"
-msgstr "Kért IPv6-előtag vagy hossz"
+msgstr "Adott hosszúságú IPv6-előtag kérése"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:408
 msgid "Request timeout"
@@ -8399,14 +8513,14 @@ msgstr "Kérés időkorlátja"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:107
 msgid "Require incoming checksum (optional)."
-msgstr ""
+msgstr "Bemenő ellenőrző összeg követelése (elhagyható)."
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:102
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:107
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:104
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:109
 msgid "Require incoming packets serialization (optional)."
-msgstr ""
+msgstr "Bemenő csomagok szerializálásának megkövetelése (elhagyható)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1476
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1815
@@ -8416,34 +8530,40 @@ msgstr "Kötelező"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
 msgstr ""
-"Bizonyos internetszolgáltatók esetén szükséges, például DOCSIS 3-mal "
-"rendelkező Charternél"
+"Bizonyos internetszolgáltatók esetén szükséges, például <abbr title=\"Kábelen"
+" keresztüli adatszolgáltatási csatoló leírása (Data Over Cable Service "
+"Interface Specification)\">DOCSIS</abbr> 3 szabványnál."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:137
 msgid "Required. Base64-encoded private key for this interface."
-msgstr "Kötelező. Base64 kódolású személyes kulcs ehhez a csatolóhoz."
+msgstr "Kötelező. Base64-kódolású személyes kulcs ehhez a csatolóhoz."
 
 #: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
 msgid "Required. Path to the .yml config file for this interface."
-msgstr ""
+msgstr "Kötelező. A csatoló .yml beállítási fájljának elérési útja."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:572
 msgid "Required. Public key of the WireGuard peer."
-msgstr ""
+msgstr "Kötelező. WireGuard partner nyilvános kulcsa."
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:42
 msgid "Required. Underlying interface."
-msgstr ""
+msgstr "Kötelező. Mögöttes csatoló."
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:39
 msgid "Required. XFRM interface ID to be used for SA."
-msgstr ""
+msgstr "Kötelező. Az SA-hoz használandó XFRM csatoló azonosítója."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1472
 msgid ""
 "Required: Rejects auth if RADIUS server does not provide appropriate VLAN "
 "attributes."
 msgstr ""
+"Kötelező: elutasítja a hitelesítést, ha a <abbr title=\"Távoli hitelesítési "
+"hívás felhasználói szolgáltatáshoz (Remote Authentication Dial In User "
+"Service)\">RADIUS</abbr>-kiszolgáló nem biztosít megfelelő <abbr title="
+"\"Látszólagos helyi hálózat (Virtual Local Area Network)\">VLAN</abbr> "
+"tulajdonságokat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1325
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1326
@@ -8455,7 +8575,7 @@ msgstr "A hostapd szükséges"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1333
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1334
 msgid "Requires hostapd with EAP Suite-B support"
-msgstr ""
+msgstr "EAP Suite-B támogatással rendelkező hostapd szükséges"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1330
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1331
@@ -8474,7 +8594,7 @@ msgstr "SAE támogatással rendelkező hostapd szükséges"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1323
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1324
 msgid "Requires hostapd with WEP support"
-msgstr ""
+msgstr "WEP támogatással rendelkező hostapd szükséges"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1340
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1341
@@ -8489,7 +8609,7 @@ msgstr "WPA-ügyfél szükséges"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1348
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1349
 msgid "Requires wpa-supplicant with EAP Suite-B support"
-msgstr ""
+msgstr "EAP Suite-B támogatással rendelkező WPA-ügyfél szükséges"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1345
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1346
@@ -8509,11 +8629,11 @@ msgstr "SAE támogatással rendelkező WPA-ügyfél szükséges"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1338
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1339
 msgid "Requires wpa-supplicant with WEP support"
-msgstr ""
+msgstr "\"WEP támogatással rendelkező WPA-ügyfél szükséges"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:231
 msgid "Reselection policy for primary slave"
-msgstr ""
+msgstr "Újrakiválasztási szabályzat az elsődleges segéd számára"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2197
 #: modules/luci-base/ucode/template/sysauth.ut:39
@@ -8533,19 +8653,19 @@ msgstr "Visszaállítás az alapértelmezettekre"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:365
 msgid "Resolv &amp; Hosts Files"
-msgstr ""
+msgstr "Feloldások és hosts fájlok"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:596
 msgid "Resolv file"
-msgstr "Fájl feloldása"
+msgstr "Feloldó fájl"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:435
 msgid "Resolve specified FQDNs to an IP."
-msgstr ""
+msgstr "A megadott FQDN-ek feloldása IP-re."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:381
 msgid "Resolve these locally"
-msgstr ""
+msgstr "Feloldás helyben"
 
 #: modules/luci-base/htdocs/luci-static/resources/rpc.js:405
 msgid "Resource not found"
@@ -8585,7 +8705,7 @@ msgstr "Jelszó felfedése/elrejtése"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:679
 msgid "Reverse path filter"
-msgstr ""
+msgstr "Fordított útvonal szűrő"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4499
 msgid "Revert"
@@ -8605,51 +8725,51 @@ msgstr "Beállítás visszaállítása…"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:84
 msgid "Revision"
-msgstr ""
+msgstr "Felülvizsgálat"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:111
 msgctxt "nft dnat ip to addr"
 msgid "Rewrite destination to <strong>%h</strong>"
-msgstr ""
+msgstr "Cél átírása erre: <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:114
 msgctxt "nft dnat ip6 to addr"
 msgid "Rewrite destination to <strong>%h</strong>"
-msgstr ""
+msgstr "Cél átírása erre: <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:112
 msgctxt "nft dnat ip to addr:port"
 msgid "Rewrite destination to <strong>%h</strong>, port <strong>%h</strong>"
-msgstr ""
+msgstr "Cél átírása erre: <strong>%h</strong>, port <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:115
 msgctxt "nft dnat ip6 to addr:port"
 msgid "Rewrite destination to <strong>%h</strong>, port <strong>%h</strong>"
-msgstr ""
+msgstr "Cél átírása erre: <strong>%h</strong>, port <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:105
 msgctxt "nft snat ip to addr"
 msgid "Rewrite source to <strong>%h</strong>"
-msgstr ""
+msgstr "Forrás átírása erre: <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:108
 msgctxt "nft snat ip6 to addr"
 msgid "Rewrite source to <strong>%h</strong>"
-msgstr ""
+msgstr "Forrás átírása erre: <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:106
 msgctxt "nft snat ip to addr:port"
 msgid "Rewrite source to <strong>%h</strong>, port <strong>%h</strong>"
-msgstr ""
+msgstr "Forrás átírása erre: <strong>%h</strong>, port <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:109
 msgctxt "nft snat ip6 to addr:port"
 msgid "Rewrite source to <strong>%h</strong>, port <strong>%h</strong>"
-msgstr ""
+msgstr "Forrás átírása erre: <strong>%h</strong>, port <strong>%h</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:120
 msgid "Rewrite to egress device address"
-msgstr ""
+msgstr "Újraírás a kimeneti eszköz címére"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1520
 msgid ""
@@ -8657,10 +8777,14 @@ msgid ""
 "(and advertise it in WLAN beacons). Only works if the specified network "
 "interface is a bridge. Shortens the time-critical reassociation process."
 msgstr ""
+"<abbr title=\"Ellenálló biztonsági hálózat (Robust Security Network)\""
+">RSN</abbr>: barangolás előzetes engedélyezése a WPA2-EAP hálózatokban (és "
+"hirdetése a WLAN alapjelben). Csak akkor működik, ha a megadott hálózati "
+"csatoló egy híd. Lerövidíti az időkritikus újratársítási kérelmek folyamatát."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:605
 msgid "Robustness"
-msgstr ""
+msgstr "Ellenállóság"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:770
 msgid ""
@@ -8668,6 +8792,9 @@ msgid ""
 "<em>TFTP server root</em> turn on the TFTP server and serve files from "
 "<em>TFTP server root</em>."
 msgstr ""
+"TFTP-n keresztül kiszolgált fájlok gyökérkönyvtára. <em>TFTP-kiszolgáló "
+"engedélyezése</em> és a <em>TFTP-kiszolgáló gyökere</em> funkciók kapcsolják "
+"be a kiszolgálót, ami a megadott könyvtárból szolgál ki fájlokat."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:298
 msgid "Root preparation"
@@ -8675,7 +8802,7 @@ msgstr "Gyökér előkészítés"
 
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:209
 msgid "Round-Robin policy (balance-rr, 0)"
-msgstr ""
+msgstr "Round-Robin szabályzat (balance-rr, 0)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:643
 msgid "Route Allowed IPs"
@@ -8683,7 +8810,7 @@ msgstr "Engedélyezett IP-k irányítása"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:532
 msgid "Route action chain \"%h\""
-msgstr ""
+msgstr "Útvonal művelet-lánc \"%h\""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:46
 msgid "Route type"
@@ -8694,6 +8821,7 @@ msgid ""
 "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 Type "
 "134\">RA</abbr> messages. Maximum is 9000 seconds."
 msgstr ""
+"Útválasztó élettartam hirdetése RA-üzenetekben, legfeljebb 9 000 másodperc."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
@@ -8705,11 +8833,11 @@ msgstr "Útválasztó jelszava"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:258
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:15
 msgid "Routing"
-msgstr ""
+msgstr "Útválasztás"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:44
 msgid "Routing Algorithm"
-msgstr ""
+msgstr "Útválasztás algoritmusa"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:28
 msgid ""
@@ -8727,24 +8855,24 @@ msgstr "Szabály"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:602
 msgid "Rule actions"
-msgstr ""
+msgstr "Szabályműveletek"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:475
 msgctxt "nft comment"
 msgid "Rule comment: %s"
-msgstr ""
+msgstr "Szabály megjegyzés: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:540
 msgid "Rule container chain \"%h\""
-msgstr ""
+msgstr "Szabálytároló-lánc \"%h\""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:601
 msgid "Rule matches"
-msgstr ""
+msgstr "Szabályegyezések"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:137
 msgid "Rule type"
-msgstr ""
+msgstr "Szabálytípus"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2360
 msgid "Runtime error"
@@ -8756,21 +8884,21 @@ msgstr "SHA256"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:145
 msgid "SIM %d"
-msgstr ""
+msgstr "%d. SIM"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:147
 msgid "SIMs"
-msgstr ""
+msgstr "SIM-ek"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:59
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:280
 msgid "SNR"
-msgstr "SNR"
+msgstr "<abbr title=\"Jel-zaj arány (Signal-to-Noise Ratio)\">SNR</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:845
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:863
 msgid "SRV"
-msgstr ""
+msgstr "SRV"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:10
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:38
@@ -8804,15 +8932,15 @@ msgstr "SSID"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:9
 msgid "SSTP"
-msgstr ""
+msgstr "SSTP"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:44
 msgid "SSTP Port"
-msgstr ""
+msgstr "SSTP port"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:41
 msgid "SSTP Server"
-msgstr "SSTP szerver"
+msgstr "SSTP-kiszolgáló"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:338
 msgid "SWAP"
@@ -8832,7 +8960,7 @@ msgstr "Mentés"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4487
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
-msgstr "Mentés és alkalmazás"
+msgstr "Mentés és Alkalmazás"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:607
 msgid "Save error"
@@ -8859,22 +8987,22 @@ msgstr "Ütemezett feladatok"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:51
 msgctxt "scroll to top (the head) of the log file"
 msgid "Scroll to head"
-msgstr ""
+msgstr "Görgetés felülre"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:38
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:42
 msgctxt "scroll to bottom (the tail) of the log file"
 msgid "Scroll to tail"
-msgstr ""
+msgstr "Görgetés alulra"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:41
 msgid "Search domain"
-msgstr ""
+msgstr "Tartomány keresése"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:39
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:62
 msgid "Section %s is empty."
-msgstr ""
+msgstr "%s szakasz üres."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4471
 msgid "Section added"
@@ -8907,16 +9035,22 @@ msgstr "Fájl kiválasztása…"
 #: protocols/luci-proto-bonding/htdocs/luci-static/resources/protocol/bonding.js:325
 msgid "Selects the transmit hash policy to use for slave selection"
 msgstr ""
+"Kiválasztja a segéd választásához használandó átviteli hash szabályzatot"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:836
 msgid ""
 "Send <abbr title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr> "
 "messages advertising this device as IPv6 router."
 msgstr ""
+"Ezt az eszközt IPv6 útválasztóként hirdető <abbr title=\"Útválasztó "
+"hirdetése (Router Advertisement)\">RA</abbr> (ICMPv6 134-es típus) üzenetek "
+"küldése."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:704
 msgid "Send ICMP redirects"
 msgstr ""
+"<abbr title=\"Internet felügyeleti-üzenet protokoll (Internet Control "
+"Message Protocol)\">ICMP</abbr> átirányítások küldése"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:143
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:115
@@ -8928,28 +9062,29 @@ msgid ""
 "Send LCP echo requests at the given interval in seconds, only effective in "
 "conjunction with failure threshold"
 msgstr ""
-"LCP visszhang kérések küldése a másodpercben megadott időközönként, csak "
-"hibaküszöbszinttel együtt van hatása"
+"<abbr title=\"Kapcsolatvezérlő protokoll (Link Control Protocol)\">LCP</"
+"abbr> visszhang kérések küldése a másodpercben megadott időközönként.<br /"
+">Csak hibaküszöbszinttel együtt van hatása."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:290
 msgid "Send multicast beacon"
-msgstr ""
+msgstr "Csoport-küldésű alapjel"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:24
 msgid "Send the hostname of this device"
-msgstr ""
+msgstr "Eszköz gépnevének elküldése"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:89
 msgid "Server"
-msgstr ""
+msgstr "Kiszolgáló"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:804
 msgid "Server address"
-msgstr ""
+msgstr "Kiszolgáló címe"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:798
 msgid "Server name"
-msgstr ""
+msgstr "Kiszolgáló neve"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:50
 msgid "Service Name"
@@ -8970,24 +9105,30 @@ msgstr "A munkamenet lejárt"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:126
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:175
 msgid "Set Static"
-msgstr ""
+msgstr "Statikus"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:759
 msgid "Set a maximum seconds TTL value for entries in the cache."
 msgstr ""
+"Állítsa be a gyorsítótár bejegyzéseihez a legnagyobb TTL értéket "
+"másodpercekben."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:916
 msgid "Set an alias for a hostname."
 msgstr ""
+"Itt állíthat be álnevet (<abbr title=\"Kanonikus név - a tartomány álneve ("
+"Canonical Name)\">CNAME</abbr>) a gépnévhez."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:122
 msgctxt "nft mangle"
 msgid "Set header field <var>%s</var> to <strong>%s</strong>"
-msgstr ""
+msgstr "Állítsa be a fejléc mezőt <var>%s</var> - <strong>%s</strong> -ig"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1032
 msgid "Set interface as NDP-Proxy external slave. Default is off."
 msgstr ""
+"Állítsa be a csatolót NDP-proxy külső segédként (alapértelmezetten "
+"kikapcsolt)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1356
 msgid ""
