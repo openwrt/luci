@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2021-06-14 19:53+0000\n"
-"Last-Translator: Gergő Szalka <kisszalimo@gmail.com>\n"
+"PO-Revision-Date: 2024-08-18 14:10+0000\n"
+"Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopkg/hu/>\n"
 "Language: hu\n"
@@ -10,11 +10,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.7-dev\n"
+"X-Generator: Weblate 5.7\n"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1095
 msgid "%s used (%1024mB used of %1024mB, %1024mB free)"
-msgstr ""
+msgstr "%s foglalt (%1024mB / %1024mB, szabad: %1024mB)"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1155
 msgid "Actions"
@@ -22,7 +22,7 @@ msgstr "Műveletek"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:792
 msgid "Allow overwriting conflicting package files"
-msgstr ""
+msgstr "Ütköző csomagfájlok felülírásának engedélyezése"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:953
 msgid "Automatically remove unused dependencies"
@@ -40,10 +40,10 @@ msgid ""
 "changed but is usually not preserved by <em>sysupgrade</em>."
 msgstr ""
 "Alább található az <em>opkg</em> által használt különféle beállítófájlok "
-"listája. Használja az <em>opkg.conf</em> fájlt a globális beállításokhoz, és "
-"a <em>customfeeds.conf</em> fájlt az egyéni tárolóbejegyzésekhez. Az egyéb "
-"fájlokban lévő beállítások megváltoztathatók, de általában nem lesznek "
-"megtartva <em>rendszerfrissítéskor</em>."
+"listája. Használja az <code>opkg.conf</code> fájlt a globális "
+"beállításokhoz, és a <code>customfeeds.conf</code> fájlt az egyéni "
+"tárolóbejegyzésekhez. Az egyéb fájlokban lévő beállítások megváltoztathatók, "
+"de általában nem lesznek megtartva <em>rendszerfrissítéskor</em>."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:800
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:846
@@ -77,7 +77,7 @@ msgstr "A(z) <em>%h</em> csomag részletei"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1134
 msgid "Disk space"
-msgstr ""
+msgstr "Szabad tárterület"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1030
 msgid "Dismiss"
@@ -85,17 +85,19 @@ msgstr "Eltüntetés"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1164
 msgid "Display LuCI translation packages"
-msgstr ""
+msgstr "LuCI nyelvi csomagok megjelenítése"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1181
 msgid "Display all available translation packages"
-msgstr ""
+msgstr "Minden elérhető nyelvi csomag megjelenítése."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1167
 msgid ""
 "Display base translation packages and translation packages for already "
 "installed languages only"
 msgstr ""
+"Csak az alapvető nyelvi csomagok, és a már telepített nyelvekhez tartozó "
+"nyelvi csomagok megjelenítése."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:354
 msgid "Displaying %d-%d of %d"
@@ -111,7 +113,7 @@ msgstr "Hibák"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:982
 msgid "Executing package manager"
-msgstr "Csomagkezelő végrehajtása"
+msgstr "Csomagkezelő műveletek végrehajtása"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1139
 msgid "Filter"
@@ -119,11 +121,11 @@ msgstr "Szűrő"
 
 #: applications/luci-app-opkg/root/usr/share/rpcd/acl.d/luci-app-opkg.json:3
 msgid "Grant access to opkg management"
-msgstr "Hozzáférés megadása az opkg kezelőnek"
+msgstr "Jogosultság adása az opkg csomagkezelőnek"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1194
 msgid "Hide all translation packages"
-msgstr ""
+msgstr "Minden nyelvi csomag rejtve marad."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:808
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:824
@@ -133,7 +135,7 @@ msgstr "Telepítés"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:780
 msgid "Install suggested translation packages as well"
-msgstr ""
+msgstr "Telepítse a javasolt nyelvi csomagokat is"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:299
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:522
@@ -147,9 +149,8 @@ msgid ""
 "Installing packages from untrusted sources is a potential security risk! "
 "Really attempt to install <em>%h</em>?"
 msgstr ""
-"A megbízhatatlan forrásokból származó csomagok telepítése lehetséges "
-"biztonsági kockázattal járhat! Valóban megpróbálja telepíteni a(z) <em>%h</"
-"em> csomagot?"
+"A nem megbízható forrásokból származó csomagok telepítése biztonsági "
+"kockázattal jár! Valóban megpróbálja telepíteni a(z) <em>%h</em> csomagot?"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:288
 msgid "Install…"
@@ -209,7 +210,7 @@ msgstr "Rendben"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:904
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:918
 msgid "OPKG Configuration"
-msgstr "OPKG beállításai"
+msgstr "Csomagkezelő beállítása"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1225
 msgid "Package name"
@@ -242,12 +243,12 @@ msgstr "Eltávolítás…"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:737
 msgid "Require approx. %1024mB size for %d package(s) to install."
-msgstr "Nagyjából %1024mB méret szükséges %d csomag telepítéséhez."
+msgstr "~%1024mB hely szükséges %d csomag telepítéséhez."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:517
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:535
 msgid "Require version %h %h, installed %h"
-msgstr "A(z) %h %h verziója szükséges, %h van telepítve"
+msgstr "A(z) %h %h verziója szükséges, telepített: %h"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:540
 msgid ""
@@ -292,11 +293,11 @@ msgstr "Szoftver"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:761
 msgid "Suggested translations"
-msgstr ""
+msgstr "Javasolt nyelvi csomagok"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:740
 msgid "Suggested translations require approx. %1024mB additional space."
-msgstr ""
+msgstr "A javasolt nyelvi csomagokhoz további kb. %1024mB hely szükséges."
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1013
 msgid "The <em>opkg %h</em> command failed with code <code>%d</code>."
@@ -374,17 +375,17 @@ msgstr "Várakozás az <em>opkg %h</em> parancs befejeződésére…"
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1190
 msgctxt "Display translation packages"
 msgid "all"
-msgstr ""
+msgstr "összes"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1177
 msgctxt "Display translation packages"
 msgid "filtered"
-msgstr ""
+msgstr "szűrt"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:1203
 msgctxt "Display translation packages"
 msgid "none"
-msgstr ""
+msgstr "nincs"
 
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:673
 #: applications/luci-app-opkg/htdocs/luci-static/resources/view/opkg.js:934
