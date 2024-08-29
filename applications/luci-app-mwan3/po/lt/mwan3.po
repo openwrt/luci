@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-08-25 18:32+0000\n"
+"PO-Revision-Date: 2024-08-29 09:09+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/lt/>\n"
@@ -178,16 +178,14 @@ msgid "Disabled"
 msgstr "Išjungta/Neįgalinta (-s/-i)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:243
-#, fuzzy
 msgid ""
 "Downed interface will be deemed up after this many successful ping tests"
 msgstr ""
-"„Išjungta/Išgalinta“ sąsaja ir/arba sietuvas bus laikoma/-as aktyvia/-iu po "
-"nurodytų sėkmingų ryšio atsakų patikrinimų skaičiaus"
+"Neveikianti sąsaja ir/arba sietuvas bus laikoma/-as aktyvia/-iu po nurodytų "
+"sėkmingų ryšio atsakų patikrinimų skaičiaus"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:40
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:48
-#, fuzzy
 msgid "Downtime"
 msgstr "Prastovos laikas/trukmė"
 
@@ -259,9 +257,10 @@ msgid "Flush conntrack table"
 msgstr "Išvalyti „conntrack“ lentelę"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:257
-#, fuzzy
 msgid "Flush global firewall conntrack table on interface events"
-msgstr "Išvalyti išorinę/visuotinę užkardos sąsajos/sietuvo įvykių lentelę"
+msgstr ""
+"Išvalyti išorinę/visuotinę užkardos „conntract“ lentelę; sąsajos/sietuvo "
+"įvykiuose"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:56
 msgid "Globals"
@@ -364,12 +363,11 @@ msgid "Lines beginning with # are comments and are not executed."
 msgstr "Eilutės, prasidedančios su – „#“, yra komentarai ir yra nevykdomi."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:20
-#, fuzzy
 msgid ""
 "Load-balanced member interfaces distribute more traffic out those with "
 "higher weights."
 msgstr ""
-"Įkėlimo/Apkrovos subalansuoti/-os narių sąsajos ir/arba sietuvų paskirsto "
+"Įkėlimo/Apkrovos subalansuoti/-os narių sąsajos ir/arba sietuvai paskirsto "
 "didesnį srautą tiems, kurių svoris yra didesnis."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:19
@@ -392,7 +390,7 @@ msgid ""
 "as a portrange (eg \"1024:2048\") without quotes"
 msgstr ""
 "Galima įvesti kaip vieną arba kelis prievadus (pvz., „22“ arba „80 443“) "
-"arba kaip – „portrange“ (pvz., „1024:2048“) be kabučių"
+"arba kaip – prievadų diapazonas (pvz., „1024:2048“) be kabučių"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:72
 msgid "Member"
@@ -404,31 +402,28 @@ msgstr ""
 "Pirmiausia naudojamos narių sąsajos ir/arba sietuvai su žemesne metrika."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:19
-#, fuzzy
 msgid "Member interfaces with the same metric will be load-balanced."
 msgstr ""
-"Narių sąsajos ir/arba sietuvai su ta pačia metrika bus įkėlimo/apkrovos "
-"subalansuoti/-os."
+"Narių sąsajos ir/arba sietuvai su ta pačia metrika bus subalansuoti pagal "
+"apkrovą."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:30
 msgid "Member used"
 msgstr "Naudotas narys"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:17
-#, fuzzy
 msgid ""
 "Members are profiles attaching a metric and weight to an MWAN interface."
 msgstr ""
 "Nariai yra profiliai, kurie prie „MWAN“ sąsajos pridedą metriką ir svorį."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:19
-#, fuzzy
 msgid ""
 "Members may not share the same name as configured interfaces, policies or "
 "rules."
 msgstr ""
-"Nariai negali naudoti to paties pavadinimo kaip sukonfigūruotų sąsajų ir/"
-"arba sietuvų, politikų ar taisyklų."
+"Nariai negali naudoti to paties pavadinimo kaip sukonfigūruotos sąsajos, "
+"sietuvai, politikos ar taisyklės."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:264
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:33
@@ -754,12 +749,12 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:28
 msgid "This section allows you to modify the content of \"/etc/mwan3.user\"."
-msgstr "Šiame skyriuje Jums leidžia keisti – „/etc/mwan3.user“ turinį."
+msgstr "Ši sekcija leidžia Jums keisti – „/etc/mwan3.user“ turinį."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:47
-#, fuzzy
 msgid "Tracking hostname or IP address"
-msgstr "Sekimo įrenginio (t.y skleidėjo/vedėjo) pavadinimas arba IP adresas"
+msgstr ""
+"Sekimo/Sekamas įrenginio (t.y skleidėjo/vedėjo) pavadinimas arba IP adresas"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:52
 msgid "Tracking method"
@@ -774,7 +769,7 @@ msgid ""
 "Traffic destined for known (other than default) networks is handled by the "
 "main routing table."
 msgstr ""
-"Srautas, skirtas žinomiems (išskyrus numatytuosius) tinklams, tvarkomas "
+"Srautas, skirtas žinomiems (išskyrus numatytiesiems) tinklams, tvarkomas "
 "pagrindinėje kelvados parinkimo lentelėje."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:71
@@ -782,18 +777,17 @@ msgid ""
 "Traffic from the same source IP address that previously matched this rule "
 "within the sticky timeout period will use the same WAN interface"
 msgstr ""
-"Srautas iš to paties šaltinio IP adreso, kuris anksčiau atitiko šią taisyklę "
-"per – „sticky pasibaigusios užklausos laiko laikotarpį, naudos tą pačią „WAN“"
-" sąsają ir/sietuvą"
+"Srautas iš to paties šaltinio, IP adreso, kuris anksčiau atitiko šią "
+"taisyklę – neperžengiant „sticky“ pasibaigusios užklausos laiko laikotarpio "
+"ribų; naudos tą pačią „WAN“ sąsają ir/arba sietuvą"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:25
 msgid ""
 "Traffic matching a rule, but all WAN interfaces for that policy are down "
 "will be blackholed."
 msgstr ""
-"Srautas, atitinkantis taisyklę, bet „išjungtos/-i│įgalintos/-i“ visos/-i tos/"
-"-ie sąsajos ir/arba sietuvai šiam „WAN“, bus įtrauktos/-i draudžiamajame "
-"sąraše."
+"Srautas, atitinkantis taisyklę, bet neveikiančios/neveikiantys visos/-i tos/-"
+"ie sąsajos ir/arba sietuvai šiam „WAN“, bus vedami (į) nieką/-ur."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:23
 msgid "Traffic not matching any rule is routed using the main routing table."
