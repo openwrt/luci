@@ -128,7 +128,7 @@ return network.registerProtocol('3g', {
 		o.datatype    = 'min(1)';
 
 		o = s.taboption('advanced', form.Value, '_keepalive_failure', _('LCP echo failure threshold'), _('Presume peer to be dead after given amount of LCP echo failures, use 0 to ignore failures'));
-		o.placeholder = '0';
+		o.placeholder = '5';
 		o.datatype    = 'uinteger';
 		o.write       = write_keepalive;
 		o.remove      = write_keepalive;
@@ -141,7 +141,7 @@ return network.registerProtocol('3g', {
 		};
 
 		o = s.taboption('advanced', form.Value, '_keepalive_interval', _('LCP echo interval'), _('Send LCP echo requests at the given interval in seconds, only effective in conjunction with failure threshold'));
-		o.placeholder = '5';
+		o.placeholder = '1';
 		o.datatype    = 'min(1)';
 		o.write       = write_keepalive;
 		o.remove      = write_keepalive;
