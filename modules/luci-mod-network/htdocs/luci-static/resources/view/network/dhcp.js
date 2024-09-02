@@ -677,6 +677,37 @@ return view.extend({
 		);
 		o.placeholder = '/etc/dnsmasq.servers';
 
+		o = s.taboption('forward', form.Value, 'addmac',
+			_('Add requestor MAC'),
+			_('Add the MAC address of the requestor to DNS queries which are forwarded upstream.') + ' ' + '<br />' +
+			_('%s uses the default MAC address format encoding').format('<code>enabled</code>') + ' ' + '<br />' +
+			_('%s uses an alternative encoding of the MAC as base64').format('<code>base64</code>') + ' ' + '<br />' +
+			_('%s uses a human-readable encoding of hex-and-colons').format('<code>text</code>'));
+		o.optional = true;
+		o.value('', _('off'));
+		o.value('1', _('enabled (default)'));
+		o.value('base64');
+		o.value('text');
+
+		s.taboption('forward', form.Flag, 'stripmac',
+			_('Remove MAC address before forwarding query'),
+			_('Remove any MAC address information already in downstream queries before forwarding upstream.'));
+
+		o = s.taboption('forward', form.Value, 'addsubnet',
+			_('Add subnet address to forwards'),
+			_('Add a subnet address to the DNS queries which are forwarded upstream, leaving this value empty disables the feature.') + ' ' +
+			_('If an address is specified in the flag, it will be used, otherwise, the address of the requestor will be used.') + ' ' +
+			_('The amount of the address forwarded depends on the prefix length parameter: 32 (128 for IPv6) forwards the whole address, zero forwards none of it but still marks the request so that no upstream nameserver will add client address information either.') + ' ' + '<br />' +
+			_('The default (%s) is zero for both IPv4 and IPv6.').format('<code>0,0</code>') + ' ' + '<br />' +
+			_('%s adds the /24 and /96 subnets of the requestor for IPv4 and IPv6 requestors, respectively.').format('<code>24,96</code>') + ' ' + '<br />' +
+			_('%s adds 1.2.3.0/24 for IPv4 requestors and ::/0 for IPv6 requestors.').format('<code>1.2.3.4/24</code>') + ' ' + '<br />' +
+			_('%s adds 1.2.3.0/24 for both IPv4 and IPv6 requestors.').format('<code>1.2.3.4/24,1.2.3.4/24</code>'));
+		o.optional = true;
+
+		s.taboption('forward', form.Flag, 'stripsubnet',
+			_('Remove subnet address before forwarding query'),
+			_('Remove any subnet address already present in a downstream query before forwarding it upstream.'));
+
 		o = s.taboption('general', form.Flag, 'allservers',
 			_('All servers'),
 			_('Query all available upstream resolvers.') + ' ' + _('First answer wins.'));
