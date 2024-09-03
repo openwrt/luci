@@ -6,8 +6,8 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=luci-app-pbr
 PKG_LICENSE:=AGPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
-PKG_VERSION:=1.1.6
-PKG_RELEASE:=20
+PKG_VERSION:=1.1.7
+PKG_RELEASE:=7
 
 LUCI_TITLE:=Policy Based Routing Service Web UI
 LUCI_URL:=https://github.com/stangri/luci-app-pbr/
@@ -24,6 +24,6 @@ help
 	Version: $(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
-include ../../luci.mk
+include $(TOPDIR)/feeds/luci/luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
