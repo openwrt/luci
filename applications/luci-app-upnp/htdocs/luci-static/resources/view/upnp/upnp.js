@@ -115,7 +115,7 @@ return view.extend({
 
 		s = m.section(form.NamedSection, 'config', 'upnpd', _('Service Settings'));
 		s.addremove = false;
-		s.tab('general',  _('General Settings'));
+		s.tab('general',  _('General Setup'));
 		s.tab('advanced', _('Advanced Settings'));
 
 		o = s.taboption('general', form.Flag, 'enabled', _('Start service'), _('Start autonomous port mapping service'));
@@ -124,16 +124,10 @@ return view.extend({
 		s.taboption('general', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol')).default = '1'
 		s.taboption('general', form.Flag, 'enable_pcp_pmp', _('Enable PCP/NAT-PMP protocols')).default = '1'
 
-		s.taboption('general', form.Flag, 'secure_mode', _('Enable secure mode'),
-			_('Allow adding port maps only to requesting IP addresses and deny third-party PCP option')).default = '1'
-
 		o = s.taboption('general', form.ListValue, 'upnp_igd_compat', _('UPnP IGD compatiblity mode'))
 		o.depends('enable_upnp', '1')
 		o.value('igdv1',_('IGDv1 (IPv4 only)'))
 		o.value('igdv2',_('IGDv2'))
-
-		s.taboption('general', form.Flag, 'log_output', _('Enable additional logging'),
-			_('Puts extra debugging information into the system log'))
 
 		o = s.taboption('general', form.Value, 'download_kbps', _('Download speed'),
 			_('Value in kbit/s, informational only'))
@@ -145,30 +139,36 @@ return view.extend({
 		o.depends('enable_upnp', '1')
 		o.rmempty = true
 
-		o = s.taboption('general', form.Value, 'port', _('SOAP/HTTP port'))
-		o.depends('enable_upnp', '1')
-		o.datatype = 'port'
-		o.default  = 5000
-
-		o = s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime'))
-		o.depends('enable_upnp', '1')
-		o.default = '1'
-
-		o = s.taboption('advanced', form.Value, 'uuid', _('Device UUID'))
-		o.depends('enable_upnp', '1')
-		o = s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'))
-		o.depends('enable_upnp', '1')
-		o = s.taboption('advanced', form.Value, 'model_number', _('Announced model number'))
-		o.depends('enable_upnp', '1')
+		s.taboption('advanced', form.Flag, 'secure_mode', _('Enable secure mode'),
+			_('Allow adding port maps only to requesting IP addresses and deny third-party PCP option')).default = '1'
 
 		o = s.taboption('advanced', form.Value, 'notify_interval', _('Notify interval'), _('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s').format('<abbr title="Simple Service Discovery Protocol">SSDP</abbr>'))
 		o.depends('enable_upnp', '1')
 		o.datatype    = 'uinteger'
 		o.placeholder = 900
 
+		o = s.taboption('advanced', form.Value, 'port', _('SOAP/HTTP port'))
+		o.depends('enable_upnp', '1')
+		o.datatype = 'port'
+		o.default  = 5000
+
 		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'))
 		o.depends('enable_upnp', '1')
 		o.placeholder = 'http://192.168.1.1/'
+
+		o = s.taboption('advanced', form.Value, 'uuid', _('Device UUID'))
+		o.depends('enable_upnp', '1')
+		o = s.taboption('advanced', form.Value, 'model_number', _('Announced model number'))
+		o.depends('enable_upnp', '1')
+		o = s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'))
+		o.depends('enable_upnp', '1')
+
+		o = s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime'))
+		o.depends('enable_upnp', '1')
+		o.default = '1'
+
+		s.taboption('advanced', form.Flag, 'log_output', _('Enable additional logging'),
+			_('Puts extra debugging information into the system log'))
 
 		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('Service lease file'))
 		o.placeholder = '/var/run/miniupnpd.leases'
