@@ -452,6 +452,10 @@ return view.extend({
 		o = s.taboption('global', form.Value, 'cacert', _('CA Certs path'));
 		o.description = _('CA certificates path that will be used to download services data. Set IGNORE to skip certificate validation.');
 		o.placeholder = 'IGNORE';
+		o.write = function(section_id, value) {
+			if(value == 'ignore')
+				uci.set('ddns', section_id, 'cacert', value.toUpperCase());
+		};
 
 		o = s.taboption('global', form.Value, 'services_url', _('Services URL Download'));
 		o.description = _('Source URL for services file. Defaults to the master openwrt ddns package repo.');
@@ -783,6 +787,10 @@ return view.extend({
 						o.placeholder = "/etc/ssl/certs";
 						o.rmempty = false;
 						o.optional = true;
+						o.write = function(section_id, value) {
+							if(value == 'ignore')
+								uci.set('ddns', section_id, 'cacert', value.toUpperCase());
+						};
 					};
 
 
