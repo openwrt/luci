@@ -122,26 +122,26 @@ return view.extend({
 		o.rmempty  = false;
 
 		s.taboption('general', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol')).default = '1'
-		s.taboption('general', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols')).default = '1'
+		s.taboption('general', form.Flag, 'enable_pcp_pmp', _('Enable PCP/NAT-PMP protocols')).default = '1'
 
 		s.taboption('general', form.Flag, 'secure_mode', _('Enable secure mode'),
-			_('Allow adding port maps only to requesting IP addresses')).default = '1'
+			_('Allow adding port maps only to requesting IP addresses and deny third-party PCP option')).default = '1'
 
-		o = s.taboption('general', form.Flag, 'igdv1', _('Enable UPnP IGDv1 mode'),
-			_('Advertise as UPnP IGDv1 device (no IPv6) instead of IGDv2'))
+		o = s.taboption('general', form.ListValue, 'upnp_igd_compat', _('UPnP IGD compatiblity mode'))
 		o.depends('enable_upnp', '1')
-		o.default = '1'
+		o.value('igdv1',_('IGDv1 (IPv4 only)'))
+		o.value('igdv2',_('IGDv2'))
 
 		s.taboption('general', form.Flag, 'log_output', _('Enable additional logging'),
 			_('Puts extra debugging information into the system log'))
 
-		o = s.taboption('general', form.Value, 'download', _('Download speed'),
-			_('Value in KByte/s, informational only'))
+		o = s.taboption('general', form.Value, 'download_kbps', _('Download speed'),
+			_('Value in kbit/s, informational only'))
 		o.depends('enable_upnp', '1')
 		o.rmempty = true
 
-		o = s.taboption('general', form.Value, 'upload', _('Upload speed'),
-			_('Value in KByte/s, informational only'))
+		o = s.taboption('general', form.Value, 'upload_kbps', _('Upload speed'),
+			_('Value in kbit/s, informational only'))
 		o.depends('enable_upnp', '1')
 		o.rmempty = true
 
