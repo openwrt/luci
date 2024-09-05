@@ -398,7 +398,7 @@ return view.extend({
 
 		// Advanced Configuration Section
 
-		o = s.taboption('global', form.Flag, 'upd_privateip', _("Allow non-public IP's"));
+		o = s.taboption('global', form.Flag, 'upd_privateip', _("Allow non-public IPs"));
 		o.description = _("Non-public and by default blocked IPs") + ':'
 		+ '<br /><strong>IPv4: </strong>'
 		+ '0/8, 10/8, 100.64/10, 127/8, 169.254/16, 172.16/12, 192.168/16'
