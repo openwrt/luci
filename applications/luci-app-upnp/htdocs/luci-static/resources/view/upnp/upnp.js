@@ -50,11 +50,11 @@ return view.extend({
 
 		var rows = rules.map(function(rule) {
 			return [
-				rule.proto,
 				rule.extport,
 				rule.intaddr,
 				rule.host_hint || _('Unknown'),
 				rule.intport,
+				rule.proto,
 				rule.descr,
 				E('button', {
 					'class': 'btn cbi-button-remove',
@@ -63,7 +63,7 @@ return view.extend({
 			];
 		});
 
-		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active port forwards.')));
+		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active port maps.')));
 
 		return;
 	},
@@ -73,18 +73,18 @@ return view.extend({
 		var m, s, o;
 
 		m = new form.Map('upnpd', [_('UPnP IGD & PCP/NAT-PMP Service')],
-			_('UPnP IGD & PCP/NAT-PMP allows clients on the local network to automatically configure port forwards on the router. Also called Universal Plug and Play.'));
+			_('The %s & %s/%s protocols allow clients on the local network to configure port maps/forwards on the router autonomously.', 'The %s (%s = UPnP IGD) & %s (%s = PCP)/%s (%s = NAT-PMP) protocols allow clients on the local network to configure port maps/forwards on the router autonomously.').format('<a href="https://en.wikipedia.org/wiki/Internet_Gateway_Device_Protocol" target="_blank" rel="noreferrer"><abbr title="UPnP Internet Gateway Device (Control Protocol)">UPnP IGD</abbr></a>', '<a href="https://en.wikipedia.org/wiki/Port_Control_Protocol" target="_blank" rel="noreferrer"><abbr title="Port Control Protocol">PCP</abbr></a>', '<a href="https://en.wikipedia.org/wiki/NAT_Port_Mapping_Protocol" target="_blank" rel="noreferrer"><abbr title="NAT Port Mapping Protocol">NAT-PMP</abbr></a>'));
 
 		s = m.section(form.GridSection, '_active_rules');
 
 		s.render = L.bind(function(view, section_id) {
 			var table = E('table', { 'class': 'table cbi-section-table', 'id': 'upnp_status_table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
-					E('th', { 'class': 'th' }, _('Protocol')),
 					E('th', { 'class': 'th' }, _('External Port')),
 					E('th', { 'class': 'th' }, _('Client Address')),
 					E('th', { 'class': 'th' }, _('Host')),
 					E('th', { 'class': 'th' }, _('Client Port')),
+					E('th', { 'class': 'th' }, _('Protocol')),
 					E('th', { 'class': 'th' }, _('Description')),
 					E('th', { 'class': 'th cbi-section-actions' }, '')
 				])
@@ -94,11 +94,11 @@ return view.extend({
 
 			var rows = rules.map(function(rule) {
 				return [
-					rule.proto,
 					rule.extport,
 					rule.intaddr,
 					rule.host_hint || _('Unknown'),
 					rule.intport,
+					rule.proto,
 					rule.descr,
 					E('button', {
 						'class': 'btn cbi-button-remove',
@@ -107,10 +107,10 @@ return view.extend({
 				];
 			});
 
-			cbi_update_table(table, rows, E('em', _('There are no active port forwards.')));
+			cbi_update_table(table, rows, E('em', _('There are no active port maps.')));
 
 			return E('div', { 'class': 'cbi-section cbi-tblsection' }, [
-					E('h3', _('Active Port Forwards')), table ]);
+					E('h3', _('Active Service Port Maps')), table ]);
 		}, o, this);
 
 		s = m.section(form.NamedSection, 'config', 'upnpd', _('Service Settings'));
@@ -118,17 +118,17 @@ return view.extend({
 		s.tab('general',  _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
 
-		o = s.taboption('general', form.Flag, 'enabled', _('Start service'));
+		o = s.taboption('general', form.Flag, 'enabled', _('Start service'), _('Start autonomous port mapping service'));
 		o.rmempty  = false;
 
 		s.taboption('general', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol')).default = '1'
-		s.taboption('general', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocol')).default = '1'
+		s.taboption('general', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols')).default = '1'
 
 		s.taboption('general', form.Flag, 'secure_mode', _('Enable secure mode'),
-			_('Allow adding port forwards only to requesting IP addresses')).default = '1'
+			_('Allow adding port maps only to requesting IP addresses')).default = '1'
 
 		s.taboption('general', form.Flag, 'igdv1', _('Enable UPnP IGDv1 mode'),
-			_('Advertise as UPnP IGDv1 device (no IPv6) instead of IGDv2')).default = '0'
+			_('Advertise as UPnP IGDv1 device (no IPv6) instead of IGDv2')).default = '1'
 
 		s.taboption('general', form.Flag, 'log_output', _('Enable additional logging'),
 			_('Puts extra debugging information into the system log'))
@@ -139,7 +139,7 @@ return view.extend({
 		s.taboption('general', form.Value, 'upload', _('Upload speed'),
 			_('Value in KByte/s, informational only')).rmempty = true
 
-		o = s.taboption('general', form.Value, 'port', _('Port'))
+		o = s.taboption('general', form.Value, 'port', _('SOAP/HTTP port'))
 		o.datatype = 'port'
 		o.default  = 5000
 
@@ -149,9 +149,9 @@ return view.extend({
 		s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'))
 		s.taboption('advanced', form.Value, 'model_number', _('Announced model number'))
 
-		o = s.taboption('advanced', form.Value, 'notify_interval', _('Notify interval'))
+		o = s.taboption('advanced', form.Value, 'notify_interval', _('Notify interval'), _('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s').format('<abbr title="Simple Service Discovery Protocol">SSDP</abbr>'))
 		o.datatype    = 'uinteger'
-		o.placeholder = 30
+		o.placeholder = 900
 
 		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'))
 		o.placeholder = 'http://192.168.1.1/'
@@ -159,7 +159,7 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('Service lease file'))
 		o.placeholder = '/var/run/miniupnpd.leases'
 
-		s.taboption('advanced', form.Flag, 'use_stun', _('Use STUN'))
+		s.taboption('advanced', form.Flag, 'use_stun', _('Use STUN'), _('Useful to detect the public IPv4 address for unrestricted full-cone, aka one-to-one, NATs'))
 
 		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN Host'))
 		o.depends('use_stun', '1');
@@ -168,10 +168,10 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'stun_port', _('STUN Port'))
 		o.depends('use_stun', '1');
 		o.datatype    = 'port'
-		o.placeholder = '0-65535'
+		o.placeholder = '3478'
 
-		s = m.section(form.GridSection, 'perm_rule', _('Service ACLs'),
-			_('ACLs specify which external ports can be forwarded to which client addresses and ports, IPv6 always allowed.'))
+		s = m.section(form.GridSection, 'perm_rule', _('Service Access Control List'),
+			_('ACL specify which client addresses and ports can be mapped, IPv6 always allowed.'))
 
 		s.sortable  = true
 		s.anonymous = true
@@ -181,7 +181,7 @@ return view.extend({
 
 		o = s.option(form.Value, 'ext_ports', _('External Port'))
 		o.datatype    = 'portrange'
-		o.placeholder = '0-65535'
+		o.placeholder = '1-65535'
 
 		o = s.option(form.Value, 'int_addr', _('Client Address'))
 		o.datatype    = 'ip4addr'
@@ -189,7 +189,7 @@ return view.extend({
 
 		o = s.option(form.Value, 'int_ports', _('Client Port'))
 		o.datatype    = 'portrange'
-		o.placeholder = '0-65535'
+		o.placeholder = '1-65535'
 
 		o = s.option(form.ListValue, 'action', _('Action'))
 		o.value('allow', _('Allow'));
