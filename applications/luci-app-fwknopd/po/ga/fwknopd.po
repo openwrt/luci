@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-09-05 17:06+0000\n"
+"PO-Revision-Date: 2024-09-06 19:05+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/ga/>\n"
@@ -18,30 +18,32 @@ msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
 msgstr ""
+"Ceadaigh do chliaint SPA rochtain ar sheirbhísí a iarraidh trí bhalla "
+"dóiteáin iptables seachas díreach chuige."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:599
 msgid "Allow SPA clients to request forwarding destination by DNS name."
-msgstr ""
+msgstr "Lig do chliaint SPA ceann scríbe seolta a iarraidh de réir ainm DNS."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:437
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:454
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:547
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:569
 msgid "Base64 key"
-msgstr ""
+msgstr "Bonn 64 eochair"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:308
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:319
 msgid "Close"
-msgstr ""
+msgstr "Dún"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:481
 msgid "Custom configuration"
-msgstr ""
+msgstr "Cumraíocht Chustaim"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:411
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr ""
+msgstr "Cumraíocht saincheaptha léite ó /etc/fwknop/access.conf."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:577
 msgid ""
@@ -49,6 +51,9 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
+"Sainmhínigh sraith port agus prótacal (tcp nó udp) nach gceadaítear go "
+"sainráite iad beag beann ar bhailíocht an phacáiste SPA atá ag teacht "
+"isteach. Tá iliontrálacha deighilte le camóga."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:572
 msgid ""
@@ -57,18 +62,28 @@ msgid ""
 "to honor any proto/port request specified in the SPA data (unless of it "
 "matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
 msgstr ""
+"Sainmhínigh sraith port agus prótacal (tcp nó udp) a osclófar má fheictear "
+"seicheamh cnag bailí. Mura bhfuil an iontráil seo socraithe, déanfaidh "
+"fwknopd iarracht urraim a thabhairt d’aon iarratas proto/port a shonraítear "
+"sna sonraí SPA (mura dtagann sé le haon iontrálacha “RESTRICT_PORTS”). Tá "
+"iliontrálacha deighilte le camóga."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:558
 msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
+"Sainmhínigh eochair fíordheimhnithe HMAC (in ionchódú Base64) a úsáidtear "
+"chun barántúlacht an phaicéid SPA a fhíorú sula ndéantar an paicéad a "
+"dhíchriptiú."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:550
 msgid ""
 "Define the HMAC authentication key used for verifying the authenticity of "
 "the SPA packet before the packet is decrypted."
 msgstr ""
+"Sainmhínigh an eochair fhíordheimhnithe HMAC a úsáidtear chun barántúlacht "
+"an phaicéid SPA a fhíorú sula ndéantar an paicéad a dhíchriptiú."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:581
 msgid ""
@@ -77,36 +92,45 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
+"Sainmhínigh an fad ama a thabharfaidh fwknopd rochtain tríd an mballa "
+"dóiteáin tar éis seicheamh cnag bailí ó sheoladh IP foinse. Mura bhfuil "
+"“FW_ACCESS_TIMEOUT” socraithe, socrófar an t-am istigh réamhshocraithe de 30 "
+"soicind go huathoibríoch."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:536
 msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Sainmhínigh an eochair shiméadrach (in ionchódú Base64) a úsáidtear chun "
+"paicéad SPA atá ag teacht isteach a dhíchriptiú atá criptithe ag cliant "
+"fwknop le Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:528
 msgid ""
 "Define the symmetric key used for decrypting an incoming SPA packet that is "
 "encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Sainmhínigh an eochair shiméadrach a úsáidtear chun paicéad SPA atá ag "
+"teacht isteach a dhíchriptiú atá criptithe ag cliant fwknop le Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:476
 msgid "Enable Uci/Luci control"
-msgstr ""
+msgstr "Cumasaigh rialú Uci/Luci"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid "Enable config overwrite"
-msgstr ""
+msgstr "Cumasaigh forscríobh cumraíochta"
 
 #: applications/luci-app-fwknopd/root/usr/share/luci/menu.d/luci-app-fwknopd.json:3
 msgid "Firewall Knock Daemon"
-msgstr ""
+msgstr "Balla Dóiteáin Cnoc Mhuire"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:303
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:474
 msgid "Firewall Knock Operator Daemon"
-msgstr ""
+msgstr "Deamhan Oibreora Balla Dóiteáin Cnoc Mhuire"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:586
 msgid ""
@@ -116,14 +140,20 @@ msgid ""
 "resolve the external address (if the client behind a NAT) or the client must "
 "know the external IP and set it via the -a argument."
 msgstr ""
+"Cuir iallach ar gach paicéad SPA fíorsheoladh IP a bheith laistigh de na "
+"sonraí criptithe. Fágann sé sin go bhfuil sé dodhéanta an argóint líne "
+"ordaithe -s a úsáid ar an líne ordaithe cliant fwknop, mar sin ní mór -R a "
+"úsáid chun an seoladh seachtrach a réiteach go huathoibríoch (má tá an "
+"cliant taobh thiar de NAT) nó caithfidh an cliant a bheith ar an eolas faoin "
+"IP seachtrach agus leag tríd an -a argument."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid "Generate Keys"
-msgstr ""
+msgstr "Gin Eochracha"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:519
 msgid "Generate keys"
-msgstr ""
+msgstr "Gin eochracha"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:519
 msgid ""
@@ -132,28 +162,34 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
+"Gineann an eochair shiméadrach a úsáidtear chun paicéad SPA atá ag teacht "
+"isteach a dhíchriptiú, atá criptithe ag an gcliant fwknop le bloc cipher "
+"Rijndael, agus eochair fíordheimhnithe HMAC a úsáidtear chun barántúlacht an "
+"phaicéid SPA atá ag teacht isteach a fhíorú sula ndéantar an paicéad a "
+"dhíchriptiú."
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
-msgstr ""
+msgstr "Deonaigh rochtain UCI do luci-app-fwknopd"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:567
 msgid "HMAC key type"
-msgstr ""
+msgstr "Cineál eochair HMAC"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:545
 msgid "Key type"
-msgstr ""
+msgstr "Cineál eochair"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:178
 msgid "Loading…"
-msgstr ""
+msgstr "Á lódáil…"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:596
 msgid ""
 "Maximum age in seconds that an SPA packet will be accepted. Defaults to 120 "
 "seconds."
 msgstr ""
+"Aois uasta i soicindí a nglacfar le paicéad SPA. Réamhshocrú go 120 soicind."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid "Network"
@@ -161,18 +197,18 @@ msgstr "Líonra"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:488
 msgid "Network configuration"
-msgstr ""
+msgstr "Cumraíocht líonra"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:315
 msgid "No stanza found."
-msgstr ""
+msgstr "Níor aimsíodh rann."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:453
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:546
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:568
 msgid "Normal key"
-msgstr ""
+msgstr "Gnáth eochair"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:481
 msgid ""
@@ -180,26 +216,30 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
+"Parsálann sé an comhad /etc/fwknop/access.conf (agus comhaid/fillteáin/"
+"eochracha san áireamh) agus gineann sé cóid QR do gach rann a aimsítear. Ní "
+"láimhseáiltear ach comhaid i bhfillteán /etc/fwknop mar gheall ar shrianta "
+"cearta rochtana."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:418
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:502
 msgid "QR code"
-msgstr ""
+msgstr "Cóid QR"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
 msgid "Show access.conf QR codes"
-msgstr ""
+msgstr "Taispeáin cóid QR access.conf"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:597
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
-msgstr ""
+msgstr "Sonraigh an comhéadan ethernet ar a ndéanfaidh fwknopd sniff paicéid."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:443
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:449
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:555
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:564
 msgid "The HMAC authentication key has to be specified."
-msgstr ""
+msgstr "Ní mór eochair fíordheimhnithe HMAC a shonrú."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:513
 msgid ""
@@ -209,6 +249,11 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"An seoladh sprice a nglacfar leis an bpaicéad SPA. Glactar leis an teaghrán "
+"“AON” freisin más rud é gur cheart paicéad SPA bailí a thabhairt d’aon IP "
+"ceann scríbe. Ba cheart líonraí a shonrú i nodaireacht CIDR (m.sh. “192.168."
+"10.0/24”), agus is féidir seoltaí IP aonair a shonrú freisin. Tá "
+"iliontrálacha deighilte le camóga."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid ""
@@ -216,6 +261,9 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
+"An líonra ar a éisteann an deamhan. Tosaítear an deamhan go huathoibríoch "
+"nuair a bhíonn an líonra faoi lánseol. Tá tosaíocht ag an rogha seo ar an "
+"rogha “PCAP_INTF”."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:504
 msgid ""
@@ -225,17 +273,22 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"An seoladh foinse óna nglacfar leis an bpaicéad SPA. Glactar leis an "
+"teaghrán “AON” freisin más ceart paicéad SPA bailí a urramú ó aon fhoinse "
+"IP. Ba cheart líonraí a shonrú i nodaireacht CIDR (m.sh. “192.168.10.0/24”), "
+"agus is féidir seoltaí IP aonair a shonrú freisin. Tá iliontrálacha "
+"deighilte le camóga."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:510
 msgid "The source address has to be specified."
-msgstr ""
+msgstr "Ní mór an seoladh foinse a shonrú."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:426
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:432
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:533
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:542
 msgid "The symmetric key has to be specified."
-msgstr ""
+msgstr "Ní mór an eochair shiméadrach a shonrú."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:590
 msgid ""
@@ -244,21 +297,28 @@ msgid ""
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
+"Tugann sé seo treoir do fwknopd glacadh le horduithe iomlána atá laistigh de "
+"phaicéad údaraithe. Déanfar aon ordú den sórt sin a fhorghníomhú ar an "
+"bhfreastalaí fwknopd mar an t-úsáideoir atá sonraithe ag an “CMD_EXEC_USER” "
+"nó mar an t-úsáideoir a thosaigh fwknopd mura bhfuil sé sin socraithe."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid ""
 "When unchecked, the config files in /etc/fwknopd will be used as is, "
 "ignoring any settings here."
 msgstr ""
+"Nuair nach ndéantar iad a sheiceáil, bainfear úsáid as na comhaid "
+"cumraíochta in /etc/fwknopd mar atá, gan aird a thabhairt ar aon socruithe "
+"anseo."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:498
 msgid "access.conf stanzas"
-msgstr ""
+msgstr "rannta rochtana.conf"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
 msgid "fwknopd.conf config options"
-msgstr ""
+msgstr "roghanna cumraíochta fwknopd.conf"
 
 #~ msgid "Firewall Knock Operator"
 #~ msgstr "Firewall Knock Operator"
