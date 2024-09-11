@@ -751,7 +751,9 @@ return view.extend({
 
 					o = s.taboption('basic', form.Value, 'password',
 						_("Password"),
-						_("Replaces [PASSWORD] in Update-URL (URL-encoded)"));
+						_("Replaces [PASSWORD] in Update-URL (URL-encoded)")
+						+ '<br/>' +
+						_("A.k.a. the TOKEN at e.g. afraid.org"));
 					o.password = true;
 					o.modalonly = true;
 					o.rmempty = false;
