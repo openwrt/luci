@@ -338,7 +338,8 @@ var CBIWifiFrequencyValue = form.Value.extend({
 				'', 'Legacy', hwmodelist.a || hwmodelist.b || hwmodelist.g,
 				'n', 'N', hwmodelist.n,
 				'ac', 'AC', L.hasSystemFeature('hostapd', '11ac') && hwmodelist.ac,
-				'ax', 'AX', L.hasSystemFeature('hostapd', '11ax') && hwmodelist.ax
+				'ax', 'AX', L.hasSystemFeature('hostapd', '11ax') && hwmodelist.ax,
+				'be', 'BE', L.hasSystemFeature('hostapd', '11be') && hwmodelist.be
 			];
 
 			var htmodelist = L.toArray(data[0] ? data[0].getHTModes() : null)
@@ -361,7 +362,13 @@ var CBIWifiFrequencyValue = form.Value.extend({
 					'HE40', '40 MHz', htmodelist.HE40,
 					'HE80', '80 MHz', htmodelist.HE80,
 					'HE160', '160 MHz', htmodelist.HE160
-				]
+				],
+				'be': [
+					'EHT80', '80 MHz', htmodelist.EHT80,
+					'EHT160', '160 MHz', htmodelist.EHT160,
+					'EHT240', '240 MHz', htmodelist.EHT240,
+					'EHT320', '320 MHz', htmodelist.EHT320
+                ]
 			};
 
 			this.bands = {
@@ -381,7 +388,12 @@ var CBIWifiFrequencyValue = form.Value.extend({
 					'2g', '2.4 GHz', this.channels['2g'].length > 3,
 					'5g', '5 GHz', this.channels['5g'].length > 3,
 					'6g', '6 GHz', this.channels['6g'].length > 3
-				]
+				],
+				'be': [
+					'2g', '2.4 GHz', this.channels['2g'].length > 3,
+					'5g', '5 GHz', this.channels['5g'].length > 3,
+					'6g', '6 GHz', this.channels['6g'].length > 3
+				],
 			};
 		}, this));
 	},
@@ -445,7 +457,9 @@ var CBIWifiFrequencyValue = form.Value.extend({
 
 		this.setValues(mode, this.modes);
 
-		if (/HE20|HE40|HE80|HE160/.test(htval))
+		if (/EHT80|EHT160|EHT240|EHT320/.test(htval))
+            mode.value = 'be';
+		else if (/HE20|HE40|HE80|HE160/.test(htval))
 			mode.value = 'ax';
 		else if (/VHT20|VHT40|VHT80|VHT160/.test(htval))
 			mode.value = 'ac';

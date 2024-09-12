@@ -3374,7 +3374,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 */
 	getHWModes: function() {
 		var hwmodes = this.ubus('dev', 'iwinfo', 'hwmodes');
-		return Array.isArray(hwmodes) ? hwmodes : [ 'b', 'g' ];
+		return Array.isArray(hwmodes) ? hwmodes : [ 'b', 'g', 'a' ];
 	},
 
 	/**
