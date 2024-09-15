@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-06-13 21:10+0000\n"
+"PO-Revision-Date: 2024-09-12 16:12+0000\n"
 "Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspbr/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:215
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:316
@@ -28,7 +28,7 @@ msgid ""
 "caution!%s"
 msgstr ""
 "%sOSTRZEŻENIE:%s Przed zmianą czegokolwiek w tej sekcji należy sprawdzić "
-"%sREADME%s! Zmień dowolne z poniższych ustawień z najwyższą ostrożnością!%s"
+"%sREADME%s! Ostrożnie zmieniaj dowolne z poniższych ustawień!%s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:52
 msgid "Active"
@@ -50,8 +50,7 @@ msgstr "Dodaj ignoruj cel"
 msgid ""
 "Adds 'ignore' to the list of interfaces for policies. See the %sREADME%s for "
 "details."
-msgstr ""
-"Dodaje 'ignoruj' do listy interfejsów zasad. Zobacz %sREADME%s po szczegóły."
+msgstr "Dodaje 'ignoruj' do listy interfejsów zasad. Szczegóły w %sREADME%s."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:54
 msgid "Advanced Configuration"
@@ -75,7 +74,7 @@ msgid ""
 msgstr ""
 "Pozwala określić listę nazw interfejsów (pisanych małymi literami), które "
 "mają być ignorowane przez usługę. Może być przydatne, jeśli na routerze "
-"działa zarówno serwer VPN, jak i klient VPN."
+"działa zarówno serwer i klient VPN."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:51
 msgid "Basic Configuration"
@@ -95,7 +94,7 @@ msgstr "Skondensowane wyjście"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:274
 msgid "Config (%s) validation failure"
-msgstr "Błąd sprawdzania poprawności konfiguracji (%s)"
+msgstr "Błąd konfiguracji (%s)"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:76
 msgid "Controls both system log and console output verbosity."
@@ -104,12 +103,11 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:379
 msgid "Custom User File Includes"
-msgstr "Zawiera własny plik użytkownika"
+msgstr "Własne pliki użytkownika"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:319
 msgid "Custom user file '%s' not found or empty"
-msgstr ""
-"Niestandardowy plik użytkownika '%s' nie został znaleziony lub jest pusty"
+msgstr "Plik użytkownika '%s' nie został znaleziony lub jest pusty"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:370
 msgid "DSCP Tag"
@@ -139,15 +137,14 @@ msgstr "Wyłączanie usługi %s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:271
 msgid "Display these protocols in protocol column in Web UI."
-msgstr "Wyświetl te protokoły w kolumnie w interfejsie Web UI."
+msgstr "Wyświetl te protokoły w kolumnie interfejsu Web UI."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:238
 msgid ""
 "Dnsmasq instance (%s) targeted in settings, but it doesn't have its own "
 "confdir."
 msgstr ""
-"Instancja Dnsmasq (%s) ukierunkowana w ustawieniach, ale nie ma własnego "
-"confdir."
+"Instancja Dnsmasq (%s) wskazana w ustawieniach, ale nie ma własnego confdir."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:148
 msgid "Dnsmasq ipset"
@@ -159,7 +156,7 @@ msgstr "nft set Dnsmasq"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:93
 msgid "Do not enforce policies when their gateway is down"
-msgstr "Nie egzekwuj zasad, gdy ich brama nie działa"
+msgstr "Nie egzekwuj zasad niedziałającej bramy"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:475
 msgid "Enable"
@@ -178,7 +175,7 @@ msgstr "Włączanie usługi %s"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:321
 msgid "Error running custom user file '%s'"
-msgstr "Błąd podczas uruchamiania niestandardowego pliku użytkownika '%s'"
+msgstr "Błąd podczas uruchamiania pliku użytkownika '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:383
 msgid "Errors encountered, please check the %sREADME%s!"
@@ -189,7 +186,7 @@ msgid ""
 "FW Mask used by the service. High mask is used to avoid conflict with SQM/"
 "QoS. Change with caution together with"
 msgstr ""
-"FW maska używana przez usługę. Wysoka maska służy do uniknięcia konfliktu z "
+"Maska FW używana przez usługę. Wysoka maska służy do uniknięcia konfliktu z "
 "SQM/QoS. Ostrożnie zmieniać wraz z"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:359
@@ -206,7 +203,7 @@ msgstr "Nie udało się zainstalować pliku nft fw4 '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:318
 msgid "Failed to reload '%s'"
-msgstr "Nie udało się ponownie załadować '%s'"
+msgstr "Nie udało się przeładować '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:348
 msgid "Failed to resolve '%s'"
@@ -218,7 +215,7 @@ msgstr "Nie udało się skonfigurować '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:325
 msgid "Failed to set up any gateway"
-msgstr "Nie można skonfigurować żadnej bramy"
+msgstr "Nie skonfigurowano żadnej bramy"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:205
 msgid "Force the ICMP protocol interface."
@@ -258,12 +255,11 @@ msgstr "Wstaw"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:343
 msgid "Insertion failed for IPv4 for policy '%s'"
-msgstr "Wstawianie nie powiodło się dla IPv4 dla zasady '%s'"
+msgstr "Wstawianie IPv4 nie powiodło się dla polityki '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:340
 msgid "Insertion failed for both IPv4 and IPv6 for policy '%s'"
-msgstr ""
-"Wstawianie nie powiodło się zarówno dla IPv4, jak i IPv6 dla zasady '%s'"
+msgstr "Wstawianie IPv4, jak i IPv6 nie powiodło się dla polityki '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:213
 msgid "Installed AdGuardHome (%s) doesn't support 'ipset_file' option."
@@ -291,7 +287,7 @@ msgstr "Porty lokalne"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:334
 msgid "Mismatched IP family between in policy '%s'"
-msgstr "Niedopasowana rodzina adresów IP w zasadzie '%s'"
+msgstr "Niedopasowana rodzina adresów IP w polityce '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:77
 msgid "Mode"
@@ -332,39 +328,39 @@ msgstr "Ścieżka"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:129
 msgid "Please check the %sREADME%s before changing this option."
-msgstr "Sprawdź %sREADME%s przed zmianą tej opcji."
+msgstr "Przed zmianą tej opcji, sprawdź %sREADME%s ."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:223
 msgid "Please unset 'chain' or set 'chain' to 'PREROUTING' for policy '%s'"
-msgstr "Usuń 'chain' lub ustaw 'chain' na 'PREROUTING' dla zasady '%s'"
+msgstr "Usuń lub ustaw 'chain' na 'PREROUTING' dla polityki '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:226
 msgid "Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'"
-msgstr "Usuń 'chain' lub ustaw 'chain' na 'PREROUTING' dla zasady '%s'"
+msgstr "Usuń lub ustaw 'chain' na 'prerouting' dla polityki '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:220
 msgid "Please unset 'proto' or set 'proto' to 'all' for policy '%s'"
-msgstr "Usuń 'proto' lub ustaw 'proto' na 'all' dla zasady '%s'"
+msgstr "Usuń lub ustaw 'proto' na 'all' dla polityki '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:217
 msgid "Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'"
-msgstr "Usuń 'src_addr', 'src_port' i 'dest_port' dla zasady '%s'"
+msgstr "Usuń 'src_addr', 'src_port' i 'dest_port' dla polityki '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:278
 msgid "Policies"
-msgstr "Zasady"
+msgstr "Reguły"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:314
 msgid "Policy '%s' has an unknown interface"
-msgstr "Zasada '%s' ma nieznany interfejs"
+msgstr "Polityka '%s' ma nieznany interfejs"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:312
 msgid "Policy '%s' has no assigned interface"
-msgstr "Zasada '%s' nie ma przypisanego interfejsu"
+msgstr "Polityka '%s' nie ma przypisanego interfejsu"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:310
 msgid "Policy '%s' has no source/destination parameters"
-msgstr "Zasada '%s' nie ma parametrów źródła/przeznaczenia"
+msgstr "Polityka '%s' nie ma parametrów źródła/przeznaczenia"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:354
 msgid ""
@@ -375,19 +371,19 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:22
 msgid "Policy Based Routing"
-msgstr "Trasowanie oparte na zasadach"
+msgstr "Trasowanie oparte na politykach"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:48
 msgid "Policy Based Routing - Configuration"
-msgstr "Trasowanie oparte na zasadach - Konfiguracja"
+msgstr "Trasowanie oparte na politykach - Konfiguracja"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:144
 msgid "Policy Based Routing - Status"
-msgstr "Trasowanie oparte na zasadach - Stan"
+msgstr "Trasowanie oparte na politykach - Stan"
 
 #: applications/luci-app-pbr/root/usr/share/luci/menu.d/luci-app-pbr.json:3
 msgid "Policy Routing"
-msgstr "Trasowanie wg zasad"
+msgstr "Trasowanie wg polityk"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:320
 msgid "Protocol"
@@ -401,7 +397,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:298
 msgid "Refer to https://docs.openwrt.melmac.net/pbr/#procd_wan_interface"
-msgstr "Patrz https://docs.openwrt.melmac.net/pbr/#procd_wan_interface"
+msgstr "Zobacz https://docs.openwrt.melmac.net/pbr/#procd_wan_interface"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:308
 msgid "Remote addresses / domains"
@@ -421,7 +417,7 @@ msgstr "Zestaw resolwera (%s) nie jest obsługiwany w tym systemie"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:210
 msgid "Resolver set (%s) is not supported on this system."
-msgstr "set resolwera (%s) nie jest obsługiwany w tym systemie."
+msgstr "Zestaw resolwera (%s) nie jest obsługiwany w tym systemie."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:280
 msgid ""
@@ -504,7 +500,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:328
 msgid "Skipping IPv6 policy '%s' as IPv6 support is disabled"
-msgstr "Pominięto zasadę IPv6 '%s', ponieważ obsługa IPv6 jest wyłączona"
+msgstr "Pominięto politykę IPv6 '%s', ponieważ obsługa IPv6 jest wyłączona"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:418
 msgid "Start"
@@ -549,7 +545,7 @@ msgstr "Ścisłe egzekwowanie"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:94
 msgid "Strictly enforce policies when their gateway is down"
-msgstr "Ściśle egzekwuj zasady, gdy ich brama nie działa"
+msgstr "Ściśle egzekwuj zasady dla niedziałającej bramy"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:169
 msgid "Supported Interfaces"
@@ -631,7 +627,7 @@ msgstr "Nieznany znacznik pakietu dla interfejsu '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:337
 msgid "Unknown protocol in policy '%s'"
-msgstr "Nieznany protokół w zasadzie '%s'"
+msgstr "Nieznany protokół w polityce '%s'"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:256
 msgid "Unknown warning"
