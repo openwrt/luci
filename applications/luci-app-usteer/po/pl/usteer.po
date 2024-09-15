@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-08-26 11:25+0000\n"
+"PO-Revision-Date: 2024-09-12 16:12+0000\n"
 "Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsusteer/pl/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:79
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:233
@@ -34,7 +34,7 @@ msgstr "Zezwalaj na odrzucanie próśb o przyłączenie w celach sterujących"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:278
 msgid "Also be sure to enable rrm reports, 80211kv, etc."
-msgstr "Pamiętaj także o włączeniu raportów rrm, 80211kv itp."
+msgstr "Pamiętaj o włączeniu raportów rrm, 80211kv itp."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:372
 msgid "An incorrect parameter can cause usteer to fail to start up."
@@ -75,7 +75,7 @@ msgstr "Lista klientów"
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:83
 msgctxt "Connection state in usteer overview"
 msgid "Connected"
-msgstr "Połączony"
+msgstr "Podłączony"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:418
 msgid "Debug level"
@@ -87,7 +87,7 @@ msgstr "Wyłącz komunikację sieciową"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:562
 msgid "Enable kicking client on excessive channel load"
-msgstr "Włącz wyrzucanie klienta przy nadmiernym obciążeniu kanału"
+msgstr "Włącz wyrzucanie klienta przy przeciążeniu kanału"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:609
 msgid "Event log types"
@@ -95,7 +95,7 @@ msgstr "Typy dzienników zdarzeń"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:419
 msgid "Fatal"
-msgstr "Krytyczny"
+msgstr "Krytyczne"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:82
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:237
@@ -111,7 +111,7 @@ msgstr "Przyznaj luci-app-usteer dostęp do UCI"
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:60
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:391
 msgid "Hearing map"
-msgstr "Mapa słuchowa"
+msgstr "Mapa nasłuchowa"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:260
 msgctxt "host hint in usteer overview"
@@ -136,23 +136,23 @@ msgstr "Identyfikator"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:526
 msgid "In case this option is disabled, the client is kicked instead"
-msgstr "Jeśli ta opcja jest wyłączona, klient zostanie wyrzucony"
+msgstr "Jeśli opcja jest wyłączona, klient zostanie wyrzucony"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:420
 msgid "Info"
-msgstr "Informacja"
+msgstr "Informacyjne"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:557
 msgid "Initial connect delay"
-msgstr "Początkowe opóźnienie połączenia"
+msgstr "Opóźnienie podłączenia"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:557
 msgid ""
 "Initial delay (ms) before responding to probe requests (to allow other APs "
 "to see packets as well)"
 msgstr ""
-"Początkowe opóźnienie (ms) przed odpowiedzią na żądania sondujące (aby inne "
-"punkty dostępowe mogły również widzieć pakiety)"
+"Opóźnienie (ms) odpowiedzi na żądania sondujące (aby inne punkty dostępowe "
+"mogły odebrać pakiety)"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:80
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:234
@@ -163,17 +163,15 @@ msgstr "Nazwa interfejsu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:473
 msgid "Interval (ms) between sending state updates to other APs"
-msgstr ""
-"Interwał (ms) między wysyłaniem aktualizacji stanu do innych punktów "
-"dostępowych"
+msgstr "Interwał (ms) wysyłania aktualizacji stanu punktom dostępowym"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:598
 msgid ""
 "Interval (ms) the device is sent a link-measurement request to help assess "
 "the bi-directional link quality."
 msgstr ""
-"Interwał (ms), z jakim urządzenie wysyła żądania pomiaru łącza, aby pomóc "
-"ocenić jakość łącza dwukierunkowego."
+"Interwał (ms) wysyłania żądania pomiaru łącza w celu dwukierunkowej oceny "
+"jakości łącza."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:597
 msgid "Link measurement interval"
@@ -181,7 +179,7 @@ msgstr "Interwał pomiaru łącza"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:625
 msgid "List of SSIDs to enable steering on"
-msgstr "Lista identyfikatorów SSID umożliwiających włączenie sterowania"
+msgstr "Lista SSID umożliwiająca włączenie sterowania"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:240
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:258
@@ -203,7 +201,7 @@ msgstr "Wyrzucanie przy obciążeniu włączone"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:575
 msgid "Load kick min clients"
-msgstr "Minimum klientów wyrzucania przy obciążeniu"
+msgstr "Min. liczba klientów przed wyrzucaniem przy obciążeniu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:580
 msgid "Load kick reason code"
@@ -227,7 +225,7 @@ msgstr "Aktualizacja lokalnej STA"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:448
 msgid "Local station information update interval (ms)"
-msgstr "Interwał aktualizacji informacji lokalnej stacji (ms)"
+msgstr "Interwał (ms) aktualizacji informacji stacji lokalnej"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:407
 msgid "Log messages to syslog"
@@ -236,7 +234,7 @@ msgstr "Rejestruj komunikaty w syslog"
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:241
 msgctxt "Max associated clients in usteer overview"
 msgid "Max assoc"
-msgstr "Maksimum skojarzeń"
+msgstr "Limit podłączeń"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:428
 msgid "Max neighbor reports"
@@ -244,7 +242,7 @@ msgstr "Maks. liczba raportów o sąsiadujących AP"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:453
 msgid "Max retry band"
-msgstr "Maksimum ponownych prób pasma"
+msgstr "Limit prób blokowania stacji"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:438
 msgid "Maximum amount of time (ms) a local unconnected station is tracked"
@@ -259,7 +257,7 @@ msgid ""
 "Maximum amount of time (ms) a station may be blocked due to policy decisions"
 msgstr ""
 "Maksymalny czas (ms), przez który stacja może być zablokowana z powodu "
-"decyzji zasad"
+"stosowania zasad"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:458
 msgid ""
@@ -267,7 +265,7 @@ msgid ""
 "decisions"
 msgstr ""
 "Maksymalny czas bezczynności wpisu stacji (ms), który należy uwzględnić przy "
-"podejmowaniu decyzji zasad"
+"stosowaniu zasad"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:519
 msgid "Maximum number of client roaming scan trigger attempts"
@@ -283,7 +281,7 @@ msgstr "Maksymalna liczba raportów sąsiadów ustawiona dla węzła"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:443
 msgid "Measurement report timeout"
-msgstr "Przekroczono limit czasu raportu pomiaru"
+msgstr "Limit czasu dla raportu pomiarowego"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:609
 msgid "Message types to include in log."
@@ -291,32 +289,32 @@ msgstr "Typy wiadomości, które należy uwzględnić w dzienniku."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:494
 msgid "Min SNR"
-msgstr "Minimum SNR"
+msgstr "Graniczny SNR"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:499
 msgid "Min SNR kick delay"
-msgstr "Minimum SNR wyrzucania przy obciążeniu"
+msgstr "Opóźnienie wyrzucania dla granicznego SNR"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:489
 msgid "Min connect SNR"
-msgstr "Minimum SNR połączenia"
+msgstr "Minimalny SNR dla połączenia"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:592
 msgid ""
 "Minimal SNR or absolute signal a device has to maintain over "
 "band_steering_interval to be steered to a higher frequency band."
 msgstr ""
-"Minimalny współczynnik SNR lub sygnał bezwzględny, jaki urządzenie musi "
-"utrzymać w okresie band_steering_interval, aby zostało skierowane na wyższe "
-"pasmo częstotliwości."
+"Minimalny SNR lub poziom sygnału, jaki urządzenie musi utrzymać w okresie "
+"band_steering_interval, aby zostało skierowane na wyższe pasmo "
+"częstotliwości."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:570
 msgid ""
 "Minimum amount of time (ms) that channel load is above threshold before "
 "starting to kick clients"
 msgstr ""
-"Minimalny czas (ms), przez który obciążenie kanału przekracza próg, zanim "
-"zacznie się wyrzucać klienty"
+"Minimalny okres (ms) przekroczenia progu obciążenie kanału przed wyrzuceniem "
+"klientów"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:565
 msgid "Minimum channel load (%) before kicking clients"
@@ -334,50 +332,44 @@ msgid ""
 "Minimum number of stations delta between APs before load balancing policy is "
 "active"
 msgstr ""
-"Minimalna liczba stacji pomiędzy punktami dostępowymi, zanim zasady "
-"równoważenia obciążenia staną się aktywne"
+"Minimalna różnica liczby stacji w punktach dostępowych aktywująca zasady "
+"równoważenia obciążenia"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:468
 msgid ""
 "Minimum number of stations delta between bands before band steering policy "
 "is active"
 msgstr ""
-"Minimalna liczba stacji pomiędzy pasmami, zanim zostaną aktywowane zasady "
-"sterowania pasmem"
+"Minimalna różnica liczby stacji w pasmach aktywująca zasady sterowania pasmem"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:552
 msgid "Minimum signal strength difference until AP steering policy is active"
-msgstr ""
-"Minimalna różnica w sile sygnału do momentu aktywowania zasad sterowania AP"
+msgstr "Minimalna różnica poziomu sygnałów aktywująca zasady sterowania AP"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:514
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) before attempting to "
 "trigger client scans for roam"
 msgstr ""
-"Minimalny stosunek sygnału do szumu lub poziom sygnału (dBm) przed próbą "
-"uruchomienia skanowania klienta w poszukiwaniu roamingu"
+"Minimalny SNR lub poziom sygnału (dBm) przed próbą uruchomienia skanowania "
+"klienta w poszukiwaniu roamingu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:537
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) before attempting to "
 "trigger forced client roaming"
 msgstr ""
-"Minimalny stosunek sygnału do szumu lub poziom sygnału (dBm) przed próbą "
-"uruchomienia wymuszonego roamingu klienta"
+"Minimalny SNR lub poziom sygnału (dBm) przed próbą uruchomienia wymuszonego "
+"roamingu klienta"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:489
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) to allow connections"
-msgstr ""
-"Minimalny stosunek sygnału do szumu lub poziom sygnału (dBm), aby umożliwić "
-"połączenia"
+msgstr "Minimalny SNR lub poziom sygnału (dBm), aby umożliwić połączenia"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:494
 msgid "Minimum signal-to-noise ratio or signal level (dBm) to remain connected"
-msgstr ""
-"Minimalny stosunek sygnału do szumu lub poziom sygnału (dBm), aby zachować "
-"połączenie"
+msgstr "Minimalny SNR lub poziom sygnału (dBm), aby zachować połączenie"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:532
 msgid "Minimum time (ms) between client roaming scan trigger attempts"
@@ -400,7 +392,7 @@ msgstr "Sieć"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:423
 msgid "Network packet info"
-msgstr "Informacje o pakiecie sieciowym"
+msgstr "Informacje o pakietach sieciowych"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:89
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:226
@@ -456,11 +448,11 @@ msgid ""
 "Retry scanning when roam_scan_tries is exceeded after this timeout (in ms)."
 msgstr ""
 "Ponów skanowanie, jeśli roam_scan_tries zostanie przekroczony po upływie "
-"tego limitu czasu (w ms)."
+"tego czasu (w ms)."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:547
 msgid "Roam kick delay"
-msgstr "Wyrzucanie przy obciążeniu roamingu"
+msgstr "Opóźnienie wyrzucenia z roamingu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:509
 msgid "Roam process timeout"
@@ -485,12 +477,12 @@ msgstr "Próby skanowania roamingu"
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:242
 msgctxt "Roam source in usteer overview"
 msgid "Roam src"
-msgstr "Pochodzenie roamingu"
+msgstr "Źródło roamingu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:243
 msgctxt "Roam target in usteer overview"
 msgid "Roam tgt"
-msgstr "Miejsce docelowe roamingu"
+msgstr "Cel roamingu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:537
 msgid "Roam trigger SNR"
@@ -542,7 +534,7 @@ msgstr "Próg różnicy sygnału"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:422
 msgid "Some debug"
-msgstr "Niektóre debugowanie"
+msgstr "Niektóre"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:433
 msgid "Sta block timeout"
