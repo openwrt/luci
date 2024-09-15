@@ -196,7 +196,7 @@ function config_iptables(c) {
 				let tname = `${s.table}`;
 				let chain = `${s.chain}`;
 
-				if (match(tname, /^\S+$/) && match(chain, /^\S+$/) {
+				if (match(tname, /^\S+$/) && match(chain, /^\S+$/)) {
 					str += `\t${verb} "${tname}" "${chain}"`;
 
 					let rule = `${s.rule}`;
