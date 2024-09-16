@@ -150,9 +150,9 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'port', _('SOAP/HTTP port'))
 		o.depends('enable_upnp', '1')
 		o.datatype = 'port'
-		o.default  = 5000
+		o.placeholder  = 5000
 
-		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'))
+		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'), _('Set custom router web interface (presentation) URL'))
 		o.depends('enable_upnp', '1')
 		o.placeholder = 'http://192.168.1.1/'
 
@@ -173,7 +173,7 @@ return view.extend({
 		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('Service lease file'))
 		o.placeholder = '/var/run/miniupnpd.leases'
 
-		s.taboption('advanced', form.Flag, 'use_stun', _('Use STUN'), _('Useful to detect the public IPv4 address for unrestricted full-cone, aka one-to-one, NATs'))
+		s.taboption('advanced', form.Flag, 'use_stun', _('Use %s', 'Use %s (%s = STUN)').format('<a href="https://en.wikipedia.org/wiki/STUN" target="_blank" rel="noreferrer"><abbr title="Session Traversal Utilities for NAT">STUN</abbr></a>'), _('Useful to detect the public IPv4 address for unrestricted full-cone, aka one-to-one, NATs'))
 
 		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN Host'))
 		o.depends('use_stun', '1');
