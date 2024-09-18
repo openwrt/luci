@@ -45,7 +45,8 @@
 			legend.parentNode.style.display = 'block';
 			legend.style.display = 'inline';
 
-			L.Request.get(L.url('admin/system/commands/run', id), field ? { args: field.value } : null).then(function(reply) {
+			var options = field ? { query: { args: field.value } } : null;
+			L.Request.get(L.url('admin/system/commands/run', id), options).then(function(reply) {
 				var st = reply.json();
 
 				if (st.binary)
