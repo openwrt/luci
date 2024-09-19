@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-08-07 18:30+0000\n"
+"PO-Revision-Date: 2024-09-15 21:45+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnut/lt/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
 "19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:216
 msgid "Additional Shutdown Time(s)"
@@ -20,7 +20,7 @@ msgstr "Papildomas/-i išjungimo laikas/-ai"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:37
 msgid "Addresses on which to listen"
-msgstr ""
+msgstr "Adresai, ant kurių laukti prisijungimo/jungties ryšio"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:23
 msgid "Allowed actions"
@@ -30,11 +30,11 @@ msgstr "Leidžiami veiksmai"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "As configured by NUT"
-msgstr ""
+msgstr "Taip, Kaip sukonfigūravo – „NUT“"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:150
 msgid "Bytes to read from interrupt pipe"
-msgstr ""
+msgstr "Baitai, kuriuos reikia perskaityti iš pertraukimo vamzdelio"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "CA Certificate path"
@@ -54,27 +54,31 @@ msgstr "Komunikacijos atkūrimo pranešimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:35
 msgid "Control UPS via CGI"
-msgstr "Valdyti „UPS“ per „CGI“"
+msgstr ""
+"Valdyti nenutrūkstamo maitinimo šaltinį per – Tipine tinklo tarpuvartes; "
+"kompiuterijos sąsają"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:43
 msgid "Deadtime"
-msgstr ""
+msgstr "„Deadtime“"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:87
 msgid "Default for UPSes without this field."
-msgstr ""
+msgstr "Numatyti nenutrūkstamo maitinimo šaltiniai, be šio lauko."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:177
 msgid "Delay for kill power command"
-msgstr ""
+msgstr "Elektros sustabdymo atidėjimo komanda"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:181
 msgid "Delay to power on UPS if power returns after kill power"
 msgstr ""
+"Nenutrūkstamo maitinimo šaltinio elektros atidėjimas, jeigu elektra grįžta "
+"po jos nutrūkimo"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:129
 msgid "Description (Display)"
-msgstr ""
+msgstr "Aprašymas (Rodymas/-ti)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:32
 msgid "Display name"
@@ -108,10 +112,11 @@ msgstr "Tvarkyklių išjungimo tvarka"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:244
 msgid "Driver waits for data to be consumed by upsd before publishing more."
 msgstr ""
+"Prieš paskelbdamas daugiau, tvarkyklė laukia, kol „upsd“ sunaudos duomenis."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:59
 msgid "Drop privileges to this user"
-msgstr ""
+msgstr "Mesti/Šalinti šio naudotojo/vartotojo privilegijas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:40
 msgid "Enable"
@@ -122,6 +127,9 @@ msgid ""
 "Enables a hotplug script that makes all ttyUSB devices (e.g. serial USB) "
 "group read-write as user 'nut'"
 msgstr ""
+"Įjungiamas/Įgalinamas – „hotplug“ skriptas, kuris padaro visus „ttyUSB“ "
+"įrenginius (pvz., nuoseklųjį „USB“) skaityti ir rašyti kaip naudoto/"
+"vartotojo – „nut“"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:93
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:102
@@ -135,7 +143,7 @@ msgstr ""
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:166
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
 msgid "Execute notify command"
-msgstr ""
+msgstr "Vykdyti pranešimo komandą"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:26
 msgid "Forced Shutdown"
@@ -151,7 +159,7 @@ msgstr "Pagrindiniai/Visuotiniai nustatymai"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:13
 msgid "Go to NUT CGI"
-msgstr "Eiti į „NUT CGI“"
+msgstr "Eiti į – „NUT CGI“"
 
 #: applications/luci-app-nut/root/usr/share/rpcd/acl.d/luci-app-nut.json:3
 msgid "Grant UCI access for luci-app-nut"
@@ -163,16 +171,18 @@ msgstr "Skleidėjas/Vedėjas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:23
 msgid "Hostname or IP address"
-msgstr ""
+msgstr "Įrenginio (t.y skleidėjo/vedėjo) pavadinimas arba IP adresas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:199
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:228
 msgid "Hostname or address of UPS"
 msgstr ""
+"Nenutrūkstamo maitinimo šaltinio įrenginio (t.y skleidėjo/vedėjo) "
+"pavadinimas arba adresas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:39
 msgid "Hot Sync"
-msgstr ""
+msgstr "„Hot Sync“"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:41
 msgid "IP Address"
@@ -198,23 +208,23 @@ msgstr "Ignoruoti mažos baterijos/akumuliatoriaus būseną"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:29
 msgid "Instant commands"
-msgstr ""
+msgstr "Akimirkos komandos"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:146
 msgid "Interrupt Only"
-msgstr ""
+msgstr "Tik pertraukimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:150
 msgid "Interrupt Size"
-msgstr ""
+msgstr "Pertraukimo dydis"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:54
 msgid "Low battery message"
-msgstr ""
+msgstr "Išsenkančios baterijos/akumuliatoriaus pranešimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:163
 msgid "Manufacturer (Display)"
-msgstr ""
+msgstr "Gamintojas (Rodymas/-ti)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:34
 msgid "Master"
@@ -222,20 +232,20 @@ msgstr "Valdytojas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:154
 msgid "Max USB HID Length Reported"
-msgstr ""
+msgstr "Praneštas maksimalus „USB HID“ ilgis"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:54
 msgid "Maximum Age of Data"
-msgstr ""
+msgstr "Maksimalus duomenų amžius"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:91
 msgid "Maximum Retries"
-msgstr ""
+msgstr "Maksimalus pakartojimų/bandymų iš naujo skaičius"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:87
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:158
 msgid "Maximum Start Delay"
-msgstr ""
+msgstr "Maksimalus paleidimo/-sties atidėjimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:67
 msgid "Maximum connections"
@@ -243,19 +253,21 @@ msgstr "Maksimalus prisijungimų skaičius"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:91
 msgid "Maximum number of times to try starting a driver."
-msgstr ""
+msgstr "Maksimalus bandymų paleisti tvarkyklę skaičius."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:101
 msgid "Maximum time in seconds between refresh of UPS status"
 msgstr ""
+"Maksimalus laikas sekundėmis, tarp nenutrūkstamo maitinimo šaltinio būklės/"
+"būsenos atnaujinimo"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:17
 msgid "Minimum required number or power supplies"
-msgstr ""
+msgstr "Minimalus reikalingas skaičius arba maitinimo šaltiniai"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:166
 msgid "Model (Display)"
-msgstr ""
+msgstr "Modelis (Rodymas/-ti)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:9
 msgid "NUT CGI Access"
@@ -268,38 +280,44 @@ msgstr "„NUT“ naudotojai/vartotojai"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "Name of UPS"
-msgstr "„UPS“ pavadinimas"
+msgstr "Nenutrūkstamo maitinimo šaltinio pavadinimas"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:3
 msgid "Network UPS Tools"
-msgstr "Tinklo „UPS“ įrankiai"
+msgstr "Tinklo nenutrūkstamo maitinimo šaltinio įrankiai"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:6
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:44
 msgid "Network UPS Tools (CGI)"
-msgstr "Tinklo „UPS“ įrankiai („CGI“)"
+msgstr ""
+"Tinklo nenutrūkstamo maitinimo šaltinio įrankiai (tipinė tinklo tarpuvartės; "
+"kompiuterijos sąsaja („CGI“))"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:7
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:31
 msgid "Network UPS Tools (Monitor)"
-msgstr "Tinklo „UPS“ įrankiai (Monitorius)"
+msgstr "Tinklo nenutrūkstamo maitinimo šaltinio įrankiai (Monitorius)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:9
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:18
 msgid "Network UPS Tools (Server)"
-msgstr "Tinklo „UPS“ įrankiai (Serveris)"
+msgstr "Tinklo nenutrūkstamo maitinimo šaltinio įrankiai (Serveris)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:7
 msgid "Network UPS Tools CGI Configuration"
-msgstr "Tinklo „UPS“ įrankiai; „CGI“ konfigūracija"
+msgstr ""
+"Tinklo nenutrūkstamo maitinimo šaltinio įrankiai; tipinė tinklo tarpuvartės; "
+"kompiuterijos sąsajos konfigūracija"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:8
 msgid "Network UPS Tools Monitoring Configuration"
 msgstr ""
+"Tinklo nenutrūkstamo maitinimo šaltinio įrankių stebėjimo konfigūracija"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:10
 msgid "Network UPS Tools Server Configuration"
-msgstr "Tinklo „UPS“ įrankiai; serverio konfigūracija"
+msgstr ""
+"Tinklo nenutrūkstamo maitinimo šaltinio įrankiai; serverio konfigūracija"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:169
 msgid "No Lock"
@@ -312,10 +330,12 @@ msgstr "Nėra komunikacijos pranešimo"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:173
 msgid "No low/high voltage transfer OIDs"
 msgstr ""
+"Nėra žemos/aukštos įtampos perdavime; objektų atributikų identifikatorių "
+"(„OID“)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:75
 msgid "No parent message"
-msgstr ""
+msgstr "Nėra aukštutinio pranešimo"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:90
 msgid "Notification defaults"
@@ -351,11 +371,11 @@ msgstr "Pranešti, kai baterijos/akumuliatoriaus lygis/būsena maža"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
 msgid "Notify when no communications"
-msgstr ""
+msgstr "Pranešti, kai nėra komunikacijos"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:171
 msgid "Notify when no parent process"
-msgstr ""
+msgstr "Pranešti, kai neapdorojama aukštutinė procedūra"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:107
 msgid "Notify when on battery"
@@ -379,7 +399,7 @@ msgstr "Naudojama baterija/akumuliatorius pranešimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:48
 msgid "Online message"
-msgstr ""
+msgstr "Žinutė prisijungus (prie tinklo)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:216
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:245
@@ -390,6 +410,8 @@ msgstr "Slaptažodis"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "Path containing ca certificates to match against host certificate"
 msgstr ""
+"Kelias, kuriame yra – „CA“ sertifikatai, atitinkantys skleidėjo/vedėjo "
+"sertifikatą"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:83
 msgid "Path to drivers (instead of default)"
@@ -397,27 +419,27 @@ msgstr "Kelias į tvarkykles (vietoj numatyto)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:63
 msgid "Path to state file"
-msgstr ""
+msgstr "Kelias į būsenos/būklės failą"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:54
 msgid "Period after which data is considered stale"
-msgstr ""
+msgstr "Laikotarpis, po kurio duomenys yra laikomi pasenusiais"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:101
 msgid "Poll Interval"
-msgstr ""
+msgstr "Apklausos intervalas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:29
 msgid "Poll frequency"
-msgstr ""
+msgstr "Apklausos dažnis"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:34
 msgid "Poll frequency alert"
-msgstr ""
+msgstr "Apklausos dažnio įspėjimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:197
 msgid "Polling Frequency(s)"
-msgstr ""
+msgstr "Apklausos dažnis (-iai)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:27
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:203
@@ -434,7 +456,7 @@ msgstr "Galios reikšmė"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:206
 msgid "Product (regex)"
-msgstr "Produktas („regex“)"
+msgstr "Produktas (reguliarusis reiškinys)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:69
 msgid "Replace battery message"
@@ -443,6 +465,8 @@ msgstr "Pakeisti bateriją/akumuliatorių pranešimas"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Require SSL and make sure server CN matches hostname"
 msgstr ""
+"Reikalauti „SSL“ ir įsitikinti, kad serverio „CN“ sulygina įrenginio (t.y "
+"skleidėjo/vedėjo) pavadinimą"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:96
 msgid "Retry Delay"
@@ -450,7 +474,7 @@ msgstr "Atkartojimo atidėjimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:32
 msgid "Role"
-msgstr "Rolė"
+msgstr "Vaidmuo"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:80
 msgid "Run drivers in a chroot(2) environment"
@@ -472,7 +496,7 @@ msgstr "„SNMP“ bandymai iš naujo"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:226
 msgid "SNMP timeout(s)"
-msgstr ""
+msgstr "„SNMP“ pasibaigusios užklausos laikas (-ai)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:230
 msgid "SNMP version"
@@ -496,11 +520,11 @@ msgstr "Serijos numeris"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:138
 msgid "Set USB serial port permissions"
-msgstr ""
+msgstr "Nustatyti „USB“ nuoseklaus/-iojo prievado leidimus"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:25
 msgid "Set variables"
-msgstr ""
+msgstr "Nustatyti kintamuosius"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:22
 msgid "Shutdown command"
@@ -517,15 +541,19 @@ msgstr "Valdomųjų/-ieji/-asis"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:106
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:244
 msgid "Synchronous Communication"
-msgstr ""
+msgstr "Sinchroninė komunikacija"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:115
 msgid "The name of this section will be used as UPS name elsewhere"
 msgstr ""
+"Šio skyriaus pavadinimas bus naudojamas kaip nenutrūkstamo maitinimo "
+"šaltinio pavadinimas kitur"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:96
 msgid "Time in seconds between driver start retry attempts."
 msgstr ""
+"Laikas sekundėmis, tarp tvarkyklės paleidimo/-sties pakartojimų/bandymų iš "
+"naujo."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:158
 msgid "Time in seconds that upsdrvctl will wait for driver to finish starting"
@@ -534,23 +562,23 @@ msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
 msgid "UPS Master"
-msgstr "„UPS“ valdytojas"
+msgstr "Nenutrūkstamo maitinimo šaltinio valdytojas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:51
 msgid "UPS Server Global Settings"
-msgstr "Visuotiniai „UPS“ serverio nustatymai"
+msgstr "Visuotiniai nenutrūkstamo maitinimo šaltinio serverio nustatymai"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
 msgid "UPS Slave"
-msgstr "„UPS“ valdomasis"
+msgstr "Nenutrūkstamo maitinimo šaltinio valdomasis"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:20
 msgid "UPS name"
-msgstr "„UPS“ pavadinimas"
+msgstr "Nenutrūkstamo maitinimo šaltinio pavadinimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:121
 msgid "USB Bus(es) (regex)"
-msgstr ""
+msgstr "„USB“ (reguliarusis reiškinys)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:209
 msgid "USB Product Id"
@@ -558,19 +586,24 @@ msgstr "„USB“ produkto ID"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:241
 msgid "USB Vendor Id"
-msgstr ""
+msgstr "„USB“ pardavėjo/tiekėjo ID"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:29
 msgid ""
 "Use upscmd -l to see full list which the commands your UPS supports "
 "(requires upscmd package)"
 msgstr ""
+"Naudokite – „upscmd -l“, kad pamatytumėte visą – nenutrūkstamo maitinimo "
+"šaltinio palaikomų komandų sąrašą (reikalingas – „upscmd“ paketas)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:110
 msgid ""
 "User as which to execute driver; requires device file accessed by driver to "
 "be read-write for that user."
 msgstr ""
+"Naudotojas/Vartotojas, kuriam reikia vykdyti tvarkyklę; reikalauja, kad "
+"įrenginio failas, kurį pasiekia tvarkyklė, būtų skaitomas ir rašomas tam "
+"naudotojui/vartotojui."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:213
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:242
@@ -580,7 +613,7 @@ msgstr "Naudotojo/Vartotojo vardas (t.y. Slapyvardis)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:238
 msgid "Vendor (regex)"
-msgstr ""
+msgstr "Pardavėjas/Tiekėjas (reguliarusis reiškinys)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Verify all connection with SSL"
@@ -588,7 +621,7 @@ msgstr "Patvirtinti visus prisijungimus su „SSL“"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:154
 msgid "Workaround for buggy firmware"
-msgstr ""
+msgstr "Klaidingos programinės įrangos laikinas apėjimas"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:94
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:103
@@ -610,4 +643,4 @@ msgstr "„chroot“"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:14
 msgid "upsmon drops privileges to this user"
-msgstr ""
+msgstr "„upsmon“ atmeta šio naudotojo/vartotojo privilegijas"
