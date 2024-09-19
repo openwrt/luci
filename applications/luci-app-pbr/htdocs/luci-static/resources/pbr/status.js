@@ -320,7 +320,7 @@ var status = baseclass.extend({
 						"The %s service failed to discover WAN gateway"
 					).format(pkg.Name),
 					errorNoWanInterface: _(
-						"The %s inteface not found, you need to set the 'pbr.config.procd_wan_interface' option"
+						"The %s interface not found, you need to set the 'pbr.config.procd_wan_interface' option"
 					),
 					errorNoWanInterfaceHint: _(
 						"Refer to https://docs.openwrt.melmac.net/pbr/#procd_wan_interface"
