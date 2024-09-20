@@ -143,8 +143,8 @@ return {
 
 			if (http.getenv('HTTPS') == 'on')
 				http.header('Set-Cookie', `sysauth_https=; expires=Thu, 01 Jan 1970 01:00:00 GMT; path=${url}`);
-
-			http.header('Set-Cookie', `sysauth_http=; expires=Thu, 01 Jan 1970 01:00:00 GMT; path=${url}`);
+			else
+				http.header('Set-Cookie', `sysauth_http=; expires=Thu, 01 Jan 1970 01:00:00 GMT; path=${url}`);
 		}
 
 		http.redirect(url);
