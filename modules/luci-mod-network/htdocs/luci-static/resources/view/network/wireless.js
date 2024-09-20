@@ -80,7 +80,7 @@ function render_signal_badge(signalPercent, signalValue, noiseValue, wrap, mode)
 		}
 
 		if (noiseValue != null && noiseValue != 0) {
-			value = '---/%d\x0a%s'.format(noiseValue, _('dBm'));
+			value = '---/%d\xa0%s'.format(noiseValue, _('dBm'));
 			title = '%s / %s: %d %s'.format(title, _('Noise'), noiseValue, _('dBm'));
 		}
 		else {
