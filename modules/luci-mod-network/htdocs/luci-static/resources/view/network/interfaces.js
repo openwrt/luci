@@ -1205,7 +1205,10 @@ return view.extend({
 			};
 
 			proto = s2.option(form.ListValue, 'proto', _('Protocol'));
-			proto.validate = name.validate;
+			proto.onchange = function(ev, section_id, value) {
+				var elem = name.getUIElement(section_id);
+				elem.triggerValidation();
+			};
 
 			device = s2.option(widgets.DeviceSelect, 'device', _('Device'));
 			device.noaliases = false;
