@@ -113,7 +113,12 @@ return view.extend({
 			form.ListValue,
 			"force_dns",
 			_("Force Router DNS"),
-			_("Forces Router DNS use on local devices, also known as DNS Hijacking.")
+			_(
+				"Forces Router DNS use on local devices, also known as DNS Hijacking. Only works on `lan` interface by default (%smore information%s)."
+			).format(
+				'<a href="' + pkg.URL + "#force_dns" + '" target="_blank">',
+				"</a>"
+			)
 		);
 		o.value("0", _("Let local devices use their own DNS servers if set"));
 		o.value("1", _("Force Router DNS server to all local devices"));
