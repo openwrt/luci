@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2024-09-11 23:20+0000\n"
-"Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
+"PO-Revision-Date: 2024-09-19 21:18+0000\n"
+"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
 "Language: pl\n"
@@ -50,17 +50,19 @@ msgstr "%d sekund temu"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:703
 msgid "%s adds 1.2.3.0/24 for IPv4 requestors and ::/0 for IPv6 requestors."
-msgstr ""
+msgstr "%s dodaje 1.2.3.0/24 dla żądających IPv4 i ::/0 dla żądających IPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:704
 msgid "%s adds 1.2.3.0/24 for both IPv4 and IPv6 requestors."
-msgstr ""
+msgstr "%s dodaje 1.2.3.0/24 dla żądających IPv4 i IPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:702
 msgid ""
 "%s adds the /24 and /96 subnets of the requestor for IPv4 and IPv6 "
 "requestors, respectively."
 msgstr ""
+"%s dodaje podsieci /24 i /96 żądającego odpowiednio dla żądających IPv4 i "
+"IPv6."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:311
 msgid ""
@@ -82,15 +84,15 @@ msgstr "%s oznacza „adres systemu z uruchomionym dnsmasq”."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:685
 msgid "%s uses a human-readable encoding of hex-and-colons"
-msgstr ""
+msgstr "%s używa czytelnego dla człowieka kodowania szesnastkowego i dwukropków"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:684
 msgid "%s uses an alternative encoding of the MAC as base64"
-msgstr ""
+msgstr "%s używa alternatywnego kodowania MAC jako base64"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:683
 msgid "%s uses the default MAC address format encoding"
-msgstr ""
+msgstr "%s używa domyślnego formatu kodowania adresu MAC"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:297
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:409
@@ -772,6 +774,8 @@ msgid ""
 "Add a subnet address to the DNS queries which are forwarded upstream, "
 "leaving this value empty disables the feature."
 msgstr ""
+"Dodaj adres podsieci do zapytań DNS, które są przekazywane w górę. "
+"Pozostawienie tej wartości pustej wyłącza tę funkcję."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1430
 msgid "Add device configuration"
@@ -829,7 +833,7 @@ msgstr "Dodaj adres peera"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:681
 msgid "Add requestor MAC"
-msgstr ""
+msgstr "Dodaj MAC żądającego"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:322
 msgctxt "Dnsmasq instance"
@@ -842,13 +846,13 @@ msgstr "Dodaj statyczne wpisy \"forward\" i \"reverse\" DNS dla tego hosta."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:697
 msgid "Add subnet address to forwards"
-msgstr ""
+msgstr "Dodaj adres podsieci do przekazywań"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:682
 msgid ""
 "Add the MAC address of the requestor to DNS queries which are forwarded "
 "upstream."
-msgstr ""
+msgstr "Dodaj adres MAC żądającego do zapytań DNS przekazywanych w górę."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:335
 msgid "Add to Blacklist"
@@ -4813,6 +4817,8 @@ msgid ""
 "If an address is specified in the flag, it will be used, otherwise, the "
 "address of the requestor will be used."
 msgstr ""
+"Jeżeli w fladze określono adres, zostanie on użyty. W przeciwnym razie "
+"zostanie użyty adres żądającego."
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "If checked, 1DES is enabled"
@@ -6197,6 +6203,9 @@ msgid ""
 "Metric is an ordinal, where a gateway with 1 is chosen 1st, 2 is chosen 2nd, "
 "3 is chosen 3rd, etc"
 msgstr ""
+"Metryka to liczba porządkowa, w której bramka z wartością 1 jest wybierana "
+"jako pierwsza, 2 jest wybierana jako druga, 3 jest wybierana jako trzecia "
+"itd."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:70
 msgctxt "nft unit"
@@ -8408,19 +8417,23 @@ msgstr "Usuń z wyników adresy IPv6 i zwróć tylko adresy IPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:693
 msgid "Remove MAC address before forwarding query"
-msgstr ""
+msgstr "Usuń adres MAC przed przekazaniem zapytania"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:694
 msgid ""
 "Remove any MAC address information already in downstream queries before "
 "forwarding upstream."
 msgstr ""
+"Usuń wszelkie informacje o adresie MAC znajdujące się już w zapytaniach w "
+"dół przed przekazaniem ich w górę."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:709
 msgid ""
 "Remove any subnet address already present in a downstream query before "
 "forwarding it upstream."
 msgstr ""
+"Usuń każdy adres podsieci znajdujący się już w zapytaniu w dół przed "
+"przekazaniem go w górę."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:341
 msgctxt "Dnsmasq instance"
@@ -8443,7 +8456,7 @@ msgstr "Usuń powiązane ustawienia urządzenia z konfiguracji"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:708
 msgid "Remove subnet address before forwarding query"
-msgstr ""
+msgstr "Usuń adres podsieci przed przekazaniem zapytania"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2178
 msgid "Replace wireless configuration"
@@ -10203,6 +10216,10 @@ msgid ""
 "still marks the request so that no upstream nameserver will add client "
 "address information either."
 msgstr ""
+"Liczba przekazywanych adresów zależy od parametru długości prefiksu: 32 (128 "
+"dla IPv6) oznacza przekazanie całego adresu, zero nie przekazuje żadnej jego "
+"części, ale nadal oznacza żądanie, tak że żaden nadrzędny serwer nazw nie "
+"doda informacji o adresie klienta."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:320
 msgid ""
@@ -10227,7 +10244,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:701
 msgid "The default (%s) is zero for both IPv4 and IPv6."
-msgstr ""
+msgstr "Wartość domyślna (%s) dla IPv4 i IPv6 wynosi zero."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4597
 msgid ""
@@ -12152,7 +12169,7 @@ msgstr "włączony"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:688
 msgid "enabled (default)"
-msgstr ""
+msgstr "włączony (domyślnie)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:60
 msgctxt "WireGuard keep alive interval"
