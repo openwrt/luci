@@ -302,7 +302,6 @@ var status = baseclass.extend({
 					errorConfigValidation: _("Config (%s) validation failure").format(
 						"/etc/config/" + pkg.Name
 					),
-					errorNoIpFull: _("%s binary cannot be found").format("ip-full"),
 					errorNoIptables: _("%s binary cannot be found").format("iptables"),
 					errorNoIpset: _(
 						"Resolver set support (%s) requires ipset, but ipset binary cannot be found"
@@ -396,6 +395,9 @@ var status = baseclass.extend({
 					errorIncompatibleUserFile: _(
 						"Incompatible custom user file detected '%s'"
 					),
+					errorDefaultFw4TableMissing: _("Default fw4 table '%s' is missing"),
+					errorDefaultFw4ChainMissing: _("Default fw4 chain '%s' is missing"),
+					errorRequiredBinaryMissing: _("Required binary '%s' is missing"),
 				};
 				var errorsTitle = E(
 					"label",
