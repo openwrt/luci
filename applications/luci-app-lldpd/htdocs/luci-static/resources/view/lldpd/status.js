@@ -164,30 +164,23 @@ return L.view.extend({
 
 	/** @private */
 	renderPort: function(port) {
-		if (typeof port.port !== 'undefined')
-		{
-			if (typeof port.port[0].descr !== 'undefined' &&
-			    typeof port.port[0].id[0].value !== 'undefined' &&
-			    port.port[0].descr[0].value !== port.port[0].id[0].value)
-			{
+		const portData = port?.port?.[0];
+		const descrValue = portData?.descr?.[0]?.value;
+		const idValue = portData?.id?.[0]?.value;
+
+		if (portData) {
+			if (descrValue && idValue && descrValue !== idValue) {
 				return [
-					E('strong', {}, port.port[0].descr[0].value),
+					E('strong', {}, descrValue),
 					E('br', {}),
-					port.port[0].id[0].value
+					idValue
 				];
 			}
-			else
-			{
-				if (typeof port.port[0].descr !== 'undefined')
-					return port.port[0].descr[0].value;
-				else
-					return port.port[0].id[0].value;
-			}
+
+			return descrValue ?? idValue;
 		}
-		else
-		{
-			return '%s'.format(port.name);
-		}
+
+		return '%s'.format(port.name);
 	},
 
 	/** @private */
@@ -202,35 +195,32 @@ return L.view.extend({
 
 	/** @private */
 	renderPortParamTable: function(port, only_id_and_ttl) {
-		var items = [];
+		const items = [];
 
 		if (!only_id_and_ttl) {
-			items.push(this.renderParam(_('Name'), port.name));
-			items.push(this.renderParam(_('Age'), this.renderAge(port.age)));
+			items.push(this.renderParam(_('Name'), port?.name));
+			items.push(this.renderParam(_('Age'), this.renderAge(port?.age)));
 		}
 
-		if (typeof port.port !== 'undefined')
-		{
-			if (typeof port.port[0].id !== 'undefined')
-			{
-				items.push(this.renderParam(_('Port ID'),
-					port.port[0].id[0].value));
-
-				items.push(this.renderParam(_('Port ID type'),
-					this.renderIdType(port.port[0].id[0].type)));
+		const portData = port?.port?.[0];
+		
+		if (portData) {
+			const portId = portData?.id?.[0];
+			if (portId) {
+				items.push(this.renderParam(_('Port ID'), portId?.value));
+				items.push(this.renderParam(_('Port ID type'), this.renderIdType(portId?.type)));
 			}
 
-			if (typeof port.port[0].descr !== 'undefined')
-				items.push(this.renderParam(_('Port description'),
-					port.port[0].descr[0].value));
+			if (portData?.descr?.[0]?.value)
+				items.push(this.renderParam(_('Port description'), portData.descr[0].value));
 
-			if (typeof port.ttl !== 'undefined')
-				items.push(this.renderParam(_('TTL'), port.ttl[0].ttl));
-			else if (port.port[0].ttl !== 'undefined')
-				items.push(this.renderParam(_('TTL'), port.port[0].ttl[0].value));
+			const ttlValue = port?.ttl?.[0]?.ttl ?? portData?.ttl?.[0]?.value;
+			if (ttlValue)
+				items.push(this.renderParam(_('TTL'), ttlValue));
 
-			if (typeof port.port[0].mfs !== 'undefined')
-				items.push(this.renderParam(_('MFS'), port.port[0].mfs[0].value));
+			if (portData?.mfs?.[0]?.value)
+				items.push(this.renderParam(_('MFS'), portData.mfs[0].value));
+
 		}
 
 		return E('div', { 'class': 'lldpd-params' }, items);
@@ -238,84 +228,64 @@ return L.view.extend({
 
 	/** @private */
 	renderChassis: function(ch) {
-		if (typeof ch.name !== 'undefined' &&
-		    typeof ch.descr !== 'undefined' &&
-		    typeof ch.name[0].value !== 'undefined' &&
-		    typeof ch.descr[0].value !== 'undefined')
-		{
+		const nameValue = ch?.name?.[0]?.value;
+		const descrValue = ch?.descr?.[0]?.value;
+		const idValue = ch?.id?.[0]?.value;
+
+		if (nameValue && descrValue) {
 			return [
-				E('strong', {}, ch.name[0].value),
+				E('strong', {}, nameValue),
 				E('br', {}),
-				ch.descr[0].value
+				descrValue
 			];
 		}
-		else if (typeof ch.name !== 'undefined' &&
-		         typeof ch.name[0].value !== 'undefined')
-			return E('strong', {}, ch.name[0].value);
-		else if (typeof ch.descr !== 'undefined' &&
-		         typeof ch.descr[0].value !== 'undefined')
-			return ch.descr[0].value;
-		else if (typeof ch.id !== 'undefined' &&
-		         typeof ch.id[0].value !== 'undefined')
-			return ch.id[0].value;
-		else
-			return _('Unknown');
+
+		if (nameValue)
+			return E('strong', {}, nameValue);
+
+		if (descrValue)
+			return descrValue;
+
+		if (idValue)
+			return idValue;
+
+		return _('Unknown');
 	},
 
 	/** @private */
 	renderChassisParamTable: function(ch) {
-		var items = [];
+		const items = [];
 
-		if (typeof ch.name !== 'undefined')
-			items.push(this.renderParam(_('Name'), ch.name[0].value));
+		// Add name and description if available
+		const nameValue = ch?.name?.[0]?.value;
+		if (nameValue)
+			items.push(this.renderParam(_('Name'), nameValue));
 
-		if (typeof ch.descr !== 'undefined')
-			items.push(this.renderParam(_('Description'), ch.descr[0].value));
+		const descrValue = ch?.descr?.[0]?.value;
+		if (descrValue)
+			items.push(this.renderParam(_('Description'), descrValue));
 
-		if (typeof ch.id !== 'undefined') {
-			items.push(this.renderParam(_('ID'), ch.id[0].value));
-			items.push(this.renderParam(_('ID type'),
-				this.renderIdType(ch.id[0].type)));
+		// Add ID and ID type if available
+		const idValue = ch?.id?.[0]?.value;
+		const idType = ch?.id?.[0]?.type;
+		if (idValue) {
+			items.push(this.renderParam(_('ID'), idValue));
+			items.push(this.renderParam(_('ID type'), this.renderIdType(idType)));
 		}
 
 		// Management addresses
-		if (typeof ch['mgmt-ip'] !== 'undefined') {
-			var ips = '';
-
-			if (ch['mgmt-ip'].length > 0) {
-				// Array of addresses
-				for (var ip = 0; ip < ch["mgmt-ip"].length; ip++)
-					ips += ch['mgmt-ip'][ip].value + '<br />';
-			}
-			else {
-				// One address
-				ips += ch['mgmt-ip'][0].value;
-			}
-
+		const mgmtIps = ch?.['mgmt-ip'];
+		if (mgmtIps?.length > 0) {
+			const ips = mgmtIps.map(ip => ip.value).join('<br />');
 			items.push(this.renderParam(_('Management IP(s)'), ips));
 		}
 
-		if (typeof ch.capability !== 'undefined') {
-			var caps = '';
-
-			if (ch.capability.length > 0)
-			{
-				// Array of capabilities
-				for (var cap = 0; cap < ch.capability.length; cap++) {
-					caps += ch.capability[cap].type;
-					caps += ' (' + (ch.capability[cap].enabled
-						? _('enabled') : _('disabled')) + ')';
-					caps += '<br />';
-				}
-			}
-			else
-			{
-				// One capability
-				caps += ch.capability[0].type;
-				caps += ' (' + (ch.capability[0].enabled
-					? _('enabled') : _('disabled')) + ')';
-			}
-
+		// Capabilities
+		const capabilities = ch?.capability;
+		if (capabilities?.length > 0) {
+			const caps = capabilities.map(cap => 
+				`${cap.type} (${cap.enabled ? _('enabled') : _('disabled')})`
+			).join('<br />');
 			items.push(this.renderParam(_('Capabilities'), caps));
 		}
 
@@ -423,20 +393,21 @@ return L.view.extend({
 
 	/** @private */
 	makeNeighborsTableRow: function(obj) {
-		if (typeof obj === 'undefined')
-			obj.name = 'Unknown';
+		obj.name = obj?.name ?? 'Unknown';
 
-		var new_id = obj.name + '-' + obj.rid;
+		let new_id = `${obj.name}-${obj.rid}`;
 
-		if (typeof obj.port !== 'undefined') {
-			if (typeof obj.port[0].id !== 'undefined')
-				new_id += "-" + obj.port[0].id[0].value;
+		const portData = obj?.port?.[0];
+		const portIdValue = portData?.id?.[0]?.value;
+		const portDescrValue = portData?.descr?.[0]?.value;
 
-			if (typeof obj.port[0].descr !== 'undefined')
-				new_id += "-" + obj.port[0].descr[0].value;
-		}
+		if (portIdValue)
+			new_id += `-${portIdValue}`;
 
-		var row_id = this.generateRowId(new_id);
+		if (portDescrValue)
+			new_id += `-${portDescrValue}`;
+
+		const row_id = this.generateRowId(new_id);
 
 		return this.makeFoldingTableRow([
 			row_id,
@@ -446,44 +417,35 @@ return L.view.extend({
 			],
 			this.renderProtocol(obj.via),
 			[
-				this.renderChassis(obj.chassis[0]),
-				this.renderChassisParamTable(obj.chassis[0])
+				this.renderChassis(obj?.chassis?.[0]),
+				this.renderChassisParamTable(obj?.chassis?.[0])
 			],
 			[
 				this.renderPort(obj),
 				this.renderPortParamTable(obj, true)
 			]
-		], this.rowsUnfolded[row_id] || false);
+		], this.rowsUnfolded?.[row_id] || false);
 	},
 
 	/** @private */
 	renderInterfaceProtocols: function(iface, neighbors) {
-		if ((typeof iface === 'undefined') ||
-		    (typeof neighbors == 'undefined') ||
-		    (typeof neighbors.lldp[0] === 'undefined') ||
-		    (typeof neighbors.lldp[0].interface === 'undefined'))
+		const ifaceName = iface?.name;
+		const interfaces = neighbors?.lldp?.[0]?.interface;
+
+		// Check if required data is available
+		if (!ifaceName || !interfaces)
 			return "&#8211;";
 
-		var name = iface.name;
-		var protocols = [];
+		const protocols = interfaces
+			.filter(n => n.name === ifaceName)
+			.map(n => this.renderProtocol(n.via));
 
-		/* Search protocols for interface <name> */
-		neighbors.lldp[0].interface.forEach(function(n) {
-			if (n.name !== name)
-				return;
-
-			protocols.push(this.renderProtocol(n.via));
-		}.bind(this));
-
-		if (protocols.length > 0)
-			return E('span', {}, protocols);
-		else
-			return "&#8211;";
+		return protocols.length > 0 ? E('span', {}, protocols) : "&#8211;";
 	},
-
+	
 	/** @private */
 	makeStatisticsTableRow: function(sobj, iobj, neighbors) {
-		var row_id = this.generateRowId(iobj.name);
+		const row_id = this.generateRowId(iobj.name);
 
 		return this.makeFoldingTableRow([
 			row_id,
@@ -492,15 +454,15 @@ return L.view.extend({
 				this.renderPortParamTable(iobj, false)  // unfolded
 			],
 			this.renderInterfaceProtocols(iobj, neighbors),
-			this.renderAdminStatus(iobj.status),
-			this.renderNumber(sobj.tx[0].tx),
-			this.renderNumber(sobj.rx[0].rx),
-			this.renderNumber(sobj.rx_discarded_cnt[0].rx_discarded_cnt),
-			this.renderNumber(sobj.rx_unrecognized_cnt[0].rx_unrecognized_cnt),
-			this.renderNumber(sobj.ageout_cnt[0].ageout_cnt),
-			this.renderNumber(sobj.insert_cnt[0].insert_cnt),
-			this.renderNumber(sobj.delete_cnt[0].delete_cnt)
-		], this.rowsUnfolded[row_id] || false);
+			this.renderAdminStatus(iobj?.status),
+			this.renderNumber(sobj?.tx?.[0]?.tx),
+			this.renderNumber(sobj?.rx?.[0]?.rx),
+			this.renderNumber(sobj?.rx_discarded_cnt?.[0]?.rx_discarded_cnt),
+			this.renderNumber(sobj?.rx_unrecognized_cnt?.[0]?.rx_unrecognized_cnt),
+			this.renderNumber(sobj?.ageout_cnt?.[0]?.ageout_cnt),
+			this.renderNumber(sobj?.insert_cnt?.[0]?.insert_cnt),
+			this.renderNumber(sobj?.delete_cnt?.[0]?.delete_cnt)
+		], this.rowsUnfolded?.[row_id] || false);
 	},
 
 	/** @private */
@@ -592,60 +554,30 @@ return L.view.extend({
 
 	/** @private */
 	renderDataLocalChassis: function(data) {
-		if (data &&
-		    typeof data !== 'undefined' &&
-		    typeof data['local-chassis'] !== 'undefined' &&
-		    typeof data['local-chassis'][0].chassis[0].name !== 'undefined') {
+		const chassis = data?.['local-chassis']?.[0]?.chassis?.[0]?.name;
+
+		if (chassis)
 			return this.renderChassisParamTable(data['local-chassis'][0].chassis[0]);
-		}
-		else {
-			return E('div', { 'class': 'alert-message warning' },
-				_('No data to display'));
-		}
+		else
+			return E('div', { 'class': 'alert-message warning' }, _('No data to display'));
 	},
 
 	/** @private */
 	renderDataNeighbors: function(neighbors) {
-		var rows = [];
-
-		if (neighbors &&
-		    typeof neighbors !== 'undefined' &&
-		    typeof neighbors.lldp !== 'undefined')
-		{
-			var ifaces = neighbors.lldp[0].interface;
-
-			// Fill table rows
-			if (typeof ifaces !== 'undefined') {
-				for (i = 0; i < ifaces.length; i++)
-					rows.push(this.makeNeighborsTableRow(ifaces[i]));
-			}
-		}
-
-		return rows;
+		const ifaces = neighbors?.lldp?.[0]?.interface;
+		return ifaces ? ifaces.map(iface => this.makeNeighborsTableRow(iface)) : [];
 	},
 
 	/** @private */
 	renderDataStatistics: function(statistics, interfaces, neighbors) {
-		var rows = [];
+		const sifaces = statistics?.lldp?.[0]?.interface;
+		const ifaces = interfaces?.lldp?.[0]?.interface;
 
-		if (statistics &&
-		    interfaces &&
-		    typeof statistics !== 'undefined' &&
-		    typeof interfaces !== 'undefined' &&
-		    typeof statistics.lldp !== 'undefined' &&
-		    typeof interfaces.lldp !== 'undefined')
-		{
-			var sifaces = statistics.lldp[0].interface;
-			var ifaces  = interfaces.lldp[0].interface;
-
-			if ((typeof sifaces !== 'undefined') &&
-			    (typeof  ifaces !== 'undefined')) {
-				for (var i = 0; i < sifaces.length; i++)
-					rows.push(this.makeStatisticsTableRow(sifaces[i], ifaces[i], neighbors));
-			}
+		if (sifaces && ifaces) {
+			return sifaces.map((siface, i) => this.makeStatisticsTableRow(siface, ifaces[i], neighbors));
 		}
 
-		return rows;
+		return [];
 	},
 
 	/** @private */
