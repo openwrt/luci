@@ -25,7 +25,7 @@ return view.extend({
 
 		o = s.option(widgets.DeviceSelect, 'idGenIf',
 			_('Interface for station ID generation'),
-			_('Station ID is derived from the MAC address of the choosen interface'));
+			_('Station ID is derived from the MAC address of the chosen interface'));
 		o.filter = function(section_id, value) {
 			var dev = this.devices.filter(function(dev) { return dev.getName() == value })[0];
 			return (dev && dev.getMAC() != null && dev.getMAC() != '00:00:00:00:00:00');
