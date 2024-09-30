@@ -143,7 +143,7 @@ uint32_t sfh_hash(const char * data, int len)
 ## Reference Implementation
 
 A reference implementation can be found here:
-https://github.com/openwrt/luci/blob/master/modules/luci-base/src/template_lmo.c
+https://github.com/openwrt/luci/blob/master/modules/luci-lua-runtime/src/template_lmo.c
 
 The `po2lmo.c` executable implements a `*.po` to `*.lmo` conversation utility.
 Lua bindings for lmo are defined in `template_lualib.c` and associated headers.
