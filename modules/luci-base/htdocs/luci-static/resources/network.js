@@ -3371,6 +3371,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `n` - IEEE 802.11n mode, 2.4 or 5 GHz, up to 600 Mbit/s
 	 *  - `ac` - IEEE 802.11ac mode, 5 GHz, up to 6770 Mbit/s
 	 *  - `ax` - IEEE 802.11ax mode, 2.4 or 5 GHz
+	 *  - 'be' - IEEE 802.11be mode, 2.4, 5 or 6 GHz
 	 */
 	getHWModes: function() {
 		var hwmodes = this.ubus('dev', 'iwinfo', 'hwmodes');
@@ -3396,6 +3397,11 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `HE40` - applicable to IEEE 802.11ax, 40 MHz wide channels
 	 *  - `HE80` - applicable to IEEE 802.11ax, 80 MHz wide channels
 	 *  - `HE160` - applicable to IEEE 802.11ax, 160 MHz wide channels
+	 *  - `EHT20` - applicable to IEEE 802.11be, 20 MHz wide channels
+	 *  - `EHT40` - applicable to IEEE 802.11be, 40 MHz wide channels
+	 *  - `EHT80` - applicable to IEEE 802.11be, 80 MHz wide channels
+	 *  - `EHT160` - applicable to IEEE 802.11be, 160 MHz wide channels
+	 *  - `EHT320` - applicable to IEEE 802.11be, 320 MHz wide channels
 	 */
 	getHTModes: function() {
 		var htmodes = this.ubus('dev', 'iwinfo', 'htmodes');
@@ -4101,6 +4107,17 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * @property {number} [he_dcm]
 	 * Specifies whether dual concurrent modulation is used for the transmission.
 	 * Only applicable to HE rates.
+	 * 
+	 * @property {boolean} [eht]
+	 * Specifies whether this rate is an EHT (IEEE 802.11be) rate.
+	 * 
+	 * @property {number} [eht_gi]
+	 * Specifies whether the guard interval used for the transmission.
+	 * Only applicable to  EHT rates.
+	 *
+	 * @property {number} [eht_dcm]
+	 * Specifies whether dual concurrent modulation is used for the transmission.
+	 * Only applicable to EHT rates.
 	 */
 
 	/**

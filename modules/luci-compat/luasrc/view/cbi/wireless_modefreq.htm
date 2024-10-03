@@ -29,7 +29,9 @@
 	var modes = [
 		'', 'Legacy', true,
 		'n', 'N', hwmodes.n,
-		'ac', 'AC', hwmodes.ac
+		'ac', 'AC', hwmodes.ac,
+		'ax', 'AX', hwmodes.ax,
+		'be', 'BE', hwmodes.be
 	];
 
 	var htmodes = {
@@ -45,6 +47,19 @@
 			'VHT40', '40 MHz', htmodes.VHT40,
 			'VHT80', '80 MHz', htmodes.VHT80,
 			'VHT160', '160 MHz', htmodes.VHT160
+		],
+		'ax': [
+			'HE20', '20 MHz', htmodes.HE20,
+			'HE40', '40 MHz', htmodes.HE40,
+			'HE80', '80 MHz', htmodes.HE80,
+			'HE160', '160 MHz', htmodes.HE160
+		],
+		'be': [
+			'EHT20', '20 MHz', htmodes.EHT20,
+			'EHT40', '40 MHz', htmodes.EHT40,
+			'EHT80', '80 MHz', htmodes.EHT80,
+			'EHT160', '160 MHz', htmodes.EHT160,
+			'EHT320', '320 MHz', htmodes.EHT320
 		]
 	};
 
@@ -59,7 +74,16 @@
 		],
 		'ac': [
 			'11a', '5 GHz', true
-		]
+		],
+		'ax': [
+			'11a', '2 GHz', true,
+			'11a', '5 GHz', true
+		],
+		'be': [
+			'11a', '2 GHz', true,
+			'11a', '5 GHz', true,
+			'11a', '6 GHz', true
+ 		]
 	};
 
 	function cbi_set_values(sel, vals)
@@ -129,7 +153,11 @@
 
 		cbi_set_values(mode, modes);
 
-		if (/VHT20|VHT40|VHT80|VHT160/.test(<%= luci.http.write_json(self.map:get(section, "htmode")) %>))
+		if (/EHT20|EHT40|EHT80|EHT160|EHT320/.test(<%= luci.http.write_json(self.map:get(section, "htmode")) %>))
+			mode.value = 'be';
+		else if (/HE20|HE40|HE80|HE160/.test(<%= luci.http.write_json(self.map:get(section, "htmode")) %>))
+			mode.value = 'ax';
+		else if (/VHT20|VHT40|VHT80|VHT160/.test(<%= luci.http.write_json(self.map:get(section, "htmode")) %>))
 			mode.value = 'ac';
 		else if (/HT20|HT40/.test(<%= luci.http.write_json(self.map:get(section, "htmode")) %>))
 			mode.value = 'n';
