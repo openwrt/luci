@@ -86,5 +86,31 @@ return network.registerProtocol('map', {
 		o.datatype    = 'max(9200)';
 
 		o = s.taboption('advanced', form.Flag, 'legacymap', _('Use legacy MAP'), _('Use legacy MAP interface identifier format (draft-ietf-softwire-map-00) instead of RFC7597'));
+
+		o = s.taboption('advanced', form.Flag, 'snat_fix', _('Enable SNAT fix'), _('Apply SNAT fixes with certain ISPs'));
+
+		o = s.taboption('advanced', form.Value, 'dont_snat_to', _('Exclude SNAT ports'), _('List of ports to exclude from SNAT. Separate ports with spaces'));
+		o.depends('snat_fix', '1');
+		o.datatype = 'string';
+		o.placeholder = '80 443 8080';
+		o.validate = function (section_id, value) {
+			value = value.trim().replace(/\s+/g, ' ');
+			if (!value) return true;
+			let seen = new Set();
+			for (let port of value.split(' ')) {
+				let portNum = parseInt(port, 10);
+				if (!/^\d+$/.test(port) || portNum < 1 || portNum > 65535) {
+					return _('Expecting: %s').format(_('valid port value'));
+				}
+				if (seen.has(port)) {
+					return _('Duplicate port found: ') + port;
+				}
+				seen.add(port);
+			}
+			return true;
+		};
+		o.write = function (section_id, form_value) {
+			return this.super('write', [section_id, form_value.trim().replace(/\s+/g, ' ')]);
+		};
 	}
 });
