@@ -30,6 +30,10 @@ return network.registerProtocol('ipip6', {
 		return null;
 	},
 
+	getGatewayAddr: function () {
+		return this.get('peeraddr');
+	},
+
 	containsDevice: function (ifname) {
 		return (network.getIfnameOf(ifname) == this.getIfname());
 	},

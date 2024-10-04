@@ -22,7 +22,17 @@ function renderbox(ifc, ipv6) {
 	    addrs = (ipv6 ? ifc.getIP6Addrs() : ifc.getIPAddrs()) || [],
 	    dnssrv = (ipv6 ? ifc.getDNS6Addrs() : ifc.getDNSAddrs()) || [],
 	    expires = ifc.getExpiry(),
-	    uptime = ifc.getUptime();
+		uptime = ifc.getUptime(),
+		type = ifc.getOpkgPackage();
+	
+	if (type === 'map-t' && typeof ifc.callShowPortsets === 'function') {
+		addrs = ifc.getIPAddrs().concat(ifc.getIPv6Addrs());
+		var showPortsets = ifc.callShowPortsets();
+	}
+
+	if (type === 'ds-lite') {
+		addrs = ifc.getIPAddrs().concat(ifc.getIP6Addrs());
+	}
 
 	return E('div', { class: 'ifacebox' }, [
 		E('div', { class: 'ifacebox-head center ' + (active ? 'active' : '') },
@@ -31,8 +41,8 @@ function renderbox(ifc, ipv6) {
 			L.itemlist(E('span'), [
 				_('Protocol'), ifc.getI18n() || E('em', _('Not connected')),
 				_('Prefix Delegated'), ipv6 ? ifc.getIP6Prefix() : null,
-				_('Address'), addrs[0],
-				_('Address'), addrs[1],
+				(type === 'map-t' || type === 'ds-lite' ? _('IPv4 address') : _('Address')), addrs[0],
+				(type === 'map-t' || type === 'ds-lite' ? _('IPv6 address') : _('Address')), addrs[1],
 				_('Address'), addrs[2],
 				_('Address'), addrs[3],
 				_('Address'), addrs[4],
@@ -47,6 +57,8 @@ function renderbox(ifc, ipv6) {
 				_('DNS') + ' 3', dnssrv[2],
 				_('DNS') + ' 4', dnssrv[3],
 				_('DNS') + ' 5', dnssrv[4],
+				showPortsets ? _('Available portsets') : null,
+				showPortsets ? E('button', { class: 'cbi-button cbi-button-apply', click: showPortsets }, _('Show')) : null,
 				_('Expires'), (expires != null && expires > -1) ? '%t'.format(expires) : null,
 				_('Connected'), (uptime > 0) ? '%t'.format(uptime) : null
 			]),
