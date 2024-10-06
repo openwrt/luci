@@ -1,0 +1,20 @@
+{
+    "luci-app-eventcat": {
+        "description": "Grant access to LuCI app eventcat",
+        "read": {
+            "file": {
+                "/usr/bin/eventcat.sh": [
+                    "exec"
+                ]
+            },
+            "uci": [
+                "eventcat"
+            ]
+        },
+        "write": {
+            "uci": [
+                "eventcat"
+            ]
+        }
+    }
+}
