@@ -322,6 +322,9 @@ var CBIZoneForwards = form.DummyValue.extend({
 		if (!dzones.length)
 			dzones.push(E('label', { 'class': 'zonebadge zonebadge-empty' },
 				E('strong', this.defaults.getForward())));
+		else
+			dzones.push(E('label', { 'class': 'zonebadge zonebadge-empty' },
+				E('strong', '%s %s'.format(this.defaults.getForward(), ('all others')))));
 
 		return E('div', { 'class': 'zone-forwards' }, [
 			E('div', { 'class': 'zone-src' }, this.renderZone(zone)),
