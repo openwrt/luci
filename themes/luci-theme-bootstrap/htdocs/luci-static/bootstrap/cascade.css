@@ -29,13 +29,13 @@
 	--background-color-medium-hsl:
 		var(--background-color-h),
 		var(--background-color-s),
-		calc(var(--background-color-l) + var(--background-color-delta-l-sign) * calc(6 / 255 * 100%));
+		calc(var(--background-color-l) + var(--background-color-delta-l-sign) * 2.35%);
 	--background-color-medium: hsl(var(--background-color-medium-hsl));
 
 	--background-color-low-hsl:
 		var(--background-color-h),
 		var(--background-color-s),
-		calc(var(--background-color-l) + var(--background-color-delta-l-sign) * calc(10 / 255 * 100%));
+		calc(var(--background-color-l) + var(--background-color-delta-l-sign) * 3.92%);
 	--background-color-low: hsl(var(--background-color-low-hsl));
 
 	--text-color-delta-l-sign: 1;
@@ -52,19 +52,19 @@
 	--text-color-high-hsl:
 		var(--text-color-h),
 		var(--text-color-s),
-		calc(var(--text-color-l) + var(--text-color-delta-l-sign) * calc(64 / 255 * 100%));
+		calc(var(--text-color-l) + var(--text-color-delta-l-sign) * 25.1%);
 	--text-color-high: hsl(var(--text-color-high-hsl));
 
 	--text-color-medium-hsl:
 		var(--text-color-h),
 		var(--text-color-s),
-		calc(var(--text-color-l) + var(--text-color-delta-l-sign) * calc(128 / 255 * 100%));
+		calc(var(--text-color-l) + var(--text-color-delta-l-sign) * 50.2%);
 	--text-color-medium: hsl(var(--text-color-medium-hsl));
 
 	--text-color-low-hsl:
 		var(--text-color-h),
 		var(--text-color-s),
-		calc(var(--text-color-l) + var(--text-color-delta-l-sign) * calc(191 / 255 * 100%));
+		calc(var(--text-color-l) + var(--text-color-delta-l-sign) * 74.9%);
 	--text-color-low: hsl(var(--text-color-low-hsl));
 
 	--border-color-delta-l-sign: -1;
@@ -75,19 +75,19 @@
 	--border-color-high-hsl:
 		var(--border-color-h),
 		var(--border-color-s),
-		calc(var(--border-color-l) + var(--border-color-delta-l-sign) * calc(51 / 255 * 100%));
+		calc(var(--border-color-l) + var(--border-color-delta-l-sign) * 20%);
 	--border-color-high: hsl(var(--border-color-high-hsl));
 
 	--border-color-medium-hsl:
 		var(--border-color-h),
 		var(--border-color-s),
-		calc(var(--border-color-l) + var(--border-color-delta-l-sign) * calc(34 / 255 * 100%));
+		calc(var(--border-color-l) + var(--border-color-delta-l-sign) * 13.33%);
 	--border-color-medium: hsl(var(--border-color-medium-hsl));
 
 	--border-color-low-hsl:
 		var(--border-color-h),
 		var(--border-color-s),
-		calc(var(--border-color-l) + var(--border-color-delta-l-sign) * calc(17 / 255 * 100%));
+		calc(var(--border-color-l) + var(--border-color-delta-l-sign) * 6.67%);
 	--border-color-low: hsl(var(--border-color-low-hsl));
 
 	--primary-color-high: #1976d2;
@@ -121,7 +121,7 @@
 	--background-color-delta-l-sign: 1;
 	--background-color-h: 0;
 	--background-color-s: 0%;
-	--background-color-l: calc(34 / 255 * 100%);
+	--background-color-l: 13.33%;
 	--text-color-delta-l-sign: -1;
 	--text-color-h: 0;
 	--text-color-s: 0%;
@@ -1191,7 +1191,7 @@ a.menu:after {
 	--tab-inactive-background-color-l: var(--border-color-low-l);
 	--tab-inactive-background-color: var(--border-color-low);
 	--tab-inactive-border-color: var(--border-color-medium);
-	--tab-inactive-text-color-delta-l: calc(85 / 255 * 100%);
+	--tab-inactive-text-color-delta-l: 33.33%;
 	--tab-inactive-text-color-l: calc(var(--tab-inactive-background-color-l) + var(--background-color-delta-l-sign) * var(--tab-inactive-text-color-delta-l));
 	--tab-inactive-text-color: hsl(var(--tab-inactive-background-color-hsl));
 	--tab-inactive-hover-background-color: var(--background-color-high);
