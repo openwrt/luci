@@ -180,9 +180,9 @@ return view.extend({
 				if (sources && info) {
 					for (var i = 0; i < info.active_sources.length; i++) {
 						if (i < info.active_sources.length-1) {
-							src_array += info.active_sources[i].source + ', ';
+							src_array += info.active_sources[i] + ', ';
 						} else {
-							src_array += info.active_sources[i].source
+							src_array += info.active_sources[i]
 						}
 					}
 					sources.textContent = src_array || '-';
