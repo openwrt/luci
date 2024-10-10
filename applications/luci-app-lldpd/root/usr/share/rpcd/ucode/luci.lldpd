@@ -3,20 +3,20 @@
 import { popen } from 'fs';
 
 function lldpcli_json(section) {
-	return json(popen(`lldpcli -f json0 show ${section}`, 'r'));
+	return json(popen(`lldpcli -f json0 show ${section}`, 'r')?.read?.('all'));
 }
 
-return {
-	'luci.lldpd': {
-		getStatus: {
-			call: function() {
-				return {
-					statistics: lldpcli_json("statistics"),
-					neighbors:  lldpcli_json("neighbors details"),
-					interfaces: lldpcli_json("interfaces"),
-					chassis:    lldpcli_json("chassis")
-				};
-			}
+const methods = {
+	getStatus: {
+		call: function() {
+			return {
+				statistics: lldpcli_json("statistics"),
+				neighbors:  lldpcli_json("neighbors details"),
+				interfaces: lldpcli_json("interfaces"),
+				chassis:    lldpcli_json("chassis")
+			};
 		}
 	}
 };
+
+return { 'luci.lldpd': methods };
