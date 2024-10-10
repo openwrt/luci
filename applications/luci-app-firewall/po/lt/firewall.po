@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-09-15 21:45+0000\n"
+"PO-Revision-Date: 2024-10-07 15:11+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/lt/>\n"
@@ -171,7 +171,7 @@ msgid ""
 msgstr ""
 "Papildomi neapdoroti „<em>iptables</em>“ argumentai zonos šaltinio srautui "
 "klasifikuoti, pvz. „<code>-p tcp --sport 443</code>“, kad atitiktų tik "
-"gaunamą „HTTPS“ srautą."
+"atvykstantį „HTTPS“ srautą."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
 msgid "Address family, Internal IP address must match"
@@ -365,7 +365,7 @@ msgid ""
 "zone."
 msgstr ""
 "Įjungti tinklo adresus ir prievado vertimą IPv4 („NAT4“ arba „NAPT4“) "
-"išeinančiam srautui šitoje zonoje. Tai tipiškai įjungiama/įgalinima "
+"išsiunčiamam srautui šitoje zonoje. Tai tipiškai įjungiama/įgalinima "
 "<em>„wan“</em> zonoje."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:237
@@ -374,7 +374,7 @@ msgid ""
 "outbound traffic on this zone."
 msgstr ""
 "Įjungti tinklo adresus ir prievado vertimą IPv6 („NAT6“ arba „NAPT6“) "
-"išeinančiam srautui šitoje zonoje."
+"išsiunčiamam srautui šitoje zonoje."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:210
 msgid "Enabled"
@@ -606,7 +606,7 @@ msgstr "Tik IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:251
 msgid "Inbound device"
-msgstr "Įeinantis/Gaunamas įrenginys"
+msgstr "Atvykstantis įrenginys"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:186
 msgid "Include File"
@@ -708,8 +708,8 @@ msgstr "IP ciklo grįžimo šaltinis"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:287
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
 msgstr ""
-"„MASQUERADE“ – Automatiškai perrašyti į išeinančios sąsajos IP (Privatus IP "
-"į Viešąjį IP)"
+"„MASQUERADE“ – Automatiškai perrašyti į išsiunčiamos sąsajos IP (privatus IP "
+"į viešąjį IP)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:174
 msgid "MSS clamping"
@@ -788,7 +788,7 @@ msgstr "Atitinka savitą užkardos žymę arba daugybę skirtingų žymių."
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:328
 msgid "Matches forwarded traffic using the specified outbound network device."
 msgstr ""
-"Atitinka persiųstą srautą naudojant nurodytą siunčiamo tinklo įrenginį."
+"Atitinka persiųstą srautą naudojant nurodytą išsiunčiamo tinklo įrenginį."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:264
 msgid "Matches traffic carrying the specified DSCP marking."
@@ -831,7 +831,7 @@ msgid ""
 "or forwarded traffic."
 msgstr ""
 "„NAT“ taisyklės leidžia tiksliai valdyti šaltinio IP, kurią galima naudoti "
-"siunčiamam arba persiunčiamam srautui."
+"išsiunčiamam arba persiunčiamam srautui."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:182
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:41
@@ -934,7 +934,7 @@ msgid ""
 "specific computer or service within the private LAN."
 msgstr ""
 "Prievadų persiuntimas leidžia išoriniams kompiuteriams internete prisijungti "
-"prie Jūsų savito kompiuterio ar paslaugos veikiančio Jūsų privačiame "
+"prie Jūsų savito kompiuterio ar paslaugų veikiančių Jūsų privačiame "
 "vietiniame („LAN“) tinkle."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:157
@@ -1075,8 +1075,8 @@ msgid ""
 "Specifies whether to tie this traffic rule to a specific inbound or outbound "
 "network device."
 msgstr ""
-"Nurodoma, ar susieti šią srauto taisyklę su savitu gaunamo ar išeinančio "
-"tinklo įrenginiu."
+"Nurodoma, ar susieti šią srauto taisyklę su savitu atvykstančiu ar "
+"išsiunčiamu tinklo įrenginiu."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:310
 msgid ""
@@ -1218,7 +1218,7 @@ msgid ""
 msgstr ""
 "Į %{dest}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-"
 "tooltip=\"Sutapatinti IP adresus įskyrus %{item.val}.\"}>%{item.ival}</"
-"var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-"
+"var>}}%{dest_port?, prievadas %{dest_port#%{next?, }<var%{item.inv? data-"
 "tooltip=\"Sutapatinti prievadus įskyrus %{item.val}.\"}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:438
@@ -1237,8 +1237,8 @@ msgid ""
 "the router."
 msgstr ""
 "Srauto taisyklės apibrėžia paketų, keliaujančių tarp skirtingų zonų, "
-"politiką, pavyzdžiui, atmesti srautą tarp tam tikrų skleidėjų/vedėjų arba "
-"atidaryti maršrutizatoriaus „WAN“ prievadus."
+"politiką (pavyzdžiui, atmesti srautą tarp tam tikrų skleidėjų/vedėjų arba "
+"atidaryti maršrutizatoriaus „WAN“ prievadus)."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:481
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:351
@@ -1476,10 +1476,10 @@ msgid ""
 "large address lists without the need to create one rule per item to match. "
 "Port ranges in ipsets are unsupported by firewall4.<br />"
 msgstr ""
-"„Firewall4“ palaiko nuorodas ir IP rinkinių kūrimą, kad būtų supaprastintas "
-"didelių adresų sąrašų suderinimas be poreikio kuriant vieną taisyklę "
-"kiekvienam elementui, kad jis atitiktų. „IPsets“ prievadų diapazonai "
-"nepalaikomi „firewall4“.<br />"
+"„Firewall4“ palaiko įvestiẽs arba išvestiẽs kreipinių ir IP rinkinių kūrimą, "
+"kad būtų supaprastintas didelių adresų sąrašų suderinimas be poreikio "
+"kuriant vieną taisyklę kiekvienam elementui, kad jis atitiktų. „IPsets“ "
+"prievadų diapazonai nepalaikomi „firewall4“.<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:158
 msgid "fromport-toport"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-09-19 17:56+0000\n"
+"PO-Revision-Date: 2024-09-30 06:29+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationstravelmate/lt/>\n"
@@ -52,7 +52,7 @@ msgstr "Autentifikavimas"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:539
 msgid "Auto Added Open Uplink"
-msgstr ""
+msgstr "Automatiškai pridėtas atviras aukštynkryptis"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:618
 msgid "Auto Login Script"
@@ -60,7 +60,7 @@ msgstr "Automatinio prisijungimo skriptas"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:353
 msgid "AutoAdd Open Uplinks"
-msgstr ""
+msgstr "Automatiškai pridėti atvirus aukštynkrypčius"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:601
 msgid ""
@@ -76,6 +76,8 @@ msgid ""
 "Automatically add open uplinks like hotel captive portals to your wireless "
 "config."
 msgstr ""
+"Automatiškai pridėti atvirus aukštynkrypčius, pvz., „viešbučių“ perimanti "
+"prieigą pagal paskirties portalą į Jūsų belaidės/bevielės konfigūraciją."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:583
 msgid ""
@@ -130,7 +132,6 @@ msgstr ""
 "reaguojantį“."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:148
-#, fuzzy
 msgid ""
 "Configuration of the travelmate package to enable travel router "
 "functionality. For further information <a href=\"https://github.com/openwrt/"
@@ -361,6 +362,8 @@ msgid ""
 "Limit the maximum number of automatically added open uplinks. To disable "
 "this limitation set it to '0'."
 msgstr ""
+"Apriboti maksimalų automatiškai pridėtų atvirų aukštynkrypčių skaičių. "
+"Norėdami išjungti šį apribojimą, nustatykite jį į – „0-į“."
 
 #: applications/luci-app-travelmate/root/usr/share/luci/menu.d/luci-app-travelmate.json:35
 msgid "Log View"
@@ -394,7 +397,6 @@ msgstr ""
 "aukštynkriptiems (atsi-) jungimams."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:340
-#, fuzzy
 msgid "Net Error Check"
 msgstr "Tinklo klaidos patikrinimas"
 
@@ -434,6 +436,13 @@ msgid ""
 "connection is emphasized in <span style=\"color:rgb(68, 170, 68);font-weight:"
 "bold\">green</span>."
 msgstr ""
+"Visų sukonfigūruotų „travelmate“ aukštynkrypčių apžvalga. Jūs galite "
+"redaguoti, pašalinti arba teikti pirmenybę esamoms aukštynkryptiems "
+"nuvilkdami &#38; numesdami ir nuskaitydami naujas.<br /> Šiuo metu "
+"naudojamas auktynkrypties ryšys yra pabrėžiamas <span style=\"color:rgb(51, "
+"119, 204);font-weight:bold\">mėlynai</span>, šifruotas „VPN“ aukštynkrypties "
+"ryšys yra pabrėžiamas<span style=\"color:rgb(68, 170, 68);font-weight:"
+"bold\">žaliai</span>."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:421
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:981
@@ -495,10 +504,9 @@ msgstr ""
 "prioriteto aukštynkrypties ryšį, nepaisant jau esamo ryšio."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:439
-#, fuzzy
 msgid "Profile used by 'msmtp' for travelmate notification E-Mails."
 msgstr ""
-"Profilis, naudojamas „msmtp“, skirtas „travelmate“ pranešimams el. paštui."
+"Profilis, kurį naudoja „msmtp“, skirta – „travelmate“ el. pašto pranešimams."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:116
 msgid "QR-Code Overview"
@@ -514,7 +522,7 @@ msgstr "Sumaišyti „MAC“ adresus"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:424
 msgid "Receiver address for travelmate notification E-Mails."
-msgstr ""
+msgstr "Gavėjo adresas, skirtas – „travelmate“ el. pašto pranešimams."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:279
 msgid "Remove"
@@ -529,6 +537,8 @@ msgid ""
 "Render the QR-Code of the selected Access Point to comfortably transfer the "
 "WLAN credentials to your mobile devices."
 msgstr ""
+"Perteikti pasirinkto prieigos taško „QR“ kodą, kad galėtumėte patogiai "
+"perkelti „WLAN“ kredencialus į savo mobiliuosius įrenginius."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:777
 msgid "Repeat Scan"
@@ -547,10 +557,12 @@ msgstr "Paleisti iš naujo sąsają ir/arba sietuvą"
 msgid ""
 "Restrict travelmate to a single radio or change the overall scanning order."
 msgstr ""
+"Apriboti „travelmate“ iki vieno radijo ryšio arba pakeisti bendrą skenavimo "
+"tvarką."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:371
 msgid "Retry limit to connect to an uplink."
-msgstr ""
+msgstr "Pakartojimų/Bandymų iš naujo prisijungiant prie aukštynkrypties, riba."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:246
 msgid "Run Flags"
@@ -582,11 +594,13 @@ msgstr "Skripto argumentai"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:429
 msgid "Sender address for travelmate notification E-Mails."
-msgstr "Siuntėjo adresas „travelmate“ pranešimams per el. paštą."
+msgstr "Siuntėjo adresas, skirtas – „travelmate“ el. pašto pranešimams."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:421
 msgid "Sends notification E-Mails after every succesful uplink connect."
 msgstr ""
+"Siunčia pranešimus el. paštu po kiekvieno sėkmingo aukštynkrypties "
+"prisijungimo."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:409
 msgid "Service Priority"
@@ -598,13 +612,16 @@ msgstr "Nustatymai"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:376
 msgid "Signal Quality Threshold"
-msgstr ""
+msgstr "Signalo kokybės slenkstis"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:658
 msgid ""
 "Space separated list of additional arguments passed to the Auto Login "
 "Script, i.e. username and password"
 msgstr ""
+"Tarpais atskirtas papildomų argumentų, perduodamų – automatinio prisijungimo "
+"skriptui, sąrašas, t.y. naudojo/vartotojo vardas (t.y slapyvardis) ir "
+"slaptažodis"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:329
 msgid "Standard VPN Service"
@@ -618,11 +635,15 @@ msgstr "Tipinė „VPN“ sąsaja"
 msgid ""
 "Standard VPN interface which will be automatically added to new STA profiles."
 msgstr ""
+"Standartinė/-is „VPN“ sąsaja ir/arba sietuvas, kuri/-is bus automatiškai "
+"įtraukta/-as į naujus „STA“ profilius."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:329
 msgid ""
 "Standard VPN service which will be automatically added to new STA profiles."
 msgstr ""
+"Standartinė „VPN“ tarnyba, kuri bus automatiškai įtraukta į naujus „STA“ "
+"profilius."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:764
 msgid "Starting wireless scan on '"
@@ -695,7 +716,7 @@ msgstr ""
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:59
 msgid "The uplink interface has been updated."
-msgstr "Aukštynkripčio sąsaja ir/arba sietuvas buvo atnaujinta/-as."
+msgstr "Aukštynkripčio sąsaja ir/arba sietuvas buvo atnaujinta/-s."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:29
 msgid "The uplink interface name"
@@ -706,7 +727,7 @@ msgid ""
 "This option is selected by default if this uplink was added automatically "
 "and counts as 'Open Uplink'."
 msgstr ""
-"Ši parinktis yra pasirenkama pagal numatytuosius nustatymus, jei šitas "
+"Ši parinktis yra parinkta pagal numatytuosius nustatymus, jei šitas "
 "aukštynkryptis buvo pridėtas automatiškai ir skaičiuojamas kaip – „Atidaryti "
 "aukštynkryptį“."
 
@@ -716,10 +737,14 @@ msgid ""
 "creates an IPv4- and an IPv6 alias network interface with all required "
 "network- and firewall settings."
 msgstr ""
+"Norėdami naudoti – „Travelmate“, Jūs turite vieną kartą nustatyti "
+"aukštynkrypties sąsają ir/arba sietuvą. Šis vedlys sukuria IPv4 ir IPv6 "
+"pseudonimo tinklo sąsają ir/arba sietuvą su visais reikalingais tinklo ir "
+"užkardos parametrais."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:434
 msgid "Topic for travelmate notification E-Mails."
-msgstr ""
+msgstr "Tema/Dalykas, skirtas – „travelmate“ el. pašto pranešimams."
 
 #: applications/luci-app-travelmate/root/usr/share/luci/menu.d/luci-app-travelmate.json:3
 msgid "Travelmate"
@@ -731,11 +756,11 @@ msgstr "„Travelmate“ nustatymai"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:340
 msgid "Treat missing internet availability as an error."
-msgstr ""
+msgstr "Laikyti trūkstamą interneto prieinamumą kaip klaidą."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:366
 msgid "Trigger Delay"
-msgstr ""
+msgstr "Suaktyvinimo atidėjimas"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:458
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1014
@@ -744,11 +769,11 @@ msgstr "Naudoti sistemos sertifikatus"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:557
 msgid "Use the specified MAC address for this uplink."
-msgstr ""
+msgstr "Naudoti šios aukštynkrypties nurodytą „MAC“ adresą."
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:400
 msgid "User Agent"
-msgstr ""
+msgstr "Naudotojo/Vartotojo agentas"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:678
 msgid "VPN Hook"
@@ -778,10 +803,11 @@ msgstr "„VPN“ apdorojimas"
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:1014
 msgid "Validate server certificate using built-in system CA bundle"
 msgstr ""
+"Patvirtinti serverio sertifikatą naudodami įmontuota sistemos „CA“ paketą"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:304
 msgid "Verbose Debug Logging"
-msgstr ""
+msgstr "Platus/Išsamus/Daugiažodiškas derinimo/trukdžių šalinimo žurnalinimas"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:323
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:952
@@ -902,7 +928,7 @@ msgstr "Belaidžio/Bevielio tinklo nustatymai"
 
 #: applications/luci-app-travelmate/root/usr/share/luci/menu.d/luci-app-travelmate.json:27
 msgid "Wireless Stations"
-msgstr ""
+msgstr "Belaidės/Bevielės stotys"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:430
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/stations.js:990
@@ -922,15 +948,17 @@ msgstr "joks (-ia/-ie)"
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:310
 msgid "use both radios, normal sort order (radio0 radio1)"
 msgstr ""
+"naudoti abu radijo imtuvus, įprasta rūšiavimo tvarka („radio0“, „radio1“)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:311
 msgid "use both radios, reverse sort order (radio1 radio0)"
 msgstr ""
+"naudoti abu radijo imtuvus, atvirkštinė rūšiavimo tvarka („radio1“, „radio0“)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:308
 msgid "use the first radio only (radio0)"
-msgstr ""
+msgstr "naudoti tik pirmąjį radijo imtuvą („radio0“)"
 
 #: applications/luci-app-travelmate/htdocs/luci-static/resources/view/travelmate/overview.js:309
 msgid "use the second radio only (radio1)"
-msgstr ""
+msgstr "naudoti tik antrąjį radijo imtuvą („radio1“)"
