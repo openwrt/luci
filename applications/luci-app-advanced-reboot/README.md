@@ -1,3 +1,3 @@
-# Advanced Reboot Web UI (luci-app-advanced-reboot)
+# README
 
-README has been moved to [https://docs.openwrt.melmac.net/luci-app-advanced-reboot/](<https://docs.openwrt.melmac.net/luci-app-advanced-reboot/>).
+Documentation for this project is available at [https://docs.openwrt.melmac.net/luci-app-advanced-reboot/](https://docs.openwrt.melmac.net/luci-app-advanced-reboot/).
