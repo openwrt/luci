@@ -3251,7 +3251,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * @returns {null|LuCI.network.Device}
 	 * Returns a `Network.Device` instance representing the parent device or
 	 * `null` when this device has no parent, as it is the case for e.g.
-	 * ordinary ethernet interfaces.
+	 * ordinary Ethernet interfaces.
 	 */
 	getParent: function() {
 		if (this.dev.parent)
@@ -3951,7 +3951,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *
 	 * @property {number} inactive
 	 * The amount of milliseconds the peer has been inactive, e.g. due
-	 * to powersave.
+	 * to power-saving.
 	 *
 	 * @property {number} connected_time
 	 * The amount of milliseconds the peer is associated to this network.
@@ -4001,7 +4001,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `UNKNOWN`
 	 *
 	 * @property {number} [mesh local PS]
-	 * The local powersafe mode for the peer link, may be an empty
+	 * The local power-save mode for the peer link, may be an empty
 	 * string (`''`) or absent if not applicable or supported by
 	 * the driver.
 	 *
@@ -4012,7 +4012,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `UNKNOWN`
 	 *
 	 * @property {number} [mesh peer PS]
-	 * The remote powersafe mode for the peer link, may be an empty
+	 * The remote power-save mode for the peer link, may be an empty
 	 * string (`''`) or absent if not applicable or supported by
 	 * the driver.
 	 *
@@ -4023,7 +4023,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `UNKNOWN`
 	 *
 	 * @property {number} [mesh non-peer PS]
-	 * The powersafe mode for all non-peer neighbours, may be an empty
+	 * The power-save mode for all non-peer neighbours, may be an empty
 	 * string (`''`) or absent if not applicable or supported by the driver.
 	 *
 	 * The following modes are known:
@@ -4317,7 +4317,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Get the primary logical interface this wireless network is attached to.
+	 * Get the primary logical interface this network is attached to.
 	 *
 	 * @returns {null|LuCI.network.Protocol}
 	 * Returns a `Network.Protocol` instance representing the logical
@@ -4329,7 +4329,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Get the logical interfaces this wireless network is attached to.
+	 * Get the logical interfaces this network is attached to.
 	 *
 	 * @returns {Array<LuCI.network.Protocol>}
 	 * Returns an array of `Network.Protocol` instances representing the
