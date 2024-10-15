@@ -7,11 +7,12 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for Coova Chilli
-LUCI_DEPENDS:=+luci-base +luci-compat @BROKEN
+LUCI_DEPENDS:=+luci-base +coova-chilli
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Steven Barth <steven@midlink.org>, \
-	Jo-Philipp Wich <jo@mein.io>
+	Jo-Philipp Wich <jo@mein.io>, \
+	Paul Donald <newtwen+github@gmail.com>
 
 include ../../luci.mk
 
