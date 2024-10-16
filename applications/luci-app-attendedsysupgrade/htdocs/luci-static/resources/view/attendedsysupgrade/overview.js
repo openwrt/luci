@@ -60,11 +60,19 @@ function get_revision_count(revision) {
 
 return view.extend({
 	steps: {
-		init: [10, _('Received build request')],
-		download_imagebuilder: [20, _('Downloading ImageBuilder archive')],
-		unpack_imagebuilder: [40, _('Setting Up ImageBuilder')],
-		calculate_packages_hash: [60, _('Validate package selection')],
-		building_image: [80, _('Generating firmware image')],
+		init:                    [  0, _('Received build request')],
+		container_setup:         [ 10, _('Setting up ImageBuilder')],
+		validate_revision:       [ 20, _('Validating revision')],
+		validate_manifest:       [ 30, _('Validating package selection')],
+		calculate_packages_hash: [ 40, _('Calculating package hash')],
+		building_image:          [ 50, _('Generating firmware image')],
+		signing_images:          [ 95, _('Signing images')],
+		done:                    [100, _('Completed generating firmware image')],
+		failed:                  [100, _('Failed to generate firmware image')],
+
+		/* Obsolete status values, retained for backward compatibility. */
+		download_imagebuilder:   [ 20, _('Downloading ImageBuilder archive')],
+		unpack_imagebuilder:     [ 40, _('Setting Up ImageBuilder')],
 	},
 
 	request_hash: '',
