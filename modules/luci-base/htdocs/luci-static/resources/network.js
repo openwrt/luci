@@ -2158,8 +2158,8 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 				var prefixes = [...v6_prefixes, ...v6_addresses];
 
 				if(prefixes.length && typeof(prefixes[0].valid) == 'number') {
-	          		var r = prefixes[0].valid;
-          			return (r > 0 ? r : 0);
+					var r = prefixes[0].valid;
+					return (r > 0 ? r : 0);
 				}
 			}
 		}

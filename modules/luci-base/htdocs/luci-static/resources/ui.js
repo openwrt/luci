@@ -1255,7 +1255,7 @@ var UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		sb.setAttribute('open', '');
 
 		var pv = ul.cloneNode(true);
-		    pv.classList.add('preview');
+		pv.classList.add('preview');
 
 		if (fl)
 			fl.classList.add('cbi-dropdown-open');
