@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-10-16 09:51+0000\n"
+"PO-Revision-Date: 2024-10-18 12:58+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsrp-pppoe-server/lt/>\n"
@@ -55,6 +55,9 @@ msgid ""
 "the PADO frame. The first one specifies the default service, and is used if "
 "the PPPoE client requests a Service-Name of length zero."
 msgstr ""
+"Kiekviena iš jų skatiną pavadintą tarnybą skelbti tarnybos pavadinimo žymoje "
+"– „PADO“ rėmelyje. Pirmoji nurodo numatytąją tarnybą ir yra naudojama, jei "
+"„PPPoE“ klientas prašo nulinės tarnybos pavadinimo."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:25
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:25
@@ -78,17 +81,23 @@ msgid ""
 "If specified as <code>0.0.0.0</code> remote IP allocation will be delegated "
 "to <code>pppd</code>"
 msgstr ""
+"Jei nurodytas kaip – <code>„0.0.0.0“</code>, nuotolinis IP paskirstymas bus "
+"perduotas į – <code>„pppd“</code>"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:33
 msgid ""
 "If specified as <code>0.0.0.0</code> the selection of local IP address is "
 "delegated to <code>pppd</code>"
 msgstr ""
+"Jei nurodytas kaip – <code>„0.0.0.0“</code>, vietinio IP adreso pasirinkimas "
+"yra perduodamas į – <code>„pppd“</code>"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid ""
 "Instead of numbering PPPoE sessions starting at 1, numbering starts at %s"
 msgstr ""
+"Vietoj „PPPoE“ seansų numeravimo, pradedant nuo 1-o, numeracija prasideda "
+"nuo – %s"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:27
 msgid "Interface"
@@ -99,6 +108,8 @@ msgid ""
 "Interface from which to relay. Only PPPoE clients may be connected to this "
 "interface."
 msgstr ""
+"Sąsaja ir/arba Sietuvas, iš kurios/-o perduodama/-as. Prie šios/-o sąsajos "
+"ir/arba sietuvo gali būti prijungti tik „PPPoE“ klientai."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:27
 msgid "Interface on which to listen."
@@ -109,16 +120,22 @@ msgid ""
 "Interface on which to listen. Only PPPoE servers may be connected to this "
 "interface."
 msgstr ""
+"Sąsaja ir/arba Sietuvas, ant kuriuos/-o laukti prisijungimo/jungties ryšio. "
+"Prie šios/-o sąsajos ir/arba sietuvo gali būti prijungti tik „PPPoE“ "
+"serveriai."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:41
 msgid ""
 "Interface upon which to listen and to relay. Both PPPoE clients and servers "
 "may be connected to this interface."
 msgstr ""
+"Sąsaja ir/arba Sietuvas, per kurią/-į laukti prisijungimo/jungties ryšio ir "
+"perduoti. Prie šios/-o sąsajos ir/arba sietuvo gali būti prijungti ir „PPPoE“"
+" klientai, ir serveriai."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:94
 msgid "Invokes <code>pppd</code> with the unit flag"
-msgstr ""
+msgstr "Iškviečia <code>„pppd“</code> su vieneto vėliavėlę"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:115
 msgid "MSS"
@@ -126,16 +143,16 @@ msgstr "„MSS“"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:115
 msgid "Max Segment Size"
-msgstr ""
+msgstr "Maksimalus segmento dydis"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:53
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:58
 msgid "Maximum Sessions"
-msgstr ""
+msgstr "Maksimalūs seansai"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:58
 msgid "Maximum concurrent sessions"
-msgstr ""
+msgstr "Maksimalūs vienu metu vykstantys seansai"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:66
 msgid "Maximum sessions per peer"
@@ -143,12 +160,12 @@ msgstr "Maksimalus seansų skaičius vienam lygiarangiui"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:70
 msgid "No limit"
-msgstr ""
+msgstr "Nėra ribos"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:65
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:110
 msgid "No timeout"
-msgstr ""
+msgstr "Nėra pasibaigusios užklausos laiko"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid "Offset"
@@ -160,11 +177,11 @@ msgstr "Parinkčių failas"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid "PPP Offset"
-msgstr ""
+msgstr "„PPP“ poslinkis"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:19
 msgid "PPPoE Relay Configuration"
-msgstr ""
+msgstr "„PPPoE“ perdavimo konfigūracija"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:19
 msgid "PPPoE Server Configuration"
@@ -172,7 +189,7 @@ msgstr "„PPPoE“ serverio konfigūracija"
 
 #: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:14
 msgid "RP PPPoE Relay"
-msgstr ""
+msgstr "„RP PPPoE“ Perdavimas"
 
 #: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:3
 msgid "RP PPPoE Server"
@@ -180,19 +197,21 @@ msgstr "„RP PPPoE“ serveris"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:89
 msgid "Random session selection"
-msgstr "Atsitiktinis sesijos pasirinkimas"
+msgstr "Atsitiktinis seanso pasirinkimas"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:124
 msgid "Reduces CPU usage, but may cause a race condition on slow CPUs"
 msgstr ""
+"Sumažiną „CPU“ naudojimą, bet gali sukelti konfliktinę sekos būseną („Race "
+"Condition“) lėtuose „CPU“ (dgs.)"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:21
 msgid "Relay Configuration"
-msgstr ""
+msgstr "Perdavimo konfigūracija"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:18
 msgid "Roaring Penguin PPPoE Relay"
-msgstr ""
+msgstr "„Roaring Penguin PPPoE“ perdavimas"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:18
 msgid "Roaring Penguin PPPoE Server"
@@ -204,7 +223,7 @@ msgstr "Serverio konfigūracija"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:27
 msgid "Server Interface"
-msgstr ""
+msgstr "Serverio sąsaja ir/arba sietuvas"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:53
 msgid "Service Name"
@@ -212,11 +231,12 @@ msgstr "Tarnybos pavadinimas"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:124
 msgid "Synchronous PPP encapsulation"
-msgstr ""
+msgstr "Sinchroninė „PPP“ inkapsuliacija"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:89
 msgid "Tells the PPPoE server to randomly permute session numbers."
 msgstr ""
+"Nurodo „PPPoE“ serveriui atsitiktinai perstatyti/pakeisti seanso numerius."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:61
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:106
@@ -230,7 +250,7 @@ msgstr "Vienetas"
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:48
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:76
 msgid "Use Non-UCI Config"
-msgstr ""
+msgstr "Naudoti ne-„UCI“ konfigūraciją"
 
 #~ msgid ""
 #~ "Instead of starting at beginning and going to end, randomize session "
