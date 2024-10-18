@@ -6,10 +6,11 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Dual Channel Wi-Fi AP Daemon configuration module
-LUCI_DEPENDS:=+luci-base +luci-compat +dcwapd
+LUCI_DEPENDS:=+luci-base +dcwapd
 
 PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=Carey Sonsino <csonsino@gmail.com>
+PKG_MAINTAINER:=Carey Sonsino <csonsino@gmail.com>, \
+	Paul Donald <newtwen+github@gmail.com>
 
 include ../../luci.mk
 
