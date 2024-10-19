@@ -109,7 +109,7 @@ return view.extend({
 		o = s.taboption('general', widgets.NetworkSelect, 'mmifacename',
 			_('Name of ModemManager Interface'), 
 			_("Applies to Ping Reboot and Restart Interface modes</i> <br /> If using ModemManager, \
-				you can have Watchcat restart your ModemManger interface by specifying its name."));
+				you can have Watchcat restart your ModemManager interface by specifying its name."));
 		o.depends({ mode: 'restart_iface' });
 		o.optional = true;
 
