@@ -31,6 +31,10 @@ return network.registerProtocol('dslite', {
 		return null;
 	},
 
+	getGatewayAddr: function () {
+		return this.get('peeraddr');
+	},
+
 	containsDevice: function(ifname) {
 		return (network.getIfnameOf(ifname) == this.getIfname());
 	},
