@@ -29,6 +29,18 @@ callDHCPLeases = rpc.declare({
 	expect: { '': {} }
 });
 
+var callNetworkDevices = rpc.declare({
+	object: 'luci-rpc',
+	method: 'getNetworkDevices',
+	expect: { '': {} }
+});
+
+var listServices = rpc.declare({
+	object: 'service',
+	method: 'list',
+	expect: { '': {} }
+});
+
 CBILeaseStatus = form.DummyValue.extend({
 	renderWidget: function(section_id, option_id, cfgvalue) {
 		return E([
@@ -278,6 +290,8 @@ return view.extend({
 			callDUIDHints(),
 			getDHCPPools(),
 			network.getNetworks(),
+			callNetworkDevices(),
+			listServices(),
 			uci.load('firewall')
 		]);
 	},
@@ -288,11 +302,15 @@ return view.extend({
 		    duids = hosts_duids_pools[1],
 		    pools = hosts_duids_pools[2],
 		    networks = hosts_duids_pools[3],
-		    m, s, o, ss, so, dnss;
+		    m, s, o, ss, so, dnss, tagstab;
+
+		var devices  = Object.keys(L.toArray(hosts_duids_pools[4])[0]);
+		var services = Object.keys(L.toArray(hosts_duids_pools[5])[0]);
 
 		let noi18nstrings = {
 			etc_hosts: '<code>/etc/hosts</code>',
 			etc_ethers: '<code>/etc/ethers</code>',
+			exclamationmark_invert: '<code>!</code>',
 			localhost_v6: '<code>::1</code>',
 			loopback_slash_8_v4: '<code>127.0.0.0/8</code>',
 			not_found: '<code>Not found</code>',
@@ -304,6 +322,18 @@ return view.extend({
 			reverse_arpa: '<code>*.IN-ADDR.ARPA,*.IP6.ARPA</code>',
 			servers_file_entry01: '<code>server=1.2.3.4</code>',
 			servers_file_entry02: '<code>server=/domain/1.2.3.4</code>',
+			tagcodestring:'<code>tag</code>',
+			tag_named_ov_string: '<code>option(6):&lt;opt-name&gt;,[&lt;value&gt;[,&lt;value&gt;]]</code>',
+
+			//match tags
+			dhcp_option_code: '<code>option(6)</code>',
+			dhcp_optioncolon_code: '<code>option(6):</code>',
+			dhcp_option_client_arch: '<code>option:client-arch,6</code>',
+			dhcp_value_code: '<code>,value</code>',
+			tag_match_code_name: '<code>match</code>',
+			tag_match_option_syntax: '<code>&lt;option number&gt;|option:&lt;option name&gt;[,&lt;value&gt;]</code>',
+			tag_name_efi_ia32: '<code>efi-ia32</code>',
+			wildcard_code: '<code>*</code>',
 
 		};
 
@@ -367,6 +397,7 @@ return view.extend({
 		s.tab('ipsets', _('IP Sets'));
 		s.tab('relay', _('Relay'));
 		s.tab('pxe_tftp', _('PXE/TFTP'));
+		s.tab('tagsparent', _('Tags'));
 
 		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
@@ -1172,6 +1203,170 @@ return view.extend({
 		so = ss.option(form.Flag, 'dns',
 			_('Forward/reverse DNS'),
 			_('Add static forward and reverse DNS entries for this host.'));
+
+
+
+		o = s.taboption('tagsparent', form.SectionValue, '__tagsparent__', form.TypedSection, '__tagsparent__');
+
+		tagstab = o.subsection;
+
+		tagstab.anonymous = true;
+		tagstab.cfgsections = function() { return [ '__tagsparent__' ] };
+
+		tagstab.tab('mac', _('MAC'));
+		tagstab.tab('matchtags', _('Match Tags'));
+		tagstab.tab('vc', _('VC'));
+		tagstab.tab('uc', _('UC'));
+		tagstab.tab('settags', _('Set Tags'));
+
+
+		o = tagstab.taboption('mac', form.SectionValue, '__mac__', form.TableSection, 'mac', null,
+			_('MAC hardware addresses uniquely identify clients to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new MAC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit MAC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'mac', _('MAC match'));
+		so.validate = isValidMAC;
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('Set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+
+		o = tagstab.taboption('matchtags', form.SectionValue, '__tags__', form.TableSection, 'tag', null,
+			customi18n( _('A {tagcodestring} is an alphanumeric label. dnsmasq applies chosen DHCP options when a specific {tagcodestring} is encountered.')) + '<br />' +
+			customi18n( _('In other words: "This {tagcodestring} gets these {tag_named_ov_string}".')) + '<br />' +
+			customi18n( _('Note: invalid {tag_named_ov_string} combinations may cause dnsmasq to silently crash.')) + '<br /><br />' +
+			customi18n( _('Prepend a {tagcodestring} with {exclamationmark_invert} to invert their domain of application, e.g. to send options to a host lacking a {tagcodestring}.') ) + '<br /><br />' +
+			customi18n( _('Use the %s Button to add a new {tagcodestring}.').format( _('<em>Add</em>') ) ) );
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit tag');
+		ss.rowcolors = true;
+
+		so = ss.option(form.DynamicList, 'dhcp_option',
+			_('Apply these DHCP Options...'),
+			_('Options to be added for this tag.'));
+		so.rmempty = true;
+		so.optional = true;
+		so.placeholder = '3,192.168.10.1,10.10.10.1';
+
+		so = ss.option(form.Value, 'tag', _('...To this matching Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		so.placeholder = 'specialgateways';
+		so.validate = function(section, value) {
+			for (var i = 0, l = devices.length; i < l; i++) {
+				if (devices[i] == value)
+					return _('Tag name %s must not match any active device name').format(value);
+			}
+			for (var i = 0, l = services.length; i < l; i++) {
+				if (services[i] == value)
+					return _('Tag name %s must not match any service name').format(value);
+			}
+			return true;
+		};
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		o = tagstab.taboption('vc', form.SectionValue, '__vc__', form.TableSection, 'vendorclass', null,
+			_('Match Vendor Class (VC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new VC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit VC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'vendorclass', _('Match this Vendor Class'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('In order to set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		o = tagstab.taboption('uc', form.SectionValue, '__uc__', form.TableSection, 'userclass', null,
+			_('Match User Class (UC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new UC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit UC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'userclass', _('Match this User Class'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('In order to set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		o = tagstab.taboption('settags', form.SectionValue, '__settags__', form.TableSection, 'match', null,
+			customi18n( _('Encountering chosen DHCP {dhcp_option_code}s (or also its {dhcp_value_code}) from clients triggers dnsmasq to set alphanumeric {tagcodestring}s.')) + '<br />' +
+			customi18n( _('In other words: "{tag_match_code_name} these {dhcp_option_code}s to set this {tagcodestring}" or "These {dhcp_option_code}s set this {tagcodestring}".')) + '<br />' +
+			customi18n( _('Internally, these configuration entries are called {tag_match_code_name}.')) + '<br />' +
+			customi18n( _('Matching option syntax: {tag_match_option_syntax}.')) + ' ' +
+			customi18n( _('Prefix named (IPv6) options with {dhcp_optioncolon_code}.')) + ' ' +
+			customi18n( _('Wildcards ({wildcard_code}) allowed.')) + '<br /><br />' +
+			customi18n( _('Match {dhcp_option_client_arch}, Tag {tag_name_efi_ia32}, sets tag {tag_name_efi_ia32}')) + ' ' +
+			_('when number %s appears in the list of architectures sent by the client in option %s.').format('<code>6</code>', '<code>93</code>') + '<br />' +
+			customi18n( _('Use the %s Button to add a new {tag_match_code_name}.').format(_('<em>Add</em>'))) );
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit Match');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'match', _('Match this client option(+value)'));
+		so.rmempty = false;
+		so.optional = false;
+		so.placeholder = '61,8c:80:90:01:02:03';
+
+		so = ss.option(form.Value, 'networkid', _('In order to Set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		so.placeholder = 'myuniqueclientid'
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
 
 		o = s.taboption('leases', CBILeaseStatus, '__status__');
 
