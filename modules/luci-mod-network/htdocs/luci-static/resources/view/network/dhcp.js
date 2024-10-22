@@ -385,6 +385,7 @@ return view.extend({
 
 
 		s.tab('general', _('General'));
+		s.tab('cache', _('Cache'));
 		s.tab('devices', _('Devices &amp; Ports'));
 		s.tab('dnsrecords', _('DNS Records'));
 		s.tab('dnssecopt', _('DNSSEC'));
@@ -397,6 +398,17 @@ return view.extend({
 		s.tab('ipsets', _('IP Sets'));
 		s.tab('relay', _('Relay'));
 		s.tab('pxe_tftp', _('PXE/TFTP'));
+
+		o = s.taboption('cache', form.MultiValue, 'cache_rr',
+			_('Cache arbitrary RR'), _('By default, dnsmasq caches A, AAAA, CNAME and SRV DNS record types.') + '<br/>' +
+			_('This option adds additional record types to the cache.'));
+		o.optional = true;
+		o.create = true;
+		o.multiple = true;
+		o.display_size = 5;
+		recordtypes.forEach(r => {
+			o.value(r);
+		});
 
 		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
