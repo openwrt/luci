@@ -394,7 +394,7 @@ var ValidatorFactory = baseclass.extend({
 			if (this.value.length <= 253)
 				return this.assert(
 					(this.value.match(/^[a-zA-Z0-9_]+$/) != null ||
-						(this.value.match(/^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]$/) &&
+						(this.value.match(/^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]\.?$/) &&
 						 this.value.match(/[^0-9.]/))) &&
 					(!strict || !this.value.match(/^_/)),
 					_('valid hostname'));
