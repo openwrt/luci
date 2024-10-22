@@ -984,7 +984,10 @@ function handleOpkg(ev)
 				_('Waiting for the <em>opkg %h</em> command to complete…').format(cmd))
 		]);
 
-		var argv = [ cmd, '--force-removal-of-dependent-packages' ];
+		var argv = [ cmd ];
+
+		if (cmd == 'remove')
+			argv.push('--force-removal-of-dependent-packages')
 
 		if (rem && rem.checked)
 			argv.push('--autoremove');
