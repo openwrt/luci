@@ -17,9 +17,10 @@
 		},
 		"write": {
 			"file": {
+				"/usr/libexec/opkg-call install": [ "exec" ],
 				"/usr/libexec/opkg-call install *": [ "exec" ],
 				"/usr/libexec/opkg-call remove *": [ "exec" ],
-				"/usr/libexec/opkg-call update *": [ "exec" ],
+				"/usr/libexec/opkg-call update": [ "exec" ],
 				"/etc/opkg.conf": [ "write" ],
 				"/etc/opkg/*.conf": [ "write" ],
 				"/tmp/upload.ipk": [ "write" ]
