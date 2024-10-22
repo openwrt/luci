@@ -307,6 +307,36 @@ return view.extend({
 
 		};
 
+		const recordtypes = [
+			'ANY',
+			'A',
+			'AAAA',
+			'ALIAS',
+			'CAA',
+			'CERT',
+			'CNAME',
+			'DS',
+			'HINFO',
+			'HIP',
+			'HTTPS',
+			'KEY',
+			'LOC',
+			'MX',
+			'NAPTR',
+			'NS',
+			'OPENPGPKEY',
+			'PTR',
+			'RP',
+			'SIG',
+			'SOA',
+			'SRV',
+			'SSHFP',
+			'SVCB',
+			'TLSA',
+			'TXT',
+			'URI',
+		]
+
 		function customi18n(template, values) {
 			if (!values)
 				values = noi18nstrings;
@@ -647,6 +677,16 @@ return view.extend({
 			_('Filter IPv4 A records'),
 			_('Remove IPv4 addresses from the results and only return IPv6 addresses.'));
 		o.optional = true;
+
+		o = s.taboption('filteropts', form.MultiValue, 'filter_rr',
+			_('Filter arbitrary RR'), _('Removes records of the specified type(s) from answers.'));
+		o.optional = true;
+		o.create = true;
+		o.multiple = true;
+		o.display_size = 5;
+		recordtypes.forEach(r => {
+			o.value(r);
+		});
 
 		s.taboption('filteropts', form.Flag, 'localise_queries',
 			_('Localise queries'),
