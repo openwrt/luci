@@ -4116,6 +4116,14 @@ var CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.protot
 	},
 
 	/**
+	 * Allows custom value entry in addition to those already specified.
+	 *
+	 * @name LuCI.form.MultiValue.prototype#create
+	 * @type boolean
+	 * @default null
+	 */
+
+	/**
 	 * Allows to specify the [display_items]{@link LuCI.ui.Dropdown.InitOptions}
 	 * property of the underlying dropdown widget. If omitted, the value of
 	 * the `size` property is used or `3` when `size` is unspecified as well.
@@ -4146,6 +4154,7 @@ var CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.protot
 			multiple: true,
 			optional: this.optional || this.rmempty,
 			select_placeholder: this.placeholder,
+			create: this.create,
 			display_items: this.display_size || this.size || 3,
 			dropdown_items: this.dropdown_size || this.size || -1,
 			validate: L.bind(this.validate, this, section_id),
