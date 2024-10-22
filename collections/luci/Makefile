@@ -13,7 +13,7 @@ LUCI_TITLE:=LuCI interface with Uhttpd as Webserver (default)
 LUCI_DESCRIPTION:=Standard OpenWrt set including package management and attended sysupgrades support
 LUCI_DEPENDS:= \
 	+luci-light \
-	+luci-app-opkg
+	+luci-app-package-manager
 
 PKG_LICENSE:=Apache-2.0
 
