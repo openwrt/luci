@@ -1230,7 +1230,7 @@ return view.extend({
 				var pr = network.getProtocol(proto.formvalue(section_id), value),
 				    ifname = pr.isVirtual() ? '%s-%s'.format(pr.getProtocol(), value) : 'br-%s'.format(value);
 
-				if (value.length > 15)
+				if (ifname.length > 15)
 					return _('The interface name is too long');
 
 				return true;
