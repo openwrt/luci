@@ -79,10 +79,10 @@ return view.extend({
 			s.anonymous = true;
 			s.addremove = false;
 
-			o = s.option(form.RichListValue, "offloading_type", _("Offloading type"));
+			o = s.option(form.RichListValue, "offloading_type", _("Flow offloading type"));
 			o.value('0', _("None"));
-			o.value('1', _("Software offloading"), _('Software based offloading for routing with/without NAT.'));
-			o.value('2', _("Hardware offloading"), _('Hardware based offloading for routing with/without NAT. Requires hardware support.'));
+			o.value('1', _("Software flow offloading"), _('Software based offloading for routing/NAT.'));
+			o.value('2', _("Hardware flow offloading"), _('Hardware based offloading for routing with/without NAT.') + ' ' + _(' Requires hardware NAT support.'));
 			o.optional = false;
 			o.load = function (section_id) {
 				var flow_offloading = uci.get('firewall', section_id, 'flow_offloading');
