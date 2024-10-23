@@ -264,39 +264,6 @@ function has_sourcefilter(proto) {
 	return false;
 }
 
-var cbiRichListValue = form.ListValue.extend({
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var choices = this.transformChoices();
-		var widget = new ui.Dropdown((cfgvalue != null) ? cfgvalue : this.default, choices, {
-			id: this.cbid(section_id),
-			sort: this.keylist,
-			optional: true,
-			select_placeholder: this.select_placeholder || this.placeholder,
-			custom_placeholder: this.custom_placeholder || this.placeholder,
-			validate: L.bind(this.validate, this, section_id),
-			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
-		});
-
-		return widget.render();
-	},
-
-	value: function(value, title, description) {
-		if (description) {
-			form.ListValue.prototype.value.call(this, value, E([], [
-				E('span', { 'class': 'hide-open' }, [ title ]),
-				E('div', { 'class': 'hide-close', 'style': 'min-width:25vw' }, [
-					E('strong', [ title ]),
-					E('br'),
-					E('span', { 'style': 'white-space:normal' }, description)
-				])
-			]));
-		}
-		else {
-			form.ListValue.prototype.value.call(this, value, title);
-		}
-	}
-});
-
 return view.extend({
 	poll_status: function(map, networks) {
 		var resolveZone = null;
@@ -829,8 +796,9 @@ return view.extend({
 					};
 
 
-					so = ss.taboption('ipv6', cbiRichListValue, 'ra', _('<abbr title="Router Advertisement">RA</abbr>-Service'),
+					so = ss.taboption('ipv6', form.RichListValue, 'ra', _('<abbr title="Router Advertisement">RA</abbr>-Service'),
 						_('Configures the operation mode of the <abbr title="Router Advertisement">RA</abbr> service on this interface.'));
+					so.optional = true;
 					so.value('', _('disabled'),
 						_('Do not send any <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> messages on this interface.'));
 					so.value('server', _('server mode'),
@@ -840,8 +808,9 @@ return view.extend({
 					so.value('hybrid', _('hybrid mode'), ' ');
 
 
-					so = ss.taboption('ipv6-ra', cbiRichListValue, 'ra_default', _('Default router'),
+					so = ss.taboption('ipv6-ra', form.RichListValue, 'ra_default', _('Default router'),
 						_('Configures the default router advertisement in <abbr title="Router Advertisement">RA</abbr> messages.'));
+					so.optional = true;
 					so.value('', _('automatic'),
 						_('Announce this device as default router if a local IPv6 default route is present.'));
 					so.value('1', _('on available prefix'),
@@ -857,8 +826,9 @@ return view.extend({
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 
-					so = ss.taboption('ipv6-ra', cbiRichListValue, 'ra_flags', _('<abbr title="Router Advertisement">RA</abbr> Flags'),
+					so = ss.taboption('ipv6-ra', form.RichListValue, 'ra_flags', _('<abbr title="Router Advertisement">RA</abbr> Flags'),
 						_('Specifies the flags sent in <abbr title="Router Advertisement">RA</abbr> messages, for example to instruct clients to request further information via stateful DHCPv6.'));
+					so.optional = true;
 					so.value('managed-config', _('managed config (M)'),
 						_('The <em>Managed address configuration</em> (M) flag indicates that IPv6 addresses are available via DHCPv6.'));
 					so.value('other-config', _('other config (O)'),
@@ -951,8 +921,9 @@ return view.extend({
 					};
 
 
-					so = ss.taboption('ipv6', cbiRichListValue, 'dhcpv6', _('DHCPv6-Service'),
+					so = ss.taboption('ipv6', form.RichListValue, 'dhcpv6', _('DHCPv6-Service'),
 						_('Configures the operation mode of the DHCPv6 service on this interface.'));
+					so.optional = true;
 					so.value('', _('disabled'),
 						_('Do not offer DHCPv6 service on this interface.'));
 					so.value('server', _('server mode'),
@@ -1016,8 +987,9 @@ return view.extend({
 					so.depends('dhcpv6', 'server');
 					so.depends({ dhcpv6: 'hybrid', master: '0' });
 
-					so = ss.taboption('ipv6', cbiRichListValue, 'ndp', _('<abbr title="Neighbour Discovery Protocol">NDP</abbr>-Proxy'),
+					so = ss.taboption('ipv6', form.RichListValue, 'ndp', _('<abbr title="Neighbour Discovery Protocol">NDP</abbr>-Proxy'),
 						_('Configures the operation mode of the NDP proxy service on this interface.'));
+					so.optional = true;
 					so.value('', _('disabled'),
 						_('Do not proxy any <abbr title="Neighbour Discovery Protocol">NDP</abbr> packets.'));
 					so.value('relay', _('relay mode'),
