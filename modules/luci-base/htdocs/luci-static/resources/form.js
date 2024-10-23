@@ -3920,6 +3920,135 @@ var CBIListValue = CBIValue.extend(/** @lends LuCI.form.ListValue.prototype */ {
 });
 
 /**
+ * @class RichListValue
+ * @memberof LuCI.form
+ * @augments LuCI.form.ListValue
+ * @hideconstructor
+ * @classdesc
+ *
+ * The `RichListValue` class implements a simple static HTML select element
+ * allowing the user to choose a single value from a set of predefined choices.
+ * Each choice may contain a tertiary, more elaborate description.
+ * It builds upon the {@link LuCI.form.ListValue} widget.
+ *
+ * @param {LuCI.form.Map|LuCI.form.JSONMap} form
+ * The configuration form this section is added to. It is automatically passed
+ * by [option()]{@link LuCI.form.AbstractSection#option} or
+ * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
+ * option to the section.
+ *
+ * @param {LuCI.form.AbstractSection} section
+ * The configuration section this option is added to. It is automatically passed
+ * by [option()]{@link LuCI.form.AbstractSection#option} or
+ * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
+ * option to the section.
+ *
+ * @param {string} option
+ * The name of the UCI option to map.
+ *
+ * @param {string} [title]
+ * The title caption of the option element.
+ *
+ * @param {string} [description]
+ * The description text of the option element.
+ */
+var CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.prototype */ {
+	__name__: 'CBI.RichListValue',
+
+	__init__: function() {
+		this.super('__init__', arguments);
+		this.widget = 'select';
+		this.orientation = 'horizontal';
+		this.deplist = [];
+	},
+
+	/**
+	 * Set the orientation of the underlying radio or checkbox elements.
+	 *
+	 * May be one of `horizontal` or `vertical`. Only applies to non-select
+	 * widget types.
+	 *
+	 * @name LuCI.form.RichListValue.prototype#orientation
+	 * @type string
+	 * @default horizontal
+	 */
+
+	/**
+	 * Set the size attribute of the underlying HTML select element.
+	 *
+	 * @name LuCI.form.RichListValue.prototype#size
+	 * @type number
+	 * @default null
+	 */
+
+	/**
+	 * Set the type of the underlying form controls.
+	 *
+	 * May be one of `select` or `radio`. If set to `select`, an HTML
+	 * select element is rendered, otherwise a collection of `radio`
+	 * elements is used.
+	 *
+	 * @name LuCI.form.RichListValue.prototype#widget
+	 * @type string
+	 * @default select
+	 */
+
+	 /** @private */
+	renderWidget: function(section_id, option_index, cfgvalue) {
+		var choices = this.transformChoices();
+		var widget = new ui.Dropdown((cfgvalue != null) ? cfgvalue : this.default, choices, {
+			id: this.cbid(section_id),
+			size: this.size,
+			sort: this.keylist,
+			widget: this.widget,
+			optional: this.optional,
+			orientation: this.orientation,
+			select_placeholder: this.select_placeholder || this.placeholder,
+			custom_placeholder: this.custom_placeholder || this.placeholder,
+			validate: L.bind(this.validate, this, section_id),
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
+		});
+
+		return widget.render();
+	},
+
+	/**
+	 * Add a predefined choice to the form option. By adding one or more
+	 * choices, the plain text input field is turned into a combobox widget
+	 * which prompts the user to select a predefined choice, or to enter a
+	 * custom value.
+	 *
+	 * @param {string} key
+	 * The choice value to add.
+	 *
+	 * @param {Node|string} val
+	 * The caption for the choice value. May be a DOM node, a document fragment
+	 * or a plain text string. If omitted, the `key` value is used as caption.
+	 * 
+	 * @param {Node|string} description
+	 * The description text of the choice value. May be a DOM node, a document
+	 * fragment or a plain text string. If omitted, the value element is
+	 * implemented as a simple ListValue entry.
+	 * 
+	 */
+	value: function(value, title, description) {
+		if (description) {
+			CBIListValue.prototype.value.call(this, value, E([], [
+				E('span', { 'class': 'hide-open' }, [ title ]),
+				E('div', { 'class': 'hide-close', 'style': 'min-width:25vw' }, [
+					E('strong', [ title ]),
+					E('br'),
+					E('span', { 'style': 'white-space:normal' }, description)
+				])
+			]));
+		}
+		else {
+			CBIListValue.prototype.value.call(this, value, title);
+		}
+	}
+});
+
+/**
  * @class FlagValue
  * @memberof LuCI.form
  * @augments LuCI.form.Value
@@ -4838,6 +4967,7 @@ return baseclass.extend(/** @lends LuCI.form.prototype */ {
 	Value: CBIValue,
 	DynamicList: CBIDynamicList,
 	ListValue: CBIListValue,
+	RichListValue: CBIRichListValue,
 	Flag: CBIFlagValue,
 	MultiValue: CBIMultiValue,
 	TextValue: CBITextValue,
