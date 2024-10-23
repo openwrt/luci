@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: ListValue</title>
+    <title>Class: RichListValue</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -3619,7 +3619,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="LuCI.form.ListValue.html">Class: ListValue</h1>
+        <h1 class="page-title" data-filename="LuCI.form.RichListValue.html">Class: RichListValue</h1>
         
 
 
@@ -3630,12 +3630,13 @@
     <h2>
         <span class="ancestors"><a href="LuCI.html">LuCI</a><a href="LuCI.form.html">.form</a>.</span>
     
-    ListValue
+    RichListValue
     </h2>
     
-        <div class="class-description"><p>The <code>ListValue</code> class implements a simple static HTML select element
+        <div class="class-description"><p>The <code>RichListValue</code> class implements a simple static HTML select element
 allowing the user to choose a single value from a set of predefined choices.
-It builds upon the <a href="LuCI.ui.Select.html"><code>LuCI.ui.Select</code></a> widget.</p></div>
+Each choice may contain a tertiary, more elaborate description.
+It builds upon the <a href="LuCI.form.ListValue.html"><code>LuCI.form.ListValue</code></a> widget.</p></div>
     
 </header>  
 
@@ -3647,14 +3648,14 @@ It builds upon the <a href="LuCI.ui.Select.html"><code>LuCI.ui.Select</code></a>
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="ListValue">
+        <h4 class="name" id="RichListValue">
             
-            new LuCI.form.ListValue<span class="signature">(form, section, option, <span class="optional">title</span>, <span class="optional">description</span>)</span>
+            new LuCI.form.RichListValue<span class="signature">(form, section, option, <span class="optional">title</span>, <span class="optional">description</span>)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3830">line 3830</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3922">line 3922</a>
         </div>
         
     </div>
@@ -3892,7 +3893,7 @@ option to the section.</p></td>
         <h3 class="subsection-title">Extends</h3>
         
         <ul>
-            <li><a href="LuCI.form.Value.html">LuCI.form.Value</a></li>
+            <li><a href="LuCI.form.ListValue.html">LuCI.form.ListValue</a></li>
         </ul>
     
     
@@ -4372,6 +4373,56 @@ or selected by the user.</p>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="orientation">orientation<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Set the orientation of the underlying radio or checkbox elements.</p>
+<p>May be one of <code>horizontal</code> or <code>vertical</code>. Only applies to non-select
+widget types.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>horizontal</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="password">password<span class="type-signature type boolean">boolean</span> </h4>
     </div>
     
@@ -4622,6 +4673,54 @@ dependency constraints.</p>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="size">size<span class="type-signature type number">number</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Set the size attribute of the underlying HTML select element.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="uciconfig">uciconfig<span class="type-signature type string">string</span> </h4>
     </div>
     
@@ -4812,6 +4911,57 @@ option element is marked as invalid.</p>
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="widget">widget<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Set the type of the underlying form controls.</p>
+<p>May be one of <code>select</code> or <code>radio</code>. If set to <code>select</code>, an HTML
+select element is rendered, otherwise a collection of <code>radio</code>
+elements is used.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>select</li></ul></dd>
     
     
     
@@ -7366,8 +7516,10 @@ was neither a string nor a function.</td>
         
             
 <dt>
-    <div class="nameContainer">
+    <div class="nameContainer inherited">
         <h4 class="name" id="value">
+            
+                <span class="inherited"><a href="LuCI.form.ListValue.html#value">inherited</a></span>
             
             value<span class="signature">(key, val, description)</span>
         </h4>
