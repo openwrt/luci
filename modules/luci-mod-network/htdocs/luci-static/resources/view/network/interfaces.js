@@ -1467,6 +1467,9 @@ return view.extend({
 			case '8021ad':
 				return '8021ad';
 
+			case 'bonding':
+				return 'bonding';
+
 			case 'bridge':
 				return 'bridge';
 
@@ -1498,6 +1501,9 @@ return view.extend({
 
 			case '8021ad':
 				return _('VLAN (802.1ad)');
+
+			case 'bonding':
+				return _('Aggregation device');
 
 			case 'bridge':
 				return _('Bridge device');
