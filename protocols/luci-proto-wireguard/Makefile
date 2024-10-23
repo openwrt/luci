@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Support for WireGuard VPN
-LUCI_DEPENDS:=+wireguard-tools +ucode +luci-lib-uqr
+LUCI_DEPENDS:=+wireguard-tools +ucode +luci-lib-uqr +resolveip
 LUCI_PKGARCH:=all
 
 PKG_LICENSE:=Apache-2.0
