@@ -11,7 +11,7 @@ var pkg = {
 		return "pbr";
 	},
 	get ReadmeCompat() {
-		return "1.1.7-21";
+		return "1.1.7-29";
 	},
 	get URL() {
 		return (
@@ -260,10 +260,21 @@ var status = baseclass.extend({
 						"The principal package (pbr) is outdated, please update it"
 					),
 					warningBadNftCallsInUserFile: _(
-						"Incompatible nft calls detected in user include file, disabling fw4 nft file support."
+						"Incompatible nft calls detected in user include file, disabling fw4 nft file support"
 					),
 					warningDnsmasqInstanceNoConfdir: _(
-						"Dnsmasq instance (%s) targeted in settings, but it doesn't have its own confdir."
+						"Dnsmasq instance (%s) targeted in settings, but it doesn't have its own confdir"
+					),
+					warningDhcpLanForce: _(
+						_(
+							"Please set 'dhcp.lan.force=1' to speed up service start-up %s(more info)%s"
+						).format(
+							"<a href='" +
+								pkg.URL +
+								"#Warning:Pleasesetdhcp.lan.force1" +
+								"' target='_blank'>",
+							"</a>"
+						)
 					),
 				};
 				var warningsTitle = E(
@@ -284,7 +295,7 @@ var status = baseclass.extend({
 						text += _("Unknown warning") + "<br />";
 					}
 				});
-				var warningsText = E("div", {}, text);
+				var warningsText = E("div", { class: "cbi-value-description" }, text);
 				var warningsField = E(
 					"div",
 					{ class: "cbi-value-field" },
@@ -421,7 +432,7 @@ var status = baseclass.extend({
 					'<a href="' + pkg.URL + '" target="_blank">',
 					"</a>!<br />"
 				);
-				var errorsText = E("div", {}, text);
+				var errorsText = E("div", { class: "cbi-value-description" }, text);
 				var errorsField = E("div", { class: "cbi-value-field" }, errorsText);
 				errorsDiv = E("div", { class: "cbi-value" }, [
 					errorsTitle,
