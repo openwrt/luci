@@ -13,6 +13,8 @@ LUCI_DEPENDS:=+luci-base
 
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 
+PKG_PROVIDES:=luci-app-opkg
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
