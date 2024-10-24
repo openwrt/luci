@@ -862,7 +862,13 @@ return view.extend({
 
 					o = s.taboption('advanced', form.Value, 'ip_script',
 						_("Script"),
-						_("User defined script to read systems IP-Address"));
+						_("Executable script, command or ash compatible statement to read systems IP-Address.")
+						+ "<br />" +
+						_("Using dig: `dig -4 +short myip.opendns.com @resolver1.opendns.com`")
+						+ "<br />" +
+						_("Using wget: `wget -q -O- 'https://api64.ipify.org'`")
+						+ "<br />" +
+						_("Using custom shell script: `/etc/config/getipv4.sh`"));
 					o.modalonly = true;
 					o.depends("ip_source", "script")
 					o.placeholder = "/path/to/script.sh"
