@@ -74,7 +74,7 @@ return view.extend({
 					'data-tab-title': multiple ? title : null,
 					'data-plugin': plugin,
 					'data-plugin-instance': plugin_instance,
-					'data-is-index': i ? null : true,
+					'data-is-index': i || render_instances.length == 1 ? null : true,
 					'cbi-tab-active': function(ev) { activeInstance = ev.target.getAttribute('data-plugin-instance') }
 				}, blobs.map(function(blob) {
 					return E('img', {
