@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-10-08 11:44+0000\n"
-"Last-Translator: Wu Ming <lf3108626969@gmail.com>\n"
+"PO-Revision-Date: 2024-10-09 09:27+0000\n"
+"Last-Translator: try496 <pinghejk@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsrp-pppoe-server/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -18,13 +18,13 @@ msgstr "访问集中器名称"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:41
 msgid "Both Interface"
-msgstr ""
+msgstr "双接口"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:106
 msgid ""
 "Causes <code>pppoe</code> to exit if no session traffic is detected for %s "
 "seconds."
-msgstr "如果在%s秒内没有检测到会话流量，导致<code>pppoe</code>退出。"
+msgstr "如果检测到在 %s 秒内没有会话流量，则使 <code>pppoe</code> 退出。"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:34
 msgid "Client Interface"
@@ -32,11 +32,11 @@ msgstr "客户端接口"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:56
 msgid "Default: 5000"
-msgstr "默认值:5000"
+msgstr "默认值: 5000"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:66
 msgid "Default: 600"
-msgstr "默认值:600"
+msgstr "默认值: 600"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:61
 msgid "Default: 64"
@@ -44,7 +44,7 @@ msgstr "默认值: 64"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:50
 msgid "Default: hostname"
-msgstr "默认值: hostname"
+msgstr "默认值：主机名"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:53
 msgid ""
@@ -52,11 +52,13 @@ msgid ""
 "the PADO frame. The first one specifies the default service, and is used if "
 "the PPPoE client requests a Service-Name of length zero."
 msgstr ""
+"每一项都会在 PADO 帧中的 Service-Name 标签内广播相应的服务。第一项指定了默认"
+"服务，如果 PPPoE 客户端请求的 Service-Name 长度为零，则会使用该默认服务。"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:25
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:25
 msgid "Enabled"
-msgstr ""
+msgstr "已启用"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:40
 msgid "First remote IP"
@@ -75,17 +77,20 @@ msgid ""
 "If specified as <code>0.0.0.0</code> remote IP allocation will be delegated "
 "to <code>pppd</code>"
 msgstr ""
+"如果指定为 <code>0.0.0.0</code>，则远程IP地址的分配将委托给 <code>pppd</code>"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:33
 msgid ""
 "If specified as <code>0.0.0.0</code> the selection of local IP address is "
 "delegated to <code>pppd</code>"
 msgstr ""
+"如果指定为 <code>0.0.0.0</code>，则本地 IP 地址的选择将委托给 <code>pppd</"
+"code>"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid ""
 "Instead of numbering PPPoE sessions starting at 1, numbering starts at %s"
-msgstr ""
+msgstr "PPPoE 会话的编号不是从 1 开始，而是从 %s 开始"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:27
 msgid "Interface"
@@ -95,7 +100,7 @@ msgstr "接口"
 msgid ""
 "Interface from which to relay. Only PPPoE clients may be connected to this "
 "interface."
-msgstr ""
+msgstr "用于中继的接口。只有 PPPoE 客户端可以连接到此接口。"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:27
 msgid "Interface on which to listen."
@@ -105,17 +110,17 @@ msgstr "要监听的接口。"
 msgid ""
 "Interface on which to listen. Only PPPoE servers may be connected to this "
 "interface."
-msgstr ""
+msgstr "监听的接口。只有 PPPoE 服务器可以连接到此接口。"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:41
 msgid ""
 "Interface upon which to listen and to relay. Both PPPoE clients and servers "
 "may be connected to this interface."
-msgstr ""
+msgstr "在此接口上监听和转发。PPPoE 客户端和服务器都可以连接到此接口。"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:94
 msgid "Invokes <code>pppd</code> with the unit flag"
-msgstr ""
+msgstr "使用单元标志调用 <code>pppd</code>"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:115
 msgid "MSS"
@@ -123,16 +128,16 @@ msgstr "MSS"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:115
 msgid "Max Segment Size"
-msgstr ""
+msgstr "最大分段大小"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:53
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:58
 msgid "Maximum Sessions"
-msgstr ""
+msgstr "最大会话数"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:58
 msgid "Maximum concurrent sessions"
-msgstr ""
+msgstr "最大并发会话数"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:66
 msgid "Maximum sessions per peer"
@@ -140,12 +145,12 @@ msgstr "每个对等节点的最大会话数"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:70
 msgid "No limit"
-msgstr ""
+msgstr "无限制"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:65
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:110
 msgid "No timeout"
-msgstr ""
+msgstr "无超时"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid "Offset"
@@ -157,11 +162,11 @@ msgstr "配置文件"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid "PPP Offset"
-msgstr ""
+msgstr "PPP 偏移"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:19
 msgid "PPPoE Relay Configuration"
-msgstr ""
+msgstr "PPPoE 中继配置"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:19
 msgid "PPPoE Server Configuration"
@@ -169,7 +174,7 @@ msgstr "PPPoE 服务器配置"
 
 #: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:14
 msgid "RP PPPoE Relay"
-msgstr ""
+msgstr "RP PPPoE 中继"
 
 #: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:3
 msgid "RP PPPoE Server"
@@ -181,15 +186,15 @@ msgstr "随机会话选择"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:124
 msgid "Reduces CPU usage, but may cause a race condition on slow CPUs"
-msgstr ""
+msgstr "降低 CPU 使用率，但在较慢的 CPU 上可能会导致竞态条件"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:21
 msgid "Relay Configuration"
-msgstr ""
+msgstr "中继配置"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:18
 msgid "Roaring Penguin PPPoE Relay"
-msgstr ""
+msgstr "Roaring Penguin PPPoE 中继"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:18
 msgid "Roaring Penguin PPPoE Server"
@@ -201,7 +206,7 @@ msgstr "服务器配置"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:27
 msgid "Server Interface"
-msgstr ""
+msgstr "服务器接口"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:53
 msgid "Service Name"
@@ -209,11 +214,11 @@ msgstr "服务名称"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:124
 msgid "Synchronous PPP encapsulation"
-msgstr ""
+msgstr "同步 PPP 封装"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:89
 msgid "Tells the PPPoE server to randomly permute session numbers."
-msgstr ""
+msgstr "告诉 PPPoE 服务器随机排列会话编号。"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:61
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:106
@@ -227,4 +232,4 @@ msgstr "单元"
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:48
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:76
 msgid "Use Non-UCI Config"
-msgstr ""
+msgstr "使用非 UCI 配置"
