@@ -34,12 +34,12 @@ msgstr ""
 "%{src?%{dest?Ar Aghaidh:Isteach}:Amach} %{ipv6?%{ipv4?<var>IPv4</var> agus "
 "<var>IPv6</var>:<var>IPv6</var>} :<var>IPv4</var>}%{proto?, prótacal "
 "%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
-"name} <span class=\"cbi-tooltip\">ICMP le cineálacha %{item.types#%{next?, "
-"}<var>%{item}</var>}</span>:<var>% {item.name}</var>}}} %{mark?, marcáil "
-"<var %{mark.inv? data-tooltip=\"Meaitseáil fwmarks seachas %{mark.num}%{"
-"mark.mask? le masc %{mark.mask}}.\": %{mark.mask? data-tooltip=\"Masc fwmark "
-"luach le %{mark.mask} roimh chur i gcomparáid.\"}}> %{mark.val}</var>} %{"
-"dscp?, DSCP %{dscp.inv?<var data-tooltip = \"Meaitseáil aicmithe DSCP "
+"name} <span class=\"cbi-tooltip\">ICMP le cineálacha %{item.types#%{next?, }"
+"<var>%{item}</var>}</span>:<var>% {item.name}</var>}}} %{mark?, marcáil <var "
+"%{mark.inv? data-tooltip=\"Meaitseáil fwmarks seachas %{mark.num}%{mark."
+"mask? le masc %{mark.mask}}.\": %{mark.mask? data-tooltip=\"Masc fwmark "
+"luach le %{mark.mask} roimh chur i gcomparáid.\"}}> %{mark.val}</var>} "
+"%{dscp?, DSCP %{dscp.inv?<var data-tooltip = \"Meaitseáil aicmithe DSCP "
 "seachas %{dscp.num?: %{dscp.name}}\"> %{dscp.val}</var>: <var> %{dscp.val}</"
 "var> }} %{ cúntóir?, cúntóir %{helper.inv?<var data-tooltip=\"Meaitseáil "
 "cúntóir ar bith seachas &quot;%{helper.name}&quot;\"> %{helper.val}</var>:"
@@ -65,8 +65,8 @@ msgstr "1024"
 msgid ""
 "<var data-tooltip=\"ACCEPT\">Accept</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"AGCEPT\">Glac le</var> "
-"%{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"AGCEPT\">Glac le</var> %{src?%{dest?forward:input}:"
+"output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:93
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
@@ -90,7 +90,8 @@ msgstr ""
 msgid ""
 "<var data-tooltip=\"DSCP\">Assign DSCP</var> classification <var>%{set_dscp}"
 "</var>"
-msgstr "<var data-tooltip=\"DSCP\">Sann DSCP</var> rangú <var>%{set_dscp}</var>"
+msgstr ""
+"<var data-tooltip=\"DSCP\">Sann DSCP</var> rangú <var>%{set_dscp}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:127
 msgid ""
@@ -118,24 +119,24 @@ msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?forward:input}:"
 "output}"
 msgstr ""
-"<var data-tooltip=\"NOTRACK\">Ná rianaigh</var> "
-"%{src?%{dest?forward:input}:output}"
+"<var data-tooltip=\"NOTRACK\">Ná rianaigh</var> %{src?%{dest?forward:input}:"
+"output}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:121
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
 msgstr ""
-"<var data-tooltip=\"REJECT\">Diúltaigh</var> "
-"%{src?%{dest?forward:input}:aschur}"
+"<var data-tooltip=\"REJECT\">Diúltaigh</var> %{src?%{dest?forward:input}:"
+"aschur}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:87
 msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"SNAT\">Athscríobh go statach</var> chuig foinse %{"
-"snat_ip?IP <var> %{snat_ip}</var>} %{snat_port?port <var> %{snat_port}</var "
-">}"
+"<var data-tooltip=\"SNAT\">Athscríobh go statach</var> chuig foinse "
+"%{snat_ip?IP <var> %{snat_ip}</var>} %{snat_port?port <var> %{snat_port}</"
+"var >}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:305
 msgid "A rewrite IP must be specified!"
@@ -153,7 +154,7 @@ msgstr "GLACADH - Díchumasaigh athscríobh seoltaí"
 msgid "Action"
 msgstr "Gníomhaíocht"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:316
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:322
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone destination "
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
@@ -163,14 +164,14 @@ msgstr ""
 "rangú, m.sh. <code> -p tcp --dport 443</code> chun trácht HTTPS amach a "
 "mheaitseáil amháin."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:306
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:312
 msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
-"Argóintí breise amh <em>iptables</em> chun trácht foinse crios a rangú, "
-"m.sh. <code> -p tcp --sport 443</code> chun trácht HTTPS isteach a "
-"mheaitseáil amháin."
+"Argóintí breise amh <em>iptables</em> chun trácht foinse crios a rangú, m."
+"sh. <code> -p tcp --sport 443</code> chun trácht HTTPS isteach a mheaitseáil "
+"amháin."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
 msgid "Address family, Internal IP address must match"
@@ -187,19 +188,19 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:161
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:181
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:108
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:114
 msgid "Advanced Settings"
 msgstr "Socruithe chun cinn"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:277
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:283
 msgid "Allow \"invalid\" traffic"
 msgstr "Ceadaigh trácht “neamhbhailí”"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:379
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:385
 msgid "Allow forward from <em>source zones</em>:"
 msgstr "Ceadaigh ar aghaidh ó <em>criosanna foinse</em>:"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:338
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:344
 msgid "Allow forward to <em>destination zones</em>:"
 msgstr "Ceadaigh ar aghaidh chuig <em>criosanna</em>:"
 
@@ -232,11 +233,11 @@ msgstr "Cuir an rang nó an luach DSCP a thugtar i bhfeidhm ar naisc bhunaithe."
 msgid "Assign the specified connection tracking helper to matched traffic."
 msgstr "Sann an cúntóir rianaithe nasc sonraithe le trácht comhoiriúnach."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:280
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:286
 msgid "Automatic helper assignment"
 msgstr "Sannadh cúntóir uathoi"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:280
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:286
 msgid ""
 "Automatically assign conntrack helpers based on traffic protocol and port"
 msgstr ""
@@ -248,11 +249,11 @@ msgstr ""
 msgid "Comment"
 msgstr "Trácht"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:109
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:115
 msgid "Conntrack Settings"
 msgstr "Socruithe Conntrack"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:284
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:290
 msgid "Conntrack helpers"
 msgstr "Cúntóirí Conntrack"
 
@@ -268,15 +269,15 @@ msgstr "Lean ar aghaidh"
 msgid "Counters"
 msgstr "Áiritheoirí"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:225
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:231
 msgid "Covered devices"
 msgstr "Feistí clúdaithe"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:177
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:183
 msgid "Covered networks"
 msgstr "Líonraí clúdaithe"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:230
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
 msgid "Covered subnets"
 msgstr "Fo-líontaí clúdaithe"
 
@@ -325,7 +326,7 @@ msgstr "Crios ceann scríbe"
 msgid "Device name"
 msgstr "Ainm gléas"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:277
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:283
 msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
@@ -352,11 +353,11 @@ msgstr "Cumasaigh NAT Loopback"
 msgid "Enable SYN-flood protection"
 msgstr "Cumasaigh cosaint tuilte Sync"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:290
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:296
 msgid "Enable logging on this zone"
 msgstr "Cumasaigh logáil ar an gcrios seo"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:162
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:168
 msgid ""
 "Enable network address and port translation IPv4 (NAT4 or NAPT4) for "
 "outbound traffic on this zone. This is typically enabled on the <em>wan</em> "
@@ -366,7 +367,7 @@ msgstr ""
 "haghaidh tráchta amach sa chrios seo. Is gnách é seo a chumasú sa chrios "
 "<em>wan</em>."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:237
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:243
 msgid ""
 "Enable network address and port translation IPv6 (NAT6 or NAPT6) for "
 "outbound traffic on this zone."
@@ -390,9 +391,10 @@ msgstr "Ag súil le: %s"
 msgid "Experimental feature. Not fully compatible with QoS/SQM."
 msgstr "Gné turgnamhach. Ní hiomlán comhoiriúnach le QOS/méadar cearnach."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:284
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:290
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
-msgstr "Roghnaíonn sé go sainráite cúntóirí rianaithe nasc ceadaithe do thrácht"
+msgstr ""
+"Roghnaíonn sé go sainráite cúntóirí rianaithe nasc ceadaithe do thrácht"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:273
 msgid "External IP address"
@@ -408,15 +410,15 @@ msgstr "Calafort seachtrach"
 msgid "Extra arguments"
 msgstr "Argóintí breise"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:316
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:322
 msgid "Extra destination arguments"
 msgstr "Argóintí scríbe breise"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:110
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:116
 msgid "Extra iptables arguments"
 msgstr "Argóintí breise iptables"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:306
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:312
 msgid "Extra source arguments"
 msgstr "Argóintí foinse breise"
 
@@ -456,6 +458,10 @@ msgstr "Balla dóiteáin - Socruithe Crios"
 msgid "Firewall configuration migration"
 msgstr "Imirce cumraíochta dóiteáin"
 
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:82
+msgid "Flow offloading type"
+msgstr ""
+
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:64
 msgid "Forward"
 msgstr "Ar aghaidh"
@@ -469,12 +475,12 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
-"Curtha ar aghaidh %{ipv6?%{ipv4?<var>IPv4</var> agus "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{ proto? , prótacal "
-"%{proto#%{ar aghaidh?, }<var>%{item.name}</var> }} %{mark?, marc <var %{"
-"mark.inv? data-tooltip=\"Meaitseáil fwmarks seachas %{mark.num}%{mark.mask? "
-"le masc %{mark.mask}}.\": %{mark.mask? data-tooltip=\"Masc luach fwmark le "
-"%{mark.mask} roimh chomparáid a dhéanamh.\"}}> %{mark.val}</var>}"
+"Curtha ar aghaidh %{ipv6?%{ipv4?<var>IPv4</var> agus <var>IPv6</var>:"
+"<var>IPv6</var>}:<var>IPv4</var>}%{ proto? , prótacal %{proto#%{ar "
+"aghaidh?, }<var>%{item.name}</var> }} %{mark?, marc <var %{mark.inv? data-"
+"tooltip=\"Meaitseáil fwmarks seachas %{mark.num}%{mark.mask? le masc %{mark."
+"mask}}.\": %{mark.mask? data-tooltip=\"Masc luach fwmark le %{mark.mask} "
+"roimh chomparáid a dhéanamh.\"}}> %{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:484
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:357
@@ -491,9 +497,9 @@ msgid ""
 msgstr ""
 "Ó %{src}%{src_device?, comhéadan <var>%{src_device}</var>} %{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Meaitseáil seoltaí IP ach "
-"amháin %{item.val}.\"}> %{item.ival}</var> }} %{src_port?, port %{src_port#%{"
-" Next?, }<var% {mír.inv? data-tooltip=\"Meaitseáil poirt seachas %{item.val}."
-"\"}> %{item.ival}</var>}}"
+"amháin %{item.val}.\"}> %{item.ival}</var> }} %{src_port?, port "
+"%{src_port#%{ Next?, }<var% {mír.inv? data-tooltip=\"Meaitseáil poirt "
+"seachas %{item.val}.\"}> %{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:64
 msgid ""
@@ -508,12 +514,12 @@ msgid ""
 msgstr ""
 "Ó %{src}%{src_device?, comhéadan <var>%{src_device}</var>} %{src_ip?, IP "
 "%{src_ip#%{next?, }<var%{item.inv? data-tooltip=\"Meaitseáil seoltaí IP ach "
-"amháin %{item.val}.\"}> %{item.ival}</var> }} %{src_port?, port %{src_port#%{"
-" Next?, }<var% {mír.inv? data-tooltip=\"Meaitseáil poirt seachas %{item.val}."
-"\"}> %{item.ival}</var> }} %{src_mac?, MAC %{src_mac#%{next?, }<var %{ "
-"mír.inv? data-tooltip=\"Meaitseáil MAC seachas %{item.val}%{item.hint.name? "
-"a.k.a. %{item.hint.name}}.\": %{item.hint.name? data-tooltip=\"%{item.hint."
-"name}\" }}> %{item.ival}</var>}}"
+"amháin %{item.val}.\"}> %{item.ival}</var> }} %{src_port?, port "
+"%{src_port#%{ Next?, }<var% {mír.inv? data-tooltip=\"Meaitseáil poirt "
+"seachas %{item.val}.\"}> %{item.ival}</var> }} %{src_mac?, MAC "
+"%{src_mac#%{next?, }<var %{ mír.inv? data-tooltip=\"Meaitseáil MAC seachas "
+"%{item.val}%{item.hint.name? a.k.a. %{item.hint.name}}.\": %{item.hint.name? "
+"data-tooltip=\"%{item.hint.name}\" }}> %{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:52
 msgid ""
@@ -525,19 +531,20 @@ msgid ""
 "%{item.val}%{item.hint.name? a.k.a. %{item.hint.name}}.\":%{item.hint.name? "
 "data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 msgstr ""
-"Ó %{src}%{src_ip?, IP %{src_ip#%{ar aghaidh?, }<var %{item.inv? data-tooltip="
-"\"Meaitseáil seoltaí IP ach amháin %{item.val}.\"}> %{item.ival}</var> }} %{"
-"src_port?, port %{src_port#%{ Next?, }<var% {mír.inv? data-tooltip="
-"\"Meaitseáil poirt seachas %{item.val}.\"}> %{item.ival}</var> }} %{"
-"src_mac?, MAC %{src_mac#%{next?, }<var %{ mír.inv? data-tooltip=\"Meaitseáil "
-"MAC seachas %{item.val}%{item.hint.name? a.k.a. %{item.hint.name}}.\": %{"
-"item.hint.name? data-tooltip=\"%{item.hint.name}\" }}> %{item.ival}</var>}}"
+"Ó %{src}%{src_ip?, IP %{src_ip#%{ar aghaidh?, }<var %{item.inv? data-"
+"tooltip=\"Meaitseáil seoltaí IP ach amháin %{item.val}.\"}> %{item.ival}</"
+"var> }} %{src_port?, port %{src_port#%{ Next?, }<var% {mír.inv? data-"
+"tooltip=\"Meaitseáil poirt seachas %{item.val}.\"}> %{item.ival}</var> }} "
+"%{src_mac?, MAC %{src_mac#%{next?, }<var %{ mír.inv? data-"
+"tooltip=\"Meaitseáil MAC seachas %{item.val}%{item.hint.name? a.k.a. %{item."
+"hint.name}}.\": %{item.hint.name? data-tooltip=\"%{item.hint.name}\" }}> "
+"%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:160
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:181
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:180
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:41
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:107
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:113
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:17
 msgid "General Settings"
 msgstr "Socruithe Ginearálta"
@@ -546,7 +553,11 @@ msgstr "Socruithe Ginearálta"
 msgid "Grant access to firewall configuration"
 msgstr "Rochtain a dheonú ar chumraíocht dóiteáin"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:88
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
+msgid "Hardware based offloading for routing with/without NAT."
+msgstr ""
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
 msgid "Hardware flow offloading"
 msgstr "Díluchtú sreafa crua-earraí"
 
@@ -574,14 +585,14 @@ msgstr "IPv4"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:190
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:279
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:218
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:250
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:256
 msgid "IPv4 and IPv6"
 msgstr "IPv4 agus IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:191
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:280
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:219
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:251
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:257
 msgid "IPv4 only"
 msgstr "IPv4 amháin"
 
@@ -589,14 +600,14 @@ msgstr "IPv4 amháin"
 msgid "IPv6"
 msgstr "IPv6"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:242
 msgid "IPv6 Masquerading"
 msgstr "Mascaradh IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:192
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:281
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:220
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:252
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:258
 msgid "IPv6 only"
 msgstr "IPv6 amháin"
 
@@ -621,24 +632,24 @@ msgid ""
 "any helper except &quot;%{helper.name}&quot;\">%{helper.val}</var>:<var data-"
 "tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"Ag teacht isteach %{ipv6?%{ipv4?<var>IPv4</var> agus "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{ proto? , prótacal "
+"Ag teacht isteach %{ipv6?%{ipv4?<var>IPv4</var> agus <var>IPv6</var>:"
+"<var>IPv6</var>}:<var>IPv4</var>}%{ proto? , prótacal "
 "%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item."
-"name}<span class=\"cbi-tooltip\">ICMP le cineálacha % {item.types#%{next?, "
-"}<var>%{item}</var>}</span></var>: <var>%{item.name}</var> }}} %{ marc?, "
+"name}<span class=\"cbi-tooltip\">ICMP le cineálacha % {item.types#%{next?, }"
+"<var>%{item}</var>}</span></var>: <var>%{item.name}</var> }}} %{ marc?, "
 "marcáil <var %{mark.inv? data-tooltip=\"Meaitseáil fwmarks seachas %{mark."
 "num}%{mark.mask? le masc %{mark.mask}}.\": %{mark.mask? data-tooltip=\"Masc "
-"fwmark luach le %{mark.mask} roimh chur i gcomparáid.\"}}> %{mark.val}</var>}"
-" %{helper?, cúntóir %{helper.inv?<var data-tooltip = \"Meaitseáil cúntóir ar "
-"bith ach amháin &quot;%{helper.name}&quot;\"> %{helper.val}</var>:<var data-"
-"tooltip=\"%{helper.name}\"> %{helper.val} </var> }}"
+"fwmark luach le %{mark.mask} roimh chur i gcomparáid.\"}}> %{mark.val}</"
+"var>} %{helper?, cúntóir %{helper.inv?<var data-tooltip = \"Meaitseáil "
+"cúntóir ar bith ach amháin &quot;%{helper.name}&quot;\"> %{helper.val}</var>:"
+"<var data-tooltip=\"%{helper.name}\"> %{helper.val} </var> }}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:179
 msgid "Initial Hash Size"
 msgstr "Méid Hash Tosaigh"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:145
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
 msgid "Input"
 msgstr "Ionchur"
 
@@ -654,7 +665,7 @@ msgstr "Port inmheánach"
 msgid "Internal zone"
 msgstr "Crios inmheánach"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:147
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:153
 msgid "Intra zone forward"
 msgstr "Intra chrios ar aghaidh"
 
@@ -674,7 +685,7 @@ msgstr "Ainm tacar neamhbhailí"
 msgid "Limit burst"
 msgstr "Pléascadh teorainn"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:293
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:299
 msgid "Limit log messages"
 msgstr "Teachtaireachtaí logála teorainn"
 
@@ -692,8 +703,8 @@ msgstr ""
 "Teorainn a mheaitseáil le <var>%{limit.num}</var> paicéad in aghaidh an "
 "<var>%{limit.unit}</var> %{limit.burst? pléasctha <var>%{limit.burst}</var>}"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:169
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:244
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:175
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:250
 msgid "Limited masquerading enabled"
 msgstr "Cumasaithe masquerading teoranta"
 
@@ -709,11 +720,11 @@ msgstr "Foinse Loopback IP"
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
 msgstr "MASQUERADE - Athscríobh go huathoibríoch chuig IP comhéadan amach"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:174
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:180
 msgid "MSS clamping"
 msgstr "Clampáil MSS"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:161
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:167
 msgid "Masquerading"
 msgstr "Masquerating"
 
@@ -840,13 +851,17 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:51
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:209
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:188
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:123
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:129
 msgid "Name"
 msgstr "Ainm"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:165
 msgid "Netmask"
 msgstr "Líonmasc"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
+msgid "None"
+msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:274
 msgid "Only match incoming traffic directed at the given IP address."
@@ -879,7 +894,7 @@ msgid "Outbound zone"
 msgstr "Crios amach"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:63
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:146
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:152
 msgid "Output"
 msgstr "Aschur"
 
@@ -906,7 +921,7 @@ msgstr ""
 msgid "Passes additional arguments to iptables. Use with care!"
 msgstr "Cuireann argóintí breise chuig iptables. Úsáid go cúramach!"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:303
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:309
 msgid ""
 "Passing raw iptables arguments to source and destination traffic "
 "classification rules allows to match packets based on other criteria than "
@@ -966,22 +981,22 @@ msgstr "Féach do Sraith Seachtrach"
 msgid "Reflection zones"
 msgstr "Criosanna machnaimh"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:89
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
 msgid "Requires hardware NAT support."
 msgstr "Teastaíonn tacaíocht NAT crua-earraí."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:266
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:272
 msgid "Restrict Masquerading to given destination subnets"
 msgstr "Masquerading a theorannú go fo-líontaí ceann scríbe ar leith"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:255
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:261
 msgid "Restrict Masquerading to given source subnets"
 msgstr "Masquerading a theorannú le fo-líontaí foinse ar leith"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:187
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:276
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:215
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:249
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:255
 msgid "Restrict to address family"
 msgstr "Cuir srian le dul i ngleic le"
 
@@ -1030,10 +1045,10 @@ msgstr ""
 "leagtha amach sa masc a mhodhnú."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:84
-msgid "Software based offloading for routing/NAT"
-msgstr "Díluchtú bunaithe ar bhogearraí le haghaidh Routa/NAT"
+msgid "Software based offloading for routing/NAT."
+msgstr ""
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:84
 msgid "Software flow offloading"
 msgstr "Díluchtú sreafa bogearraí"
 
@@ -1123,8 +1138,8 @@ msgstr ""
 "Cruthaíonn an balla dóiteáin criosanna thar do chomhéadain líonra chun "
 "sreabhadh tráchta líonra a rialú."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:221
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:334
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:227
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:340
 msgid ""
 "The options below control the forwarding policies between this zone (%s) and "
 "other zones. <em>Destination zones</em> cover forwarded traffic "
@@ -1141,7 +1156,7 @@ msgstr ""
 "m.sh. ní <em>ní</em>déanann ar aghaidh ó lan go wan cead a thabhairt ar "
 "aghaidh ó wan go lan freisin."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:119
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:125
 msgid ""
 "This section defines common properties of %q. The <em>input</em> and "
 "<em>output</em> options set the default policies for traffic entering and "
@@ -1187,8 +1202,8 @@ msgid ""
 "<var%{item.inv? data-tooltip=\"Match ports except %{item.val}.\"}>%{item."
 "ival}</var>}}"
 msgstr ""
-"Chuig %{dest}%{dest_device?, comhéadan <var>%{dest_device}</var>} %{"
-"dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Meaitseáil "
+"Chuig %{dest}%{dest_device?, comhéadan <var>%{dest_device}</var>} "
+"%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Meaitseáil "
 "seoltaí IP seachas %{item.val}.\"}> %{item.ival}</var> }} %{dest_port?, port "
 "%{dest_port#%{ Next?, }<var% {mír.inv? data-tooltip=\"Meaitseáil poirt "
 "seachas %{item.val}.\"}> %{item.ival}</var>}}"
@@ -1201,8 +1216,8 @@ msgid ""
 "%{dest_port#%{next?, }<var%{item.inv? data-tooltip=\"Match ports except "
 "%{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
-"Chuig %{dest}%{dest_device?, trí chomhéadan <var>%{dest_device}</var>} %{"
-"dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Meaitseáil "
+"Chuig %{dest}%{dest_device?, trí chomhéadan <var>%{dest_device}</var>} "
+"%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip=\"Meaitseáil "
 "seoltaí IP seachas %{item.val}.\"}> %{item.ival}</var> }} %{dest_port?, port "
 "%{dest_port#%{ Next?, }<var% {mír.inv? data-tooltip=\"Meaitseáil poirt "
 "seachas %{item.val}.\"}> %{item.ival}</var>}}"
@@ -1215,9 +1230,9 @@ msgid ""
 "tooltip=\"Match ports except %{item.val}.\"}>%{item.ival}</var>}}"
 msgstr ""
 "Chuig %{dest}%{dest_ip?, IP %{dest_ip#%{ar aghaidh?, }<var %{item.inv? data-"
-"tooltip=\"Meaitseáil seoltaí IP seachas %{item.val}.\"}> %{item.ival}</var> "
-"}} %{dest_port?, port %{dest_port#%{ Next?, }<var% {mír.inv? data-tooltip="
-"\"Meaitseáil poirt seachas %{item.val}.\"}> %{item.ival}</var>}}"
+"tooltip=\"Meaitseáil seoltaí IP seachas %{item.val}.\"}> %{item.ival}</"
+"var> }} %{dest_port?, port %{dest_port#%{ Next?, }<var% {mír.inv? data-"
+"tooltip=\"Meaitseáil poirt seachas %{item.val}.\"}> %{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:438
 msgid "Tracking helper"
@@ -1279,7 +1294,7 @@ msgstr "Riail gan ainmniú"
 msgid "Unnamed set"
 msgstr "Sraith gan ainmniú"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:124
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:130
 msgid "Unnamed zone"
 msgstr "Crios gan ainm"
 
@@ -1311,7 +1326,7 @@ msgstr "Úsáid seoladh IP inmheánach"
 msgid "Use ipset"
 msgstr "Úsáid ipset"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:225
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:231
 msgid ""
 "Use this option to classify zone traffic by raw, non-<em>uci</em> managed "
 "network devices."
@@ -1319,7 +1334,7 @@ msgstr ""
 "Úsáid an rogha seo chun trácht crios a rangú de réir gairis líonra amha, "
 "nach bhfuil á mbainistiú ag <em>uci</em>."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:230
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:236
 msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
@@ -1357,11 +1372,11 @@ msgstr "Ní ritheann do ghléas firewall4."
 msgid "Your device runs firewall4."
 msgstr "Ritheann do ghléas firewall4."
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:137
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:143
 msgid "Zone ⇒ Forwardings"
 msgstr "Crios ⇒ Seoladh"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:95
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:101
 msgid "Zones"
 msgstr "Criosanna"
 
@@ -1375,7 +1390,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:414
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:70
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:153
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:159
 msgid "accept"
 msgstr "glacadh le"
 
@@ -1464,7 +1479,7 @@ msgstr "ná rianú"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:413
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:69
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:152
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:158
 msgid "drop"
 msgstr "titim"
 
@@ -1503,7 +1518,8 @@ msgstr "ip[/cidr]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:144
 msgid "ip[/cidr]<br />For use with Match datatypes: <code>*_ip</code>."
-msgstr "ip[/cidr]<br />Le húsáid le cineálacha sonraí Match: <code>*_ip</code>."
+msgstr ""
+"ip[/cidr]<br />Le húsáid le cineálacha sonraí Match: <code>*_ip</code>."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:69
 msgid "ipv4"
@@ -1537,7 +1553,7 @@ msgstr "calafort: Port"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:415
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:68
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:157
 msgid "reject"
 msgstr "diúltú"
 
@@ -1580,9 +1596,9 @@ msgstr "src_port: Port Foinse"
 msgid "this device"
 msgstr "an gléas seo"
 
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:118
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:220
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:333
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:124
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:226
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:339
 msgid "this new zone"
 msgstr "an crios nua seo"
 
@@ -1602,3 +1618,6 @@ msgstr "suas go dtí 65536 iontráil."
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:339
 msgid "valid firewall mark"
 msgstr "marc balla dóiteáin bailí"
+
+#~ msgid "Software based offloading for routing/NAT"
+#~ msgstr "Díluchtú bunaithe ar bhogearraí le haghaidh Routa/NAT"
