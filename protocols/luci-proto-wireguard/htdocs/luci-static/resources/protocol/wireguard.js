@@ -210,6 +210,7 @@ return network.registerProtocol('wireguard', {
 		ss.addbtntitle = _('Add peer');
 		ss.nodescriptions = true;
 		ss.modaltitle = _('Edit peer');
+		ss.sortable = true;
 
 		ss.handleDragConfig = function(ev) {
 			ev.stopPropagation();
