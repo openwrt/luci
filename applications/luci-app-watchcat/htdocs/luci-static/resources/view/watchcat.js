@@ -57,7 +57,7 @@ return view.extend({
 		o.depends({ mode: "run_script" });
 
 		o = s.taboption('general', form.ListValue, 'addressfamily',
-				_('Address family for pinging the host'));
+			_('Address family for pinging the host'));
 		o.default = 'any';
 		o.depends({ mode: 'ping_reboot' });
 		o.depends({ mode: 'restart_iface' });
@@ -66,8 +66,16 @@ return view.extend({
 		o.value('ipv4');
 		o.value('ipv6');
 
-		o = s.taboption('general', form.Value, 'pingperiod', 
-			_('Check Interval'), 
+		o = s.taboption('general', form.Value, 'pingtimeout',
+			_('Ping timeout'),
+			_("Time in second to wait for ping response. (default: 10s)<br />The default unit is seconds, without a suffix."));
+		o.default = '10s';
+		o.depends({ mode: "ping_reboot" });
+		o.depends({ mode: "restart_iface" });
+		o.depends({ mode: "run_script" });
+
+		o = s.taboption('general', form.Value, 'pingperiod',
+			_('Check Interval'),
 			_("How often to ping the host specified above. \
 				<br /><br />The default unit is seconds, without a suffix, but you can use the suffix <b>m</b> for minutes, <b>h</b> for hours or <b>d</b> for days. <br /><br /> \
 				Examples:<ul><li>10 seconds would be: <b>10</b> or <b>10s</b></li><li>5 minutes would be: <b>5m</b></li><li>1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></li><ul>"));
