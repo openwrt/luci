@@ -83,7 +83,7 @@ return baseclass.extend({
 				E('th', { 'class': 'th nowrap' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('SSID')),
 				E('th', { 'class': 'th', 'width': '45%' }, _('Signal Strength')),
-				E('th', { 'class': 'th' }, 'Transferred %s / %s'.format( _('Up.'), _('Down.')))
+				E('th', { 'class': 'th' }, _('Transferred') + ' %s / %s'.format( _('Up.'), _('Down.')))
 			])
 		]);
 
@@ -205,8 +205,10 @@ return baseclass.extend({
 					name = hosthints.getHostnameByMACAddr(bss.mac);
 
 				var progress_style;
+				var defaultNF = -90; // default noise floor for devices that do not report it
+				var defaultCeil = -30;
 				// var q = Math.min((bss.signal + 110) / 70 * 100, 100);
-				var q = 100 * ((bss.signal - bss.noise) / (-30 - bss.noise));
+				var q = 100 * ((bss.signal - (bss.noise ? bss.noise: defaultNF) ) / (defaultCeil - (bss.noise ? bss.noise : defaultNF)));
 
 				if (q == 0 || q < 25)
 					progress_style = 'bg-danger';
