@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=OPKG package management application
 LUCI_DEPENDS:=+opkg
 
+PKG_PROVIDES:=luci-app-package-manager
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
