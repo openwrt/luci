@@ -521,9 +521,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 		if (hwval != null) {
 			this.useBandOption = false;
 
-			if (/be/.test(mode.value))
-				band.value = '6g';
-			else if (/ax/.test(mode.value))
+			if (/a/.test(hwval))
 				band.value = '5g';
 			else
 				band.value = '2g';
