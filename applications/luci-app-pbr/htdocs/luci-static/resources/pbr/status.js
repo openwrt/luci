@@ -11,7 +11,7 @@ var pkg = {
 		return "pbr";
 	},
 	get ReadmeCompat() {
-		return "1.1.7-29";
+		return "1.1.7-39";
 	},
 	get URL() {
 		return (
@@ -267,7 +267,7 @@ var status = baseclass.extend({
 					),
 					warningDhcpLanForce: _(
 						_(
-							"Please set 'dhcp.lan.force=1' to speed up service start-up %s(more info)%s"
+							"Please set 'dhcp.%%s.force=1' to speed up service start-up %s(more info)%s"
 						).format(
 							"<a href='" +
 								pkg.URL +
@@ -409,6 +409,9 @@ var status = baseclass.extend({
 					errorDefaultFw4TableMissing: _("Default fw4 table '%s' is missing"),
 					errorDefaultFw4ChainMissing: _("Default fw4 chain '%s' is missing"),
 					errorRequiredBinaryMissing: _("Required binary '%s' is missing"),
+					errorInterfaceRoutingUnknownDevType: _(
+						"Unknown IPv6 Link type for device '%s'"
+					),
 				};
 				var errorsTitle = E(
 					"label",
