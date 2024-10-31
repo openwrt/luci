@@ -261,9 +261,7 @@ var status = baseclass.extend({
 							"The %s failed to discover WAN gateway"
 						).format(pkg.Name),
 						errorOutputDirCreate: _("Failed to create directory for %s file"),
-						errorOutputFileCreate: _("Failed to create '%s' file").format(
-							outputFile
-						),
+						errorOutputFileCreate: _("Failed to create '%s' file"),
 						errorFailDNSReload: _("Failed to restart/reload DNS resolver"),
 						errorSharedMemory: _("Failed to access shared memory"),
 						errorSorting: _("Failed to sort data file"),
@@ -304,6 +302,10 @@ var status = baseclass.extend({
 						errorTooLittleRam: _(
 							"Free ram (%s) is not enough to process all enabled block-lists"
 						),
+						errorCreatingBackupFile: _("failed to create backup file %s"),
+						errorDeletingDataFile: _("failed to delete data file %s"),
+						errorRestoringBackupFile: _("failed to restore backup file %s"),
+						errorNoOutputFile: _("failed to create final block-list %s"),
 					};
 					var errorsTitle = E(
 						"label",
