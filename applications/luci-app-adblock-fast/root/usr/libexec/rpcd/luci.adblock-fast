@@ -14,7 +14,7 @@
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "pause" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "stop" }'
 
-readonly luciCompat='2'
+readonly luciCompat='3'
 readonly adbFunctionsFile='/etc/init.d/adblock-fast'
 if [ -s "$adbFunctionsFile" ]; then
 # shellcheck source=../../../../../adblock-fast/files/etc/init.d/adblock-fast
