@@ -2,7 +2,12 @@
 	"luci-app-wifischedule": {
 		"description": "Grant UCI access for luci-app-wifischedule",
 		"read": {
-			"uci": [ "wifi_schedule" ]
+			"uci": [ "wifi_schedule" ],
+			"file": {
+				"/usr/bin/iwinfo": [ "read" ],
+				"/usr/bin/wifi_schedule.sh": ["exec", "read"],
+				"/sbin/wifi": ["read"]
+			}
 		},
 		"write": {
 			"uci": [ "wifi_schedule" ]
