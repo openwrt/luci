@@ -291,20 +291,24 @@ return view.extend({
 					continue;
 
 				res.channel_width = "20 MHz";
-				if (res.ht_operation != null)
-					if (res.ht_operation.channel_width == 2040) { /* 40 MHz Channel Enabled */
-						if (res.ht_operation.secondary_channel_offset == "below") {
-							res.channel_width = "40 MHz";
-							chan_width = 4; /* 40 MHz Channel Used */
-							center_channels[0] -= 2;
-						} else if (res.ht_operation.secondary_channel_offset == "above") {
-							res.channel_width = "40 MHz";
-							chan_width = 4; /* 40 MHz Channel Used */
-							center_channels[0] += 2;
-						} else {
+				if (res.ht_operation != null) {
+					/* Detect 40 MHz operation by looking for the presence of
+					 * a secondary channel. */
+					if (res.ht_operation.secondary_channel_offset == "below") {
+						res.channel_width = "40 MHz";
+						chan_width = 4; /* 40 MHz Channel Used */
+						center_channels[0] -= 2;
+					} else if (res.ht_operation.secondary_channel_offset == "above") {
+						res.channel_width = "40 MHz";
+						chan_width = 4; /* 40 MHz Channel Used */
+						center_channels[0] += 2;
+					} else {
+						/* Fallback to 20 MHz due to discovery of other APs on the
+						 * same channel (802.11n coexistence mechanism). */
+						if (res.ht_operation.channel_width == 2040)
 							res.channel_width = "20 MHz (40 MHz Intolerant)";
-						}
 					}
+				}
 
 				/* if channel_width <= 40, refer to HT (above) for actual channel width,
 				 * as vht_operation.channel_width == 40 really only means that the used
