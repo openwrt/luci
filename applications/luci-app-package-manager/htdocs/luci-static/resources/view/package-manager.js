@@ -261,6 +261,7 @@ function display(pattern)
 			btn = E('div', {
 				'class': 'btn cbi-button-positive',
 				'data-package': name,
+				'data-action': 'upgrade',
 				'click': handleInstall
 			}, _('Upgrade…'));
 		}
@@ -284,12 +285,14 @@ function display(pattern)
 				btn = E('div', {
 					'class': 'btn cbi-button-action',
 					'data-package': name,
+					'data-action': 'install',
 					'click': handleInstall
 				}, _('Install…'));
 			else if (inst.installed && inst.version != pkg.version)
 				btn = E('div', {
 					'class': 'btn cbi-button-positive',
 					'data-package': name,
+					'data-action': 'upgrade',
 					'click': handleInstall
 				}, _('Upgrade…'));
 			else
@@ -661,6 +664,7 @@ function handleReset(ev)
 function handleInstall(ev)
 {
 	var name = ev.target.getAttribute('data-package'),
+	    installcmd = ev.target.getAttribute('data-action'),
 	    pkg = packages.available.pkgs[name],
 	    depcache = {},
 	    size;
@@ -800,7 +804,7 @@ function handleInstall(ev)
 			}, _('Cancel')),
 			' ',
 			E('div', {
-				'data-command': 'install',
+				'data-command': installcmd,
 				'data-package': name,
 				'class': 'btn cbi-button-action',
 				'click': handlePkg,
@@ -872,7 +876,7 @@ function handleConfig(ev)
 				} else if (partials[i].name.match(/\.conf$/)) {
 					files.push(base_dir + '/' + partials[i].name);
 				}
-			}			
+			}
 		}
 
 		return Promise.all(files.map(function(file) {
