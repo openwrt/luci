@@ -1021,6 +1021,9 @@ function handlePkg(ev)
 		fs.exec_direct('/usr/libexec/package-manager-call', argv, 'json').then(function(res) {
 			dlg.removeChild(dlg.lastChild);
 
+			if (res.pkmcmd)
+				dlg.appendChild(E('pre', [ res.pkmcmd ]));
+
 			if (res.stdout)
 				dlg.appendChild(E('pre', [ res.stdout ]));
 
