@@ -2388,6 +2388,25 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
+	 * Query the routed IPv6 prefixes associated with the logical interface.
+	 *
+	 * @returns {null|string[]}
+	 * Returns an array of the routed IPv6 prefixes registered by the remote 
+	 * protocol handler or `null` if no prefixes are present.
+	 */
+	getIP6Prefixes: function() {
+		var prefixes = this._ubus('ipv6-prefix');
+		var rv = [];
+
+		if (Array.isArray(prefixes))
+			for (var i = 0; i < prefixes.length; i++)
+				if (L.isObject(prefixes[i]))
+					rv.push('%s/%d'.format(prefixes[i].address, prefixes[i].mask));
+
+		return rv.length > 0 ? rv: null;
+	},
+
+	/**
 	 * Query interface error messages published in `ubus` runtime state.
 	 *
 	 * Interface errors are emitted by remote protocol handlers if the setup
