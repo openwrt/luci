@@ -88,6 +88,7 @@ function render_status(node, ifc, with_device) {
 		...addEntries(_('IPv4'), changecount ? [] : ifc.getIPAddrs()),
 		...addEntries(_('IPv6'), changecount ? [] : ifc.getIP6Addrs()),
 		...addEntries(_('IPv6-PD'), changecount ? null : ifc.getIP6Prefixes?.()),
+		_('Information'), with_device ? null : (ifc.get('disabled') != '1' ? null : _('Interface disabled')),
 		_('Information'), with_device ? null : (ifc.get('auto') != '0' ? null : _('Not started on boot')),
 		...addEntries(_('Error'), ifc.getErrors()),
 		null, changecount ? E('a', {
