@@ -2635,7 +2635,7 @@
 		 *
 		 * @param {string} feature
 		 * The feature to test. For detailed list of known feature flags,
-		 * see `/modules/luci-base/root/usr/libexec/rpcd/luci`.
+		 * see `/modules/luci-base/root/usr/share/rpcd/ucode/luci`.
 		 *
 		 * @param {string} [subfeature]
 		 * Some feature classes like `hostapd` provide sub-feature flags,
