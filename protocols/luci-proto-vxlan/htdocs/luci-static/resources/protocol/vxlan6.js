@@ -157,10 +157,13 @@ return network.registerProtocol('vxlan6', {
 			return false;
 		};
 		o.write = function(section_id, value) {
-			return uci.set('network', section_id, 'tos', parseInt(value).toString(16).padStart(2, '0'));
+			if (!value) return
+			value = value === 'inherit' ? value : parseInt(value).toString(16).padStart(2, '0');
+			return uci.set('network', section_id, 'tos', value);
 		};
 		o.load = function(section_id) {
-			return parseInt(uci.get('network', section_id, 'tos'), 16).toString();
+			const value = uci.get('network', section_id, 'tos');
+			return value ? (value === 'inherit' ? value : parseInt(value, 16).toString()) : null;
 		};
 
 		o = s.taboption('advanced', form.Flag, 'rxcsum', _('Enable rx checksum'));
