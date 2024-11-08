@@ -646,8 +646,15 @@ return view.extend({
 			_('Query upstream resolvers in the order they appear in the resolv file.'));
 		o.optional = true;
 
+		o = s.taboption('files', form.Flag, 'ignore_hosts_dir',
+			_('Ignore hosts files directory'),
+			_('On: use instance specific hosts file only') + '<br/>' +
+			_('Off: use all files in the directory including the instance specific hosts file')
+		);
+		o.optional = true;
+
 		o = s.taboption('files', form.Flag, 'nohosts',
-			customi18n(_('Ignore {etc_hosts}') )
+			customi18n(_('Ignore {etc_hosts} file') )
 		);
 		o.optional = true;
 
