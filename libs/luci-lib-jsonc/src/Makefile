@@ -7,7 +7,7 @@ JSONC_LIB = jsonc.so
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LUA_CFLAGS) $(JSONC_CFLAGS) $(FPIC) -c -o $@ $<
 
 compile: $(JSONC_OBJ)
-	$(CC) $(LDFLAGS) -shared -o $(JSONC_LIB) $(JSONC_OBJ) $(JSONC_LDFLAGS)
+	$(CC) $(LDFLAGS) -shared -o $(JSONC_LIB) $(JSONC_OBJ) $(JSONC_LDFLAGS) $(FPIC)
 
 install: compile
 	mkdir -p $(DESTDIR)/usr/lib/lua/luci
