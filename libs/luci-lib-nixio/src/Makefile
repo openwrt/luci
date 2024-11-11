@@ -66,7 +66,7 @@ endif
 
 
 %.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) -c -o $@ $< 
+	$(CC) $(CPPFLAGS) $(CFLAGS) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) -c -o $@ $<
 
 ifneq ($(NIXIO_TLS),)
 tls-crypto.o: $(TLS_DEPENDS) tls-crypto.c
@@ -74,18 +74,18 @@ tls-crypto.o: $(TLS_DEPENDS) tls-crypto.c
 
 tls-context.o: $(TLS_DEPENDS) tls-context.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) $(TLS_CFLAGS) -c -o $@ tls-context.c
-	
+
 tls-socket.o: $(TLS_DEPENDS) tls-socket.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) $(TLS_CFLAGS) -c -o $@ tls-socket.c
-	
+
 axtls-compat.o: libaxtls.a axtls-compat.c
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(NIXIO_CFLAGS) $(LUA_CFLAGS) $(FPIC) $(TLS_CFLAGS) -c -o $@ axtls-compat.c
 	mkdir -p dist
 	cp -pR axtls-root/* dist/
-endif	
+endif
 
 compile: $(NIXIO_OBJ)
-	$(CC) $(LDFLAGS) $(SHLIB_FLAGS) -o $(NIXIO_SO) $(NIXIO_OBJ) $(NIXIO_LDFLAGS) $(NIXIO_LDFLAGS_POST)
+	$(CC) $(LDFLAGS) $(SHLIB_FLAGS) -o $(NIXIO_SO) $(NIXIO_OBJ) $(NIXIO_LDFLAGS) $(NIXIO_LDFLAGS_POST) $(FPIC)
 	mkdir -p dist/usr/lib/lua
 	cp $(NIXIO_SO) dist/usr/lib/lua/$(NIXIO_SO)
 
