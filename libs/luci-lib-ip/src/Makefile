@@ -7,7 +7,7 @@ IP_LIB = ip.so
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(LUA_CFLAGS) $(IP_CFLAGS) $(FPIC) -c -o $@ $<
 
 compile: $(IP_OBJ)
-	$(CC) $(LDFLAGS) -shared -o $(IP_LIB) $(IP_OBJ) $(IP_LDFLAGS)
+	$(CC) $(LDFLAGS) -shared -o $(IP_LIB) $(IP_OBJ) $(IP_LDFLAGS) $(FPIC)
 
 install: compile
 	mkdir -p $(DESTDIR)/usr/lib/lua/luci
