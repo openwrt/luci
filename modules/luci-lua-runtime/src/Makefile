@@ -13,7 +13,7 @@ clean:
 	rm -f contrib/lemon parser.so plural_formula.c plural_formula.h *.o
 
 parser.so: template_parser.o template_utils.o template_lmo.o template_lualib.o plural_formula.o
-	$(CC) $(LDFLAGS) -shared -o $@ $^
+	$(CC) $(LDFLAGS) $(FPIC) -shared -o $@ $^
 
 version.lua:
 	./mkversion.sh $@ $(LUCI_VERSION) "$(LUCI_GITBRANCH)"
