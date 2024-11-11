@@ -1378,7 +1378,12 @@
 				return node.appendChild(children);
 			}
 			else if (children !== null && children !== undefined) {
-				node.innerHTML = '' + children;
+				try {
+					node.innerHTML = '' + children;
+				} catch (error) {
+					console.error("Failed to set innerHTML:", error);
+					node.textContent = '' + children;
+				}
 				return node.lastChild;
 			}
 
