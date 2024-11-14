@@ -25,7 +25,9 @@ return view.extend({
 			return e && e[0] > 0;
 		});
 
-		m = new form.Map('network', _('Routing'), _('Routing defines over which interface and gateway a certain host or network can be reached.'));
+		m = new form.Map('network', _('Routing'), _('Routing defines over which interface and gateway a certain host or network can be reached.') +
+			'<br/>' + _('Routes go in routing tables and define the specific path to reach destinations.') +
+			'<br/>' + _('Rules determine which routing table to use, based on conditions like source address or interface.'));
 		m.tabbed = true;
 
 		for (var family = 4; family <= 6; family += 2) {
@@ -78,19 +80,21 @@ return view.extend({
 			o.datatype = (family == 6) ? 'ip6addr("nomask")' : 'ip4addr("nomask")';
 			o.placeholder = (family == 6) ? 'fe80::1' : '192.168.0.1';
 
-			o = s.taboption('advanced', form.Value, 'metric', _('Metric'), _('Specifies the route metric to use'));
+			o = s.taboption('advanced', form.Value, 'metric', _('Metric'), _('Ordinal: routes with the lowest metric match first'));
 			o.datatype = 'uinteger';
 			o.placeholder = 0;
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || E('em', _('auto'));
 			};
 
-			o = s.taboption('advanced', form.Value, 'mtu', _('MTU'), _('Defines a specific MTU for this route'));
+			o = s.taboption('advanced', form.Value, 'mtu', _('MTU'), _('Packets exceeding this value may be fragmented'));
 			o.modalonly = true;
 			o.datatype = 'and(uinteger,range(64,9000))';
 			o.placeholder = 1500;
 
-			o = s.taboption('advanced', form.Value, 'table', _('Table'), _('The rule target is a table lookup ID: a numeric table index ranging from 0 to 65535 or symbol alias declared in /etc/iproute2/rt_tables. Special aliases local (255), main (254) and default (253) are also valid'));
+			o = s.taboption('advanced', form.Value, 'table', _('Table'), _('Routing table into which to insert this rule.') + '<br/>' +
+				_('A numeric table index, or symbol alias declared in %s. Special aliases local (255), main (254) and default (253) are also valid'.format('<code>/etc/iproute2/rt_tables</code>'))
+				+ '<br/>' + _('Only interfaces using this table (via override) will use this route.'));
 			o.datatype = 'or(uinteger, string)';
 			for (var i = 0; i < rtTables.length; i++)
 				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
@@ -98,7 +102,8 @@ return view.extend({
 				return this.cfgvalue(section_id) || E('em', _('auto'));
 			};
 
-			o = s.taboption('advanced', form.Value, 'source', _('Source'), _('Specifies the preferred source address when sending to destinations covered by the target'));
+			o = s.taboption('advanced', form.Value, 'source', _('Source'), _('Specifies the preferred source address when sending to destinations covered by the target')
+				+ '<br/>' + _('This is only used if no default route matches the destination gateway'));
 			o.modalonly = true;
 			o.datatype = (family == 6) ? 'ip6addr' : 'ip4addr';
 			for (var i = 0; i < netDevs.length; i++) {
@@ -127,7 +132,7 @@ return view.extend({
 			s.tab('general', _('General Settings'));
 			s.tab('advanced', _('Advanced Settings'));
 
-			o = s.taboption('general', form.Value, 'priority', _('Priority'), _('Specifies the ordering of the IP rules'));
+			o = s.taboption('general', form.Value, 'priority', _('Priority'), _('Execution order of this IP rule: lower numbers go first'));
 			o.datatype = 'uinteger';
 			o.placeholder = 30000;
 			o.textvalue = function(section_id) {
@@ -142,34 +147,36 @@ return view.extend({
 			o.value('blackhole');
 			o.value('throw');
 
-			o = s.taboption('general', widgets.NetworkSelect, 'in', _('Incoming interface'), _('Specifies the incoming logical interface name'));
+			o = s.taboption('general', widgets.NetworkSelect, 'in', _('Incoming interface'), _('Match traffic from this interface'));
 			o.loopback = true;
 			o.nocreate = true;
 
-			o = s.taboption('general', form.Value, 'src', _('Source'), _('Specifies the source subnet to match (CIDR notation)'));
+			o = s.taboption('general', form.Value, 'src', _('Source'), _('Match traffic from this source subnet (CIDR notation)'));
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || E('em', _('any'));
 			};
 
-			o = s.taboption('general', widgets.NetworkSelect, 'out', _('Outgoing interface'), _('Specifies the outgoing logical interface name'));
+			o = s.taboption('general', widgets.NetworkSelect, 'out', _('Outgoing interface'), _('Match traffic destined to this interface'));
 			o.loopback = true;
 			o.nocreate = true;
 
-			o = s.taboption('general', form.Value, 'dest', _('Destination'), _('Specifies the destination subnet to match (CIDR notation)'));
+			o = s.taboption('general', form.Value, 'dest', _('Destination'), _('Match traffic destined to this subnet (CIDR notation)'));
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || E('em', _('any'));
 			};
 
-			o = s.taboption('general', form.Value, 'lookup', _('Table'), _('The rule target is a table lookup ID: a numeric table index ranging from 0 to 65535 or symbol alias declared in /etc/iproute2/rt_tables. Special aliases local (255), main (254) and default (253) are also valid'));
+			o = s.taboption('advanced', form.Value, 'lookup', _('Table'), _('Routing table to use for traffic matching this rule.') + '<br/>' +
+				_('A numeric table index, or symbol alias declared in %s. Special aliases local (255), main (254) and default (253) are also valid'.format('<code>/etc/iproute2/rt_tables</code>'))
+				+ '<br/>' + _('Matched traffic re-targets to an interface using this table.'));
 			o.datatype = 'or(uinteger, string)';
 			for (var i = 0; i < rtTables.length; i++)
 				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
 
-			o = s.taboption('advanced', form.Value, 'goto', _('Jump to rule'), _('The rule target is a jump to another rule specified by its priority value'));
+			o = s.taboption('advanced', form.Value, 'goto', _('Jump to rule'), _('Jumps to another rule specified by its priority value'));
 			o.modalonly = true;
 			o.datatype = 'uinteger';
 			o.placeholder = 80000;
@@ -189,7 +196,8 @@ return view.extend({
 			o.datatype = 'string';
 			o.placeholder = '1000-1005';
 
-			o = s.taboption('advanced', form.Value, 'suppress_prefixlength', _('Prefix suppressor'), _('Reject routing decisions that have a prefix length less than or equal to the specified value'));
+			o = s.taboption('advanced', form.Value, 'suppress_prefixlength', _('Prefix suppressor'), _('Reject routing decisions that have a prefix length less than or equal to the specified value')
+				+ '<br/>' + _('Prevents overly broad routes being considered. Setting 16 would consider /17, /24, /28 or more specific routes yet ignore /16, /8, /0 (default) routes'));
 			o.modalonly = true;
 			o.datatype = (family == 6) ? 'ip6prefix' : 'ip4prefix';
 			o.placeholder = (family == 6) ? 64 : 24;
