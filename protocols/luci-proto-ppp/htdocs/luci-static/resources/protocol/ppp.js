@@ -26,13 +26,13 @@ function write_keepalive(section_id, value) {
 	    f = (f_opt != null) ? +f_opt[0].formvalue(section_id) : null,
 	    i = (i_opt != null) ? +i_opt[0].formvalue(section_id) : null;
 
-	if (f == null || f == '' || isNaN(f))
-		f = 0;
+	if (f === '' || isNaN(f))
+		f = null;
 
 	if (i == null || i == '' || isNaN(i) || i < 1)
 		i = 1;
 
-	if (f > 0)
+	if (f !== null)
 		uci.set('network', section_id, 'keepalive', '%d %d'.format(f, i));
 	else
 		uci.unset('network', section_id, 'keepalive');
