@@ -54,15 +54,18 @@ jobs:
         env:
           ARCH: ${{ matrix.arch }}-${{ env.BRANCH }}
           FEEDNAME: packages_ci
+          V: s
 
       - name: Move created packages to project dir
-        run: cp bin/packages/${{ matrix.arch }}/packages_ci/*.ipk . || true
+        run: cp bin/packages/${{ matrix.arch }}/packages_ci/* . || true
 
       - name: Store packages
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.arch}}-packages
-          path: "*.ipk"
+          path: |
+            *.ipk
+            *.apk
 
       - name: Store logs
         uses: actions/upload-artifact@v4
