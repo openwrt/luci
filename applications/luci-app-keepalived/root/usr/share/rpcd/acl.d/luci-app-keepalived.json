@@ -5,12 +5,16 @@
 			"ubus" : {
 				"keepalived" : [ "*" ]
 			},
-			"uci": [ "keepalived" ]
+			"uci": [ "keepalived" ],
+			"file": {
+				"/etc/keepalived.user": [ "read" ]
+			}
 		},
 		"write" : {
 			"uci": [ "keepalived" ],
 			"file" : {
-				"/etc/keepalived/keys/*" : [ "write" ]
+				"/etc/keepalived/keys/*" : [ "write" ],
+				"/etc/keepalived.user": [ "write" ]
 			}
 		}
 	}
