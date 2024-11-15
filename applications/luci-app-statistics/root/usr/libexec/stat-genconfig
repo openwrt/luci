@@ -58,7 +58,7 @@ function parse_units(ustr) {
 
 const preprocess = {
 	RRATimespans: function(val) {
-		return join(' ', map(split(val, /\s+/), parse_units));
+		return join(' ', map(type(val) == 'array' ? val :  split(val, /\s+/), parse_units));
 	}
 };
 
