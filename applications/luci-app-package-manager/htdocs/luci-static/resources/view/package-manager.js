@@ -865,8 +865,13 @@ function handleConfig(ev)
 	fs.list(base_dir).then(function(partials) {
 		var files = [];
 
-		if (!L.hasSystemFeature('apk'))
-			files.push(base_dir + '.conf')
+		if (L.hasSystemFeature('apk')) {
+                        files.push(base_dir + '/' + 'repositories.d/customfeeds.list',
+                                   base_dir + '/' + 'repositories.d/distfeeds.list'
+                        )
+                } else {
+                        files.push(base_dir + '.conf')
+                }
 
 		for (var i = 0; i < partials.length; i++) {
 			if (partials[i].type == 'file') {
