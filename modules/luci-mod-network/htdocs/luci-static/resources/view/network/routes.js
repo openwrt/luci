@@ -93,7 +93,7 @@ return view.extend({
 			o.placeholder = 1500;
 
 			o = s.taboption('advanced', form.Value, 'table', _('Table'), _('Routing table into which to insert this rule.') + '<br/>' +
-				_('A numeric table index, or symbol alias declared in %s. Special aliases local (255), main (254) and default (253) are also valid'.format('<code>/etc/iproute2/rt_tables</code>'))
+				_('A numeric table index, or symbol alias declared in %s. Special aliases local (255), main (254) and default (253) are also valid').format('<code>/etc/iproute2/rt_tables</code>')
 				+ '<br/>' + _('Only interfaces using this table (via override) will use this route.'));
 			o.datatype = 'or(uinteger, string)';
 			for (var i = 0; i < rtTables.length; i++)
@@ -170,7 +170,7 @@ return view.extend({
 			};
 
 			o = s.taboption('advanced', form.Value, 'lookup', _('Table'), _('Routing table to use for traffic matching this rule.') + '<br/>' +
-				_('A numeric table index, or symbol alias declared in %s. Special aliases local (255), main (254) and default (253) are also valid'.format('<code>/etc/iproute2/rt_tables</code>'))
+				_('A numeric table index, or symbol alias declared in %s. Special aliases local (255), main (254) and default (253) are also valid').format('<code>/etc/iproute2/rt_tables</code>')
 				+ '<br/>' + _('Matched traffic re-targets to an interface using this table.'));
 			o.datatype = 'or(uinteger, string)';
 			for (var i = 0; i < rtTables.length; i++)
