@@ -94,8 +94,8 @@ return network.registerProtocol('vxlan', {
 		o.datatype = 'min(1)';
 
 		o = s.taboption('general', form.Flag, 'learning', _('Learning'),
-			_('Automatic mac learning using multicast; inserts unknown source link layer addresses and IP addresses into the VXLAN device %s'
-				.format('<abbr title="%s">%s</abbr>'.format(_('Forwarding DataBase'), _('FDB')))));
+			_('Automatic mac learning using multicast; inserts unknown source link layer addresses and IP addresses into the VXLAN device %s')
+				.format('<abbr title="%s">%s</abbr>'.format(_('Forwarding DataBase'), _('FDB'))));
 		o.optional = true;
 		o.default = '1';
 		o.rmempty = false;
@@ -238,7 +238,7 @@ return network.registerProtocol('vxlan', {
 			let isMulticastIP = ipv4MulticastRegex.test(dst) || ipv6MulticastRegex.test(dst);
 
 			if (!value && isMulticastIP) {
-				return _('Via shall be specified when %s is a multicast address'.format(_('Peer IP')));
+				return _('Via shall be specified when %s is a multicast address').format(_('Peer IP'));
 			}
 			return true;
 		};
