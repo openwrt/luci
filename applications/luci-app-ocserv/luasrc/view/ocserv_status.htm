@@ -1,4 +1,4 @@
-<script type="text/javascript">//<![CDATA[
+<script>
 
 	function ocserv_disconnect(idx) {
 		(new XHR()).post('<%=url('admin/vpn/ocserv/disconnect')%>/' + idx, { token: '<%=token%>' },
@@ -42,7 +42,7 @@
 			}
 		}
 	);
-//]]></script>
+</script>
 
 <fieldset class="cbi-section">
 	<legend><%:Active OpenConnect Users%></legend>

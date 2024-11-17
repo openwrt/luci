@@ -192,5 +192,5 @@ Each theme must include this file in the `<head>` area of the document for forms
 It should be included like this:
 
 ```html
-<script type="text/javascript" src="<%=resource%>/xhr.js"></script>
+<script src="<%=resource%>/xhr.js"></script>
 ```

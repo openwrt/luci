@@ -1,6 +1,6 @@
 <%+cbi/valueheader%>
 
-<script type="text/javascript">//<![CDATA[
+<script>
 	var freqlist = <%= luci.http.write_json(self.iwinfo.freqlist) %>;
 	var hwmodes  = <%= luci.http.write_json(self.iwinfo.hwmodelist or {}) %>;
 	var htmodes  = <%= luci.http.write_json(self.iwinfo.htmodelist) %>;
@@ -176,7 +176,7 @@
 		bwdt.value = <%= luci.http.write_json(self.map:get(section, "htmode")) %>;
 		chan.value = <%= luci.http.write_json(self.map:get(section, "channel")) %>;
 	}
-//]]></script>
+</script>
 
 <label style="float:left; margin-right:3px">
 	<%:Mode%><br />
@@ -196,6 +196,6 @@
 </label>
 <br style="clear:left" />
 
-<script type="text/javascript">cbi_init_wifi('<%= cbid %>');</script>
+<script>cbi_init_wifi('<%= cbid %>');</script>
 
 <%+cbi/valuefooter%>

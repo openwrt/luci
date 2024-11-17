@@ -5,7 +5,7 @@
 
 {% const rollback = dispatcher.rollback_pending() %}
 {% if (rollback || trigger_apply || trigger_revert): %}
-	<script type="text/javascript">
+	<script>
 		document.addEventListener("luci-loaded", function() {
 			{% if (trigger_apply): %}
 				L.ui.changes.apply(true);
@@ -19,7 +19,7 @@
 {% endif %}
 
 {% if (media_error): %}
-	<script type="text/javascript">
+	<script>
 		L.require('ui').then(function(ui) {
 			ui.showIndicator('media_error', _('Theme fallback'), function(ev) {
 				ui.showModal(_('Error loading theme'), [

@@ -16,18 +16,17 @@
 <!DOCTYPE html>
 <html lang="{{ dispatcher.lang }}">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta http-equiv="Content-Script-Type" content="text/javascript" />
-<link rel="stylesheet" type="text/css" media="screen" href="{{ media }}/cascade.css" />
+<link rel="stylesheet" media="screen" href="{{ media }}/cascade.css" />
 {% if (node?.css): %}
-<link rel="stylesheet" type="text/css" media="screen" href="{{ resource }}/{{ node.css }}" />
+<link rel="stylesheet" media="screen" href="{{ resource }}/{{ node.css }}" />
 {% endif %}
 {% if (css): %}
-<style type="text/css">{{ css }}</style>
+<style>{{ css }}</style>
 {% endif %}
-<script type="text/javascript" src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
-<script type="text/javascript" src="{{ resource }}/cbi.js"></script>
+<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+<script src="{{ resource }}/cbi.js"></script>
 
 <title>{{ striptags(`${boardinfo.hostname ?? '?'}${node ? ` - ${_(node.title)}` : ''}`) }} - LuCI</title>
 </head>
