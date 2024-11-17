@@ -1,6 +1,5 @@
 
-<script type="text/javascript">
-//<![CDATA[
+<script>
 	function vpn_add()
 	{
 		var vpn_name     = div_add.querySelector("#instance_name1").value.replace(/[^\x00-\x7F]|[\s\.!@#$%^&*()\-+=\[\]{};':"\\|,<>\/?]/g,'');
@@ -68,7 +67,6 @@
 			setTimeout(function(){ output.innerHTML=""}, timeout);
 		}
 	}
-//]]>
 </script>
 
 <%+openvpn/ovpn_css%>

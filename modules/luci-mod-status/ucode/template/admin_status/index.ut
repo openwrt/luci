@@ -12,7 +12,7 @@
 	<div class="spinning">{{ _('Loading view…') }}</div>
 </div>
 
-<script type="text/javascript">//<![CDATA[
+<script>
 function progressbar(query, value, max, byte)
 {
 	var pg = document.querySelector(query),
@@ -46,7 +46,7 @@ function renderBadge(icon, title) {
 	]);
 }
 
-//]]></script>
+</script>
 
 <div class="includes" style="display:none">
 {%
@@ -60,7 +60,7 @@ function renderBadge(icon, title) {
 %}
 </div>
 
-<script type="text/javascript">
+<script>
 	L.require('ui').then(function(ui) {
 		ui.instantiateView('status/index');
 	});

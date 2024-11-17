@@ -53,7 +53,7 @@ Put any stylesheets, Javascripts, images, ... into `htdocs/luci-static/mytheme`.
 Refer to this directory in your header and footer templates as: `<%=media%>`.
 That means for a stylesheet `htdocs/luci-static/mytheme/cascade.css` you would write:
 ```html
-<link rel="stylesheet" type="text/css" href="<%=media%>/cascade.css" />
+<link rel="stylesheet" href="<%=media%>/cascade.css" />
 ```
 
 ## Making the theme selectable

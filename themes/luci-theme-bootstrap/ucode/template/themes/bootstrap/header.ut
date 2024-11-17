@@ -20,7 +20,7 @@
 		<meta charset="utf-8">
 		<title>{{ striptags(`${boardinfo.hostname ?? '?'}${node ? ` - ${node.title}` : ''}`) }} - LuCI</title>
 		{% if (!darkpref): %}
-			<script type="text/javascript">
+			<script>
 				var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
 				    rootElement = document.querySelector(':root'),
 				    setDarkMode = function(match) { rootElement.setAttribute('data-darkmode', match.matches) };
@@ -31,7 +31,7 @@
 		{% endif %}
 		<meta name="viewport" content="initial-scale=1.0">
 		<link rel="stylesheet" href="{{ media }}/cascade.css">
-		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="{{ media }}/mobile.css" type="text/css" />
+		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="{{ media }}/mobile.css" />
 		<link rel="icon" href="{{ media }}/logo_48.png" sizes="48x48">
 		<link rel="icon" href="{{ media }}/logo.svg" sizes="any">
 		{% if (node?.css): %}
