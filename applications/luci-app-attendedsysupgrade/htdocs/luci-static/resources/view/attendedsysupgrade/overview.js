@@ -83,8 +83,9 @@ return view.extend({
 			return (e.filesystem == firmware.filesystem);
 		}
 		var typeFilter = function(e) {
-			if (firmware.target.indexOf("x86") != -1) {
-				// x86 images can be combined-efi (EFI) or combined (BIOS)
+			let efi_targets = ['armsr', 'loongarch', 'x86'];
+			let efi_capable = efi_targets.some((tgt) => firmware.target.startsWith(tgt));
+			if (efi_capable) {
 				if (data.efi) {
 					return (e.type == 'combined-efi');
 				} else {
