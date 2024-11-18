@@ -198,7 +198,7 @@ var status = baseclass.extend({
 							"Use of external dnsmasq config file detected, please set '%s' option to '%s'"
 						).format("dns", "dnsmasq.conf"),
 						warningMissingRecommendedPackages: _(
-							"Some recommended packages are missing"
+							"Missing recommended package: '%s'"
 						),
 						warningOutdatedLuciPackage: _(
 							"The WebUI application (luci-app-adblock-fast) is outdated, please update it"
