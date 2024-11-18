@@ -18,15 +18,7 @@ local function makeForm(id, title, desc)
 	return f
 end
 
-if not cfg_file or not fs.access(cfg_file) then
-	local f = makeForm("error", nil, translatef("The OVPN config file (%s) could not be found, please check your configuration.", cfg_file or "n/a"))
-	f:append(Template("openvpn/ovpn_css"))
-	f.reset = false
-	f.submit = false
-	return f
-end
-
-if fs.stat(cfg_file).size >= 102400 then
+if fs.access(cfg_file) and fs.stat(cfg_file).size >= 102400 then
 	local f = makeForm("error", nil,
 		translatef("The size of the OVPN config file (%s) is too large for online editing in LuCI (&ge; 100 KB). ", cfg_file)
 		.. translate("Please edit this file directly in a terminal session."))
