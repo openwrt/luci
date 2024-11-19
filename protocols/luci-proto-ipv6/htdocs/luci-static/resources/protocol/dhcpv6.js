@@ -19,8 +19,9 @@ return network.registerProtocol('dhcpv6', {
 		o.value('force', _('force', 'DHCPv6 address request mode'));
 		o.value('none', _('disabled', 'DHCPv6 address request mode'));
 		o.default = 'try';
-
-		o = s.taboption('general', form.Value, 'reqprefix', _('Request IPv6-prefix of length'));
+		o = s.taboption('general', form.Value, 'reqprefix', _('Request IPv6-prefix'),
+			_('Either a prefix length hint (e.g. 56) only, whereby the operator selects the prefix, or specify a prefix also (e.g. %s)')
+			.format('<code>2001:db8::/56</code>'));
 		o.value('auto', _('Automatic'));
 		o.value('no', _('disabled'));
 		o.value('48');
