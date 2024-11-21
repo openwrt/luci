@@ -3782,12 +3782,12 @@ external JavaScript, use <code>L.require(&quot;ui&quot;).then(...)</code>.</p></
     <div class="nameContainer">
         <h4 class="name" id="addNotification">
             
-            addNotification<span class="signature">(<span class="optional">title</span>, children, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
+            addNotification<span class="signature">(<span class="optional">title</span>, children, <span class="optional">timeout</span>, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3730">line 3730</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3735">line 3735</a>
         </div>
         
     </div>
@@ -3891,6 +3891,38 @@ will be rendered.</p></td>
 node or a document fragment in most cases. The value is passed as-is
 to the <code>dom.content()</code> function - refer to its documentation for
 applicable values.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>timeout</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>A millisecond value after which the notification will disappear
+automatically. If omitted, the notification will remain until it receives
+the click event.</p></td>
         </tr>
 	
 	
@@ -4017,7 +4049,7 @@ banner element.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4863">line 4863</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4888">line 4888</a>
         </div>
         
     </div>
@@ -4331,7 +4363,7 @@ trigger field validation or to bind it to further events.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4351">line 4351</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4376">line 4376</a>
         </div>
         
     </div>
@@ -4468,7 +4500,7 @@ default.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4914">line 4914</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4939">line 4939</a>
         </div>
         
     </div>
@@ -4694,7 +4726,7 @@ valid function value.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3850">line 3850</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3875">line 3875</a>
         </div>
         
     </div>
@@ -4918,7 +4950,7 @@ handler as-is without the need to bind it first.</p>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4957">line 4957</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4982">line 4982</a>
         </div>
         
     </div>
@@ -5070,7 +5102,7 @@ caught and rendered using <a href="LuCI.html#error"><code>LuCI.error()</code></a
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3893">line 3893</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3918">line 3918</a>
         </div>
         
     </div>
@@ -5312,7 +5344,7 @@ accepted by <code>LuCI.dom.content()</code>.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4325">line 4325</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4350">line 4350</a>
         </div>
         
     </div>
@@ -5515,7 +5547,7 @@ or rejecting with <code>null</code> when the connectivity check timed out.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3802">line 3802</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3827">line 3827</a>
         </div>
         
     </div>
@@ -6018,7 +6050,7 @@ element.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4208">line 4208</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4233">line 4233</a>
         </div>
         
     </div>
@@ -6376,7 +6408,7 @@ cancelled by the user.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Nov 08 2024 10:36:42 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Thu Nov 21 2024 00:36:19 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
