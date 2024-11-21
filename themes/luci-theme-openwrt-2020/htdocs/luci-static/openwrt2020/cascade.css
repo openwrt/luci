@@ -1173,9 +1173,11 @@ textarea {
 	position: relative;
 	overflow: hidden;
 	transition: box-shadow .25s ease-in-out;
-	pointer-events: none;
+	pointer-events: auto; /* needed for drag-and-drop in UIDynamicList */
 	flex: 1 1 100%;
 	word-break: break-all;
+	cursor: move; /* drag-and-drop */
+	user-select: text; /* text selection in drag-and-drop */
 }
 
 .cbi-dynlist > .item::after {
@@ -1196,6 +1198,20 @@ textarea {
 	pointer-events: all;
 }
 
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .item.drag-over {
+	border-top: 1px solid black;
+}
+
+/* Make item being dragged in UIDynamicList partially transparent*/
+.cbi-dynlist > .item.dragging {
+	opacity: 0.5;
+}
+/* prevent pointer changing when over the span element in UIDynamicList */
+.cbi-dynlist > .item > span {
+	pointer-events: none;
+}
+
 .cbi-dynlist[disabled] > .item::after {
 	pointer-events: none;
 }
@@ -1207,6 +1223,16 @@ textarea {
 .cbi-dynlist > .add-item {
 	flex: 1;
 	display: flex;
+}
+
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .add-item > .cbi-input-text.drag-over {
+	border-top: 1px solid black;
+}
+
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .add-item > .cbi-button-add.drag-over {
+	border-top: 1px solid black;
 }
 
 .cbi-dynlist > .add-item > input {
