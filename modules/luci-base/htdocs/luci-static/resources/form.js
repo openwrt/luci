@@ -2715,7 +2715,6 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	handleDragStart: function(ev) {
 		if (!scope.dragState || !scope.dragState.node.classList.contains('drag-handle')) {
 			scope.dragState = null;
-			ev.preventDefault();
 			return false;
 		}
 
@@ -2726,6 +2725,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 	/** @private */
 	handleDragOver: function(ev) {
+		if (scope.dragState === null ) return;
 		var n = scope.dragState.targetNode,
 		    r = scope.dragState.rect,
 		    t = r.top + r.height / 2;
@@ -2746,6 +2746,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 	/** @private */
 	handleDragEnter: function(ev) {
+		if (scope.dragState === null ) return;
 		scope.dragState.rect = ev.currentTarget.getBoundingClientRect();
 		scope.dragState.targetNode = ev.currentTarget;
 	},
@@ -2771,6 +2772,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 	/** @private */
 	handleDrop: function(ev) {
+		if (scope.dragState === null ) return;
 		var s = scope.dragState;
 
 		if (s.node && s.targetNode) {

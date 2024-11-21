@@ -2265,7 +2265,96 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 			this.addItem(dl, this.values[i], label);
 		}
 
+		this.initDragAndDrop(dl);
+
 		return this.bind(dl);
+	},
+
+	/** @private */
+	initDragAndDrop: function(dl) {
+		let draggedItem = null;
+		let placeholder = null;
+
+		dl.addEventListener('dragstart', (e) => {
+			if (e.target.classList.contains('item')) {
+				draggedItem = e.target;
+				e.target.classList.add('dragging');
+			}
+		});
+
+		dl.addEventListener('dragend', (e) => e.target.classList.remove('dragging'));
+
+		dl.addEventListener('dragover', (e) => e.preventDefault());
+
+		dl.addEventListener('dragenter', (e) => e.target.classList.add('drag-over'));
+
+		dl.addEventListener('dragleave', (e) => e.target.classList.remove('drag-over'));
+
+		dl.addEventListener('drop', (e) => {
+			e.preventDefault();
+			e.target.classList.remove('drag-over');
+			const target = e.target.classList.contains('item') ? e.target : dl.querySelector('.add-item');
+			dl.insertBefore(draggedItem, target);
+		});
+
+		dl.addEventListener('click', (e) => {
+			if (e.target.closest('.item')) {
+				const span = e.target.closest('.item').querySelector('SPAN');
+				if (span) {
+					const range = document.createRange();
+					range.selectNodeContents(span);
+					const selection = window.getSelection();
+					if (selection.rangeCount === 0 || selection.toString().length === 0) {
+						selection.removeAllRanges();
+						selection.addRange(range);
+					} else selection.removeAllRanges();
+				}
+			}
+		});
+
+		dl.addEventListener('touchstart', (e) => {
+			const touch = e.touches[0];
+			const target = e.target.closest('.item');
+			if (target) {
+				draggedItem = target;
+
+				placeholder = draggedItem.cloneNode(true);
+				placeholder.className = 'placeholder';
+				placeholder.style.height = `${draggedItem.offsetHeight}px`;
+				draggedItem.parentNode.insertBefore(placeholder, draggedItem.nextSibling);
+				draggedItem.classList.add('dragging')
+			}
+		});
+
+		dl.addEventListener('touchmove', (e) => {
+			if (draggedItem) {
+				const touch = e.touches[0];
+				const currentY = touch.clientY;
+
+				const items = Array.from(dl.querySelectorAll('.item'));
+				const target = items.find(item => {
+					const rect = item.getBoundingClientRect();
+					return currentY > rect.top && currentY < rect.bottom;
+				});
+
+				if (target && target !== draggedItem) {
+					const insertBefore = currentY < target.getBoundingClientRect().top + target.offsetHeight / 2;
+					dl.insertBefore(placeholder, insertBefore ? target : target.nextSibling);
+				}
+
+				e.preventDefault();
+			}
+		});
+
+		dl.addEventListener('touchend', (e) => {
+			if (draggedItem && placeholder) {
+				dl.insertBefore(draggedItem, placeholder);
+				draggedItem.classList.remove('dragging')
+				placeholder.parentNode.removeChild(placeholder);
+				placeholder = null;
+				draggedItem = null;
+			}
+		});
 	},
 
 	/** @private */
@@ -2287,7 +2376,7 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 	/** @private */
 	addItem: function(dl, value, text, flash) {
 		var exists = false,
-		    new_item = E('div', { 'class': flash ? 'item flash' : 'item', 'tabindex': 0 }, [
+		    new_item = E('div', { 'class': flash ? 'item flash' : 'item', 'tabindex': 0, 'draggable': true }, [
 				E('span', {}, [ text || value ]),
 				E('input', {
 					'type': 'hidden',
@@ -2359,7 +2448,17 @@ var UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype */
 			return;
 
 		if (item) {
-			this.removeItem(dl, item);
+			// Get bounding rectangle of the item
+			var rect = item.getBoundingClientRect();
+
+			// Get computed styles for the ::after pseudo-element
+			var afterStyles = window.getComputedStyle(item, '::after');
+			var afterWidth = parseFloat(afterStyles.width) || 0;
+
+			// Check if the click is within the ::after region
+			if (rect.right - ev.clientX <= afterWidth) {
+				this.removeItem(dl, item);
+			}
 		}
 		else if (matchesElem(ev.target, '.cbi-button-add')) {
 			var input = ev.target.previousElementSibling;

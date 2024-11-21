@@ -1340,10 +1340,12 @@ ul.cbi-tabmenu li.cbi-tab-disabled[data-errors]::after {
 	border: 1px outset #000;
 	border-radius: 3px;
 	position: relative;
-	pointer-events: none;
+	pointer-events: auto; /* needed for drag-and-drop in UIDynamicList */
 	overflow: hidden;
 	text-overflow: ellipsis;
 	white-space: nowrap;
+	cursor: move; /* drag-and-drop */
+	user-select: text; /* text selection in drag-and-drop */
 }
 
 .cbi-dynlist > .item::after {
@@ -1364,8 +1366,33 @@ ul.cbi-tabmenu li.cbi-tab-disabled[data-errors]::after {
 	height: auto;
 }
 
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .item.drag-over {
+	border-top: 1px solid red;
+}
+
+/* Make item being dragged in UIDynamicList partially transparent*/
+.cbi-dynlist > .item.dragging {
+	opacity: 0.5;
+}
+
+/* prevent pointer changing when over the span element in UIDynamicList */
+.cbi-dynlist > .item > span {
+	pointer-events: none; 
+}
+
 .cbi-dynlist > .add-item {
 	display: flex;
+}
+
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .add-item > .cbi-input-text.drag-over {
+	border-top: 1px solid re;
+}
+
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .add-item > .cbi-button-add.drag-over {
+	border-top: 1px solid red;
 }
 
 .cbi-dynlist > .add-item > input {
