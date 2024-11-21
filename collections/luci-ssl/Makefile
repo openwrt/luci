@@ -10,7 +10,10 @@ LUCI_TYPE:=col
 LUCI_BASENAME:=ssl
 
 LUCI_TITLE:=LuCI with HTTPS support (mbedtls as SSL backend)
-LUCI_DEPENDS:=+luci-light +libustream-mbedtls +px5g-mbedtls
+LUCI_DEPENDS:=+luci-light \
+	+libustream-mbedtls \
+	+px5g-mbedtls \
+	+luci-app-package-manager
 
 PKG_LICENSE:=Apache-2.0
 
