@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=Support for OpenFortivpn
-LUCI_DEPENDS:=+openfortivpn +luci-lua-runtime
+LUCI_DEPENDS:=+openfortivpn +luci-base
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Aaron Goodman <aaronjg@stanford.edu>
