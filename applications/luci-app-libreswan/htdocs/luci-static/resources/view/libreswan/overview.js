@@ -11,14 +11,19 @@ var callLibreswanStatus = rpc.declare({
 });
 
 function secondsToString(seconds) {
-	var str = '';
-	var numdays = Math.floor(seconds / 86400);
-	var numhours = Math.floor((seconds % 86400) / 3600);
-	var numminutes = Math.floor(((seconds % 86400) % 3600) / 60);
-	var numseconds = ((seconds % 86400) % 3600) % 60;
+	const numdays = Math.floor(seconds / 86400);
+	seconds %= 86400;
+	const numhours = Math.floor(seconds / 3600);
+	seconds %= 3600;
+	const numminutes = Math.floor(seconds / 60);
+	const numseconds = seconds % 60;
 
-	str = (numdays ? numdays + 'd ' : '') + (numhours ? numhours + 'h ' : '') + (numminutes ? numminutes + 'm ' : '') +  numseconds + 's';
-	return str;
+	return [
+		numdays ? `${numdays}d` : '',
+		numhours ? `${numhours}h` : '',
+		numminutes ? `${numminutes}m` : '',
+		`${numseconds}s`
+	].filter(Boolean).join(' ');
 }
 
 return view.extend({
