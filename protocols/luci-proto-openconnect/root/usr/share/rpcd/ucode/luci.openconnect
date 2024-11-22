@@ -1,0 +1,115 @@
+#!/usr/bin/env ucode
+
+'use strict';
+
+import { readfile, writefile, stat } from 'fs';
+
+const interfaceregex = /^[a-zA-Z0-9_]+$/;
+const user_certificate_string = "/etc/openconnect/user-cert-vpn-%s.pem";
+const user_privatekey_string = "/etc/openconnect/user-key-vpn-%s.pem";
+const ca_certificate_string = "/etc/openconnect/ca-vpn-%s.pem";
+
+
+// Utility to read a file
+function _readfile(path) {
+	let _stat = stat(path);
+	if (_stat && _stat.type == "file") {
+		let content = readfile(path);
+		return content ? trim(content) : 'File empty';
+	}
+	return 'File not found';
+}
+
+// Utility to write a file
+function _writefile(path, data) {
+	if (!data) {
+		return false;
+	}
+	return writefile(path, data) == length(data);
+}
+
+const methods = {
+
+	list:{
+		call: function() {
+			return {
+				getCertificates: {
+					interface: "interface"
+				},
+				setCertificates: {
+					interface: "interface",
+					user_certificate: "user_certificate",
+					user_privatekey: "user_privatekey",
+					ca_certificate: "ca_certificate"
+				}
+			};
+		}
+	},
+
+	getCertificates: {
+		args: {
+			interface: "interface",
+		},
+		call: function(req) {
+
+			const _interface = req.args?.interface;
+			if (!_interface || !match(_interface, interfaceregex)) {
+				// printf("Invalid interface name");
+				return;
+			}
+
+			const user_certificate_pem = _readfile(sprintf(user_certificate_string, _interface));
+			const user_privatekey_pem = _readfile(sprintf(user_privatekey_string, _interface));
+			const ca_certificate_pem = _readfile(sprintf(ca_certificate_string, _interface));
+
+			if(user_certificate_pem && user_privatekey_pem && ca_certificate_pem){
+				return {
+					user_certificate: user_certificate_pem,
+					user_privatekey: user_privatekey_pem,
+					ca_certificate: ca_certificate_pem,
+				};
+			}
+
+		}
+	},
+
+	setCertificates: {
+		args: {
+			interface: "interface",
+			user_certificate: "user_certificate",
+			user_privatekey: "user_privatekey",
+			ca_certificate: "ca_certificate",
+		},
+		call: function(req) {
+
+			let result = false;
+			let _interface = req.args?.interface;
+
+			if (!_interface || !match(_interface, interfaceregex)) {
+				// printf("Invalid interface name");
+				return;
+			}
+
+			/* the interface is set up to call 1 write per certificate,
+			with only one of the following arguments not null */
+			if (req.args?.user_certificate) {
+				result = _writefile(sprintf(user_certificate_string, _interface), req.args?.user_certificate);
+			}
+			if (req.args?.user_privatekey) {
+				result = _writefile(sprintf(user_privatekey_string, _interface), req.args?.user_privatekey);
+			}
+			if (req.args?.ca_certificate) {
+				result = _writefile(sprintf(ca_certificate_string, _interface), req.args?.ca_certificate);
+			}
+
+			return {
+				result: result,
+			};
+
+		}
+	}
+
+};
+
+return { 'luci.openconnect': methods };
+
