@@ -336,6 +336,10 @@ return view.extend({
 		o.value('5353');
 		o.rmempty = true;
 
+		o = s.taboption('general', form.Flag, 'adb_tld', _('TLD Compression'), _('The top level domain compression removes thousands of needless host entries from the final DNS blocklist.'));
+		o.default = 1
+		o.rmempty = true;
+
 		o = s.taboption('general', form.Flag, 'adb_safesearch', _('Enable SafeSearch'), _('Enforcing SafeSearch for google, bing, duckduckgo, yandex, youtube and pixabay.'));
 		o.rmempty = false;
 
