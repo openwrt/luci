@@ -300,6 +300,53 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	},
 
 	/**
+	 * Clones an existing section of the given type to the given configuration,
+	 * optionally named according to the given name.
+	 *
+	 * @param {string} conf
+	 * The name of the configuration into which to clone the section.
+	 *
+	 * @param {string} type
+	 * The type of the section to clone.
+	 *
+	 * @param {string} srcsid
+	 * The source section id to clone.
+	 *
+	 * @param {boolean} [put_next]
+	 * Whether to put the cloned item next (true) or last (false: default).
+	 *
+	 * @param {string} [name]
+	 * The name of the new cloned section. If the name is omitted, an anonymous
+	 * section will be created instead.
+	 *
+	 * @returns {string}
+	 * Returns the section ID of the newly cloned section which is equivalent
+	 * to the given name for non-anonymous sections.
+	 */
+	clone: function(conf, type, srcsid, put_next, name) {
+		let n = this.state.creates;
+		let sid = this.createSID(conf);
+		let v = this.state.values;
+		put_next = put_next || false;
+
+		if (!n[conf])
+			n[conf] = { };
+
+		n[conf][sid] = {
+			...v[conf][srcsid],
+			'.type': type,
+			'.name': sid,
+			'.create': name,
+			'.anonymous': !name,
+			'.index': 1000 + this.state.newidx++
+		};
+
+		if (put_next)
+			this.move(conf, sid, srcsid, put_next);
+		return sid;
+	},
+
+	/**
 	 * Removes the section with the given ID from the given configuration.
 	 *
 	 * @param {string} conf
