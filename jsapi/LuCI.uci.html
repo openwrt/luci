@@ -925,6 +925,8 @@
             
                 <li data-name="LuCI.form.GridSection#anonymous"><a href="LuCI.form.GridSection.html#anonymous">anonymous</a></li>
             
+                <li data-name="LuCI.form.GridSection#cloneable"><a href="LuCI.form.GridSection.html#cloneable">cloneable</a></li>
+            
                 <li data-name="LuCI.form.GridSection#extedit"><a href="LuCI.form.GridSection.html#extedit">extedit</a></li>
             
                 <li data-name="LuCI.form.GridSection#max_cols"><a href="LuCI.form.GridSection.html#max_cols">max_cols</a></li>
@@ -1675,6 +1677,8 @@
             
                 <li data-name="LuCI.form.TableSection#anonymous"><a href="LuCI.form.TableSection.html#anonymous">anonymous</a></li>
             
+                <li data-name="LuCI.form.TableSection#cloneable"><a href="LuCI.form.TableSection.html#cloneable">cloneable</a></li>
+            
                 <li data-name="LuCI.form.TableSection#parentoption"><a href="LuCI.form.TableSection.html#parentoption">parentoption</a></li>
             
                 <li data-name="LuCI.form.TableSection#tabbed"><a href="LuCI.form.TableSection.html#tabbed">tabbed</a></li>
@@ -1838,6 +1842,8 @@
                 <li data-name="LuCI.form.TypedSection##addremove"><a href="LuCI.form.TypedSection.html#addremove">addremove</a></li>
             
                 <li data-name="LuCI.form.TypedSection##anonymous"><a href="LuCI.form.TypedSection.html#anonymous">anonymous</a></li>
+            
+                <li data-name="LuCI.form.TypedSection##cloneable"><a href="LuCI.form.TypedSection.html#cloneable">cloneable</a></li>
             
                 <li data-name="LuCI.form.TypedSection##tabbed"><a href="LuCI.form.TypedSection.html#tabbed">tabbed</a></li>
             
@@ -2805,6 +2811,8 @@
                 <li data-name="LuCI.uci#apply"><a href="LuCI.uci.html#apply">apply</a></li>
             
                 <li data-name="LuCI.uci#changes"><a href="LuCI.uci.html#changes">changes</a></li>
+            
+                <li data-name="LuCI.uci#clone"><a href="LuCI.uci.html#clone">clone</a></li>
             
                 <li data-name="LuCI.uci#createSID"><a href="LuCI.uci.html#createSID">createSID</a></li>
             
@@ -3953,7 +3961,7 @@ to the given name for non-anonymous sections.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line903">line 903</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line950">line 950</a>
         </div>
         
     </div>
@@ -4115,7 +4123,7 @@ operation to cancel the rollback timer.</p>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line983">line 983</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line1030">line 1030</a>
         </div>
         
     </div>
@@ -4195,6 +4203,275 @@ operation to cancel the rollback timer.</p>
             </td>
             <td class="description last">Returns a promise resolving to an object containing the configuration
 names as keys and arrays of related change records as values.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="clone">
+            
+            clone<span class="signature">(conf, type, srcsid, <span class="optional">put_next</span>, <span class="optional">name</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line326">line 326</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Clones an existing section of the given type to the given configuration,
+optionally named according to the given name.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>conf</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The name of the configuration into which to clone the section.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The type of the section to clone.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>srcsid</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The source section id to clone.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>put_next</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>Whether to put the cloned item next (true) or last (false: default).</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The name of the new cloned section. If the name is omitted, an anonymous
+section will be created instead.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        string
+                        
+                    
+            </td>
+            <td class="description last">Returns the section ID of the newly cloned section which is equivalent
+to the given name for non-anonymous sections.</td>
         </tr>
     
     </tbody>
@@ -4365,7 +4642,7 @@ where <code>X</code> denotes a hexadecimal digit.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line459">line 459</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line506">line 506</a>
         </div>
         
     </div>
@@ -4594,7 +4871,7 @@ found or if the corresponding configuration is not loaded.</li>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line659">line 659</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line706">line 706</a>
         </div>
         
     </div>
@@ -4982,7 +5259,7 @@ that have been successfully loaded.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line759">line 759</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line806">line 806</a>
         </div>
         
     </div>
@@ -5251,7 +5528,7 @@ when either the section specified by <code>sid1</code> or by <code>sid2</code> i
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line311">line 311</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line358">line 358</a>
         </div>
         
     </div>
@@ -5568,7 +5845,7 @@ not be resolved to existing section ID.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line813">line 813</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line860">line 860</a>
         </div>
         
     </div>
@@ -5672,7 +5949,7 @@ have been reloaded by the save operation.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line400">line 400</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line447">line 447</a>
         </div>
         
     </div>
@@ -5885,7 +6162,7 @@ configuration, filtered by type of a type has been specified.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line547">line 547</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line594">line 594</a>
         </div>
         
     </div>
@@ -6081,7 +6358,7 @@ with the given value.</p></td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line694">line 694</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line741">line 741</a>
         </div>
         
     </div>
@@ -6422,7 +6699,7 @@ names to unload.</p></td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line628">line 628</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line675">line 675</a>
         </div>
         
     </div>
@@ -6587,7 +6864,7 @@ configuration.</p>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line724">line 724</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line771">line 771</a>
         </div>
         
     </div>
@@ -7174,7 +7451,7 @@ underlying option is an UCI list.</p></td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line368">line 368</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line415">line 415</a>
         </div>
         
     </div>
@@ -7321,7 +7598,7 @@ associated name as arguments.</p>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Nov 22 2024 21:40:08 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Nov 25 2024 15:33:54 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

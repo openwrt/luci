@@ -925,6 +925,8 @@
             
                 <li data-name="LuCI.form.GridSection#anonymous"><a href="LuCI.form.GridSection.html#anonymous">anonymous</a></li>
             
+                <li data-name="LuCI.form.GridSection#cloneable"><a href="LuCI.form.GridSection.html#cloneable">cloneable</a></li>
+            
                 <li data-name="LuCI.form.GridSection#extedit"><a href="LuCI.form.GridSection.html#extedit">extedit</a></li>
             
                 <li data-name="LuCI.form.GridSection#max_cols"><a href="LuCI.form.GridSection.html#max_cols">max_cols</a></li>
@@ -1675,6 +1677,8 @@
             
                 <li data-name="LuCI.form.TableSection#anonymous"><a href="LuCI.form.TableSection.html#anonymous">anonymous</a></li>
             
+                <li data-name="LuCI.form.TableSection#cloneable"><a href="LuCI.form.TableSection.html#cloneable">cloneable</a></li>
+            
                 <li data-name="LuCI.form.TableSection#parentoption"><a href="LuCI.form.TableSection.html#parentoption">parentoption</a></li>
             
                 <li data-name="LuCI.form.TableSection#tabbed"><a href="LuCI.form.TableSection.html#tabbed">tabbed</a></li>
@@ -1838,6 +1842,8 @@
                 <li data-name="LuCI.form.TypedSection##addremove"><a href="LuCI.form.TypedSection.html#addremove">addremove</a></li>
             
                 <li data-name="LuCI.form.TypedSection##anonymous"><a href="LuCI.form.TypedSection.html#anonymous">anonymous</a></li>
+            
+                <li data-name="LuCI.form.TypedSection##cloneable"><a href="LuCI.form.TypedSection.html#cloneable">cloneable</a></li>
             
                 <li data-name="LuCI.form.TypedSection##tabbed"><a href="LuCI.form.TypedSection.html#tabbed">tabbed</a></li>
             
@@ -2805,6 +2811,8 @@
                 <li data-name="LuCI.uci#apply"><a href="LuCI.uci.html#apply">apply</a></li>
             
                 <li data-name="LuCI.uci#changes"><a href="LuCI.uci.html#changes">changes</a></li>
+            
+                <li data-name="LuCI.uci#clone"><a href="LuCI.uci.html#clone">clone</a></li>
             
                 <li data-name="LuCI.uci#createSID"><a href="LuCI.uci.html#createSID">createSID</a></li>
             
@@ -6062,6 +6070,16 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	 */
 
 	/**
+	 * Set to `true`, a clone button is added to the button column, allowing
+	 * the user to clone section instances mapped by the section form element.
+	 * The default is `false`.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#cloneable
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
 	 * Enables a per-section instance row `Edit` button which triggers a certain
 	 * action when clicked. If set to a string, the string value is used
 	 * as `String.format()` pattern with the name of the underlying UCI section
@@ -6109,11 +6127,25 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		throw 'Tabs are not supported by TableSection';
 	},
 
+
+	/**
+	 * Clone the section_id, putting the clone immediately after if put_next
+	 * is true. Optionally supply a name for the new section_id.
+	 */
+	/** @private */
+	handleClone: function(section_id, put_next, name) {
+		let config_name = this.uciconfig || this.map.config;
+
+		this.map.data.clone(config_name, this.sectiontype, section_id, put_next, name);
+		return this.map.save(null, true);
+	},
+
 	/** @private */
 	renderContents: function(cfgsections, nodes) {
 		var section_id = null,
 		    config_name = this.uciconfig || this.map.config,
 		    max_cols = isNaN(this.max_cols) ? this.children.length : this.max_cols,
+		    cloneable = this.cloneable,
 		    has_more = max_cols &lt; this.children.length,
 		    drag_sort = this.sortable &amp;&amp; !('ontouchstart' in window),
 		    touch_sort = this.sortable &amp;&amp; ('ontouchstart' in window),
@@ -6231,7 +6263,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 					dom.content(trEl.lastElementChild, opt.title);
 			}
 
-			if (this.sortable || this.extedit || this.addremove || has_more || has_action)
+			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable)
 				trEl.appendChild(E('th', {
 					'class': 'th cbi-section-table-cell cbi-section-actions'
 				}));
@@ -6258,7 +6290,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 						(typeof(opt.width) == 'number') ? opt.width+'px' : opt.width;
 			}
 
-			if (this.sortable || this.extedit || this.addremove || has_more || has_action)
+			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable)
 				trEl.appendChild(E('th', {
 					'class': 'th cbi-section-table-cell cbi-section-actions'
 				}));
@@ -6273,7 +6305,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	renderRowActions: function(section_id, more_label) {
 		var config_name = this.uciconfig || this.map.config;
 
-		if (!this.sortable &amp;&amp; !this.extedit &amp;&amp; !this.addremove &amp;&amp; !more_label)
+		if (!this.sortable &amp;&amp; !this.extedit &amp;&amp; !this.addremove &amp;&amp; !more_label &amp;&amp; !this.cloneable)
 			return E([]);
 
 		var tdEl = E('td', {
@@ -6317,6 +6349,19 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 					'class': 'btn cbi-button cbi-button-edit',
 					'click': ui.createHandlerFn(this, 'renderMoreOptionsModal', section_id)
 				}, [ more_label ])
+			);
+		}
+
+		if (this.cloneable) {
+			var btn_title = this.titleFn('clonebtntitle', section_id);
+
+			dom.append(tdEl.lastElementChild,
+				E('button', {
+					'title': btn_title || _('Clone') + '⿻',
+					'class': 'btn cbi-button cbi-button-neutral',
+					'click': ui.createHandlerFn(this, 'handleClone', section_id, true),
+					'disabled': this.map.readonly || null
+				}, [ btn_title || _('Clone') + '⿻' ])
 			);
 		}
 
@@ -8619,7 +8664,7 @@ return baseclass.extend(/** @lends LuCI.form.prototype */ {
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Nov 22 2024 21:40:08 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Nov 25 2024 15:33:54 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
