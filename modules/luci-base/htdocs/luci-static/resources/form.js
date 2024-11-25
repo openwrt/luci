@@ -3068,8 +3068,10 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				n.classList.remove('flash')
 			});
 
+			val = Array.isArray(val) ? val.join(' '): val;
+			val = `${val}`; // coerce non-string types to string
 			list.push([
-				ui.Table.prototype.deriveSortKey((val != null) ? val.trim() : ''),
+				ui.Table.prototype.deriveSortKey((val != null && typeof val.trim === 'function') ? val.trim() : ''),
 				tr
 			]);
 		}, this));
