@@ -1,0 +1,289 @@
+/* /www/luci-static/resources/view/dashboard/css/custom.css */
+.dashboard-container {
+    display: flex;               /* Arrange icons in a row */
+    justify-content: center;     /* Center the icons horizontally */
+    align-items: center;         /* Align the icons vertically */
+    margin-bottom: 35px;
+    margin-top: 35px;
+}
+.icon {
+    width: 100px;               /* Width of each icon */
+    height: auto;               /* Maintain aspect ratio */
+    cursor: pointer;            /* Pointer cursor on hover */
+    transition: transform 0.3s; /* Smooth hover effect */
+}.icon:hover {
+    opacity: 0.7;               /* Fade effect on hover */
+    transform: scale(1.1);      /* Slight zoom effect on hover */
+}
+.separator {
+    width: 230px;               /* Line width (adjusted) */
+    height: 2px;                /* Line height (thin horizontal line) */
+    background-color: #ccc;     /* Line color */
+    margin: 0 10px;             /* Space around the line */
+}
+.cbi-button-save,
+.cbi-button-apply,
+.cbi-button-reset,
+.cbi-page-actions {
+    display: none !important;
+}
+.system-info-cards,
+.storage-info-details, 
+.memory-info-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Space between cards */
+    padding: 10px;
+}
+.storage-info-details, 
+.memory-info-details {
+    padding-top: 1.5em;
+}
+.info-card {
+    background: #f9f9f9; /* Light background color */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 16px; /* Padding inside the card */
+    flex: 1 1 200px; /* Flex grow, shrink, and basis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+.info-card h3 {
+    margin: 0 0 8px; /* Spacing below the title */
+    text-align: center;
+    font-size: 1.2em; /* Font size for title */
+}
+.info-card p {
+    margin: 0; /* Remove margin for paragraph */
+    text-align: center;
+    font-size: 1em; /* Font size for value */
+}
+.info-card:hover {
+    transform: scale(1.05); /* Scale card on hover */
+}
+/* Internet Status Card Styling */
+.internet-status-container {
+    text-align: center;
+    margin-top: 20px;
+}
+.internet-icon {
+    margin-bottom: 10px;
+}
+.internet-status {
+    margin-top: 10px;
+    padding: 10px;
+    display: flex;
+    margin: auto;
+    flex-wrap: wrap;
+}
+/* Card-like container for each internet section (IPv4 and IPv6) */
+.internet-card {
+    background: #f9f9f9; /* Light background color */
+    border: 1px solid #ddd; /* Light border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px;
+    width: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+.internet-card:hover {
+    transform: scale(1.05);
+}
+/* Heading for IPv4 and IPv6 with icons */
+.internet-card h3 {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+/* Label-value pair styling for status info */
+.status-line {
+    margin-bottom: 10px;
+    font-size: 1rem;
+}
+.status-label {
+    font-weight: bold;
+    color: #666;
+}
+.status-value {
+    font-weight: normal;
+    color: #333;
+}
+/* Connected/Disconnected status styling */
+.status-value.connected {
+    color: #28a745; /* Green for connected */
+}
+.status-value.disconnected {
+    color: #dc3545; /* Red for disconnected */
+}
+/* Custom progress bar styling for internet status (optional) */
+.cbi-progressbar-tplink {
+    border: 1px solid var(--border-color-high);
+    border-radius: 5px;
+    /* Slightly increased radius for a smoother look */
+    position: relative;
+    min-width: 170px;
+    height: 12px;
+    /* Increased height for better visibility */
+    background: #e0e0e0;
+    /* Light gray background for contrast */
+    margin: 1.4em 0 4px;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    /* Inner shadow for depth */
+}
+.cbi-progressbar-tplink > div {
+    background: linear-gradient(to right, #3e55e4, #87d7ee);
+    height: 100%;
+    transition: width 0.25s ease-in, box-shadow 0.25s ease-in;
+    /* Smooth width transition and shadow */
+    width: 0%;
+    border-radius: 5px;
+    /* Rounded edges for consistency */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+    /* Glow effect for the progress bar */
+}
+.cbi-progressbar-tplink::before {
+    position: absolute;
+    top: -1.4em;
+    left: 0;
+    content: attr(title);
+    white-space: pre;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+    /* Bold title for better visibility */
+    color: #333;
+    /* Title color */
+    padding: 0 5px;
+    /* Padding for better spacing */
+}
+/* Add transitions for smooth hover effects */
+.internet-card:hover .status-value {
+    color: #000;
+}
+@media (max-width: 768px) {
+    .internet-card {
+        width: 100%;
+    }
+}
+.device-count {
+    background: #f9f9f9; 
+    border: 1px solid #ddd; 
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px;
+    
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    padding:  20px;
+    margin-bottom: 20px;
+    text-align: center; /* Center the text */
+}
+.connected-title {
+    font-size: 1.8em; /* Larger title */
+    font-weight: bold;
+    color: black; /* Darker blue for the title */
+    margin-bottom: 10px; /* Space below title */
+}
+.connected-count {
+    font-size: 2.5em; /* Large count size */
+    font-weight: bold;
+    color: #007BFF; /* Highlighted blue color */
+    padding: 10px 15px; /* Padding for emphasis */
+    border-radius: 5px; /* Rounded corners */
+}
+.leases-title {
+    font-size: 1.5em; /* Title for leases section */
+    font-weight: bold;
+    color: #333; 
+    margin-top: 30px; /* Space above leases title */
+    margin-bottom: 10px; /* Space below leases title */
+}
+.table {
+    width: 100%; /* Full width for the table */
+    border-collapse: collapse; /* Remove gaps between table cells */
+}
+.table th, .table td {
+    border: 1px solid #ddd; /* Light border for table cells */
+    padding: 12px; /* Padding in table cells */
+    text-align: left; /* Left-align text */
+}
+.table th {
+    background-color: black; /* Header background */
+    color: white; /* Header text color */
+}
+.table tr:nth-child(even) {
+    background-color: #f9f9f9; 
+}
+.table tr:hover {
+    background-color: #c4c4c4; /* Highlight row on hover */
+}
+.icon {
+    position: relative; /* Allow absolute positioning for badge */
+}
+.notification-badge {
+    position: absolute;
+    top: 0em;
+    right: 0em;
+    background-color: rgb(255, 230, 0);
+    color: black;
+    border-radius: 50%;
+    padding: .5em 0.5em;
+    font-size: 1.1em;
+    font-weight: bold;
+    line-height: 0.9;
+    min-width: 1.8em;
+    text-align: center;
+    /* z-index: 99; */
+    display: block;
+}
+/* Container for icons and labels */
+.icon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centers both the icon and label horizontally */
+    margin: 20px;
+    cursor: pointer;
+}
+.icon-label {
+    margin-top: 1px; /* Space between the icon and the label */
+    font-size: 14px;
+    font-weight: 360;
+    color: #000; /* Default label color (black) */
+    text-align: center;
+}
+.icon-container .icon-label.active {
+    color: #45c8d4; /* Active color when clicked */
+    font-weight: 700;
+}
+/* Specific style for the internet badge */
+.internet-badge {
+    width: 24px;
+    height: 24px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+    color: transparent;
+}
+/* Specific style for the DHCP badge */
+.dhcp-badge {
+    display: block;
+}
+/* Specific style for the device information */
+.h2-System-Information,
+.h2-Information,
+.h2-Storage-Information {
+    font-weight: 700;
+    color:black;
+    font-size: 24px;
+    line-height:36px
+}
+.h2-System-Information {
+    padding-bottom: .5em
+}
+.h2-Information,
+.h2-Storage-Information {
+    padding-top: 2em;
+    padding-bottom: 0.4em
+}
