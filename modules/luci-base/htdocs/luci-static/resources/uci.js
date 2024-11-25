@@ -153,6 +153,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	reorderSections: function() {
 		var v = this.state.values,
 		    n = this.state.creates,
+		    d = this.state.deletes,
 		    r = this.state.reorder,
 		    tasks = [];
 
@@ -166,10 +167,16 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		for (var c in r) {
 			var o = [ ];
 
+			// skip deletes within re-orders
+			if (d[c])
+				continue;
+
+			// push creates
 			if (n[c])
 				for (var s in n[c])
 					o.push(n[c][s]);
 
+			// push values
 			for (var s in v[c])
 				o.push(v[c][s]);
 
