@@ -1,0 +1,76 @@
+{
+	"luci-mod-tplink_dashboard-routes": {
+		"description": "Grant access to the system route status",
+		"read": {
+			"ubus": {
+				"file": [ "exec" ]
+			}
+		}
+	},
+	"luci-mod-tplink_dashboard-index": {
+		"description": "Grant access to main status display",
+		"read": {
+			"file": {
+				"/www/luci-static/resources/view/status/include": [ "list" ],
+				"/etc/board.json": [ "read" ],
+				"/proc/sys/net/netfilter/nf_conntrack_count": [ "read" ],
+				"/proc/sys/net/netfilter/nf_conntrack_max": [ "read" ]
+			},
+			"ubus": {
+				"luci": [ "getVersion" ],
+				"file": [ "list", "read" ],
+				"system": [ "board", "info" ],
+				"network.rrdns": [ "lookup" ]
+			}
+		}
+	},
+	"luci-mod-tplink_dashboard-index-dhcp": {
+		"description": "Grant access to DHCP status display",
+		"read": {
+			"ubus": {
+				"luci-rpc": [ "getDHCPLeases" ]
+			}
+		}
+	},
+	"luci-app-cpu-status": {
+		"description": "Grant access to cpu-status procedures",
+		"read": {
+			"file": {
+				"/proc/stat": [ "read" ]
+			}
+		}
+	},
+	"luci-mod-tplink_dashboard-index-storage": {
+		"description": "Grant access to storage and mount points display",
+		"read": {
+			"ubus": {
+				"luci": [ "getMountPoints" ],
+				"system": [ "info" ]
+			}
+		}
+	},
+	"luci-mod-tplink_dashboard-index-realtime": {
+		"description": "Grant access to realtime statistics",
+		"read": {
+			"ubus": {
+				"luci": [ "getConntrackList", "getRealtimeStats" ]
+			}
+		}
+	},
+	"luci-mod-tplink_dashboard-index-firewall": {
+		"description": "Grant access to firewall status display",
+		"read": {
+			"ubus": {
+				"file": [ "stat" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/init.d/firewall restart": [ "exec" ],
+				"/usr/sbin/iptables -Z": [ "exec" ],
+				"/usr/sbin/ip6tables -Z": [ "exec" ]
+			}
+		}
+	}
+}
+
