@@ -1039,7 +1039,7 @@ return view.extend({
 
 		so = ss.option(form.Value, 'ip', _('IP address'));
 		so.rmempty = false;
-		so.datatype = 'ipaddr';
+		so.datatype = 'ipaddr("nomask")';
 
 		var ipaddrs = {};
 
