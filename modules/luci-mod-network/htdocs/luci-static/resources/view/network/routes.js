@@ -35,6 +35,7 @@ return view.extend({
 			s.anonymous = true;
 			s.addremove = true;
 			s.sortable = true;
+			s.cloneable = true;
 			s.nodescriptions = true;
 
 			s.tab('general', _('General Settings'));
@@ -127,6 +128,7 @@ return view.extend({
 			s.anonymous = true;
 			s.addremove = true;
 			s.sortable = true;
+			s.cloneable = true;
 			s.nodescriptions = true;
 
 			s.tab('general', _('General Settings'));

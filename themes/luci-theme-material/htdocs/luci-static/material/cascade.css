@@ -1378,10 +1378,12 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	max-width: 25rem;
 	margin-right: 2em;
 	padding: .5em .25em .25em 0;
-	pointer-events: none;
+	pointer-events: auto; /* needed for drag-and-drop in UIDynamicList */
 	color: #666;
 	border-bottom: 2px solid rgba(0, 0, 0, .26);
 	outline: 0;
+	cursor: move; /* drag-and-drop */
+	user-select: text; /* text selection in drag-and-drop */
 }
 
 .cbi-dynlist[name="sshkeys"] > .item {
@@ -1403,9 +1405,21 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	background-color: var(--red-color-high);
 }
 
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .item.drag-over {
+	border-top: 1px solid black;
+}
+
+/* Make item being dragged in UIDynamicList partially transparent*/
+.cbi-dynlist > .item.dragging {
+	opacity: 0.5;
+}
+
+/* prevent pointer changing when over the span element in UIDynamicList */
 .cbi-dynlist > .item > span {
 	white-space: normal;
 	word-break: break-word;
+	pointer-events: none;
 }
 
 .cbi-dynlist > .add-item {
@@ -1413,6 +1427,16 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	align-items: center;
 	width: 100%;
 	min-width: 16rem;
+}
+
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .add-item > .cbi-input-text.drag-over {
+	border-top: 1px solid black;
+}
+
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .add-item > .cbi-button-add.drag-over {
+	border-top: 1px solid black;
 }
 
 .cbi-dynlist > .add-item:not([ondrop]) > input {

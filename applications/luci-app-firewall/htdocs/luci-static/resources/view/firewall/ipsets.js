@@ -33,6 +33,7 @@ return view.extend({
 		s.addremove = true;
 		s.anonymous = true;
 		s.sortable  = true;
+		s.cloneable = true;
 		s.nodescriptions = true;
 
 

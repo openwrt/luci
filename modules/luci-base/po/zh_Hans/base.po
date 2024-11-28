@@ -4,8 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-11-17 07:47+0000\n"
-"Last-Translator: MkQtS <MkQtS@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2024-11-27 12:00+0000\n"
+"Last-Translator: try496 <pinghejk@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -101,7 +101,7 @@ msgstr "（最近 %d 分钟信息，每 %d 秒刷新）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:843
 msgid "(Max 1h == 3600)"
-msgstr "（最大值 1h == 3600)"
+msgstr "(最大值 1h = 3600)"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:127
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:133
@@ -2692,9 +2692,8 @@ msgstr "在低 Ack 应答时断开连接"
 msgid ""
 "Discard also upstream responses containing {rfc_4193_link}, Link-Local and "
 "private IPv4-Mapped {rfc_4291_link} IPv6 Addresses."
-msgstr ""
-"同时丢弃包含 {rfc_4193_link}、链路本地地址和私有IPv4映射 {rfc_4291_link} IPv6"
-"地址的上游响应。"
+msgstr "同时丢弃包含 {rfc_4193_link}、链路本地地址和私有 IPv4 映射 {rfc_4291_link} "
+"IPv6 地址的上游响应。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:508
 msgid "Discard upstream responses containing {rfc_1918_link} addresses."
@@ -4041,7 +4040,7 @@ msgstr "网关地址无效"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:151
 msgid "Gateway metric"
-msgstr "网关跃点"
+msgstr "网关度量值"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:387
 msgid "General"
@@ -5815,7 +5814,7 @@ msgstr "本地域名"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:429
 msgid "Local domain suffix appended to DHCP names and hosts file entries."
-msgstr "向 DHCP 名称和 hosts 文件条目追加本地域后缀。"
+msgstr "向 DHCP 名称和 hosts 文件条目追加本地域名后缀。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:531
 msgid "Local service only"
@@ -5844,7 +5843,7 @@ msgstr "日志"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:442
 msgid ""
 "Log all options sent to DHCP clients and the tags used to determine them."
-msgstr "记录发送给DHCP客户端的所有选项以及用于确定这些选项的标签。"
+msgstr "记录发送给 DHCP 客户端的所有选项以及用于确定这些选项的标签。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:98
 msgctxt "nft log action"
@@ -6944,8 +6943,8 @@ msgid ""
 "Note: you may also need a DHCP Proxy (currently unavailable) when specifying "
 "a non-standard Relay To port(<code>addr#port</code>)."
 msgstr ""
-"注意：在为“Relay To”指定非标准端口(<code>addr#port</code>) 时，您可能还需要使"
-"用DHCP代理 (当前不可用)。"
+"注意：当指定非标准的 RelayTo 端口 (<code>addr#port</code>) 时，"
+"您可能还需要一个 DHCP 代理 (目前不可用)。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:142
 msgid "Notes"
@@ -8232,7 +8231,7 @@ msgstr "原始 16 进制编码的字节。除非您的运营商要求，否则�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:626
 msgid "Read {etc_ethers} to configure the DHCP server."
-msgstr "读取 {etc_ethers}来配置 DHCP 服务器。"
+msgstr "读取 {etc_ethers} 来配置 DHCP 服务器。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:554
 msgid "Really switch protocol?"
@@ -8822,8 +8821,9 @@ msgid ""
 "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 Type "
 "134\">RA</abbr> messages. Maximum is 9000 seconds."
 msgstr ""
-"在 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告,ICMPv6类"
-"型 134）\">RA</abbr> 消息中发布的路由器生存时间为 9000 秒，这是最大值。"
+"将在 <abbr title=\"Router Advertisement, ICMPv6 Type 134（"
+"路由器通告,ICMPv6类型 134）\">RA</abbr> 消息中发布的路由器生存时间。最大值为 "
+"9000 秒。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
@@ -11295,7 +11295,7 @@ msgstr "使用默认网关"
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:164
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
 msgid "Use gateway metric"
-msgstr "使用网关跃点"
+msgstr "使用网关度量值"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:88
 msgid "Use legacy MAP"

@@ -2432,6 +2432,16 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	 */
 
 	/**
+	 * Set to `true`, a clone button is added to the button column, allowing
+	 * the user to clone section instances mapped by the section form element.
+	 * The default is `false`.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#cloneable
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
 	 * Enables a per-section instance row `Edit` button which triggers a certain
 	 * action when clicked. If set to a string, the string value is used
 	 * as `String.format()` pattern with the name of the underlying UCI section
@@ -2479,11 +2489,25 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 		throw 'Tabs are not supported by TableSection';
 	},
 
+
+	/**
+	 * Clone the section_id, putting the clone immediately after if put_next
+	 * is true. Optionally supply a name for the new section_id.
+	 */
+	/** @private */
+	handleClone: function(section_id, put_next, name) {
+		let config_name = this.uciconfig || this.map.config;
+
+		this.map.data.clone(config_name, this.sectiontype, section_id, put_next, name);
+		return this.map.save(null, true);
+	},
+
 	/** @private */
 	renderContents: function(cfgsections, nodes) {
 		var section_id = null,
 		    config_name = this.uciconfig || this.map.config,
 		    max_cols = isNaN(this.max_cols) ? this.children.length : this.max_cols,
+		    cloneable = this.cloneable,
 		    has_more = max_cols < this.children.length,
 		    drag_sort = this.sortable && !('ontouchstart' in window),
 		    touch_sort = this.sortable && ('ontouchstart' in window),
@@ -2601,7 +2625,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 					dom.content(trEl.lastElementChild, opt.title);
 			}
 
-			if (this.sortable || this.extedit || this.addremove || has_more || has_action)
+			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable)
 				trEl.appendChild(E('th', {
 					'class': 'th cbi-section-table-cell cbi-section-actions'
 				}));
@@ -2628,7 +2652,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 						(typeof(opt.width) == 'number') ? opt.width+'px' : opt.width;
 			}
 
-			if (this.sortable || this.extedit || this.addremove || has_more || has_action)
+			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable)
 				trEl.appendChild(E('th', {
 					'class': 'th cbi-section-table-cell cbi-section-actions'
 				}));
@@ -2643,7 +2667,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	renderRowActions: function(section_id, more_label) {
 		var config_name = this.uciconfig || this.map.config;
 
-		if (!this.sortable && !this.extedit && !this.addremove && !more_label)
+		if (!this.sortable && !this.extedit && !this.addremove && !more_label && !this.cloneable)
 			return E([]);
 
 		var tdEl = E('td', {
@@ -2690,6 +2714,19 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 			);
 		}
 
+		if (this.cloneable) {
+			var btn_title = this.titleFn('clonebtntitle', section_id);
+
+			dom.append(tdEl.lastElementChild,
+				E('button', {
+					'title': btn_title || _('Clone') + '⿻',
+					'class': 'btn cbi-button cbi-button-neutral',
+					'click': ui.createHandlerFn(this, 'handleClone', section_id, true),
+					'disabled': this.map.readonly || null
+				}, [ btn_title || _('Clone') + '⿻' ])
+			);
+		}
+
 		if (this.addremove) {
 			var btn_title = this.titleFn('removebtntitle', section_id);
 
@@ -2715,7 +2752,6 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 	handleDragStart: function(ev) {
 		if (!scope.dragState || !scope.dragState.node.classList.contains('drag-handle')) {
 			scope.dragState = null;
-			ev.preventDefault();
 			return false;
 		}
 
@@ -2726,6 +2762,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 	/** @private */
 	handleDragOver: function(ev) {
+		if (scope.dragState === null ) return;
 		var n = scope.dragState.targetNode,
 		    r = scope.dragState.rect,
 		    t = r.top + r.height / 2;
@@ -2746,6 +2783,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 	/** @private */
 	handleDragEnter: function(ev) {
+		if (scope.dragState === null ) return;
 		scope.dragState.rect = ev.currentTarget.getBoundingClientRect();
 		scope.dragState.targetNode = ev.currentTarget;
 	},
@@ -2771,6 +2809,7 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 
 	/** @private */
 	handleDrop: function(ev) {
+		if (scope.dragState === null ) return;
 		var s = scope.dragState;
 
 		if (s.node && s.targetNode) {
@@ -3031,8 +3070,10 @@ var CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection.p
 				n.classList.remove('flash')
 			});
 
+			val = Array.isArray(val) ? val.join(' '): val;
+			val = `${val}`; // coerce non-string types to string
 			list.push([
-				ui.Table.prototype.deriveSortKey((val != null) ? val.trim() : ''),
+				ui.Table.prototype.deriveSortKey((val != null && typeof val.trim === 'function') ? val.trim() : ''),
 				tr
 			]);
 		}, this));
