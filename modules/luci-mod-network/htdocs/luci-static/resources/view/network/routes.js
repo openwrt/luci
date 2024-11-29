@@ -5,6 +5,7 @@
 'require form';
 'require network';
 'require tools.widgets as widgets';
+'require tools.network as tn';
 
 return view.extend({
 	load: function() {
@@ -159,6 +160,12 @@ return view.extend({
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || E('em', _('any'));
 			};
+
+			o = s.taboption('general', form.Value, 'ipproto', _('IP Protocol'), _('Match traffic IP protocol type'));
+			o.datatype = 'range(0,255)';
+			tn.protocols.forEach(function(p) {
+				o.value(p.i, p.d);
+			});
 
 			o = s.taboption('general', widgets.NetworkSelect, 'out', _('Outgoing interface'), _('Match traffic destined to this interface'));
 			o.loopback = true;
