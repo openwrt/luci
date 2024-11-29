@@ -74,7 +74,7 @@ return view.extend({
 
 		if (L.hasSystemFeature('offloading')) {
 			s = m.section(form.TypedSection, 'defaults', _('Routing/NAT Offloading'),
-				_('Experimental feature. Not fully compatible with QoS/SQM.'));
+				_('Not fully compatible with QoS/SQM.'));
 
 			s.anonymous = true;
 			s.addremove = false;
