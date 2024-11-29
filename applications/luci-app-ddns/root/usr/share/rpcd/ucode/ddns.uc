@@ -119,7 +119,7 @@ const methods = {
 					const dnsServer = s['dns_server'] || '';
 					const forceIpVersion = int(s['force_ipversion'] || 0);
 					const forceDnsTcp = int(s['force_dnstcp'] || 0);
-					const isGlue = int(s['is_glue'] || 0);
+					// const isGlue = int(s['is_glue'] || 0);
 					const useIpv6 = int(s['use_ipv6'] || 0);
 					const lookupHost = s['lookup_host'] || '_nolookup_';
 					let command = [luci_helper];
@@ -127,7 +127,7 @@ const methods = {
 					if (useIpv6 == 1) push(command, '-6');
 					if (forceIpVersion == 1) push(command, '-f');
 					if (forceDnsTcp == 1) push(command, '-t');
-					if (isGlue == 1) push(command, '-g');
+					// if (isGlue == 1) push(command, '-g');
 
 					push(command, '-l', lookupHost);
 					push(command, '-S', section);
@@ -148,12 +148,12 @@ const methods = {
 
 				let _uptime = int(uptime());
 
-				const forceSeconds = calc_seconds(
+				const forcedUpdateInterval = calc_seconds(
 					int(s['force_interval']) || 72,
 					s['force_unit'] || 'hours'
 				);
 
-				const checkSeconds = calc_seconds(
+				const checkInterval = calc_seconds(
 					int(s['check_interval']) || 10,
 					s['check_unit'] || 'minutes'
 				);
@@ -163,13 +163,13 @@ const methods = {
 					const epoch = time() - _uptime + lastUpdate;
 					convertedLastUpdate = epoch2date(epoch);
 					// convertedLastUpdate = get_date(epoch, dateFormat);
-					nextUpdate = epoch2date(epoch + forceSeconds + checkSeconds);
-					// nextUpdate = get_date(epoch + forceSeconds + checkSeconds, dateFormat);
+					nextUpdate = epoch2date(epoch + forcedUpdateInterval + checkInterval);
+					// nextUpdate = get_date(epoch + forcedUpdateInterval + checkInterval, dateFormat);
 				}
 
-				if (pid > 0 && (lastUpdate + forceSeconds + checkSeconds - _uptime) <= 0) {
+				if (pid > 0 && (lastUpdate + forcedUpdateInterval + checkInterval - _uptime) <= 0) {
 					nextUpdate = 'Verify';
-				} else if (forceSeconds === 0) {
+				} else if (forcedUpdateInterval === 0) {
 					nextUpdate = 'Run once';
 				} else if (pid == 0 && s['enabled'] == '0') {
 					nextUpdate = 'Disabled';
@@ -243,6 +243,13 @@ const methods = {
 				return result;
 			};
 
+			const hasGNUWgetSsl = () => {
+				if (cache['has_gnuwgetssl']) return cache['has_gnuwgetssl'];
+				const result = hasWget() && system(`wget -V 2>&1 | grep -iqF '+https'`) == 0 ? true: false;
+				cache['has_gnuwgetssl'] = result;
+				return result;
+			};
+
 			const hasCurl = () => {
 				if (cache['has_curl']) return cache['has_curl'];
 				const result = hasCommand('curl');
@@ -277,10 +284,10 @@ const methods = {
 			res['has_wget'] = hasWget();
 			res['has_curl'] = hasCurl();
 
-			res['has_ssl'] = hasWgetSsl() || hasCurlSsl() || (hasFetch() && hasFetchSsl());
-			res['has_proxy'] = hasWgetSsl() || hasCurlPxy() || hasFetch() || hasBbwget();
-			res['has_forceip'] = hasWgetSsl() || hasCurl() || hasFetch();
-			res['has_bindnet'] = hasCurl() || hasWgetSsl();
+			res['has_ssl'] = hasGNUWgetSsl()|| hasWgetSsl() || hasCurlSsl() || (hasFetch() && hasFetchSsl());
+			res['has_proxy'] = hasGNUWgetSsl() || hasWgetSsl() || hasCurlPxy() || hasFetch() || hasBbwget();
+			res['has_forceip'] = hasGNUWgetSsl() || hasWgetSsl() || hasCurl() || hasFetch();
+			res['has_bindnet'] = hasCurl() || hasGNUWgetSsl();
 
 			const hasBindHost = () => {
 				if (cache['has_bindhost']) return cache['has_bindhost'];
