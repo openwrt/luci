@@ -37,7 +37,6 @@ return baseclass.extend({
 	},
 
 	render: function(data) {
-
 		var table = E('table', { 'class': 'table', 'id': 'upnp_status_table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Client Name')),
@@ -51,7 +50,6 @@ return baseclass.extend({
 		]);
 
 		var rules = Array.isArray(data[0].rules) ? data[0].rules : [];
-
 		var rows = rules.map(function(rule) {
 			return [
 				rule.host_hint || _('Unknown'),
@@ -66,9 +64,7 @@ return baseclass.extend({
 				}, [ _('Delete') ])
 			];
 		});
-
 		cbi_update_table(table, rows, E('em', _('There are no active port maps.')));
-
 		return table;
 	}
 });
