@@ -40,7 +40,7 @@ return baseclass.extend({
 				'src': L.resource('view/dashboard/icons/devices.svg'),
 				'width': 55,
 				'title': this.title,
-				'class': 'middle'
+				'class': 'middle svgmonotone'
 			}),
 			E('h3', this.title)
 		]));

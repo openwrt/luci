@@ -44,7 +44,7 @@ return baseclass.extend({
 				'src': L.resource('view/dashboard/icons/' + icon + '.svg'),
 				'width': 'router' == type ? 64 : 54,
 				'title': title,
-				'class': 'middle'
+				'class': (type == 'router' || icon == 'not-internet') ? 'middle svgmonotone' : 'middle'
 			}),
 			E('h3', title)
 		]));
@@ -320,7 +320,7 @@ return baseclass.extend({
 
 			release: {
 				title: _('Firmware Version'),
-				value: boardinfo.release.description
+				value: boardinfo?.release?.description
 			}
 		};
 

@@ -192,6 +192,13 @@
 	border-bottom: 1px solid var(--border-color-medium, rgba(0, 0, 0, 0.1));
 }
 
+[data-darkmode="true"] {
+	/* invert black SVG line drawings in dark mode */
+	.Dashboard .svgmonotone {
+		filter: invert(.5);
+	}
+}
+
 /**
  * Responsive
  **/
