@@ -45,7 +45,7 @@ return view.extend({
 		}
 
 		// Variables you'll usually see declared in LuCI JS apps; forM, Section, Option
-		var m, s, o;
+		let m, s, o;
 
 		/*
 		LuCI has the concept of a JSONMap. This will map a structured object to

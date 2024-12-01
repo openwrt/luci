@@ -38,7 +38,7 @@ return view.extend({
 	},
 
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('vnstat', _('vnStat'), _('vnStat is a network traffic monitor for Linux that keeps a log of network traffic for the selected interface(s).'));
 

@@ -255,7 +255,7 @@ return view.extend({
 
 		var _this = this;
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('ddns', _('Dynamic DNS'));
 

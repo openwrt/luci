@@ -19,7 +19,7 @@ return view.extend({
 	render: function (data) {
 		var knownHosts = data[0];
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('sshtunnel', _('SSH Tunnels'),
 			_('This configures <a %s>SSH Tunnels</a>.')

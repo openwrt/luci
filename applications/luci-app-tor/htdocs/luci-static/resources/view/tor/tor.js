@@ -6,7 +6,7 @@
 
 return view.extend({
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('tor', _('Tor onion router'),
 			_('For further information <a %s>check the documentation</a>')

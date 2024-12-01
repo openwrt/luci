@@ -45,7 +45,7 @@ return view.extend({
 		return getStatus();
 	},
 	render: function(status) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('natmap', _('NATMap'));
 		s = m.section(form.GridSection, 'natmap');

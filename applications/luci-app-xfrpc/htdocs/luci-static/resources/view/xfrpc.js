@@ -37,7 +37,7 @@ function renderStatus(isRunning) {
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('xfrpc', _('xfrpc'));
 		m.description = _("xfrpc is a c language frp client for frps.");

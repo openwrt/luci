@@ -31,7 +31,7 @@ return view.extend({
 	},
 
 	render: function(loaded_promises) {
-		var m, s, o;
+		let m, s, o;
 		const have_ssl_support = loaded_promises[0];
 
 		m = new form.Map('nut_monitor', _('NUT Monitor'),

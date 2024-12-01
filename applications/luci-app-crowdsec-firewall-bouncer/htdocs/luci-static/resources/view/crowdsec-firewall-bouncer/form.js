@@ -5,7 +5,7 @@
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('crowdsec', _('CrowdSec'),
 			_('Gain <a href="http://www.crowdsec.net">crowd-sourced</a> protection against malicious IPs. ' +

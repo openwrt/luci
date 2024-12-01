@@ -14,7 +14,7 @@ return view.extend({
 	},
 
 	render: function(data) {
-		var m, s, o;
+		let m, s, o;
 
 		/* General Settings */
 		m = new form.Map('basicstation', _('General Settings'));

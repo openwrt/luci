@@ -9,7 +9,7 @@ return view.extend({
 		return Promise.all([uci.load('luci_olsr')]);
 	},
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('luci_olsr', _('OLSR - Display Options'));
 

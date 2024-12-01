@@ -11,7 +11,7 @@ return view.extend({
 	},
 
 	render: function(data) {
-		var m, s, o;
+		let m, s, o;
 		var a_ifaces, a_down, a_delay, a_loss;
 
 		a_ifaces = uci.sections('apinger', 'interface');

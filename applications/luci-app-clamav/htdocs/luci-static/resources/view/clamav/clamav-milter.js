@@ -10,7 +10,7 @@ return view.extend({
 	},
 
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('clamav-milter', _('ClamAV Milter'), _('Configuration'));
 

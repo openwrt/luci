@@ -364,7 +364,7 @@ return view.extend({
 	},
 
 	render: function (data) {
-		var m, s, o;
+		let m, s, o;
 
 		if (!('usteer' in data[0])) {
 			m = new form.Map('usteer', _('Usteer'),

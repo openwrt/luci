@@ -59,7 +59,7 @@ return view.extend({
 			]));
 		}
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('sqm', _('Smart Queue Management'));
 		m.description = _("With <abbr title=\"Smart Queue Management\">SQM</abbr> you " +

@@ -38,7 +38,7 @@ return view.extend({
 		var { config_file, mime_table } = data[0];
 		var options = data[1];
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('squid', _('Squid'));
 

@@ -24,7 +24,7 @@ return view.extend({
 	},
 
 	render: function(promises) {
-		var m, s, o;
+		let m, s, o;
 		var networks = promises[0];
 
 		m = new form.Map('xinetd', _('Xinetd Settings'), _('Here you can configure Xinetd services'));

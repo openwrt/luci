@@ -20,7 +20,7 @@ return view.extend({
 	},
 
 	render: function (loaded_promises) {
-		var m, s, o;
+		let m, s, o;
 		const networks = loaded_promises[0];
 		const hosts = loaded_promises[1];
 
