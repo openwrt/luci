@@ -1,25 +1,21 @@
 {
-    "tags": {
-        "allowUnknownTags": true,
-        "dictionaries": ["jsdoc","closure"]
-    },
     "source": {
-        "include": ["modules/luci-base/htdocs/luci-static/resources"],
-        "includePattern": ".+\\.js(doc|x)?$"
-    },
-    "plugins": [
-        "plugins/markdown"
-    ],
-    "templates": {
-        "cleverLinks": true,
-        "monospaceLinks": true,
-        "default": {
-                "outputSourceFiles": true
-        }
+        "include": [
+            "src"
+        ],
+        "exclude": [
+            "node_modules"
+        ],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(^|\\/|\\\\)_"
     },
     "opts": {
-        "destination": "docs/jsapi",
-        "recurse": true,
-        "readme": "docs/jsapi/README.md"
+        "destination": "./docs",
+        "recurse": true
+    },
+    "templates": {
+        "default": {
+            "includeDate": false
+        }
     }
 }
