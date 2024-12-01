@@ -30,6 +30,25 @@ You can browse the generated API documentation directly on Github.
 
 Documentation for developing and extending LuCI can be found [in the Wiki](https://github.com/openwrt/luci/wiki)
 
+ Including taffydb in the Project
+To ensure that the required taffydb dependency is available in your project, follow these steps:
+
+Install taffydb
+Run the following command in your project directory to install taffydb:
+
+bash
+Copy code
+npm install taffydb --save-dev
+Why taffydb?
+taffydb is a lightweight JavaScript database used in this project for efficient data management. It is required to run certain scripts, such as generating documentation via jsdoc.
+
+Regenerate API Documentation
+Once taffydb is installed, you can regenerate the API documentation using:
+
+bash
+Copy code
+npm run doc
+This command ensures that the documentation is built using the jsdoc tool and the necessary dependencies.
 ## License
 
 See [LICENSE](LICENSE) file.
