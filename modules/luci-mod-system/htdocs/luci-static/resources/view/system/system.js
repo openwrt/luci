@@ -195,6 +195,7 @@ return view.extend({
 		o = s.taboption('logging', form.ListValue, 'cronloglevel', _('Cron Log Level'));
 		o.default = 7;
 		o.value(7, _('Normal'));
+		o.value(9, _('Disabled'));
 		o.value(5, _('Debug'));
 
 		/*
