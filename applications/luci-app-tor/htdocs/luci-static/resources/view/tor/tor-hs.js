@@ -27,7 +27,7 @@ return view.extend({
 			hsMap.set(hs.name, hs.hostname);
 		});
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('tor-hs', _('Tor Onion Services'),
 			_('Tor Onion (Hidden) Services are proxy tunnels to your local website, SSH and other services.') + '<br />' +

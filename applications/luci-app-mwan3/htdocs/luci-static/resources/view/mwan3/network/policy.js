@@ -12,7 +12,7 @@ return view.extend({
 	},
 
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('mwan3', _('MultiWAN Manager - Policies'),
 			_('Policies are profiles grouping one or more members controlling how Mwan3 distributes traffic.') + '<br />' +

@@ -70,7 +70,7 @@ return view.extend({
 
 	render: function(data) {
 
-		var m, s, o;
+		let m, s, o;
 
 		var protocols = '%s & %s/%s'.format(
 			'<a href="https://en.wikipedia.org/wiki/Internet_Gateway_Device_Protocol" target="_blank" rel="noreferrer"><abbr title="UPnP Internet Gateway Device (Control Protocol)">UPnP IGD</abbr></a>',

@@ -4,7 +4,7 @@
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('apinger', _('Apinger - Down Alarm'),
 			_('This alarm will be fired when target does not respond for "Time"'));

@@ -131,7 +131,7 @@ return view.extend({
 	},
 
 	render: function(result) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('adblock', 'Adblock', _('Configuration of the adblock package to block ad/abuse domains by using DNS. \
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>'));

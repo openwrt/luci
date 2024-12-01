@@ -12,7 +12,7 @@ return view.extend({
 	},
 
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('mwan3', _('MultiWAN Manager - Members'),
 			_('Members are profiles attaching a metric and weight to an MWAN interface.') + '<br />' +

@@ -88,7 +88,7 @@ return view.extend({
 		]);
 	},
 	render: function (stats) {
-		var m, s, o;
+		let m, s, o;
 		var ss, so;
 		var servers, download_files;
 

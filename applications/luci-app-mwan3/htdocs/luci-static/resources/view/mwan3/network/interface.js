@@ -16,7 +16,7 @@ return view.extend({
 	},
 
 	render: function (stats) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('mwan3', _('MultiWAN Manager - Interfaces'),
 			_('Mwan3 requires that all interfaces have a unique metric configured in /etc/config/network.') + '<br />' +

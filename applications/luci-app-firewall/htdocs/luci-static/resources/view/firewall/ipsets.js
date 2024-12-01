@@ -15,7 +15,7 @@ return view.extend({
 	},
 
 	render: function(data) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('firewall', _('Firewall - IP sets'),
 			_('firewall4 supports referencing and creating IP sets to simplify matching of large address lists without the need to create one rule per item to match. Port ranges in ipsets are unsupported by firewall4.<br />'));

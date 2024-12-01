@@ -3,7 +3,7 @@
 
 return L.view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('dump1090', _('dump1090'), 
 			_('dump1090 is a Mode S decoder specifically designed for RTLSDR devices. Here you can configure the settings.'));

@@ -5,7 +5,7 @@
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('bcp38', _('BCP38'),
 			_('This function blocks packets with private address destinations ' +

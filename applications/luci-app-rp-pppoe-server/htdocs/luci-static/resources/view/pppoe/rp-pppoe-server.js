@@ -12,7 +12,7 @@ return view.extend({
 	},
 
 	render: function (loaded_promises) {
-		var m, s, o;
+		let m, s, o;
 		const networks = loaded_promises[0];
 
 		m = new form.Map('pppoe', _('Roaring Penguin PPPoE Server'),

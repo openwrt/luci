@@ -5,7 +5,7 @@
 // Project code format is tabs, not spaces
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		/*
 		The first argument to form.Map() maps to the configuration file available

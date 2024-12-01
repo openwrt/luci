@@ -12,7 +12,7 @@ return view.extend({
 	},
 
 	render: function(data) {
-		var m, s, o;
+		let m, s, o;
 		var instances;
 
 		instances = uci.sections('keepalived', 'vrrp_instance');

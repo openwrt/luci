@@ -19,7 +19,7 @@ return view.extend({
 			ui.addNotification(null, E('p', _('No SSH keys found, <a %s>generate a new one</a>').format('href="./ssh_keys"')), 'warning');
 		}
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('sshtunnel', _('SSH Tunnels'),
 			_('This configures <a %s>SSH Tunnels</a>.')

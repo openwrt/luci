@@ -47,7 +47,7 @@ return view.extend({
 	},
 
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('nlbwmon', _('Netlink Bandwidth Monitor - Configuration'),
 			_('The Netlink Bandwidth Monitor (nlbwmon) is a lightweight, efficient traffic accounting program keeping track of bandwidth usage per host and protocol.'));

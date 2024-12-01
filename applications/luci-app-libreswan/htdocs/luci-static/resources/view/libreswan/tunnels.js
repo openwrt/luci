@@ -31,7 +31,7 @@ return view.extend({
 
 	render: function(data) {
 		var netDevs = data[0];
-		var m, s, o;
+		let m, s, o;
 		var proposals;
 
 		proposals = uci.sections('libreswan', 'crypto_proposal');

@@ -31,7 +31,7 @@ var CBIMiniDLNAStatus = form.DummyValue.extend({
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('minidlna', _('miniDLNA'), _('MiniDLNA is server software with the aim of being fully compliant with DLNA/UPnP-AV clients.'));
 

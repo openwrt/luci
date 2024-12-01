@@ -5,7 +5,7 @@
 
 return view.extend({
 	render: function(data) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('luci', _('Custom Commands'),
 			_('This page allows you to configure custom shell commands which can be easily invoked from the web interface.'));

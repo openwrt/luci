@@ -14,7 +14,7 @@ return view.extend({
 	},
 
 	render: function (data) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('mwan3', _('MultiWAN Manager - Rules'),
 			_('Rules specify which traffic will use a particular MWAN policy.') + '<br />' +

@@ -26,7 +26,7 @@ return view.extend({
 		return Promise.all([uci.load('mjpg-streamer')]);
 	},
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('mjpg-streamer', 'MJPG-streamer', _('mjpg streamer is a streaming application for Linux-UVC compatible webcams'));
 

@@ -200,7 +200,7 @@ return view.extend({
 			}
 		}
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('rpcd', _('LuCI Logins'));
 
