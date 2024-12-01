@@ -9,6 +9,7 @@ include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI support for LLDP daemon
 LUCI_DEPENDS:=+lldpd +rpcd-mod-ucode
+PKG_MAINTAINER:=Paul Donald <newtwen+github@gmail.com>
 
 PKG_LICENSE:=MIT
 
