@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2024-10-29 18:58+0000\n"
+"PO-Revision-Date: 2024-11-28 18:31+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/"
 ">\n"
@@ -12,13 +12,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1076
 msgid "!known (not known)"
 msgstr "!conocido (desconocido)"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:649
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:652
 msgctxt "Yet unknown nftables table family (\"family\" table \"name\")"
 msgid "\"%h\" table \"%h\""
 msgstr "\"%h\" tabla \"%h\""
@@ -146,7 +146,7 @@ msgstr "1"
 msgid "1 Minute Load:"
 msgstr "Carga a 1 minuto:"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:323
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:325
 msgctxt "nft amount of flags"
 msgid "1 flag"
 msgid_plural "%d flags"
@@ -533,13 +533,13 @@ msgstr "¡La monitorización ARP no es compatible con la política seleccionada!
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:107
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:107
 msgid "ARP proxy"
-msgstr ""
+msgstr "Proxy ARP"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:175
 msgid "ARP retry threshold"
 msgstr "Umbral de reintento ARP"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:637
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:640
 msgid "ARP traffic table \"%h\""
 msgstr "Tabla de tráfico ARP \"%h\""
 
@@ -806,7 +806,7 @@ msgstr "Agregar una IPv6 a un conjunto IPv4 y viceversa falla silenciosamente."
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:178
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:178
 msgid "Additional Peers"
-msgstr ""
+msgstr "Pares adicionales"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:583
 msgid "Additional hosts files"
@@ -889,7 +889,7 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:76
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:76
 msgid "Ageing"
-msgstr ""
+msgstr "Envejecimiento"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:567
 msgid "Ageing time"
@@ -1021,6 +1021,8 @@ msgstr "Configuración de IPs permitidas no válida"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:42
 msgid "Alternatively, a multicast address to reach a group of peers."
 msgstr ""
+"Alternativamente, una dirección de multidifusión para llegar a un grupo de "
+"pares."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:775
 msgid "Always"
@@ -1127,7 +1129,7 @@ msgstr "Montaje Anónimo"
 msgid "Anonymous Swap"
 msgstr "Intercambio Anónimo"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:518
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:521
 msgctxt "nft match any traffic"
 msgid "Any packet"
 msgstr "Cualquier paquete"
@@ -1201,8 +1203,8 @@ msgstr "Estaciones asociadas"
 msgid "Associations"
 msgstr "Asociaciones"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:126
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:127
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:128
 msgid ""
 "At least <strong>%h</strong> per <strong>%h</strong>, burst of <strong>%h</"
 "strong>"
@@ -1210,8 +1212,8 @@ msgstr ""
 "Al menos <strong>%h</strong> por <strong>%h</strong>, ráfaga de <strong>%h</"
 "strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:124
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:125
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:126
 msgid ""
 "At most <strong>%h</strong> per <strong>%h</strong>, burst of <strong>%h</"
 "strong>"
@@ -1278,6 +1280,9 @@ msgid ""
 "Automatic mac learning using multicast; inserts unknown source link layer "
 "addresses and IP addresses into the VXLAN device %s"
 msgstr ""
+"Aprendizaje automático de mac mediante multidifusión; inserta direcciones de "
+"capa de enlace de origen desconocidas y direcciones IP en el dispositivo "
+"VXLAN %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:174
 msgid "Automatically check filesystem for errors before mounting"
@@ -1543,7 +1548,7 @@ msgstr "Opciones específicas del puerto de puente"
 msgid "Bridge ports"
 msgstr "Puertos del puente"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:641
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:644
 msgid "Bridge traffic table \"%h\""
 msgstr "Tabla de tráfico de puente \"%h\""
 
@@ -1588,7 +1593,7 @@ msgstr ""
 "Certificado CA (codificado PEM; úselo en lugar del almacenamiento en todo el "
 "sistema para verificar el certificado de la puerta de enlace)."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:182
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:181
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
 "Certificado CA; Si está vacío será guardado después de la primera conexión."
@@ -1653,33 +1658,33 @@ msgstr "Cancelar"
 msgid "Cannot parse configuration: %s"
 msgstr "No se puede analizar la configuración: %s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:568
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:571
 msgctxt "Chain hook: forward"
 msgid "Capture incoming packets addressed to other hosts"
 msgstr "Captura paquetes entrantes dirigidos a otros hosts"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:560
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:563
 msgctxt "Chain hook: prerouting"
 msgid "Capture incoming packets before any routing decision"
 msgstr "Captura paquetes entrantes antes de cualquier decisión de enrutamiento"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:564
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:567
 msgctxt "Chain hook: input"
 msgid "Capture incoming packets routed to the local system"
 msgstr "Captura paquetes entrantes enrutados al sistema local"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:576
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:579
 msgctxt "Chain hook: postrouting"
 msgid "Capture outgoing packets after any routing decision"
 msgstr ""
 "Captura paquetes salientes después de cualquier decisión de enrutamiento"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:572
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:575
 msgctxt "Chain hook: output"
 msgid "Capture outgoing packets originating from the local system"
 msgstr "Captura los paquetes salientes originados en el sistema local"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:556
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:559
 msgctxt "Chain hook: ingress"
 msgid "Capture packets directly after the NIC received them"
 msgstr "Captura paquetes directamente después de que la NIC los haya recibido"
@@ -1756,7 +1761,7 @@ msgstr ""
 msgid "Chain"
 msgstr "Cadena"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:580
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:583
 msgctxt "Yet unknown nftables chain hook"
 msgid "Chain hook \"%h\""
 msgstr "Gancho de cadena \"%h\""
@@ -2092,16 +2097,16 @@ msgstr "Se han guardado los contenidos."
 msgid "Continue"
 msgstr "Continuar"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:97
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:98
 msgctxt "nft jump action"
 msgid "Continue in <strong><a href=\"#%q.%q\">%h</a></strong>"
 msgstr "Continuar en <strong><a href=\"#%q.%q\">%h</a></strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:129
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:130
 msgid "Continue in calling chain"
 msgstr "Continuar en cadena de llamadas"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:550
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:553
 msgctxt "Chain policy: accept"
 msgid "Continue processing unmatched packets"
 msgstr "Continuar procesando paquetes no coincidentes"
@@ -2772,6 +2777,11 @@ msgstr ""
 "No envíe ningún mensaje <abbr title=\"Router Advertisement, ICMPv6 Type "
 "134\">RA</abbr> en esta interfaz."
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:96
+msgctxt "nft notrack action"
+msgid "Do not track"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2811
 msgid "Do you really want to delete \"%s\" ?"
 msgstr "¿Realmente quieres eliminar \"%s\" ?"
@@ -2888,12 +2898,12 @@ msgstr "Descartar la unidifusión de IPv4 anidada"
 msgid "Drop nested IPv6 unicast"
 msgstr "Descartar unidifusión IPv6 anidada"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:96
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:97
 msgctxt "nft drop action"
 msgid "Drop packet"
 msgstr "Descartar paquete"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:546
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:549
 msgctxt "Chain policy: drop"
 msgid "Drop unmatched packets"
 msgstr "Descartar paquetes no coincidentes"
@@ -3042,12 +3052,12 @@ msgstr "Emergencia"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:119
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:119
 msgid "Emits netlink IP ADDR miss notifications"
-msgstr ""
+msgstr "Emite notificaciones de falta de dirección IP del enlace de la red"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:113
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:113
 msgid "Emits netlink LLADDR miss notifications"
-msgstr ""
+msgstr "Emite notificaciones de falta de netlink LLADDR"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:891
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:931
@@ -3348,7 +3358,7 @@ msgstr "Hacer cumplir la versión 2 de MLD"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:84
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:84
 msgid "Ensure MTU does not exceed that of parent interface"
-msgstr ""
+msgstr "Asegúrese de que la MTU no supera la de la interfaz principal"
 
 #: modules/luci-compat/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom value"
@@ -3426,12 +3436,14 @@ msgstr "Expandir hosts"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:114
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:114
 msgid "Expect netlink reply to add MAC address into VXLAN FDB"
-msgstr ""
+msgstr "Esperar respuesta de netlink para añadir dirección MAC en VXLAN FDB"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:120
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:120
 msgid "Expect netlink reply to add destination IP address into Neighbour table"
 msgstr ""
+"Esperar respuesta de netlink para añadir la dirección IP de destino en la "
+"tabla adyacente"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:533
 msgid "Expected port number."
@@ -3540,12 +3552,12 @@ msgstr "Opciones de sstpc adicionales"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:98
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:98
 msgid "FDB"
-msgstr ""
+msgstr "FDB"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:77
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:77
 msgid "FDB entry lifetime"
-msgstr ""
+msgstr "Duración de la entrada FDB"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:942
 msgid "FQDN"
@@ -3773,7 +3785,7 @@ msgstr "Seguir la vida útil de IPv4"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:211
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:211
 msgid "For multicast, an outgoing interface (%s) needs to be specified"
-msgstr ""
+msgstr "Para multidifusión, se debe especificar una interfaz saliente (%s)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:793
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:730
@@ -3897,7 +3909,7 @@ msgstr "DNS directo/inverso"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:98
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:98
 msgid "Forwarding DataBase"
-msgstr ""
+msgstr "Reenvío de base de datos"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1672
 msgid "Forwarding mode"
@@ -3923,7 +3935,7 @@ msgstr "Aleatorización completa de puertos"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:178
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:178
 msgid "Further information about VXLAN interfaces and peers %s."
-msgstr ""
+msgstr "Más información sobre las interfaces VXLAN y los pares %s."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:200
 msgid ""
@@ -3936,7 +3948,7 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:123
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:123
 msgid "GBP"
-msgstr ""
+msgstr "GBP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:128
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:184
@@ -4202,7 +4214,7 @@ msgstr "Otorgar acceso a la pantalla de estado de Wi-Fi"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:124
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:124
 msgid "Group Based Policy (VXLAN-GBP) extension"
-msgstr ""
+msgstr "Extensión de política basada en grupos (VXLAN-GBP)"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:66
 msgid "Group Password"
@@ -4262,7 +4274,7 @@ msgstr "Alto"
 msgid "Honor gratuitous ARP"
 msgstr "Honor ARP gratuito"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:593
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:596
 msgctxt "Chain hook description"
 msgid "Hook: <strong>%h</strong> (%h), Priority: <strong>%d</strong>"
 msgstr "Gancho: <strong>%h</strong> (%h), Prioridad: <strong>%d</strong>"
@@ -4421,6 +4433,9 @@ msgid ""
 "IP address of the remote VXLAN tunnel endpoint where the MAC address (Layer "
 "2 Address) resides or a multicast address for a group of peers."
 msgstr ""
+"Dirección IP del punto final del túnel VXLAN remoto donde reside la "
+"dirección MAC (dirección de capa 2) o una dirección de multidifusión para un "
+"grupo de pares."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:793
 msgid ""
@@ -4542,7 +4557,7 @@ msgstr "Prefijo IPv4"
 msgid "IPv4 prefix length"
 msgstr "Longitud de prefijo IPv4"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:625
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:628
 msgid "IPv4 traffic table \"%h\""
 msgstr "Tabla de tráfico IPv4 \"%h\""
 
@@ -4567,7 +4582,7 @@ msgstr "IPv4/IPv6"
 msgid "IPv4/IPv6 (both - defaults to IPv4)"
 msgstr "IPv4/IPv6 (ambos: el valor predeterminado es IPv4)"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:633
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:636
 msgid "IPv4/IPv6 traffic table \"%h\""
 msgstr "Tabla de tráfico IPv4/IPv6 \"%h\""
 
@@ -4699,7 +4714,7 @@ msgstr "Sufijo IPv6"
 msgid "IPv6 support"
 msgstr "Soporte IPv6"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:629
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:632
 msgid "IPv6 traffic table \"%h\""
 msgstr "Tabla de tráfico IPv6 \"%h\""
 
@@ -4755,6 +4770,8 @@ msgstr "Si está marcado, la encriptación estará desactivada"
 msgid ""
 "If destination MAC refers to router, replace it with destination MAC address"
 msgstr ""
+"Si la MAC de destino se refiere al enrutador, reemplácela con la dirección "
+"MAC de destino"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:226
 msgid ""
@@ -5183,7 +5200,7 @@ msgstr "APN proporcionado inválido"
 msgid "Invalid Base64 key string"
 msgstr "Cadena de clave Base64 no válida"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:117
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:121
 msgid "Invalid IPv6 address"
 msgstr "Dirección IPv6 no válida"
 
@@ -5225,11 +5242,11 @@ msgstr "Comando inválido"
 msgid "Invalid hexadecimal value"
 msgstr "Valor hexadecimal inválido"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:126
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:130
 msgid "Invalid hostname or IPv4 address"
 msgstr "Nombre de host o dirección IPv4 no válidos"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:134
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
 msgid "Invalid port"
 msgstr "Puerto no válido"
 
@@ -5241,7 +5258,7 @@ msgstr "Cadena de clave privada %s no válida"
 msgid "Invalid public key string %s"
 msgstr "Cadena de clave pública %s no válida"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:108
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
 msgid "Invalid server URL"
 msgstr "URL del servidor no válida"
 
@@ -5365,6 +5382,8 @@ msgstr "Matar"
 msgid ""
 "L2 (MAC) address of peer. Uses source-address learning when %s is specified"
 msgstr ""
+"Dirección L2 (MAC) del par. Utiliza el aprendizaje de la dirección de origen "
+"cuando se especifica %s"
 
 #: modules/luci-compat/luasrc/model/network/proto_ppp.lua:21
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:10
@@ -5442,7 +5461,7 @@ msgstr "Último Handshake"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:201
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:201
 msgid "Layer 2 Address"
-msgstr ""
+msgstr "dirección de segundo nivel"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:21
 msgid "Leaf"
@@ -5459,7 +5478,7 @@ msgstr "Aprender rutas"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:96
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:96
 msgid "Learning"
-msgstr ""
+msgstr "Aprendiendo"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:558
 msgid "Lease file"
@@ -5502,7 +5521,7 @@ msgstr ""
 "tiempo en el aire puede reducirse significativamente cuando se utilizan. Se "
 "recomienda no permitir velocidades 802.11b siempre que sea posible."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:677
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:680
 msgid "Legacy rules detected"
 msgstr "Reglas heredadas detectadas"
 
@@ -5726,7 +5745,7 @@ msgstr "ULA local"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:48
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:48
 msgid "Local VTEP"
-msgstr ""
+msgstr "VTEP local"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:356
 msgid "Local domain"
@@ -5769,7 +5788,7 @@ msgstr ""
 "Registra todas las opciones enviadas a los clientes DHCP y las etiquetas "
 "utilizadas para determinarlas."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:98
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:99
 msgctxt "nft log action"
 msgid "Log event \"<strong>%h</strong>…\""
 msgstr "Registrar evento \"<strong>%h</strong>...\""
@@ -5802,7 +5821,7 @@ msgstr "Registrar consultas"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
 msgid "Logging"
-msgstr "Inicio sesión"
+msgstr "Inicio de sesión"
 
 #: themes/luci-theme-bootstrap/htdocs/luci-static/resources/view/bootstrap/sysauth.js:23
 msgid "Logging in…"
@@ -5972,7 +5991,7 @@ msgstr "Intervalo máximo de <abbr title=\"Router Advertisement\">RA</abbr>"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:90
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:90
 msgid "Max FDB size"
-msgstr ""
+msgstr "Tamaño máximo de FDB"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:728
 msgid "Max cache TTL"
@@ -6023,7 +6042,7 @@ msgstr "Segundos máximos de espera a que el módem esté activo"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:91
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:91
 msgid "Maximum number of FDB entries"
-msgstr ""
+msgstr "Número máximo de entradas FDB"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:718
 msgid "Maximum number of leased addresses."
@@ -6355,13 +6374,13 @@ msgstr "Debe estar en formato %s."
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:197
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:197
 msgid "My Peer"
-msgstr ""
+msgstr "Mi par"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1585
 msgid "NAS ID"
 msgstr "ID de NAS"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:536
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:539
 msgid "NAT action chain \"%h\""
 msgstr "Cadena de acción NAT \"%h\""
 
@@ -6421,6 +6440,8 @@ msgstr "Nombre de la nueva red"
 msgid ""
 "Name of the outgoing interface to reach the remote VXLAN tunnel endpoint"
 msgstr ""
+"Nombre de la interfaz de salida para llegar al punto final del túnel VXLAN "
+"remoto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:937
 msgid "Name of the set"
@@ -6515,7 +6536,7 @@ msgstr "Actividad del dispositivo de red (kernel: netdev)"
 msgid "Network device is not present"
 msgstr "El dispositivo de red no está presente"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:645
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:648
 msgid "Network device table \"%h\""
 msgstr "Tabla de dispositivos de red \"%h\""
 
@@ -6693,7 +6714,7 @@ msgstr "No hay más esclavos disponibles, no se puede guardar la interfaz"
 msgid "No negative cache"
 msgstr "Sin caché negativa"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:696
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:699
 msgid "No nftables ruleset loaded."
 msgstr "No se ha cargado el conjunto de reglas de nftables."
 
@@ -6725,7 +6746,7 @@ msgstr "No hay claves públicas presentes todavía."
 msgid "No related logs yet!"
 msgstr "¡Aún no hay registros relacionados!"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:613
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:616
 msgctxt "nft chain is empty"
 msgid "No rules in this chain"
 msgstr "No hay reglas en esta cadena"
@@ -6910,12 +6931,12 @@ msgstr "Encendido"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:112
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:112
 msgid "On a l2miss, send ARP"
-msgstr ""
+msgstr "En caso de l2miss, envía ARP"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:118
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:118
 msgid "On a l3miss, send ARP for IP -> mac resolution"
-msgstr ""
+msgstr "En un l3miss, envíe ARP para resolución IP -> mac"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:12
 msgid "On-State Delay"
@@ -6969,7 +6990,7 @@ msgstr ""
 "Solo si el esclavo activo actual falla y el esclavo primario está activo "
 "(falla, 2)"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:682
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:685
 msgid "Open iptables rules overview…"
 msgstr "Abrir descripción general de las reglas de iptables…"
 
@@ -6977,8 +6998,11 @@ msgstr "Abrir descripción general de las reglas de iptables…"
 msgid "Open list..."
 msgstr "Abrir lista..."
 
-#: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:65
+msgid "OpenConnect"
+msgstr "OpenConnect"
+
+#: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
 msgstr "OpenConnect (CISCO AnyConnect)"
 
@@ -7255,7 +7279,7 @@ msgstr "Anular la tabla de enrutamiento IPv6"
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:142
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:194
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:193
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:132
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:118
@@ -7503,7 +7527,7 @@ msgstr "Traspasar (Duplicar dispositivo físico a una sola MAC VLAN)"
 #: modules/luci-base/ucode/template/sysauth.ut:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1798
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:148
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:103
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:257
@@ -7530,7 +7554,7 @@ msgstr "Contraseña de clave privada interna"
 msgid "Password strength"
 msgstr "Seguridad de la contraseña"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:152
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:151
 msgid "Password2"
 msgstr "Contraseña2"
 
@@ -7613,7 +7637,7 @@ msgstr "Detalles del par"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:210
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:241
 msgid "Peer IP"
-msgstr ""
+msgstr "IP del nodo par"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:89
 msgid "Peer IP address to assign"
@@ -7719,7 +7743,7 @@ msgstr "Por favor, seleccione el archivo que desea cargar."
 msgid "Policy"
 msgstr "Política"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:594
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:597
 msgctxt "Chain hook policy"
 msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Política: <strong>%h</strong> (%h)"
@@ -7921,7 +7945,7 @@ msgstr ""
 "Proporciona el servidor NTP a la interfaz seleccionada o, si no se "
 "especifica, a todas las interfaces"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:155
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:154
 msgid "Proxy Server"
 msgstr "Servidor proxy"
 
@@ -8191,7 +8215,7 @@ msgstr "Paquetes recibidos"
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "Recomendado. Direcciones IP de la interfaz de WireGuard."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:199
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:198
 msgid "Reconnect Timeout"
 msgstr "Tiempo de espera de reconexión"
 
@@ -8203,12 +8227,12 @@ msgstr "Reconectar esta interfaz"
 msgid "Redirect to HTTPS"
 msgstr "Redirigir a HTTPS"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:118
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:119
 msgctxt "nft redirect to port"
 msgid "Redirect to local port <strong>%h</strong>"
 msgstr "Redirigir al puerto local <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:117
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:118
 msgctxt "nft redirect"
 msgid "Redirect to local system"
 msgstr "Redirigir al sistema local"
@@ -8229,22 +8253,22 @@ msgstr "Refrescar"
 msgid "Registration State"
 msgstr "Estado de registro"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:101
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:102
 msgctxt "nft reject with icmp type"
 msgid "Reject IPv4 packet with <strong>ICMP type %h</strong>"
 msgstr "Rechazar paquete IPv4 con <strong>ICMP tipo %h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:103
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:104
 msgctxt "nft reject with icmpx type"
 msgid "Reject packet with <strong>ICMP type %h</strong>"
 msgstr "Rechazar paquete con <strong>ICMP tipo %h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:102
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:103
 msgctxt "nft reject with icmpv6 type"
 msgid "Reject packet with <strong>ICMPv6 type %h</strong>"
 msgstr "Rechazar paquete con <strong>ICMPv6 tipo %h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:100
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:101
 msgctxt "nft reject with tcp reset"
 msgid "Reject packet with <strong>TCP reset</strong>"
 msgstr "Rechazar paquete con <strong>restablecimiento de TCP</strong>"
@@ -8326,7 +8350,7 @@ msgstr "Dirección IPv6 remota o FQDN"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:43
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:43
 msgid "Remote VTEP"
-msgstr ""
+msgstr "VTEP remoto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:901
 msgid "Remove"
@@ -8357,6 +8381,7 @@ msgstr "Cambiar la configuración Wi-Fi"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:108
 msgid "Reply on Neighbour request when mapping found in VXLAN FDB"
 msgstr ""
+"Responder a la solicitud de vecino cuando se encuentra un mapeo en VXLAN FDB"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:17
 msgid "Request IPv6-address"
@@ -8577,47 +8602,47 @@ msgstr "Revirtiendo configuración…"
 msgid "Revision"
 msgstr "Revisión"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:111
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:112
 msgctxt "nft dnat ip to addr"
 msgid "Rewrite destination to <strong>%h</strong>"
 msgstr "Reescribe destino a <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:114
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:115
 msgctxt "nft dnat ip6 to addr"
 msgid "Rewrite destination to <strong>%h</strong>"
 msgstr "Reescribir destino a <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:112
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:113
 msgctxt "nft dnat ip to addr:port"
 msgid "Rewrite destination to <strong>%h</strong>, port <strong>%h</strong>"
 msgstr "Reescribe destino a <strong>%h</strong>, puerto <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:115
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:116
 msgctxt "nft dnat ip6 to addr:port"
 msgid "Rewrite destination to <strong>%h</strong>, port <strong>%h</strong>"
 msgstr "Reescribe destino a <strong>%h</strong>, puerto <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:105
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:106
 msgctxt "nft snat ip to addr"
 msgid "Rewrite source to <strong>%h</strong>"
 msgstr "Reescribe origen a <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:108
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:109
 msgctxt "nft snat ip6 to addr"
 msgid "Rewrite source to <strong>%h</strong>"
 msgstr "Reescribe origen a <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:106
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:107
 msgctxt "nft snat ip to addr:port"
 msgid "Rewrite source to <strong>%h</strong>, port <strong>%h</strong>"
 msgstr "Reescribe origen a <strong>%h</strong>, puerto <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:109
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:110
 msgctxt "nft snat ip6 to addr:port"
 msgid "Rewrite source to <strong>%h</strong>, port <strong>%h</strong>"
 msgstr "Reescribir origen a <strong>%h</strong>, puerto <strong>%h</strong>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:120
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:121
 msgid "Rewrite to egress device address"
 msgstr "Reescribir en la dirección del dispositivo de salida"
 
@@ -8658,14 +8683,14 @@ msgstr "Política Round-Robin (balance-rr, 0)"
 msgid "Route Allowed IPs"
 msgstr "Ruta permitida IPs"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:532
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:535
 msgid "Route action chain \"%h\""
 msgstr "Cadena de acción de ruta \"%h\""
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:103
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:103
 msgid "Route short-circuit (RSC)"
-msgstr ""
+msgstr "Cortocircuito de ruta (RSC)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:46
 msgid "Route type"
@@ -8709,20 +8734,20 @@ msgstr ""
 msgid "Rule"
 msgstr "Regla"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:602
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:605
 msgid "Rule actions"
 msgstr "Acciones de regla"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:475
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:478
 msgctxt "nft comment"
 msgid "Rule comment: %s"
 msgstr "Comentario de la regla: %s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:540
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:543
 msgid "Rule container chain \"%h\""
 msgstr "Cadena contenedora de reglas \"%h\""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:601
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:604
 msgid "Rule matches"
 msgstr "Coincidencias de reglas"
 
@@ -8969,7 +8994,7 @@ msgstr ""
 msgid "Set an alias for a hostname."
 msgstr "Establezca un alias para un nombre de host."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:122
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:123
 msgctxt "nft mangle"
 msgid "Set header field <var>%s</var> to <strong>%s</strong>"
 msgstr "Establezca el campo de encabezado <var>%s</var> en <strong>%s</strong>"
@@ -9199,7 +9224,7 @@ msgstr "IPv6 de origen"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:251
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:251
 msgid "Source VNI"
-msgstr ""
+msgstr "Fuente VNI"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:57
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:57
@@ -9214,7 +9239,7 @@ msgstr "Puerto de origen"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:57
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:57
 msgid "Source port range"
-msgstr ""
+msgstr "Rango del puerto de origen"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:754
 msgid ""
@@ -10098,6 +10123,8 @@ msgid ""
 "The VXLAN header adds 50 bytes of IPv4 encapsulation overhead, 74 bytes for "
 "IPv6."
 msgstr ""
+"El encabezado VXLAN agrega 50 bytes de sobrecarga de encapsulación de IPv4 y "
+"74 bytes para IPv6 ."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:180
 msgid "The address through which this %s is reachable"
@@ -10528,7 +10555,7 @@ msgstr ""
 "El valor especifica el intervalo (milisegundos) en el que batman-adv inunda "
 "la red con su información de protocolo."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:678
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:681
 msgid ""
 "There are legacy iptables rules present on the system. Mixing iptables and "
 "nftables rules is discouraged and may lead to incomplete traffic filtering."
@@ -10777,11 +10804,11 @@ msgstr "Tráfico"
 msgid "Traffic Class"
 msgstr "Clase de tráfico"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:528
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:531
 msgid "Traffic filter chain \"%h\""
 msgstr "Cadena de filtro de tráfico \"%h\""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:466
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:469
 msgctxt "nft counter"
 msgid "Traffic matched by rule: %.1000mPackets, %.1024mBytes"
 msgstr "Tráfico emparejado por regla: %.1000mPackets, %.1024mBytes"
@@ -10895,6 +10922,8 @@ msgid ""
 "UDP destination port number to use to connect to the remote VXLAN tunnel "
 "endpoint"
 msgstr ""
+"Número de puerto de destino UDP que se utilizará para conectarse al punto "
+"final del túnel VXLAN remoto"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:55
 msgctxt "nft udp sport"
@@ -11030,7 +11059,7 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:78
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:78
 msgid "Units: seconds"
-msgstr ""
+msgstr "Unidades: segundos"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2092
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3873
@@ -11089,7 +11118,7 @@ msgstr "Esquema URI no soportado en %s"
 msgid "Unsupported modem"
 msgstr "Módem no soportado"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:116
 msgid "Unsupported protocol"
 msgstr "Protocolo no compatible"
 
@@ -11364,11 +11393,7 @@ msgstr ""
 msgid "Useful for systems behind firewalls."
 msgstr "Útil para sistemas detrás de cortafuegos."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
-msgid "User Group"
-msgstr "Grupo de usuario"
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:158
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:106
 msgid "User certificate (PEM encoded)"
 msgstr "Certificado de usuario (Codificado PEM)"
@@ -11377,20 +11402,20 @@ msgstr "Certificado de usuario (Codificado PEM)"
 msgid "User identifier"
 msgstr "Identificador de usuario"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:170
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:169
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:118
 msgid "User key (PEM encoded)"
 msgstr "Clave de usuario (codificada PEM)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:23
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:147
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:101
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:13
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:131
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:132
 msgid "Utilize flow table <strong>%h</strong>"
 msgstr "Utilizar la tabla de flujo <strong>%h</strong>"
 
@@ -11431,7 +11456,7 @@ msgstr "VLANs en %q"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:128
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:246
 msgid "VNI"
-msgstr ""
+msgstr "VNI"
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:54
 msgid "VPN"
@@ -11449,7 +11474,7 @@ msgstr "VPN puerto local"
 msgid "VPN Protocol"
 msgstr "Protocolo VPN"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:103
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:106
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:93
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:58
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:39
@@ -11460,7 +11485,6 @@ msgstr "Servidor VPN"
 msgid "VPN Server certificate's SHA256 hash"
 msgstr "Hash SHA256 del certificado del servidor VPN"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:140
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:96
 msgid "VPN Server port"
 msgstr "Puerto del servidor VPN"
@@ -11545,12 +11569,14 @@ msgstr "Muy alto"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:229
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:229
 msgid "Via"
-msgstr ""
+msgstr "A través de"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:241
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:241
 msgid "Via shall be specified when %s is a multicast address"
 msgstr ""
+"Cuando %s es una dirección multidifusión, se debe especificar la interfaz a "
+"través de la cual se debe enviar"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:402
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1508
@@ -12139,12 +12165,12 @@ msgstr "known-othernet (en una subred diferente)"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:111
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:111
 msgid "l2miss: Layer 2 miss"
-msgstr ""
+msgstr "l2miss: La segunda capa falla"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:117
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:117
 msgid "l3miss: Layer 3 miss"
-msgstr ""
+msgstr "l3miss: La tercera capa falla"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:860
 msgid "managed config (M)"
@@ -12309,6 +12335,8 @@ msgid ""
 "the VXLAN Network Identifier (or VXLAN Segment ID) to use to connect to the "
 "remote VXLAN tunnel endpoint"
 msgstr ""
+"el identificador de red VXLAN (o ID de segmento VXLAN) que se utilizará para "
+"conectarse al punto final del túnel VXLAN remoto"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:251
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:251
@@ -12316,6 +12344,9 @@ msgid ""
 "the source VNI Network Identifier (or VXLAN Segment ID) this entry belongs "
 "to. Used only when the VXLAN device is in external or collect metadata mode"
 msgstr ""
+"El identificador de red VNI de origen (o ID de segmento VXLAN) al que "
+"pertenece esta entrada. Se utiliza únicamente cuando el dispositivo VXLAN "
+"está en modo externo o de recopilación de metadatos"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1596
 msgid "time units (TUs / 1.024 ms) [1000-65535]"
