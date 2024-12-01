@@ -7,7 +7,7 @@
 'require rpc';
 'require dom';
 
-var callNetworkRrdnsLookup = rpc.declare({
+const callNetworkRrdnsLookup = rpc.declare({
 	object: 'network.rrdns',
 	method: 'lookup',
 	params: [ 'addrs', 'timeout', 'limit' ],

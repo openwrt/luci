@@ -3,13 +3,13 @@
 'require view';
 'require poll';
 
-var getOlsrd4Services = rpc.declare({
+const getOlsrd4Services = rpc.declare({
     object: 'olsr-services',
     method: 'services4',
     expect: {}
 });
 
-var getOlsrd6Services = rpc.declare({
+const getOlsrd6Services = rpc.declare({
     object: 'olsr-services',
     method: 'services6',
     expect: {}

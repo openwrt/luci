@@ -87,7 +87,7 @@ var css = '								\
 
 var isReadonlyView = !L.hasViewPermission() || null;
 
-var callMountPoints = rpc.declare({
+const callMountPoints = rpc.declare({
 	object: 'luci',
 	method: 'getMountPoints',
 	expect: { result: [] }

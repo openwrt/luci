@@ -5,7 +5,7 @@
 'require tools.widgets as widgets';
 'require view';
 
-var callHostHints = rpc.declare({
+const callHostHints = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getHostHints',
 	expect: { '': {} }

@@ -6,7 +6,7 @@
 'require form';
 'require tools.widgets as widgets';
 
-var callServiceList = rpc.declare({
+const callServiceList = rpc.declare({
 	object: 'service',
 	method: 'list',
 	params: [ 'name' ],

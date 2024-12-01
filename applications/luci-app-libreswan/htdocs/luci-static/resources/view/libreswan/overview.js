@@ -4,7 +4,7 @@
 'require form';
 'require poll';
 
-var callLibreswanStatus = rpc.declare({
+const callLibreswanStatus = rpc.declare({
 	object: 'libreswan',
 	method: 'status',
 	expect: {  },

@@ -12,7 +12,7 @@
 'require dom';
 'require poll';
 
-var callLLDPStatus = rpc.declare({
+const callLLDPStatus = rpc.declare({
 	object: 'luci.lldpd',
 	method: 'getStatus',
 	expect: {}
