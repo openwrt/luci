@@ -5,7 +5,7 @@
 'require rpc';
 'require poll';
 
-var callKeepalivedStatus = rpc.declare({
+const callKeepalivedStatus = rpc.declare({
 	object: 'keepalived',
 	method: 'dump',
 	expect: {  },

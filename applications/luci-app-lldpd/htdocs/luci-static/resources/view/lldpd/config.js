@@ -13,7 +13,7 @@
 'require uci';
 'require tools.widgets as widgets';
 
-var callInitList = rpc.declare({
+const callInitList = rpc.declare({
 	object: 'luci',
 	method: 'getInitList',
 	params: [ 'name' ],
@@ -25,7 +25,7 @@ var callInitList = rpc.declare({
 	}
 });
 
-var callInitAction = rpc.declare({
+const callInitAction = rpc.declare({
 	object: 'luci',
 	method: 'setInitAction',
 	params: [ 'name', 'action' ],

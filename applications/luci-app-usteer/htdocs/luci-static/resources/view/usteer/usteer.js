@@ -170,7 +170,7 @@ function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 	}
 };
 
-var callNetworkRrdnsLookup = rpc.declare({
+const callNetworkRrdnsLookup = rpc.declare({
 	object: 'network.rrdns',
 	method: 'lookup',
 	params: [ 'addrs', 'timeout', 'limit' ],

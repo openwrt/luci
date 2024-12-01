@@ -6,7 +6,7 @@
 'require uci';
 'require view';
 
-var getCompileTimeOptions = rpc.declare({
+const getCompileTimeOptions = rpc.declare({
 	object: 'luci.squid',
 	method: 'getCompileTimeOptions',
 	expect: { options: [] }

@@ -3,7 +3,7 @@
 'require uci';
 'require rpc';
 
-var callKeepalivedStatus = rpc.declare({
+const callKeepalivedStatus = rpc.declare({
 	object: 'keepalived',
 	method: 'dump',
 	expect: {  },

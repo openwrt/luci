@@ -32,37 +32,37 @@ var pkg = {
 	},
 };
 
-var getGateways = rpc.declare({
+const getGateways = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getGateways",
 	params: ["name"],
 });
 
-var getInitList = rpc.declare({
+const getInitList = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInitList",
 	params: ["name"],
 });
 
-var getInitStatus = rpc.declare({
+const getInitStatus = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInitStatus",
 	params: ["name"],
 });
 
-var getInterfaces = rpc.declare({
+const getInterfaces = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInterfaces",
 	params: ["name"],
 });
 
-var getPlatformSupport = rpc.declare({
+const getPlatformSupport = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getPlatformSupport",
 	params: ["name"],
 });
 
-var _setInitAction = rpc.declare({
+const _setInitAction = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "setInitAction",
 	params: ["name", "action"],

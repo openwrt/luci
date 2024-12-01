@@ -4,7 +4,7 @@
 'require form';
 'require poll';
 
-var callApingerStatus = rpc.declare({
+const callApingerStatus = rpc.declare({
 	object: 'apinger',
 	method: 'status',
 	expect: {  },

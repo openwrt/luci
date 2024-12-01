@@ -4,7 +4,7 @@
 'require rpc';
 'require uci';
 
-var callTorHsList = rpc.declare({
+const callTorHsList = rpc.declare({
 	object: 'tor-hs-rpc',
 	method: 'list-hs',
 });

@@ -15,7 +15,7 @@ in that directory will be the value for the object key in the declared map.
 Permissions to make these calls must be granted in /usr/share/rpcd/acl.d
 via a file named the same as the application package name (luci-app-example)
 */
-var load_sample2 = rpc.declare({
+const load_sample2 = rpc.declare({
 	object: 'luci.example',
 	method: 'get_sample2'
 });

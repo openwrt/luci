@@ -63,7 +63,7 @@ These are the changes you need in the `rpc.js` file.
 Declare the RPC call
 
 ```js
-var load_sample_yaml = rpc.declare({
+const load_sample_yaml = rpc.declare({
     object: 'luci.example',
     method: 'get_yaml_file_sample'
 });

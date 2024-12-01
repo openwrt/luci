@@ -9,17 +9,17 @@
 'require dom';
 'require fs';
 
-let callPackagelist = rpc.declare({
+const callPackagelist = rpc.declare({
 	object: 'rpc-sys',
 	method: 'packagelist',
 });
 
-let callSystemBoard = rpc.declare({
+const callSystemBoard = rpc.declare({
 	object: 'system',
 	method: 'board',
 });
 
-let callUpgradeStart = rpc.declare({
+const callUpgradeStart = rpc.declare({
 	object: 'rpc-sys',
 	method: 'upgrade_start',
 	params: ['keep'],

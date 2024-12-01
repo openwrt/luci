@@ -11,7 +11,7 @@
 var RefreshIfaces = "";
 var RefreshTabs = ['s', 't', '5', 'h', 'd', 'm', 'y'];
 
-var callServiceList = rpc.declare({
+const callServiceList = rpc.declare({
 	object: 'service',
 	method: 'list',
 	params: [ 'name' ],
