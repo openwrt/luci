@@ -11,6 +11,7 @@ LUCI_TITLE:=LuCI support for LLDP daemon
 LUCI_DEPENDS:=+lldpd +rpcd-mod-ucode
 
 PKG_LICENSE:=MIT
+PKG_MAINTAINER:=Paul Donald <newtwen+github@gmail.com>
 
 include ../../luci.mk
 
