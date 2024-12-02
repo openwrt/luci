@@ -143,11 +143,11 @@ return view.extend({
 		s.taboption('advanced', form.Flag, 'use_stun', _('Use %s', 'Use %s (%s = STUN)').format('<a href="https://en.wikipedia.org/wiki/STUN" target="_blank" rel="noreferrer"><abbr title="Session Traversal Utilities for NAT">STUN</abbr></a>'),
 			_('To detect the public IPv4 address for unrestricted full-cone/one-to-one NATs'));
 
-		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN Host'));
+		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN host'));
 		o.depends('use_stun', '1');
 		o.datatype = 'host';
 
-		o = s.taboption('advanced', form.Value, 'stun_port', _('STUN Port'));
+		o = s.taboption('advanced', form.Value, 'stun_port', _('STUN port'));
 		o.depends('use_stun', '1');
 		o.datatype = 'port';
 		o.placeholder = '3478';
