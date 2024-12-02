@@ -17,10 +17,11 @@ function command(cmd) {
 
 function checkPeerHost(configHost, configPort, wgHost) {
 	const ips = popen(`resolveip ${configHost} 2>/dev/null`);
+	const hostIp = replace(wgHost, /\[|\]/g, "");
 	if (ips) {
 		for (let line = ips.read('line'); length(line); line = ips.read('line')) {
 			const ip =  rtrim(line, '\n');
-			if (ip + ":" + configPort == wgHost) {
+			if (ip + ":" + configPort == hostIp) {
 				return true;
 			}
 		}
