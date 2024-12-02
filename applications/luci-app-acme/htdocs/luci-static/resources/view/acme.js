@@ -484,7 +484,7 @@ return view.extend({
 		o.rmempty = false;
 		o.optional = true;
 		o.modalonly = true;
-		o.cfgvalue = function(section_id, set_value) {
+		o.cfgvalue = function(section_id) {
 			var keylength = uci.get('acme', section_id, 'keylength');
 			if (keylength) {
 				// migrate the old keylength to a new keytype
@@ -497,7 +497,7 @@ return view.extend({
 					default: return ''; // bad value
 				}
 			}
-			return set_value;
+			return this.super('cfgvalue', arguments);
 		};
 		o.write = function(section_id, value) {
 			// remove old keylength
