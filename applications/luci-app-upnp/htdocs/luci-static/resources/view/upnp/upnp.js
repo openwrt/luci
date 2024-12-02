@@ -45,7 +45,9 @@ return view.extend({
 	},
 
 	poll_status: function(nodes, data) {
+
 		var rules = Array.isArray(data[0].rules) ? data[0].rules : [];
+
 		var rows = rules.map(function(rule) {
 			return [
 				rule.host_hint || _('Unknown'),
@@ -60,21 +62,18 @@ return view.extend({
 				}, [ _('Delete') ])
 			];
 		});
+
 		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active port maps.')));
+
+		return;
 	},
 
 	render: function(data) {
+
 		var m, s, o;
 
-		var protocols = '%s & %s/%s'.format(
-			'<a href="https://en.wikipedia.org/wiki/Internet_Gateway_Device_Protocol" target="_blank" rel="noreferrer"><abbr title="UPnP Internet Gateway Device (Control Protocol)">UPnP IGD</abbr></a>',
-			'<a href="https://en.wikipedia.org/wiki/Port_Control_Protocol" target="_blank" rel="noreferrer"><abbr title="Port Control Protocol">PCP</abbr></a>',
-			'<a href="https://en.wikipedia.org/wiki/NAT_Port_Mapping_Protocol" target="_blank" rel="noreferrer"><abbr title="NAT Port Mapping Protocol">NAT-PMP</abbr></a>');
 		m = new form.Map('upnpd', [_('UPnP IGD & PCP/NAT-PMP Service')],
-			_('The %s protocols allow clients on the local network to configure port maps/forwards on the router autonomously.',
-				'The %s (%s = UPnP IGD & PCP/NAT-PMP) protocols allow clients on the local network to configure port maps/forwards on the router autonomously.')
-				.format(protocols)
-		);
+			_('The %s protocols allow clients on the local network to configure port maps/forwards on the router autonomously.', 'The %s (%s = UPnP IGD & PCP/NAT-PMP) protocols allow clients on the local network to configure port maps/forwards on the router autonomously.').format('%s & %s/%s').format('<a href="https://en.wikipedia.org/wiki/Internet_Gateway_Device_Protocol" target="_blank" rel="noreferrer"><abbr title="UPnP Internet Gateway Device (Control Protocol)">UPnP IGD</abbr></a>', '<a href="https://en.wikipedia.org/wiki/Port_Control_Protocol" target="_blank" rel="noreferrer"><abbr title="Port Control Protocol">PCP</abbr></a>', '<a href="https://en.wikipedia.org/wiki/NAT_Port_Mapping_Protocol" target="_blank" rel="noreferrer"><abbr title="NAT Port Mapping Protocol">NAT-PMP</abbr></a>'));
 
 		s = m.section(form.GridSection, '_active_rules');
 
@@ -92,6 +91,7 @@ return view.extend({
 			]);
 
 			var rules = Array.isArray(data[0].rules) ? data[0].rules : [];
+
 			var rows = rules.map(function(rule) {
 				return [
 					rule.host_hint || _('Unknown'),
@@ -106,7 +106,9 @@ return view.extend({
 					}, [ _('Delete') ])
 				];
 			});
+
 			cbi_update_table(table, rows, E('em', _('There are no active port maps.')));
+
 			return E('div', { 'class': 'cbi-section cbi-tblsection' }, [
 					E('h3', _('Active Service Port Maps')), table ]);
 		}, o, this);
@@ -120,11 +122,9 @@ return view.extend({
 			_('Start autonomous port mapping service'));
 		o.rmempty = false;
 
-		s.taboption('setup', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol'))
-		s.default = '1';
+		s.taboption('setup', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol')).default = '1';
 
-		s.taboption('setup', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols'))
-		s.default = '1';
+		s.taboption('setup', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols')).default = '1';
 
 		o = s.taboption('setup', form.Flag, 'igdv1', _('UPnP IGDv1 compatibility mode'),
 			_('Advertise as IGDv1 (IPv4 only) device instead of IGDv2'));
@@ -140,8 +140,7 @@ return view.extend({
 			_('Report maximum upload speed in kByte/s'));
 		o.depends('enable_upnp', '1');
 
-		s.taboption('advanced', form.Flag, 'use_stun', _('Use %s', 'Use %s (%s = STUN)')
-				.format('<a href="https://en.wikipedia.org/wiki/STUN" target="_blank" rel="noreferrer"><abbr title="Session Traversal Utilities for NAT">STUN</abbr></a>'),
+		s.taboption('advanced', form.Flag, 'use_stun', _('Use %s', 'Use %s (%s = STUN)').format('<a href="https://en.wikipedia.org/wiki/STUN" target="_blank" rel="noreferrer"><abbr title="Session Traversal Utilities for NAT">STUN</abbr></a>'),
 			_('To detect the public IPv4 address for unrestricted full-cone/one-to-one NATs'));
 
 		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN Host'));
@@ -159,8 +158,7 @@ return view.extend({
 		o.depends('enable_upnp', '1');
 
 		o = s.taboption('advanced', form.Value, 'notify_interval', _('Notify interval'),
-			_('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s')
-				.format('<abbr title="Simple Service Discovery Protocol">SSDP</abbr>'));
+			_('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s').format('<abbr title="Simple Service Discovery Protocol">SSDP</abbr>'));
 		o.datatype = 'uinteger';
 		o.placeholder = '900';
 		o.depends('enable_upnp', '1');
