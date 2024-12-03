@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2024-09-20 14:18+0000\n"
+"PO-Revision-Date: 2024-12-03 06:15+0000\n"
 "Last-Translator: try496 <pinghejk@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsddns/zh_Hans/>\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:423
 msgid "\"../\" not allowed in path for Security Reason."
@@ -53,9 +53,8 @@ msgstr "不支持绑定到一个指定的网络"
 msgid ""
 "BusyBox's nslookup and hostip do not support TCP instead of the default UDP "
 "when sending requests to the DNS server!"
-msgstr ""
-"向 DNS 服务器查询时，BusyBox 的 nslookup 和 hostip 不支持使用 TCP ，而是使用"
-"默认的 UDP！"
+msgstr "BusyBox 的 nslookup 和 hostip 在向 DNS 服务器发送请求时，不支持使用 TCP "
+"替代默认的 UDP！"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:372
 msgid ""
@@ -308,7 +307,7 @@ msgstr "IPv6 地址必须填写在中括号(\"[ ]\")内"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:311
 msgid "IPv6 is not supported by this system"
-msgstr "该系统当前不（完全）支持IPv6"
+msgstr "该系统当前不支持IPv6"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:310
 msgid "IPv6 not supported"
@@ -352,7 +351,8 @@ msgstr "信息"
 msgid ""
 "Install 'bind-host' or 'knot-host' or 'drill' package if you know you need "
 "TCP for DNS requests."
-msgstr "您应该为 DNS 请求安装“bind-host”或“knot-host”或“drill”软件包。"
+msgstr "如果你确定 DNS 请求需要使用TCP协议，请安装 'bind-host'、'knot-host' 或 "
+"'drill' 软件包。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:386
 msgid ""
@@ -414,7 +414,7 @@ msgstr "查询主机名"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:792
 msgid "Method used to determine the system IP-Address to send in updates"
-msgstr ""
+msgstr "用于确定在更新中发送的系统 IP 地址的方法"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:492
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1110
@@ -425,7 +425,7 @@ msgstr "名称"
 msgid ""
 "Neither GNU Wget with SSL nor cURL is installed to select a network to use "
 "for communication."
-msgstr "包含 SSL 支持的 GNU Wget 或者 cURL 均未安装，无法选择网络用于通信。"
+msgstr "包含 SSL 支持的 GNU Wget 或者 cURL 均未安装，因此无法进行安全的网络通信。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:321
 msgid ""
@@ -712,7 +712,8 @@ msgstr "没有已经配置好的服务项。"
 msgid ""
 "This is only a problem with multiple WAN interfaces and your DDNS provider "
 "is unreachable via one of them."
-msgstr ""
+msgstr "这个问题仅在你拥有多个 WAN 接口，并且你的 DDNS "
+"提供商无法通过其中一个接口访问时才会出现。"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1070
 msgid "This is the current content of the log file in %h for this service."
@@ -767,7 +768,7 @@ msgstr "使用 cURL"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:856
 msgid "User defined script to read system IP-Address"
-msgstr "使用设定的脚本来读取系统 IP 地址"
+msgstr "用户自定义的用于读取系统 IP 地址的脚本"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:738
 msgid "Username"
@@ -796,7 +797,7 @@ msgstr "警告"
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:505
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:623
 msgid "Which record type to update at the DDNS provider (A/AAAA)"
-msgstr "设定哪一个 IP 地址（IPv4 或 IPv6）会被发送给 DDNS 提供商"
+msgstr "在 DDNS 服务提供商处应该更新哪种记录类型（A/AAAA）"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1044
 msgid "Which time units to use for retry counters."

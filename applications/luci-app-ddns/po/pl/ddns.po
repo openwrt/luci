@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-ddns 2.4.0-1\n"
 "POT-Creation-Date: 2016-01-30 11:07+0100\n"
-"PO-Revision-Date: 2024-09-20 14:18+0000\n"
-"Last-Translator: try496 <pinghejk@gmail.com>\n"
+"PO-Revision-Date: 2024-12-03 06:15+0000\n"
+"Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsddns/pl/>\n"
 "Language: pl\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.9-dev\n"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:423
 msgid "\"../\" not allowed in path for Security Reason."
@@ -52,8 +52,8 @@ msgid ""
 "BusyBox's nslookup and hostip do not support TCP instead of the default UDP "
 "when sending requests to the DNS server!"
 msgstr ""
-"nslookup i hostip BusyBox nie obsługują określenia, czy używać TCP zamiast "
-"domyślnego UDP podczas żądania serwera DNS!"
+"nslookup i hostip BusyBox nie obsługują TCP zamiast domyślnego UDP odpytując "
+"serwer DNS!"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:372
 msgid ""
@@ -315,7 +315,7 @@ msgstr "Adres IPv6 musi być podany w nawiasach kwadratowych"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:311
 msgid "IPv6 is not supported by this system"
-msgstr "IPv6 nie jest obecnie (w pełni) obsługiwany przez ten system"
+msgstr "IPv6 nie jest obsługiwany przez ten system"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:310
 msgid "IPv6 not supported"
@@ -367,7 +367,7 @@ msgid ""
 "TCP for DNS requests."
 msgstr ""
 "Należy zainstalować pakiet „bind-host” lub „knot-host”, lub „drill”, dla "
-"żądań DNS."
+"żądań TCP DNS."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:386
 msgid ""
@@ -388,7 +388,7 @@ msgstr "Interfejs"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:991
 msgid "Interval to force an update at the DDNS Provider"
-msgstr "Częstotliwość wymuszania wysyłania aktualizacji do dostawcy DDNS"
+msgstr "Interwał aktualizacji DDNS u dostawcy"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1017
 msgid "Interval unit for forced updates sent to DDNS Provider."
@@ -431,7 +431,7 @@ msgstr "Nazwa hosta wyszukiwania"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:792
 msgid "Method used to determine the system IP-Address to send in updates"
-msgstr ""
+msgstr "Metoda stosowana do określenia adresu IP do wysyłania aktualizacji"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:492
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1110
@@ -451,8 +451,8 @@ msgid ""
 "Neither GNU Wget with SSL nor cURL is installed to support secure updates "
 "via HTTPS protocol."
 msgstr ""
-"Ani GNU Wget z SSL, ani cURL nie są zainstalowane w celu obsługi "
-"bezpiecznych aktualizacji poprzez protokół HTTPS."
+"Ani GNU Wget z SSL, ani cURL nie są zainstalowane do obsługi bezpiecznych "
+"aktualizacji poprzez protokół HTTPS."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:608
 msgid "Neither from LuCI interface nor from console."
@@ -586,7 +586,7 @@ msgstr "Proszę nacisnąć przycisk [Czytaj]"
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:703
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:725
 msgid "Provide either an Update Script OR an Update URL"
-msgstr "Wstaw skrypt aktualizacji LUB URL aktualizacji"
+msgstr "Wstaw skrypt lub URL aktualizacji"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1054
 msgid "Read / Reread log file"
@@ -740,6 +740,8 @@ msgid ""
 "This is only a problem with multiple WAN interfaces and your DDNS provider "
 "is unreachable via one of them."
 msgstr ""
+"Jest to tylko problem z wieloma interfejsami WAN i twój dostawca DDNS nie "
+"jest dostępny przez jeden z nich."
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1070
 msgid "This is the current content of the log file in %h for this service."
@@ -794,7 +796,7 @@ msgstr "Użyj cURL"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:856
 msgid "User defined script to read system IP-Address"
-msgstr "Skrypt zdefiniowany przez użytkownika do odczytu adresu IP"
+msgstr "Skrypt użytkownika do odczytu adresu IP"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:738
 msgid "Username"
@@ -823,7 +825,7 @@ msgstr "Ostrzeżenie"
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:505
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:623
 msgid "Which record type to update at the DDNS provider (A/AAAA)"
-msgstr "Określa, który adres 'IPv4/IPv6' jest wysyłany do dostawcy DDNS"
+msgstr "Jakie rekordy (A/AAAA) mają być aktualizowane u dostawcy DDNS"
 
 #: applications/luci-app-ddns/htdocs/luci-static/resources/view/ddns/overview.js:1044
 msgid "Which time units to use for retry counters."
