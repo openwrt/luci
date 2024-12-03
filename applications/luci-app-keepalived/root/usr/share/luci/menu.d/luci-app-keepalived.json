@@ -5,6 +5,9 @@
 		"action": {
 			"type": "alias",
 			"path": "admin/services/keepalived/globals"
+		},
+		"depends": {
+			"acl": [ "luci-app-keepalived" ]
 		}
 	},
 
@@ -113,6 +116,9 @@
 		"action": {
 			"type": "view",
 			"path": "keepalived/overview"
+		},
+		"depends": {
+			"acl": [ "luci-app-keepalived" ]
 		}
 	}
 }
