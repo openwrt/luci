@@ -13,8 +13,7 @@ Regardless of whether you send a patch or open a pull request, please try to fol
 * Commit message of each commit should include a Signed-off-by line
     (See <https://openwrt.org/submitting-patches#sign_your_work>)
 
-In case you like to send patches by mail, please use the [LuCI mailinglist](https://lists.subsignal.org/mailman/listinfo/luci)
-or the [OpenWrt Development List](https://lists.openwrt.org/cgi-bin/mailman/listinfo/openwrt-devel).
+In case you like to send patches by mail, please use the [LuCI mailinglist](https://lists.subsignal.org/mailman/listinfo/luci).
 
 If you send via the OpenWrt list, include a `[luci]` tag in your subject line.
 For general information on patch submission, follow the [OpenWrt patch submission guideline](https://openwrt.org/submitting-patches).
