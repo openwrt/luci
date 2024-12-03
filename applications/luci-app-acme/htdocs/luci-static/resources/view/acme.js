@@ -484,12 +484,7 @@ return view.extend({
 		o.rmempty = false;
 		o.optional = true;
 		o.modalonly = true;
-		o.cfgvalue = function(section_id, set_value) {
-			if (set_value != null) {
-				// no migration required, need to store data
-				this.data = this.data || {};
-				this.data[section_id] = set_value;
-			}
+		o.cfgvalue = function(section_id) {
 			var keylength = uci.get('acme', section_id, 'keylength');
 			if (keylength) {
 				// migrate the old keylength to a new keytype
@@ -502,7 +497,7 @@ return view.extend({
 					default: return ''; // bad value
 				}
 			}
-			return this.data ? this.data[section_id] : null;
+			return this.super.apply(this, ['cfgvalue'].concat(arguments));
 		};
 		o.write = function(section_id, value) {
 			// remove old keylength
