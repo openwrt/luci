@@ -8,9 +8,9 @@
 'require ui';
 'require view';
 
-var callServiceList, CBIAria2Status, CBIRpcSecret, CBIRpcUrl;
+var CBIAria2Status, CBIRpcSecret, CBIRpcUrl;
 
-callServiceList = rpc.declare({
+const callServiceList = rpc.declare({
 	object: 'service',
 	method: 'list',
 	params: [ 'name' ],

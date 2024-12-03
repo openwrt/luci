@@ -2,21 +2,21 @@
 'require baseclass';
 'require rpc';
 
-let callDawnGetNetwork, callDawnGetHearingMap, callHostHints;
 
-callDawnGetNetwork = rpc.declare({
+
+const callDawnGetNetwork = rpc.declare({
 	object: 'dawn',
 	method: 'get_network',
 	expect: { }
 });
 
-callDawnGetHearingMap = rpc.declare({
+const callDawnGetHearingMap = rpc.declare({
 	object: 'dawn',
 	method: 'get_hearing_map',
 	expect: { }
 });
 
-callHostHints = rpc.declare({
+const callHostHints = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getHostHints',
 	expect: { }

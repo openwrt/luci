@@ -4,28 +4,28 @@
 'require rpc';
 'require uci';
 
-var callUpnpGetStatus, callUpnpDeleteRule, handleDelRule;
 
-callUpnpGetStatus = rpc.declare({
+
+const callUpnpGetStatus = rpc.declare({
 	object: 'luci.upnp',
 	method: 'get_status',
 	expect: {  }
 });
 
-callUpnpDeleteRule = rpc.declare({
+const callUpnpDeleteRule = rpc.declare({
 	object: 'luci.upnp',
 	method: 'delete_rule',
 	params: [ 'token' ],
 	expect: { result : "OK" },
 });
 
-handleDelRule = function(num, ev) {
+function handleDelRule(num, ev) {
 	dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
 	ev.currentTarget.classList.add('spinning');
 	ev.currentTarget.disabled = true;
 	ev.currentTarget.blur();
 	callUpnpDeleteRule(num);
-};
+}
 
 return baseclass.extend({
 	title: _('Active UPnP IGD & PCP/NAT-PMP Port Maps'),
