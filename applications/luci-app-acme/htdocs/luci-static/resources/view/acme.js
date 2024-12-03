@@ -497,7 +497,7 @@ return view.extend({
 					default: return ''; // bad value
 				}
 			}
-			return this.super.apply(this, ['cfgvalue'].concat(arguments));
+			return this.super('cfgvalue', arguments);
 		};
 		o.write = function(section_id, value) {
 			// remove old keylength
