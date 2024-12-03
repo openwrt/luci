@@ -98,7 +98,7 @@ var cbiACLSelect = form.Value.extend({
 		]);
 
 		Object.keys(aclList).sort().forEach(function(aclGroupName) {
-			var isRequired = (aclGroupName == 'unauthenticated' || aclGroupName == 'luci-base'),
+			var isRequired = (aclGroupName == 'unauthenticated' || aclGroupName == 'luci-base' || aclGroupName == 'luci-mod-status-index'),
 			    isReadable = (readMatches[0].test(aclGroupName) && !readMatches[1].test(aclGroupName)) || null,
 			    isWritable = (writeMatches[0].test(aclGroupName) && !writeMatches[1].test(aclGroupName)) || null;
 
