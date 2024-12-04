@@ -16,7 +16,7 @@ function command(cmd) {
 }
 
 function checkPeerHost(configHost, configPort, wgHost) {
-	const ips = popen(`resolveip ${configHost} 2>/dev/null`);
+	const ips = popen(`resolveip ${shellquote(configHost)} 2>/dev/null`);
 	const hostIp = replace(wgHost, /\[|\]/g, "");
 	if (ips) {
 		for (let line = ips.read('line'); length(line); line = ips.read('line')) {
