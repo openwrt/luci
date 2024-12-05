@@ -20,10 +20,10 @@ function checkPeerHost(configHost, configPort, wgHost) {
 	const hostIp = replace(wgHost, /\[|\]/g, "");
 	if (ips) {
 		for (let line = ips.read('line'); length(line); line = ips.read('line')) {
-			const ip =  rtrim(line, '\n');
+			const ip = rtrim(line, '\n');
 			if (configPort && (ip + ":" + configPort == hostIp)) {
 				return true;
-			} else if (ip == substr(hostIp, 0, index(hostIp, ":"))) {
+			} else if (ip == substr(hostIp, 0, rindex(hostIp, ":"))) {
 				return true;
 			}
 		}
