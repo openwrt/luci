@@ -21,14 +21,15 @@ function checkPeerHost(configHost, configPort, wgHost) {
 	if (ips) {
 		for (let line = ips.read('line'); length(line); line = ips.read('line')) {
 			const ip =  rtrim(line, '\n');
-			if (ip + ":" + configPort == hostIp) {
+			if (configPort && (ip + ":" + configPort == hostIp)) {
+				return true;
+			} else if (ip == substr(hostIp, 0, index(hostIp, ":"))) {
 				return true;
 			}
 		}
 	}
 	return false;
 }
-
 
 const methods = {
 	generatePsk: {
