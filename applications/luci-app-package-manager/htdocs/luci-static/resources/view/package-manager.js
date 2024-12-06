@@ -1260,7 +1260,7 @@ return view.extend({
 				E('tr', { 'class': 'tr cbi-section-table-titles' }, [
 					E('th', { 'class': 'th col-2 left' }, [ _('Package name') ]),
 					E('th', { 'class': 'th col-2 left version' }, [ _('Version') ]),
-					E('th', { 'class': 'th col-1 center size'}, [ _('Size (%s)').format(L.hasSystemFeature('apk') ? '.ipk' : '.apk') ]),
+					E('th', { 'class': 'th col-1 center size'}, [ _('Size (%s)').format(L.hasSystemFeature('apk') ? '.apk' : '.ipk') ]),
 					E('th', { 'class': 'th col-10 left' }, [ _('Description') ]),
 					E('th', { 'class': 'th right cbi-section-actions' }, [ '\u00a0' ])
 				])
