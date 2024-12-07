@@ -3,7 +3,7 @@
 'require baseclass';
 
 function isEmpty(object, ignore) {
-	for (var property in object)
+	for (const property in object)
 		if (object.hasOwnProperty(property) && property != ignore)
 			return false;
 
@@ -22,7 +22,7 @@ function isEmpty(object, ignore) {
  * UCI configuration data.
  */
 return baseclass.extend(/** @lends LuCI.uci.prototype */ {
-	__init__: function() {
+	__init__() {
 		this.state = {
 			newidx:  0,
 			values:  { },
@@ -100,14 +100,14 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * A newly generated, unique section ID in the form `newXXXXXX`
 	 * where `X` denotes a hexadecimal digit.
 	 */
-	createSID: function(conf) {
-		var v = this.state.values,
-		    n = this.state.creates,
-		    sid;
+	createSID(conf) {
+		const v = this.state.values;
+		const n = this.state.creates;
+		let sid;
 
 		do {
 			sid = "new%06x".format(Math.random() * 0xFFFFFF);
-		} while ((n[conf] && n[conf][sid]) || (v[conf] && v[conf][sid]));
+		} while ((n[conf]?.[sid]) || (v[conf]?.[sid]));
 
 		return sid;
 	},
@@ -131,31 +131,31 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * not in extended notation. Returns `null` when an extended ID could
 	 * not be resolved to existing section ID.
 	 */
-	resolveSID: function(conf, sid) {
+	resolveSID(conf, sid) {
 		if (typeof(sid) != 'string')
 			return sid;
 
-		var m = /^@([a-zA-Z0-9_-]+)\[(-?[0-9]+)\]$/.exec(sid);
+		const m = /^@([a-zA-Z0-9_-]+)\[(-?[0-9]+)\]$/.exec(sid);
 
 		if (m) {
-			var type = m[1],
-			    pos = +m[2],
-			    sections = this.sections(conf, type),
-			    section = sections[pos >= 0 ? pos : sections.length + pos];
+			const type = m[1];
+			const pos = +m[2];
+			const sections = this.sections(conf, type);
+			const section = sections[pos >= 0 ? pos : sections.length + pos];
 
-			return section ? section['.name'] : null;
+			return section?.['.name'] ?? null;
 		}
 
 		return sid;
 	},
 
 	/* private */
-	reorderSections: function() {
-		var v = this.state.values,
-		    n = this.state.creates,
-		    d = this.state.deletes,
-		    r = this.state.reorder,
-		    tasks = [];
+	reorderSections() {
+		const v = this.state.values;
+		const n = this.state.creates;
+		const d = this.state.deletes;
+		const r = this.state.reorder;
+		const tasks = [];
 
 		if (Object.keys(r).length === 0)
 			return Promise.resolve();
@@ -164,8 +164,8 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		 gather all created and existing sections, sort them according
 		 to their index value and issue an uci order call
 		*/
-		for (var c in r) {
-			var o = [ ];
+		for (const c in r) {
+			const o = [ ];
 
 			// skip deletes within re-orders
 			if (d[c])
@@ -173,21 +173,19 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 
 			// push creates
 			if (n[c])
-				for (var s in n[c])
+				for (const s in n[c])
 					o.push(n[c][s]);
 
 			// push values
-			for (var s in v[c])
+			for (const s in v[c])
 				o.push(v[c][s]);
 
 			if (o.length > 0) {
-				o.sort(function(a, b) {
-					return (a['.index'] - b['.index']);
-				});
+				o.sort((a, b) => a['.index'] - b['.index']);
 
-				var sids = [ ];
+				const sids = [ ];
 
-				for (var i = 0; i < o.length; i++)
+				for (let i = 0; i < o.length; i++)
 					sids.push(o[i]['.name']);
 
 				tasks.push(this.callOrder(c, sids));
@@ -199,7 +197,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	},
 
 	/* private */
-	loadPackage: function(packageName) {
+	loadPackage(packageName) {
 		if (this.loaded[packageName] == null)
 			return (this.loaded[packageName] = this.callLoad(packageName));
 
@@ -224,22 +222,22 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Returns a promise resolving to the names of the configurations
 	 * that have been successfully loaded.
 	 */
-	load: function(packages) {
-		var self = this,
-		    pkgs = [ ],
-		    tasks = [];
+	load(packages) {
+		const self = this;
+		const pkgs = [ ];
+		const tasks = [];
 
 		if (!Array.isArray(packages))
 			packages = [ packages ];
 
-		for (var i = 0; i < packages.length; i++)
+		for (let i = 0; i < packages.length; i++)
 			if (!self.state.values[packages[i]]) {
 				pkgs.push(packages[i]);
 				tasks.push(self.loadPackage(packages[i]));
 			}
 
-		return Promise.all(tasks).then(function(responses) {
-			for (var i = 0; i < responses.length; i++)
+		return Promise.all(tasks).then(responses => {
+			for (let i = 0; i < responses.length; i++)
 				self.state.values[pkgs[i]] = responses[i];
 
 			if (responses.length)
@@ -256,11 +254,11 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * The name of the configuration or an array of configuration
 	 * names to unload.
 	 */
-	unload: function(packages) {
+	unload(packages) {
 		if (!Array.isArray(packages))
 			packages = [ packages ];
 
-		for (var i = 0; i < packages.length; i++) {
+		for (let i = 0; i < packages.length; i++) {
 			delete this.state.values[packages[i]];
 			delete this.state.creates[packages[i]];
 			delete this.state.changes[packages[i]];
@@ -288,13 +286,11 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Returns the section ID of the newly added section which is equivalent
 	 * to the given name for non-anonymous sections.
 	 */
-	add: function(conf, type, name) {
-		var n = this.state.creates,
-		    sid = name || this.createSID(conf);
+	add(conf, type, name) {
+		const n = this.state.creates;
+		const sid = name || this.createSID(conf);
 
-		if (!n[conf])
-			n[conf] = { };
-
+		n[conf] ??= { };
 		n[conf][sid] = {
 			'.type':      type,
 			'.name':      sid,
@@ -330,7 +326,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Returns the section ID of the newly cloned section which is equivalent
 	 * to the given name for non-anonymous sections.
 	 */
-	clone: function(conf, type, srcsid, put_next, name) {
+	clone(conf, type, srcsid, put_next, name) {
 		let n = this.state.creates;
 		let sid = this.createSID(conf);
 		let v = this.state.values;
@@ -362,23 +358,20 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * @param {string} sid
 	 * The ID of the section to remove.
 	 */
-	remove: function(conf, sid) {
-		var v = this.state.values,
-		    n = this.state.creates,
-		    c = this.state.changes,
-		    d = this.state.deletes;
+	remove(conf, sid) {
+		const v = this.state.values;
+		const n = this.state.creates;
+		const c = this.state.changes;
+		const d = this.state.deletes;
 
 		/* requested deletion of a just created section */
-		if (n[conf] && n[conf][sid]) {
+		if (n[conf]?.[sid]) {
 			delete n[conf][sid];
 		}
-		else if (v[conf] && v[conf][sid]) {
-			if (c[conf])
-				delete c[conf][sid];
+		else if (v[conf]?.[sid]) {
+			delete c[conf]?.[sid];
 
-			if (!d[conf])
-				d[conf] = { };
-
+			d[conf] ??= { };
 			d[conf][sid] = true;
 		}
 	},
@@ -451,35 +444,35 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Returns a sorted array of the section objects within the given
 	 * configuration, filtered by type, if a type has been specified.
 	 */
-	sections: function(conf, type, cb) {
-		var sa = [ ],
-		    v = this.state.values[conf],
-		    n = this.state.creates[conf],
-		    c = this.state.changes[conf],
-		    d = this.state.deletes[conf];
+	sections(conf, type, cb) {
+		const sa = [ ];
+		const v = this.state.values[conf];
+		const n = this.state.creates[conf];
+		const c = this.state.changes[conf];
+		const d = this.state.deletes[conf];
 
 		if (!v)
 			return sa;
 
-		for (var s in v)
+		for (const s in v)
 			if (!d || d[s] !== true)
 				if (!type || v[s]['.type'] == type)
 					sa.push(Object.assign({ }, v[s], c ? c[s] : null));
 
 		if (n)
-			for (var s in n)
+			for (const s in n)
 				if (!type || n[s]['.type'] == type)
 					sa.push(Object.assign({ }, n[s]));
 
-		sa.sort(function(a, b) {
+		sa.sort((a, b) => {
 			return a['.index'] - b['.index'];
 		});
 
-		for (var i = 0; i < sa.length; i++)
+		for (let i = 0; i < sa.length; i++)
 			sa[i]['.index'] = i;
 
 		if (typeof(cb) == 'function')
-			for (var i = 0; i < sa.length; i++)
+			for (let i = 0; i < sa.length; i++)
 				cb.call(this, sa[i], sa[i]['.name']);
 
 		return sa;
@@ -510,11 +503,11 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * - Returns `null` if the config, section or option has not been
 	 *   found or if the corresponding configuration is not loaded.
 	 */
-	get: function(conf, sid, opt) {
-		var v = this.state.values,
-		    n = this.state.creates,
-		    c = this.state.changes,
-		    d = this.state.deletes;
+	get(conf, sid, opt) {
+		const v = this.state.values;
+		const n = this.state.creates;
+		const c = this.state.changes;
+		const d = this.state.deletes;
 
 		sid = this.resolveSID(conf, sid);
 
@@ -522,10 +515,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 			return null;
 
 		/* requested option in a just created section */
-		if (n[conf] && n[conf][sid]) {
-			if (!n[conf])
-				return null;
-
+		if (n[conf]?.[sid]) {
 			if (opt == null)
 				return n[conf][sid];
 
@@ -535,16 +525,16 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		/* requested an option value */
 		if (opt != null) {
 			/* check whether option was deleted */
-			if (d[conf] && d[conf][sid])
+			if (d[conf]?.[sid])
 				if (d[conf][sid] === true || d[conf][sid][opt])
 					return null;
 
 			/* check whether option was changed */
-			if (c[conf] && c[conf][sid] && c[conf][sid][opt] != null)
+			if (c[conf]?.[sid][opt] != null)
 				return c[conf][sid][opt];
 
 			/* return base value */
-			if (v[conf] && v[conf][sid])
+			if (v[conf]?.[sid])
 				return v[conf][sid][opt];
 
 			return null;
@@ -553,21 +543,21 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		/* requested an entire section */
 		if (v[conf]) {
 			/* check whether entire section was deleted */
-			if (d[conf] && d[conf][sid] === true)
+			if (d[conf]?.[sid] === true)
 				return null;
 
-			var s = v[conf][sid] || null;
+			const s = v[conf][sid] || null;
 
 			if (s) {
 				/* merge changes */
-				if (c[conf] && c[conf][sid])
-					for (var opt in c[conf][sid])
+				if (c[conf]?.[sid])
+					for (const opt in c[conf][sid])
 						if (c[conf][sid][opt] != null)
 							s[opt] = c[conf][sid][opt];
 
 				/* merge deletions */
-				if (d[conf] && d[conf][sid])
-					for (var opt in d[conf][sid])
+				if (d[conf]?.[sid])
+					for (const opt in d[conf][sid])
 						delete s[opt];
 			}
 
@@ -598,18 +588,18 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * the option will be removed, otherwise it will be set or overwritten
 	 * with the given value.
 	 */
-	set: function(conf, sid, opt, val) {
-		var v = this.state.values,
-		    n = this.state.creates,
-		    c = this.state.changes,
-		    d = this.state.deletes;
+	set(conf, sid, opt, val) {
+		const v = this.state.values;
+		const n = this.state.creates;
+		const c = this.state.changes;
+		const d = this.state.deletes;
 
 		sid = this.resolveSID(conf, sid);
 
 		if (sid == null || opt == null || opt.charAt(0) == '.')
 			return;
 
-		if (n[conf] && n[conf][sid]) {
+		if (n[conf]?.[sid]) {
 			if (val != null)
 				n[conf][sid][opt] = val;
 			else
@@ -621,17 +611,14 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 				return;
 
 			/* only set in existing sections */
-			if (!v[conf] || !v[conf][sid])
+			if (!v[conf]?.[sid])
 				return;
 
-			if (!c[conf])
-				c[conf] = {};
-
-			if (!c[conf][sid])
-				c[conf][sid] = {};
+			c[conf] ??= {};
+			c[conf][sid] ??= {};
 
 			/* undelete option */
-			if (d[conf] && d[conf][sid]) {
+			if (d[conf]?.[sid]) {
 				if (isEmpty(d[conf][sid], opt))
 					delete d[conf][sid];
 				else
@@ -642,7 +629,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		}
 		else {
 			/* revert any change for to-be-deleted option */
-			if (c[conf] && c[conf][sid]) {
+			if (c[conf]?.[sid]) {
 				if (isEmpty(c[conf][sid], opt))
 					delete c[conf][sid];
 				else
@@ -650,12 +637,9 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 			}
 
 			/* only delete existing options */
-			if (v[conf] && v[conf][sid] && v[conf][sid].hasOwnProperty(opt)) {
-				if (!d[conf])
-					d[conf] = { };
-
-				if (!d[conf][sid])
-					d[conf][sid] = { };
+			if (v[conf]?.[sid].hasOwnProperty(opt)) {
+				d[conf] ??= { };
+				d[conf][sid] ??= { };
 
 				if (d[conf][sid] !== true)
 					d[conf][sid][opt] = true;
@@ -679,7 +663,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * @param {string} opt
 	 * The name of the option to remove.
 	 */
-	unset: function(conf, sid, opt) {
+	unset(conf, sid, opt) {
 		return this.set(conf, sid, opt, null);
 	},
 
@@ -710,12 +694,11 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * - Returns `null` if the config, section or option has not been
 	 *   found or if the corresponding configuration is not loaded.
 	 */
-	get_first: function(conf, type, opt) {
-		var sid = null;
+	get_first(conf, type, opt) {
+		let sid = null;
 
-		this.sections(conf, type, function(s) {
-			if (sid == null)
-				sid = s['.name'];
+		this.sections(conf, type, s => {
+			sid ??= s['.name'];
 		});
 
 		return this.get(conf, sid, opt);
@@ -745,12 +728,11 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * the option will be removed, otherwise it will be set or overwritten
 	 * with the given value.
 	 */
-	set_first: function(conf, type, opt, val) {
-		var sid = null;
+	set_first(conf, type, opt, val) {
+		let sid = null;
 
-		this.sections(conf, type, function(s) {
-			if (sid == null)
-				sid = s['.name'];
+		this.sections(conf, type, s => {
+			sid ??= s['.name'];
 		});
 
 		return this.set(conf, sid, opt, val);
@@ -775,7 +757,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * @param {string} opt
 	 * The option name to set the value for.
 	 */
-	unset_first: function(conf, type, opt) {
+	unset_first(conf, type, opt) {
 		return this.set_first(conf, type, opt, null);
 	},
 
@@ -810,14 +792,15 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Returns `true` when the section was successfully moved, or `false`
 	 * when either the section specified by `sid1` or by `sid2` is not found.
 	 */
-	move: function(conf, sid1, sid2, after) {
-		var sa = this.sections(conf),
-		    s1 = null, s2 = null;
+	move(conf, sid1, sid2, after) {
+		const sa = this.sections(conf);
+		let s1 = null;
+		let s2 = null;
 
 		sid1 = this.resolveSID(conf, sid1);
 		sid2 = this.resolveSID(conf, sid2);
 
-		for (var i = 0; i < sa.length; i++) {
+		for (let i = 0; i < sa.length; i++) {
 			if (sa[i]['.name'] != sid1)
 				continue;
 
@@ -833,7 +816,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 			sa.push(s1);
 		}
 		else {
-			for (var i = 0; i < sa.length; i++) {
+			for (let i = 0; i < sa.length; i++) {
 				if (sa[i]['.name'] != sid2)
 					continue;
 
@@ -846,7 +829,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 				return false;
 		}
 
-		for (var i = 0; i < sa.length; i++)
+		for (let i = 0; i < sa.length; i++)
 			this.get(conf, sa[i]['.name'])['.index'] = i;
 
 		this.state.reorder[conf] = true;
@@ -864,21 +847,21 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Returns a promise resolving to an array of configuration names which
 	 * have been reloaded by the save operation.
 	 */
-	save: function() {
-		var v = this.state.values,
-		    n = this.state.creates,
-		    c = this.state.changes,
-		    d = this.state.deletes,
-		    r = this.state.reorder,
-		    self = this,
-		    snew = [ ],
-		    pkgs = { },
-		    tasks = [];
+	save() {
+		const v = this.state.values;
+		const n = this.state.creates;
+		const c = this.state.changes;
+		const d = this.state.deletes;
+		const r = this.state.reorder;
+		const self = this;
+		const snew = [ ];
+		let pkgs = { };
+		const tasks = [];
 
 		if (d)
-			for (var conf in d) {
-				for (var sid in d[conf]) {
-					var o = d[conf][sid];
+			for (const conf in d) {
+				for (const sid in d[conf]) {
+					const o = d[conf][sid];
 
 					if (o === true)
 						tasks.push(self.callDelete(conf, sid, null));
@@ -890,14 +873,14 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 			}
 
 		if (n)
-			for (var conf in n) {
-				for (var sid in n[conf]) {
-					var p = {
+			for (const conf in n) {
+				for (const sid in n[conf]) {
+					const p = {
 						config: conf,
 						values: { }
 					};
 
-					for (var k in n[conf][sid]) {
+					for (const k in n[conf][sid]) {
 						if (k == '.type')
 							p.type = n[conf][sid][k];
 						else if (k == '.create')
@@ -914,27 +897,27 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 			}
 
 		if (c)
-			for (var conf in c) {
-				for (var sid in c[conf])
+			for (const conf in c) {
+				for (const sid in c[conf])
 					tasks.push(self.callSet(conf, sid, c[conf][sid]));
 
 				pkgs[conf] = true;
 			}
 
 		if (r)
-			for (var conf in r)
+			for (const conf in r)
 				pkgs[conf] = true;
 
-		return Promise.all(tasks).then(function(responses) {
+		return Promise.all(tasks).then(responses => {
 			/*
 			 array "snew" holds references to the created uci sections,
 			 use it to assign the returned names of the new sections
 			*/
-			for (var i = 0; i < snew.length; i++)
+			for (let i = 0; i < snew.length; i++)
 				snew[i]['.name'] = responses[i];
 
 			return self.reorderSections();
-		}).then(function() {
+		}).then(() => {
 			pkgs = Object.keys(pkgs);
 
 			self.unload(pkgs);
@@ -954,20 +937,20 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * @returns {Promise<number>}
 	 * Returns a promise resolving/rejecting with the `ubus` RPC status code.
 	 */
-	apply: function(timeout) {
-		var self = this,
-		    date = new Date();
+	apply(timeout) {
+		const self = this;
+		const date = new Date();
 
 		if (typeof(timeout) != 'number' || timeout < 1)
 			timeout = 10;
 
-		return self.callApply(timeout, true).then(function(rv) {
+		return self.callApply(timeout, true).then(rv => {
 			if (rv != 0)
 				return Promise.reject(rv);
 
-			var try_deadline = date.getTime() + 1000 * timeout;
-			var try_confirm = function() {
-				return self.callConfirm().then(function(rv) {
+			const try_deadline = date.getTime() + 1000 * timeout;
+			const try_confirm = () => {
+				return self.callConfirm().then(rv => {
 					if (rv != 0) {
 						if (date.getTime() < try_deadline)
 							window.setTimeout(try_confirm, 250);
