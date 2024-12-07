@@ -68,7 +68,7 @@ const CBIJSONConfig = baseclass.extend({
 			}
 		}
 
-		section_ids.sort(L.bind(function(a, b) {
+		section_ids.sort(L.bind((a, b) => {
 			const indexA = (this.data[a]['.index'] != null) ? +this.data[a]['.index'] : 9999;
 			const indexB = (this.data[b]['.index'] != null) ? +this.data[b]['.index'] : 9999;
 
@@ -137,7 +137,7 @@ const CBIJSONConfig = baseclass.extend({
 			if (sectiontype == null || this.data[section_id]['.type'] == sectiontype)
 				rv.push(this.data[section_id]);
 
-		rv.sort(function(a, b) { return a['.index'] - b['.index'] });
+		rv.sort((a, b) => { return a['.index'] - b['.index'] });
 
 		if (typeof(callback) == 'function')
 			for (let i = 0; i < rv.length; i++)
@@ -229,7 +229,7 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 	 */
 	parse() {
 		const args = arguments;
-		this.children.forEach(function(child) {
+		this.children.forEach((child) => {
 			child.parse(...args);
 		});
 	},
@@ -292,7 +292,7 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 
 		const x = dom.elem(s) ? s : dom.parse(`<div>${s}</div>`);
 
-		x.querySelectorAll('br').forEach(function(br) {
+		x.querySelectorAll('br').forEach((br) => {
 			x.replaceChild(document.createTextNode('\n'), br);
 		});
 
@@ -543,11 +543,11 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 		const loadTasks = [ doCheckACL ? callSessionAccess('uci', this.config, 'write') : true ];
 		const configs = this.parsechain ?? [ this.config ];
 
-		loadTasks.push(...configs.map(L.bind(function(config, i) {
+		loadTasks.push(...configs.map(L.bind((config, i) => {
 			return i ? L.resolveDefault(this.data.load(config)) : this.data.load(config);
 		}, this)));
 
-		return Promise.all(loadTasks).then(L.bind(function(res) {
+		return Promise.all(loadTasks).then(L.bind((res) =>  {
 			if (res[0] === false)
 				this.readonly = true;
 
@@ -605,7 +605,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 			.then(cb)
 			.then(this.data.save.bind(this.data))
 			.then(this.load.bind(this))
-			.catch(function(e) {
+			.catch((e) =>  {
 				if (!silent) {
 					ui.showModal(_('Save error'), [
 						E('p', {}, [ _('An error occurred while saving the form:') ]),
@@ -653,7 +653,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 
 		dom.bindClassInstance(mapEl, this);
 
-		return this.renderChildren(null).then(L.bind(function(nodes) {
+		return this.renderChildren(null).then(L.bind((nodes) =>  {
 			const initialRender = !mapEl.firstChild;
 
 			dom.content(mapEl, null);
@@ -672,7 +672,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 			if (!initialRender) {
 				mapEl.classList.remove('flash');
 
-				window.setTimeout(function() {
+				window.setTimeout(() =>  {
 					mapEl.classList.add('flash');
 				}, 1);
 			}
@@ -912,7 +912,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 		if (Array.isArray(this.children))
 			for (let i = 0; i < section_ids.length; i++)
 				tasks.push(this.loadChildren(section_ids[i])
-					.then(Function.prototype.bind.call(function(section_id, set_values) {
+					.then(Function.prototype.bind.call((section_id, set_values) =>  {
 						for (let i = 0; i < set_values.length; i++)
 							this.children[i].cfgvalue(section_id, set_values[i]);
 					}, this, section_ids[i])));
@@ -1241,7 +1241,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	/** @private */
 	renderOptions(tab_name, section_id) {
 		const in_table = (this instanceof CBITableSection);
-		return this.renderChildren(tab_name, section_id, in_table).then(function(nodes) {
+		return this.renderChildren(tab_name, section_id, in_table).then((nodes) =>  {
 			const optionEls = E([]);
 			for (let i = 0; i < nodes.length; i++)
 				optionEls.appendChild(nodes[i]);
@@ -2203,7 +2203,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 	/** @override */
 	cfgsections() {
 		return this.map.data.sections(this.uciconfig ?? this.map.config, this.sectiontype)
-			.map(function(s) { return s['.name'] })
+			.map((s) => { return s['.name'] })
 			.filter(L.bind(this.filter, this));
 	},
 
@@ -2255,7 +2255,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 				E('button', {
 					'class': 'cbi-button cbi-button-add',
 					'title': btn_title ?? _('Add'),
-					'click': ui.createHandlerFn(this, function(ev) {
+					'click': ui.createHandlerFn(this, (ev) => {
 						if (nameEl.classList.contains('cbi-input-invalid'))
 							return;
 
@@ -2266,7 +2266,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 			]);
 
 			if (this.map.readonly !== true) {
-				ui.addValidator(nameEl, 'uciname', true, function(v) {
+				ui.addValidator(nameEl, 'uciname', true, (v) => {
 					const button = createEl.querySelector('.cbi-section-create > .cbi-button-add');
 					if (v !== '') {
 						button.disabled = null;
@@ -2502,7 +2502,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 * is true. Optionally supply a name for the new section_id.
 	 */
 	/** @private */
-	handleClone: function(section_id, put_next, name) {
+	handleClone(section_id, put_next, name) {
 		let config_name = this.uciconfig || this.map.config;
 
 		this.map.data.clone(config_name, this.sectiontype, section_id, put_next, name);
@@ -2700,7 +2700,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 			if (typeof(this.extedit) == 'function')
 				evFn = L.bind(this.extedit, this);
 			else if (typeof(this.extedit) == 'string')
-				evFn = L.bind(function(sid, ev) {
+				evFn = L.bind((sid, ev) => {
 					location.href = this.extedit.format(sid);
 				}, this, section_id);
 
@@ -2724,7 +2724,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		}
 
 		if (this.cloneable) {
-			var btn_title = this.titleFn('clonebtntitle', section_id);
+			const btn_title = this.titleFn('clonebtntitle', section_id);
 
 			dom.append(tdEl.lastElementChild,
 				E('button', {
@@ -2810,7 +2810,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		n.style.opacity = '';
 		n.classList.add('flash');
 		n.parentNode.querySelectorAll('.drag-over-above, .drag-over-below')
-			.forEach(function(tr) {
+			.forEach((tr) => {
 				tr.classList.remove('drag-over-above');
 				tr.classList.remove('drag-over-below');
 			});
@@ -2937,7 +2937,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 		dragHandle.style.top = `${touchLoc.pageY - (parseInt(dragHandle.style.height) / 2)}px`;
 
-		rowElem.parentNode.querySelectorAll('[draggable]').forEach(function(tr, i, trs) {
+		rowElem.parentNode.querySelectorAll('[draggable]').forEach((tr, i, trs) => {
 			const trRect = tr.getBoundingClientRect();
 			const yTop = trRect.top + window.scrollY;
 			const yBottom = trRect.bottom + window.scrollY;
@@ -2957,9 +2957,9 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		ev.preventDefault();
 
 		if (touchLoc.clientY < 30)
-			window.requestAnimationFrame(function() { htmlElem.scrollTop -= 30 });
+			window.requestAnimationFrame(() => { htmlElem.scrollTop -= 30 });
 		else if (touchLoc.clientY > viewportHeight - 30)
-			window.requestAnimationFrame(function() { htmlElem.scrollTop += 30 });
+			window.requestAnimationFrame(() => { htmlElem.scrollTop += 30 });
 	},
 
 	/** @private */
@@ -2984,7 +2984,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 				targetElem.getAttribute('data-sid'),
 				isBelow);
 
-			window.requestAnimationFrame(function() {
+			window.requestAnimationFrame(() => {
 				const rowRect = rowElem.getBoundingClientRect();
 
 				if (rowRect.top < 50)
@@ -3051,7 +3051,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 		return saveTasks
 			.then(L.bind(this.handleModalCancel, this, modalMap, ev, true))
-			.catch(function() {});
+			.catch(() => {});
 	},
 
 	/** @private */
@@ -3065,19 +3065,19 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		let index = 0;
 		const list = [];
 
-		ev.currentTarget.querySelectorAll('th').forEach(function(other_th, i) {
+		ev.currentTarget.querySelectorAll('th').forEach((other_th, i) => {
 			if (other_th !== th)
 				other_th.removeAttribute('data-sort-direction');
 			else
 				index = i;
 		});
 
-		ev.currentTarget.parentNode.querySelectorAll('tr.cbi-section-table-row').forEach(L.bind(function(tr, i) {
+		ev.currentTarget.parentNode.querySelectorAll('tr.cbi-section-table-row').forEach(L.bind((tr, i) => {
 			const sid = tr.getAttribute('data-sid');
 			const opt = tr.childNodes[index].getAttribute('data-name');
 			const val = this.cfgvalue(sid, opt);
 
-			tr.querySelectorAll('.flash').forEach(function(n) {
+			tr.querySelectorAll('.flash').forEach((n) => {
 				n.classList.remove('flash')
 			});
 
@@ -3089,13 +3089,13 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 			]);
 		}, this));
 
-		list.sort(function(a, b) {
+		list.sort((a, b) => {
 			return descending
 				? -L.naturalCompare(a[0], b[0])
 				: L.naturalCompare(a[0], b[0]);
 		});
 
-		window.requestAnimationFrame(L.bind(function() {
+		window.requestAnimationFrame(L.bind(() => {
 			let ref_sid;
 			let cur_sid;
 
@@ -3219,7 +3219,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		const activeMap = mapNode ? dom.findClassInstance(mapNode) : null;
 		const stackedMap = activeMap && (activeMap.parent !== parent || activeMap.section !== section_id);
 
-		return (stackedMap ? activeMap.save(null, true) : Promise.resolve()).then(L.bind(function() {
+		return (stackedMap ? activeMap.save(null, true) : Promise.resolve()).then(L.bind(() => {
 			section_id = sref['.name'];
 
 			let m;
@@ -3243,9 +3243,9 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 			this.cloneOptions(this, s);
 
-			return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(function() {
+			return Promise.resolve(this.addModalOptions(s, section_id, ev)).then(() => {
 				return m.render();
-			}).then(L.bind(function(nodes) {
+			}).then(L.bind((nodes) => {
 				let title = parent.title;
 				let name = null;
 
@@ -3751,7 +3751,7 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 				optionEl.appendChild(E('label', {
 					'class': 'cbi-value-title',
 					'for': 'widget.cbid.%s.%s.%s'.format(config_name, section_id, this.option),
-					'click': function(ev) {
+					'click': (ev) => {
 						const node = ev.currentTarget;
 						const elem = node.nextElementSibling.querySelector(`#${node.getAttribute('for')}`) ?? node.nextElementSibling.querySelector(`[data-widget-id="${node.getAttribute('for')}"]`);
 
@@ -4008,10 +4008,10 @@ const CBIListValue = CBIValue.extend(/** @lends LuCI.form.ListValue.prototype */
  * @param {string} [description]
  * The description text of the option element.
  */
-var CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.prototype */ {
+const CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.prototype */ {
 	__name__: 'CBI.RichListValue',
 
-	__init__: function() {
+	__init__() {
 		this.super('__init__', arguments);
 		this.widget = 'select';
 		this.orientation = 'horizontal';
@@ -4050,9 +4050,9 @@ var CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.protot
 	 */
 
 	 /** @private */
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var choices = this.transformChoices();
-		var widget = new ui.Dropdown((cfgvalue != null) ? cfgvalue : this.default, choices, {
+	renderWidget(section_id, option_index, cfgvalue) {
+		const choices = this.transformChoices();
+		const widget = new ui.Dropdown((cfgvalue != null) ? cfgvalue : this.default, choices, {
 			id: this.cbid(section_id),
 			size: this.size,
 			sort: this.keylist,
@@ -4087,7 +4087,7 @@ var CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.protot
 	 * implemented as a simple ListValue entry.
 	 * 
 	 */
-	value: function(value, title, description) {
+	value(value, title, description) {
 		if (description) {
 			CBIListValue.prototype.value.call(this, value, E([], [
 				E('span', { 'class': 'hide-open' }, [ title ]),
@@ -4632,7 +4632,7 @@ const CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototyp
 			dom.content(outputEl, [
 				E('button', {
 					'class': 'cbi-button cbi-button-%s'.format(this.inputstyle ?? 'button'),
-					'click': ui.createHandlerFn(this, function(section_id, ev) {
+					'click': ui.createHandlerFn(this, (section_id, ev) => {
 						if (this.onclick)
 							return this.onclick(ev, section_id);
 
@@ -5005,7 +5005,7 @@ const CBISectionValue = CBIValue.extend(/** @lends LuCI.form.SectionValue.protot
  * o.value('choice1', 'The first choice');
  * o.value('choice2', 'The second choice');
  *
- * m.render().then(function(node) {
+ * m.render().then((node) => {
  * 	document.body.appendChild(node);
  * });
  * </pre>
