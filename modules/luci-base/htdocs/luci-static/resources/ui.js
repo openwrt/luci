@@ -213,7 +213,7 @@ const UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype 
 	 * The native DOM events for which event handlers should be registered.
 	 */
 	registerEvents(targetNode, synevent, events) {
-		const dispatchFn = L.bind(function(ev) {
+		const dispatchFn = L.bind((ev) => {
 			this.node.dispatchEvent(new CustomEvent(synevent, { bubbles: true }));
 		}, this);
 
@@ -252,12 +252,12 @@ const UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype 
 			optional, validate
 		].concat(events));
 
-		this.node.addEventListener('validation-success', L.bind(function(ev) {
+		this.node.addEventListener('validation-success', L.bind((ev) => {
 			this.validState = true;
 			this.validationError = '';
 		}, this));
 
-		this.node.addEventListener('validation-failure', L.bind(function(ev) {
+		this.node.addEventListener('validation-failure', L.bind((ev) => {
 			this.validState = false;
 			this.validationError = ev.detail.message;
 		}, this));
@@ -1342,7 +1342,7 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 		sb.lastElementChild.setAttribute('tabindex', 0);
 
-		const focusFn = L.bind(function(el) {
+		const focusFn = L.bind((el) => {
 			this.setFocus(sb, el, true);
 			ul.removeEventListener('transitionend', focusFn);
 		}, this, sel ?? li[0]);
@@ -1826,10 +1826,10 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 
 			case 40:
 				if (active && active.nextElementSibling) {
-					var li = active.nextElementSibling;
+					const li = active.nextElementSibling;
 					this.setFocus(sb, li);
 					if (this.options.create && li == li.parentNode.lastElementChild) {
-						var input = li.querySelector('input:not([type="hidden"]):not([type="checkbox"]');
+						const input = li.querySelector('input:not([type="hidden"]):not([type="checkbox"]');
 						if (input) input.focus();
 					}
 					ev.preventDefault();
@@ -2383,7 +2383,7 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 	},
 
 	/** @private */
-	bind: function(dl) {
+	bind(dl) {
 		dl.addEventListener('click', L.bind(this.handleClick, this));
 		dl.addEventListener('keydown', L.bind(this.handleKeydown, this));
 		dl.addEventListener('cbi-dropdown-change', L.bind(this.handleDropdownChange, this));
@@ -2475,11 +2475,11 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 
 		if (item) {
 			// Get bounding rectangle of the item
-			var rect = item.getBoundingClientRect();
+			const rect = item.getBoundingClientRect();
 
 			// Get computed styles for the ::after pseudo-element
-			var afterStyles = window.getComputedStyle(item, '::after');
-			var afterWidth = parseFloat(afterStyles.width) || 0;
+			const afterStyles = window.getComputedStyle(item, '::after');
+			const afterWidth = parseFloat(afterStyles.width) || 0;
 
 			// Check if the click is within the ::after region
 			if (rect.right - ev.clientX <= afterWidth) {
@@ -2796,8 +2796,8 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 	},
 
 	/** @override */
-	render: function() {
-		const renderFileBrowser = L.resolveDefault(this.value != null ? fs.stat(this.value) : null).then(L.bind(function(stat) {
+	render() {
+		const renderFileBrowser = L.resolveDefault(this.value != null ? fs.stat(this.value) : null).then(L.bind((stat) => {
 			let label;
 
 			if (L.isObject(stat) && stat.type != 'directory')
@@ -2814,7 +2814,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 				'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser'),
 				'disabled': this.options.disabled ? '' : null
 			}, label);
-			var fileBrowserEl = E('div', { 'id': this.options.id }, [
+			const fileBrowserEl = E('div', { 'id': this.options.id }, [
 				btnOpenFileBrowser,
 				E('div', {
 					'class': 'cbi-filebrowser'
@@ -2829,8 +2829,8 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		}, this));
 		// in a browser mode open dir listing after render by clicking on a Select button
 		if (this.options.browser) {
-			return renderFileBrowser.then(function (fileBrowserEl) {
-				var btnOpenFileBrowser = fileBrowserEl.getElementsByClassName('open-file-browser').item(0);
+			return renderFileBrowser.then((fileBrowserEl) => {
+				const btnOpenFileBrowser = fileBrowserEl.getElementsByClassName('open-file-browser').item(0);
 				btnOpenFileBrowser.click();
 				return fileBrowserEl;
 			});
@@ -2930,7 +2930,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 			progress: L.bind((btn, ev) => {
 				btn.firstChild.data = '%.2f%%'.format((ev.loaded / ev.total) * 100);
 			}, this, ev.target)
-		}).then(L.bind(function(path, ev, res) {
+		}).then(L.bind((path, ev, res) => {
 			const reply = res.json();
 
 			if (L.isObject(reply) && reply.failure)
@@ -2962,7 +2962,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 				hidden.value = '';
 			}
 
-			return fs.remove(path).then(L.bind(function(parent, ev) {
+			return fs.remove(path).then(L.bind((parent, ev) => {
 				return this.handleSelect(parent, null, ev);
 			}, this, parent, ev)).catch(err => {
 				alert(_('Delete request failed: %s').format(err.message));
@@ -3129,7 +3129,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 
 	/** @private */
 	handleDownload(path, fileStat, ev) {
-		fs.read_direct(path, 'blob').then(function (blob) {
+		fs.read_direct(path, 'blob').then((blob) => {
 			const url = window.URL.createObjectURL(blob);
 			let a = document.createElement('a');
 			a.style.display = 'none';
@@ -3138,7 +3138,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 			document.body.appendChild(a);
 			a.click();
 			window.URL.revokeObjectURL(url);
-		}).catch(function(err) {
+		}).catch((err) => {
 			alert(_('Download failed: %s').format(err.message));
 		});
 	},
@@ -3183,7 +3183,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 
 		ev.preventDefault();
 
-		return L.resolveDefault(fs.list(path), []).then(L.bind(function(button, browser, path, list) {
+		return L.resolveDefault(fs.list(path), []).then(L.bind((button, browser, path, list) => {
 			document.querySelectorAll('.cbi-filebrowser.open').forEach(browserEl => {
 				dom.findClassInstance(browserEl).handleCancel(ev);
 			});
@@ -3261,7 +3261,7 @@ const UIMenu = baseclass.singleton(/** @lends LuCI.ui.menu.prototype */ {
 			this.menu = session.getLocalData('menu');
 
 		if (!L.isObject(this.menu)) {
-			this.menu = request.get(L.url('admin/menu')).then(L.bind(function(menu) {
+			this.menu = request.get(L.url('admin/menu')).then(L.bind((menu) => {
 				this.menu = scrubMenu(menu.json());
 				session.setLocalData('menu', this.menu);
 
@@ -3396,7 +3396,7 @@ const UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		const headings = [].slice.call(this.node.firstElementChild.querySelectorAll('th, .th'));
 
 		if (sorting) {
-			const list = data.map(L.bind(function(row) {
+			const list = data.map(L.bind((row) => {
 				return [ this.deriveSortKey(row[sorting[0]], sorting[0]), row ];
 			}, this));
 
@@ -3412,7 +3412,7 @@ const UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 				data.push(item[1]);
 			});
 
-			headings.forEach(function(th, i) {
+			headings.forEach((th, i) => {
 				if (i == sorting[0])
 					th.setAttribute('data-sort-direction', sorting[1] ? 'desc' : 'asc');
 				else
@@ -3894,7 +3894,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		mc.insertBefore(msg, mc.firstElementChild);
 
 		function fadeOutNotification(element) {
-			var notification = dom.parent(element, '.alert-message');
+			const notification = dom.parent(element, '.alert-message');
 			if (notification) {
 				notification.classList.add('fade-out');
 				notification.classList.remove('fade-in');
@@ -3907,7 +3907,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		}
 
 		if (typeof timeout === 'number' && timeout > 0) {
-			setTimeout(function() {
+			setTimeout(() => {
 				if (msg && msg.parentNode) {
 					fadeOutNotification(msg);
 				}
@@ -4266,7 +4266,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 		/** @private */
 		updateTabs(ev, root) {
-			(root ?? document).querySelectorAll('[data-tab-title]').forEach(L.bind(function(pane) {
+			(root ?? document).querySelectorAll('[data-tab-title]').forEach(L.bind((pane) => {
 				const menu = pane.parentNode.previousElementSibling;
 				const tab = menu ? menu.querySelector('[data-tab="%s"]'.format(pane.getAttribute('data-tab'))) : null;
 				const n_errors = pane.querySelectorAll('.cbi-input-invalid').length;
@@ -4512,8 +4512,8 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	awaitReconnect(...hosts) {
 		const ipaddrs = hosts.length ? hosts : [ window.location.host ];
 
-		window.setTimeout(L.bind(function() {
-			poll.add(L.bind(function() {
+		window.setTimeout(L.bind(() => {
+			poll.add(L.bind(() => {
 				const tasks = [];
 				let reachable = false;
 
@@ -4652,7 +4652,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							0: 'btn cbi-button cbi-button-positive important',
 							1: 'btn cbi-button cbi-button-negative important'
 						},
-						click: L.bind(function(ev, mode) { this.apply(mode == '0') }, this)
+						click: L.bind((ev, mode) => { this.apply(mode == '0') }, this)
 					}).render(), ' ',
 					E('button', {
 						'class': 'btn cbi-button cbi-button-reset',
@@ -4724,7 +4724,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 
 		/** @private */
 		checkConnectivityAffected() {
-			return L.resolveDefault(fs.exec_direct('/usr/libexec/luci-peeraddr', null, 'json')).then(L.bind(function(info) {
+			return L.resolveDefault(fs.exec_direct('/usr/libexec/luci-peeraddr', null, 'json')).then(L.bind((info) => {
 				if (L.isObject(info) && Array.isArray(info.inbound_interfaces)) {
 					for (let i = 0; i < info.inbound_interfaces.length; i++) {
 						const iif = info.inbound_interfaces[i];
