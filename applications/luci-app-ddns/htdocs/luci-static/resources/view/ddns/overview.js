@@ -514,7 +514,8 @@ return view.extend({
 			service_name.value('-',"📝 " + _("custom") );
 			Object.keys(_this.services).sort().forEach(name => service_name.value(name));
 			service_name.validate = function(section_id, value) {
-				if (value == '') return _("Select a service");
+				if (value == '-') return true;
+				if (!value) return _("Select a service");
 				if (!s2.service_supported) return _("Service doesn't support this IP type");
 				return true;
 			};
@@ -639,14 +640,15 @@ return view.extend({
 				};
 				service_name.write = function(section_id, service) {
 					if (service != '-') {
-						uci.set('ddns', section_id, 'update_url', null);
-						uci.set('ddns', section_id, 'update_script', null);
+						uci.unset('ddns', section_id, 'update_url');
+						uci.unset('ddns', section_id, 'update_script');
 						return uci.set('ddns', section_id, 'service_name', service);
 					}
-					return uci.set('ddns', section_id, 'service_name', null);
+					return uci.unset('ddns', section_id, 'service_name');
 				};
 				service_name.validate = function(section_id, value) {
-					if (value == '') return _("Select a service");
+					if (value == '-') return true;
+					if (!value) return _("Select a service");
 					if (!s.service_available) return _('Service not installed');
 					if (!s.service_supported) return _("Service doesn't support this IP type");
 					return true;
@@ -710,7 +712,7 @@ return view.extend({
 						_("Custom update-script"),
 						_("Custom update script for updating your DDNS Provider."));
 					o.root_directory = '/usr/lib/ddns/';
-					o.browser = true;
+					o.datatype = 'file';
 					o.show_hidden = true;
 					o.enable_upload = true;
 					o.enable_remove = true;
