@@ -27,31 +27,31 @@ var pkg = {
 	},
 };
 
-const getFileUrlFilesizes = rpc.declare({
+var getFileUrlFilesizes = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getFileUrlFilesizes",
 	params: ["name", "url"],
 });
 
-const getInitList = rpc.declare({
+var getInitList = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInitList",
 	params: ["name"],
 });
 
-const getInitStatus = rpc.declare({
+var getInitStatus = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInitStatus",
 	params: ["name"],
 });
 
-const getPlatformSupport = rpc.declare({
+var getPlatformSupport = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getPlatformSupport",
 	params: ["name"],
 });
 
-const _setInitAction = rpc.declare({
+var _setInitAction = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "setInitAction",
 	params: ["name", "action"],
