@@ -678,6 +678,17 @@ return view.extend({
 						so = ss.taboption('general', form.Value, 'leasetime', _('Lease time'), _('Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>).'));
 						so.optional = true;
 						so.default = '12h';
+						so.validate = function (section_id, value) {
+							if (value === "infinite" || value === "deprecated") {
+								return true;
+							}
+
+							const regex = new RegExp("^[0-9]+[smhdw]?$", "i");
+							if (regex.test(value)) {
+								return true;
+							}
+							return _("Invalid DHCP lease time format. Use integer values optionally followed by s, m, h, d, or w.");
+						}
 
 						so = ss.taboption('advanced', form.Flag, 'dynamicdhcp', _('Dynamic <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>'), _('Dynamically allocate DHCP addresses for clients. If disabled, only clients having static leases will be served.'));
 						so.default = so.enabled;
