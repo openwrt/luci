@@ -489,7 +489,7 @@ function syslog(prio, msg) {
 	warn(sprintf("[%s] %s\n", prio, msg));
 }
 
-function session_setup(user, pass, path) {
+function session_setup(user, pass, otp, path) {
 	let timeout = uci.get('luci', 'sauth', 'sessiontime');
 	let login = ubus.call("session", "login", {
 		username: user,
@@ -497,7 +497,11 @@ function session_setup(user, pass, path) {
 		timeout:  timeout ? +timeout : null
 	});
 
-	if (type(login?.ubus_rpc_session) == 'string') {
+	let verify_otp = ubus.call("luci", "verifyOTP", {
+		otp: otp
+	});
+
+	if (verify_otp?.result && type(login?.ubus_rpc_session) == 'string') {
 		ubus.call("session", "set", {
 			ubus_rpc_session: login.ubus_rpc_session,
 			values: { token: randomid(16) }
@@ -911,14 +915,16 @@ dispatch = function(_http, path) {
 			if (!session && resolved.ctx.auth.login) {
 				let user = http.getenv('HTTP_AUTH_USER');
 				let pass = http.getenv('HTTP_AUTH_PASS');
+				let otp = "";
 
 				if (user == null && pass == null) {
 					user = http.formvalue('luci_username');
 					pass = http.formvalue('luci_password');
+					otp = http.formvalue('luci_otp');
 				}
 
 				if (user != null && pass != null)
-					session = session_setup(user, pass, resolved.ctx.request_path);
+					session = session_setup(user, pass, otp, resolved.ctx.request_path);
 
 				if (!session) {
 					resolved.ctx.path = [];
