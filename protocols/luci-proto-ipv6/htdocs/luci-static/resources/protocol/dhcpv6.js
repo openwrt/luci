@@ -30,6 +30,9 @@ return network.registerProtocol('dhcpv6', {
 		o.value('60');
 		o.value('64');
 		o.default = 'auto';
+
+		o = s.taboption('general', form.Flag, 'extendprefix', _('Extend prefix'), _('Extend 3GPP WAN interface /64 prefix via PD to LAN (RFC 7278)'));
+
 		o = s.taboption('general', form.Flag, 'norelease', _('Do not send a Release when restarting'),
 						_('Enable to minimise the chance of prefix change after a restart'));
 		o.default = '1';
