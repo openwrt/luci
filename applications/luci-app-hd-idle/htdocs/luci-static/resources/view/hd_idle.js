@@ -9,7 +9,7 @@ function disk(devs, options, section_id) {
 	var disk = devs.find(function(itm){ return itm.name == v; });
 	var out = '';
 	if(disk != undefined){
-		out = options.map(function(opt){ return disk[opt].trim(); });
+		out = options.map(function(opt){ return disk[opt]?.trim() || null; });
 		out = out.filter(function(o){ return o != ''; });
 		out = out.join(' ');
 	}
