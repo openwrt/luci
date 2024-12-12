@@ -449,7 +449,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 *
 	 * @returns {Array<LuCI.uci.SectionObject>}
 	 * Returns a sorted array of the section objects within the given
-	 * configuration, filtered by type of a type has been specified.
+	 * configuration, filtered by type, if a type has been specified.
 	 */
 	sections: function(conf, type, cb) {
 		var sa = [ ],
