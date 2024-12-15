@@ -324,7 +324,6 @@ return view.extend({
 			network.getDSLModemType(),
 			network.getDevices(),
 			fs.lines('/etc/iproute2/rt_tables'),
-			L.resolveDefault(fs.read('/usr/lib/opkg/info/netifd.control')),
 			uci.changes()
 		]);
 	},
@@ -424,14 +423,11 @@ return view.extend({
 	},
 
 	render: function(data) {
-		var netifdVersion = (data[3] || '').match(/Version: ([^\n]+)/);
 
-		if (netifdVersion && netifdVersion[1] >= "2021-05-26") {
-			if (this.interfaceBridgeWithIfnameSections().length)
-				return this.renderBridgeMigration();
-			else if (this.deviceWithIfnameSections().length || this.interfaceWithIfnameSections().length)
-				return this.renderIfnameMigration();
-		}
+		if (this.interfaceBridgeWithIfnameSections().length)
+			return this.renderBridgeMigration();
+		else if (this.deviceWithIfnameSections().length || this.interfaceWithIfnameSections().length)
+			return this.renderIfnameMigration();
 
 		var dslModemType = data[0],
 		    netDevs = data[1],
