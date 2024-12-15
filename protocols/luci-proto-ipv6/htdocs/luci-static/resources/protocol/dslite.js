@@ -15,7 +15,7 @@ return network.registerProtocol('dslite', {
 		return this._ubus('l3_device') || 'ds-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'ds-lite';
 	},
 

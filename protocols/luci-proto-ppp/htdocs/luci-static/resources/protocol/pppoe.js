@@ -32,7 +32,7 @@ return network.registerProtocol('pppoe', {
 		return this._ubus('l3_device') || 'pppoe-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'ppp-mod-pppoe';
 	},
 

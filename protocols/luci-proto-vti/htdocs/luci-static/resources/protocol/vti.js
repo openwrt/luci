@@ -14,7 +14,7 @@ return network.registerProtocol('vti', {
 		return this._ubus('l3_device') || 'vti-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'vti';
 	},
 

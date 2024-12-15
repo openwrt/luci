@@ -32,7 +32,7 @@ return network.registerProtocol('pptp', {
 		return this._ubus('l3_device') || 'pptp-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'ppp-mod-pptp';
 	},
 

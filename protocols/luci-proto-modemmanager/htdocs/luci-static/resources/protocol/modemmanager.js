@@ -25,7 +25,7 @@ return network.registerProtocol('modemmanager', {
 		return this._ubus('l3_device') || 'modemmanager-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'modemmanager';
 	},
 

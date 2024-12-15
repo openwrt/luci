@@ -7,7 +7,7 @@ return network.registerProtocol('dhcpv6', {
 		return _('DHCPv6 client');
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'odhcp6c';
 	},
 

@@ -47,7 +47,7 @@ return network.registerProtocol('3g', {
 		return this._ubus('l3_device') || '3g-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'comgt';
 	},
 

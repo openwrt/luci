@@ -7,7 +7,7 @@ return network.registerProtocol('hnet', {
 		return _('Automatic Homenet (HNCP)');
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'hnet-full';
 	},
 

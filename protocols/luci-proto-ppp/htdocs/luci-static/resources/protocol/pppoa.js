@@ -32,7 +32,7 @@ return network.registerProtocol('pppoa', {
 		return this._ubus('l3_device') || 'pppoa-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'ppp-mod-pppoa';
 	},
 

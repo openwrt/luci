@@ -2452,17 +2452,19 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
-	 * Get the name of the opkg package providing the protocol functionality.
+	 * Gets the name of the package providing the protocol functionality. The
+	 * package is available via the system default package manager. This is used
+	 * when a config refers to a protocol handler which is not yet installed.
 	 *
 	 * This function should be overwritten by protocol specific subclasses.
 	 *
 	 * @abstract
 	 *
 	 * @returns {string}
-	 * Returns the name of the opkg package required for the protocol to
+	 * Returns the name of the package to download, required for the protocol to
 	 * function, e.g. `odhcp6c` for the `dhcpv6` protocol.
 	 */
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return null;
 	},
 

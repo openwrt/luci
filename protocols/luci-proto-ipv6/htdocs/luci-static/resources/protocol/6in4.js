@@ -14,7 +14,7 @@ return network.registerProtocol('6in4', {
 		return this._ubus('l3_device') || '6in4-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return '6in4';
 	},
 

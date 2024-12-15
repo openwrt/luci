@@ -14,7 +14,7 @@ return network.registerProtocol('ipip6', {
 		return this._ubus('l3_device') || 'ipip6-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function () {
+	getPackageName: function () {
 		return 'ds-lite';
 	},
 

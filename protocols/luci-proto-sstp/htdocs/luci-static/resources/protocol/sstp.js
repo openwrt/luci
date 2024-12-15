@@ -13,7 +13,7 @@ return network.registerProtocol('sstp', {
 		return this._ubus('l3_device') || 'sstp-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'sstp-client';
 	},
 

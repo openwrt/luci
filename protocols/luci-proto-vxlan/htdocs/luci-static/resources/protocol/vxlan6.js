@@ -15,7 +15,7 @@ return network.registerProtocol('vxlan6', {
 		return this._ubus('l3_device') || 'vxlan-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'vxlan';
 	},
 

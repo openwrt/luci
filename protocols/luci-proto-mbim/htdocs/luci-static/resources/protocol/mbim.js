@@ -28,7 +28,7 @@ return network.registerProtocol('mbim', {
 		return this._ubus('l3_device') || 'mbim-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'umbim';
 	},
 

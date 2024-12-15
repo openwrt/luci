@@ -210,7 +210,7 @@ return network.registerProtocol('yggdrasil',
 		getType: function() {
 			return "tunnel";
 		},
-		getOpkgPackage: function() {
+		getPackageName: function() {
 			return 'yggdrasil';
 		},
 		isFloating: function() {

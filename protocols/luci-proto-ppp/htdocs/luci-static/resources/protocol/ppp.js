@@ -47,7 +47,7 @@ return network.registerProtocol('ppp', {
 		return this._ubus('l3_device') || 'ppp-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'ppp';
 	},
 

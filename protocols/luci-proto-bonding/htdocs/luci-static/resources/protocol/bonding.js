@@ -132,7 +132,7 @@ return network.registerProtocol('bonding', {
 		return null;
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'bonding';
 	},
 

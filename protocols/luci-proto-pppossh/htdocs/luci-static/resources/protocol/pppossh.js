@@ -32,7 +32,7 @@ return network.registerProtocol('pppossh', {
 		return this._ubus('l3_device') || 'pppossh-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'pppossh';
 	},
 

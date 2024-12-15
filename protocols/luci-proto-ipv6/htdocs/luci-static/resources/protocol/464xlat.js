@@ -15,7 +15,7 @@ return network.registerProtocol('464xlat', {
 		return this._ubus('l3_device') || '464-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return '464xlat';
 	},
 

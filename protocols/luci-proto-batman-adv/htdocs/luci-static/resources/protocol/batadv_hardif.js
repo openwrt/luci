@@ -14,7 +14,7 @@ return network.registerProtocol('batadv_hardif', {
 		return this._ubus('l3_device') || this.sid;
 	},
 	
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'kmod-batman-adv';
 	},
 	
