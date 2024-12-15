@@ -158,7 +158,7 @@ return view.extend({
 		o.optional = true;
 
 		o = s.option(form.ListValue, 'driver', _('Driver'),
-			_('If this list is empty you need to %s'.format('<a href="/cgi-bin/luci/admin/system/opkg?query=nut-driver-">%s</a>'.format(_('install drivers')))));
+			_('If this list is empty you need to %s'.format('<a href="/cgi-bin/luci/admin/system/package-manager?query=nut-driver-">%s</a>'.format(_('install drivers')))));
 		driver_list.forEach(driver => {
 			o.value(driver_path + driver);
 		});
