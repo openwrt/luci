@@ -16,7 +16,7 @@ function proto.ifname(self)
 	return "relay-" .. self.sid
 end
 
-function proto.opkg_package(self)
+function proto.package_name(self)
 	return "relayd"
 end
 

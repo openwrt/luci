@@ -1146,7 +1146,7 @@ function protocol.is_bridge(self)
 	return (not self:is_virtual() and self:type() == "bridge")
 end
 
-function protocol.opkg_package(self)
+function protocol.package_name(self)
 	return nil
 end
 

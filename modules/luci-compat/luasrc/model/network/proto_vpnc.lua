@@ -17,7 +17,7 @@ function proto.get_interface(self)
 	return interface(self:ifname(), self)
 end
 
-function proto.opkg_package(self)
+function proto.package_name(self)
 	return "vpnc"
 end
 

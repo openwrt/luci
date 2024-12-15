@@ -25,7 +25,7 @@ for _, p in ipairs({"dslite", "map", "464xlat"}) do
 		return p .. "-" .. self.sid
 	end
 
-	function proto.opkg_package(self)
+	function proto.package_name(self)
 		if p == "dslite" or p == "ipip6" then
 			return "ds-lite"
 		elseif p == "map" then
