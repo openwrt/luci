@@ -47,7 +47,7 @@ return view.extend({
 			// data[1]
 
 			fs.exec_direct('/usr/libexec/package-manager-call', [ 'list-installed' ], 'text').catch(function(err) {
-				ui.addNotification(null, E('p', {}, _('Error calling "opkg list-installed": ' + err.message)));
+				ui.addNotification(null, E('p', {}, _('Error calling "package-manager-call list-installed": ' + err.message)));
 				console.log(err);
 					return '';
 			}).then(data => {return data.trim().split('\n').sort().filter((string) => string.includes(': kmod-'));}),
