@@ -283,7 +283,7 @@ return view.extend({
 				var e = map.querySelector('[id="cbi-network-%s"] .cbi-button-edit'.format(ifc.getName()));
 				if (e) e.disabled = true;
 
-				var link = L.url('admin/system/opkg') + '?query=luci-proto';
+				var link = L.url('admin/system/package-manager') + '?query=luci-proto';
 				dom.content(dsc, [
 					E('em', _('Unsupported protocol type.')), E('br'),
 					E('a', { href: link }, _('Install protocol extensions...'))
