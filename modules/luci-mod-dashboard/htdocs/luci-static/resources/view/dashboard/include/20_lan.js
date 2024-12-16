@@ -46,25 +46,25 @@ return baseclass.extend({
 		]));
 
 		for(var idx in this.params.lan.devices) {
-			var deivce = this.params.lan.devices[idx];
+			var device = this.params.lan.devices[idx];
 
 			container_deviceslist.appendChild(E('tr', { 'class': 'tr cbi-rowstyle-1'}, [
 
 				E('td', { 'class': 'td device-info'}, [
 					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ deivce.hostname ]),
+						E('span', { 'class': 'd-inline-block'}, [ device.hostname ]),
 					]),
 				]),
 
 				E('td', { 'class': 'td device-info'}, [
 					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ deivce.ipv4 ]),
+						E('span', { 'class': 'd-inline-block'}, [ device.ipv4 ]),
 					]),
 				]),
 
 				E('td', { 'class': 'td device-info'}, [
 					E('p', {}, [
-						E('span', { 'class': 'd-inline-block'}, [ deivce.macaddr ]),
+						E('span', { 'class': 'd-inline-block'}, [ device.macaddr ]),
 					]),
 				])
 			]));
