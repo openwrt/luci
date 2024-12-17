@@ -1443,7 +1443,7 @@ function AbstractValue.parse(self, section, novld)
 				--luci.util.append(self.map.events, self.events)
 			end
 		end
-	else							-- Unset the UCI or error
+	elseif fvalue ~= nil then			-- Unset the UCI or error
 		if self.rmempty or self.optional then
 			if not self.alias or
 			   not self.section.aliased or
