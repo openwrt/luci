@@ -5,7 +5,26 @@
 var rpcRequestID = 1,
     rpcSessionID = L.env.sessionid || '00000000000000000000000000000000',
     rpcBaseURL = L.url('admin/ubus'),
-    rpcInterceptorFns = [];
+    rpcInterceptorFns = [],
+    rpcPendingCalls = {},
+    rpcWebSocket = null;
+
+function getStatusText(statusCode) {
+	switch (statusCode) {
+	case 0: return _('Command OK');
+	case 1: return _('Invalid command');
+	case 2: return _('Invalid argument');
+	case 3: return _('Method not found');
+	case 4: return _('Resource not found');
+	case 5: return _('No data received');
+	case 6: return _('Permission denied');
+	case 7: return _('Request timeout');
+	case 8: return _('Not supported');
+	case 9: return _('Unspecified error');
+	case 10: return _('Connection lost');
+	default: return _('Unknown error code');
+	}
+}
 
 /**
  * @class rpc
@@ -92,7 +111,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 		else if (Array.isArray(msg.result)) {
 			if (req.raise && msg.result[0] !== 0)
 				L.raise('RPCError', 'RPC call to %s/%s failed with ubus code %d: %s',
-					req.object, req.method, msg.result[0], this.getStatusText(msg.result[0]));
+					req.object, req.method, msg.result[0], getStatusText(msg.result[0]));
 
 			ret = (msg.result.length > 1) ? msg.result[1] : msg.result[0];
 		}
@@ -119,6 +138,84 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 		req.resolve(ret);
 	},
 
+	/* privates */
+	send: function(operation, object, method, params, raise, expect, filter, ...priv) {
+		return new Promise(function(resolveFn, rejectFn) {
+			const msg = {
+				id: rpcRequestID++,
+				operation, object, method, params
+			};
+
+			let timeout = setTimeout(() => {
+				delete rpcPendingCalls[msg.id];
+				rejectFn(`RPC request ${msg.id} timed out.`);
+			}, 30 * 1000);
+
+			rpcPendingCalls[msg.id] = (reply) => {
+				clearInterval(timeout);
+
+				delete rpcPendingCalls[msg.id];
+
+				let ret;
+
+				if ('error' in reply) {
+					if (raise) {
+						const err = `RPC call to ${object}/${method} failed with ubus code ${+reply.error}: ${getStatusText(reply.error)}`;
+						rejectFn(err);
+						L.raise('RPCError', err);
+					}
+					else {
+						ret = reply.error;
+					}
+				}
+				else {
+					ret = reply.result;
+				}
+
+				if (L.isObject(expect)) {
+					for (var key in expect) {
+						if (ret != null && key != '')
+							ret = ret[key];
+
+						if (ret == null || Object.prototype.toString(ret) != Object.prototype.toString(expect[key]))
+							ret = expect[key];
+
+						break;
+					}
+				}
+
+				/* apply filter */
+				if (typeof(filter) == 'function')
+					ret = filter.call(this, ret, params, ...priv);
+
+				resolveFn(ret);
+			};
+
+			rpcWebSocket.send(JSON.stringify({ ubus: msg }));
+		});
+	},
+
+	recv: function(ev) {
+		let msg;
+
+		try {
+			msg = JSON.parse(ev.data);
+		}
+		catch (e) {
+			L.raise('RPCError', `Unparsable WebSocket reply: ${e}`);
+		}
+
+		if (L.isObject(msg)) {
+			if ('keepalive' in msg)
+				return;
+
+			if ('id' in msg && rpcPendingCalls[msg.id])
+				return rpcPendingCalls[msg.id](msg);
+		}
+
+		L.raise('RPCError', `Unhandled WebSocket reply: ${ev.data}`);
+	},
+
 	/**
 	 * Lists available remote ubus objects or the method signatures of
 	 * specific objects.
@@ -141,6 +238,11 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * signatures of each requested `ubus` object name will be returned.
 	 */
 	list: function() {
+		if (rpcWebSocket) {
+			return this.send('list', null, null,
+				arguments.length ? this.varargs(arguments) : undefined);
+		}
+
 		var msg = {
 			jsonrpc: '2.0',
 			id:      rpcRequestID++,
@@ -299,14 +401,21 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	declare: function(options) {
 		return Function.prototype.bind.call(function(rpc, options) {
 			var args = this.varargs(arguments, 2);
-			return new Promise(function(resolveFn, rejectFn) {
-				/* build parameter object */
-				var p_off = 0;
-				var params = { };
-				if (Array.isArray(options.params))
-					for (p_off = 0; p_off < options.params.length; p_off++)
-						params[options.params[p_off]] = args[p_off];
 
+			/* build parameter object */
+			var p_off = 0;
+			var params = { };
+			if (Array.isArray(options.params))
+				for (p_off = 0; p_off < options.params.length; p_off++)
+					params[options.params[p_off]] = args[p_off];
+
+			if (rpcWebSocket) {
+				return rpc.send('call', options.object, options.method, params,
+					options.reject, options.expect, options.filter,
+					...args.slice(p_off));
+			}
+
+			return new Promise(function(resolveFn, rejectFn) {
 				/* all remaining arguments are private args */
 				var priv = [ undefined, undefined ];
 				for (; p_off < args.length; p_off++)
@@ -387,6 +496,33 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	},
 
 	/**
+	 * Returns the current RPC socket instance.
+	 *
+	 * @returns {WebSocket}
+	 * Returns the connected RPC WebSocket instance.
+	 */
+	getWebSocket: function() {
+		return rpcWebSocket;
+	},
+
+	/**
+	 * Set the RPC WebSocket socket instance to use.
+	 *
+	 * @param {WebSocket} socket
+	 * Sets the RPC WebSocket instance to issue requests against.
+	 */
+	setWebSocket: function(socket) {
+		if (socket) {
+			rpcWebSocket = socket;
+			rpcWebSocket.onmessage = this.recv;
+		}
+		else if (rpcWebSocket) {
+			rpcWebSocket.close();
+			rpcWebSocket = null;
+		}
+	},
+
+	/**
 	 * Translates a numeric `ubus` error code into a human readable
 	 * description.
 	 *
@@ -396,22 +532,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * @returns {string}
 	 * Returns the textual description of the code.
 	 */
-	getStatusText: function(statusCode) {
-		switch (statusCode) {
-		case 0: return _('Command OK');
-		case 1: return _('Invalid command');
-		case 2: return _('Invalid argument');
-		case 3: return _('Method not found');
-		case 4: return _('Resource not found');
-		case 5: return _('No data received');
-		case 6: return _('Permission denied');
-		case 7: return _('Request timeout');
-		case 8: return _('Not supported');
-		case 9: return _('Unspecified error');
-		case 10: return _('Connection lost');
-		default: return _('Unknown error code');
-		}
-	},
+	getStatusText,
 
 	/**
 	 * Registered interceptor functions are invoked before the standard reply
@@ -481,5 +602,35 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 			if (rpcInterceptorFns[i] === interceptorFn)
 				rpcInterceptorFns.splice(i, 1);
 		return (rpcInterceptorFns.length < oldlen);
+	},
+
+	requestResource: function(path) {
+		return new Promise((resolveFn, rejectFn) => {
+			const msg = {
+				resource: {
+					id: rpcRequestID++,
+					path
+				}
+			};
+
+			let timeout = setTimeout(() => {
+				delete rpcPendingCalls[msg.resource.id];
+
+				rejectFn(`RPC request ${msg.resource.id} timed out.`);
+			}, 30 * 1000);
+
+			rpcPendingCalls[msg.resource.id] = (reply) => {
+				clearInterval(timeout);
+
+				delete rpcPendingCalls[msg.resource.id];
+
+				if ('error' in reply)
+					rejectFn(reply.error);
+				else
+					resolveFn(reply.data);
+			};
+
+			rpcWebSocket.send(JSON.stringify(msg));
+		});
 	}
 });

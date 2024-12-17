@@ -1,0 +1,22 @@
+#!/bin/sh /etc/rc.common
+
+START=50
+
+USE_PROCD=1
+NAME=uwsd
+PROG=/usr/sbin/uwsd
+
+start_service() {
+	procd_open_instance
+	procd_set_param command "$PROG" --config /etc/uwsd/conf.d/
+	procd_set_param respawn
+	procd_set_param stderr 1
+
+	for file in /etc/uwsd/conf.d/*.conf; do
+		if [ -f "$file" ]; then
+			procd_set_param file "$file"
+		fi
+	done
+
+	procd_close_instance
+}
