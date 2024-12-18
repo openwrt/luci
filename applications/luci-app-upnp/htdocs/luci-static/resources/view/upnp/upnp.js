@@ -6,8 +6,6 @@
 'require rpc';
 'require form';
 
-
-
 const callInitAction = rpc.declare({
 	object: 'luci',
 	method: 'setInitAction',
@@ -36,6 +34,12 @@ function handleDelRule(num, ev) {
 	callUpnpDeleteRule(num);
 }
 
+function padnum(num, length) {
+	num = num.toString();
+	while (num.length < length) num = "0" + num;
+	return num;
+}
+
 return view.extend({
 	load: function() {
 		return Promise.all([
@@ -49,12 +53,27 @@ return view.extend({
 		var rules = Array.isArray(data[0].rules) ? data[0].rules : [];
 
 		var rows = rules.map(function(rule) {
+			var expires_sec, hour, minute, second, expires_str = '';
+			expires_sec = (new Date(rule.expires * 1000) - new Date().getTime()) / 1000;
+			hour = Math.floor(expires_sec / 3600);
+			minute = Math.floor(expires_sec % 3600 / 60);
+			second = Math.floor(expires_sec % 60);
+			if (hour >= 1) {
+				expires_str += hour + 'h ';
+				expires_str += padnum(minute, 2) + 'm ';
+				expires_str += padnum(second, 2) + 's';
+			} else if (minute >= 1) {
+				expires_str += minute + 'm ';
+				expires_str += padnum(second, 2) + 's';
+			} else if (expires_sec >= 1) expires_str += second + 's';
+
 			return [
 				rule.host_hint || _('Unknown'),
 				rule.intaddr,
 				rule.intport,
 				rule.extport,
 				rule.proto,
+				expires_str,
 				rule.descr,
 				E('button', {
 					'class': 'btn cbi-button-remove',
@@ -64,8 +83,6 @@ return view.extend({
 		});
 
 		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active port maps.')));
-
-		return;
 	},
 
 	render: function(data) {
@@ -92,6 +109,7 @@ return view.extend({
 					E('th', { 'class': 'th' }, _('Client Port')),
 					E('th', { 'class': 'th' }, _('External Port')),
 					E('th', { 'class': 'th' }, _('Protocol')),
+					E('th', { 'class': 'th' }, _('Expires')),
 					E('th', { 'class': 'th' }, _('Description')),
 					E('th', { 'class': 'th cbi-section-actions' }, '')
 				])
@@ -129,9 +147,11 @@ return view.extend({
 			_('Start autonomous port mapping service'));
 		o.rmempty = false;
 
-		s.taboption('setup', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol')).default = '1';
+		o = s.taboption('setup', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol'));
+		o.default = '1';
 
-		s.taboption('setup', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols')).default = '1';
+		o = s.taboption('setup', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols'));
+		o.default = '1';
 
 		o = s.taboption('setup', form.Flag, 'igdv1', _('UPnP IGDv1 compatibility mode'),
 			_('Advertise as IGDv1 (IPv4 only) device instead of IGDv2'));
