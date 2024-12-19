@@ -450,10 +450,14 @@ return baseclass.extend({
 		s.tab('brport', _('Bridge port specific options'));
 		s.tab('bridgevlan', _('Bridge VLAN filtering'));
 
-		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'type', _('Device type'));
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'type', _('Device type'),
+			!L.hasSystemFeature('bonding') && isNew ? '<a href="' + L.url("admin", "system", "package-manager", "?query=kmod-bonding") + '">'+
+			 _('For bonding, install %s').format('<code>kmod-bonding</code>') + '</a>' : null);
 		o.readonly = !isNew;
 		o.value('', _('Network device'));
-		o.value('bonding', _('Aggregation device'));
+		if (L.hasSystemFeature('bonding')) {
+			o.value('bonding', _('Bonding/Aggregation device'));
+		}
 		o.value('bridge', _('Bridge device'));
 		o.value('8021q', _('VLAN (802.1q)'));
 		o.value('8021ad', _('VLAN (802.1ad)'));
@@ -864,7 +868,9 @@ return baseclass.extend({
 		};
 		o.depends('type', 'bonding');
 
-		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'monitor_mode', _('Link monitoring mode'));
+		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'monitor_mode', _('Link monitoring mode'),
+			!L.hasSystemFeature('mii-tool') ? '<a href="' + L.url("admin", "system", "package-manager", "?query=mii-tool") + '">'+
+			 _('Install %s').format('<code>mii-tool</code>') + '</a>' : null);
 		o.default = '';
 		o.value('arp', _('ARP link monitoring'));
 		o.value('mii', _('MII link monitoring'));

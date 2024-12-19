@@ -196,6 +196,8 @@ const methods = {
 				firewall:   access('/sbin/fw3') == true,
 				firewall4:  access('/sbin/fw4') == true,
 				opkg:       access('/bin/opkg') == true,
+				bonding:    access('/sys/module/bonding'),
+				mii-tool:   access('/usr/sbin/mii-tool'),
 				offloading: access('/sys/module/xt_FLOWOFFLOAD/refcnt') == true || access('/sys/module/nft_flow_offload/refcnt') == true,
 				br2684ctl:  access('/usr/sbin/br2684ctl') == true,
 				swconfig:   access('/sbin/swconfig') == true,
