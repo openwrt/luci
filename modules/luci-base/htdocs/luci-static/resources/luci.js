@@ -2790,7 +2790,7 @@
 
 		/**
 		 * Construct a relative URL path from the given prefix and parts.
-		 * The resulting URL is guaranteed to only contain the characters
+		 * The resulting URL is guaranteed to contain only the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
 		 * as `/` for the path separator. Suffixing '?x=y&foo=bar' URI
 		 * parameters also limited to the aforementioned characters is
@@ -2827,7 +2827,7 @@
 		 * Construct a URL with path relative to the script path of the server
 		 * side LuCI application (usually `/cgi-bin/luci`).
 		 *
-		 * The resulting URL is guaranteed to only contain the characters
+		 * The resulting URL is guaranteed to contain only the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
 		 * as `/` for the path separator. Suffixing '?x=y&foo=bar' URI
 		 * parameters also limited to the aforementioned characters is
@@ -2851,7 +2851,7 @@
 		 * Construct a URL path relative to the global static resource path
 		 * of the LuCI ui (usually `/luci-static/resources`).
 		 *
-		 * The resulting URL is guaranteed to only contain the characters
+		 * The resulting URL is guaranteed to contain only the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
 		 * as `/` for the path separator. Suffixing '?x=y&foo=bar' URI
 		 * parameters also limited to the aforementioned characters is
@@ -2875,7 +2875,7 @@
 		 * Construct a URL path relative to the media resource path of the
 		 * LuCI ui (usually `/luci-static/$theme_name`).
 		 *
-		 * The resulting URL is guaranteed to only contain the characters
+		 * The resulting URL is guaranteed to contain only the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
 		 * as `/` for the path separator. Suffixing '?x=y&foo=bar' URI
 		 * parameters also limited to the aforementioned characters is
