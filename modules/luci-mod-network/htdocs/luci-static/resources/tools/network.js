@@ -869,7 +869,7 @@ return baseclass.extend({
 		o.depends('type', 'bonding');
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'monitor_mode', _('Link monitoring mode'),
-			!L.hasSystemFeature('mii-tool') ? '<a href="' + L.url("admin", "system", "package-manager", "?query=mii-tool") + '">'+
+			!L.hasSystemFeature('mii_tool') ? '<a href="' + L.url("admin", "system", "package-manager", "?query=mii-tool") + '">'+
 			 _('Install %s').format('<code>mii-tool</code>') + '</a>' : null);
 		o.default = '';
 		o.value('arp', _('ARP link monitoring'));
