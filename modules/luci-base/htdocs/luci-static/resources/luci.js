@@ -2792,7 +2792,9 @@
 		 * Construct a relative URL path from the given prefix and parts.
 		 * The resulting URL is guaranteed to only contain the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
-		 * as `/` for the path separator.
+		 * as `/` for the path separator. Suffixing '?x=y&foo=bar' URI
+		 * parameters also limited to the aforementioned characters is
+		 * permissible.
 		 *
 		 * @instance
 		 * @memberof LuCI
@@ -2812,8 +2814,8 @@
 			var url = [ prefix || '' ];
 
 			for (var i = 0; i < parts.length; i++)
-				if (/^(?:[a-zA-Z0-9_.%,;-]+\/)*[a-zA-Z0-9_.%,;-]+$/.test(parts[i]))
-					url.push('/', parts[i]);
+				if (/^(?:[a-zA-Z0-9_.%,;-]+\/)*[a-zA-Z0-9_.%,;-]+$/.test(parts[i]) || /^\?[a-zA-Z0-9_.%=&;-]+$/.test(parts[i]))
+					url.push(parts[i].startsWith('?') ? parts[i] : '/' + parts[i]);
 
 			if (url.length === 1)
 				url.push('/');
@@ -2827,7 +2829,9 @@
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
-		 * as `/` for the path separator.
+		 * as `/` for the path separator. Suffixing '?x=y&foo=bar' URI
+		 * parameters also limited to the aforementioned characters is
+		 * permissible.
 		 *
 		 * @instance
 		 * @memberof LuCI
@@ -2849,7 +2853,9 @@
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
-		 * as `/` for the path separator.
+		 * as `/` for the path separator. Suffixing '?x=y&foo=bar' URI
+		 * parameters also limited to the aforementioned characters is
+		 * permissible.
 		 *
 		 * @instance
 		 * @memberof LuCI
@@ -2871,7 +2877,9 @@
 		 *
 		 * The resulting URL is guaranteed to only contain the characters
 		 * `a-z`, `A-Z`, `0-9`, `_`, `.`, `%`, `,`, `;`, and `-` as well
-		 * as `/` for the path separator.
+		 * as `/` for the path separator. Suffixing '?x=y&foo=bar' URI
+		 * parameters also limited to the aforementioned characters is
+		 * permissible.
 		 *
 		 * @instance
 		 * @memberof LuCI
