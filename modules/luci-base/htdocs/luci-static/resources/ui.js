@@ -387,7 +387,17 @@ var UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
 					'aria-label': _('Reveal/hide password'),
 					'click': function(ev) {
 						var e = this.previousElementSibling;
-						e.type = (e.type === 'password') ? 'text' : 'password';
+						// DOM manipulation (e.g. by password managers) may have inserted other
+						// elements between the reveal button and the input. This searches for
+						// the first previous sibling that is also an input.
+						while (e && e.tagName !== 'INPUT') {
+							e = e.previousElementSibling;
+						}
+						if (e) {
+							e.type = (e.type === 'password') ? 'text' : 'password';
+						} else {
+							console.error("unable to find input corresponding to reveal/hide button");
+						}
 						ev.preventDefault();
 					}
 				}, '∗')
