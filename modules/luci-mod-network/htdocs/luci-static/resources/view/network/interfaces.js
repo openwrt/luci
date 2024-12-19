@@ -1216,6 +1216,15 @@ return view.extend({
 				o.datatype = 'uinteger';
 				o.placeholder = '0';
 
+				o = nettools.replaceOption(s, 'advanced', form.RichListValue, 'multipath', _('Multi-Path TCP'),
+					_('Multi-Path TCP') + ' %s'.format('<a href="%s" target="_blank">RFC8684</a>').format('https://www.rfc-editor.org/rfc/rfc8684.html') + '<br/>' +
+					_('For packets originating from this device, e.g. VPN.') );
+				o.value('off', _('Off'), _('Disables this interface for MPTCP'));
+				o.value('on', _('On'), _('No special configuration'));
+				o.value('master', _('Master'), _('Sets default route for all traffic'));
+				o.value('backup', _('Backup'), _('Hot standby; use this interface; do not forward traffic until no other interface is available (faster)'));
+				o.value('handover', _('Handover'), _('Cold standby; Establish a connection only when no other interface is available (slower)'));
+
 				o = nettools.replaceOption(s, 'advanced', form.Value, 'ip4table', _('Override IPv4 routing table'));
 				o.datatype = 'or(uinteger, string)';
 				for (let rt of rtTables)
@@ -1763,6 +1772,9 @@ return view.extend({
 			_('The default <abbr title="DHCP Unique Identifier">DUID</abbr> for this device, used when acting as a DHCP server or client. The client identifier can be overridden on a per-interface basis.') + '<br />' +
 			_('This identifier is randomly generated the first time the device is booted.'));
 		o.datatype = 'and(rangelength(6,260),hexstring)';
+
+		o = s.option(form.Flag, 'multipath', _('Multi-Path TCP'), _('For packets originating from this device, e.g. VPN.'));
+		o.optional = true;
 
 		const l3mdevhelp1 = _('%s services running on this device in the default VRF context (ie., not bound to any VRF device) shall work across all VRF domains.');
 		const l3mdevhelp2 = _('Off means VRF traffic will be handled exclusively by sockets bound to VRFs.');
