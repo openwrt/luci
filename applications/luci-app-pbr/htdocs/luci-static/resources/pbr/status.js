@@ -11,7 +11,7 @@ var pkg = {
 		return "pbr";
 	},
 	get ReadmeCompat() {
-		return "1.1.7-39";
+		return "1.1.8";
 	},
 	get URL() {
 		return (
@@ -32,37 +32,37 @@ var pkg = {
 	},
 };
 
-const getGateways = rpc.declare({
+var getGateways = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getGateways",
 	params: ["name"],
 });
 
-const getInitList = rpc.declare({
+var getInitList = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInitList",
 	params: ["name"],
 });
 
-const getInitStatus = rpc.declare({
+var getInitStatus = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInitStatus",
 	params: ["name"],
 });
 
-const getInterfaces = rpc.declare({
+var getInterfaces = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInterfaces",
 	params: ["name"],
 });
 
-const getPlatformSupport = rpc.declare({
+var getPlatformSupport = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getPlatformSupport",
 	params: ["name"],
 });
 
-const _setInitAction = rpc.declare({
+var _setInitAction = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "setInitAction",
 	params: ["name", "action"],
