@@ -86,6 +86,8 @@
             
                 <li data-name="LuCI#hasViewPermission"><a href="LuCI.html#hasViewPermission">hasViewPermission</a></li>
             
+                <li data-name="LuCI#isArguments"><a href="LuCI.html#isArguments">isArguments</a></li>
+            
                 <li data-name="LuCI#isObject"><a href="LuCI.html#isObject">isObject</a></li>
             
                 <li data-name="LuCI#location"><a href="LuCI.html#location">location</a></li>
@@ -3663,7 +3665,7 @@ element container, allowing to nest form sections into other sections.</p></div>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4830">line 4830</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4846">line 4846</a>
         </div>
         
     </div>
@@ -4811,7 +4813,7 @@ table section elements.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line210">line 210</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line212">line 212</a>
         </div>
         
     </div>
@@ -4929,7 +4931,7 @@ table section elements.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1752">line 1752</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1758">line 1758</a>
         </div>
         
     </div>
@@ -5107,7 +5109,7 @@ within the given specific section.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4942">line 4942</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4958">line 4958</a>
         </div>
         
     </div>
@@ -5282,7 +5284,7 @@ its <code>cfgvalue()</code> implementation will always return <code>null</code>.
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1634">line 1634</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1639">line 1639</a>
         </div>
         
     </div>
@@ -5314,20 +5316,20 @@ constraint evaluation. The associated value of these special &quot;tag&quot; key
 is ignored. The recognized tags are:</p>
 <ul>
   <li>
-   <code>!reverse</code><br>
-   Invert the dependency, instead of requiring another option to be
-   equal to the dependency value, that option should <em>not</em> be
-   equal.
+	<code>!reverse</code><br>
+	Invert the dependency, instead of requiring another option to be
+	equal to the dependency value, that option should <em>not</em> be
+	equal.
   </li>
   <li>
-   <code>!contains</code><br>
-   Instead of requiring an exact match, the dependency is considered
-   satisfied when the dependency value is contained within the option
-   value.
+	<code>!contains</code><br>
+	Instead of requiring an exact match, the dependency is considered
+	satisfied when the dependency value is contained within the option
+	value.
   </li>
   <li>
-   <code>!default</code><br>
-   The dependency is always satisfied
+	<code>!default</code><br>
+	The dependency is always satisfied
   </li>
 </ul>
 <p>Examples:</p>
@@ -5351,7 +5353,7 @@ is ignored. The recognized tags are:</p>
  </li>
  <li>
   <code>opt.depends({ foo: "test" })<br>
-        opt.depends({ bar: "qrx" })</code><br>
+		 opt.depends({ bar: "qrx" })</code><br>
   Require either <code>foo</code> to be set to <code>test</code>,
   <em>or</em> the <code>bar</code> option to be <code>qrx</code>.
  </li>
@@ -5503,7 +5505,7 @@ argument, this parameter is ignored.</p></td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4951">line 4951</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4967">line 4967</a>
         </div>
         
     </div>
@@ -5678,7 +5680,7 @@ its <code>formvalue()</code> implementation will always return <code>null</code>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1803">line 1803</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1809">line 1809</a>
         </div>
         
     </div>
@@ -5856,7 +5858,7 @@ option implementation does not use <code>LuCI.ui</code> widgets.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1941">line 1941</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1947">line 1947</a>
         </div>
         
     </div>
@@ -6003,7 +6005,7 @@ option implementation does not use <code>LuCI.ui</code> widgets.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1959">line 1959</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1965">line 1965</a>
         </div>
         
     </div>
@@ -6153,7 +6155,7 @@ returns <code>false</code>.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1927">line 1927</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1933">line 1933</a>
         </div>
         
     </div>
@@ -6301,7 +6303,7 @@ returns <code>false</code>.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4891">line 4891</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4907">line 4907</a>
         </div>
         
     </div>
@@ -6484,7 +6486,7 @@ so it may return promises if overridden by user code.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4896">line 4896</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4912">line 4912</a>
         </div>
         
     </div>
@@ -6635,7 +6637,7 @@ validation constraints.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4933">line 4933</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4949">line 4949</a>
         </div>
         
     </div>
@@ -6754,7 +6756,7 @@ its <code>remove()</code> implementation is a no-op.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line288">line 288</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line289">line 289</a>
         </div>
         
     </div>
@@ -6903,7 +6905,7 @@ entities decoded.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1878">line 1878</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1884">line 1884</a>
         </div>
         
     </div>
@@ -7083,7 +7085,7 @@ state of checkbox elements.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line327">line 327</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line328">line 328</a>
         </div>
         
     </div>
@@ -7278,7 +7280,7 @@ was neither a string nor a function.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4917">line 4917</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4933">line 4933</a>
         </div>
         
     </div>
@@ -7424,7 +7426,7 @@ or a plain text string. If omitted, the <code>key</code> value is used as captio
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4925">line 4925</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4941">line 4941</a>
         </div>
         
     </div>
@@ -7575,7 +7577,7 @@ its <code>write()</code> implementation is a no-op.</p>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Thu Dec 19 2024 19:20:35 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Dec 20 2024 00:14:55 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
