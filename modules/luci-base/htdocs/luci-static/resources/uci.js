@@ -530,7 +530,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 					return null;
 
 			/* check whether option was changed */
-			if (c[conf]?.[sid][opt] != null)
+			if (c[conf]?.[sid]?.[opt] != null)
 				return c[conf][sid][opt];
 
 			/* return base value */
