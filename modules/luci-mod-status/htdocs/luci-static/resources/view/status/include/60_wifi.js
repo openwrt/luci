@@ -184,7 +184,7 @@ return baseclass.extend({
 			network.getHostHints(),
 			this.callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'read'),
 			this.callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'write'),
-			uci.load('wireless')
+			L.hasSystemFeature('wifi') ? L.resolveDefault(uci.load('wireless')) : L.resolveDefault(),
 		]).then(L.bind(function(data) {
 			var tasks = [],
 			    radios_networks_hints = data[1],
