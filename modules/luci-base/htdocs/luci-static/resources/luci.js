@@ -2744,7 +2744,7 @@
 		 * The prefix to join the given parts with. If the `prefix` is
 		 * omitted, it defaults to an empty string.
 		 *
-		 * @param {string[]} [parts]
+		 * @param {...string} [parts]
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
@@ -2782,7 +2782,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @param {string[]} [parts]
+		 * @param {...string} [parts]
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
@@ -2806,7 +2806,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @param {string[]} [parts]
+		 * @param {...string} [parts]
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
@@ -2830,7 +2830,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @param {string[]} [parts]
+		 * @param {...string} [parts]
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
