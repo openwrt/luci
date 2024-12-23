@@ -27,7 +27,8 @@ var callNetworkRrdnsLookup = rpc.declare({
 var graphPolls = [],
     pollInterval = 3,
     dns_cache = {},
-    enableLookups = false;
+    enableLookups = false,
+    filterText = '';
 
 var recheck_lookup_queue = {};
 
@@ -130,12 +131,27 @@ return view.extend({
 			var src = dns_cache[c.src] || (c.layer3 == 'ipv6' ? '[' + c.src + ']' : c.src);
 			var dst = dns_cache[c.dst] || (c.layer3 == 'ipv6' ? '[' + c.dst + ']' : c.dst);
 
+			let network = c.layer3.toUpperCase();
+			let protocol = c.layer4.toUpperCase();
+			let source ='%h'.format(c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src);
+			let destination = '%h'.format(c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst);
+			let transfer = [ c.bytes, '%1024.2mB (%d %s)'.format(c.bytes, c.packets, _('Pkts.')) ];
+
+			if  (filterText) {
+				let filterTextExpressions = filterText.split(' ');
+				if (filterTextExpressions.some((element) => element.toUpperCase !== network && element.toUpperCase() !== protocol 
+						&& !(c.src.includes(element) || source.includes(element))
+						&& !(c.dst.includes(element) || destination.includes(element)))) {
+					continue;
+				}
+			}
+
 			rows.push([
-				c.layer3.toUpperCase(),
-				c.layer4.toUpperCase(),
-				'%h'.format(c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src),
-				'%h'.format(c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst),
-				[ c.bytes, '%1024.2mB (%d %s)'.format(c.bytes, c.packets, _('Pkts.')) ]
+				network,
+				protocol,
+				source,
+				destination,
+				transfer,
 			]);
 		}
 
@@ -359,23 +375,48 @@ return view.extend({
 					])
 				]),
 
-				E('div', { 'class': 'right' }, [
-					E('button', {
-						'class': 'btn cbi-button cbi-button-apply toggle-lookups',
-						'click': function(ev) {
-							if (!enableLookups) {
-								ev.currentTarget.classList.add('spinning');
-								ev.currentTarget.disabled = true;
-								enableLookups = true;
-							}
-							else {
-								ev.currentTarget.firstChild.data = _('Enable DNS lookups');
-								enableLookups = false;
-							}
+				E('br'),
 
-							this.blur();
-						}
-					}, [ enableLookups ? _('Disable DNS lookups') : _('Enable DNS lookups') ])
+				E('div', { 
+					id: 'settings-row',
+					style: 'display: flex',
+				}, [
+					E('span', { 
+						class: 'filter',
+						style: 'flex: auto',
+					}, [
+						E('input', {
+							id: 'filter-connections',
+							type: 'text',
+							placeholder: _("Simple filtering like '0.15' or 'tcp 0.15'"),
+							class: 'cbi-input-text',
+							style: 'width: 100%',
+							keyup: function(ev) {
+								filterText = this.value;
+						    }
+						})
+					]),
+					E('span', { 
+						class: 'right',
+						style: 'flex: auto',
+					}, [
+						E('button', {
+							'class': 'btn cbi-button cbi-button-apply toggle-lookups',
+							'click': function(ev) {
+								if (!enableLookups) {
+									ev.currentTarget.classList.add('spinning');
+									ev.currentTarget.disabled = true;
+									enableLookups = true;
+								}
+								else {
+									ev.currentTarget.firstChild.data = _('Enable DNS lookups');
+									enableLookups = false;
+								}
+
+								this.blur();
+							}
+						}, [ enableLookups ? _('Disable DNS lookups') : _('Enable DNS lookups') ])
+					]),
 				]),
 
 				E('br'),
