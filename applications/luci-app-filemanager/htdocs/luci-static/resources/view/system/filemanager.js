@@ -1998,25 +1998,23 @@ return view.extend({
 		// Download the file to the user's local machine
 		var self = this;
 		var fileName = filePath.split('/').pop();
-		fs.read(filePath, {
-			binary: true
-		}).then(function(content) {
-			var blob = new Blob([content], {
-				type: 'application/octet-stream'
+		// Use the read_direct method to download the file
+		fs.read_direct(filePath, 'blob')
+			.then(function(blob) {
+				if (!(blob instanceof Blob)) {
+					throw new Error(_('Response is not a Blob'));
+				}
+				var url = window.URL.createObjectURL(blob);
+				var a = document.createElement('a');
+				a.href = url;
+				a.download = fileName;
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+				window.URL.revokeObjectURL(url);
+			}).catch(function(err) {
+				pop(null, E('p', _('Failed to download file "%s": %s').format(fileName, err.message)), 'error');
 			});
-			var downloadLink = document.createElement('a');
-			downloadLink.href = URL.createObjectURL(blob);
-			downloadLink.download = fileName;
-			document.body.appendChild(downloadLink);
-			downloadLink.click();
-			document.body.removeChild(downloadLink);
-			var statusInfo = document.getElementById('status-info');
-			if (statusInfo) {
-				statusInfo.textContent = _('Downloaded file: "%s".').format(fileName);
-			}
-		}).catch(function(err) {
-			pop(null, E('p', _('Failed to download file "%s": %s').format(fileName, err.message)), 'error');
-		});
 	},
 
 	// Handler for deleting a file
