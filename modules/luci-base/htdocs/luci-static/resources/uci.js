@@ -637,7 +637,7 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 			}
 
 			/* only delete existing options */
-			if (v[conf]?.[sid].hasOwnProperty(opt)) {
+			if (v[conf]?.[sid]?.hasOwnProperty(opt)) {
 				d[conf] ??= { };
 				d[conf][sid] ??= { };
 
