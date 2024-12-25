@@ -2744,7 +2744,7 @@
 		 * The prefix to join the given parts with. If the `prefix` is
 		 * omitted, it defaults to an empty string.
 		 *
-		 * @param {string[]} [parts]
+		 * @param {...string} [parts]
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
@@ -2754,9 +2754,14 @@
 		path(prefix = '', parts) {
 			const url = [ prefix ];
 
-			for (let i = 0; i < parts.length; i++)
-				if (/^(?:[a-zA-Z0-9_.%,;-]+\/)*[a-zA-Z0-9_.%,;-]+$/.test(parts[i]) || /^\?[a-zA-Z0-9_.%=&;-]+$/.test(parts[i]))
-					url.push(parts[i].startsWith('?') ? parts[i] : '/' + parts[i]);
+			for (let i = 0; i < parts.length; i++){				
+				const part = parts[i];
+				if (Array.isArray(part))
+					url.push(this.path('', part));
+				else
+					if (/^(?:[a-zA-Z0-9_.%,;-]+\/)*[a-zA-Z0-9_.%,;-]+$/.test(part) || /^\?[a-zA-Z0-9_.%=&;-]+$/.test(part))
+						url.push(part.startsWith('?') ? part : '/' + part);
+			}
 
 			if (url.length === 1)
 				url.push('/');
@@ -2777,7 +2782,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @param {string[]} [parts]
+		 * @param {...string} [parts]
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
@@ -2801,7 +2806,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @param {string[]} [parts]
+		 * @param {...string} [parts]
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
@@ -2825,7 +2830,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @param {string[]} [parts]
+		 * @param {...string} [parts]
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *

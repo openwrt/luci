@@ -1,5 +1,9 @@
 # Contributing Guidelines
 
+## Translations
+
+Use [Weblate](https://hosted.weblate.org/engage/openwrt/?utm_source=widget) instead of direct editing of the `*.po` files.
+
 ## Patches and Pull requests:
 
 If you want to contribute a change to LuCI, please either send a patch using git send-email
