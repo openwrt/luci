@@ -49,7 +49,7 @@ return view.extend({
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
 
-		var o = s.taboption('general', form.Value, 'config_file', _('Config file'));
+		o = s.taboption('general', form.Value, 'config_file', _('Config file'));
 		o.datatype = 'string';
 		o.default = '/etc/squid/squid.conf';
 		o.validate = function(section_id, value) {
