@@ -20,7 +20,7 @@ msgstr "„net30”, „p2p” vagy „subnet”"
 msgid "Accept options pushed from server"
 msgstr "A kiszolgálóról leküldött beállítások elfogadása"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add"
 msgstr "Hozzáadás"
 
@@ -28,7 +28,7 @@ msgstr "Hozzáadás"
 msgid "Add route after establishing connection"
 msgstr "Útvonal hozzáadása a kapcsolat kiépítése után"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add template based configuration"
 msgstr "Sablonalapú beállítás hozzáadása"
 
@@ -339,8 +339,8 @@ msgstr "Ha a gépnév feloldása nem sikerül, újrapróbálás"
 msgid "Instance \"%s\""
 msgstr "„%s” példány"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:18
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:46
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:17
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:45
 msgid "Instance with that name already exists!"
 msgstr "Már létezik ilyen nevű példány!"
 
@@ -398,7 +398,7 @@ msgstr "Lefoglalt üzenetszórási pufferek száma"
 msgid "Number of lines for log file history"
 msgstr "Naplófájlelőzmények sorainak száma"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:95
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:93
 msgid "OVPN configuration file upload"
 msgstr "OVPN beállítófájl feltöltése"
 
@@ -449,15 +449,15 @@ msgstr "Ifconfig tároló állandóvá vagy nem állandóvá tétele"
 msgid "Ping remote every n seconds over TCP/UDP port"
 msgstr "Távoli gép pingelése N másodpercenként TCP/UDP porton keresztül"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:32
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:24
 msgid "Please edit this file directly in a terminal session."
 msgstr "Szerkessze ezt a fájlt közvetlenül egy terminál munkamenetben."
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:51
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:50
 msgid "Please select a valid OVPN config file to upload!"
 msgstr "Válasszon egy érvényes OVPN beállítófájlt a feltöltéshez!"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:23
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:22
 msgid "Please select a valid VPN template!"
 msgstr "Válasszon egy érvényes VPN sablont!"
 
@@ -572,18 +572,18 @@ msgid "Run up/down scripts for all restarts"
 msgstr ""
 "Felkapcsolási és lekapcsolási parancsfájlok futtatása minden újraindításnál"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:41
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:33
 msgid "Save"
 msgstr "Mentés"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:65
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:57
 msgid ""
 "Section to add an optional 'auth-user-pass' file with your credentials (%s)"
 msgstr ""
 "Egy szakasz egy nem kötelező „auth-user-pass” fájl hozzáadásához a "
 "hitelesítési adatokkal (%s)"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:44
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:36
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Egy szakasz az OVPN beállítófájl módosításához (%s)"
 
@@ -604,7 +604,7 @@ msgstr ""
 "Biztonsági javaslat: javasolt a tömörítést kikapcsolni és ezt a paramétert "
 "`stub-v2`-re állítani"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:83
 msgid "Select template ..."
 msgstr "Sablon kiválasztása…"
 
@@ -748,7 +748,7 @@ msgstr "TLS titkosító"
 msgid "TOS passthrough (applies to IPv4 only)"
 msgstr "TOS átengedés (csak IPv4-re van alkalmazva)"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:78
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:76
 msgid "Template based configuration"
 msgstr "Sablonalapú beállítás"
 
@@ -756,16 +756,10 @@ msgstr "Sablonalapú beállítás"
 msgid "Temporary directory for client-connect return file"
 msgstr "Átmeneti könyvtár az ügyfélkapcsolódás visszatérési fájljához"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:12
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:40
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:11
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:39
 msgid "The 'Name' field must not be empty!"
 msgstr "A „Name” mező nem lehet üres!"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:22
-msgid ""
-"The OVPN config file (%s) could not be found, please check your "
-"configuration."
-msgstr "Az OVPN beállítófájl (%s) nem található, ellenőrizze a beállításait."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:795
 msgid "The highest supported TLS version"
@@ -780,7 +774,7 @@ msgstr "A kulcsirány a „tls-auth” és „secret” beállításoknál"
 msgid "The lowest supported TLS version"
 msgstr "A legalacsonyabb támogatott TLS verzió"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:31
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:23
 msgid ""
 "The size of the OVPN config file (%s) is too large for online editing in "
 "LuCI (&ge; 100 KB)."
@@ -801,11 +795,11 @@ msgstr "Időkeret a kulcscseréhez"
 msgid "Type of used device"
 msgstr "A használt eszköz típusa"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload"
 msgstr "Feltöltés"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload ovpn file"
 msgstr "OVPN fájl feltöltése"
 
@@ -858,6 +852,12 @@ msgstr "TUN/TAP tétlenségi időkorlát"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "igen (%i)"
+
+#~ msgid ""
+#~ "The OVPN config file (%s) could not be found, please check your "
+#~ "configuration."
+#~ msgstr ""
+#~ "Az OVPN beállítófájl (%s) nem található, ellenőrizze a beállításait."
 
 #~ msgid "Enable a compression algorithm"
 #~ msgstr "Tömörítési algoritmus engedélyezése"
