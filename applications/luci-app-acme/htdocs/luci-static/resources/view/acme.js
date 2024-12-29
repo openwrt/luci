@@ -234,7 +234,7 @@ return view.extend({
 		o.value('dns_zone', 'Zone.ee');
 		o.value('dns_zonomi', 'Zonomi.com');
 		o.modalonly = true;
-		o.onchange = L.bind(_handleCheckService, o, s);
+		o.onchange = _handleCheckService;
 
 		o = s.taboption('challenge_dns', form.DummyValue, '_wiki_url', _('See instructions'), '');
 		o.rawhtml = true;
@@ -536,7 +536,7 @@ function _addDnsProviderField(s, provider, env, title, desc) {
 		_(desc));
 	o.depends('dns', provider);
 	o.modalonly = true;
-	o.cfgvalue = function (section_id, stored_val) {
+	o.cfgvalue = function (section_id) {
 		let creds = this.map.data.get(this.map.config, section_id, 'credentials');
 		return _extractParamValue(creds, env);
 	};
@@ -594,7 +594,7 @@ function _parseKeyValueListToMap(paramsKeyVals) {
 	return map;
 }
 
-function _handleCheckService(c, event, curVal, newVal) {
+function _handleCheckService(event, section_id, newVal) {
 	document.getElementById('wikiInstructionUrl').href = 'https://github.com/acmesh-official/acme.sh/wiki/dnsapi#' + newVal;
 }
 
