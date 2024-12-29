@@ -5,21 +5,24 @@
 'require view';
 
 return view.extend({
-	load: function() {
-		return L.resolveDefault(fs.list('/etc/ssl/acme/'), []).then(function(entries) {
-			var certs = [];
-			for (var i = 0; i < entries.length; i++) {
-				if (entries[i].type == 'file' && entries[i].name.match(/\.key$/)) {
-					certs.push(entries[i]);
+	load() {
+		return Promise.all([
+			L.resolveDefault(fs.list('/etc/ssl/acme/'), []).then(files => {
+				let certs = [];
+				for (let f of files) {
+					if (f.type == 'file' && f.name.match(/\.key$/)) {
+						certs.push(f);
+					}
 				}
-			}
-			return certs;
-		});
+				return certs;
+			}),
+		]);
 	},
 
-	render: function (certs) {
+	render(data) {
+		let certs = data[0];
 		let wikiUrl = 'https://github.com/acmesh-official/acme.sh/wiki/';
-		var wikiInstructionUrl = wikiUrl + 'dnsapi';
+		let wikiInstructionUrl = wikiUrl + 'dnsapi';
 		let m, s, o;
 
 		m = new form.Map("acme", _("ACME certificates"),
@@ -39,14 +42,14 @@ return view.extend({
 		o = s.option(form.Value, "account_email", _("Account email"),
 			_('Email address to associate with account key.') + '<br/>' +
 			_('If a certificate wasn\'t renewed in time then you\'ll receive a notice at 20 days before expiry.')
-		)
+		);
 		o.rmempty = false;
 		o.datatype = "minlength(1)";
 
 		o = s.option(form.Flag, "debug", _("Enable debug logging"));
 		o.rmempty = false;
 
-		s = m.section(form.GridSection, "cert", _("Certificate config"))
+		s = m.section(form.GridSection, "cert", _("Certificate config"));
 		s.anonymous = false;
 		s.addremove = true;
 		s.nodescriptions = true;
@@ -93,7 +96,7 @@ return view.extend({
 		o.depends("validation_method", "dns");
 		// List of supported DNS API. Names are same as file names in acme.sh for easier search.
 		// May be outdated but not changed too often.
-		o.value('', '')
+		o.value('', '');
 		o.value('dns_acmedns', 'ACME DNS API github.com/joohoi/acme-dns');
 		o.value('dns_acmeproxy', 'ACME Proxy github.com/mdbraber/acmeproxy');
 		o.value('dns_1984hosting', '1984.is');
@@ -444,7 +447,7 @@ return view.extend({
 		o = s.taboption('challenge_dns', form.DynamicList, 'credentials', _('DNS API credentials'),
 			_("The credentials for the DNS API mode selected above. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/dnsapi for the format of credentials required by each API. " +
-				"Add multiple entries here in KEY=VAL shell variable format to supply multiple credential variables."))
+				"Add multiple entries here in KEY=VAL shell variable format to supply multiple credential variables."));
 		o.datatype = "list(string)";
 		o.depends("validation_method", "dns");
 		o.modalonly = true;
@@ -485,7 +488,7 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 		o.cfgvalue = function(section_id) {
-			var keylength = uci.get('acme', section_id, 'keylength');
+			let keylength = uci.get('acme', section_id, 'keylength');
 			if (keylength) {
 				// migrate the old keylength to a new keytype
 				switch (keylength) {
@@ -525,7 +528,7 @@ return view.extend({
 
 		return m.render();
 	}
-})
+});
 
 
 function _addDnsProviderField(s, provider, env, title, desc) {
@@ -534,7 +537,7 @@ function _addDnsProviderField(s, provider, env, title, desc) {
 	o.depends('dns', provider);
 	o.modalonly = true;
 	o.cfgvalue = function (section_id, stored_val) {
-		var creds = this.map.data.get(this.map.config, section_id, 'credentials');
+		let creds = this.map.data.get(this.map.config, section_id, 'credentials');
 		return _extractParamValue(creds, env);
 	};
 	o.write = function (section_id, value) { };
@@ -596,7 +599,7 @@ function _handleCheckService(c, event, curVal, newVal) {
 }
 
 function _renderCerts(certs) {
-	var table = E('table', {'class': 'table cbi-section-table', 'id': 'certificates_table'}, [
+	let table = E('table', {'class': 'table cbi-section-table', 'id': 'certificates_table'}, [
 		E('tr', {'class': 'tr table-titles'}, [
 			E('th', {'class': 'th'}, _('Main Domain')),
 			E('th', {'class': 'th'}, _('Private Key')),
@@ -605,7 +608,7 @@ function _renderCerts(certs) {
 		])
 	]);
 
-	var rows = certs.map(function (cert) {
+	let rows = certs.map(function (cert) {
 		let domain = cert.name.substring(0, cert.name.length - 4);
 		let issueDate = new Date(cert.mtime * 1000).toLocaleDateString();
 		return [
