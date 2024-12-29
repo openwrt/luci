@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-11-28 18:31+0000\n"
+"PO-Revision-Date: 2024-12-20 06:20+0000\n"
 "Last-Translator: try496 <pinghejk@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.9.2-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1076
 msgid "!known (not known)"
@@ -2254,7 +2254,7 @@ msgid "Data Transmitted"
 msgstr "已发送"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:186
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:157
 msgid "Debug"
 msgstr "调试"
@@ -2521,6 +2521,7 @@ msgstr "禁用此网络"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1806
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:13
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:66
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:198
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:121
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:108
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:117
@@ -2675,7 +2676,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:96
 msgctxt "nft notrack action"
 msgid "Do not track"
-msgstr ""
+msgstr "不要跟踪"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2811
 msgid "Do you really want to delete \"%s\" ?"
@@ -3360,7 +3361,7 @@ msgstr "到期时间"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:723
 msgid ""
 "Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>)."
-msgstr "租约地址的有效期， 最短 2 分钟(<code>2m</code>)。"
+msgstr "租约地址的有效期， 最短 2 分钟 (<code>2m</code>)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:722
 msgid ""
@@ -6572,7 +6573,7 @@ msgid "None"
 msgstr "无"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:949
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:198
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
 msgid "Normal"
 msgstr "正常"
 
@@ -6741,6 +6742,10 @@ msgstr "仅具备此标签的 DHCP 客户端会被发送此 boot 选项。"
 msgid "Only accept replies via"
 msgstr "只接受来自下列地址的响应"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
+msgid "Only affects dmesg kernel log"
+msgstr "仅影响 dmesg 内核日志"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:769
 msgid "Only allow communication with non-isolated bridge ports when enabled"
 msgstr "启用后仅允许与非隔离网桥端口通信"
@@ -6851,7 +6856,7 @@ msgstr "此设备的可选任意格式备注"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:147
 msgid "Optional, in seconds. If set to '0', no reconnect is attempted."
-msgstr "可选，以秒为单位。 如果设置为“0”，则不尝试重新连接。"
+msgstr "可选。以秒为单位。 如果设置为 “0”，则不尝试重新连接。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
 msgid ""
@@ -6867,8 +6872,8 @@ msgid ""
 "server, use the suffix (like '::1') to form the IPv6 address ('a:b:c:d::1') "
 "for the interface."
 msgstr ""
-"可选，允许的值：“eui64”、“random”和其他固定值 (例如：“::1”或“::1:2”)。当从授"
-"权服务器获取到 IPv6 前缀（如“a:b:c:d::”），使用后缀（如 “::1”）合成 IPv6 地址"
+"可选。允许的值: “eui64”、“random”和其他固定值 (例如: “::1”或“::1:2” )。当从授"
+"权服务器获取到 IPv6 前缀（如“a:b:c:d::”），使用后缀（如“::1”）合成 IPv6 地址"
 "（“a:b:c:d::1”）分配给此接口。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:587
@@ -6876,28 +6881,28 @@ msgid ""
 "Optional. Base64-encoded preshared key. Adds in an additional layer of "
 "symmetric-key cryptography for post-quantum resistance."
 msgstr ""
-"可选，Base64 编码的预共享密钥。添加在额外的对称密钥加密层中，用于抵抗未来的量"
+"可选。Base64 编码的预共享密钥。添加在额外的对称密钥加密层中，用于抵抗未来的量"
 "子计算破解。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:644
 msgid "Optional. Create routes for Allowed IPs for this peer."
-msgstr "可选，为此对端创建允许 IP 的路由。"
+msgstr "可选。为此对端创建允许 IP 的路由。"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:196
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:196
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:505
 msgid "Optional. Description of peer."
-msgstr "可选，对端的描述。"
+msgstr "可选。对端的描述。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:171
 msgid "Optional. Do not create host routes to peers."
-msgstr "可选，不要创建到对端的主机路由。"
+msgstr "可选。不要创建到对端的主机路由。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:647
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
-msgstr "可选，对端主机。名称将会预先被解析以启动接口。"
+msgstr "可选。对端主机。名称在接口启动之前解析。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:609
 msgid ""
@@ -6905,8 +6910,8 @@ msgid ""
 "the tunnel. Usually the peer's tunnel IP addresses and the networks the peer "
 "routes through the tunnel."
 msgstr ""
-"可选。此对端在隧道内被允许使用的 IP 地址和前缀。通常是对端的隧道 IP 地址和对"
-"端经由隧道的网络。"
+"可选。此对端在隧道内允许使用的 IP 地址和前缀。通常包括对端隧道 IP 地址以及通"
+"过隧道路由的网络。"
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:46
 msgid "Optional. Maximum Transmission Unit of the XFRM interface."
@@ -6914,11 +6919,11 @@ msgstr "可选。XFRM 接口的最大传输单元。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:182
 msgid "Optional. Maximum Transmission Unit of tunnel interface."
-msgstr "可选，隧道接口的最大传输单元。"
+msgstr "可选。隧道接口的最大传输单元。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:663
 msgid "Optional. Port of peer."
-msgstr "可选，对端的端口。"
+msgstr "可选。对端的端口。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:578
 msgid ""
@@ -6940,7 +6945,7 @@ msgstr ""
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
 msgid "Optional. UDP port used for outgoing and incoming packets."
-msgstr "可选，用于传出和传入数据包的 UDP 端口。"
+msgstr "可选。用于传出和传入数据包的 UDP 端口。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:72
 msgid "Options"
@@ -7930,7 +7935,7 @@ msgstr "接收到的数据包"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:167
 msgid "Recommended. IP addresses of the WireGuard interface."
-msgstr "推荐，WireGuard 接口的 IP 地址。"
+msgstr "WireGuard 接口的 IP 地址。"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:198
 msgid "Reconnect Timeout"
@@ -8127,7 +8132,7 @@ msgstr "某些运营商需要，例如：同轴线网络 DOCSIS 3"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:137
 msgid "Required. Base64-encoded private key for this interface."
-msgstr "必须，此接口的 Base64 编码私钥。"
+msgstr "必须。此接口的 Base64 编码私钥。"
 
 #: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
 msgid "Required. Path to the .yml config file for this interface."
@@ -8577,7 +8582,7 @@ msgstr "滚动到底部"
 
 #: protocols/luci-proto-external/htdocs/luci-static/resources/protocol/external.js:41
 msgid "Search domain"
-msgstr "搜素域名"
+msgstr "搜索域名"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:39
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:62
@@ -11130,7 +11135,6 @@ msgid "Waiting for device..."
 msgstr "正在等待设备…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:189
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:155
 msgid "Warning"
 msgstr "警告"
