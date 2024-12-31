@@ -26,8 +26,8 @@ return baseclass.extend({
 				force_dns_active: null,
 				version: null,
 			},
-			providers: (data[1] && data[1][pkg.Name]) || { providers: [] },
-			runtime: (data[2] && data[2][pkg.Name]) || { instances: [] },
+			providers: (data[1] && data[1][pkg.Name]) || [{ title: "empty" }],
+			runtime: (data[2] && data[2][pkg.Name]) || { instances: null, triggers: [] },
 		};
 		reply.providers.sort(function (a, b) {
 			return _(a.title).localeCompare(_(b.title));
