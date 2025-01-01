@@ -22,7 +22,7 @@ msgstr "'net30', 'p2p', or 'subnet'"
 msgid "Accept options pushed from server"
 msgstr "Chấp nhận tùy chọn được đảy từ server"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add"
 msgstr "Thêm vào"
 
@@ -30,7 +30,7 @@ msgstr "Thêm vào"
 msgid "Add route after establishing connection"
 msgstr "Thêm tuyến sau khi kết nối thành lập"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add template based configuration"
 msgstr "Thêm cấu hình dựa trên mẫu"
 
@@ -337,8 +337,8 @@ msgstr "Nếu hostname resolve thất bại, thử lại"
 msgid "Instance \"%s\""
 msgstr "Instance \"%s\""
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:18
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:46
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:17
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:45
 msgid "Instance with that name already exists!"
 msgstr "Phiên bản với tên đó đã tồn tại!"
 
@@ -396,7 +396,7 @@ msgstr "Số lượng phân bổ phát sóng buffers"
 msgid "Number of lines for log file history"
 msgstr "Số dòng cho tập tin log history"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:95
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:93
 msgid "OVPN configuration file upload"
 msgstr "Tải lên tệp cấu hình OVPN"
 
@@ -446,15 +446,15 @@ msgstr "Persist/unpersist ifconfig-pool"
 msgid "Ping remote every n seconds over TCP/UDP port"
 msgstr "Ping remote mỗi n giây trên cổng TCP/UDP"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:32
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:24
 msgid "Please edit this file directly in a terminal session."
 msgstr "Vui lòng chỉnh sửa tệp này trực tiếp trong phiên cuối."
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:51
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:50
 msgid "Please select a valid OVPN config file to upload!"
 msgstr "Vui lòng chọn tệp cấu hình OVPN hợp lệ để tải lên!"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:23
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:22
 msgid "Please select a valid VPN template!"
 msgstr "Vui lòng chọn một mẫu VPN hợp lệ!"
 
@@ -569,18 +569,18 @@ msgstr "Chạy script cmd trên đối tượng không kết nối"
 msgid "Run up/down scripts for all restarts"
 msgstr "Chạy up/down scripts cho tất cả khởi động"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:41
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:33
 msgid "Save"
 msgstr "Lưu"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:65
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:57
 msgid ""
 "Section to add an optional 'auth-user-pass' file with your credentials (%s)"
 msgstr ""
 "Phần để thêm tệp 'auth-user-pass' tùy chọn với thông tin xác thực của bạn "
 "(%s)"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:44
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:36
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Phần sửa đổi tệp cấu hình OVPN (%s)"
 
@@ -601,7 +601,7 @@ msgstr ""
 "Khuyến nghị bảo mật: Bạn không nên kích hoạt tính năng nén và đặt tham số "
 "này thành `stub-v2`"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:83
 msgid "Select template ..."
 msgstr "Chọn mẫu ..."
 
@@ -745,7 +745,7 @@ msgstr "TLS cipher"
 msgid "TOS passthrough (applies to IPv4 only)"
 msgstr "TOS passthrough (chỉ áp dụng cho IPv4)"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:78
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:76
 msgid "Template based configuration"
 msgstr "Cấu hình dựa trên mẫu"
 
@@ -753,18 +753,10 @@ msgstr "Cấu hình dựa trên mẫu"
 msgid "Temporary directory for client-connect return file"
 msgstr "Danh mục tạm thời cho tập tin client-connect return"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:12
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:40
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:11
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:39
 msgid "The 'Name' field must not be empty!"
 msgstr "Không được để trống trường 'Tên'!"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:22
-msgid ""
-"The OVPN config file (%s) could not be found, please check your "
-"configuration."
-msgstr ""
-"Không thể tìm thấy tệp cấu hình OVPN (%s), vui lòng kiểm tra cấu hình của "
-"bạn."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:795
 msgid "The highest supported TLS version"
@@ -779,7 +771,7 @@ msgstr "Hướng chính cho các tùy chọn 'tls-auth' và 'bí mật'"
 msgid "The lowest supported TLS version"
 msgstr "Phiên bản TLS được hỗ trợ thấp nhất"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:31
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:23
 msgid ""
 "The size of the OVPN config file (%s) is too large for online editing in "
 "LuCI (&ge; 100 KB)."
@@ -800,11 +792,11 @@ msgstr "Timeframe cho trao đổi key"
 msgid "Type of used device"
 msgstr "Loại công cụ sử dụng"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload"
 msgstr "Tải lên"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload ovpn file"
 msgstr "Tải lên tệp OVPN"
 
@@ -857,6 +849,13 @@ msgstr "tun/tap timeout không có hành động"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "Có (%i)"
+
+#~ msgid ""
+#~ "The OVPN config file (%s) could not be found, please check your "
+#~ "configuration."
+#~ msgstr ""
+#~ "Không thể tìm thấy tệp cấu hình OVPN (%s), vui lòng kiểm tra cấu hình của "
+#~ "bạn."
 
 #~ msgid "Use fast LZO compression"
 #~ msgstr "Dùng LZO nén nhanh"

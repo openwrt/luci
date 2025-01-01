@@ -29,7 +29,7 @@ return view.extend({
 				http2_support: null,
 				http3_support: null,
 			},
-			providers: (data[1] && data[1][pkg.Name]) || { providers: [] },
+			providers: (data[1] && data[1][pkg.Name]) || [{ title: "empty" }],
 		};
 		reply.providers.sort(function (a, b) {
 			return _(a.title).localeCompare(_(b.title));
@@ -331,7 +331,7 @@ return view.extend({
 		o.optional = true;
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
-		o.datatype = "ipaddr";
+		o.datatype = "ipaddr('nomask')";
 		o.default = "";
 		o.optional = true;
 		o.placeholder = "127.0.0.1";
@@ -353,13 +353,13 @@ return view.extend({
 		o.optional = true;
 
 		o = s.option(form.Value, "dscp_codepoint", _("DSCP Codepoint"));
-		o.datatype = "and(uinteger, range(0,63))";
+		o.datatype = "range(0,63)";
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
 
 		o = s.option(form.Value, "verbosity", _("Logging Verbosity"));
-		o.datatype = "and(uinteger, range(0,4))";
+		o.datatype = "range(0,4)";
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
@@ -370,7 +370,7 @@ return view.extend({
 		o.optional = true;
 
 		o = s.option(form.Value, "polling_interval", _("Polling Interval"));
-		o.datatype = "and(uinteger, range(5,3600))";
+		o.datatype = "range(5,3600)";
 		o.default = "";
 		o.modalonly = true;
 		o.optional = true;

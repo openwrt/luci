@@ -21,7 +21,7 @@ msgstr "'net30', 'p2p', або 'subnet'"
 msgid "Accept options pushed from server"
 msgstr "Прийміть варіанти, висунуті з сервера"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add"
 msgstr "Додати"
 
@@ -29,7 +29,7 @@ msgstr "Додати"
 msgid "Add route after establishing connection"
 msgstr "Додати маршрут після встановлення з'єднання"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add template based configuration"
 msgstr "Додати конфігурацію на основі шаблону"
 
@@ -336,8 +336,8 @@ msgstr "Якщо розпізнати ім’я хоста не вдається
 msgid "Instance \"%s\""
 msgstr "Екземпляр \"%s\""
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:18
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:46
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:17
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:45
 msgid "Instance with that name already exists!"
 msgstr "Екземпляр з такою назвою вже існує!"
 
@@ -395,7 +395,7 @@ msgstr "Кількість виділених широкомовних буфе�
 msgid "Number of lines for log file history"
 msgstr "Кількість рядків для історії журналу"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:95
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:93
 msgid "OVPN configuration file upload"
 msgstr "Завантаження файлу конфігурації OVPN"
 
@@ -445,15 +445,15 @@ msgstr "Зберігати/не зберігати ifconfig-pool"
 msgid "Ping remote every n seconds over TCP/UDP port"
 msgstr "Ping кожні n секунд через TCP/UDP порт"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:32
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:24
 msgid "Please edit this file directly in a terminal session."
 msgstr "Будь ласка, редагуйте цей файл безпосередньо в терміналі."
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:51
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:50
 msgid "Please select a valid OVPN config file to upload!"
 msgstr "Будь ласка, оберіть дійсний файл конфігурації OVPN для завантаження!"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:23
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:22
 msgid "Please select a valid VPN template!"
 msgstr "Будь ласка, оберіть дійсний шаблон VPN!"
 
@@ -568,18 +568,18 @@ msgstr "Запуск скрипта при відключенні клієнта
 msgid "Run up/down scripts for all restarts"
 msgstr "Запуск up/down скриптів для всіх перезапусків"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:41
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:33
 msgid "Save"
 msgstr "Зберегти"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:65
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:57
 msgid ""
 "Section to add an optional 'auth-user-pass' file with your credentials (%s)"
 msgstr ""
 "Розділ для додавання необов'язкового файлу 'auth-user-pass' з вашими "
 "обліковими даними (%s)"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:44
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:36
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Розділ для зміни конфігураційного файлу OVPN (%s)"
 
@@ -600,7 +600,7 @@ msgstr ""
 "Рекомендація з безпеки: Рекомендується не включати стиснення і встановити "
 "цей параметр в значення `stub-v2`"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:83
 msgid "Select template ..."
 msgstr "Виберіть шаблон ..."
 
@@ -745,7 +745,7 @@ msgstr "Шифр TLS"
 msgid "TOS passthrough (applies to IPv4 only)"
 msgstr "Пропуск TOS (застосовується тільки для IPv4)"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:78
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:76
 msgid "Template based configuration"
 msgstr "Конфігурація на основі шаблону"
 
@@ -753,16 +753,10 @@ msgstr "Конфігурація на основі шаблону"
 msgid "Temporary directory for client-connect return file"
 msgstr "Тимчасовий каталог для файлу повернення 'client-connect'"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:12
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:40
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:11
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:39
 msgid "The 'Name' field must not be empty!"
 msgstr "Поле \"Ім'я\" не повинно бути порожнім!"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:22
-msgid ""
-"The OVPN config file (%s) could not be found, please check your "
-"configuration."
-msgstr "Файл конфігурації OVPN (%s) не знайдено, перевірте ваші налаштування."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:795
 msgid "The highest supported TLS version"
@@ -777,7 +771,7 @@ msgstr "Задати ключ для параметрів 'tls-auth' і 'secret'
 msgid "The lowest supported TLS version"
 msgstr "Найнижча підтримувана версія TLS"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:31
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:23
 msgid ""
 "The size of the OVPN config file (%s) is too large for online editing in "
 "LuCI (&ge; 100 KB)."
@@ -798,11 +792,11 @@ msgstr "Часові рамки обміну ключами"
 msgid "Type of used device"
 msgstr "Тип використовуваного пристрою"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload"
 msgstr "Завантажити"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload ovpn file"
 msgstr "Завантажити файл OVPN"
 
@@ -855,6 +849,12 @@ msgstr "тайм-аут бездіяльності tun/tap"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "так (%i)"
+
+#~ msgid ""
+#~ "The OVPN config file (%s) could not be found, please check your "
+#~ "configuration."
+#~ msgstr ""
+#~ "Файл конфігурації OVPN (%s) не знайдено, перевірте ваші налаштування."
 
 #~ msgid "Enable a compression algorithm"
 #~ msgstr "Увімкнути алгоритм стиснення"
