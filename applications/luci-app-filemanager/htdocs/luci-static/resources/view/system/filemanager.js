@@ -1908,79 +1908,107 @@ return view.extend({
 		});
 	},
 
-	// Handler for clicking on a file to open it in the editor
-	handleFileClick: function(filePath, mode = 'text') {
-		var self = this;
-		var fileRow = document.querySelector("tr[data-file-path='" + filePath + "']");
-		var editorMessage = document.getElementById('editor-message');
-		var editorContainer = document.getElementById('editor-container');
+	/**
+	 * Determines whether a given Uint8Array represents UTF-8 text data.
+	 *
+	 * @param {Uint8Array} uint8Array - The binary data to check.
+	 * @returns {boolean} - Returns true if the data is UTF-8 text, false otherwise.
+	 */
+	isText: function(uint8Array) {
 
-		// Set default permissions if file row is not found
-		if (fileRow) {
-			var permissions = fileRow.getAttribute('data-numeric-permissions');
-			self.originalFilePermissions = permissions;
-		} else {
-			self.originalFilePermissions = '644';
-		}
+		const len = uint8Array.length;
+		let i = 0;
 
-		// Update message to indicate loading
-		if (editorMessage) {
-			editorMessage.textContent = _('Loading file...');
-		}
+		while (i < len) {
+			const byte = uint8Array[i];
 
-		// Execute 'cat' to read the file content
-		fs.exec('cat', [filePath]).then(function(res) {
-			var content = '';
-			if (res.code !== 0) {
-				if (res.stderr.trim() !== '') {
-					return Promise.reject(new Error(res.stderr.trim()));
+			if (byte === 0) return false; // Null byte indicates binary
+
+			if (byte <= 0x7F) {
+				// ASCII character, no action needed
+				i++;
+				continue;
+			} else if ((byte & 0xE0) === 0xC0) {
+				// 2-byte sequence
+				if (i + 1 >= len || (uint8Array[i + 1] & 0xC0) !== 0x80) return false;
+				i += 2;
+			} else if ((byte & 0xF0) === 0xE0) {
+				// 3-byte sequence
+				if (
+					i + 2 >= len ||
+					(uint8Array[i + 1] & 0xC0) !== 0x80 ||
+					(uint8Array[i + 2] & 0xC0) !== 0x80
+				) {
+					return false;
 				}
+				i += 3;
+			} else if ((byte & 0xF8) === 0xF0) {
+				// 4-byte sequence
+				if (
+					i + 3 >= len ||
+					(uint8Array[i + 1] & 0xC0) !== 0x80 ||
+					(uint8Array[i + 2] & 0xC0) !== 0x80 ||
+					(uint8Array[i + 3] & 0xC0) !== 0x80
+				) {
+					return false;
+				}
+				i += 4;
 			} else {
-				content = res.stdout || '';
+				// Invalid UTF-8 byte
+				return false;
 			}
+		}
 
-			// Store the content as a string
-			self.fileContent = content;
-
-			// Convert content to Uint8Array in chunks not exceeding 8KB
-			var CHUNK_SIZE = 8 * 1024; // 8KB
-			var totalLength = content.length;
-			var chunks = [];
-			for (var i = 0; i < totalLength; i += CHUNK_SIZE) {
-				var chunkStr = content.slice(i, i + CHUNK_SIZE);
-				var chunkBytes = new TextEncoder().encode(chunkStr);
-				chunks.push(chunkBytes);
-			}
-			// Concatenate chunks into a single Uint8Array
-			var totalBytes = chunks.reduce(function(prev, curr) {
-				return prev + curr.length;
-			}, 0);
-			var dataArray = new Uint8Array(totalBytes);
-			var offset = 0;
-			chunks.forEach(function(chunk) {
-				dataArray.set(chunk, offset);
-				offset += chunk.length;
-			});
-
-			self.fileData = dataArray; // Store binary data as Uint8Array
-
-			self.editorMode = mode; // Set the initial editor mode to 'text'
-
-			// Render the editor
-			self.renderEditor(filePath);
-
-			// Switch to the editor tab
-			self.switchToTab('editor');
-
-		}).catch(function(err) {
-			// Handle file read errors
-			pop(null, E('p', _('Failed to open file: %s').format(err.message)), 'error');
-			if (editorMessage) {
-				editorMessage.textContent = _('Failed to open file: %s').format(err.message);
-			}
-		});
+		return true;
 	},
 
+	// Function to handle clicking on a file to open it in the editor
+	handleFileClick: function(filePath, mode) {
+		const self = this;
+		const fileRow = document.querySelector(`tr[data-file-path='${filePath}']`);
+		const editorMessage = document.getElementById('editor-message');
+
+		// Set original file permissions
+		self.originalFilePermissions = fileRow ? fileRow.getAttribute('data-numeric-permissions') : '644';
+		self.editorMode = mode;
+
+		// Display loading message
+		if (editorMessage) editorMessage.textContent = _('Loading file...');
+
+		// Read the file as binary data
+		fs.read_direct(filePath, 'blob')
+			.then(blob => blob.arrayBuffer())
+			.then(arrayBuffer => {
+				const uint8Array = new Uint8Array(arrayBuffer);
+				self.fileData = uint8Array;
+				self.fileContent = ''; // Can be used for display or left empty
+				self.editorMode = 'hex';
+				self.textType = self.isText(uint8Array) ? 'text' : 'hex';
+				if (mode === 'text') {
+					// Determine if the file is text
+					if (self.textType === 'text') {
+						// If text, decode the content
+						self.fileContent = new TextDecoder().decode(uint8Array);
+						self.editorMode = 'text';
+					} else {
+						// If not text, show a warning and set mode to hex
+						if (editorMessage) {
+							editorMessage.textContent = _('The file does not contain valid text data. Opening in hex mode...');
+						}
+						pop(null, E('p', _('Opening file in hex mode since it is not a text file.')), 'warning');
+					}
+				}
+			})
+			.then(() => {
+				// Render the editor and switch to the editor tab
+				self.renderEditor(filePath);
+				self.switchToTab('editor');
+			})
+			.catch(err => {
+				// Handle errors during file reading
+				pop(null, E('p', _('Failed to open file: %s').format(err.message)), 'error');
+			});
+	},
 	// Adjust padding for line numbers in the editor
 	adjustLineNumbersPadding: function() {
 		// Update padding based on scrollbar size
@@ -1998,25 +2026,23 @@ return view.extend({
 		// Download the file to the user's local machine
 		var self = this;
 		var fileName = filePath.split('/').pop();
-		fs.read(filePath, {
-			binary: true
-		}).then(function(content) {
-			var blob = new Blob([content], {
-				type: 'application/octet-stream'
+		// Use the read_direct method to download the file
+		fs.read_direct(filePath, 'blob')
+			.then(function(blob) {
+				if (!(blob instanceof Blob)) {
+					throw new Error(_('Response is not a Blob'));
+				}
+				var url = window.URL.createObjectURL(blob);
+				var a = document.createElement('a');
+				a.href = url;
+				a.download = fileName;
+				document.body.appendChild(a);
+				a.click();
+				a.remove();
+				window.URL.revokeObjectURL(url);
+			}).catch(function(err) {
+				pop(null, E('p', _('Failed to download file "%s": %s').format(fileName, err.message)), 'error');
 			});
-			var downloadLink = document.createElement('a');
-			downloadLink.href = URL.createObjectURL(blob);
-			downloadLink.download = fileName;
-			document.body.appendChild(downloadLink);
-			downloadLink.click();
-			document.body.removeChild(downloadLink);
-			var statusInfo = document.getElementById('status-info');
-			if (statusInfo) {
-				statusInfo.textContent = _('Downloaded file: "%s".').format(fileName);
-			}
-		}).catch(function(err) {
-			pop(null, E('p', _('Failed to download file "%s": %s').format(fileName, err.message)), 'error');
-		});
 	},
 
 	// Handler for deleting a file
@@ -2753,14 +2779,16 @@ return view.extend({
 						self.handleSaveFile(filePath);
 					}
 				}, _('Save')),
-				E('button', {
-					'class': 'btn',
-					'id': 'toggle-text-mode',
-					'style': 'margin-left: 10px;',
-					'click': function() {
-						self.toggleHexMode(filePath);
-					}
-				}, _('Toggle to ASCII Mode'))
+				...(self.textType !== 'hex' ? [
+					E('button', {
+						'class': 'btn',
+						'id': 'toggle-text-mode',
+						'style': 'margin-left: 10px;',
+						'click': function() {
+							self.toggleHexMode(filePath);
+						}
+					}, _('Toggle to ASCII Mode'))
+				] : [])
 			];
 		}
 
@@ -2821,35 +2849,57 @@ return view.extend({
 		}
 	},
 
+	/**
+	 * Toggles the editor mode between text and hex.
+	 *
+	 * @param {string} filePath - The path of the file to be edited.
+	 */
 	toggleHexMode: function(filePath) {
-		var self = this;
+		const self = this;
 
 		if (self.editorMode === 'text') {
 			// Before switching to hex mode, update self.fileData from the textarea
-			var textarea = document.querySelector('#editor-container textarea');
+			const textarea = document.querySelector('#editor-container textarea');
 			if (textarea) {
-				var content = textarea.value;
+				const content = textarea.value;
 				self.fileContent = content;
 
 				// Convert content to Uint8Array
-				var encoder = new TextEncoder();
+				const encoder = new TextEncoder();
 				self.fileData = encoder.encode(content);
 			}
 			self.editorMode = 'hex';
 		} else {
-			// Before switching to text mode, update self.fileData from the HexEditor
-			if (self.hexEditorInstance) {
-				self.fileData = self.hexEditorInstance.getData();
+			// Before switching to text mode, check if the file is textual
+			if (self.textType !== 'text') {
+				pop(null, E('p', _('This file is not a text file and cannot be edited in text mode.')), 'error');
+				return; // Abort the toggle
 			}
+
+			// Before switching to text mode, update self.fileData from HexEditor
+			if (self.hexEditorInstance) {
+				const hexData = self.hexEditorInstance.getData();
+				if (hexData instanceof Uint8Array) {
+					self.fileData = hexData;
+				} else {
+					pop(null, E('p', _('Failed to retrieve data from Hex Editor.')), 'error');
+					return; // Abort the toggle if data retrieval fails
+				}
+			}
+
 			// Convert self.fileData to string
-			var decoder = new TextDecoder();
-			self.fileContent = decoder.decode(self.fileData);
+			const decoder = new TextDecoder();
+			try {
+				self.fileContent = decoder.decode(self.fileData);
+			} catch (error) {
+				pop(null, E('p', _('Failed to decode file data to text: %s').format(error.message)), 'error');
+				return; // Abort the toggle if decoding fails
+			}
 			self.editorMode = 'text';
 		}
 
-		// Re-render the editor
+		// Re-render the editor with the updated mode and content
 		self.renderEditor(filePath);
 	}
-
 
 });
