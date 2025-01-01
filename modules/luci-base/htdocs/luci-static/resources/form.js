@@ -3075,7 +3075,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		ev.currentTarget.parentNode.querySelectorAll('tr.cbi-section-table-row').forEach(L.bind((tr, i) => {
 			const sid = tr.getAttribute('data-sid');
 			const opt = tr.childNodes[index].getAttribute('data-name');
-			const val = this.cfgvalue(sid, opt);
+			let val = this.cfgvalue(sid, opt);
 
 			tr.querySelectorAll('.flash').forEach((n) => {
 				n.classList.remove('flash')
