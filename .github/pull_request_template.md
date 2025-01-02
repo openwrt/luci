@@ -31,7 +31,7 @@ MAY:
 - [ ] Each commit and PR title has a valid :memo: `<package name>: title` first line subject for packages
 - [ ] Incremented :up: any `PKG_VERSION` in the Makefile
 - [ ] Tested on: (architecture, openwrt version, browser) :white_check_mark:
-- [ ] \( Preferred ) Mention: @ the original code author for feedback
+- [ ] \( Preferred ) Mention: @ the original code author for feedback. Check the [CODEOWNERS](https://github.com/stokito/luci/blob/codeowners/.github/CODEOWNERS) to find a GitHub username of a maintainer.
 - [ ] \( Preferred ) Screenshot or mp4 of changes:
 - [ ] \( Optional ) Closes: e.g. openwrt/luci#issue-number
 - [ ] \( Optional ) Depends on: e.g. openwrt/packages#pr-number in sister repo
