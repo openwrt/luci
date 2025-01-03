@@ -430,7 +430,7 @@ return view.extend({
 
 		s.taboption('general', form.Flag, 'expandhosts',
 			_('Expand hosts'),
-			_('Add local domain suffix to names served from hosts files.'));
+			_('Add local domain suffix to names served from hosts files.') + ' ' +_('Also affects DHCP(v6)-derived names.'));
 
 		o = s.taboption('logging', form.Flag, 'logqueries',
 			_('Log queries'),
