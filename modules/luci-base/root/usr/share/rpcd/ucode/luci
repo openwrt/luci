@@ -196,6 +196,8 @@ const methods = {
 				firewall:   access('/sbin/fw3') == true,
 				firewall4:  access('/sbin/fw4') == true,
 				opkg:       access('/bin/opkg') == true,
+				bonding:    access('/sys/module/bonding'),
+				mii_tool:   access('/usr/sbin/mii-tool'),
 				offloading: access('/sys/module/xt_FLOWOFFLOAD/refcnt') == true || access('/sys/module/nft_flow_offload/refcnt') == true,
 				br2684ctl:  access('/usr/sbin/br2684ctl') == true,
 				swconfig:   access('/sbin/swconfig') == true,
@@ -207,6 +209,7 @@ const methods = {
 				cabundle:   access('/etc/ssl/certs/ca-certificates.crt') == true,
 				relayd:     access('/usr/sbin/relayd') == true,
 				apk:        access('/usr/bin/apk') == true,
+				wifi:       access('/sbin/wifi') == true,
 			};
 
 			const wifi_features = [ 'eap', '11ac', '11ax', '11be', '11r', 'acs', 'sae', 'owe', 'suiteb192', 'wep', 'wps', 'ocv' ];

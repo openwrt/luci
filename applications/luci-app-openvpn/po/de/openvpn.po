@@ -22,7 +22,7 @@ msgstr "Topologietyp"
 msgid "Accept options pushed from server"
 msgstr "Vom Server übertragene Optionen lokal akzeptieren"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add"
 msgstr "Hinzufügen"
 
@@ -30,7 +30,7 @@ msgstr "Hinzufügen"
 msgid "Add route after establishing connection"
 msgstr "Netzwerkrouten nach Verbindungsaufbau einrichten"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add template based configuration"
 msgstr "Hinzufügen einer vorlagenbasierten Konfiguration"
 
@@ -340,8 +340,8 @@ msgstr "Neuer Verbindungsversuch wenn Namensauflösung fehlschlägt"
 msgid "Instance \"%s\""
 msgstr "Instanz \"%s\""
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:18
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:46
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:17
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:45
 msgid "Instance with that name already exists!"
 msgstr "Instanz mit diesem Namen existiert bereits!"
 
@@ -399,7 +399,7 @@ msgstr "Anzahl der benutzten Broadcast-Puffer"
 msgid "Number of lines for log file history"
 msgstr "Anzahl der Zeilen im Protokoll-Zwischenspeicher"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:95
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:93
 msgid "OVPN configuration file upload"
 msgstr "OVPN-Konfigurationsdatei hochladen"
 
@@ -449,16 +449,16 @@ msgstr "Persistenten IP-Adressbereich nutzen"
 msgid "Ping remote every n seconds over TCP/UDP port"
 msgstr "Ping-Intervall für Gegenstellen"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:32
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:24
 msgid "Please edit this file directly in a terminal session."
 msgstr "Bitte bearbeiten Sie diese Datei direkt in einer Terminalsitzung."
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:51
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:50
 msgid "Please select a valid OVPN config file to upload!"
 msgstr ""
 "Bitte wählen Sie eine gültige OVPN-Konfigurationsdatei zum Hochladen aus!"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:23
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:22
 msgid "Please select a valid VPN template!"
 msgstr "Bitte wählen Sie eine gültige VPN-Vorlage aus!"
 
@@ -572,18 +572,18 @@ msgstr "Shell-Kommando beim Trennen von Teilnehmer-Verbindungen ausführen"
 msgid "Run up/down scripts for all restarts"
 msgstr "Shell-Kommandos bei jedem Neustart ausführen"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:41
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:33
 msgid "Save"
 msgstr "Speichern"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:65
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:57
 msgid ""
 "Section to add an optional 'auth-user-pass' file with your credentials (%s)"
 msgstr ""
 "Abschnitt zum Hinzufügen einer optionalen Datei 'auth-user-pass' mit Ihren "
 "Anmeldeinformationen (%s)"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:44
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:36
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Abschnitt zum Ändern der OVPN-Konfigurationsdatei (%s)"
 
@@ -604,7 +604,7 @@ msgstr ""
 "Sicherheitsempfehlung: Es wird empfohlen, die Komprimierung nicht zu "
 "aktivieren und diesen Parameter auf \"stub-v2\" zu setzen"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:83
 msgid "Select template ..."
 msgstr "Vorlage auswählen ..."
 
@@ -749,7 +749,7 @@ msgstr "TLS Verschlüsselungsalgorithmus"
 msgid "TOS passthrough (applies to IPv4 only)"
 msgstr "\"TOS\" Durchleitung (nur für IPv4)"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:78
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:76
 msgid "Template based configuration"
 msgstr "Vorlagenbasierte Konfiguration"
 
@@ -757,18 +757,10 @@ msgstr "Vorlagenbasierte Konfiguration"
 msgid "Temporary directory for client-connect return file"
 msgstr "Temporäres Verzeichnis für Teilnehmer-Verbindungen"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:12
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:40
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:11
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:39
 msgid "The 'Name' field must not be empty!"
 msgstr "Das Feld 'Name' darf nicht leer sein!"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:22
-msgid ""
-"The OVPN config file (%s) could not be found, please check your "
-"configuration."
-msgstr ""
-"Die OVPN-Konfigurationsdatei (%s) konnte nicht gefunden werden, bitte "
-"überprüfen Sie Ihre Konfiguration."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:795
 msgid "The highest supported TLS version"
@@ -783,7 +775,7 @@ msgstr "Schlüssel-Richtung für die Optionen 'tls-auth' und 'secret'"
 msgid "The lowest supported TLS version"
 msgstr "Die niedrigste unterstützte TLS-Version"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:31
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:23
 msgid ""
 "The size of the OVPN config file (%s) is too large for online editing in "
 "LuCI (&ge; 100 KB)."
@@ -804,11 +796,11 @@ msgstr "Maximaler Zeitraum für Schlüsselaustausch"
 msgid "Type of used device"
 msgstr "Schnittstellentyp"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload"
 msgstr "Hochladen"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload ovpn file"
 msgstr "Hochladen der OVPN-Datei"
 
@@ -864,6 +856,13 @@ msgstr "Inaktivitäts-Timeout für TUN/TAP Schnittstellen"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "Gestartet (%s)"
+
+#~ msgid ""
+#~ "The OVPN config file (%s) could not be found, please check your "
+#~ "configuration."
+#~ msgstr ""
+#~ "Die OVPN-Konfigurationsdatei (%s) konnte nicht gefunden werden, bitte "
+#~ "überprüfen Sie Ihre Konfiguration."
 
 #~ msgid "Enable a compression algorithm"
 #~ msgstr "Kompressionsalgorithmus aktivieren"

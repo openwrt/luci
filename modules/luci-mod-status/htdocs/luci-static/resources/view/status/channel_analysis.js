@@ -52,65 +52,63 @@ return view.extend({
 	},
 
 	add_wifi_to_graph: function(chan_analysis, res, scanCache, channels, channel_width) {
-		var offset_tbl = chan_analysis.offset_tbl,
-			height = chan_analysis.graph.offsetHeight - 2,
-			step = chan_analysis.col_width,
-			height_diff = (height-(height-(res.signal*-4)));
+		const offset_tbl = chan_analysis.offset_tbl;
+		const height = chan_analysis.graph.offsetHeight - 2;
+		const step = chan_analysis.col_width;
+		const height_diff = (height-(height-(res.signal*-4)));
 
 		if (scanCache[res.bssid].color == null)
 			scanCache[res.bssid].color = random.derive_color(res.bssid);
 
-		if (scanCache[res.bssid].graph == null)
-			scanCache[res.bssid].graph = [];
+		if (scanCache[res.bssid].graph == null || scanCache[res.bssid].graph === undefined) {
+			const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+			const line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+			const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+			const color = scanCache[res.bssid].color;
+
+			line.setAttribute('style', 'fill:'+color+'4f'+';stroke:'+color+';stroke-width:0.5');
+			text.setAttribute('style', 'fill:'+color+';font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
+			text.appendChild(document.createTextNode(res.ssid || res.bssid));
+
+			group.appendChild(line);
+			group.appendChild(text);
+
+			chan_analysis.graph.firstElementChild.appendChild(group);
+			scanCache[res.bssid].graph = { group : group, line : line, text : text };
+		}
 
 		channels.forEach(function(channel) {
-			if (scanCache[res.bssid].graph[i] == null) {
-				var group = document.createElementNS('http://www.w3.org/2000/svg', 'g'),
-					line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline'),
-					text = document.createElementNS('http://www.w3.org/2000/svg', 'text'),
-					color = scanCache[res.bssid].color;
-
-				line.setAttribute('style', 'fill:'+color+'4f'+';stroke:'+color+';stroke-width:0.5');
-				text.setAttribute('style', 'fill:'+color+';font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
-				text.appendChild(document.createTextNode(res.ssid || res.bssid));
-
-				group.appendChild(line)
-				group.appendChild(text)
-
-				chan_analysis.graph.firstElementChild.appendChild(group);
-				scanCache[res.bssid].graph[i] = { group : group, line : line, text : text };
-			}
 			if (channel_width > 2) {
-				if (!("main" in scanCache[res.bssid].graph[i])) {
-					var main = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+				if (!("main" in scanCache[res.bssid].graph)) {
+					const main = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
 					main.setAttribute('style', 'fill:url(#GradientVerticalCenteredBlack)');
-					scanCache[res.bssid].graph[i].group.appendChild(main)
+					scanCache[res.bssid].graph.group.appendChild(main);
 					chan_analysis.graph.firstElementChild.lastElementChild.appendChild(main);
-					scanCache[res.bssid].graph[i]["main"] = main;
+					scanCache[res.bssid].graph["main"] = main;
 				}
-				var main_offset = offset_tbl[res.channel],
-					points = [
+				const main_offset = offset_tbl[res.channel];
+				const points = [
 					(main_offset-(step*(2  )))+','+height,
 					(main_offset-(step*(2-1)))+','+height_diff,
 					(main_offset+(step*(2-1)))+','+height_diff,
 					(main_offset+(step*(2  )))+','+height
 				];
-				scanCache[res.bssid].graph[i].main.setAttribute('points', points);
+				scanCache[res.bssid].graph.main.setAttribute('points', points);
 			}
 
-			var chan_offset = offset_tbl[channel],
-				points = [
+			const chan_offset = offset_tbl[channel];
+			const points = [
 				(chan_offset-(step*(channel_width  )))+','+height,
 				(chan_offset-(step*(channel_width-1)))+','+height_diff,
 				(chan_offset+(step*(channel_width-1)))+','+height_diff,
 				(chan_offset+(step*(channel_width  )))+','+height
 			];
 
-			scanCache[res.bssid].graph[i].text.setAttribute('x', offset_tbl[res.channel]-step);
-			scanCache[res.bssid].graph[i].text.setAttribute('y', height_diff - 2);
-			scanCache[res.bssid].graph[i].line.setAttribute('points', points);
-			scanCache[res.bssid].graph[i].group.style.zIndex = res.signal*-1;
-			scanCache[res.bssid].graph[i].group.style.opacity = res.stale ? '0.5' : null;
+			scanCache[res.bssid].graph.text.setAttribute('x', offset_tbl[res.channel]-step);
+			scanCache[res.bssid].graph.text.setAttribute('y', height_diff - 2);
+			scanCache[res.bssid].graph.line.setAttribute('points', points);
+			scanCache[res.bssid].graph.group.style.zIndex = res.signal*-1;
+			scanCache[res.bssid].graph.group.style.opacity = res.stale ? '0.5' : null;
 		})
 	},
 

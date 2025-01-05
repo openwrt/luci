@@ -6,8 +6,6 @@
 'require rpc';
 'require form';
 
-
-
 const callInitAction = rpc.declare({
 	object: 'luci',
 	method: 'setInitAction',
@@ -49,12 +47,24 @@ return view.extend({
 		var rules = Array.isArray(data[0].rules) ? data[0].rules : [];
 
 		var rows = rules.map(function(rule) {
+			const padnum = (num, length) => num.toString().padStart(length, "0");
+			const expires_sec = rule?.expires || 0;
+			const hour = Math.floor(expires_sec / 3600);
+			const minute = Math.floor((expires_sec % 3600) / 60);
+			const second = Math.floor(expires_sec % 60);
+			const expires_str =
+				hour > 0 ? `${hour}h ${padnum(minute, 2)}m ${padnum(second, 2)}s` :
+				minute > 0 ? `${minute}m ${padnum(second, 2)}s` :
+				expires_sec > 0 ? `${second}s` :
+				'';
+
 			return [
 				rule.host_hint || _('Unknown'),
 				rule.intaddr,
 				rule.intport,
 				rule.extport,
 				rule.proto,
+				expires_str,
 				rule.descr,
 				E('button', {
 					'class': 'btn cbi-button-remove',
@@ -64,8 +74,6 @@ return view.extend({
 		});
 
 		cbi_update_table(nodes.querySelector('#upnp_status_table'), rows, E('em', _('There are no active port maps.')));
-
-		return;
 	},
 
 	render: function(data) {
@@ -92,6 +100,7 @@ return view.extend({
 					E('th', { 'class': 'th' }, _('Client Port')),
 					E('th', { 'class': 'th' }, _('External Port')),
 					E('th', { 'class': 'th' }, _('Protocol')),
+					E('th', { 'class': 'th right' }, _('Expires')),
 					E('th', { 'class': 'th' }, _('Description')),
 					E('th', { 'class': 'th cbi-section-actions' }, '')
 				])
@@ -129,9 +138,11 @@ return view.extend({
 			_('Start autonomous port mapping service'));
 		o.rmempty = false;
 
-		s.taboption('setup', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol')).default = '1';
+		o = s.taboption('setup', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol'));
+		o.default = '1';
 
-		s.taboption('setup', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols')).default = '1';
+		o = s.taboption('setup', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols'));
+		o.default = '1';
 
 		o = s.taboption('setup', form.Flag, 'igdv1', _('UPnP IGDv1 compatibility mode'),
 			_('Advertise as IGDv1 (IPv4 only) device instead of IGDv2'));

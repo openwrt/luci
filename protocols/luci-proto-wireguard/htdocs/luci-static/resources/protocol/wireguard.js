@@ -184,7 +184,7 @@ return network.registerProtocol('wireguard', {
 		o.placeholder = '1420';
 		o.optional = true;
 
-		o = s.taboption('advanced', form.Value, 'fwmark', _('Firewall Mark'), _('Optional. 32-bit mark for outgoing encrypted packets. Enter value in hex, starting with <code>0x</code>.'));
+		o = s.taboption('advanced', form.Value, 'fwmark', _('Firewall Mark'), _('Optional. 32-bit mark for packets during firewall processing. Enter value in hex, starting with <code>0x</code>.'));
 		o.optional = true;
 		o.validate = function(section_id, value) {
 			if (value.length > 0 && !value.match(/^0x[a-fA-F0-9]{1,8}$/))

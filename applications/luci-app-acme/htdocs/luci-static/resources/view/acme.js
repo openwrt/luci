@@ -529,7 +529,7 @@ return view.extend({
 
 
 function _addDnsProviderField(s, provider, env, title, desc) {
-	let o = s.taboption('challenge_dns', form.Value, '_' + env, _(title),
+	let o = s.taboption('challenge_dns', form.Value, '_credentials_' + env, _(title),
 		_(desc));
 	o.depends('dns', provider);
 	o.modalonly = true;
@@ -537,10 +537,27 @@ function _addDnsProviderField(s, provider, env, title, desc) {
 		var creds = this.map.data.get(this.map.config, section_id, 'credentials');
 		return _extractParamValue(creds, env);
 	};
-	o.write = function (section_id, value) {
-		this.map.data.set('acme', section_id, 'credentials', [env + '="' + value + '"']);
-	};
+	o.write = function (section_id, value) { };
+	o.onchange = _handleEditChange;
 	return o;
+}
+
+function _handleEditChange(event, section_id, newVal) {
+	// Add the provider field value directly to the credentials DynList
+	let credentialsDynList = this.map.lookupOption('credentials', section_id)[0].getUIElement(section_id);
+	let creds = credentialsDynList.getValue();
+	let credsMap = _parseKeyValueListToMap(creds);
+	let optName = this.option.substring('_credentials_'.length);
+	if (newVal) {
+		credsMap.set(optName, newVal);
+	} else {
+		credsMap.delete(optName);
+	}
+	let newCreds = [];
+	for (let [key, val] of credsMap) {
+		newCreds.push(key + '="' + val + '"');
+	}
+	credentialsDynList.setValue(newCreds);
 }
 
 /**
@@ -549,23 +566,29 @@ function _addDnsProviderField(s, provider, env, title, desc) {
  * @returns {string}
  */
 function _extractParamValue(paramsKeyVals, paramName) {
+	let map = _parseKeyValueListToMap(paramsKeyVals)
+	return map.get(paramName) || '';
+}
+
+/**
+ * @param {string[]} paramsKeyVals
+ * @returns {Map}
+ */
+function _parseKeyValueListToMap(paramsKeyVals) {
+	let map = new Map();
 	if (!paramsKeyVals) {
-		return '';
+		return map;
 	}
-	for (let i = 0; i < paramsKeyVals.length; i++) {
-		var paramKeyVal = paramsKeyVals[i];
-		var parts = paramKeyVal.split('=');
-		if (parts.lenght < 2) {
+	for (let paramKeyVal of paramsKeyVals) {
+		let pos = paramKeyVal.indexOf("=");
+		if (pos < 0) {
 			continue;
 		}
-		var name = parts[0];
-		var val = parts[1];
-		if (name == paramName) {
-			// unquote
-			return val.substring(0, val.length-1).substring(1);
-		}
+		let name = paramKeyVal.slice(0, pos);
+		let unquotedVal = paramKeyVal.slice(pos + 2, paramKeyVal.length - 1);
+		map.set(name, unquotedVal);
 	}
-	return '';
+	return map;
 }
 
 function _handleCheckService(c, event, curVal, newVal) {

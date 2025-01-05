@@ -440,8 +440,8 @@ return view.extend({
 
 		}
 
-		o = s.taboption('global', form.Value, 'cacert', _('CA Certs path'));
-		o.description = _('CA certificates path that will be used to download services data. Set IGNORE to skip certificate validation.');
+		o = s.taboption('global', form.Value, 'cacert', _('CA cert bundle file'));
+		o.description = _('CA certificate bundle file that will be used to download services data. Set IGNORE to skip certificate validation.');
 		o.placeholder = 'IGNORE';
 		o.write = function(section_id, value) {
 			if(value == 'ignore')

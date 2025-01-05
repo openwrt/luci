@@ -140,7 +140,7 @@ return view.extend({
 				return firewall.renameZone(cfgvalue, formvalue);
 		};
 
-		o = s.option(widgets.ZoneForwards, '_info', _('Zone ⇒ Forwardings'));
+		o = s.option(widgets.ZoneForwards, '_info', _('Zone ⇒ Forwards'));
 		o.editable = true;
 		o.modalonly = false;
 		o.cfgvalue = function(section_id) {
