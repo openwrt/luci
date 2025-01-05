@@ -5,6 +5,7 @@
 'require uci';
 'require fs';
 'require rpc';
+'require firewall';
 
 return baseclass.extend({
 	title: _('Wireless'),
@@ -184,6 +185,7 @@ return baseclass.extend({
 			network.getHostHints(),
 			this.callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'read'),
 			this.callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'write'),
+			firewall.getZones(),
 			L.hasSystemFeature('wifi') ? L.resolveDefault(uci.load('wireless')) : L.resolveDefault(),
 		]).then(L.bind(function(data) {
 			var tasks = [],
@@ -216,7 +218,8 @@ return baseclass.extend({
 		    networks = data[1],
 		    hosthints = data[2],
 		    hasReadPermission = data[3],
-		    hasWritePermission = data[4];
+		    hasWritePermission = data[4],
+		    zones = data[5];
 
 		var table = E('div', { 'class': 'network-status-table' });
 
@@ -325,6 +328,24 @@ return baseclass.extend({
 						E('span', this.wifirate(bss.tx))
 					])
 				];
+
+				if (bss.vlan) {
+					var desc = bss.vlan.getI18n();
+					var vlan_network = bss.vlan.getNetwork();
+					var vlan_zone;
+
+					if (vlan_network)
+						for (let zone of zones)
+							if (zone.getNetworks().includes(vlan_network))
+								vlan_zone = zone;
+
+					row[0].insertBefore(
+						E('div', {
+							'class' : 'zonebadge',
+							'title' : desc,
+							'style' : firewall.getZoneColorStyle(vlan_zone)
+						}, [ desc ]), row[0].firstChild);
+				}
 
 				if (networks[i].isClientDisconnectSupported() && hasWritePermission) {
 					if (assoclist.firstElementChild.childNodes.length < 6)
