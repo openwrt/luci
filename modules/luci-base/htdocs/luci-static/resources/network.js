@@ -639,7 +639,7 @@ function enumerateNetworks() {
 }
 
 
-var Hosts, Network, Protocol, Device, WifiDevice, WifiNetwork;
+var Hosts, Network, Protocol, Device, WifiDevice, WifiNetwork, WifiVlan;
 
 /**
  * @class network
@@ -4150,14 +4150,40 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 */
 	getAssocList: function() {
 		var tasks = [];
-		var ifnames = [ this.getIfname() ].concat(this.getVlanIfnames());
+		var station;
 
-		for (var i = 0; i < ifnames.length; i++)
-			tasks.push(callIwinfoAssoclist(ifnames[i]));
+		for (let vlan of this.getVlans())
+			tasks.push(callIwinfoAssoclist(vlan.getIfname()).then(
+				function(stations) {
+					for (station of stations)
+						station.vlan = vlan;
+
+					return stations;
+				})
+			);
+
+		tasks.push(callIwinfoAssoclist(this.getIfname()));
 
 		return Promise.all(tasks).then(function(values) {
 			return Array.prototype.concat.apply([], values);
 		});
+	},
+
+	/**
+	 * Fetch the vlans for this network.
+	 *
+	 * @returns {Array<LuCI.network.WifiVlan>}
+	 * Returns an array of vlans for this network.
+	 */
+	getVlans: function() {
+		var vlans = [];
+		var vlans_ubus = this.ubus('net', 'vlans');
+
+		if (vlans_ubus)
+			for (let vlan of vlans_ubus)
+				vlans.push(new WifiVlan(vlan));
+
+		return vlans;
 	},
 
 	/**
@@ -4434,6 +4460,79 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 			params: [ 'addr', 'deauth', 'reason', 'ban_time' ]
 		})(mac, deauth, reason, ban_time);
 	}
+});
+
+/**
+ * @class
+ * @memberof LuCI.network
+ * @hideconstructor
+ * @classdesc
+ *
+ * A `Network.WifiVlan` class instance represents a vlan on a WifiNetwork.
+ */
+WifiVlan = baseclass.extend(/** @lends LuCI.network.WifiVlan.prototype */ {
+	__init__: function(vlan) {
+		this.ifname = vlan.ifname;
+		if (L.isObject(vlan.config)) {
+			this.vid = vlan.config.vid;
+			this.name = vlan.config.name;
+
+			if (Array.isArray(vlan.config.network) && vlan.config.network.length)
+				this.network = vlan.config.network[0];
+		}
+	},
+
+	/**
+	 * Get the name of the wifi vlan.
+	 *
+	 * @returns {string}
+	 * Returns the name.
+	 */
+	getName: function() {
+		return this.name;
+	},
+
+	/**
+	 * Get the vlan id of the wifi vlan.
+	 *
+	 * @returns {number}
+	 * Returns the vlan id.
+	 */
+	getVlanId: function() {
+		return this.vid;
+	},
+
+	/**
+	 * Get the network of the wifi vlan.
+	 *
+	 * @returns {string}
+	 * Returns the network.
+	 */
+	getNetwork: function() {
+		return this.network;
+	},
+
+	/**
+	 * Get the Linux network device name of the wifi vlan.
+	 *
+	 * @returns {string}
+	 * Returns the current network device name for this wifi vlan.
+	 */
+	getIfname: function() {
+		return this.ifname;
+	},
+
+	/**
+	 * Get a long description string for the wifi vlan.
+	 *
+	 * @returns {string}
+	 * Returns a string containing the vlan id and the vlan name,
+	 * if it is different than the vlan id
+	 */
+	getI18n: function() {
+		var name =  this.name && this.name != this.vid ? ' (' + this.name + ')' : '';
+		return 'vlan %d%s'.format(this.vid, name);
+	},
 });
 
 return Network;
