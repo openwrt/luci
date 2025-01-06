@@ -1067,13 +1067,13 @@ return view.extend({
 		ss.nodescriptions = true;
 
 		function hexdecodeload(section_id) {
-			let arr = uci.get('dhcp', section_id, this.option) || [];
+			let value = uci.get('dhcp', section_id, this.option) || '';
 			// Remove any spaces or colons from the hex string - they're allowed
-			arr = arr.replace(/[\s:]/g, '');
+			value = value.replace(/[\s:]/g, '');
 			// Hex-decode the string before displaying
 			let decodedString = '';
-			for (let i = 0; i < arr.length; i += 2) {
-				decodedString += String.fromCharCode(parseInt(arr.substr(i, 2), 16));
+			for (let i = 0; i < value.length; i += 2) {
+				decodedString += String.fromCharCode(parseInt(value.substr(i, 2), 16));
 			}
 			return decodedString;
 		}
@@ -1109,7 +1109,7 @@ return view.extend({
 		so.width = '10%';
 		so.rawhtml = true;
 		so.load = function(section_id) {
-			let hexdata = uci.get('dhcp', section_id, 'hexdata') || [];
+			let hexdata = uci.get('dhcp', section_id, 'hexdata') || '';
 			hexdata = hexdata.replace(/[:]/g, '');
 			if (hexdata) {
 				return hexdata.replace(/(.{20})/g, '$1<br/>'); // Inserts <br> after every 2 characters (hex pair)
