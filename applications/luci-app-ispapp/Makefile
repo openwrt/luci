@@ -1,8 +1,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-ispapp
-PKG_VERSION:=1.0.0
-PKG_RELEASE:=1
+PKG_VERSION:=1.0.1
+PKG_RELEASE:=2
 
 PKG_SOURCE_PROTO:=git
 PKG_SOURCE_URL:=https://github.com/ispapp/ispapp-linux-client.git
@@ -45,9 +45,7 @@ define Package/$(PKG_NAME)/postinst
 	if [ -f /etc/uci-defaults/50_luci-ispapp ]; then
 		( . /etc/uci-defaults/50_luci-ispapp ) && rm -f /etc/uci-defaults/50_luci-ispapp
 	fi
-	if [ -f /bin/ispappd ]; then
-		chmod +x /bin/ispappd
-	fi
+	
 	if [ -x /etc/init.d/ispapp ]; then
 		chmod +x /etc/init.d/ispapp
 		/etc/init.d/ispapp enable
