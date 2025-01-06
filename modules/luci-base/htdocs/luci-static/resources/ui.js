@@ -2320,6 +2320,7 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 			e.target.classList.remove('drag-over');
 			const target = e.target.classList.contains('item') ? e.target : dl.querySelector('.add-item');
 			dl.insertBefore(draggedItem, target);
+			this.dispatchCbiDynlistChange(dl, draggedItem.value);
 		});
 
 		dl.addEventListener('click', (e) => {
@@ -2376,6 +2377,7 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 				dl.insertBefore(draggedItem, placeholder);
 				draggedItem.classList.remove('dragging')
 				placeholder.parentNode.removeChild(placeholder);
+				this.dispatchCbiDynlistChange(dl, draggedItem.value);
 				placeholder = null;
 				draggedItem = null;
 			}
@@ -2427,6 +2429,11 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 			ai.parentNode.insertBefore(new_item, ai);
 		}
 
+		this.dispatchCbiDynlistChange(dl,value);
+	},
+
+	/** @private */
+	dispatchCbiDynlistChange(dl,value) {
 		dl.dispatchEvent(new CustomEvent('cbi-dynlist-change', {
 			bubbles: true,
 			detail: {
@@ -2454,15 +2461,7 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 
 		item.parentNode.removeChild(item);
 
-		dl.dispatchEvent(new CustomEvent('cbi-dynlist-change', {
-			bubbles: true,
-			detail: {
-				instance: this,
-				element: dl,
-				value: value,
-				remove: true
-			}
-		}));
+		this.dispatchCbiDynlistChange(dl, value);
 	},
 
 	/** @private */
