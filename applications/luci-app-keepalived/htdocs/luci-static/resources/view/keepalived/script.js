@@ -34,7 +34,7 @@ return view.extend({
 		o.optional = false;
 		o.rmempty = false;
 		if (vrrp_scripts != '') {
-			for (i = 0; i < vrrp_scripts.length; i++) {
+			for (let i = 0; i < vrrp_scripts.length; i++) {
 				o.value(vrrp_scripts[i]['name']);
 			}
 		}
