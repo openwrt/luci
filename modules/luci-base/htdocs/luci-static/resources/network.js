@@ -1655,7 +1655,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 		if (name == null)
 			return null;
 
-		proto = (proto == null ? uci.get('network', name, 'proto') : proto);
+		proto = (proto == null ? (uci.get('network', name, 'proto') || 'none') : proto);
 
 		var protoClass = _protocols[proto] || Protocol;
 		return new protoClass(name);
