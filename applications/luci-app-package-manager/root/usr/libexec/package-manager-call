@@ -109,8 +109,13 @@ case "$action" in
 		rm -f /tmp/ipkg.lock /tmp/ipkg.err /tmp/ipkg.out
 	;;
 	*)
-		echo "Usage: $0 {list-installed|list-available|update}" >&2
-		echo "       $0 {install|upgrade|remove} pkg[ pkg...]" >&2
+		if [ $ipkg_bin = "apk" ]; then
+			echo "Usage: $0 {list-installed|list-available|update}" >&2
+			echo "       $0 {add|upgrade|remove} pkg [pkg...]" >&2
+		else
+			echo "Usage: $0 {list-installed|list-available|update}" >&2
+			echo "       $0 {install|upgrade|remove} pkg [pkg...]" >&2
+		fi
 		exit 1
 	;;
 esac
