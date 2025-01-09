@@ -193,6 +193,8 @@ return network.registerProtocol('wireguard', {
 			return true;
 		};
 
+		o = s.taboption('advanced', form.DynamicList, 'ip6prefix', _('IPv6 routed prefix'), _('This is the prefix routed to you by your provider for use by clients'));
+		o.datatype = 'cidr6';
 
 		// -- peers -----------------------------------------------------------------------
 
