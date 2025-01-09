@@ -214,16 +214,20 @@ function formatSpeed(carrier, speed, duplex) {
 		var d = (duplex == 'half') ? '\u202f(H)' : '',
 		    e = E('span', { 'title': _('Speed: %d Mibit/s, Duplex: %s').format(speed, duplex) });
 
-		switch (speed) {
-		case 10:    e.innerText = '10\u202fM' + d;  break;
-		case 100:   e.innerText = '100\u202fM' + d; break;
-		case 1000:  e.innerText = '1\u202fGbE' + d; break;
-		case 2500:  e.innerText = '2.5\u202fGbE';   break;
-		case 5000:  e.innerText = '5\u202fGbE';     break;
-		case 10000: e.innerText = '10\u202fGbE';    break;
-		case 25000: e.innerText = '25\u202fGbE';    break;
-		case 40000: e.innerText = '40\u202fGbE';    break;
-		default:    e.innerText = '%d\u202fMbE%s'.format(speed, d);
+		switch (true) {
+		case (speed < 1000):
+			e.innerText = '%d\u202fM%s'.format(speed, d);
+			break;
+		case (speed == 1000):
+			e.innerText = '1\u202fGbE' + d;
+			break;
+		case (speed >= 1e6 && speed < 1e9):
+			e.innerText = '%f\u202fTbE'.format(speed / 1e6);
+			break;
+		case (speed >= 1e9):
+			e.innerText = '%f\u202fPbE'.format(speed / 1e9);
+			break;
+		default: e.innerText = '%f\u202fGbE'.format(speed / 1000);
 		}
 
 		return e;
