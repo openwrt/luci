@@ -7,6 +7,7 @@
 'require rpc';
 'require fs';
 'require form';
+'require network';
 'require tools.widgets as widgets';
 
 return view.extend({
@@ -98,6 +99,16 @@ return view.extend({
 					_this.services[service] = false;
 			});
 		}, this))
+	},
+
+	/*
+	* Figure out what the wan interface on the device is.
+	* Determine if the physical device exist, or if we should use an alias.
+	*/
+	callGetWanInterface: function(m, ev) {
+		return network.getDevice('wan').then(dev => dev.getName())
+			.catch(err => network.getNetwork('wan').then(net => '@' + net.getName()))
+			.catch(err => null);
 	},
 
 	/*
@@ -243,7 +254,8 @@ return view.extend({
 			this.callDDnsGetStatus(),
 			this.callDDnsGetEnv(),
 			this.callGenServiceList(),
-			uci.load('ddns')
+			uci.load('ddns'),
+			this.callGetWanInterface()
 		]);
 	},
 
@@ -252,6 +264,7 @@ return view.extend({
 		var status = data[1] || [];
 		var env = data[2] || [];
 		var logdir = uci.get('ddns', 'global', 'ddns_logdir') || "/var/log/ddns";
+		var wan_interface = data[5];
 
 		var _this = this;
 
@@ -865,7 +878,7 @@ return view.extend({
 					o.modalonly = true;
 					o.depends("ip_source", "interface")
 					o.multiple = false;
-					o.default = 'wan';
+					o.default = wan_interface;
 
 					o = s.taboption('advanced', form.Value, 'ip_script',
 						_("Script"),
