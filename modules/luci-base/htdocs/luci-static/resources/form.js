@@ -3863,6 +3863,17 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 const CBIDynamicList = CBIValue.extend(/** @lends LuCI.form.DynamicList.prototype */ {
 	__name__: 'CBI.DynamicList',
 
+	/**
+	 * Allows the underlying form controls to have repeated values.
+	 *
+	 * Default is `null`. If `true`, the underlying form value will
+	 * not be checked for duplication.
+	 *
+	 * @name LuCI.form.DynamicList.prototype#duplicate
+	 * @type boolean
+	 * @default null
+	 */
+
 	/** @private */
 	renderWidget(section_id, option_index, cfgvalue) {
 		const value = (cfgvalue != null) ? cfgvalue : this.default;
@@ -3872,6 +3883,7 @@ const CBIDynamicList = CBIValue.extend(/** @lends LuCI.form.DynamicList.prototyp
 		const widget = new ui.DynamicList(items, choices, {
 			id: this.cbid(section_id),
 			sort: this.keylist,
+			duplicate: this.duplicate,
 			optional: this.optional || this.rmempty,
 			datatype: this.datatype,
 			placeholder: this.placeholder,
