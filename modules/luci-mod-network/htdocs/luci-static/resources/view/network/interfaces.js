@@ -515,12 +515,8 @@ return view.extend({
 		};
 
 		s.addModalOptions = function(s) {
-			var protoval = uci.get('network', s.section, 'proto'),
-			    protoclass = protoval ? network.getProtocol(protoval) : null,
+			var protoval = uci.get('network', s.section, 'proto') || 'none',
 			    o, proto_select, proto_switch, type, stp, igmp, ss, so;
-
-			if (!protoval)
-				return;
 
 			return network.getNetwork(s.section).then(L.bind(function(ifc) {
 				var protocols = network.getProtocols();
@@ -544,6 +540,7 @@ return view.extend({
 
 				proto_select = s.taboption('general', form.ListValue, 'proto', _('Protocol'));
 				proto_select.modalonly = true;
+				proto_select.default = 'none';
 
 				proto_switch = s.taboption('general', form.Button, '_switch_proto');
 				proto_switch.modalonly  = true;
@@ -612,7 +609,7 @@ return view.extend({
 				for (var i = 0; i < protocols.length; i++) {
 					proto_select.value(protocols[i].getProtocol(), protocols[i].getI18n());
 
-					if (protocols[i].getProtocol() != uci.get('network', s.section, 'proto'))
+					if (protocols[i].getProtocol() != protoval)
 						proto_switch.depends('proto', protocols[i].getProtocol());
 				}
 
