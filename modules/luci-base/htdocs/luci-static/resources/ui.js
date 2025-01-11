@@ -1598,7 +1598,7 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 		let markup = null;
 
 		if (tpl)
-			markup = (tpl.textContent ?? tpl.innerHTML ?? tpl.firstChild.data).replace(/^<!--|-->$/, '').trim();
+			markup = (tpl.textContent ?? tpl.innerHTML ?? tpl.firstChild.data).replace(/^<!--|--!?>$/g, '').trim();
 		else
 			markup = '<li data-value="{{value}}"><span data-label-placeholder="true" /></li>';
 
