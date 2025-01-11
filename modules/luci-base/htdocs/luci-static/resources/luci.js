@@ -680,6 +680,7 @@
 							switch (opt.method) {
 							case 'GET':
 							case 'HEAD':
+							case 'POST':
 							case 'OPTIONS':
 								opt.url += ((/\?/).test(opt.url) ? '&' : '?') + q;
 								break;
