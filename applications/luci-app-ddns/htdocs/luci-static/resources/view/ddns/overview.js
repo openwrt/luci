@@ -586,6 +586,7 @@ return view.extend({
 			return _this.handleGetServiceData(service).then(L.bind(function (service_data) {
 				s.service_available = true;
 				s.service_supported = true;
+				s.url = null;
 
 				if (service != '-') {
 					if (!service_data)
@@ -594,6 +595,11 @@ return view.extend({
 						service_data = JSON.parse(service_data);
 						if (ipv6 == "1" && !service_data.ipv6)
 							s.service_supported = false;
+						else if (ipv6 == "1") {
+							s.url = service_data.ipv6.url;
+						} else {
+							s.url = service_data.ipv4.url;
+						}
 					}
 				}
 
@@ -672,6 +678,14 @@ return view.extend({
 					o.cfgvalue = function () {
 						return _("Service doesn't support this IP type")
 					};
+				}
+
+				if (Boolean(s.url)) {
+					o = s.taboption('basic', form.DummyValue, '_url', _("Update URL"));
+					o.rawhtml = true;
+					o.default = '<div style="font-family: monospace;">'
+						+ s.url.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+						+ '</div>';
 				}
 
 				var service_switch = s.taboption('basic', form.Button, '_switch_proto');
