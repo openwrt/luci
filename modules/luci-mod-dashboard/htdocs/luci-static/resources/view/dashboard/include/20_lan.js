@@ -25,16 +25,6 @@ return baseclass.extend({
 
 		var container_wapper = E('div', { 'class': 'router-status-lan dashboard-bg box-s1' });
 		var container_box = E('div', { 'class': 'lan-info devices-list' });
-		var container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
-			E('tr', { 'class': 'tr table-titles  dashboard-bg' }, [
-				E('th', { 'class': 'th nowrap' }, _('Hostname')),
-				E('th', { 'class': 'th' }, _('IP Address')),
-				E('th', { 'class': 'th' }, _('MAC')),
-			])
-		]);
-
-		var container_deviceslist = E('table', { 'class': 'table assoclist devices-info' });
-
 		container_box.appendChild(E('div', { 'class': 'title'}, [
 			E('img', {
 				'src': L.resource('view/dashboard/icons/devices.svg'),
@@ -45,10 +35,18 @@ return baseclass.extend({
 			E('h3', this.title)
 		]));
 
+		var container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
+			E('tr', { 'class': 'tr dashboard-bg' }, [
+				E('th', { 'class': 'th nowrap' }, _('Hostname')),
+				E('th', { 'class': 'th' }, _('IP Address')),
+				E('th', { 'class': 'th' }, _('MAC')),
+			])
+		]);
+
 		for(var idx in this.params.lan.devices) {
 			var device = this.params.lan.devices[idx];
 
-			container_deviceslist.appendChild(E('tr', { 'class': 'tr cbi-rowstyle-1'}, [
+			container_devices.appendChild(E('tr', { 'class': 'tr cbi-rowstyle-1'}, [
 
 				E('td', { 'class': 'td device-info'}, [
 					E('p', {}, [
@@ -70,10 +68,7 @@ return baseclass.extend({
 			]));
 		}
 
-		container_box.appendChild(E('hr'));
 		container_box.appendChild(container_devices);
-		container_box.appendChild(E('hr'));
-		container_box.appendChild(container_deviceslist);
 		container_wapper.appendChild(container_box);
 
 		return container_wapper;
