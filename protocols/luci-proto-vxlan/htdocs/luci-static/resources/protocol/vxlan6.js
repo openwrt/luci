@@ -125,7 +125,7 @@ return network.registerProtocol('vxlan6', {
 		o.optional = true;
 
 		o = s.taboption('general', form.Value, 'vid', _('VXLAN network identifier'),
-			_('VNI') + ': ' + _('ID used to uniquely identify the VXLAN'));
+			_('VNI') + ': ' + _('ID used to identify the VXLAN uniquely'));
 		o.optional = true;
 		o.datatype = 'range(1, 16777216)';
 
