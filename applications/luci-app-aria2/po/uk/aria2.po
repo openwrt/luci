@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-10-17 17:10+0000\n"
-"Last-Translator: Max <Prototypem95@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-01-13 06:59+0000\n"
+"Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/uk/>\n"
 "Language: uk\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:433
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -658,7 +658,7 @@ msgstr "Налаштування в цьому розділі будуть до�
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:624
 msgid "Settings list"
-msgstr ""
+msgstr "Список налаштувань"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:585
 msgid ""
@@ -670,12 +670,22 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
+"Вкажіть спосіб розміщення файлів. Якщо ви використовуєте новіші файлові "
+"системи, такі як ext4 (з підтримкою екстентів), btrfs, xfs або NTFS (тільки "
+"збірка MinGW), «falloc» — ваш найкращий вибір. Він майже миттєво розміщує "
+"великі (кілька ГіБ) файли, але може бути недоступним, якщо у вашій системі "
+"немає функції posix_fallocate(3). Не використовуйте \"falloc\" із "
+"застарілими файловими системами, такими як ext3 і FAT32, оскільки це займає "
+"майже стільки ж часу, скільки \"prealloc\", і повністю блокує aria2, доки не "
+"завершиться розподіл."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:505
 msgid ""
 "Specify maximum number of files to open in multi-file BitTorrent download "
 "globally."
 msgstr ""
+"Укажіть максимальну кількість файлів для глобального відкриття під час "
+"багатофайлового завантаження BitTorrent."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:546
 msgid ""
@@ -683,6 +693,9 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
+"Вкажіть час посіву в хвилинах. Якщо разом із цією опцією вказано параметр «"
+"Коефіцієнт посіву», посів завершується, коли виконується принаймні одна з "
+"умов. Зазначення 0 вимикає заповнення після завершення завантаження."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:539
 msgid ""
@@ -690,10 +703,16 @@ msgid ""
 "RATIO. You are strongly encouraged to specify equals or more than 1.0 here. "
 "Specify 0.0 if you intend to do seeding regardless of share ratio."
 msgstr ""
+"Вкажіть коефіцієнт частки. Заповнення торрентів завершено, поки коефіцієнт "
+"частки не досягне RATIO. Вам наполегливо рекомендується вказати тут "
+"значення, що дорівнює або більше ніж 1,0. Укажіть 0,0, якщо ви маєте намір "
+"зробити засівання незалежно від співвідношення часток."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:510
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
 msgstr ""
+"Вкажіть максимальну кількість пірів на торрент, 0 означає необмежену "
+"кількість."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:531
 msgid ""
@@ -702,42 +721,50 @@ msgid ""
 "than 20 bytes are specified, random byte data are added to make its length "
 "20 bytes."
 msgstr ""
+"Укажіть префікс ідентифікатора однорангового пристрою. Довжина однорангового "
+"ідентифікатора в BitTorrent становить 20 байт. Якщо вказано більше 20 "
+"байтів, використовуються лише перші 20 байтів. Якщо вказано менше 20 байтів, "
+"випадкові дані байтів додаються, щоб зробити їхню довжину 20 байтами."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:525
 msgid ""
 "Stop BitTorrent download if download speed is 0 in consecutive N seconds. If "
 "0 is given, this feature is disabled."
 msgstr ""
+"Зупинити завантаження BitTorrent, якщо швидкість завантаження становить 0 "
+"протягом N секунд поспіль. Якщо задано 0, ця функція вимкнена."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:524
 msgid "Stop timeout"
-msgstr ""
+msgstr "Тайм-аут зупинки"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:36
 msgid "The Aria2 service is not running."
-msgstr ""
+msgstr "Служба Aria2 не працює."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:35
 msgid "The Aria2 service is running."
-msgstr ""
+msgstr "Сервіс Aria2 працює."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:217
 msgid "The directory to store the config file, session file and DHT file."
-msgstr ""
+msgstr "Каталог для зберігання файлу конфігурації, файлу сеансу та файлу DHT."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:213
 msgid ""
 "The directory to store the downloaded file. For example <code>/mnt/sda1</"
 "code>."
 msgstr ""
+"Каталог для зберігання завантаженого файлу. Наприклад <code>/mnt/sda1</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:224
 msgid "The file name of the log file."
-msgstr ""
+msgstr "Ім'я файлу журналу."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:386
 msgid "The maximum number of connections to one server for each download."
 msgstr ""
+"Максимальна кількість підключень до одного сервера для кожного завантаження."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:418
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:428
@@ -745,6 +772,7 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:445
 msgid "This option will be ignored if a private flag is set in a torrent."
 msgstr ""
+"Цей параметр ігноруватиметься, якщо в торренті встановлено приватний прапор."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:373
 msgid "Timeout"
@@ -752,21 +780,24 @@ msgstr "Часове обмеження"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:260
 msgid "Token"
-msgstr ""
+msgstr "Токен"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:486
 msgid "True"
-msgstr ""
+msgstr "правда"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:310
 msgid "Use a proxy server for all protocols."
-msgstr ""
+msgstr "Використовуйте проксі-сервер для всіх протоколів."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:330
 msgid ""
 "Use the certificate authorities in FILE to verify the peers. The certificate "
 "file must be in PEM format and can contain multiple CA certificates."
 msgstr ""
+"Використовуйте центри сертифікації у файлі FILE для перевірки однорангових "
+"вузлів. Файл сертифіката має бути у форматі PEM і може містити кілька "
+"сертифікатів ЦС."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:284
 msgid ""
@@ -776,6 +807,11 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"RPC private key\" as well."
 msgstr ""
+"Використовуйте сертифікат у ФАЙЛІ для сервера RPC. Сертифікат має бути у "
+"форматі PKCS12 (.p12, .pfx) або у форматі PEM.<br/>Файли PKCS12 мають "
+"містити сертифікат, ключ і, за бажанням, ланцюжок додаткових сертифікатів. "
+"Можна відкривати лише файли PKCS12 із порожнім паролем імпорту!<br/>Під час "
+"використання PEM також потрібно вказати \"приватний ключ RPC\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:335
 msgid ""
@@ -785,35 +821,47 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
+"Використовуйте сертифікат клієнта у ФАЙЛІ. Сертифікат має бути у форматі "
+"PKCS12 (.p12, .pfx) або у форматі PEM.<br/>Файли PKCS12 мають містити "
+"сертифікат, ключ і, за бажанням, ланцюжок додаткових сертифікатів. Можна "
+"відкривати лише файли PKCS12 із порожнім паролем імпорту!<br/>Під час "
+"використання PEM також потрібно вказати «Закритий ключ»."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:294
 msgid ""
 "Use the private key in FILE for RPC server. The private key must be "
 "decrypted and in PEM format."
 msgstr ""
+"Використовуйте приватний ключ у файлі FILE для сервера RPC. Приватний ключ "
+"має бути розшифрованим і мати формат PEM."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:342
 msgid ""
 "Use the private key in FILE. The private key must be decrypted and in PEM "
 "format. The behavior when encrypted one is given is undefined."
 msgstr ""
+"Використовуйте закритий ключ у файлі FILE. Приватний ключ має бути "
+"розшифрованим і мати формат PEM. Поведінка, коли задано зашифрований, не "
+"визначена."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:408
 msgid "User agent"
-msgstr ""
+msgstr "Агент користувача"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:259
 msgid "Username & Password"
-msgstr ""
+msgstr "Ім'я користувача та пароль"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:323
 msgid ""
 "Verify the peer using certificates specified in \"CA certificate\" option."
 msgstr ""
+"Перевірте вузол за допомогою сертифікатів, указаних у параметрі «Сертифікат "
+"ЦС»."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:233
 msgid "Warn"
-msgstr ""
+msgstr "Попередити"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:381
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:493
@@ -823,19 +871,19 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:608
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:615
 msgid "You can append K or M."
-msgstr ""
+msgstr "Ви можете додати K або M."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:594
 msgid "falloc"
-msgstr ""
+msgstr "falloc"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:592
 msgid "prealloc"
-msgstr ""
+msgstr "попередньо виділити"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:593
 msgid "trunc"
-msgstr ""
+msgstr "стовбур"
 
 #~ msgid "Empty file."
 #~ msgstr "Порожній файл."

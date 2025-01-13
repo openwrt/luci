@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-24 11:11+0000\n"
-"Last-Translator: Костянтин Серьогін <seryoginki@gmail.com>\n"
+"PO-Revision-Date: 2025-01-13 06:59+0000\n"
+"Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/uk/>\n"
 "Language: uk\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -50,11 +50,11 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
-msgstr ""
+msgstr "Адреса сім’ї, щоб пінгувати хоста"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
 msgid "Any"
-msgstr ""
+msgstr "Будь-який"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:84
 msgid "Big: 248 bytes"
@@ -112,7 +112,7 @@ msgstr "Величезний: 1492 байта"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "IP-адреса або ім’я хоста для ping."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
@@ -135,6 +135,17 @@ msgid ""
 "li><li>5 minutes would be: <b>5m</b></li><li> 1 hour would be: <b>1h</b></"
 "li><li>1 week would be: <b>7d</b></li><ul>"
 msgstr ""
+"У режимі періодичного перезавантаження він визначає частоту "
+"перезавантаження. <br /> У режимі перезавантаження Ping він визначає "
+"найдовший період часу без відповіді від хоста для перевірки, перш ніж "
+"розпочнеться перезавантаження. <br /> У режимі перезапуску мережі або "
+"запуску сценарію він визначає найдовший період часу без відповіді від хоста "
+"для перевірки перед перезапуском інтерфейсу або виконанням сценарію. <br /"
+"><br />За замовчуванням одиницею вимірювання є секунди без суфікса, але ви "
+"можете використовувати суфікс <b>m</b> для хвилин, <b>h</b> для годин або "
+"<b>d </b> протягом днів. <br /><br />Приклади:<ul><li>10 секунд будуть: "
+"<b>10</b> або <b>10с</b></li><li>5 хвилин будуть: <b>5 хвилин</b></li><li> 1 "
+"година буде: <b>1 година</b></li><li>1 тиждень буде: <b>7 днів</b></ li><ul>"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:102
 msgid "Interface"
@@ -181,6 +192,13 @@ msgid ""
 "time. <br /> Run Script: Run a script if a ping to a specified host fails "
 "for a specified duration of time. <br />"
 msgstr ""
+"Перезавантаження ping: перезавантажте цей пристрій, якщо ping до вказаного "
+"хосту не вдається протягом певного періоду часу. <br /> Періодичне "
+"перезавантаження: перезавантажте цей пристрій через визначений проміжок "
+"часу. <br /> Перезапустити інтерфейс: перезапустити мережевий інтерфейс, "
+"якщо пінг до вказаного хоста не вдається протягом певного періоду часу. <br /"
+"> Запустити сценарій: запустіть сценарій, якщо запит ping до вказаного хосту "
+"не вдається протягом певного періоду часу. <br />"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
@@ -188,17 +206,19 @@ msgstr "Перезапустити інтерфейс"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Запустіть сценарій"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Сценарій для запуску"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
 "Script to run when the host has not responded for the specified duration of "
 "time. The script is passed the interface name as $1"
 msgstr ""
+"Сценарій для запуску, коли хост не відповідає протягом зазначеного періоду "
+"часу. Сценарій передає назву інтерфейсу як $1"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
