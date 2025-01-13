@@ -89,7 +89,7 @@ return view.extend({
 		o = s.taboption("tab_basic", widgets.DeviceSelect, "interface", _("Interface name"));
 		o.rmempty = false;
 
-		o = s.taboption("tab_basic", form.Value, "download", _("Download speed (ingress)"), _("Download speed (kbit/s) (ingress) set to 0 to selectively disable ingress shaping"));
+		o = s.taboption("tab_basic", form.Value, "download", _("Download speed (ingress)"), _("Download speed (kbit/s) (ingress) set to 0 to disable ingress shaping selectively"));
 		o.datatype = "and(uinteger,min(0))";
 		o.rmempty = false;
 
