@@ -5014,8 +5014,8 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * default.
 	 *
 	 * @returns {function}
-	 * Returns the compiled validator function which can be used to manually
-	 * trigger field validation or to bind it to further events.
+	 * Returns the compiled validator function which can be used to trigger
+	 * field validation manually or to bind it to further events.
 	 *
 	 * @see LuCI.validation
 	 */

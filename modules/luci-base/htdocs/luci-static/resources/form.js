@@ -4493,8 +4493,8 @@ const CBIDummyValue = CBIValue.extend(/** @lends LuCI.form.DummyValue.prototype 
 	 * Treat the UCI option value (or the `default` property value) as HTML.
 	 *
 	 * By default, the value text is HTML escaped before being rendered as
-	 * text. In some cases it may be needed to actually interpret and render
-	 * HTML contents as-is. When set to `true`, HTML escaping is disabled.
+	 * text. In some cases, HTML content may need to be interpreted and
+	 * rendered as-is. When set to `true`, HTML escaping is disabled.
 	 *
 	 * @name LuCI.form.DummyValue.prototype#rawhtml
 	 * @type boolean
