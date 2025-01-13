@@ -114,7 +114,7 @@ function handleAction(ev) {
 				}
 			}, optionsAP);
 			L.ui.showModal(_('QR-Code Overview'), [
-				E('p', _('Render the QR-Code of the selected Access Point to comfortably transfer the WLAN credentials to your mobile devices.')),
+				E('p', _('Render the QR-Code of the selected Access Point to transfer the WLAN credentials to your mobile devices comfortably.')),
 				E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 					E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
 						selectAP,
