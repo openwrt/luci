@@ -23,8 +23,8 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.option(form.Flag, 'detect_upstream', _('Auto-detect upstream IP'), 
-			_('Attempt to automatically detect if the upstream IP ' +
-			'will be blocked by the configuration, and add an exception if it will. ' +
+			_('Automatically attempt to detect whether the upstream IP ' +
+			'will be blocked by the configuration, adding an exception if so. ' +
 			'If this does not work correctly, you can add exceptions manually below.')); 
 		o.rmempty = false;
 
