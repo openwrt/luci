@@ -308,7 +308,7 @@ return network.registerProtocol('yggdrasil',
 				form.HiddenValue,
 				'hidden_value',
 				' ',
-				_('%s is an independent project that aims to transparently reduce latency of a connection over Yggdrasil network, utilizing NAT traversal to bypass intermediary nodes.'.format('<a href="https://github.com/one-d-wide/yggdrasil-jumper">Yggdrasil Jumper</a>'))
+				_('%s is an independent project that aims to reduce latency of a connection over Yggdrasil network transparently, utilizing NAT traversal to bypass intermediary nodes.'.format('<a href="https://github.com/one-d-wide/yggdrasil-jumper">Yggdrasil Jumper</a>'))
 					+ ' ' + _('It periodically probes for active sessions and automatically establishes direct peerings over internet with remote nodes running Yggdrasil Jumper without requiring firewall or port configuration.')
 			);
 
@@ -353,7 +353,7 @@ return network.registerProtocol('yggdrasil',
 				form.Flag,
 				'allocate_listen_addresses',
 				_('Allocate listen addresses'),
-				_('Allow Yggdrasil Jumper to automatically configure Yggdrasil with proper listen address and random port.')
+				_('Allow Yggdrasil Jumper to configure Yggdrasil with proper listen address and random port automatically.')
 			);
 			o.default=true;
 			o.rmempty=false;
