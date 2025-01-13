@@ -612,7 +612,7 @@ return view.extend({
 			E(
 				'p',
 				_(
-					'The attended sysupgrade service allows to easily upgrade vanilla and custom firmware images.'
+					'The attended sysupgrade service allows to upgrade vanilla and custom firmware images easily.'
 				)
 			),
 			E(
