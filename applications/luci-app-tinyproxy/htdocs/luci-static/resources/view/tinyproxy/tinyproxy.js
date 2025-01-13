@@ -226,7 +226,7 @@ return view.extend({
 
 
 		s.taboption('filteracl', form.Flag, 'FilterDefaultDeny', _('Default deny'),
-			_('By default, the filter rules act as blacklist. Enable this option to only allow matched URLs or domain names'));
+			_('By default, the filter rules act as blacklist. Enable this option to allow matched URLs or domain names only'));
 
 
 		//
