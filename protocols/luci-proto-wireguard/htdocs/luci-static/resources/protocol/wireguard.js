@@ -422,7 +422,7 @@ return network.registerProtocol('wireguard', {
 					E('p', _('Drag or paste a valid <em>*.conf</em> file below to configure the local WireGuard interface.'))
 				] : [
 					E('p', _('Paste or drag a WireGuard configuration (commonly <em>wg0.conf</em>) from another system below to create a matching peer entry allowing that system to connect to the local WireGuard interface.')),
-					E('p', _('To fully configure the local WireGuard interface from an existing (e.g. provider supplied) configuration file, use the <strong><a class="full-import" href="#">configuration import</a></strong> instead.'))
+					E('p', _('To configure fully the local WireGuard interface from an existing (e.g. provider supplied) configuration file, use the <strong><a class="full-import" href="#">configuration import</a></strong> instead.'))
 				]),
 				E('p', [
 					E('textarea', {
