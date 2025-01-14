@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-12-20 20:38+0000\n"
-"Last-Translator: Zorya Zvenoch <svetarozenbaum@gmail.com>\n"
+"PO-Revision-Date: 2025-01-14 15:18+0000\n"
+"Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/uk/>\n"
 "Language: uk\n"
@@ -43,7 +43,7 @@ msgstr "Спеціальна конфігурація"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:411
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr ""
+msgstr "Користувацька конфігурація зчитується з /etc/fwknop/access.conf."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:577
 msgid ""
@@ -51,6 +51,9 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
+"Визначте набір портів і протоколів (tcp або udp), які явно заборонені "
+"незалежно від дійсності вхідного пакета SPA. Кілька записів відокремлюються "
+"комами."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:572
 msgid ""
@@ -59,12 +62,20 @@ msgid ""
 "to honor any proto/port request specified in the SPA data (unless of it "
 "matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
 msgstr ""
+"Визначте набір портів і протоколів (tcp або udp), які відкриватимуться, якщо "
+"буде помічено дійсну послідовність кноків. Якщо цей запис не встановлено, "
+"fwknopd намагатиметься задовольнити будь-який запит прото/порту, указаний у "
+"даних SPA (якщо він не збігається з будь-якими записами «RESTRICT_PORTS»). "
+"Кілька записів відокремлюються комами."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:558
 msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
+"Визначте ключ автентифікації HMAC (у кодуванні Base64), який "
+"використовується для перевірки автентичності пакета SPA перед розшифруванням "
+"пакета."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:550
 msgid ""
