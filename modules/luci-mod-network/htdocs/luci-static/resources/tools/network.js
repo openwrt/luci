@@ -679,7 +679,7 @@ return baseclass.extend({
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'xmit_hash_policy', _('Slave selection hash policy'));
 		o.default = '';
-		o.value('', _(''));
+		o.value('', '');
 		o.value('layer2', _('Layer 2'));
 		o.value('layer2+3', _('Layer 2+3'));
 		o.value('layer3+4', _('Layer 3+4'));
@@ -730,7 +730,7 @@ return baseclass.extend({
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'ad_select', _('802.3ad aggregation logic'));
 		o.default = '';
-		o.value('', _(''));
+		o.value('', '');
 		o.value('stable', _('Stable'));
 		o.value('bandwidth', _('Bandwidth'));
 		o.value('count', _('Count'));
@@ -758,7 +758,7 @@ return baseclass.extend({
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'lacp_rate', _('802.3ad LACPDU packet rate'));
 		o.default = '';
-		o.value('', _(''));
+		o.value('', '');
 		o.value('slow', _('Slow (every 30 seconds)'));
 		o.value('fast', _('Fast (every second)'));
 		o.cfgvalue = function(/* ... */) {
@@ -815,7 +815,7 @@ return baseclass.extend({
 
 		o = this.replaceOption(s, 'devadvanced', form.ListValue, 'primary_reselect', _('Primary port reselection policy'));
 		o.default = '';
-		o.value('', _(''));
+		o.value('', '');
 		o.value('always', _('Always'));
 		o.value('better', _('Better'));
 		o.value('failure', _('Failure'));
