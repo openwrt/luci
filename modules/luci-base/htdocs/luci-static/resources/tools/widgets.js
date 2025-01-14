@@ -148,6 +148,9 @@ var CBIZoneSelect = form.ListValue.extend({
 			display_items: this.display_size || this.size || 3,
 			dropdown_items: this.dropdown_size || this.size || 5,
 			validate: L.bind(this.validate, this, section_id),
+			datatype: L.hasSystemFeature('firewall4')
+				? ( this.multiple ? 'list(uciname)' : 'uciname' )
+				: this.multiple ? 'list(and(uciname,maxlength(11)))' : 'and(uciname,maxlength(11))',
 			create: !this.nocreate,
 			create_markup: '' +
 				'<li data-value="{{value}}">' +
