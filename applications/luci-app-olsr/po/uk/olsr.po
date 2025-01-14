@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-01-14 15:18+0000\n"
+"PO-Revision-Date: 2025-01-15 05:30+0000\n"
 "Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/uk/>\n"
@@ -65,10 +65,12 @@ msgstr "Погано (SNR < 5)"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:17
 msgid "Both values must use the dotted decimal notation."
 msgstr ""
+"Обидва значення мають використовувати десяткову систему позначення з "
+"крапками."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:142
 msgid "Broadcast address"
-msgstr ""
+msgstr "Трансляційна адреса"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:136
 msgid "Device"
@@ -77,7 +79,7 @@ msgstr "Пристрій"
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:14
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:56
 msgid "Display"
-msgstr ""
+msgstr "Дисплей"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:137
 msgid "Downlink"
@@ -86,13 +88,13 @@ msgstr "Низхідне з'єднання"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:143
 msgid "ETX"
-msgstr ""
+msgstr "ETX"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:538
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:292
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:180
 msgid "ETX:"
-msgstr ""
+msgstr "ETX:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:60
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:513
@@ -111,11 +113,13 @@ msgid ""
 "Enable SmartGateway. If it is disabled, then all other SmartGateway "
 "parameters are ignored. Default is \"no\"."
 msgstr ""
+"Увімкніть SmartGateway. Якщо його вимкнено, усі інші параметри SmartGateway "
+"ігноруються. За замовчуванням \"ні\".\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:41
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:41
 msgid "Enable this interface."
-msgstr ""
+msgstr "Увімкніть цей інтерфейс."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:278
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:276
@@ -126,12 +130,12 @@ msgstr "Увімкнено"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:292
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:180
 msgid "Expected retransmission count"
-msgstr ""
+msgstr "Очікувана кількість повторних передач"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:153
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:147
 msgid "FIB metric"
-msgstr ""
+msgstr "Метрика FIB"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:155
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:149
@@ -143,11 +147,20 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
+"FIBMetric контролює значення метрики наборів хост-маршрутів OLSRd. \"flat\" "
+"означає, що значення метрики завжди дорівнює 2. Це значення є кращим, "
+"оскільки воно допомагає маршрутизації ядра Linux очищати старі маршрути. "
+"\"правильно\" використовує кількість стрибків як значення метрики. "
+"\"приблизно\" також використовує кількість стрибків як значення метрики, але "
+"оновлює кількість стрибків, лише якщо змінюється наступний стрибок. За "
+"замовчуванням встановлено \"рівний\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:209
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:203
 msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
 msgstr ""
+"Механізм «риб’яче око» для TC (позначено означає ввімкнено). За "
+"замовчуванням увімкнено"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:132
 msgid "Gateway"
