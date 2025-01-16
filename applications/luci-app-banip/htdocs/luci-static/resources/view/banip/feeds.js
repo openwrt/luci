@@ -143,6 +143,9 @@ function handleEdit(ev) {
 				case 'rule_6':
 					subElements.rule_6 = value;
 					break;
+				case 'chain':
+					subElements.chain = value;
+					break;
 				case 'descr':
 					subElements.descr = value;
 					break;
@@ -169,7 +172,7 @@ return view.extend({
 	},
 
 	render: function (data) {
-		let m, s, o, feed, url_4, url_6, rule_4, rule_6, descr, flag;
+		let m, s, o, feed, url_4, url_6, rule_4, rule_6, chain, descr, flag;
 
 		m = new form.JSONMap(data, _('Custom Feed Editor'), _('With this editor you can upload your local custom feed file or fill up an initial one (a 1:1 copy of the version shipped with the package). \
 			The file is located at \'/etc/banip/banip.custom.feeds\'. \
@@ -180,6 +183,7 @@ return view.extend({
 			rule_4 = m.data.data[feed].rule_4;
 			url_6 = m.data.data[feed].url_6;
 			rule_6 = m.data.data[feed].rule_6;
+			chain = m.data.data[feed].chain;
 			descr = m.data.data[feed].descr;
 			flag = m.data.data[feed].flag;
 
@@ -211,7 +215,19 @@ return view.extend({
 				return true;
 			}
 
-			o = s.option(form.Value, 'rule_4', _('Rulev4'));
+			o = s.option(form.ListValue, 'rule_4', _('Rulev4'));
+			o.value('/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)[[:space:]]/{printf \"%s,\\n\",$1}', _('<IPv4><SPACE>'));
+			o.value('/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)$/{printf \"%s,\\n\",$1}', _('<IPv4><END>'));
+			o.value('/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)[[:space:]]/{printf \"%s/%s,\\n\",$1,$3}', _('<IPv4><SPACE>, concatinated'));
+			o.value('/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)$/{if(!seen[$1]++)printf \"%s,\\n\",$1}', _('<IPv4><END>, nodups'));
+			o.value('/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)[-[:space:]]?/{printf \"%s,\\n\",$1}', _('<IPv4>[<SPACE>|<HYPHEN>]'));
+			o.value('/127\\./{next}/(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)[[:space:]]/{printf \"%s,\\n\",$2}', _('<DATE><IPv4><SPACE>'));
+			o.value('BEGIN{FS=\",\"}/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)/{printf \"%s,\\n\",$1}', _('<IPv4>, csv'));
+			o.value('BEGIN{IGNORECASE=1}/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)([[:space:]]NET)/{printf \"%s,\\n\",$1}', _('<IPv4><SPACE>NET'));
+			o.value('BEGIN{IGNORECASE=1}/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)([[:space:]]YOUR)/{printf \"%s,\\n\",$1}', _('<IPv4><SPACE>YOUR'));
+			o.value('BEGIN{FS=\";\"}/content:\"127\\./{next}/(content:\"([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])\")/{printf \"%s,\\n\",substr($10,11,length($10)-11)}', _('<IPv4>, substring'));
+			o.optional = true;
+			o.rmempty = true;
 
 			o = s.option(form.Value, 'url_6', _('URLv6'));
 			o.validate = function (section_id, value) {
@@ -224,10 +240,20 @@ return view.extend({
 				return true;
 			}
 
-			o = s.option(form.Value, 'rule_6', _('Rulev6'));
+			o = s.option(form.ListValue, 'rule_6', _('Rulev6'));
+			o.value('/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)[[:space:]]/{printf \"%s,\\n\",$1}', _('<IPv6><SPACE>'));
+			o.value('/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)$/{printf \"%s,\\n\",$1}', _('<IPv6><END>'));
+			o.optional = true;
+			o.rmempty = true;
+
+			o = s.option(form.ListValue, 'chain', _('Chain'));
+			o.value('in', _('Inbound'));
+			o.value('out', _('Outbound'));
+			o.value('inout', _('Inbound & Outbound'));
+			o.default = 'in';
 
 			o = s.option(form.Value, 'descr', _('Description'));
-			o.datatype = 'and(minlength(3),maxlength(30))';
+			o.datatype = 'and(minlength(5),maxlength(30))';
 			o.validate = function (section_id, value) {
 				if (!value) {
 					return _('Empty field not allowed');

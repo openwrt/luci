@@ -135,10 +135,6 @@ return view.extend({
 							if (last_run) {
 								last_run.textContent = rtRes.lastRun || '-';
 							}
-							infSystem = document.getElementById('system');
-							if (infSystem) {
-								infSystem.textContent = rtRes.systemInfo || '-';
-							}
 						}
 					} else {
 						infStat = document.getElementById('status');
@@ -162,48 +158,44 @@ return view.extend({
 			return E('div', { 'class': 'cbi-section' }, [
 				E('h3', _('Information')),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Status')),
-					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '\xa0')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Status')),
+					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'margin-bottom:-5px;color:#37c;' }, '\xa0')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Version')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'version', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Version')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'version', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Element Count')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'elements', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Element Count')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'elements', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Active Feeds')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'feeds', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Active Feeds')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'feeds', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Active Devices')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'devices', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Active Devices')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'devices', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Active Uplink')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'uplink', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Active Uplink')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'uplink', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('NFT Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'nft', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('NFT Information')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'nft', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Run Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Information')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Run Flags')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'flags', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Flags')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'flags', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('Last Run')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;font-weight:bold;padding-top:0rem;' }, _('System Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'system', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, '-')
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Last Run')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { class: 'right' }, [
 					E('button', {
@@ -258,7 +250,7 @@ return view.extend({
 		o = s.taboption('general', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>'
-					+ '<hr style="width: 200px; height: 1px;" />';
+			+ '<hr style="width: 200px; height: 1px;" />';
 
 		o = s.taboption('general', form.Flag, 'ban_enabled', _('Enabled'), _('Enable the banIP service.'));
 		o.rmempty = false;
@@ -345,7 +337,7 @@ return view.extend({
 		o = s.taboption('advanced', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>'
-					+ '<hr style="width: 200px; height: 1px;" />';
+			+ '<hr style="width: 200px; height: 1px;" />';
 
 		o = s.taboption('advanced', form.ListValue, 'ban_nicelimit', _('Nice Level'), _('The selected priority will be used for banIP background processing.'));
 		o.value('-20', _('Highest Priority'));
@@ -401,13 +393,13 @@ return view.extend({
 		o.placeholder = '/tmp/banIP-report';
 		o.rmempty = true;
 
+		o = s.taboption('advanced', form.Value, 'ban_errordir', _('Error Directory'), _('Target directory for banIP-related error files.'));
+		o.placeholder = '/tmp/banIP-error';
+		o.rmempty = true;
+
 		o = s.taboption('advanced', form.Flag, 'ban_deduplicate', _('Deduplicate IPs'), _('Deduplicate IP addresses across all active Sets and tidy up the local blocklist.'));
 		o.default = 1
 		o.rmempty = false;
-
-		o = s.taboption('advanced', form.Flag, 'ban_reportelements', _('Report Elements'), _('List Set elements in the status and report, disable this to reduce the CPU load.'));
-		o.default = 1
-		o.optional = true;
 
 		/*
 			advanced chain settings tab
@@ -415,14 +407,13 @@ return view.extend({
 		o = s.taboption('adv_chain', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>'
-					+ '<hr style="width: 200px; height: 1px;" />';
+			+ '<hr style="width: 200px; height: 1px;" />';
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_nftpriority', _('Chain Priority'), _('Set the nft chain priority within the banIP table, lower values means higher priority.'));
 		o.value('10');
 		o.value('0');
 		o.value('-100');
 		o.value('-150');
-		o.value('-200');
 		o.default = '-100';
 		o.placeholder = _('-- default --');
 		o.create = true;
@@ -493,7 +484,7 @@ return view.extend({
 		o = s.taboption('adv_set', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>'
-					+ '<hr style="width: 200px; height: 1px;" />';
+			+ '<hr style="width: 200px; height: 1px;" />';
 
 		o = s.taboption('adv_set', form.ListValue, 'ban_nftpolicy', _('Set Policy'), _('Set the nft policy for banIP-related Sets.'));
 		o.value('memory', _('memory'));
@@ -504,7 +495,21 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_set', form.ListValue, 'ban_blocktype', _('Block Type'), _('Drop packets silently or actively reject the traffic on WAN-Input and WAN-Forward chains.'));
+		o = s.taboption('adv_set', form.ListValue, 'ban_nftretry', _('Set Load Retries'), _('Number of Set load attempts in case of an error.'));
+		o.value('1');
+		o.value('3');
+		o.value('5');
+		o.value('10');
+		o.default = '5';
+		o.placeholder = _('-- default --');
+		o.create = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('adv_set', form.Flag, 'ban_nftcount', _('Set Element Counter'), _('Enable nft counter for every Set element.'));
+		o.rmempty = true;
+
+		o = s.taboption('adv_set', form.ListValue, 'ban_blockpolicy', _('Inbound Block Policy'), _('Drop packets silently or actively reject Inbound traffic.'));
 		o.value('drop', _('drop'));
 		o.value('reject', _('reject'));
 		o.default = 'drop';
@@ -513,14 +518,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_set', form.ListValue, 'ban_blockpolicy', _('Default Block Policy'), _('By default each feed is active in all supported chains. Limit the default block policy to a certain chain.'));
-		o.value('input', _('WAN-Input Chain'));
-		o.value('forwardwan', _('WAN-Forward Chain'));
-		o.value('forwardlan', _('LAN-Forward Chain'));
-		o.optional = true;
-		o.rmempty = true;
-
-		let feed, feeds, descr;
+		let feed, feeds, chain, descr;
 		if (result && Object.keys(result).length) {
 			if (result[0]) {
 				try {
@@ -538,7 +536,7 @@ return view.extend({
 			}
 		}
 		if (feeds && Object.keys(feeds).length) {
-			o = s.taboption('adv_set', form.MultiValue, 'ban_blockinput', _('WAN-Input Chain'), _('Limit certain feeds to the WAN-Input chain.'));
+			o = s.taboption('adv_set', form.MultiValue, 'ban_feedin', _('Inbound Feed'), _('Override the default feed configuration and apply the feed to the inbound chain only.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
@@ -548,7 +546,7 @@ return view.extend({
 			o.optional = true;
 			o.rmempty = true;
 
-			o = s.taboption('adv_set', form.MultiValue, 'ban_blockforwardwan', _('WAN-Forward Chain'), _('Limit certain feeds to the WAN-Forward chain.'));
+			o = s.taboption('adv_set', form.MultiValue, 'ban_feedout', _('Outbound Feed'), _('Override the default feed configuration and apply the feed to the outbound chain only.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
@@ -558,7 +556,27 @@ return view.extend({
 			o.optional = true;
 			o.rmempty = true;
 
-			o = s.taboption('adv_set', form.MultiValue, 'ban_blockforwardlan', _('LAN-Forward Chain'), _('Limit certain feeds to the LAN-Forward chain.'));
+			o = s.taboption('adv_set', form.MultiValue, 'ban_feedinout', _('Inbound & Outbound Feed'), _('Override the default feed configuration and apply the feed to the inbound and outbound chain.'));
+			o.value('allowlist', _('local allowlist'));
+			o.value('blocklist', _('local blocklist'));
+			for (let i = 0; i < Object.keys(feeds).length; i++) {
+				feed = Object.keys(feeds)[i].trim();
+				o.value(feed);
+			}
+			o.optional = true;
+			o.rmempty = true;
+
+			o = s.taboption('adv_set', form.MultiValue, 'ban_feedfreset', _('Feed Flag Reset'), _('Override the default feed configuration and remove existing port/protocol limitations.'));
+			o.value('allowlist', _('local allowlist'));
+			o.value('blocklist', _('local blocklist'));
+			for (let i = 0; i < Object.keys(feeds).length; i++) {
+				feed = Object.keys(feeds)[i].trim();
+				o.value(feed);
+			}
+			o.optional = true;
+			o.rmempty = true;
+
+			o = s.taboption('adv_set', form.MultiValue, 'ban_feedcomplete', _('Feed Complete'), _('Opt out the feed from the deduplication process.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
@@ -575,7 +593,7 @@ return view.extend({
 		o = s.taboption('adv_log', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service restart to take effect.') + '</em>'
-					+ '<hr style="width: 200px; height: 1px;" />';
+			+ '<hr style="width: 200px; height: 1px;" />';
 
 		o = s.taboption('adv_log', form.ListValue, 'ban_nftloglevel', _('NFT Log Level'), _('Set the syslog level for NFT logging.'));
 		o.value('emerg', _('emerg'));
@@ -592,16 +610,13 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_log', form.Flag, 'ban_logprerouting', _('Log Prerouting'), _('Log suspicious Prerouting packets.'));
+		o = s.taboption('adv_log', form.Flag, 'ban_logprerouting', _('Log Prerouting'), _('Log suspicious packets in the Prerouting chain.'));
 		o.rmempty = false;
 
-		o = s.taboption('adv_log', form.Flag, 'ban_loginput', _('Log WAN-Input'), _('Log suspicious incoming WAN packets.'));
+		o = s.taboption('adv_log', form.Flag, 'ban_loginbound', _('Log Inbound'), _('Log suspicious packets in the WAN-Input and WAN-Forward chain.'));
 		o.rmempty = false;
 
-		o = s.taboption('adv_log', form.Flag, 'ban_logforwardwan', _('Log WAN-Forward'), _('Log suspicious forwarded WAN packets.'));
-		o.rmempty = false;
-
-		o = s.taboption('adv_log', form.Flag, 'ban_logforwardlan', _('Log LAN-Forward'), _('Log suspicious forwarded LAN packets.'));
+		o = s.taboption('adv_log', form.Flag, 'ban_logoutbound', _('Log Outbound'), _('Log suspicious packets in the LAN-Forward chain.'));
 		o.rmempty = false;
 
 		o = s.taboption('adv_log', form.Value, 'ban_logreadfile', _('Logfile Location'), _('Location for parsing the log file, e.g. via syslog-ng, to deactivate the standard parsing via logread.'));
@@ -626,7 +641,15 @@ return view.extend({
 		o.datatype = 'range(1,10)';
 		o.rmempty = true;
 
-		o = s.taboption('adv_log', form.DynamicList, 'ban_logterm', _('Log Terms'), _('The default regular expressions are filtering suspicious ssh, LuCI, nginx and asterisk traffic.'));
+		o = s.taboption('adv_log', form.DynamicList, 'ban_logterm', _('Log Terms'), _('Regular expressions to detect suspicious IPs in the system log.'));
+		o.value('Exit before auth from', _('dropbear failed login'));
+		o.value('luci: failed login', _('LuCI failed login'));
+		o.value('error: maximum authentication attempts exceeded', _('sshd failed login'));
+		o.value('sshd.*Connection closed by.*\[preauth\]', _('sshd closed connection'));
+		o.value('SecurityEvent=\"InvalidAccountID\".*RemoteAddress=', _('asterisk invalid account'));
+		o.value('received a suspicious remote IP \'.*\'', _('nginx suspicious IP'));
+		o.value('TLS Error: could not determine wrapping from \[AF_INET\]', _('openvpn TLS error'));
+		o.value('AdGuardHome.*\[error\].*/control/login: from ip', _('AdGuardHome login error'));
 		o.optional = true;
 		o.rmempty = true;
 
@@ -656,7 +679,7 @@ return view.extend({
 		o = s.taboption('adv_email', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('To enable email notifications, set up the \'msmtp\' package and specify a vaild E-Mail receiver address.') + '</em>'
-					+ '<hr style="width: 200px; height: 1px;" />';
+			+ '<hr style="width: 200px; height: 1px;" />';
 
 		o = s.taboption('adv_email', form.Flag, 'ban_mailnotification', _('E-Mail Notification'), _('Receive E-Mail notifications with every banIP run.'));
 		o.rmempty = true;
@@ -684,19 +707,24 @@ return view.extend({
 		o = s.taboption('feeds', form.DummyValue, '_sub');
 		o.rawhtml = true;
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs a banIP service reload to take effect.') + '</em>'
-					+ '<hr style="width: 200px; height: 1px;" />'
-					+ '<em style="color:#37c;font-weight:bold;">' + _('External Blocklist Feeds') + '</em>';
+			+ '<hr style="width: 200px; height: 1px;" />'
+			+ '<em style="color:#37c;font-weight:bold;">' + _('External Blocklist Feeds') + '</em>';
 
 		if (feeds && Object.keys(feeds).length) {
 			o = s.taboption('feeds', form.MultiValue, 'ban_feed', _('Blocklist Feed'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
+				chain = feeds[feed].chain.trim() || 'in';
 				descr = feeds[feed].descr.trim() || '-';
-				o.value(feed, feed + ' (' + descr + ')');
+				o.value(feed, feed + ' (' + chain + ', ' + descr + ')');
 			}
 			o.optional = true;
 			o.rmempty = true;
 		}
+
+		o = s.taboption('feeds', form.DummyValue, '_feeds');
+		o.rawhtml = true;
+		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('Country Selection') + '</em>';
 
 		let err, ccode, rir, country, countries = [];
 		if (result && Object.keys(result[2]).length) {
@@ -731,9 +759,19 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('feeds', form.Flag, 'ban_countrysplit', _('Split Country Set'), _('The selected Countries are stored in separate Sets.'));
+		o.rmempty = true;
+
+		o = s.taboption('feeds', form.DummyValue, '_feeds');
+		o.rawhtml = true;
+		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('ASN Selection') + '</em>';
+
 		o = s.taboption('feeds', form.DynamicList, 'ban_asn', _('ASNs'));
 		o.datatype = 'uinteger';
 		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('feeds', form.Flag, 'ban_asnsplit', _('Split ASN Set'), _('The selected ASNs are stored in separate Sets.'));
 		o.rmempty = true;
 
 		o = s.taboption('feeds', form.DummyValue, '_feeds');
