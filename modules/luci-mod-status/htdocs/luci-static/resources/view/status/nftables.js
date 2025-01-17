@@ -607,7 +607,7 @@ return view.extend({
 		]));
 
 		for (var i = 0; i < data.length; i++)
-			if (typeof(data[i].rule) == 'object' && data[i].rule.table == spec.table && data[i].rule.chain == spec.name)
+			if (typeof(data[i].rule) == 'object' && data[i].rule.table == spec.table && data[i].rule.chain == spec.name && data[i].rule.family == spec.family)
 				node.lastElementChild.appendChild(this.renderRule(data, data[i].rule));
 
 		if (node.lastElementChild.childNodes.length == 1)
@@ -669,7 +669,7 @@ return view.extend({
 		]);
 
 		for (var i = 0; i < data.length; i++)
-			if (typeof(data[i].chain) == 'object' && data[i].chain.table == spec.name)
+			if (typeof(data[i].chain) == 'object' && data[i].chain.table == spec.name && data[i].chain.family == spec.family)
 				node.lastElementChild.lastElementChild.appendChild(this.renderChain(data, data[i].chain));
 
 		return node;
