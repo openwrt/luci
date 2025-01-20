@@ -4391,9 +4391,11 @@ const CBITextValue = CBIValue.extend(/** @lends LuCI.form.TextValue.prototype */
 	/**
 	 * Enforces the use of a monospace font for the textarea contents when set
 	 * to `true`.
+	 * Or provide a list of fontFamily in string. e.g.
+	 * `"Cascadia Code",Menlo,Monaco,Consolas,"Liberation Mono","Courier New"`
 	 *
 	 * @name LuCI.form.TextValue.prototype#monospace
-	 * @type boolean
+	 * @type boolean|string
 	 * @default false
 	 */
 

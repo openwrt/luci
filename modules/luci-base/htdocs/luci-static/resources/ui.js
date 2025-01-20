@@ -468,9 +468,11 @@ const UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 	 * Specifies the HTML `placeholder` attribute which is displayed when the
 	 * corresponding `<textarea>` element is empty.
 	 *
-	 * @property {boolean} [monospace=false]
+	 * @property {boolean|string} [monospace=false]
 	 * Specifies whether a monospace font should be forced for the textarea
 	 * contents.
+	 * Or provide a list of fontFamily in string. e.g.
+	 * `"Cascadia Code",Menlo,Monaco,Consolas,"Liberation Mono","Courier New"`
 	 *
 	 * @property {number} [cols]
 	 * Specifies the HTML `cols` attribute to set on the corresponding
@@ -513,7 +515,7 @@ const UITextarea = UIElement.extend(/** @lends LuCI.ui.Textarea.prototype */ {
 		}, [ value ]));
 
 		if (this.options.monospace)
-			frameEl.firstElementChild.style.fontFamily = 'monospace';
+			frameEl.firstElementChild.style.fontFamily = (typeof this.options.monospace === 'string') ? this.options.monospace : 'monospace';
 
 		return this.bind(frameEl);
 	},
