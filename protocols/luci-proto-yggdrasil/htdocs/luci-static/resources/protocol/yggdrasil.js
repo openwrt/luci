@@ -98,7 +98,7 @@ function updateActivePeers(ifname) {
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
-				cell.textContent = '%.2f ms'.format(peer.latency_ms / 10**6);
+				cell.textContent = '%.2f ms'.format(peer.latency / 10**6);
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
