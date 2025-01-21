@@ -1572,9 +1572,10 @@ return view.extend({
 		o.datatype = 'cidr6';
 
 		o = s.option(form.ListValue, 'packet_steering', _('Packet Steering'), _('Enable packet steering across CPUs. May help or hinder network speed.'));
-		o.value('', _('Disabled'));
+		o.value('0', _('Disabled'));
 		o.value('1',_('Enabled'));
 		o.value('2',_('Enabled (all CPUs)'));
+		o.default = '1';
 		o.optional = true;
 
 		var steer_flow = uci.get('network', 'globals', 'steering_flows');	
