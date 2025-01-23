@@ -450,6 +450,9 @@ return view.extend({
 			} else {
 				const latest = response.json().latest;
 
+				// ensure order: newest to oldest release
+				latest.sort().reverse();
+
 				for (let remote_version of latest) {
 					let remote_branch = get_branch(remote_version);
 
