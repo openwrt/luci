@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2024-11-29 19:50+0000\n"
+"PO-Revision-Date: 2025-01-09 17:47+0000\n"
 "Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/pl/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -108,7 +108,7 @@ msgid ""
 "<var>%{set_mark?:%{set_xmark}}</var>"
 msgstr ""
 "<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> znacznik zapory "
-"sieciowej <var>%{set_mark?:%{set_xmark}}</var>"
+"<var>%{set_mark?:%{set_xmark}}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:90
 msgid "<var data-tooltip=\"MASQUERADE\">Automatically rewrite</var> source IP"
@@ -430,35 +430,35 @@ msgstr "Rodzina"
 
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:3
 msgid "Firewall"
-msgstr "Zapora sieciowa"
+msgstr "Zapora"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:25
 msgid "Firewall - Custom Rules"
-msgstr "Zapora sieciowa - Własne reguły"
+msgstr "Zapora - Własne reguły"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:20
 msgid "Firewall - IP sets"
-msgstr "Zapora sieciowa - Zestawy IP"
+msgstr "Zapora - Zestawy IP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:172
 msgid "Firewall - NAT Rules"
-msgstr "Zapora sieciowa - Zasady NAT"
+msgstr "Zapora - Zasady NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:152
 msgid "Firewall - Port Forwards"
-msgstr "Zapora sieciowa - Przekazywanie portów"
+msgstr "Zapora - Przekazywanie portów"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:173
 msgid "Firewall - Traffic Rules"
-msgstr "Zapora sieciowa - Reguły ruchu sieciowego"
+msgstr "Zapora - Reguły ruchu sieciowego"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:38
 msgid "Firewall - Zone Settings"
-msgstr "Zapora sieciowa - Ustawienia stref"
+msgstr "Zapora - Ustawienia stref"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:693
 msgid "Firewall configuration migration"
-msgstr "Migracja konfiguracji zapory sieciowej"
+msgstr "Migracja konfiguracji zapory"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:64
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:147
@@ -550,7 +550,7 @@ msgstr "Ustawienia główne"
 
 #: applications/luci-app-firewall/root/usr/share/rpcd/acl.d/luci-app-firewall.json:3
 msgid "Grant access to firewall configuration"
-msgstr "Udziel dostępu do konfiguracji zapory sieciowej"
+msgstr "Udziel dostępu do konfiguracji zapory"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:88
 msgid "Hardware flow offloading"
@@ -916,8 +916,7 @@ msgstr ""
 "źródłowego i docelowego pozwala na dopasowanie pakietów w oparciu o inne "
 "kryteria niż interfejsy lub podsieci. Opcje te powinny być używane ze "
 "szczególną ostrożnością, ponieważ nieprawidłowe wartości mogą spowodować "
-"złamanie zestawu reguł zapory sieciowej, całkowicie odsłaniając wszystkie "
-"usługi."
+"złamanie zestawu reguł zapory, całkowicie odsłaniając wszystkie usługi."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:187
 msgid "Path to file of CIDRs, subnets, host IPs, etc.<br />"
@@ -1110,8 +1109,8 @@ msgid ""
 "The existing firewall configuration needs to be changed for LuCI to function "
 "properly."
 msgstr ""
-"Istniejąca konfiguracja zapory sieciowej musi zostać zmieniona, aby LuCI "
-"mógł działać prawidłowo."
+"Istniejąca konfiguracja zapory musi zostać zmieniona, aby LuCI mógł działać "
+"prawidłowo."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:39
 msgid ""
@@ -1289,8 +1288,8 @@ msgid ""
 "the updated configuration."
 msgstr ""
 "Po naciśnięciu przycisku „Kontynuuj” sekcje przekierowujące z docelowym "
-"„SNAT” zostaną przekonwertowane na sekcje „nat”, a zapora sieciowa zostanie "
-"ponownie uruchomiona w celu zastosowania zaktualizowanej konfiguracji."
+"„SNAT” zostaną przekonwertowane na sekcje „nat”, a zapora zostanie ponownie "
+"uruchomiona w celu zastosowania zaktualizowanej konfiguracji."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:314
 msgid "Use external IP address"
@@ -1324,7 +1323,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:331
 msgid "Valid firewall mark required"
-msgstr "Wymagany prawidłowy znacznik zapory sieciowej"
+msgstr "Wymagany prawidłowy znacznik zapory"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:482
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:352
@@ -1597,4 +1596,4 @@ msgstr "do 65536 wpisów."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:339
 msgid "valid firewall mark"
-msgstr "prawidłowy znacznik zapory sieciowej"
+msgstr "prawidłowy znacznik zapory"

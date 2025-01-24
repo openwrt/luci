@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2024-12-01 21:35+0000\n"
+"PO-Revision-Date: 2025-01-18 13:21+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1076
 msgid "!known (not known)"
@@ -1804,10 +1804,10 @@ msgid ""
 "fill out the <em>custom</em> field to define a new zone and attach the "
 "interface to it."
 msgstr ""
-"Wybierz strefę zapory sieciowej, którą chcesz przypisać do tego interfejsu. "
-"Wybierz <em>nieokreślone</em>, aby usunąć interfejs z przypisanej strefy, "
-"lub wypełnij pole <em>własne</em>, aby zdefiniować nową strefę i przypisać "
-"ją do interfejsu."
+"Wybierz strefę zapory, którą chcesz przypisać do tego interfejsu. Wybierz "
+"<em>nieokreślone</em>, aby usunąć interfejs z przypisanej strefy, lub "
+"wypełnij pole <em>własne</em>, aby zdefiniować nową strefę i przypisać ją do "
+"interfejsu."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1018
 msgid ""
@@ -2116,7 +2116,7 @@ msgstr "Gęstość sieci Wi-Fi"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:624
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2160
 msgid "Create / Assign firewall-zone"
-msgstr "Utwórz/Przypisz strefę zapory sieciowej"
+msgstr "Utwórz/Przypisz strefę zapory"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1263
 msgid "Create interface"
@@ -3698,20 +3698,20 @@ msgstr "Zakończ"
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:27
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:43
 msgid "Firewall"
-msgstr "Zapora sieciowa"
+msgstr "Zapora"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:39
 msgid "Firewall Mark"
-msgstr "Znacznik zapory sieciowej"
+msgstr "Znacznik zapory"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:517
 msgid "Firewall Settings"
-msgstr "Ustawienia zapory sieciowej"
+msgstr "Ustawienia zapory"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:330
 msgid "Firewall Status"
-msgstr "Status zapory sieciowej"
+msgstr "Status zapory"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:177
 msgid "Firewall mark"
@@ -4116,7 +4116,7 @@ msgstr "Udziel dostępu do konfiguracji crontab"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:70
 msgid "Grant access to firewall status"
-msgstr "Udziel dostępu do statusu zapory sieciowej"
+msgstr "Udziel dostępu do statusu zapory"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:132
 msgid "Grant access to flash operations"
@@ -4467,7 +4467,7 @@ msgstr "IPv4"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:355
 msgid "IPv4 Firewall"
-msgstr "Zapora sieciowa IPv4"
+msgstr "Zapora IPv4"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:262
 msgid "IPv4 Neighbours"
@@ -4589,7 +4589,7 @@ msgstr "Indeks profilu APN IPv6"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:358
 msgid "IPv6 Firewall"
-msgstr "Zapora sieciowa IPv6"
+msgstr "Zapora IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:736
 msgid "IPv6 MTU"
@@ -7888,7 +7888,7 @@ msgstr "Brak ustawienia klucza prywatnego lub jest nieprawidłowe"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:93
 msgid "Processes"
-msgstr "Procesy systemowe"
+msgstr "Procesy"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:67
 msgid "Prot."
@@ -10969,7 +10969,7 @@ msgstr "Nie można rozpoznać nazwy peera"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:317
 msgid "Unable to restart firewall: %s"
-msgstr "Nie można zrestartować zapory sieciowej: %s"
+msgstr "Nie można zrestartować zapory: %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:22
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:370
@@ -11347,7 +11347,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:678
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:686
 msgid "Useful for systems behind firewalls."
-msgstr "Przydatne w systemach znajdujących się za zaporami sieciowymi."
+msgstr "Przydatne w systemach znajdujących się za zaporą."
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:106
