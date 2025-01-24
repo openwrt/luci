@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-12-20 20:38+0000\n"
-"Last-Translator: Zorya Zvenoch <svetarozenbaum@gmail.com>\n"
+"PO-Revision-Date: 2025-01-17 09:01+0000\n"
+"Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/uk/>\n"
 "Language: uk\n"
@@ -43,7 +43,7 @@ msgstr "Спеціальна конфігурація"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:411
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr ""
+msgstr "Користувацька конфігурація зчитується з /etc/fwknop/access.conf."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:577
 msgid ""
@@ -51,6 +51,9 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
+"Визначте набір портів і протоколів (tcp або udp), які явно заборонені "
+"незалежно від дійсності вхідного пакета SPA. Кілька записів відокремлюються "
+"комами."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:572
 msgid ""
@@ -59,18 +62,28 @@ msgid ""
 "to honor any proto/port request specified in the SPA data (unless of it "
 "matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
 msgstr ""
+"Визначте набір портів і протоколів (tcp або udp), які відкриватимуться, якщо "
+"буде помічено дійсну послідовність кноків. Якщо цей запис не встановлено, "
+"fwknopd намагатиметься задовольнити будь-який запит прото/порту, указаний у "
+"даних SPA (якщо він не збігається з будь-якими записами «RESTRICT_PORTS»). "
+"Кілька записів відокремлюються комами."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:558
 msgid ""
 "Define the HMAC authentication key (in Base64 encoding) used for verifying "
 "the authenticity of the SPA packet before the packet is decrypted."
 msgstr ""
+"Визначте ключ автентифікації HMAC (у кодуванні Base64), який "
+"використовується для перевірки автентичності пакета SPA перед розшифруванням "
+"пакета."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:550
 msgid ""
 "Define the HMAC authentication key used for verifying the authenticity of "
 "the SPA packet before the packet is decrypted."
 msgstr ""
+"Визначте ключ автентифікації HMAC, який використовується для перевірки "
+"автентичності пакета SPA перед розшифруванням пакета."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:581
 msgid ""
@@ -79,36 +92,45 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
+"Визначте проміжок часу, протягом якого fwknopd надаватиме доступ через "
+"брандмауер після правильної послідовності стукань із вихідної IP-адреси. "
+"Якщо «FW_ACCESS_TIMEOUT» не встановлено, автоматично буде встановлено тайм-"
+"аут за замовчуванням у 30 секунд."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:536
 msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Визначте симетричний ключ (у кодуванні Base64), який використовується для "
+"розшифровки вхідного пакета SPA, зашифрованого клієнтом fwknop за допомогою "
+"Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:528
 msgid ""
 "Define the symmetric key used for decrypting an incoming SPA packet that is "
 "encrypted by the fwknop client with Rijndael."
 msgstr ""
+"Визначте симетричний ключ, який використовується для дешифрування вхідного "
+"пакета SPA, зашифрованого клієнтом fwknop за допомогою Rijndael."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:476
 msgid "Enable Uci/Luci control"
-msgstr ""
+msgstr "Увімкнути керування Uci/Luci"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid "Enable config overwrite"
-msgstr ""
+msgstr "Увімкнути перезапис конфігурації"
 
 #: applications/luci-app-fwknopd/root/usr/share/luci/menu.d/luci-app-fwknopd.json:3
 msgid "Firewall Knock Daemon"
-msgstr ""
+msgstr "Брандмауер Knock Daemon"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:303
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:474
 msgid "Firewall Knock Operator Daemon"
-msgstr ""
+msgstr "Демон оператора Knock Firewall"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:586
 msgid ""
@@ -118,14 +140,19 @@ msgid ""
 "resolve the external address (if the client behind a NAT) or the client must "
 "know the external IP and set it via the -a argument."
 msgstr ""
+"Примусово всі пакети SPA містять справжню IP-адресу в зашифрованих даних. Це "
+"унеможливлює використання аргументу командного рядка -s у командному рядку "
+"клієнта fwknop, тому для автоматичного визначення зовнішньої адреси потрібно "
+"використовувати або -R (якщо клієнт стоїть за NAT), або клієнт повинен знати "
+"зовнішню IP-адресу та встановіть його за допомогою аргументу -a."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid "Generate Keys"
-msgstr ""
+msgstr "Генерувати ключі"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:519
 msgid "Generate keys"
-msgstr ""
+msgstr "Генерувати ключі"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:519
 msgid ""
@@ -134,14 +161,18 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
+"Генерує симетричний ключ, який використовується для розшифровки вхідного "
+"пакета SPA, який шифрується клієнтом fwknop за допомогою блокового шифру "
+"Rijndael, і ключ автентифікації HMAC, який використовується для перевірки "
+"автентичності вхідного пакета SPA перед розшифруванням пакета."
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
-msgstr ""
+msgstr "Надайте доступ UCI для luci-app-fwknopd"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:567
 msgid "HMAC key type"
-msgstr ""
+msgstr "Тип ключа HMAC"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:545
 msgid "Key type"
@@ -149,13 +180,15 @@ msgstr "Тип ключа"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:178
 msgid "Loading…"
-msgstr ""
+msgstr "Завантаження…"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:596
 msgid ""
 "Maximum age in seconds that an SPA packet will be accepted. Defaults to 120 "
 "seconds."
 msgstr ""
+"Максимальний вік у секундах, протягом якого буде прийнято SPA-пакет. За "
+"замовчуванням 120 секунд."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid "Network"
@@ -163,18 +196,18 @@ msgstr "Мережа"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:488
 msgid "Network configuration"
-msgstr ""
+msgstr "Конфігурація мережі"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:315
 msgid "No stanza found."
-msgstr ""
+msgstr "Строфи не знайдено."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:436
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:453
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:546
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:568
 msgid "Normal key"
-msgstr ""
+msgstr "Звичайний ключ"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:481
 msgid ""
@@ -182,26 +215,29 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
+"Розбирає файл /etc/fwknop/access.conf (і включені файли/папки/ключі) і "
+"генерує QR-коди для всіх знайдених строф. Обробляє лише файли в папці /etc/"
+"fwknop через обмеження прав доступу."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:418
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:502
 msgid "QR code"
-msgstr ""
+msgstr "QR код"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:485
 msgid "Show access.conf QR codes"
-msgstr ""
+msgstr "Показати QR-коди access.conf"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:597
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
-msgstr ""
+msgstr "Вкажіть інтерфейс Ethernet, на якому fwknopd буде нюхати пакети."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:443
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:449
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:555
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:564
 msgid "The HMAC authentication key has to be specified."
-msgstr ""
+msgstr "Необхідно вказати ключ автентифікації HMAC."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:513
 msgid ""
@@ -211,6 +247,11 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Адреса призначення, для якої буде прийнято пакет SPA. Рядок «БУДЬ-ЯКИЙ» "
+"також приймається, якщо дійсний пакет SPA має бути врахований для будь-якої "
+"IP-адреси призначення. Мережі слід вказувати в нотації CIDR (наприклад, "
+"«192.168.10.0/24»), а також можна вказувати окремі IP-адреси. Кілька записів "
+"відокремлюються комами."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid ""
@@ -218,6 +259,8 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
+"Мережа, яку слухає демон. Демон запускається автоматично, коли мережа "
+"запущена. Цей параметр має пріоритет над параметром “PCAP_INTF”."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:504
 msgid ""
@@ -227,17 +270,22 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Адреса джерела, з якої буде прийнято пакет SPA. Рядок «БУДЬ-ЯКИЙ» також "
+"приймається, якщо дійсний пакет SPA має бути прийнятий з будь-якої IP-адреси "
+"джерела. Мережі слід вказувати в нотації CIDR (наприклад, "
+"«192.168.10.0/24»), а також можна вказувати окремі IP-адреси. Кілька записів "
+"відокремлюються комами."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:510
 msgid "The source address has to be specified."
-msgstr ""
+msgstr "Необхідно вказати адресу джерела."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:426
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:432
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:533
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:542
 msgid "The symmetric key has to be specified."
-msgstr ""
+msgstr "Необхідно вказати симетричний ключ."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:590
 msgid ""
@@ -246,24 +294,24 @@ msgid ""
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
+"Це вказує fwknopd приймати повні команди, які містяться в пакеті "
+"авторизації. Будь-яка така команда буде виконана на сервері fwknopd як "
+"користувач, указаний у «CMD_EXEC_USER», або як користувач, який запустив "
+"fwknopd, якщо це не встановлено."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid ""
 "When unchecked, the config files in /etc/fwknopd will be used as is, "
 "ignoring any settings here."
 msgstr ""
+"Якщо не позначено, конфігураційні файли в /etc/fwknopd використовуватимуться "
+"як є, ігноруючи будь-які налаштування тут."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:415
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:498
 msgid "access.conf stanzas"
-msgstr ""
+msgstr "строфи access.conf"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:594
 msgid "fwknopd.conf config options"
-msgstr ""
-
-#~ msgid "Enter custom access.conf variables below:"
-#~ msgstr "Enter custom access.conf variables below:"
-
-#~ msgid "Enter custom fwknopd.conf variables below:"
-#~ msgstr "Enter custom fwknopd.conf variables below:"
+msgstr "параметри конфігурації fwknopd.conf"

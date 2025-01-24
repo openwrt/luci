@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-11-29 19:50+0000\n"
-"Last-Translator: Yuan Lau <traverslombard@outlook.com>\n"
+"PO-Revision-Date: 2025-01-22 06:38+0000\n"
+"Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsfirewall/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.9-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -299,7 +299,7 @@ msgstr "目標位址"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:404
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:278
 msgid "Destination port"
-msgstr "目的通訊埠"
+msgstr "目標連接埠"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:396
 msgid "Destination zone"
@@ -356,7 +356,7 @@ msgstr "為此區域的IPv6出站流量開啟網路位址和端口轉換(NAT6或
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:211
 msgid "Enabled"
-msgstr "啟用"
+msgstr "已啟用"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:205
 msgid "Enables packet and byte count tracking for the set."
@@ -1539,62 +1539,3 @@ msgstr "最多 65536 個條目。"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:339
 msgid "valid firewall mark"
 msgstr "有效正確的防火牆標記"
-
-#~ msgid "ipv4"
-#~ msgstr "ipv4"
-
-#~ msgid "Experimental feature. Not fully compatible with QoS/SQM."
-#~ msgstr "實驗性功能。與QoS/SQM不完全相容。"
-
-#~ msgid ""
-#~ "Traffic rules define policies for packets traveling between different "
-#~ "zones, for example to reject traffic between certain hosts or to open WAN "
-#~ "ports on the router."
-#~ msgstr ""
-#~ "通訊規則定義了不同區域間的資料包傳輸策略，例如：拒絕一些主機之間的通訊，開"
-#~ "放路由器WAN上的埠。"
-
-#~ msgid "Software based offloading for routing/NAT"
-#~ msgstr "軟體式的 路由/NAT 卸載"
-
-#~ msgid ""
-#~ "Enable network address and port translation (NAT or NAPT) for outbound "
-#~ "traffic on this zone. This is typically enabled on the <em>wan</em> zone."
-#~ msgstr ""
-#~ "為此區域上的出站流量啟用網路位址和連接埠轉換 (NAT 或 NAPT)。該選項在"
-#~ "<em>wan</em>區域上通常處於啟用狀態。"
-
-#~ msgid ""
-#~ "Forwarded IPv4%{proto?, protocol %{proto#%{next?, }<var>%{item.name}</"
-#~ "var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks except "
-#~ "%{mark.num}%{mark.mask? with mask %{mark.mask}}.\":%{mark.mask? data-"
-#~ "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark."
-#~ "val}</var>}"
-#~ msgstr ""
-#~ "已轉發 IPv4%{proto?，協定：%{proto#%{next?, }<var>%{item.name}</"
-#~ "var>}}%{mark?，標記：<var%{mark.inv? data-tooltip=\"除非 fwmark 為 %{mark."
-#~ "num}，%{mark.mask?並且其遮罩為 %{mark.mask}，}否則不匹配。\":%{mark.mask? "
-#~ "data-tooltip=\"匹配前，設定 fwmark 的遮罩為 %{mark.mask}。\"}}>%{mark.val}"
-#~ "</var>}"
-
-#~ msgid ""
-#~ "Incoming IPv4%{proto?, protocol %{proto#%{next?, }%{item.types?<var "
-#~ "class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-"
-#~ "tooltip\">ICMP with types %{item.types#%{next?, }<var>%{item}</var>}</"
-#~ "span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-"
-#~ "tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? with mask %{mark."
-#~ "mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value with %{mark.mask} "
-#~ "before compare.\"}}>%{mark.val}</var>}%{helper?, helper %{helper.inv?<var "
-#~ "data-tooltip=\"Match any helper except &quot;%{helper.name}&quot;"
-#~ "\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}"
-#~ "</var>}}"
-#~ msgstr ""
-#~ "傳入 IPv4%{proto?，協定：%{proto#%{next?, }%{item.types?<var class=\"cbi-"
-#~ "tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP 包含類"
-#~ "型：%{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%{item."
-#~ "name}</var>}}}%{mark?，標記：<var%{mark.inv? data-tooltip=\"除非 fwmark "
-#~ "為 %{mark.num}，%{mark.mask?並且其遮罩為 %{mark.mask}，}否則不匹配。\":"
-#~ "%{mark.mask? data-tooltip=\"匹配前，設定 fwmark 的遮罩為 %{mark."
-#~ "mask}。\"}}>%{mark.val}</var>}%{helper?，幫手：%{helper.inv?<var data-"
-#~ "tooltip=\"除非幫手為 &quot;%{helper.name}&quot;，否則不匹配。\">%{helper."
-#~ "val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"

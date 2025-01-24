@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-01-07 19:13+0000\n"
-"Last-Translator: Петро Романчук <ixer@ixer.org.ua>\n"
+"PO-Revision-Date: 2025-01-17 09:01+0000\n"
+"Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenwisp/uk/>\n"
 "Language: uk\n"
@@ -36,14 +36,18 @@ msgid ""
 "href='https://github.com/openwisp/openwisp-config'>https://github.com/"
 "openwisp/openwisp-config</a>"
 msgstr ""
+"Налаштуйте, запустіть і зупиніть агент OpenWISP на цьому пристрої. "
+"Докладніше про значення конфігурації: <a target='_blank' rel='noopener "
+"noreferrer' href='https://github.com/openwisp/openwisp-config'>https://"
+"github.com/openwisp/openwisp-config </a>"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:87
 msgid "Connect Timeout"
-msgstr ""
+msgstr "Час очікування підключення"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:49
 msgid "Consistent Key"
-msgstr ""
+msgstr "Послідовний ключ"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:29
 msgid "Disabled"
@@ -55,7 +59,7 @@ msgstr "Увімкнути"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:28
 msgid "Enable or disable the OpenWISP service."
-msgstr ""
+msgstr "Увімкніть або вимкніть службу OpenWISP."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:30
 msgid "Enabled"
@@ -63,19 +67,19 @@ msgstr "Увімкнено"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:16
 msgid "General Settings"
-msgstr ""
+msgstr "Загальні налаштування"
 
 #: applications/luci-app-openwisp/root/usr/share/rpcd/acl.d/luci-app-openwisp.json:3
 msgid "Grant access to luci-app-openwisp"
-msgstr ""
+msgstr "Надайте доступ до luci-app-openwisp"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:74
 msgid "Hardware ID Key"
-msgstr ""
+msgstr "Ідентифікаційний ключ обладнання"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:78
 msgid "Hardware ID Script"
-msgstr ""
+msgstr "Сценарій ідентифікації обладнання"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:60
 msgid ""
@@ -83,37 +87,42 @@ msgid ""
 "local configuration, the remote configuration takes precedence over local "
 "configuration."
 msgstr ""
+"Якщо вибрано, якщо елемент конфігурації присутній як у віддаленій, так і в "
+"локальній конфігурації, віддалена конфігурація має пріоритет над локальною "
+"конфігурацією."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:66
 msgid ""
 "If the agent is unable to reach the controller after applying the downloaded "
 "config it will be reverted."
 msgstr ""
+"Якщо агент не зможе зв’язатися з контролером після застосування завантаженої "
+"конфігурації, її буде скасовано."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:23
 msgid "Key"
-msgstr ""
+msgstr "Ключ"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:53
 msgid "MAC Interface"
-msgstr ""
+msgstr "Інтерфейс MAC"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:56
 msgid "Management Interface"
-msgstr ""
+msgstr "Інтерфейс управління"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:92
 msgid "Max Time"
-msgstr ""
+msgstr "Максимальний час"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:60
 msgid "Merge Config"
-msgstr ""
+msgstr "Конфігурація об’єднання"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:11
 #: applications/luci-app-openwisp/root/usr/share/luci/menu.d/luci-app-openwisp.json:3
 msgid "OpenWISP"
-msgstr ""
+msgstr "OpenWISP"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:107
 msgid ""
@@ -121,6 +130,10 @@ msgid ""
 "point to an executable script file. This hook is called each time openwisp-"
 "config applies a configuration, but after services are reloaded."
 msgstr ""
+"Шлях до сценарію перезавантаження публікації. Хук не викликається, якщо шлях "
+"не вказує на виконуваний файл сценарію. Цей хук викликається кожного разу, "
+"коли openwisp-config застосовує конфігурацію, але після перезавантаження "
+"служб."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:103
 msgid ""
@@ -128,77 +141,83 @@ msgid ""
 "to an executable script file. This hook is called each time openwisp-config "
 "applies a configuration, but before services are reloaded."
 msgstr ""
+"Шлях до хука попереднього перезавантаження. Хук не викликається, якщо шлях "
+"не вказує на виконуваний файл сценарію. Цей хук викликається кожного разу, "
+"коли openwisp-config застосовує конфігурацію, але перед перезавантаженням "
+"служб."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:107
 msgid "Post-reload Hook"
-msgstr ""
+msgstr "Хук після перезавантаження"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:103
 msgid "Pre-reload Hook"
-msgstr ""
+msgstr "Хук попереднього перезавантаження"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:33
 msgid "Server URL"
-msgstr ""
+msgstr "URL-адреса сервера"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:36
 msgid "Shared Secret"
-msgstr ""
+msgstr "Спільний секрет"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:64
 msgid "Tags"
-msgstr ""
+msgstr "Теги"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:64
 msgid "Tags applied to this device."
-msgstr ""
+msgstr "Теги, застосовані до цього пристрою."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:66
 msgid "Test Config"
-msgstr ""
+msgstr "Конфігурація тесту"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:70
 msgid "Test Script"
-msgstr ""
+msgstr "Тестовий сценарій"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:23
 msgid "The Key of this device in the OpenWISP server."
-msgstr ""
+msgstr "Ключ цього пристрою на сервері OpenWISP."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:33
 msgid ""
 "The URL to the OpenWISP server. Example: https://openwisp2.mynetwork.com"
-msgstr ""
+msgstr "URL-адреса сервера OpenWISP. Приклад: https://openwisp2.mynetwork.com"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:20
 msgid "The UUID of this device in the OpenWISP server."
-msgstr ""
+msgstr "UUID цього пристрою на сервері OpenWISP."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:53
 msgid "The interface to use for getting the MAC for this device."
-msgstr ""
+msgstr "Інтерфейс для отримання MAC для цього пристрою."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:56
 msgid "The interface to use for management and control."
-msgstr ""
+msgstr "Інтерфейс для керування та контролю."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:36
 msgid "The organization shared secret for auto enrollment."
-msgstr ""
+msgstr "Організація поділилася секретом для автоматичної реєстрації."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:20
 msgid "UUID"
-msgstr ""
+msgstr "UUID"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:39
 msgid "Update Interval"
-msgstr ""
+msgstr "Інтервал оновлення"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:74
 msgid ""
 "Use a unique hardware ID for device identification, for example a serial "
 "number."
 msgstr ""
+"Використовуйте унікальний ідентифікатор обладнання для ідентифікації "
+"пристрою, наприклад серійний номер."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:100
 msgid ""
@@ -206,26 +225,33 @@ msgid ""
 "must be in PEM format, and the directory must have been processed using the "
 "c_rehash utility supplied with openssl."
 msgstr ""
+"Використовуйте вказаний каталог сертифікатів, щоб перевірити вузол. "
+"Сертифікати мають бути у форматі PEM, а каталог має бути оброблено за "
+"допомогою утиліти c_rehash, що постачається з openssl."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:97
 msgid ""
 "Use the specified certificate file to verify the peer. The file may contain "
 "multiple CA certificates. The certificate(s) must be in PEM format."
 msgstr ""
+"Використовуйте вказаний файл сертифіката для перевірки вузла. Файл може "
+"містити кілька сертифікатів ЦС. Сертифікати мають бути у форматі PEM."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:92
 msgid ""
 "Value passed to curl --max-time argument, defaults to 30. Expressed in "
 "seconds."
 msgstr ""
+"Значення, передане аргументу curl --max-time, за замовчуванням 30. "
+"Виражається в секундах."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:45
 msgid "Verify SSL"
-msgstr ""
+msgstr "Підтвердьте SSL"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:45
 msgid "Verify the server SSL certificate."
-msgstr ""
+msgstr "Перевірте сертифікат SSL сервера."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:49
 msgid ""
@@ -234,3 +260,7 @@ msgid ""
 "default, but must be enabled also in the controller application in order to "
 "work."
 msgstr ""
+"Якщо використовується автоматична реєстрація, ця функція дозволяє пристроям "
+"зберігати ту саму конфігурацію, навіть якщо скинути або перепрошити. Ця "
+"функція ввімкнена за замовчуванням, але для роботи її потрібно також "
+"увімкнути в програмі контролера."
