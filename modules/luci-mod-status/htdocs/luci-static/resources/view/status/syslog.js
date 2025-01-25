@@ -55,9 +55,11 @@ return view.extend({
 		});
 
 		return E([], [
-			E('h2', {}, [ _('System Log') ]),
+			E('div', { 'style': 'display:flex; align-items:center; gap:5rem; padding-bottom:1rem' }, [
+				E('h2', {}, [ _('System Log') ]),
+				scrollDownButton
+         ]),
 			E('div', { 'id': 'content_syslog' }, [
-				E('div', {'style': 'padding-bottom: 20px'}, [scrollDownButton]),
 				E('textarea', {
 					'id': 'syslog',
 					'style': 'font-size:12px',
