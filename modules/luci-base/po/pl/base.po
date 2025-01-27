@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2025-01-18 13:21+0000\n"
-"Last-Translator: Matthaiks <kitynska@gmail.com>\n"
+"PO-Revision-Date: 2025-01-27 15:34+0000\n"
+"Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
 "Language: pl\n"
@@ -2104,11 +2104,11 @@ msgid ""
 msgstr ""
 "Konfiguruje szybkość transmisji danych na podstawie gęstości sieci Wi-Fi. "
 "Normalna: konfiguruje podstawowe szybkości na 6, 12, 24 Mbps, jeśli starsze "
-"szybkości 802.11b nie są używane. W innym przypadku na 5,5; 11 Mbps. Wysoka: "
-"konfiguruje podstawowe szybkości na 12, 24 Mbps, jeśli starsze szybkości "
-"802.11b nie są używane, w przeciwnym razie na 11 Mbps. Bardzo wysoka: "
-"konfiguruje 24 Mbps jako szybkość podstawową. Obsługiwane prędkości niższe "
-"niż minimalna podstawowa prędkość nie są oferowane."
+"szybkości 802.11b nie są używane. W innym przypadku na 5,5 lub 11 Mbps. "
+"Wysoka: konfiguruje podstawowe szybkości na 12, 24 Mbps, jeśli starsze "
+"szybkości 802.11b nie są używane, w przeciwnym razie na 11 Mbps. Bardzo "
+"wysoka: konfiguruje 24 Mbps jako szybkość podstawową. Obsługiwane prędkości "
+"niższe niż minimalna podstawowa prędkość nie są oferowane."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:805
 msgid ""
@@ -2240,7 +2240,7 @@ msgstr ""
 "Nie można było odzyskać dostępu do urządzenia po zastosowaniu zmian "
 "konfiguracyjnych. Może zajść potrzeba ponownego połączenia w przypadku "
 "zmiany ustawień związanych z siecią, takich jak adres IP lub "
-"uwierzytelnianie zabezpieczeń sieci bezprzewodowej."
+"uwierzytelnianie zabezpieczeń Wi-Fi."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:736
 msgid "Count"
@@ -3186,7 +3186,7 @@ msgstr "Edytuj tę sieć"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:912
 msgid "Edit wireless network"
-msgstr "Edytuj ustawienia sieci bezprzewodowych"
+msgstr "Edytuj ustawienia Wi-Fi"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:65
 msgctxt "nft rt mtu"
@@ -4428,11 +4428,11 @@ msgstr "Udziel dostępu do konfiguracji uHTTPd"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:58
 msgid "Grant access to wireless channel status"
-msgstr "Udziel dostępu do statusu kanału sieci bezprzewodowej"
+msgstr "Udziel dostępu do statusu kanału Wi-Fi"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:60
 msgid "Grant access to wireless status display"
-msgstr "Udziel dostępu do wyświetlania statusu sieci bezprzewodowej"
+msgstr "Udziel dostępu do wyświetlania statusu Wi-Fi"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:124
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:124
@@ -5579,7 +5579,7 @@ msgstr "Połącz z siecią"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1988
 msgid "Join Network: Wireless Scan"
-msgstr "Przyłącz do sieci: Skanuj sieci WiFi"
+msgstr "Przyłącz do sieci: Skanowanie Wi-Fi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2288
 msgid "Joining Network: %q"
@@ -6792,8 +6792,7 @@ msgid ""
 "Name for OpenWrt network configuration. (No relation to wireless network "
 "name/SSID)"
 msgstr ""
-"Nazwa konfiguracji sieci OpenWrt. (Brak związku z nazwą sieci bezprzewodowej/"
-"SSID)"
+"Nazwa konfiguracji sieci OpenWrt. (Brak związku z nazwą sieci Wi-Fi/SSID)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2256
 msgid "Name of the new network"
@@ -9829,8 +9828,8 @@ msgid ""
 "be reduced by the driver."
 msgstr ""
 "Określa maksymalną użyteczną moc radionadajnika. W zależności od wymagań "
-"prawnych i zastosowania sieci bezprzewodowej dysponowana moc nadawania może "
-"zostać zmniejszona przez sterownik."
+"prawnych i zastosowania sieci Wi-Fi dysponowana moc nadawania może zostać "
+"zmniejszona przez sterownik."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:81
 msgid ""
@@ -9878,7 +9877,7 @@ msgid ""
 msgstr ""
 "Określa porty przewodowe, które mają być dołączone do tego mostu. Aby "
 "dołączyć sieci bezprzewodowe, wybierz powiązany interfejs jako sieć w "
-"ustawieniach sieci bezprzewodowej."
+"ustawieniach sieci Wi-Fi."
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:142
@@ -10503,8 +10502,8 @@ msgid ""
 "The correct SSID must be manually specified when joining a hidden wireless "
 "network"
 msgstr ""
-"Podczas łączenia z ukrytą siecią bezprzewodową należy ręcznie określić "
-"prawidłowy identyfikator SSID"
+"Podczas łączenia z ukrytą siecią Wi-Fi należy podać prawidłowy identyfikator "
+"SSID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:760
 msgid "The default (%s) is zero for both IPv4 and IPv6."
@@ -10552,9 +10551,7 @@ msgstr ""
 msgid ""
 "The existing wireless configuration needs to be changed for LuCI to function "
 "properly."
-msgstr ""
-"Aby LuCI działał prawidłowo, należy zmienić istniejącą konfigurację sieci "
-"bezprzewodowej."
+msgstr "Aby LuCI działał prawidłowo, należy przekonfigurować sieć Wi-Fi."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:222
 msgid ""
@@ -10952,8 +10949,8 @@ msgstr ""
 "utworzyć. Jeśli chcesz kierować ruch sieciowy przez urządzenie sieci "
 "przewodowej, wybierz je z powyższego selektora urządzeń. Jeśli chcesz "
 "przypisać interfejs batman-adv do sieci Wi-Fi mesh, nie wybieraj urządzenia "
-"w selektorze urządzeń, ale przejdź do ustawień sieci bezprzewodowej i "
-"wybierz stamtąd ten interfejs jako sieć."
+"w selektorze urządzeń, ale przejdź do ustawień sieci Wi-Fi i wybierz stamtąd "
+"ten interfejs jako sieć."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:116
 msgid ""
@@ -11031,8 +11028,8 @@ msgstr ""
 msgid ""
 "This page displays the wireless metrics, for each available radio interfaces."
 msgstr ""
-"Ta strona wyświetla parametry sieci bezprzewodowej dla każdego dostępnego "
-"interfejsu radiowego."
+"Ta strona wyświetla parametry sieci Wi-Fi dla każdego dostępnego interfejsu "
+"radiowego."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1571
 msgid "This prefix is randomly generated at first install."
@@ -12020,8 +12017,8 @@ msgid ""
 "When enabled network coding increases the WiFi throughput by combining "
 "multiple frames into a single frame, thus reducing the needed air time."
 msgstr ""
-"Po włączeniu kodowania sieciowego zwiększa się przepustowość sieci Wi-Fi "
-"poprzez łączenie wielu ramek w jedną ramkę, co skraca czas nadawania."
+"Po włączeniu kodowania sieciowego następuje łączenie wielu ramek w jedną, co "
+"skraca czas nadawania i zwiększa przepustowość sieci Wi-Fi."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:76
 msgid ""
@@ -12083,8 +12080,8 @@ msgid ""
 "Where Wi-Fi Multimedia (WMM) Mode QoS is disabled, clients may be limited to "
 "802.11a/802.11g rates."
 msgstr ""
-"Gdy funkcja QoS w trybie Wi-Fi Multimedia (WMM) jest wyłączona, klienty mogą "
-"być ograniczone do szybkości 802.11a/802.11g."
+"Gdy funkcja QoS w trybie Wi-Fi Multimedia (WMM) jest wyłączona, "
+"przepływności mogą być ograniczone do 802.11a/802.11g."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1202
 msgid ""
@@ -12126,51 +12123,51 @@ msgstr "Peer WireGuard jest wyłączony"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:341
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:148
 msgid "Wireless"
-msgstr "Sieć bezprzewodowa"
+msgstr "Wi-Fi"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3028
 #: modules/luci-compat/luasrc/model/network.lua:1419
 msgid "Wireless Adapter"
-msgstr "Adapter bezprzewodowy"
+msgstr "Adapter Wi-Fi"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3007
 #: modules/luci-base/htdocs/luci-static/resources/network.js:4334
 #: modules/luci-compat/luasrc/model/network.lua:1405
 #: modules/luci-compat/luasrc/model/network.lua:1868
 msgid "Wireless Network"
-msgstr "Sieć bezprzewodowa"
+msgstr "Sieć Wi-Fi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:872
 msgid "Wireless Overview"
-msgstr "Przegląd stanu sieci bezprzewodowych"
+msgstr "Przegląd stanu sieci Wi-Fi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1047
 msgid "Wireless Security"
-msgstr "Zabezpieczenia sieci bezprzewodowych"
+msgstr "Zabezpieczenia sieci Wi-Fi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:854
 msgid "Wireless configuration migration"
-msgstr "Migracja konfiguracji bezprzewodowej"
+msgstr "Migracja konfiguracji Wi-Fi"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:193
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:152
 msgid "Wireless is disabled"
-msgstr "Sieć bezprzewodowa jest wyłączona"
+msgstr "Wi-Fi jest wyłączone"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:153
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:193
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:152
 msgid "Wireless is not associated"
-msgstr "Sieć bezprzewodowa nie jest podłączona"
+msgstr "Sieć Wi-Fi nie jest podłączona"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:996
 msgid "Wireless network is disabled"
-msgstr "Sieć bezprzewodowa jest wyłączona"
+msgstr "Sieć Wi-Fi jest wyłączona"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:996
 msgid "Wireless network is enabled"
-msgstr "Sieć bezprzewodowa jest włączona"
+msgstr "Sieć Wi-Fi jest włączona"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1935
 msgid "Workaround mode can only be used when acting as an access point."
