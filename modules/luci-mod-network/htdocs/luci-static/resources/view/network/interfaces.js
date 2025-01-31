@@ -658,7 +658,7 @@ return view.extend({
 					ss.taboption('general', form.Flag, 'ignore', _('Ignore interface'), _('Disable <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> for this interface.'));
 
 					if (protoval == 'static') {
-						so = ss.taboption('general', form.Value, 'start', _('Start'), _('Lowest leased address as offset from the network address.'));
+						so = ss.taboption('general', form.Value, 'start', _('Start', 'DHCP IP range start address'), _('Lowest leased address as offset from the network address.'));
 						so.optional = true;
 						so.datatype = 'or(uinteger,ip4addr("nomask"))';
 						so.default = '100';
