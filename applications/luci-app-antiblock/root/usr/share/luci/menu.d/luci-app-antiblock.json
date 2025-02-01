@@ -1,0 +1,30 @@
+{
+	"admin/services/antiblock": {
+		"title": "AntiBlock",
+		"order": 90,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [
+				"luci-app-antiblock"
+			]
+		}
+	},
+	"admin/services/antiblock/form": {
+		"title": "Args View",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "antiblock/form"
+		}
+	},
+	"admin/services/antiblock/domains": {
+		"title": "Domains file View",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "antiblock/domains"
+		}
+	}
+}
