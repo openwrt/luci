@@ -4,7 +4,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI example app for js based luci
-LUCI_DEPENDS:=+luci-base
+LUCI_DEPENDS:=+lua +luci-base +luci-lib-jsonc +luci-lib-nixio +luci-lua-runtime
 LUCI_PKGARCH:=all
 
 PKG_LICENSE:=GPL-2.0
