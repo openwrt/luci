@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2025-01-20 10:51+0000\n"
+"PO-Revision-Date: 2025-02-04 07:30+0000\n"
 "Last-Translator: Kay Kim <kaykim@kaykim.org>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/"
 ">\n"
@@ -436,7 +436,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:487
 msgid "A configuration for the device \"%s\" already exists"
-msgstr "디바이스 \"%s\"의 설정이 이미 존재합니다."
+msgstr "디바이스 \"%s\"의 설정이 이미 존재합니다"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:241
 msgid ""
@@ -950,7 +950,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "Alert"
-msgstr "경고"
+msgstr "경고 (Alert)"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3025
 #: modules/luci-compat/luasrc/model/network.lua:1417
@@ -1002,7 +1002,7 @@ msgstr "<abbr title=\"Secure Shell\">SSH</abbr> 암호 인증을 허용합니다
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1260
 msgid "Allow AP mode to disconnect STAs based on low ACK condition"
-msgstr "낮은 ACK 조건을 기준으로 AP 모드에서 STA의 연결을 끊을 수 있습니다."
+msgstr "AP 모드가 신호가 약한 기기의 접속을 자동으로 해제하게 허용"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:356
 msgid ""
@@ -2019,6 +2019,11 @@ msgid ""
 "the basic rate. Supported rates lower than the minimum basic rate are not "
 "offered."
 msgstr ""
+"커버리지 셀의 밀도에 따라 데이터 속도를 설정합니다. 보통은 기본 속도를 6, "
+"12, 24 Mbps로 설정하지만, 구형 802.11b 전송속도를 사용할 경우에는 5.5, 11Mbps"
+"로 설정합니다. 높음은 기본 속도를 12, 24Mbps로 설정하고, 구형 802.11b 전송속"
+"도를 사용할 경우 속도를 11Mbps로 설정합니다. 매우 높음은 24Mbps를 기본 속도"
+"로 설정합니다. 최소 기본 속도보다 낮은 지원 속도는 제공되지 않습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:805
 msgid ""
@@ -2154,7 +2159,7 @@ msgstr "국가 코드"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1014
 msgid "Coverage cell density"
-msgstr ""
+msgstr "커버리지 셀 밀도"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:575
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2284
@@ -2167,11 +2172,11 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:191
 msgid "Critical"
-msgstr ""
+msgstr "심각 (Critical)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:195
 msgid "Cron Log Level"
-msgstr ""
+msgstr "작업관리(Cron) 로그 수준"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:45
 msgid "Cross Pass (Japan only)"
@@ -2179,7 +2184,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:651
 msgid "Current power"
-msgstr ""
+msgstr "현재 출력"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:28
 msgctxt "nft meta hour"
@@ -2386,7 +2391,7 @@ msgstr "보낸 데이터"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:159
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:346
 msgid "Debug"
-msgstr ""
+msgstr "디버그"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
 msgid "Default gateway"
@@ -2648,7 +2653,7 @@ msgstr ""
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
-msgstr ""
+msgstr "암호화를 비활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1246
 msgid "Disable Inactivity Polling"
@@ -2682,12 +2687,12 @@ msgstr ""
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:70
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:500
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:529
 msgctxt "Label indicating that WireGuard peer is disabled"
 msgid "Disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1260
 msgid "Disassociate On Low Acknowledgement"
@@ -2737,13 +2742,15 @@ msgstr "닫기"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1020
 msgid "Distance Optimization"
-msgstr ""
+msgstr "거리 최적화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1020
 msgid ""
 "Distance to farthest network member in meters. Set only for distances above "
 "one kilometer; otherwise it is harmful."
 msgstr ""
+"가장 먼 네트워크 멤버까지의 거리(미터)입니다. 1km 이상 떨어져 있을 경우에만 "
+"설정하며, 그 미만일 경우에는 설정하지 않는 게 좋습니다."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
@@ -3076,7 +3083,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:193
 msgid "Emergency"
-msgstr ""
+msgstr "긴급 (Emergency)"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:119
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:119
@@ -3123,7 +3130,7 @@ msgstr ""
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:153
 msgid "Enable Debugmode"
-msgstr ""
+msgstr "디버그 모드 활성화"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:60
 msgid "Enable HE.net dynamic endpoint update"
@@ -3321,7 +3328,7 @@ msgstr ""
 msgid ""
 "Enables fast roaming among access points that belong to the same Mobility "
 "Domain"
-msgstr ""
+msgstr "동일한 모빌리티 도메인에 속한 액세스 포인트 사이의 빠른 로밍 활성화"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:100
 msgid ""
@@ -3418,7 +3425,7 @@ msgstr ""
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:156
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:343
 msgid "Error"
-msgstr ""
+msgstr "오류 (Error)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:156
 msgid "Error getting PublicKey"
@@ -3967,7 +3974,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1024
 msgid "Fragmentation Threshold"
-msgstr ""
+msgstr "파편화 임계값"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:62
 msgctxt "nft nat flag fully-random"
@@ -4313,7 +4320,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1017
 msgid "High"
-msgstr ""
+msgstr "높음"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1160
 msgid "Honor gratuitous ARP"
@@ -4988,12 +4995,12 @@ msgstr ""
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:158
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:345
 msgid "Info"
-msgstr ""
+msgstr "정보 (Info)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:91
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:92
 msgid "Information"
-msgstr ""
+msgstr "정보"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:573
 msgid "Ingress QoS mapping"
@@ -5566,9 +5573,10 @@ msgid ""
 "interoperate. Airtime efficiency may be significantly reduced where these "
 "are used. It is recommended to not allow 802.11b rates where possible."
 msgstr ""
-"레거시 또는 제대로 작동하지 않는 디바이스는 상호 운용을 위해 레거시 802.11b "
-"속도가 필요할 수 있습니다. 이러한 경우 방송 시간 효율성이 크게 저하될 수 있습"
-"니다. 가능한 경우 802.11b 속도를 허용하지 않는 것이 좋습니다."
+"오래되었거나(legacy) 제대로 작동하지 않는 장치를 상호운용하려면, 구형 "
+"802.11b 전송속도가 필요할 수도 있습니다. 이럴 경우, 방송 시간(Airtime) 효율성"
+"이 크게 저하될 수 있습니다. 가능하다면, 802.11b 전송속도를 허용하지 않는 것"
+"이 좋습니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:680
 msgid "Legacy rules detected"
@@ -5866,7 +5874,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:123
 msgid "Logging"
-msgstr ""
+msgstr "로깅"
 
 #: themes/luci-theme-bootstrap/htdocs/luci-static/resources/view/bootstrap/sysauth.js:23
 msgid "Logging in…"
@@ -6324,7 +6332,7 @@ msgstr ""
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3909
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1140
 msgid "Monitor"
-msgstr ""
+msgstr "감시 모드 (Monitor)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:895
 msgid "Monitor Interval"
@@ -6851,7 +6859,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1016
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
 msgid "Normal"
-msgstr ""
+msgstr "보통"
 
 #: modules/luci-base/ucode/template/error404.ut:9
 msgid "Not Found"
@@ -6922,7 +6930,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:188
 msgid "Notice"
-msgstr ""
+msgstr "알림 (Notice)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:135
 msgid "Nslookup"
@@ -7041,7 +7049,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:185
 msgid "Only affects dmesg kernel log"
-msgstr ""
+msgstr "dmesg 커널 로그에만 영향을 미칩니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1222
 msgid "Only allow communication with non-isolated bridge ports when enabled"
@@ -7130,7 +7138,7 @@ msgstr "삭제된 option"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1549
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1890
 msgid "Optional"
-msgstr ""
+msgstr "선택적"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1177
 msgid "Optional hostname to assign"
@@ -7949,7 +7957,7 @@ msgstr "프로세스"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:67
 msgid "Prot."
-msgstr "Prot."
+msgstr "프로토콜"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:82
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:545
@@ -7992,7 +8000,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1139
 msgid "Pseudo Ad-Hoc (ahdemo)"
-msgstr ""
+msgstr "유사 애드혹 (ahdemo)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:144
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:573
@@ -8141,7 +8149,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1028
 msgid "RTS/CTS Threshold"
-msgstr ""
+msgstr "RTS/CTS 임계값"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:49
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:86
@@ -8473,7 +8481,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1550
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1891
 msgid "Required"
-msgstr ""
+msgstr "필수"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
@@ -9132,6 +9140,8 @@ msgid ""
 "Settings for assisting wireless clients in roaming between multiple APs: "
 "802.11r, 802.11k and 802.11v"
 msgstr ""
+"여러 액세스 포인트들 사이에서 무선 클라이언트들이 로밍하는 걸 지원하기 위한 "
+"설정: 802.11r, 802.11k 및 802.11v"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:212
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:39
@@ -11270,7 +11280,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1018
 msgid "Very High"
-msgstr ""
+msgstr "매우 높음"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:229
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:229
@@ -11313,7 +11323,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1050
 msgid "WLAN roaming"
-msgstr ""
+msgstr "무선 랜 로밍"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1206
 msgid "WMM Mode"
@@ -11352,7 +11362,7 @@ msgstr ""
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:189
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:157
 msgid "Warning"
-msgstr ""
+msgstr "주의 (Warning)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:26
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
@@ -11627,7 +11637,7 @@ msgstr "자동"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (disabled)"
-msgstr ""
+msgstr "자동 (비활성화됨)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (enabled)"
@@ -11706,7 +11716,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1149
 msgid "disable"
-msgstr ""
+msgstr "비활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:157
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1134
@@ -11717,12 +11727,12 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:91
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:26
 msgid "disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:20
 msgctxt "DHCPv6 address request mode"
 msgid "disabled"
-msgstr ""
+msgstr "비활성화됨"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:800
 msgid "distribute traffic according to port load"
@@ -12051,7 +12061,7 @@ msgstr "유니크 값"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:652
 msgid "unknown"
-msgstr "알 수 없는"
+msgstr "알 수 없음"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:28
 msgid "unknown version"
