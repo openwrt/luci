@@ -40,6 +40,11 @@ function startPolling(includes, containers) {
 				else if (includes[i].content != null)
 					content = includes[i].content;
 
+				if (typeof (includes[i].oneshot) == 'function') {
+					includes[i].oneshot(results ? results[i] : null);
+					includes[i].oneshot = null;
+				}
+
 				if (content != null) {
 					containers[i].parentNode.style.display = '';
 					containers[i].parentNode.classList.add('fade-in');
