@@ -78,9 +78,11 @@ return view.extend({
 	request_hash: '',
 	sha256_unsigned: '',
 
-	applyPackageChanges: async function(packages, data, firmware) {
-		const overview_url = `${data.url}/api/v1/overview`;
-		const revision_url = `${data.url}/api/v1/revision/${firmware.version}/${firmware.target}`;
+	applyPackageChanges: async function(package_info) {
+		let { url, target, version, packages } = package_info;
+
+		const overview_url = `${url}/api/v1/overview`;
+		const revision_url = `${url}/api/v1/revision/${version}/${target}`;
 
 		let changes, target_revision;
 
@@ -88,7 +90,7 @@ return view.extend({
 			request.get(overview_url).then(
 				(response) => {
 					let json = response.json();
-					changes = json.branches[get_branch(firmware.version)].package_changes;
+					changes = json.branches[get_branch(version)].package_changes;
 				},
 				(failed) => {
 					ui.addNotification(null, E('p', _(`Get overview failed ${failed}`)));
@@ -581,7 +583,12 @@ return view.extend({
 									class: 'btn cbi-button cbi-button-positive important',
 									click: ui.createHandlerFn(this, function () {
 										map.save().then(() => {
-											this.applyPackageChanges(mapdata.request.packages, data, firmware).then((packages) => {
+											this.applyPackageChanges({
+												url,
+												target,
+												version:  mapdata.request.version,
+												packages: mapdata.request.packages,
+											}).then((packages) => {
 												const content = {
 													...firmware,
 													packages: packages,
