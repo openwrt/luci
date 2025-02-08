@@ -78,6 +78,46 @@ return view.extend({
 	request_hash: '',
 	sha256_unsigned: '',
 
+	applyPackageChanges: async function(package_info) {
+		let { url, target, version, packages } = package_info;
+
+		const overview_url = `${url}/api/v1/overview`;
+		const revision_url = `${url}/api/v1/revision/${version}/${target}`;
+
+		let changes, target_revision;
+
+		await Promise.all([
+			request.get(overview_url).then(
+				(response) => {
+					let json = response.json();
+					changes = json.branches[get_branch(version)].package_changes;
+				},
+				(failed) => {
+					ui.addNotification(null, E('p', _(`Get overview failed ${failed}`)));
+				}
+			),
+			request.get(revision_url).then(
+				(response) => {
+					target_revision = get_revision_count(response.json().revision);
+				},
+				(failed) => {
+					ui.addNotification(null, E('p', _(`Get revision failed ${failed}`)));
+				}
+			),
+		]);
+
+		for (const change of changes) {
+			let idx = packages.indexOf(change.source);
+			if (idx >= 0 && change.revision <= target_revision) {
+				if (change.target)
+					packages[idx] = change.target;
+				else
+					packages.splice(idx, 1);
+			}
+		}
+		return packages;
+	},
+
 	selectImage: function (images, data, firmware) {
 		var filesystemFilter = function(e) {
 			return (e.filesystem == firmware.filesystem);
@@ -543,17 +583,24 @@ return view.extend({
 									class: 'btn cbi-button cbi-button-positive important',
 									click: ui.createHandlerFn(this, function () {
 										map.save().then(() => {
-											const content = {
-												...firmware,
+											this.applyPackageChanges({
+												url,
+												target,
+												version:  mapdata.request.version,
 												packages: mapdata.request.packages,
-												version: mapdata.request.version,
-												profile: mapdata.request.profile
-											};
-											this.pollFn = L.bind(function () {
-												this.handleRequest(url, true, content, data, firmware);
-											}, this);
-											poll.add(this.pollFn, 5);
-											poll.start();
+											}).then((packages) => {
+												const content = {
+													...firmware,
+													packages: packages,
+													version: mapdata.request.version,
+													profile: mapdata.request.profile
+												};
+												this.pollFn = L.bind(function () {
+													this.handleRequest(url, true, content, data, firmware);
+												}, this);
+												poll.add(this.pollFn, 5);
+												poll.start();
+											});
 										});
 									}),
 								},
