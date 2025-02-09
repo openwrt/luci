@@ -74,7 +74,7 @@ case "$action" in
 				while [ -n "$1" ]; do
 					case "$1" in
 						--autoremove|--force-overwrite|--force-removal-of-dependent-packages)
-							ipkg_bin="$apk $1"
+							cmd="$cmd $1"
 							shift
 						;;
 						-*)
