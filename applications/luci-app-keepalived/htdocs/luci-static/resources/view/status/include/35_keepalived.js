@@ -38,7 +38,21 @@ return baseclass.extend({
 
 		cbi_update_table(table,
 			targets.map(function(target) {
-				var state = (target.stats.become_master - target.stats.release_master) ? 'MASTER' : 'BACKUP';
+				var state;
+				var instance_state = target.data.state;
+
+				if (instance_state === 2) {
+					state = 'MASTER';
+				} else if (instance_state === 1) {
+					state = 'BACKUP';
+				} else if (instance_state === 0) {
+					state = 'INIT';
+				} else if (instance_state === 3) {
+					state = 'FAULT';
+				} else {
+					state = 'UNKNOWN';
+				}
+
 				if (instances != '') {
 					for (var i = 0; i < instances.length; i++) {
 						if (instances[i]['name'] == target.data.iname) {
