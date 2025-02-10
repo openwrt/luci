@@ -7,7 +7,7 @@ PKG_NAME:=luci-app-https-dns-proxy
 PKG_LICENSE:=AGPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
 PKG_VERSION:=2023.12.26
-PKG_RELEASE:=1
+PKG_RELEASE:=4
 
 LUCI_TITLE:=DNS Over HTTPS Proxy Web UI
 LUCI_URL:=https://github.com/stangri/luci-app-https-dns-proxy/
