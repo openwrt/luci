@@ -24,7 +24,8 @@ return view.extend({
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Name')),
 					E('th', { 'class': 'th' }, _('Interface')),
-					E('th', { 'class': 'th' }, _('Active State/State')),
+					E('th', { 'class': 'th' }, _('Active State')),
+					E('th', { 'class': 'th' }, _('Initial State')),
 					E('th', { 'class': 'th' }, _('Probes Sent')),
 					E('th', { 'class': 'th' }, _('Probes Received')),
 					E('th', { 'class': 'th' }, _('Last Transition')),
@@ -40,6 +41,7 @@ return view.extend({
 				cbi_update_table(table,
 					targets.map(function(target) {
 						var state;
+						var state_initial;
 						var instance_state = target.data.state;
 
 						if (instance_state === 2) {
@@ -57,7 +59,8 @@ return view.extend({
 						if (instances != '') {
 							for (var i = 0; i < instances.length; i++) {
 								if (instances[i]['name'] == target.data.iname) {
-									state = state + '/' + instances[i]['state'];
+									state = state;
+									state_initial = instances[i]['state'];
 									break;
 								}
 							}
@@ -66,6 +69,7 @@ return view.extend({
 							target.data.iname,
 							target.data.ifp_ifname,
 							state,
+							state_initial,
 							target.stats.advert_sent,
 							target.stats.advert_rcvd,
 							new Date(target.data.last_transition * 1000)
