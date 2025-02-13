@@ -95,7 +95,7 @@ return view.extend({
 			var accessTechnologiesStr = generic['access-technologies'].join(', ');
 			var signalQualityValue = parseInt(generic['signal-quality'].value);
 			var networkSection = this.renderSection(_('Network Registration'), [
-				[_('Own Numbers'), ownNumbersStr],
+				[_('Mobile Number'), ownNumbersStr],
 				[_('Access Technologies'), accessTechnologiesStr],
 				[_('Operator') , modem3gpp['operator-name']],
 				[_('Operator Code'), modem3gpp['operator-code']],
