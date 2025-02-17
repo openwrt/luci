@@ -173,7 +173,7 @@ return view.extend({
 				}
 				var domains = document.getElementById('domains');
 				if (domains && info) {
-					domains.textContent = parseInt(info.blocked_domains, 10).toLocaleString() || '-';
+					domains.textContent = info.blocked_domains || '-';
 				}
 				var sources = document.getElementById('sources');
 				var src_array = [];
