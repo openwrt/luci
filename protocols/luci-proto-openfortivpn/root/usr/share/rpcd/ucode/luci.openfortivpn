@@ -1,0 +1,115 @@
+#!/usr/bin/env ucode
+
+'use strict';
+
+import { readfile, writefile, stat } from 'fs';
+
+const interfaceregex = /^[a-zA-Z0-9_]+$/;
+const user_cert_string = "/etc/openfortivpn/user-cert-%s.pem";
+const user_key_string = "/etc/openfortivpn/user-key-%s.pem";
+const ca_file_string = "/etc/openfortivpn/ca-%s.pem";
+
+
+// Utility to read a file
+function _readfile(path) {
+	let _stat = stat(path);
+	if (_stat && _stat.type == "file") {
+		let content = readfile(path);
+		return content ? trim(content) : 'File empty';
+	}
+	return 'File not found';
+}
+
+// Utility to write a file
+function _writefile(path, data) {
+	if (!data) {
+		return false;
+	}
+	return writefile(path, data) == length(data);
+}
+
+const methods = {
+
+	list:{
+		call: function() {
+			return {
+				getCertificates: {
+					interface: "interface"
+				},
+				setCertificates: {
+					interface: "interface",
+					user_cert: "user_cert",
+					user_key: "user_key",
+					ca_file: "ca_file"
+				}
+			};
+		}
+	},
+
+	getCertificates: {
+		args: {
+			interface: "interface",
+		},
+		call: function(req) {
+
+			const _interface = req.args?.interface;
+			if (!_interface || !match(_interface, interfaceregex)) {
+				// printf("Invalid interface name");
+				return;
+			}
+
+			const user_cert_pem = _readfile(sprintf(user_cert_string, _interface));
+			const user_key_pem = _readfile(sprintf(user_key_string, _interface));
+			const ca_file_pem = _readfile(sprintf(ca_file_string, _interface));
+
+			if(user_cert_pem && user_key_pem && ca_file_pem){
+				return {
+					user_cert: user_cert_pem,
+					user_key: user_key_pem,
+					ca_file: ca_file_pem,
+				};
+			}
+
+		}
+	},
+
+	setCertificates: {
+		args: {
+			interface: "interface",
+			user_cert: "user_cert",
+			user_key: "user_key",
+			ca_file: "ca_file",
+		},
+		call: function(req) {
+
+			let result = false;
+			let interface = req.args?.interface;
+
+			if (!interface || !match(interface, interfaceregex)) {
+				// printf("Invalid interface name");
+				return;
+			}
+
+			/* the interface is set up to call 1 write per certificate,
+			with only one of the following arguments not null */
+			if (req.args?.user_cert) {
+				result = _writefile(sprintf(user_cert_string, interface), req.args?.user_cert);
+			}
+			if (req.args?.user_key) {
+				result = _writefile(sprintf(user_key_string, interface), req.args?.user_key);
+			}
+			if (req.args?.ca_file) {
+				result = _writefile(sprintf(ca_file_string, interface), req.args?.ca_file);
+			}
+
+			return {
+				result: result,
+			};
+
+		}
+	}
+
+};
+
+return { 'luci.openfortivpn': methods };
+

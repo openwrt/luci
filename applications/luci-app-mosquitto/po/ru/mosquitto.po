@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-01-21 17:05+0000\n"
-"Last-Translator: st7105 <st7105@gmail.com>\n"
+"PO-Revision-Date: 2024-10-16 19:05+0000\n"
+"Last-Translator: Lorekin <lorekine@outlook.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmosquitto/ru/>\n"
 "Language: ru\n"
@@ -11,17 +11,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:61
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:60
 msgid "Allow anonymous connections"
 msgstr "Разрешить анонимные соединения"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:61
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:60
 msgid "Allow to connect without providing a username and password"
 msgstr "Разрешить подключение без указания имени пользователя и пароля"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:163
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:157
 msgid ""
 "Attempt to notify the local and remote broker of connection status, defaults "
 "to $SYS/broker/connections/&lt;clientid&gt;/state"
@@ -29,196 +29,207 @@ msgstr ""
 "Попытка уведомить локального и удаленного брокера о состоянии соединения, по "
 "умолчанию $SYS/broker/connections/&lt;clientid&gt;/state"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:177
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:179
 msgid "Automatic, but no restarts"
 msgstr "Автоматически, но без перезагрузок"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:176
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:178
 msgid "Automatic, but stopped when not used"
 msgstr "Автоматически, но останавливается, если не используется"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:175
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:177
 msgid "Automatic, includes restarts"
 msgstr "Автоматически, включая перезапуск"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:82
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:83
 msgid "Autosave interval"
 msgstr "Интервал автосохранения"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:80
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:80
 msgid "Autosave interval applies to change counts instead of time"
 msgstr ""
 "Интервал автосохранения применяется к количеству изменений, а не к времени"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:80
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:80
 msgid "Autosave on changes"
 msgstr "Автосохранение при изменениях"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:205
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:206
 msgid "Bridge PSK"
 msgstr "Мост PSK"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:165
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:162
 msgid "Bridge connection states should only be published locally"
 msgstr "Состояния мостовых соединений должны публиковаться только локально"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:132
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:139
 msgid "Bridges"
 msgstr "Мосты"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:104
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:109
 msgid "CA file path"
 msgstr "Путь к файлу CA"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:107
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:112
 msgid "CA path to search"
 msgstr "Путь CA для поиска"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:127
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:131
 msgid "CRL to use if require_certificate is enabled"
 msgstr "CRL для использования, если включен параметр require_certificate"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:128
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:133
 msgid "Ciphers control. Should match 'openssl ciphers' format"
 msgstr "Контроль шифров. Должен соответствовать формату 'openssl ciphers'"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:161
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:154
 msgid "Clean session"
 msgstr "Очистить сессию"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:77
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:77
 msgid "Client expiration"
 msgstr "Срок действия клиента"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:168
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:167
 msgid "Client id to use locally. Important when bridging to yourself"
 msgstr ""
 "Идентификатор клиента для использования локально. Важно при подключении к "
 "самому себе"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:167
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:164
 msgid "Client id to use on remote end of this bridge connection"
 msgstr ""
 "Идентификатор клиента для использования на удаленном конце этого мостового "
 "соединения"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:137
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:144
 msgid "Connection name"
 msgstr "Название соединения"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:118
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:8
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:101
+msgid "Default"
+msgstr "По умолчанию"
+
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:122
 msgid "Depends on your openssl version, empty to support all"
 msgstr "Зависит от версии openssl, пустой для поддержки всех"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:222
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:223
 msgid "Directory to search for CA files"
 msgstr "Каталог для поиска файлов CA"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:52
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:10
+msgid "Disabled"
+msgstr "Отключено"
+
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:53
 msgid "Disallow remote access to this broker"
 msgstr "Запретить удаленный доступ к этому брокеру"
+
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:9
+msgid "Enabled"
+msgstr "Включен"
 
 #: applications/luci-app-mosquitto/root/usr/share/rpcd/acl.d/luci-app-mosquitto.json:3
 msgid "Grant UCI access for luci-app-mosquitto"
 msgstr "Предоставить доступ к UCI для luci-app-mosquitto"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:181
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:185
 msgid "How long to wait before disconnecting"
 msgstr "Как долго ждать перед отключением"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:178
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:181
 msgid "How long to wait before reconnecting"
 msgstr "Как долго ждать перед повторным подключением"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:184
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:189
 msgid "How many messages to queue before restarting lazy bridge"
 msgstr ""
 "Сколько сообщений следует поместить в очередь перед перезапуском ленивого "
 "моста"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:172
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:174
 msgid "How should this bridge be started"
 msgstr "Как должен быть запущен этот мост"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:195
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:203
 msgid "Identity for TLS-PSK"
 msgstr "Идентификация для TLS-PSK"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:36
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:38
 msgid ""
-"If checked, mosquitto runs with a config generated from this page. (Or from "
-"UCI directly) If unchecked, mosquitto runs with the config in /etc/mosquitto/"
-"mosquitto.conf (and this page is ignored)"
+"If checked, mosquitto runs with a config generated from this page. If "
+"unchecked, mosquitto runs with the config in %s (and this page is ignored)."
 msgstr ""
 "Если флажок установлен, mosquitto запускается с конфигом, сгенерированным на "
-"этой странице. (Или из UCI напрямую) Если флажок снят, mosquitto запускается "
-"с конфигом в /etc/mosquitto/mosquitto.conf (и эта страница игнорируется)"
+"этой странице. Если флажок снят, mosquitto запускается с конфигурацией в %s ("
+"и эта страница игнорируется)."
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:169
-msgid "Keepalive interval for this bridge"
-msgstr "Интервал keepalive для этого моста"
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:170
+msgid "Keep-alive interval for this bridge"
+msgstr "Интервал Keep-alive для этого моста"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:205
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:206
 msgid "Key for TLS-PSK"
 msgstr "Ключ для TLS-PSK"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:62
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:118
+msgid "Keyfile (PEM encoded)"
+msgstr "ключевой файл (в кодировке PEM)"
+
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:62
 msgid "Limit for message allowed inflight"
 msgstr "Ограничение на количество разрешенных сообщений в передаче"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:65
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:65
 msgid "Limit for message queue when offline"
 msgstr "Ограничение на размер очереди сообщений при отсутствии подключения"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:68
-msgid "Limit for message queue when offline, zero to disable)"
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:68
+msgid "Limit for message queue when offline, zero to disable"
 msgstr ""
 "Ограничение на размер очереди сообщений при отсутствии подключения (ноль для "
 "отключения)"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:92
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:93
 msgid "Listeners"
 msgstr "Слушатели"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:44
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:46
 msgid "Log destination"
 msgstr "Место расположения журнала"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:99
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:102
 msgid "MQTT"
 msgstr "MQTT"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:62
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:62
 msgid "Max Inflight Messages"
 msgstr "Максимальное количество передаваемых сообщений"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:65
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:68
+msgid "Max Queued Bytes"
+msgstr "Максимальное количество байтов в очереди"
+
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:65
 msgid "Max Queued Messages"
 msgstr "Максимальное количество сообщений в очереди"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:68
-msgid "Max Queued bytes"
-msgstr "Максимальное количество байтов в очереди"
-
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:43
 #: applications/luci-app-mosquitto/root/usr/share/luci/menu.d/luci-app-mosquitto.json:3
 msgid "Mosquitto"
 msgstr "Mosquitto"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:26
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:25
 msgid "Mosquitto MQTT Broker"
 msgstr "Mosquitto MQTT брокер"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:165
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:162
 msgid "Notifications local only"
 msgstr "Уведомления только локальные"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:202
-msgid "Only hex numbers are allowed (use A-F characters and 0-9 digits)"
-msgstr ""
-"Допускаются только шестнадцатеричные числа (используйте символы A-F и цифры "
-"0-9)"
-
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:53
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:54
 msgid ""
 "Outbound bridges will still work, but this will make the primary listener "
 "only available from localhost"
@@ -226,71 +237,63 @@ msgstr ""
 "Исходящие мосты по-прежнему будут работать, но в этом случае основной "
 "слушатель будет доступен только с localhost"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:195
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:203
 msgid "PSK Bridge Identity"
 msgstr "Идентификация моста PSK"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:129
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:136
 msgid "PSK Hint to provide to connecting clients"
 msgstr "Подсказка PSK для предоставления подключающимся клиентам"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:219
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:219
 msgid "Path to CA file"
 msgstr "Путь к файлу CA"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:228
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:231
 msgid "Path to PEM encoded keyfile"
 msgstr "Путь к ключевому файлу в кодировке PEM"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:225
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:227
 msgid "Path to PEM encoded server certificate file"
 msgstr "Путь к файлу сертификата сервера в кодировке PEM"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:88
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:89
 msgid "Path to persistent file"
 msgstr "Путь к постоянному файлу"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:73
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:72
 msgid "Persistence"
 msgstr "Постоянство"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:76
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:75
 msgid "Persistence enabled"
 msgstr "Постоянство включено"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:85
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:86
 msgid "Persistent file name"
 msgstr "Постоянное имя файла"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:88
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:89
 msgid "Persistent file path (with trailing/)"
 msgstr "Постоянный путь к файлу (с трейлингом/)"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:150
-msgid "Please enter a hostname or an IP address"
-msgstr "Введите имя хоста или IP-адрес"
-
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:145
-msgid "Please enter a valid port after the :"
-msgstr "Пожалуйста, введите действительный порт после :"
-
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:95
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:97
 msgid "Port"
 msgstr "Порт"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:97
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:100
 msgid "Protocol to use when listening"
 msgstr "Протокол, который следует использовать при прослушивании"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:191
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:199
 msgid "Remote password"
 msgstr "Удаленный пароль"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:190
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:196
 msgid "Remote username"
 msgstr "Имя удаленного пользователя"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:77
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:77
 msgid ""
 "Remove persistent clients if they haven't reconnected in this period, eg 6h, "
 "3d, 2w"
@@ -298,28 +301,32 @@ msgstr ""
 "Удалите постоянных клиентов, если они не переподключались в течение этого "
 "периода, например 6h, 3d, 2w"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:125
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:129
 msgid "Require clients to present a certificate"
 msgstr "Требуйте от клиентов предъявления сертификата"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:82
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:83
 msgid "Save persistence file after this many seconds or changes"
 msgstr "Сохраняйте файл постоянства через столько-то секунд или изменений"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:57
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:115
+msgid "Server certificate file (PEM encoded)"
+msgstr "файл сертификата сервера (в кодировке PEM)"
+
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:57
 msgid "Set to zero to disable"
 msgstr "Установите нулевое значение, чтобы отключить"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:76
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:75
 msgid "Should persistence to disk be enabled at all"
 msgstr "Нужно ли вообще включать сохранение на диск"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:117
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:211
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:121
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:211
 msgid "TLS Version"
 msgstr "Версия TLS"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:212
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:212
 msgid ""
 "The remote broker must support the same version of TLS for the connection to "
 "succeed."
@@ -327,43 +334,43 @@ msgstr ""
 "Удаленный брокер должен поддерживать ту же версию TLS, чтобы соединение было "
 "успешным."
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:57
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:57
 msgid "Time in seconds between updates of the $SYS tree"
 msgstr "Время в секундах между обновлениями дерева $SYS"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:164
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:159
 msgid "Topic to use for local+remote remote for notifications."
 msgstr "Тема, которую следует использовать для уведомлений локально+удаленно."
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:35
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:37
 msgid "Use this LuCI configuration page"
 msgstr "Используйте эту страницу конфигурации LuCI"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:100
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:103
 msgid "WebSockets"
 msgstr "WebSockets"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:92
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:93
 msgid "You can configure additional listeners here"
 msgstr "Вы можете настроить дополнительные слушатели здесь"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:133
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:140
 msgid "You can configure multiple bridge connections here"
 msgstr "Здесь можно настроить несколько мостовых соединений"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:45
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:46
 msgid "You can have multiple, but 'none' will override all others"
 msgstr "Их может быть несколько, но \"ни один\" отменяет все остальные"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:153
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:147
 msgid "address"
 msgstr "адрес"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:153
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:147
 msgid "address[:port] of remote broker"
 msgstr "адрес[:порт] удаленного брокера"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:189
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:194
 msgid ""
 "attempt to notify the remote broker that this is a bridge, not all brokers "
 "support this."
@@ -371,45 +378,46 @@ msgstr ""
 "попытка уведомить удаленного брокера о том, что это мост; не все брокеры "
 "поддерживают эту функцию."
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:159
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:151
 msgid "full topic string for mosquitto.conf, eg: 'power/# out 2'"
 msgstr "полная строка темы в файле mosquitto.conf, например: 'power/# out 2'"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:102
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:105
 msgid "http_dir to serve on websockets listeners"
 msgstr "http_dir для обслуживания слушателей websockets"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:113
-msgid "keyfile (PEM encoded)"
-msgstr "ключевой файл (в кодировке PEM)"
-
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:27
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:26
 msgid ""
 "mosquitto - the <a href='http://www.mosquitto.org'>blood thirsty</a> MQTT "
 "messaging broker. Note, only some of the available configuration files are "
-"supported at this stage, use the checkbox below to use config generated by "
-"this page, or the stock mosquitto configuration file in /etc/mosquitto/"
-"mosquitto.conf"
+"supported at this stage. Use the checkbox below to use config generated by "
+"this page, or the stock mosquitto configuration file in %s."
 msgstr ""
 "mosquitto - <a href='http://www.mosquitto.org'>жаждущий крови</a> брокер "
 "обмена сообщениями MQTT. Обратите внимание, что на данном этапе "
 "поддерживаются только некоторые из доступных конфигурационных файлов, "
 "используйте флажок ниже, чтобы использовать конфигурацию, сгенерированную на "
-"этой странице, или стандартный конфигурационный файл mosquitto в /etc/"
-"mosquitto/mosquitto.conf"
+"этой странице, или стандартный конфигурационный файл mosquitto в %s."
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:162
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:156
 msgid "notifications"
 msgstr "уведомления"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:110
-msgid "server certificate file (PEM encoded)"
-msgstr "файл сертификата сервера (в кодировке PEM)"
-
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:158
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:150
 msgid "topic"
 msgstr "тема"
 
-#: applications/luci-app-mosquitto/luasrc/model/cbi/mosquitto.lua:138
+#: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:145
 msgid "unique name for this bridge configuration"
 msgstr "уникальное имя для этой конфигурации моста"
+
+#~ msgid "Only hex numbers are allowed (use A-F characters and 0-9 digits)"
+#~ msgstr ""
+#~ "Допускаются только шестнадцатеричные числа (используйте символы A-F и "
+#~ "цифры 0-9)"
+
+#~ msgid "Please enter a hostname or an IP address"
+#~ msgstr "Введите имя хоста или IP-адрес"
+
+#~ msgid "Please enter a valid port after the :"
+#~ msgstr "Пожалуйста, введите действительный порт после :"

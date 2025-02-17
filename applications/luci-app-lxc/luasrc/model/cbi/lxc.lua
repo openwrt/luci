@@ -28,11 +28,6 @@ o1:value("repo.turris.cz/lxc", "repo.turris.cz/lxc (SSL req.)")
 o1.default = "images.linuxcontainers.org"
 o1.rmempty = false
 
-o2 = s:option(Flag, "ssl_enabled", translate("Enable SSL"),
-	translate("Enable optional SSL encryption support. This requires additional packages like 'wget', 'ca-certificates', 'gnupg' and 'gnupg-utils'."))
-o2.default = o2.disabled
-o2.rmempty = false
-
 o3 = s:option(Value, "min_space", translate("Free Space Threshold"),
 	translate("Minimum required free space for LXC Container creation in KB"))
 o3.default = "100000"

@@ -64,8 +64,8 @@ return view.extend({
 			_('Allows the lower priority machine to maintain the master role,') +
 			_('even when a higher priority machine comes back online.') + ' ' +
 			_('For this to work, the initial state of this entry must be BACKUP.'));
+		o.optional = true;
 		o.default = false;
-		o.rmempty = false;
 
 		ipaddress = uci.sections('keepalived', 'ipaddress');
 		o = s.taboption('general', form.DynamicList, 'virtual_ipaddress', _('Virtual IP Address'),
@@ -218,7 +218,7 @@ return view.extend({
 		o.placeholder = '300';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.ListValue, 'preempt_delay', _('Debug'),
+		o = s.taboption('advanced', form.ListValue, 'debug', _('Debug'),
 			_('Debug Level'));
 		o.default = '0';
 		o.value('0');
@@ -283,7 +283,7 @@ return view.extend({
 
 	render: function(data) {
 		var netDevs = data[0];
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('keepalived');
 

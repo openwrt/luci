@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-23 21:10+0000\n"
-"Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2025-01-17 09:01+0000\n"
+"Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationshttps-dns-proxy/lt/>\n"
 "Language: lt\n"
@@ -11,21 +11,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
 "n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:258
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:275
 msgid "%s%s%s proxy at %s on port %s.%s"
-msgstr "%s%s%s įgaliotas randamas %s prievade %s.%s"
+msgstr "„%s%s%s“ įgaliotas randamas – „%s“, prievade – „%s“.%s"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:250
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:267
 msgid "%s%s%s proxy on port %s.%s"
-msgstr "%s%s%s įgaliotas prievade %s.%s"
+msgstr "„%s%s%s“ įgaliotas prievade – „%s“.%s"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/co.oszx.dns.json:14
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/gr.libredns.doh.json:14
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.doh.json:15
 msgid "AdBlocking Filter"
-msgstr ""
+msgstr "„Adblocking“ filtras"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.adguard.dns.json:2
 msgid "AdGuard"
@@ -33,11 +32,35 @@ msgstr "„AdGuard“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.controld.freedns.json:30
 msgid "Ads + Malware + Social Filter"
-msgstr "Reklamos + Kompiuteriniai virusai + Socialinis filtras"
+msgstr "Reklamų/Skelbimų + Kompiuterinių virusų + Socialinis filtras/-ai"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.controld.freedns.json:26
 msgid "Ads + Malware Filter"
-msgstr "Reklamos + Kompiuterinių virusų filtras"
+msgstr "Reklamų/Skelbimų + Kompiuterinių virusų filtras"
+
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.dns.json:19
+msgid "Ads and Trackers Filter"
+msgstr "Reklamų/Skelbimų ir sekiklių filtras"
+
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.dns.json:35
+msgid "Ads, Trackers, Malware, Adult, Gambling, and Social Media Filter"
+msgstr ""
+"Reklamų/Skelbimų, sekiklių, kompiuterinių virusų, suaugusiųjų, lošimų ir "
+"socialinių medijų filtras"
+
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.dns.json:31
+msgid "Ads, Trackers, Malware, Adult, and Gambling"
+msgstr ""
+"Reklamos/Skelbimai, sekikliai, kompiuteriniai virusai, suaugusieji ir lošimas"
+
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.dns.json:27
+msgid "Ads, Trackers, Malware, and Social Media Filter"
+msgstr ""
+"Reklamų/Skelbimų, sekiklių, kompiuterinių virusų ir socialinių medijų filtras"
+
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.dns.json:23
+msgid "Ads, Trackers, and Malware Filter"
+msgstr "Reklamų/Skelbimų, sekiklių ir kompiuterinių virusų filtras"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/org.cleanbrowsing.doh.json:14
 msgid "Adult Content Filter"
@@ -67,21 +90,27 @@ msgstr "Australija"
 msgid "BlahDNS"
 msgstr "„BlahDNS“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:170
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:148
 msgid ""
 "Blocks access to Mozilla Encrypted resolvers, forcing local devices to use "
 "router for DNS resolution (%smore information%s)."
 msgstr ""
+"Blokuoja prieigą prie – „Mozilla“ šifruotų sprendiklių, priversdamas "
+"vietinius įrenginius naudoti maršrutizatorių, skirtai – „DNS“ skyrimui "
+"(%sdaugiau informacijos%s)."
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:154
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:132
 msgid ""
 "Blocks access to iCloud Private Relay resolvers, forcing local devices to "
 "use router for DNS resolution (%smore information%s)."
 msgstr ""
+"Blokuoja prieigą prie – „iCloud“ privačių perdavimo sprendiklių, "
+"priversdamas vietinius įrenginius naudoti maršrutizatorių, skirtai – „DNS“ "
+"skyrimui (%sdaugiau informacijos%s)."
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:350
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:328
 msgid "Bootstrap DNS"
-msgstr ""
+msgstr "„Pradinio įkėlimo („Bootstrap“) „DNS““"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.cfiec.dns.json:2
 msgid "CFIEC Public IPv6 Only DNS (CN)"
@@ -91,25 +120,25 @@ msgstr "„CFIEC Viešasis IPv6 Tik DNS (CN)“"
 msgid "CIRA Canadian Shield"
 msgstr "„CIRA Kanadietiškas skydas“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:168
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:146
 msgid "Canary Domains Mozilla"
 msgstr "„Mozilla Canary“ domenai-sritys"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:152
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:130
 msgid "Canary Domains iCloud"
 msgstr "„iCloud Canary“ domenai-sritys"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/org.cleanbrowsing.doh.json:2
 msgid "CleanBrowsing"
-msgstr "„ŠvarusNaršymas“"
+msgstr "„ŠvarusNaršymas“ („CleanBrowsing“)"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.cloudflare-dns.json:2
 msgid "Cloudflare"
 msgstr "„Cloudflare“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/app.tiarap.doh.json:18
-msgid "Cloudlfare Cached"
-msgstr ""
+msgid "Cloudflare Cached"
+msgstr "„Cloudflare“ talpykloje/podėlyje"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/one.comss.dns.json:2
 msgid "Comss DNS (RU)"
@@ -117,7 +146,7 @@ msgstr "„Comss DNS (RU)“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.controld.freedns.json:2
 msgid "ControlD"
-msgstr "„ValdymoID“"
+msgstr "„ValdymoID“ („ControlD“)"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.dnsforfamily.dns-doh.json:2
 msgid "DNS For Family"
@@ -135,13 +164,17 @@ msgstr "„DNSPod Viešasis DNS (CN)“"
 msgid "DNSlify DNS"
 msgstr "„DNSlify DNS“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:377
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:355
 msgid "DSCP Codepoint"
-msgstr ""
+msgstr "„DSCP“ ženklo kodas/koduotės pozicija"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.decloudus.dns.json:2
 msgid "DeCloudUs DNS"
 msgstr "„DeCloudUs DNS“"
+
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.adguard.dns.json:14
+msgid "Default (Blocks ads and trackers)"
+msgstr "Numatytasis (blokuoja reklamas/skelbimus ir sekėjus)"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/ch.digitale-gesellschaft.dns.json:2
 msgid "Digitale Gesellschaft (CH)"
@@ -149,17 +182,17 @@ msgstr "„Digitale Gesellschaft (CH)“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/app.tiarap.doh.json:14
 msgid "Direct"
-msgstr ""
+msgstr "Tiesioginis"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:376
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:393
 msgid "Disable"
-msgstr "Išjungti"
+msgstr "Išjungti/Išgalinti"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:370
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:387
 msgid "Disabling %s service"
-msgstr "Išjungiama „%s“ tarnyba"
+msgstr "Išjungiama/Išgalinama – „%s“ tarnyba"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:94
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:67
 msgid "Do not update configs"
 msgstr "Neatnaujinti konfigūracijų"
 
@@ -171,30 +204,30 @@ msgstr "„DoH 360 DNS (CN)“"
 msgid "DoH DNS (SB)"
 msgstr "„DoH DNS (SB)“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:357
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:374
 msgid "Enable"
 msgstr "Įjungti/Įgalinti"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:351
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:368
 msgid "Enabling %s service"
-msgstr "Įjungiama „%s“ tarnyba"
+msgstr "Įjungiama/Įgalinama – „%s“ tarnyba"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ffmuc.doh.json:2
 msgid "FFMUC DNS (DE)"
 msgstr "„FFMUC DNS (DE)“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/ca.cira.canadianshield.json:14
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.adguard.dns.json:14
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.adguard.dns.json:22
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.cloudflare-dns.json:14
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.controld.freedns.json:14
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.opendns.doh.json:14
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/org.cleanbrowsing.doh.json:18
 msgid "Family Filter"
-msgstr "Šeimos filtras"
+msgstr "„Šeimos“ filtras"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/org.cleanbrowsing.doh.json:8
 msgid "Filter"
-msgstr "Filtruoti"
+msgstr "Filtras/Filtruoti"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.ahadns.blitz.json:8
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.rethinkdns.sky.json:8
@@ -205,39 +238,42 @@ msgstr "Filtrai"
 msgid "Finland"
 msgstr "Suomija"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:102
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:58
 msgid "Force DNS Ports"
 msgstr "Priversti „DNS“ prievadai"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:171
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:188
 msgid "Force DNS ports:"
 msgstr "Priversti „DNS“ prievadai:"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:142
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:115
 msgid "Force Router DNS"
 msgstr "Priversti maršrutizatoriaus „DNS“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:146
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:161
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:180
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:124
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:139
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:158
 msgid "Force Router DNS server to all local devices"
 msgstr ""
 "Priversti visus vietinius įrenginius, kad naudotų maršrutizatoriaus „DNS“ "
 "serverį"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:410
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:388
 msgid "Force use of HTTP/1"
 msgstr "Priverstinis „HTTP/1“ naudojimas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:422
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:400
 msgid "Force use of IPv6 DNS resolvers"
-msgstr ""
+msgstr "Priverstinai naudoti IPv6 – „DNS“ sprendiklius"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:143
-msgid "Forces Router DNS use on local devices, also known as DNS Hijacking."
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:117
+msgid ""
+"Forces Router DNS use on local devices, also known as DNS Hijacking. Only "
+"works on `lan` interface by default (%smore information%s)."
 msgstr ""
-"Priverčia maršrutizatoriaus „DNS“ naudojimą vietiniams įrenginiams, kitaip "
-"žinomas kaip „DNS užgrobimu“."
+"Priverčia maršrutizatoriaus „DNS“ naudoti vietiniuose įrenginiuose, taip pat "
+"žinomas kaip – „„DNS“ užgrobimas“ („DNS Hijacking“). Pagal numatytuosius "
+"nustatymus, veikia tik – „lan“ sąsajoje (%sdaugiau informacijos%s)."
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.blahdns.doh.json:18
 msgid "Germany"
@@ -255,40 +291,43 @@ msgstr "Suteikti „UCI“ ir failų prieigą – „luci-app-https-dns-proxy“
 msgid "HTTPS DNS Proxy"
 msgstr "Įgaliotas „HTTPS DNS“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:75
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:48
 msgid "HTTPS DNS Proxy - Configuration"
 msgstr "Įgaliotas „HTTPS DNS“ – Konfigūracija"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:207
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:185
 msgid "HTTPS DNS Proxy - Instances"
 msgstr "Įgaliotas „HTTPS DNS“ – Egzemplioriai"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:161
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:178
 msgid "HTTPS DNS Proxy - Status"
 msgstr "Įgaliotas „HTTPS DNS“ – Būklė/Būsena"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:55
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:11
 msgid "HTTPS DNS Proxy Instances"
 msgstr "Įgalioti „HTTPS DNS“ egzemplioriai"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.he.ordns.json:2
 msgid "Hurricane Electric"
-msgstr ""
+msgstr "„Hurricane Electric“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.idnet.doh.json:2
 msgid "IDNet (UK)"
-msgstr ""
+msgstr "„IDNet (UK)“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/jp.iij.dns.public.json:2
 msgid "IIJ Public DNS (JP)"
-msgstr ""
+msgstr "„IIJ Viešasis DNS (JP)“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:84
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:57
 msgid ""
 "If update option is selected, the %s'DNS Forwards' section of DHCP and DNS%s "
 "will be automatically updated to use selected DoH providers (%smore "
 "information%s)."
 msgstr ""
+"Jei atnaujinimo parinktis yra pa(si)rinktas, „%s„DNS“ persiuntimai“ "
+"skyrius , skirtai – „DHCP“ ir „DNS%s“, bus automatiškai atnaujinti, kad "
+"naudotu pa(si)rinktus – „DoH“ teikėjus (%sdaugiau informacijos%s)."
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ahadns.doh.json:26
 msgid "India"
@@ -306,15 +345,15 @@ msgstr "Japonija"
 msgid "Lelux DNS (FI)"
 msgstr "„Lelux DNS (FI)“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:179
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:157
 msgid "Let local devices use Mozilla Private Relay"
-msgstr ""
+msgstr "Leisti vietiniams įrenginiams naudoti – „Mozilla Private Relay“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:160
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:138
 msgid "Let local devices use iCloud Private Relay"
-msgstr ""
+msgstr "Leisti vietiniams įrenginiams naudoti – „iCloud Private Relay“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:145
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:123
 msgid "Let local devices use their own DNS servers if set"
 msgstr ""
 "Leisti vietiniams (prisijungtiems) įrenginiams naudoti savo nustatytą „DNS“ "
@@ -322,47 +361,42 @@ msgstr ""
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/gr.libredns.doh.json:2
 msgid "LibreDNS (GR)"
-msgstr ""
+msgstr "„LibreDNS (GR)“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:355
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:100
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:333
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:56
 msgid "Listen Address"
-msgstr ""
+msgstr "Laukiamas/-o prisijungimo/jungties ryšio adresas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:361
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:101
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:339
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:57
 msgid "Listen Port"
-msgstr ""
+msgstr "Laukiamas/-o prisijungimo/jungties ryšio prievadas"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.blahdns.doh.json:8
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ahadns.doh.json:8
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/one.comss.dns.json:7
 msgid "Location"
 msgstr "Vietovė"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:389
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:367
 msgid "Logging File Path"
 msgstr "Žurnalinimo failo kelias"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:383
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:361
 msgid "Logging Verbosity"
-msgstr ""
+msgstr "Žurnalinimo išsamumas/platumas/daugiažodiškumas"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.controld.freedns.json:22
 msgid "Malware Filter"
-msgstr ""
+msgstr "Kompiuterinio/-ių viruso/-ų filtras („Malware“)"
 
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/one.comss.dns.json:17
-msgid "Moscow, St Petersburg"
-msgstr ""
-
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.doh.json:2
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.dns.json:2
 msgid "Mullvad"
 msgstr "„Mullvad“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:99
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:55
 msgid "Name / Type"
-msgstr "Pavadinimas / Tipas"
+msgstr "Pavadinimas/Tipas"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ahadns.doh.json:38
 msgid "Netherlands"
@@ -376,7 +410,7 @@ msgstr "„NextDNS.io“"
 msgid "Norway"
 msgstr "Norvegija"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:187
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:204
 msgid "Not installed or not found"
 msgstr "Neįdiegta arba nerasta"
 
@@ -392,76 +426,78 @@ msgstr "„OSZX DNS (UK)“"
 msgid "OpenDNS"
 msgstr "„OpenDNS“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:283
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:315
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:261
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:293
 msgid "Parameter"
 msgstr "Parametras"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:188
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:197
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:166
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:175
 msgid ""
 "Please note that %s is not supported on this system (%smore information%s)."
 msgstr ""
+"Atminkite, kad – „%s“ nėra palaikoma, šioje sistemoje (%sdaugiau "
+"informacijos%s)."
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ahadns.doh.json:50
 msgid "Poland"
 msgstr "Lenkija"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:394
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:372
 msgid "Polling Interval"
-msgstr ""
+msgstr "Apklausos intervalas"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/ca.cira.canadianshield.json:18
 msgid "Private Filter"
-msgstr ""
+msgstr "Privatus filtras"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/ca.cira.canadianshield.json:22
 msgid "Protected Filter"
-msgstr ""
+msgstr "Apsaugotas filtras"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:249
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:227
 msgid "Provider"
 msgstr "Tiekėjas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:400
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:378
 msgid "Proxy Server"
 msgstr "Įgaliotasis serveris"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/tw.twnic.dns.json:2
 msgid "Quad 101 (TW)"
-msgstr ""
+msgstr "„Quad 101 (TW)“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.quad9.json:2
 msgid "Quad 9"
-msgstr ""
+msgstr "„Quad 9“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:319
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:336
 msgid "Restart"
 msgstr "Paleisti iš naujo"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:313
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:330
 msgid "Restarting %s service"
-msgstr "Iš naujo pasileidžia „%s“ tarnyba"
+msgstr "Iš naujo pasileidžiama – „%s“ tarnyba"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/lu.restena.kaitain.json:2
 msgid "Restena DNS (LU)"
-msgstr ""
+msgstr "„Restena DNS (LU)“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.rethinkdns.sky.json:2
 msgid "Rethink DNS"
-msgstr ""
+msgstr "„Rethink DNS“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/cn.rubyfish.dns.json:2
 msgid "RubyFish (CN)"
-msgstr ""
+msgstr "„RubyFish (CN)“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:372
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:350
 msgid "Run As Group"
 msgstr "Vykdyti kaip grupę"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:367
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:345
 msgid "Run As User"
-msgstr "Vykdyti kaip vartotojas"
+msgstr "Vykdyti kaip naudotojas/vartotojas"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/io.seby.doh-2.json:2
 msgid "Seby DNS (AU)"
@@ -480,29 +516,25 @@ msgstr "Apsaugota su „ECS“ palaikymu"
 msgid "Security Filter"
 msgstr "Apsaugos filtras"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:203
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:220
 msgid "See the %sREADME%s for details."
-msgstr "Peržiūrėkite %s„SKAITYKITEMANE“%s failą, norint sužinoti daugiau."
+msgstr "Peržiūrėkite – %s„SKAITYKITEMANE“%s failą, norint sužinoti daugiau."
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:120
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:93
 msgid "Select the DNSMASQ Configs to update"
-msgstr "Pasirinkite „DNSMASQ“ konfigūracijas, norint atnaujinti"
+msgstr "Pasirinkite – „DNSMASQ“ konfigūracijas, norint atnaujinti"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:402
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:419
 msgid "Service Control"
 msgstr "Tarnybos valdymas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:201
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:218
 msgid "Service Instances"
 msgstr "Tarnybų egzemplioriai"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:165
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:182
 msgid "Service Status"
 msgstr "Tarnybos būsena"
-
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/one.comss.dns.json:13
-msgid "Siberia"
-msgstr "Sibiras"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.blahdns.doh.json:30
 msgid "Singapore"
@@ -517,47 +549,46 @@ msgid "Spain"
 msgstr "Ispanija"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/co.oszx.dns.json:18
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.adguard.dns.json:18
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.cloudflare-dns.json:18
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.controld.freedns.json:18
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.opendns.doh.json:18
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/gr.libredns.doh.json:18
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.doh.json:19
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.dns.json:15
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.quad9.json:14
 msgid "Standard"
 msgstr "Standartas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:300
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:317
 msgid "Start"
-msgstr "Pradėti"
+msgstr "Pradėti/Paleisti"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:294
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:311
 msgid "Starting %s service"
-msgstr "Pradedama %s tarnyba"
+msgstr "Pradedama/Paleidžiama – „%s“ tarnyba"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:338
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:355
 msgid "Stop"
 msgstr "Stop"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:332
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:349
 msgid "Stopping %s service"
-msgstr "Stabdoma „%s“ tarnyba"
+msgstr "Stabdoma – „%s“ tarnyba"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/ch.switch.dns.json:2
 msgid "Switch DNS (CH)"
-msgstr ""
+msgstr "„Switch DNS (CH)“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.blahdns.doh.json:14
 msgid "Switzerland"
 msgstr "Šveicarija"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:148
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/status/include/71_https-dns-proxy.js:105
 msgid "There are no active instances."
 msgstr "Nėra aktyvių egzempliorių."
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/app.tiarap.doh.json:2
 msgid "Tiarap Public DNS (JP)"
-msgstr "„Tiarap Viešas DNS (JP)“"
+msgstr "„Tiarap Viešasis DNS (JP)“"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ahadns.doh.json:18
 msgid "US/Chicago"
@@ -565,51 +596,55 @@ msgstr "JAV/Čikaga"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ahadns.doh.json:34
 msgid "US/Los Angeles"
-msgstr ""
+msgstr "JAV/Los Andželas"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.ahadns.doh.json:46
 msgid "US/New York"
-msgstr ""
+msgstr "JAV/Niujorkas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:245
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.adguard.dns.json:18
+msgid "Unfiltered"
+msgstr "Nefiltruotas/-i"
+
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:223
 msgid "Unknown"
-msgstr "Nežinomas"
+msgstr "Nežinoma/-s/-i"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.quad9.json:22
 msgid "Unsecured"
 msgstr "Neapsaugotas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:82
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:55
 msgid "Update DNSMASQ Config on Start/Stop"
-msgstr "Atnaujinti „DNSMASQ“ konfigūracija paleidus/išjungus"
+msgstr "Atnaujinti – „DNSMASQ“ konfigūracija, paleidus/išjungus"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:92
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:65
 msgid "Update all configs"
 msgstr "Atnaujinti visas konfigūracijas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:93
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:66
 msgid "Update select configs"
 msgstr "Atnaujinti pasirinktas konfigūracijas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:405
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:383
 msgid "Use HTTP/1"
 msgstr "Naudoti „HTTP/1“"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:416
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:394
 msgid "Use IPv6 resolvers"
-msgstr ""
+msgstr "Naudoti IPv6 sprendiklius"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:421
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:399
 msgid "Use any family DNS resolvers"
-msgstr ""
+msgstr "Naudoti bet kokius „šeimos“ – „DNS“ sprendiklius"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:409
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/view/https-dns-proxy/overview.js:387
 msgid "Use negotiated HTTP version"
 msgstr "Naudoti susitarta „HTTP“ versiją"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/io.nextdns.dns.json:8
 msgid "Username"
-msgstr ""
+msgstr "Naudotojo/Vartotojo vardas (t.y. Slapyvardis)"
 
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/app.tiarap.doh.json:8
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/ca.cira.canadianshield.json:8
@@ -619,22 +654,70 @@ msgstr ""
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.controld.freedns.json:8
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/com.opendns.doh.json:8
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/gr.libredns.doh.json:8
-#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.doh.json:9
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.mullvad.dns.json:9
 #: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/net.quad9.json:8
 msgid "Variant"
 msgstr "Variantas"
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:169
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:186
 msgid "Version %s - Running."
 msgstr "Versija %s – Veikia."
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:181
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:198
 msgid "Version %s - Stopped (Disabled)."
-msgstr "Versija %s – Sustabdytas/-a (Išjungtas/-a)."
+msgstr "Versija %s – Sustabdytas/-a (Išjungtas/-a/Neįgalintas/-a)."
 
-#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:179
+#: applications/luci-app-https-dns-proxy/htdocs/luci-static/resources/https-dns-proxy/status.js:196
 msgid "Version %s - Stopped."
 msgstr "Versija %s – Sustabdytas/-a."
+
+#: applications/luci-app-https-dns-proxy/root/usr/share/https-dns-proxy/providers/org.wikimedia-dns.json:2
+msgid "Wikimedia"
+msgstr "„Wikimedia“"
+
+#~ msgid "Cloudlfare Cached"
+#~ msgstr "„Cloudflare Cached“"
+
+#~ msgid "Dallas, United States"
+#~ msgstr "Dalasas, JAV"
+
+#~ msgid "Frankfurt, Germany"
+#~ msgstr "Frankfurtas, Vokietija"
+
+#~ msgid "Gothenburg, Sweden"
+#~ msgstr "Geteborgas, Švedija"
+
+#~ msgid "London, United Kingdom (1)"
+#~ msgstr "Londonas, Jungtinė Karalystė (1)"
+
+#~ msgid "London, United Kingdom (2)"
+#~ msgstr "Londonas, Jungtinė Karalystė (2)"
+
+#~ msgid "Malmö, Sweden"
+#~ msgstr "Malmė, Švedija"
+
+#~ msgid "Moscow, St Petersburg"
+#~ msgstr "Maskva, Sankt Peterburgas"
+
+#~ msgid "Mullvad Regional"
+#~ msgstr "„Mullvad“ regioninis"
+
+#~ msgid "New York City, United States"
+#~ msgstr "Niujorkas, JAV"
+
+#~ msgid "Region"
+#~ msgstr "Regionas"
+
+#~ msgid "Siberia"
+#~ msgstr "Sibiras"
+
+#~ msgid "Stockholm, Sweden"
+#~ msgstr "Stokholmas, Švedija"
+
+#~ msgid "Forces Router DNS use on local devices, also known as DNS Hijacking."
+#~ msgstr ""
+#~ "Priverčia maršrutizatoriaus „DNS“ naudojimą vietiniams įrenginiams, "
+#~ "kitaip žinomas kaip – „DNS užgrobimu“."
 
 #~ msgid "%s"
 #~ msgstr "%s"

@@ -5,7 +5,7 @@
 
 return view.extend({
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('watchcat', 
 			_('Watchcat'), 
@@ -91,7 +91,7 @@ return view.extend({
 
 		o = s.taboption('general', form.Value, 'forcedelay',
 			_('Force Reboot Delay'),
-			_("Applies to Ping Reboot and Periodic Reboot modes</i> <br /> When rebooting the router, the service will trigger a soft reboot. \
+			_("<i>Applies to Ping Reboot and Periodic Reboot modes</i> <br /> When rebooting the router, the service will trigger a soft reboot. \
 				Entering a non-zero value here will trigger a delayed hard reboot if the soft reboot were to fail. \
 				Enter the number of seconds to wait for the soft reboot to fail or use 0 to disable the forced reboot delay."));
 		o.default = '1m';
@@ -108,8 +108,8 @@ return view.extend({
 
 		o = s.taboption('general', widgets.NetworkSelect, 'mmifacename',
 			_('Name of ModemManager Interface'), 
-			_("Applies to Ping Reboot and Restart Interface modes</i> <br /> If using ModemManager, \
-				you can have Watchcat restart your ModemManger interface by specifying its name."));
+			_("<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> If using ModemManager, \
+				you can have Watchcat restart your ModemManager interface by specifying its name."));
 		o.depends({ mode: 'restart_iface' });
 		o.optional = true;
 

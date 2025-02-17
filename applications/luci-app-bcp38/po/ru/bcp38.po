@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: bcp38\n"
 "POT-Creation-Date: 2017-12-01 14:00+0300\n"
-"PO-Revision-Date: 2024-01-12 17:55+0000\n"
-"Last-Translator: Boyan Alexiev <nneauu@gmail.com>\n"
+"PO-Revision-Date: 2024-10-30 02:52+0000\n"
+"Last-Translator: sergio <sergio+it@outerface.net>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/ru/>\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.8.2-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -20,19 +20,19 @@ msgstr ""
 msgid "Allowed IP ranges"
 msgstr "Диапазон разрешенных<br />IP-адресов"
 
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
+msgid "Auto-detect upstream IP"
+msgstr "Автоматическое определение IP внешней сети"
+
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:26
 msgid ""
-"Attempt to automatically detect if the upstream IP will be blocked by the "
-"configuration, and add an exception if it will. If this does not work "
+"Automatically attempt to detect whether the upstream IP will be blocked by "
+"the configuration, adding an exception if so. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
 "Попытается автоматически обнаружить, если будет настроена блокировка IP-"
 "адресов внешней сети, и добавить событие в исключения. Если автоматически не "
 "получится, можно добавить исключения вручную ниже."
-
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
-msgid "Auto-detect upstream IP"
-msgstr "Автоматическое определение IP внешней сети"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
@@ -70,9 +70,9 @@ msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
 msgstr ""
-"Имеет приоритет над заблокированными диапазонами.<br />Используйте для "
-"вашего Белого списка внешней сети, если вы находитесь за двойным NAT-ом и "
-"автоматическое обнаружение не работает."
+"Имеет приоритет над заблокированными диапазонами. Используйте для разрешения "
+"доступа upstream сети, если находитесь за двойным NAT и автоопределение не "
+"работает."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""

@@ -52,7 +52,7 @@ return view.extend({
 		real_servers = uci.sections('keepalived', 'real_server');
 		o = s.taboption('general', form.DynamicList, 'real_server', _('Real Server'));
 		if (real_servers != '') {
-			for (i = 0; i < real_servers.length; i++) {
+			for (let i = 0; i < real_servers.length; i++) {
 				o.value(real_servers[i]['name']);
 			}
 		}

@@ -3,7 +3,7 @@
 'require view';
 'require rpc';
 
-var callMwan3Status = rpc.declare({
+const callMwan3Status = rpc.declare({
 	object: 'mwan3',
 	method: 'status',
 	expect: {  },

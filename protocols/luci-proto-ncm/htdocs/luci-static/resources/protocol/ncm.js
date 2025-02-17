@@ -39,7 +39,7 @@ return network.registerProtocol('ncm', {
 		return this._ubus('l3_device') || 'wan';
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'comgt-ncm';
 	},
 

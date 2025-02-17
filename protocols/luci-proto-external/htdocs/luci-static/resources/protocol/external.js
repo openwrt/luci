@@ -7,7 +7,7 @@ return network.registerProtocol('external', {
 		return _('Externally managed interface');
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return "external-protocol";
 	},
 

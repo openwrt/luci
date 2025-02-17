@@ -68,7 +68,7 @@ return network.registerProtocol('relay', {
 		return 'relay-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'relayd';
 	},
 

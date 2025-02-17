@@ -1,7 +1,7 @@
 # Example app for js based Luci
 
 This app is meant to be a starting point for developing new LuCI apps using the modern JavaScript client-rendered approach.
-Previously the LuCI used a Lua server-side render approach which id deprecated now.
+Previously the LuCI used a Lua server-side render approach which is deprecated now.
 
 ## Installation
 

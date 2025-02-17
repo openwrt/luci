@@ -4,7 +4,7 @@
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('apinger', _('Apinger - Interfaces'),
 			_('Names must match the interface name found in /etc/config/network.'));

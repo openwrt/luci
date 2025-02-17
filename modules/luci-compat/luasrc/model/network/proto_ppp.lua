@@ -26,7 +26,7 @@ for _, p in ipairs({"ppp", "pptp", "pppoe", "pppoa", "l2tp"}) do
 		return p .. "-" .. self.sid
 	end
 
-	function proto.opkg_package(self)
+	function proto.package_name(self)
 		if p == "ppp" then
 			return p
 		elseif p == "pptp" then

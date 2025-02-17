@@ -13,17 +13,18 @@
 var pkg = {
 	get Name() { return 'p910nd'; },
 	get Description() { return _('Port 910n print daemon'); },
-	get URL() { return 'https://openwrt.org/packages/pkgdata/' + pkg.Name + '/'; }
+	get URL() { return 'https://openwrt.org/packages/pkgdata/' + pkg.Name + '/'; },
+	get pkgMgrURI() { return 'admin/system/package-manager'; },
 };
 
 return view.extend({
 
 	option_install_kmod_lp: function() {	
-		window.open(L.url('admin/system/opkg') +
+		window.open(L.url(pkg.pkgMgrURI) +
 			'?query=kmod-lp', '_blank', 'noopener');
 	},
 	option_install_kmod_usb: function() {	
-		window.open(L.url('admin/system/opkg') +
+		window.open(L.url(pkg.pkgMgrURI) +
 			'?query=kmod-usb-printer', '_blank', 'noopener');
 	},
 
@@ -45,8 +46,8 @@ return view.extend({
 			}),
 			// data[1]
 
-			fs.exec_direct('/usr/libexec/opkg-call', [ 'list-installed' ], 'text').catch(function(err) {
-				ui.addNotification(null, E('p', {}, _('Error calling "opkg list-installed": ' + err.message)));
+			fs.exec_direct('/usr/libexec/package-manager-call', [ 'list-installed' ], 'text').catch(function(err) {
+				ui.addNotification(null, E('p', {}, _('Error calling "package-manager-call list-installed": ' + err.message)));
 				console.log(err);
 					return '';
 			}).then(data => {return data.trim().split('\n').sort().filter((string) => string.includes(': kmod-'));}),
@@ -105,7 +106,7 @@ return view.extend({
 		s.modaltitle = _('Settings');
 
 		o = s.option(form.Flag, 'enabled', _('Enabled'));
-		o.default = true;
+		o.rmempty = false;
 
 		o = s.option(form.Value, 'device', _('Device'),
 			_('Note: character device assignment can change upon reboot/reconnect with multiple USB devices.') + '<br />' +

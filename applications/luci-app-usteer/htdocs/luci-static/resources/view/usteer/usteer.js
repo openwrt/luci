@@ -45,10 +45,10 @@ function collectHearingClient(client_table_entries, mac) {
 			client_table_entries.push([
 				'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 				'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
-				SSID,
-				freq,
+				'%h'.format(SSID),
+				'%h'.format(freq),
 				Clients[mac][wlanc]['connected'] === true ? 'Yes' : 'No',
-				typeof Clients[mac][wlanc]['signal'] !== 'undefined' ? Clients[mac][wlanc]['signal'] : ''
+				typeof Clients[mac][wlanc]['signal'] !== 'undefined' ? '%h'.format(Clients[mac][wlanc]['signal']) : ''
 			]);
 		}
 	}
@@ -62,7 +62,7 @@ var HearingMap = form.DummyValue.extend({
 		]);
 		for (var mac in Clients) {
 			var maciphost = '';
-			maciphost = mac;
+			maciphost = '%h'.format(mac);
 			var macUp = mac.toUpperCase();
 			var macn = macUp.replace(/:/g,'');
 			if (typeof Hosts[macUp] !== 'undefined') {
@@ -102,25 +102,25 @@ function collectWlanAPInfoEntries(connectioninfo_table_entries, wlanAPInfos) {
 		connectioninfo_table_entries.push([
 			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
-			wlanAPInfos[wlan]['bssid'],
-			wlanAPInfos[wlan]['ssid'],
-			wlanAPInfos[wlan]['freq'],
-			wlanAPInfos[wlan]['n_assoc'],
-			wlanAPInfos[wlan]['noise'],
-			wlanAPInfos[wlan]['load'],
-			wlanAPInfos[wlan]['max_assoc'],
-			typeof wlanAPInfos[wlan]['roam_events']['source'] !== 'undefined' ? wlanAPInfos[wlan]['roam_events']['source'] : '',
-			typeof wlanAPInfos[wlan]['roam_events']['target'] !== 'undefined' ? wlanAPInfos[wlan]['roam_events']['target'] : ''
+			'%h'.format(wlanAPInfos[wlan]['bssid']),
+			'%h'.format(wlanAPInfos[wlan]['ssid']),
+			'%h'.format(wlanAPInfos[wlan]['freq']),
+			'%h'.format(wlanAPInfos[wlan]['n_assoc']),
+			'%h'.format(wlanAPInfos[wlan]['noise']),
+			'%h'.format(wlanAPInfos[wlan]['load']),
+			'%h'.format(wlanAPInfos[wlan]['max_assoc']),
+			typeof wlanAPInfos[wlan]['roam_events']['source'] !== 'undefined' ? '%h'.format(wlanAPInfos[wlan]['roam_events']['source']) : '',
+			typeof wlanAPInfos[wlan]['roam_events']['target'] !== 'undefined' ? '%h'.format(wlanAPInfos[wlan]['roam_events']['target']) : ''
 		]);
 	}
 };
 
 function tootltip(mac, IP, hostname) {
 	var body= E([]);
-	body.appendChild(E('div', mac));
+	body.appendChild(E('div', '%h'.format(mac)));
 	if (typeof IP !== 'undefined') {
-		for (var IPaddr in IP['ipaddrs']) body.appendChild(E('div', IP['ipaddrs'][IPaddr]));
-		for (var IPaddr in IP['ip6addrs']) body.appendChild(E('div', IP['ip6addrs'][IPaddr]));;
+		for (var IPaddr in IP['ipaddrs']) body.appendChild(E('div', '%h'.format(IP['ipaddrs'][IPaddr])));
+		for (var IPaddr in IP['ip6addrs']) body.appendChild(E('div', '%h'.format(IP['ip6addrs'][IPaddr])));;
 	}
 	if (hostname !== '') {
 		body.appendChild(E('div', '%h'.format(hostname)));
@@ -161,16 +161,16 @@ function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 		compactconnectioninfo_table_entries.push([
 			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
-			wlanAPInfos[wlan]['ssid'],
-			wlanAPInfos[wlan]['freq'],
-			wlanAPInfos[wlan]['load'],
-			wlanAPInfos[wlan]['n_assoc'],
+			'%h'.format(wlanAPInfos[wlan]['ssid']),
+			'%h'.format(wlanAPInfos[wlan]['freq']),
+			'%h'.format(wlanAPInfos[wlan]['load']),
+			'%h'.format(wlanAPInfos[wlan]['n_assoc']),
 			hostl
 		]);
 	}
 };
 
-var callNetworkRrdnsLookup = rpc.declare({
+const callNetworkRrdnsLookup = rpc.declare({
 	object: 'network.rrdns',
 	method: 'lookup',
 	params: [ 'addrs', 'timeout', 'limit' ],
@@ -204,7 +204,7 @@ function collectRemoteHosts (remotehosttableentries,Remotehosts) {
 	});
 
 	for (var IPaddr in Remotehosts) {
-		remotehosttableentries.push([IPaddr,'%h'.format(dns_cache[IPaddr]),Remotehosts[IPaddr]['id']]);
+		remotehosttableentries.push([IPaddr,'%h'.format(dns_cache[IPaddr]),'%h'.format(Remotehosts[IPaddr]['id'])]);
 	}
 }
 
@@ -364,17 +364,19 @@ return view.extend({
 	},
 
 	render: function (data) {
-		var m, s, o;
+		let m, s, o;
 
 		if (!('usteer' in data[0])) {
 			m = new form.Map('usteer', _('Usteer'),
-				_('Usteer is not running. Make sure it is installed and running.') +
+				_('Usteer is not running. Make sure it is installed and running.') +' '+
+				_('An incorrect parameter can cause usteer to fail to start up.') +' '+
 				_('To start it running try %s').format('<code>/etc/init.d/usteer start</code>')
 			);
-			return m.render();
 		}
 
-		m = new form.Map('usteer', _('Usteer'));
+		else {
+			m = new form.Map('usteer', _('Usteer'));
+		}
 
 		Hosts = data[1];
 		Remotehosts = data[2];
@@ -389,23 +391,29 @@ return view.extend({
 		s.tab('hearingmap', _('Hearing map'));
 		s.tab('settings', _('Settings'));
 
-		o = s.taboption('status', Clientinfooverview);
-		o.readonly = true;
+		if (('usteer' in data[0])) {
+			o = s.taboption('status', Clientinfooverview);
+			o.readonly = true;
 
-		o = s.taboption('hearingmap', HearingMap);
-		o.readonly = true;
+			o = s.taboption('hearingmap', HearingMap);
+			o.readonly = true;
+		}
 
 		o = s.taboption('settings', Settingstitle);
 		o.readonly = true;
 
 		o = s.taboption('settings', widgets.NetworkSelect, 'network', _('Network'), _('The network interface for inter-AP communication'));
 
-		o = s.taboption('settings', form.Flag, 'syslog', _('Log messages to syslog'));
+		o = s.taboption('settings', form.Flag, 'syslog', _('Log messages to syslog'),_('default true'));
 		o.default = '1';
 		o.rmempty = false;
 
-		o = s.taboption('settings', form.Flag, 'ipv6', _('IPv6 mode'), _('Use IPv6 for remote exchange'));
+		o = s.taboption('settings', form.Flag, 'local_mode', _('Local mode'), _('Disable network communication')+' ('+_('default false')+')');
 		o.rmempty = false;
+
+		o = s.taboption('settings', form.Flag, 'ipv6', _('IPv6 mode'), _('Use IPv6 for remote exchange')+' ('+_('default false')+')');
+		o.rmempty = false;
+
 
 		o = s.taboption('settings', form.ListValue, 'debug_level', _('Debug level'));
 		o.value('0', _('Fatal'));
@@ -417,7 +425,7 @@ return view.extend({
 		o.rmempty = false;
 		o.editable = true;
 
-		o = s.taboption('settings', form.Value, 'max_neighbour_reports', _('Max neighbour reports'), _('Maximum number of neighbor reports set for a node'));
+		o = s.taboption('settings', form.Value, 'max_neighbor_reports', _('Max neighbor reports'), _('Maximum number of neighbor reports set for a node'));
 		o.optional = true;
 		o.placeholder = 8;
 		o.datatype = 'uinteger';
@@ -429,7 +437,7 @@ return view.extend({
 
 		o = s.taboption('settings', form.Value, 'local_sta_timeout', _('Local sta timeout'), _('Maximum amount of time (ms) a local unconnected station is tracked'));
 		o.optional = true;
-		o.placeholder = 12000;
+		o.placeholder = 120000;
 		o.datatype = 'uinteger';
 
 		o = s.taboption('settings', form.Value, 'measurement_report_timeout', _('Measurement report timeout'), _('Maximum amount of time (ms) a measurement report is stored'));
@@ -472,10 +480,10 @@ return view.extend({
 		o.placeholder = 10;
 		o.datatype = 'uinteger';
 
-		o = s.taboption('settings', form.Flag, 'assoc_steering', _('Assoc steering'), _('Allow rejecting assoc requests for steering purposes'));
+		o = s.taboption('settings', form.Flag, 'assoc_steering', _('Assoc steering'), _('Allow rejecting assoc requests for steering purposes')+' ('+_('default false')+')');
 		o.optional = true;
 
-		o = s.taboption('settings', form.Flag, 'probe_steering', _('Probe steering'), _('Allow ignoring probe requests for steering purposes'));
+		o = s.taboption('settings', form.Flag, 'probe_steering', _('Probe steering'), _('Allow ignoring probe requests for steering purposes')+' ('+_('default false')+')');
 		o.optional = true;
 
 		o = s.taboption('settings', form.Value, 'min_connect_snr', _('Min connect SNR'), _('Minimum signal-to-noise ratio or signal level (dBm) to allow connections'));
@@ -491,6 +499,11 @@ return view.extend({
 		o = s.taboption('settings', form.Value, 'min_snr_kick_delay', _('Min SNR kick delay'), _('Timeout after which a station with SNR < min_SNR will be kicked'));
 		o.optional = true;
 		o.placeholder = 5000;
+		o.datatype = 'uinteger';
+
+		o = s.taboption('settings', form.Value, 'steer_reject_timeout', _('Steer reject timeout'), _('Timeout (ms) for which a client will not be steered after rejecting a BSS-transition-request'));
+		o.optional = true;
+		o.placeholder = 60000;
 		o.datatype = 'uinteger';
 
 		o = s.taboption('settings', form.Value, 'roam_process_timeout', _('Roam process timeout'), _('Timeout (in ms) after which a association following a disassociation is not seen as a roam'));
@@ -531,9 +544,9 @@ return view.extend({
 		o.placeholder = 60000;
 		o.datatype = 'uinteger';
 
-		o = s.taboption('settings', form.Value, 'roam_kick_delay', _('Roam kick delay'), _('Timeout (in 100ms beacon intervals) for client roam requests'));
+		o = s.taboption('settings', form.Value, 'roam_kick_delay', _('Roam kick delay'), _('Timeout (ms) for client roam requests. usteer will kick the client after this times out.'));
 		o.optional = true;
-		o.placeholder = 100;
+		o.placeholder = 10000;
 		o.datatype = 'uinteger';
 
 		o = s.taboption('settings', form.Value, 'signal_diff_threshold', _('Signal diff threshold'), _('Minimum signal strength difference until AP steering policy is active'));
@@ -546,7 +559,7 @@ return view.extend({
 		o.placeholder = 0;
 		o.datatype = 'uinteger';
 
-		o = s.taboption('settings', form.Flag, 'load_kick_enabled', _('Load kick enabled'), _('Enable kicking client on excessive channel load'));
+		o = s.taboption('settings', form.Flag, 'load_kick_enabled', _('Load kick enabled'), _('Enable kicking client on excessive channel load')+' ('+_('default false')+')');
 		o.optional = true;
 
 		o = s.taboption('settings', form.Value, 'load_kick_threshold', _('Load kick threshold'), _('Minimum channel load (%) before kicking clients'));
@@ -609,7 +622,7 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'list(string)';
 
-		o = s.taboption('settings', form.DynamicList, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on'));
+		o = s.taboption('settings', form.DynamicList, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on')+' ('+_('empty means all')+')');
 		WifiNetworks.forEach(function (wifiNetwork) {
 			if (wifiNetwork.getSSID() && (!o.keylist || o.keylist.indexOf(wifiNetwork.getSSID()) === -1)) {
 				o.value(wifiNetwork.getSSID())

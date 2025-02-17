@@ -10,6 +10,8 @@ LUCI_TITLE:=LuCI Support for OpenVPN
 LUCI_DEPENDS:=+luci-base +luci-compat
 
 PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Steven Barth <steven@midlink.org>, \
+	Jo-Philipp Wich <jo@mein.io>
 
 include ../../luci.mk
 

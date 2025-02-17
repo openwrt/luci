@@ -406,7 +406,7 @@ var ParseButton = form.Button.extend({
 		var config = {};
 		config.access = stanzas;
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.JSONMap(config, null, _('Custom configuration read from /etc/fwknop/access.conf.'));
 		m.readonly = true;
@@ -469,7 +469,7 @@ return view.extend({
 
 	render: function(results) {
 		var has_access_conf = results[0];
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('fwknopd', _('Firewall Knock Operator Daemon'));
 

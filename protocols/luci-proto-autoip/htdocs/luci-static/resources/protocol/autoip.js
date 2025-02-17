@@ -6,7 +6,7 @@ return network.registerProtocol('autoip', {
 		return _('Avahi IPv4LL');
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'avahi-autoipd';
 	},
 

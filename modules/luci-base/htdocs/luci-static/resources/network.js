@@ -357,7 +357,7 @@ function initNetworkState(refresh) {
 			L.resolveDefault(callLuciHostHints(), {}),
 			getProtocolHandlers(),
 			L.resolveDefault(uci.load('network')),
-			L.resolveDefault(uci.load('wireless')),
+			L.hasSystemFeature('wifi') ? L.resolveDefault(uci.load('wireless')) : L.resolveDefault(),
 			L.resolveDefault(uci.load('luci'))
 		]).then(function(data) {
 			var netifd_ifaces = data[0],
@@ -1655,7 +1655,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 		if (name == null)
 			return null;
 
-		proto = (proto == null ? uci.get('network', name, 'proto') : proto);
+		proto = (proto == null ? (uci.get('network', name, 'proto') || 'none') : proto);
 
 		var protoClass = _protocols[proto] || Protocol;
 		return new protoClass(name);
@@ -2141,12 +2141,27 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 */
 	getExpiry: function() {
 		var u = this._ubus('uptime'),
-		    d = this._ubus('data');
+		    d = this._ubus('data'),
+		    v6_prefixes = this._ubus('ipv6-prefix'),
+		    v6_addresses = this._ubus('ipv6-address');
 
-		if (typeof(u) == 'number' && d != null &&
-		    typeof(d) == 'object' && typeof(d.leasetime) == 'number') {
-			var r = d.leasetime - (u % d.leasetime);
-			return (r > 0 ? r : 0);
+		if (typeof(u) == 'number' && d != null) {
+
+			// DHCPv4 or leasetime in data
+			if(typeof(d) == 'object' && typeof(d.leasetime) == 'number') {
+				var r = d.leasetime - (u % d.leasetime);
+				return (r > 0 ? r : 0);
+			}
+
+			// DHCPv6, we can have multiple IPs and prefixes
+			if (Array.isArray(v6_prefixes) || Array.isArray(v6_addresses)) {
+				var prefixes = [...v6_prefixes, ...v6_addresses];
+
+				if(prefixes.length && typeof(prefixes[0].valid) == 'number') {
+					var r = prefixes[0].valid;
+					return (r > 0 ? r : 0);
+				}
+			}
 		}
 
 		return -1;
@@ -2373,6 +2388,25 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
+	 * Query the routed IPv6 prefixes associated with the logical interface.
+	 *
+	 * @returns {null|string[]}
+	 * Returns an array of the routed IPv6 prefixes registered by the remote 
+	 * protocol handler or `null` if no prefixes are present.
+	 */
+	getIP6Prefixes: function() {
+		var prefixes = this._ubus('ipv6-prefix');
+		var rv = [];
+
+		if (Array.isArray(prefixes))
+			for (var i = 0; i < prefixes.length; i++)
+				if (L.isObject(prefixes[i]))
+					rv.push('%s/%d'.format(prefixes[i].address, prefixes[i].mask));
+
+		return rv.length > 0 ? rv: null;
+	},
+
+	/**
 	 * Query interface error messages published in `ubus` runtime state.
 	 *
 	 * Interface errors are emitted by remote protocol handlers if the setup
@@ -2418,17 +2452,19 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
-	 * Get the name of the opkg package providing the protocol functionality.
+	 * Gets the name of the package providing the protocol functionality. The
+	 * package is available via the system default package manager. This is used
+	 * when a config refers to a protocol handler which is not yet installed.
 	 *
 	 * This function should be overwritten by protocol specific subclasses.
 	 *
 	 * @abstract
 	 *
 	 * @returns {string}
-	 * Returns the name of the opkg package required for the protocol to
+	 * Returns the name of the package to download, required for the protocol to
 	 * function, e.g. `odhcp6c` for the `dhcpv6` protocol.
 	 */
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return null;
 	},
 
@@ -3236,7 +3272,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * @returns {null|LuCI.network.Device}
 	 * Returns a `Network.Device` instance representing the parent device or
 	 * `null` when this device has no parent, as it is the case for e.g.
-	 * ordinary ethernet interfaces.
+	 * ordinary Ethernet interfaces.
 	 */
 	getParent: function() {
 		if (this.dev.parent)
@@ -3356,6 +3392,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `n` - IEEE 802.11n mode, 2.4 or 5 GHz, up to 600 Mbit/s
 	 *  - `ac` - IEEE 802.11ac mode, 5 GHz, up to 6770 Mbit/s
 	 *  - `ax` - IEEE 802.11ax mode, 2.4 or 5 GHz
+	 *  - 'be' - IEEE 802.11be mode, 2.4, 5 or 6 GHz
 	 */
 	getHWModes: function() {
 		var hwmodes = this.ubus('dev', 'iwinfo', 'hwmodes');
@@ -3381,6 +3418,11 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *  - `HE40` - applicable to IEEE 802.11ax, 40 MHz wide channels
 	 *  - `HE80` - applicable to IEEE 802.11ax, 80 MHz wide channels
 	 *  - `HE160` - applicable to IEEE 802.11ax, 160 MHz wide channels
+	 *  - `EHT20` - applicable to IEEE 802.11be, 20 MHz wide channels
+	 *  - `EHT40` - applicable to IEEE 802.11be, 40 MHz wide channels
+	 *  - `EHT80` - applicable to IEEE 802.11be, 80 MHz wide channels
+	 *  - `EHT160` - applicable to IEEE 802.11be, 160 MHz wide channels
+	 *  - `EHT320` - applicable to IEEE 802.11be, 320 MHz wide channels
 	 */
 	getHTModes: function() {
 		var htmodes = this.ubus('dev', 'iwinfo', 'htmodes');
@@ -3930,7 +3972,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *
 	 * @property {number} inactive
 	 * The amount of milliseconds the peer has been inactive, e.g. due
-	 * to powersave.
+	 * to power-saving.
 	 *
 	 * @property {number} connected_time
 	 * The amount of milliseconds the peer is associated to this network.
@@ -3980,7 +4022,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `UNKNOWN`
 	 *
 	 * @property {number} [mesh local PS]
-	 * The local powersafe mode for the peer link, may be an empty
+	 * The local power-save mode for the peer link, may be an empty
 	 * string (`''`) or absent if not applicable or supported by
 	 * the driver.
 	 *
@@ -3991,7 +4033,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `UNKNOWN`
 	 *
 	 * @property {number} [mesh peer PS]
-	 * The remote powersafe mode for the peer link, may be an empty
+	 * The remote power-save mode for the peer link, may be an empty
 	 * string (`''`) or absent if not applicable or supported by
 	 * the driver.
 	 *
@@ -4002,7 +4044,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `UNKNOWN`
 	 *
 	 * @property {number} [mesh non-peer PS]
-	 * The powersafe mode for all non-peer neighbours, may be an empty
+	 * The power-save mode for all non-peer neighbours, may be an empty
 	 * string (`''`) or absent if not applicable or supported by the driver.
 	 *
 	 * The following modes are known:
@@ -4086,6 +4128,17 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * @property {number} [he_dcm]
 	 * Specifies whether dual concurrent modulation is used for the transmission.
 	 * Only applicable to HE rates.
+	 * 
+	 * @property {boolean} [eht]
+	 * Specifies whether this rate is an EHT (IEEE 802.11be) rate.
+	 * 
+	 * @property {number} [eht_gi]
+	 * Specifies whether the guard interval used for the transmission.
+	 * Only applicable to  EHT rates.
+	 *
+	 * @property {number} [eht_dcm]
+	 * Specifies whether dual concurrent modulation is used for the transmission.
+	 * Only applicable to EHT rates.
 	 */
 
 	/**
@@ -4285,7 +4338,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Get the primary logical interface this wireless network is attached to.
+	 * Get the primary logical interface this network is attached to.
 	 *
 	 * @returns {null|LuCI.network.Protocol}
 	 * Returns a `Network.Protocol` instance representing the logical
@@ -4297,7 +4350,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Get the logical interfaces this wireless network is attached to.
+	 * Get the logical interfaces this network is attached to.
 	 *
 	 * @returns {Array<LuCI.network.Protocol>}
 	 * Returns an array of `Network.Protocol` instances representing the

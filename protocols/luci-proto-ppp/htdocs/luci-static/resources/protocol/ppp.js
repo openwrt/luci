@@ -23,16 +23,16 @@ network.registerPatternVirtual(/^ppp-.+$/);
 function write_keepalive(section_id, value) {
 	var f_opt = this.map.lookupOption('_keepalive_failure', section_id),
 	    i_opt = this.map.lookupOption('_keepalive_interval', section_id),
-	    f = (f_opt != null) ? +f_opt[0].formvalue(section_id) : null,
-	    i = (i_opt != null) ? +i_opt[0].formvalue(section_id) : null;
+	    f = parseInt(f_opt?.[0]?.formvalue(section_id), 10),
+	    i = parseInt(i_opt?.[0]?.formvalue(section_id), 10);
 
-	if (f == null || f == '' || isNaN(f))
-		f = 0;
-
-	if (i == null || i == '' || isNaN(i) || i < 1)
+	if (isNaN(i))
 		i = 1;
 
-	if (f > 0)
+	if (isNaN(f))
+		f = (i == 1) ? null : 5;
+
+	if (f !== null)
 		uci.set('network', section_id, 'keepalive', '%d %d'.format(f, i));
 	else
 		uci.unset('network', section_id, 'keepalive');
@@ -47,7 +47,7 @@ return network.registerProtocol('ppp', {
 		return this._ubus('l3_device') || 'ppp-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'ppp';
 	},
 
@@ -100,7 +100,7 @@ return network.registerProtocol('ppp', {
 		}
 
 		o = s.taboption('advanced', form.Value, '_keepalive_failure', _('LCP echo failure threshold'), _('Presume peer to be dead after given amount of LCP echo failures, use 0 to ignore failures'));
-		o.placeholder = '0';
+		o.placeholder = '5';
 		o.datatype    = 'uinteger';
 		o.write       = write_keepalive;
 		o.remove      = write_keepalive;
@@ -113,8 +113,8 @@ return network.registerProtocol('ppp', {
 		};
 
 		o = s.taboption('advanced', form.Value, '_keepalive_interval', _('LCP echo interval'), _('Send LCP echo requests at the given interval in seconds, only effective in conjunction with failure threshold'));
-		o.placeholder = '5';
-		o.datatype    = 'min(1)';
+		o.placeholder = '1';
+		o.datatype    = 'and(uinteger,min(1))';
 		o.write       = write_keepalive;
 		o.remove      = write_keepalive;
 		o.cfgvalue = function(section_id) {

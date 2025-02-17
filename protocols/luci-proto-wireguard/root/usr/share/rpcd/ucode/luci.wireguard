@@ -15,6 +15,21 @@ function command(cmd) {
 	return trim(popen(cmd)?.read?.('all'));
 }
 
+function checkPeerHost(configHost, configPort, wgHost) {
+	const ips = popen(`resolveip ${shellquote(configHost)} 2>/dev/null`);
+	const hostIp = replace(wgHost, /\[|\]/g, "");
+	if (ips) {
+		for (let line = ips.read('line'); length(line); line = ips.read('line')) {
+			const ip = rtrim(line, '\n');
+			if (configPort && (ip + ":" + configPort == hostIp)) {
+				return true;
+			} else if (ip == substr(hostIp, 0, rindex(hostIp, ":"))) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
 
 const methods = {
 	generatePsk: {
@@ -76,7 +91,7 @@ const methods = {
 						let peer_name;
 
 						uci.foreach('network', `wireguard_${last_device}`, (s) => {
-							if (s.public_key == record[1])
+							if (!s.disabled && s.public_key == record[1] && (!s.endpoint_host || checkPeerHost(s.endpoint_host, s.endpoint_port, record[3])))
 								peer_name = s.description;
 						});
 

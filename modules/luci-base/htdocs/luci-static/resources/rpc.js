@@ -2,10 +2,10 @@
 'require baseclass';
 'require request';
 
-var rpcRequestID = 1,
-    rpcSessionID = L.env.sessionid || '00000000000000000000000000000000',
-    rpcBaseURL = L.url('admin/ubus'),
-    rpcInterceptorFns = [];
+let rpcRequestID = 1;
+let rpcSessionID = L.env.sessionid ?? '00000000000000000000000000000000';
+let rpcBaseURL = L.url('admin/ubus');
+const rpcInterceptorFns = [];
 
 /**
  * @class rpc
@@ -18,14 +18,14 @@ var rpcRequestID = 1,
  */
 return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	/* privates */
-	call: function(req, cb, nobatch) {
-		var q = '';
+	call(req, cb, nobatch) {
+		let q = '';
 
 		if (Array.isArray(req)) {
 			if (req.length == 0)
 				return Promise.resolve([]);
 
-			for (var i = 0; i < req.length; i++)
+			for (let i = 0; i < req.length; i++)
 				if (req[i].params)
 					q += '%s%s.%s'.format(
 						q ? ';' : '/',
@@ -35,14 +35,14 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 		}
 
 		return request.post(rpcBaseURL + q, req, {
-			timeout: (L.env.rpctimeout || 20) * 1000,
-			nobatch: nobatch,
+			timeout: (L.env.rpctimeout ?? 20) * 1000,
+			nobatch,
 			credentials: true
 		}).then(cb, cb);
 	},
 
-	parseCallReply: function(req, res) {
-		var msg = null;
+	parseCallReply(req, res) {
+		let msg = null;
 
 		if (res instanceof Error)
 			return req.reject(res);
@@ -62,14 +62,14 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 		 * The interceptor args are intentionally swapped.
 		 * Response is passed as first arg to align with Request class interceptors
 		 */
-		Promise.all(rpcInterceptorFns.map(function(fn) { return fn(msg, req) }))
+		Promise.all(rpcInterceptorFns.map(fn => fn(msg, req)))
 			.then(this.handleCallReply.bind(this, req, msg))
 			.catch(req.reject);
 	},
 
-	handleCallReply: function(req, msg) {
-		var type = Object.prototype.toString,
-		    ret = null;
+	handleCallReply(req, msg) {
+		const type = Object.prototype.toString;
+		let ret = null;
 
 		try {
 			/* verify message frame */
@@ -98,7 +98,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 		}
 
 		if (req.expect) {
-			for (var key in req.expect) {
+			for (const key in req.expect) {
 				if (ret != null && key != '')
 					ret = ret[key];
 
@@ -140,20 +140,17 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * more arguments, a promise resolving to an object describing the method
 	 * signatures of each requested `ubus` object name will be returned.
 	 */
-	list: function() {
-		var msg = {
+	list(...args) {
+		const msg = {
 			jsonrpc: '2.0',
 			id:      rpcRequestID++,
 			method:  'list',
-			params:  arguments.length ? this.varargs(arguments) : undefined
+			params:  args.length ? args : undefined
 		};
 
-		return new Promise(L.bind(function(resolveFn, rejectFn) {
+		return new Promise(L.bind(function(resolve, reject) {
 			/* store request info */
-			var req = {
-				resolve: resolveFn,
-				reject:  rejectFn
-			};
+			const req = { resolve, reject };
 
 			/* call rpc */
 			this.call(msg, this.parseCallReply.bind(this, req));
@@ -296,37 +293,36 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * Returns a new function implementing the method call described in
 	 * `options`.
 	 */
-	declare: function(options) {
-		return Function.prototype.bind.call(function(rpc, options) {
-			var args = this.varargs(arguments, 2);
-			return new Promise(function(resolveFn, rejectFn) {
+	declare(options) {
+		return Function.prototype.bind.call(function(rpc, options, ...args) {
+			return new Promise((resolve, reject) => {
 				/* build parameter object */
-				var p_off = 0;
-				var params = { };
+				let p_off = 0;
+				const params = { };
 				if (Array.isArray(options.params))
 					for (p_off = 0; p_off < options.params.length; p_off++)
 						params[options.params[p_off]] = args[p_off];
 
 				/* all remaining arguments are private args */
-				var priv = [ undefined, undefined ];
+				const priv = [ undefined, undefined ];
 				for (; p_off < args.length; p_off++)
 					priv.push(args[p_off]);
 
 				/* store request info */
-				var req = {
+				const req = {
 					expect:  options.expect,
 					filter:  options.filter,
-					resolve: resolveFn,
-					reject:  rejectFn,
-					params:  params,
-					priv:    priv,
+					resolve,
+					reject,
+					params,
+					priv,
 					object:  options.object,
 					method:  options.method,
 					raise:   options.reject
 				};
 
 				/* build message object */
-				var msg = {
+				const msg = {
 					jsonrpc: '2.0',
 					id:      rpcRequestID++,
 					method:  'call',
@@ -351,7 +347,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * Returns the 32 byte session ID string used for authenticating remote
 	 * requests.
 	 */
-	getSessionID: function() {
+	getSessionID() {
 		return rpcSessionID;
 	},
 
@@ -362,7 +358,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * Sets the 32 byte session ID string used for authenticating remote
 	 * requests.
 	 */
-	setSessionID: function(sid) {
+	setSessionID(sid) {
 		rpcSessionID = sid;
 	},
 
@@ -372,7 +368,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * @returns {string}
 	 * Returns the RPC URL endpoint to issue requests against.
 	 */
-	getBaseURL: function() {
+	getBaseURL() {
 		return rpcBaseURL;
 	},
 
@@ -382,7 +378,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * @param {string} url
 	 * Sets the RPC URL endpoint to issue requests against.
 	 */
-	setBaseURL: function(url) {
+	setBaseURL(url) {
 		rpcBaseURL = url;
 	},
 
@@ -396,7 +392,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * @returns {string}
 	 * Returns the textual description of the code.
 	 */
-	getStatusText: function(statusCode) {
+	getStatusText(statusCode) {
 		switch (statusCode) {
 		case 0: return _('Command OK');
 		case 1: return _('Invalid command');
@@ -459,9 +455,10 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * @returns {LuCI.rpc~interceptorFn}
 	 * Returns the given function value.
 	 */
-	addInterceptor: function(interceptorFn) {
+	addInterceptor(interceptorFn) {
 		if (typeof(interceptorFn) == 'function')
 			rpcInterceptorFns.push(interceptorFn);
+
 		return interceptorFn;
 	},
 
@@ -475,11 +472,14 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * Returns `true` if the given function has been removed or `false`
 	 * if it has not been found.
 	 */
-	removeInterceptor: function(interceptorFn) {
-		var oldlen = rpcInterceptorFns.length, i = oldlen;
+	removeInterceptor(interceptorFn) {
+		const oldlen = rpcInterceptorFns.length;
+		let i = oldlen;
+
 		while (i--)
 			if (rpcInterceptorFns[i] === interceptorFn)
 				rpcInterceptorFns.splice(i, 1);
+
 		return (rpcInterceptorFns.length < oldlen);
 	}
 });

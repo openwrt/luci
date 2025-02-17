@@ -22,7 +22,7 @@ for _, p in ipairs({"6in4", "6to4", "6rd"}) do
 		return p .. "-" .. self.sid
 	end
 
-	function proto.opkg_package(self)
+	function proto.package_name(self)
 		return p
 	end
 

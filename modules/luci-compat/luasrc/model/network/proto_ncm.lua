@@ -26,7 +26,7 @@ function proto.get_i18n(self)
 	return luci.i18n.translate("NCM")
 end
 
-function proto.opkg_package(self)
+function proto.package_name(self)
 	return "comgt-ncm"
 end
 

@@ -4,6 +4,10 @@ touch /etc/config/example
 uci set example.first=first
 uci set example.second=second
 uci set example.third=third
-uci commit
+uci set example.animals=animals
+uci set example.animals.num_cats=1
+uci set example.animals.num_dogs=2
+uci set example.animals.num_parakeets=4
+uci commit example
 
 return 0

@@ -14,7 +14,7 @@ return network.registerProtocol('ipip', {
 		return this._ubus('l3_device') || 'ipip-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'ipip';
 	},
 

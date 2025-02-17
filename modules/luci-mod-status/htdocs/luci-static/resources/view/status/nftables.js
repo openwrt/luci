@@ -93,6 +93,7 @@ var op_translations = {
 
 var action_translations = {
 	'accept': _('Accept packet', 'nft accept action'),
+	'notrack': _('Do not track', 'nft notrack action'),
 	'drop': _('Drop packet', 'nft drop action'),
 	'jump': _('Continue in <strong><a href="#%q.%q">%h</a></strong>', 'nft jump action'),
 	'log': _('Log event "<strong>%h</strong>…"', 'nft log action'),
@@ -145,6 +146,7 @@ return view.extend({
 			if (expr.hasOwnProperty(k)) {
 				switch (k) {
 				case 'accept':
+				case 'notrack':
 				case 'reject':
 				case 'drop':
 				case 'jump':
@@ -361,6 +363,7 @@ return view.extend({
 			}, (action_translations[k] || k).format(this.exprToString(spec.expr)));
 
 		case 'accept':
+		case 'notrack':
 		case 'drop':
 			return E('span', {
 				'class': 'ifacebadge'

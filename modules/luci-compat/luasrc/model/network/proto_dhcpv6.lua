@@ -11,6 +11,6 @@ function proto.is_installed(self)
 	return nixio.fs.access("/lib/netifd/proto/dhcpv6.sh")
 end
 
-function proto.opkg_package(self)
+function proto.package_name(self)
 	return "odhcp6c"
 end

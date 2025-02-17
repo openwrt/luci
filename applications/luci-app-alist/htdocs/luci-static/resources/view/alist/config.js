@@ -8,7 +8,7 @@
 'require validation';
 'require view';
 
-var callServiceList = rpc.declare({
+const callServiceList = rpc.declare({
 	object: 'service',
 	method: 'list',
 	params: ['name'],
@@ -60,7 +60,7 @@ return view.extend({
 	},
 
 	render: function(data) {
-		var m, s, o;
+		let m, s, o;
 		var webport = uci.get(data[0], 'config', 'listen_http_port') || '5244';
 
 		m = new form.Map('alist', _('AList'),

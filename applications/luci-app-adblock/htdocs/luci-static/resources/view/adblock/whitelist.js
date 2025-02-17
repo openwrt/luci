@@ -12,7 +12,7 @@ return view.extend({
 		return fs.write('/etc/adblock/adblock.whitelist', value)
 			.then(function(rc) {
 				document.querySelector('textarea').value = value;
-				ui.addNotification(null, E('p', _('Whitelist changes have been saved. Refresh your adblock lists that changes take effect.')), 'info');
+				ui.addNotification(null, E('p', _('The changes to the whitelist have been saved. Reload your adblock lists for the changes to take effect.')), 'info');
 			}).catch(function(e) {
 				ui.addNotification(null, E('p', _('Unable to save changes: %s').format(e.message)));
 			});

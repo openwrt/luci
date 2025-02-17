@@ -14,7 +14,7 @@ return network.registerProtocol('l2tp', {
 		return this._ubus('l3_device') || 'l2tp-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'xl2tpd';
 	},
 

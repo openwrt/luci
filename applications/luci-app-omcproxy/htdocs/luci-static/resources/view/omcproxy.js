@@ -8,7 +8,7 @@
 
 return view.extend({
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('omcproxy', _('omcproxy'), _('Embedded IGMPv3 and MLDv2 proxy'));
 

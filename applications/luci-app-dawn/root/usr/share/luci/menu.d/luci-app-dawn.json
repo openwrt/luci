@@ -1,5 +1,5 @@
 {
-	"admin/dawn/": {
+	"admin/status/dawn": {
 		"title": "DAWN",
 		"order": 60,
 		"action": {
@@ -10,21 +10,33 @@
 		}
 	},
 
-	"admin/dawn/network_overview": {
+	"admin/status/dawn/network_overview": {
 		"title": "Network Overview",
 		"order": 1,
 		"action": {
 			"type": "view",
-			"path": "dawn/network_overview"
+			"path": "status/dawn/network_overview"
 		}
 	},
 
-	"admin/dawn/hearing_map": {
+	"admin/status/dawn/hearing_map": {
 		"title": "Hearing Map",
 		"order": 2,
 		"action": {
 			"type": "view",
-			"path": "dawn/hearing_map"
+			"path": "status/dawn/hearing_map"
+		}
+	},
+
+	"admin/network/dawn": {
+		"title": "DAWN",
+		"order": 60,
+		"action": {
+			"type": "view",
+			"path": "network/dawn"
+		},
+		"depends": {
+			"acl": [ "luci-app-dawn" ]
 		}
 	}
 }

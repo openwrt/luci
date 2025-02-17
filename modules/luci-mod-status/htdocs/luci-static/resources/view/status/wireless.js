@@ -241,7 +241,7 @@ return view.extend({
 		    svg2 = data[1],
 		    wifidevs = data[2];
 
-		var v = E('div', {}, E('div'));
+		var v = E('div', { 'class': 'cbi-map', 'id': 'map' }, E('div'));
 
 		for (var i = 0; i < wifidevs.length; i++) {
 			var ifname = wifidevs[i].getIfname();
@@ -252,7 +252,7 @@ return view.extend({
 			var csvg1 = svg1.cloneNode(true),
 			    csvg2 = svg2.cloneNode(true);
 
-			v.firstElementChild.appendChild(E('div', { 'data-tab': ifname, 'data-tab-title': ifname }, [
+			v.firstElementChild.appendChild(E('div', { 'class': 'cbi-section', 'data-tab': ifname, 'data-tab-title': ifname }, [
 				csvg1,
 				E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
 				E('br'),
@@ -296,7 +296,8 @@ return view.extend({
 						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
 						E('td', { 'class': 'td', 'id': 'rate_bw_peak' }, [ '0 Mbit/s' ])
 					])
-				])
+				]),
+				E('div', {'class': 'cbi-section-create'})
 			]));
 
 			this.updateGraph(ifname, csvg1, [ null, { line: 'rssi', offset: 155 }, { line: 'noise', offset: 155 } ], function(svg, info) {
@@ -336,7 +337,11 @@ return view.extend({
 
 		this.pollData();
 
-		return v;
+		return E([], [
+			E('h2', _('Wireless')),
+			E('div', {'class': 'cbi-map-descr'}, _('This page displays the wireless metrics, for each available radio interfaces.')),
+			v
+		]);
 	},
 
 	handleSaveApply: null,

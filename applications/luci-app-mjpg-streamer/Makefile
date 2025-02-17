@@ -9,6 +9,9 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=MJPG-Streamer service configuration module
 LUCI_DEPENDS:=+luci-base +mjpg-streamer
 
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

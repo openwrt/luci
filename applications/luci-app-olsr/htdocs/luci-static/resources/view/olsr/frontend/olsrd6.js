@@ -26,7 +26,7 @@ return view.extend({
 		})]);
 	},
 	render: function () {
-		var m, s, o;
+		let m, s, o;
 
 		var has_ipip;
 

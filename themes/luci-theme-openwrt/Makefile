@@ -9,6 +9,8 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI OpenWrt.org theme
 LUCI_DEPENDS:=+luci-base
 
+PKG_LICENSE:=Apache-2.0
+
 define Package/luci-theme-openwrt/postrm
 #!/bin/sh
 [ -n "$${IPKG_INSTROOT}" ] || {

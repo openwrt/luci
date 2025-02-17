@@ -1,23 +1,70 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2020-06-07 15:48+0000\n"
-"Last-Translator: Artem <KovalevArtem.ru@gmail.com>\n"
+"PO-Revision-Date: 2024-10-16 19:05+0000\n"
+"Last-Translator: Lorekin <lorekine@outlook.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsrp-pppoe-server/ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.1-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.8-rc\n"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:19
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:48
 msgid "Access Concentrator Name"
 msgstr "Имя концентратора доступа"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:32
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:41
+msgid "Both Interface"
+msgstr "Оба интерфейса"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:106
+msgid ""
+"Causes <code>pppoe</code> to exit if no session traffic is detected for %s "
+"seconds."
+msgstr ""
+"Вызывает завершение работы <code>pppoe</code>, если в течение %s секунд не "
+"было обнаружено трафика сессии."
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:34
+msgid "Client Interface"
+msgstr "Клиентский интерфейс"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:56
+msgid "Default: 5000"
+msgstr "По умолчанию: 5000"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:66
+msgid "Default: 600"
+msgstr "По умолчанию: 600"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:61
+msgid "Default: 64"
+msgstr "По умолчанию: 64"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:50
+msgid "Default: hostname"
+msgstr "По умолчанию: имя хоста"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:53
+msgid ""
+"Each one causes the named service to be advertised in a Service-Name tag in "
+"the PADO frame. The first one specifies the default service, and is used if "
+"the PPPoE client requests a Service-Name of length zero."
+msgstr ""
+"Каждая из них приводит к тому, что указанный сервис объявляется в теге "
+"Service-Name в кадре PADO. Первый указывает сервис по умолчанию и "
+"используется, если PPPoE клиент запрашивает Service-Name нулевой длины."
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:25
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:25
+msgid "Enabled"
+msgstr "Включен"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:40
 msgid "First remote IP"
 msgstr "1-ый удаленный IP"
 
@@ -25,84 +72,198 @@ msgstr "1-ый удаленный IP"
 msgid "Grant UCI access for luci-app-rp-pppoe-server"
 msgstr "Предоставить UCI доступ для luci-app-rp-pppoe-server"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:29
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:33
 msgid "IP of listening side"
 msgstr "IP слушающей стороны"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:44
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:40
 msgid ""
-"Instead of starting at beginning and going to end, randomize session number"
+"If specified as <code>0.0.0.0</code> remote IP allocation will be delegated "
+"to <code>pppd</code>"
 msgstr ""
-"Вместо того, чтобы начинать с начала и до конца, рандомизируйте номер сессии"
+"Если указано как <code>0.0.0.0</code>, назначение удалённого IP-адреса будет "
+"делегировано <code>pppd</code>"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:15
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:33
+msgid ""
+"If specified as <code>0.0.0.0</code> the selection of local IP address is "
+"delegated to <code>pppd</code>"
+msgstr ""
+"Если указано как <code>0.0.0.0</code>, выбор локального IP-адреса будет "
+"делегирован <code>pppd</code>"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
+msgid ""
+"Instead of numbering PPPoE sessions starting at 1, numbering starts at %s"
+msgstr ""
+"Вместо того чтобы нумеровать сеансы PPPoE, начиная с 1, нумерация начинается "
+"с %s"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:27
 msgid "Interface"
 msgstr "Интерфейс"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:15
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:34
+msgid ""
+"Interface from which to relay. Only PPPoE clients may be connected to this "
+"interface."
+msgstr ""
+"Интерфейс, с которого будет осуществляться ретрансляция. К этому интерфейсу "
+"могут быть подключены только клиенты PPPoE."
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:27
 msgid "Interface on which to listen."
 msgstr "Интерфейс для прослушивания."
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:62
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:27
+msgid ""
+"Interface on which to listen. Only PPPoE servers may be connected to this "
+"interface."
+msgstr ""
+"Интерфейс, на котором будет осуществляться прослушивание. К этому интерфейсу "
+"могут быть подключены только серверы PPPoE."
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:41
+msgid ""
+"Interface upon which to listen and to relay. Both PPPoE clients and servers "
+"may be connected to this interface."
+msgstr ""
+"Интерфейс, через который осуществляется прослушивание и ретрансляция. К "
+"этому интерфейсу могут быть подключены как клиенты, так и серверы PPPoE."
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:94
+msgid "Invokes <code>pppd</code> with the unit flag"
+msgstr "Вызывает <code>pppd</code> с флагом unit"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:115
 msgid "MSS"
 msgstr "MSS"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:35
-msgid "Maximum sessions"
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:115
+msgid "Max Segment Size"
+msgstr "Максимальный размер сегмента"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:53
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:58
+msgid "Maximum Sessions"
 msgstr "Максимальное количество сессий"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:25
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:58
+msgid "Maximum concurrent sessions"
+msgstr "Максимальное количество одновременных сессий"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:66
 msgid "Maximum sessions per peer"
 msgstr "Максимальное количество сеансов на одного пира"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:52
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:70
+msgid "No limit"
+msgstr "Без ограничений"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:65
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:110
+msgid "No timeout"
+msgstr "Нет тайм-аута"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid "Offset"
 msgstr "смещение"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:40
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:81
 msgid "Options file"
 msgstr "Файл опций"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:52
-msgid "PPP offset"
-msgstr "смещение PPP"
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
+msgid "PPP Offset"
+msgstr "Смещение PPP"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:47
-msgid "PPP unit number"
-msgstr "номер блока PPP"
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:19
+msgid "PPPoE Relay Configuration"
+msgstr "Конфигурация ретранслятора PPPoE"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:9
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:19
 msgid "PPPoE Server Configuration"
 msgstr "Конфигурация сервера PPPoE"
+
+#: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:14
+msgid "RP PPPoE Relay"
+msgstr "RP PPPoE ретрансляция"
 
 #: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:3
 msgid "RP PPPoE Server"
 msgstr "RP PPPoE Cервер"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:44
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:89
 msgid "Random session selection"
 msgstr "Случайный выбор сессии"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:8
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:124
+msgid "Reduces CPU usage, but may cause a race condition on slow CPUs"
+msgstr ""
+"Снижает нагрузку на процессор, но может вызвать состояние гонки на медленных "
+"процессорах"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:21
+msgid "Relay Configuration"
+msgstr "Конфигурация ретрансляции"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:18
+msgid "Roaring Penguin PPPoE Relay"
+msgstr "Ретрансляция Roaring Penguin PPPoE"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:18
 msgid "Roaring Penguin PPPoE Server"
 msgstr "Roaring Penguin PPPoE Сервер"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:11
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:21
 msgid "Server Configuration"
 msgstr "Конфигурация сервера"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:22
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:27
+msgid "Server Interface"
+msgstr "Интерфейс сервера"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:53
 msgid "Service Name"
 msgstr "Имя службы"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:68
-msgid "Sync"
-msgstr "Синхронизация"
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:124
+msgid "Synchronous PPP encapsulation"
+msgstr "Синхронная инкапсуляция PPP"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:57
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:89
+msgid "Tells the PPPoE server to permute session numbers randomly."
+msgstr "Указывает серверу PPPoE случайным образом переставлять номера сеансов."
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:61
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:106
 msgid "Timeout"
 msgstr "Тайм-аут"
 
-#: applications/luci-app-rp-pppoe-server/luasrc/model/cbi/rp-pppoe-server.lua:47
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:94
 msgid "Unit"
 msgstr "узел"
+
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:48
+#: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:76
+msgid "Use Non-UCI Config"
+msgstr "Использование конфигурации, не относящейся к UCI"
+
+#~ msgid ""
+#~ "Instead of starting at beginning and going to end, randomize session "
+#~ "number"
+#~ msgstr ""
+#~ "Вместо того, чтобы начинать с начала и до конца, рандомизируйте номер "
+#~ "сессии"
+
+#~ msgid "PPP unit number"
+#~ msgstr "номер блока PPP"
+
+#~ msgid "Sync"
+#~ msgstr "Синхронизация"
+
+#~ msgid "Maximum sessions"
+#~ msgstr "Максимальное количество сессий"
+
+#~ msgid "PPP offset"
+#~ msgstr "смещение PPP"

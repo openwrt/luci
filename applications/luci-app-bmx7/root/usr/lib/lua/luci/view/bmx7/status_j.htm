@@ -1,6 +1,6 @@
 <%+header%>
-<script type="text/javascript" src="<%=resource%>/cbi.js"></script>
-<script type="text/javascript" src="<%=resource%>/bmx7/js/polling.js"></script>
+<script src="<%=resource%>/cbi.js"></script>
+<script src="<%=resource%>/bmx7/js/polling.js"></script>
 
 <div class="cbi-map">
 	<center>
@@ -87,7 +87,7 @@
 
 </div>
 
-<script type="text/javascript">//<![CDATA[
+<script>
 	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':''}, "config_div", function(st){
 		var res = Array();
 		var sta = st.info[0].status;
@@ -125,6 +125,6 @@
 		return res;
 	});
 
-//]]></script>
+</script>
 
 <%+footer%>

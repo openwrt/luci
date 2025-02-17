@@ -5,22 +5,25 @@
 'require view';
 
 return view.extend({
-	load: function() {
-		return L.resolveDefault(fs.list('/etc/ssl/acme/'), []).then(function(entries) {
-			var certs = [];
-			for (var i = 0; i < entries.length; i++) {
-				if (entries[i].type == 'file' && entries[i].name.match(/\.key$/)) {
-					certs.push(entries[i]);
+	load() {
+		return Promise.all([
+			L.resolveDefault(fs.list('/etc/ssl/acme/'), []).then(files => {
+				let certs = [];
+				for (let f of files) {
+					if (f.type == 'file' && f.name.match(/\.key$/)) {
+						certs.push(f);
+					}
 				}
-			}
-			return certs;
-		});
+				return certs;
+			}),
+		]);
 	},
 
-	render: function (certs) {
+	render(data) {
+		let certs = data[0];
 		let wikiUrl = 'https://github.com/acmesh-official/acme.sh/wiki/';
-		var wikiInstructionUrl = wikiUrl + 'dnsapi';
-		var m, s, o;
+		let wikiInstructionUrl = wikiUrl + 'dnsapi';
+		let m, s, o;
 
 		m = new form.Map("acme", _("ACME certificates"),
 			_("This configures ACME (Letsencrypt) automatic certificate installation. " +
@@ -39,14 +42,14 @@ return view.extend({
 		o = s.option(form.Value, "account_email", _("Account email"),
 			_('Email address to associate with account key.') + '<br/>' +
 			_('If a certificate wasn\'t renewed in time then you\'ll receive a notice at 20 days before expiry.')
-		)
+		);
 		o.rmempty = false;
 		o.datatype = "minlength(1)";
 
 		o = s.option(form.Flag, "debug", _("Enable debug logging"));
 		o.rmempty = false;
 
-		s = m.section(form.GridSection, "cert", _("Certificate config"))
+		s = m.section(form.GridSection, "cert", _("Certificate config"));
 		s.anonymous = false;
 		s.addremove = true;
 		s.nodescriptions = true;
@@ -93,7 +96,7 @@ return view.extend({
 		o.depends("validation_method", "dns");
 		// List of supported DNS API. Names are same as file names in acme.sh for easier search.
 		// May be outdated but not changed too often.
-		o.value('', '')
+		o.value('', '');
 		o.value('dns_acmedns', 'ACME DNS API github.com/joohoi/acme-dns');
 		o.value('dns_acmeproxy', 'ACME Proxy github.com/mdbraber/acmeproxy');
 		o.value('dns_1984hosting', '1984.is');
@@ -231,7 +234,7 @@ return view.extend({
 		o.value('dns_zone', 'Zone.ee');
 		o.value('dns_zonomi', 'Zonomi.com');
 		o.modalonly = true;
-		o.onchange = L.bind(_handleCheckService, o, s);
+		o.onchange = _handleCheckService;
 
 		o = s.taboption('challenge_dns', form.DummyValue, '_wiki_url', _('See instructions'), '');
 		o.rawhtml = true;
@@ -444,7 +447,7 @@ return view.extend({
 		o = s.taboption('challenge_dns', form.DynamicList, 'credentials', _('DNS API credentials'),
 			_("The credentials for the DNS API mode selected above. " +
 				"See https://github.com/acmesh-official/acme.sh/wiki/dnsapi for the format of credentials required by each API. " +
-				"Add multiple entries here in KEY=VAL shell variable format to supply multiple credential variables."))
+				"Add multiple entries here in KEY=VAL shell variable format to supply multiple credential variables."));
 		o.datatype = "list(string)";
 		o.depends("validation_method", "dns");
 		o.modalonly = true;
@@ -464,7 +467,7 @@ return view.extend({
 		o.modalonly = true;
 
 
-		o = s.taboption('advanced', form.Flag, 'use_staging', _('Use staging server'),
+		o = s.taboption('advanced', form.Flag, 'staging', _('Use staging server'),
 			_(
 				'Get certificate from the Letsencrypt staging server ' +
 				'(use for testing; the certificate won\'t be valid).'
@@ -484,8 +487,8 @@ return view.extend({
 		o.rmempty = false;
 		o.optional = true;
 		o.modalonly = true;
-		o.cfgvalue = function(section_id, set_value) {
-			var keylength = uci.get('acme', section_id, 'keylength');
+		o.cfgvalue = function(section_id) {
+			let keylength = uci.get('acme', section_id, 'keylength');
 			if (keylength) {
 				// migrate the old keylength to a new keytype
 				switch (keylength) {
@@ -497,7 +500,7 @@ return view.extend({
 					default: return ''; // bad value
 				}
 			}
-			return set_value;
+			return this.super('cfgvalue', arguments);
 		};
 		o.write = function(section_id, value) {
 			// remove old keylength
@@ -505,15 +508,9 @@ return view.extend({
 			uci.set('acme', section_id, 'key_type', value);
 		};
 
-		o = s.taboption('advanced', form.Flag, "use_acme_server",
-			_("Custom ACME CA"), _("Use a custom CA instead of Let's Encrypt."));
-		o.depends("use_staging", "0");
-		o.default = false;
-		o.modalonly = true;
-
 		o = s.taboption('advanced', form.Value, "acme_server", _("ACME server URL"),
-			_("Custom ACME server directory URL."));
-		o.depends("use_acme_server", "1");
+			_('Use a custom CA instead of Let\'s Encrypt.') +	' ' + _('Custom ACME server directory URL.'));
+		o.depends("staging", "0");
 		o.placeholder = "https://api.buypass.com/acme/directory";
 		o.optional = true;
 		o.modalonly = true;
@@ -531,22 +528,39 @@ return view.extend({
 
 		return m.render();
 	}
-})
+});
 
 
 function _addDnsProviderField(s, provider, env, title, desc) {
-	let o = s.taboption('challenge_dns', form.Value, '_' + env, _(title),
+	let o = s.taboption('challenge_dns', form.Value, '_credentials_' + env, _(title),
 		_(desc));
 	o.depends('dns', provider);
 	o.modalonly = true;
-	o.cfgvalue = function (section_id, stored_val) {
-		var creds = this.map.data.get(this.map.config, section_id, 'credentials');
+	o.cfgvalue = function (section_id) {
+		let creds = this.map.data.get(this.map.config, section_id, 'credentials');
 		return _extractParamValue(creds, env);
 	};
-	o.write = function (section_id, value) {
-		this.map.data.set('acme', section_id, 'credentials', [env + '="' + value + '"']);
-	};
+	o.write = function (section_id, value) { };
+	o.onchange = _handleEditChange;
 	return o;
+}
+
+function _handleEditChange(event, section_id, newVal) {
+	// Add the provider field value directly to the credentials DynList
+	let credentialsDynList = this.map.lookupOption('credentials', section_id)[0].getUIElement(section_id);
+	let creds = credentialsDynList.getValue();
+	let credsMap = _parseKeyValueListToMap(creds);
+	let optName = this.option.substring('_credentials_'.length);
+	if (newVal) {
+		credsMap.set(optName, newVal);
+	} else {
+		credsMap.delete(optName);
+	}
+	let newCreds = [];
+	for (let [key, val] of credsMap) {
+		newCreds.push(key + '="' + val + '"');
+	}
+	credentialsDynList.setValue(newCreds);
 }
 
 /**
@@ -555,31 +569,37 @@ function _addDnsProviderField(s, provider, env, title, desc) {
  * @returns {string}
  */
 function _extractParamValue(paramsKeyVals, paramName) {
-	if (!paramsKeyVals) {
-		return '';
-	}
-	for (let i = 0; i < paramsKeyVals.length; i++) {
-		var paramKeyVal = paramsKeyVals[i];
-		var parts = paramKeyVal.split('=');
-		if (parts.lenght < 2) {
-			continue;
-		}
-		var name = parts[0];
-		var val = parts[1];
-		if (name == paramName) {
-			// unquote
-			return val.substring(0, val.length-1).substring(1);
-		}
-	}
-	return '';
+	let map = _parseKeyValueListToMap(paramsKeyVals)
+	return map.get(paramName) || '';
 }
 
-function _handleCheckService(c, event, curVal, newVal) {
+/**
+ * @param {string[]} paramsKeyVals
+ * @returns {Map}
+ */
+function _parseKeyValueListToMap(paramsKeyVals) {
+	let map = new Map();
+	if (!paramsKeyVals) {
+		return map;
+	}
+	for (let paramKeyVal of paramsKeyVals) {
+		let pos = paramKeyVal.indexOf("=");
+		if (pos < 0) {
+			continue;
+		}
+		let name = paramKeyVal.slice(0, pos);
+		let unquotedVal = paramKeyVal.slice(pos + 2, paramKeyVal.length - 1);
+		map.set(name, unquotedVal);
+	}
+	return map;
+}
+
+function _handleCheckService(event, section_id, newVal) {
 	document.getElementById('wikiInstructionUrl').href = 'https://github.com/acmesh-official/acme.sh/wiki/dnsapi#' + newVal;
 }
 
 function _renderCerts(certs) {
-	var table = E('table', {'class': 'table cbi-section-table', 'id': 'certificates_table'}, [
+	let table = E('table', {'class': 'table cbi-section-table', 'id': 'certificates_table'}, [
 		E('tr', {'class': 'tr table-titles'}, [
 			E('th', {'class': 'th'}, _('Main Domain')),
 			E('th', {'class': 'th'}, _('Private Key')),
@@ -588,7 +608,7 @@ function _renderCerts(certs) {
 		])
 	]);
 
-	var rows = certs.map(function (cert) {
+	let rows = certs.map(function (cert) {
 		let domain = cert.name.substring(0, cert.name.length - 4);
 		let issueDate = new Date(cert.mtime * 1000).toLocaleDateString();
 		return [

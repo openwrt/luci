@@ -29,12 +29,12 @@ esac
 
 # Absent a [folder] parameter, use the current path
 find "${1:-.}" -name '*.pot' -and -not -name base.pot | sort | \
-    xargs -P 10 -I{} sh -c '
-        dir="${1%/po/templates/*}"
-        echo "Updating ${1#./} ... "
-        ./build/i18n-scan.pl "$dir" > "$1"
-        echo "done"
-    ' sh {}
+	xargs -P 10 -I{} sh -c '
+		dir="${1%/po/templates/*}"
+		echo "Updating ${1#./} ... "
+		./build/i18n-scan.pl "$dir" > "$1"
+		echo "done"
+	' sh {}
 
 	# while read path; do
 	# 	dir="${path%/po/templates/*}"
@@ -47,13 +47,13 @@ find "${1:-.}" -name '*.pot' -and -not -name base.pot | sort | \
 
 if [ -n "$1" ]; then
 	if [ "$(uname)" = "Darwin" ] || [ "$(uname)" = "FreeBSD" ]; then
-	    # macOS-specific commands
-	    find "$1" -path '*/templates/*.pot' -print0 | xargs -0r stat -f '%N' | \
-	    	xargs -r -n 1 dirname | \
-	    	xargs -r -n 1 dirname | sort | \
-	    	xargs -r -n 1 -P 40 ./build/i18n-update.pl
+		# macOS-specific commands
+		find "$1" -path '*/templates/*.pot' -print0 | xargs -0r stat -f '%N' | \
+			xargs -r -n 1 dirname | \
+			xargs -r -n 1 dirname | sort | \
+			xargs -r -n 1 -P 40 ./build/i18n-update.pl
 	elif [ "$(uname)" = "Linux" ]; then
-	    # Linux-specific commands
+		# Linux-specific commands
 		find "$1" -path '*/templates/*.pot' -printf '%h ' | \
 			xargs -r -n 1 dirname | \
 			xargs -r -n 1 -P 40 ./build/i18n-update.pl

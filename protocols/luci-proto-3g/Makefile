@@ -9,6 +9,9 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=Support for 3G
 LUCI_DEPENDS:=+comgt
 
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

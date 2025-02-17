@@ -223,41 +223,45 @@ return view.extend({
 	render: function(data) {
 		var svg = data[0];
 
-		var v = E([], [
-			svg,
-			E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
-			E('br'),
+		var v = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
+			E('h2', _('System load')),
+			E('div', {'class': 'cbi-map-descr'}, _('Load Average is a metric that is used by Linux to keep track of system resources.')),
+			E('div', { 'class': 'cbi-section' }, [
+				svg,
+				E('div', { 'class': 'right' }, E('small', { 'id': 'scale' }, '-')),
+				E('br'),
 
-			E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
-				E('tr', { 'class': 'tr' }, [
-					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #f00' }, [ _('1 Minute Load:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load01_cur' }, [ '0.00' ]),
+				E('table', { 'class': 'table', 'style': 'width:100%;table-layout:fixed' }, [
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #f00' }, [ _('1 Minute Load:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load01_cur' }, [ '0.00' ]),
 
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load01_avg' }, [ '0.00' ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load01_avg' }, [ '0.00' ]),
 
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load01_peak' }, [ '0.00' ])
-				]),
-				E('tr', { 'class': 'tr' }, [
-					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #f60' }, [ _('5 Minute Load:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load05_cur' }, [ '0.00' ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load01_peak' }, [ '0.00' ])
+					]),
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #f60' }, [ _('5 Minute Load:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load05_cur' }, [ '0.00' ]),
 
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load05_avg' }, [ '0.00' ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load05_avg' }, [ '0.00' ]),
 
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load05_peak' }, [ '0.00' ])
-				]),
-				E('tr', { 'class': 'tr' }, [
-					E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #fa0' }, [ _('15 Minute Load:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load15_cur' }, [ '0.00' ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load05_peak' }, [ '0.00' ])
+					]),
+					E('tr', { 'class': 'tr' }, [
+						E('td', { 'class': 'td right top' }, E('strong', { 'style': 'border-bottom:2px solid #fa0' }, [ _('15 Minute Load:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load15_cur' }, [ '0.00' ]),
 
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load15_avg' }, [ '0.00' ]),
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Average:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load15_avg' }, [ '0.00' ]),
 
-					E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
-					E('td', { 'class': 'td', 'id': 'lb_load15_peak' }, [ '0.00' ])
+						E('td', { 'class': 'td right top' }, E('strong', {}, [ _('Peak:') ])),
+						E('td', { 'class': 'td', 'id': 'lb_load15_peak' }, [ '0.00' ])
+					])
 				])
 			])
 		]);

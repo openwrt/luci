@@ -159,8 +159,6 @@ h6 {
 
 html {
 	overflow-y: hidden;
-	-webkit-text-size-adjust: 100%;
-	-ms-text-size-adjust: 100%;
 }
 
 body {
@@ -212,7 +210,7 @@ select,
 select:not([multiple="multiple"]):focus,
 input:not(.cbi-button):focus,
 .cbi-dropdown:focus {
-	border-color: var(--primary-color);
+	border-color: var(--main-color);
 }
 
 .cbi-dropdown,
@@ -346,7 +344,7 @@ small {
 	overflow-x: auto;
 	width: calc(0% + 15rem);
 	height: calc(100% - 4rem);
-	background-color: var(--white-color);
+	background-color: var(--menu-bg-color);
 	transition: visibility 400ms, width 400ms;
 }
 
@@ -379,8 +377,8 @@ small {
 }
 
 header {
-	color: var(--secondary-color);
-	background: var(--primary-color);
+	color: var(--header-color);
+	background: var(--header-bg);
 }
 
 header > .fill > .container {
@@ -407,7 +405,7 @@ header > .fill > .container > .brand {
 	cursor: default;
 	vertical-align: text-bottom;
 	text-decoration: none;
-	color: var(--white-color);
+	color: var(--header-color);
 }
 
 header > .fill > .container > .status {
@@ -429,8 +427,8 @@ header > .fill > .container > .status > * {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	color: var(--white-color);
-	background: var(--secondary-color);
+	color: var(--header-color);
+	background: var(--header-bg);
 	padding: .5rem;
 	transition: box-shadow .2s;
 	box-shadow: 0 2px 5px rgb(0 0 0 / 26%);
@@ -463,9 +461,9 @@ header > .fill > .container > .status > * {
 #modemenu > li.divider {
 	margin-left: .25rem;
 	margin-right: .25rem;
-	border: .5rem solid var(--gray-color);
-	border-left: 1px solid var(--gray-color);
-	border-right: 1px solid var(--gray-color);
+	border: .5rem solid var(--submenu-bg-hover);
+	border-left: 1px solid var(--submenu-bg-hover);
+	border-right: 1px solid var(--submenu-bg-hover);
 	border-radius: 1rem;
 }
 
@@ -561,7 +559,7 @@ header > .fill > .container > .status > * {
 
 .main > .main-left > .nav > li a {
 	display: block;
-	color: #5f6368;
+	color: var(--menu-color);
 }
 
 .main > .main-left > .nav > li.active > a {
@@ -569,7 +567,7 @@ header > .fill > .container > .status > * {
 }
 
 .main > .main-left > .nav > li.active {
-	background-color: var(--primary-color);
+	background-color: var(--submenu-bg-hover-active);
 }
 
 .main > .main-left > .nav > li.slide.active {
@@ -597,7 +595,7 @@ header > .fill > .container > .status > * {
 	width: 100%;
 	padding: .5rem 1rem;
 	text-decoration: none;
-	color: var(--black-color-low);
+	color: var(--main-menu-color);
 }
 
 .main > .main-left > .nav > .slide > .menu::before {
@@ -635,7 +633,7 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 
 .main > .main-left > .nav > li:hover,
 .main > .main-left > .nav > .slide > .menu:hover {
-	background: var(--gray-color);
+	background: var(--submenu-bg-hover);
 }
 
 .main > .main-left > .nav > .slide:hover {
@@ -643,7 +641,7 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active {
-	background-color: var(--primary-color);
+	background-color: var(--submenu-bg-hover-active);
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li > a {
@@ -657,15 +655,15 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li:hover {
-	background: var(--gray-color);
+	background: var(--submenu-bg-hover);
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li:not(.active):hover > a {
-	color: #5f6368;
+	color: var(--menu-color-hover);
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > .active:hover {
-	background-color: var(--primary-color);
+	background-color: var(--main-color);
 }
 
 /* ripple effect */
@@ -756,7 +754,7 @@ h5 {
 #cbi-wireless > #wifi_assoclist_table,
 [data-tab-title],
 [data-page^="admin-system-admin"]:not(.node-main-login) .cbi-map:not(#cbi-dropbear),
-[data-page="admin-system-opkg"] #maincontent > .container {
+[data-page="admin-system-package-manager"] #maincontent > .container {
 	font-family: inherit;
 	font-weight: normal;
 	font-style: normal;
@@ -1156,7 +1154,7 @@ td > table > tbody > tr > td,
 
 .tabs > li[class~="active"],
 .tabs > li:hover {
-	border-bottom-color: var(--primary-color);
+	border-bottom-color: var(--main-color);
 }
 
 .tabs > li:hover {
@@ -1172,7 +1170,7 @@ td > table > tbody > tr > td,
 }
 
 .tabs > li[class~="active"] > a {
-	color: var(--primary-color);
+	color: var(--main-color);
 }
 
 .cbi-tabmenu {
@@ -1378,10 +1376,12 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	max-width: 25rem;
 	margin-right: 2em;
 	padding: .5em .25em .25em 0;
-	pointer-events: none;
+	pointer-events: auto; /* needed for drag-and-drop in UIDynamicList */
 	color: #666;
 	border-bottom: 2px solid rgba(0, 0, 0, .26);
 	outline: 0;
+	cursor: move; /* drag-and-drop */
+	user-select: text; /* text selection in drag-and-drop */
 }
 
 .cbi-dynlist[name="sshkeys"] > .item {
@@ -1403,9 +1403,21 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	background-color: var(--red-color-high);
 }
 
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .item.drag-over {
+	border-top: 1px solid black;
+}
+
+/* Make item being dragged in UIDynamicList partially transparent*/
+.cbi-dynlist > .item.dragging {
+	opacity: 0.5;
+}
+
+/* prevent pointer changing when over the span element in UIDynamicList */
 .cbi-dynlist > .item > span {
 	white-space: normal;
 	word-break: break-word;
+	pointer-events: none;
 }
 
 .cbi-dynlist > .add-item {
@@ -1413,6 +1425,16 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	align-items: center;
 	width: 100%;
 	min-width: 16rem;
+}
+
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .add-item > .cbi-input-text.drag-over {
+	border-top: 1px solid black;
+}
+
+/* indication line for drag-and-drop in UIDynamicList*/
+.cbi-dynlist > .add-item > .cbi-button-add.drag-over {
+	border-top: 1px solid black;
 }
 
 .cbi-dynlist > .add-item:not([ondrop]) > input {
@@ -1561,7 +1583,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	border: thin solid #918e8c;
 	background: #f6f6f6;
 	box-shadow: 0 0 4px #918e8c;
-	color: var(--black-color-low);
+	color: var(--main-menu-color);
 }
 
 .cbi-dropdown > ul > li[display],
@@ -1643,7 +1665,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	width: 0;
 	height: 100%;
 	transition: width .25s ease-in;
-	background: var(--light-blue-color);
+	background: var(--bar-bg);
 }
 
 .cbi-progressbar::after {
@@ -1747,6 +1769,19 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .modal.cbi-modal {
 	max-width: 90%;
 	max-height: none;
+}
+
+.modal .button-row {
+	display: flex;
+	justify-content: space-between;
+}
+
+.modal .button-row > :not(:last-child) {
+	margin-right: .5em;
+}
+
+.modal .button-row > :first-child {
+	margin-right: auto;
 }
 
 body.modal-overlay-active {
@@ -2016,7 +2051,7 @@ td > .ifacebadge,
 }
 
 .ifacebox-head.active {
-	background: var(--light-blue-color);
+	background: var(--bar-bg);
 }
 
 .ifacebox-body {
@@ -2340,19 +2375,19 @@ input[name="nslookup"] {
 	gap: 2px;
 }
 
-[data-page="admin-system-opkg"] div.btn {
+[data-page="admin-system-package-manager"] div.btn {
 	line-height: 3;
 	display: inline;
 	padding: .3rem .6rem;
 }
 
 [data-page^="admin-system-admin"]:not(.node-main-login) .cbi-map:not(#cbi-dropbear),
-[data-page="admin-system-opkg"] #maincontent > .container {
+[data-page="admin-system-package-manager"] #maincontent > .container {
 	margin-top: 2rem;
 	padding-top: .1rem;
 }
 
-[data-page="admin-system-opkg"] #maincontent > .container {
+[data-page="admin-system-package-manager"] #maincontent > .container {
 	margin: 2rem;
 	margin-bottom: 1rem;
 }
@@ -2474,19 +2509,8 @@ input[name="nslookup"] {
 }
 
 .commandbox code {
-	position: absolute;
-	overflow: hidden;
-	max-width: 60%;
 	margin-left: 4px;
 	padding: 2px 3px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-}
-
-.commandbox code:hover {
-	overflow-y: auto;
-	max-height: 50px;
-	white-space: normal;
 }
 
 .commandbox p:first-of-type {

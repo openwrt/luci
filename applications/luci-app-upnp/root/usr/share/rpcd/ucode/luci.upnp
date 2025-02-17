@@ -33,7 +33,7 @@ const methods = {
 							extport: +record[1],
 							intaddr: arrtoip(iptoarr(record[2])),
 							intport: +record[3],
-							expiry: +record[4],
+							expires: record[4] - timelocal(localtime()),
 							description: trim(record[5])
 						});
 					}
@@ -95,6 +95,7 @@ const methods = {
 						    lease.extport == rule.extport)
 						{
 							rule.descr = lease.description;
+							rule.expires = lease.expires;
 							break;
 						}
 					}
@@ -135,5 +136,3 @@ const methods = {
 };
 
 return { 'luci.upnp': methods };
-
-

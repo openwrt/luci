@@ -3,62 +3,18 @@
 "require uci";
 "require form";
 "require baseclass";
+"require https-dns-proxy.status as hdp";
 
-var pkg = {
-	get Name() {
-		return "https-dns-proxy";
-	},
-	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
-	},
-	templateToRegexp: function (template) {
-		return RegExp(
-			"^" +
-				template
-					.split(/(\{\w+\})/g)
-					.map((part) => {
-						let placeholder = part.match(/^\{(\w+)\}$/);
-						if (placeholder) return `(?<${placeholder[1]}>.*?)`;
-						else return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-					})
-					.join("") +
-				"$"
-		);
-	},
-};
-
-var getInitStatus = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getInitStatus",
-	params: ["name"],
-});
-
-var getPlatformSupport = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getPlatformSupport",
-	params: ["name"],
-});
-
-var getProviders = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getProviders",
-	params: ["name"],
-});
-
-var getRuntime = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getRuntime",
-	params: ["name"],
-});
+var pkg = hdp.pkg;
 
 return baseclass.extend({
 	title: _("HTTPS DNS Proxy Instances"),
 
 	load: function () {
 		return Promise.all([
-			getInitStatus(pkg.Name),
-			getProviders(pkg.Name),
-			getRuntime(pkg.Name),
+			hdp.getInitStatus(pkg.Name),
+			hdp.getProviders(pkg.Name),
+			hdp.getRuntime(pkg.Name),
 		]);
 	},
 
@@ -70,8 +26,8 @@ return baseclass.extend({
 				force_dns_active: null,
 				version: null,
 			},
-			providers: (data[1] && data[1][pkg.Name]) || { providers: [] },
-			runtime: (data[2] && data[2][pkg.Name]) || { instances: [] },
+			providers: (data[1] && data[1][pkg.Name]) || [{ title: "empty" }],
+			runtime: (data[2] && data[2][pkg.Name]) || { instances: null, triggers: [] },
 		};
 		reply.providers.sort(function (a, b) {
 			return _(a.title).localeCompare(_(b.title));
@@ -105,46 +61,47 @@ return baseclass.extend({
 		);
 
 		var rows = [];
-		Object.values(reply.runtime.instances).forEach((element) => {
-			var resolver;
-			var address;
-			var port;
-			var name;
-			var option;
-			var found;
-			element.command.forEach((param, index, arr) => {
-				if (param === "-r") resolver = arr[index + 1];
-				if (param === "-a") address = arr[index + 1];
-				if (param === "-p") port = arr[index + 1];
-			});
-			resolver = resolver || "Unknown";
-			address = address || "127.0.0.1";
-			port = port || "Unknown";
-			reply.providers.forEach((prov) => {
-				let regexp = pkg.templateToRegexp(prov.template);
-				if (!found && regexp.test(resolver)) {
-					found = true;
-					name = _(prov.title);
-					let match = resolver.match(regexp);
-					if (match[1] != null) {
-						if (
-							prov.params &&
-							prov.params.option &&
-							prov.params.option.options
-						) {
-							prov.params.option.options.forEach((opt) => {
-								if (opt.value === match[1]) option = _(opt.description);
-							});
-							name += " (" + option + ")";
-						} else {
-							if (match[1] !== "") name += " (" + match[1] + ")";
+		if (reply.runtime.instances) {
+			Object.values(reply.runtime.instances).forEach((element) => {
+				var resolver;
+				var address;
+				var port;
+				var name;
+				var option;
+				var found;
+				element.command.forEach((param, index, arr) => {
+					if (param === "-r") resolver = arr[index + 1];
+					if (param === "-a") address = arr[index + 1];
+					if (param === "-p") port = arr[index + 1];
+				});
+				resolver = resolver || "Unknown";
+				address = address || "127.0.0.1";
+				port = port || "Unknown";
+				reply.providers.forEach((prov) => {
+					let regexp = pkg.templateToRegexp(prov.template);
+					if (!found && regexp.test(resolver)) {
+						found = true;
+						name = _(prov.title);
+						let match = resolver.match(regexp);
+						if (match[1] != null) {
+							if (
+								prov.params &&
+								prov.params.option &&
+								prov.params.option.options
+							) {
+								prov.params.option.options.forEach((opt) => {
+									if (opt.value === match[1]) option = _(opt.description);
+								});
+								name += " (" + option + ")";
+							} else {
+								if (match[1] !== "") name += " (" + match[1] + ")";
+							}
 						}
 					}
-				}
+				});
+				rows.push([name, address, port, forceDnsText]);
 			});
-			rows.push([name, address, port, forceDnsText]);
-		});
-
+		}
 		cbi_update_table(table, rows, E("em", _("There are no active instances.")));
 
 		return table;

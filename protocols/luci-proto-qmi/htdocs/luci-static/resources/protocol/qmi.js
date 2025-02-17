@@ -31,7 +31,7 @@ return network.registerProtocol('qmi', {
 		return this._ubus('l3_device') || 'qmi-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'uqmi';
 	},
 

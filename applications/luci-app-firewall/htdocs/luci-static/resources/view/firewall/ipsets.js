@@ -15,7 +15,7 @@ return view.extend({
 	},
 
 	render: function(data) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('firewall', _('Firewall - IP sets'),
 			_('firewall4 supports referencing and creating IP sets to simplify matching of large address lists without the need to create one rule per item to match. Port ranges in ipsets are unsupported by firewall4.<br />'));
@@ -33,6 +33,7 @@ return view.extend({
 		s.addremove = true;
 		s.anonymous = true;
 		s.sortable  = true;
+		s.cloneable = true;
 		s.nodescriptions = true;
 
 
@@ -66,7 +67,7 @@ return view.extend({
 		o = s.option(form.ListValue, 'family', _('Family'));
 		o.value('ipv4', _('IPv4'));
 		o.value('ipv6', _('IPv6'));
-		o.default = _('ipv4');
+		o.default = 'ipv4';
 
 
 		/* Direction src, dst; (Data)Types: ip, port, mac, net or set

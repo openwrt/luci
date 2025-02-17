@@ -14,15 +14,14 @@
 <!DOCTYPE html>
 <html lang="{{ dispatcher.lang }}">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
-<link rel="stylesheet" type="text/css" media="screen" href="{{ media }}/cascade.css" />
+<link rel="stylesheet" media="screen" href="{{ media }}/cascade.css" />
 <link rel="icon" href="{{ media }}/logo.png" sizes="180x180">
 <link rel="icon" href="{{ media }}/logo.svg" sizes="any">
-<script type="text/javascript" src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
-<script type="text/javascript" src="{{ resource }}/cbi.js"></script>
+<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+<script src="{{ resource }}/cbi.js"></script>
 <title>{{ striptags(`${boardinfo.hostname ?? '?'}${node ? ` - ${node.title}` : ''}`) }} - LuCI</title>
 {% if (css): %}
 <style title="text/css">{{ css }}</style>

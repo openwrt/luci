@@ -171,12 +171,13 @@ return view.extend({
 		    m, s, o;
 
 		m = new form.Map('firewall', _('Firewall - Traffic Rules'),
-			_('Traffic rules define policies for packets traveling between different zones, for example to reject traffic between certain hosts or to open WAN ports on the router.'));
+			_('Traffic rules define policies for packets travelling between different zones, for example to reject traffic between certain hosts or to open WAN ports on the router.'));
 
 		s = m.section(form.GridSection, 'rule', _('Traffic Rules'));
 		s.addremove = true;
 		s.anonymous = true;
 		s.sortable  = true;
+		s.cloneable = true;
 
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));

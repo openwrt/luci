@@ -11,8 +11,19 @@ var pkg = {
 	get Name() {
 		return "adblock-fast";
 	},
+	get ReadmeCompat() {
+		return "";
+	},
 	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
+		return (
+			"https://docs.openwrt.melmac.net/" + pkg.Name + "/" + pkg.ReadmeCompat
+		);
+	},
+	humanFileSize: function (bytes, si = false, dp = 2) {
+		return `%${si ? 1000 : 1024}.${dp ?? 0}mB`.format(bytes);
+	},
+	isObjEmpty: function (obj) {
+		return Object.keys(obj).length === 0;
 	},
 };
 
@@ -187,7 +198,13 @@ var status = baseclass.extend({
 							"Use of external dnsmasq config file detected, please set '%s' option to '%s'"
 						).format("dns", "dnsmasq.conf"),
 						warningMissingRecommendedPackages: _(
-							"Some recommended packages are missing"
+							"Missing recommended package: '%s'"
+						),
+						warningOutdatedLuciPackage: _(
+							"The WebUI application (luci-app-adblock-fast) is outdated, please update it"
+						),
+						warningOutdatedPrincipalPackage: _(
+							"The principal package (adblock-fast) is outdated, please update it"
 						),
 						warningInvalidCompressedCacheDir: _(
 							"Invalid compressed cache directory '%s'"
@@ -244,9 +261,7 @@ var status = baseclass.extend({
 							"The %s failed to discover WAN gateway"
 						).format(pkg.Name),
 						errorOutputDirCreate: _("Failed to create directory for %s file"),
-						errorOutputFileCreate: _("Failed to create '%s' file").format(
-							outputFile
-						),
+						errorOutputFileCreate: _("Failed to create '%s' file"),
 						errorFailDNSReload: _("Failed to restart/reload DNS resolver"),
 						errorSharedMemory: _("Failed to access shared memory"),
 						errorSorting: _("Failed to sort data file"),
@@ -287,6 +302,10 @@ var status = baseclass.extend({
 						errorTooLittleRam: _(
 							"Free ram (%s) is not enough to process all enabled block-lists"
 						),
+						errorCreatingBackupFile: _("failed to create backup file %s"),
+						errorDeletingDataFile: _("failed to delete data file %s"),
+						errorRestoringBackupFile: _("failed to restore backup file %s"),
+						errorNoOutputFile: _("failed to create final block-list %s"),
 					};
 					var errorsTitle = E(
 						"label",
@@ -509,6 +528,8 @@ RPC.on("setInitAction", function (reply) {
 
 return L.Class.extend({
 	status: status,
+	pkg: pkg,
+	getInitStatus: getInitStatus,
 	getFileUrlFilesizes: getFileUrlFilesizes,
 	getPlatformSupport: getPlatformSupport,
 });

@@ -1,8 +1,0 @@
-#!/bin/sh
-
-uci -q batch <<-EOF >/dev/null
-	delete ucitrack.@libreswan[-1]
-	add ucitrack libreswan
-	set ucitrack.@libreswan[-1].init=ipsec
-	commit ucitrack
-EOF

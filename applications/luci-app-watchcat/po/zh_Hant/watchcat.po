@@ -4,16 +4,37 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-01-05 04:02+0000\n"
-"Last-Translator: Yuan Law <traverslombard@outlook.com>\n"
-"Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
-"openwrt/luciapplicationswatchcat/zh_Hant/>\n"
+"PO-Revision-Date: 2025-01-27 18:47+0000\n"
+"Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
+"projects/openwrt/luciapplicationswatchcat/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.10-dev\n"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
+msgid ""
+"<i>Applies to Ping Reboot and Periodic Reboot modes</i> <br /> When "
+"rebooting the router, the service will trigger a soft reboot. Entering a non-"
+"zero value here will trigger a delayed hard reboot if the soft reboot were "
+"to fail. Enter the number of seconds to wait for the soft reboot to fail or "
+"use 0 to disable the forced reboot delay."
+msgstr ""
+"<i>應用於 Ping 重新啟動 和 定時重新啟動 模式</i> <br />當重新啟動路由器時，該"
+"服務將觸發軟重新啟動。如果軟重新啟動失敗，在這裡輸入非零值將觸發延遲的硬重新"
+"啟動。輸入等待軟重新啟動失敗的秒數或使用 0 來停用強制重新啟動延遲。"
+
+#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
+msgid ""
+"<i>Applies to Ping Reboot and Restart Interface modes</i> <br /> If using "
+"ModemManager, you can have Watchcat restart your ModemManager interface by "
+"specifying its name."
+msgstr ""
+"<i>應用於 Ping Reboot 和 Restart 介面模式</i> <br />如果使用 ModemManager，您"
+"可以透過指定名稱讓 Watchcat 重新啟動您的 ModemManager 介面。"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:104
 msgid ""
@@ -29,28 +50,7 @@ msgstr "Ping 主機的位址家族"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:65
 msgid "Any"
-msgstr ""
-
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
-msgid ""
-"Applies to Ping Reboot and Periodic Reboot modes</i> <br /> When rebooting "
-"the router, the service will trigger a soft reboot. Entering a non-zero "
-"value here will trigger a delayed hard reboot if the soft reboot were to "
-"fail. Enter the number of seconds to wait for the soft reboot to fail or use "
-"0 to disable the forced reboot delay."
-msgstr ""
-"應用於 Ping 重新啟動 和 定時重新啟動 模式</i> <br />當重新啟動路由器時，該服"
-"務將觸發軟重新啟動。如果軟重新啟動失敗，在這裡輸入非零值將觸發延遲的硬重新啟"
-"動。輸入等待軟重新啟動失敗的秒數或使用 0 來停用強制重新啟動延遲。"
-
-#: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
-msgid ""
-"Applies to Ping Reboot and Restart Interface modes</i> <br /> If using "
-"ModemManager, you can have Watchcat restart your ModemManger interface by "
-"specifying its name."
-msgstr ""
-"應用於 Ping Reboot 和 Restart 介面模式</i> <br />如果使用 ModemManager，您可"
-"以透過指定名稱讓 Watchcat 重新啟動您的 ModemManager 介面。"
+msgstr "任何"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:84
 msgid "Big: 248 bytes"
@@ -58,7 +58,7 @@ msgstr "大：248 位元組"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:70
 msgid "Check Interval"
-msgstr "檢查間隔時間"
+msgstr "檢查間隔"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:93
 msgid "Force Reboot Delay"
@@ -70,7 +70,7 @@ msgstr "一般設定"
 
 #: applications/luci-app-watchcat/root/usr/share/rpcd/acl.d/luci-app-watchcat.json:3
 msgid "Grant access to LuCI app watchcat"
-msgstr "授予對 LuCI 應用 watchcat 的存取權限"
+msgstr "授予存取LuCI app watchcat的權限"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:12
 msgid ""
@@ -279,11 +279,11 @@ msgstr "Windows：32 位元組"
 #~ "失敗，要監控和重新啟動的介面。"
 
 #~ msgid ""
-#~ "Applies to Ping Reboot and Periodic Reboot modes</i> <br> When rebooting "
-#~ "the router, the service will trigger a soft reboot. Entering a non-zero "
-#~ "value here will trigger a delayed hard reboot if the soft reboot were to "
-#~ "fail. Enter the number of seconds to wait for the soft reboot to fail or "
-#~ "use 0 to disable the forced reboot delay."
+#~ "<i>Applies to Ping Reboot and Periodic Reboot modes</i> <br> When "
+#~ "rebooting the router, the service will trigger a soft reboot. Entering a "
+#~ "non-zero value here will trigger a delayed hard reboot if the soft reboot "
+#~ "were to fail. Enter the number of seconds to wait for the soft reboot to "
+#~ "fail or use 0 to disable the forced reboot delay."
 #~ msgstr ""
 #~ "適用於 Ping 重新啟動和週期性重新啟動模式</i> 重新啟動路由器時，該服務將觸"
 #~ "發軟開機。 如果軟開機失敗，則在此處輸入非零值將觸發延遲的硬開機。輸入等待"
@@ -291,11 +291,11 @@ msgstr "Windows：32 位元組"
 
 #~ msgid ""
 #~ "Applies to Ping Reboot and Restart Interface modes</i> <br> If using "
-#~ "ModemManager, you can have Watchcat restart your ModemManger interface by "
-#~ "specifying its name."
+#~ "ModemManager, you can have Watchcat restart your ModemManager interface "
+#~ "by specifying its name."
 #~ msgstr ""
 #~ "適用於 Ping 重新啟動和重新啟動介面模式</i> <br> 如果使用 ModemManager，則"
-#~ "可以讓 Watchcat 透過指定其名稱來重新啟動 ModemManger 介面。"
+#~ "可以讓 Watchcat 透過指定其名稱來重新啟動 ModemManager 介面。"
 
 #~ msgid ""
 #~ "How often to ping the host specified above. <br><br>The default unit is "

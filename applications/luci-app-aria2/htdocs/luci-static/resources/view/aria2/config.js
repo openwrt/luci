@@ -8,9 +8,9 @@
 'require ui';
 'require view';
 
-var callServiceList, CBIAria2Status, CBIRpcSecret, CBIRpcUrl;
+var CBIAria2Status, CBIRpcSecret, CBIRpcUrl;
 
-callServiceList = rpc.declare({
+const callServiceList = rpc.declare({
 	object: 'service',
 	method: 'list',
 	params: [ 'name' ],
@@ -183,7 +183,7 @@ return view.extend({
 	},
 
 	render: function(aria2) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('aria2', '%s - %s'.format(_('Aria2'), _('Settings')), '<p>%s</p><p>%s</p>'.format(
 			_('Aria2 is a lightweight multi-protocol &amp; multi-source, cross platform download utility.'),

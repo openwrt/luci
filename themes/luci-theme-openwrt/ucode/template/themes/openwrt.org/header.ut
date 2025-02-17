@@ -1,0 +1,86 @@
+{#
+ Copyright 2008 Steven Barth <steven@midlink.org>
+ Copyright 2008-2010 Jo-Philipp Wich <jow@openwrt.org>
+ Licensed to the public under the Apache License 2.0.
+-#}
+
+{%
+	import { getuid, getspnam } from 'luci.core';
+
+	const boardinfo = ubus.call('system', 'board');
+	const loadinfo =  ubus.call("system", "info")?.load;
+
+	http.prepare_content('text/html; charset=UTF-8');
+-%}
+
+<!DOCTYPE html>
+<html lang="{{ dispatcher.lang }}">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" media="screen" href="{{ media }}/cascade.css" />
+{% if (node?.css): %}
+<link rel="stylesheet" media="screen" href="{{ resource }}/{{ node.css }}" />
+{% endif %}
+{% if (css): %}
+<style>{{ css }}</style>
+{% endif %}
+<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
+<script src="{{ resource }}/cbi.js"></script>
+
+<title>{{ striptags(`${boardinfo.hostname ?? '?'}${node ? ` - ${_(node.title)}` : ''}`) }} - LuCI</title>
+</head>
+<body class="lang_{{ dispatcher.lang }}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
+
+<p class="skiplink">
+<span id="skiplink1"><a href="#navigation">{{ _('Skip to navigation') }}</a></span>
+<span id="skiplink2"><a href="#content">{{ _('Skip to content') }}</a></span>
+</p>
+
+<div id="menubar">
+<h2 class="navigation"><a id="navigation" name="navigation">{{ _('Navigation') }}</a></h2>
+
+<div class="hostinfo">
+	{{ striptags(boardinfo.hostname ?? '?') }} | {{ version.distversion }} |
+	{{ _('Load') }}: {{ loadinfo ? join(' ', map(loadinfo, load => sprintf("%.2f", load / 65535.0))) : '-' }}
+</div>
+
+<div id="indicators"></div>
+
+<ul id="modemenu" style="display:none"></ul>
+
+<div class="clear"></div>
+</div>
+
+<div id="maincontainer">
+	<div id="mainmenu" style="display:none"></div>
+
+	<div id="maincontent">
+		<div id="tabmenu" style="display:none"></div>
+
+		<noscript>
+			<div class="alert-message warning">
+				<h4>{{ _('JavaScript required!') }}</h4>
+				<p>{{ _('You must enable JavaScript in your browser or LuCI will not work properly.') }}</p>
+			</div>
+		</noscript>
+
+		{% if (getuid() == 0 && getspnam('root')?.pwdp === '' && join('-', ctx.request_path) != 'admin-system-admin'): %}
+		<div class="alert-message warning">
+			<h4>{{ _('No password set!') }}</h4>
+			<p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p>
+			{% if (dispatcher.lookup("admin/system/admin")): %}
+				<div class="right"><a class="btn" href="{{ dispatcher.build_url("admin/system/admin") }}">{{ _('Go to password configuration...') }}</a></div>
+			{% endif %}
+		</div>
+		{% endif %}
+
+		{% if (boardinfo.rootfs_type == "initramfs"): %}
+		<div class="alert-message warning">
+			<h4>{{ _('System running in recovery (initramfs) mode.') }}</h4>
+			<p>{{ _('No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade') }}</p>
+			{% if (dispatcher.lookup("admin/system/flash")): %}
+			  <div class="right"><a class="btn" href="{{ dispatcher.build_url("admin/system/flash") }}">{{ _('Go to firmware upgrade...') }}</a></div>
+			{% endif %}
+		</div>
+		{% endif %}

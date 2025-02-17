@@ -7,9 +7,8 @@
 	include(`themes/${theme}/header`);
 -%}
 
-<script type="text/javascript" src="{{ resource }}/promis.min.js"></script>
-<script type="text/javascript" src="{{ resource }}/luci.js"></script>
-<script type="text/javascript">
+<script src="{{ resource }}/luci.js"></script>
+<script>
 	L = new LuCI({{ replace(`${ {
 		media          : media,
 		resource       : resource,

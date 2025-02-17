@@ -5,7 +5,7 @@
 return view.extend({
 	render: function () {
 		var docsRefAttrs = 'target="_blank" rel="noreferrer" href="https://emailrelay.sourceforge.net/';
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('emailrelay', _('Email Server Configuration'),
 			_('E-MailRelay Server Configuration.') + '<br />' +

@@ -17,7 +17,7 @@ return network.registerProtocol('map', {
 		return this._ubus('l3_device') || 'map-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'map-t';
 	},
 

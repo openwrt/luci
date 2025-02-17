@@ -131,7 +131,7 @@ return view.extend({
 	},
 
 	render: function(result) {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('adblock', 'Adblock', _('Configuration of the adblock package to block ad/abuse domains by using DNS. \
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>'));
@@ -180,9 +180,9 @@ return view.extend({
 				if (sources && info) {
 					for (var i = 0; i < info.active_sources.length; i++) {
 						if (i < info.active_sources.length-1) {
-							src_array += info.active_sources[i].source + ', ';
+							src_array += info.active_sources[i] + ', ';
 						} else {
-							src_array += info.active_sources[i].source
+							src_array += info.active_sources[i]
 						}
 					}
 					sources.textContent = src_array || '-';
@@ -333,6 +333,10 @@ return view.extend({
 		o.value('5353');
 		o.rmempty = true;
 
+		o = s.taboption('general', form.Flag, 'adb_tld', _('TLD Compression'), _('The top level domain compression removes thousands of needless host entries from the final DNS blocklist.'));
+		o.default = 1
+		o.rmempty = true;
+
 		o = s.taboption('general', form.Flag, 'adb_safesearch', _('Enable SafeSearch'), _('Enforcing SafeSearch for google, bing, duckduckgo, yandex, youtube and pixabay.'));
 		o.rmempty = false;
 
@@ -417,6 +421,7 @@ return view.extend({
 		o.value('dnsmasq', _('dnsmasq (/tmp/dnsmasq.d)'));
 		o.value('unbound', _('unbound (/var/lib/unbound)'));
 		o.value('named', _('bind (/var/lib/bind)'));
+		o.value('smartdns', _('smartdns (/tmp/smartdns)'));
 		o.value('kresd', _('kresd (/etc/kresd)'));
 		o.value('raw', _('raw (/tmp)'));
 		o.optional = true;
@@ -585,6 +590,38 @@ return view.extend({
 		for (var i = 0; i < categories.length; i++) {
 			code = categories[i].match(/^(\w+);/)[1].trim();
 			if (code === 'stb') {
+				list = categories[i].match(/^\w+;(.*);/)[1].trim();
+				path = categories[i].match(/^.*;(.*$)/)[1].trim();
+				o.value(path, list);
+			}
+		}
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('sources', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>Hagezi List Selection</b></em>';
+
+		o = s.taboption('sources', form.DynamicList, 'adb_hag_sources', _('Variants'));
+		for (var i = 0; i < categories.length; i++) {
+			code = categories[i].match(/^(\w+);/)[1].trim();
+			if (code === 'hag') {
+				list = categories[i].match(/^\w+;(.*);/)[1].trim();
+				path = categories[i].match(/^.*;(.*$)/)[1].trim();
+				o.value(path, list);
+			}
+		}
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('sources', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em><b>1Hosts List Selection</b></em>';
+
+		o = s.taboption('sources', form.DynamicList, 'adb_hst_sources', _('Variants'));
+		for (var i = 0; i < categories.length; i++) {
+			code = categories[i].match(/^(\w+);/)[1].trim();
+			if (code === 'hst') {
 				list = categories[i].match(/^\w+;(.*);/)[1].trim();
 				path = categories[i].match(/^.*;(.*$)/)[1].trim();
 				o.value(path, list);

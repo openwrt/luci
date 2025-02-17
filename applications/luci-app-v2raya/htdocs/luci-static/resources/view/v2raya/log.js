@@ -24,7 +24,7 @@ return view.extend({
 
 		var log_textarea = E('div', { 'id': 'log_textarea' },
 			E('img', {
-				'src': L.resource(['icons/loading.gif']),
+				'src': L.resource('icons/loading.gif'),
 				'alt': _('Loading…'),
 				'style': 'vertical-align:middle'
 			}, _('Collecting data…'))

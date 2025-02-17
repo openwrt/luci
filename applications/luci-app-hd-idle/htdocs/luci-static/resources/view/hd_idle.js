@@ -9,7 +9,7 @@ function disk(devs, options, section_id) {
 	var disk = devs.find(function(itm){ return itm.name == v; });
 	var out = '';
 	if(disk != undefined){
-		out = options.map(function(opt){ return disk[opt].trim(); });
+		out = options.map(function(opt){ return disk[opt]?.trim() || null; });
 		out = out.filter(function(o){ return o != ''; });
 		out = out.join(' ');
 	}
@@ -33,7 +33,7 @@ return view.extend({
 	},
 
 	render: function(devs) {
-		var m, s, o;
+		let m, s, o;
 		m = new form.Map('hd-idle', _('HDD Idle'), _('HDD Idle is a utility program for spinning-down disks after a period of idle time.'));
 
 		s = m.section(form.GridSection, 'hd-idle', _('Settings'));

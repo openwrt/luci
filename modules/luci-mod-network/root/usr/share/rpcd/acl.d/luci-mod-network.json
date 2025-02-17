@@ -8,7 +8,6 @@
 				"/proc/sys/net/ipv6/conf/*/mtu": [ "read" ],
 				"/proc/sys/net/ipv6/conf/*/hop_limit": [ "read" ],
 				"/usr/libexec/luci-peeraddr": [ "exec" ],
-				"/usr/lib/opkg/info/netifd.control": [ "read" ],
 				"/proc/sys/net/ipv[46]/conf/*": [ "read" ],
 				"/sys/class/net/*/brport/*": [ "read" ]
 			},
@@ -17,7 +16,7 @@
 				"iwinfo": [ "assoclist", "countrylist", "freqlist", "txpowerlist" ],
 				"luci": [ "getSwconfigFeatures", "getSwconfigPortState" ]
 			},
-			"uci": [ "dhcp", "firewall", "network", "wireless" ]
+			"uci": [ "dhcp", "firewall", "network", "wireless", "system" ]
 		},
 		"write": {
 			"cgi-io": [ "exec" ],

@@ -41,12 +41,10 @@ return baseclass.extend({
 				'src': L.resource('view/dashboard/icons/wireless.svg'),
 				'width': 55,
 				'title': this.title,
-				'class': 'middle'
+				'class': 'middle svgmonotone'
 			}),
 			E('h3', this.title)
 		]));
-
-		container_box.appendChild(E('hr'));
 
 		for (var i =0; i < this.params.wifi.radios.length; i++) {
 
@@ -60,7 +58,7 @@ return baseclass.extend({
 					continue;
 				}
 
-				if ('actived' === idx) {
+				if ('isactive' === idx) {
 					classname = radio[idx].value ? 'label label-success' : 'label label-danger';
 					radio[idx].value = radio[idx].value ? _('yes') : _('no');
 				}
@@ -79,19 +77,16 @@ return baseclass.extend({
 		container_box.appendChild(container_radio);
 
 		var container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
-			E('tr', { 'class': 'tr table-titles  dashboard-bg' }, [
+			E('tr', { 'class': 'tr dashboard-bg' }, [
 				E('th', { 'class': 'th nowrap' }, _('Hostname')),
-				E('th', { 'class': 'th' }, _('Wireless')),
-				E('th', { 'class': 'th' }, _('Signal')),
-				E('th', { 'class': 'th' }, '%s / %s'.format( _('Up.'), _('Down.')))
+				E('th', { 'class': 'th' }, _('SSID')),
+				E('th', { 'class': 'th', 'width': '45%' }, _('Signal Strength')),
+				E('th', { 'class': 'th' }, _('Transferred') + ' %s / %s'.format( _('Up.'), _('Down.')))
 			])
 		]);
 
-		var container_devices_item;
-		var container_devices_list = E('table', { 'class': 'table assoclist devices-info' });
-
 		for (var i =0; i < this.params.wifi.devices.length; i++) {
-			container_devices_item = E('tr', { 'class': 'tr cbi-rowstyle-1' });
+			var container_devices_item = E('tr', { 'class': 'tr cbi-rowstyle-1' });
 
 			for(var idx in this.params.wifi.devices[i]) {
 				var device = this.params.wifi.devices[i];
@@ -104,11 +99,11 @@ return baseclass.extend({
 
 				if ('progress' == idx) {
 					container_content = E('div', { 'class' : 'td device-info' }, [
-						E('div', { 'class': 'progress' }, [
-							E('div', { 'class': 'progress-bar ' + device[idx].value.style, role: 'progressbar', style: 'width:'+device[idx].value.qualite+'%', 'aria-valuenow': device[idx].value.qualite, 'aria-valuemin': 0, 'aria-valuemax': 100 }),
+						E('div', { 'class': 'cbi-progressbar', 'title': 'RSSI: ' + parseInt(device[idx].value.qualite) + '% (' + device[idx].value.rssi + 'dBm)'  }, [
+							E('div', { 'style': 'width: '+device[idx].value.qualite+'%'}),
 						])
 					]);
-				} else if ('rate' == idx) {
+				} else if ('transferred' == idx) {
 					container_content = E('td', { 'class': 'td device-info'  }, [
 						E('p', {}, [
 							E('span', { 'class': ''}, [ device[idx].value.rx ]),
@@ -127,13 +122,10 @@ return baseclass.extend({
 				container_devices_item.appendChild(container_content);
 			}
 
-			container_devices_list.appendChild(container_devices_item);
+			container_devices.appendChild(container_devices_item);
 		}
 
-		container_devices.appendChild(container_devices_list);
-		container_box.appendChild(E('hr'));
 		container_box.appendChild(container_devices);
-		container_box.appendChild(container_devices_list);
 		container_wapper.appendChild(container_box);
 
 		return container_wapper;
@@ -159,7 +151,7 @@ return baseclass.extend({
 							value: net.getActiveSSID() || '?'
 						},
 
-						actived : {
+						isactive : {
 							title: _('Active'),
 							visible: true,
 							value: !net.isDisabled()
@@ -205,7 +197,10 @@ return baseclass.extend({
 					name = hosthints.getHostnameByMACAddr(bss.mac);
 
 				var progress_style;
-				var q = Math.min((bss.signal + 110) / 70 * 100, 100);
+				var defaultNF = -90; // default noise floor for devices that do not report it
+				var defaultCeil = -30;
+				// var q = Math.min((bss.signal + 110) / 70 * 100, 100);
+				var q = 100 * ((bss.signal - (bss.noise ? bss.noise: defaultNF) ) / (defaultCeil - (bss.noise ? bss.noise : defaultNF)));
 
 				if (q == 0 || q < 25)
 					progress_style = 'bg-danger';
@@ -231,16 +226,17 @@ return baseclass.extend({
 						},
 
 						progress : {
-							title: _('Channel'),
+							title: _('Strength'),
 							visible: true,
 							value: {
 								qualite: q,
+								rssi: bss.signal,
 								style: progress_style
 							}
 						},
 
-						rate : {
-							title: _('Bitrate'),
+						transferred : {
+							title: _('Transferred'),
 							visible: true,
 							value: {
 								rx: '%s'.format('%.2mB'.format(bss.rx.bytes)),

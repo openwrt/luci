@@ -1,36 +1,40 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-02-02 12:51+0000\n"
-"Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2025-01-04 15:01+0000\n"
+"Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsradicale/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
-"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
-"1 : 2);\n"
-"X-Generator: Weblate 5.4-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
+"n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.10-dev\n"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:268
 msgid ""
 "'AUTO' selects the highest protocol version that client and server support."
 msgstr ""
+"„AUTO“ pasirenka aukščiausią protokolo versiją, kurią palaiko klientas ir "
+"serveris."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:223
 msgid ""
 "'Hostname:Port' or 'IPv4:Port' or '[IPv6]:Port' Radicale should listen on"
 msgstr ""
+"„Įrenginio (t.y skleidėjo/vedėjo) pavadinimas:Prievadas“ arba "
+"„IPv4:Prievadas“, arba „[IPv6]:Prievadas“ – „Radicale“ turėtų laukti "
+"prisijungimo/jungties ryšio"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:272
 msgid "AUTO"
-msgstr "AUTO"
+msgstr "AUTOMATIŠKAI"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:706
 msgid "Additional HTTP headers"
-msgstr ""
+msgstr "Papildomos „HTTP“ antraštės"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:222
 msgid "Address:Port"
@@ -46,14 +50,16 @@ msgid ""
 "Authentication login is matched against the 'user' key, and collection's "
 "path is matched against the 'collection' key."
 msgstr ""
+"Autentifikavimo prisijungimas yra sulyginimas su – „naudotojo/vartotojo“ "
+"raktu, o rinkinio kelias – su „rinkimo“ raktu."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:352
 msgid "Authentication method"
-msgstr "Autentifikavimo būdas"
+msgstr "Autentifikavimo metodas"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:342
 msgid "Authentication method to allow access to Radicale server."
-msgstr ""
+msgstr "Autentifikavimo metodas, leidžiantis pasiekti – „Radicale“ serverį."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:173
 msgid "Auto-start"
@@ -72,6 +78,8 @@ msgid ""
 "Calendars and address books are available for both local and remote access, "
 "possibly limited through authentication policies."
 msgstr ""
+"Kalendoriai ir adresų knygos yra pasiekiami tiek vietinei, tiek nuotolinei "
+"prieigai; galimai apribojami, taikant autentifikavimo politiką."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:284
 msgid "Certificate file"
@@ -82,6 +90,8 @@ msgid ""
 "Change here the encoding Radicale will use instead of 'UTF-8' for responses "
 "to the client and/or to store data inside collections."
 msgstr ""
+"Pakeiskite čia kodavimą, kurį „Radicale“ naudos vietoj „UTF-8“, atsakant į "
+"klientą ir (arba) duomenims saugoti rinkiniuose."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:544
 msgid "Console Log level"
@@ -89,7 +99,7 @@ msgstr "Konsolės žurnalo lygis"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:419
 msgid "Control the access to data collections."
-msgstr ""
+msgstr "Valdyti prieigą prie duomenų rinkinių."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:552
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:574
@@ -103,6 +113,10 @@ msgid ""
 "resources (e.g. fonts, JavaScript, etc.) on a web page to be requested from "
 "another domain outside the domain from which the resource originated."
 msgstr ""
+"„Kryžminės kilmės išteklių bendrinimas“ („CORS“) – yra mechanizmas, "
+"leidžiantis apribotų išteklių (pvz., šriftų, „JavaScript“ ir kt.) "
+"žiniatinklio puslapyje prašyti iš kito domeno-srities, kurie randasi to "
+"domeno-srities išorėje, iš kurio tas išteklis buvo kilęs."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:548
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:570
@@ -113,6 +127,7 @@ msgstr "Derinimas/Trukdžių šalinimas"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:191
 msgid "Delay (in seconds) during system boot before Radicale start"
 msgstr ""
+"Atidėjimas (sekundėmis) sistemos įkrovos metu, prieš paleidžiant – „Radicale“"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:508
 msgid "Directory"
@@ -128,11 +143,11 @@ msgstr "Reikalingas katalogas!"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:611
 msgid "Directory where the rotating log-files are stored"
-msgstr ""
+msgstr "Katalogas/Vietovė, kuriame yra saugomi besisukantys žurnalo failai"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:193
 msgid "During delay ifup-events are not monitored !"
-msgstr ""
+msgstr "Atidėjimo metu, „ifup“-įvykiai nėra stebimi!"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:251
 msgid "Enable HTTPS"
@@ -142,18 +157,20 @@ msgstr "Įgalinti „HTTPS“"
 msgid ""
 "Enable/Disable auto-start of Radicale on system start-up and interface events"
 msgstr ""
+"Įjungti/Įgalinti┃Išjungti/Išgalinti automatinį „Radicale“ paleidimą, "
+"sistemos paleidimo ir sąsajos įvykiuose"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:676
 msgid "Encoding"
-msgstr ""
+msgstr "Koduotė"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:689
 msgid "Encoding for responding requests."
-msgstr ""
+msgstr "Koduotė, skirta atsakant į užklausas."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:698
 msgid "Encoding for storing local collections."
-msgstr ""
+msgstr "Koduotė, skirta vietinių kolekcijų saugojimui."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:385
 msgid "Encryption method"
@@ -187,6 +204,9 @@ msgid ""
 "For example, for the 'user' key, '.+' means 'authenticated user' and '.*' "
 "means 'anybody' (including anonymous users)."
 msgstr ""
+"Pavyzdžiui, „naudotojo/vartotojo“ rakto atveju – „.+“, reiškia – „"
+"autentifikuotas naudotojas/vartotojas“, o „.*“ – \"bet kas\" (įskaitant "
+"anoniminius naudotojus/vartotojus)."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:435
 msgid "Full access for Owner only"
@@ -194,7 +214,7 @@ msgstr "Pilna prieiga tik savininkui"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:434
 msgid "Full access for authenticated Users"
-msgstr "Pilna prieiga tik autentifikuotams vartotojams"
+msgstr "Pilna prieiga tik autentifikuotams naudotojams/vartotojams"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:433
 msgid "Full access for everybody (including anonymous)"
@@ -220,11 +240,13 @@ msgstr "Informacija"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:83
 msgid "Keep in mind to use the correct hashing algorithm !"
-msgstr ""
+msgstr "Nepamirškite naudoti teisingo maišos algoritmo !"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:97
 msgid "Leading or ending slashes are trimmed from collection's path."
 msgstr ""
+"Pradedantieji arba baigiamieji pasvirieji brūkšniai yra nukirpti nuo "
+"rinkinio kelio."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:653
 msgid "Log-backup Count"
@@ -244,7 +266,7 @@ msgstr "Žurnalo failo dydis"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:533
 msgid "Logging"
-msgstr "Žurnalininimas"
+msgstr "Žurnalinimas"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:235
 msgid "Logon message"
@@ -252,11 +274,11 @@ msgstr "Prisijungimo žinutė/pranešimas"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:631
 msgid "Maximum size of each rotation log-file."
-msgstr ""
+msgstr "Maksimalus, kiekvieno pasukimo žurnalo failo dydis."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:236
 msgid "Message displayed in the client when a password is needed."
-msgstr ""
+msgstr "Kliente rodomas pranešimas, kai reikia slaptažodžio."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:46
 msgid "NOT installed"
@@ -264,19 +286,21 @@ msgstr "Neįdiegta"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:356
 msgid "None"
-msgstr "Joks"
+msgstr "Joks (-ia/-ie)"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:654
 msgid "Number of backup files of log to create."
-msgstr ""
+msgstr "Kuriamų atsarginių žurnalo failų skaičius."
 
 #: applications/luci-app-radicale/luasrc/view/radicale/tabmap_nsections.htm:50
 msgid "One or more missing/invalid fields on tab"
-msgstr ""
+msgstr "Skirtuke trūksta vieno ar daugiau laukų arba jie yra neteisingi"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:436
 msgid "Owner allow write, authenticated users allow read"
 msgstr ""
+"Savininkas/-e leidžia rašyti, autentifikuoti naudotojai/vartotojai leidžia "
+"skaityti"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:303
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:328
@@ -288,6 +312,8 @@ msgid ""
 "Place here the 'user:password' pairs for your users which should have access "
 "to Radicale."
 msgstr ""
+"Čia įdėkite – „naudotojas/vartotojas: slaptažodis“ poras savo naudotojams/"
+"vartotojams, kurie turėtų turėti prieigą prie – „Radicale“."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:67
 msgid "Please install current version !"
@@ -296,6 +322,8 @@ msgstr "Prašome įdiegti dabartinę versiją !"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:78
 msgid "Please press [Reload] button below to reread the file."
 msgstr ""
+"Norėdami iš naujo perskaityti failą, paspauskite toliau esantį mygtuką – "
+"„[Perleisti]“."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:78
 msgid "Please update to current version !"
@@ -304,6 +332,8 @@ msgstr "Prašome atnaujinti į dabartinę versiją!"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:225
 msgid "Port numbers below 1024 (Privileged ports) are not supported"
 msgstr ""
+"Prievado numeriai, mažesni nei – 1024-i (privilegijuotieji prievadai), yra "
+"nepalaikomi"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:309
 msgid "Private key file"
@@ -316,10 +346,11 @@ msgstr "„Radicale CalDAV“/„CardDAV“ serveris"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:459
 msgid "Radicale uses '/etc/radicale/rights' as regexp-based file."
 msgstr ""
+"„Radicale naudoja“ – „/etc/radicale/rights“ kaip – „regexp“ pagrįstą failą."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:404
 msgid "Radicale uses '/etc/radicale/users' as htpasswd file."
-msgstr ""
+msgstr "„Radicale“ naudoja – „/etc/radicale/users“ kaip – „htpasswd“ failą."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:402
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:457
@@ -332,11 +363,11 @@ msgstr "„RegExp“ failas"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:56
 msgid "Reload"
-msgstr ""
+msgstr "Perleidimas/-sti"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:688
 msgid "Response Encoding"
-msgstr ""
+msgstr "Atsako kodavimas"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:86
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:418
@@ -345,11 +376,11 @@ msgstr "Teisės"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:437
 msgid "Rights are based on a regexp-based file"
-msgstr ""
+msgstr "Teisės yra pagrįstos – „regexp“ pagrįstu failu"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:429
 msgid "Rights backend"
-msgstr ""
+msgstr "Teisių vidinė uždaroji sąsaja"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:392
 msgid "SHA-1"
@@ -366,7 +397,7 @@ msgstr "Išsaugoti"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:95
 msgid "Section names are only used for naming the rule."
-msgstr ""
+msgstr "Skyrių pavadinimai yra naudojami tik taisyklei pavadinti."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:211
 msgid "Server"
@@ -376,6 +407,8 @@ msgstr "Serveris"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:656
 msgid "Setting this parameter to '0' will disable rotation of log-file."
 msgstr ""
+"Nustačius šį parametrą į – „0-į“, žurnalo failo pasukimas bus išjungtas/"
+"išgalintas."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:62
 msgid "Software package '%s' is not installed."
@@ -408,11 +441,11 @@ msgstr "Vietovė/Talpa"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:697
 msgid "Storage Encoding"
-msgstr ""
+msgstr "Saugyklos kodavimas"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:484
 msgid "Storage backend"
-msgstr ""
+msgstr "Saugyklos vidinė uždaroji sąsaja"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:566
 msgid "Syslog Log level"
@@ -427,12 +460,16 @@ msgid ""
 "The Radicale Project is a complete CalDAV (calendar) and CardDAV (contact) "
 "server solution."
 msgstr ""
+"„Radicale Project“ yra užbaigtas – „CalDAV“ (kalendorių) ir „CardDAV“ "
+"(kontaktų/adresatų) serverio sprendimų."
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:34
 msgid ""
 "They can be viewed and edited by calendar and contact clients on mobile "
 "phones or computers."
 msgstr ""
+"Juos gali peržiūrėti ir redaguoti kalendoriaus ir kontaktų/adresatų "
+"klientai, mobiliuosiuose telefonuose ar kompiuteriuose."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:408
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:463
@@ -450,7 +487,7 @@ msgstr "Reikšmė nėra skaičius"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:644
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:667
 msgid "Value is not an Integer >= 0 !"
-msgstr ""
+msgstr "Reikšmė nėra sveikasis skaičius >= 0 !"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:203
 msgid "Value not between 0 and 300"
@@ -459,7 +496,7 @@ msgstr "Reikšmė nėra tarp 0 ir 300-ų"
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:647
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:670
 msgid "Value required ! Integer >= 0 !"
-msgstr ""
+msgstr "Reikalinga reikšmė ! Sveikasis skaičius >= 0 !"
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:40
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:42
@@ -475,6 +512,7 @@ msgstr "Versijos informacija"
 msgid ""
 "WARNING: Only 'File-system' is documented and tested by Radicale development"
 msgstr ""
+"ĮSPĖJIMAS: „Radicale“ plėtra dokumentuoja ir testuoja tik – „failų sistemą“"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:550
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:572
@@ -487,12 +525,16 @@ msgid ""
 "You can also get groups from the user regex in the collection with {0}, {1}, "
 "etc."
 msgstr ""
+"Jūs taip pat galite gauti grupes iš naudotojo/vartotojo reguliaraus "
+"reiškinio kolekcijoje su – „{0}“, „{1}“ ir kt."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:89
 msgid ""
 "You can use Python's ConfigParser interpolation values %(login)s and "
 "%(path)s."
 msgstr ""
+"Jūs galite naudoti – „Python's ConfigParser“ interpoliacijos reikšmes – "
+"„%(login)s“ ir „%(path)s“."
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:390
 msgid "crypt"
@@ -510,7 +552,7 @@ msgstr "įdiegta"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:623
 msgid "no valid path given!"
-msgstr ""
+msgstr "nenurodytas tinkamas kelias!"
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:43
 msgid "or higher"
@@ -518,7 +560,7 @@ msgstr "arba aukštesnį"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:391
 msgid "plain"
-msgstr ""
+msgstr "atviras"
 
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:41
 #: applications/luci-app-radicale/luasrc/controller/radicale.lua:64
@@ -528,4 +570,4 @@ msgstr "reikalingas/-aujamas"
 
 #: applications/luci-app-radicale/luasrc/model/cbi/radicale.lua:393
 msgid "salted SHA-1"
-msgstr ""
+msgstr "„salted SHA-1“"

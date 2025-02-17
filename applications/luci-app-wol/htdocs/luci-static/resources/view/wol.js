@@ -36,7 +36,7 @@ return view.extend({
 		this.formdata.has_wol = has_wol;
 
 		m = new form.JSONMap(this.formdata, _('Wake on LAN'),
-			_('Wake on LAN is a mechanism to remotely boot computers in the local network.'));
+			_('Wake on LAN is a mechanism to boot computers remotely in the local network.'));
 
 		s = m.section(form.NamedSection, 'wol');
 

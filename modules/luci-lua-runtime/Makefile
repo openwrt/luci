@@ -23,6 +23,8 @@ LUCI_DEPENDS:= \
 	+liblucihttp-lua \
 	+ucode-mod-lua
 
+PKG_LICENSE:=Apache-2.0
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

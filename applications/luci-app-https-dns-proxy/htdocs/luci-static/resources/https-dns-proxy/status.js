@@ -13,56 +13,70 @@ var pkg = {
 	get Name() {
 		return "https-dns-proxy";
 	},
+	get ReadmeCompat() {
+		return "";
+	},
 	get URL() {
-		return "https://docs.openwrt.melmac.net/" + pkg.Name + "/";
+		return (
+			"https://docs.openwrt.melmac.net/" +
+			pkg.Name +
+			"/" +
+			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "")
+		);
 	},
 	templateToRegexp: function (template) {
-		return RegExp(
-			"^" +
-				template
-					.split(/(\{\w+\})/g)
-					.map((part) => {
-						let placeholder = part.match(/^\{(\w+)\}$/);
-						if (placeholder) return `(?<${placeholder[1]}>.*?)`;
-						else return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-					})
-					.join("") +
-				"$"
-		);
+		if (template)
+			return new RegExp(
+				"^" +
+					template
+						.split(/(\{\w+\})/g)
+						.map((part) => {
+							let placeholder = part.match(/^\{(\w+)\}$/);
+							if (placeholder) return `(?<${placeholder[1]}>.*?)`;
+							else return part.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+						})
+						.join("") +
+					"$"
+			);
+		return new RegExp("");
+	},
+	templateToResolver: function (template, args) {
+		if (template) return template.replace(/{(\w+)}/g, (_, v) => args[v]);
+		return null;
 	},
 };
 
-var getInitList = rpc.declare({
+const getInitList = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInitList",
 	params: ["name"],
 });
 
-var getInitStatus = rpc.declare({
+const getInitStatus = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getInitStatus",
 	params: ["name"],
 });
 
-var getPlatformSupport = rpc.declare({
+const getPlatformSupport = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getPlatformSupport",
 	params: ["name"],
 });
 
-var getProviders = rpc.declare({
+const getProviders = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getProviders",
 	params: ["name"],
 });
 
-var getRuntime = rpc.declare({
+const getRuntime = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "getRuntime",
 	params: ["name"],
 });
 
-var _setInitAction = rpc.declare({
+const _setInitAction = rpc.declare({
 	object: "luci." + pkg.Name,
 	method: "setInitAction",
 	params: ["name", "action"],
@@ -146,8 +160,11 @@ var status = baseclass.extend({
 					force_dns_active: null,
 					version: null,
 				},
-				providers: (data[1] && data[1][pkg.Name]) || { providers: [] },
-				runtime: (data[2] && data[2][pkg.Name]) || { instances: [] },
+				providers: (data[1] && data[1][pkg.Name]) || [{ title: "empty" }],
+				runtime: (data[2] && data[2][pkg.Name]) || {
+					instances: null,
+					triggers: [],
+				},
 			};
 			reply.providers.sort(function (a, b) {
 				return _(a.title).localeCompare(_(b.title));
@@ -428,6 +445,8 @@ RPC.on("setInitAction", function (reply) {
 
 return L.Class.extend({
 	status: status,
+	pkg: pkg,
+	getInitStatus: getInitStatus,
 	getPlatformSupport: getPlatformSupport,
 	getProviders: getProviders,
 	getRuntime: getRuntime,

@@ -4,7 +4,7 @@
 'require uci';
 'require form';
 
-var callUSB = rpc.declare({
+const callUSB = rpc.declare({
 	object: 'luci',
 	method: 'getUSBDevices',
 	expect: { 'ports': [] }

@@ -15,7 +15,7 @@ return network.registerProtocol('dslite', {
 		return this._ubus('l3_device') || 'ds-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'ds-lite';
 	},
 
@@ -41,6 +41,8 @@ return network.registerProtocol('dslite', {
 		o = s.taboption('general', form.Value, 'peeraddr', _('DS-Lite AFTR address'));
 		o.rmempty  = false;
 		o.datatype = 'or(hostname,ip6addr("nomask"))';
+		o.value("gw.transix.jp", _("Transix (Japan only)"));
+		o.value("dgw.xpass.jp", _("Cross Pass (Japan only)"));
 
 		o = s.taboption('general', form.Value, 'ip6addr', _('Local IPv6 address'), _('Leave empty to use the current WAN address'));
 		o.datatype = 'ip6addr("nomask")';

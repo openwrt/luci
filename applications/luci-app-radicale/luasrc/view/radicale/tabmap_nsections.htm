@@ -13,7 +13,7 @@
 		<%+cbi/apply_widget%>
 		<% cbi_apply_widget() %>
 		<div class="alert-message" id="cbi_apply_status" style="display:none"></div>
-		<script type="text/javascript">
+		<script>
 			document.addEventListener("DOMContentLoaded", function() {
 				<% if confirmmap then -%>
 					uci_confirm(true, Date.now() + <%=confirmmap%> * 1000);

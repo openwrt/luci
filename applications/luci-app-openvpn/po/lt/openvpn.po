@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-03-12 11:02+0000\n"
-"Last-Translator: Džiugas J <dziugas1959@hotmail.com>\n"
+"PO-Revision-Date: 2024-10-20 19:09+0000\n"
+"Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenvpn/lt/>\n"
 "Language: lt\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
 "n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.8-rc\n"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:372
 msgid "'net30', 'p2p', or 'subnet'"
@@ -21,7 +21,7 @@ msgstr "„net30“, „p2p“ arba „subnet“ (potinklis)"
 msgid "Accept options pushed from server"
 msgstr "Priimti parinktys, išsiųstus iš serverio"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add"
 msgstr "Pridėti"
 
@@ -29,7 +29,7 @@ msgstr "Pridėti"
 msgid "Add route after establishing connection"
 msgstr "Pridėti maršrutą užmezgus ryšį"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:92
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:90
 msgid "Add template based configuration"
 msgstr "Pridėti šablono pagrįstą konfigūraciją"
 
@@ -48,7 +48,7 @@ msgstr "Leisti keliems klientams turėti tą patį sertifikatą"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:747
 msgid "Allow only one session"
-msgstr "Leisti tik vieną sesiją"
+msgstr "Leisti tik vieną seansą"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:197
 msgid "Allow remote to change its IP or port"
@@ -72,7 +72,9 @@ msgstr "Papildyti/Pridėti žurnalą į failą"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:498
 msgid "Authenticate using username/password"
-msgstr "Autentifikuoti naudodamas vartotojo vardą/slaptažodį"
+msgstr ""
+"Autentifikuoti, naudodamas naudotojo/vartotojo vardą (t.y. slapyvardį)/"
+"slaptažodį"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:563
 msgid "Automatically redirect default route"
@@ -96,7 +98,7 @@ msgstr "Sertifikato autoritetas"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:80
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:17
 msgid "Change process priority"
-msgstr "Pakeisti proceso prioritetą"
+msgstr "Pakeisti vyksmo pirmenybę"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:40
 msgid "Change to directory before initialization"
@@ -121,17 +123,17 @@ msgstr "Konfigūracijos kategorija"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:489
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:53
 msgid "Configure client mode"
-msgstr "Konfigūruoti kliento režimą"
+msgstr "Konfigūruoti kliento veikseną"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:389
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:37
 msgid "Configure server bridge"
-msgstr "Konfigūruoti serverio tinklo jungimą"
+msgstr "Konfigūruoti serverio „tinklo tilto“ – jungimą"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:384
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:33
 msgid "Configure server mode"
-msgstr "Konfigūruoti serverio režimą"
+msgstr "Konfigūruoti serverio veikseną"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:547
 msgid "Connect through Socks5 proxy"
@@ -139,7 +141,7 @@ msgstr "Prisijungti per „Socks5“ įgaliotinį"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:527
 msgid "Connect to remote host through an HTTP proxy"
-msgstr "Prisijungti į nuotolinį skleidėją/p.k – vedėją per „HTTP“ įgaliotinį"
+msgstr "Prisijungti į nuotolinį skleidėją/vedėją per „HTTP“ įgaliotinį"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:522
 msgid "Connection retry interval"
@@ -199,7 +201,7 @@ msgstr "Nelaikyti „--askpass“ arba „--auth-user-pass“ slaptažodžių po
 msgid "Don't drop incoming tun packets with same destination as host"
 msgstr ""
 "Nemesti/Šalinti gaunamų „TUN“ paketų, kurių paskirties vieta yra ta pati "
-"kaip ir skleidėjas/p.k – vedėjas"
+"kaip ir skleidėjas/vedėjas"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:399
 msgid "Don't inherit global push options"
@@ -219,7 +221,7 @@ msgstr "Neperskaityti rakto paleidus iš naujo"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:269
 msgid "Don't use adaptive lzo compression"
-msgstr "Nenaudoti adaptyvaus „LZO“ glaudinimo"
+msgstr "Nenaudoti prisitaikančio „LZO“ suspaudimo/glaudinimo"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:229
 msgid "Don't warn on ifconfig inconsistencies"
@@ -244,7 +246,7 @@ msgstr "Įjungti/Įgalinti kelio „MTU“ atradimą"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:575
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:65
 msgid "Enable Static Key encryption mode (non-TLS)"
-msgstr "Įjungti/Įgalinti statinio rakto šifravimo režimą (ne „TLS“)"
+msgstr "Įjungti/Įgalinti nekintamojo rakto šifravimo veikseną (ne „TLS“)"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:660
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:685
@@ -265,7 +267,7 @@ msgstr "Įjungti/Įgalinti valdymo sąsają <em>IP</em> <em>prievade</em>"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:104
 msgid "Enabled"
-msgstr "Įjungta/Įgalinta"
+msgstr "Įjungta/Įgalinta (-s/-i)"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:759
 msgid "Encrypt and authenticate all control channel packets with the key"
@@ -295,7 +297,7 @@ msgid ""
 "Executed in server mode on new client connections, when the client is still "
 "untrusted"
 msgstr ""
-"Vykdoma serverio režimu naudojant naujus kliento ryšius, kai klientas vis "
+"Vykdoma serverio veiksenos naudojant naujus kliento ryšius, kai klientas vis "
 "dar yra nepatikimas"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:153
@@ -303,8 +305,8 @@ msgid ""
 "Executed in server mode whenever an IPv4 address/route or MAC address is "
 "added to OpenVPN's internal routing table"
 msgstr ""
-"Vykdomas serverio režimu, kai IPv4 adresas/maršrutas arba „MAC“ adresas yra "
-"pridedamas prie „OpenVPN“ vidinės maršruto lentelės"
+"Vykdoma serverio veiksenos, kai IPv4 adresas/maršrutas arba „MAC“ adresas "
+"yra pridedamas prie vidinės „OpenVPN“ kelvados lentelės"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:751
 msgid "Exit on TLS negotiation failure"
@@ -329,20 +331,20 @@ msgid ""
 "server mode configurations"
 msgstr ""
 "Pagelbiklio direktyvas, skirtas supaprastinti „--ping“ ir „--ping-restart“ "
-"išraišką serverio režimo konfigūracijose"
+"išraišką serverio veiksenos konfigūracijose"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:558
 msgid "If hostname resolve fails, retry"
 msgstr ""
-"Jei nepavykstą išspręsti įrenginio (t.y skleidėjo/p.k – vedėjo) pavadinimo, "
+"Jei nepavykstą išspręsti įrenginio (t.y skleidėjo/vedėjo) pavadinimo, "
 "bandykite iš naujo"
 
 #: applications/luci-app-openvpn/luasrc/view/openvpn/pageswitch.htm:12
 msgid "Instance \"%s\""
 msgstr "Egzempliorius „%s“"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:18
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:46
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:17
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:45
 msgid "Instance with that name already exists!"
 msgstr "Egzempliorius su tokiu pavadinimu jau egzistuoja!"
 
@@ -373,7 +375,7 @@ msgstr "Vietinis sertifikatas"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:177
 msgid "Local host name or IP address"
-msgstr "Vietinis skleidėjo/p.k – vedėjo pavadinimas arba IP adresas"
+msgstr "Vietinis skleidėjo/vedėjo pavadinimas arba IP adresas"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:677
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:89
@@ -382,7 +384,7 @@ msgstr "Vietinis privatus raktas"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:173
 msgid "Major mode"
-msgstr "Pagrindinis režimas"
+msgstr "Pagrindinė veiksena"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:464
 msgid "Maximum number of queued TCP output packets"
@@ -400,7 +402,7 @@ msgstr "Paskirtų transliacijos buferių skaičius"
 msgid "Number of lines for log file history"
 msgstr "Eilučių skaičius žurnalo failo istorijai"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:95
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:93
 msgid "OVPN configuration file upload"
 msgstr "„OVPN“ konfigūracijos failo įkėlimas"
 
@@ -451,16 +453,16 @@ msgstr "Išlaikyti/Neišlaikyti „ifconfig-pool“"
 msgid "Ping remote every n seconds over TCP/UDP port"
 msgstr "Siųsti ryšio atsakas kas n sekundės per „TCP/UDP“ prievadą"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:32
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:24
 msgid "Please edit this file directly in a terminal session."
-msgstr "Prašome redaguoti šį failą tiesiogiai terminalo sesijoje."
+msgstr "Prašome redaguoti šį failą tiesiogiai terminalo seanse."
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:51
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:50
 msgid "Please select a valid OVPN config file to upload!"
 msgstr ""
 "Prašome pasirinkti tinkamą „OVPN“ konfigūracijos failą, kurį norite įkelti!"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:23
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:22
 msgid "Please select a valid VPN template!"
 msgstr "Prašome pasirinkti tinkamą „VPN“ šabloną!"
 
@@ -507,7 +509,7 @@ msgstr "Pertvarkyti „SIGUSR1“ signalus"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:513
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-basic.lua:61
 msgid "Remote host name or IP address"
-msgstr "Nuotolinio skleidėjo/p.k – vedėjo arba IP adresas"
+msgstr "Nuotolinio skleidėjo/vedėjo arba IP adresas"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:324
 msgid "Remote ping timeout"
@@ -542,8 +544,8 @@ msgid "Restart after remote ping timeout"
 msgstr ""
 "Paleisti iš naujo po nuotolinio ryšio atsako pasibaigusios užklausos laiko"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:807
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:811
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:810
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:819
 msgid "Restrict the allowed ciphers to be negotiated"
 msgstr "Apriboti leidžiamus šifrus, kuriuos reikia derinti"
 
@@ -575,18 +577,18 @@ msgstr "Vykdyti skripto komandą klientui atsijungus"
 msgid "Run up/down scripts for all restarts"
 msgstr "Vykdyti įjungimo/išjungimo skriptus visiems paleidimams iš naujo"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:41
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:33
 msgid "Save"
 msgstr "Išsaugoti"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:65
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:57
 msgid ""
 "Section to add an optional 'auth-user-pass' file with your credentials (%s)"
 msgstr ""
 "Skyrius, kuriame galite pridėti pasirenkamą „auth-user-pass“ failą su Jūsų "
 "kredencialais (%s)"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:44
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:36
 msgid "Section to modify the OVPN config file (%s)"
 msgstr "Skyrius, skirtas modifikuoti „OVPN“ konfigūracijos failą (%s)"
 
@@ -607,7 +609,7 @@ msgstr ""
 "Saugos rekomendacija: rekomenduojama ne Įjungti/ne Įgalinti glaudinimo ir "
 "nustatyti šį parametrą į „stub-v2“"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:85
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:83
 msgid "Select template ..."
 msgstr "Pasirinkite/-ti šabloną..."
 
@@ -671,7 +673,7 @@ msgstr "Nustatyti viršutinę „TCP MSS“ ribą"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:308
 msgid "Shaping for peer bandwidth"
-msgstr "Formavimas lygiarangio pralaidumu"
+msgstr "Lygiarangio duomenų siuntimo ir perdavimo srauto pralaidumo formavimas"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:108
 msgid "Shell cmd to execute after tun device open"
@@ -750,7 +752,7 @@ msgstr "„TLS“ šifras"
 msgid "TOS passthrough (applies to IPv4 only)"
 msgstr "„TOS“ perdavimas (taikoma tik IPv4)"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:78
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:76
 msgid "Template based configuration"
 msgstr "Šablono pagrįstą konfigūraciją"
 
@@ -758,17 +760,10 @@ msgstr "Šablono pagrįstą konfigūraciją"
 msgid "Temporary directory for client-connect return file"
 msgstr "Laikinas kliento-prisijungimo/ryšio grąžinimo failo katalogas"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:12
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:40
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:11
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:39
 msgid "The 'Name' field must not be empty!"
 msgstr "„Pavadinimo“ laukas negali būti tuščias!"
-
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:22
-msgid ""
-"The OVPN config file (%s) could not be found, please check your "
-"configuration."
-msgstr ""
-"Nepavyko rasti „OVPN“ konfigūracijos failo (%s), patikrinkite konfigūraciją."
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:795
 msgid "The highest supported TLS version"
@@ -783,7 +778,7 @@ msgstr "„tls-auth“ ir „secret“ parinkčių rakto kryptis"
 msgid "The lowest supported TLS version"
 msgstr "Žemiausia palaikoma „TLS“ versija"
 
-#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:31
+#: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-file.lua:23
 msgid ""
 "The size of the OVPN config file (%s) is too large for online editing in "
 "LuCI (&ge; 100 KB)."
@@ -804,11 +799,11 @@ msgstr "Raktų keitimo laikotarpis/terminas"
 msgid "Type of used device"
 msgstr "Naudoto įrenginio tipas"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload"
 msgstr "Įkelti"
 
-#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:104
+#: applications/luci-app-openvpn/luasrc/view/openvpn/cbi-select-input-add.htm:102
 msgid "Upload ovpn file"
 msgstr "Įkelti „OVPN“ failą"
 
@@ -824,7 +819,7 @@ msgstr "Naudoti „TUN/TAP“ įrenginio mazgą"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:484
 msgid "Use username as common name"
-msgstr "Naudoti vartotojo vardą kaip bendrą vardą"
+msgstr "Naudoti naudotojo/vartotojo vardą (t.y slapyvardį) kaip bendrą vardą"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:380
 msgid "VPN"
@@ -838,7 +833,7 @@ msgid ""
 msgstr ""
 "Kai turite daugiau nei vieną IP adresą (pvz., kelias sąsajas arba antrinius "
 "IP adresus) ir nenaudojate „--local“, kad priverstinai susietumėte tik su "
-"vienu konkrečiu adresu"
+"vienu savitu adresu"
 
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn-advanced.lua:64
 msgid "Write log to file"
@@ -864,3 +859,10 @@ msgstr "„TUN/TAP“ neveiklumo pasibaigimo užklausos laikas"
 #: applications/luci-app-openvpn/luasrc/model/cbi/openvpn.lua:111
 msgid "yes (%i)"
 msgstr "taip (%i)"
+
+#~ msgid ""
+#~ "The OVPN config file (%s) could not be found, please check your "
+#~ "configuration."
+#~ msgstr ""
+#~ "Nepavyko rasti „OVPN“ konfigūracijos failo (%s), patikrinkite "
+#~ "konfigūraciją."

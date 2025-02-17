@@ -14,7 +14,7 @@ return network.registerProtocol('grev6', {
 		return this._ubus('l3_device') || 'gre6-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'gre';
 	},
 

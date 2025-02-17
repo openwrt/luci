@@ -8,28 +8,20 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-radicale
 
-# Version == major.minor.patch
-# increase "minor" on new functionality and "patch" on patches/optimization
 PKG_VERSION:=1.1.0
 
-# Release == build
-# increase on changes of translation files
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_LICENSE:=Apache-2.0
-PKG_MAINTAINER:=
+PKG_MAINTAINER:=Christian Schoenebeck <christian.schoenebeck@gmail.com>
 
-# LuCI specific settings
 LUCI_TITLE:=LuCI Support for Radicale CardDAV/CalDAV
-LUCI_DEPENDS:=+luci-compat +luci-lib-ipkg +luci-base
+LUCI_DEPENDS:=+luci-compat +luci-lib-ipkg +luci-base +radicale
 
 define Package/$(PKG_NAME)/config
 # shown in make menuconfig <Help>
 help
 	$(LUCI_TITLE)
-	.
-	!!!   Package "radicale-py2" or "radicale-py3" needs to be   !!!
-	!!! installed sepearatly. There is no buildin dependency set !!!
 	.
 	Version: $(PKG_VERSION)-$(PKG_RELEASE)
 	$(PKG_MAINTAINER)

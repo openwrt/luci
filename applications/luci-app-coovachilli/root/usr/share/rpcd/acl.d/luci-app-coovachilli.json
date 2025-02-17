@@ -2,7 +2,10 @@
 	"luci-app-coovachilli": {
 		"description": "Grant UCI access for luci-app-coovachilli",
 		"read": {
-			"uci": [ "coovachilli" ]
+			"uci": [ "coovachilli" ],
+			"ubus": {
+				"luci-rpc": [ "getNetworkDevices" ]
+			}
 		},
 		"write": {
 			"uci": [ "coovachilli" ]

@@ -13,7 +13,7 @@ return view.extend({
 
 	render: function(data) {
 		var netDevs = data[0];
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('libreswan', _('IPSec Global Settings'));
 

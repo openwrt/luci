@@ -6,7 +6,7 @@
 'require form';
 'require tools.widgets as widgets';
 
-var callServiceList = rpc.declare({
+const callServiceList = rpc.declare({
 	object: 'service',
 	method: 'list',
 	params: [ 'name' ],
@@ -37,7 +37,7 @@ return view.extend({
 		if (running && webinstalled)
 			button = '&#160;<a class="btn" href="http://' + window.location.hostname + ':' + port + '" target="_blank" rel="noreferrer noopener">' + _('Open Web Interface') + '</a>';
 
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('transmission', 'Transmission', _('Transmission daemon is a simple bittorrent client, here you can configure the settings.') + button);
 

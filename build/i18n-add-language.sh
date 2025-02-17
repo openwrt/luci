@@ -2,7 +2,7 @@
 
 LANGS=$@
 if [ "$#" -eq 0 ]; then
-	echo $0 "adds i18n catalogue(s) in po/ folders (luci-app-*, luci-mod-*, etc) for each LUCI_LANG.* in luci.mk"
+	echo $(basename "$0") "adds i18n catalogue(s) in po/ folders (luci-app-*, luci-mod-*, etc) for each LUCI_LANG.* in luci.mk"
 	echo "Hint: run in the root of the luci repo or in your luci-app-* folder."
 
 	# get existing language codes from luci.mk
@@ -14,8 +14,8 @@ else
 		case "$LANG" in
 			[a-z][a-z]|[a-z][a-z][_-][A-Za-z][A-Za-z]*) : ;;
 			*)
-				echo $0 "adds i18n catalogues in each folder (luci-app-*, luci-mod-*, etc)."
-				echo "Usage: $0 <ISO_CODE> [<ISO_CODE> <ISO_CODE> ...]" >&2
+				echo $(basename "$0") "adds i18n catalogues in each folder (luci-app-*, luci-mod-*, etc)."
+				echo "Usage: $(basename "$0") <ISO_CODE> [<ISO_CODE> <ISO_CODE> ...]" >&2
 				exit 1
 			;;
 		esac

@@ -67,7 +67,7 @@ return network.registerProtocol('openfortivpn', {
 		return this._ubus('l3_device') || 'vpn-%s'.format(this.sid);
 	},
 
-	getOpkgPackage: function() {
+	getPackageName: function() {
 		return 'openfortivpn';
 	},
 

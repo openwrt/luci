@@ -13,7 +13,7 @@ function proto.ifname(self)
 	return "ipip-" .. self.sid
 end
 
-function proto.opkg_package(self)
+function proto.package_name(self)
 	return "ipip"
 end
 

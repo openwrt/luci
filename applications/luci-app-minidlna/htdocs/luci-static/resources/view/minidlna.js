@@ -31,7 +31,7 @@ var CBIMiniDLNAStatus = form.DummyValue.extend({
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('minidlna', _('miniDLNA'), _('MiniDLNA is server software with the aim of being fully compliant with DLNA/UPnP-AV clients.'));
 
@@ -87,7 +87,7 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Value, 'db_dir', _('Database directory'), _('Set this if you would like to specify the directory where you want MiniDLNA to store its database and album art cache.'));
 
-		o = s.taboption('advanced', form.Flag, 'inotify', _('Enable inotify'), _('Set this to enable inotify monitoring to automatically discover new files.'));
+		o = s.taboption('advanced', form.Flag, 'inotify', _('Enable inotify'), _('Set this to enable inotify monitoring to discover new files automatically.'));
 
 		o = s.taboption('advanced', form.Flag, 'enable_tivo', _('Enable TIVO'), _('Set this to enable support for streaming .jpg and .mp3 files to a TiVo supporting HMO.'));
 

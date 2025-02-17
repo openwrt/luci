@@ -4,7 +4,7 @@
 
 return view.extend({
 	render: function() {
-		var m, s, o;
+		let m, s, o;
 
 		m = new form.Map('apinger', _('Apinger - Loss Alarms'),
 			_('This alarm will be fired when packet loss goes over "Loss High"') + '<br />' +

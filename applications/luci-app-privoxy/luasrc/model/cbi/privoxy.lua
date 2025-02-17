@@ -617,7 +617,8 @@ local fs4	= ns:taboption("forward", DynamicList, "forward_socks4")
 fs4.title	= string.format(HELP, "SOCKS", "Forward SOCKS 4" )
 fs4.description	= translate("Through which SOCKS proxy (and optionally to which parent HTTP proxy) specific requests should be routed.")
 		.. [[<br />]]
-		.. translate("Syntax: target_pattern socks_proxy[:port] http_parent[:port]")
+		.. translate("Syntax:")
+		.. " target_pattern socks_proxy[:port] http_parent[:port]"
 fs4.rmempty	= true
 
 -- forward-socks4a -------------------------------------------------------------
@@ -629,13 +630,16 @@ f4a.rmempty	= true
 -- forward-socks5 --------------------------------------------------------------
 local fs5	= ns:taboption("forward", DynamicList, "forward_socks5")
 fs5.title	= string.format(HELP, "SOCKS", "Forward SOCKS 5" )
-fs5.description = fs4.description
+fs5.description	= translate("Through which SOCKS proxy (and optionally to which parent HTTP proxy) specific requests should be routed.")
+		.. [[<br />]]
+		.. translate("Syntax:")
+		.. " target_pattern [user:pass@]socks_proxy[:port] http_parent[:port]"
 fs5.rmempty	= true
 
 -- forward-socks5t -------------------------------------------------------------
 local f5t	= ns:taboption("forward", DynamicList, "forward_socks5t")
 f5t.title	= string.format(HELP, "SOCKS", "Forward SOCKS 5t" )
-f5t.description = fs4.description
+f5t.description = fs5.description
 f5t.rmempty	= true
 
 -- tab: misc -- ################################################################

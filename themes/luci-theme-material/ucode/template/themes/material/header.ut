@@ -73,7 +73,7 @@
 		<div class="darkMask"></div>
 		<div id="maincontent">
 			<div class="container">
-				{% if (getuid() == 0 && getspnam('root')?.pwdp === ''): %}
+				{% if (getuid() == 0 && getspnam('root')?.pwdp === '' && ctx.authsession): %}
 					<div class="alert-message warning">
 						<h4>{{ _('No password set!') }}</h4>
 						<p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p>

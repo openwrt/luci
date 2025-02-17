@@ -9,6 +9,9 @@ include $(TOPDIR)/rules.mk
 LUCI_TITLE:=LuCI Support for miniDLNA
 LUCI_DEPENDS:=+luci-base +minidlna
 
+PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature

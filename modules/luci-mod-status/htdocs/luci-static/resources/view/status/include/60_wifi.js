@@ -184,7 +184,7 @@ return baseclass.extend({
 			network.getHostHints(),
 			this.callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'read'),
 			this.callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'write'),
-			uci.load('wireless')
+			L.hasSystemFeature('wifi') ? L.resolveDefault(uci.load('wireless')) : L.resolveDefault(),
 		]).then(L.bind(function(data) {
 			var tasks = [],
 			    radios_networks_hints = data[1],
@@ -227,7 +227,7 @@ return baseclass.extend({
 		if (!table.lastElementChild)
 			return null;
 
-		var assoclist = E('table', { 'class': 'table assoclist' }, [
+		var assoclist = E('table', { 'class': 'table assoclist', 'id': 'wifi_assoclist_table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th nowrap' }, _('Network')),
 				E('th', { 'class': 'th hide-xs' }, _('MAC address')),
