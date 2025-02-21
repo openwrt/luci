@@ -35,18 +35,15 @@ return view.extend({
 			document.body.scrollTop = document.documentElement.scrollTop = 0;
 			ui.addNotification(null, E('p', _('The allowlist is too big, unable to save modifications.')), 'error');
 		}
-		return E([
-			E('p', {},
-				_('This is the local banIP allowlist that will permit certain MAC-, IP-addresses or domain names.<br /> \
+		return E('div', { 'class': 'cbi-section cbi-section-descr' }, [
+			E('p', _('This is the local banIP allowlist that will permit certain MAC-, IP-addresses or domain names.<br /> \
 				<em><b>Please note:</b></em> add only exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR notation and MAC/IP-bindings are allowed.')),
-			E('p', {},
 				E('textarea', {
-					'style': 'width: 100% !important; padding: 5px; font-family: monospace',
+					'style': 'width: 100% !important; padding: 5px; font-family: monospace; margin-top: .4em',
 					'spellcheck': 'false',
 					'wrap': 'off',
 					'rows': 25
 				}, [allowlist[1] != null ? allowlist[1] : ''])
-			)
 		]);
 	},
 	handleSaveApply: null,

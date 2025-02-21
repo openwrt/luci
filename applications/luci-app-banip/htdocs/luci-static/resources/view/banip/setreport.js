@@ -228,38 +228,37 @@ return view.extend({
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('auto-added IPs to blocklist')),
 					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content.autoadd_block || '-')
-				]),
-				E('div', { 'class': 'right' }, [
-					E('button', {
-						'class': 'btn cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, function () {
-							return handleAction(report, 'survey');
-						})
-					}, [_('Set Survey...')]),
-					'\xa0',
-					E('button', {
-						'class': 'btn cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, function () {
-							return handleAction(report, 'search');
-						})
-					}, [_('IP Search...')]),
-					'\xa0',
-					E('button', {
-						'class': 'btn cbi-button cbi-button-positive',
-						'click': ui.createHandlerFn(this, function () {
-							location.reload();
-						})
-					}, [_('Refresh')]),
-					'\xa0'
-				]),
-			])
-			,
+				])
+			]),
 			E('br'),
 			E('div', { 'class': 'cbi-section' }, [
 				E('div', { 'class': 'left' }, [
 					E('h3', _('Set details')),
 					tblSets
 				])
+			]),
+			E('div', { 'class': 'cbi-page-actions' }, [
+				E('button', {
+					'class': 'btn cbi-button cbi-button-apply',
+					'style': 'float:none;margin-right:.4em;',
+					'click': ui.createHandlerFn(this, function () {
+						return handleAction(report, 'survey');
+					})
+				}, [_('Set Survey...')]),
+				E('button', {
+					'class': 'btn cbi-button cbi-button-apply',
+					'style': 'float:none;margin-right:.4em;',
+					'click': ui.createHandlerFn(this, function () {
+						return handleAction(report, 'search');
+					})
+				}, [_('IP Search...')]),
+				E('button', {
+					'class': 'btn cbi-button cbi-button-positive important',
+					'style': 'float:none',
+					'click': ui.createHandlerFn(this, function () {
+						location.reload();
+					})
+				}, [_('Refresh')]),
 			])
 		]);
 	},
