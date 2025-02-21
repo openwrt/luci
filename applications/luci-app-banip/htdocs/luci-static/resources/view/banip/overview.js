@@ -197,36 +197,6 @@ return view.extend({
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Last Run')),
 					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
-				E('div', { class: 'right' }, [
-					E('button', {
-						'class': 'btn cbi-button cbi-button-action',
-						'click': ui.createHandlerFn(this, function () {
-							return handleAction('lookup');
-						})
-					}, [_('Domain Lookup')]),
-					'\xa0',
-					E('button', {
-						'class': 'btn cbi-button cbi-button-negative',
-						'click': ui.createHandlerFn(this, function () {
-							return handleAction('stop');
-						})
-					}, [_('Stop')]),
-					'\xa0',
-					E('button', {
-						'class': 'btn cbi-button cbi-button-positive',
-						'click': ui.createHandlerFn(this, function () {
-							return handleAction('reload');
-						})
-					}, [_('Reload')]),
-					'\xa0',
-					E('button', {
-						'class': 'btn cbi-button cbi-button-positive',
-						'click': ui.createHandlerFn(this, function () {
-							return handleAction('restart');
-						})
-					}, [_('Restart')]),
-					'\xa0'
-				])
 			]);
 		}, o, this);
 		this.pollData;
@@ -845,6 +815,32 @@ return view.extend({
 		o = s.taboption('feeds', form.Flag, 'ban_allowlistonly', _('Allowlist Only'), _('Restrict the internet access from/to a small number of secure IPs.'));
 		o.rmempty = false;
 
+		s = m.section(form.NamedSection, 'global');
+		s.render = L.bind(function () {
+			return E('div', { 'class': 'cbi-page-actions' }, [
+				E('button', {
+					'class': 'btn cbi-button cbi-button-negative important',
+					'style': 'float:none;margin-right:.4em;',
+					'click': ui.createHandlerFn(this, function () {
+						return handleAction('stop');
+					})
+				}, [_('Stop')]),
+				E('button', {
+					'class': 'btn cbi-button cbi-button-positive important',
+					'style': 'float:none;margin-right:.4em;',
+					'click': ui.createHandlerFn(this, function () {
+						return handleAction('reload');
+					})
+				}, [_('Save & Reload')]),
+				E('button', {
+					'class': 'btn cbi-button cbi-button-positive important',
+					'style': 'float:none',
+					'click': ui.createHandlerFn(this, function () {
+						return handleAction('restart');
+					})
+				}, [_('Save & Restart')])
+			])
+		});
 		return m.render();
 	},
 	handleSaveApply: null,
