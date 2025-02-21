@@ -140,6 +140,7 @@ function lxc_configuration_set(lxc_name)
 	luci.http.prepare_content("text/plain")
 
 	local lxc_configuration = luci.http.formvalue("lxc_conf")
+	lxc_configuration = luci.http.urldecode(lxc_configuration, true)
 	if lxc_configuration == nil then
 		util.perror("lxc error: config formvalue is empty")
 		return
