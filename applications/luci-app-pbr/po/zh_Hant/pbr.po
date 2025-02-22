@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-01-27 18:47+0000\n"
-"Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-02-14 04:32+0000\n"
+"Last-Translator: x86_64-pc-linux-gnu <x86_64-pc-linux-gnu@proton.me>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationspbr/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.10-rc\n"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:240
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:358
@@ -36,15 +36,15 @@ msgstr "活動"
 msgid "AdGuardHome ipset"
 msgstr "AdGuardHome ip集"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:168
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:177
 msgid "Add"
-msgstr "增加"
+msgstr "新增"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:225
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:234
 msgid "Add Ignore Target"
 msgstr "加入忽略目標"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:227
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:236
 msgid ""
 "Adds 'ignore' to the list of interfaces for policies. See the %sREADME%s for "
 "details."
@@ -58,25 +58,23 @@ msgstr "高級配置"
 msgid ""
 "Allows to specify the list of interface names (in lower case) to be "
 "explicitly supported by the service. Can be useful if your OpenVPN tunnels "
-"have dev option other than tun* or tap*."
+"have dev option other than tun* or tap* or specific use cases of WireGuard "
+"servers. See the %sREADME%s for details."
 msgstr ""
-"允許指定服務明確支持的界面名稱列表（小寫）。如果您的OpenVPN隧道具有tun* 或 "
-"tap*以外的dev選項，則可能很有用。"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:155
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:159
 msgid ""
-"Allows to specify the list of interface names (in lower case) to be ignored "
-"by the service. Can be useful if running both VPN server and VPN client on "
-"the router."
+"Allows to specify the list of interface names (lower case) to be ignored by "
+"the service. Can be useful for an OpenVPN server running on OpenWrt device. "
+"WireGuard servers, which have a listen_port defined, are handled "
+"automatically, do not add those here.See the %sREADME%s for details."
 msgstr ""
-"允許指定服務將忽略的界面名稱列表（小寫）。如果在路由器上同時運行VPN伺服器和"
-"VPN客戶端，則很有用。"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:43
 msgid "Basic Configuration"
 msgstr "基本配置"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:312
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:321
 msgid "Chain"
 msgstr "鏈"
 
@@ -96,7 +94,7 @@ msgstr ""
 msgid "Controls both system log and console output verbosity."
 msgstr "控制系統日誌和主控台輸出的詳細程度。"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:393
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:402
 msgid "Custom User File Includes"
 msgstr "自定義用戶文件包括"
 
@@ -104,19 +102,19 @@ msgstr "自定義用戶文件包括"
 msgid "Custom user file '%s' not found or empty"
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:331
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:340
 msgid "DNS Policies"
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:384
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:393
 msgid "DSCP Tag"
 msgstr "DSCP標籤"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:371
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:380
 msgid "DSCP Tagging"
 msgstr "DSCP標記"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:176
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:185
 msgid "Default ICMP Interface"
 msgstr "預設ICMP界面"
 
@@ -134,15 +132,15 @@ msgstr "停用"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:114
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:134
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:233
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:242
 msgid "Disabled"
 msgstr "已停用"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:539
 msgid "Disabling %s service"
-msgstr "正在停用 %s 服務"
+msgstr "正在停用%s服務"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:243
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:252
 msgid "Display these protocols in protocol column in Web UI."
 msgstr "在Web UI的協定列中顯示這些協定。"
 
@@ -173,16 +171,16 @@ msgid "Enable"
 msgstr "啟用"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:135
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:234
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:265
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:345
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:406
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:243
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:274
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:354
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:415
 msgid "Enabled"
 msgstr "已啟用"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:520
 msgid "Enabling %s service"
-msgstr "正在啟用 %s 服務"
+msgstr "正在啟用%s服務"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:363
 msgid "Error running custom user file '%s'"
@@ -190,9 +188,9 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:434
 msgid "Errors encountered, please check the %sREADME%s"
-msgstr ""
+msgstr "遇到錯誤，請檢查%sREADME%s"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:210
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:219
 msgid ""
 "FW Mask used by the service. High mask is used to avoid conflict with SQM/"
 "QoS. Change with caution together with"
@@ -226,7 +224,7 @@ msgstr ""
 msgid "Failed to set up any gateway"
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:177
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:186
 msgid "Force the ICMP protocol interface."
 msgstr "強制ICMP協定界面。"
 
@@ -238,7 +236,7 @@ msgstr "授予luci-app-pbr存取UCI和檔案的權限"
 msgid "IPv6 Support"
 msgstr "IPv6支援"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:153
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:157
 msgid "Ignored Interfaces"
 msgstr "忽略的界面"
 
@@ -260,7 +258,7 @@ msgid ""
 "support"
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:169
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:178
 msgid "Insert"
 msgstr "插入"
 
@@ -276,7 +274,7 @@ msgstr ""
 msgid "Installed AdGuardHome (%s) doesn't support 'ipset_file' option."
 msgstr "安裝的 AdGuardHome (%s) 不支援 'ipset_file' 選項。"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:321
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:330
 msgid "Interface"
 msgstr "介面"
 
@@ -292,12 +290,12 @@ msgstr ""
 msgid "Invalid OpenVPN config for '%s' interface"
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:271
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:352
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:280
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:361
 msgid "Local addresses / devices"
 msgstr "本地位址/設備"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:277
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:286
 msgid "Local ports"
 msgstr "本地端埠號"
 
@@ -309,12 +307,12 @@ msgstr ""
 msgid "Mode"
 msgstr "模式"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:269
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:349
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:278
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:358
 msgid "Name"
 msgstr "名稱"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:252
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:261
 msgid ""
 "Name, interface and at least one other field are required. Multiple local "
 "and remote addresses/devices/domains and ports can be space separated. "
@@ -322,14 +320,14 @@ msgid ""
 "fields are left blank. For more information on options, check the %sREADME%s."
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:333
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:342
 msgid ""
 "Name, local address and remote DNS fields are required. Multiple local "
 "addresses/devices can be space separated. For more information on options, "
 "check the %sREADME%s."
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:179
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:188
 msgid "No Change"
 msgstr "沒變更"
 
@@ -342,7 +340,7 @@ msgstr "未安裝或未找到"
 msgid "Output verbosity"
 msgstr "輸出詳細程度"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:411
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:420
 msgid "Path"
 msgstr "路徑"
 
@@ -376,7 +374,7 @@ msgstr "請取消設置“原型”或將策略“%s”的“原型”設置為�
 msgid "Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'"
 msgstr "請取消設置策略“%s”的“src_addr”、“src_port”和“dest_port”"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:250
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:259
 msgid "Policies"
 msgstr "政策"
 
@@ -417,7 +415,7 @@ msgstr "基於原則的路由 - 狀態"
 msgid "Policy Routing"
 msgstr "原則路由"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:295
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:304
 msgid "Protocol"
 msgstr "協定"
 
@@ -429,15 +427,15 @@ msgstr "設置路由時收到空的 tid/標記或介面名稱"
 msgid "Refer to https://docs.openwrt.melmac.net/pbr/#procd_wan_interface"
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:359
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:368
 msgid "Remote DNS"
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:283
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:292
 msgid "Remote addresses / domains"
 msgstr "遠端位址/網域"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:289
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:298
 msgid "Remote ports"
 msgstr "遠端埠號"
 
@@ -475,11 +473,11 @@ msgstr "重新啟動"
 msgid "Restarting %s service"
 msgstr "正在重新啟動 %s 服務"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:165
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:174
 msgid "Rule Create option"
 msgstr "規則建立選項"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:395
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:404
 msgid ""
 "Run the following user files after setting up but before restarting DNSMASQ. "
 "See the %sREADME%s for details."
@@ -495,7 +493,7 @@ msgstr "執行中"
 msgid "See the %sREADME%s for details."
 msgstr "請參閱 %sREADME%s 以獲得詳細資訊。"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:166
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:175
 msgid "Select Add for -A/add and Insert for -I/Insert."
 msgstr "選擇 -A/add 表示加入， -I/Insert 表示插入。"
 
@@ -507,8 +505,8 @@ msgstr "服務控制"
 msgid "Service Errors"
 msgstr "服務出錯"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:197
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:208
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:206
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:217
 msgid "Service FW Mask"
 msgstr "防火牆遮罩服務"
 
@@ -524,7 +522,7 @@ msgstr "服務狀態"
 msgid "Service Warnings"
 msgstr "服務警告"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:373
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:382
 msgid ""
 "Set DSCP tags (in range between 1 and 63) for specific interfaces. See the "
 "%sREADME%s for details."
@@ -542,9 +540,9 @@ msgstr "啟動"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:463
 msgid "Starting %s service"
-msgstr "正在啟動 %s 服務"
+msgstr "正在啟動%s服務"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:193
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:202
 msgid ""
 "Starting (WAN) FW Mark for marks used by the service. High starting mark is "
 "used to avoid conflict with SQM/QoS. Change with caution together with"
@@ -569,7 +567,7 @@ msgstr ""
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:501
 msgid "Stopping %s service"
-msgstr "正在停止 %s 服務"
+msgstr "正在停止%s服務"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:79
 msgid "Strict enforcement"
@@ -583,7 +581,7 @@ msgstr "當匝道器關閉時嚴格執行策略"
 msgid "Supported Interfaces"
 msgstr "已支援的界面"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:242
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:251
 msgid "Supported Protocols"
 msgstr "已支援的協定"
 
@@ -681,14 +679,14 @@ msgstr "詳細輸出"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/status/include/72_pbr.js:64
 msgid "Version"
-msgstr ""
+msgstr "版本"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/pbr/status.js:168
 msgid "Version %s"
 msgstr ""
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:191
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:214
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:200
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:223
 msgid "WAN Table FW Mark"
 msgstr "WAN表格防火牆標記"
 
@@ -696,7 +694,7 @@ msgstr "WAN表格防火牆標記"
 msgid "Web UI Configuration"
 msgstr "Web UI配置"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:304
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:313
 msgid "all"
 msgstr "所有"
 

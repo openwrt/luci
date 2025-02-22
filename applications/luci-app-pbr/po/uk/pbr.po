@@ -38,15 +38,15 @@ msgstr "Активне"
 msgid "AdGuardHome ipset"
 msgstr "IPset AdGuardHome"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:168
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:177
 msgid "Add"
 msgstr "Додати"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:225
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:234
 msgid "Add Ignore Target"
 msgstr "Додати ціль ігнорування"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:227
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:236
 msgid ""
 "Adds 'ignore' to the list of interfaces for policies. See the %sREADME%s for "
 "details."
@@ -62,27 +62,23 @@ msgstr "Розширена Конфігурація"
 msgid ""
 "Allows to specify the list of interface names (in lower case) to be "
 "explicitly supported by the service. Can be useful if your OpenVPN tunnels "
-"have dev option other than tun* or tap*."
+"have dev option other than tun* or tap* or specific use cases of WireGuard "
+"servers. See the %sREADME%s for details."
 msgstr ""
-"Дозволяє вказати список імен інтерфейсів (у нижньому регістрі), які будуть "
-"явно підтримуватися службою. Може бути корисним, якщо ваші тунелі OpenVPN "
-"мають опцію розробника, відмінну від tun* або tap*."
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:155
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:159
 msgid ""
-"Allows to specify the list of interface names (in lower case) to be ignored "
-"by the service. Can be useful if running both VPN server and VPN client on "
-"the router."
+"Allows to specify the list of interface names (lower case) to be ignored by "
+"the service. Can be useful for an OpenVPN server running on OpenWrt device. "
+"WireGuard servers, which have a listen_port defined, are handled "
+"automatically, do not add those here.See the %sREADME%s for details."
 msgstr ""
-"Дозволяє вказати список імен інтерфейсів (у нижньому регістрі), які "
-"ігноруватиме служба. Може бути корисним, якщо на маршрутизаторі запущено і "
-"сервер VPN, і клієнт VPN."
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:43
 msgid "Basic Configuration"
 msgstr "Базова конфігурація"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:312
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:321
 msgid "Chain"
 msgstr "Ланцюжок"
 
@@ -102,7 +98,7 @@ msgstr "Помилка перевірки конфігурації (%s)"
 msgid "Controls both system log and console output verbosity."
 msgstr "Контролює багатослівність виведення системного журналу та консолі."
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:393
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:402
 msgid "Custom User File Includes"
 msgstr "Користувацький файл користувача включає"
 
@@ -110,19 +106,19 @@ msgstr "Користувацький файл користувача включ�
 msgid "Custom user file '%s' not found or empty"
 msgstr "Спеціальний файл користувача \"%s\" не знайдено або порожній"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:331
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:340
 msgid "DNS Policies"
 msgstr "Політики DNS"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:384
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:393
 msgid "DSCP Tag"
 msgstr "Тег DSCP"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:371
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:380
 msgid "DSCP Tagging"
 msgstr "Тегування DSCP"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:176
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:185
 msgid "Default ICMP Interface"
 msgstr "Інтерфейс ICMP за замовчуванням"
 
@@ -140,7 +136,7 @@ msgstr "Вимкнути"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:114
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:134
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:233
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:242
 msgid "Disabled"
 msgstr "Вимкнено"
 
@@ -148,7 +144,7 @@ msgstr "Вимкнено"
 msgid "Disabling %s service"
 msgstr "Вимкнення служби %s"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:243
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:252
 msgid "Display these protocols in protocol column in Web UI."
 msgstr ""
 "Відображати ці протоколи в стовпці протоколів веб-інтерфейсу користувача."
@@ -182,10 +178,10 @@ msgid "Enable"
 msgstr "Увімкнути"
 
 #: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:135
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:234
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:265
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:345
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:406
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:243
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:274
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:354
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:415
 msgid "Enabled"
 msgstr "Увімкнено"
 
@@ -201,7 +197,7 @@ msgstr "Помилка запуску спеціального файлу кор
 msgid "Errors encountered, please check the %sREADME%s"
 msgstr "Виникли помилки, перевірте %sREADME%s"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:210
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:219
 msgid ""
 "FW Mask used by the service. High mask is used to avoid conflict with SQM/"
 "QoS. Change with caution together with"
@@ -237,7 +233,7 @@ msgstr "Не вдалося налаштувати \"%s\""
 msgid "Failed to set up any gateway"
 msgstr "Не вдалося налаштувати жодного шлюзу"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:177
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:186
 msgid "Force the ICMP protocol interface."
 msgstr "Примусовий інтерфейс протоколу ICMP."
 
@@ -249,7 +245,7 @@ msgstr "Надайте UCI та доступ до файлів для luci-app-p
 msgid "IPv6 Support"
 msgstr "Підтримка IPv6"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:153
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:157
 msgid "Ignored Interfaces"
 msgstr "Ігноровані інтерфейси"
 
@@ -273,7 +269,7 @@ msgstr ""
 "Виявлено несумісні виклики nft у файлі включення користувача, що вимикає "
 "підтримку файлів fw4 nft"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:169
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:178
 msgid "Insert"
 msgstr "Вставка"
 
@@ -289,7 +285,7 @@ msgstr "Помилка вставки як для IPv4, так і для IPv6 д
 msgid "Installed AdGuardHome (%s) doesn't support 'ipset_file' option."
 msgstr "Встановлений AdGuardHome (%s) не підтримує параметр «ipset_file»."
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:321
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:330
 msgid "Interface"
 msgstr "Інтерфейс"
 
@@ -305,12 +301,12 @@ msgstr "Недійсна конфігурація OpenVPN для інтерфе�
 msgid "Invalid OpenVPN config for '%s' interface"
 msgstr "Недійсна конфігурація OpenVPN для інтерфейсу «%s»"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:271
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:352
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:280
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:361
 msgid "Local addresses / devices"
 msgstr "Локальні адреси / пристрої"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:277
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:286
 msgid "Local ports"
 msgstr "Місцеві порти"
 
@@ -322,12 +318,12 @@ msgstr "Невідповідна група IP-адрес у політиці \"
 msgid "Mode"
 msgstr "Режим"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:269
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:349
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:278
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:358
 msgid "Name"
 msgstr "Назва"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:252
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:261
 msgid ""
 "Name, interface and at least one other field are required. Multiple local "
 "and remote addresses/devices/domains and ports can be space separated. "
@@ -340,7 +336,7 @@ msgstr ""
 "використовуватимуться, якщо поля залишаються порожніми. Для отримання "
 "додаткової інформації про параметри перегляньте %sREADME%s."
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:333
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:342
 msgid ""
 "Name, local address and remote DNS fields are required. Multiple local "
 "addresses/devices can be space separated. For more information on options, "
@@ -350,7 +346,7 @@ msgstr ""
 "локальних адрес/пристроїв можна розділити пробілом. Для отримання додаткової "
 "інформації про параметри перегляньте %sREADME%s."
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:179
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:188
 msgid "No Change"
 msgstr "Без змін"
 
@@ -363,7 +359,7 @@ msgstr "Не встановлено або не знайдено"
 msgid "Output verbosity"
 msgstr "Багатослівність виводу"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:411
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:420
 msgid "Path"
 msgstr "Шлях"
 
@@ -405,7 +401,7 @@ msgid "Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'"
 msgstr ""
 "Скасуйте параметри «src_addr», «src_port» і «dest_port» для політики «%s»"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:250
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:259
 msgid "Policies"
 msgstr "Політики"
 
@@ -448,7 +444,7 @@ msgstr "Маршрутизація на основі політики – ста
 msgid "Policy Routing"
 msgstr "Політика маршрутизації"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:295
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:304
 msgid "Protocol"
 msgstr "Протокол"
 
@@ -462,15 +458,15 @@ msgstr ""
 msgid "Refer to https://docs.openwrt.melmac.net/pbr/#procd_wan_interface"
 msgstr "Див. https://docs.openwrt.melmac.net/pbr/#procd_wan_interface"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:359
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:368
 msgid "Remote DNS"
 msgstr "Віддалений DNS"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:283
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:292
 msgid "Remote addresses / domains"
 msgstr "Віддалені адреси / домени"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:289
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:298
 msgid "Remote ports"
 msgstr "Віддалені порти"
 
@@ -512,11 +508,11 @@ msgstr "Перезапустити"
 msgid "Restarting %s service"
 msgstr "Перезапуск служби %s"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:165
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:174
 msgid "Rule Create option"
 msgstr "Параметр створення правила"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:395
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:404
 msgid ""
 "Run the following user files after setting up but before restarting DNSMASQ. "
 "See the %sREADME%s for details."
@@ -532,7 +528,7 @@ msgstr ""
 msgid "See the %sREADME%s for details."
 msgstr "Перегляньте %sREADME%s для деталей."
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:166
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:175
 msgid "Select Add for -A/add and Insert for -I/Insert."
 msgstr "Виберіть Додати для -A/add і Вставити для -I/Insert."
 
@@ -544,8 +540,8 @@ msgstr "Контроль служби"
 msgid "Service Errors"
 msgstr "Помилки служби"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:197
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:208
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:206
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:217
 msgid "Service FW Mask"
 msgstr "Сервіс FW Mask"
 
@@ -561,7 +557,7 @@ msgstr "Стан сервісу"
 msgid "Service Warnings"
 msgstr "Сервісні попередження"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:373
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:382
 msgid ""
 "Set DSCP tags (in range between 1 and 63) for specific interfaces. See the "
 "%sREADME%s for details."
@@ -581,7 +577,7 @@ msgstr "Запустити"
 msgid "Starting %s service"
 msgstr "Запуск служби %s"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:193
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:202
 msgid ""
 "Starting (WAN) FW Mark for marks used by the service. High starting mark is "
 "used to avoid conflict with SQM/QoS. Change with caution together with"
@@ -622,7 +618,7 @@ msgstr "Суворо дотримуватись політики, коли їх�
 msgid "Supported Interfaces"
 msgstr "Підтримувані інтерфейси"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:242
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:251
 msgid "Supported Protocols"
 msgstr "Підтримувані протоколи"
 
@@ -730,8 +726,8 @@ msgstr "Версія"
 msgid "Version %s"
 msgstr "Версія %s"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:191
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:214
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:200
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:223
 msgid "WAN Table FW Mark"
 msgstr "WAN Table FW Mark"
 
@@ -739,7 +735,7 @@ msgstr "WAN Table FW Mark"
 msgid "Web UI Configuration"
 msgstr "Конфігурація веб-інтерфейсу"
 
-#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:304
+#: applications/luci-app-pbr/htdocs/luci-static/resources/view/pbr/overview.js:313
 msgid "all"
 msgstr "все"
 
