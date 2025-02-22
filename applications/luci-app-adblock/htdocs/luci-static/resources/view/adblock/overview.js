@@ -525,11 +525,6 @@ return view.extend({
 		o.placeholder = 'adb_notify';
 		o.rmempty = true;
 
-		o = s.taboption('adv_email', form.Value, 'adb_mailcnt', _('E-Mail Notification Count'), _('Raise the notification count, to get E-Mails if the overall blocklist count is less or equal to the given limit.'));
-		o.placeholder = '0';
-		o.datatype = 'min(0)';
-		o.rmempty = true;
-
 		/*
 			blocklist sources tab
 		*/
