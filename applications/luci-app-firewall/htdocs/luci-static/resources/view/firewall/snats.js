@@ -338,6 +338,9 @@ return view.extend({
 		fwtool.addLimitOption(s);
 		fwtool.addLimitBurstOption(s);
 
+		o = s.taboption('advanced', form.Flag, 'log', _('Enable logging'), _('Log matched packets to syslog.'));
+		o.modalonly = true;
+
 		if (!have_fw4) {
 			o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
 				_('Passes additional arguments to iptables. Use with care!'));
