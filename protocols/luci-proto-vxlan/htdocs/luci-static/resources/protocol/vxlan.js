@@ -179,7 +179,7 @@ return network.registerProtocol('vxlan', {
 		}
 		catch(e) {}
 
-		o = s.taboption('peers', form.SectionValue, '_peers', form.GridSection, 'vxlan_peers');
+		o = s.taboption('peers', form.SectionValue, '_peers', form.GridSection, 'vxlan_peer');
 		o.depends('proto', 'vxlan');
 
 		var ss = o.subsection;
