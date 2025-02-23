@@ -250,7 +250,7 @@ local target = nx.uname().machine
 		var lxc_name = textarea.dataset['id'];
 		var lxc_conf = textarea.value;
 
-	new XHR().post('<%=luci.dispatcher.build_url("admin", "services")%>/lxc_configuration_set/' + lxc_name, "lxc_conf=" + encodeURIComponent(lxc_conf),
+	new XHR().post('<%=luci.dispatcher.build_url("admin", "services")%>/lxc_configuration_set/' + lxc_name, {"lxc_conf": encodeURIComponent(lxc_conf)},
 		function(x)
 		{
 			if (!x || x.responseText != "0")
