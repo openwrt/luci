@@ -33,13 +33,13 @@ function validateYggdrasilListenUri(section_id,value) {
 	if (value.length == 0) {
 		return true;
 	};
-	if (!value.match(/^(tls|tcp|unix|quic):\/\//))
+	if (!value.match(/^(tls|tcp|quic|unix|ws):\/\//))
 		return _('Unsupported URI scheme in %s').format(value);
 	return true;
 };
 
 function validateYggdrasilPeerUri(section_id,value) {
-	if (!value.match(/^(tls|tcp|unix|quic|socks|sockstls):\/\//))
+	if (!value.match(/^(tls|tcp|quic|socks|sockstls|unix|ws|wss):\/\//))
 		return _('URI scheme %s not supported').format(value);
 	return true;
 };
@@ -98,7 +98,7 @@ function updateActivePeers(ifname) {
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
-				cell.textContent = '%.2f ms'.format(peer.latency_ms / 10**6);
+				cell.textContent = '%.2f ms'.format(peer.latency / 10**6);
 
 				cell = row.insertCell(-1)
 				cell.className = "td"
