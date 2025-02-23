@@ -293,11 +293,40 @@ return view.extend({
 		for (var i = 0; i < ctHelpers.length; i++)
 			o.value(ctHelpers[i].name, E('<span><span class="hide-close">%s (%s)</span><span class="hide-open">%s</span></span>'.format(ctHelpers[i].description, ctHelpers[i].name.toUpperCase(), ctHelpers[i].name.toUpperCase())));
 
-		o = s.taboption('advanced', form.Flag, 'log', _('Enable logging on this zone'));
+		o = s.taboption('advanced', form.MultiValue, 'log', _('Enable logging for selected tables in this zone:'), _('Log matched packets on the selected tables to syslog.'));
 		o.modalonly = true;
+		o.value('filter');
+		o.value('mangle');
+		o.placeholder = 'No table selected';
+		o.cfgvalue = function(section_id) {
+			let bitfield = this.super('load', [section_id]) || this.default;
+			let tables = [];
+			if ((bitfield & 1) != 0) {
+				tables.push('filter');
+			}
+			if ((bitfield & 2) != 0) {
+				tables.push('mangle');
+			}
+			return tables;
+		};
+		o.write = function(section_id, value) {
+			let bitfield = 0;
+			let tables = L.toArray(value);
+			tables.forEach((table) => {
+				switch (table) {
+					case 'filter':
+						bitfield |= 1;
+						break;
+					case 'mangle':
+						bitfield |= 2;
+						break;
+				}
+			});
+			return this.super('write', [ section_id, bitfield ]);
+		};
 
 		o = s.taboption('advanced', form.Value, 'log_limit', _('Limit log messages'));
-		o.depends('log', '1');
+		o.depends({log: [], "!reverse": true});
 		o.placeholder = '10/minute';
 		o.modalonly = true;
 
