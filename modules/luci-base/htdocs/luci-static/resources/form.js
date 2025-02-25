@@ -2219,7 +2219,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 	handleRemove(section_id, ev) {
 		const config_name = this.uciconfig ?? this.map.config;
 
-		this.map.data.remove(config_name, section_id);
+		this.map.data?.remove(config_name, section_id);
 		return this.map.save(null, true);
 	},
 
@@ -3391,7 +3391,7 @@ const CBIGridSection = CBITableSection.extend(/** @lends LuCI.form.GridSection.p
 		const prevMap = mapNode ? dom.findClassInstance(mapNode) : this.map;
 
 		if (prevMap.addedSection != null && !isSaving)
-			this.map.data.remove(config_name, prevMap.addedSection);
+			this.map.data?.remove(config_name, prevMap.addedSection);
 
 		delete prevMap.addedSection;
 
@@ -3550,7 +3550,7 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 		const section_id = this.section;
 		const config_name = this.uciconfig ?? this.map.config;
 
-		this.map.data.remove(config_name, section_id);
+		this.map.data?.remove(config_name, section_id);
 		return this.map.save(null, true);
 	},
 
