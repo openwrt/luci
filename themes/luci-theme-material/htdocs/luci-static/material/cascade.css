@@ -1590,6 +1590,10 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	color: var(--white-color);
 }
 
+.cbi-dropdown[open] > ul.dropdown > li[tabindex] {
+	color: var(--black-color) !important;
+}
+
 .cbi-dropdown > ul > li[display],
 .cbi-dropdown[open] > ul.preview,
 .cbi-dropdown[open] > ul.dropdown > li,
@@ -1622,6 +1626,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 
 .cbi-dropdown[open] > ul.dropdown > li[selected] {
 	background: #b0d0f0;
+	color: var(--black-color);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li.focus,
@@ -1632,6 +1637,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .cbi-dropdown[open] > ul.dropdown > li:last-child {
 	margin-bottom: 0;
 	border-bottom: 0;
+	color: var(--black-color);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li[unselectable] {
