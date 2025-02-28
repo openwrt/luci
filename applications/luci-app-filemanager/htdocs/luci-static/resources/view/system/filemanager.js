@@ -298,7 +298,7 @@ function getFileList(path) {
 		lines.forEach(function(line) {
 			if (line.startsWith('total') || !line.trim()) return;
 			// Parse the output line from 'ls' command
-			var parts = line.match(/^([\-dl])[rwx\-]{2}[rwx\-Ss]{1}[rwx\-]{2}[rwx\-Ss]{1}[rwx\-]{2}[rwx\-Tt]{1}\s+\d+\s+(\S+)\s+(\S+)\s+(\d+)\s+([\d\-]+\s+[\d\:\.]{8,12}\s+[+-]\d{4})\s+(.+)$/);
+			var parts = line.match(/^([\-dl])[rwx\-]{2}[rwx\-Ss]{1}[rwx\-]{2}[rwx\-Ss]{1}[rwx\-]{2}[rwx\-Tt]{1}\s+\d+\s+(\S+)\s+(\S+)\s+(\d+)\s+([\d\-]+\s+\d{2}:\d{2}:\d{2}(?:\.\d+)?\s+[+-]\d{4})\s+(.+)$/);
 			if (!parts || parts.length < 7) {
 				console.warn('Failed to parse line:', line);
 				return;
