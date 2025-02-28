@@ -408,13 +408,13 @@ return view.extend({
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Threshold'), _('ICMP-Threshold in packets per second to prevent WAN-DoS attacks. To disable this safeguard set it to \'0\'.'));
 		o.value('0');
-		o.value('10');
+		o.value('25');
 		o.value('50');
 		o.value('100');
 		o.value('250');
 		o.value('500');
 		o.value('1000');
-		o.default = '10';
+		o.default = '25';
 		o.placeholder = _('-- default --');
 		o.create = true;
 		o.optional = true;
