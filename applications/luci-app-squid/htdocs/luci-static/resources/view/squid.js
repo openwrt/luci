@@ -71,7 +71,7 @@ return view.extend({
 		o.datatype = 'string';
 		o.optional = true;
 
-		o = s.taboption('general', form.Value, 'ssl_db', _('SSL DB'));
+		o = s.taboption('general', form.Value, 'ssldb', _('SSL DB'));
 		o.datatype = 'string';
 		o.optional = true;
 
