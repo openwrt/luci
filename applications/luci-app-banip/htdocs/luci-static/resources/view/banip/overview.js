@@ -615,11 +615,11 @@ return view.extend({
 		o.value('Exit before auth from', _('dropbear failed login'));
 		o.value('luci: failed login', _('LuCI failed login'));
 		o.value('error: maximum authentication attempts exceeded', _('sshd failed login'));
-		o.value('sshd.*Connection closed by.*\[preauth\]', _('sshd closed connection'));
-		o.value('SecurityEvent=\"InvalidAccountID\".*RemoteAddress=', _('asterisk invalid account'));
-		o.value('received a suspicious remote IP \'.*\'', _('nginx suspicious IP'));
-		o.value('TLS Error: could not determine wrapping from \[AF_INET\]', _('openvpn TLS error'));
-		o.value('AdGuardHome.*\[error\].*/control/login: from ip', _('AdGuardHome login error'));
+		o.value('sshd.*Connection closed by.*\\[preauth\\]', _('sshd closed connection'));
+		o.value('SecurityEvent=\\"InvalidAccountID\\".*RemoteAddress=', _('asterisk invalid account'));
+		o.value('received a suspicious remote IP .*', _('nginx suspicious IP'));
+		o.value('TLS Error: could not determine wrapping from \\[AF_INET\\]', _('openvpn TLS error'));
+		o.value('AdGuardHome.*\\[error\\].*/control/login: from ip', _('AdGuardHome login error'));
 		o.optional = true;
 		o.rmempty = true;
 
