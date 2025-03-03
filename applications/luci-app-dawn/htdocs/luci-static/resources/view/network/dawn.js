@@ -199,6 +199,11 @@ return view.extend({
 		// 	_('Shared key'),
 		// );
 
+		o = s.option(form.Value, 'tcp_ip',
+			_('TCP IP'),
+			_('Bind address for TCP networking'),
+		);
+
 		o = s.option(form.Value, 'tcp_port',
 			_('TCP port'),
 			_('Port for TCP networking'),
