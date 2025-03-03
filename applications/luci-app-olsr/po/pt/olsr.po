@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-26 19:03+0200\n"
-"PO-Revision-Date: 2024-07-20 20:09+0000\n"
-"Last-Translator: ssantos <ssantos@web.de>\n"
+"PO-Revision-Date: 2025-03-03 00:49+0000\n"
+"Last-Translator: Tiago Gaspar <tiagogaspar8@gmail.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/pt/>\n"
 "Language: pt\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.10.3-dev\n"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:152
 msgid "Active MID announcements"
@@ -73,7 +73,7 @@ msgstr "Endereço de broadcast"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:136
 msgid "Device"
-msgstr "Aparelho"
+msgstr "Dispositivo"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:14
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:56
@@ -147,12 +147,12 @@ msgid ""
 "Default is \"flat\"."
 msgstr ""
 "A métrica FIB controla o valor da métrica dos conjuntos de equipamentos-"
-"roteadores. \"flat\" significa que o valor da métrica é sempre 2. Este é o "
-"valor preferido porque ele ajuda o roteamento do kernel do Linux limpar as "
-"rotas antigas. \"correct\" usa a contagem de saltos como valor da métrica. "
-"\"approx\" também usa a contagem de saltos como métrica, mas somente "
-"atualiza a contagem de saltos se o próximo salto também mudar. O padrão é "
-"\"flat\"."
+"routeres. \"flat\" significa que o valor da métrica é sempre 2. Este é o "
+"valor preferido porque ele ajuda o encaminhamento do kernel do Linux limpar "
+"as rotas antigas. \"correct\" usa a contagem de saltos como valor da "
+"métrica. \"approx\" também usa a contagem de saltos como métrica, mas "
+"somente atualiza a contagem de saltos se o próximo salto também mudar. O "
+"padrão é \"flat\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:209
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:203
@@ -370,7 +370,7 @@ msgid ""
 "multicast."
 msgstr ""
 "Endereço de multicast IPv6. O padrão é \"FF02::6D\", o multicast do enlace "
-"local do roteador MANET."
+"local do router MANET."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
@@ -414,10 +414,10 @@ msgid ""
 "if changed.<br /><b>WARNING:</b> This parameter should not be used together "
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
-"Se a rota para o roteador está para ser alterada, o valor ETX deste roteador "
-"é multiplicado com o este valor antes que ele seja comparado com o novo "
-"valor. O parâmetro pode ser um valor entre 0.1 e 1.0, mas deve ser próximo a "
-"1.0 se alterado..<br /><b>CUIDADO:</b> Este parâmetro não deve ser usado em "
+"Se a rota para o router está para ser alterada, o valor ETX deste router é "
+"multiplicado com o este valor antes que ele seja comparado com o novo valor. "
+"O parâmetro pode ser um valor entre 0.1 e 1.0, mas deve ser próximo a 1.0 se "
+"alterado..<br /><b>CUIDADO:</b> Este parâmetro não deve ser usado em "
 "conjunto com a métrica etx_ffeth!<br />O padrão é \"1.0\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:93
@@ -565,10 +565,10 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
-"O nível de qualidade do enlace escolhe entre o roteamento por contagem de "
-"saltos e o roteamento baseado em custos (na sua maioria, ETX). <br /><b>0</"
-"b> = não use a qualidade do enlace<br /><b>2</b> = use a qualidade do enlace "
-"para a seleção do MPR e roteamento<br />O padrão é \"2\""
+"O nível de qualidade do enlace escolhe entre o encaminhamento por contagem "
+"de saltos e o encaminhamento baseado em custos (na sua maioria, ETX). <br "
+"/><b>0</b> = não use a qualidade do enlace<br /><b>2</b> = use a qualidade "
+"do enlace para a seleção do MPR e encaminhamento<br />O padrão é \"2\""
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:315
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:309
@@ -881,7 +881,7 @@ msgid ""
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
 msgstr ""
-"Define o IP principal (ip originador) do seu roteador. Este IP nunca muda "
+"Define o IP principal (ip originador) do seu router. Este IP nunca muda "
 "durante o funcionamento do olsrd. O padrão é 0.0.0.0, que faz com que o "
 "endereço da primeira interface seja usado."
 
@@ -891,7 +891,7 @@ msgid ""
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
-"Define o IP principal (ip originador) do seu roteador. Este IP nunca muda "
+"Define o IP principal (ip originador) do seu router. Este IP nunca muda "
 "durante o funcionamento do olsrd. O padrão é 0.0.0.0, que faz com que o "
 "endereço da primeira interface seja usado."
 
@@ -996,10 +996,10 @@ msgid ""
 "documentation."
 msgstr ""
 "O daemon OLSR é uma implementação do protocolo Optimized Link State Routing. "
-"Como tal, permite o roteamento em malha para qualquer equipamento de rede. É "
-"executado em qualquer placa de wifi que suporte o modo ad-hoc e, claro, em "
-"qualquer aparelho de ethernet. Veja <a href=\"http://www.olsr.org\">olsrd."
-"org</a> para obter ajuda e documentação."
+"Como tal, permite o encaminhamento em malha para qualquer equipamento de "
+"rede. É executado em qualquer placa de wifi que suporte o modo ad-hoc e, "
+"claro, em qualquer aparelho de ethernet. Veja <a href=\"http://www.olsr.org\""
+">olsrd.org</a> para obter ajuda e documentação."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:18
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:18
@@ -1011,10 +1011,10 @@ msgid ""
 "documentation."
 msgstr ""
 "O servidor OLSR é uma implementação do protoloco de Roteamento de Estado de "
-"Enlace Otimizado. Como tal, ele permite o roteamento em malha para qualquer "
-"equipamento de rede. Ele roda sobre qualquer placa de rede sem fio que "
-"suporte o modo ad-hoc e, é claro, em qualquer aparelho ethernet. Visite <a "
-"href='http://www.olsr.org'>olsrd.org</a> para ajuda e documentação."
+"Enlace Otimizado. Como tal, ele permite o encaminhamento em malha para "
+"qualquer equipamento de rede. Ele roda sobre qualquer placa de rede sem fio "
+"que suporte o modo ad-hoc e, é claro, em qualquer aparelho ethernet. Visite "
+"<a href='http://www.olsr.org'>olsrd.org</a> para ajuda e documentação."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:244
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:238
@@ -1050,9 +1050,9 @@ msgid ""
 msgstr ""
 "Isto pode ser usado para sinalizar o prefixo IPv6 externo do ligação "
 "ascendente (uplink) para os clientes. Isto pode permitir que um cliente mude "
-"o endereço IPv6 local para usar o roteador IPv6 sem qualquer tradução de "
-"endereços. O tamanho máximo do prefixo é 64 bits. O padrão é "
-"\"::/0\" (nenhum prefixo)."
+"o endereço IPv6 local para usar o router IPv6 sem qualquer tradução de "
+"endereços. O tamanho máximo do prefixo é 64 bits. O padrão é \"::/0\" ("
+"nenhum prefixo)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:286
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:280
