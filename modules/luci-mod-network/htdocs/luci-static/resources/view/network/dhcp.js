@@ -1088,7 +1088,7 @@ return view.extend({
 			uci.set('dhcp', section, this.option, encodedArr);
 		}
 
-		so = ss.option(form.Value, 'dnsrr', _('Resource Record Name'));
+		so = ss.option(form.Value, 'rrname', _('Resource Record Name'));
 		so.rmempty = false;
 		so.datatype = 'hostname';
 		so.placeholder = 'svcb.example.com.';
