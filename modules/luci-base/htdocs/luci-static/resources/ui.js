@@ -4899,7 +4899,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 							E('button', {
 								'class': 'btn cbi-button-action important',
 								'click': resolveFn.bind(null, true)
-							}, [ _('Apply, reverting in case of connectivity loss') ]), ' ',
+							}, [ _('Apply checked') ]), ' ',
 							E('button', {
 								'class': 'btn cbi-button-negative important',
 								'click': resolveFn.bind(null, false)
