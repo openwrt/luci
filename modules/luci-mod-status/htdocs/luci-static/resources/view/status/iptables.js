@@ -306,15 +306,27 @@ return view.extend({
 	handleCounterReset: function(has_ip6tables, ev) {
 		return Promise.all([
 			fs.exec('/usr/sbin/iptables', [ '-Z' ])
-				.catch(function(err) { ui.addNotification(null, E('p', {}, _('Unable to reset iptables counters: %s').format(err.message))) }),
+				.catch(function(err) {
+					ui.addNotification(null,
+						E('p', {}, _('Unable to reset iptables counters: %s').format(err.message))
+					)
+				}),
 			has_ip6tables ? fs.exec('/usr/sbin/ip6tables', [ '-Z' ])
-				.catch(function(err) { ui.addNotification(null, E('p', {}, _('Unable to reset ip6tables counters: %s').format(err.message))) }) : null
+				.catch(function(err) {
+					ui.addNotification(null,
+						E('p', {}, _('Unable to reset ip6tables counters: %s').format(err.message))
+					)
+				}) : null
 		]);
 	},
 
 	handleRestart: function(ev) {
 		return fs.exec_direct('/etc/init.d/firewall', [ 'restart' ])
-				.catch(function(err) { ui.addNotification(null, E('p', {}, _('Unable to restart firewall: %s').format(err.message))) });
+				.catch(function(err) {
+					ui.addNotification(null,
+						E('p', {}, _('Unable to restart firewall: %s').format(err.message))
+					)
+				});
 	},
 
 	render: function(has_ip6tables) {
