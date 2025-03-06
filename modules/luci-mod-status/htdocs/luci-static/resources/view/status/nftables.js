@@ -683,7 +683,7 @@ return view.extend({
 					'class': 'btn cbi-button',
 					'click': function() { location.href = 'nftables/iptables' }
 				}, _('Open iptables rules overview…'))
-			], 'warning');
+			], 0, 'warning');
 		}
 	},
 
