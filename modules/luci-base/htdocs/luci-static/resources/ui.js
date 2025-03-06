@@ -4793,7 +4793,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					E('div', { 'class': 'uci-change-legend-label' }, [
 						E('var', {}, E('del', '&#160;')), ' ', _('Option removed') ])]),
 				E('br'), list,
-				E('div', { 'class': 'right' }, [ //button-row?
+				E('div', { 'class': 'button-row' }, [
 					E('button', {
 						'class': 'btn cbi-button',
 						'click': UI.prototype.hideModal
@@ -4909,7 +4909,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 						UI.prototype.changes.displayStatus('warning', [
 							E('h4', _('Configuration changes have been rolled back!')),
 							E('p', _('The device could not be reached within %d seconds after applying the pending changes, which caused the configuration to be rolled back for safety reasons. If you believe that the configuration changes are correct nonetheless, perform an unchecked configuration apply. Alternatively, you can dismiss this warning and edit changes before attempting to apply again, or revert all pending changes to keep the currently working configuration state.').format(L.env.apply_rollback)),
-							E('div', { 'class': 'right' }, [
+							E('div', { 'class': 'button-row' }, [
 								E('button', {
 									'class': 'btn',
 									'click': L.bind(UI.prototype.changes.displayStatus, UI.prototype.changes, false)
