@@ -518,7 +518,13 @@ return view.extend({
 				'id': 'btn_update',
 				'click': ui.createHandlerFn(this, function () {
 					return fs.exec('/etc/init.d/smartdns', ['updatefiles'])
-						.catch(function (e) { ui.addNotification(null, E('p', e.message), 'error') });
+						.catch(function (e) {
+							ui.addNotification(null,
+								E('p', e.message),
+								0,
+								'error'
+							)
+						});
 				})
 			}, [_("Update")]);
 		}
@@ -1169,7 +1175,13 @@ return view.extend({
 				'id': 'btn_restart',
 				'click': ui.createHandlerFn(this, function () {
 					return fs.exec('/etc/init.d/smartdns', ['restart'])
-						.catch(function (e) { ui.addNotification(null, E('p', e.message), 'error') });
+						.catch(function (e) {
+							ui.addNotification(null,
+								E('p', e.message),
+								0,
+								'error'
+							)
+						});
 				})
 			}, [_("Restart")]);
 		}
