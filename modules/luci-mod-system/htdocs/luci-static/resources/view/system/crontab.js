@@ -15,7 +15,11 @@ return view.extend({
 
 		return fs.write('/etc/crontabs/root', value).then(function(rc) {
 			document.querySelector('textarea').value = value;
-			ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
+			ui.addNotification(null,
+				E('p', _('Contents have been saved.')),
+				0,
+				'info'
+			);
 
 			return fs.exec('/etc/init.d/cron', [ 'reload' ]);
 		}).catch(function(e) {

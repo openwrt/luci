@@ -367,7 +367,11 @@ return view.extend({
 		return m.save(function() {
 			return fs.write('/etc/sysupgrade.conf', mapdata.config.editlist.trim().replace(/\r\n/g, '\n') + '\n');
 		}).then(function() {
-			ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
+			ui.addNotification(null,
+				E('p', _('Contents have been saved.')),
+				0,
+				'info'
+			);
 		}).catch(function(e) {
 			ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e)));
 		});
