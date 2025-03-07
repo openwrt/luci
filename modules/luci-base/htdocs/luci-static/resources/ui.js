@@ -3848,11 +3848,6 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * to the `dom.content()` function - refer to its documentation for
 	 * applicable values.
 	 *	 
-	 * @param {int} [timeout]
-	 * A millisecond value after which the notification will disappear
-	 * automatically. If omitted, the notification will remain until it receives
-	 * the click event.
-	 *
 	 * @param {...string} [classes]
 	 * A number of extra CSS class names which are set on the notification
 	 * banner element.
@@ -3860,7 +3855,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * @returns {Node}
 	 * Returns a DOM Node representing the notification banner element.
 	 */
-	addNotification(title, children, timeout, ...classes) {
+	addNotification(title, children, ...classes) {
 		const mc = document.querySelector('#maincontent') ?? document.body;
 		const msg = E('div', {
 			'class': 'alert-message fade-in',
@@ -3877,7 +3872,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					'class': 'btn',
 					'style': 'margin-left:auto; margin-top:auto',
 					'click': function(ev) {
-						fadeOutNotification(ev.target);
+						dom.parent(ev.target, '.alert-message').classList.add('fade-out');
 					},
 
 				}, [ _('Dismiss') ])
@@ -3892,27 +3887,6 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 		msg.classList.add(...classes);
 
 		mc.insertBefore(msg, mc.firstElementChild);
-
-		function fadeOutNotification(element) {
-			const notification = dom.parent(element, '.alert-message');
-			if (notification) {
-				notification.classList.add('fade-out');
-				notification.classList.remove('fade-in');
-				setTimeout(() => {
-					if (notification.parentNode) {
-						notification.parentNode.removeChild(notification);
-					}
-				});
-			}
-		}
-
-		if (typeof timeout === 'number' && timeout > 0) {
-			setTimeout(() => {
-				if (msg && msg.parentNode) {
-					fadeOutNotification(msg);
-				}
-			}, timeout);
-		}
 
 		return msg;
 	},
