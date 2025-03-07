@@ -31,7 +31,11 @@ return view.extend({
 		var script = res[1]['rrdcgi'];
 
 		if (!running) {
-			return ui.addNotification(null, E('h3', _('Service is not running'), 'danger'));
+			return ui.addNotification(null,
+					E('h3', _('Service is not running')),
+					0,
+					'danger'
+				);
 		}
 
 		return fs.stat(script).then(function(res) {
@@ -48,10 +52,18 @@ return view.extend({
 					])
 				]);
 			} else {
-				return ui.addNotification(null, E('h3', _('No data available'), 'danger'));
+				return ui.addNotification(null,
+						E('h3', _('No data available')),
+						0,
+						'danger'
+					);
 			}
 		}).catch(function(err) {
-			return ui.addNotification(null, E('h3', _('No access to server file'), 'danger'));
+			return ui.addNotification(null,
+					E('h3', _('No access to server file')),
+					0,
+					'danger'
+				);
 		});
 	},
 
