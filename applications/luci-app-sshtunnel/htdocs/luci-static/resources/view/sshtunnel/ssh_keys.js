@@ -135,7 +135,11 @@ function _handleKeyGenSubmit(event) {
 	keyName = keyName.startsWith('id_') ? keyName : 'id_' + keyName;
 	if (allSshKeys[keyName]) {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
-		ui.addNotification(null, E('p', _('A key with that name already exists.'), 'error'));
+		ui.addNotification(null,
+			E('p', _('A key with that name already exists.')),
+			0,
+			'error'
+		);
 		return false;
 	}
 
@@ -154,7 +158,11 @@ function _handleKeyGenSubmit(event) {
 		}
 	}).catch(function (e) {
 		document.body.scrollTop = document.documentElement.scrollTop = 0;
-		ui.addNotification(null, E('p', _('Unable to generate a key: %s').format(e.message)), 'error');
+		ui.addNotification(null,
+			E('p', _('Unable to generate a key: %s').format(e.message)),
+			0,
+			'error'
+		);
 	});
 	return false;
 }
