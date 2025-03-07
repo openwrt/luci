@@ -2308,7 +2308,10 @@
 				if (!e.reported) {
 					if (classes.ui)
 						classes.ui.addNotification(e.name || _('Runtime error'),
-							E('pre', {}, e.message), 'danger');
+							E('pre', {}, e.message),
+							0,
+							'danger'
+						);
 					else
 						DOM.content(document.querySelector('#maincontent'),
 							E('pre', { 'class': 'alert-message error' }, e.message));
