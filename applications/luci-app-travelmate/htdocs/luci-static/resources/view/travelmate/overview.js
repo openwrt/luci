@@ -54,9 +54,17 @@ function handleAction(ev) {
 						L.resolveDefault(fs.exec('/etc/init.d/travelmate', ['setup', iface, zone, metric]))
 							.then(function (res) {
 								if (res) {
-									ui.addNotification(null, E('p', res.trim() + '.'), 'error');
+									ui.addNotification(null,
+										E('p', res.trim() + '.'),
+										0,
+										'error'
+									);
 								} else {
-									ui.addNotification(null, E('p', _('The uplink interface has been updated.')), 'info');
+									ui.addNotification(null,
+										E('p', _('The uplink interface has been updated.')),
+										0,
+										'info'
+									);
 								}
 							});
 						L.hideModal();

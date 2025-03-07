@@ -1081,17 +1081,29 @@ return view.extend({
 			}
 			if (!ssid || ((encryption.includes('psk') || encryption.includes('wpa') || encryption.includes('sae')) && !password)) {
 				if (!ssid) {
-					ui.addNotification(null, E('p', 'Empty SSID, the uplink station could not be saved.'), 'error');
+					ui.addNotification(null,
+						E('p', 'Empty SSID, the uplink station could not be saved.'),
+						0,
+						'error'
+					);
 				}
 				else {
-					ui.addNotification(null, E('p', 'Empty Password, the uplink station could not be saved.'), 'error');
+					ui.addNotification(null,
+						E('p', 'Empty Password, the uplink station could not be saved.'),
+						0,
+						'error'
+					);
 				}
 				return ui.hideModal();
 			}
 			for (var i = 0; i < w_sections.length; i++) {
 				if (w_sections[i].device === device && w_sections[i].ssid === ssid) {
 					if (ignore_bssid === '1' || (ignore_bssid === '0' && w_sections[i].bssid === bssid)) {
-						ui.addNotification(null, E('p', 'Duplicate wireless entry, the uplink station could not be saved.'), 'error');
+						ui.addNotification(null,
+							E('p', 'Duplicate wireless entry, the uplink station could not be saved.'),
+							0,
+							'error'
+						);
 						return ui.hideModal();
 					}
 				}
