@@ -494,14 +494,22 @@ return view.extend({
 				try {
 					feeds = JSON.parse(result[0]);
 				} catch (e) {
-					ui.addNotification(null, E('p', _('Unable to parse the custom feed file!')), 'error');
+					ui.addNotification(null,
+						E('p', _('Unable to parse the custom feed file!')),
+						0,
+						'error'
+					);
 				}
 			}
 			if (result[1] && (!feeds || (feeds && !Object.keys(feeds).length))) {
 				try {
 					feeds = JSON.parse(result[1]);
 				} catch (e) {
-					ui.addNotification(null, E('p', _('Unable to parse the default feed file!')), 'error');
+					ui.addNotification(null,
+						E('p', _('Unable to parse the default feed file!')),
+						0,
+						'error'
+					);
 				}
 			}
 		}
@@ -710,7 +718,11 @@ return view.extend({
 					} catch (e) {
 						countries[i] = "";
 						if (!err) {
-							ui.addNotification(null, E('p', _('Unable to parse the countries file!')), 'error');
+							ui.addNotification(null,
+								E('p', _('Unable to parse the countries file!')),
+								0,
+								'error'
+							);
 						}
 						err = e;
 					}

@@ -70,7 +70,11 @@ function handleAction(report, ev) {
 				content = JSON.parse(report[1]);
 			} catch (e) {
 				content = "";
-				ui.addNotification(null, E('p', _('Unable to parse the ruleset file!')), 'error');
+				ui.addNotification(null,
+					E('p', _('Unable to parse the ruleset file!')),
+					0,
+					'error'
+				);
 			}
 		} else {
 			content = "";
@@ -149,7 +153,11 @@ return view.extend({
 				content = JSON.parse(report[0]);
 			} catch (e) {
 				content = "";
-				ui.addNotification(null, E('p', _('Unable to parse the report file!')), 'error');
+				ui.addNotification(null,
+					E('p', _('Unable to parse the report file!')),
+					0,
+					'error'
+				);
 			}
 		} else {
 			content = "";

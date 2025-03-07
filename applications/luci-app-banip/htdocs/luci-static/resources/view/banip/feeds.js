@@ -69,20 +69,32 @@ function handleEdit(ev) {
 								continue;
 							}
 							fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
-								ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
+								ui.addNotification(null,
+									E('p', _('Upload of the custom feed file failed.')),
+									0,
+									'error'
+								);
 							});
 							return;
 						}
 					} else {
 						fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
-							ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
+							ui.addNotification(null,
+								E('p', _('Upload of the custom feed file failed.')),
+								0,
+								'error'
+							);
 						});
 						return;
 					}
 					location.reload();
 				} else {
 					fs.write('/etc/banip/banip.custom.feeds', null).then(function () {
-						ui.addNotification(null, E('p', _('Upload of the custom feed file failed.')), 'error');
+						ui.addNotification(null,
+							E('p', _('Upload of the custom feed file failed.')),
+							0,
+							'error'
+						);
 					});
 				}
 			});
@@ -116,7 +128,11 @@ function handleEdit(ev) {
 		const invalid = document.querySelectorAll('.cbi-input-invalid');
 		if (invalid.length > 0) {
 			document.body.scrollTop = document.documentElement.scrollTop = 0;
-			return ui.addNotification(null, E('p', _('Invalid input values, unable to save modifications.')), 'error');
+			return ui.addNotification(null,
+					E('p', _('Invalid input values, unable to save modifications.')),
+					0,
+					'error'
+				);
 		}
 	}
 	let sumSubElements = [], exportJson;

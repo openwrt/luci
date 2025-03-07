@@ -19,13 +19,21 @@ return view.extend({
 				document.querySelector('textarea').value = value;
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				if (!notMsg) {
-					ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload banIP that changes take effect.')), 'info');
+					ui.addNotification(null,
+						E('p', _('Allowlist modifications have been saved, reload banIP that changes take effect.')),
+						0,
+						'info'
+					);
 					notMsg = true;
 				}
 			}).catch(function (e) {
 				document.body.scrollTop = document.documentElement.scrollTop = 0;
 				if (!errMsg) {
-					ui.addNotification(null, E('p', _('Unable to save modifications: %s').format(e.message)), 'error');
+					ui.addNotification(null,
+						E('p', _('Unable to save modifications: %s').format(e.message)),
+						0,
+						'error'
+					);
 					errMsg = true;
 				}
 			});
@@ -33,7 +41,11 @@ return view.extend({
 	render: function (allowlist) {
 		if (allowlist[0].size >= 100000) {
 			document.body.scrollTop = document.documentElement.scrollTop = 0;
-			ui.addNotification(null, E('p', _('The allowlist is too big, unable to save modifications.')), 'error');
+			ui.addNotification(null,
+				E('p', _('The allowlist is too big, unable to save modifications.')),
+				0,
+				'error'
+			);
 		}
 		return E('div', { 'class': 'cbi-section cbi-section-descr' }, [
 			E('p', _('This is the local banIP allowlist that will permit certain MAC-, IP-addresses or domain names.<br /> \
