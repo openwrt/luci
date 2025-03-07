@@ -83,18 +83,34 @@ function handleAction(ev) {
 							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['timer', 'add', action, hours, minutes, days]))
 							.then(function(res) {
 								if (res) {
-									ui.addNotification(null, E('p', _('The Refresh Timer could not been updated.')), 'error');
+									ui.addNotification(null,
+										E('p', _('The Refresh Timer could not been updated.')),
+										0,
+										'error'
+									);
 								} else {
-									ui.addNotification(null, E('p', _('The Refresh Timer has been updated.')), 'info');
+									ui.addNotification(null,
+										E('p', _('The Refresh Timer has been updated.')),
+										0,
+										'info'
+									);
 								}
 							});
 						} else if (lineno) {
 							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['timer', 'remove', lineno]))
 							.then(function(res) {
 								if (res) {
-									ui.addNotification(null, E('p', _('The Refresh Timer could not been updated.')), 'error');
+									ui.addNotification(null,
+										E('p', _('The Refresh Timer could not been updated.')),
+										0,
+										'error'
+									);
 								} else {
-									ui.addNotification(null, E('p', _('The Refresh Timer has been updated.')), 'info');
+									ui.addNotification(null,
+										E('p', _('The Refresh Timer has been updated.')),
+										0,
+										'info'
+									);
 								}
 							});
 						} else {

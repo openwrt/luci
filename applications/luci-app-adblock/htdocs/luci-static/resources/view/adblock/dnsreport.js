@@ -31,7 +31,11 @@ function handleAction(ev) {
 							if (res.search(pattern) === -1) {
 								var blacklist = res + domain + '\n';
 								fs.write('/etc/adblock/adblock.blacklist', blacklist);
-								ui.addNotification(null, E('p', _('Blacklist changes have been saved. Refresh your adblock lists that changes take effect.')), 'info');
+								ui.addNotification(null,
+									E('p', _('Blacklist changes have been saved. Refresh your adblock lists that changes take effect.')),
+									0,
+									'info'
+								);
 							}
 							L.hideModal();
 						});
