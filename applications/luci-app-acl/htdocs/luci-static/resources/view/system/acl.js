@@ -174,9 +174,11 @@ return view.extend({
 	},
 
 	render: function(data) {
-		ui.addNotification(null, E('p', [
-			_('The LuCI ACL management is in an experimental stage! It does not yet work reliably with all applications')
-		]), 'warning');
+		ui.addNotification(null,
+			E('p', [_('The LuCI ACL management is in an experimental stage! It does not yet work reliably with all applications')]),
+			0,
+			'warning'
+		);
 
 		var has_uhttpd = data[0],
 		    known_unix_users = {};
