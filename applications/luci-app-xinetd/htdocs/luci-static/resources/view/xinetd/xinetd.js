@@ -175,7 +175,11 @@ return view.extend({
 					uci.set('xinetd', section, 'server', value);
 					return;
 				} else {
-					ui.addNotification(null, E('p', _('Service "%s": Invalid server file "%s"').format(section, value)), 'danger');
+					ui.addNotification(null,
+						E('p', _('Service "%s": Invalid server file "%s"').format(section, value)),
+						0,
+						'danger'
+					);
 				}
 			}).catch(function(err) {
 				ui.addNotification(null, E('p', _('Service "%s": No access to server file "%s" (%s)').format(section, value, err.message)), 'danger');
