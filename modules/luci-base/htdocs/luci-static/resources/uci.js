@@ -705,6 +705,40 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	},
 
 	/**
+	 * A special case of `get` that always returns either `true` or 
+	 * `false`.
+	 *
+	 * Many configuration files contain boolean settings, such as
+	 * `enabled` or `advanced_mode`, where there is no consistent
+	 * definition for the values.  This function allows users to
+	 * enter any of the values `"yes"`, `"on"`, `"true"` or `1` in
+	 * their config files and we return the expected boolean result.
+	 *
+	 * Character case is not significant, so for example, any of
+	 * "YES", "Yes" or "yes" will be interpreted as a `true` value.
+	 *
+	 * @param {string} conf
+	 * The name of the configuration to read.
+	 *
+	 * @param {string} sid
+	 * The name or ID of the section to read.
+	 *
+	 * @param {string} [opt]
+	 * The option name from which to read the value. If the option
+	 * name is omitted or `null`, the value `false` is returned.
+	 *
+	 * @returns {boolean}
+	 * - Returns boolean `true` if the configuration value is defined
+	 *   and looks like a true value, otherwise returns `false`.
+	 */
+	get_bool(conf, type, opt) {
+		let value = this.get(conf, type, opt);
+		if (typeof(value) == 'string')
+			return ['1', 'on', 'true', 'yes', 'enabled'].includes(value.toLowerCase());
+		return false;
+	},
+
+	/**
 	 * Sets the value of the given option within the first found section
 	 * of the given configuration matching the specified type or within
 	 * the first section of the entire config when no type has is specified.
