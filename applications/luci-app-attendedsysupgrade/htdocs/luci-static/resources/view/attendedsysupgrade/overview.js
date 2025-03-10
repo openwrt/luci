@@ -501,11 +501,6 @@ return view.extend({
 						break;
 					}
 
-					// skip branch upgrades outside the advanced mode
-					if (branch != remote_branch && advanced_mode == 0) {
-						continue;
-					}
-
 					candidates.unshift([remote_version, null]);
 
 					// don't offer branches older than the current
