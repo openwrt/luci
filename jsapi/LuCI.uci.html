@@ -2860,6 +2860,8 @@
             
                 <li data-name="LuCI.uci#get"><a href="LuCI.uci.html#get">get</a></li>
             
+                <li data-name="LuCI.uci#get_bool"><a href="LuCI.uci.html#get_bool">get_bool</a></li>
+            
                 <li data-name="LuCI.uci#get_first"><a href="LuCI.uci.html#get_first">get_first</a></li>
             
                 <li data-name="LuCI.uci#load"><a href="LuCI.uci.html#load">load</a></li>
@@ -4003,7 +4005,7 @@ to the given name for non-anonymous sections.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line940">line 940</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line974">line 974</a>
         </div>
         
     </div>
@@ -4165,7 +4167,7 @@ operation to cancel the rollback timer.</p>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line1020">line 1020</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line1054">line 1054</a>
         </div>
         
     </div>
@@ -4906,6 +4908,226 @@ found or if the corresponding configuration is not loaded.</li>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="get_bool">
+            
+            get_bool<span class="signature">(conf, sid, <span class="optional">opt</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line734">line 734</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>A special case of <code>get</code> that always returns either <code>true</code> or
+<code>false</code>.</p>
+<p>Many configuration files contain boolean settings, such as
+<code>enabled</code> or <code>advanced_mode</code>, where there is no consistent
+definition for the values.  This function allows users to
+enter any of the values <code>&quot;yes&quot;</code>, <code>&quot;on&quot;</code>, <code>&quot;true&quot;</code> or <code>1</code> in
+their config files and we return the expected boolean result.</p>
+<p>Character case is not significant, so for example, any of
+&quot;YES&quot;, &quot;Yes&quot; or &quot;yes&quot; will be interpreted as a <code>true</code> value.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>conf</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The name of the configuration to read.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>sid</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The name or ID of the section to read.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>opt</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The option name from which to read the value. If the option
+name is omitted or <code>null</code>, the value <code>false</code> is returned.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last"><ul>
+<li>Returns boolean <code>true</code> if the configuration value is defined
+and looks like a true value, otherwise returns <code>false</code>.</li>
+</ul></td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="get_first">
             
             get_first<span class="signature">(conf, <span class="optional">type</span>, <span class="optional">opt</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{null|string|Array.&lt;string>|<a href="LuCI.uci.html#.SectionObject">LuCI.uci.SectionObject</a>}</span>
@@ -5301,7 +5523,7 @@ that have been successfully loaded.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line795">line 795</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line829">line 829</a>
         </div>
         
     </div>
@@ -5887,7 +6109,7 @@ not be resolved to existing section ID.</td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line850">line 850</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line884">line 884</a>
         </div>
         
     </div>
@@ -6400,7 +6622,7 @@ with the given value.</p></td>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line731">line 731</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line765">line 765</a>
         </div>
         
     </div>
@@ -6906,7 +7128,7 @@ configuration.</p>
     
         
         <div class="tag-source">
-            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line760">line 760</a>
+            <a href="uci.js.html">uci.js</a>, <a href="uci.js.html#line794">line 794</a>
         </div>
         
     </div>
@@ -7640,7 +7862,7 @@ associated name as arguments.</p>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Mar 07 2025 13:24:26 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Mar 11 2025 14:06:32 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
