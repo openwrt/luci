@@ -2916,6 +2916,8 @@
             
                 <li data-name="LuCI.ui#addNotification"><a href="LuCI.ui.html#addNotification">addNotification</a></li>
             
+                <li data-name="LuCI.ui#addTimeLimitedNotification"><a href="LuCI.ui.html#addTimeLimitedNotification">addTimeLimitedNotification</a></li>
+            
                 <li data-name="LuCI.ui#addValidator"><a href="LuCI.ui.html#addValidator">addValidator</a></li>
             
                 <li data-name="LuCI.ui#awaitReconnect"><a href="LuCI.ui.html#awaitReconnect">awaitReconnect</a></li>
@@ -4062,6 +4064,269 @@ banner element.</p></td>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="addTimeLimitedNotification">
+            
+            addTimeLimitedNotification<span class="signature">(<span class="optional">title</span>, children, <span class="optional">timeout</span>, <span class="optional">classes</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Node}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3930">line 3930</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Add a time-limited notification banner at the top of the current view.</p>
+<p>A notification banner is an alert message usually displayed at the
+top of the current view, spanning the entire available width.
+Notification banners will stay in place until dismissed by the user, or
+it has expired.
+Multiple banners may be shown at the same time.</p>
+<p>Additional CSS class names may be passed to influence the appearance of
+the banner. Valid values for the classes depend on the underlying theme.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>title</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>The title of the notification banner. If <code>null</code>, no title element
+will be rendered.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>children</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The contents to add to the notification banner. This should be a DOM
+node or a document fragment in most cases. The value is passed as-is
+to the <code>dom.content()</code> function - refer to its documentation for
+applicable values.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>timeout</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">int</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>A millisecond value after which the notification will disappear
+automatically. If omitted, the notification will remain until it receives
+the click event.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>classes</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                        <span class="repeatable">repeatable</span>
+                    
+                
+                <p>A number of extra CSS class names which are set on the notification
+banner element.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li>LuCI.dom.content</li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Node
+                        
+                    
+            </td>
+            <td class="description last">Returns a DOM Node representing the notification banner element.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="addValidator">
             
             addValidator<span class="signature">(field, type, <span class="optional">optional</span>, <span class="optional">vfunc</span>, <span class="optional">events</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{function}</span>
@@ -4069,7 +4334,7 @@ banner element.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4997">line 4997</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5055">line 5055</a>
         </div>
         
     </div>
@@ -4383,7 +4648,7 @@ field validation manually or to bind it to further events.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4486">line 4486</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4544">line 4544</a>
         </div>
         
     </div>
@@ -4520,7 +4785,7 @@ default.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5047">line 5047</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5105">line 5105</a>
         </div>
         
     </div>
@@ -4746,7 +5011,7 @@ valid function value.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3977">line 3977</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4035">line 4035</a>
         </div>
         
     </div>
@@ -4970,7 +5235,7 @@ handler as-is without the need to bind it first.</p>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5088">line 5088</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5146">line 5146</a>
         </div>
         
     </div>
@@ -5122,7 +5387,7 @@ caught and rendered using <a href="LuCI.html#error"><code>LuCI.error()</code></a
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4020">line 4020</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4078">line 4078</a>
         </div>
         
     </div>
@@ -5364,7 +5629,7 @@ accepted by <code>LuCI.dom.content()</code>.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4460">line 4460</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4518">line 4518</a>
         </div>
         
     </div>
@@ -5567,7 +5832,7 @@ or rejecting with <code>null</code> when the connectivity check timed out.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3929">line 3929</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3987">line 3987</a>
         </div>
         
     </div>
@@ -6070,7 +6335,7 @@ element.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4338">line 4338</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4396">line 4396</a>
         </div>
         
     </div>
@@ -6428,7 +6693,7 @@ cancelled by the user.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Mar 11 2025 14:06:32 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Thu Mar 13 2025 22:07:00 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
