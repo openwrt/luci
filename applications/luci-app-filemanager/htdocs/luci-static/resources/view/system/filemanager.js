@@ -9,8 +9,12 @@
 'require view.system.filemanager.HexEditor as HE';
 
 
-function pop(a, message, timeout, severity) {
-	ui.addNotification(a, message, timeout, severity)
+function pop(a, message, severity) {
+	ui.addNotification(a, message, severity)
+}
+
+function popTimeout(a, message, timeout, severity) {
+	ui.addTimeLimitedNotification(a, message, timeout, severity)
 }
 
 // Initialize global variables
@@ -1397,7 +1401,7 @@ return view.extend({
 				if (statusInfo) {
 					statusInfo.textContent = _('File "%s" uploaded successfully.').format(file.name);
 				}
-				pop(null, E('p', _('File "%s" uploaded successfully.').format(file.name)), 5000, 'info');
+				popTimeout(null, E('p', _('File "%s" uploaded successfully.').format(file.name)), 5000, 'info');
 				uploadedFiles++;
 				uploadNextFile(index + 1);
 			}).catch(function(err) {
@@ -1458,7 +1462,7 @@ return view.extend({
 			if (res.code !== 0) {
 				return Promise.reject(new Error(res.stderr.trim()));
 			}
-			pop(null, E('p', _('Directory "%s" created successfully.').format(trimmedDirName)), 5000, 'info');
+			popTimeout(null, E('p', _('Directory "%s" created successfully.').format(trimmedDirName)), 5000, 'info');
 			self.loadFileList(currentPath).then(function() {
 				self.initResizableColumns();
 			});
@@ -1515,7 +1519,7 @@ return view.extend({
 			if (res.code !== 0) {
 				return Promise.reject(new Error(res.stderr.trim()));
 			}
-			pop(null, E('p', _('File "%s" created successfully.').format(trimmedFileName)), 5000, 'info');
+			popTimeout(null, E('p', _('File "%s" created successfully.').format(trimmedFileName)), 5000, 'info');
 			self.loadFileList(currentPath).then(function() {
 				self.initResizableColumns();
 			});
@@ -1614,7 +1618,7 @@ return view.extend({
 			}));
 		});
 		Promise.all(promises).then(function() {
-			pop(null, E('p', _('Selected files and directories deleted successfully.')), 5000, 'info');
+			popTimeout(null, E('p', _('Selected files and directories deleted successfully.')), 5000, 'info');
 			selectedItems.clear();
 			self.updateDeleteSelectedButton();
 			self.loadFileList(currentPath).then(function() {
@@ -2068,7 +2072,7 @@ return view.extend({
 
 		if (confirm(_('Are you sure you want to delete this %s: "%s"?').format(itemTypeLabel, itemName))) {
 			fs.remove(filePath).then(function() {
-				pop(null, E('p', _('Successfully deleted %s: "%s".').format(itemTypeLabel, itemName)), 5000, 'info');
+				popTimeout(null, E('p', _('Successfully deleted %s: "%s".').format(itemTypeLabel, itemName)), 5000, 'info');
 				self.loadFileList(currentPath).then(function() {
 					self.initResizableColumns();
 				});
@@ -2185,7 +2189,7 @@ return view.extend({
 				if (res.code !== 0) {
 					return Promise.reject(new Error(res.stderr.trim()));
 				}
-				pop(null, E('p', _('Successfully duplicated %s "%s" as "%s".').format(_('item'), fileInfo.name, newName)), 5000, 'info');
+				popTimeout(null, E('p', _('Successfully duplicated %s "%s" as "%s".').format(_('item'), fileInfo.name, newName)), 5000, 'info');
 				self.loadFileList(currentPath).then(function() {
 					self.initResizableColumns();
 				});
@@ -2279,7 +2283,7 @@ return view.extend({
 					if (statusInfo) {
 						statusInfo.textContent = _('File "%s" uploaded successfully.').format(fileName);
 					}
-					pop(null, E('p', _('File "%s" uploaded successfully.').format(fileName)), 5000, 'info');
+					popTimeout(null, E('p', _('File "%s" uploaded successfully.').format(fileName)), 5000, 'info');
 					return self.loadFileList(currentPath).then(function() {
 						self.initResizableColumns();
 					});
@@ -2290,7 +2294,7 @@ return view.extend({
 				if (statusInfo) {
 					statusInfo.textContent = _('File "%s" uploaded successfully.').format(fileName);
 				}
-				pop(null, E('p', _('File "%s" uploaded successfully.').format(fileName)), 5000, 'info');
+				popTimeout(null, E('p', _('File "%s" uploaded successfully.').format(fileName)), 5000, 'info');
 				return self.loadFileList(currentPath).then(function() {
 					self.initResizableColumns();
 				});
@@ -2481,7 +2485,7 @@ return view.extend({
 			});
 		});
 		promise.then(function() {
-			pop(null, E('p', _('Changes to %s "%s" uploaded successfully.').format(_('item'), newItemName)), 5000, 'info');
+			popTimeout(null, E('p', _('Changes to %s "%s" uploaded successfully.').format(_('item'), newItemName)), 5000, 'info');
 			self.loadFileList(currentPath).then(function() {
 				self.initResizableColumns();
 			});
@@ -2577,7 +2581,7 @@ return view.extend({
 			}
 
 			saveConfig().then(function() {
-				pop(null, E('p', _('Settings uploaded successfully.')), 5000, 'info');
+				popTimeout(null, E('p', _('Settings uploaded successfully.')), 5000, 'info');
 				self.setInitialColumnWidths();
 				var styleElement = document.querySelector('style');
 				if (styleElement) {
