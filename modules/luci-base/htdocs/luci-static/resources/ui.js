@@ -368,7 +368,7 @@ const UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
 			'id': this.options.id ? `widget.${this.options.id}` : null,
 			'name': this.options.name,
 			'type': 'text',
-			'class': this.options.password ? 'cbi-input-password' : 'cbi-input-text',
+			'class': `password-input ${this.options.password ? 'cbi-input-password' : 'cbi-input-text'}`,
 			'readonly': this.options.readonly ? '' : null,
 			'disabled': this.options.disabled ? '' : null,
 			'maxlength': this.options.maxlength,
@@ -384,8 +384,15 @@ const UITextfield = UIElement.extend(/** @lends LuCI.ui.Textfield.prototype */ {
 					'title': _('Reveal/hide password'),
 					'aria-label': _('Reveal/hide password'),
 					'click': function(ev) {
-						const e = this.previousElementSibling;
-						e.type = (e.type === 'password') ? 'text' : 'password';
+						// DOM manipulation (e.g. by password managers) may have inserted other
+						// elements between the reveal button and the input. This searches for
+						// the first <input> inside the parent of the <button> to use for toggle.
+						const e = this.parentElement.querySelector('input.password-input')
+						if (e) {
+							e.type = (e.type === 'password') ? 'text' : 'password';
+						} else {
+							console.error('unable to find input corresponding to reveal/hide button');
+						}
 						ev.preventDefault();
 					}
 				}, '∗')
