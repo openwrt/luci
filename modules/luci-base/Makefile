@@ -64,13 +64,13 @@ define Host/Configure
 endef
 
 define Host/Compile
-	$(MAKE) -C src/ clean po2lmo jsmin
+	$(MAKE) -C src/ clean po2lmo
 endef
 
 define Host/Install
 	$(INSTALL_DIR) $(1)/bin
 	$(INSTALL_BIN) src/po2lmo $(1)/bin/po2lmo
-	$(INSTALL_BIN) src/jsmin $(1)/bin/jsmin
+	$(INSTALL_BIN) src/rjsmin.py $(1)/bin/rjsmin
 endef
 
 $(eval $(call HostBuild))
