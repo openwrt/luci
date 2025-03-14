@@ -26,8 +26,10 @@ return view.extend({
 		o.optional = false;
 
 		o = s.option(form.Value, 'weight', _('Weight'),
-			_('When a weight is specified, instead of setting the vrrp_instance to the FAULT state in case of failure, ') +
-			_('its priority will be increased or decreased by the weight when the interface is up or down'));
+			_('When a weight is specified, instead of setting the' +
+			  'vrrp_instance to the FAULT state in case of failure, ' +
+			  'its priority will be increased or decreased by the ' +
+			  'weight when the interface is up or down'));
 		o.optional = false;
 		o.datatype = 'uinteger';
 

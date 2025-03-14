@@ -15,9 +15,11 @@ return view.extend({
 		var real_servers;
 
 		s = m.section(form.GridSection, 'virtual_server', _('Virtual Server'),
-			_('A virtual server is a service configured to listen on a specific virtual IP.') + '<br/>' +
-			_('A VIP address migrates from one LVS router to the other during a failover,') +
-			_('thus maintaining a presence at that IP address'));
+			_('A virtual server is a service configured to listen ' +
+			  'on a specific virtual IP.') + '<br/>' +
+			_('A VIP address migrates from one LVS router to the ' +
+			  'other during a failover, thus maintaining a presence ' +
+			  'at that IP address'));
 		s.anonymous = true;
 		s.addremove = true;
 		s.nodescriptions = true;

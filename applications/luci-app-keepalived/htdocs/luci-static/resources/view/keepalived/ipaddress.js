@@ -63,8 +63,9 @@ return view.extend({
 		}
 
 		s = m.section(form.GridSection, 'static_ipaddress', _('Static IP Addresses'),
-			_('Static Addresses are not moved by vrrpd, they stay on the machine.') + '<br/>' +
-			_('If your systems already have IPs and they can ping each other, you do not need this section'));
+			_('Static Addresses are not moved by vrrpd, they stay on the machine.') + ' ' +
+			_('If your systems already have IPs and they can ping ' +
+			  'each other, you do not need this section'));
 		s.anonymous = true;
 		s.addremove = true;
 		s.nodescriptions = true;
