@@ -311,7 +311,7 @@ return view.extend({
 				/* if channel_width <= 40, refer to HT (above) for actual channel width,
 				 * as vht_operation.channel_width == 40 really only means that the used
 				 * bandwidth is <= 40 and could be 20 Mhz as well */
-				if (res.vht_operation != null && res.vht_operation.channel_width > 40) {
+				if (res.vht_operation?.channel_width > 40) {
 					center_channels[0] = res.vht_operation.center_freq_1;
 					if (res.vht_operation.channel_width == 80) {
 						chan_width = 8;
@@ -340,6 +340,29 @@ return view.extend({
 						res.channel_width = "160 MHz";
 						chan_width = 16;
 					}
+				}
+
+				if (res.he_operation?.channel_width > 20) {
+					center_channels[0] = res.he_operation.center_freq_1;
+					chan_width = res.he_operation.channel_width / 10;
+					switch (res.he_operation.channel_width) {
+						case 40:
+							res.channel_width = "40 MHz";
+							break;
+						case 80:
+							res.channel_width = "80 MHz";
+							break;
+						case 160:
+							res.channel_width = "160 MHz";
+							center_channels.push(res.he_operation.center_freq_2);
+							break;
+					}
+				}
+
+				if (res.eht_operation?.channel_width == 320) {
+					chan_width = 32;
+					res.channel_width = "320 MHz";
+					center_channels.push(res.eht_operation.center_freq_2);
 				}
 
 				this.add_wifi_to_graph(chan_analysis, res, scanCache, center_channels, chan_width);
