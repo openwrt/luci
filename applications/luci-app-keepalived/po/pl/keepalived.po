@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-03-11 17:14+0000\n"
+"PO-Revision-Date: 2025-03-16 14:48+0000\n"
 "Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationskeepalived/pl/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11-dev\n"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:205
 msgid "2"
@@ -25,6 +25,8 @@ msgid ""
 "A VIP address migrates from one LVS router to the other during a failover, "
 "thus maintaining a presence at that IP address"
 msgstr ""
+"Adres VIP migruje z jednego routera LVS do drugiego podczas przełączania "
+"awaryjnego, dzięki czemu utrzymywana jest obecność pod tym adresem IP"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:46
 msgid "A server with a higher priority becomes a MASTER"
@@ -83,7 +85,7 @@ msgstr ""
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/script.js:57
 msgid "Adds a script to be executed periodically."
-msgstr ""
+msgstr "Dodaje skrypt, który będzie wykonywany okresowo."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/script.js:82
 msgid "Adjust script execution priority"
@@ -99,10 +101,12 @@ msgid ""
 "Allows the lower priority machine to maintain the master role, even when a "
 "higher priority machine comes back online."
 msgstr ""
+"Umożliwia komputerowi o niższym priorytecie zachowanie roli mastera, nawet "
+"gdy urządzenie o wyższym priorytecie powróci do sieci."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:25
 msgid "As soon as the other machine(s) come up, an election will be held."
-msgstr ""
+msgstr "Jak tylko pojawią się inne urządzenia, odbędą się wybory."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/peers.js:85
 msgid "Authorize ssh public key of peer"
@@ -262,7 +266,7 @@ msgstr "Zapora fwmark. Użyj serwera wirtualnego z FWMARK"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:248
 msgid "For cases with large numbers (eg 200) of IPs on the same interface."
-msgstr ""
+msgstr "W przypadku dużej liczby (np. 200) adresów IP na tym samym interfejsie."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:66
 msgid "For this to work, the initial state of this entry must be BACKUP."
@@ -441,7 +445,7 @@ msgstr "Stan początkowy"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:24
 msgid "Initial State."
-msgstr ""
+msgstr "Stan początkowy."
 
 #: applications/luci-app-keepalived/root/usr/share/luci/menu.d/luci-app-keepalived.json:78
 msgid "Instance"
@@ -491,6 +495,8 @@ msgid ""
 "Its exit code will be recorded for all VRRP instances and sync groups which "
 "are monitoring it"
 msgstr ""
+"Jego kod wyjścia zostanie zarejestrowany dla wszystkich instancji VRRP i "
+"grup synchronizacji, które go monitorują"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:11
 msgid "Keepalived Global Settings"
@@ -555,7 +561,7 @@ msgstr "Źródłowy adres IP multicastu"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/peers.js:68
 msgid "Must be same on Master/Backup"
-msgstr ""
+msgstr "Musi być taka sama na Masterze/Zapasowym"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/ipaddress.js:24
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/overview.js:25
@@ -632,8 +638,8 @@ msgid ""
 "Peers can be referenced into Instances cluster and data/config "
 "synchronization"
 msgstr ""
-"Węzły (Peers) mogą być używane w klastrze instancji oraz do synchronizacji "
-"danych/konfiguracji."
+"Węzły (peers) mogą być używane w klastrze instancji oraz do synchronizacji "
+"danych/konfiguracji"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:93
 msgid "Persist Granularity"
@@ -811,6 +817,8 @@ msgstr "Wyślij powiadomienie e-mail podczas zmiany stanu"
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:185
 msgid "Send/Recv VRRP messages from base interface instead of VMAC interface"
 msgstr ""
+"Wysyłaj/odbieraj komunikaty VRRP z interfejsu bazowego zamiast interfejsu "
+"VMAC"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/peers.js:54
 msgid "Sender"
@@ -818,7 +826,7 @@ msgstr "Nadawca"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/peers.js:67
 msgid "Sender will send files to this location of receiver."
-msgstr ""
+msgstr "Nadawca będzie wysyłał pliki do tej lokalizacji odbiorcy."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:45
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:147
@@ -919,7 +927,7 @@ msgstr "Cel/Miejsce docelowe"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:26
 msgid "The machine with the highest \"priority\" will become MASTER."
-msgstr ""
+msgstr "MASTER będzie urządzeniem z najwyższym „priorytetem”."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_sync_group.js:27
 msgid ""
@@ -927,6 +935,9 @@ msgid ""
 "together so that transition of one instance will be reflected to others "
 "group members"
 msgstr ""
+"Głównym celem jest ustalenie pakietu instancji VRRP, aby umożliwić ich "
+"synchronizację, tak aby przejście jednej instancji było odzwierciedlone u "
+"innych członków grupy"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/overview.js:78
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/status/include/35_keepalived.js:76
@@ -1059,7 +1070,7 @@ msgstr "Interwał rozgłaszania VRRP w sekundach"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:247
 msgid "VRRP IP excluded from VRRP."
-msgstr ""
+msgstr "Adres IP VRRP wykluczony z VRRP."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:291
 msgid "VRRP Instance"
@@ -1147,6 +1158,9 @@ msgid ""
 "state in case of failure, its priority will be increased or decreased by the "
 "weight when the interface is up or down"
 msgstr ""
+"Gdy określona jest waga, zamiast przestawiać instancję VRRP w stan BŁĘDU w "
+"przypadku awarii, jej priorytet zostanie zwiększony lub zmniejszony o wagę, "
+"gdy interfejs jest włączony lub wyłączony"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:73
 msgid ""
