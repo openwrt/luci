@@ -3084,7 +3084,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 				i ? ' » ' : '',
 				E('a', {
 					'href': '#',
-					'click': UI.prototype.createHandlerFn(this, 'handleSelect', cur ?? '/', null)
+					'click': UI.prototype.createHandlerFn(this, 'handleSelect', '/' + cur, null)
 				}, dirs[i] != '' ? '%h'.format(dirs[i]) : E('em', '(root)')),
 			]);
 		}
