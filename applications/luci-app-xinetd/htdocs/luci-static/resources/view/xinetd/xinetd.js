@@ -34,6 +34,7 @@ return view.extend({
 		s.tabbed = true;
 		s.anonymous = true;
 		s.addremove = true;
+		s.nodescriptions = true;
 		s.addbtntitle = _('Add new service entry');
 
 		// The following dummy values are used to show the table overview without the hint texts
