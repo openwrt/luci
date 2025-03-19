@@ -87,23 +87,22 @@ return view.extend({
 		let changes, target_revision;
 
 		await Promise.all([
-			request.get(overview_url).then(
-				(response) => {
-					let json = response.json();
-					changes = json.branches[get_branch(version)].package_changes;
-				},
-				(failed) => {
-					ui.addNotification(null, E('p', _(`Get overview failed ${failed}`)));
-				}
-			),
-			request.get(revision_url).then(
-				(response) => {
-					target_revision = get_revision_count(response.json().revision);
-				},
-				(failed) => {
-					ui.addNotification(null, E('p', _(`Get revision failed ${failed}`)));
-				}
-			),
+			request.get(overview_url)
+				.then(response => response.json())
+				.then(json => json.branches)
+				.then(branches => branches[get_branch(version)])
+				.then(branch => { changes = branch.package_changes; })
+				.catch(error => {
+					throw Error(`Get overview failed:<br>${overview_url}<br>${error}`);
+				}),
+
+			request.get(revision_url)
+				.then(response => response.json())
+				.then(json => json.revision)
+				.then(revision => { target_revision = get_revision_count(revision); })
+				.catch(error => {
+					throw Error(`Get revision failed:<br>${revision_url}<br>${error}`);
+				}),
 		]);
 
 		for (const change of changes) {
@@ -595,6 +594,10 @@ return view.extend({
 												}, this);
 												poll.add(this.pollFn, 5);
 												poll.start();
+											})
+											.catch(error => {
+											    ui.addNotification(null, E('p', error.message));
+											    ui.hideModal();
 											});
 										});
 									}),
