@@ -16,8 +16,6 @@ return view.extend({
 		return fs.write('/etc/keepalived.user', value).then(function(rc) {
 			document.querySelector('textarea').value = value;
 			ui.addNotification(null, E('p', _('Contents have been saved.')), 'info');
-
-			return fs.exec('/etc/init.d/keepalived', [ 'reload' ]);
 		}).catch(function(e) {
 			ui.addNotification(null, E('p', _('Unable to save contents: %s').format(e.message)));
 		});
