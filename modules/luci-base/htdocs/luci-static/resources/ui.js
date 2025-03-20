@@ -2876,10 +2876,10 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 
 	/** @private */
 	canonicalizePath(path) {
-		return path.replace(/\/{2,}/, '/')
-			.replace(/\/\.(\/|$)/g, '/')
-			.replace(/[^\/]+\/\.\.(\/|$)/g, '/')
-			.replace(/\/$/, '');
+	return path.replace(/\/{2,}/g, '/')                // Collapse multiple slashes
+				.replace(/\/\.(\/|$)/g, '/')           // Remove `/.`
+				.replace(/[^\/]+\/\.\.(\/|$)/g, '/')   // Resolve `/..`
+				.replace(/\/$/g, (m, o, s) => s.length > 1 ? '' : '/'); // Remove trailing `/` only if not root
 	},
 
 	/** @private */
@@ -2890,10 +2890,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		if (cpath.length <= croot.length)
 			return [ croot ];
 
-		if (cpath.charAt(croot.length) != '/')
-			return [ croot ];
-
-		const parts = cpath.substring(croot.length + 1).split(/\//);
+		const parts = cpath.substring(croot.length).split(/\//);
 
 		parts.unshift(croot);
 
@@ -3078,13 +3075,13 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		let cur = '';
 
 		for (let i = 0; i < dirs.length; i++) {
-			cur = cur ? `${cur}/${dirs[i]}` : dirs[i];
+			cur += dirs[i];
 			dom.append(breadcrumb, [
 				i ? ' » ' : '',
 				E('a', {
 					'href': '#',
 					'click': UI.prototype.createHandlerFn(this, 'handleSelect', cur ?? '/', null)
-				}, dirs[i] != '' ? '%h'.format(dirs[i]) : E('em', '(root)')),
+				}, dirs[i] !== '/' ? '%h'.format(dirs[i]) : E('em', '(root)')),
 			]);
 		}
 
