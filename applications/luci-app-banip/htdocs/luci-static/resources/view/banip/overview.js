@@ -43,7 +43,7 @@ return view.extend({
 		/*
 			poll runtime information
 		*/
-		let buttons, rtRes, infStat, infVer, infElements, infFeeds, infDevices, infUplink, infSystem, nftInfos, runInfos, infFlags, last_run
+		let buttons, rtRes, infStat, infVer, infElements, infFeeds, infDevices, infUplink, infSys, infNft, infRun, infFlags, infLast
 
 		pollData: poll.add(function () {
 			return L.resolveDefault(fs.stat('/var/run/banip.lock')).then(function (stat) {
@@ -90,7 +90,7 @@ return view.extend({
 								} else if (rtRes[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)) {
 									rtRes.lastRun = rtRes[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)[1];
 								} else if (rtRes[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)) {
-									rtRes.systemInfo = rtRes[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)[1];
+									rtRes.sysInfo = rtRes[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)[1];
 								}
 							}
 						}
@@ -119,21 +119,25 @@ return view.extend({
 							if (infUplink) {
 								infUplink.textContent = rtRes.activeUplink || '-';
 							}
-							nftInfos = document.getElementById('nft');
-							if (nftInfos) {
-								nftInfos.textContent = rtRes.nftInfo || '-';
+							infNft = document.getElementById('nft');
+							if (infNft) {
+								infNft.textContent = rtRes.nftInfo || '-';
 							}
-							runInfos = document.getElementById('run');
-							if (runInfos) {
-								runInfos.textContent = rtRes.runInfo || '-';
+							infRun = document.getElementById('run');
+							if (infRun) {
+								infRun.textContent = rtRes.runInfo || '-';
 							}
 							infFlags = document.getElementById('flags');
 							if (infFlags) {
 								infFlags.textContent = rtRes.runFlags || '-';
 							}
-							last_run = document.getElementById('last');
-							if (last_run) {
-								last_run.textContent = rtRes.lastRun || '-';
+							infLast = document.getElementById('last');
+							if (infLast) {
+								infLast.textContent = rtRes.lastRun || '-';
+							}
+							infSys = document.getElementById('sys');
+							if (infSys) {
+								infSys.textContent = rtRes.sysInfo || '-';
 							}
 						}
 					} else {
@@ -197,6 +201,10 @@ return view.extend({
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Last Run')),
 					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('System Info')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'sys', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				])
 			]);
 		}, o, this);
 		this.pollData;
@@ -408,13 +416,13 @@ return view.extend({
 
 		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Threshold'), _('ICMP-Threshold in packets per second to prevent WAN-DoS attacks. To disable this safeguard set it to \'0\'.'));
 		o.value('0');
-		o.value('10');
+		o.value('25');
 		o.value('50');
 		o.value('100');
 		o.value('250');
 		o.value('500');
 		o.value('1000');
-		o.default = '10';
+		o.default = '25';
 		o.placeholder = _('-- default --');
 		o.create = true;
 		o.optional = true;
@@ -615,11 +623,11 @@ return view.extend({
 		o.value('Exit before auth from', _('dropbear failed login'));
 		o.value('luci: failed login', _('LuCI failed login'));
 		o.value('error: maximum authentication attempts exceeded', _('sshd failed login'));
-		o.value('sshd.*Connection closed by.*\[preauth\]', _('sshd closed connection'));
-		o.value('SecurityEvent=\"InvalidAccountID\".*RemoteAddress=', _('asterisk invalid account'));
-		o.value('received a suspicious remote IP \'.*\'', _('nginx suspicious IP'));
-		o.value('TLS Error: could not determine wrapping from \[AF_INET\]', _('openvpn TLS error'));
-		o.value('AdGuardHome.*\[error\].*/control/login: from ip', _('AdGuardHome login error'));
+		o.value('sshd.*Connection closed by.*\\[preauth\\]', _('sshd closed connection'));
+		o.value('SecurityEvent=\\"InvalidAccountID\\".*RemoteAddress=', _('asterisk invalid account'));
+		o.value('received a suspicious remote IP .*', _('nginx suspicious IP'));
+		o.value('TLS Error: could not determine wrapping from \\[AF_INET\\]', _('openvpn TLS error'));
+		o.value('AdGuardHome.*\\[error\\].*/control/login: from ip', _('AdGuardHome login error'));
 		o.optional = true;
 		o.rmempty = true;
 

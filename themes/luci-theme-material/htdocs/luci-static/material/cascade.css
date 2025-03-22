@@ -1586,6 +1586,14 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	color: var(--main-menu-color);
 }
 
+.cbi-dropdown.btn.cbi-button.cbi-button-positive.important > ul > li[display] {
+	color: var(--white-color);
+}
+
+.cbi-dropdown[open] > ul.dropdown > li[tabindex] {
+	color: var(--black-color) !important;
+}
+
 .cbi-dropdown > ul > li[display],
 .cbi-dropdown[open] > ul.preview,
 .cbi-dropdown[open] > ul.dropdown > li,
@@ -1618,6 +1626,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 
 .cbi-dropdown[open] > ul.dropdown > li[selected] {
 	background: #b0d0f0;
+	color: var(--black-color);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li.focus,
@@ -1628,6 +1637,7 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .cbi-dropdown[open] > ul.dropdown > li:last-child {
 	margin-bottom: 0;
 	border-bottom: 0;
+	color: var(--black-color);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li[unselectable] {
@@ -1774,13 +1784,14 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 .modal .button-row {
 	display: flex;
 	justify-content: space-between;
+	flex-wrap: wrap;
 }
 
-.modal .button-row > :not(:last-child) {
+.modal .button-row > button:not(:first-of-type) {
 	margin-right: .5em;
 }
 
-.modal .button-row > :first-child {
+.modal .button-row > button:first-of-type {
 	margin-right: auto;
 }
 

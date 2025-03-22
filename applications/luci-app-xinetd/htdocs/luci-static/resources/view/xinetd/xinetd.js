@@ -34,6 +34,7 @@ return view.extend({
 		s.tabbed = true;
 		s.anonymous = true;
 		s.addremove = true;
+		s.nodescriptions = true;
 		s.addbtntitle = _('Add new service entry');
 
 		// The following dummy values are used to show the table overview without the hint texts
@@ -159,15 +160,25 @@ return view.extend({
 		o.rmempty = false;
 		o.modalonly = true;
 
+		o = s.taboption('basic', form.Flag, '_redirect', _('Use redirect'));
+		o.modalonly = true;
+		o.load = function(section_id) {
+			var redirect = uci.get(this.config, section_id, 'redirect');
+			return redirect ? 1 : 0
+		};
+		o.write = function(section_id, formvalue) {};
+
 		o = s.taboption('basic', form.Value, 'redirect', _('Redirect'), _('Redirect incoming TCP requests to this IP address:port.'));
 		o.datatype = 'ipaddrport(1)';
+		o.rmempty = false;
 		o.modalonly = true;
+		o.depends('_redirect', '1');
 
 		o = s.taboption('basic', form.Value, 'server', _('Server'), _('Complete path to the executable server file'));
 		o.datatype = 'string';
 		o.rmempty = false;
 		o.modalonly = true;
-		o.depends('type', 'UNLISTED');
+		o.depends({ 'type': 'UNLISTED', '_redirect': '0' });
 		o.validate = validateEmpty;
 		o.write = function(section, value) {
 			return fs.stat(value).then(function(res) {
@@ -186,7 +197,7 @@ return view.extend({
 		o = s.taboption('basic', form.Value, 'server_args', _('Server arguments'), _('Additional arguments passed to the server. There is no validation of this input.'));
 		o.datatype = 'string';
 		o.modalonly = true;
-		o.depends('type', 'UNLISTED');
+		o.depends({ 'type': 'UNLISTED', '_redirect': '0' });
 
 		// Advanced settings
 		o = s.taboption('advanced', widgets.UserSelect, 'user', _('User (UID)'), _('User ID for the server process for this service'));

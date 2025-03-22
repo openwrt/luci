@@ -21,8 +21,9 @@ return view.extend({
 		o.optional = false;
 
 		o = s.taboption('general', form.ListValue, 'state', _('State'),
-			_('Initial State. As soon as the other machine(s) come up,') +
-			_('an election will be held and the machine with the highest "priority" will become MASTER.'));
+			_('Initial State.') + ' ' +
+			_('As soon as the other machine(s) come up, an election will be held.') + ' ' +
+			_('The machine with the highest "priority" will become MASTER.'));
 		o.value('MASTER', _('Master'));
 		o.value('BACKUP', _('Backup'));
 		o.optional = false;
@@ -61,8 +62,7 @@ return view.extend({
 		o.value('60');
 
 		o = s.taboption('general', form.Flag, 'nopreempt', _('Disable Preempt'),
-			_('Allows the lower priority machine to maintain the master role,') +
-			_('even when a higher priority machine comes back online.') + ' ' +
+			_('Allows the lower priority machine to maintain the master role, even when a higher priority machine comes back online.') + ' ' +
 			_('For this to work, the initial state of this entry must be BACKUP.'));
 		o.optional = true;
 		o.default = false;
@@ -182,7 +182,7 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.Flag, 'vmac_xmit_base', _('Use VMAC Base'),
-			_('Send/Recv VRRP messages from base interface instead of VMAC interfac'));
+			_('Send/Recv VRRP messages from base interface instead of VMAC interface'));
 		o.default = false;
 		o.optional = true;
 		o.modalonly = true;
@@ -244,7 +244,8 @@ return view.extend({
 		scripts = uci.sections('keepalived', 'track_script');
 
 		o = s.taboption('tracking', form.DynamicList, 'virtual_ipaddress_excluded', _('Exclude Virtual IP Address'),
-			_('VRRP IP excluded from VRRP. For cases with large numbers (eg 200) of IPs on the same interface.') + ' ' +
+			_('VRRP IP excluded from VRRP.') + ' ' +
+			_('For cases with large numbers (eg 200) of IPs on the same interface.') + ' ' +
 			_('To decrease the number of packets sent in adverts, you can exclude most IPs from adverts.'));
 		o.modalonly = true;
 		if (ipaddress != '') {

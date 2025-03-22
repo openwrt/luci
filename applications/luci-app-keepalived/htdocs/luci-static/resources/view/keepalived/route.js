@@ -69,8 +69,9 @@ return view.extend({
 		}
 
 		s = m.section(form.GridSection, 'static_routes', _('Static Routes'),
-			_('Static Routes are not moved by vrrpd, they stay on the machine.') + '<br/>' +                             
-			_('If you already have routes on your machines and your machines can ping each other, you don\'t need this section'));
+			_('Static Routes are not moved by vrrpd, they stay on the machine.') + '<br/>' +
+			_('If you already have routes on your machines and ' +
+			  'your machines can ping each other, you don\'t need this section'));
 		s.anonymous = true;
 		s.addremove = true;
 		s.nodescriptions = true;
