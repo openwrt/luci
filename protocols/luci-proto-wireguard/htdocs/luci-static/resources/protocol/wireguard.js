@@ -724,12 +724,12 @@ return network.registerProtocol('wireguard', {
 				var hostnames = [];
 
 				uci.sections('ddns', 'service', function(s) {
-					if (typeof(s.lookup_host) == 'string' && s.enabled == '1')
+					if (typeof(s?.lookup_host) == 'string' && s?.enabled == '1')
 						hostnames.push(s.lookup_host);
 				});
 
 				uci.sections('system', 'system', function(s) {
-					if (typeof(s.hostname) == 'string' && s.hostname.indexOf('.') > 0)
+					if (typeof(s?.hostname) == 'string' && s?.hostname?.indexOf('.') > 0)
 						hostnames.push(s.hostname);
 				});
 
