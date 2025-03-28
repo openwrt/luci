@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-03-25 13:58+0000\n"
+"PO-Revision-Date: 2025-03-28 20:32+0000\n"
 "Last-Translator: 翻譯得真好下次別翻了 <x86_64-pc-linux-gnu@proton.me>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsocserv/zh_Hant/>\n"
@@ -28,7 +28,7 @@ msgstr "活躍的用戶"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:74
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:64
 msgid "AnyConnect client compatibility"
-msgstr "活躍的客戶端兼容性"
+msgstr "AnyConnect用戶端相容性"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/users.lua:17
 msgid "Available users"
@@ -71,7 +71,7 @@ msgstr "編輯範本"
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:80
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:85
 msgid "Edit the template that is used for generating the ocserv configuration."
-msgstr "編輯用於生成ocserv配置的模板。"
+msgstr "編輯用於生成ocserv配置的範本。"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:70
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:60
@@ -83,7 +83,7 @@ msgstr "啟用UDP"
 msgid ""
 "Enable UDP channel support; this must be enabled unless you know what you "
 "are doing"
-msgstr "啟用UDP通道支持；除非您知道自己在做什麼，否則必須啟用它"
+msgstr "啟用UDP通道支援；除非您知道自己在做什麼，否則必須啟用它"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:66
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:67
@@ -187,7 +187,7 @@ msgid ""
 "network in LAN covering 192.168.1.0/24 use 192.168.1.192/26 to reserve the "
 "upper 62 addresses."
 msgstr ""
-"從區域網路的子網路向客戶端提供位址；如果啟用，則下面的網路必須是區域網路的子"
+"從區域網路的子網路向用戶端提供位址；如果啟用，則下面的網路必須是區域網路的子"
 "網。請注意，指定子網路的第一個位址將由ocserv保留，因此不應使用。如果區域網路"
 "中的網路覆蓋192.168.1.0/24，請使用192.168.1.192/26保留前62個地址。"
 
@@ -211,27 +211,27 @@ msgstr "狀態"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:112
 msgid "The DNS servers to be provided to clients; can be either IPv6 or IPv4"
-msgstr "提供給客戶端的DNS伺服器；可以是IPv6或IPv4"
+msgstr "提供給用戶端的DNS伺服器；可以是IPv6或IPv4"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:133
 msgid ""
 "The DNS servers to be provided to clients; can be either IPv6 or IPv4. "
 "Typically you should include the address of this device"
-msgstr "提供給客戶端的DNS伺服器；可以是IPv6或IPv4。通常您應包括此設備的位址"
+msgstr "提供給用戶端的DNS伺服器；可以是IPv6或IPv4。通常您應包括此裝置的位址"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:111
 msgid ""
 "The IPv4 subnet address to provide to clients; this should be some private "
 "network different than the LAN addresses unless proxy ARP is enabled. Leave "
 "empty to attempt auto-configuration."
-msgstr "提供給客戶端的IPv4子網位址；除非啟用了代理ARP，否則這應該是不同於LAN位址的某"
+msgstr "提供給用戶端的IPv4子網位址；除非啟用了代理ARP，否則這應該是不同於LAN位址的某"
 "些專用網路。留空以嘗試自動配置。"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:125
 msgid ""
 "The IPv6 subnet address to provide to clients; leave empty to attempt auto-"
 "configuration."
-msgstr "提供給客戶端的IPv6子網位址；留空以嘗試自動配置。"
+msgstr "提供給用戶端的IPv6子網位址；留空以嘗試自動配置。"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:63
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:57
@@ -248,7 +248,7 @@ msgstr "用戶的身份驗證方法。最簡單的是使用單個用戶名-密�
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:45
 msgid "The firewall zone that the VPN clients will be set to"
-msgstr "VPN客戶端將設定到的防火牆區域"
+msgstr "VPN用戶端將設定到的防火牆區域"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:116
 msgid "The mask of the subnet above."
@@ -260,7 +260,8 @@ msgid ""
 "The routing table to be provided to clients; you can mix IPv4 and IPv6 "
 "routes, the server will send only the appropriate. Leave empty to set a "
 "default route"
-msgstr "提供給客戶端的路由表；您可以混合使用IPv4和IPv6路由，伺服器將僅發送適當的路由。留空以設定預設路由"
+msgstr "提供給用戶端的路由表；您可以混合使用IPv4和IPv6路由，伺服器將僅發送適當的路由"
+"。留空以設定預設路由"
 
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/main.lua:57
 #: applications/luci-app-ocserv/luasrc/model/cbi/ocserv/user-config.lua:51
@@ -271,7 +272,7 @@ msgstr "將採用相同的UDP和TCP埠號"
 msgid ""
 "The value to be communicated to the client to verify the server's "
 "certificate; this value only depends on the public key"
-msgstr "要傳達給客戶端以驗證伺服器憑證的值；該值僅取決於公鑰"
+msgstr "要傳達給用戶端以驗證伺服器憑證的值；該值僅取決於公鑰"
 
 #: applications/luci-app-ocserv/luasrc/view/ocserv_status.htm:41
 msgid "There are no active users."
@@ -329,4 +330,4 @@ msgstr "VPN IP位址"
 msgid ""
 "View the CA certificate used by this server. You will need to save it as 'ca."
 "pem' and import it into the clients."
-msgstr "查看該伺服器使用的CA憑證。您將需要將其另存為“ ca.pem”並將其匯入客戶端。"
+msgstr "查看該伺服器使用的CA憑證。您將需要將其另存為“ ca.pem”並將其匯入用戶端。"

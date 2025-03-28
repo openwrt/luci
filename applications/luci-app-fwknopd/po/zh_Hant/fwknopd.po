@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-03-25 13:58+0000\n"
+"PO-Revision-Date: 2025-03-28 20:32+0000\n"
 "Last-Translator: 翻譯得真好下次別翻了 <x86_64-pc-linux-gnu@proton.me>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsfwknopd/zh_Hant/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 msgid ""
 "Allow SPA clients to request access to services through an iptables firewall "
 "instead of just to it."
-msgstr "容許 SPA 客戶端請求通過 iptables 防火牆存取服務，而不僅僅是被攔截。"
+msgstr "允許SPA用戶端請求通過iptables防火牆存取服務，而非被攔截。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:599
 msgid "Allow SPA clients to request forwarding destination by DNS name."
@@ -37,11 +37,11 @@ msgstr "關閉"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:481
 msgid "Custom configuration"
-msgstr "自定義配置"
+msgstr "自訂配置"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:411
 msgid "Custom configuration read from /etc/fwknop/access.conf."
-msgstr "自定義配置從/etc/fwknop/access.conf中讀取。"
+msgstr "從/etc/fwknop/access.conf中讀取自訂配置。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:577
 msgid ""
@@ -91,16 +91,14 @@ msgstr ""
 msgid ""
 "Define the symmetric key (in Base64 encoding) used for decrypting an "
 "incoming SPA packet that is encrypted by the fwknop client with Rijndael."
-msgstr ""
-"定義對稱金鑰（採用Base64編碼），該對稱金鑰用於解密由fwknop客戶端使用Rijndael"
-"加密的傳入SPA封包。"
+msgstr "定義對稱金鑰 "
+"(Base64編碼)，用於解密由fwknop用戶端使用Rijndael加密的傳入SPA封包。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:528
 msgid ""
 "Define the symmetric key used for decrypting an incoming SPA packet that is "
 "encrypted by the fwknop client with Rijndael."
-msgstr ""
-"定義 Rijndael 對稱金鑰，將用於解密由 fwknop 客戶端傳入的加密 SPA 資料包。"
+msgstr "定義Rijndael對稱金鑰，用於解密由fwknop用戶端傳入的加密SPA封包。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:476
 msgid "Enable Uci/Luci control"
@@ -128,9 +126,9 @@ msgid ""
 "resolve the external address (if the client behind a NAT) or the client must "
 "know the external IP and set it via the -a argument."
 msgstr ""
-"強制所有 SPA 資料包在加密資料中包含真實 IP 位址。這使得無法在 fwknop 客戶端命"
-"令行上使用 -s 指令列引數，因此 -R 必須用於自動解析外部位址（如果 NAT 後面的客"
-"戶端）,或客戶端必須通過 -a 引數知道外部 IP。"
+"強制所有SPA封包在加密資料中包含真實IP位址。這使得fwknop用戶端無法在命令列上使"
+"用-s引數，因此-R必須用於自動解析外部位址 (如果客戶端在NAT後方) "
+"或用戶端必須使用-a引數知道外部IP。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid "Generate Keys"
@@ -147,8 +145,8 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
-"生成用於解密傳入SPA封包的對稱金鑰，該對稱金鑰由fwknop客戶端使用Rijndael區塊密"
-"碼進行加密，以及生成HMAC身份驗證金鑰，用於在解密該SPA消息之前驗證傳入SPA封包"
+"生成用於解密傳入SPA封包的對稱金鑰，該對稱金鑰由fwknop用戶端使用Rijndael區塊密"
+"碼進行加密，以及生成HMAC身份驗證金鑰，用於在解密該SPA訊息之前驗證傳入SPA封包"
 "的真實性。"
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
@@ -171,7 +169,7 @@ msgstr "載入中…"
 msgid ""
 "Maximum age in seconds that an SPA packet will be accepted. Defaults to 120 "
 "seconds."
-msgstr "SPA封包將被接受的最大期限（以秒為單位）。默認為120秒。"
+msgstr "SPA封包將被接受的最長時限 (以秒為單位)。預設為120秒。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid "Network"
@@ -212,7 +210,7 @@ msgstr "顯示access.conf QR二維條碼"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:597
 msgid "Specify the ethernet interface on which fwknopd will sniff packets."
-msgstr "指定 fwknopd 將要嗅探資料包的乙太網介面。"
+msgstr "指定fwknopd將要嗅探封包的乙太網路介面。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:443
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:449
@@ -229,8 +227,8 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
-"SPA封包將被接受的目標位址。如果有效的SPA封包應遵循任何目標IP，則也接受字符串“"
-" ANY”。應該以CIDR表示法指定網路（例如 “ 192.168.10.0/"
+"SPA封包將被接受的目標位址。如果有效的SPA封包應遵循任何目標IP，則也接受字串“ "
+"ANY”。應該以CIDR表示法指定網路（例如 “ 192.168.10.0/"
 "24”），也可以指定單個IP地址。多個條目以逗號分隔。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
@@ -249,9 +247,9 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
-"將接受SPA封包的來源位址。如果應該從任何來源IP接受有效的SPA封包，則也接受字符“"
-"ANY”。應該以CIDR表示法指定網路（例如“ 192.168.10.0/"
-"24”），也可以指定單個IP地址。多個條目以逗號分隔。"
+"將接受SPA封包的來源位址。如果應該從任何來源IP接受有效的SPA封包，則也接受字元“"
+"ANY”。應該以CIDR表示法指定網路 (例如“ 192.168.10.0/"
+"24”)，也可以指定單個IP位址。多個條目以逗號分隔。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:510
 msgid "The source address has to be specified."
@@ -271,9 +269,9 @@ msgid ""
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
-"這指示 fwknopd 接受包含在授權封包中的完整命令。任何這樣的命令都將在 fwknopd "
-"伺服器上以「CMD_EXEC_USER」指定的使用者或啟動 fwknopd 的使用者 (如果沒有設定"
-"的話) 的身份執行。"
+"這指示fwknopd接受包含在授權封包中的完整指令。任何這樣的指令都將在fwknopd伺服"
+"器上以「CMD_EXEC_USER」指定的使用者或啟動fwknopd的使用者 (如果沒有設定的話) "
+"的身份執行。"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid ""
