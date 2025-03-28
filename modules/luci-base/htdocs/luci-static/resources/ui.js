@@ -3650,6 +3650,10 @@ const UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 	}
 });
 
+// Because the menu can depend on uci values, we need to flush the cache
+// after uci mutations.
+document.addEventListener('uci-applied', () => UIMenu.flushCache());
+
 /**
  * @class ui
  * @memberof LuCI
