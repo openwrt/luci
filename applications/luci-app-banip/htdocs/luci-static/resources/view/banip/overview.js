@@ -275,7 +275,6 @@ return view.extend({
 		o.value('uclient-fetch');
 		o.value('wget');
 		o.value('curl');
-		o.value('aria2c');
 		o.optional = true;
 		o.retain = true;
 
@@ -485,6 +484,11 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_set', form.Flag, 'ban_nftcount', _('Set Element Counter'), _('Enable nft counter for every Set element.'));
+		o.rmempty = true;
+
+		o = s.taboption('adv_set', form.Flag, 'ban_map', _('Enable GeoIP Map'), _('Enable a GeoIP Map with suspicious Set elements. This requires external requests to get the map tiles and geolocation data.'));
+		o.depends('ban_nftcount', '1');
+		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_set', form.ListValue, 'ban_blockpolicy', _('Inbound Block Policy'), _('Drop packets silently or actively reject Inbound traffic.'));
