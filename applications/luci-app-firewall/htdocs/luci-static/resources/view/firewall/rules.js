@@ -192,19 +192,14 @@ return view.extend({
 		};
 
 		s.handleAdd = function(ev) {
-			var config_name = this.uciconfig || this.map.config,
-			    section_id = uci.add(config_name, this.sectiontype),
-			    opt1 = this.getOption('src'),
-			    opt2 = this.getOption('dest');
+			const config_name = this.uciconfig || this.map.config;
+			const section_id = uci.add(config_name, this.sectiontype);
 
-			opt1.default = 'wan';
-			opt2.default = 'lan';
+			uci.set(config_name, section_id, 'src', 'wan');
+			uci.set(config_name, section_id, 'dest', 'lan');
 
-			this.addedSection = section_id;
+			m.addedSection = section_id;
 			this.renderMoreOptionsModal(section_id);
-
-			delete opt1.default;
-			delete opt2.default;
 		};
 
 		o = s.taboption('general', form.Value, 'name', _('Name'));
