@@ -152,6 +152,8 @@ function render_network_status(radioNet) {
 }
 
 function render_modal_status(node, radioNet) {
+	if (!radioNet) return;
+
 	const mode = radioNet.getActiveMode();
 	const noise = radioNet.getNoise();
 	const bssid = radioNet.getActiveBSSID();
@@ -2299,7 +2301,7 @@ return view.extend({
 			uci.set('wireless', section_id, 'ssid', 'OpenWrt');
 			uci.set('wireless', section_id, 'encryption', 'none');
 
-			this.addedSection = section_id;
+			m.addedSection = section_id;
 			return this.renderMoreOptionsModal(section_id);
 		};
 
