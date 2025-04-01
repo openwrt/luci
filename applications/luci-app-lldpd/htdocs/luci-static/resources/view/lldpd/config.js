@@ -828,6 +828,167 @@ return L.view.extend({
 		o.depends('enable_sonmp', '1');
 	},
 
+	// -----------------------------------------------------------------------------------------
+	//
+	//   Extra TLV
+	//
+	// -----------------------------------------------------------------------------------------
+
+	/** @private */
+	populateExtraTLVOptions: function(s, tab, data) {
+		let o, s, ss, oo;
+
+		///// Custom TLV
+		// # syntax: [add | replace] oui OUI subtype SUBTYPE [oui-info CONTENT]
+		/////
+
+		o = s.taboption(tab, form.SectionValue, '_tlv_', form.TableSection, 'custom-tlv', _('Custom TLV'), 
+			_('TLV that lack network interfaces here are sent according to <code>interface pattern</code> (Network IO under Network Interfaces).') + '<br/>' +
+			_('Default insert behaviour is add.'));
+		ss = o.subsection;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.addremove = true;
+		ss.rowcolors = true;
+		ss.addbtntitle = _('Add Custom TLV', 'lldpd Custom TLV');
+		oo = ss.option(lldpd.CBIMultiIOSelect, 'ports',
+			_('Network Interface(s)'));
+		data[3].forEach(nd => {
+			oo.value(nd.getName());
+			oo.value('!'+nd.getName());
+		});
+		oo.validate = validateioentries;
+
+		const validateHexBytes = (str, length) => str.split(',').length === length && str.split(',').every(byte => /^[0-9a-f]{2}$/i.test(byte));
+
+		function parse_custom_tlv_string(input) {
+			//[add | replace] oui OUI subtype SUBTYPE [oui-info CONTENT]
+			const pattern = /^(add|replace)?\s*oui\s+([0-9a-f]{2}(?:,[0-9a-f]{2})*)\s+subtype\s+([0-9a-f]{2})(?:\s+oui-info\s+([0-9a-f]{2}(?:,[0-9a-f]{2})*))?$/i;
+			const match = input.match(pattern);
+
+			if (!match) return null;
+
+			const [, action = '', ouidata, subtype, content = ''] = match;
+
+			if (!validateHexBytes(ouidata, 3) || (content && !validateHexBytes(content, content.split(',').length))) {
+				return null;
+			}
+
+			return { action, ouidata, subtype, content };
+		}
+
+		function load_custom_tlv(section_id, part) {
+			const tlv = uci.get('lldpd', section_id, 'tlv')?.trim().toLowerCase();
+			if (!tlv) return '';
+
+			const parsed = parse_custom_tlv_string(tlv);
+			if (!parsed) return '';
+
+			switch (part) {
+			case 'cust_act': return parsed.action;
+			case 'cust_oui': return parsed.ouidata;
+			case 'cust_typ': return parsed.subtype;
+			case 'cust_inf': return parsed.content;
+			default: return tlv;
+			}
+		}
+
+		function write_custom_tlv(section_id) {
+			const formValue = (part) => this.section.formvalue(section_id, part) || '';
+
+			const action = formValue('_cust_act');
+			const ouidata = formValue('_cust_oui');
+			const subtype = formValue('_cust_typ');
+			const content = formValue('_cust_inf');
+
+			const tlvParts = [
+				action,
+				ouidata && `oui ${ouidata}`,
+				subtype && `subtype ${subtype}`,
+				content && `oui-info ${content}`
+			].filter(Boolean).join(' ');
+
+			uci.set(this.config, section_id, 'tlv', tlvParts);
+		} 
+
+		function intToHexStr(int, uc) {
+			// return 00-FF for 0-255 int
+			const str = int.toString(16).padStart(2, '0');
+			return uc ? str.toUpperCase() : str;
+		} 
+
+		function validate_custom_tlv_string_format(section_id, input) {
+			if (!input) return true;
+			return parse_custom_tlv_string(input) ? true : _('Invalid TLV string format');
+		}
+
+		// action
+		oo = ss.option(form.ListValue, '_cust_act', _('Behaviour'));
+		oo.value('', _('default'));
+		oo.value('add', _('add'));
+		oo.value('replace', _('replace'));
+		oo.rmempty = true;
+		oo.write = write_custom_tlv;
+		oo.load = function(section_id) {
+			return load_custom_tlv(section_id, 'cust_act');
+		};
+
+		// OUI
+		oo = ss.option(form.TextValue, '_cust_oui', _('OUI CSV'));
+		oo.validate = function(section_id, value) {
+			if (!validateHexBytes(value, 3))
+				return _('CSV of 3 hex values, e.g. aa,ee,ff');
+			return true;
+		};
+		oo.rmempty = false;
+		oo.width = 150;
+		oo.optional = false;
+		oo.placeholder = '0f,22,4b';
+		oo.write = write_custom_tlv;
+		oo.load = function(section_id) {
+			return load_custom_tlv(section_id, 'cust_oui');
+		};
+
+		// sub-type
+		oo = ss.option(form.ListValue, '_cust_typ', _('Subtype'));
+		const typchoices = Array.from({length: 256}, (_, index) => [index, index + " ("+intToHexStr(index, true)+")"] );
+		typchoices.forEach(v => {
+			oo.value(v[0], v[1]);
+		})
+		oo.rmempty = false;
+		oo.optional = false;
+		oo.write = write_custom_tlv;
+		oo.load = function(section_id) {
+			return load_custom_tlv(section_id, 'cust_typ');
+		};
+
+		// content
+		oo = ss.option(form.TextValue, '_cust_inf', _('Content'));
+		oo.validate = function(section_id, value) {
+			if (!value) return true;
+			if (!validateHexBytes(value, value.split(',').length))
+				return _('CSV of 1 or more hex values, e.g. aa or bb,cc or 11,55,1a');
+			return true;
+		};
+		oo.rmempty = true;
+		oo.optional = true;
+		oo.placeholder = 'ff,00,33';
+		oo.write = write_custom_tlv;
+		oo.load = function(section_id) {
+			return load_custom_tlv(section_id, 'cust_inf');
+		};
+
+		// raw
+		oo = ss.option(form.TextValue, '_raw', _('Raw'));
+		oo.write = function(section_id, value) {
+			uci.set(this.config, section_id, 'tlv', value);
+		};
+		oo.load = function(section_id) {
+			return load_custom_tlv(section_id);
+		};
+		oo.validate = validate_custom_tlv_string_format;
+	},
+
 	/** @private */
 	populateOptions: function(s, data) {
 		var o;
@@ -837,6 +998,9 @@ return L.view.extend({
 
 		s.tab('ifaces', _('Network Interfaces'));
 		this.populateIfacesOptions(s, 'ifaces', data);
+
+		s.tab('tlvtab', _('TLV'));
+		this.populateExtraTLVOptions(s, 'tlvtab', data);
 
 		s.tab('advanced', _('Advanced Settings'));
 		this.populateAdvancedOptions(s, 'advanced', data);
