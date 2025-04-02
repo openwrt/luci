@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:= Net-SNMP LuCI interface
-LUCI_DEPENDS:=+luci-base +snmpd
+LUCI_DEPENDS:=+luci-base @(PACKAGE_snmpd-ssl||PACKAGE_snmpd)
 LUCI_DESCRIPTION:=Some common net-snmp config items. In no way is this comprehensive.
 
 PKG_MAINTAINER:= Karl Palsson <karlp@etactica.com>
