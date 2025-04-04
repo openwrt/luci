@@ -13,9 +13,10 @@ return view.extend({
         s.addremove = true;
         s.nodescriptions = true;
 
-        let o = s.option(widgets.NetworkSelect, 'gateway', _('Gateway'), _('Gateway'));
+        let o = s.option(widgets.DeviceSelect, 'gateway', _('Gateway'), _('Gateway'));
         o.loopback = true;
         o.nocreate = true;
+        o.noaliases = true;
 
         o = s.option(form.Value, 'domains_path', _('Domains path'), _('Domains path/URL. If you want to add domains via LuCI, specify the files in the /etc/antiblock folder.'));
         o.default = '/etc/antiblock/';
