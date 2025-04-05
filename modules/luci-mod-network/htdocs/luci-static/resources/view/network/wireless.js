@@ -969,6 +969,13 @@ return view.extend({
 					o.datatype = 'range(15,65535)';
 					o.placeholder = 100;
 					o.rmempty = true;
+
+					o = ss.taboption('advanced', form.Flag, 'rxldpc', _('Rx LDPC'), _('Low-Density Parity-Check'));
+					o.default = '1';
+
+					o = ss.taboption('advanced', form.Flag, 'ldpc', _('Tx LDPC'));
+					o.depends({'rxldpc': '1'});
+					o.default = '1';
 				}
 
 
