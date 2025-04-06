@@ -202,26 +202,26 @@ function format_wifirate(rate) {
 	const eht_gi = rate?.eht_gi ?? 0;
 	const eht_dcm = rate?.eht_dcm ?? 0;
 
-	if (ht ?? vht) s += [
+	if (ht || vht) s += [
 		vht && `, VHT-MCS\xa0${$mcs}`,
-		nss && `VHT-NSS\xa0${nss}`,
-		ht  && `MCS\xa0${mcs}`,
-		sgi && _('Short GI').replace(/ /g, '\xa0')
-	].filter(Boolean).join(', ');
+		nss && `, VHT-NSS\xa0${nss}`,
+		ht  && `, MCS\xa0${mcs}`,
+		sgi && ', ' + _('Short GI').replace(/ /g, '\xa0')
+	].filter(Boolean).join('');
 
 	if (he) s += [
 		`, HE-MCS\xa0${mcs}`,
-		nss    && `HE-NSS\xa0${nss}`,
-		he_gi  && `HE-GI\xa0${he_gi}`,
-		he_dcm && `HE-DCM\xa0${he_dcm}`
-	].filter(Boolean).join(', ');
+		nss    && `, HE-NSS\xa0${nss}`,
+		he_gi  && `, HE-GI\xa0${he_gi}`,
+		he_dcm && `, HE-DCM\xa0${he_dcm}`
+	].filter(Boolean).join('');
 
 	if (eht) s += [
 		`, EHT-MCS\xa0${mcs}`,
-		nss    && `EHT-NSS\xa0${nss}`,
-		he_gi  && `EHT-GI\xa0${eht_gi}`,
-		he_dcm && `EHT-DCM\xa0${eht_dcm}`
-	].filter(Boolean).join(', ');
+		nss    && `, EHT-NSS\xa0${nss}`,
+		he_gi  && `, EHT-GI\xa0${eht_gi}`,
+		he_dcm && `, EHT-DCM\xa0${eht_dcm}`
+	].filter(Boolean).join('');
 
 	return s;
 }
