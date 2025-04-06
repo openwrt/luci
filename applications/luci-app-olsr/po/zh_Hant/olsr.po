@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-03-30 07:03+0000\n"
+"PO-Revision-Date: 2025-04-06 07:28+0000\n"
 "Last-Translator: 翻譯得真好下次別翻了 <x86_64-pc-linux-gnu@proton.me>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsolsr/zh_Hant/>\n"
@@ -83,7 +83,7 @@ msgstr "顯示"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:137
 msgid "Downlink"
-msgstr "下行鏈路"
+msgstr "下行連結"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:143
@@ -283,9 +283,8 @@ msgid ""
 "Hysteresis for link sensing (only for hopcount metric). Hysteresis adds more "
 "robustness to the link sensing but delays neighbor registration. Defaults is "
 "\"yes\""
-msgstr ""
-"滯後鏈路檢測（僅適用於 hopcount 度量）。滯後增加了鏈路感測的健壯性，但延遲了"
-"鄰居註冊過程。預設值為“是”"
+msgstr "滯後連結檢測 (僅適用於 hopcount "
+"度量)。滯後增加了連結感測的健壯性，但延遲了鄰居註冊過程。預設值為“是”"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:285
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:279
@@ -339,7 +338,7 @@ msgstr "IPv6"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:128
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:117
 msgid "IPv6 multicast"
-msgstr "IPv6 組播位址"
+msgstr "IPv6多播位址"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:362
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:346
@@ -348,7 +347,7 @@ msgstr "IPv6 組播位址"
 msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
-msgstr "IPv6 組播位址。預設為“FF02::6D”，即 manet-router 鏈路本地組播位址。"
+msgstr "IPv6多播位址。預設為「FF02::6D」，即manet-router連結本地多播位址。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
@@ -371,14 +370,13 @@ msgid ""
 "IPv6 src prefix. OLSRd will choose one of the interface IPs which matches "
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
-msgstr ""
-"IPv6 源字首。OLSRd 將選擇一個與此引數字首匹配的介面 IP。預設為“0::/0”，觸發使"
-"用介面的非鏈路本地 IP。"
+msgstr "IPv6源字首。OLSRd將選擇一個與此引數字首匹配的介面 "
+"IP。預設為「0::/0」，觸發使用介面的非連結本地IP。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:113
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:113
 msgid "IPv6-Prefix of the uplink"
-msgstr "IPv6 上行鏈路字首"
+msgstr "IPv6上行連結首碼"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:257
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:251
@@ -504,8 +502,9 @@ msgid ""
 "etx_float and etx_fpm, smaller values mean slower changes of ETX value. "
 "(allowed values are between 0.01 and 1.0)"
 msgstr ""
-"鏈路品質老化因子（僅適用於 lq 級別2）。調整 etx_float 和 etx_fpm 的引數，"
-"值越小意味著 ETX 值的變化越慢。（允許值介於0.01和1.0之間）"
+"連結品質老化因子 (僅適用於 lq "
+"級別2)。調整etx_float和etx_fpm的引數，值越小意味著ETX值的變化越慢。(允許值介"
+"於0.01和1.0之間)"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:193
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:187
@@ -517,11 +516,11 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
-"鏈路品質演算法（僅適用於 lq 級別2）。<br /><b>etx_float</b>：浮點數 ETX，"
-"按指數函式老化<br /><b>etx_fpm</b>：與etx_float 相同，但按整數算術<br "
-"/><b>etx_ff</b>：ETX freifunk，一種使用所有 OLSR 流量（而不僅僅是 hello）"
-"進行 ETX 計算的 etx 變體<br /><b>etx_ffeth</b>：不相容的變體 etx_ff，"
-"允許乙太網連結使用 ETX 0.1。<br />預設為“etx_ff”"
+"連結品質演算法 (僅適用於 lq 級別2)。<br /><b>etx_float</b>：浮點數ETX，"
+"按指數函式老化<br /><b>etx_fpm</b>：與etx_float相同，但按整數算術<br "
+"/><b>etx_ff</b>：ETX freifunk，一種使用所有OLSR流量 (而不僅僅是 hello) "
+"進行ETX計算的etx變體<br /><b>etx_ffeth</b>：不相容的變體etx_ff，"
+"允許乙太網連結使用ETX 0.1。<br />預設為“etx_ff”"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:172
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:166
@@ -874,14 +873,13 @@ msgstr "來源位址"
 msgid ""
 "Specifies the speed of the uplink in kilobits/s. First parameter is "
 "upstream, second parameter is downstream. Default is \"128 1024\"."
-msgstr ""
-"以千位元/秒為單位指定上行鏈路的速度。第一個引數是上傳，第二個引數是下載。預設"
+msgstr "以千位元/秒為單位指定上行連結的速度。第一個引數是上傳，第二個引數是下載。預設"
 "值為“128 1024”。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:102
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:102
 msgid "Speed of the uplink"
-msgstr "上行鏈路的速度"
+msgstr "上行連結的速度"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:137
 msgid "State"
@@ -954,9 +952,9 @@ msgid ""
 "device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
 "documentation."
 msgstr ""
-"OLSR守護程式是最佳化鏈路狀態路由 (Optimized Link State Routing) "
-"協議的實現。因此，它允許在任何網路裝置上建立網狀路由。它可以在支援ad-"
-"hoc模式的任何 wifi 卡上執行，當然也可以在任何乙太網裝置上執行。訪問 <a "
+"OLSR守護程式是最佳化連結狀態路由協議的實現。因此，它允許在任何網路裝置上建立"
+"網狀路由。它可以在支援ad-"
+"hoc模式的任何wifi卡上執行，當然也可以在任何乙太網路裝置上執行。訪問 <a "
 "href='http://www.olsr.org'>olsrd.org</a> 獲取幫助和文件。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:244
@@ -989,10 +987,9 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
-"這可用於向客戶端通知上行鏈路的外部 IPv6 字首。這可能可使客戶端更改其本地 "
-"IPv6 位址，以使用 IPv6 "
-"閘道器，而無需任何型別的位址轉換。字首長度最大為64位。預設為“::/0”（無字首）"
-"。"
+"這可用於向用戶端通知上行連結的外部IPv6字首。這可能讓用戶端更改其本地IPv6位址"
+"以使用IPv6閘道器，而無需任何型別的位址轉換。字首長度最大為64位。預設為「::/0"
+"」 (無字首)。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:286
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:280
@@ -1018,7 +1015,7 @@ msgstr "無法連線到 OLSR 守護程式！"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:136
 msgid "Uplink"
-msgstr "上行鏈路"
+msgstr "上行連結"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:93
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:93
@@ -1079,10 +1076,10 @@ msgid ""
 "0. For any other value of LinkQualityLevel, the interface ETX value is used "
 "instead."
 msgstr ""
-"當主機之間存在多個鏈路時，介面權重用於確定要使用的鏈路。通常，權重由 olsrd 根"
-"據介面的特性自動計算，但您可以在此處指定固定值。Olsrd 將選擇值最低的連結。"
-"<br /><b>注意：</b>僅當 LinkQualityLevel 設定為0時才使用介面權重。"
-"LinkQualityLevel 的任何其他值都將使用介面的 ETX 值。"
+"當主機之間存在多個連結時，介面權重用於確定要使用的連結。通常，權重由olsrd根據"
+"介面特性自動計算，但您可以在此處指定固定值。Olsrd將選擇值最低的連結。<br "
+"/><b>注意：</b>僅當LinkQualityLevel設定為0時才使用介面權重。LinkQualityLevel"
+"的任何其他值都將使用介面的ETX值。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:82
 msgid ""
@@ -1090,17 +1087,16 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
-"將匯出哪種上行鏈路到其他網狀節點。通過查詢本地 HNA 0.0.0.0/0、::ffff:0:0/96 "
-"或 2000::/3 來檢測上行鏈路。預設設定為“兩者”。"
+"將匯出哪種上行連結到其他網狀節點。通過查詢本地HNA 0.0.0.0/0、::ffff:0:0/"
+"96或2000::/3來檢測上行連結。預設為「兩者」。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:82
 msgid ""
 "Which kind of uplink is exported to the other mesh nodes. An uplink is "
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
-msgstr ""
-"將匯出哪種上行鏈路到其他網狀節點。通過查詢本地 HNA6 ::ffff:0:0/96 或 "
-"2000::/3 來檢測上行鏈路。預設設定為“兩者”。"
+msgstr "將匯出哪種上行連結到其他網狀節點。通過查詢本地HNA6 ::ffff:0:0/"
+"96或2000::/3來檢測上行連結。預設為「兩者」。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:244
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:238
