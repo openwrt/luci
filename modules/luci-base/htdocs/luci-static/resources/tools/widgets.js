@@ -551,6 +551,20 @@ var CBIDeviceSelect = form.ListValue.extend({
 			}
 		}
 
+		if (this.includeips) {
+			this.devices.forEach(net_dev => {
+				['getIPAddrs', 'getIP6Addrs'].forEach(fn => {
+					net_dev[fn]().forEach(addr => {
+						const name = addr.split('/')[0];
+						if (checked[name]) values.push(name);
+
+						choices[name] = E([], [name, ' (', E('strong', net_dev.getName()), ')']);
+						order.push(name);
+					});
+				});
+			});
+		}
+
 		if (!this.nocreate) {
 			var keys = Object.keys(checked).sort(L.naturalCompare);
 
