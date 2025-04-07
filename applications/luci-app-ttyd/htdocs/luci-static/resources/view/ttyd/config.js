@@ -27,6 +27,7 @@ return view.extend({
 		o = s.option(widgets.DeviceSelect, 'interface', _('Interface'), _('Network interface to bind (eg: eth0)'));
 		o.depends('unix_sock', '0');
 		o.nocreate    = true;
+		o.includeips = true;
 
 		o = s.option(form.Value, '_unix_sock_path', _('UNIX socket path'), _('UNIX domain socket path (eg: /var/run/ttyd.sock)'));
 		o.depends('unix_sock', '1');
