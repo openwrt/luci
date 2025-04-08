@@ -203,7 +203,7 @@ function format_wifirate(rate) {
 	const eht_dcm = rate?.eht_dcm ?? 0;
 
 	if (ht || vht) s += [
-		vht && `, VHT-MCS\xa0${$mcs}`,
+		vht && `, VHT-MCS\xa0${mcs}`,
 		nss && `, VHT-NSS\xa0${nss}`,
 		ht  && `, MCS\xa0${mcs}`,
 		sgi && ', ' + _('Short GI').replace(/ /g, '\xa0')
