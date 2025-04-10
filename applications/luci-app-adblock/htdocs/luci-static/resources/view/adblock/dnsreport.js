@@ -7,12 +7,12 @@
 	button handling
 */
 function handleAction(ev) {
-	if (ev.target && ev.target.getAttribute('name') === 'blacklist') {
-		L.ui.showModal(_('Add Blacklist Domain'), [
-			E('p', _('Add this (sub-)domain to your local blacklist.')),
+	if (ev.target && ev.target.getAttribute('name') === 'blocklist') {
+		L.ui.showModal(_('Add Blocklist Domain'), [
+			E('p', _('Add this (sub-)domain to your local blocklist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'spellcheck': 'false', 'id': 'blacklist', 'value': ev.target.getAttribute('value') }, [])
+					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'spellcheck': 'false', 'id': 'blocklist', 'value': ev.target.getAttribute('value') }, [])
 				])
 			]),
 			E('div', { 'class': 'right' }, [
@@ -24,14 +24,14 @@ function handleAction(ev) {
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function(ev) {
-						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.blacklist'), '')
+						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.blocklist'), '')
 						.then(function(res) {
-							var domain = document.getElementById('blacklist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
+							var domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
 							var pattern = new RegExp('^' + domain.replace(/[\.]/g,'\\.') + '$', 'm');
 							if (res.search(pattern) === -1) {
-								var blacklist = res + domain + '\n';
-								fs.write('/etc/adblock/adblock.blacklist', blacklist);
-								ui.addNotification(null, E('p', _('Blacklist changes have been saved. Refresh your adblock lists that changes take effect.')), 'info');
+								var blocklist = res + domain + '\n';
+								fs.write('/etc/adblock/adblock.blocklist', blocklist);
+								ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload adblock that changes take effect.')), 'info');
 							}
 							L.hideModal();
 						});
@@ -39,15 +39,15 @@ function handleAction(ev) {
 				}, _('Save'))
 			])
 		]);
-		document.getElementById('blacklist').focus();
+		document.getElementById('blocklist').focus();
 	}
 
-	if (ev.target && ev.target.getAttribute('name') === 'whitelist') {
-		L.ui.showModal(_('Add Whitelist Domain'), [
-			E('p', _('Add this (sub-)domain to your local whitelist.')),
+	if (ev.target && ev.target.getAttribute('name') === 'allowlist') {
+		L.ui.showModal(_('Add Allowlist Domain'), [
+			E('p', _('Add this (sub-)domain to your local allowlist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
-					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'spellcheck': 'false', 'id': 'whitelist', 'value': ev.target.getAttribute('value') }, [])
+					E('input', { 'class': 'cbi-input-text', 'style': 'width:300px', 'spellcheck': 'false', 'id': 'allowlist', 'value': ev.target.getAttribute('value') }, [])
 				])
 			]),
 			E('div', { 'class': 'right' }, [
@@ -59,14 +59,14 @@ function handleAction(ev) {
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function(ev) {
-						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.whitelist'), '')
+						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.allowlist'), '')
 						.then(function(res) {
-							var domain = document.getElementById('whitelist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
+							var domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
 							var pattern = new RegExp('^' + domain.replace(/[\.]/g,'\\.') + '$', 'm');
 							if (res.search(pattern) === -1) {
-								var whitelist = res + domain + '\n';
-								fs.write('/etc/adblock/adblock.whitelist', whitelist);
-								ui.addNotification(null, E('p', _('Whitelist changes have been saved. Refresh your adblock lists that changes take effect.')), 'info');
+								var allowlist = res + domain + '\n';
+								fs.write('/etc/adblock/adblock.allowlist', allowlist);
+								ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload adblock that changes take effect.')), 'info');
 							}
 							L.hideModal();
 						});
@@ -74,7 +74,7 @@ function handleAction(ev) {
 				}, _('Save'))
 			])
 		]);
-		document.getElementById('whitelist').focus();
+		document.getElementById('allowlist').focus();
 	}
 
 	if (ev === 'query') {
@@ -282,18 +282,18 @@ return view.extend({
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-positive',
 						'style': 'word-break: inherit',
-						'name': 'whitelist',
+						'name': 'allowlist',
 						'value': content.requests[i].domain,
 						'click': handleAction
-					}, [ _('Whitelist...') ]);
+					}, [ _('Allowlist...') ]);
 				} else {
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-negative',
 						'style': 'word-break: inherit',
-						'name': 'blacklist',
+						'name': 'blocklist',
 						'value': content.requests[i].domain,
 						'click': handleAction
-					}, [ _('Blacklist...') ]);
+					}, [ _('Blocklist...') ]);
 				}
 				rows_requests.push([
 					content.requests[i].date,
@@ -326,22 +326,7 @@ return view.extend({
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Blocked DNS Requests')),
 					E('div', { 'class': 'cbi-value-title', 'id': 'blocked', 'style': 'float:left;color:#37c' }, (content.blocked || '-') + ' (' + (content.percent || '-') + ')')
-				]),
-				E('div', { 'class': 'right' }, [
-					E('button', {
-						'class': 'btn cbi-button cbi-button-apply',
-						'click': ui.createHandlerFn(this, function() {
-							return handleAction('query');
-						})
-					}, [ _('Blocklist Query...') ]),
-					'\xa0\xa0\xa0',
-					E('button', {
-						'class': 'btn cbi-button cbi-button-positive',
-						'click': ui.createHandlerFn(this, function() {
-							return handleAction('refresh');
-						})
-					}, [ _('Refresh...') ])
-				]),
+				])
 			]),
 			E('div', { 'class': 'cbi-section' }, [
 				E('div', { 'class': 'left' }, [
@@ -355,7 +340,24 @@ return view.extend({
 					E('h3', _('Latest DNS Requests')),
 					tbl_requests
 				])
-			])
+			]),
+			E('div', { 'class': 'cbi-page-actions' }, [
+				E('button', {
+					'class': 'btn cbi-button cbi-button-apply',
+					'style': 'float:none;margin-right:.4em;',
+					'click': ui.createHandlerFn(this, function() {
+						return handleAction('query');
+					})
+				}, [ _('Blocklist Query...') ]),
+				E('button', {
+					'class': 'btn cbi-button cbi-button-positive important',
+					'style': 'float:none;margin-right:.4em;',
+					'click': ui.createHandlerFn(this, function() {
+						return handleAction('refresh');
+					})
+				}, [ _('Refresh...') ])
+			]),
+
 		]);
 	},
 	handleSaveApply: null,
