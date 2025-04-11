@@ -3,31 +3,20 @@
 'require fs';
 'require ui';
 
+let localFile = '/etc/banip/banip.blocklist';
 let notMsg, errMsg;
 
 return view.extend({
 	load: function () {
-		return Promise.all([
-			L.resolveDefault(fs.stat('/etc/banip/banip.blocklist'), {}),
-			L.resolveDefault(fs.read_direct('/etc/banip/banip.blocklist'), '')
-		]);
-	},
-	handleSave: function (ev) {
-		let value = ((document.querySelector('textarea').value || '').trim().toLowerCase().replace(/\r\n/g, '\n')) + '\n';
-		return fs.write('/etc/banip/banip.blocklist', value)
-			.then(function () {
-				document.querySelector('textarea').value = value;
-				document.body.scrollTop = document.documentElement.scrollTop = 0;
-				if (!notMsg) {
-					ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload banIP that changes take effect.')), 'info');
-					notMsg = true;
+		return L.resolveDefault(fs.stat(localFile), "")
+			.then(function (stat) {
+				if (!stat) {
+					return fs.write(localFile, "");
 				}
-			}).catch(function (e) {
-				document.body.scrollTop = document.documentElement.scrollTop = 0;
-				if (!errMsg) {
-					ui.addNotification(null, E('p', _('Unable to save modifications: %s').format(e.message)), 'error');
-					errMsg = true;
-				}
+				return Promise.all([
+					L.resolveDefault(fs.stat(localFile), ""),
+					L.resolveDefault(fs.read_direct(localFile), "")
+				]);
 			});
 	},
 	render: function (blocklist) {
@@ -45,6 +34,24 @@ return view.extend({
 					'rows': 25
 				}, [blocklist[1] != null ? blocklist[1] : ''])
 		]);
+	},
+	handleSave: function (ev) {
+		let value = ((document.querySelector('textarea').value || '').trim().toLowerCase().replace(/\r\n/g, '\n')) + '\n';
+		return fs.write(localFile, value)
+			.then(function () {
+				document.querySelector('textarea').value = value;
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
+				if (!notMsg) {
+					ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload banIP that changes take effect.')), 'info');
+					notMsg = true;
+				}
+			}).catch(function (e) {
+				document.body.scrollTop = document.documentElement.scrollTop = 0;
+				if (!errMsg) {
+					ui.addNotification(null, E('p', _('Unable to save modifications: %s').format(e.message)), 'error');
+					errMsg = true;
+				}
+			});
 	},
 	handleSaveApply: null,
 	handleReset: null

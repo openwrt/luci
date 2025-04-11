@@ -18,7 +18,7 @@ function handleAction(ev) {
 			.then(L.bind(ui.changes.apply, ui.changes))
 			.then(function () {
 				return fs.exec_direct('/etc/init.d/banip', [ev]);
-			});
+			})
 	} else {
 		return fs.exec_direct('/etc/init.d/banip', [ev]);
 	}
