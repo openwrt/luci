@@ -168,7 +168,13 @@ function handleEdit(ev) {
 
 return view.extend({
 	load: function () {
-		return L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "");
+		return L.resolveDefault(fs.stat('/etc/banip/banip.custom.feeds'), "")
+			.then(function (stat) {
+			if (!stat) {
+				return fs.write('/etc/banip/banip.custom.feeds', "");
+			}
+			return L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "");
+		})
 	},
 
 	render: function (data) {
@@ -243,6 +249,7 @@ return view.extend({
 			o = s.option(form.ListValue, 'rule_6', _('Rulev6'));
 			o.value('/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)[[:space:]]/{printf \"%s,\\n\",$1}', _('<IPv6><SPACE>'));
 			o.value('/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)$/{printf \"%s,\\n\",$1}', _('<IPv6><END>'));
+			o.value('BEGIN{FS=\",\"}/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)/{printf \"%s,\\n\",$1}', _('<IPv6>, csv'));
 			o.optional = true;
 			o.rmempty = true;
 
