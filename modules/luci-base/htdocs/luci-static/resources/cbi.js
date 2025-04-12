@@ -32,6 +32,15 @@ function sfh(s) {
 	for (var i = 0; i < s.length; i++) {
 		var ch = s.charCodeAt(i);
 
+		// Handle surrogate pairs
+		if (ch >= 0xD800 && ch <= 0xDBFF && i + 1 < s.length) {
+			const next = s.charCodeAt(i + 1);
+			if (next >= 0xDC00 && next <= 0xDFFF) {
+				ch = 0x10000 + ((ch - 0xD800) << 10) + (next - 0xDC00);
+				i++;
+			}
+		}
+
 		if (ch <= 0x7F)
 			bytes.push(ch);
 		else if (ch <= 0x7FF)
@@ -41,7 +50,7 @@ function sfh(s) {
 			bytes.push(((ch >>> 12) & 0x0F) | 0xE0,
 			           ((ch >>>  6) & 0x3F) | 0x80,
 			           ( ch         & 0x3F) | 0x80);
-		else if (code <= 0x10FFFF)
+		else if (ch <= 0x10FFFF)
 			bytes.push(((ch >>> 18) & 0x07) | 0xF0,
 			           ((ch >>> 12) & 0x3F) | 0x80,
 			           ((ch >>   6) & 0x3F) | 0x80,
@@ -91,7 +100,7 @@ function sfh(s) {
 	hash  = (hash ^ (hash << 25)) >>> 0;
 	hash += hash >>> 6;
 
-	return (0x100000000 + hash).toString(16).substr(1);
+	return (0x100000000 + hash).toString(16).slice(1);
 }
 
 var plural_function = null;
