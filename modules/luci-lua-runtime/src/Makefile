@@ -2,7 +2,7 @@
 	$(CC) $(CPPFLAGS) $(CFLAGS) $(FPIC) -DNDEBUG -c -o $@ $<
 
 contrib/lemon: contrib/lemon.c contrib/lempar.c
-	cc -o contrib/lemon $<
+	cc -std=gnu17 -o contrib/lemon $<
 
 plural_formula.c: plural_formula.y contrib/lemon
 	./contrib/lemon -q $<
