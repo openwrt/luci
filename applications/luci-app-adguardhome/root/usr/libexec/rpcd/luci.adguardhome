@@ -1,0 +1,253 @@
+#!/usr/bin/env lua
+
+local UCI = require("luci.model.uci")
+local fs = require("nixio.fs")
+local http = require("socket.http")
+local json = require("luci.jsonc")
+local ltn12 = require("ltn12")
+local lyaml = require("lyaml")
+local mime = require("mime")
+local nixio = require("nixio")
+local sock_url = require("socket.url")
+
+-- Slight overkill, but leaving room to do log_info etcetera.
+local function log_to_syslog(level, message)
+    nixio.syslog(level, message)
+end
+
+local function log_error(message)
+    -- The prefix is camel case because the 3rd party software emits logs
+    -- with that string, and logread doesn't support a regexp like
+    -- -e 'adguardhome|AdGuardHome'
+    log_to_syslog("err", "[luci.AdGuardHome]: " .. message)
+end
+
+local function readfile(path)
+    local s = fs.readfile(path)
+    return s and (s:gsub("^%s+", ""):gsub("%s+$", ""))
+end
+
+local function log_error_and_abort(message)
+    -- Used when a condition is hit that should log an error, and also
+    -- send the error back in JSON for the JS code to render.
+    log_error(message)
+    print(json.stringify({ error = message }))
+    os.exit(1)
+end
+
+-- Builds a URL very simply. Probably flawed.
+local function urlbuilder(tls_enabled, address, path)
+    local proto = nil
+    if tls_enabled then
+        proto = "https"
+    else
+        proto = "http"
+    end
+    return proto .. "://" .. address .. "/control/" .. path
+end
+
+local function get_credentials()
+    -- AdGuard Home stores credentials encrypted, so a secondary
+    -- copy has to be stored in /etc/config/adguardhome.
+    local uci = UCI.cursor()
+    local username = uci:get("adguardhome", "config", "web_username")
+    local password = uci:get("adguardhome", "config", "web_password")
+    uci.unload("adguardhome")
+    if not username then
+        local msg = "Username not found in uci adguardhome"
+        log_error(msg)
+        print(json.stringify({ auth_error = msg }))
+        os.exit(1)
+    end
+    if not password then
+        local msg = "Password not found in uci adguardhome"
+        log_error(msg)
+        print(json.stringify({ auth_error = msg }))
+        os.exit(1)
+    end
+    return username, password
+end
+
+local function call_rest_api(api_name)
+    -- Table to store the result of this function
+    local r = {}
+    -- Sink for the resulting JSON from the query to AGH
+    local resp = {}
+
+    -- Rather than ask for the host and port from the person using this
+    -- software, just get it directly from adguardhome's config.
+    local agh_config = readfile("/etc/adguardhome.yaml")
+    local agh_table = lyaml.load(agh_config)
+
+    -- These have to be passed in, the yaml config uses a salted store
+    -- (which is good)
+    local username, password = get_credentials()
+    -- Adguardhome ~107.21 uses these options
+    local agh_host = agh_table.bind_host
+    local agh_port = agh_table.bind_port
+    -- Adguardhome ~107.36 uses this option
+    local agh_address = agh_table.http.address
+
+    if agh_address == nil then
+        if agh_host ~= nil and agh_port ~= nil then
+            agh_address = agh_host .. ":" .. agh_port
+        else
+            log_error_and_abort(
+                "Could not retrieve AdGuardHome address from /etc/adguardhome.yaml; tried http.address, and bind_host/bind_port"
+            )
+        end
+    end
+
+    -- Build the URL to chat to for REST API queries
+    local url = urlbuilder(agh_table.tls.enabled, agh_address, api_name)
+
+    -- Call the REST API, see what comes back
+    local _, code, _, _ = http.request({
+        url = url,
+        method = "GET",
+        headers = {
+            ["Authorization"] = "Basic " .. (mime.b64(username .. ":" .. sock_url.unescape(password))),
+        },
+        sink = ltn12.sink.table(resp),
+    })
+    local result = resp[1]
+    if code == 200 then
+        -- Make the shell happy; 0 is good. All else is an error exit code.
+        code = 0
+    else
+        local msg = "REST call failed with '" .. resp[1] .. "'. Are the credentials correct?"
+        log_error(msg)
+        result = json.stringify({ error = msg })
+    end
+    r.code = code
+    r.result = result
+    return r
+end
+
+local methods = {
+    -- Converts the AGH YAML configuration into JSON for consumption by
+    -- the LuCI app.
+    get_config = {
+        call = function()
+            local agh_config = readfile("/etc/adguardhome.yaml")
+            local agh_table = lyaml.load(agh_config)
+            local r = {}
+            r.result = json.stringify(agh_table)
+            r.code = 200
+            return r
+        end,
+    },
+    -- Calls the /control/stat(istic)s REST API, returns the JSON
+    get_statistics = {
+        call = function()
+            return call_rest_api("stats")
+        end,
+    },
+    -- Calls the /control/status REST API, returns the JSON
+    get_status = {
+        call = function()
+            return call_rest_api("status")
+        end,
+    },
+}
+
+local function parseInput()
+    -- Input parsing - the RPC daemon calls the Lua script and
+    -- sends input to it via stdin, not as an argument on the CLI.
+    -- Thus, any testing via the lua interpreter needs to be in the form
+    -- echo '{jsondata}' | lua /usr/libexec/rpcd/script call method_name
+    local parse = json.new()
+    local done, err
+
+    while true do
+        local chunk = io.read(4096)
+        if not chunk then
+            break
+        elseif not done and not err then
+            done, err = parse:parse(chunk)
+        end
+    end
+
+    if not done then
+        print(json.stringify({
+            error = err or "Incomplete input for argument parsing",
+        }))
+        os.exit(1)
+    end
+
+    return parse:get()
+end
+
+local function validateArgs(func, uargs)
+    -- Validates that arguments picked out by parseInput actually match
+    -- up to the arguments expected by the function being called.
+    local method = methods[func]
+    if not method then
+        log_error_and_abort("Method '" .. func .. "' not found in methods table")
+    end
+
+    -- Lua has no length operator for tables, so iterate to get the count
+    -- of the keys.
+    local n = 0
+    for _, _ in pairs(uargs) do
+        n = n + 1
+    end
+
+    -- If the method defines an args table (so empty tables are not allowed),
+    -- and there were no args, then give a useful error message about that.
+    if method.args and n == 0 then
+        log_error_and_abort(
+            "Received empty arguments for " .. func .. " but it requires " .. json.stringify(method.args)
+        )
+    end
+
+    uargs.ubus_rpc_session = nil
+
+    local margs = method.args or {}
+    for k, v in pairs(uargs) do
+        if margs[k] == nil or (v ~= nil and type(v) ~= type(margs[k])) then
+            log_error_and_abort(
+                "Invalid argument '" .. k .. "' for " .. func .. " it requires " .. json.stringify(method.args)
+            )
+        end
+    end
+
+    return method
+end
+
+if arg[1] == "list" then
+    local _, rv = nil, {}
+    for _, method in pairs(methods) do
+        rv[_] = method.args or {}
+    end
+    print((json.stringify(rv):gsub(":%[%]", ":{}")))
+elseif arg[1] == "call" then
+    local args = parseInput()
+    local method = validateArgs(arg[2], args)
+    -- If any method in the dispatch table takes an args, then this would need to pass the
+    -- args. Passing args blindly triggers a redundant-parameters from the lua language server.
+    local run = method.call()
+    print(run.result)
+    os.exit(run.code or 0)
+elseif arg[1] == "help" then
+    local helptext = [[
+Usage:
+
+ To see what methods are exported by this script:
+
+    lua luci.adguardhome list
+
+ To call a method that has no arguments:
+
+    echo '{}' | lua luci.adguardhome call method_name
+
+ To call a method that takes arguments:
+
+    echo '{"valid": "json", "argument": "value"}' | lua luci.adguardhome call method_name
+
+ To call this script via ubus:
+
+    ubus call luci.adguardhome method_name '{"valid": "json", "argument": "value"}'
+]]
+    print(helptext)
+end
