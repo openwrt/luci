@@ -263,7 +263,7 @@ return view.extend({
 			E('p', {}, _('Server response: %s').format(response.detail)),
 			E(
 				'a',
-				{ href: 'https://github.com/openwrt/asu/issues' },
+				{ href: 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552' },
 				_('Please report the error message and request')
 			),
 			E('p', {}, _('Request Data:')),
