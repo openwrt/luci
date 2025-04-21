@@ -3096,7 +3096,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 * Checks whether this device is up.
 	 *
 	 * @returns {boolean}
-	 * Returns `true` when the associated device is running pr `false`
+	 * Returns `true` when the associated device is running or `false`
 	 * when it is down or absent.
 	 */
 	isUp: function() {
