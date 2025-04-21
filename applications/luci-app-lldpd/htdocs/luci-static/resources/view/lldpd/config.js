@@ -836,7 +836,7 @@ return L.view.extend({
 
 	/** @private */
 	populateExtraTLVOptions: function(s, tab, data) {
-		let o, s, ss, oo;
+		let o, ss, oo;
 
 		///// Custom TLV
 		// # syntax: [add | replace] oui OUI subtype SUBTYPE [oui-info CONTENT]
