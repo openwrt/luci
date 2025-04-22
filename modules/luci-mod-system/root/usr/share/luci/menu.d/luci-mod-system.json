@@ -87,11 +87,23 @@
 	},
 
 	"admin/system/crontab": {
-		"title": "Scheduled Tasks",
+		"title": "Scheduled Tasks (crontab)",
 		"order": 46,
 		"action": {
 			"type": "view",
 			"path": "system/crontab"
+		},
+		"depends": {
+			"acl": [ "luci-mod-system-cron" ]
+		}
+	},
+
+	"admin/system/crontabhelper": {
+		"title": "Scheduled Tasks Helper",
+		"order": 47,
+		"action": {
+			"type": "view",
+			"path": "system/crontabhelper"
 		},
 		"depends": {
 			"acl": [ "luci-mod-system-cron" ]
