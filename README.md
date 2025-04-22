@@ -43,3 +43,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) file.
 Use [Weblate](https://hosted.weblate.org/engage/openwrt/?utm_source=widget) instead of direct editing of the `*.po` files.
 
 [![Translation status](https://hosted.weblate.org/widgets/openwrt/-/multi-auto.svg)](https://hosted.weblate.org/engage/openwrt/?utm_source=widget)
+
