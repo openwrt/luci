@@ -695,9 +695,9 @@ return view.extend({
 		if (feeds && Object.keys(feeds).length) {
 			o = s.taboption('feeds', form.MultiValue, 'ban_feed', _('Blocklist Feed'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
-				feed = Object.keys(feeds)[i].trim();
-				chain = feeds[feed].chain.trim() || 'in';
-				descr = feeds[feed].descr.trim() || '-';
+				feed=(Object.keys(feeds)[i] || '').trim();
+				chain=(feeds[feed]?.chain ||'in').trim();
+				descr=(feeds[feed]?.descr || '-').trim();
 				o.value(feed, feed + ' (' + chain + ', ' + descr + ')');
 			}
 			o.optional = true;
