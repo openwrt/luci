@@ -117,7 +117,7 @@ function render_modal_status(node, ifc) {
 
 	dom.content(node, [
 		E('img', {
-			'src': L.resource('icons/%s%s.png').format(dev ? dev.getType() : 'ethernet', (dev && dev.isUp()) ? '' : '_disabled'),
+			'src': L.resource('icons/%s%s.png').format(dev ? dev.getType() : 'ethernet', ifc.isUp() ? '' : '_disabled'),
 			'title': dev ? dev.getTypeI18n() : _('Not present')
 		}),
 		ifc ? render_status(E('span'), ifc, true) : E('em', _('Interface not present or not connected yet.'))
@@ -343,7 +343,7 @@ return view.extend({
 				var dev = ifc.getDevice();
 				dom.content(stat, [
 					E('img', {
-						'src': L.resource('icons/%s%s.png').format(dev ? dev.getType() : 'ethernet', (dev && dev.isUp()) ? '' : '_disabled'),
+						'src': L.resource('icons/%s%s.png').format(dev ? dev.getType() : 'ethernet', ifc.isUp() ? '' : '_disabled'),
 						'title': dev ? dev.getTypeI18n() : _('Not present')
 					}),
 					render_status(E('span'), ifc, true)
