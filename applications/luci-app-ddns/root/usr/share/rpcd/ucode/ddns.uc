@@ -178,7 +178,7 @@ const methods = {
 				}
 
 				res[section] = {
-					ip: ip ? replace(ip, '\n', '') : null,
+					ip: ip ? replace(trim(ip), '\n', '<br/>') : null,
 					last_update: lastUpdate !== 0 ? convertedLastUpdate : null,
 					next_update: nextUpdate || null,
 					pid: pid || null,
