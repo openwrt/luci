@@ -111,7 +111,7 @@ function render_radio_status(radioDev, wifiNets) {
 		channel   = channel   ?? wifiNet.getChannel();
 		frequency = frequency ?? wifiNet.getFrequency();
 		bitrate   = bitrate   ?? wifiNet.getBitRate();
-	})
+	});
 
 	if (radioDev.isUp())
 		L.itemlist(node.lastElementChild, [
@@ -128,7 +128,7 @@ function render_network_status(radioNet) {
 	const mode = radioNet.getActiveMode();
 	const bssid = radioNet.getActiveBSSID();
 	const channel = radioNet.getChannel();
-	const disabled = (radioNet.get('disabled') == '1' ?? uci.get('wireless', radioNet.getWifiDeviceName(), 'disabled') == '1');
+	const disabled = (radioNet.get('disabled') == '1' || uci.get('wireless', radioNet.getWifiDeviceName(), 'disabled') == '1');
 	const is_assoc = (bssid && bssid != '00:00:00:00:00:00' && channel && mode != 'Unknown' && !disabled);
 	const is_mesh = (radioNet.getMode() == 'mesh');
 	const changecount = count_changes(radioNet.getName());
@@ -145,9 +145,9 @@ function render_network_status(radioNet) {
 	return L.itemlist(E('div'), [
 		is_mesh ? _('Mesh ID') : _('SSID'), (is_mesh ? radioNet.getMeshID() : radioNet.getSSID()) ?? '?',
 		_('Mode'),       mode,
-		_('BSSID'),      (!changecount && is_assoc) ? bssid : null,
-		_('Encryption'), (!changecount && is_assoc) ? radioNet.getActiveEncryption() ?? _('None') : null,
-		null,            status_text
+		_('BSSID'),      (!changecount && is_assoc) ? bssid : '',
+		_('Encryption'), (!changecount && is_assoc) ? radioNet.getActiveEncryption() ?? _('None') : '',
+		'',            status_text
 	], [ ' | ', E('br') ]);
 }
 
@@ -191,7 +191,6 @@ function format_wifirate(rate) {
 	let s = `${rate.rate / 1000}\xa0${_('Mbit/s')}, ${rate.mhz}\xa0${_('MHz')}`;
 	const ht = rate.ht;
 	const vht = rate.vht;
-	const mhz = rate.mhz;
 	const nss = rate.nss;
 	const mcs = rate.mcs;
 	const sgi = rate.short_gi;
@@ -257,14 +256,14 @@ function network_updown(id, map, ev) {
 		wifi_ifaces.forEach(wifi_iface => {
 			if (wifi_iface.device == radio && wifi_iface.disabled != '1')
 				all_networks_disabled = false;
-		})
+		});
 
 		if (all_networks_disabled)
 			uci.set('wireless', radio, 'disabled', '1');
 	}
 
 	return map.save().then(function() {
-		ui.changes.apply()
+		ui.changes.apply();
 	});
 }
 
@@ -333,7 +332,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 			});
 
 			const hwmodelist = L.toArray(wifidevs ? wifidevs.getHWModes() : null)
-				.reduce(function(o, v) { o[v] = true; return o }, {});
+				.reduce(function(o, v) { o[v] = true; return o; }, {});
 
 			// Define supported modes
 			this.modes = [
@@ -346,7 +345,7 @@ var CBIWifiFrequencyValue = form.Value.extend({
 
 			// Create a list of HT modes based on device capabilities
 			const htmodelist = L.toArray(wifidevs ? wifidevs.getHTModes() : null)
-				.reduce(function(o, v) { o[v] = true; return o }, {});
+				.reduce(function(o, v) { o[v] = true; return o; }, {});
 
 			this.htmodes = {
 				'': [ '', '-', { available: true } ],
@@ -665,12 +664,11 @@ var CBIWifiCountryValue = form.Value.extend({
 return view.extend({
 	poll_status: function(map, data) {
 		const rows = map.querySelectorAll('.cbi-section-table-row[data-sid]');
-		let stat;
 
 		rows.forEach(row => {
 			const section_id = row.getAttribute('data-sid');
-			const radioDev = data[1].filter(function(d) { return d.getName() == section_id })[0];
-			const radioNet = data[2].filter(function(n) { return n.getName() == section_id })[0];
+			const radioDev = data[1].filter(function(d) { return d.getName() == section_id; })[0];
+			const radioNet = data[2].filter(function(n) { return n.getName() == section_id; })[0];
 			const badge = row.querySelector('[data-name="_badge"] > div');
 			const stat = row.querySelector('[data-name="_stat"]');
 			const btns = row.querySelectorAll('.cbi-section-actions button');
@@ -678,7 +676,7 @@ return view.extend({
 
 			if (radioDev) {
 				dom.content(badge, render_radio_badge(radioDev));
-				dom.content(stat, render_radio_status(radioDev, data[2].filter(function(n) { return n.getWifiDeviceName() == radioDev.getName() })));
+				dom.content(stat, render_radio_status(radioDev, data[2].filter(function(n) { return n.getWifiDeviceName() == radioDev.getName(); })));
 			}
 			else {
 				dom.content(badge, render_network_badge(radioNet));
@@ -697,7 +695,7 @@ return view.extend({
 		const hosts = data[0];
 		let trows = [];
 		const radios = data[3];
-		const zones = data[4]
+		const zones = data[4];
 
 		radios.forEach(zone => {
 			const bss = zone;
@@ -779,14 +777,14 @@ return view.extend({
 			}
 
 			trows.push(row);
-		})
+		});
 
 		cbi_update_table(table, trows, E('em', _('No information available')));
 
 		const status = document.querySelector('.cbi-modal [data-name="_wifistat_modal"] .ifacebadge.large');
 
 		if (status)
-			render_modal_status(status, data[2].filter(function(n) { return n.getName() == status.getAttribute('data-network') })[0]);
+			render_modal_status(status, data[2].filter(function(n) { return n.getName() == status.getAttribute('data-network'); })[0]);
 
 		return network.flushCache();
 	},
@@ -868,7 +866,7 @@ return view.extend({
 
 				radios.forEach(radio => {
 					tasks.push(radio.getWifiNetworks());
-				})
+				});
 
 				return Promise.all(tasks);
 			}, this)).then(L.bind(function(data) {
@@ -876,7 +874,7 @@ return view.extend({
 
 				data.forEach(d => {
 					this.wifis.push.apply(this.wifis, d);
-				})
+				});
 			}, this));
 		};
 
@@ -896,16 +894,16 @@ return view.extend({
 		};
 
 		s.modaltitle = function(section_id) {
-			const radioNet = this.wifis.filter(function(w) { return w.getName() == section_id})[0];
+			const radioNet = this.wifis.filter(function(w) { return w.getName() == section_id; })[0];
 			return radioNet ? radioNet.getI18n() : _('Edit wireless network');
 		};
 
 		s.lookupRadioOrNetwork = function(section_id) {
-			const radioDev = this.radios.filter(function(r) { return r.getName() == section_id })[0];
+			const radioDev = this.radios.filter(function(r) { return r.getName() == section_id; })[0];
 			if (radioDev)
 				return radioDev;
 
-			const radioNet = this.wifis.filter(function(w) { return w.getName() == section_id })[0];
+			const radioNet = this.wifis.filter(function(w) { return w.getName() == section_id; })[0];
 			if (radioNet)
 				return radioNet;
 
@@ -1084,7 +1082,7 @@ return view.extend({
 				o.novirtual = true;
 				o.write = function(section_id, value) {
 					return network.getDevice(section_id).then(L.bind(function(dev) {
-						const old_networks = dev.getNetworks().reduce(function(o, v) { o[v.getName()] = v; return o }, {});
+						const old_networks = dev.getNetworks().reduce(function(o, v) { o[v.getName()] = v; return o; }, {});
 						const new_networks = {};
 						const values = L.toArray(value);
 						const tasks = [];
@@ -1101,7 +1099,7 @@ return view.extend({
 							}, this, value)).then(L.bind(function(dev, net) {
 								if (net) {
 									if (!net.isEmpty()) {
-										const target_dev = net.getDevice();
+										let target_dev = net.getDevice();
 
 										/* Resolve parent interface of vlan */
 										while (target_dev && target_dev.getType() == 'vlan')
@@ -1278,8 +1276,9 @@ return view.extend({
 				};
 
 				o.write = function(section_id, value) {
-					let e = this.section.children.filter(function(o) { return o.option == 'encryption' })[0].formvalue(section_id);
-					const co = this.section.children.filter(function(o) { return o.option == 'cipher' })[0], c = co.formvalue(section_id);
+					let e = this.section.children.filter(function(o) { return o.option == 'encryption'; })[0].formvalue(section_id);
+					const co = this.section.children.filter(function(o) { return o.option == 'cipher'; })[0];
+					const c = co.formvalue(section_id);
 
 					if (value == 'wpa' || value == 'wpa2' || value == 'wpa3' || value == 'wpa3-mixed' || value == 'wpa3-192')
 						uci.unset('wireless', section_id, 'key');
@@ -1307,7 +1306,7 @@ return view.extend({
 				o.value('gcmp256', _('Force GCMP-256 (AES)'));
 				o.value('tkip', _('Force TKIP'));
 				o.value('tkip+ccmp', _('Force TKIP and CCMP (AES)'));
-				o.write = ss.children.filter(function(o) { return o.option == 'encryption' })[0].write;
+				o.write = ss.children.filter(function(o) { return o.option == 'encryption'; })[0].write;
 
 				o.cfgvalue = function(section_id) {
 					let v = String(uci.get('wireless', section_id, 'encryption'));
@@ -1437,7 +1436,7 @@ return view.extend({
 					encr.crypto_support['sta-wds'] = encr.crypto_support['sta'];
 
 					encr.validate = function(section_id, value) {
-						const modeopt = this.section.children.filter(function(o) { return o.option == 'mode' })[0];
+						const modeopt = this.section.children.filter(function(o) { return o.option == 'mode'; })[0];
 						const modeval = modeopt.formvalue(section_id);
 						const modetitle = modeopt.vallist[modeopt.keylist.indexOf(modeval)];
 						const enctitle = this.vallist[this.keylist.indexOf(value)];
@@ -1461,7 +1460,7 @@ return view.extend({
 
 				crypto_modes.push(['none',       _('No Encryption'),   0]);
 
-				crypto_modes.sort(function(a, b) { return b[2] - a[2] });
+				crypto_modes.sort(function(a, b) { return b[2] - a[2]; });
 
 				crypto_modes.forEach(crypto_mode => {
 					const security_level = (crypto_mode[2] >= 30) ? _('strong security')
@@ -1522,7 +1521,7 @@ return view.extend({
 				};
 
 				const req_attr_syntax = _('Format:') + '<code>&lt;attr_id&gt;[:&lt;syntax:value&gt;]</code>' + '<br />' +
-					'<code>syntax: s = %s; '.format(_('string (UTF-8)')) + 'd = %s; '.format(_('integer')) + 'x = %s</code>'.format(_('octet string'))
+					'<code>syntax: s = %s; '.format(_('string (UTF-8)')) + 'd = %s; '.format(_('integer')) + 'x = %s</code>'.format(_('octet string'));
 
 				/* https://w1.fi/cgit/hostap/commit/?id=af35e7af7f8bb1ca9f0905b4074fb56a264aa12b */
 				o = ss.taboption('encryption', form.DynamicList, 'radius_auth_req_attr', _('RADIUS Access-Request attributes'),
@@ -1547,7 +1546,7 @@ return view.extend({
 				o.value('2', _('Required'));
 				o.write = function (section_id, value) {
 					return this.super('write', [section_id, (value == 0) ? null: value]);
-				}
+				};
 
 				o = ss.taboption('encryption', form.Flag, 'per_sta_vif', _('RADIUS Per STA VLAN'), _('Each STA is assigned its own AP_VLAN interface.'));
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed', 'wpa3-192'] });
@@ -1739,7 +1738,7 @@ return view.extend({
 						o.value('2', _('Enabled'));
 						o.write = function (section_id, value) {
 							return this.super('write', [section_id, (value == 2) ? value: null]);
-						}
+						};
 
 						//Pull current System TZ setting
 						const tz = uci.get('system', '@system[0]', 'timezone');
@@ -1823,7 +1822,7 @@ return view.extend({
 					add_dependency_permutations(o, { mode: ['sta', 'sta-wds'], encryption: ['wpa', 'wpa2', 'wpa3', 'wpa3-mixed', 'wpa3-192'], eap_type: ['fast', 'peap', 'ttls'] });
 
 					o.validate = function(section_id, value) {
-						const eo = this.section.children.filter(function(o) { return o.option == 'eap_type' })[0];
+						const eo = this.section.children.filter(function(o) { return o.option == 'eap_type'; })[0];
 						const ev = eo.formvalue(section_id);
 
 						if (ev != 'ttls' && (value == 'PAP' || value == 'CHAP' || value == 'MSCHAP' || value == 'MSCHAPV2'))
@@ -1925,7 +1924,7 @@ return view.extend({
 							o.depends('ieee80211w', '2');
 
 							o.validate = function(section_id, value) {
-								const modeopt = this.section.children.filter(function(o) { return o.option == 'mode' })[0];
+								const modeopt = this.section.children.filter(function(o) { return o.option == 'mode'; })[0];
 								const modeval = modeopt.formvalue(section_id);
 
 								if ((value == '2') && ((modeval == 'sta') || (modeval == 'sta-wds'))) {
@@ -1933,14 +1932,14 @@ return view.extend({
 								}
 
 								return true;
-							}
+							};
 						}
 
 						o = ss.taboption('encryption', form.Flag, 'wpa_disable_eapol_key_retries', _('Enable key reinstallation (KRACK) countermeasures'), _('Complicates key reinstallation attacks on the client side by disabling retransmission of EAPOL-Key frames that are used to install keys. This workaround might cause interoperability issues and reduced robustness of key negotiation especially in environments with heavy traffic load.'));
 						add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk2', 'psk-mixed', 'sae', 'sae-mixed', 'wpa2', 'wpa3', 'wpa3-mixed'] });
 
 						if (L.hasSystemFeature('hostapd', 'wps') && L.hasSystemFeature('wpasupplicant')) {
-							o = ss.taboption('encryption', form.Flag, 'wps_pushbutton', _('Enable WPS pushbutton, requires WPA(2)-PSK/WPA3-SAE'))
+							o = ss.taboption('encryption', form.Flag, 'wps_pushbutton', _('Enable WPS pushbutton, requires WPA(2)-PSK/WPA3-SAE'));
 							o.enabled = '1';
 							o.disabled = '0';
 							o.default = o.disabled;
@@ -2029,6 +2028,7 @@ return view.extend({
 						return -1;
 					else if (a.bssid > b.bssid)
 						return 1;
+					return 0;
 				});
 
 				results.forEach(res => {
@@ -2039,7 +2039,7 @@ return view.extend({
 
 					rows.push([
 						E('span', { 'style': s }, render_signal_badge(q, res?.signal, res?.noise)),
-						E('span', { 'style': s }, (res?.ssid != null) ? `${res?.ssid}` : E('em', _('hidden'))),
+						E('span', { 'style': s }, (typeof res.ssid === 'string' && res.ssid.length > 0) ? `${res?.ssid}` : E('em', _('hidden'))),
 						E('span', { 'style': s }, `${res?.channel}`),
 						E('span', { 'style': s }, `${res?.mode}`),
 						E('span', { 'style': s }, `${res?.bssid}`),
@@ -2065,7 +2065,8 @@ return view.extend({
 			const btn = ev.currentTarget;
 
 			if (btn.getAttribute('data-state') == 'stop') {
-				poll.remove(this.pollFn);
+				if (this.pollFn)
+					poll.remove(this.pollFn);
 				btn.firstChild.data = _('Start refresh');
 				btn.setAttribute('data-state', 'start');
 			}
@@ -2086,8 +2087,8 @@ return view.extend({
 			}
 
 			ui.hideModal();
-			poll.remove(this.pollFn);
-
+			if (this.pollFn)
+				poll.remove(this.pollFn);
 			this.pollFn = null;
 		};
 
@@ -2105,8 +2106,8 @@ return view.extend({
 			const zoneval = zoneopt ? zoneopt.formvalue('_new_') : null;
 			const enc = L.isObject(bss.encryption) ? bss.encryption : null;
 			const is_wep = (enc && Array.isArray(enc.wep));
-			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' }).length > 0);
-			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'sae' }).length > 0);
+			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk'; }).length > 0);
+			const is_sae = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'sae'; }).length > 0);
 
 			if (nameval == null || (passopt && passval == null))
 				return;
@@ -2200,8 +2201,8 @@ return view.extend({
 				return network.addNetwork(nameval, { proto: 'dhcp' }).then(function(net) {
 					firewall.deleteNetwork(net.getName());
 
-					const zonePromise = zoneval
-						? firewall.getZone(zoneval).then(function(zone) { return zone || firewall.addZone(zoneval) })
+					const zonePromise = zoneval ?
+						firewall.getZone(zoneval).then(function(zone) { return zone || firewall.addZone(zoneval); })
 						: Promise.resolve();
 
 					return zonePromise.then(function(zone) {
@@ -2217,13 +2218,13 @@ return view.extend({
 		};
 
 		s.handleJoin = function(radioDev, bss, ev) {
-			poll.remove(this.pollFn);
-
+			if (this.pollFn)
+				poll.remove(this.pollFn);
 			const m2 = new form.Map('wireless');
 			const s2 = m2.section(form.NamedSection, '_new_');
 			const enc = L.isObject(bss.encryption) ? bss.encryption : null;
 			const is_wep = (enc && Array.isArray(enc.wep));
-			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' || a == 'sae' }));
+			const is_psk = (enc && Array.isArray(enc.wpa) && L.toArray(enc.authentication).filter(function(a) { return a == 'psk' || a == 'sae'; }));
 			let replace, passphrase, name, bssid, zone;
 
 			function nameUsed(name) {
@@ -2233,7 +2234,7 @@ return view.extend({
 
 				const net = (s != null) ? network.instantiateNetwork(name) : null;
 				return (net != null && !net.isEmpty());
-			};
+			}
 
 			s2.render = function() {
 				return Promise.all([
@@ -2245,7 +2246,7 @@ return view.extend({
 			if (bss.ssid == null) {
 				name = s2.option(form.Value, 'ssid', _('Network SSID'), _('The correct SSID must be manually specified when joining a hidden wireless network'));
 				name.rmempty = false;
-			};
+			}
 
 			replace = s2.option(form.Flag, 'replace', _('Replace wireless configuration'), _('Check this option to delete the existing networks from this radio.'));
 
@@ -2386,7 +2387,7 @@ return view.extend({
 
 							for (let i = 0; i < data.length; i++) {
 								const wifiNetwork = hosts_radios_wifis[2][i];
-								const radioDev = hosts_radios_wifis[1].filter(function(d) { return d.getName() == wifiNetwork.getWifiDeviceName() })[0];
+								const radioDev = hosts_radios_wifis[1].filter(function(d) { return d.getName() == wifiNetwork.getWifiDeviceName(); })[0];
 
 								for (let dy of data[i])
 									hosts_radios_wifis[3].push(Object.assign({ radio: radioDev, network: wifiNetwork }, dy));
@@ -2412,7 +2413,7 @@ return view.extend({
 				])
 			]);
 
-			cbi_update_table(table, [], E('em', { 'class': 'spinning' }, _('Collecting data...')))
+			cbi_update_table(table, [], E('em', { 'class': 'spinning' }, _('Collecting data...')));
 
 			return E([ nodes, E('h3', _('Associated Stations')), table ]);
 		}, this, m));
