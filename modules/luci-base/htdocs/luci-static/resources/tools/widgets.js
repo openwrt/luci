@@ -357,7 +357,7 @@ var CBINetworkSelect = form.ListValue.extend({
 		for (var j = 0; j < devices.length && devices[j]; j++) {
 			span.appendChild(E('img', {
 				'title': devices[j].getI18n(),
-				'src': L.resource('icons/%s%s.png'.format(devices[j].getType(), devices[j].isUp() ? '' : '_disabled'))
+				'src': L.resource('icons/%s%s.png'.format(devices[j].getType(), network.isUp() ? '' : '_disabled'))
 			}));
 		}
 
