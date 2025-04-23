@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-04-17 20:18+0000\n"
+"PO-Revision-Date: 2025-04-23 20:29+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsxinetd/cs/>\n"
@@ -29,6 +29,8 @@ msgid ""
 "Additional arguments passed to the server. There is no validation of this "
 "input."
 msgstr ""
+"Další argumenty předávané serveru. Správnost tohoto zadání není nijak "
+"ověřována."
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:72
 msgid "Advanced Settings"
@@ -36,7 +38,7 @@ msgstr "Pokročilá nastavení"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:230
 msgid "Allowed hosts"
-msgstr ""
+msgstr "Umožnění hostitelé"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:71
 msgid "Basic Settings"
@@ -65,7 +67,7 @@ msgstr ""
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:65
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:88
 msgid "Enabled"
-msgstr ""
+msgstr "Povoleno"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:252
 msgid "Expected '[Number] [Number]'"
@@ -85,11 +87,11 @@ msgstr ""
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:235
 msgid "Forbidden hosts"
-msgstr ""
+msgstr "Odepření hostitelé"
 
 #: applications/luci-app-xinetd/root/usr/share/rpcd/acl.d/luci-app-xinetd.json:3
 msgid "Grant access to luci-app-xinetd"
-msgstr ""
+msgstr "Udělit přístup pro luci-app-xinetd"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:30
 msgid "Here you can configure Xinetd services"
@@ -123,7 +125,7 @@ msgstr "Seznam hostitelů, kterým je odepřen přístup k této službě"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:95
 msgid "Listen on IPv6 additional"
-msgstr ""
+msgstr "Další pro očekávání spojení na IPv6"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:223
 msgid "Log on failure"
@@ -150,6 +152,8 @@ msgid ""
 "Number of simultaneously running servers for this service. Argument is any "
 "number or the keyword 'UNLIMITED'"
 msgstr ""
+"Počet souběžně spuštěný serverů pro tuto službu. Argument je libovolné číslo "
+"nebo klíčové slovo „UNLIMITED“"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:47
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:141
@@ -190,7 +194,7 @@ msgstr "Server"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:215
 msgid "Server PID"
-msgstr ""
+msgstr "Identif. procesu serveru"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:197
 msgid "Server arguments"
@@ -206,7 +210,7 @@ msgstr "Služba „%s“: neplatný soubor serveru „%s“"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:192
 msgid "Service \"%s\": No access to server file \"%s\" (%s)"
-msgstr ""
+msgstr "Služba „%s“: Žádný přístup k souboru serveru „%s“ (%s)"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:33
 msgid "Service definitions to be used by Xinetd"
@@ -219,11 +223,11 @@ msgstr "Název služby"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:209
 msgid "Single-Threaded Service"
-msgstr ""
+msgstr "Jednovláknová služba"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:154
 msgid "Socket type"
-msgstr ""
+msgstr "Typ soketu"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:149
 msgid "TCP"
@@ -234,10 +238,12 @@ msgid ""
 "Takes two arguments: [Number of connections per second] [Number of seconds "
 "to reenable service]"
 msgstr ""
+"Přijímá dva argumenty: [Počet spojení za sekundu] "
+"[Počet sekund pro znovupovolení služby]"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:141
 msgid "The port used for this service, valid range: 0 - 65535"
-msgstr ""
+msgstr "Port použitý pro tuto službu – platný rozsah: 0 až 65535"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:147
 msgid "The protocol to be used for this service"
@@ -245,11 +251,11 @@ msgstr "Protokol který používat pro tuto službu"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:154
 msgid "The type of the socket used for this service"
-msgstr ""
+msgstr "Typ soketu použitého pro tuto službu"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:207
 msgid "Threading behaviour"
-msgstr ""
+msgstr "Chování vláknování"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:255
 msgid "Time intervals within service is available (Format hh:mm-hh:mm)"
@@ -261,7 +267,7 @@ msgstr "Na kterou adresu navázat"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:220
 msgid "Total bytes in and out for a redirected service"
-msgstr ""
+msgstr "Celkem bajtů do a z pro přesměrovanou službu"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:50
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:102
@@ -278,7 +284,7 @@ msgstr "UDP"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:105
 msgid "UNLISTED"
-msgstr ""
+msgstr "NEUVEDENO"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:163
 msgid "Use redirect"
@@ -286,11 +292,11 @@ msgstr "Použít přesměrování"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:203
 msgid "User (UID)"
-msgstr ""
+msgstr "Uživatel (UID)"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:203
 msgid "User ID for the server process for this service"
-msgstr ""
+msgstr "Identif. uživatele pro proces serveru pro tuto službu"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:217
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:225
@@ -311,11 +317,11 @@ msgstr "Xinetd"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:30
 msgid "Xinetd Settings"
-msgstr ""
+msgstr "Nastavení pro Xinetd"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:157
 msgid "datagram-based service"
-msgstr ""
+msgstr "služba založená na datagramech"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:158
 msgid "direct access to IP service"
@@ -328,11 +334,11 @@ msgstr "ne"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:159
 msgid "sequential datagram transmission service"
-msgstr ""
+msgstr "služba přenosu po sobě jdoucích datagramů"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:156
 msgid "stream-based service"
-msgstr ""
+msgstr "služba založená na proudech"
 
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:58
 #: applications/luci-app-xinetd/htdocs/luci-static/resources/view/xinetd/xinetd.js:67
