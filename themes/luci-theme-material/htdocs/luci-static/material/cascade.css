@@ -369,7 +369,9 @@ small {
 	float: left;
 }
 
-.nowrap:not(.td) {
+.nowrap:not(.td span) {
+/*	Sometimes you need to wrap: badges on narrow screens look weird 
+	and nowrap defeats other width constraints, so exclude span */
 	white-space: nowrap;
 }
 

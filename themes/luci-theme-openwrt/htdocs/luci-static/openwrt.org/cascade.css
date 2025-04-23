@@ -64,7 +64,9 @@ body {
 	line-height: 3em;
 }
 
-.nowrap {
+.nowrap:not(span) {
+/*	Sometimes you need to wrap: badges on narrow screens look weird 
+	and nowrap defeats other width constraints, so exclude span */
 	white-space: nowrap;
 }
 

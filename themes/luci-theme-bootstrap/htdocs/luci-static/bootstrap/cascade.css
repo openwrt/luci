@@ -318,7 +318,9 @@ a:hover {
 	float: left;
 }
 
-.nowrap {
+.nowrap:not(span) {
+/*	Sometimes you need to wrap: badges on narrow screens look weird 
+	and nowrap defeats other width constraints, so exclude span */
 	white-space: nowrap;
 }
 
@@ -2193,7 +2195,6 @@ th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
 .ifacebadge {
 	display: inline-block;
 	flex-direction: row;
-	white-space: nowrap;
 	border: 1px solid var(--border-color-high);
 	padding: 2px;
 	background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--background-color-medium));
