@@ -345,6 +345,7 @@ small {
 	float: left;
 	overflow-x: auto;
 	width: calc(0% + 15rem);
+	min-width: max-content;
 	height: calc(100% - 4rem);
 	background-color: var(--white-color);
 	transition: visibility 400ms, width 400ms;
@@ -2511,17 +2512,13 @@ input[name="nslookup"] {
 }
 
 /* IE hacks */
-@media all and (-ms-high-contrast: none) {
+@media all {
 	.main > .main-left > .nav > .slide > .menu::before {
 		top: 30.25%;
 	}
 
 	.main > .main-left > .nav > li:last-child::before {
 		top: 20%;
-	}
-
-	.showSide::before {
-		top: -12px;
 	}
 }
 
@@ -3104,12 +3101,12 @@ input[name="nslookup"] {
 	::-webkit-scrollbar-thumb {
 		background: #9e9e9e;
 	}
-
+/*
 	::-webkit-scrollbar-thumb:hover {
 		background: #757575;
 	}
 
 	::-webkit-scrollbar-thumb:active {
 		background: #424242;
-	}
+	}*/
 }
