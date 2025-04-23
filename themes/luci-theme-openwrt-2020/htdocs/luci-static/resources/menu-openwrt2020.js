@@ -3,13 +3,13 @@
 'require ui';
 
 return baseclass.extend({
-	__init__: function() {
+	__init__() {
 		ui.menu.load().then(L.bind(this.render, this));
 	},
 
-	render: function(tree) {
-		var node = tree,
-		    url = '';
+	render(tree) {
+		let node = tree;
+		let url = '';
 
 		this.renderModeMenu(node);
 
@@ -27,10 +27,12 @@ return baseclass.extend({
 			.addEventListener('click', ui.createHandlerFn(this, 'handleSidebarToggle'));
 	},
 
-	handleMenuExpand: function(ev) {
-		var a = ev.target, ul1 = a.parentNode.parentNode, ul2 = a.nextElementSibling;
+	handleMenuExpand(ev) {
+		const a = ev.target;
+		const ul1 = a.parentNode.parentNode;
+		const ul2 = a.nextElementSibling;
 
-		document.querySelectorAll('ul.mainmenu.l1 > li.active').forEach(function(li) {
+		document.querySelectorAll('ul.mainmenu.l1 > li.active').forEach(li => {
 			if (li !== a.parentNode)
 				li.classList.remove('active');
 		});
@@ -49,27 +51,28 @@ return baseclass.extend({
 		ev.stopPropagation();
 	},
 
-	renderMainMenu: function(tree, url, level) {
-		var l = (level || 0) + 1,
-		    ul = E('ul', { 'class': 'mainmenu l%d'.format(l) }),
-		    children = ui.menu.getChildren(tree);
+	renderMainMenu(tree, url, level) {
+		const l = (level || 0) + 1;
+		const ul = E('ul', { 'class': 'mainmenu l%d'.format(l) });
+		const children = ui.menu.getChildren(tree);
 
 		if (children.length == 0 || l > 2)
 			return E([]);
 
-		for (var i = 0; i < children.length; i++) {
-			var isActive = (L.env.dispatchpath[l] == children[i].name),
-			    isReadonly = children[i].readonly,
-			    activeClass = 'mainmenu-item-%s%s'.format(children[i].name, isActive ? ' selected' : '');
+		children.forEach(child => {
+			const isActive = (L.env.dispatchpath[l] == child.name);
+			const activeClass = 'mainmenu-item-%s%s'.format(child.name, isActive ? ' selected' : '');
 
 			ul.appendChild(E('li', { 'class': activeClass }, [
 				E('a', {
-					'href': L.url(url, children[i].name),
-					'click': (l == 1) ? ui.createHandlerFn(this, 'handleMenuExpand') : null
-				}, [ _(children[i].title) ]),
-				this.renderMainMenu(children[i], url + '/' + children[i].name, l)
+					'href': L.url(url, child.name),
+					'click': (l == 1) ? ui.createHandlerFn(this, 'handleMenuExpand') : ''
+				}, [
+					_(child.title)
+				]),
+				this.renderMainMenu(child, url + '/' + child.name, l)
 			]));
-		}
+		});
 
 		if (l == 1)
 			document.querySelector('#mainmenu').appendChild(E('div', [ ul ]));
@@ -77,50 +80,56 @@ return baseclass.extend({
 		return ul;
 	},
 
-	renderModeMenu: function(tree) {
-		var menu = document.querySelector('#modemenu'),
-		    children = ui.menu.getChildren(tree);
+	renderModeMenu(tree) {
+		const menu = document.querySelector('#modemenu');
+		const children = ui.menu.getChildren(tree);
 
-		for (var i = 0; i < children.length; i++) {
-			var isActive = (L.env.requestpath.length ? children[i].name == L.env.requestpath[0] : i == 0);
+		children.forEach((child, index) => {
+			const isActive = L.env.requestpath.length
+				? child.name === L.env.requestpath[0]
+				: index === 0;
 
-			if (i > 0)
+			if (index > 0)
 				menu.appendChild(E([], ['\u00a0|\u00a0']));
 
-			menu.appendChild(E('div', { 'class': isActive ? 'active' : null }, [
-				E('a', { 'href': L.url(children[i].name) }, [ _(children[i].title) ])
+			menu.appendChild(E('div', { 'class': isActive ? 'active' : '' }, [
+				E('a', { href: L.url(child.name) }, [
+					_(child.title)
+				])
 			]));
 
 			if (isActive)
-				this.renderMainMenu(children[i], children[i].name);
-		}
+				this.renderMainMenu(child, child.name);
+		});
 
 		if (menu.children.length > 1)
 			menu.style.display = '';
 	},
 
-	renderTabMenu: function(tree, url, level) {
-		var container = document.querySelector('#tabmenu'),
-		    l = (level || 0) + 1,
-		    ul = E('ul', { 'class': 'cbi-tabmenu' }),
-		    children = ui.menu.getChildren(tree),
-		    activeNode = null;
+	renderTabMenu(tree, url, level) {
+		const container = document.querySelector('#tabmenu');
+		const l = (level || 0) + 1;
+		const ul = E('ul', { 'class': 'cbi-tabmenu' });
+		const children = ui.menu.getChildren(tree);
+		let activeNode = null;
 
 		if (children.length == 0)
 			return E([]);
 
-		for (var i = 0; i < children.length; i++) {
-			var isActive = (L.env.dispatchpath[l + 2] == children[i].name),
-			    activeClass = isActive ? ' cbi-tab' : '',
-			    className = 'tabmenu-item-%s %s'.format(children[i].name, activeClass);
+		children.forEach(child => {
+			const isActive = (L.env.dispatchpath[l + 2] == child.name);
+			const activeClass = isActive ? ' cbi-tab' : '';
+			const className = 'tabmenu-item-%s %s'.format(child.name, activeClass);
 
 			ul.appendChild(E('li', { 'class': className }, [
-				E('a', { 'href': L.url(url, children[i].name) }, [ _(children[i].title) ] )
+				E('a', { 'href': L.url(url, child.name) }, [
+					_(child.title)
+				])
 			]));
 
 			if (isActive)
-				activeNode = children[i];
-		}
+				activeNode = child;
+		});
 
 		container.appendChild(ul);
 		container.style.display = '';
@@ -131,9 +140,9 @@ return baseclass.extend({
 		return ul;
 	},
 
-	handleSidebarToggle: function(ev) {
-		var btn = ev.currentTarget,
-		    bar = document.querySelector('#mainmenu');
+	handleSidebarToggle(ev) {
+		const btn = ev.currentTarget;
+		const bar = document.querySelector('#mainmenu');
 
 		if (btn.classList.contains('active')) {
 			btn.classList.remove('active');
