@@ -111,7 +111,7 @@ var CBIZoneSelect = form.ListValue.extend({
 					continue;
 
 				var span = E('span', {
-					'class': 'ifacebadge' + (network.getName() == this.network ? ' ifacebadge-active' : '')
+					'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
 				}, network.getName() + ': ');
 
 				var devices = getDevices(network);
@@ -119,7 +119,7 @@ var CBIZoneSelect = form.ListValue.extend({
 				for (var k = 0; k < devices.length; k++) {
 					span.appendChild(E('img', {
 						'title': devices[k].getI18n(),
-						'src': L.resource('icons/%s%s.png'.format(devices[k].getType(), devices[k].isUp() ? '' : '_disabled'))
+						'src': L.resource('icons/%s%s.png'.format(devices[k].getType(), network.isUp() ? '' : '_disabled'))
 					}));
 				}
 
@@ -252,7 +252,7 @@ var CBIZoneForwards = form.DummyValue.extend({
 				continue;
 
 			var span = E('span', {
-				'class': 'ifacebadge' + (network.getName() == this.network ? ' ifacebadge-active' : '')
+				'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
 			}, network.getName() + ': ');
 
 			var subdevs = getDevices(network);
@@ -260,7 +260,7 @@ var CBIZoneForwards = form.DummyValue.extend({
 			for (var k = 0; k < subdevs.length && subdevs[k]; k++) {
 				span.appendChild(E('img', {
 					'title': subdevs[k].getI18n(),
-					'src': L.resource('icons/%s%s.png'.format(subdevs[k].getType(), subdevs[k].isUp() ? '' : '_disabled'))
+					'src': L.resource('icons/%s%s.png'.format(subdevs[k].getType(), network.isUp() ? '' : '_disabled'))
 				}));
 			}
 
@@ -534,7 +534,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 				var item = E([
 					E('img', {
 						'title': device.getI18n(),
-						'src': L.resource('icons/alias%s.png'.format(net.isUp() ? '' : '_disabled'))
+						'src': L.resource('icons/alias%s.png'.format(device.isUp() ? '' : '_disabled'))
 					}),
 					E('span', { 'class': 'hide-open' }, [ name ]),
 					E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
