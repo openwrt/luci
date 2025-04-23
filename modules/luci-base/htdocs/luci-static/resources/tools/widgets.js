@@ -177,26 +177,27 @@ var CBIZoneSelect = form.ListValue.extend({
 						emptyval.parentNode.removeChild(emptyval);
 				}
 				else {
-					var anyval = node.querySelector('[data-value="*"]'),
-					    emptyval = node.querySelector('[data-value=""]');
+					const anyval = node.querySelector('[data-value="*"]') || '';
+					const emptyval = node.querySelector('[data-value=""]') || '';
 
-					if (emptyval == null) {
+					if (emptyval == null && anyval) {
 						emptyval = anyval.cloneNode(true);
 						emptyval.removeAttribute('display');
 						emptyval.removeAttribute('selected');
 						emptyval.setAttribute('data-value', '');
 					}
 
-					if (opt[0].allowlocal)
+					if (opt[0]?.allowlocal && emptyval)
 						L.dom.content(emptyval.querySelector('span'), [
 							E('strong', _('Device')), E('span', ' (%s)'.format(_('input')))
 						]);
+					if (opt[0]?.allowany && anyval && emptyval) {
+						L.dom.content(anyval.querySelector('span'), [
+							E('strong', _('Any zone')), E('span', ' (%s)'.format(_('forward')))
+						]);
 
-					L.dom.content(anyval.querySelector('span'), [
-						E('strong', _('Any zone')), E('span', ' (%s)'.format(_('forward')))
-					]);
-
-					anyval.parentNode.insertBefore(emptyval, anyval);
+						anyval.parentNode.insertBefore(emptyval, anyval);
+					}
 				}
 
 			}, this));
