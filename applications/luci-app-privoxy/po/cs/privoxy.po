@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-09-18 15:45+0000\n"
-"Last-Translator: David Rapaň <david@rapan.cz>\n"
+"PO-Revision-Date: 2025-04-23 20:29+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsprivoxy/cs/>\n"
 "Language: cs\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0.2\n"
+"Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:236
 msgid ""
@@ -27,7 +27,7 @@ msgstr ""
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:325
 msgid "A directory where Privoxy can create temporary files."
-msgstr "Adresář, kde může Privoxy vytvářet dočasné soubory."
+msgstr "Složka, kde může Privoxy vytvářet dočasné soubory."
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:84
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:87
@@ -88,11 +88,12 @@ msgstr "Protokolovat 'force' vlastnosti"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:845
 msgid "Debug redirects"
-msgstr "Protokolovat přesměrování"
+msgstr "Zaznamenávat ladící informace o přesměrování"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:839
 msgid "Debug regular expression filters"
-msgstr "Protokolovat filtry regulárních výrazů"
+msgstr ""
+"Zapisovat ladící informace pro filtry regulárních výrazů do záznamu událostí"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:152
 msgid "Delay (in seconds) during system boot before Privoxy start"
@@ -102,7 +103,7 @@ msgstr "Prodleva v sekundách při bootování systému před spuštěním Privo
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:298
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:315
 msgid "Directory does not exist!"
-msgstr "Adresář neexistuje!"
+msgstr "Složka neexistuje!"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:557
 msgid "Disabled == Transparent Proxy Mode"
@@ -134,7 +135,7 @@ msgstr "Povolit / zakázat filtrování při spuštění privoxy."
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:134
 msgid "Enabled"
-msgstr "Zapnuto"
+msgstr "Povoleno"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:602
 msgid ""
@@ -148,17 +149,17 @@ msgstr ""
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:404
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:442
 msgid "File '%s' not found inside Configuration Directory"
-msgstr "Soubor '%s' nebyl nalezen v konfiguračním adresáři"
+msgstr "Soubor „%s“ nenalezen ve složce nastavení"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:915
 #: applications/luci-app-privoxy/luasrc/view/privoxy/detail_logview.htm:12
 msgid "File not found or empty"
-msgstr "Soubor nebyl nalezen nebo je prázdný"
+msgstr "Soubor nenalezen nebo je prázdný"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:75
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:80
 msgid "Files and Directories"
-msgstr "Soubory a adresáře"
+msgstr "Soubory a složky"
 
 #: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:36
 msgid "For help use link at the relevant option"
@@ -208,15 +209,15 @@ msgstr "Prohlížeč souborů protokolu"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:895
 msgid "Log all data read from the network"
-msgstr "Protokolovat všechna data příchozí ze sítě"
+msgstr "Zaznamenávat všechna data příchozí ze sítě"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:827
 msgid "Log all data written to the network"
-msgstr "Protokolovat všechna data odchozí do sítě"
+msgstr "Zaznamenávat všechna data odchozí do sítě"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:901
 msgid "Log the applying actions"
-msgstr "Protokolovat aplikované akce"
+msgstr "Zapisovat uplatňované akce do záznamu událostí"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:803
 msgid ""
@@ -234,7 +235,7 @@ msgstr "Protokolovat cíl každého požadavku, který Privoxy nepropustí, a d�
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:104
 msgid "Logging"
-msgstr "Protokolování"
+msgstr "Zaznamenávání událostí"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:339
 msgid "Main actions file"
@@ -273,7 +274,7 @@ msgstr "Povinný vstup: Nebyla zadána žádná platná IPv6 adresa!"
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:472
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:484
 msgid "Mandatory Input: No valid Port given!"
-msgstr "Povinný vstup: Nebyl zadán žádný platný port!"
+msgstr "Povinný vstup: Nezadán žádný platný port!"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:733
 msgid "Maximum number of client connections that will be served."
@@ -286,7 +287,7 @@ msgstr "Maximální velikost vyrovnávací paměti v kB pro filtrování obsahu.
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:97
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:100
 msgid "Miscellaneous"
-msgstr "Ostatní"
+msgstr "Různé"
 
 #: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:51
 msgid "NOT installed"
@@ -296,7 +297,7 @@ msgstr "NENÍ nainstalováno"
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:291
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:310
 msgid "No trailing '/', please."
-msgstr "Nepoužívejte koncové '/', prosím."
+msgstr "Nedávejte na konec „/“."
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:881
 msgid "Non-fatal errors - *we highly recommended enabling this*"
@@ -322,20 +323,20 @@ msgstr ""
 
 #: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:81
 msgid "Please install current version !"
-msgstr "Nainstalujte prosím aktuální verzi!"
+msgstr "Nainstalujte aktuální verzi!"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:913
 msgid "Please press [Read] button"
-msgstr "Prosím, stiskněte tlačítko [Načíst]"
+msgstr "Stiskněte tlačítko [Načíst]"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:518
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:527
 msgid "Please read Privoxy manual for details!"
-msgstr "Podrobnosti si prosím přečtěte v manuálu Privoxy!"
+msgstr "Podrobnosti se dočtete v manuálové stránce k Privoxy!"
 
 #: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:92
 msgid "Please update to the current version!"
-msgstr "Aktualizujte prosím na současnou verzi!"
+msgstr "Aktualizujte na současnou verzi!"
 
 #: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:24
 msgid "Privoxy WEB proxy"
@@ -364,11 +365,11 @@ msgstr ""
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:908
 msgid "Read / Reread log file"
-msgstr "Načíst / znovu načíst soubor protokolu"
+msgstr "Načíst / znovu načíst soubor záznamu událostí"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:815
 msgid "Show I/O status"
-msgstr "Zobrazit stav I/O"
+msgstr "Zobrazit stav vstupu/výstupu"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:809
 msgid "Show each connection status"
@@ -380,16 +381,16 @@ msgstr "Zobrazit analýzu hlavičky"
 
 #: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:76
 msgid "Software package '%s' is not installed."
-msgstr "Softwarový balíček '%s' není nainstalován."
+msgstr "Softwarový balíček „%s“ není nainstalován."
 
 #: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:85
 msgid "Software package '%s' is outdated."
-msgstr "Softwarový balíček '%s' je zastaralý."
+msgstr "Softwarový balíček „%s“ je zastaralý."
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:125
 #: applications/luci-app-privoxy/luasrc/view/privoxy/detail_startstop.htm:10
 msgid "Start"
-msgstr "Start"
+msgstr "Spustit"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:115
 msgid "Start / Stop"
@@ -413,7 +414,7 @@ msgstr "Syntaxe: Názvy hlaviček klienta odděleny mezerami."
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:612
 msgid "Syntax: target_pattern http_parent[:port]"
-msgstr "Syntax: target_pattern http_parent[:port]"
+msgstr "Syntaxe: target_pattern http_parent[:port]"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:620
 msgid "Syntax: target_pattern socks_proxy[:port] http_parent[:port]"
@@ -563,7 +564,7 @@ msgstr "Hodnota není v rozmezí 0 až 9"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:545
 msgid "Value not between 1 and 4096"
-msgstr "Hodnota není v rozmezí 1 and 4096"
+msgstr "Hodnota není v rozmezí 1 až 4096"
 
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:675
 #: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:698
