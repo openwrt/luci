@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-07-08 22:10+0000\n"
-"Last-Translator: Milan <cirhanmilan@seznam.cz>\n"
+"PO-Revision-Date: 2025-04-23 20:29+0000\n"
+"Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationswatchcat/cs/>\n"
 "Language: cs\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:94
 msgid ""
@@ -20,6 +20,11 @@ msgid ""
 "to fail. Enter the number of seconds to wait for the soft reboot to fail or "
 "use 0 to disable the forced reboot delay."
 msgstr ""
+"<i>Platí pro režimy Ping Reboot a Periodic Reboot</i> <br /> Při "
+"restartování směrovače služba spustí měkký restart. Zadání nenulové hodnoty "
+"spustí tvrdý restart s prodlevou, pokud se ten měkký Zadejte počet sekund "
+"které čekat na nezdar měkkého restart nebo použijte 0 (nula) pro vypnutí "
+"prodlevy vynuceného restartu."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:111
 msgid ""
@@ -32,7 +37,10 @@ msgstr ""
 msgid ""
 "<i>Applies to Ping Reboot, Restart Interface, and Run Script modes</i> <br /"
 "> Specify the interface to monitor and react if a ping over it fails."
-msgstr "Použít Ping k restartování, a spustit skript mode."
+msgstr ""
+"<i>Platí pro režimy ping restart, restartovat rozhraní a spustit skript</i> "
+"<br /> Určete rozhraní, na které dohlížet a reagovat, pokud se ping přes něj "
+"nezdaří."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:60
 msgid "Address family for pinging the host"
@@ -60,7 +68,7 @@ msgstr ""
 
 #: applications/luci-app-watchcat/root/usr/share/rpcd/acl.d/luci-app-watchcat.json:3
 msgid "Grant access to LuCI app watchcat"
-msgstr ""
+msgstr "Udělit přístup k LuCI aplikaci watchcat"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:12
 msgid ""
@@ -71,7 +79,7 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "Host To Check"
-msgstr ""
+msgstr "Hostitel kterého kontrolovat"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:71
 msgid ""
@@ -89,7 +97,7 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:52
 msgid "IP address or hostname to ping."
-msgstr ""
+msgstr "IP adresa či název hostitele, na kterou posílat ping."
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:118
 msgid ""
@@ -125,11 +133,11 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:22
 msgid "Mode"
-msgstr ""
+msgstr "Režim"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:110
 msgid "Name of ModemManager Interface"
-msgstr ""
+msgstr "Název ModemManager rozhraní"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:40
 msgid "Period"
@@ -137,11 +145,11 @@ msgstr "Perioda"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:28
 msgid "Periodic Reboot"
-msgstr ""
+msgstr "Periodický restart"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:80
 msgid "Ping Packet Size"
-msgstr ""
+msgstr "Velikost ping paketu"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:27
 msgid "Ping Reboot"
@@ -159,15 +167,15 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:29
 msgid "Restart Interface"
-msgstr ""
+msgstr "Restartovat rozhraní"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:30
 msgid "Run Script"
-msgstr ""
+msgstr "Spustit skript"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:33
 msgid "Script to run"
-msgstr ""
+msgstr "Skript který spustit"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:34
 msgid ""
@@ -177,11 +185,11 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:81
 msgid "Small: 1 byte"
-msgstr ""
+msgstr "Malé: 1 bajt"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:83
 msgid "Standard: 56 bytes"
-msgstr ""
+msgstr "Standardní: 56 bajtů"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
 msgid "These rules will govern how this device reacts to network events."
@@ -189,7 +197,7 @@ msgstr ""
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:117
 msgid "Unlock Modem Bands"
-msgstr ""
+msgstr "Odemknout pásma modemu"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:11
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:15
@@ -199,4 +207,4 @@ msgstr "Watchcat"
 
 #: applications/luci-app-watchcat/htdocs/luci-static/resources/view/watchcat.js:82
 msgid "Windows: 32 bytes"
-msgstr ""
+msgstr "Windows: 32 bajtů"
