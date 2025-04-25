@@ -1605,6 +1605,12 @@ body.modal-overlay-active #modal_overlay {
 	color: var(--text-color-high);
 }
 
+.cbi-dropdown img {
+	/* the following are necessary to constrain (vector) images of any size */
+	max-height: 1.6em;  /* Adjusts image height to fit slightly larger than text line height */
+	width: auto;  /* Preserves aspect ratio */
+}
+
 .cbi-dropdown > ul {
 	margin: 0 !important;
 	padding: 0;
@@ -2205,8 +2211,8 @@ th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
 }
 
 .ifacebadge img {
-	width: 16px;
-	height: 16px;
+	width: 32px;
+	height: 32px;
 	vertical-align: middle;
 }
 

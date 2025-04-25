@@ -1172,6 +1172,12 @@ ul.cbi-tabmenu li.cbi-tab-disabled[data-errors]::after {
 	outline: 2px solid #4b6e9b;
 }
 
+.cbi-dropdown img {
+	/* the following are necessary to constrain (vector) images of any size */
+	max-height: 1.6em;  /* Adjusts image height to fit slightly larger than text line height */
+	width: auto;  /* Preserves aspect ratio */
+}
+
 .cbi-dropdown > ul {
 	margin: 0 !important;
 	padding: 0;
@@ -1553,6 +1559,12 @@ select + .cbi-button {
 	background: #fff;
 }
 
+.ifacebadge img {
+	width: 32px;
+	height: 32px;
+	vertical-align: middle;
+}
+
 .ifacebox-head {
 	background: #eee;
 }
@@ -1573,7 +1585,6 @@ select + .cbi-button {
 .ifacebadge > em {
 	margin-right: 5px;
 	display: inline-block;
-	height: 16px;
 }
 
 .ifacebadge-active {
@@ -1784,7 +1795,7 @@ select + .cbi-button {
 	bottom: 0;
 	width: 32px;
 	content: " ";
-	background: url(../resources/icons/loading.gif) no-repeat center;
+	background: url(../resources/icons/loading.svg) no-repeat center;
 	background-size: 16px;
 }
 

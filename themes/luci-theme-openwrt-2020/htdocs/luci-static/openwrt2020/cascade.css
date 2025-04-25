@@ -713,7 +713,8 @@ p > a {
 .ifacebadge > img {
 	vertical-align: text-bottom;
 	margin: .25em;
-	height: 16px;
+	height: 32px;
+	width: 32px;
 }
 
 .ifacebadge > * {
@@ -1262,6 +1263,12 @@ textarea {
 
 .cbi-dropdown:not(.btn):not(.cbi-button) {
 	box-shadow: inset 0 0 1px var(--main-dark-color);
+}
+
+.cbi-dropdown img {
+	/* the following are necessary to constrain (vector) images of any size */
+	max-height: 1.6em;  /* Adjusts image height to fit slightly larger than text line height */
+	width: auto;  /* Preserves aspect ratio */
 }
 
 .cbi-dropdown > ul {

@@ -2966,6 +2966,8 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			return 'wifi';
 		else if (this.dev.devtype == 'bridge' || _state.isBridge[this.device])
 			return 'bridge';
+		else if (this.dev.devtype == 'wireguard')
+			return 'wireguard';
 		else if (_state.isTunnel[this.device])
 			return 'tunnel';
 		else if (this.dev.devtype == 'vlan' || this.device.indexOf('.') > -1)
@@ -3036,6 +3038,9 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 
 		case 'vlan':
 			return (_state.isSwitch[this.device] ? _('Switch VLAN') : _('Software VLAN'));
+
+		case 'wireguard':
+			return _('WireGuard Interface');
 
 		case 'tunnel':
 			return _('Tunnel Interface');

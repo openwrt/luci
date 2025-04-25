@@ -1463,6 +1463,12 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	margin-top: -3px;
 }
 
+.cbi-dropdown img {
+	/* the following are necessary to constrain (vector) images of any size */
+	max-height: 1.6em;  /* Adjusts image height to fit slightly larger than text line height */
+	width: auto;  /* Preserves aspect ratio */
+}
+
 .cbi-dropdown > ul {
 	display: flex;
 	overflow-x: hidden;
@@ -1808,7 +1814,7 @@ body.modal-overlay-active #modal_overlay {
 	left: .2em;
 	width: 32px;
 	content: "";
-	background: url(../resources/icons/loading.gif) no-repeat center;
+	background: url(../resources/icons/loading.svg) no-repeat center;
 	background-size: 16px;
 }
 
@@ -1870,6 +1876,12 @@ body.modal-overlay-active #modal_overlay {
 	border-bottom: thin solid #ccc;
 	background: #eee;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.ifacebadge img {
+	width: 32px;
+	height: 32px;
+	vertical-align: middle;
 }
 
 td > .ifacebadge,
