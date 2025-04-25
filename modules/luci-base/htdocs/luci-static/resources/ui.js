@@ -2644,6 +2644,123 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 });
 
 /**
+ * Instantiate a range slider widget.
+ *
+ * @constructor Slider
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `RangeSlider` class implements a widget which allows the user to set a 
+ * value from a predefined range.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly. Instead they're implicitly created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.Slider`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `Slider` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * ...
+ *
+ */
+const UIRangeSlider = UIElement.extend({
+	__init__(value, options) {
+		this.value = value;
+		this.options = Object.assign({
+			optional: true,
+			min: 0,
+			max: 100,
+			step: 1,
+			calculate: null,
+			calcunits: null,
+			usecalc: false,
+			disabled: false,
+		}, options);
+	},
+
+	/** @override */
+	render() {
+		this.sliderEl = E('input', {
+			'type': 'range',
+			'id': this.options.id,
+			'min': this.options.min,
+			'max': this.options.max,
+			'step': this.options.step || 'any',
+			'value': this.value,
+			'disabled': this.options.disabled ? '' : null
+		});
+
+		this.calculatedvalue = (typeof this.options.calculate === 'function')
+			? this.options.calculate(this.value)
+			: null;
+
+		this.calcEl = E('output', { 'class': 'cbi-range-slider-calc' }, this.calculatedvalue);
+
+		this.calcunitsEl = E('span', { 'class': 'cbi-range-slider-calc-units' }, 
+			this.options.calcunits 
+			? '&nbsp;' + this.options.calcunits 
+			: ''
+		);
+
+		const container = E('div', { 'class': 'cbi-range-slider' }, [
+			this.sliderEl,
+			this.valueEl = E('output', { 'for': this.options.id, 'class': 'cbi-range-slider-value' }, this.value),
+			this.calculatedvalue ? E('br') : null,
+			this.calculatedvalue ? this.calcEl : null,
+			this.calculatedvalue ? this.calcunitsEl : null,
+		].filter(Boolean));
+
+		this.node = container;
+
+		this.setUpdateEvents(this.sliderEl, 'input', 'blur');
+		this.setChangeEvents(this.sliderEl, 'change');
+
+		this.sliderEl.addEventListener('input', () => {
+			const val = this.sliderEl.value;
+			this.valueEl.textContent = val;
+			
+			if (typeof this.options.calculate === 'function') {
+				// update the stored calculated value, and the displayed values
+				this.calculatedvalue = this.options.calculate(val);
+				this.calcEl.textContent = this.calculatedvalue;
+			}
+
+			this.node.setAttribute('data-changed', true);
+		});
+
+		dom.bindClassInstance(container, this);
+
+		return container;
+	},
+
+	/** @override */
+	getValue() {
+		return this.sliderEl.value;
+	},
+
+	/** @private */
+	getCalculatedValue() {
+		return this.calculatedvalue;
+	},
+
+	/** @override */
+	setValue(value) {
+		this.sliderEl.value = value;
+		this.valueEl.textContent = value;
+
+		if (typeof this.options.calculate === 'function') {
+			this.calculatedvalue = this.options.calculate(value);
+			this.calcEl.textContent = this.calculatedvalue;
+		}
+	}
+});
+
+/**
  * Instantiate a hidden input field widget.
  *
  * @constructor Hiddenfield
@@ -5174,6 +5291,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	Select: UISelect,
 	Dropdown: UIDropdown,
 	DynamicList: UIDynamicList,
+	RangeSlider: UIRangeSlider,
 	Combobox: UICombobox,
 	ComboButton: UIComboButton,
 	Hiddenfield: UIHiddenfield,

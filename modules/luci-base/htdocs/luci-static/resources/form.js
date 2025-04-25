@@ -4120,6 +4120,155 @@ const CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.prot
 });
 
 /**
+ * @class RangeSliderValue
+ * @memberof LuCI.form
+ * @augments LuCI.form.Value
+ * @hideconstructor
+ * @classdesc
+ *
+ * The `RangeSliderValue` class implements a range slider input using
+ * {@link LuCI.ui.RangeSlider}. It is useful in cases where a value shall fall
+ * within a predetermined range. This helps omit various error checks for such
+ * values. The currently chosen value is displayed to the side of the slider.
+ *
+ * @param {LuCI.form.Map|LuCI.form.JSONMap} form
+ * The configuration form this section is added to. It is automatically passed
+ * by [option()]{@link LuCI.form.AbstractSection#option} or
+ * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
+ * option to the section.
+ *
+ * @param {LuCI.form.AbstractSection} section
+ * The configuration section this option is added to. It is automatically passed
+ * by [option()]{@link LuCI.form.AbstractSection#option} or
+ * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
+ * option to the section.
+ *
+ * @param {string} option
+ * The name of the UCI option to map.
+ *
+ * @param {string} [title]
+ * The title caption of the option element.
+ *
+ * @param {string} [description]
+ * The description text of the option element.
+ */
+const CBIRangeSliderValue = CBIValue.extend(/** @lends LuCI.form.RangeSliderValue.prototype */ {
+	__name__: 'CBI.RangeSliderValue',
+
+	/**
+	 * Minimum value the slider can represent.
+	 * @name LuCI.form.RangeSliderValue.prototype#min
+	 * @type number
+	 * @default 0
+	 */
+
+	/**
+	 * Maximum value the slider can represent.
+	 * @name LuCI.form.RangeSliderValue.prototype#max
+	 * @type number
+	 * @default 100
+	 */
+
+	/**
+	 * Step size for each tick of the slider, or the special value "any" when
+	 * handling arbitrary precision floating point numbers.
+	 * @name LuCI.form.RangeSliderValue.prototype#step
+	 * @type string
+	 * @default 1
+	 */
+
+	/**
+	 * Set the default value for the slider. The default value is elided during
+	 * save: meaning, a currently chosen value which matches the default is
+	 * not saved.
+	 * @name LuCI.form.RangeSliderValue.prototype#default
+	 * @type string
+	 * @default null
+	 */
+
+	/**
+	 * Override the calculate action.
+	 *
+	 * When this property is set to a function, it is invoked when the slider
+	 * is adjusted. This might be useful to calculate and display a result which
+	 * is more meaningful than the currently chosen value. The calculated value
+	 * is displayed below the slider.
+	 *
+	 * @name LuCI.form.RangeSliderValue.prototype#calculate
+	 * @type function
+	 * @default null
+	 */
+
+	/**
+	 * Define the units of the calculated value.
+	 *
+	 * Suffix a unit string to the calculated value, e.g. 'seconds' or 'dBm'.
+	 *
+	 * @name LuCI.form.RangeSliderValue.prototype#calcunits
+	 * @type string
+	 * @default null
+	 */
+
+	/**
+	 * Whether to use the calculated result of the chosen value instead of the
+	 * chosen value: the result of the calculation returned by the
+	 * <code>calculate</code> function on the chosen value
+	 * is written to the configuration instead of the chosen value. The
+	 * <code>calcunits</code> displayed units are not included. 
+	 * 
+	 * Note: Implementers of the <code>calculate</code> function shall be
+	 * mindful that it may be possible to return a NaN value which is seldom a
+	 * sensible input for the underlying daemon or system. Verification of any
+	 * calculated value is an exercise left to the implementer.
+	 *
+	 * @name LuCI.form.RangeSliderValue.prototype#usecalc
+	 * @type boolean
+	 * @default false
+	 */
+
+	/** @private */
+	renderWidget(section_id, option_index, cfgvalue) {
+		const slider = new ui.RangeSlider((cfgvalue != null) ? cfgvalue : this.default, {
+			id: this.cbid(section_id),
+			name: this.cbid(section_id),
+			optional: this.optional,
+			min: this.min,
+			max: this.max,
+			step: this.step,
+			calculate: this.calculate,
+			calcunits: this.calcunits,
+			usecalc: this.usecalc,
+			disabled: this.readonly || this.disabled,
+			datatype: this.datatype,
+			validate: this.validate,
+		});
+
+		this.widget = slider;
+
+		return slider.render();
+	},
+
+	/**
+	 * Query the current form input value.
+	 *
+	 * @param {string} section_id
+	 * The configuration section ID
+	 *
+	 * @returns {*}
+	 * Returns the current input value.
+	 */
+	formvalue(section_id) {
+		const elem = this.getUIElement(section_id);
+		if (!elem) return null;
+		let val = (this.usecalc && (typeof this.calculate === 'function'))
+			? elem.getCalculatedValue()
+			: elem.getValue();
+		val = val?.toString();
+		return (val === this.default?.toString()) ? null : val;
+	}
+});
+
+/**
  * @class FlagValue
  * @memberof LuCI.form
  * @augments LuCI.form.Value
@@ -5042,6 +5191,7 @@ return baseclass.extend(/** @lends LuCI.form.prototype */ {
 	DynamicList: CBIDynamicList,
 	ListValue: CBIListValue,
 	RichListValue: CBIRichListValue,
+	RangeSliderValue: CBIRangeSliderValue,
 	Flag: CBIFlagValue,
 	MultiValue: CBIMultiValue,
 	TextValue: CBITextValue,
