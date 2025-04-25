@@ -58,7 +58,7 @@ var CBIBindSelect = form.ListValue.extend({
 			var item = E([
 				E('img', {
 					'title': device.getI18n(),
-					'src': L.resource('icons/%s%s.png'.format(type, device.isUp() ? '' : '_disabled'))
+					'src': L.resource('icons/%s%s.svg'.format(type, device.isUp() ? '' : '_disabled'))
 				}),
 				E('span', { 'class': 'hide-open' }, [ name ]),
 				E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
@@ -91,7 +91,7 @@ var CBIBindSelect = form.ListValue.extend({
 				var item = E([
 					E('img', {
 						'title': device.getI18n(),
-						'src': L.resource('icons/alias%s.png'.format(net.isUp() ? '' : '_disabled'))
+						'src': L.resource('icons/alias%s.svg'.format(net.isUp() ? '' : '_disabled'))
 					}),
 					E('span', { 'class': 'hide-open' }, [ name ]),
 					E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
@@ -115,7 +115,7 @@ var CBIBindSelect = form.ListValue.extend({
 				choices[keys[i]] = E([
 					E('img', {
 						'title': _('Absent Interface'),
-						'src': L.resource('icons/ethernet_disabled.png')
+						'src': L.resource('icons/ethernet_disabled.svg')
 					}),
 					E('span', { 'class': 'hide-open' }, [ keys[i] ]),
 					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(_('Absent Interface'), keys[i]) ])

@@ -4520,7 +4520,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * or rejecting with `null` when the connectivity check timed out.
 	 */
 	pingDevice(proto, ipaddr) {
-		const target = '%s://%s%s?%s'.format(proto ?? 'http', ipaddr ?? window.location.host, L.resource('icons/loading.gif'), Math.random());
+		const target = '%s://%s%s?%s'.format(proto ?? 'http', ipaddr ?? window.location.host, L.resource('icons/loading.svg'), Math.random());
 
 		return new Promise((resolveFn, rejectFn) => {
 			const img = new Image();
