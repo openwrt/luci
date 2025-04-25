@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-23 20:29+0000\n"
+"PO-Revision-Date: 2025-04-25 14:28+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/cs/>\n"
@@ -97,7 +97,7 @@ msgstr "Nastavení"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:367
 msgid "Connect timeout"
-msgstr "Časový limit pro připojení"
+msgstr "Časový limit spojení"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/files.js:47
 msgid "Content of config file: <code>%s</code>"
@@ -403,11 +403,11 @@ msgstr "Pozastavit metadata"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:96
 msgid "Please input token length:"
-msgstr ""
+msgstr "Zadejte délku tokenu:"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:530
 msgid "Prefix of peer ID"
-msgstr ""
+msgstr "Předpona identifikátoru protějšku"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:341
 msgid "Private key"
@@ -458,6 +458,8 @@ msgid ""
 "RPC transport will be encrypted by SSL/TLS. The RPC clients must use https "
 "scheme to access the server. For WebSocket client, use wss scheme."
 msgstr ""
+"RPC transport bude šifrován SSL/TLS. Je třeba, aby RPC klient pro přístup k "
+"serveru používal schéma https. Pro klienta WebSocket použijte schéma wss."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:262
 msgid "RPC username"
@@ -469,7 +471,7 @@ msgstr "Znovu načíst každých %s sekund."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:459
 msgid "Remove unselected file"
-msgstr ""
+msgstr "Odebrat neoznačený soubor"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:460
 msgid ""
@@ -477,6 +479,8 @@ msgid ""
 "Please use this option with care because it will actually remove files from "
 "your disk."
 msgstr ""
+"Odebírá neoznačené soubory, když je stahován v BitTorrent dokončeno. Tuto "
+"volbu používejte opatrně, protože opravdu odebere soubory z disku."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:514
 msgid "Request peer speed limit"
@@ -492,13 +496,15 @@ msgstr "Spustit proces služby pod uživatelskými oprávněními"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:194
 msgid "Running Status"
-msgstr ""
+msgstr "Stav chodu"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:566
 msgid ""
 "Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
 "is not saved during download."
 msgstr ""
+"Uložit řídící soubor (*.aria2) každých N sekund. Pokud je zadáno 0 (nula), "
+"řídící soubor není v průběhu stahování ukládán."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:598
 msgid ""
@@ -512,6 +518,8 @@ msgid ""
 "Save error/unfinished downloads to session file every N seconds. If 0 is "
 "given, file will be saved only when aria2 exits."
 msgstr ""
+"Ukládat stahování nedokončená / s chybou do souboru relací každých N sekund. "
+"Pokud je zadáno 0 (nula), soubor bude uložen pouze při ukončení aria2."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:453
 msgid ""
@@ -526,7 +534,7 @@ msgstr "Uložit metadata"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:571
 msgid "Save session interval"
-msgstr ""
+msgstr "Interval ukládání relace"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:467
 msgid "Seed previously downloaded files without verifying piece hashes."
@@ -571,24 +579,34 @@ msgid ""
 "Set UDP listening port used by DHT (IPv4, IPv6) and UDP tracker. Make sure "
 "that the specified ports are open for incoming UDP traffic."
 msgstr ""
+"Nastavit UDP port pro očekávání spojení použitý DHT (IPv4, IPv6) a UDP "
+"sledovač. Ověřte, že zadané porty jsou otevřené pro příchozí UDP provoz."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:614
 msgid ""
 "Set max download speed per each download in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Nastaví nejvyšší umožněnou rychlost stahování pro každé z nich (v bajtech/s)"
+". 0 (nula) znamená neomezeno."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:607
 msgid "Set max overall download speed in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Nastavit nejvyšší celkovou rychlost stahování (v bajtech/sek) – 0 (nula) "
+"znamená neomezeno."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:492
 msgid "Set max overall upload speed in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Nastavit nejvyšší celkovou rychlost odesílání (v bajtech/sek) – 0 (nula) "
+"znamená neomezeno."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:499
 msgid ""
 "Set max upload speed per each torrent in bytes/sec. 0 means unrestricted."
 msgstr ""
+"Nastavit nejvyšší umožněnou rychlost odesílání pro každý z torrentů (v "
+"bajtech/s). 0 (nula) znamená neomezeno."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:368
 msgid ""
@@ -603,7 +621,7 @@ msgstr "Nastavit sekundy čekání mezi opakováními pokusů."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:409
 msgid "Set user agent for HTTP(S) downloads."
-msgstr ""
+msgstr "Nastavit uživatelského agenta pro HTTP(S) stahování."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:188
 msgid "Settings"
@@ -611,7 +629,7 @@ msgstr "Nastavení"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:620
 msgid "Settings in this section will be added to config file."
-msgstr ""
+msgstr "Nastavení v této sekci budou přidána do souboru s nastaveními."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:624
 msgid "Settings list"
@@ -633,6 +651,8 @@ msgid ""
 "Specify maximum number of files to open in multi-file BitTorrent download "
 "globally."
 msgstr ""
+"Globálně určuje nejvyšší umožněný počet souborů které otevřít ve "
+"vícesouborovém Bittorent stahování."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:546
 msgid ""
@@ -651,6 +671,8 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:510
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
 msgstr ""
+"Zadejte nejvyšší umožněný počet protějšků pro jednotlivé torrenty – 0 (nula) "
+"znamená neomezený."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:531
 msgid ""
@@ -665,6 +687,8 @@ msgid ""
 "Stop BitTorrent download if download speed is 0 in consecutive N seconds. If "
 "0 is given, this feature is disabled."
 msgstr ""
+"Zastavit BitTorrent stahování pokud je rychlost stahování 0 po dobu N po "
+"sobě jdoucích sekund. Pokud zadáno 0 (nula), je tato funkce vypnutá."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:524
 msgid "Stop timeout"
@@ -672,21 +696,23 @@ msgstr "Časový limit zastavení"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:36
 msgid "The Aria2 service is not running."
-msgstr ""
+msgstr "Služba Aria2 není spuštěná."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:35
 msgid "The Aria2 service is running."
-msgstr ""
+msgstr "Služba Aria2 je spuštěná."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:217
 msgid "The directory to store the config file, session file and DHT file."
 msgstr ""
+"Složka ve které uchovávat soubor s nastaveními, soubor relací a soubor s DHT."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:213
 msgid ""
 "The directory to store the downloaded file. For example <code>/mnt/sda1</"
 "code>."
 msgstr ""
+"Složka pro uložení stahovaného souboru. Například <code>/mnt/sda1</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:224
 msgid "The file name of the log file."
@@ -694,7 +720,7 @@ msgstr "Název souboru se záznamem událostí."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:386
 msgid "The maximum number of connections to one server for each download."
-msgstr ""
+msgstr "Nejvyšší umožněný počet spojení na jeden server pro každé ze stahování."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:418
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:428
@@ -702,6 +728,7 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:445
 msgid "This option will be ignored if a private flag is set in a torrent."
 msgstr ""
+"Tato volba bude ignorována pokud je v torrentu nastaven příznak soukromý."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:373
 msgid "Timeout"
@@ -724,6 +751,9 @@ msgid ""
 "Use the certificate authorities in FILE to verify the peers. The certificate "
 "file must be in PEM format and can contain multiple CA certificates."
 msgstr ""
+"Použít certifikační autority v SOUBORU pro ověřování protějšků. Je třeba, "
+"aby soubor certifikátu byl ve formátu PEM a může obsahovat vícero "
+"certifikátů cert. autorit."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:284
 msgid ""
@@ -748,6 +778,8 @@ msgid ""
 "Use the private key in FILE for RPC server. The private key must be "
 "decrypted and in PEM format."
 msgstr ""
+"Použít soukromý klíč v SOUBOR pro RPC server. Je třeba, aby soukromý klíč "
+"byl rozšifrovaný a ve formátu PEM."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:342
 msgid ""
@@ -761,12 +793,14 @@ msgstr "Uživatelský agent"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:259
 msgid "Username & Password"
-msgstr ""
+msgstr "Uživatelské jméno a heslo"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:323
 msgid ""
 "Verify the peer using certificates specified in \"CA certificate\" option."
 msgstr ""
+"Ověřit protějšek pomocí certifikátů zadaných v předvolbě “Certifikát cert. "
+"autority“."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:233
 msgid "Warn"
@@ -780,7 +814,7 @@ msgstr "Varov."
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:608
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:615
 msgid "You can append K or M."
-msgstr ""
+msgstr "Je možné připojit K nebo M."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:594
 msgid "falloc"
