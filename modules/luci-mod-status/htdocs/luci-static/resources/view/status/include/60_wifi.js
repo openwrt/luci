@@ -114,17 +114,17 @@ return baseclass.extend({
 
 			var icon;
 			if (net.isDisabled())
-				icon = L.resource('icons/signal-none.png');
+				icon = L.resource('icons/signal-none.svg');
 			else if (quality <= 0)
-				icon = L.resource('icons/signal-0.png');
+				icon = L.resource('icons/signal-000-000.svg');
 			else if (quality < 25)
-				icon = L.resource('icons/signal-0-25.png');
+				icon = L.resource('icons/signal-000-025.svg');
 			else if (quality < 50)
-				icon = L.resource('icons/signal-25-50.png');
+				icon = L.resource('icons/signal-025-050.svg');
 			else if (quality < 75)
-				icon = L.resource('icons/signal-50-75.png');
+				icon = L.resource('icons/signal-050-075.svg');
 			else
-				icon = L.resource('icons/signal-75-100.png');
+				icon = L.resource('icons/signal-075-100.svg');
 
 			var WPS_button = null;
 
@@ -263,15 +263,15 @@ return baseclass.extend({
 				var icon;
 				var q = Math.min((bss.signal + 110) / 70 * 100, 100);
 				if (q == 0)
-					icon = L.resource('icons/signal-0.png');
+					icon = L.resource('icons/signal-000-000.svg');
 				else if (q < 25)
-					icon = L.resource('icons/signal-0-25.png');
+					icon = L.resource('icons/signal-000-025.svg');
 				else if (q < 50)
-					icon = L.resource('icons/signal-25-50.png');
+					icon = L.resource('icons/signal-025-050.svg');
 				else if (q < 75)
-					icon = L.resource('icons/signal-50-75.png');
+					icon = L.resource('icons/signal-050-075.svg');
 				else
-					icon = L.resource('icons/signal-75-100.png');
+					icon = L.resource('icons/signal-075-100.svg');
 
 				var sig_title, sig_value;
 
@@ -303,7 +303,7 @@ return baseclass.extend({
 						'data-ifname': networks[i].getIfname(),
 						'data-ssid': networks[i].getActiveSSID()
 					}, [
-						E('img', { 'src': L.resource('icons/wifi.png') }),
+						E('img', { 'src': L.resource('icons/wifi.svg'), 'style': 'width:32px;height:32px' }),
 						E('span', {}, [
 							' ', networks[i].getShortName(),
 							E('small', {}, [ ' (', networks[i].getIfname(), ')' ])

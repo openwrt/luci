@@ -128,7 +128,7 @@ return view.extend({
 					'click': ui.createHandlerFn(this, handleInterfaceDetails, ifaces[instanceName])
 				}, [
 					E('span', { 'class': 'ifacebadge' }, [
-						E('img', { 'src': L.resource('icons', 'tunnel.png') }),
+						E('img', { 'src': L.resource('icons', 'wireguard.svg'), 'style': 'width:32px;height:32px' }),
 						'\xa0',
 						instanceName
 					]),
