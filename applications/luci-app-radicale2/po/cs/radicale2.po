@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-radicale 2\n"
-"PO-Revision-Date: 2025-04-25 14:28+0000\n"
+"PO-Revision-Date: 2025-04-26 15:53+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsradicale2/cs/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:8
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:4
@@ -61,7 +61,7 @@ msgstr ""
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:38
 msgid "Close the lock file when no more clients are waiting"
-msgstr ""
+msgstr "Pokud už žádní klienti nečekají, uzavřít soubor zámku"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:44
 msgid "Command that is run after changes to storage"
@@ -163,7 +163,7 @@ msgstr ""
 
 #: applications/luci-app-radicale2/root/usr/share/rpcd/acl.d/luci-app-radicale2.json:3
 msgid "Grant UCI access for luci-app-radicale2"
-msgstr ""
+msgstr "Udělit UCI přístup pro luci-app-radicale2"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:109
 msgid "HTTP(S) Basic Authentication Realm"
@@ -213,6 +213,8 @@ msgstr "Pro podporu SSL spojení nainstalujte balíček python3-openssl"
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:46
 msgid "Install python3-passlib and python3-bcrypt to enable a secure hash"
 msgstr ""
+"Aby bylo možné vytvářet zabezpečený otisk, je třeba nainstalovat balíčky "
+"python3-passlib a python3-bcrypt"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:12
 msgid ""
@@ -252,7 +254,7 @@ msgstr ""
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:36
 msgid "Maximum number of simultaneous connections"
-msgstr ""
+msgstr "Nejvyšší umožněný počet souběžných spojení"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:42
 msgid "Maximum size of request body (bytes)"
@@ -287,6 +289,8 @@ msgstr "Heslo v čitelném textu"
 msgid ""
 "Prevent other instances or processes from modifying collections while in use"
 msgstr ""
+"Bránit ostatním instancím nebo procesům ve změnách sbírek, pokud jsou "
+"používány"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:66
 msgid "Private Key"
@@ -302,11 +306,11 @@ msgstr ""
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:170
 msgid "RO: Authenticated Users, RW: Owner"
-msgstr ""
+msgstr "RO: ověření uživatelé, RW: vlastník"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:169
 msgid "RO: None, RW: Authenticated Users"
-msgstr ""
+msgstr "RO: žádné, RW: ověření uživatelé"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:168
 msgid "RO: None, RW: Owner"
@@ -342,7 +346,7 @@ msgstr "Odebrat nastavení pro zaznamenávání událostí"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:181
 msgid "Remove configuration for rights file"
-msgstr ""
+msgstr "Odebrat nastavení pro soubor s oprávněními"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:136
 msgid "Request"
@@ -351,6 +355,8 @@ msgstr "Požadavek"
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:57
 msgid "Required time between a failed authentication attempt and trying again"
 msgstr ""
+"Vyžadovaná prodleva mezi nezdařeným pokusem o přihlášení se a umožněním "
+"nového pokusu"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:57
 msgid "Retry Delay"
@@ -398,7 +404,7 @@ msgstr "Pokud chcete zapnout zabezpečený otisk, vyberte výše bcrypt"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:26
 msgid "Send debug information to logs"
-msgstr ""
+msgstr "Odeslat ladící informace do záznamu událostí"
 
 #: applications/luci-app-radicale2/luasrc/controller/radicale2.lua:17
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:18
@@ -425,11 +431,12 @@ msgstr ""
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:85
 msgid "This permanently deletes the cert, key, and configuration to use same."
-msgstr ""
+msgstr "Toto nevratně smaže certifikát, klíč a nastavení pro použití stejného."
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:182
 msgid "This permanently deletes the rights file and configuration to use same."
 msgstr ""
+"Toto nevratně smaže soubor s oprávněními a nastavení pro použití stejného."
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:47
 msgid "Timeout"

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-25 14:28+0000\n"
+"PO-Revision-Date: 2025-04-27 17:36+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:213
 msgid "0.0.0.0<SPACE><DOMAIN>"
@@ -103,6 +103,8 @@ msgid ""
 "Allowlist modifications have been saved, reload adblock that changes take "
 "effect."
 msgstr ""
+"Změny seznamu povolených byly uloženy – aby se projevily, načtěte adblock "
+"znovu."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:288
 msgid "Allowlist..."
@@ -163,6 +165,8 @@ msgid ""
 "Blocklist modifications have been saved, reload adblock that changes take "
 "effect."
 msgstr ""
+"Změny seznamu blokovaných byly uloženy – aby se projevily, načtěte adblock "
+"znovu."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:296
 msgid "Blocklist..."
@@ -271,7 +275,7 @@ msgstr "Doména"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:334
 msgid "Domain to check for a successful DNS backend restart."
-msgstr ""
+msgstr "Doména na které vyzkoušet úspěšný restart podpůrné vrstvy pro DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:223
 msgid "Domains"
@@ -359,6 +363,8 @@ msgid ""
 "Enforcing SafeSearch for google, bing, brave, duckduckgo, yandex, youtube "
 "and pixabay."
 msgstr ""
+"Vynucování SafeSearch pro google, bing, brave, duckduckgo, yandex, youtube a "
+"pixabay."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:456
 msgid "External Blocklist Feeds"
@@ -514,7 +520,7 @@ msgstr "Přehled"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:338
 msgid "Overwrite the default target directory for the generated blocklist."
-msgstr ""
+msgstr "Přepsat výchozí cílovou složku pro vytvořený seznam blokovaných."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:428
 msgid "Profile used by 'msmtp' for adblock notification E-Mails."
@@ -530,7 +536,7 @@ msgstr "Dotaz"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:82
 msgid "Query active blocklists and backups for a specific domain."
-msgstr ""
+msgstr "Dotázat aktivní seznamy blokovaných a zálohy ohledně konkrétní domény."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:264
 msgid "Receiver address for adblock notification e-mails."
@@ -588,7 +594,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:400
 msgid "Report chunk size used by tcpdump in MByte."
-msgstr ""
+msgstr "Hlásit velikost shluku použitého tcpdump (v Megabajtech)."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:409
 msgid "Resolve IPs"
@@ -597,6 +603,7 @@ msgstr "Přeložit IP adresy"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:409
 msgid "Resolve reporting IP addresses by using reverse DNS (PTR) lookups."
 msgstr ""
+"Překládat hlásící IP adresy pomocí reverzních vyhledáváních v DNS (PTR)."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:96
 msgid "Result"
@@ -719,7 +726,7 @@ msgstr "Cílová složka pro soubory související s hlášeními ohledně DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:294
 msgid "Target directory for blocklist backups."
-msgstr ""
+msgstr "Cílová složka pro zálohy seznamu vyloučených."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:370
 msgid "Target directory for the generated jail blocklist."
@@ -727,17 +734,19 @@ msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:25
 msgid "The allowlist is too big, unable to save modifications."
-msgstr ""
+msgstr "Seznam povolených je příliš velký – změny nebylo možné uložit."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:25
 msgid "The blocklist is too big, unable to save modifications."
-msgstr ""
+msgstr "Seznam blokovaných je příliš velký – změny nebylo možné uložit."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:238
 msgid ""
 "The top level domain compression removes thousands of needless host entries "
 "from the final DNS blocklist."
 msgstr ""
+"Komprese nejvyššího doménového řádu odebere tisíce nepotřebných záznamů "
+"hostitelů z konečného DNS seznamu blokovaných."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:345
 msgid "Third instance"
@@ -762,6 +771,8 @@ msgid ""
 "This tab shows the last generated DNS Report, press the 'Refresh' button to "
 "get a current one."
 msgstr ""
+"Tento panel zobrazuje poslední vytvořené hlášení o DNS – pokud chcete získat "
+"to nejnovější (stávající), klikněte na „Načíst znovu“."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:268
 msgid "Time"
@@ -769,7 +780,7 @@ msgstr "Čas"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:349
 msgid "Timeout to wait for a successful DNS backend restart."
-msgstr ""
+msgstr "Časový limit čekání na úspěšný restart podpůrné vrstvy pro DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:333
 msgid "Top Statistics"
@@ -777,7 +788,7 @@ msgstr "Nej statistiky"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:424
 msgid "Topic for adblock notification E-Mails."
-msgstr ""
+msgstr "Téma pro e-maily notifikací ohledně blokování reklam."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:323
 msgid "Total DNS Requests"
@@ -797,11 +808,11 @@ msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:441
 msgid "Unable to parse the custom feed file!"
-msgstr ""
+msgstr "Nepodařilo se zpracovat soubor uživatelsky určeného kanálu!"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:448
 msgid "Unable to parse the default feed file!"
-msgstr ""
+msgstr "Nepodařilo se zpracovat soubor výchozího kanálu!"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:62
 msgid "Unable to parse the runtime information!"
@@ -810,7 +821,7 @@ msgstr ""
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:51
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:51
 msgid "Unable to save modifications: %s"
-msgstr ""
+msgstr "Změny nebylo možné uložit: %s"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:257
 msgid "Upload"
@@ -820,7 +831,7 @@ msgstr "Nahrát"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:77
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:83
 msgid "Upload of the custom feed file failed."
-msgstr ""
+msgstr "Nahrání souboru uživatelsky určeného kanálu se nezdařilo."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:225
 msgid "Varying"

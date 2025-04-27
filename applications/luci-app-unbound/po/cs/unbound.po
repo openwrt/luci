@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-25 14:28+0000\n"
+"PO-Revision-Date: 2025-04-27 18:28+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsunbound/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:161
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:53
@@ -65,11 +65,11 @@ msgstr "Rozdělit součásti dotazu a získat tak alespoň trochu přidaného so
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:78
 msgid "Break the loop where DNSSEC needs NTP and NTP needs DNS"
-msgstr ""
+msgstr "Řeší zacyklení kdy DNSSEC potřebuje NTP a to samotné zase DNS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:52
 msgid "Check for local program to allow forward to localhost"
-msgstr ""
+msgstr "Podívat se po lokálním programu pro povolení směrování na localhost"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:85
 msgid "Choose Unbounds listening port"
@@ -77,7 +77,7 @@ msgstr "Zvolte port, na kterém má Unbound očekávat spojení"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:239
 msgid "Choose the IP versions used upstream and downstream"
-msgstr ""
+msgstr "Zvolte verze IP protokolu použité pro odchozí a příchozí"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:65
 msgid "Connect to servers using TLS"
@@ -131,7 +131,7 @@ msgstr "Přímá zóna"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:86
 msgid "Directory only part of URL"
-msgstr ""
+msgstr "Složka pouze částí URL"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:116
 msgid "Domain Insecure"
@@ -210,7 +210,7 @@ msgstr "Povolit modul DNS64"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:73
 msgid "Enable the DNSSEC validator module"
-msgstr ""
+msgstr "Zapnout modul validátor DNSSEC"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:55
 msgid "Enable the initialization scripts for Unbound"
@@ -278,11 +278,11 @@ msgstr "Přeposílat TLS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:61
 msgid "Forward to upstream nameservers (ISP)"
-msgstr ""
+msgstr "Přeposlat na nadřazené jmenné servery (poskytovatele konektivity)"
 
 #: applications/luci-app-unbound/root/usr/share/rpcd/acl.d/luci-app-unbound.json:3
 msgid "Grant UCI access for luci-app-unbound"
-msgstr ""
+msgstr "Udělit UCI přístup pro luci-app-unbound"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:196
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:208
@@ -313,7 +313,7 @@ msgstr "Název stroje, primární adresa"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:191
 msgid "How to enter the LAN or local network router in DNS"
-msgstr ""
+msgstr "Jak vstoupit do LAN nebo směrovače lokální sítě v DNS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:180
 msgid "How to treat queries of this local domain"
@@ -321,7 +321,7 @@ msgstr "Jak zacházet s dotazy této lokální domény"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:242
 msgid "IP4 All and IP6 Local"
-msgstr ""
+msgstr "IPv4 vše a IPv6 lokální"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:241
 msgid "IP4 Only"
@@ -364,14 +364,16 @@ msgstr "Velké"
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:305
 msgid "Limit days between RFC5011 copies to reduce flash writes"
 msgstr ""
+"Omezit dny mezi kopiemi, prováděnými dle RFC5011, a omezit tak zápisy do "
+"flash paměti"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:281
 msgid "Limit extended DNS packet size"
-msgstr ""
+msgstr "Omezit rozšířenou velikost DNS paketů"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:160
 msgid "Link to supported programs to load DHCP into DNS"
-msgstr ""
+msgstr "Odkaz na podporované programy pro načítání DHCP do DNS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:117
 msgid "List domains to bypass checks of DNSSEC"
@@ -436,15 +438,16 @@ msgstr "Paměťový prostředek"
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:150
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:315
 msgid "Networks that may trigger Unbound to reload (avoid wan6)"
-msgstr ""
+msgstr "Sítě, které mohou spouštět znovunačtení Unbound (vyhněte se wan6)"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:132
 msgid "Networks to consider LAN (served) beyond those served by DHCP"
 msgstr ""
+"Sítě, které považovat za LAN (obsluhované) nad rámec těch obsluhovaných DHCP"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:141
 msgid "Networks to consider WAN (unserved)"
-msgstr ""
+msgstr "Sítě, které považovat za WAN (nebudou obsluhovány)"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:193
 msgid "No Entry"
@@ -469,12 +472,16 @@ msgid ""
 "Note: local DNS is configured to look at odhpcd, but odhpcd UCI lease "
 "trigger is incorrectly set:"
 msgstr ""
+"Pozn.: lokální DNS je nastavené tak, že hledá v odhcpd, ale odhcpd UCI "
+"spouštěč zápůjčky není nastaven správně:"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:16
 msgid ""
 "Organize directed forward, stub, and authoritative zones <a href=\"%s\" "
 "target=\"_blank\">(help)</a>."
 msgstr ""
+"Uspořádat směrovaná přeposlání, stub a autoritativní zóny <a href=\"%s\" "
+"target=\"_blank\">(nápověda)</a>."
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:203
 msgid "Override the WAN side router entry in DNS"
@@ -491,7 +498,7 @@ msgstr ""
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:109
 msgid "Prefix for generated DNS64 addresses"
-msgstr ""
+msgstr "Předpona pro vytvářené DNS64 adresy"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:293
 msgid "Prevent client query overload; zero is off"
@@ -499,7 +506,7 @@ msgstr "Bránit přetížení dotazy klientů; nula znamená nebránit"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:287
 msgid "Prevent excessively short cache periods"
-msgstr ""
+msgstr "Bránit přespříliš krátkým obdobím mezipaměti"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:92
 msgid "Protect against upstream response of 127.0.0.0/8"
@@ -573,7 +580,7 @@ msgstr "Servery"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:48
 msgid "Servers for this zone; see README.md for optional form"
-msgstr ""
+msgstr "Servery pro tuto zónu (ohledně volitelného formuláře vi README.md)"
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:97
 msgid "Show: Adblock"
@@ -589,7 +596,7 @@ msgstr "Zobrazit: Unbound"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:59
 msgid "Skip UCI and use /etc/unbound/unbound.conf"
-msgstr ""
+msgstr "Přeskočit UCI a použít /etc/unbound/unbound.conf"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:253
 msgid "Small"
@@ -614,7 +621,7 @@ msgstr ""
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:275
 msgid "Strict version of 'query minimize' but it can break DNS"
-msgstr ""
+msgstr "Striktní verze „query minimize“, ale může rozbít DNS"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zone-details.lua:39
 msgid "Stub (forced recursion)"
@@ -630,7 +637,7 @@ msgstr "TTL nejméně"
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:105
 msgid "This could display more statistics with the unbound-control package."
-msgstr ""
+msgstr "Toto by mělo zobrazit další statistiky s balíčkem unbound-control."
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:188
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:199
@@ -642,16 +649,19 @@ msgstr "Toto zobrazuje „"
 msgid ""
 "This shows 'ubound-control dump_cache' for auditing records including DNSSEC."
 msgstr ""
+"Toto zobrazuje „ubound-control dump_cache“ pro auditní záznamy včetně DNSSEC."
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:139
 msgid ""
 "This shows Unbound 'local-data:' entries from default, .conf, or control."
 msgstr ""
+"Toto zobrazí Unbound „local-data:“ položky z výchozího, .conf, nebo control."
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:151
 msgid ""
 "This shows Unbound 'local-zone:' entries from default, .conf, or control."
 msgstr ""
+"Toto zobrazí Unbound „local-zone:“ položky z výchozího, .conf, nebo control."
 
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:127
 msgid "This shows Unbound self reported performance statistics."
@@ -688,6 +698,9 @@ msgid ""
 "recursive, and caching DNS resolver <a href=\"%s\" target=\"_blank\">(help)</"
 "a>."
 msgstr ""
+"Unbound <a href=\"%s\" target=\"_blank\">(NLnet Labs)</a> je validující, "
+"rekurzivní a do mezipaměti ukládající °˚DNS překladač <a href=\"%s\" target="
+"\"_blank\">(nápověda)</a>."
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:228
 msgid "Unbound Control App"
@@ -696,6 +709,7 @@ msgstr "Řídící aplikace Unbound"
 #: applications/luci-app-unbound/luasrc/controller/unbound.lua:168
 msgid "Unbound cache is too large to display in LuCI."
 msgstr ""
+"Mezipaměť Unbound je příliš velká na to, aby ji bylo možné zobrazit v LuCI."
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:81
 msgid "Undefined"
@@ -707,7 +721,7 @@ msgstr "Použít „resolv.conf.auto“"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:168
 msgid "Use DHCPv4 MAC to discover IP6 hosts SLAAC (EUI64)"
-msgstr ""
+msgstr "Použít DHCPv4 MAC pro objevování SLAAC (EUI64) IPv6 hostitelů"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/configure.lua:205
 msgid "Use Upstream"
@@ -790,4 +804,4 @@ msgstr "použít jmenné servery"
 
 #: applications/luci-app-unbound/luasrc/model/cbi/unbound/zones.lua:165
 msgid "with default certificate for <var>%s</var>"
-msgstr ""
+msgstr "s výchozím certifikátem pro <var>%s</var>"

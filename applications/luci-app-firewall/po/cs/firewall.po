@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-04-25 14:28+0000\n"
+"PO-Revision-Date: 2025-04-27 19:57+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/cs/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -73,6 +73,8 @@ msgid ""
 "<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP <var>%"
 "{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
+"<var data-tooltip=\"DNAT\">Přeposlat</var> na %{dest}%{dest_ip? IP "
+"<var>%{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:115
 msgid ""
@@ -101,6 +103,8 @@ msgid ""
 "<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark <var>%"
 "{set_mark?:%{set_xmark}}</var>"
 msgstr ""
+"<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> označení z brány "
+"firewall <var>%{set_mark?:%{set_xmark}}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:90
 msgid "<var data-tooltip=\"MASQUERADE\">Automatically rewrite</var> source IP"
@@ -215,7 +219,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:264
 msgid "Apply the given DSCP class or value to established connections."
-msgstr ""
+msgstr "Uplatňovat danou DSCP třídu nebo hodnotu na navázaná spojení."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:434
 msgid "Assign the specified connection tracking helper to matched traffic."
@@ -354,6 +358,8 @@ msgid ""
 "Enable network address and port translation IPv6 (NAT6 or NAPT6) for "
 "outbound traffic on this zone."
 msgstr ""
+"Zapnout překlad síťové adresy a portu IPv6 (NAT6 nebo NAPT6) pro odchozí "
+"provoz na tuto zónu."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:211
 msgid "Enabled"
@@ -361,7 +367,7 @@ msgstr "Povoleno"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:205
 msgid "Enables packet and byte count tracking for the set."
-msgstr ""
+msgstr "Zapnout pro sadu sledování počtu paketů a bajtů."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:339
 msgid "Expecting: %s"
@@ -651,7 +657,7 @@ msgstr "Omezuje odpovídající provoz na danou rychlost."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:296
 msgid "Log matched packets on the selected tables to syslog."
-msgstr ""
+msgstr "Zaznamenávat pakety, odpovídající vybraným tabulkám, do syslog."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:348
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:464
@@ -695,12 +701,14 @@ msgstr "Hledat shodu v zařízení"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:271
 msgid "Match forwarded traffic directed at the given IP address."
-msgstr ""
+msgstr "Hledat shodu v přeposlaném provozu směrovaném na danou IP adresu."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:279
 msgid ""
 "Match forwarded traffic directed at the given destination port or port range."
 msgstr ""
+"Hledat shodu v přeposílaném provozu směrovaném na daný cílový port nebo "
+"jejich rozsah."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:254
 msgid "Match forwarded traffic from this IP or range."
@@ -710,6 +718,8 @@ msgstr "Hledat shodu v přeposlaném provozu z této IP nebo rozsahu."
 msgid ""
 "Match forwarded traffic originating from the given source port or port range."
 msgstr ""
+"Hledat shodu v přeposílaném provozu pocházejícím z daného zdrojového portu "
+"nebo jejich rozsahu."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:326
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:441
@@ -736,10 +746,14 @@ msgstr "Hledat shodu v provozu pomocí určeného pomocného sledování provozu
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:319
 msgid "Matches a specific firewall mark or a range of different marks."
 msgstr ""
+"Hledá shodu s konkrétním označkováním z brány firewall nebo rozsahu různých "
+"označkování."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:332
 msgid "Matches forwarded traffic using the specified outbound network device."
 msgstr ""
+"Hledá shodu v přeposílaném provozu pomocí zadaného odchozího síťového "
+"rozhraní."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:264
 msgid "Matches traffic carrying the specified DSCP marking."
@@ -867,6 +881,8 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:188
 msgid "Path to file of CIDRs, subnets, host IPs, etc.<br />"
 msgstr ""
+"Popis umístění souboru s CIDR záznamy, podsítěmi, IP adresami hostitelů, "
+"atd.<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:155
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:26
@@ -935,11 +951,12 @@ msgstr "Přepsat IP adresu"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:298
 msgid "Rewrite matched traffic to the specified source IP address."
-msgstr ""
+msgstr "Přepsat odpovídající provoz na zadanou zdrojovou IP adresu."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:312
 msgid "Rewrite matched traffic to the specified source port or port range."
 msgstr ""
+"Přepisovat odpovídající provoz na zadaný zdrojový port nebo jejich rozsah."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:311
 msgid "Rewrite port"
@@ -1171,6 +1188,8 @@ msgid ""
 "Unit: seconds. Default <code>0</code> means the entry is added permanently "
 "to the set.<br />Max: 2147483 seconds."
 msgstr ""
+"Jednotka: sekundy. Výchozí <code>0</code> (nula) znamená že položka je "
+"přidána do sady natrvalo.<br />Maximum: 2147483 sekund."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:341
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:456
@@ -1236,6 +1255,8 @@ msgid ""
 "Use this option to classify zone traffic by source or destination subnet "
 "instead of networks or devices."
 msgstr ""
+"Tuto předvolbu použijte pro klasifikaci provozu zóny podle zdrojové nebo "
+"cílové podsítě namísto sítí či zařízení."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:331
 msgid "Valid firewall mark required"
@@ -1280,6 +1301,8 @@ msgid ""
 "Zones from which reflection rules shall be created. If unset, only the "
 "destination zone is used."
 msgstr ""
+"Zóny ze kterých mají být odrážecí pravidla vytvářena. Pokud nenastaveno, je "
+"použita pouze cílová zóna."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:410
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:70
