@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-27 16:30+0000\n"
+"PO-Revision-Date: 2025-04-28 09:36+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/cs/>\n"
@@ -28,10 +28,13 @@ msgid ""
 "the length of this value is 0, all ports are allowed.<br />By default, this "
 "value is an empty set."
 msgstr ""
+"AllowPorts určuje sadu portů, ke kterým klienti budou moci využít proxy. "
+"Pokud je délka této hodnota 0 (nula), jsou povolené veškeré porty.<br />Ve "
+"výchozím stavu tato hodnota není vyplněná."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid "Assets dir"
-msgstr ""
+msgstr "Složka obsahu"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid ""
@@ -39,6 +42,10 @@ msgid ""
 "resources from. If this value is \"\", assets will be loaded from the "
 "bundled executable using statik.<br />By default, this value is \"\"."
 msgstr ""
+"AssetsDir určuje lokální složku, ze které přehled načítá prostředky. Pokud "
+"je tato hodnota „“ (nevyplněná), obsah bude načítán z přibaleného "
+"spustitelného souboru pomocí statik.<br />Ve výchozím stavu je tato hodnota "
+"nevyplněná."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:19
 msgid "Bind address"
@@ -53,6 +60,8 @@ msgid ""
 "BindAddr specifies the address that the server binds to.<br />By default, this "
 "value is \"0.0.0.0\"."
 msgstr ""
+"BindAddr určuje, na kterou adresu má být server navázán.<br />Ve výchozím "
+"stavu je tato hodnota „0.0.0.0“ (na všechny)."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:22
 msgid ""
@@ -60,12 +69,17 @@ msgid ""
 "is 0, the server will not listen for KCP connections.<br />By default, this "
 "value is 0."
 msgstr ""
+"BindKcpPort určuje KCP port, na kterém server očekává spojení. Pokud je "
+"hodnota 0 (nula) pak server nenaslouchá KCP spojením.<br />A toto je i "
+"výchozí chování (hodnota 0)."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:20
 msgid ""
 "BindPort specifies the port that the server listens on.<br />By default, this "
 "value is 7000."
 msgstr ""
+"BindPort určuje, port na kterém má server očekávat spojení.<br />Ve výchozím "
+"stavu je tato hodnota 7000."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
@@ -73,6 +87,9 @@ msgid ""
 "is 0, the server will not listen for UDP connections.<br />By default, this "
 "value is 0"
 msgstr ""
+"BindUdpPort určuje UDP port, na kterém server očekává spojení. Pokud je tato "
+"hodnota 0 (nula), pak server nenaslouchá UDP spojením.<br />Ve výchozím "
+"stavu je tato hodnota 0"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:143
 msgid "Collecting data ..."
