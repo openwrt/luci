@@ -14,7 +14,7 @@
 function handleAction(ev) {
 	if (ev === 'restart' || ev === 'reload') {
 		let map = document.querySelector('.cbi-map');
-		dom.callClassMethod(map, 'save')
+		return dom.callClassMethod(map, 'save')
 			.then(L.bind(ui.changes.apply, ui.changes))
 			.then(function () {
 				return fs.exec_direct('/etc/init.d/banip', [ev]);
@@ -283,12 +283,12 @@ return view.extend({
 		o.optional = true;
 		o.retain = true;
 
-		o = s.taboption('general', widgets.NetworkSelect, 'ban_trigger', _('Reload Trigger Interface'), _('List of available reload trigger interface(s).'));
+		o = s.taboption('general', widgets.NetworkSelect, 'ban_trigger', _('Startup Trigger Interface'), _('List of available network interfaces to trigger the banIP start.'));
 		o.multiple = true;
 		o.nocreate = true;
 		o.rmempty = true;
 
-		o = s.taboption('general', form.Value, 'ban_triggerdelay', _('Trigger Delay'), _('Additional trigger delay in seconds during interface reload and boot.'));
+		o = s.taboption('general', form.Value, 'ban_triggerdelay', _('Trigger Delay'), _('Additional trigger delay in seconds before banIP processing begins.'));
 		o.placeholder = '10';
 		o.datatype = 'range(1,300)';
 		o.rmempty = true;
@@ -339,22 +339,24 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.ListValue, 'ban_cores', _('CPU Cores'), _('Limit the cpu cores used by banIP to save RAM.'));
+		o = s.taboption('advanced', form.ListValue, 'ban_cores', _('CPU Cores'), _('Limit the cpu cores used by banIP to save RAM, autodetected by default.'));
 		o.value('1');
 		o.value('2');
 		o.value('4');
 		o.value('8');
 		o.value('16');
+		o.placeholder = _('-- default --');
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('advanced', form.ListValue, 'ban_splitsize', _('Set Split Size'), _('Split external Set loading after every n members to save RAM.'));
+		o = s.taboption('advanced', form.ListValue, 'ban_splitsize', _('Set Split Size'), _('Split external Set loading after every n members to save RAM, disabled by default.'));
 		o.value('512');
 		o.value('1024');
 		o.value('2048');
 		o.value('4096');
 		o.value('8192');
 		o.value('16384');
+		o.placeholder = _('-- default --');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -525,6 +527,7 @@ return view.extend({
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
 			}
+			o.placeholder = _('-- default --');
 			o.optional = true;
 			o.rmempty = true;
 
@@ -535,6 +538,7 @@ return view.extend({
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
 			}
+			o.placeholder = _('-- default --');
 			o.optional = true;
 			o.rmempty = true;
 
@@ -545,6 +549,7 @@ return view.extend({
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
 			}
+			o.placeholder = _('-- default --');
 			o.optional = true;
 			o.rmempty = true;
 
@@ -555,16 +560,18 @@ return view.extend({
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
 			}
+			o.placeholder = _('-- default --');
 			o.optional = true;
 			o.rmempty = true;
 
-			o = s.taboption('adv_set', form.MultiValue, 'ban_feedcomplete', _('Feed Complete'), _('Opt out the feed from the deduplication process.'));
+			o = s.taboption('adv_set', form.MultiValue, 'ban_feedcomplete', _('Feed Complete'), _('Opt out specific feeds from the deduplication process.'));
 			o.value('allowlist', _('local allowlist'));
 			o.value('blocklist', _('local blocklist'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed = Object.keys(feeds)[i].trim();
 				o.value(feed);
 			}
+			o.placeholder = _('-- default --');
 			o.optional = true;
 			o.rmempty = true;
 		}
@@ -632,6 +639,7 @@ return view.extend({
 		o.value('received a suspicious remote IP .*', _('nginx suspicious IP'));
 		o.value('TLS Error: could not determine wrapping from \\[AF_INET\\]', _('openvpn TLS error'));
 		o.value('AdGuardHome.*\\[error\\].*/control/login: from ip', _('AdGuardHome login error'));
+		o.placeholder = _('-- Please choose (optional) --');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -696,10 +704,11 @@ return view.extend({
 			o = s.taboption('feeds', form.MultiValue, 'ban_feed', _('Blocklist Feed'));
 			for (let i = 0; i < Object.keys(feeds).length; i++) {
 				feed=(Object.keys(feeds)[i] || '').trim();
- 				chain=(feeds[feed]?.chain ||'in').trim();
- 				descr=(feeds[feed]?.descr || '-').trim();
+				chain=(feeds[feed]?.chain ||'in').trim();
+				descr=(feeds[feed]?.descr || '-').trim();
 				o.value(feed, feed + ' (' + chain + ', ' + descr + ')');
 			}
+			o.placeholder = _('-- Please choose (optional) --');
 			o.optional = true;
 			o.rmempty = true;
 		}
@@ -727,17 +736,19 @@ return view.extend({
 						err = e;
 					}
 				}
+				o.placeholder = _('-- Please choose (optional) --');
 				o.optional = true;
 				o.rmempty = true;
 			}
 		}
 
-		o = s.taboption('feeds', form.MultiValue, 'ban_region', _('Regional Internet Registry'));
+		o = s.taboption('feeds', form.MultiValue, 'ban_region', _('Regional Internet Registry'), _('Summary of countries based on the Regional Internet Registry (RIR).'));
 		o.value('AFRINIC', _('AFRINIC - serving Africa and the Indian Ocean region'));
 		o.value('APNIC', _('APNIC - serving the Asia Pacific region'));
 		o.value('ARIN', _('ARIN - serving Canada and the United States'));
 		o.value('LACNIC', _('LACNIC - serving the Latin American and Caribbean region'));
 		o.value('RIPE', _('RIPE - serving Europe, Middle East and Central Asia'));
+		o.placeholder = _('-- Please choose (optional) --');
 		o.optional = true;
 		o.rmempty = true;
 
@@ -748,7 +759,7 @@ return view.extend({
 		o.rawhtml = true;
 		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('ASN Selection') + '</em>';
 
-		o = s.taboption('feeds', form.DynamicList, 'ban_asn', _('ASNs'));
+		o = s.taboption('feeds', form.DynamicList, 'ban_asn', _('ASNs'), _('Collection of IP addresses based on Autonomous System Numbers.'));
 		o.datatype = 'uinteger';
 		o.optional = true;
 		o.rmempty = true;
@@ -773,6 +784,7 @@ return view.extend({
 					countries[i] = "";
 				}
 			}
+			o.placeholder = _('-- Please choose (optional) --');
 			o.optional = true;
 			o.rmempty = true;
 			o.validate = function (section_id, value) {
@@ -821,6 +833,7 @@ return view.extend({
 		o.value('1h');
 		o.value('2h');
 		o.value('1d');
+		o.placeholder = _('-- default --');
 		o.optional = true;
 		o.rmempty = true;
 
