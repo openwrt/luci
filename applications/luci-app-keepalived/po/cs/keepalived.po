@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-28 09:36+0000\n"
+"PO-Revision-Date: 2025-04-30 12:19+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationskeepalived/cs/>\n"
@@ -99,6 +99,8 @@ msgid ""
 "Allows the lower priority machine to maintain the master role, even when a "
 "higher priority machine comes back online."
 msgstr ""
+"Umožňuje stroji, který má nižší prioritu, ponechat si roli hlavního, i když "
+"se navrátí do provozu stroj, který má vyšší prioritu."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:25
 msgid "As soon as the other machine(s) come up, an election will be held."
@@ -392,11 +394,15 @@ msgid ""
 "If peer is backup node, Current system should be sender, If peer is master "
 "current system should be receiver"
 msgstr ""
+"Pokud je protějšek záložní uzel, stávající systém by měl být odesilatelem. "
+"Pokud je protějšek hlavním, stávající systém by měl být příjemcem"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/peers.js:60
 msgid ""
 "If peer runs on non standard ssh port, change to correct ssh port number"
 msgstr ""
+"Pokud protějšek je spuštěný na nestandardním ssh portu, změňte zde na "
+"potřebné číslo ssh portu"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/route.js:73
 msgid ""
@@ -530,7 +536,7 @@ msgstr "Skupina vícesměrového vysílání kterou použít pro IPv4 VRRP inzer
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:53
 msgid "Multicast Group to use for IPv6 VRRP adverts"
-msgstr ""
+msgstr "Skupina vícesměrového vysílání kterou používat pro IPv6 VRRP propagace"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:108
 msgid "Multicast Source IP"
@@ -688,12 +694,12 @@ msgstr "Relativní váha, kterou použít"
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/script.js:92
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:116
 msgid "Required number of successes for KO transition"
-msgstr ""
+msgstr "Potřebný počet úspěchů pro přechod z KO"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/script.js:87
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:110
 msgid "Required number of successes for OK transition"
-msgstr ""
+msgstr "Potřebný počet úspěchů pro přechod do OK"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:189
 msgid "Retry"
@@ -731,7 +737,7 @@ msgstr "Trasy"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:258
 msgid "Routes add|del when changing to MASTER, to BACKUP"
-msgstr ""
+msgstr "Přidání|smazání tras při změně na HLAVNÍ, na ZÁLOŽNÍ"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/route.js:68
 msgid "Routes must be configured for Static Routes"
@@ -927,7 +933,7 @@ msgstr ""
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:216
 msgid "Time in seconds to delay preempting compared"
-msgstr ""
+msgstr "Doba (v sekundách) o kterou odložit předporovnání"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:41
 msgid "Timeout in seconds for SMTP stream processing"
@@ -942,6 +948,8 @@ msgid ""
 "To decrease the number of packets sent in adverts, you can exclude most IPs "
 "from adverts."
 msgstr ""
+"Pro snížení počtu paketů, posílaných v propagacích, je možné z propagací "
+"vynechat většinu IP adres."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/track_interface.js:13
 msgid "Track Interface"
