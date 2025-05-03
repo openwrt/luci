@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-29 14:59+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/cs/>\n"
@@ -113,6 +113,9 @@ msgid ""
 "value is \"\", a default page will be displayed.<br />By default, this value "
 "is \"\"."
 msgstr ""
+"Custom404Page určuje popis umístění uživatelsky určené stránky pro zobrazení "
+"v případě chyby 404. Pokud tato hodnota je „“ (nevyplněno), bude zobrazena "
+"výchozí stránka.<br />Ve výchozím stavu je tato hodnota „“."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid "Dashboard address"
@@ -144,6 +147,9 @@ msgid ""
 "value is 0, the dashboard will not be started.<br />By default, this value is "
 "0."
 msgstr ""
+"DashboardPort určuje port, na kterém přehled očekává spojení. Pokud je tato "
+"hodnota „0“ (nula), přehled nebude spuštěn.<br />Ve výchozím stavu je tato "
+"hodnota 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid ""
@@ -223,12 +229,18 @@ msgid ""
 "be used if LogWay is set appropriately.<br />By default, this value is "
 "\"console\"."
 msgstr ""
+"LogFile určuje soubor, do kterého budou zapisovány záznamy událostí. Tato "
+"hodnota bude použita pouze pokud je LogWay příslušně nastaveno.<br />Ve "
+"výchozím stavu je tato hodnota „console“."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
 msgid ""
 "LogLevel specifies the minimum log level. Valid values are \"trace\", \"debug"
 "\", \"info\", \"warn\", and \"error\".<br />By default, this value is \"info\"."
 msgstr ""
+"LogLevel určuje nejnižší stupeň podrobnosti záznamu událostí. Platnými "
+"hodnotami jsou „trace“, „debug“ (ladění), „info“, “warn“ (varování) a „error“"
+" (chyba).<br />Ve výchozím stavu je tato hodnota „info“."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid ""
@@ -236,6 +248,9 @@ msgid ""
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
 "this value is 0."
 msgstr ""
+"LogMaxDays určuje nejvyšší počet dnů, po který ukládat informace záznamu "
+"událostí, než budou smazány. Toto je použito pouze pokud LogWay == \"file\""
+".<br />Ve výchozím stavu je tato hodnota 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid "Max ports per client"
@@ -247,6 +262,9 @@ msgid ""
 "proxy to. If this value is 0, no limit will be applied.<br />By default, this "
 "value is 0."
 msgstr ""
+"MaxPortsPerClient určuje maximální počet portů ke kterým se každý z klientů "
+"může proxy. Pokud je tato hodnota 0 (nula), nebude uplatňován žádný "
+"limit.<br />Ve výchozím stavu je tato hodnota 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
 msgid "NOT RUNNING"
@@ -271,6 +289,9 @@ msgid ""
 "ProxyBindAddr specifies the address that the proxy binds to. This value may "
 "be the same as BindAddr.<br />By default, this value is \"0.0.0.0\"."
 msgstr ""
+"ProxyBindAddr určuje adresu na kterou se proxy naváže. Tato hodnota může být "
+"stejná, jako u BindAddr.<br />Ve výchozím stavu je tato hodnota „0.0.0.0“ ("
+"na všechny)."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
 msgid "RUNNING"
@@ -315,6 +336,9 @@ msgid ""
 "TcpMux toggles TCP stream multiplexing. This allows multiple requests from a "
 "client to share a single TCP connection.<br />By default, this value is true."
 msgstr ""
+"TcpMux zapíná/vypíná multiplexování TCP proudu. To umožňuje, aby vícero "
+"požadavků od klienta sdílelo stejné TCP spojení.<br />Ve výchozím stavu je "
+"tato hodnota true (zapnuto)."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid ""
@@ -334,6 +358,9 @@ msgid ""
 "from clients. Clients must have a matching token to be authorized to use the "
 "server.<br />By default, this value is \"\"."
 msgstr ""
+"Token určuje pověřovací token sloužící k ověřování klíčů obdržených od "
+"klientů. Je třeba, aby klient měl shodný token, aby byl pověřen k používání "
+"serveru.<br />Ve výchozím stavu je tato hodnota „“."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid "UDP bind port"

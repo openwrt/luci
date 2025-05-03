@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: firewall\n"
 "POT-Creation-Date: 2013-09-05 16:02+0200\n"
-"PO-Revision-Date: 2025-04-29 14:59+0000\n"
+"PO-Revision-Date: 2025-05-02 07:28+0000\n"
 "Last-Translator: Maksim_220 Кабанов <law820314@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/ru/>\n"
@@ -337,9 +337,9 @@ msgid ""
 "Do not install extra rules to reject forwarded traffic with conntrack state "
 "<em>invalid</em>. This may be required for complex asymmetric route setups."
 msgstr ""
-"Не устанавливать дополнительные правила для отклонения перенаправляемого "
-"трафика с состоянием <em>недействительный</em> (<em>invalid</em>). Это может "
-"потребоваться для сложных настроек асимметричной маршрутизации."
+"Не устанавливать дополнительные правила для отклонения пересылаемого трафика "
+"с состоянием conntrack <em>invalid</em>. Это может быть необходимо для "
+"сложных асимметричных маршрутов."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:59
 msgid "Drop invalid packets"
@@ -469,7 +469,7 @@ msgstr "Тип разгрузки потока"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:64
 msgid "Forward"
-msgstr "Перенаправление"
+msgstr "Переадресация"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:34
 msgid ""
@@ -722,12 +722,17 @@ msgstr "Ограничивает сопоставление трафика ук�
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:296
 msgid "Log matched packets on the selected tables to syslog."
 msgstr ""
+"При включении этой опции все пакеты, которые соответствуют правилам в "
+"выбранных таблицах (например, filter, nat), будут записываться в системный "
+"лог (syslog)."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:348
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:464
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:341
 msgid "Log matched packets to syslog."
 msgstr ""
+"При включении этой опции все пакеты, подходящие под данное правило, будут "
+"записываться в системный лог (syslog)."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:311
 msgid "Loopback source IP"
@@ -881,7 +886,7 @@ msgstr "Маска сети"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
 msgid "None"
-msgstr "Нет"
+msgstr "Отсутствует"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:77
 msgid "Not fully compatible with QoS/SQM."
@@ -1540,7 +1545,7 @@ msgstr "ip: IP-адрес"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:153
 msgid "ip[/cidr]<br />"
-msgstr "ip[/cidr]<br />"
+msgstr "Формат IP[/CIDR]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:145
 msgid "ip[/cidr]<br />For use with Match datatypes: <code>*_ip</code>."
@@ -1557,7 +1562,7 @@ msgstr "mac: MAC-адрес"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:108
 msgid "macaddr|ip[/cidr]<br />"
-msgstr "macaddr|ip[/cidr]<br />"
+msgstr "Формат macaddr|ip[/cidr] (MAC-адрес | IP-адрес[/маска CIDR])<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89

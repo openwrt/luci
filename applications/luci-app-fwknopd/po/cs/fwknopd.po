@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-04-29 14:59+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/cs/>\n"
@@ -126,7 +126,7 @@ msgstr "Proces služby „klepání“ na bránu firewall"
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:474
 msgid "Firewall Knock Operator Daemon"
-msgstr ""
+msgstr "Proces služby operátora klepání na bráně firewall"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:586
 msgid ""
@@ -136,6 +136,11 @@ msgid ""
 "resolve the external address (if the client behind a NAT) or the client must "
 "know the external IP and set it via the -a argument."
 msgstr ""
+"Vynucovat, aby veškeré SPA pakety obsahovaly skutečnou IP adresu v rámci "
+"šifrovaných dat. To znemožňuje použití argumentu -s na příkazovém řádku "
+"klienta fwknop, takže je třeba použít buď -R pro automatické překládání "
+"externí adresy (pokud se klient nachází za NAT) nebo je třeba, aby klient "
+"externí IP znal a nastavil prostřednictvím argumentu -a."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:523
 msgid "Generate Keys"
@@ -152,6 +157,10 @@ msgid ""
 "authentication key used to verify the authenticity of the incoming SPA "
 "packet before the packet is decrypted."
 msgstr ""
+"Vytváří symetrický klíč použitý pro rozšifrování příchozího SPA paketu, "
+"který je šifrován fwknop klientem pomoc blokové šifry Rijndael, a HMAC "
+"ověřovací klíč sloužící k ověření pravosti příchozího SPA paketu před jeho "
+"rozšifrováním."
 
 #: applications/luci-app-fwknopd/root/usr/share/rpcd/acl.d/luci-app-fwknopd.json:3
 msgid "Grant UCI access for luci-app-fwknopd"
@@ -231,6 +240,11 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Cílová adresa pro kterou budou SPA pakety přijímány. Řetězec „ANY“ "
+"(libovolná) je také přijímán, pokud má platný SPA packet být ctěn na "
+"jakoukoli cílovou adresu. Sítě by měly být uváděny v CIDR zápisu (např. „"
+"192.168.10.0/24“) a je možné zadávat i jednotlivé IP adresy. Vícero položek "
+"je oddělováno čárkou."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid ""
@@ -238,6 +252,9 @@ msgid ""
 "when the network is up-and-running. This option has precedence over "
 "“PCAP_INTF” option."
 msgstr ""
+"Síť na které proces služby očekává spojení. Proces služby je automaticky "
+"spuštěn když je síť v provozu. Tato předvolba má přednost před tou "
+"„PCAP_INTF“."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:504
 msgid ""
@@ -247,6 +264,11 @@ msgid ""
 "“192.168.10.0/24”), and individual IP addresses can be specified as well. "
 "Multiple entries are comma-separated."
 msgstr ""
+"Zdrojová adresa ze které budou SPA pakety přijímány. Řetězec „ANY“ "
+"(libovolná) je také přijímán, pokud má platný SPA packet být ctěn z jakékoli "
+"cílové adresy. Sítě by měly být uváděny v CIDR zápisu (např. „192.168.10.0/"
+"24“) a je možné zadávat i jednotlivé IP adresy. Vícero položek je oddělováno "
+"čárkou."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:510
 msgid "The source address has to be specified."
@@ -266,6 +288,10 @@ msgid ""
 "server as the user specified by the “CMD_EXEC_USER” or as the user that "
 "started fwknopd if that is not set."
 msgstr ""
+"Toto sdělí fwknopd že má přijímat úplné příkazy, které jsou obsažené v "
+"pověřovacím paketu. Jakýkoli takový příkaz bude vykonán fwknopd serverem "
+"jako uživatel, uvedený v proměnné prostředí „CMD_EXEC_USER“ nebo – pokud "
+"není nastavená – jako uživatel, který fwknopd spustil."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:478
 msgid ""
