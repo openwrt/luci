@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-25 14:28+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:433
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -512,6 +512,10 @@ msgid ""
 "This option also saves control file in that situations. This may be useful "
 "to save BitTorrent seeding which is recognized as completed state."
 msgstr ""
+"Uložit stahování do souboru relace i když je stahování dokončené nebo "
+"odebrané. Tato předvolba v takových situacích ukládá také řídící soubor. "
+"Toto se může hodit pro ukládán BitTorrent seeding, které je rozpoznáváno "
+"jako stav dokončeno."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:572
 msgid ""
@@ -550,7 +554,7 @@ msgstr ""
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:466
 msgid "Seed unverified"
-msgstr ""
+msgstr "Seed neověřeno"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:348
 msgid ""
@@ -558,6 +562,9 @@ msgid ""
 "if remote server responds with <code>Content-Encoding: gzip</code> or "
 "<code>Content-Encoding: deflate</code>."
 msgstr ""
+"Posílat <code>Accept: deflate, gzip</code> hlavičku požadavku a rozbalovat "
+"odpověď, pokud vzdálený server odpoví s <code>Content-Encoding: gzip</code> "
+"nebo <code>Content-Encoding: deflate</code>."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:357
 msgid ""
@@ -566,6 +573,10 @@ msgid ""
 "you can add Cache-Control header with a directive you like using \"Header\" "
 "option."
 msgstr ""
+"Odesílat <code>Cache-Control: no-cache</code> a <code>Pragma: no-cache</"
+"code> hlavičku a vyhýbat se tak obsahu z mezipaměti. Pokud vypnuto, tyto "
+"hlavičky nejsou odesílány a je možné přidat Cache-Control hlavičky pomocí "
+"direktivy, kterou chcete pomocí předvolby „Hlavička“."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:473
 msgid ""
@@ -645,6 +656,14 @@ msgid ""
 "FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
 "entirely until allocation finishes."
 msgstr ""
+"Určete metodu přidělení souboru. Pokud používáte novější souborové systémy, "
+"jako např. ext4 (s podporou pro extenty), btrfs, xfs nebo NTFS (pouze "
+"sestavení přes MinGW), pak je pro vás nejlepší volbou „falloc“. Přidělí "
+"velké (několik GiB) soubory téměř okamžitě, ale může se stát, že není k "
+"dispozici, protože vámi využívaný systém postrádá funkci posix_fallocate(3). "
+"Nepoužívejte „falloc“ se staršími souborovými systémy, jako např. ext3 a "
+"FAT32, protože to zabere skoro stejnou dobu jako „prealloc“ a ještě k tomu "
+"to do dokončení přidělení celé aria2 zcela zablokuje."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:505
 msgid ""
@@ -681,6 +700,10 @@ msgid ""
 "than 20 bytes are specified, random byte data are added to make its length "
 "20 bytes."
 msgstr ""
+"Zadejte předponu identifikátoru protějšku. V BitTorrent je identif. "
+"protějšku dlouhý 20 bajtů. Pokud je zadáno více, je použito pouze prvních "
+"20. Pokud je zadáno méně než 20 bajtů, jsou přidána náhodná data tak, aby "
+"délka byla 20 bajtů."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:525
 msgid ""
@@ -763,6 +786,12 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"RPC private key\" as well."
 msgstr ""
+"Použít certifikát v SOUBORU pro RPC server. Je třeba, aby certifikát byl buď "
+"ve formátu PKCS12 (.p12, .pfx) nebo PEM.<br/>U PKCS12 souborů je třeba, aby "
+"obsahoval certifikát, certifikát klíče, klíč a volitelně řetězec dalších "
+"certifikátů. Otevřít je možné pouze PKCS12 soubory, které nemají nastavené "
+"heslo pro importování!<br/>Při používání PEM je třeba také zadat „RPC "
+"soukromý klíč\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:335
 msgid ""
@@ -772,6 +801,11 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
+"Použít klientský certifikát v SOUBORU. Je třeba, aby certifikát byl buď ve "
+"formátu PKCS12 (.p12, .pfx) nebo PEM.<br/>U PKCS12 souborů je třeba, aby "
+"obsahoval certifikát, klíč a volitelně řetězec dalších certifikátů. Otevřít "
+"je možné pouze PKCS12 soubory, které nemají nastavené heslo pro importování!<"
+"br/>Při používání PEM je třeba také zadat „Soukromý klíč\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:294
 msgid ""
@@ -786,6 +820,9 @@ msgid ""
 "Use the private key in FILE. The private key must be decrypted and in PEM "
 "format. The behavior when encrypted one is given is undefined."
 msgstr ""
+"Použít soukromý klíč v SOUBORU. Je třeba, aby soukromý klíč byl rozšifrovaný "
+"a ve formátu PEM. Chování v případě, kdy je poskytnut šifrovaný, není "
+"definováno."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:408
 msgid "User agent"
