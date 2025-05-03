@@ -19,7 +19,7 @@ function handleAction(ev) {
 	}
 	if (ev === 'restart' || ev === 'reload') {
 		let map = document.querySelector('.cbi-map');
-		dom.callClassMethod(map, 'save')
+		return dom.callClassMethod(map, 'save')
 			.then(L.bind(ui.changes.apply, ui.changes))
 			.then(function () {
 				return fs.exec_direct('/etc/init.d/adblock', [ev]);
@@ -211,9 +211,14 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'adb_enabled', _('Enabled'), _('Enable the adblock service.'));
 		o.rmempty = false;
 
-		o = s.taboption('general', widgets.NetworkSelect, 'adb_trigger', _('Startup Trigger Interface'), _('List of available network interfaces to trigger the adblock start. \
-			Choose \'unspecified\' to use a classic startup timeout instead of a network trigger.'));
+		o = s.taboption('general', widgets.NetworkSelect, 'adb_trigger', _('Startup Trigger Interface'), _('List of available network interfaces to trigger the adblock start.'));
+		o.multiple = true;
 		o.nocreate = true;
+		o.rmempty = true;
+
+		o = s.taboption('general', form.Value, 'adb_triggerdelay', _('Trigger Delay'), _('Additional trigger delay in seconds before adblock processing begins.'));
+		o.placeholder = '5';
+		o.datatype = 'range(1,300)';
 		o.rmempty = true;
 
 		o = s.taboption('general', form.Flag, 'adb_dnsforce', _('Force Local DNS'), _('Redirect all DNS queries from specified zones to the local DNS resolver, applies to UDP and TCP protocol.'));
@@ -279,11 +284,6 @@ return view.extend({
 
 		o = s.taboption('additional', form.Flag, 'adb_nice', _('Low Priority Service'), _('Reduce the priority of the adblock background processing to take fewer resources from the system.'));
 		o.enabled = '10';
-		o.rmempty = true;
-
-		o = s.taboption('additional', form.Value, 'adb_triggerdelay', _('Trigger Delay'), _('Additional trigger delay in seconds before adblock processing begins.'));
-		o.placeholder = '2';
-		o.datatype = 'range(1,300)';
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.Value, 'adb_tmpbase', _('Base Temp Directory'), _('Base temp directory for all adblock related runtime operations, \
@@ -363,11 +363,12 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('adv_dns', form.Flag, 'adb_jail', _('Additional Jail Blocklist'), _('Builds an additional DNS blocklist to block access to all domains except those listed in the whitelist. \
+		o = s.taboption('adv_dns', form.Flag, 'adb_jail', _('Jail Blocklist'), _('Builds an additional restrictive DNS blocklist to block access to all domains except those listed in the allowlist. \
 			You can use this restrictive blocklist e.g. for guest wifi or kidsafe configurations.'));
 		o.rmempty = true;
 
-		o = s.taboption('adv_dns', form.Value, 'adb_jaildir', _('Jail Directory'), _('Target directory for the generated jail blocklist.'));
+		o = s.taboption('adv_dns', form.Value, 'adb_jaildir', _('Jail Directory'), _('Target directory for the generated jail blocklist. \
+			If this directory points to your DNS directory, the jail blocklist replaces your default blocklist.'));
 		o.depends('adb_jail', '1');
 		o.placeholder = '/tmp';
 		o.rmempty = true;
