@@ -30,9 +30,9 @@ return view.extend({
 
 				const addr_info = iface.addr_info || [];
 				addr_info.forEach(addr => {
-					if (addr.family === 'inet') {
+					if (addr.family === 'inet' && !parsedInfo.ipv4) {
 						parsedInfo.ipv4 = addr.local;
-					} else if (addr.family === 'inet6') {
+					} else if (addr.family === 'inet6' && !parsedInfo.ipv6) {
 						parsedInfo.ipv6 = addr.local;
 					}
 				});
