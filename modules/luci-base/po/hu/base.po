@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-05-08 13:01+0000\n"
+"PO-Revision-Date: 2025-05-09 21:47+0000\n"
 "Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/luci/"
 "hu/>\n"
@@ -48,16 +48,22 @@ msgstr "%d másodperccel ezelőtt"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:762
 msgid "%s adds 1.2.3.0/24 for IPv4 requestors and ::/0 for IPv6 requestors."
 msgstr ""
+"%s hozzáadja az <code>1.2.3.0/24</code>-et az IPv4-kérelmezőkhöz és a "
+"<code>::/0</code>-t az IPv6-kérelmezőkhöz."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:763
 msgid "%s adds 1.2.3.0/24 for both IPv4 and IPv6 requestors."
 msgstr ""
+"%s hozzáadja az <code>1.2.3.0/24</code>-et mind az IPv4, mind az "
+"IPv6-kérelmezőkhöz."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:761
 msgid ""
 "%s adds the /24 and /96 subnets of the requestor for IPv4 and IPv6 "
 "requestors, respectively."
 msgstr ""
+"%s hozzáadja a kérelmező <code>/24</code> és <code>/96</code> alhálózatait "
+"az IPv4, illetve az IPv6-kérelmezőkhöz."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:311
 msgid ""
@@ -65,6 +71,9 @@ msgid ""
 "over Yggdrasil network transparently, utilizing NAT traversal to bypass "
 "intermediary nodes."
 msgstr ""
+"%s egy független projekt, amelynek célja a kapcsolatok késleltetésének "
+"csökkentése az átlátható Yggdrasil hálózattal, NAT-bejárással a közbenső "
+"csomópontok megkerülésére."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:35
 msgid "%s is untagged in multiple VLANs!"
@@ -2164,6 +2173,10 @@ msgid ""
 "unspecified, the device will assign the smallest available prefix greater "
 "than or equal to the requested prefix."
 msgstr ""
+"Beállítja a kérést küldő belső útválasztóhoz rendelt előtag minimális "
+"hosszát, amely potenciálisan felülírja a kért előtag hosszát. Ha nincs "
+"megadva, az eszköz a kért előtagnál nagyobb vagy az azzal megegyező "
+"legkisebb elérhető előtagot rendeli hozzá."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:790
 msgid ""
@@ -2788,6 +2801,8 @@ msgid ""
 "Directs packet flows to specific CPUs where the local socket owner listens "
 "(the local service)."
 msgstr ""
+"A csomagfolyamokat azokhoz a CPU-khoz (vagy magokhoz) irányítja, ahol a "
+"célállomásnak tekinthető szolgáltatás fut."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:121
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:218
@@ -4805,7 +4820,7 @@ msgstr "IP készletek"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:776
 msgid "IPs to override with {nxdomain}"
-msgstr "{nxdomain} által felülírandó IP-címek"
+msgstr "{nxdomain} által felülbírálandó IP-címek"
 
 #: protocols/luci-proto-xfrm/htdocs/luci-static/resources/protocol/xfrm.js:9
 msgid "IPsec XFRM"
@@ -5516,8 +5531,8 @@ msgstr "Belső"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:85
 msgid "International Mobile Station Equipment Identity"
 msgstr ""
-"<abbr title=\"Nemzetközi mobilállomás-eszközazonosító (International Mobile "
-"Station Equipment Identity)\">IMSEI</abbr>"
+"Nemzetközi mobilállomás-eszközazonosító (International Mobile Station "
+"Equipment Identity)"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:139
 msgid "International Mobile Subscriber Identity"
@@ -6497,23 +6512,26 @@ msgstr "Címke egyezés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:164
 msgid "Match traffic IP protocol type"
-msgstr ""
+msgstr "Forgalom illesztése IP protokoll típusa szerint."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:170
 msgid "Match traffic destined to this interface"
-msgstr ""
+msgstr "Forgalom illesztése erre a cél csatolóra."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:174
 msgid "Match traffic destined to this subnet (CIDR notation)"
-msgstr ""
+msgstr "Forgalom illesztése erre a cél alhálózatra (CIDR jelölés)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:153
 msgid "Match traffic from this interface"
-msgstr ""
+msgstr "Forgalom illesztése erről a csatolóról."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:157
 msgid "Match traffic from this source subnet (CIDR notation)"
 msgstr ""
+"Forgalom illesztése erről a forrás alhálózatról (<abbr title=\"Osztály "
+"nélküli tartományok közötti útválasztás (Classless Inter-Domain Routing)\""
+">CIDR</abbr> jelölés)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:183
 msgid "Matched traffic re-targets to an interface using this table."
@@ -6674,6 +6692,8 @@ msgid ""
 "Metric is an ordinal, where a gateway with 1 is chosen 1st, 2 is chosen 2nd, "
 "3 is chosen 3rd, etc"
 msgstr ""
+"Ez egy sorrendi módszer, az legalacsonyabb érték van legelöl. Tehát előbb az "
+"1-es érték lesz kiválasztva, aztán a 2-es, stb."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:70
 msgctxt "nft unit"
@@ -7429,6 +7449,8 @@ msgid ""
 "Note: this setting is for local services on the device only (not for "
 "forwarding)."
 msgstr ""
+"Megjegyzés: ez a beállítás csak az eszközön található helyi szolgáltatásokra "
+"vonatkozik (továbbításra nem)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:558
 msgid ""
@@ -7581,6 +7603,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:99
 msgid "Only interfaces using this table (via override) will use this route."
 msgstr ""
+"Csak az ezt a táblát (felülbírálással) használó interfészek fogják ezt az "
+"útvonalat használni."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:685
 msgid "Open iptables rules overview…"
@@ -7810,6 +7834,8 @@ msgstr "Sorrendi: elöl az alacsonyabb."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:85
 msgid "Ordinal: routes with the lowest metric match first"
 msgstr ""
+"Sorrendi: a legalacsonyabb értékkel rendelkező útvonalak illeszkednek "
+"először."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:55
 msgid "Originator Interval"
@@ -7868,11 +7894,11 @@ msgstr "Átfedés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1042
 msgid "Override IPv4 routing table"
-msgstr "IPv4 útválasztási tábla felülírása"
+msgstr "IPv4 útválasztási tábla felülbírálása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1047
 msgid "Override IPv6 routing table"
-msgstr "IPv6 útválasztási tábla felülírása"
+msgstr "IPv6 útválasztási tábla felülbírálása"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:54
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:64
@@ -7901,7 +7927,8 @@ msgstr "MTU felülbírálása"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:142
 msgid "Override TOS"
 msgstr ""
-"<abbr title=\"Szolgáltatás típusa (Type of Service)\">ToS</abbr> felülírása"
+"<abbr title=\"Szolgáltatás típusa (Type of Service)\">ToS</abbr> "
+"felülbírálása"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:69
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:74
@@ -7912,8 +7939,9 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:137
 msgid "Override TTL"
 msgstr ""
-"<abbr title=\"Élettartam (Time To Live) - IPv6 megfelelője az Ugráshatár "
-"(Hop Limit)\">TTL</abbr> felülírása"
+"<abbr title="
+"\"Élettartam (Time To Live) - IPv6 megfelelője az Ugráshatár (Hop Limit)\""
+">TTL</abbr> felülbírálása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1225
 msgid ""
@@ -7921,7 +7949,7 @@ msgid ""
 "limited by the driver"
 msgstr ""
 "Az alapértelmezett <abbr title=\"Közeghozzáférés-vezérlő (Media Access "
-"Control)\">MAC</abbr>-cím felülírása – a használható címek tartományát az "
+"Control)\">MAC</abbr>-cím felülbírálása – a használható címek tartományát az "
 "illesztőprogram korlátozhatja."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1217
@@ -7930,7 +7958,7 @@ msgstr "Alapértelmezett csatolónév felülbírálása"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:167
 msgid "Override the gateway in DHCP responses"
-msgstr "DHCP válaszokban az átjáró felülírása"
+msgstr "DHCP válaszokban az átjáró felülbírálása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:694
 msgid ""
@@ -9428,11 +9456,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:97
 msgid "Routing table into which to insert this rule."
-msgstr ""
+msgstr "Az az útválasztási tábla, amelyikbe ezt a szabályt be kell szúrni."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:181
 msgid "Routing table to use for traffic matching this rule."
-msgstr ""
+msgstr "Útválasztási tábla a szabálynak megfelelő forgalom illesztéséhez."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:218
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:208
@@ -10309,6 +10337,8 @@ msgstr "Állapot"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1580
 msgid "Steering flows (<abbr title=\"Receive Packet Steering\">RPS</abbr>)"
 msgstr ""
+"<abbr title=\"Irányított csomagfogadás (Receive Packet Steering)\">RPS</"
+"abbr> folyamatirányítás"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:498
 msgid "Stop"
@@ -11174,6 +11204,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:108
 msgid "This is only used if no default route matches the destination gateway"
 msgstr ""
+"Ez csak akkor használatos, ha nincs egyező alapértelmezett útvonal a "
+"célátjáróval."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv_hardif.js:42
 msgid ""
@@ -11533,6 +11565,9 @@ msgstr "UDP:"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1567
 msgid "ULA for IPv6 is analogous to IPv4 private network addressing."
 msgstr ""
+"Az <abbr title=\"Egyedi helyi cím (Unique Local Address)\">ULA</abbr> az "
+"IPv4 magánhálózati címzéshez hasonló megoldás, de minden felhasználónak "
+"egyedi címtartományt biztosít az IPv6 hálózatokban."
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:91
 msgid "UMTS only"
@@ -12803,7 +12838,7 @@ msgstr "nincs kapcsolat"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1226
 msgid "no override"
-msgstr "nincs felülírás"
+msgstr "nincs felülbírálás"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2277
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:72
