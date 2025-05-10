@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-08-29 19:47+0000\n"
+"PO-Revision-Date: 2025-05-08 13:01+0000\n"
 "Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/hu/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:152
 msgid "Active MID announcements"
@@ -93,7 +93,7 @@ msgstr "ETX"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:292
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:180
 msgid "ETX:"
-msgstr ""
+msgstr "ETX:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:60
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:513
@@ -112,7 +112,7 @@ msgid ""
 "Enable SmartGateway. If it is disabled, then all other SmartGateway "
 "parameters are ignored. Default is \"no\"."
 msgstr ""
-"SmartGateway engedélyezése. Ha ez le van tiltva, akkor az összes egyéb "
+"SmartGateway engedélyezése. Ha ez letiltott, akkor az összes egyéb "
 "SmartGateway paraméter figyelmen kívül lesz hagyva. Alapértelmezetten „no”."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:41
@@ -193,11 +193,11 @@ msgstr "Jó (30 > SNR > 20)"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
 msgid "Grant UCI access for luci-app-olsr"
-msgstr ""
+msgstr "UCI hozzáférés engedélyezése a <em>luci-app-olsr</em> alkalmazásnak"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr-unauthenticated.json:3
 msgid "Grant read access"
-msgstr ""
+msgstr "Olvasási hozzáférés engedélyezése"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:541
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:550
@@ -503,7 +503,7 @@ msgstr "LQ szint"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:290
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:178
 msgid "LQ:"
-msgstr ""
+msgstr "LQ:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:140
 msgid "Last hop"
@@ -614,6 +614,9 @@ msgid ""
 "Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
 "configured on port 9090, and accepts connections from \"127.0.0.1\"."
 msgstr ""
+"Győződjön meg arról, hogy az OLSRd fut, a \"jsoninfo\" bővítmény be van "
+"töltve, a 9090-es porton van konfigurálva, és fogadja a kapcsolatokat a "
+"\"127.0.0.1\" címről."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:182
 msgid "Metric"
@@ -669,7 +672,7 @@ msgstr "NLQ"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:291
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:179
 msgid "NLQ:"
-msgstr ""
+msgstr "NLQ:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:270
 msgid "Neighbour IP"
@@ -682,7 +685,7 @@ msgstr "Szomszédok"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:26
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:141
 msgid "Netmask"
-msgstr "Netmask"
+msgstr "Hálózati maszk"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:521
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:497
@@ -740,11 +743,11 @@ msgstr "OLSR démon – csatoló"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:3
 msgid "OLSR IPv4"
-msgstr ""
+msgstr "OLSR IPv4"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:45
 msgid "OLSR IPv6"
-msgstr ""
+msgstr "OLSR IPv6"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:531
 msgid "OLSR connections"
@@ -863,7 +866,7 @@ msgstr "Útvonalak"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:301
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:189
 msgid "SNR:"
-msgstr ""
+msgstr "Jel-zaj arány (SNR):"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:122
 msgid "Secondary OLSR interfaces"
@@ -897,7 +900,7 @@ msgstr ""
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:301
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:189
 msgid "Signal Noise Ratio in dB"
-msgstr "Jel zajaránya dB-ben"
+msgstr "Jel-zaj arány dB-ben"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:59
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:59
@@ -911,7 +914,7 @@ msgstr "SmartGW közlemények"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:273
 msgid "SmartGateway is not configured on this system"
-msgstr ""
+msgstr "SmartGateway nincs beállítva ezen a rendszeren"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:140
 msgid "Source address"
@@ -993,6 +996,13 @@ msgid ""
 "device. Visit <a href=\"http://www.olsr.org\">olsrd.org</a> for help and "
 "documentation."
 msgstr ""
+"Az <abbr title=\"Optimalizált kapcsolatállapot alapú útirányítás (Optimized "
+"Link State Routing)\">OLSR</abbr> démon az OLSR protokoll egy megvalósítása. "
+"Lehetővé teszi az útválasztást a hálóban bármilyen hálózati eszköz számára. "
+"Minden wifi kártyával működik, amelyik támogatja az ad-hoc módot, és "
+"természetesen bármilyen ethernet eszközzel. Látogasson el az <a "
+"href=\"http://www.olsr.org\">olsrd.org</a> oldalra segítségért és "
+"dokumentációért."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:18
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:18

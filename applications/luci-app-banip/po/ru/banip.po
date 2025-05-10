@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-02-15 16:12+0000\n"
-"Last-Translator: Alexander <dmitriev8925@gmail.com>\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
+"Last-Translator: Maksim_220 Кабанов <law820314@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbanip/ru/>\n"
 "Language: ru\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:78
 msgid "-- Set Selection --"
@@ -52,7 +52,7 @@ msgstr "Активные устройства"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:177
 msgid "Active Feeds"
-msgstr "Активные каналы"
+msgstr "Активные подписки"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:185
 msgid "Active Uplink"
@@ -174,7 +174,7 @@ msgstr "Блокировка переадресации VLAN"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:691
 msgid "Blocklist Feed"
-msgstr "Источник блок-листа"
+msgstr "Фильтр блокировки"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:797
 msgid "Blocklist Set Expiry"
@@ -249,7 +249,7 @@ msgstr "Страны"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:174
 msgid "Custom Feed Editor"
-msgstr "Пользовательский редактор каналов"
+msgstr "Редактор собственных списков"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:404
 msgid ""
@@ -321,7 +321,7 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:661
 msgid "E-Mail Notification"
-msgstr "Уведомление по электронной почте"
+msgstr "Email-уведомление"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:676
 msgid "E-Mail Profile"
@@ -345,11 +345,11 @@ msgstr "Тема"
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:36
 msgid "Edit Allowlist"
-msgstr "Редактировать список разрешений"
+msgstr "Настройка исключений"
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:44
 msgid "Edit Blocklist"
-msgstr "Редактировать черный список"
+msgstr "Редактировать список блокировок"
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:52
 msgid "Edit Custom Feeds"
@@ -408,7 +408,7 @@ msgstr "Внешние каналы разрешенных список"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:688
 msgid "External Blocklist Feeds"
-msgstr "Внешние каналы запрещенных списков"
+msgstr "Каналы из внешнего черного списка"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:190
 msgid "Feed Name"
@@ -416,7 +416,7 @@ msgstr "Название канала"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:253
 msgid "Feed Selection"
-msgstr "Выбор канала"
+msgstr "Списки блокировок"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:250
 msgid "Feed/Set Settings"
@@ -724,7 +724,7 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:222
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:763
 msgid "Protocol/URL format not supported"
-msgstr "Формат протокола/URL не поддерживается"
+msgstr "Формат протокола/URL-адреса не поддерживается"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:730
 msgid "RIPE - serving Europe, Middle East and Central Asia"
@@ -905,7 +905,7 @@ msgstr "Статус"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:221
 msgid "Stop"
-msgstr "Остановить"
+msgstr "Стоп"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:780
 msgid "Subnet"
@@ -933,11 +933,11 @@ msgstr "Целевой каталог для сжатых резервных к�
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:36
 msgid "The allowlist is too big, unable to save modifications."
-msgstr "Список разрешений слишком большой, не удается сохранить модификации."
+msgstr "Белый список слишком большой, не получилось сохранить модификации."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:36
 msgid "The blocklist is too big, unable to save modifications."
-msgstr "Блок-лист слишком большой, не удается сохранить изменения."
+msgstr "Чёрный список слишком большой, не получилось сохранить модификации."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:629
 msgid ""
@@ -1033,11 +1033,13 @@ msgstr "Невозможно разобрать файл стран!"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:529
 msgid "Unable to parse the custom feed file!"
-msgstr "Невозможно разобрать файл пользовательского канала!"
+msgstr "Не получилось прочитать ваш файл. Проверьте формат!"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:536
 msgid "Unable to parse the default feed file!"
-msgstr "Невозможно разобрать файл канала по умолчанию!"
+msgstr ""
+"Система не может прочитать основной файл с данными. Возможно, он поврежден "
+"или имеет неверный формат!"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:152
 msgid "Unable to parse the report file!"
@@ -1050,7 +1052,7 @@ msgstr "Невозможно разобрать файл набора прави
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/allowlist.js:28
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/blocklist.js:28
 msgid "Unable to save modifications: %s"
-msgstr "Невозможно сохранить изменения: %s"
+msgstr "Не удалось сохранить изменения: %s"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:269
 msgid "Upload Custom Feeds"
@@ -1060,7 +1062,7 @@ msgstr "Загрузить пользовательские каналы"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:78
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:85
 msgid "Upload of the custom feed file failed."
-msgstr "Загрузка файла пользовательского канала не удалась."
+msgstr "Не получилось загрузить ваш файл. Проверьте его и попробуйте снова."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:266
 msgid "Verbose Debug Logging"

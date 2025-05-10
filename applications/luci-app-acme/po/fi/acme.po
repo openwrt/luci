@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-01-06 10:09+0000\n"
-"Last-Translator: Hannu Nyman <hannu.nyman@iki.fi>\n"
+"PO-Revision-Date: 2025-05-04 15:03+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/fi/>\n"
 "Language: fi\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
@@ -52,7 +52,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:145
 msgid "Custom ACME server directory URL."
-msgstr ""
+msgstr "Mukautettu ACME-palvelimen hakemiston URL-osoite."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:96
 msgid "DNS"
@@ -107,7 +107,7 @@ msgstr "Ota vieanetsintälokkaus käyttöön"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:46
 msgid "Enabled"
-msgstr "Käytössä"
+msgstr "Otettu käyttöön"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:42
 msgid "General Settings"
@@ -118,6 +118,8 @@ msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
+"Hae varmenne Letsencryptin koepalvelimelta (käytä testaamista varten; "
+"varmenne ei ole voimassa)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
@@ -145,7 +147,7 @@ msgstr "RSA 4096 bittiä"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:94
 msgid "Standalone"
-msgstr ""
+msgstr "Itsenäinen"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:91
 msgid ""
@@ -154,6 +156,10 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
+"Itsenäistilassa käytetään acme.sh:n sisäänrakennettua verkkopalvelinta "
+"varmenteen myöntämiseen. Webroot-tilassa käytetään olemassa olevaa web-"
+"palvelinta varmenteen myöntämiseen. DNS-tilassa voit käyttää DNS-"
+"palveluntarjoajasi DNS-rajapintaa varmenteen myöntämiseen."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:125
 msgid ""
@@ -161,6 +167,9 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
+"Kaikille toimialueille käytettävä haaste-alias. Katso prosessin "
+"yksityiskohdat https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-"
+"mode :sta. LUCI tukee vain yhtä haaste-aliasta varmennetta kohden."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:117
 msgid ""
@@ -169,6 +178,11 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
+"Yllä valitun DNS-sovellusliittymätilan valtuustiedot. Katso https://"
+"github.com/acmesh-official/acme.sh/wiki/dnsapi :sta kunkin sovellusliittymän "
+"vaatimien valtuustietojen muoto. Lisää tähän useita tietueita "
+"komentotulkkimuuttujamuodossa AVAIN=ARVO useiden valtuustietomuuttujien "
+"syöttämiseksi."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:132
 msgid ""
@@ -176,6 +190,9 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
+"Kaikille toimialueille käytettävä toimialueen alias. Katso lisätietoja tästä "
+"prosessista https://github.com/acmesh-official/acme.sh/wiki/DNS-alias-"
+"mode :sta. LUCI tukee vain yhtä haaste-toimialuetta varmennetta kohden."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
 msgid ""
@@ -186,6 +203,12 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
+"Tämä määrittää ACME (Letsencrypt) -varmenteiden automaattisen asennuksen. "
+"Täytä tämä, jotta reitittimeen määritetään Letsencryptin myöntämät "
+"verkkoliittymän sertifikaatit. Huomaa, että varmenteen toimialueiden nimien "
+"on oltava jo määritetty osoittamaan reitittimen julkiseen IP-osoitteeseen. "
+"Määrityksen jälkeen varmenteiden myöntäminen voi kestää jonkin aikaa. "
+"Tarkista lokeista edistyminen ja mahdolliset virheet."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
 msgid ""
@@ -196,6 +219,13 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
+"DNS-tilan käyttäminen varmenteiden myöntämistä varten, aseta tämä acme.sh:n "
+"tukeman DNS-rajapinnan nimeksi. Katso https://github.com/acmesh-official/"
+"acme.sh/wiki/dnsapi :sta luettelo käytettävissä olevista rajapinnoista. DNS-"
+"tilassa verkkotunnuksen nimen ei tarvitse ratkaista reitittimen IP-"
+"osoitteeksi. DNS-tila on myös ainoa tila, joka tukee "
+"jokerimerkkivarmenteita. Tämän tilan käyttö edellyttää acme-dnsapi-paketin "
+"asentamista."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:82
 msgid ""
@@ -213,7 +243,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr ""
+msgstr "Käytä mukautettua varmenneviranomaista Let's Encryptin sijaan."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
 msgid "Use for nginx"
@@ -233,11 +263,11 @@ msgstr "Validointitapa"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:95
 msgid "Webroot"
-msgstr ""
+msgstr "Webroot"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:99
 msgid "Webroot directory"
-msgstr ""
+msgstr "Webroot-hakemisto"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
 msgid ""
@@ -245,3 +275,6 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
+"Verkkopalvelimen juurihakemisto. Aseta tämä verkkopalvelimen dokumentin "
+"juurihakemistoksi, jotta Acme toimii webroot-tilassa. Verkkopalvelimeen on "
+"oltava pääsy internetistä portilla 80."

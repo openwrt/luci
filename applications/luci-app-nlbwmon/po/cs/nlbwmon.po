@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-17 23:08+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnlbwmon/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:563
 msgid "%d IPv4-only hosts"
@@ -16,11 +16,11 @@ msgstr "%d hostitelů pouze s IPv4"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:570
 msgid "%d IPv6-only hosts"
-msgstr ""
+msgstr "%d pouze IPv6 hostitelů"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:577
 msgid "%d dual-stack hosts"
-msgstr ""
+msgstr "%d hostitelů s dual stack"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:114
 msgid "%s and %s"
@@ -36,7 +36,7 @@ msgstr "-1 – restartovat každý poslední den v měsíci"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:94
 msgid "-7 - Restart a week before end of month"
-msgstr ""
+msgstr "-7 – restartovat týden před koncem měsíce"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:92
 msgid "1 - Restart every 1st of month"
@@ -61,6 +61,7 @@ msgstr ""
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:167
 msgid "5m - rarely refresh to avoid frequently clearing conntrack counters"
 msgstr ""
+"5m – málokdy načítat znovu a zamezit tak častým čištěním čítačů conntrack"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:162
 msgid "60s - commit minutely, useful for non-flash storage"
@@ -68,7 +69,7 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:852
 msgid "<big id=\"conn-total\">0</big> connections"
-msgstr ""
+msgstr "<big id=\"conn-total\">0</big> spojení"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:849
 msgid "<big id=\"host-total\">0</big> hosts"
@@ -80,7 +81,7 @@ msgstr "<big id=\"ipv6-hosts\">0%</big> četnost podpory IPv6 mezi hostiteli"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:944
 msgid "<big id=\"ipv6-rx\">0B</big> total IPv6 download"
-msgstr ""
+msgstr "<big id=\"ipv6-rx\">0B</big> celkem IPv6 příchozí"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:943
 msgid "<big id=\"ipv6-share\">0%</big> of the total traffic is IPv6"
@@ -88,7 +89,7 @@ msgstr "<big id=\"ipv6-share\">0%</big> celkového provozu je IPv6"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:945
 msgid "<big id=\"ipv6-tx\">0B</big> total IPv6 upload"
-msgstr ""
+msgstr "<big id=\"ipv6-tx\">0B</big> celkem IPv6 odchozí"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:899
 msgid "<big id=\"layer7-most-conn\">0</big> cause the most connections"
@@ -104,19 +105,19 @@ msgstr "<big id=\"layer7-most-tx\">0</big> způsobuje většinu odesílání"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:896
 msgid "<big id=\"layer7-total\">0</big> different application protocols"
-msgstr ""
+msgstr "<big id=\"layer7-total\">0</big> různých aplikačních protokolů"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:850
 msgid "<big id=\"rx-total\">0</big> download"
-msgstr ""
+msgstr "<big id=\"rx-total\">0</big> příjem"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:851
 msgid "<big id=\"tx-total\">0</big> upload"
-msgstr ""
+msgstr "<big id=\"tx-total\">0</big> odesílání"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:63
 msgid "Accounting period"
-msgstr ""
+msgstr "Účtovací období"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:60
 msgid "Advanced Settings"
@@ -143,6 +144,8 @@ msgid ""
 "Changing the accounting interval type will invalidate existing databases!"
 "<br /><strong><a href=\"%s\">Download backup</a></strong>."
 msgstr ""
+"Změna typu intervalu účtování zneplatní existující databáze!<br /><strong><a "
+"href=\"%s\">Stáhnout si zálohu</a></strong>."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:64
 msgid ""
@@ -150,6 +153,9 @@ msgid ""
 "specific date, e.g. every 3rd. Choose \"Fixed interval\" to restart the "
 "accounting period exactly every N days, beginning at a given date."
 msgstr ""
+"Zvolte „Den v měsíci“ ve kterém každý měsíc restartovat účtovací období na "
+"konkrétní datum, např. každého 3. Zvolte „Pevný interval“, pokud chcete "
+"účtovací periodu restartovat přesně každých N dnů, počínaje daným datem."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:869
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:915
@@ -194,7 +200,7 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:72
 msgid "Day of month"
-msgstr ""
+msgstr "Den v měsíci"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:84
 msgid ""
@@ -202,6 +208,9 @@ msgid ""
 "towards the end of month, e.g. \"-5\" to specify the 27th of July or the "
 "24th of February."
 msgstr ""
+"Den v měsíci pro zahájení nové účtovací periody. Pro počítání vůči konci "
+"měsíce použijte záporné hodnoty, např. „-5“ pro zadání 27. července nebo 24. "
+"února."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:24
 msgid "Dismiss"
@@ -238,15 +247,15 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:885
 msgid "Download / Application"
-msgstr ""
+msgstr "Stahování / aplikaci"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:59
 msgid "Download Database Backup"
-msgstr ""
+msgstr "Stáhnout si zálohu databáze"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:936
 msgid "Dualstack enabled hosts"
-msgstr ""
+msgstr "Hostitelé s dual stack"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:83
 msgid "Due date"
@@ -266,15 +275,15 @@ msgstr "Export"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:804
 msgid "Failed to commit database: %s"
-msgstr ""
+msgstr "Nepodařilo se odeslat do databáze: %s"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:45
 msgid "Failed to download backup archive: %s"
-msgstr ""
+msgstr "Nepodařilo se stáhnout si archiv se zálohou: %s"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:793
 msgid "Failed to download traffic data: %s"
-msgstr ""
+msgstr "Nepodařilo si stáhnout data o provozu: %s"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:28
 msgid "Failed to restore backup archive: %s"
@@ -304,19 +313,19 @@ msgstr "Vytvořit zálohu"
 
 #: applications/luci-app-nlbwmon/root/usr/share/rpcd/acl.d/luci-app-nlbwmon.json:3
 msgid "Grant UCI access for luci-app-nlbwmon"
-msgstr ""
+msgstr "Udělit UCI přístup k luci-app-nlbwmon"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:987
 msgid "Grouped by IP (CSV)"
-msgstr ""
+msgstr "Seskupeno podle IP (CSV)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:978
 msgid "Grouped by MAC (CSV)"
-msgstr ""
+msgstr "Seskupeno podle MAC (CSV)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:996
 msgid "Grouped by protocol (CSV)"
-msgstr ""
+msgstr "Seskupeno podle protokolu (CSV)"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:859
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:952
@@ -325,7 +334,7 @@ msgstr "Hostitel"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:620
 msgid "Hostname: <big id=\"bubble-hostname\">example.org</big>"
-msgstr ""
+msgstr "Název hostitele: <big id=\"bubble-hostname\">example.org</big>"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:507
 msgid "IPv4"
@@ -333,7 +342,7 @@ msgstr "IPv4"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:931
 msgid "IPv4 vs. IPv6"
-msgstr ""
+msgstr "IPv4 vs. IPv6"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:508
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:928
@@ -358,7 +367,7 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:112
 msgid "Length of accounting interval in days."
-msgstr ""
+msgstr "Délka účtovacího intervalu (v dnech)."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:123
 msgid "Local interfaces"
@@ -375,17 +384,19 @@ msgstr "MAC"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:76
 msgid "Malformed data received"
-msgstr ""
+msgstr "Obdržena data v nesprávném formátu"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:144
 msgid "Maximum entries"
-msgstr ""
+msgstr "Položek nejvýše"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:155
 msgid ""
 "Maximum number of accounting periods to keep, use zero to keep databases "
 "forever."
 msgstr ""
+"Nejvyšší počet účtovacích období k uchovávání – pokud databáze mají být "
+"ponechávány navždy, zadejte 0 (nula)."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:831
 msgid "Netlink Bandwidth Monitor"
@@ -393,17 +404,17 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:51
 msgid "Netlink Bandwidth Monitor - Backup / Restore"
-msgstr ""
+msgstr "Netlink monitor pásma – záloha/obnovení"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:52
 msgid "Netlink Bandwidth Monitor - Configuration"
-msgstr ""
+msgstr "Netlink monitor využití pásma – nastavení"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:362
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:416
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:542
 msgid "No data recorded yet."
-msgstr ""
+msgstr "Zatím ještě nezaznamenána žádná data."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:124
 msgid "Only conntrack streams from or to any of these networks are counted."
@@ -446,7 +457,7 @@ msgstr "Obnovit"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:52
 msgid "Restore Database Backup"
-msgstr ""
+msgstr "Obnovit databázi ze zálohy"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:20
 msgid "Restore complete"
@@ -454,7 +465,7 @@ msgstr "Obnovení dokončeno"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:285
 msgid "Select accounting period:"
-msgstr ""
+msgstr "Vyberte účtovací období:"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:334
 msgid "Source IP"
@@ -467,6 +478,8 @@ msgstr "Počáteční datum"
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:97
 msgid "Start date of the first accounting period, e.g. begin of ISP contract."
 msgstr ""
+"Datum zahájení prvního účtovacího období, např. začátek smlouvy o "
+"poskytování konektivity."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:154
 msgid "Stored periods"
@@ -477,6 +490,9 @@ msgid ""
 "The Netlink Bandwidth Monitor (nlbwmon) is a lightweight, efficient traffic "
 "accounting program keeping track of bandwidth usage per host and protocol."
 msgstr ""
+"Netlink Bandwidth Monitor (nlbwmon) je na systémové prostředky nenáročný, "
+"efektivní program pro účtování provozu, uchovávající přehled o využití "
+"přenosového pásma jednotlivými hostiteli a protokoly."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/backup.js:21
 msgid "The following database files have been restored:"
@@ -487,10 +503,13 @@ msgid ""
 "The maximum amount of entries that should be put into the database, setting "
 "the limit to 0 will allow databases to grow indefinitely."
 msgstr ""
+"Nejvyšší počet položek, které by měl být umístěny do databáze. Nastavení "
+"limitu na 0 (nula) umožní databázi růst donekonečna (resp. dostupného "
+"prostoru)."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:838
 msgid "Traffic / Host"
-msgstr ""
+msgstr "Provoz / hostitel"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:835
 msgid "Traffic Distribution"
@@ -527,11 +546,11 @@ msgstr ""
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:890
 msgid "Upload / Application"
-msgstr ""
+msgstr "Odesílání / aplikaci"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:621
 msgid "Vendor: <big id=\"bubble-vendor\">Example Corp.</big>"
-msgstr ""
+msgstr "Výrobce: <big id=\"bubble-vendor\">Example Corp.</big>"
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:75
 msgid "Warning"
@@ -543,6 +562,9 @@ msgid ""
 "makes accessing old data slightly slower but helps to reduce storage "
 "requirements."
 msgstr ""
+"Zda archivní databáze komprimovat pomocí gzip. Komprimování databázových "
+"souborů způsobí, že přístup ke starým datům se mírně zpomalí, ale pomůže "
+"snížit nároky na úložiště."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/config.js:148
 msgid ""
@@ -550,6 +572,9 @@ msgid ""
 "mainly useful for memory constrained systems which might not be able to "
 "satisfy memory allocation after longer uptime periods."
 msgstr ""
+"Zda v paměti předem přidělit největší možnou velikost databáze. Toto je "
+"užitečné hlavně v případě systémů s málo pamětí, které by nemusely být "
+"schopné uspokojit přidělovaná paměti po dlouhých periodách zapnutého stavu."
 
 #: applications/luci-app-nlbwmon/htdocs/luci-static/resources/view/nlbw/display.js:130
 msgid "no traffic"

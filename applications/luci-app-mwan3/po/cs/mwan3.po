@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-23 21:03+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmwan3/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:187
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:203
@@ -68,10 +68,12 @@ msgid ""
 "%s: Name of Physical device which interface went up or down (e.g. \"eth0\" "
 "or \"wwan0\")"
 msgstr ""
+"%s: Název fyzického zařízení kterého rozhraní šlo dolů či nahoru (např. "
+"„eth0“ nebo „wwan0“)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:39
 msgid "%s: Name of the action that triggered this event"
-msgstr ""
+msgstr "%s: Název akce, která tuto událost spustila"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:44
 msgid ""
@@ -85,15 +87,15 @@ msgstr "* %s: je voláno netifd a mwan3track"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:43
 msgid "* %s: Is only called by mwan3track if tracking has failed"
-msgstr ""
+msgstr "* %s: Je mwan3track voláno pouze pokud se sledování nezdařilo"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:42
 msgid "* %s: Is only called by mwan3track if tracking was successful"
-msgstr ""
+msgstr "* %s: Je mwan3track voláno pouze pokud bylo sledování úspěšné"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:71
 msgid "-- Interface Selection --"
-msgstr ""
+msgstr "-- Výběr rozhraní --"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:85
 msgid "-- Please choose --"
@@ -125,11 +127,11 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:65
 msgid "Check IP rules"
-msgstr ""
+msgstr "Zkontrolovat pravidla pro IP"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:116
 msgid "Check link quality"
-msgstr ""
+msgstr "Zkontrolovat kvalitu linky"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:66
 msgid "Check routing table"
@@ -172,11 +174,13 @@ msgstr "Zakázáno"
 msgid ""
 "Downed interface will be deemed up after this many successful ping tests"
 msgstr ""
+"Spadlé rozhraní bude považováno za nahozené po tomto počtu úspěšných ping "
+"testů"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:40
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:48
 msgid "Downtime"
-msgstr ""
+msgstr "Doba výpadku"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:25
 msgid "Emergency"
@@ -194,10 +198,12 @@ msgstr "Povoleno"
 msgid ""
 "Enables firewall rule logging (global mwan3 logging must also be enabled)"
 msgstr ""
+"Zapíná zaznamenávání pravidel brány firewall (je třeba, aby bylo také "
+"zapnuto globální zaznamenávání mwan3)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:20
 msgid "Enables global firewall logging"
-msgstr ""
+msgstr "Zapíná globální záznam událostí na bráně firewall"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:69
 msgid "Enables https tracking on ssl port 443"
@@ -217,7 +223,7 @@ msgstr "Spustit"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:35
 msgid "Expect interface state on up event"
-msgstr ""
+msgstr "Očekávat při události stav rozhraní nahozeno"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:189
 msgid "Failure interval"
@@ -229,19 +235,19 @@ msgstr "Prodleva nezdaru [ms]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:134
 msgid "Failure packet loss [%]"
-msgstr ""
+msgstr "Ztrátovost paketů pro selhání [%]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:23
 msgid "Firewall loglevel"
-msgstr ""
+msgstr "Stupeň podrobnosti záznamu událostí na bráně firewall"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:14
 msgid "Firewall mask"
-msgstr ""
+msgstr "Maska brány firewall"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:256
 msgid "Flush conntrack table"
-msgstr ""
+msgstr "Vyprázdnit conntrack tabulku"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:257
 msgid "Flush global firewall conntrack table on interface events"
@@ -253,7 +259,7 @@ msgstr "Globální"
 
 #: applications/luci-app-mwan3/root/usr/share/rpcd/acl.d/luci-app-mwan3.json:3
 msgid "Grant UCI access for luci-app-mwan3"
-msgstr ""
+msgstr "Udělit UCI přístup pro luci-app-mwan3"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:68
 msgid "Hotplug ifdown"
@@ -314,22 +320,24 @@ msgstr "Rozhraní aktivní"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:229
 msgid "Interface will be deemed down after this many failed ping tests"
-msgstr ""
+msgstr "Rozhraní bude považováno za spadlé po tolika nezdařených ping testech"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:24
 msgid ""
 "Interfaces may not share the same name as configured members, policies or "
 "rules."
 msgstr ""
+"Rozhraní nemusí sdílet stejný název jako nastavení členové, zásady nebo "
+"pravidla."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:41
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:35
 msgid "Internet Protocol"
-msgstr ""
+msgstr "Internetový protokol"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:206
 msgid "Keep failure interval"
-msgstr ""
+msgstr "Interval ponechání selhání"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:207
 msgid "Keep ping failure interval during failure state"
@@ -341,13 +349,15 @@ msgstr "Poslední možnost"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:34
 msgid "Lines beginning with # are comments and are not executed."
-msgstr ""
+msgstr "Řádky začínající na # (mřížka) jsou komentáře a nejsou vykonávány."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:20
 msgid ""
 "Load-balanced member interfaces distribute more traffic out those with "
 "higher weights."
 msgstr ""
+"Účastnící se rozhraní, mezi která je rozkládána zátěž, distribuují více "
+"provozu z těch, která mají vyšší váhy."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:19
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:93
@@ -360,7 +370,7 @@ msgstr ""
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:103
 msgid "Max TTL"
-msgstr ""
+msgstr "TTL nejvýše"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:57
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:66
@@ -368,6 +378,8 @@ msgid ""
 "May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or "
 "as a portrange (eg \"1024:2048\") without quotes"
 msgstr ""
+"Je možné zadat jako jeden nebo vícero portů (např. „22“ nebo „80,443“) nebo "
+"jako rozsah portů (např. „1024:2048“) – bez uvozovek"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:72
 msgid "Member"
@@ -380,21 +392,25 @@ msgstr "Účastnící se rozhraní s nižšími metrikami jsou použity jako prv
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:19
 msgid "Member interfaces with the same metric will be load-balanced."
 msgstr ""
+"V případě těch účastnících se rozhraní, která mají stejnou metriku, bude "
+"provoz rozdělován podle zátěže."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:30
 msgid "Member used"
-msgstr ""
+msgstr "Použitý člen"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:17
 msgid ""
 "Members are profiles attaching a metric and weight to an MWAN interface."
-msgstr ""
+msgstr "Členové jsou profily připojující metriku a váhu MWAN rozhraní."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:19
 msgid ""
 "Members may not share the same name as configured interfaces, policies or "
 "rules."
 msgstr ""
+"Členové nemusí sdílet stejný název jako nastavená rozhraní, zásady nebo "
+"pravidla."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:264
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:33
@@ -405,69 +421,73 @@ msgstr "Metrika"
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:3
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:46
 msgid "MultiWAN Manager"
-msgstr ""
+msgstr "Správa vícero WAN"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:79
 msgid "MultiWAN Manager - Diagnostics"
-msgstr ""
+msgstr "Správa MultiWAN – diagnostika"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:10
 msgid "MultiWAN Manager - Globals"
-msgstr ""
+msgstr "Správa MultiWAN – globální"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:20
 msgid "MultiWAN Manager - Interfaces"
-msgstr ""
+msgstr "Správa MultiWAN – rozhraní"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:16
 msgid "MultiWAN Manager - Members"
-msgstr ""
+msgstr "Správa MultiWAN – členové"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:26
 msgid "MultiWAN Manager - Notify"
-msgstr ""
+msgstr "Správa MultiWAN – upozornění"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:92
 msgid "MultiWAN Manager - Overview"
-msgstr ""
+msgstr "Správa MultiWAN – přehled"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:16
 msgid "MultiWAN Manager - Policies"
-msgstr ""
+msgstr "Správa MultiWAN – zásady"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:18
 msgid "MultiWAN Manager - Rules"
-msgstr ""
+msgstr "Správa MultiWAN – pravidla"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/detail.js:12
 msgid "MultiWAN Manager - Status"
-msgstr ""
+msgstr "Správa MultiWAN – stav"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/troubleshooting.js:12
 msgid "MultiWAN Manager - Troubleshooting"
-msgstr ""
+msgstr "Správa MultiWAN – řešení potíží"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:21
 msgid ""
 "Mwan3 requires that all interfaces have a unique metric configured in /etc/"
 "config/network."
 msgstr ""
+"Mwan3 vyžaduje aby všechna rozhraní měla neopakující se metriku nastavenou "
+"v /etc/config/network."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:84
 msgid ""
 "Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/"
 "youtube.com/youtube\")"
 msgstr ""
+"Název IPset pravidla. Vyžaduje IPset pravidlo v /etc/dnsmasq.conf (např. "
+"„ipset=/youtube.com/youtube“)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:23
 msgid "Names may contain characters A-Z, a-z, 0-9, _ and no spaces-"
-msgstr ""
+msgstr "Názvy mohou obsahovat znaky A-Z, a-z, 0-9, _ a žádné mezery-"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:18
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:21
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:26
 msgid "Names may contain characters A-Z, a-z, 0-9, _ and no spaces."
-msgstr ""
+msgstr "Názvy mohou obsahovat znaky A-Z, a-z, 0-9, _ a žádné mezery."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:22
 msgid "Names must be 15 characters or less."
@@ -476,6 +496,8 @@ msgstr "Je třeba, aby názvy byly dlouhé nejvýše 15 znaků."
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:22
 msgid "Names must match the interface name found in /etc/config/network."
 msgstr ""
+"Je třeba, aby se názvy shodovaly s pojmenováním rozhraní v /etc/config/"
+"network."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:74
 msgid "No"
@@ -483,7 +505,7 @@ msgstr "Ne"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:20
 msgid "No MWAN interfaces found"
-msgstr ""
+msgstr "Nenalezena žádná MWAN rozhraní"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:43
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:51
@@ -492,7 +514,7 @@ msgstr "Žádné sledování"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:272
 msgid "No interface metric set!"
-msgstr ""
+msgstr "Nenastaveny žádné metriky rozhraní!"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:31
 msgid "Notes:"
@@ -528,7 +550,7 @@ msgstr "Počet pingů"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:63
 msgid "Ping default gateway"
-msgstr ""
+msgstr "Ping na výchozí bránu"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:174
 msgid "Ping interval"
@@ -536,11 +558,11 @@ msgstr "Prodleva mezi pingy"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:190
 msgid "Ping interval during failure detection"
-msgstr ""
+msgstr "Interval mezi pingy v průběhu zjištění selhání"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:212
 msgid "Ping interval during failure recovering"
-msgstr ""
+msgstr "Interval pingu v průběhu zotavování ze selhání"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:88
 msgid "Ping size"
@@ -552,19 +574,23 @@ msgstr "Časový limit pro ping"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:64
 msgid "Ping tracking IP"
-msgstr ""
+msgstr "Ping na sledovací IP"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:17
 msgid ""
 "Policies are profiles grouping one or more members controlling how Mwan3 "
 "distributes traffic."
 msgstr ""
+"Zásady jsou profily seskupování jednoho nebo více členů řídící jak Mwan3 "
+"distribuuje provoz."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:23
 msgid ""
 "Policies may not share the same name as configured interfaces, members or "
 "rules"
 msgstr ""
+"Zásady nemusí sdílet stejný název jako nastavená rozhraní, členové nebo "
+"pravidla"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:80
 msgid "Policy"
@@ -583,6 +609,8 @@ msgid ""
 "Put your custom mwan3 action here, they will be executed with each netifd "
 "hotplug interface event on interfaces for which mwan3 is enabled."
 msgstr ""
+"Sem dejte svou uživatelsky určenou mwan3 akci, budou vykonány při každé "
+"události netifd hotplug na rozhraních, pro která je mwan3 zapnuté."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:211
 msgid "Recovery interval"
@@ -594,15 +622,15 @@ msgstr "Prodleva zotavení [ms]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:157
 msgid "Recovery packet loss [%]"
-msgstr ""
+msgstr "Ztrátovost paketů pro zotavení [%]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:39
 msgid "Routing table %d"
-msgstr ""
+msgstr "Směrovací tabulka %d"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:36
 msgid "Routing table lookup"
-msgstr ""
+msgstr "Prohledávat směrovací tabulku"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:88
 msgid "Rule"
@@ -610,7 +638,7 @@ msgstr "Pravidlo"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:20
 msgid "Rules are based on IP address, port or protocol."
-msgstr ""
+msgstr "Pravidla jsou založena na IP adresách, portech či protokolech."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:21
 msgid "Rules are matched from top to bottom."
@@ -627,14 +655,18 @@ msgid ""
 "Rules may not share the same name as configured interfaces, members or "
 "policies."
 msgstr ""
+"Pravidla nemusí sdílet stejný název jako nastavená rozhraní, členové nebo "
+"zásady."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:19
 msgid "Rules specify which traffic will use a particular MWAN policy."
-msgstr ""
+msgstr "Pravidla určují který provoz použije konkrétní zásadu MWAN."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:78
 msgid "Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set"
 msgstr ""
+"Sekundy. Přijímané hodnoty: 1-1000000. Pokud nenastaveno, bude použito "
+"výchozích 600"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:52
 msgid "Source address"
@@ -653,11 +685,11 @@ msgstr "Stav"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:70
 msgid "Sticky"
-msgstr ""
+msgstr "Lepkavé"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:77
 msgid "Sticky timeout"
-msgstr ""
+msgstr "„Lepkavý“ časový limit"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:53
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:62
@@ -675,17 +707,18 @@ msgstr "Soubor je také zachován při přechodu na novější verzi systému."
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:33
 msgid ""
 "The first line of the script must be &#34;#!/bin/sh&#34; without quotes."
-msgstr ""
+msgstr "Je třeba, aby první řádek skriptu byl „#!/bin/sh“ (bez uvozovek)."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:37
 msgid ""
 "There are three main environment variables that are passed to this script."
-msgstr ""
+msgstr "Tomuto skriptu jsou předávány tři hlavní proměnné prostředí."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:265
 msgid ""
 "This displays the metric assigned to this interface in /etc/config/network"
 msgstr ""
+"Toto zobrazuje metriku přiřazenou tomuto rozhraní v /etc/config/network"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:32
 msgid "This file is interpreted as a shell script."
@@ -696,14 +729,17 @@ msgid ""
 "This hostname or IP address will be pinged to determine if the link is up or "
 "down. Leave blank to assume interface is always online"
 msgstr ""
+"Tento název stroje nebo IP adresa bude dotazována ping kvůli zjištění, zda "
+"je linka nahozená nebo dole. Pokud má být rozhraní považováno vždy za "
+"online, nevyplňujte"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:28
 msgid "This section allows you to modify the content of \"/etc/mwan3.user\"."
-msgstr ""
+msgstr "Tato sekce umožňuje měnit obsah „/etc/mwan3.user“."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:47
 msgid "Tracking hostname or IP address"
-msgstr ""
+msgstr "Název stroje nebo IP adresa sledování"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:52
 msgid "Tracking method"
@@ -718,22 +754,30 @@ msgid ""
 "Traffic destined for known (other than default) networks is handled by the "
 "main routing table."
 msgstr ""
+"Provoz cílený do známých (jiné než výchozí) sítí je obsluhován hlavní "
+"směrovací tabulkou."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:71
 msgid ""
 "Traffic from the same source IP address that previously matched this rule "
 "within the sticky timeout period will use the same WAN interface"
 msgstr ""
+"Provoz ze stejné zdrojové IP adresy, která dříve odpovídala tomuto pravidlu "
+"v rámci období „lepkavého“ časového limitu použije stejné WAN rozhraní"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:25
 msgid ""
 "Traffic matching a rule, but all WAN interfaces for that policy are down "
 "will be blackholed."
 msgstr ""
+"Provoz odpovídá pravidlu, ale WAN rozhraní pro takovou zásadu jsou dole – "
+"spadne do černé díry."
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:23
 msgid "Traffic not matching any rule is routed using the main routing table."
 msgstr ""
+"Provoz neodpovídající žádnému pravidlu je směrován pomocí hlavní směrovací "
+"tabulky."
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:37
 msgid "Troubleshooting"
@@ -762,6 +806,8 @@ msgstr "Varování"
 msgid ""
 "When all policy members are offline use this behavior for matched traffic"
 msgstr ""
+"Pokud jsou všichni členové zásady offline, použít toto chování pro "
+"odpovídající provoz"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:73
 msgid "Yes"
@@ -779,7 +825,7 @@ msgstr "připojeno (mwan3)"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:42
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:105
 msgid "default (use main routing table)"
-msgstr ""
+msgstr "výchozí (použít hlavní směrovací tabulku)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:261
 msgid "disconnected (mwan3)"

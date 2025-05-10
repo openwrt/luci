@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-04-23 20:29+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/cs/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:152
 msgid "Active MID announcements"
@@ -37,12 +37,12 @@ msgstr ""
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:69
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:69
 msgid "Allow the selection of an outgoing IPv4 gateway with NAT"
-msgstr ""
+msgstr "Umožnit vybrání odchozí IPv4 brány s NAT"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:81
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:81
 msgid "Announce uplink"
-msgstr ""
+msgstr "Oznámit uplink"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:170
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:179
@@ -91,7 +91,7 @@ msgstr "ETX"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:292
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:180
 msgid "ETX:"
-msgstr ""
+msgstr "ETX:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:60
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:513
@@ -110,6 +110,8 @@ msgid ""
 "Enable SmartGateway. If it is disabled, then all other SmartGateway "
 "parameters are ignored. Default is \"no\"."
 msgstr ""
+"Povolit SmartGateway. Pokud zakázáno, pak všechny ostatní parametry pro "
+"SmartGateway jsou ignorovány. Výchozí je „no“ (ne)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:41
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:41
@@ -142,11 +144,19 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
+"FIBMetric řídí hodnotu metriky OLSRd sad tras hostitele. „flat“ (ploché) "
+"znamená, že hodnota metriky je vždy 2. Toto je upřednostňovaná hodnota, "
+"protože pomáhá směrování v Linuxovém jádře uklízet staré trasy. „correct“ "
+"(korektní) používá jako hodnotu metriky počet přeskoků. „approx“ (přibližné) "
+"také používá coby metriku počet přeskoků, ale jejich počet aktualizuje pouze "
+"tehdy, když se změní i následující přeskok. Výchozí je „flat“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:209
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:203
 msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
 msgstr ""
+"Mechanizmus rybího oka pro TC (zaškrnuté znamené zapnuté). Výchozí je "
+"„zapnuto“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:132
 msgid "Gateway"
@@ -180,7 +190,7 @@ msgstr "Dobré (30 > SNR > 20)"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr.json:3
 msgid "Grant UCI access for luci-app-olsr"
-msgstr ""
+msgstr "Udělit UCI přístup k luci-app-olsr"
 
 #: applications/luci-app-olsr/root/usr/share/rpcd/acl.d/luci-app-olsr-unauthenticated.json:3
 msgid "Grant read access"
@@ -261,12 +271,16 @@ msgid ""
 "Hosts in an OLSR routed network can announce connectivity to external "
 "networks using HNA messages."
 msgstr ""
+"Hostitelé v síti směrované OLSR mohou oznamovat konektivitu na externí sítě "
+"pomocí HNA zpráv."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:12
 msgid ""
 "Hosts in an OLSR routed network can announce connectivity to external "
 "networks using HNA6 messages."
 msgstr ""
+"Hostitelé v síti směrované OLSR mohou oznamovat konektivitu na externí sítě "
+"pomocí HNA6 zpráv."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:218
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:212
@@ -275,6 +289,9 @@ msgid ""
 "robustness to the link sensing but delays neighbor registration. Defaults is "
 "\"yes\""
 msgstr ""
+"Hystereze pro citlivost linky (pouze pro metriku počtu přeskoků). Hystereze "
+"přidává více robustnosti citlivosti linky, ale prodlužuje registraci "
+"sousedů. Výchozí je „ano“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:285
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:279
@@ -288,6 +305,8 @@ msgid ""
 "IP-version to use. If 6and4 is selected then one olsrd instance is started "
 "for each protocol."
 msgstr ""
+"Verze IP protokolu, kterou použít. Pokud je vybráno 6and4, pak je pro každý "
+"z protokolů spuštěna jedna instance olsrd."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:138
 msgid "IPv4"
@@ -317,6 +336,8 @@ msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
 msgstr ""
+"IPv4 zdrojová adresa pro odchozí OLSR balíčky. Výchozí je „0.0.0.0“, což "
+"spustí použití IP adresy rozhraní."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:139
 msgid "IPv6"
@@ -337,12 +358,16 @@ msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
 msgstr ""
+"Adresa IPv6 vícesměrového vysílání. Výchozí je „FF02::6D“, manet-router "
+"linklocal vícesměrové vysílání."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
 msgid ""
 "IPv6 network must be given in full notation, prefix must be in CIDR notation."
 msgstr ""
+"Je třeba, aby IPv6 síť byla zadána v plném zápisu (a předpona byla v CIDR "
+"zápisu)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:376
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:355
@@ -360,11 +385,14 @@ msgid ""
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
 msgstr ""
+"IPv6 předpona zdroje. OLSRd zvolí jednu z IP adres rozhraní, která odpovídá "
+"předponě tohoto parametru. Výchozí je „::/0“, které spouští využití ne "
+"linklocal IP adresy rozhraní."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:113
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:113
 msgid "IPv6-Prefix of the uplink"
-msgstr ""
+msgstr "IPv6 předpona uplinku"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:257
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:251
@@ -375,6 +403,11 @@ msgid ""
 "if changed.<br /><b>WARNING:</b> This parameter should not be used together "
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
+"Pokud má být trasa ke stávající bráně změněna, , hodnota ETX této brány je "
+"vynásobena touto hodnotou, než bude porovnána s novou. Parametr může být "
+"hodnota z rozmezí 0.1 až 1.0, ale pokud změněna, měla by být blíže 1.0.<br /"
+"><b>VAROVÁNÍ:</b> Tento parametr by neměl být používán v kombinaci s "
+"metrikou etx_ffeth!<br />Výchozí je „1.0“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:93
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:93
@@ -401,6 +434,9 @@ msgid ""
 "ethernet interfaces. Valid modes are \"mesh\" and \"ether\". Default is "
 "\"mesh\"."
 msgstr ""
+"Režim rozhraní slouží k zabránění zbytečnému přeposílání na přepínaných "
+"ethernetových rozhraních. Platnými režimy jsou „mesh“ a „ether“. Výchozí je "
+"„mesh“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:471
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:450
@@ -458,7 +494,7 @@ msgstr ""
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:290
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:178
 msgid "LQ:"
-msgstr ""
+msgstr "LQ:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:140
 msgid "Last hop"
@@ -508,13 +544,17 @@ msgid ""
 "routing.<br /><b>0</b> = do not use link quality<br /><b>2</b> = use link "
 "quality for MPR selection and routing<br />Default is \"2\""
 msgstr ""
+"Přepnutí kvality na úrovni linky mezi počtem přeskoků a směrování založeném "
+"na nákladech (většinou ETX).<br /><b>0</b> = nepoužívat kvalitu linky<br /"
+"><b>2</b> = požívat kvalitu linky pro MPR výběr a směrování<br />Výchozí je "
+"„2“"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:315
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:309
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:80
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:80
 msgid "LinkQuality Multiplicator"
-msgstr ""
+msgstr "LinkQuality násobič"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:273
 msgid "Local interface IP"
@@ -554,6 +594,8 @@ msgid ""
 "Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
 "configured on port 9090, and accepts connections from \"127.0.0.1\"."
 msgstr ""
+"Ověřte, že je OLsRd spuštěné, je načten zásuvný modul „jsoninfo“, nastavený "
+"na portu 9090 a přijímá spojení od „127.0.0.1“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:182
 msgid "Metric"
@@ -599,7 +641,7 @@ msgstr "NLQ"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:291
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:179
 msgid "NLQ:"
-msgstr ""
+msgstr "NLQ:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:270
 msgid "Neighbour IP"
@@ -630,7 +672,7 @@ msgstr "Síťová adresa"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:139
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:133
 msgid "Nic changes poll interval"
-msgstr ""
+msgstr "Interval dotazování změn síťového rozhraní"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:3
 msgid "OLSR"
@@ -638,7 +680,7 @@ msgstr "OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrddisplay.js:14
 msgid "OLSR - Display Options"
-msgstr ""
+msgstr "OLSR – předvolby zobrazení"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:14
 msgid "OLSR - HNA-Announcements"
@@ -664,7 +706,7 @@ msgstr "Proces služby OLSR"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:16
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:16
 msgid "OLSR Daemon - Interface"
-msgstr ""
+msgstr "Proces služby OLSR – rozhraní"
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:3
 msgid "OLSR IPv4"
@@ -699,19 +741,19 @@ msgstr "Oranžový"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/hna.js:250
 msgid "Overview of currently active OLSR host net announcements"
-msgstr ""
+msgstr "Přehled v tuto chvíli aktivních oznámení hostitelů OLSR sítě"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:529
 msgid "Overview of currently established OLSR connections"
-msgstr ""
+msgstr "Přehled v tuto chvíli navázaných OLSR spojení"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:171
 msgid "Overview of currently known OLSR nodes"
-msgstr ""
+msgstr "Přehled v tuto chvíli známých OLSR uzlů"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:283
 msgid "Overview of currently known routes to other OLSR nodes"
-msgstr ""
+msgstr "Přehled v tuto chvíli známých tras na ostatní OLSR uzly"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:165
 msgid "Overview of interfaces where OLSR is running"
@@ -719,7 +761,7 @@ msgstr "Přehled rozhraní, na kterých je spuštěné OLSR"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:150
 msgid "Overview of known multiple interface announcements"
-msgstr ""
+msgstr "Přehled známých oznámení vícero rozhraní"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:129
 msgid "Overview of smart gateways in this network"
@@ -740,7 +782,7 @@ msgstr "Zásuvné moduly"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:128
 msgid "Polling rate for OLSR sockets in seconds. Default is 0.05."
-msgstr ""
+msgstr "Četnost dotazování na OLSR sokety (v sekundách). Výchozí je 0.05."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:134
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:128
@@ -777,6 +819,10 @@ msgid ""
 "if you use public IPs and have unstable DNS-Setup then those pages will load "
 "really slow. In this case disable it here."
 msgstr ""
+"Překládat na názvy strojů na stavových stránkách. Obecně je bezpečné toto "
+"povolit, ale pokud používáte veřejné IP adresy a máte nestabilní uspořádání "
+"DNS, pak se budou tyto stránky načítat opravdu pomalu. V takovém případě zde "
+"překládání vypněte."
 
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-frontend.json:18
 msgid "Routes"
@@ -786,11 +832,11 @@ msgstr "Trasy"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:301
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:189
 msgid "SNR:"
-msgstr ""
+msgstr "SNR:"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:122
 msgid "Secondary OLSR interfaces"
-msgstr ""
+msgstr "Sekundární OLSR rozhraní"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:133
 msgid "Selected"
@@ -802,6 +848,9 @@ msgid ""
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
 msgstr ""
+"Nastaví hlavní IP adresu (IP adresa původce) tohoto směrovače. Tato IP se "
+"nikdy nezmění v průběhu doby běhu olsrd. Výchozí je 0.0.0.0, která spustí "
+"využití IP adresy prvního rozhraní."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:231
 msgid ""
@@ -809,6 +858,9 @@ msgid ""
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
+"Nastaví hlavní IP adresu (IP adresa původce) tohoto směrovače. Tato IP se "
+"nikdy nezmění v průběhu doby běhu olsrd. Výchozí je ::, která spustí využití "
+"IP adresy prvního rozhraní."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:547
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:301
@@ -824,7 +876,7 @@ msgstr "SmartGW"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:261
 msgid "SmartGW announcements"
-msgstr ""
+msgstr "SmartGW oznámení"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:273
 msgid "SmartGateway is not configured on this system"
@@ -840,11 +892,13 @@ msgid ""
 "Specifies the speed of the uplink in kilobits/s. First parameter is "
 "upstream, second parameter is downstream. Default is \"128 1024\"."
 msgstr ""
+"Určuje rychlost uplink v kilobitech/s. První parametr je upstream, druhý pak "
+"downstream. Výchozí je „128 1024“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:102
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:102
 msgid "Speed of the uplink"
-msgstr ""
+msgstr "Rychlost uplinku"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:137
 msgid "State"
@@ -907,6 +961,11 @@ msgid ""
 "device. Visit <a href=\"http://www.olsr.org\">olsrd.org</a> for help and "
 "documentation."
 msgstr ""
+"Proces služby OLSR je implementací Směrovacího protokolu optimalizovaného "
+"stavu linky. Jako takový umožňuje mesh směrování pro jakékoli síťové "
+"zařízení. Je možné provozovat na libovolné WiFi kartě, která podporuje režim "
+"ad-hoc a samozřejmě na libovolném ethernetovém zařízení. Ohledně pomoci a "
+"dokumentace navštivte <a href=\"http://www.olsr.org\">olsrd.org</a>."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:18
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:18
@@ -917,6 +976,11 @@ msgid ""
 "device. Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and "
 "documentation."
 msgstr ""
+"Proces služby OLSR je implementací Směrovacího protokolu optimalizovaného "
+"stavu linky. Jako takový umožňuje mesh směrování pro jakékoli síťové "
+"zařízení. Je možné provozovat na libovolné WiFi kartě, která podporuje režim "
+"ad-hoc a samozřejmě na libovolném ethernetovém zařízení. Ohledně pomoci a "
+"dokumentace navštivte <a href='http://www.olsr.org'>olsrd.org</a>."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:244
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:238
@@ -924,11 +988,14 @@ msgid ""
 "The fixed willingness to use. If not set willingness will be calculated "
 "dynamically based on battery/power status. Default is \"3\"."
 msgstr ""
+"Pevná „ochota“, kterou použít. Pokud nenastaveno, bude vypočítáváno "
+"dynamicky v závislosti na nastavení stavu nabití akumulátoru / přítomnosti "
+"napájení ze sítě. Výchozí je „3“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:50
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:50
 msgid "The interface OLSRd should serve."
-msgstr ""
+msgstr "Rozhraní, které má OLSRd obsluhovat."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:227
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:221
@@ -936,6 +1003,8 @@ msgid ""
 "The port OLSR uses. This should usually stay at the IANA assigned port 698. "
 "It can have a value between 1 and 65535."
 msgstr ""
+"Port který OLSR používá. Toto by obvykle mělo zůstat na portu 698, "
+"přidělených autoritou IANA. Může nabývat hodnoty z rozmezí 1 až 65535."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:115
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:115
@@ -945,6 +1014,10 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
+"Toto může být použito pro signalizaci externí IPv6 předpony uplinku "
+"klientům. To může klientovi umožnit změnit svou lokální IPv6 adresu pro "
+"použití IPv6 brány bez jakéhokoli druhu překladu adres. Předpona může být "
+"dlouhá nejvýše 64 bitů. Výchozí je „::/0“ (bez předpony)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:286
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:280
@@ -962,7 +1035,7 @@ msgstr "Topologie"
 msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
-msgstr ""
+msgstr "Typ hodnoty služby pro IP záhlaví řídícího provozu. Výchozí je „16“."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:9
 msgid "Unable to connect to the OLSR daemon!"
@@ -975,7 +1048,7 @@ msgstr "Uplink"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:93
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:93
 msgid "Uplink uses NAT"
-msgstr ""
+msgstr "Uplink používá NAT"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:217
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:211
@@ -1008,6 +1081,8 @@ msgid ""
 "Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not "
 "work, please install it."
 msgstr ""
+"Varování: kmod-ipip není nainstalován. Bez kmod-ipip SmartGateway nebude "
+"fungovat – nainstalujte balíček."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:298
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:292
@@ -1029,6 +1104,13 @@ msgid ""
 "0. For any other value of LinkQualityLevel, the interface ETX value is used "
 "instead."
 msgstr ""
+"Pokud mezi hostiteli existuje vícero linek, pak pro zjištění toho, kterou "
+"linku použít jsou použity váhy rozhraní. Ty jsou běžně vypočítávány "
+"automaticky olsrd na základě charakteristik rozhraní, ale zde je možné určit "
+"pevnou hodnotu. Olsrd zvolí linky s nejnižší hodnotou.<br /><b>Poznámka:</b> "
+"Váha rozhraní je použita pouze pokud je LinkQualityLevel nastaveno na 0. V "
+"případě jakékoli jiné hodnoty LinkQualityLevel, je namísto toho použit ETX "
+"hodnota rozhraní."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:82
 msgid ""
@@ -1036,6 +1118,9 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
+"Který druh uplinku je exportován ostatním uzlům mesh. Uplink je detekován "
+"hledáním lokální HNA od 0.0.0.0/0, ::ffff:0:0/96 nebo 2000::/3. Výchozí "
+"nastavení je „both“ (obojí)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:82
 msgid ""
@@ -1043,6 +1128,9 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
+"Jaký druh uplinku je exportován na ostatní uzly mesh. Uplink je zjišťován "
+"hledání lokální HNA6 ::ffff:0:0/96 nebo 2000::/3. Výchozí nastavení je "
+"„both“ (obojí)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:244
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:238

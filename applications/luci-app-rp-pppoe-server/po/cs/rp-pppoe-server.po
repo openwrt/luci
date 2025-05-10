@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-04-23 20:29+0000\n"
+"PO-Revision-Date: 2025-05-02 07:28+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsrp-pppoe-server/cs/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:48
 msgid "Access Concentrator Name"
@@ -25,6 +25,8 @@ msgid ""
 "Causes <code>pppoe</code> to exit if no session traffic is detected for %s "
 "seconds."
 msgstr ""
+"Způsobí že <code>pppoe</code> skončí pokud po dobu %s sekund nebude zjištěn "
+"žádný provoz relace."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:34
 msgid "Client Interface"
@@ -40,7 +42,7 @@ msgstr ""
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:61
 msgid "Default: 64"
-msgstr ""
+msgstr "Výchozí: 64"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:50
 msgid "Default: hostname"
@@ -52,6 +54,9 @@ msgid ""
 "the PADO frame. The first one specifies the default service, and is used if "
 "the PPPoE client requests a Service-Name of length zero."
 msgstr ""
+"Každé jedno způsobí, že služba named bude propagována ve štítku Service-Name "
+"v PADO rámci. První určuje výchozí službu a je použito pokud PPPoE klient "
+"požaduje Service-Name nulové délky."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:25
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:25
@@ -83,6 +88,8 @@ msgid ""
 "If specified as <code>0.0.0.0</code> the selection of local IP address is "
 "delegated to <code>pppd</code>"
 msgstr ""
+"Pokud zadáno jako <code>0.0.0.0</code> je výběr lokální IP adresy delegován "
+"na <code>pppd</code>"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid ""
@@ -98,6 +105,8 @@ msgid ""
 "Interface from which to relay. Only PPPoE clients may be connected to this "
 "interface."
 msgstr ""
+"Rozhraní ze který předávat. K tomuto rozhraní mohou být připojení pouze "
+"PPPoE klienti."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:27
 msgid "Interface on which to listen."
@@ -108,16 +117,20 @@ msgid ""
 "Interface on which to listen. Only PPPoE servers may be connected to this "
 "interface."
 msgstr ""
+"Rozhraní na kterém očekávat spojení. K tomuto rozhraní se mohou připojovat "
+"pouze PPPoE servery."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:41
 msgid ""
 "Interface upon which to listen and to relay. Both PPPoE clients and servers "
 "may be connected to this interface."
 msgstr ""
+"Rozhraní na kterém očekávat spojení a předávat. K tomuto rozhraní mohou být "
+"připojení jak PPPoE klienti, tak servery."
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:94
 msgid "Invokes <code>pppd</code> with the unit flag"
-msgstr ""
+msgstr "Vyvolá <code>pppd</code> s příznakem jednotka"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:115
 msgid "MSS"
@@ -130,7 +143,7 @@ msgstr "Nejvyšší umožněná velikost segmentu"
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:53
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:58
 msgid "Maximum Sessions"
-msgstr ""
+msgstr "Relací nejvýše"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:58
 msgid "Maximum concurrent sessions"
@@ -159,11 +172,11 @@ msgstr "Soubor možností"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:99
 msgid "PPP Offset"
-msgstr ""
+msgstr "Posun PPP"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:19
 msgid "PPPoE Relay Configuration"
-msgstr ""
+msgstr "Nastavení předávání PPPoE"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:19
 msgid "PPPoE Server Configuration"
@@ -171,7 +184,7 @@ msgstr "Nastavení PPPoE serveru"
 
 #: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:14
 msgid "RP PPPoE Relay"
-msgstr ""
+msgstr "RP PPPoE předávání"
 
 #: applications/luci-app-rp-pppoe-server/root/usr/share/luci/menu.d/luci-app-rp-pppoe-server.json:3
 msgid "RP PPPoE Server"
@@ -189,11 +202,11 @@ msgstr ""
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:21
 msgid "Relay Configuration"
-msgstr ""
+msgstr "Nastavení předávání"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:18
 msgid "Roaring Penguin PPPoE Relay"
-msgstr ""
+msgstr "PPPoE předávání Roaring Penguin"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:18
 msgid "Roaring Penguin PPPoE Server"
@@ -205,7 +218,7 @@ msgstr "Nastavení serveru"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:27
 msgid "Server Interface"
-msgstr ""
+msgstr "Rozhraní serveru"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:53
 msgid "Service Name"
@@ -213,7 +226,7 @@ msgstr "Název služby"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:124
 msgid "Synchronous PPP encapsulation"
-msgstr ""
+msgstr "Synchronní PPP zapouzdřování"
 
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:89
 msgid "Tells the PPPoE server to randomly permute session numbers."
@@ -231,4 +244,4 @@ msgstr "Jednotka"
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-relay.js:48
 #: applications/luci-app-rp-pppoe-server/htdocs/luci-static/resources/view/pppoe/rp-pppoe-server.js:76
 msgid "Use Non-UCI Config"
-msgstr ""
+msgstr "Použít nastavení nepocházející z UCI"

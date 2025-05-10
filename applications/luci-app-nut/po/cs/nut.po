@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-04-24 13:24+0000\n"
+"PO-Revision-Date: 2025-05-05 05:39+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnut/cs/>\n"
@@ -10,15 +10,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:216
 msgid "Additional Shutdown Time(s)"
-msgstr "Dodatečný čas vypnutí"
+msgstr "Dodatečný čas k vypnutí"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:37
 msgid "Addresses on which to listen"
-msgstr "Adresa na které očekávat spojení"
+msgstr "Adresy na kterých očekávat spojení"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:23
 msgid "Allowed actions"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:63
 msgid "Communications lost message"
-msgstr ""
+msgstr "Zpráva o ztrátě komunikace"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:60
 msgid "Communications restored message"
@@ -56,19 +56,21 @@ msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:43
 msgid "Deadtime"
-msgstr ""
+msgstr "Délka nekomunikace pro považování za vybitou"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:87
 msgid "Default for UPSes without this field."
-msgstr ""
+msgstr "Výchozí pro UPS zdroje bez této kolonky."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:177
 msgid "Delay for kill power command"
-msgstr ""
+msgstr "Prodleva pro příkaz utínající napájení"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:181
 msgid "Delay to power on UPS if power returns after kill power"
 msgstr ""
+"Po utnutí napájení do připojených zařízení, odložit zapnutí UPS zdroje po "
+"obnovení dodávek elektřiny ze sítě"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:129
 msgid "Description (Display)"
@@ -105,11 +107,11 @@ msgstr "Pořadí vypínání ovladače"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:106
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:244
 msgid "Driver waits for data to be consumed by upsd before publishing more."
-msgstr ""
+msgstr "Ovladač čeká až budou data použita upsd a až pak odešle další."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:59
 msgid "Drop privileges to this user"
-msgstr ""
+msgstr "Snížit práva na úroveň tohoto uživatele"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:40
 msgid "Enable"
@@ -133,7 +135,7 @@ msgstr ""
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:166
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:174
 msgid "Execute notify command"
-msgstr ""
+msgstr "Spustit notifikační příkaz"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:26
 msgid "Forced Shutdown"
@@ -141,7 +143,7 @@ msgstr "Vynucené vypnutí"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:57
 msgid "Forced shutdown message"
-msgstr ""
+msgstr "Zpráva při vynuceném vypnutí"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:10
 msgid "Global Settings"
@@ -149,11 +151,11 @@ msgstr "Globální nastavení"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:13
 msgid "Go to NUT CGI"
-msgstr ""
+msgstr "Přejít do NUT CGI"
 
 #: applications/luci-app-nut/root/usr/share/rpcd/acl.d/luci-app-nut.json:3
 msgid "Grant UCI access for luci-app-nut"
-msgstr ""
+msgstr "Udělit UCI přístup k luci-app-nut"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:16
 msgid "Host"
@@ -161,7 +163,7 @@ msgstr "Hostitel"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:23
 msgid "Hostname or IP address"
-msgstr ""
+msgstr "Název hostitele nebo IP adresa"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:199
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:228
@@ -170,7 +172,7 @@ msgstr "Název stroje nebo adresa UPS zdroje"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:39
 msgid "Hot Sync"
-msgstr ""
+msgstr "Hot Sync"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:41
 msgid "IP Address"
@@ -208,7 +210,7 @@ msgstr "Velikost přerušení"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:54
 msgid "Low battery message"
-msgstr ""
+msgstr "Zpráva při téměř vybitém akumulátoru"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:163
 msgid "Manufacturer (Display)"
@@ -220,36 +222,36 @@ msgstr "Master"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:154
 msgid "Max USB HID Length Reported"
-msgstr ""
+msgstr "Hlášená délka USB HID nejvýše"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:54
 msgid "Maximum Age of Data"
-msgstr ""
+msgstr "Nejvyšší umožněné stáří dat"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:91
 msgid "Maximum Retries"
-msgstr ""
+msgstr "Opakovaných pokusů nejvýše"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:87
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:158
 msgid "Maximum Start Delay"
-msgstr ""
+msgstr "Prodleva spuštění nejvýše"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:67
 msgid "Maximum connections"
-msgstr "Nejvyšší umožněný počet spojení"
+msgstr "Počet spojení nejvýše"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:91
 msgid "Maximum number of times to try starting a driver."
-msgstr ""
+msgstr "Kolikrát nanejvýš se pokoušet ovladač spustit."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:101
 msgid "Maximum time in seconds between refresh of UPS status"
-msgstr ""
+msgstr "Nejdelší čas (v sekundách) mezi znovunačteními stavu UPS zdroje"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:17
 msgid "Minimum required number or power supplies"
-msgstr ""
+msgstr "Nejnižší potřebný počet napájecích zdrojů"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:166
 msgid "Model (Display)"
@@ -266,11 +268,11 @@ msgstr "NUT uživatelé"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:196
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:225
 msgid "Name of UPS"
-msgstr ""
+msgstr "Název UPS zdroje"
 
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:3
 msgid "Network UPS Tools"
-msgstr ""
+msgstr "Network UPS Tools"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:6
 #: applications/luci-app-nut/root/usr/share/luci/menu.d/luci-app-nut.json:44
@@ -289,15 +291,15 @@ msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:7
 msgid "Network UPS Tools CGI Configuration"
-msgstr ""
+msgstr "Nastavení Network UPS Tools CGI"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:8
 msgid "Network UPS Tools Monitoring Configuration"
-msgstr ""
+msgstr "Nastavení monitorování v Network UPS Tools"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:10
 msgid "Network UPS Tools Server Configuration"
-msgstr ""
+msgstr "Nastavení serveru Network UPS Tools"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:169
 msgid "No Lock"
@@ -305,15 +307,15 @@ msgstr "Žádný zámek"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:72
 msgid "No communications message"
-msgstr ""
+msgstr "Zpráva při žádné komunikaci"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:173
 msgid "No low/high voltage transfer OIDs"
-msgstr ""
+msgstr "Žádná OID přenosu nízké/vysoké napětí"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:75
 msgid "No parent message"
-msgstr ""
+msgstr "Žádná nadřazená zpráva"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:90
 msgid "Notification defaults"
@@ -321,63 +323,63 @@ msgstr "Výchozí pro notifikaci"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:26
 msgid "Notify command"
-msgstr ""
+msgstr "Příkaz notifikace"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:99
 msgid "Notify when back online"
-msgstr ""
+msgstr "Upozornit při obnovení napájení ze sítě"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:155
 msgid "Notify when battery needs replacing"
-msgstr ""
+msgstr "Upozornit když je zapotřebí vyměnit opotřebený akumulátor"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:139
 msgid "Notify when communications lost"
-msgstr ""
+msgstr "Upozornit při ztrátě komunikace"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:131
 msgid "Notify when communications restored"
-msgstr ""
+msgstr "Upozornit při obnovení komunikace"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:123
 msgid "Notify when force shutdown"
-msgstr ""
+msgstr "Upozornit při vynucení vypnutí"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:115
 msgid "Notify when low battery"
-msgstr ""
+msgstr "Upozornit při téměř vybitém akumulátoru"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:163
 msgid "Notify when no communications"
-msgstr "Upozornit když nejsou komunikace"
+msgstr "Upozornit když není žádná komunikace"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:171
 msgid "Notify when no parent process"
-msgstr "Upozornit pokud neexistuje nadřazený proces"
+msgstr "Upozornit pokud neexistuje žádný nadřazený proces"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:107
 msgid "Notify when on battery"
-msgstr ""
+msgstr "Upozornit při chodu z akumulátoru"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:147
 msgid "Notify when shutting down"
-msgstr ""
+msgstr "Upozornit při vypínání"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:177
 msgid "Off Delay(s)"
-msgstr ""
+msgstr "Prodlevy vypnutí"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:181
 msgid "On Delay(s)"
-msgstr ""
+msgstr "Prodlevy zapnutí"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:51
 msgid "On battery message"
-msgstr ""
+msgstr "Zpráva při chodu z akumulátoru"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:48
 msgid "Online message"
-msgstr ""
+msgstr "Zpráva při obnovení napájení ze sítě"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:216
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:245
@@ -388,22 +390,24 @@ msgstr "Heslo"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:182
 msgid "Path containing ca certificates to match against host certificate"
 msgstr ""
+"Popis umístění obsahujícího certifikáty cert. autorit mezi kterými hledat "
+"shodu vůči certifikátu hostitele"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:83
 msgid "Path to drivers (instead of default)"
-msgstr ""
+msgstr "Popis umístění ovladače (namísto výchozího)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:63
 msgid "Path to state file"
-msgstr ""
+msgstr "Popis umístění souboru se stavy"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:54
 msgid "Period after which data is considered stale"
-msgstr "Doba, po jejíž uplynutí jsou data považována za zaseknutá"
+msgstr "Doba, po jejímž uplynutí jsou data považována za už neaktuální"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:101
 msgid "Poll Interval"
-msgstr ""
+msgstr "Interval dotazování"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:29
 msgid "Poll frequency"
@@ -411,11 +415,11 @@ msgstr "Četnost dotazování"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:34
 msgid "Poll frequency alert"
-msgstr ""
+msgstr "Dotazovat na výstrahu ohledně frekvence"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:197
 msgid "Polling Frequency(s)"
-msgstr ""
+msgstr "Četnosti dotazování"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_cgi.lua:27
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:203
@@ -436,15 +440,15 @@ msgstr "Produkt (regulární výraz)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:69
 msgid "Replace battery message"
-msgstr ""
+msgstr "Zpráva ohledně potřeby výměny akumulátoru"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Require SSL and make sure server CN matches hostname"
-msgstr ""
+msgstr "Vyžadovat SSL a ověřovat, že CN serveru se shoduje s názvem stroje"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:96
 msgid "Retry Delay"
-msgstr "Prodleva opakovaného pokusu"
+msgstr "Prodleva před opakovaným pokusem"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:32
 msgid "Role"
@@ -452,13 +456,13 @@ msgstr "Role"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:80
 msgid "Run drivers in a chroot(2) environment"
-msgstr ""
+msgstr "Spouštět ovladače v chroot(2) prostředí"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:14
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:59
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:110
 msgid "RunAs User"
-msgstr ""
+msgstr "Spouštět jako uživatel"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:125
 msgid "SNMP Community"
@@ -470,11 +474,11 @@ msgstr "SNMP opakované pokusy"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:226
 msgid "SNMP timeout(s)"
-msgstr "SNMP časový limit"
+msgstr "SNMP časové limity"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:230
 msgid "SNMP version"
-msgstr "SNMP verze"
+msgstr "Verze SNMP"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:232
 msgid "SNMPv1"
@@ -494,7 +498,7 @@ msgstr "Sériové číslo"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:138
 msgid "Set USB serial port permissions"
-msgstr ""
+msgstr "Nastavit oprávnění k USB sériovému portu"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:25
 msgid "Set variables"
@@ -520,6 +524,7 @@ msgstr "Synchronní komunikace"
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:115
 msgid "The name of this section will be used as UPS name elsewhere"
 msgstr ""
+"Název této sekce bude na ostatních místech používán jako název UPS zdroje"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:96
 msgid "Time in seconds between driver start retry attempts."
@@ -528,6 +533,8 @@ msgstr "Prodleva (v sekundách) mezi opětovnými pokusy o spuštění ovladače
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:158
 msgid "Time in seconds that upsdrvctl will wait for driver to finish starting"
 msgstr ""
+"Doba (v sekundách), po kterou upsdrvctl bude čekat na dokončení spuštění "
+"ovladače"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:191
 msgid "UPS Master"
@@ -535,7 +542,7 @@ msgstr ""
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:51
 msgid "UPS Server Global Settings"
-msgstr ""
+msgstr "Globální nastavení UPS serveru"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:220
 msgid "UPS Slave"
@@ -547,15 +554,15 @@ msgstr "Název UPS zdroje"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:121
 msgid "USB Bus(es) (regex)"
-msgstr ""
+msgstr "USB sběrnice (regulární výraz)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:209
 msgid "USB Product Id"
-msgstr ""
+msgstr "USB identif. produktu"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:241
 msgid "USB Vendor Id"
-msgstr ""
+msgstr "USB identif. výrobce"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:29
 msgid ""
@@ -568,6 +575,9 @@ msgid ""
 "User as which to execute driver; requires device file accessed by driver to "
 "be read-write for that user."
 msgstr ""
+"Uživatel pod kterým ovladač spouštět – vyžaduje, aby soubor představující "
+"zařízení, ke kterému ovladač přistupuje, byl pro tohoto uživatele přístupný "
+"pro čtení i zápis."
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:213
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:242
@@ -581,11 +591,11 @@ msgstr "Výrobce (regulární výraz)"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:186
 msgid "Verify all connection with SSL"
-msgstr ""
+msgstr "Ověřovat veškerá spojení pomocí SSL"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:154
 msgid "Workaround for buggy firmware"
-msgstr ""
+msgstr "Obejití problému pro chybový firmware"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:94
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:103
@@ -599,7 +609,7 @@ msgstr ""
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:167
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:175
 msgid "Write to syslog"
-msgstr ""
+msgstr "Zapsat do syslog"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_server.lua:80
 msgid "chroot"
@@ -607,4 +617,4 @@ msgstr "chroot"
 
 #: applications/luci-app-nut/luasrc/model/cbi/nut_monitor.lua:14
 msgid "upsmon drops privileges to this user"
-msgstr ""
+msgstr "upsmon zredukuje svá privilegia na úroveň tohoto uživatele"
