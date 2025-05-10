@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-17 20:18+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssqm/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
 msgid "Advanced Configuration"
@@ -37,6 +37,8 @@ msgid ""
 "Advanced options will only be used as long as this box is checked (only "
 "needed if MTU > 1500)."
 msgstr ""
+"Pokročilé předvolby budou použity pouze pokud je toto zašrtnuto (potřebné "
+"pouze pokud MTU > 1500)."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:133
 msgid "Advanced options will only be used as long as this box is checked."
@@ -71,14 +73,16 @@ msgid ""
 "Download speed (kbit/s) (ingress) set to 0 to disable ingress shaping "
 "selectively"
 msgstr ""
+"Rychlost stahování (kbit/s) (příjem) nastavte na 0 pro selektivní vypínání "
+"omezování rychlosti příchozího provozu"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
 msgid "ECN (egress)"
-msgstr ""
+msgstr "ECN (odchozí)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
 msgid "ECN (ingress)"
-msgstr ""
+msgstr "ECN (příchozí)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:58
 msgid "Enable SQM"
@@ -94,23 +98,27 @@ msgstr "Povolit tuto SQM instanci."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
 msgid "Explicit congestion notification (ECN) status on inbound packets"
-msgstr ""
+msgstr "Stav výslovného oznamování zácpy (ECN) na příchozích paketech"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
 msgid "Explicit congestion notification (ECN) status on outbound packets"
-msgstr ""
+msgstr "Stav výslovného upozornění na zácpu (ECN) na odchozích paketech"
 
 #: applications/luci-app-sqm/root/usr/share/rpcd/acl.d/luci-app-sqm.json:3
 msgid "Grant UCI access for luci-app-sqm"
-msgstr ""
+msgstr "Udělit UCI přístup k luci-app-sqm"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
 msgid "Hard limit on egress queues; leave empty for default."
 msgstr ""
+"Nepřekročitelný limit na odchozích frontách (pro použití výchozího "
+"nevyplňujte)."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:164
 msgid "Hard limit on ingress queues; leave empty for default."
 msgstr ""
+"Nepřekročitelný limit na příchozích frontách (pro použití výchozího "
+"nevyplňujte)."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
 msgid "Hard queue limit (egress)"
@@ -160,7 +168,7 @@ msgstr ""
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:74
 msgid "Link Layer Adaptation"
-msgstr ""
+msgstr "Přizpůsobování linkové vrstvy"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
 msgid "Link layer"
@@ -175,6 +183,8 @@ msgid ""
 "Lists queuing disciplines useable on this system. After installing a new "
 "qdisc, you need to restart the router to see updates!"
 msgstr ""
+"Vypíše disciplíny řazení do front, použitelné na tomto systému. Po instalaci "
+"nového qdisc je třeba směrovač restartovat, aby byly aktualizace vidět!"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Log verbosity"
@@ -185,6 +195,8 @@ msgid ""
 "Maximal Size for size and rate calculations, tcMTU (byte); needs to be >= "
 "interface MTU + overhead"
 msgstr ""
+"Nejvyšší velikost pro výpočty velikosti a rychlosti, tcMTU (bajt); je třeba, "
+"aby bylo >= MTU rozhraní + režie"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:203
 msgid "Maximum packet size"
@@ -194,6 +206,8 @@ msgstr "Nejvyšší umožněná velikost paketu"
 msgid ""
 "Minimal packet size, MPU (byte); needs to be > 0 for ethernet size tables"
 msgstr ""
+"Je třeba, aby pro tabulky velikosti ethernetu byla nejnižší velikost paketu, "
+"MPU (bajt), > 0"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:213
 msgid "Minimum packet size"
@@ -204,6 +218,8 @@ msgid ""
 "Number of entries in size/rate tables, TSIZE; for ATM choose TSIZE = (tcMTU "
 "+ 1) / 16"
 msgstr ""
+"Počet položek v tabulkách velikost/rychlost, TSIZE; pro ATM zvolte TSIZE = "
+"(tcMTU + 1) / 16"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:193
 msgid "Per Packet Overhead (bytes)"
@@ -247,7 +263,7 @@ msgstr "Inteligentní správa fronty"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
 msgid "Squash DSCP (ingress)"
-msgstr ""
+msgstr "Squash DSCP (příchozí)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
 msgid "Squash DSCP markings on inbound packets"
@@ -259,12 +275,17 @@ msgid ""
 "disable the sqm initscript manually under System Startup menu in case this "
 "change was not wished for."
 msgstr ""
+"SQM GUI na vaši žádost právě zapnulo sqm inicializační skript. Pokud toto "
+"nebyla změno, kterou jste chtěli, nezapomeňte sqm inicializační skript runě "
+"v nabídce Spouštění systému."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:48
 msgid ""
 "The SQM service seems to be disabled. Please use the button below to "
 "activate this service."
 msgstr ""
+"Zdá se, že služba SQM je zakázaná. Prosím použijte níže uvedené tlačítko pro "
+"aktivaci této služby."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:96
 msgid "Upload speed (egress)"
@@ -274,6 +295,8 @@ msgstr "Rychlost odesílání (odesílání)"
 msgid ""
 "Upload speed (kbit/s) (egress) set to 0 to selectively disable egress shaping"
 msgstr ""
+"Rychlost odesílání (kbit/s) (odchozí) nastavena na 0 pro selektivní vypínání "
+"omezování rychlosti odchozího"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Verbosity of SQM's output into the system log."
@@ -281,11 +304,13 @@ msgstr "Výřečnost výstupu ze SQM do systémového záznamu událostí."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
 msgid "Which link layer technology to account for"
-msgstr ""
+msgstr "Pro kterou technologii linkové vrstvy účtovat"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
 msgid "Which linklayer adaptation mechanism to use; for testing only"
 msgstr ""
+"Který mechanizmus přizpůsobování linkové vrstvy použít – pouze pro testovací "
+"účely"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:65
 msgid ""

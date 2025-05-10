@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-24 13:24+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrpc/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:214
 msgid "Add new proxy..."
@@ -43,6 +43,8 @@ msgid ""
 "AdminAddr specifies the address that the admin server binds to.<br />By "
 "default, this value is \"0.0.0.0\"."
 msgstr ""
+"AdminAddr určuje adresu, na kterou se správní server naváže.<br />Ve "
+"výchozím stavu je tato hodnota „0.0.0.0“ (všechny)."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:29
 msgid ""
@@ -50,22 +52,29 @@ msgid ""
 "value is 0, the admin server will not be started.<br />By default, this "
 "value is 0."
 msgstr ""
+"AdminPort určuje port, na kterém má správní server očekávat spojení. Pokud "
+"je hodnota 0 (nula), správní server nebude spouštěn.<br />Výchozí je právě "
+"toto chování (0)."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:31
 msgid ""
 "AdminPwd specifies the password that the admin server will use for login."
 "<br />By default, this value is \"admin\"."
 msgstr ""
+"AdminPwd určuje heslo, které správní server použije pro přihlášení.<br />Ve "
+"výchozím stavu je tato hodnota „admin“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:30
 msgid ""
 "AdminUser specifies the username that the admin server will use for login."
 "<br />By default, this value is \"admin\"."
 msgstr ""
+"AdminUser určuje uživatelské jméno, které správní server využije pro "
+"přihlášení.<br />Ve výchozím stavu je tato hodnota „admin“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:32
 msgid "Assets dir"
-msgstr ""
+msgstr "Složka obsahu"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:32
 msgid ""
@@ -73,6 +82,10 @@ msgid ""
 "resources from. If this value is \"\", assets will be loaded from the "
 "bundled executable using statik.<br />By default, this value is \"\"."
 msgstr ""
+"AssetsDir určuje lokální složku, ze které správní server načte prostředky. "
+"Pokud je tato hodnota „“, prostředky budou načítány z přibaleného "
+"spustitelného souboru pomocí statik.<br />Ve výchozím stavu je tato hodnota "
+"„“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:190
 msgid "Collecting data ..."
@@ -103,6 +116,8 @@ msgid ""
 "DisableLogColor disables log colors when LogWay == \"console\" when set to "
 "true."
 msgstr ""
+"Pokud nastaveno na true (ano) DisableLogColor vypíná obarvování záznamu "
+"událostí, když je LogWay == \"console\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:46
 msgid "Encryption"
@@ -166,7 +181,7 @@ msgstr "Časový limit kontroly stavu"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:65
 msgid "Host header rewrite"
-msgstr ""
+msgstr "Přepsání hlavičky hostitel"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:22
 msgid ""
@@ -174,6 +189,9 @@ msgid ""
 "this value is \"\", the server will be connected to directly.<br />By "
 "default, this value is read from the \"http_proxy\" environment variable."
 msgstr ""
+"HttpProxy určuje adresu proxy, přes kterou se k serveru připojovat. Pokud je "
+"tato hodnota „“, k serveru se bude připojováno napřímo.<br />Ve výchozím "
+"stavu je tato hodnota přečtena z proměnné prostředí „http_proxy“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:53
 msgid "If remote_port is 0, frps will assign a random port for you"
@@ -216,7 +234,7 @@ msgstr "Zaznamenávat nejvýše dnů"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:11
 msgid "Log stderr"
-msgstr ""
+msgstr "Zaznamenávat standardní chybový výstup"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:10
 msgid "Log stdout"
@@ -228,6 +246,9 @@ msgid ""
 "be used if LogWay is set appropriately.<br />By default, this value is "
 "\"console\"."
 msgstr ""
+"LogFile určuje soubor, do kterého budou zapisovány záznamy událostí. Tato "
+"hodnota bude použita pouze pokud je LogWay příslušně nastaveno.<br />Ve "
+"výchozím stavu je tato hodnota „console“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:24
 msgid ""
@@ -235,6 +256,9 @@ msgid ""
 "\"debug\", \"info\", \"warn\", and \"error\".<br />By default, this value is "
 "\"info\"."
 msgstr ""
+"LogLevel určuje nejnižší stupeň podrobnosti záznamu událostí. Platnými "
+"hodnotami jsou „trace“, „debug“ (ladění), „info“, “warn“ (varování) a "
+"„error“ (chyba).<br />Ve výchozím stavu je tato hodnota „info“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:25
 msgid ""
@@ -242,6 +266,9 @@ msgid ""
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
 "this value is 0."
 msgstr ""
+"LogMaxDays určuje nejvyšší počet dnů, po který ukládat informace záznamu "
+"událostí, než budou smazány. Toto je použito pouze pokud LogWay == \"file\"."
+"<br />Ve výchozím stavu je tato hodnota 0."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:35
 msgid ""
@@ -249,6 +276,9 @@ msgid ""
 "login attempt. If false, the client will retry until a login attempt "
 "succeeds.<br />By default, this value is true."
 msgstr ""
+"LoginFailExit řídí zda po neúspěšném pokusu o přihlášení má či nemá klient "
+"skončit. Pokud ne, klient to bude zkoušet pořád dál, dokud se pokus o "
+"přihlášení nezdaří.<br />Ve výchozím stavu je tato hodnota true (ano)."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
 msgid "NOT RUNNING"
@@ -281,6 +311,9 @@ msgid ""
 "Valid values are \"tcp\", \"kcp\", and \"websocket\".<br />By default, this "
 "value is \"tcp\"."
 msgstr ""
+"Protokol určuje který použít při interakci se serverem. Platnými hodnotami "
+"jsou „tcp“, „kcp“ a „websocket“.<br />Ve výchozím stavu je tato hodnota "
+"„tcp“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:210
 msgid "Proxy Settings"
@@ -302,6 +335,9 @@ msgid ""
 "\"udp\", \"http\", \"https\", \"stcp\", and \"xtcp\".<br />By default, this "
 "value is \"tcp\"."
 msgstr ""
+"ProxyType určuje typ této proxy. Platnými hodnotami jsou „tcp“, „udp“, "
+"„http“, „https“, „stcp“, a „xtcp“.<br />Ve výchozím stavu je tato hodnota "
+"„tcp“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 msgid "RUNNING"
@@ -353,12 +389,16 @@ msgid ""
 "ServerAddr specifies the address of the server to connect to.<br />By "
 "default, this value is \"127.0.0.1\"."
 msgstr ""
+"ServerAddr určuje adresu serveru, ke kterému se připojovat.<br />Ve výchozím "
+"stavu je tato hodnota „127.0.0.1“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:21
 msgid ""
 "ServerPort specifies the port to connect to the server on.<br />By default, "
 "this value is 7000."
 msgstr ""
+"ServerPort určuje port, na kterém se na serveru připojit.<br />Ve výchozím "
+"stavu je tato hodnota 7000."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
 msgid "Sk"
@@ -375,7 +415,7 @@ msgstr "Dílčí doména"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:33
 msgid "TCP mux"
-msgstr ""
+msgstr "TCP mux"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:37
 msgid "TLS"
@@ -400,6 +440,8 @@ msgid ""
 "This list can be used to specify some additional parameters which have not "
 "been included in this LuCI."
 msgstr ""
+"Tento seznam je možné použít pro zadání nějakých dalších parametrů, které "
+"nejsou zde v LuCI."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:27
 msgid "Token"
@@ -411,6 +453,9 @@ msgid ""
 "the server. The server must have a matching token for authorization to "
 "succeed. <br />By default, this value is \"\"."
 msgstr ""
+"Token určuje pověřovací token použitý pro vytvoření klíčů, které poslat na "
+"server. Aby uspělo je třeba, aby server měl odpovídající token. <br />Ve "
+"výchozím stavu je tato hodnota „“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
 msgid "Unix domain socket path"
@@ -421,6 +466,8 @@ msgid ""
 "UseCompression controls whether or not communication with the server will be "
 "compressed.<br />By default, this value is false."
 msgstr ""
+"UseCompression řídí zda komunikace se serverem bude či nebude komprimována."
+"<br />Ve výchozím stavu je tato hodnota neplatí."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:46
 msgid ""
@@ -428,6 +475,9 @@ msgid ""
 "encrypted. Encryption is done using the tokens supplied in the server and "
 "client configuration.<br />By default, this value is false."
 msgstr ""
+"UseEncryption řídí zda šifrovat komunikace se serverem nebo ne. Šifrování se "
+"děje pomocí tokenů poskytnutých v nastavení serveru a klienta.<br />Ve "
+"výchozím stavu je tato hodnota false (ne)."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:34
 msgid "User"
@@ -439,6 +489,9 @@ msgid ""
 "clients. If this value is not \"\", proxy names will automatically be "
 "changed to \"{user}.{proxy_name}\".<br />By default, this value is \"\"."
 msgstr ""
+"Uživatel určuje předponu pro proxy názvy kvůli jejich rozlišení od ostatních "
+"klientů. Pokud hodnota není „“, proxy názvy budou automaticky změněny na "
+"„{user}.{proxy_name}“.<br />Ve výchozím stavu je tato hodnota „“."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165

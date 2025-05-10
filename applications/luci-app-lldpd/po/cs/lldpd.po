@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-23 20:29+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationslldpd/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:374
 msgid "1A"
@@ -34,7 +34,7 @@ msgstr ""
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:59
 msgid "Ageout count"
-msgstr ""
+msgstr "Počet vystárnutí"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:675
 msgid ""
@@ -42,6 +42,8 @@ msgid ""
 "address %s is used and limits the propagation of the LLDPDU to the nearest "
 "bridge."
 msgstr ""
+"Umožní agentovi řídit propagování LLDPDU jednotek. Ve výchozím stavu je "
+"použita MAC adresa %s a toto propagování omezeno na LLDPDU na nejbližší most."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:291
 msgid "Altitude"
@@ -81,6 +83,7 @@ msgstr ""
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:970
 msgid "CSV of 1 or more hex values, e.g. aa or bb,cc or 11,55,1a"
 msgstr ""
+"CSV z 1 nebo více šestnáctkových hodnot ,např. aa nebo bb,cc nebo 11,55,1a"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:940
 msgid "CSV of 3 hex values, e.g. aa,ee,ff"
@@ -88,7 +91,7 @@ msgstr "CSV tří šestnáctkových hodnot, např. aa,ee,ff"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:39
 msgid "Cannot have both interface %s and its exclusion %s"
-msgstr ""
+msgstr "Není možné mít jak rozhraní %s a jeho vynechání %s"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:289
 msgid "Capabilities"
@@ -142,10 +145,13 @@ msgid ""
 "is used as a management address without any check. To blacklist IPv6 "
 "addresses, use <code>!*:*</code>."
 msgstr ""
+"Jako výchozí bude použita první IPv4 a IPv6. Pokud je zadána přesná IP "
+"adresa, je použita jako správní a to bez jakékoli kontroly. Pokud chcete na "
+"seznam vyloučených zařadit IPv6 adresy, použijte <code>!*:*</code>."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:61
 msgid "Delete count"
-msgstr ""
+msgstr "Počet smazání"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:266
 msgid "Description"
@@ -156,10 +162,12 @@ msgid ""
 "Determines the transmitted packet TTL (== this value * transmit delay). The "
 "default value is 4 &therefore; the default TTL is 120 seconds."
 msgstr ""
+"Určuje životnost přenášeného paketu (TTL) (== tato hodnota * prodleva "
+"přenosu). Výchozí hodnota je 4 a proto. Výchozí TTL je 120 sekund."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:638
 msgid "Disable LLDP-MED inventory TLV transmission"
-msgstr ""
+msgstr "Zakázat TLV přenosy LLDP-MED inventáře"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:647
 msgid "Disable advertising of kernel release, version and machine"
@@ -171,7 +179,7 @@ msgstr "Zakázáno"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:619
 msgid "Discovered Neighbors"
-msgstr ""
+msgstr "Objevení sousedé"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:41
 msgid "Discovered chassis"
@@ -199,51 +207,59 @@ msgstr ""
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:730
 msgid "Enable CDP"
-msgstr ""
+msgstr "Povolit CDP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:790
 msgid "Enable EDP"
-msgstr ""
+msgstr "Povolit EDP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:770
 msgid "Enable FDP"
-msgstr ""
+msgstr "Povolit FDP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:708
 msgid "Enable LLDP"
-msgstr ""
+msgstr "Povolit LLDP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:816
 msgid "Enable SONMP"
-msgstr ""
+msgstr "Povolit SONMP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:89
 msgid "Enable service"
-msgstr ""
+msgstr "Povolit službu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:731
 msgid ""
 "Enable the support of CDP protocol to deal with Cisco routers that do not "
 "speak LLDP"
 msgstr ""
+"Zapnout podporu pro CDP protokol pro nakládání s Cisco směrovači, které "
+"nekomunikují v LLDP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:791
 msgid ""
 "Enable the support of EDP protocol to deal with Extreme routers and switches "
 "that do not speak LLDP."
 msgstr ""
+"Zapnout podporu pro protokol EDP pro zacházení se směrovači a přepínači od "
+"Extreme, které nekomunikují LLDP."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:771
 msgid ""
 "Enable the support of FDP protocol to deal with Foundry routers that do not "
 "speak LLDP"
 msgstr ""
+"Zapnout podporu pro FDP, pro nakládání se směrovači Foundry, které "
+"nekomunikují v LLDP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:817
 msgid ""
 "Enable the support of SONMP protocol to deal with Nortel routers and "
 "switches that do not speak LLDP."
 msgstr ""
+"Zapnout podporu pro protokol SONMP pro zacházení se směrovači a přepínači od "
+"Nortel, které nekomunikují LLDP."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:715
 msgid ""
@@ -297,7 +313,7 @@ msgstr "Identifikátor"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:273
 msgid "ID type"
-msgstr ""
+msgstr "Typ identifikátoru"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:116
 msgid "IP address"
@@ -309,7 +325,7 @@ msgstr "Příchozí"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:60
 msgid "Insert count"
-msgstr ""
+msgstr "Počet vložení"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:667
 msgid "Interface MAC address"
@@ -317,12 +333,12 @@ msgstr "MAC adresa rozhraní"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:620
 msgid "Interface Statistics"
-msgstr ""
+msgstr "Statistiky rozhraní"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:668
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:112
 msgid "Interface name"
-msgstr ""
+msgstr "Název rozhraní"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:922
 msgid "Invalid TLV string format"
@@ -341,15 +357,15 @@ msgstr "LLDP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:603
 msgid "LLDP Status"
-msgstr ""
+msgstr "Stav LLDP"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:584
 msgid "LLDP-MED device class"
-msgstr ""
+msgstr "LLDP-MED třída zařízení"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:626
 msgid "LLDP-MED fast-start"
-msgstr ""
+msgstr "LLDP-MED rychlý start"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:630
 msgid "LLDP-MED fast-start tx-interval"
@@ -357,7 +373,7 @@ msgstr ""
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:595
 msgid "LLDP-MED policy"
-msgstr ""
+msgstr "LLDP-MED zásada"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:674
 msgid "LLDPDU destination MAC"
@@ -365,7 +381,7 @@ msgstr "MAC cíle LLDPU"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:1015
 msgid "LLDPd Settings"
-msgstr ""
+msgstr "Nastavení pro LLDPd"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:1016
 msgid "LLDPd is an implementation of IEEE 802.1ab"
@@ -377,10 +393,13 @@ msgid ""
 "TLV but will not send them. Use this option if you do not want to transmit "
 "sensitive information like serial numbers."
 msgstr ""
+"LLDPd i tak bude přijímat (a publikovat pomocí SNMP, pokud zapnuto) tyto "
+"LLDP-MED TLV, ale nebude je posílat. Tuto volbu použijte pokud nechcete "
+"přenášet citlivé informace, jako například sériová čísla."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:504
 msgid "LLDPd won't send any frames; only listen to neighbors."
-msgstr ""
+msgstr "LLDPd nebude odesílat žádné rámce – pouze očekávat spojení od sousedů."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:257
 msgid "Latitude"
@@ -388,16 +407,16 @@ msgstr "Zeměpisná výška"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:608
 msgid "Local Chassis"
-msgstr ""
+msgstr "Lokální šasi"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:114
 msgid "Local ID"
-msgstr ""
+msgstr "Lokální identif."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:39
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:52
 msgid "Local interface"
-msgstr ""
+msgstr "Lokální rozhraní"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:273
 msgid "Longitude"
@@ -405,7 +424,7 @@ msgstr "Zeměpisná délka"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:110
 msgid "MAC address"
-msgstr ""
+msgstr "MAC adresa"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:222
 msgid "MFS"
@@ -413,11 +432,11 @@ msgstr "MFS"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:354
 msgid "Main Street"
-msgstr ""
+msgstr "Hlavní ulice"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:280
 msgid "Management IP(s)"
-msgstr ""
+msgstr "IP adresy pro správu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:587
 msgid "Media Endpoint (Class II)"
@@ -434,10 +453,11 @@ msgstr "Je třeba, aby bylo číslo"
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:246
 msgid "Must contain: 'coordinate ...', 'address ...' or 'elin ...'"
 msgstr ""
+"Je třeba, aby obsahovalo: 'coordinate ...', 'address ...' nebo 'elin ...'"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:620
 msgid "Must start: application ..."
-msgstr ""
+msgstr "Je třeba, aby začínalo na: application …"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:190
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:201
@@ -451,7 +471,7 @@ msgstr "Zařízení síťové konektivity (třída 4)"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:526
 msgid "Network IO"
-msgstr ""
+msgstr "Síťový vstup/výstup"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:542
 msgid "Network IO for chassis ID"
@@ -463,7 +483,7 @@ msgstr "Síťové/á rozhraní"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:999
 msgid "Network Interfaces"
-msgstr ""
+msgstr "Síťová rozhraní"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:562
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:592
@@ -485,7 +505,7 @@ msgstr "Na této stránce je možné nastavit parametry pro LLDp."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:741
 msgid "Only CDPv2"
-msgstr ""
+msgstr "Pouze CDPv2"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/lldpd.js:164
 msgid "Outgoing"
@@ -496,7 +516,7 @@ msgstr "Odchozí"
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:401
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:413
 msgid "Override %s."
-msgstr ""
+msgstr "Přebít %s."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:204
 msgid "Override the announced location of the host."
@@ -504,7 +524,7 @@ msgstr "Přebít oznámené umístění hostitele."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:210
 msgid "Port ID"
-msgstr ""
+msgstr "Identif. portu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:211
 msgid "Port ID type"
@@ -512,7 +532,7 @@ msgstr "Typ identifikátoru portu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:215
 msgid "Port description"
-msgstr ""
+msgstr "Popis portu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:378
 msgid "Post-code"
@@ -525,7 +545,7 @@ msgstr "Protokol"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:1008
 msgid "Protocols Support"
-msgstr ""
+msgstr "Podpora protokolů"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:982
 msgid "Raw"
@@ -539,15 +559,15 @@ msgstr ""
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:225
 msgid "Raw location config"
-msgstr ""
+msgstr "Nastavení holého umístění"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:503
 msgid "Receive-only mode"
-msgstr ""
+msgstr "Režim pouze příjem"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:56
 msgid "Rx"
-msgstr ""
+msgstr "Příjem"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:146
 msgid "Rx and Tx"
@@ -555,15 +575,15 @@ msgstr "Příjem a vysílání"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:148
 msgid "Rx only"
-msgstr ""
+msgstr "Pouze příjem"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:58
 msgid "Rx unrecognized"
-msgstr ""
+msgstr "Příjem nerozpoznán"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:573
 msgid "SNMP agentX socket path"
-msgstr ""
+msgstr "Popis umístění SNMP agentX soketu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:814
 msgid "SONMP (NTDP, NDP, BNMP, BDP)"
@@ -575,19 +595,19 @@ msgstr "Viz syntaxe <a %s>zde</a>."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:747
 msgid "Send CDP packets even if no CDP peer detected"
-msgstr ""
+msgstr "Odesílat CDP pakety i když nezjištěn žádný CDP protějšek"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:798
 msgid "Send EDP packets even if no EDP peer detected"
-msgstr ""
+msgstr "Odesílat EDP pakety i když nezjištěn žádný EDP protějšek"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:778
 msgid "Send FDP packets even if no FDP peer detected"
-msgstr ""
+msgstr "Posílat FDP pakety i když nezjištěn žádný FDP protějšek"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:824
 msgid "Send SONMP packets even if no SONMP peer detected"
-msgstr ""
+msgstr "Posílat SONMP pakety i když nezjištěn žádný SONMP protějšek"
 
 #: applications/luci-app-lldpd/root/usr/share/luci/menu.d/luci-app-lldpd.json:28
 msgid "Settings"
@@ -602,6 +622,8 @@ msgid ""
 "Specify which interface (not) to listen upon and send LLDPDU from. Absent "
 "any value, LLDPd uses all available physical interfaces."
 msgstr ""
+"Určete která rozhraní (nebudou) naslouchat a odesílat LLDPU. Pokud nic "
+"nezadáno, LLDPd použije všechna dostupná fyzická rozhraní."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:543
 msgid ""
@@ -609,6 +631,9 @@ msgid ""
 "value, all interfaces are considered. LLDPd takes the first MAC address from "
 "all the considered interfaces to compute the chassis ID."
 msgstr ""
+"Určuje která rozhraní (ne) používat pro výpočet identifikátoru šasi. V "
+"případě žádné hodnoty jsou zvažována všechna rozhraní. LLDPd bere první MAC "
+"adresu ze všech zvažovaných rozhraní pro výpočet identifikátoru šasi."
 
 #: applications/luci-app-lldpd/root/usr/share/luci/menu.d/luci-app-lldpd.json:16
 msgid "Status"
@@ -628,7 +653,7 @@ msgstr "Přípona %s pro hodnoty v milisekundách."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:412
 msgid "System capabilities"
-msgstr ""
+msgstr "Schopnosti systému"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:406
 msgid "System capability advertisements"
@@ -636,11 +661,11 @@ msgstr "Propagace schopností systému"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:116
 msgid "System description"
-msgstr ""
+msgstr "Popis systému"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:123
 msgid "System hostname"
-msgstr ""
+msgstr "Název hostitele systému"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:438
 msgid "System management IO"
@@ -648,7 +673,7 @@ msgstr "Vstup/výstup správy systému"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:431
 msgid "System management IO advertisements"
-msgstr ""
+msgstr "Propagace vstupů/výstupů správy systému"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:400
 msgid "System platform description"
@@ -663,6 +688,8 @@ msgid ""
 "TLV that lack network interfaces here are sent according to <code>interface "
 "pattern</code> (Network IO under Network Interfaces)."
 msgstr ""
+"TLV, které zde postrádá síťová rozhraní jsou odeslána podle <code>vzoru "
+"rozhraní</code> (síťový vstup/výstup v Síťových rozhraních)."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:219
 msgid "TTL"
@@ -674,7 +701,7 @@ msgstr "Výchozím popisem je název jádra systému (Linux)."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:656
 msgid "The default filter is 15. Refer to &quot;FILTERING NEIGHBORS&quot;."
-msgstr ""
+msgstr "Výchozí filtr je 15. Viz &quot;FILTROVÁNÍ SOUSEDŮ&quot;."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:414
 msgid "The default is derived from kernel information."
@@ -683,21 +710,23 @@ msgstr "Výchozí hodnota je odvozena od informace z jádra systému."
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:465
 msgid ""
 "The delay between transmissions of LLDP PDU. The default value is 30 seconds."
-msgstr ""
+msgstr "Prodleva mezi vysíláními LLDP PDU. Výchozí hodnota je 30 sekund."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:604
 msgid ""
 "This page allows you to see discovered LLDP neighbors, local interfaces "
 "statistics and local chassis information."
 msgstr ""
+"Tato stránka umožňuje zobrazit si objevené LLDP sousedy, statistiky "
+"lokálních rozhraní a informace o lokálním šasi."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:464
 msgid "Transmit delay"
-msgstr ""
+msgstr "Prodleva přenosu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:482
 msgid "Transmit hold value"
-msgstr ""
+msgstr "Hodnota zadržení přenosu"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:497
 msgid "Transmit hold value must be greater than 0"
@@ -705,36 +734,40 @@ msgstr "Je třeba, aby hodnota zadržení přenosu byla vyšší než 0"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:327
 msgid "Two character CC required"
-msgstr ""
+msgstr "Vyžadováno dvouznakové CC"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:55
 msgid "Tx"
-msgstr ""
+msgstr "Vysílání"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:57
 msgid "Tx discarded"
-msgstr ""
+msgstr "Vysílání zahozeno"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:150
 msgid "Tx only"
-msgstr ""
+msgstr "Pouze vysílání"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:154
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:252
 msgid "Unknown"
-msgstr "Neznámé"
+msgstr "Neznámý"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:574
 msgid ""
 "When set, LLDPd enables an SNMP subagent using AgentX protocol. This enables "
 "information about other systems through SNMP."
 msgstr ""
+"Pokud nastaveno, LLDPd zapne SNMP dílčího agenta pomocí protokolu AgentX. "
+"Toto umožní získávat informace o ostatních systémech prostřednictvím SNMP."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:664
 msgid ""
 "With this option, you can force the port identifier to be the interface name "
 "or the MAC address."
 msgstr ""
+"Pomocí této předvolby je možné vynutit aby identifikátor portu byl název "
+"rozhraní nebo MAC adresa."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:928
 msgid "add"
@@ -746,15 +779,15 @@ msgstr "výchozí"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:287
 msgid "disabled"
-msgstr ""
+msgstr "zakázáno"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/lldpd.js:46
 msgid "enable filter"
-msgstr ""
+msgstr "povolit filtr"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:287
 msgid "enabled"
-msgstr ""
+msgstr "povoleno"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/lldpd.js:48
 msgid "keep only one neighbor"

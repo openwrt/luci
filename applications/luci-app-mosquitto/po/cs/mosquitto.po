@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-04-23 20:29+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsmosquitto/cs/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:60
 msgid "Allow anonymous connections"
@@ -25,6 +25,8 @@ msgid ""
 "Attempt to notify the local and remote broker of connection status, defaults "
 "to $SYS/broker/connections/&lt;clientid&gt;/state"
 msgstr ""
+"Pokusit se oznámit lokálnímu a vzdálenému zprostředkovateli stav spojení, "
+"výchozí je $SYS/broker/connections/&lt;clientid&gt;/state"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:179
 msgid "Automatic, but no restarts"
@@ -52,7 +54,7 @@ msgstr ""
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:206
 msgid "Bridge PSK"
-msgstr ""
+msgstr "PSK mostu"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:162
 msgid "Bridge connection states should only be published locally"
@@ -84,15 +86,18 @@ msgstr ""
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:77
 msgid "Client expiration"
-msgstr ""
+msgstr "Skončení platnosti klienta"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:167
 msgid "Client id to use locally. Important when bridging to yourself"
 msgstr ""
+"Identif. klienta který používat lokálně. Důležité pokud používáte přemostění "
+"sami na sebe"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:164
 msgid "Client id to use on remote end of this bridge connection"
 msgstr ""
+"Identif. klienta který použít na vzdálené straně tohoto připojení mostu"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:144
 msgid "Connection name"
@@ -125,7 +130,7 @@ msgstr "Povoleno"
 
 #: applications/luci-app-mosquitto/root/usr/share/rpcd/acl.d/luci-app-mosquitto.json:3
 msgid "Grant UCI access for luci-app-mosquitto"
-msgstr ""
+msgstr "Udělit UCI přístup pro luci-app-mosquitto"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:185
 msgid "How long to wait before disconnecting"
@@ -137,7 +142,7 @@ msgstr "Jak dlouho čekat před opětovným připojením"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:189
 msgid "How many messages to queue before restarting lazy bridge"
-msgstr ""
+msgstr "Kolik zpráv zařadit do fronty než se přistoupí k restartu líného mostu"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:174
 msgid "How should this bridge be started"
@@ -152,10 +157,13 @@ msgid ""
 "If checked, mosquitto runs with a config generated from this page. If "
 "unchecked, mosquitto runs with the config in %s (and this page is ignored)."
 msgstr ""
+"Pokud zaškrtnuto, mosquitto bude provozováno s nastaveními, vytvořenými z "
+"této stránky. Pokud nezaškrtnuto, mosquitto bude provozováno s nastaveními v "
+"%s (a tato stránka bude ignorována)."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:170
 msgid "Keep-alive interval for this bridge"
-msgstr ""
+msgstr "Interval udržování spojení pro tento most"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:206
 msgid "Key for TLS-PSK"
@@ -163,11 +171,11 @@ msgstr "Klíč pro TLS-PSK"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:118
 msgid "Keyfile (PEM encoded)"
-msgstr ""
+msgstr "Soubor s klíčem (PEM enkódováno)"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:62
 msgid "Limit for message allowed inflight"
-msgstr ""
+msgstr "Omezení pro zprávy povolené v letu"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:65
 msgid "Limit for message queue when offline"
@@ -175,11 +183,11 @@ msgstr "Limit pro frontu zpráv pokud bez připojení"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:68
 msgid "Limit for message queue when offline, zero to disable"
-msgstr ""
+msgstr "Limit fronty zpráv pokud offline – 0 (nula) pro žádný limit"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:93
 msgid "Listeners"
-msgstr ""
+msgstr "Očekávající spojení"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:46
 msgid "Log destination"
@@ -195,11 +203,11 @@ msgstr ""
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:68
 msgid "Max Queued Bytes"
-msgstr ""
+msgstr "Bajtů ve frontě nejvýše"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:65
 msgid "Max Queued Messages"
-msgstr ""
+msgstr "Zpráv ve frontě nejvýše"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:43
 #: applications/luci-app-mosquitto/root/usr/share/luci/menu.d/luci-app-mosquitto.json:3
@@ -212,13 +220,15 @@ msgstr ""
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:162
 msgid "Notifications local only"
-msgstr ""
+msgstr "Upozorňování pouze lokální"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:54
 msgid ""
 "Outbound bridges will still work, but this will make the primary listener "
 "only available from localhost"
 msgstr ""
+"Odchozí mosty i tak budou fungovat, ale toto způsobí, že hlavní "
+"naslouchající bude k dispozici pouze z localhost"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:203
 msgid "PSK Bridge Identity"
@@ -234,7 +244,7 @@ msgstr "Popis umístění souboru certifikační autority"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:231
 msgid "Path to PEM encoded keyfile"
-msgstr ""
+msgstr "Popis umístění PEM kódovaného souboru s klíčem"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:227
 msgid "Path to PEM encoded server certificate file"
@@ -250,15 +260,15 @@ msgstr "Trvalost"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:75
 msgid "Persistence enabled"
-msgstr ""
+msgstr "Trvalost povolena"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:86
 msgid "Persistent file name"
-msgstr ""
+msgstr "Název trvalého souboru"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:89
 msgid "Persistent file path (with trailing/)"
-msgstr ""
+msgstr "Popis umístění trvalého souboru (s koncovým/)"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:97
 msgid "Port"
@@ -266,21 +276,23 @@ msgstr "Port"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:100
 msgid "Protocol to use when listening"
-msgstr ""
+msgstr "Protokol který používat pro očekávání spojení"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:199
 msgid "Remote password"
-msgstr ""
+msgstr "Vzdálené heslo"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:196
 msgid "Remote username"
-msgstr ""
+msgstr "Vzdálené uživatelské jméno"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:77
 msgid ""
 "Remove persistent clients if they haven't reconnected in this period, eg 6h, "
 "3d, 2w"
 msgstr ""
+"Odebrat trvalé klienty pokud se znovu nepřipojí v tomto období, např. 6h, "
+"3d, 2w (týdny)"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:129
 msgid "Require clients to present a certificate"
@@ -289,6 +301,7 @@ msgstr ""
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:83
 msgid "Save persistence file after this many seconds or changes"
 msgstr ""
+"Ukládat do souboru pro trvalé uchovávání po tolika sekundách či změnách"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:115
 msgid "Server certificate file (PEM encoded)"
@@ -296,7 +309,7 @@ msgstr "Soubor s certifikátem serveru (PEM formát)"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:57
 msgid "Set to zero to disable"
-msgstr ""
+msgstr "Pokud chcete vypnout, nastavte na 0 (nula)"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:75
 msgid "Should persistence to disk be enabled at all"
@@ -305,29 +318,31 @@ msgstr "Měla by být trvalost na disk zapnuta vůbec"
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:121
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:211
 msgid "TLS Version"
-msgstr ""
+msgstr "Verze TLS"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:212
 msgid ""
 "The remote broker must support the same version of TLS for the connection to "
 "succeed."
 msgstr ""
+"Aby spojení bylo úspěšné, je třeba, aby vzdálený zprostředkovatel podporoval "
+"stejnou verzi TLS."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:57
 msgid "Time in seconds between updates of the $SYS tree"
-msgstr ""
+msgstr "Čas (v sekundách) mezi aktualizacemi stromu $SYS"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:159
 msgid "Topic to use for local+remote remote for notifications."
-msgstr ""
+msgstr "Téma které použít pro lokální+vzdálené vzdálené pro notifikace."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:37
 msgid "Use this LuCI configuration page"
-msgstr ""
+msgstr "Použít tuto LuCI stránku nastavení"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:103
 msgid "WebSockets"
-msgstr ""
+msgstr "Websokety"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:93
 msgid "You can configure additional listeners here"
@@ -339,7 +354,7 @@ msgstr "Zde je možné nastavit vícero spojení mostu"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:46
 msgid "You can have multiple, but 'none' will override all others"
-msgstr ""
+msgstr "Je možné mít vícero, ale „none“ všechny ostatní přebíjí"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:147
 msgid "address"
@@ -354,10 +369,12 @@ msgid ""
 "attempt to notify the remote broker that this is a bridge, not all brokers "
 "support this."
 msgstr ""
+"pokus o upozornění vzdáleného zprostředkovatele, že toto je most, ale ne "
+"všichni zprostředkovávatelé toto podporují."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:151
 msgid "full topic string for mosquitto.conf, eg: 'power/# out 2'"
-msgstr ""
+msgstr "úplný řetězec pro mosquitto.conf,např.: 'napájení/č výpadek 2'"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:105
 msgid "http_dir to serve on websockets listeners"
@@ -370,10 +387,15 @@ msgid ""
 "supported at this stage. Use the checkbox below to use config generated by "
 "this page, or the stock mosquitto configuration file in %s."
 msgstr ""
+"mosquitto (komár) – <a href='http://www.mosquitto.org'>krvežíznivý</a> "
+"zprostředkovávatel MQTT zpráv. Poznamenejme, že v této fázi jsou podporovány "
+"pouze některé ze souborů s nastaveními, které jsou k dispozici. Pomocí níže "
+"uvedeného zaškrtávátka určete, zda použít nastavení vytvořená touto stránku, "
+"nebo výchozí soubor s nastaveními %s, dodávaný společně s mosquitto."
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:156
 msgid "notifications"
-msgstr "upozornění"
+msgstr "notifikace"
 
 #: applications/luci-app-mosquitto/htdocs/luci-static/resources/view/mosquitto/mosquitto.js:150
 msgid "topic"

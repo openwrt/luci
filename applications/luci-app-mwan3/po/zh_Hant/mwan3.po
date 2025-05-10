@@ -3,15 +3,15 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-06 07:28+0000\n"
-"Last-Translator: 翻譯得真好下次別翻了 <x86_64-pc-linux-gnu@proton.me>\n"
+"PO-Revision-Date: 2025-04-30 10:58+0000\n"
+"Last-Translator: ИEØ_ΙΙØZ <darkevil1102@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsmwan3/zh_Hant/>\n"
 "Language: zh_Hant\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:211
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:227
@@ -70,11 +70,11 @@ msgstr "%d 秒"
 msgid ""
 "%s: Name of Physical device which interface went up or down (e.g. \"eth0\" "
 "or \"wwan0\")"
-msgstr "%s：介面啟動或停止時物理裝置的名稱 (如：「eth0」或「wwan0」)"
+msgstr "%s：介面啟動或停止時實體網卡的名稱 (如：「eth0」或「wwan0」)"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:39
 msgid "%s: Name of the action that triggered this event"
-msgstr "%s：觸發此事件的操作的名稱"
+msgstr "%s：觸發此事件的動作的名稱"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:44
 msgid ""
@@ -88,11 +88,11 @@ msgstr "* %s：被 netifd 和 mwan3track 呼叫"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:43
 msgid "* %s: Is only called by mwan3track if tracking has failed"
-msgstr "* %s：僅在跟蹤失敗時由 mwan3track 呼叫"
+msgstr "* %s：僅在追蹤失敗時由 mwan3track 呼叫"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/notify.js:42
 msgid "* %s: Is only called by mwan3track if tracking was successful"
-msgstr "* %s：僅在跟蹤成功時由 mwan3track 呼叫"
+msgstr "* %s：僅在追蹤成功時由 mwan3track 呼叫"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:71
 msgid "-- Interface Selection --"
@@ -106,8 +106,7 @@ msgstr "--請選擇--"
 msgid ""
 "Acceptable values: 1-100. This many Tracking IP addresses must respond for "
 "the link to be deemed up"
-msgstr ""
-"取值範圍：1-100。這個設定項指定了當多少個 IP 位址能夠連通時介面會被認為在線"
+msgstr "取值範圍：1-100。當多少個 IP 位址能夠連通時，將判定介面已連線"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:62
 msgid "Acceptable values: 1-1000. Defaults to 1 if not set"
@@ -173,7 +172,7 @@ msgstr "已停用"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:267
 msgid ""
 "Downed interface will be deemed up after this many successful ping tests"
-msgstr "當 Ping 成功次數達到這個數值後，已經被認為離線的介面將會重新上線"
+msgstr "當 Ping 成功次數達到這個數值後，離線的介面將判定為已連線"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:40
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:48
@@ -186,7 +185,7 @@ msgstr "緊急"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:92
 msgid "Enable ssl tracking"
-msgstr "啟用 SSL 跟蹤"
+msgstr "啟用 SSL 追蹤"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:55
 msgid "Enabled"
@@ -203,7 +202,7 @@ msgstr "啟用全域防火牆日誌"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:93
 msgid "Enables https tracking on ssl port 443"
-msgstr "啟用在 SSL 連接埠 443 上的 https 跟蹤"
+msgstr "啟用在 SSL 連接埠 443 上的 https 追蹤"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:15
 msgid "Enter value in hex, starting with <code>0x</code>"
@@ -223,7 +222,7 @@ msgstr "在 up 事件發生時的預期介面狀態"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:213
 msgid "Failure interval"
-msgstr "故障檢測間隔"
+msgstr "故障偵測間隔"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:145
 msgid "Failure latency [ms]"
@@ -235,19 +234,19 @@ msgstr "失敗封包遺失 [%]"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:23
 msgid "Firewall loglevel"
-msgstr "防火牆日誌級別"
+msgstr "防火牆日誌等級"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:14
 msgid "Firewall mask"
-msgstr "防火牆掩碼"
+msgstr "防火牆遮罩"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:280
 msgid "Flush conntrack table"
-msgstr "重新整理連線跟蹤表"
+msgstr "重新整理連線追蹤表"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:281
 msgid "Flush global firewall conntrack table on interface events"
-msgstr "在介面事件觸發時重新整理全局防火牆連線跟蹤表"
+msgstr "在介面事件觸發時重新整理全域防火牆連線追蹤表"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:56
 msgid "Globals"
@@ -312,7 +311,7 @@ msgstr "介面離線"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:266
 msgid "Interface up"
-msgstr "介面在線"
+msgstr "介面已連線"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:253
 msgid "Interface will be deemed down after this many failed ping tests"
@@ -328,7 +327,7 @@ msgstr "介面名稱不能與已設定的成員、策略或規則相同。"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:65
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:59
 msgid "Internet Protocol"
-msgstr "網際網路協議"
+msgstr "網際網路協定"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:230
 msgid "Keep failure interval"
@@ -350,7 +349,7 @@ msgstr "以 # 開頭的行是註解，不會被執行。"
 msgid ""
 "Load-balanced member interfaces distribute more traffic out those with "
 "higher weights."
-msgstr "權重較高的負載均衡成員介面將分配到更多的流量。"
+msgstr "權重較高的負載平衡成員介面將分配到更多的流量。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:19
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:117
@@ -359,7 +358,7 @@ msgstr "日誌"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:22
 msgid "Loglevel"
-msgstr "日誌級別"
+msgstr "日誌等級"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:127
 msgid "Max TTL"
@@ -384,7 +383,7 @@ msgstr "優先使用躍點數較低的成員介面。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:20
 msgid "Member interfaces with the same metric will be load-balanced."
-msgstr "系統對躍點數相同的成員介面執行負載均衡。"
+msgstr "系統對躍點數相同的成員介面執行負載平衡。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:54
 msgid "Member used"
@@ -471,7 +470,7 @@ msgid ""
 "Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/"
 "youtube.com/youtube\")"
 msgstr ""
-"匹配 IPset 規則列表名稱。需要先配置 /etc/dnsmasq.conf 中的 IPset 規則（例"
+"IPset 規則列表名稱。需要先配置 /etc/dnsmasq.conf 中的 IPset 規則（例"
 "如：“ipset=/youtube.com/youtube”）"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:24
@@ -503,7 +502,7 @@ msgstr "沒有找到 MWAN 介面"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:43
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:51
 msgid "No Tracking"
-msgstr "無跟蹤"
+msgstr "不追蹤"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:296
 msgid "No interface metric set!"
@@ -531,7 +530,7 @@ msgstr "離線"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/overview.js:30
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/status/include/90_mwan3.js:39
 msgid "Online"
-msgstr "在線"
+msgstr "已連線"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:13
 msgid "Overview"
@@ -543,7 +542,7 @@ msgstr "Ping 計數"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:63
 msgid "Ping default gateway"
-msgstr "Ping 預設閘道器"
+msgstr "Ping 預設閘道"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:198
 msgid "Ping interval"
@@ -551,7 +550,7 @@ msgstr "Ping 間隔"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:214
 msgid "Ping interval during failure detection"
-msgstr "故障檢測期間的 Ping 間隔"
+msgstr "故障偵測期間的 Ping 間隔"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:236
 msgid "Ping interval during failure recovering"
@@ -563,18 +562,18 @@ msgstr "Ping 大小"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:191
 msgid "Ping timeout"
-msgstr "Ping 超時"
+msgstr "Ping 逾時"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:64
 msgid "Ping tracking IP"
-msgstr "Ping 跟蹤 IP"
+msgstr "Ping 追蹤 IP"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:18
 msgid ""
 "Policies are profiles grouping one or more members controlling how Mwan3 "
 "distributes traffic."
 msgstr ""
-"策略是將一個或多個成員分組的設定檔案，這些成員控制 Mwan3 如何分配流量。"
+"策略是將一個或多個成員分組的設定檔案，這些成員控制 Mwan3 如何分配連線。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:24
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:45
@@ -633,7 +632,7 @@ msgstr "規則基於 IP 位址、連接埠或協定。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:22
 msgid "Rules are matched from top to bottom."
-msgstr "規則從上到下進行相符。"
+msgstr "規則將由上到下比對。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:23
 msgid "Rules below a matching rule are ignored."
@@ -671,16 +670,16 @@ msgstr "狀態"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:94
 msgid "Sticky"
-msgstr "粘滯模式"
+msgstr "黏性模式"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:101
 msgid "Sticky timeout"
-msgstr "粘滯超時"
+msgstr "黏性逾時"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:77
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:86
 msgid "Supports CIDR notation (eg \"192.168.100.0/24\") without quotes"
-msgstr "支援 CIDR 記法（例如：\"192.168.100.0/24\"）不含引號"
+msgstr "支援 CIDR 表示法（例如：\"192.168.100.0/24\"）不含引號"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/status/diagnostics.js:91
 msgid "Task"
@@ -721,39 +720,39 @@ msgstr "這個部分允許您修改「/etc/mwan3.user」的內容。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:71
 msgid "Tracking hostname or IP address"
-msgstr "跟蹤的主機或 IP 位址"
+msgstr "追蹤的主機名稱或 IP 位址"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:76
 msgid "Tracking method"
-msgstr "跟蹤方式"
+msgstr "追蹤方式"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:98
 msgid "Tracking reliability"
-msgstr "跟蹤可靠性"
+msgstr "追蹤可靠性"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:25
 msgid ""
 "Traffic destined for known (other than default) networks is handled by the "
 "main routing table."
-msgstr "傳送到已知 (非預設) 網路的流量由主路由表處理。"
+msgstr "傳送到已知 (非預設) 網路的連線由主路由表處理。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:95
 msgid ""
 "Traffic from the same source IP address that previously matched this rule "
 "within the sticky timeout period will use the same WAN interface"
 msgstr ""
-"來自相同源 IP 的流量，如果已經匹配過此規則並且在粘滯超時時間內，將會使用相同"
-"的 WAN 介面"
+"來自同 IP 的連線，只要在黏性逾時期間內曾經符合此規則，將會持續使用同一個 WAN "
+"介面"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:26
 msgid ""
 "Traffic matching a rule, but all WAN interfaces for that policy are down "
 "will be blackholed."
-msgstr "流量相符了一條規則，但該策略的所有WAN介面都停止運作，流量將被黑洞。"
+msgstr "與規則相符的連線，但該策略的所有 WAN 介面均已離線，將被丟棄。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:24
 msgid "Traffic not matching any rule is routed using the main routing table."
-msgstr "不相符任何規則的流量使用主路由表進行路由。"
+msgstr "不相符任何規則的連線將使用主路由表進行路由。"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:37
 msgid "Troubleshooting"
@@ -772,7 +771,7 @@ msgstr "上線時間"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:67
 msgid "View the content of /etc/protocols for protocol description"
-msgstr "檢視協議描述的 /etc/protocols 的內容"
+msgstr "檢視協定描述的 /etc/protocols 的內容"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:29
 msgid "Warning"
@@ -781,7 +780,7 @@ msgstr "警告"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:62
 msgid ""
 "When all policy members are offline use this behavior for matched traffic"
-msgstr "當所有策略成員都無法使用的時候，對使用該策略的流量使用這個操作"
+msgstr "當所有策略成員都無法使用的時候，對使用該策略的連線使用這個動作"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:97
 msgid "Yes"

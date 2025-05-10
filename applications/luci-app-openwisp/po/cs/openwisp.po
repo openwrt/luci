@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-04-24 13:24+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsopenwisp/cs/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:17
 msgid "Advanced Settings"
@@ -35,6 +35,10 @@ msgid ""
 "href='https://github.com/openwisp/openwisp-config'>https://github.com/"
 "openwisp/openwisp-config</a>"
 msgstr ""
+"Nastavujte, spouštějte a zastavujte agenta OpenWISP na tomto zařzení. "
+"Ohledně hodnot v nastavení se více dočtete na: <a target='_blank' "
+"rel='noopener noreferrer' href='https://github.com/openwisp/openwisp-"
+"config'>https://github.com/openwisp/openwisp-config</a>"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:87
 msgid "Connect Timeout"
@@ -82,12 +86,16 @@ msgid ""
 "local configuration, the remote configuration takes precedence over local "
 "configuration."
 msgstr ""
+"Pokud vybráno, v události je přítomna položka nastavení v jak vzdáleném, tak "
+"lokálním nastavení – to vzdálené má přednost před lokálním nastavením."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:66
 msgid ""
 "If the agent is unable to reach the controller after applying the downloaded "
 "config it will be reverted."
 msgstr ""
+"Pokud se agentovi nepodaří dosáhnout řadiče po uplatnění staženého natavení, "
+"pak nastavení bude vráceno do předchozího stavu."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:23
 msgid "Key"
@@ -120,6 +128,10 @@ msgid ""
 "point to an executable script file. This hook is called each time openwisp-"
 "config applies a configuration, but after services are reloaded."
 msgstr ""
+"Popis umístění skriptu háčku po opětovném nahrání. Háček není volán pokud "
+"popis umístění neodkazuje na spustitelný soubor se skriptem Tento háček je "
+"volán pokaždé, když openwisp-config uplatní nastavení, ale až poté, co jsou "
+"služby načteny znovu."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:103
 msgid ""
@@ -150,7 +162,7 @@ msgstr "Štítky"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:64
 msgid "Tags applied to this device."
-msgstr ""
+msgstr "Štítky uplatněné na toto zařízení."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:66
 msgid "Test Config"
@@ -162,7 +174,7 @@ msgstr ""
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:23
 msgid "The Key of this device in the OpenWISP server."
-msgstr ""
+msgstr "Klíč tohoto zařízení v OpenWISP serveru."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:33
 msgid ""
@@ -171,11 +183,11 @@ msgstr "URL OpenWISP serveru. Příklad: https://openwisp2.mynetwork.com"
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:20
 msgid "The UUID of this device in the OpenWISP server."
-msgstr ""
+msgstr "UUID tohoto zařízení v OpenWISP serveru."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:53
 msgid "The interface to use for getting the MAC for this device."
-msgstr ""
+msgstr "Rozhraní které použít pro získání MAC pro toto zařízení."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:56
 msgid "The interface to use for management and control."
@@ -198,6 +210,8 @@ msgid ""
 "Use a unique hardware ID for device identification, for example a serial "
 "number."
 msgstr ""
+"Použít pro identifikaci zařízení neopakující se identifikátor hardware, "
+"například sériové číslo."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:100
 msgid ""
@@ -205,12 +219,18 @@ msgid ""
 "must be in PEM format, and the directory must have been processed using the "
 "c_rehash utility supplied with openssl."
 msgstr ""
+"Pro ověřování protějšků používat zadanou složku s certifikáty. Je třeba, aby "
+"certifikáty byly ve formátu PEM a aby složka byla zpracována pomocí nástroje "
+"c_reshash, dodávanou s openssl."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:97
 msgid ""
 "Use the specified certificate file to verify the peer. The file may contain "
 "multiple CA certificates. The certificate(s) must be in PEM format."
 msgstr ""
+"Použít zadaný soubor s certifikátem pro ověření protějšku. Soubor může "
+"obsahovat certifikáty vícero certif. autorit. Je třeba, aby bylo ve formátu "
+"PEM."
 
 #: applications/luci-app-openwisp/htdocs/luci-static/resources/view/openwisp.js:92
 msgid ""
@@ -235,3 +255,7 @@ msgid ""
 "default, but must be enabled also in the controller application in order to "
 "work."
 msgstr ""
+"Při používání automatické registrace, tato funkce zařízením umožňuje "
+"ponechat si stejné nastavení, i po vrácení nastavení do výchozího stavu či "
+"přeinstalaci firmware. Tato funkce je ve výchozím stavu zapnutá, ale aby "
+"fungovala, je třeba ji zapnout také v aplikaci řadiče."

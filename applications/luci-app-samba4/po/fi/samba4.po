@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-22 15:23+0100\n"
-"PO-Revision-Date: 2023-10-18 05:43+0000\n"
-"Last-Translator: Jiri Grönroos <jiri.gronroos@iki.fi>\n"
+"PO-Revision-Date: 2025-05-04 15:03+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssamba4/fi/>\n"
 "Language: fi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:120
 msgid "Allow guests"
@@ -20,13 +20,15 @@ msgstr "Salli vieraat"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:67
 msgid "Allow legacy (insecure) protocols/authentication."
-msgstr ""
+msgstr "Salli vanhat (suojaamattomat) protokollat/todennus."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:68
 msgid ""
 "Allow legacy smb(v1)/Lanman connections, needed for older devices without "
 "smb(v2.1/3) support."
 msgstr ""
+"Salli vanhat smb(v1)/Lanman-yhteydet, joita tarvitaan vanhemmille laitteille "
+"ilman smb(v2.1/3)-tukea."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:117
 msgid "Allowed users"
@@ -50,7 +52,7 @@ msgstr "Kuvaus"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:142
 msgid "Directory mask"
-msgstr ""
+msgstr "Hakemiston peite"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:74
 msgid "Disable Active Directory Domain Controller"
@@ -74,7 +76,7 @@ msgstr "Muokkaa samba-määritysten luomiseen käytettävää mallipohjaa."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:57
 msgid "Enable extra Tuning"
-msgstr ""
+msgstr "Ota ylimääräinen viritys käyttöön"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:64
 msgid "Enable macOS compatible shares"
@@ -86,16 +88,21 @@ msgid ""
 "speeds and better operation via WiFi. Not recommend if multiple clients "
 "write to the same files, at the same time!"
 msgstr ""
+"Ota käyttöön yhteisön määrittämiä säätöparametreja, jotka voivat parantaa "
+"kirjoitusnopeuksia ja toimintaa Wi-Fi-yhteyden välityksellä. Ei suositella, "
+"jos useat asiakkaat kirjoittavat samoihin tiedostoihin samanaikaisesti!"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:65
 msgid ""
 "Enables Apple's AAPL extension globally and adds macOS compatibility options "
 "to all shares."
 msgstr ""
+"Ottaa Applen AAPL-laajennuksen yleisesti käyttöön ja lisää macOS-"
+"yhteensopivuusvaihtoehdot kaikkiin jaettuihin jakoihin."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:115
 msgid "Force Root"
-msgstr ""
+msgstr "Pakota Root"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:61
 msgid "Force synchronous I/O"
@@ -107,7 +114,7 @@ msgstr "Yleiset asetukset"
 
 #: applications/luci-app-samba4/root/usr/share/rpcd/acl.d/luci-app-samba4.json:3
 msgid "Grant access to LuCI app samba4"
-msgstr ""
+msgstr "Myönnä pääsy LuCI-sovelluksen samba4:lle"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:126
 msgid "Guests only"
@@ -119,11 +126,13 @@ msgstr "Peri omistaja"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:34
 msgid "Interface"
-msgstr "Sovitin"
+msgstr "Liitäntä"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:35
 msgid "Listen only on the given interface or, if unspecified, on lan"
 msgstr ""
+"Kuuntele vain annetulla liitännälllä tai, jos sitä ei ole määritetty, "
+"lähiverkossa (LAN)"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:98
 msgid "Name"
@@ -139,6 +148,8 @@ msgid ""
 "On lower-end devices may increase speeds, by forcing synchronous I/O instead "
 "of the default asynchronous."
 msgstr ""
+"Alhaisemmissa laitteissa nopeuksia voidaan lisätä pakottamalla synkroninen "
+"syöttö/lähtö oletusasynkronisen sijaan."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:99
 msgid "Path"
@@ -167,6 +178,9 @@ msgid ""
 "('|') should not be changed. They get their values from the 'General "
 "Settings' tab."
 msgstr ""
+"Tämä on tiedoston '/etc/samba/smb.conf.template' sisältö, josta Samba-"
+"kokoonpanosi luodaan. Pystyviivojen ('|') sisällä olevia arvoja ei tule "
+"muuttaa. Ne hakevat arvonsa 'Yleiset asetukset' -välilehdeltä."
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:153
 msgid "Time-machine size in GB"
@@ -174,8 +188,8 @@ msgstr "Time Machinen koko gigatavuissa"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:148
 msgid "Vfs objects"
-msgstr ""
+msgstr "Vfs-objektit"
 
 #: applications/luci-app-samba4/htdocs/luci-static/resources/view/samba4.js:51
 msgid "Workgroup"
-msgstr ""
+msgstr "Työryhmä"

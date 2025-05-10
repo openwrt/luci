@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2025-03-09 18:16+0000\n"
+"PO-Revision-Date: 2025-04-24 17:18+0000\n"
 "Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/luci/"
 "uk/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.11.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1277
 msgid "!known (not known)"
@@ -133,7 +133,7 @@ msgstr "-- Додаткові поля --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:275
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3803
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4301
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4314
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:797
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1035
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2055
@@ -1423,7 +1423,7 @@ msgstr "Avahi IPv4LL"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:193
 msgid "Available"
-msgstr "Доступно"
+msgstr "В наявності"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:270
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:280
@@ -2912,11 +2912,9 @@ msgid ""
 "Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
 "abbr> forwarder."
 msgstr ""
-"Dnsmasq являє собою комбінований <abbr title=\"Dynamic Host Configuration "
-"Protocol — протокол динамічної конфігурації вузла\">DHCP</abbr>-сервер і "
-"<abbr title=\"Domain Name System — система доменних імен\">DNS</abbr>-проксі "
-"для брандмауерів <abbr title=\"Network Address Translation — перетворення "
-"(трансляція) мережевих адрес\">NAT</abbr>."
+"Dnsmasq — це легкий <abbr title=\"Dynamic Host Configuration "
+"Protocol\">DHCP</abbr> сервер і пересилач <abbr title=\"Domain Name "
+"System\">DNS</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:731
 msgid "Do not cache negative replies, e.g. for non-existent domains."
@@ -3635,8 +3633,9 @@ msgid ""
 "Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. "
 "for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
-"Дозволити висхідні відповіді від клієнта на сервер у діапазоні "
-"{loopback_slash_8_v4} та {localhost_v6}, до прикладу, для RBL-послуг."
+"Звільнити {loopback_slash_8_v4} та {localhost_v6} від перевірок повторного "
+"прив’язування, наприклад. для служб <abbr title=\"Real-time Block "
+"List\">RBL</abbr>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:473
 msgid "Existing device"
@@ -3974,7 +3973,7 @@ msgstr "Файл прошивки"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:59
 msgid "Firmware Version"
-msgstr "Версія прошивки"
+msgstr "Версія мікропрограми"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:772
 msgid "First answer wins."
@@ -5930,15 +5929,11 @@ msgid ""
 "R0KH. This is also the list of authorized R1KHs in the MD that can request "
 "PMK-R1 keys."
 msgstr ""
-"Список власників ключів R1 у тому ж домені мобільності. <br />Формат: MAC-"
-"адреса,<abbr title=\"ідентифікатор власника ключа R1\">R1KH-ID</abbr> у "
-"формі 6 октетів з двокрапками,256-бітний ключ у вигляді шістнадцяткового "
-"рядка. <br />Цей список використовується для відображення <abbr "
-"title=\"ідентифікатор власника ключа R1\">R1KH-ID</abbr> на MAC-адреси "
-"призначення при передаванні ключа PMK-R1 від <abbr title=\"власник ключа "
-"R0\">R0KH</abbr>. Це також список авторизованих <abbr title=\"власник ключа "
-"R1\">R1KH</abbr> у формі <abbr title=\"Message Digest — дайджест "
-"повідомлення\">MD</abbr>, які можуть запитувати ключі PMK-R1."
+"Список R1KH в одному домені мобільності. <br />Формат: MAC-адреса, R1KH-ID у "
+"вигляді 6 октетів із двокрапками, 256-бітний ключ у вигляді шістнадцяткового "
+"рядка. <br />Цей список використовується для зіставлення R1KH-ID з MAC-"
+"адресою призначення під час надсилання ключа PMK-R1 з R0KH. Це також список "
+"авторизованих R1KH в MD, які можуть запитувати ключі PMK-R1."
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:82
 msgid "List of SSH key files for auth"
@@ -6198,7 +6193,7 @@ msgstr "Слабка фільтрація"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1027
 msgid "Low-Density Parity-Check"
-msgstr ""
+msgstr "Перевірка парності низької щільності"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:664
 msgid "Lowest leased address as offset from the network address."
@@ -6473,7 +6468,7 @@ msgstr "Мбіт/с"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:35
 msgid "Medium"
-msgstr "Середня"
+msgstr "Середній"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:24
 msgid "Memory"
@@ -6995,7 +6990,7 @@ msgstr "Нова назва інтерфейсу…"
 msgid "Next »"
 msgstr "Наступний »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4237
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4250
 msgid "No"
 msgstr "Немає"
 
@@ -7482,7 +7477,7 @@ msgid "Operator Name"
 msgstr "Ім'я оператора"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2014
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4250
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4263
 msgid "Option \"%s\" contains an invalid input value."
 msgstr "Параметр \"%s\" містить неприпустиме значення введення."
 
@@ -9301,7 +9296,7 @@ msgstr "Помилка виконання"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1027
 msgid "Rx LDPC"
-msgstr ""
+msgstr "Rx LDPC"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:226
 msgid "SHA256"
@@ -10119,7 +10114,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:498
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:101
 msgid "Stop"
-msgstr "Зупинити"
+msgstr "Стій"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:136
 msgid "Stop WPS"
@@ -11306,7 +11301,7 @@ msgstr "Тунель"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1030
 msgid "Tx LDPC"
-msgstr ""
+msgstr "Tx LDPC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:177
 msgid "Tx-Power"
@@ -11756,13 +11751,12 @@ msgid ""
 "the requesting host. The optional <em>Lease time</em> can be used to set non-"
 "standard host-specific lease time, e.g. 12h, 3d or infinite."
 msgstr ""
-"Використовуйте кнопку <em>Додати</em>, щоб додати новий запис оренди. "
-"<em>MAC-адреса</em> ідентифікує вузол, <em>IPv4-адреса</em> визначає "
-"фіксовану адресу, яка буде використовуватися, а <em>Назва (ім'я) вузла</em> "
-"призначає символічне ім'я вузла. Необов'язковий параметр <em>Час оренди</em> "
-"можна використовувати для встановлення нестандартного специфічного для вузла "
-"часу оренди, наприклад 12h, 3d чи <abbr title=\"необмежений\">infinite</"
-"abbr>."
+"Скористайтеся кнопкою <em>Додати</em>, щоб додати новий запис про оренду. "
+"<em>MAC-адреса</em> визначає хост, <em>IPv4-адреса</em> визначає фіксовану "
+"адресу для використання, а <em>Ім’я хоста</em> призначається як символічне "
+"ім’я хосту, який запитує. Додатковий <em>Час оренди</em> можна "
+"використовувати для встановлення нестандартного часу оренди для конкретного "
+"хоста, напр. 12 годин, 3 дні або нескінченно."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:625
 msgid "Use {etc_ethers}"
@@ -12234,7 +12228,7 @@ msgstr "Записувати отримані DNS-запити до систем
 msgid "Write system log to file"
 msgstr "Записувати cистемний журнал до файлу"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4237
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4250
 msgid "Yes"
 msgstr "Так"
 
@@ -12592,7 +12586,7 @@ msgstr "mobile home agent (H)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 msgid "no"
-msgstr "Ні"
+msgstr "ні"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:104
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:76

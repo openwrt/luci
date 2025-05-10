@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-24 12:08+0000\n"
+"PO-Revision-Date: 2025-05-03 01:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsusteer/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:79
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:233
@@ -23,11 +23,11 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:486
 msgid "Allow ignoring probe requests for steering purposes"
-msgstr ""
+msgstr "Umožnit ignorování požadavků na sondu pro účely řízení"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:483
 msgid "Allow rejecting assoc requests for steering purposes"
-msgstr ""
+msgstr "Pro účely řízení umožnit odmítání požadavků na asociování"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:278
 msgid "Also be sure to enable rrm reports, 80211kv, etc."
@@ -35,17 +35,19 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:372
 msgid "An incorrect parameter can cause usteer to fail to start up."
-msgstr ""
+msgstr "Nesprávný parametr může způsobit, že usteer se nepovede spustit."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:483
 msgid "Assoc steering"
-msgstr ""
+msgstr "Řízení asociování"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:587
 msgid ""
 "Attempting to steer clients to a higher frequency-band every n ms. A value "
 "of 0 disables band-steering."
 msgstr ""
+"Snažení se o přehození klientů na vyšší frekvenční pásmo každých n ms. "
+"Hodnota 0 (nula) toto vypíná."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:235
 msgid "BSSID"
@@ -82,7 +84,7 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:562
 msgid "Enable kicking client on excessive channel load"
-msgstr ""
+msgstr "Zapnout vykopávání klientů při přílišném vytížení kanálu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:609
 msgid "Event log types"
@@ -157,12 +159,15 @@ msgstr "Název rozhraní"
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:473
 msgid "Interval (ms) between sending state updates to other APs"
 msgstr ""
+"Interval (ms) mezi posíláním aktualizací stavu na ostatní přístupové body"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:598
 msgid ""
 "Interval (ms) the device is sent a link-measurement request to help assess "
 "the bi-directional link quality."
 msgstr ""
+"Interval (ms) ve kterém je zařízení posílán požadavek na změření linky pro "
+"posouzení její linky pro obousměrnou komunikaci."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:597
 msgid "Link measurement interval"
@@ -184,19 +189,19 @@ msgstr "Práh rozprostírání zátěže"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:570
 msgid "Load kick delay"
-msgstr ""
+msgstr "Prodleva vykopnutí při zátěži"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:562
 msgid "Load kick enabled"
-msgstr ""
+msgstr "Vykopávání kvůli vytížení povoleno"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:575
 msgid "Load kick min clients"
-msgstr ""
+msgstr "Nejméně klientů pro vykopnutí kvůli vytížení"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:580
 msgid "Load kick reason code"
-msgstr ""
+msgstr "Kód důvodu vykopnutí kvůli vytížení"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:565
 msgid "Load kick threshold"
@@ -208,11 +213,11 @@ msgstr "Lokální režim"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:438
 msgid "Local sta timeout"
-msgstr ""
+msgstr "Lokální sta časový limit"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:448
 msgid "Local sta update"
-msgstr ""
+msgstr "Lokální sta aktualizace"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:448
 msgid "Local station information update interval (ms)"
@@ -241,22 +246,26 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:443
 msgid "Maximum amount of time (ms) a measurement report is stored"
-msgstr ""
+msgstr "Nejvyšší umožněná doba (ms) po kterou je hlášení o měření ukládáno"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:433
 msgid ""
 "Maximum amount of time (ms) a station may be blocked due to policy decisions"
 msgstr ""
+"Nejdelší čas (ms) po který může stanice být blokována kvůli rozhodnutím "
+"zásady"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:458
 msgid ""
 "Maximum idle time of a station entry (ms) to be considered for policy "
 "decisions"
 msgstr ""
+"Nejdelší doba nečinnosti položky stanice (ms), aby byla brána do úvahy pro "
+"rozhodování zásady"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:519
 msgid "Maximum number of client roaming scan trigger attempts"
-msgstr ""
+msgstr "Největší počet pokusů o spuštění skenu roamingu klienta"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:453
 msgid "Maximum number of consecutive times a station may be blocked by policy"
@@ -266,11 +275,11 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:428
 msgid "Maximum number of neighbor reports set for a node"
-msgstr ""
+msgstr "Nejvyšší počet sad hlášení sousedů pro uzel"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:443
 msgid "Measurement report timeout"
-msgstr ""
+msgstr "Časový limit hlášení měření"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:609
 msgid "Message types to include in log."
@@ -299,10 +308,12 @@ msgid ""
 "Minimum amount of time (ms) that channel load is above threshold before "
 "starting to kick clients"
 msgstr ""
+"Nejkratší doba (ms), když je vytížení kanálu nad hranicí, než začít klienty "
+"posílat pryč"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:565
 msgid "Minimum channel load (%) before kicking clients"
-msgstr ""
+msgstr "Nejnižší vytížení kanálu (%) před vykopáváním klientů"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:575
 msgid ""
@@ -324,6 +335,8 @@ msgstr ""
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:552
 msgid "Minimum signal strength difference until AP steering policy is active"
 msgstr ""
+"Nejnižší rozdíl síly signálu, do kterého je zásada řízení přístupových bodů "
+"aktivní"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:514
 msgid ""
@@ -336,15 +349,21 @@ msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) before attempting to "
 "trigger forced client roaming"
 msgstr ""
+"Nejnižší poměr signál/šum nebo síla signálu (dBm) než se bude pokoušeno "
+"spustit vynucený roaming klienta"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:489
 msgid ""
 "Minimum signal-to-noise ratio or signal level (dBm) to allow connections"
 msgstr ""
+"Nejnižší poměr signál/šum nebo síla signálu (dBm) při kterém ještě umožňovat "
+"připojení"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:494
 msgid "Minimum signal-to-noise ratio or signal level (dBm) to remain connected"
 msgstr ""
+"Nejnižší poměr signál/šum nebo síla signálu (dBm) při které ještě zůstat "
+"připojení"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:532
 msgid "Minimum time (ms) between client roaming scan trigger attempts"
@@ -352,13 +371,13 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:542
 msgid "Minimum time (ms) between client roaming trigger attempts"
-msgstr ""
+msgstr "Nejnižší čas (ms) mezi pokusy o spuštění roamingu klienta"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:238
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:259
 msgctxt "Number of associated clients in usteer overview"
 msgid "N"
-msgstr ""
+msgstr "N"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:405
 msgid "Network"
@@ -366,7 +385,7 @@ msgstr "Síť"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:423
 msgid "Network packet info"
-msgstr ""
+msgstr "Informace o sítovém paketu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:89
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:226
@@ -398,11 +417,12 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:581
 msgid "Reason code on client kick based on channel load."
-msgstr ""
+msgstr "Kód důvodu při vykopnutí klienta kvůli vytížení kanálu."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:61
 msgid "Refresh page to get new mac addresses to show up"
 msgstr ""
+"Načtete stránku znovu a získejte tak novou mac adresu, která se tím zobrazí"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:215
 msgid "Remote hosts"
@@ -435,15 +455,15 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:532
 msgid "Roam scan interval"
-msgstr ""
+msgstr "Interval roam skenu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:524
 msgid "Roam scan timeout"
-msgstr ""
+msgstr "Časový limit roam skenu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:519
 msgid "Roam scan tries"
-msgstr ""
+msgstr "Pokusů o roam sken"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:242
 msgctxt "Roam source in usteer overview"
@@ -475,7 +495,7 @@ msgstr "Seznam SSID"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:605
 msgid "Script to run after bringing up a node"
-msgstr ""
+msgstr "Skript který spustit po nahození uzlu"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:279
 msgid "See <a %s>documentation</a>"
@@ -487,7 +507,7 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:599
 msgid "Setting the interval to 0 disables link-measurements."
-msgstr ""
+msgstr "Nastavení intervalu na 0 (nula) vypíná měření linky."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:275
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:392
@@ -509,7 +529,7 @@ msgstr "Nějaké ladící informace"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:433
 msgid "Sta block timeout"
-msgstr ""
+msgstr "Časový limit blokování sta"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:390
 msgid "Status"
@@ -536,6 +556,8 @@ msgid ""
 "Timeout (in ms) after which a association following a disassociation is not "
 "seen as a roam"
 msgstr ""
+"Časový limit (v ms) po jehož uplynutí asociování následující po odasociování "
+"není považováno za roam"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:547
 msgid ""
@@ -548,6 +570,8 @@ msgid ""
 "Timeout (ms) for which a client will not be steered after rejecting a BSS-"
 "transition-request"
 msgstr ""
+"Časový limit (ms) pro který klient nebude řízen po odmítnutí BSS požadavku "
+"na přechod"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:499
 msgid "Timeout after which a station with SNR < min_SNR will be kicked"
@@ -555,7 +579,7 @@ msgstr ""
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:373
 msgid "To start it running try %s"
-msgstr ""
+msgstr "Pro spuštění zkuste %s"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:414
 msgid "Use IPv6 for remote exchange"
@@ -569,7 +593,7 @@ msgstr "Usteer"
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:371
 msgid "Usteer is not running. Make sure it is installed and running."
-msgstr ""
+msgstr "Usteer není spuštěné. Ověřte, že je nainstalované a spuštěné."
 
 #: applications/luci-app-usteer/htdocs/luci-static/resources/view/usteer/usteer.js:421
 msgid "Verbose"
