@@ -619,7 +619,7 @@ return baseclass.extend({
 		o.depends('type', 'bonding');
 
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'policy', _('Bonding Policy'));
-		o.default = 'active-backup';
+		o.default = 'balance-rr';
 		o.value('active-backup', _('Active backup'));
 		o.value('balance-rr', _('Round robin'));
 		o.value('balance-xor', _('Transmit hash - balance-xor'));
@@ -660,7 +660,7 @@ return baseclass.extend({
 				return 'balance-alb';
 
 			default:
-				return 'active-backup';
+				return 'balance-rr';
 			}
 		};
 		o.depends('type', 'bonding');
