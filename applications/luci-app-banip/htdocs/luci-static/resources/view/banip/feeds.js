@@ -250,7 +250,7 @@ return view.extend({
 			o.value('/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)[[:space:]]/{printf \"%s,\\n\",$1}', _('<IPv6><SPACE>'));
 			o.value('/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)$/{printf \"%s,\\n\",$1}', _('<IPv6><END>'));
 			o.value('BEGIN{FS=\",\"}/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)/{printf \"%s,\\n\",$1}', _('<IPv6>, csv'));
-			o.value('match($0,\/^([0-9A-f]{1,4}:){4}\/) { print substr($0, RSTART, RLENGTH)\":\/64,\" }; match($0,\/^([0-9A-f]{1,4}:){3}:\/) { print substr($0, RSTART, RLENGTH)\"\/48,\" }; match($0,\/^([0-9A-f]{1,4}:){2}:\/) { print substr($0, RSTART, RLENGTH)\"\/32,\" }', _('<IPv6> /64 /48 /32 whole subnet parse'));
+			o.value('match($0,\/^.*\\\/\\d{2}\/){print $0; next}; match($0,\/^([0-9A-f]{1,4}:){4}\/) { print substr($0, RSTART, RLENGTH)\":\/64,\" }; match($0,\/^([0-9A-f]{1,4}:){3}:\/) { print substr($0, RSTART, RLENGTH)\"\/48,\" }; match($0,\/^([0-9A-f]{1,4}:){2}:\/) { print substr($0, RSTART, RLENGTH)\"\/32,\" }', _('Rewrite IPV6 without subnet, using a double colon hint, to /64 /48 /32 subnets'));
 			o.optional = true;
 			o.rmempty = true;
 
