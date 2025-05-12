@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: statistics\n"
 "POT-Creation-Date: 2017-10-17 22:00+0300\n"
-"PO-Revision-Date: 2025-05-02 07:28+0000\n"
-"Last-Translator: Maksim_220 Кабанов <law820314@gmail.com>\n"
+"PO-Revision-Date: 2025-05-12 07:34+0000\n"
+"Last-Translator: SnIPeRSnIPeR <feoktistovk@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:47
 msgid "0 - At most once"
-msgstr "0 - не более одного раза"
+msgstr "0 - Не более одного раза"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:48
 msgid "1 - At least once"
@@ -113,29 +113,29 @@ msgstr "Bitswap включен"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:15
 msgid "By setting this, CPU is not aggregate of all processors on the system"
 msgstr ""
-"При установке данной опции график CPU не будет агрегировать данные всех "
-"процессоров в системе"
+"При включении данной опции график загрузки будет отображать отдельные данные "
+"по каждому ядру"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/contextswitch.js:6
 msgid "CPU Context Switches Plugin Configuration"
-msgstr "Настройка плагина переключений контекста CPU"
+msgstr "Настройка плагина сбора статистики о масштабировании частоты процессора"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/cpufreq.js:8
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/cpufreq.json:2
 msgid "CPU Frequency"
-msgstr "Частота CPU"
+msgstr "Частота процессора"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:6
 msgid "CPU Frequency Plugin Configuration"
-msgstr "Настройка плагина частоты CPU"
+msgstr "Настройка плагина сбора статистики о частоте процессора"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:6
 msgid "CPU Plugin Configuration"
-msgstr "Настройка плагина «CPU»"
+msgstr "Настройка плагина «Процессор»"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:40
 msgid "CPU monitoring is enabled"
-msgstr "Мониторинг CPU включен"
+msgstr "Мониторинг процессора включён"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/csv.json:2
 msgid "CSV Output"
@@ -292,7 +292,7 @@ msgstr "Файл с определением набора данных"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:22
 msgid "Detailled CPU frequency monitoring enabled"
-msgstr "Мониторинг частоты CPU включён"
+msgstr "Мониторинг частоты процессора включён"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/dhcpleases.json:2
 msgid "Dhcpleases"
@@ -546,8 +546,8 @@ msgid ""
 "Hiding the free memory item makes the graph to scale to actual memory usage, "
 "not to 100%."
 msgstr ""
-"Скрытие элемента свободной памяти приводит к тому, что график масштабируется "
-"не до 100%, а до фактического использования памяти."
+"При включении данной опции данные о свободной оперативной памяти не "
+"отображаются на графике."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:29
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:14
@@ -704,11 +704,11 @@ msgstr "Максимальный размер пакета"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/memory.js:11
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/memory.json:2
 msgid "Memory"
-msgstr "Оперативная память (RAM)"
+msgstr "Оперативная память"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:6
 msgid "Memory Plugin Configuration"
-msgstr "Настройка плагина «Оперативная память (RAM)»"
+msgstr "Настройка плагина «Оперативная память»"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:28
 msgid "Memory monitoring enabled"
@@ -980,7 +980,7 @@ msgstr "Настройка плагина «Netlink»"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/network.json:2
 msgid "Network"
-msgstr "Сетевое подключение"
+msgstr "Сеть"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:6
 msgid "Network Plugin Configuration"
@@ -1110,7 +1110,7 @@ msgstr "Настройка плагина «Процессы»"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/cpu.js:8
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/cpu.json:2
 msgid "Processor"
-msgstr "CPU"
+msgstr "Процессор"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:21
 msgid "Publish"
@@ -1127,7 +1127,7 @@ msgstr "QoS"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:62
 msgid "RRD XFiles Factor"
 msgstr ""
-"Часть интервала консолидации, которая может состоять из неопределенных "
+"Часть интервала консолидации, которая может состоять из неопределённых "
 "значений (*UNKNOWN*), если консолидированное значение может быть определено "
 "(известно)"
 
@@ -1289,7 +1289,7 @@ msgstr "Затухания сигнала (SATN) включено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:23
 msgid "Simple CPU frequency monitoring enabled"
-msgstr "Включён простой мониторинг частоты CPU"
+msgstr "Включён простой мониторинг частоты процессора"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/snmp6.json:2
 msgid "Snmp6"
@@ -1467,7 +1467,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:7
 msgid "The cpu plugin collects basic statistics about the processor usage."
-msgstr "Плагин «CPU» собирает статистику об использовании процессора."
+msgstr "Плагин «Процессор» собирает статистику об использовании процессора."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:7
 msgid ""
@@ -1564,7 +1564,8 @@ msgid ""
 "The iwinfo plugin collects statistics about wireless signal strength, noise "
 "and quality."
 msgstr ""
-"Плагин «Wi-Fi» собирает статистику о качестве и шуме беспроводного сигнала."
+"Плагин «Беспроводная сеть» собирает статистику о силе сигнала, уровне шума и "
+"качестве беспроводного соединения."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/load.js:7
 msgid "The load plugin collects statistics about the general system load."
@@ -1573,8 +1574,7 @@ msgstr "Плагин «Загрузка системы» собирает ста
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:7
 msgid "The memory plugin collects statistics about the memory usage."
 msgstr ""
-"Плагин «Оперативная память (RAM)» собирает статистику об использовании "
-"памяти."
+"Плагин «Оперативная память» собирает статистику об использовании памяти."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:8
 msgid ""
@@ -1590,10 +1590,10 @@ msgid ""
 "client mode locally collected data is transferred to a collectd server "
 "instance, in server mode the local instance receives data from other hosts."
 msgstr ""
-"Плагин «Сеть» предоставляет возможность сетевого обмена данными между "
-"разными сервисами collectd. Collectd может работать в режиме сервера или "
-"клиента. В режиме клиента, локальная статистика передается collectd-серверу, "
-"в режиме сервера collectd собирает статистику с удаленных хостов."
+"Плагин «Сеть» предоставляет возможность обмена данными между различными "
+"экземплярами collectd. Collectd может работать как в режиме сервера, так и в "
+"режиме клиента. В режиме клиента локальная статистика передаётся на collectd-"
+"сервер, а в режиме сервера collectd собирает статистику с удалённых хостов."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:7
 msgid ""
@@ -1608,8 +1608,8 @@ msgid ""
 "The processes plugin collects information like cpu time, page faults and "
 "memory usage of selected processes."
 msgstr ""
-"Плагин «Процессы» собирает информацию, такую как время CPU, ошибки страниц и "
-"использование памяти выбранных процессов."
+"Плагин «Процессы» собирает данные о времени процессора, ошибках страниц и "
+"потребляемой памяти для выбранных процессов."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:7
 msgid ""
@@ -1619,9 +1619,9 @@ msgid ""
 "directory. This can render the device unusable!</strong>"
 msgstr ""
 "Плагин «RRDTool» сохраняет статистику в формате RRD для последующего "
-"построения диаграмм.<br /><br /><strong>Внимание: установка неверных "
-"параметров может привести к высокому потреблению памяти устройства. Это "
-"может привести к зависанию устройства!</strong>"
+"построения диаграмм.<br /><br /><strong>Внимание: установка некорректных "
+"параметров может привести к высокому потреблению памяти во временном "
+"каталоге, что способно вызвать нестабильную работу устройства!</strong>"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
 msgid ""
@@ -1697,11 +1697,12 @@ msgstr "Настройка плагина «Thermal»"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/contextswitch.js:7
 msgid "This plugin collects statistics about the processor context switches."
-msgstr "Данный плагин собирает статистику о переключение контекста процессора."
+msgstr ""
+"Данный плагин собирает статистику о контекстных переключениях процессора."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:7
 msgid "This plugin collects statistics about the processor frequency scaling."
-msgstr "Этот плагин собирает статистику о частоте процессора масштабирования."
+msgstr "Этот плагин собирает статистику о масштабировании частоты процессора."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:33
 msgid ""
@@ -1860,7 +1861,7 @@ msgstr "Беспроводная сеть"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:7
 msgid "Wireless iwinfo Plugin Configuration"
-msgstr "Настройка плагина «Wi-Fi»"
+msgstr "Настройка плагина «Беспроводная сеть»"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:102
 msgid "Writing *.rrd files to %s"
