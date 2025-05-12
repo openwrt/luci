@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-05-03 01:34+0000\n"
+"PO-Revision-Date: 2025-05-11 19:01+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationskeepalived/cs/>\n"
@@ -196,7 +196,7 @@ msgstr "Odlišit vícero instancí vrrpd, spuštěné na stejném síťovém roz
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/url.js:24
 msgid "Digest"
-msgstr ""
+msgstr "Výtah"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/url.js:25
 msgid "Digest computed with genhash"
@@ -208,7 +208,7 @@ msgstr "Směr"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:64
 msgid "Disable Preempt"
-msgstr ""
+msgstr "Nepředjímat"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:196
 msgid "Disable Primary Tracking"
@@ -216,7 +216,7 @@ msgstr "Zakázat sledování primárního"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:100
 msgid "Do not send VRRP adverts over VRRP multicast group."
-msgstr ""
+msgstr "Neposílat VRRP propagace přes VRRP skupinu vícesměrového vysílání."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:26
 msgid "EMail accounts that will receive the notification mail"
@@ -258,15 +258,16 @@ msgstr "Nezdar"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:51
 msgid "Firewall fwmark. Use Virtual server from FWMARK"
-msgstr ""
+msgstr "fwmark brány firewall. Použít virtuální server z FWMARK"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:248
 msgid "For cases with large numbers (eg 200) of IPs on the same interface."
-msgstr ""
+msgstr "Pro případy velkého množství (např. 200) IP adres na stejném rozhraní."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:66
 msgid "For this to work, the initial state of this entry must be BACKUP."
 msgstr ""
+"Aby toto fungovalo, je třeba, aby počáteční stav této položky byl ZALOHA."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:191
 msgid "Force instance to use IPv6"
@@ -290,7 +291,7 @@ msgstr "GARP obnovení"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:163
 msgid "GARP Refresh Repeat"
-msgstr ""
+msgstr "Zopakovat znovunačtení GARP"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:141
 msgid "GARP Repeat"
@@ -327,7 +328,7 @@ msgstr "Pokud jakékoli z tohoto spadne, přejít do stavu PORUCHA"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:276
 msgid "Go to FAULT state if any of these go down, if unweighted"
-msgstr ""
+msgstr "Přejít do stavu PORUCHA pokud jakékoli z těchto spadne (pokud neváženo)"
 
 #: applications/luci-app-keepalived/root/usr/share/rpcd/acl.d/luci-app-keepalived.json:3
 msgid "Grant access to LuCI app keepalived"
@@ -339,19 +340,19 @@ msgstr "Maska granularity pro trvalá spojení"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:131
 msgid "Gratuitous Master Delay in seconds"
-msgstr ""
+msgstr "Bezdůvodná prodleva hlavního (v sekundách)"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:164
 msgid "Gratuitous Master Refresh Repeat in seconds"
-msgstr ""
+msgstr "Bezdůvodné opakování (v sekundách) znovunačtení hlavního"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:153
 msgid "Gratuitous Master Refresh in seconds"
-msgstr ""
+msgstr "Bezdůvodné znovunačtení hlavního (v sekundách)"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:142
 msgid "Gratuitous Master Repeat in seconds"
-msgstr ""
+msgstr "Bezdůvodné zopakování hlavního (v sekundách)"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:115
 msgid "HA Authentication Type"
@@ -417,12 +418,16 @@ msgstr ""
 msgid ""
 "If you want to hide location of vrrpd, use this IP for multicast vrrp packets"
 msgstr ""
+"Pokud chcete umístění vrrpd skrýt, použijte pro vícesměrové vysílání vrrp "
+"paketů tuto IP adresu"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/ipaddress.js:67
 msgid ""
 "If your systems already have IPs and they can ping each other, you do not "
 "need this section"
 msgstr ""
+"Pokud vaše systému už mají IP adresy a mohou provádět ping mezi sebou, pak "
+"tuto sekci nepotřebujete"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:197
 msgid "Ignore VRRP interface faults"
@@ -454,6 +459,8 @@ msgid ""
 "Instead it sends adverts to the following list of ip addresses using unicast "
 "design fashion"
 msgstr ""
+"Namísto toho odešle propagace na následující seznam IP adres pomocí "
+"jednosměrového způsobu"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/overview.js:26
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:32
@@ -463,7 +470,7 @@ msgstr "Rozhraní"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:33
 msgid "Interface for inside_network, bound by VRRP"
-msgstr ""
+msgstr "Rozhraní pro inside_network, navázané od VRRP"
 
 #: applications/luci-app-keepalived/root/usr/share/luci/menu.d/luci-app-keepalived.json:60
 msgid "Interfaces"
@@ -483,6 +490,8 @@ msgid ""
 "Its exit code will be recorded for all VRRP instances and sync groups which "
 "are monitoring it"
 msgstr ""
+"Jeho návratový kód bude zaznamenán pro všechny instance VRRP a "
+"synchronizační skupiny, které ho monitorují"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:11
 msgid "Keepalived Global Settings"
@@ -494,7 +503,7 @@ msgstr "Instance keepalived"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:26
 msgid "Keepalived.user"
-msgstr ""
+msgstr "Keepalived.user"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/overview.js:31
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/status/include/35_keepalived.js:35
@@ -503,7 +512,7 @@ msgstr "Poslední přechod"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:83
 msgid "Least-Connection"
-msgstr ""
+msgstr "Nejméně spojení"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/ipaddress.js:49
 msgid "Link"
@@ -566,11 +575,11 @@ msgstr "Název"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/script.js:50
 msgid "No Reverse"
-msgstr ""
+msgstr "Žádné obrácené"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/ipaddress.js:51
 msgid "No Where"
-msgstr ""
+msgstr "Žádné kde"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:204
 msgid "None"
@@ -628,11 +637,11 @@ msgstr ""
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:93
 msgid "Persist Granularity"
-msgstr ""
+msgstr "Jemnost trvání"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:87
 msgid "Persist Timeout"
-msgstr ""
+msgstr "Časový limit trvalosti"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:21
 msgid ""
@@ -654,7 +663,7 @@ msgstr "Port ke kterému připojit"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:215
 msgid "Preempt Delay"
-msgstr ""
+msgstr "Prodleva předcházení"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:45
 msgid "Priority"
@@ -715,7 +724,7 @@ msgstr "Obrácené"
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/script.js:86
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:109
 msgid "Rise"
-msgstr ""
+msgstr "Vyvstat"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:81
 msgid "Round-Robin"
@@ -915,6 +924,9 @@ msgid ""
 "together so that transition of one instance will be reflected to others "
 "group members"
 msgstr ""
+"Hlavním cílem je definovat sadu instance VRRP pro její synchronizování "
+"společně, takže přechod jedné instance se projeví na ostatních členech "
+"skupiny"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/overview.js:78
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/status/include/35_keepalived.js:76
@@ -982,7 +994,7 @@ msgstr "Sledovací skripty by byly odkazovány z VRRP instancí"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/url.js:20
 msgid "URL Path"
-msgstr ""
+msgstr "URL popis umístění"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/url.js:21
 msgid "URL path, i.e path /, or path /mrtg2/"
@@ -996,7 +1008,7 @@ msgstr "URL adresy"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/url.js:12
 msgid "URLs can be referenced into Real Servers to test"
-msgstr ""
+msgstr "URL lokátory je možné odkazovat do skutečných serverů pro test"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:20
 msgid "Unable to save contents: %s"

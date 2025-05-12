@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: adblock\n"
 "POT-Creation-Date: 2017-10-22 13:00+0300\n"
-"PO-Revision-Date: 2025-05-04 15:03+0000\n"
-"Last-Translator: Vladimir <gh@mail.ru>\n"
+"PO-Revision-Date: 2025-05-12 07:34+0000\n"
+"Last-Translator: SnIPeRSnIPeR <feoktistovk@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/ru/>\n"
 "Language: ru\n"
@@ -54,7 +54,7 @@ msgstr "Блокировщик рекламы"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:46
 msgid "Add Allowlist Domain"
-msgstr "Добавить домен в список разрешений"
+msgstr "Добавить домен в список разрешенных"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:11
 msgid "Add Blocklist Domain"
@@ -187,6 +187,10 @@ msgid ""
 "domains except those listed in the allowlist. You can use this restrictive "
 "blocklist e.g. for guest wifi or kidsafe configurations."
 msgstr ""
+"Создаёт дополнительный строгий DNS-блок лист, запрещающий доступ ко всем "
+"доменам, кроме тех, что есть в белом списке. Этот ограничивающий блок лист "
+"можно использовать, например, для гостевого Wi-Fi или детских безопасных "
+"настроек."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:22
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:57
@@ -475,11 +479,11 @@ msgstr "Недопустимые входные значения, невозмо
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:366
 msgid "Jail Blocklist"
-msgstr ""
+msgstr "Jail Blocklist"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:370
 msgid "Jail Directory"
-msgstr "Папка для «тюрьмы»"
+msgstr "Папка для дополнительного списка блокировки"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:222
 msgid "Large"
@@ -509,7 +513,7 @@ msgstr "Список доступных сетевых устройств, ис�
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:214
 msgid "List of available network interfaces to trigger the adblock start."
-msgstr ""
+msgstr "Список доступных сетевых интерфейсов для запуска adblock."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:317
 msgid "List of supported DNS backends."
@@ -760,6 +764,8 @@ msgid ""
 "Target directory for the generated jail blocklist. If this directory points "
 "to your DNS directory, the jail blocklist replaces your default blocklist."
 msgstr ""
+"Целевая директория для дополнительного списка блокировки. Если она совпадает "
+"с DNS-каталогом, данный список заменит стандартный."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:25
 msgid "The allowlist is too big, unable to save modifications."
