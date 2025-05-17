@@ -57,6 +57,15 @@ return view.extend({
 			o.noaliases = true;
 			o.noinactive = true;
 
+			uci.sections('etherwake', 'target', function(section) {
+				if (section.mac && section.name) {
+					// Create a host entry if it doesn't exist
+					if (!hosts[section.mac]) {
+						hosts[section.mac] = { name: section.name };
+					}
+				}
+			});
+
 			if (has_wol)
 				o.depends('executable', '/usr/bin/etherwake');
 		}
