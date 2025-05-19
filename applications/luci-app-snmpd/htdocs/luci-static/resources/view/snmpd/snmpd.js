@@ -27,6 +27,13 @@ return L.view.extend({
 		this.snmp_version = null;
 	},
 
+	testPassLength: function(section_id, value) {
+			if (value.length < 8)
+				return _('Password must be at least 8 characters');
+
+			return true;
+		},
+
 	populateSystemSettings: function(tab, s, data) {
 		var g, go, o;
 
@@ -452,7 +459,8 @@ return L.view.extend({
 		go.rmempty = false;
 		go.modalonly = true;
 		go.optional = false;
-		go.depends({'auth_type': "", "!reverse": true});
+		go.validate = this.testPassLength;
+		go.depends({'auth_type': '', '!reverse': true});
 
 		// SNMPv3 privacy/encryption type
 		go = g.option(form.ListValue, 'privacy_type',
@@ -470,7 +478,8 @@ return L.view.extend({
 		go.rmempty = false;
 		go.modalonly = true;
 		go.optional = false;
-		go.depends({'privacy_type': "", "!reverse": true});
+		go.validate = this.testPassLength;
+		go.depends({'privacy_type': '', '!reverse': true});
 
 		go = g.option(form.ListValue, 'RestrictOID',
 			_('OID-Restriction'));
