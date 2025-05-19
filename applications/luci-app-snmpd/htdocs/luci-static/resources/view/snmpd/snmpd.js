@@ -452,6 +452,13 @@ return L.view.extend({
 		go.rmempty = false;
 		go.modalonly = true;
 		go.optional = false;
+		go.validate = function(section_id, value) {
+			if (value.length < 8)
+				return _("Password must be at least 8 characters");
+
+			return true;
+		}
+
 		go.depends({'auth_type': "", "!reverse": true});
 
 		// SNMPv3 privacy/encryption type
@@ -470,6 +477,12 @@ return L.view.extend({
 		go.rmempty = false;
 		go.modalonly = true;
 		go.optional = false;
+		go.validate = function(section_id, value) {
+			if (value.length < 8)
+				return _("Password must be at least 8 characters");
+
+			return true;
+		}
 		go.depends({'privacy_type': "", "!reverse": true});
 
 		go = g.option(form.ListValue, 'RestrictOID',
