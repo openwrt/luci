@@ -2728,11 +2728,11 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 			dom.append(tdEl.lastElementChild,
 				E('button', {
-					'title': btn_title || _('Clone') + '⿻',
+					'title': btn_title || _('Clone'),
 					'class': 'btn cbi-button cbi-button-neutral',
 					'click': ui.createHandlerFn(this, 'handleClone', section_id, true),
 					'disabled': this.map.readonly || null
-				}, [ btn_title || _('Clone') + '⿻' ])
+				}, [ btn_title || _('Clone') ])
 			);
 		}
 
