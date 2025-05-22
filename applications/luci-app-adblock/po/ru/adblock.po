@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: adblock\n"
 "POT-Creation-Date: 2017-10-22 13:00+0300\n"
-"PO-Revision-Date: 2025-05-18 18:02+0000\n"
+"PO-Revision-Date: 2025-05-19 21:02+0000\n"
 "Last-Translator: SnIPeRSnIPeR <feoktistovk@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/ru/>\n"
@@ -62,12 +62,11 @@ msgstr "Добавить домен в список заблокированны
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:47
 msgid "Add this (sub-)domain to your local allowlist."
-msgstr "Добавьте этот (под-) домен в свой локальный список разрешений."
+msgstr "Добавьте этот (под-)домен в ваш локальный список разрешений."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:12
 msgid "Add this (sub-)domain to your local blocklist."
-msgstr ""
-"Добавьте этот (поддомен) домен в свой локальный список заблокированных."
+msgstr "Добавьте этот (под-)домен в ваш локальный список заблокированных."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:197
 msgid "Additional Settings"
@@ -449,7 +448,7 @@ msgid ""
 "installation and a full adblock service restart to take effect."
 msgstr ""
 "Собирайте сетевой трафик, связанный с DNS, с помощью tcpdump и "
-"предоставляйте отчет о DNS по запросу. Для этого необходимо установить "
+"предоставляйте отчёт о DNS по запросу. Для этого необходимо установить "
 "дополнительный пакет \"tcpdump\" или \"tcpdump-mini\" и полностью "
 "перезапустить службу adblock."
 
@@ -517,7 +516,7 @@ msgstr "Список доступных сетевых интерфейсов д
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:317
 msgid "List of supported DNS backends."
-msgstr "Список поддерживаемых серверов DNS."
+msgstr "Список поддерживаемых DNS-серверов."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:298
 msgid "List of supported and fully pre-configured download utilities."
@@ -629,7 +628,7 @@ msgstr "Разрешение IP-адресов"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:410
 msgid "Resolve reporting IP addresses by using reverse DNS (PTR) lookups."
-msgstr "Разрешение IP-адресов в отчетах с помощью обратного поиска DNS (PTR)."
+msgstr "Разрешение IP-адресов в отчётах с помощью обратного поиска DNS (PTR)."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:96
 msgid "Result"
@@ -753,7 +752,7 @@ msgstr "Сжатие TLD"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:392
 msgid "Target directory for DNS related report files."
-msgstr "Целевой каталог для файлов отчетов, связанных с DNS."
+msgstr "Целевой каталог для файлов отчётов, связанных с DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:294
 msgid "Target directory for blocklist backups."
@@ -815,8 +814,8 @@ msgid ""
 "This tab shows the last generated DNS Report, press the 'Refresh' button to "
 "get a current one."
 msgstr ""
-"На этой вкладке показан последний созданный отчет DNS, нажмите кнопку "
-"'Обновить', чтобы получить текущий отчет."
+"На этой вкладке показан последний созданный отчёт DNS, нажмите кнопку "
+"'Обновить', чтобы получить текущий отчёт."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:268
 msgid "Time"
@@ -857,7 +856,7 @@ msgstr "Не получилось прочитать ваш файл. Прове
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:449
 msgid "Unable to parse the default feed file!"
 msgstr ""
-"Система не может прочитать основной файл с данными. Возможно, он поврежден "
+"Система не может прочитать основной файл с данными. Возможно, он повреждён "
 "или имеет неверный формат!"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:62
@@ -897,16 +896,12 @@ msgid ""
 "file, delete entries, add new ones or make a local backup. To go back to the "
 "maintainers version just clear the custom feed file."
 msgstr ""
-"С помощью этого редактора вы можете загрузить свой локальный файл с "
-"пользовательскими фидами или создать начальную версию (точную копию версии, "
-"поставляемой с пакетом). Файл находится по пути '/etc/adblock/"
-"adblock.custom.feeds'. Затем вы можете редактировать этот файл, удалять "
-"записи, добавлять новые или создавать локальную резервную копию. Чтобы "
-"вернуться к версии разработчиков, просто очистите содержимое "
-"пользовательского файла. Основные возможности: Загрузка собственного файла "
-"фидов. Создание копии стандартного фида. Редактирование (добавление/удаление "
-"записей). Создание резервных копий. Сброс к оригинальной версии через "
-"очистку файла. Файл для работы: \"/etc/adblock/adblock.custom.feeds\"."
+"С помощью этого редактора вы можете загрузить локальный файл "
+"пользовательских списков или создать начальный файл (точно такой же, как "
+"изначально поставляемый с пакетом). Файл находится по пути /etc/adblock/"
+"adblock.custom.feeds. Вы можете редактировать этот файл, удалять записи, "
+"добавлять новые или создавать локальную резервную копию. Чтобы вернуться к "
+"версии из пакета, удалите содержимое пользовательского файла списков."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:320
 msgid "bind"
