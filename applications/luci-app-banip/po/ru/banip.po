@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-05-18 18:02+0000\n"
+"PO-Revision-Date: 2025-05-20 17:15+0000\n"
 "Last-Translator: SnIPeRSnIPeR <feoktistovk@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbanip/ru/>\n"
@@ -141,7 +141,7 @@ msgstr "Дополнительная задержка срабатывания �
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:218
 msgid "Advanced Settings"
-msgstr "Дополнительные настройки"
+msgstr "Расширенные настройки"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:402
 msgid "Allow Protocol/Ports"
@@ -914,7 +914,7 @@ msgstr "Папка для отчётов"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:840
 msgid "Restrict the internet access from/to a small number of secure IPs."
 msgstr ""
-"Ограничить доступ в Интернет с/на небольшое количество защищенных IP-адресов."
+"Ограничить доступ в Интернет для небольшого числа доверенных IP-адресов."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:27
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:97
@@ -1016,7 +1016,7 @@ msgstr "Настройка политики"
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:57
 msgid "Set Reporting"
-msgstr "Настройка отчетов"
+msgstr "Настройка отчётов"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:352
 msgid "Set Split Size"
@@ -1101,7 +1101,7 @@ msgstr "Целевая директория для файлов ошибок ban
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:371
 msgid "Target directory for banIP-related report files."
-msgstr "Целевой каталог для файлов отчетов, связанных с banIP."
+msgstr "Целевой каталог для файлов отчётов, связанных с banIP."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:367
 msgid "Target directory for compressed feed backups."
@@ -1134,8 +1134,8 @@ msgid ""
 "exactly one MAC/IPv4/IPv6 address or domain name per line. Ranges in CIDR "
 "notation and MAC/IP-bindings are allowed."
 msgstr ""
-"Это локальный список разрешений banIP, который разрешает определённые MAC-, "
-"IP-адреса или доменные имена.<br /> <em><b> Обратите внимание:</b></em> "
+"Это локальный список разрешений banIP, который разрешает определённые MAC/IP-"
+"адреса или доменные имена.<br /> <em><b> Обратите внимание:</b></em> "
 "добавляет только ровно один MAC/IPv4/IPv6-адрес или доменное имя на строку. "
 "Разрешены диапазоны в нотации CIDR и MAC/IP-связи."
 
@@ -1216,12 +1216,12 @@ msgstr "Не получилось прочитать ваш файл. Прове
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:518
 msgid "Unable to parse the default feed file!"
 msgstr ""
-"Система не может прочитать основной файл с данными. Возможно, он поврежден "
+"Система не может прочитать основной файл с данными. Возможно, он повреждён "
 "или имеет неверный формат!"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:183
 msgid "Unable to parse the report file!"
-msgstr "Невозможно разобрать файл отчета!"
+msgstr "Невозможно разобрать файл отчёта!"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:72
 msgid "Unable to parse the ruleset file!"
@@ -1258,13 +1258,12 @@ msgid ""
 "delete entries, add new ones or make a local backup. To go back to the "
 "maintainers version just clear the custom feed file."
 msgstr ""
-"С помощью этого редактора вы можете загрузить свой локальный файл "
-"пользовательских фидов или заполнить начальный (копия 1:1 версии, "
-"поставляемой с пакетом). Файл находится по адресу '/etc/banip/"
-"banip.custom.feeds'. Затем вы можете отредактировать этот файл, удалить "
-"записи, добавить новые или сделать локальную резервную копию. Чтобы "
-"вернуться к версии для сопровождающих, просто очистите файл пользовательской "
-"ленты."
+"С помощью этого редактора вы можете загрузить локальный файл "
+"пользовательских списков или создать начальный файл (точно такой же, как "
+"изначально поставляемый с пакетом). Файл находится по пути /etc/banip/"
+"banip.custom.feeds. Вы можете редактировать этот файл, удалять записи, "
+"добавлять новые или создавать локальную резервную копию. Чтобы вернуться к "
+"версии из пакета, удалите содержимое пользовательского файла списков."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:589
 msgid "alert"
