@@ -8,10 +8,23 @@
 "require ui";
 "require view";
 
+var testV3 = function() {
+	return fs.exec("/usr/bin/ldd", [ "/usr/lib/libnetsnmp.so.40" ]).then(function (res) {
+		return res.stdout.includes("libssl");
+	});
+};
+
+var testPassLength: function(section_id, value) {
+	if (value.length < 8)
+		return _('Password must be at least 8 characters');
+	return true;
+};
+
 return L.view.extend({
 	load: function() {
 		return Promise.all([
 			uci.load("snmpd"),
+			testV3(),
 		]);
 	},
 
@@ -647,8 +660,10 @@ return L.view.extend({
 		this.populateV1V2CSettings("access_HostIP",
 			_("Communities via IP-Address range"), "HostIP", s, data);
 
-		s.tab("v3", _("SNMPv3"));
-		this.populateV3Settings('v3', s, data);
+		if (data[1]) {
+			s.tab("v3", _("SNMPv3"));
+			this.populateV3Settings('v3', s, data);
+		}
 
 		s.tab("traps", _("Traps", "SNMP"));
 		this.populateTrapsSettings('trap_HostName', 'Traps via Hostname',
