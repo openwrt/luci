@@ -71,13 +71,13 @@ function render_port_status(node, portstate) {
 
 	if (!portstate || !portstate.link)
 		dom.content(node, [
-			E('img', { src: L.resource('icons/port_down.png') }),
+			E('img', { src: L.resource('icons/port_down.svg') }),
 			E('br'),
 			_('no link')
 		]);
 	else
 		dom.content(node, [
-			E('img', { src: L.resource('icons/port_up.png') }),
+			E('img', { src: L.resource('icons/port_up.svg') }),
 			E('br'),
 			'%d'.format(portstate.speed) + _('baseT'),
 			E('br'),
