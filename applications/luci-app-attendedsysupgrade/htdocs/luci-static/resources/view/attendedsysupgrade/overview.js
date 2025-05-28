@@ -646,7 +646,12 @@ return view.extend({
 			target: promises[1].release.target,
 			version: promises[1].release.version,
 			diff_packages: true,
-			filesystem: promises[1].rootfs_type
+			filesystem: promises[1].rootfs_type,
+
+			// If the user has changed the rootfs partition size via owut,
+			// then make sure to keep new image the same size.  A null value
+			// is interpreted by the ASU server as "default".
+			rootfs_size_mb: uci.get('attendedsysupgrade', 'owut', 'rootfs_size'),
 		};
 		return [data, firmware];
 	},
