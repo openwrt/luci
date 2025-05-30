@@ -2,6 +2,7 @@
 'require view';
 'require fs';
 'require ui';
+'require uci';
 
 /*
 	button handling
@@ -200,19 +201,65 @@ function handleAction(ev) {
 		]);
 		document.getElementById('refresh').focus();
 	}
+
+	if (ev === 'map') {
+		let md = L.ui.showModal(null, [
+			E('div', { id: 'mapModal',
+						style: 'position: relative;' }, [
+				E('iframe', {
+					id: 'mapFrame',
+					src: L.resource('view/adblock/map.html'),
+					style: 'width: 100%; height: 80vh; border: none;'
+				}),
+			]),
+			E('div', { 'class': 'right' }, [
+				E('button', {
+					'class': 'btn cbi-button',
+					'click': ui.createHandlerFn(this, function (ev) {
+						ui.hideModal();
+						sessionStorage.clear();
+						location.reload();
+					})
+				}, _('Cancel')),
+				' ',
+				E('button', {
+					'class': 'btn cbi-button-action',
+					'click': ui.createHandlerFn(this, function (ev) {
+						const iframe = document.getElementById('mapFrame');
+						iframe.contentWindow.location.reload();
+					})
+				}, _('Map Reset'))
+			])
+		]);
+		md.style.maxWidth = '90%';
+		document.getElementById('mapModal').focus();
+	}
 }
 
 return view.extend({
 	load: function() {
-		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '10', '50', '+']),'');
+		return Promise.all([
+			L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '10', '50', '+']),''),
+			uci.load('adblock')
+		]);
 	},
 
 	render: function(dnsreport) {
-		if (!dnsreport) {
-			dnsreport = '{}';
-		};
-		var content;
-		content = JSON.parse(dnsreport);
+		let content, notMsg, errMsg;
+
+		if (dnsreport) {
+			try {
+				content = JSON.parse(dnsreport[0]);
+			} catch (e) {
+				content = "";
+				if (!errMsg) {
+					errMsg = true;
+					ui.addNotification(null, E('p', _('Unable to parse the report file!')), 'error');
+				}
+			}
+		} else {
+			content = "";
+		}
 
 		var rows_top = [];
 		var tbl_top  = E('table', { 'class': 'table', 'id': 'top_10' }, [
@@ -227,28 +274,28 @@ return view.extend({
 		]);
 
 		var max = 0;
-		if (content.top_clients && content.top_domains && content.top_blocked) {
-			max = Math.max(content.top_clients.length, content.top_domains.length, content.top_blocked.length);
+		if (content[0].top_clients && content[0].top_domains && content[0].top_blocked) {
+			max = Math.max(content[0].top_clients.length, content[0].top_domains.length, content[0].top_blocked.length);
 		}
 		for (var i = 0; i < max; i++) {
 			var a_cnt = '\xa0', a_addr = '\xa0', b_cnt = '\xa0', b_addr = '\xa0', c_cnt = '\xa0', c_addr = '\xa0';
-			if (content.top_clients[i]) {
-				a_cnt = content.top_clients[i].count;
+			if (content[0].top_clients[i]) {
+				a_cnt = content[0].top_clients[i].count;
 			}
-			if (content.top_clients[i]) {
-				a_addr = content.top_clients[i].address;
+			if (content[0].top_clients[i]) {
+				a_addr = content[0].top_clients[i].address;
 			}
-			if (content.top_domains[i]) {
-				b_cnt = content.top_domains[i].count;
+			if (content[0].top_domains[i]) {
+				b_cnt = content[0].top_domains[i].count;
 			}
-			if (content.top_domains[i]) {
-				b_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.top_domains[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.top_domains[i].address + '</a>';
+			if (content[0].top_domains[i]) {
+				b_addr = '<a href="https://ip-api.com/#' + encodeURIComponent(content[0].top_domains[i].address) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].top_domains[i].address + '</a>';
 			}
-			if (content.top_blocked[i]) {
-				c_cnt = content.top_blocked[i].count;
+			if (content[0].top_blocked[i]) {
+				c_cnt = content[0].top_blocked[i].count;
 			}
-			if (content.top_blocked[i]) {
-				c_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.top_blocked[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.top_blocked[i].address + '</a>';
+			if (content[0].top_blocked[i]) {
+				c_addr = '<a href="https://ip-api.com/#' + encodeURIComponent(content[0].top_blocked[i].address) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].top_blocked[i].address + '</a>';
 			}
 			rows_top.push([
 				a_cnt,
@@ -274,16 +321,16 @@ return view.extend({
 		]);
 
 		max = 0;
-		if (content.requests) {
+		if (content[0].requests) {
 			var button;
-			max = content.requests.length;
+			max = content[0].requests.length;
 			for (var i = 0; i < max; i++) {
-				if (content.requests[i].rc === 'NX') {
+				if (content[0].requests[i].rc === 'NX') {
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-positive',
 						'style': 'word-break: inherit',
 						'name': 'allowlist',
-						'value': content.requests[i].domain,
+						'value': content[0].requests[i].domain,
 						'click': handleAction
 					}, [ _('Allowlist...') ]);
 				} else {
@@ -291,16 +338,16 @@ return view.extend({
 						'class': 'btn cbi-button cbi-button-negative',
 						'style': 'word-break: inherit',
 						'name': 'blocklist',
-						'value': content.requests[i].domain,
+						'value': content[0].requests[i].domain,
 						'click': handleAction
 					}, [ _('Blocklist...') ]);
 				}
 				rows_requests.push([
-					content.requests[i].date,
-					content.requests[i].time,
-					content.requests[i].client,
-					'<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.requests[i].domain) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.requests[i].domain + '</a>',
-					content.requests[i].rc,
+					content[0].requests[i].date,
+					content[0].requests[i].time,
+					content[0].requests[i].client,
+					'<a href="https://ip-api.com/#' + encodeURIComponent(content[0].requests[i].domain) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].requests[i].domain + '</a>',
+					content[0].requests[i].rc,
 					button
 				]);
 			}
@@ -313,19 +360,19 @@ return view.extend({
 				E('p', '\xa0'),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Start Timestamp')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, (content.start_date || '-') + ', ' + (content.start_time || '-'))
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, (content[0].start_date || '-') + ', ' + (content[0].start_time || '-'))
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('End Timestamp')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'end', 'style': 'float:left;color:#37c' }, (content.end_date || '-') + ', ' + (content.end_time || '-'))
+					E('div', { 'class': 'cbi-value-title', 'id': 'end', 'style': 'float:left;color:#37c' }, (content[0].end_date || '-') + ', ' + (content[0].end_time || '-'))
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Total DNS Requests')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'total', 'style': 'float:left;color:#37c' }, content.total || '-')
+					E('div', { 'class': 'cbi-value-title', 'id': 'total', 'style': 'float:left;color:#37c' }, content[0].total || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Blocked DNS Requests')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'blocked', 'style': 'float:left;color:#37c' }, (content.blocked || '-') + ' (' + (content.percent || '-') + ')')
+					E('div', { 'class': 'cbi-value-title', 'id': 'blocked', 'style': 'float:left;color:#37c' }, (content[0].blocked || '-') + ' (' + (content[0].percent || '-') + ')')
 				])
 			]),
 			E('div', { 'class': 'cbi-section' }, [
@@ -342,6 +389,28 @@ return view.extend({
 				])
 			]),
 			E('div', { 'class': 'cbi-page-actions' }, [
+				E('button', {
+					'class': 'btn cbi-button cbi-button-apply',
+					'style': 'float:none;margin-right:.4em;',
+					'click': ui.createHandlerFn(this, function () {
+						if (uci.get('adblock', 'global', 'adb_map') !== '1') {
+							if (!notMsg) {
+								notMsg = true;
+								return ui.addNotification(null, E('p', _('GeoIP Map is not enabled!')), 'info');
+							}
+						}
+						if (content[1] && content[1].length > 1) {
+							sessionStorage.setItem('mapData', JSON.stringify(content[1]));
+							return handleAction('map');
+						}
+						else {
+							if (!notMsg) {
+								notMsg = true;
+								return ui.addNotification(null, E('p', _('No GeoIP Map data!')), 'info');
+							}
+						}
+					})
+				}, [_('Map...')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'style': 'float:none;margin-right:.4em;',
