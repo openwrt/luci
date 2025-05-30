@@ -245,20 +245,16 @@ return view.extend({
 	},
 
 	render: function(dnsreport) {
-		let content, notMsg, errMsg;
+		let content=[], notMsg, errMsg;
 
 		if (dnsreport) {
 			try {
 				content = JSON.parse(dnsreport[0]);
 			} catch (e) {
-				content = "";
-				if (!errMsg) {
-					errMsg = true;
-					ui.addNotification(null, E('p', _('Unable to parse the report file!')), 'error');
-				}
+				content[0] = "";
 			}
 		} else {
-			content = "";
+			content[0] = "";
 		}
 
 		var rows_top = [];
