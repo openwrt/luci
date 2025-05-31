@@ -123,11 +123,19 @@ function handleEdit(ev) {
 	const nodeKeys = document.querySelectorAll('[id^="widget.cbid.json"][id$="name"]');
 	for (let i = 0; i < nodeKeys.length; i++) {
 		let subElements = {};
-		let elements = document.querySelectorAll('[id^="widget.cbid.json.' + nodeKeys[i].id.split('.')[3] + '\."]');
+		const elements = document.querySelectorAll('[id^="widget.cbid.json.' + nodeKeys[i].id.split('.')[3] + '\."], \
+			[id^="cbid.json.' + nodeKeys[i].id.split('.')[3] + '\.rule_4"], \
+			[id^="cbid.json.' + nodeKeys[i].id.split('.')[3] + '\.rule_6"]');
 		for (const element of elements) {
-			let key = element.id.split('.')[4];
-			let value = element.value || "";
-			if (value === "") {
+			let key;
+			const value = element.value || "";
+			const parts = element.id.split('.');
+			if (parts.length === 5) {
+				key = element.id.split('.')[4];
+			} else if (parts.length === 4) {
+				key = element.id.split('.')[3];
+			}
+			if (!key || value === "") {
 				continue;
 			}
 			switch (key) {
@@ -170,11 +178,11 @@ return view.extend({
 	load: function () {
 		return L.resolveDefault(fs.stat('/etc/banip/banip.custom.feeds'), "")
 			.then(function (stat) {
-			if (!stat) {
-				return fs.write('/etc/banip/banip.custom.feeds', "");
-			}
-			return L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "");
-		})
+				if (!stat) {
+					return fs.write('/etc/banip/banip.custom.feeds', "");
+				}
+				return L.resolveDefault(fs.read_direct('/etc/banip/banip.custom.feeds', 'json'), "");
+			})
 	},
 
 	render: function (data) {
@@ -221,7 +229,7 @@ return view.extend({
 				return true;
 			}
 
-			o = s.option(form.ListValue, 'rule_4', _('Rulev4'));
+			o = s.option(form.Value, 'rule_4', _('Rulev4'));
 			o.value('/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)[[:space:]]/{printf \"%s,\\n\",$1}', _('<IPv4><SPACE>'));
 			o.value('/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)$/{printf \"%s,\\n\",$1}', _('<IPv4><END>'));
 			o.value('/^127\\./{next}/^(([1-9][0-9]{0,2}\\.){1}([0-9]{1,3}\\.){2}(1?[0-9][0-9]?|2[0-4][0-9]|25[0-5])(\\/(1?[0-9]|2?[0-9]|3?[0-2]))?)[[:space:]]/{printf \"%s/%s,\\n\",$1,$3}', _('<IPv4><SPACE>, concatinated'));
@@ -246,7 +254,7 @@ return view.extend({
 				return true;
 			}
 
-			o = s.option(form.ListValue, 'rule_6', _('Rulev6'));
+			o = s.option(form.Value, 'rule_6', _('Rulev6'));
 			o.value('/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)[[:space:]]/{printf \"%s,\\n\",$1}', _('<IPv6><SPACE>'));
 			o.value('/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)$/{printf \"%s,\\n\",$1}', _('<IPv6><END>'));
 			o.value('BEGIN{FS=\",\"}/^(([0-9A-f]{0,4}:){1,7}[0-9A-f]{0,4}:?(\\/(1?[0-2][0-8]|[0-9][0-9]))?)/{printf \"%s,\\n\",$1}', _('<IPv6>, csv'));
