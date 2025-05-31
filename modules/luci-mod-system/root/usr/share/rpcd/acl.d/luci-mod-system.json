@@ -41,6 +41,22 @@
 		}
 	},
 
+	"luci-mod-system-repokeys": {
+		"description": "Grant access to Software Repository Public Key management",
+		"read": {
+			"file": {
+				"/etc/opkg/keys/*": [ "read" ],
+				"/etc/apk/keys/*": [ "read" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/opkg/keys/*": [ "write" ],
+				"/etc/apk/keys/*": [ "write" ]
+			}
+		}
+	},
+
 	"luci-mod-system-uhttpd": {
 		"description": "Grant access to uHTTPd configuration",
 		"read": {

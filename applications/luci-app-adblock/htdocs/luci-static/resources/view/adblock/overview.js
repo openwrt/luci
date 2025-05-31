@@ -110,10 +110,6 @@ return view.extend({
 				if (backend && info) {
 					backend.textContent = info.dns_backend || '-';
 				}
-				var utils = document.getElementById('utils');
-				if (utils && info) {
-					utils.textContent = info.run_utils || '-';
-				}
 				var ifaces = document.getElementById('ifaces');
 				if (ifaces && info) {
 					ifaces.textContent = info.run_ifaces || '-';
@@ -159,10 +155,6 @@ return view.extend({
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('DNS Backend')),
 					E('div', { 'class': 'cbi-value-field', 'id': 'backend', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Utils')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'utils', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Interfaces')),
@@ -282,12 +274,19 @@ return view.extend({
 		o = s.taboption('additional', form.Flag, 'adb_debug', _('Verbose Debug Logging'), _('Enable verbose debug logging in case of any processing errors.'));
 		o.rmempty = false;
 
-		o = s.taboption('additional', form.Flag, 'adb_nice', _('Low Priority Service'), _('Reduce the priority of the adblock background processing to take fewer resources from the system.'));
-		o.enabled = '10';
+		o = s.taboption('additional', form.ListValue, 'adb_nicelimit', _('Nice Level'), _('The selected priority will be used for adblock background processing.'));
+		o.value('-20', _('Highest Priority'));
+		o.value('-10', _('High Priority'));
+		o.value('0', _('Normal Priority'));
+		o.value('10', _('Less Priority'));
+		o.value('19', _('Least Priority'));
+		o.default = '0';
+		o.placeholder = _('-- default --');
+		o.create = true;
+		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('additional', form.Value, 'adb_tmpbase', _('Base Temp Directory'), _('Base temp directory for all adblock related runtime operations, \
-			e.g. downloading, sorting, merging etc.'));
+		o = s.taboption('additional', form.Value, 'adb_basedir', _('Base Directory'), _('Base working directory during adblock processing.'));
 		o.placeholder = '/tmp';
 		o.rmempty = true;
 
@@ -408,6 +407,10 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('adv_report', form.Flag, 'adb_represolve', _('Resolve IPs'), _('Resolve reporting IP addresses by using reverse DNS (PTR) lookups.'));
+		o.rmempty = true;
+
+		o = s.taboption('adv_report', form.Flag, 'adb_map', _('GeoIP Map'), _('Enable a GeoIP map that shows the geographical location of the blocked domains. This requires external requests to get the map tiles and geolocation data.'));
+		o.optional = true;
 		o.rmempty = true;
 
 		/*

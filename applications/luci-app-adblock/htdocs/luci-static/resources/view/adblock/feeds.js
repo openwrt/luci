@@ -121,11 +121,18 @@ function handleEdit(ev) {
 	const nodeKeys = document.querySelectorAll('[id^="widget.cbid.json"][id$="name"]');
 	for (let i = 0; i < nodeKeys.length; i++) {
 		let subElements = {};
-		let elements = document.querySelectorAll('[id^="widget.cbid.json.' + nodeKeys[i].id.split('.')[3] + '\."]');
+		const elements = document.querySelectorAll('[id^="widget.cbid.json.' + nodeKeys[i].id.split('.')[3] + '\."], \
+			[id^="cbid.json.' + nodeKeys[i].id.split('.')[3] + '\.rule"]');
 		for (const element of elements) {
-			let key = element.id.split('.')[4];
-			let value = element.value || "";
-			if (value === "") {
+			let key;
+			const value = element.value || "";
+			const parts = element.id.split('.');
+			if (parts.length === 5) {
+				key = element.id.split('.')[4];
+			} else if (parts.length === 4) {
+				key = element.id.split('.')[3];
+			}
+			if (!key || value === "") {
 				continue;
 			}
 			switch (key) {
@@ -207,7 +214,7 @@ return view.extend({
 				return true;
 			}
 
-			o = s.option(form.ListValue, 'rule', _('Rule'));
+			o = s.option(form.Value, 'rule', _('Rule'));
 			o.value('/^([[:alnum:]_-]{1,63}\\.)+[[:alpha:]]+([[:space:]]|$)/{print tolower($1)}', _('<DOMAIN>'));
 			o.value('/^127\\.0\\.0\\.1[[:space:]]+([[:alnum:]_-]{1,63}\\.)+[[:alpha:]]+([[:space:]]|$)/{print tolower($2)}', _('127.0.0.1<SPACE><DOMAIN>'));
 			o.value('/^0\\.0\\.0\\.0[[:space:]]+([[:alnum:]_-]{1,63}\\.)+[[:alpha:]]+([[:space:]]|$)/{print tolower($2)}', _('0.0.0.0<SPACE><DOMAIN>'));
