@@ -3779,7 +3779,10 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 				E('div', { 'class': 'cbi-value-description' }, this.description.trim()));
 
 		if (depend_list && depend_list.length)
-			optionEl.classList.add('hidden');
+			if (in_table)
+				optionEl.firstChild.classList.add('hidden');
+			else
+				optionEl.classList.add('hidden');
 
 		optionEl.addEventListener('widget-change',
 			L.bind(this.map.checkDepends, this.map));
