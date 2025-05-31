@@ -9,7 +9,7 @@
 */
 function handleAction(ev) {
 	if (ev.target && ev.target.getAttribute('name') === 'blocklist') {
-		L.ui.showModal(_('Add Blocklist Domain'), [
+		ui.showModal(_('Add Blocklist Domain'), [
 			E('p', _('Add this (sub-)domain to your local blocklist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
@@ -19,23 +19,23 @@ function handleAction(ev) {
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
 					'class': 'btn cbi-button-action',
-					'click': ui.createHandlerFn(this, function(ev) {
+					'click': ui.createHandlerFn(this, function (ev) {
 						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.blocklist'), '')
-						.then(function(res) {
-							var domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
-							var pattern = new RegExp('^' + domain.replace(/[\.]/g,'\\.') + '$', 'm');
-							if (res.search(pattern) === -1) {
-								var blocklist = res + domain + '\n';
-								fs.write('/etc/adblock/adblock.blocklist', blocklist);
-								ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload adblock that changes take effect.')), 'info');
-							}
-							L.hideModal();
-						});
+							.then(function (res) {
+								var domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
+								var pattern = new RegExp('^' + domain.replace(/[\.]/g, '\\.') + '$', 'm');
+								if (res.search(pattern) === -1) {
+									var blocklist = res + domain + '\n';
+									fs.write('/etc/adblock/adblock.blocklist', blocklist);
+									ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload adblock that changes take effect.')), 'info');
+								}
+								ui.hideModal();
+							});
 					})
 				}, _('Save'))
 			])
@@ -44,7 +44,7 @@ function handleAction(ev) {
 	}
 
 	if (ev.target && ev.target.getAttribute('name') === 'allowlist') {
-		L.ui.showModal(_('Add Allowlist Domain'), [
+		ui.showModal(_('Add Allowlist Domain'), [
 			E('p', _('Add this (sub-)domain to your local allowlist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
@@ -54,23 +54,23 @@ function handleAction(ev) {
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
 					'class': 'btn cbi-button-action',
-					'click': ui.createHandlerFn(this, function(ev) {
+					'click': ui.createHandlerFn(this, function (ev) {
 						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.allowlist'), '')
-						.then(function(res) {
-							var domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
-							var pattern = new RegExp('^' + domain.replace(/[\.]/g,'\\.') + '$', 'm');
-							if (res.search(pattern) === -1) {
-								var allowlist = res + domain + '\n';
-								fs.write('/etc/adblock/adblock.allowlist', allowlist);
-								ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload adblock that changes take effect.')), 'info');
-							}
-							L.hideModal();
-						});
+							.then(function (res) {
+								var domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
+								var pattern = new RegExp('^' + domain.replace(/[\.]/g, '\\.') + '$', 'm');
+								if (res.search(pattern) === -1) {
+									var allowlist = res + domain + '\n';
+									fs.write('/etc/adblock/adblock.allowlist', allowlist);
+									ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload adblock that changes take effect.')), 'info');
+								}
+								ui.hideModal();
+							});
 					})
 				}, _('Save'))
 			])
@@ -83,7 +83,7 @@ function handleAction(ev) {
 			E('p', _('Query active blocklists and backups for a specific domain.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'style': 'padding-top:.5em', 'id': 'run' }, [
-					E('input', { 
+					E('input', {
 						'class': 'cbi-input-text',
 						'placeholder': 'google.com',
 						'style': 'width:300px',
@@ -106,18 +106,18 @@ function handleAction(ev) {
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
 					'class': 'btn cbi-button-action',
-					'click': ui.createHandlerFn(this, function(ev) {
-						var domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
+					'click': ui.createHandlerFn(this, function (ev) {
+						var domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
 						if (domain) {
 							document.getElementById('run').classList.add("spinning");
 							document.getElementById('search').value = domain;
 							document.getElementById('result').textContent = 'The query is running, please wait...';
-							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['query', domain])).then(function(res) {
+							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['query', domain])).then(function (res) {
 								var result = document.getElementById('result');
 								if (res) {
 									result.textContent = res.trim();
@@ -137,7 +137,7 @@ function handleAction(ev) {
 	}
 
 	if (ev === 'refresh') {
-		L.ui.showModal(_('Refresh DNS Report'), [
+		ui.showModal(_('Refresh DNS Report'), [
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
 					E('select', { 'class': 'cbi-input-select', 'id': 'top_count' }, [
@@ -166,36 +166,32 @@ function handleAction(ev) {
 			]),
 			E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 				E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'search' }, [
-			]),
-			'\xa0\xa0\xa0',
-			_('Filter criteria like date, domain or client (optional)')
+				]),
+				'\xa0\xa0\xa0',
+				_('Filter criteria like date, domain or client (optional)')
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
 					'class': 'btn cbi-button-action',
-					'id': 'refresh',
-					'click': ui.createHandlerFn(this, async function(ev) {
-						var top_count = document.getElementById('top_count').value;
-						var res_count = document.getElementById('res_count').value;
-						var search = document.getElementById('search').value.trim().replace(/[^\w\.\-\:]/g,'') || '+';
-						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]),'');
-						var running = 1;
-						while (running === 1) {
-							await new Promise(r => setTimeout(r, 1000));
-							L.resolveDefault(fs.read_direct('/var/run/adblock.pid')).then(function(res) {
-								if (!res) {
-									running = 0;
-								}
+					'click': function () {
+						document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {
+							btn.disabled = true;
+						})
+						this.blur();
+						this.classList.add('spinning');
+						const top_count = document.getElementById('top_count').value;
+						const res_count = document.getElementById('res_count').value;
+						const search = document.getElementById('search').value.trim().replace(/[^\w\.\-\:]/g, '') || '+';
+						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]), '')
+							.then(function () {
+								location.reload();
 							})
-						}
-						L.hideModal();
-						location.reload();
-					})
+					}
 				}, _('Refresh'))
 			])
 		]);
@@ -203,9 +199,11 @@ function handleAction(ev) {
 	}
 
 	if (ev === 'map') {
-		let md = L.ui.showModal(null, [
-			E('div', { id: 'mapModal',
-						style: 'position: relative;' }, [
+		let md = ui.showModal(null, [
+			E('div', {
+				id: 'mapModal',
+				style: 'position: relative;'
+			}, [
 				E('iframe', {
 					id: 'mapFrame',
 					src: L.resource('view/adblock/map.html'),
@@ -237,15 +235,15 @@ function handleAction(ev) {
 }
 
 return view.extend({
-	load: function() {
+	load: function () {
 		return Promise.all([
-			L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '10', '50', '+']),''),
+			L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '10', '50', '+']), ''),
 			uci.load('adblock')
 		]);
 	},
 
-	render: function(dnsreport) {
-		let content=[], notMsg, errMsg;
+	render: function (dnsreport) {
+		let content = [], notMsg, errMsg;
 
 		if (dnsreport) {
 			try {
@@ -258,7 +256,7 @@ return view.extend({
 		}
 
 		var rows_top = [];
-		var tbl_top  = E('table', { 'class': 'table', 'id': 'top_10' }, [
+		var tbl_top = E('table', { 'class': 'table', 'id': 'top_10' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th right' }, _('Count')),
 				E('th', { 'class': 'th' }, _('Clients')),
@@ -305,7 +303,7 @@ return view.extend({
 		cbi_update_table(tbl_top, rows_top);
 
 		var rows_requests = [];
-		var tbl_requests  = E('table', { 'class': 'table', 'id': 'requests' }, [
+		var tbl_requests = E('table', { 'class': 'table', 'id': 'requests' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Date')),
 				E('th', { 'class': 'th' }, _('Time')),
@@ -328,7 +326,7 @@ return view.extend({
 						'name': 'allowlist',
 						'value': content[0].requests[i].domain,
 						'click': handleAction
-					}, [ _('Allowlist...') ]);
+					}, [_('Allowlist...')]);
 				} else {
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-negative',
@@ -336,7 +334,7 @@ return view.extend({
 						'name': 'blocklist',
 						'value': content[0].requests[i].domain,
 						'click': handleAction
-					}, [ _('Blocklist...') ]);
+					}, [_('Blocklist...')]);
 				}
 				rows_requests.push([
 					content[0].requests[i].date,
@@ -410,17 +408,17 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'style': 'float:none;margin-right:.4em;',
-					'click': ui.createHandlerFn(this, function() {
+					'click': ui.createHandlerFn(this, function () {
 						return handleAction('query');
 					})
-				}, [ _('Blocklist Query...') ]),
+				}, [_('Blocklist Query...')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
-					'click': ui.createHandlerFn(this, function() {
+					'click': ui.createHandlerFn(this, function () {
 						return handleAction('refresh');
 					})
-				}, [ _('Refresh...') ])
+				}, [_('Refresh...')])
 			]),
 
 		]);
