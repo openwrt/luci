@@ -18,9 +18,6 @@ version.uc:
 clean:
 	rm -f contrib/lemon lib/*.o lib/plural_formula.c lib/plural_formula.h core.so version.uc
 
-jsmin: jsmin.o
-	$(CC) $(LDFLAGS) -o $@ $^
-
 po2lmo: po2lmo.o lib/lmo.o lib/plural_formula.o
 	$(CC) $(LDFLAGS) -o $@ $^
 

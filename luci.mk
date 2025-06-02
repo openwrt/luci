@@ -254,7 +254,7 @@ endif
 ifeq ($(LUCI_MINIFY_JS),1)
   define JsMin
 	$(FIND) $(1) -type f -name '*.js' | while read src; do \
-		if jsmin < "$$$$src" > "$$$$src.o"; \
+		if rjsmin < "$$$$src" > "$$$$src.o"; \
 		then mv "$$$$src.o" "$$$$src"; fi; \
 	done
   endef
