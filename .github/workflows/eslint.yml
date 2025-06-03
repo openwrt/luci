@@ -1,0 +1,33 @@
+---
+name: "LuCI repo ESLint JSON Analysis"
+
+on:
+  push:
+    branches: [ "master" ]
+    path:
+      - '**/*.json'
+  pull_request:
+    branches: [ "master" ]
+    path:
+      - '**/*.json'
+permissions: {}
+
+jobs:
+  eslint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: latest
+
+      - name: Install ESLint
+        run: npm install --no-audit --no-fund --save-dev eslint@latest @eslint/json@latest
+
+      # Currently, we lint JSON only.
+      - name: Run ESLint
+        run: npx eslint **/*.json
+
