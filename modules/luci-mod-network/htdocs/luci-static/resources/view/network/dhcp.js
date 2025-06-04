@@ -769,30 +769,44 @@ return view.extend({
 			_('Remove any subnet address already present in a downstream query before forwarding it upstream.'));
 
 		// *******************************************************************
-		o = s.taboption('dhcptags', form.SectionValue, 'dhcptags', form.TypedSection, 'tag',
+		// <<<<<<< DHCP Tagged Options Tab 内容定义 (使用 form.GridSection，并使用 nodescriptions 隐藏表格描述) >>>>>>>
+		// 此 GridSection 将作为 dnsmasq TypedSection (s) 的 'DHCP Tags' Tab 内容
+		// *******************************************************************
+
+		// 使用 o 变量来接收 s.taboption 的返回值 (这将是一个 form.SectionValue 实例)
+		o = s.taboption('dhcptags', form.SectionValue, 'dhcptags', form.GridSection, 'tag',
 			_('Define and manage DHCP Tags'),
 			_('Create custom DHCP tags and configure specific DHCP options to be assigned to clients matching these tags.'));
 
+		// 获取实际的 GridSection 实例
 		var ss = o.subsection;
 
+		// 在这个 ss (GridSection 实例) 上设置所有属性
 		ss.addremove = true;
-		ss.anonymous = false;
+		ss.anonymous = true;
 		ss.addbtntitle = _('Add new DHCP Tag');
 		ss.modaltitle = _('Edit DHCP Tag');
+		// 关键修改：添加 nodescriptions = true; 隐藏表格中的描述文本
+		ss.nodescriptions = true;
 
+		// 在这个 ss 实例上定义内部选项 (这些将成为 GridSection 的列)
 		var so;
 
-		so = ss.option(form.Value, 'name', _('Tag Name'),
-			_('The unique name for this DHCP tag. Example: <code>vpn</code>, <code>guest</code>. This name will be used in Static Leases/PXE Hosts.'));
+		// Tag 名称 (成为第一列)
+		so = ss.option(form.Value, 'name', _('Tag Name'));
 		so.rmempty = false;
 		so.datatype = 'uciname';
 		so.placeholder = 'mytag';
+		// 重新设置 so.description，它将在模态框中显示
+		so.description = _('The unique name for this DHCP tag. Example: <code>vpn</code>, <code>guest</code>. This name will be used in Static Leases/PXE Hosts.');
 
-		so = ss.option(form.DynamicList, 'dhcp_option',
-			_('DHCP Options'),
-			_('Additional DHCP options to send to clients matching this tag. Syntax: <code>option_number,value</code>. Example for gateway: <code>3,192.168.2.5</code>. Example for DNS servers: <code>6,192.168.2.5</code>.'));
+
+		// DHCP 选项列表 (成为第二列)
+		so = ss.option(form.DynamicList, 'dhcp_option', _('DHCP Options'));
 		so.optional = true;
 		so.placeholder = '3,192.168.2.5';
+		// 重新设置 so.description，它将在模态框中显示
+		so.description = _('Additional DHCP options to send to clients matching this tag. Syntax: <code>option_number,value</code>. Example for gateway: <code>3,192.168.2.5</code>. Example for DNS servers: <code>6,192.168.2.5</code>.');
 		so.validate = function(section_id, value) {
 			if (!value) return true;
 			const parts = value.split(',');
