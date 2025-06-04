@@ -394,6 +394,7 @@ return view.extend({
 		s.tab('limits', _('Limits'));
 		s.tab('logging', _('Log'));
 		s.tab('files', _('Resolv &amp; Hosts Files'));
+		s.tab('dhcptags', _('DHCP Tags'));
 		s.tab('leases', _('Static Leases'));
 		s.tab('ipsets', _('IP Sets'));
 		s.tab('relay', _('Relay'));
@@ -766,6 +767,45 @@ return view.extend({
 		s.taboption('forward', form.Flag, 'stripsubnet',
 			_('Remove subnet address before forwarding query'),
 			_('Remove any subnet address already present in a downstream query before forwarding it upstream.'));
+
+		// *******************************************************************
+		o = s.taboption('dhcptags', form.SectionValue, 'dhcptags', form.TypedSection, 'tag',
+			_('Define and manage DHCP Tags'),
+			_('Create custom DHCP tags and configure specific DHCP options to be assigned to clients matching these tags.'));
+
+		var ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = false;
+		ss.addbtntitle = _('Add new DHCP Tag');
+		ss.modaltitle = _('Edit DHCP Tag');
+
+		var so;
+
+		so = ss.option(form.Value, 'name', _('Tag Name'),
+			_('The unique name for this DHCP tag. Example: <code>vpn</code>, <code>guest</code>. This name will be used in Static Leases/PXE Hosts.'));
+		so.rmempty = false;
+		so.datatype = 'uciname';
+		so.placeholder = 'mytag';
+
+		so = ss.option(form.DynamicList, 'dhcp_option',
+			_('DHCP Options'),
+			_('Additional DHCP options to send to clients matching this tag. Syntax: <code>option_number,value</code>. Example for gateway: <code>3,192.168.2.5</code>. Example for DNS servers: <code>6,192.168.2.5</code>.'));
+		so.optional = true;
+		so.placeholder = '3,192.168.2.5';
+		so.validate = function(section_id, value) {
+			if (!value) return true;
+			const parts = value.split(',');
+			if (parts.length < 2) {
+				return _('Invalid DHCP option format. Expected "option_number,value".');
+			}
+			const optionNum = parts[0].trim();
+			if (!/^\d+$/.test(optionNum)) {
+				return _('Invalid option number. Expected a numeric value.');
+			}
+			return true;
+		};
+		// *******************************************************************
 
 		o = s.taboption('general', form.Flag, 'allservers',
 			_('All servers'),
@@ -1301,49 +1341,6 @@ return view.extend({
 
 		if (has_dhcpv6)
 			o = s.taboption('leases', CBILease6Status, '__status6__');
-		
-		// *******************************************************************
-		// <<<<<<< 在此定义新的 DHCP Tagged Options TypedSection >>>>>>>
-		// 此 TypedSection 将作为一个新的顶级 Section，与 dnsmasq 和 PXE/TFTP/BOOTP Hosts 平级
-		// *******************************************************************
-
-		// 新增：一个独立的 DHCP Tagged Options Section
-		// 注意：这里使用 m.section，因为我们希望它作为一个与 dnsmasq 实例平级的顶级 Section
-		var tagSection = m.section(form.TypedSection, 'tag', _('DHCP Tagged Options'),
-			_('Configure custom DHCP options for specific tags. Clients matching these tags will receive the configured options.'));
-		tagSection.addremove = true;
-		tagSection.anonymous = false; // Tag应该有名字
-		tagSection.addbtntitle = _('Add new DHCP Tag');
-
-		// Tag 名称
-		o = tagSection.option(form.Value, 'name', _('Tag Name'),
-			_('The unique name for this DHCP tag. Example: <code>vpn</code>, <code>guest</code>. This name will be used in Static Leases/PXE Hosts.'));
-		o.rmempty = false;
-		o.datatype = 'uciname'; // 确保是合法的UCI名称
-		o.placeholder = 'mytag';
-
-		// DHCP 选项列表
-		o = tagSection.option(form.DynamicList, 'dhcp_option',
-			_('DHCP Options'),
-			_('Additional DHCP options to send to clients matching this tag. Syntax: <code>option_number,value</code>. Example for gateway: <code>3,192.168.2.5</code>. Example for DNS servers: <code>6,192.168.2.5</code>.'));
-		o.optional = true;
-		o.placeholder = '3,192.168.2.5';
-		o.validate = function(section_id, value) {
-			if (!value) return true;
-			const parts = value.split(',');
-			if (parts.length < 2) {
-				return _('Invalid DHCP option format. Expected "option_number,value".');
-			}
-			const optionNum = parts[0].trim();
-			if (!/^\d+$/.test(optionNum)) {
-				return _('Invalid option number. Expected a numeric value.');
-			}
-			return true;
-		};
-
-		// *******************************************************************
-		// <<<<<<< 文件末尾的 return m.render(); 语句应该紧随其后 >>>>>>>
-		// *******************************************************************
 		
 		return m.render().then(function(mapEl) {
 			poll.add(function() {
