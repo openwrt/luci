@@ -868,11 +868,11 @@ return view.extend({
 					o.default = 'wan';
 					o.depends("ip_source", "web");
 					o.depends("ip_source", "script");
+					o.depends("ip_source", "interface");
 
 					o = s.taboption('advanced', form.DummyValue, '_interface',
 						_("Event Network"),
 						_("Network on which the ddns-updater scripts will be started"));
-					o.depends("ip_source", "interface");
 					o.depends("ip_source", "network");
 					o.forcewrite = true;
 					o.modalonly = true;
