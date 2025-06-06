@@ -177,6 +177,7 @@ function handleAction(ev) {
 				}, _('Cancel')),
 				' ',
 				E('button', {
+					'id': 'refresh',
 					'class': 'btn cbi-button-action',
 					'click': function () {
 						document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {

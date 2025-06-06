@@ -12,19 +12,28 @@
 	button handling
 */
 function handleAction(ev) {
-	if (ev !== 'stop' &&
-		document.getElementById('status') &&
-		document.getElementById('status').textContent.substring(0, 6) === 'paused') {
-		ev = 'resume';
-	}
 	if (ev === 'restart' || ev === 'reload') {
-		let map = document.querySelector('.cbi-map');
+		const map = document.querySelector('.cbi-map');
 		return dom.callClassMethod(map, 'save')
 			.then(L.bind(ui.changes.apply, ui.changes))
 			.then(function () {
+				document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {
+					btn.disabled = true;
+					btn.blur();
+				});
 				return fs.exec_direct('/etc/init.d/adblock', [ev]);
 			})
 	} else {
+		if (ev !== 'stop') {
+			document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {
+				btn.disabled = true;
+				btn.blur();
+			});
+			if (document.getElementById('status') &&
+				document.getElementById('status').textContent.substring(0, 6) === 'paused') {
+				ev = 'resume';
+			}
+		}
 		return fs.exec_direct('/etc/init.d/adblock', [ev]);
 	}
 }
@@ -38,7 +47,6 @@ return view.extend({
 			uci.load('adblock')
 		]);
 	},
-
 	render: function (result) {
 		let m, s, o;
 
@@ -50,13 +58,17 @@ return view.extend({
 		*/
 		pollData: poll.add(function () {
 			return L.resolveDefault(fs.read_direct('/var/run/adb_runtime.json'), 'null').then(function (res) {
-				var status = document.getElementById('status');
+				const status = document.getElementById('status');
+				const buttons = document.querySelectorAll('.cbi-page-actions button');
 				try {
 					var info = JSON.parse(res);
 				} catch (e) {
 					status.textContent = '-';
 					poll.stop();
 					if (status.classList.contains('spinning')) {
+						buttons.forEach(function (btn) {
+							btn.disabled = false;
+						})
 						status.classList.remove('spinning');
 					}
 					ui.addNotification(null, E('p', _('Unable to parse the runtime information!')), 'error');
@@ -69,6 +81,9 @@ return view.extend({
 						}
 					} else {
 						if (status.classList.contains("spinning")) {
+							buttons.forEach(function (btn) {
+								btn.disabled = false;
+							})
 							status.classList.remove("spinning");
 							if (document.getElementById('btn_suspend')) {
 								if (status.textContent.substring(0, 6) === 'paused') {
@@ -87,6 +102,9 @@ return view.extend({
 					status.textContent = '-';
 					poll.stop();
 					if (status.classList.contains('spinning')) {
+						buttons.forEach(function (btn) {
+							btn.disabled = false;
+						})
 						status.classList.remove('spinning');
 					}
 				}
@@ -548,31 +566,31 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
 					'style': 'float:none;margin-right:.4em;',
-					'click': ui.createHandlerFn(this, function () {
+					'click': function () {
 						return handleAction('stop');
-					})
+					}
 				}, [_('Stop')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply important',
 					'style': 'float:none;margin-right:.4em;',
 					'id': 'btn_suspend',
-					'click': ui.createHandlerFn(this, function () {
+					'click': function () {
 						return handleAction('suspend');
-					})
+					}
 				}, [_('Suspend')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
-					'click': ui.createHandlerFn(this, function () {
+					'click': function () {
 						return handleAction('reload');
-					})
+					}
 				}, [_('Save & Reload')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none',
-					'click': ui.createHandlerFn(this, function () {
+					'click': function () {
 						handleAction('restart');
-					})
+					}
 				}, [_('Save & Restart')])
 			])
 		});
