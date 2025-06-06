@@ -145,8 +145,8 @@ function render_network_status(radioNet) {
 	return L.itemlist(E('div'), [
 		is_mesh ? _('Mesh ID') : _('SSID'), (is_mesh ? radioNet.getMeshID() : radioNet.getSSID()) ?? '?',
 		_('Mode'),       mode,
-		_('BSSID'),      (!changecount && is_assoc) ? bssid : '',
-		_('Encryption'), (!changecount && is_assoc) ? radioNet.getActiveEncryption() ?? _('None') : '',
+		_('BSSID'),      (!changecount && is_assoc) ? bssid : null,
+		_('Encryption'), (!changecount && is_assoc) ? radioNet.getActiveEncryption() ?? _('None') : null,
 		'',            status_text
 	], [ ' | ', E('br') ]);
 }
