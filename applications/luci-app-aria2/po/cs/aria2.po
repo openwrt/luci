@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-05-03 01:34+0000\n"
+"PO-Revision-Date: 2025-05-12 07:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/cs/>\n"
@@ -52,7 +52,7 @@ msgstr "Interval automatického ukládání"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:204
 msgid "Basic Options"
-msgstr "Základní nastavení"
+msgstr "Základní předvolby"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:413
 msgid "BitTorrent Options"
@@ -64,7 +64,7 @@ msgstr "Port na které má BitTorrent očekávat spojení"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:329
 msgid "CA certificate"
-msgstr "Certifikát CA"
+msgstr "Certifikát cert. autority"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:334
 msgid "Certificate"
@@ -85,7 +85,7 @@ msgstr ""
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:29
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/log.js:51
 msgid "Collecting data..."
-msgstr "Shromažďování údajů…"
+msgstr "Shromažďování dat…"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:216
 msgid "Config file directory"
@@ -214,7 +214,7 @@ msgstr "Vytvářet náhodně"
 
 #: applications/luci-app-aria2/root/usr/share/rpcd/acl.d/luci-app-aria2.json:3
 msgid "Grant UCI access for luci-app-aria2"
-msgstr "Udělit oprávnění k UCI pro luci-app-aria2"
+msgstr "Udělit luci-app-aria2 přístup do UCI nastavování"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:347
 msgid "HTTP accept gzip"
@@ -379,7 +379,7 @@ msgstr "Žádná data záznamu událostí."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:591
 msgid "None"
-msgstr "Žádný"
+msgstr "Žádné"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:232
 msgid "Notice"
@@ -484,7 +484,7 @@ msgstr ""
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:514
 msgid "Request peer speed limit"
-msgstr ""
+msgstr "Vyžádat omezení rychlosti protějšku"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:403
 msgid "Retry wait"
@@ -531,6 +531,9 @@ msgid ""
 "BitTorrent Magnet URI is used. The file name is hex encoded info hash with "
 "suffix \".torrent\"."
 msgstr ""
+"Uložit metadata jako soubor „.torrent“. Tato volba má efekt pouze pokud je "
+"použito BitTorrent Magnet URI. Název souboru je informační otisk kódovaný v "
+"šestnáctkovém formátu s příponou „.torrent“."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:452
 msgid "Save metadata"
@@ -542,15 +545,15 @@ msgstr "Interval ukládání relace"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:467
 msgid "Seed previously downloaded files without verifying piece hashes."
-msgstr ""
+msgstr "Seed dříve stažené soubory bez ověřování otisků kousku."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:538
 msgid "Seed ratio"
-msgstr ""
+msgstr "Poměr seed"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:545
 msgid "Seed time"
-msgstr ""
+msgstr "Čas seed"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:466
 msgid "Seed unverified"
@@ -584,6 +587,9 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
+"Nastavit číslo TCP portu pro BitTorrent stahování. Přijímaný formát: "
+"„6881,6885“, „6881-6999“ a „6881-6889,6999“. Ověřte, že zadané porty jsou "
+"otevřené pro příchozí TCP provoz."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:479
 msgid ""
@@ -625,6 +631,9 @@ msgid ""
 "server. After the connection is established, this option makes no effect and "
 "\"Timeout\" option is used instead."
 msgstr ""
+"Nastavit časový limit (v sekundách) pro navázání spojení s HTTP/FTP/proxy "
+"serverem. Po navázání spojení tato volba nemá žádný efekt a je namísto toho "
+"použita volba „Časový limit“."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:404
 msgid "Set the seconds to wait between retries."
@@ -679,6 +688,9 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
+"Zadejte seeding čas (v minutách). Pokud je společně s touto zadána i "
+"předvolba „Poměr seed“, seeding skončí když je splněna alespoň jedna z "
+"těchto podmínek. Zadání 0 (nula) seeding po dokončení stahování vypne."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:539
 msgid ""
@@ -686,6 +698,9 @@ msgid ""
 "RATIO. You are strongly encouraged to specify equals or more than 1.0 here. "
 "Specify 0.0 if you intend to do seeding regardless of share ratio."
 msgstr ""
+"Zadejte poměr sdílení. Seed dokončené torrenty dokud poměr sdílení nedosáhne "
+"POMĚR. Je důrazně doporučováno zde zadat jako rovné nebo vyšší než 1.0. "
+"Pokud zamýšlíte seedovat nezávisle na poměru sdílení, zadejte 0.0."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:510
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
