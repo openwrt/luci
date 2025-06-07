@@ -41,7 +41,7 @@ function determineKeyEnv() {
 }
 
 function listKeyFiles() {
-	return fs.list(dir).then(entries =>
+	return fs.list(KEYDIR).then(entries =>
 		Promise.all(entries.map(entry =>
 			fs.read(KEYDIR + entry.name).then(content => ({
 				filename: entry.name,
