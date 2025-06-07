@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-05-05 05:39+0000\n"
+"PO-Revision-Date: 2025-05-11 19:01+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/cs/>\n"
@@ -216,6 +216,9 @@ msgid ""
 "established connections. Format is value[/mask]. If a mask is specified then "
 "those bits set in the mask are zeroed out."
 msgstr ""
+"Uplatňovat bitové XOR dané hodnoty a existující hodnotu značky u navázaných "
+"spojení. Formát je hodnota[/maska]. Pokud je zadána maska, pak tyto bity "
+"nastavené v masce jsou vynulovány."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:264
 msgid "Apply the given DSCP class or value to established connections."
@@ -223,7 +226,7 @@ msgstr "Uplatňovat danou DSCP třídu nebo hodnotu na navázaná spojení."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:433
 msgid "Assign the specified connection tracking helper to matched traffic."
-msgstr ""
+msgstr "Přidělit odpovídajícímu provozu určené pomocné pro sledování provozu."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:280
 msgid "Automatic helper assignment"
@@ -246,7 +249,7 @@ msgstr "Nastavení pro Conntrack"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:284
 msgid "Conntrack helpers"
-msgstr ""
+msgstr "Pomocné sledování spojení"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:16
 msgid "Contents have been saved."
@@ -296,7 +299,7 @@ msgstr "Značka DSCP"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
 msgid "DSCP mark required"
-msgstr ""
+msgstr "DSCP označení vyžadováno"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:396
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:266
@@ -516,6 +519,13 @@ msgid ""
 "{item.hint.name? a.k.a. %{item.hint.name}}.\":%{item.hint.name? data-"
 "tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 msgstr ""
+"Od %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Hledat shodu s IP kromě %{item.val}.\"}>%{item.ival}</var>}}%"
+"{src_port?, port %{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Hledat "
+"shodu s porty kromě %{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, MAC %"
+"{src_mac#%{next?, }<var%{item.inv? data-tooltip=\"Hledat shodu s MAC "
+"adresami kromě %{item.val}%{item.hint.name? neboli %{item.hint.name}}.\":%"
+"{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:160
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:181
@@ -532,7 +542,7 @@ msgstr "Udělit přístup k nastavování brány firewall"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:88
 msgid "Hardware flow offloading"
-msgstr ""
+msgstr "Hardwarové offloadování toku"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:143
 msgid "IP (range)"
@@ -604,6 +614,17 @@ msgid ""
 "tooltip=\"Match any helper except &quot;%{helper.name}&quot;\">%{helper.val}"
 "</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
+"Příchozí %{ipv6?%{ipv4?<var>IPv4</var> a <var>IPv6</var>:<var>IPv6</var>}:"
+"<var>IPv4</var>}%{proto?, protokol %{proto#%{next?, }%{item.types?<var "
+"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
+"s typy %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%"
+"{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Hledat "
+"shodu s fwmarks kromě %{mark.num}%{mark.mask? s maskou %{mark.mask}}.\":%"
+"{mark.mask? data-tooltip=\"Před porovnáním maskovat hodnotu fwmark pomocí %"
+"{mark.mask}.\"}}>%{mark.val}</var>}%{helper?, pomocné %{helper.inv?<var data-"
+"tooltip=\"Hledat shodu v jakémkoli pomocném s výjimkou &quot;%{helper.name}"
+"&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
+"{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:179
 msgid "Initial Hash Size"
@@ -657,6 +678,8 @@ msgid ""
 "Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</"
 "var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
+"Omezit hledání shody na <var>%{limit.num}</var> paketů v <var>%{limit.unit}</"
+"var>%{limit.burst? dávce <var>%{limit.burst}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:169
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:244
@@ -726,7 +749,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:325
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:440
 msgid "Match helper"
-msgstr ""
+msgstr "Hledat shodu v pomocném"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:279
 msgid ""
@@ -971,7 +994,7 @@ msgstr "Přepsat port"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:76
 msgid "Routing/NAT Offloading"
-msgstr ""
+msgstr "Offloading směrování/NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:286
 msgid "SNAT - Rewrite to specific source IP or port"
@@ -1001,7 +1024,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:83
 msgid "Software flow offloading"
-msgstr ""
+msgstr "Softwarový offloading toku"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:259
 msgid "Source IP address"
@@ -1183,7 +1206,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:433
 msgid "Tracking helper"
-msgstr ""
+msgstr "Pomocné sledování"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:176
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:35
@@ -1305,11 +1328,11 @@ msgstr "Dny v týdnu"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:414
 msgid "XOR firewall mark"
-msgstr ""
+msgstr "Provádět na označení z brány firewall operaci XOR"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:316
 msgid "XOR mark"
-msgstr ""
+msgstr "XOR označkování"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:28
 msgid "Your device does not run firewall4."
@@ -1375,7 +1398,7 @@ msgstr "uplatnit označkování branou firewall"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:412
 msgid "assign conntrack helper"
-msgstr ""
+msgstr "přidělit pomocné sledování spojení"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:193
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:220
@@ -1511,7 +1534,7 @@ msgstr "sekunda"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:85
 msgid "set: ipset*"
-msgstr ""
+msgstr "sada: ipset*"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:91
 msgid "src_Set: Source ipset*"

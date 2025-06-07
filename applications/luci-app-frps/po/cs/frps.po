@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-05-03 01:34+0000\n"
+"PO-Revision-Date: 2025-05-11 19:01+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/cs/>\n"
@@ -93,19 +93,20 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:143
 msgid "Collecting data ..."
-msgstr ""
+msgstr "Shromažďování dat…"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:151
 msgid "Common settings"
-msgstr ""
+msgstr "Běžná nastavení"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:15
 msgid "Config files include in temporary config file"
 msgstr ""
+"Které soubory s nastaveními zahrnout do dočasného souboru s nastaveními"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid "Custom 404 page"
-msgstr ""
+msgstr "Uživatelsky určená stránka 404"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid ""
@@ -119,11 +120,11 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid "Dashboard address"
-msgstr ""
+msgstr "Adresa přehledu"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid "Dashboard password"
-msgstr ""
+msgstr "Heslo k přehledu"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid "Dashboard port"
@@ -194,6 +195,9 @@ msgid ""
 "terminating the connection. It is not recommended to change this value.<br /"
 ">By default, this value is 90."
 msgstr ""
+"HeartBeatTimeout určuje nejdelší dobu, po kterou čekat na heartbeat, než "
+"bude spojení ukončeno. Není doporučováno tuto hodnotu měnit.<br />Ve "
+"výchozím stavu je 90."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid "Heartbeat timeout"
@@ -201,7 +205,7 @@ msgstr "Časový limit kontroly stavu"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:22
 msgid "KCP bind port"
-msgstr ""
+msgstr "Port pro navázání KCP"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
 msgid "Log file"
@@ -269,7 +273,7 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
 msgid "NOT RUNNING"
-msgstr ""
+msgstr "NESPUŠTĚNÉ"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid ""
@@ -295,7 +299,7 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
 msgid "RUNNING"
-msgstr "BĚŽÍCÍ"
+msgstr "SPUŠTĚNÉ"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:13
 msgid "Respawn when crashed"
@@ -322,6 +326,10 @@ msgid ""
 "\"test\", the resulting URL would be \"test.frps.com\".<br />By default, "
 "this value is \"\"."
 msgstr ""
+"SubDomainHost určuje doménu která bude přidávána k požadavkům na subdomény "
+"klienty, při používání proxy pro Vhost. Například, pokud je tato hodnota "
+"nastavena na „frps.com“ a klient si vyžádal subdoménu „test“, výsledná URL "
+"by byla „test.frps.com“.<br />Ve výchozím stavu je tato hodnota \"\"."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid "Subdomain host"
@@ -364,19 +372,19 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid "UDP bind port"
-msgstr ""
+msgstr "UDP port pro navázání"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid "Vhost HTTP port"
-msgstr ""
+msgstr "HTTP port Vhost"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid "Vhost HTTP timeout"
-msgstr ""
+msgstr "Časový limit HTTP Vhost"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid "Vhost HTTPS port"
-msgstr ""
+msgstr "HTTPS port Vhost"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid ""
@@ -384,6 +392,9 @@ msgid ""
 "requests. If this value is 0, the server will not listen for HTTP requests."
 "<br />By default, this value is 0."
 msgstr ""
+"VhostHttpPort určuje port na kterém server očekává požadavky na HTTP Vhost. "
+"Pokud je tato hodnota 0 (nula), server nebude naslouchat HTTP požadavkům."
+"<br />Ve výchozím stavu je tato hodnota 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid ""
@@ -399,6 +410,9 @@ msgid ""
 "requests. If this value is 0, the server will not listen for HTTPS requests."
 "<br />By default, this value is 0."
 msgstr ""
+"VhostHttpsPort určuje port, na kterém server očekává požadavky HTTPS Vhost. "
+"Pokud je tato hodnota 0 (nula), server nebude naslouchat HTTP požadavkům."
+"<br />Ve výchozím stavu je tato hodnota 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118

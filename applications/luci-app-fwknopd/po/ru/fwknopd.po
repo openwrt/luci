@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: fwknopd\n"
 "POT-Creation-Date: 2017-12-01 12:15+0300\n"
-"PO-Revision-Date: 2025-05-02 07:28+0000\n"
-"Last-Translator: Maksim_220 Кабанов <law820314@gmail.com>\n"
+"PO-Revision-Date: 2025-05-20 17:15+0000\n"
+"Last-Translator: SnIPeRSnIPeR <feoktistovk@gmail.com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfwknopd/ru/>\n"
 "Language: ru\n"
@@ -55,7 +55,7 @@ msgid ""
 "allowed regardless of the validity of the incoming SPA packet. Multiple "
 "entries are comma-separated."
 msgstr ""
-"Определите набор портов и протоколов (tcp или udp), которые явно не "
+"Определите набор портов и протоколов (TCP или UDP), которые явно не "
 "разрешены независимо от действительности входящего пакета SPA. Несколько "
 "записей разделяются запятыми."
 
@@ -66,11 +66,11 @@ msgid ""
 "to honor any proto/port request specified in the SPA data (unless of it "
 "matches any “RESTRICT_PORTS” entries). Multiple entries are comma-separated."
 msgstr ""
-"Задайте порты и протоколы (TCP или UDP), которые будут открыты, если задана "
-"допустимая последовательность защищенного постукивания. Если порты и "
-"протоколы не заданы, fwknopd постарается исполнить любой прото/порт запрос, "
-"указанный в SPA данных (если он соответствует любой 'RESTRICT_PORTS' "
-"записи). Последовательность данных, разделенных запятыми."
+"Задайте набор портов и протоколов (TCP или UDP), которые будут открыты при "
+"обнаружении корректной последовательности стуков. Если эта запись не "
+"указана, fwknopd попытается выполнить запросы протокола/порта из данных SPA "
+"(если они не совпадают с записями 'RESTRICT_PORTS'). Несколько записей "
+"разделяются запятыми."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:558
 msgid ""
@@ -95,11 +95,10 @@ msgid ""
 "“FW_ACCESS_TIMEOUT” is not set then the default timeout of 30 seconds will "
 "automatically be set."
 msgstr ""
-"Задайте промежуток времени, в течение которого демоном fwknopd будет "
-"предоставлен доступ через межсетевой экран, после допустимой "
-"последовательности защищенного постукивания из исходящего IP-адреса. Если "
-"параметр 'FW_ACCESS_TIMEOUT' не установлен, то автоматически устанавливается "
-"время ожидания по умолчанию 30 секунд."
+"Укажите длительность доступа, предоставляемого fwknopd через межсетевой "
+"экран после корректной последовательности стуков с исходного IP-адреса. Если "
+"параметр 'FW_ACCESS_TIMEOUT' не задан, будет автоматически установлен "
+"таймаут по умолчанию — 30 секунд."
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:536
 msgid ""
@@ -128,13 +127,13 @@ msgstr "Настроить config файл"
 
 #: applications/luci-app-fwknopd/root/usr/share/luci/menu.d/luci-app-fwknopd.json:3
 msgid "Firewall Knock Daemon"
-msgstr "Демон Firewall Knock"
+msgstr "Демон Port Knocking для межсетевого экрана"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:303
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:314
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:474
 msgid "Firewall Knock Operator Daemon"
-msgstr "Демон оператора брандмауэра Knock"
+msgstr "Управляющий демон Port Knocking для межсетевого экрана"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:586
 msgid ""
@@ -197,7 +196,7 @@ msgstr ""
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:490
 msgid "Network"
-msgstr "Сетевое подключение"
+msgstr "Сеть"
 
 #: applications/luci-app-fwknopd/htdocs/luci-static/resources/view/fwknopd.js:488
 msgid "Network configuration"
@@ -220,7 +219,7 @@ msgid ""
 "and generates QR codes for all found stanzas. Handles only files in /etc/"
 "fwknop folder due to access rights restrictions."
 msgstr ""
-"Анализирует файл /etc/fwknop/access.conf (и включенные файлы/папки/ключи) и "
+"Анализирует файл /etc/fwknop/access.conf (и включённые файлы/папки/ключи) и "
 "генерирует QR-коды для всех найденных разделов. Обрабатывает только файлы в "
 "папке /etc/fwknop из-за ограничений прав доступа."
 

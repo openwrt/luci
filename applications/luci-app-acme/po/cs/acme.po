@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-23 20:29+0000\n"
+"PO-Revision-Date: 2025-05-12 14:57+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsacme/cs/>\n"
@@ -8,11 +8,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11.1-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:17
 msgid "ACME certificates"
-msgstr "Certifikáty ACME"
+msgstr "ACME certifikáty"
 
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
 msgid "ACME certs"
@@ -20,11 +20,11 @@ msgstr "Certifikáty ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:26
 msgid "ACME global config"
-msgstr "Globální nastavení ACME"
+msgstr "Globální nastavení pro ACME"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:144
 msgid "ACME server URL"
-msgstr "URL serveru ACME"
+msgstr "URL ACME serveru"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:29
 msgid "Account email"
@@ -84,9 +84,9 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
-"Doménové názvy, které se mají zahrnout do certifikátu. První název je název/"
-"jméno subjektu, další jsou alternativní názvy. Mějte na paměti, že všechny "
-"doménové názvy musejí v globálním DNS ukazovat na router."
+"Doménové názvy, které zahrnout do certifikátu. První název je název/jméno "
+"subjektu, další jsou alternativní názvy. Mějte na paměti, že je třeba, aby "
+"všechny doménové názvy v globálním DNS ukazovaly na směrovač."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:60
 msgid "ECC 256 bits"
@@ -117,12 +117,12 @@ msgid ""
 "Get certificate from the Letsencrypt staging server (use for testing; the "
 "certificate won't be valid)."
 msgstr ""
-"Získat certifikát z pracovního serveru Letsencrypt (používá se k testování, "
+"Získat certifikát z „nanečisto“ serveru Letsencrypt (používá se k testování, "
 "certifikát nebude platný)."
 
 #: applications/luci-app-acme/root/usr/share/rpcd/acl.d/luci-app-acme.json:3
 msgid "Grant UCI access for luci-app-acme"
-msgstr "Udělit přístup UCI pro luci-app-acme"
+msgstr "Udělit luci-app-acme přístup do UCI nastavování"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:55
 msgid "Key size"
@@ -155,9 +155,9 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
-"Samostatný režim bude vydávání certifikátů používat vestavěný webový server "
-"acme.sh. Režim webroot bude používat existující webový server. DNS režim "
-"bude umožňovat použití DNS API vašeho poskytovatele DNS."
+"Samostatný režim bude pro vydávání certifikátů používat vestavěný webový "
+"server acme.sh. Režim webroot bude používat existující webový server. DNS "
+"režim bude umožňovat použití DNS API vašeho poskytovatele DNS."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:125
 msgid ""
@@ -165,10 +165,10 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge alias per certificate."
 msgstr ""
-"Alias výzvy, který se má použít pro VŠECHNY domény. Podrobnosti o tomto "
-"procesu naleznete na adrese https://github.com/acmesh-official/acme.sh/wiki/"
-"DNS-alias-mode. Rozhraní LUCI podporuje pouze jeden alias výzvy na "
-"certifikát."
+"Alternativní název výzvy, který má být používán pro VŠECHNY domény. "
+"Podrobnosti o tomto procesu naleznete na https://github.com/acmesh-official/"
+"acme.sh/wiki/DNS-alias-mode. Rozhraní LuCI podporuje na jeden certifikát "
+"pouze jeden alternativní název výzvy."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:117
 msgid ""
@@ -177,10 +177,10 @@ msgid ""
 "by each API. Add multiple entries here in KEY=VAL shell variable format to "
 "supply multiple credential variables."
 msgstr ""
-"Přihlašovací údaje pro zvolený režim DNS API. Podívejte se na adresu https://"
-"github.com/acmesh-official/acme.sh/wiki/dnsapi, jaký formát přihlašovacích "
-"údajů je požadován pro každé API. Přidejte zde více položek v formátu "
-"proměnné shellu KLÍČ=HODNOTA, abyste mohli poskytnout více přihlašovacích "
+"Přihlašovací údaje pro zvolený režim DNS API. To jaký formát přihlašovacích "
+"údajů je požadován na tom kterém API naleznete na https://github.com/acmesh-"
+"official/acme.sh/wiki/dnsapi. Přidejte sem vícero položek (ve formátu "
+"proměnné shellu KLÍČ=HODNOTA), pokud chcete dodat vícero přihlašovacích "
 "proměnných."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:132
@@ -189,9 +189,10 @@ msgid ""
 "official/acme.sh/wiki/DNS-alias-mode for the details of this process. LUCI "
 "only supports one challenge domain per certificate."
 msgstr ""
-"Doménový alias k použití pro VŠECHNY domény. Viz https://github.com/acmesh-"
-"official/acme.sh/wiki/DNS-alias-mode pro více informací o tomto procesu. "
-"LUCI podporuje jen jednu challenge doménu pro každý certifikát."
+"Doménový alternativní název, který používat pro VŠECHNY domény. Podrobnosti "
+"o tomto procesu naleznete na https://github.com/acmesh-official/acme.sh/wiki/"
+"DNS-alias-mode. Rozhraní LuCI podporuje na jeden certifikát pouze jednu "
+"doménu výzvy."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:18
 msgid ""
@@ -202,13 +203,13 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
-"Konfiguruje ACME (Letsencrypt) pro automatickou instalaci certifikátu. "
-"Jednoduše toto vyplňte, abyste měli router nakonfigurován pro certifikáty od "
-"Letsencrypt pro webové rozhraní. Nezapomeňte, že doménové názvy v "
-"certifikátu už musejí být nakonfigurovány tak, aby ukazovaly na veřejnou IP "
-"adresu routeru. Jakmile bude konfigurace dokončena, vydávání certifikátů "
-"bude chvíli trvat. Kontrolujte protokoly, kde uvidíte průběh a jakékoli "
-"chyby."
+"Toto nastavuje ACME (Letsencrypt) automatickou instalaci certifikátu. Stačí "
+"toto vyplnit a směrovač bude nastavený tak, že pro jeho webové rozhraní "
+"budou používány certifikáty od Letsencrypt. Nezapomeňte, že je třeba, aby "
+"doménové názvy v certifikátu už byly nastavené tak, aby ukazovaly na "
+"veřejnou IP adresu směrovače. Po dokončení nastavení může vydávání "
+"certifikátů chvíli trvat. Podívejte se do záznamů událostí, kde uvidíte "
+"průběh a případné chyby."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:108
 msgid ""
@@ -219,12 +220,12 @@ msgid ""
 "supports wildcard certificates. Using this mode requires the acme-dnsapi "
 "package to be installed."
 msgstr ""
-"Aby bylo možné vydávání certifikátů pomocí režimu DNS, nastavte název DNS "
-"API podporovaného aplikací acme.sh. Seznam dostupných API naleznete na "
-"adrese https://github.com/acmesh-official/acme.sh/wiki/dnsapi. V režimu DNS "
-"nemusí být doménové jméno přeloženo na IP adresu směrovače. Režim DNS je "
-"také jediným režimem, který podporuje vydávání wildcard certifikátů. Použití "
-"tohoto režimu vyžaduje instalaci balíčku acme-dnsapi."
+"Aby bylo možné vydávat certifikáty pomocí režimu DNS, nastavte název DNS API "
+"podporovaného aplikací acme.sh. Seznam dostupných API naleznete na https://"
+"github.com/acmesh-official/acme.sh/wiki/dnsapi. V režimu DNS nemusí být "
+"doménový název překládat na IP adresu směrovače. Režim DNS je také jediným "
+"režimem, který podporuje vydávání hvězdičkových certifikátů. Použití tohoto "
+"režimu vyžaduje instalaci balíčku acme-dnsapi."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:82
 msgid ""
@@ -249,7 +250,7 @@ msgstr ""
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:139
 msgid "Use a custom CA instead of Let's Encrypt."
-msgstr "Namísto Let's Encrypt použít vlastní CA."
+msgstr "Namísto Let's Encrypt používat uživatelsky určenou cert. autoritu."
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:81
 msgid "Use for nginx"
@@ -261,11 +262,11 @@ msgstr "Použít pro uhttpd"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:49
 msgid "Use staging server"
-msgstr "Použít fázovaný server"
+msgstr "Použít „nanečisto“ server"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:90
 msgid "Validation method"
-msgstr "Metoda ověření"
+msgstr "Metoda ověřování"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:95
 msgid "Webroot"
@@ -273,7 +274,7 @@ msgstr "Kořen webu"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:99
 msgid "Webroot directory"
-msgstr "Adresář Webroot"
+msgstr "Složka s kořenem webu"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:100
 msgid ""
@@ -281,6 +282,6 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
-"Kořenový adresář webového serveru. Pro spuštění ACME v režimu webroot "
-"nastavte tento adresář jako kořen webu ve webovém serveru. Server musí být "
-"přístupný z Internetu na portu 80."
+"Kořenový adresář webového serveru. Pokud chcete ACME provozovat v režimu "
+"webroot, nastavte toto ve webovém serveru na kořen webu. Je třeba, aby "
+"server byl přístupný z Internetu na portu 80."

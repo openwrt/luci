@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: luci-app-radicale 2\n"
-"PO-Revision-Date: 2025-05-04 20:13+0000\n"
+"PO-Revision-Date: 2025-05-12 07:34+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsradicale2/cs/>\n"
@@ -33,7 +33,7 @@ msgstr "Ověřování se"
 
 #: applications/luci-app-radicale2/luasrc/controller/radicale2.lua:21
 msgid "Authentication / Users"
-msgstr ""
+msgstr "Ověřování / uživatelé"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:14
 msgid "Authentication Type"
@@ -41,11 +41,11 @@ msgstr "Typ ověřování se"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:171
 msgid "Based on settings in 'Rights File'"
-msgstr ""
+msgstr "Na základě nastavení v „souboru s oprávněními“"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:128
 msgid "CORS"
-msgstr ""
+msgstr "CORS"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:62
 msgid "Certificate"
@@ -53,11 +53,11 @@ msgstr "Certifikát"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:70
 msgid "Client Certificate Authority"
-msgstr ""
+msgstr "Autorita klientského certifikátu"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:38
 msgid "Close Lock File"
-msgstr ""
+msgstr "Zavřít soubor zámku"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:38
 msgid "Close the lock file when no more clients are waiting"
@@ -65,11 +65,11 @@ msgstr "Pokud už žádní klienti nečekají, uzavřít soubor zámku"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:44
 msgid "Command that is run after changes to storage"
-msgstr ""
+msgstr "Příkaz, který je spouštěn po změnách na úložišti"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:80
 msgid "Confirm Plaintext Password"
-msgstr ""
+msgstr "Potvrdit heslo v čitelné podobě"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:105
 msgid "DNS Lookup"
@@ -85,11 +85,11 @@ msgstr "Výchozí (htpasswd soubor z uživatelů níže)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:14
 msgid "Default (multifilesystem)"
-msgstr ""
+msgstr "Výchozí (vícero souborových systémů)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:167
 msgid "Default (owner only)"
-msgstr ""
+msgstr "Výchozí (pouze vlastník)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/storage.lua:31
 msgid "Delete sync token that are older (seconds)"
@@ -152,6 +152,11 @@ msgid ""
 "plaintext in a field that will appear on this page if python3-passlib is "
 "installed."
 msgstr ""
+"Vytvořte tuto kolonku pomocí nástroje pro vytváření souborů ověřování ve "
+"stylu Apache htpasswd (pro formát vytváření otisku, který jste zvolili "
+"výše), nebo nainstalujte python3-passlib a získejte tak možnost vytvářet "
+"otisk zadání holého textu do kolonky, která se objeví na této stránce, pokud "
+"je python3-passlib nainstalované."
 
 #: applications/luci-app-radicale2/luasrc/view/cbi/raduigo.htm:24
 msgid "Go to Radicale 2.x Web UI"
@@ -163,7 +168,7 @@ msgstr "Přejít do webového uživ. rozhraní Radicale v2"
 
 #: applications/luci-app-radicale2/root/usr/share/rpcd/acl.d/luci-app-radicale2.json:3
 msgid "Grant UCI access for luci-app-radicale2"
-msgstr "Udělit UCI přístup pro luci-app-radicale2"
+msgstr "Udělit luci-app-radicale2 přístup do UCI nastavování"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:109
 msgid "HTTP(S) Basic Authentication Realm"
@@ -175,7 +180,7 @@ msgstr "HTTP(S) záhlaví"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:32
 msgid "HTTP(S) Listeners (address:port)"
-msgstr ""
+msgstr "HTTP(S) očekávající spojení (adresa:port)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/server.lua:128
 msgid "Header: X-Access-Control-Allow-Origin"
@@ -196,10 +201,14 @@ msgid ""
 "the existing hash (you can also put your own hash value for the type of hash "
 "listed above)."
 msgstr ""
+"Pokud se zadání v kolonkách „Čitelné heslo“ a „Potvrzení čitelného hesla“, "
+"pak se tato kolonka stane otiskem takového hesla. V opačném případě tato "
+"kolonka zůstane stávajícím otiskem (je také možné zadat svou vlastní hodnotu "
+"otisku pro typ vypsaný výše)."
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/logging.lua:30
 msgid "Include full environment in logs"
-msgstr ""
+msgstr "Do záznamu událostí zahrnout úplné prostředí"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:46
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:48
@@ -304,7 +313,7 @@ msgstr "VZDALENY_UZIVATEL z webového serveru"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:172
 msgid "RO: All, RW: All"
-msgstr ""
+msgstr "Pouze čtení: všichni, čtení/zápis: všichni"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:170
 msgid "RO: Authenticated Users, RW: Owner"
@@ -316,7 +325,7 @@ msgstr "RO: žádné, RW: ověření uživatelé"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:168
 msgid "RO: None, RW: Owner"
-msgstr ""
+msgstr "Pouze čtení: nikdo, čtení/zápis: vlastník"
 
 #: applications/luci-app-radicale2/luasrc/controller/radicale2.lua:13
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:7
@@ -494,7 +503,7 @@ msgstr "soubor htpasswd (ručně vyplněný)"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:23
 msgid "htpasswd-formatted file filename"
-msgstr ""
+msgstr "název souboru ve formátu htpasswd"
 
 #: applications/luci-app-radicale2/luasrc/model/cbi/radicale2/auth.lua:37
 msgid "md5"
