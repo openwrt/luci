@@ -93,6 +93,18 @@ function handleAction(report, ev) {
 				]),
 			]),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+				E('label', { 'class': 'cbi-checkbox', 'style': 'padding-top:.5em' }, [
+					E('input', {
+						'class': 'cbi-checkbox',
+						'data-update': 'click change',
+						'type': 'checkbox',
+						'id': 'filter',
+						'value': 'true'
+					}),
+					E('span', { 'style': 'margin-left: .5em;' }, _('Show only Set elements with hits'))
+				]),
+			]),
+			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				'\xa0',
 				E('h5', _('Result')),
 				E('textarea', {
@@ -112,10 +124,12 @@ function handleAction(report, ev) {
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function (ev) {
+						const checkbox = document.getElementById('filter');
+						const isChecked = checkbox.checked;
 						let set = document.getElementById('set').value;
 						if (set) {
 							document.getElementById('result').textContent = 'Collecting Set content, please wait...';
-							return L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['content', set])).then(function (res) {
+							return L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['content', set, isChecked])).then(function (res) {
 								let result = document.getElementById('result');
 								result.textContent = res.trim();
 								document.getElementById('set').value = '';
@@ -191,7 +205,7 @@ return view.extend({
 				E('th', { 'class': 'th' }, _('Inbound&#160;(packets)')),
 				E('th', { 'class': 'th' }, _('Outbound&#160;(packets)')),
 				E('th', { 'class': 'th' }, _('Port&#160;/&#160;Protocol')),
-				E('th', { 'class': 'th' }, _('Elements'))
+				E('th', { 'class': 'th' }, _('Elements (max. 50)'))
 			])
 		]);
 
