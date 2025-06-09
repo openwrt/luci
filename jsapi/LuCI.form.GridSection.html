@@ -3689,7 +3689,7 @@
     GridSection
     </h2>
     
-        <div class="class-description"><p>The <code>GridSection</code> class maps all or - if <code>filter()</code> is overwritten - a
+        <div class="class-description"><p>The <code>GridSection</code> class maps all or - if <code>filter()</code> is overridden - a
 subset of the underlying UCI configuration sections of a given type.</p>
 <p>A grid section functions similar to a <a href="LuCI.form.TableSection.html"><code>LuCI.form.TableSection</code></a> but
 supports tabbing in the modal overlay. Option elements added with
@@ -3698,7 +3698,7 @@ elements added with <a href="LuCI.form.GridSection.html#taboption"><code>tabopti
 are displayed in the modal popup.</p>
 <p>Another important difference is that the table cells show a readonly text
 preview of the corresponding option elements by default, unless the child
-option element is explicitly made writable by setting the <code>editable</code>
+option element is explicitly made writeable by setting the <code>editable</code>
 property to <code>true</code>.</p>
 <p>Additionally, the grid section honours a <code>modalonly</code> property of child
 option elements. Refer to the <a href="LuCI.form.AbstractValue.html"><code>AbstractValue</code></a>
@@ -3955,8 +3955,8 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
     
     <div class="description">
         <p>Override the caption used for the section add button at the bottom of
-the section form element. If set to a string, it will be used as-is,
-if set to a function, the function will be invoked and its return value
+the section form element. Set to a string, it will be used as-is.
+Set to a function, the function will be invoked and its return value
 is used as caption, after converting it to a string. If this property
 is not set, the default is <code>Add</code>.</p>
     </div>
@@ -4007,7 +4007,7 @@ is not set, the default is <code>Add</code>.</p>
     
     <div class="description">
         <p>If set to <code>true</code>, the user may add or remove instances from the form
-section widget, otherwise only preexisting sections may be edited.
+section widget, otherwise only pre-existing sections may be edited.
 The default is <code>false</code>.</p>
     </div>
     
@@ -4158,9 +4158,9 @@ The default is <code>false</code>.</p>
     
     <div class="description">
         <p>Enables a per-section instance row <code>Edit</code> button which triggers a certain
-action when clicked. If set to a string, the string value is used
-as <code>String.format()</code> pattern with the name of the underlying UCI section
-as first format argument. The result is then interpreted as URL which
+action when clicked. Set to a string, the string value is used
+as a <code>String.format()</code> pattern with the name of the underlying UCI section
+as first format argument. The result is then interpreted as a URL which
 LuCI will navigate to when the user clicks the edit button.</p>
 <p>If set to a function, this function will be registered as click event
 handler on the rendered edit button, receiving the section instance
@@ -4267,9 +4267,9 @@ style when clicked.</p>
     
     <div class="description">
         <p>Override the per-section instance modal popup title caption shown when
-clicking the <code>More…</code> button in a section specifying <code>max_cols</code>. If set
-to a string, it will be used as <code>String.format()</code> pattern with the name
-of the underlying UCI section as first argument, if set to a function,
+clicking the <code>More…</code> button in a section specifying <code>max_cols</code>. Set
+to a string, it will be used as a <code>String.format()</code> pattern with the name
+of the underlying UCI section as first argument. Set to a function,
 the function will be invoked with the section name as first argument and
 its return value is used as caption, after converting it to a string.
 If this property is not set, the default is the name of the underlying
@@ -4321,7 +4321,7 @@ UCI configuration section.</p>
 <dd>
     
     <div class="description">
-        <p>If set to <code>true</code>, the header row with the options descriptions will
+        <p>Set to <code>true</code>, the header row with the options descriptions will
 not be displayed. By default, descriptions row is automatically displayed
 when at least one option has a description.</p>
     </div>
@@ -4419,7 +4419,7 @@ this property will hold a reference to the parent option instance.</p>
 <dd>
     
     <div class="description">
-        <p>If set to <code>true</code>, alternating <code>cbi-rowstyle-1</code> and <code>cbi-rowstyle-2</code> CSS
+        <p>Set to <code>true</code>, alternating <code>cbi-rowstyle-1</code> and <code>cbi-rowstyle-2</code> CSS
 classes are added to the table row elements. Not all LuCI themes
 implement these row style classes. The default is <code>false</code>.</p>
     </div>
@@ -4470,11 +4470,11 @@ implement these row style classes. The default is <code>false</code>.</p>
     
     <div class="description">
         <p>Override the per-section instance title caption shown in the first
-column of the table unless <code>anonymous</code> is set to true. If set to a
-string, it will be used as <code>String.format()</code> pattern with the name of
-the underlying UCI section as first argument, if set to a function, the
+column of the table unless <code>anonymous</code> is set to true. Set to a
+string, it will be used as a <code>String.format()</code> pattern with the name of
+the underlying UCI section as first argument. Set to a function, the
 function will be invoked with the section name as first argument and
-its return value is used as caption, after converting it to a string.
+its return value used as caption, after converting it to a string.
 If this property is not set, the default is the name of the underlying
 UCI configuration section.</p>
     </div>
@@ -4524,7 +4524,7 @@ UCI configuration section.</p>
 <dd>
     
     <div class="description">
-        <p>If set to <code>true</code>, a sort button is added to the last column, allowing
+        <p>Set to <code>true</code>, a sort button is added to the last column, allowing
 the user to reorder the section instances mapped by the section form
 element.</p>
     </div>
@@ -4628,7 +4628,7 @@ among instances. The default is <code>false</code>.</p>
         <p>Override the UCI configuration name to read the section IDs from. By
 default, the configuration name is inherited from the parent <code>Map</code>.
 By setting this property, a deviating configuration may be specified.
-The default is <code>null</code>, means inheriting from the parent form.</p>
+The default of <code>null</code> means inherit from the parent form.</p>
     </div>
     
     
@@ -4695,7 +4695,7 @@ The default is <code>null</code>, means inheriting from the parent form.</p>
     
     <div class="description">
         <p>Add further options to the per-section instanced modal popup.</p>
-<p>This function may be overwritten by user code to perform additional
+<p>This function may be overridden by user code to perform additional
 setup steps before displaying the more options modal which is useful to
 e.g. query additional data or to inject further option elements.</p>
 <p>The default implementation of this function does nothing.</p>
@@ -5018,7 +5018,7 @@ is shown.</td>
         <p>Query underlying option configuration values.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, the configuration values of all
-options within this section are returned as dictionary.</p>
+options within this section are returned as a dictionary.</p>
 <p>If both the section ID and an option name are supplied, this function
 returns the configuration value of the specified option only.</p>
     </div>
@@ -5218,7 +5218,7 @@ on the amount of passed arguments.</td>
 and controls whether the given UCI section is rendered or ignored by
 the form section element.</p>
 <p>The default implementation always returns <code>true</code>. User code or
-classes extending <code>AbstractSection</code> may overwrite this function with
+classes extending <code>AbstractSection</code> may override this function with
 custom implementations.</p>
     </div>
     
@@ -5370,7 +5370,7 @@ custom implementations.</p>
         <p>Query underlying option widget input values.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, the widget input values of all
-options within this section are returned as dictionary.</p>
+options within this section are returned as a dictionary.</p>
 <p>If both the section ID and an option name are supplied, this function
 returns the widget input value of the specified option only.</p>
     </div>
@@ -5568,7 +5568,7 @@ on the amount of passed arguments.</td>
         <p>Obtain underlying option objects.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if no option name is specified, all options within this section are
-returned as dictionary.</p>
+returned as a dictionary.</p>
 <p>If an option name is supplied, this function returns the matching
 LuCI.form.AbstractValue instance only.</p>
     </div>
@@ -5735,7 +5735,7 @@ depending on the amount of passed arguments.</td>
         <p>Obtain underlying option LuCI.ui widget instances.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, the LuCI.ui widget instances of all
-options within this section are returned as dictionary.</p>
+options within this section are returned as a dictionary.</p>
 <p>If both the section ID and an option name are supplied, this function
 returns the LuCI.ui widget instance value of the specified option only.</p>
     </div>
@@ -5998,7 +5998,7 @@ invokes the load function of each child option element.</p>
             </td>
             <td class="description last">Returns a promise resolving once the values of all child elements have
 been loaded. The promise may reject with an error if any of the child
-elements load functions rejected with an error.</td>
+elements' load functions rejected with an error.</td>
         </tr>
     
     </tbody>
@@ -6322,8 +6322,8 @@ option element.</p>
                     
             </td>
             <td class="description last">Returns a promise resolving once the values of all child elements have
-been parsed. The returned promise is rejected if any parsed values are
-not meeting the validation constraints of their respective elements.</td>
+been parsed. The returned promise is rejected if any parsed values do
+not meet the validation constraints of their respective elements.</td>
         </tr>
     
     </tbody>
@@ -6510,7 +6510,7 @@ entities decoded.</td>
 tabs to provide a better overview to the user.</p>
 <p>Before options can be moved into a tab pane, the corresponding tab
 has to be defined first, which is done by calling this function.</p>
-<p>Note that tabs are only effective in modal popups, options added with
+<p>Note that tabs are only effective in modal popups. Options added with
 <code>option()</code> will not be assigned to a specific tab and are rendered in
 the table view only.</p>
     </div>
@@ -7182,7 +7182,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jun 02 2025 19:03:24 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jun 09 2025 22:45:27 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

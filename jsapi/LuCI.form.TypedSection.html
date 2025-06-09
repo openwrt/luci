@@ -3689,7 +3689,7 @@
     TypedSection
     </h2>
     
-        <div class="class-description"><p>The <code>TypedSection</code> class maps all or - if <code>filter()</code> is overwritten - a
+        <div class="class-description"><p>The <code>TypedSection</code> class maps all or - if <code>filter()</code> is overridden - a
 subset of the underlying UCI configuration sections of a given type.</p>
 <p>Layout wise, the configuration section instances mapped by the section
 element (sometimes referred to as &quot;section nodes&quot;) are stacked beneath
@@ -3947,8 +3947,8 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
     
     <div class="description">
         <p>Override the caption used for the section add button at the bottom of
-the section form element. If set to a string, it will be used as-is,
-if set to a function, the function will be invoked and its return value
+the section form element. Set to a string, it will be used as-is.
+Set to a function, the function will be invoked and its return value
 is used as caption, after converting it to a string. If this property
 is not set, the default is <code>Add</code>.</p>
     </div>
@@ -3999,7 +3999,7 @@ is not set, the default is <code>Add</code>.</p>
     
     <div class="description">
         <p>If set to <code>true</code>, the user may add or remove instances from the form
-section widget, otherwise only preexisting sections may be edited.
+section widget, otherwise only pre-existing sections may be edited.
 The default is <code>false</code>.</p>
     </div>
     
@@ -4203,7 +4203,7 @@ among instances. The default is <code>false</code>.</p>
         <p>Override the UCI configuration name to read the section IDs from. By
 default, the configuration name is inherited from the parent <code>Map</code>.
 By setting this property, a deviating configuration may be specified.
-The default is <code>null</code>, means inheriting from the parent form.</p>
+The default of <code>null</code> means inherit from the parent form.</p>
     </div>
     
     
@@ -4568,7 +4568,7 @@ The sections will be rendered in the same order as the returned array.</td>
         <p>Query underlying option configuration values.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, the configuration values of all
-options within this section are returned as dictionary.</p>
+options within this section are returned as a dictionary.</p>
 <p>If both the section ID and an option name are supplied, this function
 returns the configuration value of the specified option only.</p>
     </div>
@@ -4768,7 +4768,7 @@ on the amount of passed arguments.</td>
 and controls whether the given UCI section is rendered or ignored by
 the form section element.</p>
 <p>The default implementation always returns <code>true</code>. User code or
-classes extending <code>AbstractSection</code> may overwrite this function with
+classes extending <code>AbstractSection</code> may override this function with
 custom implementations.</p>
     </div>
     
@@ -4920,7 +4920,7 @@ custom implementations.</p>
         <p>Query underlying option widget input values.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, the widget input values of all
-options within this section are returned as dictionary.</p>
+options within this section are returned as a dictionary.</p>
 <p>If both the section ID and an option name are supplied, this function
 returns the widget input value of the specified option only.</p>
     </div>
@@ -5118,7 +5118,7 @@ on the amount of passed arguments.</td>
         <p>Obtain underlying option objects.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if no option name is specified, all options within this section are
-returned as dictionary.</p>
+returned as a dictionary.</p>
 <p>If an option name is supplied, this function returns the matching
 LuCI.form.AbstractValue instance only.</p>
     </div>
@@ -5285,7 +5285,7 @@ depending on the amount of passed arguments.</td>
         <p>Obtain underlying option LuCI.ui widget instances.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, the LuCI.ui widget instances of all
-options within this section are returned as dictionary.</p>
+options within this section are returned as a dictionary.</p>
 <p>If both the section ID and an option name are supplied, this function
 returns the LuCI.ui widget instance value of the specified option only.</p>
     </div>
@@ -5548,7 +5548,7 @@ invokes the load function of each child option element.</p>
             </td>
             <td class="description last">Returns a promise resolving once the values of all child elements have
 been loaded. The promise may reject with an error if any of the child
-elements load functions rejected with an error.</td>
+elements' load functions rejected with an error.</td>
         </tr>
     
     </tbody>
@@ -5872,8 +5872,8 @@ option element.</p>
                     
             </td>
             <td class="description last">Returns a promise resolving once the values of all child elements have
-been parsed. The returned promise is rejected if any parsed values are
-not meeting the validation constraints of their respective elements.</td>
+been parsed. The returned promise is rejected if any parsed values do
+not meet the validation constraints of their respective elements.</td>
         </tr>
     
     </tbody>
@@ -6843,7 +6843,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jun 02 2025 19:03:24 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jun 09 2025 22:45:28 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

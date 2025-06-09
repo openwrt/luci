@@ -3770,7 +3770,7 @@ as data source.</p></div>
                     
                 
                 <p>The JavaScript object to use as data source. Internally, the object is
-converted into an UCI-like format. Its toplevel keys are treated like UCI
+converted into an UCI-like format. Its top-level keys are treated like UCI
 section types while the object or array-of-object values are treated as
 section contents.</p></td>
         </tr>
@@ -3802,7 +3802,7 @@ section contents.</p></td>
                         
                     
                 
-                <p>The title caption of the form. A form title is usually rendered as separate
+                <p>The title caption of the form. A form title is usually rendered as a separate
 headline element before the actual form contents. If omitted, the
 corresponding headline element will not be rendered.</p></td>
         </tr>
@@ -4156,7 +4156,7 @@ needed by the map.</p>
             <td class="description last">
                 
                 <p>The additional UCI configuration file to tie to the map. If the given
-config already is in the list of required files, it will be ignored.</p></td>
+config is in the list of required files already, it will be ignored.</p></td>
         </tr>
 	
 	
@@ -4227,7 +4227,7 @@ config already is in the list of required files, it will be ignored.</p></td>
     
     
     <div class="description">
-        <p>Find the first DOM node within this Map which matches the given search
+        <p>Return the first DOM node within this Map which matches the given search
 parameters. This function is essentially a convenience wrapper around
 <code>findElements()</code> which only returns the first found node.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
@@ -4452,7 +4452,7 @@ passed.</p>
     
     
     <div class="description">
-        <p>Find all DOM nodes within this Map which match the given search
+        <p>Return all DOM nodes within this Map which match the given search
 parameters. This function is essentially a convenience wrapper around
 <code>querySelectorAll()</code>.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
@@ -4746,7 +4746,7 @@ load function of each child element.</p>
             </td>
             <td class="description last">Returns a promise resolving once the entire form completed loading all
 data. The promise may reject with an error if any configuration failed
-to load or if any of the child elements load functions rejected with
+to load or if any of the child elements' load functions rejected with
 an error.</td>
         </tr>
     
@@ -5072,8 +5072,8 @@ triggers input value reading and validation for each child element.</p>
                     
             </td>
             <td class="description last">Returns a promise resolving once the entire form completed parsing all
-input values. The returned promise is rejected if any parsed values are
-not meeting the validation constraints of their respective elements.</td>
+input values. The returned promise is rejected if any parsed values do
+not meet the validation constraints of their respective elements.</td>
         </tr>
     
     </tbody>
@@ -5175,7 +5175,7 @@ not meeting the validation constraints of their respective elements.</td>
                         
                     
             </td>
-            <td class="description last">Returns a promise resolving to the toplevel form DOM node once the
+            <td class="description last">Returns a promise resolving to the top-level form DOM node once the
 rendering is complete.</td>
         </tr>
     
@@ -5279,7 +5279,7 @@ unsaved user inputs to their initial form state.</p>
                         
                     
             </td>
-            <td class="description last">Returns a promise resolving to the toplevel form DOM node once the
+            <td class="description last">Returns a promise resolving to the top-level form DOM node once the
 re-rendering is complete.</td>
         </tr>
     
@@ -5416,7 +5416,7 @@ additional data manipulation steps before saving the changes.</p></td>
                     
                 
                 <p>If set to <code>true</code>, trigger an alert message to the user in case saving
-the form data failures. Otherwise fail silently.</p></td>
+the form data fails. Otherwise fail silently.</p></td>
         </tr>
 	
 	
@@ -5519,8 +5519,8 @@ failed.</td>
     
     <div class="description">
         <p>Add a configuration section to the map.</p>
-<p>LuCI forms follow the structure of the underlying UCI configurations,
-means that a map, which represents a single UCI configuration, is
+<p>LuCI forms follow the structure of the underlying UCI configurations.
+This means that a map, which represents a single UCI configuration, is
 divided into multiple sections which in turn contain an arbitrary
 number of options.</p>
 <p>While UCI itself only knows two kinds of sections - named and anonymous
@@ -6052,7 +6052,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jun 02 2025 19:03:24 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jun 09 2025 22:45:28 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

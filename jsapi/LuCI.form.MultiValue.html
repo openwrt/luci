@@ -4025,7 +4025,7 @@ option to the section.</p></td>
     <div class="description">
         <p>Allows to specify the <a href="LuCI.ui.Dropdown.html#.InitOptions"><code>display_items</code></a>
 property of the underlying dropdown widget. If omitted, the value of
-the <code>size</code> property is used or <code>3</code> when <code>size</code> is unspecified as well.</p>
+the <code>size</code> property is used or <code>3</code> when <code>size</code> is also unspecified.</p>
     </div>
     
     
@@ -4075,7 +4075,7 @@ the <code>size</code> property is used or <code>3</code> when <code>size</code> 
     <div class="description">
         <p>Allows to specify the <a href="LuCI.ui.Dropdown.html#.InitOptions"><code>dropdown_items</code></a>
 property of the underlying dropdown widget. If omitted, the value of
-the <code>size</code> property is used or <code>-1</code> when <code>size</code> is unspecified as well.</p>
+the <code>size</code> property is used or <code>-1</code> when <code>size</code> is also unspecified.</p>
     </div>
     
     
@@ -4276,7 +4276,7 @@ option element is marked as invalid.</p>
 <p>Options which are displayed in the table portion of a <code>GridSection</code>
 instance are rendered as readonly text by default. By setting the
 <code>editable</code> property of a child option element to <code>true</code>, that element
-is rendered as full input widget within its cell instead of a text only
+is rendered as a full input widget within its cell instead of a text only
 preview.</p>
 <p>This property has no effect on options that are not children of grid
 section elements.</p>
@@ -4383,8 +4383,8 @@ section elements.</p>
     
     <div class="description">
         <p>Register a custom value change handler.</p>
-<p>If this property is set to a function value, the function is invoked
-whenever the value of the underlying UI input element is changing.</p>
+<p>If this property is set to a function, it is invoked
+whenever the value of the underlying UI input element changes.</p>
 <p>The invoked handler function will receive the DOM click element as
 first and the underlying configuration section ID as well as the input
 value as second and third argument respectively.</p>
@@ -4485,8 +4485,8 @@ or selected by the user.</p>
 <dd>
     
     <div class="description">
-        <p>If set to <code>true</code>, the field is rendered as password input, otherwise
-as plain text input.</p>
+        <p>If set to <code>true</code>, the field is rendered as a password input, otherwise
+as a plain text input.</p>
     </div>
     
     
@@ -4585,8 +4585,8 @@ as plain text input.</p>
         <p>Make option element readonly.</p>
 <p>This property defaults to the readonly state of the parent form element.
 When set to <code>true</code>, the underlying widget is rendered in disabled state,
-means its contents cannot be changed and the widget cannot be interacted
-with.</p>
+meaning its contents cannot be changed and the widget cannot be
+interacted with.</p>
     </div>
     
     
@@ -4738,7 +4738,7 @@ dependency constraints.</p>
         <p>Override the UCI configuration name to read the option value from.</p>
 <p>By default, the configuration name is inherited from the parent Map.
 By setting this property, a deviating configuration may be specified.</p>
-<p>The default is null, means inheriting from the parent form.</p>
+<p>The default of null means inherit from the parent form.</p>
     </div>
     
     
@@ -4790,7 +4790,7 @@ By setting this property, a deviating configuration may be specified.</p>
 <p>By default, the elements name, which is passed as third argument to
 the constructor, is used as UCI option name. By setting this property,
 a deviating UCI option may be specified.</p>
-<p>The default is null, means using the option element name.</p>
+<p>The default of null means use the option element name.</p>
     </div>
     
     
@@ -4841,7 +4841,7 @@ a deviating UCI option may be specified.</p>
         <p>Override the UCI section name to read the option value from.</p>
 <p>By default, the section ID is inherited from the parent section element.
 By setting this property, a deviating section may be specified.</p>
-<p>The default is null, means inheriting from the parent section.</p>
+<p>The default of null means inherit from the parent section.</p>
     </div>
     
     
@@ -5313,7 +5313,7 @@ within the given specific section.</p>
         <p>Query the underlying configuration value.</p>
 <p>The default implementation of this method returns the cached return
 value of <a href="LuCI.form.AbstractValue.html#load"><code>load()</code></a>. It may be
-overwritten by user code to obtain the configuration value in a
+overridden by user code to obtain the configuration value in a
 different way.</p>
     </div>
     
@@ -5492,11 +5492,11 @@ different way.</p>
 <p>Dependency constraints allow making the presence of option elements
 dependent on the current values of certain other options within the
 same form. An option element with unsatisfied dependencies will be
-hidden from the view and its current value is omitted when saving.</p>
+hidden from the view and its current value omitted when saving.</p>
 <p>Multiple constraints (that is, multiple calls to <code>depends()</code>) are
 treated as alternatives, forming a logical &quot;or&quot; expression.</p>
 <p>By passing an object of name =&gt; value pairs as first argument, it is
-possible to depend on multiple options simultaneously, allowing to form
+possible to depend on multiple options simultaneously, forming
 a logical &quot;and&quot; expression.</p>
 <p>Option names may be given in &quot;dot notation&quot; which allows to reference
 option elements outside the current form section. If a name without
@@ -5712,7 +5712,7 @@ argument, this parameter is ignored.</p></td>
         <p>Query the current form input value.</p>
 <p>The default implementation of this method returns the current input
 value of the underlying <a href="LuCI.ui.AbstractElement.html"><code>LuCI.ui</code></a> widget.
-It may be overwritten by user code to handle input values differently.</p>
+It may be overridden by user code to handle input values differently.</p>
     </div>
     
 
@@ -6512,8 +6512,8 @@ returns <code>false</code>.</td>
         <p>Load the underlying configuration value.</p>
 <p>The default implementation of this method reads and returns the
 underlying UCI option value (or the related JavaScript property for
-<code>JSONMap</code> instances). It may be overwritten by user code to load data
-from nonstandard sources.</p>
+<code>JSONMap</code> instances). It may be overridden by user code to load data
+from non-standard sources.</p>
     </div>
     
 
@@ -6849,7 +6849,7 @@ element has been hidden due to unsatisfied dependencies or when the
 user cleared the input value and the option is marked optional.</p>
 <p>The default implementation simply removes the associated option from the
 UCI configuration (or the associated JavaScript object property in
-case of <code>JSONMap</code> forms). It may be overwritten by user code to
+case of <code>JSONMap</code> forms). It may be overridden by user code to
 implement alternative removal logic, e.g. to retain the original value.</p>
     </div>
     
@@ -7118,10 +7118,10 @@ entities decoded.</td>
     
     <div class="description">
         <p>Obtain a textual input representation.</p>
-<p>The default implementation of this method returns the HTML escaped
+<p>The default implementation of this method returns the HTML-escaped
 current input value of the underlying
 <a href="LuCI.ui.AbstractElement.html"><code>LuCI.ui</code></a> widget. User code or specific
-option element implementations may overwrite this function to apply a
+option element implementations may override this function to apply a
 different logic, e.g. to return <code>Yes</code> or <code>No</code> depending on the checked
 state of checkbox elements.</p>
     </div>
@@ -7647,7 +7647,7 @@ the initial value returned by
 <a href="LuCI.form.AbstractValue.html#cfgvalue"><code>cfgvalue()</code></a>.</p>
 <p>The default implementation simply sets the given input value in the
 UCI configuration (or the associated JavaScript object property in
-case of <code>JSONMap</code> forms). It may be overwritten by user code to
+case of <code>JSONMap</code> forms). It may be overridden by user code to
 implement alternative save logic, e.g. to transform the input value
 before it is written.</p>
     </div>
@@ -7788,7 +7788,7 @@ before it is written.</p>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jun 02 2025 19:03:24 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jun 09 2025 22:45:28 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
