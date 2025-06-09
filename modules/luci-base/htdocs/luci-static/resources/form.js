@@ -214,7 +214,7 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 	},
 
 	/**
-	 * Parse this elements form input.
+	 * Parse this element's form input.
 	 *
 	 * The `parse()` function recursively walks the form element tree and
 	 * triggers input value reading and validation for each encountered element.
@@ -224,7 +224,7 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 	 * @returns {Promise<void>}
 	 * Returns a promise resolving once this element's value and the values of
 	 * all child elements have been parsed. The returned promise is rejected
-	 * if any parsed values are not meeting the validation constraints of their
+	 * if any parsed values do not meet the validation constraints of their
 	 * respective elements.
 	 */
 	parse() {
@@ -354,19 +354,19 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
  * configuration file and is divided into multiple sections containing multiple
  * fields each.
  *
- * It serves as main entry point into the `LuCI.form` for typical view code.
+ * It serves as the main entry point into the `LuCI.form` for typical view code.
  *
  * @param {string} config
- * The UCI configuration to map. It is automatically loaded along when the
+ * The UCI configuration to map. It is automatically loaded along with the
  * resulting map instance.
  *
  * @param {string} [title]
- * The title caption of the form. A form title is usually rendered as separate
+ * The title caption of the form. A form title is usually rendered as a separate
  * headline element before the actual form contents. If omitted, the
  * corresponding headline element will not be rendered.
  *
  * @param {string} [description]
- * The description text of the form which is usually rendered as text
+ * The description text of the form which is usually rendered as a text
  * paragraph below the form title and before the actual form contents.
  * If omitted, the corresponding paragraph element will not be rendered.
  */
@@ -394,7 +394,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 */
 
 	/**
-	 * Find all DOM nodes within this Map which match the given search
+	 * Return all DOM nodes within this Map which match the given search
 	 * parameters. This function is essentially a convenience wrapper around
 	 * `querySelectorAll()`.
 	 *
@@ -437,7 +437,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	},
 
 	/**
-	 * Find the first DOM node within this Map which matches the given search
+	 * Return the first DOM node within this Map which matches the given search
 	 * parameters. This function is essentially a convenience wrapper around
 	 * `findElements()` which only returns the first found node.
 	 *
@@ -482,7 +482,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 *
 	 * @param {string} config
 	 * The additional UCI configuration file to tie to the map. If the given
-	 * config already is in the list of required files, it will be ignored.
+	 * config is in the list of required files already, it will be ignored.
 	 */
 	chain(config) {
 		if (this.parsechain.indexOf(config) == -1)
@@ -492,8 +492,8 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	/**
 	 * Add a configuration section to the map.
 	 *
-	 * LuCI forms follow the structure of the underlying UCI configurations,
-	 * means that a map, which represents a single UCI configuration, is
+	 * LuCI forms follow the structure of the underlying UCI configurations.
+	 * This means that a map, which represents a single UCI configuration, is
 	 * divided into multiple sections which in turn contain an arbitrary
 	 * number of options.
 	 *
@@ -535,7 +535,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * @returns {Promise<void>}
 	 * Returns a promise resolving once the entire form completed loading all
 	 * data. The promise may reject with an error if any configuration failed
-	 * to load or if any of the child elements load functions rejected with
+	 * to load or if any of the child elements' load functions rejected with
 	 * an error.
 	 */
 	load() {
@@ -565,8 +565,8 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 *
 	 * @returns {Promise<void>}
 	 * Returns a promise resolving once the entire form completed parsing all
-	 * input values. The returned promise is rejected if any parsed values are
-	 * not meeting the validation constraints of their respective elements.
+	 * input values. The returned promise is rejected if any parsed values do
+	 * not meet the validation constraints of their respective elements.
 	 */
 	parse() {
 		const tasks = [];
@@ -591,7 +591,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 *
 	 * @param {boolean} [silent=false]
 	 * If set to `true`, trigger an alert message to the user in case saving
-	 * the form data failures. Otherwise fail silently.
+	 * the form data fails. Otherwise fail silently.
 	 *
 	 * @returns {Promise<void>}
 	 * Returns a promise resolving once the entire save operation is complete.
@@ -625,7 +625,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * unsaved user inputs to their initial form state.
 	 *
 	 * @returns {Promise<Node>}
-	 * Returns a promise resolving to the toplevel form DOM node once the
+	 * Returns a promise resolving to the top-level form DOM node once the
 	 * re-rendering is complete.
 	 */
 	reset() {
@@ -636,7 +636,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * Render the form markup.
 	 *
 	 * @returns {Promise<Node>}
-	 * Returns a promise resolving to the toplevel form DOM node once the
+	 * Returns a promise resolving to the top-level form DOM node once the
 	 * rendering is complete.
 	 */
 	render() {
@@ -792,12 +792,12 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
  *
  * @param {Object<string, Object<string, *>|Array<Object<string, *>>>} data
  * The JavaScript object to use as data source. Internally, the object is
- * converted into an UCI-like format. Its toplevel keys are treated like UCI
+ * converted into an UCI-like format. Its top-level keys are treated like UCI
  * section types while the object or array-of-object values are treated as
  * section contents.
  *
  * @param {string} [title]
- * The title caption of the form. A form title is usually rendered as separate
+ * The title caption of the form. A form title is usually rendered as a separate
  * headline element before the actual form contents. If omitted, the
  * corresponding headline element will not be rendered.
  *
@@ -823,10 +823,10 @@ const CBIJSONMap = CBIMap.extend(/** @lends LuCI.form.JSONMap.prototype */ {
  * @hideconstructor
  * @classdesc
  *
- * The `AbstractSection` class serves as abstract base for the different form
+ * The `AbstractSection` class serves as an abstract base for the different form
  * section styles implemented by `LuCI.form`. It provides the common logic for
  * enumerating underlying configuration section instances, for registering
- * form options and for handling tabs to segment child options.
+ * form options and for handling tabs in order to segment child options.
  *
  * This class is private and not directly accessible by user code.
  */
@@ -879,7 +879,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * the form section element.
 	 *
 	 * The default implementation always returns `true`. User code or
-	 * classes extending `AbstractSection` may overwrite this function with
+	 * classes extending `AbstractSection` may override this function with
 	 * custom implementations.
 	 *
 	 * @abstract
@@ -903,7 +903,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 * @returns {Promise<void>}
 	 * Returns a promise resolving once the values of all child elements have
 	 * been loaded. The promise may reject with an error if any of the child
-	 * elements load functions rejected with an error.
+	 * elements' load functions rejected with an error.
 	 */
 	load() {
 		const section_ids = this.cfgsections();
@@ -931,8 +931,8 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 *
 	 * @returns {Promise<void>}
 	 * Returns a promise resolving once the values of all child elements have
-	 * been parsed. The returned promise is rejected if any parsed values are
-	 * not meeting the validation constraints of their respective elements.
+	 * been parsed. The returned promise is rejected if any parsed values do
+	 * not meet the validation constraints of their respective elements.
 	 */
 	parse() {
 		const section_ids = this.cfgsections();
@@ -1071,7 +1071,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 *
 	 * This function is sensitive to the amount of arguments passed to it;
 	 * if only one argument is specified, the configuration values of all
-	 * options within this section are returned as dictionary.
+	 * options within this section are returned as a dictionary.
 	 *
 	 * If both the section ID and an option name are supplied, this function
 	 * returns the configuration value of the specified option only.
@@ -1104,7 +1104,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 *
 	 * This function is sensitive to the amount of arguments passed to it;
 	 * if only one argument is specified, the widget input values of all
-	 * options within this section are returned as dictionary.
+	 * options within this section are returned as a dictionary.
 	 *
 	 * If both the section ID and an option name are supplied, this function
 	 * returns the widget input value of the specified option only.
@@ -1140,7 +1140,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 *
 	 * This function is sensitive to the amount of arguments passed to it;
 	 * if only one argument is specified, the LuCI.ui widget instances of all
-	 * options within this section are returned as dictionary.
+	 * options within this section are returned as a dictionary.
 	 *
 	 * If both the section ID and an option name are supplied, this function
 	 * returns the LuCI.ui widget instance value of the specified option only.
@@ -1173,7 +1173,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 *
 	 * This function is sensitive to the amount of arguments passed to it;
 	 * if no option name is specified, all options within this section are
-	 * returned as dictionary.
+	 * returned as a dictionary.
 	 *
 	 * If an option name is supplied, this function returns the matching
 	 * LuCI.form.AbstractValue instance only.
@@ -1433,7 +1433,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * By default, the configuration name is inherited from the parent Map.
 	 * By setting this property, a deviating configuration may be specified.
 	 *
-	 * The default is null, means inheriting from the parent form.
+	 * The default of null means inherit from the parent form.
 	 *
 	 * @name LuCI.form.AbstractValue.prototype#uciconfig
 	 * @type string
@@ -1446,7 +1446,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * By default, the section ID is inherited from the parent section element.
 	 * By setting this property, a deviating section may be specified.
 	 *
-	 * The default is null, means inheriting from the parent section.
+	 * The default of null means inherit from the parent section.
 	 *
 	 * @name LuCI.form.AbstractValue.prototype#ucisection
 	 * @type string
@@ -1460,7 +1460,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * the constructor, is used as UCI option name. By setting this property,
 	 * a deviating UCI option may be specified.
 	 *
-	 * The default is null, means using the option element name.
+	 * The default of null means use the option element name.
 	 *
 	 * @name LuCI.form.AbstractValue.prototype#ucioption
 	 * @type string
@@ -1473,7 +1473,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * Options which are displayed in the table portion of a `GridSection`
 	 * instance are rendered as readonly text by default. By setting the
 	 * `editable` property of a child option element to `true`, that element
-	 * is rendered as full input widget within its cell instead of a text only
+	 * is rendered as a full input widget within its cell instead of a text only
 	 * preview.
 	 *
 	 * This property has no effect on options that are not children of grid
@@ -1506,8 +1506,8 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * This property defaults to the readonly state of the parent form element.
 	 * When set to `true`, the underlying widget is rendered in disabled state,
-	 * means its contents cannot be changed and the widget cannot be interacted
-	 * with.
+	 * meaning its contents cannot be changed and the widget cannot be
+	 * interacted with.
 	 *
 	 * @name LuCI.form.AbstractValue.prototype#readonly
 	 * @type boolean
@@ -1533,8 +1533,8 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	/**
 	 * Register a custom value change handler.
 	 *
-	 * If this property is set to a function value, the function is invoked
-	 * whenever the value of the underlying UI input element is changing.
+	 * If this property is set to a function, it is invoked
+	 * whenever the value of the underlying UI input element changes.
 	 *
 	 * The invoked handler function will receive the DOM click element as
 	 * first and the underlying configuration section ID as well as the input
@@ -1551,13 +1551,13 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * Dependency constraints allow making the presence of option elements
 	 * dependent on the current values of certain other options within the
 	 * same form. An option element with unsatisfied dependencies will be
-	 * hidden from the view and its current value is omitted when saving.
+	 * hidden from the view and its current value omitted when saving.
 	 *
 	 * Multiple constraints (that is, multiple calls to `depends()`) are
 	 * treated as alternatives, forming a logical "or" expression.
 	 *
 	 * By passing an object of name => value pairs as first argument, it is
-	 * possible to depend on multiple options simultaneously, allowing to form
+	 * possible to depend on multiple options simultaneously, forming
 	 * a logical "and" expression.
 	 *
 	 * Option names may be given in "dot notation" which allows to reference
@@ -1769,8 +1769,8 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * The default implementation of this method reads and returns the
 	 * underlying UCI option value (or the related JavaScript property for
-	 * `JSONMap` instances). It may be overwritten by user code to load data
-	 * from nonstandard sources.
+	 * `JSONMap` instances). It may be overridden by user code to load data
+	 * from non-standard sources.
 	 *
 	 * @param {string} section_id
 	 * The configuration section ID
@@ -1817,7 +1817,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * The default implementation of this method returns the cached return
 	 * value of [load()]{@link LuCI.form.AbstractValue#load}. It may be
-	 * overwritten by user code to obtain the configuration value in a
+	 * overridden by user code to obtain the configuration value in a
 	 * different way.
 	 *
 	 * @param {string} section_id
@@ -1846,7 +1846,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * The default implementation of this method returns the current input
 	 * value of the underlying [LuCI.ui]{@link LuCI.ui.AbstractElement} widget.
-	 * It may be overwritten by user code to handle input values differently.
+	 * It may be overridden by user code to handle input values differently.
 	 *
 	 * @param {string} section_id
 	 * The configuration section ID
@@ -1865,10 +1865,10 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	/**
 	 * Obtain a textual input representation.
 	 *
-	 * The default implementation of this method returns the HTML escaped
+	 * The default implementation of this method returns the HTML-escaped
 	 * current input value of the underlying
 	 * [LuCI.ui]{@link LuCI.ui.AbstractElement} widget. User code or specific
-	 * option element implementations may overwrite this function to apply a
+	 * option element implementations may override this function to apply a
 	 * different logic, e.g. to return `Yes` or `No` depending on the checked
 	 * state of checkbox elements.
 	 *
@@ -1900,7 +1900,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * the user input, e.g. on keyup or blur events.
 	 *
 	 * The default implementation of this method does nothing and always
-	 * returns `true`. User code may overwrite this method to provide
+	 * returns `true`. User code may override this method to provide
 	 * additional validation logic which is not covered by data type
 	 * constraints.
 	 *
@@ -2050,7 +2050,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * The default implementation simply sets the given input value in the
 	 * UCI configuration (or the associated JavaScript object property in
-	 * case of `JSONMap` forms). It may be overwritten by user code to
+	 * case of `JSONMap` forms). It may be overridden by user code to
 	 * implement alternative save logic, e.g. to transform the input value
 	 * before it is written.
 	 *
@@ -2077,7 +2077,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * The default implementation simply removes the associated option from the
 	 * UCI configuration (or the associated JavaScript object property in
-	 * case of `JSONMap` forms). It may be overwritten by user code to
+	 * case of `JSONMap` forms). It may be overridden by user code to
 	 * implement alternative removal logic, e.g. to retain the original value.
 	 *
 	 * @param {string} section_id
@@ -2120,7 +2120,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
  * @hideconstructor
  * @classdesc
  *
- * The `TypedSection` class maps all or - if `filter()` is overwritten - a
+ * The `TypedSection` class maps all or - if `filter()` is overridden - a
  * subset of the underlying UCI configuration sections of a given type.
  *
  * Layout wise, the configuration section instances mapped by the section
@@ -2147,7 +2147,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 
 	/**
 	 * If set to `true`, the user may add or remove instances from the form
-	 * section widget, otherwise only preexisting sections may be edited.
+	 * section widget, otherwise only pre-existing sections may be edited.
 	 * The default is `false`.
 	 *
 	 * @name LuCI.form.TypedSection.prototype#addremove
@@ -2179,8 +2179,8 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 
 	/**
 	 * Override the caption used for the section add button at the bottom of
-	 * the section form element. If set to a string, it will be used as-is,
-	 * if set to a function, the function will be invoked and its return value
+	 * the section form element. Set to a string, it will be used as-is.
+	 * Set to a function, the function will be invoked and its return value
 	 * is used as caption, after converting it to a string. If this property
 	 * is not set, the default is `Add`.
 	 *
@@ -2193,7 +2193,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 	 * Override the UCI configuration name to read the section IDs from. By
 	 * default, the configuration name is inherited from the parent `Map`.
 	 * By setting this property, a deviating configuration may be specified.
-	 * The default is `null`, means inheriting from the parent form.
+	 * The default of `null` means inherit from the parent form.
 	 *
 	 * @name LuCI.form.TypedSection.prototype#uciconfig
 	 * @type string
@@ -2359,7 +2359,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
  * @hideconstructor
  * @classdesc
  *
- * The `TableSection` class maps all or - if `filter()` is overwritten - a
+ * The `TableSection` class maps all or - if `filter()` is overridden - a
  * subset of the underlying UCI configuration sections of a given type.
  *
  * Layout wise, the configuration section instances mapped by the section
@@ -2386,11 +2386,11 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 	/**
 	 * Override the per-section instance title caption shown in the first
-	 * column of the table unless `anonymous` is set to true. If set to a
-	 * string, it will be used as `String.format()` pattern with the name of
-	 * the underlying UCI section as first argument, if set to a function, the
+	 * column of the table unless `anonymous` is set to true. Set to a
+	 * string, it will be used as a `String.format()` pattern with the name of
+	 * the underlying UCI section as first argument. Set to a function, the
 	 * function will be invoked with the section name as first argument and
-	 * its return value is used as caption, after converting it to a string.
+	 * its return value used as caption, after converting it to a string.
 	 * If this property is not set, the default is the name of the underlying
 	 * UCI configuration section.
 	 *
@@ -2401,9 +2401,9 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 	/**
 	 * Override the per-section instance modal popup title caption shown when
-	 * clicking the `More…` button in a section specifying `max_cols`. If set
-	 * to a string, it will be used as `String.format()` pattern with the name
-	 * of the underlying UCI section as first argument, if set to a function,
+	 * clicking the `More…` button in a section specifying `max_cols`. Set
+	 * to a string, it will be used as a `String.format()` pattern with the name
+	 * of the underlying UCI section as first argument. Set to a function,
 	 * the function will be invoked with the section name as first argument and
 	 * its return value is used as caption, after converting it to a string.
 	 * If this property is not set, the default is the name of the underlying
@@ -2429,7 +2429,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 */
 
 	/**
-	 * If set to `true`, alternating `cbi-rowstyle-1` and `cbi-rowstyle-2` CSS
+	 * Set to `true`, alternating `cbi-rowstyle-1` and `cbi-rowstyle-2` CSS
 	 * classes are added to the table row elements. Not all LuCI themes
 	 * implement these row style classes. The default is `false`.
 	 *
@@ -2450,9 +2450,9 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 	/**
 	 * Enables a per-section instance row `Edit` button which triggers a certain
-	 * action when clicked. If set to a string, the string value is used
-	 * as `String.format()` pattern with the name of the underlying UCI section
-	 * as first format argument. The result is then interpreted as URL which
+	 * action when clicked. Set to a string, the string value is used
+	 * as a `String.format()` pattern with the name of the underlying UCI section
+	 * as first format argument. The result is then interpreted as a URL which
 	 * LuCI will navigate to when the user clicks the edit button.
 	 *
 	 * If set to a function, this function will be registered as click event
@@ -2465,7 +2465,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 */
 
 	/**
-	 * If set to `true`, a sort button is added to the last column, allowing
+	 * Set to `true`, a sort button is added to the last column, allowing
 	 * the user to reorder the section instances mapped by the section form
 	 * element.
 	 *
@@ -2475,7 +2475,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 */
 
 	/**
-	 * If set to `true`, the header row with the options descriptions will
+	 * Set to `true`, the header row with the options descriptions will
 	 * not be displayed. By default, descriptions row is automatically displayed
 	 * when at least one option has a description.
 	 *
@@ -3118,7 +3118,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	/**
 	 * Add further options to the per-section instanced modal popup.
 	 *
-	 * This function may be overwritten by user code to perform additional
+	 * This function may be overridden by user code to perform additional
 	 * setup steps before displaying the more options modal which is useful to
 	 * e.g. query additional data or to inject further option elements.
 	 *
@@ -3298,7 +3298,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
  * @hideconstructor
  * @classdesc
  *
- * The `GridSection` class maps all or - if `filter()` is overwritten - a
+ * The `GridSection` class maps all or - if `filter()` is overridden - a
  * subset of the underlying UCI configuration sections of a given type.
  *
  * A grid section functions similar to a {@link LuCI.form.TableSection} but
@@ -3309,7 +3309,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
  *
  * Another important difference is that the table cells show a readonly text
  * preview of the corresponding option elements by default, unless the child
- * option element is explicitly made writable by setting the `editable`
+ * option element is explicitly made writeable by setting the `editable`
  * property to `true`.
  *
  * Additionally, the grid section honours a `modalonly` property of child
@@ -3341,7 +3341,7 @@ const CBIGridSection = CBITableSection.extend(/** @lends LuCI.form.GridSection.p
 	 * Before options can be moved into a tab pane, the corresponding tab
 	 * has to be defined first, which is done by calling this function.
 	 *
-	 * Note that tabs are only effective in modal popups, options added with
+	 * Note that tabs are only effective in modal popups. Options added with
 	 * `option()` will not be assigned to a specific tab and are rendered in
 	 * the table view only.
 	 *
@@ -3504,9 +3504,9 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 	},
 
 	/**
-	 * If set to `true`, the user may remove or recreate the sole mapped
+	 * Set to `true`, the user may remove or recreate the sole mapped
 	 * configuration instance from the form section widget, otherwise only a
-	 * preexisting section may be edited. The default is `false`.
+	 * pre-existing section may be edited. The default is `false`.
 	 *
 	 * @name LuCI.form.NamedSection.prototype#addremove
 	 * @type boolean
@@ -3517,7 +3517,7 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 	 * Override the UCI configuration name to read the section IDs from. By
 	 * default, the configuration name is inherited from the parent `Map`.
 	 * By setting this property, a deviating configuration may be specified.
-	 * The default is `null`, means inheriting from the parent form.
+	 * The default of `null` means inherit from the parent form.
 	 *
 	 * @name LuCI.form.NamedSection.prototype#uciconfig
 	 * @type string
@@ -3525,7 +3525,7 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 	 */
 
 	/**
-	 * The `NamedSection` class overwrites the generic `cfgsections()`
+	 * The `NamedSection` class overrides the generic `cfgsections()`
 	 * implementation to return a one-element array containing the mapped
 	 * section ID as sole element. User code should not normally change this.
 	 *
@@ -3654,8 +3654,8 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 	__name__: 'CBI.Value',
 
 	/**
-	 * If set to `true`, the field is rendered as password input, otherwise
-	 * as plain text input.
+	 * If set to `true`, the field is rendered as a password input, otherwise
+	 * as a plain text input.
 	 *
 	 * @name LuCI.form.Value.prototype#password
 	 * @type boolean
@@ -3838,7 +3838,7 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
  * @hideconstructor
  * @classdesc
  *
- * The `DynamicList` class represents a multi value widget allowing the user
+ * The `DynamicList` class represents a multi-value widget allowing the user
  * to enter multiple unique values, optionally selected from a set of
  * predefined choices. It builds upon the {@link LuCI.ui.DynamicList} widget.
  *
@@ -4317,9 +4317,9 @@ const CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */
 	/**
 	 * Set a tooltip for the flag option.
 	 *
-	 * If set to a string, it will be used as-is as a tooltip.
+	 * Set to a string, it will be used as-is as a tooltip.
 	 *
-	 * If set to a function, the function will be invoked and the return
+	 * Set to a function, the function will be invoked and the return
 	 * value will be shown as a tooltip. If the return value of the function
 	 * is `null` no tooltip will be set.
 	 *
@@ -4464,7 +4464,7 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 	/**
 	 * Allows to specify the [display_items]{@link LuCI.ui.Dropdown.InitOptions}
 	 * property of the underlying dropdown widget. If omitted, the value of
-	 * the `size` property is used or `3` when `size` is unspecified as well.
+	 * the `size` property is used or `3` when `size` is also unspecified.
 	 *
 	 * @name LuCI.form.MultiValue.prototype#display_size
 	 * @type number
@@ -4474,7 +4474,7 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 	/**
 	 * Allows to specify the [dropdown_items]{@link LuCI.ui.Dropdown.InitOptions}
 	 * property of the underlying dropdown widget. If omitted, the value of
-	 * the `size` property is used or `-1` when `size` is unspecified as well.
+	 * the `size` property is used or `-1` when `size` is also unspecified.
 	 *
 	 * @name LuCI.form.MultiValue.prototype#dropdown_size
 	 * @type number
@@ -4603,7 +4603,7 @@ const CBITextValue = CBIValue.extend(/** @lends LuCI.form.TextValue.prototype */
  * @hideconstructor
  * @classdesc
  *
- * The `DummyValue` element wraps an {@link LuCI.ui.Hiddenfield} widget and
+ * The `DummyValue` element wraps a {@link LuCI.ui.Hiddenfield} widget and
  * renders the underlying UCI option or default value as readonly text.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
@@ -4654,9 +4654,10 @@ const CBIDummyValue = CBIValue.extend(/** @lends LuCI.form.DummyValue.prototype 
 	 */
 
 	/**
-	 * Render the UCI option value as hidden using the HTML display: none style property.
+	 * Render the UCI option value as hidden using the HTML 'display: none'
+	 * style property.
 	 *
-	 * By default, the value is displayed
+	 * By default, the value is displayed.
 	 *
 	 * @name LuCI.form.DummyValue.prototype#hidden
 	 * @type boolean
@@ -4696,7 +4697,7 @@ const CBIDummyValue = CBIValue.extend(/** @lends LuCI.form.DummyValue.prototype 
  * @hideconstructor
  * @classdesc
  *
- * The `DummyValue` element wraps an {@link LuCI.ui.Hiddenfield} widget and
+ * The `ButtonValue` element wraps a {@link LuCI.ui.Hiddenfield} widget and
  * renders the underlying UCI option or default value as readonly text.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
@@ -4728,13 +4729,13 @@ const CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototyp
 	 *
 	 * By default, the option title - which is passed as fourth argument to the
 	 * constructor - is used as caption for the button element. When setting
-	 * this property to a string, it is used as `String.format()` pattern with
+	 * this property to a string, it is used as a `String.format()` pattern with
 	 * the underlying UCI section name passed as first format argument. When
 	 * set to a function, it is invoked passing the section ID as sole argument
 	 * and the resulting return value is converted to a string before being
 	 * used as button caption.
 	 *
-	 * The default is `null`, means the option title is used as caption.
+	 * The default of `null` means the option title is used as caption.
 	 *
 	 * @name LuCI.form.ButtonValue.prototype#inputtitle
 	 * @type string|function
@@ -4750,7 +4751,7 @@ const CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototyp
 	 * Suitable values which are implemented by most themes are `positive`,
 	 * `negative` and `primary`.
 	 *
-	 * The default is `null`, means a neutral button styling is used.
+	 * The default of `null` means a neutral button styling is used.
 	 *
 	 * @name LuCI.form.ButtonValue.prototype#inputstyle
 	 * @type string
@@ -4812,7 +4813,7 @@ const CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototyp
  * @hideconstructor
  * @classdesc
  *
- * The `HiddenValue` element wraps an {@link LuCI.ui.Hiddenfield} widget.
+ * The `HiddenValue` element wraps a {@link LuCI.ui.Hiddenfield} widget.
  *
  * Hidden value widgets used to be necessary in legacy code which actually
  * submitted the underlying HTML form the server. With client side handling of
@@ -4863,7 +4864,7 @@ const CBIHiddenValue = CBIValue.extend(/** @lends LuCI.form.HiddenValue.prototyp
  * @hideconstructor
  * @classdesc
  *
- * The `FileUpload` element wraps an {@link LuCI.ui.FileUpload} widget and
+ * The `FileUpload` element wraps a {@link LuCI.ui.FileUpload} widget and
  * offers the ability to browse, upload and select remote files.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
@@ -4914,10 +4915,10 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 	 * Toggle display of hidden files.
 	 *
 	 * Display hidden files when rendering the remote directory listing.
-	 * Note that this is merely a cosmetic feature, hidden files are always
+	 * Note that this is merely a cosmetic feature: hidden files are always
 	 * included in received remote file listings.
 	 *
-	 * The default is `false`, means hidden files are not displayed.
+	 * The default of `false` means hidden files are not displayed.
 	 *
 	 * @name LuCI.form.FileUpload.prototype#show_hidden
 	 * @type boolean
@@ -4929,10 +4930,10 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 	 *
 	 * When set to `true`, the underlying widget provides a button which lets
 	 * the user select and upload local files to the remote system.
-	 * Note that this is merely a cosmetic feature, remote upload access is
+	 * Note that this is merely a cosmetic feature: remote upload access is
 	 * controlled by the session ACL rules.
 	 *
-	 * The default is `true`, means file upload functionality is displayed.
+	 * The default of `true` means file upload functionality is displayed.
 	 *
 	 * @name LuCI.form.FileUpload.prototype#enable_upload
 	 * @type boolean
@@ -4944,7 +4945,7 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 	 *
 	 * When set to `true`, the underlying widget provides a buttons which let
 	 * the user delete files from remote directories. Note that this is merely
-	 * a cosmetic feature, remote delete permissions are controlled by the
+	 * a cosmetic feature: remote delete permissions are controlled by the
 	 * session ACL rules.
 	 *
 	 * The default is `true`, means file removal buttons are displayed.
@@ -4966,8 +4967,8 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 	 * Specify the root directory for file browsing.
 	 *
 	 * This property defines the topmost directory the file browser widget may
-	 * navigate to, the UI will not allow browsing directories outside this
-	 * prefix. Note that this is merely a cosmetic feature, remote file access
+	 * navigate to. The UI will not allow browsing directories outside this
+	 * prefix. Note that this is merely a cosmetic feature: remote file access
 	 * and directory listing permissions are controlled by the session ACL
 	 * rules.
 	 *
