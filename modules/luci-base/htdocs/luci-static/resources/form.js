@@ -4667,7 +4667,8 @@ const CBIDummyValue = CBIValue.extend(/** @lends LuCI.form.DummyValue.prototype 
 	renderWidget(section_id, option_index, cfgvalue) {
 		const value = (cfgvalue != null) ? cfgvalue : this.default;
 		const hiddenEl = new ui.Hiddenfield(value, { id: this.cbid(section_id) });
-		const outputEl = E('div', { 'style': this.hidden ? 'display:none' : null });
+		const outputEl = E('output', { 'style': this.hidden ? 'display:none' : null,
+			'for': this.cbid(section_id)});
 
 		if (this.href && !((this.readonly != null) ? this.readonly : this.map.readonly))
 			outputEl.appendChild(E('a', { 'href': this.href }));
@@ -4777,7 +4778,7 @@ const CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototyp
 	renderWidget(section_id, option_index, cfgvalue) {
 		const value = (cfgvalue != null) ? cfgvalue : this.default;
 		const hiddenEl = new ui.Hiddenfield(value, { id: this.cbid(section_id) });
-		const outputEl = E('div');
+		const outputEl = E('output', {'for': this.cbid(section_id)});
 		const btn_title = this.titleFn('inputtitle', section_id) ?? this.titleFn('title', section_id);
 
 		if (value !== false)
