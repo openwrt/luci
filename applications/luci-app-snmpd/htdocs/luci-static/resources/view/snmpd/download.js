@@ -1,32 +1,32 @@
-"use strict";
-"require form";
-"require fs";
-"require rpc";
-"require ui";
-"require view";
+'use strict';
+'require form';
+'require fs';
+'require rpc';
+'require ui';
+'require view';
 
 var mapdata = { actions: {} };
 
 var mibDownload = rpc.declare({
 	object: 'file',
 	method: 'read',
-	params: [ "path" ],
+	params: [ 'path' ],
 	expect: { data : '' },
 });
 
 return L.view.extend({
 	handleMIB: function(name) {
-		var base = "/usr/share/snmp/mibs/";
-		var fileName = name;
-		var a = document.createElement("a");
+		const base = '/usr/share/snmp/mibs/';
+		const fileName = name;
+		const a = document.createElement('a');
 
 		document.body.appendChild(a);
-		a.display = "none";
+		a.display = 'none';
 
 		return mibDownload(base + fileName, false).then(function(res) {
-			var data = res;
-			var file = new Blob( [data] , { type: 'text/plain'});
-			var fileUrl = window.URL.createObjectURL(file);
+			const data = res;
+			const file = new Blob( [data] , { type: 'text/plain'});
+			const fileUrl = window.URL.createObjectURL(file);
 
 			a.href = fileUrl;
 			a.download = fileName;
@@ -37,24 +37,23 @@ return L.view.extend({
 
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(fs.list("/usr/share/snmp/mibs/"), [])
+			L.resolveDefault(fs.list('/usr/share/snmp/mibs/'), [])
 			.then(function(entries) {
-				var files = [];
-				for (var i = 0; i < entries.length; i++) {
-					if (entries[i].type == "file" &&
-						entries[i].name.match(
-							/MIB\.(mib|my|txt)$/i)) {
-						files.push(entries[i].name);
+				const files = [];
+				entries.forEach((elem) => {
+					if (elem.type == 'file' &&
+					elem.name.match(/MIB\.(mib|my|txt)$/i)) {
+						files.push(elem.name);
 					}
-				}
+				});
 				return files;
 			})
 		]);
 	},
 
 	render: function(data) {
-		var m, s, o, ss;
-		var files = data[0];
+		let m, s, o, ss;
+		const files = data[0];
 
 		m = new form.JSONMap(mapdata, _('SNMP - MIB Download'),
 			'Here you can download SNMP-MIB files');
@@ -67,13 +66,13 @@ return L.view.extend({
 
 		ss = o.subsection;
 
-		for( var i = 0; i < files.length; i++) {
-			o = ss.option(form.Button, 'dl_mib', _(files[i]),
+		files.forEach((elem) => {
+			o = ss.option(form.Button, 'dl_mib', _(elem),
 				_(''));
 			o.inputstyle = 'action important';
-			o.inputtitle = _("Download");
-			o.onclick = ui.createHandlerFn(this, this.handleMIB, files[i]);
-		}
+			o.inputtitle = _('Download');
+			o.onclick = ui.createHandlerFn(this, this.handleMIB, elem);
+		});
 
 		return m.render();
 	},
