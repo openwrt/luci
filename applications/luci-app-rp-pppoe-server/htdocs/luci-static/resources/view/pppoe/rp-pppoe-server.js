@@ -24,7 +24,7 @@ return view.extend({
 
 		o = s.option(form.Flag, 'enabled', _('Enabled'));
 
-		o = s.option(widgets.DeviceSelect, 'interface', _('Interface'), _('Interface on which to listen.'));
+		o = s.option(widgets.NetworkSelect, 'interface', _('Interface'), _('Interface on which to listen.'));
 		o.optional = true;
 		o.nocreate = true;
 		o.rmempty = true;
