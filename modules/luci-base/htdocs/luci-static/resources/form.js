@@ -4000,19 +4000,6 @@ var CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */ {
 	 * @default 'ℹ️';
 	 */
 
-	/**
-	 * Coerce the various forms of a 'boolean' string into a true/false value.
-	 *
-	 * @override
-	 */
-	load() {
-		// 
-		let load = this.super('load', arguments);
-		if (typeof(load) == 'string')
-			load = ['1', 'on', 'true', 'yes', 'enabled'].includes(load.toLowerCase());
-		return load;
-	},
-
 	/** @private */
 	renderWidget: function(section_id, option_index, cfgvalue) {
 		var tooltip = null;
