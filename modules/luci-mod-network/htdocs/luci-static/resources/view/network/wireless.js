@@ -29,7 +29,7 @@ function render_radio_badge(radioDev) {
 }
 
 function render_signal_badge(signalPercent, signalValue, noiseValue, wrap, mode) {
-	let icon = L.resource('icons/signal-75-100.svg'), title, value;
+	let icon = L.resource('icons/signal-075-100.svg'), title, value;
 
 	switch(true) {
 	case(signalPercent  < 0): icon = L.resource('icons/signal-none.svg'); 	break;
