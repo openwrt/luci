@@ -68,7 +68,7 @@ function render_status(node, ifc, with_device) {
 	desc = desc ? '%s (%s)'.format(desc, ifc.getI18n()) : ifc.getI18n();
 
 	const changecount = with_device ? 0 : count_changes(ifc.getName());
-	const maindev = ifc.getL3Device() || ifc.getDevice();
+	const maindev = ifc.getL3Device() ?? ifc.getDevice();
 	const macaddr = maindev ? maindev.getMAC() : null;
 	const cond00 = !changecount && !ifc.isDynamic() && !ifc.isAlias();
 	const cond01 = cond00 && macaddr;
@@ -99,7 +99,8 @@ function render_status(node, ifc, with_device) {
 }
 
 function render_modal_status(node, ifc) {
-	var dev = ifc ? (ifc.getDevice() || ifc.getL3Device() || ifc.getL3Device()) : null;
+	// order is important: ifc.getL3Device() can determine dev.getType for tunnel configs
+	const dev = ifc ? (ifc.getL3Device() ?? ifc.getDevice()) : null;
 
 	dom.content(node, [
 		E('img', {
@@ -294,7 +295,7 @@ return view.extend({
 			}
 
 			if (stat) {
-				var dev = ifc.getDevice();
+				const dev = ifc.getL3Device() ?? ifc.getDevice();
 				dom.content(stat, [
 					E('img', {
 						'src': L.resource('icons/%s%s.svg').format(dev ? dev.getType() : 'ethernet', ifc.isUp() ? '' : '_disabled'),
