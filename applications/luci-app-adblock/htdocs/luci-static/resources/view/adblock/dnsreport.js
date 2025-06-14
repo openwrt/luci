@@ -79,7 +79,7 @@ function handleAction(ev) {
 	}
 
 	if (ev === 'query') {
-		L.ui.showModal(_('Blocklist Query'), [
+		ui.showModal(_('Blocklist Query'), [
 			E('p', _('Query active blocklists and backups for a specific domain.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'style': 'padding-top:.5em', 'id': 'run' }, [
@@ -200,7 +200,7 @@ function handleAction(ev) {
 	}
 
 	if (ev === 'map') {
-		let md = ui.showModal(null, [
+		const modal = ui.showModal(null, [
 			E('div', {
 				id: 'mapModal',
 				style: 'position: relative;'
@@ -230,7 +230,7 @@ function handleAction(ev) {
 				}, _('Map Reset'))
 			])
 		]);
-		md.style.maxWidth = '90%';
+		modal.style.maxWidth = '90%';
 		document.getElementById('mapModal').focus();
 	}
 }
@@ -349,7 +349,7 @@ return view.extend({
 		}
 		cbi_update_table(tbl_requests, rows_requests);
 
-		return E('div', { 'class': 'cbi-map', 'id': 'map' }, [
+		const page = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
 			E('div', { 'class': 'cbi-section' }, [
 				E('p', _('This tab shows the last generated DNS Report, press the \'Refresh\' button to get a current one.')),
 				E('p', '\xa0'),
@@ -387,13 +387,9 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'style': 'float:none;margin-right:.4em;',
+					'id': 'btnMap',
+					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
-						if (uci.get('adblock', 'global', 'adb_map') !== '1') {
-							if (!notMsg) {
-								notMsg = true;
-								return ui.addNotification(null, E('p', _('GeoIP Map is not enabled!')), 'info');
-							}
-						}
 						if (content[1] && content[1].length > 1) {
 							sessionStorage.setItem('mapData', JSON.stringify(content[1]));
 							return handleAction('map');
@@ -420,9 +416,15 @@ return view.extend({
 						return handleAction('refresh');
 					})
 				}, [_('Refresh...')])
-			]),
-
+			])
 		]);
+		if (uci.get('adblock', 'global', 'adb_map') === '1') {
+			const btn = page.querySelector('#btnMap');
+			if (btn) {
+				btn.removeAttribute('disabled');
+			}
+		}
+		return page;
 	},
 	handleSaveApply: null,
 	handleSave: null,
