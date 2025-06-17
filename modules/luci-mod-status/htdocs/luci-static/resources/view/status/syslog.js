@@ -2,7 +2,6 @@
 'require view';
 'require fs';
 'require poll';
-'require uci';
 'require ui';
 
 return view.extend({
@@ -133,7 +132,6 @@ return view.extend({
 		scrollUpButton.addEventListener('click', () => scrollDownButton.scrollIntoView());
 
 		const self = this;
-		const log_file = uci.get_first('system', 'system', 'log_file');
 
 		// Create facility invert checkbox
 		const facilityInvert = E('input', {
