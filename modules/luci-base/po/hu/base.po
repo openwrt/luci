@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-05-31 20:15+0000\n"
+"PO-Revision-Date: 2025-06-17 14:41+0000\n"
 "Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/luci/"
 "hu/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.12.1\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1277
 msgid "!known (not known)"
@@ -85,15 +85,15 @@ msgstr "%s a dnsmasq-ot futtató rendszer címe."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:744
 msgid "%s uses a human-readable encoding of hex-and-colons"
-msgstr ""
+msgstr "%s Olvasható formátum (kettőspontokkal tagolt hex értékek)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:743
 msgid "%s uses an alternative encoding of the MAC as base64"
-msgstr ""
+msgstr "%s MAC-cím használata base64 kódolással"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:742
 msgid "%s uses the default MAC address format encoding"
-msgstr ""
+msgstr "%s Alapértelmezett MAC-cím formátumkódolás használata"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:297
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:450
@@ -806,6 +806,8 @@ msgid ""
 "Add a subnet address to the DNS queries which are forwarded upstream, "
 "leaving this value empty disables the feature."
 msgstr ""
+"Adjon hozzá egy alhálózati címet a továbbított (upstream) DNS-"
+"lekérdezésekhez, vagy hagyja üresen a funkció letiltásához."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1395
 msgid "Add device configuration"
@@ -869,7 +871,7 @@ msgstr "Partner-cím hozzáadása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:740
 msgid "Add requestor MAC"
-msgstr ""
+msgstr "Kérelmező MAC-címének hozzáadása"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:352
 msgctxt "Dnsmasq instance"
@@ -882,13 +884,15 @@ msgstr "Továbbított és fordított DNS-bejegyzések hozzáadása ehhez a gépn
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:756
 msgid "Add subnet address to forwards"
-msgstr ""
+msgstr "Alhálózati cím hozzáadása az átirányításokhoz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:741
 msgid ""
 "Add the MAC address of the requestor to DNS queries which are forwarded "
 "upstream."
 msgstr ""
+"Adja hozzá a kérelmező MAC-címét a továbbított (upstream) DNS-"
+"lekérdezésekhez."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:356
 msgid "Add to Blacklist"
@@ -1118,7 +1122,8 @@ msgstr "Rendszerfunkciók vizsgálatának engedélyezése"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr ""
-"Engedélyezi a <em>root</em> felhasználónak a jelszóval történő bejelentkezést"
+"Engedélyezi a <em>root</em> felhasználónak a jelszóval történő "
+"bejelentkezést."
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:609
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:782
@@ -1724,6 +1729,8 @@ msgstr "Pufferelt"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:403
 msgid "By default, dnsmasq caches A, AAAA, CNAME and SRV DNS record types."
 msgstr ""
+"Alapértelmezés szerint a dnsmasq a következőket gyorsítótárazza: A, AAAA, "
+"CNAME és SRV DNS."
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:130
 msgid ""
@@ -1761,11 +1768,11 @@ msgstr "Processzorhasználat (%)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:388
 msgid "Cache"
-msgstr ""
+msgstr "Gyorsítótár"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:403
 msgid "Cache arbitrary RR"
-msgstr ""
+msgstr "Tetszőleges gyorsítótár erőforrásrekord (RR - resource record)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:43
 msgid "Cached"
@@ -1940,7 +1947,7 @@ msgstr "A változtatások visszavonva."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 msgid "Changes the administrator password for accessing the device"
-msgstr "Az eszköz eléréséhez szükséges rendszergazdai jelszó megváltoztatása"
+msgstr "Az eszköz eléréséhez szükséges rendszergazdai jelszó megváltoztatása."
 
 #: modules/luci-compat/luasrc/view/cbi/wireless_modefreq.htm:190
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:118
@@ -3238,7 +3245,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:205
 msgid "Each key is stored as a file in <code>%s</code>."
-msgstr ""
+msgstr "Minden kulcs fájlként tárolódik a(z) <code>%s</code> könyvtárban."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:203
 msgid ""
@@ -3246,6 +3253,9 @@ msgid ""
 "repositories) allows packages in lists signed by it to be installed by the "
 "package manager."
 msgstr ""
+"Minden tároló (repository) nyilvános - hivatalos vagy harmadik féltől "
+"származó - kulcsa lehetővé teszi, hogy az azzal aláírt listákban szereplő "
+"csomagokat a csomagkezelő telepítse."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2709
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2712
@@ -3350,7 +3360,7 @@ msgstr "IGMP szimatolás engedélyezése"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Enable <abbr title=\"Secure Shell\">SSH</abbr> service instance"
-msgstr "SSH szolgáltatáspéldány engedélyezése"
+msgstr "SSH szolgáltatáspéldány engedélyezése."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1025
 msgid "Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
@@ -5115,6 +5125,8 @@ msgid ""
 "If an address is specified in the flag, it will be used, otherwise, the "
 "address of the requestor will be used."
 msgstr ""
+"Ha meg van adva cím, akkor azt fogja használni a rendszer, ellenkező esetben "
+"a kérelmező címét."
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "If checked, 1DES is enabled"
@@ -5209,7 +5221,7 @@ msgstr "Mellőzés"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
 msgid "Ignore hosts files directory"
-msgstr ""
+msgstr "hosts fájlok könyvtárának mellőzése"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:658
 msgid "Ignore interface"
@@ -5225,7 +5237,7 @@ msgstr "A feloldási fájl mellőzése"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:657
 msgid "Ignore {etc_hosts} file"
-msgstr ""
+msgstr "{etc_hosts} fájl mellőzése"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:449
 msgid "Image"
@@ -6633,7 +6645,7 @@ msgstr "Legnagyobb szimatolási táblaméret"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:805
 msgid "Maximum source port #"
-msgstr "Legnagyobb forrásport #"
+msgstr "Legnagyobb forrásport"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:854
 msgid ""
@@ -6756,7 +6768,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:797
 msgid "Minimum source port #"
-msgstr "Legkisebb forrásport #"
+msgstr "Legkisebb forrásport"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:861
 msgid ""
@@ -6820,7 +6832,7 @@ msgid ""
 "Modem connection in progress. Please wait. This process will timeout after 2 "
 "minutes."
 msgstr ""
-"Modem csatlakoztatása folyamatban. Kérem várjon. Ez a folyamat 2 perc múlva "
+"Modem csatlakoztatása folyamatban, kérem várjon! Ez a folyamat 2 perc múlva "
 "leáll."
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:77
@@ -7556,6 +7568,8 @@ msgid ""
 "Off: use all files in the directory including the instance specific hosts "
 "file"
 msgstr ""
+"Ki: a könyvtárban található összes fájl használata, beleértve a "
+"példányspecifikus hosts fájlt is."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/none.js:19
 msgid "On"
@@ -7581,7 +7595,7 @@ msgstr "Kapcsolatban"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:651
 msgid "On: use instance specific hosts file only"
-msgstr ""
+msgstr "Be: csak a példányspecifikus hosts fájl használata."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1219
 msgid "One of hostname or MAC address must be specified!"
@@ -8223,7 +8237,7 @@ msgstr "2. jelszó"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:266
 msgid "Paste or drag SSH key file…"
-msgstr "SSH kulcsfájl beszúrása vagy idehúzása…"
+msgstr "SSH kulcsfájl beillesztése vagy idehúzása…"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:431
 msgid "Paste or drag WireGuard peer configuration (wg0.conf) file…"
@@ -8243,7 +8257,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:181
 msgid "Paste or drag repository public key"
-msgstr ""
+msgstr "Nyilvános kulcs beillesztése vagy idehúzása"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:430
 msgid "Paste or drag supplied WireGuard configuration file…"
@@ -8253,7 +8267,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:184
 msgid "Paste or drag to upload a software repository public key…"
-msgstr ""
+msgstr "Tároló nyilvános kulcsának beillesztése vagy idehúzása…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1793
 msgid "Path to CA-Certificate"
@@ -9074,7 +9088,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:752
 msgid "Remove MAC address before forwarding query"
-msgstr ""
+msgstr "MAC-cím eltávolítása a lekérdezés továbbítása előtt"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:753
 msgid ""
@@ -9126,11 +9140,11 @@ msgstr ""
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:77
 msgid "Repo Public Keys"
-msgstr ""
+msgstr "Nyilvános kulcsok"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:201
 msgid "Repository Public Keys"
-msgstr ""
+msgstr "Nyilvános kulcsok"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:17
 msgid "Request IPv6-address"
@@ -9478,6 +9492,8 @@ msgid ""
 "Routes go in routing tables and define the specific path to reach "
 "destinations."
 msgstr ""
+"Az útvonalak útválasztási táblázatokban szerepelnek, és meghatározzák a "
+"célállomások eléréséhez vezető konkrét utat."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:29
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
@@ -9538,6 +9554,8 @@ msgid ""
 "Rules determine which routing table to use, based on conditions like source "
 "address or interface."
 msgstr ""
+"A szabályok - olyan feltételek alapján, mint a forráscím vagy az csatoló - "
+"határozzák meg, hogy melyik útválasztási táblát kell használni."
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2310
 msgid "Runtime error"
@@ -9572,7 +9590,7 @@ msgstr "SRV"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:10
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:38
 msgid "SSH Access"
-msgstr "SSH-hozzáférés"
+msgstr "SSH hozzáférés"
 
 #: protocols/luci-proto-pppossh/htdocs/luci-static/resources/protocol/pppossh.js:70
 msgid "SSH server address"
@@ -10822,6 +10840,9 @@ msgid ""
 "still marks the request so that no upstream nameserver will add client "
 "address information either."
 msgstr ""
+"A továbbított cím hossza az előtag hossz paraméterétől függ: 32 (IPv6 esetén "
+"128) a teljes címet továbbítja, a nulla pedig semmit, de megjelöli a kérést, "
+"így a felsőbb rétegű névszerverek sem adnak hozzá kliens címinformációkat."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:320
 msgid ""
@@ -10843,7 +10864,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:760
 msgid "The default (%s) is zero for both IPv4 and IPv6."
-msgstr ""
+msgstr "IPv4 és IPv6 esetén is nulla az alapértelmezett érték (%s)."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4793
 msgid ""
@@ -11271,8 +11292,8 @@ msgid ""
 "This is the content of /etc/rc.local. Insert your own commands here (in "
 "front of 'exit 0') to execute them at the end of the boot process."
 msgstr ""
-"Ez a <code>/etc/rc.local</code> fájl tartalma. Szúrja be ide a saját "
-"parancsait (az „exit 0” sor elé) a rendszerindítási folyamat végén történő "
+"Ez a <code>/etc/rc.local</code> fájl tartalma. Az „exit 0” sor elé Illessze "
+"be ide a saját parancsait a rendszerindítási folyamat végén történő "
 "végrehajtásukhoz."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:54
@@ -13175,11 +13196,11 @@ msgstr "érvényes MAC-cím"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:457
 msgid "valid UCI identifier"
-msgstr "érvényes <em>UCI</em>-azonosító"
+msgstr "érvényes UCI-azonosító"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:408
 msgid "valid UCI identifier, hostname or IP address range"
-msgstr "érvényes <em>UCI</em>-azonosító, gépnév vagy IP-cím"
+msgstr "érvényes UCI-azonosító, gépnév vagy IP-cím"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:429
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:432
