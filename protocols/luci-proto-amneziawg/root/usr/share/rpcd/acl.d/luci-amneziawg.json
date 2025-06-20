@@ -1,0 +1,22 @@
+{
+	"luci-proto-amneziawg": {
+		"description": "Grant access to LuCI AmneziaWG procedures",
+		"read": {
+			"ubus": {
+				"luci.amneziawg": [
+					"getWgInstances"
+				]
+			},
+			"uci": [ "ddns", "system", "network" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.amneziawg": [
+					"generateKeyPair",
+					"getPublicAndPrivateKeyFromPrivate",
+					"generatePsk"
+				]
+			}
+		}
+	}
+}
