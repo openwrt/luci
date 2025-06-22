@@ -57,9 +57,6 @@ return view.extend({
 		lhttps = s.taboption('general', form.DynamicList, 'listen_https', _('HTTPS listener (address:port)'), _('Bind to specific interface:port (by specifying interface address)'));
 		lhttps.datatype = 'list(ipaddrport(1))';
 
-		var cert = uci.get('uhttpd', 'main', 'cert');
-		var key = uci.get('uhttpd', 'main', 'key');
-
 		lhttps.validate = function (section_id, value) {
 			let have_https_listener = false;
 			let have_http_listener = false;
@@ -94,8 +91,6 @@ return view.extend({
 
 			return true;
 		};
-
-		lhttps.depends({ cert, key });
 
 		o = s.taboption('general', form.Flag, 'redirect_https', _('Redirect all HTTP to HTTPS'));
 		o.default = o.enabled;
