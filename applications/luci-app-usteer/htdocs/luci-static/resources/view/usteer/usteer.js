@@ -192,13 +192,14 @@ function collectRemoteHosts (remotehosttableentries,Remotehosts) {
 						dns_cache[address] = replies[address];
 						continue;
 					} else {
-						dns_cache[address]=Hosts[
-							Object.keys(Hosts).find(mac =>   
-								((typeof Hosts[mac]['name'] !== 'undefined') && 
-									((Object.keys(Hosts[mac]['ip6addrs']).find(IPaddr2 => (address === Hosts[mac]['ip6addrs'][IPaddr2]))) ||
-									(Object.keys(Hosts[mac]['ipaddrs']).find(IPaddr2 => (address === Hosts[mac]['ipaddrs'][IPaddr2])))))
-									)
-							]['name'];
+						if (Hosts.length >0)
+							dns_cache[address]=Hosts[
+								Object.keys(Hosts).find(mac =>   
+									((typeof Hosts[mac]['name'] !== 'undefined') && 
+										((Object.keys(Hosts[mac]['ip6addrs']).find(IPaddr2 => (address === Hosts[mac]['ip6addrs'][IPaddr2]))) ||
+										(Object.keys(Hosts[mac]['ipaddrs']).find(IPaddr2 => (address === Hosts[mac]['ipaddrs'][IPaddr2])))))
+										)
+								]['name'];
 					}
 				}
 	});
@@ -328,7 +329,7 @@ return view.extend({
 			this.callGetRemoteinfo().catch (function (){return null;}),
 			this.callGetLocalinfo().catch (function (){return null;}),
 			this.callGetClients().catch (function (){return null;}),
-			network.getWifiNetworks()
+			network.getWifiNetworks().catch (function (){return null;})
 		]);
 	},
 
@@ -624,10 +625,11 @@ return view.extend({
 
 		o = s.taboption('settings', form.DynamicList, 'ssid_list', _('SSID list'), _('List of SSIDs to enable steering on')+' ('+_('empty means all')+')');
 		WifiNetworks.forEach(function (wifiNetwork) {
-			if (wifiNetwork.getSSID() && (!o.keylist || o.keylist.indexOf(wifiNetwork.getSSID()) === -1)) {
-				o.value(wifiNetwork.getSSID())
-			}
-		});
+			if (wifiNetwork && typeof wifiNetwork === 'object') 
+				if (wifiNetwork.getSSID() && (!o.keylist || o.keylist.indexOf(wifiNetwork.getSSID()) === -1)) {
+					o.value(wifiNetwork.getSSID())
+				}
+		});	
 		o.optional = true;
 		o.datatype = 'list(string)';
 
