@@ -9,6 +9,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=luci-app-privoxy
 
 PKG_LICENSE:=Apache-2.0
+PKG_MAINTAINER:=Paul Donald <newtwen+github@gmail.com>
 
 LUCI_TITLE:=LuCI Support for Privoxy WEB proxy
 LUCI_DEPENDS:=+luci-base +privoxy
