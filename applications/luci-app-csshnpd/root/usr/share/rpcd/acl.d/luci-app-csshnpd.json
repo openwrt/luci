@@ -1,0 +1,15 @@
+{
+	"luci-app-csshnpd": {
+		"description": "Grant UCI access for luci-app-csshnpd",
+		"read": {
+			"uci": [ "sshnpd" ],
+			"file": {
+				"/usr/bin/at_enroll.sh": ["exec"],
+				"/root/.atsign/keys/*": ["stat"]
+			}
+		},
+		"write": {
+			"uci": [ "sshnpd" ]
+		}
+	}
+}
