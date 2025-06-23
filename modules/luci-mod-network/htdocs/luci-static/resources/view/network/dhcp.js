@@ -8,6 +8,7 @@
 'require network';
 'require validation';
 'require tools.widgets as widgets';
+'require tools.dnsrecordhandlers as drh';
 
 var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
 
@@ -1054,7 +1055,7 @@ return view.extend({
 			so.value(ipv4, '%s (%s)'.format(ipv4, ipaddrs[ipv4]));
 		});
 
-		o = dnss.taboption('dnsrr', form.SectionValue, '__dnsrr__', form.TableSection, 'dnsrr', null, 
+		o = dnss.taboption('dnsrr', form.SectionValue, '__dnsrr__', form.GridSection, 'dnsrr', null, 
 			_('Set an arbitrary resource record (RR) type.') + '<br/>' + 
 			_('Hexdata is automatically en/decoded on save and load'));
 
@@ -1067,7 +1068,7 @@ return view.extend({
 		ss.nodescriptions = true;
 
 		function hexdecodeload(section_id) {
-			let value = uci.get('dhcp', section_id, this.option) || '';
+			let value = uci.get('dhcp', section_id, 'hexdata') || '';
 			// Remove any spaces or colons from the hex string - they're allowed
 			value = value.replace(/[\s:]/g, '');
 			// Hex-decode the string before displaying
@@ -1098,25 +1099,77 @@ return view.extend({
 		so.datatype = 'uinteger';
 		so.placeholder = '64';
 
-		so = ss.option(form.Value, 'hexdata', _('Raw Data'));
+		so = ss.option(form.Value, '_hexdata', _('Raw Data'));
 		so.rmempty = true;
 		so.datatype = 'string';
 		so.placeholder = 'free-form string';
 		so.load = hexdecodeload;
 		so.write = hexencodesave;
+		so.modalonly = true;
+		so.depends({ rrnumber: '65', '!reverse': true });
 
-		so = ss.option(form.DummyValue, '_hexdata', _('Hex Data'));
-		so.width = '10%';
+		so = ss.option(form.DummyValue, 'hexdata', _('Hex Data'));
+		so.width = '50%';
 		so.rawhtml = true;
 		so.load = function(section_id) {
 			let hexdata = uci.get('dhcp', section_id, 'hexdata') || '';
 			hexdata = hexdata.replace(/[:]/g, '');
-			if (hexdata) {
-				return hexdata.replace(/(.{20})/g, '$1<br/>'); // Inserts <br> after every 2 characters (hex pair)
-			} else {
-				return '';
-			}
-		}
+			return hexdata.replace(/(.{2})/g, '$1 ');
+		};
+
+		function writetype65(section_id, value) {
+			let rrnum = uci.get('dhcp', section_id, 'rrnumber');
+			if (rrnum !== '65') return;
+
+			let priority = parseInt(this.section.formvalue(section_id, '_svc_priority'), 10);
+			let target = this.section.formvalue(section_id, '_svc_target') || '.';
+			let params = value.trim().split('\n').map(l => l.trim()).filter(Boolean);
+
+			const hex = drh.buildSvcbHex(priority, target, params);	
+			uci.set('dhcp', section_id, 'hexdata', hex);
+		};
+
+		function loadtype65(section_id) {
+			let rrnum = uci.get('dhcp', section_id, 'rrnumber');
+			if (rrnum !== '65') return null;
+
+			let hexdata = uci.get('dhcp', section_id, 'hexdata');
+			return drh.parseSvcbHex(hexdata);
+		};
+
+		// Type 65 builder fields (hidden unless rrnumber === 65)
+		so = ss.option(form.Value, '_svc_priority', _('Svc Priority'));
+		so.placeholder = 1;
+		so.datatype = 'and(uinteger,min(0),max(65535))'
+		so.modalonly = true;
+		so.depends({ rrnumber: '65' });
+		so.write = writetype65;
+		so.load = function(section_id) {
+			const parsed = loadtype65(section_id);
+			return parsed?.priority?.toString() || '';
+		};
+
+		so = ss.option(form.Value, '_svc_target', _('Svc Target'));
+		so.placeholder = 'svc.example.com.';
+		so.dataype = 'hostname';
+		so.modalonly = true;
+		so.depends({ rrnumber: '65' });
+		so.write = writetype65;
+		so.load = function(section_id) {
+			const parsed = loadtype65(section_id);
+			return parsed?.target || '';
+		};
+
+		so = ss.option(form.TextValue, '_svc_params', _('Svc Parameters'));
+		so.placeholder = 'alpn=h2,h3\nipv4hint=192.0.2.1,192.0.2.2\nipv6hint=2001:db8::1,2001:db8::2\nport=8000';
+		so.modalonly = true;
+		so.rows = 4;
+		so.depends({ rrnumber: '65' });
+		so.write = writetype65;
+		so.load = function(section_id) {
+			const parsed = loadtype65(section_id);
+			return parsed?.params?.join('\n') || '';
+		};
 
 		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
 			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.') + '<br />' +
