@@ -5,6 +5,7 @@
 'require uci';
 'require rpc';
 'require form';
+'require tools.widgets as widgets';
 
 const callInitAction = rpc.declare({
 	object: 'luci',
@@ -143,36 +144,39 @@ return view.extend({
 		o = s.taboption('setup', form.Flag, 'enable_upnp', _('Enable UPnP IGD protocol'));
 		o.default = '1';
 
-		o = s.taboption('setup', form.Flag, 'enable_natpmp', _('Enable PCP/NAT-PMP protocols'));
+		o = s.taboption('setup', form.Flag, 'enable_pcp_natpmp', _('Enable PCP/NAT-PMP protocols'));
 		o.default = '1';
 
-		o = s.taboption('setup', form.Flag, 'igdv1', _('UPnP IGDv1 compatibility mode'),
-			_('Advertise as IGDv1 (IPv4 only) device instead of IGDv2'));
-		o.default = '1';
-		o.rmempty = false;
+		o = s.taboption('setup', form.ListValue, 'upnp_igd_compat', _('UPnP IGD compatibility mode'),
+			_('Act/emulate as specific/different device to workaround/support/handle/bypass/assist/mitigate IGDv2 incompatible clients'));
+		o.value('igdv1', _('IGDv1 (IPv4 only)'));
+		o.value('igdv2', _('IGDv2'));
+		o.default = 'igdv1';
 		o.depends('enable_upnp', '1');
 		o.retain = true;
 
-		s.taboption('advanced', form.Flag, 'use_stun', _('Use %s', 'Use %s (%s = STUN)')
-				.format('<a href="https://en.wikipedia.org/wiki/STUN" target="_blank" rel="noreferrer"><abbr title="Session Traversal Utilities for NAT">STUN</abbr></a>'),
-			_('To detect the public IPv4 address for unrestricted full-cone/one-to-one NATs'));
+		o = s.taboption('advanced', form.RichListValue, 'use_stun', _('Use %s for CGNATs', 'Use %s (%s = STUN) for CGNATs')
+			.format('<a href="https://en.wikipedia.org/wiki/STUN" target="_blank" rel="noreferrer"><abbr title="Session Traversal Utilities for NAT">STUN</abbr></a>'),
+			_('Enable unrestricted endpoint-independent (1:1) CGNATs and detect public IPv4'));
+		o.value('0', _('Disabled'));
+		o.value('1', _('Enabled'), _('Test requires currently an additional firewall rule'));
+		o.value('allow-filtered', _('Enabled (allow filtered)'), _('Allow filtered CGNAT test result'));
+		o.default = '0';
 
-		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN host'));
+		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN server'));
 		o.depends('use_stun', '1');
+		o.depends('use_stun', 'allow-filtered');
 		o.retain = true;
-		o.datatype = 'host';
+		o.datatype = 'or(hostname,hostport,ip4addr("nomask"))';
+		o.placeholder = 'stun.nextcloud.com';
 
-		o = s.taboption('advanced', form.Value, 'stun_port', _('STUN port'));
-		o.depends('use_stun', '1');
-		o.retain = true;
-		o.datatype = 'port';
-		o.placeholder = '3478';
+		o = s.taboption('advanced', form.Value, 'external_ip', _('Override public IPv4'),
+			_('Manually set reported public/external (WAN) IPv4 address'));
+		o.depends('use_stun', '0');
+		o.datatype = 'ip4addr("nomask")';
 
-		o = s.taboption('advanced', form.Flag, 'secure_mode', _('Enable secure mode'),
-			_('Allow adding port maps for requesting IP addresses only'));
-		o.default = '1';
-		o.depends('enable_upnp', '1');
-		o.retain = true;
+		o = s.taboption('advanced', form.Flag, 'allow_third_party_mapping', _('Allow third-party mapping'),
+			_('Allow adding port maps for non-requesting IP addresses'));
 
 		s.taboption('advanced', form.Flag, 'ipv6_disable', _('Disable IPv6 mapping'));
 
@@ -190,22 +194,26 @@ return view.extend({
 		o.retain = true;
 
 		o = s.taboption('igd-settings', form.Value, 'notify_interval', _('Notify interval'),
-			_('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s')
+			_('A 900s interval results in %s announces with a minimum cache-control max-age of 1800', 'A 900s interval results in %s (%s = SSDP) announces with a minimum cache-control max-age of 1800')
 				.format('<abbr title="Simple Service Discovery Protocol">SSDP</abbr>'));
-		o.datatype = 'uinteger';
+		o.datatype = 'min(900)';
 		o.placeholder = '900';
 		o.depends('enable_upnp', '1');
 		o.retain = true;
 
-		o = s.taboption('igd-settings', form.Value, 'download', _('Download speed'),
-			_('Report maximum download speed in kByte/s'));
+		o = s.taboption('igd-settings', form.Value, 'download_kbps', _('Download speed'),
+			_('Report maximum link speed in kbit/s'));
 		o.depends('enable_upnp', '1');
 		o.retain = true;
+		o.datatype = 'uinteger';
+		o.placeholder = 'Default interface link speed';
 
-		o = s.taboption('igd-settings', form.Value, 'upload', _('Upload speed'),
-			_('Report maximum upload speed in kByte/s'));
+		o = s.taboption('igd-settings', form.Value, 'upload_kbps', _('Upload speed'),
+			_('Report maximum link speed in kbit/s'));
 		o.depends('enable_upnp', '1');
 		o.retain = true;
+		o.datatype = 'uinteger';
+		o.placeholder = 'Default interface link speed';
 
 		o = s.taboption('igd-settings', form.Value, 'presentation_url', _('Presentation URL'),
 			_('Report custom router web interface (presentation) URL'));
@@ -232,7 +240,7 @@ return view.extend({
 		o.retain = true;
 
 		s = m.section(form.GridSection, 'perm_rule', _('Service Access Control List'),
-			_('ACL specify which client addresses and ports can be mapped, IPv6 always allowed.'));
+			_('The ACL specifies which client addresses and ports can be mapped. ACL denied with no entry. IPv6 is always allowed unless disabled.'));
 		s.sortable = true;
 		s.anonymous = true;
 		s.addremove = true;
