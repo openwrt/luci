@@ -21,20 +21,24 @@ const methods = {
 			const rules = [];
 			const leases = [];
 
-			const leasefile = open(uci.get('upnpd', 'config', 'upnp_lease_file'), 'r');
+			const leasefile = open(uci.get('upnpd', 'config', 'upnp_lease_file') || '/var/run/miniupnpd.leases', 'r');
 
 			if (leasefile) {
 				for (let line = leasefile.read('line'); length(line); line = leasefile.read('line')) {
 					const record = split(line, ':', 6);
 
 					if (length(record) == 6) {
+						let desc = trim(record[5]);
+						if (!match(desc, /^PCP.*[0-9a-f]{24}$|^NAT-PMP/)) {
+							desc='UPnP IGD / ' + desc;
+						}
 						push(leases, {
 							proto: uc(record[0]),
 							extport: +record[1],
 							intaddr: arrtoip(iptoarr(record[2])),
 							intport: +record[3],
 							expires: record[4] - timelocal(localtime()),
-							description: trim(record[5])
+							description: desc
 						});
 					}
 				}
@@ -120,7 +124,7 @@ const methods = {
 
 			if (idx > 0) {
 				const uci = cursor();
-				const leasefile = uci.get('upnpd', 'config', 'upnp_lease_file');
+				const leasefile = uci.get('upnpd', 'config', 'upnp_lease_file') || '/var/run/miniupnpd.leases';
 
 				if (access(leasefile)) {
 					system(['sed', '-i', '-e', `${idx}d`, leasefile]);
