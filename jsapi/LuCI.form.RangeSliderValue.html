@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: GridSection</title>
+    <title>Class: RangeSliderValue</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -3827,7 +3827,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="LuCI.form.GridSection.html">Class: GridSection</h1>
+        <h1 class="page-title" data-filename="LuCI.form.RangeSliderValue.html">Class: RangeSliderValue</h1>
         
 
 
@@ -3838,24 +3838,13 @@
     <h2>
         <span class="ancestors"><a href="LuCI.html">LuCI</a><a href="LuCI.form.html">.form</a>.</span>
     
-    GridSection
+    RangeSliderValue
     </h2>
     
-        <div class="class-description"><p>The <code>GridSection</code> class maps all or - if <code>filter()</code> is overridden - a
-subset of the underlying UCI configuration sections of a given type.</p>
-<p>A grid section functions similar to a <a href="LuCI.form.TableSection.html"><code>LuCI.form.TableSection</code></a> but
-supports tabbing in the modal overlay. Option elements added with
-<a href="LuCI.form.GridSection.html#option"><code>option()</code></a> are shown in the table while
-elements added with <a href="LuCI.form.GridSection.html#taboption"><code>taboption()</code></a>
-are displayed in the modal popup.</p>
-<p>Another important difference is that the table cells show a readonly text
-preview of the corresponding option elements by default, unless the child
-option element is explicitly made writeable by setting the <code>editable</code>
-property to <code>true</code>.</p>
-<p>Additionally, the grid section honours a <code>modalonly</code> property of child
-option elements. Refer to the <a href="LuCI.form.AbstractValue.html"><code>AbstractValue</code></a>
-documentation for details.</p>
-<p>Layout wise, a grid section looks mostly identical to table sections.</p></div>
+        <div class="class-description"><p>The <code>RangeSliderValue</code> class implements a range slider input using
+<code>LuCI.ui.RangeSlider</code>. It is useful in cases where a value shall fall
+within a predetermined range. This helps omit various error checks for such
+values. The currently chosen value is displayed to the side of the slider.</p></div>
     
 </header>  
 
@@ -3867,14 +3856,14 @@ documentation for details.</p>
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="GridSection">
+        <h4 class="name" id="RangeSliderValue">
             
-            new LuCI.form.GridSection<span class="signature">(form, section_type, <span class="optional">title</span>, <span class="optional">description</span>)</span>
+            new LuCI.form.RangeSliderValue<span class="signature">(form, section, option, <span class="optional">title</span>, <span class="optional">description</span>)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3294">line 3294</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4122">line 4122</a>
         </div>
         
     </div>
@@ -3937,14 +3926,47 @@ documentation for details.</p>
                     
                 
                 <p>The configuration form this section is added to. It is automatically passed
-by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
+by <a href="LuCI.form.AbstractSection.html#option"><code>option()</code></a> or
+<a href="LuCI.form.AbstractSection.html#taboption"><code>taboption()</code></a> when adding the
+option to the section.</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>section_type</code></td>
+                <td class="name"><code>section</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="LuCI.form.AbstractSection.html">LuCI.form.AbstractSection</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                    
+                    
+                        
+                    
+                
+                <p>The configuration section this option is added to. It is automatically passed
+by <a href="LuCI.form.AbstractSection.html#option"><code>option()</code></a> or
+<a href="LuCI.form.AbstractSection.html#taboption"><code>taboption()</code></a> when adding the
+option to the section.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>option</code></td>
             
             
             <td class="type">
@@ -3965,7 +3987,7 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
                         
                     
                 
-                <p>The type of the UCI section to map.</p></td>
+                <p>The name of the UCI option to map.</p></td>
         </tr>
 	
 	
@@ -3995,7 +4017,7 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
                         
                     
                 
-                <p>The title caption of the form section element.</p></td>
+                <p>The title caption of the option element.</p></td>
         </tr>
 	
 	
@@ -4025,7 +4047,7 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
                         
                     
                 
-                <p>The description text of the form section element.</p></td>
+                <p>The description text of the option element.</p></td>
         </tr>
 	
 	
@@ -4079,7 +4101,7 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
         <h3 class="subsection-title">Extends</h3>
         
         <ul>
-            <li><a href="LuCI.form.TableSection.html">LuCI.form.TableSection</a></li>
+            <li><a href="LuCI.form.Value.html">LuCI.form.Value</a></li>
         </ul>
     
     
@@ -4098,7 +4120,7 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="addbtntitle">addbtntitle<span class="type-signature type string">string</span> <span class="type-signature type function">function</span> </h4>
+        <h4 class="name" id="calculate">calculate<span class="type-signature type function">function</span> </h4>
     </div>
     
     
@@ -4106,11 +4128,11 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
 <dd>
     
     <div class="description">
-        <p>Override the caption used for the section add button at the bottom of
-the section form element. Set to a string, it will be used as-is.
-Set to a function, the function will be invoked and its return value
-is used as caption, after converting it to a string. If this property
-is not set, the default is <code>Add</code>.</p>
+        <p>Override the calculate action.</p>
+<p>When this property is set to a function, it is invoked when the slider
+is adjusted. This might be useful to calculate and display a result which
+is more meaningful than the currently chosen value. The calculated value
+is displayed below the slider.</p>
     </div>
     
     
@@ -4150,7 +4172,7 @@ is not set, the default is <code>Add</code>.</p>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="addremove">addremove<span class="type-signature type boolean">boolean</span> </h4>
+        <h4 class="name" id="calcunits">calcunits<span class="type-signature type string">string</span> </h4>
     </div>
     
     
@@ -4158,165 +4180,8 @@ is not set, the default is <code>Add</code>.</p>
 <dd>
     
     <div class="description">
-        <p>If set to <code>true</code>, the user may add or remove instances from the form
-section widget, otherwise only pre-existing sections may be edited.
-The default is <code>false</code>.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="anonymous">anonymous<span class="type-signature type boolean">boolean</span> </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>If set to <code>true</code>, mapped section instances are treated as anonymous
-UCI sections, which means that section instance elements will be
-rendered without title element and that no name is required when adding
-new sections. The default is <code>false</code>.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="cloneable">cloneable<span class="type-signature type boolean">boolean</span> </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Set to <code>true</code>, a clone button is added to the button column, allowing
-the user to clone section instances mapped by the section form element.
-The default is <code>false</code>.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="extedit">extedit<span class="type-signature type string">string</span> <span class="type-signature type function">function</span> </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Enables a per-section instance row <code>Edit</code> button which triggers a certain
-action when clicked. Set to a string, the string value is used
-as a <code>String.format()</code> pattern with the name of the underlying UCI section
-as first format argument. The result is then interpreted as a URL which
-LuCI will navigate to when the user clicks the edit button.</p>
-<p>If set to a function, this function will be registered as click event
-handler on the rendered edit button, receiving the section instance
-name as first and the DOM click event as second argument.</p>
+        <p>Define the units of the calculated value.</p>
+<p>Suffix a unit string to the calculated value, e.g. 'seconds' or 'dBm'.</p>
     </div>
     
     
@@ -4356,7 +4221,7 @@ name as first and the DOM click event as second argument.</p>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="max_cols">max_cols<span class="type-signature type number">number</span> </h4>
+        <h4 class="name" id="default">default<span class="type-signature type string">string</span> </h4>
     </div>
     
     
@@ -4364,13 +4229,9 @@ name as first and the DOM click event as second argument.</p>
 <dd>
     
     <div class="description">
-        <p>Specify a maximum amount of columns to display. By default, one table
-column is rendered for each child option of the form section element.
-When this option is set to a positive number, then no more columns than
-the given amount are rendered. When the number of child options exceeds
-the specified amount, a <code>More…</code> button is rendered in the last column,
-opening a modal dialog presenting all options elements in <code>NamedSection</code>
-style when clicked.</p>
+        <p>Set the default value for the slider. The default value is elided during
+save: meaning, a currently chosen value which matches the default is
+not saved.</p>
     </div>
     
     
@@ -4410,7 +4271,7 @@ style when clicked.</p>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="modaltitle">modaltitle<span class="type-signature type string">string</span> <span class="type-signature type function">function</span> </h4>
+        <h4 class="name" id="max">max<span class="type-signature type number">number</span> </h4>
     </div>
     
     
@@ -4418,14 +4279,211 @@ style when clicked.</p>
 <dd>
     
     <div class="description">
-        <p>Override the per-section instance modal popup title caption shown when
-clicking the <code>More…</code> button in a section specifying <code>max_cols</code>. Set
-to a string, it will be used as a <code>String.format()</code> pattern with the name
-of the underlying UCI section as first argument. Set to a function,
-the function will be invoked with the section name as first argument and
-its return value is used as caption, after converting it to a string.
-If this property is not set, the default is the name of the underlying
-UCI configuration section.</p>
+        <p>Maximum value the slider can represent.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>100</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="min">min<span class="type-signature type number">number</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Minimum value the slider can represent.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>0</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="step">step<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Step size for each tick of the slider, or the special value &quot;any&quot; when
+handling arbitrary precision floating point numbers.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>1</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="usecalc">usecalc<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Whether to use the calculated result of the chosen value instead of the
+chosen value: the result of the calculation returned by the
+<code>calculate</code> function on the chosen value
+is written to the configuration instead of the chosen value. The
+<code>calcunits</code> displayed units are not included.</p>
+<p>Note: Implementers of the <code>calculate</code> function shall be
+mindful that it may be possible to return a NaN value which is seldom a
+sensible input for the underlying daemon or system. Verification of any
+calculated value is an exercise left to the implementer.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="datatype">datatype<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Specifies a datatype constraint expression to validate input values
+against. Refer to <code>LuCI.validation</code> for details on the format.</p>
+<p>If the user entered input does not match the datatype validation, the
+option element is marked as invalid.</p>
     </div>
     
     
@@ -4465,7 +4523,7 @@ UCI configuration section.</p>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="nodescriptions">nodescriptions<span class="type-signature type boolean">boolean</span> </h4>
+        <h4 class="name" id="default">default<span class="type-signature type *">*</span> </h4>
     </div>
     
     
@@ -4473,162 +4531,7 @@ UCI configuration section.</p>
 <dd>
     
     <div class="description">
-        <p>Set to <code>true</code>, the header row with the options descriptions will
-not be displayed. By default, descriptions row is automatically displayed
-when at least one option has a description.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="parentoption"><span class="type-signature ">readonly</span>parentoption<span class="type-signature type luci.form.abstractvalue"><a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a></span> </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Access the parent option container instance.</p>
-<p>In case this section is nested within an option element container,
-this property will hold a reference to the parent option instance.</p>
-<p>If this section is not nested, the property is <code>null</code>.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="rowcolors">rowcolors<span class="type-signature type boolean">boolean</span> </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Set to <code>true</code>, alternating <code>cbi-rowstyle-1</code> and <code>cbi-rowstyle-2</code> CSS
-classes are added to the table row elements. Not all LuCI themes
-implement these row style classes. The default is <code>false</code>.</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="sectiontitle">sectiontitle<span class="type-signature type string">string</span> <span class="type-signature type function">function</span> </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>Override the per-section instance title caption shown in the first
-column of the table unless <code>anonymous</code> is set to true. Set to a
-string, it will be used as a <code>String.format()</code> pattern with the name of
-the underlying UCI section as first argument. Set to a function, the
-function will be invoked with the section name as first argument and
-its return value used as caption, after converting it to a string.
-If this property is not set, the default is the name of the underlying
-UCI configuration section.</p>
+        <p>Sets a default value to use when the underlying UCI option is not set.</p>
     </div>
     
     
@@ -4668,7 +4571,7 @@ UCI configuration section.</p>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="sortable">sortable<span class="type-signature type boolean">boolean</span> </h4>
+        <h4 class="name" id="editable">editable<span class="type-signature type boolean">boolean</span> </h4>
     </div>
     
     
@@ -4676,9 +4579,14 @@ UCI configuration section.</p>
 <dd>
     
     <div class="description">
-        <p>Set to <code>true</code>, a sort button is added to the last column, allowing
-the user to reorder the section instances mapped by the section form
-element.</p>
+        <p>Mark grid section option element as editable.</p>
+<p>Options which are displayed in the table portion of a <code>GridSection</code>
+instance are rendered as readonly text by default. By setting the
+<code>editable</code> property of a child option element to <code>true</code>, that element
+is rendered as a full input widget within its cell instead of a text only
+preview.</p>
+<p>This property has no effect on options that are not children of grid
+section elements.</p>
     </div>
     
     
@@ -4718,7 +4626,7 @@ element.</p>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="tabbed">tabbed<span class="type-signature type boolean">boolean</span> </h4>
+        <h4 class="name" id="modalonly">modalonly<span class="type-signature type boolean">boolean</span> </h4>
     </div>
     
     
@@ -4726,10 +4634,117 @@ element.</p>
 <dd>
     
     <div class="description">
-        <p>When set to <code>true</code>, instead of rendering section instances one below
-another, treat each instance as separate tab pane and render a tab menu
-at the top of the form section element, allowing the user to switch
-among instances. The default is <code>false</code>.</p>
+        <p>Move grid section option element into the table, the modal popup or both.</p>
+<p>If this property is <code>null</code> (the default), the option element is
+displayed in both the table preview area and the per-section instance
+modal popup of a grid section. When it is set to <code>false</code> the option
+is only shown in the table but not the modal popup. When set to <code>true</code>,
+the option is only visible in the modal popup but not the table.</p>
+<p>This property has no effect on options that are not children of grid
+section elements.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="onchange">onchange<span class="type-signature type function">function</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Register a custom value change handler.</p>
+<p>If this property is set to a function, it is invoked
+whenever the value of the underlying UI input element changes.</p>
+<p>The invoked handler function will receive the DOM click element as
+first and the underlying configuration section ID as well as the input
+value as second and third argument respectively.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="optional">optional<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>If set to <code>true</code>, the underlying ui input widget is allowed to be empty,
+otherwise the option element is marked invalid when no value is entered
+or selected by the user.</p>
     </div>
     
     
@@ -4752,6 +4767,256 @@ among instances. The default is <code>false</code>.</p>
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="password">password<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>If set to <code>true</code>, the field is rendered as a password input, otherwise
+as a plain text input.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="placeholder">placeholder<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Set a placeholder string to use when the input field is empty.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="readonly">readonly<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Make option element readonly.</p>
+<p>This property defaults to the readonly state of the parent form element.
+When set to <code>true</code>, the underlying widget is rendered in disabled state,
+meaning its contents cannot be changed and the widget cannot be
+interacted with.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="retain">retain<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>If set to <code>true</code>, the underlying ui input widget value is not cleared
+from the configuration on unsatisfied dependencies. The default behavior
+is to remove the values of all options whose dependencies are not
+fulfilled.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="rmempty">rmempty<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>If set to <code>false</code>, the underlying option value is retained upon saving
+the form when the option element is disabled due to unsatisfied
+dependency constraints.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>true</li></ul></dd>
     
     
     
@@ -4777,10 +5042,220 @@ among instances. The default is <code>false</code>.</p>
 <dd>
     
     <div class="description">
-        <p>Override the UCI configuration name to read the section IDs from. By
-default, the configuration name is inherited from the parent <code>Map</code>.
-By setting this property, a deviating configuration may be specified.
-The default of <code>null</code> means inherit from the parent form.</p>
+        <p>Override the UCI configuration name to read the option value from.</p>
+<p>By default, the configuration name is inherited from the parent Map.
+By setting this property, a deviating configuration may be specified.</p>
+<p>The default of null means inherit from the parent form.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="ucioption">ucioption<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the UCI option name to read the value from.</p>
+<p>By default, the elements name, which is passed as third argument to
+the constructor, is used as UCI option name. By setting this property,
+a deviating UCI option may be specified.</p>
+<p>The default of null means use the option element name.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="ucisection">ucisection<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the UCI section name to read the option value from.</p>
+<p>By default, the section ID is inherited from the parent section element.
+By setting this property, a deviating section may be specified.</p>
+<p>The default of null means inherit from the parent section.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="validate">validate<span class="type-signature type function">function</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Specifies a custom validation function to test the user input for
+validity. The validation function must return <code>true</code> to accept the
+value. Any other return value type is converted to a string and
+displayed to the user as validation error message.</p>
+<p>If the user entered input does not pass the validation function, the
+option element is marked as invalid.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="width">width<span class="type-signature type number">number</span> <span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the cell width of a table or grid section child option.</p>
+<p>If the property is set to a numeric value, it is treated as pixel width
+which is set on the containing cell element of the option, essentially
+forcing a certain column width. When the property is set to a string
+value, it is applied as-is to the CSS <code>width</code> property.</p>
+<p>This property has no effect on options that are not children of grid or
+table section elements.</p>
     </div>
     
     
@@ -4823,209 +5298,6 @@ The default of <code>null</code> means inherit from the parent form.</p>
         <h3 class="subsection-title">Methods</h3>
         
         <dl>
-            
-<dt>
-    <div class="nameContainer inherited">
-        <h4 class="name" id="addModalOptions">
-            
-                <span class="inherited"><a href="LuCI.form.TableSection.html#addModalOptions">inherited</a></span>
-            
-            <span class="type-signature ">abstract</span>addModalOptions<span class="signature">(modalSection, section_id, ev)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{*|Promise.&lt;*>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3143">line 3143</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Add further options to the per-section instanced modal popup.</p>
-<p>This function may be overridden by user code to perform additional
-setup steps before displaying the more options modal which is useful to
-e.g. query additional data or to inject further option elements.</p>
-<p>The default implementation of this function does nothing.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>modalSection</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="LuCI.form.NamedSection.html">LuCI.form.NamedSection</a></span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>The <code>NamedSection</code> instance about to be rendered in the modal popup.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>section_id</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>The ID of the underlying UCI section the modal popup belongs to.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>ev</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">Event</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                <p>The DOM event emitted by clicking the <code>More…</code> button.</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        *
-                         | 
-                    
-                        Promise.&lt;*>
-                        
-                    
-            </td>
-            <td class="description last">Return values of this function are ignored but if a promise is returned,
-it is run to completion before the rendering is continued, allowing
-custom logic to perform asynchronous work before the modal dialog
-is shown.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
             
 <dt>
     <div class="nameContainer inherited">
@@ -5147,16 +5419,16 @@ is shown.</td>
             
 <dt>
     <div class="nameContainer inherited">
-        <h4 class="name" id="cfgvalue">
+        <h4 class="name" id="cbid">
             
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#cfgvalue">inherited</a></span>
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#cbid">inherited</a></span>
             
-            cfgvalue<span class="signature">(section_id, <span class="optional">option</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{null|string|Array.&lt;string>|Object.&lt;string, (null|string|Array.&lt;string>)>}</span>
+            cbid<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1090">line 1090</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1758">line 1758</a>
         </div>
         
     </div>
@@ -5167,12 +5439,11 @@ is shown.</td>
     
     
     <div class="description">
-        <p>Query underlying option configuration values.</p>
-<p>This function is sensitive to the amount of arguments passed to it;
-if only one argument is specified, the configuration values of all
-options within this section are returned as a dictionary.</p>
-<p>If both the section ID and an option name are supplied, this function
-returns the configuration value of the specified option only.</p>
+        <p>Obtain the internal ID (&quot;cbid&quot;) of the element instance.</p>
+<p>Since each form section element may map multiple underlying
+configuration sections, the configuration section ID is required to
+form a fully qualified ID pointing to the specific element instance
+within the given specific section.</p>
     </div>
     
 
@@ -5219,19 +5490,169 @@ returns the configuration value of the specified option only.</p>
             
             <td class="description last">
                 
-                    
-                    
-                        
-                    
-                
                 <p>The configuration section ID</p></td>
         </tr>
 	
 	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        string
+                        
+                    
+            </td>
+            <td class="description last">Returns the element ID.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="cfgvalue">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#cfgvalue">inherited</a></span>
+            
+            cfgvalue<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{*}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1832">line 1832</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Query the underlying configuration value.</p>
+<p>The default implementation of this method returns the cached return
+value of <a href="LuCI.form.AbstractValue.html#load"><code>load()</code></a>. It may be
+overridden by user code to obtain the configuration value in a
+different way.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
 	
         <tr>
             
-                <td class="name"><code>option</code></td>
+                <td class="name"><code>section_id</code></td>
             
             
             <td class="type">
@@ -5247,14 +5668,400 @@ returns the configuration value of the specified option only.</p>
             
             <td class="description last">
                 
-                    
-                        <span class="optional">optional</span>
-                    
-                    
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        *
                         
                     
+            </td>
+            <td class="description last">Returns the configuration value.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="depends">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#depends">inherited</a></span>
+            
+            depends<span class="signature">(field, value)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1639">line 1639</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Add a dependency constraint to the option.</p>
+<p>Dependency constraints allow making the presence of option elements
+dependent on the current values of certain other options within the
+same form. An option element with unsatisfied dependencies will be
+hidden from the view and its current value omitted when saving.</p>
+<p>Multiple constraints (that is, multiple calls to <code>depends()</code>) are
+treated as alternatives, forming a logical &quot;or&quot; expression.</p>
+<p>By passing an object of name =&gt; value pairs as first argument, it is
+possible to depend on multiple options simultaneously, forming
+a logical &quot;and&quot; expression.</p>
+<p>Option names may be given in &quot;dot notation&quot; which allows to reference
+option elements outside the current form section. If a name without
+dot is specified, it refers to an option within the same configuration
+section. If specified as <code>configname.sectionid.optionname</code>,
+options anywhere within the same form may be specified.</p>
+<p>The object notation also allows for a number of special keys which are
+not treated as option names but as modifiers to influence the dependency
+constraint evaluation. The associated value of these special &quot;tag&quot; keys
+is ignored. The recognized tags are:</p>
+<ul>
+  <li>
+	<code>!reverse</code><br>
+	Invert the dependency, instead of requiring another option to be
+	equal to the dependency value, that option should <em>not</em> be
+	equal.
+  </li>
+  <li>
+	<code>!contains</code><br>
+	Instead of requiring an exact match, the dependency is considered
+	satisfied when the dependency value is contained within the option
+	value.
+  </li>
+  <li>
+	<code>!default</code><br>
+	The dependency is always satisfied
+  </li>
+</ul>
+<p>Examples:</p>
+<ul>
+ <li>
+  <code>opt.depends("foo", "test")</code><br>
+  Require the value of `foo` to be `test`.
+ </li>
+ <li>
+  <code>opt.depends({ foo: "test" })</code><br>
+  Equivalent to the previous example.
+ </li>
+ <li>
+  <code>opt.depends({ foo: /test/ })</code><br>
+  Require the value of `foo` to match the regular expression `/test/`.
+ </li>
+ <li>
+  <code>opt.depends({ foo: "test", bar: "qrx" })</code><br>
+  Require the value of `foo` to be `test` and the value of `bar` to be
+  `qrx`.
+ </li>
+ <li>
+  <code>opt.depends({ foo: "test" })<br>
+		 opt.depends({ bar: "qrx" })</code><br>
+  Require either <code>foo</code> to be set to <code>test</code>,
+  <em>or</em> the <code>bar</code> option to be <code>qrx</code>.
+ </li>
+ <li>
+  <code>opt.depends("test.section1.foo", "bar")</code><br>
+  Require the "foo" form option within the "section1" section to be
+  set to "bar".
+ </li>
+ <li>
+  <code>opt.depends({ foo: "test", "!contains": true })</code><br>
+  Require the "foo" option value to contain the substring "test".
+ </li>
+</ul>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>field</code></td>
+            
+            
+            <td class="type">
+            
                 
-                <p>The name of the option to query</p></td>
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Object.&lt;string, (string|RegExp)></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The name of the option to depend on or an object describing multiple
+dependencies which must be satisfied (a logical &quot;and&quot; expression).</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">RegExp</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>When invoked with a plain option name as first argument, this parameter
+specifies the expected value. In case an object is passed as first
+argument, this parameter is ignored.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="formvalue">
+            
+            formvalue<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{*}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line4260">line 4260</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Query the current form input value.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
         </tr>
 	
 	
@@ -5315,22 +6122,11 @@ returns the configuration value of the specified option only.</p>
             
             <td class="type">
             
-                        null
-                         | 
-                    
-                        string
-                         | 
-                    
-                        Array.&lt;string>
-                         | 
-                    
-                        Object.&lt;string, (null|string|Array.&lt;string>)>
+                        *
                         
                     
             </td>
-            <td class="description last">Returns either a dictionary of option names and their corresponding
-configuration values or just a single configuration value, depending
-on the amount of passed arguments.</td>
+            <td class="description last">Returns the current input value.</td>
         </tr>
     
     </tbody>
@@ -5345,16 +6141,16 @@ on the amount of passed arguments.</td>
             
 <dt>
     <div class="nameContainer inherited">
-        <h4 class="name" id="filter">
+        <h4 class="name" id="getUIElement">
             
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#filter">inherited</a></span>
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#getUIElement">inherited</a></span>
             
-            <span class="type-signature ">abstract</span>filter<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+            getUIElement<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="LuCI.ui.AbstractElement.html">LuCI.ui.AbstractElement</a>|null}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line893">line 893</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1809">line 1809</a>
         </div>
         
     </div>
@@ -5365,13 +6161,7 @@ on the amount of passed arguments.</td>
     
     
     <div class="description">
-        <p>Filter UCI section IDs to render.</p>
-<p>The filter function is invoked for each UCI section ID of a given type
-and controls whether the given UCI section is rendered or ignored by
-the form section element.</p>
-<p>The default implementation always returns <code>true</code>. User code or
-classes extending <code>AbstractSection</code> may override this function with
-custom implementations.</p>
+        <p>Obtain the underlying <code>LuCI.ui</code> element instance.</p>
     </div>
     
 
@@ -5418,7 +6208,334 @@ custom implementations.</p>
             
             <td class="description last">
                 
-                <p>The UCI section ID to test.</p></td>
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    <h5>Throws:</h5>
+    
+            
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
+        </div>
+    </dt>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type">TypeError</span>
+
+
+            </dd>
+        </dl>
+    </dt>
+</dl>
+
+
+        
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        <a href="LuCI.ui.AbstractElement.html">LuCI.ui.AbstractElement</a>
+                         | 
+                    
+                        null
+                        
+                    
+            </td>
+            <td class="description last">Returns the <code>LuCI.ui</code> element instance or <code>null</code> in case the form
+option implementation does not use <code>LuCI.ui</code> widgets.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="getValidationError">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#getValidationError">inherited</a></span>
+            
+            getValidationError<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1947">line 1947</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Returns the current validation error for this input.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        string
+                        
+                    
+            </td>
+            <td class="description last">The validation error at this time</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="isActive">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#isActive">inherited</a></span>
+            
+            isActive<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1965">line 1965</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Test whether the option element is currently active.</p>
+<p>An element is active when it is not hidden due to unsatisfied dependency
+constraints.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
         </tr>
 	
 	
@@ -5483,8 +6600,8 @@ custom implementations.</p>
                         
                     
             </td>
-            <td class="description last">Returns <code>true</code> when the given UCI section ID should be handled and
-<code>false</code> when it should be ignored.</td>
+            <td class="description last">Returns <code>true</code> if the option element currently is active, otherwise it
+returns <code>false</code>.</td>
         </tr>
     
     </tbody>
@@ -5499,16 +6616,16 @@ custom implementations.</p>
             
 <dt>
     <div class="nameContainer inherited">
-        <h4 class="name" id="formvalue">
+        <h4 class="name" id="isValid">
             
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#formvalue">inherited</a></span>
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#isValid">inherited</a></span>
             
-            formvalue<span class="signature">(section_id, <span class="optional">option</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{null|string|Array.&lt;string>|Object.&lt;string, (null|string|Array.&lt;string>)>}</span>
+            isValid<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1123">line 1123</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1933">line 1933</a>
         </div>
         
     </div>
@@ -5519,12 +6636,7 @@ custom implementations.</p>
     
     
     <div class="description">
-        <p>Query underlying option widget input values.</p>
-<p>This function is sensitive to the amount of arguments passed to it;
-if only one argument is specified, the widget input values of all
-options within this section are returned as a dictionary.</p>
-<p>If both the section ID and an option name are supplied, this function
-returns the widget input value of the specified option only.</p>
+        <p>Test whether the input value is currently valid.</p>
     </div>
     
 
@@ -5571,45 +6683,10 @@ returns the widget input value of the specified option only.</p>
             
             <td class="description last">
                 
-                    
-                    
-                        
-                    
-                
                 <p>The configuration section ID</p></td>
         </tr>
 	
 	
-	
-        <tr>
-            
-                <td class="name"><code>option</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                        <span class="optional">optional</span>
-                    
-                    
-                        
-                    
-                
-                <p>The name of the option to query</p></td>
-        </tr>
-	
-	
 	</tbody>
 </table>
     
@@ -5667,384 +6744,12 @@ returns the widget input value of the specified option only.</p>
             
             <td class="type">
             
-                        null
-                         | 
-                    
-                        string
-                         | 
-                    
-                        Array.&lt;string>
-                         | 
-                    
-                        Object.&lt;string, (null|string|Array.&lt;string>)>
+                        boolean
                         
                     
             </td>
-            <td class="description last">Returns either a dictionary of option names and their corresponding
-widget input values or just a single widget input value, depending
-on the amount of passed arguments.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer inherited">
-        <h4 class="name" id="getOption">
-            
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#getOption">inherited</a></span>
-            
-            getOption<span class="signature">(<span class="optional">option</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{null|<a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>|Object.&lt;string, <a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1189">line 1189</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Obtain underlying option objects.</p>
-<p>This function is sensitive to the amount of arguments passed to it;
-if no option name is specified, all options within this section are
-returned as a dictionary.</p>
-<p>If an option name is supplied, this function returns the matching
-LuCI.form.AbstractValue instance only.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>option</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                        <span class="optional">optional</span>
-                    
-                    
-                        
-                    
-                
-                <p>The name of the option object to obtain</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        null
-                         | 
-                    
-                        <a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>
-                         | 
-                    
-                        Object.&lt;string, <a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>>
-                        
-                    
-            </td>
-            <td class="description last">Returns either a dictionary of option names and their corresponding
-option instance objects or just a single object instance value,
-depending on the amount of passed arguments.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer inherited">
-        <h4 class="name" id="getUIElement">
-            
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#getUIElement">inherited</a></span>
-            
-            getUIElement<span class="signature">(section_id, <span class="optional">option</span>)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{null|<a href="LuCI.ui.AbstractElement.html">LuCI.ui.AbstractElement</a>|Object.&lt;string, (null|<a href="LuCI.ui.AbstractElement.html">LuCI.ui.AbstractElement</a>)>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1159">line 1159</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Obtain underlying option LuCI.ui widget instances.</p>
-<p>This function is sensitive to the amount of arguments passed to it;
-if only one argument is specified, the LuCI.ui widget instances of all
-options within this section are returned as a dictionary.</p>
-<p>If both the section ID and an option name are supplied, this function
-returns the LuCI.ui widget instance value of the specified option only.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>section_id</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                    
-                        
-                    
-                
-                <p>The configuration section ID</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>option</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                        <span class="optional">optional</span>
-                    
-                    
-                        
-                    
-                
-                <p>The name of the option to query</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        null
-                         | 
-                    
-                        <a href="LuCI.ui.AbstractElement.html">LuCI.ui.AbstractElement</a>
-                         | 
-                    
-                        Object.&lt;string, (null|<a href="LuCI.ui.AbstractElement.html">LuCI.ui.AbstractElement</a>)>
-                        
-                    
-            </td>
-            <td class="description last">Returns either a dictionary of option names and their corresponding
-widget input values or just a single widget input value, depending
-on the amount of passed arguments.</td>
+            <td class="description last">Returns <code>true</code> if the input value currently is valid, otherwise it
+returns <code>false</code>.</td>
         </tr>
     
     </tbody>
@@ -6061,14 +6766,14 @@ on the amount of passed arguments.</td>
     <div class="nameContainer inherited">
         <h4 class="name" id="load">
             
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#load">inherited</a></span>
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#load">inherited</a></span>
             
-            load<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;void>}</span>
+            load<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{*|Promise.&lt;*>}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line908">line 908</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1786">line 1786</a>
         </div>
         
     </div>
@@ -6079,115 +6784,11 @@ on the amount of passed arguments.</td>
     
     
     <div class="description">
-        <p>Load the configuration covered by this section.</p>
-<p>The <code>load()</code> function recursively walks the section element tree and
-invokes the load function of each child option element.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    
-    
-    <h5>Returns:</h5>
-    
-
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Type</th>
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    
-        <tr>
-            
-            <td class="type">
-            
-                        Promise.&lt;void>
-                        
-                    
-            </td>
-            <td class="description last">Returns a promise resolving once the values of all child elements have
-been loaded. The promise may reject with an error if any of the child
-elements' load functions rejected with an error.</td>
-        </tr>
-    
-    </tbody>
-</table>
-
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer inherited">
-        <h4 class="name" id="option">
-            
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#option">inherited</a></span>
-            
-            option<span class="signature">(optionclass, classargs)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>}</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1021">line 1021</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Add a configuration option widget to the section.</p>
-<p>Note that <a href="LuCI.form.AbstractSection.html#taboption"><code>taboption()</code></a>
-should be used instead if this form section element uses tabs.</p>
+        <p>Load the underlying configuration value.</p>
+<p>The default implementation of this method reads and returns the
+underlying UCI option value (or the related JavaScript property for
+<code>JSONMap</code> instances). It may be overridden by user code to load data
+from non-standard sources.</p>
     </div>
     
 
@@ -6218,13 +6819,13 @@ should be used instead if this form section element uses tabs.</p>
 	
         <tr>
             
-                <td class="name"><code>optionclass</code></td>
+                <td class="name"><code>section_id</code></td>
             
             
             <td class="type">
             
                 
-<span class="param-type"><a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a></span>
+<span class="param-type">string</span>
 
 
             
@@ -6234,47 +6835,7 @@ should be used instead if this form section element uses tabs.</p>
             
             <td class="description last">
                 
-                    
-                    
-                        
-                    
-                
-                <p>The option class to use for rendering the configuration option. Note
-that this value must be the class itself, not a class instance obtained
-from calling <code>new</code>. It must also be a class derived from
-<a href="LuCI.form.AbstractSection.html"><code>LuCI.form.AbstractSection</code></a>.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>classargs</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                    
-                        
-                    
-                        <span class="repeatable">repeatable</span>
-                    
-                
-                <p>Additional arguments which are passed as-is to the constructor of the
-given option class. Refer to the class specific constructor
-documentation for details.</p></td>
+                <p>The configuration section ID</p></td>
         </tr>
 	
 	
@@ -6322,8 +6883,7 @@ documentation for details.</p></td>
 <dl>
     <dt>
         <div class="param-desc">
-        <p>Throws a <code>TypeError</code> exception in case the passed class value is not a
-descendant of <code>AbstractValue</code>.</p>
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
         </div>
     </dt>
     <dt>
@@ -6363,11 +6923,16 @@ descendant of <code>AbstractValue</code>.</p>
             
             <td class="type">
             
-                        <a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>
+                        *
+                         | 
+                    
+                        Promise.&lt;*>
                         
                     
             </td>
-            <td class="description last">Returns the instantiated option class instance.</td>
+            <td class="description last">Returns the configuration value to initialize the option element with.
+The return value of this function is filtered through <code>Promise.resolve()</code>
+so it may return promises if overridden by user code.</td>
         </tr>
     
     </tbody>
@@ -6384,14 +6949,14 @@ descendant of <code>AbstractValue</code>.</p>
     <div class="nameContainer inherited">
         <h4 class="name" id="parse">
             
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#parse">inherited</a></span>
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#parse">inherited</a></span>
             
-            parse<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;void>}</span>
+            parse<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Promise.&lt;void>}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3450">line 3450</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line2006">line 2006</a>
         </div>
         
     </div>
@@ -6402,11 +6967,9 @@ descendant of <code>AbstractValue</code>.</p>
     
     
     <div class="description">
-        <p>Parse this sections form input.</p>
-<p>The <code>parse()</code> function recursively walks the section element tree and
-triggers input value reading and validation for each encountered child
-option element.</p>
-<p>Options which are hidden due to unsatisfied dependencies are skipped.</p>
+        <p>Parse the option element input.</p>
+<p>The function is invoked when the <code>parse()</code> method has been invoked on
+the parent form and triggers input value reading and validation.</p>
     </div>
     
 
@@ -6414,6 +6977,51 @@ option element.</p>
     
     
     
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -6473,14 +7081,139 @@ option element.</p>
                         
                     
             </td>
-            <td class="description last">Returns a promise resolving once the values of all child elements have
-been parsed. The returned promise is rejected if any parsed values do
-not meet the validation constraints of their respective elements.</td>
+            <td class="description last">Returns a promise resolving once the input value has been read and
+validated or rejecting in case the input value does not meet the
+validation constraints.</td>
         </tr>
     
     </tbody>
 </table>
 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="remove">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#remove">inherited</a></span>
+            
+            remove<span class="signature">(section_id)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line2086">line 2086</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Remove the corresponding value from the configuration.</p>
+<p>This function is invoked upon saving the parent form when the option
+element has been hidden due to unsatisfied dependencies or when the
+user cleared the input value and the option is marked optional.</p>
+<p>The default implementation simply removes the associated option from the
+UCI configuration (or the associated JavaScript object property in
+case of <code>JSONMap</code> forms). It may be overridden by user code to
+implement alternative removal logic, e.g. to retain the original value.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
     
     
     
@@ -6638,233 +7371,17 @@ entities decoded.</td>
         
             
 <dt>
-    <div class="nameContainer">
-        <h4 class="name" id="tab">
-            
-            tab<span class="signature">(name, title, <span class="optional">description</span>)</span>
-        </h4>
-    
-        
-        <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3363">line 3363</a>
-        </div>
-        
-    </div>
-
-    
-</dt>
-<dd>
-    
-    
-    <div class="description">
-        <p>Add an option tab to the section.</p>
-<p>The modal option elements of a grid section may be divided into multiple
-tabs to provide a better overview to the user.</p>
-<p>Before options can be moved into a tab pane, the corresponding tab
-has to be defined first, which is done by calling this function.</p>
-<p>Note that tabs are only effective in modal popups. Options added with
-<code>option()</code> will not be assigned to a specific tab and are rendered in
-the table view only.</p>
-    </div>
-    
-
-    
-    
-    
-    
-    
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                    
-                        
-                    
-                
-                <p>The name of the tab to register. It may be freely chosen and just serves
-as an identifier to differentiate tabs.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>title</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                    
-                        
-                    
-                
-                <p>The human readable caption of the tab.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>description</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                        <span class="optional">optional</span>
-                    
-                    
-                        
-                    
-                
-                <p>An additional description text for the corresponding tab pane. It is
-displayed as text paragraph below the tab but before the tab pane
-contents. If omitted, no description will be rendered.</p></td>
-        </tr>
-	
-	
-	</tbody>
-</table>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-
-    
-
-    
-    
-    
-    <h5>Throws:</h5>
-    
-            
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        <p>Throws an exception if a tab with the same <code>name</code> already exists.</p>
-        </div>
-    </dt>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">Error</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-</dl>
-
-
-        
-    
-    
-    
-    
-</dd>
-
-        
-            
-<dt>
     <div class="nameContainer inherited">
-        <h4 class="name" id="taboption">
+        <h4 class="name" id="textvalue">
             
-                <span class="inherited"><a href="LuCI.form.AbstractSection.html#taboption">inherited</a></span>
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#textvalue">inherited</a></span>
             
-            taboption<span class="signature">(tabName, optionclass, classargs)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{<a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>}</span>
+            textvalue<span class="signature">(section_id)</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{string}</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1058">line 1058</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line1884">line 1884</a>
         </div>
         
     </div>
@@ -6875,7 +7392,13 @@ contents. If omitted, no description will be rendered.</p></td>
     
     
     <div class="description">
-        <p>Add a configuration option widget to a tab of the section.</p>
+        <p>Obtain a textual input representation.</p>
+<p>The default implementation of this method returns the HTML-escaped
+current input value of the underlying
+<a href="LuCI.ui.AbstractElement.html"><code>LuCI.ui</code></a> widget. User code or specific
+option element implementations may override this function to apply a
+different logic, e.g. to return <code>Yes</code> or <code>No</code> depending on the checked
+state of checkbox elements.</p>
     </div>
     
 
@@ -6906,7 +7429,7 @@ contents. If omitted, no description will be rendered.</p></td>
 	
         <tr>
             
-                <td class="name"><code>tabName</code></td>
+                <td class="name"><code>section_id</code></td>
             
             
             <td class="type">
@@ -6922,75 +7445,7 @@ contents. If omitted, no description will be rendered.</p></td>
             
             <td class="description last">
                 
-                    
-                    
-                        
-                    
-                
-                <p>The name of the section tab to add the option element to.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>optionclass</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type"><a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a></span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                    
-                        
-                    
-                
-                <p>The option class to use for rendering the configuration option. Note
-that this value must be the class itself, not a class instance obtained
-from calling <code>new</code>. It must also be a class derived from
-<a href="LuCI.form.AbstractSection.html"><code>LuCI.form.AbstractSection</code></a>.</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>classargs</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">*</span>
-
-
-            
-            </td>
-            
-            
-            
-            <td class="description last">
-                
-                    
-                    
-                        
-                    
-                        <span class="repeatable">repeatable</span>
-                    
-                
-                <p>Additional arguments which are passed as-is to the constructor of the
-given option class. Refer to the class specific constructor
-documentation for details.</p></td>
+                <p>The configuration section ID</p></td>
         </tr>
 	
 	
@@ -7032,40 +7487,13 @@ documentation for details.</p></td>
     
     
     <h5>Throws:</h5>
-    <ul>
-            <li>
+    
+            
 
 <dl>
     <dt>
         <div class="param-desc">
-        <p>Throws a <code>ReferenceError</code> exception when the given tab name does not
-exist.</p>
-        </div>
-    </dt>
-    <dt>
-        <dl>
-            <dt>
-                Type
-            </dt>
-            <dd>
-                
-<span class="param-type">ReferenceError</span>
-
-
-            </dd>
-        </dl>
-    </dt>
-</dl>
-
-</li>
-        
-            <li>
-
-<dl>
-    <dt>
-        <div class="param-desc">
-        <p>Throws a <code>TypeError</code> exception in case the passed class value is not a
-descendant of <code>AbstractValue</code>.</p>
+        <p>Throws a <code>TypeError</code> exception when no <code>section_id</code> was specified.</p>
         </div>
     </dt>
     <dt>
@@ -7083,8 +7511,8 @@ descendant of <code>AbstractValue</code>.</p>
     </dt>
 </dl>
 
-</li>
-        </ul>
+
+        
     
     
     <h5>Returns:</h5>
@@ -7105,11 +7533,11 @@ descendant of <code>AbstractValue</code>.</p>
             
             <td class="type">
             
-                        <a href="LuCI.form.AbstractValue.html">LuCI.form.AbstractValue</a>
+                        string
                         
                     
             </td>
-            <td class="description last">Returns the instantiated option class instance.</td>
+            <td class="description last">Returns the text representation of the current input value.</td>
         </tr>
     
     </tbody>
@@ -7310,6 +7738,307 @@ was neither a string nor a function.</td>
     </tbody>
 </table>
 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="value">
+            
+                <span class="inherited"><a href="LuCI.form.Value.html#value">inherited</a></span>
+            
+            value<span class="signature">(key, val)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3686">line 3686</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Add a predefined choice to the form option. By adding one or more
+choices, the plain text input field is turned into a combobox widget
+which prompts the user to select a predefined choice, or to enter a
+custom value.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>key</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The choice value to add.</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>val</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">Node</span>
+|
+
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The caption for the choice value. May be a DOM node, a document fragment
+or a plain text string. If omitted, the <code>key</code> value is used as caption.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="write">
+            
+                <span class="inherited"><a href="LuCI.form.AbstractValue.html#write">inherited</a></span>
+            
+            write<span class="signature">(section_id, formvalue)</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line2063">line 2063</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Write the current input value into the configuration.</p>
+<p>This function is invoked upon saving the parent form when the option
+element is valid and when its input value has been changed compared to
+the initial value returned by
+<a href="LuCI.form.AbstractValue.html#cfgvalue"><code>cfgvalue()</code></a>.</p>
+<p>The default implementation simply sets the given input value in the
+UCI configuration (or the associated JavaScript object property in
+case of <code>JSONMap</code> forms). It may be overridden by user code to
+implement alternative save logic, e.g. to transform the input value
+before it is written.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>section_id</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The configuration section ID</p></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>formvalue</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type">Array.&lt;string></span>
+
+
+            
+            </td>
+            
+            
+            
+            <td class="description last">
+                
+                <p>The input value to write.</p></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
     
     
     
