@@ -10,6 +10,10 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
 "X-Generator: Weblate 5.12-dev\n"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:50
+msgid "A new %s version of OpenWrt is available:"
+msgstr "Je k dispozici nová verze OpenWrt %s:"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:21
 msgid "Address"
 msgstr "Adresa"
@@ -23,7 +27,8 @@ msgid "Advanced Mode"
 msgstr "Pokročilý režim"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:11
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:664
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:662
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:54
 #: applications/luci-app-attendedsysupgrade/root/usr/share/luci/menu.d/luci-app-attendedsysupgrade.json:3
 msgid "Attended Sysupgrade"
 msgstr "Interaktivně prováděný přechod na novější verzi systému"
@@ -32,7 +37,11 @@ msgstr "Interaktivně prováděný přechod na novější verzi systému"
 msgid "Attendedsysupgrade Configuration."
 msgstr "Nastavení interaktivního přechodu na novější verzi systému."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:557
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:37
+msgid "Available"
+msgstr "K dispozici"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:555
 msgid "Board Name / Profile"
 msgstr "Název zařízení / profilu"
 
@@ -49,18 +58,22 @@ msgid "Calculating package hash"
 msgstr "Počítání otisku (hash) balíčku"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:204
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:572
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:570
 msgid "Cancel"
 msgstr "Zrušit"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:53
+msgid "Check"
+msgstr "Kontrola"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:35
 msgid "Client"
 msgstr "Klient"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:285
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:422
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:477
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:620
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:420
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:475
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:618
 msgid "Close"
 msgstr "Zavřít"
 
@@ -72,12 +85,16 @@ msgstr "Dokončeno vytváření obrazu firmware"
 msgid "Configuration"
 msgstr "Nastavení"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:471
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:469
 msgid "Could not reach API at \"%s\". Please try again later."
 msgstr "Nepodařilo se připojit k API na „%s“. Prosím zkuste to znovu později."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:565
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:679
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:36
+msgid "Current"
+msgstr "Stávající"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:563
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:677
 msgid "Currently running: %s - %s"
 msgstr "Nyní provozováno: %s - %s"
 
@@ -93,11 +110,11 @@ msgstr "Stáhnout obraz firmwaru"
 msgid "Downloading ImageBuilder archive"
 msgstr "Stahování archivu z ImageBuilder"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:383
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:381
 msgid "Downloading firmware from server to browser"
 msgstr "Stahování firmwaru ze serveru do prohlížeče"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:379
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:377
 msgid "Downloading..."
 msgstr "Stahování…"
 
@@ -105,11 +122,11 @@ msgstr "Stahování…"
 msgid "Error building the firmware image"
 msgstr "Během sestavování obrazu firmwaru došlo k chybě"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:467
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:465
 msgid "Error connecting to upgrade server"
 msgstr "Připojení k serveru s aktualizacemi se nezdařilo"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:420
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:418
 msgid "Error during download of firmware. Please try again"
 msgstr "Během stahování firmwaru došlo k chybě. Prosím zkuste to znovu"
 
@@ -125,6 +142,10 @@ msgstr "Název souboru"
 msgid "Filesystem"
 msgstr "Souborový systém"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:20
+msgid "Firmware Version"
+msgstr "Verze firmware"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:68
 msgid "Generating firmware image"
 msgstr "Vytváření obrazu firmware"
@@ -139,13 +160,13 @@ msgstr ""
 msgid "Install firmware image"
 msgstr "Nainstalovat obraz firmwaru"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:429
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:427
 msgid "Installing the sysupgrade. Do not unpower device!"
 msgstr ""
 "Probíhá aktualizace na novější verzi systému. Neodpojujte zařízení od "
 "napájení!"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:425
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:423
 msgid "Installing..."
 msgstr "Instalace…"
 
@@ -153,11 +174,23 @@ msgstr "Instalace…"
 msgid "Keep settings and retain the current configuration"
 msgstr "Uchovat nastavení a stávající uspořádání"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:562
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:26
+msgid "Kernel Version"
+msgstr "Verze jádra systému"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:180
+msgid "Look online for upgrades upon status page load"
+msgstr "Po načtení stavové stránky zjistit dostupnost případné novější verze"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:49
+msgid "New Firmware Available"
+msgstr "K dispozici nový firmware"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:560
 msgid "New firmware upgrade available"
 msgstr "K dispozici nová verze firmwaru"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:611
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:609
 msgid "No upgrade available"
 msgstr "Novější verze není k dispozici"
 
@@ -173,7 +206,7 @@ msgstr ""
 msgid "Overview"
 msgstr "Přehled"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:558
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:556
 msgid "Packages"
 msgstr "Balíčky"
 
@@ -210,7 +243,7 @@ msgstr "Přijata žádost o sestavení"
 msgid "Request Data:"
 msgstr "Data žádosti:"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:605
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:603
 msgid "Request firmware image"
 msgstr "Zaslat žádost o obraz firmwaru"
 
@@ -218,11 +251,15 @@ msgstr "Zaslat žádost o obraz firmwaru"
 msgid "Request in build queue position %s"
 msgstr "Pozice žádosti ve frontě sestavování %s"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:23
+msgid "Revision"
+msgstr "Revize"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:154
 msgid "SHA256"
 msgstr "SHA-256"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:690
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:688
 msgid "Search for firmware upgrade"
 msgstr "Vyhledat novější verzi firmwaru"
 
@@ -234,11 +271,11 @@ msgstr "Vyhledat nové aktualizace systému při otevření karty"
 msgid "Search on opening"
 msgstr "Vyhledat při otevření"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:458
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:456
 msgid "Searching for an available sysupgrade of %s - %s"
 msgstr "Hledání případné aktualizace systému %s - %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:454
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:452
 msgid "Searching..."
 msgstr "Hledání…"
 
@@ -274,7 +311,7 @@ msgstr "Obraz firmwaru úspěšně vytvořen"
 msgid "Target"
 msgstr "Cíl"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:668
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:666
 msgid ""
 "The attended sysupgrade service allows to upgrade vanilla and custom "
 "firmware images easily."
@@ -282,21 +319,21 @@ msgstr ""
 "Služba interaktivního přechodu na novější verzi systému umožňuje snadné "
 "provádění upgrade základních i uživatelsky určených obrazů firmware."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:614
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:612
 msgid "The device runs the latest firmware version %s - %s"
 msgstr "Na zařízení je provozována nejnovější verze firmwaru %s - %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:674
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:672
 msgid ""
 "This is done by building a new firmware on demand via an online service."
 msgstr ""
 "Toho se dosahuje sestavením nového firmwaru na vyžádání pomocí online služby."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:405
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:403
 msgid "Uploading firmware from browser to device"
 msgstr "Probíhá nahrávání firmwaru z prohlížeče do zařízení"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:401
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:399
 msgid "Uploading..."
 msgstr "Nahrávání…"
 
@@ -312,10 +349,18 @@ msgstr "Ověřování revize"
 msgid "Version"
 msgstr "Verze"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:417
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:415
 msgid "Wrong checksum"
 msgstr "Chybný kontrolní součet"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:542
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:540
 msgid "[installed] %s"
 msgstr "[nainstalováno] %s"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:55
+msgid "and"
+msgstr "a"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:56
+msgid "release notes"
+msgstr "poznámky k vydání"

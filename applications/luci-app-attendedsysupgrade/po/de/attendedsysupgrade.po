@@ -10,6 +10,10 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.12-dev\n"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:50
+msgid "A new %s version of OpenWrt is available:"
+msgstr "Eine neue %s-Version von OpenWrt ist verfügbar:"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:21
 msgid "Address"
 msgstr "Adresse"
@@ -23,7 +27,8 @@ msgid "Advanced Mode"
 msgstr "Erweiterter Modus"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:11
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:664
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:662
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:54
 #: applications/luci-app-attendedsysupgrade/root/usr/share/luci/menu.d/luci-app-attendedsysupgrade.json:3
 msgid "Attended Sysupgrade"
 msgstr "Begleitetes System-Upgrade"
@@ -32,7 +37,11 @@ msgstr "Begleitetes System-Upgrade"
 msgid "Attendedsysupgrade Configuration."
 msgstr "Einstellungen für Begleitetes System-Upgrade."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:557
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:37
+msgid "Available"
+msgstr "Verfügbar"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:555
 msgid "Board Name / Profile"
 msgstr "Board Name / Profil"
 
@@ -49,18 +58,22 @@ msgid "Calculating package hash"
 msgstr "Berechne den Paket-Hash"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:204
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:572
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:570
 msgid "Cancel"
 msgstr "Abbrechen"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:53
+msgid "Check"
+msgstr "Überprüfe"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:35
 msgid "Client"
 msgstr "Client"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:285
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:422
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:477
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:620
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:420
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:475
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:618
 msgid "Close"
 msgstr "Schließen"
 
@@ -72,14 +85,18 @@ msgstr "Erstellung des Firmware-Abbilds abgeschlossen"
 msgid "Configuration"
 msgstr "Konfiguration"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:471
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:469
 msgid "Could not reach API at \"%s\". Please try again later."
 msgstr ""
 "Die API unter \"%s\" konnte nicht erreicht werden. Bitte versuchen Sie es "
 "später noch einmal."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:565
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:679
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:36
+msgid "Current"
+msgstr "Aktuell"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:563
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:677
 msgid "Currently running: %s - %s"
 msgstr "Aktuell ausgeführt: %s - %s"
 
@@ -95,11 +112,11 @@ msgstr "Firmware-Image herunterladen"
 msgid "Downloading ImageBuilder archive"
 msgstr "ImageBuilder-Archiv wird heruntergeladen"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:383
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:381
 msgid "Downloading firmware from server to browser"
 msgstr "Firmware vom Server zum Browser herunterladen"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:379
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:377
 msgid "Downloading..."
 msgstr "Wird heruntergeladen..."
 
@@ -107,11 +124,11 @@ msgstr "Wird heruntergeladen..."
 msgid "Error building the firmware image"
 msgstr "Fehler beim Erstellen des Firmware-Images"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:467
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:465
 msgid "Error connecting to upgrade server"
 msgstr "Fehler beim Verbinden mit dem Upgrade-Server"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:420
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:418
 msgid "Error during download of firmware. Please try again"
 msgstr "Fehler beim Firmware-Download. Bitte erneut versuchen"
 
@@ -127,6 +144,10 @@ msgstr "Dateiname"
 msgid "Filesystem"
 msgstr "Dateisystem"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:20
+msgid "Firmware Version"
+msgstr "Firmware-Version"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:68
 msgid "Generating firmware image"
 msgstr "Erzeuge Firmware-Image"
@@ -139,11 +160,11 @@ msgstr "Gewähre UCI-Zugriff auf LuCI-App für begleitete System-Upgrades"
 msgid "Install firmware image"
 msgstr "Firmware-Image installieren"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:429
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:427
 msgid "Installing the sysupgrade. Do not unpower device!"
 msgstr "Installiere System-Upgrade. Gerät nicht ausschalten!"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:425
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:423
 msgid "Installing..."
 msgstr "Installation..."
 
@@ -151,11 +172,23 @@ msgstr "Installation..."
 msgid "Keep settings and retain the current configuration"
 msgstr "Einstellungen beibehalten und die aktuelle Konfiguration sichern"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:562
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:26
+msgid "Kernel Version"
+msgstr "Kernel-Version"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:180
+msgid "Look online for upgrades upon status page load"
+msgstr "Nach Updates suchen, sobald die Statusseite geladen wird"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:49
+msgid "New Firmware Available"
+msgstr "Neue Firmware verfügbar"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:560
 msgid "New firmware upgrade available"
 msgstr "Neues Firmware-Upgrade verfügbar"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:611
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:609
 msgid "No upgrade available"
 msgstr "Kein Upgrade verfügbar"
 
@@ -172,7 +205,7 @@ msgstr ""
 msgid "Overview"
 msgstr "Übersicht"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:558
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:556
 msgid "Packages"
 msgstr "Pakete"
 
@@ -208,7 +241,7 @@ msgstr "Build-Anfrage erhalten"
 msgid "Request Data:"
 msgstr "Daten anfordern:"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:605
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:603
 msgid "Request firmware image"
 msgstr "Firmware-Image anfordern"
 
@@ -216,11 +249,15 @@ msgstr "Firmware-Image anfordern"
 msgid "Request in build queue position %s"
 msgstr "Anforderung in Build-Warteschlangenposition %s"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:23
+msgid "Revision"
+msgstr "Revision"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:154
 msgid "SHA256"
 msgstr "SHA-256"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:690
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:688
 msgid "Search for firmware upgrade"
 msgstr "Nach Firmware-Upgrade suchen"
 
@@ -232,11 +269,11 @@ msgstr "Suche beim Öffnen des Tabs nach neuen System-Upgrades"
 msgid "Search on opening"
 msgstr "Suche beim Öffnen"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:458
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:456
 msgid "Searching for an available sysupgrade of %s - %s"
 msgstr "Suche nach einem verfügbaren Sysupgrade von %s - %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:454
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:452
 msgid "Searching..."
 msgstr "Suche..."
 
@@ -272,7 +309,7 @@ msgstr "Firmware-Image erfolgreich erstellt"
 msgid "Target"
 msgstr "Zielplattform"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:668
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:666
 msgid ""
 "The attended sysupgrade service allows to upgrade vanilla and custom "
 "firmware images easily."
@@ -280,21 +317,21 @@ msgstr ""
 "Begleitetes Sysupgrade erlaubt es, Upgrades für Vanilla- und Custom-"
 "Installationen einzuspielen."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:614
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:612
 msgid "The device runs the latest firmware version %s - %s"
 msgstr "Auf dem Gerät läuft die neueste Firmware-Version %s - %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:674
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:672
 msgid ""
 "This is done by building a new firmware on demand via an online service."
 msgstr ""
 "Dafür wird auf Anfrage eine neue Firmware bei einem Online-Service gebaut."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:405
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:403
 msgid "Uploading firmware from browser to device"
 msgstr "Firmware vom Browser zum Gerät laden"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:401
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:399
 msgid "Uploading..."
 msgstr "Hochladen..."
 
@@ -310,10 +347,18 @@ msgstr "Validiere die Revision"
 msgid "Version"
 msgstr "Version"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:417
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:415
 msgid "Wrong checksum"
 msgstr "Falsche Prüfsumme"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:542
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:540
 msgid "[installed] %s"
 msgstr "[installiert] %s"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:55
+msgid "and"
+msgstr "und"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:56
+msgid "release notes"
+msgstr "Veröffentlichungshinweise"

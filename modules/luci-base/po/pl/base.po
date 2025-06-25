@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2025-05-09 16:01+0000\n"
+"PO-Revision-Date: 2025-06-21 14:51+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1277
 msgid "!known (not known)"
@@ -134,7 +134,7 @@ msgstr "-- Dodatkowe pole --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:275
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3803
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4314
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4301
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:797
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:1035
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:2055
@@ -670,7 +670,7 @@ msgstr "Akceptuj pakiety z lokalnym adresem źródłowym"
 msgid "Access Concentrator"
 msgstr "Koncentrator dostępowy (ATM)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3906
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3911
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1047
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1163
 msgid "Access Point"
@@ -733,7 +733,7 @@ msgstr "Aktywny-zapasowy"
 msgid "Active peers"
 msgstr "Aktywne peery"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3907
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3912
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1049
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:23
 msgid "Ad-Hoc"
@@ -802,6 +802,8 @@ msgstr "Dodaj konfigurację urządzenia…"
 msgid "Add instance"
 msgstr "Dodaj instancję"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:150
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:216
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:171
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:177
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:274
@@ -980,11 +982,12 @@ msgstr "Urządzenie agregacji"
 msgid "Aggregation ports"
 msgstr "Porty agregacji"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:46
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:192
 msgid "Alert"
 msgstr "Alarm"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3025
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3027
 #: modules/luci-compat/luasrc/model/network.lua:1417
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:62
 msgid "Alias Interface"
@@ -1067,7 +1070,7 @@ msgstr "Akceptuj tylko wymienione"
 msgid "Allow localhost"
 msgstr "Akceptuj localhost"
 
-#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:178
+#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:194
 msgid "Allow rebooting the device"
 msgstr "Akceptuj restart urządzenia"
 
@@ -1213,6 +1216,11 @@ msgstr "Anonimowe montowanie"
 msgid "Anonymous Swap"
 msgstr "Anonimowy swap"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:16
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:44
+msgid "Any"
+msgstr "Każdy"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:521
 msgctxt "nft match any traffic"
 msgid "Any packet"
@@ -1312,10 +1320,18 @@ msgstr ""
 msgid "Attributes to add/replace in each request."
 msgstr "Atrybuty do dodania/zastąpienia w każdym żądaniu."
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:21
+msgid "Auth"
+msgstr "Uwierzytelnianie"
+
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:145
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:64
 msgid "Auth Group"
 msgstr "Grupa autoryzacji"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:27
+msgid "Auth Priv"
+msgstr "Uwierzytelnianie (prywatne)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1813
 msgid "Authentication"
@@ -1460,9 +1476,9 @@ msgstr "Powrót do konfiguracji peerów"
 msgid "Backup"
 msgstr "Kopia zapasowa"
 
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:128
+#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:139
 msgid "Backup / Flash Firmware"
-msgstr "Kopia zapasowa / Aktualizacja firmware"
+msgstr "Kopia zapasowa / Firmware"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:353
 msgid "Backup file list"
@@ -1607,7 +1623,7 @@ msgstr "Urządzenie wiążące/agregujące"
 msgid "Both \"Relay from\" and \"Relay to address\" must be specified."
 msgstr "Należy określić zarówno „Przekazuj z”, jak i „Przekazuj do adresu”."
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3031
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3033
 #: modules/luci-compat/luasrc/model/network.lua:1421
 msgid "Bridge"
 msgstr "Most"
@@ -1748,6 +1764,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2291
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:128
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:297
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:98
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:209
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:472
 msgid "Cancel"
@@ -1976,7 +1993,7 @@ msgstr ""
 "Kliknij \"Zapisz mtdblock\", aby pobrać określony plik mtdblock. (UWAGA: "
 "FUNKCJA DLA PROFESJONALISTÓW!)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3908
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3913
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1048
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1164
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:88
@@ -2267,9 +2284,14 @@ msgstr "Utwórz/Przypisz strefę zapory"
 msgid "Create interface"
 msgstr "Stwórz interfejs"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:47
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:191
 msgid "Critical"
 msgstr "Krytyczny"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:26
+msgid "Cron"
+msgstr "Cron"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:195
 msgid "Cron Log Level"
@@ -2475,6 +2497,10 @@ msgstr "Interwał DTIM"
 msgid "DUID"
 msgstr "DUID"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:20
+msgid "Daemon"
+msgstr "Demon"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/50_dsl.js:29
 msgid "Data Rate"
 msgstr "Szybkość przesyłania danych"
@@ -2487,6 +2513,7 @@ msgstr "Dane odebrane"
 msgid "Data Transmitted"
 msgstr "Dane przesłane"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:52
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:186
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:159
@@ -2572,6 +2599,8 @@ msgstr "Delegowanie prefiksów IPv6"
 msgid "Delete"
 msgstr "Usuń"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:94
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:108
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:205
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:211
 msgid "Delete key"
@@ -3143,6 +3172,20 @@ msgstr "Metoda protokołu rozszerzonego uwierzytelniania (EAP)"
 msgid "Each STA is assigned its own AP_VLAN interface."
 msgstr "Każda STA ma przypisany własny interfejs AP_VLAN."
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:229
+msgid "Each key is stored as a file in <code>%s</code>."
+msgstr "Każdy klucz jest przechowywany jako plik w <code>%s</code>."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:227
+msgid ""
+"Each software repository public key (from official or third party "
+"repositories) allows packages in lists signed by it to be installed by the "
+"package manager."
+msgstr ""
+"Każdy klucz publiczny repozytorium oprogramowania (pochodzący z repozytoriów "
+"oficjalnych lub zewnętrznych) umożliwia menedżerowi pakietów instalowanie "
+"pakietów z list podpisanych tym kluczem."
+
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2709
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2712
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3446
@@ -3214,6 +3257,7 @@ msgstr ""
 "Albo tylko podpowiedź długości prefiksu (np. 56), za pomocą której operator "
 "wybiera prefiks, albo określ również prefiks (np. %s)"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:45
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:193
 msgid "Emergency"
 msgstr "Ratunkowy"
@@ -3570,6 +3614,7 @@ msgid "Erasing..."
 msgstr "Usuwanie..."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:93
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:48
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:190
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:156
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:343
@@ -3580,12 +3625,12 @@ msgstr "Błąd"
 msgid "Error getting PublicKey"
 msgstr "Błąd uzyskiwania klucza publicznego"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3044
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3049
 #: modules/luci-compat/luasrc/model/network.lua:1433
 msgid "Ethernet Adapter"
 msgstr "Karta ethernetowa"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3035
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3037
 #: modules/luci-compat/luasrc/model/network.lua:1423
 msgid "Ethernet Switch"
 msgstr "Przełącznik ethernetowy"
@@ -3772,6 +3817,10 @@ msgstr "FT Over-the-Air (OTA)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1681
 msgid "FT protocol"
 msgstr "Protokół FT"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:28
+msgid "FTP"
+msgstr "FTP"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:91
 msgid "Failed Reason"
@@ -4349,6 +4398,12 @@ msgstr "Udziel dostępu do procedur LuCI openfortivpn"
 msgid "Grant access to SSH configuration"
 msgstr "Udziel dostępu do konfiguracji SSH"
 
+#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:45
+msgid "Grant access to Software Repository Public Key management"
+msgstr ""
+"Udziel dostępu do zarządzania kluczami publicznymi repozytorium "
+"oprogramowania"
+
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:23
 msgid "Grant access to Storage and Mount status display"
 msgstr "Udziel dostępu do wyświetlania statusu pamięci masowej i montowania"
@@ -4357,7 +4412,7 @@ msgstr "Udziel dostępu do wyświetlania statusu pamięci masowej i montowania"
 msgid "Grant access to basic LuCI procedures"
 msgstr "Udziel dostępu do podstawowych procedur LuCI"
 
-#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:78
+#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:94
 msgid "Grant access to crontab configuration"
 msgstr "Udziel dostępu do konfiguracji crontab"
 
@@ -4365,7 +4420,7 @@ msgstr "Udziel dostępu do konfiguracji crontab"
 msgid "Grant access to firewall status"
 msgstr "Udziel dostępu do statusu zapory"
 
-#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:131
+#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:147
 msgid "Grant access to flash operations"
 msgstr "Udziel dostępu do operacji flash"
 
@@ -4377,7 +4432,7 @@ msgstr "Udziel dostępu do wyświetlania statusu głównego"
 msgid "Grant access to mmcli"
 msgstr "Udziel dostępu do mmcli"
 
-#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:99
+#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:115
 msgid "Grant access to mount configuration"
 msgstr "Udziel dostępu do konfiguracji montowania"
 
@@ -4409,7 +4464,7 @@ msgstr "Udziel dostępu do statystyk w czasie rzeczywistym"
 msgid "Grant access to routing status"
 msgstr "Udziel dostępu do statusu trasowania"
 
-#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:56
+#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:72
 msgid "Grant access to startup configuration"
 msgstr "Udziel dostępu do konfiguracji uruchamiania"
 
@@ -4421,7 +4476,7 @@ msgstr "Udziel dostępu do konfiguracji systemu"
 msgid "Grant access to system logs"
 msgstr "Udziel dostępu do dzienników systemowych"
 
-#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:45
+#: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:61
 msgid "Grant access to uHTTPd configuration"
 msgstr "Udziel dostępu do konfiguracji uHTTPd"
 
@@ -5218,6 +5273,7 @@ msgstr "Przychodząca serializacja"
 msgid "Indoor Only Channel Selected"
 msgstr "Wybrano kanał do użytku wyłącznie w pomieszczeniach"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:51
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:187
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:158
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:345
@@ -5510,6 +5566,10 @@ msgstr "Nieprawidłowa wartość szesnastkowa"
 msgid "Invalid hostname or IPv4 address"
 msgstr "Nieprawidłowa nazwa hosta lub adres IPv4"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:139
+msgid "Invalid key format"
+msgstr ""
+
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
 msgid "Invalid port"
 msgstr "Nieprawidłowy port"
@@ -5604,6 +5664,10 @@ msgstr "Zachowaj ustawienia i bieżącą konfigurację"
 msgid "Keep-Alive"
 msgstr "Utrzymanie aktywności (Keep-Alive)"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:17
+msgid "Kernel"
+msgstr "Jądro"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:54
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:84
 msgid "Kernel Log"
@@ -5697,13 +5761,17 @@ msgstr "Próg błędu echa LCP"
 msgid "LCP echo interval"
 msgstr "Interwał echa LCP"
 
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:115
+#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:126
 msgid "LED Configuration"
 msgstr "Konfiguracja LED"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1688
 msgid "LLC"
 msgstr "LLC"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:23
+msgid "LPR"
+msgstr "LPR"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:268
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:375
@@ -6008,6 +6076,38 @@ msgstr "Ładowanie widoku…"
 msgid "Local"
 msgstr "Lokalny"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:33
+msgid "Local 0"
+msgstr "Lokalny 0"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:34
+msgid "Local 1"
+msgstr "Lokalny 1"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:35
+msgid "Local 2"
+msgstr "Lokalny 2"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:36
+msgid "Local 3"
+msgstr "Lokalny 3"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:37
+msgid "Local 4"
+msgstr "Lokalny 4"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:38
+msgid "Local 5"
+msgstr "Lokalny 5"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:39
+msgid "Local 6"
+msgstr "Lokalny 6"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:40
+msgid "Local 7"
+msgstr "Lokalny 7"
+
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:169
 msgid "Local IP address"
 msgstr "Lokalny adres IP"
@@ -6098,12 +6198,20 @@ msgstr "Zablokuj na BSSID"
 msgid "Log"
 msgstr "Dziennik"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:31
+msgid "Log alert"
+msgstr "Alert dziennika"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:442
 msgid ""
 "Log all options sent to DHCP clients and the tags used to determine them."
 msgstr ""
 "Rejestruj wszystkie opcje wysyłane do klientów DHCP oraz tagi użyte do ich "
 "określenia."
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:30
+msgid "Log audit"
+msgstr "Audyt dziennika"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:99
 msgctxt "nft log action"
@@ -6272,6 +6380,10 @@ msgstr "MTU"
 msgid "MX"
 msgstr "MX"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:19
+msgid "Mail"
+msgstr "Poczta"
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:303
 msgid ""
 "Make sure to clone the root filesystem using something like the commands "
@@ -6294,7 +6406,7 @@ msgstr "Ręczne"
 msgid "Manufacturer"
 msgstr "Producent"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3910
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3915
 msgid "Master (VLAN)"
 msgstr "Główny (VLAN)"
 
@@ -6458,7 +6570,7 @@ msgstr "ID mesh"
 msgid "Mesh Id"
 msgstr "Identyfikator mesh"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3912
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3917
 msgid "Mesh Point"
 msgstr "Punkt sieci mesh"
 
@@ -6620,7 +6732,7 @@ msgstr "Limit czasu inicjacji modemu"
 msgid "ModemManager"
 msgstr "Menedżer modemu"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3909
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3914
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1135
 msgid "Monitor"
 msgstr "Monitor"
@@ -6651,7 +6763,7 @@ msgstr "Punkt montowania"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:144
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:228
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:102
+#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:113
 msgid "Mount Points"
 msgstr "Punkty montowania"
 
@@ -6771,6 +6883,10 @@ msgstr "Podrzędne NDP-Proxy"
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:72
 msgid "NT Domain"
 msgstr "Domena NT"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:29
+msgid "NTP"
+msgstr "NTP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:958
 msgid "NTP Servers"
@@ -6955,11 +7071,15 @@ msgstr "Nowy interfejs \"%s\" nie może być utworzony: %s"
 msgid "New interface name…"
 msgstr "Nazwa nowego interfejsu…"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:24
+msgid "News"
+msgstr "Aktualności"
+
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:11
 msgid "Next »"
 msgstr "Następna »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4250
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4237
 msgid "No"
 msgstr "Nie"
 
@@ -7114,6 +7234,10 @@ msgstr "Brak reguł w tym łańcuchu"
 msgid "No rules in this chain."
 msgstr "Brak zasad w tym łańcuchu."
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:79
+msgid "No software repository public keys present yet."
+msgstr "Klucze publiczne repozytorium oprogramowania nie są jeszcze obecne."
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:139
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1287
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:263
@@ -7162,6 +7286,12 @@ msgstr "Brak"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:197
 msgid "Normal"
 msgstr "Normalny"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:209
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:213
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:219
+msgid "Not"
+msgstr "Nie"
 
 #: modules/luci-base/ucode/template/error404.ut:9
 msgid "Not Found"
@@ -7235,6 +7365,7 @@ msgstr ""
 msgid "Notes"
 msgstr "Uwagi"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:50
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:188
 msgid "Notice"
 msgstr "Spostrzeżenie"
@@ -7446,7 +7577,7 @@ msgid "Operator Name"
 msgstr "Nazwa operatora"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2014
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4263
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4250
 msgid "Option \"%s\" contains an invalid input value."
 msgstr "Opcja \"%s\" zawiera nieprawidłową wartość."
 
@@ -7758,11 +7889,11 @@ msgstr "Własne numery"
 msgid "Owner"
 msgstr "Właściciel"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3913
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3918
 msgid "P2P Client"
 msgstr "Klient P2P"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3914
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3919
 msgid "P2P Go"
 msgstr "Właściciel grupy P2P"
 
@@ -7979,9 +8110,19 @@ msgstr ""
 "em>) z innego systemu, aby utworzyć pasujący wpis peera, umożliwiając temu "
 "systemowi połączenie się z lokalnym interfejsem WireGuard."
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:205
+msgid "Paste or drag repository public key"
+msgstr "Wklej lub przeciągnij klucz publiczny repozytorium"
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:430
 msgid "Paste or drag supplied WireGuard configuration file…"
 msgstr "Wklej lub przeciągnij dostarczony plik konfiguracyjny WireGuard…"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:208
+msgid "Paste or drag to upload a software repository public key…"
+msgstr ""
+"Wklej lub przeciągnij, aby przesłać klucz publiczny repozytorium "
+"oprogramowania…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1788
 msgid "Path to CA-Certificate"
@@ -8567,6 +8708,11 @@ msgstr ""
 msgid "Read {etc_ethers} to configure the DHCP server."
 msgstr "Przejrzyj plik {etc_ethers}, aby skonfigurować serwer DHCP."
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:95
+msgid "Really delete the following software repository public key?"
+msgstr ""
+"Czy na pewno usunąć następujący klucz publiczny repozytorium oprogramowania?"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:550
 msgid "Really switch protocol?"
 msgstr "Naprawdę zmienić protokół?"
@@ -8584,7 +8730,7 @@ msgid "Rebind protection"
 msgstr "Ochrona odnawiania adresów"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:20
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:140
+#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:151
 msgid "Reboot"
 msgstr "Restart urządzenia"
 
@@ -8839,6 +8985,14 @@ msgstr "Zamień konfigurację Wi-Fi"
 msgid "Reply on Neighbour request when mapping found in VXLAN FDB"
 msgstr ""
 "Odpowiedz na żądanie sąsiada, gdy mapowanie zostanie znalezione w FDB VXLAN"
+
+#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:77
+msgid "Repo Public Keys"
+msgstr "Klucze publiczne repozytorium"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:225
+msgid "Repository Public Keys"
+msgstr "Klucze publiczne repozytorium"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:17
 msgid "Request IPv6-address"
@@ -9358,18 +9512,22 @@ msgid "Scan"
 msgstr "Skanuj"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:28
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:90
+#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:101
 msgid "Scheduled Tasks"
 msgstr "Zaplanowane zadania"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:32
+msgid "Scheduling daemon"
+msgstr "Demon harmonogramu"
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:47
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:51
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:130
 msgctxt "scroll to top (the head) of the log file"
 msgid "Scroll to head"
 msgstr "Przewiń na początek"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:38
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:42
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:123
 msgctxt "scroll to bottom (the tail) of the log file"
 msgid "Scroll to tail"
 msgstr "Przewiń na koniec"
@@ -9665,7 +9823,7 @@ msgstr "Polityka wyboru slave'a"
 msgid "Slow (every 30 seconds)"
 msgstr "Wolno (co 30 sekund)"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3038
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3040
 #: modules/luci-compat/luasrc/model/network.lua:1428
 msgid "Software VLAN"
 msgstr "Programowy VLAN"
@@ -10010,7 +10168,7 @@ msgid "Starting wireless scan..."
 msgstr "Skanowanie..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:109
-#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:78
+#: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:89
 msgid "Startup"
 msgstr "Autostart"
 
@@ -10134,12 +10292,12 @@ msgid ""
 msgstr ""
 "Przełącznik %q ma nieznaną topologię - ustawienia VLAN mogą nie być dokładne."
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3038
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3040
 #: modules/luci-compat/luasrc/model/network.lua:1426
 msgid "Switch VLAN"
 msgstr "Przełącznik VLAN"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3035
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3037
 msgid "Switch port"
 msgstr "Port przełącznika"
 
@@ -10173,6 +10331,10 @@ msgstr "Składnia:"
 msgid "Syntax: {code_syntax}."
 msgstr "Składnia: {code_syntax}."
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:22
+msgid "Syslog"
+msgstr "Dziennik systemowy"
+
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:26
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:22
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:113
@@ -10180,7 +10342,7 @@ msgstr "Składnia: {code_syntax}."
 msgid "System"
 msgstr "System"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:58
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:206
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:63
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:75
 msgid "System Log"
@@ -10603,6 +10765,10 @@ msgstr ""
 "Podany klucz publiczny SSH jest nieprawidłowy. Podaj odpowiedni publiczny "
 "RSA lub klucze ECDSA."
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:151
+msgid "The given software repository public key is already present."
+msgstr "Podany klucz publiczny repozytorium oprogramowania jest już obecny."
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1192
 msgid "The hardware address(es) of this entry/host."
 msgstr "Adresy sprzętowe tego wpisu/hosta."
@@ -11000,6 +11166,18 @@ msgid ""
 msgstr ""
 "Zwykle jest to adres najbliższego PoP prowadzonego przez brokera tuneli"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:122
+msgid ""
+"This key appears to be in PEM format, which is not supported in an opkg "
+"environment."
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:124
+msgid ""
+"This key does not appear to be in PEM format, which is required in an apk "
+"environment."
+msgstr ""
+
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:65
 msgid ""
 "This list gives an overview over currently running system processes and "
@@ -11244,7 +11422,7 @@ msgstr "Rodzaj wyzwalacza"
 msgid "Tunnel ID"
 msgstr "Numer identyfikacyjny tunelu"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3041
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3046
 #: modules/luci-compat/luasrc/model/network.lua:1431
 msgid "Tunnel Interface"
 msgstr "Interfejs tunelu"
@@ -11323,6 +11501,10 @@ msgstr "URI"
 msgid "URI scheme %s not supported"
 msgstr "Schemat URI %s nie jest obsługiwany"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:25
+msgid "UUCP"
+msgstr "UUCP"
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:255
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:359
 msgid "UUID"
@@ -11350,7 +11532,7 @@ msgid "Unable to dispatch"
 msgstr "Nie można wysłać"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:15
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:18
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:96
 msgid "Unable to load log data:"
 msgstr "Nie można załadować danych dziennika:"
 
@@ -11434,7 +11616,7 @@ msgid "Units: seconds"
 msgstr "Jednostki: sekundy"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:2092
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3915
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3920
 #: modules/luci-compat/luasrc/model/network.lua:971
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:18
 msgid "Unknown"
@@ -11469,6 +11651,7 @@ msgctxt "Dnsmasq instance"
 msgid "Unnamed instance #%d"
 msgstr "Nienazwana instancja #%d"
 
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:65
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:121
 msgid "Unnamed key"
 msgstr "Klucz bez nazwy"
@@ -11746,6 +11929,10 @@ msgstr ""
 msgid "Useful for systems behind firewalls."
 msgstr "Przydatne w systemach znajdujących się za zaporą."
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:18
+msgid "User"
+msgstr "Użytkownik"
+
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:106
 msgid "User certificate (PEM encoded)"
@@ -11926,7 +12113,7 @@ msgstr "Wirtualny Ethernet"
 msgid "Virtual dynamic interface"
 msgstr "Wirtualny interfejs dynamiczny"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3911
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3916
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1163
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1164
 msgid "WDS"
@@ -11986,6 +12173,7 @@ msgstr "Oczekiwanie na urządzenie..."
 msgid "Warn"
 msgstr "Uwaga"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:49
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:189
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:157
 msgid "Warning"
@@ -12114,6 +12302,10 @@ msgstr "Szerokość"
 msgid "WireGuard"
 msgstr "WireGuard"
 
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3043
+msgid "WireGuard Interface"
+msgstr ""
+
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:120
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:165
 msgid "WireGuard Status"
@@ -12135,13 +12327,13 @@ msgstr "Peer WireGuard jest wyłączony"
 msgid "Wireless"
 msgstr "Wi-Fi"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3028
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3030
 #: modules/luci-compat/luasrc/model/network.lua:1419
 msgid "Wireless Adapter"
 msgstr "Adapter Wi-Fi"
 
-#: modules/luci-base/htdocs/luci-static/resources/network.js:3007
-#: modules/luci-base/htdocs/luci-static/resources/network.js:4360
+#: modules/luci-base/htdocs/luci-static/resources/network.js:3009
+#: modules/luci-base/htdocs/luci-static/resources/network.js:4365
 #: modules/luci-compat/luasrc/model/network.lua:1405
 #: modules/luci-compat/luasrc/model/network.lua:1868
 msgid "Wireless Network"
@@ -12193,7 +12385,7 @@ msgstr "Zapisz zapytania DNS do dziennika systemowego."
 msgid "Write system log to file"
 msgstr "Zapisz dziennik systemowy do pliku"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4250
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4237
 msgid "Yes"
 msgstr "Tak"
 
@@ -12438,6 +12630,10 @@ msgstr "co %ds"
 msgid "expired"
 msgstr "wygasły"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:211
+msgid "facility:"
+msgstr "lokalizacja:"
+
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:19
 msgctxt "DHCPv6 address request mode"
 msgid "force"
@@ -12487,6 +12683,10 @@ msgstr "tryb hybrydowy"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:66
 msgid "ignore"
 msgstr "ignoruj"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:221
+msgid "including:"
+msgstr "wliczając:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1252
 msgid "infinite (lease does not expire)"
@@ -12668,6 +12868,10 @@ msgstr "sek."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:922
 msgid "server mode"
 msgstr "tryb serwera"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:215
+msgid "severity:"
+msgstr "istotność:"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:58
 msgid "sstpc Log-level"
