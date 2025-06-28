@@ -23,11 +23,10 @@ function handleAction(report, ev) {
 				])
 			]),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
-				'\xa0',
 				E('h5', _('Result')),
 				E('textarea', {
 					'id': 'result',
-					'style': 'width: 100% !important; padding: 5px; font-family: monospace',
+					'style': 'width: 100% !important; margin-top:.5em; padding: 5px; font-family: monospace',
 					'readonly': 'readonly',
 					'wrap': 'off',
 					'rows': 20
@@ -36,6 +35,7 @@ function handleAction(report, ev) {
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
+					'style': 'float:none; margin-right:.4em;',
 					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
@@ -106,11 +106,10 @@ function handleAction(report, ev) {
 				]),
 			]),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
-				'\xa0',
 				E('h5', _('Result')),
 				E('textarea', {
 					'id': 'result',
-					'style': 'width: 100% !important; padding: 5px; font-family: monospace',
+					'style': 'width: 100% !important; margin-top:.5em; padding: 5px; font-family: monospace',
 					'readonly': 'readonly',
 					'wrap': 'off',
 					'rows': 20
@@ -119,6 +118,7 @@ function handleAction(report, ev) {
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
+					'style': 'float:none; margin-right:.4em;',
 					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
@@ -244,9 +244,9 @@ return view.extend({
 
 		const page = E('div', { 'class': 'cbi-map', 'id': 'cbimap' }, [
 			E('div', { 'class': 'cbi-section' }, [
-				E('p', _('This report shows the latest NFT Set statistics, press the \'Refresh\' button to get a new one. \
+				E('p', { 'style': 'margin-bottom:1em;' },
+					_('This report shows the latest NFT Set statistics, press the \'Refresh\' button to get a new one. \
 					You can also display the specific content of Sets, search for suspicious IPs and finally, these IPs can also be displayed on a map.')),
-				E('p', '\xa0'),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;width:230px;font-weight:bold;' }, _('Timestamp')),
 					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-bottom:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.timestamp || '-')
@@ -339,7 +339,11 @@ return view.extend({
 				}, [_('Refresh')])
 			])
 		]);
-		if (uci.get('banip', 'global', 'ban_nftcount') === '1' && uci.get('banip', 'global', 'ban_map') === '1') {
+		if (uci.get('banip', 'global', 'ban_nftcount') === '1'
+			&& uci.get('banip', 'global', 'ban_map') === '1'
+			&& (uci.get('banip', 'global', 'ban_allowlistonly') !== '1'
+				|| (uci.get('banip', 'global', 'ban_feedin') || "").includes("allowlist")
+				|| (uci.get('banip', 'global', 'ban_feedout') || "").includes("allowlist"))) {
 			const btn = page.querySelector('#btnMap');
 			if (btn) {
 				btn.removeAttribute('disabled');
