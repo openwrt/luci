@@ -2613,18 +2613,10 @@ div.cbi-value var.cbi-tooltip-container,
 	max-width: none;
 }
 
-[data-darkmode="true"] [data-page="admin-status-channel_analysis"] #view> div > div > div > div > div[style],
-[data-darkmode="true"] [data-page="admin-status-realtime-load"] #view > div > div > div[style],
-[data-darkmode="true"] [data-page="admin-status-realtime-bandwidth"] #view > div > div > div > div[style],
-[data-darkmode="true"] [data-page="admin-status-realtime-wireless"] #view > div > div > div > div[style],
-[data-darkmode="true"] [data-page="admin-status-realtime-connections"] #view > div > div > div[style] {
+#view div[style] > svg {
 	background-color: var(--background-color-high)!important;
 }
 
-[data-darkmode="true"] [data-page="admin-status-channel_analysis"] #view> div > div > div > div > div > svg > line[style],
-[data-darkmode="true"] [data-page="admin-status-realtime-load"] #view > div > div > div > svg > line[style],
-[data-darkmode="true"] [data-page="admin-status-realtime-bandwidth"] #view > div > div > div > div > svg > line[style],
-[data-darkmode="true"] [data-page="admin-status-realtime-wireless"] #view > div > div > div > div > svg > line[style],
-[data-darkmode="true"] [data-page="admin-status-realtime-connections"] #view > div > div > div > svg > line[style] {
-	stroke: #fff!important;
+#view div[style] > svg line[style] {
+	stroke: var(--text-color-highest)!important;
 }
