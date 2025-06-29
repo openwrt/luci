@@ -12,11 +12,12 @@ document.querySelector('head').appendChild(E('link', {
 }));
 
 function invokeIncludesLoad(includes) {
-	var tasks = [], has_load = false;
+	const tasks = [];
+	let has_load = false;
 
-	for (var i = 0; i < includes.length; i++) {
+	for (let i = 0; i < includes.length; i++) {
 		if (typeof(includes[i].load) == 'function') {
-			tasks.push(includes[i].load().catch(L.bind(function() {
+			tasks.push(includes[i].load().catch(L.bind(() => {
 				this.failed = true;
 			}, includes[i])));
 
@@ -31,12 +32,12 @@ function invokeIncludesLoad(includes) {
 }
 
 function startPolling(includes, containers) {
-	var step = function() {
-		return network.flushCache().then(function() {
+	const step = () => {
+		return network.flushCache().then(() => {
 			return invokeIncludesLoad(includes);
-		}).then(function(results) {
-			for (var i = 0; i < includes.length; i++) {
-				var content = null;
+		}).then(results => {
+			for (let i = 0; i < includes.length; i++) {
+				let content = null;
 
 				if (includes[i].failed)
 					continue;
@@ -59,7 +60,7 @@ function startPolling(includes, containers) {
 				}
 			}
 
-			var ssi = document.querySelector('div.includes');
+			const ssi = document.querySelector('div.includes');
 			if (ssi) {
 				ssi.style.display = '';
 				ssi.classList.add('fade-in');
@@ -67,30 +68,31 @@ function startPolling(includes, containers) {
 		});
 	};
 
-	return step().then(function() {
+	return step().then(() => {
 		poll.add(step);
 	});
 }
 
 return view.extend({
-	load: function() {
-		return L.resolveDefault(fs.list('/www' + L.resource('view/dashboard/include')), []).then(function(entries) {
-			return Promise.all(entries.filter(function(e) {
+	load() {
+		return L.resolveDefault(fs.list('/www' + L.resource('view/dashboard/include')), []).then(entries => {
+			return Promise.all(entries.filter(e => {
 				return (e.type == 'file' && e.name.match(/\.js$/));
-			}).map(function(e) {
+			}).map(e => {
 				return 'view.dashboard.include.' + e.name.replace(/\.js$/, '');
-			}).sort().map(function(n) {
+			}).sort().map(n => {
 				return L.require(n);
 			}));
 		});
 	},
 
-	render: function(includes) {
-		var rv = E([]), containers = [];
+	render(includes) {
+		const rv = E([]);
+		const containers = [];
 
-		for (var i = 0; i < includes.length - 1; i++) {
+		for (let i = 0; i < includes.length - 1; i++) {
 
-			var container = E('div', { 'class': 'section-content' });
+			const container = E('div', { 'class': 'section-content' });
 
 			rv.appendChild(E('div', { 'class': 'cbi-section-' + i, 'style': 'display:none' }, [
 				container
@@ -99,7 +101,7 @@ return view.extend({
 			containers.push(container);
 		}
 
-		return startPolling(includes, containers).then(function() {
+		return startPolling(includes, containers).then(() => {
 			return rv;
 		});
 	},

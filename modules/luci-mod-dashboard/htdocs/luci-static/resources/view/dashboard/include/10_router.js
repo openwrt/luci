@@ -18,7 +18,7 @@ return baseclass.extend({
 
 	params: [],
 
-	load: function() {
+	load() {
 		return Promise.all([
 			network.getWANNetworks(),
 			network.getWAN6Networks(),
@@ -27,13 +27,40 @@ return baseclass.extend({
 		]);
 	},
 
-	renderHtml: function(data, type) {
+	renderRow(title, value, className = '', tag = 'p') {
+		return E(tag, { 'class': 'mt-2' }, [
+			E('span', {}, [ title + '：' ]),
+			E('span', { 'class': className }, [ value ])
+		]);
+	},
 
-		var icon = type;
-		var title = 'router' == type ? _('System') : _('Internet');
-		var container_wapper = E('div', { 'class': type + '-status-self dashboard-bg box-s1'});
-		var container_box = E('div', { 'class': type + '-status-info'});
-		var container_item = E('div', { 'class': 'settings-info'});
+	renderArrayAsTable(title, values) {
+		const table = E('table', { 'class': 'table' });
+
+		if (Array.isArray(values) && values.length > 0) {
+			values.forEach((val) => {
+				table.appendChild(E('tr', {}, [
+					E('td', {}, [ title + '：' ]),
+					E('td', {}, [ val ])
+				]));
+			});
+		} else {
+			table.appendChild(E('tr', {}, [
+				E('td', {}, [ title + '：' ]),
+				E('td', {}, [ '-' ])
+			]));
+		}
+
+		return table;
+	},
+
+	renderHtml(data, type) {
+
+		let icon = type;
+		const title = 'router' == type ? _('System') : _('Internet');
+		const container_wapper = E('div', { 'class': type + '-status-self dashboard-bg box-s1'});
+		const container_box = E('div', { 'class': type + '-status-info'});
+		const container_item = E('div', { 'class': 'settings-info'});
 
 		if ('internet' == type) {
 			icon = (data.v4.connected.value || data.v6.connected.value) ? type : 'not-internet';
@@ -52,15 +79,14 @@ return baseclass.extend({
 		container_box.appendChild(E('hr'));
 
 		if ('internet' == type) {
-			var container_internet_v4 = E('div');
-			var container_internet_v6 = E('div');
+			const container_internet_v4 = E('div');
+			const container_internet_v6 = E('div');
 
-			for(var idx in data) {
+			for(let idx in data) {
 
-				for(var ver in data[idx]) {
-					var classname = ver,
-						suppelements = '',
-						visible = data[idx][ver].visible;
+				for(let ver in data[idx]) {
+					let classname = ver;
+					const visible = data[idx][ver].visible;
 
 					if('connected' === ver) {
 						classname = data[idx][ver].value ? 'label label-success' : 'label label-danger';
@@ -79,22 +105,20 @@ return baseclass.extend({
 						}
 
 						if ('addrsv4' === ver) {
-							var addrs = data[idx][ver].value;
+							const addrs = data[idx][ver].value;
 							if(Array.isArray(addrs) && addrs.length) {
-								for(var ip in addrs) {
+								for(let ip in addrs) {
 									data[idx][ver].value = addrs[ip].split('/')[0];
 								}
 							}
 						}
 
 						if (visible) {
-							container_internet_v4.appendChild(
-								E('p', { 'class': 'mt-2'}, [
-									E('span', {'class': ''}, [ data[idx][ver].title + '：' ]),
-									E('span', {'class': classname }, [ data[idx][ver].value ]),
-									suppelements
-								])
-							);
+							if (['dnsv4'].includes(ver) && Array.isArray(data[idx][ver].value)) {
+								container_internet_v4.appendChild(this.renderArrayAsTable(data[idx][ver].title, data[idx][ver].value));
+							} else {
+								container_internet_v4.appendChild(this.renderRow(data[idx][ver].title, data[idx][ver].value, classname));
+							}
 						}
 
 					} else {
@@ -109,13 +133,11 @@ return baseclass.extend({
 						}
 
 						if (visible) {
-							container_internet_v6.appendChild(
-								E('p', {'class': 'mt-2'}, [
-									E('span', {'class': ''}, [data[idx][ver].title + '：']),
-									E('span', {'class': classname}, [data[idx][ver].value]),
-									suppelements
-								])
-							);
+							if (['dnsv6'].includes(ver) && Array.isArray(data[idx][ver].value)) {
+								container_internet_v6.appendChild(this.renderArrayAsTable(data[idx][ver].title, data[idx][ver].value));
+							} else {
+								container_internet_v6.appendChild(this.renderRow(data[idx][ver].title, data[idx][ver].value, classname));
+							}
 						}
 					}
 				}
@@ -124,7 +146,7 @@ return baseclass.extend({
 			container_item.appendChild(container_internet_v4);
 			container_item.appendChild(container_internet_v6);
 		} else {
-			for(var idx in data) {
+			for(let idx in data) {
 				container_item.appendChild(
 					E('p', { 'class': 'mt-2'}, [
 						E('span', {'class': ''}, [ data[idx].title + '：' ]),
@@ -140,22 +162,22 @@ return baseclass.extend({
 		return container_wapper;
 	},
 
-	renderUpdateWanData: function(data, v6) {
+	renderUpdateWanData(data, v6) {
 
-		var min_metric = 2000000000;
-		var min_metric_i = 0;
-		for (var i = 0; i < data.length; i++) {
-			var metric = data[i].getMetric();
+		let min_metric = 2000000000;
+		let min_metric_i = 0;
+		for (let i = 0; i < data.length; i++) {
+			const metric = data[i].getMetric();
 			if (metric < min_metric) {
 				min_metric = metric;
 				min_metric_i = i;
 			}
 		 }
 
-		var ifc = data[min_metric_i];
+		const ifc = data[min_metric_i];
 		if(ifc){
 			if (v6) {
-				var uptime = ifc.getUptime();
+				const uptime = ifc.getUptime();
 				this.params.internet.v6.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
 				this.params.internet.v6.ipprefixv6.value =  ifc.getIP6Prefix() || '-';
 				this.params.internet.v6.gatewayv6.value =  ifc.getGateway6Addr() || '-';
@@ -164,7 +186,7 @@ return baseclass.extend({
 				this.params.internet.v6.dnsv6.value = ifc.getDNS6Addrs() || [ '-' ];
 				this.params.internet.v6.connected.value = ifc.isUp();
 			} else {
-				var uptime = ifc.getUptime();
+				const uptime = ifc.getUptime();
 				this.params.internet.v4.uptime.value = (uptime > 0) ? '%t'.format(uptime) : '-';
 				this.params.internet.v4.protocol.value=  ifc.getI18n() || E('em', _('Not connected'));
 				this.params.internet.v4.gatewayv4.value =  ifc.getGatewayAddr() || '0.0.0.0';
@@ -175,7 +197,7 @@ return baseclass.extend({
 		}
 	},
 
-	renderInternetBox: function(data) {
+	renderInternetBox(data) {
 
 		this.params.internet = {
 
@@ -272,15 +294,15 @@ return baseclass.extend({
 		return this.renderHtml(this.params.internet, 'internet');
 	},
 
-	renderRouterBox: function(data) {
+	renderRouterBox(data) {
 
-		var boardinfo   = data[2],
-			systeminfo  = data[3];
+		const boardinfo   = data[2];
+		const systeminfo  = data[3];
 
-		var datestr = null;
+		let datestr = null;
 
 		if (systeminfo.localtime) {
-			var date = new Date(systeminfo.localtime * 1000);
+			const date = new Date(systeminfo.localtime * 1000);
 
 			datestr = '%04d-%02d-%02d %02d:%02d:%02d'.format(
 				date.getUTCFullYear(),
@@ -327,7 +349,7 @@ return baseclass.extend({
 		return this.renderHtml(this.params.router, 'router');
 	},
 
-	render: function(data) {
+	render(data) {
 		return [this.renderInternetBox(data), this.renderRouterBox(data)];
 	}
 });
