@@ -133,14 +133,20 @@ return view.extend({
 				'class': 'cbi-button cbi-button-neutral',
 			}, _('Scroll to tail', 'scroll to bottom (the tail) of the log file')
 		);
-		scrollDownButton.addEventListener('click', () => scrollUpButton.scrollIntoView());
+		scrollDownButton.addEventListener('click', () => {
+			scrollUpButton.scrollIntoView();
+			scrollUpButton.blur();
+		});
 
 		const scrollUpButton = E('button', { 
 				'id' : 'scrollUpButton',
 				'class': 'cbi-button cbi-button-neutral',
 			}, _('Scroll to head', 'scroll to top (the head) of the log file')
 		);
-		scrollUpButton.addEventListener('click', () => scrollDownButton.scrollIntoView());
+		scrollUpButton.addEventListener('click', () => {
+			scrollDownButton.scrollIntoView();
+			scrollDownButton.blur();
+		});
 
 		const self = this;
 
