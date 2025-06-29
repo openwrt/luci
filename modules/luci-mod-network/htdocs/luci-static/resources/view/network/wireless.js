@@ -189,37 +189,26 @@ function render_modal_status(node, radioNet) {
 
 function format_wifirate(rate) {
 	let s = `${rate.rate / 1000}\xa0${_('Mbit/s')}, ${rate.mhz}\xa0${_('MHz')}`;
-	const ht = rate.ht;
-	const vht = rate.vht;
-	const nss = rate.nss;
-	const mcs = rate.mcs;
-	const sgi = rate.short_gi;
-	const he = rate.he;
-	const he_gi = rate.he_gi;
-	const he_dcm = rate.he_dcm;
-	const eht = rate?.eht ?? false;
-	const eht_gi = rate?.eht_gi ?? 0;
-	const eht_dcm = rate?.eht_dcm ?? 0;
 
-	if (ht || vht) s += [
-		vht && `, VHT-MCS\xa0${mcs}`,
-		nss && `, VHT-NSS\xa0${nss}`,
-		ht  && `, MCS\xa0${mcs}`,
-		sgi && ', ' + _('Short GI').replace(/ /g, '\xa0')
+	if (rate?.ht || rate?.vht) s += [
+		rate?.vht && `, VHT-MCS\xa0${rate?.mcs}`,
+		rate?.nss && `, VHT-NSS\xa0${rate?.nss}`,
+		rate?.ht  && `, MCS\xa0${rate?.mcs}`,
+		rate?.short_gi && ', ' + _('Short GI').replace(/ /g, '\xa0')
 	].filter(Boolean).join('');
 
-	if (he) s += [
-		`, HE-MCS\xa0${mcs}`,
-		nss    && `, HE-NSS\xa0${nss}`,
-		he_gi  && `, HE-GI\xa0${he_gi}`,
-		he_dcm && `, HE-DCM\xa0${he_dcm}`
+	if (rate?.he) s += [
+		`, HE-MCS\xa0${rate?.mcs}`,
+		rate?.nss    && `, HE-NSS\xa0${rate?.nss}`,
+		rate?.he_gi  && `, HE-GI\xa0${rate?.he_gi}`,
+		rate?.he_dcm && `, HE-DCM\xa0${rate?.he_dcm}`
 	].filter(Boolean).join('');
 
-	if (eht) s += [
-		`, EHT-MCS\xa0${mcs}`,
-		nss    && `, EHT-NSS\xa0${nss}`,
-		he_gi  && `, EHT-GI\xa0${eht_gi}`,
-		he_dcm && `, EHT-DCM\xa0${eht_dcm}`
+	if (rate?.eht) s += [
+		`, EHT-MCS\xa0${rate?.mcs}`,
+		rate?.nss    && `, EHT-NSS\xa0${rate?.nss}`,
+		rate?.eht_gi  && `, EHT-GI\xa0${rate?.eht_gi}`,
+		rate?.eht_dcm && `, EHT-DCM\xa0${rate?.eht_dcm}`
 	].filter(Boolean).join('');
 
 	return s;
