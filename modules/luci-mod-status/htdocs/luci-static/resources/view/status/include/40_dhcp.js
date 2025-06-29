@@ -122,8 +122,9 @@ return baseclass.extend({
 				rows.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
 					'click': L.bind(this.handleCreateStaticLease, this, lease),
+					'data-tooltip': _('Reserve a specific IP address for this device'),
 					'disabled': this.isMACStatic[mac]
-				}, [ _('Set Static') ]));
+				}, [ _('Reserve IP') ]));
 			}
 
 			return rows;
@@ -171,8 +172,9 @@ return baseclass.extend({
 				rows.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
 					'click': L.bind(this.handleCreateStaticLease6, this, lease),
+					'data-tooltip': _('Reserve a specific IP address for this device'),
 					'disabled': this.isDUIDStatic[duid]
-				}, [ _('Set Static') ]));
+				}, [ _('Reserve IP') ]));
 			}
 
 			return rows;
