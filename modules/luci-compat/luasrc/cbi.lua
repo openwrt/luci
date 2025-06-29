@@ -1456,7 +1456,7 @@ function AbstractValue.parse(self, section, novld)
 					--luci.util.append(self.map.events, self.events)
 				end
 			end
-		elseif cvalue ~= fvalue and not novld then
+		elseif (fvalue ~= nil or self.nilasempty) and cvalue ~= fvalue and not novld then
 			-- trigger validator with nil value to get custom user error msg.
 			local _, val_err = self:validate(nil, section)
 			self:add_error(section, "missing", val_err)
@@ -1695,6 +1695,7 @@ function MultiValue.__init__(self, ...)
 
 	self.widget = "checkbox"
 	self.delimiter = " "
+	self.nilasempty = true
 
 	self:reset_values()
 end
@@ -1785,6 +1786,7 @@ function DynamicList.__init__(self, ...)
 	AbstractValue.__init__(self, ...)
 	self.template  = "cbi/dynlist"
 	self.cast = "table"
+	self.nilasempty = true
 	self:reset_values()
 end
 
