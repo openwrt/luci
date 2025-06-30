@@ -135,7 +135,7 @@ return view.extend({
 		);
 		scrollDownButton.addEventListener('click', () => {
 			scrollUpButton.scrollIntoView();
-			scrollUpButton.blur();
+			scrollDownButton.blur();
 		});
 
 		const scrollUpButton = E('button', { 
@@ -145,7 +145,7 @@ return view.extend({
 		);
 		scrollUpButton.addEventListener('click', () => {
 			scrollDownButton.scrollIntoView();
-			scrollDownButton.blur();
+			scrollUpButton.blur();
 		});
 
 		const self = this;
