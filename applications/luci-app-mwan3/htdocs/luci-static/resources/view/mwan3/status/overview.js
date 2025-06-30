@@ -6,6 +6,7 @@
 const callMwan3Status = rpc.declare({
 	object: 'mwan3',
 	method: 'status',
+	params: ['section'],
 	expect: {  },
 });
 
@@ -76,13 +77,13 @@ function renderMwan3Status(status) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			callMwan3Status(),
+			callMwan3Status("interfaces"),
 		]);
 	},
 
 	render: function (data) {
 		poll.add(function() {
-			return callMwan3Status().then(function(result) {
+			return callMwan3Status("interfaces").then(function(result) {
 				var view = document.getElementById('mwan3-service-status');
 				view.innerHTML = renderMwan3Status(result);
 			});
