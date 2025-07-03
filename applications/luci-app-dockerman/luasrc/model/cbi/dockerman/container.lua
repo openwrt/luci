@@ -37,7 +37,16 @@ local get_ports = function(d)
 
 	if d.HostConfig and d.HostConfig.PortBindings then
 		for inter, out in pairs(d.HostConfig.PortBindings) do
-			data = (data and (data .. "<br />") or "") .. out[1]["HostPort"] .. ":" .. inter
+			if out[1] and out[1]["HostPort"] then
+				local host_ip = ""
+				if out[1].HostIp and out[1].HostIp ~= "" then
+					host_ip = out[1].HostIp
+				else
+					host_ip = "*"
+				end
+				local line = host_ip  .. ":" .. out[1]["HostPort"] .. ":" .. inter
+				data = (data and (data .. "<br />") or "") .. line
+			end
 		end
 	end
 
