@@ -4601,7 +4601,8 @@ const CBITextValue = CBIValue.extend(/** @lends LuCI.form.TextValue.prototype */
 			rows: this.rows,
 			wrap: this.wrap,
 			validate: L.bind(this.validate, this, section_id),
-			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
+			readonly: (this.readonly != null) ? this.readonly : this.map.readonly,
+			disabled: (this.disabled != null) ? this.disabled : null,
 		});
 
 		return widget.render();
