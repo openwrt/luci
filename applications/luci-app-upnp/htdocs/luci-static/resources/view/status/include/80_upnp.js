@@ -43,7 +43,7 @@ return baseclass.extend({
 				E('th', { 'class': 'th' }, _('External Port')),
 				E('th', { 'class': 'th' }, _('Protocol')),
 				E('th', { 'class': 'th right' }, _('Expires')),
-				E('th', { 'class': 'th' }, _('Description')),
+				E('th', { 'class': 'th' }, _('Used Protocol / Description')),
 				E('th', { 'class': 'th cbi-section-actions' }, '')
 			])
 		]);
@@ -72,7 +72,8 @@ return baseclass.extend({
 				rule.descr,
 				E('button', {
 					'class': 'btn cbi-button-remove',
-					'click': L.bind(handleDelRule, this, rule.num)
+					'click': L.bind(handleDelRule, this, rule.num),
+					'title': _('Delete this port map')
 				}, [ _('Delete') ])
 			];
 		});
