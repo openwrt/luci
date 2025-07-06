@@ -2,9 +2,25 @@
 	"luci-app-dockerman": {
 		"description": "Grant UCI access for luci-app-dockerman",
 		"read": {
+			"file_comment": "so directory picker can browse the FS",
+			"file": {
+				"/*": ["list", "read"]
+			},
+			"ubus": {
+				"docker": [ "*" ],
+				"docker.*": [ "*" ],
+				"file": [ "*" ],
+				"luci": [ "getMountPoints" ],
+				"rc": [ "init" ]
+			},
 			"uci": [ "dockerd" ]
 			},
 		"write": {
+			"ubus": {
+				"docker": [ "*" ],
+				"docker.*": [ "*" ],
+				"rc": [ "init" ]
+			},
 			"uci": [ "dockerd" ]
 		}
 	}
