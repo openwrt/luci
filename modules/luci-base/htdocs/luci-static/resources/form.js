@@ -4883,13 +4883,13 @@ const CBIHiddenValue = CBIValue.extend(/** @lends LuCI.form.HiddenValue.prototyp
  * offers the ability to browse, upload and select remote files.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form to which this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4910,6 +4910,8 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 		this.super('__init__', args);
 
 		this.browser = false;
+		this.directory_create = false;
+		this.directory_select = false;
 		this.show_hidden = false;
 		this.enable_upload = true;
 		this.enable_remove = true;
@@ -4919,7 +4921,8 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 
 
 	/**
-	 * Open in a file browser mode instead of selecting for a file
+	 * Render the widget in browser mode initially instead of a button
+	 * to 'Select File...'.
 	 *
 	 * @name LuCI.form.FileUpload.prototype#browser
 	 * @type boolean
@@ -4953,6 +4956,35 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 	 * @name LuCI.form.FileUpload.prototype#enable_upload
 	 * @type boolean
 	 * @default true
+	 */
+
+	/**
+	 * Toggle remote directory create functionality.
+	 *
+	 * When set to `true`, the underlying widget provides a button which lets
+	 * the user create directories. Note that this is merely
+	 * a cosmetic feature: remote create permissions are controlled by the
+	 * session ACL rules.
+	 *
+	 * The default of `false` means the directory create button is hidden.
+	 *
+	 * @name LuCI.form.FileUpload.prototype#directory_create
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
+	 * Toggle remote directory select functionality.
+	 *
+	 * When set to `true`, the underlying widget changes behaviour to select
+	 * directories instead of files, in effect, becoming a directory
+	 * picker.
+	 *
+	 * The default is `false`.
+	 *
+	 * @name LuCI.form.FileUpload.prototype#directory_select
+	 * @type boolean
+	 * @default false
 	 */
 
 	/**
@@ -5001,10 +5033,171 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 			name: this.cbid(section_id),
 			browser: this.browser,
 			show_hidden: this.show_hidden,
+			directory_create: this.directory_create,
+			directory_select: this.directory_select,
 			enable_upload: this.enable_upload,
 			enable_remove: this.enable_remove,
 			enable_download: this.enable_download,
 			root_directory: this.root_directory,
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
+		});
+
+		return browserEl.render();
+	}
+});
+
+/**
+ * @class DirectoryPicker
+ * @memberof LuCI.form
+ * @augments LuCI.form.Value
+ * @hideconstructor
+ * @classdesc
+ *
+ * The `DirectoryPicker` element wraps a {@link LuCI.ui.FileUpload} widget and
+ * offers the ability to browse, create, delete and select remote directories.
+ *
+ * @param {LuCI.form.Map|LuCI.form.JSONMap} form
+ * The configuration form to which this section is added. It is automatically passed
+ * by [option()]{@link LuCI.form.AbstractSection#option} or
+ * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
+ * option to the section.
+ *
+ * @param {LuCI.form.AbstractSection} section
+ * The configuration section this option is added. It is automatically passed
+ * by [option()]{@link LuCI.form.AbstractSection#option} or
+ * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
+ * option to the section.
+ *
+ * @param {string} option
+ * The name of the UCI option to map.
+ *
+ * @param {string} [title]
+ * The title caption of the option element.
+ *
+ * @param {string} [description]
+ * The description text of the option element.
+ */
+const CBIDirectoryPicker = CBIValue.extend(/** @lends LuCI.form.DirectoryPicker.prototype */ {
+	__name__: 'CBI.DirectoryPicker',
+
+	__init__(...args) {
+		this.super('__init__', args);
+
+		this.browser = false;
+		this.directory_create = false;
+		this.enable_download = false;
+		this.enable_remove = false;
+		this.enable_upload = false;
+		this.root_directory = '/tmp';
+		this.show_hidden = true;
+	},
+
+
+	/**
+	 * Render the widget in browser mode initially instead of a button
+	 * to 'Select Directory...'.
+	 *
+	 * @name LuCI.form.DirectoryPicker.prototype#browser
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
+	 * Toggle remote directory create functionality.
+	 *
+	 * When set to `true`, the underlying widget provides a button which lets
+	 * the user create directories. Note that this is merely
+	 * a cosmetic feature: remote create permissions are controlled by the
+	 * session ACL rules.
+	 *
+	 * The default of `false` means the directory create button is hidden.
+	 *
+	 * @name LuCI.form.DirectoryPicker.prototype#directory_create
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
+	 * Toggle download file functionality.
+	 *
+	 * @name LuCI.form.DirectoryPicker.prototype#enable_download
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
+	 * Toggle remote file delete functionality.
+	 *
+	 * When set to `true`, the underlying widget provides buttons which let
+	 * the user delete files from remote directories. Note that this is merely
+	 * a cosmetic feature: remote delete permissions are controlled by the
+	 * session ACL rules.
+	 *
+	 * The default is `false`, means file removal buttons are not displayed.
+	 *
+	 * @name LuCI.form.DirectoryPicker.prototype#enable_remove
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
+	 * Toggle file upload functionality.
+	 *
+	 * When set to `true`, the underlying widget provides a button which lets
+	 * the user select and upload local files to the remote system.
+	 * Note that this is merely a cosmetic feature: remote upload access is
+	 * controlled by the session ACL rules.
+	 *
+	 * The default of `false` means file upload functionality is disabled.
+	 *
+	 * @name LuCI.form.DirectoryPicker.prototype#enable_upload
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
+	 * Specify the root directory for file browsing.
+	 *
+	 * This property defines the topmost directory the file browser widget may
+	 * navigate to. The UI will not allow browsing directories outside this
+	 * prefix. Note that this is merely a cosmetic feature: remote file access
+	 * and directory listing permissions are controlled by the session ACL
+	 * rules.
+	 *
+	 * The default is `/tmp`.
+	 *
+	 * @name LuCI.form.DirectoryPicker.prototype#root_directory
+	 * @type string
+	 * @default /tmp
+	 */
+
+	/**
+	 * Toggle display of hidden files.
+	 *
+	 * Display hidden files when rendering the remote directory listing.
+	 * Note that this is merely a cosmetic feature: hidden files are always
+	 * included in received remote file listings.
+	 *
+	 * The default of `true` means hidden files are displayed.
+	 *
+	 * @name LuCI.form.DirectoryPicker.prototype#show_hidden
+	 * @type boolean
+	 * @default true
+	 */
+
+	/** @private */
+	renderWidget(section_id, option_index, cfgvalue) {
+		const browserEl = new ui.FileUpload((cfgvalue != null) ? cfgvalue : this.default, {
+			id: this.cbid(section_id),
+			name: this.cbid(section_id),
+			browser: this.browser,
+			directory_create: this.directory_create,
+			directory_select: true,
+			enable_download: this.enable_download,
+			enable_remove: this.enable_remove,
+			enable_upload: this.enable_upload,
+			root_directory: this.root_directory,
+			show_hidden: this.show_hidden,
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
 
@@ -5202,5 +5395,6 @@ return baseclass.extend(/** @lends LuCI.form.prototype */ {
 	Button: CBIButtonValue,
 	HiddenValue: CBIHiddenValue,
 	FileUpload: CBIFileUpload,
+	DirectoryPicker: CBIDirectoryPicker,
 	SectionValue: CBISectionValue
 });

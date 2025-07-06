@@ -2921,6 +2921,12 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 	 * remotely depends on the ACL setup for the current session. This option
 	 * merely controls whether the file remove controls are rendered or not.
 	 *
+	 * @property {boolean} [directory_create=false]
+	 * Specifies whether the widget allows the user to create directories.
+	 *
+	 * @property {boolean} [directory_select=false]
+	 * Specifies whether the widget shall select directories only instead of files.
+	 *
 	 * @property {boolean} [enable_download=false]
 	 * Specifies whether the widget allows the user to download files.
 	 *
@@ -2935,6 +2941,8 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		this.value = value;
 		this.options = Object.assign({
 			browser: false,
+			directory_create: false,
+			directory_select: false,
 			show_hidden: false,
 			enable_upload: true,
 			enable_remove: true,
@@ -2960,15 +2968,17 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		const renderFileBrowser = L.resolveDefault(this.value != null ? fs.stat(this.value) : null).then(L.bind((stat) => {
 			let label;
 
-			if (L.isObject(stat) && stat.type != 'directory')
+			if (L.isObject(stat))
 				this.stat = stat;
 
-			if (this.stat != null)
+			if (this.stat != null && this.stat.type === 'directory')
+				label = [ this.iconForType(this.stat.type), ' %s'.format(this.truncatePath(this.stat.path)) ];
+			else if (this.stat != null && this.stat.type !== 'directory')
 				label = [ this.iconForType(this.stat.type), ' %s (%1000mB)'.format(this.truncatePath(this.stat.path), this.stat.size) ];
 			else if (this.value != null)
 				label = [ this.iconForType('file'), ' %s (%s)'.format(this.truncatePath(this.value), _('File not accessible')) ];
 			else
-				label = [ _('Select file…') ];
+				label = [ this.options.directory_select ? _('Select directory…') : _('Select file…') ];
 			let btnOpenFileBrowser = E('button', {
 				'class': 'btn open-file-browser',
 				'click': UI.prototype.createHandlerFn(this, 'handleFileBrowser'),
@@ -3051,11 +3061,63 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		if (cpath.length <= croot.length)
 			return [ croot ];
 
-		const parts = cpath.substring(croot.length).split(/\//);
+		const parts = cpath.substring(croot.length).split(/\//).filter(p => p !== '');
 
 		parts.unshift(croot);
 
 		return parts;
+	},
+
+	/** @private */
+	handleCreateDirectory(path, ev) {
+		const container = E('div', { 'class': 'uci-dialog' });
+
+		const input = E('input', {
+			'type': 'text',
+			'placeholder': _('Directory name'),
+			'style': 'margin-right: 0.5em'
+		});
+
+		const okBtn = E('button', {
+			'type': 'button',
+			'class': 'btn cbi-button',
+			'click': async () => {
+				var directoryName = input.value.trim();
+				if (!directoryName) {
+					alert(_('Directory name cannot be empty.'));
+					return;
+				}
+
+				try {
+					// Assume current upload path (you may need to retrieve or set this yourself)
+					var basePath = path || '/tmp';
+					var fullPath = basePath + '/' + directoryName;
+
+					await fs.exec('mkdir', ['-p', fullPath]).then(L.bind((path, ev) => {
+						return this.handleSelect(path, null, ev);
+					}, this, path, ev));
+				} catch (err) {
+					UI.prototype.addTimeLimitedNotification(_('Error'), E('p', _('Failed to create directory: %s').format(err.message)), 5000, 'error');
+				} finally {
+					UI.prototype.hideModal();
+				}
+			}
+		}, _('OK'));
+
+		var cancelBtn = E('button', {
+			'type': 'button',
+			'class': 'btn cbi-button',
+			'click': () => UI.prototype.hideModal(),
+		}, _('Cancel'));
+
+        container.appendChild(input);
+        container.appendChild(okBtn);
+        container.appendChild(cancelBtn);
+
+
+		UI.prototype.showModal(_('Create Directory'), [
+			container
+		]);
 	},
 
 	/** @private */
@@ -3115,7 +3177,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 			const hidden = this.node.lastElementChild;
 
 			if (path == hidden.value) {
-				dom.content(button, _('Select file…'));
+				dom.content(button, this.options.directory_select ? _('Select directory…') : _('Select file…'));
 				hidden.value = '';
 			}
 
@@ -3196,6 +3258,8 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 				E('div', { 'class': 'name' }, [
 					this.iconForType(list[i].type),
 					' ',
+					(this.options.directory_select && list[i].type !== 'directory') ? 
+					list[i].name :
 					E('a', {
 						'href': '#',
 						'style': selected ? 'font-weight:bold' : null,
@@ -3213,6 +3277,11 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 						mtime.getSeconds())
 				]),
 				E('div', [
+					(this.options.directory_select && list[i].type === 'directory') ? E('button', {
+						'class': 'btn cbi-button',
+						'click': UI.prototype.createHandlerFn(this, 'handleSelect',
+							entrypath, list[i].type === 'directory' ? list[i] : null)
+					}, [ _('Select') ]) : '',
 					selected ? E('button', {
 						'class': 'btn',
 						'click': UI.prototype.createHandlerFn(this, 'handleReset')
@@ -3236,7 +3305,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		let cur = '';
 
 		for (let i = 0; i < dirs.length; i++) {
-			cur += dirs[i];
+			cur = (i === 0 || cur === '/') ? cur + dirs[i] : cur + '/' + dirs[i];
 			dom.append(breadcrumb, [
 				i ? ' » ' : '',
 				E('a', {
@@ -3251,6 +3320,11 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 			rows,
 			E('div', { 'class': 'right' }, [
 				this.renderUpload(path, list),
+				(this.options.directory_create) ? E('a', {
+					'href': '#',
+					'class': 'btn cbi-button',
+					'click': UI.prototype.createHandlerFn(this, 'handleCreateDirectory', path)
+				}, _('Create')) : '',
 				!this.options.browser ? E('a', {
 					'href': '#',
 					'class': 'btn',
@@ -3279,7 +3353,7 @@ const UIFileUpload = UIElement.extend(/** @lends LuCI.ui.FileUpload.prototype */
 		const hidden = this.node.lastElementChild;
 
 		hidden.value = '';
-		dom.content(button, _('Select file…'));
+		dom.content(button, this.options.directory_select ? _('Select directory…') : _('Select file…'));
 
 		this.handleCancel(ev);
 	},
