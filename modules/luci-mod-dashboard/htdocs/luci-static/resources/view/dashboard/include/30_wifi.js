@@ -98,7 +98,7 @@ return baseclass.extend({
 				let container_content;
 
 				if ('progress' == idx) {
-					container_content = E('div', { 'class' : 'td device-info' }, [
+					container_content = E('td', { 'class' : 'td device-info' }, [
 						E('div', { 'class': 'cbi-progressbar', 'title': 'RSSI: ' + parseInt(device[idx].value.qualite) + '% (' + device[idx].value.rssi + 'dBm)'  }, [
 							E('div', { 'style': 'width: '+device[idx].value.qualite+'%'}),
 						])
