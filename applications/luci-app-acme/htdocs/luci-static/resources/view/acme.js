@@ -123,8 +123,20 @@ return view.extend({
 		o.modalonly = true;
 
 		for (let info of apiInfos) {
+			if (info.OptsTitle) {
+				o = s.taboption('challenge_dns', form.DummyValue, '_dns_OptsTitle_' + info.Id, ' ', '');
+				o.default = info.OptsTitle;
+				o.depends({'dns': info.Id, '_dns_options_alt': '0'});
+				o.modalonly = true;
+			}
 			for (let opt of info.Opts) {
 				_addDnsProviderField(s, info.Id, opt, false);
+			}
+			if (info.OptsAltTitle) {
+				o = s.taboption('challenge_dns', form.DummyValue, '_dns_OptsAltTitle_' + info.Id, ' ', '');
+				o.default = info.OptsAltTitle;
+				o.depends({'dns': info.Id, '_dns_options_alt': '1'});
+				o.modalonly = true;
 			}
 			for (let opt of info.OptsAlt) {
 				_addDnsProviderField(s, info.Id, opt, true);
@@ -228,7 +240,7 @@ function _addDnsProviderField(s, apiId, opt, isOptsAlt) {
 		optionName += '_OptsAlt'
 	}
 	let o = s.taboption('challenge_dns', form.Value, optionName, opt.Title, desc);
-	o.depends({ 'dns' : apiId, '_dns_options_alt': isOptsAlt ? '1' : '0'});
+	o.depends({'dns': apiId, '_dns_options_alt': isOptsAlt ? '1' : '0'});
 	o.modalonly = true;
 	o.placeholder = opt.Default;
 	o.cfgvalue = function (section_id) {
