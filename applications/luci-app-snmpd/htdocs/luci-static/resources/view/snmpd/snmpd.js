@@ -41,6 +41,137 @@ return L.view.extend({
 			return true;
 		},
 
+	populateGlobalSettings: function(tab, s, havesslv3) {
+		let go, g, o;
+
+		o = s.taboption('general', form.SectionValue, '__general__',
+			form.TypedSection, 'snmpd', null,
+			_('Here you can configure agent settings'));
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = false;
+
+		go = g.option(form.Flag, 'enabled', _('Enable SNMP'),
+			_('Enable to use SNMP'));
+		go.default = '0';
+		go.rmempty = false;
+
+		this.ip_protocol = g.option(form.ListValue, 'ip_protocol', _('IP version'));
+		this.ip_protocol.value('ipv4', _('Only IPv4'));
+		this.ip_protocol.value('ipv6', _('Only IPv6'));
+		this.ip_protocol.value('ipv4/ipv6', _('IPv4 and IPv6'));
+		this.ip_protocol.optional = false;
+		this.ip_protocol.forcewrite = true;
+		this.ip_protocol.default = 'ipv4';
+		this.ip_protocol.rmempty = false;
+
+		this.ip_protocol.cfgvalue = function(section_id) {
+			let ip_protocol = uci.get('snmpd', section_id, 'ip_protocol');
+
+			if (!ip_protocol) {
+				const s = uci.get_first('snmpd', 'agent');
+				if (!s)
+					return null;
+
+				const rawAddr = uci.get('snmpd', s['.name'], 'agentaddress');
+				if (!rawAddr)
+					return null;
+				const addr = rawAddr.toUpperCase();
+				const p = [];
+
+				if (addr.match(/UDP:\d+/g))
+					p.push('ipv4');
+
+				if (addr.match(/UDP6:\d+/g))
+					p.push('ipv6');
+
+				ip_protocol = p.join('/');
+			}
+
+			return ip_protocol;
+		};
+
+		go = g.option(form.Value, 'snmp_port', _('Port'));
+		go.rmempty = false;
+		go.default = '161';
+		go.datatype = 'port';
+		go.forcewrite = true;
+		go.cfgvalue = function(section_id) {
+			const port = uci.get('snmpd', section_id, 'snmp_port');
+			if (!port)
+				return port;
+
+			const s = uci.get_first('snmpd', 'agent');
+			const rawAddr = uci.get('snmpd', s['.name'], 'agentaddress');
+			if (!rawAddr)
+				return null;
+
+			const addr = rawAddr.toUpperCase();
+			const match = addr.match(/UDP6?:(\d+)/i);
+
+			return Array.isArray(match) && match.length > 1 ?
+				match[1] : null;
+		};
+
+		go.write = L.bind(function(protocol, section_id, value) {
+			const port = parseInt(value);
+			const ip_protocol = protocol.formvalue(section_id);
+
+			const addr = [];
+
+			if (ip_protocol.match(/ipv4/g))
+				addr.push('UDP:%d'.format(port));
+
+			if (ip_protocol.match(/ipv6/g))
+				addr.push('UDP6:%d'.format(port));
+
+			if (addr.length > 0) {
+				const s = uci.get_first('snmpd', 'agent');
+				if (s)
+					uci.set('snmpd', s['.name'], 'agentaddress', addr.join(','));
+			}
+
+			return form.Value.prototype.write.apply(this, [section_id, value]);
+		}, go, this.ip_protocol);
+
+		this.snmp_version = g.option(form.ListValue, 'snmp_version',
+			_('SNMP version'),
+			_('SNMP version used to monitor and control the device'));
+		this.snmp_version.default = 'v1/v2c';
+		this.snmp_version.rmempty = false;
+		this.snmp_version.forcewrite = true;
+		this.snmp_version.value('v1/v2c', _('SNMPv1 and SNMPv2c'));
+		if (havesslv3) {
+			this.snmp_version.value('v1/v2c/v3', _('SNMPv1, SNMPv2c and SNMPv3'));
+			this.snmp_version.value('v3', _('Only SNMPv3'));
+		}
+
+		go = g.option(form.Value, '__agentxsocket', _('AgentX socket path'),
+			_('Empty for disable AgentX'));
+		go.rmempty = true;
+		go.forcewrite = true;
+		go.cfgvalue = function(section_id) {
+			const s = uci.get_first('snmpd', 'agentx');
+			let socket = uci.get('snmpd', s['.name'], 'agentxsocket');
+			if (!socket)
+				socket = this.default;
+			return socket;
+		};
+
+		go.remove = function(section_id) {
+			const s = uci.get_first('snmpd', 'agentx');
+			if (s)
+				s.remove('snmpd', s['.name']);
+		};
+
+		go.write = function(section_id, value) {
+			const s = uci.get_first('snmpd', 'agentx');
+			var sid = s ? s['.name'] : uci.add('snmpd', 'agentx');
+			uci.set('snmpd', sid, 'agentxsocket', value);
+		};
+	},
+
 	populateSystemSettings: function(tab, s, havesslv3) {
 		let g, go, o;
 
@@ -526,136 +657,5 @@ return L.view.extend({
 		this.populateLogSettings('log', s);
 
 		return m.render();
-	},
-
-	populateGlobalSettings: function(tab, s, havesslv3) {
-		let go, g, o;
-
-		o = s.taboption('general', form.SectionValue, '__general__',
-			form.TypedSection, 'snmpd', null,
-			_('Here you can configure agent settings'));
-
-		g = o.subsection;
-		g.anonymous = true;
-		g.addremove = false;
-
-		go = g.option(form.Flag, 'enabled', _('Enable SNMP'),
-			_('Enable to use SNMP'));
-		go.default = '0';
-		go.rmempty = false;
-
-		this.ip_protocol = g.option(form.ListValue, 'ip_protocol', _('IP version'));
-		this.ip_protocol.value('ipv4', _('Only IPv4'));
-		this.ip_protocol.value('ipv6', _('Only IPv6'));
-		this.ip_protocol.value('ipv4/ipv6', _('IPv4 and IPv6'));
-		this.ip_protocol.optional = false;
-		this.ip_protocol.forcewrite = true;
-		this.ip_protocol.default = 'ipv4';
-		this.ip_protocol.rmempty = false;
-
-		this.ip_protocol.cfgvalue = function(section_id) {
-			let ip_protocol = uci.get('snmpd', section_id, 'ip_protocol');
-
-			if (!ip_protocol) {
-				const s = uci.get_first('snmpd', 'agent');
-				if (!s)
-					return null;
-
-				const rawAddr = uci.get('snmpd', s['.name'], 'agentaddress');
-				if (!rawAddr)
-					return null;
-				const addr = rawAddr.toUpperCase();
-				const p = [];
-
-				if (addr.match(/UDP:\d+/g))
-					p.push('ipv4');
-
-				if (addr.match(/UDP6:\d+/g))
-					p.push('ipv6');
-
-				ip_protocol = p.join('/');
-			}
-
-			return ip_protocol;
-		};
-
-		go = g.option(form.Value, 'snmp_port', _('Port'));
-		go.rmempty = false;
-		go.default = '161';
-		go.datatype = 'port';
-		go.forcewrite = true;
-		go.cfgvalue = function(section_id) {
-			const port = uci.get('snmpd', section_id, 'snmp_port');
-			if (!port)
-				return port;
-
-			const s = uci.get_first('snmpd', 'agent');
-			const rawAddr = uci.get('snmpd', s['.name'], 'agentaddress');
-			if (!rawAddr)
-				return null;
-
-			const addr = rawAddr.toUpperCase();
-			const match = addr.match(/UDP6?:(\d+)/i);
-
-			return Array.isArray(match) && match.length > 1 ?
-				match[1] : null;
-		};
-
-		go.write = L.bind(function(protocol, section_id, value) {
-			const port = parseInt(value);
-			const ip_protocol = protocol.formvalue(section_id);
-
-			const addr = [];
-
-			if (ip_protocol.match(/ipv4/g))
-				addr.push('UDP:%d'.format(port));
-
-			if (ip_protocol.match(/ipv6/g))
-				addr.push('UDP6:%d'.format(port));
-
-			if (addr.length > 0) {
-				const s = uci.get_first('snmpd', 'agent');
-				if (s)
-					uci.set('snmpd', s['.name'], 'agentaddress', addr.join(','));
-			}
-
-			return form.Value.prototype.write.apply(this, [section_id, value]);
-		}, go, this.ip_protocol);
-
-		this.snmp_version = g.option(form.ListValue, 'snmp_version',
-			_('SNMP version'),
-			_('SNMP version used to monitor and control the device'));
-		this.snmp_version.default = 'v1/v2c';
-		this.snmp_version.rmempty = false;
-		this.snmp_version.forcewrite = true;
-		this.snmp_version.value('v1/v2c', _('SNMPv1 and SNMPv2c'));
-		if (havesslv3) {
-			this.snmp_version.value('v1/v2c/v3', _('SNMPv1, SNMPv2c and SNMPv3'));
-			this.snmp_version.value('v3', _('Only SNMPv3'));
-		}
-
-		go = g.option(form.Value, '__agentxsocket', _('AgentX socket path'),
-			_('Empty for disable AgentX'));
-		go.rmempty = true;
-		go.forcewrite = true;
-		go.cfgvalue = function(section_id) {
-			const s = uci.get_first('snmpd', 'agentx');
-			let socket = uci.get('snmpd', s['.name'], 'agentxsocket');
-			if (!socket)
-				socket = this.default;
-			return socket;
-		};
-
-		go.remove = function(section_id) {
-			const s = uci.get_first('snmpd', 'agentx');
-			if (s)
-				s.remove('snmpd', s['.name']);
-		};
-
-		go.write = function(section_id, value) {
-			const s = uci.get_first('snmpd', 'agentx');
-			var sid = s ? s['.name'] : uci.add('snmpd', 'agentx');
-			uci.set('snmpd', sid, 'agentxsocket', value);
-		};
 	}
 });
