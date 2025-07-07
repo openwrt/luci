@@ -227,6 +227,55 @@ return L.view.extend({
 		this.oid.depends('RestrictOID', 'yes');
 	},
 
+	populateTrapsSettings: function(subsection, desc, s, type) {
+		let g, go, o;
+
+		o = s.taboption('traps', form.SectionValue, '__traps__',
+			form.GridSection, subsection, null, desc);
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = true;
+		g.nodescriptions = true;
+		g.modaltitle = desc;
+
+		go = g.option(form.Value,
+			type,
+			_(type));
+		if (type == 'HostIP'){
+			go.datatype = 'ipaddr';
+		}else{
+			go.datatype = 'hostname';
+		}
+		go.optional = false;
+		go.rmempty = false;
+
+		go = g.option(form.Value,
+			'Port',
+			_('Port'));
+		go.datatype = 'port'
+		go.default = '162'
+		go.optional = true;
+		go.rmempty = false;
+
+		go = g.option(form.Value,
+			'Community',
+			_('Community'));
+		go.datatype = 'string';
+		go.optional = false;
+		go.rmempty = false;
+
+		go = g.option(form.ListValue,
+			'Type',
+			_('Type'));
+		go.value('trapsink', _('SNMPv1 Trap Receiver'));
+		go.value('trap2sink', _('SNMPv2c Trap Receiver'));
+		go.value('informsink', _('SNMPv2c Inform Receiver'));
+		go.default = 'trapsink';
+		go.optional = false;
+		go.rmempty = false;
+	},
+
 	render: function(data) {
 		let m, s, o, g, go;
 
@@ -373,6 +422,12 @@ return L.view.extend({
 
 		s.tab('v3', _('SNMPv3'));
 		this.populateV3Settings('v3', s);
+
+		s.tab('traps', _('Traps', 'SNMP'));
+		this.populateTrapsSettings('trap_HostName', 'Traps via Hostname',
+			s, 'HostName');
+		this.populateTrapsSettings('trap_HostIP', 'Traps via IP-Address',
+			s, 'HostIP');
 
 		return m.render();
 	},
