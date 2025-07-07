@@ -1303,7 +1303,12 @@ return view.extend({
 		so.value('12h', _('12h (12 hours - default)'));
 		so.value('7d', _('7d (7 days)'));
 		so.value('infinite', _('infinite (lease does not expire)'));
-
+		so.validate = function(section, value) {
+			if (!value || value === '') return true;
+			if (value === 'infinite') return true;
+			if (/^\d+[mhds]$/.test(value)) return true;
+			return _('Expecting format like "5m", "3h", "7d", "infinite" or blank');
+		};
 		so = ss.option(form.Value, 'duid',
 			_('DUID'),
 			_('The DHCPv6-DUID (DHCP unique identifier) of this host.'));
