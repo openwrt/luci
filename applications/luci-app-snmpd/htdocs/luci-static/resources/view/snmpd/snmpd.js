@@ -22,6 +22,53 @@ return L.view.extend({
 		this.snmp_version = null;
 	},
 
+	populateSystemSettings: function(tab, s) {
+		let g, go, o;
+
+		o = s.taboption('general', form.SectionValue, '__general__',
+			form.TypedSection, 'system', null,
+			_('Here you can configure system settings'));
+
+		g = o.subsection;
+		g.anonymous = true;
+		g.addremove = false;
+
+		function snmpd_sys_cfgvalue(section) {
+			const s = uci.get_first('snmpd', 'system');
+			return s && uci.get('snmpd', s['.name'], this.option || '');
+		};
+
+		function snmpd_sys_remove(section) {
+			const s = uci.get_first('snmpd', 'system');
+			if (s)
+				uci.unset('snmpd', s['.name'], this.option);
+		};
+
+		function snmpd_sys_write(section, value) {
+			const s = uci.get_first('snmpd', 'system');
+			const sid = s ? s['.name'] : uci.add('snmpd', 'system');
+			uci.set('snmpd', sid, this.option, value);
+		};
+
+		go = g.option(form.Value, 'sysName', _('Name'),
+			_('System Name'));
+		go.cfgvalue = snmpd_sys_cfgvalue;
+		go.write = snmpd_sys_write;
+		go.remove = snmpd_sys_remove;
+
+		go = g.option(form.Value, 'sysContact', _('Contact'),
+			_('System contact'));
+		go.cfgvalue = snmpd_sys_cfgvalue;
+		go.write = snmpd_sys_write;
+		go.remove = snmpd_sys_remove;
+
+		go = g.option(form.Value, 'sysLocation', _('Location'),
+			_('System location'));
+		go.cfgvalue = snmpd_sys_cfgvalue;
+		go.write = snmpd_sys_write;
+		go.remove = snmpd_sys_remove;
+	},
+
 	render: function(data) {
 		let m, s, o, g, go;
 
@@ -33,19 +80,7 @@ return L.view.extend({
 		s.anonymous = true;
 		s.addremove = false;
 
-		s.tab('general', _('SNMP - General'));
-
-		o = s.taboption('general', form.SectionValue, '__general__',
-			form.TypedSection, 'system', _('System settings'),
-			_('Here you can configure system settings'));
-
-		g = o.subsection;
-		g.anonymous = true;
-		g.addremove = false;
-
-		go = g.option(form.Value, 'sysLocation', 'sysLocation');
-		go = g.option(form.Value, 'sysContact', 'sysContact');
-		go = g.option(form.Value, 'sysName', 'sysName');
+		s.tab('general', _('General'));
 
 		o = s.taboption('general', form.SectionValue, '__general__',
 			form.TypedSection, 'snmpd', _('Common Settings'),
@@ -172,6 +207,7 @@ return L.view.extend({
 			var sid = s ? s['.name'] : uci.add('snmpd', 'agentx');
 			uci.set('snmpd', sid, 'agentxsocket', value);
 		};
+		this.populateSystemSettings('general', s);
 
 		s.tab('advanced', _('Advanced Settings'));
 
