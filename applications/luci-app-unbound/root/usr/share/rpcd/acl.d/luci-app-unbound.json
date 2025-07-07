@@ -8,8 +8,6 @@
 				"/tmp/resolv.conf.auto": ["read"],
 				"/tmp/resolv.conf.d/*": ["read"],
 				"/var/lib/unbound/*": ["read"],
-				"/etc/init.d/unbound stop:": ["exec"],
-				"/etc/init.d/unbound restart:": ["exec"],
 				"/sbin/logread -e unbound:": ["exec"],
 				"/usr/sbin/unbound-control -c /var/lib/unbound/unbound.conf stats_noreset": ["exec"],
 				"/usr/sbin/unbound-control -c /var/lib/unbound/unbound.conf list_local_data": ["exec"],
