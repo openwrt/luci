@@ -395,6 +395,7 @@ return view.extend({
 		s.tab('limits', _('Limits'));
 		s.tab('logging', _('Log'));
 		s.tab('files', _('Resolv &amp; Hosts Files'));
+		s.tab('dhcptags', _('DHCP Tags'));
 		s.tab('leases', _('Static Leases'));
 		s.tab('ipsets', _('IP Sets'));
 		s.tab('relay', _('Relay'));
@@ -767,6 +768,43 @@ return view.extend({
 		s.taboption('forward', form.Flag, 'stripsubnet',
 			_('Remove subnet address before forwarding query'),
 			_('Remove any subnet address already present in a downstream query before forwarding it upstream.'));
+
+		// *******************************************************************
+		o = s.taboption('dhcptags', form.SectionValue, 'dhcptags', form.GridSection, 'tag',
+			_('Define and manage DHCP Tags'),
+			_('Create custom DHCP tags and configure specific DHCP options to be assigned to clients matching these tags.'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.addbtntitle = _('Add new DHCP Tag');
+		ss.modaltitle = _('Edit DHCP Tag');
+		ss.nodescriptions = true;
+
+		so = ss.option(form.Value, 'name', _('Tag Name'));
+		so.rmempty = false;
+		so.datatype = 'uciname';
+		so.placeholder = 'mytag';
+		so.description = _('The unique name for this DHCP tag. Example: <code>vpn</code>, <code>guest</code>. This name will be used in Static Leases/PXE Hosts.');
+
+		so = ss.option(form.DynamicList, 'dhcp_option', _('DHCP Options'));
+		so.optional = true;
+		so.placeholder = '3,192.168.2.5';
+		so.description = _('Additional DHCP options to send to clients matching this tag. Syntax: <code>option_number,value</code>. Example for gateway: <code>3,192.168.2.5</code>. Example for DNS servers: <code>6,192.168.2.5</code>.');
+		so.validate = function(section_id, value) {
+			if (!value) return true;
+			const parts = value.split(',');
+			if (parts.length < 2) {
+				return _('Invalid DHCP option format. Expected "option_number,value".');
+			}
+			const optionNum = parts[0].trim();
+			if (!/^\d+$/.test(optionNum)) {
+				return _('Invalid option number. Expected a numeric value.');
+			}
+			return true;
+		};
+		// *******************************************************************
 
 		o = s.taboption('general', form.Flag, 'allservers',
 			_('All servers'),
@@ -1354,7 +1392,7 @@ return view.extend({
 
 		if (has_dhcpv6)
 			o = s.taboption('leases', CBILease6Status, '__status6__');
-
+		
 		return m.render().then(function(mapEl) {
 			poll.add(function() {
 				return callDHCPLeases().then(function(leaseinfo) {
