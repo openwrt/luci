@@ -8,10 +8,17 @@
 'require ui';
 'require view';
 
+var testV3 = function() {
+	return fs.exec('/usr/bin/ldd', [ '/usr/lib/libnetsnmp.so.40' ]).then(function (res) {
+		return res.stdout.includes('libssl');
+	});
+};
+
 return L.view.extend({
 	load: function() {
 		return Promise.all([
 			uci.load('snmpd'),
+			testV3(),
 		]);
 	},
 
@@ -127,7 +134,9 @@ return L.view.extend({
 			_('The used version for the group'));
 		go.value('v1', _('SNMPv1'));
 		go.value('v2c', _('SNMPv2c'));
-		go.value('usm', _('SNMPv3'));
+		if (data[1]) {
+			go.value('usm', _('SNMPv3'));
+		}
 		go.optional = false;
 		go.rmempty = false;
 
@@ -160,7 +169,9 @@ return L.view.extend({
 		go.value('any', _('Any version'));
 		go.value('v1', _('SNMPv1'));
 		go.value('v2c', _('SNMPv2c'));
-		go.value('usm', _('SNMPv3'));
+		if (data[1]) {
+			go.value('usm', _('SNMPv3'));
+		}
 		go.optional = false;
 		go.rmempty = false;
 
@@ -500,8 +511,10 @@ return L.view.extend({
 		this.populateV1V2CSettings('access_HostIP',
 			_('Communities via IP-Address range'), 'HostIP', s, data);
 
-		s.tab('v3', _('SNMPv3'));
-		this.populateV3Settings('v3', s, data);
+		if (data[1]) {
+			s.tab('v3', _('SNMPv3'));
+			this.populateV3Settings('v3', s, data);
+		}
 
 		s.tab('traps', _('Traps', 'SNMP'));
 		this.populateTrapsSettings('trap_HostName', 'Traps via Hostname',
@@ -616,8 +629,10 @@ return L.view.extend({
 		this.snmp_version.rmempty = false;
 		this.snmp_version.forcewrite = true;
 		this.snmp_version.value('v1/v2c', _('SNMPv1 and SNMPv2c'));
-		this.snmp_version.value('v1/v2c/v3', _('SNMPv1, SNMPv2c and SNMPv3'));
-		this.snmp_version.value('v3', _('Only SNMPv3'));
+		if (data[1]) {
+			this.snmp_version.value('v1/v2c/v3', _('SNMPv1, SNMPv2c and SNMPv3'));
+			this.snmp_version.value('v3', _('Only SNMPv3'));
+		}
 
 		go = g.option(form.Value, '__agentxsocket', _('AgentX socket path'),
 			_('Empty for disable AgentX'));
