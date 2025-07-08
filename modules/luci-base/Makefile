@@ -21,6 +21,7 @@ LUCI_DEPENDS:=\
 	+cgi-io \
 	+ucode \
 	+ucode-mod-fs \
+	+ucode-mod-log \
 	+ucode-mod-uci \
 	+ucode-mod-ubus \
 	+ucode-mod-math \
