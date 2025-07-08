@@ -1306,7 +1306,7 @@ return view.extend({
 		so.validate = function(section, value) {
 			if (!value || value === '') return true;
 			if (value === 'infinite') return true;
-			if (/^\d+[mhds]$/.test(value)) return true;
+			if (/^\d+[mhdsw]$/i.test(value)) return true;
 			return _('Expecting format like "5m", "3h", "7d", "infinite" or blank');
 		};
 		so = ss.option(form.Value, 'duid',
