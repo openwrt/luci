@@ -2,8 +2,8 @@
 
 'use strict';
 
-import { readfile, mkstemp, open, popen, stat, glob } from 'fs';
-import { init_list, init_index, init_enabled, init_action, conntrack_list, process_list } from 'luci.sys';
+import { readfile, popen, stat, glob } from 'fs';
+import { init_enabled } from 'luci.sys';
 import { isnan } from 'math';
 import { cursor } from 'uci';
 
