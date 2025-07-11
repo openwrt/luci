@@ -14,6 +14,7 @@ const ddns_run_path = '/var/run/ddns';
 const luci_helper = '/usr/lib/ddns/dynamic_dns_lucihelper.sh';
 const srv_name    = 'ddns-scripts';
 const opkg_info_path    = '/usr/lib/opkg/info';
+const ddns_version_file = '/usr/share/ddns/version';
 
 
 
@@ -23,7 +24,7 @@ function get_dateformat() {
 }
 
 function uptime() {
-	return split(readfile('/proc/uptime', 256), ' ')?.[0];
+	return split(readfile('/proc/uptime'), ' ')?.[0];
 }
 
 function killcmd(procid, signal) {
@@ -45,8 +46,7 @@ function get_date(seconds, format) {
 // convert epoch date to given format
 function epoch2date(epoch, format) {
 	if (!format || length(format) < 2) {
-			format = get_dateformat();
-			// uci.unload('ddns'); //don't do this in uci.foreach loops
+		format = get_dateformat();
 	}
 	format = replace(format, /%n/g, '<br />'); // Replace '%n' with '<br />'
 	format = replace(format, /%t/g, '    ');   // Replace '%t' with four spaces
@@ -102,7 +102,6 @@ const methods = {
 	get_services_status: {
 		call: function() {
 			const rundir = uci.get('ddns', 'global', 'ddns_rundir') || ddns_run_path;
-			// const dateFormat = get_dateformat();
 			let res = {};
 
 			uci.foreach('ddns', 'service', function(s) {
@@ -162,9 +161,7 @@ const methods = {
 				if (lastUpdate > 0) {
 					const epoch = time() - _uptime + lastUpdate;
 					convertedLastUpdate = epoch2date(epoch);
-					// convertedLastUpdate = get_date(epoch, dateFormat);
 					nextUpdate = epoch2date(epoch + forcedUpdateInterval + checkInterval);
-					// nextUpdate = get_date(epoch + forcedUpdateInterval + checkInterval, dateFormat);
 				}
 
 				if (pid > 0 && (lastUpdate + forcedUpdateInterval + checkInterval - _uptime) <= 0) {
@@ -192,28 +189,17 @@ const methods = {
 
 	get_ddns_state: {
 		call: function() {
-			// const dateFormat = get_dateformat();
 
 			const services_mtime = stat(ddns_package_path + '/list')?.mtime;
-			// uci.unload('ddns');
 			let res = {};
 			let ver, control;
 
-			if (stat(opkg_info_path + `/${srv_name}.control`)?.type == 'file') {
-				control = readfile(opkg_info_path + `/${srv_name}.control`);
+			if (stat(ddns_version_file)?.type == 'file') {
+				ver = readfile(ddns_version_file);
 			}
-
-			for (let line in split(control, '\n')) {
-				ver = match(line, /^Version: (.+)$/)?.[1];
-				if ( ver && length(ver) > 0 )
-					break;
-			}
-
-			ver = ver || trimnonewline(popen(`${luci_helper} -V | awk {'print $2'}`, 'r')?.read?.('line'));
 
 			res['_version'] = ver;
 			res['_enabled'] = init_enabled('ddns');
-			// res['_curr_dateformat'] = get_date(time(), dateFormat);
 			res['_curr_dateformat'] = epoch2date(time());
 			res['_services_list'] = (services_mtime && epoch2date(services_mtime)) || 'NO_LIST';
 
@@ -227,25 +213,20 @@ const methods = {
 			let res = {};
 			let cache = {};
 
-			const hasCommand = (command) => {
-				if (system(`command -v ${command}`) == 0)
-					return true;
-				else
-					return false;
-			};
+			const hasCommand = (command) => { return (system(`command -v ${command} 1>/dev/null`) == 0) ? true : false };
 
 			const hasWget = () => hasCommand('wget');
 
 			const hasWgetSsl = () => {
 				if (cache['has_wgetssl']) return cache['has_wgetssl'];
-				const result = hasWget() && system(`wget 2>&1 | grep -iqF 'https'`) == 0 ? true: false;
+				const result = hasWget() && system(`wget 2>&1 | grep -iqF 'https'`) == 0 ? true : false;
 				cache['has_wgetssl'] = result;
 				return result;
 			};
 
 			const hasGNUWgetSsl = () => {
 				if (cache['has_gnuwgetssl']) return cache['has_gnuwgetssl'];
-				const result = hasWget() && system(`wget -V 2>&1 | grep -iqF '+https'`) == 0 ? true: false;
+				const result = hasWget() && system(`wget -V 2>&1 | grep -iqF '+https'`) == 0 ? true : false;
 				cache['has_gnuwgetssl'] = result;
 				return result;
 			};
@@ -258,7 +239,7 @@ const methods = {
 			};
 
 			const hasCurlSsl = () => {
-				return system(`curl -V 2>&1 | grep -qF 'https'`) == 0 ? true: false;
+				return system(`curl -V 2>&1 | grep -qF 'https'`) == 0 ? true : false;
 			};
 
 			const hasFetch = () => {
@@ -269,22 +250,22 @@ const methods = {
 			};
 
 			const hasFetchSsl = () => {
-				return stat('/lib/libustream-ssl.so') == 0 ? true: false;
+				return stat('/lib/libustream-ssl.so') == 0 ? true : false;
 			};
 
 			const hasCurlPxy = () => {
-				return system(`grep -i 'all_proxy' /usr/lib/libcurl.so*`) == 0 ? true: false;
+				return system(`grep -i 'all_proxy' /usr/lib/libcurl.so*`) == 0 ? true : false;
 			};
 
 			const hasBbwget = () => {
-				return system(`wget -V 2>&1 | grep -iqF 'busybox'`) == 0 ? true: false;
+				return system(`wget -V 2>&1 | grep -iqF 'busybox'`) == 0 ? true : false;
 			};
 
 
 			res['has_wget'] = hasWget();
 			res['has_curl'] = hasCurl();
 
-			res['has_ssl'] = hasGNUWgetSsl()|| hasWgetSsl() || hasCurlSsl() || (hasFetch() && hasFetchSsl());
+			res['has_ssl'] = hasGNUWgetSsl() || hasWgetSsl() || hasCurlSsl() || (hasFetch() && hasFetchSsl());
 			res['has_proxy'] = hasGNUWgetSsl() || hasWgetSsl() || hasCurlPxy() || hasFetch() || hasBbwget();
 			res['has_forceip'] = hasGNUWgetSsl() || hasWgetSsl() || hasCurl() || hasFetch();
 			res['has_bindnet'] = hasCurl() || hasGNUWgetSsl();
