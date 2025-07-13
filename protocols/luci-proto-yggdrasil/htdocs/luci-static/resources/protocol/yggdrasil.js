@@ -276,7 +276,9 @@ return network.registerProtocol('yggdrasil',
 			o=ss.option(form.Value,"address",_("Peer URI"));
 			o.placeholder="tls://0.0.0.0:0"
 			o.validate=validateYggdrasilPeerUri;
-			ss.option(widgets.NetworkSelect,"interface",_("Peer interface"));
+
+			o=ss.option(widgets.DeviceSelect,"interface",_("Peer interface"));
+			o.noaliases=true;
 
 			o=s.taboption('peers', form.SectionValue, '_interfaces', form.TableSection, 'yggdrasil_%s_interface'.format(this.sid), _("Multicast rules"))
 			ss=o.subsection;
@@ -286,6 +288,7 @@ return network.registerProtocol('yggdrasil',
 
 			o=ss.option(widgets.DeviceSelect,"interface",_("Devices"));
 			o.multiple=true;
+			o.noaliases=true;
 
 			ss.option(form.Flag,"beacon",_("Send multicast beacon"));
 
