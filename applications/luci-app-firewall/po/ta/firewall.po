@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-06-16 11:44+0000\n"
+"PO-Revision-Date: 2025-07-14 19:03+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/ta/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
 msgid ""
@@ -96,7 +96,7 @@ msgid ""
 "<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark <var>%"
 "{set_mark?:%{set_xmark}}</var>"
 msgstr ""
-"<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark "
+"<var data-tooltip=\"MARK\">%{set_mark? Assign:XOR}</var> தீசுவர் குறி "
 "<var>%{set_mark?:%{set_xmark}}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:90
@@ -123,8 +123,8 @@ msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
-"<தரவு-டெர்ரிப் = \"ச்னாட்\"> நிலையான முறையில் மீண்டும் எழுதப்பட்டது </s> மூலத்திற்கு %"
-"{ச்னாட் ஐபி>}"
+"<var data-tooltip=\"SNAT\">நிலையான முறையில் மீண்டும் எழுதப்பட்டது</var> மூலத்திற்கு "
+"%{snat_ip?IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:306
 msgid "A rewrite IP must be specified!"
@@ -343,7 +343,7 @@ msgstr "ஒத்திசைவு பாதுகாப்பை இயக்�
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:341
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:296
 msgid "Enable logging"
-msgstr ""
+msgstr "பதிவை இயக்கவும்"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:168
 msgid ""
@@ -460,10 +460,14 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
-"முன்னோக்கி%{ஐபிவி 6? , நெறிமுறை%{புரோட்டோ#%{அடுத்து? data-tooltip = \" %"
-"{item.name} %{mark.mask ஐத் தவிர fwmarks உடன் பொருந்துமா? முகமூடியுடன் %"
-"{mark.num}}. தரவு-TOOLTIP = \"ஒப்பிடுவதற்கு முன் %{mark.mask with உடன் முகமூடி "
-"fwmark மதிப்பு."
+"முன்னுப்பப்பட்டது %{ipv6?%{ipv4?<var>IPv4</var> மற்றும் "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
+"%{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? "
+"data-tooltip="
+"\"Match fwmarks except %{mark.num}%{mark.mask? முகமூடியுடன் %{mark.mask}}.\""
+":%{mark.mask? data-tooltip="
+"\"உடன் முகமூடி fwmark மதிப்பு %{mark.mask} ஒப்பிடுவதற்கு முன்.\""
+"}}>%{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:488
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:361
@@ -671,8 +675,9 @@ msgid ""
 "Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</"
 "var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
-"<tar>%{limit.num} </ver> பாக்கெட்டுகள் <ar>%{limit.unit} </vart>%{limit.prst? "
-"வெடித்தது <as>%{limit.burst} </v>}"
+"பொருத்தத்தை கட்டுப்படுத்துங்கள்<var>%{limit.num}</var>நொடிக்குப் "
+"பாக்கெட்டுகள்<var>%{limit.unit}</var>%{limit.burst? வெடித்தது "
+"<var>%{limit.burst}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:175
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:250
@@ -686,12 +691,13 @@ msgstr "குறிப்பிட்ட விகிதத்துடன் �
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:296
 msgid "Log matched packets on the selected tables to syslog."
 msgstr ""
+"தேர்ந்தெடுக்கப்பட்ட அட்டவணையில் பொருந்திய பாக்கெட்டுகளை சிஸ்லாக் நகரில் பதிவு செய்யுங்கள்."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:348
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:464
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:341
 msgid "Log matched packets to syslog."
-msgstr ""
+msgstr "பொருந்திய பாக்கெட்டுகளை சிஸ்லாக் பதிவு செய்யுங்கள்."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:311
 msgid "Loopback source IP"
@@ -717,7 +723,7 @@ msgstr "போட்டி"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "Match DSCP"
-msgstr "பொருந்தும் டி.எச்.சி.பி."
+msgstr "பொருந்தும் டிஎச்சிபி"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:288
 msgid "Match ICMP type"
@@ -890,8 +896,10 @@ msgid ""
 "Datatypes: <code>ip, port, mac, net, set</code>.<br />Direction prefixes are "
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
-"பொருந்த வேண்டிய பாக்கெட் புலங்கள். எ.கா .: <code> src_port, dest_net </code>. "
-"தரவுத்தொகுப்புகள்: <code> ஐபி, துறைமுகம், மேக், நெட், செட் < /code>."
+"பொருந்த வேண்டிய பாக்கெட் புலங்கள். <br />Syntax: <em>direction_datatype</em>. "
+"எ.கா.: <code>src_port, dest_net</code>.<br />Directions: <code>src, dst</"
+"code>. தரவுவகைகள்: <code>ip, port, mac, net, set</code>.<br />திசைமுன்னொட்டுகள் "
+"விருப்பமானவை.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:358
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:474
@@ -1236,8 +1244,8 @@ msgid ""
 "Unit: seconds. Default <code>0</code> means the entry is added permanently "
 "to the set.<br />Max: 2147483 seconds."
 msgstr ""
-"அலகு: விநாடிகள். இயல்புநிலை <குறியீடு> 0 </code> என்றால் நுழைவு தொகுப்பில் "
-"நிரந்தரமாக சேர்க்கப்படுகிறது. <br /> அதிகபட்சம்: 2147483 வினாடிகள்."
+"அலகு: விநாடிகள். இயல்புநிலை <code> 0 </code> என்றால் நுழைவு தொகுப்பில் நிரந்தரமாகச் "
+"சேர்க்கப்படுகிறது. <br /> மிகுதிஅளவு: 2147483 வினாடிகள்."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:341
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:456
@@ -1499,7 +1507,7 @@ msgstr "மேக்: மேக் முகவரி"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:108
 msgid "macaddr|ip[/cidr]<br />"
-msgstr "Ma'adr |"
+msgstr "மேக்முகவரி|ஐபி[/cidr]<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:72
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:89
