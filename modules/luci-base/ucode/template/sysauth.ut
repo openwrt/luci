@@ -35,8 +35,14 @@
 	</div>
 
 	<div class="cbi-page-actions">
-		<input type="submit" value="{{ _('Log in') }}" class="btn cbi-button cbi-button-apply" />
-		<input type="reset" value="{{ _('Reset') }}" class="btn cbi-button cbi-button-reset" />
+		{% let login_button_order = uci.get('luci', 'main', 'login_button_order') ?? "";
+		if (login_button_order == 'reverse'): %}
+			<input type="reset" value="{{ _('Reset') }}" class="btn cbi-button cbi-button-reset" />
+			<input type="submit" value="{{ _('Log in') }}" class="btn cbi-button cbi-button-apply" />
+		{% else %}
+			<input type="submit" value="{{ _('Log in') }}" class="btn cbi-button cbi-button-apply" />
+			<input type="reset" value="{{ _('Reset') }}" class="btn cbi-button cbi-button-reset" />
+		{% endif %}
 	</div>
 </form>
 
