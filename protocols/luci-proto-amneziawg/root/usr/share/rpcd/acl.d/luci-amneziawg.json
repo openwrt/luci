@@ -1,0 +1,25 @@
+{
+	"luci-proto-amneziawg": {
+		"description": "Grant access to LuCI AmneziaWG procedures",
+		"read": {
+			"file": {
+				"/usr/bin/qrencode --inline --8bit --type=SVG --output=- -- *": [ "exec" ]
+			},
+			"ubus": {
+				"luci.amneziawg": [
+					"getWgInstances"
+				]
+			},
+			"uci": [ "network" ]
+		},
+		"write": {
+			"ubus": {
+				"luci.amneziawg": [
+					"generateKeyPair",
+					"getPublicAndPrivateKeyFromPrivate",
+					"generatePsk"
+				]
+			}
+		}
+	}
+}
