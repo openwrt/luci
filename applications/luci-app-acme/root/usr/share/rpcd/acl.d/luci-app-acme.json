@@ -8,7 +8,12 @@
                         "uci": [ "acme" ]
                 },
                 "write": {
-                        "uci": [ "acme" ]
+                        "uci": [ "acme" ],
+                        "file": {
+                                "/usr/libexec/acmesh-dnsinfo.sh": [
+                                        "exec"
+                                ],
+                        }
                 }
         }
 }
