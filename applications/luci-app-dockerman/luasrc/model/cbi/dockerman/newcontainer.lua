@@ -408,7 +408,14 @@ elseif cmd_line and cmd_line:match("^duplicate/[^/]+$") then
 		if create_body.HostConfig.PortBindings and type(create_body.HostConfig.PortBindings) == "table" then
 			default_config.publish = {}
 			for k, v in pairs(create_body.HostConfig.PortBindings) do
-				table.insert( default_config.publish, v[1].HostPort..":"..k:match("^(%d+)/.+").."/"..k:match("^%d+/(.+)") )
+				local host_ip = ""
+				if v[1].HostIp and v[1].HostIp ~= "" then
+					host_ip = v[1].HostIp .. ":"
+				end
+				local host_port = v[1].HostPort
+				local container_port = k:match("^(%d+)/.+")
+				local protocol = k:match("^%d+/(.+)")
+				table.insert(default_config.publish, host_ip .. host_port .. ":" .. container_port .. "/" .. protocol)
 			end
 		end
 
@@ -544,7 +551,7 @@ o.default = default_config.volume or nil
 local d_publish = s:option(DynamicList, "publish",
 	translate("Exposed Ports(-p)"),
 	translate("Publish container's port(s) to the host"))
-d_publish.placeholder = "2200:22/tcp"
+d_publish.placeholder = "[192.168.1.0:]2200:22/tcp"
 d_publish.rmempty = true
 d_publish.default = default_config.publish or nil
 
@@ -768,13 +775,23 @@ m.handle = function(self, state, data)
 
 	tmp = data.publish or {}
 	for i, v in ipairs(tmp) do
-		for v1 ,v2 in string.gmatch(v, "(%d+):([^%s]+)") do
-			local _,_,p= v2:find("^%d+/(%w+)")
-			if p == nil then
-				v2=v2..'/tcp'
+		local ip, host_port, container_port = v:match("^([^:]+):(%d+):([^%s]+)$")
+		if not container_port then
+			host_port, container_port = v:match("^(%d+):([^%s]+)$")
+		end
+
+		if container_port then
+			if not container_port:match("^%d+/(%w+)$") then
+				container_port = container_port .. "/tcp"
 			end
-			portbindings[v2] = {{HostPort=v1}}
-			exposedports[v2] = {HostPort=v1}
+
+			local binding = { HostPort = host_port }
+			if ip then
+				binding["HostIp"] = ip
+			end
+
+			portbindings[container_port] = { binding }
+			exposedports[container_port] = {HostPort = host_port}
 		end
 	end
 
