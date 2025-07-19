@@ -2,6 +2,7 @@
 'require view';
 'require form';
 'require uci';
+'require ui';
 'require tools.widgets as widgets';
 'require strongswan_algorithms';
 
@@ -23,6 +24,27 @@ function addAlgorithms(o, algorithms) {
 	});
 }
 
+function sectionNameCheck(extra_class) {
+	var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
+		nameEl = el.querySelector('.cbi-section-create-name');
+	ui.addValidator(nameEl, 'uciname', true, function(v) {
+		let sections = [
+			...uci.sections('ipsec', 'remote'),
+			...uci.sections('ipsec', 'tunnel'),
+			...uci.sections('ipsec', 'crypto_proposal'),
+		];
+		if (sections.find(function(s) {
+			return s['.name'] == v;
+		})) {
+			return _('Remotes, Encryption Proposals and Tunnels may not share the same names.') + ' ' + 
+				_('Use combinations like tunnel1_phase1 that do not exceed 15 characters.');
+		}
+		if (v.length > 15) return _('Name length shall not exceed 15 characters');
+		return true;
+	}, 'blur', 'keyup');
+	return el;
+};
+
 return view.extend({
 	load: function () {
 		return uci.load('network');
@@ -38,6 +60,7 @@ return view.extend({
 		// strongSwan General Settings
 		s = m.section(form.TypedSection, 'ipsec', _('General Settings'));
 		s.anonymous = true;
+		s.addremove = true;
 
 		o = s.option(widgets.ZoneSelect, 'zone', _('Zone'),
 			_('Firewall zone that has to match the defined firewall zone'));
@@ -62,6 +85,7 @@ return view.extend({
 			_('Define Remote IKE Configurations.'));
 		s.addremove = true;
 		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck
 
 		o = s.tab('general', _('General'));
 		o = s.tab('authentication', _('Authentication'));
@@ -113,7 +137,7 @@ return view.extend({
 		o.rmempty = false;
 
 		o = s.taboption('general', form.MultiValue, 'tunnel', _('Tunnel'),
-			_('Name of ESP (phase 2) section'));
+			_('The Tunnel containing the ESP (phase 2) section'));
 		o.load = function (section_id) {
 			this.keylist = [];
 			this.vallist = [];
@@ -229,6 +253,7 @@ return view.extend({
 			_('Define Connection Children to be used as Tunnels in Remote Configurations.'));
 		s.addremove = true;
 		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck;
 
 		o = s.tab('general', _('General'));
 		o = s.tab('advanced', _('Advanced'));
@@ -362,6 +387,7 @@ return view.extend({
 			_('Configure Cipher Suites to define IKE (Phase 1) or ESP (Phase 2) Proposals.'));
 		s.addremove = true;
 		s.nodescriptions = true;
+		s.renderSectionAdd = sectionNameCheck;
 
 		o = s.option(form.Flag, 'is_esp', _('ESP Proposal'),
 			_('Whether this is an ESP (phase 2) proposal or not'));
