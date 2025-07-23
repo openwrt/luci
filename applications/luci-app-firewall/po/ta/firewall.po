@@ -65,8 +65,8 @@ msgid ""
 "<var data-tooltip=\"DNAT\">Forward</var> to %{dest}%{dest_ip? IP <var>%"
 "{dest_ip}</var>}%{dest_port? port <var>%{dest_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"DNAT\">முன்னோக்கி</var> %{dest}%{dest_ip இதற்கு? Ip "
-"<var>%{dest_ip}</var>}%{dest_port? துறைமுகம் <var>%{dest_port}</var>}"
+"<var data-tooltip=\"DNAT\">முன்னோக்கி</var> %{dest}%{dest_ip இதற்கு? Ip <var>%"
+"{dest_ip}</var>}%{dest_port? துறைமுகம் <var>%{dest_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:115
 msgid ""
@@ -80,8 +80,8 @@ msgid ""
 "<var data-tooltip=\"DSCP\">Assign DSCP</var> classification <var>%{set_dscp}"
 "</var>"
 msgstr ""
-"<var data-tooltip=\"DSCP\">DSCP ஐ ஒதுக்கவும் </var> வகைப்பாடு<var>%{set_dscp} "
-"</var>"
+"<var data-tooltip=\"DSCP\">DSCP ஐ ஒதுக்கவும் </var> வகைப்பாடு<var>%{set_dscp} </"
+"var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:127
 msgid ""
@@ -96,8 +96,8 @@ msgid ""
 "<var data-tooltip=\"MARK\">%{set_mark?Assign:XOR}</var> firewall mark <var>%"
 "{set_mark?:%{set_xmark}}</var>"
 msgstr ""
-"<var data-tooltip=\"MARK\">%{set_mark? Assign:XOR}</var> தீசுவர் குறி "
-"<var>%{set_mark?:%{set_xmark}}</var>"
+"<var data-tooltip=\"MARK\">%{set_mark? Assign:XOR}</var> தீசுவர் குறி <var>%"
+"{set_mark?:%{set_xmark}}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:90
 msgid "<var data-tooltip=\"MASQUERADE\">Automatically rewrite</var> source IP"
@@ -123,8 +123,8 @@ msgid ""
 "<var data-tooltip=\"SNAT\">Statically rewrite</var> to source %{snat_ip?IP "
 "<var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 msgstr ""
-"<var data-tooltip=\"SNAT\">நிலையான முறையில் மீண்டும் எழுதப்பட்டது</var> மூலத்திற்கு "
-"%{snat_ip?IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
+"<var data-tooltip=\"SNAT\">நிலையான முறையில் மீண்டும் எழுதப்பட்டது</var> மூலத்திற்கு %"
+"{snat_ip?IP <var>%{snat_ip}</var>} %{snat_port?port <var>%{snat_port}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:306
 msgid "A rewrite IP must be specified!"
@@ -460,14 +460,12 @@ msgid ""
 "tooltip=\"Mask fwmark value with %{mark.mask} before compare.\"}}>%{mark.val}"
 "</var>}"
 msgstr ""
-"முன்னுப்பப்பட்டது %{ipv6?%{ipv4?<var>IPv4</var> மற்றும் "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol "
-"%{proto#%{next?, }<var>%{item.name}</var>}}%{mark?, mark <var%{mark.inv? "
-"data-tooltip="
-"\"Match fwmarks except %{mark.num}%{mark.mask? முகமூடியுடன் %{mark.mask}}.\""
-":%{mark.mask? data-tooltip="
-"\"உடன் முகமூடி fwmark மதிப்பு %{mark.mask} ஒப்பிடுவதற்கு முன்.\""
-"}}>%{mark.val}</var>}"
+"முன்னுப்பப்பட்டது %{ipv6?%{ipv4?<var>IPv4</var> மற்றும் <var>IPv6</var>:<var>IPv6</"
+"var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%{next?, }<var>%{item.name}"
+"</var>}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Match fwmarks except %"
+"{mark.num}%{mark.mask? முகமூடியுடன் %{mark.mask}}.\":%{mark.mask? data-"
+"tooltip=\"உடன் முகமூடி fwmark மதிப்பு %{mark.mask} ஒப்பிடுவதற்கு முன்.\"}}>%"
+"{mark.val}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:488
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:361
@@ -560,6 +558,10 @@ msgstr "ஐபிஎச்/நெட்வொர்க்குகள்/மே�
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:68
 msgid "IPv4"
 msgstr "Iprsh"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:167
+msgid "IPv4 Masquerading"
+msgstr "முகமூடி"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:191
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:275
@@ -675,9 +677,8 @@ msgid ""
 "Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</"
 "var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
-"பொருத்தத்தை கட்டுப்படுத்துங்கள்<var>%{limit.num}</var>நொடிக்குப் "
-"பாக்கெட்டுகள்<var>%{limit.unit}</var>%{limit.burst? வெடித்தது "
-"<var>%{limit.burst}</var>}"
+"பொருத்தத்தை கட்டுப்படுத்துங்கள்<var>%{limit.num}</var>நொடிக்குப் பாக்கெட்டுகள்<var>%"
+"{limit.unit}</var>%{limit.burst? வெடித்தது <var>%{limit.burst}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:175
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:250
@@ -710,10 +711,6 @@ msgstr "மாச்க்வெரேட் - வெளிச்செல்ல
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:180
 msgid "MSS clamping"
 msgstr "எம்.எச்.எச் கிளம்பிங்"
-
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:167
-msgid "IPv4 Masquerading"
-msgstr "முகமூடி"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:213
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:209

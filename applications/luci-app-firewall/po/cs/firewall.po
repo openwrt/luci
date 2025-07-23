@@ -521,14 +521,13 @@ msgid ""
 "{item.hint.name? a.k.a. %{item.hint.name}}.\":%{item.hint.name? data-"
 "tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 msgstr ""
-"Od %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="
-"\"Hledat shodu s IP kromě %{item.val}.\"}>%{item.ival}</var>}}%{src_port?, "
-"port %{src_port#%{next?, }<var%{item.inv? data-tooltip="
-"\"Hledat shodu s porty kromě %{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, "
-"MAC %{src_mac#%{next?, }<var%{item.inv? data-tooltip=\"Hledat shodu s MAC "
-"adresami kromě %{item.val}%{item.hint.name? neboli %{item.hint.name}}."
-"\":%{item.hint.name? data-tooltip=\"%{item.hint.name}\""
-"}}>%{item.ival}</var>}}"
+"Od %{src}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-"
+"tooltip=\"Hledat shodu s IP kromě %{item.val}.\"}>%{item.ival}</var>}}%"
+"{src_port?, port %{src_port#%{next?, }<var%{item.inv? data-tooltip=\"Hledat "
+"shodu s porty kromě %{item.val}.\"}>%{item.ival}</var>}}%{src_mac?, MAC %"
+"{src_mac#%{next?, }<var%{item.inv? data-tooltip=\"Hledat shodu s MAC "
+"adresami kromě %{item.val}%{item.hint.name? neboli %{item.hint.name}}.\":%"
+"{item.hint.name? data-tooltip=\"%{item.hint.name}\"}}>%{item.ival}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:161
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:182
@@ -571,6 +570,10 @@ msgstr "IP adresy / sítě / MAC adresy"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:68
 msgid "IPv4"
 msgstr "IPv4"
+
+#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:167
+msgid "IPv4 Masquerading"
+msgstr "Maškárádování"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:191
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:275
@@ -622,18 +625,17 @@ msgid ""
 "tooltip=\"Match any helper except &quot;%{helper.name}&quot;\">%{helper.val}"
 "</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"Příchozí %{ipv6?%{ipv4?<var>IPv4</var> a "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protokol "
-"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\""
-">%{item.name}<span class=\"cbi-tooltip\">ICMP s typy %{item.types#%{next?, "
-"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark "
-"<var%{mark.inv? data-tooltip=\"Hledat shodu s fwmarks kromě %{mark.num}%{"
-"mark.mask? s maskou %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Před "
-"porovnáním maskovat hodnotu fwmark pomocí %{mark.mask}."
-"\"}}>%{mark.val}</var>}%{helper?, pomocné %{helper.inv?<var data-tooltip=\""
-"Hledat shodu v jakémkoli pomocném s výjimkou &quot;%{helper.name}&quot;"
-"\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\""
-">%{helper.val}</var>}}"
+"Příchozí %{ipv6?%{ipv4?<var>IPv4</var> a <var>IPv6</var>:<var>IPv6</var>}:"
+"<var>IPv4</var>}%{proto?, protokol %{proto#%{next?, }%{item.types?<var "
+"class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
+"s typy %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%"
+"{item.name}</var>}}}%{mark?, mark <var%{mark.inv? data-tooltip=\"Hledat "
+"shodu s fwmarks kromě %{mark.num}%{mark.mask? s maskou %{mark.mask}}.\":%"
+"{mark.mask? data-tooltip=\"Před porovnáním maskovat hodnotu fwmark pomocí %"
+"{mark.mask}.\"}}>%{mark.val}</var>}%{helper?, pomocné %{helper.inv?<var data-"
+"tooltip=\"Hledat shodu v jakémkoli pomocném s výjimkou &quot;%{helper.name}"
+"&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
+"{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:180
 msgid "Initial Hash Size"
@@ -693,8 +695,8 @@ msgid ""
 "Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</"
 "var>%{limit.burst? burst <var>%{limit.burst}</var>}"
 msgstr ""
-"Omezit hledání shody na <var>%{limit.num}</var> paketů v "
-"<var>%{limit.unit}</var>%{limit.burst? dávce <var>%{limit.burst}</var>}"
+"Omezit hledání shody na <var>%{limit.num}</var> paketů v <var>%{limit.unit}</"
+"var>%{limit.burst? dávce <var>%{limit.burst}</var>}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:175
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:250
@@ -726,10 +728,6 @@ msgstr "MASQUERADE - Automaticky přepsat na IP adresu odchozího rozhraní"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:180
 msgid "MSS clamping"
 msgstr "MSS clamping"
-
-#: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:167
-msgid "IPv4 Masquerading"
-msgstr "Maškárádování"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:213
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:209
