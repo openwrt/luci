@@ -457,8 +457,7 @@ return view.extend({
 		o.description = _('CA certificate bundle file that will be used to download services data. Set IGNORE to skip certificate validation.');
 		o.placeholder = 'IGNORE';
 		o.write = function(section_id, value) {
-			if(value == 'ignore')
-				uci.set('ddns', section_id, 'cacert', value.toUpperCase());
+			uci.set('ddns', section_id, 'cacert', value == 'ignore' ? value.toUpperCase() : value);
 		};
 
 		o = s.taboption('global', form.Value, 'services_url', _('Services URL Download'));
@@ -810,8 +809,7 @@ return view.extend({
 						o.rmempty = false;
 						o.optional = true;
 						o.write = function(section_id, value) {
-							if(value == 'ignore')
-								uci.set('ddns', section_id, 'cacert', value.toUpperCase());
+							uci.set('ddns', section_id, 'cacert', value == 'ignore' ? value.toUpperCase() : value);
 						};
 					};
 
