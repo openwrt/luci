@@ -28,7 +28,7 @@
 <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
 <script src="{{ resource }}/cbi.js"></script>
 
-<title>{{ striptags(`${boardinfo.hostname ?? '?'}${node ? ` - ${_(node.title)}` : ''}`) }} - LuCI</title>
+<title>{{ striptags(`${dispatched ? `${dispatched.title} | ` : ''}${boardinfo.hostname ?? '?'}`) }} | LuCI</title>
 </head>
 <body class="lang_{{ dispatcher.lang }}" data-page="{{ entityencode(join('-', ctx.request_path), true) }}">
 
