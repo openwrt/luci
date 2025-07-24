@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-07-16 14:09+0000\n"
+"PO-Revision-Date: 2025-07-24 15:20+0000\n"
 "Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hant/>\n"
@@ -79,7 +79,7 @@ msgstr "%s表示「執行dnsmasq的系統位址」。"
 msgid ""
 "%s services running on this device in the default VRF context (ie., not "
 "bound to any VRF device) shall work across all VRF domains."
-msgstr ""
+msgstr "預設VRF環境中執行的%s服務（即未繫結至任何VRF裝置）將可在所有VRF網域間運作。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 msgid "%s uses a human-readable encoding of hex-and-colons"
@@ -2418,7 +2418,7 @@ msgstr "除錯"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:21
 msgid "Default"
-msgstr ""
+msgstr "預設"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
 msgid "Default gateway"
@@ -3873,7 +3873,7 @@ msgstr "遵循IPv4有效期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:457
 msgid "For VRF, install %s"
-msgstr ""
+msgstr "VRF需安裝%s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 msgid "For bonding, install %s"
@@ -5363,7 +5363,7 @@ msgstr "無效的主機名或IPv4位址"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:139
 msgid "Invalid key format"
-msgstr ""
+msgstr "金鑰格式無效"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
 msgid "Invalid port"
@@ -6225,7 +6225,7 @@ msgstr "匹配發送至此子網路（CIDR標記法）的流量"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:203
 msgid "Match traffic from this destination port (range)"
-msgstr ""
+msgstr "匹配來自此目的連接埠（範圍）的流量"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:153
 msgid "Match traffic from this interface"
@@ -6233,7 +6233,7 @@ msgstr "匹配來自此介面的流量"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:198
 msgid "Match traffic from this source port (range)"
-msgstr ""
+msgstr "匹配來自此來源連接埠（範圍）的流量"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:157
 msgid "Match traffic from this source subnet (CIDR notation)"
@@ -6446,7 +6446,7 @@ msgstr "鏡像監測連接埠"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:203
 msgid "Mirror source port"
-msgstr "鏡像來源連接埠"
+msgstr "映射來源連接埠"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:120
 msgid "Mobile Country Code"
@@ -7198,7 +7198,7 @@ msgstr "關閉"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1579
 msgid ""
 "Off means VRF traffic will be handled exclusively by sockets bound to VRFs."
-msgstr ""
+msgstr "停用表示VRF流量將僅由繫結至特定VRF的socket處理。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:18
 msgid "Off-State Delay"
@@ -8072,7 +8072,7 @@ msgstr "連接埠狀態："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:980
 msgid "Ports"
-msgstr ""
+msgstr "連接埠"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:547
 msgid "Potential negation of: %s"
@@ -8852,12 +8852,12 @@ msgstr "需要wpa-supplicant支援WEP"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:127
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:177
 msgid "Reserve IP"
-msgstr ""
+msgstr "保留IP"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:125
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:175
 msgid "Reserve a specific IP address for this device"
-msgstr ""
+msgstr "為此裝置保留特定的IP位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2148
 #: modules/luci-base/ucode/template/sysauth.ut:39
@@ -8945,7 +8945,7 @@ msgstr "反向路徑篩選"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:271
 msgid "Reverse sort"
-msgstr ""
+msgstr "反向排序"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4813
 msgid "Revert"
@@ -9096,7 +9096,7 @@ msgstr "路由指定介面和閘道可到達某個主機或網路。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1018
 msgid "Routing table"
-msgstr ""
+msgstr "路由表"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:97
 msgid "Routing table into which to insert this rule."
@@ -9602,7 +9602,7 @@ msgstr "來源介面"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:198
 msgid "Source port"
-msgstr ""
+msgstr "來源連接埠"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:45
 msgctxt "nft ip sport"
@@ -9654,7 +9654,8 @@ msgid ""
 "Specifies the devices to attach to this VRF. In order to attach wireless "
 "networks, choose the associated interface as network in the wireless "
 "settings."
-msgstr ""
+msgstr "指定附加至此VRF的裝置。若要附加無線網絡，請在無線設定中選擇關聯的介面作為網路"
+"。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Specifies the directory the device is attached to"
@@ -9977,15 +9978,15 @@ msgstr "禁止記錄DHCP協定的例行作業。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1163
 msgid "Svc Parameters"
-msgstr ""
+msgstr "服務參數"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1141
 msgid "Svc Priority"
-msgstr ""
+msgstr "優先順序"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1152
 msgid "Svc Target"
-msgstr ""
+msgstr "目標主機"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:46
 msgid "Swap free"
@@ -10082,7 +10083,7 @@ msgstr "系統在復原 (initramfs) 模式下執行。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1581
 msgid "TCP Layer 3 Master Device (tcp_l3mdev) accept"
-msgstr ""
+msgstr "接受TCP第三層主裝置 (tcp_l3mdev)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:67
 msgctxt "nft tcp option maxseg size"
@@ -10120,7 +10121,7 @@ msgstr "傳輸"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:183
 msgid "TX Power"
-msgstr ""
+msgstr "傳輸功率"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:250
 msgid "TX Rate"
@@ -10795,7 +10796,7 @@ msgstr "這是隧道代理分配的首碼路由，以供用戶端使用"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 msgid "This is the prefix routed to you by your provider for use by clients"
-msgstr ""
+msgstr "這是服務提供者給用戶端的路由首碼"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:29
 msgid "This is the system crontab in which scheduled tasks can be defined."
@@ -10810,13 +10811,13 @@ msgstr "這通常是隧道代理作業的最近PoP位址"
 msgid ""
 "This key appears to be in PEM format, which is not supported in an opkg "
 "environment."
-msgstr ""
+msgstr "此金鑰似乎為PEM格式，在opkg環境中不支援。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:124
 msgid ""
 "This key does not appear to be in PEM format, which is required in an apk "
 "environment."
-msgstr ""
+msgstr "此金鑰似乎不是PEM格式，apk環境要求必須為此格式。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:65
 msgid ""
@@ -11081,7 +11082,7 @@ msgstr "服務類別"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1585
 msgid "UDP Layer 3 Master Device (udp_l3mdev) accept"
-msgstr ""
+msgstr "接受UDP第三層主裝置 (udp_l3mdev)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:56
 msgctxt "nft udp dport"
@@ -11650,7 +11651,7 @@ msgstr "VPNC (CISCO 3000（和其它）VPN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:469
 msgid "VRF device"
-msgstr ""
+msgstr "VRF裝置"
 
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:10
 msgid "VTI"
@@ -11720,7 +11721,7 @@ msgstr "虛擬乙太網路"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3040
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1515
 msgid "Virtual Routing and Forwarding (VRF)"
-msgstr ""
+msgstr "虛擬路由和轉送 (VRF)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:60
 msgid "Virtual dynamic interface"
@@ -11899,7 +11900,7 @@ msgstr "WireGuard"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3050
 msgid "WireGuard Interface"
-msgstr ""
+msgstr "WireGuard介面"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:120
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:165
@@ -12048,11 +12049,11 @@ msgstr ""
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:268
 msgid "and above"
-msgstr ""
+msgstr "及以上"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:260
 msgid "and:"
-msgstr ""
+msgstr "到："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:795
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:161
@@ -12094,7 +12095,7 @@ msgstr "baseT"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:258
 msgid "between:"
-msgstr ""
+msgstr "從："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1710
 msgid "bridged"
