@@ -135,6 +135,7 @@ return view.extend({
 		s.addremove = false;
 		s.tab('setup', _('Service Setup'));
 		s.tab('advanced', _('Advanced Settings'));
+		s.tab('igd', _('UPnP IGD Adjustments'));
 
 		o = s.taboption('setup', form.Flag, 'enabled', _('Start service'),
 			_('Start autonomous port mapping service'));
@@ -150,16 +151,6 @@ return view.extend({
 			_('Advertise as IGDv1 (IPv4 only) device instead of IGDv2'));
 		o.default = '1';
 		o.rmempty = false;
-		o.depends('enable_upnp', '1');
-		o.retain = true;
-
-		o = s.taboption('setup', form.Value, 'download', _('Download speed'),
-			_('Report maximum download speed in kByte/s'));
-		o.depends('enable_upnp', '1');
-		o.retain = true;
-
-		o = s.taboption('setup', form.Value, 'upload', _('Upload speed'),
-			_('Report maximum upload speed in kByte/s'));
 		o.depends('enable_upnp', '1');
 		o.retain = true;
 
@@ -186,39 +177,6 @@ return view.extend({
 
 		s.taboption('advanced', form.Flag, 'ipv6_disable', _('Disable IPv6 mapping'));
 
-		o = s.taboption('advanced', form.Value, 'notify_interval', _('Notify interval'),
-			_('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s')
-				.format('<abbr title="Simple Service Discovery Protocol">SSDP</abbr>'));
-		o.datatype = 'uinteger';
-		o.placeholder = '900';
-		o.depends('enable_upnp', '1');
-		o.retain = true;
-
-		o = s.taboption('advanced', form.Value, 'port', _('SOAP/HTTP port'));
-		o.datatype = 'port';
-		o.placeholder = '5000';
-		o.depends('enable_upnp', '1');
-		o.retain = true;
-
-		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'),
-			_('Report custom router web interface (presentation) URL'));
-		o.placeholder = 'http://192.168.1.1/';
-		o.depends('enable_upnp', '1');
-		o.retain = true;
-
-		o = s.taboption('advanced', form.Value, 'uuid', _('Device UUID'));
-		// o.depends('enable_upnp', '1');
-		o.depends('to-disable-as-rarely-used', '1');
-		o.retain = true;
-
-		o = s.taboption('advanced', form.Value, 'model_number', _('Announced model number'));
-		o.depends('enable_upnp', '1');
-		o.retain = true;
-
-		o = s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'));
-		o.depends('enable_upnp', '1');
-		o.retain = true;
-
 		o = s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime'));
 		o.default = '1';
 		o.depends('to-disable-as-rarely-used', '1');
@@ -228,6 +186,49 @@ return view.extend({
 			_('Puts extra debugging information into the system log'));
 
 		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('Service lease file'));
+		o.depends('to-disable-as-rarely-used', '1');
+		o.retain = true;
+
+		o = s.taboption('igd', form.Value, 'port', _('SOAP/HTTP port'));
+		o.datatype = 'port';
+		o.placeholder = '5000';
+		o.depends('enable_upnp', '1');
+		o.retain = true;
+
+		o = s.taboption('igd', form.Value, 'notify_interval', _('Notify interval'),
+			_('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s')
+				.format('<abbr title="Simple Service Discovery Protocol">SSDP</abbr>'));
+		o.datatype = 'uinteger';
+		o.placeholder = '900';
+		o.depends('enable_upnp', '1');
+		o.retain = true;
+
+		o = s.taboption('igd', form.Value, 'download', _('Download speed'),
+			_('Report maximum download speed in kByte/s'));
+		o.depends('enable_upnp', '1');
+		o.retain = true;
+
+		o = s.taboption('igd', form.Value, 'upload', _('Upload speed'),
+			_('Report maximum upload speed in kByte/s'));
+		o.depends('enable_upnp', '1');
+		o.retain = true;
+
+		o = s.taboption('igd', form.Value, 'model_number', _('Announced model number'));
+		o.depends('enable_upnp', '1');
+		o.retain = true;
+
+		o = s.taboption('igd', form.Value, 'serial_number', _('Announced serial number'));
+		o.depends('enable_upnp', '1');
+		o.retain = true;
+
+		o = s.taboption('igd', form.Value, 'presentation_url', _('Presentation URL'),
+			_('Report custom router web interface (presentation) URL'));
+		o.placeholder = 'http://192.168.1.1/';
+		o.depends('enable_upnp', '1');
+		o.retain = true;
+
+		o = s.taboption('igd', form.Value, 'uuid', _('Device UUID'));
+		// o.depends('enable_upnp', '1');
 		o.depends('to-disable-as-rarely-used', '1');
 		o.retain = true;
 
