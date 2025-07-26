@@ -3,6 +3,7 @@
 'require fs';
 'require uci';
 'require view';
+"require view.dnsapi as dnsapi";
 
 return view.extend({
 	load() {
@@ -16,11 +17,15 @@ return view.extend({
 				}
 				return certs;
 			}),
+			L.resolveDefault(fs.exec_direct('/usr/libexec/acmesh-dnsinfo.sh'), ''),
 		]);
 	},
 
 	render(data) {
 		let certs = data[0];
+		let dnsApiInfoText = data[1];
+		let apiInfos = dnsapi.parseFile(dnsApiInfoText);
+
 		let wikiUrl = 'https://github.com/acmesh-official/acme.sh/wiki/';
 		let wikiInstructionUrl = wikiUrl + 'dnsapi';
 		let m, s, o;
@@ -97,142 +102,13 @@ return view.extend({
 		// List of supported DNS API. Names are same as file names in acme.sh for easier search.
 		// May be outdated but not changed too often.
 		o.value('', '');
-		o.value('dns_acmedns', 'ACME DNS API github.com/joohoi/acme-dns');
-		o.value('dns_acmeproxy', 'ACME Proxy github.com/mdbraber/acmeproxy');
-		o.value('dns_1984hosting', '1984.is');
-		o.value('dns_active24', 'Active24.com');
-		o.value('dns_ad', 'Alwaysdata.com');
-		o.value('dns_ali', 'Alibaba Cloud Aliyun.com');
-		o.value('dns_anx', 'Anexia.com');
-		o.value('dns_arvan', 'ArvanCloud.ir');
-		o.value('dns_aurora', 'AuroraDNS.eu');
-		o.value('dns_autodns', 'autoDNS (InternetX)');
-		o.value('dns_aws', 'Amazon AWS Route53');
-		o.value('dns_azion', 'Azion.com');
-		o.value('dns_azure', 'Azure');
-		o.value('dns_bunny', 'Bunny.net');
-		o.value('dns_cf', 'CloudFlare.com');
-		o.value('dns_clouddns', 'CloudDNS vshosting.cz');
-		o.value('dns_cloudns', 'ClouDNS.net');
-		o.value('dns_cn', 'Core-Networks.de');
-		o.value('dns_conoha', 'ConoHa.io');
-		o.value('dns_constellix', 'constellix.com');
-		o.value('dns_cpanel', 'CPanel');
-		o.value('dns_curanet', 'curanet.dk scannet.dk wannafind.dk dandomain.dk');
-		o.value('dns_cyon', 'cayon.ch');
-		o.value('dns_da', 'DirectAdmin Panel');
-		o.value('dns_ddnss', 'DDNSS.de');
-		o.value('dns_desec', 'deSEC.io');
-		o.value('dns_df', 'DynDnsFree.de');
-		o.value('dns_dgon', 'DigitalOcean.com');
-		o.value('dns_dnshome', 'dnsHome.de');
-		o.value('dns_dnsimple', 'DNSimple.com');
-		o.value('dns_dnsservices', 'dns.services');
-		o.value('dns_doapi', 'Domain-Offensive do.de');
-		o.value('dns_domeneshop', 'DomeneShop.no');
-		o.value('dns_dp', 'DNSPod.cn');
-		o.value('dns_dpi', 'DNSPod.com');
-		o.value('dns_dreamhost', 'DreamHost.com');
-		o.value('dns_duckdns', 'DuckDNS.org');
-		o.value('dns_durabledns', 'DurableDNS.com');
-		o.value('dns_dyn', 'Dyn.com');
-		o.value('dns_dynu', 'Dynu.com');
-		o.value('dns_dynv6', 'DynV6.com');
-		o.value('dns_easydns', 'EasyDNS.net');
-		o.value('dns_edgedns', 'Akamai Edge DNS');
-		o.value('dns_euserv', 'euserv.eu');
-		o.value('dns_exoscale', 'Exoscale.com');
-		o.value('dns_fornex', 'fornex.com');
-		o.value('dns_freedns', 'FreeDNS.afraid.org');
-		o.value('dns_gandi_livedns', 'LiveDNS.Gandi.net');
-		// o.value('dns_gcloud', 'Google Cloud gcloud client');
-		o.value('dns_gcore', 'Gcore.com');
-		o.value('dns_gd', 'GoDaddy.com');
-		o.value('dns_geoscaling', 'Geoscaling.com');
-		o.value('dns_googledomains', 'Google Domains');
-		o.value('dns_he', 'he.net');
-		o.value('dns_hetzner', 'Hetzner.com');
-		o.value('dns_hexonet', 'Hexonet.net');
-		o.value('dns_hostingde', 'Hosting.de');
-		o.value('dns_huaweicloud', 'MyHuaweiCloud.com');
-		o.value('dns_infoblox', 'Infoblox');
-		o.value('dns_infomaniak', 'InfoManiak.com');
-		o.value('dns_internetbs', 'InternetBS.net');
-		o.value('dns_inwx', 'inwx.de');
-		o.value('dns_ionos', 'IONOS.com');
-		o.value('dns_ipv64', 'ipv64.net');
-		o.value('dns_ispconfig', 'ISPConfig Server');
-		o.value('dns_jd', 'JDCloud.com');
-		o.value('dns_joker', 'Joker.com');
-		o.value('dns_kappernet', 'kapper.net');
-		o.value('dns_kas', 'kasserver.com');
-		o.value('dns_kinghost', 'KingHost.net');
-		o.value('dns_la', 'dns.la');
-		o.value('dns_leaseweb', 'leaseweb.com');
-		// o.value('dns_lexicon', 'Lexicon client');
-		o.value('dns_linode_v4', 'Linode.com');
-		o.value('dns_loopia', 'Loopia.se');
-		o.value('dns_lua', 'LuaDNS.com');
-		// o.value('dns_maradns', 'MaraDNS Server zone file');
-		o.value('dns_me', 'DNSMadeEasy.com');
-		// o.value('dns_miab', 'Mail-in-a-Box Server API');
-		o.value('dns_misaka', 'misaka.io');
-		o.value('dns_mydevil', 'MyDevil.net');
-		o.value('dns_mydnsjp', 'MyDNS.JP');
-		o.value('dns_mythic_beasts', 'Mythic-Beasts.com');
-		o.value('dns_namecheap', 'NameCheap.com');
-		o.value('dns_namecom', 'Name.com');
-		o.value('dns_namesilo', 'NameSilo.com');
-		o.value('dns_nanelo', 'Nanelo.com');
-		o.value('dns_nederhost', 'NederHost.nl');
-		o.value('dns_neodigit', 'Neodigit.net');
-		o.value('dns_netcup', 'netcup.eu netcup.de');
-		o.value('dns_netlify', 'Netlify.com');
-		o.value('dns_nic', 'nic.ru');
-		o.value('dns_njalla', 'Njalla njal.la');
-		o.value('dns_nm', 'NameMaster.de');
-		// o.value('dns_nsd', 'NSD Server zone file');
-		o.value('dns_nsone', 'NS1 nsone.net');
-		o.value('dns_nsupdate', 'nsupdate (RFC2136) Server');
-		o.value('dns_nw', 'Nexcess.net');
-		o.value('dns_oci', 'Oracle Cloud Infrastructure (OCI)');
-		o.value('dns_one', 'one.com');
-		o.value('dns_online', 'online.net');
-		o.value('dns_openprovider', 'OpenProvider.com');
-		// o.value('dns_openstack', 'OpenStack Client');
-		o.value('dns_opnsense', 'OPNsense Bind API');
-		o.value('dns_ovh', 'OVH ovh.com ovhcloud.com kimsufi.com soyoustart.com');
-		o.value('dns_pdns', 'PowerDNS Server');
-		o.value('dns_pleskxml', 'plesk.com XML API');
-		o.value('dns_pointhq', 'PointDNS pointhq.com');
-		o.value('dns_porkbun', 'Porkbun.com');
-		o.value('dns_rackcorp', 'RackCorp.com');
-		o.value('dns_rackspace', 'RackSpace rackspacecloud.com');
-		o.value('dns_rage4', 'rage4.com');
-		o.value('dns_rcode0', 'Rcode0 rcodezero.at');
-		o.value('dns_regru', 'Reg.ru');
-		o.value('dns_scaleway', 'Scaleway.com');
-		o.value('dns_schlundtech', 'Schlundtech.de');
-		o.value('dns_selectel', 'Selectel.ru');
-		o.value('dns_selfhost', 'selfhost.de');
-		o.value('dns_servercow', 'servercow.de');
-		o.value('dns_simply', 'Simply.com');
-		o.value('dns_tele3', 'tele3.cz');
-		o.value('dns_transip', 'transip.nl');
-		o.value('dns_udr', 'ud-reselling.com');
-		o.value('dns_ultra', 'UltraDNS.com');
-		o.value('dns_variomedia', 'variomedia.de');
-		o.value('dns_veesp', 'veesp.com');
-		o.value('dns_vercel', 'Vercel.com');
-		o.value('dns_vscale', 'vscale.io');
-		o.value('dns_vultr', 'vultr.com');
-		o.value('dns_websupport', 'websupport.sk');
-		o.value('dns_world4you', 'World4You.com');
-		o.value('dns_yandex', 'Yandex DNS dns.yandex.ru');
-		o.value('dns_yc', 'Yandex Cloud cloud.yandex.net');
-		o.value('dns_zilore', 'zilore.com');
-		o.value('dns_zone', 'Zone.ee');
-		o.value('dns_zonomi', 'Zonomi.com');
+		for (let info of apiInfos) {
+			let title = info.Name;
+			if (info.Domains) {
+				title += ' (' + info.Domains + ')';
+			}
+			o.value(info.Id, title);
+		}
 		o.modalonly = true;
 		o.onchange = _handleCheckService;
 
@@ -243,206 +119,29 @@ return view.extend({
 		o.depends('validation_method', 'dns');
 		o.modalonly = true;
 
-		_addDnsProviderField(s, 'dns_1984hosting', 'One984HOSTING_Username', '1984.is Username', '');
-		_addDnsProviderField(s, 'dns_1984hosting', 'One984HOSTING_Password', '1984.is Password', '');
+		o = s.taboption('challenge_dns', form.Flag, '_dns_options_alt', _('Alternative DNS API options'), '');
+		o.modalonly = true;
 
-		_addDnsProviderField(s, 'dns_acmedns', 'ACMEDNS_BASE_URL', 'ACMEDNS URL', '');
-		_addDnsProviderField(s, 'dns_acmedns', 'ACMEDNS_USERNAME', 'ACMEDNS User', '');
-		_addDnsProviderField(s, 'dns_acmedns', 'ACMEDNS_PASSWORD', 'ACMEDNS Password', '');
-		_addDnsProviderField(s, 'dns_acmedns', 'ACMEDNS_SUBDOMAIN', 'ACMEDNS Subdomain', '');
-
-		_addDnsProviderField(s, 'dns_ali', 'Ali_Key', 'Ali Key', '');
-		_addDnsProviderField(s, 'dns_ali', 'Ali_Secret', 'Ali Secret', '');
-
-		_addDnsProviderField(s, 'dns_aws', 'AWS_ACCESS_KEY_ID', 'AWS access key id', '');
-		_addDnsProviderField(s, 'dns_aws', 'AWS_SECRET_ACCESS_KEY', 'AWS secret access key', '');
-
-		_addDnsProviderField(s, 'dns_azure', 'AZUREDNS_SUBSCRIPTIONID', 'Azure Subscription ID', '');
-		_addDnsProviderField(s, 'dns_azure', 'AZUREDNS_TENANTID', 'Azure Tenant ID', '');
-		_addDnsProviderField(s, 'dns_azure', 'AZUREDNS_APPID', 'Azure App ID', '');
-		_addDnsProviderField(s, 'dns_azure', 'AZUREDNS_CLIENTSECRET', 'Azure Client Secret', '');
-
-		_addDnsProviderField(s, 'dns_bunny', 'BUNNY_API_KEY', 'Bunny API Key', '');
-
-		_addDnsProviderField(s, 'dns_cf', 'CF_Key', 'CF Key', '');
-		_addDnsProviderField(s, 'dns_cf', 'CF_Email', 'CF Email', '');
-		_addDnsProviderField(s, 'dns_cf', 'CF_Token', 'CF Token', '');
-		_addDnsProviderField(s, 'dns_cf', 'CF_Account_ID', 'CF Account ID', '');
-		_addDnsProviderField(s, 'dns_cf', 'CF_Zone_ID', 'CF Zone ID', '');
-
-		_addDnsProviderField(s, 'dns_ddnss', 'DDNSS_Token', 'DDNSS.de Token', '');
-
-		_addDnsProviderField(s, 'dns_desec', 'DEDYN_TOKEN', 'deSEC.io Token', '');
-
-		_addDnsProviderField(s, 'dns_duckdns', 'DuckDNS_Token', 'DuckDNS Token',
-			_('Open <a href="https://www.duckdns.org/">DuckDNS</a> and copy a token here')
-		);
-
-		_addDnsProviderField(s, 'dns_dynv6', 'DYNV6_TOKEN', 'DynV6 Token', '');
-
-		_addDnsProviderField(s, 'dns_dnsimple', 'DNSimple_OAUTH_TOKEN', 'DNSimple OAuth TOKEN', '');
-
-		_addDnsProviderField(s, 'dns_dgon', 'DO_API_KEY', 'Digital Ocean API Key', '');
-
-		_addDnsProviderField(s, 'dns_dreamhost', 'DH_API_KEY', 'DreamHost.com API Key', '');
-
-		_addDnsProviderField(s, 'dns_df', 'DF_user', 'DynDnsFree.de Username', '');
-		_addDnsProviderField(s, 'dns_df', 'DF_password', 'DynDnsFree.de Password', '');
-
-		_addDnsProviderField(s, 'dns_gandi_livedns', 'GANDI_LIVEDNS_KEY', 'Gandi LiveDNS Key', '');
-
-		_addDnsProviderField(s, 'dns_gcore', 'GCORE_Key', 'GCore Key', '');
-
-		_addDnsProviderField(s, 'dns_gd', 'GD_Key', 'GoDaddy.com Key', '');
-		_addDnsProviderField(s, 'dns_gd', 'GD_Secret', 'GoDaddy.com Secret', '');
-
-		_addDnsProviderField(s, 'dns_geoscaling', 'GEOSCALING_Username', 'Geoscaling.com Username',
-			_('This is usually NOT an email address')
-		);
-		_addDnsProviderField(s, 'dns_geoscaling', 'GEOSCALING_Password', 'Geoscaling.com Password', '');
-
-		_addDnsProviderField(s, 'dns_googledomains', 'GOOGLEDOMAINS_ACCESS_TOKEN', 'Google Domains Access Token', '');
-		_addDnsProviderField(s, 'dns_googledomains', 'GOOGLEDOMAINS_ZONE', 'Google Domains Zone', '');
-
-		_addDnsProviderField(s, 'dns_he', 'HE_Username', 'dns.he.net Username', '');
-		_addDnsProviderField(s, 'dns_he', 'HE_Password', 'dns.he.net Password', '');
-
-		_addDnsProviderField(s, 'dns_hetzner', 'HETZNER_Token', 'Hetzner Token', '');
-
-		_addDnsProviderField(s, 'dns_he', 'dns_hexonet', 'Hexonet.net Login', 'username!roleId');
-		_addDnsProviderField(s, 'dns_he', 'dns_hexonet', 'Hexonet.net Password', '');
-
-		_addDnsProviderField(s, 'dns_huaweicloud', 'HUAWEICLOUD_Username', 'MyHuaweiCloud.com Username', '');
-		_addDnsProviderField(s, 'dns_huaweicloud', 'HUAWEICLOUD_Password', 'MyHuaweiCloud.com Password', '');
-		_addDnsProviderField(s, 'dns_huaweicloud', 'HUAWEICLOUD_DomainName', 'MyHuaweiCloud.com Domain Name', '');
-
-		_addDnsProviderField(s, 'dns_infomaniak', 'INFOMANIAK_API_TOKEN', 'InfoManiak Token', '');
-
-		_addDnsProviderField(s, 'dns_ipv64', 'IPv64_Token', 'ipv64.net Token', '');
-
-		_addDnsProviderField(s, 'dns_jd', 'JD_ACCESS_KEY_ID', 'JDCloud.com Access Key ID', '');
-		_addDnsProviderField(s, 'dns_jd', 'JD_ACCESS_KEY_SECRET', 'JDCloud.com Access Key Secret', '');
-		_addDnsProviderField(s, 'dns_jd', 'JD_REGION', 'JDCloud.com Region', 'cn-north-1');
-
-		_addDnsProviderField(s, 'dns_joker', 'JOKER_USERNAME', 'Joker.com User', '');
-		_addDnsProviderField(s, 'dns_joker', 'JOKER_PASSWORD', 'Joker.com Password', '');
-
-		_addDnsProviderField(s, 'dns_freedns', 'FREEDNS_User', 'FreeDNS User', '');
-		_addDnsProviderField(s, 'dns_freedns', 'FREEDNS_Password', 'FreeDNS Password', '');
-
-		_addDnsProviderField(s, 'dns_la', 'LA_Id', 'dns.la Id', '');
-		_addDnsProviderField(s, 'dns_la', 'LA_Key', 'dns.la Key', '');
-
-		_addDnsProviderField(s, 'dns_linodev4', 'LINODE_V4_API_KEY', 'Linode API Key', '');
-
-		_addDnsProviderField(s, 'dns_loopia', 'LOOPIA_User', 'Loopia User', '');
-		_addDnsProviderField(s, 'dns_loopia', 'LOOPIA_Password', 'Loopia Password', '');
-
-		_addDnsProviderField(s, 'dns_lua', 'LUA_Email', 'luadns.com email', '');
-		_addDnsProviderField(s, 'dns_lua', 'LUA_Key', 'luadns.com Key', '');
-
-		_addDnsProviderField(s, 'dns_mydnsjp', 'MYDNSJP_MasterID', 'MyDNS.jp MasterID', '');
-		_addDnsProviderField(s, 'dns_mydnsjp', 'MYDNSJP_Password', 'MyDNS.jp Password', '');
-
-		_addDnsProviderField(s, 'dns_me', 'ME_Key', 'DNSMadeEasy Key', '');
-		_addDnsProviderField(s, 'dns_me', 'ME_Secret', 'DNSMadeEasy Secret', '');
-
-		_addDnsProviderField(s, 'dns_namecom', 'Namecom_Username', 'Name.com Username', '');
-		_addDnsProviderField(s, 'dns_namecom', 'Namecom_Token', 'Name.com Token', '');
-
-		_addDnsProviderField(s, 'dns_namecheap', 'NAMECHEAP_API_KEY', 'NameCheap API Key', '');
-		_addDnsProviderField(s, 'dns_namecheap', 'NAMECHEAP_USERNAME', 'NameCheap User', '');
-		_addDnsProviderField(s, 'dns_namecheap', 'NAMECHEAP_SOURCEIP', 'NameCheap Source IP', '');
-
-		_addDnsProviderField(s, 'dns_nic', 'NIC_ClientID', 'Nic.ru ClientID', '');
-		_addDnsProviderField(s, 'dns_nic', 'NIC_ClientSecret', 'Nic.ru ClientSecret', '');
-		_addDnsProviderField(s, 'dns_nic', 'NIC_Username', 'Nic.ru Username', '');
-		_addDnsProviderField(s, 'dns_nic', 'NIC_Password', 'Nic.ru Password', '');
-
-		_addDnsProviderField(s, 'dns_netlify', 'NETLIFY_ACCESS_TOKEN', 'Netlify Access Token', '');
-
-		_addDnsProviderField(s, 'dns_nsone', 'NS1_Key', 'nsone.net Key', '');
-
-		_addDnsProviderField(s, 'dns_nsupdate', 'NSUPDATE_SERVER', 'nsupdate server address', '');
-		_addDnsProviderField(s, 'dns_nsupdate', 'NSUPDATE_SERVER_PORT', 'nsupdate server port', '');
-		_addDnsProviderField(s, 'dns_nsupdate', 'NSUPDATE_KEY', 'nsupdate key file path', '');
-		_addDnsProviderField(s, 'dns_nsupdate', 'NSUPDATE_ZONE', 'nsupdate zone', '');
-
-		_addDnsProviderField(s, 'dns_nsupdate', 'OCI_CLI_TENANCY', 'OCI Tenancy',
-			_('OCID of tenancy that contains the target DNS zone')
-		);
-		_addDnsProviderField(s, 'dns_nsupdate', 'OCI_CLI_USER', 'OCI User',
-			_('OCID of user with permission to add/remove records from zones')
-		);
-		_addDnsProviderField(s, 'dns_nsupdate', 'OCI_CLI_REGION', 'OCI Region',
-			_('Should point to the tenancy home region')
-		);
-		_addDnsProviderField(s, 'dns_nsupdate', 'OCI_CLI_KEY_FILE', 'OCI Key file',
-			_('Path to private API signing key file in PEM format')
-		);
-		_addDnsProviderField(s, 'dns_nsupdate', 'OCI_CLI_KEY', 'OCI Key',
-			_('The private API signing key in PEM format')
-		);
-
-		_addDnsProviderField(s, 'dns_ovh', 'OVH_AK', 'OVH Application Key', '');
-		_addDnsProviderField(s, 'dns_ovh', 'OVH_AS', 'OVH Application Secret', '');
-		_addDnsProviderField(s, 'dns_ovh', 'OVH_CK', 'OVH Consumer Key', '');
-		_addDnsProviderField(s, 'dns_ovh', 'OVH_END_POINT', 'OVH Region/Endpoint',
-			'ovh-eu, ovh-us, ovh-ca, kimsufi-eu, kimsufi-ca, soyoustart-eu, soyoustart-ca'
-		);
-
-		_addDnsProviderField(s, 'dns_pdns', 'PDNS_Url', 'PDNS API URL', '');
-		_addDnsProviderField(s, 'dns_pdns', 'PDNS_ServerId', 'PDNS Server ID', '');
-		_addDnsProviderField(s, 'dns_pdns', 'PDNS_Token', 'PDNS Token', '');
-		_addDnsProviderField(s, 'dns_pdns', 'PDNS_Ttl', 'PDNS Default TTL', '60');
-
-		_addDnsProviderField(s, 'dns_porkbun', 'PORKBUN_API_KEY', 'Porkbun API Key', '');
-		_addDnsProviderField(s, 'dns_porkbun', 'PORKBUN_SECRET_API_KEY', 'Porkbun API Secret', '');
-
-		_addDnsProviderField(s, 'dns_rackspace', 'RACKSPACE_Apikey', 'RackSpace API Key', '');
-		_addDnsProviderField(s, 'dns_rackspace', 'RACKSPACE_Username', 'Porkbun Username', '');
-
-		_addDnsProviderField(s, 'dns_regru', 'REGRU_API_Username', 'reg.ru Username', '');
-		_addDnsProviderField(s, 'dns_regru', 'REGRU_API_Password', 'reg.ru Password', '');
-
-		_addDnsProviderField(s, 'dns_selectel', 'SL_Key', 'Selectel API Key', '');
-
-		_addDnsProviderField(s, 'dns_selfhost', 'SELFHOSTDNS_USERNAME', 'SelfHost.de Username', '');
-		_addDnsProviderField(s, 'dns_selfhost', 'SELFHOSTDNS_PASSWORD', 'SelfHost.de Password', '');
-		_addDnsProviderField(s, 'dns_selfhost', 'SELFHOSTDNS_MAP', 'SelfHost.de Domains map',
-			_('E.g. <code>_acme-challenge.example.com:12345:98765 alias.example.com:11111</code>')
-		);
-
-		_addDnsProviderField(s, 'dns_simply', 'SIMPLY_AccountName', 'Simply.com account name', '');
-		_addDnsProviderField(s, 'dns_simply', 'SIMPLY_ApiKey', 'Simply.com API Key', '');
-
-		_addDnsProviderField(s, 'dns_tele3', 'TELE3_Key', 'tele3.cz API Key', '');
-		_addDnsProviderField(s, 'dns_tele3', 'TELE3_Secret', 'tele3.cz API Secret', '');
-
-		_addDnsProviderField(s, 'dns_vultr', 'VULTR_API_KEY', 'Vultr API Secret', '');
-
-		_addDnsProviderField(s, 'dns_vscale', 'VSCALE_API_KEY', 'vscale.io API Key', '');
-
-		_addDnsProviderField(s, 'dns_yandex', 'PDD_Token', 'Yandex DNS API Token', '');
-
-		_addDnsProviderField(s, 'dns_yandex', 'PDD_Token', 'Yandex DNS API Token', '');
-
-		_addDnsProviderField(s, 'dns_yc', 'YC_Zone_ID', 'Yandex Cloud: DNS Zone ID', '');
-		_addDnsProviderField(s, 'dns_yc', 'YC_Folder_ID', 'Yandex Cloud: YC Folder ID', '');
-		_addDnsProviderField(s, 'dns_yc', 'YC_SA_ID', 'Yandex Cloud: Service Account ID', '');
-		_addDnsProviderField(s, 'dns_yc', 'YC_SA_Key_ID', 'Yandex Cloud: Service Account IAM Key ID', '');
-		_addDnsProviderField(s, 'dns_yc', 'YC_SA_Key_File_Path', 'Yandex Cloud: Path to private key', '');
-		_addDnsProviderField(s, 'dns_yc', 'YC_SA_Key_File_PEM_b64', 'Yandex Cloud: PEM of private key',
-			_('Base64 content of private key. Use instead of YC_SA_Key_File_Path')
-		);
-
-		_addDnsProviderField(s, 'dns_zilore', 'Zilore_Key', 'Zilore API Key', '');
-
-		_addDnsProviderField(s, 'dns_zone', 'ZONE_Username', 'Zone.ee Username', '');
-		_addDnsProviderField(s, 'dns_zone', 'ZONE_Key', 'Zone.ee API Key', '');
-
-		_addDnsProviderField(s, 'dns_zonomi', 'ZM_Key', 'Zonomi.com API Key', '');
-
+		for (let info of apiInfos) {
+			if (info.OptsTitle) {
+				o = s.taboption('challenge_dns', form.DummyValue, '_dns_OptsTitle_' + info.Id, ' ', '');
+				o.default = info.OptsTitle;
+				o.depends({'dns': info.Id, '_dns_options_alt': '0'});
+				o.modalonly = true;
+			}
+			for (let opt of info.Opts) {
+				_addDnsProviderField(s, info.Id, opt, false);
+			}
+			if (info.OptsAltTitle) {
+				o = s.taboption('challenge_dns', form.DummyValue, '_dns_OptsAltTitle_' + info.Id, ' ', '');
+				o.default = info.OptsAltTitle;
+				o.depends({'dns': info.Id, '_dns_options_alt': '1'});
+				o.modalonly = true;
+			}
+			for (let opt of info.OptsAlt) {
+				_addDnsProviderField(s, info.Id, opt, true);
+			}
+		}
 
 		o = s.taboption('challenge_dns', form.DynamicList, 'credentials', _('DNS API credentials'),
 			_("The credentials for the DNS API mode selected above. " +
@@ -531,14 +230,22 @@ return view.extend({
 });
 
 
-function _addDnsProviderField(s, provider, env, title, desc) {
-	let o = s.taboption('challenge_dns', form.Value, '_credentials_' + env, _(title),
-		_(desc));
-	o.depends('dns', provider);
+function _addDnsProviderField(s, apiId, opt, isOptsAlt) {
+	let desc = '<code>' + opt.Name + '</code> ' + opt.Description;
+	if (opt.Default) {
+		desc += '<br />' + _('Default')  + ' <code>' + opt.Default + '</code>';
+	}
+	let optionName = '_credentials_' + opt.Name;
+	if (isOptsAlt) {
+		optionName += '_OptsAlt'
+	}
+	let o = s.taboption('challenge_dns', form.Value, optionName, opt.Title, desc);
+	o.depends({'dns': apiId, '_dns_options_alt': isOptsAlt ? '1' : '0'});
 	o.modalonly = true;
+	o.placeholder = opt.Default;
 	o.cfgvalue = function (section_id) {
 		let creds = this.map.data.get(this.map.config, section_id, 'credentials');
-		return _extractParamValue(creds, env);
+		return _extractParamValue(creds, opt.Name);
 	};
 	o.write = function (section_id, value) { };
 	o.onchange = _handleEditChange;
@@ -551,6 +258,7 @@ function _handleEditChange(event, section_id, newVal) {
 	let creds = credentialsDynList.getValue();
 	let credsMap = _parseKeyValueListToMap(creds);
 	let optName = this.option.substring('_credentials_'.length);
+	optName = optName.replace(/_OptsAlt$/, '');
 	if (newVal) {
 		credsMap.set(optName, newVal);
 	} else {
