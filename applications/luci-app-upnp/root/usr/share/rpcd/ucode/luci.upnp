@@ -7,34 +7,35 @@ import { access, open, popen } from 'fs';
 import { connect } from 'ubus';
 import { cursor } from 'uci';
 
-// Establish ubus connection persistently outside of the call handler scope to
-// prevent premature GC'ing. Can be moved into `get_status` callback once
-// https://github.com/jow-/ucode/commit/a58fe4709f661b5f28e26701ea8638efccf5aeb6
-// is merged.
-const ubus = connect();
+const uci = cursor();
+const leasefilepath = uci.get('upnpd', 'config', 'lease_file') || '/var/run/miniupnpd.leases';
 
 const methods = {
 	get_status: {
 		call: function(req) {
-			const uci = cursor();
-
+			const ubus = connect();
 			const rules = [];
 			const leases = [];
 
-			const leasefile = open(uci.get('upnpd', 'config', 'upnp_lease_file'), 'r');
+			const leasefile = open(leasefilepath, 'r');
 
 			if (leasefile) {
 				for (let line = leasefile.read('line'); length(line); line = leasefile.read('line')) {
 					const record = split(line, ':', 6);
 
 					if (length(record) == 6) {
+						let desc = trim(record[5]);
+						let m = match(desc, /^PCP.*([0-9a-f]{24})$/);
+						if (m) desc='PCP nonce ' + m[1];
+						else if (match(desc, /^NAT-PMP/)) desc='NAT-PMP';
+						else if (!match(desc, /^UPnP IGD/)) desc='UPnP IGD / ' + desc;
 						push(leases, {
 							proto: uc(record[0]),
 							extport: +record[1],
 							intaddr: arrtoip(iptoarr(record[2])),
 							intport: +record[3],
 							expires: record[4] - timelocal(localtime()),
-							description: trim(record[5])
+							description: desc
 						});
 					}
 				}
@@ -119,11 +120,8 @@ const methods = {
 			const idx = +req.args?.token;
 
 			if (idx > 0) {
-				const uci = cursor();
-				const leasefile = uci.get('upnpd', 'config', 'upnp_lease_file');
-
-				if (access(leasefile)) {
-					system(['sed', '-i', '-e', `${idx}d`, leasefile]);
+				if (access(leasefilepath)) {
+					system(['sed', '-i', '-e', `${idx}d`, leasefilepath]);
 					system(['/etc/init.d/miniupnpd', 'restart']);
 				}
 
