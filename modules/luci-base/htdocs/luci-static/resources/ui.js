@@ -2647,7 +2647,7 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 /**
  * Instantiate a range slider widget.
  *
- * @constructor Slider
+ * @constructor RangeSlider
  * @memberof LuCI.ui
  * @augments LuCI.ui.AbstractElement
  *
@@ -2661,25 +2661,53 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
  * instantiating CBI forms.
  *
  * This class is automatically instantiated as part of `LuCI.ui`. To use it
- * in views, use `'require ui'` and refer to `ui.Slider`. To import it in
+ * in views, use `'require ui'` and refer to `ui.RangeSlider`. To import it in
  * external JavaScript, use `L.require("ui").then(...)` and access the
- * `Slider` property of the class instance value.
+ * `RangeSlider` property of the class instance value.
  *
  * @param {string|string[]} [value=null]
- * ...
+ * The initial value to set the slider handle position.
  *
+ * @param {LuCI.ui.RangeSlider.InitOptions} [options]
+ * Object describing the widget specific options to initialize the range slider.
  */
 const UIRangeSlider = UIElement.extend({
+	/**
+	 * In addition to the [AbstractElement.InitOptions]{@link LuCI.ui.AbstractElement.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
+	 * @memberof LuCI.ui.RangeSlider
+	 *
+	 * @property {int} [min=1]
+	 * Specifies the minimum value of the range.
+	 *
+	 * @property {int} [max=100]
+	 * Specifies the maximum value of the range.
+	 *
+	 * @property {int} [step=1]
+	 * Specifies the step value of the range slider handle.
+	 *
+	 * @param {function} [calculate=null]
+	 * A function to invoke when the slider is adjusted by the user. The function
+	 * performs a calculation on the selected value to produce a new value.
+	 *
+	 * @property {string} [calcunits=null]
+	 * Specifies a suffix string to append to the calculated value output.
+	 *
+	 * @property {boolean} [disabled=false]
+	 * Specifies whether the the widget is disabled.
+	 *
+	 */
+
 	__init__(value, options) {
 		this.value = value;
 		this.options = Object.assign({
-			optional: true,
 			min: 0,
 			max: 100,
 			step: 1,
 			calculate: null,
 			calcunits: null,
-			usecalc: false,
 			disabled: false,
 		}, options);
 	},
@@ -2744,7 +2772,12 @@ const UIRangeSlider = UIElement.extend({
 		return this.sliderEl.value;
 	},
 
-	/** @private */
+	/**
+	 * Return the value calculated by the `calculate` function.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.RangeSlider
+	 */
 	getCalculatedValue() {
 		return this.calculatedvalue;
 	},
