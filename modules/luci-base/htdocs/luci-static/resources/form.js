@@ -4209,38 +4209,19 @@ const CBIRangeSliderValue = CBIValue.extend(/** @lends LuCI.form.RangeSliderValu
 	 * @default null
 	 */
 
-	/**
-	 * Whether to use the calculated result of the chosen value instead of the
-	 * chosen value: the result of the calculation returned by the
-	 * <code>calculate</code> function on the chosen value
-	 * is written to the configuration instead of the chosen value. The
-	 * <code>calcunits</code> displayed units are not included. 
-	 * 
-	 * Note: Implementers of the <code>calculate</code> function shall be
-	 * mindful that it may be possible to return a NaN value which is seldom a
-	 * sensible input for the underlying daemon or system. Verification of any
-	 * calculated value is an exercise left to the implementer.
-	 *
-	 * @name LuCI.form.RangeSliderValue.prototype#usecalc
-	 * @type boolean
-	 * @default false
-	 */
-
 	/** @private */
 	renderWidget(section_id, option_index, cfgvalue) {
 		const slider = new ui.RangeSlider((cfgvalue != null) ? cfgvalue : this.default, {
 			id: this.cbid(section_id),
 			name: this.cbid(section_id),
-			optional: this.optional,
 			min: this.min,
 			max: this.max,
 			step: this.step,
 			calculate: this.calculate,
 			calcunits: this.calcunits,
-			usecalc: this.usecalc,
 			disabled: this.readonly || this.disabled,
 			datatype: this.datatype,
-			validate: this.validate,
+			validate: L.bind(this.validate, this, section_id),
 		});
 
 		this.widget = slider;
@@ -4255,15 +4236,13 @@ const CBIRangeSliderValue = CBIValue.extend(/** @lends LuCI.form.RangeSliderValu
 	 * The configuration section ID
 	 *
 	 * @returns {*}
-	 * Returns the current input value.
+	 * Returns the currently selected value if it does not match the default.
+	 * If the currently selected value matches the default value, returns null.
 	 */
 	formvalue(section_id) {
 		const elem = this.getUIElement(section_id);
 		if (!elem) return null;
-		let val = (this.usecalc && (typeof this.calculate === 'function'))
-			? elem.getCalculatedValue()
-			: elem.getValue();
-		val = val?.toString();
+		const val = elem.getValue().toString();
 		return (val === this.default?.toString()) ? null : val;
 	}
 });
