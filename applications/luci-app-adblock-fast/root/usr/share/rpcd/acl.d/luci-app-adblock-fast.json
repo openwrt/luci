@@ -3,16 +3,16 @@
 		"description": "Grant UCI and file access for luci-app-adblock-fast",
 		"read": {
 			"file": {
-				"/dev/shm/adblock-fast.config": [ "list", "read" ],
-				"/dev/shm/adblock-fast.error": [ "list", "read" ],
-				"/dev/shm/adblock-fast.status": [ "list", "read" ]
+				"/dev/shm/adblock-fast": [ "list", "read" ],
+				"/dev/shm/adblock-fast.status.json": [ "list", "read" ]
 			},
 			"ubus": {
 				"luci.adblock-fast": [
 					"getFileUrlFilesizes",
 					"getInitList",
 					"getInitStatus",
-					"getPlatformSupport"
+					"getPlatformSupport",
+					"getUbusInfo"
 				]
 			},
 			"uci": [

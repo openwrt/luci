@@ -9,12 +9,13 @@
 # ubus -S call luci.adblock-fast getInitList '{"name": "adblock-fast" }'
 # ubus -S call luci.adblock-fast getInitStatus '{"name": "adblock-fast" }'
 # ubus -S call luci.adblock-fast getPlatformSupport '{"name": "adblock-fast" }'
+# ubus -S call luci.adblock-fast getUbusInfo '{"name": "adblock-fast" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "start" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "dl" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "pause" }'
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "stop" }'
 
-readonly luciCompat='4'
+readonly rpcdCompat='7'
 readonly adbFunctionsFile='/etc/init.d/adblock-fast'
 if [ -s "$adbFunctionsFile" ]; then
 # shellcheck source=../../../../../adblock-fast/files/etc/init.d/adblock-fast
@@ -100,8 +101,8 @@ get_init_status() {
 	local name
 	name="$(basename "$1")"
 	name="${name:-$packageName}"
-	local errors warnings ports dns outputFile outputCache outputGzip outputConfig
-	local i j
+	local ports dns outputFile outputCache outputGzip outputConfig
+	local i j k
 # shellcheck disable=SC2034
 	local compressed_cache_dir
 	config_load "$name"
@@ -113,65 +114,20 @@ get_init_status() {
 	else
 		dns="$(uci_get "$packageName" 'config' 'dns' 'dnsmasq.servers')"
 	fi
-
 	dns_set_output_values "$dns"
 
 	json_init
-	json_add_object  "$name"
-	json_add_boolean 'enabled' "$(is_enabled "$name")"
-	json_add_string 'status' "$(json 'get' 'status')"
+	json_add_object 	"$name"
+	json_add_boolean	'enabled'				"$(is_enabled "$name")"
+	json_add_string		'status'				"$(json 'get' 'status')"
+	json_add_string 	'version'				"$PKG_VERSION"
+	json_add_int			'packageCompat'	"${packageCompat:-0}"
+	json_add_int			'rpcdCompat'		"${rpcdCompat:-0}"
 	if is_running "$name"; then
 		json_add_boolean 'running' '1'
 	else
 		json_add_boolean 'running' '0'
 	fi
-	json_add_string 'version' "$PKG_VERSION"
-	errors="$(ubus_get_data errors)"
-	json_add_array 'errors'
-	if [ -n "$errors" ]; then
-		for i in $errors; do
-			if str_contains "$i" '|'; then
-				error_extra="${i##*|}"
-				error_id="${i%|*}"
-			else
-				error_id="$i"
-				unset error_extra
-			fi
-			json_add_object
-			json_add_string 'id' "$error_id"
-			json_add_string 'extra' "$error_extra"
-			json_close_object
-		done
-	fi
-	json_close_array
-	warnings="$(ubus_get_data warnings)"
-	json_add_array 'warnings'
-	if [ -n "$warnings" ]; then
-		for i in $warnings; do
-			if str_contains "$i" '|'; then
-				error_extra="${i##*|}"
-				error_id="${i%|*}"
-			else
-				error_id="$i"
-				unset error_extra
-			fi
-			json_add_object
-			json_add_string 'id' "$error_id"
-			json_add_string 'extra' "$error_extra"
-			json_close_object
-		done
-	fi
-	if is_greater "${packageCompat:-0}" "${luciCompat:-0}"; then
-		json_add_object
-		json_add_string 'id' 'warningOutdatedLuciPackage'
-		json_close_object
-	elif is_greater "${luciCompat:-0}" "${packageCompat:-0}"; then
-		json_add_object
-		json_add_string 'id' 'warningOutdatedPrincipalPackage'
-		json_close_object
-	fi
-	json_close_array
-
 	ports="$(ubus_get_ports)"
 	if [ -n "$ports" ]; then
 		json_add_boolean 'force_dns_active' '1'
@@ -202,7 +158,11 @@ get_init_status() {
 		json_add_boolean 'outputGzipExists' '0'
 	fi
 	json_add_array 'leds'
-		for i in /sys/class/leds/*; do json_add_string '' "$(basename "$i")"; done
+		if ls /sys/class/leds/* >/dev/null 2>&1; then
+			for i in /sys/class/leds/*; do
+				[ -d "$i" ] && json_add_string '' "$(basename "$i")"
+			done
+		fi
 	json_close_array
 	json_close_object
 	json_dump
@@ -268,6 +228,13 @@ get_platform_support() {
 	json_cleanup
 }
 
+get_ubus_info() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}"
+	ubus call service list '{"name":"'"$name"'"}'
+}
+
 case "$1" in
 	list)
 		json_init
@@ -281,6 +248,9 @@ case "$1" in
 			json_add_string 'name' 'name'
 		json_close_object
 		json_add_object "getPlatformSupport"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getUbusInfo"
 			json_add_string 'name' 'name'
 		json_close_object
 		json_add_object "setInitAction"
@@ -319,6 +289,13 @@ case "$1" in
 				json_get_var name 'name'
 				json_cleanup
 				get_platform_support "$name"
+				;;
+			getUbusInfo)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_ubus_info "$name"
 				;;
 			setInitAction)
 				read -r input
