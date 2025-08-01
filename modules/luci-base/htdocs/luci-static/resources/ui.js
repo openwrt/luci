@@ -2685,8 +2685,9 @@ const UIRangeSlider = UIElement.extend({
 	 * @property {int} [max=100]
 	 * Specifies the maximum value of the range.
 	 *
-	 * @property {int} [step=1]
-	 * Specifies the step value of the range slider handle.
+	 * @property {string} [step=1]
+	 * Specifies the step value of the range slider handle. Use "any" for
+	 * arbitrary precision floating point numbers.
 	 *
 	 * @param {function} [calculate=null]
 	 * A function to invoke when the slider is adjusted by the user. The function
