@@ -175,17 +175,17 @@ return view.extend({
 				"tab_basic",
 				form.ListValue,
 				"dnsmasq_instance_option",
-				_("Use AdBlocking on the dnsmasq instance(s)"),
+				_("Use ad-blocking on the dnsmasq instance(s)"),
 				_(
-					"You can limit the AdBlocking to the specific dnsmasq instance(s) (%smore information%s)."
+					"You can limit the ad-blocking to the specific dnsmasq instance(s) (%smore information%s)."
 				).format(
 					'<a href="' + pkg.URL + "#dnsmasq_instance" + '" target="_blank">',
 					"</a>"
 				)
 			);
-			o.value("*", _("AdBlock on all instances"));
-			o.value("+", _("AdBlock on select instances"));
-			o.value("-", _("No AdBlock on dnsmasq"));
+			o.value("*", _("Ad-blocking on all instances"));
+			o.value("+", _("Ad-blocking on select instances"));
+			o.value("-", _("No Ad-blocking on dnsmasq"));
 			o.default = "*";
 			o.depends("dns", "dnsmasq.addnhosts");
 			o.depends("dns", "dnsmasq.servers");
@@ -214,7 +214,7 @@ return view.extend({
 				"tab_basic",
 				form.MultiValue,
 				"dnsmasq_instance",
-				_("Pick the dnsmasq instance(s) for AdBlocking")
+				_("Pick the dnsmasq instance(s) for ad-blocking")
 			);
 			Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(function (
 				element
@@ -239,17 +239,17 @@ return view.extend({
 				"tab_basic",
 				form.ListValue,
 				"smartdns_instance_option",
-				_("Use AdBlocking on the SmartDNS instance(s)"),
+				_("Use ad-blocking on the SmartDNS instance(s)"),
 				_(
-					"You can limit the AdBlocking to the specific SmartDNS instance(s) (%smore information%s)."
+					"You can limit the ad-blocking to the specific SmartDNS instance(s) (%smore information%s)."
 				).format(
 					'<a href="' + pkg.URL + "#smartdns_instance" + '" target="_blank">',
 					"</a>"
 				)
 			);
-			o.value("*", _("AdBlock on all instances"));
-			o.value("+", _("AdBlock on select instances"));
-			o.value("-", _("No AdBlock on SmartDNS"));
+			o.value("*", _("Ad-blocking on all instances"));
+			o.value("+", _("Ad-blocking on select instances"));
+			o.value("-", _("No Ad-blocking on SmartDNS"));
 			o.default = "*";
 			o.depends("dns", "smartdns.domainset");
 			o.retain = true;
@@ -277,7 +277,7 @@ return view.extend({
 				"tab_basic",
 				form.MultiValue,
 				"smartdns_instance",
-				_("Pick the SmartDNS instance(s) for AdBlocking")
+				_("Pick the SmartDNS instance(s) for ad-blocking")
 			);
 			Object.values(L.uci.sections("smartdns", "smartdns")).forEach(function (
 				element
