@@ -8,10 +8,11 @@
 # ubus -S call luci.pbr getInitList '{"name": "pbr" }'
 # ubus -S call luci.pbr getInitStatus '{"name": "pbr" }'
 # ubus -S call luci.pbr getPlatformSupport '{"name": "pbr" }'
+# ubus -S call luci.pbr getUbusInfo '{"name": "pbr" }'
 # ubus -S call luci.pbr getGateways '{"name": "pbr" }'
 # ubus -S call luci.pbr getInterfaces '{"name": "pbr" }'
 
-readonly luciCompat='11'
+readonly rpcdCompat='14'
 readonly pbrFunctionsFile='/etc/init.d/pbr'
 if [ -s "$pbrFunctionsFile" ]; then
 # shellcheck source=../../../../../pbr/files/etc/init.d/pbr
@@ -22,7 +23,7 @@ else
 fi
 
 # compatibility with old luci app versions
-is_running_iptables() { iptables -t mangle -L | grep -q PBR_PREROUTING >/dev/null 2>&1; }
+is_running_iptables() { iptables -t mangle -n -L | grep -q PBR_PREROUTING >/dev/null 2>&1; }
 is_running() { is_running_iptables || is_running_nft; }
 check_ipset() { { [ -n "$ipset" ] && "$ipset" help hash:net; } >/dev/null 2>&1; }
 check_agh_ipset() {
@@ -84,13 +85,10 @@ set_init_action() {
 }
 
 get_init_status() {
-	local name
+	local name gateways
 	name="$(basename "$1")"
 	name="${name:-$packageName}" 
-	local gateways warnings errors
 	gateways="$(ubus_get_status gateways | sed "s|\\\n|<br />|g;s|\(\\\033[^<]*\)|✓|g;")"
-	warnings="$(ubus_get_status warnings)"
-	errors="$(ubus_get_status errors)"
 	json_init
 	json_add_object  "$packageName"
 	json_add_boolean 'enabled' "$(is_enabled "$packageName")"
@@ -116,53 +114,8 @@ get_init_status() {
 	fi
 	json_add_string 'version' "$PKG_VERSION"
 	json_add_string 'gateways' "$gateways"
-	json_add_array 'errors'
-	if [ -n "$errors" ]; then
-		while read -r line; do
-			if str_contains "$line" ' '; then
-				error_id="${line% *}"
-				error_extra="${line#* }"
-			else
-				error_id="$line"
-				unset error_extra
-			fi
-			json_add_object
-			json_add_string 'id' "$error_id"
-			json_add_string 'extra' "$error_extra"
-			json_close_object
-		done <<EOF
-$(echo "$errors" | tr \# \\n)
-EOF
-	fi
-	json_close_array
-	json_add_array 'warnings'
-	if [ -n "$warnings" ]; then
-		while read -r line; do
-			if str_contains "$line" ' '; then
-				warning_id="${line% *}"
-				warning_extra="${line#* }"
-			else
-				warning_id="$line"
-				unset warning_extra
-			fi
-			json_add_object
-			json_add_string 'id' "$warning_id"
-			json_add_string 'extra' "$warning_extra"
-			json_close_object
-		done <<EOF
-$(echo "$warnings" | tr \# \\n)
-EOF
-	fi
-	if is_greater "${packageCompat:-0}" "${luciCompat:-0}"; then
-		json_add_object
-		json_add_string 'id' 'warningOutdatedLuciPackage'
-		json_close_object
-	elif is_greater "${luciCompat:-0}" "${packageCompat:-0}"; then
-		json_add_object
-		json_add_string 'id' 'warningOutdatedPrincipalPackage'
-		json_close_object
-	fi
-	json_close_array
+	json_add_int		'packageCompat'	"${packageCompat:-0}"
+	json_add_int		'rpcdCompat'		"${rpcdCompat:-0}"
 	json_close_object
 	json_dump
 	json_cleanup
@@ -268,6 +221,13 @@ get_supported_interfaces() {
 	json_cleanup
 }
 
+get_ubus_info() {
+	local name
+	name="$(basename "$1")"
+	name="${name:-$packageName}"
+	ubus call service list '{"name":"'"$name"'"}'
+}
+
 case "$1" in
 	list)
 		json_init
@@ -284,6 +244,9 @@ case "$1" in
 			json_add_string 'name' 'name'
 		json_close_object
 		json_add_object "getPlatformSupport"
+			json_add_string 'name' 'name'
+		json_close_object
+		json_add_object "getUbusInfo"
 			json_add_string 'name' 'name'
 		json_close_object
 		json_add_object "setInitAction"
@@ -329,6 +292,13 @@ case "$1" in
 				json_get_var name 'name'
 				json_cleanup
 				get_platform_support "$packageName"
+				;;
+			getUbusInfo)
+				read -r input
+				json_load "$input"
+				json_get_var name 'name'
+				json_cleanup
+				get_ubus_info "$name"
 				;;
 			setInitAction)
 				read -r input
