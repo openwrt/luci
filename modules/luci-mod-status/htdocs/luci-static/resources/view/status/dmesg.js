@@ -156,13 +156,14 @@ return view.extend({
 			'id': 'invertLogRangeTime',
 			'type': 'checkbox',
 			'class': 'cbi-input-checkbox',
+			'title': 'Invert Time Range',
 		});
 
 		// Create from time filter
 		const fromTimeFilter = E('input', {
 			'id': 'logFromTime',
 			'class': 'cbi-input-text',
-			'style': 'margin-bottom:10px',
+			'style': 'margin:0 5px; width:110px',
 			'type': 'number',
 			'min': '0',
 			'step': '0.1',
@@ -173,7 +174,7 @@ return view.extend({
 		const toTimeFilter = E('input', {
 			'id': 'logToTime',
 			'class': 'cbi-input-text',
-			'style': 'margin-bottom:10px',
+			'style': 'margin:0 5px; width:110px',
 			'type': 'number',
 			'min': '0',
 			'step': '0.1',
@@ -186,12 +187,15 @@ return view.extend({
 			'id': 'invertSeverity',
 			'type': 'checkbox',
 			'class': 'cbi-input-checkbox',
+			'title': 'Invert Severity Level',
 		});
 
 		// Create severity select-dropdown from severity map
 		const severitySelect = E('select', {
 			'id': 'logSeveritySelect',
 			'class': 'cbi-input-select',
+			'style': 'margin:0 5px; width:120px',
+			'title': 'Severity Level (and higher)',
 		},
 		this.severity.map(([val, tag, label]) =>
 			E('option', { value: val }, label)
@@ -209,12 +213,14 @@ return view.extend({
 			'id': 'invertLogTextSearch',
 			'type': 'checkbox',
 			'class': 'cbi-input-checkbox',
+			'title': 'Invert text search',
 		});
 
 		// Create raw text search text input
 		const filterTextInput = E('input', {
 			'id': 'logTextFilter',
 			'class': 'cbi-input-text',
+			'style': 'margin:0 5px; width:150px',
 		});
 
 		function handleLogFilterChange() {
@@ -252,32 +258,30 @@ return view.extend({
 		return E([], [
 			E('h2', {}, [ _('Kernel Log') ]),
 			E('div', { 'id': 'content_syslog' }, [
-				E('div', { 'style': 'margin-bottom:10px' }, [
-					E('label', { 'for': 'invertLogFacilitySearch', 'style': 'margin-right:5px' }, _('Not')),
-					rangeTimeInvert,
-					E('label', { 'for': 'logFacilitySelect', 'style': 'margin: 0 5px' }, _('between:')),
-					fromTimeFilter,
-					E('label', { 'for': 'logSeveritySelect', 'style': 'margin: 0 5px' }, _('and:')),
-					toTimeFilter,
+				E('div', { 'style': 'margin-bottom:16px; display:flex; flex-wrap:wrap; gap:16px 32px; align-items: center' }, [
+					scrollDownButton,
+               E('div', {}, [
+                  E('label', { 'for': 'invertAscendingSort', 'style': 'margin-right:5px' }, _('Newest first:')),
+                  descendingSort,
+               ]),
+               E('div', {}, [
+                  E('label', { 'for': 'logFacilitySelect', 'style': 'margin: 0 5px' }, _('Time:')),
+                  fromTimeFilter,
+                  E('label', { 'for': 'logSeveritySelect', 'style': 'margin: 0 5px' }, _('to:')),
+                  toTimeFilter,
+                  rangeTimeInvert,
+               ]),
+               E('div', {}, [
+                  E('label', { 'for': 'logSeveritySelect', 'style': 'margin: 0 5px' }, _('Severity:')),
+                  severitySelect,
+                  severityInvert,
+               ]),
+               E('div', {}, [
+                  E('label', { 'for': 'logTextFilter', 'style': 'margin: 0 5px' }, _('Including:')),
+                  filterTextInput,
+                  filterTextInvert,
+               ]),
 				]),
-				E('div', { 'style': 'margin-bottom:10px' }, [
-					E('label', { 'for': 'invertLogSeveritySearch', 'style': 'margin-right:5px' }, _('Not')),
-					severityInvert,
-					'\xa0',
-					severitySelect,
-					E('label', { 'for': 'logSeveritySelect', 'style': 'margin: 0 5px' }, _('and above')),
-				]),
-				E('div', { 'style': 'margin-bottom:10px' }, [
-					E('label', { 'for': 'invertAscendingSort', 'style': 'margin-right:5px' }, _('Reverse sort')),
-					descendingSort,
-				]),
-				E('div', { 'style': 'margin-bottom:10px' }, [
-					E('label', { 'for': 'invertLogTextSearch', 'style': 'margin-right:5px' }, _('Not')),
-					filterTextInvert,
-					E('label', { 'for': 'logTextFilter', 'style': 'margin: 0 5px' }, _('including:')),
-					filterTextInput,
-				]),
-				E('div', {'style': 'padding-bottom: 20px'}, [scrollDownButton]),
 				E('textarea', {
 					'id': 'syslog',
 					'style': 'font-size:12px',
