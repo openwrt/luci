@@ -68,7 +68,8 @@ return view.extend({
 				rule.descr,
 				E('button', {
 					'class': 'btn cbi-button-remove',
-					'click': L.bind(handleDelRule, this, rule.num)
+					'click': L.bind(handleDelRule, this, rule.num),
+					'title': _('Delete')
 				}, [ _('Delete') ])
 			];
 		});
@@ -101,7 +102,7 @@ return view.extend({
 					E('th', { 'class': 'th' }, _('External Port')),
 					E('th', { 'class': 'th' }, _('Protocol')),
 					E('th', { 'class': 'th right' }, _('Expires')),
-					E('th', { 'class': 'th' }, _('Description')),
+					E('th', { 'class': 'th' }, _('Added Via') + ' / ' + _('Description')),
 					E('th', { 'class': 'th cbi-section-actions' }, '')
 				])
 			]);
@@ -118,7 +119,8 @@ return view.extend({
 					rule.descr,
 					E('button', {
 						'class': 'btn cbi-button-remove',
-						'click': L.bind(handleDelRule, this, rule.num)
+						'click': L.bind(handleDelRule, this, rule.num),
+						'title': _('Delete')
 					}, [ _('Delete') ])
 				];
 			});
@@ -149,32 +151,40 @@ return view.extend({
 		o.default = '1';
 		o.rmempty = false;
 		o.depends('enable_upnp', '1');
+		o.retain = true;
 
 		o = s.taboption('setup', form.Value, 'download', _('Download speed'),
 			_('Report maximum download speed in kByte/s'));
 		o.depends('enable_upnp', '1');
+		o.retain = true;
 
 		o = s.taboption('setup', form.Value, 'upload', _('Upload speed'),
 			_('Report maximum upload speed in kByte/s'));
 		o.depends('enable_upnp', '1');
+		o.retain = true;
 
 		s.taboption('advanced', form.Flag, 'use_stun', _('Use %s', 'Use %s (%s = STUN)')
 				.format('<a href="https://en.wikipedia.org/wiki/STUN" target="_blank" rel="noreferrer"><abbr title="Session Traversal Utilities for NAT">STUN</abbr></a>'),
 			_('To detect the public IPv4 address for unrestricted full-cone/one-to-one NATs'));
 
 		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN host'));
-		o.depends('use_stun', '1');
 		o.datatype = 'host';
+		o.depends('use_stun', '1');
+		o.retain = true;
 
 		o = s.taboption('advanced', form.Value, 'stun_port', _('STUN port'));
-		o.depends('use_stun', '1');
 		o.datatype = 'port';
 		o.placeholder = '3478';
+		o.depends('use_stun', '1');
+		o.retain = true;
 
 		o = s.taboption('advanced', form.Flag, 'secure_mode', _('Enable secure mode'),
 			_('Allow adding port maps for requesting IP addresses only'));
 		o.default = '1';
 		o.depends('enable_upnp', '1');
+		o.retain = true;
+
+		s.taboption('advanced', form.Flag, 'ipv6_disable', _('Disable IPv6 mapping'));
 
 		o = s.taboption('advanced', form.Value, 'notify_interval', _('Notify interval'),
 			_('A 900s interval will result in %s notifications with the minimum max-age of 1800s', 'A 900s interval will result in %s (%s = SSDP) notifications with the minimum max-age of 1800s')
@@ -182,40 +192,49 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.placeholder = '900';
 		o.depends('enable_upnp', '1');
+		o.retain = true;
 
 		o = s.taboption('advanced', form.Value, 'port', _('SOAP/HTTP port'));
 		o.datatype = 'port';
 		o.placeholder = '5000';
 		o.depends('enable_upnp', '1');
+		o.retain = true;
 
 		o = s.taboption('advanced', form.Value, 'presentation_url', _('Presentation URL'),
 			_('Report custom router web interface (presentation) URL'));
 		o.placeholder = 'http://192.168.1.1/';
 		o.depends('enable_upnp', '1');
+		o.retain = true;
 
 		o = s.taboption('advanced', form.Value, 'uuid', _('Device UUID'));
-		o.depends('enable_upnp', '1');
+		// o.depends('enable_upnp', '1');
+		o.depends('to-disable-as-rarely-used', '1');
+		o.retain = true;
 
 		o = s.taboption('advanced', form.Value, 'model_number', _('Announced model number'));
 		o.depends('enable_upnp', '1');
+		o.retain = true;
 
 		o = s.taboption('advanced', form.Value, 'serial_number', _('Announced serial number'));
 		o.depends('enable_upnp', '1');
+		o.retain = true;
 
 		o = s.taboption('advanced', form.Flag, 'system_uptime', _('Report system instead of service uptime'));
 		o.default = '1';
-		o.depends('enable_upnp', '1');
+		o.depends('to-disable-as-rarely-used', '1');
+		o.retain = true;
 
 		s.taboption('advanced', form.Flag, 'log_output', _('Enable additional logging'),
 			_('Puts extra debugging information into the system log'));
 
 		o = s.taboption('advanced', form.Value, 'upnp_lease_file', _('Service lease file'));
-		o.placeholder = '/var/run/miniupnpd.leases';
+		o.depends('to-disable-as-rarely-used', '1');
+		o.retain = true;
 
 		s = m.section(form.GridSection, 'perm_rule', _('Service Access Control List'),
 			_('ACL specify which client addresses and ports can be mapped, IPv6 always allowed.'));
-		s.sortable = true;
 		s.anonymous = true;
+		s.sortable = true;
 		s.addremove = true;
 
 		s.option(form.Value, 'comment', _('Comment'));
