@@ -1,0 +1,32 @@
+{
+	"title": "OpenNameServer",
+	"template": "https://{option}.opennameserver.org/dns-query",
+	"bootstrap_dns": "217.160.70.42,2a01:239:2fd:b700::1,213.202.211.221,2001:4ba0:cafe:3d2::1,81.169.136.222,2a01:238:4231:5200::1,185.181.61.24,2a03:94e0:1804::1",
+	"help_link": "https://opennameserver.org/",
+	"params": {
+		"option": {
+			"description": "Nameserver",
+			"type": "select",
+			"regex": "(|ns1|ns2|ns3|ns4)",
+			"options": [
+				{
+					"value": "ns1",
+					"description": "ns1: Germany - Baden-Baden"
+				},
+				{
+					"value": "ns2",
+					"description": "ns2: Germany - Düsseldorf"
+				},
+				{
+					"value": "ns3",
+					"description": "ns3: Germany - Berlin"
+				},
+				{
+					"value": "ns4",
+					"description": "ns4: Norway - Sandefjord"
+				}
+			],
+			"default": "ns1"
+		}
+	}
+}
