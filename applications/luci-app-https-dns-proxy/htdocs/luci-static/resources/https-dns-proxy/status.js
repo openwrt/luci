@@ -18,10 +18,19 @@ var pkg = {
 	},
 	get URL() {
 		return (
-			"https://docs.openwrt.melmac.net/" +
+			"https://docs.openwrt.melmac.ca/" +
 			pkg.Name +
 			"/" +
 			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "")
+		);
+	},
+	get DonateURL() {
+		return (
+			"https://docs.openwrt.melmac.ca/" +
+			pkg.Name +
+			"/" +
+			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "") +
+			"#Donate"
 		);
 	},
 	templateToRegexp: function (template) {
@@ -203,7 +212,7 @@ var status = baseclass.extend({
 			} else {
 				text = _("Not installed or not found");
 			}
-			var statusText = E("div", {}, text);
+			var statusText = E("div", { class: "cbi-value-description" }, text);
 			var statusField = E("div", { class: "cbi-value-field" }, statusText);
 			var statusDiv = E("div", { class: "cbi-value" }, [
 				statusTitle,
@@ -281,7 +290,13 @@ var status = baseclass.extend({
 							"<br />"
 						);
 				});
-				var instancesText = E("div", {}, text);
+				text +=
+					"<br />" +
+					_("Please %sdonate%s to support development of this project.").format(
+						"<a href='" + pkg.DonateURL + "' target='_blank'>",
+						"</a>"
+					);
+				var instancesText = E("div", { class: "cbi-value-description" }, text);
 				var instancesField = E("div", { class: "cbi-value-field" }, [
 					instancesText,
 					instancesDescr,
