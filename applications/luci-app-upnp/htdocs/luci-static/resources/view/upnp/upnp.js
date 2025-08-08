@@ -306,7 +306,7 @@ return view.extend({
 			_('By default, reject FTP/Telnet/DCE/NetBIOS/SMB/RDP client ports being mapped regardless the ACL'));
 		o.placeholder = '21 23 135 137-139 445 3389';
 
-		s = m.section(form.GridSection, 'perm_rule', '<h5>' + _('Custom ACL') + '</h5>',
+		s = m.section(form.GridSection, 'acl_entry', '<h5>' + _('Custom ACL') + '</h5>',
 			_('ACL entries are checked in order and then rejected by default.') + ' ' + _('An empty list is reset to defaults when applied.'));
 		s.anonymous = true;
 		s.sortable = true;
@@ -327,8 +327,8 @@ return view.extend({
 		o.default = _('unspecified');
 
 		o = s.option(form.ListValue, 'action', _('Action'));
-		o.value('allow', _('Accept'));
-		o.value('deny', _('Reject'));
+		o.value('accept', _('Accept'));
+		o.value('reject', _('Reject'));
 		o.value('disabled', _('Disabled'));
 		o.editable = true;
 		o.retain = true; // Otherwise will be removed if disabled
