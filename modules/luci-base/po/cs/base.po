@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-07-07 16:01+0000\n"
+"PO-Revision-Date: 2025-07-24 19:37+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/luci/cs/>\n"
 "Language: cs\n"
@@ -83,6 +83,8 @@ msgid ""
 "%s services running on this device in the default VRF context (ie., not "
 "bound to any VRF device) shall work across all VRF domains."
 msgstr ""
+"%s služeb spuštěných na tomto zařízení ve výchozím VRF kontextu (tj. "
+"nenavázáno na žádné VRF zařízení) by mělo fungovat napříč všemi VRF doménami."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 msgid "%s uses a human-readable encoding of hex-and-colons"
@@ -1322,7 +1324,7 @@ msgstr "Atributy pro přidání/nahrazení v každém z požadavků."
 msgid "Auth"
 msgstr "Ověř."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:145
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:143
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:64
 #, fuzzy
 msgid "Auth Group"
@@ -1700,7 +1702,7 @@ msgstr ""
 "Certifikát cert. autority (v PEM kódování – použít namísto systémového "
 "úložiště pro ověřování certifikátu brány."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:181
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:179
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
 "Certifikát cert. autority; pokud je prázdné, bude uloženo po prvním "
@@ -4039,7 +4041,7 @@ msgstr "Následovat životnost IPv4"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:457
 msgid "For VRF, install %s"
-msgstr ""
+msgstr "Pro VRF, nainstalujte %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 msgid "For bonding, install %s"
@@ -5507,7 +5509,7 @@ msgstr ""
 "Neplatný formát doby DHCP zápůjčky. Použijte celočíselné hodnoty volitelně "
 "následované s, m, h, d nebo w (týden)."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:121
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:119
 msgid "Invalid IPv6 address"
 msgstr "Neplatná IPv6 adresa"
 
@@ -5552,15 +5554,15 @@ msgstr "Neplatný příkaz"
 msgid "Invalid hexadecimal value"
 msgstr "Neplatná šestnáctková hodnota"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:130
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:128
 msgid "Invalid hostname or IPv4 address"
 msgstr "Neplatný název stroje nebo IPv4 adresa"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:139
 msgid "Invalid key format"
-msgstr ""
+msgstr "Neplatný formát klíče"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:136
 msgid "Invalid port"
 msgstr "Neplatný port"
 
@@ -5572,7 +5574,7 @@ msgstr "Neplatný řetězec %s soukromého klíče"
 msgid "Invalid public key string %s"
 msgstr "Neplatný řetězec %s veřejného klíče"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:110
 msgid "Invalid server URL"
 msgstr "Neplatná URL serveru"
 
@@ -7406,6 +7408,8 @@ msgstr "Vypnuto"
 msgid ""
 "Off means VRF traffic will be handled exclusively by sockets bound to VRFs."
 msgstr ""
+"Vypnuto znamená, že VRF provoz bude obsluhován výhradně sokety, navázanými "
+"na VRF tabulky."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:18
 msgid "Off-State Delay"
@@ -7506,10 +7510,6 @@ msgstr "Otevřít přehled iptables pravidel…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:474
 msgid "Open list..."
 msgstr "Otevřít seznam…"
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:65
-msgid "OpenConnect"
-msgstr "OpenConnect"
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
@@ -7800,7 +7800,7 @@ msgstr "Přebít IPv6 směrovací tabulku"
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:144
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:193
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:191
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:132
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:118
@@ -8049,7 +8049,7 @@ msgstr "Průchod (zrcadlit fyzické zařízení do jediné MAC VLAN)"
 #: modules/luci-base/ucode/template/sysauth.ut:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1877
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:148
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:103
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:298
@@ -8076,7 +8076,7 @@ msgstr "Heslo k vnitřnímu soukromému klíči"
 msgid "Password strength"
 msgstr "Odolnost hesla"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:151
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
 msgid "Password2"
 msgstr "Heslo2"
 
@@ -8314,7 +8314,7 @@ msgstr "Stav portu:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:980
 msgid "Ports"
-msgstr ""
+msgstr "Porty"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:547
 msgid "Potential negation of: %s"
@@ -8492,7 +8492,7 @@ msgstr ""
 "Poskytovat NTP server na všechna vybraných rozhraních nebo, pokud nezadáno, "
 "na všech"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:154
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:152
 msgid "Proxy Server"
 msgstr "Proxy server"
 
@@ -8769,7 +8769,7 @@ msgstr "Přijatých paktů"
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "Doporučeno. IP adresy rozhraní pro WireGuard."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:198
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:196
 msgid "Reconnect Timeout"
 msgstr "Časový limit opětovného připojení"
 
@@ -9348,7 +9348,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1018
 msgid "Routing table"
-msgstr ""
+msgstr "Směrovací tabulka"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:97
 msgid "Routing table into which to insert this rule."
@@ -9929,6 +9929,9 @@ msgid ""
 "networks, choose the associated interface as network in the wireless "
 "settings."
 msgstr ""
+"Určuje zařízení která připojit k tomuto VRF. Aby bylo možné připojit "
+"bezdrátové sítě, zvolte v nastavení bezdrátového asociované rozhraní jako "
+"síť."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Specifies the directory the device is attached to"
@@ -10269,15 +10272,15 @@ msgstr "Potlačit protokolování rutinního provozu protokolu DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1163
 msgid "Svc Parameters"
-msgstr ""
+msgstr "Svc parametry"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1141
 msgid "Svc Priority"
-msgstr ""
+msgstr "Svc priorita"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1152
 msgid "Svc Target"
-msgstr ""
+msgstr "Svc cíl"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:46
 msgid "Swap free"
@@ -10374,7 +10377,7 @@ msgstr "Systém je spuštěný v záchranném (initramvs) režimu."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1583
 msgid "TCP Layer 3 Master Device (tcp_l3mdev) accept"
-msgstr ""
+msgstr "Hlavní zařízení TCP vrstvy 3 (tcp_l3mdev) přijmout"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:67
 msgctxt "nft tcp option maxseg size"
@@ -11073,7 +11076,6 @@ msgstr "Tato IPv4 adresa předávání"
 msgid "This authentication type is not applicable to the selected EAP method."
 msgstr "Tento typ ověřování se není použitelný pro zvolenou EAP metodu."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:58
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
 msgid "This does not look like a valid PEM file"
 msgstr "Toto nevypadá jako platný PEM soubor"
@@ -11167,12 +11169,14 @@ msgid ""
 "This key appears to be in PEM format, which is not supported in an opkg "
 "environment."
 msgstr ""
+"Tento klíč se zdá být ve formátu PEM, který není v opkg prostředí podporován."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:124
 msgid ""
 "This key does not appear to be in PEM format, which is required in an apk "
 "environment."
 msgstr ""
+"Tento klíč se nezdá být ve formátu PEM, což je v prostředí apk vyžadováno."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:65
 msgid ""
@@ -11453,7 +11457,7 @@ msgstr "Typ služby"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1587
 msgid "UDP Layer 3 Master Device (udp_l3mdev) accept"
-msgstr ""
+msgstr "Hlavní zařízení UDP vrstvy 3 (udp_l3mdev) přijmout"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:56
 msgctxt "nft udp dport"
@@ -11676,7 +11680,7 @@ msgstr "Nepodporované URI schéma v %s"
 msgid "Unsupported modem"
 msgstr "Nepodporovaný modem"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:116
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "Unsupported protocol"
 msgstr "Nepodporovaný protokol"
 
@@ -11931,7 +11935,7 @@ msgstr "Užitečné pro systémy, nacházející se za branami firewall."
 msgid "User"
 msgstr "Uživatel"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:155
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:106
 msgid "User certificate (PEM encoded)"
 msgstr "Uživatelský certifikát (PEM formát)"
@@ -11940,13 +11944,13 @@ msgstr "Uživatelský certifikát (PEM formát)"
 msgid "User identifier"
 msgstr "Identifikátor uživatele"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:169
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:167
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:118
 msgid "User key (PEM encoded)"
 msgstr "Uživatelský klíč (PEM formát)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:23
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:101
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:13
@@ -12008,11 +12012,6 @@ msgstr "Lokální VPN adresa"
 msgid "VPN Local port"
 msgstr "Lokální VPN port"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:97
-msgid "VPN Protocol"
-msgstr "VPN protokol"
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:106
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:93
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:58
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:39
@@ -12027,7 +12026,7 @@ msgstr "SHA256 otisk certifikátu VPN serveru"
 msgid "VPN Server port"
 msgstr "Port na VPN serveru"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:142
 msgid "VPN Server's certificate SHA1 hash"
 msgstr "SHA1 otisk certifikátu VPN serveru"
 
@@ -12038,7 +12037,7 @@ msgstr "VPNC (CISCO 3000 (a další) VPN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:469
 msgid "VRF device"
-msgstr ""
+msgstr "VRF zařízení"
 
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:10
 msgid "VTI"
@@ -12116,7 +12115,7 @@ msgstr "Virtuální Ethernet"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3040
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1517
 msgid "Virtual Routing and Forwarding (VRF)"
-msgstr ""
+msgstr "Virtuální směrování a přeposílání (VRF)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:60
 msgid "Virtual dynamic interface"
@@ -12310,7 +12309,7 @@ msgstr "WireGuard VPN"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3050
 msgid "WireGuard Interface"
-msgstr ""
+msgstr "WireGuard rozhraní"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:120
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:165

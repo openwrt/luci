@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-07-16 14:09+0000\n"
+"PO-Revision-Date: 2025-07-24 15:20+0000\n"
 "Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hant/>\n"
@@ -80,6 +80,7 @@ msgid ""
 "%s services running on this device in the default VRF context (ie., not "
 "bound to any VRF device) shall work across all VRF domains."
 msgstr ""
+"預設VRF環境中執行的%s服務（即未繫結至任何VRF裝置）將可在所有VRF網域間運作。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 msgid "%s uses a human-readable encoding of hex-and-colons"
@@ -1270,7 +1271,7 @@ msgstr "在每個請求中新增/替換的屬性。"
 msgid "Auth"
 msgstr "認證"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:145
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:143
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:64
 msgid "Auth Group"
 msgstr "認證群組"
@@ -1629,7 +1630,7 @@ msgid ""
 "gateway certificate."
 msgstr "CA憑證（PEM編碼；使用此憑證而非系統儲存的驗證閘道。"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:181
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:179
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr "CA憑證；如果留空會在第一次連線後儲存。"
 
@@ -3863,7 +3864,7 @@ msgstr "遵循IPv4有效期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:457
 msgid "For VRF, install %s"
-msgstr ""
+msgstr "VRF需安裝%s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 msgid "For bonding, install %s"
@@ -5297,7 +5298,7 @@ msgid ""
 "m, h, d, or w."
 msgstr "DHCP租約時間格式無效。使用整數值（可選後接s、m、h、d或w）。"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:121
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:119
 msgid "Invalid IPv6 address"
 msgstr "無效的IPv6位址"
 
@@ -5337,15 +5338,15 @@ msgstr "無效指令"
 msgid "Invalid hexadecimal value"
 msgstr "無效的十六進位值"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:130
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:128
 msgid "Invalid hostname or IPv4 address"
 msgstr "無效的主機名或IPv4位址"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:139
 msgid "Invalid key format"
-msgstr ""
+msgstr "金鑰格式無效"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:136
 msgid "Invalid port"
 msgstr "無效連接埠"
 
@@ -5357,7 +5358,7 @@ msgstr "無效私密金鑰字串%s"
 msgid "Invalid public key string %s"
 msgstr "無效的公開金鑰字串%s"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:110
 msgid "Invalid server URL"
 msgstr "無效伺服器URL"
 
@@ -6390,7 +6391,7 @@ msgstr "鏡像監測連接埠"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:203
 msgid "Mirror source port"
-msgstr "鏡像來源連接埠"
+msgstr "映射來源連接埠"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:120
 msgid "Mobile Country Code"
@@ -7133,7 +7134,7 @@ msgstr "關閉"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1581
 msgid ""
 "Off means VRF traffic will be handled exclusively by sockets bound to VRFs."
-msgstr ""
+msgstr "停用表示VRF流量將僅由繫結至特定VRF的socket處理。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:18
 msgid "Off-State Delay"
@@ -7228,10 +7229,6 @@ msgstr "開啟iptables規則概覽…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:474
 msgid "Open list..."
 msgstr "開啟清單..."
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:65
-msgid "OpenConnect"
-msgstr "OpenConnect"
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
@@ -7507,7 +7504,7 @@ msgstr "覆寫IPv6路由表"
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:144
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:193
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:191
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:132
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:118
@@ -7750,7 +7747,7 @@ msgstr "直通（將實體裝置鏡像至單個MAC VLAN）"
 #: modules/luci-base/ucode/template/sysauth.ut:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1877
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:148
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:103
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:298
@@ -7777,7 +7774,7 @@ msgstr "內部私密金鑰密碼"
 msgid "Password strength"
 msgstr "密碼強度"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:151
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
 msgid "Password2"
 msgstr "密碼2"
 
@@ -8011,7 +8008,7 @@ msgstr "連接埠狀態："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:980
 msgid "Ports"
-msgstr ""
+msgstr "連接埠"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:547
 msgid "Potential negation of: %s"
@@ -8181,7 +8178,7 @@ msgid ""
 "interfaces"
 msgstr "向指定的介面提供NTP伺服器，若未指定則提供給所有介面"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:154
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:152
 msgid "Proxy Server"
 msgstr "代理伺服器"
 
@@ -8446,7 +8443,7 @@ msgstr "已接收封包"
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "推薦。WireGuard介面的IP位址。"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:198
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:196
 msgid "Reconnect Timeout"
 msgstr "重新連線逾時"
 
@@ -9006,7 +9003,7 @@ msgstr "路由指定介面和閘道可到達某個主機或網路。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1018
 msgid "Routing table"
-msgstr ""
+msgstr "路由表"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:97
 msgid "Routing table into which to insert this rule."
@@ -9566,6 +9563,8 @@ msgid ""
 "networks, choose the associated interface as network in the wireless "
 "settings."
 msgstr ""
+"指定附加至此VRF的裝置。若要附加無線網絡，請在無線設定中選擇關聯的介面作為網"
+"路。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Specifies the directory the device is attached to"
@@ -9879,15 +9878,15 @@ msgstr "禁止記錄DHCP協定的例行作業。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1163
 msgid "Svc Parameters"
-msgstr ""
+msgstr "服務參數"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1141
 msgid "Svc Priority"
-msgstr ""
+msgstr "優先順序"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1152
 msgid "Svc Target"
-msgstr ""
+msgstr "目標主機"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:46
 msgid "Swap free"
@@ -9984,7 +9983,7 @@ msgstr "系統在復原 (initramfs) 模式下執行。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1583
 msgid "TCP Layer 3 Master Device (tcp_l3mdev) accept"
-msgstr ""
+msgstr "接受TCP第三層主裝置 (tcp_l3mdev)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:67
 msgctxt "nft tcp option maxseg size"
@@ -10625,7 +10624,6 @@ msgstr "中繼IPv4位址"
 msgid "This authentication type is not applicable to the selected EAP method."
 msgstr "此驗證類別不適用於所選的EAP方式。"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:58
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
 msgid "This does not look like a valid PEM file"
 msgstr "這看起來不像有效的PEM檔案"
@@ -10704,13 +10702,13 @@ msgstr "這通常是隧道代理作業的最近PoP位址"
 msgid ""
 "This key appears to be in PEM format, which is not supported in an opkg "
 "environment."
-msgstr ""
+msgstr "此金鑰似乎為PEM格式，在opkg環境中不支援。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:124
 msgid ""
 "This key does not appear to be in PEM format, which is required in an apk "
 "environment."
-msgstr ""
+msgstr "此金鑰似乎不是PEM格式，apk環境要求必須為此格式。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:65
 msgid ""
@@ -10975,7 +10973,7 @@ msgstr "服務類別"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1587
 msgid "UDP Layer 3 Master Device (udp_l3mdev) accept"
-msgstr ""
+msgstr "接受UDP第三層主裝置 (udp_l3mdev)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:56
 msgctxt "nft udp dport"
@@ -11194,7 +11192,7 @@ msgstr "%s中的URI方案不支援"
 msgid "Unsupported modem"
 msgstr "不支援的數據機"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:116
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "Unsupported protocol"
 msgstr "不支援的協定"
 
@@ -11437,7 +11435,7 @@ msgstr "對防火牆後面的系統有用。"
 msgid "User"
 msgstr "使用者"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:155
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:106
 msgid "User certificate (PEM encoded)"
 msgstr "使用者憑證（PEM編碼）"
@@ -11446,13 +11444,13 @@ msgstr "使用者憑證（PEM編碼）"
 msgid "User identifier"
 msgstr "使用者識別碼"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:169
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:167
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:118
 msgid "User key (PEM encoded)"
 msgstr "使用者金鑰（PEM編碼）"
 
 #: modules/luci-base/ucode/template/sysauth.ut:23
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:101
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:13
@@ -11514,11 +11512,6 @@ msgstr "VPN本地位址"
 msgid "VPN Local port"
 msgstr "VPN本地連接阜"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:97
-msgid "VPN Protocol"
-msgstr "VPN協定"
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:106
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:93
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:58
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:39
@@ -11533,7 +11526,7 @@ msgstr "VPN伺服器憑證SHA256雜湊"
 msgid "VPN Server port"
 msgstr "VPN伺服器連接埠"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:142
 msgid "VPN Server's certificate SHA1 hash"
 msgstr "VPN伺服器憑證SHA1雜湊"
 
@@ -11544,7 +11537,7 @@ msgstr "VPNC (CISCO 3000（和其它）VPN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:469
 msgid "VRF device"
-msgstr ""
+msgstr "VRF裝置"
 
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:10
 msgid "VTI"
@@ -11614,7 +11607,7 @@ msgstr "虛擬乙太網路"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3040
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1517
 msgid "Virtual Routing and Forwarding (VRF)"
-msgstr ""
+msgstr "虛擬路由和轉送 (VRF)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:60
 msgid "Virtual dynamic interface"
@@ -11792,7 +11785,7 @@ msgstr "WireGuard"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3050
 msgid "WireGuard Interface"
-msgstr ""
+msgstr "WireGuard介面"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:120
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:165

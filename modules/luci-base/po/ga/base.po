@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-06-20 14:21+0000\n"
+"PO-Revision-Date: 2025-07-24 15:20+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/openwrt/luci/ga/>\n"
 "Language: ga\n"
@@ -85,6 +85,9 @@ msgid ""
 "%s services running on this device in the default VRF context (ie., not "
 "bound to any VRF device) shall work across all VRF domains."
 msgstr ""
+"Oibreoidh %s seirbhísí atá ag rith ar an ngléas seo sa chomhthéacs VRF "
+"réamhshocraithe (i.e., gan a bheith ceangailte le haon ghléas VRF) ar fud "
+"gach fearainn VRF."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 msgid "%s uses a human-readable encoding of hex-and-colons"
@@ -1336,7 +1339,7 @@ msgstr "Tréithe le cuirte/athsholáthar i ngach iarratas."
 msgid "Auth"
 msgstr "Údarú"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:145
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:143
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:64
 msgid "Auth Group"
 msgstr "Grúpa Auth"
@@ -1716,7 +1719,7 @@ msgstr ""
 "Teastas CA (ionchódaithe PEM; Úsáid in ionad stór ar fud an chórais chun "
 "deimhniú an geata a fhíorú."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:181
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:179
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr "Teastas CA; má tá sé folamh sábhálfar é tar éis an chéad nasc."
 
@@ -4055,7 +4058,7 @@ msgstr "Lean IPv4 Saoil"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:457
 msgid "For VRF, install %s"
-msgstr ""
+msgstr "I gcás VRF, suiteáil %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 msgid "For bonding, install %s"
@@ -5534,7 +5537,7 @@ msgstr ""
 "Formáid ama léasa DHCP neamhbhailí. Úsáid luachanna slánuimhreacha go "
 "roghnach agus ansin s, m, h, d, nó w."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:121
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:119
 msgid "Invalid IPv6 address"
 msgstr "Seoladh IPv6 neamhbhailí"
 
@@ -5576,15 +5579,15 @@ msgstr "Ordú neamhbhailí"
 msgid "Invalid hexadecimal value"
 msgstr "Luach heicseachadúil neamhbhailí"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:130
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:128
 msgid "Invalid hostname or IPv4 address"
 msgstr "Ainm óstach nó seoladh IPv4 neamhbhailí"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:139
 msgid "Invalid key format"
-msgstr ""
+msgstr "Formáid eochrach neamhbhailí"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:136
 msgid "Invalid port"
 msgstr "Port neamhbhailí"
 
@@ -5596,7 +5599,7 @@ msgstr "Teagán eochair phríobháideach ne"
 msgid "Invalid public key string %s"
 msgstr "Sreang eochair phoiblí neamhbhail"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:110
 msgid "Invalid server URL"
 msgstr "URL freastalaí nebhailí"
 
@@ -7434,6 +7437,8 @@ msgstr "As"
 msgid ""
 "Off means VRF traffic will be handled exclusively by sockets bound to VRFs."
 msgstr ""
+"Ciallaíonn múchta go láimhseálfar tráchta VRF go heisiach ag soicéid atá "
+"ceangailte le VRFanna."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:18
 msgid "Off-State Delay"
@@ -7533,10 +7538,6 @@ msgstr "Forbhreathnú ar rialacha iptables oscailte…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:474
 msgid "Open list..."
 msgstr "Liosta oscailte..."
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:65
-msgid "OpenConnect"
-msgstr "Oscailceangail"
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
@@ -7828,7 +7829,7 @@ msgstr "Tábla ródúcháin IPv6 a chur ar aghaidh"
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:144
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:193
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:191
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:132
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:118
@@ -8079,7 +8080,7 @@ msgstr "Pas tríd (Gléas fisiceach scátháin chuig MAC VLAN aonair)"
 #: modules/luci-base/ucode/template/sysauth.ut:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1877
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:148
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:103
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:298
@@ -8106,7 +8107,7 @@ msgstr "Pasfhocal Eochair Príobháideach istigh"
 msgid "Password strength"
 msgstr "Neart pasfhocal"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:151
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
 msgid "Password2"
 msgstr "Pasfhocal2"
 
@@ -8342,7 +8343,7 @@ msgstr "Stádas calafoirt:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:980
 msgid "Ports"
-msgstr ""
+msgstr "Poirt"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:547
 msgid "Potential negation of: %s"
@@ -8520,7 +8521,7 @@ msgstr ""
 "Cuir an freastalaí NTP ar fáil don chomhéadan roghnaithe nó, mura bhfuil sé "
 "sonraithe, do gach comhéadan"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:154
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:152
 msgid "Proxy Server"
 msgstr "Seachfhreastalaí"
 
@@ -8793,7 +8794,7 @@ msgstr "Pacáistí a fuarthas"
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "Molta. Seoltaí IP an chomhéadan WireGuard."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:198
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:196
 msgid "Reconnect Timeout"
 msgstr "Athcheangail Timeout"
 
@@ -9376,7 +9377,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1018
 msgid "Routing table"
-msgstr ""
+msgstr "Tábla ródaithe"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:97
 msgid "Routing table into which to insert this rule."
@@ -9957,6 +9958,9 @@ msgid ""
 "networks, choose the associated interface as network in the wireless "
 "settings."
 msgstr ""
+"Sonraíonn sé seo na gléasanna atá le ceangal leis an VRF seo. Chun líonraí "
+"gan sreang a cheangal, roghnaigh an comhéadan gaolmhar mar líonra sna "
+"socruithe gan sreang."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Specifies the directory the device is attached to"
@@ -10298,15 +10302,15 @@ msgstr "Cuir cosc ar logáil na gnáthoibríochta don phrótacal DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1163
 msgid "Svc Parameters"
-msgstr ""
+msgstr "Paraiméadair Svc"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1141
 msgid "Svc Priority"
-msgstr ""
+msgstr "Tosaíocht Svc"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1152
 msgid "Svc Target"
-msgstr ""
+msgstr "Sprioc Svc"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:46
 msgid "Swap free"
@@ -10405,7 +10409,7 @@ msgstr "Córas ag rith i mód aisghabhála (initramfs)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1583
 msgid "TCP Layer 3 Master Device (tcp_l3mdev) accept"
-msgstr ""
+msgstr "Glactar le Gléas Máistir Sraith 3 TCP (tcp_l3mdev)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:67
 msgctxt "nft tcp option maxseg size"
@@ -11134,7 +11138,6 @@ msgstr ""
 "Níl an cineál fíordheimhnithe seo infheidhme maidir leis an modh EAP "
 "roghnaithe."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:58
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
 msgid "This does not look like a valid PEM file"
 msgstr "Ní chuma é seo cosúil le comhad bailí PEM"
@@ -11227,12 +11230,16 @@ msgid ""
 "This key appears to be in PEM format, which is not supported in an opkg "
 "environment."
 msgstr ""
+"Is cosúil go bhfuil an eochair seo i bhformáid PEM, rud nach dtacaítear leis "
+"i dtimpeallacht opkg."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:124
 msgid ""
 "This key does not appear to be in PEM format, which is required in an apk "
 "environment."
 msgstr ""
+"Ní cosúil go bhfuil an eochair seo i bhformáid PEM, rud atá riachtanach i "
+"dtimpeallacht apk."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:65
 msgid ""
@@ -11516,7 +11523,7 @@ msgstr "Cineál seirbhíse"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1587
 msgid "UDP Layer 3 Master Device (udp_l3mdev) accept"
-msgstr ""
+msgstr "Glactar le Gléas Máistir Sraith 3 UDP (udp_l3mdev)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:56
 msgctxt "nft udp dport"
@@ -11739,7 +11746,7 @@ msgstr "Scéim URI gan tacaíocht i %s"
 msgid "Unsupported modem"
 msgstr "Móideim gan tacaíocht"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:116
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "Unsupported protocol"
 msgstr "Prótacal gan tacaíocht"
 
@@ -11995,7 +12002,7 @@ msgstr "Úsáideach do chórais taobh thiar de bhallaí dóiteáin."
 msgid "User"
 msgstr "Úsáideoir"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:155
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:106
 msgid "User certificate (PEM encoded)"
 msgstr "Teastas úsáideora (ionchódaithe PEM)"
@@ -12004,13 +12011,13 @@ msgstr "Teastas úsáideora (ionchódaithe PEM)"
 msgid "User identifier"
 msgstr "Aitheantóir úsáideora"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:169
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:167
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:118
 msgid "User key (PEM encoded)"
 msgstr "Eochair úsáideora (ionchódaithe PEM)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:23
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:101
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:13
@@ -12072,11 +12079,6 @@ msgstr "Seoladh áitiúil VPN"
 msgid "VPN Local port"
 msgstr "Port áitiúil VPN"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:97
-msgid "VPN Protocol"
-msgstr "Prótacal VPN"
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:106
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:93
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:58
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:39
@@ -12091,7 +12093,7 @@ msgstr "Hash SHA256 deimhniú Freastalaí VPN"
 msgid "VPN Server port"
 msgstr "Port freastalaí VPN"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:142
 msgid "VPN Server's certificate SHA1 hash"
 msgstr "Teastas Freastalaí VPN SHA1 hash"
 
@@ -12102,7 +12104,7 @@ msgstr "VPNC (CISCO 3000 (agus daoine eile) VPN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:469
 msgid "VRF device"
-msgstr ""
+msgstr "Gléas VRF"
 
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:10
 msgid "VTI"
@@ -12177,7 +12179,7 @@ msgstr "Ethernet Fíorúil"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3040
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1517
 msgid "Virtual Routing and Forwarding (VRF)"
-msgstr ""
+msgstr "Ródáil agus Aghaidh Fíorúil (VRF)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:60
 msgid "Virtual dynamic interface"
@@ -12375,7 +12377,7 @@ msgstr "WireGuard"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3050
 msgid "WireGuard Interface"
-msgstr ""
+msgstr "Comhéadan WireGuard"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:120
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:165

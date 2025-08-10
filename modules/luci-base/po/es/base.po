@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2025-07-14 19:03+0000\n"
+"PO-Revision-Date: 2025-07-29 16:05+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/luci/es/"
 ">\n"
@@ -83,10 +83,14 @@ msgid "%s means \"the address of the system running dnsmasq\"."
 msgstr "%s significa \"la dirección del sistema que ejecuta dnsmasq\"."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1580
+#, fuzzy
 msgid ""
 "%s services running on this device in the default VRF context (ie., not "
 "bound to any VRF device) shall work across all VRF domains."
 msgstr ""
+"Los servicios %s que se ejecutan en este dispositivo en el contexto VRF "
+"predeterminado (es decir, no vinculados a ningún dispositivo VRF) "
+"funcionarán en todos los dominios VRF."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 msgid "%s uses a human-readable encoding of hex-and-colons"
@@ -1345,7 +1349,7 @@ msgstr "Atributos para agregar/reemplazar en cada solicitud."
 msgid "Auth"
 msgstr "Auth"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:145
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:143
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:64
 msgid "Auth Group"
 msgstr "Grupo de Autenticaciones"
@@ -1729,7 +1733,7 @@ msgstr ""
 "Certificado CA (codificado PEM; úselo en lugar del almacenamiento en todo el "
 "sistema para verificar el certificado de la puerta de enlace)."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:181
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:179
 msgid "CA certificate; if empty it will be saved after the first connection."
 msgstr ""
 "Certificado CA; Si está vacío será guardado después de la primera conexión."
@@ -2116,7 +2120,7 @@ msgstr "Calcular la suma de verificación saliente (opcional)."
 
 #: protocols/luci-proto-nebula/htdocs/luci-static/resources/protocol/nebula.js:40
 msgid "Config File"
-msgstr "Archivo de Configuración"
+msgstr "Archivo de configuración"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4774
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:456
@@ -4081,7 +4085,7 @@ msgstr "Seguir la vida útil de IPv4"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:457
 msgid "For VRF, install %s"
-msgstr ""
+msgstr "Para VRF, instale %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 msgid "For bonding, install %s"
@@ -5570,7 +5574,7 @@ msgstr ""
 "Formato de tiempo de asignación de DHCP no válido. Utilice valores enteros "
 "seguidos opcionalmente de s, m, h, d o w."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:121
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:119
 msgid "Invalid IPv6 address"
 msgstr "Dirección IPv6 no válida"
 
@@ -5612,15 +5616,15 @@ msgstr "Comando no válido"
 msgid "Invalid hexadecimal value"
 msgstr "Valor hexadecimal no válido"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:130
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:128
 msgid "Invalid hostname or IPv4 address"
 msgstr "Nombre de host o dirección IPv4 no válidos"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:139
 msgid "Invalid key format"
-msgstr ""
+msgstr "Formato de clave no válido"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:138
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:136
 msgid "Invalid port"
 msgstr "Puerto no válido"
 
@@ -5632,7 +5636,7 @@ msgstr "Cadena de clave privada %s no válida"
 msgid "Invalid public key string %s"
 msgstr "Cadena de clave pública %s no válida"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:112
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:110
 msgid "Invalid server URL"
 msgstr "URL del servidor no válida"
 
@@ -7471,6 +7475,8 @@ msgstr "Apagado"
 msgid ""
 "Off means VRF traffic will be handled exclusively by sockets bound to VRFs."
 msgstr ""
+"Desactivado significa que el tráfico VRF será manejado exclusivamente por "
+"sockets vinculados a VRF."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:18
 msgid "Off-State Delay"
@@ -7573,10 +7579,6 @@ msgstr "Abrir descripción general de las reglas de iptables…"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:474
 msgid "Open list..."
 msgstr "Abrir lista..."
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:65
-msgid "OpenConnect"
-msgstr "OpenConnect"
 
 #: modules/luci-compat/luasrc/model/network/proto_openconnect.lua:9
 msgid "OpenConnect (CISCO AnyConnect)"
@@ -7867,7 +7869,7 @@ msgstr "Anular la tabla de enrutamiento IPv6"
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:53
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:128
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:144
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:193
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:191
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:57
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:132
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoa.js:118
@@ -8115,7 +8117,7 @@ msgstr "Traspasar (Duplicar dispositivo físico a una sola MAC VLAN)"
 #: modules/luci-base/ucode/template/sysauth.ut:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1877
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:51
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:148
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:103
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:58
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:298
@@ -8142,7 +8144,7 @@ msgstr "Contraseña de clave privada interna"
 msgid "Password strength"
 msgstr "Seguridad de la contraseña"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:151
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:149
 msgid "Password2"
 msgstr "Contraseña2"
 
@@ -8380,7 +8382,7 @@ msgstr "Estado del puerto:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:980
 msgid "Ports"
-msgstr ""
+msgstr "Puertos"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:547
 msgid "Potential negation of: %s"
@@ -8558,7 +8560,7 @@ msgstr ""
 "Proporciona el servidor NTP a la interfaz seleccionada o, si no se "
 "especifica, a todas las interfaces"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:154
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:152
 msgid "Proxy Server"
 msgstr "Servidor proxy"
 
@@ -8837,7 +8839,7 @@ msgstr "Paquetes recibidos"
 msgid "Recommended. IP addresses of the WireGuard interface."
 msgstr "Recomendado. Direcciones IP de la interfaz de WireGuard."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:198
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:196
 msgid "Reconnect Timeout"
 msgstr "Tiempo de espera de reconexión"
 
@@ -9422,7 +9424,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1018
 msgid "Routing table"
-msgstr ""
+msgstr "Tabla de enrutamiento"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:97
 msgid "Routing table into which to insert this rule."
@@ -10010,6 +10012,9 @@ msgid ""
 "networks, choose the associated interface as network in the wireless "
 "settings."
 msgstr ""
+"Especifique los dispositivos que se conectarán a esta VRF. Para conectar "
+"redes inalámbricas, seleccione la interfaz asociada como red en la "
+"configuración inalámbrica."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Specifies the directory the device is attached to"
@@ -10354,16 +10359,17 @@ msgid "Suppress logging of the routine operation for the DHCP protocol."
 msgstr "Suprime el registro de la operación de rutina para el protocolo DHCP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1163
+#, fuzzy
 msgid "Svc Parameters"
-msgstr ""
+msgstr "Parámetros de Svc"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1141
 msgid "Svc Priority"
-msgstr ""
+msgstr "Prioridad de Svc"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1152
 msgid "Svc Target"
-msgstr ""
+msgstr "Objetivo de Svc"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:46
 msgid "Swap free"
@@ -10461,8 +10467,9 @@ msgid "System running in recovery (initramfs) mode."
 msgstr "El sistema se ejecuta en modo de recuperación (initramfs)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1583
+#, fuzzy
 msgid "TCP Layer 3 Master Device (tcp_l3mdev) accept"
-msgstr ""
+msgstr "Dispositivo maestro de capa 3 TCP (tcp_l3mdev) acepta"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:67
 msgctxt "nft tcp option maxseg size"
@@ -11185,7 +11192,6 @@ msgstr "Dirección IPv4 del relé"
 msgid "This authentication type is not applicable to the selected EAP method."
 msgstr "Este tipo de autenticación no es aplicable al método EAP seleccionado."
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:58
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:56
 msgid "This does not look like a valid PEM file"
 msgstr "Esto no parece un archivo PEM válido"
@@ -11282,12 +11288,16 @@ msgid ""
 "This key appears to be in PEM format, which is not supported in an opkg "
 "environment."
 msgstr ""
+"Esta clave parece estar en formato PEM, que no es compatible con un entorno "
+"opkg."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:124
 msgid ""
 "This key does not appear to be in PEM format, which is required in an apk "
 "environment."
 msgstr ""
+"Esta clave no parece estar en formato PEM, que es necesario en un entorno "
+"apk."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:65
 msgid ""
@@ -11571,8 +11581,9 @@ msgid "Type of service"
 msgstr "Tipo de servicio"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1587
+#, fuzzy
 msgid "UDP Layer 3 Master Device (udp_l3mdev) accept"
-msgstr ""
+msgstr "Dispositivo maestro de capa 3 UDP (udp_l3mdev) acepta"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:56
 msgctxt "nft udp dport"
@@ -11795,7 +11806,7 @@ msgstr "Esquema URI no soportado en %s"
 msgid "Unsupported modem"
 msgstr "Módem no soportado"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:116
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "Unsupported protocol"
 msgstr "Protocolo no compatible"
 
@@ -12051,7 +12062,7 @@ msgstr "Útil para sistemas detrás de cortafuegos."
 msgid "User"
 msgstr "Usuario"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:157
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:155
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:106
 msgid "User certificate (PEM encoded)"
 msgstr "Certificado de usuario (Codificado PEM)"
@@ -12060,13 +12071,13 @@ msgstr "Certificado de usuario (Codificado PEM)"
 msgid "User identifier"
 msgstr "Identificador de usuario"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:169
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:167
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:118
 msgid "User key (PEM encoded)"
 msgstr "Clave de usuario (codificada PEM)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:23
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:146
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:101
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:56
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:13
@@ -12128,11 +12139,6 @@ msgstr "VPN dirección local"
 msgid "VPN Local port"
 msgstr "VPN puerto local"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:97
-msgid "VPN Protocol"
-msgstr "Protocolo VPN"
-
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:106
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:93
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:58
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:39
@@ -12147,7 +12153,7 @@ msgstr "Hash SHA256 del certificado del servidor VPN"
 msgid "VPN Server port"
 msgstr "Puerto del servidor VPN"
 
-#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:144
+#: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:142
 msgid "VPN Server's certificate SHA1 hash"
 msgstr "Hash SHA1 del certificado del servidor VPN"
 
@@ -12158,7 +12164,7 @@ msgstr "VPNC (CISCO 3000 (y otros) VPN)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:469
 msgid "VRF device"
-msgstr ""
+msgstr "Dispositivo VRF"
 
 #: protocols/luci-proto-vti/htdocs/luci-static/resources/protocol/vti.js:10
 msgid "VTI"
@@ -12236,7 +12242,7 @@ msgstr "Ethernet virtual"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3040
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1517
 msgid "Virtual Routing and Forwarding (VRF)"
-msgstr ""
+msgstr "Enrutamiento y reenvío virtual (VRF)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:60
 msgid "Virtual dynamic interface"
@@ -12435,7 +12441,7 @@ msgstr "WireGuard"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:3050
 msgid "WireGuard Interface"
-msgstr ""
+msgstr "Interfaz WireGuard"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:120
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:165
