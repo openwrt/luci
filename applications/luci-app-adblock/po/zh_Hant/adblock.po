@@ -5,8 +5,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-06-19 08:24+0000\n"
-"Last-Translator: ZW <roc_fe@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-08-08 06:21+0000\n"
+"Last-Translator: zack_404 <zack40091647@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsadblock/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.12.1\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:302
 msgid "-- default --"
@@ -58,19 +58,21 @@ msgstr "Adblock"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:47
 msgid "Add Allowlist Domain"
-msgstr ""
+msgstr "新增白名單地域名"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:12
 msgid "Add Blocklist Domain"
-msgstr ""
+msgstr "新增黑明單地域名"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:48
+#, fuzzy
 msgid "Add this (sub-)domain to your local allowlist."
-msgstr "將此 (子) 網域新增到您的允許清單。"
+msgstr "將此 (子) 網域新增到您的白名單。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:13
+#, fuzzy
 msgid "Add this (sub-)domain to your local blocklist."
-msgstr "將此 (子) 網域新增到您的封鎖清單。"
+msgstr "將此 (子) 網域新增到您的黑名單。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:207
 msgid "Additional Settings"
@@ -78,7 +80,7 @@ msgstr "進階設定"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:229
 msgid "Additional trigger delay in seconds before adblock processing begins."
-msgstr ""
+msgstr "附加觸發 Adblock 行程延遲開始秒數。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:208
 msgid "Advanced DNS Settings"
@@ -126,8 +128,9 @@ msgid "Base Directory"
 msgstr "基礎目錄"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:307
+#, fuzzy
 msgid "Base working directory during adblock processing."
-msgstr ""
+msgstr "運行 adblock 的根目錄"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:371
 msgid "Block Local Client IPs"
@@ -146,7 +149,7 @@ msgstr "被封鎖的DNS請求數"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:267
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:166
 msgid "Blocked Domains"
-msgstr "封鎖域名數"
+msgstr "已封鎖域名"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:481
 msgid "Blocklist Feed"
@@ -176,7 +179,8 @@ msgid ""
 "Builds an additional restrictive DNS blocklist to block access to all "
 "domains except those listed in the allowlist. You can use this restrictive "
 "blocklist e.g. for guest wifi or kidsafe configurations."
-msgstr ""
+msgstr "建立一個額外的限制型 DNS 黑名單，用以封鎖所有非允許清單中的網域，"
+"可應用於訪客 Wi-Fi 或兒童安全網路環境。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:23
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:58
@@ -194,16 +198,18 @@ msgid "Categories"
 msgstr "類別"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:476
+#, fuzzy
 msgid "Changes on this tab needs an adblock service reload to take effect."
-msgstr ""
+msgstr "改變的內容需在 adblock 重新啟動後以生效"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:218
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:289
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:331
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:398
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:439
+#, fuzzy
 msgid "Changes on this tab needs an adblock service restart to take effect."
-msgstr ""
+msgstr "改變的內容需在 adblock 重新啟動後以生效"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:282
 msgid "Clear"
@@ -345,11 +351,13 @@ msgid "Enable SafeSearch"
 msgstr "啟用安全搜尋"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:430
+#, fuzzy
 msgid ""
 "Enable a GeoIP map that shows the geographical location of the blocked "
 "domains. This requires external requests to get the map tiles and "
 "geolocation data."
-msgstr ""
+msgstr "啟用 GeoIP "
+"地圖，顯示被封鎖網域的地理位置。此功能需要透過外部請求以取得地圖與定位資料。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:221
 msgid "Enable the adblock service."
@@ -680,10 +688,11 @@ msgid "Second instance"
 msgstr "第二個實例"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:275
+#, fuzzy
 msgid ""
 "Send adblock related notification e-mails. This needs the additional 'msmtp' "
 "package installation."
-msgstr ""
+msgstr "寄送 adblock 相關通知 e-mails。這需要額外的 'msmtp' 套件安裝。"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:442
 msgid "Sender address for adblock notification E-Mails."
@@ -849,8 +858,9 @@ msgid "Unable to parse the default feed file!"
 msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:74
+#, fuzzy
 msgid "Unable to parse the runtime information!"
-msgstr ""
+msgstr "誤法讀取執行時期資訊"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:51
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:51
@@ -868,8 +878,9 @@ msgid "Upload of the custom feed file failed."
 msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:232
+#, fuzzy
 msgid "Varying"
-msgstr ""
+msgstr "變動中"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:292
 msgid "Verbose Debug Logging"
