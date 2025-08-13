@@ -44,7 +44,6 @@ return view.extend({
 				return L.resolveDefault(fs.exec_direct('/usr/sbin/unbound-control', ['-c', '/var/lib/unbound/unbound.conf', 'stats_noreset'])).then(function(res) {
 					const stats = document.getElementById("stats");
 					stats.value = res ? res.trim() : _('No stats yet!');
-					stats.scrollTop = stats.scrollHeight;
 				});
 			});
 			// Local Data
