@@ -1,13 +1,23 @@
 #!/bin/sh
-# Copyright 2017-2020 Stan Grishin (stangri@melmac.ca)
+# Copyright 2017-2025 Stan Grishin (stangri@melmac.ca)
 # shellcheck disable=SC2039,SC1091,SC3043,SC3057,SC3060
+
+
+# TechRef: https://openwrt.org/docs/techref/rpcd
+# TESTS
+# ubus -v list luci.advanced_reboot
+# ubus -S call luci.advanced_reboot obtain_device_info '{"name": "advanced-reboot" }'
+# ubus -S call luci.advanced_reboot toggle_boot_partition '{"name": "advanced-reboot" }'
 
 readonly devices_dir="/usr/share/advanced-reboot/devices/"
 
 . /lib/functions.sh
 . /usr/share/libubox/jshn.sh
 
-logger() { /usr/bin/logger -t advanced-reboot "$1"; }
+packageName='advanced-reboot'
+debug() { local i j; for i in "$@"; do eval "j=\$$i"; logger "${packageName:+-t $packageName}" "${i}: ${j} "; done; }
+
+logger() { /usr/bin/logger -t advanced-reboot "$*"; }
 is_present() { command -v "$1" >/dev/null 2>&1; }
 
 is_alt_mountable() {
@@ -25,29 +35,29 @@ is_alt_mountable() {
 alt_partition_mount() {
 	local ubi_dev op_ubi="$1" ubi_vol="${2:-0}"
 	mkdir -p /var/alt_rom
-	ubi_dev="$(ubiattach -m "$op_ubi")"
+	ubi_dev="$(ubiattach -m "$op_ubi" 2>/dev/null)"
 	ubi_dev="$(echo "$ubi_dev" | sed -n "s/^UBI device number\s*\(\d*\),.*$/\1/p")"
 	if [ -z "$ubi_dev" ]; then 
-		ubidetach -m "$op_ubi"
+		ubidetach -m "$op_ubi" >/dev/null 2>&1
 		return 1
 	fi
-	ubiblock --create "/dev/ubi${ubi_dev}_${ubi_vol}" && \
-	mount -t squashfs -r "/dev/ubiblock${ubi_dev}_${ubi_vol}" /var/alt_rom
+	ubiblock --create "/dev/ubi${ubi_dev}_${ubi_vol}" >/dev/null 2>&1 && \
+	mount -t squashfs -r "/dev/ubiblock${ubi_dev}_${ubi_vol}" /var/alt_rom >/dev/null 2>&1
 }
 
 alt_partition_unmount() {
 	local mtdCount i=0 op_ubi="$1" ubi_vol="${2:-0}"
 	mtdCount="$(ubinfo | grep 'Present UBI devices' | tr ',' '\n' | grep -c 'ubi')"
 	[ -z "$mtdCount" ] && mtdCount=10
-	[ -d /var/alt_rom ] && umount /var/alt_rom
+	grep -qs '/var/alt_rom ' /proc/mounts && umount /var/alt_rom
 	while [ "$i" -le "$mtdCount" ]; do
 		if [ ! -e "/sys/devices/virtual/ubi/ubi${i}/mtd_num" ]; then
 			break
 		fi
 		ubi_mtd="$(cat /sys/devices/virtual/ubi/ubi${i}/mtd_num)"
 		if [ -n "$ubi_mtd" ] && [ "$ubi_mtd" = "$op_ubi" ]; then
-			ubiblock --remove /dev/ubi${i}_${ubi_vol}
-			ubidetach -m "$op_ubi"
+			ubiblock --remove "/dev/ubi${i}_${ubi_vol}" >/dev/null 2>&1
+			ubidetach -m "$op_ubi" >/dev/null 2>&1
 			rm -rf /var/alt_rom
 		fi
 		i=$((i + 1))
@@ -71,6 +81,7 @@ get_alt_partition_os_info(){
 	alt_partition_unmount "$op_ubi" "$ubi_vol"
 	alt_partition_mount "$op_ubi" "$ubi_vol"
 	if [ -s "/var/alt_rom/etc/os-release" ]; then
+# shellcheck disable=SC2031
 		op_info="$(. /var/alt_rom/etc/os-release && echo "$PRETTY_NAME")"
 		if [ "${op_info//SNAPSHOT}" != "$op_info" ]; then
 			op_info="$(. /var/alt_rom/etc/os-release && echo "${OPENWRT_RELEASE%%-*}")"
@@ -134,7 +145,7 @@ obtain_device_info(){
 
 	if [ -n "$labelOffset" ]; then
 		if [ -n "$partition1MTD" ]; then
-			p1_label="$(dd if="/dev/${partition1MTD}" bs=1 skip="${labelOffset}" count=64 2>/dev/null)"
+			p1_label="$(dd if="/dev/${partition1MTD}" bs=1 skip="${labelOffset}" count=64 2>/dev/null | tr -d '\0')"
 			if [ -n "$p1_label" ]; then
 				p1_version="$(echo "$p1_label" | sed -n "s/\(.*\)Linux-\([0-9.]\+\).*$/\2/p")"
 				if [ "${p1_label//LEDE}" != "$p1_label" ]; then p1_os="LEDE"; fi
@@ -149,7 +160,7 @@ obtain_device_info(){
 		fi
 
 		if [ -n "$partition2MTD" ]; then
-			p2_label="$(dd if="/dev/${partition2MTD}" bs=1 skip="${labelOffset}" count=64 2>/dev/null)"
+			p2_label="$(dd if="/dev/${partition2MTD}" bs=1 skip="${labelOffset}" count=64 2>/dev/null | tr -d '\0')"
 			if [ -n "$p2_label" ]; then
 				p2_version="$(echo "$p2_label" | sed -n "s/\(.*\)Linux-\([0-9.]\+\).*$/\2/p")"
 				if [ "${p2_label//LEDE}" != "$p2_label" ]; then p2_os="LEDE"; fi
@@ -192,13 +203,19 @@ obtain_device_info(){
 	if is_alt_mountable "$partition1MTD" "$partition2MTD"; then
 		opOffset="${opOffset:-1}"
 		ubiVolume="${ubiVolume:-0}"
+		# Robustly extract numeric MTD indices (handles mtd2, mtd22, mtd22ro, etc.)
+		local p1num p2num
+		p1num="${partition1MTD#mtd}"; p1num="${p1num%%[^0-9]*}"
+		p2num="${partition2MTD#mtd}"; p2num="${p2num%%[^0-9]*}"
+		[ -n "$p1num" ] || p1num=0
+		[ -n "$p2num" ] || p2num=0
 		if [ "$current_partition" = "$bootEnv1Partition1Value" ]; then
-			op_ubi=$(( ${partition2MTD:3:3} + $opOffset ))
+			op_ubi=$(( p2num + opOffset ))
 		else
-			op_ubi=$(( ${partition1MTD:3:3} + $opOffset ))
+			op_ubi=$(( p1num + opOffset ))
 		fi
-		cp_info="$(get_main_partition_os_info $op_ubi)"
-		op_info="$(get_alt_partition_os_info $op_ubi $vendorName $ubiVolume)"
+		cp_info="$(get_main_partition_os_info "$op_ubi")"
+		op_info="$(get_alt_partition_os_info "$op_ubi" "$vendorName" "$ubiVolume")"
 		if [ "$current_partition" = "$bootEnv1Partition1Value" ]; then
 			p1_os="${cp_info:-$p1_os}"
 			p2_os="${op_info:-$p2_os}"
@@ -336,7 +353,7 @@ toggle_boot_partition(){
 					json_add_string "$newEnvSetting"
 					json_close_array
 					json_add_string 'rom_board_name' "$romBoardName"
-					json_dump; json_cleanup;
+					json_dump >&4; json_cleanup;
 					return
 				fi
 			fi
@@ -378,7 +395,7 @@ toggle_boot_partition(){
 			fi
 		fi
 		json_init
-		json_dump; json_cleanup;
+		json_dump >&4; json_cleanup;
 	fi
 }
 
