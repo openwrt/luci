@@ -260,6 +260,8 @@ function config_mqtt(c) {
 					str += s['StoreRates'] ? `\t\tRetain ${s.StoreRates}\n` : '';
 					str += s['CleanSession'] ? `\t\tRetain ${s.CleanSession}\n` : '';
 					str += s['Topic'] ? `\t\tTopic "${s.Topic}"\n` : '';
+					str += s['CACert'] ? `\t\tCACert "${s.CACert}"\n` : '';
+					str += s['TLSProtocol'] ? `\t\tTLSProtocol "${s.TLSProtocol}"\n` : '';
 
 					str += isPublish ? `\t</Publish>\n` : `\t</Subscribe>\n`;
 			}
