@@ -1,0 +1,443 @@
+/* luci.advanced-reboot.uc — ucode port of luci.advanced-reboot
+ * Copyright 2025 MOSSDeF, Stan Grishin (stangri@melmac.ca)
+ *
+ * Exposes ubus object: luci.advanced-reboot
+ * Methods:
+ *   - obtain_device_info
+ *   - toggle_boot_partition
+ * Tests:
+ * ubus -v list luci.advanced-reboot
+ * ubus -S call luci.advanced-reboot obtain_device_info
+ * ubus -S call luci.advanced-reboot toggle_boot_partition
+ *
+ * Schema for device JSON files (new):
+ * {
+ * 	"device": { "vendor": "Vendor", "model": "Model", "board": ["vendor,model"] },
+ * 	"commands": {
+ * 		"params": ["<env1>", "<env2>"],
+ * 		"get": "fw_printenv",
+ * 		"set": "fw_setenv",
+ * 		"save": null
+ * 	},
+ * 	"partitions": [
+ * 		{ "number": 1, "param_values": [v1, w1], "mtd": "mtdX", "labelOffsetBytes": <int|null>, "altMountOptions": { "mtdOffset": <int>, "ubiVolume": <int> } },
+ * 		{ "number": 2, "param_values": [v2, w2], "mtd": "mtdY", "labelOffsetBytes": <int|null> }
+ * 	]
+ * }
+ *
+ * Notes:
+ * - `altMountOptions` is optional; when absent, defaults are mtdOffset=1, ubiVolume=0.
+ * - `param_values[i]` aligns with `commands.params[i]`.
+ */
+
+'use strict';
+
+import { stat as stat, readfile as readfile, popen as popen, glob as glob, open as open } from 'fs';
+let DEVICES_DIR = "/usr/share/advanced-reboot/devices/";
+
+function file_exists(p) {
+	try { return stat(p) != null; } catch (e) { return false; }
+}
+
+function str_trim(s) {
+	if (s == null) return s;
+	/* Greedy capture to reliably trim leading/trailing whitespace */
+	let m = match("" + s, /^\s*(.*)\s*$/);
+	return (m && m[1] != null) ? m[1] : ("" + s);
+}
+
+function shellquote(s) {
+	return `'${replace(s ?? '', "'", "'\\''")}'`;
+}
+
+function command(cmd) {
+	return trim(popen(cmd)?.read?.('all'));
+}
+
+function log(msg) {
+	command('logger -t advanced-reboot -- ' + shellquote("" + msg));
+}
+
+/* Quickly check if a command is present in PATH */
+function has_cmd(name) {
+	let r = command('command -v ' + name + ' >/dev/null 2>&1; echo $?');
+	return r == "0";
+}
+
+/* Read /tmp/sysinfo/board_name */
+function get_board_name() {
+	let s = readfile('/tmp/sysinfo/board_name');
+	if (!s) return null;
+	/* take the first line, drop trailing CR if present */
+	let line = split(s, "\n")[0] ?? "";
+	let parts = split(line, "\r");
+	return parts[0] ?? "";
+}
+
+/* Find and return parsed device JSON object matching romBoardName */
+function find_device_info(romBoardName) {
+	let rb = str_trim(romBoardName ?? "");
+	let list = glob(DEVICES_DIR + "*.json");
+	for (let f in list) {
+		let txt = readfile(f);
+		if (!txt) continue;
+		let obj = json(txt);
+		if (!obj || !obj.device) continue;
+		let boards = obj.device.board;
+		if (!boards) continue;
+		if (type(boards) != 'array') boards = [ '' + boards ];
+		for (let i = 0; i < length(boards); i++) {
+			let s = '' + boards[i];
+			if (s == rb)
+				return obj;
+		}
+	}
+	return null;
+}
+
+/* Convert an mtd name like "mtd5" to its numeric index (5) */
+function mtd_index(mtdName) {
+		let m = match("" + mtdName, /^mtd([0-9]+)/);
+		if (m && m[1]) {
+				let n = int(m[1]);
+				return (n == n) ? n : null;
+		}
+		return null;
+}
+
+/* Read OS label (and optionally kernel) from a given root path */
+function get_volume_info(path) {
+	let root = path ?? '/';
+	/* ensure trailing slash exactly once */
+	if (!match(root, /\/$/)) root = root + '/';
+
+	let label = null;
+	let pretty = command('. ' + shellquote(root + 'etc/os-release') + ' 2>/dev/null; echo "$PRETTY_NAME" 2>/dev/null');
+	if (pretty)
+		label = str_trim(pretty);
+	if (label && match(label, /SNAPSHOT/)) {
+		let rel = command('grep -m1 "^DISTRIB_RELEASE=" ' + shellquote(root + 'etc/openwrt_release') + ' 2>/dev/null | awk -F= \'{gsub(/["\'\']/, "", $2); print $2}\'');
+		if (rel)
+			label = 'OpenWrt ' + str_trim(rel);
+	}
+
+	let kver = null;
+	if (root == '/') {
+		let pv = readfile('/proc/version');
+		if (pv) {
+			let m = match(pv, /^Linux version ([^ ]+)/);
+			if (m && m[1])
+				kver = m[1];
+		}
+		if (!kver) {
+			let r = command('uname -r 2>/dev/null');
+			if (r) kver = r;
+		}
+	}
+	return { label: label, os: kver };
+}
+
+/* Read current OS name from /etc/os-release, normalized for snapshot */
+function get_partition_info_current() {
+	return get_volume_info('/');
+}
+
+/* Alt partition mount / unmount helpers */
+function is_alt_mountable(partitions) {
+	if (!partitions || type(partitions) != "array")
+		return false;
+	for (let i = 0; i < length(partitions); i++) {
+		if (!match("" + partitions[i], /^mtd/))
+			return false;
+	}
+	return has_cmd("ubiattach") && has_cmd("ubiblock") && has_cmd("mount");
+}
+
+function alt_partition_mount(op_ubi, ubi_vol) {
+	log('attempting to mount alternative partition: UBI=' + op_ubi + ', Volume=' + ubi_vol);
+	log('ignore kernel messages below');
+	command('mkdir -p /var/alt_rom');
+	command('umount /var/alt_rom');
+	command('ubidetach -m ' + op_ubi + ' >/dev/null 2>&1');
+	let out = command('ubiattach -m ' + op_ubi + ' 2>/dev/null | sed -n \'s/^UBI device number\\s*\\([0-9]*\\),.*$/\\1/p\'');
+	log('mounted alternative partition UBI device number: ' + out);
+	let dev = (out && length(out)) ? int(out) : null;
+	if (dev == null) {
+		command('ubidetach -m ' + op_ubi + ' >/dev/null 2>&1');
+		return false;
+	}
+	let vol = (ubi_vol == null) ? 0 : int(ubi_vol);
+	let blk = '/dev/ubiblock' + dev + '_' + vol;
+	command('ubiblock --create /dev/ubi' + dev + '_' + vol + ' >/dev/null 2>&1');
+	let rc = command('mount -t squashfs -r ' + blk + ' /var/alt_rom >/dev/null 2>&1; echo $?');
+	return rc == '0';
+}
+
+function alt_partition_unmount(op_ubi, ubi_vol) {
+	let mtdCount = command('ubmtdCount | grep "Present UBI devices" | tr "," "\\n" | grep -c "ubi"');
+	mtdCount = int(mtdCount) || 10;
+	command('umount /var/alt_rom');
+	for (let i = 0; i <= mtdCount; i++) {
+		let mtd = readfile('/sys/devices/virtual/ubi/ubi' + i + '/mtd_num');
+		if (!mtd) break;
+		mtd = str_trim(mtd);
+		if (mtd == ("" + op_ubi)) {
+			/* remove any ubiblock nodes on this ubi dev */
+			for (let vid = 0; vid < 16; vid++)
+				command('ubiblock --remove /dev/ubi' + i + '_' + vid + ' >/dev/null 2>&1');
+			command('ubidetach -m ' + op_ubi + ' >/dev/null 2>&1');
+			command('rm -rf /var/alt_rom');
+		}
+	}
+}
+
+function get_partition_info_alt(op_ubi, vendor_name, ubi_vol) {
+	let info = null;
+	let mounted = alt_partition_mount(op_ubi, ubi_vol);
+	if (mounted) {
+		/* Read info from mounted alt root */
+		info = get_volume_info('/var/alt_rom/');
+		alt_partition_unmount(op_ubi, ubi_vol);
+		return info ?? { label: null, os: null };
+	}
+	else {
+		alt_partition_unmount(op_ubi, ubi_vol);
+	}
+	return { label: null, os: null };
+}
+
+/* Fallback: read label directly from MTD using dd pipeline */
+function get_partition_info_fallback(mtd, offset, vendor) {
+	let label = null;
+	let os = null;
+	let tag = command('dd if=/dev/' + mtd + ' bs=1 skip=' + offset + ' count=64');
+	if (tag) {
+		let m = match(tag, /Linux-([0-9.]+)/);
+		if (m && m[1])
+			os = m[1];
+		if (match(tag, /OpenWrt/)) {
+			label = "OpenWrt";
+		} else if (vendor && vendor != "" && match(tag, regexp(vendor))) {
+			label = vendor;
+		} else {
+			label = "Unknown";
+		}
+	}
+	else {
+		label = vendor ?? vendor + ' (Compressed)' || 'Unknown (Compressed)';
+	}
+	return { label: label, os: os };
+}
+
+/* Dual-flag helpers (Zyxel path) */
+function read_dual_flag_mtd() {
+	for (let name in ['0:dual_flag', '0:DUAL_FLAG']) {
+		let dev = command('. /lib/functions.sh; find_mtd_part ' + shellquote(name));
+		if (dev)
+			return dev;
+	}
+	return null;
+}
+
+function read_dual_flag_value(dev) {
+	/* hexdump style read: one byte -> decimal */
+	let r = command('dd if=' + shellquote(dev) + ' bs=1 count=1 2>/dev/null | hexdump -n 1 -e \'' + '1/1 "%d"' + '\'');
+	return r || null;
+}
+
+function write_dual_flag_value(dev, cur) {
+	let newb = (cur == "1") ? "\\xff" : "\\x01";
+	let rc = command('printf %b ' + shellquote(newb) + ' > ' + shellquote(dev) + ' 2>/dev/null; echo $?');
+	return rc == "0";
+}
+
+/* Obtain info: mirrors shell behavior */
+function obtain_device_info() {
+	let board = get_board_name();
+	if (!board)
+			return { error: 'NO_BOARD_NAME' };
+
+	let d = find_device_info(board);
+	if (!d)
+		return { error: 'NO_BOARD_NAME_MATCH', rom_board_name: board };
+
+	/* parse new-schema device object */
+	let dev		= d.device ?? {};
+	let cmds	= d.commands ?? {};
+	let parts	= (d.partitions && type(d.partitions) == 'array') ? d.partitions : [];
+	let params	= (cmds.params && type(cmds.params) == 'array') ? cmds.params : [];
+	let getcmd	= cmds.get ?? 'fw_printenv';
+	let setcmd	= cmds.set ?? 'fw_setenv';
+	let savecmd	= cmds.save ?? null;
+
+	/* read current values for all params */
+	let curvals = [];
+	for (let i = 0; i < length(params); i++) {
+		let p = params[i];
+		let v = null;
+		if (p) v = command(getcmd + ' -n ' + shellquote(p) + ' 2>/dev/null') || null;
+		push(curvals, v);
+	}
+
+	/* find active partition by matching all param_values */
+	let active_idx = -1;
+	for (let i = 0; i < length(parts); i++) {
+		let pv = (parts[i].param_values && type(parts[i].param_values) == 'array') ? parts[i].param_values : [];
+		let allmatch = (length(pv) == length(curvals));
+		if (allmatch) {
+			for (let j = 0; j < length(pv); j++) {
+				if (("" + pv[j]) != ("" + curvals[j])) { allmatch = false; break; }
+			}
+		}
+		if (allmatch) { active_idx = i; break; }
+	}
+
+	/* if no params, fall back to dual-flag (Zyxel) */
+	let current_num = null;
+	if (length(params) == 0) {
+		let df = read_dual_flag_mtd();
+		if (!df) return { error: 'NO_DUAL_FLAG', rom_board_name: board };
+		if (!file_exists(df)) return { error: 'NO_DUAL_FLAG_BLOCK', rom_board_name: board };
+		current_num = read_dual_flag_value(df);
+		/* try to map current_num to partition index */
+		for (let i = 0; i < length(parts); i++) {
+			if (("" + (parts[i].number ?? i)) == ("" + current_num)) { active_idx = i; break; }
+		}
+	}
+
+	let out_parts = [];
+	for (let i = 0; i < length(parts); i++) {
+		let p = parts[i] ?? {};
+		let num = (p.number != null) ? p.number : i;
+		let mtd = p.mtd ?? null;
+		let info = null;
+
+		if (i == active_idx) {
+			info = get_partition_info_current();
+		} else if (mtd) {
+			/* attempt alt mount if we have mount options (or defaults) and tools */
+			let amo = p.altMountOptions ?? {};
+			let mtdOff = (amo.mtdOffset == null) ? 1 : int(amo.mtdOffset);
+			let ubiVol = (amo.ubiVolume == null) ? 0 : int(amo.ubiVolume);
+			if (is_alt_mountable([mtd])) {
+				let idx = mtd_index(mtd);
+				if (idx != null) {
+					let op_ubi = idx + mtdOff;
+					info = get_partition_info_alt(op_ubi, dev.vendor ?? null, ubiVol);
+					if (info && info.label == null && info.os == null) info = null;
+				}
+			}
+		}
+
+		/* raw-label fallback if needed: only fill missing OS, never downgrade an existing label */
+		if (mtd && p.labelOffsetBytes != null) {
+			let need_os = (!info || info.os == null || info.os == '');
+			if (!info || info.label == null || info.label == '' || info.os == null || info.os == '') {
+				let fb = get_partition_info_fallback(mtd, p.labelOffsetBytes, dev.vendor);
+				if (!info) {
+					info = fb;
+				} else {
+					if (fb && fb.label && (info.label == null || info.label == '')) {
+						info.label = fb.label;
+					}
+					if (fb && fb.os && (info.os == null || info.os == '')) {
+						info.os = fb.os;
+					}
+				}
+			}
+		}
+
+		push(out_parts, {
+			number: ("" + num),
+			label:  info ? info.label : null,
+			os:     info ? info.os    : null,
+			mtd:    mtd
+		});
+	}
+
+	let active_num = null;
+	if (active_idx >= 0 && active_idx < length(parts))
+		active_num = parts[active_idx].number ?? active_idx;
+	else if (current_num != null)
+		active_num = current_num;
+
+	return {
+		device: {
+			vendor: dev.vendor ?? "",
+			model:  dev.model  ?? "",
+			board:  board ?? "",
+			partition_active: active_num != null ? ("" + active_num) : null
+		},
+		partitions: out_parts
+	};
+}
+
+/* Toggle partition: mirrors shell behavior */
+function toggle_boot_partition() {
+	let board = get_board_name();
+	if (!board)
+		return { error: "NO_BOARD_NAME" };
+
+	let d = find_device_info(board);
+	if (!d)
+		return { rom_board_name: board };
+
+	let dev = d.device ?? {};
+	let cmds = d.commands ?? {};
+	let parts = (d.partitions && type(d.partitions) == 'array') ? d.partitions : [];
+	let params = (cmds.params && type(cmds.params) == 'array') ? cmds.params : [];
+	let getcmd = cmds.get ?? 'fw_printenv';
+	let setcmd = cmds.set ?? 'fw_setenv';
+	let savecmd = cmds.save ?? null;
+
+	if (length(params) > 0) {
+		/* read current param values */
+		let curvals = [];
+		for (let i = 0; i < length(params); i++)
+			push(curvals, command(getcmd + ' -n ' + shellquote(params[i]) + ' 2>/dev/null') || null);
+
+		/* find active partition */
+		let active_idx = -1;
+		for (let i = 0; i < length(parts); i++) {
+			let pv = (parts[i].param_values && type(parts[i].param_values) == 'array') ? parts[i].param_values : [];
+			let allmatch = (length(pv) == length(curvals));
+			if (allmatch) {
+				for (let j = 0; j < length(pv); j++)
+					if (("" + pv[j]) != ("" + curvals[j])) { allmatch = false; break; }
+			}
+			if (allmatch) { active_idx = i; break; }
+		}
+		if (active_idx < 0) active_idx = 0;
+
+		/* next partition cyclically */
+		let next_idx = (active_idx + 1) % (length(parts) > 0 ? length(parts) : 1);
+		let target = parts[next_idx] ?? null;
+		if (!target) return { error: 'NO_TARGET_PART', rom_board_name: board };
+		let tvals = (target.param_values && type(target.param_values) == 'array') ? target.param_values : [];
+		if (length(tvals) != length(params)) return { error: 'PARAM_ARITY_MISMATCH', rom_board_name: board };
+
+		/* set all params to target values */
+		for (let i = 0; i < length(params); i++) {
+			let rc = command(setcmd + ' ' + shellquote(params[i]) + ' ' + shellquote('' + tvals[i]) + ' 2>/dev/null; echo $?');
+			if (rc != '0') return { error: 'ERR_SET_ENV', args: [ params[i], ('' + tvals[i]) ], rom_board_name: board };
+		}
+		if (savecmd) command(savecmd + ' >/dev/null 2>&1');
+		return {};
+	}
+
+	/* fallback: dual-flag path */
+	let devf = read_dual_flag_mtd();
+	if (!devf) return { error: 'NO_DUAL_FLAG', rom_board_name: board };
+	if (!file_exists(devf)) return { error: 'NO_DUAL_FLAG_BLOCK', rom_board_name: board };
+	let cur = read_dual_flag_value(devf);
+	if (cur == null) return { error: 'NO_DUAL_FLAG', rom_board_name: board };
+	if (!write_dual_flag_value(devf, cur)) return { error: 'ERR_SET_DUAL_FLAG', args: [ devf ], rom_board_name: board };
+	return {};
+}
+
+const methods = {
+	obtain_device_info: { call: obtain_device_info },
+	toggle_boot_partition: { call: toggle_boot_partition }
+};
+
+return { 'luci.advanced-reboot': methods };
