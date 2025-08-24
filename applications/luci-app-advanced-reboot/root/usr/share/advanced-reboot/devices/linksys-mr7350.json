@@ -1,14 +1,35 @@
 {
-        "vendorName": "Linksys",
-        "deviceName": "MR7350",
-        "boardNames": [ "linksys,mr7350" ],
-        "partition1MTD": "mtd14",
-        "partition2MTD": "mtd16",
-        "labelOffset": 192,
-        "bootEnv1": "boot_part",
-        "bootEnv1Partition1Value": 1,
-        "bootEnv1Partition2Value": 2,
-        "bootEnv2": null,
-        "bootEnv2Partition1Value": null,
-        "bootEnv2Partition2Value": null
+	"device": {
+		"vendor": "Linksys",
+		"model": "MR7350",
+		"board": [
+			"linksys,mr7350"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"mtd": "mtd14",
+			"labelOffsetBytes": 192
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"mtd": "mtd16",
+			"labelOffsetBytes": 192
+		}
+	]
 }
