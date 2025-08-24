@@ -1,14 +1,29 @@
 {
-	"vendorName": "Linksys",
-	"deviceName": "EA9500",
-	"boardName": "linksys-panamera",
-	"partition1MTD": "mtd3",
-	"partition2MTD": "mtd6",
-	"labelOffset": 28,
-	"bootEnv1": "boot_part",
-	"bootEnv1Partition1Value": 1,
-	"bootEnv1Partition2Value": 2,
-	"bootEnv2": null,
-	"bootEnv2Partition1Value": null,
-	"bootEnv2Partition2Value": null
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA9500",
+		"board": []
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [1],
+			"mtd": "mtd3",
+			"labelOffsetBytes": 28
+		},
+		{
+			"number": 2,
+			"param_values": [2],
+			"mtd": "mtd6",
+			"labelOffsetBytes": 28
+		}
+	]
 }
