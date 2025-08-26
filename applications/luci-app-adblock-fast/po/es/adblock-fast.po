@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-08-11 21:03+0000\n"
-"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"PO-Revision-Date: 2025-08-23 10:16+0000\n"
+"Last-Translator: brodrigueznu <brodrigueznu@hotmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock-fast/es/>\n"
 "Language: es\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:318
 msgid "%s is currently disabled"
@@ -399,7 +399,7 @@ msgstr "Otorgar acceso a archivos y UCI para luci-app-adblock-fast"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:377
 msgid "Heartbeat domain is not accessible after resolver restart"
-msgstr ""
+msgstr "El dominio heartbeat no es accesible después del reinicio del resolutor"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:355
 msgid "IPv6 Support"
@@ -435,6 +435,9 @@ msgid ""
 "may need to update packages or reboot the device, please check the "
 "%sREADME%s."
 msgstr ""
+"Discordancia de versión interna (package: %s, luci app: %s, luci rpcd: %s), "
+"es posible que necesite actualizar los paquetes o reiniciar el dispositivo. "
+"Por favor, consulte el %sREADME%s."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:279
 msgid "Invalid compressed cache directory '%s'"
@@ -472,11 +475,11 @@ msgstr "Nombre/URL"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:252
 msgid "No Ad-blocking on SmartDNS"
-msgstr ""
+msgstr "Sin bloqueo de anuncios en SmartDNS"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:188
 msgid "No Ad-blocking on dnsmasq"
-msgstr ""
+msgstr "Sin bloqueo de anuncios en dnsmasq"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:361
 msgid "No HTTPS/SSL support on device"
@@ -515,15 +518,15 @@ msgstr ""
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:280
 msgid "Pick the SmartDNS instance(s) for ad-blocking"
-msgstr ""
+msgstr "Seleccione la(s) instancia(s) de SmartDNS para bloqueo de anuncios"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:217
 msgid "Pick the dnsmasq instance(s) for ad-blocking"
-msgstr ""
+msgstr "Seleccione la(s) instancia(s) de dnsmasq para bloqueo de anuncios"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:221
 msgid "Please %sdonate%s to support development of this project."
-msgstr ""
+msgstr "Por favor, %sdonate%s para apoyar el desarrollo de este proyecto."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:61
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:66
@@ -554,11 +557,11 @@ msgstr "Reiniciando"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:282
 msgid "Sanity check discovered TLDs in %s"
-msgstr ""
+msgstr "Verificación de sanidad descubrió TLDs en %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:284
 msgid "Sanity check discovered leading dots in %s"
-msgstr ""
+msgstr "Verificación de sanidad descubrió puntos iniciales en %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:560
 msgid "Service Control"
@@ -713,7 +716,7 @@ msgstr "Error desconocido"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:41
 msgid "Unknown message"
-msgstr ""
+msgstr "Mensaje desconocido"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:297
 msgid "Unknown warning"
@@ -721,11 +724,11 @@ msgstr "Advertencia desconocida"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:242
 msgid "Use ad-blocking on the SmartDNS instance(s)"
-msgstr ""
+msgstr "Utilizar bloqueo de anuncios en la(s) instancia(s) de SmartDNS"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:178
 msgid "Use ad-blocking on the dnsmasq instance(s)"
-msgstr ""
+msgstr "Utilizar bloqueo de anuncios en la(s) instancia(s) de dnsmasq"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:267
 msgid ""
@@ -759,12 +762,16 @@ msgid ""
 "You can limit the ad-blocking to the specific SmartDNS instance(s) (%smore "
 "information%s)."
 msgstr ""
+"Puede limitar el bloqueo de anuncios a la(s) instancia(s) específica(s) de "
+"SmartDNS (%smore information%s)."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:180
 msgid ""
 "You can limit the ad-blocking to the specific dnsmasq instance(s) (%smore "
 "information%s)."
 msgstr ""
+"Puede limitar el bloqueo de anuncios a la(s) instancia(s) específica(s) de "
+"dnsmasq (%smore information%s)."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:135
 msgid "dnsmasq additional hosts"
