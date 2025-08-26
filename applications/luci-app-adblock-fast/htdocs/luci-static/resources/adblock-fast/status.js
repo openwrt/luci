@@ -12,7 +12,7 @@ var pkg = {
 		return "adblock-fast";
 	},
 	get LuciCompat() {
-		return 7;
+		return 8;
 	},
 	get ReadmeCompat() {
 		return "";
@@ -50,6 +50,106 @@ var pkg = {
 	},
 	isObjEmpty: function (obj) {
 		return Object.keys(obj).length === 0;
+	},
+
+	statusTable: {
+		statusNoInstall: _("%s is not installed or not found").format(
+			"adblock-fast"
+		),
+		statusStopped: _("Stopped"),
+		statusStarting: _("Starting"),
+		statusProcessing: _("Processing lists"),
+		statusRestarting: _("Restarting"),
+		statusForceReloading: _("Force Reloading"),
+		statusDownloading: _("Downloading lists"),
+		statusFail: _("Failed to start"),
+		statusSuccess: _("Active"),
+		statusTriggerBootWait: _("Waiting for trigger (on_boot)"),
+		statusTriggerStartWait: _("Waiting for trigger (on_start)"),
+	},
+
+	warningTable: {
+		warningInternalVersionMismatch: _(
+			"Internal version mismatch (package: %s, luci app: %s, luci rpcd: %s), you may need to update packages or reboot the device, please check the %sREADME%s."
+		),
+		warningExternalDnsmasqConfig: _(
+			"Use of external dnsmasq config file detected, please set '%s' option to '%s'"
+		).format("dns", "dnsmasq.conf"),
+		warningMissingRecommendedPackages: _("Missing recommended package: '%s'"),
+		warningOutdatedLuciPackage: _(
+			"The WebUI application (luci-app-adblock-fast) is outdated, please update it"
+		),
+		warningOutdatedPrincipalPackage: _(
+			"The principal package (adblock-fast) is outdated, please update it"
+		),
+		warningInvalidCompressedCacheDir: _(
+			"Invalid compressed cache directory '%s'"
+		),
+		warningFreeRamCheckFail: _("Can't detect free RAM"),
+		warningSanityCheckTLD: _("Sanity check discovered TLDs in %s"),
+		warningSanityCheckLeadingDot: _(
+			"Sanity check discovered leading dots in %s"
+		),
+	},
+
+	errorTable: {
+		errorConfigValidationFail: _("Config (%s) validation failure!").format(
+			"/etc/config/" + "adblock-fast"
+		),
+		errorServiceDisabled: _("%s is currently disabled").format("adblock-fast"),
+		errorNoDnsmasqIpset: _(
+			"The dnsmasq ipset support is enabled, but dnsmasq is either not installed or installed dnsmasq does not support ipset"
+		),
+		errorNoIpset: _(
+			"The dnsmasq ipset support is enabled, but ipset is either not installed or installed ipset does not support '%s' type"
+		).format("hash:net"),
+		errorNoDnsmasqNftset: _(
+			"The dnsmasq nft set support is enabled, but dnsmasq is either not installed or installed dnsmasq does not support nft set"
+		),
+		errorNoNft: _(
+			"The dnsmasq nft sets support is enabled, but nft is not installed"
+		),
+		errorNoWanGateway: _("The %s failed to discover WAN gateway").format(
+			"adblock-fast"
+		),
+		errorOutputDirCreate: _("Failed to create directory for %s file"),
+		errorOutputFileCreate: _("Failed to create '%s' file"),
+		errorFailDNSReload: _("Failed to restart/reload DNS resolver"),
+		errorSharedMemory: _("Failed to access shared memory"),
+		errorSorting: _("Failed to sort data file"),
+		errorOptimization: _("Failed to optimize data file"),
+		errorAllowListProcessing: _("Failed to process allow-list"),
+		errorDataFileFormatting: _("Failed to format data file"),
+		// NOTE: keep placeholders; fill with info at render time
+		errorMovingDataFile: _("Failed to move temporary data file to '%s'"),
+		errorCreatingCompressedCache: _("Failed to create compressed cache"),
+		errorRemovingTempFiles: _("Failed to remove temporary files"),
+		errorRestoreCompressedCache: _("Failed to unpack compressed cache"),
+		// NOTE: keep placeholders; fill with info at render time
+		errorRestoreCache: _("Failed to move '%s' to '%s'"),
+		errorOhSnap: _("Failed to create block-list or restart DNS resolver"),
+		errorStopping: _("Failed to stop %s").format("adblock-fast"),
+		errorDNSReload: _("Failed to reload/restart DNS resolver"),
+		errorDownloadingConfigUpdate: _("Failed to download Config Update file"),
+		errorDownloadingList: _("Failed to download %s"),
+		errorParsingConfigUpdate: _("Failed to parse Config Update file"),
+		errorParsingList: _("Failed to parse %s"),
+		errorNoSSLSupport: _("No HTTPS/SSL support on device"),
+		errorCreatingDirectory: _(
+			"Failed to create output/cache/gzip file directory"
+		),
+		errorDetectingFileType: _("Failed to detect format %s"),
+		errorNothingToDo: _("No blocked list URLs nor blocked-domains enabled"),
+		errorTooLittleRam: _(
+			"Free ram (%s) is not enough to process all enabled block-lists"
+		),
+		errorCreatingBackupFile: _("failed to create backup file %s"),
+		errorDeletingDataFile: _("failed to delete data file %s"),
+		errorRestoringBackupFile: _("failed to restore backup file %s"),
+		errorNoOutputFile: _("failed to create final block-list %s"),
+		errorNoHeartbeat: _(
+			"Heartbeat domain is not accessible after resolver restart"
+		),
 	},
 };
 
@@ -175,17 +275,6 @@ var status = baseclass.extend({
 			var text = "";
 			var outputFile = reply.status.outputFile;
 			var outputCache = reply.status.outputCache;
-			var statusTable = {
-				statusNoInstall: _("%s is not installed or not found").format(pkg.Name),
-				statusStopped: _("Stopped"),
-				statusStarting: _("Starting"),
-				statusProcessing: _("Processing lists"),
-				statusRestarting: _("Restarting"),
-				statusForceReloading: _("Force Reloading"),
-				statusDownloading: _("Downloading lists"),
-				statusFail: _("Failed to start"),
-				statusSuccess: _("Active"),
-			};
 
 			var header = E("h2", {}, _("AdBlock-Fast - Status"));
 			var statusTitle = E(
@@ -197,7 +286,7 @@ var status = baseclass.extend({
 				text += _("Version %s").format(reply.status.version) + " - ";
 				switch (reply.status.status) {
 					case "statusSuccess":
-						text += statusTable[reply.status.status] + ".";
+						text += pkg.statusTable[reply.status.status] + ".";
 						text +=
 							"<br />" +
 							_("Blocking %s domains (with %s).").format(
@@ -226,10 +315,13 @@ var status = baseclass.extend({
 						break;
 					case "statusStopped":
 						if (reply.status.enabled) {
-							text += statusTable[reply.status.status] + ".";
+							text += pkg.statusTable[reply.status.status] + ".";
 						} else {
 							text +=
-								statusTable[reply.status.status] + " (" + _("Disabled") + ").";
+								pkg.statusTable[reply.status.status] +
+								" (" +
+								_("Disabled") +
+								").";
 						}
 						if (reply.status.outputCacheExists) {
 							text += "<br />" + _("Cache file found.");
@@ -241,10 +333,10 @@ var status = baseclass.extend({
 					case "statusForceReloading":
 					case "statusDownloading":
 					case "statusProcessing":
-						text += statusTable[reply.status.status] + "...";
+						text += pkg.statusTable[reply.status.status] + "...";
 						break;
 					default:
-						text += statusTable[reply.status.status] + ".";
+						text += pkg.statusTable[reply.status.status] + ".";
 						break;
 				}
 			} else {
@@ -259,31 +351,6 @@ var status = baseclass.extend({
 
 			var warningsDiv = [];
 			if (reply.ubus.warnings && reply.ubus.warnings.length) {
-				var warningTable = {
-					warningInternalVersionMismatch: _(
-						"Internal version mismatch (package: %s, luci app: %s, luci rpcd: %s), you may need to update packages or reboot the device, please check the %sREADME%s."
-					),
-					warningExternalDnsmasqConfig: _(
-						"Use of external dnsmasq config file detected, please set '%s' option to '%s'"
-					).format("dns", "dnsmasq.conf"),
-					warningMissingRecommendedPackages: _(
-						"Missing recommended package: '%s'"
-					),
-					warningOutdatedLuciPackage: _(
-						"The WebUI application (luci-app-adblock-fast) is outdated, please update it"
-					),
-					warningOutdatedPrincipalPackage: _(
-						"The principal package (adblock-fast) is outdated, please update it"
-					),
-					warningInvalidCompressedCacheDir: _(
-						"Invalid compressed cache directory '%s'"
-					),
-					warningFreeRamCheckFail: _("Can't detect free RAM"),
-					warningSanityCheckTLD: _("Sanity check discovered TLDs in %s"),
-					warningSanityCheckLeadingDot: _(
-						"Sanity check discovered leading dots in %s"
-					),
-				};
 				var warningsTitle = E(
 					"label",
 					{ class: "cbi-value-title" },
@@ -291,13 +358,16 @@ var status = baseclass.extend({
 				);
 				var text = "";
 				reply.ubus.warnings.forEach((element) => {
-					if (element.code && warningTable[element.code]) {
-						text += pkg.formatMessage(element.info, warningTable[element.code]);
+					if (element.code && pkg.warningTable[element.code]) {
+						text += pkg.formatMessage(
+							element.info,
+							pkg.warningTable[element.code]
+						);
 					} else {
 						text += _("Unknown warning") + "<br />";
 					}
 				});
-				var warningsText = E("div", {}, text);
+				var warningsText = E("div", { class: "cbi-value-description" }, text);
 				var warningsField = E(
 					"div",
 					{ class: "cbi-value-field" },
@@ -311,72 +381,6 @@ var status = baseclass.extend({
 
 			var errorsDiv = [];
 			if (reply.ubus.errors && reply.ubus.errors.length) {
-				var errorTable = {
-					errorConfigValidationFail: _(
-						"Config (%s) validation failure!"
-					).format("/etc/config/" + pkg.Name),
-					errorServiceDisabled: _("%s is currently disabled").format(pkg.Name),
-					errorNoDnsmasqIpset: _(
-						"The dnsmasq ipset support is enabled, but dnsmasq is either not installed or installed dnsmasq does not support ipset"
-					),
-					errorNoIpset: _(
-						"The dnsmasq ipset support is enabled, but ipset is either not installed or installed ipset does not support '%s' type"
-					).format("hash:net"),
-					errorNoDnsmasqNftset: _(
-						"The dnsmasq nft set support is enabled, but dnsmasq is either not installed or installed dnsmasq does not support nft set"
-					),
-					errorNoNft: _(
-						"The dnsmasq nft sets support is enabled, but nft is not installed"
-					),
-					errorNoWanGateway: _("The %s failed to discover WAN gateway").format(
-						pkg.Name
-					),
-					errorOutputDirCreate: _("Failed to create directory for %s file"),
-					errorOutputFileCreate: _("Failed to create '%s' file"),
-					errorFailDNSReload: _("Failed to restart/reload DNS resolver"),
-					errorSharedMemory: _("Failed to access shared memory"),
-					errorSorting: _("Failed to sort data file"),
-					errorOptimization: _("Failed to optimize data file"),
-					errorAllowListProcessing: _("Failed to process allow-list"),
-					errorDataFileFormatting: _("Failed to format data file"),
-					errorMovingDataFile: _(
-						"Failed to move temporary data file to '%s'"
-					).format(outputFile),
-					errorCreatingCompressedCache: _("Failed to create compressed cache"),
-					errorRemovingTempFiles: _("Failed to remove temporary files"),
-					errorRestoreCompressedCache: _("Failed to unpack compressed cache"),
-					errorRestoreCache: _("Failed to move '%s' to '%s'").format(
-						outputCache,
-						outputFile
-					),
-					errorOhSnap: _("Failed to create block-list or restart DNS resolver"),
-					errorStopping: _("Failed to stop %s").format(pkg.Name),
-					errorDNSReload: _("Failed to reload/restart DNS resolver"),
-					errorDownloadingConfigUpdate: _(
-						"Failed to download Config Update file"
-					),
-					errorDownloadingList: _("Failed to download %s"),
-					errorParsingConfigUpdate: _("Failed to parse Config Update file"),
-					errorParsingList: _("Failed to parse %s"),
-					errorNoSSLSupport: _("No HTTPS/SSL support on device"),
-					errorCreatingDirectory: _(
-						"Failed to create output/cache/gzip file directory"
-					),
-					errorDetectingFileType: _("Failed to detect format %s"),
-					errorNothingToDo: _(
-						"No blocked list URLs nor blocked-domains enabled"
-					),
-					errorTooLittleRam: _(
-						"Free ram (%s) is not enough to process all enabled block-lists"
-					),
-					errorCreatingBackupFile: _("failed to create backup file %s"),
-					errorDeletingDataFile: _("failed to delete data file %s"),
-					errorRestoringBackupFile: _("failed to restore backup file %s"),
-					errorNoOutputFile: _("failed to create final block-list %s"),
-					errorNoHeartbeat: _(
-						"Heartbeat domain is not accessible after resolver restart"
-					),
-				};
 				var errorsTitle = E(
 					"label",
 					{ class: "cbi-value-title" },
@@ -384,8 +388,11 @@ var status = baseclass.extend({
 				);
 				var text = "";
 				reply.ubus.errors.forEach((element) => {
-					if (element.code && errorTable[element.code]) {
-						text += pkg.formatMessage(element.info, errorTable[element.code]);
+					if (element.code && pkg.errorTable[element.code]) {
+						text += pkg.formatMessage(
+							element.info,
+							pkg.errorTable[element.code]
+						);
 					} else {
 						text += _("Unknown error") + "<br />";
 					}
@@ -394,7 +401,7 @@ var status = baseclass.extend({
 					'<a href="' + pkg.URL + '" target="_blank">',
 					"</a>!<br />"
 				);
-				var errorsText = E("div", {}, text);
+				var errorsText = E("div", { class: "cbi-value-description" }, text);
 				var errorsField = E("div", { class: "cbi-value-field" }, errorsText);
 				errorsDiv = E("div", { class: "cbi-value" }, [
 					errorsTitle,
