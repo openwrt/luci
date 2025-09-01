@@ -397,12 +397,22 @@ var FileSystem = baseclass.extend(/** @lends LuCI.fs.prototype */ {
 	 * is usually not needed but can be useful for programs that cannot
 	 * handle UTF-8 input.
 	 *
+	 * @param {boolean} [stderr=false]
+	 * Whether to include stderr output in command output. This is usually
+	 * not needed but can be useful to execute a command and get full output.
+	 *
+	 * @param {function} [responseProgress=null]
+	 * An optional request callback function which receives ProgressEvent
+	 * instances as sole argument during the HTTP response transfer. This is
+	 * usually not needed but can be useful to receive realtime command
+	 * output before command exit.
+	 *
 	 * @returns {Promise<*>}
 	 * Returns a promise resolving with the command stdout output interpreted
 	 * according to the specified type or rejecting with an error stating the
 	 * failure reason.
 	 */
-	exec_direct: function(command, params, type, latin1) {
+	exec_direct: function(command, params, type, latin1, stderr, responseProgress) {
 		var cmdstr = String(command)
 			.replace(/\\/g, '\\\\').replace(/(\s)/g, '\\$1');
 
@@ -416,12 +426,12 @@ var FileSystem = baseclass.extend(/** @lends LuCI.fs.prototype */ {
 		else
 			cmdstr = encodeURIComponent(cmdstr);
 
-		var postdata = 'sessionid=%s&command=%s'
-			.format(encodeURIComponent(L.env.sessionid), cmdstr);
+		var postdata = 'sessionid=%s&command=%s&stderr=%d'
+			.format(encodeURIComponent(L.env.sessionid), cmdstr, stderr ? 1 : 0);
 
 		return request.post(L.env.cgi_base + '/cgi-exec', postdata, {
 			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-			responseType: (type == 'blob') ? 'blob' : 'text'
+			responseType: (type == 'blob') ? 'blob' : 'text', responseProgress
 		}).then(handleCgiIoReply.bind({ type: type }));
 	}
 });
