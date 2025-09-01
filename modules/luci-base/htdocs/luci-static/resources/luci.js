@@ -634,6 +634,10 @@
 		 * @property {function} [progress]
 		 * An optional request callback function which receives ProgressEvent
 		 * instances as sole argument during the HTTP request transfer.
+		 *
+		 * @property {function} [responseProgress]
+		 * An optional request callback function which receives ProgressEvent
+		 * instances as sole argument during the HTTP response transfer.
 		 */
 
 		/**
@@ -751,6 +755,9 @@
 
 					if ('progress' in opt && 'upload' in opt.xhr)
 						opt.xhr.upload.addEventListener('progress', opt.progress);
+
+					if (opt.responseProgress != null)
+						opt.xhr.addEventListener('progress', opt.responseProgress);
 
 					if (contenttype != null)
 						opt.xhr.setRequestHeader('Content-Type', contenttype);
