@@ -218,6 +218,7 @@ return view.extend({
 		o.value('dns_servercow', 'servercow.de');
 		o.value('dns_simply', 'Simply.com');
 		o.value('dns_tele3', 'tele3.cz');
+		o.value('dns_tencent', 'Tencent.com')
 		o.value('dns_transip', 'transip.nl');
 		o.value('dns_udr', 'ud-reselling.com');
 		o.value('dns_ultra', 'UltraDNS.com');
@@ -418,6 +419,9 @@ return view.extend({
 
 		_addDnsProviderField(s, 'dns_tele3', 'TELE3_Key', 'tele3.cz API Key', '');
 		_addDnsProviderField(s, 'dns_tele3', 'TELE3_Secret', 'tele3.cz API Secret', '');
+
+		_addDnsProviderField(s, 'dns_tencent', 'Tencent_SecretId', 'Tencent.com Secret ID', '');
+		_addDnsProviderField(s, 'dns_tencent', 'Tencent_SecretKey', 'Tencent.com Secret Key', '');
 
 		_addDnsProviderField(s, 'dns_vultr', 'VULTR_API_KEY', 'Vultr API Secret', '');
 
