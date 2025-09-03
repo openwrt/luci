@@ -8,4 +8,4 @@ The process takes per images between 30 seconds and 5 minutes, please be
 patient.
 
 More information on the backend server and how to host one are available on the
-projects page: https://github.com/aparcar/asu/
+projects page: https://github.com/openwrt/asu
