@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-07-05 23:02+0000\n"
+"PO-Revision-Date: 2025-09-01 10:35+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/luci/"
 "lt/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && ("
 "n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.13-dev\n"
+"X-Generator: Weblate 5.13.1-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1330
 msgid "!known (not known)"
@@ -86,6 +86,8 @@ msgid ""
 "%s services running on this device in the default VRF context (ie., not "
 "bound to any VRF device) shall work across all VRF domains."
 msgstr ""
+"Šiame įrenginyje numatytuoju „VRF“ kontekstu (t. y. nesusietos su jokiu „VRF“"
+" įrenginiu) vykdomos %s paslaugos veiks visuose „VRF“ domenuose-srityse."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:745
 msgid "%s uses a human-readable encoding of hex-and-colons"
@@ -502,6 +504,9 @@ msgid ""
 "A numeric table index, or symbol alias declared in %s. Special aliases local "
 "(255), main (254) and default (253) are also valid"
 msgstr ""
+"Skaitmeninės lentelės indeksas arba simbolio pseudonimas, pareikštas %s. "
+"Taip pat galioja specialieji pseudonimai – „local (255)“, „main (254)“ ir „"
+"default (253)“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1638
 msgid "A43C + J43 + A43"
@@ -1149,6 +1154,8 @@ msgstr "„Leidžiami IP (dgs.)“ nustatymas yra netinkamas"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:42
 msgid "Alternatively, a multicast address to reach a group of peers."
 msgstr ""
+"Arba daugiaadresinio transliavimo adresas, skirtas pasiekti lygiarangių "
+"grupę ."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:824
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1241
@@ -1422,6 +1429,9 @@ msgid ""
 "Automatic mac learning using multicast; inserts unknown source link layer "
 "addresses and IP addresses into the VXLAN device %s"
 msgstr ""
+"Automatinis „mac“ mokymasis, naudojant daugiaadresinį transliavimą; į – "
+"„VXLAN“ įrenginį įterpia nežinomus šaltinio ryšio sluoksnio adresus ir IP "
+"adresus %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:174
 msgid "Automatically check filesystem for errors before mounting"
@@ -2316,7 +2326,6 @@ msgstr ""
 "duomenis."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:741
-#, fuzzy
 msgid "Count"
 msgstr "Suskaičiuoti"
 
@@ -2584,7 +2593,7 @@ msgstr "Derinimas/Trukdžių šalinimas"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:21
 msgid "Default"
-msgstr ""
+msgstr "Numatyta/-s"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/ipip6.js:70
 msgid "Default gateway"
@@ -3256,6 +3265,7 @@ msgstr "Kiekvienas „STA“ yra priskirtas savo „AP_VLAN“ sąsają ir/arba 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:229
 msgid "Each key is stored as a file in <code>%s</code>."
 msgstr ""
+"Kiekvienas raktas yra saugomas kaip failas aplanke esanti – <code>%s</code>."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:227
 msgid ""
@@ -3263,6 +3273,9 @@ msgid ""
 "repositories) allows packages in lists signed by it to be installed by the "
 "package manager."
 msgstr ""
+"Kiekvienas taikomosios programos saugyklos viešasis raktas (iš oficialių "
+"arba trečiųjų šalių saugyklų) leidžia paketų tvarkyklei įdiegti paketus, "
+"esančius jo pasirašytuose sąrašuose."
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2709
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2712
@@ -3333,6 +3346,9 @@ msgid ""
 "Either a prefix length hint (e.g. 56) only, whereby the operator selects the "
 "prefix, or specify a prefix also (e.g. %s)"
 msgstr ""
+"Arba tik prielinksnio/priešdėlio ilgio užuomina (pvz., 56-as), kai "
+"operatorius pasirenka prielinksnį/priešdėlį, arba taip pat nurodomas "
+"prielinksnis/priešdėlis (pvz., %s)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:45
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:193
@@ -3766,6 +3782,8 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:120
 msgid "Expect netlink reply to add destination IP address into Neighbour table"
 msgstr ""
+"Tikėkitės „netlink“ atsakymo, kad pridėtumėte paskirties/kelionės tikslo IP "
+"adresą į – kaimyninę lentelę"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:606
 msgid "Expected port number."
@@ -4131,7 +4149,7 @@ msgstr "Sekti IPv4 gyvavimo laiką"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:457
 msgid "For VRF, install %s"
-msgstr ""
+msgstr "Skirtai „VRF“, įdiekite – %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 msgid "For bonding, install %s"
@@ -4515,6 +4533,7 @@ msgstr "Duoti prieigą prie „SSH“ konfigūracijos"
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:45
 msgid "Grant access to Software Repository Public Key management"
 msgstr ""
+"Duoti prieigą prie taikomosios programos saugyklos viešojo rakto valdymo"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:23
 msgid "Grant access to Storage and Mount status display"
@@ -5400,7 +5419,7 @@ msgstr "Gaunamas nuoseklinimas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:509
 msgid "Indoor Only Channel Selected"
-msgstr ""
+msgstr "Pasirinktas tik vidaus kanalo"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:28
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:51
@@ -5699,7 +5718,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:139
 msgid "Invalid key format"
-msgstr ""
+msgstr "Negalimas rakto formatas"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:136
 msgid "Invalid port"
@@ -6593,31 +6612,33 @@ msgstr "Atitikti srauto IP protokolo tipą"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:170
 msgid "Match traffic destined to this interface"
-msgstr ""
+msgstr "Atitikti srautą, skirtą šiai/-m sąsajai ir/arba sietuvui"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:174
 msgid "Match traffic destined to this subnet (CIDR notation)"
-msgstr ""
+msgstr "Atitikti srautą su šiuo potinkliu („CIDR“ žymėjimas)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:203
 msgid "Match traffic from this destination port (range)"
-msgstr ""
+msgstr "Atitikti srautą iš šio paskirties prievado (diapazonas)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:153
 msgid "Match traffic from this interface"
-msgstr ""
+msgstr "Atitikti srautą iš šios-/o sąsajos ir/arba sietuvo"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:198
 msgid "Match traffic from this source port (range)"
-msgstr ""
+msgstr "Atitikti srautą iš šio šaltinio prievado (diapazonas)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:157
 msgid "Match traffic from this source subnet (CIDR notation)"
-msgstr ""
+msgstr "Atitikti srautą iš šio šaltinio potinklio („CIDR“ žymėjimas)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:183
 msgid "Matched traffic re-targets to an interface using this table."
 msgstr ""
+"Atitikti pakartotiniai taikiniai pagal sąsają ir/arba sietuvą, naudojant šią "
+"lentelę."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:855
 msgid "Max <abbr title=\"Router Advertisement\">RA</abbr> interval"
@@ -6628,7 +6649,7 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:90
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:90
 msgid "Max FDB size"
-msgstr ""
+msgstr "Maksimalus „FDB“ dydis"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:849
 msgid "Max cache TTL"
@@ -6680,7 +6701,7 @@ msgstr "Maksimalus sekundžių skaičius laukti, kol modemas bus paruoštas"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:91
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:91
 msgid "Maximum number of FDB entries"
-msgstr ""
+msgstr "Maksimalus „FDB“ įrašų skaičius"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:667
 msgid "Maximum number of leased addresses."
@@ -6791,7 +6812,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:787
 msgid "Min Links"
-msgstr ""
+msgstr "Minimalus sujungimų/nuorodų skaičius"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:842
 msgid "Min cache TTL"
@@ -6807,7 +6828,7 @@ msgstr "Minimalus „ARP“ galiojimo laikas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:787
 msgid "Minimum number of active links"
-msgstr ""
+msgstr "Minimalus aktyvių sujungimų/nuorodų skaičius"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1187
 msgid ""
@@ -6851,8 +6872,9 @@ msgid "Mobile Network Code"
 msgstr "Mobilausk tinklo kodas"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:98
+#, fuzzy
 msgid "Mobile Number"
-msgstr ""
+msgstr "Mobilusis numeris"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1663
 msgid "Mobility Domain"
@@ -6922,15 +6944,17 @@ msgstr "Prižiūryklė/-ėtojas \\ Monitorius \\ Stebėti/-ojas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:900
 msgid "Monitor Interval"
-msgstr ""
+msgstr "Stebėjimo intervalas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:974
+#, fuzzy
 msgid "Monitor link-down delay"
-msgstr ""
+msgstr "Stebėti išjungto/-s sujungimo/nuorodos delsą"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:968
+#, fuzzy
 msgid "Monitor link-up delay"
-msgstr ""
+msgstr "Stebėti įjungto/-s sujungimo/nuorodos delsą"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:31
 msgid "More Characters"
@@ -7032,7 +7056,7 @@ msgstr "Turi būti „%s“ formatu."
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:197
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:197
 msgid "My Peer"
-msgstr ""
+msgstr "Mano lygiarangis"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1658
 msgid "NAS ID"
@@ -7069,7 +7093,7 @@ msgstr "„NT“ domenas-sritis"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:29
 msgid "NTP"
-msgstr ""
+msgstr "„NTP“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:956
 msgid "NTP Servers"
