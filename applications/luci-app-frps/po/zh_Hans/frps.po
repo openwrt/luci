@@ -67,6 +67,15 @@ msgstr ""
 "BindKcpPort 指定服务器侦听的 KCP 端口。如果此值为 0，则服务器将不会侦听 KCP "
 "连接。<br />默认值为 0。"
 
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid ""
+"BindQuicPort specifies the QUIC port that the server listens on. If this value "
+"is 0, the server will not listen for QUIC connections.<br />By default, this "
+"value is 0."
+msgstr ""
+"BindQuicPort 指定服务器侦听的 QUIC 端口。如果此值为 0，则服务器将不会侦听 QUIC "
+"连接。<br />默认值为 0。"
+
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:20
 msgid ""
 "BindPort specifies the port that the server listens on.<br />By default, "
@@ -77,10 +86,10 @@ msgstr "BindPort 指定服务器侦听的端口。<br />默认值为 7000。"
 msgid ""
 "BindUdpPort specifies the UDP port that the server listens on. If this value "
 "is 0, the server will not listen for UDP connections.<br />By default, this "
-"value is 0"
+"value is 0."
 msgstr ""
 "BindUdpPort 指定服务器侦听的 UDP 端口。如果此值为 0，则服务器将不会侦听 UDP "
-"连接。<br />默认值为 0"
+"连接。<br />默认值为 0。"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:143
 msgid "Collecting data ..."
@@ -186,6 +195,10 @@ msgstr "心跳包超时"
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:22
 msgid "KCP bind port"
 msgstr "KCP 绑定端口"
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid "QUIC bind port"
+msgstr "QUIC 绑定端口"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
 msgid "Log file"
@@ -345,7 +358,7 @@ msgstr "UDP 绑定端口"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid "Vhost HTTP port"
-msgstr "Vhost HTTP端口"
+msgstr "Vhost HTTP 端口"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid "Vhost HTTP timeout"
@@ -379,7 +392,44 @@ msgid ""
 "<br />By default, this value is 0."
 msgstr ""
 "VhostHttpsPort指定服务器侦听HTTPS Vhost请求的端口。如果该值为0，服务器将不侦"
-"听HTTPS请求。.<br />该值默认为 0。"
+"听HTTPS请求。<br />该值默认为 0。"
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid "Dashboard TLS mode"
+msgstr "仪表板 TLS 模式"
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid "Dashboard TLS certificate"
+msgstr "​仪表板 TLS 证书​"
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid "Dashboard TLS private key"
+msgstr "仪表板 TLS 私钥​"
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid ""
+"Enable or disable TLS encryption for the dashboard. When enabled, HTTPS "
+"is used for secure communication."
+msgstr ""
+"启用或禁用仪表板的 TLS 加密功能。启用后，仪表板将通过 HTTPS 协议进行安全通信。​"
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid ""
+"Dashboard TLS Cert File specifies the path to the TLS certificate file for "
+"enabling HTTPS access."
+"<br />Required if HTTPS is enabled."
+msgstr ""
+"Dashboard TLS Cert File 用于指定启用 HTTPS 访问所需的 TLS 证书文件路径，若启"
+"用 HTTPS 则必须配置此文件。"
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid ""
+"Dashboard TLS Key File specifies the path to the TLS private key file for "
+"enabling HTTPS access."
+"<br />Required if HTTPS is enabled."
+msgstr ""
+"Dashboard TLS Key File 用于指定启用 HTTPS 访问所需的 TLS 私钥文件路径，若启"
+"用 HTTPS 则必须配置此文件。"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
