@@ -19,7 +19,7 @@ return view.extend({
 				return certs;
 			}),
 			L.resolveDefault(fs.exec_direct('/usr/libexec/acmesh-dnsinfo.sh'), ''),
-			L.resolveDefault(fs.stat('/usr/lib/acme/client/dnsapi'), null),
+			L.resolveDefault(fs.list('/usr/lib/acme/client/dnsapi/'), null),
 			L.resolveDefault(fs.lines('/proc/sys/kernel/hostname'), ''),
 			L.resolveDefault(uci.load('ddns')),
 		]);
@@ -272,7 +272,6 @@ return view.extend({
 			)
 		);
 		o.depends('acme_server', '');
-		o.depends('acme_server', 'letsencrypt');
 		o.optional = true;
 		o.modalonly = true;
 
@@ -291,9 +290,19 @@ return view.extend({
 	}
 });
 
+/**
+ * Is not an IP or a local domain without TLD
+ */
 function _isFqdn(domain) {
-	// Is not an IP i.e. starts from alphanumeric and has least one dot
-	return /[a-z0-9-]\..*$/.test(domain) && !/[0-9-]\..*$/.test(domain);
+	let i = domain.lastIndexOf('.');
+	if (i < 0) {
+		return false;
+	}
+	let tld = domain.substr(i + 1);
+	if (tld.length < 2) {
+		return false;
+	}
+	return /^[a-z0-9]+$/.test(tld);
 }
 
 function _guessDomain(hostname) {
@@ -336,7 +345,7 @@ function _collectDdnsDomains() {
 		if (credentials.length > 0) {
 			ddnsDomains.push({
 				sectionId: ddnsService['.name'],
-				domains: [ddnsService['domain'], '*.' + ddnsService['domain']],
+				domains: [ddnsService['domain'], ddnsService['domain']],
 				dnsApi: dnsApi,
 				credentials: credentials,
 			});
