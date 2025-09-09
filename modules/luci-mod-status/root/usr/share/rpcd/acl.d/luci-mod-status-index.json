@@ -33,7 +33,9 @@
 		"description": "Grant access to DHCP status display",
 		"read": {
 			"ubus": {
-				"luci-rpc": [ "getDHCPLeases" ]
+				"luci-rpc": [ "getDHCPLeases" ],
+				"fingerprint": [ "fingerprint" ],
+				"file": [ "stat" ]
 			}
 		}
 	},
