@@ -12,12 +12,6 @@ const ddns_log_path = '/var/log/ddns';
 const ddns_package_path = '/usr/share/ddns';
 const ddns_run_path = '/var/run/ddns';
 const luci_helper = '/usr/lib/ddns/dynamic_dns_lucihelper.sh';
-const srv_name    = 'ddns-scripts';
-const opkg_info_path    = '/usr/lib/opkg/info';
-const ddns_version_file = '/usr/share/ddns/version';
-
-
-
 
 function get_dateformat() {
 	return uci.get('ddns', 'global', 'ddns_dateformat') || '%F %R';
@@ -157,17 +151,24 @@ const methods = {
 					s['check_unit'] || 'minutes'
 				);
 
-				let convertedLastUpdate;
+				let convertedLastUpdate, timegap;
 				if (lastUpdate > 0) {
 					const epoch = time() - _uptime + lastUpdate;
 					convertedLastUpdate = epoch2date(epoch);
-					nextUpdate = epoch2date(epoch + forcedUpdateInterval + checkInterval);
+					if (forcedUpdateInterval <= checkInterval) {
+						timegap = checkInterval;
+					} else {
+						timegap = forcedUpdateInterval - checkInterval;
+						while (timegap > checkInterval)
+							timegap = timegap - checkInterval;
+					}
+					nextUpdate = epoch2date(epoch + forcedUpdateInterval + checkInterval - timegap);
 				}
 
-				if (pid > 0 && (lastUpdate + forcedUpdateInterval + checkInterval - _uptime) <= 0) {
-					nextUpdate = 'Verify';
-				} else if (forcedUpdateInterval === 0) {
+				if (forcedUpdateInterval === 0) {
 					nextUpdate = 'Run once';
+				} else if (pid > 0 && (lastUpdate + forcedUpdateInterval + checkInterval - timegap - _uptime) <= 0) {
+					nextUpdate = 'Verify';
 				} else if (pid == 0 && s['enabled'] == '0') {
 					nextUpdate = 'Disabled';
 				} else if (pid == 0 && s['enabled'] != '0') {
@@ -189,16 +190,10 @@ const methods = {
 
 	get_ddns_state: {
 		call: function() {
-
 			const services_mtime = stat(ddns_package_path + '/list')?.mtime;
 			let res = {};
-			let ver, control;
 
-			if (stat(ddns_version_file)?.type == 'file') {
-				ver = readfile(ddns_version_file);
-			}
-
-			res['_version'] = ver;
+			res['_version'] = trimnonewline( popen(`${luci_helper} -V | awk {'print $2'}`, 'r')?.read?.('line') );
 			res['_enabled'] = init_enabled('ddns');
 			res['_curr_dateformat'] = epoch2date(time());
 			res['_services_list'] = (services_mtime && epoch2date(services_mtime)) || 'NO_LIST';
