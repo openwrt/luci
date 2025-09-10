@@ -11,6 +11,18 @@ var callNetworkInterfaceDump = rpc.declare({
 	expect: { interface: [] }
 });
 
+var checkUfpInstalled = rpc.declare({
+	object: 'file',
+	method: 'stat',
+	params: [ 'path' ]
+});
+
+var callUfpList = rpc.declare({
+	object: 'fingerprint',
+	method: 'fingerprint',
+	expect: { '': {} }
+});
+
 function applyMask(addr, mask, v6) {
 	var words = v6 ? validation.parseIPv6(addr) : validation.parseIPv4(addr);
 	var bword = v6 ? 0xffff : 0xff;
@@ -32,14 +44,21 @@ function applyMask(addr, mask, v6) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			callNetworkInterfaceDump(),
-			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'neigh', 'show' ]), {}),
-			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'route', 'show', 'table', 'all' ]), {}),
-			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'rule', 'show' ]), {}),
-			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'neigh', 'show' ]), {}),
-			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'route', 'show', 'table', 'all' ]), {}),
-			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'rule', 'show' ]), {})
-		]);
+			checkUfpInstalled('/usr/sbin/ufpd')
+		]).then(data => {
+			var promises = [
+				callNetworkInterfaceDump(),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'neigh', 'show' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'route', 'show', 'table', 'all' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'rule', 'show' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'neigh', 'show' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'route', 'show', 'table', 'all' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'rule', 'show' ]), {}),
+				data[0].type === 'file' ? callUfpList() : null
+			];
+
+			return Promise.all(promises);
+		});
 	},
 
 	getNetworkByDevice(networks, dev, addr, mask, v6) {
@@ -84,7 +103,7 @@ return view.extend({
 		return matching_iface;
 	},
 
-	parseNeigh: function(s, networks, v6) {
+	parseNeigh: function(s, macs, networks, v6) {
 		var lines = s.trim().split(/\n/),
 		    res = [];
 
@@ -92,7 +111,8 @@ return view.extend({
 			var m = lines[i].match(/^([0-9a-f:.]+) (.+) (\S+) *$/),
 			    addr = m ? m[1] : null,
 			    flags = m ? m[2].trim().split(/\s+/) : [],
-			    state = (m ? m[3] : null) || 'FAILED';
+			    state = (m ? m[3] : null) || 'FAILED',
+			    vendor;
 
 			if (!addr || state == 'FAILED' || addr.match(/^fe[89a-f][0-9a-f]:/))
 				continue;
@@ -102,12 +122,17 @@ return view.extend({
 
 			if (!flags.lladdr)
 				continue;
+			
+			for (let mac in macs) {
+				if (flags.lladdr === mac)
+					vendor = macs[mac].vendor;
+	 		}
 
 			var net = this.getNetworkByDevice(networks, flags.dev, addr, v6 ? 128 : 32, v6);
 
 			res.push([
 				addr,
-				flags.lladdr.toUpperCase(),
+				vendor ? flags.lladdr.toUpperCase() + ` (${vendor})` : flags.lladdr.toUpperCase(),
 				E('span', { 'class': 'ifacebadge' }, [ net ? net : '(%s)'.format(flags.dev) ])
 			]);
 		}
@@ -115,7 +140,7 @@ return view.extend({
 		return res;
 	},
 
-	parseRoute: function(s, networks, v6) {
+	parseRoute: function(s, macs, networks, v6) {
 		var lines = s.trim().split(/\n/),
 		    res = [];
 
@@ -173,7 +198,8 @@ return view.extend({
 		    ip4rule = data[3].stdout || '',
 		    ip6neigh = data[4].stdout || '',
 		    ip6route = data[5].stdout || '',
-		    ip6rule = data[6].stdout || '';
+		    ip6rule = data[6].stdout || '',
+		    macdata = data[7];
 
 		var device_title = _('Which is used to access this %s').format(_('Target'));
 		var target_title = _('Network and its mask that define the size of the destination');
@@ -235,7 +261,7 @@ return view.extend({
 			])
 		]);
 
-		cbi_update_table(neigh4tbl, this.parseNeigh(ip4neigh, networks, false),
+		cbi_update_table(neigh4tbl, this.parseNeigh(ip4neigh, macdata, networks, false),
 			E('em', _('No entries available'))
 		);
 		cbi_update_table(route4tbl, this.parseRoute(ip4route, networks, false),
@@ -244,7 +270,7 @@ return view.extend({
 		cbi_update_table(rule4tbl, this.parseRule(ip4rule, networks, false),
 			E('em', _('No entries available'))
 		);
-		cbi_update_table(neigh6tbl, this.parseNeigh(ip6neigh, networks, true),
+		cbi_update_table(neigh6tbl, this.parseNeigh(ip6neigh, macdata, networks, true),
 			E('em', _('No entries available'))
 		);
 		cbi_update_table(route6tbl, this.parseRoute(ip6route, networks, true),
