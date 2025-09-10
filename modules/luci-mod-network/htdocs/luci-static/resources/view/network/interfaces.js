@@ -936,6 +936,15 @@ return view.extend({
 					so.depends('dhcpv6', 'server');
 					so.depends({ dhcpv6: 'hybrid', master: '0' });
 
+					so = ss.taboption('ipv6', form.DynamicList, 'dnr', _('Announced Encrypted IPv6 DNS servers'),
+						_('Specifies a fixed list of Encrypted DNS server addresses to announce via DHCPv6/RA (see %s).<br/>Format: <code>&lt;numeric priority&gt; &lt;domain-name&gt; [IP,...] [SVC parameter ...]</code><br/>Example: <code>100 dns.example.com fd01::53,192.168.1.53 alpn=doq port=853</code>',
+						 ).format('<a href="%s" target="_blank">RFC9463</a>').format('https://www.rfc-editor.org/rfc/rfc9463'));
+					so.datatype = 'string';
+					so.depends('ra', 'server');
+					so.depends({ ra: 'hybrid', master: '0' });
+					so.depends('dhcpv6', 'server');
+					so.depends({ dhcpv6: 'hybrid', master: '0' });
+
 					so = ss.taboption('ipv6', form.Flag, 'dns_service', _('Local IPv6 DNS server'),
 						_('Announce this device as IPv6 DNS server.'));
 					so.default = so.enabled;
