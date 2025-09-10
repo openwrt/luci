@@ -11,6 +11,7 @@
 'require tools.dnsrecordhandlers as drh';
 
 var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
+var checkUfpInstalled, callUfpList;
 
 callHostHints = rpc.declare({
 	object: 'luci-rpc',
@@ -27,6 +28,18 @@ callDUIDHints = rpc.declare({
 callDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getDHCPLeases',
+	expect: { '': {} }
+});
+
+checkUfpInstalled = rpc.declare({
+	object: 'file',
+	method: 'stat',
+	params: [ 'path' ]
+});
+
+callUfpList = rpc.declare({
+	object: 'fingerprint',
+	method: 'fingerprint',
 	expect: { '': {} }
 });
 
@@ -275,12 +288,19 @@ function validateMACAddr(pools, sid, s) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			callHostHints(),
-			callDUIDHints(),
-			getDHCPPools(),
-			network.getNetworks(),
-			uci.load('firewall')
-		]);
+			checkUfpInstalled('/usr/sbin/ufpd')
+		]).then(data => {
+			var promises = [
+				callHostHints(),
+				callDUIDHints(),
+				getDHCPPools(),
+				network.getNetworks(),
+				data[0].type === 'file' ? callUfpList() : null,
+				uci.load('firewall')
+			]
+
+			return Promise.all(promises);
+		});
 	},
 
 	render: function(hosts_duids_pools) {
@@ -289,6 +309,7 @@ return view.extend({
 		    duids = hosts_duids_pools[1],
 		    pools = hosts_duids_pools[2],
 		    networks = hosts_duids_pools[3],
+		    macdata = hosts_duids_pools[4],
 		    m, s, o, ss, so, dnss;
 
 		let noi18nstrings = {
@@ -1248,16 +1269,46 @@ return view.extend({
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
 			var macs = uci.get('dhcp', section, 'mac');
+			var formattedMacs;
+			var hint, entry;
+
 			if(!Array.isArray(macs)){
-				return expandAndFormatMAC(L.toArray(macs));
+				formattedMacs = expandAndFormatMAC(L.toArray(macs));
 			} else {
-				return expandAndFormatMAC(macs);
+				formattedMacs = expandAndFormatMAC(macs);
 			}
+
+			if (!macdata) {
+				return formattedMacs;
+			}
+
+
+			if (Array.isArray(formattedMacs)){
+				for (let mac in formattedMacs) {
+					entry = formattedMacs[mac].toLowerCase();
+					if (macdata[entry]) {
+						hint = macdata[entry].vendor ? macdata[entry].vendor : null;
+						formattedMacs[mac] += ` (${hint})`;
+					}
+				}
+				return formattedMacs;
+			}
+
+			if (formattedMacs) {
+				entry = formattedMacs[0].toLowerCase();
+				hint = macdata[entry].vendor ? macdata[entry].vendor : null;
+				formattedMacs[0] += ` (${hint})`;
+			}
+			return formattedMacs;
 		};
 		//removed jows renderwidget function which hindered multi-mac entry
 		so.validate = validateMACAddr.bind(so, pools);
 		Object.keys(hosts).forEach(function(mac) {
-			var hint = hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
+			var vendor;
+			var lower_mac = mac.toLowerCase();
+			if (macdata)
+				vendor = macdata[lower_mac] ? macdata[lower_mac].vendor : null;
+			const hint = vendor || hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
@@ -1364,6 +1415,7 @@ return view.extend({
 					cbi_update_table(mapEl.querySelector('#lease_status_table'),
 						leases.map(function(lease) {
 							var exp;
+							var vendor;
 
 							if (lease.expires === false)
 								exp = E('em', _('unlimited'));
@@ -1371,6 +1423,13 @@ return view.extend({
 								exp = E('em', _('expired'));
 							else
 								exp = '%t'.format(lease.expires);
+
+							for (let mac in macdata) {
+								if (mac.toUpperCase() === lease.macaddr) {
+									vendor = macdata[mac].vendor ?
+										` (${macdata[mac].vendor})` : null;
+								}
+							}
 
 							var hint = lease.macaddr ? hosts[lease.macaddr] : null,
 							    name = hint ? hint.name : null,
@@ -1384,7 +1443,7 @@ return view.extend({
 							return [
 								host || '-',
 								lease.ipaddr,
-								lease.macaddr,
+								vendor ? lease.macaddr + vendor : lease.macaddr,
 								exp
 							];
 						}),
