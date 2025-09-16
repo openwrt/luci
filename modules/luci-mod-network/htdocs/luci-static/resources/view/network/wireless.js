@@ -13,6 +13,25 @@
 
 const isReadonlyView = !L.hasViewPermission();
 
+function check_password_strength(section_id, value) {
+	var strength = document.querySelector('[data-name="_wpa_key"]'),
+	strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g"),
+	mediumRegex = new RegExp("^(?=.{7,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g"),
+	enoughRegex = new RegExp("(?=.{6,}).*", "g");
+
+	if (strength && value.length) {
+		var strengthChild = strength.childNodes[1].childNodes[1];
+		if (strongRegex.test(value))
+			strengthChild.innerHTML = '%s: <span style="color:green">%s</span>'.format(_('Password strength'), _('Strong'));
+		else if (mediumRegex.test(value))
+			strengthChild.innerHTML = '%s: <span style="color:orange">%s</span>'.format(_('Password strength'), _('Medium'));
+		else
+			strengthChild.innerHTML = '%s: <span style="color:red">%s</span>'.format(_('Password strength'), _('Weak'));
+	}
+
+	return true;
+}
+
 function count_changes(section_id) {
 	const changes = ui.changes.changes?.wireless;
 	if (!Array.isArray(changes)) return 0;
@@ -1589,7 +1608,7 @@ return view.extend({
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['wpa2', 'wpa3', 'wpa3-mixed'] });
 
 
-				o = ss.taboption('encryption', form.Value, '_wpa_key', _('Key'));
+				o = ss.taboption('encryption', form.Value, '_wpa_key', _('Key'), ' ');
 				add_dependency_permutations(o, { mode: ['ap', 'ap-wds'], encryption: ['psk', 'psk2', 'psk+psk2', 'psk-mixed'], ppsk: ['0'] });
 				add_dependency_permutations(o, { mode: ['sta', 'adhoc', 'mesh', 'sta-wds'], encryption: ['psk', 'psk2', 'psk+psk2', 'psk-mixed'] });
 				o.depends('encryption', 'sae');
@@ -1597,6 +1616,7 @@ return view.extend({
 				o.datatype = 'wpakey';
 				o.rmempty = true;
 				o.password = true;
+				o.validate = check_password_strength;
 
 				o.cfgvalue = function(section_id) {
 					const key = uci.get('wireless', section_id, 'key');
