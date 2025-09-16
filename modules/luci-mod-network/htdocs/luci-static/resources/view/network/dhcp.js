@@ -58,6 +58,7 @@ CBILease6Status = form.DummyValue.extend({
 					E('th', { 'class': 'th' }, _('Hostname')),
 					E('th', { 'class': 'th' }, _('IPv6 address')),
 					E('th', { 'class': 'th' }, _('DUID')),
+					E('th', { 'class': 'th' }, _('IAID')),
 					E('th', { 'class': 'th' }, _('Lease time remaining'))
 				]),
 				E('tr', { 'class': 'tr placeholder' }, [
@@ -1417,6 +1418,7 @@ return view.extend({
 									host || '-',
 									lease.ip6addrs ? lease.ip6addrs.join('<br />') : lease.ip6addr,
 									lease.duid,
+									lease.iaid,
 									exp
 								];
 							}),
