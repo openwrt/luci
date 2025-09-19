@@ -38,7 +38,9 @@
 		"description": "Grant access to DHCP configuration",
 		"read": {
 			"ubus": {
-				"luci-rpc": [ "getDHCPLeases", "getDUIDHints", "getHostHints" ]
+				"luci-rpc": [ "getDHCPLeases", "getDUIDHints", "getHostHints" ],
+				"fingerprint": [ "fingerprint" ],
+				"file": [ "stat" ]
 			},
 			"uci": [ "dhcp" ]
 		},
