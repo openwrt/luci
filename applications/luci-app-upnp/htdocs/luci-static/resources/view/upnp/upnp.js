@@ -333,8 +333,8 @@ return view.extend({
 		o.default = _('unspecified');
 
 		o = s.option(form.ListValue, 'action', _('Action'));
-		o.value('allow', _('Accept'));
-		o.value('deny', _('Reject'));
+		o.value('accept', _('Accept'));
+		o.value('reject', _('Reject'));
 		o.value('disabled', _('Disabled'));
 		o.editable = true;
 		o.retain = true; // Otherwise will be removed if disabled
