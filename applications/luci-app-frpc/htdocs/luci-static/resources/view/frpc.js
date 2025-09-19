@@ -33,8 +33,8 @@ var commonConf = [
 	[form.Flag, 'tcp_mux', _('TCP mux'), _('TcpMux toggles TCP stream multiplexing. This allows multiple requests from a client to share a single TCP connection. If this value is true, the server must have TCP multiplexing enabled as well.<br />By default, this value is true.'), {datatype: 'bool', default: 'true'}],
 	[form.Value, 'user', _('User'), _('User specifies a prefix for proxy names to distinguish them from other clients. If this value is not "", proxy names will automatically be changed to "{user}.{proxy_name}".<br />By default, this value is "".')],
 	[form.Flag, 'login_fail_exit', _('Exit when login fail'), _('LoginFailExit controls whether or not the client should exit after a failed login attempt. If false, the client will retry until a login attempt succeeds.<br />By default, this value is true.'), {datatype: 'bool', default: 'true'}],
-	[form.ListValue, 'protocol', _('Protocol'), _('Protocol specifies the protocol to use when interacting with the server. Valid values are "tcp", "kcp", and "websocket".<br />By default, this value is "tcp".'), {values: ['tcp', 'kcp', 'websocket']}],
-	[form.Flag, 'tls_enable', _('TLS'), _('TLSEnable specifies whether or not TLS should be used when communicating with the server.'), {datatype: 'bool'}],
+	[form.ListValue, 'protocol', _('Protocol'), _('Protocol specifies the protocol to use when interacting with the server. Valid values are "tcp", "kcp", "quic" and "websocket".<br />By default, this value is "tcp".'), {values: ['tcp', 'kcp', 'quic', 'websocket']}],
+	[form.Flag, 'tls_enable', _('TLS'), _('TLS Enable specifies whether or not TLS should be used when communicating with the server.'), {datatype: 'bool'}],
 	[form.Value, 'heartbeat_interval', _('Heartbeat interval'), _('HeartBeatInterval specifies at what interval heartbeats are sent to the server, in seconds. It is not recommended to change this value.<br />By default, this value is 30.'), {datatype: 'uinteger'}],
 	[form.Value, 'heartbeat_timeout', _('Heartbeat timeout'), _('HeartBeatTimeout specifies the maximum allowed heartbeat response delay before the connection is terminated, in seconds. It is not recommended to change this value.<br />By default, this value is 90.'), {datatype: 'uinteger'}],
 	[form.DynamicList, '_', _('Additional settings'), _('This list can be used to specify some additional parameters which have not been included in this LuCI.'), {placeholder: 'Key-A=Value-A'}]
@@ -42,7 +42,7 @@ var commonConf = [
 
 var baseProxyConf = [
 	[form.Value, 'name', _('Proxy name'), undefined, {rmempty: false, optional: false}],
-	[form.ListValue, 'type', _('Proxy type'), _('ProxyType specifies the type of this proxy. Valid values include "tcp", "udp", "http", "https", "stcp", and "xtcp".<br />By default, this value is "tcp".'), {values: ['tcp', 'udp', 'http', 'https', 'stcp', 'xtcp']}],
+	[form.ListValue, 'type', _('Proxy type'), _('ProxyType specifies the type of this proxy. Valid values include "tcp", "udp", "http", "https", "stcp" and "xtcp".<br />By default, this value is "tcp".'), {values: ['tcp', 'udp', 'http', 'https', 'stcp', 'xtcp']}],
 	[form.Flag, 'use_encryption', _('Encryption'), _('UseEncryption controls whether or not communication with the server will be encrypted. Encryption is done using the tokens supplied in the server and client configuration.<br />By default, this value is false.'), {datatype: 'bool'}],
 	[form.Flag, 'use_compression', _('Compression'), _('UseCompression controls whether or not communication with the server will be compressed.<br />By default, this value is false.'), {datatype: 'bool'}],
 	[form.Value, 'local_ip', _('Local IP'), _('LocalIp specifies the IP address or host name to proxy to.'), {datatype: 'host'}],
