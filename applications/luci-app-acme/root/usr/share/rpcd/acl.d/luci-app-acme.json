@@ -4,10 +4,14 @@
                 "read": {
                         "cgi-io": [ "exec" ],
                         "file": {
+                                "/usr/lib/acme/client/dnsapi": [ "list" ],
+                                "/proc/sys/kernel/hostname": [ "read" ],
                                 "/etc/ssl/acme": [ "list" ],
-                                "/usr/libexec/acmesh-dnsinfo.sh": [ "exec" ]
+                                "/usr/libexec/acmesh-dnsinfo.sh": [ "exec" ],
+                                "/sbin/logread -e acme": [ "exec" ],
+                                "/usr/sbin/logread -e acme": [ "exec" ]
                         },
-                        "uci": [ "acme" ]
+                        "uci": [ "acme", "ddns" ]
                 },
                 "write": {
                         "uci": [ "acme" ]
