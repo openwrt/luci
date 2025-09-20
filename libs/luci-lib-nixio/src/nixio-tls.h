@@ -15,12 +15,6 @@
 
 typedef struct nixio_tls_socket {
 	SSL		*socket;
-#ifdef WITH_AXTLS
-	char	connected;
-	size_t	pbufsiz;
-	char	*pbufpos;
-	char	*pbuffer;
-#endif
 } nixio_tls_sock;
 
 #define NIXIO_CRYPTO_HASH_META "nixio.crypto.hash"

@@ -230,9 +230,7 @@ void nixio_open_tls_context(lua_State *L) {
     /* register module functions */
     luaL_register(L, NULL, R);
 
-#if defined (WITH_AXTLS)
-    lua_pushliteral(L, "axtls");
-#elif defined (WITH_CYASSL)
+#if defined (WITH_CYASSL)
     lua_pushliteral(L, "cyassl");
 #else
     lua_pushliteral(L, "openssl");
