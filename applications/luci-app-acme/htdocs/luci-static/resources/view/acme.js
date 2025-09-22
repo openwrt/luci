@@ -216,7 +216,7 @@ return view.extend({
 
 		o = s.taboption('advanced', form.Value, 'days', _('Days until renewal'));
 		o.optional    = true;
-		o.placeholder = 90;
+		o.placeholder = 'acme.sh default (60 days)';
 		o.datatype    = 'uinteger';
 		o.modalonly = true;
 
