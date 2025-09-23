@@ -12,8 +12,6 @@ const ddns_log_path = '/var/log/ddns';
 const ddns_package_path = '/usr/share/ddns';
 const ddns_run_path = '/var/run/ddns';
 const luci_helper = '/usr/lib/ddns/dynamic_dns_lucihelper.sh';
-const srv_name    = 'ddns-scripts';
-const opkg_info_path    = '/usr/lib/opkg/info';
 const ddns_version_file = '/usr/share/ddns/version';
 
 
@@ -107,7 +105,7 @@ const methods = {
 			uci.foreach('ddns', 'service', function(s) {
 				/* uci.foreach danger zone: if you inadvertently call uci.unload('ddns')
 				anywhere in this foreach loop, you will produce some spectacular undefined behaviour */
-				let ip, lastUpdate, nextUpdate;
+				let ip, lastUpdate, nextUpdate, nextCheck;
 				const section = s['.name'];
 				if (section == '.anonymous')
 					return;
@@ -137,6 +135,7 @@ const methods = {
 				}
 
 				lastUpdate = int(readfile(`${rundir}/${section}.update`) || 0);
+				nextCheck = int(readfile(`${rundir}/${section}.nextcheck`) || 0);
 
 				let pid = int(readfile(`${rundir}/${section}.pid`) || 0);
 
@@ -161,10 +160,16 @@ const methods = {
 				if (lastUpdate > 0) {
 					const epoch = time() - _uptime + lastUpdate;
 					convertedLastUpdate = epoch2date(epoch);
-					nextUpdate = epoch2date(epoch + forcedUpdateInterval + checkInterval);
+					nextUpdate = epoch2date(epoch + forcedUpdateInterval);
 				}
 
-				if (pid > 0 && (lastUpdate + forcedUpdateInterval + checkInterval - _uptime) <= 0) {
+				let convertedNextCheck;
+				if (nextCheck > 0) {
+					const epoch = time() - _uptime + nextCheck;
+					convertedNextCheck = epoch2date(epoch);
+				}
+
+				if (pid > 0 && (lastUpdate + forcedUpdateInterval - _uptime) <= 0) {
 					nextUpdate = 'Verify';
 				} else if (forcedUpdateInterval === 0) {
 					nextUpdate = 'Run once';
@@ -178,6 +183,7 @@ const methods = {
 					ip: ip ? replace(trim(ip), '\n', '<br/>') : null,
 					last_update: lastUpdate !== 0 ? convertedLastUpdate : null,
 					next_update: nextUpdate || null,
+					next_check : nextCheck !== 0 ? convertedNextCheck : null,
 					pid: pid || null,
 				};
 			});

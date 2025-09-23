@@ -192,8 +192,6 @@ return view.extend({
 
 	poll_status: function(map, data) {
 		var status = data[1] || [], service = data[0] || [], rows = map.querySelectorAll('.cbi-section-table-row[data-sid]'),
-			section_id, cfg_detail_ip, cfg_update, cfg_status, host, ip, last_update,
-			next_update, service_status, reload, cfg_enabled, stop,
 			ddns_enabled = map.querySelector('[data-name="_enabled"]').querySelector('.cbi-value-field'),
 			ddns_toggle = map.querySelector('[data-name="_toggle"]').querySelector('button'),
 			services_list = map.querySelector('[data-name="_services_list"]').querySelector('.cbi-value-field');
@@ -212,36 +210,26 @@ return view.extend({
 		});
 
 		for (var i = 0; i < rows.length; i++) {
-			section_id = rows[i].getAttribute('data-sid');
-			cfg_detail_ip = rows[i].querySelector('[data-name="_cfg_detail_ip"]');
-			cfg_update = rows[i].querySelector('[data-name="_cfg_update"]');
-			cfg_status = rows[i].querySelector('[data-name="_cfg_status"]');
-			reload = rows[i].querySelector('.cbi-section-actions .reload');
-			stop = rows[i].querySelector('.cbi-section-actions .stop');
-			cfg_enabled = uci.get('ddns', section_id, 'enabled');
+			const section_id = rows[i].getAttribute('data-sid');
+			const cfg_detail_ip = rows[i].querySelector('[data-name="_cfg_detail_ip"]');
+			const cfg_update = rows[i].querySelector('[data-name="_cfg_update"]');
+			const cfg_status = rows[i].querySelector('[data-name="_cfg_status"]');
+			const reload = rows[i].querySelector('.cbi-section-actions .reload');
+			const stop = rows[i].querySelector('.cbi-section-actions .stop');
+			const cfg_enabled = uci.get('ddns', section_id, 'enabled');
 
 			reload.disabled = (status['_enabled'] == 0 || cfg_enabled == 0);
+			stop.disabled = (!service[section_id].pid);
 
-			host = uci.get('ddns', section_id, 'lookup_host') || _('Configuration Error');
-			ip =  _('No Data');
-			last_update = _('Never');
-			next_update = _('Unknown');
-			service_status = '<b>' + _('Not Running') + '</b>';
-
-			if (service[section_id]) {
-				stop.disabled = (!service[section_id].pid);
-				if (service[section_id].ip)
-					ip = service[section_id].ip;
-				if (service[section_id].last_update)
-					last_update = service[section_id].last_update;
-				if (service[section_id].next_update)
-					next_update = this.NextUpdateStrings[service[section_id].next_update] || service[section_id].next_update;
-				if (service[section_id].pid)
-					service_status = '<b>' + _('Running') + '</b> : ' + service[section_id].pid;
-			}
+			const host = uci.get('ddns', section_id, 'lookup_host') || _('Configuration Error');
+			const ip = service[section_id]?.ip || _('No Data');
+			const last_update = service[section_id]?.last_update || _('Never');
+			const next_update = this.NextUpdateStrings[service[section_id]?.next_update] || service[section_id]?.next_update || _('Unknown');
+			const next_check = service[section_id]?.next_check || _('Unknown');
+			const service_status = service[section_id]?.pid ? '<b>' + _('Running') + '</b> : ' + service[section_id]?.pid : '<b>' + _('Not Running') + '</b>';
 
 			cfg_detail_ip.innerHTML = host + '<br />' + ip;
-			cfg_update.innerHTML = last_update + '<br />' + next_update;
+			cfg_update.innerHTML = last_update + '<br />' + next_check + '<br />' + next_update ;
 			cfg_status.innerHTML = service_status;
 		}
 
@@ -1144,10 +1132,8 @@ return view.extend({
 		o.rawhtml   = true;
 		o.modalonly = false;
 		o.textvalue = function(section_id) {
-			var host = uci.get('ddns', section_id, 'lookup_host') || _('Configuration Error'),
-				ip = _('No Data');
-			if (resolved[section_id] && resolved[section_id].ip)
-				ip = resolved[section_id].ip;
+			const host = uci.get('ddns', section_id, 'lookup_host') || _('Configuration Error');
+			const ip = resolved[section_id]?.ip || _('No Data');
 
 			return host + '<br />' + ip;
 		};
@@ -1157,19 +1143,14 @@ return view.extend({
 		o.editable = true;
 		o.modalonly = false;
 
-		o = s.option(form.DummyValue, '_cfg_update', _('Last Update') + "<br />" + _('Next Update'));
+		o = s.option(form.DummyValue, '_cfg_update', _('Last Update') + " |<br />" + _('Next Verify') + " |<br />" + _('Next Update'));
 		o.rawhtml   = true;
 		o.modalonly = false;
 		o.textvalue = function(section_id) {
-			var last_update = _('Never'), next_update = _('Unknown');
-			if (resolved[section_id]) {
-				if (resolved[section_id].last_update)
-					last_update = resolved[section_id].last_update;
-				if (resolved[section_id].next_update)
-					next_update = _this.NextUpdateStrings[resolved[section_id].next_update] || resolved[section_id].next_update;
-			}
-
-			return  last_update + '<br />' + next_update;
+			const last_update = resolved[section_id]?.last_update || _('Never');
+			const next_check = resolved[section_id]?.next_check || _('Unknown');
+			const next_update = _this.NextUpdateStrings[resolved[section_id]?.next_update] || resolved[section_id]?.next_update || _('Unknown');
+			return  last_update + '<br />' + next_check + '<br />' + next_update;
 		};
 
 		return m.render().then(L.bind(function(m, nodes) {
