@@ -257,12 +257,75 @@ return view.extend({
 			...firmware
 		};
 		let body = [
-			E('p', {}, _('Server response: %s').format(response.detail)),
+			E('p', {}, [
+				_('First check '),
+				E(
+					'a',
+					{ href: 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552' },
+					_('this forum thread')
+				),
+				_('.  If you don\'t find a solution there, report all of the information below.')
+			]),
+
 			E(
-				'a',
-				{ href: 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552' },
-				_('Please report the error message and request')
+				'button',
+				{
+					class: 'btn cbi-button cbi-button-positive important',
+					click: ui.createHandlerFn(this, function () {
+						// No translations in here as it's intended for the forum.
+						var text =
+							'Server response: %s'.format(response.detail)
+							+ '\n\n'
+							+ '`--version-to %s --device %s:%s`'.format(
+								request_data.version,
+								request_data.target,
+								request_data.profile,
+							  )
+							+ '\n\n'
+							+ '[details="Request Data"]\n'
+							+ '```\n'
+							+ JSON.stringify({ ...request_data }, null, 4) + '\n'
+							+ '```\n'
+							+ '[/details]\n'
+						;
+						if (response.stdout) {
+							text = text +
+								'[details="STDOUT"]\n'
+								+ '```\n'
+								+ response.stdout + '\n'
+								+ '```\n'
+								+ '[/details]\n'
+							;
+						}
+						if (response.stderr) {
+							text = text +
+								'[details="STDERR"]\n'
+								+ '```\n'
+								+ response.stderr + '\n'
+								+ '```\n'
+								+ '[/details]\n'
+							;
+						}
+
+						navigator.clipboard.writeText(text);
+
+						ui.showModal(_('Data copied!'), [
+							E('p', {}, [
+								_('Paste the contents of the clipboard to '),
+								E(
+									'a',
+									{ href: 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552' },
+									_('this forum thread')
+								),
+							]),
+							E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+						]);
+					}),
+				},
+				_('Copy error data to clipboard')
 			),
+
+			E('p', {}, _('Server response: %s').format(response.detail)),
 			E('p', {}, _('Request Data:')),
 			E('pre', {}, JSON.stringify({ ...request_data }, null, 4)),
 		];
