@@ -323,6 +323,11 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'uinteger';
 		o.placeholder = 150;
+
+		o = s.taboption('general', form.Flag, 'address_as_local',
+			_('Resolve addresses locally'),
+			_('Never send queries for FQDNs in the Address option to an upstream resolver.'));
+		o.optional = true;
 		// End general
 
 		// Begin devices
