@@ -22,7 +22,7 @@
 <link rel="icon" href="{{ media }}/logo.svg" sizes="any">
 <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
 <script src="{{ resource }}/cbi.js"></script>
-<title>{{ striptags(`${boardinfo.hostname ?? '?'}${node ? ` - ${node.title}` : ''}`) }} - LuCI</title>
+<title>{{ striptags(`${dispatched ? `${dispatched.title} | ` : ''}${boardinfo.hostname ?? '?'}`) }} | LuCI</title>
 {% if (css): %}
 <style title="text/css">{{ css }}</style>
 {% endif %}
