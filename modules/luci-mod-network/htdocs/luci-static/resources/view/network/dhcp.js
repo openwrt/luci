@@ -692,6 +692,11 @@ return view.extend({
 			_('Allocate IP addresses sequentially, starting from the lowest available address.'));
 		o.optional = true;
 
+		o = s.taboption('general', form.Flag, 'address_as_local',
+			_('Resolve addresses locally'),
+			_('Never send queries for FQDNs in the Address option to an upstream resolver.'));
+		o.optional = true;
+
 		o = s.taboption('filteropts', form.Flag, 'boguspriv',
 			_('Filter private'),
 			customi18n(
