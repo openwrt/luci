@@ -16,7 +16,7 @@
 # ubus -S call luci.adblock-fast setInitAction '{"name": "adblock-fast", "action": "stop" }'
 
 readonly rpcdCompat='8'
-readonly adbFunctionsFile='/etc/init.d/adblock-fast'
+readonly adbFunctionsFile="${IPKG_INSTROOT}/etc/init.d/adblock-fast"
 if [ -s "$adbFunctionsFile" ]; then
 # shellcheck source=../../../../../adblock-fast/files/etc/init.d/adblock-fast
 	. "$adbFunctionsFile"
@@ -49,7 +49,7 @@ get_file_url_filesizes() {
 	json_close_object
 	json_dump
 	json_cleanup
-	[ -n "$(uci_changes "$name")" ] && uci_commit "$name"
+	uci_changes "$name" && uci_commit "$name"
 }
 
 get_init_list() {
