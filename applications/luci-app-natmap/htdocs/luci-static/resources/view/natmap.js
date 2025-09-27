@@ -76,23 +76,37 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.option(form.Value, 'interval', _('Keep-alive interval'));
-		o.datatype = 'uinteger';
+		o.datatype = 'and(uinteger, min(1))';
 		o.modalonly = true;
 
+		o = s.option(form.Value, 'stun_cycle', _('STUN check cycle'), _('For UDP mode'));
+		o.datatype = 'uinteger';
+		o.modalonly = true;
+		o.depends('udp_mode', '1');
+
 		o = s.option(form.Value, 'stun_server', _('STUN server'));
-		o.datatype = 'host';
+		o.datatype = 'string';
 		o.modalonly = true;
 		o.optional = false;
 		o.rmempty = false;
 
 		o = s.option(form.Value, 'http_server', _('HTTP server'), _('For TCP mode'));
-		o.datatype = 'host';
+		o.datatype = 'string';
 		o.modalonly = true;
 		o.rmempty = false;
 
+		o = s.option(form.Value, 'fwmark', _('Fwmark'),
+				_('Mark fwmark for STUN/HTTP outbound traffic'));
+		o.datatype = 'string';
+		o.modalonly = true;
+
 		o = s.option(form.Value, 'port', _('Bind port'));
-		o.datatype = 'portrange';
+		o.datatype = 'or(port, portrange)';
 		o.rmempty = false;
+
+		o = s.option(form.Flag, 'port_random', _('Randomly allocation ports'),
+				_('Allocation bind ports randomly instead of sequentially.'));
+		o.modalonly = true;
 
 		o = s.option(form.Flag, '_forward_mode', _('Forward mode'));
 		o.modalonly = true;
@@ -111,6 +125,16 @@ return view.extend({
 		o.datatype = 'port';
 		o.modalonly = true;
 		o.depends('_forward_mode', '1');
+
+		o = s.option(form.Value, 'forward_timeout', _('Forward timeout'));
+		o.datatype = 'and(uinteger, min(1))';
+		o.modalonly = true;
+		o.depends('_forward_mode', '1');
+
+		o = s.option(form.Value, 'forward_congestion', _('Congestion control'), _('For TCP mode'));
+		o.datatype = 'string';
+		o.modalonly = true;
+		o.depends({'_forward_mode': '1', 'udp_mode': '0'});
 
 		o = s.option(form.Value, 'notify_script', _('Notify script'));
 		o.datatype = 'file';
