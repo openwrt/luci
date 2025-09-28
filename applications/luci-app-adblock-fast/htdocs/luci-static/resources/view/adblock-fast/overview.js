@@ -335,6 +335,7 @@ return view.extend({
 			reply.platform.leds.forEach((element) => {
 				o.value(element);
 			});
+			o.rmempty = true;
 		}
 
 		o = s1.taboption(
