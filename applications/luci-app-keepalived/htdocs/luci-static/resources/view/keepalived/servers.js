@@ -112,7 +112,7 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'fail', _('Fail'),
+		o = s.taboption('advanced', form.Value, 'fall', _('Fall'),
 			_('Required number of successes for KO transition'));
 		o.optional = true;
 		o.datatype = 'uinteger';
