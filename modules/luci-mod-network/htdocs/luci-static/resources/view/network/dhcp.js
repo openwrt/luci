@@ -942,6 +942,61 @@ return view.extend({
 			so.value(name, display_str);
 		});
 
+		o = s.taboption('pxe_tftp', form.SectionValue, '__pxe6__', form.TableSection, 'boot6', null,
+			_('Special <abbr title="Preboot eXecution Environment">PXE</abbr> boot options for odhcpd IPv6.') + ' ' +
+			_('The last entry absent architecture becomes the default.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.nodescriptions = true;
+		ss.sortable = true;
+
+		/* URL https://www.rfc-editor.org/rfc/rfc5970.html#section-3.1 i.e. https://www.rfc-editor.org/rfc/rfc3986 */
+		so = ss.option(form.Value, 'url', _('URL'));
+		so.optional = false;
+		so.datatype = 'string';
+		so.placeholder = 'tftp://[fd11::1]/pxe.efi';
+
+		// Arch https://www.iana.org/assignments/dhcpv6-parameters/dhcpv6-parameters.xhtml#processor-architecture
+		so = ss.option(form.Value, 'arch', _('Architecture'));
+		so.optional = true;
+		so.rmempty = true;
+		so.datatype = 'range(0,65535)';
+		so.default = '';
+		so.value('');
+		so.value('0', _('00: x86 BIOS'));
+		so.value('6', _('06: x86 UEFI (IA32)'));
+		so.value('7', _('07: x64 UEFI'));
+		so.value('10', _('10: ARM 32-bit UEFI'));
+		so.value('11', _('11: ARM 64-bit UEFI'));
+		so.value('15', _('15: x86 UEFI boot from HTTP'));
+		so.value('16', _('16: x64 UEFI boot from HTTP'));
+		so.value('17', _('17: ebc boot from HTTP'));
+		so.value('18', _('18: ARM UEFI 32 boot from HTTP'));
+		so.value('19', _('19: ARM UEFI 64 boot from HTTP'));
+		so.value('20', _('20: pc/at bios boot from HTTP'));
+		so.value('21', _('21: ARM 32 uboot'));
+		so.value('22', _('22: ARM 64 uboot'));
+		so.value('23', _('23: ARM uboot 32 boot from HTTP'));
+		so.value('24', _('24: ARM uboot 64 boot from HTTP'));
+		so.value('25', _('25: RISC-V 32-bit UEFI'));
+		so.value('26', _('26: RISC-V 32-bit UEFI boot from HTTP'));
+		so.value('27', _('27: RISC-V 64-bit UEFI'));
+		so.value('28', _('28: RISC-V 64-bit UEFI boot from HTTP'));
+		so.value('29', _('29: RISC-V 128-bit UEFI'));
+		so.value('30', _('30: RISC-V 128-bit UEFI boot from HTTP'));
+		so.value('31', _('31: s390 Basic'));
+		so.value('32', _('32: s390 Extended'));
+		so.value('33', _('33: MIPS 32-bit UEFI'));
+		so.value('34', _('34: MIPS 64-bit UEFI'));
+		so.value('35', _('35: Sunway 32-bit UEFI'));
+		so.value('36', _('36: Sunway 64-bit UEFI'));
+		so.value('37', _('37: LoongArch 32-bit UEFI'));
+		so.value('38', _('38: LoongArch 32-bit UEFI boot from HTTP'));
+		so.value('39', _('39: LoongArch 64-bit UEFI'));
+		so.value('39', _('40: LoongArch 64-bit UEFI boot from HTTP'));
+		so.value('41', _('41: ARM rpiboot'));
+
 		o = s.taboption('dnsrecords', form.SectionValue, '__dnsrecords__', form.TypedSection, '__dnsrecords__');
 
 		dnss = o.subsection;
