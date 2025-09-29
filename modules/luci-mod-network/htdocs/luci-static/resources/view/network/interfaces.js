@@ -890,7 +890,7 @@ return view.extend({
 					so = ss.taboption('ipv6-ra', form.Value, 'ra_lifetime', _('<abbr title="Router Advertisement">RA</abbr> Lifetime'), _('Router Lifetime published  in <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> messages.  Maximum is 9000 seconds.'));
 					so.optional = true;
 					so.datatype = 'range(0, 9000)';
-					so.placeholder = '1800';
+					so.placeholder = '2700';
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 
@@ -1032,17 +1032,23 @@ return view.extend({
 					so.depends({ ndp: 'relay', master: '0' });
 					so.depends({ ndp: 'hybrid', master: '0' });
 
-					so = ss.taboption('ipv6', form.Value, 'preferred_lifetime', _('IPv6 Prefix Lifetime'), _('Preferred lifetime for a prefix.'));
+					so = ss.taboption('ipv6', form.Value, 'max_preferred_lifetime', _('IPv6 Preferred Prefix Lifetime'), _('Maximum preferred lifetime for a prefix.'));
 					so.optional = true;
-					so.placeholder = '12h';
+					so.placeholder = '45m';
 					so.value('5m', _('5m (5 minutes)'));
+					so.value('45m', _('45m (45 minutes - default)'));
 					so.value('3h', _('3h (3 hours)'));
-					so.value('12h', _('12h (12 hours - default)'));
+					so.value('12h', _('12h (12 hours)'));
 					so.value('7d', _('7d (7 days)'));
 
-					//This is a ra_* setting, but its placement is more logical/findable under IPv6 settings.
-					so = ss.taboption('ipv6', form.Flag, 'ra_useleasetime', _('Follow IPv4 Lifetime'), _('DHCPv4 <code>leasetime</code> is used as limit and preferred lifetime of the IPv6 prefix.'));
+					so = ss.taboption('ipv6', form.Value, 'max_valid_lifetime', _('IPv6 Valid Prefix Lifetime'), _('Maximum valid lifetime for a prefix.'));
 					so.optional = true;
+					so.placeholder = '90m';
+					so.value('5m', _('5m (5 minutes)'));
+					so.value('90m', _('90m (90 minutes - default)'));
+					so.value('3h', _('3h (3 hours)'));
+					so.value('12h', _('12h (12 hours)'));
+					so.value('7d', _('7d (7 days)'));
 				}
 
 				ifc.renderFormOptions(s);
