@@ -1,10 +1,13 @@
 {
-  "admin/network/usteer": {
-    "title": "Usteer",
-    "order": 80,
-    "action": {
-      "type": "view",
-      "path": "usteer/usteer"
-    }
-  }
+	"admin/network/usteer": {
+		"title": "Usteer",
+		"order": 80,
+		"action": {
+			"type": "view",
+			"path": "usteer/usteer"
+		},
+		"depends": {
+			"acl": [ "luci-app-usteer" ]
+		}
+	}
 }
