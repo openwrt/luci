@@ -866,6 +866,24 @@ return view.extend({
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 
+					so = ss.taboption('ipv6-ra', form.Value, 'ra_reachabletime', _('<abbr title="Router Advertisement">RA</abbr> Reachability Timer'), 
+						_('Units: milliseconds. 0 means unspecified.') + ' ' +
+						_('Dictates how long a node assumes a neighbor is reachable after a reachability confirmation; published in <abbr title="Router Advertisement">RA</abbr> messages.'));
+					so.optional = true;
+					so.datatype = 'range(0, 3600000)'; // RFC4861 and odhcpd caps to 3,600,000 msec
+					so.placeholder = '0';
+					so.depends('ra', 'server');
+					so.depends({ ra: 'hybrid', master: '0' });
+
+					so = ss.taboption('ipv6-ra', form.Value, 'ra_retranstime', _('<abbr title="Router Advertisement">RA</abbr> Retransmission Timer'), 
+						_('Units: milliseconds. 0 means unspecified.') + ' ' +
+						_('Controls retransmitted Neighbor Solicitation messages; published in <abbr title="Router Advertisement">RA</abbr> messages.'));
+					so.optional = true;
+					so.placeholder = '0';
+					so.datatype = 'range(0, 60000)'; // odhcpd caps to 60,000 msec
+					so.depends('ra', 'server');
+					so.depends({ ra: 'hybrid', master: '0' });
+
 					so = ss.taboption('ipv6-ra', form.Value, 'ra_lifetime', _('<abbr title="Router Advertisement">RA</abbr> Lifetime'), _('Router Lifetime published  in <abbr title="Router Advertisement, ICMPv6 Type 134">RA</abbr> messages.  Maximum is 9000 seconds.'));
 					so.optional = true;
 					so.datatype = 'range(0, 9000)';
