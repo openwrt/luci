@@ -955,6 +955,14 @@ return view.extend({
 					so.depends('dhcpv6', 'server');
 					so.depends({ dhcpv6: 'hybrid', master: '0' });
 
+					so = ss.taboption('ipv6', form.Flag, 'dns_service', _('Local IPv6 DNS server'),
+						_('Announce this device as IPv6 DNS server.'));
+					so.default = so.enabled;
+					so.depends({ ra: 'server', dns: /^$/ });
+					so.depends({ ra: 'hybrid', dns: /^$/, master: '0' });
+					so.depends({ dhcpv6: 'server', dns: /^$/ });
+					so.depends({ dhcpv6: 'hybrid', dns: /^$/, master: '0' });
+
 					so = ss.taboption('ipv6', form.DynamicList, 'dnr', _('Announce encrypted DNS servers'),
 						_('Specifies a fixed list of encrypted DNS server addresses to announce via DHCPv6/<abbr title="Router Advertisement">RA</abbr> (see %s).')
 						 .format('<a href="%s" target="_blank">RFC9463</a>').format('https://www.rfc-editor.org/rfc/rfc9463') + '<br/>' +
@@ -968,14 +976,6 @@ return view.extend({
 					so.depends({ ra: 'hybrid', master: '0' });
 					so.depends('dhcpv6', 'server');
 					so.depends({ dhcpv6: 'hybrid', master: '0' });
-
-					so = ss.taboption('ipv6', form.Flag, 'dns_service', _('Local IPv6 DNS server'),
-						_('Announce this device as IPv6 DNS server.'));
-					so.default = so.enabled;
-					so.depends({ ra: 'server', dns: /^$/ });
-					so.depends({ ra: 'hybrid', dns: /^$/, master: '0' });
-					so.depends({ dhcpv6: 'server', dns: /^$/ });
-					so.depends({ dhcpv6: 'hybrid', dns: /^$/, master: '0' });
 
 					so = ss.taboption('ipv6', form.DynamicList, 'domain', _('Announce DNS domains'),
 						_('Specifies a fixed list of DNS search domains to announce via DHCPv6. If left unspecified, the local device DNS search domain will be announced.'));
