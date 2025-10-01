@@ -94,10 +94,10 @@ return view.extend({
 		);
 
 		s = m.section(form.GridSection, '_active_rules');
-		s.disable = uci.get('upnpd', 'config', 'enabled') == '1' ? false : true;
+		s.disable = uci.get('upnpd', 'settings', 'enabled') == '1' ? false : true;
 
-		if (!uci.get('upnpd', 'config', 'enabled')) {
-			ui.addNotification(null, E('p', _('No suitable config file found. Please update both packages (daemon and LuCI) and restart service.') + ' (v1.0)'));
+		if (!uci.get('upnpd', 'settings', 'enabled')) {
+			ui.addNotification(null, E('p', _('No suitable config file found. Please update both packages (daemon and LuCI) and restart service.') + ' (v2.0)'));
 			return;
 		}
 
@@ -139,7 +139,7 @@ return view.extend({
 					E('h3', _('Active Port Maps')), table ]);
 		}, o, this);
 
-		s = m.section(form.NamedSection, 'config', 'upnpd', _('Service Settings'));
+		s = m.section(form.NamedSection, 'settings', 'upnpd', _('Service Settings'));
 		s.addremove = false;
 		s.tab('setup', _('Service Setup'));
 		s.tab('advanced', _('Advanced Settings'));
@@ -307,7 +307,7 @@ return view.extend({
 		o.editable = true;
 		o.depends({ acl_preset: '', '!reverse': true });
 
-		s = m.section(form.NamedSection, 'config', 'upnpd');
+		s = m.section(form.NamedSection, 'settings', 'upnpd');
 		o = s.option(form.Value, 'acl_reject_unsafe_ports', _('Reject unsafe/insecure/risky ports'),
 			_('By default, reject FTP/Telnet/DCE/NetBIOS/SMB/RDP client ports being mapped regardless of the ACL'));
 		o.placeholder = '21 23 135 137-139 445 3389';
@@ -363,7 +363,7 @@ return view.extend({
 		o.modalonly = true;
 
 		return m.render().then(L.bind(function(m, nodes) {
-			if (uci.get('upnpd', 'config', 'enabled') == '1') {
+			if (uci.get('upnpd', 'settings', 'enabled') == '1') {
 				poll.add(L.bind(function() {
 					return Promise.all([
 						callUpnpGetStatus()
