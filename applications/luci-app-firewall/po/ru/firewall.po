@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: firewall\n"
 "POT-Creation-Date: 2013-09-05 16:02+0200\n"
-"PO-Revision-Date: 2025-09-28 02:02+0000\n"
+"PO-Revision-Date: 2025-09-29 15:25+0000\n"
 "Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
@@ -34,18 +34,20 @@ msgid ""
 "{helper.val}</var>}}"
 msgstr ""
 "%{src?%{dest?Перенаправление:Входящий}:Исходящий} %{ipv6?%{ipv4?<var>IPv4</"
-"var> и <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, протокол %"
-"{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%"
-"{item.name}<span class=\"cbi-tooltip\">ICMP с типами %{item.types#%{next?, }"
-"<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, метка "
-"<var%{mark.inv? data-tooltip=\"Соответствие fwmarks кроме %{mark.num}%"
-"{mark.mask? с маской %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Применение "
-"маски %{mark.mask} к значению fwmark перед сравнением.\"}}>%{mark.val}</var>}"
-"%{dscp?, DSCP %{dscp.inv?<var data-tooltip=\"Соответствие DSCP "
-"классификатора кроме {dscp.num?:%{dscp.name}}\">%{dscp.val}</var>:<var>%"
-"{dscp.val}</var>}}%{helper?, помощник %{helper.inv?<var data-"
-"tooltip=\"Соответствие любому помощнику кроме &quot;%{helper.name}&quot;\">%"
-"{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
+"var> и <var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, протокол "
+"%{proto#%{next?, }%{item.types?<var class=\"cbi-tooltip-container\""
+">%{item.name}<span class=\"cbi-tooltip\">ICMP с типами %{item.types#%{next?, "
+"}<var>%{item}</var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, метка "
+"<var%{mark.inv? data-tooltip=\"Соответствие fwmarks кроме %{mark.num}%{"
+"mark.mask? с маской %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Применение "
+"маски %{mark.mask} к значению fwmark перед сравнением."
+"\"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp.inv?<var data-tooltip=\""
+"Соответствие DSCP-классификатора кроме {dscp.num?:%{dscp.name}}\""
+">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, помощник %{"
+"helper.inv?<var data-tooltip="
+"\"Соответствие любому помощнику кроме &quot;%{helper.name}&quot;\""
+">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\""
+">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:463
 msgid "-- add IP --"
@@ -94,8 +96,8 @@ msgid ""
 "<var data-tooltip=\"DSCP\">Assign DSCP</var> classification <var>%{set_dscp}"
 "</var>"
 msgstr ""
-"<var data-tooltip=\"DSCP\">Назначить DSCP</var> классификатор <var>%"
-"{set_dscp}</var>"
+"<var data-tooltip=\"DSCP\">Назначить DSCP</var>-классификатор "
+"<var>%{set_dscp}</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:127
 msgid ""
@@ -305,15 +307,15 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:416
 msgid "DSCP classification"
-msgstr "DSCP классификация"
+msgstr "DSCP-классификация"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "DSCP mark"
-msgstr "DSCP метка"
+msgstr "DSCP-метка"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:297
 msgid "DSCP mark required"
-msgstr "Требуется DSCP метка"
+msgstr "Требуется DSCP-метка"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:397
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:270
@@ -608,7 +610,7 @@ msgstr "Только IPv4"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:69
 msgid "IPv6"
-msgstr "IPv6"
+msgstr "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:242
 msgid "IPv6 Masquerading"
@@ -681,7 +683,7 @@ msgstr "Внутризональная пересылка"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:305
 msgid "Invalid DSCP mark"
-msgstr "Неверная DSCP метка"
+msgstr "Неверная DSCP-метка"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:373
 msgid "Invalid limit value"
