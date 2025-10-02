@@ -341,6 +341,7 @@ static void strip_colon_duid(char *str) {
 
 static struct {
 	time_t now;
+	int af;
 	size_t num, off;
 	struct {
 		FILE *fh;
@@ -449,7 +450,7 @@ lease_close(void)
 }
 
 static void
-lease_open(void)
+lease_open(int af)
 {
 	struct uci_context *uci;
 
@@ -460,6 +461,7 @@ lease_open(void)
 	if (!uci)
 		return;
 
+	lease_state.af = af;
 	lease_state.now = time(NULL);
 
 	if (!find_leasefiles(uci, false))
@@ -498,11 +500,13 @@ lease_next(void)
 				if (!strcmp(e.iaid, "ipv4")) {
 					e.af = AF_INET;
 					e.mask = 32;
-				}
-				else {
+				} else {
 					e.af = AF_INET6;
 					e.mask = 128;
 				}
+
+				if (lease_state.af != AF_UNSPEC && e.af != lease_state.af)
+					continue;
 
 				e.hostname = strtok(NULL, " \t\n"); /* name */
 
@@ -590,6 +594,9 @@ lease_next(void)
 				else {
 					continue;
 				}
+
+				if (lease_state.af != AF_UNSPEC && e.af != lease_state.af)
+					continue;
 
 				if (!ea && e.af != AF_INET6)
 					continue;
@@ -1534,7 +1541,7 @@ rpc_luci_get_host_hints_uci(struct reply_context *rctx)
 		}
 	}
 
-	lease_open();
+	lease_open(AF_UNSPEC);
 
 	while ((lease = lease_next()) != NULL) {
 		if (ea_empty(&lease->mac))
@@ -1824,10 +1831,10 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 	avl_init(&avl, avl_strcmp, false, NULL);
 	blob_buf_init(&blob, 0);
 
-	lease_open();
+	lease_open(AF_INET6);
 
 	while ((lease = lease_next()) != NULL) {
-		if (lease->af != AF_INET6 || lease->duid == NULL)
+		if (!lease->duid)
 			continue;
 
 		e = avl_find_element(&avl, lease->duid, e, avl);
@@ -1918,7 +1925,7 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 
 	switch (tb[RPC_L_FAMILY] ? blobmsg_get_u32(tb[RPC_L_FAMILY]) : 0) {
 	case 0:
-		family = 0;
+		family = AF_UNSPEC;
 		break;
 
 	case 4:
@@ -1935,18 +1942,16 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 
 	blob_buf_init(&blob, 0);
 
-	for (af = family ? family : AF_INET;
+	for (af = family != AF_UNSPEC ? family : AF_INET;
 	     af != 0;
-	     af = (family == 0) ? (af == AF_INET ? AF_INET6 : 0) : 0) {
+	     af = (family == AF_UNSPEC) ? (af == AF_INET ? AF_INET6 : 0) : 0) {
 
 		a = blobmsg_open_array(&blob, (af == AF_INET) ? "dhcp_leases"
 		                                              : "dhcp6_leases");
 
-		lease_open();
+		lease_open(af);
 
 		while ((lease = lease_next()) != NULL) {
-			if (lease->af != af)
-				continue;
 
 			o = blobmsg_open_table(&blob, NULL);
 
