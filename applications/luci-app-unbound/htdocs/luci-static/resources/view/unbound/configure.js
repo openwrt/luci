@@ -37,7 +37,7 @@ return view.extend({
 		const dhcpLink = uci.get('unbound', 'ub_main', 'dhcp_link');
 		const leasetrig = uci.get('dhcp', 'odhcpd', 'leasetrigger') || 'undefined';
 
-		if (manual === '0' && dhcpLink === 'odhcpd' && leasetrig === '/usr/lib/unbound/odhcpd.sh') {
+		if (manual === '0' && dhcpLink === 'odhcpd' && leasetrig !== '/usr/lib/unbound/odhcpd.sh') {
 			ui.addTimeLimitedNotification(null, E('p', _('Note: local DNS is configured to look at odhpcd, but odhpcd UCI lease trigger is incorrectly set:') +
 				"dhcp.odhcpd.leasetrigger='" + leasetrig + "'"), 15000, 'note');
 		}

@@ -11,6 +11,7 @@
 'require tools.dnsrecordhandlers as drh';
 
 var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
+var checkUfpInstalled, callUfpList;
 
 callHostHints = rpc.declare({
 	object: 'luci-rpc',
@@ -27,6 +28,18 @@ callDUIDHints = rpc.declare({
 callDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getDHCPLeases',
+	expect: { '': {} }
+});
+
+checkUfpInstalled = rpc.declare({
+	object: 'file',
+	method: 'stat',
+	params: [ 'path' ]
+});
+
+callUfpList = rpc.declare({
+	object: 'fingerprint',
+	method: 'fingerprint',
 	expect: { '': {} }
 });
 
@@ -58,6 +71,7 @@ CBILease6Status = form.DummyValue.extend({
 					E('th', { 'class': 'th' }, _('Hostname')),
 					E('th', { 'class': 'th' }, _('IPv6 address')),
 					E('th', { 'class': 'th' }, _('DUID')),
+					E('th', { 'class': 'th' }, _('IAID')),
 					E('th', { 'class': 'th' }, _('Lease time remaining'))
 				]),
 				E('tr', { 'class': 'tr placeholder' }, [
@@ -275,20 +289,23 @@ function validateMACAddr(pools, sid, s) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			callHostHints(),
-			callDUIDHints(),
-			getDHCPPools(),
-			network.getNetworks(),
-			uci.load('firewall')
-		]);
+			checkUfpInstalled('/usr/sbin/ufpd')
+		]).then(data => {
+			var promises = [
+				callHostHints(),
+				callDUIDHints(),
+				getDHCPPools(),
+				network.getNetworks(),
+				data[0].type === 'file' ? callUfpList() : null,
+				uci.load('firewall')
+			]
+
+			return Promise.all(promises);
+		});
 	},
 
-	render: function(hosts_duids_pools) {
+	render: function([hosts, duids, pools, networks, macdata]) {
 		var has_dhcpv6 = L.hasSystemFeature('dnsmasq', 'dhcpv6') || L.hasSystemFeature('odhcpd'),
-		    hosts = hosts_duids_pools[0],
-		    duids = hosts_duids_pools[1],
-		    pools = hosts_duids_pools[2],
-		    networks = hosts_duids_pools[3],
 		    m, s, o, ss, so, dnss;
 
 		let noi18nstrings = {
@@ -925,6 +942,61 @@ return view.extend({
 			so.value(name, display_str);
 		});
 
+		o = s.taboption('pxe_tftp', form.SectionValue, '__pxe6__', form.TableSection, 'boot6', null,
+			_('Special <abbr title="Preboot eXecution Environment">PXE</abbr> boot options for odhcpd IPv6.') + ' ' +
+			_('The last entry absent architecture becomes the default.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.nodescriptions = true;
+		ss.sortable = true;
+
+		/* URL https://www.rfc-editor.org/rfc/rfc5970.html#section-3.1 i.e. https://www.rfc-editor.org/rfc/rfc3986 */
+		so = ss.option(form.Value, 'url', _('URL'));
+		so.optional = false;
+		so.datatype = 'string';
+		so.placeholder = 'tftp://[fd11::1]/pxe.efi';
+
+		// Arch https://www.iana.org/assignments/dhcpv6-parameters/dhcpv6-parameters.xhtml#processor-architecture
+		so = ss.option(form.Value, 'arch', _('Architecture'));
+		so.optional = true;
+		so.rmempty = true;
+		so.datatype = 'range(0,65535)';
+		so.default = '';
+		so.value('');
+		so.value('0', _('00: x86 BIOS'));
+		so.value('6', _('06: x86 UEFI (IA32)'));
+		so.value('7', _('07: x64 UEFI'));
+		so.value('10', _('10: ARM 32-bit UEFI'));
+		so.value('11', _('11: ARM 64-bit UEFI'));
+		so.value('15', _('15: x86 UEFI boot from HTTP'));
+		so.value('16', _('16: x64 UEFI boot from HTTP'));
+		so.value('17', _('17: ebc boot from HTTP'));
+		so.value('18', _('18: ARM UEFI 32 boot from HTTP'));
+		so.value('19', _('19: ARM UEFI 64 boot from HTTP'));
+		so.value('20', _('20: pc/at bios boot from HTTP'));
+		so.value('21', _('21: ARM 32 uboot'));
+		so.value('22', _('22: ARM 64 uboot'));
+		so.value('23', _('23: ARM uboot 32 boot from HTTP'));
+		so.value('24', _('24: ARM uboot 64 boot from HTTP'));
+		so.value('25', _('25: RISC-V 32-bit UEFI'));
+		so.value('26', _('26: RISC-V 32-bit UEFI boot from HTTP'));
+		so.value('27', _('27: RISC-V 64-bit UEFI'));
+		so.value('28', _('28: RISC-V 64-bit UEFI boot from HTTP'));
+		so.value('29', _('29: RISC-V 128-bit UEFI'));
+		so.value('30', _('30: RISC-V 128-bit UEFI boot from HTTP'));
+		so.value('31', _('31: s390 Basic'));
+		so.value('32', _('32: s390 Extended'));
+		so.value('33', _('33: MIPS 32-bit UEFI'));
+		so.value('34', _('34: MIPS 64-bit UEFI'));
+		so.value('35', _('35: Sunway 32-bit UEFI'));
+		so.value('36', _('36: Sunway 64-bit UEFI'));
+		so.value('37', _('37: LoongArch 32-bit UEFI'));
+		so.value('38', _('38: LoongArch 32-bit UEFI boot from HTTP'));
+		so.value('39', _('39: LoongArch 64-bit UEFI'));
+		so.value('39', _('40: LoongArch 64-bit UEFI boot from HTTP'));
+		so.value('41', _('41: ARM rpiboot'));
+
 		o = s.taboption('dnsrecords', form.SectionValue, '__dnsrecords__', form.TypedSection, '__dnsrecords__');
 
 		dnss = o.subsection;
@@ -1248,16 +1320,46 @@ return view.extend({
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
 			var macs = uci.get('dhcp', section, 'mac');
+			var formattedMacs;
+			var hint, entry;
+
 			if(!Array.isArray(macs)){
-				return expandAndFormatMAC(L.toArray(macs));
+				formattedMacs = expandAndFormatMAC(L.toArray(macs));
 			} else {
-				return expandAndFormatMAC(macs);
+				formattedMacs = expandAndFormatMAC(macs);
 			}
+
+			if (!macdata) {
+				return formattedMacs;
+			}
+
+
+			if (Array.isArray(formattedMacs)){
+				for (let mac in formattedMacs) {
+					entry = formattedMacs[mac].toLowerCase();
+					if (macdata[entry]) {
+						hint = macdata[entry].vendor ? macdata[entry].vendor : null;
+						formattedMacs[mac] += ` (${hint})`;
+					}
+				}
+				return formattedMacs;
+			}
+
+			if (formattedMacs) {
+				entry = formattedMacs[0].toLowerCase();
+				hint = macdata[entry].vendor ? macdata[entry].vendor : null;
+				formattedMacs[0] += ` (${hint})`;
+			}
+			return formattedMacs;
 		};
 		//removed jows renderwidget function which hindered multi-mac entry
 		so.validate = validateMACAddr.bind(so, pools);
 		Object.keys(hosts).forEach(function(mac) {
-			var hint = hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
+			var vendor;
+			var lower_mac = mac.toLowerCase();
+			if (macdata)
+				vendor = macdata[lower_mac] ? macdata[lower_mac].vendor : null;
+			const hint = vendor || hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
@@ -1364,6 +1466,7 @@ return view.extend({
 					cbi_update_table(mapEl.querySelector('#lease_status_table'),
 						leases.map(function(lease) {
 							var exp;
+							var vendor;
 
 							if (lease.expires === false)
 								exp = E('em', _('unlimited'));
@@ -1371,6 +1474,13 @@ return view.extend({
 								exp = E('em', _('expired'));
 							else
 								exp = '%t'.format(lease.expires);
+
+							for (let mac in macdata) {
+								if (mac.toUpperCase() === lease.macaddr) {
+									vendor = macdata[mac].vendor ?
+										` (${macdata[mac].vendor})` : null;
+								}
+							}
 
 							var hint = lease.macaddr ? hosts[lease.macaddr] : null,
 							    name = hint ? hint.name : null,
@@ -1384,7 +1494,7 @@ return view.extend({
 							return [
 								host || '-',
 								lease.ipaddr,
-								lease.macaddr,
+								vendor ? lease.macaddr + vendor : lease.macaddr,
 								exp
 							];
 						}),
@@ -1417,6 +1527,7 @@ return view.extend({
 									host || '-',
 									lease.ip6addrs ? lease.ip6addrs.join('<br />') : lease.ip6addr,
 									lease.duid,
+									lease.iaid,
 									exp
 								];
 							}),

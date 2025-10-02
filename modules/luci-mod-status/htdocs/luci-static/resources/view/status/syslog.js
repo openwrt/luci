@@ -46,7 +46,7 @@ return view.extend({
 		['1',  'alert',   _('Alert')],
 		['2',  'crit',   _('Critical')],
 		['3',  'err', _('Error')],
-		['4',  'warning',   _('Warning')],
+		['4',  'warn',   _('Warning')],
 		['5',  'notice', _('Notice')],
 		['6',  'info',    _('Info')],
 		['7',  'debug',   _('Debug')]

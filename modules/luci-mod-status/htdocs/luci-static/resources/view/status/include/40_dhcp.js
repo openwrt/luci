@@ -11,6 +11,17 @@ var callLuciDHCPLeases = rpc.declare({
 	expect: { '': {} }
 });
 
+var callUfpList = rpc.declare({
+	object: 'fingerprint',
+	method: 'fingerprint',
+});
+
+var checkUfpInstalled = rpc.declare({
+	object: 'file',
+	method: 'stat',
+	params: [ 'path' ]
+});
+
 return baseclass.extend({
 	title: '',
 
@@ -19,10 +30,17 @@ return baseclass.extend({
 
 	load: function() {
 		return Promise.all([
-			callLuciDHCPLeases(),
-			network.getHostHints(),
-			L.resolveDefault(uci.load('dhcp'))
-		]);
+			checkUfpInstalled('/usr/sbin/ufpd')
+		]).then(data => {
+			var promises = [
+				callLuciDHCPLeases(),
+				network.getHostHints(),
+				data[0].type === 'file' ? callUfpList() : null,
+				L.resolveDefault(uci.load('dhcp'))
+			];
+
+			return Promise.all(promises);
+		});
 	},
 
 	handleCreateStaticLease: function(lease, ev) {
@@ -64,6 +82,7 @@ return baseclass.extend({
 		    leases6 = Array.isArray(data[0].dhcp6_leases) ? data[0].dhcp6_leases : [],
 		    machints = data[1].getMACHints(false),
 		    hosts = uci.sections('dhcp', 'host'),
+		    macaddr = data[2],
 		    isReadonlyView = !L.hasViewPermission();
 
 		for (var i = 0; i < hosts.length; i++) {
@@ -94,6 +113,7 @@ return baseclass.extend({
 
 		cbi_update_table(table, leases.map(L.bind(function(lease) {
 			var exp, rows;
+			var vendor;
 
 			if (lease.expires === false)
 				exp = E('em', _('unlimited'));
@@ -110,10 +130,15 @@ return baseclass.extend({
 			else if (lease.hostname)
 				host = lease.hostname;
 
+			if (macaddr) {
+				var lowermac = lease.macaddr.toLowerCase();
+				vendor = macaddr[lowermac].vendor ? macaddr[lowermac].vendor : null;
+			}
+
 			rows = [
 				host || '-',
 				lease.ipaddr,
-				lease.macaddr,
+				vendor ? lease.macaddr + ` (${vendor})` : lease.macaddr,
 				exp
 			];
 
@@ -135,6 +160,7 @@ return baseclass.extend({
 				E('th', { 'class': 'th' }, _('Host')),
 				E('th', { 'class': 'th' }, _('IPv6 address')),
 				E('th', { 'class': 'th' }, _('DUID')),
+				E('th', { 'class': 'th' }, _('IAID')),
 				E('th', { 'class': 'th' }, _('Lease time remaining')),
 				isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
@@ -164,6 +190,7 @@ return baseclass.extend({
 				host || '-',
 				lease.ip6addrs ? lease.ip6addrs.join('<br />') : lease.ip6addr,
 				lease.duid,
+				lease.iaid,
 				exp
 			];
 

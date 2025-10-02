@@ -163,6 +163,7 @@ return baseclass.extend({
 				return keys.map(n => [(n >> 8) & 0xff, n & 0xff]).flat();
 
 			case 'ech': // Assume ech is in base64
+				return Array.prototype.map.call(atob(value), c => c.charCodeAt(0)); // OR Uint8Array.fromBase64(value)
 			case 'alpn':
 				/* (RFC 9460 §7.1.1 The wire-format value for "alpn" consists of
 				at least one alpn-id prefixed by its length as a single octet */
@@ -320,6 +321,7 @@ return baseclass.extend({
 				return keys.join(',');
 
 			case 'ech':
+				return btoa(String.fromCharCode(...buf)); // OR buf.toBase64()
 			case 'alpn': {
 				let pos = 0, result = [];
 				while (pos < buf.length) {
