@@ -6,9 +6,11 @@
 
 include $(TOPDIR)/rules.mk
 
-LUCI_TITLE:=UPnP IGD & PCP/NAT-PMP configuration module | Universal Plug and Play
+LUCI_TITLE:=UPnP IGD & PCP/NAT-PMP LuCI app | Universal Plug and Play
 LUCI_DEPENDS:=+luci-base +miniupnpd +rpcd-mod-ucode
 
+PKG_VERSION:=2.0.0
+PKG_RELEASE:=1
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 
