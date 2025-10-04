@@ -28,7 +28,7 @@
 	 *
 	 * `LuCI.baseclass` is the abstract base class all LuCI classes inherit from.
 	 *
-	 * It provides simple means to create subclasses of given classes and
+	 * It provides a simple means to create subclasses of given classes and
 	 * implements prototypal inheritance.
 	 */
 	const superContext = {};
@@ -191,11 +191,11 @@
 			 * Walks up the parent class chain and looks for a class member
 			 * called `key` in any of the parent classes this class inherits
 			 * from. Returns the member value of the superclass or calls the
-			 * member as function and returns its return value when the
+			 * member as a function and returns its return value when the
 			 * optional `callArgs` array is given.
 			 *
 			 * This function has two signatures and is sensitive to the
-			 * amount of arguments passed to it:
+			 * number of arguments passed to it:
 			 *  - `super('key')` -
 			 *	Returns the value of `key` when found within one of the
 			 *	parent classes.
@@ -212,7 +212,7 @@
 			 * @param {Array<*>} [callArgs]
 			 * An optional array of function call parameters to use. When
 			 * this parameter is specified, the found member value is called
-			 * as function using the values of this array as arguments.
+			 * as a function using the values of this array as arguments.
 			 *
 			 * @throws {ReferenceError}
 			 * Throws a `ReferenceError` when `callArgs` are specified and
@@ -633,7 +633,7 @@
 		 *
 		 * @property {function} [progress]
 		 * An optional request callback function which receives ProgressEvent
-		 * instances as sole argument during the HTTP request transfer.
+		 * instances as the sole argument during the HTTP request transfer.
 		 */
 
 		/**
@@ -999,7 +999,7 @@
 	 * @classdesc
 	 *
 	 * The `Poll` class allows registering and unregistering poll actions,
-	 * as well as starting, stopping and querying the state of the polling
+	 * as well as starting, stopping, and querying the state of the polling
 	 * loop.
 	 */
 	const Poll = Class.singleton(/** @lends LuCI.poll.prototype */ {
@@ -1164,7 +1164,7 @@
 	 * @hideconstructor
 	 * @classdesc
 	 *
-	 * The `dom` class provides convenience method for creating and
+	 * The `dom` class provides a convenience method for creating and
 	 * manipulating DOM elements.
 	 *
 	 * To import the class in views, use `'require dom'`, to import it in
@@ -1282,20 +1282,20 @@
 		 * The `Node` argument to append the children to.
 		 *
 		 * @param {*} [children]
-		 * The children to append to the given node.
+		 * The children are to append to the given node.
 		 *
 		 * When `children` is an array, then each item of the array
-		 * will be either appended as child element or text node,
+		 * will be either appended as a child element or text node,
 		 * depending on whether the item is a DOM `Node` instance or
 		 * some other non-`null` value. Non-`Node`, non-`null` values
 		 * will be converted to strings first before being passed as
 		 * argument to `createTextNode()`.
 		 *
 		 * When `children` is a function, it will be invoked with
-		 * the passed `node` argument as sole parameter and the `append`
+		 * the passed `node` argument as the sole parameter and the `append`
 		 * function will be invoked again, with the given `node` argument
 		 * as first and the return value of the `children` function as
-		 * second parameter.
+		 *  the second parameter.
 		 *
 		 * When `children` is a DOM `Node` instance, it will be
 		 * appended to the given `node`.
@@ -1352,17 +1352,17 @@
 		 * The children to replace into the given node.
 		 *
 		 * When `children` is an array, then each item of the array
-		 * will be either appended as child element or text node,
+		 * will be either appended as a child element or text node,
 		 * depending on whether the item is a DOM `Node` instance or
 		 * some other non-`null` value. Non-`Node`, non-`null` values
 		 * will be converted to strings first before being passed as
 		 * argument to `createTextNode()`.
 		 *
 		 * When `children` is a function, it will be invoked with
-		 * the passed `node` argument as sole parameter and the `append`
+		 * the passed `node` argument as the sole parameter and the `append`
 		 * function will be invoked again, with the given `node` argument
 		 * as first and the return value of the `children` function as
-		 * second parameter.
+		 * the second parameter.
 		 *
 		 * When `children` is a DOM `Node` instance, it will be
 		 * appended to the given `node`.
@@ -1412,15 +1412,15 @@
 		 * If the `key` parameter is an `Object`, this parameter will be
 		 * ignored.
 		 *
-		 * When `val` is of type function, it will be registered as event
+		 * When `val` is of type function, it will be registered as an event
 		 * handler on the given `node` with the `key` parameter being the
 		 * event name.
 		 *
 		 * When `val` is of type object, it will be serialized as JSON and
-		 * added as attribute to the given `node`, using the given `key`
-		 * as attribute name.
+		 * added as an attribute to the given `node`, using the given `key`
+		 * as an attribute name.
 		 *
-		 * When `val` is of any other type, it will be added as attribute
+		 * When `val` is of any other type, it will be added as an attribute
 		 * to the given `node` as-is, with the underlying `setAttribute()`
 		 * call implicitly turning it into a string.
 		 */
@@ -1471,10 +1471,10 @@
 		 * When the value of `html` is of type array, a `DocumentFragment`
 		 * node is created and each item of the array is first converted
 		 * to a DOM `Node` by passing it through `create()` and then added
-		 * as child to the fragment.
+		 * as a child to the fragment.
 		 *
 		 * When the value of `html` is a DOM `Node` instance, no new
-		 * element will be created but the node will be used as-is.
+		 * element will be created, but the node will be used as-is.
 		 *
 		 * When the value of `html` is a string starting with `<`, it will
 		 * be passed to `dom.parse()` and the resulting value is used.
@@ -1638,7 +1638,7 @@
 		},
 
 		/**
-		 * Binds the given class instance ot the specified DOM `Node`.
+		 * Binds the given class instance to the specified DOM `Node`.
 		 *
 		 * This function uses the `dom.data()` facility to attach the
 		 * passed instance of a Class to a node. This is needed for
@@ -1909,7 +1909,7 @@
 		 * `Promise.resolve()` so it may return Promises if needed.
 		 *
 		 * The return value of the function (or the resolved values
-		 * of the promise returned by it) will be passed as first
+		 * of the promise returned by it) will be passed as the first
 		 * argument to `render()`.
 		 *
 		 * This function is supposed to be overwritten by subclasses,
@@ -2160,7 +2160,7 @@
 	let sysFeatures = null;
 	let preloadClasses = null;
 
-	/* "preload" builtin classes to make the available via require */
+	/* "preload" builtin classes to make them available via require */
 	const classes = {
 		baseclass: Class,
 		dom: DOM,
@@ -2212,7 +2212,7 @@
 		/**
 		 * Captures the current stack trace and throws an error of the
 		 * specified type as a new exception. Also logs the exception as
-		 * error to the debug console if it is available.
+		 * an error to the debug console if it is available.
 		 *
 		 * @instance
 		 * @memberof LuCI
@@ -2581,7 +2581,7 @@
 		 * @memberof LuCI
 		 *
 		 * @param {string} feature
-		 * The feature to test. For detailed list of known feature flags,
+		 * The feature to test. For a detailed list of known feature flags,
 		 * see `/modules/luci-base/root/usr/share/rpcd/ucode/luci`.
 		 *
 		 * @param {string} [subfeature]
@@ -2693,7 +2693,7 @@
 
 		/**
 		 * The `env` object holds environment settings used by LuCI, such
-		 * as request timeouts, base URLs etc.
+		 * as request timeouts, base URLs, etc.
 		 *
 		 * @instance
 		 * @memberof LuCI
@@ -2771,7 +2771,7 @@
 		},
 
 		/**
-		 * Construct a URL with path relative to the script path of the server
+		 * Construct a URL with a path relative to the script path of the server
 		 * side LuCI application (usually `/cgi-bin/luci`).
 		 *
 		 * The resulting URL is guaranteed to contain only the characters
@@ -2868,7 +2868,7 @@
 		 * The value to test
 		 *
 		 * @return {boolean}
-		 * Returns `true` if the given value is of type object and
+		 * Returns `true` if the given value is of a type object and
 		 * not `null`, else returns `false`.
 		 */
 		isObject(val) {
@@ -2940,11 +2940,11 @@
 		},
 
 		/**
-		 * Compares two values numerically and returns -1, 0 or 1 depending
-		 * on whether the first value is smaller, equal to or larger than the
+		 * Compares two values numerically and returns -1, 0, or 1 depending
+		 * on whether the first value is smaller, equal to, or larger than the
 		 * second one respectively.
 		 *
-		 * This function is meant to be used as comparator function for
+		 * This function is meant to be used as a comparator function for
 		 * Array.sort().
 		 *
 		 * @type {function}
@@ -2983,11 +2983,11 @@
 
 		/**
 		 * Converts the given value to an array. If the given value is of
-		 * type array, it is returned as-is, values of type object are
+		 * type array, it is returned as-is, values of a type object are
 		 * returned as one-element array containing the object, empty
-		 * strings and `null` values are returned as empty array, all other
+		 * strings and `null` values are returned as an empty array, all other
 		 * values are converted using `String()`, trimmed, split on white
-		 * space and returned as array.
+		 * space and returned as an array.
 		 *
 		 * @instance
 		 * @memberof LuCI
@@ -3137,7 +3137,7 @@
 		 * @param {boolean} [post=false]
 		 * When set to `false` or not specified, poll requests will be made
 		 * using the GET method. When set to `true`, POST requests will be
-		 * issued. In case of POST requests, the request body will contain
+		 * issued. In the case of POST requests, the request body will contain
 		 * an argument `token` with the current value of `LuCI.env.token` by
 		 * default, regardless of the parameters specified with `args`.
 		 *
@@ -3285,7 +3285,7 @@
 	 * @classdesc
 	 *
 	 * The `LuCI.xhr` class is a legacy compatibility shim for the
-	 * functionality formerly provided by `xhr.js`. It is registered as global
+	 * functionality formerly provided by `xhr.js`. It is registered as a global
 	 * `window.XHR` symbol for compatibility with legacy code.
 	 *
 	 * New code should use {@link LuCI.request} instead to implement HTTP
