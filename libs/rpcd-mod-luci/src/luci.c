@@ -1899,6 +1899,69 @@ rpc_luci_get_board_json(struct ubus_context *ctx, struct ubus_object *obj,
 	return UBUS_STATUS_OK;
 }
 
+static void
+rpc_luci_get_dhcp_leases_cb(struct ubus_request *req, int type,
+			    struct blob_attr *msg, int af)
+{
+	struct blob_attr *devs, *dev, *leases, *lease;
+	struct reply_context *rctx = req->priv;
+	int rem, rem2, rem3, rem4;
+	void *a;
+
+	if (af == AF_INET)
+		a = blobmsg_open_array(&rctx->blob, "dhcp_leases");
+	else
+		a = blobmsg_open_array(&rctx->blob, "dhcp6_leases");
+
+	blob_for_each_attr(devs, msg, rem) {
+		if (blobmsg_type(devs) != BLOBMSG_TYPE_TABLE ||
+		    blobmsg_name(devs) == NULL ||
+		    strcmp(blobmsg_name(devs), "device"))
+			continue;
+
+		rem2 = blobmsg_data_len(devs);
+		__blob_for_each_attr(dev, blobmsg_data(devs), rem2) {
+			if (blobmsg_type(dev) != BLOBMSG_TYPE_TABLE ||
+			    blobmsg_name(dev) == NULL)
+				continue;
+
+			rem3 = blobmsg_data_len(dev);
+			__blob_for_each_attr(leases, blobmsg_data(dev), rem3) {
+				if (blobmsg_type(leases) != BLOBMSG_TYPE_ARRAY ||
+				    blobmsg_name(leases) == NULL ||
+				    strcmp(blobmsg_name(leases), "leases"))
+					continue;
+
+				rem4 = blobmsg_data_len(leases);
+				__blob_for_each_attr(lease, blobmsg_data(leases), rem4) {
+					if (blobmsg_type(dev) != BLOBMSG_TYPE_TABLE)
+						continue;
+
+					blobmsg_add_blob(&rctx->blob, lease);
+				}
+			}
+		}
+	}
+
+	blobmsg_close_array(&rctx->blob, a);
+
+	finish_request(rctx, UBUS_STATUS_OK);
+}
+
+static void
+rpc_luci_get_dhcp_leases_cb4(struct ubus_request *req, int type,
+			     struct blob_attr *msg)
+{
+	rpc_luci_get_dhcp_leases_cb(req, type, msg, AF_INET);
+}
+
+static void
+rpc_luci_get_dhcp_leases_cb6(struct ubus_request *req, int type,
+			     struct blob_attr *msg)
+{
+	rpc_luci_get_dhcp_leases_cb(req, type, msg, AF_INET6);
+}
+
 enum {
 	RPC_L_FAMILY,
 	__RPC_L_MAX,
@@ -1908,6 +1971,44 @@ static const struct blobmsg_policy rpc_get_leases_policy[__RPC_L_MAX] = {
 	[RPC_L_FAMILY] = { .name = "family", .type = BLOBMSG_TYPE_INT32 }
 };
 
+struct ubus_method_lookup_request {
+	const char *method;
+	bool result;
+};
+
+/* FIXME: This could hopefully go into libubus */
+static void ubus_lookup_method_cb(struct ubus_context *ctx, struct ubus_object_data *obj, void *priv)
+{
+        struct blob_attr *cur;
+        size_t rem;
+	struct ubus_method_lookup_request *lookup = priv;
+
+	lookup->result = false;
+
+        if (!obj->signature || !lookup->method)
+                return;
+
+        blob_for_each_attr(cur, obj->signature, rem) {
+		if (!blobmsg_name(cur) || strcmp(blobmsg_name(cur), lookup->method))
+			continue;
+		lookup->result = true;
+		return;
+	}
+}
+
+static bool ubus_lookup_method(struct ubus_context *ctx, const char *path, const char *method)
+{
+	struct ubus_method_lookup_request req = {
+		.method = method,
+		.result = false,
+	};
+
+	if (ubus_lookup(ctx, path, ubus_lookup_method_cb, &req))
+		return false;
+
+	return req.result;
+}
+
 static int
 rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
                          struct ubus_request_data *req, const char *method,
@@ -1915,6 +2016,7 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 {
 	char s[INET6_ADDRSTRLEN];
 	struct blob_attr *tb[__RPC_L_MAX];
+	struct reply_context *rctx;
 	struct lease_entry *lease;
 	int af;
 	void *a, *a2, *o, *t;
@@ -1927,83 +2029,100 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 	case 4:
 		af = AF_INET;
 		break;
-
 	case 6:
 		af = AF_INET6;
 		break;
-
 	default:
 		return UBUS_STATUS_INVALID_ARGUMENT;
 	}
 
-	blob_buf_init(&blob, 0);
+	rctx = defer_request(ctx, req);
+	if (!rctx)
+		return UBUS_STATUS_UNKNOWN_ERROR;
 
-	if (af == AF_INET)
-		a = blobmsg_open_array(&blob, "dhcp_leases");
-	else
+	/* First, try to get the requested information via ubus calls */
+	switch (af) {
+	case AF_INET:
+		if (ubus_lookup_method(ctx, "dhcp", "ipv4leases") &&
+		    invoke_ubus(ctx, "dhcp", "ipv4leases", NULL,
+				rpc_luci_get_dhcp_leases_cb4, rctx))
+				return UBUS_STATUS_OK;
+
+		blob_buf_init(&blob, 0);
+		a = blobmsg_open_array(&rctx->blob, "dhcp_leases");
+		break;
+
+	case AF_INET6:
+		if (ubus_lookup_method(ctx, "dhcp", "ipv6leases") &&
+		    invoke_ubus(ctx, "dhcp", "ipv6leases", NULL,
+				rpc_luci_get_dhcp_leases_cb6, rctx))
+			return UBUS_STATUS_OK;
+
+		blob_buf_init(&blob, 0);
 		a = blobmsg_open_array(&blob, "dhcp6_leases");
+		break;
+	}
 
+	/* Second, fall back to parsing lease files */
 	lease_open(af);
 
 	while ((lease = lease_next()) != NULL) {
 
-		o = blobmsg_open_table(&blob, NULL);
+		o = blobmsg_open_table(&rctx->blob, NULL);
 
-		blobmsg_add_u32(&blob, "valid", lease->valid);
+		blobmsg_add_u32(&rctx->blob, "valid", lease->valid);
 
 		if (lease->hostname)
-			blobmsg_add_string(&blob, "hostname", lease->hostname);
+			blobmsg_add_string(&rctx->blob, "hostname", lease->hostname);
 
 		if (!ea_empty(&lease->mac))
-			blobmsg_add_string(&blob, "macaddr", ea2str(&lease->mac));
+			blobmsg_add_string(&rctx->blob, "macaddr", ea2str(&lease->mac));
 
 		if (lease->duid)
-			blobmsg_add_string(&blob, "duid", lease->duid);
+			blobmsg_add_string(&rctx->blob, "duid", lease->duid);
 
 		if (lease->af == AF_INET) {
 			inet_ntop(lease->af, &lease->addr[0].in, s, sizeof(s));
-			blobmsg_add_string(&blob, "ipaddr", s);
+			blobmsg_add_string(&rctx->blob, "ipaddr", s);
 
 		} else if (lease->af == AF_INET6) {
 			if (lease->iaid_known)
-				blobmsg_add_u32(&blob, "iaid", lease->iaid);
+				blobmsg_add_u32(&rctx->blob, "iaid", lease->iaid);
 
-			a2 = blobmsg_open_array(&blob, "ipv6-addr");
+			a2 = blobmsg_open_array(&rctx->blob, "ipv6-addr");
 			for (n = 0; n < lease->n_addr; n++) {
 				if (lease->mask != 128)
 					continue;
 
-				t = blobmsg_open_table(&blob, NULL);
+				t = blobmsg_open_table(&rctx->blob, NULL);
 				inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));
-				blobmsg_add_string(&blob, "address", s);
-				blobmsg_close_table(&blob, t);
+				blobmsg_add_string(&rctx->blob, "address", s);
+				blobmsg_close_table(&rctx->blob, t);
 			}
-			blobmsg_close_array(&blob, a2);
+			blobmsg_close_array(&rctx->blob, a2);
 
-			a2 = blobmsg_open_array(&blob, "ipv6-prefix");
+			a2 = blobmsg_open_array(&rctx->blob, "ipv6-prefix");
 			for (n = 0; n < lease->n_addr; n++) {
 				if (lease->mask >= 128)
 					continue;
 
-				t = blobmsg_open_table(&blob, NULL);
+				t = blobmsg_open_table(&rctx->blob, NULL);
 				inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));
-				blobmsg_add_string(&blob, "address", s);
-				blobmsg_add_u32(&blob, "prefix-length", lease->mask);
-				blobmsg_close_table(&blob, t);
+				blobmsg_add_string(&rctx->blob, "address", s);
+				blobmsg_add_u32(&rctx->blob, "prefix-length", lease->mask);
+				blobmsg_close_table(&rctx->blob, t);
 			}
-			blobmsg_close_array(&blob, a2);
+			blobmsg_close_array(&rctx->blob, a2);
 		}
 
-		blobmsg_close_table(&blob, o);
+		blobmsg_close_table(&rctx->blob, o);
 	}
 
 	lease_close();
 
-	blobmsg_close_array(&blob, a);
+	blobmsg_close_array(&rctx->blob, a);
 
-	ubus_send_reply(ctx, req, blob.head);
-
-	return UBUS_STATUS_OK;
+	return finish_request(rctx, UBUS_STATUS_OK);
 }
 
 static int
