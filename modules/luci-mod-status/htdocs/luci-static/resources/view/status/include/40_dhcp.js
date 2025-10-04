@@ -190,7 +190,7 @@ return baseclass.extend({
 				host || '-',
 				lease['ipv6-addr'] ? lease['ipv6-addr'].join('<br />') : '-',
 				lease.duid,
-				lease.iaid,
+				lease.iaid ? lease.iaid.toString() : '?',
 				exp
 			];
 

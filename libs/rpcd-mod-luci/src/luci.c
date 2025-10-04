@@ -356,7 +356,9 @@ struct lease_entry {
 	struct ether_addr mac;
 	char *hostname;
 	char *duid;
-	char *iaid;
+	uint32_t iaid;
+	char *iaid_str;
+	bool iaid_known;
 	union {
 		struct in_addr in;
 		struct in6_addr in6;
@@ -493,16 +495,18 @@ lease_next(void)
 				if (!e.duid)
 					continue;
 
-				e.iaid = strtok(NULL, " \t\n"); /* iaid */
-				if (!e.iaid)
+				e.iaid_str = strtok(NULL, " \t\n"); /* iaid */
+				if (!e.iaid_str)
 					continue;
 
-				if (!strcmp(e.iaid, "ipv4")) {
+				if (!strcmp(e.iaid_str, "ipv4")) {
 					e.af = AF_INET;
 					e.mask = 32;
 				} else {
 					e.af = AF_INET6;
 					e.mask = 128;
+					e.iaid = strtoul(e.iaid_str, NULL, 16);
+					e.iaid_known = true;
 				}
 
 				if (lease_state.af != AF_UNSPEC && e.af != lease_state.af)
@@ -603,7 +607,7 @@ lease_next(void)
 
 				e.hostname = strtok(NULL, " \t\n");
 				e.duid     = strtok(NULL, " \t\n");
-				e.iaid     = NULL;
+				e.iaid_known = false;
 
 				if (!e.hostname || !e.duid)
 					continue;
@@ -1963,14 +1967,14 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 			if (lease->duid)
 				blobmsg_add_string(&blob, "duid", lease->duid);
 
-			if (lease->iaid)
-				blobmsg_add_string(&blob, "iaid", lease->iaid);
-
 			if (lease->af == AF_INET) {
 				inet_ntop(lease->af, &lease->addr[0].in, s, sizeof(s));
 				blobmsg_add_string(&blob, "ipaddr", s);
 
 			} else if (lease->af == AF_INET6) {
+				if (lease->iaid_known)
+					blobmsg_add_u32(&blob, "iaid", lease->iaid);
+
 				a2 = blobmsg_open_array(&blob, "ipv6-addr");
 
 				for (n = 0; n < lease->n_addr; n++) {
