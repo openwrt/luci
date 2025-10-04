@@ -1849,9 +1849,6 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 
 		o = blobmsg_open_table(&blob, lease->duid);
 
-		inet_ntop(AF_INET6, &lease->addr[0].in6, s, sizeof(s));
-		blobmsg_add_string(&blob, "ip6addr", s);
-
 		a = blobmsg_open_array(&blob, "ip6addrs");
 
 		for (n = 0; n < lease->n_addr; n++) {

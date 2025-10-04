@@ -1411,7 +1411,7 @@ return view.extend({
 			_('The DHCPv6-DUID (DHCP unique identifier) of this host.'));
 		so.datatype = 'and(rangelength(20,36),hexstring)';
 		Object.keys(duids).forEach(function(duid) {
-			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
+			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || ((duids[duid].ip6addrs && duids[duid].ip6addrs[0]) ? duids[duid].ip6addrs[0] : '?')));
 		});
 
 		so = ss.option(form.Value, 'hostid',
