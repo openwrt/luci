@@ -1974,7 +1974,7 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 				blobmsg_add_string(&blob, "ipaddr", s);
 
 			} else if (lease->af == AF_INET6) {
-				a2 = blobmsg_open_array(&blob, "ip6addrs");
+				a2 = blobmsg_open_array(&blob, "ipv6-addr");
 
 				for (n = 0; n < lease->n_addr; n++) {
 					inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));

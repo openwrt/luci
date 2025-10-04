@@ -1516,7 +1516,7 @@ return view.extend({
 								    name = hint ? (hint.name || L.toArray(hint.ipaddrs || hint.ipv4)[0] || L.toArray(hint.ip6addrs || hint.ipv6)[0]) : null,
 								    host = null;
 
-								if (name && lease.hostname && lease.hostname != name && (!lease.ip6addrs || !lease.ip6addrs[0] || lease.ip6addrs[0] != name))
+								if (name && lease.hostname && lease.hostname != name && (!lease['ipv6-addr'] || !lease['ipv6-addr'] || lease['ipv6-addr'][0] != name))
 									host = '%s (%s)'.format(lease.hostname, name);
 								else if (lease.hostname)
 									host = lease.hostname;
@@ -1525,7 +1525,7 @@ return view.extend({
 
 								return [
 									host || '-',
-									lease.ip6addrs ? lease.ip6addrs.join('<br />') : '-',
+									lease['ipv6-addr'] ? lease['ipv6-addr'].join('<br />') : '-',
 									lease.duid,
 									lease.iaid,
 									exp
