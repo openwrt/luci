@@ -186,9 +186,19 @@ return baseclass.extend({
 			else if (hint)
 				host = hint[1];
 
+			var addr_str = '-';
+			if (lease['ipv6-addr'] && lease['ipv6-addr'].length > 0) {
+				addr_str = lease['ipv6-addr'].join('<br />');
+			} else if (lease['ipv6-prefix'] && lease['ipv6-prefix'].length > 0) {
+				var prefixes = [];
+				for (const prefix of lease['ipv6-prefix'])
+					prefixes.push(prefix['address'] + '/' + prefix['prefix-length']);
+				addr_str = prefixes.join('<br />');
+			}
+
 			rows = [
 				host || '-',
-				lease['ipv6-addr'] ? lease['ipv6-addr'].join('<br />') : '-',
+				addr_str,
 				lease.duid,
 				lease.iaid ? lease.iaid.toString() : '?',
 				exp

@@ -1917,8 +1917,7 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 	struct blob_attr *tb[__RPC_L_MAX];
 	struct lease_entry *lease;
 	int af, family = 0;
-	void *a, *a2, *o;
-	size_t l;
+	void *a, *a2, *o, *t;
 	int n;
 
 	blobmsg_parse(rpc_get_leases_policy, __RPC_L_MAX, tb,
@@ -1976,7 +1975,6 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 					blobmsg_add_u32(&blob, "iaid", lease->iaid);
 
 				a2 = blobmsg_open_array(&blob, "ipv6-addr");
-
 				for (n = 0; n < lease->n_addr; n++) {
 					if (lease->mask != 128)
 						continue;
@@ -1984,7 +1982,19 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 					inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));
 					blobmsg_add_string(&blob, NULL, s);
 				}
+				blobmsg_close_array(&blob, a2);
 
+				a2 = blobmsg_open_array(&blob, "ipv6-prefix");
+				for (n = 0; n < lease->n_addr; n++) {
+					if (lease->mask >= 128)
+						continue;
+
+					t = blobmsg_open_table(&blob, NULL);
+					inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));
+					blobmsg_add_string(&blob, "address", s);
+					blobmsg_add_u32(&blob, "prefix-length", lease->mask);
+					blobmsg_close_table(&blob, t);
+				}
 				blobmsg_close_array(&blob, a2);
 			}
 
