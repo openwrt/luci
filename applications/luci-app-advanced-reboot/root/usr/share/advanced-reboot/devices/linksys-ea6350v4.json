@@ -1,14 +1,35 @@
 {
-	"vendorName": "Linksys",
-	"deviceName": "EA6350v4",
-	"boardNames": [ "linksys,ea6350-v4" ],
-	"partition1MTD": "mtd5",
-	"partition2MTD": "mtd7",
-	"labelOffset": 32,
-	"bootEnv1": "boot_part",
-	"bootEnv1Partition1Value": 1,
-	"bootEnv1Partition2Value": 2,
-	"bootEnv2": null,
-	"bootEnv2Partition1Value": null,
-	"bootEnv2Partition2Value": null
+	"device": {
+		"vendor": "Linksys",
+		"model": "EA6350v4",
+		"board": [
+			"linksys,ea6350-v4"
+		]
+	},
+	"commands": {
+		"params": [
+			"boot_part"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				1
+			],
+			"mtd": "mtd5",
+			"labelOffsetBytes": 32
+		},
+		{
+			"number": 2,
+			"param_values": [
+				2
+			],
+			"mtd": "mtd7",
+			"labelOffsetBytes": 32
+		}
+	]
 }
