@@ -61,7 +61,7 @@ function lxc_get_downloadable()
 		%{ url }, 'r')
 	local line
 	for line in f:lines() do
-		local dist, version, dist_target = line:match("^(%S+)%s+(%S+)%s+(%S+)%s+default%s+%S+$")
+		local dist, version, dist_target = line:match("^(%S+)%s+(%S+)%s+(%S+)%s+default%s+(%S+)%s*$")
 		if dist and version and dist_target and dist_target == target then
 			templates[#templates+1] = "%s:%s" %{ dist, version }
 		end
