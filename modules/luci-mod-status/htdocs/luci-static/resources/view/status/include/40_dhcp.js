@@ -64,7 +64,7 @@ return baseclass.extend({
 		ev.currentTarget.blur();
 
 		var cfg = uci.add('dhcp', 'host'),
-		    ip6arr = lease['ipv6-addr'][0] ? validation.parseIPv6(lease['ipv6-addr'][0]) : null;
+		    ip6arr = lease['ipv6-addr'][0]['address'] ? validation.parseIPv6(lease['ipv6-addr'][0]['address']) : null;
 
 		uci.set('dhcp', cfg, 'name', lease.hostname);
 		uci.set('dhcp', cfg, 'duid', lease.duid.toUpperCase());
@@ -179,7 +179,9 @@ return baseclass.extend({
 			var hint = lease.macaddr ? machints.filter(function(h) { return h[0] == lease.macaddr })[0] : null,
 			    host = null;
 
-			if (hint && lease.hostname && lease.hostname != hint[1] && (!lease['ipv6-addr'] || !lease['ipv6-addr'][0] || lease['ipv6-addr'][0] != hint[1]))
+			var hint_addr = (lease['ipv6-addr'] && lease['ipv6-addr'].length > 0) ? lease['ipv6-addr'][0]['address'] : null;
+
+			if (hint && lease.hostname && lease.hostname != hint[1] && hint_addr != hint[1])
 				host = '%s (%s)'.format(lease.hostname, hint[1]);
 			else if (lease.hostname)
 				host = lease.hostname;
@@ -188,7 +190,10 @@ return baseclass.extend({
 
 			var addr_str = '-';
 			if (lease['ipv6-addr'] && lease['ipv6-addr'].length > 0) {
-				addr_str = lease['ipv6-addr'].join('<br />');
+				var addrs = [];
+				for (const addr of lease['ipv6-addr'])
+					addrs.push(addr['address']);
+				addr_str = addrs.join('<br />');
 			} else if (lease['ipv6-prefix'] && lease['ipv6-prefix'].length > 0) {
 				var prefixes = [];
 				for (const prefix of lease['ipv6-prefix'])
@@ -204,7 +209,7 @@ return baseclass.extend({
 				exp
 			];
 
-			if (!isReadonlyView && lease.duid != null && lease['ipv6-addr']) {
+			if (!isReadonlyView && lease.duid != null && hint_addr != null) {
 				var duid = lease.duid.toUpperCase();
 				rows.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',

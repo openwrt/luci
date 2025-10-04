@@ -1979,8 +1979,10 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 					if (lease->mask != 128)
 						continue;
 
+					t = blobmsg_open_table(&blob, NULL);
 					inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));
-					blobmsg_add_string(&blob, NULL, s);
+					blobmsg_add_string(&blob, "address", s);
+					blobmsg_close_table(&blob, t);
 				}
 				blobmsg_close_array(&blob, a2);
 
