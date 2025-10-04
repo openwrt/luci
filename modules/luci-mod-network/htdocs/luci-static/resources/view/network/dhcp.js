@@ -28,6 +28,7 @@ callDUIDHints = rpc.declare({
 callDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getDHCPLeases',
+	params: [ 'family' ],
 	expect: { '': {} }
 });
 
@@ -1459,9 +1460,8 @@ return view.extend({
 
 		return m.render().then(function(mapEl) {
 			poll.add(function() {
-				return callDHCPLeases().then(function(leaseinfo) {
-					var leases = Array.isArray(leaseinfo.dhcp_leases) ? leaseinfo.dhcp_leases : [],
-					    leases6 = Array.isArray(leaseinfo.dhcp6_leases) ? leaseinfo.dhcp6_leases : [];
+				return callDHCPLeases(4).then(function(leaseinfo) {
+					var leases = Array.isArray(leaseinfo.dhcp_leases) ? leaseinfo.dhcp_leases : [];
 
 					cbi_update_table(mapEl.querySelector('#lease_status_table'),
 						leases.map(function(lease) {
@@ -1498,59 +1498,67 @@ return view.extend({
 								exp
 							];
 						}),
-						E('em', _('There are no active leases')));
-
-					if (has_dhcpv6) {
-						cbi_update_table(mapEl.querySelector('#lease6_status_table'),
-							leases6.map(function(lease) {
-								var exp;
-
-								if (lease.valid == 0xffffffff)
-									exp = E('em', _('unlimited'));
-								else if (lease.valid <= 0)
-									exp = E('em', _('expired'));
-								else
-									exp = '%t'.format(lease.valid);
-
-								var hint = lease.macaddr ? hosts[lease.macaddr] : null,
-								    name = hint ? (hint.name || L.toArray(hint.ipaddrs || hint.ipv4)[0] || L.toArray(hint.ip6addrs || hint.ipv6)[0]) : null,
-								    host = null;
-
-								var hint_addr = (lease['ipv6-addr'] && lease['ipv6-addr'].length > 0) ? lease['ipv6-addr'][0]['address'] : null;
-
-								if (name && lease.hostname && lease.hostname != name && hint_addr != name)
-									host = '%s (%s)'.format(lease.hostname, name);
-								else if (lease.hostname)
-									host = lease.hostname;
-								else if (name)
-									host = name;
-
-								var addr_str = '-';
-								if (lease['ipv6-addr'] && lease['ipv6-addr'].length > 0) {
-									var addrs = [];
-									for (const addr of lease['ipv6-addr'])
-										addrs.push(addr['address']);
-									addr_str = addrs.join('<br />');
-								} else if (lease['ipv6-prefix'] && lease['ipv6-prefix'].length > 0) {
-									var prefixes = [];
-									for (const prefix of lease['ipv6-prefix'])
-										prefixes.push(prefix['address'] + '/' + prefix['prefix-length']);
-									addr_str = prefixes.join('<br />');
-								}
-
-								return [
-									host || '-',
-									addr_str,
-									lease.duid,
-									lease.iaid ? lease.iaid.toString() : '?',
-									exp
-								];
-							}),
-							E('em', _('There are no active leases')));
-					}
+						E('em', _('There are no active leases'))
+					);
 				});
 			});
 
+			if (!has_dhcpv6)
+				return mapEl;
+
+			poll.add(function() {
+				return callDHCPLeases(6).then(function(leaseinfo) {
+					var leases6 = Array.isArray(leaseinfo.dhcp6_leases) ? leaseinfo.dhcp6_leases : [];
+
+					cbi_update_table(mapEl.querySelector('#lease6_status_table'),
+						leases6.map(function(lease) {
+							var exp;
+
+							if (lease.valid == 0xffffffff)
+								exp = E('em', _('unlimited'));
+							else if (lease.valid <= 0)
+								exp = E('em', _('expired'));
+							else
+								exp = '%t'.format(lease.valid);
+
+							var hint = lease.macaddr ? hosts[lease.macaddr] : null,
+							    name = hint ? (hint.name || L.toArray(hint.ipaddrs || hint.ipv4)[0] || L.toArray(hint.ip6addrs || hint.ipv6)[0]) : null,
+							    host = null;
+
+							var hint_addr = (lease['ipv6-addr'] && lease['ipv6-addr'].length > 0) ? lease['ipv6-addr'][0]['address'] : null;
+
+							if (name && lease.hostname && lease.hostname != name && hint_addr != name)
+								host = '%s (%s)'.format(lease.hostname, name);
+							else if (lease.hostname)
+								host = lease.hostname;
+							else if (name)
+								host = name;
+
+							var addr_str = '-';
+							if (lease['ipv6-addr'] && lease['ipv6-addr'].length > 0) {
+								var addrs = [];
+								for (const addr of lease['ipv6-addr'])
+									addrs.push(addr['address']);
+								addr_str = addrs.join('<br />');
+							} else if (lease['ipv6-prefix'] && lease['ipv6-prefix'].length > 0) {
+								var prefixes = [];
+								for (const prefix of lease['ipv6-prefix'])
+									prefixes.push(prefix['address'] + '/' + prefix['prefix-length']);
+								addr_str = prefixes.join('<br />');
+							}
+
+							return [
+								host || '-',
+								addr_str,
+								lease.duid,
+								lease.iaid ? lease.iaid.toString() : '?',
+								exp
+							];
+						}),
+						E('em', _('There are no active leases'))
+					);
+				});
+			});
 			return mapEl;
 		});
 	}

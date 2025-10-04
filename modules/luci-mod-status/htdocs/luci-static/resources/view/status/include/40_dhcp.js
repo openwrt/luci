@@ -8,6 +8,7 @@
 var callLuciDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getDHCPLeases',
+	params: [ 'family' ],
 	expect: { '': {} }
 });
 
@@ -33,7 +34,8 @@ return baseclass.extend({
 			checkUfpInstalled('/usr/sbin/ufpd')
 		]).then(data => {
 			var promises = [
-				callLuciDHCPLeases(),
+				callLuciDHCPLeases(4),
+				callLuciDHCPLeases(6),
 				network.getHostHints(),
 				data[0].type === 'file' ? callUfpList() : null,
 				L.resolveDefault(uci.load('dhcp'))
@@ -79,10 +81,10 @@ return baseclass.extend({
 
 	renderLeases: function(data) {
 		var leases = Array.isArray(data[0].dhcp_leases) ? data[0].dhcp_leases : [],
-		    leases6 = Array.isArray(data[0].dhcp6_leases) ? data[0].dhcp6_leases : [],
-		    machints = data[1].getMACHints(false),
+		    leases6 = Array.isArray(data[1].dhcp6_leases) ? data[1].dhcp6_leases : [],
+		    machints = data[2].getMACHints(false),
 		    hosts = uci.sections('dhcp', 'host'),
-		    macaddr = data[2],
+		    macaddr = data[3],
 		    isReadonlyView = !L.hasViewPermission();
 
 		for (var i = 0; i < hosts.length; i++) {
