@@ -171,6 +171,7 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('challenge_dns', form.Flag, '_dns_options_alt', _('Alternative DNS API options'), '');
+		o.depends('validation_method', 'dns');
 		o.modalonly = true;
 
 		for (let info of apiInfos) {
