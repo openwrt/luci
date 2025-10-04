@@ -91,9 +91,9 @@ return view.extend({
 				'Webroot mode will use an existing webserver to issue a certificate. ' +
 				'DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate.')
 		);
-		o.value('standalone', _('Standalone'));
-		o.value('webroot', _('Webroot Challenge Validation'));
-		o.value('dns', _('DNS Challenge Validation'));
+		o.value('standalone', 'HTTP-01' + _('Standalone'));
+		o.value('webroot', 'HTTP-01' + _('Webroot Challenge Validation'));
+		o.value('dns', 'DNS-01 ' + _('DNS Challenge Validation'));
 		o.default = 'standalone';
 
 		if (!hasDnsApi) {
