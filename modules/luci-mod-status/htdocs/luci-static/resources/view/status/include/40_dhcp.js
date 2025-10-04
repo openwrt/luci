@@ -115,12 +115,12 @@ return baseclass.extend({
 			var exp, rows;
 			var vendor;
 
-			if (lease.expires === false)
+			if (lease.valid == 0xffffffff)
 				exp = E('em', _('unlimited'));
-			else if (lease.expires <= 0)
+			else if (lease.valid <= 0)
 				exp = E('em', _('expired'));
 			else
-				exp = '%t'.format(lease.expires);
+				exp = '%t'.format(lease.valid);
 
 			var hint = lease.macaddr ? machints.filter(function(h) { return h[0] == lease.macaddr })[0] : null,
 			    host = null;
@@ -169,12 +169,12 @@ return baseclass.extend({
 		cbi_update_table(table6, leases6.map(L.bind(function(lease) {
 			var exp, rows;
 
-			if (lease.expires === false)
+			if (lease.valid == 0xffffffff)
 				exp = E('em', _('unlimited'));
-			else if (lease.expires <= 0)
+			else if (lease.valid <= 0)
 				exp = E('em', _('expired'));
 			else
-				exp = '%t'.format(lease.expires);
+				exp = '%t'.format(lease.valid);
 
 			var hint = lease.macaddr ? machints.filter(function(h) { return h[0] == lease.macaddr })[0] : null,
 			    host = null;

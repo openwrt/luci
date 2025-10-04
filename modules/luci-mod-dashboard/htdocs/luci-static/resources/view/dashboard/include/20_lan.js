@@ -91,7 +91,7 @@ return baseclass.extend({
 
 		const devices = [];
 		leases.map(lease => {
-			devices[lease.expires] = {
+			devices[lease.valid] = {
 				hostname: lease.hostname || '?',
 				ipv4: lease.ipaddr || '-',
 				macaddr: lease.macaddr || '00:00:00:00:00:00',

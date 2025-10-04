@@ -352,7 +352,7 @@ static struct {
 struct lease_entry {
 	int af, n_addr;
 	char buf[512];
-	int32_t expire;
+	uint32_t valid;
 	struct ether_addr mac;
 	char *hostname;
 	char *duid;
@@ -521,11 +521,11 @@ lease_next(void)
 				n = strtol(p, NULL, 10);
 
 				if (n > lease_state.now)
-					e.expire = n - lease_state.now;
+					e.valid = n - lease_state.now;
 				else if (n >= 0)
-					e.expire = 0;
+					e.valid = 0;
 				else
-					e.expire = -1;
+					e.valid = UINT32_MAX;
 
 				strtok(NULL, " \t\n"); /* id */
 
@@ -566,11 +566,11 @@ lease_next(void)
 				n = strtol(p, NULL, 10);
 
 				if (n > lease_state.now)
-					e.expire = n - lease_state.now;
+					e.valid = n - lease_state.now;
 				else if (n > 0)
-					e.expire = 0;
+					e.valid = 0;
 				else
-					e.expire = -1;
+					e.valid = UINT32_MAX;
 
 				p = strtok(NULL, " \t\n");
 
@@ -1952,10 +1952,7 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 
 			o = blobmsg_open_table(&blob, NULL);
 
-			if (lease->expire == -1)
-				blobmsg_add_u8(&blob, "expires", 0);
-			else
-				blobmsg_add_u32(&blob, "expires", lease->expire);
+			blobmsg_add_u32(&blob, "valid", lease->valid);
 
 			if (lease->hostname)
 				blobmsg_add_string(&blob, "hostname", lease->hostname);

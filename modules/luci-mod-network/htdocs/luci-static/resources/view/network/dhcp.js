@@ -1468,12 +1468,12 @@ return view.extend({
 							var exp;
 							var vendor;
 
-							if (lease.expires === false)
+							if (lease.valid == 0xffffffff)
 								exp = E('em', _('unlimited'));
-							else if (lease.expires <= 0)
+							else if (lease.valid <= 0)
 								exp = E('em', _('expired'));
 							else
-								exp = '%t'.format(lease.expires);
+								exp = '%t'.format(lease.valid);
 
 							for (let mac in macdata) {
 								if (mac.toUpperCase() === lease.macaddr) {
@@ -1505,12 +1505,12 @@ return view.extend({
 							leases6.map(function(lease) {
 								var exp;
 
-								if (lease.expires === false)
+								if (lease.valid == 0xffffffff)
 									exp = E('em', _('unlimited'));
-								else if (lease.expires <= 0)
+								else if (lease.valid <= 0)
 									exp = E('em', _('expired'));
 								else
-									exp = '%t'.format(lease.expires);
+									exp = '%t'.format(lease.valid);
 
 								var hint = lease.macaddr ? hosts[lease.macaddr] : null,
 								    name = hint ? (hint.name || L.toArray(hint.ipaddrs || hint.ipv4)[0] || L.toArray(hint.ip6addrs || hint.ipv6)[0]) : null,
