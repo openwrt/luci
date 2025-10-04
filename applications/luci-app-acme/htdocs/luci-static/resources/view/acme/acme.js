@@ -92,8 +92,8 @@ return view.extend({
 				'DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate.')
 		);
 		o.value('standalone', _('Standalone'));
-		o.value('webroot', _('Webroot'));
-		o.value('dns', _('DNS'));
+		o.value('webroot', _('Webroot Challenge Validation'));
+		o.value('dns', _('DNS Challenge Validation'));
 		o.default = 'standalone';
 
 		if (!hasDnsApi) {
