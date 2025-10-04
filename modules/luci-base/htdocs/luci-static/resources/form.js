@@ -1631,7 +1631,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * The name of the option to depend on or an object describing multiple
 	 * dependencies which must be satisfied (a logical "and" expression).
 	 *
-	 * @param {string|RegExp} value
+	 * @param {string|RegExp} [value]
 	 * When invoked with a plain option name as first argument, this parameter
 	 * specifies the expected value. In case an object is passed as first
 	 * argument, this parameter is ignored.
