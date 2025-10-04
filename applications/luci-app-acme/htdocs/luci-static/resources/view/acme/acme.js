@@ -89,11 +89,14 @@ return view.extend({
 		o = s.taboption('general', form.ListValue, 'validation_method', _('Validation method'),
 			_('Standalone mode will use the built-in webserver of acme.sh to issue a certificate. ' +
 				'Webroot mode will use an existing webserver to issue a certificate. ' +
-				'DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate.')
+				'DNS mode will allow you to use the DNS API of your DNS provider to issue a certificate.') + '<br />' +
+			_('Validation via TLS ALPN') + ': ' + _('Validate via TLS port 443.') + '<br />' +
+			'<a href="https://letsencrypt.org/docs/challenge-types/" target="_blank">' + _('See more') + '</a>'
 		);
 		o.value('standalone', 'HTTP-01' + _('Standalone'));
 		o.value('webroot', 'HTTP-01' + _('Webroot Challenge Validation'));
 		o.value('dns', 'DNS-01 ' + _('DNS Challenge Validation'));
+		o.value('alpn', 'TLS-ALPN-01 ' + _('Validation via TLS ALPN'));
 		o.default = 'standalone';
 
 		if (!hasDnsApi) {
@@ -108,6 +111,20 @@ return view.extend({
 				window.open(link, '_blank', 'noopener');
 			};
 		}
+
+		o = s.taboption('general', form.Value, 'listen_port', _('Listen port'),
+			_('Port where to listen for ACME challenge requests. The port will be temporarily open during validation.') + '<br />' +
+			_('It may be needed to change if your web server is behind reverse proxy and uses a different port.') + '<br />' +
+			_('Standalone') + ': ' + _('Default') + ' 80.' + '<br />' +
+			_('Webroot Challenge Validation') + ': ' + _('To temporary open port you can specify your web server port e.g. 80.') + '<br />' +
+			_('Validation via TLS ALPN') + ': ' + _('Default') + ' 443.'
+		);
+		o.optional = true;
+		o.placeholder = '80';
+		o.depends('validation_method', 'standalone');
+		o.depends('validation_method', 'webroot');
+		o.depends('validation_method', 'alpn');
+		o.modalonly = true;
 
 		o = s.taboption('general', form.DynamicList, "domains", _("Domain names"),
 			_("Domain names to include in the certificate. " +
