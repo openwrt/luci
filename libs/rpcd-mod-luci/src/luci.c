@@ -1972,10 +1972,11 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 			if (lease->iaid)
 				blobmsg_add_string(&blob, "iaid", lease->iaid);
 
-			inet_ntop(lease->af, &lease->addr[0].in6, s, sizeof(s));
-			blobmsg_add_string(&blob, (af == AF_INET) ? "ipaddr" : "ip6addr", s);
+			if (lease->af == AF_INET) {
+				inet_ntop(lease->af, &lease->addr[0].in, s, sizeof(s));
+				blobmsg_add_string(&blob, "ipaddr", s);
 
-			if (af == AF_INET6) {
+			} else if (lease->af == AF_INET6) {
 				a2 = blobmsg_open_array(&blob, "ip6addrs");
 
 				for (n = 0; n < lease->n_addr; n++) {

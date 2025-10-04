@@ -179,7 +179,7 @@ return baseclass.extend({
 			var hint = lease.macaddr ? machints.filter(function(h) { return h[0] == lease.macaddr })[0] : null,
 			    host = null;
 
-			if (hint && lease.hostname && lease.hostname != hint[1] && lease.ip6addr != hint[1])
+			if (hint && lease.hostname && lease.hostname != hint[1] && (!lease.ip6addrs || !lease.ip6addrs[0] || lease.ip6addrs[0] != hint[1]))
 				host = '%s (%s)'.format(lease.hostname, hint[1]);
 			else if (lease.hostname)
 				host = lease.hostname;
@@ -188,13 +188,13 @@ return baseclass.extend({
 
 			rows = [
 				host || '-',
-				lease.ip6addrs ? lease.ip6addrs.join('<br />') : lease.ip6addr,
+				lease.ip6addrs ? lease.ip6addrs.join('<br />') : '-',
 				lease.duid,
 				lease.iaid,
 				exp
 			];
 
-			if (!isReadonlyView && lease.duid != null) {
+			if (!isReadonlyView && lease.duid != null && lease.ip6addrs) {
 				var duid = lease.duid.toUpperCase();
 				rows.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
