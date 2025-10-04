@@ -189,7 +189,7 @@ const CBIJSONConfig = baseclass.extend({
  * @hideconstructor
  * @classdesc
  *
- * The `AbstractElement` class serves as abstract base for the different form
+ * The `AbstractElement` class serves as an abstract base for the different form
  * elements implemented by `LuCI.form`. It provides the common logic for
  * loading and rendering values, for nesting elements and for defining common
  * properties.
@@ -300,17 +300,17 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 	},
 
 	/**
-	 * Format the given named property as title string.
+	 * Format the given named property as a title string.
 	 *
 	 * This function looks up the given named property and formats its value
-	 * suitable for use as element caption or description string. It also
+	 * suitable for use as an element caption or description string. It also
 	 * strips any HTML tags from the result.
 	 *
 	 * If the property value is a string, it is passed to `String.format()`
 	 * along with any additional parameters passed to `titleFn()`.
 	 *
 	 * If the property value is a function, it is invoked with any additional
-	 * `titleFn()` parameters as arguments and the obtained return value is
+	 * `titleFn()` parameters as arguments, and the obtained return value is
 	 * converted to a string.
 	 *
 	 * In all other cases, `null` is returned.
@@ -401,7 +401,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * This function is sensitive to the amount of arguments passed to it;
 	 * if only one argument is specified, it is used as selector-expression
 	 * as-is. When two arguments are passed, the first argument is treated
-	 * as attribute name, the second one as attribute value to match.
+	 * as an attribute name, the second one as an attribute value to match.
 	 *
 	 * As an example, `map.findElements('input')` would find all `<input>`
 	 * nodes while `map.findElements('type', 'text')` would find any DOM node
@@ -444,7 +444,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * This function is sensitive to the amount of arguments passed to it;
 	 * if only one argument is specified, it is used as selector-expression
 	 * as-is. When two arguments are passed, the first argument is treated
-	 * as attribute name, the second one as attribute value to match.
+	 * as an attribute name, the second one as an attribute value to match.
 	 *
 	 * As an example, `map.findElement('input')` would find the first `<input>`
 	 * node while `map.findElement('type', 'text')` would find the first DOM
@@ -475,7 +475,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * Tie another UCI configuration to the map.
 	 *
 	 * By default, a map instance will only load the UCI configuration file
-	 * specified in the constructor but sometimes access to values from
+	 * specified in the constructor, but sometimes access to values from
 	 * further configuration files is required. This function allows for such
 	 * use cases by registering further UCI configuration files which are
 	 * needed by the map.
@@ -535,7 +535,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * @returns {Promise<void>}
 	 * Returns a promise resolving once the entire form completed loading all
 	 * data. The promise may reject with an error if any configuration failed
-	 * to load or if any of the child elements' load functions rejected with
+	 * to load or if any of the child elements' load functions reject with
 	 * an error.
 	 */
 	load() {
@@ -695,8 +695,8 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 * The name or the full ID of the option element to look up.
 	 *
 	 * @param {string} [section_id]
-	 * The ID of the UCI section containing the option to look up. May be
-	 * omitted if a full ID is passed as first argument.
+	 * The ID of the UCI section that contains the option to look up. May be
+	 * omitted if a full ID is passed as the first argument.
 	 *
 	 * @param {string} [config_name]
 	 * The name of the UCI configuration the option instance belongs to.
@@ -704,7 +704,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	 *
 	 * @returns {Array<LuCI.form.AbstractValue,string>|null}
 	 * Returns a two-element array containing the form option instance as
-	 * first item and the corresponding UCI section ID as second item.
+	 * the first item and the corresponding UCI section ID as the second item.
 	 * Returns `null` if the option could not be found.
 	 */
 	lookupOption(name, section_id, config_name) {
@@ -788,10 +788,10 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
  *
  * A `JSONMap` class functions similar to [LuCI.form.Map]{@link LuCI.form.Map}
  * but uses a multidimensional JavaScript object instead of UCI configuration
- * as data source.
+ * as a data source.
  *
  * @param {Object<string, Object<string, *>|Array<Object<string, *>>>} data
- * The JavaScript object to use as data source. Internally, the object is
+ * The JavaScript object to use as a data source. Internally, the object is
  * converted into an UCI-like format. Its top-level keys are treated like UCI
  * section types while the object or array-of-object values are treated as
  * section contents.
@@ -802,7 +802,7 @@ const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
  * corresponding headline element will not be rendered.
  *
  * @param {string} [description]
- * The description text of the form which is usually rendered as text
+ * The description text of the form which is usually rendered as a text
  * paragraph below the form title and before the actual form contents.
  * If omitted, the corresponding paragraph element will not be rendered.
  */
@@ -969,7 +969,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	 *
 	 * @param {string} [description]
 	 * An additional description text for the corresponding tab pane. It is
-	 * displayed as text paragraph below the tab but before the tab pane
+	 * displayed as a text paragraph below the tab but before the tab pane
 	 * contents. If omitted, no description will be rendered.
 	 *
 	 * @throws {Error}
@@ -1100,7 +1100,7 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 	},
 
 	/**
-	 * Query underlying option widget input values.
+	 * Query the underlying option widget input values.
 	 *
 	 * This function is sensitive to the amount of arguments passed to it;
 	 * if only one argument is specified, the widget input values of all
@@ -1257,9 +1257,9 @@ const CBIAbstractSection = CBIAbstractElement.extend(/** @lends LuCI.form.Abstra
 		for (let i = 0, sid = sids[0]; (sid = sids[i]) != null; i++) {
 			for (let j = 0, o = this.children[0]; (o = this.children[j]) != null; j++) {
 				let isActive = o.isActive(sid);
-				const isSatisified = o.checkDepends(sid);
+				const isSatisfied = o.checkDepends(sid);
 
-				if (isActive != isSatisified) {
+				if (isActive != isSatisfied) {
 					o.setActive(sid, !isActive);
 					isActive = !isActive;
 					changed = true;
@@ -1337,7 +1337,7 @@ function isContained(x, y) {
  * @hideconstructor
  * @classdesc
  *
- * The `AbstractValue` class serves as abstract base for the different form
+ * The `AbstractValue` class serves as an abstract base for the different form
  * option styles implemented by `LuCI.form`. It provides the common logic for
  * handling option input values, for dependencies among options and for
  * validation constraints that should be applied to entered values.
@@ -1417,7 +1417,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * Specifies a custom validation function to test the user input for
 	 * validity. The validation function must return `true` to accept the
 	 * value. Any other return value type is converted to a string and
-	 * displayed to the user as validation error message.
+	 * displayed to the user as a validation error message.
 	 *
 	 * If the user entered input does not pass the validation function, the
 	 * option element is marked as invalid.
@@ -1456,8 +1456,8 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	/**
 	 * Override the UCI option name to read the value from.
 	 *
-	 * By default, the elements name, which is passed as third argument to
-	 * the constructor, is used as UCI option name. By setting this property,
+	 * By default, the elements name, which is passed as the third argument to
+	 * the constructor, is used as the UCI option name. By setting this property,
 	 * a deviating UCI option may be specified.
 	 *
 	 * The default of null means use the option element name.
@@ -1468,7 +1468,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 */
 
 	/**
-	 * Mark grid section option element as editable.
+	 * Mark the grid section option element as editable.
 	 *
 	 * Options which are displayed in the table portion of a `GridSection`
 	 * instance are rendered as readonly text by default. By setting the
@@ -1485,7 +1485,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 */
 
 	/**
-	 * Move grid section option element into the table, the modal popup or both.
+	 * Move the grid section option element into the table, the modal popup or both.
 	 *
 	 * If this property is `null` (the default), the option element is
 	 * displayed in both the table preview area and the per-section instance
@@ -1556,13 +1556,13 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * Multiple constraints (that is, multiple calls to `depends()`) are
 	 * treated as alternatives, forming a logical "or" expression.
 	 *
-	 * By passing an object of name => value pairs as first argument, it is
+	 * By passing an object of name => value pairs as the first argument, it is
 	 * possible to depend on multiple options simultaneously, forming
 	 * a logical "and" expression.
 	 *
-	 * Option names may be given in "dot notation" which allows to reference
+	 * Option names may be given in "dot notation" which allows referencing
 	 * option elements outside the current form section. If a name without
-	 * dot is specified, it refers to an option within the same configuration
+	 * a dot is specified, it refers to an option within the same configuration
 	 * section. If specified as <code>configname.sectionid.optionname</code>,
 	 * options anywhere within the same form may be specified.
 	 *
@@ -1632,8 +1632,8 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 * dependencies which must be satisfied (a logical "and" expression).
 	 *
 	 * @param {string|RegExp} [value]
-	 * When invoked with a plain option name as first argument, this parameter
-	 * specifies the expected value. In case an object is passed as first
+	 * When invoked with a plain option name as the first argument, this parameter
+	 * specifies the expected value. In case an object is passed as the first
 	 * argument, this parameter is ignored.
 	 */
 	depends(field, value) {
@@ -1715,7 +1715,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 		const config_name = this.uciconfig ?? this.section.uciconfig ?? this.map.config;
 		const cfgvalue = L.toArray(this.cfgvalue(section_id))[0];
 		let default_defval = null;
-		let satisified_defval = null;
+		let satisfied_defval = null;
 
 		for (const value in this.defaults) {
 			if (!this.defaults[value] || this.defaults[value].length == 0) {
@@ -1723,19 +1723,19 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 				continue;
 			}
 			else if (this.map.isDependencySatisfied(this.defaults[value], config_name, section_id)) {
-				satisified_defval = value;
+				satisfied_defval = value;
 				break;
 			}
 		}
 
-		if (satisified_defval == null)
-			satisified_defval = default_defval;
+		if (satisfied_defval == null)
+			satisfied_defval = default_defval;
 
 		const node = this.map.findElement('id', this.cbid(section_id));
-		if (node && node.getAttribute('data-changed') != 'true' && satisified_defval != null && cfgvalue == null)
-			dom.callClassMethod(node, 'setValue', satisified_defval);
+		if (node && node.getAttribute('data-changed') != 'true' && satisfied_defval != null && cfgvalue == null)
+			dom.callClassMethod(node, 'setValue', satisfied_defval);
 
-		this.default = satisified_defval;
+		this.default = satisfied_defval;
 	},
 
 	/**
@@ -1913,8 +1913,8 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	 *
 	 * @returns {*}
 	 * The method shall return `true` to accept the given value. Any other
-	 * return value is treated as failure, converted to a string and displayed
-	 * as error message to the user.
+	 * return value is treated as a failure, converted to a string and displayed
+	 * as an error message to the user.
 	 */
 	validate(section_id, value) {
 		return true;
@@ -2130,7 +2130,7 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
  * value of the `addremove` property.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [section()]{@link LuCI.form.Map#section}.
  *
  * @param {string} section_type
@@ -2158,7 +2158,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 	/**
 	 * If set to `true`, mapped section instances are treated as anonymous
 	 * UCI sections, which means that section instance elements will be
-	 * rendered without title element and that no name is required when adding
+	 * rendered without a title element and that no name is required when adding
 	 * new sections. The default is `false`.
 	 *
 	 * @name LuCI.form.TypedSection.prototype#anonymous
@@ -2168,7 +2168,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 
 	/**
 	 * When set to `true`, instead of rendering section instances one below
-	 * another, treat each instance as separate tab pane and render a tab menu
+	 * another, treat each instance as a separate tab pane and render a tab menu
 	 * at the top of the form section element, allowing the user to switch
 	 * among instances. The default is `false`.
 	 *
@@ -2178,10 +2178,10 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 	 */
 
 	/**
-	 * Override the caption used for the section add button at the bottom of
+	 * Override the caption used for the section add a button at the bottom of
 	 * the section form element. Set to a string, it will be used as-is.
 	 * Set to a function, the function will be invoked and its return value
-	 * is used as caption, after converting it to a string. If this property
+	 * is used as a caption, after converting it to a string. If this property
 	 * is not set, the default is `Add`.
 	 *
 	 * @name LuCI.form.TypedSection.prototype#addbtntitle
@@ -2369,7 +2369,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
  * value of the `addremove` property.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [section()]{@link LuCI.form.Map#section}.
  *
  * @param {string} section_type
@@ -2388,9 +2388,9 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 * Override the per-section instance title caption shown in the first
 	 * column of the table unless `anonymous` is set to true. Set to a
 	 * string, it will be used as a `String.format()` pattern with the name of
-	 * the underlying UCI section as first argument. Set to a function, the
-	 * function will be invoked with the section name as first argument and
-	 * its return value used as caption, after converting it to a string.
+	 * the underlying UCI section as the first argument. Set to a function, the
+	 * function will be invoked with the section name as the first argument and
+	 * its return value used as a caption, after converting it to a string.
 	 * If this property is not set, the default is the name of the underlying
 	 * UCI configuration section.
 	 *
@@ -2403,9 +2403,9 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 * Override the per-section instance modal popup title caption shown when
 	 * clicking the `More…` button in a section specifying `max_cols`. Set
 	 * to a string, it will be used as a `String.format()` pattern with the name
-	 * of the underlying UCI section as first argument. Set to a function,
-	 * the function will be invoked with the section name as first argument and
-	 * its return value is used as caption, after converting it to a string.
+	 * of the underlying UCI section as the first argument. Set to a function,
+	 * the function will be invoked with the section name as the first argument, and
+	 * its return value is used as a caption after converting it to a string.
 	 * If this property is not set, the default is the name of the underlying
 	 * UCI configuration section.
 	 *
@@ -2452,12 +2452,12 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 * Enables a per-section instance row `Edit` button which triggers a certain
 	 * action when clicked. Set to a string, the string value is used
 	 * as a `String.format()` pattern with the name of the underlying UCI section
-	 * as first format argument. The result is then interpreted as a URL which
+	 * as the first format argument. The result is then interpreted as a URL which
 	 * LuCI will navigate to when the user clicks the edit button.
 	 *
-	 * If set to a function, this function will be registered as click event
+	 * If set to a function, this function will be registered as a click event
 	 * handler on the rendered edit button, receiving the section instance
-	 * name as first and the DOM click event as second argument.
+	 * name as the first and the DOM click event as the second argument.
 	 *
 	 * @name LuCI.form.TableSection.prototype#extedit
 	 * @type string|function
@@ -2475,8 +2475,8 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 */
 
 	/**
-	 * Set to `true`, the header row with the options descriptions will
-	 * not be displayed. By default, descriptions row is automatically displayed
+	 * Set to `true`, the header row with the descriptions of options will
+	 * not be displayed. By default, the row of descriptions is automatically displayed
 	 * when at least one option has a description.
 	 *
 	 * @name LuCI.form.TableSection.prototype#nodescriptions
@@ -3319,7 +3319,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
  * Layout wise, a grid section looks mostly identical to table sections.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [section()]{@link LuCI.form.Map#section}.
  *
  * @param {string} section_type
@@ -3354,7 +3354,7 @@ const CBIGridSection = CBITableSection.extend(/** @lends LuCI.form.GridSection.p
 	 *
 	 * @param {string} [description]
 	 * An additional description text for the corresponding tab pane. It is
-	 * displayed as text paragraph below the tab but before the tab pane
+	 * displayed as a text paragraph below the tab but before the tab pane
 	 * contents. If omitted, no description will be rendered.
 	 *
 	 * @throws {Error}
@@ -3480,7 +3480,7 @@ const CBIGridSection = CBITableSection.extend(/** @lends LuCI.form.GridSection.p
  * `TypedSection` which allows exactly one section node.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added to. It is automatically passed
  * by [section()]{@link LuCI.form.Map#section}.
  *
  * @param {string} section_id
@@ -3527,7 +3527,7 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 	/**
 	 * The `NamedSection` class overrides the generic `cfgsections()`
 	 * implementation to return a one-element array containing the mapped
-	 * section ID as sole element. User code should not normally change this.
+	 * section ID as a sole element. User code should not normally change this.
 	 *
 	 * @returns {string[]}
 	 * Returns a one-element array containing the mapped section ID.
@@ -3630,7 +3630,7 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
  * {@link LuCI.ui.Combobox} class as underlying widget.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -3681,7 +3681,7 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 	 *
 	 * @param {Node|string} val
 	 * The caption for the choice value. May be a DOM node, a document fragment
-	 * or a plain text string. If omitted, the `key` value is used as caption.
+	 * or a plain text string. If omitted, the `key` value is used as a caption.
 	 */
 	value(key, val) {
 		this.keylist ??= [];
@@ -3843,13 +3843,13 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
  * predefined choices. It builds upon the {@link LuCI.ui.DynamicList} widget.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section to which this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -3910,7 +3910,7 @@ const CBIDynamicList = CBIValue.extend(/** @lends LuCI.form.DynamicList.prototyp
  * It builds upon the {@link LuCI.ui.Select} widget.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added to. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4003,13 +4003,13 @@ const CBIListValue = CBIValue.extend(/** @lends LuCI.form.ListValue.prototype */
  * It builds upon the {@link LuCI.form.ListValue} widget.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section to which this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4132,13 +4132,13 @@ const CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.prot
  * values. The currently chosen value is displayed to the side of the slider.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section to which this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4258,13 +4258,13 @@ const CBIRangeSliderValue = CBIValue.extend(/** @lends LuCI.form.RangeSliderValu
  * implement a simple checkbox element.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section to which this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4416,13 +4416,13 @@ const CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.FlagValue.prototype */
  * select dropdown element.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section to which this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4453,7 +4453,7 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 	 */
 
 	/**
-	 * Allows to specify the [display_items]{@link LuCI.ui.Dropdown.InitOptions}
+	 * Allows specifying the [display_items]{@link LuCI.ui.Dropdown.InitOptions}
 	 * property of the underlying dropdown widget. If omitted, the value of
 	 * the `size` property is used or `3` when `size` is also unspecified.
 	 *
@@ -4463,7 +4463,7 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 	 */
 
 	/**
-	 * Allows to specify the [dropdown_items]{@link LuCI.ui.Dropdown.InitOptions}
+	 * Allows specifying the [dropdown_items]{@link LuCI.ui.Dropdown.InitOptions}
 	 * property of the underlying dropdown widget. If omitted, the value of
 	 * the `size` property is used or `-1` when `size` is also unspecified.
 	 *
@@ -4505,13 +4505,13 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
  * {@link LuCI.ui.Textarea}.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section to which this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4541,7 +4541,7 @@ const CBITextValue = CBIValue.extend(/** @lends LuCI.form.TextValue.prototype */
 	 */
 
 	/**
-	 * Allows to specify the [cols]{@link LuCI.ui.Textarea.InitOptions}
+	 * Allows specifying the [cols]{@link LuCI.ui.Textarea.InitOptions}
 	 * property of the underlying textarea widget.
 	 *
 	 * @name LuCI.form.TextValue.prototype#cols
@@ -4550,7 +4550,7 @@ const CBITextValue = CBIValue.extend(/** @lends LuCI.form.TextValue.prototype */
 	 */
 
 	/**
-	 * Allows to specify the [rows]{@link LuCI.ui.Textarea.InitOptions}
+	 * Allows specifying the [rows]{@link LuCI.ui.Textarea.InitOptions}
 	 * property of the underlying textarea widget.
 	 *
 	 * @name LuCI.form.TextValue.prototype#rows
@@ -4559,7 +4559,7 @@ const CBITextValue = CBIValue.extend(/** @lends LuCI.form.TextValue.prototype */
 	 */
 
 	/**
-	 * Allows to specify the [wrap]{@link LuCI.ui.Textarea.InitOptions}
+	 * Allows specifying the [wrap]{@link LuCI.ui.Textarea.InitOptions}
 	 * property of the underlying textarea widget.
 	 *
 	 * @name LuCI.form.TextValue.prototype#wrap
@@ -4599,13 +4599,13 @@ const CBITextValue = CBIValue.extend(/** @lends LuCI.form.TextValue.prototype */
  * renders the underlying UCI option or default value as readonly text.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section to which this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4693,7 +4693,7 @@ const CBIDummyValue = CBIValue.extend(/** @lends LuCI.form.DummyValue.prototype 
  * renders the underlying UCI option or default value as readonly text.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added to. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4719,13 +4719,13 @@ const CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototyp
 	/**
 	 * Override the rendered button caption.
 	 *
-	 * By default, the option title - which is passed as fourth argument to the
-	 * constructor - is used as caption for the button element. When setting
+	 * By default, the option title - which is passed as the fourth argument to the
+	 * constructor - is used as a caption for the button element. When setting
 	 * this property to a string, it is used as a `String.format()` pattern with
-	 * the underlying UCI section name passed as first format argument. When
-	 * set to a function, it is invoked passing the section ID as sole argument
+	 * the underlying UCI section name passed as the first format argument. When
+	 * set to a function, it is invoked passing the section ID as the sole argument,
 	 * and the resulting return value is converted to a string before being
-	 * used as button caption.
+	 * used as a button caption.
 	 *
 	 * The default of `null` means the option title is used as caption.
 	 *
@@ -4759,8 +4759,8 @@ const CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototyp
 	 *
 	 * When this property is set to a function, it is invoked instead of
 	 * performing the default actions. The handler function will receive the
-	 * DOM click element as first and the underlying configuration section ID
-	 * as second argument.
+	 * DOM click element as the first and the underlying configuration section ID
+	 * as the second argument.
 	 *
 	 * @name LuCI.form.ButtonValue.prototype#onclick
 	 * @type function
@@ -4816,7 +4816,7 @@ const CBIButtonValue = CBIValue.extend(/** @lends LuCI.form.ButtonValue.prototyp
  * distorted form layout when rendering the option element.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added to. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4860,7 +4860,7 @@ const CBIHiddenValue = CBIValue.extend(/** @lends LuCI.form.HiddenValue.prototyp
  * offers the ability to browse, upload and select remote files.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added to. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
@@ -4935,7 +4935,7 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
 	/**
 	 * Toggle remote file delete functionality.
 	 *
-	 * When set to `true`, the underlying widget provides a buttons which let
+	 * When set to `true`, the underlying widget provides buttons which let
 	 * the user delete files from remote directories. Note that this is merely
 	 * a cosmetic feature: remote delete permissions are controlled by the
 	 * session ACL rules.
@@ -5000,13 +5000,13 @@ const CBIFileUpload = CBIValue.extend(/** @lends LuCI.form.FileUpload.prototype 
  * element container, allowing to nest form sections into other sections.
  *
  * @param {LuCI.form.Map|LuCI.form.JSONMap} form
- * The configuration form this section is added to. It is automatically passed
+ * The configuration form to which this section is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
  *
  * @param {LuCI.form.AbstractSection} section
- * The configuration section this option is added to. It is automatically passed
+ * The configuration section to which this option is added. It is automatically passed
  * by [option()]{@link LuCI.form.AbstractSection#option} or
  * [taboption()]{@link LuCI.form.AbstractSection#taboption} when adding the
  * option to the section.
