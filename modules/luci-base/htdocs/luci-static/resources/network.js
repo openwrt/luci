@@ -669,7 +669,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 *
 	 * @returns {null|string}
 	 * Returns a string containing the netmask corresponding to the bit count
-	 * or `null` when the given amount of bits exceeds the maximum possible
+	 * or `null` when the given number of bits exceeds the maximum possible
 	 * value of `32` for IPv4 or `128` for IPv6.
 	 */
 	prefixToMask: prefixToMask,
@@ -804,7 +804,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * Registers a new {@link LuCI.network.Protocol Protocol} subclass
 	 * with the given methods and returns the resulting subclass value.
 	 *
-	 * This functions internally calls
+	 * This function internally calls
 	 * {@link LuCI.Class.extend Class.extend()} on the `Network.Protocol`
 	 * base class.
 	 *
@@ -872,7 +872,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * `NO_DEVICE`.
 	 *
 	 * @param {string} message
-	 * The message to use as translation for the given protocol error code.
+	 * The message to use as a translation for the given protocol error code.
 	 *
 	 * @returns {boolean}
 	 * Returns `true` if the error code description has been added or `false`
@@ -1334,7 +1334,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * The device name to test.
 	 *
 	 * @returns {boolean}
-	 * Returns `true` if the given name is in the ignore pattern list,
+	 * Returns `true` if the given name is in the ignored pattern list,
 	 * else returns `false`.
 	 */
 	isIgnoredDevice: function(name) {
@@ -1565,7 +1565,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * Get IPv4 wan networks.
 	 *
 	 * This function looks up all networks having a default `0.0.0.0/0` route
-	 * and returns them as array.
+	 * and returns them as an array.
 	 *
 	 * @returns {Promise<Array<LuCI.network.Protocol>>}
 	 * Returns a promise resolving to an array of `Protocol` subclass
@@ -1590,7 +1590,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * Get IPv6 wan networks.
 	 *
 	 * This function looks up all networks having a default `::/0` route
-	 * and returns them as array.
+	 * and returns them as an array.
 	 *
 	 * @returns {Promise<Array<LuCI.network.Protocol>>}
 	 * Returns a promise resolving to an array of `Protocol` subclass
@@ -1766,7 +1766,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * class instance describing the found hosts.
 	 *
 	 * @returns {Promise<LuCI.network.Hosts>}
-	 * Returns a `Hosts` instance describing host known on the system.
+	 * Returns a `Hosts` instance describing a host known on the system.
 	 */
 	getHostHints: function() {
 		return initNetworkState().then(function() {
@@ -1983,7 +1983,7 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
  * @hideconstructor
  * @classdesc
  *
- * The `Network.Protocol` class serves as base for protocol specific
+ * The `Network.Protocol` class serves as the base for protocol-specific
  * subclasses which describe logical UCI networks defined by `config
  * interface` sections in `/etc/config/network`.
  */
@@ -2137,7 +2137,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * until the lease expires.
 	 *
 	 * @returns {number}
-	 * Returns the amount of seconds until the lease expires or `-1`
+	 * Returns the number of seconds until the lease expires or `-1`
 	 * if it isn't applicable to the associated protocol.
 	 */
 	getExpiry: function() {
@@ -2480,7 +2480,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * The name of the interface to be created.
 	 *
 	 * @returns {Promise<void>}
-	 * Returns a promise resolving if new interface is creatable, else
+	 * Returns a promise resolving if a new interface is creatable, else
 	 * rejects with an error message string.
 	 */
 	isCreateable: function(ifname) {
@@ -2509,7 +2509,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * A "virtual" protocol is a protocol which spawns its own interfaces
 	 * on demand instead of using existing physical interfaces.
 	 *
-	 * Examples for virtual protocols are `6in4` which `gre` spawn tunnel
+	 * Examples for virtual protocols are `6in4` which `gre` spawn a tunnel
 	 * network device on startup, examples for non-virtual protocols are
 	 * `dhcp` or `static` which apply IP configuration to existing interfaces.
 	 *
@@ -2547,8 +2547,8 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	/**
 	 * Checks whether this logical interface is dynamic.
 	 *
-	 * A dynamic interface is an interface which has been created at runtime,
-	 * e.g. as sub-interface of another interface, but which is not backed by
+	 * A dynamic interface is an interface that has been created at runtime.
+	 * E.g. as a sub-interface of another interface, but which is not backed by
 	 * any user configuration. Such dynamic interfaces cannot be edited but
 	 * only brought down or restarted.
 	 *
@@ -3143,10 +3143,10 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	},
 
 	/**
-	 * Get the amount of transmitted bytes.
+	 * Get the number of transmitted bytes.
 	 *
 	 * @returns {number}
-	 * Returns the amount of bytes transmitted by the network device.
+	 * Returns the number of bytes transmitted by the network device.
 	 */
 	getTXBytes: function() {
 		var stat = this._devstate('stats');
@@ -3154,10 +3154,10 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	},
 
 	/**
-	 * Get the amount of received bytes.
+	 * Get the number of received bytes.
 	 *
 	 * @returns {number}
-	 * Returns the amount of bytes received by the network device.
+	 * Returns the number of bytes received by the network device.
 	 */
 	getRXBytes: function() {
 		var stat = this._devstate('stats');
@@ -3165,10 +3165,10 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	},
 
 	/**
-	 * Get the amount of transmitted packets.
+	 * Get the number of transmitted packets.
 	 *
 	 * @returns {number}
-	 * Returns the amount of packets transmitted by the network device.
+	 * Returns the number of packets transmitted by the network device.
 	 */
 	getTXPackets: function() {
 		var stat = this._devstate('stats');
@@ -3176,10 +3176,10 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	},
 
 	/**
-	 * Get the amount of received packets.
+	 * Get the number of received packets.
 	 *
 	 * @returns {number}
-	 * Returns the amount of packets received by the network device.
+	 * Returns the number of packets received by the network device.
 	 */
 	getRXPackets: function() {
 		var stat = this._devstate('stats');
@@ -3382,7 +3382,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *
 	 * @returns {string}
 	 * Returns the UCI section name (e.g. `radio0`) of the corresponding
-	 * radio configuration which also serves as unique logical identifier
+	 * radio configuration, which also serves as a unique logical identifier
 	 * for the wireless phy.
 	 */
 	getName: function() {
@@ -3983,11 +3983,11 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * supported by the driver.
 	 *
 	 * @property {number} inactive
-	 * The amount of milliseconds the peer has been inactive, e.g. due
+	 * The number of milliseconds the peer has been inactive, e.g. due
 	 * to power-saving.
 	 *
 	 * @property {number} connected_time
-	 * The amount of milliseconds the peer is associated to this network.
+	 * The number of milliseconds the peer is associated to this network.
 	 *
 	 * @property {number} [thr]
 	 * The estimated throughput of the peer, May be `0` or absent if not
@@ -4080,22 +4080,22 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * @memberof LuCI.network
 	 *
 	 * @property {number} [drop_misc]
-	 * The amount of received misc. packages that have been dropped, e.g.
+	 * The number of received misc. packages that have been dropped, e.g.
 	 * due to corruption or missing authentication. Only applicable to
 	 * receiving rates.
 	 *
 	 * @property {number} packets
-	 * The amount of packets that have been received or sent.
+	 * The number of packets that have been received or sent.
 	 *
 	 * @property {number} bytes
-	 * The amount of bytes that have been received or sent.
+	 * The number of bytes that have been received or sent.
 	 *
 	 * @property {number} [failed]
-	 * The amount of failed transmission attempts. Only applicable to
+	 * The number of failed transmission attempts. Only applicable to
 	 * transmit rates.
 	 *
 	 * @property {number} [retries]
-	 * The amount of retried transmissions. Only applicable to transmit
+	 * The number of retried transmissions. Only applicable to transmit
 	 * rates.
 	 *
 	 * @property {boolean} is_ht
@@ -4118,7 +4118,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * Specifies whether the transmission rate used 40MHz wide channel.
 	 * Only applicable to HT or VHT rates.
 	 *
-	 * Note: this option exists for backwards compatibility only and its
+	 * Note: this option exists for backwards compatibility only, and its
 	 * use is discouraged. The `mhz` field should be used instead to
 	 * determine the channel width.
 	 *
@@ -4145,8 +4145,8 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * Specifies whether this rate is an EHT (IEEE 802.11be) rate.
 	 * 
 	 * @property {number} [eht_gi]
-	 * Specifies whether the guard interval used for the transmission.
-	 * Only applicable to  EHT rates.
+	 * Specifies whether the guard interval is used for the transmission.
+	 * Only applicable to EHT rates.
 	 *
 	 * @property {number} [eht_dcm]
 	 * Specifies whether dual concurrent modulation is used for the transmission.
@@ -4216,11 +4216,11 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Query the current average bit-rate of all peers associated to this
+	 * Query the current average bit-rate of all peers associated with this
 	 * wireless network.
 	 *
 	 * @returns {null|number}
-	 * Returns the average bit rate among all peers associated to the network
+	 * Returns the average bit rate among all peers associated with the network
 	 * as reported by `ubus` runtime information or `null` if the information
 	 * is not available.
 	 */
@@ -4449,7 +4449,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * with. Default is `1` which corresponds to `Unspecified reason`.
 	 *
 	 * @param {number} [ban_time=0]
-	 * Specifies the amount of milliseconds to ban the client from
+	 * Specifies the number of milliseconds to ban the client from
 	 * reconnecting. By default, no ban time is set which allows the client
 	 * to re-associate / reauthenticate immediately.
 	 *
