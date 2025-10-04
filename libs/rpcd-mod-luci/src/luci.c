@@ -1913,7 +1913,7 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
                          struct ubus_request_data *req, const char *method,
                          struct blob_attr *msg)
 {
-	char s[INET6_ADDRSTRLEN + strlen("/128")];
+	char s[INET6_ADDRSTRLEN];
 	struct blob_attr *tb[__RPC_L_MAX];
 	struct lease_entry *lease;
 	int af, family = 0;
@@ -1978,11 +1978,10 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 				a2 = blobmsg_open_array(&blob, "ipv6-addr");
 
 				for (n = 0; n < lease->n_addr; n++) {
+					if (lease->mask != 128)
+						continue;
+
 					inet_ntop(lease->af, &lease->addr[n].in6, s, sizeof(s));
-
-					l = strlen(s);
-					snprintf(s + l, sizeof(s) - l, "/%hhu", lease->mask);
-
 					blobmsg_add_string(&blob, NULL, s);
 				}
 
