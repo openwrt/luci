@@ -751,9 +751,10 @@ return view.extend({
 		};
 
 		so = ss.option(form.DynamicList, 'mac',
-			_('MAC address(es)'),
-			_('The hardware address(es) of this entry/host.') + '<br /><br />' +
-			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
+			_('MAC Addresses'),
+			_('The hardware address(es) of this host.') + '<br /><br />' +
+			_('The same IPv4 address will be (re)assigned to <em>any</em> host using one of the MAC addresses listed above.') + '<br />' +
+			_('Only one of the MAC addresses is expected to be in active use on the network at any given time.'));
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
 			var macs = uci.get('dhcp', section, 'mac');
