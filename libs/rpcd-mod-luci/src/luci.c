@@ -1830,29 +1830,27 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 		if (lease->af != AF_INET6 || lease->duid == NULL)
 			continue;
 
-		e = avl_find_element(&avl, lease->duid, e, avl);
+		size_t key_len = strlen(lease->duid) + 1 + (lease->iaid ? strlen(lease->iaid) + 1 : 0);
+		char key[key_len];
 
+		sprintf(key, "%s%s%s", lease->duid,
+			lease->iaid ? "%" : "",
+			lease->iaid ? lease->iaid : "");
+
+		e = avl_find_element(&avl, key, e, avl);
 		if (e)
 			continue;
 
-		e = calloc_a(sizeof(*e), &p, strlen(lease->duid) + 1);
-
+		e = calloc_a(sizeof(*e), &p, key_len);
 		if (!e)
 			continue;
 
-		o = blobmsg_open_table(&blob, lease->duid);
+		o = blobmsg_open_table(&blob, key);
 
-		inet_ntop(AF_INET6, &lease->addr[0].in6, s, sizeof(s));
-		blobmsg_add_string(&blob, "ip6addr", s);
+		blobmsg_add_string(&blob, "duid", lease->duid);
 
-		a = blobmsg_open_array(&blob, "ip6addrs");
-
-		for (n = 0; n < lease->n_addr; n++) {
-			inet_ntop(AF_INET6, &lease->addr[n].in6, s, sizeof(s));
-			blobmsg_add_string(&blob, NULL, s);
-		}
-
-		blobmsg_close_array(&blob, a);
+		if (lease->iaid)
+			blobmsg_add_string(&blob, "iaid", lease->iaid);
 
 		if (lease->hostname)
 			blobmsg_add_string(&blob, "hostname", lease->hostname);
@@ -1860,9 +1858,16 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 		if (!ea_empty(&lease->mac))
 			blobmsg_add_string(&blob, "macaddr", ea2str(&lease->mac));
 
+		a = blobmsg_open_array(&blob, "ip6addrs");
+		for (n = 0; n < lease->n_addr; n++) {
+			inet_ntop(AF_INET6, &lease->addr[n].in6, s, sizeof(s));
+			blobmsg_add_string(&blob, NULL, s);
+		}
+		blobmsg_close_array(&blob, a);
+
 		blobmsg_close_table(&blob, o);
 
-		e->avl.key = strcpy(p, lease->duid);
+		e->avl.key = strcpy(p, key);
 		avl_insert(&avl, &e->avl);
 	}
 

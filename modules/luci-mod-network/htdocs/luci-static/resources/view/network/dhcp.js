@@ -874,8 +874,9 @@ return view.extend({
 			_('Syntax: <code>&lt;DUID-hex-str&gt;</code> <em>or</em> <code>&lt;DUID-hex-str&gt;%&lt;IAID-hex-str&gt;</code>'));
 		so.rmempty = true;
 		so.validate = validateDUIDIAID;
-		Object.keys(duids).forEach(function(duid) {
-			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
+		Object.keys(duids).forEach(function(duid_iaid) {
+			var desc = duids[duid_iaid].hostname || duids[duid_iaid].macaddr || duids[duid_iaid].ip6addrs[0] || '?';
+			so.value(duid_iaid, '%s (%s)'.format(duid_iaid, desc));
 		});
 
 		so = ss.option(form.Value, 'hostid',
