@@ -1311,12 +1311,12 @@ return view.extend({
 			uci.unset('dhcp', section, 'dns');
 		};
 
-		//this can be a .DynamicList or a .Value with a widget and dnsmasq handles multimac OK.
+		//this can be a .DynamicList or a .Value with a widget and dnsmasq/odhcpd handles multimac OK.
 		so = ss.option(form.DynamicList, 'mac',
-			_('MAC address(es)'),
-			_('The hardware address(es) of this entry/host.') + '<br /><br />' + 
-			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
-		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
+			_('MAC Addresses'),
+			_('The hardware address(es) of this host.') + '<br /><br />' + 
+			_('The same IPv4 address will be (re)assigned to <em>any</em> host using one of the MAC addresses listed above.') + '<br />' +
+			_('Only one of the MAC addresses is expected to be in active use on the network at any given time.'));
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
 			var macs = uci.get('dhcp', section, 'mac');
