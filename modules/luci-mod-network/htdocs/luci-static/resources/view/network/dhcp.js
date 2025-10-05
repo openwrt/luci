@@ -858,8 +858,9 @@ return view.extend({
 		});
 
 		so = ss.option(form.Value, 'hostid',
-			_('IPv6-Suffix (hex)'),
-			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 16 chars).'));
+			_('IPv6 Token'),
+			_('The hexadecimal <abbr title="Address suffix"><a href="%s">IPv6 token</a></abbr> for this host (up to 16 chars, i.e. 64 bits).')
+			.format('https://datatracker.ietf.org/doc/html/draft-chown-6man-tokenised-ipv6-identifiers-02'));
 		so.datatype = 'and(rangelength(0,16),hexstring)';
 
 		so = ss.option(form.DynamicList, 'tag',
