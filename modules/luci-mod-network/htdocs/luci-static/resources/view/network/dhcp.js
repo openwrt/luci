@@ -158,6 +158,24 @@ function validateHostname(sid, s) {
 	return true;
 }
 
+function validateDUIDIAID(sid, s) {
+	if (s == null || s == '')
+		return true;
+
+	var parts = s.split('%');
+	if (parts.length > 2)
+		return _('Expecting: %s').format(_('maximum one "%"'));
+
+	// DUID_MAX_LEN = 130 => 260 hex chars
+	if (parts[0].length < 20 || parts[0].length > 260 || !parts[0].match(/^([a-f0-9]{2})+$/i))
+		return _('Expecting: %s').format(_('DUID with an even number (20 to 260) of hexadecimal characters'));
+
+	if (parts.length == 2 && (parts[1].length < 1 || parts[1].length > 8 || !parts[1].match(/^[a-f0-9]+$/i)))
+		return _('Expecting: %s').format(_('IAID of 1 to 8 hexadecimal characters'));
+
+	return true;
+};
+
 function expandAndFormatMAC(macs) {
 	let result = [];
 
@@ -849,10 +867,13 @@ return view.extend({
 		so.value('7d', _('7d (7 days)'));
 		so.value('infinite', _('infinite (lease does not expire)'));
 
-		so = ss.option(form.Value, 'duid',
-			_('DUID'),
-			_('The DHCPv6-DUID (DHCP unique identifier) of this host.'));
-		so.datatype = 'and(rangelength(20,36),hexstring)';
+		so = ss.option(form.DynamicList, 'duid',
+			_('DUID/IAIDs'),
+			_('The <abbr title="Dynamic Host Configuration Protocol for IPv6">DHCPv6</abbr>-<abbr title="DHCP Unique Identifier">DUID</abbr>s and, optionally, <abbr title="Identity Association Identifier">IAID</abbr>s of this host.') + '<br /><br />' +
+			_('The same IPv6 addresses will be (re)assigned to <em>any</em> host using one of the <code>DUID</code> or <code>DUID%IAID</code> values listed above. Only one is expected to be in active use on the network at any given time.') + '<br /><br />' +
+			_('Syntax: <code>&lt;DUID-hex-str&gt;</code> <em>or</em> <code>&lt;DUID-hex-str&gt;%&lt;IAID-hex-str&gt;</code>'));
+		so.rmempty = true;
+		so.validate = validateDUIDIAID;
 		Object.keys(duids).forEach(function(duid) {
 			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
 		});
