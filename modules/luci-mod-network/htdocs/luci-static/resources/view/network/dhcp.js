@@ -62,7 +62,7 @@ CBILease6Status = form.DummyValue.extend({
 			E('table', { 'id': 'lease6_status_table', 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Hostname')),
-					E('th', { 'class': 'th' }, _('IPv6 address')),
+					E('th', { 'class': 'th' }, _('IPv6 addresses')),
 					E('th', { 'class': 'th' }, _('DUID')),
 					E('th', { 'class': 'th' }, _('IAID')),
 					E('th', { 'class': 'th' }, _('Lease time remaining'))
