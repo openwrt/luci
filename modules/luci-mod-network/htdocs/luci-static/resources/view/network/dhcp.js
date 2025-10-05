@@ -738,7 +738,7 @@ return view.extend({
 
 		so = ss.option(form.Value, 'name',
 			_('Hostname'),
-			_('Optional hostname to assign'));
+			_('The hostname for this host (optional).'));
 		so.validate = validateHostname;
 		so.rmempty  = true;
 		so.write = function(section, value) {
@@ -800,8 +800,7 @@ return view.extend({
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
-		so = ss.option(form.Value, 'ip', _('IPv4 address'),
-			_('The IP address to be used for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
+		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IPv4 address for this host, or <em>ignore</em> to ignore DHCP requests from this host.'));
 		so.value('ignore', _('Ignore'));
 		so.datatype = 'or(ip4addr,"ignore")';
 		so.validate = function(section, value) {
@@ -866,7 +865,7 @@ return view.extend({
 
 		so = ss.option(form.DynamicList, 'tag',
 			_('Tag'),
-			_('Assign new, freeform tags to this entry.'));
+			_('Additional tags for this host.'));
 
 		so = ss.option(form.DynamicList, 'match_tag',
 			_('Match Tag'),
