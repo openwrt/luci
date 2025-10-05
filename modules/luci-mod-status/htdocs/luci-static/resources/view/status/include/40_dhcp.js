@@ -52,10 +52,14 @@ return baseclass.extend({
 		ev.currentTarget.blur();
 
 		var cfg = uci.add('dhcp', 'host'),
-		    ip6arr = lease.ip6addrs[0] ? validation.parseIPv6(lease.ip6addrs[0]) : null;
+		    ip6arr = lease.ip6addrs[0] ? validation.parseIPv6(lease.ip6addrs[0].replace(/\/128$/,'')) : null,
+		    duid_iaid = lease.duid.toUpperCase();
+
+		if (lease.iaid)
+			duid_iaid += '%' + lease.iaid;
 
 		uci.set('dhcp', cfg, 'name', lease.hostname);
-		uci.set('dhcp', cfg, 'duid', lease.duid.toUpperCase());
+		uci.set('dhcp', cfg, 'duid', duid_iaid);
 		uci.set('dhcp', cfg, 'mac', [lease.macaddr]);
 		if (ip6arr)
 			uci.set('dhcp', cfg, 'hostid', (ip6arr[6] * 0xFFFF + ip6arr[7]).toString(16));
