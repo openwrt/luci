@@ -489,13 +489,11 @@ return view.extend({
 					'class': 'cbi-button cbi-button-neutral reconnect',
 					'click': iface_updown.bind(this, true, section_id),
 					'title': _('Reconnect this interface'),
-					'disabled': dynamic ? 'disabled' : null
 				}, _('Restart')),
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral down',
 					'click': iface_updown.bind(this, false, section_id),
 					'title': _('Shutdown this interface'),
-					'disabled': (dynamic || disabled) ? 'disabled' : null
 				}, _('Stop')),
 				tdEl.lastChild.firstChild,
 				tdEl.lastChild.lastChild
@@ -503,13 +501,27 @@ return view.extend({
 
 			if (!dynamic && net && !uci.get('network', net.getName())) {
 				tdEl.lastChild.childNodes[0].disabled = true;
+				tdEl.lastChild.childNodes[1].disabled = true;
 				tdEl.lastChild.childNodes[2].disabled = true;
 				tdEl.lastChild.childNodes[3].disabled = true;
 			}
-
-			if (dynamic) {
-				//disable the 'Edit' button on dynamic interfaces
+			else if(dynamic === true) {
+				tdEl.lastChild.childNodes[0].disabled = true;
+				tdEl.lastChild.childNodes[1].disabled = true;
 				tdEl.lastChild.childNodes[2].disabled = true;
+				tdEl.lastChild.childNodes[3].disabled = true;
+			}
+			else if (disabled === true){
+				tdEl.lastChild.childNodes[0].disabled = false;
+				tdEl.lastChild.childNodes[1].disabled = true;
+				tdEl.lastChild.childNodes[2].disabled = false;
+				tdEl.lastChild.childNodes[3].disabled = false;
+			}
+			else {
+				tdEl.lastChild.childNodes[0].disabled = false;
+				tdEl.lastChild.childNodes[1].disabled = false;
+				tdEl.lastChild.childNodes[2].disabled = false;
+				tdEl.lastChild.childNodes[3].disabled = false;
 			}
 
 			return tdEl;
