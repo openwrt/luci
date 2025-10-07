@@ -305,8 +305,26 @@ return view.extend({
 				]);
 			}
 
-			btn1.disabled = isReadonlyView || btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic;
-			btn2.disabled = isReadonlyView || btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic || disabled;
+			if (isReadonlyView === true) {
+				btn1.disabled = true;
+				btn2.disabled = true;
+			}
+			else if (btn1.classList.contains('spinning') || btn2.classList.contains('spinning')) {
+				btn1.disabled = true;
+				btn2.disabled = true;
+			}
+			else if (dynamic === true) {
+				btn1.disabled = true;
+				btn2.disabled = true;
+			}
+			else if (disabled === true) {
+				btn1.disabled = false;
+				btn2.disabled = true;
+			}
+			else {
+				btn1.disabled = false;
+				btn2.disabled = false;
+			}
 		}
 
 		document.querySelectorAll('.port-status-device[data-device]').forEach(function(node) {
