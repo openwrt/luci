@@ -269,7 +269,8 @@ return view.extend({
 			    stat = document.querySelector('[id="%s-ifc-status"]'.format(ifc.getName())),
 			    resolveZone = render_ifacebox_status(box, ifc),
 			    disabled = ifc ? !ifc.isUp() : true,
-			    dynamic = ifc ? ifc.isDynamic() : false;
+			    dynamic = ifc ? ifc.isDynamic() : false,
+			    pending = ifc ? ifc.isPending() : false;
 
 			if (dsc.hasAttribute('reconnect')) {
 				dom.content(dsc, E('em', _('Interface is starting...')));
@@ -316,6 +317,10 @@ return view.extend({
 			else if (dynamic === true) {
 				btn1.disabled = true;
 				btn2.disabled = true;
+			}
+			else if (pending === true) {
+				btn1.disabled = true;
+				btn2.disabled = false;
 			}
 			else if (disabled === true) {
 				btn1.disabled = false;
@@ -500,7 +505,8 @@ return view.extend({
 			var tdEl = this.super('renderRowActions', [ section_id, _('Edit') ]),
 			    net = this.networks.filter(function(n) { return n.getName() == section_id })[0],
 			    disabled = net ? !net.isUp() : true,
-			    dynamic = net ? net.isDynamic() : false;
+			    dynamic = net ? net.isDynamic() : false,
+			    pending = net ? net.isPending() : false;
 
 			dom.content(tdEl.lastChild, [
 				E('button', {
@@ -528,6 +534,12 @@ return view.extend({
 				tdEl.lastChild.childNodes[1].disabled = true;
 				tdEl.lastChild.childNodes[2].disabled = true;
 				tdEl.lastChild.childNodes[3].disabled = true;
+			}
+			else if(pending === true) {
+				tdEl.lastChild.childNodes[0].disabled = true;
+				tdEl.lastChild.childNodes[1].disabled = false;
+				tdEl.lastChild.childNodes[2].disabled = false;
+				tdEl.lastChild.childNodes[3].disabled = false;
 			}
 			else if (disabled === true){
 				tdEl.lastChild.childNodes[0].disabled = false;
