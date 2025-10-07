@@ -146,8 +146,16 @@ return view.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(fs.exec_direct('/usr/sbin/nft', [ '--terse', '--json', 'list', 'ruleset' ], 'json'), {}),
-			L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-save'), ''),
-			L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-save'), '')
+			fs.stat('/usr/sbin/iptables-legacy-save').then(function(stat) {
+                return L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-legacy-save'), '');
+            }).catch(function(err) {
+                return L.resolveDefault(fs.exec_direct('/usr/sbin/iptables-save'), '');
+            }),
+            fs.stat('/usr/sbin/ip6tables-legacy-save').then(function(stat) {
+                return L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-legacy-save'), '');
+            }).catch(function(err) {
+                return L.resolveDefault(fs.exec_direct('/usr/sbin/ip6tables-save'), '');
+            })
 		]);
 	},
 
