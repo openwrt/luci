@@ -70,9 +70,11 @@ function render_status(node, ifc, with_device) {
 	const changecount = with_device ? 0 : count_changes(ifc.getName());
 	const maindev = ifc.getL3Device() ?? ifc.getDevice();
 	const macaddr = maindev ? maindev.getMAC() : null;
+	const carrier = maindev ? maindev.getCarrier(): null;
 	const cond00 = !changecount && !ifc.isDynamic() && !ifc.isAlias();
 	const cond01 = cond00 && macaddr;
 	const cond02 = cond00 && maindev;
+	const cond03 = cond00 && carrier;
 
 	function addEntries(label, array) {
 		return Array.isArray(array) ? array.flatMap((item) => [label, item]) : [label, null];
@@ -81,6 +83,7 @@ function render_status(node, ifc, with_device) {
 	return L.itemlist(node, [
 		_('Protocol'), with_device ? null : (desc || '?'),
 		_('Device'), with_device ? (maindev ? maindev.getShortName() : E('em', _('Not present'))) : null,
+		_('Carrier'), (cond03) ? _('Present') : _('Absent'),
 		_('Uptime'), (!changecount && ifc.isUp()) ? '%t'.format(ifc.getUptime()) : null,
 		_('MAC'), (cond01) ? macaddr : null,
 		_('RX'), (cond02) ? '%.2mB (%d %s)'.format(maindev.getRXBytes(), maindev.getRXPackets(), _('Pkts.')) : null,
