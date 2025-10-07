@@ -3932,7 +3932,7 @@ value of the <code>addremove</code> property.</p></div>
                         
                     
                 
-                <p>The configuration form this section is added to. It is automatically passed
+                <p>The configuration form to which this section is added. It is automatically passed
 by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
         </tr>
 	
@@ -4105,11 +4105,11 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
         <p>Enables a per-section instance row <code>Edit</code> button which triggers a certain
 action when clicked. Set to a string, the string value is used
 as a <code>String.format()</code> pattern with the name of the underlying UCI section
-as first format argument. The result is then interpreted as a URL which
+as the first format argument. The result is then interpreted as a URL which
 LuCI will navigate to when the user clicks the edit button.</p>
-<p>If set to a function, this function will be registered as click event
+<p>If set to a function, this function will be registered as a click event
 handler on the rendered edit button, receiving the section instance
-name as first and the DOM click event as second argument.</p>
+name as the first and the DOM click event as the second argument.</p>
     </div>
     
     
@@ -4214,9 +4214,9 @@ style when clicked.</p>
         <p>Override the per-section instance modal popup title caption shown when
 clicking the <code>More…</code> button in a section specifying <code>max_cols</code>. Set
 to a string, it will be used as a <code>String.format()</code> pattern with the name
-of the underlying UCI section as first argument. Set to a function,
-the function will be invoked with the section name as first argument and
-its return value is used as caption, after converting it to a string.
+of the underlying UCI section as the first argument. Set to a function,
+the function will be invoked with the section name as the first argument, and
+its return value is used as a caption after converting it to a string.
 If this property is not set, the default is the name of the underlying
 UCI configuration section.</p>
     </div>
@@ -4266,8 +4266,8 @@ UCI configuration section.</p>
 <dd>
     
     <div class="description">
-        <p>Set to <code>true</code>, the header row with the options descriptions will
-not be displayed. By default, descriptions row is automatically displayed
+        <p>Set to <code>true</code>, the header row with the descriptions of options will
+not be displayed. By default, the row of descriptions is automatically displayed
 when at least one option has a description.</p>
     </div>
     
@@ -4369,9 +4369,9 @@ implement these row style classes. The default is <code>false</code>.</p>
         <p>Override the per-section instance title caption shown in the first
 column of the table unless <code>anonymous</code> is set to true. Set to a
 string, it will be used as a <code>String.format()</code> pattern with the name of
-the underlying UCI section as first argument. Set to a function, the
-function will be invoked with the section name as first argument and
-its return value used as caption, after converting it to a string.
+the underlying UCI section as the first argument. Set to a function, the
+function will be invoked with the section name as the first argument and
+its return value used as a caption, after converting it to a string.
 If this property is not set, the default is the name of the underlying
 UCI configuration section.</p>
     </div>
@@ -4471,10 +4471,10 @@ element.</p>
 <dd>
     
     <div class="description">
-        <p>Override the caption used for the section add button at the bottom of
+        <p>Override the caption used for the section add a button at the bottom of
 the section form element. Set to a string, it will be used as-is.
 Set to a function, the function will be invoked and its return value
-is used as caption, after converting it to a string. If this property
+is used as a caption, after converting it to a string. If this property
 is not set, the default is <code>Add</code>.</p>
     </div>
     
@@ -4575,7 +4575,7 @@ The default is <code>false</code>.</p>
     <div class="description">
         <p>If set to <code>true</code>, mapped section instances are treated as anonymous
 UCI sections, which means that section instance elements will be
-rendered without title element and that no name is required when adding
+rendered without a title element and that no name is required when adding
 new sections. The default is <code>false</code>.</p>
     </div>
     
@@ -4723,7 +4723,7 @@ this property will hold a reference to the parent option instance.</p>
     
     <div class="description">
         <p>When set to <code>true</code>, instead of rendering section instances one below
-another, treat each instance as separate tab pane and render a tab menu
+another, treat each instance as a separate tab pane and render a tab menu
 at the top of the form section element, allowing the user to switch
 among instances. The default is <code>false</code>.</p>
     </div>
@@ -5513,7 +5513,7 @@ custom implementations.</p>
     
     
     <div class="description">
-        <p>Query underlying option widget input values.</p>
+        <p>Query the underlying option widget input values.</p>
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, the widget input values of all
 options within this section are returned as a dictionary.</p>
@@ -6767,7 +6767,7 @@ as an identifier to differentiate tabs.</p></td>
                     
                 
                 <p>An additional description text for the corresponding tab pane. It is
-displayed as text paragraph below the tab but before the tab pane
+displayed as a text paragraph below the tab but before the tab pane
 contents. If omitted, no description will be rendered.</p></td>
         </tr>
 	
@@ -7120,14 +7120,14 @@ descendant of <code>AbstractValue</code>.</p>
     
     
     <div class="description">
-        <p>Format the given named property as title string.</p>
+        <p>Format the given named property as a title string.</p>
 <p>This function looks up the given named property and formats its value
-suitable for use as element caption or description string. It also
+suitable for use as an element caption or description string. It also
 strips any HTML tags from the result.</p>
 <p>If the property value is a string, it is passed to <code>String.format()</code>
 along with any additional parameters passed to <code>titleFn()</code>.</p>
 <p>If the property value is a function, it is invoked with any additional
-<code>titleFn()</code> parameters as arguments and the obtained return value is
+<code>titleFn()</code> parameters as arguments, and the obtained return value is
 converted to a string.</p>
 <p>In all other cases, <code>null</code> is returned.</p>
     </div>
@@ -7310,7 +7310,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 14:17:18 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 22:56:21 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

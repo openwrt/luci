@@ -3929,7 +3929,7 @@ It builds upon the <a href="LuCI.form.ListValue.html"><code>LuCI.form.ListValue<
                         
                     
                 
-                <p>The configuration form this section is added to. It is automatically passed
+                <p>The configuration form to which this section is added. It is automatically passed
 by <a href="LuCI.form.AbstractSection.html#option"><code>option()</code></a> or
 <a href="LuCI.form.AbstractSection.html#taboption"><code>taboption()</code></a> when adding the
 option to the section.</p></td>
@@ -3960,7 +3960,7 @@ option to the section.</p></td>
                         
                     
                 
-                <p>The configuration section this option is added to. It is automatically passed
+                <p>The configuration section to which this option is added. It is automatically passed
 by <a href="LuCI.form.AbstractSection.html#option"><code>option()</code></a> or
 <a href="LuCI.form.AbstractSection.html#taboption"><code>taboption()</code></a> when adding the
 option to the section.</p></td>
@@ -4380,7 +4380,7 @@ option element is marked as invalid.</p>
 <dd>
     
     <div class="description">
-        <p>Mark grid section option element as editable.</p>
+        <p>Mark the grid section option element as editable.</p>
 <p>Options which are displayed in the table portion of a <code>GridSection</code>
 instance are rendered as readonly text by default. By setting the
 <code>editable</code> property of a child option element to <code>true</code>, that element
@@ -4435,7 +4435,7 @@ section elements.</p>
 <dd>
     
     <div class="description">
-        <p>Move grid section option element into the table, the modal popup or both.</p>
+        <p>Move the grid section option element into the table, the modal popup or both.</p>
 <p>If this property is <code>null</code> (the default), the option element is
 displayed in both the table preview area and the per-section instance
 modal popup of a grid section. When it is set to <code>false</code> the option
@@ -4993,8 +4993,8 @@ By setting this property, a deviating configuration may be specified.</p>
     
     <div class="description">
         <p>Override the UCI option name to read the value from.</p>
-<p>By default, the elements name, which is passed as third argument to
-the constructor, is used as UCI option name. By setting this property,
+<p>By default, the elements name, which is passed as the third argument to
+the constructor, is used as the UCI option name. By setting this property,
 a deviating UCI option may be specified.</p>
 <p>The default of null means use the option element name.</p>
     </div>
@@ -5098,7 +5098,7 @@ By setting this property, a deviating section may be specified.</p>
         <p>Specifies a custom validation function to test the user input for
 validity. The validation function must return <code>true</code> to accept the
 value. Any other return value type is converted to a string and
-displayed to the user as validation error message.</p>
+displayed to the user as a validation error message.</p>
 <p>If the user entered input does not pass the validation function, the
 option element is marked as invalid.</p>
     </div>
@@ -5729,7 +5729,7 @@ different way.</p>
             
                 <span class="inherited"><a href="LuCI.form.AbstractValue.html#depends">inherited</a></span>
             
-            depends<span class="signature">(field, value)</span>
+            depends<span class="signature">(field, <span class="optional">value</span>)</span>
         </h4>
     
         
@@ -5752,12 +5752,12 @@ same form. An option element with unsatisfied dependencies will be
 hidden from the view and its current value omitted when saving.</p>
 <p>Multiple constraints (that is, multiple calls to <code>depends()</code>) are
 treated as alternatives, forming a logical &quot;or&quot; expression.</p>
-<p>By passing an object of name =&gt; value pairs as first argument, it is
+<p>By passing an object of name =&gt; value pairs as the first argument, it is
 possible to depend on multiple options simultaneously, forming
 a logical &quot;and&quot; expression.</p>
-<p>Option names may be given in &quot;dot notation&quot; which allows to reference
+<p>Option names may be given in &quot;dot notation&quot; which allows referencing
 option elements outside the current form section. If a name without
-dot is specified, it refers to an option within the same configuration
+a dot is specified, it refers to an option within the same configuration
 section. If specified as <code>configname.sectionid.optionname</code>,
 options anywhere within the same form may be specified.</p>
 <p>The object notation also allows for a number of special keys which are
@@ -5866,6 +5866,11 @@ is ignored. The recognized tags are:</p>
             
             <td class="description last">
                 
+                    
+                    
+                        
+                    
+                
                 <p>The name of the option to depend on or an object describing multiple
 dependencies which must be satisfied (a logical &quot;and&quot; expression).</p></td>
         </tr>
@@ -5893,8 +5898,15 @@ dependencies which must be satisfied (a logical &quot;and&quot; expression).</p>
             
             <td class="description last">
                 
-                <p>When invoked with a plain option name as first argument, this parameter
-specifies the expected value. In case an object is passed as first
+                    
+                        <span class="optional">optional</span>
+                    
+                    
+                        
+                    
+                
+                <p>When invoked with a plain option name as the first argument, this parameter
+specifies the expected value. In case an object is passed as the first
 argument, this parameter is ignored.</p></td>
         </tr>
 	
@@ -7554,14 +7566,14 @@ state of checkbox elements.</p>
     
     
     <div class="description">
-        <p>Format the given named property as title string.</p>
+        <p>Format the given named property as a title string.</p>
 <p>This function looks up the given named property and formats its value
-suitable for use as element caption or description string. It also
+suitable for use as an element caption or description string. It also
 strips any HTML tags from the result.</p>
 <p>If the property value is a string, it is passed to <code>String.format()</code>
 along with any additional parameters passed to <code>titleFn()</code>.</p>
 <p>If the property value is a function, it is invoked with any additional
-<code>titleFn()</code> parameters as arguments and the obtained return value is
+<code>titleFn()</code> parameters as arguments, and the obtained return value is
 converted to a string.</p>
 <p>In all other cases, <code>null</code> is returned.</p>
     </div>
@@ -8073,7 +8085,7 @@ before it is written.</p>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 14:17:18 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 22:56:21 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

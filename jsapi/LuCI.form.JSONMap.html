@@ -3847,7 +3847,7 @@
     
         <div class="class-description"><p>A <code>JSONMap</code> class functions similar to <a href="LuCI.form.Map.html"><code>LuCI.form.Map</code></a>
 but uses a multidimensional JavaScript object instead of UCI configuration
-as data source.</p></div>
+as a data source.</p></div>
     
 </header>  
 
@@ -3925,7 +3925,7 @@ as data source.</p></div>
                         
                     
                 
-                <p>The JavaScript object to use as data source. Internally, the object is
+                <p>The JavaScript object to use as a data source. Internally, the object is
 converted into an UCI-like format. Its top-level keys are treated like UCI
 section types while the object or array-of-object values are treated as
 section contents.</p></td>
@@ -3990,7 +3990,7 @@ corresponding headline element will not be rendered.</p></td>
                         
                     
                 
-                <p>The description text of the form which is usually rendered as text
+                <p>The description text of the form which is usually rendered as a text
 paragraph below the form title and before the actual form contents.
 If omitted, the corresponding paragraph element will not be rendered.</p></td>
         </tr>
@@ -4261,7 +4261,7 @@ permissions are granted.</p>
     <div class="description">
         <p>Tie another UCI configuration to the map.</p>
 <p>By default, a map instance will only load the UCI configuration file
-specified in the constructor but sometimes access to values from
+specified in the constructor, but sometimes access to values from
 further configuration files is required. This function allows for such
 use cases by registering further UCI configuration files which are
 needed by the map.</p>
@@ -4389,7 +4389,7 @@ parameters. This function is essentially a convenience wrapper around
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, it is used as selector-expression
 as-is. When two arguments are passed, the first argument is treated
-as attribute name, the second one as attribute value to match.</p>
+as an attribute name, the second one as an attribute value to match.</p>
 <p>As an example, <code>map.findElement('input')</code> would find the first <code>&lt;input&gt;</code>
 node while <code>map.findElement('type', 'text')</code> would find the first DOM
 node with a <code>type=&quot;text&quot;</code> attribute.</p>
@@ -4614,7 +4614,7 @@ parameters. This function is essentially a convenience wrapper around
 <p>This function is sensitive to the amount of arguments passed to it;
 if only one argument is specified, it is used as selector-expression
 as-is. When two arguments are passed, the first argument is treated
-as attribute name, the second one as attribute value to match.</p>
+as an attribute name, the second one as an attribute value to match.</p>
 <p>As an example, <code>map.findElements('input')</code> would find all <code>&lt;input&gt;</code>
 nodes while <code>map.findElements('type', 'text')</code> would find any DOM node
 with a <code>type=&quot;text&quot;</code> attribute.</p>
@@ -4902,7 +4902,7 @@ load function of each child element.</p>
             </td>
             <td class="description last">Returns a promise resolving once the entire form completed loading all
 data. The promise may reject with an error if any configuration failed
-to load or if any of the child elements' load functions rejected with
+to load or if any of the child elements' load functions reject with
 an error.</td>
         </tr>
     
@@ -5020,8 +5020,8 @@ an error.</td>
                         
                     
                 
-                <p>The ID of the UCI section containing the option to look up. May be
-omitted if a full ID is passed as first argument.</p></td>
+                <p>The ID of the UCI section that contains the option to look up. May be
+omitted if a full ID is passed as the first argument.</p></td>
         </tr>
 	
 	
@@ -5121,7 +5121,7 @@ Defaults to the main UCI configuration of the map if omitted.</p></td>
                     
             </td>
             <td class="description last">Returns a two-element array containing the form option instance as
-first item and the corresponding UCI section ID as second item.
+the first item and the corresponding UCI section ID as the second item.
 Returns <code>null</code> if the option could not be found.</td>
         </tr>
     
@@ -6018,14 +6018,14 @@ entities decoded.</td>
     
     
     <div class="description">
-        <p>Format the given named property as title string.</p>
+        <p>Format the given named property as a title string.</p>
 <p>This function looks up the given named property and formats its value
-suitable for use as element caption or description string. It also
+suitable for use as an element caption or description string. It also
 strips any HTML tags from the result.</p>
 <p>If the property value is a string, it is passed to <code>String.format()</code>
 along with any additional parameters passed to <code>titleFn()</code>.</p>
 <p>If the property value is a function, it is invoked with any additional
-<code>titleFn()</code> parameters as arguments and the obtained return value is
+<code>titleFn()</code> parameters as arguments, and the obtained return value is
 converted to a string.</p>
 <p>In all other cases, <code>null</code> is returned.</p>
     </div>
@@ -6208,7 +6208,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 14:17:18 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 22:56:21 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

@@ -3845,7 +3845,7 @@
     dom
     </h2>
     
-        <div class="class-description"><p>The <code>dom</code> class provides convenience method for creating and
+        <div class="class-description"><p>The <code>dom</code> class provides a convenience method for creating and
 manipulating DOM elements.</p>
 <p>To import the class in views, use <code>'require dom'</code>, to import it in
 external JavaScript, use <code>L.require(&quot;dom&quot;).then(...)</code>.</p></div>
@@ -4047,16 +4047,16 @@ external JavaScript, use <code>L.require(&quot;dom&quot;).then(...)</code>.</p><
                 
                 <p>The children to append to the given node.</p>
 <p>When <code>children</code> is an array, then each item of the array
-will be either appended as child element or text node,
+will be either appended as a child element or text node,
 depending on whether the item is a DOM <code>Node</code> instance or
 some other non-<code>null</code> value. Non-<code>Node</code>, non-<code>null</code> values
 will be converted to strings first before being passed as
 argument to <code>createTextNode()</code>.</p>
 <p>When <code>children</code> is a function, it will be invoked with
-the passed <code>node</code> argument as sole parameter and the <code>append</code>
+the passed <code>node</code> argument as the sole parameter and the <code>append</code>
 function will be invoked again, with the given <code>node</code> argument
 as first and the return value of the <code>children</code> function as
-second parameter.</p>
+the second parameter.</p>
 <p>When <code>children</code> is a DOM <code>Node</code> instance, it will be
 appended to the given <code>node</code>.</p>
 <p>When <code>children</code> is any other non-<code>null</code> value, it will be
@@ -4285,13 +4285,13 @@ depending on the respective value.</p></td>
                 <p>Specifies the attribute value or event handler function to add.
 If the <code>key</code> parameter is an <code>Object</code>, this parameter will be
 ignored.</p>
-<p>When <code>val</code> is of type function, it will be registered as event
+<p>When <code>val</code> is of type function, it will be registered as an event
 handler on the given <code>node</code> with the <code>key</code> parameter being the
 event name.</p>
 <p>When <code>val</code> is of type object, it will be serialized as JSON and
-added as attribute to the given <code>node</code>, using the given <code>key</code>
-as attribute name.</p>
-<p>When <code>val</code> is of any other type, it will be added as attribute
+added as an attribute to the given <code>node</code>, using the given <code>key</code>
+as an attribute name.</p>
+<p>When <code>val</code> is of any other type, it will be added as an attribute
 to the given <code>node</code> as-is, with the underlying <code>setAttribute()</code>
 call implicitly turning it into a string.</p></td>
         </tr>
@@ -4362,7 +4362,7 @@ call implicitly turning it into a string.</p></td>
     
     
     <div class="description">
-        <p>Binds the given class instance ot the specified DOM <code>Node</code>.</p>
+        <p>Binds the given class instance to the specified DOM <code>Node</code>.</p>
 <p>This function uses the <code>dom.data()</code> facility to attach the
 passed instance of a Class to a node. This is needed for
 complex widget elements or similar where the corresponding
@@ -4866,16 +4866,16 @@ rules outlined below.</p>
                 
                 <p>The children to replace into the given node.</p>
 <p>When <code>children</code> is an array, then each item of the array
-will be either appended as child element or text node,
+will be either appended as a child element or text node,
 depending on whether the item is a DOM <code>Node</code> instance or
 some other non-<code>null</code> value. Non-<code>Node</code>, non-<code>null</code> values
 will be converted to strings first before being passed as
 argument to <code>createTextNode()</code>.</p>
 <p>When <code>children</code> is a function, it will be invoked with
-the passed <code>node</code> argument as sole parameter and the <code>append</code>
+the passed <code>node</code> argument as the sole parameter and the <code>append</code>
 function will be invoked again, with the given <code>node</code> argument
 as first and the return value of the <code>children</code> function as
-second parameter.</p>
+the second parameter.</p>
 <p>When <code>children</code> is a DOM <code>Node</code> instance, it will be
 appended to the given <code>node</code>.</p>
 <p>When <code>children</code> is any other non-<code>null</code> value, it will be
@@ -5044,9 +5044,9 @@ type of the second argument.</p>
 <p>When the value of <code>html</code> is of type array, a <code>DocumentFragment</code>
 node is created and each item of the array is first converted
 to a DOM <code>Node</code> by passing it through <code>create()</code> and then added
-as child to the fragment.</p>
+as a child to the fragment.</p>
 <p>When the value of <code>html</code> is a DOM <code>Node</code> instance, no new
-element will be created but the node will be used as-is.</p>
+element will be created, but the node will be used as-is.</p>
 <p>When the value of <code>html</code> is a string starting with <code>&lt;</code>, it will
 be passed to <code>dom.parse()</code> and the resulting value is used.</p>
 <p>When the value of <code>html</code> is any other string, it will be passed
@@ -6638,7 +6638,7 @@ ignored, else not.</p>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 14:17:18 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 22:56:21 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
