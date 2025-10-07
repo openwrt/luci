@@ -11,10 +11,10 @@ var pkg = {
 		return "pbr";
 	},
 	get LuciCompat() {
-		return 14;
+		return 17;
 	},
 	get ReadmeCompat() {
-		return "1.1.8";
+		return "1.2.0";
 	},
 	get URL() {
 		return (
@@ -43,6 +43,29 @@ var pkg = {
 				? template.format(...info)
 				: template.format(info || " ")) + "<br />"
 		);
+	},
+	buildGatewayText: function (gw) {
+		const gateways = Array.isArray(gw) ? gw : Object.values(gw);
+		const lines = gateways.map((g) => {
+			const iface = g.name;
+			if (!iface) return "";
+			const dev_ipv4 = g.device_ipv4;
+			const gw_ipv4 = g.gateway_ipv4;
+			const dev_ipv6 = g.device_ipv6;
+			const gw_ipv6 = g.gateway_ipv6;
+			const default_gw = g.default;
+			const parts = [iface];
+			if (dev_ipv4 && dev_ipv4 !== iface) parts.push(dev_ipv4);
+			if (gw_ipv4) parts.push(gw_ipv4);
+			if (gw_ipv6) {
+				if (dev_ipv6 && dev_ipv6 !== iface) parts.push(dev_ipv6);
+				parts.push(gw_ipv6);
+			}
+			let line = parts.join("/");
+			if (default_gw) line += " ✓";
+			return line;
+		});
+		return lines.join("<br />");
 	},
 };
 
@@ -121,9 +144,9 @@ var status = baseclass.extend({
 		return Promise.all([
 			L.resolveDefault(getInitStatus(pkg.Name), {}),
 			L.resolveDefault(getUbusInfo(pkg.Name), {}),
-		]).then(function (data) {
+		]).then(function ([initStatus, ubusInfo]) {
 			var reply = {
-				status: data[0]?.[pkg.Name] || {
+				status: initStatus?.[pkg.Name] || {
 					enabled: null,
 					running: null,
 					running_iptables: null,
@@ -134,8 +157,9 @@ var status = baseclass.extend({
 					packageCompat: 0,
 					rpcdCompat: 0,
 				},
-				ubus: data[1]?.[pkg.Name]?.instances?.main?.data || {
+				ubus: ubusInfo?.[pkg.Name]?.instances?.main?.data || {
 					packageCompat: 0,
+					gateways: [],
 					errors: [],
 					warnings: [],
 				},
@@ -200,13 +224,13 @@ var status = baseclass.extend({
 			]);
 
 			var gatewaysDiv = [];
-			if (reply.status.gateways) {
+			if (reply.ubus.gateways) {
 				var gatewaysTitle = E(
 					"label",
 					{ class: "cbi-value-title" },
 					_("Service Gateways")
 				);
-				text =
+				var description =
 					_(
 						"The %s indicates default gateway. See the %sREADME%s for details."
 					).format(
@@ -221,8 +245,13 @@ var status = baseclass.extend({
 						"<a href='" + pkg.DonateURL + "' target='_blank'>",
 						"</a>"
 					);
-				var gatewaysDescr = E("div", { class: "cbi-value-description" }, text);
-				var gatewaysText = E("div", {}, reply.status.gateways);
+				var gatewaysDescr = E(
+					"div",
+					{ class: "cbi-value-description" },
+					description
+				);
+				text = pkg.buildGatewayText(reply.ubus.gateways);
+				var gatewaysText = E("div", {}, text);
 				var gatewaysField = E("div", { class: "cbi-value-field" }, [
 					gatewaysText,
 					gatewaysDescr,
@@ -284,6 +313,10 @@ var status = baseclass.extend({
 							"</a>"
 						)
 					),
+					warningSummary: _("Warnings encountered, please check %s"),
+					warningIncompatibleDHCPOption6: _(
+						"Incompatible DHCP Option 6 for interface %s"
+					),
 				};
 				var warningsTitle = E(
 					"label",
@@ -298,6 +331,10 @@ var status = baseclass.extend({
 						text += _("Unknown warning") + "<br />";
 					}
 				});
+				text += _("Warnings encountered, please check the %sREADME%s").format(
+					'<a href="' + pkg.URL + '#WarningMessagesDetails" target="_blank">',
+					"</a>!<br />"
+				);
 				var warningsText = E("div", { class: "cbi-value-description" }, text);
 				var warningsField = E(
 					"div",
@@ -332,11 +369,11 @@ var status = baseclass.extend({
 					errorNoWanGateway: _(
 						"The %s service failed to discover WAN gateway"
 					).format(pkg.Name),
-					errorNoWanInterface: _(
-						"The %s interface not found, you need to set the 'pbr.config.procd_wan_interface' option"
+					errorNoUplinkInterface: _(
+						"The %s interface not found, you need to set the 'pbr.config.uplink_interface' option"
 					),
-					errorNoWanInterfaceHint: _(
-						"Refer to https://docs.openwrt.melmac.ca/pbr/#procd_wan_interface"
+					errorNoUplinkInterfaceHint: _(
+						"Refer to https://docs.openwrt.melmac.ca/pbr/#uplink_interface"
 					),
 					errorIpsetNameTooLong: _(
 						"The ipset name '%s' is longer than allowed 31 characters"
@@ -416,6 +453,10 @@ var status = baseclass.extend({
 					errorInterfaceRoutingUnknownDevType: _(
 						"Unknown IPv6 Link type for device '%s'"
 					),
+					errorMktempFileCreate: _(
+						"Failed to create temporary file with mktemp mask: '%s'"
+					),
+					errorSummary: _("Errors encountered, please check %s"),
 				};
 				var errorsTitle = E(
 					"label",
@@ -431,7 +472,7 @@ var status = baseclass.extend({
 					}
 				});
 				text += _("Errors encountered, please check the %sREADME%s").format(
-					'<a href="' + pkg.URL + '" target="_blank">',
+					'<a href="' + pkg.URL + '#ErrorMessagesDetails" target="_blank">',
 					"</a>!<br />"
 				);
 				var errorsText = E("div", { class: "cbi-value-description" }, text);
