@@ -14,8 +14,8 @@
 readonly packageName="https-dns-proxy"
 readonly providersDir="/usr/share/${packageName}/providers"
 
-. /lib/functions.sh
-. /usr/share/libubox/jshn.sh
+. "${IPKG_INSTROOT}/lib/functions.sh"
+. "${IPKG_INSTROOT}/usr/share/libubox/jshn.sh"
 
 is_enabled() { "/etc/init.d/${1}" enabled; }
 is_running() { [ "$(ubus call service list "{ 'name': '$1' }" | jsonfilter -q -e "@['$1'].instances[*].running" | uniq)" = 'true' ]; }
