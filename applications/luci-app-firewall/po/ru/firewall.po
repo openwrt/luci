@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: firewall\n"
 "POT-Creation-Date: 2013-09-05 16:02+0200\n"
-"PO-Revision-Date: 2025-09-29 15:25+0000\n"
+"PO-Revision-Date: 2025-10-08 18:24+0000\n"
 "Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
@@ -11,8 +11,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural="
+"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
 "X-Generator: Weblate 5.14-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
@@ -356,11 +357,11 @@ msgstr "Включить"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:306
 msgid "Enable NAT Loopback"
-msgstr "Включить NAT Loopback"
+msgstr "Включить NAT loopback"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:45
 msgid "Enable SYN-flood protection"
-msgstr "Защита от SYN flood атак"
+msgstr "Защита от SYN-флуд атак"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:348
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:464
@@ -468,7 +469,7 @@ msgstr "Миграция конфигурации межсетевого экр�
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:82
 msgid "Flow offloading type"
-msgstr "Тип разгрузки потока"
+msgstr "Тип разгрузки потоков"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:64
 msgid "Forward"
@@ -567,7 +568,7 @@ msgstr "Аппаратная разгрузка для маршрутизаци�
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
 msgid "Hardware flow offloading"
-msgstr "Аппаратная разгрузка потока"
+msgstr "Аппаратная разгрузка"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:144
 msgid "IP (range)"
@@ -610,7 +611,7 @@ msgstr "Только IPv4"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:69
 msgid "IPv6"
-msgstr "<abbr title=\"Internet Protocol Version 6\">IPv6</abbr>"
+msgstr "IPv6"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:242
 msgid "IPv6 Masquerading"
@@ -743,7 +744,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:311
 msgid "Loopback source IP"
-msgstr "IP-адрес источника петли (Loopback)"
+msgstr "IP-адрес источника петли (loopback)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:291
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
@@ -762,7 +763,8 @@ msgstr "Соответствие"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:263
 msgid "Match DSCP"
-msgstr "Соответствие DSCP"
+msgstr ""
+"Соответствие <abbr title=\"Differentiated Services Code Point\">DSCP</abbr>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:288
 msgid "Match ICMP type"
@@ -832,7 +834,9 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:264
 msgid "Matches traffic carrying the specified DSCP marking."
-msgstr "Сопоставляет трафик с указанной DSCP-маркировкой."
+msgstr ""
+"Сопоставляет трафик с указанной <abbr title="
+"\"Differentiated Services Code Point\">DSCP</abbr>-маркировкой."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:113
 msgid "Max Entries"
@@ -894,7 +898,9 @@ msgstr "Отсутствует"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:77
 msgid "Not fully compatible with QoS/SQM."
-msgstr "Не полностью совместим с QoS/SQM."
+msgstr ""
+"Не полностью совместимо с <abbr title=\"Quality of Service\">QoS</abbr>/"
+"<abbr title=\"Smart Queue Management\">SQM</abbr>."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:275
 msgid "Only match incoming traffic directed at the given IP address."
@@ -1020,7 +1026,7 @@ msgstr "Зоны отражения"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
 msgid "Requires hardware NAT support."
-msgstr "Требуется аппаратная поддержка NAT."
+msgstr "Требуется поддержка аппаратного NAT."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:272
 msgid "Restrict Masquerading to given destination subnets"
@@ -1057,7 +1063,7 @@ msgstr "Порт для перезаписи"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:76
 msgid "Routing/NAT Offloading"
-msgstr "Маршрутизация/NAT offloading"
+msgstr "Разгрузка маршрутизации/NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:290
 msgid "SNAT - Rewrite to specific source IP or port"
@@ -1087,7 +1093,7 @@ msgstr "Программная разгрузка для маршрутизац�
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:84
 msgid "Software flow offloading"
-msgstr "Программный flow offloading"
+msgstr "Программная разгрузка"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:260
 msgid "Source IP address"
@@ -1516,7 +1522,7 @@ msgstr "не отслеживать"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:69
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:158
 msgid "drop"
-msgstr "не обрабатывать"
+msgstr "отбрасывать"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:21
 msgid ""
