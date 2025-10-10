@@ -846,7 +846,7 @@ return view.extend({
 					};
 
 					so = ss.taboption('ipv6-ra', form.Value, 'ra_pref64', _('NAT64 prefix'), _('Announce NAT64 prefix in <abbr title="Router Advertisement">RA</abbr> messages.') +  ' ' + 
-						_('See %s and %s.'.format('<a href="%s" target="_blank">RFC6146</a>', '<a href="%s" target="_blank">RFC8781</a>').format('https://www.rfc-editor.org/rfc/rfc6146', 'https://www.rfc-editor.org/rfc/rfc8781')));
+						_('See %s and %s.').format('<a href="%s" target="_blank">RFC6146</a>', '<a href="%s" target="_blank">RFC8781</a>').format('https://www.rfc-editor.org/rfc/rfc6146', 'https://www.rfc-editor.org/rfc/rfc8781'));
 					so.optional = true;
 					so.datatype = 'cidr6';
 					so.placeholder = '64:ff9b::/96';
