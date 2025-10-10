@@ -260,12 +260,17 @@ return view.extend({
 			...firmware
 		};
 		let body = [
+			E('p', {}, [
+				_('First check '),
+				E(
+					'a',
+					{ href: 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552' },
+					_('this forum thread')
+				),
+				_('.  If you don\'t find a solution there, report all of the information below.')
+			]),
+
 			E('p', {}, _('Server response: %s').format(response.detail)),
-			E(
-				'a',
-				{ href: 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552' },
-				_('Please report the error message and request')
-			),
 			E('p', {}, _('Request Data:')),
 			E('pre', {}, JSON.stringify({ ...request_data }, null, 4)),
 		];
