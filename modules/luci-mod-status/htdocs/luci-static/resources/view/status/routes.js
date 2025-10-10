@@ -163,10 +163,11 @@ return view.extend({
 			res.push([
 				E('span', { 'class': 'ifacebadge' }, [ net ? net : '(%s)'.format(flags.dev) ]),
 				dest,
-				(v6 ? flags.from : flags.via) || '-',
+				flags.via || '-',
+				flags.src || flags.from || '-',
 				String(flags.metric || 0),
 				flags.table || 'main',
-				flags.proto,
+				flags.proto
 			]);
 		}
 
@@ -222,6 +223,7 @@ return view.extend({
 				E('th', { 'class': 'th', 'title': device_title }, [ _('Device') ]),
 				E('th', { 'class': 'th', 'title': target_title }, [ _('Target') ]),
 				E('th', { 'class': 'th', 'title': gateway_title }, [ _('Gateway') ]),
+				E('th', { 'class': 'th', 'title': source_title }, [ _('Source') ]),
 				E('th', { 'class': 'th', 'title': metric_title }, [ _('Metric') ]),
 				E('th', { 'class': 'th', 'title': table_title }, [ _('Table') ]),
 				E('th', { 'class': 'th', 'title': proto_title }, [ _('Protocol') ])
@@ -247,6 +249,7 @@ return view.extend({
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th', 'title': device_title }, [ _('Device') ]),
 				E('th', { 'class': 'th', 'title': target_title }, [ _('Target') ]),
+				E('th', { 'class': 'th', 'title': gateway_title }, [ _('Gateway') ]),
 				E('th', { 'class': 'th', 'title': source_title }, [ _('Source') ]),
 				E('th', { 'class': 'th', 'title': metric_title }, [ _('Metric') ]),
 				E('th', { 'class': 'th', 'title': table_title }, [ _('Table') ]),
