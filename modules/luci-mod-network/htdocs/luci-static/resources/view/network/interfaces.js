@@ -1659,6 +1659,11 @@ return view.extend({
 			_('This prefix is randomly generated at first install.'));
 		o.datatype = 'cidr6';
 
+		o = s.option(form.Value, 'dhcp_default_duid', _('Default DUID'),
+			_('The default <abbr title="DHCP Unique Identifier">DUID</abbr> for this device, used when acting as a DHCP server or client. The client identifier can be overridden on a per-interface basis.') + '<br />' +
+			_('This identifier is randomly generated the first time the device is booted.'));
+		o.datatype = 'and(rangelength(6,260),hexstring)';
+
 		const l3mdevhelp1 = _('%s services running on this device in the default VRF context (ie., not bound to any VRF device) shall work across all VRF domains.');
 		const l3mdevhelp2 = _('Off means VRF traffic will be handled exclusively by sockets bound to VRFs.');
 
