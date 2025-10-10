@@ -229,7 +229,6 @@ const methods = {
 				offloading: access('/sys/module/xt_FLOWOFFLOAD/refcnt') == true || access('/sys/module/nft_flow_offload/refcnt') == true,
 				br2684ctl:  access('/usr/sbin/br2684ctl') == true,
 				swconfig:   access('/sbin/swconfig') == true,
-				odhcpd:     access('/usr/sbin/odhcpd') == true,
 				zram:       access('/sys/class/zram-control') == true,
 				sysntpd:    readlink('/usr/sbin/ntpd') != null,
 				ipv6:       access('/proc/net/ipv6_route') == true,
@@ -268,6 +267,25 @@ const methods = {
 
 					result.dnsmasq ??= {};
 					result.dnsmasq[lc(f)] = (f == opt);
+				}
+
+				fd.close();
+			}
+
+			result.odhcpd = false;
+			fd = popen('odhcpd -h 2>/dev/null');
+
+			if (fd) {
+				const output = fd.read('all');
+
+				if (output) {
+					result.odhcpd = {};
+					const m = match(output, /^Features: (.+)$/s);
+
+					for (let opt in split(m?.[1], ' ')) {
+						let f = replace(opt, 'no-', '', 1);
+						result.odhcpd[lc(f)] = (f == opt);
+					}
 				}
 
 				fd.close();
