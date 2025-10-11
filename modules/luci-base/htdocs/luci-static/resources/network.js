@@ -2561,6 +2561,16 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	},
 
 	/**
+	 * Checks whether this logical interface is pending.
+	 *
+	 * @returns {boolean}
+	 * returns `true` when the interface is pending or `false` when it is not.
+	 */
+	isPending: function() {
+		return (this._ubus('pending') == true);
+	},
+
+	/**
 	 * Checks whether this interface is an alias interface.
 	 *
 	 * Alias interfaces are interfaces layering on top of another interface
