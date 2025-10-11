@@ -142,8 +142,7 @@ return view.extend({
 
 	parseRoute: function(s, macs, networks, v6) {
 		var lines = s.trim().split(/\n/),
-		    res = [],
-		    k = 0;
+		    res = [];
 
 		for (var i = 0; i < lines.length; i++) {
 			var m = lines[i].match(/^(?:([a-z_]+|\d+) )?(default|[0-9a-f:.\/]+) (.+)$/),
@@ -165,15 +164,11 @@ return view.extend({
 				E('span', { 'class': 'ifacebadge' }, [ net ? net : '(%s)'.format(flags.dev) ]),
 				dest,
 				flags.via || '-',
+				flags.src || flags.from || '-',
 				String(flags.metric || 0),
 				flags.table || 'main',
 				flags.proto
 			]);
-
-			if (v6) {
-				res[k].splice(3, 0, flags.from || '-');
-				k++;
-			}
 		}
 
 		return res;
@@ -228,6 +223,7 @@ return view.extend({
 				E('th', { 'class': 'th', 'title': device_title }, [ _('Device') ]),
 				E('th', { 'class': 'th', 'title': target_title }, [ _('Target') ]),
 				E('th', { 'class': 'th', 'title': gateway_title }, [ _('Gateway') ]),
+				E('th', { 'class': 'th', 'title': source_title }, [ _('Source') ]),
 				E('th', { 'class': 'th', 'title': metric_title }, [ _('Metric') ]),
 				E('th', { 'class': 'th', 'title': table_title }, [ _('Table') ]),
 				E('th', { 'class': 'th', 'title': proto_title }, [ _('Protocol') ])
