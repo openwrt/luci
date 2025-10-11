@@ -56,8 +56,8 @@ LUCI_LANG.tr=Türkçe (Turkish)
 LUCI_LANG.uk=Українська (Ukrainian)
 LUCI_LANG.vi=Tiếng Việt (Vietnamese)
 LUCI_LANG.yua=Yucateco (Yucatec Maya)
-LUCI_LANG.zh_Hans=简体中文 (Chinese Simplified)
-LUCI_LANG.zh_Hant=繁體中文 (Chinese Traditional)
+LUCI_LANG.zh_Hans=简体中文 (Simplified Chinese)
+LUCI_LANG.zh_Hant=正體中文 (Traditional Chinese)
 #LUCI_LANG_END
 
 # Submenu titles
