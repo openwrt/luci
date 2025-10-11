@@ -69,7 +69,7 @@ CBILease6Status = form.DummyValue.extend({
 			E('table', { 'id': 'lease6_status_table', 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Hostname')),
-					E('th', { 'class': 'th' }, _('IPv6 address')),
+					E('th', { 'class': 'th' }, _('IPv6 addresses')),
 					E('th', { 'class': 'th' }, _('DUID')),
 					E('th', { 'class': 'th' }, _('IAID')),
 					E('th', { 'class': 'th' }, _('Lease time remaining'))
@@ -224,6 +224,24 @@ function validateServerSpec(sid, s) {
 	return true;
 }
 
+function validateDUIDIAID(sid, s) {
+	if (s == null || s == '')
+		return true;
+
+	var parts = s.split('%');
+	if (parts.length > 2)
+		return _('Expecting: %s').format(_('maximum one "%"'));
+
+	// DUID_MAX_LEN = 130 => 260 hex chars
+	if (parts[0].length < 20 || parts[0].length > 260 || !parts[0].match(/^([a-f0-9]{2})+$/i))
+		return _('Expecting: %s').format(_('DUID with an even number (20 to 260) of hexadecimal characters'));
+
+	if (parts.length == 2 && (parts[1].length < 1 || parts[1].length > 8 || !parts[1].match(/^[a-f0-9]+$/i)))
+		return _('Expecting: %s').format(_('IAID of 1 to 8 hexadecimal characters'));
+
+	return true;
+};
+
 function expandAndFormatMAC(macs) {
 	let result = [];
 
@@ -361,8 +379,7 @@ return view.extend({
 			return template.replace(/\{(\w+)\}/g, (match, key) => values[key] || match);
 		};
 
-		m = new form.Map('dhcp', _('DHCP and DNS'),
-			_('Dnsmasq is a lightweight <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> server and <abbr title="Domain Name System">DNS</abbr> forwarder.'));
+		m = new form.Map('dhcp', _('DHCP and DNS'));
 
 		s = m.section(form.TypedSection, 'dnsmasq');
 		s.anonymous = false;
@@ -1299,7 +1316,7 @@ return view.extend({
 
 		so = ss.option(form.Value, 'name', 
 			_('Hostname'),
-			_('Optional hostname to assign'));
+			_('The hostname for this host (optional).'));
 		so.validate = validateHostname;
 		so.rmempty  = true;
 		so.write = function(section, value) {
@@ -1311,12 +1328,12 @@ return view.extend({
 			uci.unset('dhcp', section, 'dns');
 		};
 
-		//this can be a .DynamicList or a .Value with a widget and dnsmasq handles multimac OK.
+		//this can be a .DynamicList or a .Value with a widget and dnsmasq/odhcpd handles multimac OK.
 		so = ss.option(form.DynamicList, 'mac',
-			_('MAC address(es)'),
-			_('The hardware address(es) of this entry/host.') + '<br /><br />' + 
-			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
-		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
+			_('MAC Addresses'),
+			_('The hardware address(es) of this host.') + '<br /><br />' + 
+			_('The same IPv4 address will be (re)assigned to <em>any</em> host using one of the MAC addresses listed above.') + '<br />' +
+			_('Only one of the MAC addresses is expected to be in active use on the network at any given time.'));
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
 			var macs = uci.get('dhcp', section, 'mac');
@@ -1363,7 +1380,7 @@ return view.extend({
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
-		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IP address to be used for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
+		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IPv4 address for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
 		so.value('ignore', _('Ignore'));
 		so.datatype = 'or(ip4addr,"ignore")';
 		so.validate = function(section, value) {
@@ -1406,22 +1423,27 @@ return view.extend({
 		so.value('7d', _('7d (7 days)'));
 		so.value('infinite', _('infinite (lease does not expire)'));
 
-		so = ss.option(form.Value, 'duid',
-			_('DUID'),
-			_('The DHCPv6-DUID (DHCP unique identifier) of this host.'));
-		so.datatype = 'and(rangelength(20,36),hexstring)';
-		Object.keys(duids).forEach(function(duid) {
-			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
+		so = ss.option(form.DynamicList, 'duid',
+			_('DUID/IAIDs'),
+			_('The <abbr title="Dynamic Host Configuration Protocol for IPv6">DHCPv6</abbr>-<abbr title="DHCP Unique Identifier">DUID</abbr>s and, optionally, <abbr title="Identity Association Identifier">IAID</abbr>s of this host.') + '<br /><br />' +
+			_('The same IPv6 addresses will be (re)assigned to <em>any</em> host using one of the <code>DUID</code> or <code>DUID%IAID</code> values listed above. Only one is expected to be in active use on the network at any given time.') + '<br /><br />' +
+			_('Syntax: <code>&lt;DUID-hex-str&gt;</code> <em>or</em> <code>&lt;DUID-hex-str&gt;%&lt;IAID-hex-str&gt;</code>'));
+		so.rmempty = true;
+		so.validate = validateDUIDIAID;
+		Object.keys(duids).forEach(function(duid_iaid) {
+			var desc = duids[duid_iaid].hostname || duids[duid_iaid].macaddr || duids[duid_iaid].ip6addrs[0] || '?';
+			so.value(duid_iaid, '%s (%s)'.format(duid_iaid, desc));
 		});
 
 		so = ss.option(form.Value, 'hostid',
-			_('IPv6-Suffix (hex)'),
-			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 16 chars).'));
+			_('IPv6 Token'),
+			_('The hexadecimal <abbr title="Address suffix"><a href="%s">IPv6 token</a></abbr> for this host (up to 16 chars, i.e. 64 bits).')
+			.format('https://datatracker.ietf.org/doc/html/draft-chown-6man-tokenised-ipv6-identifiers-02'));
 		so.datatype = 'and(rangelength(0,16),hexstring)';
 
 		so = ss.option(form.DynamicList, 'tag',
 			_('Tag'),
-			_('Assign new, freeform tags to this entry.'));
+			_('Additional tags for this host.'));
 
 		so = ss.option(form.DynamicList, 'match_tag',
 			_('Match Tag'),
