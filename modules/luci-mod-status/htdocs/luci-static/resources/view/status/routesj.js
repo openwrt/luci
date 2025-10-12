@@ -1,6 +1,7 @@
 'use strict';
 'require fs';
 'require rpc';
+'require tools.network as tn';
 'require ui';
 'require validation';
 'require view';
@@ -48,13 +49,13 @@ return view.extend({
 		]).then(([ufpcheck]) => {
 			return Promise.all([
 				callNetworkInterfaceDump(),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'neigh', 'show' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'route', 'show', 'table', 'all' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'rule', 'show' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'neigh', 'show' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'route', 'show', 'table', 'all' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'rule', 'show' ]), {}),
-				ufpcheck?.type === 'file' ? callUfpList() : null
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', '-j', 'neigh', 'show' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', '-j', 'route', 'show', 'table', 'all' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', '-j', 'rule', 'show' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', '-j', 'neigh', 'show' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', '-j', 'route', 'show', 'table', 'all' ]), {}),
+				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', '-j', 'rule', 'show' ]), {}),
+				ufpcheck?.type === 'file' ? callUfpList() : null,
 			]);
 		});
 	},
@@ -90,34 +91,44 @@ return view.extend({
 		return matching_iface;
 	},
 
+	parseJSON(string) {
+		try {
+			return JSON.parse(string);
+		} catch (e) {
+			return [];
+		}
+	},
+
 	parseNeighbs(nbs, macs, networks, v6) {
 		const res = [];
 
-		for (const line of nbs.trim().split(/\n/)) {
-			const [, addr = null, f = [], state = null] = line.match(/^([0-9a-f:.]+) (.+) (\S+) *$/);
-			const flags = f?.trim?.().split?.(/\s+/);
+		for (const n of this.parseJSON(nbs)) {
 			let vendor;
-
-			if (!addr || !state || addr.match(/^fe[89a-f][0-9a-f]:/))
+			if (n.dst.match(/^fe[89a-f][0-9a-f]:/))
 				continue;
 
-			for (let j = 0; j < flags.length; j += 2)
-				flags[flags[j]] = flags[j + 1];
-
-			if (!flags.lladdr)
+			if (n.state.find(f => {return f == 'FAILED'}))
 				continue;
-			
+
 			for (let mac in macs) {
-				if (flags.lladdr === mac)
+				if (n?.lladdr === mac)
 					vendor = macs[mac].vendor;
 	 		}
 
-			const net = this.getNetworkByDevice(networks, flags.dev, addr, v6 ? 128 : 32, v6);
+			const net = this.getNetworkByDevice(networks, n?.dev, n?.dst, v6 ? 128 : 32, v6);
 
 			res.push([
-				addr,
-				vendor ? flags.lladdr.toUpperCase() + ` (${vendor})` : flags.lladdr.toUpperCase(),
-				E('span', { 'class': 'ifacebadge' }, [ net ? net : '(%s)'.format(flags.dev) ]),
+				E('div', { 'data-tooltip': JSON.stringify(n) }, [
+					'#',
+					n?.nud ? `; ${_('NUD')}: ${n?.nud}` : '',
+					n?.proxy === null ? `; ${_('Proxy')}: ✅` : '',
+					n?.nomaster === null ? `;  ${_('No master')} : ✅` : '',
+					n?.vrf ? `; ${_('VRF')}: ${n?.vrf}` : '',
+				]),
+
+				n?.dst,
+				n?.lladdr?.toUpperCase() + (vendor ? ` (${vendor})` : ''),
+				E('span', { 'class': 'ifacebadge' }, [ net ? net : '(%s)'.format(n?.dev) ]),
 			]);
 		}
 
@@ -127,47 +138,70 @@ return view.extend({
 	parseRoutes(routes, macs, networks, v6) {
 		const res = [];
 
-		for (const line of routes.trim().split(/\n/)) {
-			const [, type = 'unicast', d, f = [] ] = line.match(/^(?:([a-z_]+|\d+) )?(default|[0-9a-f:.\/]+) (.+)$/);
-			const dest = d == 'default' ? (v6 ? '::/0' : '0.0.0.0/0') : d;
-			const flags = f?.trim?.().split?.(/\s+/);
-
-			if (!dest || type != 'unicast' || dest == 'fe80::/64' || dest == 'ff00::/8')
+		for (const rt of this.parseJSON(routes)) {
+			const dest = rt.dst == 'default' ? (v6 ? '::/0' : '0.0.0.0/0') : rt.dst;
+			if (dest == 'fe80::/64' || dest == 'ff00::/8')
 				continue;
 
-			for (let j = 0; j < flags.length; j += 2)
-				flags[flags[j]] = flags[j + 1];
-
 			const [addr, bits = (v6 ? 128 : 32)] = dest.split('/');
-			const net = this.getNetworkByDevice(networks, flags.dev, addr, bits, v6);
+			const net = this.getNetworkByDevice(networks, rt.dev, addr, bits, v6);
 
 			res.push([
-				E('span', { 'class': 'ifacebadge' }, [ net ? net : '(%s)'.format(flags.dev) ]),
+				E('span', { 'class': 'ifacebadge' }, [ net ? net : '(%s)'.format(rt.dev) ]),
 				dest,
-				flags.via || '-',
-				flags.src || flags.from || '-',
-				String(flags.metric || 0),
-				flags.table || 'main',
-				flags.proto,
+				rt?.gateway || '-',
+				rt?.src || rt?.from || '-',
+				String(rt?.metric || '-'),
+				rt?.table || 'main',
+				rt?.protocol,
 			]);
 		}
 
 		return res;
 	},
 
-	parseRules: rules => rules.trim().split('\n').map(l => {
-		const [, prio=null, rule=null] = l.match(/^(\d+):\s+(.+)$/) || [];
-		return [prio, rule];
-	}),
+	parseRules(rules) {
+		const r = [];
+		for (const rl of this.parseJSON(rules)) {
+			r.push([
+				E('div', { 'data-tooltip': JSON.stringify(rl) }, [
+					'#',
+					rl?.not === null ? `; ${_('Not')}: ✅` : '',
+					rl?.nop === null ? `; ${_('No-op')}: ✅` : '',
+					rl?.l3mdev === null ? `; ${_('L3Mdev')}: ✅` : '',
+					rl?.fwmark ? `; ${_('Fwmark')}:${rl?.fwmark}` : '',
+					rl?.from ? `; ${_('From')}:${rl?.from}` : '',
+					rl?.to ? `; ${_('To')}:${rl?.to}` : '',
+					rl?.tos ? `; ${_('ToS')}:${rl?.tos}` : '',
+					rl?.dsfield ? `; ${_('DSCP')}:${rl?.dsfield}` : '',
+					rl?.uidrange ? `; ${_('UID-range')}:${rl?.uidrange}` : '',
+					rl?.goto ? `; ${_('goto')}:${rl?.goto}` : '',
+					rl?.nat ? `; ${_('NAT')}:${rl?.nat}` : '',
+				]),
+
+				rl?.priority,
+				rl?.iif ? E('span', { 'class': 'ifacebadge' }, [ rl?.iif ]) : '-',
+				rl?.src ? (rl?.srclen ? rl?.src + '/' + rl?.srclen : rl?.src) : _('any'),
+				rl?.sport || '-',
+				rl?.action || '-',
+				tn.protocols.find(f => {return f.i == rl?.ipproto?.split?.('-')[1] })?.d || '-',
+				rl?.oif ? E('span', { 'class': 'ifacebadge' }, [ rl?.oif ]) : '-',
+				rl?.dst ? (rl?.dstlen ? rl?.dst + '/' + rl?.dstlen : rl?.dst) : _('any'),
+				rl?.dport || '-',
+				rl?.table || '-',
+			]);
+		}
+		return r;
+	},
 
 	render([
 		networks,
-		{ stdout: ip4neigh = '' } = {},
-		{ stdout: ip4route = '' } = {},
-		{ stdout: ip4rule = '' } = {},
-		{ stdout: ip6neigh = '' } = {},
-		{ stdout: ip6route = '' } = {},
-		{ stdout: ip6rule = '' } = {},
+		{ stdout: ip4neighbs = '' } = {},
+		{ stdout: ip4routes = '' } = {},
+		{ stdout: ip4rules = '' } = {},
+		{ stdout: ip6neighbs = '' } = {},
+		{ stdout: ip6routes = '' } = {},
+		{ stdout: ip6rules = '' } = {},
 		macdata,
 	]) {
 
@@ -181,6 +215,7 @@ return view.extend({
 
 		const neigh4tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, [ _('Entry') ]),
 				E('th', { 'class': 'th' }, [ _('IP address') ]),
 				E('th', { 'class': 'th' }, [ _('MAC address') ]),
 				E('th', { 'class': 'th' }, [ _('Interface') ]),
@@ -201,13 +236,23 @@ return view.extend({
 
 		const rule4tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, [ _('Priority') ]),
 				E('th', { 'class': 'th' }, [ _('Rule') ]),
+				E('th', { 'class': 'th' }, [ _('Priority') ]),
+				E('th', { 'class': 'th' }, [ _('Ingress') ]),
+				E('th', { 'class': 'th' }, [ _('Source') ]),
+				E('th', { 'class': 'th' }, [ _('Src Port') ]),
+				E('th', { 'class': 'th' }, [ _('Action') ]),
+				E('th', { 'class': 'th' }, [ _('IP Protocol') ]),
+				E('th', { 'class': 'th' }, [ _('Egress') ]),
+				E('th', { 'class': 'th' }, [ _('Destination') ]),
+				E('th', { 'class': 'th' }, [ _('Dest Port') ]),
+				E('th', { 'class': 'th' }, [ _('Table') ]),
 			])
 		]);
 
 		const neigh6tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, [ _('Entry') ]),
 				E('th', { 'class': 'th' }, [ _('IP address') ]),
 				E('th', { 'class': 'th' }, [ _('MAC address') ]),
 				E('th', { 'class': 'th' }, [ _('Interface') ]),
@@ -228,27 +273,36 @@ return view.extend({
 
 		const rule6tbl = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, [ _('Priority') ]),
 				E('th', { 'class': 'th' }, [ _('Rule') ]),
+				E('th', { 'class': 'th' }, [ _('Priority') ]),
+				E('th', { 'class': 'th' }, [ _('Ingress') ]),
+				E('th', { 'class': 'th' }, [ _('Source') ]),
+				E('th', { 'class': 'th' }, [ _('Src Port') ]),
+				E('th', { 'class': 'th' }, [ _('Action') ]),
+				E('th', { 'class': 'th' }, [ _('IP Protocol') ]),
+				E('th', { 'class': 'th' }, [ _('Egress') ]),
+				E('th', { 'class': 'th' }, [ _('Destination') ]),
+				E('th', { 'class': 'th' }, [ _('Dest Port') ]),
+				E('th', { 'class': 'th' }, [ _('Table') ]),
 			])
 		]);
 
-		cbi_update_table(neigh4tbl, this.parseNeighbs(ip4neigh, macdata, networks, false),
+		cbi_update_table(neigh4tbl, this.parseNeighbs(ip4neighbs, macdata, networks, false),
 			E('em', _('No entries available'))
 		);
-		cbi_update_table(route4tbl, this.parseRoutes(ip4route, macdata, networks, false),
+		cbi_update_table(route4tbl, this.parseRoutes(ip4routes, macdata, networks, false),
 			E('em', _('No entries available'))
 		);
-		cbi_update_table(rule4tbl, this.parseRules(ip4rule),
+		cbi_update_table(rule4tbl, this.parseRules(ip4rules),
 			E('em', _('No entries available'))
 		);
-		cbi_update_table(neigh6tbl, this.parseNeighbs(ip6neigh, macdata, networks, true),
+		cbi_update_table(neigh6tbl, this.parseNeighbs(ip6neighbs, macdata, networks, true),
 			E('em', _('No entries available'))
 		);
-		cbi_update_table(route6tbl, this.parseRoutes(ip6route, macdata, networks, true),
+		cbi_update_table(route6tbl, this.parseRoutes(ip6routes, macdata, networks, true),
 			E('em', _('No entries available'))
 		);
-		cbi_update_table(rule6tbl, this.parseRules(ip6rule),
+		cbi_update_table(rule6tbl, this.parseRules(ip6rules),
 			E('em', _('No entries available'))
 		);
 
