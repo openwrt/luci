@@ -442,8 +442,8 @@ static int run_daemon(void)
 	struct dirent *e;
 
 	struct stat s;
-	char *ipc;
-	char *ipc_command;
+	char *ipc = NULL;
+	char *ipc_command = NULL;
 	if(! stat("/proc/net/nf_conntrack", &s))
 		ipc = "/proc/net/nf_conntrack";
 	else if(! stat("/proc/net/ip_conntrack", &s))
@@ -541,8 +541,8 @@ static int run_daemon(void)
 			closedir(dir);
 		}
 
-		if (((ipc != '\0') && ((info = fopen(ipc, "r")) != NULL)) ||
-			((ipc_command != '\0') && ((info=popen(ipc_command, "r")) != NULL)))
+		if ((ipc && ((info = fopen(ipc, "r")) != NULL)) ||
+			(ipc_command && ((info = popen(ipc_command, "r")) != NULL)))
 		{
 			udp   = 0;
 			tcp   = 0;
@@ -570,7 +570,10 @@ static int run_daemon(void)
 
 			update_cnstat(udp, tcp, other);
 
-			fclose(info);
+			if (ipc)
+				fclose(info);
+			else
+				pclose(info);
 		}
 
 		if ((info = fopen("/proc/loadavg", "r")) != NULL)
@@ -582,10 +585,7 @@ static int run_daemon(void)
 							  (uint16_t)(lf15 * 100));
 			}
 
-			if (ipc != '\0')
-				fclose(info);
-			if (ipc_command != '\0')
-				pclose(info);
+			fclose(info);
 		}
 
 		sleep(STEP_TIME);
