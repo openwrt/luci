@@ -150,7 +150,7 @@ return view.extend({
 				E('span', { 'class': 'ifacebadge' }, [ net ? net : '(%s)'.format(rt.dev) ]),
 				dest,
 				rt?.gateway || '-',
-				rt?.src || rt?.from || '-',
+				rt?.prefsrc || rt?.from || '-',
 				String(rt?.metric || '-'),
 				rt?.table || 'main',
 				rt?.protocol,
