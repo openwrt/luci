@@ -118,14 +118,14 @@ function renderKeyItem(pubkey) {
 		click: isReadonlyView ? null : removeKey,
 		'data-key': pubkey.src
 	}, [
-		E('strong', [ pubkey.comment || _('Unnamed key') ]), E('br'),
-		E('small', [
+		E('strong', {}, [ pubkey.comment || _('Unnamed key') ]), E('br'),
+		E('small', {}, [
 			'%s, %s'.format(pubkey.type, pubkey.curve || _('%d Bit').format(pubkey.bits)),
-			pubkey.options ? E([], [
+			pubkey.options ? E([], {}, [
 				' / ', _('Options:'), ' ',
-				E('code', Object.keys(pubkey.options).sort().join(', '))
+				E('code', {}, [Object.keys(pubkey.options).sort().join(', ')])
 			]) : '',
-			E('br'), E('code', pubkey.fprint)
+			E('br'), E('code', {}, [pubkey.fprint])
 		])
 	]);
 }
