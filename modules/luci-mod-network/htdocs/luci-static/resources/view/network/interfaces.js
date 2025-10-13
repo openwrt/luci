@@ -269,7 +269,8 @@ return view.extend({
 			    stat = document.querySelector('[id="%s-ifc-status"]'.format(ifc.getName())),
 			    resolveZone = render_ifacebox_status(box, ifc),
 			    disabled = ifc ? !ifc.isUp() : true,
-			    dynamic = ifc ? ifc.isDynamic() : false;
+			    dynamic = ifc ? ifc.isDynamic() : false,
+			    pending = ifc ? ifc.isPending() : false;
 
 			if (dsc.hasAttribute('reconnect')) {
 				dom.content(dsc, E('em', _('Interface is starting...')));
@@ -305,8 +306,30 @@ return view.extend({
 				]);
 			}
 
-			btn1.disabled = isReadonlyView || btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic;
-			btn2.disabled = isReadonlyView || btn1.classList.contains('spinning') || btn2.classList.contains('spinning') || dynamic || disabled;
+			if (isReadonlyView === true) {
+				btn1.disabled = true;
+				btn2.disabled = true;
+			}
+			else if (btn1.classList.contains('spinning') || btn2.classList.contains('spinning')) {
+				btn1.disabled = true;
+				btn2.disabled = true;
+			}
+			else if (dynamic === true) {
+				btn1.disabled = true;
+				btn2.disabled = true;
+			}
+			else if (pending === true) {
+				btn1.disabled = true;
+				btn2.disabled = false;
+			}
+			else if (disabled === true) {
+				btn1.disabled = false;
+				btn2.disabled = true;
+			}
+			else {
+				btn1.disabled = false;
+				btn2.disabled = false;
+			}
 		}
 
 		document.querySelectorAll('.port-status-device[data-device]').forEach(function(node) {
@@ -482,20 +505,19 @@ return view.extend({
 			var tdEl = this.super('renderRowActions', [ section_id, _('Edit') ]),
 			    net = this.networks.filter(function(n) { return n.getName() == section_id })[0],
 			    disabled = net ? !net.isUp() : true,
-			    dynamic = net ? net.isDynamic() : false;
+			    dynamic = net ? net.isDynamic() : false,
+			    pending = net ? net.isPending() : false;
 
 			dom.content(tdEl.lastChild, [
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral reconnect',
 					'click': iface_updown.bind(this, true, section_id),
 					'title': _('Reconnect this interface'),
-					'disabled': dynamic ? 'disabled' : null
 				}, _('Restart')),
 				E('button', {
 					'class': 'cbi-button cbi-button-neutral down',
 					'click': iface_updown.bind(this, false, section_id),
 					'title': _('Shutdown this interface'),
-					'disabled': (dynamic || disabled) ? 'disabled' : null
 				}, _('Stop')),
 				tdEl.lastChild.firstChild,
 				tdEl.lastChild.lastChild
@@ -503,13 +525,33 @@ return view.extend({
 
 			if (!dynamic && net && !uci.get('network', net.getName())) {
 				tdEl.lastChild.childNodes[0].disabled = true;
+				tdEl.lastChild.childNodes[1].disabled = true;
 				tdEl.lastChild.childNodes[2].disabled = true;
 				tdEl.lastChild.childNodes[3].disabled = true;
 			}
-
-			if (dynamic) {
-				//disable the 'Edit' button on dynamic interfaces
+			else if(dynamic === true) {
+				tdEl.lastChild.childNodes[0].disabled = true;
+				tdEl.lastChild.childNodes[1].disabled = true;
 				tdEl.lastChild.childNodes[2].disabled = true;
+				tdEl.lastChild.childNodes[3].disabled = true;
+			}
+			else if(pending === true) {
+				tdEl.lastChild.childNodes[0].disabled = true;
+				tdEl.lastChild.childNodes[1].disabled = false;
+				tdEl.lastChild.childNodes[2].disabled = false;
+				tdEl.lastChild.childNodes[3].disabled = false;
+			}
+			else if (disabled === true){
+				tdEl.lastChild.childNodes[0].disabled = false;
+				tdEl.lastChild.childNodes[1].disabled = true;
+				tdEl.lastChild.childNodes[2].disabled = false;
+				tdEl.lastChild.childNodes[3].disabled = false;
+			}
+			else {
+				tdEl.lastChild.childNodes[0].disabled = false;
+				tdEl.lastChild.childNodes[1].disabled = false;
+				tdEl.lastChild.childNodes[2].disabled = false;
+				tdEl.lastChild.childNodes[3].disabled = false;
 			}
 
 			return tdEl;
