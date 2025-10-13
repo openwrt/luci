@@ -19,7 +19,7 @@ const safeList = [
 ];
 
 function isFileInSafeList(file){
-	for (name of safeList) {
+	for (let name of safeList) {
 		if (file === name)
 			return true;
 	}
@@ -27,7 +27,7 @@ function isFileInSafeList(file){
 }
 
 function normalizeKey(s) {
-	return s.replace(/\s+/g, ' ').trim();
+	return s?.replace(/\s+/g, ' ')?.trim();
 }
 
 function determineKeyEnv() {
@@ -51,10 +51,16 @@ function listKeyFiles() {
 	);
 }
 
+function safeText(str) {
+	return String(str).replace(/[&<>"']/g, s => ({
+		'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+	}[s]));
+}
+
 function renderKeyItem(pubkey) {
 	const safeFile = isFileInSafeList(pubkey?.filename);
 	const lines = pubkey?.key?.trim()?.split('\n').map(line =>
-		[ E('br'), E('code', line) ]
+		[ E('br'), E('code', {}, [ safeText(line) ]) ]
 	).flat();
 	return E('div', {
 		class: 'item',
@@ -62,7 +68,7 @@ function renderKeyItem(pubkey) {
 		'data-file': pubkey?.filename,
 		'data-key': normalizeKey(pubkey?.key)
 	}, [
-		E('strong', [ pubkey?.filename || _('Unnamed key') ]),
+		E('strong', {}, [ pubkey?.filename || _('Unnamed key') ]),
 		...lines
 	]);
 }
