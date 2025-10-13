@@ -2484,6 +2484,8 @@
             
                 <li data-name="LuCI.network.Protocol#isInstalled"><a href="LuCI.network.Protocol.html#isInstalled">isInstalled</a></li>
             
+                <li data-name="LuCI.network.Protocol#isPending"><a href="LuCI.network.Protocol.html#isPending">isPending</a></li>
+            
                 <li data-name="LuCI.network.Protocol#isUp"><a href="LuCI.network.Protocol.html#isUp">isUp</a></li>
             
                 <li data-name="LuCI.network.Protocol#isVirtual"><a href="LuCI.network.Protocol.html#isVirtual">isVirtual</a></li>
@@ -3950,7 +3952,7 @@ subclasses which describe logical UCI networks defined by <code>config interface
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2633">line 2633</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2643">line 2643</a>
         </div>
         
     </div>
@@ -4111,7 +4113,7 @@ interface or if the logical interface is virtual.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2799">line 2799</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2809">line 2809</a>
         </div>
         
     </div>
@@ -4272,7 +4274,7 @@ device or <code>false</code> if not.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2846">line 2846</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2856">line 2856</a>
         </div>
         
     </div>
@@ -4382,7 +4384,7 @@ the interface removal will be aborted.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2660">line 2660</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2670">line 2670</a>
         </div>
         
     </div>
@@ -4695,7 +4697,7 @@ not found.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2687">line 2687</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2697">line 2697</a>
         </div>
         
     </div>
@@ -4797,7 +4799,7 @@ expected Linux network device according to the configuration.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2748">line 2748</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2758">line 2758</a>
         </div>
         
     </div>
@@ -6348,7 +6350,7 @@ follows the order of the addresses in <code>ubus</code> runtime information.</td
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2720">line 2720</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2730">line 2730</a>
         </div>
         
     </div>
@@ -6450,7 +6452,7 @@ network device currently associated with the logical interface.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2733">line 2733</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2743">line 2743</a>
         </div>
         
     </div>
@@ -7379,7 +7381,7 @@ handler didn't request a zone.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2574">line 2574</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2584">line 2584</a>
         </div>
         
     </div>
@@ -7840,7 +7842,7 @@ or not (<code>false</code>).</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2594">line 2594</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2604">line 2604</a>
         </div>
         
     </div>
@@ -8147,6 +8149,106 @@ returns <code>true</code>.</p>
             
 <dt>
     <div class="nameContainer">
+        <h4 class="name" id="isPending">
+            
+            isPending<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2569">line 2569</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Checks whether this logical interface is pending.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last">returns <code>true</code> when the interface is pending or <code>false</code> when it is not.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
         <h4 class="name" id="isUp">
             
             isUp<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
@@ -8154,7 +8256,7 @@ returns <code>true</code>.</p>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2616">line 2616</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line2626">line 2626</a>
         </div>
         
     </div>
@@ -8515,7 +8617,7 @@ configuration.</p></td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Oct 07 2025 22:56:21 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Oct 13 2025 05:59:35 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
