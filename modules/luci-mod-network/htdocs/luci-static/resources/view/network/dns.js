@@ -401,7 +401,6 @@ return view.extend({
 		s.tab('logging', _('Log'));
 		s.tab('files', _('Resolv &amp; Hosts Files'));
 		s.tab('ipsets', _('IP Sets'));
-		s.tab('relay', _('Relay'));
 		s.tab('pxe_tftp', _('PXE/TFTP'));
 
 		// Begin general
@@ -1060,73 +1059,6 @@ return view.extend({
 		so.value('ip6', _('IPv6'));
 		// End ipsets
 
-		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
-			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
-			+ '<br />' + _('Note: you may also need a DHCP Proxy (currently unavailable) when specifying a non-standard Relay To port(<code>addr#port</code>).')
-			+ '<br />' + _('You may add multiple unique Relay To on the same Listen addr.'));
-
-		ss = o.subsection;
-
-		ss.addremove = true;
-		ss.anonymous = true;
-		ss.sortable  = true;
-		ss.rowcolors = true;
-		ss.nodescriptions = true;
-
-		so = ss.option(form.Value, 'local_addr', _('Relay from'));
-		so.rmempty = false;
-		so.datatype = 'ipaddr';
-
-		for (var family = 4; family <= 6; family += 2) {
-			for (var i = 0; i < networks.length; i++) {
-				if (networks[i].getName() != 'loopback') {
-					var addrs = (family == 6) ? networks[i].getIP6Addrs() : networks[i].getIPAddrs();
-					for (var j = 0; j < addrs.length; j++) {
-						var addr = addrs[j].split('/')[0];
-						so.value(addr, E([], [
-							addr, ' (',
-							widgets.NetworkSelect.prototype.renderIfaceBadge(networks[i]),
-							')'
-						]));
-					}
-				}
-			}
-		}
-
-		so = ss.option(form.Value, 'server_addr', _('Relay to address'));
-		so.rmempty = false;
-		so.optional = false;
-		so.placeholder = '192.168.10.1#535';
-
-		so.validate = function(section, value) {
-			var m = this.section.formvalue(section, 'local_addr'),
-			    n = this.section.formvalue(section, 'server_addr'),
-			    p;
-
-			if (!m || !n) {
-				return _('Both "Relay from" and "Relay to address" must be specified.');
-			}
-			else {
-				p = n.split('#');
-				if (p.length > 1 && !/^[0-9]+$/.test(p[1]))
-					return _('Expected port number.');
-				else
-					n = p[0];
-
-				if ((validation.parseIPv6(m) && validation.parseIPv6(n)) ||
-					validation.parseIPv4(m) && validation.parseIPv4(n))
-					return true;
-				else
-					return _('Address families of "Relay from" and "Relay to address" must match.')
-			}
-			return true;
-		};
-
-
-		so = ss.option(widgets.NetworkSelect, 'interface', _('Only accept replies via'));
-		so.optional = true;
-		so.rmempty = false;
-		so.placeholder = 'lan';
 
 		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
 			_('Enable TFTP server'),
