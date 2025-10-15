@@ -348,8 +348,7 @@ return view.extend({
 			return template.replace(/\{(\w+)\}/g, (match, key) => values[key] || match);
 		};
 
-		m = new form.Map('dhcp', _('DHCP and DNS'),
-			_('Dnsmasq is a lightweight <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> server and <abbr title="Domain Name System">DNS</abbr> forwarder.'));
+		m = new form.Map('dhcp', _('DHCP'));
 
 		s = m.section(form.TypedSection, 'dnsmasq');
 		s.anonymous = false;
