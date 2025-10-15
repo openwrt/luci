@@ -3,6 +3,12 @@
 'require fs';
 'require rpc';
 
+var callGetUnixtime = rpc.declare({
+	object: 'luci',
+	method: 'getUnixtime',
+	expect: { result: 0 }
+});
+
 var callLuciVersion = rpc.declare({
 	object: 'luci',
 	method: 'getVersion'
@@ -25,30 +31,25 @@ return baseclass.extend({
 		return Promise.all([
 			L.resolveDefault(callSystemBoard(), {}),
 			L.resolveDefault(callSystemInfo(), {}),
-			L.resolveDefault(callLuciVersion(), { revision: _('unknown version'), branch: 'LuCI' })
+			L.resolveDefault(callLuciVersion(), { revision: _('unknown version'), branch: 'LuCI' }),
+			L.resolveDefault(callGetUnixtime(), {})
 		]);
 	},
 
 	render: function(data) {
 		var boardinfo   = data[0],
 		    systeminfo  = data[1],
-		    luciversion = data[2];
+		    luciversion = data[2],
+		    unixtime    = data[3];
 
 		luciversion = luciversion.branch + ' ' + luciversion.revision;
 
 		var datestr = null;
 
-		if (systeminfo.localtime) {
-			var date = new Date(systeminfo.localtime * 1000);
+		if (unixtime) {
+			var date = new Date(unixtime * 1000);
 
-			datestr = '%04d-%02d-%02d %02d:%02d:%02d'.format(
-				date.getUTCFullYear(),
-				date.getUTCMonth() + 1,
-				date.getUTCDate(),
-				date.getUTCHours(),
-				date.getUTCMinutes(),
-				date.getUTCSeconds()
-			);
+			datestr = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'full' }).format(date);
 		}
 
 		var fields = [
