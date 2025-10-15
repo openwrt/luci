@@ -1018,6 +1018,48 @@ return view.extend({
 		o.placeholder = '/etc/dnsmasq.hosts';
 		// End files
 
+		// Begin ipsets
+		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
+			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.') + '<br />' +
+			_('The netfilter components below are only regarded when running fw4.'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable  = true;
+		ss.rowcolors = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit IP set');
+
+		so = ss.option(form.DynamicList, 'name', _('Name of the set'));
+		uci.sections('firewall', 'ipset', function(s) {
+			if (typeof(s.name) == 'string')
+				so.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
+		});
+		so.rmempty = false;
+		so.editable = false;
+		so.datatype = 'string';
+
+		so = ss.option(form.DynamicList, 'domain', _('FQDN'));
+		so.rmempty = false;
+		so.editable = false;
+		so.datatype = 'hostname';
+
+		so = ss.option(form.Value, 'table', _('Netfilter table name'), _('Defaults to fw4.'));
+		so.editable = false;
+		so.placeholder = 'fw4';
+		so.rmempty = true;
+
+		so = ss.option(form.ListValue, 'table_family', _('Table IP family'), _('Defaults to IPv4+6.') + ' ' + _('Can be hinted by adding 4 or 6 to the name.') + '<br />' +
+			_('Adding an IPv6 to an IPv4 set and vice-versa silently fails.'));
+		so.editable = false;
+		so.rmempty = true;
+		so.value('inet', _('IPv4+6'));
+		so.value('ip', _('IPv4'));
+		so.value('ip6', _('IPv6'));
+		// End ipsets
+
 		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
 			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
 			+ '<br />' + _('Note: you may also need a DHCP Proxy (currently unavailable) when specifying a non-standard Relay To port(<code>addr#port</code>).')
@@ -1215,45 +1257,6 @@ return view.extend({
 		so.value('39', _('40: LoongArch 64-bit UEFI boot from HTTP'));
 		so.value('41', _('41: ARM rpiboot'));
 
-		o = s.taboption('ipsets', form.SectionValue, '__ipsets__', form.GridSection, 'ipset', null,
-			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.') + '<br />' +
-			_('The netfilter components below are only regarded when running fw4.'));
-
-		ss = o.subsection;
-
-		ss.addremove = true;
-		ss.anonymous = true;
-		ss.sortable  = true;
-		ss.rowcolors = true;
-		ss.nodescriptions = true;
-		ss.modaltitle = _('Edit IP set');
-
-		so = ss.option(form.DynamicList, 'name', _('Name of the set'));
-		uci.sections('firewall', 'ipset', function(s) {
-			if (typeof(s.name) == 'string')
-				so.value(s.name, s.comment ? '%s (%s)'.format(s.name, s.comment) : s.name);
-		});
-		so.rmempty = false;
-		so.editable = false;
-		so.datatype = 'string';
-
-		so = ss.option(form.DynamicList, 'domain', _('FQDN'));
-		so.rmempty = false;
-		so.editable = false;
-		so.datatype = 'hostname';
-
-		so = ss.option(form.Value, 'table', _('Netfilter table name'), _('Defaults to fw4.'));
-		so.editable = false;
-		so.placeholder = 'fw4';
-		so.rmempty = true;
-
-		so = ss.option(form.ListValue, 'table_family', _('Table IP family'), _('Defaults to IPv4+6.') + ' ' + _('Can be hinted by adding 4 or 6 to the name.') + '<br />' +
-			_('Adding an IPv6 to an IPv4 set and vice-versa silently fails.'));
-		so.editable = false;
-		so.rmempty = true;
-		so.value('inet', _('IPv4+6'));
-		so.value('ip', _('IPv4'));
-		so.value('ip6', _('IPv6'));
 
 		return m.render();
 	}
