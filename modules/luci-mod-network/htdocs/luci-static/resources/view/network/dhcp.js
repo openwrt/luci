@@ -673,6 +673,7 @@ return view.extend({
 			o = s.taboption('leases', CBILease6Status, '__status6__');
 		// End leases
 
+		// Begin relay
 		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
 			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
 			+ '<br />' + _('Note: you may also need a DHCP Proxy (currently unavailable) when specifying a non-standard Relay To port(<code>addr#port</code>).')
@@ -710,7 +711,6 @@ return view.extend({
 		so.rmempty = false;
 		so.optional = false;
 		so.placeholder = '192.168.10.1#535';
-
 		so.validate = function(section, value) {
 			var m = this.section.formvalue(section, 'local_addr'),
 			    n = this.section.formvalue(section, 'server_addr'),
@@ -735,11 +735,11 @@ return view.extend({
 			return true;
 		};
 
-
 		so = ss.option(widgets.NetworkSelect, 'interface', _('Only accept replies via'));
 		so.optional = true;
 		so.rmempty = false;
 		so.placeholder = 'lan';
+		// End relay
 
 		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
 			_('Enable TFTP server'),
