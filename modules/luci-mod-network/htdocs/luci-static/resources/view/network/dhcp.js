@@ -419,6 +419,28 @@ return view.extend({
 		o.optional = true;
 		// End general
 
+		// Begin devices
+		o = s.taboption('devices', form.Flag, 'nonwildcard',
+			_('Non-wildcard'),
+			_('Bind only to configured interface addresses, instead of the wildcard address.'));
+		o.default = o.enabled;
+		o.optional = false;
+		o.rmempty = true;
+
+		o = s.taboption('devices', widgets.NetworkSelect, 'interface',
+			_('Listen interfaces'),
+			_('Listen only on the specified interfaces, and loopback if not excluded explicitly.'));
+		o.multiple = true;
+		o.nocreate = true;
+
+		o = s.taboption('devices', widgets.NetworkSelect, 'notinterface',
+			_('Exclude interfaces'),
+			_('Do not listen on the specified interfaces.'));
+		o.loopback = true;
+		o.multiple = true;
+		o.nocreate = true;
+		// End devices
+
 		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
 			_('Never forward DNS queries which lack dots or domain parts.') + '<br />' +
@@ -494,26 +516,6 @@ return view.extend({
 			_('Accept DNS queries only from hosts whose address is on a local subnet.'));
 		o.optional = false;
 		o.rmempty = false;
-
-		o = s.taboption('devices', form.Flag, 'nonwildcard',
-			_('Non-wildcard'),
-			_('Bind only to configured interface addresses, instead of the wildcard address.'));
-		o.default = o.enabled;
-		o.optional = false;
-		o.rmempty = true;
-
-		o = s.taboption('devices', widgets.NetworkSelect, 'interface',
-			_('Listen interfaces'),
-			_('Listen only on the specified interfaces, and loopback if not excluded explicitly.'));
-		o.multiple = true;
-		o.nocreate = true;
-
-		o = s.taboption('devices', widgets.NetworkSelect, 'notinterface',
-			_('Exclude interfaces'),
-			_('Do not listen on the specified interfaces.'));
-		o.loopback = true;
-		o.multiple = true;
-		o.nocreate = true;
 
 		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
 			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
@@ -730,36 +732,6 @@ return view.extend({
 		);
 		o.optional = true;
 		o.placeholder = '64.94.110.11';
-
-		o = s.taboption('devices', form.Value, 'port',
-			_('DNS server port'),
-			_('Listening port for inbound DNS queries.'));
-		o.optional = true;
-		o.datatype = 'port';
-		o.placeholder = 53;
-
-		o = s.taboption('devices', form.Value, 'queryport',
-			_('DNS query port'),
-			_('Fixed source port for outbound DNS queries.'));
-		o.optional = true;
-		o.datatype = 'port';
-		o.placeholder = _('any');
-
-		o = s.taboption('devices', form.Value, 'minport',
-			_('Minimum source port #'),
-			_('Min valid value %s.').format('<code>1024</code>') + ' ' + _('Useful for systems behind firewalls.'));
-		o.optional = true;
-		o.datatype = 'port';
-		o.placeholder = 1024;
-		o.depends('queryport', '');
-
-		o = s.taboption('devices', form.Value, 'maxport',
-			_('Maximum source port #'),
-			_('Max valid value %s.').format('<code>65535</code>') + ' ' + _('Useful for systems behind firewalls.'));
-		o.optional = true;
-		o.datatype = 'port';
-		o.placeholder = 50000;
-		o.depends('queryport', '');
 
 		o = s.taboption('limits', form.Value, 'dhcpleasemax',
 			_('Max. DHCP leases'),
