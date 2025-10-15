@@ -158,65 +158,6 @@ function validateHostname(sid, s) {
 	return true;
 }
 
-function validateAddressList(sid, s) {
-	if (s == null || s == '')
-		return true;
-
-	var m = s.match(/^\/(.+)\/$/),
-	    names = m ? m[1].split(/\//) : [ s ];
-
-	for (var i = 0; i < names.length; i++) {
-		var res = validateHostname(sid, names[i]);
-
-		if (res !== true)
-			return res;
-	}
-
-	return true;
-}
-
-function validateServerSpec(sid, s) {
-	if (s == null || s == '')
-		return true;
-
-	var m = s.match(/^(\/.*\/)?(.*)$/);
-	if (!m)
-		return _('Expecting: %s').format(_('valid hostname'));
-
-	if (m[1] != '//' && m[1] != '/#/') {
-		var res = validateAddressList(sid, m[1]);
-		if (res !== true)
-			return res;
-	}
-
-	if (m[2] == '' || m[2] == '#')
-		return true;
-
-	// ipaddr%scopeid#srvport@source@interface#srcport
-
-	m = m[2].match(/^([0-9a-f:.]+)(?:%[^#@]+)?(?:#(\d+))?(?:@([0-9a-f:.]+)(?:@[^#]+)?(?:#(\d+))?)?$/);
-
-	if (!m)
-		return _('Expecting: %s').format(_('valid IP address'));
-
-	if (validation.parseIPv4(m[1])) {
-		if (m[3] != null && !validation.parseIPv4(m[3]))
-			return _('Expecting: %s').format(_('valid IPv4 address'));
-	}
-	else if (validation.parseIPv6(m[1])) {
-		if (m[3] != null && !validation.parseIPv6(m[3]))
-			return _('Expecting: %s').format(_('valid IPv6 address'));
-	}
-	else {
-		return _('Expecting: %s').format(_('valid IP address'));
-	}
-
-	if ((m[2] != null && +m[2] > 65535) || (m[4] != null && +m[4] > 65535))
-		return _('Expecting: %s').format(_('valid port value'));
-
-	return true;
-}
-
 function expandAndFormatMAC(macs) {
 	let result = [];
 
@@ -296,51 +237,8 @@ return view.extend({
 		    m, s, o, ss, so;
 
 		let noi18nstrings = {
-			etc_hosts: '<code>/etc/hosts</code>',
 			etc_ethers: '<code>/etc/ethers</code>',
-			localhost_v6: '<code>::1</code>',
-			loopback_slash_8_v4: '<code>127.0.0.0/8</code>',
-			not_found: '<code>Not found</code>',
-			nxdomain: '<code>NXDOMAIN</code>',
-			rfc_1918_link: '<a href="https://www.rfc-editor.org/rfc/rfc1918">RFC1918</a>',
-			rfc_4193_link: '<a href="https://www.rfc-editor.org/rfc/rfc4193">RFC4193</a>',
-			rfc_4291_link: '<a href="https://www.rfc-editor.org/rfc/rfc4291">RFC4291</a>',
-			rfc_6303_link: '<a href="https://www.rfc-editor.org/rfc/rfc6303">RFC6303</a>',
-			reverse_arpa: '<code>*.IN-ADDR.ARPA,*.IP6.ARPA</code>',
-			servers_file_entry01: '<code>server=1.2.3.4</code>',
-			servers_file_entry02: '<code>server=/domain/1.2.3.4</code>',
-
 		};
-
-		const recordtypes = [
-			'ANY',
-			'A',
-			'AAAA',
-			'ALIAS',
-			'CAA',
-			'CERT',
-			'CNAME',
-			'DS',
-			'HINFO',
-			'HIP',
-			'HTTPS',
-			'KEY',
-			'LOC',
-			'MX',
-			'NAPTR',
-			'NS',
-			'OPENPGPKEY',
-			'PTR',
-			'RP',
-			'SIG',
-			'SOA',
-			'SRV',
-			'SSHFP',
-			'SVCB',
-			'TLSA',
-			'TXT',
-			'URI',
-		]
 
 		function customi18n(template, values) {
 			if (!values)

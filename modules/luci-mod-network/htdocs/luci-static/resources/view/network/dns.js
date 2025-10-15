@@ -10,138 +10,13 @@
 'require tools.widgets as widgets';
 'require tools.dnsrecordhandlers as drh';
 
-var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
-var callUfpList;
+var callHostHints;
 
 callHostHints = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getHostHints',
 	expect: { '': {} }
 });
-
-callDUIDHints = rpc.declare({
-	object: 'luci-rpc',
-	method: 'getDUIDHints',
-	expect: { '': {} }
-});
-
-callDHCPLeases = rpc.declare({
-	object: 'luci-rpc',
-	method: 'getDHCPLeases',
-	expect: { '': {} }
-});
-
-callUfpList = rpc.declare({
-	object: 'fingerprint',
-	method: 'fingerprint',
-	expect: { '': {} }
-});
-
-CBILeaseStatus = form.DummyValue.extend({
-	renderWidget: function(section_id, option_id, cfgvalue) {
-		return E([
-			E('h4', _('Active DHCP Leases')),
-			E('table', { 'id': 'lease_status_table', 'class': 'table' }, [
-				E('tr', { 'class': 'tr table-titles' }, [
-					E('th', { 'class': 'th' }, _('Hostname')),
-					E('th', { 'class': 'th' }, _('IPv4 address')),
-					E('th', { 'class': 'th' }, _('MAC address')),
-					E('th', { 'class': 'th' }, _('Lease time remaining'))
-				]),
-				E('tr', { 'class': 'tr placeholder' }, [
-					E('td', { 'class': 'td' }, E('em', _('Collecting data...')))
-				])
-			])
-		]);
-	}
-});
-
-CBILease6Status = form.DummyValue.extend({
-	renderWidget: function(section_id, option_id, cfgvalue) {
-		return E([
-			E('h4', _('Active DHCPv6 Leases')),
-			E('table', { 'id': 'lease6_status_table', 'class': 'table' }, [
-				E('tr', { 'class': 'tr table-titles' }, [
-					E('th', { 'class': 'th' }, _('Hostname')),
-					E('th', { 'class': 'th' }, _('IPv6 address')),
-					E('th', { 'class': 'th' }, _('DUID')),
-					E('th', { 'class': 'th' }, _('IAID')),
-					E('th', { 'class': 'th' }, _('Lease time remaining'))
-				]),
-				E('tr', { 'class': 'tr placeholder' }, [
-					E('td', { 'class': 'td' }, E('em', _('Collecting data...')))
-				])
-			])
-		]);
-	}
-});
-
-function calculateNetwork(addr, mask) {
-	addr = validation.parseIPv4(String(addr));
-
-	if (!isNaN(mask))
-		mask = validation.parseIPv4(network.prefixToMask(+mask));
-	else
-		mask = validation.parseIPv4(String(mask));
-
-	if (addr == null || mask == null)
-		return null;
-
-	return [
-		[
-			addr[0] & (mask[0] >>> 0 & 255),
-			addr[1] & (mask[1] >>> 0 & 255),
-			addr[2] & (mask[2] >>> 0 & 255),
-			addr[3] & (mask[3] >>> 0 & 255)
-		].join('.'),
-		mask.join('.')
-	];
-}
-
-function generateDnsmasqInstanceEntry(data) {
-	const nameValueMap = new Map(Object.entries(data));
-	let formatString = nameValueMap.get('.index') + ' (' +  _('Name') + (nameValueMap.get('.anonymous') ? ': dnsmasq[' + nameValueMap.get('.index') + ']': ': ' + nameValueMap.get('.name'));
-
-	if (data.domain) {
-		formatString += ', ' +  _('Domain')  + ': ' + data.domain;
-	}
-	if (data.local) {
-		formatString += ', ' +  _('Local')  + ': ' + data.local;
-	}
-	formatString += ')';
-
-	return [nameValueMap.get('.name'), formatString];
-}
-
-function getDHCPPools() {
-	return uci.load('dhcp').then(function() {
-		let sections = uci.sections('dhcp', 'dhcp'),
-		    tasks = [], pools = [];
-
-		for (var i = 0; i < sections.length; i++) {
-			if (sections[i].ignore == '1' || !sections[i].interface)
-				continue;
-
-			tasks.push(network.getNetwork(sections[i].interface).then(L.bind(function(section_id, net) {
-				var cidr = net ? (net.getIPAddrs()[0] || '').split('/') : null;
-
-				if (cidr && cidr.length == 2) {
-					var net_mask = calculateNetwork(cidr[0], cidr[1]);
-
-					pools.push({
-						section_id: section_id,
-						network: net_mask[0],
-						netmask: net_mask[1]
-					});
-				}
-			}, null, sections[i]['.name'])));
-		}
-
-		return Promise.all(tasks).then(function() {
-			return pools;
-		});
-	});
-}
 
 function validateHostname(sid, s) {
 	if (s == null || s == '')
@@ -218,87 +93,19 @@ function validateServerSpec(sid, s) {
 	return true;
 }
 
-function expandAndFormatMAC(macs) {
-	let result = [];
-
-	macs.forEach(mac => {
-		if (isValidMAC(mac)) {
-			const expandedMac = mac.split(':').map(part => {
-				return (part.length === 1 && part !== '*') ? '0' + part : part;
-			}).join(':').toUpperCase();
-			result.push(expandedMac);
-		}
-	});
-
-	return result.length ? result : null;
-}
-
-function isValidMAC(sid, s) {
-	if (!s)
-		return true;
-
-	let macaddrs = L.toArray(s);
-
-	for (var i = 0; i < macaddrs.length; i++)
-		if (!macaddrs[i].match(/^(([0-9a-f]{1,2}|\*)[:-]){5}([0-9a-f]{1,2}|\*)$/i))
-			return _('Expecting a valid MAC address, optionally including wildcards') + _('; invalid MAC: ') + macaddrs[i];
-
-	return true;
-}
-
-function validateMACAddr(pools, sid, s) {
-	if (s == null || s == '')
-		return true;
-
-	var leases = uci.sections('dhcp', 'host'),
-	    this_macs = L.toArray(s).map(function(m) { return m.toUpperCase() });
-
-	for (var i = 0; i < pools.length; i++) {
-		var this_net_mask = calculateNetwork(this.section.formvalue(sid, 'ip'), pools[i].netmask);
-
-		if (!this_net_mask)
-			continue;
-
-		for (var j = 0; j < leases.length; j++) {
-			if (leases[j]['.name'] == sid || !leases[j].ip)
-				continue;
-
-			var lease_net_mask = calculateNetwork(leases[j].ip, pools[i].netmask);
-
-			if (!lease_net_mask || this_net_mask[0] != lease_net_mask[0])
-				continue;
-
-			var lease_macs = L.toArray(leases[j].mac).map(function(m) { return m.toUpperCase() });
-
-			for (var k = 0; k < lease_macs.length; k++)
-				for (var l = 0; l < this_macs.length; l++)
-					if (lease_macs[k] == this_macs[l])
-						return _('The MAC address %h is already used by another static lease in the same DHCP pool').format(this_macs[l]);
-		}
-	}
-
-	return isValidMAC(sid, s);
-}
-
 return view.extend({
 	load: function() {
 		return Promise.all([
 			callHostHints(),
-			callDUIDHints(),
-			getDHCPPools(),
-			network.getNetworks(),
-			L.hasSystemFeature('ufpd') ? callUfpList() : null,
 			uci.load('firewall')
 		]);
 	},
 
-	render: function([hosts, duids, pools, networks, macdata]) {
-		var has_dhcpv6 = L.hasSystemFeature('dnsmasq', 'dhcpv6') || L.hasSystemFeature('odhcpd'),
-		    m, s, o, ss, so, dnss;
+	render: function([hosts]) {
+		var m, s, o, ss, so, dnss;
 
 		let noi18nstrings = {
 			etc_hosts: '<code>/etc/hosts</code>',
-			etc_ethers: '<code>/etc/ethers</code>',
 			localhost_v6: '<code>::1</code>',
 			loopback_slash_8_v4: '<code>127.0.0.0/8</code>',
 			not_found: '<code>Not found</code>',
