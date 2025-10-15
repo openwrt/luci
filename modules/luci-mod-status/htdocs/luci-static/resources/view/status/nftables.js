@@ -138,6 +138,7 @@ var action_translations = {
 
 	'return': _('Continue in calling chain'),
 
+	'ct helper': _('Utilise <strong>%h</strong> conntrack helper'),
 	'flow': _('Utilize flow table <strong>%h</strong>')
 };
 
@@ -168,6 +169,7 @@ return view.extend({
 				case 'masquerade':
 				case 'return':
 				case 'flow':
+				case 'ct helper':
 				case 'log':
 					return true;
 				}
@@ -406,6 +408,11 @@ return view.extend({
 		switch (kind) {
 		case 'match':
 			return this.renderMatchExpr(spec);
+
+		case 'ct helper':
+			return E('span', {
+					'class': 'ifacebadge'
+			}, action_translations[kind].format(spec));
 
 		case 'reject':
 			var k = 'reject.%s'.format(spec.type);
