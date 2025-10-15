@@ -14,6 +14,12 @@ var callSystemInfo = rpc.declare({
 	method: 'info'
 });
 
+var callGetUnixtime = rpc.declare({
+	object: 'luci',
+	method: 'getUnixtime',
+	expect: { result: 0 }
+});
+
 return baseclass.extend({
 
 	params: [],
@@ -23,7 +29,8 @@ return baseclass.extend({
 			network.getWANNetworks(),
 			network.getWAN6Networks(),
 			L.resolveDefault(callSystemBoard(), {}),
-			L.resolveDefault(callSystemInfo(), {})
+			L.resolveDefault(callSystemInfo(), {}),
+			L.resolveDefault(callGetUnixtime(), {})
 		]);
 	},
 
@@ -298,20 +305,14 @@ return baseclass.extend({
 
 		const boardinfo   = data[2];
 		const systeminfo  = data[3];
+		const unixtime    = data[4];
 
 		let datestr = null;
 
-		if (systeminfo.localtime) {
-			const date = new Date(systeminfo.localtime * 1000);
+		if (unixtime) {
+			const date = new Date(unixtime * 1000);
 
-			datestr = '%04d-%02d-%02d %02d:%02d:%02d'.format(
-				date.getUTCFullYear(),
-				date.getUTCMonth() + 1,
-				date.getUTCDate(),
-				date.getUTCHours(),
-				date.getUTCMinutes(),
-				date.getUTCSeconds()
-			);
+			datestr = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'full' }).format(date);
 		}
 
 		this.params.router = {
