@@ -456,6 +456,7 @@ return view.extend({
 		o.optional = true;
 		// End general
 
+		// Begin cache
 		o = s.taboption('cache', form.MultiValue, 'cache_rr',
 			_('Cache arbitrary RR'), _('By default, dnsmasq caches A, AAAA, CNAME and SRV DNS record types.') + '<br/>' +
 			_('This option adds additional record types to the cache.'));
@@ -466,6 +467,7 @@ return view.extend({
 		recordtypes.forEach(r => {
 			o.value(r);
 		});
+		// End cache
 
 		s.taboption('filteropts', form.Flag, 'domainneeded',
 			_('Domain required'),
