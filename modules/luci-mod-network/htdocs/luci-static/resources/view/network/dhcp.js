@@ -391,7 +391,6 @@ return view.extend({
 
 		s.tab('general', _('General'));
 		s.tab('devices', _('Devices &amp; Ports'));
-		s.tab('dnssecopt', _('DNSSEC'));
 		s.tab('filteropts', _('Filter'));
 		s.tab('forward', _('Forwards'));
 		s.tab('limits', _('Limits'));
@@ -669,19 +668,6 @@ return view.extend({
 			customi18n(_('Limit response records (from {etc_hosts}) to those that fall within the subnet of the querying interface.') ) + '<br />' +
 			_('This prevents unreachable IPs in subnets not accessible to you.') + '<br />' +
 			_('Note: IPv4 only.'));
-
-		if (L.hasSystemFeature('dnsmasq', 'dnssec')) {
-			o = s.taboption('dnssecopt', form.Flag, 'dnssec',
-				_('DNSSEC'),
-				_('Validate DNS replies and cache DNSSEC data, requires upstream to support DNSSEC.'));
-			o.optional = true;
-
-			o = s.taboption('dnssecopt', form.Flag, 'dnsseccheckunsigned',
-				_('DNSSEC check unsigned'),
-				_('Verify unsigned domain responses really come from unsigned domains.'));
-			o.default = o.enabled;
-			o.optional = true;
-		}
 
 		s.taboption('filteropts', form.Flag, 'nonegcache',
 			_('No negative cache'),
