@@ -405,6 +405,21 @@ return view.extend({
 		s.tab('relay', _('Relay'));
 		s.tab('pxe_tftp', _('PXE/TFTP'));
 
+		// Begin general
+		s.taboption('general', form.Flag, 'authoritative',
+			_('Authoritative'),
+			_('This is the only DHCP server in the local network.'));
+
+		s.taboption('general', form.Value, 'domain',
+			_('Local domain'),
+			_('Local domain suffix appended to DHCP names and hosts file entries.'));
+
+		o = s.taboption('general', form.Flag, 'sequential_ip',
+			_('Allocate IPs sequentially'),
+			_('Allocate IP addresses sequentially, starting from the lowest available address.'));
+		o.optional = true;
+		// End general
+
 		o = s.taboption('cache', form.MultiValue, 'cache_rr',
 			_('Cache arbitrary RR'), _('By default, dnsmasq caches A, AAAA, CNAME and SRV DNS record types.') + '<br/>' +
 			_('This option adds additional record types to the cache.'));
@@ -421,22 +436,6 @@ return view.extend({
 			_('Never forward DNS queries which lack dots or domain parts.') + '<br />' +
 			customi18n(_('Names not in {etc_hosts} are answered {not_found}.') )
 		);
-		s.taboption('general', form.Flag, 'authoritative',
-			_('Authoritative'),
-			_('This is the only DHCP server in the local network.'));
-
-		o = s.taboption('general', form.Value, 'local',
-			_('Resolve these locally'),
-			_('Never forward these matching domains or subdomains; resolve from DHCP or hosts files only.'));
-		o.placeholder = '/internal.example.com/private.example.com/example.org';
-
-		s.taboption('general', form.Value, 'domain',
-			_('Local domain'),
-			_('Local domain suffix appended to DHCP names and hosts file entries.'));
-
-		s.taboption('general', form.Flag, 'expandhosts',
-			_('Expand hosts'),
-			_('Add local domain suffix to names served from hosts files.'));
 
 		o = s.taboption('logging', form.Flag, 'logqueries',
 			_('Log queries'),
@@ -477,37 +476,6 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = '/*.example.org/10.1.2.3';
 		o.validate = validateServerSpec;
-
-		o = s.taboption('general', form.DynamicList, 'address',
-			_('Addresses'),
-			_('Resolve specified FQDNs to an IP.') + '<br />' +
-			customi18n(_('Syntax: {code_syntax}.'),
-				{code_syntax: '<code>/fqdn[/fqdn…]/[ipaddr]</code>'}) + '<br />' +
-			customi18n(_('{example_nx} returns {nxdomain}.',
-				'hint: <code>/example.com/</code> returns <code>NXDOMAIN</code>.'),
-				{example_nx: '<code>/example.com/</code>', nxdomain: '<code>NXDOMAIN</code>'}) + '<br />' +
-			customi18n(_('{any_domain} matches any domain (and returns {nxdomain}).',
-				'hint: <code>/#/</code> matches any domain (and returns NXDOMAIN).'),
-				{any_domain:'<code>/#/</code>', nxdomain: '<code>NXDOMAIN</code>'}) + '<br />' +
-			customi18n(
-				_('{example_null} returns {null_addr} addresses ({null_ipv4}, {null_ipv6}) for {example_com} and its subdomains.',
-					'hint: <code>/example.com/#</code> returns NULL addresses (<code>0.0.0.0</code>, <code>::</code>) for example.com and its subdomains.'),
-				{	example_null: '<code>/example.com/#</code>',
-					null_addr: '<code>NULL</code>', 
-					null_ipv4: '<code>0.0.0.0</code>',
-					null_ipv6: '<code>::</code>',
-					example_com: '<code>example.com</code>',
-				}
-			)
-		);
-		o.optional = true;
-		o.placeholder = '/router.local/router.lan/192.168.0.1';
-
-		o = s.taboption('general', form.DynamicList, 'ipset',
-			_('IP sets'),
-			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
-		o.optional = true;
-		o.placeholder = '/example.org/ipset,ipset6';
 
 		o = s.taboption('filteropts', form.Flag, 'rebind_protection',
 			_('Rebind protection'),
@@ -675,11 +643,6 @@ return view.extend({
 		o.optional = true;
 		o.depends('logdhcp', '0');
 
-		o = s.taboption('general', form.Flag, 'sequential_ip',
-			_('Allocate IPs sequentially'),
-			_('Allocate IP addresses sequentially, starting from the lowest available address.'));
-		o.optional = true;
-
 		o = s.taboption('filteropts', form.Flag, 'boguspriv',
 			_('Filter private'),
 			customi18n(
@@ -772,11 +735,6 @@ return view.extend({
 		s.taboption('forward', form.Flag, 'stripsubnet',
 			_('Remove subnet address before forwarding query'),
 			_('Remove any subnet address already present in a downstream query before forwarding it upstream.'));
-
-		o = s.taboption('general', form.Flag, 'allservers',
-			_('All servers'),
-			_('Query all available upstream resolvers.') + ' ' + _('First answer wins.'));
-		o.optional = true;
 
 		o = s.taboption('filteropts', form.DynamicList, 'bogusnxdomain',
 			customi18n(_('IPs to override with {nxdomain}') ),
