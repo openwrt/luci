@@ -16,12 +16,6 @@ var callUfpList = rpc.declare({
 	method: 'fingerprint',
 });
 
-var checkUfpInstalled = rpc.declare({
-	object: 'file',
-	method: 'stat',
-	params: [ 'path' ]
-});
-
 return baseclass.extend({
 	title: '',
 
@@ -30,17 +24,11 @@ return baseclass.extend({
 
 	load: function() {
 		return Promise.all([
-			checkUfpInstalled('/usr/sbin/ufpd')
-		]).then(data => {
-			var promises = [
-				callLuciDHCPLeases(),
-				network.getHostHints(),
-				data[0].type === 'file' ? callUfpList() : null,
-				L.resolveDefault(uci.load('dhcp'))
-			];
-
-			return Promise.all(promises);
-		});
+			callLuciDHCPLeases(),
+			network.getHostHints(),
+			L.hasSystemFeature('ufpd') ? callUfpList() : null,
+			L.resolveDefault(uci.load('dhcp'))
+		]);
 	},
 
 	handleCreateStaticLease: function(lease, ev) {

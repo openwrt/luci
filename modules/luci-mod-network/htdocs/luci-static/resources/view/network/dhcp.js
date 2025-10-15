@@ -11,7 +11,7 @@
 'require tools.dnsrecordhandlers as drh';
 
 var callHostHints, callDUIDHints, callDHCPLeases, CBILeaseStatus, CBILease6Status;
-var checkUfpInstalled, callUfpList;
+var callUfpList;
 
 callHostHints = rpc.declare({
 	object: 'luci-rpc',
@@ -29,12 +29,6 @@ callDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getDHCPLeases',
 	expect: { '': {} }
-});
-
-checkUfpInstalled = rpc.declare({
-	object: 'file',
-	method: 'stat',
-	params: [ 'path' ]
 });
 
 callUfpList = rpc.declare({
@@ -289,19 +283,13 @@ function validateMACAddr(pools, sid, s) {
 return view.extend({
 	load: function() {
 		return Promise.all([
-			checkUfpInstalled('/usr/sbin/ufpd')
-		]).then(data => {
-			var promises = [
-				callHostHints(),
-				callDUIDHints(),
-				getDHCPPools(),
-				network.getNetworks(),
-				data[0].type === 'file' ? callUfpList() : null,
-				uci.load('firewall')
-			]
-
-			return Promise.all(promises);
-		});
+			callHostHints(),
+			callDUIDHints(),
+			getDHCPPools(),
+			network.getNetworks(),
+			L.hasSystemFeature('ufpd') ? callUfpList() : null,
+			uci.load('firewall')
+		]);
 	},
 
 	render: function([hosts, duids, pools, networks, macdata]) {
