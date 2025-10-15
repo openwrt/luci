@@ -11,12 +11,6 @@ const callNetworkInterfaceDump = rpc.declare({
 	expect: { interface: [] }
 });
 
-const checkUfpInstalled = rpc.declare({
-	object: 'file',
-	method: 'stat',
-	params: [ 'path' ]
-});
-
 const callUfpList = rpc.declare({
 	object: 'fingerprint',
 	method: 'fingerprint',
@@ -44,19 +38,15 @@ function applyMask(addr, mask, v6) {
 return view.extend({
 	load() {
 		return Promise.all([
-			checkUfpInstalled('/usr/sbin/ufpd')
-		]).then(([ufpcheck]) => {
-			return Promise.all([
-				callNetworkInterfaceDump(),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'neigh', 'show' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'route', 'show', 'table', 'all' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'rule', 'show' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'neigh', 'show' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'route', 'show', 'table', 'all' ]), {}),
-				L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'rule', 'show' ]), {}),
-				ufpcheck?.type === 'file' ? callUfpList() : null
-			]);
-		});
+			callNetworkInterfaceDump(),
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'neigh', 'show' ]), {}),
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'route', 'show', 'table', 'all' ]), {}),
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-4', 'rule', 'show' ]), {}),
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'neigh', 'show' ]), {}),
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'route', 'show', 'table', 'all' ]), {}),
+			L.resolveDefault(fs.exec('/sbin/ip', [ '-6', 'rule', 'show' ]), {}),
+			L.hasSystemFeature('ufpd') ? callUfpList() : null
+		]);
 	},
 
 	getNetworkByDevice(networks, dev, addr, mask, v6) {
