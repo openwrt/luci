@@ -391,7 +391,6 @@ return view.extend({
 
 		s.tab('general', _('General'));
 		s.tab('devices', _('Devices &amp; Ports'));
-		s.tab('limits', _('Limits'));
 		s.tab('logging', _('Log'));
 		s.tab('files', _('Resolv &amp; Hosts Files'));
 		s.tab('leases', _('Static Leases'));
@@ -412,6 +411,13 @@ return view.extend({
 			_('Allocate IPs sequentially'),
 			_('Allocate IP addresses sequentially, starting from the lowest available address.'));
 		o.optional = true;
+
+		o = s.taboption('general', form.Value, 'dhcpleasemax',
+			_('Max. DHCP leases'),
+			_('Maximum allowed number of active DHCP leases.'));
+		o.optional = true;
+		o.datatype = 'uinteger';
+		o.placeholder = 150;
 		// End general
 
 		// Begin devices
@@ -584,47 +590,6 @@ return view.extend({
 			_('Suppress logging of the routine operation for the DHCP protocol.'));
 		o.optional = true;
 		o.depends('logdhcp', '0');
-
-		o = s.taboption('limits', form.Value, 'dhcpleasemax',
-			_('Max. DHCP leases'),
-			_('Maximum allowed number of active DHCP leases.'));
-		o.optional = true;
-		o.datatype = 'uinteger';
-		o.placeholder = 150;
-
-		o = s.taboption('limits', form.Value, 'ednspacket_max',
-			_('Max. EDNS0 packet size'),
-			_('Maximum allowed size of EDNS0 UDP packets.'));
-		o.optional = true;
-		o.datatype = 'uinteger';
-		o.placeholder = 1280;
-
-		o = s.taboption('limits', form.Value, 'dnsforwardmax',
-			_('Max. concurrent queries'),
-			_('Maximum allowed number of concurrent DNS queries.'));
-		o.optional = true;
-		o.datatype = 'uinteger';
-		o.placeholder = 150;
-
-		o = s.taboption('limits', form.Value, 'cachesize',
-			_('Size of DNS query cache'),
-			_('Number of cached DNS entries, 10000 is maximum, 0 is no caching.'));
-		o.optional = true;
-		o.datatype = 'range(0,10000)';
-		o.placeholder = 150;
-
-		o = s.taboption('limits', form.Value, 'min_cache_ttl',
-			_('Min cache TTL'),
-			_('Extend short TTL values to the seconds value given when caching them. Use with caution.') +
-			_(' (Max 1h == 3600)'));
-		o.optional = true;
-		o.placeholder = 60;
-
-		o = s.taboption('limits', form.Value, 'max_cache_ttl',
-			_('Max cache TTL'),
-			_('Set a maximum seconds TTL value for entries in the cache.'));
-		o.optional = true;
-		o.placeholder = 3600;
 
 		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
 			_('Enable TFTP server'),
