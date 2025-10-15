@@ -741,6 +741,7 @@ return view.extend({
 		so.placeholder = 'lan';
 		// End relay
 
+		// Begin pxe_tftp
 		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
 			_('Enable TFTP server'),
 			_('Enable the built-in single-instance TFTP server.'));
@@ -869,6 +870,7 @@ return view.extend({
 		so.value('39', _('39: LoongArch 64-bit UEFI'));
 		so.value('39', _('40: LoongArch 64-bit UEFI boot from HTTP'));
 		so.value('41', _('41: ARM rpiboot'));
+		// End pxe_tftp
 
 
 		return m.render().then(function(mapEl) {
