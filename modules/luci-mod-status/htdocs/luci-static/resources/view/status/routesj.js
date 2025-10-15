@@ -125,7 +125,7 @@ return view.extend({
 		return res;
 	},
 
-	parseRoutes(routes, macs, networks, v6) {
+	parseRoutes(routes, networks, v6) {
 		const res = [];
 
 		for (const rt of this.parseJSON(routes)) {
@@ -280,7 +280,7 @@ return view.extend({
 		cbi_update_table(neigh4tbl, this.parseNeighbs(ip4neighbs, macdata, networks, false),
 			E('em', _('No entries available'))
 		);
-		cbi_update_table(route4tbl, this.parseRoutes(ip4routes, macdata, networks, false),
+		cbi_update_table(route4tbl, this.parseRoutes(ip4routes, networks, false),
 			E('em', _('No entries available'))
 		);
 		cbi_update_table(rule4tbl, this.parseRules(ip4rules),
@@ -289,7 +289,7 @@ return view.extend({
 		cbi_update_table(neigh6tbl, this.parseNeighbs(ip6neighbs, macdata, networks, true),
 			E('em', _('No entries available'))
 		);
-		cbi_update_table(route6tbl, this.parseRoutes(ip6routes, macdata, networks, true),
+		cbi_update_table(route6tbl, this.parseRoutes(ip6routes, networks, true),
 			E('em', _('No entries available'))
 		);
 		cbi_update_table(rule6tbl, this.parseRules(ip6rules),
