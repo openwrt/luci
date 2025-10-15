@@ -442,11 +442,7 @@ return view.extend({
 		o.nocreate = true;
 		// End devices
 
-		o = s.taboption('logging', form.Flag, 'logqueries',
-			_('Log queries'),
-			_('Write received DNS queries to syslog.') + ' ' + _('Dump cache on SIGUSR1, include requesting IP.'));
-		o.optional = true;
-
+		// Begin logging
 		o = s.taboption('logging', form.Flag, 'logdhcp',
 			_('Extra DHCP logging'),
 			_('Log all options sent to DHCP clients and the tags used to determine them.'));
@@ -474,6 +470,13 @@ return view.extend({
 		o.value('LOCAL6');
 		o.value('LOCAL7');
 		o.value('-', _('stderr'));
+
+		o = s.taboption('logging', form.Flag, 'quietdhcp',
+			_('Suppress logging'),
+			_('Suppress logging of the routine operation for the DHCP protocol.'));
+		o.optional = true;
+		o.depends('logdhcp', '0');
+		// End logging
 
 		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
 			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
@@ -584,12 +587,6 @@ return view.extend({
 			_('Additional hosts files'));
 		o.optional = true;
 		o.placeholder = '/etc/dnsmasq.hosts';
-
-		o = s.taboption('logging', form.Flag, 'quietdhcp',
-			_('Suppress logging'),
-			_('Suppress logging of the routine operation for the DHCP protocol.'));
-		o.optional = true;
-		o.depends('logdhcp', '0');
 
 		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
 			_('Enable TFTP server'),
