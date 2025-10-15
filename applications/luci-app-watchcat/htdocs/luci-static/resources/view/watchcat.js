@@ -49,12 +49,22 @@ return view.extend({
 				1 hour would be: <b>1h</b></li><li>1 week would be: <b>7d</b></li><ul>"));
 		o.default = '6h';
 
-		o = s.taboption('general', form.Value, 'pinghosts', _('Host To Check'), _(`IP addresses or hostnames to ping.`));
-		o.datatype = 'list(host)';
-		o.default = '8.8.8.8 1.1.1.1';
+		o = s.taboption('general', form.DynamicList, 'pinghosts', _('Hosts To Check'), _(`IP addresses or hostnames to ping.`));
+		o.datatype = 'host';
+		o.default = ['8.8.8.8', '1.1.1.1'];
 		o.depends({ mode: "ping_reboot" });
 		o.depends({ mode: "restart_iface" });
 		o.depends({ mode: "run_script" });
+
+		o.load = function(section_id) {
+			return (String(this.map.data.get('watchcat', section_id, 'pinghosts') || '')
+			.trim().split(/\s+/).filter(Boolean))
+		}
+
+		o.write = function(section_id, formvalue) {
+			this.map.data.set('watchcat', section_id, 'pinghosts',
+			(formvalue || []).map(v => String(v).trim()).filter(Boolean).join(' '))
+		}
 
 		o = s.taboption('general', form.ListValue, 'addressfamily',
 				_('Address family for pinging the host'));
