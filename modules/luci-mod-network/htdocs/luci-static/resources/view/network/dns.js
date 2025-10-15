@@ -984,6 +984,41 @@ return view.extend({
 		o.value('-', _('stderr'));
 		// End logging
 
+		// Begin files
+		o = s.taboption('files', form.Flag, 'noresolv',
+			_('Ignore resolv file'));
+		o.optional = true;
+
+		o = s.taboption('files', form.Value, 'resolvfile',
+			_('Resolv file'),
+			_('File with upstream resolvers.'));
+		o.depends('noresolv', '0');
+		o.placeholder = '/tmp/resolv.conf.d/resolv.conf.auto';
+		o.optional = true;
+
+		o = s.taboption('files', form.Flag, 'strictorder',
+			_('Strict order'),
+			_('Query upstream resolvers in the order they appear in the resolv file.'));
+		o.optional = true;
+
+		o = s.taboption('files', form.Flag, 'ignore_hosts_dir',
+			_('Ignore hosts files directory'),
+			_('On: use instance specific hosts file only') + '<br/>' +
+			_('Off: use all files in the directory including the instance specific hosts file')
+		);
+		o.optional = true;
+
+		o = s.taboption('files', form.Flag, 'nohosts',
+			customi18n(_('Ignore {etc_hosts} file') )
+		);
+		o.optional = true;
+
+		o = s.taboption('files', form.DynamicList, 'addnhosts',
+			_('Additional hosts files'));
+		o.optional = true;
+		o.placeholder = '/etc/dnsmasq.hosts';
+		// End files
+
 		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
 			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
 			+ '<br />' + _('Note: you may also need a DHCP Proxy (currently unavailable) when specifying a non-standard Relay To port(<code>addr#port</code>).')
@@ -1051,48 +1086,6 @@ return view.extend({
 		so.optional = true;
 		so.rmempty = false;
 		so.placeholder = 'lan';
-
-		s.taboption('files', form.Flag, 'readethers',
-			customi18n(_('Use {etc_ethers}') ),
-			customi18n(_('Read {etc_ethers} to configure the DHCP server.') )
-			);
-
-		s.taboption('files', form.Value, 'leasefile',
-			_('Lease file'),
-			_('File to store DHCP lease information.'));
-
-		o = s.taboption('files', form.Flag, 'noresolv',
-			_('Ignore resolv file'));
-		o.optional = true;
-
-		o = s.taboption('files', form.Value, 'resolvfile',
-			_('Resolv file'),
-			_('File with upstream resolvers.'));
-		o.depends('noresolv', '0');
-		o.placeholder = '/tmp/resolv.conf.d/resolv.conf.auto';
-		o.optional = true;
-
-		o = s.taboption('files', form.Flag, 'strictorder',
-			_('Strict order'),
-			_('Query upstream resolvers in the order they appear in the resolv file.'));
-		o.optional = true;
-
-		o = s.taboption('files', form.Flag, 'ignore_hosts_dir',
-			_('Ignore hosts files directory'),
-			_('On: use instance specific hosts file only') + '<br/>' +
-			_('Off: use all files in the directory including the instance specific hosts file')
-		);
-		o.optional = true;
-
-		o = s.taboption('files', form.Flag, 'nohosts',
-			customi18n(_('Ignore {etc_hosts} file') )
-		);
-		o.optional = true;
-
-		o = s.taboption('files', form.DynamicList, 'addnhosts',
-			_('Additional hosts files'));
-		o.optional = true;
-		o.placeholder = '/etc/dnsmasq.hosts';
 
 		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
 			_('Enable TFTP server'),
