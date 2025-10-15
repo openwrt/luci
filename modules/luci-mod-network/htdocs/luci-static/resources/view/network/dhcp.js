@@ -391,7 +391,6 @@ return view.extend({
 
 		s.tab('general', _('General'));
 		s.tab('devices', _('Devices &amp; Ports'));
-		s.tab('filteropts', _('Filter'));
 		s.tab('forward', _('Forwards'));
 		s.tab('limits', _('Limits'));
 		s.tab('logging', _('Log'));
@@ -438,12 +437,6 @@ return view.extend({
 		o.nocreate = true;
 		// End devices
 
-		s.taboption('filteropts', form.Flag, 'domainneeded',
-			_('Domain required'),
-			_('Never forward DNS queries which lack dots or domain parts.') + '<br />' +
-			customi18n(_('Names not in {etc_hosts} are answered {not_found}.') )
-		);
-
 		o = s.taboption('logging', form.Flag, 'logqueries',
 			_('Log queries'),
 			_('Write received DNS queries to syslog.') + ' ' + _('Dump cache on SIGUSR1, include requesting IP.'));
@@ -483,36 +476,6 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = '/*.example.org/10.1.2.3';
 		o.validate = validateServerSpec;
-
-		o = s.taboption('filteropts', form.Flag, 'rebind_protection',
-			_('Rebind protection'),
-			customi18n(_('Discard upstream responses containing {rfc_1918_link} addresses.') ) + '<br />' +
-			customi18n(_('Discard also upstream responses containing {rfc_4193_link}, Link-Local and private IPv4-Mapped {rfc_4291_link} IPv6 Addresses.') )	
-		);
-		o.rmempty = false;
-
-		o = s.taboption('filteropts', form.Flag, 'rebind_localhost',
-			_('Allow localhost'),
-			customi18n(
-			_('Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. for <abbr title="Real-time Block List">RBL</abbr> services.')
-			)
-		);
-		o.depends('rebind_protection', '1');
-
-		o = s.taboption('filteropts', form.DynamicList, 'rebind_domain',
-			_('Domain whitelist'),
-			customi18n(_('List of domains to allow {rfc_1918_link} responses for.') )
-		);
-		o.depends('rebind_protection', '1');
-		o.optional = true;
-		o.placeholder = 'ihost.netflix.com';
-		o.validate = validateAddressList;
-
-		o = s.taboption('filteropts', form.Flag, 'localservice',
-			_('Local service only'),
-			_('Accept DNS queries only from hosts whose address is on a local subnet.'));
-		o.optional = false;
-		o.rmempty = false;
 
 		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
 			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
@@ -630,49 +593,6 @@ return view.extend({
 		o.optional = true;
 		o.depends('logdhcp', '0');
 
-		o = s.taboption('filteropts', form.Flag, 'boguspriv',
-			_('Filter private'),
-			customi18n(
-			_('Reject reverse lookups to {rfc_6303_link} IP ranges ({reverse_arpa}) not in {etc_hosts}.') )
-		); 
-		o.default = o.enabled;
-
-		s.taboption('filteropts', form.Flag, 'filterwin2k',
-			_('Filter SRV/SOA service discovery'),
-			_('Filters SRV/SOA service discovery, to avoid triggering dial-on-demand links.') + '<br />' +
-			_('May prevent VoIP or other services from working.'));
-
-		o = s.taboption('filteropts', form.Flag, 'filter_aaaa',
-			_('Filter IPv6 AAAA records'),
-			_('Remove IPv6 addresses from the results and only return IPv4 addresses.') + '<br />' +
-			_('Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing.'));
-		o.optional = true;
-
-		o = s.taboption('filteropts', form.Flag, 'filter_a',
-			_('Filter IPv4 A records'),
-			_('Remove IPv4 addresses from the results and only return IPv6 addresses.'));
-		o.optional = true;
-
-		o = s.taboption('filteropts', form.MultiValue, 'filter_rr',
-			_('Filter arbitrary RR'), _('Removes records of the specified type(s) from answers.'));
-		o.optional = true;
-		o.create = true;
-		o.multiple = true;
-		o.display_size = 5;
-		recordtypes.forEach(r => {
-			o.value(r);
-		});
-
-		s.taboption('filteropts', form.Flag, 'localise_queries',
-			_('Localise queries'),
-			customi18n(_('Limit response records (from {etc_hosts}) to those that fall within the subnet of the querying interface.') ) + '<br />' +
-			_('This prevents unreachable IPs in subnets not accessible to you.') + '<br />' +
-			_('Note: IPv4 only.'));
-
-		s.taboption('filteropts', form.Flag, 'nonegcache',
-			_('No negative cache'),
-			_('Do not cache negative replies, e.g. for non-existent domains.'));
-
 		o = s.taboption('forward', form.Value, 'serversfile',
 			_('Additional servers file'),
 			customi18n(_('File listing upstream resolvers, optionally domain-specific, e.g. {servers_file_entry01}, {servers_file_entry02}.') )
@@ -709,13 +629,6 @@ return view.extend({
 		s.taboption('forward', form.Flag, 'stripsubnet',
 			_('Remove subnet address before forwarding query'),
 			_('Remove any subnet address already present in a downstream query before forwarding it upstream.'));
-
-		o = s.taboption('filteropts', form.DynamicList, 'bogusnxdomain',
-			customi18n(_('IPs to override with {nxdomain}') ),
-			customi18n(_('Transform replies which contain the specified addresses or subnets into {nxdomain} responses.') )
-		);
-		o.optional = true;
-		o.placeholder = '64.94.110.11';
 
 		o = s.taboption('limits', form.Value, 'dhcpleasemax',
 			_('Max. DHCP leases'),
