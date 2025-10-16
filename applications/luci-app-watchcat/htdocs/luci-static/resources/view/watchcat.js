@@ -56,16 +56,6 @@ return view.extend({
 		o.depends({ mode: "restart_iface" });
 		o.depends({ mode: "run_script" });
 
-		o.load = function(section_id) {
-			return (String(this.map.data.get('watchcat', section_id, 'pinghosts') || '')
-			.trim().split(/\s+/).filter(Boolean))
-		}
-
-		o.write = function(section_id, formvalue) {
-			this.map.data.set('watchcat', section_id, 'pinghosts',
-			(formvalue || []).map(v => String(v).trim()).filter(Boolean).join(' '))
-		}
-
 		o = s.taboption('general', form.ListValue, 'addressfamily',
 				_('Address family for pinging the host'));
 		o.default = 'any';
