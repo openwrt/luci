@@ -386,6 +386,35 @@ const ValidatorFactory = baseclass.extend({
 				multicast ? _('valid multicast MAC address') : _('valid MAC address'));
 		},
 
+		macrange(multicast) {
+			const m = this.value.match(/^((?:[a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2})\-((?:[a-fA-F0-9]{2}:){5}[a-fA-F0-9]{2})$/);
+			let valid, mac1, mac2;
+
+			let tonumber = (mac) => {
+				const n = mac.replace(/[^a-fA-F0-9]/g, '').toUpperCase();
+				return BigInt('0x' + n);
+			};
+
+			if (m == null)
+				return this.assert(false, multicast ? _('valid multicast MAC address range') : _('valid MAC address range'));
+
+			if (m[1]) {
+				mac1 = tonumber(m[1]);
+				valid = this.apply('macaddr', m[1], [multicast]);
+				if (!valid)
+					return this.assert(false, multicast ? _('valid multicast MAC address') : _('valid MAC address'));
+			}
+
+			if (m[2]) {
+				mac2 = tonumber(m[2]);
+				valid = this.apply('macaddr', m[2], [multicast]);
+				if (!valid)
+					return this.assert(false, multicast ? _('valid multicast MAC address') : _('valid MAC address'));
+			}
+
+			return this.assert(mac1 < mac2, multicast ? _('valid multicast MAC address range') : _('valid MAC address range'));
+		},
+
 		host(ipv4only) {
 			return this.assert(this.apply('hostname') || this.apply(ipv4only == 1 ? 'ip4addr' : 'ipaddr', null, ['nomask']),
 				_('valid hostname or IP address'));
