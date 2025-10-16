@@ -517,8 +517,8 @@ return baseclass.extend({
 		var o = s.taboption(tab, this.CBIDynamicMultiValueList, name, label, description);
 
 		o.modalonly = true;
-		o.datatype = 'list(macaddr)';
-		o.placeholder = _('-- add MAC --');
+		o.datatype = 'list(neg(or(macaddr,macrange)))';
+		o.placeholder = _('-- add MAC or MAC range --');
 
 		L.sortedKeys(hosts).forEach(function(mac) {
 			o.value(mac, E([], [ mac, ' (', E('strong', {}, [
