@@ -94,8 +94,9 @@ const methods = {
 		}
 	},
 
-	getLocaltime: {
+	getUnixtime: {
 		call: function(request) {
+			// time() ; Returns the current UNIX epoch.
 			return { result: time() };
 		}
 	},
