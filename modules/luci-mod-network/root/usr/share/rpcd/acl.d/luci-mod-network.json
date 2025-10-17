@@ -34,6 +34,19 @@
 		}
 	},
 
+	"luci-mod-network-dns": {
+		"description": "Grant access to DNS configuration",
+		"read": {
+			"ubus": {
+				"luci-rpc": [ "getHostHints" ]
+			},
+			"uci": [ "dhcp" ]
+		},
+		"write": {
+			"uci": [ "dhcp" ]
+		}
+	},
+
 	"luci-mod-network-dhcp": {
 		"description": "Grant access to DHCP configuration",
 		"read": {
