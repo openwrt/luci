@@ -47,10 +47,10 @@ const etitle = _('enable filter');
 const ptitle = _('keep only one protocol');
 const ntitle = _('keep only one neighbor');
 
-var cbiFilterSelect = form.Value.extend({
+const cbiFilterSelect = form.Value.extend({
 	__name__: 'CBI.LLDPD.FilterSelect',
 
-	__init__: function() {
+	__init__() {
 		this.super('__init__', arguments);
 
 		this.selected = null;
@@ -80,11 +80,11 @@ var cbiFilterSelect = form.Value.extend({
 	},
 
 	/** @private */
-	handleRowClick: function(section_id, ev) {
-		var row = ev.currentTarget;
-		var tbody = row.parentNode;
-		var selected = row.getAttribute('data-filter');
-		var input = tbody.querySelector('[id="' + this.cbid(section_id) + '-' + selected + '"]');
+	handleRowClick(section_id, ev) {
+		const row = ev.currentTarget;
+		const tbody = row.parentNode;
+		const selected = row.getAttribute('data-filter');
+		const input = tbody.querySelector('[id="' + this.cbid(section_id) + '-' + selected + '"]');
 
 		this.selected = selected;
 
@@ -96,12 +96,12 @@ var cbiFilterSelect = form.Value.extend({
 		row.classList.add('lldpd-filter-selected');
 	},
 
-	formvalue: function(section_id) {
+	formvalue(section_id) {
 		return this.selected || this.cfgvalue(section_id);
 	},
 
-	renderFrame: function(section_id, in_table, option_index, nodes) {
-		var tmp = this.description;
+	renderFrame(section_id, in_table, option_index, nodes) {
+		const tmp = this.description;
 
 		// Prepend description with table legend
 		this.description = 
@@ -110,7 +110,7 @@ var cbiFilterSelect = form.Value.extend({
 			    '<li>' + 'N &mdash; ' + ntitle + '</li>' +
 			'</ul>' + this.description;
 
-		var rendered = this.super('renderFrame', arguments);
+		const rendered = this.super('renderFrame', arguments);
 
 		// Restore original description
 		this.description = tmp;
@@ -118,17 +118,17 @@ var cbiFilterSelect = form.Value.extend({
 		return rendered;
 	},
 
-	renderWidget: function(section_id, option_index, cfgvalue) {
+	renderWidget(section_id, option_index, cfgvalue) {
 		//default value is "15" - rows are zero based
-		var selected = parseInt(cfgvalue) || 15;
+		const selected = parseInt(cfgvalue) || 15;
 
-		var tbody = [];
+		const tbody = [];
 
-		var renderFilterVal = L.bind(function(row, col) {
+		const renderFilterVal = L.bind(function(row, col) {
 			return this.filterVal[row][col] ? '&#x2714;' : '';
 		}, this);
 
-		for (var i = 0; i < this.filterVal.length; i++) {
+		for (let i = 0; i < this.filterVal.length; i++) {
 			tbody.push(E('tr', {
 				'class': ((selected == i) ? 'lldpd-filter-selected' : ''),
 				'click': L.bind(this.handleRowClick, this, section_id),
@@ -155,7 +155,7 @@ var cbiFilterSelect = form.Value.extend({
 			]));
 		};
 
-		var table = E('table', { 'class': 'lldpd-filter', 'id': this.cbid(section_id) }, [
+		const table = E('table', { 'class': 'lldpd-filter', 'id': this.cbid(section_id) }, [
 			E('thead', {}, [
 				E('tr', {}, [
 					E('th', { 'rowspan': 2 }),
@@ -179,14 +179,14 @@ var cbiFilterSelect = form.Value.extend({
 	},
 });
 
-var CBIMultiIOSelect = form.MultiValue.extend({
+const CBIMultiIOSelect = form.MultiValue.extend({
 	__name__: 'CBI.MultiIOSelect',
 
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var value = (cfgvalue != null) ? cfgvalue : this.default ? this.default : '',
+	renderWidget(section_id, option_index, cfgvalue) {
+		const value = (cfgvalue != null) ? cfgvalue : this.default ? this.default : '',
 		    choices = this.transformChoices() ? this.transformChoices() : '';
 
-		var widget = new ui.Dropdown(L.toArray(value), choices, {
+		const widget = new ui.Dropdown(L.toArray(value), choices, {
 			id: this.cbid(section_id),
 			sort: this.keylist,
 			multiple: true,
@@ -204,7 +204,7 @@ var CBIMultiIOSelect = form.MultiValue.extend({
 
 function init() {
 	return new Promise(function(resolveFn, rejectFn) {
-		var data = session.getLocalData('luci-app-lldpd');
+		let data = session.getLocalData('luci-app-lldpd');
 		if (data !== null) {
 			return resolveFn();
 		}
