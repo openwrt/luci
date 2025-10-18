@@ -188,6 +188,10 @@ return view.extend({
 							if (station_interfaces && info) {
 								station_interfaces.textContent = info.data.station_interfaces || '-';
 							}
+							let station_subnet = document.getElementById('station_subnet');
+							if (station_subnet && info) {
+								station_subnet.textContent = info.data.station_subnet || '-';
+							}
 							let run_flags = document.getElementById('run_flags');
 							if (run_flags && info) {
 								run_flags.textContent = info.data.run_flags || '-';
@@ -233,6 +237,10 @@ return view.extend({
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Station Interfaces')),
 					E('div', { 'class': 'cbi-value-field', 'id': 'station_interfaces', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Station Subnet')),
+					E('div', { 'class': 'cbi-value-field', 'id': 'station_subnet', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Flags')),
@@ -359,6 +367,12 @@ return view.extend({
 		o = s.taboption('additional', form.Flag, 'trm_debug', _('Verbose Debug Logging'), _('Enable verbose debug logging in case of any processing errors.'));
 		o.rmempty = false;
 
+		o = s.taboption('additional', widgets.NetworkSelect, 'trm_laniface', _('LAN Interface'), _('Select the logical LAN network interface, default is \'lan\'.'));
+		o.multiple = false;
+		o.nocreate = true;
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('additional', form.ListValue, 'trm_nice', _('Service Priority'), _('The selected priority will be used for travelmate processes.'));
 		o.value('-20', _('Highest Priority'));
 		o.value('-10', _('High Priority'));
@@ -394,8 +408,8 @@ return view.extend({
 		o.datatype = 'range(30,300)';
 		o.rmempty = true;
 
-		o = s.taboption('additional', form.ListValue, 'trm_captiveurl', _('Captive Portal URL'), _('The selected URL will be used for connectivity- and captive portal checks.'));
-		o.value('http://detectportal.firefox.com', 'Firefox (default)');
+		o = s.taboption('additional', form.Value, 'trm_captiveurl', _('Captive Portal URL'), _('The selected URL will be used for connectivity- and captive portal checks.'));
+		o.value('http://detectportal.firefox.com', 'Firefox');
 		o.value('http://connectivity-check.ubuntu.com', 'Ubuntu');
 		o.value('http://captive.apple.com', 'Apple');
 		o.value('http://connectivitycheck.android.com/generate_204', 'Google');
@@ -404,8 +418,8 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('additional', form.ListValue, 'trm_useragent', _('User Agent'), _('The selected user agent will be used for connectivity- and captive portal checks.'));
-		o.value('Mozilla/5.0 (X11; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0', 'Firefox (default)');
+		o = s.taboption('additional', form.Value, 'trm_useragent', _('User Agent'), _('The selected user agent will be used for connectivity- and captive portal checks.'));
+		o.value('Mozilla/5.0 (X11; Linux x86_64; rv:144.0) Gecko/20100101 Firefox/144.0', 'Firefox');
 		o.value('Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36', 'Chromium');
 		o.value('Mozilla/5.0 (Macintosh; Intel Mac OS X 15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.0 Safari/605.1.15', 'Safari');
 		o.value('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.3537.71', 'Edge');
