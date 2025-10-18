@@ -3,6 +3,7 @@
 'require fs';
 'require rpc';
 'require network';
+'require uci';
 
 var callSystemBoard = rpc.declare({
 	object: 'system',
@@ -30,7 +31,8 @@ return baseclass.extend({
 			network.getWAN6Networks(),
 			L.resolveDefault(callSystemBoard(), {}),
 			L.resolveDefault(callSystemInfo(), {}),
-			L.resolveDefault(callGetUnixtime(), {})
+			L.resolveDefault(callGetUnixtime(), {}),
+			uci.load('system')
 		]);
 	},
 
@@ -311,8 +313,9 @@ return baseclass.extend({
 
 		if (unixtime) {
 			const date = new Date(unixtime * 1000);
+			const zn = uci.get('system', '@system[0]', 'zonename') || 'UTC';
 
-			datestr = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'full' }).format(date);
+			datestr = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'full', timeZone: zn }).format(date);
 		}
 
 		this.params.router = {
