@@ -50,8 +50,9 @@ callTimezone = rpc.declare({
 
 function formatTime(epoch) {
 	var date = new Date(epoch * 1000);
+	var zn = uci.get('system', '@system[0]', 'zonename') || 'UTC';
 
-	return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'full' }).format(date);
+	return new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'full', timeZone: zn }).format(date);
 }
 
 CBILocalTime = form.DummyValue.extend({
