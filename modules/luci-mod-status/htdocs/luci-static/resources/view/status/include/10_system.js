@@ -2,6 +2,7 @@
 'require baseclass';
 'require fs';
 'require rpc';
+'require uci';
 
 var callGetUnixtime = rpc.declare({
 	object: 'luci',
@@ -32,7 +33,8 @@ return baseclass.extend({
 			L.resolveDefault(callSystemBoard(), {}),
 			L.resolveDefault(callSystemInfo(), {}),
 			L.resolveDefault(callLuciVersion(), { revision: _('unknown version'), branch: 'LuCI' }),
-			L.resolveDefault(callGetUnixtime(), {})
+			L.resolveDefault(callGetUnixtime(), {}),
+			uci.load('system')
 		]);
 	},
 
@@ -48,8 +50,9 @@ return baseclass.extend({
 
 		if (unixtime) {
 			var date = new Date(unixtime * 1000);
+			var zn = uci.get('system', '@system[0]', 'zonename') || 'UTC';
 
-			datestr = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'full' }).format(date);
+			datestr = new Intl.DateTimeFormat(undefined, { dateStyle: 'medium', timeStyle: 'full', timeZone: zn }).format(date);
 		}
 
 		var fields = [
