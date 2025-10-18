@@ -440,6 +440,7 @@ return L.view.extend({
 			  'blacklist IPv6 addresses, use <code>!*:*</code>.') + '<br />' +
 			  usage);
 		o.placeholder = 'Addresses and interfaces';
+		o.optional = true;
 		o.depends({lldp_mgmt_addr_advertisements: '1'});
 		o.cfgvalue = function(section_id) {
 			const opt = uci.get(this.config, section_id, this.option);
@@ -541,6 +542,7 @@ return L.view.extend({
 			  'Absent any value, all interfaces are considered. ' +
 			  'LLDPd takes the first MAC address from all the considered ' +
 			  'interfaces to compute the chassis ID.'));
+		o.optional = true;
 
 		o.value('*');
 		o.value('!*');
@@ -850,6 +852,7 @@ return L.view.extend({
 		ss.addbtntitle = _('Add Custom TLV', 'lldpd Custom TLV');
 		oo = ss.option(lldpd.CBIMultiIOSelect, 'ports',
 			_('Network Interface(s)'));
+		oo.optional = true;
 		net_devices.forEach(nd => {
 			oo.value(nd.getName());
 			oo.value('!'+nd.getName());

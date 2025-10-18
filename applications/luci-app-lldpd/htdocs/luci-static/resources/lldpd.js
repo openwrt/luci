@@ -183,19 +183,19 @@ const CBIMultiIOSelect = form.MultiValue.extend({
 	__name__: 'CBI.MultiIOSelect',
 
 	renderWidget(section_id, option_index, cfgvalue) {
-		const value = (cfgvalue != null) ? cfgvalue : this.default ? this.default : '',
-		    choices = this.transformChoices() ? this.transformChoices() : '';
+		const value = (cfgvalue != null) ? cfgvalue : this.default ? this.default : '';
+		const choices = this.transformChoices() ? this.transformChoices() : '';
 
 		const widget = new ui.Dropdown(L.toArray(value), choices, {
-			id: this.cbid(section_id),
-			sort: this.keylist,
-			multiple: true,
-			optional: true,
-			display_items: 5,
-			dropdown_items: -1,
-			create: true,
-			disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
-			validate: L.bind(this.validate, this, section_id),
+			id:				this.cbid(section_id),
+			sort: 			this.keylist,
+			multiple: 		this.multiple ?? true,
+			optional: 		this.optional ?? true,
+			display_items:	this.display_items ?? 5,
+			dropdown_items:	this.dropdown_items ?? -1,
+			create:			this.create ?? true,
+			disabled:		(this.readonly != null) ? this.readonly : this.map.readonly,
+			validate:		L.bind(this.validate, this, section_id),
 		});
 
 		return widget.render();
