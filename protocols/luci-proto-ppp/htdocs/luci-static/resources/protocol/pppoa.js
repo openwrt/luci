@@ -85,6 +85,16 @@ return network.registerProtocol('pppoa', {
 			o.default = 'auto';
 		}
 
+		o = s.taboption('advanced', form.Value, 'reqprefix', _('Request IPv6-prefix'),
+			_('Either a prefix length hint (e.g. 56) only, whereby the operator selects the prefix, or specify a prefix also (e.g. %s)')
+			.format('<code>2001:db8::/56</code>'));
+		o.depends("ppp_ipv6", "auto");
+
+		o = s.taboption('advanced', form.Flag, 'norelease', _('Do not send a Release when restarting'), _('Enable to minimise the chance of prefix change after a restart'));
+		o.depends("ppp_ipv6", "auto");
+		o.default = '1';
+		o.rmempty = false;
+
 		o = s.taboption('advanced', form.Value, '_keepalive_failure', _('LCP echo failure threshold'), _('Presume peer to be dead after given amount of LCP echo failures, use 0 to ignore failures'));
 		o.placeholder = '5';
 		o.datatype    = 'uinteger';
