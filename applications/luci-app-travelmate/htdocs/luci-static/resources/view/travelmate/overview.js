@@ -361,6 +361,12 @@ return view.extend({
 		o.datatype = 'range(0,30)';
 		o.rmempty = true;
 
+		o = s.taboption('general', form.DynamicList, 'trm_ssidfilter', _('Filter AutoAdd SSIDs'), _('List of SSID patterns for filtering/skipping specific open uplinks, e.g. \'Chromecast*\''));
+		o.depends('trm_autoadd', '1');
+		o.multiple = true;
+		o.nocreate = false;
+		o.rmempty = true;
+
 		/*
 			additional settings tab
 		*/
