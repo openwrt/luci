@@ -52,12 +52,12 @@ function formatTime(epoch) {
 	var date = new Date(epoch * 1000),
 		zn = uci.get('system', '@system[0]', 'zonename')?.replaceAll(' ', '_') || 'UTC',
 		ts = uci.get('system', '@system[0]', 'clock_timestyle') || 0,
-		hc = uci.get('system', '@system[0]', 'clock_hourcycle') || 'h23';
+		hc = uci.get('system', '@system[0]', 'clock_hourcycle') || 0;
 
 	return new Intl.DateTimeFormat(undefined, {
 		dateStyle: 'medium',
 		timeStyle: (ts == 0) ? 'long' : 'full',
-		hourCycle: hc,
+		hourCycle: (hc == 0) ? undefined : hc,
 		timeZone: zn
 	}).format(date);
 }
@@ -157,7 +157,6 @@ return view.extend({
 		};
 
 		o = s.taboption('general', form.Flag, 'clock_timestyle', _('Full TimeZone Name'), _('Unchecked means the timezone offset (E.g. GMT+1) is displayed'));
-		o.default = o.enabled;
 
 		o = s.taboption('general', form.ListValue, 'clock_hourcycle', _('Time Format'));
 		o.value('', _('Default'));
