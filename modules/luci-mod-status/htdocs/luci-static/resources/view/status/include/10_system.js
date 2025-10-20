@@ -51,8 +51,8 @@ return baseclass.extend({
 		if (unixtime) {
 			var date = new Date(unixtime * 1000),
 				zn = uci.get('system', '@system[0]', 'zonename')?.replaceAll(' ', '_') || 'UTC',
-				ts = uci.get('system', '@system[0]', 'clock_timestyle'),
-				hc = uci.get('system', '@system[0]', 'clock_hourcycle');
+				ts = uci.get('system', '@system[0]', 'clock_timestyle') || 0,
+				hc = uci.get('system', '@system[0]', 'clock_hourcycle') || 'h23';
 
 			datestr = new Intl.DateTimeFormat(undefined, {
 				dateStyle: 'medium',

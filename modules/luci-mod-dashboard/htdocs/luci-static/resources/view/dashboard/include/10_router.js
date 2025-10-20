@@ -314,8 +314,8 @@ return baseclass.extend({
 		if (unixtime) {
 			const date = new Date(unixtime * 1000);
 			const zn = uci.get('system', '@system[0]', 'zonename')?.replaceAll(' ', '_') || 'UTC';
-			const ts = uci.get('system', '@system[0]', 'clock_timestyle');
-			const hc = uci.get('system', '@system[0]', 'clock_hourcycle');
+			const ts = uci.get('system', '@system[0]', 'clock_timestyle') || 0;
+			const hc = uci.get('system', '@system[0]', 'clock_hourcycle') || 'h23';
 
 			datestr = new Intl.DateTimeFormat(undefined, {
 				dateStyle: 'medium',
