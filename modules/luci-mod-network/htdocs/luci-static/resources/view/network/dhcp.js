@@ -294,15 +294,6 @@ return view.extend({
 		s.tab('relay', _('Relay'));
 		s.tab('pxe_tftp', _('PXE/TFTP'));
 
-		var ipaddrs = {};
-
-		Object.keys(hosts).forEach(function(mac) {
-			var addrs = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4);
-
-			for (var i = 0; i < addrs.length; i++)
-				ipaddrs[addrs[i]] = hosts[mac].name || mac;
-		});
-
 		// Begin general
 		s.taboption('general', form.Flag, 'authoritative',
 			_('Authoritative'),
@@ -503,7 +494,13 @@ return view.extend({
 
 			return _('The IP address is outside of any DHCP pool address range');
 		};
+		var ipaddrs = {};
+		Object.keys(hosts).forEach(function(mac) {
+			var addrs = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4);
 
+			for (var i = 0; i < addrs.length; i++)
+				ipaddrs[addrs[i]] = hosts[mac].name || mac;
+		});
 		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
 			so.value(ipv4, ipaddrs[ipv4] ? '%s (%s)'.format(ipv4, ipaddrs[ipv4]) : ipv4);
 		});
