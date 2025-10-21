@@ -235,16 +235,6 @@ return view.extend({
 		var has_dhcpv6 = L.hasSystemFeature('dnsmasq', 'dhcpv6') || L.hasSystemFeature('odhcpd'),
 		    m, s, o, ss, so;
 
-		let noi18nstrings = {
-			etc_ethers: '<code>/etc/ethers</code>',
-		};
-
-		function customi18n(template, values) {
-			if (!values)
-				values = noi18nstrings;
-			return template.replace(/\{(\w+)\}/g, (match, key) => values[key] || match);
-		};
-
 		m = new form.Map('dhcp', _('DHCP'));
 
 		s = m.section(form.TypedSection, 'dnsmasq');
@@ -375,9 +365,8 @@ return view.extend({
 
 		// Begin files
 		s.taboption('files', form.Flag, 'readethers',
-			customi18n(_('Use {etc_ethers}') ),
-			customi18n(_('Read {etc_ethers} to configure the DHCP server.') )
-			);
+			_('Use %s').format('<code>/etc/ethers</code>'),
+			_('Read %s to configure the DHCP server.').format('<code>/etc/ethers</code>'));
 
 		s.taboption('files', form.Value, 'leasefile',
 			_('Lease file'),
