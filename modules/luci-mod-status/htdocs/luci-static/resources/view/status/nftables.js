@@ -303,7 +303,7 @@ return view.extend({
 	renderVMap: function(spec, table) {
 		// spec: { key: {...}, data: { set: [ [mapkey, actionSpec], ... ] } }
 		const matchElem = E('span', { 'class': 'ifacebadge' },
-			_('Verdict map: <var>%h</var>  is').format(this.exprToString(spec.key)));
+			_('Verdict map: <var>%h</var> is').format(this.exprToString(spec.key)));
 
 		const actions = [];
 		const keys = [];

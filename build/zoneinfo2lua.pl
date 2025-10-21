@@ -39,7 +39,8 @@ while( ! eof ZTAB ) {
 		close ZONE;
 
 		if( $tz ) {
-			$zone =~ s/_/ /g;
+			# Don't replace underscores with spaces: correct names contain underscores.
+			# $zone =~ s/_/ /g;
 			$TZ{$zone} = $tz;
 		}
 	}

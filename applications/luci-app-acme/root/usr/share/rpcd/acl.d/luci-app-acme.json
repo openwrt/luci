@@ -1,20 +1,21 @@
 {
-        "luci-app-acme": {
-                "description": "Grant UCI access for luci-app-acme",
-                "read": {
-                        "cgi-io": [ "exec" ],
-                        "file": {
-                                "/usr/lib/acme/client/dnsapi": [ "list" ],
-                                "/proc/sys/kernel/hostname": [ "read" ],
-                                "/etc/ssl/acme": [ "list" ],
-                                "/usr/libexec/acmesh-dnsinfo.sh": [ "exec" ],
-                                "/sbin/logread -e acme": [ "exec" ],
-                                "/usr/sbin/logread -e acme": [ "exec" ]
-                        },
-                        "uci": [ "acme", "ddns" ]
-                },
-                "write": {
-                        "uci": [ "acme" ]
-                }
-        }
+	"luci-app-acme": {
+		"description": "Grant UCI access for luci-app-acme",
+		"read": {
+			"cgi-io": [ "exec" ],
+			"file": {
+				"/usr/lib/acme/client/dnsapi": [ "list" ],
+				"/proc/sys/kernel/hostname": [ "read" ],
+				"/etc/ssl/acme": [ "list" ],
+				"/usr/libexec/acmesh-dnsinfo.sh": [ "exec" ]
+			},
+			"uci": [ "acme", "ddns" ],
+			"ubus": {
+				"log": [ "read" ]
+			}
+		},
+		"write": {
+			"uci": [ "acme" ]
+		}
+	}
 }

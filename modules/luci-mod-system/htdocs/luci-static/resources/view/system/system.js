@@ -8,7 +8,7 @@
 'require tools.widgets as widgets';
 
 var callRcList, callRcInit, callTimezone,
-    callGetLocaltime, callSetLocaltime, CBILocalTime;
+    callGetUnixtime, callSetLocaltime, CBILocalTime;
 
 callRcList = rpc.declare({
 	object: 'rc',
@@ -29,10 +29,10 @@ callRcInit = rpc.declare({
 	expect: { result: false }
 });
 
-callGetLocaltime = rpc.declare({
-	object: 'system',
-	method: 'info',
-	expect: { localtime: 0 }
+callGetUnixtime = rpc.declare({
+	object: 'luci',
+	method: 'getUnixtime',
+	expect: { result: 0 }
 });
 
 callSetLocaltime = rpc.declare({
@@ -49,16 +49,17 @@ callTimezone = rpc.declare({
 });
 
 function formatTime(epoch) {
-	var date = new Date(epoch * 1000);
+	var date = new Date(epoch * 1000),
+		zn = uci.get('system', '@system[0]', 'zonename')?.replaceAll(' ', '_') || 'UTC',
+		ts = uci.get('system', '@system[0]', 'clock_timestyle') || 0,
+		hc = uci.get('system', '@system[0]', 'clock_hourcycle') || 'h23';
 
-	return '%04d-%02d-%02d %02d:%02d:%02d'.format(
-		date.getUTCFullYear(),
-		date.getUTCMonth() + 1,
-		date.getUTCDate(),
-		date.getUTCHours(),
-		date.getUTCMinutes(),
-		date.getUTCSeconds()
-	);
+	return new Intl.DateTimeFormat(undefined, {
+		dateStyle: 'medium',
+		timeStyle: (ts == 0) ? 'long' : 'full',
+		hourCycle: hc,
+		timeZone: zn
+	}).format(date);
 }
 
 CBILocalTime = form.DummyValue.extend({
@@ -97,7 +98,7 @@ return view.extend({
 		return Promise.all([
 			callRcList('sysntpd'),
 			callTimezone(),
-			callGetLocaltime(),
+			callGetUnixtime(),
 			uci.load('luci'),
 			uci.load('system')
 		]);
@@ -106,7 +107,7 @@ return view.extend({
 	render: function(rpc_replies) {
 		var ntpd_enabled = rpc_replies[0],
 		    timezones = rpc_replies[1],
-		    localtime = rpc_replies[2],
+		    unixtime  = rpc_replies[2],
 		    m, s, o;
 
 		m = new form.Map('system',
@@ -129,7 +130,7 @@ return view.extend({
 		 */
 
 		o = s.taboption('general', CBILocalTime, '_systime', _('Local Time'));
-		o.cfgvalue = function() { return localtime };
+		o.cfgvalue = function() { return unixtime };
 		o.ntpd_support = ntpd_enabled;
 
 		o = s.taboption('general', form.Value, 'hostname', _('Hostname'));
@@ -154,6 +155,14 @@ return view.extend({
 			uci.set('system', section_id, 'zonename', formvalue);
 			uci.set('system', section_id, 'timezone', tz);
 		};
+
+		o = s.taboption('general', form.Flag, 'clock_timestyle', _('Full TimeZone Name'), _('Unchecked means the timezone offset (E.g. GMT+1) is displayed'));
+		o.default = o.enabled;
+
+		o = s.taboption('general', form.ListValue, 'clock_hourcycle', _('Time Format'));
+		o.value('', _('Default'));
+		o.value('h12', _('12-Hour Clock'));
+		o.value('h23', _('24-Hour Clock'));
 
 		/*
 		 * Logging
@@ -309,7 +318,7 @@ return view.extend({
 
 		return m.render().then(function(mapEl) {
 			poll.add(function() {
-				return callGetLocaltime().then(function(t) {
+				return callGetUnixtime().then(function(t) {
 					mapEl.querySelector('#localtime').value = formatTime(t);
 				});
 			});

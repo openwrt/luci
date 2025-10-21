@@ -31,11 +31,10 @@
 		"read": {
 			"cgi-io": [ "exec" ],
 			"file": {
-				"/bin/dmesg -r": [ "exec" ],
-				"/usr/libexec/syslog-wrapper": [ "exec" ]
+				"/bin/dmesg -r": [ "exec" ]
 			},
 			"ubus": {
-				"file": [ "stat" ]
+				"log": [ "read" ]
 			}
 		}
 	},

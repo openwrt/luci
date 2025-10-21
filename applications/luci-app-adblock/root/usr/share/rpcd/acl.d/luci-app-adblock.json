@@ -33,12 +33,6 @@
 				"/var/run/adb_runtime.json": [
 					"read"
 				],
-				"/sbin/logread -e adblock-": [
-					"exec"
-				],
-				"/usr/sbin/logread -e adblock-": [
-					"exec"
-				],
 				"/etc/init.d/adblock reload": [
 					"exec"
 				],
@@ -60,6 +54,9 @@
 				"/etc/init.d/adblock query *": [
 					"exec"
 				]
+			},
+			"ubus": {
+				"log": [ "read" ]
 			},
 			"uci": [
 				"adblock"
