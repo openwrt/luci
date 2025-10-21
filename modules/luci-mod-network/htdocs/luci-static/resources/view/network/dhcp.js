@@ -227,8 +227,7 @@ return view.extend({
 			callDUIDHints(),
 			getDHCPPools(),
 			network.getNetworks(),
-			L.hasSystemFeature('ufpd') ? callUfpList() : null,
-			uci.load('firewall')
+			L.hasSystemFeature('ufpd') ? callUfpList() : null
 		]);
 	},
 
