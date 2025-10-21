@@ -69,6 +69,8 @@ var httpProxyConf = [
 var stcpProxyConf = [
 	[form.ListValue, 'role', _('Role'), undefined, {values: ['server', 'visitor']}],
 	[form.Value, 'server_name', _('Server name'), undefined, {depends: [{role: 'visitor'}]}],
+	[form.Value, 'bind_addr', _('Bind addr'), undefined, {depends: [{role: 'visitor'}]}],
+	[form.Value, 'bind_port', _('Bind port'), undefined, {depends: [{role: 'visitor'}]}],
 	[form.Value, 'sk', _('Sk')],
 ];
 
