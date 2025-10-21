@@ -232,197 +232,15 @@ return view.extend({
 	},
 
 	render: function([hosts, duids, pools, networks, macdata]) {
-		var has_dhcpv6 = L.hasSystemFeature('dnsmasq', 'dhcpv6') || L.hasSystemFeature('odhcpd'),
-		    m, s, o, ss, so;
+		var m, s, o, ss, so;
 
 		m = new form.Map('dhcp', _('DHCP'));
 
 		s = this.add_dnsmasq_cfg(m, networks);
 
-		s.tab('leases', _('Static Leases'));
+		this.add_leases_cfg(s, hosts, duids, pools, macdata);
+
 		s.tab('pxe_tftp', _('PXE/TFTP'));
-
-		// Begin leases
-		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
-			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br /><br />' +
-			_('Use the <em>Add</em> Button to add a new lease entry. The <em>MAC address</em> identifies the host, the <em>IPv4 address</em> specifies the fixed address to use, and the <em>Hostname</em> is assigned as a symbolic name to the requesting host. The optional <em>Lease time</em> can be used to set non-standard host-specific lease time, e.g. 12h, 3d or infinite.') + '<br /><br />' +
-			_('The tag construct filters which host directives are used; more than one tag can be provided, in this case the request must match all of them. Tagged directives are used in preference to untagged ones. Note that one of mac, duid or hostname still needs to be specified (can be a wildcard).'));
-
-		ss = o.subsection;
-
-		ss.addremove = true;
-		ss.anonymous = true;
-		ss.sortable = true;
-		ss.nodescriptions = true;
-		ss.max_cols = 8;
-		ss.modaltitle = _('Edit static lease');
-
-		so = ss.option(form.Value, 'name',
-			_('Hostname'),
-			_('Optional hostname to assign'));
-		so.validate = validateHostname;
-		so.rmempty  = true;
-		so.write = function(section, value) {
-			uci.set('dhcp', section, 'name', value);
-			uci.set('dhcp', section, 'dns', '1');
-		};
-		so.remove = function(section) {
-			uci.unset('dhcp', section, 'name');
-			uci.unset('dhcp', section, 'dns');
-		};
-
-		//this can be a .DynamicList or a .Value with a widget and dnsmasq handles multimac OK.
-		so = ss.option(form.DynamicList, 'mac',
-			_('MAC address(es)'),
-			_('The hardware address(es) of this entry/host.') + '<br /><br />' +
-			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
-		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
-		so.rmempty  = true;
-		so.cfgvalue = function(section) {
-			var macs = uci.get('dhcp', section, 'mac');
-			var formattedMacs;
-			var hint, entry;
-
-			if(!Array.isArray(macs)){
-				formattedMacs = expandAndFormatMAC(L.toArray(macs));
-			} else {
-				formattedMacs = expandAndFormatMAC(macs);
-			}
-
-			if (!macdata) {
-				return formattedMacs;
-			}
-
-
-			if (Array.isArray(formattedMacs)){
-				for (let mac in formattedMacs) {
-					entry = formattedMacs[mac].toLowerCase();
-					if (macdata[entry]) {
-						hint = macdata[entry].vendor ? macdata[entry].vendor : null;
-						formattedMacs[mac] += ` (${hint})`;
-					}
-				}
-				return formattedMacs;
-			}
-
-			if (formattedMacs) {
-				entry = formattedMacs[0].toLowerCase();
-				hint = macdata[entry].vendor ? macdata[entry].vendor : null;
-				formattedMacs[0] += ` (${hint})`;
-			}
-			return formattedMacs;
-		};
-		//removed jows renderwidget function which hindered multi-mac entry
-		so.validate = validateMACAddr.bind(so, pools);
-		Object.keys(hosts).forEach(function(mac) {
-			var vendor;
-			var lower_mac = mac.toLowerCase();
-			if (macdata)
-				vendor = macdata[lower_mac] ? macdata[lower_mac].vendor : null;
-			const hint = vendor || hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
-			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
-		});
-
-		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IP address to be used for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
-		so.value('ignore', _('Ignore'));
-		so.datatype = 'or(ip4addr,"ignore")';
-		so.validate = function(section, value) {
-			var m = this.section.formvalue(section, 'mac'),
-			    n = this.section.formvalue(section, 'name');
-
-			if ((m && !m.length > 0) && !n)
-				return _('One of hostname or MAC address must be specified!');
-
-			if (!value || value == 'ignore')
-				return true;
-
-			var leases = uci.sections('dhcp', 'host');
-
-			for (var i = 0; i < leases.length; i++)
-				if (leases[i]['.name'] != section && leases[i].ip == value)
-					return _('The IP address %h is already used by another static lease').format(value);
-
-			for (var i = 0; i < pools.length; i++) {
-				var net_mask = calculateNetwork(value, pools[i].netmask);
-
-				if (net_mask && net_mask[0] == pools[i].network)
-					return true;
-			}
-
-			return _('The IP address is outside of any DHCP pool address range');
-		};
-		var ipaddrs = {};
-		Object.keys(hosts).forEach(function(mac) {
-			var addrs = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4);
-
-			for (var i = 0; i < addrs.length; i++)
-				ipaddrs[addrs[i]] = hosts[mac].name || mac;
-		});
-		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
-			so.value(ipv4, ipaddrs[ipv4] ? '%s (%s)'.format(ipv4, ipaddrs[ipv4]) : ipv4);
-		});
-
-		so = ss.option(form.Value, 'leasetime',
-			_('Lease time'),
-			_('Host-specific lease time, e.g. <code>5m</code>, <code>3h</code>, <code>7d</code>.'));
-		so.rmempty = true;
-		so.value('5m', _('5m (5 minutes)'));
-		so.value('3h', _('3h (3 hours)'));
-		so.value('12h', _('12h (12 hours - default)'));
-		so.value('7d', _('7d (7 days)'));
-		so.value('infinite', _('infinite (lease does not expire)'));
-
-		so = ss.option(form.Value, 'duid',
-			_('DUID'),
-			_('The DHCPv6-DUID (DHCP unique identifier) of this host.'));
-		so.datatype = 'and(rangelength(20,36),hexstring)';
-		Object.keys(duids).forEach(function(duid) {
-			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
-		});
-
-		so = ss.option(form.Value, 'hostid',
-			_('IPv6-Suffix (hex)'),
-			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 16 chars).'));
-		so.datatype = 'and(rangelength(0,16),hexstring)';
-
-		so = ss.option(form.DynamicList, 'tag',
-			_('Tag'),
-			_('Assign new, freeform tags to this entry.'));
-
-		so = ss.option(form.DynamicList, 'match_tag',
-			_('Match Tag'),
-			_('When a host matches an entry then the special tag %s is set. Use %s to match all known hosts.').format('<code>known</code>', '<code>known</code>') + '<br /><br />' +
-			_('Ignore requests from unknown machines using %s.').format('<code>!known</code>') + '<br /><br />' +
-			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag %s is set.').format('<code>known-othernet</code>'));
-		so.value('known', _('known'));
-		so.value('!known', _('!known (not known)'));
-		so.value('known-othernet', _('known-othernet (on different subnet)'));
-		so.optional = true;
-
-		so = ss.option(form.Value, 'instance',
-			_('Instance'),
-			_('Dnsmasq instance to which this DHCP host section is bound. If unspecified, the section is valid for all dnsmasq instances.'));
-		so.optional = true;
-
-		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
-			var [name, display_str] = generateDnsmasqInstanceEntry(val);
-			so.value(name, display_str);
-		});
-
-
-		so = ss.option(form.Flag, 'broadcast',
-			_('Broadcast'),
-			_('Force broadcast DHCP response.'));
-
-		so = ss.option(form.Flag, 'dns',
-			_('Forward/reverse DNS'),
-			_('Add static forward and reverse DNS entries for this host.'));
-
-		o = s.taboption('leases', CBILeaseStatus, '__status__');
-
-		if (has_dhcpv6)
-			o = s.taboption('leases', CBILease6Status, '__status6__');
-		// End leases
 
 		// Begin pxe_tftp
 		o = s.taboption('pxe_tftp', form.Flag, 'enable_tftp',
@@ -843,5 +661,191 @@ return view.extend({
 		// End relay
 
 		return s;
+	},
+
+	add_leases_cfg: function(s, hosts, duids, pools, macdata) {
+		var has_dhcpv6 = L.hasSystemFeature('dnsmasq', 'dhcpv6') || L.hasSystemFeature('odhcpd'),
+		    o, ss, so;
+
+		s.tab('leases', _('Static Leases'));
+		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
+			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new lease entry. The <em>MAC address</em> identifies the host, the <em>IPv4 address</em> specifies the fixed address to use, and the <em>Hostname</em> is assigned as a symbolic name to the requesting host. The optional <em>Lease time</em> can be used to set non-standard host-specific lease time, e.g. 12h, 3d or infinite.') + '<br /><br />' +
+			_('The tag construct filters which host directives are used; more than one tag can be provided, in this case the request must match all of them. Tagged directives are used in preference to untagged ones. Note that one of mac, duid or hostname still needs to be specified (can be a wildcard).'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.max_cols = 8;
+		ss.modaltitle = _('Edit static lease');
+
+		so = ss.option(form.Value, 'name',
+			_('Hostname'),
+			_('Optional hostname to assign'));
+		so.validate = validateHostname;
+		so.rmempty  = true;
+		so.write = function(section, value) {
+			uci.set('dhcp', section, 'name', value);
+			uci.set('dhcp', section, 'dns', '1');
+		};
+		so.remove = function(section) {
+			uci.unset('dhcp', section, 'name');
+			uci.unset('dhcp', section, 'dns');
+		};
+
+		//this can be a .DynamicList or a .Value with a widget and dnsmasq handles multimac OK.
+		so = ss.option(form.DynamicList, 'mac',
+			_('MAC address(es)'),
+			_('The hardware address(es) of this entry/host.') + '<br /><br />' +
+			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
+		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
+		so.rmempty  = true;
+		so.cfgvalue = function(section) {
+			var macs = uci.get('dhcp', section, 'mac');
+			var formattedMacs;
+			var hint, entry;
+
+			if(!Array.isArray(macs)){
+				formattedMacs = expandAndFormatMAC(L.toArray(macs));
+			} else {
+				formattedMacs = expandAndFormatMAC(macs);
+			}
+
+			if (!macdata) {
+				return formattedMacs;
+			}
+
+
+			if (Array.isArray(formattedMacs)){
+				for (let mac in formattedMacs) {
+					entry = formattedMacs[mac].toLowerCase();
+					if (macdata[entry]) {
+						hint = macdata[entry].vendor ? macdata[entry].vendor : null;
+						formattedMacs[mac] += ` (${hint})`;
+					}
+				}
+				return formattedMacs;
+			}
+
+			if (formattedMacs) {
+				entry = formattedMacs[0].toLowerCase();
+				hint = macdata[entry].vendor ? macdata[entry].vendor : null;
+				formattedMacs[0] += ` (${hint})`;
+			}
+			return formattedMacs;
+		};
+		//removed jows renderwidget function which hindered multi-mac entry
+		so.validate = validateMACAddr.bind(so, pools);
+		Object.keys(hosts).forEach(function(mac) {
+			var vendor;
+			var lower_mac = mac.toLowerCase();
+			if (macdata)
+				vendor = macdata[lower_mac] ? macdata[lower_mac].vendor : null;
+			const hint = vendor || hosts[mac].name || L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4)[0];
+			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
+		});
+
+		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IP address to be used for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
+		so.value('ignore', _('Ignore'));
+		so.datatype = 'or(ip4addr,"ignore")';
+		so.validate = function(section, value) {
+			var m = this.section.formvalue(section, 'mac'),
+			    n = this.section.formvalue(section, 'name');
+
+			if ((m && !m.length > 0) && !n)
+				return _('One of hostname or MAC address must be specified!');
+
+			if (!value || value == 'ignore')
+				return true;
+
+			var leases = uci.sections('dhcp', 'host');
+
+			for (var i = 0; i < leases.length; i++)
+				if (leases[i]['.name'] != section && leases[i].ip == value)
+					return _('The IP address %h is already used by another static lease').format(value);
+
+			for (var i = 0; i < pools.length; i++) {
+				var net_mask = calculateNetwork(value, pools[i].netmask);
+
+				if (net_mask && net_mask[0] == pools[i].network)
+					return true;
+			}
+
+			return _('The IP address is outside of any DHCP pool address range');
+		};
+		var ipaddrs = {};
+		Object.keys(hosts).forEach(function(mac) {
+			var addrs = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4);
+
+			for (var i = 0; i < addrs.length; i++)
+				ipaddrs[addrs[i]] = hosts[mac].name || mac;
+		});
+		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
+			so.value(ipv4, ipaddrs[ipv4] ? '%s (%s)'.format(ipv4, ipaddrs[ipv4]) : ipv4);
+		});
+
+		so = ss.option(form.Value, 'leasetime',
+			_('Lease time'),
+			_('Host-specific lease time, e.g. <code>5m</code>, <code>3h</code>, <code>7d</code>.'));
+		so.rmempty = true;
+		so.value('5m', _('5m (5 minutes)'));
+		so.value('3h', _('3h (3 hours)'));
+		so.value('12h', _('12h (12 hours - default)'));
+		so.value('7d', _('7d (7 days)'));
+		so.value('infinite', _('infinite (lease does not expire)'));
+
+		so = ss.option(form.Value, 'duid',
+			_('DUID'),
+			_('The DHCPv6-DUID (DHCP unique identifier) of this host.'));
+		so.datatype = 'and(rangelength(20,36),hexstring)';
+		Object.keys(duids).forEach(function(duid) {
+			so.value(duid, '%s (%s)'.format(duid, duids[duid].hostname || duids[duid].macaddr || duids[duid].ip6addr || '?'));
+		});
+
+		so = ss.option(form.Value, 'hostid',
+			_('IPv6-Suffix (hex)'),
+			_('The IPv6 interface identifier (address suffix) as hexadecimal number (max. 16 chars).'));
+		so.datatype = 'and(rangelength(0,16),hexstring)';
+
+		so = ss.option(form.DynamicList, 'tag',
+			_('Tag'),
+			_('Assign new, freeform tags to this entry.'));
+
+		so = ss.option(form.DynamicList, 'match_tag',
+			_('Match Tag'),
+			_('When a host matches an entry then the special tag %s is set. Use %s to match all known hosts.').format('<code>known</code>', '<code>known</code>') + '<br /><br />' +
+			_('Ignore requests from unknown machines using %s.').format('<code>!known</code>') + '<br /><br />' +
+			_('If a host matches an entry which cannot be used because it specifies an address on a different subnet, the tag %s is set.').format('<code>known-othernet</code>'));
+		so.value('known', _('known'));
+		so.value('!known', _('!known (not known)'));
+		so.value('known-othernet', _('known-othernet (on different subnet)'));
+		so.optional = true;
+
+		so = ss.option(form.Value, 'instance',
+			_('Instance'),
+			_('Dnsmasq instance to which this DHCP host section is bound. If unspecified, the section is valid for all dnsmasq instances.'));
+		so.optional = true;
+
+		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
+			var [name, display_str] = generateDnsmasqInstanceEntry(val);
+			so.value(name, display_str);
+		});
+
+
+		so = ss.option(form.Flag, 'broadcast',
+			_('Broadcast'),
+			_('Force broadcast DHCP response.'));
+
+		so = ss.option(form.Flag, 'dns',
+			_('Forward/reverse DNS'),
+			_('Add static forward and reverse DNS entries for this host.'));
+
+		o = s.taboption('leases', CBILeaseStatus, '__status__');
+
+		if (has_dhcpv6)
+			o = s.taboption('leases', CBILease6Status, '__status6__');
 	}
 });
