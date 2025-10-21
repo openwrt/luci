@@ -237,209 +237,10 @@ return view.extend({
 
 		m = new form.Map('dhcp', _('DHCP'));
 
-		s = m.section(form.TypedSection, 'dnsmasq');
-		s.anonymous = false;
-		s.addremove = true;
-		s.addbtntitle = _('Add server instance', 'Dnsmasq instance');
+		s = this.add_dnsmasq_cfg(m, networks);
 
-		s.renderContents = function(/* ... */) {
-			var renderTask = form.TypedSection.prototype.renderContents.apply(this, arguments),
-			    sections = this.cfgsections();
-
-			return Promise.resolve(renderTask).then(function(nodes) {
-				if (sections.length < 2) {
-					nodes.querySelector('#cbi-dhcp-dnsmasq > h3').remove();
-					nodes.querySelector('#cbi-dhcp-dnsmasq > .cbi-section-remove').remove();
-				}
-				else {
-					nodes.querySelectorAll('#cbi-dhcp-dnsmasq > .cbi-section-remove').forEach(function(div, i) {
-						var section = uci.get('dhcp', sections[i]),
-						    hline = div.nextElementSibling,
-						    btn = div.firstElementChild;
-
-						if (!section || section['.anonymous']) {
-							hline.innerText = i ? _('Unnamed instance #%d', 'Dnsmasq instance').format(i+1) : _('Default instance', 'Dnsmasq instance');
-							btn.innerText = i ? _('Remove instance #%d', 'Dnsmasq instance').format(i+1) : _('Remove default instance', 'Dnsmasq instance');
-						}
-						else {
-							hline.innerText = _('Instance "%q"', 'Dnsmasq instance').format(section['.name']);
-							btn.innerText = _('Remove instance "%q"', 'Dnsmasq instance').format(section['.name']);
-						}
-					});
-				}
-
-				nodes.querySelector('#cbi-dhcp-dnsmasq > .cbi-section-create input').placeholder = _('New instance name…', 'Dnsmasq instance');
-
-				return nodes;
-			});
-		};
-
-
-		s.tab('general', _('General'));
-		s.tab('devices', _('Devices &amp; Ports'));
-		s.tab('logging', _('Log'));
-		s.tab('files', _('Files'));
-		s.tab('relay', _('Relay'));
 		s.tab('leases', _('Static Leases'));
 		s.tab('pxe_tftp', _('PXE/TFTP'));
-
-		// Begin general
-		s.taboption('general', form.Flag, 'authoritative',
-			_('Authoritative'),
-			_('This is the only DHCP server in the local network.'));
-
-		s.taboption('general', form.Value, 'domain',
-			_('Local domain'),
-			_('Local domain suffix appended to DHCP names and hosts file entries.'));
-
-		o = s.taboption('general', form.Flag, 'sequential_ip',
-			_('Allocate IPs sequentially'),
-			_('Allocate IP addresses sequentially, starting from the lowest available address.'));
-		o.optional = true;
-
-		o = s.taboption('general', form.Value, 'dhcpleasemax',
-			_('Max. DHCP leases'),
-			_('Maximum allowed number of active DHCP leases.'));
-		o.optional = true;
-		o.datatype = 'uinteger';
-		o.placeholder = 150;
-		// End general
-
-		// Begin devices
-		o = s.taboption('devices', form.Flag, 'nonwildcard',
-			_('Non-wildcard'),
-			_('Bind only to configured interface addresses, instead of the wildcard address.'));
-		o.default = o.enabled;
-		o.optional = false;
-		o.rmempty = true;
-
-		o = s.taboption('devices', widgets.NetworkSelect, 'interface',
-			_('Listen interfaces'),
-			_('Listen only on the specified interfaces, and loopback if not excluded explicitly.'));
-		o.multiple = true;
-		o.nocreate = true;
-
-		o = s.taboption('devices', widgets.NetworkSelect, 'notinterface',
-			_('Exclude interfaces'),
-			_('Do not listen on the specified interfaces.'));
-		o.loopback = true;
-		o.multiple = true;
-		o.nocreate = true;
-		// End devices
-
-		// Begin logging
-		o = s.taboption('logging', form.Flag, 'logdhcp',
-			_('Extra DHCP logging'),
-			_('Log all options sent to DHCP clients and the tags used to determine them.'));
-		o.optional = true;
-
-		o = s.taboption('logging', form.Value, 'logfacility',
-			_('Log facility'),
-			_('Set log class/facility for syslog entries.'));
-		o.optional = true;
-		o.value('KERN');
-		o.value('USER');
-		o.value('MAIL');
-		o.value('DAEMON');
-		o.value('AUTH');
-		o.value('LPR');
-		o.value('NEWS');
-		o.value('UUCP');
-		o.value('CRON');
-		o.value('LOCAL0');
-		o.value('LOCAL1');
-		o.value('LOCAL2');
-		o.value('LOCAL3');
-		o.value('LOCAL4');
-		o.value('LOCAL5');
-		o.value('LOCAL6');
-		o.value('LOCAL7');
-		o.value('-', _('stderr'));
-
-		o = s.taboption('logging', form.Flag, 'quietdhcp',
-			_('Suppress logging'),
-			_('Suppress logging of the routine operation for the DHCP protocol.'));
-		o.optional = true;
-		o.depends('logdhcp', '0');
-		// End logging
-
-		// Begin files
-		s.taboption('files', form.Flag, 'readethers',
-			_('Use %s').format('<code>/etc/ethers</code>'),
-			_('Read %s to configure the DHCP server.').format('<code>/etc/ethers</code>'));
-
-		s.taboption('files', form.Value, 'leasefile',
-			_('Lease file'),
-			_('File to store DHCP lease information.'));
-		// End files
-
-		// Begin relay
-		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
-			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
-			+ '<br />' + _('Note: you may also need a DHCP Proxy (currently unavailable) when specifying a non-standard Relay To port(<code>addr#port</code>).')
-			+ '<br />' + _('You may add multiple unique Relay To on the same Listen addr.'));
-
-		ss = o.subsection;
-
-		ss.addremove = true;
-		ss.anonymous = true;
-		ss.sortable  = true;
-		ss.rowcolors = true;
-		ss.nodescriptions = true;
-
-		so = ss.option(form.Value, 'local_addr', _('Relay from'));
-		so.rmempty = false;
-		so.datatype = 'ipaddr';
-
-		for (var family = 4; family <= 6; family += 2) {
-			for (var i = 0; i < networks.length; i++) {
-				if (networks[i].getName() != 'loopback') {
-					var addrs = (family == 6) ? networks[i].getIP6Addrs() : networks[i].getIPAddrs();
-					for (var j = 0; j < addrs.length; j++) {
-						var addr = addrs[j].split('/')[0];
-						so.value(addr, E([], [
-							addr, ' (',
-							widgets.NetworkSelect.prototype.renderIfaceBadge(networks[i]),
-							')'
-						]));
-					}
-				}
-			}
-		}
-
-		so = ss.option(form.Value, 'server_addr', _('Relay to address'));
-		so.rmempty = false;
-		so.optional = false;
-		so.placeholder = '192.168.10.1#535';
-		so.validate = function(section, value) {
-			var m = this.section.formvalue(section, 'local_addr'),
-			    n = this.section.formvalue(section, 'server_addr'),
-			    p;
-
-			if (!m || !n) {
-				return _('Both "Relay from" and "Relay to address" must be specified.');
-			}
-			else {
-				p = n.split('#');
-				if (p.length > 1 && !/^[0-9]+$/.test(p[1]))
-					return _('Expected port number.');
-				else
-					n = p[0];
-
-				if ((validation.parseIPv6(m) && validation.parseIPv6(n)) ||
-					validation.parseIPv4(m) && validation.parseIPv4(n))
-					return true;
-				else
-					return _('Address families of "Relay from" and "Relay to address" must match.')
-			}
-			return true;
-		};
-
-		so = ss.option(widgets.NetworkSelect, 'interface', _('Only accept replies via'));
-		so.optional = true;
-		so.rmempty = false;
-		so.placeholder = 'lan';
-		// End relay
 
 		// Begin leases
 		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
@@ -836,5 +637,211 @@ return view.extend({
 
 			return mapEl;
 		});
+	},
+
+	add_dnsmasq_cfg: function(m, networks) {
+		var s, o, ss, so;
+
+		s = m.section(form.TypedSection, 'dnsmasq');
+		s.anonymous = false;
+		s.addremove = true;
+		s.addbtntitle = _('Add server instance', 'Dnsmasq instance');
+		s.renderContents = function(/* ... */) {
+			var renderTask = form.TypedSection.prototype.renderContents.apply(this, arguments),
+			    sections = this.cfgsections();
+
+			return Promise.resolve(renderTask).then(function(nodes) {
+				if (sections.length < 2) {
+					nodes.querySelector('#cbi-dhcp-dnsmasq > h3').remove();
+					nodes.querySelector('#cbi-dhcp-dnsmasq > .cbi-section-remove').remove();
+				}
+				else {
+					nodes.querySelectorAll('#cbi-dhcp-dnsmasq > .cbi-section-remove').forEach(function(div, i) {
+						var section = uci.get('dhcp', sections[i]),
+						    hline = div.nextElementSibling,
+						    btn = div.firstElementChild;
+
+						if (!section || section['.anonymous']) {
+							hline.innerText = i ? _('Unnamed instance #%d', 'Dnsmasq instance').format(i+1) : _('Default instance', 'Dnsmasq instance');
+							btn.innerText = i ? _('Remove instance #%d', 'Dnsmasq instance').format(i+1) : _('Remove default instance', 'Dnsmasq instance');
+						}
+						else {
+							hline.innerText = _('Instance "%q"', 'Dnsmasq instance').format(section['.name']);
+							btn.innerText = _('Remove instance "%q"', 'Dnsmasq instance').format(section['.name']);
+						}
+					});
+				}
+
+				nodes.querySelector('#cbi-dhcp-dnsmasq > .cbi-section-create input').placeholder = _('New instance name…', 'Dnsmasq instance');
+
+				return nodes;
+			});
+		};
+
+		s.tab('general', _('General'));
+		s.tab('devices', _('Devices &amp; Ports'));
+		s.tab('logging', _('Log'));
+		s.tab('files', _('Files'));
+		s.tab('relay', _('Relay'));
+
+		// Begin general
+		s.taboption('general', form.Flag, 'authoritative',
+			_('Authoritative'),
+			_('This is the only DHCP server in the local network.'));
+
+		s.taboption('general', form.Value, 'domain',
+			_('Local domain'),
+			_('Local domain suffix appended to DHCP names and hosts file entries.'));
+
+		o = s.taboption('general', form.Flag, 'sequential_ip',
+			_('Allocate IPs sequentially'),
+			_('Allocate IP addresses sequentially, starting from the lowest available address.'));
+		o.optional = true;
+
+		o = s.taboption('general', form.Value, 'dhcpleasemax',
+			_('Max. DHCP leases'),
+			_('Maximum allowed number of active DHCP leases.'));
+		o.optional = true;
+		o.datatype = 'uinteger';
+		o.placeholder = 150;
+		// End general
+
+		// Begin devices
+		o = s.taboption('devices', form.Flag, 'nonwildcard',
+			_('Non-wildcard'),
+			_('Bind only to configured interface addresses, instead of the wildcard address.'));
+		o.default = o.enabled;
+		o.optional = false;
+		o.rmempty = true;
+
+		o = s.taboption('devices', widgets.NetworkSelect, 'interface',
+			_('Listen interfaces'),
+			_('Listen only on the specified interfaces, and loopback if not excluded explicitly.'));
+		o.multiple = true;
+		o.nocreate = true;
+
+		o = s.taboption('devices', widgets.NetworkSelect, 'notinterface',
+			_('Exclude interfaces'),
+			_('Do not listen on the specified interfaces.'));
+		o.loopback = true;
+		o.multiple = true;
+		o.nocreate = true;
+		// End devices
+
+		// Begin logging
+		o = s.taboption('logging', form.Flag, 'logdhcp',
+			_('Extra DHCP logging'),
+			_('Log all options sent to DHCP clients and the tags used to determine them.'));
+		o.optional = true;
+
+		o = s.taboption('logging', form.Value, 'logfacility',
+			_('Log facility'),
+			_('Set log class/facility for syslog entries.'));
+		o.optional = true;
+		o.value('KERN');
+		o.value('USER');
+		o.value('MAIL');
+		o.value('DAEMON');
+		o.value('AUTH');
+		o.value('LPR');
+		o.value('NEWS');
+		o.value('UUCP');
+		o.value('CRON');
+		o.value('LOCAL0');
+		o.value('LOCAL1');
+		o.value('LOCAL2');
+		o.value('LOCAL3');
+		o.value('LOCAL4');
+		o.value('LOCAL5');
+		o.value('LOCAL6');
+		o.value('LOCAL7');
+		o.value('-', _('stderr'));
+
+		o = s.taboption('logging', form.Flag, 'quietdhcp',
+			_('Suppress logging'),
+			_('Suppress logging of the routine operation for the DHCP protocol.'));
+		o.optional = true;
+		o.depends('logdhcp', '0');
+		// End logging
+
+		// Begin files
+		s.taboption('files', form.Flag, 'readethers',
+			_('Use %s').format('<code>/etc/ethers</code>'),
+			_('Read %s to configure the DHCP server.').format('<code>/etc/ethers</code>'));
+
+		s.taboption('files', form.Value, 'leasefile',
+			_('Lease file'),
+			_('File to store DHCP lease information.'));
+		// End files
+
+		// Begin relay
+		o = s.taboption('relay', form.SectionValue, '__relays__', form.TableSection, 'relay', null,
+			_('Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4.')
+			+ '<br />' + _('Note: you may also need a DHCP Proxy (currently unavailable) when specifying a non-standard Relay To port(<code>addr#port</code>).')
+			+ '<br />' + _('You may add multiple unique Relay To on the same Listen addr.'));
+
+		ss = o.subsection;
+
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable  = true;
+		ss.rowcolors = true;
+		ss.nodescriptions = true;
+
+		so = ss.option(form.Value, 'local_addr', _('Relay from'));
+		so.rmempty = false;
+		so.datatype = 'ipaddr';
+
+		for (var family = 4; family <= 6; family += 2) {
+			for (var i = 0; i < networks.length; i++) {
+				if (networks[i].getName() != 'loopback') {
+					var addrs = (family == 6) ? networks[i].getIP6Addrs() : networks[i].getIPAddrs();
+					for (var j = 0; j < addrs.length; j++) {
+						var addr = addrs[j].split('/')[0];
+						so.value(addr, E([], [
+							addr, ' (',
+							widgets.NetworkSelect.prototype.renderIfaceBadge(networks[i]),
+							')'
+						]));
+					}
+				}
+			}
+		}
+
+		so = ss.option(form.Value, 'server_addr', _('Relay to address'));
+		so.rmempty = false;
+		so.optional = false;
+		so.placeholder = '192.168.10.1#535';
+		so.validate = function(section, value) {
+			var m = this.section.formvalue(section, 'local_addr'),
+			    n = this.section.formvalue(section, 'server_addr'),
+			    p;
+
+			if (!m || !n) {
+				return _('Both "Relay from" and "Relay to address" must be specified.');
+			}
+			else {
+				p = n.split('#');
+				if (p.length > 1 && !/^[0-9]+$/.test(p[1]))
+					return _('Expected port number.');
+				else
+					n = p[0];
+
+				if ((validation.parseIPv6(m) && validation.parseIPv6(n)) ||
+					validation.parseIPv4(m) && validation.parseIPv4(n))
+					return true;
+				else
+					return _('Address families of "Relay from" and "Relay to address" must match.')
+			}
+			return true;
+		};
+
+		so = ss.option(widgets.NetworkSelect, 'interface', _('Only accept replies via'));
+		so.optional = true;
+		so.rmempty = false;
+		so.placeholder = 'lan';
+		// End relay
+
+		return s;
 	}
 });
