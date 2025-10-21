@@ -238,6 +238,8 @@ return view.extend({
 
 		s = this.add_dnsmasq_cfg(m, networks);
 
+		this.add_odhcpd_cfg(s);
+
 		this.add_leases_cfg(s, hosts, duids, pools, macdata);
 
 		s.tab('pxe_tftp', _('PXE/TFTP'));
@@ -661,6 +663,50 @@ return view.extend({
 		// End relay
 
 		return s;
+	},
+
+	add_odhcpd_cfg: function(s) {
+		var o, ss, so;
+
+		s.tab('odhcpd', _('odhcpd'));
+		o = s.taboption('odhcpd', form.SectionValue, '__odhcpd__', form.TypedSection, 'odhcpd', null,
+			_('Note that many options are set on a per-interface basis in the <a href="./network">Interfaces</a> tab.'));
+
+		ss = o.subsection;
+		ss.anonymous = true;
+
+		so = ss.option(form.Flag, 'maindhcp',
+			_('DHCPv4'),
+			_('Use <code>odhcp</code> for DHCPv4. This will disable DHCPv4 support in <code>dnsmasq</code>.') + '<br />' +
+			_('The DHCPv4 functionality also needs to be enabled on a per-interface basis.'));
+
+		so = ss.option(form.Value, 'leasefile',
+			_('Lease file'),
+			_('File to store active DHCP leases in.'));
+
+		so = ss.option(form.Value, 'leasetrigger',
+			_('Lease trigger'),
+			_('Path to a script to run each time the lease file changes.'));
+
+		so = ss.option(form.Value, 'hostsfile',
+			_('Hosts file'),
+			_('Path to store a hostsfile (IP address to hostname mapping) in. Used by e.g. <code>dnsmasq</code>.'));
+
+		so = ss.option(form.Value, 'piofolder',
+			_('PIO directory'),
+			_('Directory to store IPv6 prefix information files in (to detect and announce stale prefixes).'));
+
+		so = ss.option(form.Value, 'loglevel',
+			_('Log level'),
+			_('Log level of the <code>odhcpd</code> daemon.'));
+		so.value('0', 'Emergency');
+		so.value('1', 'Alert');
+		so.value('2', 'Critical');
+		so.value('3', 'Error');
+		so.value('4', 'Warning');
+		so.value('5', 'Notice');
+		so.value('6', 'Info');
+		so.value('7', 'Debug');
 	},
 
 	add_leases_cfg: function(s, hosts, duids, pools, macdata) {
