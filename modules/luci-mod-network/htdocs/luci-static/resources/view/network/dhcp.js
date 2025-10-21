@@ -761,7 +761,7 @@ return view.extend({
 					var leases = Array.isArray(leaseinfo.dhcp_leases) ? leaseinfo.dhcp_leases : [],
 					    leases6 = Array.isArray(leaseinfo.dhcp6_leases) ? leaseinfo.dhcp6_leases : [];
 
-					cbi_update_table(mapEl.querySelector('#lease_status_table'),
+					cbi_update_table('#lease_status_table',
 						leases.map(function(lease) {
 							var exp;
 							var vendor;
@@ -796,41 +796,41 @@ return view.extend({
 								exp
 							];
 						}),
-						E('em', _('There are no active leases')));
+						E('em', _('There are no active leases'))
+					);
 
-					if (has_dhcpv6) {
-						cbi_update_table(mapEl.querySelector('#lease6_status_table'),
-							leases6.map(function(lease) {
-								var exp;
+					cbi_update_table('#lease6_status_table',
+						leases6.map(function(lease) {
+							var exp;
 
-								if (lease.expires === false)
-									exp = E('em', _('unlimited'));
-								else if (lease.expires <= 0)
-									exp = E('em', _('expired'));
-								else
-									exp = '%t'.format(lease.expires);
+							if (lease.expires === false)
+								exp = E('em', _('unlimited'));
+							else if (lease.expires <= 0)
+								exp = E('em', _('expired'));
+							else
+								exp = '%t'.format(lease.expires);
 
-								var hint = lease.macaddr ? hosts[lease.macaddr] : null,
-								    name = hint ? (hint.name || L.toArray(hint.ipaddrs || hint.ipv4)[0] || L.toArray(hint.ip6addrs || hint.ipv6)[0]) : null,
-								    host = null;
+							var hint = lease.macaddr ? hosts[lease.macaddr] : null,
+							    name = hint ? (hint.name || L.toArray(hint.ipaddrs || hint.ipv4)[0] || L.toArray(hint.ip6addrs || hint.ipv6)[0]) : null,
+							    host = null;
 
-								if (name && lease.hostname && lease.hostname != name && lease.ip6addr != name)
-									host = '%s (%s)'.format(lease.hostname, name);
-								else if (lease.hostname)
-									host = lease.hostname;
-								else if (name)
-									host = name;
+							if (name && lease.hostname && lease.hostname != name && lease.ip6addr != name)
+								host = '%s (%s)'.format(lease.hostname, name);
+							else if (lease.hostname)
+								host = lease.hostname;
+							else if (name)
+								host = name;
 
-								return [
-									host || '-',
-									lease.ip6addrs ? lease.ip6addrs.join('<br />') : lease.ip6addr,
-									lease.duid,
-									lease.iaid,
-									exp
-								];
-							}),
-							E('em', _('There are no active leases')));
-					}
+							return [
+								host || '-',
+								lease.ip6addrs ? lease.ip6addrs.join('<br />') : lease.ip6addr,
+								lease.duid,
+								lease.iaid,
+								exp
+							];
+						}),
+						E('em', _('There are no active leases'))
+					);
 				});
 			});
 
