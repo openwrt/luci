@@ -232,15 +232,16 @@ return view.extend({
 	},
 
 	render: function([hosts, duids, pools, networks, macdata]) {
-		var m, s, o, ss, so;
+		let m;
 
 		m = new form.Map('dhcp', _('DHCP'));
+		m.tabbed = true;
 
-		s = this.add_dnsmasq_cfg(m, networks);
+		this.add_dnsmasq_cfg(m, networks);
 
-		this.add_odhcpd_cfg(s);
+		this.add_odhcpd_cfg(m);
 
-		this.add_leases_cfg(s, hosts, duids, pools, macdata);
+		this.add_leases_cfg(m, hosts, duids, pools, macdata);
 
 		return m.render().then(function(mapEl) {
 			poll.add(function() {
@@ -328,7 +329,8 @@ return view.extend({
 	add_dnsmasq_cfg: function(m, networks) {
 		var s, o, ss, so;
 
-		s = m.section(form.TypedSection, 'dnsmasq');
+		s = m.section(form.TypedSection, 'dnsmasq', _('dnsmasq'));
+		s.hidetitle = true;
 		s.anonymous = false;
 		s.addremove = true;
 		s.addbtntitle = _('Add server instance', 'Dnsmasq instance');
@@ -608,53 +610,57 @@ return view.extend({
 		return s;
 	},
 
-	add_odhcpd_cfg: function(s) {
-		var o, ss, so;
+	add_odhcpd_cfg: function(m) {
+		var s, o, ss, so;
 
-		s.tab('odhcpd', _('odhcpd'));
-		o = s.taboption('odhcpd', form.SectionValue, '__odhcpd__', form.TypedSection, 'odhcpd', null,
+		s = m.section(form.TypedSection, 'odhcpd', _('odhcpd'));
+		s.hidetitle = true;
+		s.anonymous = true;
+
+		// Begin general
+		s.tab('general', _('General'),
 			_('Note that many options are set on a per-interface basis in the <a href="./network">Interfaces</a> tab.'));
 
-		ss = o.subsection;
-		ss.anonymous = true;
-
-		so = ss.option(form.Flag, 'maindhcp',
+		o = s.taboption('general', form.Flag, 'maindhcp',
 			_('DHCPv4'),
 			_('Use <code>odhcp</code> for DHCPv4. This will disable DHCPv4 support in <code>dnsmasq</code>.') + '<br />' +
 			_('The DHCPv4 functionality also needs to be enabled on a per-interface basis.'));
 
-		so = ss.option(form.Value, 'leasefile',
+		o = s.taboption('general', form.Value, 'leasefile',
 			_('Lease file'),
 			_('File to store active DHCP leases in.'));
 
-		so = ss.option(form.Value, 'leasetrigger',
+		o = s.taboption('general', form.Value, 'leasetrigger',
 			_('Lease trigger'),
 			_('Path to a script to run each time the lease file changes.'));
 
-		so = ss.option(form.Value, 'hostsfile',
+		o = s.taboption('general', form.Value, 'hostsfile',
 			_('Hosts file'),
 			_('Path to store a hostsfile (IP address to hostname mapping) in. Used by e.g. <code>dnsmasq</code>.'));
 
-		so = ss.option(form.Value, 'piofolder',
+		o = s.taboption('general', form.Value, 'piofolder',
 			_('PIO directory'),
 			_('Directory to store IPv6 prefix information files in (to detect and announce stale prefixes).'));
 
-		so = ss.option(form.Value, 'loglevel',
+		o = s.taboption('general', form.Value, 'loglevel',
 			_('Log level'),
 			_('Log level of the <code>odhcpd</code> daemon.'));
-		so.value('0', 'Emergency');
-		so.value('1', 'Alert');
-		so.value('2', 'Critical');
-		so.value('3', 'Error');
-		so.value('4', 'Warning');
-		so.value('5', 'Notice');
-		so.value('6', 'Info');
-		so.value('7', 'Debug');
+		o.value('0', 'Emergency');
+		o.value('1', 'Alert');
+		o.value('2', 'Critical');
+		o.value('3', 'Error');
+		o.value('4', 'Warning');
+		o.value('5', 'Notice');
+		o.value('6', 'Info');
+		o.value('7', 'Debug');
+		// End general
 
-		// Begin pxe_tftp
-		o = s.taboption('pxe_tftp', form.SectionValue, '__pxe6__', form.TableSection, 'boot6', null,
-			_('Special <abbr title="Preboot eXecution Environment">PXE</abbr> boot options for odhcpd IPv6.') + ' ' +
-			_('The last entry absent architecture becomes the default.'));
+		// Begin pxe6
+		s.tab('pxe6', _('PXE over IPv6'));
+
+		o = s.taboption('pxe6', form.SectionValue, '__pxe6__', form.TableSection, 'boot6', null,
+			_('<abbr title="Preboot eXecution Environment">PXE</abbr> over IPv6 boot options.') + '<br />' +
+			_('The last entry without an architecture becomes the default.'));
 		ss = o.subsection;
 		ss.addremove = true;
 		ss.anonymous = true;
@@ -706,23 +712,25 @@ return view.extend({
 		so.value('39', _('39: LoongArch 64-bit UEFI'));
 		so.value('39', _('40: LoongArch 64-bit UEFI boot from HTTP'));
 		so.value('41', _('41: ARM rpiboot'));
-		// End pxe_tftp
+		// End pxe6
 	},
 
-	add_leases_cfg: function(s, hosts, duids, pools, macdata) {
+	add_leases_cfg: function(m, hosts, duids, pools, macdata) {
 		var has_dhcpv6 = L.hasSystemFeature('dnsmasq', 'dhcpv6') || L.hasSystemFeature('odhcpd'),
-		    o, ss, so;
+		    s, o, ss, so;
 
-		s.tab('leases', _('Static Leases'));
-		o = s.taboption('leases', form.SectionValue, '__leases__', form.GridSection, 'host', null,
+		s = m.section(form.TypedSection, '__leases__', _('Leases'));
+		s.hidetitle = true;
+		s.anonymous = true;
+		s.cfgsections = function() { return [ '__leases__' ] };
+
+		o = s.option(form.SectionValue, '__static_leases__', form.GridSection, 'host', null,
 			_('Static leases are used to assign fixed IP addresses and symbolic hostnames to DHCP clients. They are also required for non-dynamic interface configurations where only hosts with a corresponding lease are served.') + '<br /><br />' +
 			_('Use the <em>Add</em> Button to add a new lease entry. The <em>MAC address</em> identifies the host, the <em>IPv4 address</em> specifies the fixed address to use, and the <em>Hostname</em> is assigned as a symbolic name to the requesting host. The optional <em>Lease time</em> can be used to set non-standard host-specific lease time, e.g. 12h, 3d or infinite.') + '<br /><br />' +
 			_('The tag construct filters which host directives are used; more than one tag can be provided, in this case the request must match all of them. Tagged directives are used in preference to untagged ones. Note that one of mac, duid or hostname still needs to be specified (can be a wildcard).'));
-
 		ss = o.subsection;
-
-		ss.addremove = true;
 		ss.anonymous = true;
+		ss.addremove = true;
 		ss.sortable = true;
 		ss.nodescriptions = true;
 		ss.max_cols = 8;
@@ -742,12 +750,10 @@ return view.extend({
 			uci.unset('dhcp', section, 'dns');
 		};
 
-		//this can be a .DynamicList or a .Value with a widget and dnsmasq handles multimac OK.
 		so = ss.option(form.DynamicList, 'mac',
 			_('MAC address(es)'),
 			_('The hardware address(es) of this entry/host.') + '<br /><br />' +
 			_('In DHCPv4, it is possible to include more than one mac address. This allows an IP address to be associated with multiple macaddrs, and dnsmasq abandons a DHCP lease to one of the macaddrs when another asks for a lease. It only works reliably if only one of the macaddrs is active at any time.'));
-		//As a special case, in DHCPv4, it is possible to include more than one hardware address. eg: --dhcp-host=11:22:33:44:55:66,12:34:56:78:90:12,192.168.0.2 This allows an IP address to be associated with multiple hardware addresses, and gives dnsmasq permission to abandon a DHCP lease to one of the hardware addresses when another one asks for a lease
 		so.rmempty  = true;
 		so.cfgvalue = function(section) {
 			var macs = uci.get('dhcp', section, 'mac');
@@ -783,8 +789,7 @@ return view.extend({
 			}
 			return formattedMacs;
 		};
-		//removed jows renderwidget function which hindered multi-mac entry
-		so.validate = validateMACAddr.bind(so, pools);
+		so.validate = validateMACAddr.bind(o, pools);
 		Object.keys(hosts).forEach(function(mac) {
 			var vendor;
 			var lower_mac = mac.toLowerCase();
@@ -794,7 +799,8 @@ return view.extend({
 			so.value(mac, hint ? '%s (%s)'.format(mac, hint) : mac);
 		});
 
-		so = ss.option(form.Value, 'ip', _('IPv4 address'), _('The IP address to be used for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
+		so = ss.option(form.Value, 'ip', _('IPv4 address'),
+			_('The IP address to be used for this host, or <em>ignore</em> to ignore any DHCP request from this host.'));
 		so.value('ignore', _('Ignore'));
 		so.datatype = 'or(ip4addr,"ignore")';
 		so.validate = function(section, value) {
@@ -830,7 +836,7 @@ return view.extend({
 				ipaddrs[addrs[i]] = hosts[mac].name || mac;
 		});
 		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
-			so.value(ipv4, ipaddrs[ipv4] ? '%s (%s)'.format(ipv4, ipaddrs[ipv4]) : ipv4);
+			o.value(ipv4, ipaddrs[ipv4] ? '%s (%s)'.format(ipv4, ipaddrs[ipv4]) : ipv4);
 		});
 
 		so = ss.option(form.Value, 'leasetime',
@@ -874,12 +880,10 @@ return view.extend({
 			_('Instance'),
 			_('Dnsmasq instance to which this DHCP host section is bound. If unspecified, the section is valid for all dnsmasq instances.'));
 		so.optional = true;
-
 		Object.values(L.uci.sections('dhcp', 'dnsmasq')).forEach(function(val, index) {
 			var [name, display_str] = generateDnsmasqInstanceEntry(val);
 			so.value(name, display_str);
 		});
-
 
 		so = ss.option(form.Flag, 'broadcast',
 			_('Broadcast'),
@@ -889,9 +893,9 @@ return view.extend({
 			_('Forward/reverse DNS'),
 			_('Add static forward and reverse DNS entries for this host.'));
 
-		o = s.taboption('leases', CBILeaseStatus, '__status__');
+		s.option(CBILeaseStatus, '__status__');
 
 		if (has_dhcpv6)
-			o = s.taboption('leases', CBILease6Status, '__status6__');
+			s.option(CBILease6Status, '__status6__');
 	}
 });
