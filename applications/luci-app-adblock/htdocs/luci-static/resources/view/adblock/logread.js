@@ -1,4 +1,4 @@
 'use strict';
 'require tools.views as views';
 
-return views.LogreadBox("adblock-", "adblock");
+return views.LogreadBox("adblock-", _('Adblock Log'));
