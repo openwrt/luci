@@ -1,4 +1,4 @@
 'use strict';
-'require tools.views as views';
+'require view.travelmate.logtemplate as LogTemplate';
 
-return views.LogreadBox("trm-", "travelmate");
+return LogTemplate.Logview('trm-', 'travelmate');

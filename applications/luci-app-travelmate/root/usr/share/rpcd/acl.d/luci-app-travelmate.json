@@ -15,14 +15,13 @@
 				"/var/run/travelmate.scan": [ "read" ],
 				"/var/state/travelmate.refresh": [ "read" ],
 				"/tmp/trm_runtime.json": [ "read" ],
+				"/sbin/logread -e trm-": [ "exec" ],
+				"/usr/sbin/logread -e trm-": [ "exec" ],
 				"/sbin/ifup *": [ "exec" ],
 				"/etc/init.d/travelmate start" : [ "exec" ],
 				"/etc/init.d/travelmate stop" : [ "exec" ],
 				"/etc/init.d/travelmate setup [0-9a-z_]* [0-9a-z_]* [0-9]*" : [ "exec" ],
 				"/etc/init.d/travelmate scan radio[0-1]" : [ "exec" ]
-			},
-			"ubus": {
-				"log": [ "read" ]
 			},
 			"uci": [ "travelmate", "wireless" ]
 		}
