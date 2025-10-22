@@ -1023,7 +1023,7 @@ return view.extend({
 					so.depends({ dhcpv6: 'hybrid', master: '0' });
 
 					so = ss.taboption('ipv6', form.DynamicList, 'domain', _('Announce DNS domains'),
-						_('Specifies a fixed list of DNS search domains to announce via DHCPv6. If left unspecified, the local device DNS search domain will be announced.'));
+						_('Specifies a fixed list of DNS search domains to announce via DHCPv6.'));
 					so.datatype = 'hostname';
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
@@ -1109,11 +1109,6 @@ return view.extend({
 				if (has_peerdns(protoval))
 					o.depends('peerdns', '0');
 				o.datatype = 'ipaddr';
-
-				o = nettools.replaceOption(s, 'advanced', form.DynamicList, 'dns_search', _('DNS search domains'));
-				if (protoval != 'static')
-					o.depends('peerdns', '0');
-				o.datatype = 'hostname';
 
 				o = nettools.replaceOption(s, 'advanced', form.Value, 'dns_metric', _('DNS weight'), _('The DNS server entries in the local resolv.conf are primarily sorted by the weight specified here'));
 				o.datatype = 'uinteger';
