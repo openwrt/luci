@@ -1,4 +1,4 @@
 'use strict';
 'require tools.views as views';
 
-return views.LogreadBox("banIP-", "banIP");
+return views.LogreadBox("banIP-", _('banIP Log'));

@@ -25,7 +25,7 @@ var CBILogreadBox = function(logtag, name) {
 		logTextFilter: '',
 		invertLogTextSearch: false,
 		logTagFilter: logtag ? logtag : '',
-		logName: name ? name : _('System'),
+		logName: name ? name : _('System Log'),
 		fetchMaxRows: 1000,
 
 		facilities: [
@@ -233,7 +233,7 @@ var CBILogreadBox = function(logtag, name) {
 			filterMaxRows.addEventListener('change', handleLogFilterChange);
 
 			return E([], [
-				E('h2', {}, [ `${this.logName} ${_('Log')}` ]),
+				E('h2', {}, [ this.logName ]),
 				E('div', { 'id': 'content_syslog' }, [
 					E('div', { class: 'cbi-section-descr' }, this.logTagFilter ? _('The syslog output, pre-filtered for messages related to: ' + this.logTagFilter) : '') ,
 					E('div', { 'style': 'margin-bottom:10px' }, [
