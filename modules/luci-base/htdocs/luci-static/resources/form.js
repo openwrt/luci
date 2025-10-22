@@ -2156,6 +2156,17 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 	 */
 
 	/**
+	 * If set to true, the title caption of the form section element which
+	 * is normally rendered before the start of the section content will
+	 * not be rendered in the UI. The default is false, meaning that the
+	 * title is rendered.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#hidetitle
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
 	 * If set to `true`, mapped section instances are treated as anonymous
 	 * UCI sections, which means that section instance elements will be
 	 * rendered without a title element and that no name is required when adding
@@ -2300,7 +2311,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 			'data-tab-title': (this.map.tabbed && !this.parentoption) ? this.title || this.sectiontype : null
 		});
 
-		if (this.title != null && this.title != '')
+		if (this.title != null && this.title != '' && !this.hidetitle)
 			sectionEl.appendChild(E('h3', {}, this.title));
 
 		if (this.description != null && this.description != '')
@@ -2530,7 +2541,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 			'class': 'table cbi-section-table'
 		});
 
-		if (this.title != null && this.title != '')
+		if (this.title != null && this.title != '' && !this.hidetitle)
 			sectionEl.appendChild(E('h3', {}, this.title));
 
 		if (this.description != null && this.description != '')
@@ -3514,6 +3525,17 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 	 */
 
 	/**
+	 * If set to true, the title caption of the form section element which
+	 * is normally rendered before the start of the section content will
+	 * not be rendered in the UI. The default is false, meaning that the
+	 * title is rendered.
+	 *
+	 * @name LuCI.form.NamedSection.prototype#hidetitle
+	 * @type boolean
+	 * @default false
+	 */
+
+	/**
 	 * Override the UCI configuration name to read the section IDs from. By
 	 * default, the configuration name is inherited from the parent `Map`.
 	 * By setting this property, a deviating configuration may be specified.
@@ -3568,7 +3590,7 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 			'data-tab-title': (this.map.tabbed && !this.parentoption) ? this.title || this.sectiontype : null
 		});
 
-		if (typeof(this.title) === 'string' && this.title !== '')
+		if (typeof(this.title) === 'string' && this.title !== '' && !this.hidetitle)
 			sectionEl.appendChild(E('h3', {}, this.title));
 
 		if (typeof(this.description) === 'string' && this.description !== '')
