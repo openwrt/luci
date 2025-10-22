@@ -6,14 +6,14 @@
 'require uci';
 'require tools.widgets as widgets';
 
-var callGetStatus = rpc.declare({ object: 'tailscale', method: 'get_status' });
-var callGetSettings = rpc.declare({ object: 'tailscale', method: 'get_settings' });
-var callSetSettings = rpc.declare({ object: 'tailscale', method: 'set_settings', params: ['form_data'] });
-var callDoLogin = rpc.declare({ object: 'tailscale', method: 'do_login' });
-var callGetSubroutes = rpc.declare({ object: 'tailscale', method: 'get_subroutes' });
-var map;
+let callGetStatus = rpc.declare({ object: 'tailscale', method: 'get_status' });
+let callGetSettings = rpc.declare({ object: 'tailscale', method: 'get_settings' });
+let callSetSettings = rpc.declare({ object: 'tailscale', method: 'set_settings', params: ['form_data'] });
+let callDoLogin = rpc.declare({ object: 'tailscale', method: 'do_login' });
+let callGetSubroutes = rpc.declare({ object: 'tailscale', method: 'get_subroutes' });
+let map;
 
-var tailscaleSettingsConf = [
+let tailscaleSettingsConf = [
     [form.Flag, 'accept_routes', _('Accept Routes'), _('Allow accepting routes announced by other nodes.'), { rmempty: false }],
     [form.Flag, 'advertise_exit_node', _('Advertise Exit Node'), _('Declare this device as an Exit Node.'), { rmempty: false }],
     [form.Value, 'exit_node', _('Exit Node'), _('Specify an exit node. Leave it blank and it will not be used.'), { rmempty: true }],
@@ -22,22 +22,22 @@ var tailscaleSettingsConf = [
     [form.Flag, 'ssh', _('Enable Tailscale SSH'), _('Allow connecting to this device through the SSH function of Tailscale.'), { rmempty: false }]
 ];
 
-var daemonConf = [
+let daemonConf = [
     [form.Value, 'daemon_mtu', _('Daemon MTU'), _('Set a custom MTU for the Tailscale daemon. Leave blank to use the default value.'), { datatype: 'uinteger', placeholder: '1280' }, { rmempty: false }],
     [form.Flag, 'daemon_reduce_memory', _('Reduce Memory Usage'), _('Enabling this option can reduce memory usage, but it may sacrifice some performance (set GOGC=10).'), { rmempty: false }]
 ];
 function setParams(o, params) {
-    if (!params) return; for (var key in params) {
-        var val = params[key]; if (key === 'values') {
-            for (var j = 0; j < val.length; j++) {
-                var args = val[j]; if (!Array.isArray(args))
+    if (!params) return; for (let key in params) {
+        let val = params[key]; if (key === 'values') {
+            for (let j = 0; j < val.length; j++) {
+                let args = val[j]; if (!Array.isArray(args))
                     args = [args]; o.value.apply(o, args);
             }
         } else if (key === 'depends') {
             if (!Array.isArray(val))
-                val = [val]; var deps = []; for (var j = 0; j < val.length; j++) {
-                    var d = {}; for (var vkey in val[j])
-                        d[vkey] = val[j][vkey]; for (var k = 0; k < o.deps.length; k++) { for (var dkey in o.deps[k]) { d[dkey] = o.deps[k][dkey]; } }
+                val = [val]; let deps = []; for (let j = 0; j < val.length; j++) {
+                    let d = {}; for (let vkey in val[j])
+                        d[vkey] = val[j][vkey]; for (let k = 0; k < o.deps.length; k++) { for (let dkey in o.deps[k]) { d[dkey] = o.deps[k][dkey]; } }
                     deps.push(d);
                 }
             o.deps = deps;
@@ -45,7 +45,7 @@ function setParams(o, params) {
     }
     if (params['datatype'] === 'bool') { o.enabled = 'true'; o.disabled = 'false'; }
 }
-function defTabOpts(s, t, opts, params) { for (var i = 0; i < opts.length; i++) { var opt = opts[i]; var o = s.taboption(t, opt[0], opt[1], opt[2], opt[3]); setParams(o, opt[4]); setParams(o, params); } }
+function defTabOpts(s, t, opts, params) { for (let i = 0; i < opts.length; i++) { let opt = opts[i]; let o = s.taboption(t, opt[0], opt[1], opt[2], opt[3]); setParams(o, opt[4]); setParams(o, params); } }
 
 function getRunningStatus() {
     return L.resolveDefault(callGetStatus(), { running: false }).then(function (res) {
@@ -53,116 +53,133 @@ function getRunningStatus() {
     });
 }
 
-// NEW: Helper function to format bytes into a human-readable string.
 function formatBytes(bytes) {
-    var bytes_num = parseInt(bytes, 10);
+    let bytes_num = parseInt(bytes, 10);
     if (isNaN(bytes_num) || bytes_num === 0) return '-';
-    var k = 1024;
-    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    var i = Math.floor(Math.log(bytes_num) / Math.log(k));
+    let k = 1024;
+    let sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    let i = Math.floor(Math.log(bytes_num) / Math.log(k));
     return parseFloat((bytes_num / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 
 
 function renderStatus(status) {
-    // 如果 status 对象为空或没有 running 属性，则显示加载中
+    // If status object is not yet available, show a loading message.
     if (!status || !status.hasOwnProperty('status')) {
-        return _('Collecting data ...');
+        return E('em', {}, _('Collecting data ...'));
     }
 
-    var finalHtml = [];
+    // --- Part 1: Handle non-running states ---
 
-    // --- Part 1: 渲染水平状态表格 ---
+    // State: Tailscale binary not found.
     if (status.status == 'not_installed') {
-        finalHtml.push('<dl class="cbi-value"><dt>' + _('Service Status') + '</dt>');
-        finalHtml.push('<dd><span style="color:red;"><strong>' + _('NO FOUND TAILSCALE') + '</strong></span></dd></dl>');
-        return finalHtml.join('');
+        return E('dl', { 'class': 'cbi-value' }, [
+            E('dt', {}, _('Service Status')),
+            E('dd', {}, E('span', { 'style': 'color:red;' }, E('strong', {}, _('NO FOUND TAILSCALE'))))
+        ]);
     }
+
+    // State: Logged out, requires user action.
     if (status.status == 'logout') {
-        finalHtml.push('<dl class="cbi-value"><dt>' + _('Service Status') + '</dt>');
-        finalHtml.push('<dd><span style="color:orange;"><strong>' + _('LOGGED OUT') + '</strong></span></br><span>' + _('Please use the login button in the settings below to authenticate.') + '</span></dd></dl>');
-        return finalHtml.join('');
+        return E('dl', { 'class': 'cbi-value' }, [
+            E('dt', {}, _('Service Status')),
+            E('dd', {}, [
+                E('span', { 'style': 'color:orange;' }, E('strong', {}, _('LOGGED OUT'))),
+                E('br'),
+                E('span', {}, _('Please use the login button in the settings below to authenticate.'))
+            ])
+        ]);
     }
-    // ** MODIFICATION END **
+
+    // State: Service is installed but not running.
     if (status.status != 'running') {
-        finalHtml.push('<dl class="cbi-value"><dt>' + _('Service Status') + '</dt>');
-        finalHtml.push('<dd><span style="color:red;"><strong>' + _('NOT RUNNING') + '</strong></span></dd></dl>');
-        return finalHtml.join('');
+        return E('dl', { 'class': 'cbi-value' }, [
+            E('dt', {}, _('Service Status')),
+            E('dd', {}, E('span', { 'style': 'color:red;' }, E('strong', {}, _('NOT RUNNING'))))
+        ]);
     }
+
+    // --- Part 2: Render the full status display for a running service ---
+
+    // A helper array to define the data for the main status table.
+    const statusData = [
+        { label: _('Service Status'), value: E('span', { 'style': 'color:green;' }, E('strong', {}, _('RUNNING'))) },
+        { label: _('Version'), value: status.version || 'N/A' },
+        { label: _('TUN Mode'), value: status.TUNMode ? _('Enabled') : _('Disabled') },
+        { label: _('Tailscale IPv4'), value: status.ipv4 || 'N/A' },
+        { label: _('Tailscale IPv6'), value: status.ipv6 || 'N/A' },
+        { label: _('Tailnet Name'), value: status.domain_name || 'N/A' }
+    ];
+
+    // Build the horizontal status table using the data array.
+    const statusTable = E('table', { 'style': 'width: 100%; border-spacing: 0 5px;' }, [
+        E('tr', {}, statusData.map(item => E('td', { 'style': 'padding-right: 20px;' }, E('strong', {}, item.label)))),
+        E('tr', {}, statusData.map(item => E('td', { 'style': 'padding-right: 20px;' }, item.value)))
+    ]);
+
+    // --- Part 3: Render the Peers/Network Devices table ---
     
-    var labels = [];
-    var values = [];
-    labels.push('<strong>' + _('Service Status') + '</strong>');
-    values.push('<span style="color:green;"><strong>' + _('RUNNING') + '</strong></span>');
-    labels.push('<strong>' + _('Version') + '</strong>');
-    values.push(status.version || 'N/A');
-    labels.push('<strong>' + _('TUN Mode') + '</strong>');
-    values.push(status.TUNMode ? _('Enabled') : _('Disabled'));
-    labels.push('<strong>' + _('Tailscale IPv4') + '</strong>');
-    values.push(status.ipv4 || 'N/A');
-    labels.push('<strong>' + _('Tailscale IPv6') + '</strong>');
-    values.push(status.ipv6 || 'N/A');
-    labels.push('<strong>' + _('Tailnet Name') + '</strong>');
-    values.push(status.domain_name || 'N/A');
+    const peers = status.peers;
+    let peersContent;
 
-    var statusTable = '<table style="width: 100%; border-spacing: 0 5px;">';
-    statusTable += '<tr>';
-    for (var i = 0; i < labels.length; i++) {
-        statusTable += '<td style="padding-right: 20px;">' + labels[i] + '</td>';
-    }
-    statusTable += '</tr><tr>';
-    for (var i = 0; i < values.length; i++) {
-        statusTable += '<td style="padding-right: 20px;">' + values[i] + '</td>';
-    }
-    statusTable += '</tr></table>';
-    finalHtml.push(statusTable);
-
-
-    // --- Part 2: 渲染 Peers 设备表格 ---
-    finalHtml.push('<div style="margin-top: 25px;">');
-    finalHtml.push('<h4>' + _('Network Devices') + '</h4>');
-
-    var peers = status.peers;
     if (!peers || Object.keys(peers).length === 0) {
-        finalHtml.push('<p>' + _('No peer devices found.') + '</p>');
+        // Display a message if no peers are found.
+        peersContent = E('p', {}, _('No peer devices found.'));
     } else {
-        var peersTable = '<table class="cbi-table">';
-        peersTable += '<tr class="cbi-table-header">';
-        var th_style = 'padding-right: 20px; text-align: left;';
-        peersTable += '<th class="cbi-table-cell" style="' + th_style + 'width: 80px;">' + _('Status') + '</th>';
-        peersTable += '<th class="cbi-table-cell" style="' + th_style + '">' + _('Hostname') + '</th>';
-        peersTable += '<th class="cbi-table-cell" style="' + th_style + '">' + _('Tailscale IP') + '</th>';
-        peersTable += '<th class="cbi-table-cell" style="' + th_style + '">' + _('OS') + '</th>';
-        peersTable += '<th class="cbi-table-cell" style="' + th_style + '">' + _('Connection Info') + '</th>';
-        peersTable += '<th class="cbi-table-cell" style="' + th_style + '">' + _('RX') + '</th>';
-        peersTable += '<th class="cbi-table-cell" style="' + th_style + '">' + _('TX') + '</th>';
-        peersTable += '</tr>';
+        // Define headers for the peers table.
+        const peerTableHeaders = [
+            { text: _('Status'), style: 'width: 80px;' },
+            { text: _('Hostname') },
+            { text: _('Tailscale IP') },
+            { text: _('OS') },
+            { text: _('Connection Info') },
+            { text: _('RX') },
+            { text: _('TX') }
+        ];
+        
+        // Build the peers table.
+        peersContent = E('table', { 'class': 'cbi-table' }, [
+            // Table Header Row
+            E('tr', { 'class': 'cbi-table-header' }, peerTableHeaders.map(header => {
+                let th_style = 'padding-right: 20px; text-align: left;';
+                if (header.style) {
+                    th_style += header.style;
+                }
+                return E('th', { 'class': 'cbi-table-cell', 'style': th_style }, header.text);
+            })),
+            
+            // Table Body Rows (one for each peer)
+            ...Object.entries(peers).map(([hostname, peer]) => {
+                const isOnline = peer.status !== 'offline';
+                const td_style = 'padding-right: 20px;';
 
-        for (var hostname in peers) {
-            if (peers.hasOwnProperty(hostname)) {
-                var peer = peers[hostname];
-                peersTable += '<tr class="cbi-rowstyle-1">';
-                var status_indicator = (peer.status != 'offline')
-                    ? '<span style="color:green;" title="' + _("Online") + '">●</span>'
-                    : '<span style="color:gray;" title="' + _("Offline") + '">○</span>';
-                var td_style = 'padding-right: 20px;';
-                peersTable += '<td class="cbi-value-field" style="' + td_style + '">' + status_indicator + '</td>';
-                peersTable += '<td class="cbi-value-field" style="' + td_style + '"><strong>' + hostname + '</strong></td>';
-                peersTable += '<td class="cbi-value-field" style="' + td_style + '">' + (peer.ip || 'N/A') + '</td>';
-                peersTable += '<td class="cbi-value-field" style="' + td_style + '">' + (peer.ostype || 'N/A') + '</td>';
-                peersTable += '<td class="cbi-value-field" style="' + td_style + '">' + (peer.linkadress || '-') + '</td>';
-                peersTable += '<td class="cbi-value-field" style="' + td_style + '">' + formatBytes(peer.rx) + '</td>';
-                peersTable += '<td class="cbi-value-field" style="' + td_style + '">' + formatBytes(peer.tx) + '</td>';
-                peersTable += '</tr>';
-            }
-        }
-        peersTable += '</table>';
-        finalHtml.push(peersTable);
+                return E('tr', { 'class': 'cbi-rowstyle-1' }, [
+                    E('td', { 'class': 'cbi-value-field', 'style': td_style },
+                        E('span', {
+                            'style': `color:${isOnline ? 'green' : 'gray'};`,
+                            'title': isOnline ? _('Online') : _('Offline')
+                        }, isOnline ? '●' : '○')
+                    ),
+                    E('td', { 'class': 'cbi-value-field', 'style': td_style }, E('strong', {}, hostname)),
+                    E('td', { 'class': 'cbi-value-field', 'style': td_style }, peer.ip || 'N/A'),
+                    E('td', { 'class': 'cbi-value-field', 'style': td_style }, peer.ostype || 'N/A'),
+                    E('td', { 'class': 'cbi-value-field', 'style': td_style }, peer.linkadress || '-'),
+                    E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatBytes(peer.rx)),
+                    E('td', { 'class': 'cbi-value-field', 'style': td_style }, formatBytes(peer.tx))
+                ]);
+            })
+        ]);
     }
 
-    finalHtml.push('</div>');
-
-    return finalHtml.join('');
+    // Combine all parts into a single DocumentFragment.
+    // Using E() without a tag name creates a fragment, which is perfect for grouping elements.
+    return E([
+        statusTable,
+        E('div', { 'style': 'margin-top: 25px;' }, [
+            E('h4', {}, _('Network Devices')),
+            peersContent
+        ])
+    ]);
 }
 
 return view.extend({
@@ -173,8 +190,8 @@ return view.extend({
             L.resolveDefault(callGetSubroutes(), { routes: [] })
         ])
         .then(function(rpc_data) {
-            // rpc_data 是数组: [status_result, settings_result, subroutes_result]
-            var settings_from_rpc = rpc_data[1];
+            // rpc_data is an array: [status_result, settings_result, subroutes_result]
+            let settings_from_rpc = rpc_data[1];
 
             return uci.load('tailscale').then(function() {
                 if (uci.get('tailscale', 'settings') === null) {
@@ -200,11 +217,10 @@ return view.extend({
     },
 
     render: function (data) {
-        var status = data[0] || {};
-        var settings = data[1] || {};
-        var subroutes = (data[2] && data[2].routes) ? data[2].routes : [];
+        let [status = {}, settings = {}, subroutes_obj] = data;
+        let subroutes = (subroutes_obj && subroutes_obj.routes) ? subroutes_obj.routes : [];
         
-        var s, o, loginBtn, loginUrl;
+        let s, o, loginBtn, loginUrl;
         map = new form.Map('tailscale', _('Tailscale'), _('Tailscale is a mesh VPN solution that makes it easy to connect your devices securely. This configuration page allows you to manage Tailscale settings on your OpenWrt device.'));
         
         s = map.section(form.NamedSection, '_status');
@@ -217,29 +233,29 @@ return view.extend({
                             document.getElementsByClassName('cbi-button cbi-button-apply')[0].disabled = true;
                         }
 
-                        var view = document.getElementById("service_status_display");
+                        let view = document.getElementById("service_status_display");
                         if (view) {
-                            view.innerHTML = renderStatus(res);
+                            let content = renderStatus(res);
+                            view.replaceChildren(content);
                         }
-                        
-                        var btn = document.getElementById('tailscale_login_btn');
+
+                        let btn = document.getElementById('tailscale_login_btn');
                         if (btn) {
                             btn.disabled = (res.status != 'logout');
                         }
                     });
                 }, 10);
 
-            // 初始的容器，ID 用于被轮询更新
             return E('div', { 'id': 'service_status_display', 'class': 'cbi-value' }, 
                 _('Collecting data ...')
             );
         }
 
-        // 将设置绑定到 uci 的 'settings' section
+        // Bind settings to the 'settings' section of uci
         s = map.section(form.NamedSection, 'settings', 'settings', _('Settings'));
         s.dynamic = true;
 
-        // 创建 "常规设置" 标签页，并应用 tailscaleSettingsConf
+        // Create the "General Settings" tab and apply tailscaleSettingsConf
         s.tab('general', _('General Settings'));
 
         loginBtn = s.taboption('general', form.Button, '_login', _('Login'), _('Click to get a login URL for this device.'));
@@ -249,23 +265,23 @@ return view.extend({
         loginBtn.disabled = (status.status != 'logout');
 
         loginBtn.onclick = function() {
-            var loginWindow = window.open('', '_blank');
+            let loginWindow = window.open('', '_blank');
             if (!loginWindow) {
                 ui.addNotification(null, E('p', _('Could not open a new tab. Please disable your pop-up blocker for this site and try again.')), 'error');
                 return;
             }
-            // 在新窗口显示提示信息
+            // Display a prompt message in the new window
             loginWindow.document.write(_('Requesting Tailscale login URL... Please wait...<br>The looggest time to get the URL is about 30 seconds.'));
 
-            // 显示“加载中”的模态框，并执行异步的RPC调用
+            // Show a "loading" modal and execute the asynchronous RPC call
             ui.showModal(_('Requesting Login URL...'), E('em', {}, _('Please wait.')));
             return callDoLogin().then(function(res) {
                 ui.hideModal();
                 if (res && res.url) {
-                    // 成功获取URL后，重定向之前已打开的标签页
+                    // After successfully obtaining the URL, redirect the previously opened tab
                     loginWindow.location.href = res.url;
                 } else {
-                    // 如果失败，告知用户并可以关闭新标签页
+                    // If it fails, inform the user and they can close the new tab
                     loginWindow.document.write(_('<br>Failed to get login URL. You may close this tab.'));
                     ui.addNotification(null, E('p', _('>Failed to get login URL: Invalid response from server.')), 'error');
                 }
@@ -284,17 +300,17 @@ return view.extend({
         }
 		o.rmempty = true;
 
-        // 创建 "守护设置" 标签页，并应用 daemonConf
+        // Create the "Daemon Settings" tab and apply daemonConf
         s.tab('daemon', _('Daemon Settings'));
         defTabOpts(s, 'daemon', daemonConf, { optional: false });
 
         return map.render();
     },
 
-    // handleSaveApply 函数在点击 "Save & Apply" 后执行
+    // The handleSaveApply function is executed after clicking "Save & Apply"
     handleSaveApply: function (ev) {
         return map.save().then(function () {
-            var data = map.data.get('tailscale', 'settings');
+            let data = map.data.get('tailscale', 'settings');
             ui.showModal(_('Applying changes...'), E('em', {}, _('Please wait.')));
 
             return callSetSettings(data).then(function (response) {
@@ -305,20 +321,23 @@ return view.extend({
         }, 1000);
         try {
         const indicator = document.querySelector('span[data-indicator="uci-changes"][data-clickable="true"]');
-        indicator.click();
-        setTimeout(function() {
+        if (indicator) {
+            indicator.click();
+            setTimeout(function() {
                 const discardButton = document.querySelector('.cbi-button.cbi-button-reset');
-            if (discardButton) {
-                console.log('Found the "Discard" button in the modal. Clicking it...');
-                discardButton.click();
-            } else {
-                console.error('Could not find the "Discard" button in the modal!');
-            }
-        }, 100);
-            
-        } catch (error) {   
+                if (discardButton) {
+                    console.log('Found the "Discard" button in the modal. Clicking it...');
+                    discardButton.click();
+                } else {
+                    console.error('Could not find the "Discard" button in the modal!');
+                }
+            }, 100);
         }
-                    // 重新加载页面以显示最新状态
+            
+        } catch (error) {
+            ui.addNotification(null, E('p', _('Error saving settings: %s').format(error || 'Unknown error')), 'error');
+            }
+                    // Reload the page to display the latest status
                     setTimeout(function () { window.location.reload(); }, 2000);
                 } else {
                     ui.hideModal();

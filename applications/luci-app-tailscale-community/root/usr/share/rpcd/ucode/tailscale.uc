@@ -6,6 +6,15 @@ import { access, popen, readfile, writefile, unlink } from 'fs';
 import { cursor } from 'uci';
 
 const uci = cursor();
+const env_script_path = "/etc/profile.d/tailscale-env.sh";
+const ori_env_script_content = `#!/bin/sh
+# This script is managed by luci-app-tailscale-community.
+uci_get_state() { uci get tailscale.settings."$1" 2>/dev/null; }
+if [ "$(uci_get_state daemon_reduce_memory)" = "1" ]; then export GOGC=10; fi
+TS_MTU=$(uci_get_state daemon_mtu)
+if [ -n "$TS_MTU" ]; then export TS_DEBUG_MTU="$TS_MTU"; fi
+`;
+const env_script_content = replace(ori_env_script_content, /\r/g, '');
 
 function exec(command) {
     let stdout_content = '';
@@ -199,24 +208,17 @@ methods.set_settings = {
 
         let new_mtu = form_data.daemon_mtu || "";
         let new_reduce_mem = form_data.daemon_reduce_memory || "0";
-        if (new_mtu != null || new_mtu != '0' || new_reduce_mem != 0) {
-            try{mkdir('/etc/profile.d');} catch (e) { }
-            const env_script_path = "/etc/profile.d/tailscale-env.sh";
-            const env_script_content = `#!/bin/sh
-# This script is managed by luci-app-tailscale-community.
-uci_get_state() { uci get tailscale.settings."$1" 2>/dev/null; }
-if [ "$(uci_get_state daemon_reduce_memory)" = "1" ]; then export GOGC=10; fi
-TS_MTU=$(uci_get_state daemon_mtu)
-if [ -n "$TS_MTU" ]; then export TS_DEBUG_MTU="$TS_MTU"; fi
-`;
-            const clean_env_script_content = replace(env_script_content, /\r/g, '');
-            if (new_mtu !== "" || new_reduce_mem === "1") {
-                writefile(env_script_path, clean_env_script_content);
-                exec('chmod 755 '+env_script_path);
-            } else {
-                unlink(env_script_path);
+        if (access('/etc/profile.d/tailscale-env.sh')==false) {
+            if (new_mtu != null || new_mtu != '0' || new_reduce_mem != 0) {
+                try{mkdir('/etc/profile.d');} catch (e) { }
+                if (new_mtu !== "" || new_reduce_mem === "1") {
+                    writefile(env_script_path, env_script_content);
+                    exec('chmod 755 '+env_script_path);
+                } else {
+                    unlink(env_script_path);
+                }
+                popen('/bin/sh -c /etc/init.d/tailscale restart &');
             }
-            popen('/bin/sh -c /etc/init.d/tailscale restart &');
         }
         return { success: true };
     }
@@ -254,10 +256,30 @@ methods.do_login = {
 
 methods.get_subroutes = {
     call: function() {
-        let cmd = `ip -4 addr show | awk '!/ lo$|tailscale/ && /inet/ { split($2,c,"/");split(c[1],o,"."); p=c[2]; i=0; for(k=1;k<=4;k++) i=or(lshift(i,8),o[k]); m=lshift(4294967295,32-p); n=and(i,m); print rshift(n,24)"."and(rshift(n,16),255)"."and(rshift(n,8),255)"."and(n,255)"/"p }'`;
-        let routes =  exec(cmd);
-        return { routes: routes.stdout };
-    }
+		try {
+			let cmd = 'ip -j route';
+			let result = exec(cmd);
+			let subnets = [];
+
+			if (result.code == 0 && length(result.stdout) > 0) {
+			    let routes_json = json(join('',result.stdout));
+
+			    for (let route in routes_json) {
+                    // We need to filter out local subnets
+                    // 1. 'dst' (target address) is not' default' (default gateway)
+                    // 2. 'scope' is' link' (indicating directly connected network)
+                    // 3. It is an IPv4 address (simple judgment: including'.')
+			    	if (route.dst && route.dst != 'default' && route.scope == 'link' && index(route.dst,'.') != -1) {
+			    		push(subnets,route.dst);
+			    	}
+			    }
+            }
+			return { routes: subnets };
+		}
+		catch(e) {
+			return { routes: '[]' };
+		}
+	}
 };
 
 return { 'tailscale': methods };
