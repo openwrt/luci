@@ -707,6 +707,34 @@ return view.extend({
 					}
 
 					if (protoval == 'static') {
+						so = ss.taboption('general', form.Flag, 'dynamicdhcp', _('Dynamic <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>'), _('Dynamically allocate DHCP addresses for clients. If disabled, only clients having static leases will be served.'));
+						so.default = so.enabled;
+
+						so = ss.taboption('general', form.Value, 'leasetime', _('Lease time'), _('Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>).'));
+						so.optional = true;
+						so.default = '12h';
+						so.validate = function (section_id, value) {
+							if (value === "infinite" || value === "deprecated") {
+								return true;
+							}
+
+							const regex = new RegExp("^[0-9]+[smhdw]?$", "i");
+							if (regex.test(value)) {
+								return true;
+							}
+							return _("Invalid DHCP lease time format. Use integer values optionally followed by s, m, h, d, or w.");
+						}
+
+						if (L.hasSystemFeature('dnsmasq')) {
+							ss.taboption('general', form.Flag, 'force', _('Force'),
+								_('Force DHCP on this network even if another server is detected (dnsmasq only).'));
+						}
+
+						if (L.hasSystemFeature('dnsmasq')) {
+							ss.taboption('general', form.DynamicList, 'dhcp_option', _('DHCP-Options'),
+								_('Define additional DHCP options,  for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients (dnsmasq only).'));
+						}
+
 						if (L.hasSystemFeature('odhcpd')) {
 							so = ss.taboption('ipv4', form.RichListValue, 'dhcpv4', _('DHCPv4 Service'),
 									  _('Enable or disable DHCPv4 services on this interface (odhcpd only).'));
@@ -727,32 +755,6 @@ return view.extend({
 						so.datatype = 'uinteger';
 						so.default = '150';
 
-						so = ss.taboption('general', form.Value, 'leasetime', _('Lease time'), _('Expiry time of leased addresses, minimum is 2 minutes (<code>2m</code>).'));
-						so.optional = true;
-						so.default = '12h';
-						so.validate = function (section_id, value) {
-							if (value === "infinite" || value === "deprecated") {
-								return true;
-							}
-
-							const regex = new RegExp("^[0-9]+[smhdw]?$", "i");
-							if (regex.test(value)) {
-								return true;
-							}
-							return _("Invalid DHCP lease time format. Use integer values optionally followed by s, m, h, d, or w.");
-						}
-
-						so = ss.taboption('general', form.Flag, 'dynamicdhcp', _('Dynamic <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>'), _('Dynamically allocate DHCP addresses for clients. If disabled, only clients having static leases will be served.'));
-						so.default = so.enabled;
-
-						if (L.hasSystemFeature('dnsmasq')) {
-							ss.taboption('general', form.Flag, 'force', _('Force'),
-								_('Force DHCP on this network even if another server is detected (dnsmasq only).'));
-						}
-
-						// XXX: is this actually useful?
-						//ss.taboption('advanced', form.Value, 'name', _('Name'), _('Define a name for this network.'));
-
 						if (L.hasSystemFeature('dnsmasq')) {
 							so = ss.taboption('ipv4', form.Value, 'netmask', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask'),
 								_('Override the netmask sent to clients. Normally it is calculated from the subnet that is served (dnsmasq only).'));
@@ -768,11 +770,6 @@ return view.extend({
 									uielem.setPlaceholder(get_netmask(s, false));
 								return form.Value.prototype.validate.apply(this, [ section_id, value ]);
 							};
-						}
-
-						if (L.hasSystemFeature('dnsmasq')) {
-							ss.taboption('general', form.DynamicList, 'dhcp_option', _('DHCP-Options'),
-								_('Define additional DHCP options,  for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients (dnsmasq only).'));
 						}
 					}
 
