@@ -702,7 +702,10 @@ return view.extend({
 						]);
 					};
 
-					ss.taboption('general', form.Flag, 'ignore', _('Ignore interface'), _('Disable <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> for this interface.'));
+					if (L.hasSystemFeature('dnsmasq')) {
+						ss.taboption('general', form.Flag, 'ignore', _('Ignore interface'),
+							     _('Disable <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> for this interface (dnsmasq only).'));
+					}
 
 					if (protoval == 'static') {
 						if (L.hasSystemFeature('odhcpd')) {
