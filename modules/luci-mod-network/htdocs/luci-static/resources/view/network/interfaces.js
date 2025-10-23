@@ -735,7 +735,7 @@ return view.extend({
 								_('Define additional DHCP options,  for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients (dnsmasq only).'));
 						}
 
-						if (L.hasSystemFeature('odhcpd')) {
+						if (L.hasSystemFeature('odhcpd', 'dhcpv4')) {
 							so = ss.taboption('ipv4', form.RichListValue, 'dhcpv4', _('DHCPv4 Service'),
 									  _('Enable or disable DHCPv4 services on this interface (odhcpd only).'));
 							so.optional = true;
