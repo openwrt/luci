@@ -668,7 +668,6 @@ return view.extend({
 					ss.anonymous = true;
 
 					ss.tab('general',  _('General Setup'));
-					ss.tab('advanced', _('Advanced Settings'));
 					ss.tab('ipv4', _('IPv4 Settings'));
 					ss.tab('ipv6', _('IPv6 Settings'));
 					ss.tab('ipv6-ra', _('IPv6 RA Settings'));
@@ -743,10 +742,13 @@ return view.extend({
 							return _("Invalid DHCP lease time format. Use integer values optionally followed by s, m, h, d, or w.");
 						}
 
-						so = ss.taboption('advanced', form.Flag, 'dynamicdhcp', _('Dynamic <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>'), _('Dynamically allocate DHCP addresses for clients. If disabled, only clients having static leases will be served.'));
+						so = ss.taboption('general', form.Flag, 'dynamicdhcp', _('Dynamic <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr>'), _('Dynamically allocate DHCP addresses for clients. If disabled, only clients having static leases will be served.'));
 						so.default = so.enabled;
 
-						ss.taboption('advanced', form.Flag, 'force', _('Force'), _('Force DHCP on this network even if another server is detected.'));
+						if (L.hasSystemFeature('dnsmasq')) {
+							ss.taboption('general', form.Flag, 'force', _('Force'),
+								_('Force DHCP on this network even if another server is detected (dnsmasq only).'));
+						}
 
 						// XXX: is this actually useful?
 						//ss.taboption('advanced', form.Value, 'name', _('Name'), _('Define a name for this network.'));
@@ -768,7 +770,10 @@ return view.extend({
 							};
 						}
 
-						ss.taboption('advanced', form.DynamicList, 'dhcp_option', _('DHCP-Options'), _('Define additional DHCP options,  for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients.'));
+						if (L.hasSystemFeature('dnsmasq')) {
+							ss.taboption('general', form.DynamicList, 'dhcp_option', _('DHCP-Options'),
+								_('Define additional DHCP options,  for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients (dnsmasq only).'));
+						}
 					}
 
 
