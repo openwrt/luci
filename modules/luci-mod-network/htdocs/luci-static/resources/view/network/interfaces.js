@@ -718,12 +718,12 @@ return view.extend({
 								 _('Provide DHCPv4 services on this interface.'));
 						}
 
-						so = ss.taboption('general', form.Value, 'start', _('Start', 'DHCP IP range start address'), _('Lowest leased address as offset from the network address.'));
+						so = ss.taboption('ipv4', form.Value, 'start', _('Start', 'DHCP IP range start address'), _('Lowest leased address as offset from the network address.'));
 						so.optional = true;
 						so.datatype = 'or(uinteger,ip4addr("nomask"))';
 						so.default = '100';
 
-						so = ss.taboption('general', form.Value, 'limit', _('Limit'), _('Maximum number of leased addresses.'));
+						so = ss.taboption('ipv4', form.Value, 'limit', _('Limit'), _('Maximum number of leased addresses.'));
 						so.optional = true;
 						so.datatype = 'uinteger';
 						so.default = '150';
@@ -751,21 +751,22 @@ return view.extend({
 						// XXX: is this actually useful?
 						//ss.taboption('advanced', form.Value, 'name', _('Name'), _('Define a name for this network.'));
 
-						so = ss.taboption('advanced', form.Value, 'netmask', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask'), _('Override the netmask sent to clients. Normally it is calculated from the subnet that is served.'));
-						so.optional = true;
-						so.datatype = 'ip4addr';
-
-						so.render = function(option_index, section_id, in_table) {
-							this.placeholder = get_netmask(s, true);
-							return form.Value.prototype.render.apply(this, [ option_index, section_id, in_table ]);
-						};
-
-						so.validate = function(section_id, value) {
-							var uielem = this.getUIElement(section_id);
-							if (uielem)
-								uielem.setPlaceholder(get_netmask(s, false));
-							return form.Value.prototype.validate.apply(this, [ section_id, value ]);
-						};
+						if (L.hasSystemFeature('dnsmasq')) {
+							so = ss.taboption('ipv4', form.Value, 'netmask', _('<abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask'),
+								_('Override the netmask sent to clients. Normally it is calculated from the subnet that is served (dnsmasq only).'));
+							so.optional = true;
+							so.datatype = 'ip4addr';
+							so.render = function(option_index, section_id, in_table) {
+								this.placeholder = get_netmask(s, true);
+								return form.Value.prototype.render.apply(this, [ option_index, section_id, in_table ]);
+							};
+							so.validate = function(section_id, value) {
+								var uielem = this.getUIElement(section_id);
+								if (uielem)
+									uielem.setPlaceholder(get_netmask(s, false));
+								return form.Value.prototype.validate.apply(this, [ section_id, value ]);
+							};
+						}
 
 						ss.taboption('advanced', form.DynamicList, 'dhcp_option', _('DHCP-Options'), _('Define additional DHCP options,  for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients.'));
 					}
