@@ -669,6 +669,7 @@ return view.extend({
 
 					ss.tab('general',  _('General Setup'));
 					ss.tab('advanced', _('Advanced Settings'));
+					ss.tab('ipv4', _('IPv4 Settings'));
 					ss.tab('ipv6', _('IPv6 Settings'));
 					ss.tab('ipv6-ra', _('IPv6 RA Settings'));
 
@@ -704,6 +705,16 @@ return view.extend({
 					ss.taboption('general', form.Flag, 'ignore', _('Ignore interface'), _('Disable <abbr title="Dynamic Host Configuration Protocol">DHCP</abbr> for this interface.'));
 
 					if (protoval == 'static') {
+						if (L.hasSystemFeature('odhcpd')) {
+							so = ss.taboption('ipv4', form.RichListValue, 'dhcpv4', _('DHCPv4 Service'),
+									  _('Enable or disable DHCPv4 services on this interface (odhcpd only).'));
+							so.optional = true;
+							so.value('', _('disabled'),
+								 _('Do not provide DHCPv4 services on this interface.'));
+							so.value('server', _('enabled'),
+								 _('Provide DHCPv4 services on this interface.'));
+						}
+
 						so = ss.taboption('general', form.Value, 'start', _('Start', 'DHCP IP range start address'), _('Lowest leased address as offset from the network address.'));
 						so.optional = true;
 						so.datatype = 'or(uinteger,ip4addr("nomask"))';
