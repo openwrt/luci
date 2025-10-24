@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-10-05 13:02+0000\n"
-"Last-Translator: rostmodern <weblate@kurs.33mail.com>\n"
+"PO-Revision-Date: 2025-10-14 21:10+0000\n"
+"Last-Translator: Blubberland <github@alias.kardansch.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationslldpd/de/>\n"
 "Language: de\n"
@@ -34,7 +34,7 @@ msgstr "Alter"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:59
 msgid "Ageout count"
-msgstr ""
+msgstr "Zeitüberschreitungszähler"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:675
 msgid ""
@@ -42,6 +42,9 @@ msgid ""
 "address %s is used and limits the propagation of the LLDPDU to the nearest "
 "bridge."
 msgstr ""
+"Erlaubt einem Vermittler LLDPDUs zu übertragen. Standardmäßig wird die MAC-"
+"Adresse %s genutzt und die Übertragung der LLDPDU wird bis zur nächsten "
+"Brücke begrenzt."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:291
 msgid "Altitude"
@@ -145,6 +148,10 @@ msgid ""
 "is used as a management address without any check. To blacklist IPv6 "
 "addresses, use <code>!*:*</code>."
 msgstr ""
+"Verwendet standardmäßig die erste IPv4 und IPv6. Wenn eine exakte IP-Adresse "
+"angegeben wird, wird diese ohne weitere Prüfung als Management-Adresse "
+"genutzt. Um IPv6-Adressen auf die schwarze Liste zu setzen, nutze: <code>!"
+"*:*</code>."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:61
 msgid "Delete count"
@@ -159,10 +166,13 @@ msgid ""
 "Determines the transmitted packet TTL (== this value * transmit delay). The "
 "default value is 4 &therefore; the default TTL is 120 seconds."
 msgstr ""
+"Setzt die Lebenzeit (TTL) eines übertragenen Pakets fest: TTL == [dieser "
+"Wert] * Übertragungsverzögerung. Der Standardwert ist 4, daraus folgende "
+"beträgt die Standard-Lebenzeit 120 Sekunden."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:638
 msgid "Disable LLDP-MED inventory TLV transmission"
-msgstr ""
+msgstr "Deaktiviere LLDP-MED Inventar TLV Übertragung"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:647
 msgid "Disable advertising of kernel release, version and machine"
@@ -237,24 +247,32 @@ msgid ""
 "Enable the support of EDP protocol to deal with Extreme routers and switches "
 "that do not speak LLDP."
 msgstr ""
+"Aktiviere EDP-Protokoll-Unterstützung, um Umgang mit Extreme-Routern und "
+"-Switches zu ermöglichen, die nicht LLDP-fähig sind."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:771
 msgid ""
 "Enable the support of FDP protocol to deal with Foundry routers that do not "
 "speak LLDP"
 msgstr ""
+"Aktiviere FDP-Protokoll-Unterstützung, um den Umgang mit Foundry-Routern zu "
+"ermöglichen, die nicht LLDP-fähig sind"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:817
 msgid ""
 "Enable the support of SONMP protocol to deal with Nortel routers and "
 "switches that do not speak LLDP."
 msgstr ""
+"Aktiviere SONMP-Protokoll-Unterstützung, um den Umgang mit Nortel-Routern "
+"und -Switches zu ermöglichen, die nicht LLDP-fähig sind"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:715
 msgid ""
 "Even when there is no LLDP peer detected but there is a peer speaking "
 "another protocol detected."
 msgstr ""
+"Auch wenn kein LLDP-Peer gefunden wird, aber ein Peer gefunden wird, der ein "
+"anderes Protokoll unterstützt."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:768
 msgid "FDP"
@@ -338,6 +356,8 @@ msgid ""
 "Kernel name (ie: Linux) will still be shared, and Inventory software version "
 "will be set to %s."
 msgstr ""
+"Kernel-Name (z.B. Linux) wird weiterhin geteilt und Version der "
+"Inventarisierungssoftware wird auf %s gesetzt."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:706
 #: applications/luci-app-lldpd/root/usr/share/luci/menu.d/luci-app-lldpd.json:3
@@ -366,7 +386,7 @@ msgstr "LLDP-MED-Richtlinie"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:674
 msgid "LLDPDU destination MAC"
-msgstr ""
+msgstr "LLDPDU Ziel MAC-Adresse"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:1015
 msgid "LLDPd Settings"
@@ -382,10 +402,14 @@ msgid ""
 "TLV but will not send them. Use this option if you do not want to transmit "
 "sensitive information like serial numbers."
 msgstr ""
+"LLDPd empfängt weiterhin (und, wenn aktiviert, veröffentlicht mit SNMP) "
+"diese LLDP-MED-Pakete, aber versendet selbst keine. Nutze diese Einstellung, "
+"um zu verhindern, dass sensible Informationen (wie z.B. Seriennummern) "
+"übermittelt werden."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:504
 msgid "LLDPd won't send any frames; only listen to neighbors."
-msgstr ""
+msgstr "LLDPd versendet keine Pakete; hört nur auf Nachbar-Peers."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:257
 msgid "Latitude"
@@ -430,7 +454,7 @@ msgstr "Medienendpunkt (Klasse II)"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:476
 msgid "Must be a greater than zero number optionally suffixed with \"ms\""
-msgstr ""
+msgstr "Zahl muss größer als null sein, optionales Suffix: \"ms\""
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:495
 msgid "Must be a number"
@@ -486,7 +510,7 @@ msgstr "OUI-CSV"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:1018
 msgid "On this page you may configure LLDPd parameters."
-msgstr ""
+msgstr "Auf dieser Seite können LLDPd-Parameter konfiguriert werden."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:741
 msgid "Only CDPv2"
@@ -501,11 +525,11 @@ msgstr "Ausgehend"
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:401
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:413
 msgid "Override %s."
-msgstr ""
+msgstr "Überschreibt %s."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:204
 msgid "Override the announced location of the host."
-msgstr ""
+msgstr "Überschreibe den angekündigten Standort des Hosts."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:210
 msgid "Port ID"
@@ -521,7 +545,7 @@ msgstr "Port-Beschreibung"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:378
 msgid "Post-code"
-msgstr ""
+msgstr "Postleitzahl"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:40
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:53
@@ -546,7 +570,7 @@ msgstr ""
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:503
 msgid "Receive-only mode"
-msgstr ""
+msgstr "Nur-Empfangs-Modus"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/status.js:56
 msgid "Rx"
@@ -569,8 +593,9 @@ msgid "SNMP agentX socket path"
 msgstr "Socketpfad für SNMP agentX"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:814
+#, fuzzy
 msgid "SONMP (NTDP, NDP, BNMP, BDP)"
-msgstr ""
+msgstr "SONMP (NTDP, NDP, BNMP, BDP)"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:35
 msgid "See syntax <a %s>here</a>."
@@ -578,19 +603,19 @@ msgstr "Siehe Syntax <a %s>hier</a>."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:747
 msgid "Send CDP packets even if no CDP peer detected"
-msgstr ""
+msgstr "Sende CDP-Pakete, auch wenn kein CDP-Peer entdeckt wird"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:798
 msgid "Send EDP packets even if no EDP peer detected"
-msgstr ""
+msgstr "Sende EDP-Pakete, auch wenn kein EDP-Peer entdeckt wird"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:778
 msgid "Send FDP packets even if no FDP peer detected"
-msgstr ""
+msgstr "Sende FDP-Pakete, auch wenn kein FDP-Peer entdeckt wird"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:824
 msgid "Send SONMP packets even if no SONMP peer detected"
-msgstr ""
+msgstr "Sende SONMP-Pakete, auch wenn kein SONMP-Peer entdeckt wird"
 
 #: applications/luci-app-lldpd/root/usr/share/luci/menu.d/luci-app-lldpd.json:28
 msgid "Settings"
@@ -598,13 +623,15 @@ msgstr "Einstellungen"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:655
 msgid "Specify the behaviour when detecting multiple neighbors"
-msgstr ""
+msgstr "Präzisiere Verhaltensvorgabe bei Entdeckung mehrerer Nachbarn"
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:527
 msgid ""
 "Specify which interface (not) to listen upon and send LLDPDU from. Absent "
 "any value, LLDPd uses all available physical interfaces."
 msgstr ""
+"Bestimme, von welcher Schnittstelle LLDPDUs versendet und empfangen werden "
+"sollen oder nicht. Ohne Angabe nutzt LLDPd alle verfügbaren Schnittstellen."
 
 #: applications/luci-app-lldpd/htdocs/luci-static/resources/view/lldpd/config.js:543
 msgid ""
@@ -612,6 +639,10 @@ msgid ""
 "value, all interfaces are considered. LLDPd takes the first MAC address from "
 "all the considered interfaces to compute the chassis ID."
 msgstr ""
+"Bestimme, welche Schnittstelle zur Erstellung von Gehäuse-IDs (Chassi-ID) "
+"genutzt werden soll, und welche nicht. Ohne spezifische Angabe werden alle "
+"berücksichtigten Schnittstellen genutzt. LLDPd nutzt die erste MAC-Adresse "
+"von allen berücksichtigten Schnittstellen um die Gehäuse-ID zu erstellen."
 
 #: applications/luci-app-lldpd/root/usr/share/luci/menu.d/luci-app-lldpd.json:16
 msgid "Status"
