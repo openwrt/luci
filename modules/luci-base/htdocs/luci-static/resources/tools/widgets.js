@@ -190,7 +190,7 @@ var CBIZoneSelect = form.ListValue.extend({
 				}
 				else {
 					const anyval = node.querySelector('[data-value="*"]') || '';
-					const emptyval = node.querySelector('[data-value=""]') || '';
+					let emptyval = node.querySelector('[data-value=""]') || '';
 
 					if (emptyval == null && anyval) {
 						emptyval = anyval.cloneNode(true);
