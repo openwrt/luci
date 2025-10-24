@@ -11,7 +11,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.14.1-dev\n"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:214
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:216
 msgid "Add new proxy..."
 msgstr "添加新代理…"
 
@@ -81,11 +81,19 @@ msgstr ""
 "AssetsDir指定管理服务器用于加载资源的本地目录。如果此值为空，则使用statik从可"
 "执行文件中加载资源。<br />默认情况下，此值为空。"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:190
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
+msgid "Bind addr"
+msgstr "绑定地址"
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:73
+msgid "Bind port"
+msgstr "绑定端口"
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:192
 msgid "Collecting data ..."
 msgstr "正在收集数据…"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:198
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:200
 msgid "Common Settings"
 msgstr "常规设置"
 
@@ -123,7 +131,7 @@ msgstr "环境变量"
 msgid "Exit when login fail"
 msgstr "当登录失败时退出"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:218
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:220
 msgid "General Settings"
 msgstr "常规设置"
 
@@ -131,12 +139,12 @@ msgstr "常规设置"
 msgid "Grant access to LuCI app frpc"
 msgstr "授予访问 LuCI 应用 frpc 的权限"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:219
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:221
 msgid "HTTP Settings"
 msgstr "HTTP 设置"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:64
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:78
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:80
 msgid "HTTP password"
 msgstr "HTTP 密码"
 
@@ -145,7 +153,7 @@ msgid "HTTP proxy"
 msgstr "HTTP 代理"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:63
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:77
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:79
 msgid "HTTP user"
 msgstr "HTTP 用户"
 
@@ -193,12 +201,12 @@ msgid "If remote_port is 0, frps will assign a random port for you"
 msgstr "如远程端口为 0，frps 将给你分配一个端口"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:48
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:224
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:226
 msgid "Local IP"
 msgstr "本地 IP"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:49
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:225
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:227
 msgid "Local port"
 msgstr "本地端口"
 
@@ -270,7 +278,7 @@ msgstr ""
 "LoginFailExit 控制客户端在尝试登录失败后是否应退出。如果为 false，客户端将重"
 "试，直到登录成功。<br />默认情况下，此值为 true。"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:167
 msgid "NOT RUNNING"
 msgstr "未在运行"
 
@@ -282,11 +290,11 @@ msgstr ""
 "操作系统环境传递给 frp。配置模板请参阅 <a href=\"https://github.com/fatedier/"
 "frp#configuration-file-template\">frp文档</a>"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:76
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:78
 msgid "Plugin"
 msgstr "插件"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:220
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:222
 msgid "Plugin Settings"
 msgstr "插件设置"
 
@@ -300,38 +308,38 @@ msgid ""
 "Valid values are \"tcp\", \"kcp\", \"quic\" and \"websocket\".<br />By "
 "default, this value is \"tcp\"."
 msgstr ""
-"Protocol 指定在与服务器交互时要使用的协议。有效值为\"tcp\"、\"kcp\"、\"quic\"和"
-"\"websocket\"。<br />默认情况下，此值为\"tcp\"。"
+"Protocol 指定在与服务器交互时要使用的协议。有效值为\"tcp\"、\"kcp\"、"
+"\"quic\"和\"websocket\"。<br />默认情况下，此值为\"tcp\"。"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:210
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:212
 msgid "Proxy Settings"
 msgstr "代理设置"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:44
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:222
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:224
 msgid "Proxy name"
 msgstr "代理名称"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:223
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:225
 msgid "Proxy type"
 msgstr "代理类型"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
 msgid ""
 "ProxyType specifies the type of this proxy. Valid values include \"tcp\", "
-"\"udp\", \"http\", \"https\", \"stcp\" and \"xtcp\".<br />By "
-"default, this value is \"tcp\"."
+"\"udp\", \"http\", \"https\", \"stcp\" and \"xtcp\".<br />By default, this "
+"value is \"tcp\"."
 msgstr ""
 "ProxyType 指定此代理的类型。有效值包括\"tcp\"、\"udp\"、\"http\"、\"https\"、"
 "\"stcp\"和\"xtcp\"。<br />默认情况下，此值为\"tcp\"。"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
 msgid "RUNNING"
 msgstr "运行中"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:53
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:226
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:228
 msgid "Remote port"
 msgstr "远程端口"
 
@@ -343,14 +351,6 @@ msgstr "崩溃时重启"
 msgid "Role"
 msgstr "角色"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
-msgid "Bind addr"
-msgstr "绑定地址"
-
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:73
-msgid "Bind port"
-msgstr "绑定端口"
-
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:13
 msgid "Run daemon as group"
 msgstr "以此组权限运行"
@@ -359,11 +359,11 @@ msgstr "以此组权限运行"
 msgid "Run daemon as user"
 msgstr "以此用户权限运行"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:80
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:82
 msgid "SOCKS5 password"
 msgstr "SOCKS5 密码"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:79
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
 msgid "SOCKS5 user"
 msgstr "SOCKS5 用户"
 
@@ -393,12 +393,12 @@ msgid ""
 "this value is 7000."
 msgstr "ServerPort 指定要连接到的服务器端口。<br />默认情况下，此值为 7000。"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:74
 msgid "Sk"
 msgstr "Sk"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:199
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:203
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:201
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:205
 msgid "Startup Settings"
 msgstr "启动设置"
 
@@ -449,7 +449,7 @@ msgstr ""
 "Token 指定用于创建要发送到服务器的密钥的授权令牌。服务器必须具有匹配的令牌才"
 "能成功进行授权。<br />默认情况下，此值为空。"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:83
 msgid "Unix domain socket path"
 msgstr "Unix 域套接字路径"
 
@@ -482,9 +482,9 @@ msgstr ""
 "User 为代理名称指定前缀，以将它们与其他客户端区分开来。如果此值不为空，则代理"
 "名称将自动更改为\"{user}.{proxy_name}\"。<br />默认情况下，此值为空。"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:175
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:167
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:177
 #: applications/luci-app-frpc/root/usr/share/luci/menu.d/luci-app-frpc.json:3
 msgid "frp Client"
 msgstr "frp 客户端"

@@ -58,6 +58,10 @@ msgstr "Активные подписки"
 msgid "Adblock"
 msgstr "Adblock"
 
+#: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/logread.js:4
+msgid "Adblock Log"
+msgstr ""
+
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:47
 msgid "Add Allowlist Domain"
 msgstr "Добавить домен в список разрешённых"
@@ -242,9 +246,9 @@ msgid ""
 "noopener\" >check the online documentation</a>"
 msgstr ""
 "Настройка блокировщика рекламы для фильтрации рекламных и вредоносных "
-"доменов с помощью DNS. Для дополнительной информации ознакомьтесь с <a href="
-"\"https://github.com/openwrt/packages/blob/master/net/adblock/files/README."
-"md\" target=\"_blank\" rel=\"noreferrer noopener\" >документацией</a>"
+"доменов с помощью DNS. Для дополнительной информации ознакомьтесь с <a "
+"href=\"https://github.com/openwrt/packages/blob/master/net/adblock/files/"
+"README.md\" target=\"_blank\" rel=\"noreferrer noopener\" >документацией</a>"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:262
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:264
@@ -298,8 +302,8 @@ msgstr "Домен"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:351
 msgid "Domain to check for a successful DNS backend restart."
 msgstr ""
-"Домен, используемый для проверки успешности перезапуска службы <abbr title="
-"\"Domain Name System\">DNS</abbr>."
+"Домен, используемый для проверки успешности перезапуска службы <abbr "
+"title=\"Domain Name System\">DNS</abbr>."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:265
 msgid "Domains"
@@ -384,7 +388,8 @@ msgstr "Включить службу Adblock."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:292
 msgid "Enable verbose debug logging in case of any processing errors."
-msgstr "Включить формирование подробного отчёта на случай возникновения ошибок."
+msgstr ""
+"Включить формирование подробного отчёта на случай возникновения ошибок."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:221
 msgid "Enabled"
@@ -633,8 +638,9 @@ msgid ""
 msgstr ""
 "Перенаправлять все <abbr title=\"Domain Name System\">DNS</abbr>-запросы из "
 "указанных зон на локальный <abbr title=\"Domain Name System\">DNS</abbr>-"
-"сервер. Применяется для протоколов <abbr title=\"User Datagram Protocol\""
-">UDP</abbr> и <abbr title=\"Transmission Control Protocol\">TCP</abbr>."
+"сервер. Применяется для протоколов <abbr title=\"User Datagram "
+"Protocol\">UDP</abbr> и <abbr title=\"Transmission Control Protocol\">TCP</"
+"abbr>."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:196
 msgid "Refresh"
@@ -684,8 +690,8 @@ msgstr "Обратный <abbr title=\"Domain Name System\">DNS</abbr>-поис�
 msgid "Resolve reporting IP addresses by using reverse DNS (PTR) lookups."
 msgstr ""
 "Определять доменные имена по IP-адресам в отчётах с помощью обратных <abbr "
-"title=\"Domain Name System\">DNS</abbr>-запросов (<abbr title="
-"\"Pointer Records\">PTR</abbr>)."
+"title=\"Domain Name System\">DNS</abbr>-запросов (<abbr title=\"Pointer "
+"Records\">PTR</abbr>)."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:97
 msgid "Result"
@@ -749,7 +755,8 @@ msgstr "Настройки"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:344
 msgid "Shift DNS Blocklist"
-msgstr "Перенос списка блокировок <abbr title=\"Domain Name System\">DNS</abbr>"
+msgstr ""
+"Перенос списка блокировок <abbr title=\"Domain Name System\">DNS</abbr>"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:344
 msgid ""
@@ -809,8 +816,8 @@ msgstr "Сжатие <abbr title=\"Top-Level Domain\">TLD</abbr>"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:409
 msgid "Target directory for DNS related report files."
 msgstr ""
-"Целевой каталог для файлов отчётов, связанных с <abbr title="
-"\"Domain Name System\">DNS</abbr>."
+"Целевой каталог для файлов отчётов, связанных с <abbr title=\"Domain Name "
+"System\">DNS</abbr>."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:311
 msgid "Target directory for blocklist backups."
@@ -844,8 +851,8 @@ msgid ""
 "from the final DNS blocklist."
 msgstr ""
 "Сжатие доменов верхнего уровня удаляет тысячи ненужных записей из "
-"окончательного списка блокировок <abbr title=\"Domain Name System\""
-">DNS</abbr>."
+"окончательного списка блокировок <abbr title=\"Domain Name System\">DNS</"
+"abbr>."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:362
 msgid "Third instance"
@@ -878,9 +885,9 @@ msgid ""
 "This tab shows the last generated DNS Report, press the 'Refresh' button to "
 "get a current one."
 msgstr ""
-"На этой вкладке показан последний сгенерированный отчёт <abbr title="
-"\"Domain Name System\">DNS</abbr>. Нажмите кнопку 'Обновить' для получения "
-"актуальных данных."
+"На этой вкладке показан последний сгенерированный отчёт <abbr title=\"Domain "
+"Name System\">DNS</abbr>. Нажмите кнопку 'Обновить' для получения актуальных "
+"данных."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:310
 msgid "Time"
@@ -889,8 +896,8 @@ msgstr "Время"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:366
 msgid "Timeout to wait for a successful DNS backend restart."
 msgstr ""
-"Время ожидания (в секундах) успешного перезапуска службы <abbr title="
-"\"Domain Name System\">DNS</abbr>."
+"Время ожидания (в секундах) успешного перезапуска службы <abbr "
+"title=\"Domain Name System\">DNS</abbr>."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:375
 msgid "Top Statistics"

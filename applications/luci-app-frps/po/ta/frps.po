@@ -14,29 +14,29 @@ msgstr ""
 msgid "Additional configs"
 msgstr "கூடுதல் உள்ளமைவுகள்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:47
 msgid "Additional settings"
 msgstr "கூடுதல் அமைப்புகள்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:44
 msgid "Allow ports"
 msgstr "துறைமுகங்களை அனுமதிக்கவும்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:44
 msgid ""
 "AllowPorts specifies a set of ports that clients are able to proxy to. If "
 "the length of this value is 0, all ports are allowed.<br />By default, this "
 "value is an empty set."
 msgstr ""
 "வாடிக்கையாளர்கள் பதிலாள் செய்யக்கூடிய துறைமுகங்களின் தொகுப்பைக் குறிப்பிடுகிறது. இந்த "
-"மதிப்பின் நீளம் 0 ஆக இருந்தால், அனைத்து துறைமுகங்களும் அனுமதிக்கப்படுகின்றன. <br />இயல்பா"
-"க, இந்த மதிப்பு வெற்று தொகுப்பு."
+"மதிப்பின் நீளம் 0 ஆக இருந்தால், அனைத்து துறைமுகங்களும் அனுமதிக்கப்படுகின்றன. <br /"
+">இயல்பாக, இந்த மதிப்பு வெற்று தொகுப்பு."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid "Assets dir"
 msgstr "சொத்துக்கள் டிர்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid ""
 "AssetsDir specifies the local directory that the dashboard will load "
 "resources from. If this value is \"\", assets will be loaded from the "
@@ -79,20 +79,25 @@ msgstr ""
 "சேவையகம் கேட்கும் துறைமுகத்தை பிண்ட்போர்ட் குறிப்பிடுகிறது. <br /> இயல்பாக, இந்த மதிப்பு "
 "7000 ஆகும்."
 
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid ""
+"BindQuicPort specifies the QUIC port that the server listens on. If this "
+"value is 0, the server will not listen for QUIC connections.<br />By "
+"default, this value is 0."
+msgstr ""
+
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
 "BindUdpPort specifies the UDP port that the server listens on. If this value "
 "is 0, the server will not listen for UDP connections.<br />By default, this "
-"value is 0"
+"value is 0."
 msgstr ""
-"சேவையகம் கேட்கும் யுடிபி போர்ட்டை பிண்டுட்போர்ட் குறிப்பிடுகிறது. இந்த மதிப்பு 0 ஆக "
-"இருந்தால், சேவையகம் யுடிபி இணைப்புகளைக் கேட்காது. <br /> இயல்பாக, இந்த மதிப்பு 0 ஆகும்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:143
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:147
 msgid "Collecting data ..."
 msgstr "தரவு சேகரித்தல் ..."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:151
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:155
 msgid "Common settings"
 msgstr "பொதுவான அமைப்புகள்"
 
@@ -100,11 +105,11 @@ msgstr "பொதுவான அமைப்புகள்"
 msgid "Config files include in temporary config file"
 msgstr "கட்டமைப்பு கோப்புகள் தற்காலிக கட்டமைப்பு கோப்பில் அடங்கும்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid "Custom 404 page"
 msgstr "தனிப்பயன் 404 பக்கம்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid ""
 "Custom404Page specifies a path to a custom 404 page to display. If this "
 "value is \"\", a default page will be displayed.<br />By default, this value "
@@ -114,23 +119,47 @@ msgstr ""
 "மதிப்பு \"\" என்றால், இயல்புநிலை பக்கம் காண்பிக்கப்படும். <br /> இயல்பாக, இந்த மதிப்பு "
 "\"\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid ""
+"Dashboard TLS Cert File specifies the path to the TLS certificate file for "
+"enabling HTTPS access.<br />Required if HTTPS is enabled."
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid ""
+"Dashboard TLS Key File specifies the path to the TLS private key file for "
+"enabling HTTPS access.<br />Required if HTTPS is enabled."
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid "Dashboard TLS certificate"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid "Dashboard TLS mode"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid "Dashboard TLS private key"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid "Dashboard address"
 msgstr "டாச்போர்டு முகவரி"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid "Dashboard password"
 msgstr "டாச்போர்டு கடவுச்சொல்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
 msgid "Dashboard port"
 msgstr "டாச்போர்டு துறைமுகம்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid "Dashboard user"
 msgstr "டாச்போர்டு பயனர்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid ""
 "DashboardAddr specifies the address that the dashboard binds to.<br />By "
 "default, this value is \"0.0.0.0\"."
@@ -138,7 +167,7 @@ msgstr ""
 "டாச்போர்டுஆட்ர் டாச்போர்டு பிணைக்கும் முகவரியைக் குறிப்பிடுகிறார். <br /> இயல்பாக, இந்த "
 "மதிப்பு \"0.0.0.0\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
 msgid ""
 "DashboardPort specifies the port that the dashboard listens on. If this "
 "value is 0, the dashboard will not be started.<br />By default, this value "
@@ -147,7 +176,7 @@ msgstr ""
 "டாச்போர்ட்போர்ட் டாச்போர்டு கேட்கும் துறைமுகத்தைக் குறிப்பிடுகிறது. இந்த மதிப்பு 0 ஆக "
 "இருந்தால், டாச்போர்டு தொடங்கப்படாது. <br /> இயல்பாக, இந்த மதிப்பு 0 ஆகும்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid ""
 "DashboardPwd specifies the password that the dashboard will use for login."
 "<br />By default, this value is \"admin\"."
@@ -155,7 +184,7 @@ msgstr ""
 "டாச்போர்டு பி.டபிள்யூ.டி உள்நுழைவுக்கு டாச்போர்டு பயன்படுத்தும் கடவுச்சொல்லைக் "
 "குறிப்பிடுகிறது. <br /> இயல்பாக, இந்த மதிப்பு \"நிர்வாகி\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid ""
 "DashboardUser specifies the username that the dashboard will use for login."
 "<br />By default, this value is \"admin\"."
@@ -163,17 +192,23 @@ msgstr ""
 "டாச்போர்டு யூசர் உள்நுழைவுக்கு டாச்போர்டு பயன்படுத்தும் பயனர்பெயரைக் குறிப்பிடுகிறது. "
 "<br /> இயல்பாக, இந்த மதிப்பு \"நிர்வாகி\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid "Disable log color"
 msgstr "பதிவு வண்ணத்தை முடக்கு"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid ""
 "DisableLogColor disables log colors when LogWay == \"console\" when set to "
 "true.<br />By default, this value is false."
 msgstr ""
 "LOGCOLOR ஐ முடக்கு லாங்வே == \"கன்சோல்\" உண்மைக்கு அமைக்கும்போது வண்ணங்களை முடக்கு. "
 "<br /> இயல்பாக, இந்த மதிப்பு தவறானது."
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid ""
+"Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is "
+"used for secure communication."
+msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid "Environment variable"
@@ -183,7 +218,7 @@ msgstr "சுற்றுச்சூழல் மாறி"
 msgid "Grant access to LuCI app frps"
 msgstr "லூசி பயன்பாட்டு FRP களுக்கு அணுகலை வழங்கவும்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:46
 msgid ""
 "HeartBeatTimeout specifies the maximum time to wait for a heartbeat before "
 "terminating the connection. It is not recommended to change this value.<br /"
@@ -193,7 +228,7 @@ msgstr ""
 "நேரத்தைக் குறிப்பிடுகிறது. இந்த மதிப்பை மாற்ற பரிந்துரைக்கப்படவில்லை. <br /> இயல்பாக, "
 "இந்த மதிப்பு 90 ஆகும்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:46
 msgid "Heartbeat timeout"
 msgstr "இதய துடிப்பு நேரம் முடிந்தது"
 
@@ -201,15 +236,15 @@ msgstr "இதய துடிப்பு நேரம் முடிந்த
 msgid "KCP bind port"
 msgstr "KCP பிணைப்பு துறைமுகம்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid "Log file"
 msgstr "பதிவு கோப்பு"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid "Log level"
 msgstr "பதிவு நிலை"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid "Log max days"
 msgstr "பதிவு அதிகபட்ச நாட்கள்"
 
@@ -221,7 +256,7 @@ msgstr "பதிவு நிலைபிழை"
 msgid "Log stdout"
 msgstr "பதிவு நிலைவெளி"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid ""
 "LogFile specifies a file where logs will be written to. This value will only "
 "be used if LogWay is set appropriately.<br />By default, this value is "
@@ -231,7 +266,7 @@ msgstr ""
 "அமைக்கப்பட்டால் மட்டுமே இந்த மதிப்பு பயன்படுத்தப்படும். <br /> இயல்பாக, இந்த மதிப்பு "
 "\"கன்சோல்\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid ""
 "LogLevel specifies the minimum log level. Valid values are \"trace\", "
 "\"debug\", \"info\", \"warn\", and \"error\".<br />By default, this value is "
@@ -241,7 +276,7 @@ msgstr ""
 "\"சுவடு\", \"பிழைத்திருத்த\", \"தகவல்\", \"எச்சரிக்கை\" மற்றும் \"பிழை\". <br /> "
 "இயல்பாக, இந்த மதிப்பு \"தகவல்\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid ""
 "LogMaxDays specifies the maximum number of days to store log information "
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
@@ -251,11 +286,11 @@ msgstr ""
 "குறிப்பிடுகிறது. உள்நுழைவு == \"கோப்பு\" என்றால் மட்டுமே இது பயன்படுத்தப்படுகிறது. "
 "<br /> இயல்பாக, இந்த மதிப்பு 0 ஆகும்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:45
 msgid "Max ports per client"
 msgstr "ஒரு வாடிக்கையாளருக்கு அதிகபட்ச துறைமுகங்கள்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:45
 msgid ""
 "MaxPortsPerClient specifies the maximum number of ports a single client may "
 "proxy to. If this value is 0, no limit will be applied.<br />By default, "
@@ -265,7 +300,7 @@ msgstr ""
 "குறிப்பிடுகிறது. இந்த மதிப்பு 0 ஆக இருந்தால், எந்த வரம்பும் பயன்படுத்தப்படாது. <br /> "
 "இயல்பாக, இந்த மதிப்பு 0 ஆகும்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:122
 msgid "NOT RUNNING"
 msgstr "ஓடவில்லை"
 
@@ -278,11 +313,11 @@ msgstr ""
 "\"https://github.com/fatedier/frp#configuration-file-template\"> frp ReadMe "
 "</a>"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid "Proxy bind address"
 msgstr "பதிலாள் பிணைப்பு முகவரி"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid ""
 "ProxyBindAddr specifies the address that the proxy binds to. This value may "
 "be the same as BindAddr.<br />By default, this value is \"0.0.0.0\"."
@@ -290,7 +325,11 @@ msgstr ""
 "பதிலாள் பிண்டாட்.டி.ஆர் பதிலாள் பிணைக்கும் முகவரியைக் குறிப்பிடுகிறது. இந்த மதிப்பு "
 "பிண்டாட்ரைப் போலவே இருக்கலாம். <br /> இயல்பாக, இந்த மதிப்பு \"0.0.0.0\" ஆகும்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid "QUIC bind port"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
 msgid "RUNNING"
 msgstr "இயங்கும்"
 
@@ -306,12 +345,12 @@ msgstr "டீமனை குழுவாக இயக்கவும்"
 msgid "Run daemon as user"
 msgstr "டீமனை பயனராக இயக்கவும்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:152
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:156
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:160
 msgid "Startup settings"
 msgstr "தொடக்க அமைப்புகள்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid ""
 "SubDomainHost specifies the domain that will be attached to sub-domains "
 "requested by the client when using Vhost proxying. For example, if this "
@@ -319,20 +358,20 @@ msgid ""
 "\"test\", the resulting URL would be \"test.frps.com\".<br />By default, "
 "this value is \"\"."
 msgstr ""
-"VHOST ப்ராக்சிங்கைப் பயன்படுத்தும்போது கிளையன்ட் கோரிய துணை களங்களுடன் இணைக்கப்படும் டொமைனை"
-" SUBDOMAINHOST குறிப்பிடுகிறது. எடுத்துக்காட்டாக, இந்த மதிப்பு \"frps.com\" என "
-"அமைக்கப்பட்டால், வாடிக்கையாளர் துணை டொமைன் \"சோதனை\" என்று கோரியால், இதன் விளைவாக வரும் "
-"முகவரி \"Test.frps.com\" ஆக இருக்கும். <br />இயல்பாக, இந்த மதிப்பு \"\"."
+"VHOST ப்ராக்சிங்கைப் பயன்படுத்தும்போது கிளையன்ட் கோரிய துணை களங்களுடன் இணைக்கப்படும் "
+"டொமைனை SUBDOMAINHOST குறிப்பிடுகிறது. எடுத்துக்காட்டாக, இந்த மதிப்பு \"frps.com\" "
+"என அமைக்கப்பட்டால், வாடிக்கையாளர் துணை டொமைன் \"சோதனை\" என்று கோரியால், இதன் விளைவாக "
+"வரும் முகவரி \"Test.frps.com\" ஆக இருக்கும். <br />இயல்பாக, இந்த மதிப்பு \"\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid "Subdomain host"
 msgstr "துணை டொமைன் புரவலன்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid "TCP mux"
 msgstr "TCP MUX"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid ""
 "TcpMux toggles TCP stream multiplexing. This allows multiple requests from a "
 "client to share a single TCP connection.<br />By default, this value is true."
@@ -341,7 +380,7 @@ msgstr ""
 "கோரிக்கைகளை ஒற்றை TCP இணைப்பைப் பகிர அனுமதிக்கிறது. <br /> இயல்பாக, இந்த மதிப்பு "
 "உண்மை."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:47
 msgid ""
 "This list can be used to specify some additional parameters which have not "
 "been included in this LuCI."
@@ -349,11 +388,11 @@ msgstr ""
 "இந்த லூசியில் சேர்க்கப்படாத சில கூடுதல் அளவுருக்களைக் குறிப்பிட இந்த பட்டியல் "
 "பயன்படுத்தப்படலாம்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
 msgid "Token"
 msgstr "கிள்ளாக்கு"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
 msgid ""
 "Token specifies the authorization token used to authenticate keys received "
 "from clients. Clients must have a matching token to be authorized to use the "
@@ -368,19 +407,19 @@ msgstr ""
 msgid "UDP bind port"
 msgstr "யுடிபி பிணைப்பு துறைமுகம்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid "Vhost HTTP port"
 msgstr "Vhost http துறைமுகம்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid "Vhost HTTP timeout"
 msgstr "Vhost http நேரம் முடிந்தது"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid "Vhost HTTPS port"
 msgstr "Vhost https துறைமுகம்"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid ""
 "VhostHttpPort specifies the port that the server listens for HTTP Vhost "
 "requests. If this value is 0, the server will not listen for HTTP requests."
@@ -390,7 +429,7 @@ msgstr ""
 "குறிப்பிடுகிறது. இந்த மதிப்பு 0 ஆக இருந்தால், சேவையகம் HTTP கோரிக்கைகளை கேட்காது. "
 "<br /> இயல்பாக, இந்த மதிப்பு 0 ஆகும்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid ""
 "VhostHttpTimeout specifies the response header timeout for the Vhost HTTP "
 "server, in seconds.<br />By default, this value is 60."
@@ -398,7 +437,7 @@ msgstr ""
 "VHOSTHTTPTIMEOUT, VHOST HTTP சேவையகத்திற்கான மறுமொழி தலைப்பு நேரத்தை நொடிகளில் "
 "குறிப்பிடுகிறது. <br /> இயல்பாக, இந்த மதிப்பு 60 ஆகும்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid ""
 "VhostHttpsPort specifies the port that the server listens for HTTPS Vhost "
 "requests. If this value is 0, the server will not listen for HTTPS requests."
@@ -408,9 +447,18 @@ msgstr ""
 "குறிப்பிடுகிறது. இந்த மதிப்பு 0 ஆக இருந்தால், சேவையகம் HTTPS கோரிக்கைகளை கேட்காது. "
 "<br /> இயல்பாக, இந்த மதிப்பு 0 ஆகும்."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:128
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:122
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:132
 #: applications/luci-app-frps/root/usr/share/luci/menu.d/luci-app-frps.json:3
 msgid "frp Server"
 msgstr "FRP சேவையகம்"
+
+#~ msgid ""
+#~ "BindUdpPort specifies the UDP port that the server listens on. If this "
+#~ "value is 0, the server will not listen for UDP connections.<br />By "
+#~ "default, this value is 0"
+#~ msgstr ""
+#~ "சேவையகம் கேட்கும் யுடிபி போர்ட்டை பிண்டுட்போர்ட் குறிப்பிடுகிறது. இந்த மதிப்பு 0 ஆக "
+#~ "இருந்தால், சேவையகம் யுடிபி இணைப்புகளைக் கேட்காது. <br /> இயல்பாக, இந்த மதிப்பு 0 "
+#~ "ஆகும்"

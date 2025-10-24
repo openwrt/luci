@@ -16,15 +16,15 @@ msgstr ""
 msgid "Additional configs"
 msgstr "Дополнительные конфигурации"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:47
 msgid "Additional settings"
 msgstr "Дополнительные настройки"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:44
 msgid "Allow ports"
 msgstr "Разрешить порты"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:44
 msgid ""
 "AllowPorts specifies a set of ports that clients are able to proxy to. If "
 "the length of this value is 0, all ports are allowed.<br />By default, this "
@@ -34,11 +34,11 @@ msgstr ""
 "через прокси. Если длина этого значения равна 0, все порты разрешены.<br /"
 ">По умолчанию это значение - пустой набор."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid "Assets dir"
 msgstr "Каталог ресурсов"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid ""
 "AssetsDir specifies the local directory that the dashboard will load "
 "resources from. If this value is \"\", assets will be loaded from the "
@@ -84,21 +84,25 @@ msgstr ""
 "BindPort указывает порт, к которому привязывается сервер.<br />По умолчанию "
 "7000."
 
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid ""
+"BindQuicPort specifies the QUIC port that the server listens on. If this "
+"value is 0, the server will not listen for QUIC connections.<br />By "
+"default, this value is 0."
+msgstr ""
+
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
 "BindUdpPort specifies the UDP port that the server listens on. If this value "
 "is 0, the server will not listen for UDP connections.<br />By default, this "
-"value is 0"
+"value is 0."
 msgstr ""
-"BindUdpPort указывает UDP-порт, к которому привязывается сервер. Если "
-"значение равно 0, сервер не будет слушать UDP-соединения.<br />По умолчанию "
-"это значение равно 0"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:143
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:147
 msgid "Collecting data ..."
 msgstr "Сбор данных ..."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:151
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:155
 msgid "Common settings"
 msgstr "Общие настройки"
 
@@ -106,11 +110,11 @@ msgstr "Общие настройки"
 msgid "Config files include in temporary config file"
 msgstr "Конфигурационные настройки записаны во временный конфигурационный файл"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid "Custom 404 page"
 msgstr "Своя страница 404"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid ""
 "Custom404Page specifies a path to a custom 404 page to display. If this "
 "value is \"\", a default page will be displayed.<br />By default, this value "
@@ -120,23 +124,47 @@ msgstr ""
 "ответа 404. Если это значение равно \"\", будет показана страница по "
 "умолчанию.<br />По умолчанию это значение равно \"\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid ""
+"Dashboard TLS Cert File specifies the path to the TLS certificate file for "
+"enabling HTTPS access.<br />Required if HTTPS is enabled."
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid ""
+"Dashboard TLS Key File specifies the path to the TLS private key file for "
+"enabling HTTPS access.<br />Required if HTTPS is enabled."
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid "Dashboard TLS certificate"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid "Dashboard TLS mode"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid "Dashboard TLS private key"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid "Dashboard address"
 msgstr "Адрес дашборда"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid "Dashboard password"
 msgstr "Пароль дашборда"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
 msgid "Dashboard port"
 msgstr "Порт дашборда"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid "Dashboard user"
 msgstr "Пользователь дашборда"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid ""
 "DashboardAddr specifies the address that the dashboard binds to.<br />By "
 "default, this value is \"0.0.0.0\"."
@@ -144,7 +172,7 @@ msgstr ""
 "DashboardAddr указывает адрес, к которому привязывается дашборд.<br />По "
 "умолчанию это значение равно \"0.0.0.0\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
 msgid ""
 "DashboardPort specifies the port that the dashboard listens on. If this "
 "value is 0, the dashboard will not be started.<br />By default, this value "
@@ -154,7 +182,7 @@ msgstr ""
 "значение равно 0, дашборд не будет запущен.<br />По умолчанию это значение "
 "равно 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid ""
 "DashboardPwd specifies the password that the dashboard will use for login."
 "<br />By default, this value is \"admin\"."
@@ -162,7 +190,7 @@ msgstr ""
 "DashboardPwd указывает пароль, который необходимо ввести для доступа к "
 "дашборду.<br />По умолчанию это \"admin\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid ""
 "DashboardUser specifies the username that the dashboard will use for login."
 "<br />By default, this value is \"admin\"."
@@ -170,17 +198,23 @@ msgstr ""
 "DashboardUser указывает логин, который необходимо ввести для доступа к "
 "дашборду.<br />По умолчанию это \"admin\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid "Disable log color"
 msgstr "Отключить цвета в журнале"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid ""
 "DisableLogColor disables log colors when LogWay == \"console\" when set to "
 "true.<br />By default, this value is false."
 msgstr ""
 "DisableLogColor отключает вывод цвета в журнале, если LogWay == \"console\"."
 "<br />По умолчанию флажок снят."
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid ""
+"Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is "
+"used for secure communication."
+msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid "Environment variable"
@@ -190,7 +224,7 @@ msgstr "Переменные окружения"
 msgid "Grant access to LuCI app frps"
 msgstr "Предоставить доступ LuCI к приложению frps"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:46
 msgid ""
 "HeartBeatTimeout specifies the maximum time to wait for a heartbeat before "
 "terminating the connection. It is not recommended to change this value.<br /"
@@ -200,7 +234,7 @@ msgstr ""
 "соединения. Не рекомендуется изменять это значение.<br />По умолчанию это "
 "значение равно 90."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:46
 msgid "Heartbeat timeout"
 msgstr "Heartbeat тайм-аут"
 
@@ -208,15 +242,15 @@ msgstr "Heartbeat тайм-аут"
 msgid "KCP bind port"
 msgstr "Порт привязки KCP"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid "Log file"
 msgstr "Файл журнала"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid "Log level"
 msgstr "Уровень журналирования"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid "Log max days"
 msgstr "Хранить журнал (дней)"
 
@@ -228,7 +262,7 @@ msgstr "Сохранять вывод stderr"
 msgid "Log stdout"
 msgstr "Сохранять вывод stdout"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid ""
 "LogFile specifies a file where logs will be written to. This value will only "
 "be used if LogWay is set appropriately.<br />By default, this value is "
@@ -238,7 +272,7 @@ msgstr ""
 "будет использоваться только в том случае, если LogWay установлен "
 "соответствующим образом.<br />По умолчанию это значение равно \"console\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid ""
 "LogLevel specifies the minimum log level. Valid values are \"trace\", "
 "\"debug\", \"info\", \"warn\", and \"error\".<br />By default, this value is "
@@ -248,7 +282,7 @@ msgstr ""
 "\"debug\", \"info\", \"warn\" и \"error\".<br />По умолчанию это значение "
 "равно \"info\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid ""
 "LogMaxDays specifies the maximum number of days to store log information "
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
@@ -258,11 +292,11 @@ msgstr ""
 "журнала перед удалением. Это значение используется, только если LogWay == "
 "\"file\".<br />По умолчанию это значение равно 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:45
 msgid "Max ports per client"
 msgstr "Максимальное количество портов для одного клиента"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:45
 msgid ""
 "MaxPortsPerClient specifies the maximum number of ports a single client may "
 "proxy to. If this value is 0, no limit will be applied.<br />By default, "
@@ -272,7 +306,7 @@ msgstr ""
 "проксировать один клиент. Если это значение равно 0, ограничение не "
 "применяется.<br />По умолчанию это значение равно 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:122
 msgid "NOT RUNNING"
 msgstr "НЕ ЗАПУЩЕН"
 
@@ -285,11 +319,11 @@ msgstr ""
 "файле конфигурации. Подробнее читай в <a href=\"https://github.com/fatedier/"
 "frp#using-environment-variables\">справке frp</a>"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid "Proxy bind address"
 msgstr "Адрес привязки прокси-сервера"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid ""
 "ProxyBindAddr specifies the address that the proxy binds to. This value may "
 "be the same as BindAddr.<br />By default, this value is \"0.0.0.0\"."
@@ -298,7 +332,11 @@ msgstr ""
 "может быть таким же, как BindAddr.<br />По умолчанию это значение равно "
 "\"0.0.0.0\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid "QUIC bind port"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
 msgid "RUNNING"
 msgstr "ЗАПУЩЕН"
 
@@ -314,12 +352,12 @@ msgstr "Запуск демона от имени группы"
 msgid "Run daemon as user"
 msgstr "Запуск демона от имени пользователя"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:152
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:156
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:160
 msgid "Startup settings"
 msgstr "Настройки запуска"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid ""
 "SubDomainHost specifies the domain that will be attached to sub-domains "
 "requested by the client when using Vhost proxying. For example, if this "
@@ -333,15 +371,15 @@ msgstr ""
 "\"test\", результирующий URL будет \"test.frps.com\".<br />По умолчанию это "
 "значение равно \"\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid "Subdomain host"
 msgstr "Зона для поддоменов"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid "TCP mux"
 msgstr "TCP мультиплексор"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid ""
 "TcpMux toggles TCP stream multiplexing. This allows multiple requests from a "
 "client to share a single TCP connection.<br />By default, this value is true."
@@ -350,7 +388,7 @@ msgstr ""
 "запросам от клиента использовать одно TCP-соединение.<br />По умолчанию это "
 "значение равно true."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:47
 msgid ""
 "This list can be used to specify some additional parameters which have not "
 "been included in this LuCI."
@@ -358,11 +396,11 @@ msgstr ""
 "Этот список может быть использован для указания некоторых дополнительных "
 "параметров, которые не были включены в данный LuCI."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
 msgid "Token"
 msgstr "Токен"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
 msgid ""
 "Token specifies the authorization token used to authenticate keys received "
 "from clients. Clients must have a matching token to be authorized to use the "
@@ -377,19 +415,19 @@ msgstr ""
 msgid "UDP bind port"
 msgstr "Порт привязки UDP"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid "Vhost HTTP port"
 msgstr "HTTP-порт виртуального хоста"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid "Vhost HTTP timeout"
 msgstr "Тайм-аут виртуального хоста HTTP"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid "Vhost HTTPS port"
 msgstr "HTTPS-порт виртуального хоста"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid ""
 "VhostHttpPort specifies the port that the server listens for HTTP Vhost "
 "requests. If this value is 0, the server will not listen for HTTP requests."
@@ -399,7 +437,7 @@ msgstr ""
 "Vhost. Если это значение равно 0, сервер не будет прослушивать HTTP-запросы."
 "<br />По умолчанию это значение равно 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid ""
 "VhostHttpTimeout specifies the response header timeout for the Vhost HTTP "
 "server, in seconds.<br />By default, this value is 60."
@@ -407,7 +445,7 @@ msgstr ""
 "VhostHttpTimeout указывает тайм-аут заголовка ответа для HTTP-сервера Vhost, "
 "в секундах.<br />По умолчанию это значение равно 60."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid ""
 "VhostHttpsPort specifies the port that the server listens for HTTPS Vhost "
 "requests. If this value is 0, the server will not listen for HTTPS requests."
@@ -417,9 +455,18 @@ msgstr ""
 "HTTPS Vhost. Если это значение равно 0, сервер не будет прослушивать запросы "
 "HTTPS.<br />По умолчанию это значение равно 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:128
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:122
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:132
 #: applications/luci-app-frps/root/usr/share/luci/menu.d/luci-app-frps.json:3
 msgid "frp Server"
 msgstr "frp сервер"
+
+#~ msgid ""
+#~ "BindUdpPort specifies the UDP port that the server listens on. If this "
+#~ "value is 0, the server will not listen for UDP connections.<br />By "
+#~ "default, this value is 0"
+#~ msgstr ""
+#~ "BindUdpPort указывает UDP-порт, к которому привязывается сервер. Если "
+#~ "значение равно 0, сервер не будет слушать UDP-соединения.<br />По "
+#~ "умолчанию это значение равно 0"

@@ -14,15 +14,15 @@ msgstr ""
 msgid "Additional configs"
 msgstr "Ek yapılandırmalar"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:47
 msgid "Additional settings"
 msgstr "Ek ayarlar"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:44
 msgid "Allow ports"
 msgstr "Bağlantı noktalarına izin ver"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:44
 msgid ""
 "AllowPorts specifies a set of ports that clients are able to proxy to. If "
 "the length of this value is 0, all ports are allowed.<br />By default, this "
@@ -32,11 +32,11 @@ msgstr ""
 "belirtir. Bu değerin uzunluğu 0 ise, tüm bağlantı noktalarına izin verilir. "
 "<br /> Varsayılan olarak, bu değer boş bir kümedir."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid "Assets dir"
 msgstr "Varlıklar dizini"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid ""
 "AssetsDir specifies the local directory that the dashboard will load "
 "resources from. If this value is \"\", assets will be loaded from the "
@@ -80,21 +80,25 @@ msgstr ""
 "BindPort, sunucunun dinlediği bağlantı noktasını belirtir. <br /> Varsayılan "
 "olarak bu değer 7000'dir."
 
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid ""
+"BindQuicPort specifies the QUIC port that the server listens on. If this "
+"value is 0, the server will not listen for QUIC connections.<br />By "
+"default, this value is 0."
+msgstr ""
+
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
 "BindUdpPort specifies the UDP port that the server listens on. If this value "
 "is 0, the server will not listen for UDP connections.<br />By default, this "
-"value is 0"
+"value is 0."
 msgstr ""
-"BindUdpPort, sunucunun dinlediği UDP bağlantı noktasını belirtir. Bu değer 0 "
-"ise, sunucu UDP bağlantılarını dinlemez. <br /> Varsayılan olarak bu değer "
-"0'dır"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:143
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:147
 msgid "Collecting data ..."
 msgstr "Veri toplama ..."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:151
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:155
 msgid "Common settings"
 msgstr "Genel Ayarlar"
 
@@ -102,11 +106,11 @@ msgstr "Genel Ayarlar"
 msgid "Config files include in temporary config file"
 msgstr "Yapılandırma dosyaları, geçici yapılandırma dosyasına dahil edilir"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid "Custom 404 page"
 msgstr "Özel 404 sayfası"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid ""
 "Custom404Page specifies a path to a custom 404 page to display. If this "
 "value is \"\", a default page will be displayed.<br />By default, this value "
@@ -116,23 +120,47 @@ msgstr ""
 "değer \"\" ise, varsayılan bir sayfa görüntülenecektir. <br /> Varsayılan "
 "olarak bu değer \"\" dir."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid ""
+"Dashboard TLS Cert File specifies the path to the TLS certificate file for "
+"enabling HTTPS access.<br />Required if HTTPS is enabled."
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid ""
+"Dashboard TLS Key File specifies the path to the TLS private key file for "
+"enabling HTTPS access.<br />Required if HTTPS is enabled."
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid "Dashboard TLS certificate"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid "Dashboard TLS mode"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid "Dashboard TLS private key"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid "Dashboard address"
 msgstr "Kontrol paneli adresi"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid "Dashboard password"
 msgstr "Kontrol paneli şifresi"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
 msgid "Dashboard port"
 msgstr "Kontrol paneli bağlantı noktası"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid "Dashboard user"
 msgstr "Kontrol paneli kullanıcısı"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid ""
 "DashboardAddr specifies the address that the dashboard binds to.<br />By "
 "default, this value is \"0.0.0.0\"."
@@ -140,7 +168,7 @@ msgstr ""
 "DashboardAddr, panonun bağlandığı adresi belirtir. <br /> Varsayılan olarak "
 "bu değer \"0.0.0.0\" dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
 msgid ""
 "DashboardPort specifies the port that the dashboard listens on. If this "
 "value is 0, the dashboard will not be started.<br />By default, this value "
@@ -150,7 +178,7 @@ msgstr ""
 "ise, gösterge tablosu başlatılmayacaktır. <br /> Varsayılan olarak bu değer "
 "0'dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid ""
 "DashboardPwd specifies the password that the dashboard will use for login."
 "<br />By default, this value is \"admin\"."
@@ -158,7 +186,7 @@ msgstr ""
 "DashboardPwd, kontrol panelinin oturum açmak için kullanacağı parolayı "
 "belirtir. <br /> Varsayılan olarak bu değer \"admin\" dir."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid ""
 "DashboardUser specifies the username that the dashboard will use for login."
 "<br />By default, this value is \"admin\"."
@@ -166,11 +194,11 @@ msgstr ""
 "DashboardUser, kontrol panelinin oturum açmak için kullanacağı kullanıcı "
 "adını belirtir. <br /> Varsayılan olarak bu değer \"admin\" dir."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid "Disable log color"
 msgstr "Günlük renklerini devre dışı bırak"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid ""
 "DisableLogColor disables log colors when LogWay == \"console\" when set to "
 "true.<br />By default, this value is false."
@@ -178,6 +206,12 @@ msgstr ""
 "DisableLogColor, doğru olarak ayarlandığında LogWay == \"console\" olduğunda "
 "günlük renklerini devre dışı bırakır. <br /> Varsayılan olarak bu değer "
 "yanlıştır."
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid ""
+"Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is "
+"used for secure communication."
+msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid "Environment variable"
@@ -187,7 +221,7 @@ msgstr "Çevre değişkeni"
 msgid "Grant access to LuCI app frps"
 msgstr "LuCI uygulaması frps'ye erişim izni verin"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:46
 msgid ""
 "HeartBeatTimeout specifies the maximum time to wait for a heartbeat before "
 "terminating the connection. It is not recommended to change this value.<br /"
@@ -197,7 +231,7 @@ msgstr ""
 "beklenecek maksimum süreyi belirtir. Bu değerin değiştirilmesi önerilmez. "
 "<br /> Varsayılan olarak bu değer 90'dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:46
 msgid "Heartbeat timeout"
 msgstr "Heartbeat zaman aşımı"
 
@@ -205,15 +239,15 @@ msgstr "Heartbeat zaman aşımı"
 msgid "KCP bind port"
 msgstr "KCP bağlama bağlantı noktası"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid "Log file"
 msgstr "Günlük dosyası"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid "Log level"
 msgstr "Günlük seviyesi"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid "Log max days"
 msgstr "Maksimum günleri günlüğe kaydet"
 
@@ -225,7 +259,7 @@ msgstr "Stderr'i günlüğe kaydet"
 msgid "Log stdout"
 msgstr "Stdout'u günlüğe kaydet"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid ""
 "LogFile specifies a file where logs will be written to. This value will only "
 "be used if LogWay is set appropriately.<br />By default, this value is "
@@ -235,7 +269,7 @@ msgstr ""
 "doğru bir şekilde ayarlanmışsa kullanılacaktır.<br />Varsayılan olarak bu "
 "değer \"console\" şeklindedir."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid ""
 "LogLevel specifies the minimum log level. Valid values are \"trace\", "
 "\"debug\", \"info\", \"warn\", and \"error\".<br />By default, this value is "
@@ -245,7 +279,7 @@ msgstr ""
 "\"debug\", \"info\", \"warn\" ve \"error\" dir.<br />Varsayılan olarak bu "
 "değer \"info\" dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid ""
 "LogMaxDays specifies the maximum number of days to store log information "
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
@@ -255,11 +289,11 @@ msgstr ""
 "sayısını belirtir. Bu yalnızca LogWay == \"file\" ise kullanılır.<br /"
 ">Varsayılan olarak bu değer 0'dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:45
 msgid "Max ports per client"
 msgstr "İstemci başına maksimum bağlantı noktası"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:45
 msgid ""
 "MaxPortsPerClient specifies the maximum number of ports a single client may "
 "proxy to. If this value is 0, no limit will be applied.<br />By default, "
@@ -269,7 +303,7 @@ msgstr ""
 "noktası sayısını belirtir. Bu değer 0 ise sınır uygulanmaz. <br /> "
 "Varsayılan olarak bu değer 0'dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:122
 msgid "NOT RUNNING"
 msgstr "ÇALIŞMIYOR"
 
@@ -282,11 +316,11 @@ msgstr ""
 "bkz. <a href=\"https://github.com/fatedier/frp#configuration-file-"
 "template\">frp README</a>"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid "Proxy bind address"
 msgstr "Proxy bağlama adresi"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid ""
 "ProxyBindAddr specifies the address that the proxy binds to. This value may "
 "be the same as BindAddr.<br />By default, this value is \"0.0.0.0\"."
@@ -294,7 +328,11 @@ msgstr ""
 "ProxyBindAddr, proxy'nin bağlandığı adresi belirtir. Bu değer BindAddr ile "
 "aynı olabilir. <br /> Varsayılan olarak bu değer \"0.0.0.0\" dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid "QUIC bind port"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
 msgid "RUNNING"
 msgstr "ÇALIŞIYOR"
 
@@ -310,12 +348,12 @@ msgstr "Arka plan programı grup olarak çalıştır"
 msgid "Run daemon as user"
 msgstr "Arka plan programı kullanıcı olarak çalıştır"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:152
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:156
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:160
 msgid "Startup settings"
 msgstr "Başlangıç ayarları"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid ""
 "SubDomainHost specifies the domain that will be attached to sub-domains "
 "requested by the client when using Vhost proxying. For example, if this "
@@ -329,15 +367,15 @@ msgstr ""
 "sonuçta ortaya çıkan URL \"test.frps.com\" olur. <br /> Varsayılan olarak bu "
 "değer \"\" olur."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid "Subdomain host"
 msgstr "Alt alan adı barındırıcısı"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid "TCP mux"
 msgstr "TCP mux"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid ""
 "TcpMux toggles TCP stream multiplexing. This allows multiple requests from a "
 "client to share a single TCP connection.<br />By default, this value is true."
@@ -346,7 +384,7 @@ msgstr ""
 "isteğin tek bir TCP bağlantısını paylaşmasına izin verir. <br /> Varsayılan "
 "olarak bu değer doğrudur."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:47
 msgid ""
 "This list can be used to specify some additional parameters which have not "
 "been included in this LuCI."
@@ -354,11 +392,11 @@ msgstr ""
 "Bu liste, bu LuCI'ye dahil edilmemiş bazı ek parametreleri belirtmek için "
 "kullanılabilir."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
 msgid "Token"
 msgstr "Token"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
 msgid ""
 "Token specifies the authorization token used to authenticate keys received "
 "from clients. Clients must have a matching token to be authorized to use the "
@@ -373,19 +411,19 @@ msgstr ""
 msgid "UDP bind port"
 msgstr "UDP bağlama bağlantı noktası"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid "Vhost HTTP port"
 msgstr "Vhost HTTP bağlantı noktası"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid "Vhost HTTP timeout"
 msgstr "Vhost HTTP zaman aşımı"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid "Vhost HTTPS port"
 msgstr "Vhost HTTPS bağlantı noktası"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid ""
 "VhostHttpPort specifies the port that the server listens for HTTP Vhost "
 "requests. If this value is 0, the server will not listen for HTTP requests."
@@ -395,7 +433,7 @@ msgstr ""
 "belirtir. Bu değer 0 ise, sunucu HTTP isteklerini dinlemeyecektir. <br /> "
 "Varsayılan olarak bu değer 0'dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid ""
 "VhostHttpTimeout specifies the response header timeout for the Vhost HTTP "
 "server, in seconds.<br />By default, this value is 60."
@@ -403,7 +441,7 @@ msgstr ""
 "VhostHttpTimeout, Vhost HTTP sunucusu için saniye cinsinden yanıt başlığı "
 "zaman aşımını belirtir. <br /> Varsayılan olarak bu değer 60'tır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid ""
 "VhostHttpsPort specifies the port that the server listens for HTTPS Vhost "
 "requests. If this value is 0, the server will not listen for HTTPS requests."
@@ -413,9 +451,18 @@ msgstr ""
 "noktasını belirtir. Bu değer 0 ise, sunucu HTTPS isteklerini dinlemez. <br /"
 "> Varsayılan olarak bu değer 0'dır."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:128
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:122
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:132
 #: applications/luci-app-frps/root/usr/share/luci/menu.d/luci-app-frps.json:3
 msgid "frp Server"
 msgstr "frp Sunucusu"
+
+#~ msgid ""
+#~ "BindUdpPort specifies the UDP port that the server listens on. If this "
+#~ "value is 0, the server will not listen for UDP connections.<br />By "
+#~ "default, this value is 0"
+#~ msgstr ""
+#~ "BindUdpPort, sunucunun dinlediği UDP bağlantı noktasını belirtir. Bu "
+#~ "değer 0 ise, sunucu UDP bağlantılarını dinlemez. <br /> Varsayılan olarak "
+#~ "bu değer 0'dır"

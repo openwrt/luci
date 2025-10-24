@@ -14,15 +14,15 @@ msgstr ""
 msgid "Additional configs"
 msgstr "Cấu hình thêm"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:47
 msgid "Additional settings"
 msgstr "Cài đặt mở rộng"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:44
 msgid "Allow ports"
 msgstr "Cho phép cổng"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:44
 msgid ""
 "AllowPorts specifies a set of ports that clients are able to proxy to. If "
 "the length of this value is 0, all ports are allowed.<br />By default, this "
@@ -32,11 +32,11 @@ msgstr ""
 "độ dài của giá trị này là 0, thì tất cả các cổng đều được phép.<br />Theo "
 "mặc định, giá trị này là một tập hợp trống."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid "Assets dir"
 msgstr "Assets dir"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
 msgid ""
 "AssetsDir specifies the local directory that the dashboard will load "
 "resources from. If this value is \"\", assets will be loaded from the "
@@ -80,21 +80,25 @@ msgstr ""
 "BindPort chỉ định cổng mà máy chủ lắng nghe.<br />Theo mặc định, giá trị này "
 "là 7000."
 
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid ""
+"BindQuicPort specifies the QUIC port that the server listens on. If this "
+"value is 0, the server will not listen for QUIC connections.<br />By "
+"default, this value is 0."
+msgstr ""
+
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
 "BindUdpPort specifies the UDP port that the server listens on. If this value "
 "is 0, the server will not listen for UDP connections.<br />By default, this "
-"value is 0"
+"value is 0."
 msgstr ""
-"BindUdpPort chỉ định cổng UDP mà máy chủ lắng nghe. Nếu giá trị này là 0, "
-"thì máy chủ sẽ không lắng nghe các kết nối UDP.<br />Theo mặc định, giá trị "
-"này là 0"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:143
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:147
 msgid "Collecting data ..."
 msgstr "Đang thu thập dữ liệu ..."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:151
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:155
 msgid "Common settings"
 msgstr "Cài đặt chung"
 
@@ -102,11 +106,11 @@ msgstr "Cài đặt chung"
 msgid "Config files include in temporary config file"
 msgstr "Tệp cấu hình bao gồm trong tệp cấu hình tạm thời"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid "Custom 404 page"
 msgstr "Tùy chỉnh trang 404"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
 msgid ""
 "Custom404Page specifies a path to a custom 404 page to display. If this "
 "value is \"\", a default page will be displayed.<br />By default, this value "
@@ -116,23 +120,47 @@ msgstr ""
 "giá trị này là \"\", một trang mặc định sẽ được hiển thị.<br />Theo mặc "
 "định, giá trị này là \"\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid ""
+"Dashboard TLS Cert File specifies the path to the TLS certificate file for "
+"enabling HTTPS access.<br />Required if HTTPS is enabled."
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid ""
+"Dashboard TLS Key File specifies the path to the TLS private key file for "
+"enabling HTTPS access.<br />Required if HTTPS is enabled."
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+msgid "Dashboard TLS certificate"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid "Dashboard TLS mode"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+msgid "Dashboard TLS private key"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid "Dashboard address"
 msgstr "Địa chỉ Dashboard"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid "Dashboard password"
 msgstr "Mật khẩu Dashboard"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
 msgid "Dashboard port"
 msgstr "Cổng Dashboard"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid "Dashboard user"
 msgstr "Người dùng Dashboard"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid ""
 "DashboardAddr specifies the address that the dashboard binds to.<br />By "
 "default, this value is \"0.0.0.0\"."
@@ -140,7 +168,7 @@ msgstr ""
 "DashboardAddr chỉ định địa chỉ mà trang tổng quan liên kết đến.<br />Theo "
 "mặc định, giá trị này là \"0.0.0.0\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
 msgid ""
 "DashboardPort specifies the port that the dashboard listens on. If this "
 "value is 0, the dashboard will not be started.<br />By default, this value "
@@ -150,7 +178,7 @@ msgstr ""
 "0, thì trang tổng quan sẽ không được khởi động.<br />Theo mặc định, giá trị "
 "này là 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:31
 msgid ""
 "DashboardPwd specifies the password that the dashboard will use for login."
 "<br />By default, this value is \"admin\"."
@@ -158,7 +186,7 @@ msgstr ""
 "DashboardPwd chỉ định mật khẩu mà trang tổng quan sẽ sử dụng để đăng nhập."
 "<br />Theo mặc định, giá trị này là \"admin\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:29
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:30
 msgid ""
 "DashboardUser specifies the username that the dashboard will use for login."
 "<br />By default, this value is \"admin\"."
@@ -166,17 +194,23 @@ msgstr ""
 "Người dùng bảng điều khiển chỉ định tên người dùng mà bảng điều khiển sẽ sử "
 "dụng để đăng nhập.<br />Theo mặc định, giá trị này là \"quản trị viên\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid "Disable log color"
 msgstr "Disable log color"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:35
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:39
 msgid ""
 "DisableLogColor disables log colors when LogWay == \"console\" when set to "
 "true.<br />By default, this value is false."
 msgstr ""
 "DisableLogColor sẽ tắt màu nhật ký khi LogWay == \"bảng điều khiển\" được "
 "đặt thành true.<br />Theo mặc định, giá trị này là false."
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+msgid ""
+"Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is "
+"used for secure communication."
+msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid "Environment variable"
@@ -186,7 +220,7 @@ msgstr "Environment variable"
 msgid "Grant access to LuCI app frps"
 msgstr "Cấp quyền truy cập vào ứng dụng LuCI fps"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:46
 msgid ""
 "HeartBeatTimeout specifies the maximum time to wait for a heartbeat before "
 "terminating the connection. It is not recommended to change this value.<br /"
@@ -196,7 +230,7 @@ msgstr ""
 "kết nối. Bạn không nên thay đổi giá trị này.<br />Theo mặc định, giá trị này "
 "là 90."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:46
 msgid "Heartbeat timeout"
 msgstr "Heartbeat timeout"
 
@@ -204,15 +238,15 @@ msgstr "Heartbeat timeout"
 msgid "KCP bind port"
 msgstr "KCP bind port"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid "Log file"
 msgstr "Tệp nhật ký"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid "Log level"
 msgstr "Mức độ nhật ký"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid "Log max days"
 msgstr "Log max days"
 
@@ -224,7 +258,7 @@ msgstr "Log stderr"
 msgid "Log stdout"
 msgstr "Log stdout"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
 msgid ""
 "LogFile specifies a file where logs will be written to. This value will only "
 "be used if LogWay is set appropriately.<br />By default, this value is "
@@ -234,7 +268,7 @@ msgstr ""
 "sử dụng nếu LogWay được đặt phù hợp.<br />Theo mặc định, giá trị này là "
 "\"bảng điều khiển\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
 msgid ""
 "LogLevel specifies the minimum log level. Valid values are \"trace\", "
 "\"debug\", \"info\", \"warn\", and \"error\".<br />By default, this value is "
@@ -244,7 +278,7 @@ msgstr ""
 "\"gỡ lỗi\", \"thông tin\", \"cảnh báo\" và \"lỗi\".<br />Theo mặc định, giá "
 "trị này là \"thông tin\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
 msgid ""
 "LogMaxDays specifies the maximum number of days to store log information "
 "before deletion. This is only used if LogWay == \"file\".<br />By default, "
@@ -254,11 +288,11 @@ msgstr ""
 "xóa. Giá trị này chỉ được sử dụng nếu LogWay == \"file\".<br />Theo mặc "
 "định, giá trị này là 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:45
 msgid "Max ports per client"
 msgstr "Cổng tối đa cho mỗi khách hàng"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:45
 msgid ""
 "MaxPortsPerClient specifies the maximum number of ports a single client may "
 "proxy to. If this value is 0, no limit will be applied.<br />By default, "
@@ -268,7 +302,7 @@ msgstr ""
 "quyền. Nếu giá trị này là 0, thì sẽ không có giới hạn nào được áp dụng.<br /"
 ">Theo mặc định, giá trị này là 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:122
 msgid "NOT RUNNING"
 msgstr "Không chạy"
 
@@ -281,11 +315,11 @@ msgstr ""
 "href=\"https://github.com/fatedier/frp#configuration-file-template\">frp "
 "README</a>"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid "Proxy bind address"
 msgstr "Proxy bind address"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
 msgid ""
 "ProxyBindAddr specifies the address that the proxy binds to. This value may "
 "be the same as BindAddr.<br />By default, this value is \"0.0.0.0\"."
@@ -293,7 +327,11 @@ msgstr ""
 "ProxyBindAddr chỉ định địa chỉ mà proxy liên kết tới. Giá trị này có thể "
 "giống với BindAddr.<br />Theo mặc định, giá trị này là \"0.0.0.0\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
+msgid "QUIC bind port"
+msgstr ""
+
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
 msgid "RUNNING"
 msgstr "Đang chạy"
 
@@ -309,12 +347,12 @@ msgstr "Chạy daemon theo nhóm"
 msgid "Run daemon as user"
 msgstr "Chạy daemon với tư cách người dùng"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:152
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:156
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:160
 msgid "Startup settings"
 msgstr "Cài đặt khởi động"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid ""
 "SubDomainHost specifies the domain that will be attached to sub-domains "
 "requested by the client when using Vhost proxying. For example, if this "
@@ -327,15 +365,15 @@ msgstr ""
 "\"frps.com\" và ứng dụng khách đã yêu cầu tên miền phụ \"test\", URL kết quả "
 "sẽ là \"test.frps.com\".<br />Theo mặc định, giá trị này là \"\"."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:37
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:41
 msgid "Subdomain host"
 msgstr "Subdomain host"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid "TCP mux"
 msgstr "TCP mux"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:38
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:42
 msgid ""
 "TcpMux toggles TCP stream multiplexing. This allows multiple requests from a "
 "client to share a single TCP connection.<br />By default, this value is true."
@@ -343,7 +381,7 @@ msgstr ""
 "TcpMux chuyển đổi ghép kênh luồng TCP. Điều này cho phép nhiều yêu cầu từ "
 "máy khách chia sẻ một kết nối TCP.<br />Theo mặc định, giá trị này là đúng."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:43
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:47
 msgid ""
 "This list can be used to specify some additional parameters which have not "
 "been included in this LuCI."
@@ -351,11 +389,11 @@ msgstr ""
 "Danh sách này có thể được sử dụng để chỉ định một số tham số bổ sung chưa "
 "được đưa vào LuCI này."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
 msgid "Token"
 msgstr "Token"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:36
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:40
 msgid ""
 "Token specifies the authorization token used to authenticate keys received "
 "from clients. Clients must have a matching token to be authorized to use the "
@@ -369,19 +407,19 @@ msgstr ""
 msgid "UDP bind port"
 msgstr "UDP bind port"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid "Vhost HTTP port"
 msgstr "Vhost HTTP port"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid "Vhost HTTP timeout"
 msgstr "Vhost HTTP timeout"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid "Vhost HTTPS port"
 msgstr "Cổng Vhost HTTPS"
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:24
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
 msgid ""
 "VhostHttpPort specifies the port that the server listens for HTTP Vhost "
 "requests. If this value is 0, the server will not listen for HTTP requests."
@@ -391,7 +429,7 @@ msgstr ""
 "giá trị này bằng 0 thì máy chủ sẽ không lắng nghe các yêu cầu HTTP.<br /"
 ">Theo mặc định, giá trị này bằng 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:27
 msgid ""
 "VhostHttpTimeout specifies the response header timeout for the Vhost HTTP "
 "server, in seconds.<br />By default, this value is 60."
@@ -399,7 +437,7 @@ msgstr ""
 "VhostHttpTimeout chỉ định thời gian chờ tiêu đề phản hồi cho máy chủ HTTP "
 "Vhost, tính bằng giây.<br />Theo mặc định, giá trị này là 60."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:25
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:26
 msgid ""
 "VhostHttpsPort specifies the port that the server listens for HTTPS Vhost "
 "requests. If this value is 0, the server will not listen for HTTPS requests."
@@ -409,9 +447,18 @@ msgstr ""
 "Nếu giá trị này bằng 0 thì máy chủ sẽ không lắng nghe các yêu cầu HTTPS.<br /"
 ">Theo mặc định, giá trị này bằng 0."
 
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:116
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:118
-#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:128
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:122
+#: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:132
 #: applications/luci-app-frps/root/usr/share/luci/menu.d/luci-app-frps.json:3
 msgid "frp Server"
 msgstr "Máy chủ frp"
+
+#~ msgid ""
+#~ "BindUdpPort specifies the UDP port that the server listens on. If this "
+#~ "value is 0, the server will not listen for UDP connections.<br />By "
+#~ "default, this value is 0"
+#~ msgstr ""
+#~ "BindUdpPort chỉ định cổng UDP mà máy chủ lắng nghe. Nếu giá trị này là 0, "
+#~ "thì máy chủ sẽ không lắng nghe các kết nối UDP.<br />Theo mặc định, giá "
+#~ "trị này là 0"

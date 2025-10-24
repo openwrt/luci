@@ -11,7 +11,7 @@ msgstr ""
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 5.12-dev\n"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:214
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:216
 msgid "Add new proxy..."
 msgstr "Додати новий проксі..."
 
@@ -88,11 +88,19 @@ msgstr ""
 "завантажені з пакетного виконуваного файлу за допомогою statik.<br />За "
 "замовчуванням це значення дорівнює \"\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:190
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
+msgid "Bind addr"
+msgstr ""
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:73
+msgid "Bind port"
+msgstr ""
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:192
 msgid "Collecting data ..."
 msgstr "Збір даних..."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:198
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:200
 msgid "Common Settings"
 msgstr "Загальні налаштування"
 
@@ -132,7 +140,7 @@ msgstr "Змінна середовища"
 msgid "Exit when login fail"
 msgstr "Вийти, якщо вхід не вдається"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:218
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:220
 msgid "General Settings"
 msgstr "Загальні налаштування"
 
@@ -140,12 +148,12 @@ msgstr "Загальні налаштування"
 msgid "Grant access to LuCI app frpc"
 msgstr "Надайте доступ до програми LuCI frpc"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:219
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:221
 msgid "HTTP Settings"
 msgstr "Налаштування HTTP"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:64
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:78
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:80
 msgid "HTTP password"
 msgstr "Пароль HTTP"
 
@@ -154,7 +162,7 @@ msgid "HTTP proxy"
 msgstr "Проксі HTTP"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:63
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:77
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:79
 msgid "HTTP user"
 msgstr "Користувач HTTP"
 
@@ -205,12 +213,12 @@ msgid "If remote_port is 0, frps will assign a random port for you"
 msgstr "Якщо remote_port дорівнює 0, frps призначить вам випадковий порт"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:48
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:224
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:226
 msgid "Local IP"
 msgstr "Локальний IP"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:49
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:225
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:227
 msgid "Local port"
 msgstr "Місцевий порт"
 
@@ -286,7 +294,7 @@ msgstr ""
 "входу. Якщо false, клієнт повторюватиме спробу, доки спроба входу не буде "
 "успішною.<br />За замовчуванням це значення є true."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:167
 msgid "NOT RUNNING"
 msgstr "НЕ ПРАЦЮЄ"
 
@@ -299,11 +307,11 @@ msgstr ""
 "href=\"https://github.com/fatedier/frp#configuration-file-template\">frp "
 "README</a>"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:76
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:78
 msgid "Plugin"
 msgstr "Плагін"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:220
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:222
 msgid "Plugin Settings"
 msgstr "Налаштування плагіна"
 
@@ -314,43 +322,37 @@ msgstr "Протокол"
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:36
 msgid ""
 "Protocol specifies the protocol to use when interacting with the server. "
-"Valid values are \"tcp\", \"kcp\", and \"websocket\".<br />By default, this "
-"value is \"tcp\"."
+"Valid values are \"tcp\", \"kcp\", \"quic\" and \"websocket\".<br />By "
+"default, this value is \"tcp\"."
 msgstr ""
-"Protocol визначає протокол, який використовуватиметься під час взаємодії з "
-"сервером. Дійсні значення: «tcp», «kcp» і «websocket».<br />За умовчанням це "
-"значення «tcp».\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:210
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:212
 msgid "Proxy Settings"
 msgstr "Налаштування проксі"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:44
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:222
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:224
 msgid "Proxy name"
 msgstr "Ім'я проксі"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:223
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:225
 msgid "Proxy type"
 msgstr "Тип проксі"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
 msgid ""
 "ProxyType specifies the type of this proxy. Valid values include \"tcp\", "
-"\"udp\", \"http\", \"https\", \"stcp\", and \"xtcp\".<br />By default, this "
+"\"udp\", \"http\", \"https\", \"stcp\" and \"xtcp\".<br />By default, this "
 "value is \"tcp\"."
 msgstr ""
-"ProxyType визначає тип цього проксі. Дійсні значення включають \"tcp\", "
-"\"udp\", \"http\", \"https\", \"stcp\" і \"xtcp\".<br />За умовчанням це "
-"значення \"tcp\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
 msgid "RUNNING"
 msgstr "ЗАПУЩЕНО"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:53
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:226
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:228
 msgid "Remote port"
 msgstr "Віддалений порт"
 
@@ -370,11 +372,11 @@ msgstr "Запустити демон від імені групи"
 msgid "Run daemon as user"
 msgstr "Запустіть демон як користувач"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:80
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:82
 msgid "SOCKS5 password"
 msgstr "Пароль SOCKS5"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:79
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
 msgid "SOCKS5 user"
 msgstr "Користувач SOCKS5"
 
@@ -406,12 +408,12 @@ msgstr ""
 "ServerPort визначає порт для підключення до сервера.<br />За замовчуванням "
 "це значення становить 7000."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:74
 msgid "Sk"
 msgstr "ск"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:199
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:203
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:201
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:205
 msgid "Startup Settings"
 msgstr "Параметри запуску"
 
@@ -429,10 +431,9 @@ msgstr "TLS"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:37
 msgid ""
-"TLSEnable specifies whether or not TLS should be used when communicating "
+"TLS Enable specifies whether or not TLS should be used when communicating "
 "with the server."
 msgstr ""
-"TLSEnable визначає, чи слід використовувати TLS під час зв’язку із сервером."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:33
 msgid ""
@@ -468,7 +469,7 @@ msgstr ""
 "ключів для надсилання на сервер. Для успішної авторизації сервер повинен "
 "мати відповідний маркер. <br />За замовчуванням це значення \"\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:83
 msgid "Unix domain socket path"
 msgstr "Шлях сокета домену Unix"
 
@@ -505,9 +506,34 @@ msgstr ""
 "автоматично змінені на \"{user}.{proxy_name}\".<br />За замовчуванням це "
 "значення дорівнює \"\"."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:175
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:167
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:177
 #: applications/luci-app-frpc/root/usr/share/luci/menu.d/luci-app-frpc.json:3
 msgid "frp Client"
 msgstr "Клієнт frp"
+
+#~ msgid ""
+#~ "Protocol specifies the protocol to use when interacting with the server. "
+#~ "Valid values are \"tcp\", \"kcp\", and \"websocket\".<br />By default, "
+#~ "this value is \"tcp\"."
+#~ msgstr ""
+#~ "Protocol визначає протокол, який використовуватиметься під час взаємодії "
+#~ "з сервером. Дійсні значення: «tcp», «kcp» і «websocket».<br />За "
+#~ "умовчанням це значення «tcp».\"."
+
+#~ msgid ""
+#~ "ProxyType specifies the type of this proxy. Valid values include \"tcp\", "
+#~ "\"udp\", \"http\", \"https\", \"stcp\", and \"xtcp\".<br />By default, "
+#~ "this value is \"tcp\"."
+#~ msgstr ""
+#~ "ProxyType визначає тип цього проксі. Дійсні значення включають \"tcp\", "
+#~ "\"udp\", \"http\", \"https\", \"stcp\" і \"xtcp\".<br />За умовчанням це "
+#~ "значення \"tcp\"."
+
+#~ msgid ""
+#~ "TLSEnable specifies whether or not TLS should be used when communicating "
+#~ "with the server."
+#~ msgstr ""
+#~ "TLSEnable визначає, чи слід використовувати TLS під час зв’язку із "
+#~ "сервером."

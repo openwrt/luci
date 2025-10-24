@@ -10,7 +10,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.5-dev\n"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:214
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:216
 msgid "Add new proxy..."
 msgstr "Yeni proxy ekle..."
 
@@ -87,11 +87,19 @@ msgstr ""
 "yürütülebilir dosyadan yüklenecektir.<br />Varsayılan olarak bu değer \"\" "
 "şeklindedir."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:190
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
+msgid "Bind addr"
+msgstr ""
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:73
+msgid "Bind port"
+msgstr ""
+
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:192
 msgid "Collecting data ..."
 msgstr "Veri toplama ..."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:198
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:200
 msgid "Common Settings"
 msgstr "Ortak Ayarlar"
 
@@ -131,7 +139,7 @@ msgstr "Çevre değişkeni"
 msgid "Exit when login fail"
 msgstr "Giriş başarısız olduğunda çık"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:218
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:220
 msgid "General Settings"
 msgstr "Genel Ayarlar"
 
@@ -139,12 +147,12 @@ msgstr "Genel Ayarlar"
 msgid "Grant access to LuCI app frpc"
 msgstr "LuCI uygulaması frpc'ye erişim izni verin"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:219
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:221
 msgid "HTTP Settings"
 msgstr "HTTP Ayarları"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:64
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:78
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:80
 msgid "HTTP password"
 msgstr "HTTP şifresi"
 
@@ -153,7 +161,7 @@ msgid "HTTP proxy"
 msgstr "HTTP proxy"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:63
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:77
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:79
 msgid "HTTP user"
 msgstr "HTTP kullanıcısı"
 
@@ -204,12 +212,12 @@ msgid "If remote_port is 0, frps will assign a random port for you"
 msgstr "remote_port 0 ise, frps sizin için rastgele bir port atayacaktır"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:48
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:224
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:226
 msgid "Local IP"
 msgstr "Yerel IP"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:49
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:225
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:227
 msgid "Local port"
 msgstr "Yerel bağlantı noktası"
 
@@ -288,7 +296,7 @@ msgstr ""
 "girişimi olana kadar yeniden deneyecektir.<br />Varsayılan olarak bu değer "
 "doğrudur."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:167
 msgid "NOT RUNNING"
 msgstr "ÇALIŞMIYOR"
 
@@ -301,11 +309,11 @@ msgstr ""
 "bkz. <a href=\"https://github.com/fatedier/frp#configuration-file-"
 "template\">frp README</a>"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:76
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:78
 msgid "Plugin"
 msgstr "Eklenti"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:220
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:222
 msgid "Plugin Settings"
 msgstr "Eklenti Ayarları"
 
@@ -316,43 +324,37 @@ msgstr "Protokol"
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:36
 msgid ""
 "Protocol specifies the protocol to use when interacting with the server. "
-"Valid values are \"tcp\", \"kcp\", and \"websocket\".<br />By default, this "
-"value is \"tcp\"."
+"Valid values are \"tcp\", \"kcp\", \"quic\" and \"websocket\".<br />By "
+"default, this value is \"tcp\"."
 msgstr ""
-"Protokol, sunucuyla etkileşimde bulunulduğunda kullanılacak protokolü "
-"belirtir. Geçerli değerler \"tcp\", \"kcp\" ve \"websocket\" dir.<br /"
-">Varsayılan olarak bu değer \"tcp\" dir."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:210
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:212
 msgid "Proxy Settings"
 msgstr "Proxy Ayarları"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:44
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:222
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:224
 msgid "Proxy name"
 msgstr "Proxy adı"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:223
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:225
 msgid "Proxy type"
 msgstr "Proxy türü"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:45
 msgid ""
 "ProxyType specifies the type of this proxy. Valid values include \"tcp\", "
-"\"udp\", \"http\", \"https\", \"stcp\", and \"xtcp\".<br />By default, this "
+"\"udp\", \"http\", \"https\", \"stcp\" and \"xtcp\".<br />By default, this "
 "value is \"tcp\"."
 msgstr ""
-"ProxyType, bu proxy'nin türünü belirtir. Geçerli değerler arasında \"tcp\", "
-"\"udp\", \"http\", \"https\", \"stcp\" ve \"xtcp\" bulunur.<br />Varsayılan "
-"olarak bu değer \"tcp\" dir."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
 msgid "RUNNING"
 msgstr "ÇALIŞIYOR"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:53
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:226
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:228
 msgid "Remote port"
 msgstr "Uzak bağlantı noktası"
 
@@ -372,11 +374,11 @@ msgstr "Arka plan programı grup olarak çalıştır"
 msgid "Run daemon as user"
 msgstr "Arka plan programı kullanıcı olarak çalıştır"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:80
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:82
 msgid "SOCKS5 password"
 msgstr "SOCKS5 parolası"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:79
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
 msgid "SOCKS5 user"
 msgstr "SOCKS5 kullanıcısı"
 
@@ -408,12 +410,12 @@ msgstr ""
 "ServerPort, sunucuya bağlanılacak bağlantı noktasını belirtir.<br /"
 ">Varsayılan olarak bu değer 7000'dir."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:74
 msgid "Sk"
 msgstr "Sk"
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:199
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:203
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:201
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:205
 msgid "Startup Settings"
 msgstr "Başlangıç Ayarları"
 
@@ -431,11 +433,9 @@ msgstr "TLS"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:37
 msgid ""
-"TLSEnable specifies whether or not TLS should be used when communicating "
+"TLS Enable specifies whether or not TLS should be used when communicating "
 "with the server."
 msgstr ""
-"TLSEnable, sunucuyla iletişim kurulurken TLS'nin kullanılıp "
-"kullanılmayacağını belirtir."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:33
 msgid ""
@@ -472,7 +472,7 @@ msgstr ""
 "sunucunun eşleşen bir jetona sahip olması gerekir.<br />Varsayılan olarak bu "
 "değer \"\" dir."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:83
 msgid "Unix domain socket path"
 msgstr "Unix etki alanı soketi yolu"
 
@@ -509,9 +509,34 @@ msgstr ""
 "{Proxy_name}\" olarak değiştirilecektir.<br />Varsayılan olarak bu değer "
 "\"\" şeklindedir."
 
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165
-#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:175
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:167
+#: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:177
 #: applications/luci-app-frpc/root/usr/share/luci/menu.d/luci-app-frpc.json:3
 msgid "frp Client"
 msgstr "frp İstemcisi"
+
+#~ msgid ""
+#~ "Protocol specifies the protocol to use when interacting with the server. "
+#~ "Valid values are \"tcp\", \"kcp\", and \"websocket\".<br />By default, "
+#~ "this value is \"tcp\"."
+#~ msgstr ""
+#~ "Protokol, sunucuyla etkileşimde bulunulduğunda kullanılacak protokolü "
+#~ "belirtir. Geçerli değerler \"tcp\", \"kcp\" ve \"websocket\" dir.<br /"
+#~ ">Varsayılan olarak bu değer \"tcp\" dir."
+
+#~ msgid ""
+#~ "ProxyType specifies the type of this proxy. Valid values include \"tcp\", "
+#~ "\"udp\", \"http\", \"https\", \"stcp\", and \"xtcp\".<br />By default, "
+#~ "this value is \"tcp\"."
+#~ msgstr ""
+#~ "ProxyType, bu proxy'nin türünü belirtir. Geçerli değerler arasında "
+#~ "\"tcp\", \"udp\", \"http\", \"https\", \"stcp\" ve \"xtcp\" bulunur.<br /"
+#~ ">Varsayılan olarak bu değer \"tcp\" dir."
+
+#~ msgid ""
+#~ "TLSEnable specifies whether or not TLS should be used when communicating "
+#~ "with the server."
+#~ msgstr ""
+#~ "TLSEnable, sunucuyla iletişim kurulurken TLS'nin kullanılıp "
+#~ "kullanılmayacağını belirtir."
