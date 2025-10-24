@@ -201,21 +201,22 @@ return view.extend({
 				for (const option of knownPlParams[plname]) {
 					const [otype, name, defaultVal, uci2cbi, cbi2uci] = option;
 					let values;
+					let actualDefault = defaultVal; // new variable instead of reassigning defaultVal
 
 					if (Array.isArray(defaultVal)) {
 						values = defaultVal;
-						defaultVal = defaultVal[0];
+						actualDefault = defaultVal[0];
 					}
 
 					if (otype === form.Flag) {
 						const bool = p.option(form.Flag, name, name);
-						if (defaultVal === 'yes' || defaultVal === 'no') {
+						if (actualDefault === 'yes' || actualDefault === 'no') {
 							bool.enabled = 'yes';
 							bool.disabled = 'no';
-						} else if (defaultVal === 'on' || defaultVal === 'off') {
+						} else if (actualDefault === 'on' || actualDefault === 'off') {
 							bool.enabled = 'on';
 							bool.disabled = 'off';
-						} else if (defaultVal === '1' || defaultVal === '0') {
+						} else if (actualDefault === '1' || actualDefault === '0') {
 							bool.enabled = '1';
 							bool.disabled = '0';
 						} else {
@@ -223,7 +224,7 @@ return view.extend({
 							bool.disabled = 'false';
 						}
 						bool.optional = true;
-						bool.placeholder = defaultVal;
+						bool.placeholder = actualDefault;
 						bool.cfgvalue = function (section_id) {
 							return uci.get('olsrd6', section_id, name);
 						};
@@ -249,7 +250,7 @@ return view.extend({
 							};
 						}
 						field.optional = true;
-						field.placeholder = defaultVal;
+						field.placeholder = actualDefault;
 					}
 				}
 			}
