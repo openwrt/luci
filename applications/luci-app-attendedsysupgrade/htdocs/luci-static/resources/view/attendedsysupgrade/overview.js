@@ -75,7 +75,7 @@ return view.extend({
 		unpack_imagebuilder:     [ 40, _('Setting Up ImageBuilder')],
 	},
 
-	request_hash: '',
+	request_hash: new Map(),
 	sha256_unsigned: '',
 
 	applyPackageChanges: async function(package_info) {
@@ -224,9 +224,6 @@ return view.extend({
 	},
 
 	handle202: function (response) {
-		response = response.json();
-		this.request_hash = response.request_hash;
-
 		if ('queue_position' in response) {
 			ui.showModal(_('Queued...'), [
 				E(
@@ -298,8 +295,8 @@ return view.extend({
 		 * If `request_hash` is available use a GET request instead of
 		 * sending the entire object.
 		 */
-		if (this.request_hash && main == true) {
-			request_url += `/${this.request_hash}`;
+		if (this.request_hash.get(server)) {
+			request_url += `/${this.request_hash.get(server)}`;
 			local_content = {};
 			method = 'GET';
 		}
@@ -309,11 +306,13 @@ return view.extend({
 			.then((response) => {
 				switch (response.status) {
 					case 202:
+						response = response.json();
+
+						this.request_hash.set(server, response.request_hash);
+
 						if (main) {
 							this.handle202(response);
 						} else {
-							response = response.json();
-
 							let view = document.getElementById(server);
 							view.innerText = `⏳	(${
 								this.steps[response.imagebuilder_status][0]
@@ -441,7 +440,7 @@ return view.extend({
 	},
 
 	handleCheck: function (data, firmware) {
-		this.request_hash = '';
+		this.request_hash.clear();
 		let { url, revision, advanced_mode, branch } = data;
 		let { version, target, profile, packages } = firmware;
 		let candidates = [];
