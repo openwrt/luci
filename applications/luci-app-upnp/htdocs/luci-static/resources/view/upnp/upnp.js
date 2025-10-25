@@ -327,11 +327,13 @@ return view.extend({
 		o.depends({ acl_preset: 'accept-high-ports', '!contains': true });
 		// o.retain = true; To removed with unmet dependencies
 
-		s = m.section(form.GridSection, 'perm_rule', _('Service Access Control List'),
-			_('ACL specify which client addresses and ports can be mapped, IPv6 always allowed.'));
+		s = m.section(form.GridSection, 'acl_entry', '<h5>' + _('Custom ACL') + '</h5>',
+			_('The custom ACL specifies which IP addresses and ports can be mapped. ACL entries are checked in order, and then rejected by default. (alternative text welcome)'));
 		s.anonymous = true;
 		s.addremove = true;
+		s.cloneable = true;
 		s.sortable = true;
+		s.modaltitle = _('UPnP IGD & PCP') + ' - ' + _('Edit custom ACL entry');
 		// Preferably, custom ACL in extra tab with depends for section, as immediately, and network section part of service setup tab
 		let custom_acl = false;
 		for (let ifnr = 0; uci.get('upnpd', `@internal_network[${ifnr}]`, 'interface'); ifnr++) {
@@ -342,23 +344,38 @@ return view.extend({
 		}
 		s.disable = custom_acl ? false : true;
 
-		s.option(form.Value, 'comment', _('Comment'));
+		o = s.option(form.Value, 'comment', _('Comment'));
+		o.default = _('unspecified');
+
+		o = s.option(form.ListValue, 'action', _('Action'));
+		o.value('accept', _('Accept'));
+		o.value('reject', _('Reject'));
+		o.value('ignore', _('Ignore'));
+		o.editable = true;
+		o.retain = true; // Otherwise removed if disabled
 
 		o = s.option(form.Value, 'int_addr', _('IP address'));
 		o.datatype = 'ip4addr';
-		o.placeholder = '0.0.0.0/0';
+		o.default = '0.0.0.0/0';
+		o.editable = true;
+		o.retain = true; // Otherwise removed if disabled
 
-		o = s.option(form.Value, 'int_ports', _('Port'));
+		o = s.option(form.Value, 'int_port', _('Port'));
 		o.datatype = 'portrange';
-		o.placeholder = '1-65535';
+		o.placeholder = '1-65535 (' + _('any port') + ')';
+		o.editable = true;
+		o.retain = true; // Otherwise removed if disabled
 
-		o = s.option(form.Value, 'ext_ports', _('External port'));
+		o = s.option(form.Value, 'ext_port', _('External port'));
 		o.datatype = 'portrange';
-		o.placeholder = '1-65535';
+		o.placeholder = '1-65535 (' + _('any port') + ')';
+		o.editable = true;
+		o.retain = true; // Otherwise removed if disabled
 
-		o = s.option(form.ListValue, 'action', _('Action'));
-		o.value('allow', _('Allow'));
-		o.value('deny', _('Deny'));
+		o = s.option(form.Value, 'desc_filter', _('Description filter'),
+			_('A regular expression to check for a UPnP IGD IPv4 port map description'));
+		o.placeholder = '.* (' + _('any description') + ')';
+		o.modalonly = true;
 
 		return m.render().then(L.bind(function(m, nodes) {
 			if (uci.get('upnpd', 'config', 'enabled') == '1') {
