@@ -67,8 +67,10 @@
 		},
 		"depends": {
 			"acl": [ "luci-mod-network-dhcp" ],
-			"fs": { "/usr/sbin/odhcpd": "executable" },
-			"fs": { "/usr/sbin/dnsmasq": "executable" },
+			"fs": [
+				{ "/usr/sbin/odhcpd": "executable" },
+				{ "/usr/sbin/dnsmasq": "executable" }
+			],
 			"uci": { "dhcp": true }
 		}
 	},
