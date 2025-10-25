@@ -1,15 +1,15 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-01-05 10:42+0000\n"
+"PO-Revision-Date: 2025-10-25 02:36+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/pl/>\n"
 "Language: pl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"Plural-Forms: nplurals=3; plural="
+"(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:15
 msgid "Additional configs"
@@ -50,11 +50,11 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:19
 msgid "Bind address"
-msgstr "Zwiąż adres"
+msgstr "Adres wiązania"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:20
 msgid "Bind port"
-msgstr "Zwiąż port"
+msgstr "Port wiązania"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:19
 msgid ""
@@ -88,6 +88,9 @@ msgid ""
 "value is 0, the server will not listen for QUIC connections.<br />By "
 "default, this value is 0."
 msgstr ""
+"BindQuicPort określa port QUIC, na którym nasłuchuje serwer. Jeśli ta "
+"wartość wynosi 0, serwer nie będzie nasłuchiwał połączeń QUIC.<br /"
+">Domyślnie ta wartość to 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
@@ -95,6 +98,9 @@ msgid ""
 "is 0, the server will not listen for UDP connections.<br />By default, this "
 "value is 0."
 msgstr ""
+"BindUdpPort określa port UDP, na którym nasłuchuje serwer. Jeśli ta wartość "
+"wynosi 0, serwer nie będzie nasłuchiwał połączeń UDP.<br />Domyślnie ta "
+"wartość to 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:147
 msgid "Collecting data ..."
@@ -127,24 +133,30 @@ msgid ""
 "Dashboard TLS Cert File specifies the path to the TLS certificate file for "
 "enabling HTTPS access.<br />Required if HTTPS is enabled."
 msgstr ""
+"Plik certyfikatu TLS pulpitu nawigacyjnego określa ścieżkę do pliku "
+"certyfikatu TLS umożliwiającego dostęp HTTPS.<br />Wymagane, jeśli włączono "
+"protokół HTTPS."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid ""
 "Dashboard TLS Key File specifies the path to the TLS private key file for "
 "enabling HTTPS access.<br />Required if HTTPS is enabled."
 msgstr ""
+"Plik klucza TLS pulpitu nawigacyjnego określa ścieżkę do pliku prywatnego "
+"klucza TLS umożliwiającego dostęp HTTPS.<br />Wymagane, jeśli włączono "
+"protokół HTTPS."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
 msgid "Dashboard TLS certificate"
-msgstr ""
+msgstr "Certyfikat TLS pulpitu nawigacyjnego"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
 msgid "Dashboard TLS mode"
-msgstr ""
+msgstr "Tryb TLS pulpitu nawigacyjnego"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid "Dashboard TLS private key"
-msgstr ""
+msgstr "Klucz prywatny TLS pulpitu nawigacyjnego"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid "Dashboard address"
@@ -213,6 +225,8 @@ msgid ""
 "Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is "
 "used for secure communication."
 msgstr ""
+"Włącz lub wyłącz szyfrowanie TLS dla pulpitu nawigacyjnego. Po włączeniu "
+"protokół HTTPS będzie używany do bezpiecznej komunikacji."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid "Environment variable"
@@ -330,7 +344,7 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
 msgid "QUIC bind port"
-msgstr ""
+msgstr "Port wiązania QUIC"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
 msgid "RUNNING"
