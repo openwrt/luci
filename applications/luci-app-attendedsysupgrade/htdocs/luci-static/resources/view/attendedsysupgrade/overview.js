@@ -75,7 +75,7 @@ return view.extend({
 		unpack_imagebuilder:     [ 40, _('Setting Up ImageBuilder')],
 	},
 
-	request_hash: '',
+	request_hash: new Map(),
 	sha256_unsigned: '',
 
 	applyPackageChanges: async function(package_info) {
@@ -224,9 +224,6 @@ return view.extend({
 	},
 
 	handle202: function (response) {
-		response = response.json();
-		this.request_hash = response.request_hash;
-
 		if ('queue_position' in response) {
 			ui.showModal(_('Queued...'), [
 				E(
@@ -251,11 +248,11 @@ return view.extend({
 		}
 	},
 
-	handleError: function (response, data, firmware) {
+	handleError: function (response, data, firmware, request_hash) {
 		response = response.json();
 		const request_data = {
 			...data,
-			request_hash: this.request_hash,
+			request_hash: request_hash,
 			sha256_unsigned: this.sha256_unsigned,
 			...firmware
 		};
@@ -293,13 +290,14 @@ return view.extend({
 		let request_url = `${server}/api/v1/build`;
 		let method = 'POST';
 		let local_content = content;
+		const request_hash = this.request_hash.get(server);
 
 		/**
 		 * If `request_hash` is available use a GET request instead of
 		 * sending the entire object.
 		 */
-		if (this.request_hash && main == true) {
-			request_url += `/${this.request_hash}`;
+		if (request_hash) {
+			request_url += `/${request_hash}`;
 			local_content = {};
 			method = 'GET';
 		}
@@ -309,11 +307,13 @@ return view.extend({
 			.then((response) => {
 				switch (response.status) {
 					case 202:
+						response = response.json();
+
+						this.request_hash.set(server, response.request_hash);
+
 						if (main) {
 							this.handle202(response);
 						} else {
-							response = response.json();
-
 							let view = document.getElementById(server);
 							view.innerText = `⏳	(${
 								this.steps[response.imagebuilder_status][0]
@@ -341,7 +341,7 @@ return view.extend({
 					default:  // any error or unexpected responses
 						if (main == true) {
 							poll.remove(this.pollFn);
-							this.handleError(response, data, firmware);
+							this.handleError(response, data, firmware, request_hash);
 						} else {
 							poll.remove(this.rebuilder_polls[server]);
 							document.getElementById(server).innerText = '🚫 %s'.format(
@@ -441,7 +441,7 @@ return view.extend({
 	},
 
 	handleCheck: function (data, firmware) {
-		this.request_hash = '';
+		this.request_hash.clear();
 		let { url, revision, advanced_mode, branch } = data;
 		let { version, target, profile, packages } = firmware;
 		let candidates = [];
