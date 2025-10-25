@@ -57,5 +57,7 @@ return network.registerProtocol('l2tp', {
 		o = s.taboption('advanced', form.Value, 'mtu', _('Override MTU'));
 		o.placeholder = dev ? (dev.getMTU() || '1500') : '1500';
 		o.datatype    = 'max(9200)';
+
+		o = s.taboption('advanced', form.Value, 'hostname', _('L2TP Hostname'));
 	}
 });
