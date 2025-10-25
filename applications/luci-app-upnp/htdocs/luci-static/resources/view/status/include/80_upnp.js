@@ -37,13 +37,13 @@ return baseclass.extend({
 	render: function(data) {
 		var table = E('table', { 'class': 'table', 'id': 'upnp_status_table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, _('Client Name')),
-				E('th', { 'class': 'th' }, _('Client Address')),
-				E('th', { 'class': 'th' }, _('Client Port')),
-				E('th', { 'class': 'th' }, _('External Port')),
+				E('th', { 'class': 'th' }, _('Hostname')),
+				E('th', { 'class': 'th' }, _('IP address')),
+				E('th', { 'class': 'th' }, _('Port')),
+				E('th', { 'class': 'th' }, _('External port')),
 				E('th', { 'class': 'th' }, _('Protocol')),
 				E('th', { 'class': 'th right' }, _('Expires')),
-				E('th', { 'class': 'th' }, _('Description')),
+				E('th', { 'class': 'th' }, _('Added via / description')),
 				E('th', { 'class': 'th cbi-section-actions' }, '')
 			])
 		]);
@@ -72,7 +72,8 @@ return baseclass.extend({
 				rule.descr,
 				E('button', {
 					'class': 'btn cbi-button-remove',
-					'click': L.bind(handleDelRule, this, rule.num)
+					'click': L.bind(handleDelRule, this, rule.num),
+					'title': _('Delete')
 				}, [ _('Delete') ])
 			];
 		});
