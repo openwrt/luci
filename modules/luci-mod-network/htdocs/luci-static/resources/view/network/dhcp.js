@@ -426,6 +426,11 @@ return view.extend({
 		o.multiple = true;
 		o.nocreate = true;
 
+		o = s.taboption('devices', widgets.IPSelect, 'listen_address',
+			_('Listen addresses'),
+			_('Listen only on the specified addresses.'));
+		o.multiple = true;
+
 		o = s.taboption('devices', widgets.NetworkSelect, 'notinterface',
 			_('Exclude interfaces'),
 			_('Do not listen on the specified interfaces.'));
