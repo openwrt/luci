@@ -30,6 +30,18 @@
 				"/var/run/banip.lock": [
 					"read"
 				],
+				"/sbin/logread -e banIP-": [
+					"exec"
+				],
+				"/usr/sbin/logread -e banIP-": [
+					"exec"
+				],
+				"/sbin/logread -e banIP/": [
+					"exec"
+				],
+				"/usr/sbin/logread -e banIP/": [
+					"exec"
+				],
 				"/usr/sbin/nft -tj list sets": [
 					"exec"
 				],
@@ -57,9 +69,6 @@
 				"/etc/init.d/banip status": [
 					"exec"
 				]
-			},
-			"ubus": {
-				"log": [ "read" ]
 			},
 			"uci": [
 				"banip"
