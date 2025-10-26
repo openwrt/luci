@@ -10,39 +10,36 @@
 'require tools.widgets as widgets';
 'require tools.dnsrecordhandlers as drh';
 
-var callHostHints;
-
-callHostHints = rpc.declare({
+const callHostHints = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getHostHints',
 	expect: { '': {} }
 });
 
 function validateHostname(sid, s) {
-	if (s == null || s == '')
-		return true;
+	if (!s) return true;
 
 	if (s.length > 256)
 		return _('Expecting: %s').format(_('valid hostname'));
 
-	var labels = s.replace(/^\*?\.?|\.$/g, '').split(/\./);
+	const labels = s.replace(/^\*?\.?|\.$/g, '').split(/\./);
 
-	for (var i = 0; i < labels.length; i++)
-		if (!labels[i].match(/^[a-z0-9_](?:[a-z0-9-]{0,61}[a-z0-9])?$/i))
+	for (const label of labels) {
+		if (!label.match(/^[a-z0-9_](?:[a-z0-9-]{0,61}[a-z0-9])?$/i))
 			return _('Expecting: %s').format(_('valid hostname'));
+	}
 
 	return true;
 }
 
 function validateAddressList(sid, s) {
-	if (s == null || s == '')
-		return true;
+	if (!s) return true;
 
-	var m = s.match(/^\/(.+)\/$/),
-	    names = m ? m[1].split(/\//) : [ s ];
+	const m = s.match(/^\/(.+)\/$/);
+	const names = m ? m[1].split(/\//) : [ s ];
 
-	for (var i = 0; i < names.length; i++) {
-		var res = validateHostname(sid, names[i]);
+	for (const name of names) {
+		const res = validateHostname(sid, name);
 
 		if (res !== true)
 			return res;
@@ -52,15 +49,14 @@ function validateAddressList(sid, s) {
 }
 
 function validateServerSpec(sid, s) {
-	if (s == null || s == '')
-		return true;
+	if (!s) return true;
 
-	var m = s.match(/^(\/.*\/)?(.*)$/);
+	let m = s.match(/^(\/.*\/)?(.*)$/);
 	if (!m)
 		return _('Expecting: %s').format(_('valid hostname'));
 
 	if (m[1] != '//' && m[1] != '/#/') {
-		var res = validateAddressList(sid, m[1]);
+		const res = validateAddressList(sid, m[1]);
 		if (res !== true)
 			return res;
 	}
@@ -102,7 +98,7 @@ return view.extend({
 	},
 
 	render: function([hosts]) {
-		var m, s, o, ss, so, dnss;
+		let m, s, o, ss, so, dnss;
 
 		let noi18nstrings = {
 			etc_hosts: '<code>/etc/hosts</code>',
@@ -164,8 +160,8 @@ return view.extend({
 		s.addbtntitle = _('Add server instance', 'Dnsmasq instance');
 
 		s.renderContents = function(/* ... */) {
-			var renderTask = form.TypedSection.prototype.renderContents.apply(this, arguments),
-			    sections = this.cfgsections();
+			const renderTask = form.TypedSection.prototype.renderContents.apply(this, arguments);
+			const sections = this.cfgsections();
 
 			return Promise.resolve(renderTask).then(function(nodes) {
 				if (sections.length < 2) {
@@ -174,9 +170,9 @@ return view.extend({
 				}
 				else {
 					nodes.querySelectorAll('#cbi-dhcp-dnsmasq > .cbi-section-remove').forEach(function(div, i) {
-						var section = uci.get('dhcp', sections[i]),
-						    hline = div.nextElementSibling,
-						    btn = div.firstElementChild;
+						const section = uci.get('dhcp', sections[i]);
+						const hline = div.nextElementSibling;
+						const btn = div.firstElementChild;
 
 						if (!section || section['.anonymous']) {
 							hline.innerText = i ? _('Unnamed instance #%d', 'Dnsmasq instance').format(i+1) : _('Default instance', 'Dnsmasq instance');
@@ -447,13 +443,11 @@ return view.extend({
 		so.rmempty = false;
 		so.datatype = 'ipaddr("nomask")';
 
-		var ipaddrs = {};
+		const ipaddrs = {};
 
 		Object.keys(hosts).forEach(function(mac) {
-			var addrs = L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4);
-
-			for (var i = 0; i < addrs.length; i++)
-				ipaddrs[addrs[i]] = hosts[mac].name || mac;
+			for (const addr of L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4))
+				ipaddrs[addr] = hosts[mac].name || mac;
 		});
 
 		L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ipv4) {
