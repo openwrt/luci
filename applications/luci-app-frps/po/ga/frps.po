@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-09-06 19:05+0000\n"
+"PO-Revision-Date: 2025-10-25 13:33+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/ga/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
 "(n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:15
 msgid "Additional configs"
@@ -53,7 +53,7 @@ msgstr "Seoladh ceangail"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:20
 msgid "Bind port"
-msgstr "Calafort ceangail"
+msgstr "Port ceangail"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:19
 msgid ""
@@ -87,6 +87,9 @@ msgid ""
 "value is 0, the server will not listen for QUIC connections.<br />By "
 "default, this value is 0."
 msgstr ""
+"Sonraíonn BindQuicPort an port QUIC a n-éisteann an freastalaí leis. Mura "
+"bhfuil an luach seo ach 0, ní éistfidh an freastalaí le haghaidh naisc "
+"QUIC.<br />De réir réamhshocraithe, is é 0 an luach seo."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
@@ -94,6 +97,9 @@ msgid ""
 "is 0, the server will not listen for UDP connections.<br />By default, this "
 "value is 0."
 msgstr ""
+"Sonraíonn BindUdpPort an port UDP a n-éisteann an freastalaí leis. Mura "
+"bhfuil an luach seo ach 0, ní éistfidh an freastalaí le haghaidh naisc "
+"UDP.<br />De réir réamhshocraithe, is é 0 an luach seo."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:147
 msgid "Collecting data ..."
@@ -126,24 +132,30 @@ msgid ""
 "Dashboard TLS Cert File specifies the path to the TLS certificate file for "
 "enabling HTTPS access.<br />Required if HTTPS is enabled."
 msgstr ""
+"Sonraíonn Comhad Deimhnithe TLS an Phainéal an cosán chuig an gcomhad "
+"deimhnithe TLS chun rochtain HTTPS a chumasú.<br />Riachtanach má tá HTTPS "
+"cumasaithe."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid ""
 "Dashboard TLS Key File specifies the path to the TLS private key file for "
 "enabling HTTPS access.<br />Required if HTTPS is enabled."
 msgstr ""
+"Sonraíonn Comhad Eochrach TLS an Phainéal an cosán chuig an gcomhad eochrach "
+"príobháideach TLS chun rochtain HTTPS a chumasú.<br />Riachtanach má tá "
+"HTTPS cumasaithe."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
 msgid "Dashboard TLS certificate"
-msgstr ""
+msgstr "Teastas TLS Painéil"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
 msgid "Dashboard TLS mode"
-msgstr ""
+msgstr "Mód TLS an phainéil"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid "Dashboard TLS private key"
-msgstr ""
+msgstr "Eochair phríobháideach TLS an phainéil"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid "Dashboard address"
@@ -212,6 +224,8 @@ msgid ""
 "Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is "
 "used for secure communication."
 msgstr ""
+"Cumasaigh nó díchumasaigh criptiú TLS don phainéal rialaithe. Nuair a bhíonn "
+"sé cumasaithe, úsáidtear HTTPS le haghaidh cumarsáide sláine."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid "Environment variable"
@@ -331,7 +345,7 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:23
 msgid "QUIC bind port"
-msgstr ""
+msgstr "Port ceangail QUIC"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:120
 msgid "RUNNING"
