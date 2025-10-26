@@ -94,19 +94,13 @@ function calculateNetwork(addr, mask) {
 	];
 }
 
-function generateDnsmasqInstanceEntry(data) {
-	const nameValueMap = new Map(Object.entries(data));
-	let formatString = nameValueMap.get('.index') + ' (' +  _('Name') + (nameValueMap.get('.anonymous') ? ': dnsmasq[' + nameValueMap.get('.index') + ']': ': ' + nameValueMap.get('.name'));
-
-	if (data.domain) {
-		formatString += ', ' +  _('Domain')  + ': ' + data.domain;
-	}
-	if (data.local) {
-		formatString += ', ' +  _('Local')  + ': ' + data.local;
-	}
-	formatString += ')';
-
-	return [nameValueMap.get('.name'), formatString];
+function generateDnsmasqInstanceEntry(d) {
+	const idx = d['.index'], name = d['.name'], anon = d['.anonymous'];
+	const label = anon ? `dnsmasq[${idx}]` : name;
+	const parts = [`${idx} (${_('Name')}: ${label}`];
+	if (d.domain) parts.push(`${_('Domain')}: ${d.domain}`);
+	if (d.local) parts.push(`${_('Local')}: ${d.local}`);
+	return [name, parts.join(', ') + ')'];
 }
 
 function getDHCPPools() {
