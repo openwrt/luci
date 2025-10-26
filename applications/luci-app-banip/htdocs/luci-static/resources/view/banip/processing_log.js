@@ -1,4 +1,4 @@
 'use strict';
-'require tools.views as views';
+'require view.banip.logtemplate as LogTemplate';
 
-return views.LogreadBox("banIP-", "banIP");
+return LogTemplate.Logview('banIP-', 'banIP');
