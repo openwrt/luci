@@ -4,9 +4,8 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-10-25 21:02+0000\n"
-"Last-Translator: 大王叫我来巡山 "
-"<hamburger2048@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2025-10-26 12:38+0000\n"
+"Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -2521,7 +2520,7 @@ msgstr "DHCPv4"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:739
 msgid "DHCPv4 Service"
-msgstr ""
+msgstr "DHCPv4 服务器"
 
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
@@ -2704,6 +2703,8 @@ msgid ""
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients (dnsmasq only)."
 msgstr ""
+"定义额外的 DHCP 选项，例如\"<code>6,192.168.2.1,192.168.2.2</code>\"，该选项"
+"会向客户端通告不同的 DNS 服务器（仅限 dnsmasq）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:584
 msgid ""
@@ -2951,11 +2952,13 @@ msgid ""
 "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface (dnsmasq only)."
 msgstr ""
+"为此接口禁用 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
+"（仅限 dnsmasq）。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:418
 msgid "Disable DNS lookups"
-msgstr "禁用 DNS 查找"
+msgstr "禁用 DNS 查询"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:93
 msgid "Disable Encryption"
@@ -3103,7 +3106,7 @@ msgstr "不在此接口上提供 DHCPv6 服务。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:743
 msgid "Do not provide DHCPv4 services on this interface."
-msgstr ""
+msgstr "不在这个接口上提供 DHCPv4 服务。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1080
 msgid ""
@@ -3597,7 +3600,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:740
 msgid "Enable or disable DHCPv4 services on this interface (odhcpd only)."
-msgstr ""
+msgstr "在这个接口上启用或禁用 DHCPv4 服务（仅限 odhcpd）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1690
 msgid "Enable packet steering across CPUs. May help or hinder network speed."
@@ -3623,7 +3626,7 @@ msgstr "启用多播传输支持 (可选)。"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:88
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:67
 msgid "Enable the DF (Don't Fragment) flag of the encapsulating packets."
-msgstr "启用后报文的 DF（禁止分片）标志。"
+msgstr "启用封装数据包的 DF（禁止分片）标志。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:555
 msgid "Enable the built-in single-instance TFTP server."
@@ -4016,7 +4019,7 @@ msgstr "执行“/etc/init.d/%s %s”失败：%s"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:149
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:173
 msgid "Failed to fetch key"
-msgstr ""
+msgstr "获取密钥失败"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:25
 msgid "Failed to get modem information"
@@ -4040,15 +4043,15 @@ msgstr "快速（每秒一次）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:165
 msgid "Fetched content seems empty or too short."
-msgstr ""
+msgstr "获取到的内容似乎为空或过短。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:158
 msgid "Fetched content seems too long. Maximum 8192 bytes."
-msgstr ""
+msgstr "获取到的内容似乎过长。最大允许 8192 字节。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:145
 msgid "Fetching key from URL…"
-msgstr ""
+msgstr "正在从 URL 获取密钥…"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3032
 msgid "File"
@@ -4251,7 +4254,7 @@ msgstr "强制使用 CCMP-256 (AES)"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:730
 msgid ""
 "Force DHCP on this network even if another server is detected (dnsmasq only)."
-msgstr ""
+msgstr "即使检测到其他服务器，仍在此网络强制启用 DHCP（仅限 dnsmasq）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1296
 msgid "Force GCMP (AES)"
@@ -4717,7 +4720,7 @@ msgstr "HE.net 用户名"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:150
 msgid "HTTP error %d"
-msgstr ""
+msgstr "HTTP 错误 %d"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:9
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:64
@@ -5020,7 +5023,7 @@ msgstr "IPv4 规则"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:671
 msgid "IPv4 Settings"
-msgstr ""
+msgstr "IPV4 设置"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
 msgid "IPv4 Upstream"
@@ -5792,7 +5795,7 @@ msgstr "无效的密钥格式"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:164
 msgid "Invalid or empty key file"
-msgstr ""
+msgstr "密钥文件无效或为空"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:136
 msgid "Invalid port"
@@ -5916,7 +5919,7 @@ msgstr "密钥 #%d"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:157
 msgid "Key file too large"
-msgstr ""
+msgstr "密钥文件过大"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:92
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:97
@@ -8147,7 +8150,8 @@ msgstr "重设 DHCP 响应网关"
 msgid ""
 "Override the netmask sent to clients. Normally it is calculated from the "
 "subnet that is served (dnsmasq only)."
-msgstr ""
+msgstr "覆盖发送给客户端的子网掩码。通常该值会根据所服务的子网自动计算得出（仅限 dnsm"
+"asq）。"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:179
 msgid "Override the table used for internal routes"
@@ -8381,7 +8385,7 @@ msgstr "密码 2"
 msgid ""
 "Paste content of a file, or a URL to a key file, or drag and drop here to "
 "upload a software repository public key…"
-msgstr ""
+msgstr "粘贴文件内容、密钥文件的 URL，或直接拖拽至此以上传软件仓库公钥…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:266
 msgid "Paste or drag SSH key file…"
@@ -8786,7 +8790,7 @@ msgstr "协议"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:745
 msgid "Provide DHCPv4 services on this interface."
-msgstr ""
+msgstr "在此接口上提供 DHCPv4 服务。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:290
 msgid "Provide NTP server"
