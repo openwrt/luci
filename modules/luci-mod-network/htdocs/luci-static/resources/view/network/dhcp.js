@@ -204,40 +204,6 @@ function isValidMAC(sid, s) {
 	return true;
 }
 
-function validateMACAddr(pools, sid, s) {
-	if (s == null || s == '')
-		return true;
-
-	var leases = uci.sections('dhcp', 'host'),
-	    this_macs = L.toArray(s).map(function(m) { return m.toUpperCase() });
-
-	for (var i = 0; i < pools.length; i++) {
-		var this_net_mask = calculateNetwork(this.section.formvalue(sid, 'ip'), pools[i].netmask);
-
-		if (!this_net_mask)
-			continue;
-
-		for (var j = 0; j < leases.length; j++) {
-			if (leases[j]['.name'] == sid || !leases[j].ip)
-				continue;
-
-			var lease_net_mask = calculateNetwork(leases[j].ip, pools[i].netmask);
-
-			if (!lease_net_mask || this_net_mask[0] != lease_net_mask[0])
-				continue;
-
-			var lease_macs = L.toArray(leases[j].mac).map(function(m) { return m.toUpperCase() });
-
-			for (var k = 0; k < lease_macs.length; k++)
-				for (var l = 0; l < this_macs.length; l++)
-					if (lease_macs[k] == this_macs[l])
-						return _('The MAC address %h is already used by another static lease in the same DHCP pool').format(this_macs[l]);
-		}
-	}
-
-	return isValidMAC(sid, s);
-}
-
 return view.extend({
 	load: function() {
 		return Promise.all([
@@ -797,7 +763,22 @@ return view.extend({
 			}
 			return formattedMacs;
 		};
-		so.validate = validateMACAddr.bind(o, pools);
+		so.validate = function(section_id, value) {
+			// check MAC isn't in use in other host entries
+			if (!section_id) return true;
+			const this_macs = this.section.formvalue(section_id, 'mac')
+				.map(function(m) { return m.toUpperCase() });
+
+			for (const host of uci.sections('dhcp', 'host')) {
+				if (host['.name'] == section_id)
+					continue;
+				const host_macs = L.toArray(host.mac).map(function(m) { return m.toUpperCase() });
+				if (host_macs.some(lm => this_macs.includes(lm)))
+					return _('The MAC address %h is already used by another static lease in the same DHCP pool')
+						.format(host_macs.find(lm => this_macs.includes(lm)));
+			}
+			return isValidMAC(section_id, value);
+		}
 		Object.keys(hosts).forEach(function(mac) {
 			var vendor;
 			var lower_mac = mac.toLowerCase();
