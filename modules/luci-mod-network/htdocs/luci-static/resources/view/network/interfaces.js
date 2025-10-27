@@ -1009,9 +1009,12 @@ return view.extend({
 					so.datatype = 'range(1,62)';
 					so.depends('dhcpv6', 'server');
 
-					so = ss.taboption('ipv6', form.DynamicList, 'dns', _('Announce IPv6 DNS servers'),
-						_('Specifies a fixed list of IPv6 DNS server addresses to announce via DHCPv6. If left unspecified, the device will announce itself as IPv6 DNS server unless the <em>Local IPv6 DNS server</em> option is disabled.'));
-					so.datatype = 'ip6addr("nomask")'; /* restrict to IPv6 only for now since dnsmasq (DHCPv4) does not honour this option */
+					/* This option is used by odhcpd. It can take IPv4/6 entries, although IPv4 DNS servers don't
+					always make sense in an IPv6 environment, they might in a dual stack environment. */
+					so = ss.taboption('ipv6', form.DynamicList, 'dns', _('Announce IPv4/6 DNS servers'),
+						_('Specifies a fixed list of DNS server addresses to announce via DHCPv6.') + '<br/>' +
+						_('If left unspecified, the device will announce itself as DNS server unless the <em>Local IPv6 DNS server</em> option is disabled.'));
+					so.datatype = 'ipaddr("nomask")';
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 					so.depends('dhcpv6', 'server');
