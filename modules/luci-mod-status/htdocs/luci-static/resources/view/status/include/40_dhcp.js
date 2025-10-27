@@ -51,12 +51,14 @@ return baseclass.extend({
 		ev.currentTarget.disabled = true;
 		ev.currentTarget.blur();
 
-		var cfg = uci.add('dhcp', 'host'),
-		    ip6arr = lease.ip6addrs[0] ? validation.parseIPv6(lease.ip6addrs[0].replace(/\/128$/,'')) : null,
-		    duid_iaid = lease.duid.toUpperCase();
+		const cfg = uci.add('dhcp', 'host');
+		const ip6addr = lease.ip6addrs?.[0]?.replace(/\/128$/, '');
+		const ip6arr = ip6addr ? validation.parseIPv6(ip6addr) : null;
 
-		if (lease.iaid)
-			duid_iaid += '%' + lease.iaid;
+		// Combine DUID and IAID if both available
+		let duid_iaid = lease.duid ? lease.duid.toUpperCase() : null;
+		if (duid_iaid && lease.iaid)
+			duid_iaid += `%${lease.iaid}`;
 
 		uci.set('dhcp', cfg, 'name', lease.hostname);
 		uci.set('dhcp', cfg, 'duid', duid_iaid);
