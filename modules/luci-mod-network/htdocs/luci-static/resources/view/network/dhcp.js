@@ -499,25 +499,9 @@ return view.extend({
 		ss.rowcolors = true;
 		ss.nodescriptions = true;
 
-		so = ss.option(form.Value, 'local_addr', _('Relay from'));
+		so = ss.option(widgets.IPSelect, 'local_addr', _('Relay from'));
 		so.rmempty = false;
-		so.datatype = 'ipaddr';
-
-		for (var family = 4; family <= 6; family += 2) {
-			for (var i = 0; i < networks.length; i++) {
-				if (networks[i].getName() != 'loopback') {
-					var addrs = (family == 6) ? networks[i].getIP6Addrs() : networks[i].getIPAddrs();
-					for (var j = 0; j < addrs.length; j++) {
-						var addr = addrs[j].split('/')[0];
-						so.value(addr, E([], [
-							addr, ' (',
-							widgets.NetworkSelect.prototype.renderIfaceBadge(networks[i]),
-							')'
-						]));
-					}
-				}
-			}
-		}
+		so.multiple = false;
 
 		so = ss.option(form.Value, 'server_addr', _('Relay to address'));
 		so.rmempty = false;
