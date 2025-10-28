@@ -3,6 +3,7 @@
 'require rpc';
 'require poll';
 'require dom';
+'require uci';
 'require ui';
 
 
@@ -27,7 +28,15 @@ function timestampToStr(timestamp) {
 	else
 		ago = _('over a day ago');
 
-	return (new Date(timestamp * 1000)).toUTCString() + ' (' + ago + ')';
+	const date = new Date(timestamp * 1000);
+	const sys = uci.get('system', '@system[0]');
+
+	return new Intl.DateTimeFormat(undefined, {
+		dateStyle: 'medium',
+		timeStyle: (!sys?.clock_timestyle) ? 'long' : 'full',
+		hourCycle: (!sys?.clock_hourcycle) ? undefined : sys.clock_hourcycle,
+		timeZone: sys?.zonename?.replaceAll(' ', '_') || 'UTC',
+	}).format(date) + ' (' + ago + ')';
 }
 
 function handleInterfaceDetails(iface) {
@@ -115,6 +124,12 @@ function renderPeerTable(instanceName, peers) {
 }
 
 return view.extend({
+	load() {
+		return Promise.all([
+			uci.load('system'),
+		])
+	},
+
 	renderIfaces: function(ifaces) {
 		var res = [
 			E('h2', [ _('WireGuard Status') ])
