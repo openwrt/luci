@@ -733,6 +733,9 @@ return view.extend({
 						if (L.hasSystemFeature('dnsmasq')) {
 							ss.taboption('general', form.DynamicList, 'dhcp_option', _('DHCP-Options'),
 								_('Define additional DHCP options,  for example "<code>6,192.168.2.1,192.168.2.2</code>" which advertises different DNS servers to clients (dnsmasq only).'));
+
+							ss.taboption('general', form.DynamicList, 'dhcp_option_force', _('Force DHCP-Options'),
+								_('As DHCP-Options; send unsolicited (dnsmasq only).'));
 						}
 
 						if (L.hasSystemFeature('odhcpd', 'dhcpv4')) {
