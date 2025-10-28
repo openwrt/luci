@@ -476,27 +476,26 @@ return view.extend({
 					.then((response) => {
 						if (response.sha256sum != sha256) {
 							ui.showModal(_('Wrong checksum'), [
-								E(
-									'p',
-									_('Error during download of firmware. Please try again')
-								),
+								E('p', _('Error during download of firmware. Please try again')),
 								E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
 							]);
 						} else {
 							ui.showModal(_('Installing...'), [
-								E(
-									'p',
-									{ class: 'spinning' },
-									_('Installing the sysupgrade. Do not unpower device!')
-								),
+								E('div', { class: 'spinning' }, [
+									E('p', _('Installing the sysupgrade image...')),
+									E('p', 
+									_('Once the image is written, the system will reboot.')
+									+ ' ' +
+									_('This should take at least a minute, so please wait for the login screen.')
+									),
+									E('b', _('While you are waiting, do not unpower device!')),
+								]),
 							]);
 
 							L.resolveDefault(callUpgradeStart(keep), {}).then((response) => {
-								if (keep) {
-									ui.awaitReconnect(window.location.host);
-								} else {
-									ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
-								}
+								// Wait 10 seconds before we try to reconnect...
+								let hosts = keep ? [] : ['192.168.1.1', 'openwrt.lan'];
+								setTimeout(() => { ui.awaitReconnect(...hosts); }, 10000);
 							});
 						}
 					});
