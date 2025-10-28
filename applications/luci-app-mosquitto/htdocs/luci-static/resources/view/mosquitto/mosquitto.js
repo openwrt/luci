@@ -95,7 +95,7 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = true;
 
-		o = s.option(widgets.IPSelect, 'bind_address', _('Bind Addres'));
+		o = s.option(widgets.IPSelect, 'bind_address', _('Bind Address'));
 		o.multiple = false;
 
 		o = s.option(form.Value, 'port', _('Port'));
