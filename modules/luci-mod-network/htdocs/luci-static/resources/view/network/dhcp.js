@@ -207,9 +207,11 @@ return view.extend({
 		m = new form.Map('dhcp', _('DHCP'));
 		m.tabbed = true;
 
-		this.add_dnsmasq_cfg(m, networks);
+		if (L.hasSystemFeature('dnsmasq'))
+			this.add_dnsmasq_cfg(m, networks);
 
-		this.add_odhcpd_cfg(m);
+		if (L.hasSystemFeature('odhcpd'))
+			this.add_odhcpd_cfg(m);
 
 		this.add_leases_cfg(m, hosts, duids, pools, macdata);
 
@@ -309,11 +311,11 @@ return view.extend({
 			const sections = this.cfgsections();
 
 			return Promise.resolve(renderTask).then(function(nodes) {
-				if (sections.length < 2) {
+				if (sections.length == 1) {
 					nodes.querySelector('#cbi-dhcp-dnsmasq > h3').remove();
 					nodes.querySelector('#cbi-dhcp-dnsmasq > .cbi-section-remove').remove();
 				}
-				else {
+				else if (sections.length > 1) {
 					nodes.querySelectorAll('#cbi-dhcp-dnsmasq > .cbi-section-remove').forEach(function(div, i) {
 						const section = uci.get('dhcp', sections[i]);
 						const hline = div.nextElementSibling;
