@@ -9,6 +9,32 @@
 'require dom';
 'require fs';
 
+
+/* --------------------------------------------------------------------------
+ * This section should be sufficient to isolate the changes that any forked
+ * versions need to change with a custom support url.
+ */
+
+const support_url = 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552';
+const support_link = E('a', { href: support_url }, _('this forum thread'));
+
+function detailsBlock(title, content, pre) {
+	/* Formatter for discourse-based forum "details" block.
+	 *
+	 * If the above support_url is changed to github, say, then you'd
+	 * probably need to get rid of the '[details...]' syntax.
+	 */
+	return ! content ? '' : ''.concat(
+		'[details="', title, '"]\n',
+		pre ? '```\n' : '',
+		content, '\n',
+		pre ? '```\n' : '',
+		'[/details]\n',
+	);
+}
+
+/* -------------------------------------------------------------------------- */
+
 const callPackagelist = rpc.declare({
 	object: 'rpc-sys',
 	method: 'packagelist',
@@ -256,95 +282,69 @@ return view.extend({
 			sha256_unsigned: this.sha256_unsigned,
 			...firmware
 		};
+		const request_str = JSON.stringify(request_data, null, 4);
 		let body = [
 			E('p', {}, [
-				_('First check '),
-				E(
-					'a',
-					{ href: 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552' },
-					_('this forum thread')
-				),
-				_('.  If you don\'t find a solution there, report all of the information below.')
+				_('First, check'), ' ',
+				support_link,
+				_('.  If you don\'t find a solution there, then report all of the information below.')
 			]),
 
 			E(
 				'button',
 				{
 					class: 'btn cbi-button cbi-button-positive important',
+					style: 'margin-bottom: 1em; padding: 0.2em',
 					click: ui.createHandlerFn(this, function () {
-						// No translations in here as it's intended for the forum.
-						var text =
-							'Server response: %s'.format(response.detail)
-							+ '\n\n'
-							+ '`--version-to %s --device %s:%s`'.format(
-								request_data.version,
-								request_data.target,
-								request_data.profile,
-							  )
-							+ '\n\n'
-							+ '[details="Request Data"]\n'
-							+ '```\n'
-							+ JSON.stringify({ ...request_data }, null, 4) + '\n'
-							+ '```\n'
-							+ '[/details]\n'
-						;
-						if (response.stdout) {
-							text = text +
-								'[details="STDOUT"]\n'
-								+ '```\n'
-								+ response.stdout + '\n'
-								+ '```\n'
-								+ '[/details]\n'
-							;
-						}
-						if (response.stderr) {
-							text = text +
-								'[details="STDERR"]\n'
-								+ '```\n'
-								+ response.stderr + '\n'
-								+ '```\n'
-								+ '[/details]\n'
-							;
-						}
+						var text = ''.concat(
+							// No translations in here as it's intended for the forum.
+							'Server response: %s\n\n'.format(response.detail),
+							detailsBlock('Request Data', request_str, true),
+							detailsBlock('STDOUT', response.stdout, true),
+							detailsBlock('STDERR', response.stderr, true),
+						);
 
 						navigator.clipboard.writeText(text);
 
 						ui.showModal(_('Data copied!'), [
-							E('p', {}, [
-								_('Paste the contents of the clipboard to '),
-								E(
-									'a',
-									{ href: 'https://forum.openwrt.org/t/luci-attended-sysupgrade-support-thread/230552' },
-									_('this forum thread')
-								),
+							E('p', [
+								_('Paste the contents of the clipboard to'), ' ',
+								support_link,
+								'.',
 							]),
-							E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+							E('div', { class: 'right' }, [
+								E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+							]),
 						]);
 					}),
 				},
-				_('Copy error data to clipboard')
+				_('Copy error data to clipboard...')
 			),
 
-			E('p', {}, _('Server response: %s').format(response.detail)),
-			E('p', {}, _('Request Data:')),
-			E('pre', {}, JSON.stringify({ ...request_data }, null, 4)),
+			E('p', _('Server response: %s').format(response.detail)),
+			E('p', _('Request Data:')),
+			E('pre', {}, request_str),
 		];
 
 		if (response.stdout) {
-			body.push(E('b', {}, 'STDOUT:'));
-			body.push(E('pre', {}, response.stdout));
+			body.push(
+				E('b', 'STDOUT:'),
+				E('pre', response.stdout),
+			);
 		}
 
 		if (response.stderr) {
-			body.push(E('b', {}, 'STDERR:'));
-			body.push(E('pre', {}, response.stderr));
+			body.push(
+				E('b', 'STDERR:'),
+				E('pre', response.stderr),
+			);
 		}
 
-		body = body.concat([
+		body.push(
 			E('div', { class: 'right' }, [
 				E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
 			]),
-		]);
+		);
 
 		ui.showModal(_('Error building the firmware image'), body);
 	},
@@ -483,7 +483,7 @@ return view.extend({
 							ui.showModal(_('Installing...'), [
 								E('div', { class: 'spinning' }, [
 									E('p', _('Installing the sysupgrade image...')),
-									E('p', 
+									E('p',
 									_('Once the image is written, the system will reboot.')
 									+ ' ' +
 									_('This should take at least a minute, so please wait for the login screen.')
@@ -692,12 +692,13 @@ return view.extend({
 			uci.load('attendedsysupgrade'),
 		]);
 		const data = {
+			system_board: promises[1],
+			advanced_mode: uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0,
 			url: uci.get_first('attendedsysupgrade', 'server', 'url').replace(/\/+$/, ''),
 			branch: get_branch(promises[1].release.version),
 			revision: promises[1].release.revision,
 			efi: promises[2],
-			advanced_mode: uci.get_first('attendedsysupgrade', 'client', 'advanced_mode') || 0,
-			rebuilder: uci.get_first('attendedsysupgrade', 'server', 'rebuilder')
+			rebuilder: uci.get_first('attendedsysupgrade', 'server', 'rebuilder'),
 		};
 		const firmware = {
 			client: 'luci/' + promises[0].packages['luci-app-attendedsysupgrade'],
