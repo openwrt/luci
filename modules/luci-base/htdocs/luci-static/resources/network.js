@@ -103,6 +103,9 @@ var _init = null,
 
 function getProtocolHandlers(cache) {
 	return callNetworkProtoHandlers().then(function(protos) {
+		/* Prevent attempt to load "protocol/bonding" */
+		delete protos.bonding;
+
 		/* Register "none" protocol */
 		if (!protos.hasOwnProperty('none'))
 			Object.assign(protos, { none: { no_device: false } });
