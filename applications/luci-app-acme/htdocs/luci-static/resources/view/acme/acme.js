@@ -12,7 +12,7 @@ return view.extend({
 			L.resolveDefault(fs.list('/etc/ssl/acme/'), []).then(files => {
 				let certs = [];
 				for (let f of files) {
-					if (f.type == 'file' && f.name.match(/\.key$/)) {
+					if (f.type == 'file' && f.name.match(/\.fullchain\.crt$/)) {
 						certs.push(f);
 					}
 				}
@@ -521,7 +521,7 @@ function _renderCerts(certs) {
 	]);
 
 	let rows = certs.map(function (cert) {
-		let domain = cert.name.substring(0, cert.name.length - 4);
+		let domain = cert.name.replace(/\.fullchain\.crt$/, '');
 		let issueDate = new Date(cert.mtime * 1000).toLocaleDateString();
 		return [
 			domain,
