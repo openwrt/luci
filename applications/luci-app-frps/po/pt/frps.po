@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-07-20 20:09+0000\n"
+"PO-Revision-Date: 2025-10-30 03:42+0000\n"
 "Last-Translator: ssantos <ssantos@web.de>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/pt/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:15
 msgid "Additional configs"
@@ -52,7 +52,7 @@ msgstr "Endereço de ligação"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:20
 msgid "Bind port"
-msgstr "Porta do bind"
+msgstr "Porta do BIND"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:19
 msgid ""
@@ -86,6 +86,9 @@ msgid ""
 "value is 0, the server will not listen for QUIC connections.<br />By "
 "default, this value is 0."
 msgstr ""
+"BindQuicPort determina a porta QUIC na qual o servidor escuta. Se este valor "
+"for 0, o servidor não atenderá às conexões QUIC. <br /> O valor predefinido "
+"é 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
@@ -93,6 +96,9 @@ msgid ""
 "is 0, the server will not listen for UDP connections.<br />By default, this "
 "value is 0."
 msgstr ""
+"BindUdpPort determina a porta UDP em que o servidor atende. Se este valor "
+"for 0, o servidor não atenderá às conexões UDP. <br />O valor predefinido é "
+"0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:147
 msgid "Collecting data ..."
@@ -135,15 +141,15 @@ msgstr ""
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
 msgid "Dashboard TLS certificate"
-msgstr ""
+msgstr "Certificado de painel TLS"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:32
 msgid "Dashboard TLS mode"
-msgstr ""
+msgstr "Modo TLS de painel"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid "Dashboard TLS private key"
-msgstr ""
+msgstr "Chave privada do TLS de painel"
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:28
 msgid "Dashboard address"
@@ -211,6 +217,8 @@ msgid ""
 "Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is "
 "used for secure communication."
 msgstr ""
+"Ativar ou desativar a criptografia TLS para o painel. Quando ativado, HTTPS "
+"é usado para comunicação segura."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid "Environment variable"
