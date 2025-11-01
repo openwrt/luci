@@ -1,0 +1,25 @@
+{
+	"luci-app-tailscale-community": {
+		"description": "Allow user access to tailscale",
+		"read": {
+			"ubus": {
+				"tailscale": [
+					"get_status",
+					"get_settings",
+					"get_subroutes"
+				]
+			},
+			"uci": [ "tailscale" ]
+		},
+		"write": {
+			"ubus": {
+				"tailscale": [
+					"do_login",
+					"do_logout",
+					"set_settings"
+				]
+			},
+			"uci": [ "tailscale" ]
+		}
+	}
+}
