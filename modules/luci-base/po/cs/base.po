@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-10-30 03:41+0000\n"
+"PO-Revision-Date: 2025-10-30 21:46+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/luci/cs/>\n"
 "Language: cs\n"
@@ -2457,6 +2457,8 @@ msgid ""
 "Controls retransmitted Neighbor Solicitation messages; published in <abbr "
 "title=\"Router Advertisement\">RA</abbr> messages."
 msgstr ""
+"Řídí znovu přenesené Neighbor Solicitation zprávy; zveřejněné ve zprávách "
+"<abbr title=\"Router Advertisement\">propagace směrovače</abbr>."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4981
 msgid ""
@@ -2785,6 +2787,9 @@ msgid ""
 "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
 "servers to clients (dnsmasq only)."
 msgstr ""
+"Definovat další DHCP volby, například "
+"„<code>6,192.168.2.1,192.168.2.2</code>“ která klientům propaguje odlišné "
+"DNS servery (pouze v případě dnsmasq)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:584
 msgid ""
@@ -3003,6 +3008,9 @@ msgid ""
 "reachability confirmation; published in <abbr title=\"Router "
 "Advertisement\">RA</abbr> messages."
 msgstr ""
+"Diktuje jak dlouho po potvrzení dosažitelnosti uzel předpokládá že je soused "
+"dosažitelný; zveřejněno ve zprávách <abbr title=\"Router Advertisement\""
+">propagace směrovače</abbr>."
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:140
 msgid "Dir"
@@ -3017,6 +3025,8 @@ msgid ""
 "Directory to store IPv6 prefix information files in (to detect and announce "
 "stale prefixes)."
 msgstr ""
+"Složka ve které ukládat soubory s informacemi o IPv6 předponě "
+"(kvůli zjišťování a oznamování zastaralé předpony)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1700
 msgid ""
@@ -3038,6 +3048,8 @@ msgid ""
 "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> for "
 "this interface (dnsmasq only)."
 msgstr ""
+"Vypnout <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> pro "
+"toto rozhraní (pouze v případě dnsmasq)."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:418
@@ -4997,7 +5009,7 @@ msgstr "IAID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:174
 msgid "IAID of 1 to 8 hexadecimal characters"
-msgstr ""
+msgstr "IAID z 1 až 8 šestnáctkových znaků"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:55
 msgctxt "nft icmp code"
@@ -6645,7 +6657,7 @@ msgstr "Zaznamenávat audit"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:107
 msgctxt "nft log action"
 msgid "Log event"
-msgstr ""
+msgstr "Událost záznamu událostí"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:108
 msgctxt "nft log action"
@@ -6674,6 +6686,7 @@ msgstr "Stupeň podrobnosti záznamu událostí"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:665
 msgid "Log level of the <code>odhcpd</code> daemon."
 msgstr ""
+"Stupeň podrobnosti záznamu událostí v procesu služby <code>odhcpd</code>."
 
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:81
 msgid "Log out"
@@ -7823,6 +7836,8 @@ msgid ""
 "Note that many options are set on a per-interface basis in the <a href=\"./"
 "network\">Interfaces</a> tab."
 msgstr ""
+"Všimněte si, že v panelu <a href=\"./network\">Rozhraní</a> jsou mnohé volby "
+"nastavené po jednotlivých rozhraních."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:664
 msgid "Note: IPv4 only."
@@ -8615,6 +8630,8 @@ msgid ""
 "Paste content of a file, or a URL to a key file, or drag and drop here to "
 "upload a software repository public key…"
 msgstr ""
+"Vložte obsah souboru, nebo URL adresu souboru s klíčem, nebo sem nahrajte "
+"(přetažením) verřejný klíč repozitáře softwaru…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:266
 msgid "Paste or drag SSH key file…"
@@ -8660,6 +8677,7 @@ msgstr "Popis umístění soukromého klíče"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:653
 msgid "Path to a script to run each time the lease file changes."
 msgstr ""
+"Popis umístění skriptu který spouštět při každé změně souboru se zápůjčkami."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1840
 msgid "Path to inner CA-Certificate"
@@ -8678,6 +8696,8 @@ msgid ""
 "Path to store a hostsfile (IP address to hostname mapping) in. Used by e.g. "
 "<code>dnsmasq</code>."
 msgstr ""
+"Popis umístění ve kterém uchovávat tzv. hostsfile "
+"(mapování IP addres na názvy strojů). Využíváno např. <code>dnsmasq</code>."
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2679
 msgid "Paused"
@@ -10505,6 +10525,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1043
 msgid "Specifies a fixed list of DNS search domains to announce via DHCPv6."
 msgstr ""
+"Určuje pevný seznam prohledávaných DNS domén, které oznamovat "
+"prostřednictvím DHCPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1013
 msgid ""
@@ -10966,6 +10988,8 @@ msgid ""
 "Syntax: <code>&lt;DUID-hex-str&gt;</code> <em>or</em> <code>&lt;DUID-hex-"
 "str&gt;%&lt;IAID-hex-str&gt;</code>"
 msgstr ""
+"Syntaxe: <code>&lt;DUID-šestnáckový-řetězec&gt;</code> <em>or</em> <code>&lt"
+";DUID-šestnáctkový-řetězec&gt;%&lt;IAID-šestnácktový-řeštězec&gt;</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1032
 msgid ""
@@ -11130,6 +11154,9 @@ msgid ""
 "abbr>-<abbr title=\"DHCP Unique Identifier\">DUID</abbr>s and, optionally, "
 "<abbr title=\"Identity Association Identifier\">IAID</abbr>s of this host."
 msgstr ""
+"<abbr title=\"Dynamic Host Configuration Protocol for IPv6\">DHCPv6</abbr>-"
+"<abbr title=\"DHCP Unique Identifier\">DUID</abbr>s a, volitelně, <abbr "
+"title=\"Identity Association Identifier\">IAID</abbr>s tohoto hostitele."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
 msgid ""
@@ -11172,7 +11199,7 @@ msgstr "Příkaz <em>block mount</em> se nezdařil s kódem %d"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:645
 msgid ""
 "The DHCPv4 functionality also needs to be enabled on a per-interface basis."
-msgstr ""
+msgstr "Je také třeba pro jednotlivá rozhraní zapnout funkci DHCPv4."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1130
 msgid ""
@@ -11207,6 +11234,8 @@ msgid ""
 "The IPv4 address for this host, or <em>ignore</em> to ignore DHCP requests "
 "from this host."
 msgstr ""
+"IPv4 adresa pro tohoto hostitele, nebo <em>ignore</em> pro ignorování DHCP "
+"požadavků z tohoto hostitele."
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:41
 msgid "The IPv4 address or the fully-qualified domain name of the remote end."
@@ -11342,6 +11371,9 @@ msgid ""
 "device, used when acting as a DHCP server or client. The client identifier "
 "can be overridden on a per-interface basis."
 msgstr ""
+"Výchozí <abbr title=\"DHCP Unique Identifier\">DUID</abbr> pro toto "
+"zařízení, použitý když působí jako DHCP server nebo klient. Klientský "
+"identifikátor je možné přebít pro jednotlivá rozhraní."
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4946
 msgid ""
@@ -11444,6 +11476,8 @@ msgid ""
 "The hexadecimal <abbr title=\"Address suffix\"><a href=\"%s\">IPv6 token</"
 "a></abbr> for this host (up to 16 chars, i.e. 64 bits)."
 msgstr ""
+"Šestnáctkový <abbr title=\"Address suffix\"><a href=\"%s\">IPv6 token</a></"
+"abbr> pro tohoto hostitele (až 16 znaků, tj. 64 bitů)."
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:93
 msgid ""
@@ -11619,6 +11653,8 @@ msgid ""
 "The same IPv4 address will be (re)assigned to <em>any</em> host using one of "
 "the MAC addresses listed above."
 msgstr ""
+"Stejná IPv4 adresa bude (znovu)přiřazena <em>libovolnému</em> hostiteli, s "
+"využitím jedné z výše uvedených MAC adres."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:873
 msgid ""
@@ -11626,6 +11662,10 @@ msgid ""
 "of the <code>DUID</code> or <code>DUID%IAID</code> values listed above. Only "
 "one is expected to be in active use on the network at any given time."
 msgstr ""
+"Stejná IPv6 adresa bude (znovu)přiřazena <em>libovolnému</em> hostiteli "
+"pomocí jedné z <code>DUID</code> nebo <code>DUID%IAID</code> hodnot, "
+"uvedených výše. Je očekáváno, že v aktivním používání bude na síti v "
+"jakémkoli daném okamžiku pouze jediná."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1439
 msgid "The selected %s mode is incompatible with %s encryption"
@@ -12198,7 +12238,7 @@ msgstr "UDP:"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:167
 msgid "UID-range"
-msgstr ""
+msgstr "Rozsah UID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1670
 msgid "ULA for IPv6 is analogous to IPv4 private network addressing."
@@ -12313,6 +12353,7 @@ msgstr "PIN nebylo možné ověřit"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:159
 msgid "Unchecked means the timezone offset (E.g. GMT+1) is displayed"
 msgstr ""
+"Zrušené zaškrtnutí znamená, že je zobrazen posun časového pásma (např. GMT+1)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1481
 msgid "Unconfigure"
@@ -12514,6 +12555,8 @@ msgid ""
 "Use <code>odhcp</code> for DHCPv4. This will disable DHCPv4 support in "
 "<code>dnsmasq</code>."
 msgstr ""
+"Pro DHCPv4 použít <code>odhcp</code>. Toto vypne podporu pro DHCPv4 v "
+"<code>dnsmasq</code>."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:964
 msgid "Use Carrier"
@@ -12697,7 +12740,7 @@ msgstr "Uživatelské jméno"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:141
 msgid "Utilise <strong>%h</strong> conntrack helper"
-msgstr ""
+msgstr "Využít <strong>%h</strong> conntrack pomocné"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:142
 msgid "Utilize flow table <strong>%h</strong>"
@@ -12829,7 +12872,7 @@ msgstr "Třída výrobce kterou posílat při DHCP požadavku"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:306
 msgid "Verdict map: <var>%h</var> is"
-msgstr ""
+msgstr "Mapa rozsudku: <var>%h</var> is"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:584
 msgid "Verify unsigned domain responses really come from unsigned domains."
@@ -13516,7 +13559,7 @@ msgstr "spravované nastavení (M)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:167
 msgid "maximum one \"%\""
-msgstr ""
+msgstr "nejvyšší „%“"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1458
 msgid "medium security"
