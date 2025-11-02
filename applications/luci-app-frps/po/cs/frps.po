@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-10-30 03:42+0000\n"
+"PO-Revision-Date: 2025-10-30 21:46+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrps/cs/>\n"
@@ -87,6 +87,9 @@ msgid ""
 "value is 0, the server will not listen for QUIC connections.<br />By "
 "default, this value is 0."
 msgstr ""
+"BindQuicPort určuje QUIC port, na kterém server očekává spojení. Pokud je "
+"tato hodnota 0 (nula), pak server nebude očekávat QUIC spojení.<br />Ve "
+"výchozím stavu je tato hodnota 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:21
 msgid ""
@@ -94,6 +97,9 @@ msgid ""
 "is 0, the server will not listen for UDP connections.<br />By default, this "
 "value is 0."
 msgstr ""
+"BindUdpPort určuje UDP port, na kterém server očekává spojení. Pokud je tato "
+"hodnota 0 (nula), pak server nebude očekávat UDP spojení.<br />Ve výchozím "
+"stavu je tato hodnota 0."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:147
 msgid "Collecting data ..."
@@ -127,12 +133,18 @@ msgid ""
 "Dashboard TLS Cert File specifies the path to the TLS certificate file for "
 "enabling HTTPS access.<br />Required if HTTPS is enabled."
 msgstr ""
+"Soubor s TLS certifikátem pro Přehled určuje popis umístění souboru s TLS "
+"certifikátem, pomocí kterého zapnout přístup přes HTTPS.<br />Vyžadováno, "
+"pokud je zapnuté HTTPS."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:34
 msgid ""
 "Dashboard TLS Key File specifies the path to the TLS private key file for "
 "enabling HTTPS access.<br />Required if HTTPS is enabled."
 msgstr ""
+"Soubor s TLS klíčem pro Přehled určuje popis umístění souboru s TLS "
+"soukromým klíčem pro zapnutí HTTP přístupu.<br />Vyžadováno, pokud je "
+"zapnuté HTTPS."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:33
 msgid "Dashboard TLS certificate"
@@ -214,6 +226,8 @@ msgid ""
 "Enable or disable TLS encryption for the dashboard. When enabled, HTTPS is "
 "used for secure communication."
 msgstr ""
+"Zapnout nebo vypnout TLS šifrování pro přehled. Pokud zapnuto, HTTPS je "
+"použito pro zabezpečenou komunikaci."
 
 #: applications/luci-app-frps/htdocs/luci-static/resources/view/frps.js:14
 msgid "Environment variable"
