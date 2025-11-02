@@ -87,6 +87,7 @@ function refreshKeyList(list, keys) {
 
 function saveKeyFile(keyContent, file, fileContent) {
 	const ts = Date.now();
+	// Note: opkg can only verify against a key with filename that matches its key hash
 	// generate a file name in case key content was pasted
 	const filename = file ? file?.name?.split('.')?.[0] + (KEYEXT || '') : null;
 	const noname = 'key_' + ts + (KEYEXT || '');
@@ -167,8 +168,12 @@ function addKey(ev, file, fileContent) {
 				return;
 			}
 
-			// Continue directly with fetched key
-			addKey(ev, null, fetched);
+			const filename = res?.url?.split('/').pop().split('?')[0].split('#')[0];
+
+			// Remove extension if any (we'll re-add based on environment)
+			const file = {name: filename.replace(/\.[^.]+$/, '') };
+
+			addKey(ev, file, fetched);
 		}).catch(err => {
 			ui.addTimeLimitedNotification(_('Failed to fetch key'), [
 				E('p', err.message),
