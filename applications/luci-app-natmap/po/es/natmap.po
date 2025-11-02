@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-08-04 23:09+0000\n"
+"PO-Revision-Date: 2025-10-25 02:37+0000\n"
 "Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnatmap/es/>\n"
@@ -8,45 +8,70 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:93
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:108
+msgid "Allocation bind ports randomly instead of sequentially."
+msgstr ""
+"La asignación de puertos se vincula de forma aleatoria en lugar de "
+"secuencial."
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:103
+#, fuzzy
 msgid "Bind port"
-msgstr "Vincular puerto"
+msgstr "Puerto de enlace"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:134
+msgid "Congestion control"
+msgstr "Control de congestión"
 
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:55
 msgid "Enable"
 msgstr "Activar"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:119
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:143
 msgid "External IP"
 msgstr "IP externa"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:126
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:150
 msgid "External Port"
 msgstr "Puerto externo"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:88
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:93
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:134
 msgid "For TCP mode"
 msgstr "Para el modo TCP"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:97
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:82
+msgid "For UDP mode"
+msgstr "Para el modo UDP"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:111
 msgid "Forward mode"
 msgstr "Modo de reenvío"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:105
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:119
 msgid "Forward target"
 msgstr "Reenviar objetivo"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:110
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:124
 msgid "Forward target port"
 msgstr "Puerto de destino de reenvío"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:129
+msgid "Forward timeout"
+msgstr "Tiempo de espera para reenvío"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:98
+#, fuzzy
+msgid "Fwmark"
+msgstr "Fwmark"
 
 #: applications/luci-app-natmap/root/usr/share/rpcd/acl.d/luci-app-natmap.json:3
 msgid "Grant access to LuCI app natmap"
 msgstr "Otorgar acceso a la aplicación LuCI natmap"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:88
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:93
 msgid "HTTP server"
 msgstr "Servidor HTTP"
 
@@ -70,12 +95,16 @@ msgstr "Interfaz"
 msgid "Keep-alive interval"
 msgstr "Intervalo de mantenimiento"
 
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:99
+msgid "Mark fwmark for STUN/HTTP outbound traffic"
+msgstr "Marcar fwmark para el tráfico saliente STUN/HTTP"
+
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:50
 #: applications/luci-app-natmap/root/usr/share/luci/menu.d/luci-app-natmap.json:3
 msgid "NATMap"
 msgstr "NATMap"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:115
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:139
 msgid "Notify script"
 msgstr "Script de notificación"
 
@@ -83,10 +112,18 @@ msgstr "Script de notificación"
 msgid "Protocol"
 msgstr "Protocolo"
 
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:107
+msgid "Randomly allocation ports"
+msgstr "Asignación aleatoria de puertos"
+
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:69
 msgid "Restrict to address family"
 msgstr "Restringir para dirigirse a la familia"
 
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:82
+msgid "STUN check cycle"
+msgstr "Ciclo de comprobación de STUN"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:87
 msgid "STUN server"
 msgstr "Servidor STUN"

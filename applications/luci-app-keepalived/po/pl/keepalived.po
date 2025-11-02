@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-07 22:45+0000\n"
+"PO-Revision-Date: 2025-10-05 18:40+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationskeepalived/pl/>\n"
@@ -8,9 +8,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.11-dev\n"
+"Plural-Forms: nplurals=3; plural="
+"(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:205
 msgid "2"
@@ -257,8 +257,8 @@ msgstr "Wyklucz wirtualny adres IP"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/script.js:91
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:115
-msgid "Fail"
-msgstr "Niepowodzenie"
+msgid "Fall"
+msgstr "Upadek"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/servers.js:51
 msgid "Firewall fwmark. Use Virtual server from FWMARK"
@@ -266,7 +266,8 @@ msgstr "Zapora fwmark. Użyj serwera wirtualnego z FWMARK"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:248
 msgid "For cases with large numbers (eg 200) of IPs on the same interface."
-msgstr "W przypadku dużej liczby (np. 200) adresów IP na tym samym interfejsie."
+msgstr ""
+"W przypadku dużej liczby (np. 200) adresów IP na tym samym interfejsie."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:66
 msgid "For this to work, the initial state of this entry must be BACKUP."
@@ -506,7 +507,7 @@ msgstr "Ustawienia globalne Keepalived"
 msgid "Keepalived Instances"
 msgstr "Instancje Keepalived"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:28
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:26
 msgid "Keepalived.user"
 msgstr "keepalived.user"
 
@@ -944,7 +945,7 @@ msgstr ""
 msgid "There are no active instances"
 msgstr "Brak aktywnych instancji"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:29
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:27
 msgid ""
 "This is the /etc/keepalived.user file in which custom commands can be "
 "defined."
@@ -959,7 +960,7 @@ msgstr "Ten przegląd pokazuje aktualny stan instancji VRRP na tym urządzeniu."
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/vrrp_instance.js:216
 msgid "Time in seconds to delay preempting compared"
-msgstr "Czas opóźnienia wywłaszczania w sekundach w porównaniu"
+msgstr "Czas opóźnienia (w sekundach) przed wywłaszczeniem"
 
 #: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/globals.js:41
 msgid "Timeout in seconds for SMTP stream processing"
@@ -1022,7 +1023,7 @@ msgstr ""
 "Adresy URL można odwoływać do serwerów rzeczywistych w celu przeprowadzenia "
 "testów"
 
-#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:22
+#: applications/luci-app-keepalived/htdocs/luci-static/resources/view/keepalived/notification.js:20
 msgid "Unable to save contents: %s"
 msgstr "Nie można zapisać zawartości: %s"
 
@@ -1174,85 +1175,5 @@ msgstr ""
 msgid "default"
 msgstr "domyślna"
 
-#~ msgid "Allows the lower priority machine to maintain the master role,"
-#~ msgstr "Umożliwia urządzeniu o niższym priorytecie zachowanie roli głównej,"
-
-#~ msgid ""
-#~ "The main goal is to define a bundle of VRRP instance to get synchronized "
-#~ "together"
-#~ msgstr ""
-#~ "Głównym celem jest zdefiniowanie pakietu instancji VRRP w celu "
-#~ "synchronizacji"
-
-#~ msgid ""
-#~ "When a weight is specified, instead of setting the vrrp_instance to the "
-#~ "FAULT state in case of failure,"
-#~ msgstr ""
-#~ "Gdy określona jest ważność, zamiast ustawiać vrrp_instance na stan BŁĘDU "
-#~ "w przypadku awarii,"
-
-#~ msgid ""
-#~ "A VIP address migrates from one LVS router to the other during a failover,"
-#~ msgstr ""
-#~ "Adres VIP migruje z jednego routera LVS do drugiego podczas przełączania "
-#~ "awaryjnego,"
-
-#~ msgid ""
-#~ "Adds a script to be executed periodically. Its exit code will be recorded "
-#~ "for all VRRP instances and sync groups which are monitoring it"
-#~ msgstr ""
-#~ "Dodaje skrypt, który ma być wykonywany okresowo. Jego kod wyjścia będzie "
-#~ "rejestrowany dla wszystkich instancji VRRP i grup synchronizacji, które "
-#~ "go monitorują"
-
-#~ msgid "Initial State. As soon as the other machine(s) come up,"
-#~ msgstr "Stan początkowy. Gdy tylko pojawią się inne urządzenia,"
-
-#~ msgid "Send/Recv VRRP messages from base interface instead of VMAC interfac"
-#~ msgstr ""
-#~ "Wysyłaj/odbieraj komunikaty VRRP z interfejsu bazowego zamiast interfejsu "
-#~ "VMAC"
-
-#~ msgid ""
-#~ "Sender will send files to this location of receiver. Must be same on "
-#~ "Master/Backup"
-#~ msgstr ""
-#~ "Nadawca wyśle pliki do tej lokalizacji odbiorcy. Musi być taka sama w "
-#~ "Głównym/Zapasowym"
-
-#~ msgid ""
-#~ "VRRP IP excluded from VRRP. For cases with large numbers (eg 200) of IPs "
-#~ "on the same interface."
-#~ msgstr ""
-#~ "Adres IP VRRP wyłączony z VRRP. W przypadku dużej liczby (np. 200) "
-#~ "adresów IP na tym samym interfejsie."
-
-#~ msgid ""
-#~ "an election will be held and the machine with the highest \"priority\" "
-#~ "will become MASTER."
-#~ msgstr ""
-#~ "odbędą się wybory i urządzenie z najwyższym „priorytetem” stanie się "
-#~ "GŁÓWNYM."
-
-#~ msgid "even when a higher priority machine comes back online."
-#~ msgstr "nawet gdy urządzenie o wyższym priorytecie powróci do sieci."
-
-#~ msgid ""
-#~ "its priority will be increased or decreased by the weight when the "
-#~ "interface is up or down"
-#~ msgstr ""
-#~ "jego priorytet będzie zwiększany lub zmniejszany o ważność, gdy interfejs "
-#~ "jest włączony lub wyłączony"
-
-#~ msgid ""
-#~ "so that transition of one instance will be reflected to others group "
-#~ "members"
-#~ msgstr ""
-#~ "tak, aby przejście jednej instancji było widoczne dla innych członków "
-#~ "grupy"
-
-#~ msgid "thus maintaining a presence at that IP address"
-#~ msgstr "utrzymując w ten sposób obecność pod tym adresem IP"
-
-#~ msgid "Active State/State"
-#~ msgstr "Stan aktywny / Stan"
+#~ msgid "Fail"
+#~ msgstr "Niepowodzenie"

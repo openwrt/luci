@@ -19,7 +19,28 @@
 			"path": "status/routes"
 		},
 		"depends": {
-			"acl": [ "luci-mod-status-routes" ]
+			"acl": [ "luci-mod-status-routes" ],
+			"fs": [
+				{ "/usr/libexec/ip-tiny": "absent", "/usr/libexec/ip-full": "absent" }
+			]
+
+		}
+	},
+
+	"admin/status/routesj": {
+		"title": "Routing",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "status/routesj"
+		},
+		"depends": {
+			"acl": [ "luci-mod-status-routes-json" ],
+			"fs": [
+				{ "/usr/libexec/ip-tiny": "executable" },
+				{ "/usr/libexec/ip-full": "executable" }
+			]
+
 		}
 	},
 

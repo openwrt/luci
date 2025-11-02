@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-10-14 17:15+0000\n"
+"PO-Revision-Date: 2025-05-08 13:02+0000\n"
 "Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsprivoxy/hu/>\n"
@@ -8,48 +8,47 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.12-dev\n"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:236
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:90
 msgid ""
-"A URL to be displayed in the error page that users will see if access to an "
-"untrusted page is denied."
+"A directory where Privoxy can create temporary files.<br /><strong>Only when "
+"using 'external filters', Privoxy has to create temporary files.</strong>"
 msgstr ""
-"Azon a hibaoldalon megjelenítendő URL, amelyet a felhasználók akkor fognak "
-"látni, ha egy megbízhatatlan oldalhoz történő hozzáférés megtagadásra kerül."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:226
-msgid ""
-"A URL to documentation about the local Privoxy setup, configuration or "
-"policies."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:209
+msgid "Accept intercepted requests"
 msgstr ""
-"Egy URL a helyi Privoxy beállítással, konfigurációval és házirendekkel "
-"kapcsolatos dokumentációhoz."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:325
-msgid "A directory where Privoxy can create temporary files."
-msgstr "Egy könyvtár, ahol a Privoxy átmeneti fájlokat hozhat létre."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:84
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:87
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:118
 msgid "Access Control"
 msgstr "Hozzáférés-vezérlés"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:337
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:96
+msgid "Action Files"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:98
 msgid "Actions that are applied to all sites and maybe overruled later on."
 msgstr ""
 "Műveletek, amelyek az összes oldalra alkalmazva lesznek, és később talán "
 "felülbírálásra kerülnek."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:308
-msgid "An alternative directory where the templates are loaded from."
-msgstr "Egy alternatív könyvtár, ahonnan a sablonok betöltésre kerülnek."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:42
+msgid "Admin Email"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:206
-msgid "An email address to reach the Privoxy administrator."
-msgstr "Egy e-mail cím a Privoxy adminisztrátorának eléréséhez."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:213
+msgid "Allow CGI request crunching"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:695
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:84
+msgid ""
+"An alternative directory where the templates are loaded from.<br />No "
+"trailing \"/\", please."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:230
 msgid ""
 "Assumed server-side keep-alive timeout (in seconds) if not specified by the "
 "server."
@@ -57,88 +56,183 @@ msgstr ""
 "Feltételezett kiszolgáló oldali életben tartási időkorlát (másodpercben), ha "
 "a kiszolgáló nem adta meg."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:151
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:22
 msgid "Boot delay"
 msgstr "Rendszerindítási késleltetés"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:873
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:141
+msgid "Buffer Limit"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:318
 msgid "CGI user interface"
 msgstr "CGI felhasználói felület"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:861
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:260
+msgid "Client header order"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:310
 msgid "Common Log Format"
 msgstr "Gyakori naplóformátum"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:92
-msgid ""
-"Configure here the routing of HTTP requests through a chain of multiple "
-"proxies. Note that parent proxies can severely decrease your privacy level. "
-"Also specified here are SOCKS proxies."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:255
+msgid "Compression level"
 msgstr ""
-"Itt állítsa be a több proxyláncon keresztüli HTTP kérések útválasztását. Ne "
-"feledje, hogy a szülőproxyk erősen csökkenthetik az adatvédelmi szintet. Itt "
-"adhatók meg a SOCKS proxyk is."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:855
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:77
+msgid "Configuration Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:13
+msgid "Configure the Privoxy proxy daemon settings."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:233
+msgid "Connection sharing"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:266
+msgid "Debug"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:273
+msgid "Debug 1"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:313
+msgid "Debug 1024"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:301
+msgid "Debug 128"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:289
+msgid "Debug 16"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:277
+msgid "Debug 2"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:317
+msgid "Debug 2048"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:305
+msgid "Debug 256"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:293
+msgid "Debug 32"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:331
+msgid "Debug 32768"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:281
+msgid "Debug 4"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:321
+msgid "Debug 4096"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:309
+msgid "Debug 512"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:297
+msgid "Debug 64"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:335
+msgid "Debug 65536"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:285
+msgid "Debug 8"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:325
+msgid "Debug 8192"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:306
 msgid "Debug GIF de-animation"
 msgstr "GIF-animáció megszüntetésének hibakeresése"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:837
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:294
 msgid "Debug force feature"
 msgstr "Kényszerítés funkció hibakeresése"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:849
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:302
 msgid "Debug redirects"
 msgstr "Átirányítások hibakeresése"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:843
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:298
 msgid "Debug regular expression filters"
 msgstr "Reguláris kifejezés szűrőinek hibakeresése"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:152
-msgid "Delay (in seconds) during system boot before Privoxy start"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:229
+msgid "Default server timeout"
 msgstr ""
-"Késleltetés (másodpercben) a rendszerindítás közben a Privoxy indulása előtt"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:261
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:298
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:315
-msgid "Directory does not exist!"
-msgstr "A könyvtár nem létezik!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:23
+msgid "Delay (in seconds) during system boot before Privoxy starts."
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:557
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:135
+msgid "Deny access"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:151
 msgid "Disabled == Transparent Proxy Mode"
 msgstr "Letiltva == transzparens proxy mód"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:66
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:71
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:31
 msgid "Documentation"
 msgstr "Dokumentáció"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:154
-msgid "During delay ifup-events are not monitored !"
-msgstr "Az ifup események alatti késleltetés nincs megfigyelve!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:43
+msgid "Email address for the Privoxy administrator."
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:599
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:167
+msgid "Enable action file editor"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:251
+msgid "Enable compression"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:181
 msgid "Enable proxy authentication forwarding"
 msgstr "Proxyhitelesítés továbbításának engedélyezése"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:135
-msgid ""
-"Enable/Disable autostart of Privoxy on system startup and interface events"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:156
+msgid "Enable remote toggle"
 msgstr ""
-"A Privoxy automatikus indításának engedélyezése vagy letiltása a rendszer "
-"indításakor és a csatolóeseményeknél"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:555
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:161
+msgid "Enable remote toggle via HTTP"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
+msgid "Enable/Disable autostart of Privoxy"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:150
 msgid "Enable/Disable filtering when Privoxy starts."
 msgstr "Szűrés engedélyezése vagy letiltása, ha a Privoxy indul."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:134
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
 msgid "Enabled"
 msgstr "Engedélyezve"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:602
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:183
 msgid ""
 "Enabling this option is NOT recommended if there is no parent proxy that "
 "requires authentication!"
@@ -146,44 +240,61 @@ msgstr ""
 "Ennek a beállításnak az engedélyezése NEM ajánlott, ha nincs olyan "
 "szülőproxy, amely hitelesítést igényel!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:368
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:404
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:442
-msgid "File '%s' not found inside Configuration Directory"
-msgstr "A(z) „%s” fájl nem található a beállítási könyvtáron belül"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:172
+msgid "Enforce page blocking"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:919
-#: applications/luci-app-privoxy/luasrc/view/privoxy/detail_logview.htm:12
-msgid "File not found or empty"
-msgstr "A fájl nem található vagy üres"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:75
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:80
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:55
 msgid "Files and Directories"
 msgstr "Fájlok és könyvtárak"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:36
-msgid "For help use link at the relevant option"
-msgstr "A súgóért használja a hivatkozást a megfelelő beállításnál"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:104
+msgid "Filter files"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:91
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:185
+msgid "Forward HTTP"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:189
+msgid "Forward SOCKS 4"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:193
+msgid "Forward SOCKS 4A"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:197
+msgid "Forward SOCKS 5"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:201
+msgid "Forward SOCKS 5t"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:178
 msgid "Forwarding"
 msgstr "Továbbítás"
 
 #: applications/luci-app-privoxy/root/usr/share/rpcd/acl.d/luci-app-privoxy.json:3
 msgid "Grant UCI access for luci-app-privoxy"
+msgstr "UCI hozzáférés engedélyezése a <em>luci-app-privoxy</em> alkalmazásnak"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:247
+msgid "Handle as empty doc returns ok"
 msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:589
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:35
+msgid "Hostname"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:173
 msgid ""
-"If enabled, Privoxy hides the 'go there anyway' link. The user obviously "
+"If enabled, Privoxy hides the \"go there anyway\" link. The user obviously "
 "should not be able to bypass any blocks."
 msgstr ""
-"Ha engedélyezve van, akkor a Privoxy elrejti a „menjen oda mindenképp” "
-"hivatkozást. A felhasználó nyilvánvalóan nem lehet képes megkerülni "
-"semmilyen blokkolást."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:67
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:31
 msgid ""
 "If you intend to operate Privoxy for more users than just yourself, it might "
 "be a good idea to let them know how to reach you, what you block and why you "
@@ -194,35 +305,43 @@ msgstr ""
 "érhetik el Önt, mit blokkol és miért teszi ezt, ismertetni a házirendeket, "
 "stb."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:215
-msgid "Invalid email address"
-msgstr "Érvénytelen e-mail cím"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:416
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:112
 msgid "It is NOT recommended for the casual user."
 msgstr "NEM ajánlott az alkalmi felhasználóknak."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:194
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:221
+msgid "Keep-alive timeout"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:121
+msgid "Listen addresses"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:40
 msgid "Location of the Privoxy User Manual."
 msgstr "A Privoxy felhasználói kézikönyvének helye."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:108
-msgid "Log File Viewer"
-msgstr "Naplófájl-megjelenítő"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:60
+msgid "Log Directory"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:899
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:66
+msgid "Log File"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:332
 msgid "Log all data read from the network"
 msgstr "A hálózatról olvasott összes adat naplózása"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:831
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:290
 msgid "Log all data written to the network"
 msgstr "A hálózatra írt összes adat naplózása"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:905
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:336
 msgid "Log the applying actions"
 msgstr "Az alkalmazott műveletek naplózása"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:807
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:274
 msgid ""
 "Log the destination for each request Privoxy let through. See also 'Debug "
 "1024'."
@@ -230,7 +349,7 @@ msgstr ""
 "Azon kérések céljainak naplózása, amelyeket a Privoxy átenged. Nézze meg még "
 "az „1024 hibakeresést”."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:867
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:314
 msgid ""
 "Log the destination for requests Privoxy didn't let through, and the reason "
 "why."
@@ -238,119 +357,70 @@ msgstr ""
 "Azon kérések céljainak naplózása, amelyeket a Privoxy nem engedett át, "
 "illetve az okát, hogy miért."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:104
-msgid "Logging"
-msgstr "Naplózás"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:339
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:99
 msgid "Main actions file"
 msgstr "Fő műveletek fájlja"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:461
-msgid "Mandatory Input: No Data given!"
-msgstr "Kötelező bemenet: nincs adat megadva!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:259
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:296
-msgid "Mandatory Input: No Directory given!"
-msgstr "Kötelező bemenet: nincs könyvtár megadva!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:279
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:72
 msgid "Mandatory Input: No File given!"
 msgstr "Kötelező bemenet: nincs fájl megadva!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:479
-msgid "Mandatory Input: No Port given!"
-msgstr "Kötelező bemenet: nincs port megadva!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:242
+msgid "Max. client connections"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:345
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:381
-msgid "Mandatory Input: No files given!"
-msgstr "Kötelező bemenet: nincsenek fájlok megadva!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:482
-msgid "Mandatory Input: No valid IPv4 address or host given!"
-msgstr "Kötelező bemenet: nincs érvényes IPv4-cím vagy gép megadva!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:470
-msgid "Mandatory Input: No valid IPv6 address given!"
-msgstr "Kötelező bemenet: nincs érvényes IPv6-cím megadva!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:472
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:484
-msgid "Mandatory Input: No valid Port given!"
-msgstr "Kötelező bemenet: nincs érvényes port megadva!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:737
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:244
 msgid "Maximum number of client connections that will be served."
 msgstr "Ügyfélkapcsolatok legnagyobb száma, amely ki lesz szolgálva."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:535
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:142
 msgid "Maximum size (in KB) of the buffer for content filtering."
 msgstr "A puffer legnagyobb mérete (kilobájtban) a tartalomszűréshez."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:97
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:100
-msgid "Miscellaneous"
-msgstr "Egyebek"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:207
+msgid "Misc"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:51
-msgid "NOT installed"
-msgstr "Nincs telepítve"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:254
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:291
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:310
-msgid "No trailing '/', please."
-msgstr "Ne használjon záró „/” karakter."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:885
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:326
 msgid "Non-fatal errors - *we highly recommended enabling this*"
 msgstr "Nem végzetes hibák – *erősen ajánljuk ennek engedélyezését*"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:718
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:239
 msgid ""
 "Number of seconds after which a socket times out if no data is received."
 msgstr ""
 "Másodpercek száma, amely után egy foglalat túllépi az időkorlátot, ha nem "
 "érkezik adat."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:672
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:222
 msgid ""
 "Number of seconds after which an open connection will no longer be reused."
 msgstr ""
 "Másodpercek száma, amely után egy nyitott kapcsolatot többé nem lehet "
 "újrahasználni."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:327
-msgid ""
-"Only when using 'external filters', Privoxy has to create temporary files."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:129
+msgid "Permit access"
 msgstr ""
-"Csak „külső szűrők” használatakor a Privoxynak átmeneti fájlokat kell "
-"létrehoznia."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:81
-msgid "Please install current version !"
-msgstr "Telepítse a jelenlegi verziót!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:917
-msgid "Please press [Read] button"
-msgstr "Nyomja meg a [Beolvasás] gombot"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:518
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:527
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:130
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:136
 msgid "Please read Privoxy manual for details!"
 msgstr "Olvassa el a Privoxy kézikönyvét a részletekért!"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:92
-msgid "Please update to the current version!"
-msgstr "Frissítsen a jelenlegi verzióra!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:12
+msgid "Privoxy"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:24
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:15
+msgid "Privoxy Settings"
+msgstr ""
+
+#: applications/luci-app-privoxy/root/usr/share/luci/menu.d/luci-app-privoxy.json:3
 msgid "Privoxy WEB proxy"
 msgstr "Privoxy webes proxy"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:76
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:55
 msgid ""
 "Privoxy can (and normally does) use a number of other files for additional "
 "configuration, help and logging. This section of the configuration file "
@@ -360,78 +430,74 @@ msgstr ""
 "beállításhoz, súgóhoz és naplózáshoz. A beállítófájl ezen szakasza mondja "
 "meg a Privoxynak, hogy hol találja meg az egyéb fájlokat."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:32
-msgid ""
-"Privoxy is a non-caching web proxy with advanced filtering capabilities for "
-"enhancing privacy, modifying web page data and HTTP headers, controlling "
-"access, and removing ads and other obnoxious Internet junk."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:47
+msgid "Proxy Info URL"
 msgstr ""
-"A Privoxy egy nem gyorsítótárazó webes proxy speciális szűrési képességekkel "
-"a megnövelt adatvédelemhez, a weboldal adatainak és a HTTP fejlécek "
-"módosításához, a hozzáférés szabályozásához, valamint a reklámok és egyéb "
-"kellemetlen internetes szemét eltávolításához."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:912
-msgid "Read / Reread log file"
-msgstr "Naplófájl olvasása vagy újraolvasása"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:819
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:282
 msgid "Show I/O status"
 msgstr "I/O állapot megjelenítése"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:813
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:278
 msgid "Show each connection status"
 msgstr "Minden kapcsolatállapot megjelenítése"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:825
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:286
 msgid "Show header parsing"
 msgstr "Fejléc feldolgozásának megjelenítése"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:76
-msgid "Software package '%s' is not installed."
-msgstr "A(z) „%s” szoftvercsomag nincs telepítve."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:268
+msgid "Single Threaded"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:85
-msgid "Software package '%s' is outdated."
-msgstr "A(z) „%s” szoftvercsomag elavult."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:237
+msgid "Socket timeout"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:125
-#: applications/luci-app-privoxy/luasrc/view/privoxy/detail_startstop.htm:10
-msgid "Start"
-msgstr "Indítás"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:217
+msgid "Split large forms"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:115
-msgid "Start / Stop"
-msgstr "Indítás vagy leállítás"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:116
-msgid "Start/Stop Privoxy WEB Proxy"
-msgstr "Privoxy webes proxy indítása vagy leállítása"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:879
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:322
 msgid "Startup banner and warnings."
 msgstr "Rendszerindítási reklámcsík és figyelmeztetések."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:455
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:620
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:635
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:123
 msgid "Syntax:"
 msgstr "Elrendezés:"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:790
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:262
 msgid "Syntax: Client header names delimited by spaces."
 msgstr "Szintaxis: szóközzel elválasztott ügyfélfejlécnevek."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:612
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:199
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:203
+msgid ""
+"Syntax: target_pattern [user:pass@]socks_proxy[:port] http_parent[:port]"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:187
 msgid "Syntax: target_pattern http_parent[:port]"
 msgstr "Szintaxis: cél_minta http_szülő[:port]"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:59
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:62
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:191
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:195
+msgid "Syntax: target_pattern socks_proxy[:port] http_parent[:port]"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:19
 msgid "System"
 msgstr "Rendszer"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:335
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:83
+msgid "Template Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:89
+msgid "Temporary Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:97
 msgid ""
 "The actions file(s) to use. Multiple actionsfile lines are permitted, and "
 "are in fact recommended!"
@@ -439,13 +505,13 @@ msgstr ""
 "A használandó műveleti fájlok. Több műveleti fájl sor is megengedett, és "
 "valójában ajánlott!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:453
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:122
 msgid ""
 "The address and TCP port on which Privoxy will listen for client requests."
 msgstr ""
 "A cím és a TCP port, amelyen a Privoxy figyelni fogja az ügyfélkéréseket."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:770
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:257
 msgid ""
 "The compression level that is passed to the zlib library when compressing "
 "buffered content."
@@ -453,19 +519,17 @@ msgstr ""
 "A tömörítési szint, amely a zlib programkönyvtárnak kerül átadásra a "
 "pufferelt tartalom tömörítésekor."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:252
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:61
 msgid ""
 "The directory where all logging takes place (i.e. where the logfile is "
-"located)."
+"located).<br />No trailing \"/\", please."
 msgstr ""
-"A könyvtár, ahol az összes naplózás történik (azaz ahol a naplófájl "
-"található)."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:289
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:78
 msgid "The directory where the other configuration files are located."
 msgstr "A könyvtár, ahol az egyéb beállítófájlok találhatók."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:377
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:105
 msgid ""
 "The filter files contain content modification rules that use regular "
 "expressions."
@@ -473,20 +537,20 @@ msgstr ""
 "A szűrőfájlok olyan tartalommódosítási szabályokat tartalmaznak, amelyek "
 "reguláris kifejezéseket használnak."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:183
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:36
 msgid "The hostname shown on the CGI pages."
 msgstr "A CGI-oldalakon megjelenített gépnév."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:274
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:67
 msgid "The log file to use. File name, relative to log directory."
 msgstr "A használandó naplófájl. Fájlnév a naplózási könyvtártól relatívan."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:788
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:261
 msgid "The order in which client headers are sorted before forwarding them."
 msgstr ""
 "A sorrend, amelyben az ügyfélfejlécek rendezve vannak a továbbításuk előtt."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:755
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:248
 msgid ""
 "The status code Privoxy returns for pages blocked with +handle-as-empty-"
 "document."
@@ -494,7 +558,7 @@ msgstr ""
 "Az állapotkód, amelyet a Privoxy visszaad azoknál a blokkolt oldalaknál, "
 "amelyek üres dokumentumként vannak kezelve."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:413
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:111
 msgid ""
 "The trust mechanism is an experimental feature for building white-lists and "
 "should be used with care."
@@ -502,15 +566,7 @@ msgstr ""
 "A megbízhatóság mechanizmus egy kísérleti funkció fehérlisták "
 "összeállításához, és óvatosan kell használni."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:238
-msgid ""
-"The value of this option only matters if the experimental trust mechanism "
-"has been activated."
-msgstr ""
-"Ennek a beállításnak az értéke csak akkor számít, ha a kísérleti "
-"megbízhatóság mechanizmus be lett kapcsolva."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:800
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:270
 msgid ""
 "This option is only there for debugging purposes. It will drastically reduce "
 "performance."
@@ -518,7 +574,7 @@ msgstr ""
 "Ez a beállítás csak hibakeresési célokból van itt. Drasztikusan csökkenteni "
 "fogja a teljesítményt."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:574
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:163
 msgid ""
 "This option will be removed in future releases as it has been obsoleted by "
 "the more general header taggers."
@@ -526,14 +582,16 @@ msgstr ""
 "Ez a beállítás el lesz távolítva a későbbi kiadásokból, mivel az "
 "általánosabb fejléccímkézők elavulttá tették."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:85
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:118
 msgid ""
 "This tab controls the security-relevant aspects of Privoxy's configuration."
 msgstr ""
 "Ez a lap vezérli a Privoxy beállításának biztonságra vonatkozó szempontjait."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:618
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:633
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:190
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:194
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:198
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:202
 msgid ""
 "Through which SOCKS proxy (and optionally to which parent HTTP proxy) "
 "specific requests should be routed."
@@ -541,63 +599,54 @@ msgstr ""
 "Mely SOCKS proxyn keresztül (és esetlegesen mely szülő HTTP proxyhoz) "
 "jellemző kéréseket kell irányítani."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:610
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:186
 msgid "To which parent HTTP proxy specific requests should be routed."
 msgstr "Mely szülőhöz kell a HTTP proxyra jellemző kéréseket irányítani."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:341
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:149
+msgid "Toggle Status"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:225
+msgid "Tolerate pipelining"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:50
+msgid "Trust Info URL"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:110
+msgid "Trust file"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:51
+msgid ""
+"URL shown if access to an untrusted page is denied. Only applies if trust "
+"mechanism is enabled."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:48
+msgid "URL to documentation about the local Privoxy setup."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:39
+msgid "User Manual"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:100
 msgid "User customizations"
 msgstr "Felhasználói személyre szabások"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:166
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:543
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:677
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:700
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:724
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:743
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:776
-msgid "Value is not a number"
-msgstr "Az érték nem szám"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:168
-msgid "Value not between 0 and 300"
-msgstr "Az érték nem 0 és 300 között van"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:778
-msgid "Value not between 0 and 9"
-msgstr "Az érték nem 0 és 9 között van"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:545
-msgid "Value not between 1 and 4096"
-msgstr "Az érték nem 1 és 4096 között van"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:679
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:702
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:726
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:745
-msgid "Value not greater 0 or empty"
-msgstr "Az érték nem nagyobb mint 0 vagy üres"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:537
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:143
 msgid "Value range 1 to 4096, no entry defaults to 4096"
 msgstr ""
 "Értéktartomány 1 és 4096 között, nincs alapértelmezetten 4096-os bejegyzés"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:45
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:47
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:50
-msgid "Version"
-msgstr "Verzió"
-
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:43
-msgid "Version Information"
-msgstr "Verzióinformációk"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:650
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:210
 msgid "Whether intercepted requests should be treated as valid."
 msgstr "Az elfogott kéréseket érvényesnek kell-e tekinteni vagy sem."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:572
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:162
 msgid ""
 "Whether or not Privoxy recognizes special HTTP headers to change toggle "
 "state."
@@ -605,11 +654,11 @@ msgstr ""
 "A Privoxy ismerje-e fel a különleges HTTP fejléceket az átváltási állapot "
 "megváltoztatásához vagy sem."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:762
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:252
 msgid "Whether or not buffered content is compressed before delivery."
 msgstr "A pufferelt tartalom legyen-e tömörítve kézbesítés előtt vagy sem."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:710
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:234
 msgid ""
 "Whether or not outgoing connections that have been kept alive should be "
 "shared between different incoming connections."
@@ -617,58 +666,231 @@ msgstr ""
 "Az életben tartott kimenő kapcsolatokat meg kell-e osztani a különböző "
 "bejövő kapcsolatok között vagy sem."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:687
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:226
 msgid "Whether or not pipelined requests should be served."
 msgstr "A csővezetéken keresztüli kéréseket ki kell-e szolgálni vagy sem."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:600
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:182
 msgid "Whether or not proxy authentication through Privoxy should work."
 msgstr "A Privoxyn keresztüli proxyhitelesítésnek működnie kell-e vagy sem."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:582
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:168
 msgid "Whether or not the web-based actions file editor may be used."
 msgstr "A webalapú műveletek fájlszerkesztője legyen-e használva vagy sem."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:565
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:157
 msgid "Whether or not the web-based toggle feature may be used."
 msgstr "A webalapú átkapcsolási funkciót lehessen-e használni vagy sem."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:657
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:214
 msgid "Whether requests to Privoxy's CGI pages can be blocked or redirected."
 msgstr ""
 "A Privoxy CGI-oldalaihoz intézett kéréseket lehessen-e blokkolni vagy "
 "átirányítani."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:664
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:218
 msgid ""
 "Whether the CGI interface should stay compatible with broken HTTP clients."
 msgstr "A CGI felület maradjon-e kompatibilis a törött HTTP ügyfelekkel."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:798
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:269
 msgid "Whether to run only one server thread."
 msgstr "Csak egyetlen kiszolgálószálat futtasson-e."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:516
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:525
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:130
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:136
 msgid "Who can access what."
 msgstr "Ki férhet hozzá mihez."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:49
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:87
-msgid "installed"
-msgstr "telepítve"
+#~ msgid ""
+#~ "A URL to be displayed in the error page that users will see if access to "
+#~ "an untrusted page is denied."
+#~ msgstr ""
+#~ "Azon a hibaoldalon megjelenítendő URL, amelyet a felhasználók akkor "
+#~ "fognak látni, ha egy megbízhatatlan oldalhoz történő hozzáférés "
+#~ "megtagadásra kerül."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:48
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:78
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:89
-msgid "or higher"
-msgstr "vagy magasabb"
+#~ msgid ""
+#~ "A URL to documentation about the local Privoxy setup, configuration or "
+#~ "policies."
+#~ msgstr ""
+#~ "Egy URL a helyi Privoxy beállítással, konfigurációval és házirendekkel "
+#~ "kapcsolatos dokumentációhoz."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:46
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:78
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:89
-msgid "required"
-msgstr "kötelező"
+#~ msgid "A directory where Privoxy can create temporary files."
+#~ msgstr "Egy könyvtár, ahol a Privoxy átmeneti fájlokat hozhat létre."
 
-#~ msgid "Syntax: target_pattern socks_proxy[:port] http_parent[:port]"
-#~ msgstr "Szintaxis: cél_minta socks_proxy[:port] http_szülő[:port]"
+#~ msgid "An alternative directory where the templates are loaded from."
+#~ msgstr "Egy alternatív könyvtár, ahonnan a sablonok betöltésre kerülnek."
+
+#~ msgid "An email address to reach the Privoxy administrator."
+#~ msgstr "Egy e-mail cím a Privoxy adminisztrátorának eléréséhez."
+
+#~ msgid ""
+#~ "Configure here the routing of HTTP requests through a chain of multiple "
+#~ "proxies. Note that parent proxies can severely decrease your privacy "
+#~ "level. Also specified here are SOCKS proxies."
+#~ msgstr ""
+#~ "Itt állítsa be a több proxyláncon keresztüli HTTP kérések útválasztását. "
+#~ "Ne feledje, hogy a szülőproxyk erősen csökkenthetik az adatvédelmi "
+#~ "szintet. Itt adhatók meg a SOCKS proxyk is."
+
+#~ msgid "Delay (in seconds) during system boot before Privoxy start"
+#~ msgstr ""
+#~ "Késleltetés (másodpercben) a rendszerindítás közben a Privoxy indulása "
+#~ "előtt"
+
+#~ msgid "Directory does not exist!"
+#~ msgstr "A könyvtár nem létezik!"
+
+#~ msgid "During delay ifup-events are not monitored !"
+#~ msgstr "Az ifup események alatti késleltetés nincs megfigyelve!"
+
+#~ msgid ""
+#~ "Enable/Disable autostart of Privoxy on system startup and interface events"
+#~ msgstr ""
+#~ "A Privoxy automatikus indításának engedélyezése vagy letiltása a rendszer "
+#~ "indításakor és a csatolóeseményeknél"
+
+#~ msgid "File '%s' not found inside Configuration Directory"
+#~ msgstr "A(z) „%s” fájl nem található a beállítási könyvtáron belül"
+
+#~ msgid "File not found or empty"
+#~ msgstr "A fájl nem található vagy üres"
+
+#~ msgid "For help use link at the relevant option"
+#~ msgstr "A súgóért használja a hivatkozást a megfelelő beállításnál"
+
+#~ msgid ""
+#~ "If enabled, Privoxy hides the 'go there anyway' link. The user obviously "
+#~ "should not be able to bypass any blocks."
+#~ msgstr ""
+#~ "Ha engedélyezve van, akkor a Privoxy elrejti a „menjen oda mindenképp” "
+#~ "hivatkozást. A felhasználó nyilvánvalóan nem lehet képes megkerülni "
+#~ "semmilyen blokkolást."
+
+#~ msgid "Invalid email address"
+#~ msgstr "Érvénytelen e-mail cím"
+
+#~ msgid "Log File Viewer"
+#~ msgstr "Naplófájl-megjelenítő"
+
+#~ msgid "Logging"
+#~ msgstr "Naplózás"
+
+#~ msgid "Mandatory Input: No Data given!"
+#~ msgstr "Kötelező bemenet: nincs adat megadva!"
+
+#~ msgid "Mandatory Input: No Directory given!"
+#~ msgstr "Kötelező bemenet: nincs könyvtár megadva!"
+
+#~ msgid "Mandatory Input: No Port given!"
+#~ msgstr "Kötelező bemenet: nincs port megadva!"
+
+#~ msgid "Mandatory Input: No files given!"
+#~ msgstr "Kötelező bemenet: nincsenek fájlok megadva!"
+
+#~ msgid "Mandatory Input: No valid IPv4 address or host given!"
+#~ msgstr "Kötelező bemenet: nincs érvényes IPv4-cím vagy gép megadva!"
+
+#~ msgid "Mandatory Input: No valid IPv6 address given!"
+#~ msgstr "Kötelező bemenet: nincs érvényes IPv6-cím megadva!"
+
+#~ msgid "Mandatory Input: No valid Port given!"
+#~ msgstr "Kötelező bemenet: nincs érvényes port megadva!"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Egyebek"
+
+#~ msgid "NOT installed"
+#~ msgstr "Nincs telepítve"
+
+#~ msgid "No trailing '/', please."
+#~ msgstr "Ne használjon záró „/” karakter."
+
+#~ msgid ""
+#~ "Only when using 'external filters', Privoxy has to create temporary files."
+#~ msgstr ""
+#~ "Csak „külső szűrők” használatakor a Privoxynak átmeneti fájlokat kell "
+#~ "létrehoznia."
+
+#~ msgid "Please install current version !"
+#~ msgstr "Telepítse a jelenlegi verziót!"
+
+#~ msgid "Please press [Read] button"
+#~ msgstr "Nyomja meg a [Beolvasás] gombot"
+
+#~ msgid "Please update to the current version!"
+#~ msgstr "Frissítsen a jelenlegi verzióra!"
+
+#~ msgid ""
+#~ "Privoxy is a non-caching web proxy with advanced filtering capabilities "
+#~ "for enhancing privacy, modifying web page data and HTTP headers, "
+#~ "controlling access, and removing ads and other obnoxious Internet junk."
+#~ msgstr ""
+#~ "A Privoxy egy nem gyorsítótárazó webes proxy speciális szűrési "
+#~ "képességekkel a megnövelt adatvédelemhez, a weboldal adatainak és a HTTP "
+#~ "fejlécek módosításához, a hozzáférés szabályozásához, valamint a reklámok "
+#~ "és egyéb kellemetlen internetes szemét eltávolításához."
+
+#~ msgid "Read / Reread log file"
+#~ msgstr "Naplófájl olvasása vagy újraolvasása"
+
+#~ msgid "Software package '%s' is not installed."
+#~ msgstr "A(z) „%s” szoftvercsomag nincs telepítve."
+
+#~ msgid "Software package '%s' is outdated."
+#~ msgstr "A(z) „%s” szoftvercsomag elavult."
+
+#~ msgid "Start"
+#~ msgstr "Indítás"
+
+#~ msgid "Start / Stop"
+#~ msgstr "Indítás vagy leállítás"
+
+#~ msgid "Start/Stop Privoxy WEB Proxy"
+#~ msgstr "Privoxy webes proxy indítása vagy leállítása"
+
+#~ msgid ""
+#~ "The directory where all logging takes place (i.e. where the logfile is "
+#~ "located)."
+#~ msgstr ""
+#~ "A könyvtár, ahol az összes naplózás történik (azaz ahol a naplófájl "
+#~ "található)."
+
+#~ msgid ""
+#~ "The value of this option only matters if the experimental trust mechanism "
+#~ "has been activated."
+#~ msgstr ""
+#~ "Ennek a beállításnak az értéke csak akkor számít, ha a kísérleti "
+#~ "megbízhatóság mechanizmus be lett kapcsolva."
+
+#~ msgid "Value is not a number"
+#~ msgstr "Az érték nem szám"
+
+#~ msgid "Value not between 0 and 300"
+#~ msgstr "Az érték nem 0 és 300 között van"
+
+#~ msgid "Value not between 0 and 9"
+#~ msgstr "Az érték nem 0 és 9 között van"
+
+#~ msgid "Value not between 1 and 4096"
+#~ msgstr "Az érték nem 1 és 4096 között van"
+
+#~ msgid "Value not greater 0 or empty"
+#~ msgstr "Az érték nem nagyobb mint 0 vagy üres"
+
+#~ msgid "Version"
+#~ msgstr "Verzió"
+
+#~ msgid "Version Information"
+#~ msgstr "Verzióinformációk"
+
+#~ msgid "installed"
+#~ msgstr "telepítve"
+
+#~ msgid "or higher"
+#~ msgstr "vagy magasabb"
+
+#~ msgid "required"
+#~ msgstr "kötelező"

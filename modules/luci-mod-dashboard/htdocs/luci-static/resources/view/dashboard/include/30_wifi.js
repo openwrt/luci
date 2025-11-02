@@ -10,31 +10,31 @@ return baseclass.extend({
 
 	params: [],
 
-	load: function() {
+	load() {
 		return Promise.all([
 			network.getWifiDevices(),
 			network.getWifiNetworks(),
 			network.getHostHints()
-		]).then(function(radios_networks_hints) {
-			var tasks = [];
+		]).then(radios_networks_hints => {
+			const tasks = [];
 
-			for (var i = 0; i < radios_networks_hints[1].length; i++)
-				tasks.push(L.resolveDefault(radios_networks_hints[1][i].getAssocList(), []).then(L.bind(function(net, list) {
-					net.assoclist = list.sort(function(a, b) { return a.mac > b.mac });
+			for (let i = 0; i < radios_networks_hints[1].length; i++)
+				tasks.push(L.resolveDefault(radios_networks_hints[1][i].getAssocList(), []).then(L.bind((net, list) => {
+					net.assoclist = list.sort((a, b) => { return a.mac > b.mac });
 				}, this, radios_networks_hints[1][i])));
 
-			return Promise.all(tasks).then(function() {
+			return Promise.all(tasks).then(() => {
 				return radios_networks_hints;
 			});
 		});
 	},
 
-	renderHtml: function() {
+	renderHtml() {
 
-		var container_wapper = E('div', { 'class': 'router-status-wifi dashboard-bg box-s1' });
-		var container_box = E('div', { 'class': 'wifi-info devices-list' });
-		var container_radio = E('div', { 'class': 'settings-info' });
-		var container_radio_item;
+		const container_wapper = E('div', { 'class': 'router-status-wifi dashboard-bg box-s1' });
+		const container_box = E('div', { 'class': 'wifi-info devices-list' });
+		const container_radio = E('div', { 'class': 'settings-info' });
+		let container_radio_item;
 
 		container_box.appendChild(E('div', { 'class': 'title'}, [
 			E('img', {
@@ -46,13 +46,13 @@ return baseclass.extend({
 			E('h3', this.title)
 		]));
 
-		for (var i =0; i < this.params.wifi.radios.length; i++) {
+		for (let i = 0; i < this.params.wifi.radios.length; i++) {
 
 			container_radio_item = E('div', { 'class': 'radio-info' })
 
-			for(var idx in this.params.wifi.radios[i]) {
-				var classname = idx,
-					radio = this.params.wifi.radios[i];
+			for(let idx in this.params.wifi.radios[i]) {
+				let classname = idx;
+				const radio = this.params.wifi.radios[i];
 
 				if (!radio[idx].visible) {
 					continue;
@@ -76,7 +76,7 @@ return baseclass.extend({
 
 		container_box.appendChild(container_radio);
 
-		var container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
+		const container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
 			E('tr', { 'class': 'tr dashboard-bg' }, [
 				E('th', { 'class': 'th nowrap' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('SSID')),
@@ -85,20 +85,20 @@ return baseclass.extend({
 			])
 		]);
 
-		for (var i =0; i < this.params.wifi.devices.length; i++) {
-			var container_devices_item = E('tr', { 'class': 'tr cbi-rowstyle-1' });
+		for (let i = 0; i < this.params.wifi.devices.length; i++) {
+			const container_devices_item = E('tr', { 'class': 'tr cbi-rowstyle-1' });
 
-			for(var idx in this.params.wifi.devices[i]) {
-				var device = this.params.wifi.devices[i];
+			for(let idx in this.params.wifi.devices[i]) {
+				const device = this.params.wifi.devices[i];
 
 				if (!device[idx].visible) {
 					continue;
 				}
 
-				var container_content;
+				let container_content;
 
 				if ('progress' == idx) {
-					container_content = E('div', { 'class' : 'td device-info' }, [
+					container_content = E('td', { 'class' : 'td device-info' }, [
 						E('div', { 'class': 'cbi-progressbar', 'title': 'RSSI: ' + parseInt(device[idx].value.qualite) + '% (' + device[idx].value.rssi + 'dBm)'  }, [
 							E('div', { 'style': 'width: '+device[idx].value.qualite+'%'}),
 						])
@@ -131,19 +131,19 @@ return baseclass.extend({
 		return container_wapper;
 	},
 
-	renderUpdateData: function(radios, networks, hosthints) {
+	renderUpdateData(radios, networks, hosthints) {
 
-		for (var i = 0; i < radios.sort(function(a, b) { a.getName() > b.getName() }).length; i++) {
-			var network_items = networks.filter(function(net) { return net.getWifiDeviceName() == radios[i].getName() });
+		for (let i = 0; i < radios.sort((a, b) => { a.getName() > b.getName() }).length; i++) {
+			const network_items = networks.filter(net => { return net.getWifiDeviceName() == radios[i].getName() });
 
-			for (var j = 0; j < network_items.length; j++) {
-				 var net = network_items[j],
-					 is_assoc = (net.getBSSID() != '00:00:00:00:00:00' && net.getChannel() && !net.isDisabled()),
-					 chan = net.getChannel(),
-					 freq = net.getFrequency(),
-					 rate = net.getBitRate();
+			for (let j = 0; j < network_items.length; j++) {
+				const net = network_items[j];
+				const is_assoc = (net.getBSSID() != '00:00:00:00:00:00' && net.getChannel() && !net.isDisabled());
+				const chan = net.getChannel();
+				const freq = net.getFrequency();
+				const rate = net.getBitRate();
 
-				 this.params.wifi.radios.push(
+				this.params.wifi.radios.push(
 					{
 						ssid : {
 							title: _('SSID'),
@@ -191,16 +191,16 @@ return baseclass.extend({
 			}
 		}
 
-		for (var i = 0; i < networks.length; i++) {
-			for (var k = 0; k < networks[i].assoclist.length; k++) {
-				var bss = networks[i].assoclist[k],
-					name = hosthints.getHostnameByMACAddr(bss.mac);
+		for (let i = 0; i < networks.length; i++) {
+			for (let k = 0; k < networks[i].assoclist.length; k++) {
+				const bss = networks[i].assoclist[k];
+				const name = hosthints.getHostnameByMACAddr(bss.mac);
 
-				var progress_style;
-				var defaultNF = -90; // default noise floor for devices that do not report it
-				var defaultCeil = -30;
-				// var q = Math.min((bss.signal + 110) / 70 * 100, 100);
-				var q = 100 * ((bss.signal - (bss.noise ? bss.noise: defaultNF) ) / (defaultCeil - (bss.noise ? bss.noise : defaultNF)));
+				let progress_style;
+				const defaultNF = -90; // default noise floor for devices that do not report it
+				const defaultCeil = -30;
+				// const q = Math.min((bss.signal + 110) / 70 * 100, 100);
+				const q = 100 * ((bss.signal - (bss.noise ? bss.noise: defaultNF) ) / (defaultCeil - (bss.noise ? bss.noise : defaultNF)));
 
 				if (q == 0 || q < 25)
 					progress_style = 'bg-danger';
@@ -249,7 +249,7 @@ return baseclass.extend({
 		}
 	},
 
-	render: function(data) {
+	render(data) {
 
 		this.params.wifi = {
 			radios: [],

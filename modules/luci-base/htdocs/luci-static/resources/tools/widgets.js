@@ -18,12 +18,12 @@ function getGroups() {
 }
 
 function getDevices(network) {
-    if (network.isBridge()) {
-        var devices = network.getDevices();
-        return devices ? devices : [];
-    } else {
-        return L.toArray(network.getDevice());
-    }
+	if (network.isBridge()) {
+		var devices = network.getDevices();
+		return devices ? devices : [];
+	} else {
+		return L.toArray(network.getL3Device());
+	}
 }
 
 var CBIZoneSelect = form.ListValue.extend({
@@ -111,7 +111,7 @@ var CBIZoneSelect = form.ListValue.extend({
 					continue;
 
 				var span = E('span', {
-					'class': 'ifacebadge' + (network.getName() == this.network ? ' ifacebadge-active' : '')
+					'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
 				}, network.getName() + ': ');
 
 				var devices = getDevices(network);
@@ -119,7 +119,7 @@ var CBIZoneSelect = form.ListValue.extend({
 				for (var k = 0; k < devices.length; k++) {
 					span.appendChild(E('img', {
 						'title': devices[k].getI18n(),
-						'src': L.resource('icons/%s%s.png'.format(devices[k].getType(), devices[k].isUp() ? '' : '_disabled'))
+						'src': L.resource('icons/%s%s.svg'.format(devices[k].getType(), devices[k].isUp() ? '' : '_disabled'))
 					}));
 				}
 
@@ -189,26 +189,27 @@ var CBIZoneSelect = form.ListValue.extend({
 						emptyval.parentNode.removeChild(emptyval);
 				}
 				else {
-					var anyval = node.querySelector('[data-value="*"]'),
-					    emptyval = node.querySelector('[data-value=""]');
+					const anyval = node.querySelector('[data-value="*"]') || '';
+					let emptyval = node.querySelector('[data-value=""]') || '';
 
-					if (emptyval == null) {
+					if (emptyval == null && anyval) {
 						emptyval = anyval.cloneNode(true);
 						emptyval.removeAttribute('display');
 						emptyval.removeAttribute('selected');
 						emptyval.setAttribute('data-value', '');
 					}
 
-					if (opt[0].allowlocal)
+					if (opt[0]?.allowlocal && emptyval)
 						L.dom.content(emptyval.querySelector('span'), [
 							E('strong', _('Device')), E('span', ' (%s)'.format(_('input')))
 						]);
+					if (opt[0]?.allowany && anyval && emptyval) {
+						L.dom.content(anyval.querySelector('span'), [
+							E('strong', _('Any zone')), E('span', ' (%s)'.format(_('forward')))
+						]);
 
-					L.dom.content(anyval.querySelector('span'), [
-						E('strong', _('Any zone')), E('span', ' (%s)'.format(_('forward')))
-					]);
-
-					anyval.parentNode.insertBefore(emptyval, anyval);
+						anyval.parentNode.insertBefore(emptyval, anyval);
+					}
 				}
 
 			}, this));
@@ -255,7 +256,7 @@ var CBIZoneForwards = form.DummyValue.extend({
 				continue;
 
 			var span = E('span', {
-				'class': 'ifacebadge' + (network.getName() == this.network ? ' ifacebadge-active' : '')
+				'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
 			}, network.getName() + ': ');
 
 			var subdevs = getDevices(network);
@@ -263,7 +264,7 @@ var CBIZoneForwards = form.DummyValue.extend({
 			for (var k = 0; k < subdevs.length && subdevs[k]; k++) {
 				span.appendChild(E('img', {
 					'title': subdevs[k].getI18n(),
-					'src': L.resource('icons/%s%s.png'.format(subdevs[k].getType(), subdevs[k].isUp() ? '' : '_disabled'))
+					'src': L.resource('icons/%s%s.svg'.format(subdevs[k].getType(), subdevs[k].isUp() ? '' : '_disabled'))
 				}));
 			}
 
@@ -282,7 +283,7 @@ var CBIZoneForwards = form.DummyValue.extend({
 			ifaces.push(E('span', { 'class': 'ifacebadge' }, [
 				E('img', {
 					'title': title,
-					'src': L.resource('icons/%s%s.png'.format(type, up ? '' : '_disabled'))
+					'src': L.resource('icons/%s%s.svg'.format(type, up ? '' : '_disabled'))
 				}),
 				device ? device.getName() : devices[i]
 			]));
@@ -337,6 +338,110 @@ var CBIZoneForwards = form.DummyValue.extend({
 	},
 });
 
+const CBIIPSelect = form.ListValue.extend({
+	__name__: 'CBI.IPSelect',
+
+	load(section_id) {
+		return network.getDevices().then(L.bind(function(devices) {
+			this.devices = devices;
+			return this.super('load', section_id);
+		}, this));
+	},
+
+	filter(section_id, value) {
+		return true;
+	},
+
+	renderIfaceBadge(device, ip) {
+		return E('div', {}, [
+			ip,
+			' ',
+			E('span', { 'class': 'ifacebadge', }, [ device.getName(),
+				E('img', {
+					'title': device.getI18n(),
+					'src': L.resource('icons/%s%s.svg'.format(device.getType(), device.isUp() ? '' : '_disabled'))
+				})
+			]),
+		]);
+	},
+
+	renderWidget(section_id, option_index, cfgvalue) {
+		let values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const choices = {};
+		const checked = {};
+
+		for (const val of values)
+			checked[val] = true;
+
+		values = [];
+
+		if (!this.multiple && (this.rmempty || this.optional))
+			choices[''] = E('em', _('unspecified'));
+
+
+		for (const device of (this.devices || [])) {
+			const name = device.getName();
+
+			if (name == this.exclude || !this.filter(section_id, name))
+				continue;
+
+			if (name == 'loopback' && !this.loopback)
+				continue;
+
+			if (this.novirtual && device.isVirtual())
+				continue;
+
+			for (const ip of [...device.getIPAddrs(), ...device.getIP6Addrs()]) {
+				const iponly = ip.split('/')?.[0]
+				if (checked[iponly])
+					values.push(iponly);
+				choices[iponly] = this.renderIfaceBadge(device, iponly);
+			}
+		}
+
+		const widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
+			id: this.cbid(section_id),
+			sort: true,
+			multiple: this.multiple,
+			optional: this.optional || this.rmempty,
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
+			select_placeholder: E('em', _('unspecified')),
+			display_items: this.display_size || this.size || 2,
+			dropdown_items: this.dropdown_size || this.size || 5,
+			datatype: this.multiple ? 'list(ipaddr)' : 'ipaddr',
+			validate: L.bind(this.validate, this, section_id),
+			create: false,
+		});
+
+		return widget.render();
+	},
+
+	textvalue(section_id) {
+		const cfgvalue = this.cfgvalue(section_id);
+		const values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const rv = E([]);
+
+		for (const device of (this.devices || [])) {
+			for (const ip of [...device.getIPAddrs(), ...device.getIP6Addrs()]) {
+				const iponly = ip.split('/')[0];
+				if (values.indexOf(iponly) === -1)
+					continue;
+
+				if (rv.childNodes.length)
+					rv.appendChild(document.createTextNode(' '));
+
+				rv.appendChild(this.renderIfaceBadge(device, iponly));
+			}
+		}
+
+		if (!rv.firstChild)
+			rv.appendChild(E('em', _('unspecified')));
+
+		return rv;
+	},
+});
+
+
 var CBINetworkSelect = form.ListValue.extend({
 	__name__: 'CBI.NetworkSelect',
 
@@ -359,7 +464,7 @@ var CBINetworkSelect = form.ListValue.extend({
 		for (var j = 0; j < devices.length && devices[j]; j++) {
 			span.appendChild(E('img', {
 				'title': devices[j].getI18n(),
-				'src': L.resource('icons/%s%s.png'.format(devices[j].getType(), devices[j].isUp() ? '' : '_disabled'))
+				'src': L.resource('icons/%s%s.svg'.format(devices[j].getType(), devices[j].isUp() ? '' : '_disabled'))
 			}));
 		}
 
@@ -504,7 +609,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 			var item = E([
 				E('img', {
 					'title': device.getI18n(),
-					'src': L.resource('icons/%s%s.png'.format(type, device.isUp() ? '' : '_disabled'))
+					'src': L.resource('icons/%s%s.svg'.format(type, device.isUp() ? '' : '_disabled'))
 				}),
 				E('span', { 'class': 'hide-open' }, [ name ]),
 				E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
@@ -537,7 +642,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 				var item = E([
 					E('img', {
 						'title': device.getI18n(),
-						'src': L.resource('icons/alias%s.png'.format(net.isUp() ? '' : '_disabled'))
+						'src': L.resource('icons/alias%s.svg'.format(device.isUp() ? '' : '_disabled'))
 					}),
 					E('span', { 'class': 'hide-open' }, [ name ]),
 					E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
@@ -575,7 +680,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 				choices[keys[i]] = E([
 					E('img', {
 						'title': _('Absent Interface'),
-						'src': L.resource('icons/ethernet_disabled.png')
+						'src': L.resource('icons/ethernet_disabled.svg')
 					}),
 					E('span', { 'class': 'hide-open' }, [ keys[i] ]),
 					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(_('Absent Interface'), keys[i]) ])
@@ -599,7 +704,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 			create: !this.nocreate,
 			create_markup: '' +
 				'<li data-value="{{value}}">' +
-					'<img title="'+_('Custom Interface')+': &quot;{{value}}&quot;" src="'+L.resource('icons/ethernet_disabled.png')+'" />' +
+					'<img title="'+_('Custom Interface')+': &quot;{{value}}&quot;" src="'+L.resource('icons/ethernet_disabled.svg')+'" />' +
 					'<span class="hide-open">{{value}}</span>' +
 					'<span class="hide-close">'+_('Custom Interface')+': "{{value}}"</span>' +
 				'</li>'
@@ -651,6 +756,7 @@ var CBIGroupSelect = form.ListValue.extend({
 return L.Class.extend({
 	ZoneSelect: CBIZoneSelect,
 	ZoneForwards: CBIZoneForwards,
+	IPSelect: CBIIPSelect,
 	NetworkSelect: CBINetworkSelect,
 	DeviceSelect: CBIDeviceSelect,
 	UserSelect: CBIUserSelect,

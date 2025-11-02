@@ -103,6 +103,9 @@ var _init = null,
 
 function getProtocolHandlers(cache) {
 	return callNetworkProtoHandlers().then(function(protos) {
+		/* Prevent attempt to load "protocol/bonding" */
+		delete protos.bonding;
+
 		/* Register "none" protocol */
 		if (!protos.hasOwnProperty('none'))
 			Object.assign(protos, { none: { no_device: false } });
@@ -349,6 +352,7 @@ function maskToPrefix(mask, v6) {
 
 function initNetworkState(refresh) {
 	if (_state == null || refresh) {
+		const hasWifi = L.hasSystemFeature('wifi');
 		_init = _init || Promise.all([
 			L.resolveDefault(callNetworkInterfaceDump(), []),
 			L.resolveDefault(callLuciBoardJSON(), {}),
@@ -357,7 +361,7 @@ function initNetworkState(refresh) {
 			L.resolveDefault(callLuciHostHints(), {}),
 			getProtocolHandlers(),
 			L.resolveDefault(uci.load('network')),
-			L.hasSystemFeature('wifi') ? L.resolveDefault(uci.load('wireless')) : L.resolveDefault(),
+			hasWifi ? L.resolveDefault(uci.load('wireless')) : L.resolveDefault(),
 			L.resolveDefault(uci.load('luci'))
 		]).then(function(data) {
 			var netifd_ifaces = data[0],
@@ -803,7 +807,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * Registers a new {@link LuCI.network.Protocol Protocol} subclass
 	 * with the given methods and returns the resulting subclass value.
 	 *
-	 * This functions internally calls
+	 * This function internally calls
 	 * {@link LuCI.Class.extend Class.extend()} on the `Network.Protocol`
 	 * base class.
 	 *
@@ -871,7 +875,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * `NO_DEVICE`.
 	 *
 	 * @param {string} message
-	 * The message to use as translation for the given protocol error code.
+	 * The message to use as a translation for the given protocol error code.
 	 *
 	 * @returns {boolean}
 	 * Returns `true` if the error code description has been added or `false`
@@ -1333,7 +1337,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * The device name to test.
 	 *
 	 * @returns {boolean}
-	 * Returns `true` if the given name is in the ignore pattern list,
+	 * Returns `true` if the given name is in the ignore-pattern list,
 	 * else returns `false`.
 	 */
 	isIgnoredDevice: function(name) {
@@ -1564,7 +1568,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * Get IPv4 wan networks.
 	 *
 	 * This function looks up all networks having a default `0.0.0.0/0` route
-	 * and returns them as array.
+	 * and returns them as an array.
 	 *
 	 * @returns {Promise<Array<LuCI.network.Protocol>>}
 	 * Returns a promise resolving to an array of `Protocol` subclass
@@ -1589,7 +1593,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * Get IPv6 wan networks.
 	 *
 	 * This function looks up all networks having a default `::/0` route
-	 * and returns them as array.
+	 * and returns them as an array.
 	 *
 	 * @returns {Promise<Array<LuCI.network.Protocol>>}
 	 * Returns a promise resolving to an array of `Protocol` subclass
@@ -1765,7 +1769,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * class instance describing the found hosts.
 	 *
 	 * @returns {Promise<LuCI.network.Hosts>}
-	 * Returns a `Hosts` instance describing host known on the system.
+	 * Returns a `Hosts` instance describing a host known on the system.
 	 */
 	getHostHints: function() {
 		return initNetworkState().then(function() {
@@ -1982,7 +1986,7 @@ Hosts = baseclass.extend(/** @lends LuCI.network.Hosts.prototype */ {
  * @hideconstructor
  * @classdesc
  *
- * The `Network.Protocol` class serves as base for protocol specific
+ * The `Network.Protocol` class serves as the base for protocol-specific
  * subclasses which describe logical UCI networks defined by `config
  * interface` sections in `/etc/config/network`.
  */
@@ -2136,7 +2140,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * until the lease expires.
 	 *
 	 * @returns {number}
-	 * Returns the amount of seconds until the lease expires or `-1`
+	 * Returns the number of seconds until the lease expires or `-1`
 	 * if it isn't applicable to the associated protocol.
 	 */
 	getExpiry: function() {
@@ -2479,7 +2483,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * The name of the interface to be created.
 	 *
 	 * @returns {Promise<void>}
-	 * Returns a promise resolving if new interface is creatable, else
+	 * Returns a promise resolving if a new interface is creatable, else
 	 * rejects with an error message string.
 	 */
 	isCreateable: function(ifname) {
@@ -2508,7 +2512,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * A "virtual" protocol is a protocol which spawns its own interfaces
 	 * on demand instead of using existing physical interfaces.
 	 *
-	 * Examples for virtual protocols are `6in4` which `gre` spawn tunnel
+	 * Examples for virtual protocols are `6in4` which `gre` spawn a tunnel
 	 * network device on startup, examples for non-virtual protocols are
 	 * `dhcp` or `static` which apply IP configuration to existing interfaces.
 	 *
@@ -2546,8 +2550,8 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	/**
 	 * Checks whether this logical interface is dynamic.
 	 *
-	 * A dynamic interface is an interface which has been created at runtime,
-	 * e.g. as sub-interface of another interface, but which is not backed by
+	 * A dynamic interface is an interface that has been created at runtime.
+	 * E.g. as a sub-interface of another interface, but which is not backed by
 	 * any user configuration. Such dynamic interfaces cannot be edited but
 	 * only brought down or restarted.
 	 *
@@ -2557,6 +2561,16 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 */
 	isDynamic: function() {
 		return (this._ubus('dynamic') == true);
+	},
+
+	/**
+	 * Checks whether this logical interface is pending.
+	 *
+	 * @returns {boolean}
+	 * returns `true` when the interface is pending or `false` when it is not.
+	 */
+	isPending: function() {
+		return (this._ubus('pending') == true);
 	},
 
 	/**
@@ -2956,6 +2970,7 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	 *  - `bridge` if it is a bridge device (e.g. `br-lan`)
 	 *  - `tunnel` if it is a tun or tap device (e.g. `tun0`)
 	 *  - `vlan` if it is a vlan device (e.g. `eth0.1`)
+	 *  - `vrf` if it is a Virtual Routing and Forwarding type (e.g. `vrf0`)
 	 *  - `switch` if it is a switch device (e.g.`eth1` connected to switch0)
 	 *  - `ethernet` for all other device types
 	 */
@@ -2966,6 +2981,8 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			return 'wifi';
 		else if (this.dev.devtype == 'bridge' || _state.isBridge[this.device])
 			return 'bridge';
+		else if (this.dev.devtype == 'wireguard')
+			return 'wireguard';
 		else if (_state.isTunnel[this.device])
 			return 'tunnel';
 		else if (this.dev.devtype == 'vlan' || this.device.indexOf('.') > -1)
@@ -2976,6 +2993,8 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 			return 'vlan';
 		else if (this.config.type == 'bridge')
 			return 'bridge';
+		else if (this.config.type == 'vrf')
+			return 'vrf';
 		else
 			return 'ethernet';
 	},
@@ -3030,12 +3049,18 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 		case 'bridge':
 			return _('Bridge');
 
+		case 'vrf':
+			return _('Virtual Routing and Forwarding (VRF)');
+
 		case 'switch':
 			return (_state.netdevs[this.device] && _state.netdevs[this.device].devtype == 'dsa')
 				? _('Switch port') : _('Ethernet Switch');
 
 		case 'vlan':
 			return (_state.isSwitch[this.device] ? _('Switch VLAN') : _('Software VLAN'));
+
+		case 'wireguard':
+			return _('WireGuard Interface');
 
 		case 'tunnel':
 			return _('Tunnel Interface');
@@ -3370,7 +3395,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 *
 	 * @returns {string}
 	 * Returns the UCI section name (e.g. `radio0`) of the corresponding
-	 * radio configuration which also serves as unique logical identifier
+	 * radio configuration, which also serves as a unique logical identifier
 	 * for the wireless phy.
 	 */
 	getName: function() {
@@ -3971,11 +3996,11 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * supported by the driver.
 	 *
 	 * @property {number} inactive
-	 * The amount of milliseconds the peer has been inactive, e.g. due
+	 * The number of milliseconds the peer has been inactive, e.g. due
 	 * to power-saving.
 	 *
 	 * @property {number} connected_time
-	 * The amount of milliseconds the peer is associated to this network.
+	 * The number of milliseconds the peer is associated to this network.
 	 *
 	 * @property {number} [thr]
 	 * The estimated throughput of the peer, May be `0` or absent if not
@@ -4106,7 +4131,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * Specifies whether the transmission rate used 40MHz wide channel.
 	 * Only applicable to HT or VHT rates.
 	 *
-	 * Note: this option exists for backwards compatibility only and its
+	 * Note: this option exists for backwards compatibility only, and its
 	 * use is discouraged. The `mhz` field should be used instead to
 	 * determine the channel width.
 	 *
@@ -4133,8 +4158,8 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * Specifies whether this rate is an EHT (IEEE 802.11be) rate.
 	 * 
 	 * @property {number} [eht_gi]
-	 * Specifies whether the guard interval used for the transmission.
-	 * Only applicable to  EHT rates.
+	 * Specifies whether the guard interval is used for the transmission.
+	 * Only applicable to EHT rates.
 	 *
 	 * @property {number} [eht_dcm]
 	 * Specifies whether dual concurrent modulation is used for the transmission.
@@ -4204,11 +4229,11 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	},
 
 	/**
-	 * Query the current average bit-rate of all peers associated to this
+	 * Query the current average bit-rate of all peers associated with this
 	 * wireless network.
 	 *
 	 * @returns {null|number}
-	 * Returns the average bit rate among all peers associated to the network
+	 * Returns the average bit rate among all peers associated with the network
 	 * as reported by `ubus` runtime information or `null` if the information
 	 * is not available.
 	 */
@@ -4437,7 +4462,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * with. Default is `1` which corresponds to `Unspecified reason`.
 	 *
 	 * @param {number} [ban_time=0]
-	 * Specifies the amount of milliseconds to ban the client from
+	 * Specifies the number of milliseconds to ban the client from
 	 * reconnecting. By default, no ban time is set which allows the client
 	 * to re-associate / reauthenticate immediately.
 	 *

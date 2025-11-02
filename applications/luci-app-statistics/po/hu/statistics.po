@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-02-27 19:01+0000\n"
-"Last-Translator: \"Szollosi, Balazs\" <szolloba@gmail.com>\n"
+"PO-Revision-Date: 2025-05-08 13:01+0000\n"
+"Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/hu/>\n"
 "Language: hu\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.2-rc\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:47
 msgid "0 - At most once"
@@ -107,7 +107,11 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:15
 msgid "By setting this, CPU is not aggregate of all processors on the system"
 msgstr ""
-"Ennek beállításával a CPU nem a rendszeren lévő összes processzor összegzése"
+"Ennek a beállításával a CPU nem összesíti a rendszer minden processzorát"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:79
+msgid "CACert"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/contextswitch.js:6
 msgid "CPU Context Switches Plugin Configuration"
@@ -163,7 +167,7 @@ msgstr ""
 msgid "Chrony monitoring enabled"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:72
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:85
 msgid "CleanSession"
 msgstr ""
 
@@ -335,7 +339,7 @@ msgstr "E-mail"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:15
 msgid "Empty value = monitor all"
-msgstr "Üres érték = összes megfigyelése"
+msgstr "Üres érték = minden megfigyelése"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:21
 msgid "Enable"
@@ -443,7 +447,7 @@ msgstr "További elemek"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:61
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:68
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:75
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:88
 msgid "False"
 msgstr ""
 
@@ -712,11 +716,11 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:21
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:34
 msgid "Monitor all except specified"
-msgstr "Összes megfigyelése, kivéve a megadottakat"
+msgstr "Minden figyelése, kivéve a megadottakat"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:14
 msgid "Monitor all local listen ports"
-msgstr "Összes helyi figyelési port megfigyelése"
+msgstr "Minden helyi figyelési port figyelése"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:15
 msgid "Monitor device(s) / thermal zone(s)"
@@ -935,7 +939,7 @@ msgstr ""
 msgid "Mqtt Plugin Configuration"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:86
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:99
 msgid "Mqtt plugin enabled"
 msgstr ""
 
@@ -1098,7 +1102,7 @@ msgstr "Qdisc megfigyelés"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:46
 msgid "QoS"
-msgstr ""
+msgstr "QoS"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:62
 msgid "RRD XFiles Factor"
@@ -1380,6 +1384,18 @@ msgstr "TCP kapcsolatok"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:6
 msgid "TCPConns Plugin Configuration"
 msgstr "TCPConns bővítmény beállítása"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:74
+msgid "TLS 1.2"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:75
+msgid "TLS 1.3"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:72
+msgid "TLSProtocol"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:15
 msgid "TTL for network packets"
@@ -1707,13 +1723,13 @@ msgstr ""
 msgid "Timeout for polling chrony"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:79
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:92
 msgid "Topic"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:60
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:67
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:74
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:87
 msgid "True"
 msgstr ""
 
@@ -1917,90 +1933,3 @@ msgstr "csökkenti az RRD méretét"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "summary of all ports"
 msgstr ""
-
-#~ msgid "Cache flush interval"
-#~ msgstr "Gyorsítótár-ürítés időköze"
-
-#~ msgid ""
-#~ "The statistics package uses <a href=\"https://collectd.org/\">Collectd</"
-#~ "a> to gather data and <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</"
-#~ "a> to render diagram images."
-#~ msgstr ""
-#~ "A statisztikák csomag a <a href=\"https://collectd.org/\">Collectd</a> "
-#~ "démont használja adatgyűjtéshez, valamint az <a href=\"http://oss.oetiker."
-#~ "ch/rrdtool/\">RRDtool</a> eszközt a diagramok megjelenítéséhez."
-
-#~ msgid ""
-#~ "You can install additional collectd-mod-* plugins to enable more "
-#~ "statistics."
-#~ msgstr ""
-#~ "Telepíthet további collectd-mod-* bővítményeket is több statisztika "
-#~ "engedélyezéséhez."
-
-#~ msgid "Action (target)"
-#~ msgstr "Művelet (cél)"
-
-#~ msgid "Add matching rule"
-#~ msgstr "Illeszkedési szabály hozzáadása"
-
-#~ msgid "Add multiple hosts separated by space."
-#~ msgstr "Több gép hozzáadása szóközzel elválasztva."
-
-#~ msgid ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-#~ msgstr ""
-#~ "A collectd változatos forrásokból különféle bővítményeken keresztül "
-#~ "történő adatgyűjtésre szolgáló kis méretű démon. Ezen az oldalon "
-#~ "változtathatja meg a collectd démon általános beállításait."
-
-#~ msgid "Destination ip range"
-#~ msgstr "Cél IP-tartomány"
-
-#~ msgid "Hold Ctrl to select multiple items or to deselect entries."
-#~ msgstr ""
-#~ "Tartsa nyomva a Ctrl billentyűt több elem kijelöléséhez vagy bejegyzések "
-#~ "kijelölésének eltávolításához."
-
-#~ msgid "Incoming interface"
-#~ msgstr "Bejövő csatoló"
-
-#~ msgid "Monitor all sensors"
-#~ msgstr "Összes érzékelő megfigyelése"
-
-#~ msgid "Name of the rule"
-#~ msgstr "A szabály neve"
-
-#~ msgid "Network protocol"
-#~ msgstr "Hálózati protokoll"
-
-#~ msgid "Options"
-#~ msgstr "Beállítások"
-
-#~ msgid "Outgoing interface"
-#~ msgstr "Kimenő csatoló"
-
-#~ msgid "Processes to monitor separated by space"
-#~ msgstr "Megfigyelendő folyamatok szóközzel elválasztva"
-
-#~ msgid "Source ip range"
-#~ msgstr "Forrás IP-tartomány"
-
-#~ msgid "e.g. br-ff"
-#~ msgstr "például br-ff"
-
-#~ msgid "e.g. br-lan"
-#~ msgstr "például br-lan"
-
-#~ msgid "e.g. reject-with tcp-reset"
-#~ msgstr "például reject-with tcp-reset"
-
-#~ msgid "max. 16 chars"
-#~ msgstr "legfeljebb 16 karakter"
-
-#~ msgid "seconds; multiple separated by space"
-#~ msgstr "másodpercek; több is lehet szóközzel elválasztva"
-
-#~ msgid "server interfaces"
-#~ msgstr "kiszolgáló csatolók"

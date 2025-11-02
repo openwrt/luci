@@ -25,33 +25,35 @@ return baseclass.extend({
 		expect: { 'access': false }
 	}),
 
-	wifirate: function(rt) {
-		var s = '%.1f\xa0%s, %d\xa0%s'.format(rt.rate / 1000, _('Mbit/s'), rt.mhz, _('MHz')),
-		    ht = rt.ht, vht = rt.vht,
-			mhz = rt.mhz, nss = rt.nss,
-			mcs = rt.mcs, sgi = rt.short_gi,
-			he = rt.he, he_gi = rt.he_gi,
-			he_dcm = rt.he_dcm;
+	wifirate(rate) {
+		let s = `${rate.rate / 1000}\xa0${_('Mbit/s')}, ${rate.mhz}\xa0${_('MHz')}`;
 
-		if (ht || vht) {
-			if (vht) s += ', VHT-MCS\xa0%d'.format(mcs);
-			if (nss) s += ', VHT-NSS\xa0%d'.format(nss);
-			if (ht)  s += ', MCS\xa0%s'.format(mcs);
-			if (sgi) s += ', ' + _('Short GI').replace(/ /g, '\xa0');
-		}
+		if (rate?.ht || rate?.vht) s += [
+			rate?.vht && `, VHT-MCS\xa0${rate?.mcs}`,
+			rate?.nss && `, VHT-NSS\xa0${rate?.nss}`,
+			rate?.ht  && `, MCS\xa0${rate?.mcs}`,
+			rate?.short_gi && ', ' + _('Short GI').replace(/ /g, '\xa0')
+		].filter(Boolean).join('');
 
-		if (he) {
-			s += ', HE-MCS\xa0%d'.format(mcs);
-			if (nss) s += ', HE-NSS\xa0%d'.format(nss);
-			if (he_gi) s += ', HE-GI\xa0%d'.format(he_gi);
-			if (he_dcm) s += ', HE-DCM\xa0%d'.format(he_dcm);
-		}
+		if (rate?.he) s += [
+			`, HE-MCS\xa0${rate?.mcs}`,
+			rate?.nss    && `, HE-NSS\xa0${rate?.nss}`,
+			rate?.he_gi  && `, HE-GI\xa0${rate?.he_gi}`,
+			rate?.he_dcm && `, HE-DCM\xa0${rate?.he_dcm}`
+		].filter(Boolean).join('');
+
+		if (rate?.eht) s += [
+			`, EHT-MCS\xa0${rate?.mcs}`,
+			rate?.nss    && `, EHT-NSS\xa0${rate?.nss}`,
+			rate?.eht_gi  && `, EHT-GI\xa0${rate?.eht_gi}`,
+			rate?.eht_dcm && `, EHT-DCM\xa0${rate?.eht_dcm}`
+		].filter(Boolean).join('');
 
 		return s;
 	},
 
-	handleDelClient: function(wifinet, mac, ev, cmd) {
-		var exec = cmd || 'disconnect';
+	handleDelClient(wifinet, mac, ev, cmd) {
+		const exec = cmd || 'disconnect';
 
 		dom.parent(ev.currentTarget, '.tr').style.opacity = 0.5;
 		ev.currentTarget.classList.add('spinning');
@@ -72,14 +74,14 @@ return baseclass.extend({
 		}
 	},
 
-	handleGetWPSStatus: function(wifinet) {
+	handleGetWPSStatus(wifinet) {
 		return rpc.declare({
 			object: 'hostapd.%s'.format(wifinet),
 			method: 'wps_status',
 		})()
 	},
 
-	handleCallWPS: function(wifinet, ev) {
+	handleCallWPS(wifinet, ev) {
 		ev.currentTarget.classList.add('spinning');
 		ev.currentTarget.disabled = true;
 		ev.currentTarget.blur();
@@ -90,7 +92,7 @@ return baseclass.extend({
 		})();
 	},
 
-	handleCancelWPS: function(wifinet, ev) {
+	handleCancelWPS(wifinet, ev) {
 		ev.currentTarget.classList.add('spinning');
 		ev.currentTarget.disabled = true;
 		ev.currentTarget.blur();
@@ -101,32 +103,35 @@ return baseclass.extend({
 		})();
 	},
 
-	renderbox: function(radio, networks) {
-		var chan = null,
-		    freq = null,
-		    rate = null,
-		    badges = [];
+	renderbox(radio, networks) {
+		let chan = null;
+		let freq = null;
+		let rate = null;
+		let coco = null;
+		let noise = null;
+		let tx_power = null;
+		const badges = [];
 
-		for (var i = 0; i < networks.length; i++) {
-			var net = networks[i],
-			    is_assoc = (net.getBSSID() != '00:00:00:00:00:00' && net.getChannel() && !net.isDisabled()),
-			    quality = net.getSignalPercent();
+		for (let i = 0; i < networks.length; i++) {
+			const net = networks[i];
+			const is_assoc = (net.getBSSID() != '00:00:00:00:00:00' && net.getChannel() && !net.isDisabled());
+			const quality = net.getSignalPercent();
 
-			var icon;
+			let icon;
 			if (net.isDisabled())
-				icon = L.resource('icons/signal-none.png');
+				icon = L.resource('icons/signal-none.svg');
 			else if (quality <= 0)
-				icon = L.resource('icons/signal-0.png');
+				icon = L.resource('icons/signal-000-000.svg');
 			else if (quality < 25)
-				icon = L.resource('icons/signal-0-25.png');
+				icon = L.resource('icons/signal-000-025.svg');
 			else if (quality < 50)
-				icon = L.resource('icons/signal-25-50.png');
+				icon = L.resource('icons/signal-025-050.svg');
 			else if (quality < 75)
-				icon = L.resource('icons/signal-50-75.png');
+				icon = L.resource('icons/signal-050-075.svg');
 			else
-				icon = L.resource('icons/signal-75-100.png');
+				icon = L.resource('icons/signal-075-100.svg');
 
-			var WPS_button = null;
+			let WPS_button = null;
 
 			if (net.isWPSEnabled) {
 				if (net.wps_status == 'Active') {
@@ -142,7 +147,7 @@ return baseclass.extend({
 				}
 			}
 
-			var badge = renderBadge(
+			const badge = renderBadge(
 				icon,
 				'%s: %d dBm / %s: %d%%'.format(_('Signal'), net.getSignal(), _('Quality'), quality),
 				_('SSID'), net.getActiveSSID() || '?',
@@ -158,8 +163,11 @@ return baseclass.extend({
 			badges.push(badge);
 
 			chan = (chan != null) ? chan : net.getChannel();
+			coco = (coco != null) ? coco : net.getCountryCode();
 			freq = (freq != null) ? freq : net.getFrequency();
 			rate = (rate != null) ? rate : net.getBitRate();
+			noise = (noise != null) ? noise : net.getNoise();
+			tx_power = (tx_power != null) ? tx_power : net.getTXPower();
 		}
 
 		return E('div', { class: 'ifacebox' }, [
@@ -168,8 +176,11 @@ return baseclass.extend({
 			E('div', { class: 'ifacebox-body left' }, [
 				L.itemlist(E('span'), [
 					_('Type'), radio.getI18n().replace(/^Generic | Wireless Controller .+$/g, ''),
-					_('Channel'), chan ? '%d (%.3f %s)'.format(chan, freq, _('GHz')) : '-',
-					_('Bitrate'), rate ? '%d %s'.format(rate, _('Mbit/s')) : '-',
+					_('Bitrate'), rate ? '%d %s'.format(rate, _('Mbit/s')) : null,
+					_('Channel'), chan ? '%d (%.3f %s)'.format(chan, freq, _('GHz')) : null,
+					_('Country Code'), coco ? '%s'.format(coco) : null,
+					_('Noise'), noise ? '%.2f %s'.format(noise, _('dBm')) : null,
+					_('TX Power'), tx_power ? '%.2f %s'.format(tx_power, _('dBm')): null,
 				]),
 				E('div', {}, badges)
 			])
@@ -178,7 +189,7 @@ return baseclass.extend({
 
 	isWPSEnabled: {},
 
-	load: function() {
+	load() {
 		return Promise.all([
 			network.getWifiDevices(),
 			network.getWifiNetworks(),
@@ -187,50 +198,50 @@ return baseclass.extend({
 			this.callSessionAccess('access-group', 'luci-mod-status-index-wifi', 'write'),
 			firewall.getZones(),
 			L.hasSystemFeature('wifi') ? L.resolveDefault(uci.load('wireless')) : L.resolveDefault(),
-		]).then(L.bind(function(data) {
-			var tasks = [],
-			    radios_networks_hints = data[1],
-			    hasWPS = L.hasSystemFeature('hostapd', 'wps');
+		]).then(L.bind(data => {
+			const tasks = [];
+			const radios_networks_hints = data[1];
+			const hasWPS = L.hasSystemFeature('hostapd', 'wps');
 
-			for (var i = 0; i < radios_networks_hints.length; i++) {
-				tasks.push(L.resolveDefault(radios_networks_hints[i].getAssocList(), []).then(L.bind(function(net, list) {
-					net.assoclist = list.sort(function(a, b) { return a.mac > b.mac });
+			for (let i = 0; i < radios_networks_hints.length; i++) {
+				tasks.push(L.resolveDefault(radios_networks_hints[i].getAssocList(), []).then(L.bind((net, list) => {
+					net.assoclist = list.sort((a, b) => { return a.mac > b.mac });
 				}, this, radios_networks_hints[i])));
 
 				if (hasWPS && uci.get('wireless', radios_networks_hints[i].sid, 'wps_pushbutton') == '1') {
 					radios_networks_hints[i].isWPSEnabled = true;
 					tasks.push(L.resolveDefault(this.handleGetWPSStatus(radios_networks_hints[i].getIfname()), null)
-						.then(L.bind(function(net, data) {
+						.then(L.bind((net, data) => {
 							net.wps_status = data ? data.pbc_status : _('No Data');
 					}, this, radios_networks_hints[i])));
 				}
 			}
 
-			return Promise.all(tasks).then(function() {
+			return Promise.all(tasks).then(() => {
 				return data;
 			});
 		}, this));
 	},
 
-	render: function(data) {
-		var seen = {},
-		    radios = data[0],
-		    networks = data[1],
-		    hosthints = data[2],
-		    hasReadPermission = data[3],
-		    hasWritePermission = data[4],
-		    zones = data[5];
+	render(data) {
+		const seen = {};
+		const radios = data[0];
+		const networks = data[1];
+		const hosthints = data[2];
+		const hasReadPermission = data[3];
+		const hasWritePermission = data[4];
+		const zones = data[5];
 
-		var table = E('div', { 'class': 'network-status-table' });
+		const table = E('div', { 'class': 'network-status-table' });
 
-		for (var i = 0; i < radios.sort(function(a, b) { a.getName() > b.getName() }).length; i++)
+		for (let i = 0; i < radios.sort((a, b) => { a.getName() > b.getName() }).length; i++)
 			table.appendChild(this.renderbox(radios[i],
-				networks.filter(function(net) { return net.getWifiDeviceName() == radios[i].getName() })));
+				networks.filter(net => { return net.getWifiDeviceName() == radios[i].getName() })));
 
 		if (!table.lastElementChild)
 			return null;
 
-		var assoclist = E('table', { 'class': 'table assoclist', 'id': 'wifi_assoclist_table' }, [
+		const assoclist = E('table', { 'class': 'table assoclist', 'id': 'wifi_assoclist_table' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th nowrap' }, _('Network')),
 				E('th', { 'class': 'th hide-xs' }, _('MAC address')),
@@ -240,40 +251,40 @@ return baseclass.extend({
 			])
 		]);
 
-		var rows = [];
+		const rows = [];
 
-		for (var i = 0; i < networks.length; i++) {
-			var macfilter = uci.get('wireless', networks[i].sid, 'macfilter'),
-			    maclist = {};
+		for (let i = 0; i < networks.length; i++) {
+			const macfilter = uci.get('wireless', networks[i].sid, 'macfilter');
+			const maclist = {};
 
 			if (macfilter != null && macfilter != 'disable') {
 				networks[i].maclist = L.toArray(uci.get('wireless', networks[i].sid, 'maclist'));
-				for (var j = 0; j < networks[i].maclist.length; j++) {
-					var mac = networks[i].maclist[j].toUpperCase();
+				for (let j = 0; j < networks[i].maclist.length; j++) {
+					const mac = networks[i].maclist[j].toUpperCase();
 					maclist[mac] = true;
 				}
 			}
 
-			for (var k = 0; k < networks[i].assoclist.length; k++) {
-				var bss = networks[i].assoclist[k],
-				    name = hosthints.getHostnameByMACAddr(bss.mac),
-				    ipv4 = hosthints.getIPAddrByMACAddr(bss.mac),
-				    ipv6 = hosthints.getIP6AddrByMACAddr(bss.mac);
+			for (let k = 0; k < networks[i].assoclist.length; k++) {
+				const bss = networks[i].assoclist[k];
+				const name = hosthints.getHostnameByMACAddr(bss.mac);
+				const ipv4 = hosthints.getIPAddrByMACAddr(bss.mac);
+				const ipv6 = hosthints.getIP6AddrByMACAddr(bss.mac);
 
-				var icon;
-				var q = Math.min((bss.signal + 110) / 70 * 100, 100);
+				let icon;
+				const q = Math.min((bss.signal + 110) / 70 * 100, 100);
 				if (q == 0)
-					icon = L.resource('icons/signal-0.png');
+					icon = L.resource('icons/signal-000-000.svg');
 				else if (q < 25)
-					icon = L.resource('icons/signal-0-25.png');
+					icon = L.resource('icons/signal-000-025.svg');
 				else if (q < 50)
-					icon = L.resource('icons/signal-25-50.png');
+					icon = L.resource('icons/signal-025-050.svg');
 				else if (q < 75)
-					icon = L.resource('icons/signal-50-75.png');
+					icon = L.resource('icons/signal-050-075.svg');
 				else
-					icon = L.resource('icons/signal-75-100.png');
+					icon = L.resource('icons/signal-075-100.svg');
 
-				var sig_title, sig_value;
+				let sig_title, sig_value;
 
 				if (bss.noise) {
 					sig_value = '%d/%d\xa0%s'.format(bss.signal, bss.noise, _('dBm'));
@@ -287,7 +298,7 @@ return baseclass.extend({
 					sig_title = '%s: %d %s'.format(_('Signal'), bss.signal, _('dBm'));
 				}
 
-				var hint;
+				let hint;
 
 				if (name && ipv4 && ipv6)
 					hint = '%s <span class="hide-xs">(%s, %s)</span>'.format(name, ipv4, ipv6);
@@ -296,14 +307,14 @@ return baseclass.extend({
 				else
 					hint = name || ipv4 || ipv6 || '?';
 
-				var row = [
+				const row = [
 					E('span', {
 						'class': 'ifacebadge',
 						'title': networks[i].getI18n(),
 						'data-ifname': networks[i].getIfname(),
 						'data-ssid': networks[i].getActiveSSID()
 					}, [
-						E('img', { 'src': L.resource('icons/wifi.png') }),
+						E('img', { 'src': L.resource('icons/wifi.svg'), 'style': 'width:32px;height:32px' }),
 						E('span', {}, [
 							' ', networks[i].getShortName(),
 							E('small', {}, [ ' (', networks[i].getIfname(), ')' ])
@@ -330,9 +341,9 @@ return baseclass.extend({
 				];
 
 				if (bss.vlan) {
-					var desc = bss.vlan.getI18n();
-					var vlan_network = bss.vlan.getNetwork();
-					var vlan_zone;
+					const desc = bss.vlan.getI18n();
+					const vlan_network = bss.vlan.getNetwork();
+					let vlan_zone;
 
 					if (vlan_network)
 						for (let zone of zones)

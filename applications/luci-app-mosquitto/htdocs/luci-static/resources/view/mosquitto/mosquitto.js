@@ -1,6 +1,7 @@
 'use strict';
 'require form';
 'require view';
+'require widgets';
 
 // OptionalFlag helper function
 function OptionalFlag(section, key, title, description) {
@@ -93,6 +94,9 @@ return view.extend({
 		s = m.section(form.TypedSection, 'listener', _('Listeners'), _('You can configure additional listeners here'));
 		s.anonymous = true;
 		s.addremove = true;
+
+		o = s.option(widgets.IPSelect, 'bind_address', _('Bind Address'));
+		o.multiple = false;
 
 		o = s.option(form.Value, 'port', _('Port'));
 		o.datatype = 'port';

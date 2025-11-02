@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-01-27 15:34+0000\n"
+"PO-Revision-Date: 2025-08-15 22:01+0000\n"
 "Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsolsr/pl/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:152
 msgid "Active MID announcements"
@@ -121,8 +121,8 @@ msgstr ""
 msgid "Enable this interface."
 msgstr "Włącz ten interfejs."
 
-#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:278
-#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:276
+#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:279
+#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:277
 msgid "Enabled"
 msgstr "Włączone"
 
@@ -515,9 +515,9 @@ msgid "Legend"
 msgstr "Legenda"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:58
-#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:287
+#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:288
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:56
-#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:285
+#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:286
 msgid "Library"
 msgstr "Biblioteka"
 
@@ -613,8 +613,8 @@ msgid ""
 "configured on port 9090, and accepts connections from \"127.0.0.1\"."
 msgstr ""
 "Upewnij się, że OLSRd jest uruchomiony, wtyczka \"jsoninfo\" jest "
-"załadowana, skonfigurowana na porcie 9090 i akceptuje połączenia z \"127.0.0."
-"1\"."
+"załadowana, skonfigurowana na porcie 9090 i akceptuje połączenia z "
+"\"127.0.0.1\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:182
 msgid "Metric"
@@ -720,9 +720,9 @@ msgid "OLSR - HNA6-Announcements"
 msgstr "OLSR - Komunikaty HNA6"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:46
-#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:261
+#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:262
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:44
-#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:259
+#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:260
 msgid "OLSR - Plugins"
 msgstr "OLSR - pluginy"
 
@@ -801,8 +801,8 @@ msgstr "Przegląd bram SmartGateway w tej sieci"
 msgid "Plugin configuration"
 msgstr "Ustawienia pluginu"
 
-#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:263
-#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:261
+#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins.js:264
+#: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdplugins6.js:262
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:37
 #: applications/luci-app-olsr/root/usr/share/luci/menu.d/luci-app-olsr-backend.json:79
 msgid "Plugins"
@@ -1045,11 +1045,10 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
-"Może on być wykorzystany do sygnalizowania klientom zewnętrznego prefiksu "
-"IPv6 łącza uplink. Może to umożliwić klientowi zmianę jego lokalnego adresu "
-"IPv6, aby mógł korzystać z bramki IPv6 bez jakiejkolwiek translacji adresów. "
-"Maksymalna długość prefiksu wynosi 64 bity. Domyślnie jest to \"::/0\" (bez "
-"prefiksu)."
+"Może być wykorzystany do sygnalizowania klientom zewnętrznego prefiksu IPv6 "
+"łącza uplink. Umożliwia to klientowi zmianę lokalnego adresu IPv6, aby mógł "
+"korzystać z bramki IPv6 bez translacji adresów. Maksymalna długość prefiksu "
+"to 64 bity. Domyślnie jest to \"::/0\" (bez prefiksu)."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:286
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:280
@@ -1195,97 +1194,3 @@ msgstr "w górę"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/interfaces.js:155
 msgid "yes"
 msgstr "tak"
-
-#~ msgid "Can only be a valid IPv4 or IPv6 address or 'default'"
-#~ msgstr "Może to być tylko prawidłowy adres IPv4 lub IPv6 albo \"domyślny\""
-
-#~ msgid "Can only be a valid IPv6 address or 'default'"
-#~ msgstr "Może to być tylko prawidłowy adres IPv6 lub \"domyślny\""
-
-#~ msgid "Configuration"
-#~ msgstr "Konfiguracja"
-
-#~ msgid ""
-#~ "Could not get any data. Make sure the jsoninfo plugin is installed and "
-#~ "allows connections from localhost."
-#~ msgstr ""
-#~ "Nie udało się uzyskać żadnych danych. Upewnij się, że wtyczka jsoninfo "
-#~ "jest zainstalowana i umożliwia połączenia z lokalnym hostem."
-
-#~ msgid "Download Config"
-#~ msgstr "Ustawienia pobierania"
-
-#~ msgid "HNA6 Announcements"
-#~ msgstr "Ogłoszenia HNA6"
-
-#~ msgid "Hide IPv4"
-#~ msgstr "Ukryj IPv4"
-
-#~ msgid "Hide IPv6"
-#~ msgstr "Ukryj IPv6"
-
-#~ msgid "Invalid Value for LQMult-Value. Must be between 0.01 and 1.0."
-#~ msgstr ""
-#~ "Nieprawidłowa wartość dla LQMult-Value. Musi być z zakresu od 0.01 do 1.0."
-
-#~ msgid ""
-#~ "Invalid Value for LQMult-Value. You must use a decimal number between "
-#~ "0.01 and 1.0 here."
-#~ msgstr ""
-#~ "Nieprawidłowa wartość dla LQMult-Value. Należy użyć liczby dziesiętnej od "
-#~ "0.01 do 1.0."
-
-#~ msgid ""
-#~ "LQMult requires two values (IP address or 'default' and multiplicator) "
-#~ "separated by space."
-#~ msgstr ""
-#~ "LQMult wymaga dwóch wartości (adresu IP lub 'domyślnego' i "
-#~ "wielokrotnosci) oddzielonych spacją."
-
-#~ msgid "Links per node (average)"
-#~ msgstr "Linków na węzeł (średnio)"
-
-#~ msgid "Links total"
-#~ msgstr "Linków w sumie"
-
-#~ msgid ""
-#~ "Make sure that OLSRd is running, the \"jsoninfo\" plugin is loaded, "
-#~ "configured on port 9090 and accepts connections from \"127.0.0.1\"."
-#~ msgstr ""
-#~ "Upewnij się, że olsrd jest uruchomiony, wtyczka jsoninfo jest załadowana, "
-#~ "skonfigurowana na porcie 9090 i przyjmuje połączenia od \"127.0.0.1\"."
-
-#~ msgid "Neighbors"
-#~ msgstr "Sąsiedzi"
-
-#~ msgid "Nodes"
-#~ msgstr "Węzły"
-
-#~ msgid "Overview"
-#~ msgstr "Przegląd"
-
-#~ msgid "Show IPv4"
-#~ msgstr "Pokaż IPv4"
-
-#~ msgid "Show IPv6"
-#~ msgstr "Pokaż IPv6"
-
-#~ msgid "SmartGateway is not configured on this system."
-#~ msgstr "SmartGateway jest nieskonfigurowane."
-
-#~ msgid "Version"
-#~ msgstr "Wersja"
-
-#~ msgid "infinite"
-#~ msgstr "nieskończony"
-
-#~ msgid "Status"
-#~ msgstr "Status"
-
-#~ msgid ""
-#~ "Make sure that OLSRd is running, the \"txtinfo\" plugin is loaded, "
-#~ "configured on port 2006 and accepts connections from \"127.0.0.1\"."
-#~ msgstr ""
-#~ "Upewnij się że OLSRd jest uruchomione, \"txtinfo\" plugin jest "
-#~ "załadowany, skonfigurowany na porcie 2006 i akceptuje połączenia z "
-#~ "127.0.0.1 (localhost)"

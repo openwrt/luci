@@ -2,9 +2,30 @@
 	"luci-app-unbound": {
 		"description": "Grant UCI access for luci-app-unbound",
 		"read": {
+			"file": {
+				"/etc/config/unbound": ["read"],
+				"/etc/unbound/*": ["read"],
+				"/tmp/resolv.conf.auto": ["read"],
+				"/tmp/resolv.conf.d/*": ["read"],
+				"/var/lib/unbound/*": ["read"],
+				"/sbin/logread -e unbound:": ["exec"],
+				"/usr/sbin/unbound-control -c /var/lib/unbound/unbound.conf stats_noreset": ["exec"],
+				"/usr/sbin/unbound-control -c /var/lib/unbound/unbound.conf list_local_data": ["exec"],
+				"/usr/sbin/unbound-control -c /var/lib/unbound/unbound.conf list_local_zones": ["exec"],
+				"/usr/sbin/unbound-control -c /var/lib/unbound/unbound.conf dump_cache": ["exec"]
+			},
 			"uci": [ "unbound" ]
 		},
 		"write": {
+			"file": {
+				"/etc/config/unbound": ["write"],
+				"/etc/unbound/*": ["write"],
+				"/lib/unbound/*": ["write"],
+				"/var/lib/unbound/*": ["write"]
+			},
+			"ubus": {
+				"rc": [ "init" ]
+			},
 			"uci": [ "unbound" ]
 		}
 	}

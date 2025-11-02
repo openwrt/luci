@@ -48,7 +48,7 @@
 %>>
 	<script type="item-template"><!--
 		<li data-value="{{value}}">
-			<img title="<%:Custom Interface%>: &quot;{{value}}&quot;" src="<%=resource%>/icons/ethernet_disabled.png" />
+			<img title="<%:Custom Interface%>: &quot;{{value}}&quot;" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/ethernet_disabled.svg" />
 			<span class="hide-open">{{value}}</span>
 			<span class="hide-close"><%:Custom Interface%>: "{{value}}"</span>
 		</li>
@@ -64,7 +64,7 @@
 			attr("data-value", iface:name()) ..
 			ifattr(checked[iface:name()], "selected", "selected")
 		%>>
-			<img<%=attr("title", iface:get_i18n())%> src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.png" />
+			<img<%=attr("title", iface:get_i18n())%> style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/<%=iface:type()%><%=iface:is_up() and "" or "_disabled"%>.svg" />
 			<span class="hide-open"><%=pcdata(iface:name())%></span>
 			<span class="hide-close">
 				<%=pcdata(iface:get_i18n())%>
@@ -79,7 +79,7 @@
 		<% end end %>
 		<% if not self.nocreate then %>
 		<li data-value="">
-			<img title="<%:Custom Interface%>" src="<%=resource%>/icons/ethernet_disabled.png" />
+			<img title="<%:Custom Interface%>" style="width:16px; height:16px; vertical-align:middle" src="<%=resource%>/icons/ethernet_disabled.svg" />
 			<span><%:Custom Interface%>:</span>
 			<input type="password" style="display:none" />
 			<input class="create-item-input" type="text" />

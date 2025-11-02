@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-01-27 09:27+0000\n"
+"PO-Revision-Date: 2025-09-07 21:06+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/pl/>\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:47
 msgid "0 - At most once"
@@ -115,6 +115,10 @@ msgid "By setting this, CPU is not aggregate of all processors on the system"
 msgstr ""
 "Ustawiając to, procesor nie jest połączony ze wszystkimi procesami w systemie"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:79
+msgid "CACert"
+msgstr "CACert"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/contextswitch.js:6
 msgid "CPU Context Switches Plugin Configuration"
 msgstr "Kontekst cpu przełącza konfigurację wtyczek"
@@ -169,7 +173,7 @@ msgstr "Konfiguracja wtyczki chrony"
 msgid "Chrony monitoring enabled"
 msgstr "Monitorowanie chrony włączone"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:72
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:85
 msgid "CleanSession"
 msgstr "WyczyśćSesję"
 
@@ -451,7 +455,7 @@ msgstr "Pozycje dodatkowe"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:61
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:68
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:75
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:88
 msgid "False"
 msgstr "Fałsz"
 
@@ -963,7 +967,7 @@ msgstr "MQTT"
 msgid "Mqtt Plugin Configuration"
 msgstr "Konfiguracja wtyczki MQTT"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:86
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:99
 msgid "Mqtt plugin enabled"
 msgstr "Wtyczka MQTT włączona"
 
@@ -1407,6 +1411,18 @@ msgstr "Połączenia TCP"
 msgid "TCPConns Plugin Configuration"
 msgstr "Konfiguracja wtyczki TCPConns"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:74
+msgid "TLS 1.2"
+msgstr "TLS 1.2"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:75
+msgid "TLS 1.3"
+msgstr "TLS 1.3"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:72
+msgid "TLSProtocol"
+msgstr "Protokół TLS"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:15
 msgid "TTL for network packets"
 msgstr "TTL dla pakietów sieciowych"
@@ -1518,8 +1534,9 @@ msgid ""
 msgstr ""
 "Wtyczka email tworzy gniazdo uniksowe, którego można użyć do przesyłania "
 "statystyk e-maili do działającego demona collectd. Ta wtyczka jest "
-"przeznaczona głównie do użytku w połączeniu z Mail::SpamAssasin::Plugin::"
-"Collectd, ale może być również używana na inne sposoby."
+"przeznaczona głównie do użytku w połączeniu z "
+"Mail::SpamAssasin::Plugin::Collectd, ale może być również używana na inne "
+"sposoby."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/entropy.js:7
 msgid "The entropy plugin collects statistics about the available entropy."
@@ -1732,13 +1749,13 @@ msgstr "Ta sekcja określa, na które serwery są wysyłane lokalnie zebrane dan
 msgid "Timeout for polling chrony"
 msgstr "Limit czasu dla odpytywania chrony"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:79
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:92
 msgid "Topic"
 msgstr "Temat"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:60
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:67
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:74
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:87
 msgid "True"
 msgstr "Prawda"
 
@@ -1909,7 +1926,7 @@ msgstr "bez podsumowania"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
-msgstr "Brak"
+msgstr "brak"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:107
 msgid "one device"
@@ -1953,109 +1970,3 @@ msgstr "zmniejsza rozmiar RRD"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "summary of all ports"
 msgstr "podsumowanie wszystkich portów"
-
-#~ msgid "Monitoring %s and %s"
-#~ msgstr "Monitorowanie %s i %s"
-
-#~ msgid "Monitoring local listen ports"
-#~ msgstr "Monitorowanie lokalnych portów nasłuchiwania"
-
-#~ msgid "one local port"
-#~ msgid_plural "%d local ports"
-#~ msgstr[0] "jeden port lokalny"
-#~ msgstr[1] "%d portów lokalnych"
-#~ msgstr[2] "inne porty lokalne"
-
-#~ msgid ""
-#~ "When a host has not replied to this number of packets in a row, re-"
-#~ "resolve the hostname in DNS. Useful for dynamic DNS hosts."
-#~ msgstr ""
-#~ "Jeśli host nie odpowiedział na taką liczbę pakietów z rzędu, ponownie "
-#~ "ustal nazwę hosta w DNS. Przydatne dla hostów dynamicznego DNS."
-
-#~ msgid "Cache flush interval"
-#~ msgstr "Interwał opróżniania pamięci podręcznej"
-
-#~ msgid ""
-#~ "The statistics package uses <a href=\"https://collectd.org/\">Collectd</"
-#~ "a> to gather data and <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</"
-#~ "a> to render diagram images."
-#~ msgstr ""
-#~ "Pakiet statystyk używa <a href=\"https://collectd.org/\">Collectd</a> do "
-#~ "zbierania danych i <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</a> "
-#~ "do renderowania obrazów diagramu."
-
-#~ msgid ""
-#~ "You can install additional collectd-mod-* plugins to enable more "
-#~ "statistics."
-#~ msgstr ""
-#~ "Możesz zainstalować dodatkowe wtyczki collectd-mod-*, aby włączyć więcej "
-#~ "statystyk."
-
-#~ msgid "Action (target)"
-#~ msgstr "Akcja (cel)"
-
-#~ msgid "Add matching rule"
-#~ msgstr "Dodaj pasującą regułę"
-
-#~ msgid "Add multiple hosts separated by space."
-#~ msgstr "Dodaj wiele hostów rozdzielonych spacjami."
-
-#~ msgid ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-#~ msgstr ""
-#~ "Collectd jest małym demonem do zbieranie danych z różnych źródeł za "
-#~ "pomocą różnych wtyczek. Na tej stronie można zmienić ogólne ustawienia "
-#~ "demona collectd."
-
-#~ msgid "Destination ip range"
-#~ msgstr "Zakres docelowych adresów IP"
-
-#~ msgid "Hold Ctrl to select multiple items or to deselect entries."
-#~ msgstr ""
-#~ "Przytrzymaj klawisz Ctrl, aby wybrać wiele elementów lub odznaczyć "
-#~ "pozycje."
-
-#~ msgid "Incoming interface"
-#~ msgstr "Interfejs przychodzący"
-
-#~ msgid "Monitor all sensors"
-#~ msgstr "Monitorowanie wszystkich czujników"
-
-#~ msgid "Name of the rule"
-#~ msgstr "Nazwa tej reguły"
-
-#~ msgid "Network protocol"
-#~ msgstr "Protokoły sieciowe"
-
-#~ msgid "Options"
-#~ msgstr "Opcje"
-
-#~ msgid "Outgoing interface"
-#~ msgstr "Interfejs wychodzący"
-
-#~ msgid "Processes to monitor separated by space"
-#~ msgstr "Monitorowane procesy oddzielone spacją"
-
-#~ msgid "Source ip range"
-#~ msgstr "Zakres źródłowych adresów ip"
-
-#~ msgid "e.g. br-ff"
-#~ msgstr "np. br-ff"
-
-#~ msgid "e.g. br-lan"
-#~ msgstr "np. br-lan"
-
-#~ msgid "e.g. reject-with tcp-reset"
-#~ msgstr "np. reject-with tcp-reset"
-
-#~ msgid "max. 16 chars"
-#~ msgstr "max. 16 znaków"
-
-#~ msgid "seconds; multiple separated by space"
-#~ msgstr "sekundy; wielokrotnie oddzielone spacją"
-
-#~ msgid "server interfaces"
-#~ msgstr "Interfejsy serwera"

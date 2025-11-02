@@ -72,7 +72,7 @@ foreach my $dir (@dirs)
 				my $head = read_header($file);
 
 				printf "Updating %-40s", $file;
-				system("msgmerge", "-U", "-N", $file, "$dir/templates/$basename.pot");
+				system("msgmerge", "-U", "-N", $file, "$dir/templates/$basename.pot") == 0 || die "$0: [$file] failed: $?\n";
 
 				write_header($file, $head);
 			}

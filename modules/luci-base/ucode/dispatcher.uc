@@ -6,6 +6,7 @@ import { striptags, entityencode } from 'html';
 import { connect } from 'ubus';
 import { cursor } from 'uci';
 import { rand } from 'math';
+import { openlog, syslog, closelog, LOG_INFO, LOG_WARNING, LOG_AUTHPRIV } from 'log';
 
 import { hash, load_catalog, change_catalog, translate, ntranslate, getuid } from 'luci.core';
 import { revision as luciversion, branch as luciname } from 'luci.version';
@@ -485,10 +486,6 @@ function randomid(num_bytes) {
 	return join('', bytes);
 }
 
-function syslog(prio, msg) {
-	warn(sprintf("[%s] %s\n", prio, msg));
-}
-
 function session_setup(user, pass, path) {
 	let timeout = uci.get('luci', 'sauth', 'sessiontime');
 	let login = ubus.call("session", "login", {
@@ -497,19 +494,22 @@ function session_setup(user, pass, path) {
 		timeout:  timeout ? +timeout : null
 	});
 
+	openlog('dispatcher.uc');
 	if (type(login?.ubus_rpc_session) == 'string') {
 		ubus.call("session", "set", {
 			ubus_rpc_session: login.ubus_rpc_session,
 			values: { token: randomid(16) }
 		});
-		syslog("info", sprintf("luci: accepted login on /%s for %s from %s",
+		syslog(LOG_INFO|LOG_AUTHPRIV, sprintf("luci: accepted login on /%s for %s from %s",
 			join('/', path), user || "?", http.getenv("REMOTE_ADDR") || "?"));
 
 		return session_retrieve(login.ubus_rpc_session);
 	}
 
-	syslog("info", sprintf("luci: failed login on /%s for %s from %s",
+	syslog(LOG_WARNING|LOG_AUTHPRIV, sprintf("luci: failed login on /%s for %s from %s",
 		join('/', path), user || "?", http.getenv("REMOTE_ADDR") || "?"));
+
+	closelog();
 }
 
 function check_authentication(method) {

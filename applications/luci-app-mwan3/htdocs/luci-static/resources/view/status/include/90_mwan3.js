@@ -5,6 +5,7 @@
 const callMwan3Status = rpc.declare({
 	object: 'mwan3',
 	method: 'status',
+	params: ['section'],
 	expect: {  },
 });
 
@@ -19,7 +20,7 @@ return baseclass.extend({
 
 	load: function() {
 		return Promise.all([
-			callMwan3Status(),
+			callMwan3Status("interfaces"),
 		]);
 	},
 

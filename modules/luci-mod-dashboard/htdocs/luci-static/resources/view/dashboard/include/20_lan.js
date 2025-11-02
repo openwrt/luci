@@ -14,17 +14,17 @@ return baseclass.extend({
 
 	params: {},
 
-	load: function() {
+	load() {
 		return Promise.all([
 			callLuciDHCPLeases(),
 			network.getDevices()
 		]);
 	},
 
-	renderHtml: function() {
+	renderHtml() {
 
-		var container_wapper = E('div', { 'class': 'router-status-lan dashboard-bg box-s1' });
-		var container_box = E('div', { 'class': 'lan-info devices-list' });
+		const container_wapper = E('div', { 'class': 'router-status-lan dashboard-bg box-s1' });
+		const container_box = E('div', { 'class': 'lan-info devices-list' });
 		container_box.appendChild(E('div', { 'class': 'title'}, [
 			E('img', {
 				'src': L.resource('view/dashboard/icons/devices.svg'),
@@ -35,7 +35,7 @@ return baseclass.extend({
 			E('h3', this.title)
 		]));
 
-		var container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
+		const container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
 			E('tr', { 'class': 'tr dashboard-bg' }, [
 				E('th', { 'class': 'th nowrap' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('IP Address')),
@@ -43,8 +43,8 @@ return baseclass.extend({
 			])
 		]);
 
-		for(var idx in this.params.lan.devices) {
-			var device = this.params.lan.devices[idx];
+		for(let idx in this.params.lan.devices) {
+			const device = this.params.lan.devices[idx];
 
 			container_devices.appendChild(E('tr', { 'class': 'tr cbi-rowstyle-1'}, [
 
@@ -74,12 +74,12 @@ return baseclass.extend({
 		return container_wapper;
 	},
 
-	renderUpdateData: function(data, leases) {
+	renderUpdateData(data, leases) {
 
-		for(var item in data) {
+		for(let item in data) {
 			if (/lan|br-lan/ig.test(data[item].ifname) && (typeof data[item].dev == 'object' && !data[item].dev.wireless)) {
-				var lan_device = data[item];
-				var ipv4addr = lan_device.dev.ipaddrs.toString().split('/');
+				const lan_device = data[item];
+				const ipv4addr = lan_device.dev.ipaddrs.toString().split('/');
 
 				this.params.lan.ipv4 = ipv4addr[0] || '?';
 				this.params.lan.ipv6 = ipv4addr[0] || '?';
@@ -89,8 +89,8 @@ return baseclass.extend({
 			}
 		}
 
-		var devices = [];
-		leases.map(function(lease) {
+		const devices = [];
+		leases.map(lease => {
 			devices[lease.expires] = {
 				hostname: lease.hostname || '?',
 				ipv4: lease.ipaddr || '-',
@@ -100,9 +100,9 @@ return baseclass.extend({
 		this.params.lan.devices = devices;
 	},
 
-	renderLeases: function(data) {
+	renderLeases(data) {
 
-		var leases = Array.isArray(data[0].dhcp_leases) ? data[0].dhcp_leases : [];
+		const leases = Array.isArray(data[0].dhcp_leases) ? data[0].dhcp_leases : [];
 
 		this.params.lan = {
 			ipv4: {
@@ -136,7 +136,7 @@ return baseclass.extend({
 		return this.renderHtml();
 	},
 
-	render: function(data) {
+	render(data) {
 		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
 			return this.renderLeases(data);
 

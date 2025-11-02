@@ -1,53 +1,55 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-04-01 08:36+0000\n"
-"Last-Translator: Oğuz Han <h4n.3545@gmail.com>\n"
+"PO-Revision-Date: 2025-09-08 17:09+0000\n"
+"Last-Translator: Derman <mole.qnap@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsprivoxy/tr/>\n"
 "Language: tr\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:236
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:90
 msgid ""
-"A URL to be displayed in the error page that users will see if access to an "
-"untrusted page is denied."
+"A directory where Privoxy can create temporary files.<br /><strong>Only when "
+"using 'external filters', Privoxy has to create temporary files.</strong>"
 msgstr ""
-"Güvenilir olmayan bir sayfaya erişim reddedildiğinde kullanıcıların göreceği "
-"hata sayfasında görüntülenecek URL."
+"Privoxy’nin geçici dosyalar oluşturabileceği bir dizin.<br /><strong>Sadece "
+"'harici filtreler' kullanıldığında Privoxy geçici dosyalar oluşturmak "
+"zorundadır.</strong>"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:226
-msgid ""
-"A URL to documentation about the local Privoxy setup, configuration or "
-"policies."
-msgstr ""
-"Yerel Privoxy kurulumu, yapılandırması veya politikaları hakkındaki "
-"belgelere ait URL."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:209
+msgid "Accept intercepted requests"
+msgstr "Engellenen istekleri kabul et"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:325
-msgid "A directory where Privoxy can create temporary files."
-msgstr "Privoxy'nin geçici dosyalar oluşturabileceği bir dizin."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:84
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:87
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:118
 msgid "Access Control"
 msgstr "Erişim Kontrolü"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:337
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:96
+msgid "Action Files"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:98
 msgid "Actions that are applied to all sites and maybe overruled later on."
 msgstr "Tüm sitelere uygulanan ve daha sonra reddedilebilecek eylemler."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:308
-msgid "An alternative directory where the templates are loaded from."
-msgstr "Şablonların yüklendiği alternatif bir dizin."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:42
+msgid "Admin Email"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:206
-msgid "An email address to reach the Privoxy administrator."
-msgstr "Privoxy yöneticisine ulaşmak için bir e-posta adresi."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:213
+msgid "Allow CGI request crunching"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:695
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:84
+msgid ""
+"An alternative directory where the templates are loaded from.<br />No "
+"trailing \"/\", please."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:230
 msgid ""
 "Assumed server-side keep-alive timeout (in seconds) if not specified by the "
 "server."
@@ -55,90 +57,183 @@ msgstr ""
 "Sunucu tarafından belirtilmediyse, varsayılan sunucu tarafı canlı tutma "
 "zaman aşımı (saniye cinsinden)."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:151
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:22
 msgid "Boot delay"
 msgstr "Önyükleme gecikmesi"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:873
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:141
+msgid "Buffer Limit"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:318
 msgid "CGI user interface"
 msgstr "CGI kullanıcı arayüzü"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:861
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:260
+msgid "Client header order"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:310
 msgid "Common Log Format"
 msgstr "Ortak Günlük Formatı"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:92
-msgid ""
-"Configure here the routing of HTTP requests through a chain of multiple "
-"proxies. Note that parent proxies can severely decrease your privacy level. "
-"Also specified here are SOCKS proxies."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:255
+msgid "Compression level"
 msgstr ""
-"Burada, HTTP isteklerinin birden çok proxy'den oluşan bir zincir üzerinden "
-"yönlendirilmesini yapılandırın. Ebeveyn temsilcilerinin gizlilik seviyenizi "
-"ciddi şekilde düşürebileceğini unutmayın. Burada ayrıca SOCKS vekil "
-"sunucuları da belirtilmiştir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:855
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:77
+msgid "Configuration Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:13
+msgid "Configure the Privoxy proxy daemon settings."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:233
+msgid "Connection sharing"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:266
+msgid "Debug"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:273
+msgid "Debug 1"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:313
+msgid "Debug 1024"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:301
+msgid "Debug 128"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:289
+msgid "Debug 16"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:277
+msgid "Debug 2"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:317
+msgid "Debug 2048"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:305
+msgid "Debug 256"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:293
+msgid "Debug 32"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:331
+msgid "Debug 32768"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:281
+msgid "Debug 4"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:321
+msgid "Debug 4096"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:309
+msgid "Debug 512"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:297
+msgid "Debug 64"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:335
+msgid "Debug 65536"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:285
+msgid "Debug 8"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:325
+msgid "Debug 8192"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:306
 msgid "Debug GIF de-animation"
 msgstr "Hata ayıklama GIF de-animasyonu"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:837
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:294
 msgid "Debug force feature"
 msgstr "Hata ayıklama zorlama özelliği"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:849
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:302
 msgid "Debug redirects"
 msgstr "Yönlendirmelerde hata ayıklama"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:843
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:298
 msgid "Debug regular expression filters"
 msgstr "Normal ifade filtrelerinde hata ayıklama"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:152
-msgid "Delay (in seconds) during system boot before Privoxy start"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:229
+msgid "Default server timeout"
 msgstr ""
-"Privoxy başlamadan önce sistem önyüklemesi sırasında gecikme (saniye "
-"cinsinden)"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:261
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:298
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:315
-msgid "Directory does not exist!"
-msgstr "Dizin mevcut değil!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:23
+msgid "Delay (in seconds) during system boot before Privoxy starts."
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:557
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:135
+msgid "Deny access"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:151
 msgid "Disabled == Transparent Proxy Mode"
 msgstr "Devre Dışı == Şeffaf Proxy Modu"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:66
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:71
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:31
 msgid "Documentation"
 msgstr "Dokümantasyon"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:154
-msgid "During delay ifup-events are not monitored !"
-msgstr "Gecikme sırasında ifup-events izlenmez!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:43
+msgid "Email address for the Privoxy administrator."
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:599
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:167
+msgid "Enable action file editor"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:251
+msgid "Enable compression"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:181
 msgid "Enable proxy authentication forwarding"
 msgstr "Proxy kimlik doğrulamasını yönlendirmeyi etkinleştirin"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:135
-msgid ""
-"Enable/Disable autostart of Privoxy on system startup and interface events"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:156
+msgid "Enable remote toggle"
 msgstr ""
-"Sistem başlangıcında ve arayüz olaylarında Privoxy'nin otomatik "
-"başlatılmasını etkinleştirin / devre dışı bırakın"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:555
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:161
+msgid "Enable remote toggle via HTTP"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
+msgid "Enable/Disable autostart of Privoxy"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:150
 msgid "Enable/Disable filtering when Privoxy starts."
 msgstr "Privoxy başladığında filtrelemeyi etkinleştirin / devre dışı bırakın."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:134
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
 msgid "Enabled"
 msgstr "Etkin"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:602
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:183
 msgid ""
 "Enabling this option is NOT recommended if there is no parent proxy that "
 "requires authentication!"
@@ -146,27 +241,39 @@ msgstr ""
 "Kimlik doğrulama gerektiren bir ana proxy yoksa bu seçeneğin "
 "etkinleştirilmesi ÖNERİLMEZ!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:368
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:404
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:442
-msgid "File '%s' not found inside Configuration Directory"
-msgstr "Yapılandırma Dizini içinde '%s' dosyası bulunamadı"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:172
+msgid "Enforce page blocking"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:919
-#: applications/luci-app-privoxy/luasrc/view/privoxy/detail_logview.htm:12
-msgid "File not found or empty"
-msgstr "Dosya bulunamadı veya boş"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:75
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:80
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:55
 msgid "Files and Directories"
 msgstr "Dosyalar ve Dizinler"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:36
-msgid "For help use link at the relevant option"
-msgstr "Yardım için ilgili seçenekteki bağlantıyı kullanın"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:104
+msgid "Filter files"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:91
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:185
+msgid "Forward HTTP"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:189
+msgid "Forward SOCKS 4"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:193
+msgid "Forward SOCKS 4A"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:197
+msgid "Forward SOCKS 5"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:201
+msgid "Forward SOCKS 5t"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:178
 msgid "Forwarding"
 msgstr "Yönlendirme"
 
@@ -174,15 +281,21 @@ msgstr "Yönlendirme"
 msgid "Grant UCI access for luci-app-privoxy"
 msgstr "luci-app-privoxy için UCI erişimi verin"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:589
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:247
+msgid "Handle as empty doc returns ok"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:35
+msgid "Hostname"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:173
 msgid ""
-"If enabled, Privoxy hides the 'go there anyway' link. The user obviously "
+"If enabled, Privoxy hides the \"go there anyway\" link. The user obviously "
 "should not be able to bypass any blocks."
 msgstr ""
-"Etkinleştirilirse, Privoxy 'yine de oraya git' bağlantısını gizler. "
-"Kullanıcı tabii ki herhangi bir bloğu atlayamaz."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:67
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:31
 msgid ""
 "If you intend to operate Privoxy for more users than just yourself, it might "
 "be a good idea to let them know how to reach you, what you block and why you "
@@ -193,35 +306,43 @@ msgstr ""
 "neden yaptığınızı, politikalarınızı vb. bilmelerini sağlamak iyi bir fikir "
 "olabilir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:215
-msgid "Invalid email address"
-msgstr "Geçersiz e-posta adresi"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:416
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:112
 msgid "It is NOT recommended for the casual user."
 msgstr "Sıradan kullanıcılar için ÖNERİLMEZ."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:194
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:221
+msgid "Keep-alive timeout"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:121
+msgid "Listen addresses"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:40
 msgid "Location of the Privoxy User Manual."
 msgstr "Privoxy Kullanım Kılavuzunun Yeri."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:108
-msgid "Log File Viewer"
-msgstr "Günlük Dosyası Görüntüleyicisi"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:60
+msgid "Log Directory"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:899
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:66
+msgid "Log File"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:332
 msgid "Log all data read from the network"
 msgstr "Ağdan okunan tüm verileri günlüğe kaydedin"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:831
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:290
 msgid "Log all data written to the network"
 msgstr "Ağa yazılan tüm verileri günlüğe kaydedin"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:905
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:336
 msgid "Log the applying actions"
 msgstr "Uygulama eylemlerini günlüğe kaydedin"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:807
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:274
 msgid ""
 "Log the destination for each request Privoxy let through. See also 'Debug "
 "1024'."
@@ -229,125 +350,75 @@ msgstr ""
 "Privoxy'nin geçmesine izin verilen her istek için hedefi günlüğe kaydedin. "
 "Ayrıca '1024 Hata Ayıklama' konusuna bakın."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:867
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:314
 msgid ""
 "Log the destination for requests Privoxy didn't let through, and the reason "
 "why."
 msgstr ""
 "Privoxy'nin izin vermediği istekler için hedefi ve nedenini günlüğe kaydedin."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:104
-msgid "Logging"
-msgstr "Günlükleme"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:339
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:99
 msgid "Main actions file"
 msgstr "Ana eylemler dosyası"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:461
-msgid "Mandatory Input: No Data given!"
-msgstr "Zorunlu Giriş: Veri verilmedi!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:259
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:296
-msgid "Mandatory Input: No Directory given!"
-msgstr "Zorunlu Giriş: Dizin verilmedi!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:279
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:72
 msgid "Mandatory Input: No File given!"
 msgstr "Zorunlu Giriş: Dosya verilmedi!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:479
-msgid "Mandatory Input: No Port given!"
-msgstr "Zorunlu Giriş: Bağlantı Noktası verilmedi!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:345
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:381
-msgid "Mandatory Input: No files given!"
-msgstr "Zorunlu Giriş: Dosya verilmedi!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:482
-msgid "Mandatory Input: No valid IPv4 address or host given!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:242
+msgid "Max. client connections"
 msgstr ""
-"Zorunlu Giriş: Geçerli bir IPv4 adresi veya ana bilgisayar belirtilmedi!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:470
-msgid "Mandatory Input: No valid IPv6 address given!"
-msgstr "Zorunlu Giriş: Geçerli bir IPv6 adresi verilmedi!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:472
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:484
-msgid "Mandatory Input: No valid Port given!"
-msgstr "Zorunlu Giriş: Belirtilen geçerli Bağlantı Noktası yok!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:737
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:244
 msgid "Maximum number of client connections that will be served."
 msgstr "Sağlanacak maksimum istemci bağlantısı sayısı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:535
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:142
 msgid "Maximum size (in KB) of the buffer for content filtering."
 msgstr "İçerik filtreleme için arabelleğin maksimum boyutu (KB cinsinden)."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:97
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:100
-msgid "Miscellaneous"
-msgstr "Çeşitli"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:207
+msgid "Misc"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:51
-msgid "NOT installed"
-msgstr "Yüklü değil"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:254
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:291
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:310
-msgid "No trailing '/', please."
-msgstr "Sonda '/' yok, lütfen."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:885
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:326
 msgid "Non-fatal errors - *we highly recommended enabling this*"
 msgstr ""
 "Önemli olmayan hatalar - * bunu etkinleştirmenizi şiddetle tavsiye ederiz *"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:718
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:239
 msgid ""
 "Number of seconds after which a socket times out if no data is received."
 msgstr ""
 "Veri alınmazsa soketin zaman aşımına uğramasından sonraki saniye sayısı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:672
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:222
 msgid ""
 "Number of seconds after which an open connection will no longer be reused."
 msgstr "Açık bir bağlantının artık tekrar kullanılmayacağı saniye sayısı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:327
-msgid ""
-"Only when using 'external filters', Privoxy has to create temporary files."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:129
+msgid "Permit access"
 msgstr ""
-"Yalnızca 'harici filtreler' kullanıldığında, Privoxy geçici dosyalar "
-"oluşturmalıdır."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:81
-msgid "Please install current version !"
-msgstr "Lütfen güncel sürümü kurun!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:917
-msgid "Please press [Read] button"
-msgstr "Lütfen [Oku] düğmesine basın"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:518
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:527
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:130
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:136
 msgid "Please read Privoxy manual for details!"
 msgstr "Ayrıntılar için lütfen Privoxy kılavuzunu okuyun!"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:92
-msgid "Please update to the current version!"
-msgstr "Lütfen mevcut sürüme güncelleyin!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:12
+msgid "Privoxy"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:24
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:15
+msgid "Privoxy Settings"
+msgstr ""
+
+#: applications/luci-app-privoxy/root/usr/share/luci/menu.d/luci-app-privoxy.json:3
 msgid "Privoxy WEB proxy"
 msgstr "Privoxy WEB proxy"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:76
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:55
 msgid ""
 "Privoxy can (and normally does) use a number of other files for additional "
 "configuration, help and logging. This section of the configuration file "
@@ -357,78 +428,74 @@ msgstr ""
 "kullanabilir (ve normalde kullanır). Yapılandırma dosyasının bu bölümü, "
 "Privoxy'ye bu diğer dosyaları nerede bulacağını söyler."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:32
-msgid ""
-"Privoxy is a non-caching web proxy with advanced filtering capabilities for "
-"enhancing privacy, modifying web page data and HTTP headers, controlling "
-"access, and removing ads and other obnoxious Internet junk."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:47
+msgid "Proxy Info URL"
 msgstr ""
-"Privoxy, gizliliği artırmak, web sayfası verilerini ve HTTP başlıklarını "
-"değiştirmek, erişimi kontrol etmek ve reklamları ve diğer iğrenç İnternet "
-"çöplerini kaldırmak için gelişmiş filtreleme yeteneklerine sahip, önbelleğe "
-"alınmayan bir web proxy'sidir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:912
-msgid "Read / Reread log file"
-msgstr "Günlük dosyasını oku / yeniden oku"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:819
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:282
 msgid "Show I/O status"
 msgstr "G / Ç durumunu göster"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:813
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:278
 msgid "Show each connection status"
 msgstr "Her bağlantı durumunu göster"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:825
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:286
 msgid "Show header parsing"
 msgstr "Üstbilgi ayrıştırmasını göster"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:76
-msgid "Software package '%s' is not installed."
-msgstr "Yazılım paketi '%s' kurulu değil."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:268
+msgid "Single Threaded"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:85
-msgid "Software package '%s' is outdated."
-msgstr "Yazılım paketi '%s' güncel değil."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:237
+msgid "Socket timeout"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:125
-#: applications/luci-app-privoxy/luasrc/view/privoxy/detail_startstop.htm:10
-msgid "Start"
-msgstr "Başlat"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:217
+msgid "Split large forms"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:115
-msgid "Start / Stop"
-msgstr "Başlat/Durdur"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:116
-msgid "Start/Stop Privoxy WEB Proxy"
-msgstr "Privoxy WEB Proxy'i Başlat/Durdur"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:879
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:322
 msgid "Startup banner and warnings."
 msgstr "Başlangıç başlığı ve uyarılar."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:455
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:620
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:635
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:123
 msgid "Syntax:"
 msgstr "Sözdizimi:"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:790
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:262
 msgid "Syntax: Client header names delimited by spaces."
 msgstr "Sözdizimi: Boşluklarla ayrılmış istemci başlığı adları."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:612
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:199
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:203
+msgid ""
+"Syntax: target_pattern [user:pass@]socks_proxy[:port] http_parent[:port]"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:187
 msgid "Syntax: target_pattern http_parent[:port]"
 msgstr "Sözdizimi: target_pattern http_parent[:bağlantı noktası]"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:59
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:62
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:191
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:195
+msgid "Syntax: target_pattern socks_proxy[:port] http_parent[:port]"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:19
 msgid "System"
 msgstr "Sistem"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:335
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:83
+msgid "Template Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:89
+msgid "Temporary Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:97
 msgid ""
 "The actions file(s) to use. Multiple actionsfile lines are permitted, and "
 "are in fact recommended!"
@@ -436,13 +503,13 @@ msgstr ""
 "Kullanılacak eylem dosyaları. Birden fazla eylem dosya satırına izin verilir "
 "ve aslında tavsiye edilir!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:453
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:122
 msgid ""
 "The address and TCP port on which Privoxy will listen for client requests."
 msgstr ""
 "Privoxy'nin istemci isteklerini dinleyeceği adres ve TCP bağlantı noktası."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:770
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:257
 msgid ""
 "The compression level that is passed to the zlib library when compressing "
 "buffered content."
@@ -450,19 +517,17 @@ msgstr ""
 "Arabelleğe alınan içerik sıkıştırılırken zlib kitaplığına iletilen "
 "sıkıştırma düzeyi."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:252
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:61
 msgid ""
 "The directory where all logging takes place (i.e. where the logfile is "
-"located)."
+"located).<br />No trailing \"/\", please."
 msgstr ""
-"Tüm günlük kaydının gerçekleştiği dizin (yani, günlük dosyasının bulunduğu "
-"yer)."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:289
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:78
 msgid "The directory where the other configuration files are located."
 msgstr "Diğer yapılandırma dosyalarının bulunduğu dizin."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:377
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:105
 msgid ""
 "The filter files contain content modification rules that use regular "
 "expressions."
@@ -470,19 +535,19 @@ msgstr ""
 "Filtre dosyaları, normal ifadeler kullanan içerik değiştirme kurallarını "
 "içerir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:183
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:36
 msgid "The hostname shown on the CGI pages."
 msgstr "CGI sayfalarında gösterilen ana bilgisayar adı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:274
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:67
 msgid "The log file to use. File name, relative to log directory."
 msgstr "Kullanılacak günlük dosyası. Günlük dizinine göre dosya adı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:788
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:261
 msgid "The order in which client headers are sorted before forwarding them."
 msgstr "İstemci başlıklarının iletilmeden önce sıralandığı sıra."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:755
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:248
 msgid ""
 "The status code Privoxy returns for pages blocked with +handle-as-empty-"
 "document."
@@ -490,7 +555,7 @@ msgstr ""
 "Privoxy durum kodu +handle-as-empty-document ile engellenen sayfalar için "
 "döndürür."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:413
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:111
 msgid ""
 "The trust mechanism is an experimental feature for building white-lists and "
 "should be used with care."
@@ -498,15 +563,7 @@ msgstr ""
 "Güven mekanizması, beyaz listeler oluşturmak için deneysel bir özelliktir ve "
 "dikkatli kullanılmalıdır."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:238
-msgid ""
-"The value of this option only matters if the experimental trust mechanism "
-"has been activated."
-msgstr ""
-"Bu seçeneğin değeri, yalnızca deneysel güven mekanizması etkinleştirildiyse "
-"önemlidir."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:800
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:270
 msgid ""
 "This option is only there for debugging purposes. It will drastically reduce "
 "performance."
@@ -514,7 +571,7 @@ msgstr ""
 "Bu seçenek yalnızca hata ayıklama amaçlıdır. Performansı büyük ölçüde "
 "düşürecektir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:574
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:163
 msgid ""
 "This option will be removed in future releases as it has been obsoleted by "
 "the more general header taggers."
@@ -522,15 +579,17 @@ msgstr ""
 "Bu seçenek, daha genel başlık etiketleyicileri tarafından kullanımdan "
 "kaldırıldığı için gelecekteki sürümlerde kaldırılacaktır."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:85
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:118
 msgid ""
 "This tab controls the security-relevant aspects of Privoxy's configuration."
 msgstr ""
 "Bu sekme, Privoxy'nin yapılandırmasının güvenlikle ilgili yönlerini kontrol "
 "eder."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:618
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:633
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:190
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:194
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:198
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:202
 msgid ""
 "Through which SOCKS proxy (and optionally to which parent HTTP proxy) "
 "specific requests should be routed."
@@ -538,63 +597,54 @@ msgstr ""
 "Hangi SOCKS proxy'si (ve isteğe bağlı olarak hangi ana HTTP proxy'sine) özel "
 "isteklerin yönlendirilmesi gerekir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:610
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:186
 msgid "To which parent HTTP proxy specific requests should be routed."
 msgstr "Hangi üst HTTP proxy'sine özgü isteklerin yönlendirilmesi gerekir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:341
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:149
+msgid "Toggle Status"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:225
+msgid "Tolerate pipelining"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:50
+msgid "Trust Info URL"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:110
+msgid "Trust file"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:51
+msgid ""
+"URL shown if access to an untrusted page is denied. Only applies if trust "
+"mechanism is enabled."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:48
+msgid "URL to documentation about the local Privoxy setup."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:39
+msgid "User Manual"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:100
 msgid "User customizations"
 msgstr "Kullanıcı özelleştirmeleri"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:166
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:543
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:677
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:700
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:724
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:743
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:776
-msgid "Value is not a number"
-msgstr "Değer bir sayı değil"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:168
-msgid "Value not between 0 and 300"
-msgstr "Değer 0 ile 300 arasında değil"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:778
-msgid "Value not between 0 and 9"
-msgstr "Değer 0 ile 9 arasında değil"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:545
-msgid "Value not between 1 and 4096"
-msgstr "Değer 1 ile 4096 arasında değil"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:679
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:702
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:726
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:745
-msgid "Value not greater 0 or empty"
-msgstr "Değer 0'dan büyük değil veya boş"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:537
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:143
 msgid "Value range 1 to 4096, no entry defaults to 4096"
 msgstr "Değer aralığı 1 - 4096, giriş yok ise varsayılan 4096"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:45
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:47
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:50
-msgid "Version"
-msgstr "Versiyon"
-
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:43
-msgid "Version Information"
-msgstr "Sürüm bilgisi"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:650
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:210
 msgid "Whether intercepted requests should be treated as valid."
 msgstr ""
 "Yakalanan isteklerin geçerli olarak değerlendirilip değerlendirilmeyeceği."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:572
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:162
 msgid ""
 "Whether or not Privoxy recognizes special HTTP headers to change toggle "
 "state."
@@ -602,13 +652,13 @@ msgstr ""
 "Privoxy'nin geçiş durumunu değiştirmek için özel HTTP başlıklarını tanıyıp "
 "tanımadığı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:762
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:252
 msgid "Whether or not buffered content is compressed before delivery."
 msgstr ""
 "Arabelleğe alınan içeriğin teslim edilmeden önce sıkıştırılıp "
 "sıkıştırılmayacağı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:710
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:234
 msgid ""
 "Whether or not outgoing connections that have been kept alive should be "
 "shared between different incoming connections."
@@ -616,62 +666,233 @@ msgstr ""
 "Canlı tutulan giden bağlantıların farklı gelen bağlantılar arasında "
 "paylaşılıp paylaşılmayacağı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:687
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:226
 msgid "Whether or not pipelined requests should be served."
 msgstr "Ardışık düzenlenmiş isteklerin sunulup sunulmayacağı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:600
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:182
 msgid "Whether or not proxy authentication through Privoxy should work."
 msgstr ""
 "Privoxy aracılığıyla proxy kimlik doğrulamasının çalışıp çalışmayacağı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:582
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:168
 msgid "Whether or not the web-based actions file editor may be used."
 msgstr ""
 "Web tabanlı eylemler dosyası düzenleyicisinin kullanılıp kullanılamayacağı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:565
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:157
 msgid "Whether or not the web-based toggle feature may be used."
 msgstr "Web tabanlı geçiş özelliğinin kullanılıp kullanılamayacağı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:657
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:214
 msgid "Whether requests to Privoxy's CGI pages can be blocked or redirected."
 msgstr ""
 "Privoxy'nin CGI sayfalarına gelen isteklerin engellenip engellenemeyeceği "
 "veya yeniden yönlendirilip yönlendirilemeyeceği."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:664
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:218
 msgid ""
 "Whether the CGI interface should stay compatible with broken HTTP clients."
 msgstr "CGI arayüzünün bozuk HTTP istemcileriyle uyumlu olup olmayacağı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:798
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:269
 msgid "Whether to run only one server thread."
 msgstr "Yalnızca bir sunucu iş parçacığının çalıştırılıp çalıştırılmayacağı."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:516
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:525
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:130
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:136
 msgid "Who can access what."
 msgstr "Kim neye erişebilir."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:49
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:87
-msgid "installed"
-msgstr "kurulmuş"
-
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:48
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:78
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:89
-msgid "or higher"
-msgstr "veya daha yüksek"
-
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:46
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:78
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:89
-msgid "required"
-msgstr "gereklidir"
-
-#~ msgid "Syntax: target_pattern socks_proxy[:port] http_parent[:port]"
+#~ msgid ""
+#~ "A URL to be displayed in the error page that users will see if access to "
+#~ "an untrusted page is denied."
 #~ msgstr ""
-#~ "Sözdizimi: target_pattern socks_proxy[:bağlantı noktası] http_parent[:"
-#~ "bağlantı noktası]"
+#~ "Güvenilir olmayan bir sayfaya erişim reddedildiğinde kullanıcıların "
+#~ "göreceği hata sayfasında görüntülenecek URL."
+
+#~ msgid ""
+#~ "A URL to documentation about the local Privoxy setup, configuration or "
+#~ "policies."
+#~ msgstr ""
+#~ "Yerel Privoxy kurulumu, yapılandırması veya politikaları hakkındaki "
+#~ "belgelere ait URL."
+
+#~ msgid "A directory where Privoxy can create temporary files."
+#~ msgstr "Privoxy'nin geçici dosyalar oluşturabileceği bir dizin."
+
+#~ msgid "An alternative directory where the templates are loaded from."
+#~ msgstr "Şablonların yüklendiği alternatif bir dizin."
+
+#~ msgid "An email address to reach the Privoxy administrator."
+#~ msgstr "Privoxy yöneticisine ulaşmak için bir e-posta adresi."
+
+#~ msgid ""
+#~ "Configure here the routing of HTTP requests through a chain of multiple "
+#~ "proxies. Note that parent proxies can severely decrease your privacy "
+#~ "level. Also specified here are SOCKS proxies."
+#~ msgstr ""
+#~ "Burada, HTTP isteklerinin birden çok proxy'den oluşan bir zincir "
+#~ "üzerinden yönlendirilmesini yapılandırın. Ebeveyn temsilcilerinin "
+#~ "gizlilik seviyenizi ciddi şekilde düşürebileceğini unutmayın. Burada "
+#~ "ayrıca SOCKS vekil sunucuları da belirtilmiştir."
+
+#~ msgid "Delay (in seconds) during system boot before Privoxy start"
+#~ msgstr ""
+#~ "Privoxy başlamadan önce sistem önyüklemesi sırasında gecikme (saniye "
+#~ "cinsinden)"
+
+#~ msgid "Directory does not exist!"
+#~ msgstr "Dizin mevcut değil!"
+
+#~ msgid "During delay ifup-events are not monitored !"
+#~ msgstr "Gecikme sırasında ifup-events izlenmez!"
+
+#~ msgid ""
+#~ "Enable/Disable autostart of Privoxy on system startup and interface events"
+#~ msgstr ""
+#~ "Sistem başlangıcında ve arayüz olaylarında Privoxy'nin otomatik "
+#~ "başlatılmasını etkinleştirin / devre dışı bırakın"
+
+#~ msgid "File '%s' not found inside Configuration Directory"
+#~ msgstr "Yapılandırma Dizini içinde '%s' dosyası bulunamadı"
+
+#~ msgid "File not found or empty"
+#~ msgstr "Dosya bulunamadı veya boş"
+
+#~ msgid "For help use link at the relevant option"
+#~ msgstr "Yardım için ilgili seçenekteki bağlantıyı kullanın"
+
+#~ msgid ""
+#~ "If enabled, Privoxy hides the 'go there anyway' link. The user obviously "
+#~ "should not be able to bypass any blocks."
+#~ msgstr ""
+#~ "Etkinleştirilirse, Privoxy 'yine de oraya git' bağlantısını gizler. "
+#~ "Kullanıcı tabii ki herhangi bir bloğu atlayamaz."
+
+#~ msgid "Invalid email address"
+#~ msgstr "Geçersiz e-posta adresi"
+
+#~ msgid "Log File Viewer"
+#~ msgstr "Günlük Dosyası Görüntüleyicisi"
+
+#~ msgid "Logging"
+#~ msgstr "Günlükleme"
+
+#~ msgid "Mandatory Input: No Data given!"
+#~ msgstr "Zorunlu Giriş: Veri verilmedi!"
+
+#~ msgid "Mandatory Input: No Directory given!"
+#~ msgstr "Zorunlu Giriş: Dizin verilmedi!"
+
+#~ msgid "Mandatory Input: No Port given!"
+#~ msgstr "Zorunlu Giriş: Bağlantı Noktası verilmedi!"
+
+#~ msgid "Mandatory Input: No files given!"
+#~ msgstr "Zorunlu Giriş: Dosya verilmedi!"
+
+#~ msgid "Mandatory Input: No valid IPv4 address or host given!"
+#~ msgstr ""
+#~ "Zorunlu Giriş: Geçerli bir IPv4 adresi veya ana bilgisayar belirtilmedi!"
+
+#~ msgid "Mandatory Input: No valid IPv6 address given!"
+#~ msgstr "Zorunlu Giriş: Geçerli bir IPv6 adresi verilmedi!"
+
+#~ msgid "Mandatory Input: No valid Port given!"
+#~ msgstr "Zorunlu Giriş: Belirtilen geçerli Bağlantı Noktası yok!"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Çeşitli"
+
+#~ msgid "NOT installed"
+#~ msgstr "Yüklü değil"
+
+#~ msgid "No trailing '/', please."
+#~ msgstr "Sonda '/' yok, lütfen."
+
+#~ msgid ""
+#~ "Only when using 'external filters', Privoxy has to create temporary files."
+#~ msgstr ""
+#~ "Yalnızca 'harici filtreler' kullanıldığında, Privoxy geçici dosyalar "
+#~ "oluşturmalıdır."
+
+#~ msgid "Please install current version !"
+#~ msgstr "Lütfen güncel sürümü kurun!"
+
+#~ msgid "Please press [Read] button"
+#~ msgstr "Lütfen [Oku] düğmesine basın"
+
+#~ msgid "Please update to the current version!"
+#~ msgstr "Lütfen mevcut sürüme güncelleyin!"
+
+#~ msgid ""
+#~ "Privoxy is a non-caching web proxy with advanced filtering capabilities "
+#~ "for enhancing privacy, modifying web page data and HTTP headers, "
+#~ "controlling access, and removing ads and other obnoxious Internet junk."
+#~ msgstr ""
+#~ "Privoxy, gizliliği artırmak, web sayfası verilerini ve HTTP başlıklarını "
+#~ "değiştirmek, erişimi kontrol etmek ve reklamları ve diğer iğrenç İnternet "
+#~ "çöplerini kaldırmak için gelişmiş filtreleme yeteneklerine sahip, "
+#~ "önbelleğe alınmayan bir web proxy'sidir."
+
+#~ msgid "Read / Reread log file"
+#~ msgstr "Günlük dosyasını oku / yeniden oku"
+
+#~ msgid "Software package '%s' is not installed."
+#~ msgstr "Yazılım paketi '%s' kurulu değil."
+
+#~ msgid "Software package '%s' is outdated."
+#~ msgstr "Yazılım paketi '%s' güncel değil."
+
+#~ msgid "Start"
+#~ msgstr "Başlat"
+
+#~ msgid "Start / Stop"
+#~ msgstr "Başlat/Durdur"
+
+#~ msgid "Start/Stop Privoxy WEB Proxy"
+#~ msgstr "Privoxy WEB Proxy'i Başlat/Durdur"
+
+#~ msgid ""
+#~ "The directory where all logging takes place (i.e. where the logfile is "
+#~ "located)."
+#~ msgstr ""
+#~ "Tüm günlük kaydının gerçekleştiği dizin (yani, günlük dosyasının "
+#~ "bulunduğu yer)."
+
+#~ msgid ""
+#~ "The value of this option only matters if the experimental trust mechanism "
+#~ "has been activated."
+#~ msgstr ""
+#~ "Bu seçeneğin değeri, yalnızca deneysel güven mekanizması "
+#~ "etkinleştirildiyse önemlidir."
+
+#~ msgid "Value is not a number"
+#~ msgstr "Değer bir sayı değil"
+
+#~ msgid "Value not between 0 and 300"
+#~ msgstr "Değer 0 ile 300 arasında değil"
+
+#~ msgid "Value not between 0 and 9"
+#~ msgstr "Değer 0 ile 9 arasında değil"
+
+#~ msgid "Value not between 1 and 4096"
+#~ msgstr "Değer 1 ile 4096 arasında değil"
+
+#~ msgid "Value not greater 0 or empty"
+#~ msgstr "Değer 0'dan büyük değil veya boş"
+
+#~ msgid "Version"
+#~ msgstr "Versiyon"
+
+#~ msgid "Version Information"
+#~ msgstr "Sürüm bilgisi"
+
+#~ msgid "installed"
+#~ msgstr "kurulmuş"
+
+#~ msgid "or higher"
+#~ msgstr "veya daha yüksek"
+
+#~ msgid "required"
+#~ msgstr "gereklidir"

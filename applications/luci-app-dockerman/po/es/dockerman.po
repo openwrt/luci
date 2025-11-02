@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-10-16 19:05+0000\n"
+"PO-Revision-Date: 2025-10-07 22:42+0000\n"
 "Last-Translator: brodrigueznu <brodrigueznu@hotmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsdockerman/es/>\n"
@@ -8,11 +8,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-rc\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newcontainer.lua:604
 msgid "A list of kernel capabilities to add to the container"
-msgstr "Una lista de capacidades de kernel para agregar al contenedor"
+msgstr "Una lista de capacidades del núcleo para agregar al contenedor"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/containers.lua:183
 msgid "Add"
@@ -83,7 +83,7 @@ msgstr ""
 msgid ""
 "Block IO weight (relative weight) accepts a weight value between 10 and 1000."
 msgstr ""
-"El peso del bloque IO (peso relativo) acepta un valor de peso entre 10 y "
+"El peso del bloque E/S (peso relativo) acepta un valor de peso entre 10 y "
 "1000."
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:51
@@ -180,7 +180,7 @@ msgstr "Conectar red"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:14
 msgid "Connect to remote endpoint"
-msgstr "Conectarse al punto final remoto"
+msgstr "Conecta a un punto final remoto"
 
 #: applications/luci-app-dockerman/luasrc/view/dockerman/container.htm:7
 msgid "Console"
@@ -214,7 +214,7 @@ msgstr "Contenedores"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/containers.lua:107
 msgid "Containers overview"
-msgstr "Descripción general de contenedores"
+msgstr "Vista general de contenedores"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:84
 msgid "Create macvlan interface"
@@ -240,7 +240,7 @@ msgstr "DNS"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:56
 msgid "Debug"
-msgstr "Depuración"
+msgstr "Depurar"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/configuration.lua:41
 msgid "Default bridge"
@@ -319,7 +319,7 @@ msgstr "DockerMan es un cliente de administrador de Docker simple para LuCI"
 
 #: applications/luci-app-dockerman/luasrc/view/dockerman/container_file.htm:14
 msgid "Download"
-msgstr "Descargar"
+msgstr "Descarga"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/networks.lua:79
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:32
@@ -576,8 +576,8 @@ msgid ""
 "Memory limit (format: <number>[<unit>]). Number is a positive integer. Unit "
 "can be one of b, k, m, or g. Minimum is 4M."
 msgstr ""
-"Límite de memoria (formato: <número>[<unidad>]). El número es un entero "
-"positivo. La unidad puede ser una de b, k, m o g. El mínimo es de 4M."
+"Límite de memoria (formato: <number>[<unit>]). El número es un entero "
+"positivo. La unidad puede ser b, k, m o g. El mínimo es 4M."
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newnetwork.lua:47
 msgid "Mode"
@@ -644,9 +644,7 @@ msgstr ""
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/container.lua:566
 msgid "Number of CPUs. Number is a fractional number. 0.000 means no limit."
-msgstr ""
-"Número de CPU. El número es un número fraccionario. 0.000 significa sin "
-"límite."
+msgstr "Número de CPUs. Puede ser un valor decimal. 0.000 significa sin límite."
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/images.lua:73
 msgid ""
@@ -670,7 +668,7 @@ msgstr "Red superpuesta"
 
 #: applications/luci-app-dockerman/luasrc/controller/dockerman.lua:36
 msgid "Overview"
-msgstr "Descripción general"
+msgstr "Vista general"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/networks.lua:81
 msgid "Parent Interface"
@@ -862,7 +860,7 @@ msgstr "Sysctl(--sysctl)"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newcontainer.lua:596
 msgid "Sysctls (kernel parameters) options"
-msgstr "Opciones de sysctls (parámetros del kernel)"
+msgstr "Opciones de sysctls (parámetros del núcleo)"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/container.lua:788
 msgid "TOP"
@@ -886,8 +884,8 @@ msgstr "La configuración de registro para este contenedor"
 
 #: applications/luci-app-dockerman/luasrc/model/cbi/dockerman/newcontainer.lua:525
 msgid ""
-"The user that commands are run as inside the container.(format: name|uid[:"
-"group|gid])"
+"The user that commands are run as inside the container.(format: name|"
+"uid[:group|gid])"
 msgstr ""
 "El usuario que ejecuta los comandos como dentro del contenedor. (Formato: "
 "nombre|uid[:grupo|gid])"
@@ -981,92 +979,4 @@ msgid ""
 "system and a valid image tar can be downloaded from remote."
 msgstr ""
 "Al presionar el botón Importar, se puede cargar una imagen local en el "
-"sistema y se puede descargar una imagen tar válida de forma remota."
-
-#~ msgid "CPU Useage"
-#~ msgstr "Uso de CPU"
-
-#~ msgid "Memory Useage"
-#~ msgstr "Uso de memoria"
-
-#~ msgid "Setting"
-#~ msgstr "Configuraciones"
-
-#~ msgid "Specifies where the Docker daemon will listen for client connections"
-#~ msgstr ""
-#~ "Especifica dónde escuchará el demonio de Docker para las conexiones del "
-#~ "cliente"
-
-#~ msgid "Docker Container"
-#~ msgstr "Contenedor Docker"
-
-#~ msgid "Docker Socket Path"
-#~ msgstr "Ruta del zócalo Docker"
-
-#~ msgid ""
-#~ "DockerMan is a Simple Docker manager client for LuCI, If you have any "
-#~ "issue please visit:"
-#~ msgstr ""
-#~ "DockerMan es un cliente administrador simple de Docker para LuCI. Si "
-#~ "tiene algún problema, visite:"
-
-#~ msgid "Github"
-#~ msgstr "GitHub"
-
-#~ msgid "Import Images"
-#~ msgstr "Importar imágenes"
-
-#~ msgid "New Container"
-#~ msgstr "Nuevo contenedor"
-
-#~ msgid "New Network"
-#~ msgstr "Nueva red"
-
-#~ msgid "Macvlan Mode"
-#~ msgstr "Modo Macvlan"
-
-#~ msgid "Access Control"
-#~ msgstr "Control de acceso"
-
-#~ msgid "Allowed access interfaces"
-#~ msgstr "Interfaces de acceso permitidas"
-
-#~ msgid "Containers allowed to be accessed"
-#~ msgstr "Contenedores permitidos para acceder"
-
-#~ msgid ""
-#~ "Daemon unix socket (unix:///var/run/docker.sock) or TCP Remote Hosts "
-#~ "(tcp://0.0.0.0:2375), default: unix:///var/run/docker.sock"
-#~ msgstr ""
-#~ "Demonio de zócalo Unix (unix:///var/run/docker.sock) o Hosts remotos TCP "
-#~ "(tcp://0.0.0.0:2375), predeterminado: unix:///var/run/docker.sock"
-
-#~ msgid "Docker Daemon"
-#~ msgstr "Demonio Docker"
-
-#~ msgid "DockerMan"
-#~ msgstr "DockerMan"
-
-#~ msgid "Dockerman connect to remote endpoint"
-#~ msgstr "Dockerman se conecta al punto final remoto"
-
-#~ msgid "Enable"
-#~ msgstr "Activar"
-
-#~ msgid "Server Host"
-#~ msgstr "Servidor host"
-
-#~ msgid ""
-#~ "Which container(s) under bridge network can be accessed, even from "
-#~ "interfaces that are not allowed, fill-in Container Id or Name"
-#~ msgstr ""
-#~ "A qué contenedor/es en la red de puente se puede/n acceder, incluso desde "
-#~ "interfaces que no están permitidas, rellenar el ID o el nombre del "
-#~ "contenedor"
-
-#~ msgid ""
-#~ "Which interface(s) can access containers under the bridge network, fill-"
-#~ "in Interface Name"
-#~ msgstr ""
-#~ "Qué interfaz/ces puede/n acceder a los contenedores bajo la red del "
-#~ "puente, complete el nombre de la interfaz"
+"sistema o descargar una imagen tar válida desde una ubicación remota."

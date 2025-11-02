@@ -3,15 +3,16 @@
 		"description": "Grant UCI access for luci-app-clamav",
 		"read": {
 			"file": [ "/tmp/*" ],
+			"ubus": {
+				"log": [ "read" ]
+			},
 			"uci": [ "clamav", "clamav-milter", "freshclam" ]
 		},
 		"write": {
 			"file": {
 				"/etc/init.d/clamav *": [ "exec" ],
 				"/etc/init.d/clamav-milter *": [ "exec" ],
-				"/etc/init.d/freshclam *": [ "exec" ],
-				"/sbin/logread -e clamav": [ "exec" ],
-				"/usr/sbin/logread -e clamav": [ "exec" ]
+				"/etc/init.d/freshclam *": [ "exec" ]
 			},
 			"uci": [ "clamav", "clamav-milter", "freshclam" ]
 		}

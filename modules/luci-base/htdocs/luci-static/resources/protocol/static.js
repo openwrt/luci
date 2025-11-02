@@ -8,26 +8,38 @@ function isCIDR(value) {
 }
 
 function calculateBroadcast(s, use_cfgvalue) {
-	var readfn = use_cfgvalue ? 'cfgvalue' : 'formvalue',
-	    addropt = s.children.filter(function(o) { return o.option == 'ipaddr'})[0],
-	    addrvals = addropt ? L.toArray(addropt[readfn](s.section)) : [],
-	    maskopt = s.children.filter(function(o) { return o.option == 'netmask'})[0],
-	    maskval = maskopt ? maskopt[readfn](s.section) : null,
-	    firstsubnet = maskval ? addrvals[0] + '/' + maskval : addrvals.filter(function(a) { return a.indexOf('/') > 0 })[0];
+	const readfn = use_cfgvalue ? 'cfgvalue' : 'formvalue';
+	const addropt = s.children.find(o => o.option == 'ipaddr');
+	const addrvals = addropt ? L.toArray(addropt[readfn](s.section)) : [];
+	const maskopt = s.children.find(o => o.option == 'netmask');
+	const maskval = maskopt ? maskopt[readfn](s.section) : null;
+	let firstsubnet = null;
 
-	if (firstsubnet == null)
+	/* only form a subnet if both parts exist */
+	if (addrvals.length && addrvals[0] && maskval)
+		firstsubnet = addrvals[0] + '/' + maskval;
+	else if (addrvals.length)
+		firstsubnet = addrvals.find(a => a.indexOf('/') > 0);
+
+	if (!firstsubnet)
 		return null;
 
-	var addr_mask = firstsubnet.split('/'),
-	    addr = validation.parseIPv4(addr_mask[0]),
-	    mask = addr_mask[1];
+	const [addr_str, mask_str] = firstsubnet.split('/');
+	const addr = validation.parseIPv4(addr_str);
+	if (!addr)
+		return null;
+
+	let mask = mask_str;
 
 	if (!isNaN(mask))
 		mask = validation.parseIPv4(network.prefixToMask(+mask));
 	else
 		mask = validation.parseIPv4(mask);
 
-	var bc = [
+	if (!mask)
+		return null;
+
+	const bc = [
 		addr[0] | (~mask[0] >>> 0 & 255),
 		addr[1] | (~mask[1] >>> 0 & 255),
 		addr[2] | (~mask[2] >>> 0 & 255),

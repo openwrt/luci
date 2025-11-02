@@ -1,54 +1,57 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-06-21 08:31+0000\n"
-"Last-Translator: Mashiro <michio.haiyaku@gmail.com>\n"
+"PO-Revision-Date: 2025-08-05 09:41+0000\n"
+"Last-Translator: Vũ Minh Ngọc <vuminhngocpt@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsprivoxy/vi/>\n"
 "Language: vi\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.13-dev\n"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:236
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:90
+#, fuzzy
 msgid ""
-"A URL to be displayed in the error page that users will see if access to an "
-"untrusted page is denied."
+"A directory where Privoxy can create temporary files.<br /><strong>Only when "
+"using 'external filters', Privoxy has to create temporary files.</strong>"
 msgstr ""
-"Một URL sẽ được hiển thị trong trang lỗi mà người dùng sẽ thấy nếu quyền "
-"truy cập vào một trang không đáng tin cậy bị từ chối."
+"Một thư mục nơi Privoxy có thể tạo các tệp tạm thời.<br /><strong>Chỉ khi sử "
+"dụng 'bộ lọc bên ngoài', Privoxy mới phải tạo các tệp tạm thời.</strong>"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:226
-msgid ""
-"A URL to documentation about the local Privoxy setup, configuration or "
-"policies."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:209
+msgid "Accept intercepted requests"
 msgstr ""
-"Một URL tới tài liệu về thiết lập, cấu hình hoặc chính sách Privoxy cục bộ."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:325
-msgid "A directory where Privoxy can create temporary files."
-msgstr "Một thư mục nơi Privoxy có thể tạo các tệp tạm thời."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:84
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:87
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:118
 msgid "Access Control"
-msgstr "Kiểm soát truy cập"
+msgstr "Quản lý quyền kiểm soát"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:337
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:96
+msgid "Action Files"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:98
 msgid "Actions that are applied to all sites and maybe overruled later on."
 msgstr ""
 "Các hành động được áp dụng cho tất cả các trang web và có thể bị bãi bỏ sau "
 "này."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:308
-msgid "An alternative directory where the templates are loaded from."
-msgstr "Một thư mục thay thế nơi các mẫu được tải từ."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:42
+msgid "Admin Email"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:206
-msgid "An email address to reach the Privoxy administrator."
-msgstr "Một địa chỉ email để liên hệ với quản trị viên Privoxy."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:213
+msgid "Allow CGI request crunching"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:695
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:84
+msgid ""
+"An alternative directory where the templates are loaded from.<br />No "
+"trailing \"/\", please."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:230
 msgid ""
 "Assumed server-side keep-alive timeout (in seconds) if not specified by the "
 "server."
@@ -56,116 +59,222 @@ msgstr ""
 "Giả định thời gian chờ giữ kết nối phía máy chủ (tính bằng giây) nếu không "
 "được máy chủ chỉ định."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:151
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:22
 msgid "Boot delay"
 msgstr "Độ trễ khởi động"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:873
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:141
+msgid "Buffer Limit"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:318
 msgid "CGI user interface"
 msgstr "Giao diện người dùng CGI"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:861
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:260
+msgid "Client header order"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:310
 msgid "Common Log Format"
 msgstr "Định dạng nhật ký chung"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:92
-msgid ""
-"Configure here the routing of HTTP requests through a chain of multiple "
-"proxies. Note that parent proxies can severely decrease your privacy level. "
-"Also specified here are SOCKS proxies."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:255
+msgid "Compression level"
 msgstr ""
-"Cấu hình tại đây việc định tuyến các yêu cầu HTTP qua một chuỗi nhiều proxy. "
-"Lưu ý rằng các proxy cha có thể làm giảm mức độ riêng tư của bạn nghiêm "
-"trọng. Cũng được chỉ định tại đây là các proxy SOCKS."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:855
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:77
+msgid "Configuration Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:13
+msgid "Configure the Privoxy proxy daemon settings."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:233
+msgid "Connection sharing"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:266
+msgid "Debug"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:273
+msgid "Debug 1"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:313
+msgid "Debug 1024"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:301
+msgid "Debug 128"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:289
+msgid "Debug 16"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:277
+msgid "Debug 2"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:317
+msgid "Debug 2048"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:305
+msgid "Debug 256"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:293
+msgid "Debug 32"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:331
+msgid "Debug 32768"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:281
+msgid "Debug 4"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:321
+msgid "Debug 4096"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:309
+msgid "Debug 512"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:297
+msgid "Debug 64"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:335
+msgid "Debug 65536"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:285
+msgid "Debug 8"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:325
+msgid "Debug 8192"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:306
 msgid "Debug GIF de-animation"
 msgstr "Gỡ lỗi GIF hủy hoạt hình"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:837
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:294
 msgid "Debug force feature"
 msgstr "Tính năng gỡ lỗi buộc"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:849
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:302
 msgid "Debug redirects"
 msgstr "Gỡ lỗi chuyển hướng"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:843
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:298
 msgid "Debug regular expression filters"
 msgstr "Gỡ lỗi bộ lọc biểu thức chính quy"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:152
-msgid "Delay (in seconds) during system boot before Privoxy start"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:229
+msgid "Default server timeout"
 msgstr ""
-"Độ trễ (tính bằng giây) trong quá trình khởi động hệ thống trước khi Privoxy "
-"bắt đầu"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:261
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:298
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:315
-msgid "Directory does not exist!"
-msgstr "Thư mục không tồn tại!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:23
+msgid "Delay (in seconds) during system boot before Privoxy starts."
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:557
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:135
+msgid "Deny access"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:151
 msgid "Disabled == Transparent Proxy Mode"
 msgstr "Vô hiệu hóa == Chế độ Proxy Trong suốt"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:66
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:71
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:31
 msgid "Documentation"
 msgstr "Tài liệu"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:154
-msgid "During delay ifup-events are not monitored !"
-msgstr "Trong thời gian chờ, các sự kiện ifup không được giám sát !"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:43
+msgid "Email address for the Privoxy administrator."
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:599
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:167
+msgid "Enable action file editor"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:251
+msgid "Enable compression"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:181
 msgid "Enable proxy authentication forwarding"
 msgstr "Bật chuyển tiếp xác thực proxy"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:135
-msgid ""
-"Enable/Disable autostart of Privoxy on system startup and interface events"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:156
+msgid "Enable remote toggle"
 msgstr ""
-"Bật/Tắt khởi động tự động của Privoxy khi hệ thống khởi động và các sự kiện "
-"giao diện"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:555
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:161
+msgid "Enable remote toggle via HTTP"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
+msgid "Enable/Disable autostart of Privoxy"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:150
 msgid "Enable/Disable filtering when Privoxy starts."
 msgstr "Bật/Tắt lọc khi Privoxy bắt đầu."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:134
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
 msgid "Enabled"
 msgstr "Kích Hoạt"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:602
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:183
 msgid ""
 "Enabling this option is NOT recommended if there is no parent proxy that "
 "requires authentication!"
 msgstr ""
 "Không nên bật tùy chọn này nếu không có proxy cha nào yêu cầu xác thực!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:368
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:404
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:442
-msgid "File '%s' not found inside Configuration Directory"
-msgstr "Không tìm thấy tệp '%s' trong Thư mục Cấu hình"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:172
+msgid "Enforce page blocking"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:919
-#: applications/luci-app-privoxy/luasrc/view/privoxy/detail_logview.htm:12
-msgid "File not found or empty"
-msgstr "Không tìm thấy tệp hoặc tệp trống"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:75
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:80
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:55
 msgid "Files and Directories"
 msgstr "Các tệp và thư mục"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:36
-msgid "For help use link at the relevant option"
-msgstr "Để được trợ giúp, hãy sử dụng liên kết tại tùy chọn liên quan"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:104
+msgid "Filter files"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:91
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:185
+msgid "Forward HTTP"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:189
+msgid "Forward SOCKS 4"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:193
+msgid "Forward SOCKS 4A"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:197
+msgid "Forward SOCKS 5"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:201
+msgid "Forward SOCKS 5t"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:178
 msgid "Forwarding"
 msgstr "Chuyển tiếp"
 
@@ -173,15 +282,22 @@ msgstr "Chuyển tiếp"
 msgid "Grant UCI access for luci-app-privoxy"
 msgstr "Cấp quyền truy cập UCI cho luci-app-privoxy"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:589
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:247
+msgid "Handle as empty doc returns ok"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:35
+#, fuzzy
+msgid "Hostname"
+msgstr "Tên máy chủ"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:173
 msgid ""
-"If enabled, Privoxy hides the 'go there anyway' link. The user obviously "
+"If enabled, Privoxy hides the \"go there anyway\" link. The user obviously "
 "should not be able to bypass any blocks."
 msgstr ""
-"Nếu bật, Privoxy sẽ ẩn liên kết 'đi đến đó dù sao'. Người dùng rõ ràng không "
-"nên có thể bỏ qua bất kỳ khối nào."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:67
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:31
 msgid ""
 "If you intend to operate Privoxy for more users than just yourself, it might "
 "be a good idea to let them know how to reach you, what you block and why you "
@@ -191,158 +307,117 @@ msgstr ""
 "có thể là một ý tưởng tốt để cho họ biết cách liên lạc với bạn, những gì bạn "
 "chặn và tại sao bạn làm như vậy, chính sách của bạn, v.v."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:215
-msgid "Invalid email address"
-msgstr "Địa chỉ email không hợp lệ"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:416
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:112
 msgid "It is NOT recommended for the casual user."
 msgstr "Không khuyến khích cho người dùng thông thường."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:194
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:221
+msgid "Keep-alive timeout"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:121
+msgid "Listen addresses"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:40
 msgid "Location of the Privoxy User Manual."
 msgstr "Vị trí của Sổ tay Người dùng Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:108
-msgid "Log File Viewer"
-msgstr "Trình xem Tệp Nhật ký"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:60
+msgid "Log Directory"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:899
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:66
+msgid "Log File"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:332
 msgid "Log all data read from the network"
 msgstr "Ghi nhật ký tất cả dữ liệu đọc từ mạng"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:831
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:290
 msgid "Log all data written to the network"
 msgstr "Ghi nhật ký tất cả dữ liệu ghi vào mạng"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:905
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:336
 msgid "Log the applying actions"
 msgstr "Ghi nhật ký các hành động áp dụng"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:807
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:274
 msgid ""
 "Log the destination for each request Privoxy let through. See also 'Debug "
 "1024'."
 msgstr ""
 "Ghi nhật ký điểm đến cho mỗi yêu cầu Privoxy cho qua. Xem thêm 'Debug 1024'."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:867
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:314
 msgid ""
 "Log the destination for requests Privoxy didn't let through, and the reason "
 "why."
 msgstr ""
 "Ghi nhật ký điểm đến cho các yêu cầu Privoxy không cho qua và lý do tại sao."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:104
-msgid "Logging"
-msgstr "Ghi nhật ký"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:339
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:99
 msgid "Main actions file"
 msgstr "Tệp hành động chính"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:461
-msgid "Mandatory Input: No Data given!"
-msgstr "Đầu vào Bắt buộc: Không có Dữ liệu nào được cung cấp!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:259
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:296
-msgid "Mandatory Input: No Directory given!"
-msgstr "Đầu vào Bắt buộc: Không có Thư mục nào được cung cấp!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:279
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:72
 msgid "Mandatory Input: No File given!"
 msgstr "Đầu vào Bắt buộc: Không có Tệp nào được cung cấp!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:479
-msgid "Mandatory Input: No Port given!"
-msgstr "Đầu vào Bắt buộc: Không có Cổng nào được cung cấp!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:345
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:381
-msgid "Mandatory Input: No files given!"
-msgstr "Đầu vào Bắt buộc: Không có tệp nào được cung cấp!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:482
-msgid "Mandatory Input: No valid IPv4 address or host given!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:242
+msgid "Max. client connections"
 msgstr ""
-"Đầu vào Bắt buộc: Không có địa chỉ IPv4 hoặc máy chủ hợp lệ nào được cung "
-"cấp!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:470
-msgid "Mandatory Input: No valid IPv6 address given!"
-msgstr "Đầu vào Bắt buộc: Không có địa chỉ IPv6 hợp lệ nào được cung cấp!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:472
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:484
-msgid "Mandatory Input: No valid Port given!"
-msgstr "Đầu vào Bắt buộc: Không có Cổng hợp lệ nào được cung cấp!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:737
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:244
 msgid "Maximum number of client connections that will be served."
 msgstr "Số lượng kết nối khách hàng tối đa sẽ được phục vụ."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:535
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:142
 msgid "Maximum size (in KB) of the buffer for content filtering."
 msgstr "Kích thước tối đa (theo KB) của bộ đệm cho lọc nội dung."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:97
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:100
-msgid "Miscellaneous"
-msgstr "Linh tinh"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:207
+msgid "Misc"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:51
-msgid "NOT installed"
-msgstr "CHƯA được cài đặt"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:254
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:291
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:310
-msgid "No trailing '/', please."
-msgstr "Không có dấu '/' ở cuối, xin vui lòng."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:885
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:326
 msgid "Non-fatal errors - *we highly recommended enabling this*"
 msgstr "Gây lỗi nhỏ - *chúng tôi khuyến khích bạn bật tính năng này*"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:718
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:239
 msgid ""
 "Number of seconds after which a socket times out if no data is received."
 msgstr ""
 "Số giây sau đó một socket bị hết thời gian nếu không nhận được dữ liệu."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:672
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:222
 msgid ""
 "Number of seconds after which an open connection will no longer be reused."
 msgstr "Số giây sau đó một kết nối mở sẽ không được sử dụng lại."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:327
-msgid ""
-"Only when using 'external filters', Privoxy has to create temporary files."
-msgstr "Chỉ khi sử dụng 'bộ lọc bên ngoài', Privoxy phải tạo các tệp tạm thời."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:129
+msgid "Permit access"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:81
-msgid "Please install current version !"
-msgstr "Vui lòng cài đặt phiên bản hiện tại !"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:917
-msgid "Please press [Read] button"
-msgstr "Vui lòng nhấn nút [Đọc]"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:518
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:527
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:130
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:136
 msgid "Please read Privoxy manual for details!"
 msgstr "Vui lòng đọc sổ tay Privoxy để biết chi tiết!"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:92
-msgid "Please update to the current version!"
-msgstr "Vui lòng cập nhật lên phiên bản hiện tại!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:12
+msgid "Privoxy"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:24
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:15
+msgid "Privoxy Settings"
+msgstr ""
+
+#: applications/luci-app-privoxy/root/usr/share/luci/menu.d/luci-app-privoxy.json:3
 msgid "Privoxy WEB proxy"
 msgstr "Proxy WEB Privoxy"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:76
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:55
 msgid ""
 "Privoxy can (and normally does) use a number of other files for additional "
 "configuration, help and logging. This section of the configuration file "
@@ -352,77 +427,74 @@ msgstr ""
 "giúp và ghi nhật ký. Phần này của tệp cấu hình cho Privoxy biết nơi tìm thấy "
 "các tệp khác đó."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:32
-msgid ""
-"Privoxy is a non-caching web proxy with advanced filtering capabilities for "
-"enhancing privacy, modifying web page data and HTTP headers, controlling "
-"access, and removing ads and other obnoxious Internet junk."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:47
+msgid "Proxy Info URL"
 msgstr ""
-"Privoxy là một proxy web không lưu đệm với khả năng lọc nâng cao để tăng "
-"cường quyền riêng tư, sửa đổi dữ liệu trang web và tiêu đề HTTP, kiểm soát "
-"truy cập và loại bỏ quảng cáo và các rác rưởi Internet khó chịu khác."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:912
-msgid "Read / Reread log file"
-msgstr "Đọc / Đọc lại tệp nhật ký"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:819
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:282
 msgid "Show I/O status"
 msgstr "Hiển thị trạng thái I/O"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:813
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:278
 msgid "Show each connection status"
 msgstr "Hiển thị trạng thái của từng kết nối"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:825
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:286
 msgid "Show header parsing"
 msgstr "Hiển thị phân tích tiêu đề"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:76
-msgid "Software package '%s' is not installed."
-msgstr "Gói phần mềm '%s' chưa được cài đặt."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:268
+msgid "Single Threaded"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:85
-msgid "Software package '%s' is outdated."
-msgstr "Gói phần mềm '%s' đã lỗi thời."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:237
+msgid "Socket timeout"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:125
-#: applications/luci-app-privoxy/luasrc/view/privoxy/detail_startstop.htm:10
-msgid "Start"
-msgstr "Bắt đầu"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:217
+msgid "Split large forms"
+msgstr ""
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:115
-msgid "Start / Stop"
-msgstr "Bắt đầu / Dừng"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:116
-msgid "Start/Stop Privoxy WEB Proxy"
-msgstr "Bắt đầu/Dừng Proxy WEB Privoxy"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:879
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:322
 msgid "Startup banner and warnings."
 msgstr "Biểu ngữ khởi động và cảnh báo."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:455
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:620
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:635
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:123
 msgid "Syntax:"
 msgstr "Cú pháp:"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:790
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:262
 msgid "Syntax: Client header names delimited by spaces."
 msgstr "Cú pháp: Tên tiêu đề khách hàng được phân cách bằng dấu cách."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:612
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:199
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:203
+msgid ""
+"Syntax: target_pattern [user:pass@]socks_proxy[:port] http_parent[:port]"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:187
 msgid "Syntax: target_pattern http_parent[:port]"
 msgstr "Cú pháp: mẫu_đích http_cha[:cổng]"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:59
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:62
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:191
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:195
+msgid "Syntax: target_pattern socks_proxy[:port] http_parent[:port]"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:19
 msgid "System"
 msgstr "Hệ thống"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:335
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:83
+msgid "Template Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:89
+msgid "Temporary Directory"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:97
 msgid ""
 "The actions file(s) to use. Multiple actionsfile lines are permitted, and "
 "are in fact recommended!"
@@ -430,51 +502,49 @@ msgstr ""
 "Tệp hành động để sử dụng. Nhiều dòng actionsfile được cho phép và thực sự "
 "được khuyến khích!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:453
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:122
 msgid ""
 "The address and TCP port on which Privoxy will listen for client requests."
 msgstr ""
 "Địa chỉ và cổng TCP mà Privoxy sẽ lắng nghe các yêu cầu của khách hàng."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:770
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:257
 msgid ""
 "The compression level that is passed to the zlib library when compressing "
 "buffered content."
 msgstr "Mức nén được truyền đến thư viện zlib khi nén nội dung đệm."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:252
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:61
 msgid ""
 "The directory where all logging takes place (i.e. where the logfile is "
-"located)."
+"located).<br />No trailing \"/\", please."
 msgstr ""
-"Thư mục nơi tất cả các hoạt động ghi nhật ký diễn ra (tức là nơi tệp nhật ký "
-"được đặt)."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:289
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:78
 msgid "The directory where the other configuration files are located."
 msgstr "Thư mục nơi các tệp cấu hình khác được đặt."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:377
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:105
 msgid ""
 "The filter files contain content modification rules that use regular "
 "expressions."
 msgstr ""
 "Các tệp bộ lọc chứa các quy tắc sửa đổi nội dung sử dụng biểu thức chính quy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:183
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:36
 msgid "The hostname shown on the CGI pages."
 msgstr "Tên máy chủ được hiển thị trên các trang CGI."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:274
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:67
 msgid "The log file to use. File name, relative to log directory."
 msgstr "Tệp nhật ký để sử dụng. Tên tệp, tương đối với thư mục nhật ký."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:788
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:261
 msgid "The order in which client headers are sorted before forwarding them."
 msgstr ""
 "Thứ tự mà các tiêu đề khách hàng được sắp xếp trước khi chuyển tiếp chúng."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:755
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:248
 msgid ""
 "The status code Privoxy returns for pages blocked with +handle-as-empty-"
 "document."
@@ -482,7 +552,7 @@ msgstr ""
 "Mã trạng thái Privoxy trả về cho các trang bị chặn với +handle-as-empty-"
 "document."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:413
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:111
 msgid ""
 "The trust mechanism is an experimental feature for building white-lists and "
 "should be used with care."
@@ -490,15 +560,7 @@ msgstr ""
 "Cơ chế tin cậy là một tính năng thử nghiệm để xây dựng danh sách trắng và "
 "nên được sử dụng cẩn thận."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:238
-msgid ""
-"The value of this option only matters if the experimental trust mechanism "
-"has been activated."
-msgstr ""
-"Giá trị của tùy chọn này chỉ quan trọng nếu cơ chế tin cậy thử nghiệm đã "
-"được kích hoạt."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:800
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:270
 msgid ""
 "This option is only there for debugging purposes. It will drastically reduce "
 "performance."
@@ -506,7 +568,7 @@ msgstr ""
 "Tùy chọn này chỉ có cho mục đích gỡ lỗi. Nó sẽ làm giảm hiệu suất một cách "
 "đáng kể."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:574
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:163
 msgid ""
 "This option will be removed in future releases as it has been obsoleted by "
 "the more general header taggers."
@@ -514,14 +576,16 @@ msgstr ""
 "Tùy chọn này sẽ bị xóa trong các phiên bản tương lai vì nó đã bị lỗi thời "
 "bởi các trình gắn thẻ tiêu đề tổng quát hơn."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:85
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:118
 msgid ""
 "This tab controls the security-relevant aspects of Privoxy's configuration."
 msgstr ""
 "Tab này điều khiển các khía cạnh liên quan đến bảo mật của cấu hình Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:618
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:633
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:190
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:194
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:198
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:202
 msgid ""
 "Through which SOCKS proxy (and optionally to which parent HTTP proxy) "
 "specific requests should be routed."
@@ -529,62 +593,53 @@ msgstr ""
 "Qua proxy SOCKS nào (và tùy chọn đến proxy HTTP cha nào) các yêu cầu cụ thể "
 "nên được định tuyến."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:610
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:186
 msgid "To which parent HTTP proxy specific requests should be routed."
 msgstr "Đến proxy HTTP cha nào các yêu cầu cụ thể nên được định tuyến."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:341
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:149
+msgid "Toggle Status"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:225
+msgid "Tolerate pipelining"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:50
+msgid "Trust Info URL"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:110
+msgid "Trust file"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:51
+msgid ""
+"URL shown if access to an untrusted page is denied. Only applies if trust "
+"mechanism is enabled."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:48
+msgid "URL to documentation about the local Privoxy setup."
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:39
+msgid "User Manual"
+msgstr ""
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:100
 msgid "User customizations"
 msgstr "Tùy chỉnh của người dùng"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:166
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:543
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:677
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:700
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:724
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:743
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:776
-msgid "Value is not a number"
-msgstr "Giá trị không phải là một số"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:168
-msgid "Value not between 0 and 300"
-msgstr "Giá trị không nằm trong khoảng từ 0 đến 300"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:778
-msgid "Value not between 0 and 9"
-msgstr "Giá trị không nằm trong khoảng từ 0 đến 9"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:545
-msgid "Value not between 1 and 4096"
-msgstr "Giá trị không nằm trong khoảng từ 1 đến 4096"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:679
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:702
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:726
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:745
-msgid "Value not greater 0 or empty"
-msgstr "Giá trị không lớn hơn 0 hoặc rỗng"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:537
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:143
 msgid "Value range 1 to 4096, no entry defaults to 4096"
 msgstr "Phạm vi giá trị từ 1 đến 4096, không có mục nhập mặc định là 4096"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:45
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:47
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:50
-msgid "Version"
-msgstr "Phiên bản"
-
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:43
-msgid "Version Information"
-msgstr "Thông tin phiên bản"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:650
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:210
 msgid "Whether intercepted requests should be treated as valid."
 msgstr "Có phải các yêu cầu bị chặn nên được coi là hợp lệ hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:572
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:162
 msgid ""
 "Whether or not Privoxy recognizes special HTTP headers to change toggle "
 "state."
@@ -592,11 +647,11 @@ msgstr ""
 "Privoxy có nhận ra các tiêu đề HTTP đặc biệt để thay đổi trạng thái chuyển "
 "đổi hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:762
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:252
 msgid "Whether or not buffered content is compressed before delivery."
 msgstr "Có phải nội dung đệm được nén trước khi giao hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:710
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:234
 msgid ""
 "Whether or not outgoing connections that have been kept alive should be "
 "shared between different incoming connections."
@@ -604,63 +659,234 @@ msgstr ""
 "Có phải các kết nối đi ra đã được giữ sống nên được chia sẻ giữa các kết nối "
 "đến khác nhau hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:687
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:226
 msgid "Whether or not pipelined requests should be served."
 msgstr "Có phải các yêu cầu được xếp hàng nên được phục vụ hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:600
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:182
 msgid "Whether or not proxy authentication through Privoxy should work."
 msgstr "Có phải xác thực proxy thông qua Privoxy nên hoạt động hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:582
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:168
 msgid "Whether or not the web-based actions file editor may be used."
 msgstr ""
 "Có phải trình biên tập tệp hành động dựa trên web có thể được sử dụng hay "
 "không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:565
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:157
 msgid "Whether or not the web-based toggle feature may be used."
 msgstr ""
 "Có phải tính năng chuyển đổi dựa trên web có thể được sử dụng hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:657
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:214
 msgid "Whether requests to Privoxy's CGI pages can be blocked or redirected."
 msgstr ""
 "Có phải các yêu cầu đến các trang CGI của Privoxy có thể bị chặn hoặc chuyển "
 "hướng hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:664
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:218
 msgid ""
 "Whether the CGI interface should stay compatible with broken HTTP clients."
 msgstr ""
 "Dù giao diện CGI nên duy trì khả năng tương thích với các khách hàng HTTP bị "
 "lỗi."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:798
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:269
 msgid "Whether to run only one server thread."
 msgstr "Dù chạy chỉ một luồng máy chủ hay không."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:516
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:525
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:130
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:136
 msgid "Who can access what."
 msgstr "Ai có thể truy cập điều gì."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:49
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:87
-msgid "installed"
-msgstr "đã cài đặt"
+#~ msgid ""
+#~ "A URL to be displayed in the error page that users will see if access to "
+#~ "an untrusted page is denied."
+#~ msgstr ""
+#~ "Một URL sẽ được hiển thị trong trang lỗi mà người dùng sẽ thấy nếu quyền "
+#~ "truy cập vào một trang không đáng tin cậy bị từ chối."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:48
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:78
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:89
-msgid "or higher"
-msgstr "hoặc cao hơn"
+#~ msgid ""
+#~ "A URL to documentation about the local Privoxy setup, configuration or "
+#~ "policies."
+#~ msgstr ""
+#~ "Một URL tới tài liệu về thiết lập, cấu hình hoặc chính sách Privoxy cục "
+#~ "bộ."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:46
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:78
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:89
-msgid "required"
-msgstr "bắt buộc"
+#~ msgid "A directory where Privoxy can create temporary files."
+#~ msgstr "Một thư mục nơi Privoxy có thể tạo các tệp tạm thời."
 
-#~ msgid "Syntax: target_pattern socks_proxy[:port] http_parent[:port]"
-#~ msgstr "Cú pháp: mẫu_đích socks_proxy[:cổng] http_cha[:cổng]"
+#~ msgid "An alternative directory where the templates are loaded from."
+#~ msgstr "Một thư mục thay thế nơi các mẫu được tải từ."
+
+#~ msgid "An email address to reach the Privoxy administrator."
+#~ msgstr "Một địa chỉ email để liên hệ với quản trị viên Privoxy."
+
+#~ msgid ""
+#~ "Configure here the routing of HTTP requests through a chain of multiple "
+#~ "proxies. Note that parent proxies can severely decrease your privacy "
+#~ "level. Also specified here are SOCKS proxies."
+#~ msgstr ""
+#~ "Cấu hình tại đây việc định tuyến các yêu cầu HTTP qua một chuỗi nhiều "
+#~ "proxy. Lưu ý rằng các proxy cha có thể làm giảm mức độ riêng tư của bạn "
+#~ "nghiêm trọng. Cũng được chỉ định tại đây là các proxy SOCKS."
+
+#~ msgid "Delay (in seconds) during system boot before Privoxy start"
+#~ msgstr ""
+#~ "Độ trễ (tính bằng giây) trong quá trình khởi động hệ thống trước khi "
+#~ "Privoxy bắt đầu"
+
+#~ msgid "Directory does not exist!"
+#~ msgstr "Thư mục không tồn tại!"
+
+#~ msgid "During delay ifup-events are not monitored !"
+#~ msgstr "Trong thời gian chờ, các sự kiện ifup không được giám sát !"
+
+#~ msgid ""
+#~ "Enable/Disable autostart of Privoxy on system startup and interface events"
+#~ msgstr ""
+#~ "Bật/Tắt khởi động tự động của Privoxy khi hệ thống khởi động và các sự "
+#~ "kiện giao diện"
+
+#~ msgid "File '%s' not found inside Configuration Directory"
+#~ msgstr "Không tìm thấy tệp '%s' trong Thư mục Cấu hình"
+
+#~ msgid "File not found or empty"
+#~ msgstr "Không tìm thấy tệp hoặc tệp trống"
+
+#~ msgid "For help use link at the relevant option"
+#~ msgstr "Để được trợ giúp, hãy sử dụng liên kết tại tùy chọn liên quan"
+
+#~ msgid ""
+#~ "If enabled, Privoxy hides the 'go there anyway' link. The user obviously "
+#~ "should not be able to bypass any blocks."
+#~ msgstr ""
+#~ "Nếu bật, Privoxy sẽ ẩn liên kết 'đi đến đó dù sao'. Người dùng rõ ràng "
+#~ "không nên có thể bỏ qua bất kỳ khối nào."
+
+#~ msgid "Invalid email address"
+#~ msgstr "Địa chỉ email không hợp lệ"
+
+#~ msgid "Log File Viewer"
+#~ msgstr "Trình xem Tệp Nhật ký"
+
+#~ msgid "Logging"
+#~ msgstr "Ghi nhật ký"
+
+#~ msgid "Mandatory Input: No Data given!"
+#~ msgstr "Đầu vào Bắt buộc: Không có Dữ liệu nào được cung cấp!"
+
+#~ msgid "Mandatory Input: No Directory given!"
+#~ msgstr "Đầu vào Bắt buộc: Không có Thư mục nào được cung cấp!"
+
+#~ msgid "Mandatory Input: No Port given!"
+#~ msgstr "Đầu vào Bắt buộc: Không có Cổng nào được cung cấp!"
+
+#~ msgid "Mandatory Input: No files given!"
+#~ msgstr "Đầu vào Bắt buộc: Không có tệp nào được cung cấp!"
+
+#~ msgid "Mandatory Input: No valid IPv4 address or host given!"
+#~ msgstr ""
+#~ "Đầu vào Bắt buộc: Không có địa chỉ IPv4 hoặc máy chủ hợp lệ nào được cung "
+#~ "cấp!"
+
+#~ msgid "Mandatory Input: No valid IPv6 address given!"
+#~ msgstr "Đầu vào Bắt buộc: Không có địa chỉ IPv6 hợp lệ nào được cung cấp!"
+
+#~ msgid "Mandatory Input: No valid Port given!"
+#~ msgstr "Đầu vào Bắt buộc: Không có Cổng hợp lệ nào được cung cấp!"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Linh tinh"
+
+#~ msgid "NOT installed"
+#~ msgstr "CHƯA được cài đặt"
+
+#~ msgid "No trailing '/', please."
+#~ msgstr "Không có dấu '/' ở cuối, xin vui lòng."
+
+#~ msgid ""
+#~ "Only when using 'external filters', Privoxy has to create temporary files."
+#~ msgstr ""
+#~ "Chỉ khi sử dụng 'bộ lọc bên ngoài', Privoxy phải tạo các tệp tạm thời."
+
+#~ msgid "Please install current version !"
+#~ msgstr "Vui lòng cài đặt phiên bản hiện tại !"
+
+#~ msgid "Please press [Read] button"
+#~ msgstr "Vui lòng nhấn nút [Đọc]"
+
+#~ msgid "Please update to the current version!"
+#~ msgstr "Vui lòng cập nhật lên phiên bản hiện tại!"
+
+#~ msgid ""
+#~ "Privoxy is a non-caching web proxy with advanced filtering capabilities "
+#~ "for enhancing privacy, modifying web page data and HTTP headers, "
+#~ "controlling access, and removing ads and other obnoxious Internet junk."
+#~ msgstr ""
+#~ "Privoxy là một proxy web không lưu đệm với khả năng lọc nâng cao để tăng "
+#~ "cường quyền riêng tư, sửa đổi dữ liệu trang web và tiêu đề HTTP, kiểm "
+#~ "soát truy cập và loại bỏ quảng cáo và các rác rưởi Internet khó chịu khác."
+
+#~ msgid "Read / Reread log file"
+#~ msgstr "Đọc / Đọc lại tệp nhật ký"
+
+#~ msgid "Software package '%s' is not installed."
+#~ msgstr "Gói phần mềm '%s' chưa được cài đặt."
+
+#~ msgid "Software package '%s' is outdated."
+#~ msgstr "Gói phần mềm '%s' đã lỗi thời."
+
+#~ msgid "Start"
+#~ msgstr "Bắt đầu"
+
+#~ msgid "Start / Stop"
+#~ msgstr "Bắt đầu / Dừng"
+
+#~ msgid "Start/Stop Privoxy WEB Proxy"
+#~ msgstr "Bắt đầu/Dừng Proxy WEB Privoxy"
+
+#~ msgid ""
+#~ "The directory where all logging takes place (i.e. where the logfile is "
+#~ "located)."
+#~ msgstr ""
+#~ "Thư mục nơi tất cả các hoạt động ghi nhật ký diễn ra (tức là nơi tệp nhật "
+#~ "ký được đặt)."
+
+#~ msgid ""
+#~ "The value of this option only matters if the experimental trust mechanism "
+#~ "has been activated."
+#~ msgstr ""
+#~ "Giá trị của tùy chọn này chỉ quan trọng nếu cơ chế tin cậy thử nghiệm đã "
+#~ "được kích hoạt."
+
+#~ msgid "Value is not a number"
+#~ msgstr "Giá trị không phải là một số"
+
+#~ msgid "Value not between 0 and 300"
+#~ msgstr "Giá trị không nằm trong khoảng từ 0 đến 300"
+
+#~ msgid "Value not between 0 and 9"
+#~ msgstr "Giá trị không nằm trong khoảng từ 0 đến 9"
+
+#~ msgid "Value not between 1 and 4096"
+#~ msgstr "Giá trị không nằm trong khoảng từ 1 đến 4096"
+
+#~ msgid "Value not greater 0 or empty"
+#~ msgstr "Giá trị không lớn hơn 0 hoặc rỗng"
+
+#~ msgid "Version"
+#~ msgstr "Phiên bản"
+
+#~ msgid "Version Information"
+#~ msgstr "Thông tin phiên bản"
+
+#~ msgid "installed"
+#~ msgstr "đã cài đặt"
+
+#~ msgid "or higher"
+#~ msgstr "hoặc cao hơn"
+
+#~ msgid "required"
+#~ msgstr "bắt buộc"

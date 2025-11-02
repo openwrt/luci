@@ -59,7 +59,7 @@
 	},
 
 	"admin/network/dhcp": {
-		"title": "DHCP and DNS",
+		"title": "DHCP",
 		"order": 40,
 		"action": {
 			"type": "view",
@@ -67,6 +67,23 @@
 		},
 		"depends": {
 			"acl": [ "luci-mod-network-dhcp" ],
+			"fs": [
+				{ "/usr/sbin/odhcpd": "executable" },
+				{ "/usr/sbin/dnsmasq": "executable" }
+			],
+			"uci": { "dhcp": true }
+		}
+	},
+
+	"admin/network/dns": {
+		"title": "DNS",
+		"order": 45,
+		"action": {
+			"type": "view",
+			"path": "network/dns"
+		},
+		"depends": {
+			"acl": [ "luci-mod-network-dns" ],
 			"fs": { "/usr/sbin/dnsmasq": "executable" },
 			"uci": { "dhcp": true }
 		}

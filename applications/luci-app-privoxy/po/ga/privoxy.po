@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-09-07 19:01+0000\n"
+"PO-Revision-Date: 2025-06-20 14:21+0000\n"
 "Last-Translator: Aindriú Mac Giolla Eoin <aindriu80@gmail.com>\n"
 "Language-Team: Irish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsprivoxy/ga/>\n"
@@ -9,47 +9,52 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :("
 "n>6 && n<11) ? 3 : 4;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:236
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:90
 msgid ""
-"A URL to be displayed in the error page that users will see if access to an "
-"untrusted page is denied."
+"A directory where Privoxy can create temporary files.<br /><strong>Only when "
+"using 'external filters', Privoxy has to create temporary files.</strong>"
 msgstr ""
-"URL le taispeáint sa leathanach earráide a fheicfidh úsáideoirí má "
-"dhiúltaítear rochtain ar leathanach neamhiontaofa."
+"Eolaire inar féidir le Privoxy comhaid shealadacha a chruthú.<br /"
+"><strong>Nuair a úsáidtear 'scagairí seachtracha' amháin, ní mór do Privoxy "
+"comhaid shealadacha a chruthú.</strong>"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:226
-msgid ""
-"A URL to documentation about the local Privoxy setup, configuration or "
-"policies."
-msgstr ""
-"URL chun doiciméadú faoi shocrú, cumraíocht nó beartais áitiúil Privoxy."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:209
+msgid "Accept intercepted requests"
+msgstr "Glac le hiarratais idircheaptha"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:325
-msgid "A directory where Privoxy can create temporary files."
-msgstr "Eolaire inar féidir le Privoxy comhaid shealadacha a chruthú."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:84
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:87
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:118
 msgid "Access Control"
 msgstr "Rialú Rochtana"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:337
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:96
+msgid "Action Files"
+msgstr "Comhaid Ghníomhaíochta"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:98
 msgid "Actions that are applied to all sites and maybe overruled later on."
 msgstr ""
 "Gníomhartha a chuirtear i bhfeidhm ar gach suíomh agus b'fhéidir a shárú "
 "níos déanaí."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:308
-msgid "An alternative directory where the templates are loaded from."
-msgstr "Eolaire malartach áit a luchtaítear na teimpléid."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:42
+msgid "Admin Email"
+msgstr "Ríomhphost an Riarthóra"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:206
-msgid "An email address to reach the Privoxy administrator."
-msgstr "Seoladh ríomhphoist chun riarthóir Privoxy a bhaint amach."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:213
+msgid "Allow CGI request crunching"
+msgstr "Ceadaigh próiseáil iarratais CGI"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:695
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:84
+msgid ""
+"An alternative directory where the templates are loaded from.<br />No "
+"trailing \"/\", please."
+msgstr ""
+"Eolaire malartach as a lódálfar na teimpléid.<br />Gan \"/\" a leanúint, le "
+"do thoil."
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:230
 msgid ""
 "Assumed server-side keep-alive timeout (in seconds) if not specified by the "
 "server."
@@ -57,87 +62,183 @@ msgstr ""
 "Glactar leis an am a choinneáil beo ar thaobh an fhreastalaí (i soicindí) "
 "mura ndéanann an freastalaí a shonrú."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:151
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:22
 msgid "Boot delay"
 msgstr "Moill tosaithe"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:873
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:141
+msgid "Buffer Limit"
+msgstr "Teorainn Maoláin"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:318
 msgid "CGI user interface"
 msgstr "Comhéadan úsáideora CGI"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:861
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:260
+msgid "Client header order"
+msgstr "Ordú ceanntásc cliant"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:310
 msgid "Common Log Format"
 msgstr "Formáid Logála Coiteann"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:92
-msgid ""
-"Configure here the routing of HTTP requests through a chain of multiple "
-"proxies. Note that parent proxies can severely decrease your privacy level. "
-"Also specified here are SOCKS proxies."
-msgstr ""
-"Cumraigh anseo ródú iarratais HTTP trí slabhra iolracha seachfhreastaí. "
-"Tabhair faoi deara gur féidir le seachfhreastóirí tuismitheoirí do leibhéal "
-"príobháideachta Sonraítear anseo freisin tá seachfhálaí SOCKS."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:255
+msgid "Compression level"
+msgstr "Leibhéal comhbhrúite"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:855
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:77
+msgid "Configuration Directory"
+msgstr "Eolaire Cumraíochta"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:13
+msgid "Configure the Privoxy proxy daemon settings."
+msgstr "Cumraigh socruithe daemon seachfhreastalaí Privoxy."
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:233
+msgid "Connection sharing"
+msgstr "Comhroinnt nasc"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:266
+msgid "Debug"
+msgstr "Dífhabhtú"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:273
+msgid "Debug 1"
+msgstr "Dífhabhtú 1"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:313
+msgid "Debug 1024"
+msgstr "Dífhabhtú 1024"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:301
+msgid "Debug 128"
+msgstr "Dífhabhtú 128"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:289
+msgid "Debug 16"
+msgstr "Dífhabhtú 16"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:277
+msgid "Debug 2"
+msgstr "Dífhabhtú 2"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:317
+msgid "Debug 2048"
+msgstr "Dífhabhtú 2048"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:305
+msgid "Debug 256"
+msgstr "Dífhabhtú 256"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:293
+msgid "Debug 32"
+msgstr "Dífhabhtú 32"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:331
+msgid "Debug 32768"
+msgstr "Dífhabhtú 32768"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:281
+msgid "Debug 4"
+msgstr "Dífhabhtú 4"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:321
+msgid "Debug 4096"
+msgstr "Dífhabhtú 4096"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:309
+msgid "Debug 512"
+msgstr "Dífhabhtú 512"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:297
+msgid "Debug 64"
+msgstr "Dífhabhtú 64"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:335
+msgid "Debug 65536"
+msgstr "Dífhabhtú 65536"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:285
+msgid "Debug 8"
+msgstr "Dífhabhtú 8"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:325
+msgid "Debug 8192"
+msgstr "Dífhabhtú 8192"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:306
 msgid "Debug GIF de-animation"
 msgstr "Díbheochan GIF a dhífhabhtú"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:837
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:294
 msgid "Debug force feature"
 msgstr "Gné fórsa dífhabhtaithe"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:849
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:302
 msgid "Debug redirects"
 msgstr "Atreoracha dífhabhtú"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:843
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:298
 msgid "Debug regular expression filters"
 msgstr "Dífhabhtaigh scagairí léirithe"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:152
-msgid "Delay (in seconds) during system boot before Privoxy start"
-msgstr "Moill (i soicindí) le linn tosaithe an chórais sula dtosaíonn Privoxy"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:229
+msgid "Default server timeout"
+msgstr "Am críochnaithe réamhshocraithe an fhreastalaí"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:261
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:298
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:315
-msgid "Directory does not exist!"
-msgstr "Níl Eolaire ann!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:23
+msgid "Delay (in seconds) during system boot before Privoxy starts."
+msgstr "Moill (i soicindí) le linn tosaithe an chórais sula dtosaíonn Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:557
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:135
+msgid "Deny access"
+msgstr "Diúltaigh rochtain"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:151
 msgid "Disabled == Transparent Proxy Mode"
 msgstr "Díchumasaithe == Mód Seachfhreastala"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:66
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:71
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:31
 msgid "Documentation"
 msgstr "Doiciméadú"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:154
-msgid "During delay ifup-events are not monitored !"
-msgstr "Le linn moill ní dhéantar monatóireacht ar imeachtaí ifup!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:43
+msgid "Email address for the Privoxy administrator."
+msgstr "Seoladh ríomhphoist riarthóir Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:599
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:167
+msgid "Enable action file editor"
+msgstr "Cumasaigh eagarthóir comhad gníomhaíochta"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:251
+msgid "Enable compression"
+msgstr "Cumasaigh comhbhrú"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:181
 msgid "Enable proxy authentication forwarding"
 msgstr "Cumasaigh seachfhíordheimhniú"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:135
-msgid ""
-"Enable/Disable autostart of Privoxy on system startup and interface events"
-msgstr ""
-"Cumasach/Díchumasaigh uathosú Privoxy ar imeachtaí tosaithe agus comhéadain "
-"an chórais"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:156
+msgid "Enable remote toggle"
+msgstr "Cumasaigh lascán iargúlta"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:555
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:161
+msgid "Enable remote toggle via HTTP"
+msgstr "Cumasaigh lascán iargúlta trí HTTP"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
+msgid "Enable/Disable autostart of Privoxy"
+msgstr "Cumasaigh/Díchumasaigh uaththosú Privoxy"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:150
 msgid "Enable/Disable filtering when Privoxy starts."
 msgstr "Cumasach/Díchumasaigh scagadh nuair a thosaíonn Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:134
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:20
 msgid "Enabled"
 msgstr "Cumasaithe"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:602
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:183
 msgid ""
 "Enabling this option is NOT recommended if there is no parent proxy that "
 "requires authentication!"
@@ -145,27 +246,39 @@ msgstr ""
 "NÍ mholtar an rogha seo a chumasú mura bhfuil seachfhreastalaí tuismitheora "
 "ann a dteastaíonn fíordheimhniú uaidh!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:368
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:404
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:442
-msgid "File '%s' not found inside Configuration Directory"
-msgstr "Níor aimsíodh comhad '%s' taobh istigh de Eolaire Cumraíochta"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:172
+msgid "Enforce page blocking"
+msgstr "Cuir bac leathanaigh i bhfeidhm"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:919
-#: applications/luci-app-privoxy/luasrc/view/privoxy/detail_logview.htm:12
-msgid "File not found or empty"
-msgstr "Níor aimsíodh comhad nó folamh"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:75
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:80
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:55
 msgid "Files and Directories"
 msgstr "Comhaid agus Eolairí"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:36
-msgid "For help use link at the relevant option"
-msgstr "Le haghaidh cabhrach bain úsáid as an nasc ag an rogha ábhartha"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:104
+msgid "Filter files"
+msgstr "Scag comhaid"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:91
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:185
+msgid "Forward HTTP"
+msgstr "HTTP Ar Aghaidh"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:189
+msgid "Forward SOCKS 4"
+msgstr "Stocaí Ar Aghaidh 4"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:193
+msgid "Forward SOCKS 4A"
+msgstr "Stocaí Ar Aghaidh 4A"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:197
+msgid "Forward SOCKS 5"
+msgstr "Stocaí Ar Aghaidh 5"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:201
+msgid "Forward SOCKS 5t"
+msgstr "Stocaí Ar Aghaidh 5t"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:178
 msgid "Forwarding"
 msgstr "Ag Seoladh"
 
@@ -173,15 +286,24 @@ msgstr "Ag Seoladh"
 msgid "Grant UCI access for luci-app-privoxy"
 msgstr "Rochtain UCI a dheonú do luci-app-privoxy"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:589
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:247
+msgid "Handle as empty doc returns ok"
+msgstr "Láimhseáil mar dhoiciméad folamh a thugann ceart go leor ar ais"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:35
+msgid "Hostname"
+msgstr "Ainm óstach"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:173
 msgid ""
-"If enabled, Privoxy hides the 'go there anyway' link. The user obviously "
+"If enabled, Privoxy hides the \"go there anyway\" link. The user obviously "
 "should not be able to bypass any blocks."
 msgstr ""
-"Má tá sé cumasaithe, folaíonn Privoxy an nasc ‘téigh ann ar aon nós’. Is "
-"léir nár cheart go mbeadh an t-úsáideoir in ann aon bhloc a sheachbhóthar."
+"Má tá sé cumasaithe, cuireann Privoxy an nasc \"téigh ann ar aon nós\" i "
+"bhfolach. Ar ndóigh, níor cheart go mbeadh an t-úsáideoir in ann aon bhloic "
+"a sheachaint."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:67
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:31
 msgid ""
 "If you intend to operate Privoxy for more users than just yourself, it might "
 "be a good idea to let them know how to reach you, what you block and why you "
@@ -192,35 +314,43 @@ msgstr ""
 "bhaint amach, cad a chuireann tú bac agus cén fáth a ndéanann tú é sin, do "
 "bheartais, srl."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:215
-msgid "Invalid email address"
-msgstr "Seoladh ríomhphoist neam"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:416
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:112
 msgid "It is NOT recommended for the casual user."
 msgstr "NÍ mholtar é don úsáideoir ócáideach."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:194
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:221
+msgid "Keep-alive timeout"
+msgstr "Am scoir coinnigh beo"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:121
+msgid "Listen addresses"
+msgstr "Seoltaí Éisteachta"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:40
 msgid "Location of the Privoxy User Manual."
 msgstr "Suíomh Lámhleabhar Úsáideora Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:108
-msgid "Log File Viewer"
-msgstr "Breathnóir Comhad Logála"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:60
+msgid "Log Directory"
+msgstr "Eolaire Logála"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:899
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:66
+msgid "Log File"
+msgstr "Comhad Logála"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:332
 msgid "Log all data read from the network"
 msgstr "Logáil na sonraí go léite ón líonra"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:831
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:290
 msgid "Log all data written to the network"
 msgstr "Logáil na sonraí go léir scríofa chuig an líonra"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:905
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:336
 msgid "Log the applying actions"
 msgstr "Logáil na gníomhartha iarratais"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:807
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:274
 msgid ""
 "Log the destination for each request Privoxy let through. See also 'Debug "
 "1024'."
@@ -228,7 +358,7 @@ msgstr ""
 "Logáil an ceann scríbe do gach iarratas a ligeann Privoxy tríd. Féach "
 "freisin 'Debug 1024'."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:867
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:314
 msgid ""
 "Log the destination for requests Privoxy didn't let through, and the reason "
 "why."
@@ -236,118 +366,69 @@ msgstr ""
 "Logáil an ceann scríbe d'iarratais nár lig Privoxy tríd, agus an chúis cén "
 "fáth."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:104
-msgid "Logging"
-msgstr "Logáil"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:339
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:99
 msgid "Main actions file"
 msgstr "Príomh-chomhad gníomhartha"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:461
-msgid "Mandatory Input: No Data given!"
-msgstr "Ionchur Éigeantach: Níl aon Sonraí tugtha!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:259
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:296
-msgid "Mandatory Input: No Directory given!"
-msgstr "Ionchur Éigeantach: Níl aon Eolaire tugtha!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:279
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:72
 msgid "Mandatory Input: No File given!"
 msgstr "Ionchur Éigeantach: Níl aon Comhad tugtha!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:479
-msgid "Mandatory Input: No Port given!"
-msgstr "Ionchur Éigeantach: Níl aon Port tugtha!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:242
+msgid "Max. client connections"
+msgstr "Uasmhéid naisc cliant"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:345
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:381
-msgid "Mandatory Input: No files given!"
-msgstr "Ionchur Éigeantach: Níl aon chomhaid tugtha!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:482
-msgid "Mandatory Input: No valid IPv4 address or host given!"
-msgstr "Ionchur Éigeantach: Níl aon seoladh nó óstach bailí IPv4 tugtha!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:470
-msgid "Mandatory Input: No valid IPv6 address given!"
-msgstr "Ionchur Éigeantach: Níl aon seoladh bailí IPv6 tugtha!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:472
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:484
-msgid "Mandatory Input: No valid Port given!"
-msgstr "Ionchur Éigeantach: Níl aon Port bailí tugtha!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:737
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:244
 msgid "Maximum number of client connections that will be served."
 msgstr "Líon uasta na naisc cliant a sheirbheálfar."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:535
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:142
 msgid "Maximum size (in KB) of the buffer for content filtering."
 msgstr "Uasmhéid (i KB) an maoláin le haghaidh scagadh ábhair."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:97
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:100
-msgid "Miscellaneous"
-msgstr "Ilghnéireach"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:207
+msgid "Misc"
+msgstr "Ilghnéitheach"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:51
-msgid "NOT installed"
-msgstr "NÍL suiteáilte"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:254
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:291
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:310
-msgid "No trailing '/', please."
-msgstr "Gan aon leanúint '/', le do thoil."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:885
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:326
 msgid "Non-fatal errors - *we highly recommended enabling this*"
 msgstr "Earráidí neamh-mharfacha - * molaimid go mór é seo a chumasú*"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:718
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:239
 msgid ""
 "Number of seconds after which a socket times out if no data is received."
 msgstr ""
 "Líon na soicind ina dhiaidh sin déanann soicéad amach mura bhfaightear aon "
 "sonraí."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:672
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:222
 msgid ""
 "Number of seconds after which an open connection will no longer be reused."
 msgstr ""
 "Líon na soicind ina dhiaidh sin ní athúsáidfear nasc oscailte a thuilleadh."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:327
-msgid ""
-"Only when using 'external filters', Privoxy has to create temporary files."
-msgstr ""
-"Ní mór do Privoxy comhaid shealadacha a chruthú ach amháin nuair a bhíonn "
-"'scagairí seachtracha á n-úsáid agat."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:129
+msgid "Permit access"
+msgstr "Ceadaigh rochtain"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:81
-msgid "Please install current version !"
-msgstr "Suiteáil an leagan reatha le do thoil!"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:917
-msgid "Please press [Read] button"
-msgstr "Brúigh [Léigh] cnaipe le do thoil"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:518
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:527
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:130
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:136
 msgid "Please read Privoxy manual for details!"
 msgstr "Léigh lámhleabhar Privoxy le haghaidh sonraí!"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:92
-msgid "Please update to the current version!"
-msgstr "Nuashonraigh an leagan reatha le do thoil!"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:12
+msgid "Privoxy"
+msgstr "Privoxy"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:24
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:15
+msgid "Privoxy Settings"
+msgstr "Socruithe Privoxy"
+
+#: applications/luci-app-privoxy/root/usr/share/luci/menu.d/luci-app-privoxy.json:3
 msgid "Privoxy WEB proxy"
 msgstr "Seachfhreastalaí WEB Privoxy"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:76
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:55
 msgid ""
 "Privoxy can (and normally does) use a number of other files for additional "
 "configuration, help and logging. This section of the configuration file "
@@ -358,78 +439,75 @@ msgstr ""
 "den chomhad cumraíochta do Privoxy cá háit ar féidir na comhaid eile sin a "
 "fháil."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:32
-msgid ""
-"Privoxy is a non-caching web proxy with advanced filtering capabilities for "
-"enhancing privacy, modifying web page data and HTTP headers, controlling "
-"access, and removing ads and other obnoxious Internet junk."
-msgstr ""
-"Is seachfhreastalaí gréasáin neamh-chaching é Privoxy le hardchumais scagtha "
-"chun príobháideacht a fheabhsú, sonraí leathanaigh ghréasáin agus ceanntásca "
-"HTTP a mhodhnú, rochtain a rialú, agus fógraí agus bruscar Idirlín "
-"dochreidte eile a bhaint."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:47
+msgid "Proxy Info URL"
+msgstr "URL Faisnéise Seachfhreastalaí"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:912
-msgid "Read / Reread log file"
-msgstr "Léithe/Athléigh comhad log"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:819
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:282
 msgid "Show I/O status"
 msgstr "Taispeáin stádas I/O"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:813
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:278
 msgid "Show each connection status"
 msgstr "Taispeáin gach stádas nasc"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:825
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:286
 msgid "Show header parsing"
 msgstr "Taispeáin parsáil ceanntásc"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:76
-msgid "Software package '%s' is not installed."
-msgstr "Níl an pacáiste bogearraí '%s' suiteáilte."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:268
+msgid "Single Threaded"
+msgstr "Snáithithe Aonair"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:85
-msgid "Software package '%s' is outdated."
-msgstr "Tá pacáiste bogearraí '%s' as dáta."
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:237
+msgid "Socket timeout"
+msgstr "Am scoir soicéid"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:125
-#: applications/luci-app-privoxy/luasrc/view/privoxy/detail_startstop.htm:10
-msgid "Start"
-msgstr "Tosaigh"
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:217
+msgid "Split large forms"
+msgstr "Scoilt foirmeacha móra"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:115
-msgid "Start / Stop"
-msgstr "Tos/ Stop"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:116
-msgid "Start/Stop Privoxy WEB Proxy"
-msgstr "Tos/Stop Privoxy WEB Proxy"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:879
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:322
 msgid "Startup banner and warnings."
 msgstr "Meirge tosaithe agus rabhaidh."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:455
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:620
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:635
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:123
 msgid "Syntax:"
 msgstr "Comhréir:"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:790
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:262
 msgid "Syntax: Client header names delimited by spaces."
 msgstr "Comhréir: Ainmneacha ceanntásc cliant atá teoranta ag spásanna."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:612
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:199
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:203
+msgid ""
+"Syntax: target_pattern [user:pass@]socks_proxy[:port] http_parent[:port]"
+msgstr ""
+"Comhréir: patrún_target [úsáideoir:pas@]proxy_socks[:port] http_parent[:port]"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:187
 msgid "Syntax: target_pattern http_parent[:port]"
 msgstr "Comhréir: target_pattern http_parent [:port]"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:59
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:62
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:191
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:195
+msgid "Syntax: target_pattern socks_proxy[:port] http_parent[:port]"
+msgstr "Comhréir: patrún_target socks_proxy[:port] http_parent[:port]"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:19
 msgid "System"
 msgstr "Córas"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:335
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:83
+msgid "Template Directory"
+msgstr "Eolaire Teimpléid"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:89
+msgid "Temporary Directory"
+msgstr "Eolaire Sealadach"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:97
 msgid ""
 "The actions file(s) to use. Multiple actionsfile lines are permitted, and "
 "are in fact recommended!"
@@ -437,14 +515,14 @@ msgstr ""
 "An comhad (í) gníomhartha atá le húsáid. Ceadaítear línte comhad "
 "gníomhaíochtaí iolracha, agus moltar iad i ndáiríre!"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:453
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:122
 msgid ""
 "The address and TCP port on which Privoxy will listen for client requests."
 msgstr ""
 "An seoladh agus an calafort TCP ar éisteoidh Privoxy le hiarratais ar "
 "chliaint."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:770
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:257
 msgid ""
 "The compression level that is passed to the zlib library when compressing "
 "buffered content."
@@ -452,18 +530,19 @@ msgstr ""
 "An leibhéal comhbhrúite a chuirtear chuig an leabharlann zlib agus ábhar "
 "maolaithe á gcomhbhrú."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:252
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:61
 msgid ""
 "The directory where all logging takes place (i.e. where the logfile is "
-"located)."
+"located).<br />No trailing \"/\", please."
 msgstr ""
-"An eolaire ina ndéantar gach logáil (ie áit a bhfuil an logfile suite)."
+"An t-eolaire ina ndéantar an logáil go léir (i.e. an áit a bhfuil an comhad "
+"loga suite).<br />Gan \"/\" a leanúint, le do thoil."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:289
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:78
 msgid "The directory where the other configuration files are located."
 msgstr "An eolaire ina bhfuil na comhaid chumraíochta eile suite."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:377
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:105
 msgid ""
 "The filter files contain content modification rules that use regular "
 "expressions."
@@ -471,22 +550,22 @@ msgstr ""
 "Tá rialacha modhnaithe ábhair sna comhaid scagaire a úsáideann nathanna "
 "rialta."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:183
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:36
 msgid "The hostname shown on the CGI pages."
 msgstr "An t-ainm óstach a thaispeántar ar na leathanaigh CGI."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:274
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:67
 msgid "The log file to use. File name, relative to log directory."
 msgstr ""
 "An comhad logála le húsáid. Ainm comhaid, i gcoibhneas le eolaire logála."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:788
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:261
 msgid "The order in which client headers are sorted before forwarding them."
 msgstr ""
 "An t-ord ina ndéantar ceanntásca cliant a shórtáil sula gcuirtear iad ar "
 "aghaidh."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:755
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:248
 msgid ""
 "The status code Privoxy returns for pages blocked with +handle-as-empty-"
 "document."
@@ -494,7 +573,7 @@ msgstr ""
 "Filleann an cód stádais Privoxy le haghaidh leathanaigh atá blocáilte "
 "len+handle-as-empty-document."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:413
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:111
 msgid ""
 "The trust mechanism is an experimental feature for building white-lists and "
 "should be used with care."
@@ -502,15 +581,7 @@ msgstr ""
 "Is gné thurgnamhach é an mheicníocht iontaobhais chun liostaí bána a thógáil "
 "agus ba chóir í a úsáid go cúramach."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:238
-msgid ""
-"The value of this option only matters if the experimental trust mechanism "
-"has been activated."
-msgstr ""
-"Ní mór luach an rogha seo ach má tá an mheicníocht iontaobhais turgnamhach "
-"gníomhachtaithe."
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:800
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:270
 msgid ""
 "This option is only there for debugging purposes. It will drastically reduce "
 "performance."
@@ -518,7 +589,7 @@ msgstr ""
 "Níl an rogha seo ann ach chun críocha dífhabhtaithe. Laghdóidh sé "
 "feidhmíocht go suntasach."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:574
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:163
 msgid ""
 "This option will be removed in future releases as it has been obsoleted by "
 "the more general header taggers."
@@ -526,15 +597,17 @@ msgstr ""
 "Bainfear an rogha seo in eisiúintí amach anseo toisc go bhfuil na clibeoirí "
 "ceanntásc níos ginearálta tar éis é a chur in iúl."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:85
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:118
 msgid ""
 "This tab controls the security-relevant aspects of Privoxy's configuration."
 msgstr ""
 "Rialaíonn an cluaisín seo na gnéithe atá ábhartha do shlándáil de "
 "chumraíocht Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:618
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:633
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:190
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:194
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:198
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:202
 msgid ""
 "Through which SOCKS proxy (and optionally to which parent HTTP proxy) "
 "specific requests should be routed."
@@ -542,64 +615,57 @@ msgstr ""
 "Tríd an seachfhreastalaí SOCKS (agus go roghnach cén tuismitheoir "
 "seachfhreastalaí HTTP) ba cheart iarratais ar leith a threorú."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:610
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:186
 msgid "To which parent HTTP proxy specific requests should be routed."
 msgstr ""
 "Cé na hiarratais shainiúla seachfhreastalaí HTTP chucu ar cheart iad a "
 "threorú."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:341
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:149
+msgid "Toggle Status"
+msgstr "Stádas a Athrú"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:225
+msgid "Tolerate pipelining"
+msgstr "Glac le píblíneáil"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:50
+msgid "Trust Info URL"
+msgstr "URL Faisnéise Muiníne"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:110
+msgid "Trust file"
+msgstr "Comhad muiníne"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:51
+msgid ""
+"URL shown if access to an untrusted page is denied. Only applies if trust "
+"mechanism is enabled."
+msgstr ""
+"Taispeántar an URL má dhiúltaítear rochtain ar leathanach neamhiontaofa. Ní "
+"bhaineann sé seo ach amháin má tá an sásra muiníne cumasaithe."
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:48
+msgid "URL to documentation about the local Privoxy setup."
+msgstr "URL chuig doiciméadacht faoin socrú áitiúil Privoxy."
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:39
+msgid "User Manual"
+msgstr "Lámhleabhar Úsáideora"
+
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:100
 msgid "User customizations"
 msgstr "Saincheaptha úsáideora"
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:166
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:543
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:677
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:700
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:724
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:743
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:776
-msgid "Value is not a number"
-msgstr "Ní uimhir í an luach"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:168
-msgid "Value not between 0 and 300"
-msgstr "Luach nach bhfuil idir 0 agus 300"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:778
-msgid "Value not between 0 and 9"
-msgstr "Luach nach bhfuil idir 0 agus 9"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:545
-msgid "Value not between 1 and 4096"
-msgstr "Luach nach bhfuil idir 1 agus 4096"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:679
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:702
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:726
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:745
-msgid "Value not greater 0 or empty"
-msgstr "Luach nach mó 0 nó folamh"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:537
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:143
 msgid "Value range 1 to 4096, no entry defaults to 4096"
 msgstr "Raon luacha 1 go 4096, gan aon réamhshocruithe iontrála go 4096"
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:45
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:47
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:50
-msgid "Version"
-msgstr "Leagan"
-
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:43
-msgid "Version Information"
-msgstr "Eolas Leagan"
-
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:650
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:210
 msgid "Whether intercepted requests should be treated as valid."
 msgstr "Cibé an gcaithfear le hiarratais idirghabháilte mar bhailí."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:572
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:162
 msgid ""
 "Whether or not Privoxy recognizes special HTTP headers to change toggle "
 "state."
@@ -607,12 +673,12 @@ msgstr ""
 "Cibé an aithníonn Privoxy ceanntásca HTTP speisialta nó nach bhfuil chun "
 "stát toggle a athrú."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:762
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:252
 msgid "Whether or not buffered content is compressed before delivery."
 msgstr ""
 "Cibé an bhfuil ábhar maolaithe comhbhrúite nó nach bhfuil roimh sheachadadh."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:710
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:234
 msgid ""
 "Whether or not outgoing connections that have been kept alive should be "
 "shared between different incoming connections."
@@ -620,61 +686,232 @@ msgstr ""
 "Ba chóir naisc imeachta a choinneáil beo a roinnt idir naisc éagsúla atá ag "
 "teacht isteach nó nach bhfuil."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:687
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:226
 msgid "Whether or not pipelined requests should be served."
 msgstr "Cibé acu ba chóir iarratais píblínte a sheirbheáil nó nach bhfuil."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:600
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:182
 msgid "Whether or not proxy authentication through Privoxy should work."
 msgstr ""
 "Cibé ar cheart nó nár cheart go n-oibreodh fíordheimhniú seachfhreastalaí "
 "trí Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:582
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:168
 msgid "Whether or not the web-based actions file editor may be used."
 msgstr ""
 "Cibé an féidir eagarthóir comhad gníomhartha bunaithe ar an ngréasán a úsáid "
 "nó nach féidir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:565
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:157
 msgid "Whether or not the web-based toggle feature may be used."
 msgstr ""
 "Cibé an féidir an ghné toggle bunaithe ar an ngréasán a úsáid nó nach féidir."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:657
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:214
 msgid "Whether requests to Privoxy's CGI pages can be blocked or redirected."
 msgstr ""
 "Cibé an féidir iarratais chuig leathanaigh CGI Privoxy a bhac nó a atreorú."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:664
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:218
 msgid ""
 "Whether the CGI interface should stay compatible with broken HTTP clients."
 msgstr ""
 "Cibé an chóir don chomhéadan CGI fanacht comhoiriúnach le cliaint HTTP "
 "briste."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:798
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:269
 msgid "Whether to run only one server thread."
 msgstr "Cibé acu ach snáithe freastalaí amháin a reáchtáil."
 
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:516
-#: applications/luci-app-privoxy/luasrc/model/cbi/privoxy.lua:525
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:130
+#: applications/luci-app-privoxy/htdocs/luci-static/resources/view/privoxy/privoxy.js:136
 msgid "Who can access what."
 msgstr "Cé atá in ann rochtain a fháil ar cad."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:49
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:87
-msgid "installed"
-msgstr "suiteáilte"
+#~ msgid ""
+#~ "A URL to be displayed in the error page that users will see if access to "
+#~ "an untrusted page is denied."
+#~ msgstr ""
+#~ "URL le taispeáint sa leathanach earráide a fheicfidh úsáideoirí má "
+#~ "dhiúltaítear rochtain ar leathanach neamhiontaofa."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:48
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:78
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:89
-msgid "or higher"
-msgstr "nó níos airde"
+#~ msgid ""
+#~ "A URL to documentation about the local Privoxy setup, configuration or "
+#~ "policies."
+#~ msgstr ""
+#~ "URL chun doiciméadú faoi shocrú, cumraíocht nó beartais áitiúil Privoxy."
 
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:46
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:78
-#: applications/luci-app-privoxy/luasrc/controller/privoxy.lua:89
-msgid "required"
-msgstr "riachtanach"
+#~ msgid "A directory where Privoxy can create temporary files."
+#~ msgstr "Eolaire inar féidir le Privoxy comhaid shealadacha a chruthú."
+
+#~ msgid "An alternative directory where the templates are loaded from."
+#~ msgstr "Eolaire malartach áit a luchtaítear na teimpléid."
+
+#~ msgid "An email address to reach the Privoxy administrator."
+#~ msgstr "Seoladh ríomhphoist chun riarthóir Privoxy a bhaint amach."
+
+#~ msgid ""
+#~ "Configure here the routing of HTTP requests through a chain of multiple "
+#~ "proxies. Note that parent proxies can severely decrease your privacy "
+#~ "level. Also specified here are SOCKS proxies."
+#~ msgstr ""
+#~ "Cumraigh anseo ródú iarratais HTTP trí slabhra iolracha seachfhreastaí. "
+#~ "Tabhair faoi deara gur féidir le seachfhreastóirí tuismitheoirí do "
+#~ "leibhéal príobháideachta Sonraítear anseo freisin tá seachfhálaí SOCKS."
+
+#~ msgid "Delay (in seconds) during system boot before Privoxy start"
+#~ msgstr ""
+#~ "Moill (i soicindí) le linn tosaithe an chórais sula dtosaíonn Privoxy"
+
+#~ msgid "Directory does not exist!"
+#~ msgstr "Níl Eolaire ann!"
+
+#~ msgid "During delay ifup-events are not monitored !"
+#~ msgstr "Le linn moill ní dhéantar monatóireacht ar imeachtaí ifup!"
+
+#~ msgid ""
+#~ "Enable/Disable autostart of Privoxy on system startup and interface events"
+#~ msgstr ""
+#~ "Cumasach/Díchumasaigh uathosú Privoxy ar imeachtaí tosaithe agus "
+#~ "comhéadain an chórais"
+
+#~ msgid "File '%s' not found inside Configuration Directory"
+#~ msgstr "Níor aimsíodh comhad '%s' taobh istigh de Eolaire Cumraíochta"
+
+#~ msgid "File not found or empty"
+#~ msgstr "Níor aimsíodh comhad nó folamh"
+
+#~ msgid "For help use link at the relevant option"
+#~ msgstr "Le haghaidh cabhrach bain úsáid as an nasc ag an rogha ábhartha"
+
+#~ msgid ""
+#~ "If enabled, Privoxy hides the 'go there anyway' link. The user obviously "
+#~ "should not be able to bypass any blocks."
+#~ msgstr ""
+#~ "Má tá sé cumasaithe, folaíonn Privoxy an nasc ‘téigh ann ar aon nós’. Is "
+#~ "léir nár cheart go mbeadh an t-úsáideoir in ann aon bhloc a sheachbhóthar."
+
+#~ msgid "Invalid email address"
+#~ msgstr "Seoladh ríomhphoist neam"
+
+#~ msgid "Log File Viewer"
+#~ msgstr "Breathnóir Comhad Logála"
+
+#~ msgid "Logging"
+#~ msgstr "Logáil"
+
+#~ msgid "Mandatory Input: No Data given!"
+#~ msgstr "Ionchur Éigeantach: Níl aon Sonraí tugtha!"
+
+#~ msgid "Mandatory Input: No Directory given!"
+#~ msgstr "Ionchur Éigeantach: Níl aon Eolaire tugtha!"
+
+#~ msgid "Mandatory Input: No Port given!"
+#~ msgstr "Ionchur Éigeantach: Níl aon Port tugtha!"
+
+#~ msgid "Mandatory Input: No files given!"
+#~ msgstr "Ionchur Éigeantach: Níl aon chomhaid tugtha!"
+
+#~ msgid "Mandatory Input: No valid IPv4 address or host given!"
+#~ msgstr "Ionchur Éigeantach: Níl aon seoladh nó óstach bailí IPv4 tugtha!"
+
+#~ msgid "Mandatory Input: No valid IPv6 address given!"
+#~ msgstr "Ionchur Éigeantach: Níl aon seoladh bailí IPv6 tugtha!"
+
+#~ msgid "Mandatory Input: No valid Port given!"
+#~ msgstr "Ionchur Éigeantach: Níl aon Port bailí tugtha!"
+
+#~ msgid "Miscellaneous"
+#~ msgstr "Ilghnéireach"
+
+#~ msgid "NOT installed"
+#~ msgstr "NÍL suiteáilte"
+
+#~ msgid "No trailing '/', please."
+#~ msgstr "Gan aon leanúint '/', le do thoil."
+
+#~ msgid ""
+#~ "Only when using 'external filters', Privoxy has to create temporary files."
+#~ msgstr ""
+#~ "Ní mór do Privoxy comhaid shealadacha a chruthú ach amháin nuair a bhíonn "
+#~ "'scagairí seachtracha á n-úsáid agat."
+
+#~ msgid "Please install current version !"
+#~ msgstr "Suiteáil an leagan reatha le do thoil!"
+
+#~ msgid "Please press [Read] button"
+#~ msgstr "Brúigh [Léigh] cnaipe le do thoil"
+
+#~ msgid "Please update to the current version!"
+#~ msgstr "Nuashonraigh an leagan reatha le do thoil!"
+
+#~ msgid ""
+#~ "Privoxy is a non-caching web proxy with advanced filtering capabilities "
+#~ "for enhancing privacy, modifying web page data and HTTP headers, "
+#~ "controlling access, and removing ads and other obnoxious Internet junk."
+#~ msgstr ""
+#~ "Is seachfhreastalaí gréasáin neamh-chaching é Privoxy le hardchumais "
+#~ "scagtha chun príobháideacht a fheabhsú, sonraí leathanaigh ghréasáin agus "
+#~ "ceanntásca HTTP a mhodhnú, rochtain a rialú, agus fógraí agus bruscar "
+#~ "Idirlín dochreidte eile a bhaint."
+
+#~ msgid "Read / Reread log file"
+#~ msgstr "Léithe/Athléigh comhad log"
+
+#~ msgid "Software package '%s' is not installed."
+#~ msgstr "Níl an pacáiste bogearraí '%s' suiteáilte."
+
+#~ msgid "Software package '%s' is outdated."
+#~ msgstr "Tá pacáiste bogearraí '%s' as dáta."
+
+#~ msgid "Start"
+#~ msgstr "Tosaigh"
+
+#~ msgid "Start / Stop"
+#~ msgstr "Tos/ Stop"
+
+#~ msgid "Start/Stop Privoxy WEB Proxy"
+#~ msgstr "Tos/Stop Privoxy WEB Proxy"
+
+#~ msgid ""
+#~ "The directory where all logging takes place (i.e. where the logfile is "
+#~ "located)."
+#~ msgstr ""
+#~ "An eolaire ina ndéantar gach logáil (ie áit a bhfuil an logfile suite)."
+
+#~ msgid ""
+#~ "The value of this option only matters if the experimental trust mechanism "
+#~ "has been activated."
+#~ msgstr ""
+#~ "Ní mór luach an rogha seo ach má tá an mheicníocht iontaobhais "
+#~ "turgnamhach gníomhachtaithe."
+
+#~ msgid "Value is not a number"
+#~ msgstr "Ní uimhir í an luach"
+
+#~ msgid "Value not between 0 and 300"
+#~ msgstr "Luach nach bhfuil idir 0 agus 300"
+
+#~ msgid "Value not between 0 and 9"
+#~ msgstr "Luach nach bhfuil idir 0 agus 9"
+
+#~ msgid "Value not between 1 and 4096"
+#~ msgstr "Luach nach bhfuil idir 1 agus 4096"
+
+#~ msgid "Value not greater 0 or empty"
+#~ msgstr "Luach nach mó 0 nó folamh"
+
+#~ msgid "Version"
+#~ msgstr "Leagan"
+
+#~ msgid "Version Information"
+#~ msgstr "Eolas Leagan"
+
+#~ msgid "installed"
+#~ msgstr "suiteáilte"
+
+#~ msgid "or higher"
+#~ msgstr "nó níos airde"
+
+#~ msgid "required"
+#~ msgstr "riachtanach"

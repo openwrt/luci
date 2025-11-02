@@ -79,7 +79,8 @@ msgstr "RRD統計のバックアップ"
 msgid ""
 "Backup and restore RRD statistics to/from non-volatile storage around "
 "shutdown, reboot, and/or sysupgrade"
-msgstr "シャットダウン、再起動、および/または、sysupgradeの前後に、RRD統計情報を不揮"
+msgstr ""
+"シャットダウン、再起動、および/または、sysupgradeの前後に、RRD統計情報を不揮"
 "発性ストレージにバックアップおよび復元します"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:59
@@ -112,6 +113,10 @@ msgid "By setting this, CPU is not aggregate of all processors on the system"
 msgstr ""
 "この設定により、 CPU はシステム上のすべてのプロセッサーの総計ではなくなりま"
 "す。"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:79
+msgid "CACert"
+msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/contextswitch.js:6
 msgid "CPU Context Switches Plugin Configuration"
@@ -167,7 +172,7 @@ msgstr "Chrony プラグイン構成"
 msgid "Chrony monitoring enabled"
 msgstr "Chrony モニタリングが有効"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:72
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:85
 msgid "CleanSession"
 msgstr ""
 
@@ -447,7 +452,7 @@ msgstr "追加アイテム"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:61
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:68
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:75
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:88
 msgid "False"
 msgstr ""
 
@@ -926,7 +931,7 @@ msgstr ""
 msgid "Mqtt Plugin Configuration"
 msgstr ""
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:86
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:99
 msgid "Mqtt plugin enabled"
 msgstr ""
 
@@ -1369,6 +1374,18 @@ msgstr "TCP 接続"
 msgid "TCPConns Plugin Configuration"
 msgstr "TCP接続プラグイン設定"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:74
+msgid "TLS 1.2"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:75
+msgid "TLS 1.3"
+msgstr ""
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:72
+msgid "TLSProtocol"
+msgstr ""
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:15
 msgid "TTL for network packets"
 msgstr "ネットワークパケットのTTL"
@@ -1690,13 +1707,13 @@ msgstr ""
 msgid "Timeout for polling chrony"
 msgstr "chrony ポーリングのタイムアウト"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:79
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:92
 msgid "Topic"
 msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:60
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:67
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:74
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:87
 msgid "True"
 msgstr ""
 
@@ -1896,100 +1913,3 @@ msgstr "rrdファイルのサイズを小さくします。"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "summary of all ports"
 msgstr ""
-
-#~ msgid "Monitoring %s and %s"
-#~ msgstr "%s および %s を監視"
-
-#~ msgid "Monitoring local listen ports"
-#~ msgstr "ローカルのリッスンポートを監視中"
-
-#~ msgid "one local port"
-#~ msgid_plural "%d local ports"
-#~ msgstr[0] "%d 個のローカルポート"
-
-#~ msgid "Cache flush interval"
-#~ msgstr "キャッシュ クリア間隔"
-
-#~ msgid ""
-#~ "The statistics package uses <a href=\"https://collectd.org/\">Collectd</"
-#~ "a> to gather data and <a href=\"http://oss.oetiker.ch/rrdtool/\">RRDtool</"
-#~ "a> to render diagram images."
-#~ msgstr ""
-#~ "statistics パッケージは、データの収集に<a href=\"https://collectd.org/"
-#~ "\">Collectd</a>を、統計図のレンダリングに<a href=\"http://oss.oetiker.ch/"
-#~ "rrdtool/\">RRDtool</a>を使用します。"
-
-#~ msgid ""
-#~ "You can install additional collectd-mod-* plugins to enable more "
-#~ "statistics."
-#~ msgstr ""
-#~ "追加の collectd-mod-* プラグインをインストールすることで、より多くの統計を"
-#~ "有効にできます。"
-
-#~ msgid "Action (target)"
-#~ msgstr "アクション（対象）"
-
-#~ msgid "Add matching rule"
-#~ msgstr "マッチング規則の追加"
-
-#~ msgid "Add multiple hosts separated by space."
-#~ msgstr "スペースで区切られた複数のホストを追加します。"
-
-#~ msgid ""
-#~ "Collectd is a small daemon for collecting data from various sources "
-#~ "through different plugins. On this page you can change general settings "
-#~ "for the collectd daemon."
-#~ msgstr ""
-#~ "Collectd は、様々なソースから別々のプラグインを通してデータを収集する軽量"
-#~ "デーモンです。"
-
-#~ msgid "Destination ip range"
-#~ msgstr "対象IPの範囲"
-
-#~ msgid "Hold Ctrl to select multiple items or to deselect entries."
-#~ msgstr "複数の項目を選択または解除するには、Ctrlキーを押したままにします。"
-
-#~ msgid "Incoming interface"
-#~ msgstr "着信インターフェース"
-
-#~ msgid "Monitor all sensors"
-#~ msgstr "全てのセンサーをモニターする"
-
-#~ msgid "Name of the rule"
-#~ msgstr "ルール名"
-
-#~ msgid "Network protocol"
-#~ msgstr "ネットワークプロトコル"
-
-#~ msgid "Options"
-#~ msgstr "オプション"
-
-#~ msgid "Outgoing interface"
-#~ msgstr "送信インターフェース"
-
-#~ msgid "Processes to monitor separated by space"
-#~ msgstr "スペースで区切られた、モニターするプロセスです。"
-
-#~ msgid "Source ip range"
-#~ msgstr "ソースIPの範囲"
-
-#~ msgid "e.g. br-ff"
-#~ msgstr "例: br-ff"
-
-#~ msgid "e.g. br-lan"
-#~ msgstr "例: br-lan"
-
-#~ msgid "e.g. reject-with tcp-reset"
-#~ msgstr "例: reject-with tcp-reset"
-
-#~ msgid "max. 16 chars"
-#~ msgstr "最大16文字"
-
-#~ msgid "server interfaces"
-#~ msgstr "サーバー インターフェース"
-
-#~ msgid "Collectd"
-#~ msgstr "Collectd"
-
-#~ msgid "System plugins"
-#~ msgstr "システムプラグイン"

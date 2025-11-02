@@ -1,53 +1,76 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2023-04-04 06:36+0000\n"
-"Last-Translator: AHOHNMYC <lqwh2h2cwa@protonmail.com>\n"
+"PO-Revision-Date: 2025-10-27 15:04+0000\n"
+"Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsnatmap/ru/>\n"
 "Language: ru\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"Plural-Forms: nplurals=3; plural="
+"(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
+"1 : 2);\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:93
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:108
+msgid "Allocation bind ports randomly instead of sequentially."
+msgstr "Выделять привязываемые порты случайным образом, а не последовательно."
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:103
 msgid "Bind port"
 msgstr "Порт сервера"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:134
+msgid "Congestion control"
+msgstr "Управление перегрузкой"
 
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:55
 msgid "Enable"
 msgstr "Включить"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:119
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:143
 msgid "External IP"
 msgstr "Внешний IP"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:126
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:150
 msgid "External Port"
 msgstr "Внешний порт"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:88
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:93
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:134
 msgid "For TCP mode"
 msgstr "Для режима TCP"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:97
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:82
+msgid "For UDP mode"
+msgstr "Для режима UDP"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:111
 msgid "Forward mode"
 msgstr "Режим перенаправления"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:105
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:119
 msgid "Forward target"
 msgstr "Цель перенаправления"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:110
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:124
 msgid "Forward target port"
 msgstr "Порт переадресованной цели"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:129
+msgid "Forward timeout"
+msgstr "Таймаут перенаправления"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:98
+msgid "Fwmark"
+msgstr "Метка fwmark"
 
 #: applications/luci-app-natmap/root/usr/share/rpcd/acl.d/luci-app-natmap.json:3
 msgid "Grant access to LuCI app natmap"
 msgstr "Предоставить доступ LuCI к приложению natmap"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:88
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:93
 msgid "HTTP server"
 msgstr "HTTP-сервер"
 
@@ -69,14 +92,21 @@ msgstr "Интерфейс"
 
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:78
 msgid "Keep-alive interval"
-msgstr "Keep-alive интервал"
+msgstr "Интервал поддержания соединения"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:99
+msgid "Mark fwmark for STUN/HTTP outbound traffic"
+msgstr ""
+"Установить метку <abbr title=\"Firewall Mark\">fwmark</abbr> для исходящего "
+"трафика <abbr title=\"Session Traversal Utilities for NAT\">STUN</abbr>/"
+"<abbr title=\"Hypertext Transfer Protocol\">HTTP</abbr>"
 
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:50
 #: applications/luci-app-natmap/root/usr/share/luci/menu.d/luci-app-natmap.json:3
 msgid "NATMap"
 msgstr "NATMap"
 
-#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:115
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:139
 msgid "Notify script"
 msgstr "Скрипт уведомления"
 
@@ -84,10 +114,19 @@ msgstr "Скрипт уведомления"
 msgid "Protocol"
 msgstr "Протокол"
 
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:107
+msgid "Randomly allocation ports"
+msgstr "Случайное назначение портов"
+
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:69
 msgid "Restrict to address family"
 msgstr "Использовать протокол"
 
 #: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:82
+msgid "STUN check cycle"
+msgstr ""
+"Цикл проверки <abbr title=\"Session Traversal Utilities for NAT\">STUN</abbr>"
+
+#: applications/luci-app-natmap/htdocs/luci-static/resources/view/natmap.js:87
 msgid "STUN server"
 msgstr "Сервер STUN"

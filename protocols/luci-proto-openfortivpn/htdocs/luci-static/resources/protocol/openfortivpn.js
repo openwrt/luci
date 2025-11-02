@@ -116,6 +116,7 @@ return network.registerProtocol('openfortivpn', {
 		};
 
 		o = s.taboption('general', form.TextValue, 'user_key', _('User key (PEM encoded)'));
+		o.optional = true;
 		o.rows = 10;
 		o.monospace = true;
 		o.validate = L.bind(validateCert, o, true);
@@ -128,6 +129,7 @@ return network.registerProtocol('openfortivpn', {
 		};
 
 		o = s.taboption('general', form.TextValue, 'ca_file', _('CA certificate (PEM encoded; Use instead of system-wide store to verify the gateway certificate.'));
+		o.optional = true;
 		o.rows = 10;
 		o.monospace = true;
 		o.validate = L.bind(validateCert, o, false);

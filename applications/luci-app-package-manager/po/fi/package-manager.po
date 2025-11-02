@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2025-01-08 19:17+0000\n"
-"Last-Translator: Hannu Nyman <hannu.nyman@iki.fi>\n"
+"PO-Revision-Date: 2025-07-22 08:17+0000\n"
+"Last-Translator: Ricky Tigg <ricky.tigg@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspackage-manager/fi/>\n"
 "Language: fi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.13-dev\n"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:861
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:926
@@ -28,10 +28,12 @@ msgstr "%s käytetty (%1024mB / %1024mB, vapaana %1024mB)"
 msgid ""
 "<strong>Warning!</strong> Package operations can <a %s>break your system</a>."
 msgstr ""
+"<strong>Varoitus!</strong> Pakettitoiminnat voivat <a %s>rikkoa "
+"järjestelmäsi</a>."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1191
 msgid "Actions"
-msgstr "Toiminnot"
+msgstr "Toimet"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:796
 msgid "Allow overwriting conflicting package files"
@@ -51,6 +53,9 @@ msgid ""
 "The configuration in the other files may be changed but is usually not "
 "preserved by <em>sysupgrade</em>."
 msgstr ""
+"Alla on luettelo <em>apk</em>:n käyttämistä eri kokoonpanotiedostoista. "
+"Muiden tiedostojen kokoonpanoa voidaan muuttaa, mutta <em>sysupgrade</em> ei "
+"yleensä säilytä niitä."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:897
 msgid ""
@@ -60,10 +65,10 @@ msgid ""
 "changed but is usually not preserved by <em>sysupgrade</em>."
 msgstr ""
 "Alla on luettelo <em>opkg</em>:n käyttämistä määritystiedostoista. Käytä "
-"<em>opkg.conf</em>-tiedostoa yleisiä asetuksia varten ja <em>customfeeds."
-"conf</em>-tiedostoa mukautettujen arkistojen merkinnöille. Voit toki muuttaa "
-"myös muita tiedostoja, mutta <em>sysupgrade</em> ei yleensä säilytä "
-"muutoksia."
+"<em>opkg.conf</em>-tiedostoa yleisiä asetuksia varten ja "
+"<em>customfeeds.conf</em>-tiedostoa mukautettujen arkistojen merkinnöille. "
+"Voit toki muuttaa myös muita tiedostoja, mutta <em>sysupgrade</em> ei "
+"yleensä säilytä muutoksia."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:804
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:850
@@ -116,6 +121,7 @@ msgid ""
 "Display base translation packages and translation packages for already "
 "installed languages only"
 msgstr ""
+"Näytä peruskäännöspaketit ja käännöspaketit vain jo asennetuille kielille"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:357
 msgid "Displaying %d-%d of %d"
@@ -139,7 +145,7 @@ msgstr "Suodatin"
 
 #: applications/luci-app-package-manager/root/usr/share/rpcd/acl.d/luci-app-package-manager.json:3
 msgid "Grant access to package management"
-msgstr ""
+msgstr "Myönnä pääsy pakettien hallintaan"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1230
 msgid "Hide all translation packages"
@@ -153,7 +159,7 @@ msgstr "Asenna"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1161
 msgid "Install additional software and upgrade existing packages with %s."
-msgstr ""
+msgstr "Asenna lisäohjelmistoja ja päivitä olemassa olevia paketteja %s:lla."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:784
 msgid "Install suggested translation packages as well"
@@ -314,11 +320,11 @@ msgstr "Ehdotetut kielikäännökset"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:744
 msgid "Suggested translations require approx. %1024mB additional space."
-msgstr ""
+msgstr "Ehdotetut käännökset vaativat noin 1024 Mt lisätilaa."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1041
 msgid "The <em>%s %h</em> command failed with code <code>%d</code>."
-msgstr ""
+msgstr "Komento <em>%s %h</em> epäonnistui koodilla <code>%d</code>."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:516
 msgid ""
@@ -348,7 +354,7 @@ msgstr "Kirjoita suodattaaksesi…"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1060
 msgid "Unable to execute <em>%s %s</em> command: %s"
-msgstr ""
+msgstr "Komentoa <em>%s %s</em> ei voida suorittaa: %s"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:891
 msgid "Unable to read %s: %s"
@@ -388,7 +394,7 @@ msgstr "Versio ei ole yhteensopiva"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1006
 msgid "Waiting for the <em>%s %h</em> command to complete…"
-msgstr ""
+msgstr "Odotetaan komennon <em>%s %h</em> valmistumista…"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1226
 msgctxt "Display translation packages"
@@ -398,12 +404,12 @@ msgstr "kaikki"
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1213
 msgctxt "Display translation packages"
 msgid "filtered"
-msgstr ""
+msgstr "suodatettu"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1239
 msgctxt "Display translation packages"
 msgid "none"
-msgstr ""
+msgstr "ei yhtään"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:677
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:956
@@ -420,27 +426,3 @@ msgstr "~%1024mB pakattu"
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:952
 msgid "~%1024mB installed"
 msgstr "~%1024mB asennettuna"
-
-#~ msgid "Configure opkg…"
-#~ msgstr "Määritä opkg…"
-
-#~ msgid "Grant access to opkg management"
-#~ msgstr "Salli pääsy pakettiasennusten hallintaan (opkg)"
-
-#~ msgid "OPKG Configuration"
-#~ msgstr "OPKG-määritys"
-
-#~ msgid "The <em>opkg %h</em> command failed with code <code>%d</code>."
-#~ msgstr "<em>opkg %h</em> -komento epäonnistui koodilla <code>%d</code>."
-
-#~ msgid "Unable to execute <em>opkg %s</em> command: %s"
-#~ msgstr "Komentoa <em>opkg %s</em> ei voida suorittaa: %s"
-
-#~ msgid "Waiting for the <em>opkg %h</em> command to complete…"
-#~ msgstr "Odotetaan <em>opkg %h</em> -komennon valmistumista…"
-
-#~ msgid "Free space"
-#~ msgstr "Vapaa levytila"
-
-#~ msgid "Overwrite files from other package(s)"
-#~ msgstr "Korvaa tiedostoja muista paketeista"

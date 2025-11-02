@@ -2,13 +2,14 @@
 'require view';
 'require fs';
 'require ui';
+'require uci';
 
 /*
 	button handling
 */
 function handleAction(ev) {
 	if (ev.target && ev.target.getAttribute('name') === 'blocklist') {
-		L.ui.showModal(_('Add Blocklist Domain'), [
+		ui.showModal(_('Add Blocklist Domain'), [
 			E('p', _('Add this (sub-)domain to your local blocklist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
@@ -18,23 +19,23 @@ function handleAction(ev) {
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
 					'class': 'btn cbi-button-action',
-					'click': ui.createHandlerFn(this, function(ev) {
+					'click': ui.createHandlerFn(this, function (ev) {
 						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.blocklist'), '')
-						.then(function(res) {
-							var domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
-							var pattern = new RegExp('^' + domain.replace(/[\.]/g,'\\.') + '$', 'm');
-							if (res.search(pattern) === -1) {
-								var blocklist = res + domain + '\n';
-								fs.write('/etc/adblock/adblock.blocklist', blocklist);
-								ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload adblock that changes take effect.')), 'info');
-							}
-							L.hideModal();
-						});
+							.then(function (res) {
+								var domain = document.getElementById('blocklist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
+								var pattern = new RegExp('^' + domain.replace(/[\.]/g, '\\.') + '$', 'm');
+								if (res.search(pattern) === -1) {
+									var blocklist = res + domain + '\n';
+									fs.write('/etc/adblock/adblock.blocklist', blocklist);
+									ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload adblock that changes take effect.')), 'info');
+								}
+								ui.hideModal();
+							});
 					})
 				}, _('Save'))
 			])
@@ -43,7 +44,7 @@ function handleAction(ev) {
 	}
 
 	if (ev.target && ev.target.getAttribute('name') === 'allowlist') {
-		L.ui.showModal(_('Add Allowlist Domain'), [
+		ui.showModal(_('Add Allowlist Domain'), [
 			E('p', _('Add this (sub-)domain to your local allowlist.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
@@ -53,23 +54,23 @@ function handleAction(ev) {
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
 					'class': 'btn cbi-button-action',
-					'click': ui.createHandlerFn(this, function(ev) {
+					'click': ui.createHandlerFn(this, function (ev) {
 						L.resolveDefault(fs.read_direct('/etc/adblock/adblock.allowlist'), '')
-						.then(function(res) {
-							var domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
-							var pattern = new RegExp('^' + domain.replace(/[\.]/g,'\\.') + '$', 'm');
-							if (res.search(pattern) === -1) {
-								var allowlist = res + domain + '\n';
-								fs.write('/etc/adblock/adblock.allowlist', allowlist);
-								ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload adblock that changes take effect.')), 'info');
-							}
-							L.hideModal();
-						});
+							.then(function (res) {
+								var domain = document.getElementById('allowlist').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
+								var pattern = new RegExp('^' + domain.replace(/[\.]/g, '\\.') + '$', 'm');
+								if (res.search(pattern) === -1) {
+									var allowlist = res + domain + '\n';
+									fs.write('/etc/adblock/adblock.allowlist', allowlist);
+									ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload adblock that changes take effect.')), 'info');
+								}
+								ui.hideModal();
+							});
 					})
 				}, _('Save'))
 			])
@@ -78,11 +79,11 @@ function handleAction(ev) {
 	}
 
 	if (ev === 'query') {
-		L.ui.showModal(_('Blocklist Query'), [
+		ui.showModal(_('Blocklist Query'), [
 			E('p', _('Query active blocklists and backups for a specific domain.')),
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'style': 'padding-top:.5em', 'id': 'run' }, [
-					E('input', { 
+					E('input', {
 						'class': 'cbi-input-text',
 						'placeholder': 'google.com',
 						'style': 'width:300px',
@@ -105,18 +106,18 @@ function handleAction(ev) {
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
 					'class': 'btn cbi-button-action',
-					'click': ui.createHandlerFn(this, function(ev) {
-						var domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g,'');
+					'click': ui.createHandlerFn(this, function (ev) {
+						var domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
 						if (domain) {
 							document.getElementById('run').classList.add("spinning");
 							document.getElementById('search').value = domain;
 							document.getElementById('result').textContent = 'The query is running, please wait...';
-							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['query', domain])).then(function(res) {
+							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['query', domain])).then(function (res) {
 								var result = document.getElementById('result');
 								if (res) {
 									result.textContent = res.trim();
@@ -136,7 +137,7 @@ function handleAction(ev) {
 	}
 
 	if (ev === 'refresh') {
-		L.ui.showModal(_('Refresh DNS Report'), [
+		ui.showModal(_('Refresh DNS Report'), [
 			E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
 				E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [
 					E('select', { 'class': 'cbi-input-select', 'id': 'top_count' }, [
@@ -165,57 +166,98 @@ function handleAction(ev) {
 			]),
 			E('label', { 'class': 'cbi-input-text', 'style': 'padding-top:.5em' }, [
 				E('input', { 'class': 'cbi-input-text', 'spellcheck': 'false', 'id': 'search' }, [
-			]),
-			'\xa0\xa0\xa0',
-			_('Filter criteria like date, domain or client (optional)')
+				]),
+				'\xa0\xa0\xa0',
+				_('Filter criteria like date, domain or client (optional)')
 			]),
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'btn cbi-button',
-					'click': L.hideModal
+					'click': ui.hideModal
 				}, _('Cancel')),
 				' ',
 				E('button', {
-					'class': 'btn cbi-button-action',
 					'id': 'refresh',
-					'click': ui.createHandlerFn(this, async function(ev) {
-						var top_count = document.getElementById('top_count').value;
-						var res_count = document.getElementById('res_count').value;
-						var search = document.getElementById('search').value.trim().replace(/[^\w\.\-\:]/g,'') || '+';
-						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]),'');
-						var running = 1;
-						while (running === 1) {
-							await new Promise(r => setTimeout(r, 1000));
-							L.resolveDefault(fs.read_direct('/var/run/adblock.pid')).then(function(res) {
-								if (!res) {
-									running = 0;
-								}
+					'class': 'btn cbi-button-action',
+					'click': function () {
+						document.querySelectorAll('.cbi-page-actions button').forEach(function (btn) {
+							btn.disabled = true;
+						})
+						this.blur();
+						this.classList.add('spinning');
+						const top_count = document.getElementById('top_count').value;
+						const res_count = document.getElementById('res_count').value;
+						const search = document.getElementById('search').value.trim().replace(/[^\w\.\-\:]/g, '') || '+';
+						L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'gen', top_count, res_count, search]), '')
+							.then(function () {
+								location.reload();
 							})
-						}
-						L.hideModal();
-						location.reload();
-					})
+					}
 				}, _('Refresh'))
 			])
 		]);
 		document.getElementById('refresh').focus();
 	}
+
+	if (ev === 'map') {
+		const modal = ui.showModal(null, [
+			E('div', {
+				id: 'mapModal',
+				style: 'position: relative;'
+			}, [
+				E('iframe', {
+					id: 'mapFrame',
+					src: L.resource('view/adblock/map.html'),
+					style: 'width: 100%; height: 80vh; border: none;'
+				}),
+			]),
+			E('div', { 'class': 'right' }, [
+				E('button', {
+					'class': 'btn cbi-button',
+					'click': ui.createHandlerFn(this, function (ev) {
+						ui.hideModal();
+						sessionStorage.clear();
+						location.reload();
+					})
+				}, _('Cancel')),
+				' ',
+				E('button', {
+					'class': 'btn cbi-button-action',
+					'click': ui.createHandlerFn(this, function (ev) {
+						const iframe = document.getElementById('mapFrame');
+						iframe.contentWindow.location.reload();
+					})
+				}, _('Map Reset'))
+			])
+		]);
+		modal.style.maxWidth = '90%';
+		document.getElementById('mapModal').focus();
+	}
 }
 
 return view.extend({
-	load: function() {
-		return L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '10', '50', '+']),'');
+	load: function () {
+		return Promise.all([
+			L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['report', 'json', '10', '50', '+']), ''),
+			uci.load('adblock')
+		]);
 	},
 
-	render: function(dnsreport) {
-		if (!dnsreport) {
-			dnsreport = '{}';
-		};
-		var content;
-		content = JSON.parse(dnsreport);
+	render: function (dnsreport) {
+		let content = [], notMsg, errMsg;
+
+		if (dnsreport) {
+			try {
+				content = JSON.parse(dnsreport[0]);
+			} catch (e) {
+				content[0] = "";
+			}
+		} else {
+			content[0] = "";
+		}
 
 		var rows_top = [];
-		var tbl_top  = E('table', { 'class': 'table', 'id': 'top_10' }, [
+		var tbl_top = E('table', { 'class': 'table', 'id': 'top_10' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th right' }, _('Count')),
 				E('th', { 'class': 'th' }, _('Clients')),
@@ -227,28 +269,28 @@ return view.extend({
 		]);
 
 		var max = 0;
-		if (content.top_clients && content.top_domains && content.top_blocked) {
-			max = Math.max(content.top_clients.length, content.top_domains.length, content.top_blocked.length);
+		if (content[0].top_clients && content[0].top_domains && content[0].top_blocked) {
+			max = Math.max(content[0].top_clients.length, content[0].top_domains.length, content[0].top_blocked.length);
 		}
 		for (var i = 0; i < max; i++) {
 			var a_cnt = '\xa0', a_addr = '\xa0', b_cnt = '\xa0', b_addr = '\xa0', c_cnt = '\xa0', c_addr = '\xa0';
-			if (content.top_clients[i]) {
-				a_cnt = content.top_clients[i].count;
+			if (content[0].top_clients[i]) {
+				a_cnt = content[0].top_clients[i].count;
 			}
-			if (content.top_clients[i]) {
-				a_addr = content.top_clients[i].address;
+			if (content[0].top_clients[i]) {
+				a_addr = content[0].top_clients[i].address;
 			}
-			if (content.top_domains[i]) {
-				b_cnt = content.top_domains[i].count;
+			if (content[0].top_domains[i]) {
+				b_cnt = content[0].top_domains[i].count;
 			}
-			if (content.top_domains[i]) {
-				b_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.top_domains[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.top_domains[i].address + '</a>';
+			if (content[0].top_domains[i]) {
+				b_addr = '<a href="https://ip-api.com/#' + encodeURIComponent(content[0].top_domains[i].address) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].top_domains[i].address + '</a>';
 			}
-			if (content.top_blocked[i]) {
-				c_cnt = content.top_blocked[i].count;
+			if (content[0].top_blocked[i]) {
+				c_cnt = content[0].top_blocked[i].count;
 			}
-			if (content.top_blocked[i]) {
-				c_addr = '<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.top_blocked[i].address) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.top_blocked[i].address + '</a>';
+			if (content[0].top_blocked[i]) {
+				c_addr = '<a href="https://ip-api.com/#' + encodeURIComponent(content[0].top_blocked[i].address) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].top_blocked[i].address + '</a>';
 			}
 			rows_top.push([
 				a_cnt,
@@ -262,7 +304,7 @@ return view.extend({
 		cbi_update_table(tbl_top, rows_top);
 
 		var rows_requests = [];
-		var tbl_requests  = E('table', { 'class': 'table', 'id': 'requests' }, [
+		var tbl_requests = E('table', { 'class': 'table', 'id': 'requests' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Date')),
 				E('th', { 'class': 'th' }, _('Time')),
@@ -274,58 +316,58 @@ return view.extend({
 		]);
 
 		max = 0;
-		if (content.requests) {
+		if (content[0].requests) {
 			var button;
-			max = content.requests.length;
+			max = content[0].requests.length;
 			for (var i = 0; i < max; i++) {
-				if (content.requests[i].rc === 'NX') {
+				if (content[0].requests[i].rc === 'NX') {
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-positive',
 						'style': 'word-break: inherit',
 						'name': 'allowlist',
-						'value': content.requests[i].domain,
+						'value': content[0].requests[i].domain,
 						'click': handleAction
-					}, [ _('Allowlist...') ]);
+					}, [_('Allowlist...')]);
 				} else {
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-negative',
 						'style': 'word-break: inherit',
 						'name': 'blocklist',
-						'value': content.requests[i].domain,
+						'value': content[0].requests[i].domain,
 						'click': handleAction
-					}, [ _('Blocklist...') ]);
+					}, [_('Blocklist...')]);
 				}
 				rows_requests.push([
-					content.requests[i].date,
-					content.requests[i].time,
-					content.requests[i].client,
-					'<a href="https://duckduckgo.com/?q=' + encodeURIComponent(content.requests[i].domain) + '&amp;k1=-1&amp;km=l&amp;kh=1" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content.requests[i].domain + '</a>',
-					content.requests[i].rc,
+					content[0].requests[i].date,
+					content[0].requests[i].time,
+					content[0].requests[i].client,
+					'<a href="https://ip-api.com/#' + encodeURIComponent(content[0].requests[i].domain) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].requests[i].domain + '</a>',
+					content[0].requests[i].rc,
 					button
 				]);
 			}
 		}
 		cbi_update_table(tbl_requests, rows_requests);
 
-		return E('div', { 'class': 'cbi-map', 'id': 'map' }, [
+		const page = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
 			E('div', { 'class': 'cbi-section' }, [
 				E('p', _('This tab shows the last generated DNS Report, press the \'Refresh\' button to get a current one.')),
 				E('p', '\xa0'),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Start Timestamp')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, (content.start_date || '-') + ', ' + (content.start_time || '-'))
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'float:left;color:#37c' }, (content[0].start_date || '-') + ', ' + (content[0].start_time || '-'))
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('End Timestamp')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'end', 'style': 'float:left;color:#37c' }, (content.end_date || '-') + ', ' + (content.end_time || '-'))
+					E('div', { 'class': 'cbi-value-title', 'id': 'end', 'style': 'float:left;color:#37c' }, (content[0].end_date || '-') + ', ' + (content[0].end_time || '-'))
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Total DNS Requests')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'total', 'style': 'float:left;color:#37c' }, content.total || '-')
+					E('div', { 'class': 'cbi-value-title', 'id': 'total', 'style': 'float:left;color:#37c' }, content[0].total || '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'float:left;width:230px' }, _('Blocked DNS Requests')),
-					E('div', { 'class': 'cbi-value-title', 'id': 'blocked', 'style': 'float:left;color:#37c' }, (content.blocked || '-') + ' (' + (content.percent || '-') + ')')
+					E('div', { 'class': 'cbi-value-title', 'id': 'blocked', 'style': 'float:left;color:#37c' }, (content[0].blocked || '-') + ' (' + (content[0].percent || '-') + ')')
 				])
 			]),
 			E('div', { 'class': 'cbi-section' }, [
@@ -345,20 +387,44 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'style': 'float:none;margin-right:.4em;',
-					'click': ui.createHandlerFn(this, function() {
+					'id': 'btnMap',
+					'disabled': 'disabled',
+					'click': ui.createHandlerFn(this, function () {
+						if (content[1] && content[1].length > 1) {
+							sessionStorage.setItem('mapData', JSON.stringify(content[1]));
+							return handleAction('map');
+						}
+						else {
+							if (!notMsg) {
+								notMsg = true;
+								return ui.addNotification(null, E('p', _('No GeoIP Map data!')), 'info');
+							}
+						}
+					})
+				}, [_('Map...')]),
+				E('button', {
+					'class': 'btn cbi-button cbi-button-apply',
+					'style': 'float:none;margin-right:.4em;',
+					'click': ui.createHandlerFn(this, function () {
 						return handleAction('query');
 					})
-				}, [ _('Blocklist Query...') ]),
+				}, [_('Blocklist Query...')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
-					'click': ui.createHandlerFn(this, function() {
+					'click': ui.createHandlerFn(this, function () {
 						return handleAction('refresh');
 					})
-				}, [ _('Refresh...') ])
-			]),
-
+				}, [_('Refresh...')])
+			])
 		]);
+		if (uci.get('adblock', 'global', 'adb_map') === '1') {
+			const btn = page.querySelector('#btnMap');
+			if (btn) {
+				btn.removeAttribute('disabled');
+			}
+		}
+		return page;
 	},
 	handleSaveApply: null,
 	handleSave: null,

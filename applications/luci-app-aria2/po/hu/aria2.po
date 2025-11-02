@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2024-09-11 23:20+0000\n"
+"PO-Revision-Date: 2025-05-08 13:02+0000\n"
 "Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/hu/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:433
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -24,7 +24,7 @@ msgstr "Speciális beállítások"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:309
 msgid "All proxy"
-msgstr "Összes proxy"
+msgstr "Minden proxy"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:365
 msgid "Append HEADERs to HTTP request header."
@@ -219,7 +219,7 @@ msgstr "Előállítás véletlenszerűen"
 
 #: applications/luci-app-aria2/root/usr/share/rpcd/acl.d/luci-app-aria2.json:3
 msgid "Grant UCI access for luci-app-aria2"
-msgstr "UCI hozzáférés megadása a luci-app-aria2 alkalmazásnak"
+msgstr "UCI hozzáférés engedélyezése a <em>luci-app-aria2</em> alkalmazásnak"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:347
 msgid "HTTP accept gzip"
@@ -300,8 +300,8 @@ msgstr "További BitTorrent követő bejelentési URI-jának listája."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:625
 msgid ""
-"List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/."
-"netrc</code>."
+"List of extra settings. Format: option=value, eg. <code>netrc-path=/"
+"tmp/.netrc</code>."
 msgstr ""
 "További beállítások listája. Formátum: beállítás=érték, például <code>netrc-"
 "path=/tmp/.netrc</code>."
@@ -675,12 +675,12 @@ msgstr "Beállítások listája"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:585
 msgid ""
 "Specify file allocation method. If you are using newer file systems such as "
-"ext4 (with extents support), btrfs, xfs or NTFS (MinGW build only), \"falloc"
-"\" is your best choice. It allocates large(few GiB) files almost instantly, "
-"but it may not be available if your system doesn't have posix_fallocate(3) "
-"function. Don't use \"falloc\" with legacy file systems such as ext3 and "
-"FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
-"entirely until allocation finishes."
+"ext4 (with extents support), btrfs, xfs or NTFS (MinGW build only), "
+"\"falloc\" is your best choice. It allocates large(few GiB) files almost "
+"instantly, but it may not be available if your system doesn't have "
+"posix_fallocate(3) function. Don't use \"falloc\" with legacy file systems "
+"such as ext3 and FAT32 because it takes almost same time as \"prealloc\" and "
+"it blocks aria2 entirely until allocation finishes."
 msgstr ""
 "Fájllefoglalási módszer meghatározása. Ha újabb fájlrendszereket használ, "
 "mint például ext4 (kiterjesztések támogatásával), btrfs, xfs vagy NTFS (csak "
@@ -837,8 +837,8 @@ msgid ""
 "PKCS12 files with a blank import password can be opened!<br/>When using PEM, "
 "you have to specify the \"Private key\" as well."
 msgstr ""
-"A FÁJLBAN lévő ügyféltanúsítvány használata. A tanúsítványnak vagy PKCS12 (."
-"p12, .pfx), vagy PEM formátumban kell lennie.<br/>A PKCS12 fájloknak "
+"A FÁJLBAN lévő ügyféltanúsítvány használata. A tanúsítványnak vagy PKCS12 "
+"(.p12, .pfx), vagy PEM formátumban kell lennie.<br/>A PKCS12 fájloknak "
 "tartalmazniuk kell a tanúsítványt, egy kulcsot és esetlegesen a további "
 "tanúsítványok láncát. Csak az üres importálási jelszóval rendelkező PKCS12 "
 "fájlok nyithatók meg!<br/>PEM használatakor meg kell adnia a „Személyes "
@@ -901,29 +901,3 @@ msgstr "prealloc"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:593
 msgid "trunc"
 msgstr "trunc"
-
-#~ msgid "Empty file."
-#~ msgstr "Üres fájl."
-
-#~ msgid "Error: Can't find aria2c in PATH, please reinstall aria2."
-#~ msgstr ""
-#~ "Hiba: nem található az aria2c a PATH környezeti változóban, telepítse "
-#~ "újra az aria2 programot."
-
-#~ msgid "Failed to load log data."
-#~ msgstr "Nem sikerült betölteni a naplóadatokat."
-
-#~ msgid "File does not exist."
-#~ msgstr "A fájl nem létezik."
-
-#~ msgid "For more information, please visit: %s"
-#~ msgstr "További információkért látogassa meg ezt az oldalt: %s"
-
-#~ msgid "Refresh every 10 seconds."
-#~ msgstr "Frissítés 10 másodpercenként."
-
-#~ msgid "Show URL"
-#~ msgstr "URL megjelenítése"
-
-#~ msgid "Use WebSocket"
-#~ msgstr "WebSocket használata"

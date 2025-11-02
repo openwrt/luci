@@ -1090,7 +1090,9 @@ const UIDropdown = UIElement.extend(/** @lends LuCI.ui.Dropdown.prototype */ {
 				'class': 'create-item-input',
 				'readonly': this.options.readonly ? '' : null,
 				'maxlength': this.options.maxlength,
-				'placeholder': this.options.custom_placeholder ?? this.options.placeholder
+				'placeholder': this.options.custom_placeholder ?? this.options.placeholder,
+				'inputmode': 'text',
+				'enterkeyhint': 'done'
 			});
 
 			if (this.options.datatype || this.options.validate)
@@ -2640,6 +2642,157 @@ const UIDynamicList = UIElement.extend(/** @lends LuCI.ui.DynamicList.prototype 
 	clearChoices() {
 		const dl = this.node.lastElementChild.firstElementChild;
 		dom.callClassMethod(dl, 'clearChoices');
+	}
+});
+
+/**
+ * Instantiate a range slider widget.
+ *
+ * @constructor RangeSlider
+ * @memberof LuCI.ui
+ * @augments LuCI.ui.AbstractElement
+ *
+ * @classdesc
+ *
+ * The `RangeSlider` class implements a widget which allows the user to set a 
+ * value from a predefined range.
+ *
+ * UI widget instances are usually not supposed to be created by view code
+ * directly. Instead they're implicitly created by `LuCI.form` when
+ * instantiating CBI forms.
+ *
+ * This class is automatically instantiated as part of `LuCI.ui`. To use it
+ * in views, use `'require ui'` and refer to `ui.RangeSlider`. To import it in
+ * external JavaScript, use `L.require("ui").then(...)` and access the
+ * `RangeSlider` property of the class instance value.
+ *
+ * @param {string|string[]} [value=null]
+ * The initial value to set the slider handle position.
+ *
+ * @param {LuCI.ui.RangeSlider.InitOptions} [options]
+ * Object describing the widget specific options to initialize the range slider.
+ */
+const UIRangeSlider = UIElement.extend({
+	/**
+	 * In addition to the [AbstractElement.InitOptions]{@link LuCI.ui.AbstractElement.InitOptions}
+	 * the following properties are recognized:
+	 *
+	 * @typedef {LuCI.ui.AbstractElement.InitOptions} InitOptions
+	 * @memberof LuCI.ui.RangeSlider
+	 *
+	 * @property {int} [min=1]
+	 * Specifies the minimum value of the range.
+	 *
+	 * @property {int} [max=100]
+	 * Specifies the maximum value of the range.
+	 *
+	 * @property {string} [step=1]
+	 * Specifies the step value of the range slider handle. Use "any" for
+	 * arbitrary precision floating point numbers.
+	 *
+	 * @param {function} [calculate=null]
+	 * A function to invoke when the slider is adjusted by the user. The function
+	 * performs a calculation on the selected value to produce a new value.
+	 *
+	 * @property {string} [calcunits=null]
+	 * Specifies a suffix string to append to the calculated value output.
+	 *
+	 * @property {boolean} [disabled=false]
+	 * Specifies whether the the widget is disabled.
+	 *
+	 */
+
+	__init__(value, options) {
+		this.value = value;
+		this.options = Object.assign({
+			min: 0,
+			max: 100,
+			step: 1,
+			calculate: null,
+			calcunits: null,
+			disabled: false,
+		}, options);
+	},
+
+	/** @override */
+	render() {
+		this.sliderEl = E('input', {
+			'type': 'range',
+			'id': this.options.id,
+			'min': this.options.min,
+			'max': this.options.max,
+			'step': this.options.step || 'any',
+			'value': this.value,
+			'disabled': this.options.disabled ? '' : null
+		});
+
+		this.calculatedvalue = (typeof this.options.calculate === 'function')
+			? this.options.calculate(this.value)
+			: null;
+
+		this.calcEl = E('output', { 'class': 'cbi-range-slider-calc' }, this.calculatedvalue);
+
+		this.calcunitsEl = E('span', { 'class': 'cbi-range-slider-calc-units' }, 
+			this.options.calcunits 
+			? '&nbsp;' + this.options.calcunits 
+			: ''
+		);
+
+		const container = E('div', { 'class': 'cbi-range-slider' }, [
+			this.sliderEl,
+			this.valueEl = E('output', { 'for': this.options.id, 'class': 'cbi-range-slider-value' }, this.value),
+			this.calculatedvalue ? E('br') : null,
+			this.calculatedvalue ? this.calcEl : null,
+			this.calculatedvalue ? this.calcunitsEl : null,
+		].filter(Boolean));
+
+		this.node = container;
+
+		this.setUpdateEvents(this.sliderEl, 'input', 'blur');
+		this.setChangeEvents(this.sliderEl, 'change');
+
+		this.sliderEl.addEventListener('input', () => {
+			const val = this.sliderEl.value;
+			this.valueEl.textContent = val;
+			
+			if (typeof this.options.calculate === 'function') {
+				// update the stored calculated value, and the displayed values
+				this.calculatedvalue = this.options.calculate(val);
+				this.calcEl.textContent = this.calculatedvalue;
+			}
+
+			this.node.setAttribute('data-changed', true);
+		});
+
+		dom.bindClassInstance(container, this);
+
+		return container;
+	},
+
+	/** @override */
+	getValue() {
+		return this.sliderEl.value;
+	},
+
+	/**
+	 * Return the value calculated by the `calculate` function.
+	 *
+	 * @instance
+	 * @memberof LuCI.ui.RangeSlider
+	 */
+	getCalculatedValue() {
+		return this.calculatedvalue;
+	},
+
+	/** @override */
+	setValue(value) {
+		this.sliderEl.value = value;
+		this.valueEl.textContent = value;
+
+		if (typeof this.options.calculate === 'function') {
+			this.calculatedvalue = this.options.calculate(value);
+			this.calcEl.textContent = this.calculatedvalue;
+		}
 	}
 });
 
@@ -4520,7 +4673,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * or rejecting with `null` when the connectivity check timed out.
 	 */
 	pingDevice(proto, ipaddr) {
-		const target = '%s://%s%s?%s'.format(proto ?? 'http', ipaddr ?? window.location.host, L.resource('icons/loading.gif'), Math.random());
+		const target = '%s://%s%s?%s'.format(proto ?? 'http', ipaddr ?? window.location.host, L.resource('icons/loading.svg'), Math.random());
 
 		return new Promise((resolveFn, rejectFn) => {
 			const img = new Image();
@@ -5174,6 +5327,7 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	Select: UISelect,
 	Dropdown: UIDropdown,
 	DynamicList: UIDynamicList,
+	RangeSlider: UIRangeSlider,
 	Combobox: UICombobox,
 	ComboButton: UIComboButton,
 	Hiddenfield: UIHiddenfield,

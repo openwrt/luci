@@ -1,41 +1,32 @@
-#!/usr/bin/env ucode
-
 'use strict';
 
 import { readfile, writefile, stat } from 'fs';
 
 const interfaceregex = /^[a-zA-Z0-9_]+$/;
-const user_certificate_string = "/etc/openconnect/user-cert-vpn-%s.pem";
-const user_privatekey_string = "/etc/openconnect/user-key-vpn-%s.pem";
-const ca_certificate_string = "/etc/openconnect/ca-vpn-%s.pem";
+const paths = {
+	user_certificate: "/etc/openconnect/user-cert-vpn-%s.pem",
+	user_privatekey:  "/etc/openconnect/user-key-vpn-%s.pem",
+	ca_certificate:   "/etc/openconnect/ca-vpn-%s.pem"
+};
 
-
-// Utility to read a file
 function _readfile(path) {
-	let _stat = stat(path);
-	if (_stat && _stat.type == "file") {
-		let content = readfile(path);
-		return content ? trim(content) : 'File empty';
-	}
-	return 'File not found';
+	let s = stat(path);
+	return (s?.type == 'file') ? trim(readfile(path) ?? '') || 'File empty' : null;
 }
 
-// Utility to write a file
 function _writefile(path, data) {
-	if (!data) {
-		return false;
-	}
-	return writefile(path, data) == length(data);
+	return data ? writefile(path, data) == length(data) : false;
+}
+
+function is_valid_iface(ifname) {
+	return ifname && match(ifname, interfaceregex);
 }
 
 const methods = {
-
-	list:{
+	list: {
 		call: function() {
 			return {
-				getCertificates: {
-					interface: "interface"
-				},
+				getCertificates: { interface: "interface" },
 				setCertificates: {
 					interface: "interface",
 					user_certificate: "user_certificate",
@@ -47,29 +38,16 @@ const methods = {
 	},
 
 	getCertificates: {
-		args: {
-			interface: "interface",
-		},
+		args: { interface: "interface" },
 		call: function(req) {
+			let iface = req.args?.interface;
+			if (!is_valid_iface(iface)) return;
 
-			const _interface = req.args?.interface;
-			if (!_interface || !match(_interface, interfaceregex)) {
-				// printf("Invalid interface name");
-				return;
-			}
+			let result = {};
+			for (let k in paths)
+				result[k] = _readfile(sprintf(paths[k], iface));
 
-			const user_certificate_pem = _readfile(sprintf(user_certificate_string, _interface));
-			const user_privatekey_pem = _readfile(sprintf(user_privatekey_string, _interface));
-			const ca_certificate_pem = _readfile(sprintf(ca_certificate_string, _interface));
-
-			if(user_certificate_pem && user_privatekey_pem && ca_certificate_pem){
-				return {
-					user_certificate: user_certificate_pem,
-					user_privatekey: user_privatekey_pem,
-					ca_certificate: ca_certificate_pem,
-				};
-			}
-
+			return result;
 		}
 	},
 
@@ -81,35 +59,17 @@ const methods = {
 			ca_certificate: "ca_certificate",
 		},
 		call: function(req) {
+			let iface = req.args?.interface;
+			if (!is_valid_iface(iface)) return;
 
 			let result = false;
-			let _interface = req.args?.interface;
-
-			if (!_interface || !match(_interface, interfaceregex)) {
-				// printf("Invalid interface name");
-				return;
+			for (let k in paths) {
+				if (req.args?.[k])
+					result = _writefile(sprintf(paths[k], iface), req.args[k]);
 			}
-
-			/* the interface is set up to call 1 write per certificate,
-			with only one of the following arguments not null */
-			if (req.args?.user_certificate) {
-				result = _writefile(sprintf(user_certificate_string, _interface), req.args?.user_certificate);
-			}
-			if (req.args?.user_privatekey) {
-				result = _writefile(sprintf(user_privatekey_string, _interface), req.args?.user_privatekey);
-			}
-			if (req.args?.ca_certificate) {
-				result = _writefile(sprintf(ca_certificate_string, _interface), req.args?.ca_certificate);
-			}
-
-			return {
-				result: result,
-			};
-
+			return { result: result };
 		}
 	}
-
 };
 
 return { 'luci.openconnect': methods };
-

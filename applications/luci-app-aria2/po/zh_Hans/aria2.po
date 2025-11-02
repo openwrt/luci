@@ -1,14 +1,14 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-04-03 06:31+0000\n"
-"Last-Translator: try496 <pinghejk@gmail.com>\n"
+"PO-Revision-Date: 2025-10-31 07:04+0000\n"
+"Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsaria2/zh_Hans/>\n"
 "Language: zh_Hans\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.11-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:433
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -146,11 +146,11 @@ msgstr "启用 IPv6 DHT 功能。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:435
 msgid "Enable Local Peer Discovery."
-msgstr "启用本地对等点发现。"
+msgstr "启用本地 Peer 查找。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:444
 msgid "Enable Peer Exchange extension."
-msgstr "启用对等交换扩展。"
+msgstr "启用 Peer 交换扩展。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:579
 msgid "Enable disk cache (in bytes), set 0 to disabled."
@@ -170,7 +170,7 @@ msgstr "启用代理"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:206
 msgid "Enabled"
-msgstr "已启用"
+msgstr "启用"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:234
 msgid "Error"
@@ -289,8 +289,8 @@ msgstr "额外的 BT Tracker 通告链接。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:625
 msgid ""
-"List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/."
-"netrc</code>."
+"List of extra settings. Format: option=value, eg. <code>netrc-path=/"
+"tmp/.netrc</code>."
 msgstr ""
 "额外设置的列表。格式：选项=值，例如：<code>netrc-path=/tmp/.netrc</code>。"
 
@@ -348,7 +348,7 @@ msgstr "最大全局上传限速"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:509
 msgid "Max peers"
-msgstr "最大对等连接数"
+msgstr "最大 Peer 数量"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:399
 msgid "Max tries"
@@ -377,7 +377,7 @@ msgstr "无"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:232
 msgid "Notice"
-msgstr "注意"
+msgstr "通知"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:242
 msgid "Pause"
@@ -476,7 +476,7 @@ msgstr "BT 下载完成时删除未选择的文件。文件将从磁盘中被完
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:514
 msgid "Request peer speed limit"
-msgstr "请求对等速度限制"
+msgstr "单个 Peer 限速"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:403
 msgid "Retry wait"
@@ -609,8 +609,8 @@ msgid ""
 "server. After the connection is established, this option makes no effect and "
 "\"Timeout\" option is used instead."
 msgstr ""
-"设置 HTTP、FTP 和代理服务器的连接超时时间。当连接建立后，该选项失去作用，"
-"而“超时时间”选项会被使用。"
+"设置 HTTP、FTP 和代理服务器的连接超时时间。当连接建立后，该选项失去作用，而"
+"“超时时间”选项会被使用。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:404
 msgid "Set the seconds to wait between retries."
@@ -635,12 +635,12 @@ msgstr "设置列表"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:585
 msgid ""
 "Specify file allocation method. If you are using newer file systems such as "
-"ext4 (with extents support), btrfs, xfs or NTFS (MinGW build only), \"falloc"
-"\" is your best choice. It allocates large(few GiB) files almost instantly, "
-"but it may not be available if your system doesn't have posix_fallocate(3) "
-"function. Don't use \"falloc\" with legacy file systems such as ext3 and "
-"FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
-"entirely until allocation finishes."
+"ext4 (with extents support), btrfs, xfs or NTFS (MinGW build only), "
+"\"falloc\" is your best choice. It allocates large(few GiB) files almost "
+"instantly, but it may not be available if your system doesn't have "
+"posix_fallocate(3) function. Don't use \"falloc\" with legacy file systems "
+"such as ext3 and FAT32 because it takes almost same time as \"prealloc\" and "
+"it blocks aria2 entirely until allocation finishes."
 msgstr ""
 "指定文件分配方式。如果你使用的文件系统较新，例如：ext4（支持扩展分区），"
 "btrfs，xfs 或者 NTFS（仅限 MinGW 版本），强烈推荐 \"falloc\"，这种方式几乎能"
@@ -674,7 +674,7 @@ msgstr ""
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:510
 msgid "Specify the maximum number of peers per torrent, 0 means unlimited."
-msgstr "设置每个 BT 任务的最大节点数量，0 表示不限制。"
+msgstr "设置每个 BT 任务的最大 Peer 数量，0 表示不限制。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:531
 msgid ""
@@ -792,7 +792,7 @@ msgstr "使用文件中的私钥。私钥必须解密并且为 PEM 格式，不�
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:408
 msgid "User agent"
-msgstr "用户代理"
+msgstr "User Agent"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:259
 msgid "Username & Password"
@@ -819,36 +819,12 @@ msgstr "你可以追加 K 或者 M。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:594
 msgid "falloc"
-msgstr "falloc"
+msgstr "快速分配"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:592
 msgid "prealloc"
-msgstr "prealloc"
+msgstr "预分配"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:593
 msgid "trunc"
-msgstr "trunc"
-
-#~ msgid "Empty file."
-#~ msgstr "文件为空。"
-
-#~ msgid "Error: Can't find aria2c in PATH, please reinstall aria2."
-#~ msgstr "错误：未在 PATH 中找到 aria2c，请重新安装 Aria2。"
-
-#~ msgid "Failed to load log data."
-#~ msgstr "获取日志数据失败。"
-
-#~ msgid "File does not exist."
-#~ msgstr "文件不存在。"
-
-#~ msgid "For more information, please visit: %s"
-#~ msgstr "获取更多信息，请访问：%s"
-
-#~ msgid "Refresh every 10 seconds."
-#~ msgstr "每 10 秒刷新。"
-
-#~ msgid "Show URL"
-#~ msgstr "显示 URL"
-
-#~ msgid "Use WebSocket"
-#~ msgstr "使用 WebSocket"
+msgstr "创建稀疏文件"

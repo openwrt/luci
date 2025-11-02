@@ -4,7 +4,7 @@
 "require baseclass";
 "require adblock-fast.status as adb";
 
-var pkg = adb.pkg;
+const { pkg } = adb;
 
 return baseclass.extend({
 	title: _("AdBlock-Fast"),
@@ -34,19 +34,6 @@ return baseclass.extend({
 				outputGzipExists: null,
 				leds: [],
 			},
-		};
-		var statusTable = {
-			statusNoInstall: _("%s is not installed or not found").format(pkg.Name),
-			statusStopped: _("Stopped"),
-			statusStarting: _("Starting"),
-			statusProcessing: _("Processing lists"),
-			statusRestarting: _("Restarting"),
-			statusForceReloading: _("Force Reloading"),
-			statusDownloading: _("Downloading lists"),
-			statusError: _("Error"),
-			statusWarning: _("Warning"),
-			statusFail: _("Fail"),
-			statusSuccess: _("Active"),
 		};
 
 		var cacheText;
@@ -80,7 +67,7 @@ return baseclass.extend({
 					E(
 						"td",
 						{ class: "td" },
-						statusTable[reply.status.status] || _("Unknown")
+						pkg.statusTable[reply.status.status] || _("Unknown")
 					),
 					E("td", { class: "td" }, reply.status.version || _("-")),
 					E("td", { class: "td" }, reply.status.dns || _("-")),

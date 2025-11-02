@@ -9,7 +9,7 @@
 				"/www/luci-static/resources/view/status/include": [ "list" ]
 			},
 			"ubus": {
-				"luci": [ "getVersion" ],
+				"luci": [ "getVersion", "getUnixtime" ],
 				"file": [ "list", "read" ],
 				"system": [ "board", "info" ]
 			}
@@ -33,7 +33,8 @@
 		"description": "Grant access to DHCP status display",
 		"read": {
 			"ubus": {
-				"luci-rpc": [ "getDHCPLeases" ]
+				"luci-rpc": [ "getDHCPLeases" ],
+				"fingerprint": [ "fingerprint" ]
 			}
 		}
 	},

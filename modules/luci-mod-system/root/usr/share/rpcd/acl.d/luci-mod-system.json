@@ -3,9 +3,8 @@
 		"description": "Grant access to system configuration",
 		"read": {
 			"ubus": {
-				"luci": [ "getLEDs", "getTimezones", "getUSBDevices" ],
-				"rc": [ "list" ],
-				"system": [ "info" ]
+				"luci": [ "getLEDs", "getTimezones", "getUSBDevices", "getUnixtime" ],
+				"rc": [ "list" ]
 			},
 			"uci": [ "luci", "system" ]
 		},
@@ -38,6 +37,22 @@
 				"luci": [ "setLocaltime" ]
 			},
 			"uci": [ "dropbear" ]
+		}
+	},
+
+	"luci-mod-system-repokeys": {
+		"description": "Grant access to Software Repository Public Key management",
+		"read": {
+			"file": {
+				"/etc/opkg/keys/*": [ "read" ],
+				"/etc/apk/keys/*": [ "read" ]
+			}
+		},
+		"write": {
+			"file": {
+				"/etc/opkg/keys/*": [ "write" ],
+				"/etc/apk/keys/*": [ "write" ]
+			}
 		}
 	},
 

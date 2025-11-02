@@ -42,7 +42,7 @@ function renderbox(ifc, ipv6) {
 				_('Connected'), (uptime > 0) ? '%t'.format(uptime) : null
 			]),
 			E('div', {}, renderBadge(
-				L.resource('icons/%s.png').format(dev ? dev.getType() : 'ethernet_disabled'), null,
+				L.resource('icons/%s.svg').format(dev ? dev.getType() : 'ethernet_disabled'), null,
 				_('Device'), dev ? dev.getI18n() : '-',
 				_('MAC address'), dev.getMAC())
 			)

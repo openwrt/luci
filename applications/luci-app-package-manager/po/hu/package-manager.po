@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-10-24 13:06+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2025-06-12 17:02+0000\n"
+"Last-Translator: hmzs <hmzs@1szer1.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspackage-manager/hu/>\n"
 "Language: hu\n"
@@ -10,13 +10,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.8.2-dev\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:861
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:926
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:940
 msgid "%s Configuration"
-msgstr ""
+msgstr "%s beállítások"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1123
 msgid "%s used (%1024mB used of %1024mB, %1024mB free)"
@@ -26,7 +26,7 @@ msgstr "%s foglalt (%1024mB / %1024mB, szabad: %1024mB)"
 msgid ""
 "<strong>Warning!</strong> Package operations can <a %s>break your system</a>."
 msgstr ""
-"<strong>Figyelem!</strong> A csomagművelet(ek) hatására <a %s> a rendszert "
+"<strong>Figyelem!</strong> A csomagművelet(ek) hatására <a %s> a rendszer "
 "működésképtelenné válhat</a>."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1191
@@ -51,6 +51,9 @@ msgid ""
 "The configuration in the other files may be changed but is usually not "
 "preserved by <em>sysupgrade</em>."
 msgstr ""
+"Alább található az <em>apk</em> által használt különféle beállítófájlok "
+"listája. Az egyéb fájlokban lévő beállítások megváltoztathatók, de általában "
+"nem lesznek megtartva <em>rendszerfrissítés</em>kor."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:897
 msgid ""
@@ -63,7 +66,7 @@ msgstr ""
 "listája. Használja az <code>opkg.conf</code> fájlt a globális "
 "beállításokhoz, és a <code>customfeeds.conf</code> fájlt az egyéni "
 "tárolóbejegyzésekhez. Az egyéb fájlokban lévő beállítások megváltoztathatók, "
-"de általában nem lesznek megtartva <em>rendszerfrissítéskor</em>."
+"de általában nem lesznek megtartva <em>rendszerfrissítés</em>kor."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:804
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:850
@@ -79,7 +82,7 @@ msgstr "Törlés"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1195
 msgid "Configure %s"
-msgstr ""
+msgstr "%s beállítása"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:748
 msgid "Dependencies"
@@ -97,7 +100,7 @@ msgstr "A(z) <em>%h</em> csomag részletei"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1170
 msgid "Disk space"
-msgstr "Szabad tárterület"
+msgstr "Használt tárterület"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1058
 msgid "Dismiss"
@@ -141,7 +144,7 @@ msgstr "Szűrő"
 
 #: applications/luci-app-package-manager/root/usr/share/rpcd/acl.d/luci-app-package-manager.json:3
 msgid "Grant access to package management"
-msgstr ""
+msgstr "Hozzáférés engedélyezése a csomagkezeléshez"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1230
 msgid "Hide all translation packages"
@@ -156,6 +159,8 @@ msgstr "Telepítés"
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1161
 msgid "Install additional software and upgrade existing packages with %s."
 msgstr ""
+"%s csomagkezelővel frissítheti a meglévő csomagokat vagy további "
+"szoftvereket telepíthet."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:784
 msgid "Install suggested translation packages as well"
@@ -320,6 +325,7 @@ msgstr "A javasolt nyelvi csomagokhoz további kb. %1024mB hely szükséges."
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1041
 msgid "The <em>%s %h</em> command failed with code <code>%d</code>."
 msgstr ""
+"<em>%s %h</em> parancs végrehajtása meghiúsul, hibakód: <code>%d</code>."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:516
 msgid ""
@@ -347,7 +353,7 @@ msgstr "Gépeljen a szűréshez…"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1060
 msgid "Unable to execute <em>%s %s</em> command: %s"
-msgstr ""
+msgstr "<em>%s %s</em> parancs végrehajtása sikertelen: %s"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:891
 msgid "Unable to read %s: %s"
@@ -387,12 +393,12 @@ msgstr "Nem megfelelő verzió"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1006
 msgid "Waiting for the <em>%s %h</em> command to complete…"
-msgstr ""
+msgstr "Várakozás a(z) <em>%s %h</em> parancs végrehajtására…"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1226
 msgctxt "Display translation packages"
 msgid "all"
-msgstr "összes"
+msgstr "minden"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1213
 msgctxt "Display translation packages"
@@ -419,34 +425,3 @@ msgstr "~%1024mB tömörítve"
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:952
 msgid "~%1024mB installed"
 msgstr "~%1024mB telepítve"
-
-#~ msgid "Configure opkg…"
-#~ msgstr "Az opkg beállítása…"
-
-#~ msgid "Grant access to opkg management"
-#~ msgstr "Jogosultság adása az opkg csomagkezelőnek"
-
-#~ msgid "Install additional software and upgrade existing packages with opkg."
-#~ msgstr ""
-#~ "Telepítsen további szoftvereket, és frissítse a meglévő csomagokat az "
-#~ "opkg segítségével."
-
-#~ msgid "OPKG Configuration"
-#~ msgstr "Csomagkezelő beállítása"
-
-#~ msgid "The <em>opkg %h</em> command failed with code <code>%d</code>."
-#~ msgstr ""
-#~ "Az <em>opkg %h</em> parancs meghiúsult a következő kóddal: <code>%d</"
-#~ "code>."
-
-#~ msgid "Unable to execute <em>opkg %s</em> command: %s"
-#~ msgstr "Nem sikerült végrehajtani az <em>opkg %s</em> parancsot: %s"
-
-#~ msgid "Waiting for the <em>opkg %h</em> command to complete…"
-#~ msgstr "Várakozás az <em>opkg %h</em> parancs befejeződésére…"
-
-#~ msgid "Free space"
-#~ msgstr "Szabad hely"
-
-#~ msgid "Overwrite files from other package(s)"
-#~ msgstr "Fájlok felülírása más csomagokból"

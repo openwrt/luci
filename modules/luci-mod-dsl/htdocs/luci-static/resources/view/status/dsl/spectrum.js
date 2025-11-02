@@ -42,7 +42,7 @@ return view.extend({
 						'width': 1024},
 						["chart2"])
 				),
-				E('div', {'class': 'cbi-section-descr', 'style': 'text-align:center'}, _('The graph shows th amount of bits actually allocated per subcarrier in the uplink and downlink direction')),
+				E('div', {'class': 'cbi-section-descr', 'style': 'text-align:center'}, _('The graph shows the amount of bits actually allocated per subcarrier in the uplink and downlink direction')),
 			]),
 			E('div', {'class': 'cbi-section'}, [
 				E('div', {'style': "height: 360px; width:1024px"},

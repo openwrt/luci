@@ -49,65 +49,71 @@ return view.extend({
 
 		s = m.section(form.NamedSection, "config", pkg.Name);
 
-		o = s.option(
-			form.ListValue,
-			"dnsmasq_config_update_option",
-			_("Update DNSMASQ Config on Start/Stop"),
-			_(
-				"If update option is selected, the %s'DNS Forwards' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
-			).format(
-				'<a href="' + L.url("admin", "network", "dhcp") + '">',
-				"</a>",
-				'<a href="' + pkg.URL + "#default-settings" + '" target="_blank">',
-				"</a>"
-			)
-		);
-		o.value("*", _("Update all configs"));
-		o.value("+", _("Update select configs"));
-		o.value("-", _("Do not update configs"));
-		o.default = "*";
-		o.retain = true;
-		o.cfgvalue = function (section_id) {
-			let val = this.map.data.get(
-				this.map.config,
-				section_id,
-				"dnsmasq_config_update"
-			);
-			if (val && val[0]) {
-				switch (val[0]) {
-					case "*":
-					case "-":
-						return val[0];
-					default:
-						return "+";
-				}
-			} else return "*";
-		};
-		o.write = function (section_id, formvalue) {
-			L.uci.set(pkg.Name, section_id, "dnsmasq_config_update", formvalue);
-		};
+		var dhcp_dnsmasq_values = Object.values(L.uci.sections("dhcp", "dnsmasq"));
+		function isEmpty(obj) {
+			return Object.keys(obj).length === 0;
+		}
 
-		o = s.option(
-			form.MultiValue,
-			"dnsmasq_config_update",
-			_("Select the DNSMASQ Configs to update")
-		);
-		Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(function (
-			element
-		) {
-			var description;
-			var key;
-			if (element[".name"] === L.uci.resolveSID("dhcp", element[".name"])) {
-				key = element[".index"];
-				description = "dnsmasq[" + element[".index"] + "]";
-			} else {
-				key = element[".name"];
-				description = element[".name"];
-			}
-			o.value(key, description);
-		});
-		o.depends("dnsmasq_config_update_option", "+");
-		o.retain = true;
+		if (!isEmpty(dhcp_dnsmasq_values)) {
+			o = s.option(
+				form.ListValue,
+				"dnsmasq_config_update_option",
+				_("Update DNSMASQ Config on Start/Stop"),
+				_(
+					"If update option is selected, the %s'DNS Forwards' section of DHCP and DNS%s will be automatically updated to use selected DoH providers (%smore information%s)."
+				).format(
+					'<a href="' + L.url("admin", "network", "dhcp") + '">',
+					"</a>",
+					'<a href="' + pkg.URL + "#default-settings" + '" target="_blank">',
+					"</a>"
+				)
+			);
+			o.value("*", _("Update all configs"));
+			o.value("+", _("Update select configs"));
+			o.value("-", _("Do not update configs"));
+			o.default = "*";
+			o.retain = true;
+			o.cfgvalue = function (section_id) {
+				let val = this.map.data.get(
+					this.map.config,
+					section_id,
+					"dnsmasq_config_update"
+				);
+				if (val && val[0]) {
+					switch (val[0]) {
+						case "*":
+						case "-":
+							return val[0];
+						default:
+							return "+";
+					}
+				} else return "*";
+			};
+			o.write = function (section_id, formvalue) {
+				L.uci.set(pkg.Name, section_id, "dnsmasq_config_update", formvalue);
+			};
+
+			o = s.option(
+				form.MultiValue,
+				"dnsmasq_config_update",
+				_("Select the DNSMASQ Configs to update")
+			);
+
+			dhcp_dnsmasq_values.forEach(function (element) {
+				var description;
+				var key;
+				if (element[".name"] === L.uci.resolveSID("dhcp", element[".name"])) {
+					key = element[".index"];
+					description = "dnsmasq[" + element[".index"] + "]";
+				} else {
+					key = element[".name"];
+					description = element[".name"];
+				}
+				o.value(key, description);
+			});
+			o.depends("dnsmasq_config_update_option", "+");
+			o.retain = true;
+		}
 
 		o = s.option(
 			form.ListValue,
@@ -323,12 +329,50 @@ return view.extend({
 				};
 				_paramText.remove = _paramText.write;
 			}
+			const _boot_dns = s.option(
+				form.Value,
+				"_bootstrap_dns_" + i,
+				_("Bootstrap DNS")
+			);
+			_boot_dns.template = prov.template;
+			_boot_dns.modalonly = true;
+			_boot_dns.depends("_provider", prov.template);
+			_boot_dns.cfgvalue = function (section_id) {
+				const c_value = this.map.data.get(
+					this.map.config,
+					section_id,
+					"bootstrap_dns"
+				);
+				return c_value || prov.bootstrap_dns || "";
+			};
+			_boot_dns.write = function (section_id, formvalue) {
+				const resolver = this.map.data.get(
+					this.map.config,
+					section_id,
+					"resolver_url"
+				);
+				const regexp = pkg.templateToRegexp(_boot_dns.template);
+				if (regexp.test(resolver)) {
+					console.log(
+						pkg.Name,
+						section_id,
+						"bootstrap_dns",
+						formvalue,
+						this.cfgvalue(section_id)
+					);
+					if (formvalue)
+						L.uci.set(pkg.Name, section_id, "bootstrap_dns", formvalue);
+					else
+						L.uci.set(
+							pkg.Name,
+							section_id,
+							"bootstrap_dns",
+							this.cfgvalue(section_id)
+						);
+				}
+				_boot_dns.remove = _boot_dns.write;
+			};
 		});
-
-		o = s.option(form.Value, "bootstrap_dns", _("Bootstrap DNS"));
-		o.default = "";
-		o.modalonly = true;
-		o.optional = true;
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
 		o.datatype = "ipaddr('nomask')";

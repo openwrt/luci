@@ -3,13 +3,13 @@
 'require ui';
 
 return baseclass.extend({
-	__init__: function() {
+	__init__() {
 		ui.menu.load().then(L.bind(this.render, this));
 	},
 
-	render: function(tree) {
-		var node = tree,
-		    url = '';
+	render(tree) {
+		let node = tree;
+		let url = '';
 
 		this.renderModeMenu(node);
 
@@ -39,8 +39,10 @@ return baseclass.extend({
 		
 	},
 
-	handleMenuExpand: function(ev) {
-		var a = ev.target, ul1 = a.parentNode, ul2 = a.nextElementSibling;
+	handleMenuExpand(ev) {
+		const a = ev.target;
+		const ul1 = a.parentNode;
+		const ul2 = a.nextElementSibling;
 
 		document.querySelectorAll('li.slide.active').forEach(function(li) {
 			if (li !== a.parentNode || li == ul1) {
@@ -66,29 +68,31 @@ return baseclass.extend({
 		ev.stopPropagation();
 	},
 
-	renderMainMenu: function(tree, url, level) {
-		var l = (level || 0) + 1,
-		    ul = E('ul', { 'class': level ? 'slide-menu' : 'nav' }),
-		    children = ui.menu.getChildren(tree);
+	renderMainMenu(tree, url, level) {
+		const l = (level || 0) + 1;
+		const ul = E('ul', { 'class': level ? 'slide-menu' : 'nav' });
+		const children = ui.menu.getChildren(tree);
 
 		if (children.length == 0 || l > 2)
 			return E([]);
 
-		for (var i = 0; i < children.length; i++) {
-			var isActive = (L.env.dispatchpath[l] == children[i].name),
-			    submenu = this.renderMainMenu(children[i], url + '/' + children[i].name, l),
-			    hasChildren = submenu.children.length;
+		children.forEach(child => {
+			const submenu = this.renderMainMenu(child, url + '/' + child.name, l);
+			const isActive = (L.env.dispatchpath[l] == child.name);
+			const hasChildren = submenu.children.length;
 
 			ul.appendChild(E('li', { 'class': (hasChildren ? 'slide' + (isActive ? ' active' : '') : (isActive ? ' active' : ''))}, [
 				E('a', {
-					'href': hasChildren ? '#' : L.url(url, children[i].name),
-					'class': hasChildren ? 'menu' + (isActive ? ' active' : '') : null,
-					'click': hasChildren ? ui.createHandlerFn(this, 'handleMenuExpand') : null,
-					'data-title': hasChildren ? null : _(children[i].title),
-				}, [ _(children[i].title) ]),
+					'href': hasChildren ? '#' : L.url(url, child.name),
+					'class': hasChildren ? 'menu' + (isActive ? ' active' : '') : '',
+					'click': hasChildren ? ui.createHandlerFn(this, 'handleMenuExpand') : '',
+					'data-title': hasChildren ? '' : _(child.title),
+				}, [
+					_(child.title)
+				]),
 				submenu
 			]));
-		}
+		});
 
 		if (l == 1) {
 			var container = document.querySelector('#mainmenu');
@@ -100,53 +104,57 @@ return baseclass.extend({
 		return ul;
 	},
 
-	renderModeMenu: function(tree) {
-		var ul = document.querySelector('#modemenu'),
-		    children = ui.menu.getChildren(tree);
+	renderModeMenu(tree) {
+		const ul = document.querySelector('#modemenu');
+		const children = ui.menu.getChildren(tree);
 
-		for (var i = 0; i < children.length; i++) {
-			var isActive = (L.env.requestpath.length ? children[i].name == L.env.requestpath[0] : i == 0);
+		children.forEach((child, index) => {
+			const isActive = L.env.requestpath.length
+				? child.name === L.env.requestpath[0]
+				: index === 0;
 
 			ul.appendChild(E('li', {}, [
 				E('a', {
-					'href': L.url(children[i].name),
-					'class': isActive ? 'active' : null
-				}, [ _(children[i].title) ])
+					'href': L.url(child.name),
+					'class': isActive ? 'active' : ''
+				}, [ _(child.title) ])
 			]));
 
 			if (isActive)
-				this.renderMainMenu(children[i], children[i].name);
+				this.renderMainMenu(child, child.name);
 
-			if (i > 0 && i < children.length)
+			if (index > 0 && index < children.length)
 				ul.appendChild(E('li', {'class': 'divider'}, [E('span')]))
-		}
+		});
 
 		if (children.length > 1)
 			ul.parentElement.style.display = '';
 	},
 
-	renderTabMenu: function(tree, url, level) {
-		var container = document.querySelector('#tabmenu'),
-			    l = (level || 0) + 1,
-			    ul = E('ul', { 'class': 'tabs' }),
-			    children = ui.menu.getChildren(tree),
-			    activeNode = null;
+	renderTabMenu(tree, url, level) {
+		const container = document.querySelector('#tabmenu');
+		const l = (level || 0) + 1;
+		const ul = E('ul', { 'class': 'tabs' });
+		const children = ui.menu.getChildren(tree);
+		let activeNode = null;
 
 		if (children.length == 0)
 			return E([]);
 
-		for (var i = 0; i < children.length; i++) {
-			var isActive = (L.env.dispatchpath[l + 2] == children[i].name),
-				activeClass = isActive ? ' active' : '',
-				className = 'tabmenu-item-%s %s'.format(children[i].name, activeClass);
+		children.forEach(child => {
+			const isActive = (L.env.dispatchpath[l + 2] == child.name);
+			const activeClass = isActive ? ' active' : '';
+			const className = 'tabmenu-item-%s %s'.format(child.name, activeClass);
 
 			ul.appendChild(E('li', { 'class': className }, [
-				E('a', { 'href': L.url(url, children[i].name) }, [ _(children[i].title) ] )
+				E('a', { 'href': L.url(url, child.name) }, [
+					_(child.title)
+				])
 			]));
 
 			if (isActive)
-				activeNode = children[i];
-		}
+				activeNode = child;
+		})
 
 		container.appendChild(ul);
 		container.style.display = '';
@@ -157,12 +165,12 @@ return baseclass.extend({
 		return ul;
 	},
 
-	handleSidebarToggle: function(ev) {
-		var width = window.innerWidth,
-		    darkMask = document.querySelector('.darkMask'),
-		    mainRight = document.querySelector('.main-right'),
-		    mainLeft = document.querySelector('.main-left'),
-		    open = mainLeft.style.width == '';
+	handleSidebarToggle(ev) {
+		const width = window.innerWidth;
+		const darkMask = document.querySelector('.darkMask');
+		const mainRight = document.querySelector('.main-right');
+		const mainLeft = document.querySelector('.main-left');
+		let open = mainLeft.style.width == '';
 
 		if (width > 1152 || ev.type == 'resize')
 			open = true;

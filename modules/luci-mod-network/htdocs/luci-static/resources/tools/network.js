@@ -71,7 +71,7 @@ function updateDevBadge(node, dev) {
 	dom.content(node, [
 		E('img', {
 			'class': 'middle',
-			'src': L.resource('icons/%s%s.png').format(type, up ? '' : '_disabled')
+			'src': L.resource('icons/%s%s.svg').format(type, up ? '' : '_disabled')
 		}),
 		'\x0a', dev.getName()
 	]);
@@ -107,7 +107,7 @@ function updatePortStatus(node, dev) {
 	dom.content(node, [
 		E('img', {
 			'class': 'middle',
-			'src': L.resource('icons/port_%s.png').format(carrier ? 'up' : 'down')
+			'src': L.resource('icons/port_%s.svg').format(carrier ? 'up' : 'down')
 		}),
 		'\x0a', desc
 	]);
@@ -440,7 +440,7 @@ return baseclass.extend({
 		return s.taboption(tabName, optionClass, optionName, optionTitle, optionDescription);
 	},
 
-	addDeviceOptions: function(s, dev, isNew) {
+	addDeviceOptions: function(s, dev, isNew, rtTables) {
 		var parent_dev = dev ? dev.getParent() : null,
 		    devname = dev ? dev.getName() : null,
 		    o, ss;
@@ -451,8 +451,10 @@ return baseclass.extend({
 		s.tab('bridgevlan', _('Bridge VLAN filtering'));
 
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'type', _('Device type'),
-			!L.hasSystemFeature('bonding') && isNew ? '<a href="' + L.url("admin", "system", "package-manager", "?query=kmod-bonding") + '">'+
-			 _('For bonding, install %s').format('<code>kmod-bonding</code>') + '</a>' : null);
+			(!L.hasSystemFeature('bonding') && isNew ? '<a href="' + L.url("admin", "system", "package-manager", "?query=kmod-bonding") + '">'+
+			 _('For bonding, install %s').format('<code>kmod-bonding</code>') + '</a><br/>' : '') +
+			(!L.hasSystemFeature('vrf') && isNew  ? '<a href="' + L.url("admin", "system", "package-manager", "?query=kmod-vrf") + '">'+
+			 _('For VRF, install %s').format('<code>kmod-vrf</code>') + '</a><br/>' : ''));
 		o.readonly = !isNew;
 		o.value('', _('Network device'));
 		if (L.hasSystemFeature('bonding')) {
@@ -463,8 +465,11 @@ return baseclass.extend({
 		o.value('8021ad', _('VLAN (802.1ad)'));
 		o.value('macvlan', _('MAC VLAN'));
 		o.value('veth', _('Virtual Ethernet'));
+		if (L.hasSystemFeature('vrf') && L.hasSystemFeature('netifd_vrf')) {
+			o.value('vrf', _('VRF device'));
+		}
 		o.validate = function(section_id, value) {
-			if (value == 'bonding' || value == 'bridge' || value == 'veth')
+			if (value == 'bonding' || value == 'bridge' || value == 'veth' || value == 'vrf')
 				updatePlaceholders(this.section.getOption('name_complex'), section_id);
 
 			return true;
@@ -619,7 +624,7 @@ return baseclass.extend({
 		o.depends('type', 'bonding');
 
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'policy', _('Bonding Policy'));
-		o.default = 'active-backup';
+		o.default = 'balance-rr';
 		o.value('active-backup', _('Active backup'));
 		o.value('balance-rr', _('Round robin'));
 		o.value('balance-xor', _('Transmit hash - balance-xor'));
@@ -660,7 +665,7 @@ return baseclass.extend({
 				return 'balance-alb';
 
 			default:
-				return 'active-backup';
+				return 'balance-rr';
 			}
 		};
 		o.depends('type', 'bonding');
@@ -972,7 +977,7 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 		o.depends({'type': 'bonding', 'monitor_mode': 'mii'});
 
-		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi-bridge', _('Bridge ports'));
+		o = this.replaceOption(s, 'devgeneral', widgets.DeviceSelect, 'ifname_multi-bridge', dev?.getType() == 'bridge' ? _('Bridge ports'): _('Ports'));
 		o.size = 10;
 		o.rmempty = true;
 		o.multiple = true;
@@ -998,7 +1003,8 @@ return baseclass.extend({
 
 			return (!parent_dev || parent_dev.getName() != bridge_name);
 		};
-		o.description = _('Specifies the wired ports to attach to this bridge. In order to attach wireless networks, choose the associated interface as network in the wireless settings.')
+		o.description = dev?.getType() == 'bridge' ? _('Specifies the wired ports to attach to this bridge. In order to attach wireless networks, choose the associated interface as network in the wireless settings.'):
+			_('Specifies the devices to attach to this VRF. In order to attach wireless networks, choose the associated interface as network in the wireless settings.');
 		o.onchange = function(ev, section_id, values) {
 			ss.updatePorts(values);
 
@@ -1007,6 +1013,13 @@ return baseclass.extend({
 			});
 		};
 		o.depends('type', 'bridge');
+		o.depends('type', 'vrf');
+
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'table', _('Routing table'));
+		rtTables.forEach((rtTable) => {
+			o.value(rtTable[1], '%s (%d)'.format(rtTable[1], rtTable[0]));
+		})
+		o.depends('type', 'vrf');
 
 		o = this.replaceOption(s, 'devgeneral', form.Flag, 'bridge_empty', _('Bring up empty bridge'), _('Bring up the bridge interface even if no ports are attached'));
 		o.default = o.disabled;

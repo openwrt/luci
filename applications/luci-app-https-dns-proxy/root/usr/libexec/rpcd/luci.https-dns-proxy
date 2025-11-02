@@ -14,14 +14,14 @@
 readonly packageName="https-dns-proxy"
 readonly providersDir="/usr/share/${packageName}/providers"
 
-. /lib/functions.sh
-. /usr/share/libubox/jshn.sh
+. "${IPKG_INSTROOT}/lib/functions.sh"
+. "${IPKG_INSTROOT}/usr/share/libubox/jshn.sh"
 
 is_enabled() { "/etc/init.d/${1}" enabled; }
 is_running() { [ "$(ubus call service list "{ 'name': '$1' }" | jsonfilter -q -e "@['$1'].instances[*].running" | uniq)" = 'true' ]; }
-get_version() { /usr/sbin/https-dns-proxy -V; }
-check_http2() { curl --version | grep -q 'nghttp2'; }
-check_http3() { curl --version | grep -q 'nghttp3'; }
+get_version() { /usr/sbin/https-dns-proxy -V | head -1; }
+check_http2() { /usr/sbin/https-dns-proxy -V | grep -q 'nghttp2'; }
+check_http3() { /usr/sbin/https-dns-proxy -V | grep -q 'nghttp3'; }
 ubus_get_ports() { ubus call service list "{ 'name': '$packageName' }" | jsonfilter -e "@['${packageName}'].instances[*].data.firewall.*.dest_port"; }
 logger() { /usr/bin/logger -t "$packageName" "$@"; }
 print_json_bool() { json_init; json_add_boolean "$1" "$2"; json_dump; json_cleanup; }

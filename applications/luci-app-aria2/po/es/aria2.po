@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-09 19:46+0000\n"
-"Last-Translator: Franco Castillo <castillofrancodamian@gmail.com>\n"
+"PO-Revision-Date: 2025-08-23 10:16+0000\n"
+"Last-Translator: brodrigueznu <brodrigueznu@hotmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsaria2/es/>\n"
 "Language: es\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.10.3-dev\n"
+"X-Generator: Weblate 5.13\n"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:433
 msgid "<abbr title=\"Local Peer Discovery\">LPD</abbr> enabled"
@@ -118,7 +118,7 @@ msgstr "Puerto DHT de escucha"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:230
 msgid "Debug"
-msgstr "Depuración"
+msgstr "Depurar"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:559
 msgid ""
@@ -153,11 +153,11 @@ msgstr ""
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:427
 msgid "Enable IPv6 DHT functionality."
-msgstr "Activar DHT IPv6."
+msgstr "Activa la funcionalidad DHT IPv6."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:435
 msgid "Enable Local Peer Discovery."
-msgstr "Activar descubrimiento de pares locales."
+msgstr "Activa descubrimiento de pares locales."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:444
 msgid "Enable Peer Exchange extension."
@@ -168,7 +168,6 @@ msgid "Enable disk cache (in bytes), set 0 to disabled."
 msgstr "Activa la caché de disco (en bytes), establezca 0 para desactivar."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:220
-#, fuzzy
 msgid "Enable logging"
 msgstr "Activar el registro"
 
@@ -303,8 +302,8 @@ msgstr "Lista URI de anuncio de trackers de BitTorrent adicionales."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:625
 msgid ""
-"List of extra settings. Format: option=value, eg. <code>netrc-path=/tmp/."
-"netrc</code>."
+"List of extra settings. Format: option=value, eg. <code>netrc-path=/"
+"tmp/.netrc</code>."
 msgstr ""
 "Lista de ajustes adicionales. Formato: opción=valor, p. ej. <code>netrc-"
 "path=/tmp/.netrc</code>."
@@ -400,7 +399,7 @@ msgstr "Pausar"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:242
 msgid "Pause download after added."
-msgstr "Pausar la descarga después de agregarla."
+msgstr "Pausa la descarga después de agregarla."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:248
 msgid "Pause downloads created as a result of metadata download."
@@ -515,8 +514,8 @@ msgid ""
 "Save a control file (*.aria2) every N seconds. If 0 is given, a control file "
 "is not saved during download."
 msgstr ""
-"Guarda un archivo de control (*.aria2) cada N segundos. Si se da 0, no se "
-"guarda un archivo de control durante la descarga."
+"Guarda un archivo de control (*.aria2) cada N segundos. Si se indica 0, no "
+"se guardará ningún archivo de control durante la descarga."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:598
 msgid ""
@@ -534,8 +533,9 @@ msgid ""
 "Save error/unfinished downloads to session file every N seconds. If 0 is "
 "given, file will be saved only when aria2 exits."
 msgstr ""
-"Guarda el error/descargas inacabadas en el archivo de sesión cada N "
-"segundos. Si se define en 0, el archivo se guardará solo cuando cierre aria2."
+"Guarda las descargas con errores o sin terminar en un archivo de sesión cada "
+"N segundos. Si se indica 0, el archivo se guardará solo cuando aria2 "
+"finalice."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:453
 msgid ""
@@ -543,9 +543,10 @@ msgid ""
 "BitTorrent Magnet URI is used. The file name is hex encoded info hash with "
 "suffix \".torrent\"."
 msgstr ""
-"Guarde los metadatos como archivo \".torrent\". Esta opción tiene efecto "
-"sólo cuando se utiliza BitTorrent Magnet URI. El nombre del archivo es un "
-"hash de información codificado en hexadecimal con el sufijo \".torrent\"."
+"Guarda los metadatos como archivo \".torrent\". Esta opción solo tiene "
+"efecto cuando se utiliza una URI Magnet de BitTorrent. El nombre del archivo "
+"es el hash de información codificado en hexadecimal con el sufijo "
+"\".torrent\"."
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:452
 msgid "Save metadata"
@@ -673,12 +674,12 @@ msgstr "Lista de ajustes"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:585
 msgid ""
 "Specify file allocation method. If you are using newer file systems such as "
-"ext4 (with extents support), btrfs, xfs or NTFS (MinGW build only), \"falloc"
-"\" is your best choice. It allocates large(few GiB) files almost instantly, "
-"but it may not be available if your system doesn't have posix_fallocate(3) "
-"function. Don't use \"falloc\" with legacy file systems such as ext3 and "
-"FAT32 because it takes almost same time as \"prealloc\" and it blocks aria2 "
-"entirely until allocation finishes."
+"ext4 (with extents support), btrfs, xfs or NTFS (MinGW build only), "
+"\"falloc\" is your best choice. It allocates large(few GiB) files almost "
+"instantly, but it may not be available if your system doesn't have "
+"posix_fallocate(3) function. Don't use \"falloc\" with legacy file systems "
+"such as ext3 and FAT32 because it takes almost same time as \"prealloc\" and "
+"it blocks aria2 entirely until allocation finishes."
 msgstr ""
 "Especifica el método de asignación de archivos. Si está utilizando sistemas "
 "de archivos más nuevos como ext4 (con soporte de extensiones), btrfs, xfs o "
@@ -733,7 +734,7 @@ msgid ""
 "20 bytes."
 msgstr ""
 "Especifica el prefijo de ID del par. La ID del par en BitTorrent tiene 20 "
-"bytes de longitud. Si se especifica más de 20 bytes, sólo se utilizan los "
+"bytes de longitud. Si se especifica más de 20 bytes, solo se utilizan los "
 "primeros 20 bytes. Si se especifica menos de 20 bytes, se agregan datos de "
 "bytes aleatorios para que su longitud sea de 20 bytes."
 
@@ -898,142 +899,3 @@ msgstr "preasignar (prealloc)"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:593
 msgid "trunc"
 msgstr "truncar"
-
-#~ msgid "Empty file."
-#~ msgstr "Archivo vacío."
-
-#~ msgid "Error: Can't find aria2c in PATH, please reinstall aria2."
-#~ msgstr "Error: no se puede encontrar aria2c en PATH, reinstale aria2."
-
-#~ msgid "Failed to load log data."
-#~ msgstr "Error al cargar los datos del registro."
-
-#~ msgid "File does not exist."
-#~ msgstr "El archivo no existe."
-
-#~ msgid "For more information, please visit: %s"
-#~ msgstr "Para obtener más información, visite: %s"
-
-#~ msgid "Refresh every 10 seconds."
-#~ msgstr "Actualiza cada 10 segundos."
-
-#~ msgid "Show URL"
-#~ msgstr "Mostrar URL"
-
-#~ msgid "Use WebSocket"
-#~ msgstr "Utilizar websocket"
-
-#~ msgid "\"Falloc\" is not available in all cases."
-#~ msgstr "\"Falloc\" no está disponible en todos los casos."
-
-#~ msgid "<abbr title=\"Distributed Hash Table\">DHT</abbr> enabled"
-#~ msgstr "Habilitar <abbr title=\"Tabla de hash distribuida\">DHT</abbr>"
-
-#~ msgid "Additional Bt tracker enabled"
-#~ msgstr "Habilitar Bt tracker adicional"
-
-#~ msgid "Aria2 Settings"
-#~ msgstr "Aria2"
-
-#~ msgid "Aria2 Status"
-#~ msgstr "Estado de Aria2"
-
-#~ msgid ""
-#~ "Aria2 is a multi-protocol &amp; multi-source download utility, here you "
-#~ "can configure the settings."
-#~ msgstr ""
-#~ "Aria2 es una utilidad de descarga multi-fuente &amp; multiprotocolo. Aquí "
-#~ "puede configurarlo."
-
-#~ msgid "Autosave session interval"
-#~ msgstr "Intervalo de sesión de autoguardado"
-
-#~ msgid "BitTorrent Settings"
-#~ msgstr "Configuraciones de BitTorrent"
-
-#~ msgid "Default download directory"
-#~ msgstr "Directorio de descarga predeterminado"
-
-#~ msgid "Enable log"
-#~ msgstr "Habilitar registro"
-
-#~ msgid "Falloc"
-#~ msgstr "Falloc"
-
-#~ msgid "Files and Locations"
-#~ msgstr "Archivos y ubicaciones"
-
-#~ msgid "General Settings"
-#~ msgstr "Configuraciones generales"
-
-#~ msgid "List of additional Bt tracker"
-#~ msgstr "Lista de Bt Tracker adicional"
-
-#~ msgid "List of extra settings"
-#~ msgstr "Lista de configuraciones extra"
-
-#~ msgid "Max number of peers per torrent"
-#~ msgstr "Número máximo de pares por torrent"
-
-#~ msgid "Off"
-#~ msgstr "Apagado"
-
-#~ msgid "Open AriaNg"
-#~ msgstr "Abrir AriaNg"
-
-#~ msgid "Open WebUI-Aria2"
-#~ msgstr "Abrir WebUI-Aria2"
-
-#~ msgid "Open YAAW"
-#~ msgstr "Abrir YAAW"
-
-#~ msgid "Overall download limit"
-#~ msgstr "Límite global de descargas"
-
-#~ msgid "Overall speed limit enabled"
-#~ msgstr "Habilitar límite de velocidad total"
-
-#~ msgid "Overall upload limit"
-#~ msgstr "Límite global de carga"
-
-#~ msgid "Per task download limit"
-#~ msgstr "Límite de descarga por tarea"
-
-#~ msgid "Per task speed limit enabled"
-#~ msgstr "Habilitar límite de velocidad por tarea"
-
-#~ msgid "Per task upload limit"
-#~ msgstr "Límite de carga por tarea"
-
-#~ msgid "Prealloc"
-#~ msgstr "Preasignar"
-
-#~ msgid "Preallocation"
-#~ msgstr "Preasignación"
-
-#~ msgid "RPC Token"
-#~ msgstr "RPC Token"
-
-#~ msgid "Sec"
-#~ msgstr "Seg"
-
-#~ msgid "Task Settings"
-#~ msgstr "Configuración de tareas"
-
-#~ msgid "The default log file is /var/log/aria2.log"
-#~ msgstr "El archivo de registro predeterminado es /var/log/aria2.log"
-
-#~ msgid "Trunc"
-#~ msgstr "Truncar"
-
-#~ msgid "User agent value"
-#~ msgstr "Valor de agente de usuario"
-
-#~ msgid "View Json-RPC URL"
-#~ msgstr "Ver la URL de Json-RPC"
-
-#~ msgid "in bytes, You can append K or M."
-#~ msgstr "en bytes, puedes añadir K o M."
-
-#~ msgid "in bytes/sec, You can append K or M."
-#~ msgstr "en bytes/seg, puedes añadir K o M."

@@ -343,9 +343,11 @@ small {
 	float: left;
 	overflow-x: auto;
 	width: calc(0% + 15rem);
+	min-width: max-content;
 	height: calc(100% - 4rem);
 	background-color: var(--menu-bg-color);
 	transition: visibility 400ms, width 400ms;
+	z-index: 800;
 }
 
 .main-right {
@@ -368,7 +370,9 @@ small {
 	float: left;
 }
 
-.nowrap:not(.td) {
+.nowrap:not(.td span) {
+/*	Sometimes you need to wrap: badges on narrow screens look weird 
+	and nowrap defeats other width constraints, so exclude span */
 	white-space: nowrap;
 }
 
@@ -1462,6 +1466,12 @@ body:not(.Interfaces) .cbi-rowstyle-2:first-child {
 	margin-top: -3px;
 }
 
+.cbi-dropdown img {
+	/* the following are necessary to constrain (vector) images of any size */
+	max-height: 1.6em;  /* Adjusts image height to fit slightly larger than text line height */
+	width: auto;  /* Preserves aspect ratio */
+}
+
 .cbi-dropdown > ul {
 	display: flex;
 	overflow-x: hidden;
@@ -1818,7 +1828,7 @@ body.modal-overlay-active #modal_overlay {
 	left: .2em;
 	width: 32px;
 	content: "";
-	background: url(../resources/icons/loading.gif) no-repeat center;
+	background: url(../resources/icons/loading.svg) no-repeat center;
 	background-size: 16px;
 }
 
@@ -1880,6 +1890,12 @@ body.modal-overlay-active #modal_overlay {
 	border-bottom: thin solid #ccc;
 	background: #eee;
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, .2), 0 1px 2px rgba(0, 0, 0, .05);
+}
+
+.ifacebadge img {
+	width: 32px;
+	height: 32px;
+	vertical-align: middle;
 }
 
 td > .ifacebadge,
@@ -1945,7 +1961,6 @@ td > .ifacebadge,
 
 #syslog {
 	font-size: small;
-	overflow-y: hidden;
 	width: 100%;
 	min-height: 15rem;
 	padding: 1rem;
@@ -2067,6 +2082,11 @@ td > .ifacebadge,
 
 .ifacebox-body {
 	padding: .25em;
+}
+
+#cbi-network-interface .ifacebox img {
+	width: 24px;
+	height: 24px;
 }
 
 .cbi-image-button {
@@ -2559,17 +2579,13 @@ input[name="nslookup"] {
 }
 
 /* IE hacks */
-@media all and (-ms-high-contrast: none) {
+@media all {
 	.main > .main-left > .nav > .slide > .menu::before {
 		top: 30.25%;
 	}
 
 	.main > .main-left > .nav > li:last-child::before {
 		top: 20%;
-	}
-
-	.showSide::before {
-		top: -12px;
 	}
 }
 
@@ -3152,12 +3168,12 @@ input[name="nslookup"] {
 	::-webkit-scrollbar-thumb {
 		background: #9e9e9e;
 	}
-
+/*
 	::-webkit-scrollbar-thumb:hover {
 		background: #757575;
 	}
 
 	::-webkit-scrollbar-thumb:active {
 		background: #424242;
-	}
+	}*/
 }

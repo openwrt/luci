@@ -3,8 +3,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-02-22 14:33+0000\n"
-"Last-Translator: Максим Горпиніч <maksimgorpinic2005a@gmail.com>\n"
+"PO-Revision-Date: 2025-09-08 07:50+0000\n"
+"Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/uk/>\n"
 "Language: uk\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.10.1-dev\n"
+"X-Generator: Weblate 5.14-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:47
 msgid "0 - At most once"
@@ -86,7 +86,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:59
 msgid "Base Directory"
-msgstr "Базова директорія"
+msgstr "Базовий каталог"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:16
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:16
@@ -113,6 +113,10 @@ msgstr "Bitswap Up"
 msgid "By setting this, CPU is not aggregate of all processors on the system"
 msgstr ""
 "Якщо встановити це значення, ЦП не є сукупністю всіх процесорів у системі"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:79
+msgid "CACert"
+msgstr "CACert"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/contextswitch.js:6
 msgid "CPU Context Switches Plugin Configuration"
@@ -168,7 +172,7 @@ msgstr "Конфігурація плагіна Chrony"
 msgid "Chrony monitoring enabled"
 msgstr "Моніторинг Chrony увімкнено"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:72
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:85
 msgid "CleanSession"
 msgstr "Чиста сесія"
 
@@ -448,7 +452,7 @@ msgstr "Додаткові предмети"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:61
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:68
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:75
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:88
 msgid "False"
 msgstr "Неправда"
 
@@ -558,7 +562,7 @@ msgstr "Хост працює хроні"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:51
 msgid "Hostname"
-msgstr "Ім'я хоста"
+msgstr "Ім'я хосту"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:15
 msgid "IP or hostname where to get the txtinfo output from"
@@ -660,7 +664,7 @@ msgstr "Завантаження даних…"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:14
 msgid "Log level"
-msgstr ""
+msgstr "Рівень журналу"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:20
 msgid "Match IPv4 iptables rules"
@@ -957,14 +961,14 @@ msgstr "Mqtt"
 msgid "Mqtt Plugin Configuration"
 msgstr "Конфігурація плагіна Mqtt"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:86
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:99
 msgid "Mqtt plugin enabled"
 msgstr "Плагін Mqtt увімкнено"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:25
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:25
 msgid "Name"
-msgstr "Назва"
+msgstr "Ім'я"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/netlink.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/netlink.json:2
@@ -1023,7 +1027,7 @@ msgstr "Кількість потоків для збору даних"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/olsrd.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/olsrd.json:2
 msgid "OLSRd"
-msgstr "OLSRd"
+msgstr "OLSRd'"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:6
 msgid "OLSRd Plugin Configuration"
@@ -1248,7 +1252,8 @@ msgstr "Порт сервера"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:20
 msgid "Set the maximum size for datagrams sent over the network"
-msgstr "Встановіть максимальний розмір дейтаграм, які надсилаються через мережу"
+msgstr ""
+"Встановіть максимальний розмір дейтаграм, які надсилаються через мережу"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
 msgid "Set up collectd"
@@ -1400,6 +1405,18 @@ msgstr "З'єднання TCP"
 msgid "TCPConns Plugin Configuration"
 msgstr "Конфігурація плагіна TCPConns"
 
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:74
+msgid "TLS 1.2"
+msgstr "TLS 1.2"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:75
+msgid "TLS 1.3"
+msgstr "TLS 1.3"
+
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:72
+msgid "TLSProtocol"
+msgstr "TLSProtocol"
+
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:15
 msgid "TTL for network packets"
 msgstr "TTL для мережевих пакетів"
@@ -1509,8 +1526,9 @@ msgid ""
 msgstr ""
 "Плагін електронної пошти створює сокет Unix, який можна використовувати для "
 "передачі статистики електронної пошти запущеному демону collectd. Цей плагін "
-"насамперед призначений для використання разом із Mail::SpamAssasin::Plugin::"
-"Collectd, але його можна використовувати й іншими способами."
+"насамперед призначений для використання разом із "
+"Mail::SpamAssasin::Plugin::Collectd, але його можна використовувати й іншими "
+"способами."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/entropy.js:7
 msgid "The entropy plugin collects statistics about the available entropy."
@@ -1713,21 +1731,22 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:51
 msgid ""
 "This section defines to which servers the locally collected data is sent to."
-msgstr "Цей розділ визначає, на які сервери надсилаються локально зібрані дані."
+msgstr ""
+"Цей розділ визначає, на які сервери надсилаються локально зібрані дані."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:25
 msgid "Timeout for polling chrony"
 msgstr "Тайм-аут для хроніки опитування"
 
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:79
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:92
 msgid "Topic"
 msgstr "Тема"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:60
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:67
-#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:74
+#: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:87
 msgid "True"
-msgstr "правда"
+msgstr "Правда"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:80
 msgid "Try to look up fully qualified hostname"
@@ -1869,8 +1888,8 @@ msgid ""
 "You need to configure <em>collectd</em> to gather data into <em>.rrd</em> "
 "files."
 msgstr ""
-"Вам потрібно налаштувати <em>collectd</em> для збору даних у файли "
-"<em>.rrd</em>."
+"Вам потрібно налаштувати <em>collectd</em> для збору даних у файли <em>.rrd</"
+"em>."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
 msgid "all local listening ports,"
@@ -1883,7 +1902,7 @@ msgstr "Плаґін cURL увімкнуто"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/curl.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/curl.json:2
 msgid "cUrl"
-msgstr "cUrl"
+msgstr "cUrl'"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
@@ -1895,7 +1914,7 @@ msgstr "немає резюме"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
-msgstr "нічого"
+msgstr "жодного"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:107
 msgid "one device"
@@ -1939,9 +1958,3 @@ msgstr "зменшує rrd розмір"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "summary of all ports"
 msgstr "зведення всіх портів"
-
-#~ msgid "Network protocol"
-#~ msgstr "Мережевий протокол"
-
-#~ msgid "Options"
-#~ msgstr "Опції"

@@ -1,13 +1,13 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 # Copyright 2023-2025 MOSSDeF, Stan Grishin (stangri@melmac.ca).
-# This is free software, licensed under AGPL-3.0-or-later.
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-adblock-fast
 PKG_LICENSE:=AGPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
-PKG_VERSION:=1.1.3
-PKG_RELEASE:=1
+PKG_VERSION:=1.2.0
+PKG_RELEASE:=20
 
 LUCI_TITLE:=AdBlock-Fast Web UI
 LUCI_URL:=https://github.com/stangri/luci-app-adblock-fast/

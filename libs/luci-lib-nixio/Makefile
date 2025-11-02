@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=NIXIO POSIX library
-LUCI_DEPENDS:=+liblua
+LUCI_DEPENDS:= +USE_GLIBC:libcrypt-compat +liblua
 
 PKG_LICENSE:=Apache-2.0
 

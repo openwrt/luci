@@ -33,6 +33,12 @@ var expr_translations = {
 	'ct.status': _('Conntrack status', 'nft ct status'),
 	'ct.status.dnat': 'DNAT',
 
+	'ip.dscp': 'DSCP',
+	'ip6.dscp': 'DSCP',
+
+	'ether.saddr': _('Source MAC address', 'nft ether saddr'),
+	'ether.daddr': _('Destination MAC address', 'nft ether daddr'),
+
 	'ip.protocol': _('IP protocol', 'nft ip protocol'),
 	'ip.protocol.tcp': 'TCP',
 	'ip.protocol.udp': 'UDP',
@@ -96,7 +102,10 @@ var action_translations = {
 	'notrack': _('Do not track', 'nft notrack action'),
 	'drop': _('Drop packet', 'nft drop action'),
 	'jump': _('Continue in <strong><a href="#%q.%q">%h</a></strong>', 'nft jump action'),
-	'log': _('Log event "<strong>%h</strong>…"', 'nft log action'),
+	'goto': _('Goto chain <strong><a href="#%q.%q">%h</a></strong>', 'nft goto action'),
+	'continue': _('Continue to next rule', 'nft continue action'),
+	'log': _('Log event', 'nft log action'),
+	'log.prefix': _('Log event "<strong>%h</strong>…"', 'nft log action'),
 
 	'reject.tcp reset': _('Reject packet with <strong>TCP reset</strong>', 'nft reject with tcp reset'),
 	'reject.icmp': _('Reject IPv4 packet with <strong>ICMP type %h</strong>', 'nft reject with icmp type'),
@@ -129,6 +138,7 @@ var action_translations = {
 
 	'return': _('Continue in calling chain'),
 
+	'ct helper': _('Utilise <strong>%h</strong> conntrack helper'),
 	'flow': _('Utilize flow table <strong>%h</strong>')
 };
 
@@ -150,6 +160,8 @@ return view.extend({
 				case 'reject':
 				case 'drop':
 				case 'jump':
+				case 'goto':
+				case 'continue':
 				case 'snat':
 				case 'dnat':
 				case 'redirect':
@@ -157,6 +169,7 @@ return view.extend({
 				case 'masquerade':
 				case 'return':
 				case 'flow':
+				case 'ct helper':
 				case 'log':
 					return true;
 				}
@@ -287,6 +300,47 @@ return view.extend({
 		}
 	},
 
+	renderVMap: function(spec, table) {
+		// spec: { key: {...}, data: { set: [ [mapkey, actionSpec], ... ] } }
+		const matchElem = E('span', { 'class': 'ifacebadge' },
+			_('Verdict map: <var>%h</var> is').format(this.exprToString(spec.key)));
+
+		const actions = [];
+		const keys = [];
+
+		if (spec && spec.data && Array.isArray(spec.data.set)) {
+			// For each mapping entry, render key and the action
+			for (var i = 0; i < spec.data.set.length; i++) {
+				const entry = spec.data.set[i];
+				const mapKey = entry[0];
+				const actionSpec = entry[1];
+
+				// if actionSpec is an action (accept/drop/jump/...), render it as action element
+				if (typeof(actionSpec) == 'object' && this.isActionExpression(actionSpec)) {
+					// renderExpr expects an expr object like { accept: null } or { jump: {...} }
+					const renderedAction = this.renderExpr(actionSpec, table);
+
+					actions.push(E('div', {  }, [ 
+						E('span', [ this.exprToString(mapKey) + ':' ]),
+						' ',
+						renderedAction
+					]));
+					keys.push('<strong>%s</strong>'.format(this.exprToString(mapKey)));
+				} else {
+					// fallback: render the actionSpec as generic JSON tooltip
+					actions.push(E('span', { 'class': 'ifacebadge', 'data-tooltip': JSON.stringify(actionSpec) },
+						this.exprToString(mapKey) + ':' + this.exprToString(actionSpec)));
+					keys.push('<strong>%s</strong>'.format(this.exprToString(mapKey)));
+				}
+
+			}
+
+			dom.append(matchElem, [ ' ', E('span', {}, keys.join(_(' or '))) ]);
+		}
+
+		return { match: matchElem, actions: actions };
+	},
+
 	renderMatchExpr: function(spec) {
 		switch (spec.op) {
 		case '==':
@@ -355,6 +409,11 @@ return view.extend({
 		case 'match':
 			return this.renderMatchExpr(spec);
 
+		case 'ct helper':
+			return E('span', {
+					'class': 'ifacebadge'
+			}, action_translations[kind].format(spec));
+
 		case 'reject':
 			var k = 'reject.%s'.format(spec.type);
 
@@ -373,6 +432,16 @@ return view.extend({
 			return E('span', {
 				'class': 'ifacebadge'
 			}, action_translations.jump.format(table, spec.target, spec.target));
+
+		case 'goto':
+			return E('span', {
+				'class': 'ifacebadge'
+			}, action_translations.goto.format(table, spec.target, spec.target));
+
+		case 'continue':
+			return E('span', {
+				'class': 'ifacebadge'
+			}, action_translations.continue);
 
 		case 'return':
 			return E('span', {
@@ -452,7 +521,9 @@ return view.extend({
 		case 'log':
 			return E('span', {
 				'class': 'ifacebadge'
-			}, action_translations.log.format(spec.prefix));
+			}, spec?.prefix ?
+				''.format.apply(action_translations['log.prefix'], [spec?.prefix])
+				: action_translations.log);
 
 		default:
 			return E('span', {
@@ -493,6 +564,25 @@ return view.extend({
 				// nftables JSON format bug, `flow` targets are currently not properly serialized
 				if (typeof(spec.expr[i]) == 'string' && spec.expr[i].match(/^flow add (@\S+)$/))
 					spec.expr[i] = { flow: { op: "add", flowtable: RegExp.$1 } };
+
+				// vmap special handling
+				if (spec.expr[i] && spec.expr[i].vmap) {
+					var vm = this.renderVMap(spec.expr[i].vmap, spec.table);
+
+					// add match summary to left column
+					dom.append(row.childNodes[0], [ vm.match ]);
+					empty = false;
+
+					if (typeof(spec.expr[i]) == 'object' && spec.expr[i].counter) {
+						row.childNodes[0].appendChild(
+							this.renderCounter(spec.expr[i].counter));
+					}
+
+					// append each mapped action to the actions column
+					for (var ai = 0; ai < vm.actions.length; ai++)
+						dom.append(row.childNodes[1], [ vm.actions[ai] ]);
+					continue;
+				}
 
 				var res = this.renderExpr(spec.expr[i], spec.table);
 

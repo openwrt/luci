@@ -65,6 +65,7 @@ return view.extend({
 
 
 		o = s.option(form.ListValue, 'family', _('Family'));
+		o.value('any', _('IPv4 and IPv6'))
 		o.value('ipv4', _('IPv4'));
 		o.value('ipv6', _('IPv6'));
 		o.default = 'ipv4';
