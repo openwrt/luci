@@ -97,8 +97,7 @@ return baseclass.extend({
 			if (host.duid) {
 				if (Array.isArray(host.duid)){
 					host.duid.map(m => {
-						m.toUpperCase();
-						this.isDUIDStatic[m] = true;
+						this.isDUIDStatic[m.toUpperCase()] = true;
 					})
 				} else {
 					this.isDUIDStatic[host.duid.toUpperCase()] = true;
