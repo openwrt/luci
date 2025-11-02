@@ -1040,7 +1040,7 @@ return view.extend({
 				let warn = ss.taboption('general', form.Value, '_mesh_warning', _('Warning:'));
 				warn.depends('mode', 'mesh');
 				warn.readonly = true;
-				warn.default = _('Required package: wpad-mbedtls');
+				warn.default = _('Required package: wpad-mbedtls ');
 				warn.rmempty = false;
 				
 				o = ss.taboption('general', form.Value, 'mesh_id', _('Mesh Id'));
