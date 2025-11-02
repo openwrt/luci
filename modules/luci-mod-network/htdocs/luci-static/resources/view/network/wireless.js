@@ -1037,10 +1037,10 @@ return view.extend({
 				o.value('sta', _('Client'));
 				o.value('adhoc', _('Ad-Hoc'));
 
-				let warn = ss.taboption('general', form.Value, '_mesh_warning', _('Warning:'));
+				let warn = ss.taboption('general', form.Value, '_mesh_warning', _(' Warning:'));
 				warn.depends('mode', 'mesh');
 				warn.readonly = true;
-				warn.default = _('Required package: wpad-mbedtls ');
+				warn.default = _(' Required package: wpad-mbedtls');
 				warn.rmempty = false;
 				
 				o = ss.taboption('general', form.Value, 'mesh_id', _('Mesh Id'));
