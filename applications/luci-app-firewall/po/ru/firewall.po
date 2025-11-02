@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: firewall\n"
 "POT-Creation-Date: 2013-09-05 16:02+0200\n"
-"PO-Revision-Date: 2025-10-08 18:24+0000\n"
+"PO-Revision-Date: 2025-11-01 22:03+0000\n"
 "Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural="
 "(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? "
 "1 : 2);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.14.1-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -153,7 +153,7 @@ msgstr "IP-адрес для перезаписи должен быть указ
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:292
 msgid "ACCEPT - Disable address rewriting"
-msgstr "ACCEPT — отключить перезапись адреса"
+msgstr "ACCEPT — отключить перезапись адресов"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:224
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:220
@@ -357,7 +357,8 @@ msgstr "Включить"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:306
 msgid "Enable NAT Loopback"
-msgstr "Включить NAT loopback"
+msgstr ""
+"Включить <abbr title=\"Network Address Translation\">NAT</abbr> loopback"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:45
 msgid "Enable SYN-flood protection"
@@ -376,16 +377,22 @@ msgid ""
 "outbound traffic on this zone. This is typically enabled on the <em>wan</em> "
 "zone."
 msgstr ""
-"Включите трансляцию сетевых адресов и портов IPv4 (NAT4 или NAPT4) для "
-"исходящего трафика в этой зоне. Обычно это включается в зоне <em>wan</em>."
+"Включите трансляцию сетевых адресов и портов <abbr title="
+"\"Internet Protocol Version 4\">IPv4</abbr> (<abbr title="
+"\"Network Address Translation for IPv4\">NAT4</abbr> или <abbr title="
+"\"Network Address Port Translation for IPv4\">NAPT4</abbr>) для исходящего "
+"трафика в этой зоне. Обычно это включается в зоне <em>wan</em>."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:243
 msgid ""
 "Enable network address and port translation IPv6 (NAT6 or NAPT6) for "
 "outbound traffic on this zone."
 msgstr ""
-"Включите трансляцию сетевых адресов и портов IPv6 (NAT6 или NAPT6) для "
-"исходящего трафика в этой зоне."
+"Включите трансляцию сетевых адресов и портов <abbr title="
+"\"Internet Protocol Version 6\">IPv6</abbr> (<abbr title="
+"\"Network Address Translation for IPv6\">NAT6</abbr> или <abbr title="
+"\"Network Address Port Translation for IPv6\">NAPT6</abbr>) для исходящего "
+"трафика в этой зоне."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:211
 msgid "Enabled"
@@ -469,7 +476,7 @@ msgstr "Миграция конфигурации межсетевого экр�
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:82
 msgid "Flow offloading type"
-msgstr "Тип разгрузки потоков"
+msgstr "Тип ускорения потоков"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:64
 msgid "Forward"
@@ -564,11 +571,11 @@ msgstr "Разрешить конфигурировать брандмауер"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
 msgid "Hardware based offloading for routing with/without NAT."
-msgstr "Аппаратная разгрузка для маршрутизации с/без NAT."
+msgstr "Аппаратное ускорение маршрутизации с/без NAT."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:85
 msgid "Hardware flow offloading"
-msgstr "Аппаратная разгрузка"
+msgstr "Аппаратное ускорение"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:144
 msgid "IP (range)"
@@ -748,8 +755,7 @@ msgstr "IP-адрес источника петли (loopback)"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:291
 msgid "MASQUERADE - Automatically rewrite to outbound interface IP"
-msgstr ""
-"MASQUERADE — автоматически переписывать на IP-адрес исходящего интерфейса"
+msgstr "MASQUERADE — автоматически заменить на IP исходящего интерфейса"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:180
 msgid "MSS clamping"
@@ -980,7 +986,9 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:188
 msgid "Path to file of CIDRs, subnets, host IPs, etc.<br />"
-msgstr "Путь к файлу с CIDR, подсетями, IP-адресами хостов и т.д.<br />"
+msgstr ""
+"Путь к файлу с <abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>, "
+"подсетями, IP-адресами хостов и т.д.<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:155
 #: applications/luci-app-firewall/root/usr/share/luci/menu.d/luci-app-firewall.json:26
@@ -1063,11 +1071,11 @@ msgstr "Порт для перезаписи"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:76
 msgid "Routing/NAT Offloading"
-msgstr "Разгрузка маршрутизации/NAT"
+msgstr "Ускорение маршрутизации/NAT"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:290
 msgid "SNAT - Rewrite to specific source IP or port"
-msgstr "SNAT — перезаписать на указанный IP-адрес источника или порт"
+msgstr "SNAT — заменить на заданный исходный IP или порт"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:489
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:362
@@ -1089,11 +1097,11 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:84
 msgid "Software based offloading for routing/NAT."
-msgstr "Программная разгрузка для маршрутизации/NAT."
+msgstr "Программное ускорение маршрутизации/NAT."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:84
 msgid "Software flow offloading"
-msgstr "Программная разгрузка"
+msgstr "Программное ускорение"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:260
 msgid "Source IP address"
