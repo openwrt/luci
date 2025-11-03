@@ -1128,8 +1128,8 @@ return view.extend({
 
 				let encr;
 				if (hwtype == 'mac80211') {
-					const mode = ss.children[0];
-					const bssid = ss.children[5];
+					const mode = ss.children.find(obj => obj.option === 'mode');
+					const bssid = ss.children.find(obj => obj.option === 'bssid');
 
 					if (have_mesh) mode.value('mesh', '802.11s');
 					mode.value('ahdemo', _('Pseudo Ad-Hoc (ahdemo)'));
