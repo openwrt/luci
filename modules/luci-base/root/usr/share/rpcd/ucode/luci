@@ -243,7 +243,21 @@ const methods = {
 				netifd_vrf: false,
 			};
 
-			const wifi_features = [ 'eap', '11ac', '11ax', '11be', '11r', 'acs', 'sae', 'owe', 'suiteb192', 'wep', 'wps', 'ocv' ];
+			const wifi_features = [ 
+				'11ac',
+				'11ax',
+				'11be',
+				'11r',
+				'acs',
+				'eap',
+				'mesh',
+				'ocv',
+				'owe',
+				'sae',
+				'suiteb192',
+				'wep',
+				'wps',
+			];
 
 			if (access('/usr/sbin/hostapd')) {
 				result.hostapd = { cli: access('/usr/sbin/hostapd_cli') == true };
