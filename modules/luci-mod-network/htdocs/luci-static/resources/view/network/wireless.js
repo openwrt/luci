@@ -951,6 +951,7 @@ return view.extend({
 		s.addModalOptions = function(s) {
 			return network.getWifiNetwork(s.section).then(function(radioNet) {
 				const hwtype = uci.get('wireless', radioNet.getWifiDeviceName(), 'type');
+				const have_mesh = L.hasSystemFeature('hostapd', 'mesh') || L.hasSystemFeature('wpasupplicant', 'mesh');
 				let o, ss;
 
 				o = s.option(form.SectionValue, '_device', form.NamedSection, radioNet.getWifiDeviceName(), 'wifi-device', _('Device Configuration'));
@@ -1045,7 +1046,8 @@ return view.extend({
 				o.default = '1';
 				o.depends('mode', 'mesh');
 
-				o = ss.taboption('advanced', form.Value, 'mesh_rssi_threshold', _('RSSI threshold for joining'), _('0 = not using RSSI threshold, 1 = do not change driver default'));
+				o = ss.taboption('advanced', form.Value, 'mesh_rssi_threshold', _('RSSI threshold for joining mesh'), _('0 = not using RSSI threshold, 1 = do not change driver default') + ' ' +
+					_('Units: dBm. Where -255 is weakest, and -10 is strong.'));
 				o.rmempty = false;
 				o.default = '0';
 				o.datatype = 'range(-255,1)';
@@ -1116,10 +1118,10 @@ return view.extend({
 
 				let encr;
 				if (hwtype == 'mac80211') {
-					const mode = ss.children[0];
-					const bssid = ss.children[5];
+					const mode = ss.children.find(obj => obj.option === 'mode');
+					const bssid = ss.children.find(obj => obj.option === 'bssid');
 
-					mode.value('mesh', '802.11s');
+					if (have_mesh) mode.value('mesh', '802.11s');
 					mode.value('ahdemo', _('Pseudo Ad-Hoc (ahdemo)'));
 					mode.value('monitor', _('Monitor'));
 
