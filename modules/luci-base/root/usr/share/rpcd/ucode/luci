@@ -22,7 +22,7 @@ function callPackageVersionCheck(pkg) {
 
 	if ( access('/bin/opkg') ) {
 		// <= v24.10
-		let fd = popen('opkg list-installed ' + pkg + ' 2>/dev/null');
+		let fd = popen('opkg list-installed ' + shellquote(pkg) + ' 2>/dev/null');
 		if (fd) {
 			const re = regexp('^' + pkg + ' - (.+)$', 's');
 			const m = match(fd.read('all'), re);
@@ -33,7 +33,7 @@ function callPackageVersionCheck(pkg) {
 	}
 	else if ( access('/usr/bin/apk') ) {
 		// > v24.10
-		let fd = popen('apk list -I ' + pkg + ' 2>/dev/null');
+		let fd = popen('apk list -I ' + shellquote(pkg) + ' 2>/dev/null');
 		if (fd) {
 			const re = regexp('^' + pkg + '-(.+)$', 's');
 			const m = match(fd.read('all'), re);
@@ -631,18 +631,6 @@ const methods = {
 			}
 
 			return { result: ports };
-		}
-	},
-
-	packageVersionCheck: {
-		args: { name: 'netifd' },
-		call: function(request) {
-			let version = "";
-			const pkg = request?.args?.name;
-
-			version = callPackageVersionCheck(pkg);
-
-			return { result: version };
 		}
 	}
 };
