@@ -3,87 +3,10 @@ name: Test Formalities
 on:
   pull_request:
 
+permissions:
+  contents: read
+
 jobs:
-  build:
+  formalities:
     name: Test Formalities
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-
-    steps:
-      - uses: actions/checkout@v5
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
-          fetch-depth: 0
-
-      - name: Determine branch name
-        run: |
-          BRANCH="${GITHUB_BASE_REF#refs/heads/}"
-          echo "Building for $BRANCH"
-          echo "BRANCH=$BRANCH" >> $GITHUB_ENV
-
-      - name: Test for merge commits, subject, S.O.B., and email
-        run: |
-          source .github/workflows/ci_helpers.sh
-
-          RET=0
-          for commit in $(git rev-list HEAD ^origin/$BRANCH); do
-            info "=== Checking commit '$commit'"
-            if git show --format='%P' -s $commit | grep -qF ' '; then
-              err "Pull request should not include merge commits"
-              RET=1
-            fi
-
-            authorname="$(git show -s --format=%aN $commit)"
-            if echo $authorname | grep -q '\S\+\s\+\S\+'; then
-              success "Author name ($authorname) seems ok"
-            elif echo $authorname | grep -q '\S\+'; then
-              success "Author name ($authorname) seems to be nick or alias"
-            else
-              err "Author name ($authorname) must be one of: real name 'firstname lastname' OR nickname/alias/handle "
-              RET=1
-            fi
-
-            committername="$(git show -s --format=%cN $commit)"
-            # Pattern \S\+\s\+\S\+ matches >= 2 names i.e. 3 and more e.g. "John Von Doe" also match
-            if echo $committername | grep -q '\S\+\s\+\S\+'; then
-              success "Committer name ($committername) seems ok"
-            elif echo $committername | grep -q '\S\+'; then
-              # Pattern \S\+ matches single names, typical of nicks or handles
-              success "Committer name ($committername) seems to be nick or alias"
-            else
-              err "Committer name ($committername) must be one of: real name 'firstname lastname' OR nickname/alias/handle "
-              RET=1
-            fi
-
-            subject="$(git show -s --format=%s $commit)"
-            if echo "$subject" | grep -q -e '^[0-9A-Za-z,+/_-]\+: ' -e '^Revert '; then
-              success "Commit subject line seems ok ($subject)"
-            elif echo "$subject" | grep -iq '^Translated using Weblate.*'; then
-              success "Weblate commit subject line exception OK: $subject"
-            elif echo "$subject" | grep -iq '^Added translation using Weblate.*'; then
-              success "Weblate commit subject line exception OK: $subject"
-            else
-              err "Commit subject line MUST start with '<package name>: ' ($subject)"
-              RET=1
-            fi
-
-            body="$(git show -s --format=%b $commit)"
-            authoremail="$(git show -s --format='<%aE>' $commit)"
-            sob="$(git show -s --format='Signed-off-by: %aN <%aE>' $commit)"
-            if echo "$body" | grep -qF "$sob"; then
-              success "Signed-off-by matches author"
-            elif echo "$authoremail" | grep -iqF "<hosted@weblate.org>"; then
-              success "Signed-off-by exception: authored by Weblate"
-            else
-              err "Signed-off-by is missing or doesn't match author (should be '$sob')"
-              RET=1
-            fi
-
-            if echo "$authoremail" | grep -iqF "users.noreply"; then
-              err "Real email address policy: please configure GitHub email ($authoremail) to a real one"
-              RET=1
-            fi
-          done
-
-          exit $RET
+    uses: openwrt/actions-shared-workflows/.github/workflows/formal.yml@main
