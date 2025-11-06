@@ -792,7 +792,7 @@ return view.extend({
 							if (res) {
 								lines = res.split('\n');
 								for (let i = 0; i < lines.length; i++) {
-									if (lines[i].match(/^\s+[0-9]/)) {
+									if (lines[i].match(/^\s*\d+/)) {
 										strength = lines[i].slice(0,3).trim();
 										channel = lines[i].slice(3,7).trim();
 										bssid = lines[i].slice(7,25).trim();
@@ -801,6 +801,11 @@ return view.extend({
 										cipher = lines[i].slice(29,40).trim();
 										auth = lines[i].slice(40,71).trim().split(',');
 										ssid = lines[i].slice(71).trim();
+										let tbl_ssid = ssid;
+										if (ssid === "") {
+											tbl_ssid = "<em>hidden</em>";
+											ssid = "hidden";
+										}
 										let encryption = 'Open';
 										let tbl_encryption = '';
 										let hasWPA = wpa === '+';
@@ -857,7 +862,7 @@ return view.extend({
 										rows.push([
 											strength,
 											channel,
-											ssid,
+											tbl_ssid,
 											bssid,
 											tbl_encryption,
 											E('div', { 'class': 'right' },
