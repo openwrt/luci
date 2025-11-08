@@ -1132,7 +1132,7 @@ return view.extend({
 				                if (ev.target.value === 'mesh') {
 				                    L.ui.showModal(_('Required packeges are not available'), [
 				                        E('p', { 'class': 'alert-message warning' },
-				                            _('The following packages with a mesh support to run the 802.11s are required: "wpad-mbedtls/wpa-supplicant-mbedtls"')),
+				                            _('Mesh mode (802.11s) requires a wpad package with SAE support (e.g. wpad-openssl, wpad-wolfssl, or wpad-mbedtls). Please ensure that a compatible package is installed.')),
 				                        E('div', { 'class': 'right' }, [
 				                            E('button', {
 				                                'class': 'btn',
