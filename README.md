@@ -23,7 +23,7 @@ To install all its package definitions, run:
 
 You can browse the generated API documentation directly on Github.
 
- - [Server side Lua APIs](http://openwrt.github.io/luci/api/index.html)
+ - [Server side Lua APIs](http://openwrt.github.io/luci/api/index.html); Note: deprecated - Lua will be removed in future. Use ucode rpcd for server side operations.
  - [Client side JavaScript APIs](http://openwrt.github.io/luci/jsapi/index.html)
 
 ## Development

@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-11-02 14:01+0000\n"
+"PO-Revision-Date: 2025-11-05 20:47+0000\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:898
 msgid "!known (not known)"
@@ -83,8 +83,9 @@ msgstr "%s 表示 “运行 dnsmasq 的系统的地址”。"
 msgid ""
 "%s services running on this device in the default VRF context (ie., not "
 "bound to any VRF device) shall work across all VRF domains."
-msgstr "在默认 VRF 上下文（即未绑定到任何 VRF 设备）运行的 %s 服务，能在所有 VRF 域中"
-"使用。"
+msgstr ""
+"开启后，在默认 VRF 上下文（即未绑定到任何 VRF 设备）运行的 %s 服务，<abbr "
+"title=\"可接受来自所有 VRF 的连接请求\">能在所有 VRF 域中使用</abbr>。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:697
 msgid "%s uses a human-readable encoding of hex-and-colons"
@@ -156,7 +157,7 @@ msgstr "-- 自定义 --"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:271
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:378
 msgid "-- match by label --"
-msgstr "-- 根据标签匹配 --"
+msgstr "-- 根据卷标匹配 --"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:257
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:361
@@ -567,7 +568,7 @@ msgstr "大了 <var>%s</var>或相等，与<strong>%s</strong>相比"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:96
 msgctxt "nft set match expression"
 msgid "<var>%s</var> in set <strong>%s</strong>"
-msgstr "<var>%s</var> 于集合 <strong>%s</strong> 中"
+msgstr "<var>%s</var> 在集合 <strong>%s</strong> 中"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:89
 msgctxt "nft relational \"==\" operator expression"
@@ -760,9 +761,8 @@ msgid ""
 "in 802.11v. Note: might break receiver STA multicast expectations."
 msgstr ""
 "将目的地为组播 MAC 的 ARP、IPv4 和 IPv6（包含 802.1Q）组播帧转换为对目的 STA "
-"MAC 地址的单播帧。\n"
-"注意：这不是 802.11v 中的定向组播服务（DMS）。\n"
-"注意：可能会破坏接收端 STA 对组播的预期。"
+"MAC 地址的单播帧。注意：这不是 802.11v 中的定向组播服务（DMS）。注意：可能会"
+"破坏接收端 STA 对组播的预期。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1747
 msgid "ATM (Asynchronous Transfer Mode)"
@@ -897,7 +897,7 @@ msgstr "活跃的 IPv6 规则"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:628
 msgid "Active backup"
-msgstr "主动备份"
+msgstr "主备模式 (Active backup)"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:256
 msgid "Active peers"
@@ -956,7 +956,7 @@ msgstr "添加 VLAN"
 msgid ""
 "Add a subnet address to the DNS queries which are forwarded upstream, "
 "leaving this value empty disables the feature."
-msgstr "在向上游转发的DNS查询中添加子网地址，将此值留空则禁用此功能。"
+msgstr "在向上游转发的 DNS 查询中添加子网地址，将此值留空则禁用此功能。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1492
 msgid "Add device configuration"
@@ -986,11 +986,11 @@ msgid ""
 "interfaces. Choose an acceptable URI <code>tls://</code>, <code>tcp://</"
 "code>, <code>unix://</code> or <code>quic://</code>"
 msgstr ""
-"添加监听器以便接受来自非本地节点的传入对等连接。无论这里设置了哪些监听器，多"
+"添加监听器以便接受来自非本地节点的传入对等连接。无论这里设置了哪些监听器，组"
 "播对等发现都可以正常工作。URI 格式：<code>tls://0.0.0.0:0</code> 或 "
 "<code>tls://[::]:0</code> 用于在所有接口上监听。选择一个可接受的 URI，如 "
-"<code>tls://</code>,<code>tcp://</code>,<code>unix://</code> 或 <code>quic://"
-"</code>"
+"<code>tls://</code>,<code>tcp://</code>,<code>unix://</code> 或 "
+"<code>quic://</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:223
 msgid "Add local domain suffix to names served from hosts files."
@@ -998,7 +998,7 @@ msgstr "为 HOSTS 文件中的主机名添加本地域名后缀。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:285
 msgid "Add multicast rule"
-msgstr "添加多播规则"
+msgstr "添加组播规则"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:477
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1316
@@ -1274,7 +1274,7 @@ msgstr "AllowedIPs 设置无效"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:42
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:42
 msgid "Alternatively, a multicast address to reach a group of peers."
-msgstr "可以使用一个多播地址来访问一组对等节点。"
+msgstr "可以使用一个组播地址来访问一组对等节点。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:824
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1241
@@ -1426,13 +1426,13 @@ msgstr "Arp 扫描"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1157
 msgid ""
 "Assign a part of given length of every public IPv6-prefix to this interface"
-msgstr "将每个公共 IPv6 前缀的给定长度部分分配给此接口"
+msgstr "分配给此接口的公共 IPv6 前缀的长度"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1162
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
 msgid ""
 "Assign prefix parts using this hexadecimal subprefix ID for this interface."
-msgstr "将此十六进制子 ID 前缀分配给此接口。"
+msgstr "将使用此十六进制子前缀 ID 为此接口分配前缀。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2412
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:398
@@ -1528,8 +1528,7 @@ msgstr "自动家庭网络（HNCP）"
 msgid ""
 "Automatic mac learning using multicast; inserts unknown source link layer "
 "addresses and IP addresses into the VXLAN device %s"
-msgstr ""
-"使用多播进行自动 MAC 地址学习；将未知的源链路层地址和 IP 地址插入到 VXLAN 设"
+msgstr "使用组播进行自动 MAC 地址学习；将未知的源链路层地址和 IP 地址插入到 VXLAN 设"
 "备 %s 中"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:174
@@ -1540,7 +1539,7 @@ msgstr "在挂载前自动检查文件系统错误"
 msgid ""
 "Automatically handle multiple uplink interfaces using source-based policy "
 "routing."
-msgstr "使用基于源的策略路由自动处理多个上行链路接口。"
+msgstr "使用基于源地址的策略路由自动处理多个上行链路接口。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:170
 msgid "Automatically mount filesystems on hotplug"
@@ -1624,7 +1623,7 @@ msgstr "备份"
 
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:139
 msgid "Backup / Flash Firmware"
-msgstr "备份与升级"
+msgstr "备份与更新"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:353
 msgid "Backup file list"
@@ -2025,8 +2024,8 @@ msgid ""
 "inhibit access to this device. Any IP change requires <strong>connecting to "
 "the new IP</strong> within %d seconds to retain the changes."
 msgstr ""
-"已通过 “%h” 对现有连接进行了更改。这可能会阻止访问此设备。任何 IP 更改都需要"
-"在 %d 秒内 <strong>连接到新的IP</strong> 以保留更改。"
+"已通过 “%h” 对现有连接进行了更改。这可能会导致无法访问此设备。任何 IP 更改都"
+"需要在 %d 秒内 <strong>连接到新的IP</strong> 以保留更改。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5157
 msgid "Changes have been reverted."
@@ -2192,9 +2191,9 @@ msgid ""
 "workaround might cause interoperability issues and reduced robustness of key "
 "negotiation especially in environments with heavy traffic load."
 msgstr ""
-"通过禁用用于安装密钥的 EAPOL-Key 帧的重新传输，来增加客户端密钥重安装攻击的复"
-"杂度。此解决方法可能会导致互操作性问题，并降低密钥协商的可靠性，特别是在流量"
-"负载较重的环境中。"
+"通过禁用用于安装密钥的 EAPOL-Key 帧的重传，来增加客户端密钥重装攻击的复杂度。"
+"此变通方法可能会导致互操作性问题，并降低密钥协商的可靠性，特别是在流量负载较"
+"重的环境中更明显。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
@@ -2327,7 +2326,7 @@ msgstr "连接更改"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:31
 msgctxt "nft ct state"
 msgid "Conntrack state"
-msgstr "连接跟踪状况"
+msgstr "连接状态"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:33
 msgctxt "nft ct status"
@@ -2414,7 +2413,7 @@ msgstr "创建接口"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:24
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:199
 msgid "Critical"
-msgstr "关键"
+msgstr "严重"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:42
 msgid "Cron"
@@ -2933,7 +2932,7 @@ msgstr "存储 IPv6 前缀信息文件的目录（检测并通告过时的前缀
 msgid ""
 "Directs packet flows to specific CPUs where the local socket owner listens "
 "(the local service)."
-msgstr "将数据包流定向到特定的CPU，以便于本地套接字所有者（即本地服务）监听。"
+msgstr "将数据包流定向到本地套接字所有者（即本地服务）所监听的特定 CPU 。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:121
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:228
@@ -3066,15 +3065,13 @@ msgstr "分布式 ARP 表"
 msgid ""
 "Dnsmasq instance to which this DHCP host section is bound. If unspecified, "
 "the section is valid for all dnsmasq instances."
-msgstr ""
-"此 DHCP 主机部分所绑定的 Dnsmasq 实例。如未指定，此部分对所有 dnsmasq 实例均"
-"有效。"
+msgstr "此静态租约绑定的 Dnsmasq 实例。如未指定，此租约在所有 dnsmasq 实例有效。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:619
 msgid ""
 "Dnsmasq instance to which this boot section is bound. If unspecified, the "
 "section is valid for all dnsmasq instances."
-msgstr "此引导选项绑定的 Dnsmasq 实例。 如果未指定，将在所有 dnsmasq 实例生效。"
+msgstr "此引导选项绑定的 Dnsmasq 实例。 如未指定，将在所有 dnsmasq 实例生效。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:668
 msgid "Do not cache negative replies, e.g. for non-existent domains."
@@ -3111,7 +3108,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:36
 msgid "Do not send a Release when restarting"
-msgstr "重启时不要发送 Release"
+msgstr "重启接口时不发送 Release 报文"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:25
 msgid "Do not send a hostname"
@@ -3206,29 +3203,28 @@ msgid ""
 "proxy on the network and such frames need not be used or in the case of "
 "802.11, must not be used to prevent attacks."
 msgstr ""
-"丢弃所有不必要的 ARP 帧，如果网络上有一个已知的好的 ARP 代理并且这样的帧无需"
-"使用或者就 802.11 而言，不准使用这样的帧以防止攻击。"
+"丢弃所有免费 ARP 帧。如果网络上有一个已知可靠的 ARP 代理，则无需使用此类帧，"
+"在 802.11 无线网络中，则需要禁用此类帧以防止攻击。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1198
 msgid ""
 "Drop all unsolicited neighbor advertisements, for example if there’s a known "
 "good NA proxy on the network and such frames need not be used or in the case "
 "of 802.11, must not be used to prevent attacks."
-msgstr ""
-"丢弃所有非请求邻居通告，例如，如果网络中存在已知的好的 NA 代理，那么不需要使"
-"用这些帧；或者在 802.11 的情况下，必须禁止使用以防止攻击。"
+msgstr "丢弃所有非请求邻居通告。如果网络中存在已知可靠的 NA 代理，那么无需使用此类帧"
+"；在 802.11 无线网络中，则需要禁用此类帧以防止攻击。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1176
 msgid "Drop gratuitous ARP"
-msgstr "丢弃不必要的 ARP"
+msgstr "丢弃免费 ARP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1252
 msgid "Drop layer 2 multicast frames containing IPv4 unicast packets."
-msgstr "丢弃包含 IPv4 单播数据包的 layer 2 多播帧。"
+msgstr "丢弃包含 IPv4 单播数据包的 layer 2 组播帧。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1256
 msgid "Drop layer 2 multicast frames containing IPv6 unicast packets."
-msgstr "丢弃包含 IPv6 单播数据包的 layer 2 多播帧。"
+msgstr "丢弃包含 IPv6 单播数据包的 layer 2 组播帧。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1252
 msgid "Drop nested IPv4 unicast"
@@ -3303,8 +3299,7 @@ msgstr "动态隧道"
 msgid ""
 "Dynamically allocate DHCP addresses for clients. If disabled, only clients "
 "having static leases will be served."
-msgstr ""
-"为所有客户端提供 DHCP 服务。如果禁用，将只对具有静态租约的客户端提供服务。"
+msgstr "为所有客户端提供 DHCP 服务。如果禁用，将只对拥有静态租约的客户端提供服务。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1564
 msgid "E.g. <code>br-vlan</code> or <code>brvlan</code>."
@@ -3409,8 +3404,8 @@ msgid ""
 "Either a prefix length hint (e.g. 56) only, whereby the operator selects the "
 "prefix, or specify a prefix also (e.g. %s)"
 msgstr ""
-"可以选择仅提供一个前缀长度（例如 56 ），在这种情况下具体的前缀将由运营商来选"
-"择；或者也可以直接指定一个具体的前缀（例如 %s ）"
+"可以只选择前缀长度（例如 56 ），此时将由运营商来选择分配的前缀，也可以指定<ab"
+"br title=\"运营商或上游不一定支持\">想要获取的前缀</abbr>（例如 %s ）"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:61
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:201
@@ -3555,7 +3550,7 @@ msgstr "启用此接口上可用的 IPv6 前缀的下游委托"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1932
 msgid "Enable key reinstallation (KRACK) countermeasures"
-msgstr "启用密钥重新安装（KRACK）对策"
+msgstr "启用密钥重装攻击防护"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:189
 msgid "Enable learning and aging"
@@ -3571,7 +3566,7 @@ msgstr "启用流出数据包镜像"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1248
 msgid "Enable multicast fast leave"
-msgstr "启用多播快速离开"
+msgstr "启用组播快速离开"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1067
 msgid "Enable multicast querier"
@@ -3579,7 +3574,7 @@ msgstr "启用组播查询器"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1212
 msgid "Enable multicast support"
-msgstr "启用多播支持"
+msgstr "启用组播支持"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:250
 msgid ""
@@ -3612,7 +3607,7 @@ msgstr "启用 Rx 校验"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
 msgid "Enable support for multicast traffic (optional)."
-msgstr "启用多播传输支持 (可选)。"
+msgstr "启用组播传输支持 (可选)。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:83
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:88
@@ -3630,7 +3625,7 @@ msgstr "启用此网络"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:37
 msgid "Enable to minimise the chance of prefix change after a restart"
-msgstr "启用后最大程度减少重启后前缀更改的可能性"
+msgstr "启用以减少重启接口后从上游获取的前缀变更的几率"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:173
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:173
@@ -3658,7 +3653,7 @@ msgstr "已启用（所有CPU）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1915
 msgid "Enabled (workaround mode)"
-msgstr "已启用（权宜模式）"
+msgstr "启用（兼容模式）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1058
 msgid "Enables IGMP snooping on this bridge"
@@ -3674,7 +3669,7 @@ msgstr "启用属于同一移动域接入点之间的快速漫游"
 msgid ""
 "Enables more efficient, group aware multicast forwarding infrastructure in "
 "batman-adv."
-msgstr "在 batman-adv 中启用更高效、分组感知的多播转发基础架构。"
+msgstr "在 batman-adv 中启用更高效、分组感知的组播转发基础架构。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1038
 msgid "Enables the Spanning Tree Protocol on this bridge"
@@ -3713,11 +3708,11 @@ msgstr "传输端点"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:649
 msgid "Endpoint Host"
-msgstr "端点主机"
+msgstr "对端地址"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:665
 msgid "Endpoint Port"
-msgstr "端点端口"
+msgstr "对端端口"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:314
 msgid "Endpoint setting is invalid"
@@ -3816,7 +3811,7 @@ msgid ""
 "Exempt {loopback_slash_8_v4} and {localhost_v6} from rebinding checks, e.g. "
 "for <abbr title=\"Real-time Block List\">RBL</abbr> services."
 msgstr ""
-"将 {loopback_slash_8_v4}和{localhost_v6} 排除在重新绑定检查之外，例如，用于"
+"将 {loopback_slash_8_v4}和{localhost_v6} 排除在重绑定检查之外，例如：需要使用"
 "<abbr title=\"Real-time Block List（实时黑名单列表）\"> RBL </abbr> 服务。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:478
@@ -3890,7 +3885,9 @@ msgstr "租约地址的有效期， 最短 2 分钟 (<code>2m</code>)。"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:34
 msgid "Extend 3GPP WAN interface /64 prefix via PD to LAN (RFC 7278)"
-msgstr "通过前缀委托将 3GPP WAW 口的 /64 前缀扩展到 LAN（RFC 7278）"
+msgstr ""
+"通过<abbr title=\"Prefix Delegation，PD\">前缀委托</abbr>将 3GPP WAN 接口的全"
+"局 /64 前缀扩展到 LAN（RFC 7278）"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:34
 msgid "Extend prefix"
@@ -3900,7 +3897,7 @@ msgstr "扩展前缀"
 msgid ""
 "Extend short TTL values to the seconds value given when caching them. Use "
 "with caution."
-msgstr "缓存时延长短 TTL 值到给定的秒数。小心使用。"
+msgstr "将较短的 TTL 值在缓存时延长为指定的秒数。谨慎使用。"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:19
 msgid "External"
@@ -4202,24 +4199,24 @@ msgstr "更新固件"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:386
 msgid "Flash operations"
-msgstr "刷写操作"
+msgstr "备份与更新"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:319
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:321
 msgid "Flashing…"
-msgstr "正在刷写…"
+msgstr "正在刷入新固件…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:853
 msgid "Follow"
-msgstr "遵循"
+msgstr "跟随活动接口"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:457
 msgid "For VRF, install %s"
-msgstr "对于 VRF，安装 %s"
+msgstr "使用 VRF 需要安装 %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:455
 msgid "For bonding, install %s"
-msgstr "对于绑定功能，请安装 %s"
+msgstr "端口绑定功能需要安装 %s"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:211
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:211
@@ -4341,7 +4338,7 @@ msgstr "转发 mesh 节点数据包"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1244
 msgid "Forward multicast packets as unicast packets on this device."
-msgstr "在此设备上将多播数据包转发为单播数据包。"
+msgstr "在此设备上将组播数据包转发为单播数据包。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:681
 msgid "Forward specific domain queries to specific upstream servers."
@@ -4829,9 +4826,8 @@ msgid ""
 "Hostnames are used to bind a domain name to an IP address. This setting is "
 "redundant for hostnames already configured with static leases, but it can be "
 "useful to rebind an FQDN."
-msgstr ""
-"主机名用于将域名与 IP 地址绑定。对于已经配置了静态租约的主机名，此设置多余，"
-"但它对重新绑定 FQDN 可能有用。"
+msgstr "主机名用于将域名与 IP 地址绑定。对于已经配置了静态租约的主机名无用，主要用于"
+"重新绑定域名（ FQDN ）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:656
 msgid "Hosts file"
@@ -4945,9 +4941,8 @@ msgstr "IP 地址缺失"
 msgid ""
 "IP address of the remote VXLAN tunnel endpoint where the MAC address (Layer "
 "2 Address) resides or a multicast address for a group of peers."
-msgstr ""
-"远程 VXLAN 隧道端点的 IP 地址，其中包含 MAC 地址（第 2 层地址）或一组对等体的"
-"多播地址。"
+msgstr "远程 VXLAN 隧道端点的 IP 地址，其中包含 MAC 地址（第 2 层地址）或一组对等体的"
+"组播地址。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:795
 msgid ""
@@ -5181,11 +5176,11 @@ msgstr "IPv6 地址"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1162
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:27
 msgid "IPv6 assignment hint"
-msgstr "IPv6 分配提示"
+msgstr "IPv6 <abbr title=\"Assignment hint\">分配指示</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1157
 msgid "IPv6 assignment length"
-msgstr "IPv6 分配长度"
+msgstr "IPv6 前缀分配长度"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:188
 msgid "IPv6 gateway"
@@ -5275,7 +5270,8 @@ msgstr ""
 msgid ""
 "If an address is specified in the flag, it will be used, otherwise, the "
 "address of the requestor will be used."
-msgstr "如果在标志中指定了地址，那么将使用该地址，否则将使用请求者的地址。"
+msgstr "如果请求者在 EDNS 标记中指定了地址，那么将使用该地址，否则将使用请求者的地址"
+"。"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:96
 msgid "If checked, 1DES is enabled"
@@ -5299,15 +5295,14 @@ msgstr "如果目的 MAC 地址指的是路由器，则将其替换为目的地�
 msgid ""
 "If empty, all incoming connections will be allowed (default). This does not "
 "affect outgoing peerings, nor link-local peers discovered via multicast."
-msgstr ""
-"如果为空，将允许所有传入连接 (默认设置)。这不会影响传出连接，也不影响通过多播"
+msgstr "如果为空，将允许所有传入连接 (默认设置)。这不会影响传出连接，也不影响通过组播"
 "发现的链路本地对等节点。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1179
 msgid ""
 "If set, downstream subnets are only allocated from the given IPv6 prefix "
 "classes."
-msgstr "如果设置，则仅从给定的 IPv6 前缀类别中分配下游子网。"
+msgstr "如果设置此项，则仅将指定的 IPv6 前缀分配给下游子网。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:224
 msgid "If set, the meaning of the match options is inverted"
@@ -5410,7 +5405,7 @@ msgstr "导入对端配置"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:174
 msgid "Imports settings from an existing WireGuard configuration file"
-msgstr "从现有的 WireGuard 配置文件导入配置。"
+msgstr "从现有的 WireGuard 配置文件导入配置"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:68
 msgid "In"
@@ -5821,7 +5816,7 @@ msgstr "反向匹配"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:223
 msgctxt "VLAN port state"
 msgid "Is Primary VLAN"
-msgstr "是主 VLAN"
+msgstr "Primary VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1204
 msgid "Isolate Bridge Port"
@@ -5835,7 +5830,7 @@ msgstr "客户端隔离"
 msgid ""
 "It appears that you are trying to flash an image that does not fit into the "
 "flash memory, please verify the image file!"
-msgstr "您尝试刷写的固件与此设备不兼容，请检查固件文件！"
+msgstr "尝试刷入的固件与此设备不兼容，请检查固件文件！"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:315
 msgid ""
@@ -5882,7 +5877,7 @@ msgstr "保留当前配置"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:60
 msgid "Keep-Alive"
-msgstr "保活"
+msgstr "保活间隔"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:33
 msgid "Kernel"
@@ -6270,7 +6265,7 @@ msgstr "仅监听这些接口和环回接口。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:295
 msgid "Listen to multicast beacons"
-msgstr "监听多播信标"
+msgstr "监听组播信标"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:288
 msgid "ListenPort setting is invalid"
@@ -6740,7 +6735,7 @@ msgstr "最大并发查询数"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1052
 msgid "Maximum age"
-msgstr "最大年龄"
+msgstr "最大生存时间"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1241
 msgid "Maximum allowed Listen Interval"
@@ -6903,7 +6898,7 @@ msgstr "最小活动链路数"
 msgid ""
 "Minimum required time in seconds before an ARP entry may be replaced. "
 "Prevents ARP cache thrashing."
-msgstr "替换 ARP 条目所需的最短时间 (以秒为单位)。防止 ARP 缓存崩溃。"
+msgstr "在 ARP 条目被替换前所需的最短等待时间 (单位：秒)。用于防止 ARP 缓存抖动。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:311
 msgid "Minimum source port #"
@@ -7090,23 +7085,23 @@ msgstr "组播转单播"
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:91
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:96
 msgid "Multicast"
-msgstr "多播"
+msgstr "组播"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:99
 msgid "Multicast Mode"
-msgstr "多播模式"
+msgstr "组播模式"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1238
 msgid "Multicast routing"
-msgstr "多播路由"
+msgstr "组播路由"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:283
 msgid "Multicast rules"
-msgstr "多播规则"
+msgstr "组播规则"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1244
 msgid "Multicast to unicast"
-msgstr "多播到单播"
+msgstr "组播到单播"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1509
 msgid "Must be in %s format."
@@ -7631,9 +7626,8 @@ msgstr ""
 msgid ""
 "Note: Workaround mode allows a STA that claims OCV capability to connect "
 "even if the STA doesn't send OCI or negotiate PMF."
-msgstr ""
-"注：权宜模式允许宣称具有 OCV 能力的 STA 进行连接，即使该 STA 并不发送 OCI 或"
-"协商 PMF."
+msgstr "注：兼容模式允许宣称具有 OCV 能力的 STA 进行连接，即使该 STA 并不发送 OCI 或"
+"协商 PMF。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1034
 msgid ""
@@ -7685,7 +7679,7 @@ msgstr "在切换到下一个接口之前，通过当前接口发送的数据包
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:799
 msgid "Number of seconds between sent learning packets"
-msgstr "发送学习数据包之间的秒数"
+msgstr "发送学习数据包的间隔秒数"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:69
 msgid "Obfuscated Group Password"
@@ -7715,7 +7709,7 @@ msgstr "关"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1680
 msgid ""
 "Off means VRF traffic will be handled exclusively by sockets bound to VRFs."
-msgstr "如果禁用， VRF 流量将完全由绑定到 VRF 的套接字处理。"
+msgstr "如不启用， VRF 内的流量将只能由绑定到该 VRF 的套接字处理。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:18
 msgid "Off-State Delay"
@@ -7751,11 +7745,11 @@ msgstr "在发生 L3 缺失时，发送 ARP 请求以进行 IP 到 MAC 地址的
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/timer.js:12
 msgid "On-State Delay"
-msgstr "通电时间"
+msgstr "开启时间"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:117
 msgid "On-link"
-msgstr "强制路由处于直连（On-Link）状态"
+msgstr "On-Link 路由"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:809
 msgid "On: use instance specific hosts file only"
@@ -7905,7 +7899,7 @@ msgstr "此设备的可选任意格式备注"
 
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:149
 msgid "Optional, in seconds. If set to '0', no reconnect is attempted."
-msgstr "可选。以秒为单位。 如果设置为 “0”，则不尝试重新连接。"
+msgstr "可选。单位：秒。 如果设置为 “0”，则不尝试重新连接。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:187
 msgid ""
@@ -7956,7 +7950,7 @@ msgstr "可选。不创建到对端的路由。"
 msgid ""
 "Optional. Host of peer. Names are resolved prior to bringing up the "
 "interface."
-msgstr "可选。对端主机。名称在接口启动之前解析。"
+msgstr "可选。对端主机的地址、名称或域名。名称和域名在接口启动之前解析。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:611
 msgid ""
@@ -7992,9 +7986,8 @@ msgstr ""
 msgid ""
 "Optional. Seconds between keep alive messages. Default is 0 (disabled). "
 "Recommended value if this device is behind a NAT is 25."
-msgstr ""
-"可选。两次保持连接消息之间的间隔秒数。默认值为 0（禁用）。若设备处于 NAT 网络"
-"环境下，建议将此值设为 25。"
+msgstr "可选。保持连接消息的间隔秒数。默认值为 0（禁用）。若设备处于 NAT 网络环境下，"
+"推荐值为 25。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:162
 msgid "Optional. UDP port used for outgoing and incoming packets."
@@ -8023,7 +8016,7 @@ msgstr "发起人间隔"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:367
 msgid "Other:"
-msgstr "其余："
+msgstr "其它："
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:69
 msgid "Out"
@@ -9054,7 +9047,7 @@ msgstr "已接收字节数"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:245
 msgid "Received multicast"
-msgstr "已接收多播"
+msgstr "已接收组播"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:244
 msgid "Received packets"
@@ -9092,7 +9085,7 @@ msgstr "引用"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/channel_analysis.js:438
 msgid "Refresh Channels"
-msgstr "刷新频道"
+msgstr "重新扫描"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2673
 msgid "Refreshing"
@@ -9589,7 +9582,7 @@ msgstr "根目录准备"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:629
 msgid "Round robin"
-msgstr "轮询"
+msgstr "轮询 (Round robin)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:646
 msgid "Route Allowed IPs"
@@ -9613,8 +9606,8 @@ msgid ""
 "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 Type "
 "134\">RA</abbr> messages. Maximum is 9000 seconds."
 msgstr ""
-"将在 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告,ICMPv6类"
-"型 134）\">RA</abbr> 消息中发布的路由器生存时间。最大值为 9000 秒。"
+"在 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告,ICMPv6类型"
+" 134）\">RA</abbr> 消息中发布的路由器生存时间。最大值为 9000 秒。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
@@ -9673,7 +9666,7 @@ msgstr "规则操作"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:549
 msgctxt "nft comment"
 msgid "Rule comment: %s"
-msgstr "规则评论：%s"
+msgstr "规则描述：%s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:633
 msgid "Rule container chain \"%h\""
@@ -9882,15 +9875,15 @@ msgstr "发送 ICMP 重定向"
 msgid ""
 "Send LCP echo requests at the given interval in seconds, only effective in "
 "conjunction with failure threshold"
-msgstr "定时发送 LCP 响应（秒），仅在结合了故障阈值时有效"
+msgstr "定时发送 LCP 回显请求（单位：秒），仅在结合了故障阈值时有效"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:293
 msgid "Send multicast beacon"
-msgstr "发送多播信标"
+msgstr "发送组播信标"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:24
 msgid "Send the hostname of this device"
-msgstr "传输这台设备的主机名称"
+msgstr "发送这台设备的主机名"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:89
 msgid "Server"
@@ -10261,7 +10254,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:901
 msgid "Specifies the link monitoring frequency in milliseconds"
-msgstr "指定链路监控频率以毫秒为单位"
+msgstr "指定链路监控频率（单位：毫秒）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 msgid ""
@@ -10279,7 +10272,7 @@ msgstr "判定主机已下线的最少 ARP 请求失败数"
 msgid ""
 "Specifies the maximum amount of seconds after which hosts are presumed to be "
 "dead"
-msgstr "判断主机已下线的超时时间（秒）"
+msgstr "判断主机已离线的超时时间（单位：秒）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:984
 msgid ""
@@ -10320,7 +10313,7 @@ msgstr "指定规则目标路由动作"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:616
 msgid "Specifies the wired ports to attach to this bonding."
-msgstr "指定要连接到此绑定的有线端口。"
+msgstr "指定要关联到此接口绑定/聚合组的有线端口。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1006
 msgid ""
@@ -10756,7 +10749,7 @@ msgstr "标签"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:219
 msgctxt "VLAN port state"
 msgid "Tagged"
-msgstr "已打标签"
+msgstr "Tagged"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:360
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:423
@@ -10966,9 +10959,9 @@ msgid ""
 "still marks the request so that no upstream nameserver will add client "
 "address information either."
 msgstr ""
-"转发的地址数量取决于前缀长度参数：对于 IPv4，32 表示转发整个地址，对于 IPv6，"
-"128 表示转发整个地址；而设置为 0 则不转发任何地址信息，但仍然标记请求，使得上"
-"游名称服务器也不会添加客户端地址信息。"
+"转发的地址完整度取决于前缀长度参数：若前缀长度为 32（IPv6 为 128），则转发完"
+"整地址；若前缀长度为0，则不转发任何地址信息，但仍会对请求进行标记，以确保上游"
+"域名服务器也不会添加客户端地址信息。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:323
 msgid ""
@@ -11010,18 +11003,16 @@ msgid ""
 "or revert all pending changes to keep the currently working configuration "
 "state."
 msgstr ""
-"应用更改后 %d 秒内无法访问该设备，稳妥起见，该配置被回滚。如果您仍然认为更改"
-"的配置是正确的，请强制应用。或者您可以关闭此警告并在更改配置后尝试再次应用，"
-"或者还原所有未应用的更改以保持当前工作的配置状态。"
+"应用更改后 %d 秒内无法访问该设备，稳妥起见，该配置被回滚。如果仍然认为更改的"
+"配置是正确的，请强制应用。可以关闭此警告并在更改配置后尝试再次应用，或者还原"
+"所有未应用的更改以保持当前工作的配置状态。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:281
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:391
 msgid ""
 "The device file of the memory or partition (<abbr title=\"for example\">e.g."
 "</abbr> <code>/dev/sda1</code>)"
-msgstr ""
-"存储器或分区的设备文件（<abbr title=\"for example\">例如：</abbr><code>/dev/"
-"sda1</code>）"
+msgstr "存储器或分区的设备文件（例如：<code>/dev/sda1</code>）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:572
 msgid "The device name \"%s\" is already taken"
@@ -11172,8 +11163,8 @@ msgid ""
 "IGMP messages on the subnet; larger values make the traffic less bursty, as "
 "host responses are spread out over a larger interval"
 msgstr ""
-"插入定期常规查询的最大响应时间 (以厘秒为单位)。更改该值,管理员可以调整子网上 "
-"IGMP 消息的突发性；较大的值可减少流量的突发性，因为主机响应会在较大的时间间隔"
+"插入定期常规查询的最长响应时间（单位：厘秒）。更改该值，管理员可以调整子网上 "
+"IGMP 消息的突发性；较大的值可减少流量的突发性，因为主机响应会在较长的时间间隔"
 "内分布"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:976
@@ -11294,8 +11285,8 @@ msgid ""
 "address of your computer to reach the device again, depending on your "
 "settings."
 msgstr ""
-"正在刷写系统…<br />切勿关闭电源！ DO NOT POWER OFF THE DEVICE!<br />等待数分"
-"钟后即可尝试重新连接到路由器。您可能需要更改计算机的 IP 地址以重新连接。"
+"正在刷入新固件…<br />切勿关闭电源！ DO NOT POWER OFF THE DEVICE!<br />等待数"
+"分钟后即可尝试重新连接到设备。可能需要更改计算机的 IP 地址以重新连接。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:163
 msgid ""
@@ -11408,9 +11399,8 @@ msgid ""
 "This is a list of shell glob patterns for matching files and directories to "
 "include during sysupgrade. Modified files in /etc/config/ and certain other "
 "configurations are automatically preserved."
-msgstr ""
-"系统升级时要保存的配置文件和目录的清单。目录 /etc/config/ 内更改过的文件以及"
-"部分其他配置会被自动保存。"
+msgstr "系统更新时要保留的配置文件和目录的清单。/etc/config/ 目录内更改过的文件以及部"
+"分其他配置会被自动保留。"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:81
 msgid ""
@@ -11539,8 +11529,7 @@ msgstr "这指定了 AD 系统的优先级"
 msgid ""
 "This specifies the mac-address for the actor in protocol packet exchanges "
 "(LACPDUs). The value cannot be NULL or multicast."
-msgstr ""
-"这指定了在协议数据包交换（LACPDUs）中主动端的 MAC 地址。该值不能为空值或多播"
+msgstr "这指定了在协议数据包交换（LACPDUs）中主动端的 MAC 地址。该值不能为空值或组播"
 "地址。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:161
@@ -11557,11 +11546,11 @@ msgstr "时间广播"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1179
 msgid "Time in milliseconds"
-msgstr "时间（以毫秒为单位）"
+msgstr "时间（单位：毫秒）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1047
 msgid "Time in seconds to spend in listening and learning states"
-msgstr "花费在监听和学习状态上的时间 （以秒为单位）"
+msgstr "在监听和学习状态上的等待时间 （单位：秒）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1227
 msgid "Time interval for rekeying GTK"
@@ -11569,7 +11558,7 @@ msgstr "组密钥更新间隔"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1739
 msgid "Time zone"
-msgstr "时间区域"
+msgstr "时区"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:16
 msgid "Timed-out"
@@ -11577,15 +11566,15 @@ msgstr "超时"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1183
 msgid "Timeout in seconds"
-msgstr "超时（以秒为单位）"
+msgstr "超时（单位：秒）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1033
 msgid "Timeout in seconds for learned MAC addresses in the forwarding database"
-msgstr "网桥转发数据库中学习到的 MAC 地址的超时时间（单位：秒）"
+msgstr "网桥转发数据库中已学习 MAC 地址的超时时间（单位：秒）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1052
 msgid "Timeout in seconds until topology updates on link loss"
-msgstr "链接丢失拓扑更新前的超时时间 （以秒为单位）"
+msgstr "链接丢失时，更新拓扑的等待时间 （单位：秒）"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:146
 msgid "Timezone"
@@ -11685,7 +11674,7 @@ msgstr "发送错误"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:630
 msgid "Transmit hash - balance-xor"
-msgstr "发送哈希 - balance-xor"
+msgstr "传输哈希(Transmit hash - balance-xor)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:58
 msgid "Transmitted Data"
@@ -12011,12 +12000,12 @@ msgstr "不支持的协议类型。"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:215
 msgctxt "VLAN port state"
 msgid "Untagged"
-msgstr "未打标签"
+msgstr "Untagged"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:522
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:97
 msgid "Untitled peer"
-msgstr "无标题的对端"
+msgstr "未命名的对端"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:151
 msgid "Up"
@@ -12185,7 +12174,7 @@ msgstr "使用该接口的网关作为默认网关"
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:166
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:133
 msgid "Use gateway metric"
-msgstr "使用网关度量值"
+msgstr "网关跃点"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:88
 msgid "Use legacy MAP"
@@ -12559,7 +12548,10 @@ msgstr ""
 msgid ""
 "When enabled, gateway is on-link even if the gateway does not match any "
 "interface prefix"
-msgstr "启用后，即使网关与任何接口前缀都不匹配，网关也会处于联机状态"
+msgstr ""
+"启用后，即使<abbr title=\"即网关不在本地链路的广播域中，没有直连路由\">网关与"
+"任何接口前缀都不匹配</abbr>，也会强制使网关处于<abbr title=\"On-Link （在链路"
+"上）\">直连</abbr>状态"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1173
 msgid ""
@@ -12597,7 +12589,7 @@ msgstr ""
 msgid ""
 "Where Wi-Fi Multimedia (WMM) Mode QoS is disabled, clients may be limited to "
 "802.11a/802.11g rates."
-msgstr "如果禁用 Wi-Fi 多媒体 （WMM） 模式 QoS，则客户端的速率可能限制到 802.11a/"
+msgstr "如果禁用 Wi-Fi 多媒体 （WMM） 模式 QoS，则客户端的速率可能被限制为 802.11a/"
 "802.11g 速率。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1186
@@ -12692,7 +12684,7 @@ msgstr "无线网络已启用"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1925
 msgid "Workaround mode can only be used when acting as an access point."
-msgstr "权宜模式只能用于接入点 AP 模式。"
+msgstr "兼容模式只能用于接入点 AP 模式。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:763
 msgid "Write received DNS queries to syslog."
@@ -12969,7 +12961,7 @@ msgstr "强制"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:871
 msgid "forced"
-msgstr "强制的"
+msgstr "强制通告"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:94
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:208
@@ -13445,7 +13437,7 @@ msgstr "有效整数值"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:386
 msgid "valid multicast MAC address"
-msgstr "有效的多播 MAC 地址"
+msgstr "有效的组播 MAC 地址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:466
 msgid ""
