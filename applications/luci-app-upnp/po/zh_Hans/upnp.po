@@ -6,8 +6,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2024-12-25 15:41+0000\n"
-"Last-Translator: try496 <pinghejk@gmail.com>\n"
+"PO-Revision-Date: 2025-11-07 13:13+0000\n"
+"Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsupnp/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.10-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:180
 msgctxt ""
@@ -24,13 +24,13 @@ msgctxt ""
 msgid ""
 "A 900s interval will result in %s notifications with the minimum max-age of "
 "1800s"
-msgstr "一个 900 秒的时间间隔将导致 %s 通知的最小 max-age 为 1800 秒"
+msgstr "900 秒的时间间隔将导致 %s 通知的最小 max-age 为 1800 秒"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:216
 msgid ""
 "ACL specify which client addresses and ports can be mapped, IPv6 always "
 "allowed."
-msgstr "ACL 指定了哪些客户端地址和端口可以被转发，IPv6 始终被允许。"
+msgstr "ACL 用来限制哪些客户端地址和端口可以被映射，IPv6 始终被允许。"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:235
 msgid "Action"
@@ -38,11 +38,11 @@ msgstr "操作"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:129
 msgid "Active Service Port Maps"
-msgstr "活跃的端口转发"
+msgstr "当前生效的端口映射"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:29
 msgid "Active UPnP IGD & PCP/NAT-PMP Port Maps"
-msgstr "活跃的 UPnP IGD 和 PCP/NAT-PMP 端口转发"
+msgstr "当前生效的 UPnP IGD 和 PCP/NAT-PMP 端口映射"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:135
 msgid "Advanced Settings"
@@ -58,7 +58,7 @@ msgstr "允许"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:175
 msgid "Allow adding port maps for requesting IP addresses only"
-msgstr "仅允许为请求的 IP 地址添加端口转发"
+msgstr "‌仅允许为发起请求的 IP 地址添加端口映射"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:199
 msgid "Announced model number"
@@ -87,7 +87,7 @@ msgstr "客户端端口"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:221
 msgid "Comment"
-msgstr "注释"
+msgstr "ACL 描述"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:76
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:72
@@ -110,7 +110,7 @@ msgstr "设备 UUID"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:153
 msgid "Download speed"
-msgstr "下载速度"
+msgstr "下行带宽"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:144
 msgid "Enable PCP/NAT-PMP protocols"
@@ -131,7 +131,7 @@ msgstr "启用安全模式"
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:45
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:103
 msgid "Expires"
-msgstr "到期时间"
+msgstr "剩余有效期"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/status/include/80_upnp.js:43
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:101
@@ -145,7 +145,7 @@ msgstr "授予访问 UPnP IGD 及 PCP/NAT-PMP 的权限"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:179
 msgid "Notify interval"
-msgstr "通知的时间间隔"
+msgstr "通知间隔"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:191
 msgid "Presentation URL"
@@ -166,11 +166,11 @@ msgstr "自定义路由器网页界面（展示页面）网址"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:154
 msgid "Report maximum download speed in kByte/s"
-msgstr "最大下载速度 kByte/s"
+msgstr "向客户端通告的最大下载速度 kByte/s"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:158
 msgid "Report maximum upload speed in kByte/s"
-msgstr "最大上传速度 kByte/s"
+msgstr "向客户端通告的最大上传速度 kByte/s"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:205
 msgid "Report system instead of service uptime"
@@ -206,7 +206,7 @@ msgstr "服务租约文件"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:138
 msgid "Start autonomous port mapping service"
-msgstr "启动自动端口转发服务"
+msgstr "启动自动端口映射服务"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:137
 msgid "Start service"
@@ -225,12 +225,14 @@ msgstr "%s 协议允许本地网络上的客户端自主配置路由器上的端
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:76
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:126
 msgid "There are no active port maps."
-msgstr "当前没有活跃的端口转发。"
+msgstr "当前没有生效的端口映射。"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:163
 msgid ""
 "To detect the public IPv4 address for unrestricted full-cone/one-to-one NATs"
-msgstr "检测公网 IPv4 地址，以便用于不受限制的全锥形/一对一 NAT"
+msgstr ""
+"检测公网 IPv4 地址，用于不受限制的全锥形（Full-cone/NAT1）/一对一 NAT 端口映"
+"射"
 
 #: applications/luci-app-upnp/root/usr/share/luci/menu.d/luci-app-upnp.json:3
 msgid "UPnP IGD & PCP"
@@ -252,7 +254,7 @@ msgstr "未知"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:157
 msgid "Upload speed"
-msgstr "上传速度"
+msgstr "上行带宽"
 
 #: applications/luci-app-upnp/htdocs/luci-static/resources/view/upnp/upnp.js:161
 msgctxt "Use %s (%s = STUN)"
