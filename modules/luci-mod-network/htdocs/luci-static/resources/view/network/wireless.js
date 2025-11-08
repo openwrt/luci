@@ -1120,7 +1120,6 @@ return view.extend({
 				if (hwtype == 'mac80211') {
 					const mode = ss.children.find(obj => obj.option === 'mode');
 					const bssid = ss.children.find(obj => obj.option === 'bssid');
-
 			    if (have_mesh) {
 			        mode.value('mesh', '802.11s');
 				    } else {
