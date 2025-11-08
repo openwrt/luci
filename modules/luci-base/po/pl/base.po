@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: LuCI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
-"PO-Revision-Date: 2025-10-27 15:02+0000\n"
+"PO-Revision-Date: 2025-11-08 23:11+0000\n"
 "Last-Translator: Piotr Kołtun <pkoltungm@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
 "\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural="
 "(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:854
 msgid "!known (not known)"
@@ -1360,7 +1360,7 @@ msgstr "Rozgłaszaj domeny DNS"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1038
 msgid "Announce IPv4/6 DNS servers"
-msgstr ""
+msgstr "Rozgłaszaj serwery DNS IPv4/6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:913
 msgid ""
@@ -1465,7 +1465,7 @@ msgstr "Arp-scan"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:738
 msgid "As DHCP-Options; send unsolicited (dnsmasq only)."
-msgstr ""
+msgstr "Jako opcje DHCP; wysyłaj bez żądania klienta (tylko dnsmasq)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1166
 msgid ""
@@ -3327,9 +3327,9 @@ msgid ""
 "good NA proxy on the network and such frames need not be used or in the case "
 "of 802.11, must not be used to prevent attacks."
 msgstr ""
-"Aby zapobiec atakom, porzucaj wszystkie niechciane rozgłoszenia sąsiadów, na "
-"przykład jeśli w sieci jest znane dobre proxy NA i takie ramki nie muszą być "
-"używane lub w przypadku 802.11 nie mogą być używane."
+"Aby zapobiec atakom, porzucaj wszystkie nieproszone rozgłoszenia sąsiadów, "
+"na przykład jeśli w sieci jest znane dobre proxy NA i takie ramki nie muszą "
+"być używane lub w przypadku 802.11 nie mogą być używane."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1176
 msgid "Drop gratuitous ARP"
@@ -3367,7 +3367,7 @@ msgstr "Porzucaj niedopasowane pakiety"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1198
 msgid "Drop unsolicited NA"
-msgstr "Porzucaj niezamówione NA"
+msgstr "Porzucaj nieproszone NA"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:12
 msgid "Dropbear Instance"
@@ -4399,7 +4399,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:737
 msgid "Force DHCP-Options"
-msgstr ""
+msgstr "Wymuś opcje DHCP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1298
 msgid "Force GCMP (AES)"
@@ -5484,6 +5484,8 @@ msgid ""
 "If left unspecified, the device will announce itself as DNS server unless "
 "the <em>Local IPv6 DNS server</em> option is disabled."
 msgstr ""
+"Jeśli nie zostanie określone, urządzenie ogłosi się jako serwer DNS, chyba "
+"że opcja <em>Lokalny serwer DNS IPv6</em> zostanie wyłączona."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1188
 msgid ""
@@ -6164,7 +6166,7 @@ msgstr "L2TP"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:61
 msgid "L2TP Hostname"
-msgstr ""
+msgstr "Nazwa hosta L2TP"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:40
 msgid "L2TP Server"
@@ -6487,7 +6489,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:385
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:287
 msgid "Listen only on the specified addresses."
-msgstr ""
+msgstr "Nasłuchuj tylko na określonych adresach."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:379
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:281
@@ -7033,9 +7035,9 @@ msgid ""
 "Maximum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds."
 msgstr ""
-"Maksymalny dozwolony czas pomiędzy wysyłaniem niezamówionego <abbr "
-"title=\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna "
-"to 600 sekund."
+"Maksymalny dozwolony czas pomiędzy spontanicznym wysyłaniem <abbr title="
+"\"Router Advertisement, ICMPv6 Type 134\">RA</abbr>. Wartość domyślna to 600 "
+"sekund."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:985
 msgid "Maximum transmit power"
@@ -9283,7 +9285,7 @@ msgstr "Preautoryzacja RSN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1049
 msgid "RSSI threshold for joining mesh"
-msgstr ""
+msgstr "Próg RSSI łączenia sieci mesh"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1005
 msgid "RTS/CTS Threshold"
@@ -10581,6 +10583,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1039
 msgid "Specifies a fixed list of DNS server addresses to announce via DHCPv6."
 msgstr ""
+"Określa stałą listę adresów serwerów DNS, które mają być ogłaszane za pomocą "
+"protokołu DHCPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1056
 msgid ""
@@ -12447,7 +12451,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1050
 msgid "Units: dBm. Where -255 is weakest, and -10 is strong."
-msgstr ""
+msgstr "Jednostki: dBm. Gdzie -255 oznacza sygnał najsłabszy, a -10 silny."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:945
