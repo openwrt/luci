@@ -1121,7 +1121,32 @@ return view.extend({
 					const mode = ss.children.find(obj => obj.option === 'mode');
 					const bssid = ss.children.find(obj => obj.option === 'bssid');
 
-					if (have_mesh) mode.value('mesh', '802.11s');
+			    if (have_mesh) {
+			        mode.value('mesh', '802.11s');
+			    } else {
+			        mode.value('mesh', '802.11s (not available)');
+			        const origRender = mode.renderWidget;
+			        mode.renderWidget = function(section_id, option_id, cfgvalue) {
+			            var node = origRender.apply(this, arguments);
+			            node.addEventListener('change', function(ev) {
+			                if (ev.target.value === 'mesh') {
+			                    L.ui.showModal(_('Required packeges are not available'), [
+			                        E('p', { 'class': 'alert-message warning' },
+			                            _('The following packages with a mesh support to run the 802.11s are required: "wpad-mbedtls/wpa-supplicant-mbedtls"')),
+			                        E('div', { 'class': 'right' }, [
+			                            E('button', {
+			                                'class': 'btn',
+			                                'click': function() { L.ui.hideModal(); }
+			                            }, _('Close'))
+			                        ])
+			                    ]);
+			                    ev.target.value = '';
+			                }
+			            });
+			
+			            return node;
+			        };
+			    }
 					mode.value('ahdemo', _('Pseudo Ad-Hoc (ahdemo)'));
 					mode.value('monitor', _('Monitor'));
 
