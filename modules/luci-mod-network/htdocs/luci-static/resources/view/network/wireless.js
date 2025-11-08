@@ -1143,7 +1143,6 @@ return view.extend({
 				                    ev.target.value = '';
 				                }
 				            });
-				
 				            return node;
 				        };
 				    }
