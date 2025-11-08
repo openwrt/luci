@@ -1276,40 +1276,35 @@ return view.extend({
 					if (value == 'wpa' || value == 'wpa2' || value == 'wpa3' || value == 'wpa3-mixed' || value == 'wpa3-192')
 						uci.unset('wireless', section_id, 'key');
 
-					if (co.isActive(section_id) && e && (c == 'tkip' || c == 'ccmp' || c == 'ccmp256' || c == 'gcmp' || c == 'gcmp256' || c == 'tkip+ccmp'))
-						e += '+' + c;
-
+					if (co.isActive(section_id) && e) {
+						for (const  r of c) {
+							e += '+' + r;
+						}
+					}				
 					uci.set('wireless', section_id, 'encryption', e);
 				};
 
-				o = ss.taboption('encryption', form.ListValue, 'cipher', _('Cipher'));
+				o = ss.taboption('encryption', form.MultiValue, 'cipher', _('Cipher') , _('If you select none, then defaults ciphers get selected. In order of strength: TKIP, CCMP, CCMP-256, GCMP, GCMP-256. TKIP is not supported in WPA3 (due to weakness). Avoid TKIP on WPA2 and lower if possible'));
 				o.depends('encryption', 'wpa');
 				o.depends('encryption', 'wpa2');
 				o.depends('encryption', 'wpa3');
 				o.depends('encryption', 'wpa3-mixed');
 				o.depends('encryption', 'wpa3-192');
+				o.depends('encryption', 'sae');				
 				o.depends('encryption', 'psk');
 				o.depends('encryption', 'psk2');
 				o.depends('encryption', 'wpa-mixed');
 				o.depends('encryption', 'psk-mixed');
-				o.value('auto', _('auto'));
-				o.value('ccmp', _('Force CCMP (AES)'));
-				o.value('ccmp256', _('Force CCMP-256 (AES)'));
-				o.value('gcmp', _('Force GCMP (AES)'));
-				o.value('gcmp256', _('Force GCMP-256 (AES)'));
-				o.value('tkip', _('Force TKIP'));
-				o.value('tkip+ccmp', _('Force TKIP and CCMP (AES)'));
-				o.write = ss.children.filter(function(o) { return o.option == 'encryption'; })[0].write;
+				o.value('tkip', _('TKIP'));	
+				o.value('ccmp', _('CCMP (AES)'));
+				o.value('ccmp256', _('CCMP-256 (AES)'));
+				o.value('gcmp', _('GCMP (AES)'));
+				o.value('gcmp256', _('GCMP-256 (AES)'));
+				o.write = o.remove = ss.children.filter(function(o) { return o.option == 'encryption'; })[0].write;
 
 				o.cfgvalue = function(section_id) {
-					let v = String(uci.get('wireless', section_id, 'encryption'));
-					if (v.match(/\+/)) {
-						v = v.replace(/^[^+]+\+/, '');
-						if (v == 'aes')
-							v = 'ccmp';
-						else if (v == 'tkip+aes' || v == 'aes+tkip' || v == 'ccmp+tkip')
-							v = 'tkip+ccmp';
-					}
+					let v = String(uci.get('wireless', section_id, 'encryption')).split("+");
+					v = v.map(item => item === 'aes' ? 'ccmp' : item);
 					return v;
 				};
 
