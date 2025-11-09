@@ -39,47 +39,6 @@ return baseclass.extend({
 		return E([]);
 	},
 
-	handleCreateStaticLease(lease, ev) {
-		ev.currentTarget.classList.add('spinning');
-		ev.currentTarget.disabled = true;
-		ev.currentTarget.blur();
-
-		const cfg = uci.add('dhcp', 'host');
-		uci.set('dhcp', cfg, 'name', lease.hostname);
-		uci.set('dhcp', cfg, 'ip', lease.ipaddr);
-		uci.set('dhcp', cfg, 'mac', [lease.macaddr.toUpperCase()]);
-
-		return uci.save()
-			.then(L.bind(L.ui.changes.init, L.ui.changes))
-			.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
-	},
-
-	handleCreateStaticLease6(lease, ev) {
-		ev.currentTarget.classList.add('spinning');
-		ev.currentTarget.disabled = true;
-		ev.currentTarget.blur();
-
-		const cfg = uci.add('dhcp', 'host');
-		const ip6addr = lease.ip6addrs?.[0]?.replace(/\/128$/, '');
-		const ip6arr = ip6addr ? validation.parseIPv6(ip6addr) : null;
-
-		// Combine DUID and IAID if both available
-		// (note that we know that lease.duid is set here)
-		let duid_iaid = lease.duid.toUpperCase();
-		if (lease.iaid)
-			duid_iaid += `%${lease.iaid}`.toUpperCase();
-
-		uci.set('dhcp', cfg, 'name', lease.hostname);
-		uci.set('dhcp', cfg, 'duid', [duid_iaid]);
-		uci.set('dhcp', cfg, 'mac', [lease.macaddr]);
-		if (ip6arr)
-			uci.set('dhcp', cfg, 'hostid', (ip6arr[6] * 0xFFFF + ip6arr[7]).toString(16));
-
-		return uci.save()
-			.then(L.bind(L.ui.changes.init, L.ui.changes))
-			.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
-	},
-
 	renderLeases(dhcp_leases, host_hints, macaddr) {
 		const leases = Array.isArray(dhcp_leases.dhcp_leases) ? dhcp_leases.dhcp_leases : [];
 		const leases6 = Array.isArray(dhcp_leases.dhcp6_leases) ? dhcp_leases.dhcp6_leases : [];
@@ -229,4 +188,44 @@ return baseclass.extend({
 		]);
 	},
 
+	handleCreateStaticLease(lease, ev) {
+		ev.currentTarget.classList.add('spinning');
+		ev.currentTarget.disabled = true;
+		ev.currentTarget.blur();
+
+		const cfg = uci.add('dhcp', 'host');
+		uci.set('dhcp', cfg, 'name', lease.hostname);
+		uci.set('dhcp', cfg, 'ip', lease.ipaddr);
+		uci.set('dhcp', cfg, 'mac', [lease.macaddr.toUpperCase()]);
+
+		return uci.save()
+			.then(L.bind(L.ui.changes.init, L.ui.changes))
+			.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
+	},
+
+	handleCreateStaticLease6(lease, ev) {
+		ev.currentTarget.classList.add('spinning');
+		ev.currentTarget.disabled = true;
+		ev.currentTarget.blur();
+
+		const cfg = uci.add('dhcp', 'host');
+		const ip6addr = lease.ip6addrs?.[0]?.replace(/\/128$/, '');
+		const ip6arr = ip6addr ? validation.parseIPv6(ip6addr) : null;
+
+		// Combine DUID and IAID if both available
+		// (note that we know that lease.duid is set here)
+		let duid_iaid = lease.duid.toUpperCase();
+		if (lease.iaid)
+			duid_iaid += `%${lease.iaid}`.toUpperCase();
+
+		uci.set('dhcp', cfg, 'name', lease.hostname);
+		uci.set('dhcp', cfg, 'duid', [duid_iaid]);
+		uci.set('dhcp', cfg, 'mac', [lease.macaddr]);
+		if (ip6arr)
+			uci.set('dhcp', cfg, 'hostid', (ip6arr[6] * 0xFFFF + ip6arr[7]).toString(16));
+
+		return uci.save()
+			.then(L.bind(L.ui.changes.init, L.ui.changes))
+			.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
+	},
 });
