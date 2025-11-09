@@ -17,7 +17,8 @@ LUCI_DESCRIPTION:=LuCI with OpenSSL as the SSL backend (libustream-openssl). \
 LUCI_DEPENDS:=+luci-light \
 	+libustream-openssl \
 	+openssl-util \
-	+luci-app-package-manager
+	+luci-app-package-manager \
+	+luci-app-attendedsysupgrade
 
 PKG_LICENSE:=Apache-2.0
 
