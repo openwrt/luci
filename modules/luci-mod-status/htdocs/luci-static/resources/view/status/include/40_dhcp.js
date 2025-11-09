@@ -39,7 +39,7 @@ return baseclass.extend({
 		return E([]);
 	},
 
-	renderLeases(dhcp_leases, host_hints, macaddr) {
+	renderLeases(dhcp_leases, host_hints, ufp_list) {
 		const leases4 = L.toArray(dhcp_leases.dhcp_leases);
 		const leases6 = L.toArray(dhcp_leases.dhcp6_leases);
 		if (leases4.length == 0 && leases6.length == 0)
@@ -77,7 +77,6 @@ return baseclass.extend({
 
 		cbi_update_table(table4, leases4.map(L.bind(function(lease) {
 			let exp;
-			let vendor;
 
 			if (lease.expires === false)
 				exp = E('em', _('unlimited'));
@@ -94,14 +93,14 @@ return baseclass.extend({
 			else if (lease.hostname)
 				host = lease.hostname;
 
-			if (macaddr)
-				vendor = macaddr[lease.macaddr.toLowerCase()]?.vendor ?? null;
+			const vendor = ufp_list?.[lease.macaddr.toLowerCase()]?.vendor ?? null;
+			const mac_desc = vendor ? `${lease.macaddr} (${vendor})` : lease.macaddr;
 
 			const columns = [
 				host || '-',
 				lease.ipaddr,
-				vendor ? lease.macaddr + ` (${vendor})` : lease.macaddr,
-				lease.duid ? lease.duid : null,
+				mac_desc,
+				lease.duid || '-',
 				exp,
 			];
 
