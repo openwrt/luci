@@ -69,6 +69,18 @@ return baseclass.extend({
 			}
 		};
 
+		const table4 = this.createTable4(leases4);
+		const table6 = this.createTable6(leases6);
+
+		return E([
+			E('h3', _('Active DHCPv4 Leases')),
+			table4,
+			E('h3', _('Active DHCPv6 Leases')),
+			table6
+		]);
+	},
+
+	createTable4(leases4) {
 		const table4 = E('table', { 'id': 'status_leases4', 'class': 'table leases4' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Hostname')),
@@ -121,6 +133,10 @@ return baseclass.extend({
 			return columns;
 		}, this)), E('em', _('There are no active leases')));
 
+		return table4;
+	},
+
+	createTable6(leases6) {
 		const table6 = E('table', { 'id': 'status_leases6', 'class': 'table leases6' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Host')),
@@ -184,12 +200,7 @@ return baseclass.extend({
 			return columns;
 		}, this)), E('em', _('There are no active leases')));
 
-		return E([
-			E('h3', _('Active DHCPv4 Leases')),
-			table4,
-			E('h3', _('Active DHCPv6 Leases')),
-			table6
-		]);
+		return table6;
 	},
 
 	handleCreateStaticLease4(lease, ev) {
