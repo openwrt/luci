@@ -11,6 +11,12 @@ const callLuciDHCPLeases = rpc.declare({
 	expect: { '': {} }
 });
  
+const callODHCPD4Leases = rpc.declare({
+	object: 'dhcp',
+	method: 'ipv4leases',
+	expect: { 'device': {} }
+});
+
 const callODHCPD6Leases = rpc.declare({
 	object: 'dhcp',
 	method: 'ipv6leases',
@@ -49,6 +55,7 @@ return baseclass.extend({
 	load() {
 		return Promise.all([
 			callLuciDHCPLeases(),
+			L.hasSystemFeature('odhcpd', 'dhcpv4') ? L.resolveDefault(callODHCPD4Leases()) : null,
 			L.hasSystemFeature('odhcpd', 'dhcpv6') ? L.resolveDefault(callODHCPD6Leases()) : null,
 			network.getHostHints(),
 			L.hasSystemFeature('ufpd') ? callUfpList() : null,
@@ -56,21 +63,21 @@ return baseclass.extend({
 		]);
 	},
 
-	render([dnsmasq_leases, odhcpd_leases6, host_hints, ufp_list]) {
+	render([dnsmasq_leases, odhcpd_leases4, odhcpd_leases6, host_hints, ufp_list]) {
 		this.mac_hints = host_hints.getMACHints(false);
 		this.ufp_list = ufp_list;
 
 		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
-			return this.renderLeases(dnsmasq_leases, odhcpd_leases6);
+			return this.renderLeases(dnsmasq_leases, odhcpd_leases4, odhcpd_leases6);
 
 		return E([]);
 	},
 
-	renderLeases(dnsmasq_leases, odhcpd_leases6) {
+	renderLeases(dnsmasq_leases, odhcpd_leases4, odhcpd_leases6) {
 		const leases4 = L.toArray(dnsmasq_leases.dhcp_leases);
 		const leases6 = L.toArray(dnsmasq_leases.dhcp6_leases);
 
-		if (leases4.length == 0 && leases6.length == 0)
+		if (leases4.length == 0 && leases6.length == 0 && !odhcpd_leases4 && !odhcpd_leases6)
 			return E([]);
 
 		for (const host of uci.sections('dhcp', 'host')) {
@@ -89,20 +96,22 @@ return baseclass.extend({
 			}
 		};
 
-		const table4 = this.createTable4(leases4);
+		const dnsmasq_table4 = this.createDnsmasqTable4(leases4);
+		const odhcpd_table4 = this.createOdhcpdTable4(odhcpd_leases4);
 		const dnsmasq_table6 = this.createDnsmasqTable6(leases6);
 		const odhcpd_table6 = this.createOdhcpdTable6(odhcpd_leases6);
 
 		return E([
 			E('h3', _('Active DHCPv4 Leases')),
-			table4,
+			dnsmasq_table4,
+			odhcpd_table4,
 			E('h3', _('Active DHCPv6 Leases')),
 			dnsmasq_table6,
 			odhcpd_table6
 		]);
 	},
 
-	createTable4(leases4) {
+	createDnsmasqTable4(leases4) {
 		const table4 = E('table', { 'id': 'status_leases4', 'class': 'table leases4' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Hostname')),
@@ -144,6 +153,75 @@ return baseclass.extend({
 			];
 
 			if (!this.isReadonlyView && lease.macaddr) {
+				columns.push(E('button', {
+					'class': 'cbi-button cbi-button-apply',
+					'click': L.bind(this.handleCreateStaticLease4, this, lease),
+					'data-tooltip': _('Reserve a specific IP address for this device'),
+					'disabled': this.isMACStatic[lease.macaddr.toUpperCase()]
+				}, [ _('Reserve IP') ]));
+			}
+
+			return columns;
+		}, this)), E('em', _('There are no active leases')));
+
+		return table4;
+	},
+
+	createOdhcpdTable4(iface_leases4) {
+		console.log("DHCPv4 leases " + JSON.stringify(iface_leases4));
+
+		const table4 = E('table', { 'id': 'status_leases4', 'class': 'table leases4' }, [
+			E('tr', { 'class': 'tr table-titles' }, [
+				E('th', { 'class': 'th' }, _('Interface')),
+				E('th', { 'class': 'th' }, _('Hostname')),
+				E('th', { 'class': 'th' }, _('IPv4 address')),
+				E('th', { 'class': 'th' }, _('MAC address')),
+				E('th', { 'class': 'th' }, _('FR')),
+				E('th', { 'class': 'th' }, _('Lease time remaining')),
+				this.isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
+			])
+		]);
+
+		const leases4 = Object.entries(iface_leases4).flatMap(([iface, { leases }]) =>
+			leases.map(lease => {
+				lease.iface = iface;
+				lease.reconf = lease['accept-reconf'];
+				lease.macaddr = lease.mac.toUpperCase().match(/.{1,2}/g).join(':');
+				lease.ipaddr = lease.address;
+				return lease;
+			})
+		);
+
+		cbi_update_table(table4, leases4.map(L.bind(function(lease) {
+			let exp;
+			if (lease.valid == 0xffffffff)
+				exp = E('em', _('unlimited'));
+			else if (lease.valid <= 0)
+				exp = E('em', _('expired'));
+			else
+				exp = '%t'.format(lease.valid);
+
+			const hint = lease.macaddr ? this.mac_hints.filter(function(h) { return h[0] == lease.macaddr })[0] : null;
+			let host = null;
+
+			if (hint && lease.hostname && lease.hostname != hint[1])
+				host = '%s (%s)'.format(lease.hostname, hint[1]);
+			else if (lease.hostname)
+				host = lease.hostname;
+
+			const vendor = this.ufp_list?.[lease.macaddr.toLowerCase()]?.vendor ?? null;
+			const mac_desc = vendor ? `${lease.macaddr} (${vendor})` : lease.macaddr;
+
+			const columns = [
+				lease.iface,
+				host || '-',
+				lease.ipaddr,
+				mac_desc,
+				lease.reconf ? _('Yes') : _('No'),
+				exp,
+			];
+
+			if (!this.isReadonlyView) {
 				columns.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
 					'click': L.bind(this.handleCreateStaticLease4, this, lease),
