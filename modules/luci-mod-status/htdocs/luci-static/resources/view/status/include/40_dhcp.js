@@ -40,9 +40,9 @@ return baseclass.extend({
 	},
 
 	renderLeases(dhcp_leases, host_hints, macaddr) {
-		const leases = Array.isArray(dhcp_leases.dhcp_leases) ? dhcp_leases.dhcp_leases : [];
-		const leases6 = Array.isArray(dhcp_leases.dhcp6_leases) ? dhcp_leases.dhcp6_leases : [];
-		if (leases.length == 0 && leases6.length == 0)
+		const leases4 = L.toArray(dhcp_leases.dhcp_leases);
+		const leases6 = L.toArray(dhcp_leases.dhcp6_leases);
+		if (leases4.length == 0 && leases6.length == 0)
 			return E([]);
 		const machints = host_hints.getMACHints(false);
 		const hosts = uci.sections('dhcp', 'host');
@@ -64,7 +64,7 @@ return baseclass.extend({
 			}
 		};
 
-		const table = E('table', { 'id': 'status_leases', 'class': 'table lases' }, [
+		const table4 = E('table', { 'id': 'status_leases4', 'class': 'table leases4' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('IPv4 address')),
@@ -75,7 +75,7 @@ return baseclass.extend({
 			])
 		]);
 
-		cbi_update_table(table, leases.map(L.bind(function(lease) {
+		cbi_update_table(table4, leases4.map(L.bind(function(lease) {
 			let exp;
 			let vendor;
 
@@ -108,7 +108,7 @@ return baseclass.extend({
 			if (!isReadonlyView && lease.macaddr != null) {
 				columns.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
-					'click': L.bind(this.handleCreateStaticLease, this, lease),
+					'click': L.bind(this.handleCreateStaticLease4, this, lease),
 					'data-tooltip': _('Reserve a specific IP address for this device'),
 					'disabled': this.isMACStatic[lease.macaddr.toUpperCase()]
 				}, [ _('Reserve IP') ]));
@@ -181,14 +181,14 @@ return baseclass.extend({
 		}, this)), E('em', _('There are no active leases')));
 
 		return E([
-			E('h3', _('Active DHCP Leases')),
-			table,
+			E('h3', _('Active DHCPv4 Leases')),
+			table4,
 			E('h3', _('Active DHCPv6 Leases')),
 			table6
 		]);
 	},
 
-	handleCreateStaticLease(lease, ev) {
+	handleCreateStaticLease4(lease, ev) {
 		ev.currentTarget.classList.add('spinning');
 		ev.currentTarget.disabled = true;
 		ev.currentTarget.blur();
