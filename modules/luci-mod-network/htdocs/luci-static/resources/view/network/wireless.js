@@ -1033,7 +1033,8 @@ return view.extend({
 				ss.tab('advanced', _('Advanced Settings'));
 				ss.tab('roaming', _('WLAN roaming'), _('Settings for assisting wireless clients in roaming between multiple APs: 802.11r, 802.11k and 802.11v'));
 
-				o = ss.taboption('general', form.ListValue, 'mode', _('Mode'));
+				o = ss.taboption('general', form.ListValue, 'mode', _('Mode') , !have_mesh ? '<a id="installmesh" href="%s" target="_blank" rel="noreferrer">%s</a>'
+						.format(L.url('admin/system/package-manager') + '?query=wpad-mesh', _('802.11s? Install mesh wpad') ) : '');
 				o.value('ap', _('Access Point'));
 				o.value('sta', _('Client'));
 				o.value('adhoc', _('Ad-Hoc'));
