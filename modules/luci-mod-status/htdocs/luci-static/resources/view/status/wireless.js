@@ -340,7 +340,7 @@ return view.extend({
 
 		return E([], [
 			E('h2', _('Wireless')),
-			E('div', {'class': 'cbi-map-descr'}, _('This page displays the wireless metrics, for each available radio interfaces.')),
+			E('div', {'class': 'cbi-map-descr'}, _('This page displays the wireless metrics for each available radio interface.')),
 			v
 		]);
 	},
