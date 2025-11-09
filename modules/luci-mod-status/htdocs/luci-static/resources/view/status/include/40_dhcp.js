@@ -23,6 +23,10 @@ return baseclass.extend({
 	isDUIDStatic: {},
 	isDUIDIAIDStatic: {},
 
+	isReadonlyView: !L.hasViewPermission(),
+	mac_hints: null,
+	ufp_list: null,
+
 	load() {
 		return Promise.all([
 			callLuciDHCPLeases(),
@@ -33,20 +37,21 @@ return baseclass.extend({
 	},
 
 	render([dhcp_leases, host_hints, ufp_list]) {
+		this.mac_hints = host_hints.getMACHints(false);
+		this.ufp_list = ufp_list;
+
 		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
-			return this.renderLeases(dhcp_leases, host_hints, ufp_list);
+			return this.renderLeases(dhcp_leases);
 
 		return E([]);
 	},
 
-	renderLeases(dhcp_leases, host_hints, ufp_list) {
+	renderLeases(dhcp_leases) {
 		const leases4 = L.toArray(dhcp_leases.dhcp_leases);
 		const leases6 = L.toArray(dhcp_leases.dhcp6_leases);
+
 		if (leases4.length == 0 && leases6.length == 0)
 			return E([]);
-		const machints = host_hints.getMACHints(false);
-		const hosts = uci.sections('dhcp', 'host');
-		const isReadonlyView = !L.hasViewPermission();
 
 		for (const host of uci.sections('dhcp', 'host')) {
 
@@ -71,7 +76,7 @@ return baseclass.extend({
 				E('th', { 'class': 'th' }, _('MAC address')),
 				E('th', { 'class': 'th' }, _('DUID')),
 				E('th', { 'class': 'th' }, _('Lease time remaining')),
-				isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
+				this.isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
 
@@ -85,7 +90,7 @@ return baseclass.extend({
 			else
 				exp = '%t'.format(lease.expires);
 
-			const hint = lease.macaddr ? machints.filter(function(h) { return h[0] == lease.macaddr })[0] : null;
+			const hint = lease.macaddr ? this.mac_hints.filter(function(h) { return h[0] == lease.macaddr })[0] : null;
 			let host = null;
 
 			if (hint && lease.hostname && lease.hostname != hint[1])
@@ -93,7 +98,7 @@ return baseclass.extend({
 			else if (lease.hostname)
 				host = lease.hostname;
 
-			const vendor = ufp_list?.[lease.macaddr.toLowerCase()]?.vendor ?? null;
+			const vendor = this.ufp_list?.[lease.macaddr.toLowerCase()]?.vendor ?? null;
 			const mac_desc = vendor ? `${lease.macaddr} (${vendor})` : lease.macaddr;
 
 			const columns = [
@@ -104,7 +109,7 @@ return baseclass.extend({
 				exp,
 			];
 
-			if (!isReadonlyView && lease.macaddr != null) {
+			if (!this.isReadonlyView && lease.macaddr) {
 				columns.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
 					'click': L.bind(this.handleCreateStaticLease4, this, lease),
@@ -123,7 +128,7 @@ return baseclass.extend({
 				E('th', { 'class': 'th' }, _('DUID')),
 				E('th', { 'class': 'th' }, _('IAID')),
 				E('th', { 'class': 'th' }, _('Lease time remaining')),
-				isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
+				this.isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
 
@@ -137,7 +142,7 @@ return baseclass.extend({
 			else
 				exp = '%t'.format(lease.expires);
 
-			const hint = lease.macaddr ? machints.filter(function(h) { return h[0] == lease.macaddr })[0] : null;
+			const hint = lease.macaddr ? this.mac_hints.filter(function(h) { return h[0] == lease.macaddr })[0] : null;
 			let host = null;
 
 			if (hint && lease.hostname && lease.hostname != hint[1] && lease.ip6addr != hint[1])
@@ -167,7 +172,7 @@ return baseclass.extend({
 				exp
 			];
 
-			if (!isReadonlyView && lease.duid) {
+			if (!this.isReadonlyView && lease.duid) {
 				columns.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
 					'click': L.bind(this.handleCreateStaticLease6, this, lease),
