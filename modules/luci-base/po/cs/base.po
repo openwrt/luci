@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-11-05 00:02+0000\n"
+"PO-Revision-Date: 2025-11-09 14:30+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/luci/cs/>\n"
 "Language: cs\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14.1-dev\n"
+"X-Generator: Weblate 5.15-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:854
 msgid "!known (not known)"
@@ -1358,7 +1358,7 @@ msgstr "Oznámené DNS domény"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1038
 msgid "Announce IPv4/6 DNS servers"
-msgstr ""
+msgstr "Oznamovat IPv4/6 DNS servery"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:913
 msgid ""
@@ -1463,7 +1463,7 @@ msgstr "Arp-sken"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:738
 msgid "As DHCP-Options; send unsolicited (dnsmasq only)."
-msgstr ""
+msgstr "jako DHCP volby – odeslat nevyžádaně (pouze v případě dnsmasq)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1166
 msgid ""
@@ -3509,7 +3509,7 @@ msgstr "Skutečné MTU trasy"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:236
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:273
 msgid "Egress"
-msgstr ""
+msgstr "Ven"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:584
 msgid "Egress QoS mapping"
@@ -4397,7 +4397,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:737
 msgid "Force DHCP-Options"
-msgstr ""
+msgstr "Vynutit DHCP volby"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1298
 msgid "Force GCMP (AES)"
@@ -4717,7 +4717,7 @@ msgstr "Přejít na související stránku s nastavením"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:105
 msgctxt "nft goto action"
 msgid "Goto chain <strong><a href=\"#%q.%q\">%h</a></strong>"
-msgstr ""
+msgstr "Jít na řetěz <strong><a href=\"#%q.%q\">%h</a></strong>"
 
 #: modules/luci-mod-network/root/usr/share/rpcd/acl.d/luci-mod-network.json:51
 msgid "Grant access to DHCP configuration"
@@ -5475,6 +5475,8 @@ msgid ""
 "If left unspecified, the device will announce itself as DNS server unless "
 "the <em>Local IPv6 DNS server</em> option is disabled."
 msgstr ""
+"Pokud nezadáno, zařízení oznámí jako DNS server samo sebe "
+"(pokud není vypnutá volba <em> Lokální IPv6 DNS server</em>)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1188
 msgid ""
@@ -5682,7 +5684,7 @@ msgstr "Informace"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:231
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:268
 msgid "Ingress"
-msgstr ""
+msgstr "Dovnitř"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:578
 msgid "Ingress QoS mapping"
@@ -6154,7 +6156,7 @@ msgstr "L2TP"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:61
 msgid "L2TP Hostname"
-msgstr ""
+msgstr "Název hostitele pro L2TP"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/l2tp.js:40
 msgid "L2TP Server"
@@ -6475,7 +6477,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:385
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:287
 msgid "Listen only on the specified addresses."
-msgstr ""
+msgstr "Očekávat spojení pouze na zadaných adresách."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:379
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:281
@@ -9267,7 +9269,7 @@ msgstr "RSN předověření"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1049
 msgid "RSSI threshold for joining mesh"
-msgstr ""
+msgstr "Práh RSSI pro přidání se do mesh"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1005
 msgid "RTS/CTS Threshold"
@@ -10557,6 +10559,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1039
 msgid "Specifies a fixed list of DNS server addresses to announce via DHCPv6."
 msgstr ""
+"Určuje pevný seznam adres DNS serverů které oznamovat prostřednictvím DHCPv6."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1056
 msgid ""
@@ -12402,7 +12405,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1050
 msgid "Units: dBm. Where -255 is weakest, and -10 is strong."
-msgstr ""
+msgstr "Jednotky: dBm. Kde -255 je nejslabší a -10 je nejsilnější."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:936
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:945
