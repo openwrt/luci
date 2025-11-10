@@ -36,6 +36,7 @@ return view.extend({
 			_('Choose IP ranges from this interface to set them as allowed ranges.') + '<br/>' +
 			_('Choose a wan interface to allow from all IPs.') + '<br/>' +
 			_('Additional firewall configuration is required if you intend wan access.'));
+		o.multiple = true;
 		o.nocreate = true;
 		o.rmempty = false;
 
