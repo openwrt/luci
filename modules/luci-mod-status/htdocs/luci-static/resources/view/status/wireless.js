@@ -118,7 +118,7 @@ return view.extend({
 
 			return Promise.all(tasks).then(L.bind(function(datasets) {
 				for (let gi = 0; gi < graphPolls.length; gi++) {
-					const ctx = graphPolls[gi];
+					let ctx = graphPolls[gi];
 					const data = datasets[gi];
 					const values = ctx.values;
 					const lines = ctx.lines;
