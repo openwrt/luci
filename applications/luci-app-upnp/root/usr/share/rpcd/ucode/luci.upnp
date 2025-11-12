@@ -10,7 +10,7 @@ import { connect } from 'ubus';
 import { cursor } from 'uci';
 
 const uci = cursor();
-const leasefilepath = uci.get('upnpd', 'config', 'lease_file') || '/run/miniupnpd.leases';
+const leasefilepath = uci.get('upnpd', 'settings', 'lease_file') || '/run/miniupnpd.leases';
 
 const methods = {
 	get_status: {
