@@ -711,8 +711,9 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * Many configuration files contain boolean settings, such as
 	 * `enabled` or `advanced_mode`, where there is no consistent
 	 * definition for the values.  This function allows users to
-	 * enter any of the values `"yes"`, `"on"`, `"true"` or `1` in
-	 * their config files and we return the expected boolean result.
+	 * enter any of the values `"yes"`, `"on"`, `"true"`, `"enabled"`
+	 * or `1` in their config files and we return the expected boolean
+	 * result.
 	 *
 	 * Character case is not significant, so for example, any of
 	 * "YES", "Yes" or "yes" will be interpreted as a `true` value.
@@ -730,6 +731,10 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 	 * @returns {boolean}
 	 * - Returns boolean `true` if the configuration value is defined
 	 *   and looks like a true value, otherwise returns `false`.
+	 *
+	 * See the
+	 * {@link https://openwrt.org/docs/guide-developer/config-scripting#reading_booleans|Developers Guide}
+	 * for more.
 	 */
 	get_bool(conf, type, opt) {
 		let value = this.get(conf, type, opt);
