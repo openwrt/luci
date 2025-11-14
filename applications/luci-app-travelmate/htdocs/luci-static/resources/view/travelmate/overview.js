@@ -5,6 +5,7 @@
 'require ui';
 'require uci';
 'require form';
+'require network';
 'require tools.widgets as widgets';
 'require uqr';
 
@@ -138,13 +139,23 @@ function handleAction(ev) {
 return view.extend({
 	load: function () {
 		return Promise.all([
-			uci.load('travelmate')
+			uci.load('travelmate'),
+			network.getWifiDevices().then(function (res) {
+				let radios = [];
+				for (let i = 0; i < res.length; i++) {
+					radios.push(res[i].sid);
+				}
+				return radios;
+			})
 		]);
 	},
 
 	render: function (result) {
 		let m, s, o;
 
+		/*
+			main map
+		*/
 		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to enable travel router functionality. \
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>. <br /> \
 			<b><em>Please note:</em></b> On first start please call the \'Interface Wizard\' once, to make the necessary network- and firewall settings.'));
@@ -297,14 +308,20 @@ return view.extend({
 		o = s.taboption('general', form.Flag, 'trm_enabled', _('Enabled'), _('Enable the travelmate service.'));
 		o.rmempty = false;
 
-		o = s.taboption('general', form.ListValue, 'trm_radio', _('Radio Selection'), _('Restrict travelmate to a single radio or change the overall scanning order.'));
-		o.value('radio0', _('use the first radio only (radio0)'));
-		o.value('radio1', _('use the second radio only (radio1)'));
-		o.value('radio0 radio1', _('use both radios, normal sort order (radio0 radio1)'));
-		o.value('radio1 radio0', _('use both radios, reverse sort order (radio1 radio0)'));
+		o = s.taboption('general', form.MultiValue, 'trm_radio', _('Radio Selection'), _('Restrict travelmate to certain radio\(s\).'));
+		for (let i = 0; i < result[1].length; i++) {
+			o.value(result[1][i]);
+		}
 		o.placeholder = _('-- default --');
 		o.optional = true;
 		o.rmempty = true;
+		o.write = function(section_id, value) {
+			uci.set('travelmate', section_id, 'trm_radio', value.join(' '));
+		};
+
+		o = s.taboption('general', form.Flag, 'trm_revradio', _('Reverse Radio Order'), _('Reverse the radio processing order.'));
+		o.default = 0;
+		o.rmempty = false;
 
 		o = s.taboption('general', form.ListValue, 'trm_scanmode', _('WLAN Scan Mode'), _('Send active probe requests or passively listen for beacon frames that are regularly sent by access points.'));
 		o.value('active', _('active'));
