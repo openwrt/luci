@@ -1,0 +1,1506 @@
+[
+  {
+    "device": {
+      "vendor": "D-Link",
+      "model": "DGS-1210-28",
+      "board": [
+        "d-link,dgs-1210-28"
+      ]
+    },
+    "commands": {
+      "params": [
+        "bootcmd",
+        "image"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [],
+        "mtd": "mtd5",
+        "labelOffsetBytes": null
+      },
+      {
+        "number": 2,
+        "param_values": [
+          "run addargs\\; bootm 0xb4e80000",
+          "/dev/mtdblock7"
+        ],
+        "mtd": "mtd9",
+        "labelOffsetBytes": null
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "E4200v2/EA4500",
+      "board": [
+        "linksys-viper",
+        "linksys,viper"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd3",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "E4200v2",
+      "board": [
+        "linksys-e4200v2",
+        "linksys,e4200-v2"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd3",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "E7350",
+      "board": [
+        "linksys,e7350"
+      ]
+    },
+    "commands": {
+      "params": [
+        "bootimage"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd3",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd6",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA3500",
+      "board": [
+        "linksys-audi",
+        "linksys,audi",
+        "linksys-ea3500",
+        "linksys,ea3500"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd3",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA4500",
+      "board": [
+        "linksys-ea4500",
+        "linksys,ea4500"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd3",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA6350v3",
+      "board": [
+        "linksys-ea6350v3",
+        "linksys,ea6350v3"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd10",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd12",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA6350v4",
+      "board": [
+        "linksys,ea6350-v4"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd7",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA7300v1",
+      "board": [
+        "linksys,ea7300-v1"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd7",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA7300v2",
+      "board": [
+        "linksys,ea7300-v2"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd7",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA7500v1",
+      "board": [
+        "linksys,ea7500-v1"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd13",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd15",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA7500v2",
+      "board": [
+        "linksys,ea7500-v2"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd7",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA8100v1",
+      "board": [
+        "linksys,ea8100-v1"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd7",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA8100v2",
+      "board": [
+        "linksys,ea8100-v2"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd7",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA8300",
+      "board": [
+        "linksys-ea8300",
+        "linksys,ea8300"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd10",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd12",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "EA8500",
+      "board": [
+        "linksys-ea8500",
+        "linksys,ea8500"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd13",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd15",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MR5500",
+      "board": [
+        "linksys,mr5500"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd12",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd14",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MR7350",
+      "board": [
+        "linksys,mr7350"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd14",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd16",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MR7500",
+      "board": [
+        "linksys,mr7500"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd13",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd15",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MR8300",
+      "board": [
+        "linksys-mr8300",
+        "linksys,mr8300"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd10",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd12",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MR9000 (Dallas)",
+      "board": [
+        "linksys,mr9000"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd10",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd12",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MX2000",
+      "board": [
+        "linksys,mx2000"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd12",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd14",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MX4200v1",
+      "board": [
+        "linksys,mx4200v1"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd21",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd23",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MX4200v2",
+      "board": [
+        "linksys,mx4200v2"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd21",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd23",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MX4300",
+      "board": [
+        "linksys,mx4300"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd21",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd23",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MX5300",
+      "board": [
+        "linksys,mx5300"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd21",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd23",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MX5500",
+      "board": [
+        "linksys,mx5500"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd12",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd14",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "MX8500",
+      "board": [
+        "linksys,mx8500"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd21",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd23",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "SPNMX56",
+      "board": [
+        "linksys,spnmx56"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd12",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd14",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WHW01 V1 (Velop)",
+      "board": [
+        "linksys,whw01"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd9",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd11",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WHW03 (Velop)",
+      "board": [
+        "linksys,whw03"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mmcblk0p14",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mmcblk0p16",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WHW03 V2 (Velop)",
+      "board": [
+        "linksys-whw03v2",
+        "linksys,whw03v2"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd9",
+        "labelOffsetBytes": 192
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2
+        ],
+        "mtd": "mtd11",
+        "labelOffsetBytes": 192
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WRT1200AC",
+      "board": [
+        "linksys-caiman",
+        "linksys,caiman",
+        "linksys,wrt1200ac"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd4",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd6",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WRT1900ACv1",
+      "board": [
+        "linksys-mamba",
+        "linksys,mamba",
+        "linksys,wrt1900ac-v1"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd4",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd6",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WRT1900ACS",
+      "board": [
+        "linksys-shelby",
+        "linksys,shelby",
+        "linksys,wrt1900acs"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd4",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd6",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WRT1900ACv2",
+      "board": [
+        "linksys-cobra",
+        "linksys,cobra",
+        "linksys,wrt1900ac-v2"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd4",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd6",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WRT3200ACM",
+      "board": [
+        "linksys-rango",
+        "linksys,rango",
+        "linksys,wrt3200acm"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd7",
+        "labelOffsetBytes": 32
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Linksys",
+      "model": "WRT32X",
+      "board": [
+        "linksys-venom",
+        "linksys,venom",
+        "linksys,wrt32x"
+      ]
+    },
+    "commands": {
+      "params": [
+        "boot_part",
+        "bootcmd"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          1,
+          "run nandboot"
+        ],
+        "mtd": "mtd5",
+        "labelOffsetBytes": null
+      },
+      {
+        "number": 2,
+        "param_values": [
+          2,
+          "run altnandboot"
+        ],
+        "mtd": "mtd7",
+        "labelOffsetBytes": null
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "MERCUSYS",
+      "model": "MR90X v1",
+      "board": [
+        "mercusys,mr90x-v1"
+      ]
+    },
+    "commands": {
+      "params": [
+        "tp_boot_idx"
+      ],
+      "get": "fw_printenv",
+      "set": "fw_setenv",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          0
+        ],
+        "mtd": "mtd2",
+        "labelOffsetBytes": null,
+        "altMountOptions": {
+          "mtdOffset": 0,
+          "ubiVolume": 2
+        }
+      },
+      {
+        "number": 2,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd3",
+        "labelOffsetBytes": null,
+        "altMountOptions": {
+          "mtdOffset": 0,
+          "ubiVolume": 2
+        }
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "Netgear",
+      "model": "GS308T v1",
+      "board": [
+        "netgear,gs308t-v1"
+      ]
+    },
+    "commands": {
+      "params": [
+        "bootpartition"
+      ],
+      "get": "fw_printsys",
+      "set": "fw_setsys",
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          0
+        ],
+        "mtd": "mtd6",
+        "labelOffsetBytes": null
+      },
+      {
+        "number": 2,
+        "param_values": [
+          1
+        ],
+        "mtd": "mtd9",
+        "labelOffsetBytes": null
+      }
+    ]
+  },
+  {
+    "device": {
+      "vendor": "ZyXEL",
+      "model": "NBG6817",
+      "board": [
+        "nbg6817",
+        "zyxel,nbg6817"
+      ]
+    },
+    "commands": {
+      "params": [],
+      "get": null,
+      "set": null,
+      "save": null
+    },
+    "partitions": [
+      {
+        "number": 1,
+        "param_values": [
+          "ff"
+        ],
+        "mtd": "mmcblk0p4",
+        "labelOffsetBytes": 32
+      },
+      {
+        "number": 2,
+        "param_values": [
+          "01"
+        ],
+        "mtd": "mmcblk0p7",
+        "labelOffsetBytes": 32
+      }
+    ]
+  }
+]
