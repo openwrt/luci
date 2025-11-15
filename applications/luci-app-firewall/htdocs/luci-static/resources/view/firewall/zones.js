@@ -173,9 +173,22 @@ return view.extend({
 			var masq_dest = uci.get('firewall', section_id, 'masq_dest')
 			if ((!family || family.indexOf('6') == -1) && (masq_src || masq_dest))
 				return _('Limited masquerading enabled');
-
 			return null;
 		};
+
+		if (fw4) {
+			o = s.taboption('general', form.Flag, 'masq6', _('IPv6 Masquerading'),
+				_('Enable network address and port translation IPv6 (NAT6 or NAPT6) for outbound traffic on this zone. Typically not needed, as native IPv6 routing is usually used instead of NAT6.'));
+			o.modalonly = true;
+			o.tooltip = function(section_id) {
+				var family = uci.get('firewall', section_id, 'family')
+				var masq_src = uci.get('firewall', section_id, 'masq_src')
+				var masq_dest = uci.get('firewall', section_id, 'masq_dest')
+				if ((!family || family.indexOf('6') >= 0) && (masq_src || masq_dest))
+					return _('Limited masquerading enabled');
+				return null;
+			};
+		}
 
 		o = s.taboption('general', form.Flag, 'mtu_fix', _('MSS clamping'));
 		o.modalonly = true;
@@ -237,20 +250,6 @@ return view.extend({
 		o.datatype = 'neg(cidr("true"))';
 		o.modalonly = true;
 		o.multiple = true;
-
-		if (fw4) {
-			o = s.taboption('advanced', form.Flag, 'masq6', _('IPv6 Masquerading'),
-				_('Enable network address and port translation IPv6 (NAT6 or NAPT6) for outbound traffic on this zone.'));
-			o.modalonly = true;
-			o.tooltip = function(section_id) {
-				var family = uci.get('firewall', section_id, 'family')
-				var masq_src = uci.get('firewall', section_id, 'masq_src')
-				var masq_dest = uci.get('firewall', section_id, 'masq_dest')
-				if ((!family || family.indexOf('6') >= 0) && (masq_src || masq_dest))
-					return _('Limited masquerading enabled');
-				return null;
-			};
-		}
 
 		o = s.taboption('advanced', form.ListValue, 'family', _('Restrict to address family'));
 		o.value('', _('IPv4 and IPv6'));
