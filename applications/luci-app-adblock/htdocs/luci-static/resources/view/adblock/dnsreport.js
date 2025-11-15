@@ -370,20 +370,7 @@ return view.extend({
 					E('div', { 'class': 'cbi-value-title', 'id': 'blocked', 'style': 'float:left;color:#37c' }, (content[0].blocked || '-') + ' (' + (content[0].percent || '-') + ')')
 				])
 			]),
-			E('div', { 'class': 'cbi-section' }, [
-				E('div', { 'class': 'left' }, [
-					E('h3', _('Top Statistics')),
-					tbl_top
-				])
-			]),
-			E('br'),
-			E('div', { 'class': 'cbi-section' }, [
-				E('div', { 'class': 'left' }, [
-					E('h3', _('Latest DNS Requests')),
-					tbl_requests
-				])
-			]),
-			E('div', { 'class': 'cbi-page-actions' }, [
+E('div', { 'class': 'cbi-page-actions' }, [
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'style': 'float:none;margin-right:.4em;',
@@ -416,6 +403,19 @@ return view.extend({
 						return handleAction('refresh');
 					})
 				}, [_('Refresh...')])
+			]),
+			E('div', { 'class': 'cbi-section' }, [
+				E('div', { 'class': 'left' }, [
+					E('h3', _('Top Statistics')),
+					tbl_top
+				])
+			]),
+			E('br'),
+			E('div', { 'class': 'cbi-section' }, [
+				E('div', { 'class': 'left' }, [
+					E('h3', _('Latest DNS Requests')),
+					tbl_requests
+				])
 			])
 		]);
 		if (uci.get('adblock', 'global', 'adb_map') === '1') {
