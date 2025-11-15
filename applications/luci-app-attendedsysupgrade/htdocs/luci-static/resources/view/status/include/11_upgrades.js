@@ -11,21 +11,13 @@ const callSystemBoard = rpc.declare({
 	method: 'board'
 });
 
-function showUpgradeNotification(type, boardinfo, new_version, upgrade_info) {
-
-	const table_fields = [
-		// Row/property,
-		// 		Current,
-		// 		Available
-		_('Firmware Version'),
-			boardinfo?.release?.version, // '24.10.0'
-			(L.isObject(upgrade_info) ? upgrade_info?.version_number : ''),
-		_('Revision'),
-			boardinfo?.release?.revision, // r28427-6df0e3d02a
-			(L.isObject(upgrade_info) ? upgrade_info?.version_code : ''),
-		_('Kernel Version'),
-			boardinfo.kernel, // 6.6.73
-			upgrade_info?.linux_kernel?.version,
+function showUpgradeNotification(type, boardinfo, new_version, upgrade_info)
+{
+	const table_rows = [
+		// Title                Current                     Available
+		[_('Firmware Version'), boardinfo.release.version,  upgrade_info.version_number        ],
+		[_('Revision'),         boardinfo.release.revision, upgrade_info.version_code          ],
+		[_('Kernel Version'),   boardinfo?.kernel,          upgrade_info.linux_kernel?.version ],
 	];
 
 	const table = E('table', { 'class': 'table' });
@@ -38,33 +30,38 @@ function showUpgradeNotification(type, boardinfo, new_version, upgrade_info) {
 		])
 	);
 
-	for (var i = 0; i < table_fields.length; i += 3) {
+	table_rows.forEach((cols) => {
 		table.appendChild(E('tr', { 'class': 'tr' }, [
-			E('td', { 'class': 'td left', 'width': '33%' }, [ table_fields[i] ]),
-			E('td', { 'class': 'td left' }, [ (table_fields[i + 1] != null) ? table_fields[i + 1] : '?' ]),
-			E('td', { 'class': 'td left' }, [ (table_fields[i + 2] != null) ? table_fields[i + 2] : '?' ]),
+			E('td', { 'class': 'td left', 'width': '33%' }, [ cols[0] ]),
+			E('td', { 'class': 'td left'                 }, [ cols[1] ?? '?' ]),
+			E('td', { 'class': 'td left'                 }, [ cols[2] ?? '?' ]),
 		]));
-	}
+	});
 
 	ui.addTimeLimitedNotification(_('New Firmware Available'), [
 		E('p', _('A new %s version of OpenWrt is available:').format(type)),
 		table,
 		E('p', [
-				_('Check') + ' ',
-				E('a', {href: `/cgi-bin/luci/admin/system/attendedsysupgrade`}, _('Attended Sysupgrade')),
-				' ' + _('and') + ' ',
-				E('a', {href: `https://openwrt.org/releases/${new_version?.split('.').slice(0, 2).join('.')}/notes-${new_version}`}, _('release notes')),
-			]
-		),
+			_('Check') + ' ',
+			E('a', {href: `/cgi-bin/luci/admin/system/attendedsysupgrade`}, _('Attended Sysupgrade')),
+			' ' + _('and') + ' ',
+			E('a', {href: `https://openwrt.org/releases/${new_version?.split('.').slice(0, 2).join('.')}/notes-${new_version}`}, _('release notes')),
+		]),
 	], 60000, 'notice');
 };
 
-function compareVersions(a, b) {
+function shouldUpgrade(installed, available)
+{
+	// If installed is any snapshot (release or main), don't upgrade.
+
+	if (! available) return false;
+	if (! installed || installed.includes('SNAPSHOT')) return false
+
 	const parse = (v) => v.split(/[-+]/)[0]?.split('.').map(Number);
 	const parseRC = (v) => v.split(/[-+]/)[1]?.split('').map(Number);
 	const isPrerelease = (v) => /-/.test(v);
 
-	const [aParts, bParts] = [parse(a), parse(b)];
+	const [aParts, bParts] = [parse(available), parse(installed)];
 
 	for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
 		const numA = aParts[i] || 0;
@@ -73,23 +70,24 @@ function compareVersions(a, b) {
 		if (numA < numB) return false;
 	}
 
-	const [aRC, bRC] = [parseRC(a), parseRC(b)];
+	const [aRC, bRC] = [parseRC(available), parseRC(installed)];
 
 	if (aRC > bRC) return true;
 	if (aRC < bRC) return false;
 
 	// If numeric parts are equal, handle release candidates
-	// if (isPrerelease(a) && !isPrerelease(b)) return false;
-	if (!isPrerelease(a) && isPrerelease(b)) return true;
+	// if (isPrerelease(available) && !isPrerelease(installed)) return false;
+	if (!isPrerelease(available) && isPrerelease(installed)) return true;
 	return false;
 }
 
-async function checkDeviceAvailable(boardinfo, new_version) {
+async function checkDeviceAvailable(boardinfo, new_version)
+{
 	const profile_url = `https://downloads.openwrt.org/releases/${new_version}/targets/${boardinfo?.release?.target}/profiles.json`;
 	return fetch(profile_url)
 		.then(response => response.json())
 		.then(data => {
-			// special case for x86 and armsr
+			// special case for x86, armsr and loongarch
 			if (Object.keys(data?.profiles).length == 1 && Object.keys(data?.profiles)[0] == "generic") {
 				return [true, data];
 			}
@@ -104,7 +102,7 @@ async function checkDeviceAvailable(boardinfo, new_version) {
 				}
 			}
 
-			return [false, null]
+			return [false, null];
 		})
 		.catch(error => {
 			console.error('Failed to fetch firmware upgrade profile information:', error);
@@ -135,39 +133,47 @@ return baseclass.extend({
 
 	oneshot: function(data) {
 		var boardinfo = data[0];
-		const check_upgrades = uci.get_bool('luci', 'main', 'check_for_newer_firmwares') ?? false;
+		const check_upgrades = uci.get_bool('luci', 'main', 'check_for_newer_firmwares');
 
 		if (check_upgrades) {
 			fetch('https://downloads.openwrt.org/.versions.json')
 			.then(response => response.json())
-			.then(async data => {
-				if (data?.oldstable_version && compareVersions(data?.oldstable_version, boardinfo?.release?.version) ) {
-					(async function () {
-						const [available, upgrade_info] = await checkDeviceAvailable(boardinfo, data?.oldstable_version);
-						if (available) showUpgradeNotification("oldstable", boardinfo, data?.oldstable_version, upgrade_info);
-					})();
+			.then(async (versions) => {
+				var label = null;
+				var new_version = null;
 
-				} else if (data?.stable_version && compareVersions(data?.stable_version, boardinfo?.release?.version) ) {
-					(async function () {
-						const [available, upgrade_info] = await checkDeviceAvailable(boardinfo, data?.stable_version)
+				const installed_version = boardinfo?.release?.version;
+				const prev_version = versions?.oldstable_version;
+				const curr_version = versions?.stable_version;
+				const next_version = versions?.upcoming_version;  // Only available during "rc".
 
-						if (available) showUpgradeNotification("stable", boardinfo, data?.stable_version, upgrade_info);
-					})();
-				} else if (data?.upcoming_version && data?.stable_version 
-						&& compareVersions(boardinfo?.release?.version, data?.stable_version)
-						&& compareVersions(data?.upcoming_version > boardinfo?.release?.version) ) {
-					(async function () {
-						const [available, upgrade_info] = await checkDeviceAvailable(boardinfo, data?.upcoming_version);
-						
-						if (available) showUpgradeNotification("release candidate", boardinfo, data?.upcoming_version, upgrade_info);
-					})();
+				if (shouldUpgrade(installed_version, prev_version)) {
+					// On old branch, and a newer 'old stable' is available.
+					label = 'old stable';
+					new_version = prev_version;
+				} else if (shouldUpgrade(installed_version, curr_version)) {
+					// On old stable or current branch, and newer stable is available.
+					label = 'stable';
+					new_version = curr_version;
+				} else if (shouldUpgrade(installed_version, next_version)) {
+					// On current stable or rc branch, a newer rc is available.
+					label = 'release candidate';
+					new_version = next_version;
 				}
+
+				if (new_version) {
+					(async function(label, new_version) {
+						const [available, upgrade_info] = await checkDeviceAvailable(boardinfo, new_version);
+						if (available && upgrade_info)
+							showUpgradeNotification(label, boardinfo, new_version, upgrade_info);
+					})(label, new_version);
+				}
+
 			})
 			.catch(error => {
 					console.error('Failed to fetch firmware upgrade version information:', error);
 			});
 		}
-
 	},
 
 	render: function(data) {
