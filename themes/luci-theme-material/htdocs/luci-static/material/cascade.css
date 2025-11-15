@@ -343,7 +343,6 @@ small {
 	float: left;
 	overflow-x: auto;
 	width: calc(0% + 15rem);
-	min-width: max-content;
 	height: calc(100% - 4rem);
 	background-color: var(--menu-bg-color);
 	transition: visibility 400ms, width 400ms;
@@ -649,6 +648,8 @@ body[class*="node-"] > .main > .main-left > .nav > .slide > .menu.active::before
 }
 
 .main > .main-left > .nav > .slide > .slide-menu > li > a {
+	overflow: hidden;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 	text-decoration: none;
 	padding: .4rem 2rem;
