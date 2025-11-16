@@ -249,6 +249,7 @@ return view.extend({
 					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnDownload',
 					'disabled': 'disabled',
+					'title': 'Download',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('download');
 					})
@@ -258,6 +259,7 @@ return view.extend({
 					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnUpload',
 					'disabled': 'disabled',
+					'title': 'Upload',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('upload');
 					})
@@ -267,6 +269,7 @@ return view.extend({
 					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnCreate',
 					'disabled': 'disabled',
+					'title': 'Fill',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('create');
 					})
@@ -276,6 +279,7 @@ return view.extend({
 					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnClear',
 					'disabled': 'disabled',
+					'title': 'Clear',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('clear');
 					})
@@ -285,6 +289,7 @@ return view.extend({
 					'style': 'float:none',
 					'id': 'btnSave',
 					'disabled': 'disabled',
+					'title': 'Save',
 					'click': ui.createHandlerFn(this, function () {
 						return handleEdit('save');
 					})

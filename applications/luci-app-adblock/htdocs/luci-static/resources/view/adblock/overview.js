@@ -231,10 +231,10 @@ return view.extend({
 		o.datatype = 'range(1,300)';
 		o.rmempty = true;
 
-		o = s.taboption('general', form.Flag, 'adb_dnsforce', _('Force Local DNS'), _('Redirect all DNS queries from specified zones to the local DNS resolver, applies to UDP and TCP protocol.'));
+		o = s.taboption('general', form.Flag, 'adb_dnsforce', _('Force Local DNS'), _('Redirect all local DNS queries from specified LAN zones to the local DNS resolver, applies to UDP and TCP protocol.'));
 		o.rmempty = false;
 
-		o = s.taboption('general', widgets.ZoneSelect, 'adb_zonelist', _('Forced Zones'), _('Firewall source zones that should be forced locally.'));
+		o = s.taboption('general', widgets.ZoneSelect, 'adb_zonelist', _('Forced Zones'), _('Firewall LAN source zones that should be forced locally.'));
 		o.depends('adb_dnsforce', '1');
 		o.multiple = true;
 		o.nocreate = true;
@@ -397,10 +397,6 @@ return view.extend({
 		o.rawhtml = true;
 		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs an adblock service restart to take effect.') + '</em>'
 			+ '<hr style="width: 200px; height: 1px;" />';
-
-		o = s.taboption('adv_report', form.DummyValue, '_sub');
-		o.rawhtml = true;
-		o.default = '<em><b>Changes on this tab needs a full adblock service restart to take effect.</b></em>';
 
 		o = s.taboption('adv_report', widgets.DeviceSelect, 'adb_repiface', _('Report Interface'), _('List of available network devices used by tcpdump.'));
 		o.nocreate = false;
@@ -566,6 +562,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-negative important',
 					'style': 'float:none;margin-right:.4em;',
+					'title': 'Stop',
 					'click': function () {
 						return handleAction('stop');
 					}
@@ -574,6 +571,7 @@ return view.extend({
 					'class': 'btn cbi-button cbi-button-apply important',
 					'style': 'float:none;margin-right:.4em;',
 					'id': 'btn_suspend',
+					'title': 'Suspend/Resume',
 					'click': function () {
 						return handleAction('suspend');
 					}
@@ -581,6 +579,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
+					'title': 'Save & Reload',
 					'click': function () {
 						return handleAction('reload');
 					}
@@ -588,6 +587,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none',
+					'title': 'Save & Restart',
 					'click': function () {
 						handleAction('restart');
 					}

@@ -325,6 +325,7 @@ return view.extend({
 						'class': 'btn cbi-button cbi-button-positive',
 						'style': 'word-break: inherit',
 						'name': 'allowlist',
+						'title': 'Add to Allowlist',
 						'value': content[0].requests[i].domain,
 						'click': handleAction
 					}, [_('Allowlist...')]);
@@ -333,6 +334,7 @@ return view.extend({
 						'class': 'btn cbi-button cbi-button-negative',
 						'style': 'word-break: inherit',
 						'name': 'blocklist',
+						'title': 'Add to Blocklist',
 						'value': content[0].requests[i].domain,
 						'click': handleAction
 					}, [_('Blocklist...')]);
@@ -387,7 +389,17 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'style': 'float:none;margin-right:.4em;',
+					'id': 'btnTest',
+					'title': 'Adblock Test',
+					'click': function() {
+						window.open('https://adblock.turtlecute.org/', '_blank', 'noopener,noreferrer');
+					}
+				}, [_('Adblock Test')]),
+				E('button', {
+					'class': 'btn cbi-button cbi-button-apply',
+					'style': 'float:none;margin-right:.4em;',
 					'id': 'btnMap',
+					'title': 'Map',
 					'disabled': 'disabled',
 					'click': ui.createHandlerFn(this, function () {
 						if (content[1] && content[1].length > 1) {
@@ -401,10 +413,11 @@ return view.extend({
 							}
 						}
 					})
-				}, [_('Map...')]),
+				}, [_('Map')]),
 				E('button', {
 					'class': 'btn cbi-button cbi-button-apply',
 					'style': 'float:none;margin-right:.4em;',
+					'title': 'Blocklist Query',
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('query');
 					})
@@ -412,6 +425,7 @@ return view.extend({
 				E('button', {
 					'class': 'btn cbi-button cbi-button-positive important',
 					'style': 'float:none;margin-right:.4em;',
+					'title': 'Refresh',
 					'click': ui.createHandlerFn(this, function () {
 						return handleAction('refresh');
 					})
