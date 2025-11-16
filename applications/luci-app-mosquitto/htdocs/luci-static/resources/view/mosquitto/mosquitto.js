@@ -1,7 +1,7 @@
 'use strict';
 'require form';
 'require view';
-'require widgets';
+'require tools.widgets as widgets';
 
 // OptionalFlag helper function
 function OptionalFlag(section, key, title, description) {
