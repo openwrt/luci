@@ -92,9 +92,9 @@ return view.extend({
 				'The %s (%s = UPnP IGD & PCP/NAT-PMP) protocols / service enable allowed devices on the local network to autonomously set up port maps (forwards) on the router.')
 			.format(protocols)
 		);
-		if (!uci.get('upnpd', 'config')) {
+		if (!uci.get('upnpd', 'settings')) {
 			ui.addNotification(null, E('div', '<h4>' + _('No suitable configuration found!') + '</h4><p>' +
-				_('No suitable %s configuration was found in %s.').format('v1.0', '<code>/etc/config/upnpd</code>') + ' ' +
+				_('No suitable %s configuration was found in %s.').format('v2.0', '<code>/etc/config/upnpd</code>') + ' ' +
 				_('Please update the missing related package (LuCI app or daemon). The updated daemon package migrates the configuration on the restart.') + ' ' +
 				_('If you are using the software package manager, first update the lists, and then install the update.') + '</p>' +
 				'<a class="btn" href="/cgi-bin/luci/admin/system/package-manager?query=UPnP%20IGD%20&%20PCP/NAT-PMP">' + _('Go to package manager…') + '</a>'), 'warning');
@@ -102,7 +102,7 @@ return view.extend({
 		}
 
 		s = m.section(form.GridSection, '_active_rules');
-		s.disable = uci.get('upnpd', 'config', 'enabled') == '0';
+		s.disable = uci.get('upnpd', 'settings', 'enabled') == '0';
 
 		s.render = L.bind(function(view, section_id) {
 			const table = E('table', { 'class': 'table cbi-section-table', 'id': 'upnp_status_table' }, [
@@ -142,7 +142,7 @@ return view.extend({
 					E('h3', _('Active Port Maps')), table]);
 		}, o, this);
 
-		s = m.section(form.NamedSection, 'config', 'upnpd', _('Service Settings'));
+		s = m.section(form.NamedSection, 'settings', 'upnpd', _('Service Settings'));
 		s.addremove = false;
 		s.tab('setup', _('Service Setup'));
 		s.tab('advanced', _('Advanced Settings'));
@@ -397,7 +397,7 @@ return view.extend({
 		o.retain = true; // Otherwise removed if disabled
 
 		return m.render().then(L.bind(function(m, nodes) {
-			if (uci.get('upnpd', 'config', 'enabled') != '0') {
+			if (uci.get('upnpd', 'settings', 'enabled') != '0') {
 				poll.add(L.bind(function() {
 					return Promise.all([
 						callUpnpGetStatus()
