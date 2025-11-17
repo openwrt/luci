@@ -174,6 +174,7 @@ return view.extend({
 		o.value('', _('Disabled'), _('Allow a private IP address by overriding the external IPv4'));
 		o.value('1', _('Enabled'), _('Filtering test currently requires an extra firewall rule'));
 		o.value('allow-filtered', _('Enabled') + ' (' + _('allow filtered') + ')', _('Allow filtered IPv4 CGNAT test result'));
+		o.value('allow-private-ext-ipv4', _('Disabled') + ' (' + _('allow private external IPv4') + ')', _('No public IPv4 address detection; issues with multiple clients'));
 		o.optional = true;
 
 		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN server'));
