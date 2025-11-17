@@ -4,7 +4,7 @@
 
 return baseclass.extend({
 	__init__() {
-		ui.menu.load().then(L.bind(this.render, this));
+		ui.menu.load().then((tree) => this.render(tree));
 	},
 
 	render(tree) {
