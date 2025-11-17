@@ -164,6 +164,9 @@
 			"cgi-io": [ "upload" ],
 			"file": {
 				"/bin/tar -tzf /tmp/backup.tar.gz": [ "exec" ],
+				"/bin/mkdir -p /tmp/selective_restore/": [ "exec" ],
+				"/bin/tar -xzf /tmp/backup.tar.gz -T /tmp/filelist.txt -C /tmp/selective_restore/": [ "exec" ],
+				"/bin/tar -czf /tmp/selective_restore.tar.gz -T /tmp/filelist.txt -C /tmp/selective_restore/": [ "exec" ],
 				"/etc/sysupgrade.conf": [ "write" ],
 				"/sbin/firstboot -r -y": [ "exec" ],
 				"/sbin/reboot": [ "exec" ],
@@ -177,8 +180,10 @@
 				"/sbin/sysupgrade -u /tmp/firmware.bin": [ "exec" ],
 				"/sbin/sysupgrade -u -k /tmp/firmware.bin": [ "exec" ],
 				"/sbin/sysupgrade --restore-backup /tmp/backup.tar.gz": [ "exec" ],
+				"/sbin/sysupgrade --restore-backup /tmp/selective_restore.tar.gz": [ "exec" ],
 				"/sbin/sysupgrade --test /tmp/firmware.bin": [ "exec" ],
 				"/sbin/sysupgrade /tmp/firmware.bin": [ "exec" ],
+				"/tmp/filelist.txt": [ "write" ],
 				"/tmp/backup.tar.gz": [ "write" ],
 				"/tmp/firmware.bin": [ "write" ]
 			},
