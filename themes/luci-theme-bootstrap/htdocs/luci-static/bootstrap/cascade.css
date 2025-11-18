@@ -115,6 +115,9 @@
 	--disabled-opacity: .7;
 
 	color-scheme: light;
+
+	--font-sans: Helvetica Neue, Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+	--font-mono: Monaco, Andale Mono, Courier New, ui-monospace, monospace;
 }
 
 :root[data-darkmode="true"] {
@@ -252,7 +255,7 @@ input[type="search"]::-webkit-search-decoration {
 textarea {
 	overflow: auto;
 	vertical-align: top;
-	font-family: monospace;
+	font-family: var(--font-mono);
 }
 
 .control-group {
@@ -273,7 +276,7 @@ textarea {
  * ------------------------------------------------------------------------------------------- */
 body {
 	background-color: var(--background-color-high);
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: var(--font-sans);
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 18px;
@@ -480,7 +483,7 @@ address {
 
 code, pre {
 	padding: 0 3px 2px;
-	font-family: Monaco, Andale Mono, Courier New, monospace;
+	font-family: var(--font-mono);
 	font-size: 12px;
 	border-radius: 3px;
 }
@@ -532,7 +535,7 @@ label,
 input,
 button,
 select {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: var(--font-sans);
 	font-size: 13px;
 	font-weight: normal;
 	line-height: normal;
@@ -1448,7 +1451,7 @@ body.modal-overlay-active #modal_overlay {
 }
 
 .btn .close, .alert-message .close {
-	font-family: Arial, sans-serif;
+	font-family: var(--font-sans);
 	line-height: 18px;
 }
 
@@ -2017,7 +2020,7 @@ form.inline { display: inline; margin-bottom: 0; }
 	width: 100%;
 	color: var(--text-color-highest);
 	margin-bottom: 18px;
-	font-family: monospace;
+	font-family: var(--font-mono);
 }
 
 .cbi-section-table .tr:hover .td,
@@ -2391,7 +2394,7 @@ div.cbi-value var.cbi-tooltip-container,
 .uci-dialog ins,
 .uci-dialog var {
 	text-decoration: none;
-	font-family: monospace;
+	font-family: var(--font-mono);
 	font-style: normal;
 	color: var(--text-color-high);
 	display: block;
