@@ -684,6 +684,25 @@ return view.extend({
 		);
 		o.placeholder = '/etc/dnsmasq.servers';
 
+		s.taboption('forward', form.Flag, 'fast_dns_retry',
+			_('Fast DNS retry'),
+			_('Allow dnsmasq to generate its own retries (instead of relying on DNS clients).'));
+
+		o = s.taboption('forward', form.Value, 'fast_dns_retry_param',
+			_('Retry time settings'),
+			_('Set initial retry delay and retry duration in milliseconds.') + '<br />' +
+			customi18n(_('Syntax: {code_syntax}.'),
+				{code_syntax: '<code>&lt;initial retry delay&gt;[,&lt;retry duration&gt;]</code>'}) + '<br />' +
+			_('Examples:') + ' ' + '<code>500</code> / <code>500,5000</code>'
+		);
+		o.placeholder = '1000,10000';
+		o.depends('fast_dns_retry', '1');
+		o.validate = function (section_id, value) {
+			if (!value) return true;
+			if (!/^\d+(,\d+)?$/.test(value)) return _('Invalid parameter');
+			return true;
+		};
+
 		o = s.taboption('forward', form.Value, 'addmac',
 			_('Add requestor MAC'),
 			_('Add the MAC address of the requestor to DNS queries which are forwarded upstream.') + ' ' + '<br />' +
