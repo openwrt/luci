@@ -688,6 +688,24 @@ return view.extend({
 		);
 		o.placeholder = '/etc/dnsmasq.servers';
 
+		s.taboption('forward', form.Flag, 'fast_dns_retry',
+			_('Fast dns retry'),
+			_('Allow dnsmasq to generate its own retries (instead of relying on DNS clients).'));
+
+		o = s.taboption('forward', form.Value, 'fast_dns_retry_param',
+			_('Retry time settings'),
+			_('Set initial retry dalay and retry duration in milliseconds') + '<br />' +
+			_('Syntax:') + ' ' + '&lt;' + _('initial retry dalay') + '&gt;[,&lt;' + _('retry duration') + '&gt;]' + '<br />' +
+			_('Examples:') + ' ' + '<code>500</code> / <code>500,5000</code>' + '<br />' +
+			_('Default values:') + ' ' + '<code>1000,10000</code>'
+		);
+		o.depends('fast_dns_retry', '1');
+		o.validate = function (section_id, value) {
+			if (!value) return true;
+			if (!/^\d+(,\d+)?$/.test(value)) return _('Invalid parameter');
+			return true;
+		};
+
 		o = s.taboption('forward', form.Value, 'addmac',
 			_('Add requestor MAC'),
 			_('Add the MAC address of the requestor to DNS queries which are forwarded upstream.') + ' ' + '<br />' +
