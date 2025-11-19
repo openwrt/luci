@@ -260,6 +260,20 @@ return view.extend({
 		recordtypes.forEach(r => {
 			o.value(r);
 		});
+
+		s.taboption('cache', form.Flag, 'use_stale_cache',
+			_('Use stale cache'),
+			_('Return a cached DNS record even if its TTL has expired. Dnsmasq refreshes the data with an upstream query after returning the stale record.') + '<br />' +
+			_('This can improve speed and reliability, at the expense of sometimes returning out-of-date data and less efficient cache utilisation.'));
+
+		o = s.taboption('cache', form.Value, 'stale_cache_param',
+			_('Max expiration time'),
+			_('The maximum time a record may stay expired and still be served, in seconds. By default nothing expired for longer than one day is served.') + '<br />' +
+			_('Setting to zero will serve stale cache data regardless of how long it has expired.'));
+		o.optional = true;
+		o.datatype = 'uinteger';
+		o.placeholder = 86400;
+		o.depends('use_stale_cache', '1');
 		// End cache
 
 		// Begin devices
