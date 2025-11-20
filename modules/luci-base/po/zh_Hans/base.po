@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-11-15 10:09+0000\n"
+"PO-Revision-Date: 2025-11-17 20:58+0000\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -1068,7 +1068,7 @@ msgstr "额外的 HOSTS 文件"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:544
 msgid "Additional options to send to the below match tags."
-msgstr "发送到匹配下方标签主机的附加 DHCP 选项。"
+msgstr "发送到匹配下方标签的客户端的附加 DHCP 选项。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:686
 msgid "Additional servers file"
@@ -1294,7 +1294,7 @@ msgstr "始终开启（kernel：default-on）"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:557
 msgid ""
 "Always send the chosen DHCP options. Sometimes needed, with e.g. PXELinux."
-msgstr "始终发送所选的 DHCP 选项。有些时候需要，比如对 PXELinux。"
+msgstr "强制发送 DHCP 选项。有些时候需要，例如使用 PXELinux 时。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1009
 msgid ""
@@ -1886,7 +1886,7 @@ msgstr "调用失败"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:857
 msgid "Can be hinted by adding 4 or 6 to the name."
-msgstr "可以通过添加 4 或 6 到名称暗示是 IPv4 或 IPv6。"
+msgstr "可以在名称后加上 4 或 6 来体现是 IPv4 或 IPv6。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:641
 msgid ""
@@ -3213,18 +3213,16 @@ msgid ""
 "Drop all gratuitous ARP frames, for example if there’s a known good ARP "
 "proxy on the network and such frames need not be used or in the case of "
 "802.11, must not be used to prevent attacks."
-msgstr ""
-"丢弃所有免费 ARP 帧。如果网络上有一个已知可靠的 ARP 代理，则无需使用此类帧，"
-"在 802.11 无线网络中，则需要禁用此类帧以防止攻击。"
+msgstr "丢弃所有免费 ARP 帧。如果网络中存在已知可靠的 ARP 代理，则无需使用此类帧；在 "
+"802.11 无线网络中，则需要禁用此类帧以防止攻击。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1198
 msgid ""
 "Drop all unsolicited neighbor advertisements, for example if there’s a known "
 "good NA proxy on the network and such frames need not be used or in the case "
 "of 802.11, must not be used to prevent attacks."
-msgstr ""
-"丢弃所有非请求邻居通告。如果网络中存在已知可靠的 NA 代理，那么无需使用此类"
-"帧；在 802.11 无线网络中，则需要禁用此类帧以防止攻击。"
+msgstr "丢弃所有非请求邻居通告。如果网络中存在已知可靠的 NA 代理，则无需使用此类帧；"
+"在 802.11 无线网络中，则需要禁用此类帧以防止攻击。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1176
 msgid "Drop gratuitous ARP"
@@ -3232,11 +3230,11 @@ msgstr "丢弃免费 ARP"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1252
 msgid "Drop layer 2 multicast frames containing IPv4 unicast packets."
-msgstr "丢弃包含 IPv4 单播数据包的 layer 2 组播帧。"
+msgstr "丢弃包含 IPv4 单播数据包的二层组播帧。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1256
 msgid "Drop layer 2 multicast frames containing IPv6 unicast packets."
-msgstr "丢弃包含 IPv6 单播数据包的 layer 2 组播帧。"
+msgstr "丢弃包含 IPv6 单播数据包的二层组播帧。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1252
 msgid "Drop nested IPv4 unicast"
@@ -6226,9 +6224,7 @@ msgstr "链路监控模式"
 msgid ""
 "List of IP sets to populate with the IPs of DNS lookup results of the FQDNs "
 "also specified here."
-msgstr ""
-"用于存储根据域名（FQDN）进行 DNS 查找后获得的 IP 地址的 IP 集列表也在这里定"
-"义。"
+msgstr "IP 集列表用于存储域名（FQDN）进行 DNS 查找后获得的 IP 地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1705
 msgid ""
@@ -7261,7 +7257,7 @@ msgstr "邻居报告"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1179
 msgid "Neighbour cache validity"
-msgstr "邻近缓存有效性"
+msgstr "邻居缓存有效期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:852
 msgid "Netfilter table name"
@@ -7825,7 +7821,7 @@ msgstr "一个或多个必选项值为空！"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:551
 msgid "Only DHCP Clients with this tag are sent this boot option."
-msgstr "仅具备此标签的 DHCP 客户端会被发送此 boot 选项。"
+msgstr "仅向具备此标签的 DHCP 客户端发送此 boot 选项。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:488
 msgid "Only accept replies via"
@@ -9626,9 +9622,8 @@ msgid ""
 "Root directory for files served via TFTP. <em>Enable TFTP server</em> and "
 "<em>TFTP server root</em> turn on the TFTP server and serve files from "
 "<em>TFTP server root</em>."
-msgstr ""
-"通过 TFTP 传送的文件的根目录。 <em>启用 TFTP 服务器</em> 和 <em>TFTP 服务器根"
-"目录</em> 打开 TFTP 服务器并从 <em>TFTP 服务器根目录提供文件</em>。"
+msgstr "通过 TFTP 传送的文件的根目录。TFTP 服务器将从 <em>TFTP 服务器根目录</em> 向客"
+"户端提供文件。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:298
 msgid "Root preparation"
@@ -9993,8 +9988,7 @@ msgstr "将接口设置为 NDP 代理外部从属设备。默认为关闭。"
 msgid ""
 "Set interface properties regardless of the link carrier (If set, carrier "
 "sense events do not invoke hotplug handlers)."
-msgstr ""
-"不论接口的链路状态如何,强制接口处于连接状态 (如果勾选,链路状态变更将不再触发"
+msgstr "无论接口的链路状态如何,强制接口处于连接状态 (如果勾选,链路状态变化将不再触发"
 "接口热插拔事件处理)。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:404
@@ -10279,9 +10273,7 @@ msgid ""
 "Specifies the devices to attach to this VRF. In order to attach wireless "
 "networks, choose the associated interface as network in the wireless "
 "settings."
-msgstr ""
-"明确附加到这个 VRF 的设备。为了附加无线网络，在无线设置中选择关联接口作为网"
-"络。"
+msgstr "指定关联到此 VRF 的设备。如需关联无线网络，在无线网络配置中关联此设备。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Specifies the directory the device is attached to"
@@ -10463,7 +10455,7 @@ msgstr "稳定"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1183
 msgid "Stale neighbour cache timeout"
-msgstr "过时的邻近缓存超时"
+msgstr "过时邻居缓存超时"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1711
 msgid "Standard: none"
@@ -11562,7 +11554,7 @@ msgstr "此页面显示所有可用物理接口的带宽使用情况。"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:342
 msgid ""
 "This page displays the wireless metrics for each available radio interface."
-msgstr "此页面展示每个可用无线电接口的无线指标。"
+msgstr "此页面展示无线接口的信号指标。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1680
 msgid "This prefix is randomly generated at first install."
@@ -11656,9 +11648,8 @@ msgid ""
 "To restore configuration files, you can upload a previously generated backup "
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
-msgstr ""
-"上传备份存档以恢复配置。要将固件恢复到初始状态，请单击“执行重置” (仅 "
-"squashfs 格式的固件文件有效)。"
+msgstr "上传备份存档以恢复配置。要将固件恢复到初始状态，请单击“执行重置” (仅 squashfs"
+" 格式的固件有效)。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:165
 msgid "ToS"
