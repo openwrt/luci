@@ -4,6 +4,8 @@
 'require ui';
 'require uci';
 
+var notMsg = false, errMsg = false;
+
 /*
 	button handling
 */
@@ -32,7 +34,10 @@ function handleAction(ev) {
 								if (res.search(pattern) === -1) {
 									var blocklist = res + domain + '\n';
 									fs.write('/etc/adblock/adblock.blocklist', blocklist);
-									ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload adblock that changes take effect.')), 'info');
+									if (!notMsg) {
+										notMsg = true;
+										ui.addNotification(null, E('p', _('Blocklist modifications have been saved, reload adblock that changes take effect.')), 'info');
+									}
 								}
 								ui.hideModal();
 							});
@@ -67,7 +72,10 @@ function handleAction(ev) {
 								if (res.search(pattern) === -1) {
 									var allowlist = res + domain + '\n';
 									fs.write('/etc/adblock/adblock.allowlist', allowlist);
-									ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload adblock that changes take effect.')), 'info');
+									if (!notMsg) {
+										notMsg = true;
+										ui.addNotification(null, E('p', _('Allowlist modifications have been saved, reload adblock that changes take effect.')), 'info');
+									}
 								}
 								ui.hideModal();
 							});
@@ -112,13 +120,13 @@ function handleAction(ev) {
 				E('button', {
 					'class': 'btn cbi-button-action',
 					'click': ui.createHandlerFn(this, function (ev) {
-						var domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
+						const domain = document.getElementById('search').value.trim().toLowerCase().replace(/[^a-z0-9\.\-]/g, '');
 						if (domain) {
 							document.getElementById('run').classList.add("spinning");
 							document.getElementById('search').value = domain;
 							document.getElementById('result').textContent = 'The query is running, please wait...';
 							L.resolveDefault(fs.exec_direct('/etc/init.d/adblock', ['query', domain])).then(function (res) {
-								var result = document.getElementById('result');
+								const result = document.getElementById('result');
 								if (res) {
 									result.textContent = res.trim();
 								} else {
@@ -244,7 +252,7 @@ return view.extend({
 	},
 
 	render: function (dnsreport) {
-		let content = [], notMsg, errMsg;
+		let content = [];
 
 		if (dnsreport) {
 			try {
@@ -256,8 +264,8 @@ return view.extend({
 			content[0] = "";
 		}
 
-		var rows_top = [];
-		var tbl_top = E('table', { 'class': 'table', 'id': 'top_10' }, [
+		let rows_top = [];
+		const tbl_top = E('table', { 'class': 'table', 'id': 'top_10' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th right' }, _('Count')),
 				E('th', { 'class': 'th' }, _('Clients')),
@@ -268,12 +276,12 @@ return view.extend({
 			])
 		]);
 
-		var max = 0;
+		let max = 0;
 		if (content[0].top_clients && content[0].top_domains && content[0].top_blocked) {
 			max = Math.max(content[0].top_clients.length, content[0].top_domains.length, content[0].top_blocked.length);
 		}
-		for (var i = 0; i < max; i++) {
-			var a_cnt = '\xa0', a_addr = '\xa0', b_cnt = '\xa0', b_addr = '\xa0', c_cnt = '\xa0', c_addr = '\xa0';
+		for (let i = 0; i < max; i++) {
+			let a_cnt = '\xa0', a_addr = '\xa0', b_cnt = '\xa0', b_addr = '\xa0', c_cnt = '\xa0', c_addr = '\xa0';
 			if (content[0].top_clients[i]) {
 				a_cnt = content[0].top_clients[i].count;
 			}
@@ -303,8 +311,8 @@ return view.extend({
 		}
 		cbi_update_table(tbl_top, rows_top);
 
-		var rows_requests = [];
-		var tbl_requests = E('table', { 'class': 'table', 'id': 'requests' }, [
+		let rows_requests = [];
+		const tbl_requests = E('table', { 'class': 'table', 'id': 'requests' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				E('th', { 'class': 'th' }, _('Date')),
 				E('th', { 'class': 'th' }, _('Time')),
@@ -317,9 +325,9 @@ return view.extend({
 
 		max = 0;
 		if (content[0].requests) {
-			var button;
+			let button;
 			max = content[0].requests.length;
-			for (var i = 0; i < max; i++) {
+			for (let i = 0; i < max; i++) {
 				if (content[0].requests[i].rc === 'NX') {
 					button = E('button', {
 						'class': 'btn cbi-button cbi-button-positive',

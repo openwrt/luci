@@ -54,6 +54,16 @@ return view.extend({
 			For further information <a href="https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md" target="_blank" rel="noreferrer noopener" >check the online documentation</a>'));
 
 		/*
+			set text content helper function
+		*/
+		const setText = (id, value) => {
+			const el = document.getElementById(id);
+			if (el) {
+				el.textContent = value || '-';
+			}
+		};
+
+		/*
 			poll runtime information
 		*/
 		pollData: poll.add(function () {
@@ -74,7 +84,7 @@ return view.extend({
 					ui.addNotification(null, E('p', _('Unable to parse the runtime information!')), 'error');
 				}
 				if (status && info) {
-					status.textContent = (info.adblock_status || '-') + ' / ' + (info.adblock_version || '-');
+					status.textContent = `${info.adblock_status || '-'} (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
 					if (info.adblock_status === "running") {
 						if (!status.classList.contains("spinning")) {
 							status.classList.add("spinning");
@@ -108,45 +118,15 @@ return view.extend({
 						status.classList.remove('spinning');
 					}
 				}
-				var domains = document.getElementById('domains');
-				if (domains && info) {
-					domains.textContent = info.blocked_domains || '-';
-				}
-				var feeds = document.getElementById('feeds');
-				var src_array = [];
-				if (feeds && info) {
-					for (var i = 0; i < info.active_feeds.length; i++) {
-						if (i < info.active_feeds.length - 1) {
-							src_array += info.active_feeds[i] + ', ';
-						} else {
-							src_array += info.active_feeds[i]
-						}
-					}
-					feeds.textContent = src_array || '-';
-				}
-				var backend = document.getElementById('backend');
-				if (backend && info) {
-					backend.textContent = info.dns_backend || '-';
-				}
-				var ifaces = document.getElementById('ifaces');
-				if (ifaces && info) {
-					ifaces.textContent = info.run_ifaces || '-';
-				}
-				var dirs = document.getElementById('dirs');
-				if (dirs && info) {
-					dirs.textContent = info.run_directories || '-';
-				}
-				var flags = document.getElementById('flags');
-				if (flags && info) {
-					flags.textContent = info.run_flags || '-';
-				}
-				var run = document.getElementById('run');
-				if (run && info) {
-					run.textContent = info.last_run || '-';
-				}
-				var sys = document.getElementById('sys');
-				if (sys && info) {
-					sys.textContent = info.system_info || '-';
+				if (info) {
+					setText('domains', info.blocked_domains);
+					setText('feeds', info.active_feeds?.join(', '));
+					setText('backend', info.dns_backend);
+					setText('ifaces', info.run_ifaces);
+					setText('dirs', info.run_directories);
+					setText('flags', info.run_flags);
+					setText('run', info.last_run);
+					setText('sys', info.system_info);
 				}
 			});
 		}, 2);

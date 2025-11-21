@@ -2,68 +2,31 @@
 	"luci-app-adblock": {
 		"description": "Grant access to LuCI app adblock",
 		"write": {
-			"uci": [
-				"adblock"
-			],
+			"uci": [ "adblock" ],
 			"file": {
-				"/etc/adblock/*": [
-					"read",
-					"write"
-				],
-				"/etc/adblock/adblock.allowlist": [
-					"write"
-				],
-				"/etc/adblock/adblock.blocklist": [
-					"write"
-				],
-				"/etc/adblock/adblock.custom.feeds": [
-					"read",
-					"write"
-				]
+				"/etc/adblock/*": [ "read", "write" ],
+				"/etc/adblock/adblock.allowlist": [ "write" ],
+				"/etc/adblock/adblock.blocklist": [ "write" ],
+				"/etc/adblock/adblock.custom.feeds": [ "read", "write" ]
 			}
 		},
 		"read": {
-			"cgi-io": [
-				"exec"
-			],
+			"cgi-io": [ "exec" ],
 			"file": {
-				"/var/run/adblock.pid": [
-					"read"
-				],
-				"/var/run/adb_runtime.json": [
-					"read"
-				],
-				"/sbin/logread -e adblock-": [
-					"exec"
-				],
-				"/usr/sbin/logread -e adblock-": [
-					"exec"
-				],
-				"/etc/init.d/adblock reload": [
-					"exec"
-				],
-				"/etc/init.d/adblock restart": [
-					"exec"
-				],
-				"/etc/init.d/adblock suspend": [
-					"exec"
-				],
-				"/etc/init.d/adblock resume": [
-					"exec"
-				],
-				"/etc/init.d/adblock stop": [
-					"exec"
-				],
-				"/etc/init.d/adblock report [a-z]* [0-9]* [0-9]* *": [
-					"exec"
-				],
-				"/etc/init.d/adblock query *": [
-					"exec"
-				]
+				"/var/run/adblock.pid": [ "read" ],
+				"/var/run/adb_runtime.json": [ "read" ],
+				"/sbin/logread -e adblock-": [ "exec" ],
+				"/usr/sbin/logread -e adblock-": [ "exec" ],
+				"/etc/init.d/adblock reload": [ "exec" ],
+				"/etc/init.d/adblock restart": [ "exec" ],
+				"/etc/init.d/adblock suspend": [ "exec" ],
+				"/etc/init.d/adblock resume": [ "exec" ],
+				"/etc/init.d/adblock stop": [ "exec" ],
+				"/etc/init.d/adblock report [a-z]* [0-9]* [0-9]* *": [ "exec" ],
+				"/etc/init.d/adblock query *": [ "exec" ]
 			},
-			"uci": [
-				"adblock"
-			]
+			"uci": [ "adblock" ],
+			"log": [ "read" ]
 		}
 	}
 }
