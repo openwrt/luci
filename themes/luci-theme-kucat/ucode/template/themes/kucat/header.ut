@@ -1,0 +1,314 @@
+{#
+    luci-theme-kucat: 
+    Copyright (C) 2019-2025 The Sirpdboy <herboy2008@gmail.com> 
+    Have a bug? Please create an issue here on GitHub!
+    https://github.com/sirpdboy/luci-theme-kucat/issues
+    
+    luci-theme-material: 
+    Copyright 2015 Lutty Yang <lutty@wcan.in>
+    luci-theme-bootstrap:
+    Copyright 2008 Steven Barth <steven@midlink.org>
+    Copyright 2008 Jo-Philipp Wich <jow@openwrt.org>
+    Copyright 2012 David Menting <david@nut-bolt.nl>
+
+    MUI:
+    https://github.com/muicss/mui 
+
+    Licensed to the public under the Apache License 2.0
+
+-#}
+{%
+import { cursor } from 'uci';
+import { readfile, access, lsdir } from 'fs';
+import { srand } from 'math';
+import { getuid, getspnam } from 'luci.core';
+const boardinfo = ubus.call('system', 'board');
+const hostname = striptags(boardinfo?.hostname ?? '?');
+let uci_cursor = cursor();
+http.prepare_content('text/html; charset=UTF-8');
+srand(+substr(reverse(time() + ""), 0, 8));
+
+//Custom settings
+let config = {};
+let bar = '/cgi-bin/luci/admin/';
+let config_exists = false;
+let kucat = '';
+let showword = "";
+
+let primary_rgbm = '45,102,147', primary_rgbbody = '244,245,247',primary_rgbm_ts = '0.8', primary_opacity = '0', primary_rgbs = '132,188,218', primary_rgbs_ts = '0.1', mode = 'auto';
+let gohome = bar + "status/", gouser = bar + "system/", gossr = bar + "services/", bgqs = '1', setbar = '1', dayword = '0';
+let background = '0', bkuse = '0', bklock = '1', fontd = '0.92rem', fontz = '0.875rem', fontx = '0.825rem';
+let bg_url = media + "/img/bg1.jpg";
+
+if (access('/etc/config/kucat')) {
+        kucat = "kucat";
+        config_exists = true;
+}
+    
+if (config_exists && kucat) {
+    try {
+        let config = uci_cursor.get_all(kucat, "@basic[0]");
+        primary_rgbm = config.primary_rgbm || "45,102,147";
+        primary_rgbbody= config.primary_rgbbody || "244,245,247";
+        primary_rgbm_ts = config.primary_rgbm_ts || "0.8";
+        primary_opacity = config.primary_opacity || '0';
+        primary_rgbs = config.primary_rgbs || "132,188,218";
+        primary_rgbs_ts = config.primary_rgbs_ts || "0.1";
+        mode = config.mode || "light";
+        gohome = bar + "status/" + config.gohome|| bar + "status/";
+        gouser = bar + "system/" + config.gouser|| bar + "system/";
+        gossr = bar + "services/" + config.gossr || bar + "services/";
+        bgqs = config.bgqs || "1";
+        setbar = config.setbar || "1";
+        dayword = config.dayword || "0";
+        background = config.background || "0";
+        bkuse = config.bkuse || "0";
+        bklock = config.bklock || "1";
+        fontd = config.font_d || '0.92rem';
+        fontz = config.font_z || '0.875rem';
+        fontx = config.font_x || '0.825rem';
+    } catch (e) {} 
+} else {}
+let ufilter = "blur(" + primary_opacity + "px)";
+if (primary_opacity == '0') {
+        ufilter = 'none';
+}
+
+let automode = mode;
+if ( mode == 'auto' ) {
+        let auto_theme = ubus.call("luci.kucatget", "get_auto_theme") || {};
+        automode = auto_theme.auto_theme;
+} 
+
+function fetchPIC(path, themeDir) {
+        const imageTypes = " jpg jpeg png gif webp ";
+        let backgroundTable = [];
+        
+        let files = lsdir(path) || [];
+        for (let i = 0; i < length(files); i++) {
+            let f = files[i];
+            let parts = split(f, '.');
+            if (length(parts) > 1) {
+                let ext = lc(parts[1]);
+                if (ext && index(imageTypes, " " + ext + " ") != -1) {
+                    let bg = {
+                        type: ext,
+                        url: themeDir + f
+                    };
+                    push(backgroundTable, bg);
+                }
+            }
+        }
+        return backgroundTable;
+}
+
+function Getwallpaper(themeDir, num) {
+    let bgUrl = media + '/img/bg1.jpg';
+    if ( num == '0' ) {
+         let physicalPath = "/www" + themeDir;
+         if (!access(physicalPath)) { return { url: bgUrl };}
+         let bgpath = fetchPIC(physicalPath, themeDir);
+         if (length(bgpath) > 0) {
+               let randomIndex = srand() % length(bgpath);
+               let currentBg = bgpath[randomIndex];
+               bgUrl = currentBg.url;
+           } 
+    } else {
+               const picurl = ubus.call("luci.kucatget", "get_url") ?? {};
+               if (picurl && picurl.url) {
+                    return { url: picurl.url };
+               }
+    }
+    return { url: bgUrl };
+
+}
+let bg_url_result = Getwallpaper(resource + "/background/", background);
+let bg_url = bg_url_result.url;
+let bg_lock = bg_url;
+
+let bk_use = "background: rgba(var(--primary-rgbbody),1)";
+let loginbk_use = "background: linear-gradient(0deg, rgba(var(--primary-rgbm), 1) 0%, rgba(var(--primary-rgbbody), 1) 100%); display: block;";
+
+if (bkuse == "1") {
+    if (bklock == "0") {
+        let bg_lock_result = Getwallpaper(media + "/background/", '0');
+        bg_lock = bg_lock_result.url;
+        bk_use = "background-image: url(" + bg_lock + ")";
+        loginbk_use = "background-image: url(" + bg_url + ")";
+    } else {
+        bk_use = "background-image: url(" + bg_url + ")";
+        loginbk_use = "background-image: url(" + bg_url + ")";
+    }
+} else {
+    if (bklock == "0") {
+        loginbk_use = "background-image: url(" + bg_url + ")";
+    }
+}
+
+if (dayword == "1") {
+        let tmpshowword = ubus.call("luci.kucatget", "get_word") || {};
+        if (tmpshowword && tmpshowword.word) {
+            showword = tmpshowword.word;
+        }
+}
+
+%}
+<!DOCTYPE html>
+<html lang="{{ dispatcher.lang }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1.5, user-scalable=no, viewport-fit=cover">
+    <title>{{ hostname }}{{ node?.title ? ` - ${striptags(node.title)}` : '' }} - LuCI</title>
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta name="format-detection" content="telephone=no, email=no">
+    <meta name="x5-fullscreen" content="true">
+    <meta name="full-screen" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="{{ hostname }} - LuCI">
+    <meta name="format-detection" content="telephone=no, email=no, address=no">
+
+    <meta name="theme-color" content="#ffffff"> 
+    <meta name="color-scheme" content="light dark">
+    <meta name="msapplication-TileColor" content="{{ (mode == 'dark' && '#1a1a1a' || '#ffffff' ) }}">
+    <meta name="msapplication-TileImage" content="{{ media }}/icon/ms-icon-144x144.png">
+    <meta name="application-name" content="{{ hostname }} - LuCI">
+    <link rel="manifest" href="{{ media }}/manifest.json" crossorigin="use-credentials">
+    <link rel="shortcut icon" href="{{ media }}/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="{{ media }}/logo.png" type="image/png">
+    <link rel="mask-icon" href="{{ media }}/logo.png" color="#ffffff">
+    <link rel="apple-touch-icon" href="{{ media }}/img/logo180.png">
+    <link rel="apple-touch-icon" sizes="150x150" href="{{ media }}/img/logo150.png">
+    <meta name="apple-touch-fullscreen" content="yes">
+    
+    <meta name="msapplication-config" content="{{ media }}/browserconfig.xml">
+    <meta name="msapplication-TileImage" content="{{ media }}/logo.png">
+    <link rel="stylesheet" href="{{ media }}/css/style.css{# ?v=PKG_VERSION #}">
+
+    <noscript>
+        <link rel="stylesheet" href="{{ media }}/css/style.css{# ?v=PKG_VERSION #}">
+    </noscript>
+    <style title="text/css">
+    :root {
+        --primary-rgbm: {{ primary_rgbm }};--primary-rgbm-ts: {{ primary_rgbm_ts }};--primary-rgbs: {{ primary_rgbs }};--primary-rgbs-ts: {{ primary_rgbs_ts }};
+        --font-d: {{ fontd }};--font-z: {{ fontz }};--font-x: {{ fontx }};--ufilter: {{ ufilter }};
+        {% if (automode == 'dark'): %}
+            --menu-item-titlebg-color: rgba(var(--primary-rgbm),0.32);--body-hover-bgcolor: rgba(255,255,255,0.05);--menu-hover-color: #f5f5f5f5;--menu-fontcolor: #bbb;--primarytextcolor: #bbb;--primary-title-color: #ccc;--menu-color: #ddd;--title-color: #ddd;--body-color: #bbb;
+            --primary-rgbbody:33,45,60;--inputtext-color: #ccc;  --inputborder-color: rgba(255,255,255,0.2);  --input-bgcolor: rgba(0,0,0,0.2);  --input-boxcolor: rgba(255,255,255,0.22);  --input-boxhovercolor: rgba(255,255,255,0.32);  --input-checkcolor: rgba(255,255,255,0.7);--filter-color:invert(90%);
+        {% else %}
+            --menu-item-titlebg-color: rgba(var(--primary-rgbm),0.12);--body-hover-bgcolor: rgba(50,50,50,0.05);--menu-hover-color: #fff;--menu-fontcolor: #f5f5f5f5;--primarytextcolor: #505063;--primary-title-color: #4d4d5d;--menu-color: #eee;--title-color: #3c3c3c;--body-color: #424242;
+            --primary-rgbbody:244,245,247;--inputtext-color: #383838;  --inputborder-color: rgba(0,0,0,0.2);  --input-bgcolor: rgba(255,255,255,0.2);  --input-boxcolor: rgba(0,0,0,0.22);  --input-boxhovercolor: rgba(0,0,0,0.32);  --input-checkcolor: rgba(var(--primary-rgbm),1);--filter-color:invert(10%);
+	{% endif %}
+        {% if (bgqs == '0'): %}
+            --bgqs-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.1) 75%, transparent 75%, transparent);
+            --menu-bgcolor: rgba(var(--primary-rgbm), var(--primary-rgbm-ts));--menu-item-hover-bgcolor: rgba(248,248,248, 0.22);--menu-item-active-bgcolor: rgba(248,248,248, 0.3);
+        {% else %}
+            --bgqs-image: none;--menu-bgcolor: rgba(var(--primary-rgbbody), var(--primary-rgbm-ts));--menu-item-hover-bgcolor: rgba(var(--primary-rgbm), 0.8);--menu-item-active-bgcolor:  rgba(var(--primary-rgbm), 0.9);
+            {% if (automode == 'dark'): %}
+                      --menu-fontcolor: #bbb;
+            {% else %}
+                      --menu-fontcolor: #333333;
+            {% endif %}
+
+    }
+     @media screen and (max-width: 920px) { .main-left {background-color:rgba(var(--primary-rgbbody), 0.95);width: calc(0% + 15rem);}}
+    {% endif -%}
+    
+	{% if (setbar == "1"): %}
+	header.bar-primary .container-bar-left {width: 300px;display: block;}
+	header.bar-primary .container-bar-right { width: 0; display: none;}
+	{% else %}
+	header.bar-primary .container-bar-left { width: 0;display: none;}
+	header.bar-primary .container-bar-right {width: 50px;display: block;}
+	{% endif %}
+    </style>
+<script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}?v={{ version.luciversion }}"></script>
+<script src="{{ resource }}/cbi.js?v={{ version.luciversion }}"></script>
+<script src="{{ media }}/js/style.js?v={{ version.luciversion }}"></script>
+</head>
+<body
+class="lang_{{ dispatcher.lang }} {{ ctx.authsession ? 'logged-in' : '' }} {{ length(ctx.path) ? `node-${join('-', ctx.path)}` : 'node-main-login' }}"
+ data-page="{{ entityencode(join('-', ctx.path), true) }}"  style="{{ bk_use }};" {% if (mode != 'auto'): %}data-theme="{{ mode }}"{% endif %}
+>
+
+    <header class="bar-primary">
+        <div id="header-bar-left" class="container-bar-left">
+            <a class="labelbar pdboy-closebar" href="javascript:void(0)" onclick="pdclosebar()" title="{{ _('Close') }}"></a>
+            <a class="labelbar pdboy-gohome" href="{{ gohome }}" title="{{ _('Status') }}"></a>
+            <a class="labelbar pdboy-goadvanced" href="{{ gouser }}" title="{{ _('System') }}"></a>
+            <a class="labelbar pdboy-gossr" href="{{ gossr }}" title="{{ _('Services') }}"></a>
+            <a class="labelbar pdboy-gonet" href="{{ dispatcher.build_url("admin/network/network") }}" title="{{ _('Network') }}"></a>
+            <a class="labelbar pdboy-gopoweroff" href="{{ dispatcher.build_url("admin/system/reboot") }}" title="{{ _('Reboot') }}"></a>
+        </div>
+        <div id="header-bar-right" class="container-bar-right">
+            <a class="labelbar pdboy-openbar" href="javascript:void(0)" title="Open" onclick="pdopenbar()"></a>
+        </div>
+    </header>
+    
+    <div class="main">
+	<div style="" class="loading"></div>
+        <div class="main-left">
+            <div class="sidenav-header d-flex align-items-center">
+                <a class="brand" href="#">{{ hostname }}</a>
+            </div>
+            <div class="mainmenu" id="mainmenu" style="display:none"></div>
+        </div>
+        <div class="main-right">
+            <header class="pd-primary">
+                <div class="fill">
+                    <div class="container">
+                        <div class="flex1">
+                            <a class="showSide"></a>
+                            <a class="brand" href="#">{{ hostname }}</a>
+                            {% if (dayword == '1'): %}
+                            <a class="showWord" href="#">{{ showword }}</a>
+                            {% endif %}
+                        </div>
+                        <div class="status" id="indicators"></div>
+
+                        <span><a class="pdboy-qlogout" href="{{ dispatcher.build_url("admin/logout") }}" title="{{ _('Log_out') }}"></a></span>
+                    </div>
+                </div>
+            </header>
+		<div class="modemenu-buttons" style="display:none">
+			<ul id="modemenu"></ul>
+		</div>
+            <div class="darkMask"></div>
+            <div class="login-bg" style="{{ loginbk_use }}"></div>
+            
+		<div id="maincontent">
+			<div class="container">
+				{% if (getuid() == 0 && getspnam('root')?.pwdp === '' && ctx.authsession): %}
+					<div class="alert-message warning">
+						<h4>{{ _('No password set!') }}</h4>
+						<p>{{ _('There is no password set on this router. Please configure a root password to protect the web interface.') }}</p>
+						{% if (dispatcher.lookup("admin/system/admin")): %}
+						  <div class="right"><a class="btn" href="{{ dispatcher.build_url("admin/system/admin") }}">{{ _('Go to password configuration...') }}</a></div>
+						{% endif %}
+					</div>
+				{% endif %}
+
+				{% if (boardinfo?.rootfs_type == "initramfs"): %}
+					<div class="alert-message warning">
+						<h4>{{ _('System running in recovery (initramfs) mode.') }}</h4>
+						<p>{{ _('No changes to settings will be stored and are lost after rebooting. This mode should only be used to install a firmware upgrade') }}</p>
+						{% if (dispatcher.lookup("admin/system/flash")): %}
+						  <div class="right"><a class="btn" href="{{ dispatcher.build_url("admin/system/flash") }}">{{ _('Go to firmware upgrade...') }}</a></div>
+						{% endif %}
+                    </div>
+                    {% endif %}
+
+                    <noscript>
+                        <div class="alert-message warning">
+                            <h4>{{ _('JavaScript required!') }}</h4>
+                            <p>{{ _('You must enable JavaScript in your browser or LuCI will not work properly.') }}</p>
+                        </div>
+                    </noscript>
+
+                    <div id="tabmenu" style="display:none"></div>

@@ -1,0 +1,12 @@
+#!/bin/sh
+if [ "$PKG_UPGRADE" != 1 ]; then
+	uci get luci.themes.KuCat >/dev/null 2>&1 || \
+uci batch <<-EOF
+	set luci.themes.KuCat=/luci-static/kucat
+	set luci.main.mediaurlbase=/luci-static/kucat
+	commit luci
+EOF
+fi
+
+rm -rf /tmp/luci-*
+exit 0
