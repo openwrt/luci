@@ -139,6 +139,85 @@ return view.extend({
 			}, this, ev.target));
 	},
 
+	handleSelectiveRestore: function(ev) {
+		return ui.uploadFile('/tmp/backup.tar.gz', ev.target)
+			.then(L.bind(function(btn, res) {
+				btn.firstChild.data = _('Checking archive…');
+				return fs.exec('/bin/tar', [ '-tzf', '/tmp/backup.tar.gz' ]);
+			}, this, ev.target))
+			.then(L.bind(function(btn, res) {
+				if (res.code != 0) {
+					ui.addNotification(null, E('p', _('The uploaded backup archive is not readable')));
+					return fs.remove('/tmp/backup.tar.gz');
+				}
+
+				// Split the stdout to get individual file names
+				var files = res.stdout.split('\n').filter(function(f) { return f.trim() !== ''; });
+
+				// Generate check-boxes for each file with <br /> after each
+				var fileCheckboxes = files.map(function(file) {
+					return E('label', { 'class': 'checkbox' }, [
+						E('input', { 'type': 'checkbox', 'name': 'file', 'value': file }),
+						' ', file, E('br')  // Add line break after each checkbox
+					]);
+				});
+
+				// Helper buttons to check all, none, or inverse
+				var checkAllButton = E('button', {
+					'class': 'btn',
+					'click': function() {
+						// Select all check-boxes
+						document.querySelectorAll('input[name="file"]').forEach(function(cb) {
+							cb.checked = true;
+						});
+					}
+				}, _('Check All'));
+
+				var uncheckAllButton = E('button', {
+					'class': 'btn',
+					'click': function() {
+						// Deselect all check-boxes
+						document.querySelectorAll('input[name="file"]').forEach(function(cb) {
+							cb.checked = false;
+						});
+					}
+				}, _('Check None'));
+
+				var invertButton = E('button', {
+					'class': 'btn',
+					'click': function() {
+						// Deselect all check-boxes
+						document.querySelectorAll('input[name="file"]').forEach(function(cb) {
+							cb.checked = !cb.checked;
+						});
+					}
+				}, _('Invert'));
+
+				// Display the modal with check-boxes and helper buttons
+				ui.showModal(_('Apply backup?'), [
+					E('p', _('The uploaded backup archive appears to be valid and contains the files listed below. Select the files you wish to restore and press "Continue", or "Cancel" to abort.')),
+					E('div', {}, fileCheckboxes), // Display check-boxes for files
+					E('div', { 'class': 'right' }, [
+						checkAllButton, ' ', uncheckAllButton, ' ', invertButton, ' ',
+						E('button', {
+							'class': 'btn',
+							'click': ui.createHandlerFn(this, function(ev) {
+								return fs.remove('/tmp/backup.tar.gz').finally(ui.hideModal);
+							})
+						}, [ _('Cancel') ]), ' ',
+						E('button', {
+							'class': 'btn cbi-button-action important',
+							'click': ui.createHandlerFn(this, 'handleSelectiveRestoreConfirm', btn)
+						}, [ _('Continue') ])
+					])
+				]);
+			}, this, ev.target))
+			.catch(function(e) { ui.addNotification(null, E('p', e.message)) })
+			.finally(L.bind(function(btn, input) {
+				btn.firstChild.data = _('Upload archive...');
+			}, this, ev.target));
+	},
+
 	handleRestoreConfirm: function(btn, ev) {
 		return fs.exec('/sbin/sysupgrade', [ '--restore-backup', '/tmp/backup.tar.gz' ])
 			.then(L.bind(function(btn, res) {
@@ -167,6 +246,94 @@ return view.extend({
 			}, this))
 			.catch(function(e) { ui.addNotification(null, E('p', e.message)) })
 			.finally(function() { btn.firstChild.data = _('Upload archive...') });
+	},
+
+	handleSelectiveRestoreConfirm: function(btn, ev) {
+		// Get the selected files from the check-boxes
+		var selectedFiles = Array.prototype.slice.call(document.querySelectorAll('input[name="file"]:checked'))
+			.map(function(checkbox) { return checkbox.value; });
+
+		if (selectedFiles.length === 0) {
+			ui.addNotification(null, E('p', _('No files selected for restoration')));
+			return fs.remove('/tmp/backup.tar.gz').finally(ui.hideModal);
+		}
+
+		btn.firstChild.data = _('Creating archive of selected files…');
+
+		// Write the selected file names into a temporary file for tar -T option
+		var fileList = selectedFiles.join('\n');
+		return fs.write('/tmp/filelist.txt', fileList)
+			.then(L.bind(function() {
+				// Make selective restore directory
+			return fs.exec('/bin/mkdir', ['-p', '/tmp/selective_restore/']);
+			}, this))
+			.then(L.bind(function(mkdirRes) {
+				if (mkdirRes.code != 0) {
+					ui.addNotification(null, [
+						E('p', _('Path creation failed with code %d').format(mkdirRes.code)),
+						mkdirRes.stderr ? E('pre', {}, [ mkdirRes.stderr ]) : ''
+					]);
+					L.raise('Error', 'Path creation failed');
+				}
+				// Extract the tar.gz with only the selected files
+				return fs.exec('/bin/tar', ['-xzf', '/tmp/backup.tar.gz', '-T', '/tmp/filelist.txt', '-C', '/tmp/selective_restore/']);
+			}, this))
+			.then(L.bind(function(tarRes) {
+				if (tarRes.code != 0) {
+					ui.addNotification(null, [
+						E('p', _('Tar extraction failed with code %d').format(tarRes.code)),
+						tarRes.stderr ? E('pre', {}, [ tarRes.stderr ]) : ''
+					]);
+					L.raise('Error', 'Tar extraction failed');
+				}
+				// Create the new tar.gz with only the selected files
+				return fs.exec('/bin/tar', ['-czf', '/tmp/selective_restore.tar.gz', '-T', '/tmp/filelist.txt', '-C', '/tmp/selective_restore/']);
+			}, this))
+			.then(L.bind(function(tarRes) {
+				if (tarRes.code != 0) {
+					ui.addNotification(null, [
+						E('p', _('The tar creation failed with code %d').format(tarRes.code)),
+						tarRes.stderr ? E('pre', {}, [ tarRes.stderr ]) : ''
+					]);
+					L.raise('Error', 'Tar creation failed');
+				}
+
+				// Now use sysupgrade with the newly created tar.gz
+				return fs.exec('/sbin/sysupgrade', ['--restore-backup', '/tmp/selective_restore.tar.gz']);
+			}, this))
+			.then(L.bind(function(sysupgradeRes) {
+				if (sysupgradeRes.code != 0) {
+					ui.addNotification(null, [
+						E('p', _('The sysupgrade command failed with code %d').format(sysupgradeRes.code)),
+						sysupgradeRes.stderr ? E('pre', {}, [ sysupgradeRes.stderr ]) : ''
+					]);
+					L.raise('Error', 'Sysupgrade failed');
+				}
+
+				// Proceed with reboot after successful restore
+				btn.firstChild.data = _('Rebooting…');
+				return fs.exec('/sbin/reboot');
+			}, this))
+			.then(L.bind(function(res) {
+				if (res.code != 0) {
+					ui.addNotification(null, E('p', _('The reboot command failed with code %d').format(res.code)));
+					L.raise('Error', 'Reboot failed');
+				}
+
+				// Show rebooting modal
+				ui.showModal(_('Rebooting…'), [
+					E('p', { 'class': 'spinning' }, _('The system is rebooting now. If the restored configuration changed the current LAN IP address, you might need to reconnect manually.'))
+				]);
+
+				// Await reconnection
+				ui.awaitReconnect(window.location.host, '192.168.1.1', 'openwrt.lan');
+			}, this))
+			.catch(function(e) { 
+				ui.addNotification(null, E('p', e.message)); 
+			})
+			.finally(function() { 
+				btn.firstChild.data = _('Upload archive...'); 
+			});
 	},
 
 	handleBlock: function(hostname, ev) {
@@ -414,6 +581,10 @@ return view.extend({
 		o.inputtitle = _('Upload archive...');
 		o.onclick = L.bind(this.handleRestore, this);
 
+		o = ss.option(form.Button, 'selective_restore', _('Selectively Restore backup'), _('Custom files (certificates, scripts) may remain on the system. To prevent this, perform a factory-reset first.'));
+		o.inputstyle = 'action important';
+		o.inputtitle = _('Upload archive...');
+		o.onclick = L.bind(this.handleSelectiveRestore, this);
 
 		var mtdblocks = [];
 		procmtd.split(/\n/).forEach(function(ln) {
