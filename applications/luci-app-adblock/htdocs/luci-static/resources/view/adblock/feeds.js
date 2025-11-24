@@ -215,11 +215,11 @@ return view.extend({
 			}
 
 			o = s.option(form.Value, 'rule', _('Rule'));
-			o.value('/^([[:alnum:]_-]{1,63}\\.)+[[:alpha:]]+([[:space:]]|$)/{print tolower($1)}', _('<DOMAIN>'));
-			o.value('/^127\\.0\\.0\\.1[[:space:]]+([[:alnum:]_-]{1,63}\\.)+[[:alpha:]]+([[:space:]]|$)/{print tolower($2)}', _('127.0.0.1<SPACE><DOMAIN>'));
-			o.value('/^0\\.0\\.0\\.0[[:space:]]+([[:alnum:]_-]{1,63}\\.)+[[:alpha:]]+([[:space:]]|$)/{print tolower($2)}', _('0.0.0.0<SPACE><DOMAIN>'));
-			o.value('BEGIN{FS=\"[|^]\"}/^\\|\\|([[:alnum:]_-]{1,63}\\.)+[[:alpha:]]+\\^(\\$third-party)?$/{print tolower($3)}', _('<ADBLOCK-PLUS>'));
-			o.value('BEGIN{FS=\"\/\"}/^http[s]?:\\/\\/([[:alnum:]_-]{1,63}\\.)+[[:alpha:]]+(\\/|$)/{print tolower($3)}', _('<HTTP[S]-URL>'));
+			o.value('/^(([[:alnum:]_-]{1,63}\\.)+[[:alpha:]][[:alnum:]-]{1,62}([[:space:]]|$))/{print tolower($1)}', _('<DOMAIN> excl. TLDs'));
+			o.value('/^(([[:alnum:]_-]{1,63}\\.)*[[:alpha:]][[:alnum:]-]{1,62}([[:space:]]|$))/{print tolower($1)}', _('<DOMAIN> incl. TLDs'));
+			o.value('/^(127\\.0\\.0\\.1 ([[:alnum:]_-]{1,63}\\.)+[[:alpha:]][[:alnum:]-]{1,62}([[:space:]]|$))/{print tolower($2)}', _('127.0.0.1<SPACE><DOMAIN>'));
+			o.value('/^(0\\.0\\.0\\.0 ([[:alnum:]_-]{1,63}\\.)+[[:alpha:]][[:alnum:]-]{1,62}([[:space:]]|$))/{print tolower($2)}', _('0.0.0.0<SPACE><DOMAIN>'));
+			o.value('BEGIN{FS=\"[|^]\"}/^\\|\\|([[:alnum:]_-]{1,63}\\.)+[[:alpha:]][[:alnum:]-]{1,62}\\^(\\$third-party)?$/{print tolower($3)}', _('<ADBLOCK-PLUS>'));
 			o.optional = true;
 			o.rmempty = true;
 
