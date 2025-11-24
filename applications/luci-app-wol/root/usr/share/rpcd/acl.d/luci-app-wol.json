@@ -3,14 +3,14 @@
 		"description": "Grant access to wake-on-lan executables",
 		"read": {
 			"ubus": {
-				"luci-rpc": [ "getHostHints" ]
+				"luci.wol": [ "stat" ],
+				"luci-rpc": [ "getHostHints", "getNetworkDevices" ]
 			},
 			"uci": [ "etherwake" ]
 		},
 		"write": {
-			"file": {
-				"/usr/bin/etherwake": [ "exec" ],
-				"/usr/bin/wol": [ "exec" ]
+			"ubus": {
+				"luci.wol": [ "exec" ]
 			}
 		}
 	}

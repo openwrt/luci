@@ -8,8 +8,25 @@
 'require form';
 'require tools.widgets as widgets';
 
+const ETHERWAKE_BIN = '/usr/bin/etherwake';
+const WAKEONLAN_BIN = '/usr/bin/wakeonlan';
+
 return view.extend({
 	formdata: { wol: {} },
+
+	callStat: rpc.declare({
+		object: 'luci.wol',
+		method: 'stat',
+		params: [ ],
+		expect: { }
+	}),
+
+	callExec: rpc.declare({
+		object: 'luci.wol',
+		method: 'exec',
+		params: [ 'name', 'args' ],
+		expect: { }
+	}),
 
 	callHostHints: rpc.declare({
 		object: 'luci-rpc',
@@ -19,17 +36,15 @@ return view.extend({
 
 	load: function() {
 		return Promise.all([
-			L.resolveDefault(fs.stat('/usr/bin/etherwake')),
-			L.resolveDefault(fs.stat('/usr/bin/wol')),
+			L.resolveDefault(this.callStat()),
 			this.callHostHints(),
 			uci.load('etherwake')
 		]);
 	},
 
-	render: function(data) {
-		var has_ewk = data[0],
-		    has_wol = data[1],
-		    hosts = data[2],
+	render([stat, hosts]) {
+			var has_ewk = stat && stat.etherwake,
+				has_wol = stat && stat.wakeonlan,
 		    m, s, o;
 
 		this.formdata.has_ewk = has_ewk;
@@ -44,8 +59,8 @@ return view.extend({
 			o = s.option(form.ListValue, 'executable', _('WoL program'),
 				_('Sometimes only one of the two tools works. If one fails, try the other one'));
 
-			o.value('/usr/bin/etherwake', 'Etherwake');
-			o.value('/usr/bin/wol', 'WoL');
+			o.value(ETHERWAKE_BIN, 'Etherwake');
+			o.value(WAKEONLAN_BIN, 'Wakeonlan');
 		}
 
 		if (has_ewk) {
@@ -67,7 +82,7 @@ return view.extend({
 			});
 
 			if (has_wol)
-				o.depends('executable', '/usr/bin/etherwake');
+				o.depends('executable', ETHERWAKE_BIN);
 		}
 
 		o = s.option(form.Value, 'mac', _('Host to wake up'),
@@ -88,7 +103,7 @@ return view.extend({
 			o = s.option(form.Flag, 'broadcast', _('Send to broadcast address'));
 
 			if (has_wol)
-				o.depends('executable', '/usr/bin/etherwake');
+				o.depends('executable', ETHERWAKE_BIN);
 		}
 
 		return m.render();
@@ -96,16 +111,17 @@ return view.extend({
 
 	handleWakeup: function(ev) {
 		var map = document.querySelector('#maincontent .cbi-map'),
-		    data = this.formdata;
+		    data = this.formdata,
+		    self = this;
 
 		return dom.callClassMethod(map, 'save').then(function() {
 			if (!data.wol.mac)
 				return alert(_('No target host specified!'));
 
-			var bin = data.executable || (data.has_ewk ? '/usr/bin/etherwake' : '/usr/bin/wol'),
+			var bin = data.wol.executable || (data.has_ewk ? ETHERWAKE_BIN : WAKEONLAN_BIN),
 			    args = [];
 
-			if (bin == '/usr/bin/etherwake') {
+			if (bin == ETHERWAKE_BIN) {
 				args.push('-D', '-i', data.wol.iface);
 
 				if (data.wol.broadcast == '1')
@@ -114,16 +130,16 @@ return view.extend({
 				args.push(data.wol.mac);
 			}
 			else {
-				args.push('-v', data.wol.mac);
+				args.push(data.wol.mac);
 			}
 
 			ui.showModal(_('Waking host'), [
 				E('p', { 'class': 'spinning' }, [ _('Starting WoL utility…') ])
 			]);
-
-			return fs.exec(bin, args).then(function(res) {
+			
+			return self.callExec(bin, args).then(function(res) {
 				ui.showModal(_('Waking host'), [
-					res.stderr ? E('p', [ res.stdout ]) : '',
+					res.stdout ? E('p', [ res.stdout ]) : '',
 					res.stderr ? E('pre', [ res.stderr ]) : '',
 					E('div', { 'class': 'right' }, [
 						E('button', {
