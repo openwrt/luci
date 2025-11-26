@@ -611,14 +611,14 @@ return view.extend({
 		o = s.taboption('general', form.Value, 'loglevel',
 			_('Log level'),
 			_('Log level of the <code>odhcpd</code> daemon.'));
-		o.value('0', 'Emergency');
-		o.value('1', 'Alert');
-		o.value('2', 'Critical');
-		o.value('3', 'Error');
-		o.value('4', 'Warning');
-		o.value('5', 'Notice');
-		o.value('6', 'Info');
-		o.value('7', 'Debug');
+		o.value('0', _('Emergency'));
+		o.value('1', _('Alert'));
+		o.value('2', _('Critical'));
+		o.value('3', _('Error'));
+		o.value('4', _('Warning'));
+		o.value('5', _('Notice'));
+		o.value('6', _('Info'));
+		o.value('7', _('Debug'));
 		// End general
 
 		// Begin pxe6
