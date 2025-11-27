@@ -8,15 +8,16 @@
 
 return view.extend({
 	handleCommand: function(exec, args) {
-		var buttons = document.querySelectorAll('.diag-action > .cbi-button');
+		var buttons = document.querySelectorAll('.diag-action > .cbi-button'),
+			out = document.querySelector('textarea');
 
 		for (var i = 0; i < buttons.length; i++)
 			buttons[i].setAttribute('disabled', 'true');
 
-		return fs.exec(exec, args).then(function(res) {
-			var out = document.querySelector('textarea');
-
-			dom.content(out, [ res.stdout || '', res.stderr || '' ]);
+		return fs.exec_direct(exec, args, 'text', false, true, function(ev) {
+			out.textContent = ev.target.response;
+		}).then(function(res) {
+			out.textContent = res;
 		}).catch(function(err) {
 			ui.addNotification(null, E('p', [ err ]))
 		}).finally(function() {
