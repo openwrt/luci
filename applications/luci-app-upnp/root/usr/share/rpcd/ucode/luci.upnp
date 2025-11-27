@@ -1,3 +1,5 @@
+#!/usr/bin/env ucode
+
 // Copyright 2022 Jo-Philipp Wich <jo@mein.io>
 // Licensed to the public under the Apache License 2.0.
 
@@ -7,47 +9,43 @@ import { access, open, popen } from 'fs';
 import { connect } from 'ubus';
 import { cursor } from 'uci';
 
-// Establish ubus connection persistently outside of the call handler scope to
-// prevent premature GC'ing. Can be moved into `get_status` callback once
-// https://github.com/jow-/ucode/commit/a58fe4709f661b5f28e26701ea8638efccf5aeb6
-// is merged.
-const ubus = connect();
+const uci = cursor();
+const leasefilepath = uci.get('upnpd', 'config', 'upnp_lease_file') || '/run/miniupnpd.leases';
 
 const methods = {
 	get_status: {
 		call: function(req) {
-			const uci = cursor();
-
+			const ubus = connect();
 			const rules = [];
 			const leases = [];
-
-			const leasefile = open(uci.get('upnpd', 'config', 'upnp_lease_file'), 'r');
-
+			const leasefile = open(leasefilepath, 'r');
 			if (leasefile) {
 				for (let line = leasefile.read('line'); length(line); line = leasefile.read('line')) {
 					const record = split(line, ':', 6);
-
 					if (length(record) == 6) {
+						let descr = trim(record[5]);
+						let m = match(descr, /^PCP ([A-Z]+) ([0-9a-f]{24})$/);
+						if (m) descr = 'PCP (' + m[1] + ' nonce ' + m[2] + ')';
+						else if (match(descr, /^NAT-PMP \d+ \w+$/)) descr = 'NAT-PMP';
+						else if (match(descr, /^IGD2 pinhole$/)) descr = 'UPnP IGDv2 IPv6';
+						else if (!match(descr, /^UPnP IGD/)) descr = 'UPnP IGD / ' + descr;
 						push(leases, {
 							proto: uc(record[0]),
 							extport: +record[1],
 							intaddr: arrtoip(iptoarr(record[2])),
 							intport: +record[3],
 							expires: record[4] - timelocal(localtime()),
-							description: trim(record[5])
+							descr: descr
 						});
 					}
 				}
-
 				leasefile.close();
 			}
 
 			const ipt = popen('iptables --line-numbers -t nat -xnvL MINIUPNPD 2>/dev/null');
-
 			if (ipt) {
 				for (let line = ipt.read('line'); length(line); line = ipt.read('line')) {
 					let m = match(line, /^([0-9]+)\s+([a-z]+).+dpt:([0-9]+) to:(\S+):([0-9]+)/);
-
 					if (m) {
 						push(rules, {
 							num: m[1],
@@ -59,16 +57,13 @@ const methods = {
 						});
 					}
 				}
-
 				ipt.close();
 			}
 
 			const nft = popen('nft --handle list chain inet fw4 upnp_prerouting 2>/dev/null');
-
 			if (nft) {
 				for (let line = nft.read('line'), num = 1; length(line); line = nft.read('line')) {
-					let m = match(line, /^\t\tiif ".+" @nh,72,8 (0x6|0x11) th dport ([0-9]+) dnat ip to ([0-9.]+):([0-9]+)/);
-
+					let m = match(line, /^\t\tiif ".+" @nh,72,8 (0x6|0x11) th dport ([0-9]+).* dnat ip to ([0-9.]+):([0-9]+)/);
 					if (m) {
 						push(rules, {
 							num: `${num}`,
@@ -78,11 +73,9 @@ const methods = {
 							intport: +m[4],
 							descr: ''
 						});
-
 						num++;
 					}
 				}
-
 				nft.close();
 			}
 
@@ -90,16 +83,14 @@ const methods = {
 				for (let rule in rules) {
 					for (let lease in leases) {
 						if (lease.proto == rule.proto &&
-						    lease.intaddr == rule.intaddr &&
-						    lease.intport == rule.intport &&
-						    lease.extport == rule.extport)
-						{
-							rule.descr = lease.description;
+							lease.intaddr == rule.intaddr &&
+							lease.intport == rule.intport &&
+							lease.extport == rule.extport) {
+							rule.descr = lease.descr;
 							rule.expires = lease.expires;
 							break;
 						}
 					}
-
 					for (let mac, hint in host_hints) {
 						if (rule.intaddr in hint.ipaddrs) {
 							rule.host_hint = hint.name;
@@ -107,7 +98,6 @@ const methods = {
 						}
 					}
 				}
-
 				req.reply({ rules });
 			});
 		}
@@ -117,19 +107,13 @@ const methods = {
 		args: { token: 'token' },
 		call: function(req) {
 			const idx = +req.args?.token;
-
 			if (idx > 0) {
-				const uci = cursor();
-				const leasefile = uci.get('upnpd', 'config', 'upnp_lease_file');
-
-				if (access(leasefile)) {
-					system(['sed', '-i', '-e', `${idx}d`, leasefile]);
+				if (access(leasefilepath)) {
+					system(['sed', '-i', '-e', `${idx}d`, leasefilepath]);
 					system(['/etc/init.d/miniupnpd', 'restart']);
 				}
-
 				return { result: 'OK' };
 			}
-
 			return { result: 'Bad request' };
 		}
 	}
