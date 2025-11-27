@@ -2531,7 +2531,7 @@
 				sysFeatures = Session.getLocalData('features');
 
 			if (!this.isObject(sysFeatures)) {
-				sysFeatures = classes.rpc.declare({
+				return classes.rpc.declare({
 					object: 'luci',
 					method: 'getFeatures',
 					expect: { '': {} }
