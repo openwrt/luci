@@ -424,7 +424,7 @@ return view.extend({
 		o.modalonly = true;
 		o.optional = true;
 
-		o = s.option(form.ListValue, "use_http1", _("Use HTTP/1"));
+		o = s.option(form.ListValue, "force_http1", _("Use HTTP/1"));
 		o.modalonly = true;
 		o.optional = true;
 		o.rmempty = true;
@@ -434,7 +434,7 @@ return view.extend({
 
 		o = s.option(
 			form.ListValue,
-			"use_ipv6_resolvers_only",
+			"force_ipv6_resolvers",
 			_("Use IPv6 resolvers")
 		);
 		o.modalonly = true;
