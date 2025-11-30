@@ -466,7 +466,7 @@ lease_open(void)
 		add_leasefile("/tmp/dhcp.leases", false);
 
 	if (!find_leasefiles(uci, true))
-		add_leasefile("/tmp/hosts/odhcpd", true);
+		add_leasefile("/tmp/odhcpd.leases", true);
 
 	uci_free_context(uci);
 }
