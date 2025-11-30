@@ -36,13 +36,13 @@ const callUfpList = rpc.declare({
 const CBILeaseStatus = form.DummyValue.extend({
 	renderWidget(section_id, option_id, cfgvalue) {
 		return E([
-			E('h4', _('Active DHCP Leases')),
+			E('h4', _('Active DHCPv4 Leases')),
 			E('table', { 'id': 'lease_status_table', 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Hostname')),
 					E('th', { 'class': 'th' }, _('IPv4 address')),
 					E('th', { 'class': 'th' }, _('MAC address')),
-					E('th', { 'class': 'th' }, _('Lease time remaining'))
+					E('th', { 'class': 'th' }, _('Remaining time'))
 				]),
 				E('tr', { 'class': 'tr placeholder' }, [
 					E('td', { 'class': 'td' }, E('em', _('Collecting data...')))
@@ -62,7 +62,7 @@ const CBILease6Status = form.DummyValue.extend({
 					E('th', { 'class': 'th' }, _('IPv6 addresses')),
 					E('th', { 'class': 'th' }, _('DUID')),
 					E('th', { 'class': 'th' }, _('IAID')),
-					E('th', { 'class': 'th' }, _('Lease time remaining'))
+					E('th', { 'class': 'th' }, _('Remaining time'))
 				]),
 				E('tr', { 'class': 'tr placeholder' }, [
 					E('td', { 'class': 'td' }, E('em', _('Collecting data...')))
