@@ -43,6 +43,8 @@ const CBILeaseStatus = form.DummyValue.extend({
 					E('th', { 'class': 'th' }, _('Hostname')),
 					E('th', { 'class': 'th' }, _('IPv4 address')),
 					E('th', { 'class': 'th' }, _('MAC address')),
+					E('th', { 'class': 'th' }, _('DUID')),
+					E('th', { 'class': 'th' }, _('IAID')),
 					E('th', { 'class': 'th' }, _('Remaining time'))
 				]),
 				E('tr', { 'class': 'tr placeholder' }, [
@@ -255,6 +257,8 @@ return view.extend({
 								host || '-',
 								lease.ipaddr,
 								vendor ? lease.macaddr + vendor : lease.macaddr,
+								lease.duid || '-',
+								lease.iaid || '-',
 								exp
 							];
 
