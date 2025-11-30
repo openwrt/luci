@@ -329,7 +329,7 @@ duid2ea(const char *duid)
 	return &ea;
 }
 
-static void strip_colon_duid(char *str) {
+static void strip_colon(char *str) {
 	char *pr = str, *pw = str;
 
 	while (*pr) {
@@ -483,39 +483,40 @@ lease_next(void)
 		memset(&e, 0, sizeof(e));
 
 		while (fgets(e.buf, sizeof(e.buf), lease_state.files[lease_state.off].fh)) {
+			ea = NULL;
+
 			if (lease_state.files[lease_state.off].odhcpd) {
 				strtok(e.buf, " \t\n"); /* # */
 				strtok(NULL, " \t\n"); /* iface */
 
-				e.duid = strtok(NULL, " \t\n"); /* duid */
+				e.duid = strtok(NULL, " \t\n"); /* duid or MAC */
 				if (!e.duid)
 					continue;
 
-				e.iaid = strtok(NULL, " \t\n"); /* iaid */
+				e.iaid = strtok(NULL, " \t\n"); /* iaid or "ipv4"*/
 				if (!e.iaid)
 					continue;
 
 				if (!strcmp(e.iaid, "ipv4")) {
 					e.af = AF_INET;
 					e.mask = 32;
-				}
-				else {
+					ea = ether_aton(e.duid);
+					e.duid = NULL;
+					e.iaid = NULL;
+				} else {
 					e.af = AF_INET6;
 					e.mask = 128;
 				}
 
 				e.hostname = strtok(NULL, " \t\n"); /* name */
-
 				if (!e.hostname)
 					continue;
 
 				p = strtok(NULL, " \t\n"); /* ts */
-
 				if (!p)
 					continue;
 
 				n = strtol(p, NULL, 10);
-
 				if (n > lease_state.now)
 					e.expire = n - lease_state.now;
 				else if (n >= 0)
@@ -526,12 +527,10 @@ lease_next(void)
 				strtok(NULL, " \t\n"); /* id */
 
 				p = strtok(NULL, " \t\n"); /* length */
-
 				if (!p)
 					continue;
 
 				n = atoi(p); /* length */
-
 				if (n != 0)
 					e.mask = n;
 
@@ -542,7 +541,8 @@ lease_next(void)
 						e.n_addr++;
 				}
 
-				ea = duid2ea(e.duid);
+				if (!ea)
+					ea = duid2ea(e.duid);
 
 				if (ea)
 					e.mac = *ea;
@@ -550,10 +550,9 @@ lease_next(void)
 				if (!strcmp(e.hostname, "-"))
 					e.hostname = NULL;
 
-				if (!strcmp(e.duid, "-"))
+				if (e.duid && !strcmp(e.duid, "-"))
 					e.duid = NULL;
-			}
-			else {
+			} else {
 				p = strtok(e.buf, " \t\n");
 
 				if (!p)
@@ -601,13 +600,26 @@ lease_next(void)
 				if (!e.hostname || !e.duid)
 					continue;
 
-				strip_colon_duid(e.duid);
-
 				if (!strcmp(e.hostname, "*"))
 					e.hostname = NULL;
 
-				if (!strcmp(e.duid, "*"))
+				if (e.af == AF_INET && strlen(e.duid) > 15 && !strncmp(e.duid, "ff:", 3)) {
+					/* ff:<iaid-4-bytes>:<duid-x-bytes...> */
+					e.duid[14] = '\0';
+					e.iaid = &e.duid[3];
+					strip_colon(e.iaid);
+					e.duid = &e.duid[15];
+					strip_colon(e.duid);
+				} else if(e.af == AF_INET && strlen(e.duid) == 20 && !strncmp(e.duid, "01:", 3)) {
+					/* 01:<mac-addr-6-bytes> */
+					if (!ea)
+						ea = ether_aton(&e.duid[3]);
 					e.duid = NULL;
+				} else if (!strcmp(e.duid, "*")) {
+					e.duid = NULL;
+				} else {
+					strip_colon(e.duid);
+				}
 
 				if (!ea && e.duid)
 					ea = duid2ea(e.duid);
