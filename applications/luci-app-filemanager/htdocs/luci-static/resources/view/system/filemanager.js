@@ -292,7 +292,8 @@ function symbolicToNumeric(permissions) {
 // Function to get a list of files in a directory
 function getFileList(path) {
 	return fs.exec('/bin/ls', ['-lA', '--full-time', path]).then(function(res) {
-		if (res.code !== 0) {
+		// If there is an error and no any info about files, reject
+		if (res.code !== 0 && (!res.stdout || !res.stdout.trim())) {
 			var errorMessage = res.stderr ? res.stderr.trim() : 'Unknown error';
 			return Promise.reject(new Error('Failed to list directory: ' + errorMessage));
 		}
@@ -301,19 +302,21 @@ function getFileList(path) {
 		var files = [];
 		lines.forEach(function(line) {
 			if (line.startsWith('total') || !line.trim()) return;
+			// Ignore ls error lines (common in /proc)
+    		if (line.startsWith('ls:')) return;
 			// Parse the output line from 'ls' command
-			var parts = line.match(/^([\-dl])[rwx\-]{2}[rwx\-Ss]{1}[rwx\-]{2}[rwx\-Ss]{1}[rwx\-]{2}[rwx\-Tt]{1}\s+\d+\s+(\S+)\s+(\S+)\s+(\d+)\s+([\d\-]+\s+\d{2}:\d{2}:\d{2}(?:\.\d+)?\s+[+-]\d{4})\s+(.+)$/);
+			var parts = line.match(/^([\-dlpscbD])([rwxstST-]{9})\s+\d+\s+(\S+)\s+(\S+)\s+(\d+(?:,\s*\d+)?)\s+([\d]{4}-[\d]{2}-[\d]{2}\s+\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?\s+[+-]\d{4})\s+(.+)$/);
 			if (!parts || parts.length < 7) {
 				console.warn('Failed to parse line:', line);
 				return;
 			}
 			var typeChar = parts[1];
 			var permissions = line.substring(0, 10);
-			var owner = parts[2];
-			var group = parts[3];
-			var size = parseInt(parts[4], 10);
-			var dateStr = parts[5];
-			var name = parts[6];
+			var owner = parts[3];
+			var group = parts[4];
+			var size = parseInt(parts[5], 10);
+			var dateStr = parts[6];
+			var name = parts[7];
 			var type = '';
 			var target = null;
 			if (typeChar === 'd') {
@@ -321,10 +324,24 @@ function getFileList(path) {
 			} else if (typeChar === '-') {
 				type = 'file'; // File
 			} else if (typeChar === 'l') {
-				type = 'symlink'; // Symbolic link
-				var linkParts = name.split(' -> ');
-				name = linkParts[0];
-				target = linkParts[1] || '';
+				type = 'symlink';
+				const idx = name.indexOf(' -> ');
+				if (idx >= 0) {
+					target = name.slice(idx + 4);
+					name = name.slice(0, idx);
+				}
+				else {
+					// SYMLINK WITHOUT TARGET (case /proc/<pid>/exe)
+					target = null;
+				}
+			} else if (typeChar === 'c') {
+				type = 'character device'; // Character device
+			} else if (typeChar === 'b') {
+				type = 'block device'; // Block device
+			} else if (typeChar === 'p') {
+				type = 'named pipe'; // Named pipe
+			} else if (typeChar === 's') {
+				type = 'socket'; // Socket
 			} else {
 				type = 'unknown'; // Unknown type
 			}
@@ -1743,7 +1760,7 @@ return view.extend({
 						'class': 'size-unit'
 					}, self.getFormattedSize(file.size).unit)]), E('td', {}, new Date(file.mtime * 1000).toLocaleString()), actionTd]);
 				} else if (file.type === 'symlink') {
-					var symlinkName = file.name + ' -> ' + file.target;
+					var symlinkName = file.target ? (file.name + ' -> ' + file.target) : file.name;
 					var symlinkSize = (file.size === -1) ? -1 : file.size;
 					var sizeContent;
 					if (symlinkSize >= 0) {
@@ -1786,14 +1803,14 @@ return view.extend({
 				} else {
 					listItem = E('tr', {
 						'data-file-path': joinPath(path, file.name),
-						'data-file-type': 'unknown'
-					}, [E('td', {}, file.name), E('td', {}, _('Unknown')), E('td', {
+						'data-file-type': file.type
+					}, [E('td', {}, file.name), E('td', {}, file.type.charAt(0).toUpperCase() + file.type.slice(1)), E('td', {
 						'class': 'size-cell'
 					}, [E('span', {
 						'class': 'size-number'
 					}, '-'), E('span', {
 						'class': 'size-unit'
-					}, '')]), E('td', {}, '-'), E('td', {}, '-')]);
+					}, '')]), E('td', {}, new Date(file.mtime * 1000).toLocaleString()), actionTd]);
 				}
 				if (listItem && listItem instanceof Node) {
 					fileList.appendChild(listItem);
@@ -2315,6 +2332,10 @@ return view.extend({
 	handleSymlinkClick: function(linkPath, targetPath, mode) {
 		// Navigate to the target of the symbolic link
 		var self = this;
+		if (!targetPath) {
+			pop(null, E('p', _('The symlink does not have a valid target.')), 'error');
+			return;
+		}
 		if (!targetPath.startsWith('/')) {
 			targetPath = joinPath(currentPath, targetPath);
 		}
