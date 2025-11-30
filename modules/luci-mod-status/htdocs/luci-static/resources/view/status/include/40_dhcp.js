@@ -106,6 +106,7 @@ return baseclass.extend({
 
 		const table = E('table', { 'id': 'status_leases', 'class': 'table lases' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
+				L.hasSystemFeature('odhcpd', 'dhcpv4') ? E('th', { 'class': 'th' }, _('Interface')) : E([]),
 				E('th', { 'class': 'th' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('IPv4 address')),
 				E('th', { 'class': 'th' }, _('MAC address')),
@@ -145,6 +146,9 @@ return baseclass.extend({
 				exp,
 			];
 
+			if (L.hasSystemFeature('odhcpd', 'dhcpv4'))
+				columns.unshift(lease.interface || '-');
+
 			if (!isReadonlyView && lease.macaddr != null) {
 				columns.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
@@ -159,6 +163,7 @@ return baseclass.extend({
 
 		const table6 = E('table', { 'id': 'status_leases6', 'class': 'table leases6' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
+				L.hasSystemFeature('odhcpd', 'dhcpv6') ? E('th', { 'class': 'th' }, _('Interface')) : E([]),
 				E('th', { 'class': 'th' }, _('Host')),
 				E('th', { 'class': 'th' }, _('IPv6 addresses')),
 				E('th', { 'class': 'th' }, _('DUID')),
@@ -207,6 +212,9 @@ return baseclass.extend({
 				iaid || '-',
 				exp
 			];
+
+			if (L.hasSystemFeature('odhcpd', 'dhcpv6'))
+				columns.unshift(lease.interface || '-');
 
 			if (!isReadonlyView && lease.duid) {
 				columns.push(E('button', {
