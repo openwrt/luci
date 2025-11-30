@@ -111,6 +111,7 @@ return baseclass.extend({
 				E('th', { 'class': 'th' }, _('IPv4 address')),
 				E('th', { 'class': 'th' }, _('MAC address')),
 				E('th', { 'class': 'th' }, _('DUID')),
+				E('th', { 'class': 'th' }, _('IAID')),
 				E('th', { 'class': 'th' }, _('Remaining time')),
 				isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
@@ -142,7 +143,8 @@ return baseclass.extend({
 				host || '-',
 				lease.ipaddr,
 				vendor ? lease.macaddr + ` (${vendor})` : lease.macaddr,
-				lease.duid ? lease.duid : null,
+				lease.duid || '-',
+				lease.iaid || '-',
 				exp,
 			];
 
