@@ -353,6 +353,7 @@ struct lease_entry {
 	char buf[512];
 	int32_t expire;
 	struct ether_addr mac;
+	char *iface;
 	char *hostname;
 	char *duid;
 	char *iaid;
@@ -486,8 +487,13 @@ lease_next(void)
 			ea = NULL;
 
 			if (lease_state.files[lease_state.off].odhcpd) {
-				strtok(e.buf, " \t\n"); /* # */
-				strtok(NULL, " \t\n"); /* iface */
+				p = strtok(e.buf, " \t\n"); /* # */
+				if (!p || strcmp(p, "#"))
+					continue;
+
+				e.iface = strtok(NULL, " \t\n"); /* iface */
+				if (!e.iface)
+					continue;
 
 				e.duid = strtok(NULL, " \t\n"); /* duid or MAC */
 				if (!e.duid)
@@ -1859,6 +1865,9 @@ rpc_luci_get_duid_hints(struct ubus_context *ctx, struct ubus_object *obj,
 
 		o = blobmsg_open_table(&blob, key);
 
+		if (lease->iface)
+			blobmsg_add_string(&blob, "interface", lease->iface);
+
 		blobmsg_add_string(&blob, "duid", lease->duid);
 
 		if (lease->iaid)
@@ -1971,6 +1980,9 @@ rpc_luci_get_dhcp_leases(struct ubus_context *ctx, struct ubus_object *obj,
 				blobmsg_add_u8(&blob, "expires", 0);
 			else
 				blobmsg_add_u32(&blob, "expires", lease->expire);
+
+			if (lease->iface)
+				blobmsg_add_string(&blob, "interface", lease->iface);
 
 			if (lease->hostname)
 				blobmsg_add_string(&blob, "hostname", lease->hostname);
