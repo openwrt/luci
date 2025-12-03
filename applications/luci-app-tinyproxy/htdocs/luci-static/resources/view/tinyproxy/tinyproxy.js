@@ -116,7 +116,7 @@ return view.extend({
 		o.placeholder = '0.0.0.0';
 
 
-		o = s.taboption('general', form.Value, 'Bind', _('Bind address'),
+		o = s.taboption('general', form.DynamicList, 'Bind', _('Bind address'),
 			_('Specifies the address Tinyproxy binds to for outbound forwarded requests'));
 
 		o.optional = true;
