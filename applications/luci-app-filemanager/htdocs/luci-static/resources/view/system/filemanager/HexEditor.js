@@ -27,295 +27,295 @@ var hexeditCssContent = `
 /* Hex Editor CSS Styles */
 .hexview:focus,
 .textview:focus {
-    outline: none;
-    box-shadow: none;
-    border-right: 2px solid var(--clr-border); 
+	outline: none;
+	box-shadow: none;
+	border-right: 2px solid var(--clr-border); 
 }
 :root {
-  --span-spacing: 0.25ch;
-  --clr-background: #f5f5f5;
-  --clr-selected: #c9daf8;
-  --clr-selected-editing: #6d9eeb;
-  --clr-non-printable: #999999;
-  --clr-border: #000000;
-  --clr-offset: #666666;
-  --clr-header: #333333;
-  --clr-highlight: yellow; /* Unified highlight color for matches */
-  --clr-cursor-active: blue; /* Active cursor base color */
-  --clr-cursor-passive: lightblue; /* Passive cursor color */
-  --animation-duration: 1s; /* Duration for blinking animation */
+	--span-spacing: 0.25ch;
+	--clr-background: #f5f5f5;
+	--clr-selected: #c9daf8;
+	--clr-selected-editing: #6d9eeb;
+	--clr-non-printable: #999999;
+	--clr-border: #000000;
+	--clr-offset: #666666;
+	--clr-header: #333333;
+	--clr-highlight: yellow; /* Unified highlight color for matches */
+	--clr-cursor-active: blue; /* Active cursor base color */
+	--clr-cursor-passive: lightblue; /* Passive cursor color */
+	--animation-duration: 1s; /* Duration for blinking animation */
 }
 
 /* Apply box-sizing to all elements */
 .hexedit *,
 .hexedit *::before,
 .hexedit *::after {
-  box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 /* Main hex editor container */
 .hexedit {
-  display: flex;
-  flex-direction: column;
-  flex: 1; /* Allow hexedit to expand */
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 1.2em;
-  background-color: var(--clr-background);
-  border: 1px solid var(--clr-border);
-  width: 100%;
+	display: flex;
+	flex-direction: column;
+	flex: 1; /* Allow hexedit to expand */
+	font-family: monospace;
+	font-size: 14px;
+	line-height: 1.2em;
+	background-color: var(--clr-background);
+	border: 1px solid var(--clr-border);
+	width: 100%;
 }
 
 .hexedit:focus {
-  outline: none;
+	outline: none;
 }
 
 /* Headers container */
 .hexedit-headers {
-  display: flex;
-  background-color: var(--clr-background);
-  border-bottom: 2px solid var(--clr-border);
-  font-family: monospace;
+	display: flex;
+	background-color: var(--clr-background);
+	border-bottom: 2px solid var(--clr-border);
+	font-family: monospace;
 }
 
 /* Header styles */
 .offsets-header,
 .hexview-header,
 .textview-header {
-  display: flex;
-  align-items: center;
-  padding: 5px;
-  box-sizing: border-box;
-  font-weight: bold;
-  color: var(--clr-header);
-  border-right: 2px solid var(--clr-border);
+	display: flex;
+	align-items: center;
+	padding: 5px;
+	box-sizing: border-box;
+	font-weight: bold;
+	color: var(--clr-header);
+	border-right: 2px solid var(--clr-border);
 }
 
 .offsets-header {
-  width: 100px; /* Ensure alignment with .offsets */
-  text-align: left;
+	width: 100px; /* Ensure alignment with .offsets */
+	text-align: left;
 }
 
 .hexview-header {
-  width: calc(16 * 2ch + 20 * var(--span-spacing)); /* Increased width to match content */
-  display: flex;
+	width: calc(16 * 2ch + 20 * var(--span-spacing)); /* Increased width to match content */
+	display: flex;
 }
 
 .hexview-header span {
-  width: 2ch;
-  margin-right: var(--span-spacing);
-  text-align: center;
+	width: 2ch;
+	margin-right: var(--span-spacing);
+	text-align: center;
 }
 
 .hexview-header span:last-child {
-  margin-right: 0;
+	margin-right: 0;
 }
 
 .textview-header {
-  flex: 1;
-  margin-left: 10px;
-  text-align: left;
+	flex: 1;
+	margin-left: 10px;
+	text-align: left;
 }
 
 /* Content container */
 .hexedit-content {
-  display: flex;
-  height: 100%;
-  flex: 1 1 auto;
-  overflow: auto;
-  position: relative;
-  border-top: 2px solid var(--clr-border);
+	display: flex;
+	height: 100%;
+	flex: 1 1 auto;
+	overflow: auto;
+	position: relative;
+	border-top: 2px solid var(--clr-border);
 }
 
 /* Columns */
 .offsets,
 .hexview,
 .textview {
-  flex-shrink: 0;
-  display: block;
-  padding: 5px;
-  position: relative;
-  border-right: 2px solid var(--clr-border);
+	flex-shrink: 0;
+	display: block;
+	padding: 5px;
+	position: relative;
+	border-right: 2px solid var(--clr-border);
 }
 
 .offsets {
-  width: 100px; /* Increased width to match content */
-  display: flex;
-  flex-direction: column;
-  text-align: left;
+	width: 100px; /* Increased width to match content */
+	display: flex;
+	flex-direction: column;
+	text-align: left;
 }
 
 .offsets span {
-  display: block;
-  height: 1.2em;
+	display: block;
+	height: 1.2em;
 }
 
 .hexview {
-  width: calc(16 * 2ch + 20 * var(--span-spacing)); /* Increased width to match content */
-  text-align: center;
+	width: calc(16 * 2ch + 20 * var(--span-spacing)); /* Increased width to match content */
+	text-align: center;
 }
 
 .textview {
-  flex: 1;
-  margin-left: 10px;
-  text-align: left;
-  border-right: none;
+	flex: 1;
+	margin-left: 10px;
+	text-align: left;
+	border-right: none;
 }
 
 /* Line containers */
 .hex-line,
 .text-line {
-  display: flex;
-  height: 1.2em;
+	display: flex;
+	height: 1.2em;
 }
 
 /* Byte spans */
 .hex-line span,
 .text-line span {
-  width: 2ch;
-  margin-right: var(--span-spacing);
-  text-align: center;
-  display: inline-block;
-  cursor: default;
+	width: 2ch;
+	margin-right: var(--span-spacing);
+	text-align: center;
+	display: inline-block;
+	cursor: default;
 }
 
 .hex-line span:last-child,
 .hexview-header span:last-child,
 .text-line span:last-child {
-  margin-right: 0;
+	margin-right: 0;
 }
 
 /* Selections */
 .selected {
-  background-color: var(--clr-selected);
+	background-color: var(--clr-selected);
 }
 
 .selected-editing {
-  background-color: var(--clr-selected-editing);
+	background-color: var(--clr-selected-editing);
 }
 
 .non-printable {
-  color: var(--clr-non-printable);
+	color: var(--clr-non-printable);
 }
 
 /* Remove individual scrollbars */
 .offsets::-webkit-scrollbar,
 .hexview::-webkit-scrollbar,
 .textview::-webkit-scrollbar {
-  display: none;
+	display: none;
 }
 
 .offsets,
 .hexview,
 .textview {
-  scrollbar-width: none; /* For Firefox */
+	scrollbar-width: none; /* For Firefox */
 }
 
 /* Adjust overall layout */
 .hexedit .offsets,
 .hexedit .hexview,
 .hexedit .textview {
-  border-right: 2px solid var(--clr-border);
+	border-right: 2px solid var(--clr-border);
 }
 
 .hexedit .textview {
-  border-right: none;
+	border-right: none;
 }
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
-  .hexedit {
-    font-size: 12px;
-  }
+	.hexedit {
+	font-size: 12px;
+	}
 
-  .offsets {
-    width: 120px; /* Adjust for smaller screens */
-  }
+	.offsets {
+	width: 120px; /* Adjust for smaller screens */
+	}
 
-  .hexview {
-    width: calc(16 * 2ch + 20 * var(--span-spacing));
-  }
+	.hexview {
+	width: calc(16 * 2ch + 20 * var(--span-spacing));
+	}
 }
 
 /* Search container styles */
 .hexedit-search-container {
-    padding: 10px;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid #ccc; /* Border to separate from headers */
-    display: flex;
-    flex-direction: column; /* Stack search groups vertically */
-    gap: 10px;
-    width: 100%;
-    box-sizing: border-box;
+	padding: 10px;
+	background-color: #f9f9f9;
+	border-bottom: 1px solid #ccc; /* Border to separate from headers */
+	display: flex;
+	flex-direction: column; /* Stack search groups vertically */
+	gap: 10px;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 /* Search group styles */
 .hexedit-search-group {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    width: 100%;
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	width: 100%;
 }
 
 /* Search input fields */
 .hexedit-search-input {
-    flex: 1;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 14px;
+	flex: 1;
+	padding: 8px;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	font-size: 14px;
 }
 
 /* Search status fields */
 .hexedit-search-status {
-    width: 50px;
-    text-align: center;
-    font-size: 14px;
-    color: #555;
+	width: 50px;
+	text-align: center;
+	font-size: 14px;
+	color: #555;
 }
 
 /* Find Previous and Next buttons */
 .hexedit-search-button {
-    padding: 8px 12px;
-    cursor: pointer;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
+	padding: 8px 12px;
+	cursor: pointer;
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 4px;
+	font-size: 14px;
+	transition: background-color 0.3s ease;
 }
 
 .hexedit-search-button:hover {
-    background-color: #0056b3;
+	background-color: #0056b3;
 }
 
 /* Highlight search results */
 .search-highlight {
-    background-color: var(--clr-highlight);
+	background-color: var(--clr-highlight);
 }
 
 /* Define keyframes for blinking blue */
 @keyframes blink-blue {
-    0% { background-color: var(--clr-cursor-active); }
-    50% { background-color: white; }
-    100% { background-color: var(--clr-cursor-active); }
+	0% { background-color: var(--clr-cursor-active); }
+	50% { background-color: white; }
+	100% { background-color: var(--clr-cursor-active); }
 }
 
 /* Classes for active view cursor blinking */
 .active-view-cursor {
-    animation: blink-blue var(--animation-duration) infinite;
-    background-color: var(--clr-cursor-active); /* Initial color */
+	animation: blink-blue var(--animation-duration) infinite;
+	background-color: var(--clr-cursor-active); /* Initial color */
 }
 
 /* Classes for passive view cursor highlighting */
 .passive-view-cursor {
-    background-color: var(--clr-cursor-passive);
+	background-color: var(--clr-cursor-passive);
 }
 
 /* Highlighted class to maintain yellow background for matches */
 .highlighted {
-    background-color: var(--clr-highlight);
+	background-color: var(--clr-highlight);
 }
 `;
 
@@ -575,7 +575,7 @@ class HexEditor {
 				pattern = document.getElementById('hexedit-search-regex').value.trim();
 				break;
 			default:
-				console.warn(`Unknown search type: ${searchType}`);
+				// console.warn(`Unknown search type: ${searchType}`);
 				pattern = '';
 				break;
 		}
@@ -588,7 +588,7 @@ class HexEditor {
 		if (!pattern) {
 			// Update status field to 0/0
 			this.updateSearchStatus(searchType, 0, 0);
-			console.log('No search pattern entered.');
+			// console.log('No search pattern entered.');
 			return;
 		}
 
@@ -602,7 +602,7 @@ class HexEditor {
 				this.searchRegex(pattern);
 			}
 		} catch (error) {
-			console.log(`Error during search: ${error.message}`);
+			// console.log(`Error during search: ${error.message}`);
 			// Update status field to 0/0 on error
 			this.updateSearchStatus(searchType, 0, 0);
 			return;
@@ -615,11 +615,11 @@ class HexEditor {
 			this.navigateToMatch(this.currentMatchIndex);
 			// Update status field with actual match count
 			this.updateSearchStatus(searchType, this.currentMatchIndex + 1, this.matches.length);
-			console.log(`Found ${this.matches.length} matches.`);
+			// console.log(`Found ${this.matches.length} matches.`);
 		} else {
 			// Update status field to 0/0 if no matches found
 			this.updateSearchStatus(searchType, 0, 0);
-			console.log('No matches found.');
+			// console.log('No matches found.');
 		}
 	}
 
@@ -654,13 +654,13 @@ class HexEditor {
 		if (this.matches.length === 0) {
 			// Update status field to 0/0 if no matches
 			this.updateSearchStatus(this.currentSearchType, 0, 0);
-			console.log('No matches to navigate.');
+			// console.log('No matches to navigate.');
 			return;
 		}
 
 		// Ensure matchIndex is within bounds
 		if (matchIndex < 0 || matchIndex >= this.matches.length) {
-			console.log('navigateToMatch: matchIndex out of bounds.');
+			// console.log('navigateToMatch: matchIndex out of bounds.');
 			return;
 		}
 
@@ -672,7 +672,7 @@ class HexEditor {
 
 		// Set selected index to the match start
 		this.setSelectedIndex(match.index);
-		console.log(`Navigated to match ${matchIndex + 1} at offset ${match.index.toString(16)}`);
+		// console.log(`Navigated to match ${matchIndex + 1} at offset ${match.index.toString(16)}`);
 
 		// Update status field
 		this.updateSearchStatus(this.currentSearchType, this.currentMatchIndex + 1, this.matches.length);
@@ -697,7 +697,7 @@ class HexEditor {
 				regex.lastIndex++;
 			}
 		}
-		console.log(`searchASCII: Found ${this.matches.length} matches.`);
+		// console.log(`searchASCII: Found ${this.matches.length} matches.`);
 	}
 
 	/**
@@ -733,7 +733,7 @@ class HexEditor {
 				});
 			}
 		}
-		console.log(`searchHEX: Found ${this.matches.length} matches.`);
+		// console.log(`searchHEX: Found ${this.matches.length} matches.`);
 	}
 
 	/**
@@ -757,7 +757,7 @@ class HexEditor {
 				regex.lastIndex++;
 			}
 		}
-		console.log(`searchRegex: Found ${this.matches.length} matches.`);
+		// console.log(`searchRegex: Found ${this.matches.length} matches.`);
 	}
 
 	/**
@@ -772,9 +772,9 @@ class HexEditor {
 		// Calculate new scroll position to ensure the matched line is visible
 		const newScrollTop = Math.max(0, (lineNumber * lineHeight) - ((this.visibleRows / 2) * lineHeight));
 
-		console.log(`scrollToMatch called with index: ${index}`);
-		console.log(`lineNumber: ${lineNumber}`);
-		console.log(`newScrollTop: ${newScrollTop}`);
+		// console.log(`scrollToMatch called with index: ${index}`);
+		// console.log(`lineNumber: ${lineNumber}`);
+		// console.log(`newScrollTop: ${newScrollTop}`);
 
 		// Update the scrollTop property to trigger handleScroll
 		this.hexeditContent.scrollTop = newScrollTop;
@@ -809,7 +809,7 @@ class HexEditor {
 		const containerHeight = this.hexeditContent.clientHeight;
 		this.visibleRows = Math.floor(containerHeight / lineHeight);
 		this.visibleByteCount = this.bytesPerRow * this.visibleRows;
-		console.log(`calculateVisibleRows: visibleRows=${this.visibleRows}, visibleByteCount=${this.visibleByteCount}`);
+		// console.log(`calculateVisibleRows: visibleRows=${this.visibleRows}, visibleByteCount=${this.visibleByteCount}`);
 		this.renderDom(); // Re-render to apply the new rows
 	}
 
@@ -821,7 +821,7 @@ class HexEditor {
 	setData(data) {
 		this.data = data;
 		this.totalRows = Math.ceil(this.data.length / this.bytesPerRow);
-		console.log(`setData: data length=${this.data.length}, totalRows=${this.totalRows}`);
+		// console.log(`setData: data length=${this.data.length}, totalRows=${this.totalRows}`);
 		this.calculateVisibleRows(); // Ensure visibleRows are calculated before rendering
 	}
 
@@ -845,13 +845,13 @@ class HexEditor {
 		const firstVisibleLine = Math.floor(scrollTop / lineHeight);
 		const newStartIndex = firstVisibleLine * this.bytesPerRow;
 
-		console.log(`handleScroll: scrollTop=${scrollTop}, firstVisibleLine=${firstVisibleLine}, newStartIndex=${newStartIndex}`);
+		// console.log(`handleScroll: scrollTop=${scrollTop}, firstVisibleLine=${firstVisibleLine}, newStartIndex=${newStartIndex}`);
 
 		// Update startIndex and re-render the DOM if necessary
 		if (newStartIndex !== this.startIndex) {
 			this.startIndex = newStartIndex;
 			this.renderDom(); // Re-render visible data
-			console.log(`handleScroll: Updated startIndex and rendered DOM.`);
+			// console.log(`handleScroll: Updated startIndex and rendered DOM.`);
 		}
 	}
 
@@ -1163,7 +1163,7 @@ class HexEditor {
 	 */
 	setSelectedIndex(index) {
 		this.selectedIndex = index;
-		console.log(`setSelectedIndex called with index: ${index}`);
+		// console.log(`setSelectedIndex called with index: ${index}`);
 
 		if (index !== null) {
 			// Calculate the line number of the selected index
@@ -1175,13 +1175,13 @@ class HexEditor {
 			const visibleStartLine = Math.floor(this.hexeditContent.scrollTop / lineHeight);
 			const visibleEndLine = visibleStartLine + this.visibleRows;
 
-			console.log(`setSelectedIndex: lineNumber=${lineNumber}, visibleStartLine=${visibleStartLine}, visibleEndLine=${visibleEndLine}`);
+			// console.log(`setSelectedIndex: lineNumber=${lineNumber}, visibleStartLine=${visibleStartLine}, visibleEndLine=${visibleEndLine}`);
 
 			// If the selected line is out of the visible range, update scrollTop
 			if (lineNumber < visibleStartLine || lineNumber >= visibleEndLine) {
 				const newScrollTop = Math.max(0, (lineNumber * lineHeight) - ((this.visibleRows / 2) * lineHeight));
 				this.hexeditContent.scrollTop = newScrollTop;
-				console.log(`setSelectedIndex: Updated scrollTop to ${this.hexeditContent.scrollTop}`);
+				// console.log(`setSelectedIndex: Updated scrollTop to ${this.hexeditContent.scrollTop}`);
 			}
 		}
 
@@ -1298,8 +1298,8 @@ return L.Class.extend({
 	/**
 	 * Initializing new instance of HexEditor.
 	 *
-	 * @param {HTMLElement} hexeditDomObject - DOM элемент для HexEditor.
-	 * @returns {HexEditor} - Новый экземпляр HexEditor.
+	 * @param {HTMLElement} hexeditDomObject - DOM element for HexEditor.
+	 * @returns {HexEditor} - new instance of HexEditor.
 	 */
 	initialize: function(hexeditDomObject) {
 		return new HexEditor(hexeditDomObject);

@@ -13,87 +13,105 @@
  * @returns {string} - The resulting HTML string.
  */
 function parseMarkdown(markdown) {
-	// Split the input into lines
 	const lines = markdown.split('\n');
 	const html = [];
-	let inList = false;
-	let listType = ''; // 'ul' or 'ol'
 
-	lines.forEach((line) => {
-		let trimmedLine = line.trim();
+	// Stack of open lists: [{ type: "ul"|"ol", indent: number }]
+	const listStack = [];
 
-		if (trimmedLine === '') {
-			// Empty line signifies a new paragraph
-			if (inList) {
-				html.push(`</${listType}>`);
-				inList = false;
-				listType = '';
-			}
-			return; // Skip adding empty lines to HTML
+	function closeListsToIndent(indent) {
+		while (listStack.length > 0 && listStack[listStack.length - 1].indent >= indent) {
+			const last = listStack.pop();
+			html.push(`</${last.type}>`);
+		}
+	}
+
+	function openList(type, indent, startNumber = null) {
+		listStack.push({ type, indent });
+		if (type === "ol" && startNumber != null && startNumber !== 1)
+			html.push(`<ol start="${startNumber}">`);
+		else
+			html.push(`<${type}>`);
+	}
+
+	lines.forEach(line => {
+		// Detect indentation level (2 spaces = one indent)
+		const indentSpaces = line.match(/^ */)[0].length;
+		const indent = Math.floor(indentSpaces / 2);
+
+		const trimmed = line.trim();
+		if (trimmed === "") {
+			// Close all lists for blank lines, do NOT output <p>
+			closeListsToIndent(0);
+			return;
 		}
 
-		// Check for headings
-		if (/^###\s+(.*)/.test(trimmedLine)) {
-			const content = trimmedLine.replace(/^###\s+/, '');
-			html.push(`<h3>${escapeHtml(content)}</h3>`);
+		// --------
+		// Headings
+		// --------
+		if (/^###\s+/.test(trimmed)) {
+			closeListsToIndent(0);
+			html.push(`<h3>${escapeHtml(trimmed.replace(/^###\s+/, ''))}</h3>`);
 			return;
-		} else if (/^##\s+(.*)/.test(trimmedLine)) {
-			const content = trimmedLine.replace(/^##\s+/, '');
-			html.push(`<h2>${escapeHtml(content)}</h2>`);
+		}
+		if (/^##\s+/.test(trimmed)) {
+			closeListsToIndent(0);
+			html.push(`<h2>${escapeHtml(trimmed.replace(/^##\s+/, ''))}</h2>`);
 			return;
-		} else if (/^#\s+(.*)/.test(trimmedLine)) {
-			const content = trimmedLine.replace(/^#\s+/, '');
-			html.push(`<h1>${escapeHtml(content)}</h1>`);
+		}
+		if (/^#\s+/.test(trimmed)) {
+			closeListsToIndent(0);
+			html.push(`<h1>${escapeHtml(trimmed.replace(/^#\s+/, ''))}</h1>`);
 			return;
 		}
 
-		// Check for ordered lists
-		let orderedMatch = trimmedLine.match(/^(\d+)\.\s+(.*)/);
-		if (orderedMatch) {
-			const [, number, content] = orderedMatch;
-			if (!inList || listType !== 'ol') {
-				if (inList) {
-					html.push(`</${listType}>`);
-				}
-				html.push('<ol>');
-				inList = true;
-				listType = 'ol';
+		// ------------------------
+		// Ordered lists: "N. text"
+		// ------------------------
+		let mOrdered = trimmed.match(/^(\d+)\.\s+(.*)/);
+		if (mOrdered) {
+			const num = parseInt(mOrdered[1], 10);
+			const content = mOrdered[2];
+
+			const last = listStack[listStack.length - 1];
+
+			if (!last || last.indent < indent || last.type !== "ol") {
+				// NEW ordered list
+				closeListsToIndent(indent);
+				openList("ol", indent, num);
 			}
+			// ELSE: same indent, same list → continue existing OL without closing/opening
+
 			html.push(`<li>${parseInlineMarkdown(escapeHtml(content))}</li>`);
 			return;
 		}
 
-		// Check for unordered lists
-		let unorderedMatch = trimmedLine.match(/^[-*]\s+(.*)/);
-		if (unorderedMatch) {
-			const content = unorderedMatch[1];
-			if (!inList || listType !== 'ul') {
-				if (inList) {
-					html.push(`</${listType}>`);
-				}
-				html.push('<ul>');
-				inList = true;
-				listType = 'ul';
+		// -------------------------------------
+		// Unordered lists: "- text" or "* text"
+		// -------------------------------------
+		let mUnordered = trimmed.match(/^[-*]\s+(.*)/);
+		if (mUnordered) {
+			const content = mUnordered[1];
+			const last = listStack[listStack.length - 1];
+
+			if (!last || last.indent < indent || last.type !== "ul") {
+				closeListsToIndent(indent);
+				openList("ul", indent);
 			}
+
 			html.push(`<li>${parseInlineMarkdown(escapeHtml(content))}</li>`);
 			return;
 		}
 
-		// If currently inside a list but the line doesn't match a list item, close the list
-		if (inList) {
-			html.push(`</${listType}>`);
-			inList = false;
-			listType = '';
-		}
-
-		// Regular paragraph
-		html.push(`<p>${parseInlineMarkdown(escapeHtml(trimmedLine))}</p>`);
+		// ---------
+		// Paragraph
+		// ---------
+		closeListsToIndent(0);
+		html.push(`<p>${parseInlineMarkdown(escapeHtml(trimmed))}</p>`);
 	});
 
-	// Close any open list tags at the end
-	if (inList) {
-		html.push(`</${listType}>`);
-	}
+	// Close all remaining lists
+	closeListsToIndent(0);
 
 	return html.join('\n');
 }
