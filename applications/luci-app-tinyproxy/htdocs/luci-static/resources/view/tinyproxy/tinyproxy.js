@@ -299,7 +299,7 @@ return view.extend({
 
 		ta.rmempty = true;
 		ta.placeholder = '0.0.0.0/0';
-		ta.datatype = 'host(1)';
+		ta.datatype = 'or(ipaddr("nomask"),ipaddr,hostname,".",".i2p",".onion")';
 
 
 		v = s.option(form.Value, 'via', _('Via proxy'),
