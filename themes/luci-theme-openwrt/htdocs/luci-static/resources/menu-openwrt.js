@@ -5,6 +5,52 @@
 return baseclass.extend({
 	__init__() {
 		ui.menu.load().then((tree) => this.render(tree));
+		this.initDarkMode();
+	},
+
+	initDarkMode() {
+		const toggle = document.getElementById('darkmode-toggle');
+		const icon = document.getElementById('darkmode-icon');
+		
+		if (!toggle) return;
+
+		// Get saved preference or detect system preference
+		const savedMode = localStorage.getItem('luci-darkmode');
+		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		
+		let isDark;
+		if (savedMode === 'true') {
+			isDark = true;
+			document.documentElement.setAttribute('data-darkmode', 'true');
+		} else if (savedMode === 'false') {
+			isDark = false;
+			document.documentElement.setAttribute('data-darkmode', 'false');
+		} else {
+			// Follow system preference (no explicit setting)
+			isDark = prefersDark;
+		}
+		
+		this.updateDarkModeUI(isDark, icon);
+		
+		toggle.addEventListener('click', () => {
+			const currentMode = document.documentElement.getAttribute('data-darkmode');
+			const newIsDark = currentMode !== 'true';
+			
+			document.documentElement.setAttribute('data-darkmode', newIsDark ? 'true' : 'false');
+			localStorage.setItem('luci-darkmode', newIsDark ? 'true' : 'false');
+			this.updateDarkModeUI(newIsDark, icon);
+		});
+
+		// Listen for system preference changes
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+			if (localStorage.getItem('luci-darkmode') === null) {
+				this.updateDarkModeUI(e.matches, icon);
+			}
+		});
+	},
+
+	updateDarkModeUI(isDark, icon) {
+		if (icon) icon.textContent = isDark ? '☀️' : '🌙';
 	},
 
 	render(tree) {
