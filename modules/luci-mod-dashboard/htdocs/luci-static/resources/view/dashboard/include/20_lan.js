@@ -17,7 +17,6 @@ return baseclass.extend({
 	load() {
 		return Promise.all([
 			callLuciDHCPLeases(),
-			network.getDevices()
 		]);
 	},
 
@@ -36,7 +35,7 @@ return baseclass.extend({
 		]));
 
 		const container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
-			E('tr', { 'class': 'tr dashboard-bg' }, [
+			E('thead', { 'class': 'thead dashboard-bg' }, [
 				E('th', { 'class': 'th nowrap' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('IP Address')),
 				E('th', { 'class': 'th' }, _('MAC')),
@@ -46,7 +45,7 @@ return baseclass.extend({
 		for(let idx in this.params.lan.devices) {
 			const device = this.params.lan.devices[idx];
 
-			container_devices.appendChild(E('tr', { 'class': 'tr cbi-rowstyle-1'}, [
+			container_devices.appendChild(E('tr', { 'class': idx % 2 ? 'tr cbi-rowstyle-2' : 'tr cbi-rowstyle-1' }, [
 
 				E('td', { 'class': 'td device-info'}, [
 					E('p', {}, [
@@ -64,9 +63,32 @@ return baseclass.extend({
 					E('p', {}, [
 						E('span', { 'class': 'd-inline-block'}, [ device.macaddr ]),
 					]),
-				])
+				]),
 			]));
 		}
+
+		container_devices.appendChild(E('tfoot', { 'class': 'tfoot dashboard-bg' }, [
+			E('tr', { 'class': 'tr cbi-rowstyle-1' }, [
+				E('td', { 'class': 'td device-info'}, [
+					E('p', {}, [
+						E('span', { 'class': 'd-inline-block'}, [ ]),
+					]),
+				]),
+
+				E('td', { 'class': 'td device-info'}, [
+					E('p', {}, [
+						E('span', { 'class': 'd-inline-block'}, [ _('Total') + '：' ]),
+					]),
+				]),
+
+				E('td', { 'class': 'td device-info'}, [
+					E('p', {}, [
+						E('span', { 'class': 'd-inline-block'}, [ this.params.lan.devices.length ]),
+					]),
+				]),
+
+			])
+		]));
 
 		container_box.appendChild(container_devices);
 		container_wapper.appendChild(container_box);
@@ -74,71 +96,25 @@ return baseclass.extend({
 		return container_wapper;
 	},
 
-	renderUpdateData(data, leases) {
+	renderUpdateData(leases) {
+		const dev_arr = [];
 
-		for(let item in data) {
-			if (/lan|br-lan/ig.test(data[item].ifname) && (typeof data[item].dev == 'object' && !data[item].dev.wireless)) {
-				const lan_device = data[item];
-				const ipv4addr = lan_device.dev.ipaddrs.toString().split('/');
-
-				this.params.lan.ipv4 = ipv4addr[0] || '?';
-				this.params.lan.ipv6 = ipv4addr[0] || '?';
-				this.params.lan.macaddr = lan_device.dev.macaddr || '00:00:00:00:00:00';
-				this.params.lan.rx_bytes = lan_device.dev.stats.rx_bytes ? '%.2mB'.format(lan_device.dev.stats.rx_bytes)  : '-';
-				this.params.lan.tx_bytes = lan_device.dev.stats.tx_bytes ? '%.2mB'.format(lan_device.dev.stats.tx_bytes)  : '-';
-			}
-		}
-
-		const devices = [];
-		leases.map(lease => {
-			devices[lease.expires] = {
-				hostname: lease.hostname || '?',
-				ipv4: lease.ipaddr || '-',
-				macaddr: lease.macaddr || '00:00:00:00:00:00',
-			};
+		leases.forEach(({ hostname = '?', ipaddr: ipv4 = '-', macaddr = '00:00:00:00:00:00' }) => {
+			dev_arr.push({ hostname, ipv4, macaddr });
 		});
-		this.params.lan.devices = devices;
+
+		this.params.lan = { devices: dev_arr };
 	},
 
-	renderLeases(data) {
-
-		const leases = Array.isArray(data[0].dhcp_leases) ? data[0].dhcp_leases : [];
-
-		this.params.lan = {
-			ipv4: {
-				title:  _('IPv4'),
-				value: '?'
-			},
-
-			macaddr: {
-				title: _('Mac'),
-				value: '00:00:00:00:00:00'
-			},
-
-			rx_bytes: {
-				title: _('Upload'),
-				value: '-'
-			},
-
-			tx_bytes: {
-				title: _('Download'),
-				value: '-'
-			},
-
-			devices: {
-				title: _('Devices'),
-				value: []
-			}
-		};
-
-		this.renderUpdateData(data[1], leases);
+	renderLeases(leases) {
+		this.renderUpdateData([...leases.dhcp_leases]);
 
 		return this.renderHtml();
 	},
 
-	render(data) {
+	render([leases]) {
 		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
-			return this.renderLeases(data);
+			return this.renderLeases(leases);
 
 		return E([]);
 	}
