@@ -8,7 +8,7 @@ return baseclass.extend({
     addFormOptions: function(s) {
         let o, ss;
 
-        o = s.option(form.Flag, 'enable', _('Sends or receives data via mqtt'));
+        pluginUtil.addCommonOptions(s, true);
 
         o = s.option(form.SectionValue, '__blocks', form.GridSection, 'collectd_mqtt_block');
         o.depends('enable', '1');

@@ -52,9 +52,9 @@ var i18n = L.Class.singleton({
 
 	ds: function(host, source) {
 		var label = source.title || 'dt=%s/di=%s/ds=%s'.format(
-			source.type     || '(nil)',
+			source.type	 || '(nil)',
 			source.instance || '(nil)',
-			source.ds       || '(nil)'
+			source.ds	   || '(nil)'
 		);
 
 		return subst(label, {
@@ -102,8 +102,8 @@ var colors = L.Class.singleton({
 
 	random: function() {
 		var r = random.get(255),
-		    g = random.get(255),
-		    min = 0, max = 255;
+			g = random.get(255),
+			min = 0, max = 255;
 
 		if (r + g < 255)
 			min = 255 - r - g;
@@ -132,7 +132,7 @@ var colors = L.Class.singleton({
 });
 
 var rrdtree = {},
-    graphdefs = {};
+	graphdefs = {};
 
 return baseclass.extend({
 	__init__: function() {
@@ -146,15 +146,15 @@ return baseclass.extend({
 			uci.load('luci_statistics')
 		]).then(L.bind(function(data) {
 			var definitions = data[0],
-			    hostname = data[1];
+				hostname = data[1];
 
-			this.opts.host      = uci.get('luci_statistics', 'collectd', 'Hostname')        || hostname;
+			this.opts.host	  = uci.get('luci_statistics', 'collectd', 'Hostname')		|| hostname;
 			this.opts.timespan  = uci.get('luci_statistics', 'rrdtool', 'default_timespan') || 3600;
-			this.opts.width     = uci.get('luci_statistics', 'rrdtool', 'image_width')      || 600;
-			this.opts.height    = uci.get('luci_statistics', 'rrdtool', 'image_height')     || 150;
+			this.opts.width	 = uci.get('luci_statistics', 'rrdtool', 'image_width')	  || 600;
+			this.opts.height	= uci.get('luci_statistics', 'rrdtool', 'image_height')	 || 150;
 			this.opts.rrdpath   = (uci.get('luci_statistics', 'collectd_rrdtool', 'DataDir') || '/tmp/rrd').replace(/\/$/, '');
 			this.opts.rrasingle = (uci.get('luci_statistics', 'collectd_rrdtool', 'RRASingle') == '1');
-			this.opts.rramax    = (uci.get('luci_statistics', 'collectd_rrdtool', 'RRAMax') == '1');
+			this.opts.rramax	= (uci.get('luci_statistics', 'collectd_rrdtool', 'RRAMax') == '1');
 
 			graphdefs = {};
 
@@ -229,7 +229,7 @@ return baseclass.extend({
 						continue;
 
 					var pluginName = m[1],
-					    pluginInstance = m[2] || '';
+						pluginInstance = m[2] || '';
 
 					rrdtree[hostInstance][pluginName] = rrdtree[hostInstance][pluginName] || {};
 					rrdtree[hostInstance][pluginName][pluginInstance] = rrdtree[hostInstance][pluginName][pluginInstance] || {};
@@ -241,7 +241,7 @@ return baseclass.extend({
 							continue;
 
 						var dataType = m[1],
-						    dataInstance = m[2] || '';
+							dataInstance = m[2] || '';
 
 						rrdtree[hostInstance][pluginName][pluginInstance][dataType] = rrdtree[hostInstance][pluginName][pluginInstance][dataType] || [];
 						rrdtree[hostInstance][pluginName][pluginInstance][dataType].push(dataInstance);
@@ -262,7 +262,7 @@ return baseclass.extend({
 	pluginInstances: function(hostInstance, pluginName) {
 		return Object.keys((rrdtree[hostInstance] || {})[pluginName] || {}).sort(function(a, b) {
 			var x = a.match(/^(\d+)\b/),
-			    y = b.match(/^(\d+)\b/);
+				y = b.match(/^(\d+)\b/);
 
 			if (!x != !y)
 				return !x - !y;
@@ -290,19 +290,18 @@ return baseclass.extend({
 		return (graphdefs[pluginName] != null);
 	},
 
+	// unlike rrdargs remains synchronous
 	hasInstanceDetails: function(hostInstance, pluginName, pluginInstance) {
 		var def = graphdefs[pluginName];
 
-		if (!def || typeof(def.rrdargs) != 'function')
+		if (!def || !def.hasInstanceDetails)
 			return false;
 
-		var optlist = this._forcelol(def.rrdargs(this, hostInstance, pluginName, pluginInstance, null, false));
+		if (typeof(def.hasInstanceDetails) == 'function') {
+			return def.hasInstanceDetails(pluginInstance);
+		}
 
-		for (var i = 0; i < optlist.length; i++)
-			if (optlist[i].detail)
-				return true;
-
-		return false;
+		return def.hasInstanceDetails;
 	},
 
 	_mkpath: function(host, plugin, plugin_instance, dtype, data_instance) {
@@ -326,8 +325,9 @@ return baseclass.extend({
 		).replace(/[\\:]/g, '\\$&');
 	},
 
-	_forcelol: function(list) {
-		return L.isObject(list[0]) ? list : [ list ];
+	_forcelol: async function(list) {
+		const resolved = await list; 
+		return Array.isArray(resolved) ? resolved : [resolved];
 	},
 
 	_rrdtool: function(def, rrd, timespan, width, height, cache) {
@@ -351,35 +351,36 @@ return baseclass.extend({
 		if (L.isObject(cache)) {
 			var key = sfh(cmdline.join('\0'));
 
-			if (!cache.hasOwnProperty(key))
+			if (!cache.hasOwnProperty(key)) {
 				cache[key] = fs.exec_direct('/usr/bin/rrdtool', cmdline, 'blob', true);
-
+			}
 			return cache[key];
 		}
-
 		return fs.exec_direct('/usr/bin/rrdtool', cmdline, 'blob', true);
 	},
 
-	_generic: function(opts, host, plugin, plugin_instance, dtype, index) {
+	_generic: function(opts, host, plugin, plugin_instance) {
 		var defs = [],
-		    gopts = this.opts,
-		    _args = [],
-		    _sources = [],
-		    _stack_neg = [],
-		    _stack_pos = [],
-		    _longest_name = 0,
-		    _has_totals = false;
+			gopts = this.opts,
+			_args = [],
+			_sources = [],
+			_stack_neg = [],
+			_stack_pos = [],
+			_longest_name = 0,
+			_has_totals = false;
 
 		/* use the plugin+instance+type as seed for the prng to ensure the
 		   same pseudo-random color sequence for each render */
-		random.seed(sfh([plugin, plugin_instance || '', dtype || ''].join('.')));
+		random.seed(sfh([plugin, plugin_instance || '', ''].join('.')));
 
 		function __def(source) {
 			var inst = source.sname,
-			    rrd  = source.rrd,
-			    ds   = source.ds || 'value';
+				rrd  = source.rrd,
+				ds   = source.ds || 'value';
 
-			_args.push(
+			// make sure %s_avg_raw/%s_min_raw will take not more than 29 symbols
+			// same for key of CDEF but it is guaranteed to be less than DEF
+				_args.push(
 				'DEF:%s_avg_raw=%s:%s:AVERAGE'.format(inst, rrd, ds),
 				'CDEF:%s_avg=%s_avg_raw,%s'.format(inst, inst, source.transform_rpn)
 			);
@@ -453,8 +454,8 @@ return baseclass.extend({
 			/* calculate total amount of data if requested */
 			if (source.total)
 				_args.push(
-					'CDEF:%s_avg_sample=%s_avg,UN,0,%s_avg,IF,sample_len,*'.format(source.sname, source.sname, source.sname),
-					'CDEF:%s_avg_sum=PREV,UN,0,PREV,IF,%s_avg_sample,+'.format(source.sname, source.sname, source.sname)
+					'CDEF:%s_avg_smp=%s_avg,UN,0,%s_avg,IF,sample_len,*'.format(source.sname, source.sname, source.sname),
+					'CDEF:%s_avg_sum=PREV,UN,0,PREV,IF,%s_avg_smp,+'.format(source.sname, source.sname, source.sname)
 				);
 		}
 
@@ -509,25 +510,25 @@ return baseclass.extend({
 		/* local helper: create gprint statements */
 		function __gprint(source) {
 			var numfmt = opts.number_format || '%6.1lf',
-			    totfmt = opts.totals_format || '%5.1lf%s';
+				totfmt = opts.totals_format || '%5.1lf%s';
 
 			/* don't include MIN if rrasingle is enabled */
 			if (!gopts.rrasingle)
-				_args.push('GPRINT:%s_min:MIN:\tMin\\: %s'.format(source.sname, numfmt));
+				_args.push('GPRINT:%s_min:MIN:Min\\: %s'.format(source.sname, numfmt));
 
 			/* don't include AVERAGE if noavg option is set */
 			if (!source.noavg)
-				_args.push('GPRINT:%s_avg:AVERAGE:\tAvg\\: %s'.format(source.sname, numfmt));
+				_args.push('GPRINT:%s_avg:AVERAGE:Avg\\: %s'.format(source.sname, numfmt));
 
 			/* don't include MAX if rrasingle is enabled */
 			if (!gopts.rrasingle)
-				_args.push('GPRINT:%s_max:MAX:\tMax\\: %s'.format(source.sname, numfmt));
+				_args.push('GPRINT:%s_max:MAX:Max\\: %s'.format(source.sname, numfmt));
 
 			/* include total count if requested else include LAST */
 			if (source.total)
 				_args.push('GPRINT:%s_avg_sum:LAST:(ca. %s Total)\\l'.format(source.sname, totfmt));
 			else
-				_args.push('GPRINT:%s_avg:LAST:\tLast\\: %s\\l'.format(source.sname, numfmt));
+				_args.push('GPRINT:%s_avg:LAST:Last\\: %s\\l'.format(source.sname, numfmt));
 		}
 
 		/*
@@ -535,9 +536,9 @@ return baseclass.extend({
 		 */
 
 		/* find data types */
-		var data_types = dtype ? [ dtype ] : (opts.data.types || []);
+		var data_types = opts.data.types || [];
 
-		if (!(dtype || opts.data.types)) {
+		if (!(opts.data.types)) {
 			if (L.isObject(opts.data.instances))
 				data_types.push.apply(data_types, Object.keys(opts.data.instances));
 			else if (L.isObject(opts.data.sources))
@@ -581,7 +582,7 @@ return baseclass.extend({
 				/* iterate over data sources */
 				for (var k = 0; k < data_sources.length; k++) {
 					var dsname  = data_types[i] + '_' + data_instances[j].replace(/\W/g, '_') + '_' + data_sources[k],
-					    altname = data_types[i] + '__' + data_sources[k];
+						altname = data_types[i] + '__' + data_sources[k];
 
 					/* find datasource options */
 					var dopts = {};
@@ -599,7 +600,8 @@ return baseclass.extend({
 
 					/* store values */
 					var source = {
-						rrd: dopts.rrd || this.mkrrdpath(host, plugin, plugin_instance, data_types[i], data_instances[j]),
+						rrd: dopts.rrd || this.mkrrdpath(host, plugin, plugin_instance, 
+							opts.data.types_orig ? opts.data.types_orig[i] : data_types[i], data_instances[j]),
 						color: dopts.color || colors.asString(colors.random()),
 						flip: dopts.flip || false,
 						total: dopts.total || false,
@@ -610,10 +612,13 @@ return baseclass.extend({
 						title: dopts.title || null,
 						weight: dopts.weight || (dopts.negweight ? -+data_instances[j] : null) || (dopts.posweight ? +data_instances[j] : null) || null,
 						ds: data_sources[k],
+						type_orig: opts.data.types_orig ? opts.data.types_orig[i] : null,
 						type: data_types[i],
 						instance: data_instances[j],
 						index: _sources.length + 1,
-						sname: String(_sources.length + 1) + data_types[i]
+						/* limitation of rrdtool of old version: must be DEF_NAM_FMT aka "%29[_A-Za-z0-9]" minus suffixes later like _avg_raw
+							index prefix is used to distinguish same named data types within differnt files in case of multi-DEF merging*/
+						sname: String(_sources.length + 1) + data_types[i].substring(0, 19).replaceAll(/-/g, '_')
 					};
 
 					_sources.push(source);
@@ -673,7 +678,7 @@ return baseclass.extend({
 			/* sort sources */
 			_sources.sort(function(a, b) {
 				var x = a.weight || a.index || 0,
-				    y = b.weight || b.index || 0;
+					y = b.weight || b.index || 0;
 
 				return +x - +y;
 			});
@@ -688,7 +693,8 @@ return baseclass.extend({
 				/* fixup properties for per instance mode... */
 				if (opts.per_instance) {
 					_sources[j].instance = instances[i];
-					_sources[j].rrd      = this.mkrrdpath(host, plugin, plugin_instance, _sources[j].type, instances[i]);
+					_sources[j].rrd	  = this.mkrrdpath(host, plugin, plugin_instance, 
+						_sources[j].type_orig ? _sources[j].type_orig : _sources[j].type, instances[i]);
 				}
 
 				__def(_sources[j]);
@@ -719,40 +725,35 @@ return baseclass.extend({
 		return defs;
 	},
 
-	render: function(plugin, plugin_instance, is_index, hostname, timespan, width, height, cache) {
+	render: async function(plugin, plugin_instance, is_index, hostname, timespan, width, height, cache) {
 		var pngs = [];
 
 		/* check for a whole graph handler */
 		var def = graphdefs[plugin];
 
-		if (def && typeof(def.rrdargs) == 'function') {
-			/* temporary image matrix */
-			var _images = [];
-
-			/* get diagram definitions */
-			var optlist = this._forcelol(def.rrdargs(this, hostname, plugin, plugin_instance, null, is_index));
-			for (var i = 0; i < optlist.length; i++) {
-				var opt = optlist[i];
-				if (!is_index || !opt.detail) {
-					_images[i] = [];
-
-					/* get diagram definition instances */
-					var diagrams = this._generic(opt, hostname, plugin, plugin_instance, null, i);
-
-					/* render all diagrams */
-					for (var j = 0; j < diagrams.length; j++) {
-						/* exec */
-						_images[i][j] = this._rrdtool(diagrams[j], null, timespan, width, height, cache);
-					}
-				}
-			}
-
-			/* remember images - XXX: fixme (will cause probs with asymmetric data) */
-			for (var y = 0; y < _images[0].length; y++)
-				for (var x = 0; x < _images.length; x++)
-					pngs.push(_images[x][y]);
+		if (!def || typeof(def.rrdargs) != 'function') {
+			return pngs;
 		}
+		
+		
+		/* get diagram definitions */
+		const optlist = await this._forcelol(def.rrdargs(this, hostname, plugin, plugin_instance, null));
+		const imageMatrix = await Promise.all(optlist.map(async (opt) => {
+			if (is_index && opt.detail) {
+				return null;
+			}
+			const diagrams = this._generic(opt, hostname, plugin, plugin_instance);
+			const images = await Promise.all(diagrams.map(diagram =>
+				this._rrdtool(diagram, null, timespan, width, height, cache)));
+			return images;
+		}));
 
-		return Promise.all(pngs);
+		if (imageMatrix.length > 0) {	
+			/* remember images - XXX: fixme (will cause probs with asymmetric data) */
+			for (let y = 0; y < imageMatrix[0]?.length; y++)
+				for (let x = 0; x < imageMatrix.length; x++)
+					if (imageMatrix[x]) pngs.push(imageMatrix[x][y]);
+		}
+		return pngs;
 	}
 });

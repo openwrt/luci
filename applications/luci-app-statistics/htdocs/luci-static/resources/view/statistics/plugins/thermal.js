@@ -2,6 +2,7 @@
 'require baseclass';
 'require fs';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 return baseclass.extend({
 	title: _('Thermal Plugin Configuration'),
@@ -10,7 +11,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s);
 
 		o = s.option(form.DynamicList, 'Device', _('Monitor device(s) / thermal zone(s)'), _('Empty value = monitor all'));
 		o.load = function(section_id) {

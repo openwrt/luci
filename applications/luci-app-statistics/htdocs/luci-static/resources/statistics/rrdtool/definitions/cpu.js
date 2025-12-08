@@ -15,7 +15,16 @@ return baseclass.extend({
 		if (plugin_instance != '')
 			title = "%H: Processor usage on core #%pi";
 
-		var show_idle = uci.get("luci_statistics", "collectd_cpu", "ShowIdle") == "1" ? true : false;
+		var allowed_states = uci.get("luci_statistics", "collectd_cpu", "States") || [
+			"idle",
+			"nice",
+			"user",
+			"wait",
+			"system",
+			"softirq",
+			"interrupt",
+			"steal"
+		];
 
 		if (uci.get("luci_statistics", "collectd_cpu", "ReportByState") == "1") {
 			var cpu = {
@@ -26,16 +35,7 @@ return baseclass.extend({
 				number_format: "%5.1lf",
 				data: {
 					instances: {
-						cpu: [
-							...(show_idle ? ["idle"] : []),
-							"nice",
-							"user",
-							"wait",
-							"system",
-							"softirq",
-							"interrupt",
-							"steal"
-						]
+						cpu: allowed_states
 					},
 					options: {
 						cpu_idle: {
@@ -82,17 +82,8 @@ return baseclass.extend({
 				vlabel: "Percent",
 				number_format: "%5.1lf%%",
 				data: {
-					instances: {
-						percent: [
-							...(show_idle ? ["idle"] : []),
-							"nice",
-							"user",
-							"wait",
-							"system",
-							"softirq",
-							"interrupt",
-							"steal"
-						]
+					instances : {
+						percent: allowed_states
 					},
 					options: {
 						percent_idle: {

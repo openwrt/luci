@@ -61,5 +61,7 @@ return baseclass.extend({
 				}
 			}
 		}];
-	}
+	},
+
+	hasInstanceDetails: true
 });

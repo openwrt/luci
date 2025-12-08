@@ -2,6 +2,7 @@
 'require baseclass';
 'require fs';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 var sensorTypes = [
 	/^[0-9]+(?:\.[0-9]+)?v$/,									'voltage',
@@ -13,14 +14,14 @@ var sensorTypes = [
 	/^(?:power)[0-9]*$/,										'power'
 ];
 
-return baseclass.extend({
+return baseclass.extend({ 
 	title: _('Sensors Plugin Configuration'),
 	description: _('The sensors plugin uses the Linux Sensors framework to gather environmental statistics.'),
 
 	addFormOptions: function(s) {
 		var o;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s);
 
 		o = s.option(form.DynamicList, 'Sensor', _('Sensor list'));
 		o.rmempty = true;

@@ -2,6 +2,7 @@
 'require baseclass';
 'require fs';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 return baseclass.extend({
 	title: _('OpenVPN Plugin Configuration'),
@@ -10,7 +11,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s);
 
 		o = s.option(form.Flag, 'CollectIndividualUsers', _('Generate a separate graph for each logged user'));
 		o.depends('enable', '1');

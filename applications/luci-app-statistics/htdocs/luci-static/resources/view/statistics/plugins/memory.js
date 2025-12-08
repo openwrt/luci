@@ -1,6 +1,7 @@
 'use strict';
 'require baseclass';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 return baseclass.extend({
 	title: _('Memory Plugin Configuration'),
@@ -9,7 +10,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s);
 
 		o = s.option(form.Flag, 'HideFree', _('Hide free memory'),
 			_('Hiding the free memory item makes the graph to scale to actual memory usage, not to 100%.'));

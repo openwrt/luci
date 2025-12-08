@@ -138,5 +138,7 @@ return baseclass.extend({
 		}
 
 		return g;
-	}
+	},
+
+	hasInstanceDetails: true
 });

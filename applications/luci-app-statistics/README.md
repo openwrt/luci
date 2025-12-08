@@ -110,7 +110,7 @@ the sysupgrade backup is restored.
 
 In a system crash or other disorderly reboot, the shutdown scripts do
 not run.  What remains on the system is the previous contents of
-`/etc/luci_statistics`.
+`/etc/luci_statistics` or whatever path you overriden via "backup_dir".
 
 * If the system never started luci_statistics, or it was cleanly shut
   down before the crash, then there is no difference in behavior from

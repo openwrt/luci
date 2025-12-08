@@ -58,5 +58,7 @@ return baseclass.extend({
 	    else {
 			return [ cpufreq ];
 	    }
-	}
+	},
+
+	hasInstanceDetails: uci.get("luci_statistics", "collectd_cpufreq", "ExtraItems")
 });

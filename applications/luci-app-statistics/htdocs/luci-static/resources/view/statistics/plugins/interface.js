@@ -1,6 +1,7 @@
 'use strict';
 'require baseclass';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 'require tools.widgets as widgets';
 
 return baseclass.extend({
@@ -10,7 +11,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s);
 
 		o = s.option(widgets.DeviceSelect, 'Interfaces', _('Monitor interfaces'));
 		o.multiple = true;

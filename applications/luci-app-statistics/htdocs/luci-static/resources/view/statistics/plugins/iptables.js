@@ -3,6 +3,7 @@
 'require fs';
 'require uci';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 return baseclass.extend({
 	title: _('Iptables Plugin Configuration'),
@@ -11,7 +12,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o, ss;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s);
 
 		for (var family = 4; family <= 6; family += 2) {
 			var suffix = (family == 4 ? '' : '6');
