@@ -9,6 +9,7 @@ import { cursor } from 'uci';
 import { init_list, init_index, init_enabled, init_action, conntrack_list, process_list } from 'luci.sys';
 import { revision, branch } from 'luci.version';
 import { statvfs, uname } from 'luci.core';
+import { connect } from 'ubus';
 
 import timezones from 'luci.zoneinfo';
 
@@ -563,6 +564,7 @@ const methods = {
 			}
 		}
 	},
+
 	getRealtimeStats: {
 		args: { mode: 'interface', device: 'eth0' },
 		call: function(request) {
@@ -651,6 +653,31 @@ const methods = {
 			}
 
 			return { result: ports };
+		}
+	},
+
+	getOdhcp6cStats: {
+		call: function() {
+			const ubus = connect();
+			const devs = ubus.call('network.device', 'status');
+
+			if (!devs)
+				return false;
+
+			const dev_stats = {};
+
+			for (let dev in devs) {
+				const m = ubus.call(`odhcp6c.${dev}`, 'get_statistics');
+
+				// not all interfaces are exposed unless odhcp6c runs on it
+				if (!m)
+					continue;
+
+				push(dev_stats, dev);
+				dev_stats[dev] = m;
+			}
+
+			return { result: dev_stats };
 		}
 	}
 };
