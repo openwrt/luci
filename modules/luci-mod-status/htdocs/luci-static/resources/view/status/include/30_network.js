@@ -2,6 +2,16 @@
 'require baseclass';
 'require fs';
 'require network';
+'require rpc';
+
+
+/* returns per odhcp6c active interface JSON like:
+{"result":{"eth1":{"dhcp_solicit":3,"dhcp_advertise":3,"dhcp_request":3,...}}} */
+const callOdhcp6cStats = rpc.declare({
+	object: 'luci',
+	method: 'getOdhcp6cStats',
+	expect: { '': {} },
+});
 
 function progressbar(value, max, byte) {
 	const vn = parseInt(value) || 0;
@@ -16,7 +26,7 @@ function progressbar(value, max, byte) {
 	}, E('div', { 'style': 'width:%.2f%%'.format(pc) }));
 }
 
-function renderbox(ifc, ipv6) {
+function renderbox(ifc, ipv6, dhcpv6_stats) {
 	const dev = ifc.getL3Device();
 	const active = (dev && ifc.getProtocol() != 'none');
 	const addrs = (ipv6 ? ifc.getIP6Addrs() : ifc.getIPAddrs()) || [];
@@ -26,6 +36,16 @@ function renderbox(ifc, ipv6) {
 
 	function addEntries(label, array) {
 		return Array.isArray(array) ? array.flatMap((item) => [label, item]) : [label, null];
+	}
+
+	function addDhcpv6Stats() {
+		if (ipv6 && ifc.getProtocol() === 'dhcpv6' && dhcpv6_stats && dhcpv6_stats[dev.device]) {
+			const arr = [];
+			for (const [pkt_type, count] of Object.entries(dhcpv6_stats[dev.device]))
+				arr.push(pkt_type.replace('dhcp_', _('DHCPv6') + ' '), `${count} ${_('pkts', 'packets, abbreviated')}`);
+			return arr;
+		}
+		return ['', null];
 	}
 
 	return E('div', { class: 'ifacebox' }, [
@@ -40,6 +60,7 @@ function renderbox(ifc, ipv6) {
 				...addEntries(_('DNS'), dnssrv),
 				_('Expires'), (expires != null && expires > -1) ? '%t'.format(expires) : null,
 				_('Connected'), (uptime > 0) ? '%t'.format(uptime) : null,
+				...addDhcpv6Stats(),
 			]),
 			E('div', {}, renderBadge(
 				L.resource('icons/%s.svg').format(dev ? dev.getType() : 'ethernet_disabled'), null,
@@ -59,10 +80,11 @@ return baseclass.extend({
 			fs.trimmed('/proc/sys/net/netfilter/nf_conntrack_max'),
 			network.getWANNetworks(),
 			network.getWAN6Networks(),
+			callOdhcp6cStats(),
 		]);
 	},
 
-	render([ct_count, ct_max, wan_nets, wan6_nets]) {
+	render([ct_count, ct_max, wan_nets, wan6_nets, dhcpv6_stats]) {
 
 		const fields = [
 			{ label: _('Active Connections'), value: ct_max ? ct_count : null }
@@ -85,7 +107,7 @@ return baseclass.extend({
 			netstatus.appendChild(renderbox(wan_net, false));
 
 		for (const wan6_net of wan6_nets)
-			netstatus.appendChild(renderbox(wan6_net, true));
+			netstatus.appendChild(renderbox(wan6_net, true, dhcpv6_stats?.result));
 
 		return E([
 			netstatus,
