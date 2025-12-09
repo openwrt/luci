@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-12-06 07:06+0000\n"
+"PO-Revision-Date: 2025-12-09 15:00+0000\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -835,7 +835,7 @@ msgstr "接受数据包"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1167
 msgid "Accept packets with local source addresses"
-msgstr "接受具有本地源地址的数据包"
+msgstr "接受源地址为本地地址的数据包"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:51
@@ -1439,7 +1439,7 @@ msgstr "Arp 扫描"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:738
 msgid "As DHCP-Options; send unsolicited (dnsmasq only)."
-msgstr "强制发送客户端未请求的 DHCP-Options （仅 dnsmasq）。"
+msgstr "强制发送客户端未请求的 DHCP-Options （仅限 dnsmasq）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1173
 msgid ""
@@ -1637,7 +1637,7 @@ msgstr "返回对端配置"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1662
 msgid "Back to settings"
-msgstr ""
+msgstr "返回设置"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:918
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:393
@@ -1840,7 +1840,7 @@ msgstr "广播"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3166
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4587
 msgid "Browse…"
-msgstr "浏览…"
+msgstr "选择文件…"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:40
 msgid "Buffered"
@@ -2215,8 +2215,8 @@ msgid ""
 "negotiation especially in environments with heavy traffic load."
 msgstr ""
 "通过禁用用于安装密钥的 EAPOL-Key 帧的重传，来增加客户端密钥重装攻击的复杂度。"
-"此变通方法可能会导致互操作性问题，并降低密钥协商的可靠性，特别是在流量负载较"
-"重的环境中更明显。"
+"此变通方法可能会导致互操作问题，并降低密钥协商的可靠性，特别是在流量负载较重"
+"的环境中更明显。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
@@ -3300,7 +3300,7 @@ msgstr "轻型双栈（RFC6333）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:762
 msgid "Dump cache on SIGUSR1, include requesting IP."
-msgstr "转储 SIGUSR1 缓存，包括请求 IP。"
+msgstr "收到 SIGUSR1 信号时转储缓存，包含请求来源的 IP 地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:710
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -4545,11 +4545,11 @@ msgstr "本地生成 PMK"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1677
 msgid "Generate QR…"
-msgstr ""
+msgstr "生成二维码…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1642
 msgid "Generate WiFi QR…"
-msgstr ""
+msgstr "生成 WiFi 二维码…"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:398
 msgid "Generate archive"
@@ -5299,7 +5299,7 @@ msgstr "IPv6 流量表 \"%h\""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:750
 msgid "IPv6-Only Preferred"
-msgstr ""
+msgstr "首选仅 IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:93
 msgid "IPv6-PD"
@@ -6612,7 +6612,7 @@ msgstr "宽松过滤"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1593
 msgid "Low"
-msgstr ""
+msgstr "低"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1035
 msgid "Low-Density Parity-Check"
@@ -7735,8 +7735,8 @@ msgid ""
 "lifetime of the announced server (use <code>0</code> to indicate a server "
 "which should no longer be used)."
 msgstr ""
-"注意：<code>_lifetime=&lt;seconds&gt;</code> SVC 参数设定通告服务器的有效期"
-"（使用 <code>0</code> 表示该服务器不在被使用）。"
+"注意：SVC 参数 <code>_lifetime=&lt;seconds&gt;</code> 设置通告的 DNS 服务器有"
+"效期（设置为 <code>0</code> 表示不再使用该服务器）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1717
 msgid ""
@@ -8959,11 +8959,11 @@ msgstr "QMI 蜂窝"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1486
 msgid "QR Code"
-msgstr ""
+msgstr "二维码"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1592
 msgid "QR Error Correction Code Level"
-msgstr ""
+msgstr "二维码错误纠正级别"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:152
 msgid "Quality"
@@ -8979,7 +8979,7 @@ msgstr "量化路径开销或距离，允许路由器做出最佳数据包转发
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1595
 msgid "Quartile"
-msgstr ""
+msgstr "四分之一"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:254
 msgid "Query all available upstream resolvers."
@@ -9293,7 +9293,7 @@ msgstr "重新加载"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:115
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:173
 msgid "Remaining time"
-msgstr ""
+msgstr "剩余时间"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:50
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:49
@@ -9884,7 +9884,7 @@ msgstr "SSID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1487
 msgid "SSID and passwords with URIencoded sequences (e.g. %20) may not work."
-msgstr ""
+msgstr "含 URI 编码序列的 SSID 和密码（如 %20）可能不工作。"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:9
 msgid "SSTP"
@@ -9936,7 +9936,7 @@ msgstr "扫描"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1574
 msgid "Scan this QR code with the client device."
-msgstr ""
+msgstr "用客户端设备扫描此二维码。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/crontab.js:28
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:101
@@ -10337,7 +10337,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1077
 msgid "Specifies a fixed list of DNS search domains to announce via DHCPv6."
-msgstr "指定通过 DHCPv6 通告的 DNS 搜索域名的固定列表。"
+msgstr "指定通过 DHCPv6 通告的 DNS 搜索域列表。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1046
 msgid "Specifies a fixed list of DNS server addresses to announce via DHCPv6."
@@ -10364,7 +10364,7 @@ msgstr ""
 msgid ""
 "Specifies how often (in seconds) clients should check whether IPv6-only mode "
 "is still preferred (see %s, odhcpd only)."
-msgstr ""
+msgstr "指定客户端应该每隔多少秒检查仅 IPv6 模式是否仍是首选（详见 %s, 仅 odhcpd）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:208
 msgid "Specifies the TOS value to match in IP headers"
@@ -13572,7 +13572,7 @@ msgstr "有效十进制值"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:461
 msgid "valid fw4 zone name UCI identifier"
-msgstr ""
+msgstr "有效的 fw4 区域名 UCI 标识符"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:451
 msgid "valid hexadecimal WEP key"
