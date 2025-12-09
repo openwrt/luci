@@ -166,7 +166,7 @@ return baseclass.extend({
 		const table6 = E('table', { 'id': 'status_leases6', 'class': 'table leases6' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				L.hasSystemFeature('odhcpd', 'dhcpv6') ? E('th', { 'class': 'th' }, _('Interface')) : E([]),
-				E('th', { 'class': 'th' }, _('Host')),
+				E('th', { 'class': 'th' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('IPv6 addresses')),
 				E('th', { 'class': 'th' }, _('DUID')),
 				E('th', { 'class': 'th' }, _('IAID')),
