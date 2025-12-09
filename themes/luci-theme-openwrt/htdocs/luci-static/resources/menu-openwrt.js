@@ -14,38 +14,27 @@ return baseclass.extend({
 		
 		if (!toggle) return;
 
-		// Get saved preference or detect system preference
 		const savedMode = localStorage.getItem('luci-darkmode');
-		const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+		const media = window.matchMedia('(prefers-color-scheme: dark)');
 		
-		let isDark;
-		if (savedMode === 'true') {
-			isDark = true;
-			document.documentElement.setAttribute('data-darkmode', 'true');
-		} else if (savedMode === 'false') {
-			isDark = false;
-			document.documentElement.setAttribute('data-darkmode', 'false');
-		} else {
-			// Follow system preference (no explicit setting)
-			isDark = prefersDark;
-		}
-		
-		this.updateDarkModeUI(isDark, icon);
+		let isDark = savedMode === null ? media.matches : (savedMode === 'true');
+		const setMode = (dark, save = false) => {
+			document.documentElement.setAttribute('data-darkmode', dark);
+			if (save)
+				localStorage.setItem('luci-darkmode', dark);
+			this.updateDarkModeUI(dark, icon);
+		};
+		setMode(isDark);
 		
 		toggle.addEventListener('click', () => {
-			const currentMode = document.documentElement.getAttribute('data-darkmode');
-			const newIsDark = currentMode !== 'true';
-			
-			document.documentElement.setAttribute('data-darkmode', newIsDark ? 'true' : 'false');
-			localStorage.setItem('luci-darkmode', newIsDark ? 'true' : 'false');
-			this.updateDarkModeUI(newIsDark, icon);
+			const next = document.documentElement.getAttribute('data-darkmode') !== 'true';
+			setMode(next, true);
 		});
 
-		// Listen for system preference changes
-		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-			if (localStorage.getItem('luci-darkmode') === null) {
-				this.updateDarkModeUI(e.matches, icon);
-			}
+		// Change when user has not set a preference
+		media.addEventListener('change', e => {
+			if (localStorage.getItem('luci-darkmode') === null)
+				setMode(e.matches);
 		});
 	},
 
