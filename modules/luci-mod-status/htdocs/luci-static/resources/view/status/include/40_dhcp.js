@@ -106,11 +106,13 @@ return baseclass.extend({
 
 		const table = E('table', { 'id': 'status_leases', 'class': 'table lases' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
+				L.hasSystemFeature('odhcpd', 'dhcpv4') ? E('th', { 'class': 'th' }, _('Interface')) : E([]),
 				E('th', { 'class': 'th' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('IPv4 address')),
 				E('th', { 'class': 'th' }, _('MAC address')),
 				E('th', { 'class': 'th' }, _('DUID')),
-				E('th', { 'class': 'th' }, _('Lease time remaining')),
+				E('th', { 'class': 'th' }, _('IAID')),
+				E('th', { 'class': 'th' }, _('Remaining time')),
 				isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
@@ -141,9 +143,13 @@ return baseclass.extend({
 				host || '-',
 				lease.ipaddr,
 				vendor ? lease.macaddr + ` (${vendor})` : lease.macaddr,
-				lease.duid ? lease.duid : null,
+				lease.duid || '-',
+				lease.iaid || '-',
 				exp,
 			];
+
+			if (L.hasSystemFeature('odhcpd', 'dhcpv4'))
+				columns.unshift(lease.interface || '-');
 
 			if (!isReadonlyView && lease.macaddr != null) {
 				columns.push(E('button', {
@@ -159,11 +165,12 @@ return baseclass.extend({
 
 		const table6 = E('table', { 'id': 'status_leases6', 'class': 'table leases6' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th' }, _('Host')),
+				L.hasSystemFeature('odhcpd', 'dhcpv6') ? E('th', { 'class': 'th' }, _('Interface')) : E([]),
+				E('th', { 'class': 'th' }, _('Hostname')),
 				E('th', { 'class': 'th' }, _('IPv6 addresses')),
 				E('th', { 'class': 'th' }, _('DUID')),
 				E('th', { 'class': 'th' }, _('IAID')),
-				E('th', { 'class': 'th' }, _('Lease time remaining')),
+				E('th', { 'class': 'th' }, _('Remaining time')),
 				isReadonlyView ? E([]) : E('th', { 'class': 'th cbi-section-actions' }, _('Static Lease'))
 			])
 		]);
@@ -208,6 +215,9 @@ return baseclass.extend({
 				exp
 			];
 
+			if (L.hasSystemFeature('odhcpd', 'dhcpv6'))
+				columns.unshift(lease.interface || '-');
+
 			if (!isReadonlyView && lease.duid) {
 				columns.push(E('button', {
 					'class': 'cbi-button cbi-button-apply',
@@ -221,7 +231,7 @@ return baseclass.extend({
 		}, this)), E('em', _('There are no active leases')));
 
 		return E([
-			E('h3', _('Active DHCP Leases')),
+			E('h3', _('Active DHCPv4 Leases')),
 			table,
 			E('h3', _('Active DHCPv6 Leases')),
 			table6

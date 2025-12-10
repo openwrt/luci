@@ -34,7 +34,6 @@ return baseclass.extend({
 		const container_wapper = E('div', { 'class': 'router-status-wifi dashboard-bg box-s1' });
 		const container_box = E('div', { 'class': 'wifi-info devices-list' });
 		const container_radio = E('div', { 'class': 'settings-info' });
-		let container_radio_item;
 
 		container_box.appendChild(E('div', { 'class': 'title'}, [
 			E('img', {
@@ -48,7 +47,7 @@ return baseclass.extend({
 
 		for (let i = 0; i < this.params.wifi.radios.length; i++) {
 
-			container_radio_item = E('div', { 'class': 'radio-info' })
+			const container_radio_item = E('div', { 'class': 'radio-info' })
 
 			for(let idx in this.params.wifi.radios[i]) {
 				let classname = idx;
@@ -77,16 +76,18 @@ return baseclass.extend({
 		container_box.appendChild(container_radio);
 
 		const container_devices = E('table', { 'class': 'table assoclist devices-info' }, [
+			E('thead', { 'class': 'thead dashboard-bg' }, [
 			E('tr', { 'class': 'tr dashboard-bg' }, [
-				E('th', { 'class': 'th nowrap' }, _('Hostname')),
-				E('th', { 'class': 'th' }, _('SSID')),
-				E('th', { 'class': 'th', 'width': '45%' }, _('Signal Strength')),
-				E('th', { 'class': 'th' }, _('Transferred') + ' %s / %s'.format( _('Up.'), _('Down.')))
+				E('th', { 'class': 'th nowrap' },[ _('Hostname') ]),
+				E('th', { 'class': 'th' }, [ _('SSID') ]),
+				E('th', { 'class': 'th', 'width': '45%' }, [ _('Signal Strength') ]),
+				E('th', { 'class': 'th' }, [ _('Transferred') + ' %s / %s'.format( _('Up.'), _('Down.')) ])
+			])
 			])
 		]);
 
 		for (let i = 0; i < this.params.wifi.devices.length; i++) {
-			const container_devices_item = E('tr', { 'class': 'tr cbi-rowstyle-1' });
+			const container_devices_item = E('tr', { 'class': i % 2 ? 'tr cbi-rowstyle-2' : 'tr cbi-rowstyle-1' });
 
 			for(let idx in this.params.wifi.devices[i]) {
 				const device = this.params.wifi.devices[i];
@@ -95,35 +96,39 @@ return baseclass.extend({
 					continue;
 				}
 
-				let container_content;
-
 				if ('progress' == idx) {
-					container_content = E('td', { 'class' : 'td device-info' }, [
+					container_devices_item.appendChild(E('td', { 'class' : 'td device-info' }, [
 						E('div', { 'class': 'cbi-progressbar', 'title': 'RSSI: ' + parseInt(device[idx].value.qualite) + '% (' + device[idx].value.rssi + 'dBm)'  }, [
 							E('div', { 'style': 'width: '+device[idx].value.qualite+'%'}),
 						])
-					]);
+					]));
 				} else if ('transferred' == idx) {
-					container_content = E('td', { 'class': 'td device-info'  }, [
+					container_devices_item.appendChild(E('td', { 'class': 'td device-info'  }, [
 						E('p', {}, [
 							E('span', { 'class': ''}, [ device[idx].value.rx ]),
 							E('br'),
 							E('span', { 'class': ''}, [ device[idx].value.tx ])
 						])
-					]);
+					]));
 				} else {
-					container_content = E('td', { 'class': 'td device-info'}, [
+					container_devices_item.appendChild(E('td', { 'class': 'td device-info'}, [
 						E('p', {}, [
 							E('span', { 'class': ''}, [ device[idx].value ]),
 						])
-					]);
+					]));
 				}
 
-				container_devices_item.appendChild(container_content);
 			}
 
 			container_devices.appendChild(container_devices_item);
 		}
+
+		container_devices.appendChild(E('tfoot', { 'class': 'tfoot dashboard-bg' }, [
+				E('td', { 'class': 'td nowrap' }, [ ]),
+				E('td', { 'class': 'td' }, [ _('Total') + '：' ]),
+				E('td', { 'class': 'td' }, [ this.params.wifi.devices.length ]),
+				E('td', { 'class': 'td' }, [] ),
+			]));
 
 		container_box.appendChild(container_devices);
 		container_wapper.appendChild(container_box);
@@ -249,14 +254,14 @@ return baseclass.extend({
 		}
 	},
 
-	render(data) {
+	render([radios, networks, hosthints]) {
 
 		this.params.wifi = {
 			radios: [],
 			devices: []
 		};
 
-		this.renderUpdateData(data[0], data[1], data[2]);
+		this.renderUpdateData(radios, networks, hosthints);
 
 		if (this.params.wifi.radios.length)
 			return this.renderHtml();

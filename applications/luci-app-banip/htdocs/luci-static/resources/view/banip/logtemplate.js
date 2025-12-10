@@ -1,33 +1,54 @@
 'use strict';
-'require fs';
+'require rpc';
+
+const callLogRead = rpc.declare({
+	object: 'log',
+	method: 'read',
+	params: ['lines', 'stream', 'oneshot'],
+	expect: {}
+});
 
 function Logview(logtag, name) {
 	return L.view.extend({
-		load: function() {
-			return Promise.all([
-				L.resolveDefault(fs.stat('/sbin/logread'), null),
-				L.resolveDefault(fs.stat('/usr/sbin/logread'), null)
-			]);
-		},
+		load: () => Promise.resolve(),
 
-		render: function(stat) {
-			let logger = stat[0]?.path || stat[1]?.path || null;
+		render: () => {
+			L.Poll.add(() => {
+				return callLogRead(1000, false, true).then(res => {
+					const logEl = document.getElementById('logfile');
+					if (!logEl) return;
 
-			if (!logger) {
-				return E('div', { class: 'error' }, _('logread not found on system.'));
-			}
-			L.Poll.add(function() {
-				return L.resolveDefault(fs.exec_direct(logger, ['-e', logtag])).then(function(res) {
-					var log = document.getElementById('logfile');
-					if (log) {
-						log.value = res ? res.trim() : _('No %s related logs yet!').format(name);
-						log.scrollTop = log.scrollHeight;
+					const entries = res?.log ?? [];
+					if (entries.length > 0) {
+						const filtered = entries
+							.filter(entry => !logtag || entry.msg.includes(logtag))
+							.map(entry => {
+								const d = new Date(entry.time);
+								const date = d.toLocaleDateString([], {
+									year: 'numeric',
+									month: '2-digit',
+									day: '2-digit'
+								});
+								const time = d.toLocaleTimeString([], {
+									hour: '2-digit',
+									minute: '2-digit',
+									second: '2-digit',
+									hour12: false
+								});
+								return `[${date}-${time}] ${entry.msg}`;
+							});
+						logEl.value = filtered.join('\n');
+					} else {
+						logEl.value = _('No %s related logs yet!').format(name);
 					}
+					logEl.scrollTop = logEl.scrollHeight;
 				});
 			});
+
 			return E('div', { class: 'cbi-map' }, [
 				E('div', { class: 'cbi-section' }, [
-					E('div', { class: 'cbi-section-descr' }, _('The syslog output, pre-filtered for messages related to: %s').format(name)),
+					E('div', { class: 'cbi-section-descr' },
+						_('The syslog output, pre-filtered for messages related to: %s').format(name)),
 					E('textarea', {
 						id: 'logfile',
 						style: 'min-height: 500px; max-height: 90vh; width: 100%; padding: 5px; font-family: monospace; resize: vertical;',
@@ -37,12 +58,11 @@ function Logview(logtag, name) {
 				])
 			]);
 		},
+
 		handleSaveApply: null,
 		handleSave: null,
 		handleReset: null
 	});
 }
 
-return L.Class.extend({
-	Logview: Logview
-});
+return L.Class.extend({ Logview });

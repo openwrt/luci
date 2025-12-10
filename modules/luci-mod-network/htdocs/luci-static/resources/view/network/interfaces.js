@@ -746,6 +746,13 @@ return view.extend({
 								 _('Do not provide DHCPv4 services on this interface.'));
 							so.value('server', _('enabled'),
 								 _('Provide DHCPv4 services on this interface.'));
+
+							so = ss.taboption('ipv4', form.Value, 'ipv6_only_preferred', _('IPv6-Only Preferred'),
+								_('Specifies how often (in seconds) clients should check whether IPv6-only mode is still preferred (see %s, odhcpd only).')
+								.format('<a href="%s" target="_blank">RFC8925</a>').format('https://www.rfc-editor.org/rfc/rfc8925'));
+							so.optional = true;
+							so.datatype = 'or(0, range(300,86400))';
+							so.default = '0';
 						}
 
 						so = ss.taboption('ipv4', form.Value, 'start', _('Start', 'DHCP IP range start address'), _('Lowest leased address as offset from the network address.'));

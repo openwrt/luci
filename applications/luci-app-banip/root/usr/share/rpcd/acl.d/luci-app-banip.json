@@ -3,76 +3,30 @@
 		"description": "Grant access to LuCI app banIP",
 		"write": {
 			"file": {
-				"/etc/banip/*": [
-					"read",
-					"write"
-				],
-				"/etc/banip/banip.allowlist": [
-					"write"
-				],
-				"/etc/banip/banip.blocklist": [
-					"write"
-				],
-				"/etc/banip/banip.custom.feeds": [
-					"read",
-					"write"
-				]
+				"/etc/banip/*": [ "read", "write" ],
+				"/etc/banip/banip.allowlist": [ "write" ],
+				"/etc/banip/banip.blocklist": [ "write" ],
+				"/etc/banip/banip.custom.feeds": [ "read", "write" ]
 			},
-			"uci": [
-				"banip"
-			]
+			"uci": [ "banip" ]
 		},
 		"read": {
-			"cgi-io": [
-				"exec"
-			],
+			"cgi-io": [ "exec" ],
 			"file": {
-				"/var/run/banip.lock": [
-					"read"
-				],
-				"/sbin/logread -e banIP-": [
-					"exec"
-				],
-				"/usr/sbin/logread -e banIP-": [
-					"exec"
-				],
-				"/sbin/logread -e banIP/": [
-					"exec"
-				],
-				"/usr/sbin/logread -e banIP/": [
-					"exec"
-				],
-				"/usr/sbin/nft -tj list sets": [
-					"exec"
-				],
-				"/etc/init.d/banip stop": [
-					"exec"
-				],
-				"/etc/init.d/banip reload": [
-					"exec"
-				],
-				"/etc/init.d/banip restart": [
-					"exec"
-				],
-				"/etc/init.d/banip report json": [
-					"exec"
-				],
-				"/etc/init.d/banip report gen": [
-					"exec"
-				],
-				"/etc/init.d/banip search [A-Za-z0-9:.]*": [
-					"exec"
-				],
-				"/etc/init.d/banip content [A-Za-z0-9]* *": [
-					"exec"
-				],
-				"/etc/init.d/banip status": [
-					"exec"
-				]
+				"/var/run/banip.lock": [ "read" ],
+				"/var/run/banip_runtime.json": [ "read" ],
+				"/usr/sbin/nft -tj list sets": [ "exec" ],
+				"/etc/init.d/banip stop": [ "exec" ],
+				"/etc/init.d/banip reload": [ "exec" ],
+				"/etc/init.d/banip restart": [ "exec" ],
+				"/etc/init.d/banip report json": [ "exec" ],
+				"/etc/init.d/banip report gen": [ "exec" ],
+				"/etc/init.d/banip search [A-Za-z0-9:.]*": [ "exec" ],
+				"/etc/init.d/banip content [A-Za-z0-9]* *": [ "exec" ],
+				"/etc/init.d/banip status": [ "exec" ]
 			},
-			"uci": [
-				"banip"
-			]
+			"uci": [ "banip"],
+			"log": [ "read" ]
 		}
 	}
 }

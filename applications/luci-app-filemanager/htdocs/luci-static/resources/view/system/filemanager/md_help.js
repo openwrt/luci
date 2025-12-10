@@ -17,7 +17,7 @@ The **LuCI OpenWrt File Manager** is a tool to navigate directories, manage file
 2. **File Management**
    - **View Files and Directories**: Display a list of files and folders within the current directory.
    - **Navigate Directories**: Move into subdirectories or return to parent directories.
-   - **Resizable Columns**: Adjust the width of table columns to enhance readability and organization.
+   - **Resizeable Columns**: Adjust the width of table columns to enhance readability and organization.
    - **Drag-and-Drop Uploads**: Upload files by simply dragging them into the designated area.
    - **Upload via File Selector**: Use the "Upload File" button to select and upload files from your local machine.
    - **Create New Files and Folders**:
@@ -118,7 +118,7 @@ The **LuCI OpenWrt File Manager** is a tool to navigate directories, manage file
 
 ## Additional Functionalities
 
-- **Resizable Columns and Windows**: Enhance the interface's flexibility by resizing table columns and editor windows to match your workflow. The Help window starts at **650x600** pixels and can be adjusted as needed.
+- **Resizeable Columns and Windows**: Enhance the interface's flexibility by resizing table columns and editor windows to match your workflow. The Help window starts at **650x600** pixels and can be adjusted as needed.
 - **Responsive Design**: The application adapts to different screen sizes, ensuring usability across various devices.
 - **Error Handling and Notifications**: Receive immediate feedback on actions, helping you stay informed about the status of your file management tasks.
 - **Line Number Toggle**: Easily show or hide line numbers in the text editor to assist with content navigation.

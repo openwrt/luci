@@ -457,6 +457,10 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(this.value.match(/^[a-zA-Z0-9_]+$/), _('valid UCI identifier'));
 		},
 
+		ucifw4zonename() {
+			return this.assert(this.value.match(/^[a-zA-Z_][a-zA-Z0-9_]+$/), _('valid fw4 zone name UCI identifier'));
+		},
+
 		netdevname() {
 			const v = this.value;
 

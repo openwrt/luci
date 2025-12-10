@@ -41,116 +41,77 @@ return view.extend({
 			For further information please check the <a style="color:#37c;font-weight:bold;" href="https://github.com/openwrt/packages/blob/master/net/banip/files/README.md" target="_blank" rel="noreferrer noopener" >online documentation</a>'));
 
 		/*
+			set text content helper function
+		*/
+		const setText = (id, value) => {
+			const el = document.getElementById(id);
+			if (el) {
+				el.textContent = value || '-';
+			}
+		};
+
+		/*
 			poll runtime information
 		*/
-		let buttons, rtRes, infStat, infVer, infElements, infFeeds, infDevices, infUplink, infSys, infNft, infRun, infFlags, infLast
-
 		pollData: poll.add(function () {
-			return L.resolveDefault(fs.stat('/var/run/banip.lock')).then(function (stat) {
-				buttons = document.querySelectorAll('.cbi-button');
-				infStat = document.getElementById('status');
-				if (stat) {
-					for (let i = 0; i < buttons.length; i++) {
-						buttons[i].setAttribute('disabled', 'true');
+			return L.resolveDefault(fs.read_direct('/var/run/banip_runtime.json'), 'null').then(function (res) {
+				const status = document.getElementById('status');
+				const buttons = document.querySelectorAll('.cbi-page-actions button');
+				try {
+					var info = JSON.parse(res);
+				} catch (e) {
+					status.textContent = '-';
+					poll.stop();
+					if (status.classList.contains('spinning')) {
+						buttons.forEach(function (btn) {
+							btn.disabled = false;
+						})
+						status.classList.remove('spinning');
 					}
-					if (infStat && !infStat.classList.contains('spinning')) {
-						infStat.classList.add('spinning');
+					ui.addNotification(null, E('p', _('Unable to parse the runtime information!')), 'error');
+				}
+				if (status && info) {
+					status.textContent = `${info.status || '-'} (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
+					if (info.status === "processing") {
+						if (!status.classList.contains("spinning")) {
+							status.classList.add("spinning");
+						}
+						buttons.forEach(function (btn) {
+							btn.disabled = true;
+							btn.blur();
+						})
+					} else {
+						if (status.classList.contains("spinning")) {
+							buttons.forEach(function (btn) {
+								btn.disabled = false;
+							})
+							status.classList.remove("spinning");
+						}
 					}
-				} else {
-					for (let i = 0; i < buttons.length; i++) {
-						buttons[i].removeAttribute('disabled');
-					}
-					if (infStat && infStat.classList.contains('spinning')) {
-						infStat.classList.remove('spinning');
+				} else if (status) {
+					status.textContent = '-';
+					poll.stop();
+					if (status.classList.contains('spinning')) {
+						buttons.forEach(function (btn) {
+							btn.disabled = false;
+						})
+						status.classList.remove('spinning');
 					}
 				}
-				L.resolveDefault(fs.exec_direct('/etc/init.d/banip', ['status'])).then(function (result) {
-					if (result) {
-						rtRes = result.trim().split('\n');
-						if (rtRes) {
-							for (let i = 0; i < rtRes.length; i++) {
-								if (rtRes[i].match(/^\s+\+\sstatus\s+\:\s+(.*)$/)) {
-									rtRes.status = rtRes[i].match(/^\s+\+\sstatus\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\sversion\s+\:\s+(.*)$/)) {
-									rtRes.version = rtRes[i].match(/^\s+\+\sversion\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\selement_count\s+\:\s+(.*)$/)) {
-									rtRes.elementCount = rtRes[i].match(/^\s+\+\selement_count\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)) {
-									rtRes.activeFeeds = rtRes[i].match(/^\s+\+\sactive_feeds\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)) {
-									rtRes.activeDevices = rtRes[i].match(/^\s+\+\sactive_devices\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\sactive_uplink\s+\:\s+(.*)$/)) {
-									rtRes.activeUplink = rtRes[i].match(/^\s+\+\sactive_uplink\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)) {
-									rtRes.nftInfo = rtRes[i].match(/^\s+\+\snft_info\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)) {
-									rtRes.runInfo = rtRes[i].match(/^\s+\+\srun_info\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\srun_flags\s+\:\s+(.*)$/)) {
-									rtRes.runFlags = rtRes[i].match(/^\s+\+\srun_flags\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)) {
-									rtRes.lastRun = rtRes[i].match(/^\s+\+\slast_run\s+\:\s+(.*)$/)[1];
-								} else if (rtRes[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)) {
-									rtRes.sysInfo = rtRes[i].match(/^\s+\+\ssystem_info\s+\:\s+(.*)$/)[1];
-								}
-							}
-						}
-						if (rtRes) {
-							infStat = document.getElementById('status');
-							if (infStat) {
-								infStat.textContent = rtRes.status || '-';
-							}
-							infVer = document.getElementById('version');
-							if (infVer) {
-								infVer.textContent = rtRes.version || '-';
-							}
-							infElements = document.getElementById('elements');
-							if (infElements) {
-								infElements.textContent = rtRes.elementCount || '-';
-							}
-							infFeeds = document.getElementById('feeds');
-							if (infFeeds) {
-								infFeeds.textContent = rtRes.activeFeeds || '-';
-							}
-							infDevices = document.getElementById('devices');
-							if (infDevices) {
-								infDevices.textContent = rtRes.activeDevices || '-';
-							}
-							infUplink = document.getElementById('uplink');
-							if (infUplink) {
-								infUplink.textContent = rtRes.activeUplink || '-';
-							}
-							infNft = document.getElementById('nft');
-							if (infNft) {
-								infNft.textContent = rtRes.nftInfo || '-';
-							}
-							infRun = document.getElementById('run');
-							if (infRun) {
-								infRun.textContent = rtRes.runInfo || '-';
-							}
-							infFlags = document.getElementById('flags');
-							if (infFlags) {
-								infFlags.textContent = rtRes.runFlags || '-';
-							}
-							infLast = document.getElementById('last');
-							if (infLast) {
-								infLast.textContent = rtRes.lastRun || '-';
-							}
-							infSys = document.getElementById('sys');
-							if (infSys) {
-								infSys.textContent = rtRes.sysInfo || '-';
-							}
-						}
-					} else {
-						infStat = document.getElementById('status');
-						if (infStat) {
-							infStat.textContent = '-';
-							poll.stop();
-							if (infStat.classList.contains('spinning')) {
-								infStat.classList.remove('spinning');
-							}
-						}
-					}
-				});
+				if (info) {
+					setText('elements', info.element_count);
+					setText('feeds', info.active_feeds?.join(', '));
+					setText('devices', `wan-dev: ${info.wan_devices?.join(', ') || '-'} /
+							wan-if: ${info.wan_interfaces?.join(', ') || '-'} /
+							vlan-allow: ${info.vlan_allow?.join(', ') || '-'} /
+							vlan-block: ${info.vlan_block?.join(', ') || '-'}`);
+					setText('uplink', info.active_uplink?.join(', ') || '-');
+					setText('nft', info.nft_info);
+					setText('run', info.run_info);
+					setText('flags', info.run_flags);
+					setText('last', info.last_run);
+					setText('sys', info.system_info);
+				}
 			});
 		}, 2);
 
@@ -164,10 +125,6 @@ return view.extend({
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Status')),
 					E('div', { 'class': 'cbi-value-field spinning', 'id': 'status', 'style': 'margin-bottom:-5px;color:#37c;' }, '\xa0')
-				]),
-				E('div', { 'class': 'cbi-value' }, [
-					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Version')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'version', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Element Count')),

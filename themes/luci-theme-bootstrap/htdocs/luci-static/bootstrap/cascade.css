@@ -115,6 +115,9 @@
 	--disabled-opacity: .7;
 
 	color-scheme: light;
+
+	--font-sans: Helvetica Neue, Helvetica, Arial, ui-sans-serif, system-ui, sans-serif;
+	--font-mono: Monaco, Andale Mono, Courier New, ui-monospace, monospace;
 }
 
 :root[data-darkmode="true"] {
@@ -273,7 +276,7 @@ textarea {
  * ------------------------------------------------------------------------------------------- */
 body {
 	background-color: var(--background-color-high);
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: var(--font-sans);
 	font-size: 13px;
 	font-weight: normal;
 	line-height: 18px;
@@ -480,7 +483,7 @@ address {
 
 code, pre {
 	padding: 0 3px 2px;
-	font-family: Monaco, Andale Mono, Courier New, monospace;
+	font-family: var(--font-mono);
 	font-size: 12px;
 	border-radius: 3px;
 }
@@ -532,7 +535,7 @@ label,
 input,
 button,
 select {
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-family: var(--font-sans);
 	font-size: 13px;
 	font-weight: normal;
 	line-height: normal;
@@ -1448,7 +1451,7 @@ body.modal-overlay-active #modal_overlay {
 }
 
 .btn .close, .alert-message .close {
-	font-family: Arial, sans-serif;
+	font-family: var(--font-sans);
 	line-height: 18px;
 }
 
