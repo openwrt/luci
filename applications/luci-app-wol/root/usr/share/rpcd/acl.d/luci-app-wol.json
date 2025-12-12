@@ -6,12 +6,14 @@
 				"luci.wol": [ "stat" ],
 				"luci-rpc": [ "getHostHints", "getNetworkDevices" ]
 			},
-			"uci": [ "etherwake" ]
+			"uci": [ "luci-wol" ]
 		},
 		"write": {
 			"ubus": {
-				"luci.wol": [ "exec" ]
-			}
+				"luci.wol": [ "exec" ],
+				"uci": [ "add", "set", "delete", "order" ]
+			},
+			"uci": [ "luci-wol" ]
 		}
 	}
 }
