@@ -3,6 +3,7 @@
 'require fs';
 'require network';
 'require rpc';
+'require ui';
 
 
 /* returns per odhcp6c active interface JSON like:
@@ -43,7 +44,10 @@ function renderbox(ifc, ipv6, dhcpv6_stats) {
 			const arr = [];
 			for (const [pkt_type, count] of Object.entries(dhcpv6_stats[dev.device]))
 				arr.push(pkt_type.replace('dhcp_', _('DHCPv6') + ' '), `${count} ${_('pkts', 'packets, abbreviated')}`);
-			return arr;
+			return [_('DHCPv6 Statistics'), E('span', { 'class': 'cbi-tooltip-container'}, [
+				'📊',
+				E('span', { 'class': 'cbi-tooltip' }, ui.itemlist(E('span'), arr))
+			])];
 		}
 		return ['', null];
 	}
