@@ -43,7 +43,7 @@ const methods = {
 
 				result.stdout = fd.read('all');
 				result.stderr = '';
-				result.code = 0;
+				result.code = fd.close();
 			} else {
 				result.stdout = '';
 				result.stderr = 'disallowed';
