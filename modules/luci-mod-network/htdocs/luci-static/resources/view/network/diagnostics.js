@@ -7,75 +7,70 @@
 'require network';
 
 return view.extend({
-	handleCommand: function(exec, args) {
-		var buttons = document.querySelectorAll('.diag-action > .cbi-button'),
-			out = document.querySelector('textarea');
+	handleCommand(exec, args) {
+		const buttons = document.querySelectorAll('.diag-action > .cbi-button');
+		const out = document.querySelector('textarea');
 
-		for (var i = 0; i < buttons.length; i++)
-			buttons[i].setAttribute('disabled', 'true');
+		for (const button of buttons)
+			button.setAttribute('disabled', 'true');
 
-		return fs.exec_direct(exec, args, 'text', false, true, function(ev) {
+		return fs.exec_direct(exec, args, 'text', false, true, (ev) => {
 			out.textContent = ev.target.response;
-		}).then(function(res) {
+		}).then((res) =>  {
 			out.textContent = res;
-		}).catch(function(err) {
+		}).catch((err) =>  {
 			ui.addNotification(null, E('p', [ err ]))
-		}).finally(function() {
-			for (var i = 0; i < buttons.length; i++)
-				buttons[i].removeAttribute('disabled');
+		}).finally(() => {
+			for (const button of buttons)
+				button.removeAttribute('disabled');
 		});
 	},
 
-	handlePing: function(ev, cmd) {
-		var exec = cmd || 'ping',
-		    addr = ev.currentTarget.parentNode.previousSibling.value,
-		    args = (exec == 'ping') ? [ '-4', '-c', '5', '-W', '1', addr ] : [ '-6', '-c', '5', addr ];
+	handlePing(ev, cmd) {
+		const exec = cmd || 'ping';
+		const addr = ev.currentTarget.parentNode.previousSibling.value;
+		const args = (exec == 'ping') ? [ '-4', '-c', '5', '-W', '1', addr ] : [ '-6', '-c', '5', addr ];
 
 		return this.handleCommand(exec, args);
 	},
 
-	handleTraceroute: function(ev, cmd) {
-		var exec = cmd || 'traceroute',
-		    addr = ev.currentTarget.parentNode.previousSibling.value,
-		    args = (exec == 'traceroute') ? [ '-4', '-q', '1', '-w', '1', '-n', '-m', String(L.env.rpctimeout || 20), addr ] : [ '-q', '1', '-w', '2', '-n', addr ];
+	handleTraceroute(ev, cmd) {
+		const exec = cmd || 'traceroute';
+		const addr = ev.currentTarget.parentNode.previousSibling.value;
+		const args = (exec == 'traceroute') ? [ '-4', '-q', '1', '-w', '1', '-n', '-m', String(L.env.rpctimeout || 20), addr ] : [ '-q', '1', '-w', '2', '-n', addr ];
 
 		return this.handleCommand(exec, args);
 	},
 
-	handleNslookup: function(ev, cmd) {
-		var addr = ev.currentTarget.parentNode.previousSibling.value;
+	handleNslookup(ev, cmd) {
+		const addr = ev.currentTarget.parentNode.previousSibling.value;
 
 		return this.handleCommand('nslookup', [ addr ]);
 	},
 
-	handleArpScan: function(ev, cmd) {
-		var addr = ev.currentTarget.parentNode.previousSibling.value;
+	handleArpScan(ev, cmd) {
+		const addr = ev.currentTarget.parentNode.previousSibling.value;
 
 		return this.handleCommand('arp-scan', [ '-l', '-I', addr ]);
 	},
 
-	load: function() {
+	load() {
 		return Promise.all([
-			L.resolveDefault(fs.stat('/bin/ping6'), {}),
-			L.resolveDefault(fs.stat('/usr/bin/ping6'), {}),
-			L.resolveDefault(fs.stat('/bin/traceroute6'), {}),
-			L.resolveDefault(fs.stat('/usr/bin/traceroute6'), {}),
-			L.resolveDefault(fs.stat('/usr/bin/arp-scan'), {}),
+			L.resolveDefault(fs.stat('/bin/ping6') || fs.stat('/usr/bin/ping6'), false),
+			L.resolveDefault(fs.stat('/bin/traceroute6') || fs.stat('/usr/bin/traceroute6'), false),
+			L.resolveDefault(fs.stat('/usr/bin/arp-scan'), false),
 			network.getDevices(),
 			uci.load('luci')
 		]);
 	},
 
-	render: function(res) {
-		var has_ping6 = res[0].path || res[1].path,
-		    has_traceroute6 = res[2].path || res[3].path,
-		    has_arpscan = res[4].path,
-		    devices = res[5],
-			dns_host = uci.get('luci', 'diag', 'dns') || 'openwrt.org',
-			ping_host = uci.get('luci', 'diag', 'ping') || 'openwrt.org',
-			route_host = uci.get('luci', 'diag', 'route') || 'openwrt.org';
+	render([has_ping6, has_traceroute6, has_arpscan, devices]) {
+		debugger;
+		const dns_host = uci.get('luci', 'diag', 'dns') || 'openwrt.org';
+		const ping_host = uci.get('luci', 'diag', 'ping') || 'openwrt.org';
+		const route_host = uci.get('luci', 'diag', 'route') || 'openwrt.org';
 
-		var table = E('table', { 'class': 'table' }, [
+		const table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr' }, [
 					E('td', { 'class': 'td left', 'style': 'overflow:initial' }, [
 						E('input', {
@@ -140,7 +135,7 @@ return view.extend({
 					has_arpscan ? E('td', { 'class': 'td left' }, [
 						E('select', {
 							'style': 'margin:5px 0'
-						}, devices.map(function(device) {
+						}, devices.map((device) => {
 							if (!device.isUp())
 								return E([]);
 
@@ -156,7 +151,7 @@ return view.extend({
 				])
 			]);
 
-		var view = E('div', { 'class': 'cbi-map'}, [
+		const view = E('div', { 'class': 'cbi-map'}, [
 			E('h2', {}, [ _('Diagnostics') ]),
 			E('div', { 'class': 'cbi-map-descr'}, _('Execution of various network commands to check the connection and name resolution to other systems.')),
 			table,
