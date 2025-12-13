@@ -6,8 +6,8 @@ msgstr ""
 "Language: ga\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :(n>"
-"6 && n<11) ? 3 : 4;\n"
+"Plural-Forms: nplurals=5; plural=n==1 ? 0 : n==2 ? 1 : (n>2 && n<7) ? 2 :"
+"(n>6 && n<11) ? 3 : 4;\n"
 "X-Generator: Weblate 5.15-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:875
@@ -890,7 +890,7 @@ msgstr "Gníomhartha"
 msgid "Active"
 msgstr "Gníomhach"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:72
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:90
 msgid "Active Connections"
 msgstr "Naisc Gníomhacha"
 
@@ -1112,7 +1112,7 @@ msgstr "Comhad freastalaithe breise"
 msgid "Additional tags for this host."
 msgstr "Clibeanna breise don óstach seo."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:38
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:58
 msgid "Address"
 msgstr "Seoladh"
 
@@ -2414,7 +2414,7 @@ msgstr "Deimhniú"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:101
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:236
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:42
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:62
 msgid "Connected"
 msgstr "Ceangailte"
 
@@ -2641,6 +2641,10 @@ msgstr "DHCPv4"
 msgid "DHCPv4 Service"
 msgstr "Seirbhís DHCPv4"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgid "DHCPv6"
+msgstr ""
+
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
 msgid "DHCPv6 client"
@@ -2657,7 +2661,7 @@ msgstr "Seirbhís DHCPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:155
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:79
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:40
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:60
 msgid "DNS"
 msgstr "DNS"
 
@@ -2964,7 +2968,7 @@ msgstr "Crios ceann scríbe"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1320
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1634
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:67
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:211
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:217
@@ -4062,7 +4066,7 @@ msgstr "Ag súil le dhá luach tosaíochta atá scartha le colon"
 msgid "Expecting: %s"
 msgstr "Ag súil le: %s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:41
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:61
 msgid "Expires"
 msgstr "In éag"
 
@@ -4641,7 +4645,7 @@ msgid "GRETAP tunnel over IPv6"
 msgstr "Tollán GRETAP thar IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:81
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:39
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:59
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:186
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:219
@@ -4997,7 +5001,6 @@ msgid "Hop Penalty"
 msgstr "Pionós Hop"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2621
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:248
 msgid "Host"
 msgstr "Óstach"
@@ -5028,6 +5031,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:438
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:66
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:110
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:136
 msgid "Hostname"
 msgstr "Ainm óstach"
@@ -5239,7 +5243,7 @@ msgstr "Rialacha IPv4"
 msgid "IPv4 Settings"
 msgstr "Socruithe IPv4"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv4 Upstream"
 msgstr "IPv4 Suas Sruth"
 
@@ -5385,7 +5389,7 @@ msgstr "Comhartha IPv6"
 msgid "IPv6 ULA-Prefix"
 msgstr "Réimír ULA IPv6"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv6 Upstream"
 msgstr "IPv6 Suas Sruth"
 
@@ -6865,7 +6869,7 @@ msgstr "MAC VLAN"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1235
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2620
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:47
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:68
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:112
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:247
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:177
@@ -7546,7 +7550,7 @@ msgstr "Ainm tábla Netfilter"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1089
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2619
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:427
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:54
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:246
 msgid "Network"
 msgstr "Líonra"
@@ -7917,7 +7921,7 @@ msgstr "Ní Comhalta"
 msgid "Not associated"
 msgstr "Níl gaolmhar"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 msgid "Not connected"
 msgstr "Gan ceangal"
 
@@ -9005,7 +9009,7 @@ msgstr "Is fearr UMTS"
 msgid "Preferred network technology"
 msgstr "Teicneolaíocht líonra fearr"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:37
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:57
 msgid "Prefix Delegated"
 msgstr "Réimír Tarmligthe"
 
@@ -9145,7 +9149,7 @@ msgstr "Prot."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:587
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1314
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:428
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:223
@@ -13861,6 +13865,11 @@ msgctxt "nft unit"
 msgid "packets"
 msgstr "paicéid"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgctxt "packets, abbreviated"
+msgid "pkts"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:266
 msgid "positive decimal value"
 msgstr "luach deachúil dearfach"
@@ -14249,169 +14258,3 @@ msgstr "Tugann {example_nx} ar ais {nxdomain}."
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "“Ar ais"
-
-#~ msgid "Lease time remaining"
-#~ msgstr "Am léasa atá fágtha"
-
-#~ msgid "Announce IPv6 DNS servers"
-#~ msgstr "Fógraíodh freastalaithe DNS IPv6"
-
-#~ msgid "RSSI threshold for joining"
-#~ msgstr "Tairseach RSSI le haghaidh ceangail"
-
-#~ msgid ""
-#~ "Specifies a fixed list of IPv6 DNS server addresses to announce via "
-#~ "DHCPv6. If left unspecified, the device will announce itself as IPv6 DNS "
-#~ "server unless the <em>Local IPv6 DNS server</em> option is disabled."
-#~ msgstr ""
-#~ "Sonraíonn sé liosta seasta de sheoltaí freastalaí DNS IPv6 le fógairt trí "
-#~ "DHCPv6. Mura bhfuil sé sonraithe, fógróidh an gléas é féin mar "
-#~ "fhreastalaí IPv6 DNS ach amháin má tá an rogha <em> Freastalaí Áitiúil "
-#~ "IPv6 DNS</em> díchumasaithe."
-
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "Sainmhínigh roghanna breise DHCP, mar shampla "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" a fhógraíonn freastalaithe DNS "
-#~ "éagsúla do chliaint."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "Díchumasaigh <abbr title=\"Prótacal Cumraíochta Óstáin "
-#~ "Dinimiciúla\">DHCP</abbr> don chomhéadan seo."
-
-#~ msgid "Force DHCP on this network even if another server is detected."
-#~ msgstr ""
-#~ "Déan DHCP a chur i bhfeidhm ar an líonra seo fiú má aimsítear freastalaí "
-#~ "eile."
-
-#~ msgid ""
-#~ "Override the netmask sent to clients. Normally it is calculated from the "
-#~ "subnet that is served."
-#~ msgstr ""
-#~ "Athraigh an líonmask a sheoltar chuig cliaint. De ghnáth ríomhtar é ón "
-#~ "bhfo-líon a sheirbheáltar."
-
-#~ msgid "Paste or drag to upload a software repository public key…"
-#~ msgstr ""
-#~ "Greamaigh nó tarraing chun eochair phoiblí stórtha bogearraí a uaslódáil…"
-
-#~ msgid "Assign new, freeform tags to this entry."
-#~ msgstr "Sann clibeanna nua saorfhoirme don iontráil seo."
-
-#~ msgid "DHCP and DNS"
-#~ msgstr "DHCP agus DNS"
-
-#~ msgid "DNS search domains"
-#~ msgstr "Fearainn cuardaigh DNS"
-
-#~ msgid ""
-#~ "Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-#~ "abbr> forwarder."
-#~ msgstr ""
-#~ "Is freastalaí éadrom <abbr title=\"Prótacal Cumraíochta Óstáin "
-#~ "Dinimiciúla\">DHCP</abbr> agus seoltóir <abbr title=\"Córas Ainm "
-#~ "Fearainn\">DNS</abbr> é Dnsmasq."
-
-#~ msgid "IPv6-Suffix (hex)"
-#~ msgstr "Iarmhír IPv6 (heicseach)"
-
-#~ msgid ""
-#~ "In DHCPv4, it is possible to include more than one mac address. This "
-#~ "allows an IP address to be associated with multiple macaddrs, and dnsmasq "
-#~ "abandons a DHCP lease to one of the macaddrs when another asks for a "
-#~ "lease. It only works reliably if only one of the macaddrs is active at "
-#~ "any time."
-#~ msgstr ""
-#~ "I DHCPv4, is féidir níos mó ná seoladh mac amháin a áireamh. Ligeann sé "
-#~ "seo seoladh IP a bheith bainteach le macaddrs iolracha, agus tréigeann "
-#~ "dnsmasq léas DHCP chuig duine de na macaddrs nuair a iarrann duine eile "
-#~ "léas. Ní oibríonn sé go hiontaofa ach mura bhfuil ach ceann amháin de na "
-#~ "macaddrs gníomhach ag am ar bith."
-
-#~ msgid "MAC address(es)"
-#~ msgstr "Seoladh MAC (í)"
-
-#~ msgid "No related logs yet!"
-#~ msgstr "Níl aon logaí gaolmhara fós!"
-
-#~ msgid "Optional hostname to assign"
-#~ msgstr "Ainm óstach roghnach le sannadh"
-
-#~ msgid "Read {etc_ethers} to configure the DHCP server."
-#~ msgstr "Léigh {etc_ethers} chun an freastalaí DHCP a chumrú."
-
-#~ msgid ""
-#~ "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
-#~ "options for odhcpd IPv6."
-#~ msgstr ""
-#~ "Roghanna tosaithe speisialta <abbr title=\"Preboot eXecution "
-#~ "Environment\">PXE</abbr> le haghaidh odhcpd IPv6."
-
-#~ msgid ""
-#~ "Specifies a fixed list of DNS search domains to announce via DHCPv6. If "
-#~ "left unspecified, the local device DNS search domain will be announced."
-#~ msgstr ""
-#~ "Sonraíonn sé liosta seasta de fearainn cuardaigh DNS le fógairt trí "
-#~ "DHCPv6. Má fhágtar neamhshonraithe, fógrófar an fearainn cuardaigh DNS "
-#~ "gléas áitiúil."
-
-#~ msgid "Static Leases"
-#~ msgstr "Léasanna Statacha"
-
-#~ msgid "The DHCPv6-DUID (DHCP unique identifier) of this host."
-#~ msgstr "DHCPv6-DUID (aitheantóir uathúil DHCP) an óstach seo."
-
-#~ msgid ""
-#~ "The IP address to be used for this host, or <em>ignore</em> to ignore any "
-#~ "DHCP request from this host."
-#~ msgstr ""
-#~ "An seoladh IP atá le húsáid don óstach seo, nó <em>neamhaird</em> chun "
-#~ "neamhaird a dhéanamh d'aon iarratas DHCP ón óstach seo."
-
-#~ msgid ""
-#~ "The IPv6 interface identifier (address suffix) as hexadecimal number "
-#~ "(max. 16 chars)."
-#~ msgstr ""
-#~ "An aitheantóir comhéadain IPv6 (iarmhír seoladh) mar uimhir "
-#~ "heicseachadach (uasmhéid. 16 chars)."
-
-#~ msgid "The hardware address(es) of this entry/host."
-#~ msgstr "Seoltaí crua-earraí an iontrála/óstach seo."
-
-#~ msgid "The last entry absent architecture becomes the default."
-#~ msgstr "Is é an iontráil dheireanach as láthair an réamhshocrú."
-
-#~ msgid "Use {etc_ethers}"
-#~ msgstr "Úsáid {etc_ethers}"
-
-#~ msgid ""
-#~ "DHCPv4 <code>leasetime</code> is used as limit and preferred lifetime of "
-#~ "the IPv6 prefix."
-#~ msgstr ""
-#~ "Úsáidtear DHCPv4 <code>am léasa</code> mar theorainn agus mar shaolré "
-#~ "roghnaithe don réimír IPv6."
-
-#~ msgid "Follow IPv4 Lifetime"
-#~ msgstr "Lean IPv4 Saoil"
-
-#~ msgid "IPv6 Prefix Lifetime"
-#~ msgstr "Réimír IPv6 Saolré"
-
-#~ msgid "Preferred lifetime for a prefix."
-#~ msgstr "Saolré is fearr le haghaidh réimír."
-
-#~ msgid "OpenConnect"
-#~ msgstr "Oscailceangail"
-
-#~ msgid "VPN Protocol"
-#~ msgstr "Prótacal VPN"
-
-#~ msgid "Set Static"
-#~ msgstr "Socraigh Statach"

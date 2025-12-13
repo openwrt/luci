@@ -904,7 +904,7 @@ msgstr "Дії"
 msgid "Active"
 msgstr "Активний"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:72
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:90
 msgid "Active Connections"
 msgstr "Активні підключення"
 
@@ -1123,7 +1123,7 @@ msgstr "Додаткові файли servers"
 msgid "Additional tags for this host."
 msgstr "Додаткові теги для цього хоста."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:38
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:58
 msgid "Address"
 msgstr "Адреса"
 
@@ -2421,7 +2421,7 @@ msgstr "Підтвердження"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:101
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:236
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:42
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:62
 msgid "Connected"
 msgstr "Підключений"
 
@@ -2648,6 +2648,10 @@ msgstr "DHCPv4"
 msgid "DHCPv4 Service"
 msgstr "DHCPv4 Сервіс"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgid "DHCPv6"
+msgstr ""
+
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
 msgid "DHCPv6 client"
@@ -2664,7 +2668,7 @@ msgstr "Служба DHCPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:155
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:79
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:40
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:60
 msgid "DNS"
 msgstr "DNS"
 
@@ -2977,7 +2981,7 @@ msgstr "Зона призначення"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1320
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1634
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:67
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:211
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:217
@@ -4072,7 +4076,7 @@ msgstr "Очікується два значення пріоритету, ро�
 msgid "Expecting: %s"
 msgstr "Очікується: %s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:41
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:61
 msgid "Expires"
 msgstr "Збігає за"
 
@@ -4652,7 +4656,7 @@ msgid "GRETAP tunnel over IPv6"
 msgstr "Тунель GRETAP через IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:81
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:39
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:59
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:186
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:219
@@ -5010,7 +5014,6 @@ msgid "Hop Penalty"
 msgstr "Хоп Пенальті"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2621
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:248
 msgid "Host"
 msgstr "Хост"
@@ -5041,6 +5044,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:438
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:66
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:110
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:136
 msgid "Hostname"
 msgstr "Ім'я хосту"
@@ -5252,7 +5256,7 @@ msgstr "Правила IPv4"
 msgid "IPv4 Settings"
 msgstr "Налаштування IPv4"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv4 Upstream"
 msgstr "З'єднання IPv4 (upstream)"
 
@@ -5400,7 +5404,7 @@ msgstr ""
 "<abbr title=\"Unique Local Address — унікальна локальна адреса\">ULA</abbr>-"
 "префікс IPv6"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv6 Upstream"
 msgstr "З'єднання IPv6 (upstream)"
 
@@ -6885,7 +6889,7 @@ msgstr "MAC VLAN"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1235
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2620
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:47
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:68
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:112
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:247
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:177
@@ -7577,7 +7581,7 @@ msgstr "Ім'я таблиці Netfilter"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1089
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2619
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:427
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:54
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:246
 msgid "Network"
 msgstr "Мережа"
@@ -7949,7 +7953,7 @@ msgstr "Не учасник"
 msgid "Not associated"
 msgstr "Не пов'язано"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 msgid "Not connected"
 msgstr "Не підключено"
 
@@ -9041,7 +9045,7 @@ msgstr "Переважно UMTS"
 msgid "Preferred network technology"
 msgstr "Бажана мережева технологія"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:37
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:57
 msgid "Prefix Delegated"
 msgstr "Делеговано префікс"
 
@@ -9180,7 +9184,7 @@ msgstr "Прот."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:587
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1314
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:428
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:223
@@ -13875,6 +13879,11 @@ msgctxt "nft unit"
 msgid "packets"
 msgstr "пакети"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgctxt "packets, abbreviated"
+msgid "pkts"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:266
 msgid "positive decimal value"
 msgstr "додатне десяткове значення"
@@ -14264,170 +14273,3 @@ msgstr "{example_nx} повертає {nxdomain}."
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Назад"
-
-#~ msgid "Lease time remaining"
-#~ msgstr "До кінця оренди"
-
-#~ msgid "Announce IPv6 DNS servers"
-#~ msgstr "Анонсовані IPv6 DNS-сервери"
-
-#~ msgid "RSSI threshold for joining"
-#~ msgstr "Поріг RSSI для приєднання"
-
-#~ msgid ""
-#~ "Specifies a fixed list of IPv6 DNS server addresses to announce via "
-#~ "DHCPv6. If left unspecified, the device will announce itself as IPv6 DNS "
-#~ "server unless the <em>Local IPv6 DNS server</em> option is disabled."
-#~ msgstr ""
-#~ "Визначає фіксований список адрес DNS-серверів IPv6, які потрібно "
-#~ "оголошувати через DHCPv6. Якщо не вказано, пристрій оголошуватиме себе як "
-#~ "IPv6 DNS-сервер, якщо параметр <em>Локальний IPv6 DNS-сервер</em> не "
-#~ "вимкнено."
-
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "Визначення додаткових опцій DHCP, наприклад "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\", щоб оголошувати різні DNS-"
-#~ "сервери для клієнтів."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "Вимкнути <abbr title=\"Dynamic Host Configuration Protocol — протокол "
-#~ "динамічного конфігурування вузла\">DHCP</abbr> для цього інтерфейсу."
-
-#~ msgid "Force DHCP on this network even if another server is detected."
-#~ msgstr "Примусово DHCP у цій мережі, навіть якщо виявлено інший сервер."
-
-#~ msgid ""
-#~ "Override the netmask sent to clients. Normally it is calculated from the "
-#~ "subnet that is served."
-#~ msgstr ""
-#~ "Перевизначення мережевої маски, яка надсилається клієнтам. Зазвичай вона "
-#~ "обчислюється від підмережі, що обслуговується."
-
-#~ msgid "Paste or drag to upload a software repository public key…"
-#~ msgstr ""
-#~ "Вставте або перетягніть, щоб завантажити відкритий ключ репозиторію "
-#~ "програмного забезпечення…"
-
-#~ msgid "Assign new, freeform tags to this entry."
-#~ msgstr "Призначте цьому запису нові теги довільної форми."
-
-#~ msgid "DHCP and DNS"
-#~ msgstr "DHCP та DNS"
-
-#~ msgid "DNS search domains"
-#~ msgstr "Домени пошуку DNS"
-
-#~ msgid ""
-#~ "Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-#~ "abbr> forwarder."
-#~ msgstr ""
-#~ "Dnsmasq — це легкий <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> сервер і пересилач <abbr title=\"Domain Name "
-#~ "System\">DNS</abbr>."
-
-#~ msgid "IPv6-Suffix (hex)"
-#~ msgstr "Суфікс IPv6 (шістнадцятковий)"
-
-#~ msgid ""
-#~ "In DHCPv4, it is possible to include more than one mac address. This "
-#~ "allows an IP address to be associated with multiple macaddrs, and dnsmasq "
-#~ "abandons a DHCP lease to one of the macaddrs when another asks for a "
-#~ "lease. It only works reliably if only one of the macaddrs is active at "
-#~ "any time."
-#~ msgstr ""
-#~ "У DHCPv4 можна включити більше однієї mac-адреси. Це дозволяє пов’язувати "
-#~ "IP-адресу з кількома макадрами, і dnsmasq відмовляється від оренди DHCP "
-#~ "одному з макадр, коли інший просить оренду. Він працює надійно, лише якщо "
-#~ "в будь-який час активний лише один із macaddrs."
-
-#~ msgid "MAC address(es)"
-#~ msgstr "MAC-адреса(и)"
-
-#~ msgid "No related logs yet!"
-#~ msgstr "Поки що немає пов'язаних журналів!"
-
-#~ msgid "Optional hostname to assign"
-#~ msgstr "Додаткове ім’я хоста для призначення"
-
-#~ msgid "Read {etc_ethers} to configure the DHCP server."
-#~ msgstr ""
-#~ "Читати {etc_ethers} для налаштування <abbr title=\"Dynamic Host "
-#~ "Configuration Protocol — Протокол динамічного конфігурування "
-#~ "вузла\">DHCP</abbr>-сервера."
-
-#~ msgid ""
-#~ "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
-#~ "options for odhcpd IPv6."
-#~ msgstr ""
-#~ "Спеціальні параметри завантаження <abbr title=\"Preboot eXecution "
-#~ "Environment\">PXE</abbr> для odhcpd IPv6."
-
-#~ msgid ""
-#~ "Specifies a fixed list of DNS search domains to announce via DHCPv6. If "
-#~ "left unspecified, the local device DNS search domain will be announced."
-#~ msgstr ""
-#~ "Визначає фіксований список пошукових доменів DNS для оголошення через "
-#~ "DHCPv6. Якщо не вказано, буде оголошено домен пошуку DNS локального "
-#~ "пристрою."
-
-#~ msgid "Static Leases"
-#~ msgstr "Статичні оренди"
-
-#~ msgid "The DHCPv6-DUID (DHCP unique identifier) of this host."
-#~ msgstr "DHCPv6-DUID (унікальний ідентифікатор DHCP) цього хоста."
-
-#~ msgid ""
-#~ "The IP address to be used for this host, or <em>ignore</em> to ignore any "
-#~ "DHCP request from this host."
-#~ msgstr ""
-#~ "IP-адреса, яка буде використовуватися для цього хосту, або "
-#~ "<em>ігнорувати</em>, щоб ігнорувати будь-який запит DHCP від цього хосту."
-
-#~ msgid ""
-#~ "The IPv6 interface identifier (address suffix) as hexadecimal number "
-#~ "(max. 16 chars)."
-#~ msgstr ""
-#~ "Ідентифікатор інтерфейсу IPv6 (суфікс адреси) як шістнадцяткове число "
-#~ "(макс. 16 символів)."
-
-#~ msgid "The hardware address(es) of this entry/host."
-#~ msgstr "Адреса(и) обладнання цього запису/хоста."
-
-#~ msgid "The last entry absent architecture becomes the default."
-#~ msgstr "Останній запис без архітектури стає записом за замовчуванням."
-
-#~ msgid "Use {etc_ethers}"
-#~ msgstr "Використовувати {etc_ethers}"
-
-#~ msgid ""
-#~ "DHCPv4 <code>leasetime</code> is used as limit and preferred lifetime of "
-#~ "the IPv6 prefix."
-#~ msgstr ""
-#~ "DHCPv4 <code>leasetime</code> використовується як обмеження та бажаний "
-#~ "термін дії префікса IPv6."
-
-#~ msgid "Follow IPv4 Lifetime"
-#~ msgstr "Дотримуйтеся терміну служби IPv4"
-
-#~ msgid "IPv6 Prefix Lifetime"
-#~ msgstr "Термін служби префікса IPv6"
-
-#~ msgid "Preferred lifetime for a prefix."
-#~ msgstr "Бажаний термін життя для префікса."
-
-#~ msgid "OpenConnect"
-#~ msgstr "Відкрийте Connect"
-
-#~ msgid "VPN Protocol"
-#~ msgstr "VPN-протокол"
-
-#~ msgid "Set Static"
-#~ msgstr "Встановити статичним"

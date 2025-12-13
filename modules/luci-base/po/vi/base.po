@@ -881,7 +881,7 @@ msgstr "Hành động"
 msgid "Active"
 msgstr "Kích hoạt"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:72
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:90
 msgid "Active Connections"
 msgstr "kết nối đang hoạt động"
 
@@ -1104,7 +1104,7 @@ msgstr "Tập tin máy chủ(server) bổ sung"
 msgid "Additional tags for this host."
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:38
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:58
 msgid "Address"
 msgstr "Địa chỉ"
 
@@ -2383,7 +2383,7 @@ msgstr "Xác nhận"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:101
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:236
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:42
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:62
 msgid "Connected"
 msgstr "Đã kết nối"
 
@@ -2608,6 +2608,10 @@ msgstr ""
 msgid "DHCPv4 Service"
 msgstr ""
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgid "DHCPv6"
+msgstr ""
+
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
 msgid "DHCPv6 client"
@@ -2624,7 +2628,7 @@ msgstr "Dịch vụ DHCPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:155
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:79
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:40
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:60
 msgid "DNS"
 msgstr "DNS"
 
@@ -2931,7 +2935,7 @@ msgstr "Vùng điểm đến"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1320
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1634
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:67
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:211
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:217
@@ -4017,7 +4021,7 @@ msgstr "Đang mong đợi hai giá trị ưu tiên phân cách bằng dấu hai 
 msgid "Expecting: %s"
 msgstr "Đang chờ: %s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:41
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:61
 msgid "Expires"
 msgstr "Hết hạn"
 
@@ -4613,7 +4617,7 @@ msgid "GRETAP tunnel over IPv6"
 msgstr "Đường hầm GRETAP qua IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:81
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:39
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:59
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:186
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:219
@@ -4965,7 +4969,6 @@ msgid "Hop Penalty"
 msgstr "Hình phạt Hops"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2621
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:248
 msgid "Host"
 msgstr "Host"
@@ -4994,6 +4997,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:438
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:66
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:110
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:136
 #, fuzzy
 msgid "Hostname"
@@ -5202,7 +5206,7 @@ msgstr "Quy tắc IPv4"
 msgid "IPv4 Settings"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv4 Upstream"
 msgstr "Kết nối IPv4 nguồn"
 
@@ -5346,7 +5350,7 @@ msgstr ""
 msgid "IPv6 ULA-Prefix"
 msgstr "Tiền tố ULA IPv6"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv6 Upstream"
 msgstr "Kết nối IPv6 nguồn"
 
@@ -6792,7 +6796,7 @@ msgstr "VLAN MAC"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1235
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2620
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:47
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:68
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:112
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:247
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:177
@@ -7476,7 +7480,7 @@ msgstr "Tên bảng Netfilter"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1089
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2619
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:427
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:54
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:246
 msgid "Network"
 msgstr "Mạng"
@@ -7844,7 +7848,7 @@ msgstr "Không là thành viên"
 msgid "Not associated"
 msgstr "Chưa được liên kết"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 msgid "Not connected"
 msgstr "Không kết nối"
 
@@ -8911,7 +8915,7 @@ msgstr "Ưu tiên UMTS"
 msgid "Preferred network technology"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:37
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:57
 msgid "Prefix Delegated"
 msgstr "Tiền tố được ủy quyền"
 
@@ -9042,7 +9046,7 @@ msgstr "Prot."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:587
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1314
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:428
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:223
@@ -13614,6 +13618,11 @@ msgctxt "nft unit"
 msgid "packets"
 msgstr "gói tin"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgctxt "packets, abbreviated"
+msgid "pkts"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:266
 msgid "positive decimal value"
 msgstr "giá trị thập phân dương"
@@ -13995,115 +14004,3 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Quay lại"
-
-#~ msgid "Lease time remaining"
-#~ msgstr "Leasetime còn lại"
-
-#~ msgid "Announce IPv6 DNS servers"
-#~ msgstr "Các máy chủ DNS IPv6 được thông báo"
-
-#~ msgid "RSSI threshold for joining"
-#~ msgstr "Ngưỡng RSSI có thể tham gia"
-
-#~ msgid ""
-#~ "Specifies a fixed list of IPv6 DNS server addresses to announce via "
-#~ "DHCPv6. If left unspecified, the device will announce itself as IPv6 DNS "
-#~ "server unless the <em>Local IPv6 DNS server</em> option is disabled."
-#~ msgstr ""
-#~ "Chỉ định một danh sách cố định các địa chỉ máy chủ DNS IPv6 để thông báo "
-#~ "thông qua DHCPv6. Nếu không chỉ định, thiết bị sẽ thông báo nó là máy chủ "
-#~ "DNS IPv6 trừ khi tùy chọn <em>Máy chủ DNS IPv6 cục bộ</em> bị vô hiệu hóa."
-
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "Xác định các tùy chọn DHCP bổ sung, ví dụ như "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" để quảng bá các máy chủ DNS "
-#~ "khác nhau đến các máy khách."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "Vô hiệu hóa <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
-#~ "abbr> cho giao diện kết nối này."
-
-#~ msgid "Force DHCP on this network even if another server is detected."
-#~ msgstr ""
-#~ "Buộc sử dụng DHCP trên mạng này ngay cả khi máy chủ khác được phát hiện."
-
-#~ msgid ""
-#~ "Override the netmask sent to clients. Normally it is calculated from the "
-#~ "subnet that is served."
-#~ msgstr ""
-#~ "Ghi đè mặt nạ mạng (netmask) gửi cho máy khách. Thông thường, nó được "
-#~ "tính từmạng con được phục vụ."
-
-#~ msgid "Assign new, freeform tags to this entry."
-#~ msgstr "Gán các thẻ mới, tự do cho mục này."
-
-#~ msgid "DHCP and DNS"
-#~ msgstr "DHCP và DNS"
-
-#~ msgid "DNS search domains"
-#~ msgstr "Miền tìm kiếm DNS"
-
-#~ msgid ""
-#~ "Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-#~ "abbr> forwarder."
-#~ msgstr ""
-#~ "Dnsmasq là một máy chủ <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> nhẹ và trình chuyển tiếp <abbr title=\"Domain Name "
-#~ "System\">DNS</abbr>."
-
-#~ msgid "IPv6-Suffix (hex)"
-#~ msgstr "Hậu tố IPv6 (hex)"
-
-#~ msgid "MAC address(es)"
-#~ msgstr "Địa chỉ MAC(es)"
-
-#~ msgid "No related logs yet!"
-#~ msgstr "Chưa có nhật ký liên quan nào!"
-
-#~ msgid "Optional hostname to assign"
-#~ msgstr "Tên máy chủ tùy chọn để gán"
-
-#~ msgid "Read {etc_ethers} to configure the DHCP server."
-#~ msgstr "Đọc {etc_ethers} để định cấu hình máy chủ DHCP."
-
-#~ msgid ""
-#~ "Specifies a fixed list of DNS search domains to announce via DHCPv6. If "
-#~ "left unspecified, the local device DNS search domain will be announced."
-#~ msgstr ""
-#~ "Chỉ định một danh sách cố định các miền tìm kiếm DNS để thông báo thông "
-#~ "qua DHCPv6. Nếu không chỉ định, miền tìm kiếm DNS của thiết bị cục bộ sẽ "
-#~ "được thông báo."
-
-#~ msgid "Static Leases"
-#~ msgstr "Thống kê địa chỉ đã cấp phát"
-
-#~ msgid "Use {etc_ethers}"
-#~ msgstr "Dùng {etc_ethers}"
-
-#~ msgid ""
-#~ "DHCPv4 <code>leasetime</code> is used as limit and preferred lifetime of "
-#~ "the IPv6 prefix."
-#~ msgstr ""
-#~ "<code>leasetime</code> của DHCPv4 được sử dụng làm giới hạn và thời gian "
-#~ "sống ưu tiên của tiền tố IPv6."
-
-#, fuzzy
-#~ msgid "Follow IPv4 Lifetime"
-#~ msgstr "Theo dõi IPv4 trọn đời"
-
-#~ msgid "OpenConnect"
-#~ msgstr "OpenConnect"
-
-#~ msgid "VPN Protocol"
-#~ msgstr "Giao thức VPN"
-
-#~ msgid "Set Static"
-#~ msgstr "Đặt là Tĩnh"

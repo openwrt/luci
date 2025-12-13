@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "PO-Revision-Date: 2025-12-07 00:56+0000\n"
 "Last-Translator: Samuel Rydén <trahojen@gmail.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/luci/sv/>"
-"\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/openwrt/luci/sv/"
+">\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -853,7 +853,7 @@ msgstr "Åtgärder"
 msgid "Active"
 msgstr "Aktiv"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:72
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:90
 msgid "Active Connections"
 msgstr "Aktiva anslutningar"
 
@@ -1063,7 +1063,7 @@ msgstr "Ytterligare server-filer"
 msgid "Additional tags for this host."
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:38
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:58
 msgid "Address"
 msgstr "Adress"
 
@@ -2268,7 +2268,7 @@ msgstr "Bekräftelse"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:101
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:236
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:42
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:62
 msgid "Connected"
 msgstr "Ansluten"
 
@@ -2485,6 +2485,10 @@ msgstr ""
 msgid "DHCPv4 Service"
 msgstr ""
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgid "DHCPv6"
+msgstr ""
+
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
 msgid "DHCPv6 client"
@@ -2501,7 +2505,7 @@ msgstr "DHCPv6-tjänst"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:155
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:79
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:40
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:60
 msgid "DNS"
 msgstr "DNS"
 
@@ -2799,7 +2803,7 @@ msgstr "Destinationens zon"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1320
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1634
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:67
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:211
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:217
@@ -3825,7 +3829,7 @@ msgstr ""
 msgid "Expecting: %s"
 msgstr "Förväntat: %s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:41
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:61
 msgid "Expires"
 msgstr "Löper ut"
 
@@ -4378,7 +4382,7 @@ msgid "GRETAP tunnel over IPv6"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:81
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:39
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:59
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:186
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:219
@@ -4730,7 +4734,6 @@ msgid "Hop Penalty"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2621
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:248
 msgid "Host"
 msgstr "Värd"
@@ -4759,6 +4762,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:438
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:66
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:110
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:136
 msgid "Hostname"
 msgstr "Värdnamn"
@@ -4960,7 +4964,7 @@ msgstr "Regler för IPv4"
 msgid "IPv4 Settings"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv4 Upstream"
 msgstr "IPv4 Uppströms"
 
@@ -5104,7 +5108,7 @@ msgstr ""
 msgid "IPv6 ULA-Prefix"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv6 Upstream"
 msgstr "IPv6 Uppströms"
 
@@ -6508,7 +6512,7 @@ msgstr "MAC VLAN"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1235
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2620
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:47
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:68
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:112
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:247
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:177
@@ -7171,7 +7175,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1089
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2619
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:427
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:54
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:246
 msgid "Network"
 msgstr "Nätverk"
@@ -7532,7 +7536,7 @@ msgstr "Inte medlem"
 msgid "Not associated"
 msgstr "Inte associerad"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 msgid "Not connected"
 msgstr "Inte ansluten"
 
@@ -8544,7 +8548,7 @@ msgstr "Föredra UMTS"
 msgid "Preferred network technology"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:37
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:57
 msgid "Prefix Delegated"
 msgstr ""
 
@@ -8670,7 +8674,7 @@ msgstr "Prot."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:587
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1314
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:428
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:223
@@ -12973,6 +12977,11 @@ msgctxt "nft unit"
 msgid "packets"
 msgstr "paket"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgctxt "packets, abbreviated"
+msgid "pkts"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:266
 msgid "positive decimal value"
 msgstr ""
@@ -13347,44 +13356,3 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Bakåt"
-
-#~ msgid "Lease time remaining"
-#~ msgstr "Återstående kontraktstid"
-
-#~ msgid "Announce IPv6 DNS servers"
-#~ msgstr "Tillkännagivna IPv6 DNS-servrar"
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "Inaktivera <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</"
-#~ "abbr> för det här gränssnittet."
-
-#~ msgid "Force DHCP on this network even if another server is detected."
-#~ msgstr ""
-#~ "Tvinga DHCP på det här nätverket även om en annan server är upptäckt."
-
-#~ msgid "DHCP and DNS"
-#~ msgstr "DHCP och DNS"
-
-#~ msgid "IPv6-Suffix (hex)"
-#~ msgstr "IPv6-tillägg (hex)"
-
-#~ msgid "MAC address(es)"
-#~ msgstr "MAC-adress(er)"
-
-#~ msgid "Read {etc_ethers} to configure the DHCP server."
-#~ msgstr "Läs {etc_ethers} för att ställa in DHCP-servern."
-
-#~ msgid "Use {etc_ethers}"
-#~ msgstr "Använd {etc_ethers}"
-
-#~ msgid "OpenConnect"
-#~ msgstr "OpenConnect"
-
-#~ msgid "VPN Protocol"
-#~ msgstr "Protokoll för VPN"
-
-#~ msgid "Set Static"
-#~ msgstr "Ställ in som Statisk"

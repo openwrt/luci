@@ -5,8 +5,8 @@ msgstr ""
 "POT-Creation-Date: 2010-04-20 09:40+0200\n"
 "PO-Revision-Date: 2025-12-07 00:56+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
-"Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/>"
-"\n"
+"Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/luci/pl/"
+">\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -889,7 +889,7 @@ msgstr "Akcje"
 msgid "Active"
 msgstr "Aktywna"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:72
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:90
 msgid "Active Connections"
 msgstr "Aktywne połączenia"
 
@@ -1108,7 +1108,7 @@ msgstr "Dodatkowe pliki serwera"
 msgid "Additional tags for this host."
 msgstr "Dodatkowe znaczniki dla tego hosta."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:38
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:58
 msgid "Address"
 msgstr "Adres"
 
@@ -2400,7 +2400,7 @@ msgstr "Powtórz hasło"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:101
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:236
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:42
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:62
 msgid "Connected"
 msgstr "Połączony"
 
@@ -2627,6 +2627,10 @@ msgstr "DHCPv4"
 msgid "DHCPv4 Service"
 msgstr "Usługa DHCPv4"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgid "DHCPv6"
+msgstr ""
+
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
 msgid "DHCPv6 client"
@@ -2643,7 +2647,7 @@ msgstr "Usługa DHCPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:155
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:79
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:40
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:60
 msgid "DNS"
 msgstr "DNS"
 
@@ -2950,7 +2954,7 @@ msgstr "Strefa docelowa"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1320
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1634
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:67
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:211
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:217
@@ -4050,7 +4054,7 @@ msgstr "Wymagane dwie wartości oddzielone dwukropkiem"
 msgid "Expecting: %s"
 msgstr "Zaleca się użyć: %s"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:41
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:61
 msgid "Expires"
 msgstr "Wygasa"
 
@@ -4628,7 +4632,7 @@ msgid "GRETAP tunnel over IPv6"
 msgstr "Tunel GRETAP przez IPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:81
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:39
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:59
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:186
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:219
@@ -4985,7 +4989,6 @@ msgid "Hop Penalty"
 msgstr "Kara przeskoku"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2621
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:248
 msgid "Host"
 msgstr "Host"
@@ -5016,6 +5019,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:438
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:66
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:110
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:136
 msgid "Hostname"
 msgstr "Nazwa hosta"
@@ -5227,7 +5231,7 @@ msgstr "Reguły IPv4"
 msgid "IPv4 Settings"
 msgstr "Ustawienia IPv4"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv4 Upstream"
 msgstr "Wychodzące IPv4"
 
@@ -5373,7 +5377,7 @@ msgstr "Token IPv6"
 msgid "IPv6 ULA-Prefix"
 msgstr "Prefiks ULA IPv6"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv6 Upstream"
 msgstr "Połączenie IPv6"
 
@@ -6856,7 +6860,7 @@ msgstr "MAC VLAN"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1235
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2620
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:47
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:68
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:112
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:247
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:177
@@ -7541,7 +7545,7 @@ msgstr "Nazwa tablicy netfilter"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1089
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2619
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:427
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:54
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:246
 msgid "Network"
 msgstr "Sieć"
@@ -7912,7 +7916,7 @@ msgstr "Nie jest członkiem"
 msgid "Not associated"
 msgstr "Niepowiązany"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 msgid "Not connected"
 msgstr "Niepodłączony"
 
@@ -9000,7 +9004,7 @@ msgstr "Preferuj UMTS"
 msgid "Preferred network technology"
 msgstr "Preferowana technologia sieciowa"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:37
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:57
 msgid "Prefix Delegated"
 msgstr "Prefiks przekazany"
 
@@ -9141,7 +9145,7 @@ msgstr "Prot."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:587
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1314
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:428
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:223
@@ -13845,6 +13849,11 @@ msgctxt "nft unit"
 msgid "packets"
 msgstr "pakiety(-ów)"
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgctxt "packets, abbreviated"
+msgid "pkts"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:266
 msgid "positive decimal value"
 msgstr "dodatnia wartość dziesiętna"
@@ -14233,169 +14242,3 @@ msgstr "{example_nx} zwraca {nxdomain}."
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« Wstecz"
-
-#~ msgid "Lease time remaining"
-#~ msgstr "Pozostały czas dzierżawy"
-
-#~ msgid "Announce IPv6 DNS servers"
-#~ msgstr "Rozgłaszaj serwery DNS IPv6"
-
-#~ msgid "RSSI threshold for joining"
-#~ msgstr "Próg RSSI dla połączeń"
-
-#~ msgid ""
-#~ "Specifies a fixed list of IPv6 DNS server addresses to announce via "
-#~ "DHCPv6. If left unspecified, the device will announce itself as IPv6 DNS "
-#~ "server unless the <em>Local IPv6 DNS server</em> option is disabled."
-#~ msgstr ""
-#~ "Określa stałą listę adresów serwerów DNS IPv6, które mają być ogłaszane "
-#~ "przez DHCPv6. Jeśli nie zostanie określona, urządzenie będzie ogłaszać "
-#~ "się jako serwer DNS IPv6, chyba że opcja <em>Lokalny serwer DNS IPv6</em> "
-#~ "jest wyłączona."
-
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "Zdefiniuj dodatkowe opcje DHCP, np. \"<code>6,192.168.2.1,192.168.2.2</"
-#~ "code>\", które rozgłaszają różne serwery DNS klientom."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "Wyłącz <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> na "
-#~ "tym interfejsie."
-
-#~ msgid "Force DHCP on this network even if another server is detected."
-#~ msgstr ""
-#~ "Wymuś uruchomienie serwera DHCP w tej sieci, nawet jeśli zostanie wykryty "
-#~ "inny serwer."
-
-#~ msgid ""
-#~ "Override the netmask sent to clients. Normally it is calculated from the "
-#~ "subnet that is served."
-#~ msgstr ""
-#~ "Nadpisz maskę sieci wysyłaną do klientów. Zazwyczaj jest ona wyliczana z "
-#~ "obsługiwanej podsieci."
-
-#~ msgid "Paste or drag to upload a software repository public key…"
-#~ msgstr ""
-#~ "Wklej lub przeciągnij, aby przesłać klucz publiczny repozytorium "
-#~ "oprogramowania…"
-
-#~ msgid "Assign new, freeform tags to this entry."
-#~ msgstr "Przypisz nowe, dowolne tagi do tego wpisu."
-
-#~ msgid "DHCP and DNS"
-#~ msgstr "DHCP i DNS"
-
-#~ msgid "DNS search domains"
-#~ msgstr "Domeny wyszukiwania DNS"
-
-#~ msgid ""
-#~ "Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-#~ "abbr> forwarder."
-#~ msgstr ""
-#~ "Dnsmasq to lekki serwer <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> i serwer przekazujący (forwarder) <abbr "
-#~ "title=\"Domain Name System\">DNS</abbr>."
-
-#~ msgid "IPv6-Suffix (hex)"
-#~ msgstr "Sufiks IPv6 (szesnastkowy)"
-
-#~ msgid ""
-#~ "In DHCPv4, it is possible to include more than one mac address. This "
-#~ "allows an IP address to be associated with multiple macaddrs, and dnsmasq "
-#~ "abandons a DHCP lease to one of the macaddrs when another asks for a "
-#~ "lease. It only works reliably if only one of the macaddrs is active at "
-#~ "any time."
-#~ msgstr ""
-#~ "W DHCPv4 możliwe jest uwzględnienie więcej niż jednego adresu MAC. "
-#~ "Pozwala to na powiązanie adresu IP z wieloma adresami MAC, a Dnsmasq "
-#~ "porzuca dzierżawę DHCP na rzecz jednego z adresów MAC, gdy inny prosi "
-#~ "o dzierżawę. Działa niezawodnie tylko wtedy, gdy tylko jeden z adresów "
-#~ "MAC jest aktywny w dowolnym momencie."
-
-#~ msgid "MAC address(es)"
-#~ msgstr "Adres(y) MAC"
-
-#~ msgid "No related logs yet!"
-#~ msgstr "Brak powiązanych dzienników!"
-
-#~ msgid "Optional hostname to assign"
-#~ msgstr "Opcjonalnie przydzielana nazwa hosta"
-
-#~ msgid "Read {etc_ethers} to configure the DHCP server."
-#~ msgstr "Przejrzyj plik {etc_ethers}, aby skonfigurować serwer DHCP."
-
-#~ msgid ""
-#~ "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
-#~ "options for odhcpd IPv6."
-#~ msgstr ""
-#~ "Specjalne opcje rozruchu <abbr title=\"Preboot eXecution "
-#~ "Environment\">PXE</abbr> dla odhcpd IPv6."
-
-#~ msgid ""
-#~ "Specifies a fixed list of DNS search domains to announce via DHCPv6. If "
-#~ "left unspecified, the local device DNS search domain will be announced."
-#~ msgstr ""
-#~ "Określa stałą listę domen wyszukiwania DNS, które mają być ogłaszane "
-#~ "przez protokół DHCPv6. Jeśli nie zostanie określona, zostanie ogłoszona "
-#~ "domena wyszukiwania DNS urządzenia lokalnego."
-
-#~ msgid "Static Leases"
-#~ msgstr "Dzierżawy stałe"
-
-#~ msgid "The DHCPv6-DUID (DHCP unique identifier) of this host."
-#~ msgstr "DHCPv6-DUID (unikatowy identyfikator DHCP) tego hosta."
-
-#~ msgid ""
-#~ "The IP address to be used for this host, or <em>ignore</em> to ignore any "
-#~ "DHCP request from this host."
-#~ msgstr ""
-#~ "Adres IP, który ma być używany dla tego hosta, lub <em>ignoruj</em>, aby "
-#~ "zignorować wszelkie żądania DHCP z tego hosta."
-
-#~ msgid ""
-#~ "The IPv6 interface identifier (address suffix) as hexadecimal number "
-#~ "(max. 16 chars)."
-#~ msgstr ""
-#~ "Identyfikator interfejsu IPv6 (sufiks adresu) w postaci liczby "
-#~ "szesnastkowej (maks. 16 znaków)."
-
-#~ msgid "The hardware address(es) of this entry/host."
-#~ msgstr "Adresy sprzętowe tego wpisu/hosta."
-
-#~ msgid "The last entry absent architecture becomes the default."
-#~ msgstr "Ostatni wpis bez architektury staje się domyślnym."
-
-#~ msgid "Use {etc_ethers}"
-#~ msgstr "Użyj {etc_ethers}"
-
-#~ msgid ""
-#~ "DHCPv4 <code>leasetime</code> is used as limit and preferred lifetime of "
-#~ "the IPv6 prefix."
-#~ msgstr ""
-#~ "DHCPv4 <code>leasetime</code> jest używany jako limit i preferowana "
-#~ "żywotność prefiksu IPv6."
-
-#~ msgid "Follow IPv4 Lifetime"
-#~ msgstr "Śledź żywotność IPv4"
-
-#~ msgid "IPv6 Prefix Lifetime"
-#~ msgstr "Żywotność prefiksu IPv6"
-
-#~ msgid "Preferred lifetime for a prefix."
-#~ msgstr "Preferowana żywotność prefiksu."
-
-#~ msgid "OpenConnect"
-#~ msgstr "OpenConnect"
-
-#~ msgid "VPN Protocol"
-#~ msgstr "Protokół VPN"
-
-#~ msgid "Set Static"
-#~ msgstr "Ustaw statycznie"

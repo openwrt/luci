@@ -5,8 +5,8 @@ msgstr ""
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
 "PO-Revision-Date: 2025-08-10 18:01+0000\n"
 "Last-Translator: 안정언 <me@jeongeon.net>\n"
-"Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/>"
-"\n"
+"Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/"
+">\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -865,7 +865,7 @@ msgstr "실행"
 msgid "Active"
 msgstr "활성화"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:72
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:90
 msgid "Active Connections"
 msgstr "활성 연결 수"
 
@@ -1075,7 +1075,7 @@ msgstr "추가적인 서버 파일"
 msgid "Additional tags for this host."
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:38
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:58
 msgid "Address"
 msgstr "주소"
 
@@ -2302,7 +2302,7 @@ msgstr "다시 확인"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:101
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:236
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:42
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:62
 msgid "Connected"
 msgstr "연결 시간"
 
@@ -2523,6 +2523,10 @@ msgstr ""
 msgid "DHCPv4 Service"
 msgstr ""
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgid "DHCPv6"
+msgstr ""
+
 #: modules/luci-compat/luasrc/model/network/proto_dhcpv6.lua:7
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dhcpv6.js:7
 msgid "DHCPv6 client"
@@ -2539,7 +2543,7 @@ msgstr "DHCPv6 서비스"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:155
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:79
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:40
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:60
 msgid "DNS"
 msgstr "DNS"
 
@@ -2837,7 +2841,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:603
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1320
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1634
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:46
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:67
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:184
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:211
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:217
@@ -3874,7 +3878,7 @@ msgstr ""
 msgid "Expecting: %s"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:41
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:61
 msgid "Expires"
 msgstr "만료 시간"
 
@@ -4431,7 +4435,7 @@ msgid "GRETAP tunnel over IPv6"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:81
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:39
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:59
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:186
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:213
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:219
@@ -4782,7 +4786,6 @@ msgid "Hop Penalty"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2621
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:248
 msgid "Host"
 msgstr "호스트"
@@ -4811,6 +4814,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:438
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:66
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:110
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:169
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:136
 msgid "Hostname"
 msgstr "호스트 이름"
@@ -5012,7 +5016,7 @@ msgstr ""
 msgid "IPv4 Settings"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 #, fuzzy
 msgid "IPv4 Upstream"
 msgstr "IPv4 업스트림"
@@ -5157,7 +5161,7 @@ msgstr ""
 msgid "IPv6 ULA-Prefix"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:33
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:53
 msgid "IPv6 Upstream"
 msgstr ""
 
@@ -6564,7 +6568,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1235
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2620
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:47
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:68
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:112
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:247
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:177
@@ -7229,7 +7233,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1089
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2619
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:427
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:54
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:75
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:246
 msgid "Network"
 msgstr "네트워크"
@@ -7591,7 +7595,7 @@ msgstr ""
 msgid "Not associated"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 msgid "Not connected"
 msgstr "연결되지 않음"
 
@@ -8608,7 +8612,7 @@ msgstr ""
 msgid "Preferred network technology"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:37
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:57
 msgid "Prefix Delegated"
 msgstr ""
 
@@ -8734,7 +8738,7 @@ msgstr "프로토콜"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:587
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1314
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:428
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:36
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:56
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:223
@@ -13112,6 +13116,11 @@ msgctxt "nft unit"
 msgid "packets"
 msgstr ""
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:45
+msgctxt "packets, abbreviated"
+msgid "pkts"
+msgstr ""
+
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:266
 msgid "positive decimal value"
 msgstr "양수인 10진수 값"
@@ -13490,56 +13499,3 @@ msgstr ""
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:20
 msgid "« Back"
 msgstr "« 이전"
-
-#~ msgid "Lease time remaining"
-#~ msgstr "남아있는 임대 시간"
-
-#~ msgid "Announce IPv6 DNS servers"
-#~ msgstr "알려진 IPv6 DNS 서버"
-
-#~ msgid ""
-#~ "Define additional DHCP options, for example "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\" which advertises different DNS "
-#~ "servers to clients."
-#~ msgstr ""
-#~ "추가적인 DHCP 옵션을 정의합니다. 예를 들어 "
-#~ "\"<code>6,192.168.2.1,192.168.2.2</code>\"는 클라이언트에게 다른 DNS 서버"
-#~ "를 설정하도록 권고할 수 있습니다."
-
-#~ msgid ""
-#~ "Disable <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> "
-#~ "for this interface."
-#~ msgstr ""
-#~ "이 인터페이스에 대해 <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> 기능을 비활성화합니다."
-
-#~ msgid "Force DHCP on this network even if another server is detected."
-#~ msgstr "다른 DHCP 서버가 탐지되더라도 이 네트워크에 DHCP를 강제합니다."
-
-#~ msgid ""
-#~ "Override the netmask sent to clients. Normally it is calculated from the "
-#~ "subnet that is served."
-#~ msgstr ""
-#~ "클라이언트에 전달될 넷마스크를 덮어 쓸 수 있습니다. 보통 해당 값은 제공되"
-#~ "는 서브넷에 따라 자동 계산됩니다."
-
-#~ msgid "DHCP and DNS"
-#~ msgstr "DHCP 및 DNS"
-
-#~ msgid ""
-#~ "Dnsmasq is a lightweight <abbr title=\"Dynamic Host Configuration "
-#~ "Protocol\">DHCP</abbr> server and <abbr title=\"Domain Name System\">DNS</"
-#~ "abbr> forwarder."
-#~ msgstr ""
-#~ "Dnsmasq는 <abbr title=\"Network Address Translation\">NAT</abbr> 방화벽을 "
-#~ "위한 <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr> 서버"
-#~ "와 <abbr title=\"Domain Name System\">DNS</abbr> 포워딩 기능을 제공합니다."
-
-#~ msgid "Read {etc_ethers} to configure the DHCP server."
-#~ msgstr "{etc_ethers} 파일을 읽어서 DHCP 서버를 설정합니다."
-
-#~ msgid "Static Leases"
-#~ msgstr "정적 임대"
-
-#~ msgid "Use {etc_ethers}"
-#~ msgstr "{etc_ethers} 사용"
