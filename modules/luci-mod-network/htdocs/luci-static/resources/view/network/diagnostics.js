@@ -65,7 +65,6 @@ return view.extend({
 	},
 
 	render([has_ping6, has_traceroute6, has_arpscan, devices]) {
-		debugger;
 		const dns_host = uci.get('luci', 'diag', 'dns') || 'openwrt.org';
 		const ping_host = uci.get('luci', 'diag', 'ping') || 'openwrt.org';
 		const route_host = uci.get('luci', 'diag', 'route') || 'openwrt.org';
