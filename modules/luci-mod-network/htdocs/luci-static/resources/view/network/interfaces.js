@@ -889,6 +889,14 @@ return view.extend({
 					so.depends('ra', 'server');
 					so.depends({ ra: 'hybrid', master: '0' });
 
+					so = ss.taboption('ipv6-ra', form.ListValue, 'ra_preference', _('Router Priority'),
+						_('A tie-breaker for clients and their routes when multiple routers exist on the same network.'));
+					so.default = 'medium';
+					so.value('low', _('Low'));
+					so.value('medium', _('Medium'));
+					so.value('high', _('High'));
+					so.depends('ra', 'server');
+
 					so = ss.taboption('ipv6-ra', form.RichListValue, 'ra_flags', _('<abbr title="Router Advertisement">RA</abbr> Flags'),
 						_('Specifies the flags sent in <abbr title="Router Advertisement">RA</abbr> messages, for example to instruct clients to request further information via stateful DHCPv6.'));
 					so.optional = true;
