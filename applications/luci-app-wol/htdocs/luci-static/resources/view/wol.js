@@ -38,7 +38,7 @@ return view.extend({
 		return Promise.all([
 			L.resolveDefault(this.callStat()),
 			this.callHostHints(),
-			uci.load('etherwake')
+			uci.load('luci-wol')
 		]);
 	},
 
@@ -47,13 +47,19 @@ return view.extend({
 				has_wol = stat && stat.wakeonlan,
 		    m, s, o;
 
+		if (!has_ewk && !has_wol) {
+			return E('div', { 'class': 'alert-message warning' }, [
+				E('p', _('No Wake on LAN utilities found. Please install either the "etherwake" or "wakeonlan" package.'))
+			]);
+		}
+
 		this.formdata.has_ewk = has_ewk;
 		this.formdata.has_wol = has_wol;
 
-		m = new form.JSONMap(this.formdata, _('Wake on LAN'),
+		m = new form.Map('luci-wol', _('Wake on LAN'),
 			_('Wake on LAN is a mechanism to boot computers remotely in the local network.'));
 
-		s = m.section(form.NamedSection, 'wol');
+		s = m.section(form.NamedSection, 'defaults', 'wol');
 
 		if (has_ewk && has_wol) {
 			o = s.option(form.ListValue, 'executable', _('WoL program'),
@@ -67,7 +73,6 @@ return view.extend({
 			o = s.option(widgets.DeviceSelect, 'iface', _('Network interface to use'),
 				_('Specifies the interface the WoL packet is sent on'));
 
-			o.default = uci.get('etherwake', 'setup', 'interface');
 			o.rmempty = false;
 			o.noaliases = true;
 			o.noinactive = true;
@@ -101,6 +106,7 @@ return view.extend({
 
 		if (has_ewk) {
 			o = s.option(form.Flag, 'broadcast', _('Send to broadcast address'));
+			o.rmempty = false;
 
 			if (has_wol)
 				o.depends('executable', ETHERWAKE_BIN);
@@ -111,26 +117,34 @@ return view.extend({
 
 	handleWakeup: function(ev) {
 		var map = document.querySelector('#maincontent .cbi-map'),
-		    data = this.formdata,
 		    self = this;
 
 		return dom.callClassMethod(map, 'save').then(function() {
-			if (!data.wol.mac)
+			var mac = uci.get('luci-wol', 'defaults', 'mac');
+			if (!mac)
 				return alert(_('No target host specified!'));
 
-			var bin = data.wol.executable || (data.has_ewk ? ETHERWAKE_BIN : WAKEONLAN_BIN),
-			    args = [];
+			var bin = uci.get('luci-wol', 'defaults', 'executable');
+			
+			if (bin == ETHERWAKE_BIN && !self.formdata.has_ewk)
+				bin = WAKEONLAN_BIN;
+			else if (bin == WAKEONLAN_BIN && !self.formdata.has_wol)
+				bin = ETHERWAKE_BIN;
+			else if (!bin)
+				bin = self.formdata.has_ewk ? ETHERWAKE_BIN : WAKEONLAN_BIN;
+			
+			var args = [];
 
 			if (bin == ETHERWAKE_BIN) {
-				args.push('-D', '-i', data.wol.iface);
+				args.push('-D', '-i', uci.get('luci-wol', 'defaults', 'iface'));
 
-				if (data.wol.broadcast == '1')
+				if (uci.get('luci-wol', 'defaults', 'broadcast') == '1')
 					args.push('-b');
 
-				args.push(data.wol.mac);
+				args.push(mac);
 			}
 			else {
-				args.push(data.wol.mac);
+				args.push(mac);
 			}
 
 			ui.showModal(_('Waking host'), [
@@ -158,6 +172,10 @@ return view.extend({
 	},
 
 	addFooter: function() {
+		if (!this.formdata.has_ewk && !this.formdata.has_wol) {
+			return null;
+		}
+
 		return E('div', { 'class': 'cbi-page-actions' }, [
 			E('button', {
 				'class': 'cbi-button cbi-button-save',
