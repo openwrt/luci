@@ -616,11 +616,11 @@ return view.extend({
 			_('Lease trigger'),
 			_('Path to a script to run each time the lease file changes.'));
 
-		o = s.taboption('general', form.Value, 'hostsfile',
+		o = s.taboption('general', form.Value, 'hostsdir',
 			_('Hosts file'),
-			_('Path to store a hostsfile (IP address to hostname mapping) in. Used by e.g. <code>dnsmasq</code>.'));
+			_('Directory to store hosts files (IP address to hostname mapping) in. Used by e.g. <code>dnsmasq</code>.'));
 
-		o = s.taboption('general', form.Value, 'piofolder',
+		o = s.taboption('general', form.Value, 'piodir',
 			_('PIO directory'),
 			_('Directory to store IPv6 prefix information files in (to detect and announce stale prefixes).'));
 
