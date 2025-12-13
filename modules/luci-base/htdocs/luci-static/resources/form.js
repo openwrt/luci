@@ -4094,6 +4094,7 @@ const CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.prot
 			size: this.size,
 			sort: this.keylist,
 			widget: this.widget,
+			multiple: this.multiple,
 			optional: this.optional,
 			orientation: this.orientation,
 			select_placeholder: this.select_placeholder || this.placeholder,
