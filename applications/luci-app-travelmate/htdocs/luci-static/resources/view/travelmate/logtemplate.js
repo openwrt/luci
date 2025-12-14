@@ -18,25 +18,24 @@ function Logview(logtag, name) {
 					const logEl = document.getElementById('logfile');
 					if (!logEl) return;
 
-					const entries = res?.log ?? [];
-					if (entries.length > 0) {
-						const filtered = entries
-							.filter(entry => !logtag || entry.msg.includes(logtag))
-							.map(entry => {
-								const d = new Date(entry.time);
-								const date = d.toLocaleDateString([], {
-									year: 'numeric',
-									month: '2-digit',
-									day: '2-digit'
-								});
-								const time = d.toLocaleTimeString([], {
-									hour: '2-digit',
-									minute: '2-digit',
-									second: '2-digit',
-									hour12: false
-								});
-								return `[${date}-${time}] ${entry.msg}`;
-							});
+					const filtered = (res?.log ?? [])
+					.filter(entry => !logtag || entry.msg.includes(logtag))
+					.map(entry => {
+						const d = new Date(entry.time);
+						const date = d.toLocaleDateString([], {
+							year: 'numeric',
+							month: '2-digit',
+							day: '2-digit'
+						});
+						const time = d.toLocaleTimeString([], {
+							hour: '2-digit',
+							minute: '2-digit',
+							second: '2-digit',
+							hour12: false
+						});
+						return `[${date}-${time}] ${entry.msg}`;
+					});
+					if (filtered.length > 0) {
 						logEl.value = filtered.join('\n');
 					} else {
 						logEl.value = _('No %s related logs yet!').format(name);
