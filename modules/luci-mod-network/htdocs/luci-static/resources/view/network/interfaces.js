@@ -1045,7 +1045,8 @@ return view.extend({
 
 					so = ss.taboption('ipv6', form.Value, 'dhcpv6_pd_min_len', _('<abbr title="Prefix Delegation">PD</abbr> minimum length'),
 						_('Configures the minimum delegated prefix length assigned to a requesting downstream router, potentially overriding a requested prefix length. If left unspecified, the device will assign the smallest available prefix greater than or equal to the requested prefix.'));
-					so.datatype = 'range(1,62)';
+					so.placeholder = '62';
+					so.datatype = 'range(1,64)';
 					so.depends('dhcpv6', 'server');
 
 					/* This option is used by odhcpd. It can take IPv4/6 entries, although IPv4 DNS servers don't
