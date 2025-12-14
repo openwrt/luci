@@ -215,11 +215,10 @@ return view.extend({
 			}
 
 			o = s.option(form.Value, 'rule', _('Rule'));
-			o.value('/^(([[:alnum:]_-]{1,63}\\.)+[[:alpha:]][[:alnum:]-]{1,62}([[:space:]]|$))/{print tolower($1)}', _('<DOMAIN> excl. TLDs'));
-			o.value('/^(([[:alnum:]_-]{1,63}\\.)*[[:alpha:]][[:alnum:]-]{1,62}([[:space:]]|$))/{print tolower($1)}', _('<DOMAIN> incl. TLDs'));
-			o.value('/^(127\\.0\\.0\\.1 ([[:alnum:]_-]{1,63}\\.)+[[:alpha:]][[:alnum:]-]{1,62}([[:space:]]|$))/{print tolower($2)}', _('127.0.0.1<SPACE><DOMAIN>'));
-			o.value('/^(0\\.0\\.0\\.0 ([[:alnum:]_-]{1,63}\\.)+[[:alpha:]][[:alnum:]-]{1,62}([[:space:]]|$))/{print tolower($2)}', _('0.0.0.0<SPACE><DOMAIN>'));
-			o.value('BEGIN{FS=\"[|^]\"}/^\\|\\|([[:alnum:]_-]{1,63}\\.)+[[:alpha:]][[:alnum:]-]{1,62}\\^(\\$third-party)?$/{print tolower($3)}', _('<ADBLOCK-PLUS>'));
+			o.value('feed 1', _('<Domain>'));
+			o.value('feed 127.0.0.1 2', _('127.0.0.1 <Domain>'));
+			o.value('feed 0.0.0.0 2', _('0.0.0.0 <Domain>'));
+			o.value('feed 3 [|^]', _('<Adblock Plus Syntax>'));
 			o.optional = true;
 			o.rmempty = true;
 
