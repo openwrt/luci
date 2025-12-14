@@ -12,7 +12,7 @@ return view.extend({
 			L.resolveDefault(fs.list('/etc/ssl/acme/'), []).then(files => {
 				let certs = [];
 				for (let f of files) {
-					if ((f.type === 'file' || f.type === 'symlink' || f.type === 'link') && f.name.match(/\.fullchain\.crt$/)) {
+					if (f.name.match(/\.fullchain\.crt$/)) {
 						certs.push(f);
 					}
 				}
