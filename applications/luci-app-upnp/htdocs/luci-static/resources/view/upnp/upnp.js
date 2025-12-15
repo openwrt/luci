@@ -92,16 +92,16 @@ return view.extend({
 				'The %s (%s = UPnP IGD & PCP/NAT-PMP) protocols/service enable allowed devices on local networks to autonomously set up port maps (forwards) on this router.')
 			.format(protocols)
 		);
-		if (!uci.get('upnpd', 'config')) {
+		if (!uci.get('upnpd', 'settings')) {
 			ui.addNotification(null, E('div', '<h4>' + _('No suitable configuration was found!') + '</h4><p>' +
-				_('No suitable (LuCI app %s) config found in %s. Related package update (daemon or LuCI app) may be missing.').format('v1.0', '<code>/etc/config/upnpd</code>') + '<br>' +
+				_('No suitable (LuCI app %s) config found in %s. Related package update (daemon or LuCI app) may be missing.').format('v2.0', '<code>/etc/config/upnpd</code>') + '<br>' +
 				_('Use the software package manager, update lists, and install the related update. Config is migrated on the daemon package update.') + '</p>' +
 				'<a class="btn" href="/cgi-bin/luci/admin/system/package-manager?query=UPnP%20IGD%20&%20PCP/NAT-PMP">' + _('Go to package manager…') + '</a>'), 'warning');
 			m.readonly = true;
 		}
 
 		s = m.section(form.GridSection, '_active_rules');
-		s.disable = uci.get('upnpd', 'config', 'enabled') == '0';
+		s.disable = uci.get('upnpd', 'settings', 'enabled') == '0';
 
 		s.render = L.bind(function(view, section_id) {
 			const table = E('table', { 'class': 'table cbi-section-table', 'id': 'upnp_status_table' }, [
@@ -142,7 +142,7 @@ return view.extend({
 			]);
 		}, o, this);
 
-		s = m.section(form.NamedSection, 'config', 'upnpd', _('Service Settings'));
+		s = m.section(form.NamedSection, 'settings', 'upnpd', _('Service Settings'));
 		s.addremove = false;
 		s.tab('setup', _('Service Setup'));
 		s.tab('advanced', _('Advanced Settings'));
@@ -371,7 +371,7 @@ return view.extend({
 		o.value('deny', _('Deny'));
 
 		return m.render().then(L.bind(function(m, nodes) {
-			if (uci.get('upnpd', 'config', 'enabled') != '0') {
+			if (uci.get('upnpd', 'settings', 'enabled') != '0') {
 				poll.add(L.bind(function() {
 					return Promise.all([
 						callUpnpGetStatus()
