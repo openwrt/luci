@@ -333,7 +333,7 @@ return view.extend({
 	},
 
 	add_dnsmasq_cfg(m, networks, devices, services) {
-		let s, o, ss, so;
+		let s, o, ss, so, tagstab;
 
 		s = m.section(form.TypedSection, 'dnsmasq', _('dnsmasq'));
 		s.hidetitle = true;
@@ -377,11 +377,7 @@ return view.extend({
 		s.tab('logging', _('Log'));
 		s.tab('files', _('Files'));
 		s.tab('relay', _('Relay'));
-		s.tab('mac', _('MAC'));
-		s.tab('matchtags', _('Match Tags'));
-		s.tab('vc', _('VC'));
-		s.tab('uc', _('UC'));
-		s.tab('settags', _('Set Tags'));
+		s.tab('tagsparent', _('Tags'));
 
 		// Begin general
 		s.taboption('general', form.Flag, 'authoritative',
@@ -626,9 +622,21 @@ return view.extend({
 		const tag_match_option_syntax = '<code>&lt;option number&gt;|option:&lt;option name&gt;[,&lt;value&gt;]</code>';
 		const tag_name_efi_ia32 = '<code>efi-ia32</code>';
 		const wildcard_code = '<code>*</code>';
+		o = s.taboption('tagsparent', form.SectionValue, '__tagsparent__', form.TypedSection, '__tagsparent__');
+
+		tagstab = o.subsection;
+
+		tagstab.anonymous = true;
+		tagstab.cfgsections = function() { return [ '__tagsparent__' ] };
+
+		tagstab.tab('matchtags', _('Match Tags'));
+		tagstab.tab('settags', _('Set Tags'));
+		tagstab.tab('mac', _('MAC'));
+		tagstab.tab('vc', _('VC'));
+		tagstab.tab('uc', _('UC'));
 
 		// Match Tags
-		o = s.taboption('matchtags', form.SectionValue, '__tags__', form.TableSection, 'tag', null,
+		o = tagstab.taboption('matchtags', form.SectionValue, '__tags__', form.TableSection, 'tag', null,
 			_(`A ${tagcodestring} is an alphanumeric label.`) + ' ' + _(`They are attached to a DHCP client or transaction.`)
 			_(`dnsmasq conditionally applies chosen DHCP options when a specific ${tagcodestring} is encountered.`) + '<br />' +
 			_(`In other words: "This ${tagcodestring} gets these ${tag_named_ov_string}".`) + '<br />' +
@@ -678,7 +686,7 @@ return view.extend({
 		// End Match Tags
 
 		// Set Tags
-		o = s.taboption('settags', form.SectionValue, '__settags__', form.TableSection, 'match', null,
+		o = tagstab.taboption('settags', form.SectionValue, '__settags__', form.TableSection, 'match', null,
 			_(`Encountering chosen DHCP ${dhcp_option_code}s (or also its ${dhcp_value_code}) from clients triggers dnsmasq to set alphanumeric ${tagcodestring}s.`) + '<br />' +
 			_(`In other words: "${tag_match_code_name} these ${dhcp_option_code}s to set this ${tagcodestring}" or "These ${dhcp_option_code}s set this ${tagcodestring}".`) + '<br />' +
 			_(`Internally, these configuration entries are called ${tag_match_code_name}.`) + '<br />' +
@@ -715,7 +723,7 @@ return view.extend({
 		// End Set tags
 
 		// Mac
-		o = s.taboption('mac', form.SectionValue, '__mac__', form.TableSection, 'mac', null,
+		o = tagstab.taboption('mac', form.SectionValue, '__mac__', form.TableSection, 'mac', null,
 			_('MAC hardware addresses uniquely identify clients to set tags on them.') + '<br /><br />' +
 			_('Use the <em>Add</em> Button to add a new MAC.'));
 		ss = o.subsection;
@@ -741,7 +749,7 @@ return view.extend({
 		// End Mac
 
 		// VC
-		o = s.taboption('vc', form.SectionValue, '__vc__', form.TableSection, 'vendorclass', null,
+		o = tagstab.taboption('vc', form.SectionValue, '__vc__', form.TableSection, 'vendorclass', null,
 			_('Match Vendor Class (VC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
 			_('Use the <em>Add</em> Button to add a new VC.'));
 		ss = o.subsection;
@@ -772,7 +780,7 @@ return view.extend({
 		// End VC
 
 		// UC
-		o = s.taboption('uc', form.SectionValue, '__uc__', form.TableSection, 'userclass', null,
+		o = tagstab.taboption('uc', form.SectionValue, '__uc__', form.TableSection, 'userclass', null,
 			_('Match User Class (UC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
 			_('Use the <em>Add</em> Button to add a new UC.'));
 		ss = o.subsection;
