@@ -4,6 +4,7 @@
 'require poll';
 'require rpc';
 'require uci';
+'require ui';
 'require form';
 'require network';
 'require validation';
@@ -360,6 +361,7 @@ return view.extend({
 		s.tab('files', _('Files'));
 		s.tab('relay', _('Relay'));
 		s.tab('mac', _('MAC'));
+		s.tab('matchtags', _('Match Tags'));
 
 		// Begin general
 		s.taboption('general', form.Flag, 'authoritative',
@@ -590,6 +592,61 @@ return view.extend({
 		});
 		// End pxe_tftp
 
+		// Tags
+
+		const exclamationmark_invert = '<code>!</code>';
+		const tagcodestring = '<code>tag</code>';
+		const tag_named_ov_string = '<code>option(6):&lt;opt-name&gt;,[&lt;value&gt;[,&lt;value&gt;]]</code>';
+		const addtag = _('Add tag');
+
+		// Match Tags
+		o = s.taboption('matchtags', form.SectionValue, '__tags__', form.TableSection, 'tag', null,
+			_(`A ${tagcodestring} is an alphanumeric label.`) + ' ' + _(`They are attached to a DHCP client or transaction.`)
+			_(`dnsmasq conditionally applies chosen DHCP options when a specific ${tagcodestring} is encountered.`) + '<br />' +
+			_(`In other words: "This ${tagcodestring} gets these ${tag_named_ov_string}".`) + '<br />' +
+			_(`${tagcodestring}s do not do anything by themselves. They are labels that other directives test against.`) + '<br />' +
+			_(`Note: invalid ${tag_named_ov_string} combinations may cause dnsmasq to crash silently.`) + '<br /><br />' +
+			_(`Prepend a ${tagcodestring} with ${exclamationmark_invert} to invert their domain of application, e.g. to send options to a host lacking a ${tagcodestring}.`) + '<br /><br />' +
+			_(`Use the %s button to add a new ${tagcodestring}.`).format( _(`<em>${addtag}</em>`) ) );
+		ss = o.subsection;
+		ss.placeholder = _('tag name');
+		ss.sortable = true;
+		ss.addremove = true;
+		ss.rowcolors = true;
+		ss.modaltitle = _('Edit tag');
+		ss.addbtntitle = addtag;
+		ss.nodescriptions = true;
+		ss.renderSectionAdd = function(extra_class) {
+			const el = form.TableSection.prototype.renderSectionAdd.apply(this, arguments);
+			const nameEl = el.querySelector('.cbi-section-create-name');
+			ui.addValidator(nameEl, 'uciname', true, (v) => {
+				const sections = [
+					...uci.sections('dhcp', 'tag').map(s => s['.name']),
+				];
+				if (sections.find((s) => { return s == v; })) {
+					return _('Name already exists.') + ' ' + 
+						_('Choose a unique name.');
+				}
+				return true;
+			}, 'blur', 'keyup');
+			return el;
+		};
+
+		so = ss.option(form.DynamicList, 'dhcp_option',
+			_('Apply these DHCP Options'),
+			_('Options to be added for this tag.'));
+		so.rmempty = true;
+		so.optional = true;
+		so.placeholder = '3,192.168.10.1,10.10.10.1';
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		// End Match Tags
+
 		// Mac
 		o = s.taboption('mac', form.SectionValue, '__mac__', form.TableSection, 'mac', null,
 			_('MAC hardware addresses uniquely identify clients to set tags on them.') + '<br /><br />' +
@@ -610,8 +667,12 @@ return view.extend({
 		so = ss.option(form.Value, 'networkid', _('Set this Tag'));
 		so.rmempty = false;
 		so.optional = false;
+		uci.sections('dhcp', 'tag').map(s => s['.name']).forEach(tag => {
+			so.value(tag);
+		});
 
 		// End Mac
+		// End Tags
 
 		return s;
 	},
