@@ -34,6 +34,18 @@ const callUfpList = rpc.declare({
 	expect: { '': {} }
 });
 
+var callNetworkDevices = rpc.declare({
+	object: 'luci-rpc',
+	method: 'getNetworkDevices',
+	expect: { '': {} }
+});
+
+const listServices = rpc.declare({
+	object: 'service',
+	method: 'list',
+	expect: { '': {} }
+});
+
 const CBILeaseStatus = form.DummyValue.extend({
 	renderWidget(section_id, option_id, cfgvalue) {
 		return E([
@@ -202,18 +214,23 @@ return view.extend({
 			callDUIDHints(),
 			getDHCPPools(),
 			network.getNetworks(),
-			L.hasSystemFeature('ufpd') ? callUfpList() : null
+			L.hasSystemFeature('ufpd') ? callUfpList() : null,
+			callNetworkDevices(),
+			listServices(),
 		]);
 	},
 
-	render([hosts, duids, pools, networks, macdata]) {
+	render([hosts, duids, pools, networks, macdata, devices, services]) {
 		let m;
+
+		devices = Object.keys(devices);
+		services = Object.keys(services);
 
 		m = new form.Map('dhcp', _('DHCP'));
 		m.tabbed = true;
 
 		if (L.hasSystemFeature('dnsmasq'))
-			this.add_dnsmasq_cfg(m, networks);
+			this.add_dnsmasq_cfg(m, networks, devices, services);
 
 		if (L.hasSystemFeature('odhcpd'))
 			this.add_odhcpd_cfg(m);
@@ -315,7 +332,7 @@ return view.extend({
 		});
 	},
 
-	add_dnsmasq_cfg(m, networks) {
+	add_dnsmasq_cfg(m, networks, devices, services) {
 		let s, o, ss, so;
 
 		s = m.section(form.TypedSection, 'dnsmasq', _('dnsmasq'));
@@ -622,6 +639,8 @@ return view.extend({
 			ui.addValidator(nameEl, 'uciname', true, (v) => {
 				const sections = [
 					...uci.sections('dhcp', 'tag').map(s => s['.name']),
+					...services,
+					...devices,
 				];
 				if (sections.find((s) => { return s == v; })) {
 					return _('Name already exists.') + ' ' + 
