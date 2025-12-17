@@ -380,6 +380,7 @@ return view.extend({
 		s.tab('mac', _('MAC'));
 		s.tab('matchtags', _('Match Tags'));
 		s.tab('vc', _('VC'));
+		s.tab('uc', _('UC'));
 
 		// Begin general
 		s.taboption('general', form.Flag, 'authoritative',
@@ -723,6 +724,37 @@ return view.extend({
 		so.optional = true;
 
 		// End VC
+
+		// UC
+		o = s.taboption('uc', form.SectionValue, '__uc__', form.TableSection, 'userclass', null,
+			_('Match User Class (UC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new UC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit UC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'userclass', _('Match this User Class'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('In order to set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		uci.sections('dhcp', 'tag').map(s => s['.name']).forEach(tag => {
+			so.value(tag);
+		});
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		// End UC
 
 		// End Tags
 
