@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-12-05 05:00+0000\n"
+"PO-Revision-Date: 2025-12-18 15:00+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbanip/lt/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1-dev\n"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:599
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:668
@@ -74,9 +74,8 @@ msgid "<IPv4><SPACE>"
 msgstr "<IPv4><SPACE>"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:235
-#, fuzzy
 msgid "<IPv4><SPACE>, concatinated"
-msgstr "<IPv4><SPACE>, sukoncentruotas"
+msgstr "<IPv4><SPACE>, sujungtas"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:240
 msgid "<IPv4><SPACE>NET"
@@ -300,11 +299,11 @@ msgstr ""
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:329
 msgid "Clear"
-msgstr ""
+msgstr "Išvalyti"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:719
 msgid "Collection of IP addresses based on Autonomous System Numbers."
-msgstr ""
+msgstr "IP adresų kolekcija pagal autonominių sistemų numerius („ASN“)."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:40
 msgid ""
@@ -314,6 +313,12 @@ msgid ""
 "packages/blob/master/net/banip/files/README.md\" target=\"_blank\" "
 "rel=\"noreferrer noopener\" >online documentation</a>"
 msgstr ""
+"„banIP“ prog. įrang paketo konfigūracija, skirta uždrausti gaunamus ir "
+"išsiunčiamus IP adresus naudojant įvardytus „nftables“ rinkinius. Prašome "
+"apsilankyti – <a style=\"color:#37c;font-weight:bold;\" href=\"https://"
+"github.com/openwrt/packages/blob/master/net/banip/files/README.md\" "
+"target=\"_blank\" rel=\"noreferrer noopener\" >internetinėje "
+"dokumentacijoje</a>, dėl išsamios informacijos."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:211
 msgid "Count"
@@ -325,7 +330,7 @@ msgstr "Šalys"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:675
 msgid "Country Selection"
-msgstr ""
+msgstr "Šalies pasirinkimas"
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:49
 msgid "Custom Feed Editor"
@@ -336,10 +341,12 @@ msgid ""
 "Deduplicate IP addresses across all active Sets and tidy up the local "
 "blocklist."
 msgstr ""
+"Pašalinti pasikartojančius IP adresus visuose aktyviuose rinkiniuose ir "
+"sutvarkyti vietinę blokavimo sąrašą."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:336
 msgid "Deduplicate IPs"
-msgstr ""
+msgstr "Pašalinti pasikartojančius IP(dgs.)"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:270
 msgid "Description"
@@ -383,7 +390,7 @@ msgstr "Atsisiuntimo įrankis"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:453
 msgid "Drop packets silently or actively reject Inbound traffic."
-msgstr ""
+msgstr "Tyliai mesti/šalinti paketus arba aktyviai atmesti atvykstančią srautą."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:631
 msgid "E-Mail Notification"
@@ -423,7 +430,7 @@ msgstr "Elementų kiekis"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:215
 msgid "Elements (max. 50)"
-msgstr ""
+msgstr "Elementai (maks. 50)"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:213
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:274
@@ -433,7 +440,7 @@ msgstr "Tuščia įvestis yra neleidžiama"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:448
 msgid "Enable GeoIP Map"
-msgstr ""
+msgstr "Įjungti/Įgalinti „GeoIP“ žemėlapį"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:603
 msgid "Enable Remote Logging"
@@ -444,10 +451,13 @@ msgid ""
 "Enable a GeoIP Map with suspicious Set elements. This requires external "
 "requests to get the map tiles and geolocation data."
 msgstr ""
+"Įjungti/Įgalinti „GeoIP“ žemėlapį su įtartinais rinkinio elementais. Tam "
+"reikalingos išorinės užklausos, norint gauti žemėlapio išklotinės ir "
+"geografinės vietos duomenys."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:445
 msgid "Enable nft counter for every Set element."
-msgstr ""
+msgstr "Įjungti/Įgalinti „nft“ skaitiklį kiekvienam rinkinio elementui."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:190
 msgid "Enable the banIP service."
@@ -462,6 +472,8 @@ msgstr ""
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:193
 msgid "Enable verbose debug logging in case of processing errors."
 msgstr ""
+"Įjungti/Įgalinti plačią/išsamią/daugiažodišką derinimo/trukdžių šalinimo "
+"žurnalinimą klaidų apdorojimo atveju."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:190
 msgid "Enabled"
@@ -477,11 +489,13 @@ msgstr "Įgalina IPv6 palaikymą."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:332
 msgid "Error Directory"
-msgstr ""
+msgstr "Klaidos katalogas/vietovė"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:786
 msgid "Expiry time for auto added blocklist Set members."
 msgstr ""
+"Galiojimo laikas, skirtai automatiškai pridėto blokavimo sąrašo rinkinio "
+"nariams."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:729
 msgid "External Allowlist Feeds"
@@ -493,11 +507,11 @@ msgstr "Išoriniai blokavimo sąrašo padavimai"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:524
 msgid "Feed Complete"
-msgstr ""
+msgstr "Padavimas užbaigtas"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:513
 msgid "Feed Flag Reset"
-msgstr ""
+msgstr "Padavimo vėliavos grąžinimas į pradinę padėtį ar būseną"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:208
 msgid "Feed Name"
@@ -513,7 +527,7 @@ msgstr "Padavimo/Rinkinio nustatymai"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:320
 msgid "Fill"
-msgstr ""
+msgstr "Užpildyti"
 
 #: applications/luci-app-banip/root/usr/share/luci/menu.d/luci-app-banip.json:65
 msgid "Firewall Log"
@@ -552,6 +566,9 @@ msgid ""
 "ICMP-Threshold in packets per second to prevent WAN-DoS attacks. To disable "
 "this safeguard set it to '0'."
 msgstr ""
+"„ICMP“ – paketų per sekundę slenkstis, skirtas išvengti kelią „WAN-DoS“ "
+"atakoms. Norėdami išjungti/išgalinti šią apsaugos priemonę, nustatykite ją į "
+"– „0-į“."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:770
 msgid "IP"
@@ -583,15 +600,15 @@ msgstr "IPv6 palaikymas"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:265
 msgid "Inbound"
-msgstr ""
+msgstr "Atvykstantis/-ys"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/feeds.js:267
 msgid "Inbound & Outbound"
-msgstr ""
+msgstr "Atvykstantis/-ys ir išsiunčiami"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:502
 msgid "Inbound & Outbound Feed"
-msgstr ""
+msgstr "Atvykstantys ir išsiunčiami padavimai"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:453
 msgid "Inbound Block Policy"
@@ -610,6 +627,8 @@ msgid ""
 "Increase the maximal number of open files, e.g. to handle the amount of "
 "temporary split files while loading the Sets."
 msgstr ""
+"Padidinti maksimalų atidarytų failų skaičių, pvz., kad būtų galima tvarkyti "
+"laikinai padalintų failų kiekį įkeliant rinkinius."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:124
 msgid "Information"
@@ -643,28 +662,34 @@ msgstr "Mažesnė pirmenybė"
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:299
 msgid "Limit the cpu cores used by banIP to save RAM, autodetected by default."
 msgstr ""
+"Apriboti „banIP“ naudojamus „CPU“ branduolius, kad sutaupytumėte operatyvią "
+"atmintį „RAM“, pagal numatytuosius nustatymus automatiškai aptinkama."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:766
 msgid "Limit the uplink autoallow function."
-msgstr ""
+msgstr "Apriboti aukštynkrypties automatinio leidimo funkciją."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:243
 msgid "List of available network interfaces to trigger the banIP start."
 msgstr ""
+"Galimų tinklo sąsajų ir/arba sietuvų, skirtų suaktyvinti „banIP“ paleidimą, "
+"sąrašas."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/setreport.js:86
 msgid "List the elements of a specific banIP-related Set."
-msgstr ""
+msgstr "Išvardyti konkretaus su „banIP“ susijusio rinkinio elementus."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:760
 msgid "Local Feed Settings"
-msgstr ""
+msgstr "Vietinio padavimo nustatymai"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:568
 msgid ""
 "Location for parsing the log file, e.g. via syslog-ng, to deactivate the "
 "standard parsing via logread."
 msgstr ""
+"Žurnalo failo nagrinėjimo vieta, pvz., naudojant – „syslog-ng“, kad būtų "
+"išjungtas/išgalintas standartinis nagrinėjimas naudojant – „logread“."
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:585
 msgid "Log Count"
@@ -672,7 +697,7 @@ msgstr "Žurnalo kiekis"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:562
 msgid "Log Inbound"
-msgstr ""
+msgstr "Žurnalinti atvykstanti/-čius"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:572
 msgid "Log Limit"
@@ -680,7 +705,7 @@ msgstr "Žurnalo limitas"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:565
 msgid "Log Outbound"
-msgstr ""
+msgstr "Žurnalinti išsiunčianti/-mus"
 
 #: applications/luci-app-banip/htdocs/luci-static/resources/view/banip/overview.js:559
 msgid "Log Prerouting"
