@@ -703,7 +703,7 @@ select,
 .cbi-select {
 	padding: 0;
 	position: relative;
-	background: linear-gradient(var(--background-color-high), var(--border-color-low));
+	background: var(--background-color-high);
 }
 
 .cbi-select select,
@@ -727,7 +727,7 @@ select,
 	bottom: 0;
 	content: "▾";
 	padding: 0 .3em;
-	background: linear-gradient(var(--background-color-high), var(--border-color-low));
+	background: var(--background-color-high);
 	pointer-events: none;
 	border-radius: 3px;
 	display: flex;
@@ -799,7 +799,7 @@ input[type="radio"]::before {
 	left: 0;
 	width: 14px;
 	height: 14px;
-	background: linear-gradient(var(--background-color-high), var(--background-color-low));
+	background: var(--background-color-high);
 	border: 1px solid var(--bd-color);
 	border-radius: 2px;
 }
@@ -1064,7 +1064,7 @@ header p {
 }
 
 header {
-	background: linear-gradient(#333333, #222222);
+	background: #333333;
 	box-shadow: 0 1px 3px hsla(var(--border-color-low-hsl), .25), inset 0 -1px 0 hsla(var(--border-color-low-hsl), .01);
 	padding: 0;
 	/* the redundant properties below work around a csstidy bug */
@@ -1124,7 +1124,7 @@ header {
 .nav .dropdown-menu li a:hover {
 	background-color: #191919;
 	background-repeat: repeat-x;
-	background-image: linear-gradient(to bottom, #292929, #191919);
+	background: #292929;
 	color: #fff;
 }
 
@@ -1195,7 +1195,7 @@ a.menu:after {
 .dropdown-menu a:hover {
 	background-color: #ddd;
 	background-repeat: repeat-x;
-	background-image: linear-gradient(to bottom, #eee, #ddd);
+	background: #eee;
 	color: #404040;
 	text-decoration: none;
 	box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.025), inset 0 -1px rgba(0, 0, 0, 0.025);
@@ -1234,7 +1234,7 @@ a.menu:after {
 	list-style: none;
 	display: flex;
 	flex-wrap: wrap;
-	background: linear-gradient(var(--tab-bar-background-color) 28px, var(--tab-inactive-border-color) 28px);
+	background: var(--tab-bar-background-color);
 	background-size: 1px 29px;
 	background-position: left bottom;
 }
@@ -1270,12 +1270,12 @@ a.menu:after {
 }
 
 .tabs > li:not(.active):hover, .cbi-tabmenu > .cbi-tab-disabled:hover {
-	background: linear-gradient(var(--tab-inactive-hover-background-color) 90%, var(--tab-inactive-border-color) 100%);
+	background: var(--tab-inactive-hover-background-color);
 }
 
 .tabs > li:not(.active), .cbi-tabmenu > .cbi-tab-disabled {
 	color: var(--tab-inactive-text-color);
-	background: linear-gradient(var(--tab-inactive-background-color) 90%, var(--tab-inactive-border-color) 100%);
+	background: var(--tab-inactive-background-color);
 }
 
 .cbi-tab-disabled[data-errors]::after {
@@ -1339,7 +1339,7 @@ a.menu:after {
 .breadcrumb {
 	padding: 7px 14px;
 	margin: 0 0 18px;
-	background: linear-gradient(to bottom, var(--background-color-high), var(--background-color-low));
+	background: var(--background-color-high);
 	border: 1px solid var(--border-color-medium);
 	border-radius: 3px;
 	display: flex;
@@ -1460,31 +1460,31 @@ body.modal-overlay-active #modal_overlay {
 .btn.error,
 .alert-message.error,
 .cbi-tooltip.error {
-	background: linear-gradient(var(--error-color-low), var(--error-color-medium));
+	background: var(--error-color-low);
 	color: var(--on-error-color);
 	border-color: var(--error-color-high) var(--error-color-high) var(--error-color-low);
 }
 
 .btn.success, .alert-message.success, .cbi-tooltip.success {
-	background: linear-gradient(var(--success-color-low), var(--success-color-medium));
+	background: var(--success-color-low);
 	color: var(--on-error-color);
 	border-color: var(--success-color-high) var(--success-color-high) var(--success-color-low);
 }
 
 .btn.info, .alert-message.info, .cbi-tooltip.info {
-	background: linear-gradient(var(--primary-color-low), var(--primary-color-medium));
+	background: var(--primary-color-low);
 	color: var(--on-primary-color);
 	border-color: var(--primary-color-high) var(--primary-color-high) var(--primary-color-low);
 }
 
 .alert-message.notice, .cbi-tooltip.notice {
-	background: linear-gradient(var(--background-color-low), var(--background-color-medium));
+	background: var(--background-color-low);
 	border-color: var(--background-color-high) var(--background-color-high) var(--background-color-low);
 	color: var(--text-color-high);
 }
 
 .alert-message.warning {
-	background: linear-gradient(var(--warn-color-low), var(--warn-color-medium));
+	background: var(--warn-color-low);
 	border-color: var(--warn-color-high) var(--warn-color-high) var(--warn-color-low);
 	color: var(--on-warn-color);
 }
@@ -1496,7 +1496,7 @@ body.modal-overlay-active #modal_overlay {
 .item::after,
 .btn,
 .cbi-button {
-	--default-btn-background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--background-color-low));
+	--default-btn-background: var(--background-color-high);
 	--on-color: var(--text-color-high);
 
 	cursor: pointer;
@@ -1573,20 +1573,20 @@ body.modal-overlay-active #modal_overlay {
 .cbi-page-actions .cbi-button-apply,
 .cbi-section-actions .cbi-button-edit {
 	--on-color: var(--on-primary-color);
-	background: linear-gradient(var(--primary-color-medium), var(--primary-color-low));
+	background: var(--primary-color-medium);
 	border-color: var(--primary-color-high);
 }
 
 .cbi-button-positive.important,
 .cbi-page-actions .cbi-button-save {
 	--on-color: var(--on-success-color);
-	background: linear-gradient(var(--success-color-medium), var(--success-color-low));
+	background: var(--success-color-medium);
 	border-color: var(--success-color-high);
 }
 
 .cbi-button-negative.important {
 	--on-color: var(--on-error-color);
-	background: linear-gradient(var(--error-color-medium), var(--error-color-low));
+	background: var(--error-color-medium);
 	border-color: var(--error-color-high);
 }
 
@@ -1606,7 +1606,7 @@ body.modal-overlay-active #modal_overlay {
 }
 
 .cbi-dropdown:not(.btn):not(.cbi-button) {
-	background: linear-gradient(var(--background-color-high) 0%, var(--border-color-low) 100%);
+	background: var(--background-color-high);
 	border: 1px solid var(--border-color-high);
 	border-radius: 3px;
 	color: var(--text-color-high);
@@ -1775,7 +1775,7 @@ body.modal-overlay-active #modal_overlay {
 
 .cbi-dropdown[open] > ul.dropdown > li[selected].focus,
 .cbi-dropdown[open] > ul.dropdown > li[selected]:hover {
-	background: linear-gradient(90deg, var(--primary-color-medium) 50%, var(--primary-color-low));
+	background: var(--primary-color-medium);
 }
 
 .cbi-dropdown[open] > ul.dropdown > li:last-child {
@@ -1931,7 +1931,7 @@ body.modal-overlay-active #modal_overlay {
 	padding: .5em .5em .25em .5em;
 	margin-bottom: .5em;
 	color: var(--on-warn-color);
-	background: linear-gradient(#fceec1, #eedc94);
+	background: #fceec1;
 	border: 1px solid var(--border-color-low);
 	border-color: var(--border-color-high) var(--border-color-high) var(--border-color-low);
 	border-radius: 4px;
@@ -2158,7 +2158,7 @@ th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
 	margin: 0 10px;
 	text-align: center;
 	white-space: nowrap;
-	background: linear-gradient(var(--background-color-high), var(--background-color-medium));
+	background: var(--background-color-high);
 	border-radius: 4px;
 	box-shadow: inset 0 1px 0 hsla(var(--text-color-low-hsl), 0.05);
 	display: inline-flex;
@@ -2186,7 +2186,7 @@ th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
 
 [data-darkmode="true"] .zonebadge[style],
 [data-darkmode="true"] .ifacebox-head[style] {
-	background: linear-gradient(rgba(var(--zone-color-rgb), .4), rgba(var(--zone-color-rgb), .3)) !important;
+	background: rgba(var(--zone-color-rgb), .4) !important;
 }
 
 .ifacebox .ifacebox-body {
@@ -2207,7 +2207,7 @@ th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
 	flex-direction: row;
 	border: 1px solid var(--border-color-high);
 	padding: 2px;
-	background: linear-gradient(var(--background-color-high), var(--background-color-high) 25%, var(--background-color-medium));
+	background: var(--background-color-high);
 	color: var(--text-color-high);
 	text-shadow: 0 1px 1px hsla(var(--background-color-high-hsl), 0.75);
 	border-radius: 4px;
