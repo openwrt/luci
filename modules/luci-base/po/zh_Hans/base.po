@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-12-06 07:06+0000\n"
+"PO-Revision-Date: 2025-12-19 19:00+0000\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1330
 msgid "!known (not known)"
@@ -411,7 +411,7 @@ msgstr "<abbr title=\"Router Advertisement\">RA</abbr> 重传定时器"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:792
 msgid "<abbr title=\"Router Advertisement\">RA</abbr>-Service"
-msgstr "<abbr title=\"Router Advertisement\">RA</abbr>-服务"
+msgstr "<abbr title=\"Router Advertisement\">RA</abbr> 服务"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:87
 msgctxt "nft relational \">\" operator expression"
@@ -684,7 +684,7 @@ msgstr "接受数据包"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1167
 msgid "Accept packets with local source addresses"
-msgstr "接受具有本地源地址的数据包"
+msgstr "接受源地址为本地地址的数据包"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:51
@@ -1669,7 +1669,7 @@ msgstr "广播"
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4552
 msgid "Browse…"
-msgstr "浏览…"
+msgstr "选择文件…"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:40
 msgid "Buffered"
@@ -2038,8 +2038,8 @@ msgid ""
 "negotiation especially in environments with heavy traffic load."
 msgstr ""
 "通过禁用用于安装密钥的 EAPOL-Key 帧的重传，来增加客户端密钥重装攻击的复杂度。"
-"此变通方法可能会导致互操作性问题，并降低密钥协商的可靠性，特别是在流量负载较"
-"重的环境中更明显。"
+"此变通方法可能会导致互操作问题，并降低密钥协商的可靠性，特别是在流量负载较重"
+"的环境中更明显。"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:101
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:106
@@ -3073,7 +3073,7 @@ msgstr "轻型双栈（RFC6333）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:438
 msgid "Dump cache on SIGUSR1, include requesting IP."
-msgstr "转储 SIGUSR1 缓存，包括请求 IP。"
+msgstr "收到 SIGUSR1 信号时转储缓存，包含请求来源的 IP 地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:689
 msgid "Dynamic <abbr title=\"Dynamic Host Configuration Protocol\">DHCP</abbr>"
@@ -5057,7 +5057,7 @@ msgstr "取消勾选则不创建到该接口网关的默认路由"
 #: protocols/luci-proto-openfortivpn/htdocs/luci-static/resources/protocol/openfortivpn.js:160
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:140
 msgid "If unchecked, the advertised DNS server addresses are ignored"
-msgstr "取消勾选则忽略所通告的 DNS 服务器"
+msgstr "取消勾选则忽略上游通告的 DNS 服务器"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:338
 msgid ""
@@ -7258,8 +7258,8 @@ msgid ""
 "lifetime of the announced server (use <code>0</code> to indicate a server "
 "which should no longer be used)."
 msgstr ""
-"注意：<code>_lifetime=&lt;seconds&gt;</code> SVC 参数设定通告服务器的有效期"
-"（使用 <code>0</code> 表示该服务器不在被使用）。"
+"注意：SVC 参数 <code>_lifetime=&lt;seconds&gt;</code> 设置通告的 DNS 服务器有"
+"效期（设置为 <code>0</code> 表示不再使用该服务器）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1644
 msgid ""
