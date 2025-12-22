@@ -47,7 +47,7 @@ return baseclass.extend({
 		const cfg = uci.add('dhcp', 'host');
 		uci.set('dhcp', cfg, 'name', lease.hostname);
 		uci.set('dhcp', cfg, 'ip', lease.ipaddr);
-		uci.set('dhcp', cfg, 'mac', [lease.macaddr.toUpperCase()]);
+		uci.set('dhcp', cfg, 'mac', [lease.macaddr.toLowerCase()]);
 
 		return uci.save()
 			.then(L.bind(L.ui.changes.init, L.ui.changes))
@@ -72,7 +72,7 @@ return baseclass.extend({
 		uci.set('dhcp', cfg, 'name', lease.hostname);
 		uci.set('dhcp', cfg, 'duid', [duid_iaid]);
 		if (lease.macaddr)
-			uci.set('dhcp', cfg, 'mac', [lease.macaddr.toUpperCase()]);
+			uci.set('dhcp', cfg, 'mac', [lease.macaddr.toLowerCase()]);
 		if (ip6arr)
 			uci.set('dhcp', cfg, 'hostid', (ip6arr[6] * 0xFFFF + ip6arr[7]).toString(16));
 
@@ -156,7 +156,7 @@ return baseclass.extend({
 					'class': 'cbi-button cbi-button-apply',
 					'click': L.bind(this.handleCreateStaticLease, this, lease),
 					'data-tooltip': _('Reserve a specific IP address for this device'),
-					'disabled': this.isMACStatic[lease.macaddr.toUpperCase()]
+					'disabled': this.isMACStatic[lease.macaddr.toLowerCase()]
 				}, [ _('Reserve IP') ]));
 			}
 
