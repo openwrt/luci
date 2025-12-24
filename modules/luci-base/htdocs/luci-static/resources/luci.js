@@ -1899,16 +1899,14 @@
 
 			DOM.content(vp, E('div', { 'class': 'spinning' }, _('Loading view…')));
 
-			return Promise.resolve(this.load())
-				.then(function (...args) {
-					if (L.loaded) {
-						return Promise.resolve(...args);
-					} else {
-						return new Promise(function (resolve) {
-							document.addEventListener('luci-loaded', resolve.bind(null, ...args), { once: true });
-						});
-					}
-				})
+			const ready = L.loaded
+				? Promise.resolve()
+				: new Promise((resolve) => {
+					document.addEventListener('luci-loaded', resolve, { once: true });
+				});
+
+			return ready
+				.then(LuCI.prototype.bind(this.load, this))
 				.then(LuCI.prototype.bind(this.render, this))
 				.then(LuCI.prototype.bind(function(nodes) {
 					const vp = document.getElementById('view');
