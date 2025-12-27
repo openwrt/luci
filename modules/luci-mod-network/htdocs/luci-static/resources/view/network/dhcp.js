@@ -4,6 +4,7 @@
 'require poll';
 'require rpc';
 'require uci';
+'require ui';
 'require form';
 'require network';
 'require validation';
@@ -30,6 +31,18 @@ const callDHCPLeases = rpc.declare({
 const callUfpList = rpc.declare({
 	object: 'fingerprint',
 	method: 'fingerprint',
+	expect: { '': {} }
+});
+
+var callNetworkDevices = rpc.declare({
+	object: 'luci-rpc',
+	method: 'getNetworkDevices',
+	expect: { '': {} }
+});
+
+const listServices = rpc.declare({
+	object: 'service',
+	method: 'list',
 	expect: { '': {} }
 });
 
@@ -201,18 +214,23 @@ return view.extend({
 			callDUIDHints(),
 			getDHCPPools(),
 			network.getNetworks(),
-			L.hasSystemFeature('ufpd') ? callUfpList() : null
+			L.hasSystemFeature('ufpd') ? callUfpList() : null,
+			callNetworkDevices(),
+			listServices(),
 		]);
 	},
 
-	render([hosts, duids, pools, networks, macdata]) {
+	render([hosts, duids, pools, networks, macdata, devices, services]) {
 		let m;
+
+		devices = Object.keys(devices);
+		services = Object.keys(services);
 
 		m = new form.Map('dhcp', _('DHCP'));
 		m.tabbed = true;
 
 		if (L.hasSystemFeature('dnsmasq'))
-			this.add_dnsmasq_cfg(m, networks);
+			this.add_dnsmasq_cfg(m, networks, devices, services);
 
 		if (L.hasSystemFeature('odhcpd'))
 			this.add_odhcpd_cfg(m);
@@ -314,8 +332,8 @@ return view.extend({
 		});
 	},
 
-	add_dnsmasq_cfg(m, networks) {
-		let s, o, ss, so;
+	add_dnsmasq_cfg(m, networks, devices, services) {
+		let s, o, ss, so, tagstab;
 
 		s = m.section(form.TypedSection, 'dnsmasq', _('dnsmasq'));
 		s.hidetitle = true;
@@ -359,6 +377,7 @@ return view.extend({
 		s.tab('logging', _('Log'));
 		s.tab('files', _('Files'));
 		s.tab('relay', _('Relay'));
+		s.tab('tagsparent', _('Tags'));
 
 		// Begin general
 		s.taboption('general', form.Flag, 'authoritative',
@@ -588,6 +607,210 @@ return view.extend({
 			so.value(name, display_str);
 		});
 		// End pxe_tftp
+
+		// Tags
+
+		const exclamationmark_invert = '<code>!</code>';
+		const tagcodestring = '<code>tag</code>';
+		const tag_named_ov_string = '<code>option(6):&lt;opt-name&gt;,[&lt;value&gt;[,&lt;value&gt;]]</code>';
+		const addtag = _('Add tag');
+		const dhcp_option_code = '<code>option(6)</code>';
+		const dhcp_optioncolon_code = '<code>option(6):</code>';
+		const dhcp_option_client_arch = '<code>option:client-arch,6</code>';
+		const dhcp_value_code = '<code>,value</code>';
+		const tag_match_code_name = '<code>match</code>';
+		const tag_match_option_syntax = '<code>&lt;option number&gt;|option:&lt;option name&gt;[,&lt;value&gt;]</code>';
+		const tag_name_efi_ia32 = '<code>efi-ia32</code>';
+		const wildcard_code = '<code>*</code>';
+		o = s.taboption('tagsparent', form.SectionValue, '__tagsparent__', form.TypedSection, '__tagsparent__');
+
+		tagstab = o.subsection;
+
+		tagstab.anonymous = true;
+		tagstab.cfgsections = function() { return [ '__tagsparent__' ] };
+
+		tagstab.tab('matchtags', _('Match Tags'));
+		tagstab.tab('settags', _('Set Tags'));
+		tagstab.tab('mac', _('MAC'));
+		tagstab.tab('vc', _('VC'));
+		tagstab.tab('uc', _('UC'));
+
+		// Match Tags
+		o = tagstab.taboption('matchtags', form.SectionValue, '__tags__', form.TableSection, 'tag', null,
+			_(`A ${tagcodestring} is an alphanumeric label.`) + ' ' + _(`They are attached to a DHCP client or transaction.`)
+			_(`dnsmasq conditionally applies chosen DHCP options when a specific ${tagcodestring} is encountered.`) + '<br />' +
+			_(`In other words: "This ${tagcodestring} gets these ${tag_named_ov_string}".`) + '<br />' +
+			_(`${tagcodestring}s do not do anything by themselves. They are labels that other directives test against.`) + '<br />' +
+			_(`Note: invalid ${tag_named_ov_string} combinations may cause dnsmasq to crash silently.`) + '<br /><br />' +
+			_(`Prepend a ${tagcodestring} with ${exclamationmark_invert} to invert their domain of application, e.g. to send options to a host lacking a ${tagcodestring}.`) + '<br /><br />' +
+			_(`Use the %s button to add a new ${tagcodestring}.`).format( _(`<em>${addtag}</em>`) ) );
+		ss = o.subsection;
+		ss.placeholder = _('tag name');
+		ss.sortable = true;
+		ss.addremove = true;
+		ss.rowcolors = true;
+		ss.modaltitle = _('Edit tag');
+		ss.addbtntitle = addtag;
+		ss.nodescriptions = true;
+		ss.renderSectionAdd = function(extra_class) {
+			const el = form.TableSection.prototype.renderSectionAdd.apply(this, arguments);
+			const nameEl = el.querySelector('.cbi-section-create-name');
+			ui.addValidator(nameEl, 'uciname', true, (v) => {
+				const sections = [
+					...uci.sections('dhcp', 'tag').map(s => s['.name']),
+					...services,
+					...devices,
+				];
+				if (sections.find((s) => { return s == v; })) {
+					return _('Name already exists.') + ' ' + 
+						_('Choose a unique name.');
+				}
+				return true;
+			}, 'blur', 'keyup');
+			return el;
+		};
+
+		so = ss.option(form.DynamicList, 'dhcp_option',
+			_('Apply these DHCP Options'),
+			_('Options to be added for this tag.'));
+		so.rmempty = true;
+		so.optional = true;
+		so.placeholder = '3,192.168.10.1,10.10.10.1';
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		// End Match Tags
+
+		// Set Tags
+		o = tagstab.taboption('settags', form.SectionValue, '__settags__', form.TableSection, 'match', null,
+			_(`Encountering chosen DHCP ${dhcp_option_code}s (or also its ${dhcp_value_code}) from clients triggers dnsmasq to set alphanumeric ${tagcodestring}s.`) + '<br />' +
+			_(`In other words: "${tag_match_code_name} these ${dhcp_option_code}s to set this ${tagcodestring}" or "These ${dhcp_option_code}s set this ${tagcodestring}".`) + '<br />' +
+			_(`Internally, these configuration entries are called ${tag_match_code_name}.`) + '<br />' +
+			_(`Matching option syntax: ${tag_match_option_syntax}.`) + ' ' +
+			_(`Prefix named (IPv6) options with ${dhcp_optioncolon_code}.`) + ' ' +
+			_(`Wildcards (${wildcard_code}) allowed.`) + '<br /><br />' +
+			_(`Match ${dhcp_option_client_arch}, Tag ${tag_name_efi_ia32}, sets tag ${tag_name_efi_ia32}`) + ' ' +
+			_('when number %s appears in the list of architectures sent by the client in option %s.').format('<code>6</code>', '<code>93</code>') + '<br />' +
+			_(`Use the %s Button to add a new ${tag_match_code_name}.`).format(_('<em>Add</em>')) );
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit Match');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'match', _('Match this client option(+value)'));
+		so.rmempty = false;
+		so.optional = false;
+		so.placeholder = '61,8c:80:90:01:02:03';
+
+		so = ss.option(form.Value, 'networkid', _('In order to Set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		so.placeholder = 'tag_name'
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		// End Set tags
+
+		// Mac
+		o = tagstab.taboption('mac', form.SectionValue, '__mac__', form.TableSection, 'mac', null,
+			_('MAC hardware addresses uniquely identify clients to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new MAC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit MAC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'mac', _('MAC match'));
+		so.validate = isValidMAC;
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('Set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		uci.sections('dhcp', 'tag').map(s => s['.name']).forEach(tag => {
+			so.value(tag);
+		});
+
+		// End Mac
+
+		// VC
+		o = tagstab.taboption('vc', form.SectionValue, '__vc__', form.TableSection, 'vendorclass', null,
+			_('Match Vendor Class (VC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new VC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit VC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'vendorclass', _('Match this Vendor Class'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('In order to set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		uci.sections('dhcp', 'tag').map(s => s['.name']).forEach(tag => {
+			so.value(tag);
+		});
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		// End VC
+
+		// UC
+		o = tagstab.taboption('uc', form.SectionValue, '__uc__', form.TableSection, 'userclass', null,
+			_('Match User Class (UC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new UC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit UC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'userclass', _('Match this User Class'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('In order to set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		uci.sections('dhcp', 'tag').map(s => s['.name']).forEach(tag => {
+			so.value(tag);
+		});
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		// End UC
+
+		// End Tags
 
 		return s;
 	},
