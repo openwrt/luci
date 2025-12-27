@@ -1,14 +1,34 @@
 {
-	"vendorName": "ZyXEL",
-	"deviceName": "NBG6817",
-	"boardNames": [ "nbg6817", "zyxel,nbg6817" ],
-	"partition1MTD": "mmcblk0p4",
-	"partition2MTD": "mmcblk0p7",
-	"labelOffset": 32,
-	"bootEnv1": null,
-	"bootEnv1Partition1Value": 255,
-	"bootEnv1Partition2Value": 1,
-	"bootEnv2": null,
-	"bootEnv2Partition1Value": null,
-	"bootEnv2Partition2Value": null
+	"device": {
+		"vendor": "ZyXEL",
+		"model": "NBG6817",
+		"board": [
+			"nbg6817",
+			"zyxel,nbg6817"
+		]
+	},
+	"commands": {
+		"params": [],
+		"get": null,
+		"set": null,
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				"ff"
+			],
+			"mtd": "mmcblk0p4",
+			"labelOffsetBytes": 32
+		},
+		{
+			"number": 2,
+			"param_values": [
+				"01"
+			],
+			"mtd": "mmcblk0p7",
+			"labelOffsetBytes": 32
+		}
+	]
 }
