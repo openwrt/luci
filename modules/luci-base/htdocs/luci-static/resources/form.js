@@ -1684,9 +1684,9 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	},
 
 	/** @private */
-	transformChoices() {
+	transformChoices(default_empty) {
 		if (!Array.isArray(this.keylist) || this.keylist.length == 0)
-			return null;
+			return default_empty;
 
 		const choices = {};
 
@@ -1837,6 +1837,8 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 			this.data ??= {};
 			this.data[section_id] = set_value;
 		}
+		console.log("called cfgvalue, section_id=", section_id);
+		console.log("this.data=", this.data);
 
 		return this.data?.[section_id];
 	},
@@ -3902,7 +3904,7 @@ const CBIDynamicList = CBIValue.extend(/** @lends LuCI.form.DynamicList.prototyp
 	/** @private */
 	renderWidget(section_id, option_index, cfgvalue) {
 		const value = (cfgvalue != null) ? cfgvalue : this.default;
-		const choices = this.transformChoices();
+		const choices = this.transformChoices({});
 		const items = L.toArray(value);
 
 		const widget = new ui.DynamicList(items, choices, {
@@ -3995,7 +3997,7 @@ const CBIListValue = CBIValue.extend(/** @lends LuCI.form.ListValue.prototype */
 
 	 /** @private */
 	renderWidget(section_id, option_index, cfgvalue) {
-		const choices = this.transformChoices();
+		const choices = this.transformChoices({});
 		const widget = new ui.Select((cfgvalue != null) ? cfgvalue : this.default, choices, {
 			id: this.cbid(section_id),
 			size: this.size,
@@ -4088,7 +4090,7 @@ const CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.prot
 
 	 /** @private */
 	renderWidget(section_id, option_index, cfgvalue) {
-		const choices = this.transformChoices();
+		const choices = this.transformChoices({});
 		const widget = new ui.Dropdown((cfgvalue != null) ? cfgvalue : this.default, choices, {
 			id: this.cbid(section_id),
 			size: this.size,
@@ -4498,7 +4500,7 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 	/** @private */
 	renderWidget(section_id, option_index, cfgvalue) {
 		const value = (cfgvalue != null) ? cfgvalue : this.default;
-		const choices = this.transformChoices();
+		const choices = this.transformChoices({});
 
 		const widget = new ui.Dropdown(L.toArray(value), choices, {
 			id: this.cbid(section_id),

@@ -1,6 +1,7 @@
 'use strict';
 'require baseclass';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 return baseclass.extend({
 	title: _('cUrl Plugin Configuration'),
@@ -8,7 +9,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o, ss;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s);
 
 		o = s.option(form.SectionValue, '__pages', form.TableSection, 'collectd_curl_page');
 		o.title = _('Fetch pages');
