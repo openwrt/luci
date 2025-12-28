@@ -359,6 +359,7 @@ return view.extend({
 		s.tab('logging', _('Log'));
 		s.tab('files', _('Files'));
 		s.tab('relay', _('Relay'));
+		s.tab('mac', _('MAC'));
 
 		// Begin general
 		s.taboption('general', form.Flag, 'authoritative',
@@ -588,6 +589,29 @@ return view.extend({
 			so.value(name, display_str);
 		});
 		// End pxe_tftp
+
+		// Mac
+		o = s.taboption('mac', form.SectionValue, '__mac__', form.TableSection, 'mac', null,
+			_('MAC hardware addresses uniquely identify clients to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new MAC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit MAC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'mac', _('MAC match'));
+		so.validate = isValidMAC;
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('Set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+
+		// End Mac
 
 		return s;
 	},
