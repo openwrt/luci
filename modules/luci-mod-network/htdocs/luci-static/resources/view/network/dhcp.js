@@ -379,6 +379,7 @@ return view.extend({
 		s.tab('relay', _('Relay'));
 		s.tab('mac', _('MAC'));
 		s.tab('matchtags', _('Match Tags'));
+		s.tab('vc', _('VC'));
 
 		// Begin general
 		s.taboption('general', form.Flag, 'authoritative',
@@ -691,6 +692,38 @@ return view.extend({
 		});
 
 		// End Mac
+
+		// VC
+		o = s.taboption('vc', form.SectionValue, '__vc__', form.TableSection, 'vendorclass', null,
+			_('Match Vendor Class (VC) strings sent by DHCP clients as a trigger to set tags on them.') + '<br /><br />' +
+			_('Use the <em>Add</em> Button to add a new VC.'));
+		ss = o.subsection;
+		ss.addremove = true;
+		ss.anonymous = true;
+		ss.sortable = true;
+		ss.nodescriptions = true;
+		ss.modaltitle = _('Edit VC');
+		ss.rowcolors = true;
+
+		so = ss.option(form.Value, 'vendorclass', _('Match this Vendor Class'));
+		so.rmempty = false;
+		so.optional = false;
+
+		so = ss.option(form.Value, 'networkid', _('In order to set this Tag'));
+		so.rmempty = false;
+		so.optional = false;
+		uci.sections('dhcp', 'tag').map(s => s['.name']).forEach(tag => {
+			so.value(tag);
+		});
+
+		so = ss.option(form.Flag, 'force',
+			_('Force'),
+			_('Send options to clients that did not request them.'));
+		so.rmempty = false;
+		so.optional = true;
+
+		// End VC
+
 		// End Tags
 
 		return s;
