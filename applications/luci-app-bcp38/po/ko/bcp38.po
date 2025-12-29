@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-12-27 06:29+0000\n"
+"PO-Revision-Date: 2025-12-28 09:01+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsbcp38/ko/>\n"
@@ -16,7 +16,7 @@ msgstr "허용된 IP 범위"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid "Auto-detect upstream IP"
-msgstr ""
+msgstr "상위 IP 자동 감지"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:26
 msgid ""
@@ -24,19 +24,21 @@ msgid ""
 "the configuration, adding an exception if so. If this does not work "
 "correctly, you can add exceptions manually below."
 msgstr ""
+"상위 IP가 현재 설정에서 차단되는지 확인하여 자동으로 예외 목록에 등록합니다. "
+"자동으로 등록되지 않으면, 아래에 직접 예외를 추가할 수 있습니다."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:10
 #: applications/luci-app-bcp38/root/usr/share/luci/menu.d/luci-app-bcp38.json:3
 msgid "BCP38"
-msgstr ""
+msgstr "BCP38"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:18
 msgid "BCP38 config"
-msgstr ""
+msgstr "BCP38 설정"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:38
 msgid "Blocked IP ranges"
-msgstr ""
+msgstr "차단된 IP 범위"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:21
 msgid "Enable"
@@ -48,18 +50,20 @@ msgstr "luci-app-bcp38의 UCI 접근 권한 부여"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid "Interface name"
-msgstr ""
+msgstr "인터페이스 이름"
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:32
 msgid ""
 "Interface to apply the blocking to should be the upstream WAN interface)."
-msgstr ""
+msgstr "차단은 상위 WAN 인터페이스를 대상으로 해야 합니다."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
 msgstr ""
+"차단된 범위보다 우선 적용됩니다. 이중 NAT 환경에서 자동 감지가 되지 않을 "
+"경우, 상위 네트워크를 허용 목록에 추가하세요."
 
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
@@ -68,3 +72,6 @@ msgid ""
 "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
 "installed, so no BCP38 firewall routes are needed."
 msgstr ""
+"이 기능은 <a href=\"http://tools.ietf.org/html/bcp38\">BCP 38</a>에 따라 "
+"사설 주소를 목적지로 하는 패킷이 인터넷으로 나가지 못하게 차단합니다. IPv6는 "
+"출발지 특정 기본 경로만 사용하므로 BCP38 방화벽이 필요 없습니다."
