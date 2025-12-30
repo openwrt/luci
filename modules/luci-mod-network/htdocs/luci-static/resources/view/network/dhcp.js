@@ -211,13 +211,13 @@ return view.extend({
 		m = new form.Map('dhcp', _('DHCP'));
 		m.tabbed = true;
 
+		this.add_leases_cfg(m, hosts, duids, pools, macdata);
+
 		if (L.hasSystemFeature('dnsmasq'))
 			this.add_dnsmasq_cfg(m, networks);
 
 		if (L.hasSystemFeature('odhcpd'))
 			this.add_odhcpd_cfg(m);
-
-		this.add_leases_cfg(m, hosts, duids, pools, macdata);
 
 		return m.render().then(function(mapEl) {
 			poll.add(function() {
