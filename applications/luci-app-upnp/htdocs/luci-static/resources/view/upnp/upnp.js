@@ -174,6 +174,7 @@ return view.extend({
 		o.value('', _('Disabled'), _('Manually override external IPv4 to allow a private IP'));
 		o.value('1', _('Enabled'), _('Filtering test currently requires an extra firewall rule'));
 		o.value('allow-filtered', _('Enabled') + ' (' + _('allow filtered') + ')', _('Allow filtered IPv4 CGNAT test result'));
+		o.value('allow-private-ext-ipv4', _('Ignore CGNAT (allow private IPv4, avoid)'), _('No STUN public IPv4 detection; various issues'));
 		o.optional = true;
 
 		o = s.taboption('advanced', form.Value, 'stun_host', _('STUN server'));
@@ -188,6 +189,7 @@ return view.extend({
 		o.datatype = 'ip4addr("nomask")';
 		o.placeholder = '(203.1.2.3)';
 		o.depends('allow_cgnat', '');
+		o.depends('allow_cgnat', 'allow-private-ext-ipv4');
 
 		o = s.taboption('advanced', form.ListValue, 'allow_third_party_mapping', _('Allow third-party mapping'),
 			_('Allow adding port maps for non-requesting IP addresses; normally disabled for security'));
