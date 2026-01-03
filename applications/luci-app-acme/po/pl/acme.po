@@ -7,8 +7,8 @@ msgstr ""
 "Language: pl\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural="
+"(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Weblate 5.14.1-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/logread.js:4
@@ -40,7 +40,7 @@ msgstr "Ustawienia zaawansowane"
 msgid "Alternative DNS API options"
 msgstr "Alternatywne opcje API DNS"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:419
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:423
 msgid "Cancel"
 msgstr "Anuluj"
 
@@ -48,11 +48,15 @@ msgstr "Anuluj"
 msgid "Cert files are stored in"
 msgstr "Pliki certyfikatów są przechowywane w"
 
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:302
+msgid "Certificate Profile"
+msgstr ""
+
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:76
 msgid "Certificate config"
 msgstr "Konfiguracja certyfikatu"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:537
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:541
 msgid "Certificates"
 msgstr "Certyfikaty"
 
@@ -60,7 +64,7 @@ msgstr "Certyfikaty"
 msgid "Challenge Alias"
 msgstr "Alias wyzwania"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:412
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:416
 msgid "Check the configurations of the added domain certificates"
 msgstr "Sprawdź konfiguracje dodanych certyfikatów domeny"
 
@@ -93,7 +97,7 @@ msgstr "Dni do czasu odnowienia"
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:120
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:157
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:280
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:440
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:444
 msgid "Default"
 msgstr "Domyślne"
 
@@ -176,7 +180,7 @@ msgid "Invalid domain. Allowed lowercase a-z, numbers and hyphen -"
 msgstr ""
 "Nieprawidłowa domena. Dozwolone są małe litery od A do Z, cyfry i dywiz -"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:519
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:523
 msgid "Issued on"
 msgstr "Wystawiono dnia"
 
@@ -204,7 +208,7 @@ msgstr "Port nasłuchiwania"
 msgid "Log View"
 msgstr "Widok dziennika"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:516
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:520
 msgid "Main Domain"
 msgstr "Domena główna"
 
@@ -220,11 +224,11 @@ msgstr ""
 "Port, na którym należy nasłuchiwać wyzwań ACME. Port będzie tymczasowo "
 "otwarty podczas walidacji."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:517
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:521
 msgid "Private Key"
 msgstr "Klucz prywatny"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:518
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:522
 msgid "Public Certificate"
 msgstr "Certyfikat publiczny"
 
@@ -240,7 +244,7 @@ msgstr "RSA 3072 bity"
 msgid "RSA 4096 bits"
 msgstr "RSA 4096 bitów"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:432
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:436
 msgid "Save"
 msgstr "Zapisz"
 
@@ -299,7 +303,7 @@ msgstr ""
 "poświadczeń wymaganych przez każdy interfejs API. Dodaj tutaj wiele wpisów w "
 "formacie zmiennej powłoki KEY=VAL, aby podać wiele zmiennych referencji."
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:399
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:403
 msgid ""
 "The domain %s in DDNS %s is already configured in %s. Please check it after "
 "the importing."
@@ -403,3 +407,43 @@ msgstr ""
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:147
 msgid "wildcards * require Validation method: DNS"
 msgstr "symbole wieloznaczne * wymagają metody walidacji: DNS"
+
+#~ msgid "Base64 content of private key. Use instead of YC_SA_Key_File_Path"
+#~ msgstr ""
+#~ "Zawartość klucza prywatnego w formacie Base64. Użyj zamiast "
+#~ "YC_SA_Key_File_Path"
+
+#~ msgid ""
+#~ "E.g. <code>_acme-challenge.example.com:12345:98765 alias.example."
+#~ "com:11111</code>"
+#~ msgstr ""
+#~ "Np. <code>_acme-challenge.example.com:12345:98765 alias.example."
+#~ "com:11111</code>"
+
+#~ msgid "OCID of tenancy that contains the target DNS zone"
+#~ msgstr "OCID dzierżawcy, który zawiera docelową strefę DNS"
+
+#~ msgid "OCID of user with permission to add/remove records from zones"
+#~ msgstr ""
+#~ "OCID użytkownika z uprawnieniami do dodawania/usuwania rekordów ze stref"
+
+#~ msgid ""
+#~ "Open <a href=\"https://www.duckdns.org/\">DuckDNS</a> and copy a token "
+#~ "here"
+#~ msgstr ""
+#~ "Otwórz <a href=\"https://www.duckdns.org/\">DuckDNS</a> i skopiuj tutaj "
+#~ "token"
+
+#~ msgid "Path to private API signing key file in PEM format"
+#~ msgstr ""
+#~ "Ścieżka do pliku prywatnego klucza podpisywania interfejsu API w formacie "
+#~ "PEM"
+
+#~ msgid "Should point to the tenancy home region"
+#~ msgstr "Powinien wskazywać region macierzysty dzierżawy"
+
+#~ msgid "The private API signing key in PEM format"
+#~ msgstr "Prywatny klucz podpisywania interfejsu API w formacie PEM"
+
+#~ msgid "This is usually NOT an email address"
+#~ msgstr "Zwykle NIE jest to adres e-mail"
