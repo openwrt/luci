@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:41+0200\n"
-"PO-Revision-Date: 2025-12-09 15:00+0000\n"
+"PO-Revision-Date: 2025-12-27 06:29+0000\n"
 "Last-Translator: Janderson Vieira Santos <jandersonvs79@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "openwrt/luci/pt_BR/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1330
 msgid "!known (not known)"
@@ -497,7 +497,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "Um diretório com o mesmo nome já existe."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr "Uma nova autenticação é necessária já que a sessão expirou."
 
@@ -1078,7 +1078,7 @@ msgstr "Alocar endereços IP sequencialmente"
 msgid "Allocate listen addresses"
 msgstr "Alocar endereços de escuta"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "Permitir autenticação <abbr title=\"Shell Seguro\">SSH</abbr> por senha"
@@ -1125,13 +1125,13 @@ msgstr "Permitir a reinicialização do dispositivo"
 msgid "Allow receiving on inactive ports"
 msgstr "Permitir recebimento em portas inativas"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
 "Permitir que equipamentos remotos conectem à portas locais encaminhadas por "
 "SSH"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "Permite autenticação do root com senha"
 
@@ -1139,7 +1139,7 @@ msgstr "Permite autenticação do root com senha"
 msgid "Allow system feature probing"
 msgstr "Permitir detecção dos recursos do sistema"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "Permite que o usuário <em>root</em> se autentique utilizando senha"
 
@@ -1298,7 +1298,7 @@ msgstr "Aplicar cópia de segurança?"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Pedido para aplicar falhou com o estado <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1663,6 +1663,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Vincule o túnel a esta interface (opcional)."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4395,7 +4399,7 @@ msgstr "Roteador"
 msgid "Gateway Mode"
 msgstr "Modo gateway"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "Acesso remoto a portas encaminhadas"
 
@@ -5550,7 +5554,8 @@ msgstr "Identificador do cartão com circuito integrado"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "Interface"
 
@@ -6172,7 +6177,13 @@ msgstr "Escutar por pares"
 msgid "Listen interfaces"
 msgstr "Interfaces de escuta"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Escuta apenas na interface especificada. Se não especificado, escuta em todas"
@@ -6390,7 +6401,7 @@ msgstr "Unidade de registro"
 msgid "Log in"
 msgstr "Entrar"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "Para fazer login…"
 
@@ -8255,7 +8266,7 @@ msgstr "Passagem direta (Dispositivo físico espelhado para um único MAC VLAN)"
 msgid "Password"
 msgstr "Senha"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "Autenticação por senha"
 
@@ -8338,7 +8349,7 @@ msgstr "Caminho interno para o certificado do cliente"
 msgid "Path to inner Private Key"
 msgstr "Caminho interno para a chave privada"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "Pausado"
 
@@ -8485,7 +8496,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Política: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -8997,7 +9008,7 @@ msgstr "Referências"
 msgid "Refresh Channels"
 msgstr "Atualiza os canais"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "Atualizando"
 
@@ -9319,7 +9330,7 @@ msgstr "Requer wpa-supplicant com suporte SAE"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "Requer wpa-supplicant com suporte WEP"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9611,7 +9622,7 @@ msgstr ""
 "Regras determinam qual tabela de roteamento usar, com base em condições como "
 "endereço de origem ou interface."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "Erro de execução"
 
@@ -9688,7 +9699,7 @@ msgid "SWAP"
 msgstr "SWAP"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9697,7 +9708,7 @@ msgstr "SWAP"
 msgid "Save"
 msgstr "Salvar"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9838,7 +9849,7 @@ msgstr "Tipo do Serviço"
 msgid "Services"
 msgstr "Serviços"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "Sessão expirada"
 

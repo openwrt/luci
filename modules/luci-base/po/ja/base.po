@@ -470,7 +470,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "同じ名前のディレクトリがすでに存在します。"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr "認証セッションの期限が切れたため、再ログインが必要です。"
 
@@ -1024,7 +1024,7 @@ msgstr "順次IP割り当て"
 msgid "Allocate listen addresses"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "<abbr title=\"Secure Shell\">SSH</abbr>パスワード認証を許可"
 
@@ -1066,11 +1066,11 @@ msgstr "デバイスの再起動を許可"
 msgid "Allow receiving on inactive ports"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr "リモートホストがSSH転送されたローカルのポートに接続することを許可"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "パスワードでの root ログインを許可"
 
@@ -1078,7 +1078,7 @@ msgstr "パスワードでの root ログインを許可"
 msgid "Allow system feature probing"
 msgstr "システム機能の調査を許可"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "パスワードでの <em>root</em> 権限へのログインを許可します"
 
@@ -1231,7 +1231,7 @@ msgstr "バックアップを適用しますか?"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "適用のリクエストに失敗しました ステータスコード:<code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1569,6 +1569,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "トンネルをこのインターフェースにバインド（オプション）。"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4220,7 +4224,7 @@ msgstr "ゲートウェイ"
 msgid "Gateway Mode"
 msgstr "ゲートウェイ モード"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "ゲートウェイ ポート"
 
@@ -5336,7 +5340,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "インターフェース"
 
@@ -5936,7 +5941,13 @@ msgstr ""
 msgid "Listen interfaces"
 msgstr "リッスンインターフェース"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "指定されたインターフェースでのみリッスンを行います。設定しない場合はすべて対"
@@ -6153,7 +6164,7 @@ msgstr ""
 msgid "Log in"
 msgstr "ログイン"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "ログイン…"
 
@@ -7955,7 +7966,7 @@ msgstr "パススルー（物理デバイスを単一の MAC ベース VLAN へ�
 msgid "Password"
 msgstr "パスワード"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "パスワード認証"
 
@@ -8031,7 +8042,7 @@ msgstr "内部クライアント証明書のパス"
 msgid "Path to inner Private Key"
 msgstr "内部秘密鍵のパス"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "一時停止中"
 
@@ -8178,7 +8189,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -8675,7 +8686,7 @@ msgstr "参照"
 msgid "Refresh Channels"
 msgstr "チャンネルをリフレッシュ"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "更新中"
 
@@ -8979,7 +8990,7 @@ msgstr "SAEをサポートするwpa-supplicantが必要"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "WEPをサポートするwpa-supplicantが必要"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9251,7 +9262,7 @@ msgid ""
 "address or interface."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "ランタイム エラー"
 
@@ -9328,7 +9339,7 @@ msgid "SWAP"
 msgstr "スワップ"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9337,7 +9348,7 @@ msgstr "スワップ"
 msgid "Save"
 msgstr "保存"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9478,7 +9489,7 @@ msgstr "サービス タイプ"
 msgid "Services"
 msgstr "サービス"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "セッション期限切れ"
 

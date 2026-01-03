@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-12-19 19:00+0000\n"
+"PO-Revision-Date: 2025-12-31 14:29+0000\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -387,7 +387,7 @@ msgstr "<abbr title=\"Prefix Delegation（前缀代理）\">PD</abbr> 最小长�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:822
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Flags"
-msgstr "<abbr title=\"Router Advertisement（路由器通告）\">RA</abbr> 标记"
+msgstr "<abbr title=\"Router Advertisement（路由器通告）\">RA</abbr> 标识"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:916
 msgid "<abbr title=\"Router Advertisement\">RA</abbr> Hop Limit"
@@ -483,7 +483,7 @@ msgstr "Yggdrasil 设置了默认 MTU 值 65535。推荐使用该默认值。"
 msgid "A directory with the same name already exists."
 msgstr "已存在同名的目录。"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr "由于身份验证会话已过期，需要重新登录。"
 
@@ -1045,7 +1045,7 @@ msgstr "顺序分配 IP"
 msgid "Allocate listen addresses"
 msgstr "分配监听地址"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "允许 <abbr title=\"Secure Shell（安全外壳）\">SSH</abbr> 密码验证"
 
@@ -1088,11 +1088,11 @@ msgstr "允许重启设备"
 msgid "Allow receiving on inactive ports"
 msgstr "允许在非活动端口上接收"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr "允许远程主机连接到本地 SSH 转发端口"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "允许 root 用户凭密码登录"
 
@@ -1100,7 +1100,7 @@ msgstr "允许 root 用户凭密码登录"
 msgid "Allow system feature probing"
 msgstr "允许系统功能探测"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "允许 <em>root</em> 用户凭密码登录"
 
@@ -1248,7 +1248,7 @@ msgstr "应用备份？"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "应用请求失败，状态 <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1589,6 +1589,10 @@ msgstr "绑定服务记录到域名：指定服务的位置。见 <a href=\"%s\"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "将隧道绑定到此接口 (可选)。"
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -2024,7 +2028,7 @@ msgstr "命令执行失败"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:73
 msgid "Comment"
-msgstr "ACL 描述"
+msgstr "注释"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:182
 msgid "Common name or numeric ID of the %s in which this route is found"
@@ -4216,7 +4220,7 @@ msgstr "网关"
 msgid "Gateway Mode"
 msgstr "网关模式"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "网关端口"
 
@@ -5337,7 +5341,8 @@ msgstr "集成电路卡识别符"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "接口"
 
@@ -5595,7 +5600,7 @@ msgstr "跳转到另一个由优先级值指定的规则"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:230
 msgid "Keep settings and retain the current configuration"
-msgstr "保留当前配置"
+msgstr "保留设置并继续使用当前配置"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:60
 msgid "Keep-Alive"
@@ -5936,7 +5941,13 @@ msgstr "监听对等节点"
 msgid "Listen interfaces"
 msgstr "监听接口"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "仅监听指定的接口，未指定则监听全部"
 
@@ -6147,7 +6158,7 @@ msgstr "日志记录设施"
 msgid "Log in"
 msgstr "登录"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "去登录…"
 
@@ -7957,7 +7968,7 @@ msgstr "直通（将物理设备镜像到单个 MAC VLAN）"
 msgid "Password"
 msgstr "密码"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "密码验证"
 
@@ -8035,7 +8046,7 @@ msgstr "内部客户端证书的路径"
 msgid "Path to inner Private Key"
 msgstr "内部私钥的路径"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "暂停"
 
@@ -8182,7 +8193,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "策略：<strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -8672,7 +8683,7 @@ msgstr "引用"
 msgid "Refresh Channels"
 msgstr "重新扫描"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "刷新"
 
@@ -8978,7 +8989,7 @@ msgstr "需要带 SAE 支持的 wpa-supplicant"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "需要带 WEP 支持的 wpa-supplicant"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9254,7 +9265,7 @@ msgid ""
 "address or interface."
 msgstr "规则根据诸如源地址或接口等条件来决定使用哪个路由表。"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "运行时错误"
 
@@ -9331,7 +9342,7 @@ msgid "SWAP"
 msgstr "交换分区"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9340,7 +9351,7 @@ msgstr "交换分区"
 msgid "Save"
 msgstr "保存"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9478,7 +9489,7 @@ msgstr "服务类型"
 msgid "Services"
 msgstr "服务"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "会话已过期"
 
@@ -10325,14 +10336,14 @@ msgstr ""
 msgid ""
 "The <em>Managed address configuration</em> (M) flag indicates that IPv6 "
 "addresses are available via DHCPv6."
-msgstr "<em>受管地址配置</em> (M) 标记表明可以通过 DHCPv6 获取 IPv6 地址。"
+msgstr "<em>管理地址配置</em> (M) 标识表明可以通过 DHCPv6 获取 IPv6 地址。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:830
 msgid ""
 "The <em>Mobile IPv6 Home Agent</em> (H) flag indicates that the device is "
 "also acting as Mobile IPv6 home agent on this link."
 msgstr ""
-"<em>移动 IPv6 归属代理</em> (H) 标记表明该设备在此链路上还充当移动 IPv6 归属"
+"<em>移动 IPv6 家乡代理</em> (H) 标识表明该设备在此链路上还充当移动 IPv6 家乡"
 "代理。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:828
@@ -10340,7 +10351,7 @@ msgid ""
 "The <em>Other configuration</em> (O) flag indicates that other information, "
 "such as DNS servers, is available via DHCPv6."
 msgstr ""
-"<em>其他配置</em> (O) 标记表明其他信息，如 DNS 服务器，可以通过 DHCPv6 获得。"
+"<em>其他配置</em> (O) 标识表明其他信息，如 DNS 服务器可以通过 DHCPv6 获得。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:84
 msgid "The <em>block mount</em> command failed with code %d"
@@ -10506,7 +10517,7 @@ msgstr "加入一个隐藏的无线网络时，必须手动指定正确的 SSID"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:761
 msgid "The default (%s) is zero for both IPv4 and IPv6."
-msgstr "默认值（%s）对于 IPv4 和 IPv6 都是 0。"
+msgstr "默认值（%s），IPv4 和 IPv6 都是 0。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4911
 msgid ""
@@ -11683,7 +11694,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:799
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:807
 msgid "Useful for systems behind firewalls."
-msgstr "对防火墙后面的系统有用。"
+msgstr "路由器在防火墙后面时很有用（用于规避低端口拦截）。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/syslog.js:18
 msgid "User"
@@ -12476,7 +12487,7 @@ msgstr "l3miss: 第三层未命中"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:825
 msgid "managed config (M)"
-msgstr "受管配置 (M)"
+msgstr "管理配置 (M)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1469
 msgid "medium security"
@@ -12493,7 +12504,7 @@ msgstr "分钟"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:829
 msgid "mobile home agent (H)"
-msgstr "移动归属代理 (H)"
+msgstr "移动家乡代理 (H)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:47
 msgid "no"

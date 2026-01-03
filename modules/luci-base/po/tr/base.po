@@ -482,7 +482,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "Aynı isim ile bir dizin zaten bulunuyor."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr ""
 "Kimlik doğrulama oturumu sona erdiğinden dolayı yeni bir oturum açma gerekli."
@@ -1052,7 +1052,7 @@ msgid "Allocate listen addresses"
 msgstr "Dinleme adresleri tahsis edin"
 
 # "Secure Shell" için ne kullanılabilinir bir fikrim yok.
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "<abbr title=\"Secure Shell\">SSH</abbr> parola kimlik doğrulamasına izin ver"
@@ -1098,13 +1098,13 @@ msgstr "Cihazın yeniden başlamasına izin ver"
 msgid "Allow receiving on inactive ports"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
 "Uzak ana makinelerin yerel yönlendirilen SSH bağlantı noktalarına "
 "bağlanmasına izin ver"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "Parola ile root girişlerine izin ver"
 
@@ -1112,7 +1112,7 @@ msgstr "Parola ile root girişlerine izin ver"
 msgid "Allow system feature probing"
 msgstr "Sistemin özellik araştırmasına izin ver"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "<em>root</em> kullanıcısının parolayla oturum açmasına izin ver"
 
@@ -1268,7 +1268,7 @@ msgstr "Yedek uygulansın mı?"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Başvuru isteği <code>%h</code> durumuyla başarısız oldu"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1626,6 +1626,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Tüneli bu arabirime bağla (isteğe bağlı)."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4314,7 +4318,7 @@ msgstr "Ağ Geçidi"
 msgid "Gateway Mode"
 msgstr "Ağ Geçidi Modu"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "Ağ Geçidi Bağlantı Noktaları"
 
@@ -5453,7 +5457,8 @@ msgstr "Entegre Devre Kartı Tanımlayıcısı"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "Arayüz"
 
@@ -6068,7 +6073,13 @@ msgstr "Eşleri dinle"
 msgid "Listen interfaces"
 msgstr "Arayüzleri Dinle"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "Yalnızca verilen arayüzde dinle veya belirtilmemişse tümünde dinle"
 
@@ -6284,7 +6295,7 @@ msgstr "Günlük tesisi"
 msgid "Log in"
 msgstr "Oturum Aç"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "Giriş yap…"
 
@@ -8130,7 +8141,7 @@ msgstr "Geçiş (Fiziksel cihazı tek bir MAC VLAN'a yansıtın)"
 msgid "Password"
 msgstr "Şifre"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "Parola kimlik doğrulaması"
 
@@ -8210,7 +8221,7 @@ msgstr "İç İstemci Sertifikası'nın Yolu"
 msgid "Path to inner Private Key"
 msgstr "İç Özel anahtar'ın Yolu"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "Duraklatıldı"
 
@@ -8357,7 +8368,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Politika: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -8858,7 +8869,7 @@ msgstr "Referanslar"
 msgid "Refresh Channels"
 msgstr "Kanalları Yenile"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "Yenileniyor"
 
@@ -9172,7 +9183,7 @@ msgstr "SAE destekli wpa-supplicant gerektirir"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "WEP destekli wpa-supplicant gerektirir"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9461,7 +9472,7 @@ msgid ""
 "address or interface."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "Çalışma hatası"
 
@@ -9538,7 +9549,7 @@ msgid "SWAP"
 msgstr "TAKAS"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9547,7 +9558,7 @@ msgstr "TAKAS"
 msgid "Save"
 msgstr "Kaydet"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9688,7 +9699,7 @@ msgstr "Servis Tipi"
 msgid "Services"
 msgstr "Hizmetler"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "Oturum süresi doldu"
 

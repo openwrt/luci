@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: base\n"
 "POT-Creation-Date: 2010-05-09 01:01+0300\n"
-"PO-Revision-Date: 2025-12-16 22:00+0000\n"
-"Last-Translator: vanapro1 <law820314@gmail.com>\n"
+"PO-Revision-Date: 2025-12-28 09:00+0000\n"
+"Last-Translator: sergio <sergio+it@outerface.net>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/luci/ru/"
 ">\n"
 "Language: ru\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.1-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -498,7 +498,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "Директория с таким же именем уже существует."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr "Необходима авторизация."
 
@@ -1088,7 +1088,7 @@ msgstr "Выделять IP-адреса последовательно"
 msgid "Allocate listen addresses"
 msgstr "Распределение адресов прослушивания"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "Разрешить <abbr title=\"Secure Shell\">SSH</abbr>-аутентификацию с помощью "
@@ -1137,13 +1137,13 @@ msgstr "Разрешить перезагрузку устройства"
 msgid "Allow receiving on inactive ports"
 msgstr "Разрешить приём на неактивных портах"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
 "Разрешить удалённое подключение к локальным перенаправленным портам <abbr "
 "title=\"Secure Shell\">SSH</abbr>"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "Root входит по паролю"
 
@@ -1151,7 +1151,7 @@ msgstr "Root входит по паролю"
 msgid "Allow system feature probing"
 msgstr "Разрешить опробование возможностей системы"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr ""
 "Разрешить пользователю <em>root</em> входить в систему с помощью пароля"
@@ -1318,7 +1318,7 @@ msgstr "Восстановить резервную копию?"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Ошибка <code>%h</code> запроса на применение"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1684,6 +1684,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Открытый туннель для этого интерфейса (необязательно)."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4456,7 +4460,7 @@ msgstr "Шлюз"
 msgid "Gateway Mode"
 msgstr "Режим шлюза"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "Разрешить порты шлюза"
 
@@ -5631,7 +5635,8 @@ msgstr "Идентификатор карты интегральной микр�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "Интерфейс"
 
@@ -6260,7 +6265,13 @@ msgstr "Слушатель для пиров"
 msgid "Listen interfaces"
 msgstr "Интерфейс для входящих соединений"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Принимать подключения только на указанном интерфейсе или, если интерфейс не "
@@ -6485,7 +6496,7 @@ msgstr "Функции журнала"
 msgid "Log in"
 msgstr "Войти"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "Войти…"
 
@@ -8399,7 +8410,7 @@ msgstr "Прозрачный (зеркалировать физическое у
 msgid "Password"
 msgstr "Пароль"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "С помощью пароля"
 
@@ -8480,7 +8491,7 @@ msgstr "Путь к внутренним Client-сертификатам"
 msgid "Path to inner Private Key"
 msgstr "Путь к внутреннему Приватному ключу"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "Приостановлено"
 
@@ -8627,7 +8638,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Политика: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -9150,7 +9161,7 @@ msgstr "Ссылки"
 msgid "Refresh Channels"
 msgstr "Обновить данные"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "Обновляется"
 
@@ -9477,7 +9488,7 @@ msgstr "Требуется wpa-supplicant с поддержкой SAE"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "Требуется wpa-supplicant с поддержкой WEP"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9766,7 +9777,7 @@ msgstr ""
 "Правила определяют, какую таблицу маршрутизации использовать, основываясь на "
 "условиях (например, исходный адрес или интерфейс)."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "Ошибка исполнения"
 
@@ -9845,7 +9856,7 @@ msgid "SWAP"
 msgstr "Разделы подкачки (swap)"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9854,7 +9865,7 @@ msgstr "Разделы подкачки (swap)"
 msgid "Save"
 msgstr "Сохранить"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9999,7 +10010,7 @@ msgstr "Тип службы"
 msgid "Services"
 msgstr "Службы"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "Сессия истекла"
 
@@ -10584,7 +10595,7 @@ msgstr "Автозапуск"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:90
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:139
 msgid "State"
-msgstr "Состояние"
+msgstr "Штат"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:35
 msgid "Static IPv4 Routes"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2025-12-07 00:56+0000\n"
+"PO-Revision-Date: 2025-12-26 15:12+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/luci/"
 "uk/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1330
 msgid "!known (not known)"
@@ -503,7 +503,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "Каталог з такою ж назвою вже існує."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr ""
 "Оскільки сеанс автентифікації закінчився, потрібен новий вхід у систему."
@@ -1082,7 +1082,7 @@ msgstr "Виділяти IP послідовно"
 msgid "Allocate listen addresses"
 msgstr "Виділити адреси прослуховування"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "Дозволити <abbr title=\"Secure Shell — безпечна оболонка\">SSH</abbr>-"
@@ -1131,13 +1131,13 @@ msgstr "Дозволити перезавантаження пристрою"
 msgid "Allow receiving on inactive ports"
 msgstr "Дозволити отримання через неактивні порти"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
 "Дозволити віддаленим вузлам підключення до локальних переспрямованих портів "
 "SSH"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "Дозволити root-вхід із паролем"
 
@@ -1145,7 +1145,7 @@ msgstr "Дозволити root-вхід із паролем"
 msgid "Allow system feature probing"
 msgstr "Дозволити зондування функцій системи"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "Дозволити користувачеві <em>root</em> вхід до системи з паролем"
 
@@ -1304,7 +1304,7 @@ msgstr "Застосувати резервну копію?"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Сталася помилка запиту на застосування зі статусом <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1665,6 +1665,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Прив'язка тунелю до цього інтерфейсу (за бажання)."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4377,7 +4381,7 @@ msgstr "Шлюз"
 msgid "Gateway Mode"
 msgstr "Режим шлюзу"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "Порти шлюзу"
 
@@ -5487,7 +5491,7 @@ msgstr "Внутрішнє обмеження сертифіката (Шабло
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:878
 msgid "Install %s"
-msgstr "встановити %s"
+msgstr "Встановити %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:289
 msgid "Install protocol extensions..."
@@ -5531,7 +5535,8 @@ msgstr "Ідентифікатор картки інтегральної схе�
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "Інтерфейс"
 
@@ -6154,7 +6159,13 @@ msgstr "Слухайте однолітків"
 msgid "Listen interfaces"
 msgstr "Інтерфейси прослуховування"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Прослуховувати тільки на цьому інтерфейсі, якщо <em>невизначено</em> – на "
@@ -6374,7 +6385,7 @@ msgstr "Журнал об'єкта"
 msgid "Log in"
 msgstr "Увійти"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "До входу…"
 
@@ -6441,7 +6452,7 @@ msgstr "MAC"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1588
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:51
 msgid "MAC Address"
-msgstr "MAC-адреса"
+msgstr "MAC-Адреса"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1143
 msgid "MAC Address Filter"
@@ -8254,7 +8265,7 @@ msgstr ""
 msgid "Password"
 msgstr "Пароль"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "Автентифікація за паролем"
 
@@ -8335,7 +8346,7 @@ msgstr "Шлях до внутрішнього сертифіката клієн
 msgid "Path to inner Private Key"
 msgstr "Шлях до внутрішнього закритого ключа"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "Призупинено"
 
@@ -8482,7 +8493,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Політика: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -8997,7 +9008,7 @@ msgstr "Посиланням"
 msgid "Refresh Channels"
 msgstr "Оновити канали"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "Поновлюється"
 
@@ -9315,7 +9326,7 @@ msgstr "Потребує wpa-суплікатора з підтримкою SAE"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "Потребує wpa-суплікатора з підтримкою WEP"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9607,7 +9618,7 @@ msgstr ""
 "Правила визначають, яку таблицю маршрутизації використовувати, на основі "
 "таких умов, як адреса джерела чи інтерфейс."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "Помилка виконання"
 
@@ -9684,7 +9695,7 @@ msgid "SWAP"
 msgstr "SWAP"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9693,7 +9704,7 @@ msgstr "SWAP"
 msgid "Save"
 msgstr "Зберегти"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9834,7 +9845,7 @@ msgstr "Тип сервісу"
 msgid "Services"
 msgstr "Сервіси"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "Час сеансу минув"
 

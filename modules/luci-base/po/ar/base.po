@@ -481,7 +481,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "يوجد دليل بنفس الاسم."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr "يجب الدخول مجدداً لئن صلاحية جلسة قد انتهت."
 
@@ -1044,7 +1044,7 @@ msgstr "تخصيص IP بالتسلسل"
 msgid "Allocate listen addresses"
 msgstr "تخصيص عناوين الاستماع"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "السماح بمصادقة كلمة المرور <abbr title=\"Secure Shell\">SSH</abbr>"
 
@@ -1088,11 +1088,11 @@ msgstr "السماح بإعادة تشغيل الجهاز"
 msgid "Allow receiving on inactive ports"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr "السماح للأجهزة البعيدة بالاتصال بمنافذ SSH المحلية"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "السماح بتسجيل الدخول إلى root بكلمة مرور"
 
@@ -1100,7 +1100,7 @@ msgstr "السماح بتسجيل الدخول إلى root بكلمة مرور"
 msgid "Allow system feature probing"
 msgstr "السماح بفحص ميزات النظام"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "اسمح للمستخدم <em>الجذر</em> بتسجيل الدخول باستخدام كلمة المرور"
 
@@ -1253,7 +1253,7 @@ msgstr "تطبيق النسخ الاحتياطي؟"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "فشل تطبيق الطلب بالحالة <code> h% </code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1602,6 +1602,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "اربط النفق بهذه الواجهة (اختياري)."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4259,7 +4263,7 @@ msgstr "بوابة"
 msgid "Gateway Mode"
 msgstr "وضع البوابة"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "منافذ البوابة"
 
@@ -5390,7 +5394,8 @@ msgstr "معرف بطاقة الدائرة المتكاملة"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "واجهه"
 
@@ -6001,7 +6006,13 @@ msgstr "الاستماع إلى الأقران"
 msgid "Listen interfaces"
 msgstr "واجهات الاستماع"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "استمع فقط على الواجهة المحددة أو على الكل ، إذا لم يتم تحديدها"
 
@@ -6212,7 +6223,7 @@ msgstr "مرفق السجل"
 msgid "Log in"
 msgstr "تسجيل الدخول"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "لتسجيل الدخول…"
 
@@ -8045,7 +8056,7 @@ msgstr ""
 msgid "Password"
 msgstr "كلمة المرور"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "مصادقة كلمة المرور"
 
@@ -8123,7 +8134,7 @@ msgstr "المسار إلى شهادة العميل الداخلية"
 msgid "Path to inner Private Key"
 msgstr "المسار إلى المفتاح الخاص الداخلي"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "متوقف مؤقتًا"
 
@@ -8270,7 +8281,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "السياسة: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -8764,7 +8775,7 @@ msgstr "مراجع"
 msgid "Refresh Channels"
 msgstr "إنعاش القنوات"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "تجديد"
 
@@ -9071,7 +9082,7 @@ msgstr "يتطلب wpa-supplicant مع دعم SAE"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "يتطلب wpa-supplicant مع دعم WEP"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9350,7 +9361,7 @@ msgid ""
 "address or interface."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "خطأ أثناء التشغيل"
 
@@ -9427,7 +9438,7 @@ msgid "SWAP"
 msgstr "ذاكرة المبادلة"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9436,7 +9447,7 @@ msgstr "ذاكرة المبادلة"
 msgid "Save"
 msgstr "إحفظ"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9576,7 +9587,7 @@ msgstr "نوع الخدمة"
 msgid "Services"
 msgstr "خدمات"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "انتهت الجلسة"
 

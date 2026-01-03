@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2025-11-25 14:58+0000\n"
+"PO-Revision-Date: 2025-12-29 10:00+0000\n"
 "Last-Translator: CRISTIAN ANDREI <cristianvdr@gmail.com>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/openwrt/luci/ro/"
 ">\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.15.1\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1330
 msgid "!known (not known)"
@@ -489,7 +489,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "Un director cu acelaşi nume există deja."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr ""
 "O nouă logare este necesară deoarece sesiunea de autentificare a expirat."
@@ -1062,7 +1062,7 @@ msgstr "Alocă IP-urile secvențial"
 msgid "Allocate listen addresses"
 msgstr "Alocarea adreselor de ascultare"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "Permite autentificarea prin parolă a <abbr title=\"Secure Shell\">SSH</abbr>"
@@ -1106,11 +1106,11 @@ msgstr "Permiteți repornirea dispozitivului"
 msgid "Allow receiving on inactive ports"
 msgstr "Permiteți primirea pe porturile inactive"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr "Permiteți stațiilor externe să se conecteze la porturile SSH locale"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "Permiteți autentificări root cu parolă"
 
@@ -1118,7 +1118,7 @@ msgstr "Permiteți autentificări root cu parolă"
 msgid "Allow system feature probing"
 msgstr "Permiteți sondarea caracteristicilor sistemului"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "Permiteți utilizatorului <em>root</em> să se conecteze cu parolă"
 
@@ -1276,7 +1276,7 @@ msgstr "Aplicați backup?"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Solicitarea de aplicare a eșuat cu statusul <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1635,6 +1635,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Legați tunelul la această interfață (opțional)."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4333,7 +4337,7 @@ msgstr "Poartă de acces"
 msgid "Gateway Mode"
 msgstr "Modul Gateway"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "Porturile porții de acces"
 
@@ -5468,7 +5472,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "Interfață"
 
@@ -6076,7 +6081,13 @@ msgstr "Ascultați pentru parteneri"
 msgid "Listen interfaces"
 msgstr "Interfețe de ascultare"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr ""
 "Ascultă numai pe interfața dată sau, dacă nu este specificat, pe toate "
@@ -6295,7 +6306,7 @@ msgstr "Facilitate jurnalizare"
 msgid "Log in"
 msgstr "Autentificare"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "Mergeți la autentificare…"
 
@@ -8150,7 +8161,7 @@ msgstr "Pass-through (dispozitiv fizic în oglindă pentru un singur MAC VLAN)"
 msgid "Password"
 msgstr "Parolă"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "Autentificare prin parolă"
 
@@ -8230,7 +8241,7 @@ msgstr "Calea de acces la certificatul intern"
 msgid "Path to inner Private Key"
 msgstr "Cale către cheia privată interioară"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "Întrerupt"
 
@@ -8377,7 +8388,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Politica: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -8879,7 +8890,7 @@ msgstr "Referințe"
 msgid "Refresh Channels"
 msgstr "Reîmprospătare canale"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "Împrospătare"
 
@@ -9199,7 +9210,7 @@ msgstr "Necesită wpa-supplicant cu suport SAE"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "Necesită wpa-supplicant cu suport WEP"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9229,7 +9240,7 @@ msgstr "Lista domeniilor care trebuie forțate la o adresă IP."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:424
 msgid "Resolve these locally"
-msgstr "Rezolvați-le local"
+msgstr "Rezolvați acestea local"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1092
 msgid "Resource Record Name"
@@ -9487,7 +9498,7 @@ msgstr ""
 "Regulile determină ce tabel de rutare să utilizeze, pe baza unor condiții "
 "precum adresa sursă sau interfața."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "Eroare de execuție"
 
@@ -9564,7 +9575,7 @@ msgid "SWAP"
 msgstr "SWAP"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9573,7 +9584,7 @@ msgstr "SWAP"
 msgid "Save"
 msgstr "Salvați"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9714,7 +9725,7 @@ msgstr "Tipul de serviciu"
 msgid "Services"
 msgstr "Servicii"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "Sesiunea a expirat"
 

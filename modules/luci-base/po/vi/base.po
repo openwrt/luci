@@ -489,7 +489,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "thư mục có tên này đã tồn tại."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr "Cần đăng nhận lại vì phiên xác thực cũ đã hết hạn."
 
@@ -1068,7 +1068,7 @@ msgstr "Phân bổ tuần tự địa chủ IP"
 msgid "Allocate listen addresses"
 msgstr "Phân bổ địa chỉ nghe"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr "Cho phép <abbr title=\"Secure Shell\">SSH</abbr> xác thực mật mã"
 
@@ -1112,11 +1112,11 @@ msgstr "Cho phép khởi động lại thiết bị"
 msgid "Allow receiving on inactive ports"
 msgstr "Cho phép nhận trên các cổng không hiện hoạt"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr "Cho phép máy chủ từ xa kết nối với các cổng chuyển tiếp SSH cục bộ"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "Cho phép root đăng nhập với mật khẩu"
 
@@ -1124,7 +1124,7 @@ msgstr "Cho phép root đăng nhập với mật khẩu"
 msgid "Allow system feature probing"
 msgstr "Cho phép dò tìm tính năng hệ thống"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr "Cho phép người dùng <em>root</em> đăng nhập với mật khẩu"
 
@@ -1280,7 +1280,7 @@ msgstr "Chấp nhận sao lưu?"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "Áp dụng yêu cầu không thành công với trạng thái <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1638,6 +1638,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Liên kết đường hầm dữ liệu với giao diện này (tùy chọn)."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4351,7 +4355,7 @@ msgstr "Cổng ra"
 msgid "Gateway Mode"
 msgstr "Chế độ Gateway"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "Cổng Gateway"
 
@@ -5474,7 +5478,8 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "Giao diện"
 
@@ -6077,7 +6082,13 @@ msgstr ""
 msgid "Listen interfaces"
 msgstr "Lắng nghe giao diện mạng"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "Chỉ nghe giao diện mạng đã cho (nếu không xác định sẽ nghe tất cả)"
 
@@ -6292,7 +6303,7 @@ msgstr "Thiết bị ghi nhật ký"
 msgid "Log in"
 msgstr "Đăng nhập"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "Đến phần đăng nhập…"
 
@@ -8148,7 +8159,7 @@ msgstr "Chuyển tiếp (Sao chép thiết bị vật lý thành một MAC VLAN 
 msgid "Password"
 msgstr "Mật khẩu"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "Xác thực mật mã"
 
@@ -8227,7 +8238,7 @@ msgstr "Đường dẫn tới chứng chỉ nội bộ của máy khách"
 msgid "Path to inner Private Key"
 msgstr "Đường dẫn tới khoá riêng tư nội bộ"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "Tạm dừng"
 
@@ -8374,7 +8385,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Chính sách: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -8876,7 +8887,7 @@ msgstr "Tham khảo"
 msgid "Refresh Channels"
 msgstr "Làm mới các kênh"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "Đang làm mới"
 
@@ -9186,7 +9197,7 @@ msgstr "Yêu cầu wpa-supplicant với SAE hỗ trợ"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "Yêu cầu wpa-supplicant hỗ trợ WEP"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9468,7 +9479,7 @@ msgid ""
 "address or interface."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "Lỗi"
 
@@ -9545,7 +9556,7 @@ msgid "SWAP"
 msgstr "SWAP"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9554,7 +9565,7 @@ msgstr "SWAP"
 msgid "Save"
 msgstr "Lưu"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9695,7 +9706,7 @@ msgstr "Kiểu dịch vụ"
 msgid "Services"
 msgstr "Các dịch vụ"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "Phiên hết hạn"
 

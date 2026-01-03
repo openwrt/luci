@@ -505,7 +505,7 @@ msgstr ""
 msgid "A directory with the same name already exists."
 msgstr "Már létezik könyvtár ezzel a névvel."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2621
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
 msgid "A new login is required since the authentication session expired."
 msgstr "Új bejelentkezés szükséges, mivel a hitelesítés munkamenete lejárt."
 
@@ -1089,7 +1089,7 @@ msgstr "IP-címek kiosztása egymás után"
 msgid "Allocate listen addresses"
 msgstr "Figyelési címek kiosztása"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Allow <abbr title=\"Secure Shell\">SSH</abbr> password authentication"
 msgstr ""
 "<abbr title=\"Biztonságos rendszerhéj (Secure Shell)\">SSH</abbr> jelszavas "
@@ -1140,13 +1140,13 @@ msgstr "Újraindítás engedélyezése"
 msgid "Allow receiving on inactive ports"
 msgstr "Fogadás engedélyezése inaktív portokon"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
 msgstr ""
 "Távoli gépek kapcsolódásának engedélyezése a helyi <abbr title=\"Biztonságos "
 "rendszerhéj (Secure Shell)\">SSH</abbr> továbbított portokhoz."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow root logins with password"
 msgstr "Rendszergazda jelszavas bejelentkezésének engedélyezése"
 
@@ -1154,7 +1154,7 @@ msgstr "Rendszergazda jelszavas bejelentkezésének engedélyezése"
 msgid "Allow system feature probing"
 msgstr "Rendszerfunkciók vizsgálatának engedélyezése"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:33
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:41
 msgid "Allow the <em>root</em> user to log in with password"
 msgstr ""
 "Engedélyezi a <em>root</em> felhasználónak a jelszóval történő "
@@ -1317,7 +1317,7 @@ msgstr "Alkalmazza a biztonsági mentést?"
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "A kérés alkalmazása meghiúsult, állapot: <code>%h</code>"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2134
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2132
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4803
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4924
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:5060
@@ -1679,6 +1679,10 @@ msgstr ""
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:132
 msgid "Bind the tunnel to this interface (optional)."
 msgstr "Az alagút kötése ehhez a csatolóhoz (elhagyható)."
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+msgid "Bind to Interface"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:119
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:180
@@ -4434,7 +4438,7 @@ msgstr "Átjáró"
 msgid "Gateway Mode"
 msgstr "Átjáró üzemmód"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:38
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Gateway Ports"
 msgstr "Átjáró portok"
 
@@ -5578,7 +5582,8 @@ msgstr "Integrált áramköri kártya azonosítója"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:216
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
 msgid "Interface"
 msgstr "Csatoló"
 
@@ -6209,7 +6214,13 @@ msgstr "Figyelt partnerek"
 msgid "Listen interfaces"
 msgstr "Figyelt csatolók"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:20
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+msgid ""
+"Listen on up to 10 IPs on the given interface or, if unspecified, on all "
+"interfaces"
+msgstr ""
+
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
 msgid "Listen only on the given interface or, if unspecified, on all"
 msgstr "Figyelés csak a megadott csatolón, ha nincs megadva akkor az összesen."
 
@@ -6429,7 +6440,7 @@ msgstr "Napló létesítménykódja"
 msgid "Log in"
 msgstr "Bejelentkezés"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2629
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2627
 msgid "Log in…"
 msgstr "Bejelentkezés…"
 
@@ -8310,7 +8321,7 @@ msgstr "Átengedés (Fizikai eszköz tükrözése egyetlen MAC VLAN-hoz)"
 msgid "Password"
 msgstr "Jelszó"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:27
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:35
 msgid "Password authentication"
 msgstr "Jelszavas hitelesítés"
 
@@ -8393,7 +8404,7 @@ msgstr "Útvonal a belső ügyféltanúsítványhoz"
 msgid "Path to inner Private Key"
 msgstr "Útvonal a belső személyes kulcshoz"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2678
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2676
 msgid "Paused"
 msgstr "Szüneteltetve"
 
@@ -8542,7 +8553,7 @@ msgid "Policy: <strong>%h</strong> (%h)"
 msgstr "Szabályzat: <strong>%h</strong> (%h)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:965
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:23
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:31
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:223
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:223
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:294
@@ -9051,7 +9062,7 @@ msgstr "Hivatkozások"
 msgid "Refresh Channels"
 msgstr "Csatornák frissítése"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2672
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2670
 msgid "Refreshing"
 msgstr "Frissítés"
 
@@ -9376,7 +9387,7 @@ msgstr "SAE támogatással rendelkező WPA-ügyfél szükséges"
 msgid "Requires wpa-supplicant with WEP support"
 msgstr "\"WEP támogatással rendelkező WPA-ügyfél szükséges"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2156
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2154
 #: modules/luci-base/ucode/template/sysauth.ut:39
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:30
@@ -9660,7 +9671,7 @@ msgstr ""
 "A szabályok - olyan feltételek alapján, mint a forráscím vagy az csatoló - "
 "határozzák meg, hogy melyik útválasztási táblát kell használni."
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2318
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2316
 msgid "Runtime error"
 msgstr "Futás idejű hiba"
 
@@ -9737,7 +9748,7 @@ msgid "SWAP"
 msgstr "SWAP"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3285
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2151
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2149
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
 #: modules/luci-compat/luasrc/view/cbi/header.htm:20
@@ -9746,7 +9757,7 @@ msgstr "SWAP"
 msgid "Save"
 msgstr "Mentés"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2133
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2131
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4802
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
@@ -9891,7 +9902,7 @@ msgstr "Szolgáltatás típusa"
 msgid "Services"
 msgstr "Szolgáltatások"
 
-#: modules/luci-base/htdocs/luci-static/resources/luci.js:2619
+#: modules/luci-base/htdocs/luci-static/resources/luci.js:2617
 msgid "Session expired"
 msgstr "A munkamenet lejárt"
 
