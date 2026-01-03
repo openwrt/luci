@@ -299,6 +299,10 @@ return view.extend({
 		o.datatype    = 'uinteger';
 		o.modalonly = true;
 
+		o = s.taboption('advanced', form.Value, 'cert_profile', _('Certificate Profile'));
+		o.optional = true;
+		o.modalonly = true;
+
 
 		s = m.section(form.GridSection, '_certificates');
 
