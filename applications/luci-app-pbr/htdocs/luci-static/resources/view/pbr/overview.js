@@ -228,6 +228,21 @@ return view.extend({
 		o.datatype = "hexstring";
 
 		o = s.taboption(
+			"tab_advanced",
+			form.Value,
+			"uplink_ip_rules_priority",
+			_("Uplink IP Rules Priority"),
+			_(
+				"Starting (Uplink/WAN) ip rules priority used by the pbr service. High starting priority is " +
+					"used to avoid conflict with other services, this can be changed by user."
+			)
+		);
+		o.rmempty = true;
+		o.placeholder = "30000";
+		o.datatype = "uinteger";
+		o.default = "30000";
+
+		o = s.taboption(
 			"tab_webui",
 			form.ListValue,
 			"webui_show_ignore_target",
@@ -321,9 +336,7 @@ return view.extend({
 		o = s.option(form.ListValue, "chain", _("Chain"));
 		o.value("", "prerouting");
 		o.value("forward", "forward");
-		o.value("input", "input");
 		o.value("output", "output");
-		o.value("postrouting", "postrouting");
 		o.default = "";
 		o.rmempty = true;
 
