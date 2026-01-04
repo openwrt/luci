@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+# Wrapper script for hbbr (RustDesk Relay server)
+#
+# Purpose: This wrapper changes to /etc/rustdesk before exec'ing hbbr.
+# This is for consistency with hbbs (which needs the working directory
+# for key generation). Using exec ensures the process name remains
+# "hbbr" (not "sh") so syslog filtering works correctly.
+
+cd /etc/rustdesk
+exec /usr/bin/hbbr "$@"
