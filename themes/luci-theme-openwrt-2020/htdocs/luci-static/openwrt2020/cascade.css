@@ -305,10 +305,7 @@ tr.cbi-section-table-titles[data-title]::before {
 }
 
 tr[data-title]::before {
-	content: attr(data-title);
-	display: table-cell;
-	border-top: 1px solid var(--main-dark-color);
-	padding: .5em;
+	content: none;
 }
 
 th {
@@ -1138,6 +1135,10 @@ textarea {
 	flex: 1 1 100%;
 }
 
+.cbi-value-first-field {
+	font-weight: bold;	
+}
+
 .cbi-map-descr,
 .cbi-tab-descr,
 .cbi-section-descr,
@@ -1787,20 +1788,7 @@ ul.errors {
 	}
 
 	td[data-title]::before {
-		content: attr(data-title) ": ";
-		white-space: nowrap;
-		font-weight: bold;
-		width: 40%;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		position: absolute;
-		left: 0;
-		top: 0;
-		bottom: 0;
-		padding: .2em 0;
-		text-align: left;
-		display: inline-flex;
-		align-items: center;
+		content: none;
 	}
 
 	td[data-title]::after {
