@@ -1,0 +1,75 @@
+{
+    "luci-app-rustdesk-server": {
+        "description": "Grant access to RustDesk Server configuration",
+        "read": {
+            "uci": [
+                "rustdesk-server"
+            ],
+            "ubus": {
+                "luci.rustdesk-server": [
+                    "get_status",
+                    "get_public_key",
+                    "get_version"
+                ],
+                "log": [
+                    "read"
+                ],
+                "file": [
+                    "stat",
+                    "exec"
+                ]
+            },
+            "file": {
+                "/usr/bin/hbbs": [
+                    "read"
+                ],
+                "/usr/bin/hbbr": [
+                    "read"
+                ],
+                "/etc/rustdesk/id_ed25519.pub": [
+                    "read"
+                ],
+                "/etc/rustdesk/*": [
+                    "list"
+                ],
+                "/etc/rc.d/S98rustdesk-server": [
+                    "read"
+                ]
+            }
+        },
+        "write": {
+            "uci": [
+                "rustdesk-server"
+            ],
+            "ubus": {
+                "luci.rustdesk-server": [
+                    "service_action",
+                    "regenerate_key"
+                ]
+            },
+            "cgi-io": [
+                "exec"
+            ],
+            "file": {
+                "/etc/init.d/rustdesk-server start": [
+                    "exec"
+                ],
+                "/etc/init.d/rustdesk-server stop": [
+                    "exec"
+                ],
+                "/etc/init.d/rustdesk-server restart": [
+                    "exec"
+                ],
+                "/etc/init.d/rustdesk-server reload": [
+                    "exec"
+                ],
+                "/etc/init.d/rustdesk-server enable": [
+                    "exec"
+                ],
+                "/etc/init.d/rustdesk-server disable": [
+                    "exec"
+                ]
+            }
+        }
+    }
+}
