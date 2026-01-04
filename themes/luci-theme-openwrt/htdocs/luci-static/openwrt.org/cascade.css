@@ -985,12 +985,7 @@ div.cbi-optionals {
 }
 
 .td[data-title]::before {
-	content: attr(data-title) ":\20";
-	font-weight: bold;
-	text-align: left;
-	display: none;
-	padding: 1px 0;
-	white-space: nowrap;
+	content: none; 
 }
 
 .td[data-description]::after {
@@ -1010,16 +1005,7 @@ div.cbi-optionals {
 
 .tr[data-title]::before,
 .tr.cbi-section-table-titles.named::before {
-	content: attr(data-title) "\20";
-	font-weight: bold;
-	text-align: left;
-	display: table-cell;
-	align-self: center;
-	flex: 1 1 5%;
-	padding: .25em;
-	white-space: normal;
-	word-wrap: break-word;
-	vertical-align: middle;
+	content: none;
 }
 
 .cbi-value-helpicon img {
@@ -1048,6 +1034,11 @@ div.cbi-optionals {
 .cbi-value-field var {
 	color: #2222FF;
 }
+
+.cbi-value-first-field {
+	font-weight: bold;	
+}
+
 
 ul.cbi-tabmenu {
 	list-style-type: none;

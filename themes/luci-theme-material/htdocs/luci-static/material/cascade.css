@@ -1305,12 +1305,7 @@ td > table > tbody > tr > td,
 }
 
 .td[data-title]::before {
-	font-weight: bold;
-	display: none;
-	padding: .25rem 0;
-	content: attr(data-title) ":\20";
-	text-align: left;
-	white-space: nowrap;
+	content: none;
 }
 
 .tr.placeholder .td[data-title]::before {
@@ -1319,16 +1314,7 @@ td > table > tbody > tr > td,
 
 .tr[data-title]::before,
 .tr.cbi-section-table-titles.named::before {
-	font-weight: bold;
-	display: table-cell;
-	align-self: center;
-	flex: 1 1 5%;
-	padding: .25rem;
-	content: attr(data-title) "\20";
-	text-align: center;
-	vertical-align: middle;
-	white-space: normal;
-	word-wrap: break-word;
+	content: none;
 }
 
 .cbi-rowstyle-1 {
@@ -2159,6 +2145,10 @@ td.cbi-value-field var,
 .td.cbi-value-field var {
 	font-style: italic;
 	color: #0069d6;
+}
+
+.cbi-value-first-field {
+	font-weight: bold;	
 }
 
 .cbi-optionals {
