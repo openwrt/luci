@@ -2601,6 +2601,9 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 			if (this.extedit || this.rowcolors)
 				trEl.classList.add(!(tableEl.childNodes.length % 2)
 					? 'cbi-rowstyle-1' : 'cbi-rowstyle-2');
+			if  (sectionname && (!this.anonymous || this.sectiontitle)) {
+				trEl.appendChild(E('td', {'class': 'td cbi-value-field cbi-value-first-field'}, [ (sectionname && (!this.anonymous || this.sectiontitle)) ? sectionname : null ]));
+			}
 
 			for (let j = 0; j < max_cols && nodes[i].firstChild; j++)
 				trEl.appendChild(nodes[i].firstChild);
@@ -2641,10 +2644,17 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 		if (has_titles) {
 			const trEl = E('tr', {
-				'class': `tr cbi-section-table-titles ${anon_class}`,
+				'class': `tr cbi-value-first-field cbi-section-table-titles ${anon_class}`,
 				'data-title': (!this.anonymous || this.sectiontitle) ? _('Name') : null,
 				'click': this.sortable ? ui.createHandlerFn(this, 'handleSort') : null
 			});
+			if (!this.anonymous || this.sectiontitle) {
+				trEl.appendChild(E('th', {
+						'class': 'th cbi-section-table-cell',
+						'data-sortable-row': this.sortable ? '' : null
+						},	(!this.anonymous || this.sectiontitle) ? _('Name') : null
+					));
+			}
 
 			for (let i = 0, opt; i < max_cols && (opt = this.children[i]) != null; i++) {
 				if (opt.modalonly)

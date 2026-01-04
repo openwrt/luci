@@ -2037,12 +2037,7 @@ form.inline { display: inline; margin-bottom: 0; }
 .cbi-section-table-titles.named::before,
 .cbi-section-table-descr.named::before,
 .cbi-section-table-row[data-title]::before {
-	content: attr(data-title) " ";
-	display: table-cell;
-	padding: 10px 10px 9px;
-	line-height: 18px;
-	font-weight: bold;
-	vertical-align: middle;
+	content: none;
 }
 
 .cbi-section-table-titles.named::before,
@@ -2322,6 +2317,10 @@ div.cbi-value var,
 .td.cbi-value-field var {
 	font-style: italic;
 	color: #0069d6;
+}
+
+.cbi-value-first-field {
+	font-weight: bold;	
 }
 
 div.cbi-value var[data-tooltip],
