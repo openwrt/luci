@@ -16,7 +16,7 @@ version.uc:
 	echo "export const revision = '$(LUCI_VERSION)', branch = '$(LUCI_GITBRANCH)';" > $@
 
 clean:
-	rm -f contrib/lemon lib/*.o lib/plural_formula.c lib/plural_formula.h core.so version.uc
+	rm -f contrib/lemon lib/*.o lib/plural_formula.c lib/plural_formula.h *.o core.so jsmin po2lmo version.uc
 
 jsmin: jsmin.o
 	$(CC) $(LDFLAGS) -o $@ $^
