@@ -12,7 +12,7 @@ var pkg = {
 		return "adblock-fast";
 	},
 	get LuciCompat() {
-		return 8;
+		return 9;
 	},
 	get ReadmeCompat() {
 		return "";
@@ -213,8 +213,54 @@ var RPC = {
 			function (result) {
 				this.emit("setInitAction", result);
 			}.bind(this)
+		).catch(
+			function (error) {
+				// Even if RPC call fails/times out, emit event to start polling
+				// This handles cases where the backend task starts but RPC times out
+				this.emit("setInitAction", { timeout: true });
+			}.bind(this)
 		);
 	},
+};
+
+// Poll service status until completion (for long-running operations like download)
+var pollServiceStatus = function (callback) {
+	var maxAttempts = 120; // Max 2 minutes of polling
+	var attempt = 0;
+
+	var checkStatus = function () {
+		attempt++;
+
+		// Use the RPC function directly from the module scope
+		L.resolveDefault(getInitStatus(pkg.Name), {}).then(function (statusData) {
+			var currentStatus = statusData && statusData[pkg.Name] && statusData[pkg.Name].status;
+
+			// Check if completed or failed
+			if (currentStatus === 'statusSuccess' ||
+				currentStatus === 'statusFail' ||
+				currentStatus === 'statusStopped') {
+				callback(true, currentStatus);
+			}
+			// Check if timed out
+			else if (attempt >= maxAttempts) {
+				callback(false, 'timeout');
+			}
+			// Continue polling
+			else {
+				setTimeout(checkStatus, 1000); // Check again in 1 second
+			}
+		}).catch(function (err) {
+			// Retry on error unless timed out
+			if (attempt < maxAttempts) {
+				setTimeout(checkStatus, 1000);
+			} else {
+				callback(false, 'error');
+			}
+		});
+	};
+
+	// Start polling after 2 seconds delay (give backend time to start the task)
+	setTimeout(checkStatus, 2000);
 };
 
 var status = baseclass.extend({
@@ -266,8 +312,8 @@ var status = baseclass.extend({
 						pkg.LuciCompat,
 						reply.status.rpcdCompat,
 						'<a href="' +
-							pkg.URL +
-							'#internal_version_mismatch" target="_blank">',
+						pkg.URL +
+						'#internal_version_mismatch" target="_blank">',
 						"</a>",
 					],
 				});
@@ -599,8 +645,12 @@ var status = baseclass.extend({
 });
 
 RPC.on("setInitAction", function (reply) {
-	ui.hideModal();
-	location.reload();
+	// Don't immediately hide modal and reload
+	// Instead, poll status until the operation actually completes
+	pollServiceStatus(function () {
+		ui.hideModal();
+		location.reload();
+	});
 });
 
 return L.Class.extend({
