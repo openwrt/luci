@@ -1080,9 +1080,13 @@ return view.extend({
 		so.datatype = 'and(rangelength(0,16),hexstring)';
 
 		so = ss.option(form.DynamicList, 'tag',
-			_('Tag'),
+			_('Set Tag'),
 			_('Additional tags for this host.'));
 		so.validate = validateTags;
+		uci.sections('dhcp', 'tag').map(s => s['.name']).forEach(tag => {
+			so.value(tag);
+			so.value('!' + tag);
+		});
 
 		so = ss.option(form.DynamicList, 'match_tag',
 			_('Match Tag'),
