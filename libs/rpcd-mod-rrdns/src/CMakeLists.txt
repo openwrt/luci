@@ -16,7 +16,7 @@ IF(resolv STREQUAL "LIBS-NOTFOUND")
   SET(resolv "")
 ENDIF()
 
-ADD_LIBRARY(rpcd-mod-rrdns MODULE rrdns.c)
+ADD_LIBRARY(rpcd-mod-rrdns MODULE rrdns.c neighbor.c)
 TARGET_LINK_LIBRARIES(rpcd-mod-rrdns ubox ubus ${resolv})
 SET_TARGET_PROPERTIES(rpcd-mod-rrdns PROPERTIES OUTPUT_NAME rrdns PREFIX "")
 

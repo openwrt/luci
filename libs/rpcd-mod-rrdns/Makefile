@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rpcd-mod-rrdns
-PKG_VERSION:=20170710
+PKG_VERSION:=20260101
 PKG_MAINTAINER:=Jo-Philipp Wich <jo@mein.io>
 
 PKG_LICENSE:=Apache-2.0

@@ -38,7 +38,7 @@
 #include <rpcd/plugin.h>
 
 #include "rrdns.h"
-
+#include "neighbor.h"
 
 enum {
 	RPC_L_ADDRS,
@@ -101,6 +101,8 @@ rrdns_parse_response(struct rrdns_context *rctx)
 	if (ns_initparse(res, len, &handle))
 		return -EINVAL;
 
+	int count = 0;
+	inet_ntop(req->family, &req->addr, buf, sizeof(buf));
 	for (n = 0; n < ns_msg_count(handle, ns_s_an); n++) {
 		if (ns_parserr(&handle, ns_s_an, n, &rr))
 			return -EINVAL;
@@ -112,8 +114,14 @@ rrdns_parse_response(struct rrdns_context *rctx)
 		                       ns_rr_rdata(rr), dname, sizeof(dname)) < 0)
 			return -EINVAL;
 
-		inet_ntop(req->family, &req->addr, buf, sizeof(buf));
 		blobmsg_add_string(&rctx->blob, buf, dname);
+		count++;
+	}
+
+	if (!count) {
+		char* name = neighbor_name(req->family, &req->addr);
+		if (name)
+			blobmsg_add_string(&rctx->blob, buf, name);
 	}
 
 	return 0;
@@ -174,14 +182,14 @@ rrdns_next_query(struct rrdns_context *rctx)
 		return -EINVAL;
 	}
 
+	if (avl_find(&rctx->request_addrs, &a.in6))
+		return -ENOTUNIQ;
+
 	alen = res_mkquery(QUERY, dname, C_IN, T_PTR, NULL, 0, NULL,
 	                   msg.buf, sizeof(msg.buf));
 
 	if (alen < 0)
 		return alen;
-
-	if (avl_find(&rctx->request_addrs, &a.in6))
-		return -ENOTUNIQ;
 
 	if (send(rctx->socket.fd, msg.buf, alen, 0) != alen)
 		return -errno;
@@ -222,6 +230,8 @@ rdns_shutdown(struct rrdns_context *rctx)
 
 	blob_buf_free(&rctx->blob);
 	free(rctx);
+
+	rrdns_neighbors_cache_clear();
 }
 
 static void
@@ -354,6 +364,8 @@ rpc_rrdns_lookup(struct ubus_context *ctx, struct ubus_object *obj,
 	uloop_fd_add(&rctx->socket, ULOOP_READ);
 
 	blob_buf_init(&rctx->blob, 0);
+
+	rrdns_neighbors_cache_init();
 
 	while (limit--)
 		rrdns_next_query(rctx);
