@@ -24,6 +24,12 @@ var callNetworkRrdnsLookup = rpc.declare({
 	expect: { '': {} }
 });
 
+var callLuciRpcGetHostHints = rpc.declare({
+	object: 'luci-rpc',
+	method: 'getHostHints',
+	expect: { '': {} }
+});
+
 var graphPolls = [],
     pollInterval = 3,
     dns_cache = {},
@@ -158,31 +164,55 @@ return view.extend({
 		cbi_update_table('#connections', rows, E('em', _('No information available')));
 
 		if (enableLookups && lookup_queue.length > 0) {
-			var reduced_lookup_queue = lookup_queue;
+			// Take a batch of max 100 addresses
+			const reduced_lookup_queue = lookup_queue.length > 100
+				? lookup_queue.slice(0, 100)
+				: lookup_queue;
 
-			if (lookup_queue.length > 100)
-				reduced_lookup_queue = lookup_queue.slice(0, 100);
+			const checked = new Set(reduced_lookup_queue);
 
-			callNetworkRrdnsLookup(reduced_lookup_queue, 5000, 1000).then(function(replies) {
-				for (var index in reduced_lookup_queue) {
-					var address = reduced_lookup_queue[index];
+			callNetworkRrdnsLookup(reduced_lookup_queue, 5000, 1000).then(function (replies) {
+				const unresolved = [];
 
-					if (!address)
-						continue;
-
+				// Remove resolved addresses from lookup_queue, keep unresolved
+				lookup_queue = lookup_queue.filter(address => {
+					if (!checked.has(address)) return true; // outside this batch → keep
 					if (replies[address]) {
 						dns_cache[address] = replies[address];
-						lookup_queue.splice(reduced_lookup_queue.indexOf(address), 1);
-						continue;
+						return false; // resolved → remove
 					}
+					unresolved.push(address);
+					return true; // unresolved → keep
+				});
 
-					if (recheck_lookup_queue[address] > 2) {
-						dns_cache[address] = (address.match(/:/)) ? '[' + address + ']' : address;
-						lookup_queue.splice(index, 1);
-					}
-					else {
-						recheck_lookup_queue[address] = (recheck_lookup_queue[address] || 0) + 1;
-					}
+				if (unresolved.length > 0) {
+					callLuciRpcGetHostHints().then(function (hints) {
+						const ipNameMap = {};
+
+						for (const hint of Object.values(hints || {})) {
+							if (!hint || !hint.name) continue;
+							for (const ip of [...(hint.ipaddrs || []), ...(hint.ip6addrs || [])]) {
+								ipNameMap[ip] = hint.name;
+							}
+						}
+
+						// Apply host hints and recheck logic
+						lookup_queue = lookup_queue.filter(address => {
+							if (!checked.has(address)) return true; // outside batch → keep
+							if (ipNameMap[address]) {
+								dns_cache[address] = ipNameMap[address]
+								return false; // resolved → remove
+							}
+
+							if ((recheck_lookup_queue[address] || 0) > 2) {
+								dns_cache[address] = address.includes(':') ? `[${address}]` : address;
+								return false; // give up → remove
+							}
+
+							recheck_lookup_queue[address] = (recheck_lookup_queue[address] || 0) + 1;
+							return true; // unresolved → keep
+						});
+					});
 				}
 
 				var btn = document.querySelector('.btn.toggle-lookups');
