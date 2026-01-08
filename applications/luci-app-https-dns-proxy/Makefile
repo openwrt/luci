@@ -1,13 +1,13 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-# Copyright 2017-2025 MOSSDeF, Stan Grishin (stangri@melmac.ca).
+# Copyright 2017-2026 MOSSDeF, Stan Grishin (stangri@melmac.ca).
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-https-dns-proxy
 PKG_LICENSE:=AGPL-3.0-or-later
 PKG_MAINTAINER:=Stan Grishin <stangri@melmac.ca>
-PKG_VERSION:=2025.10.07
-PKG_RELEASE:=2
+PKG_VERSION:=2025.12.29
+PKG_RELEASE:=1
 
 LUCI_TITLE:=DNS Over HTTPS Proxy Web UI
 LUCI_URL:=https://github.com/stangri/luci-app-https-dns-proxy/
