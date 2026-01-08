@@ -299,9 +299,20 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 				/* build parameter object */
 				let p_off = 0;
 				const params = { };
-				if (Array.isArray(options.params))
+				if (Array.isArray(options.params)) {
+					// Array style: parameter names are positional
 					for (p_off = 0; p_off < options.params.length; p_off++)
 						params[options.params[p_off]] = args[p_off];
+				} else if (typeof(options.params) === 'object') {
+					// Object style: first arg is an object with the parameter keys
+					const argObj = args[0];
+					if (argObj && typeof(argObj) === 'object') {
+						for (let key in options.params)
+							if (key in argObj)
+								params[key] = argObj[key];
+					}
+					p_off = 1;
+				}
 
 				/* all remaining arguments are private args */
 				const priv = [ undefined, undefined ];
