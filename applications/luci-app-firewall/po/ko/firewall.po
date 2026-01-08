@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2026-01-05 05:34+0000\n"
+"PO-Revision-Date: 2026-01-07 14:02+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/ko/>\n"
@@ -30,9 +30,9 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
 "{helper.val}</var>}}"
 msgstr ""
-"%{src?%{dest?전달:수신}:송신} %{ipv6?%{ipv4?<var>IPv4</var> 및 <var>IPv6</"
-"var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, 프로토콜 %{proto#%{next?, }%"
-"{item.types?<var class=\"cbi-tooltip-container\">%{item.name}<span "
+"%{src?%{dest?전달:인바운드}:아웃바운드} %{ipv6?%{ipv4?<var>IPv4</var> 및 "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, 프로토콜 %{proto#%"
+"{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item.name}<span "
 "class=\"cbi-tooltip\">ICMP 유형 %{item.types#%{next?, }<var>%{item}</var>}</"
 "span></var>:<var>%{item.name}</var>}}}%{mark?, 마크 <var%{mark.inv? data-"
 "tooltip=\"%{mark.mask?마스크 %{mark.mask} 적용 후, }%{mark.num} 제외 "
@@ -63,7 +63,7 @@ msgstr "1024"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:118
 msgid ""
 "<var data-tooltip=\"ACCEPT\">Accept</var> %{src?%{dest?forward:input}:output}"
-msgstr "%{src?%{dest?전달:수신}:송신} <var data-tooltip=\"ACCEPT\">허용</var>"
+msgstr "%{src?%{dest?전달:입력}:출력} <var data-tooltip=\"ACCEPT\">허용</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:93
 msgid "<var data-tooltip=\"ACCEPT\">Prevent source rewrite</var>"
@@ -80,7 +80,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:115
 msgid ""
 "<var data-tooltip=\"DROP\">Drop</var> %{src?%{dest?forward:input}:output}"
-msgstr "%{src?%{dest?전달:수신}:송신} <var data-tooltip=\"DROP\">드롭</var>"
+msgstr "%{src?%{dest?전달:입력}:출력} <var data-tooltip=\"DROP\">드롭</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:133
 msgid ""
@@ -112,12 +112,12 @@ msgstr "출발지 IP <var data-tooltip=\"MASQUERADE\">자동 변환</var>"
 msgid ""
 "<var data-tooltip=\"NOTRACK\">Do not track</var> %{src?%{dest?"
 "forward:input}:output}"
-msgstr "%{src?%{dest?전달:수신}:송신} <var data-tooltip=\"NOTRACK\">추적 안 함</var>"
+msgstr "%{src?%{dest?전달:입력}:출력} <var data-tooltip=\"NOTRACK\">추적 안 함</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:121
 msgid ""
 "<var data-tooltip=\"REJECT\">Reject</var> %{src?%{dest?forward:input}:output}"
-msgstr "%{src?%{dest?전달:수신}:송신} <var data-tooltip=\"REJECT\">거부</var>"
+msgstr "%{src?%{dest?전달:입력}:출력} <var data-tooltip=\"REJECT\">거부</var>"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:87
 msgid ""
@@ -158,7 +158,7 @@ msgstr ""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
 msgid "Address family, Internal IP address must match"
-msgstr ""
+msgstr "주소 체계와 내부 IP 주소 형식이 일치해야 함"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:135
 msgid ""
@@ -235,7 +235,7 @@ msgstr "Conntrack 헬퍼"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:16
 msgid "Contents have been saved."
-msgstr ""
+msgstr "내용이 저장되었습니다."
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:700
 msgid "Continue"
@@ -601,8 +601,8 @@ msgid ""
 "tooltip=\"Match any helper except &quot;%{helper.name}&quot;\">%{helper.val}"
 "</var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 msgstr ""
-"수신, %{ipv6?%{ipv4?<var>IPv4</var> 및 <var>IPv6</var>:<var>IPv6</var>}:<var>"
-"IPv4</var>}%{proto?, 프로토콜 %{proto#%{next?, }%{item.types?<var "
+"인바운드, %{ipv6?%{ipv4?<var>IPv4</var> 및 <var>IPv6</var>:<var>IPv6</var>}"
+":<var>IPv4</var>}%{proto?, 프로토콜 %{proto#%{next?, }%{item.types?<var "
 "class=\"cbi-tooltip-container\">%{item.name}<span class=\"cbi-tooltip\">ICMP "
 "유형 %{item.types#%{next?, }<var>%{item}</var>}</span></var>:<var>%"
 "{item.name}</var>}}}%{mark?, 마크 <var%{mark.inv? data-tooltip=\"%"
@@ -619,7 +619,7 @@ msgstr "초기 해시 크기"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:62
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:151
 msgid "Input"
-msgstr "수신"
+msgstr "입력"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:292
 msgid "Internal IP address"
@@ -858,7 +858,7 @@ msgstr "아웃바운드 영역"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:63
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:152
 msgid "Output"
-msgstr "송신"
+msgstr "출력"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:76
 msgid "Packet Field Match"
@@ -1197,7 +1197,7 @@ msgstr "화요일"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:19
 msgid "Unable to save contents: %s"
-msgstr ""
+msgstr "내용을 저장할 수 없습니다: %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:198
 msgid ""
