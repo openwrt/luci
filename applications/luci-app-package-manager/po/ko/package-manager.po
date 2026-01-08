@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-01-04 09:37+0000\n"
+"PO-Revision-Date: 2026-01-06 13:19+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationspackage-manager/ko/>\n"
@@ -51,6 +51,9 @@ msgid ""
 "The configuration in the other files may be changed but is usually not "
 "preserved by <em>sysupgrade</em>."
 msgstr ""
+"아래는 <em>apk</em>에서 사용하는 다양한 설정 파일 목록입니다. 다른 파일의 "
+"설정도 변경할 수 있지만, <em>sysupgrade</em> 시 변경 사항이 초기화될 수 "
+"있습니다."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:897
 msgid ""
@@ -59,6 +62,10 @@ msgid ""
 "custom repository entries. The configuration in the other files may be "
 "changed but is usually not preserved by <em>sysupgrade</em>."
 msgstr ""
+"아래는 <em>opkg</em>에서 사용하는 다양한 설정 파일 목록입니다. 전역 설정에는 "
+"<em>opkg.conf</em>를, 사용자 정의 저장소 항목에는 <em>customfeeds.conf</em>"
+"를 사용하세요. 다른 파일의 설정도 변경할 수 있지만, <em>sysupgrade</em> 시 "
+"변경 사항이 초기화될 수 있습니다."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:804
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:850
@@ -78,7 +85,7 @@ msgstr "%s 설정"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:748
 msgid "Dependencies"
-msgstr "의존성들"
+msgstr "의존성 패키지"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:754
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:960
@@ -166,6 +173,8 @@ msgid ""
 "Installing packages from untrusted sources is a potential security risk! "
 "Really attempt to install <em>%h</em>?"
 msgstr ""
+"신뢰할 수 없는 출처의 패키지 설치는 보안 위험을 초래할 수 있습니다! 그래도 "
+"<em>%h</em> 패키지를 설치합니까?"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:290
 msgid "Install…"
@@ -236,7 +245,7 @@ msgstr "이전 페이지"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:841
 msgid "Really attempt to install <em>%h</em>?"
-msgstr "정말 <em>%h</em> 설치를 시도합니까?"
+msgstr "<em>%h</em> 설치를 계속하시겠습니까?"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:989
 msgid "Remove"
@@ -262,7 +271,7 @@ msgstr "필요 버전 %h %h, 설치 버전 %h"
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:543
 msgid ""
 "Required dependency package <em>%h</em> is not available in any repository."
-msgstr ""
+msgstr "<em>%h</em> 필수 의존성 패키지를 어느 저장소에서도 찾을 수 없습니다."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:511
 msgid "Requires update to %h %h"
@@ -301,31 +310,35 @@ msgstr "소프트웨어"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:765
 msgid "Suggested translations"
-msgstr "제안된 번역"
+msgstr "번역 패키지 제안"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:744
 msgid "Suggested translations require approx. %1024mB additional space."
-msgstr "제안된 번역 설치에 약 %1024mB의 추가 공간이 필요합니다."
+msgstr "제안된 번역 패키지 설치에 약 %1024mB의 추가 공간이 필요합니다."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1041
 msgid "The <em>%s %h</em> command failed with code <code>%d</code>."
-msgstr ""
+msgstr "<em>%s %h</em> 명령을 수행하지 못했습니다. (코드: <code>%d</code>)"
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:516
 msgid ""
 "The installed version of package <em>%h</em> is not compatible, require %s "
 "while %s is installed."
 msgstr ""
+"<em>%h</em> 패키지의 설치된 버전이 호환되지 않습니다. 버전 %s가 필요하지만 "
+"%s가 설치되어 있습니다."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:837
 msgid "The package <em>%h</em> is not available in any configured repository."
-msgstr ""
+msgstr "<em>%h</em> 패키지를 설정된 어느 저장소에서도 찾을 수 없습니다."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:533
 msgid ""
 "The repository version of package <em>%h</em> is not compatible, require %s "
 "but only %s is available."
 msgstr ""
+"<em>%h</em> 패키지의 저장소 버전이 호환되지 않습니다. 버전 %s가 필요하지만 "
+"%s만 사용 가능합니다."
 
 #: applications/luci-app-package-manager/htdocs/luci-static/resources/view/package-manager.js:1177
 msgid "Type to filter…"
