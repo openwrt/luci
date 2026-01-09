@@ -12,7 +12,7 @@
 # ubus -S call luci.pbr getGateways '{"name": "pbr" }'
 # ubus -S call luci.pbr getInterfaces '{"name": "pbr" }'
 
-readonly rpcdCompat='17'
+readonly rpcdCompat='20'
 readonly pbrFunctionsFile="${IPKG_INSTROOT}/etc/init.d/pbr"
 if [ -s "$pbrFunctionsFile" ]; then
 # shellcheck source=../../../../../pbr/files/etc/init.d/pbr
@@ -24,7 +24,7 @@ fi
 
 # compatibility with old luci app versions
 is_running_iptables() { iptables -t mangle -n -L | grep -q PBR_PREROUTING >/dev/null 2>&1; }
-is_running() { is_running_iptables || is_running_nft; }
+is_running() { exists_lockfile && { is_running_iptables || is_running_nft; }; }
 check_ipset() { { [ -n "$ipset" ] && "$ipset" help hash:net; } >/dev/null 2>&1; }
 check_agh_ipset() {
 	check_ipset || return 1
@@ -113,7 +113,6 @@ get_init_status() {
 		json_add_boolean 'running_nft_file' '0'
 	fi
 	json_add_string 'version' "$PKG_VERSION"
-	json_add_string 'gateways' "$gateways"
 	json_add_int		'packageCompat'	"${packageCompat:-0}"
 	json_add_int		'rpcdCompat'		"${rpcdCompat:-0}"
 	json_close_object
