@@ -1,16 +1,43 @@
 {
-    "vendorName": "MERCUSYS",
-    "deviceName": "MR90X v1",
-    "boardNames": [ "mercusys,mr90x-v1" ],
-    "partition1MTD": "mtd2",
-    "partition2MTD": "mtd3",
-    "opOffset": 0,
-    "ubiVolume": 2,
-    "labelOffset": null,
-    "bootEnv1": "tp_boot_idx",
-    "bootEnv1Partition1Value": 0,
-    "bootEnv1Partition2Value": 1,
-    "bootEnv2": null,
-    "bootEnv2Partition1Value": null,
-    "bootEnv2Partition2Value": null
+	"device": {
+		"vendor": "MERCUSYS",
+		"model": "MR90X v1",
+		"board": [
+			"mercusys,mr90x-v1"
+		]
+	},
+	"commands": {
+		"params": [
+			"tp_boot_idx"
+		],
+		"get": "fw_printenv",
+		"set": "fw_setenv",
+		"save": null
+	},
+	"partitions": [
+		{
+			"number": 1,
+			"param_values": [
+				0
+			],
+			"mtd": "mtd2",
+			"labelOffsetBytes": null,
+			"altMountOptions": {
+				"mtdOffset": 0,
+				"ubiVolume": 2
+			}
+		},
+		{
+			"number": 2,
+			"param_values": [
+				1
+			],
+			"mtd": "mtd3",
+			"labelOffsetBytes": null,
+			"altMountOptions": {
+				"mtdOffset": 0,
+				"ubiVolume": 2
+			}
+		}
+	]
 }

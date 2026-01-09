@@ -1,39 +1,34 @@
 {
 	"device": {
-		"vendor": "Linksys",
-		"model": "WRT32X",
+		"vendor": "Netgear",
+		"model": "GS308T v1",
 		"board": [
-			"linksys-venom",
-			"linksys,venom",
-			"linksys,wrt32x"
+			"netgear,gs308t-v1"
 		]
 	},
 	"commands": {
 		"params": [
-			"boot_part",
-			"bootcmd"
+			"bootpartition"
 		],
-		"get": "fw_printenv",
-		"set": "fw_setenv",
+		"get": "fw_printsys",
+		"set": "fw_setsys",
 		"save": null
 	},
 	"partitions": [
 		{
 			"number": 1,
 			"param_values": [
-				1,
-				"run nandboot"
+				0
 			],
-			"mtd": "mtd5",
+			"mtd": "mtd6",
 			"labelOffsetBytes": null
 		},
 		{
 			"number": 2,
 			"param_values": [
-				2,
-				"run altnandboot"
+				1
 			],
-			"mtd": "mtd7",
+			"mtd": "mtd9",
 			"labelOffsetBytes": null
 		}
 	]

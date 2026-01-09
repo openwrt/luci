@@ -1,15 +1,36 @@
 {
 	"luci-app-advanced-reboot": {
-		"description": "Grant UCI and file access for luci-app-advanced-reboot",
+		"description": "Grant file access for luci-app-advanced-reboot",
 		"read": {
 			"ubus": {
-				"luci.advanced_reboot": [ "obtain_device_info", "toggle_boot_partition" ],
+				"luci.advanced-reboot": [ "obtain_device_info", "boot_partition" ],
 				"system": [ "reboot" ]
 			},
 			"file": {
-				"/usr/sbin/fw_printenv": [ "list" ],
-				"/usr/sbin/fw_setenv": [ "list" ],
-				"/sbin/poweroff": [ "list", "exec" ]
+				"/bin/dd": [ "list", "exec" ],
+				"/bin/grep": [ "list", "exec" ],
+				"/bin/mount": [ "list", "exec" ],
+				"/bin/sed": [ "list", "exec" ],
+				"/bin/sh": [ "list", "exec" ],
+				"/bin/umount": [ "list", "exec" ],
+				"/bin/uname": [ "list", "exec" ],
+				"/etc/os-release": [ "read" ],
+				"/lib/functions.sh": [ "read" ],
+				"/proc/mounts": [ "read" ],
+				"/proc/version": [ "read" ],
+				"/sbin/poweroff": [ "list", "exec" ],
+				"/tmp/sysinfo/board_name": [ "read" ],
+				"/usr/bin/hexdump": [ "list", "exec" ],
+				"/usr/bin/logger": [ "list", "exec" ],
+				"/usr/bin/printf": [ "list", "exec" ],
+				"/usr/bin/tr": [ "list", "exec" ],
+				"/usr/sbin/fw_printenv": [ "list", "exec" ],
+				"/usr/sbin/fw_printsys": [ "list", "exec" ],
+				"/usr/sbin/fw_setenv": [ "list", "exec" ],
+				"/usr/sbin/fw_setsys": [ "list", "exec" ],
+				"/usr/sbin/ubiblock": [ "list", "exec" ],
+				"/usr/sbin/ubiattach": [ "list", "exec" ],
+				"/usr/sbin/ubidetach": [ "list", "exec" ]
 			}
 		}
 	}
