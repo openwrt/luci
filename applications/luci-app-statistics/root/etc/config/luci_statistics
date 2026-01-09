@@ -1,5 +1,8 @@
-# general settings
+# general luci-related settings
+config globals
+	option config_file '/var/etc/collectd.conf'
 
+# general collectd-related settings
 config statistics 'collectd'
 	option BaseDir '/var/run/collectd'
 #	option Include '/etc/collectd/conf.d'
@@ -13,7 +16,6 @@ config statistics 'rrdtool'
 	option default_timespan '2hour'
 	option image_width '600'
 	option image_height '150'
-	option image_path '/tmp/rrdimg'
 
 # output plugins
 
@@ -24,6 +26,7 @@ config statistics 'collectd_rrdtool'
 	option RRASingle '1'
 	option RRATimespans '2hour 1day 1week 1month 1year'
 	option backup '0'
+	option backup_dir '/etc/luci_statistics'
 
 config statistics 'collectd_csv'
 	option enable '0'
