@@ -46,8 +46,10 @@ return view.extend({
 		status = new hdp.status();
 
 		m = new form.Map(pkg.Name, _("HTTPS DNS Proxy - Configuration"));
-
 		s = m.section(form.NamedSection, "config", pkg.Name);
+
+		s.tab("service", _("Service Options"));
+		s.tab("global", _("Global Instance Options"));
 
 		var dhcp_dnsmasq_values = Object.values(L.uci.sections("dhcp", "dnsmasq"));
 		function isEmpty(obj) {
@@ -55,7 +57,8 @@ return view.extend({
 		}
 
 		if (!isEmpty(dhcp_dnsmasq_values)) {
-			o = s.option(
+			o = s.taboption(
+				"service",
 				form.ListValue,
 				"dnsmasq_config_update_option",
 				_("Update DNSMASQ Config on Start/Stop"),
@@ -93,7 +96,8 @@ return view.extend({
 				L.uci.set(pkg.Name, section_id, "dnsmasq_config_update", formvalue);
 			};
 
-			o = s.option(
+			o = s.taboption(
+				"service",
 				form.MultiValue,
 				"dnsmasq_config_update",
 				_("Select the DNSMASQ Configs to update")
@@ -115,7 +119,8 @@ return view.extend({
 			o.retain = true;
 		}
 
-		o = s.option(
+		o = s.taboption(
+			"service",
 			form.ListValue,
 			"force_dns",
 			_("Force Router DNS"),
@@ -130,7 +135,8 @@ return view.extend({
 		o.value("1", _("Force Router DNS server to all local devices"));
 		o.default = "1";
 
-		o = s.option(
+		o = s.taboption(
+			"service",
 			form.ListValue,
 			"canary_domains_icloud",
 			_("Canary Domains iCloud"),
@@ -146,7 +152,8 @@ return view.extend({
 		o.depends("force_dns", "1");
 		o.default = "1";
 
-		o = s.option(
+		o = s.taboption(
+			"service",
 			form.ListValue,
 			"canary_domains_mozilla",
 			_("Canary Domains Mozilla"),
@@ -154,9 +161,9 @@ return view.extend({
 				"Blocks access to Mozilla Encrypted resolvers, forcing local devices to use router for DNS resolution (%smore information%s)."
 			).format(
 				'<a href="' +
-					pkg.URL +
-					"#canary_domains_mozilla" +
-					'" target="_blank">',
+				pkg.URL +
+				"#canary_domains_mozilla" +
+				'" target="_blank">',
 				"</a>"
 			)
 		);
@@ -164,6 +171,149 @@ return view.extend({
 		o.value("1", _("Force Router DNS server to all local devices"));
 		o.depends("force_dns", "1");
 		o.default = "1";
+
+		o = s.taboption(
+			"service",
+			form.Value,
+			"heartbeat_domain",
+			_("Heartbeat Domain"),
+			_(
+				"The domain used for connectivity checks (%smore information%s)."
+			).format(
+				'<a href="' + pkg.URL + "#heartbeat_domain" + '" target="_blank">',
+				"</a>"
+			)
+		);
+		o.optional = true;
+		o.placeholder = "heartbeat.melmac.ca";
+
+		o = s.taboption(
+			"service",
+			form.Value,
+			"heartbeat_sleep_timeout",
+			_("Heartbeat Sleep Timeout"),
+			_("Time to wait before checking connectivity (seconds).")
+		);
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "10";
+
+		o = s.taboption(
+			"service",
+			form.Value,
+			"heartbeat_wait_timeout",
+			_("Heartbeat Wait Timeout"),
+			_("Time to wait for connectivity check response (seconds).")
+		);
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "30";
+
+		o = s.taboption(
+			"global",
+			form.ListValue,
+			"force_http1",
+			_("Use HTTP/1")
+		);
+		o.optional = true;
+		o.rmempty = true;
+		o.value("", _("Use negotiated HTTP version"));
+		o.value("1", _("Force use of HTTP/1"));
+		o.default = "";
+
+		o = s.taboption(
+			"global",
+			form.ListValue,
+			"force_http3",
+			_("Use HTTP/3 (QUIC)")
+		);
+		o.optional = true;
+		o.rmempty = true;
+		o.value("", _("Use negotiated HTTP version"));
+		o.value("1", _("Force use of HTTP/3 (QUIC)"));
+		o.default = "";
+		o.depends("force_http1", "");
+
+		o = s.taboption(
+			"global",
+			form.ListValue,
+			"force_ipv6_resolvers",
+			_("Use IPv6 resolvers")
+		);
+		o.optional = true;
+		o.rmempty = true;
+		o.value("", _("Use any family DNS resolvers"));
+		o.value("1", _("Force use of IPv6 DNS resolvers"));
+		o.default = "";
+
+		o = s.taboption("global", form.ListValue, "verbosity", _("Logging Verbosity Level"));
+		o.optional = true;
+		o.value("", _("0: Fatal"));
+		o.value("1", _("1: Error"));
+		o.value("2", _("2: Warning"));
+		o.value("3", _("3: Info"));
+		o.value("4", _("4: Debug"));
+		o.default = "";
+
+		o = s.taboption("global", form.Value, "listen_addr", _("Listen Address"));
+		o.datatype = "ipaddr('nomask')";
+		o.optional = true;
+		o.placeholder = "127.0.0.1";
+
+		o = s.taboption("global", form.Value, "user", _("Run As User"));
+		o.optional = true;
+		o.placeholder = "nobody";
+
+		o = s.taboption("global", form.Value, "group", _("Run As Group"));
+		o.optional = true;
+		o.placeholder = "nogroup";
+
+		o = s.taboption("global", form.Value, "source_addr", _("Source Address"));
+		o.datatype = "ipaddr('nomask')";
+		o.optional = true;
+		o.placeholder = "";
+
+		o = s.taboption("global", form.Value, "logfile", _("Logging File Path"));
+		o.datatype = "file";
+		o.optional = true;
+		o.placeholder = "";
+
+		o = s.taboption("global", form.Value, "polling_interval", _("Polling Interval"));
+		o.datatype = "range(5,3600)";
+		o.optional = true;
+		o.placeholder = "120";
+
+		o = s.taboption("global", form.Value, "proxy_server", _("Proxy Server"));
+		o.optional = true;
+
+		o = s.taboption("global", form.Value, "ca_certs_file", _("CA Certs File"));
+		o.datatype = "file";
+		o.optional = true;
+
+		o = s.taboption("global", form.Value, "conn_loss_time", _("Connection Loss Time"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "15";
+
+		o = s.taboption("global", form.Value, "log_limit", _("Log Limit"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "0";
+
+		o = s.taboption("global", form.Value, "max_idle_time", _("Max Idle Time"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "118";
+
+		o = s.taboption("global", form.Value, "statistic_interval", _("Statistic Interval"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "0";
+
+		o = s.taboption("global", form.Value, "tcp_client_limit", _("TCP Client Limit"));
+		o.datatype = "uinteger";
+		o.optional = true;
+		o.placeholder = "20";
 
 		text = "";
 		if (!reply.platform.http2_support)
@@ -250,85 +400,114 @@ return view.extend({
 			});
 			return ret || "";
 		};
+
 		_provider.write = function (section_id, formvalue) {
-			L.uci.set(pkg.Name, section_id, "resolver_url", formvalue);
+			let providerTemplate = formvalue;
+			let resolverUrl = providerTemplate;
+			let bootstrapDns = "";
+			let section = this.section;
+
+			reply.providers.forEach((prov, i) => {
+				if (prov.template === providerTemplate) {
+					let paramValue = "";
+					let paramWidgetOption = "";
+
+					if (prov.params && prov.params.option) {
+						if (prov.params.option.type === "select") {
+							paramWidgetOption = "_paramList_" + i;
+						} else if (prov.params.option.type === "text") {
+							paramWidgetOption = "_paramText_" + i;
+						}
+					}
+
+					if (paramWidgetOption) {
+						// Find the widget object to get the value safely
+						let widget = section.children.find(w => w.option === paramWidgetOption);
+						if (widget) {
+							paramValue = widget.formvalue(section_id) || "";
+						}
+					}
+
+					resolverUrl = pkg.templateToResolver(providerTemplate, {
+						option: paramValue
+					});
+
+					let bootWidget = section.children.find(w => w.option === "_bootstrap_dns_" + i);
+					if (bootWidget) {
+						bootstrapDns = bootWidget.formvalue(section_id);
+					}
+
+					// Fallback to default if empty
+					if (!bootstrapDns) {
+						bootstrapDns = prov.bootstrap_dns || "";
+					}
+				}
+			});
+
+			if (resolverUrl) {
+				L.uci.set(pkg.Name, section_id, "resolver_url", resolverUrl);
+			}
+
+			if (bootstrapDns) {
+				L.uci.set(pkg.Name, section_id, "bootstrap_dns", bootstrapDns);
+			} else {
+				L.uci.unset(pkg.Name, section_id, "bootstrap_dns");
+			}
+		};
+		_provider.remove = function (section_id) {
+			L.uci.unset(pkg.Name, section_id, "resolver_url");
+			L.uci.unset(pkg.Name, section_id, "bootstrap_dns");
 		};
 
-		reply.providers.forEach((prov, i) => {
-			if (prov.http2_only && !reply.platform.http2_support) return;
-			if (prov.http3_only && !reply.platform.http3_support) return;
-			_provider.value(prov.template, _(prov.title));
+		function createProviderWidget(s, i, prov) {
 			if (
 				prov.params &&
 				prov.params.option &&
-				prov.params.option.type &&
-				prov.params.option.type === "select"
+				prov.params.option.type
 			) {
-				let optName = prov.params.option.description || _("Parameter");
-				var _paramList = s.option(form.ListValue, "_paramList_" + i, optName);
-				_paramList.template = prov.template;
-				_paramList.modalonly = true;
-				if (prov.params.option.default) {
-					_paramList.default = prov.params.option.default;
+				if (prov.params.option.type === "select") {
+					let optName = prov.params.option.description || _("Parameter");
+					var _paramList = s.option(form.ListValue, "_paramList_" + i, optName);
+					_paramList.template = prov.template;
+					_paramList.modalonly = true;
+					if (prov.params.option.default) {
+						_paramList.default = prov.params.option.default;
+					}
+					prov.params.option.options.forEach((opt) => {
+						let val = opt.value || "";
+						let descr = opt.description || "";
+						_paramList.value(val, descr);
+					});
+					_paramList.depends("_provider", prov.template);
+					_paramList.write = function (section_id, formvalue) { };
+					_paramList.remove = function (section_id, formvalue) { };
+				} else if (prov.params.option.type === "text") {
+					let optName = prov.params.option.description || _("Parameter");
+					var _paramText = s.option(form.Value, "_paramText_" + i, optName);
+					_paramText.template = prov.template;
+					_paramText.modalonly = true;
+					_paramText.depends("_provider", prov.template);
+					_paramText.optional = !(
+						prov.params.option.default && prov.params.option.default !== ""
+					);
+					_paramText.cfgvalue = function (section_id) {
+						let resolver = this.map.data.get(
+							this.map.config,
+							section_id,
+							"resolver_url"
+						);
+						if (resolver === undefined || resolver === null) return null;
+						let regexp = pkg.templateToRegexp(prov.template);
+						let match = resolver.match(regexp);
+						return (match && match[1]) || null;
+					};
+					_paramText.write = function (section_id, formvalue) { };
+					_paramText.remove = function (section_id, formvalue) { };
 				}
-				prov.params.option.options.forEach((opt) => {
-					let val = opt.value || "";
-					let descr = opt.description || "";
-					_paramList.value(val, descr);
-				});
-				_paramList.depends("_provider", prov.template);
-				_paramList.write = function (section_id, formvalue) {
-					let template = this.map.data.get(
-						this.map.config,
-						section_id,
-						"resolver_url"
-					);
-					if (!formvalue && _paramList.template !== template) return 0;
-					let resolver = pkg.templateToResolver(_paramList.template, {
-						option: formvalue || "",
-					});
-					L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
-				};
-				_paramList.remove = _paramList.write;
-			} else if (
-				prov.params &&
-				prov.params.option &&
-				prov.params.option.type &&
-				prov.params.option.type === "text"
-			) {
-				let optName = prov.params.option.description || _("Parameter");
-				var _paramText = s.option(form.Value, "_paramText_" + i, optName);
-				_paramText.template = prov.template;
-				_paramText.modalonly = true;
-				_paramText.depends("_provider", prov.template);
-				_paramText.optional = !(
-					prov.params.option.default && prov.params.option.default !== ""
-				);
-				_paramText.cfgvalue = function (section_id) {
-					let resolver = this.map.data.get(
-						this.map.config,
-						section_id,
-						"resolver_url"
-					);
-					if (resolver === undefined || resolver === null) return null;
-					let regexp = pkg.templateToRegexp(prov.template);
-					let match = resolver.match(regexp);
-					return (match && match[1]) || null;
-				};
-				_paramText.write = function (section_id, formvalue) {
-					let template = this.map.data.get(
-						this.map.config,
-						section_id,
-						"resolver_url"
-					);
-					if (!formvalue && _paramText.template !== template) return 0;
-					let resolver = pkg.templateToResolver(_paramText.template, {
-						option: formvalue || "",
-					});
-					L.uci.set(pkg.Name, section_id, "resolver_url", resolver);
-				};
-				_paramText.remove = _paramText.write;
 			}
+		}
+
+		function createBootstrapWidget(s, i, prov) {
 			const _boot_dns = s.option(
 				form.Value,
 				"_bootstrap_dns_" + i,
@@ -345,84 +524,119 @@ return view.extend({
 				);
 				return c_value || prov.bootstrap_dns || "";
 			};
-			_boot_dns.write = function (section_id, formvalue) {
-				const resolver = this.map.data.get(
-					this.map.config,
-					section_id,
-					"resolver_url"
-				);
-				const regexp = pkg.templateToRegexp(_boot_dns.template);
-				if (regexp.test(resolver)) {
-					console.log(
-						pkg.Name,
-						section_id,
-						"bootstrap_dns",
-						formvalue,
-						this.cfgvalue(section_id)
-					);
-					if (formvalue)
-						L.uci.set(pkg.Name, section_id, "bootstrap_dns", formvalue);
-					else
-						L.uci.set(
-							pkg.Name,
-							section_id,
-							"bootstrap_dns",
-							this.cfgvalue(section_id)
-						);
-				}
-				_boot_dns.remove = _boot_dns.write;
-			};
+			_boot_dns.write = function (section_id, formvalue) { };
+			_boot_dns.remove = function (section_id, formvalue) { };
+		}
+
+		reply.providers.forEach((prov, i) => {
+			if (prov.http2_only && !reply.platform.http2_support) return;
+			if (prov.http3_only && !reply.platform.http3_support) return;
+			_provider.value(prov.template, _(prov.title));
+			createProviderWidget(s, i, prov);
+			createBootstrapWidget(s, i, prov);
 		});
 
 		o = s.option(form.Value, "listen_addr", _("Listen Address"));
 		o.datatype = "ipaddr('nomask')";
-		o.default = "";
 		o.optional = true;
 		o.placeholder = "127.0.0.1";
+		o.textvalue = function (section_id) {
+			var value = this.cfgvalue(section_id);
+			if (value) return value;
+			var globalValue = this.map.data.get(this.map.config, "config", "listen_addr");
+			return globalValue || this.placeholder || _("auto");
+		};
 
 		o = s.option(form.Value, "listen_port", _("Listen Port"));
 		o.datatype = "port";
-		o.default = "";
 		o.optional = true;
 		o.placeholder = "5053";
+		o.textvalue = function (section_id) {
+			var value = this.cfgvalue(section_id);
+			return value || _("auto");
+		};
+
+		o = s.option(form.Value, "source_addr", _("Source (Bind To) Address"));
+		o.datatype = "ipaddr('nomask')";
+		o.optional = true;
+		o.textvalue = function (section_id) {
+			var value = this.cfgvalue(section_id);
+			return value || _("*");
+		};
 
 		o = s.option(form.Value, "user", _("Run As User"));
-		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+		o.placeholder = "nobody";
 
 		o = s.option(form.Value, "group", _("Run As Group"));
-		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
+		o.placeholder = "nogroup";
 
 		o = s.option(form.Value, "dscp_codepoint", _("DSCP Codepoint"));
 		o.datatype = "range(0,63)";
-		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
 
-		o = s.option(form.Value, "verbosity", _("Logging Verbosity"));
-		o.datatype = "range(0,4)";
-		o.default = "";
+		o = s.option(form.ListValue, "verbosity", _("Logging Verbosity Level"));
 		o.modalonly = true;
 		o.optional = true;
+		o.value("", _("0: Fatal"));
+		o.value("1", _("1: Error"));
+		o.value("2", _("2: Warning"));
+		o.value("3", _("3: Info"));
+		o.value("4", _("4: Debug"));
+		o.default = "";
 
 		o = s.option(form.Value, "logfile", _("Logging File Path"));
-		o.default = "";
 		o.modalonly = true;
 		o.optional = true;
 
 		o = s.option(form.Value, "polling_interval", _("Polling Interval"));
 		o.datatype = "range(5,3600)";
-		o.default = "";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "120";
+
+		o = s.option(form.Value, "proxy_server", _("Proxy Server"));
 		o.modalonly = true;
 		o.optional = true;
 
-		o = s.option(form.Value, "proxy_server", _("Proxy Server"));
-		o.default = "";
+		o = s.option(form.Value, "ca_certs_file", _("CA Certs File"));
+		o.datatype = "file";
 		o.modalonly = true;
 		o.optional = true;
+
+		o = s.option(form.Value, "conn_loss_time", _("Connection Loss Time"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "15";
+
+		o = s.option(form.Value, "log_limit", _("Log Limit"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "0";
+
+		o = s.option(form.Value, "max_idle_time", _("Max Idle Time"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "118";
+
+		o = s.option(form.Value, "statistic_interval", _("Statistic Interval"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "0";
+
+		o = s.option(form.Value, "tcp_client_limit", _("TCP Client Limit"));
+		o.datatype = "uinteger";
+		o.modalonly = true;
+		o.optional = true;
+		o.placeholder = "20";
 
 		o = s.option(form.ListValue, "force_http1", _("Use HTTP/1"));
 		o.modalonly = true;
@@ -432,11 +646,16 @@ return view.extend({
 		o.value("1", _("Force use of HTTP/1"));
 		o.default = "";
 
-		o = s.option(
-			form.ListValue,
-			"force_ipv6_resolvers",
-			_("Use IPv6 resolvers")
-		);
+		o = s.option(form.ListValue, "force_http3", _("Use HTTP/3 (QUIC)"));
+		o.modalonly = true;
+		o.optional = true;
+		o.rmempty = true;
+		o.value("", _("Use negotiated HTTP version"));
+		o.value("1", _("Force use of HTTP/3 (QUIC)"));
+		o.default = "";
+		o.depends("force_http1", "");
+
+		o = s.option(form.ListValue, "force_ipv6_resolvers", _("Use IPv6 resolvers"));
 		o.modalonly = true;
 		o.optional = true;
 		o.rmempty = true;
