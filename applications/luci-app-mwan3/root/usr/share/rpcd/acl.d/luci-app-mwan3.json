@@ -1,32 +1,94 @@
 {
-	"luci-app-mwan3": {
-		"description": "Grant UCI access for luci-app-mwan3",
+	"luci-app-mwan3-status": {
+		"description": "Grant access for luci-app-mwan3 status information",
 		"read": {
+			"cgi-io": [
+				"exec"
+			],
 			"file": {
-				"/etc/mwan3.user": [ "read" ],
-				"/usr/bin/httping": [ "list" ],
-				"/usr/bin/nping": [ "list" ],
-				"/usr/bin/arping": [ "list" ],
-				"/usr/sbin/mwan3 status": [ "exec" ],
-				"/usr/sbin/mwan3 ifup *": [ "exec" ],
-				"/usr/sbin/mwan3 ifdown *": [ "exec" ],
-				"/usr/sbin/mwan3 internal ipv4": [ "exec" ],
-				"/usr/sbin/mwan3 internal ipv6": [ "exec" ],
-				"/usr/libexec/luci-mwan3 diag * *": [ "exec" ],
-				"/usr/libexec/luci-mwan3 ipset *": [ "exec" ]
+				"/usr/sbin/mwan3 status": [
+					"exec"
+				]
 			},
 			"ubus": {
-				"mwan3": [ "status" ]
-			},
-			"uci": [ "mwan3", "network" ]
+				"mwan3": [
+					"status"
+				]
+			}
 		},
 		"write": {
 			"file": {
-				"/etc/mwan3.user": ["write"],
-				"/usr/sbin/mwan3 ifup *": [ "exec" ],
-				"/usr/sbin/mwan3 ifdown *": [ "exec" ]
+				"/usr/libexec/luci-mwan3 diag gateway *": [
+					"exec"
+				],
+				"/usr/libexec/luci-mwan3 diag tracking *": [
+					"exec"
+				],
+				"/usr/libexec/luci-mwan3 diag rules *": [
+					"exec"
+				],
+				"/usr/libexec/luci-mwan3 diag routes *": [
+					"exec"
+				],
+				"/usr/sbin/mwan3 internal ipv4": [
+					"exec"
+				],
+				"/usr/sbin/mwan3 ifup *": [
+					"exec"
+				],
+				"/usr/sbin/mwan3 ifdown *": [
+					"exec"
+				]
 			},
-			"uci": [ "mwan3" ]
+			"ubus": {
+				"file": [
+					"exec"
+				]
+			}
+		}
+	},
+	"luci-app-mwan3": {
+		"description": "Grant access for luci-app-mwan3 configuration",
+		"read": {
+			"cgi-io": [
+				"exec"
+			],
+			"file": {
+				"/etc/mwan3.user": [
+					"read"
+				],
+				"/usr/bin/httping": [
+					"list"
+				],
+				"/usr/bin/nping": [
+					"list"
+				],
+				"/usr/bin/arping": [
+					"list"
+				],
+				"/usr/libexec/luci-mwan3 ipset dump": [
+					"exec"
+				]
+			},
+			"ubus": {
+				"mwan3": [
+					"status"
+				]
+			},
+			"uci": [
+				"mwan3",
+				"network"
+			]
+		},
+		"write": {
+			"file": {
+				"/etc/mwan3.user": [
+					"write"
+				]
+			},
+			"uci": [
+				"mwan3"
+			]
 		}
 	}
 }
