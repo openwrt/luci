@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-01-08 08:37+0000\n"
+"PO-Revision-Date: 2026-01-09 19:56+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationssqm/ko/>\n"
@@ -51,6 +51,8 @@ msgid ""
 "Create log file for this SQM instance under /var/run/sqm/${Interface_name}."
 "[start|stop]-sqm.log."
 msgstr ""
+"이 SQM 인스턴스의 로그 파일을 기록합니다. 위치: /var/run/sqm/$"
+"{Interface_name}.[start|stop]-sqm.log"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:160
 msgid "Dangerous Configuration"
@@ -94,11 +96,11 @@ msgstr "이 SQM 설정을 활성화합니다."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:148
 msgid "Explicit congestion notification (ECN) status on inbound packets"
-msgstr ""
+msgstr "인바운드 패킷에 명시적 혼잡 알림 (ECN) 적용"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:154
 msgid "Explicit congestion notification (ECN) status on outbound packets"
-msgstr ""
+msgstr "아웃바운드 패킷에 명시적 혼잡 알림 (ECN) 적용"
 
 #: applications/luci-app-sqm/root/usr/share/rpcd/acl.d/luci-app-sqm.json:3
 msgid "Grant UCI access for luci-app-sqm"
@@ -106,11 +108,11 @@ msgstr "luci-app-sqm의 UCI 접근 권한 부여"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
 msgid "Hard limit on egress queues; leave empty for default."
-msgstr ""
+msgstr "이그레스 대기열에 적용할 최대 강제 제한치. 기본값을 사용하려면 비워두세요."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:164
 msgid "Hard limit on ingress queues; leave empty for default."
-msgstr ""
+msgstr "인그레스 대기열에 적용할 최대 강제 제한치. 기본값을 사용하려면 비워두세요."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:168
 msgid "Hard queue limit (egress)"
@@ -126,7 +128,7 @@ msgstr "DSCP 무시 (인그레스)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:142
 msgid "Ignore DSCP markings on inbound packets"
-msgstr ""
+msgstr "인바운드 패킷의 DSCP 마크 무시"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:89
 msgid "Interface name"
@@ -169,6 +171,8 @@ msgid ""
 "Lists queuing disciplines useable on this system. After installing a new "
 "qdisc, you need to restart the router to see updates!"
 msgstr ""
+"이 시스템에서 사용 가능한 대기열 관리 방식(qdisc)을 나열합니다. qdisc를 새로 "
+"설치하면 라우터를 재시작해야 목록에 표시됩니다!"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:103
 msgid "Log verbosity"
@@ -221,7 +225,7 @@ msgstr "대기열 설정 스크립트"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:112
 msgid "Queueing discipline"
-msgstr "대기열 관리 규칙"
+msgstr "대기열 관리 방식"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:71
 msgid "Queues"
@@ -245,7 +249,7 @@ msgstr "DSCP 초기화 (인그레스)"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:136
 msgid "Squash DSCP markings on inbound packets"
-msgstr ""
+msgstr "인바운드 패킷의 DSCP 마크 초기화"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:83
 msgid ""
@@ -282,7 +286,7 @@ msgstr "시스템 로그 내 SQM 출력의 상세 수준."
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:187
 msgid "Which link layer technology to account for"
-msgstr ""
+msgstr "트래픽 오버헤드 계산 시 반영할 링크 계층 기술"
 
 #: applications/luci-app-sqm/htdocs/luci-static/resources/view/network/sqm.js:218
 msgid "Which linklayer adaptation mechanism to use; for testing only"
