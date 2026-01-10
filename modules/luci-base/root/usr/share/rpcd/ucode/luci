@@ -541,8 +541,8 @@ const methods = {
 
 				for (let line = fd.read('line'); length(line); line = fd.read('line')) {
 					const m = split(line, ' ');
-					const device = replace(m[0], /\\([0-9][0-9][0-9])/g, (m, n) => char(int(n, 8)));
-					const mount  = replace(m[1], /\\([0-9][0-9][0-9])/g, (m, n) => char(int(n, 8)));
+					const device = replace(m[0], /\\([0-9][0-9][0-9])/g, (m, n) => chr(int(n, 8)));
+					const mount  = replace(m[1], /\\([0-9][0-9][0-9])/g, (m, n) => chr(int(n, 8)));
 					const stat = statvfs(mount);
 
 					if (stat?.blocks > 0) {
