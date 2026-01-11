@@ -670,6 +670,7 @@ return view.extend({
 					ss.tab('general',  _('General Setup'));
 					ss.tab('ipv4', _('IPv4 Settings'));
 					ss.tab('ipv6', _('IPv6 Settings'));
+					ss.tab('dhcpv6', _('DHCPv6 Settings'));
 					ss.tab('ipv6-ra', _('IPv6 RA Settings'));
 
 					ss.filter = function(section_id) {
@@ -927,6 +928,50 @@ return view.extend({
 						}
 					};
 
+					so = ss.taboption('ipv6-ra', form.RichListValue, '_ra_pio_flags', _('RA <abbr title="Prefix Information Option">PIO</abbr> Flags'),
+						_('Allow <abbr title="Prefix Information Option">PIO</abbr> flags sent in RA messages, globally for all prefixes.'));
+					so.optional = true;
+					so.value('pd', _('prefix delegation (PD) preferred (P)'),
+						_('The PD <em>preferred</em> (P) flag indicates that the network prefers clients use PD instead of individual addresses via DHCPv6 or SLAAC. Requires DHCPv6 and DHCPv6-PD.'));
+					/* Here PD-P depends on RA being in server or hybrid mode to
+					distribute the PIO P flag.
+
+					For odhcpd to send the PIO P flag set to on requires:
+					- dhcpv6 on [server, hybrid]
+					- dhcpv6_pd on
+					- dhcpv6_pd_preferred on
+
+					For odhcpd to relay an upstream PIO P flag which is on requires:
+					- dhcpv6 on [relay]
+					- dhcpv6_pd on
+					- dhcpv6_pd_preferred on
+
+					otherwise a relayed P flag is disabled.
+
+					If a user runs a separate DHCPv6 server (i.e. not odhcpd), the
+					named settings must still be on to enable the RA PIO P flag here,
+					since that is what odhcpd expects.
+					*/
+					so.multiple = true;
+					so.default = '';
+					so.select_placeholder = _('none');
+					so.depends({ ra: 'server' });
+					so.depends({ ra: 'hybrid', master: '0' });
+					so.cfgvalue = function(section_id) {
+						const p_flag = uci.get('dhcp', section_id, 'dhcpv6_pd_preferred');
+						const flags = [];
+						if (p_flag) flags.push('pd');
+						return flags;
+					};
+					so.remove = function(section_id) {
+						uci.unset('dhcp', section_id, 'dhcpv6_pd_preferred');
+					};
+					so.write = function(section_id, value) {
+						if (value?.includes('pd'))
+							uci.set('dhcp', section_id, 'dhcpv6_pd_preferred', '1');
+						return;
+					}
+
 					so = ss.taboption('ipv6-ra', form.Value, 'ra_pref64', _('NAT64 prefix'), _('Announce NAT64 prefix in <abbr title="Router Advertisement">RA</abbr> messages.') +  ' ' + 
 						_('See %s and %s.').format('<a href="%s" target="_blank">RFC6146</a>', '<a href="%s" target="_blank">RFC8781</a>').format('https://www.rfc-editor.org/rfc/rfc6146', 'https://www.rfc-editor.org/rfc/rfc8781'));
 					so.optional = true;
@@ -1045,16 +1090,21 @@ return view.extend({
 						_('Forward DHCPv6 messages between the designated master interface and downstream interfaces.'));
 					so.value('hybrid', _('hybrid mode'), ' ');
 
-					so = ss.taboption('ipv6', form.Value, 'dhcpv6_pd_min_len', _('<abbr title="Prefix Delegation">PD</abbr> minimum length'),
+					so = ss.taboption('dhcpv6', form.Flag, 'dhcpv6_pd', _('DHCPv6-<abbr title="Prefix Delegation">PD</abbr>'),
+						_('Toggle IPv6 PD via DHCPv6.'));
+					so.depends({ dhcpv6: 'server' });
+
+					so = ss.taboption('dhcpv6', form.Value, 'dhcpv6_pd_min_len', _('<abbr title="Prefix Delegation">PD</abbr> minimum length'),
 						_('Configures the minimum delegated prefix length assigned to a requesting downstream router, potentially overriding a requested prefix length. If left unspecified, the device will assign the smallest available prefix greater than or equal to the requested prefix.'));
 					so.placeholder = '62';
 					so.datatype = 'range(1,64)';
-					so.depends('dhcpv6', 'server');
+					so.depends({ dhcpv6: 'server', dhcpv6_pd: '1' });
 
 					/* This option is used by odhcpd. It can take IPv4/6 entries, although IPv4 DNS servers don't
 					always make sense in an IPv6 environment, they might in a dual stack environment. */
 					so = ss.taboption('ipv6', form.DynamicList, 'dns', _('Announce IPv4/6 DNS servers'),
 						_('Specifies a fixed list of DNS server addresses to announce via DHCPv6.') + '<br/>' +
+						_('Specifies a fixed list of DNS server addresses to announce via RA.') + '<br/>' +
 						_('If left unspecified, the device will announce itself as DNS server unless the <em>Local IPv6 DNS server</em> option is disabled.'));
 					so.datatype = 'ipaddr("nomask")';
 					so.depends('ra', 'server');
@@ -1093,7 +1143,7 @@ return view.extend({
 					so.depends({ dhcpv6: 'hybrid', master: '0' });
 
 					//This is a DHCPv6 specific odhcpd setting
-					so = ss.taboption('ipv6', form.DynamicList, 'ntp', _('NTP Servers'),
+					so = ss.taboption('dhcpv6', form.DynamicList, 'ntp', _('NTP Servers'),
 						_('DHCPv6 option 56. %s.', 'DHCPv6 option 56. RFC5908 link').format('<a href="%s" target="_blank">RFC5908</a>').format('https://www.rfc-editor.org/rfc/rfc5908#section-4'));
 					so.datatype = 'host(0)';
 					for(var x of uci.get('system', 'ntp', 'server') || '') {
