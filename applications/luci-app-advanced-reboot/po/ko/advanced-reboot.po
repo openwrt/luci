@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-01-07 14:01+0000\n"
+"PO-Revision-Date: 2026-01-11 05:02+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadvanced-reboot/ko/>\n"
@@ -63,12 +63,12 @@ msgstr "기기 전원 끄기..."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:81
 msgid "Power Off Device"
-msgstr "기기 전원 끄기"
+msgstr "기기 전원 종료"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:105
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:236
 msgid "Proceed"
-msgstr "확인"
+msgstr "진행"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:325
 msgid "Reboot"
@@ -103,7 +103,7 @@ msgstr "상태"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:27
 msgid "The Dual Boot Flag Partition: %s is not a block device."
-msgstr ""
+msgstr "듀얼 부팅 플래그 파티션: %s가 블록 장치가 아닙니다."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:117
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:159
@@ -117,6 +117,10 @@ msgid ""
 "might be necessary to renew the address of your computer to reach the device "
 "again, depending on your settings."
 msgstr ""
+"시스템이 현재 다른 파티션으로 재부팅 중입니다.<br /> 기기의 전원을 차단하지 "
+"마십시오!<br /> 재연결을 시도하기 전, 몇 분 정도 기다려 주십시오. 사용자의 "
+"설정에 따라, 기기에 다시 연결하려면 컴퓨터의 주소를 갱신해야 할 수도 "
+"있습니다."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:73
 msgid ""
@@ -124,9 +128,9 @@ msgid ""
 "might be necessary to renew the address of your computer to reach the device "
 "again, depending on your settings."
 msgstr ""
-"시스템이 지금 시스템 종료되는 중입니다.<br /> 장치의 전원을 끄지 마십시오!"
-"<br /> 사용자의 설정에 따라 장치에 다시 연결하려면, 사용자의 컴퓨터의 주소를 "
-"갱신해야 할 수도 있습니다."
+"시스템 종료 중입니다.<br /> 기기의 전원을 차단하지 마십시오!<br /> 사용자의 "
+"설정에 따라, 기기에 다시 연결하려면 컴퓨터의 주소를 갱신해야 할 수도 "
+"있습니다."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:20
 msgid "Unable to find Device Board Name."
@@ -134,19 +138,19 @@ msgstr "기기의 보드 이름을 찾을 수 없습니다."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:23
 msgid "Unable to find Dual Boot Flag Partition."
-msgstr ""
+msgstr "듀얼 부팅 플래그 파티션을 찾을 수 없습니다."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:36
 msgid "Unable to obtain firmware environment variable: %s."
-msgstr ""
+msgstr "펌웨어 환경 변수를 가져올 수 없습니다: %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:32
 msgid "Unable to set Dual Boot Flag Partition entry for partition: %s."
-msgstr ""
+msgstr "듀얼 부팅 플래그 파티션 항목을 설정할 수 없습니다: %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:41
 msgid "Unable to set firmware environment variable: %s to %s."
-msgstr ""
+msgstr "펌웨어 환경 변수를 설정할 수 없습니다: %s를 %s로 설정 실패."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:264
 msgid "Unknown"
@@ -163,6 +167,12 @@ msgid ""
 "back to the currently active partition.<br /><br /> Click \"Proceed\" below "
 "to reboot device to an alternative partition."
 msgstr ""
+"경고: 다른 파티션은 고유한 설정과 전혀 다른 펌웨어를 포함하고 있을 수 "
+"있습니다.<br /><br /> 다른 파티션의 네트워크 설정 및 WiFi 정보(SSID/비밀번호)"
+"가 현재와 다를 경우, 재부팅 후 기기 연결을 위해 컴퓨터 설정을 조정해야 할 수 "
+"있습니다.<br /><br /> 또한, 다른 파티션의 펌웨어에서는 현재 파티션으로 다시 "
+"부팅하는 기능을 제공하지 않을 수 있으니 주의하십시오.<br /><br /> 계속해서 "
+"기기를 다른 파티션으로 재부팅하려면 아래의 \"진행\"을 클릭하세요."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:85
 msgid ""
@@ -170,6 +180,9 @@ msgid ""
 "support power off.<br /><br /> Click \"Proceed\" below to power off your "
 "device."
 msgstr ""
+"경고: 전원 종료 기능을 지원하지 않는 기기를 종료하려고 하면 재부팅이 발생할 "
+"수 있습니다.<br /><br /> 계속해서 장치를 종료하려면 아래의 \"진행\"을 "
+"클릭하세요."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:123
 msgid "Waiting for device..."
@@ -181,6 +194,9 @@ msgid ""
 "seeing this on an OpenWrt dual-firmware supported device,%splease refer to "
 "%sHow to add a new device section of the README%s."
 msgstr ""
+"주의: 장치 (%s)를 인식할 수 없거나 듀얼 펌웨어를 지원하는 장치가 "
+"아닙니다!%sOpenWrt 듀얼 펌웨어 지원 장치를 사용 중인데 이 메시지가 "
+"표시된다면,%s%sREADME의 새 장치 추가 방법 섹션%s을 참조해 주세요."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:301
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
@@ -188,8 +204,8 @@ msgstr "경고: 저장되지 않은 변경사항이 있습니다. 재부팅 시 
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:376
 msgid "Warning: This system does not support powering off!"
-msgstr ""
+msgstr "경고: 이 시스템은 전원 종료 기능을 지원하지 않습니다!"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced_reboot.js:357
 msgid "Warning: Unable to obtain device information!"
-msgstr ""
+msgstr "경고: 기기 정보를 가져올 수 없습니다!"
