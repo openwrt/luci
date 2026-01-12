@@ -54,6 +54,13 @@ var CBIZoneSelect = form.ListValue.extend({
 		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
 		    isOutputOnly = false,
 		    choices = {};
+		let datatype_str = 'ucifw4zonename';
+		if (!L.hasSystemFeature('firewall4'))
+			datatype_str = `and(${datatype_str},maxlength(11))`;
+		if (this.allowany && this.nocreate)
+			datatype_str = `or(${datatype_str},"*")`;
+		if (this.multiple)
+			datatype_str = `list(${datatype_str})`;
 
 		if (this.option == 'dest') {
 			for (var i = 0; i < this.section.children.length; i++) {
@@ -148,9 +155,7 @@ var CBIZoneSelect = form.ListValue.extend({
 			display_items: this.display_size || this.size || 3,
 			dropdown_items: this.dropdown_size || this.size || 5,
 			validate: L.bind(this.validate, this, section_id),
-			datatype: L.hasSystemFeature('firewall4')
-				? ( this.multiple ? 'list(or(uciname,"*"))' : 'or(uciname,"*")' )
-				: this.multiple ? 'list(or(and(uciname,maxlength(11)),"*"))' : 'or(and(uciname,maxlength(11)),"*")',
+			datatype: datatype_str,
 			create: !this.nocreate,
 			create_markup: '' +
 				'<li data-value="{{value}}">' +
