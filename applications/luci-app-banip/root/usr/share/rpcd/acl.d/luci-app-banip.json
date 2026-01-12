@@ -2,13 +2,13 @@
 	"luci-app-banip": {
 		"description": "Grant access to LuCI app banIP",
 		"write": {
+			"uci": [ "banip" ],
 			"file": {
 				"/etc/banip/*": [ "read", "write" ],
 				"/etc/banip/banip.allowlist": [ "write" ],
 				"/etc/banip/banip.blocklist": [ "write" ],
 				"/etc/banip/banip.custom.feeds": [ "read", "write" ]
-			},
-			"uci": [ "banip" ]
+			}
 		},
 		"read": {
 			"cgi-io": [ "exec" ],

@@ -272,6 +272,10 @@ return view.extend({
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked invalid tcp packets')),
 					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_tcpinvalid || '-')
 				]),
+				E('div', { 'class': 'cbi-value' }, [
+					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('blocked bcp38 packets')),
+					E('div', { 'class': 'cbi-value-title', 'id': 'start', 'style': 'margin-top:-5px;color:#37c;font-weight:bold;' }, content?.[0]?.sum_bcp38 || '-')
+				]),
 				E('hr'),
 				E('div', { 'class': 'cbi-value' }, [
 					E('div', { 'class': 'cbi-value-title', 'style': 'margin-top:-5px;width:230px;font-weight:bold;' }, _('auto-added IPs to allowlist')),
