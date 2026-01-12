@@ -372,6 +372,10 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
+		o = s.taboption('adv_chain', form.Flag, 'ban_bcp38', _('Enable BCP38'), _('Block packets with spoofed source IP addresses in all supported chains.'));
+		o.optional = true;
+		o.rmempty = true;
+
 		o = s.taboption('adv_chain', form.ListValue, 'ban_icmplimit', _('ICMP-Threshold'), _('ICMP-Threshold in packets per second to prevent WAN-DoS attacks. To disable this safeguard set it to \'0\'.'));
 		o.value('0');
 		o.value('25');
@@ -435,8 +439,7 @@ return view.extend({
 		o.value('1');
 		o.value('3');
 		o.value('5');
-		o.value('10');
-		o.default = '5';
+		o.default = '3';
 		o.placeholder = _('-- default --');
 		o.create = true;
 		o.optional = true;

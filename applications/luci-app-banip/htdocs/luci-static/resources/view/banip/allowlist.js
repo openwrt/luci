@@ -13,7 +13,7 @@ const resetScroll = () => {
 return view.extend({
 	load: function () {
 		return L.resolveDefault(fs.stat(localFile), "")
-		.then(function (stat) {
+			.then(function (stat) {
 			if (!stat) {
 				return fs.write(localFile, "");
 			}
@@ -24,7 +24,7 @@ return view.extend({
 		});
 	},
 	render: function (allowlist) {
-		if (allowlist[0].size >= 100000) {
+		if (allowlist[0] && allowlist[0].size >= 100000) {
 			resetScroll();
 			ui.addNotification(null, E('p', _('The allowlist is too big, unable to save modifications.')), 'error');
 		}
