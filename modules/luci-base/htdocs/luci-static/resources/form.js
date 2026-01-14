@@ -2189,13 +2189,25 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 	 */
 
 	/**
-	 * Override the caption used for the section add a button at the bottom of
+	 * Override the caption used for the section add button at the bottom of
 	 * the section form element. Set to a string, it will be used as-is.
 	 * Set to a function, the function will be invoked and its return value
 	 * is used as a caption, after converting it to a string. If this property
 	 * is not set, the default is `Add`.
 	 *
 	 * @name LuCI.form.TypedSection.prototype#addbtntitle
+	 * @type string|function
+	 * @default null
+	 */
+
+	/**
+	 * Override the caption used for the section delete button at the bottom of
+	 * the section form element. Set to a string, it will be used as-is.
+	 * Set to a function, the function will be invoked and its return value
+	 * is used as a caption, after converting it to a string. If this property
+	 * is not set, the default is `Delete`.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#delbtntitle
 	 * @type string|function
 	 * @default null
 	 */
@@ -2319,6 +2331,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 
 		for (let i = 0; i < nodes.length; i++) {
 			if (this.addremove) {
+				const rem_btn_title = this.titleFn('delbtntitle', section_id);
 				sectionEl.appendChild(
 					E('div', { 'class': 'cbi-section-remove right' },
 						E('button', {
@@ -2327,7 +2340,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 							'data-section-id': cfgsections[i],
 							'click': ui.createHandlerFn(this, 'handleRemove', cfgsections[i]),
 							'disabled': this.map.readonly || null
-						}, [ _('Delete') ])));
+						}, [ rem_btn_title ?? _('Delete') ])));
 			}
 
 			if (!this.anonymous)
@@ -2457,6 +2470,18 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 * @name LuCI.form.TypedSection.prototype#cloneable
 	 * @type boolean
 	 * @default false
+	 */
+
+	/**
+	 * Override the caption used for the section clone button at the bottom of
+	 * the section form element. Set to a string, it will be used as-is.
+	 * Set to a function, the function will be invoked and its return value
+	 * is used as a caption, after converting it to a string. If this property
+	 * is not set, the default is `Clone`.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#clonebtntitle
+	 * @type string|function
+	 * @default null
 	 */
 
 	/**
@@ -2748,7 +2773,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		}
 
 		if (this.addremove) {
-			const btn_title = this.titleFn('removebtntitle', section_id);
+			const btn_title = this.titleFn('delbtntitle', section_id);
 
 			dom.append(tdEl.lastElementChild,
 				E('button', {
@@ -3598,13 +3623,14 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 
 		if (ucidata) {
 			if (this.addremove) {
+				const rem_btn_title = this.titleFn('delbtntitle', section_id);
 				sectionEl.appendChild(
 					E('div', { 'class': 'cbi-section-remove right' },
 						E('button', {
 							'class': 'cbi-button',
 							'click': ui.createHandlerFn(this, 'handleRemove'),
 							'disabled': this.map.readonly || null
-						}, [ _('Delete') ])));
+						}, [ rem_btn_title ?? _('Delete') ])));
 			}
 
 			sectionEl.appendChild(E('div', {
@@ -3615,12 +3641,13 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 			}, nodes));
 		}
 		else if (this.addremove) {
+			const add_btn_title = this.titleFn('addbtntitle', section_id);
 			sectionEl.appendChild(
 				E('button', {
 					'class': 'cbi-button cbi-button-add',
 					'click': ui.createHandlerFn(this, 'handleAdd'),
 					'disabled': this.map.readonly || null
-				}, [ _('Add') ]));
+				}, [ add_btn_title ?? _('Add') ]));
 		}
 
 		dom.bindClassInstance(sectionEl, this);
