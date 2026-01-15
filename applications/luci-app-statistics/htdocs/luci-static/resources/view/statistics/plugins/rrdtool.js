@@ -1,6 +1,7 @@
 'use strict';
 'require baseclass';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 return baseclass.extend({
 	title: _('RRDTool Plugin Configuration'),
@@ -9,7 +10,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s, true);
 
 		o = s.option(form.Value, 'DataDir', _('Storage directory'),
 			_('Note: as pages are rendered by user \'nobody\', the *.rrd files, the storage directory and all its parent directories need to be world readable.'));
@@ -20,6 +21,11 @@ return baseclass.extend({
 			     _('Backup and restore RRD statistics to/from non-volatile storage around shutdown, reboot, and/or sysupgrade'));
 		o.default = '0';
 		o.depends('enable', '1');
+
+
+		o = s.option(form.Value, 'backup_dir', _('Backup directory'), _('Backup directory'));
+		o.default = '/etc/luci_statistics';
+		o.depends('backup', '1');
 
 		o = s.option(form.Value, 'StepSize', _('RRD step interval'), _('Seconds'));
 		o.placeholder = '30';

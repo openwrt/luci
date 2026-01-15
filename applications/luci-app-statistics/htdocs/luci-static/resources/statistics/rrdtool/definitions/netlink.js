@@ -173,7 +173,8 @@ return baseclass.extend({
 		 */
 		var errors = {
 			title: "%H: Netlink - Errors on %pi",
-			vlabel: "Errors/s", detail: true,
+			vlabel: "Errors/s",
+			detail: true,
 
 			/* diagram data description */
 			data: {
@@ -205,5 +206,7 @@ return baseclass.extend({
 		};
 
 		return [ traffic, packets, multicast, collisions, errors ];
-	}
+	},
+
+	hasInstanceDetails: true
 });

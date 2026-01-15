@@ -4375,8 +4375,8 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 					}
 				}
 
-				menu.childNodes[selected].classList.add('cbi-tab');
-				menu.childNodes[selected].classList.remove('cbi-tab-disabled');
+				menu.childNodes[selected]?.classList.add('cbi-tab');
+				menu.childNodes[selected]?.classList.remove('cbi-tab-disabled');
 				panes[selected].setAttribute('data-tab-active', 'true');
 
 				this.setActiveTabId(panes[selected], selected);

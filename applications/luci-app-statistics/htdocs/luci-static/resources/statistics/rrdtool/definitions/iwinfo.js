@@ -92,5 +92,7 @@ return baseclass.extend({
 		};
 
 		return [ quality, snr, bitrate, stations ];
-	}
+	},
+
+	hasInstanceDetails: true
 });
