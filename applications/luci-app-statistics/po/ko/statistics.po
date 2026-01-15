@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:35+0200\n"
-"PO-Revision-Date: 2026-01-11 05:02+0000\n"
+"PO-Revision-Date: 2026-01-15 16:49+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/ko/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.15.2\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:54
 msgid "%H: Attenuation on %pi"
@@ -24,7 +24,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:133
 msgid "%H: Data rate on %pi"
-msgstr ""
+msgstr "%H: %pi의 전송 속도"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:178
 msgid "%H: Errored seconds on %pi"
@@ -36,7 +36,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:13
 msgid "%H: Line uptime on %pi"
-msgstr ""
+msgstr "%H: %pi의 회선 가동 시간"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:262
 msgid "%H: RETX Errors %pi"
@@ -44,7 +44,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:31
 msgid "%H: SNR on %pi"
-msgstr ""
+msgstr "%H: %pi의 SNR"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:47
 msgid "0 - At most once"
@@ -134,7 +134,7 @@ msgstr "기본 모니터링"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:25
 msgid "Basic process monitoring enabled"
-msgstr "기본 프로세스 모니터링 켜짐"
+msgstr "기본 프로세스 모니터링 활성화됨"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:103
 msgid "Bitswap Down"
@@ -259,7 +259,7 @@ msgstr "문맥 교환"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/contextswitch.js:10
 msgid "Context switch monitoring enabled"
-msgstr ""
+msgstr "문맥 교환 모니터링 활성화됨"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/syslog.js:23
 msgid "Controls which notifications should be sent to syslog."
@@ -337,12 +337,12 @@ msgstr "디스크 플러그인 설정"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/df.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/df.json:2
 msgid "Disk Space Usage"
-msgstr ""
+msgstr "디스크 공간 사용량"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/disk.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/disk.json:2
 msgid "Disk Usage"
-msgstr ""
+msgstr "디스크 사용량"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:221
 msgid "Display Host »"
@@ -763,7 +763,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:59
 msgid "Monitor filesystem types"
-msgstr ""
+msgstr "대상 파일 시스템 종류"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:14
 msgid "Monitor host"
@@ -789,7 +789,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:37
 msgid "Monitor mount points"
-msgstr ""
+msgstr "대상 마운트 지점"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:14
 msgid "Monitor processes"
@@ -805,7 +805,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
-msgstr "%s, %s, %s 모니터링 중"
+msgstr "%s, %s, %s 항목 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:26
 msgid "Monitoring APC UPS at host %s, port %d"
@@ -813,7 +813,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
 msgid "Monitoring DHCP leases enabled"
-msgstr ""
+msgstr "DHCP 임대 모니터링 활성화됨"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:32
 msgid "Monitoring DNS queries on all interfaces"
@@ -831,7 +831,7 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:43
 msgid "Monitoring all but one disk"
 msgid_plural "Monitoring all but %d disks"
-msgstr[0] "%d개를 제외한 모든 디스크 모니터링 중"
+msgstr[0] "%d개 제외 모든 디스크 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:32
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:36
@@ -857,7 +857,7 @@ msgstr "모든 디스크 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring all except %s, %s, %s"
-msgstr ""
+msgstr "%s, %s, %s 제외 모든 항목 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:30
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:34
@@ -1527,7 +1527,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
 msgid "The dhcpleases plugin collects information about assigned DHCP leases."
-msgstr ""
+msgstr "DHCP 임대(dhcpleases) 플러그인은 할당된 DHCP 임대 정보를 수집합니다."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:8
 msgid ""
@@ -1775,7 +1775,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/uptime.js:10
 msgid "Uptime monitoring enabled"
-msgstr ""
+msgstr "가동 시간 모니터링 활성화됨"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:24
 msgid "Use improved naming schema"
@@ -1885,12 +1885,12 @@ msgstr "없음"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:107
 msgid "one device"
 msgid_plural "%d devices"
-msgstr[0] ""
+msgstr[0] "장치 %d개"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:109
 msgid "one filesystem type"
 msgid_plural "%d filesystem types"
-msgstr[0] ""
+msgstr[0] "파일 시스템 종류 %d개"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
 msgid "one local"
@@ -1900,7 +1900,7 @@ msgstr[0] ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
 msgid_plural "%d mounts"
-msgstr[0] ""
+msgstr[0] "마운트 지점 %d개"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
