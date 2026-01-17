@@ -388,10 +388,12 @@ function build_pagetree() {
 			for (let path, spec in data) {
 				if (type(spec) == 'object') {
 					let node = tree;
+					let has_wildcard = false;
 
 					for (let s in match(path, /[^\/]+/g)) {
 						if (s[0] == '*') {
 							node.wildcard = true;
+							has_wildcard = true;
 							break;
 						}
 
@@ -404,6 +406,12 @@ function build_pagetree() {
 						for (let k, t in schema)
 							if (type(spec[k]) == t)
 								node[k] = spec[k];
+
+						/* Preserve distinct actions for wildcard vs. base path */
+						if (has_wildcard && type(spec.action) == 'object')
+							node.wildcardaction = spec.action;
+						else if (type(spec.action) == 'object')
+							node.action = spec.action;
 
 						node.satisfied = check_depends(spec);
 					}
@@ -635,16 +643,27 @@ function resolve_page(tree, request_path) {
 		if (!login && node.auth?.login)
 			login = true;
 
+		/* If this node is marked as wildcard, check if the next segment
+		 * matches a child node. Only apply wildcard behaviour (capturing
+		 * remaining segments as args) if no child matches, allowing
+		 * deeper routes like foo/bar/* to work alongside
+		 * foo/*
+		 */
 		if (node.wildcard) {
-			ctx.request_args = [];
-			ctx.request_path = ctx.path ? [ ...ctx.path ] : [];
+			let next_segment = request_path[i + 1];
+			let has_matching_child = next_segment && node.children?.[next_segment]?.satisfied;
 
-			while (++i < length(request_path)) {
-				push(ctx.request_path, request_path[i]);
-				push(ctx.request_args, request_path[i]);
+			if (!has_matching_child) {
+				ctx.request_args = [];
+				ctx.request_path = ctx.path ? [ ...ctx.path ] : [];
+
+				while (++i < length(request_path)) {
+					push(ctx.request_path, request_path[i]);
+					push(ctx.request_args, request_path[i]);
+				}
+
+				break;
 			}
-
-			break;
 		}
 	}
 
@@ -985,6 +1004,11 @@ dispatch = function(_http, path) {
 		}
 
 		let action = resolved.node.action;
+
+		/* If this node matched a wildcard and we have request args,
+		 * prefer the wildcard-specific action when defined. */
+		if (length(resolved.ctx.request_args) && type(resolved.node.wildcardaction) == 'object')
+			action = resolved.node.wildcardaction;
 
 		if (action?.type == 'arcombine')
 			action = length(resolved.ctx.request_args) ? action.targets?.[1] : action.targets?.[0];
