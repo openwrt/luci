@@ -871,7 +871,8 @@ return baseclass.extend(/** @lends LuCI.uci.prototype */ {
 		for (let i = 0; i < sa.length; i++)
 			this.get(conf, sa[i]['.name'])['.index'] = i;
 
-		this.state.reorder[conf] = true;
+		if (this.state)
+			this.state.reorder[conf] = true;
 
 		return true;
 	},
