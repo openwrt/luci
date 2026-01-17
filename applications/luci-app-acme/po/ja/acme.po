@@ -40,7 +40,7 @@ msgstr "詳細設定"
 msgid "Alternative DNS API options"
 msgstr "代替 DNS API オプション"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:419
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:423
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -48,11 +48,15 @@ msgstr "キャンセル"
 msgid "Cert files are stored in"
 msgstr "証明書ファイルは以下の場所に保存されています"
 
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:302
+msgid "Certificate Profile"
+msgstr ""
+
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:76
 msgid "Certificate config"
 msgstr "証明書設定"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:537
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:541
 msgid "Certificates"
 msgstr "証明書"
 
@@ -60,7 +64,7 @@ msgstr "証明書"
 msgid "Challenge Alias"
 msgstr "チャレンジのエイリアス"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:412
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:416
 msgid "Check the configurations of the added domain certificates"
 msgstr "追加されたドメイン証明書の設定を確認してください"
 
@@ -93,7 +97,7 @@ msgstr "更新までの日数"
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:120
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:157
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:280
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:440
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:444
 msgid "Default"
 msgstr "既定"
 
@@ -158,7 +162,8 @@ msgstr "luci-app-acme に UCI アクセスを許可"
 msgid ""
 "If a certificate wasn't renewed in time then you'll receive a notice at 20 "
 "days before expiry."
-msgstr "証明書が期限までに更新されなかった場合、有効期限の 20 日前にお知らせが届きま"
+msgstr ""
+"証明書が期限までに更新されなかった場合、有効期限の 20 日前にお知らせが届きま"
 "す。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:69
@@ -173,7 +178,7 @@ msgstr "パッケージ %s をインストール"
 msgid "Invalid domain. Allowed lowercase a-z, numbers and hyphen -"
 msgstr "無効なドメインです。英数字およびハイフンのみが許可されます"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:519
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:523
 msgid "Issued on"
 msgstr "発行日"
 
@@ -181,7 +186,8 @@ msgstr "発行日"
 msgid ""
 "It may be needed to change if your web server is behind reverse proxy and "
 "uses a different port."
-msgstr "ウェブサーバーがリバースプロキシの背後にある場合や、異なるポートを使用してい"
+msgstr ""
+"ウェブサーバーがリバースプロキシの背後にある場合や、異なるポートを使用してい"
 "る場合には変更が必要になる可能性があります。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:246
@@ -200,7 +206,7 @@ msgstr "リッスンポート"
 msgid "Log View"
 msgstr "ログビュー"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:516
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:520
 msgid "Main Domain"
 msgstr "メイン ドメイン"
 
@@ -212,13 +218,14 @@ msgstr "パッケージはインストールされていません"
 msgid ""
 "Port where to listen for ACME challenge requests. The port will be "
 "temporarily open during validation."
-msgstr "ACME チャレンジリクエストを待機するポートです。検証中は一時的に開かれます。"
+msgstr ""
+"ACME チャレンジリクエストを待機するポートです。検証中は一時的に開かれます。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:517
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:521
 msgid "Private Key"
 msgstr "秘密鍵"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:518
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:522
 msgid "Public Certificate"
 msgstr "公開証明書"
 
@@ -234,7 +241,7 @@ msgstr "RSA 3072 ビット"
 msgid "RSA 4096 bits"
 msgstr "RSA 4096 ビット"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:432
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:436
 msgid "Save"
 msgstr "保存"
 
@@ -291,11 +298,12 @@ msgstr ""
 "ださい。複数の認証情報変数を指定するには、KEY=VAL シェル変数形式で複数のエン"
 "トリーを追加してください。"
 
-#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:399
+#: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:403
 msgid ""
 "The domain %s in DDNS %s is already configured in %s. Please check it after "
 "the importing."
-msgstr "DDNS %s のドメイン %s は既に %s で設定されています。インポート後に確認してく"
+msgstr ""
+"DDNS %s のドメイン %s は既に %s で設定されています。インポート後に確認してく"
 "ださい。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:231
@@ -317,15 +325,17 @@ msgid ""
 "address. Once configured, issuing certificates can take a while. Check the "
 "logs for progress and any errors."
 msgstr ""
-"この設定は ACME (Let's Encrypt) による自動証明書インストールを構成します。ウ"
-"ェブインターフェース用に Let's Encrypt 発行の証明書でルーターを設定するには、"
-"以下を入力してください。証明書内のドメイン名は、事前にルーターのパブリッ ク I"
-"Pアドレスを指すよう設定済みである必要があります。設定後、証明書の発行には時間"
-"がかかる場合があります。進行状況やエラーについてはログを確認してください。"
+"この設定は ACME (Let's Encrypt) による自動証明書インストールを構成します。"
+"ウェブインターフェース用に Let's Encrypt 発行の証明書でルーターを設定するに"
+"は、以下を入力してください。証明書内のドメイン名は、事前にルーターのパブリッ "
+"ク IPアドレスを指すよう設定済みである必要があります。設定後、証明書の発行には"
+"時間がかかる場合があります。進行状況やエラーについてはログを確認してくださ"
+"い。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:119
 msgid "To temporary open port you can specify your web server port e.g. 80."
-msgstr "一時的にポートを開くときは、Web サーバーのポート番号 (例: 80) を指定します。"
+msgstr ""
+"一時的にポートを開くときは、Web サーバーのポート番号 (例: 80) を指定します。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme/acme.js:164
 msgid ""
