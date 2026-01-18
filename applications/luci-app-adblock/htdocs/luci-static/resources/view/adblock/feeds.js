@@ -117,49 +117,50 @@ function handleEdit(ev) {
 			return ui.addNotification(null, E('p', _('Invalid input values, unable to save modifications.')), 'error');
 		}
 	}
-	let sumSubElements = [], exportJson;
+	/*
+		gather all input data
+	*/
+	let sumSubElements = [];
 	const nodeKeys = document.querySelectorAll('[id^="widget.cbid.json"][id$="name"]');
-	for (let i = 0; i < nodeKeys.length; i++) {
-		let subElements = {};
-		const elements = document.querySelectorAll('[id^="widget.cbid.json.' + nodeKeys[i].id.split('.')[3] + '\."], \
-			[id^="cbid.json.' + nodeKeys[i].id.split('.')[3] + '\.rule"]');
-		for (const element of elements) {
-			let key;
-			const value = element.value || "";
-			const parts = element.id.split('.');
-			if (parts.length === 5) {
-				key = element.id.split('.')[4];
-			} else if (parts.length === 4) {
-				key = element.id.split('.')[3];
-			}
-			if (!key || value === "") {
-				continue;
-			}
-			switch (key) {
-				case 'url':
-					subElements.url = value;
-					break;
-				case 'rule':
-					subElements.rule = value;
-					break;
-				case 'size':
-					subElements.size = value;
-					break;
-				case 'descr':
-					subElements.descr = value;
-					break;
+	for (const keyNode of nodeKeys) {
+		const keyValue = keyNode.value?.trim();
+		if (!keyValue) continue;
+		const idParts = keyNode.id.split(".");
+		const ruleId = idParts[3];
+		if (!ruleId) continue;
+		const selector =
+			`[id^="widget.cbid.json.${ruleId}."], ` +
+			`[id^="cbid.json.${ruleId}.rule"]`;
+		const elements = document.querySelectorAll(selector);
+		const sub = {};
+		for (const el of elements) {
+			const parts = el.id.split(".");
+			const key = parts[parts.length - 1];
+			const value = el.value?.trim();
+			if (!value) continue;
+			if (["url", "rule", "size", "descr"].includes(key)) {
+				sub[key] = value;
 			}
 		}
-		if (nodeKeys[i].value !== "" && subElements.descr !== "") {
-			sumSubElements.push(nodeKeys[i].value, subElements);
+		if (sub.descr) {
+			sumSubElements.push(keyValue, sub);
 		}
 	}
-	if (sumSubElements.length > 0) {
-		exportJson = JSON.stringify(sumSubElements).replace(/^\[/, '{\n').replace(/\}]$/, '\n\t}\n}\n').replace(/,{"/g, ':{\n\t"').replace(/"},"/g, '"\n\t},\n"').replace(/","/g, '",\n\t"');
+	/*
+		construct json object
+	*/
+	let exportObj = {};
+	for (let i = 0; i < sumSubElements.length; i += 2) {
+		const key = sumSubElements[i];
+		const value = sumSubElements[i + 1];
+		exportObj[key] = value;
 	}
-	return fs.write('/etc/adblock/adblock.custom.feeds', exportJson).then(function () {
-		location.reload();
-	});
+	const exportJson = JSON.stringify(exportObj, null, 4);
+	/*
+		save to file and reload
+	*/
+	return fs.write('/etc/adblock/adblock.custom.feeds', exportJson)
+		.then(() => location.reload());
 }
 
 return view.extend({
