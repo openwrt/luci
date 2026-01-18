@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Class: DynamicList</title>
+    <title>Class: DirectoryPicker</title>
     
     
     <script src="scripts/prettify/prettify.js"></script>
@@ -3951,7 +3951,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="LuCI.form.DynamicList.html">Class: DynamicList</h1>
+        <h1 class="page-title" data-filename="LuCI.form.DirectoryPicker.html">Class: DirectoryPicker</h1>
         
 
 
@@ -3962,12 +3962,11 @@
     <h2>
         <span class="ancestors"><a href="LuCI.html">LuCI</a><a href="LuCI.form.html">.form</a>.</span>
     
-    DynamicList
+    DirectoryPicker
     </h2>
     
-        <div class="class-description"><p>The <code>DynamicList</code> class represents a multi-value widget allowing the user
-to enter multiple unique values, optionally selected from a set of
-predefined choices. It builds upon the <a href="LuCI.ui.DynamicList.html"><code>LuCI.ui.DynamicList</code></a> widget.</p></div>
+        <div class="class-description"><p>The <code>DirectoryPicker</code> element wraps a <a href="LuCI.ui.FileUpload.html"><code>LuCI.ui.FileUpload</code></a> widget and
+offers the ability to browse, create, delete and select remote directories.</p></div>
     
 </header>  
 
@@ -3979,14 +3978,14 @@ predefined choices. It builds upon the <a href="LuCI.ui.DynamicList.html"><code>
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="DynamicList">
+        <h4 class="name" id="DirectoryPicker">
             
-            new LuCI.form.DynamicList<span class="signature">(form, section, option, <span class="optional">title</span>, <span class="optional">description</span>)</span>
+            new LuCI.form.DirectoryPicker<span class="signature">(form, section, option, <span class="optional">title</span>, <span class="optional">description</span>)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3856">line 3856</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line5049">line 5049</a>
         </div>
         
     </div>
@@ -4079,7 +4078,7 @@ option to the section.</p></td>
                         
                     
                 
-                <p>The configuration section to which this option is added. It is automatically passed
+                <p>The configuration section this option is added. It is automatically passed
 by <a href="LuCI.form.AbstractSection.html#option"><code>option()</code></a> or
 <a href="LuCI.form.AbstractSection.html#taboption"><code>taboption()</code></a> when adding the
 option to the section.</p></td>
@@ -4243,7 +4242,7 @@ option to the section.</p></td>
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="allowduplicates">allowduplicates<span class="type-signature type boolean">boolean</span> </h4>
+        <h4 class="name" id="browser">browser<span class="type-signature type boolean">boolean</span> </h4>
     </div>
     
     
@@ -4251,9 +4250,8 @@ option to the section.</p></td>
 <dd>
     
     <div class="description">
-        <p>Allows the underlying form controls to have multiple identical values.</p>
-<p>Default is <code>null</code>. If <code>true</code>, the underlying form value will
-not be checked for duplication.</p>
+        <p>Render the widget in browser mode initially instead of a button
+to 'Select Directory...'.</p>
     </div>
     
     
@@ -4275,7 +4273,320 @@ not be checked for duplication.</p>
     
     
     <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="directory_create">directory_create<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Toggle remote directory create functionality.</p>
+<p>When set to <code>true</code>, the underlying widget provides a button which lets
+the user create directories. Note that this is merely
+a cosmetic feature: remote create permissions are controlled by the
+session ACL rules.</p>
+<p>The default of <code>false</code> means the directory create button is hidden.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="enable_download">enable_download<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Toggle download file functionality.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="enable_remove">enable_remove<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Toggle remote file delete functionality.</p>
+<p>When set to <code>true</code>, the underlying widget provides buttons which let
+the user delete files from remote directories. Note that this is merely
+a cosmetic feature: remote delete permissions are controlled by the
+session ACL rules.</p>
+<p>The default is <code>false</code>, means file removal buttons are not displayed.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="enable_upload">enable_upload<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Toggle file upload functionality.</p>
+<p>When set to <code>true</code>, the underlying widget provides a button which lets
+the user select and upload local files to the remote system.
+Note that this is merely a cosmetic feature: remote upload access is
+controlled by the session ACL rules.</p>
+<p>The default of <code>false</code> means file upload functionality is disabled.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="root_directory">root_directory<span class="type-signature type string">string</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Specify the root directory for file browsing.</p>
+<p>This property defines the topmost directory the file browser widget may
+navigate to. The UI will not allow browsing directories outside this
+prefix. Note that this is merely a cosmetic feature: remote file access
+and directory listing permissions are controlled by the session ACL
+rules.</p>
+<p>The default is <code>/tmp</code>.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>/tmp</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="show_hidden">show_hidden<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Toggle display of hidden files.</p>
+<p>Display hidden files when rendering the remote directory listing.
+Note that this is merely a cosmetic feature: hidden files are always
+included in received remote file listings.</p>
+<p>The default of <code>true</code> means hidden files are displayed.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>true</li></ul></dd>
     
     
     
