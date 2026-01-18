@@ -85,10 +85,14 @@ return view.extend({
 				}
 				if (status && info) {
 					status.textContent = `${info.adblock_status || '-'} (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
-					if (info.adblock_status === "running") {
+					if (info.adblock_status === "processing") {
 						if (!status.classList.contains("spinning")) {
 							status.classList.add("spinning");
 						}
+						buttons.forEach(function (btn) {
+							btn.disabled = true;
+							btn.blur();
+						})
 					} else {
 						if (status.classList.contains("spinning")) {
 							buttons.forEach(function (btn) {
@@ -120,7 +124,7 @@ return view.extend({
 				}
 				if (info) {
 					setText('domains', info.blocked_domains);
-					setText('feeds', info.active_feeds?.join(', '));
+					setText('feeds', info.active_feeds?.join(' '));
 					setText('backend', info.dns_backend);
 					setText('ifaces', info.run_ifaces);
 					setText('dirs', info.run_directories);
@@ -185,6 +189,7 @@ return view.extend({
 		s.addremove = false;
 		s.tab('general', _('General Settings'));
 		s.tab('additional', _('Additional Settings'));
+		s.tab('firewall', _('Firewall Settings'));
 		s.tab('adv_dns', _('Advanced DNS Settings'));
 		s.tab('adv_report', _('Advanced Report Settings'));
 		s.tab('adv_email', _('Advanced E-Mail Settings'));
@@ -209,25 +214,6 @@ return view.extend({
 		o = s.taboption('general', form.Value, 'adb_triggerdelay', _('Trigger Delay'), _('Additional trigger delay in seconds before adblock processing begins.'));
 		o.placeholder = '5';
 		o.datatype = 'range(1,300)';
-		o.rmempty = true;
-
-		o = s.taboption('general', form.Flag, 'adb_dnsforce', _('Force Local DNS'), _('Redirect all local DNS queries from specified LAN zones to the local DNS resolver, applies to UDP and TCP protocol.'));
-		o.rmempty = false;
-
-		o = s.taboption('general', widgets.ZoneSelect, 'adb_zonelist', _('Forced Zones'), _('Firewall LAN source zones that should be forced locally.'));
-		o.depends('adb_dnsforce', '1');
-		o.multiple = true;
-		o.nocreate = true;
-		o.rmempty = true;
-
-		o = s.taboption('general', form.DynamicList, 'adb_portlist', _('Forced Ports'), _('Firewall ports that should be forced locally.'));
-		o.depends('adb_dnsforce', '1');
-		o.multiple = true;
-		o.nocreate = false;
-		o.datatype = 'port';
-		o.value('53');
-		o.value('853');
-		o.value('5353');
 		o.rmempty = true;
 
 		o = s.taboption('general', form.Flag, 'adb_tld', _('TLD Compression'), _('The top level domain compression removes thousands of needless host entries from the final DNS blocklist.'));
@@ -304,6 +290,145 @@ return view.extend({
 		o.rmempty = true;
 
 		/*
+			firewall settings tab
+		*/
+		o = s.taboption('firewall', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<em style="color:#37c;font-weight:bold;">' + _('Changes on this tab needs an adblock service restart to take effect.') + '</em>'
+			+ '<hr style="width: 200px; height: 1px;" />'
+			+ '<em style="color:#37c;font-weight:bold;">' + _('External Unfiltered DNS Policy (MAC-/Interface‑based DNS bypass)') + '</em>';
+
+		o = s.taboption('firewall', form.Flag, 'adb_nftallow', _('Enable Unfiltered DNS Routing'), _('Routes selected MACs or interfaces to an unfiltered external DNS resolver, bypassing local adblock.'));
+		o.rmempty = false;
+		
+		o = s.taboption('firewall', form.DynamicList, 'adb_nftmacallow', _('MAC DNS Filter Targets'), _('Devices with listed MAC addresses will always use the configured unfiltered DNS server.'));
+		o.depends('adb_nftallow', '1');
+		o.datatype = 'macaddr';
+		o.placeholder = '00:11:22:33:44:55';
+		o.multiple = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('firewall', widgets.DeviceSelect, 'adb_nftdevallow', _('Interface DNS Filter Targets'), _('Entire interfaces or VLANs will be routed to the unfiltered DNS server.'));
+		o.depends('adb_nftallow', '1');
+		o.multiple = true;
+		o.nocreate = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.Value, 'adb_allowdnsv4', _('IPv4 DNS Resolver'), _('IPv4 DNS resolver applied to MACs and interfaces using the unfiltered DNS policy.'));
+		o.depends('adb_nftallow', '1');
+		o.datatype = 'ip4addr("nomask")';
+		o.value('86.54.11.100', _('DNS4EU (unfiltered)'));
+		o.value('94.140.14.140', _('AdGuard (unfiltered)'));
+		o.value('76.76.2.0', _('Control D (unfiltered)'));
+		o.value('1.1.1.1', _('Cloudflare (unfiltered)'));
+		o.value('9.9.9.10', _('Quad9 (unfiltered)'));
+		o.value('185.150.99.255', _('Digitale Gesellschaft (unfiltered)'));
+		o.default = '86.54.11.100';
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.Value, 'adb_allowdnsv6', _('IPv6 DNS Resolver'), _('IPv6 DNS resolver applied to MACs and interfaces using the unfiltered DNS policy.'));
+		o.depends('adb_nftallow', '1');
+		o.datatype = 'ip6addr("nomask")';
+		o.value('2a13:1001::86:54:11:100', _('DNS4EU (unfiltered)'));
+		o.value('2a10:50c0::1:ff', _('AdGuard (unfiltered)'));
+		o.value('2606:1a40::', _('Control D (unfiltered)'));
+		o.value('2606:4700:4700::1111', _('Cloudflare (unfiltered)'));
+		o.value('2620:fe::10', _('Quad9 (unfiltered)'));
+		o.value('2a07:6b47:6b47::255', _('Digitale Gesellschaft (unfiltered)'));
+		o.default = '2a13:1001::86:54:11:100';
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('External Filtered DNS Policy (MAC-/Interface‑based DNS bypass)') + '</em>';
+
+		o = s.taboption('firewall', form.Flag, 'adb_nftblock', _('Enable Filtered DNS Routing'), _('Routes selected MACs or interfaces to a filtered external DNS resolver, bypassing local adblock.'));
+		o.rmempty = false;
+
+		o = s.taboption('firewall', form.DynamicList, 'adb_nftmacblock', _('MAC DNS Filter Targets'), _('Devices with listed MAC addresses will always use the configured filtered DNS server.'));
+		o.depends('adb_nftblock', '1');
+		o.datatype = 'macaddr';
+		o.placeholder = '00:11:22:33:44:55';
+		o.multiple = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('firewall', widgets.DeviceSelect, 'adb_nftdevblock', _('Interface DNS Filter Targets'), _('Entire interfaces or VLANs will be routed to the filtered DNS server.'));
+		o.depends('adb_nftblock', '1');
+		o.multiple = true;
+		o.nocreate = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.Value, 'adb_blockdnsv4', _('IPv4 DNS Resolver'), _('IPv4 DNS resolver applied to MACs and interfaces using the filtered DNS policy.'));
+		o.depends('adb_nftblock', '1');
+		o.datatype = 'ip4addr("nomask")';
+		o.value('86.54.11.1', _('DNS4EU (protective)'));
+		o.value('86.54.11.12', _('DNS4EU (protective+family)'));
+		o.value('86.54.11.13', _('DNS4EU (protective+adblock)'));
+		o.value('86.54.11.11', _('DNS4EU (protective+family+adblock)'));
+		o.value('176.9.93.198', _('dnsforge (normal)'));
+		o.value('49.12.43.208', _('dnsforge (clean)'));
+		o.value('49.12.222.213', _('dnsforge (hard)'));
+		o.value('94.140.14.14', _('AdGuard (default)'));
+		o.value('94.140.14.15', _('AdGuard (family)'));
+		o.value('76.76.10.0', _('Control D (security)'));
+		o.value('76.76.10.10', _('Control D (family)'));
+		o.value('76.76.10.11', _('Control D (adblock)'));
+		o.value('1.1.1.2', _('Cloudflare (malware)'));
+		o.value('1.1.1.3', _('Cloudflare (malware+family)'));
+		o.value('9.9.9.9', _('Quad9 (malware)'));
+		o.default = '86.54.11.13';
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.Value, 'adb_blockdnsv6', _('IPv6 DNS Resolver'), _('IPv6 DNS resolver applied to MACs and interfaces using the filtered DNS policy.'));
+		o.depends('adb_nftblock', '1');
+		o.datatype = 'ip6addr("nomask")';
+		o.value('2a13:1001::86:54:11:1', _('DNS4EU (protective)'));
+		o.value('2a13:1001::86:54:11:12', _('DNS4EU (protective+family)'));
+		o.value('2a13:1001::86:54:11:13', _('DNS4EU (protective+adblock)'));
+		o.value('2a13:1001::86:54:11:11', _('DNS4EU (protective+family+adblock)'));
+		o.value('2a01:4f8:151:34aa::198', _('dnsforge (normal)'));
+		o.value('2a01:4f8:c012:ed89::208', _('dnsforge (clean)'));
+		o.value('2a01:4f8:c17:2c61::213', _('dnsforge (hard)'));
+		o.value('2a10:50c0::ad1:ff', _('AdGuard (default)'));
+		o.value('2a10:50c0::bad1:ff', _('AdGuard (family)'));
+		o.value('2606:1a40:1::', _('Control D (security)'));
+		o.value('2606:1a40:1::1', _('Control D (family)'));
+		o.value('2606:1a40:1::2', _('Control D (adblock)'));
+		o.value('2606:4700:4700::1112', _('Cloudflare (malware)'));
+		o.value('2606:4700:4700::1113', _('Cloudflare (malware+family)'));
+		o.value('2620:fe::fe', _('Quad9 (malware)'));
+		o.default = '2a13:1001::86:54:11:13';
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('Local DNS Enforcement') + '</em>';
+
+		o = s.taboption('firewall', form.Flag, 'adb_nftforce', _('Force Local DNS'), _('Redirect all local DNS queries from specified LAN zones to the local DNS resolver, applies to UDP and TCP protocol.'));
+		o.rmempty = false;
+
+		o = s.taboption('firewall', widgets.DeviceSelect, 'adb_nftdevforce', _('Forced Devices/VLANs'), _('Firewall LAN Devices/VLANs that should be forced locally.'));
+		o.depends('adb_nftforce', '1');
+		o.multiple = true;
+		o.nocreate = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.DynamicList, 'adb_nftportforce', _('Forced Ports'), _('Firewall ports that should be forced locally.'));
+		o.depends('adb_nftforce', '1');
+		o.multiple = true;
+		o.nocreate = false;
+		o.datatype = 'port';
+		o.value('53');
+		o.value('853');
+		o.value('5353');
+		o.rmempty = true;
+
+		/*
 			advanced dns settings tab
 		*/
 		o = s.taboption('adv_dns', form.DummyValue, '_sub');
@@ -335,11 +460,11 @@ return view.extend({
 		o = s.taboption('adv_dns', form.Value, 'adb_dnsdir', _('DNS Directory'), _('Overwrite the default target directory for the generated blocklist.'));
 		o.rmempty = true;
 
-		o = s.taboption('adv_dns', form.ListValue, 'adb_dnsinstance', _('DNS Instance'), _('Set the dns backend instance used by adblock.'));
+		o = s.taboption('adv_dns', form.Value, 'adb_dnsinstance', _('DNS Instance'), _('Set the dns backend instance used by adblock.'));
 		o.depends('adb_dns', 'dnsmasq');
-		o.value('0', _('First instance (default)'));
+		o.value('0', _('First instance'));
 		o.value('1', _('Second instance'));
-		o.value('2', _('Third instance'));
+		o.default = '0';
 		o.optional = true;
 		o.rmempty = true;
 
@@ -348,26 +473,7 @@ return view.extend({
 		o.datatype = 'range(5,60)';
 		o.rmempty = true;
 
-		o = s.taboption('adv_dns', form.DynamicList, 'adb_denyip', _('Block Local Client IPs'), _('Block all requests of certain DNS clients based on their IP address (RPZ-CLIENT-IP).'));
-		o.datatype = 'or(ip4addr("nomask"),ip6addr("nomask"))';
-		o.depends('adb_dns', 'bind');
-		o.optional = true;
-		o.rmempty = true;
-
-		o = s.taboption('adv_dns', form.DynamicList, 'adb_allowip', _('Allow Local Client IPs'), _('Allow all requests of certain DNS clients based on their IP address (RPZ-CLIENT-IP).'));
-		o.datatype = 'or(ip4addr("nomask"),ip6addr("nomask"))';
-		o.depends('adb_dns', 'bind');
-		o.optional = true;
-		o.rmempty = true;
-
-		o = s.taboption('adv_dns', form.Flag, 'adb_jail', _('Jail Blocklist'), _('Builds an additional restrictive DNS blocklist to block access to all domains except those listed in the allowlist. \
-			You can use this restrictive blocklist e.g. for guest wifi or kidsafe configurations.'));
-		o.rmempty = true;
-
-		o = s.taboption('adv_dns', form.Value, 'adb_jaildir', _('Jail Directory'), _('Target directory for the generated jail blocklist. \
-			If this directory points to your DNS directory, the jail blocklist replaces your default blocklist.'));
-		o.depends('adb_jail', '1');
-		o.placeholder = '/tmp';
+		o = s.taboption('adv_dns', form.Flag, 'adb_jail', _('Jail Mode'), _('Only domains on the allowlist are permitted, all other DNS requests are rejected.'));
 		o.rmempty = true;
 
 		/*
@@ -403,7 +509,7 @@ return view.extend({
 		o = s.taboption('adv_report', form.Flag, 'adb_represolve', _('Resolve IPs'), _('Resolve reporting IP addresses by using reverse DNS (PTR) lookups.'));
 		o.rmempty = true;
 
-		o = s.taboption('adv_report', form.Flag, 'adb_map', _('GeoIP Map'), _('Enable a GeoIP map that shows the geographical location of the blocked domains. This requires external requests to get the map tiles and geolocation data.'));
+		o = s.taboption('adv_report', form.Flag, 'adb_map', _('GeoIP Map'), _('Enable a GeoIP map that shows the geographical location of the blocked domains.'));
 		o.optional = true;
 		o.rmempty = true;
 
