@@ -1041,6 +1041,10 @@
             
                 <li data-name="LuCI.form.GridSection#cloneable"><a href="LuCI.form.GridSection.html#cloneable">cloneable</a></li>
             
+                <li data-name="LuCI.form.GridSection#clonebtntitle"><a href="LuCI.form.GridSection.html#clonebtntitle">clonebtntitle</a></li>
+            
+                <li data-name="LuCI.form.GridSection#delbtntitle"><a href="LuCI.form.GridSection.html#delbtntitle">delbtntitle</a></li>
+            
                 <li data-name="LuCI.form.GridSection#extedit"><a href="LuCI.form.GridSection.html#extedit">extedit</a></li>
             
                 <li data-name="LuCI.form.GridSection#hidetitle"><a href="LuCI.form.GridSection.html#hidetitle">hidetitle</a></li>
@@ -1903,6 +1907,10 @@
             
                 <li data-name="LuCI.form.TableSection#cloneable"><a href="LuCI.form.TableSection.html#cloneable">cloneable</a></li>
             
+                <li data-name="LuCI.form.TableSection#clonebtntitle"><a href="LuCI.form.TableSection.html#clonebtntitle">clonebtntitle</a></li>
+            
+                <li data-name="LuCI.form.TableSection#delbtntitle"><a href="LuCI.form.TableSection.html#delbtntitle">delbtntitle</a></li>
+            
                 <li data-name="LuCI.form.TableSection#hidetitle"><a href="LuCI.form.TableSection.html#hidetitle">hidetitle</a></li>
             
                 <li data-name="LuCI.form.TableSection#parentoption"><a href="LuCI.form.TableSection.html#parentoption">parentoption</a></li>
@@ -2070,6 +2078,10 @@
                 <li data-name="LuCI.form.TypedSection##anonymous"><a href="LuCI.form.TypedSection.html#anonymous">anonymous</a></li>
             
                 <li data-name="LuCI.form.TypedSection##cloneable"><a href="LuCI.form.TypedSection.html#cloneable">cloneable</a></li>
+            
+                <li data-name="LuCI.form.TypedSection##clonebtntitle"><a href="LuCI.form.TypedSection.html#clonebtntitle">clonebtntitle</a></li>
+            
+                <li data-name="LuCI.form.TypedSection##delbtntitle"><a href="LuCI.form.TypedSection.html#delbtntitle">delbtntitle</a></li>
             
                 <li data-name="LuCI.form.TypedSection##hidetitle"><a href="LuCI.form.TypedSection.html#hidetitle">hidetitle</a></li>
             
@@ -3990,7 +4002,7 @@ value of the <code>addremove</code> property.</p></div>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line2366">line 2366</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line2379">line 2379</a>
         </div>
         
     </div>
@@ -4591,7 +4603,7 @@ element.</p>
 <dd>
     
     <div class="description">
-        <p>Override the caption used for the section add a button at the bottom of
+        <p>Override the caption used for the section add button at the bottom of
 the section form element. Set to a string, it will be used as-is.
 Set to a function, the function will be invoked and its return value
 is used as a caption, after converting it to a string. If this property
@@ -4769,6 +4781,110 @@ The default is <code>false</code>.</p>
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy"><li>false</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="clonebtntitle">clonebtntitle<span class="type-signature type string">string</span> <span class="type-signature type function">function</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the caption used for the section clone button at the bottom of
+the section form element. Set to a string, it will be used as-is.
+Set to a function, the function will be invoked and its return value
+is used as a caption, after converting it to a string. If this property
+is not set, the default is <code>Clone</code>.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="delbtntitle">delbtntitle<span class="type-signature type string">string</span> <span class="type-signature type function">function</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Override the caption used for the section delete button at the bottom of
+the section form element. Set to a string, it will be used as-is.
+Set to a function, the function will be invoked and its return value
+is used as a caption, after converting it to a string. If this property
+is not set, the default is <code>Delete</code>.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
     
     
     
@@ -5000,7 +5116,7 @@ The default of <code>null</code> means inherit from the parent form.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3154">line 3154</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3179">line 3179</a>
         </div>
         
     </div>
@@ -6813,7 +6929,7 @@ entities decoded.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line2506">line 2506</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line2531">line 2531</a>
         </div>
         
     </div>
@@ -7481,7 +7597,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Sun Jan 18 2026 18:45:24 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Sun Jan 18 2026 18:52:12 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>

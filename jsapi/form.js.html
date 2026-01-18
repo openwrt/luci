@@ -1041,6 +1041,10 @@
             
                 <li data-name="LuCI.form.GridSection#cloneable"><a href="LuCI.form.GridSection.html#cloneable">cloneable</a></li>
             
+                <li data-name="LuCI.form.GridSection#clonebtntitle"><a href="LuCI.form.GridSection.html#clonebtntitle">clonebtntitle</a></li>
+            
+                <li data-name="LuCI.form.GridSection#delbtntitle"><a href="LuCI.form.GridSection.html#delbtntitle">delbtntitle</a></li>
+            
                 <li data-name="LuCI.form.GridSection#extedit"><a href="LuCI.form.GridSection.html#extedit">extedit</a></li>
             
                 <li data-name="LuCI.form.GridSection#hidetitle"><a href="LuCI.form.GridSection.html#hidetitle">hidetitle</a></li>
@@ -1903,6 +1907,10 @@
             
                 <li data-name="LuCI.form.TableSection#cloneable"><a href="LuCI.form.TableSection.html#cloneable">cloneable</a></li>
             
+                <li data-name="LuCI.form.TableSection#clonebtntitle"><a href="LuCI.form.TableSection.html#clonebtntitle">clonebtntitle</a></li>
+            
+                <li data-name="LuCI.form.TableSection#delbtntitle"><a href="LuCI.form.TableSection.html#delbtntitle">delbtntitle</a></li>
+            
                 <li data-name="LuCI.form.TableSection#hidetitle"><a href="LuCI.form.TableSection.html#hidetitle">hidetitle</a></li>
             
                 <li data-name="LuCI.form.TableSection#parentoption"><a href="LuCI.form.TableSection.html#parentoption">parentoption</a></li>
@@ -2070,6 +2078,10 @@
                 <li data-name="LuCI.form.TypedSection##anonymous"><a href="LuCI.form.TypedSection.html#anonymous">anonymous</a></li>
             
                 <li data-name="LuCI.form.TypedSection##cloneable"><a href="LuCI.form.TypedSection.html#cloneable">cloneable</a></li>
+            
+                <li data-name="LuCI.form.TypedSection##clonebtntitle"><a href="LuCI.form.TypedSection.html#clonebtntitle">clonebtntitle</a></li>
+            
+                <li data-name="LuCI.form.TypedSection##delbtntitle"><a href="LuCI.form.TypedSection.html#delbtntitle">delbtntitle</a></li>
             
                 <li data-name="LuCI.form.TypedSection##hidetitle"><a href="LuCI.form.TypedSection.html#hidetitle">hidetitle</a></li>
             
@@ -6149,13 +6161,25 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 	 */
 
 	/**
-	 * Override the caption used for the section add a button at the bottom of
+	 * Override the caption used for the section add button at the bottom of
 	 * the section form element. Set to a string, it will be used as-is.
 	 * Set to a function, the function will be invoked and its return value
 	 * is used as a caption, after converting it to a string. If this property
 	 * is not set, the default is `Add`.
 	 *
 	 * @name LuCI.form.TypedSection.prototype#addbtntitle
+	 * @type string|function
+	 * @default null
+	 */
+
+	/**
+	 * Override the caption used for the section delete button at the bottom of
+	 * the section form element. Set to a string, it will be used as-is.
+	 * Set to a function, the function will be invoked and its return value
+	 * is used as a caption, after converting it to a string. If this property
+	 * is not set, the default is `Delete`.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#delbtntitle
 	 * @type string|function
 	 * @default null
 	 */
@@ -6279,6 +6303,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 
 		for (let i = 0; i &lt; nodes.length; i++) {
 			if (this.addremove) {
+				const rem_btn_title = this.titleFn('delbtntitle', section_id);
 				sectionEl.appendChild(
 					E('div', { 'class': 'cbi-section-remove right' },
 						E('button', {
@@ -6287,7 +6312,7 @@ const CBITypedSection = CBIAbstractSection.extend(/** @lends LuCI.form.TypedSect
 							'data-section-id': cfgsections[i],
 							'click': ui.createHandlerFn(this, 'handleRemove', cfgsections[i]),
 							'disabled': this.map.readonly || null
-						}, [ _('Delete') ])));
+						}, [ rem_btn_title ?? _('Delete') ])));
 			}
 
 			if (!this.anonymous)
@@ -6417,6 +6442,18 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 * @name LuCI.form.TypedSection.prototype#cloneable
 	 * @type boolean
 	 * @default false
+	 */
+
+	/**
+	 * Override the caption used for the section clone button at the bottom of
+	 * the section form element. Set to a string, it will be used as-is.
+	 * Set to a function, the function will be invoked and its return value
+	 * is used as a caption, after converting it to a string. If this property
+	 * is not set, the default is `Clone`.
+	 *
+	 * @name LuCI.form.TypedSection.prototype#clonebtntitle
+	 * @type string|function
+	 * @default null
 	 */
 
 	/**
@@ -6708,7 +6745,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		}
 
 		if (this.addremove) {
-			const btn_title = this.titleFn('removebtntitle', section_id);
+			const btn_title = this.titleFn('delbtntitle', section_id);
 
 			dom.append(tdEl.lastElementChild,
 				E('button', {
@@ -7558,13 +7595,14 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 
 		if (ucidata) {
 			if (this.addremove) {
+				const rem_btn_title = this.titleFn('delbtntitle', section_id);
 				sectionEl.appendChild(
 					E('div', { 'class': 'cbi-section-remove right' },
 						E('button', {
 							'class': 'cbi-button',
 							'click': ui.createHandlerFn(this, 'handleRemove'),
 							'disabled': this.map.readonly || null
-						}, [ _('Delete') ])));
+						}, [ rem_btn_title ?? _('Delete') ])));
 			}
 
 			sectionEl.appendChild(E('div', {
@@ -7575,12 +7613,13 @@ const CBINamedSection = CBIAbstractSection.extend(/** @lends LuCI.form.NamedSect
 			}, nodes));
 		}
 		else if (this.addremove) {
+			const add_btn_title = this.titleFn('addbtntitle', section_id);
 			sectionEl.appendChild(
 				E('button', {
 					'class': 'cbi-button cbi-button-add',
 					'click': ui.createHandlerFn(this, 'handleAdd'),
 					'disabled': this.map.readonly || null
-				}, [ _('Add') ]));
+				}, [ add_btn_title ?? _('Add') ]));
 		}
 
 		dom.bindClassInstance(sectionEl, this);
@@ -9370,7 +9409,7 @@ return baseclass.extend(/** @lends LuCI.form.prototype */ {
         
 
         <footer>
-            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Sun Jan 18 2026 18:45:23 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Sun Jan 18 2026 18:52:12 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
