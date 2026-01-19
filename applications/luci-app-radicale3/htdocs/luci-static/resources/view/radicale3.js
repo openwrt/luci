@@ -53,11 +53,11 @@ return view.extend({
 
 		button = '';
 
-		if ((radicale_address == '127.0.0.1') || (radicale_address == '::1')) {
+		if ((radicale_address == '127.0.0.1') || (radicale_address == '[::1]') || radicale_host == 'localhost') {
 			ui.addNotification(_('Need a listen address'),
 				_('Radicale needs a non-loopback IP address for your browser to access the web interface'));
 		} else {
-			if (radicale_address == '0.0.0.0' || radicale_address == '::') {
+			if (radicale_address == '0.0.0.0' || radicale_address == '[::]') {
 				radicale_address = window.location.hostname;
 			}
 			radicale_port = radicale_host.substring(radicale_host.lastIndexOf(':') + 1) || '5232';
@@ -84,8 +84,8 @@ return view.extend({
 
 		o = s.taboption('main', form.DynamicList, 'host', _('Host:port'));
 		o.optional = true;
-		o.datatype = 'or(hostport(0),ipaddrport(0))';
-		o.default = ['127.0.0.1:5232', '::1:5232'];
+		o.datatype = 'or(hostport(0),ipaddrport(1))';
+		o.default = ['127.0.0.1:5232', '[::1]:5232'];
 
 		s.tab('advanced', _('Advanced'));
 
