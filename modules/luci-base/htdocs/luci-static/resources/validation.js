@@ -422,7 +422,7 @@ const ValidatorFactory = baseclass.extend({
 
 		ipaddrport(bracket) {
 			const m4 = this.value.match(/^([^\[\]:]+):(\d+)$/);
-			const m6 = this.value.match((bracket == 1) ? /^\[(.+)\]:(\d+)$/ : /^([^\[\]]+):(\d+)$/);
+			const m6 = this.value.match((bracket == 1) ? /^(\[(.+)\]):(\d+)$/ : /^([^\[\]]+):(\d+)$/);
 
 			if (m4)
 				return this.assert(this.apply('ip4addr', m4[1], [true]) && this.apply('port', m4[2]),
