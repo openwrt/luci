@@ -9,7 +9,6 @@
 # ubus -S call luci.https-dns-proxy getInitStatus '{"name": "https-dns-proxy" }'
 # ubus -S call luci.https-dns-proxy getPlatformSupport '{"name": "https-dns-proxy" }'
 # ubus -S call luci.https-dns-proxy getProviders '{"name": "https-dns-proxy" }'
-# ubus -S call luci.https-dns-proxy getRuntime '{"name": "https-dns-proxy" }'
 
 readonly packageName="https-dns-proxy"
 readonly providersDir="/usr/share/${packageName}/providers"
@@ -112,19 +111,18 @@ get_providers() {
 	echo ']}'
 }
 
-get_runtime() { ubus call service list "{ 'verbose': true, 'name': '$1' }"; }
-
 set_init_action() {
-	local name="$1" action="$2" cmd
-	case $action in
+	local action="$2" cmd
+	[ "$(basename "$1")" = "$packageName" ] || { print_json_bool 'result' '0'; return 1; }
+		case $action in
 		enable|disable|start|stop|restart)
-			cmd="/etc/init.d/${name} ${action}"
+			cmd="/etc/init.d/${packageName} ${action}"
 		;;
 	esac
 	if [ -n "$cmd" ] && eval "$cmd" >/dev/null 2>&1; then
-		print_json_bool "result" '1'
+		print_json_bool 'result' '1'
 	else
-		print_json_bool "result" '0'
+		print_json_bool 'result' '0'
 	fi
 }
 
@@ -141,9 +139,6 @@ case "$1" in
 			json_add_string 'name' 'name'
 		json_close_object
 		json_add_object "getProviders"
-			json_add_string 'name' "name"
-		json_close_object
-		json_add_object "getRuntime"
 			json_add_string 'name' "name"
 		json_close_object
 		json_add_object "setInitAction"
@@ -182,13 +177,6 @@ case "$1" in
 				json_get_var name "name"
 				json_cleanup
 				get_providers "$name"
-				;;
-			getRuntime)
-				read -r input
-				json_load "$input"
-				json_get_var name "name"
-				json_cleanup
-				get_runtime "$name"
 				;;
 			setInitAction)
 				read -r input
