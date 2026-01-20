@@ -31,7 +31,7 @@ const callEncrypt = rpc.declare({
 const callPackageList = rpc.declare({
 	object: 'rpc-sys',
 	method: 'packagelist',
-	params: [],
+	params: ['all'],
 	expect: {},
 });
 
@@ -39,7 +39,7 @@ return view.extend({
 	load() {
 		return Promise.all([
 			L.resolveDefault(callServiceList('radicale3')),
-			L.resolveDefault(callPackageList()),
+			L.resolveDefault(callPackageList(true)),
 			uci.load('radicale3'),
 		]);
 	},
