@@ -8,7 +8,8 @@
 return view.extend({
 	load: function() {
 		return Promise.all([
-			fs.exec_direct('/usr/libexec/luci-mwan3', ['ipset', 'dump'])
+			fs.exec_direct('/usr/libexec/luci-mwan3', ['ipset', 'dump']),
+			uci.load('mwan3')
 		]);
 	},
 
