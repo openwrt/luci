@@ -5,6 +5,11 @@
 'require ui';
 
 return view.extend({
+	load: function() {
+		return Promise.all([
+			uci.load('mwan3')
+		]);
+	},
 
 	render: function () {
 		let m, s, o;
