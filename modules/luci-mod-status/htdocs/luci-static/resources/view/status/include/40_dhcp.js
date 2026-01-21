@@ -17,7 +17,7 @@ const callUfpList = rpc.declare({
 });
 
 return baseclass.extend({
-	title: '',
+	title: _('DHCP Leases'),
 
 	isMACStatic: {},
 	isDUIDStatic: {},
@@ -36,7 +36,7 @@ return baseclass.extend({
 		if (L.hasSystemFeature('dnsmasq') || L.hasSystemFeature('odhcpd'))
 			return this.renderLeases(dhcp_leases, host_hints, ufp_list);
 
-		return E([]);
+		return null;
 	},
 
 	handleCreateStaticLease(lease, ev) {
@@ -85,7 +85,7 @@ return baseclass.extend({
 		const leases = Array.isArray(dhcp_leases.dhcp_leases) ? dhcp_leases.dhcp_leases : [];
 		const leases6 = Array.isArray(dhcp_leases.dhcp6_leases) ? dhcp_leases.dhcp6_leases : [];
 		if (leases.length == 0 && leases6.length == 0)
-			return E([]);
+			return E('em', _('No active leases found'));
 		const machints = host_hints.getMACHints(false);
 		const isReadonlyView = !L.hasViewPermission();
 
@@ -104,7 +104,7 @@ return baseclass.extend({
 			}
 		};
 
-		const table = E('table', { 'id': 'status_leases', 'class': 'table lases' }, [
+		const table = E('table', { 'id': 'status_leases', 'class': 'table leases' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
 				L.hasSystemFeature('odhcpd', 'dhcpv4') ? E('th', { 'class': 'th' }, _('Interface')) : E([]),
 				E('th', { 'class': 'th' }, _('Hostname')),
@@ -161,7 +161,7 @@ return baseclass.extend({
 			}
 
 			return columns;
-		}, this)), E('em', _('There are no active leases')));
+		}, this)), E('em', _('No active leases found')));
 
 		const table6 = E('table', { 'id': 'status_leases6', 'class': 'table leases6' }, [
 			E('tr', { 'class': 'tr table-titles' }, [
@@ -228,7 +228,7 @@ return baseclass.extend({
 			}
 
 			return columns;
-		}, this)), E('em', _('There are no active leases')));
+		}, this)), E('em', _('No active leases found')));
 
 		return E([
 			E('h3', _('Active DHCPv4 Leases')),
