@@ -161,17 +161,9 @@ function get_volume_info(path) {
 	let pretty = command(
 		". " +
 		shellquote(root + "etc/os-release") +
-		' 2>/dev/null; echo "$PRETTY_NAME" 2>/dev/null'
+		' 2>/dev/null; echo "$OPENWRT_RELEASE" 2>/dev/null'
 	);
 	if (pretty) label = trim(pretty);
-	if (label && match(label, /SNAPSHOT/)) {
-		let rel = command(
-			'grep -m1 "^DISTRIB_RELEASE=" ' +
-			shellquote(root + "etc/openwrt_release") +
-			" 2>/dev/null | awk -F= '{gsub(/[\"'']/, \"\", $2); print $2}'"
-		);
-		if (rel) label = "OpenWrt " + trim(rel);
-	}
 
 	let kver = null;
 	if (root == "/") {
@@ -496,18 +488,31 @@ function obtain_device_info() {
  * Accepts ubus args: { "number": "<partition-number>" }.
  * Uses the device schema to map partition numbers to env values or dual-flag bytes.
  *
- * @param {{args:{number:String|Number}}} req
+ * @param {{number:String}} req
  * @returns {Object} {} on success; {error:..., ...} on failure.
  * @sideeffects  Calls fw_setenv/fw_saveenv or writes to dual-flag MTD.
  */
 function boot_partition(req) {
+	log("boot_partition req=" + sprintf("%J", req?.args));
 	/* extract target partition number from RPC args */
 	let number;
-	if (req && req.number != null) number = int(req.number);
-	if (!number)
+	let val;
+
+	if (type(req) == "array" && length(req) > 0)
+		val = req[0]?.number;
+	else if (type(req?.args) == "object")
+		val = req.args.number;
+	else if (type(req) == "object")
+		val = req.number;
+
+	if (val != null) val = "" + val;
+	if (val != null && match(val, /^[0-9]+$/))
+		number = int(val);
+
+	if (number == null)
 		return {
 			error: "INVALID_ARG",
-			detail: "number is required and must be numeric",
+			detail: "number is required and must be numeric (got: " + sprintf("%J", req?.args) + ")",
 		};
 
 	let board = get_board_name();
@@ -540,23 +545,32 @@ function boot_partition(req) {
 		for (let j = 0; j < length(params); j++) {
 			let param = params[j];
 			let value = target.param_values ? target.param_values[j] : null;
+			let rc = "0";
+
 			if (param == null || param == "") continue;
 			if (value == null) continue;
-			let rc = command(
-				setcmd +
-				" " +
-				shellquote(param) +
-				" " +
-				shellquote("" + value) +
-				" 2>/dev/null; echo $?"
-			);
-			if (rc != "0")
-				return {
-					error: "ERR_SET_ENV",
-					args: [param, "" + value],
-					rom_board_name: board,
-				};
-			if (savecmd) rc = command(savecmd + " 2>/dev/null; echo $?");
+
+			if (setcmd) {
+				let cmd = setcmd +
+					" " +
+					shellquote(param) +
+					" " +
+					shellquote("" + value) +
+					" 2>/dev/null; echo $?";
+				log("boot_partition running: " + cmd);
+				rc = command(cmd);
+				if (rc != "0")
+					return {
+						error: "ERR_SET_ENV",
+						args: [param, "" + value],
+						rom_board_name: board,
+					};
+			}
+			if (savecmd) {
+				let cmd = savecmd + " 2>/dev/null; echo $?";
+				log("boot_partition running: " + cmd);
+				rc = command(cmd);
+			}
 			if (rc != "0") return { error: "ERR_SAVE_ENV", rom_board_name: board };
 		}
 	} else {
@@ -564,6 +578,9 @@ function boot_partition(req) {
 		if (!df) return { error: "NO_DUAL_FLAG", rom_board_name: board };
 		if (!file_exists(df))
 			return { error: "NO_DUAL_FLAG_BLOCK", rom_board_name: board };
+
+		log("boot_partition setting dual flag: " + df + " to " + target.param_values[0]);
+
 		if (!write_dual_flag_value(df, target.param_values[0]))
 			return { error: "ERR_SET_DUAL_FLAG", args: [df], rom_board_name: board };
 	}
