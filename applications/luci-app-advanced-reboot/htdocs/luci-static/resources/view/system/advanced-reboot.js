@@ -108,8 +108,8 @@ return view.extend({
 			E(
 				"p",
 				_(
-					'WARNING: Power off might result in a reboot on a device which doesn\'t support power off.<br /><br />\
-			Click "Proceed" below to power off your device.'
+					"WARNING: Power off might result in a reboot on a device which doesn't support power off.<br /><br />" +
+					"Click \"Proceed\" below to power off your device."
 				)
 			),
 			E("div", { class: "right" }, [
@@ -192,7 +192,9 @@ return view.extend({
 								"p",
 								{ class: "spinning" },
 								_(
-									"The system is rebooting to an alternative partition now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings."
+									"The system is rebooting to an alternative partition now.<br /> DO NOT POWER OFF THE DEVICE!<br /> " +
+									"Wait a few minutes before you try to reconnect." +
+									" It might be necessary to renew the address of your computer to reach the device again, depending on your settings."
 								)
 							),
 						]);
@@ -216,23 +218,10 @@ return view.extend({
 		);
 	},
 
-	handleAlternativeReboot: function () {
-		// accept either (ev, number) or (number, ev)
-		var pn = null;
+	handleAlternativeReboot: function (number, ev) {
+		var pn = Number(number);
 
-		for (var i = 0; i < arguments.length; i++) {
-			var a = arguments[i];
-			if (typeof a === "number" && !Number.isNaN(a)) {
-				pn = a;
-				break;
-			}
-			if (typeof a === "string" && a !== "" && !Number.isNaN(Number(a))) {
-				pn = Number(a);
-				break;
-			}
-		}
-
-		if (pn == null) {
+		if (Number.isNaN(pn)) {
 			// fall back / safety
 			ui.addNotification(null, E("p", _("Missing partition number")));
 			return Promise.resolve();
@@ -247,12 +236,12 @@ return view.extend({
 						E(
 							"p",
 							_(
-								'WARNING: An alternative partition might have its own settings and completely different firmware.<br /><br />\
-As your network configuration and WiFi SSID/password on alternative partition might be different,\
-you might have to adjust your computer settings to be able to access your device once it reboots.<br /><br />\
-Please also be aware that alternative partition firmware might not provide an easy way to switch active partition\
-and boot back to the currently active partition.<br /><br />\
-Click "Proceed" below to reboot device to the selected partition.'
+								"WARNING: An alternative partition might have its own settings and completely different firmware.<br /><br />" +
+								"As your network configuration and WiFi SSID/password on alternative partition might be different," +
+								" you might have to adjust your computer settings to be able to access your device once it reboots.<br /><br />" +
+								"Please also be aware that alternative partition firmware might not provide an easy way to switch active partition" +
+								" and boot back to the currently active partition.<br /><br />" +
+								"Click \"Proceed\" below to reboot device to the selected partition."
 							)
 						),
 						E("div", { class: "right" }, [
@@ -283,8 +272,8 @@ Click "Proceed" below to reboot device to the selected partition.'
 															typeof fn === "function"
 																? fn(a)
 																: _("Unexpected error: %s").format(
-																		String(res.error)
-																  );
+																	String(res.error)
+																);
 
 														return ui.addNotification(null, E("p", msg));
 													}
@@ -395,18 +384,18 @@ Click "Proceed" below to reboot device to the selected partition.'
 						{ class: "alert-message warning" },
 						_(
 							"Warning: Device (%s) is unknown or isn't a dual-firmware device!" +
-								"%s" +
-								"If you are seeing this on an OpenWrt dual-firmware supported device," +
-								"%s" +
-								"please refer to " +
-								"%sHow to add a new device section of the README%s."
+							"%s" +
+							"If you are seeing this on an OpenWrt dual-firmware supported device," +
+							"%s" +
+							"please refer to " +
+							"%sHow to add a new device section of the README%s."
 						).format(
 							warnBoard,
 							"<br /><br />",
 							"<br />",
 							'<a href="' +
-								pkg.URL +
-								'#how-to-add-a-new-device" target="_blank">',
+							pkg.URL +
+							'#how-to-add-a-new-device" target="_blank">',
 							"</a>"
 						)
 					)
@@ -474,18 +463,18 @@ Click "Proceed" below to reboot device to the selected partition.'
 		body.appendChild(
 			poweroff_supported
 				? E(
-						"button",
-						{
-							class: "btn cbi-button cbi-button-apply important",
-							click: ui.createHandlerFn(this, "handlePowerOff"),
-						},
-						_("Perform power off...")
-				  )
+					"button",
+					{
+						class: "btn cbi-button cbi-button-apply important",
+						click: ui.createHandlerFn(this, "handlePowerOff"),
+					},
+					_("Perform power off...")
+				)
 				: E(
-						"p",
-						{ class: "alert-message warning" },
-						_("Warning: This system does not support powering off!")
-				  )
+					"p",
+					{ class: "alert-message warning" },
+					_("Warning: This system does not support powering off!")
+				)
 		);
 
 		return body;
