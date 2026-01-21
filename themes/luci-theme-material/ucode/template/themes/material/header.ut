@@ -46,7 +46,7 @@
 {% endif %}
 <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
 <script src="{{ resource }}/cbi.js"></script>
-<title>{{ striptags(`${dispatched ? `${dispatched.title} | ` : ''}${boardinfo.hostname ?? '?'}`) }} | LuCI</title>
+<title>{{ striptags(`${dispatched?.title ? `${_(dispatched.title)} | ` : ''}${boardinfo.hostname ?? '?'}`) }} | LuCI</title>
 {% if (css): %}
 <style title="text/css">{{ css }}</style>
 {% endif %}

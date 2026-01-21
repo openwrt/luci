@@ -18,7 +18,7 @@
 <html lang="{{ dispatcher.lang }}" {{ darkpref ? `data-darkmode="${darkpref}"` : '' }}>
 	<head>
 		<meta charset="utf-8">
-		<title>{{ striptags(`${dispatched ? `${dispatched.title} | ` : ''}${boardinfo.hostname ?? '?'}`) }} | LuCI</title>
+		<title>{{ striptags(`${dispatched?.title ? `${_(dispatched.title)} | ` : ''}${boardinfo.hostname ?? '?'}`) }} | LuCI</title>
 		{% if (!darkpref): %}
 			<script>
 				var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
