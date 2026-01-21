@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-01-12 12:02+0000\n"
+"PO-Revision-Date: 2026-01-21 05:34+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsdawn/ko/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:389
 msgid "2.4G Band Metric"
@@ -91,7 +91,7 @@ msgstr "채널 이용률 값"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/dawn/dawn-common.js:78
 msgid "Check Startup services"
-msgstr "시작 프로그램 확인"
+msgstr "시작 서비스 확인"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/status/dawn/hearing_map.js:60
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/status/dawn/network_overview.js:58
@@ -104,7 +104,7 @@ msgstr "클라이언트"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:385
 msgid "Compare connected station counts when considering kicking"
-msgstr ""
+msgstr "단말 추방 판단 시 연결 단말 수 비교"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/status/dawn/hearing_map.js:69
 msgid "Connected to Network"
@@ -116,15 +116,15 @@ msgstr "연결 시간 초과"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:316
 msgid "Control whether ASSOCIATION frames are evaluated for rejection"
-msgstr ""
+msgstr "연결 프레임을 평가하여 거부 여부 결정"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:321
 msgid "Control whether AUTHENTICATION frames are evaluated for rejection"
-msgstr ""
+msgstr "인증 프레임을 평가하여 거부 여부 결정"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:326
 msgid "Control whether PROBE frames are evaluated for rejection"
-msgstr ""
+msgstr "프로브 프레임을 평가하여 거부 여부 결정"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:126
 #: applications/luci-app-dawn/root/usr/share/luci/menu.d/luci-app-dawn.json:3
@@ -301,7 +301,7 @@ msgstr "RSSI 미약 값"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:448
 msgid "Lower threshold for bad channel utilization"
-msgstr ""
+msgstr "채널 상태 불량 판정 기준 채널 이용률 임계값"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/status/dawn/network_overview.js:45
 msgid "MAC"
@@ -317,13 +317,15 @@ msgstr "최대 채널 이용률 값"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:346
 msgid "Max Station Diff"
-msgstr ""
+msgstr "최대 단말 수 차이"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:280
 msgid ""
 "Maximum reported AP-client bandwidth permitted when kicking. Set to zero to "
 "disable the check."
 msgstr ""
+"AP-클라이언트 대역폭이 해당 설정값보다 낮아지면 클라이언트를 추방합니다. "
+"0으로 설정하면 기능을 끕니다."
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:185
 msgid "Method of networking between DAWN instances"
@@ -335,7 +337,7 @@ msgstr "최적 AP 전환 대상 클라이언트 선정 방식"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:376
 msgid "Method used to set Neighbor Report on AP"
-msgstr ""
+msgstr "AP 인접 리포트 설정 방식"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:465
 msgid "Midpoint for weighted RSSI evaluation"
@@ -343,15 +345,15 @@ msgstr "가중 RSSI 평가 기준점"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:352
 msgid "Min Number To Kick"
-msgstr ""
+msgstr "최소 추방 시도 횟수"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:358
 msgid "Min Probe Count"
-msgstr ""
+msgstr "최소 프로브 시도 횟수"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:341
 msgid "Minimum score difference to consider kicking to alternate AP"
-msgstr ""
+msgstr "다른 AP로의 전환을 위해 추방을 검토할 최소 평가 지수 차이"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:138
 msgid ""
@@ -408,13 +410,13 @@ msgstr "미지원"
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:347
 msgid ""
 "Number of connected stations to consider \"better\" for use_station_count"
-msgstr ""
+msgstr "연결 단말 수 활용(use_station_count) 시 최적 AP로 평가할 단말 수 차이 기준"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:353
 msgid ""
 "Number of consecutive times a client should be evaluated as ready to kick "
 "before actually doing it"
-msgstr ""
+msgstr "단말을 실제로 추방하기까지 추방 요건을 연속으로 충족해야 하는 횟수"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:304
 msgid "Number of entries to include in a 802.11v DISASSOCIATE Neighbor Report"
@@ -426,7 +428,7 @@ msgstr "채널 이용률 값의 평균을 산출하기 위한 샘플링 주기 �
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:359
 msgid "Number of times a client should retry PROBE before acceptance"
-msgstr ""
+msgstr "클라이언트의 접속을 허용하기까지 프로브 시도가 연속으로 확인되어야 하는 횟수"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:151
 msgid "Path to hostapd runtime information"
@@ -448,6 +450,8 @@ msgstr "TCP 통신 포트"
 msgid ""
 "Preferred order for using Passive, Active or Table 802.11k BEACON information"
 msgstr ""
+"802.11k 비콘 정보 수집 방식 우선순위 조합 (p: 수동 측정, a: 능동 측정, t: "
+"자체 표 참조)"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/status/dawn/hearing_map.js:66
 msgid "RCPI"
@@ -531,11 +535,11 @@ msgstr "VHT 지원 시 평가 지수 가산치"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:442
 msgid "Score increment if channel utilization is above max_chan_util_val"
-msgstr ""
+msgstr "최대 채널 이용률 값(max_chan_util_val) 초과 시 평가 지수 조정값"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:406
 msgid "Score increment if channel utilization is below chan_util_val"
-msgstr ""
+msgstr "채널 이용률 값(chan_util_val) 미만 시 평가 지수 가산치"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:142
 msgid "Serious malfunction / unexpected behaviour"
@@ -560,7 +564,7 @@ msgstr "오류 발생 (복구 가능)"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:365
 msgid "Space separated list of MACS to use in \"static\" AP Neighbor Report"
-msgstr ""
+msgstr "\"정적\" AP 인접 리포트에서 사용할 MAC 주소 목록 (공백으로 구분)"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:140
 msgid "Standard behaviour always worth reporting"
@@ -592,39 +596,43 @@ msgstr "RSSI 나쁨(Bad) 임계값"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:264
 msgid "Timer to (re-)register for hostapd messages for each local BSSID"
-msgstr ""
+msgstr "각 로컬 BSSID의 hostapd 메시지 수신을 (재)등록하는 주기"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:246
 msgid "Timer to ask all connected clients for a new BEACON REPORT"
-msgstr ""
+msgstr "연결된 모든 클라이언트에 새로운 비콘 리포트를 요청하는 주기"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:252
 msgid "Timer to get recent channel utilization figure for each local BSSID"
-msgstr ""
+msgstr "각 로컬 BSSID의 최근 채널 이용률 수치를 가져오는 주기"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:270
 msgid ""
 "Timer to refresh / remove the TCP connections to other DAWN instances found "
 "via uMDNS"
 msgstr ""
+"uMDNS를 통해 찾은 다른 DAWN 인스턴스와의 TCP 연결을 새로 고치거나 삭제하는 "
+"주기"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:258
 msgid ""
 "Timer to refresh local connection information and send revised NEIGHBOR "
 "REPORT to all clients"
 msgstr ""
+"로컬 연결 정보를 새로 고치고 수정된 인접 리포트를 모든 클라이언트에 전송하는 "
+"주기"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:228
 msgid "Timer to remove expired AP entries from core data set"
-msgstr ""
+msgstr "핵심 데이터 세트에서 만료된 AP 항목을 삭제하는 주기"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:240
 msgid "Timer to remove expired PROBE and BEACON entries from core data set"
-msgstr ""
+msgstr "핵심 데이터 세트에서 만료된 프로브 및 비콘 항목을 삭제하는 주기"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:234
 msgid "Timer to remove expired client entries from core data set"
-msgstr ""
+msgstr "핵심 데이터 세트에서 만료된 클라이언트 항목을 삭제하는 주기"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:216
 msgid "Times"
@@ -663,7 +671,7 @@ msgstr "TCP 연결 갱신"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:412
 msgid "Upper threshold for good channel utilization"
-msgstr ""
+msgstr "채널 상태 우수 판정 기준 채널 이용률 임계값"
 
 #: applications/luci-app-dawn/htdocs/luci-static/resources/view/network/dawn.js:384
 msgid "Use Station Count"

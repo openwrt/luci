@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2024-10-07 15:11+0000\n"
+"PO-Revision-Date: 2026-01-20 14:25+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadvanced-reboot/lt/>\n"
@@ -9,10 +9,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
-"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
-"1 : 2);\n"
-"X-Generator: Weblate 5.8-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"(n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:364
 #: applications/luci-app-advanced-reboot/root/usr/share/luci/menu.d/luci-app-advanced-reboot.json:3
@@ -21,7 +20,7 @@ msgstr "Pažangus paleidimas iš naujo"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:317
 msgid "Alternative"
-msgstr ""
+msgstr "Alternatyvus/-i"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:122
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:265
@@ -30,7 +29,7 @@ msgstr "Atšaukti"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:317
 msgid "Current"
-msgstr ""
+msgstr "Dabartinis/-ė"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:157
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:205
@@ -43,11 +42,11 @@ msgstr "KLAIDA:"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:431
 msgid "ERROR: %s"
-msgstr ""
+msgstr "KLAIDA: %s"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:48
 msgid "Error accessing the device definition for board: %s"
-msgstr ""
+msgstr "Klaida prieinant prie įrenginio apibrėžimo lentelės: %s"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:451
 msgid "Firmware"
@@ -55,15 +54,15 @@ msgstr "Programinė įranga – „Firmware“"
 
 #: applications/luci-app-advanced-reboot/root/usr/share/rpcd/acl.d/luci-app-advanced-reboot.json:3
 msgid "Grant file access for luci-app-advanced-reboot"
-msgstr ""
+msgstr "Suteikti failo prieigą prie – „luci-app-advanced-reboot“"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:57
 msgid "Invalid request: %s."
-msgstr ""
+msgstr "Negalima užklausa: %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:237
 msgid "Missing partition number"
-msgstr ""
+msgstr "Trūkstamas tomo numeris"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:449
 msgid "Partition"
@@ -71,7 +70,7 @@ msgstr "Tomas"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:61
 msgid "Partition %s was not found in the device definition."
-msgstr ""
+msgstr "Tomas %s nerastas įrenginio apibrėžime."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:438
 msgid "Partitions"
@@ -96,7 +95,7 @@ msgstr "Paleisti iš naujo"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:243
 msgid "Reboot Device to Partition: %s"
-msgstr ""
+msgstr "Paleisti iš naujo įrenginį į tomą: %s"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:319
 msgid "Reboot to current partition"
@@ -104,7 +103,7 @@ msgstr "Paleisti iš naujo į dabartinį tomą"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:320
 msgid "Reboot to this partition..."
-msgstr ""
+msgstr "Paleisti iš naujo į šitą tomą..."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:148
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:153
@@ -123,7 +122,7 @@ msgstr "Būklė/Būsena"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:69
 msgid "Target partition flag is not defined for this device."
-msgstr ""
+msgstr "Taikomojo tomo vėliava nėra apibrėžta šiam įrenginiui."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:27
 msgid "The Dual Boot Flag Partition: %s is not a block device."
@@ -170,7 +169,7 @@ msgstr "Nebuvo galima gauti programinės įrangos aplinkos kintamajį: %s."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:66
 msgid "Unable to save environment changes."
-msgstr ""
+msgstr "Nepavyko išsaugoti aplinkos pakeitimų."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:32
 msgid "Unable to set Dual Boot Flag Partition entry for partition: %s."
@@ -185,7 +184,7 @@ msgstr ""
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:285
 msgid "Unexpected error: %s"
-msgstr ""
+msgstr "Netikėta klaida: %s"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:322
 msgid "Unknown"
@@ -193,7 +192,7 @@ msgstr "Nežinoma/-s/-i"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:53
 msgid "Unknown or unsupported dual-partition device: %s"
-msgstr ""
+msgstr "Nežinomas ar nepalaikomas dviejų tomų įrenginys: %s"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:250
 msgid ""
@@ -206,6 +205,15 @@ msgid ""
 "currently active partition.<br /><br />Click \"Proceed\" below to reboot "
 "device to the selected partition."
 msgstr ""
+"ĮSPĖJIMAS: Alternatyviame tome gali būti nustatyti nuosavi parametrai ir "
+"visiškai kitokia programinė įranga. <br /><br />Kadangi Jūsų tinklo "
+"konfigūracija ir „WiFi SSID“/slaptažodis alternatyviame tome gali būti "
+"kitokie, gali tekti pakoreguoti savo kompiuterio nustatymus, kad galėtumėte "
+"prisijungti prie savo įrenginio po jo paleidimo iš naujo. <br /><br />Taip "
+"pat atkreipkite dėmesį, kad alternatyvaus tomo programinė įranga gali "
+"nesuteikti paprasto būdo perjungti aktyvų tomą ir paleisti kompiuterį su "
+"šiuo metu aktyviu tomu. <br /><br />Spustelėkite „Tęsti“ žemiau, kad "
+"paleistumėte iš naujo įrenginį į pasirinktą tomą."
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:111
 msgid ""
@@ -245,7 +253,7 @@ msgstr "Įspėjimas: Nepavyko gauti įrenginio informacijos!"
 
 #: applications/luci-app-advanced-reboot/htdocs/luci-static/resources/view/system/advanced-reboot.js:56
 msgid "invalid argument"
-msgstr ""
+msgstr "negalimas argumentas"
 
 #~ msgid "Compressed"
 #~ msgstr "Kompresuota"
