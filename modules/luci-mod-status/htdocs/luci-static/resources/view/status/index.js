@@ -129,10 +129,11 @@ return view.extend({
 
 			rv.appendChild(E('div', { 'class': 'cbi-section', 'style': 'display: none' }, [
 				E('div', { 'class': 'cbi-title' },[
-					title != '' ? E('h3', title) : '',
-					E('div', [
+					E('h3', { 'style': 'display: flex; justify-content: space-between' }, [
+						title || '-',
 						E('span', {
 							'class': includes[i].hide ? 'label notice' : 'label',
+							'style': 'display: flex; align-items: center; justify-content: center; min-width: 4em',
 							'data-style': includes[i].hide ? 'active' : 'inactive',
 							'data-indicator': 'poll-status',
 							'data-clickable': 'true',
