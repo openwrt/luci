@@ -191,9 +191,11 @@ return view.extend({
 		o.placeholder = 45;
 
 		o = s.option(form.Value, 'mfr', _('Manufacturer (Display)'));
+		o.depends("driver", "genericups")
 		o.optional = true;
 
 		o = s.option(form.Value, 'model', _('Model (Display)'));
+		o.depends("driver", "genericups")
 		o.optional = true;
 
 		o = s.option(form.Flag, 'nolock', _('No Lock'), _('Do not lock port when starting driver'));
@@ -242,9 +244,11 @@ return view.extend({
 		o.datatype = 'uinteger';
 
 		o = s.option(form.Value, 'sdtime', _('Additional Shutdown Time(s)'));
+		o.depends("driver", "genericups")
 		o.optional = true;
 
 		o = s.option(form.Value, 'serial', _('Serial Number'));
+		o.depends("driver", "genericups")
 		o.optional = true;
 
 		o = s.option(form.Value, 'snmp_retries', _('SNMP retries'));
