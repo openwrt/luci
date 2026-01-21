@@ -14,7 +14,7 @@ return baseclass.extend({
 		return Promise.all([
 			hdp.getInitStatus(pkg.Name),
 			hdp.getProviders(pkg.Name),
-			hdp.getRuntime(pkg.Name),
+			hdp.getServiceInfo(pkg.Name),
 		]);
 	},
 
