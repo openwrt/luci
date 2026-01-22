@@ -3,6 +3,7 @@
 'require poll';
 'require request';
 'require rpc';
+'require fs';
 
 var callLuciRealtimeStats = rpc.declare({
 	object: 'luci',
@@ -31,10 +32,11 @@ var callLuciRpcGetHostHints = rpc.declare({
 });
 
 var graphPolls = [],
-    pollInterval = 3,
-    dns_cache = {},
-    enableLookups = false,
-    filterText = '';
+	pollInterval = 3,
+	dns_cache = {},
+	service_cache = {},
+	enableLookups = false,
+	filterText = '';
 
 var recheck_lookup_queue = {};
 
@@ -113,6 +115,40 @@ return view.extend({
 	},
 
 	updateConntrack: function(conn) {
+		function fetchServices() {
+			if (Object.keys(service_cache).length > 0) return;
+
+			fs.read('/etc/services')
+				.then((rawData) => {
+					const lines = rawData.split('\n');  // Split data into lines
+					// Parse each line to extract port and service info
+					lines.forEach(line => {
+						const match = line.match(/^([\w-]+)\s+(\d+)\/(\w+)/);  // Regex to match service definition
+						if (match) {
+							const [, service, port, protocol] = match;
+							// Cache the service info by port and protocol
+							if (!service_cache[port]) service_cache[port] = {};
+							service_cache[port][protocol] = service;
+						}
+					});
+				})
+				.catch((error) => {
+					console.error('Error fetching services:', error);
+				});
+		}
+
+		function joinAddressWithPortOrServiceName(address, port, protocol) {
+			if (!port) return address;
+
+			if (enableLookups) {
+				fetchServices();
+				const service = service_cache[Number(port)]?.[protocol];
+				if (service)
+					return `${address}:${service}`;
+			}
+			return `${address}:${port}`;
+		}
+
 		var lookup_queue = [ ];
 		var rows = [];
 
@@ -139,8 +175,8 @@ return view.extend({
 
 			const network = c.layer3.toUpperCase();
 			const protocol = c.layer4.toUpperCase();
-			const source ='%h'.format(c.hasOwnProperty('sport') ? (src + ':' + c.sport) : src);
-			const destination = '%h'.format(c.hasOwnProperty('dport') ? (dst + ':' + c.dport) : dst);
+			const source ='%h'.format(joinAddressWithPortOrServiceName(src, c.sport, protocol));
+			const destination = '%h'.format(joinAddressWithPortOrServiceName(dst, c.dport, protocol));
 			const transfer = [ c.bytes, '%1024.2mB (%d %s)'.format(c.bytes, c.packets, _('Pkts.')) ];
 
 			if (filterText) {
