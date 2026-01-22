@@ -2,6 +2,9 @@
 	"luci-mod-status-realtime": {
 		"description": "Grant access to realtime statistics",
 		"read": {
+			"file": {
+				"/etc/services": [ "read" ]
+			},
 			"ubus": {
 				"luci": [ "getConntrackList", "getRealtimeStats" ],
 				"network.rrdns": [ "lookup" ]
