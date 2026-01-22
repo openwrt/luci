@@ -491,6 +491,14 @@ header > .fill > .container > .status > * {
 	font-weight: bold;
 }
 
+.alert-message a:is(:link, :active, :visited) {
+	color: var(--gray-color-high);
+}
+
+.alert-message a:is(:hover, :focus) {
+	color: var(--gray-color);
+}
+
 .alert-message > * {
 	margin: .5rem 0;
 }
@@ -916,7 +924,8 @@ tr > th,
 
 div > table > tbody > tr:nth-of-type(2n),
 div > .table > .tr:nth-of-type(2n) {
-	background-color: var(--white-color-low);
+	color: var(--notice-color);
+	background-color: var(--on-notice-color);
 }
 
 /* fix multiple table */
