@@ -33,13 +33,15 @@ application/json-seq: ␊ = \n | ^J | 0xa, ␞ = ␞ | ^^ | 0x1e
 return dm2.dv.extend({
 	load() {
 		const now = Math.floor(Date.now() / 1000);
+		this.js_api = false;
 
 		return Promise.all([
 			dm2.docker_events({ query: { since: `0`, until: `${now}` } }),
+			dm2.js_api_ready.then(([ok, host]) => this.js_api = ok),
 		]);
 	},
 
-	render([events]) {
+	render([events, js_api_available]) {
 		if (events?.code !== 200) {
 			return E('div', {}, [ events?.body?.message ]);
 		}
@@ -199,7 +201,7 @@ return dm2.dv.extend({
 			if (!isNaN(toDate.getTime())) {
 				const now = Date.now() / 1000;
 				until = Math.floor(toDate.getTime() / 1000).toString();
-				until = until > now ? now : until;
+				until = !this.js_api ? until > now ? now : until : until;
 			}
 		}
 		const queryParams = { since, until };
@@ -212,6 +214,11 @@ return dm2.dv.extend({
 		event_list = new Set();
 		view.outputText = '';
 		let eventsTable = null;
+		// Batching for speed
+		let batchBuffer = new Set();
+		let batchTimer = null;
+		const BATCH_SIZE = 256;
+		const BATCH_INTERVAL = 500; // ms
 
 		function updateTable() {
 			const ev_array = Array.from(event_list.keys());
@@ -251,6 +258,27 @@ return dm2.dv.extend({
 
 		view.tableSection.innerHTML = '';
 
+		function flushBatch() {
+			if (batchBuffer.size) {
+				batchBuffer = new Set();
+			}
+			if (batchTimer) {
+				clearTimeout(batchTimer);
+				batchTimer = null;
+			}
+			updateTable();
+		}
+
+		function handleEventChunk(event) {
+			event_list.add(event);
+			batchBuffer.add(event);
+			if (batchBuffer.size >= BATCH_SIZE) {
+				flushBatch();
+			} else if (!batchTimer) {
+				batchTimer = setTimeout(flushBatch, BATCH_INTERVAL);
+			}
+		}
+
 		/* Partial transfers work but XHR times out waiting, even with xhr.timeout = 0 */
 		// view.handleXHRTransfer({
 		// 	q_params:{ query: queryParams },
@@ -277,7 +305,7 @@ return dm2.dv.extend({
 
 		view.executeDockerAction(
 			dm2.docker_events,
-			{ query: queryParams },
+			{ query: queryParams, onChunk: handleEventChunk },
 			_('Load Events'),
 			{
 				showOutput: false,
@@ -286,6 +314,7 @@ return dm2.dv.extend({
 					if (response.body)
 						event_list = Array.isArray(response.body) ? new Set(response.body) : new Set([response.body]);
 					updateTable();
+					flushBatch();
 				},
 				onError: (err) => {
 					view.tableSection.innerHTML = '';

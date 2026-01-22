@@ -24,11 +24,12 @@ This implementation includes three methods to connect to the API.
 # API Availability
 
 
-|                  | rpcd/CGI | Reverse Proxy  | Controller |
+|                  | rpcd/CGI | (Proxy+)JS API | Controller |
 |------------------|----------|----------------|------------|
 | API              |    ✅    |        ✅      |      ✅    |
 | File Stream      |    ❌    |        ✅      |      ✅    |
 | Console Start    |    ✅    |        ❌      |      ❌    |
+| WS Console       |    ❌    |        ✅      |      ❌    |
 | Stream endpoints |    ❌    |        ✅      |      ✅    |
 
 * Stream endpoints are docker API paths that continue to stream data, like logs
@@ -42,7 +43,7 @@ It is possible to configure dockerd to listen on e.g.:
 
 `['unix:///var/run/docker.sock', 'tcp://0.0.0.0:2375']`
 
-when you have a Reverse Proxy configured.
+when you have a Reverse Proxy configured and to open up the JS API.
 
 ## Reverse Proxy
 
@@ -73,6 +74,43 @@ the docker API socket to avoid the rpc penalty, and stream file uploads and
 downloads. These are still authenticated with your session login. The methods
 to reach the controller API are defined in the menu JSON file. The controller
 API interface only exposes a limited subset of API methods.
+
+
+## JS API
+
+A JS API is included in the front-end to connect to API endpoints, and it
+will detect how dockerd is configured. If dockerd is configured with any
+
+`xxx://x.x.x.x:2375` or `xxx://x.x.x.x:2376` (or `xxx://[2001:db8::1]:2375`)
+
+the front end will attempt to connect using the JS API. More features are
+available with a more direct connection to the API (via Proxy or using 
+[browser plugin](#browser-plug-in)), like WebSockets to connect to container
+terminals. WebSocket connections are not currently available in LuCI, or the
+LuCI CGI proxy.
+
+CGI's job is to parse the request, send the response and disconnect.
+
+
+## Browser plug-in
+
+To avoid setting up a Proxy, and attempt to communicate directly with the API
+endpoint, whether or not configured with `-tls*` options, you can use a plug-in.
+One which overrides (the absence of) `Access-Control-Allow-Origin` CORS headers
+(dockerd does not add these headers).
+For example:
+
+https://addons.mozilla.org/en-US/firefox/addon/cors-everywhere/
+
+https://addons.mozilla.org/en-US/firefox/addon/access-control-allow-origin/
+
+https://addons.mozilla.org/en-US/firefox/addon/cors-unblock/
+
+https://addons.mozilla.org/en-US/firefox/addon/cross-domain-cors/
+
+
+The browser plug-in does not magically fix TLS problems when you have mTLS
+configured on dockerd (mutual CA based certificate authentication).
 
 
 # Architecture

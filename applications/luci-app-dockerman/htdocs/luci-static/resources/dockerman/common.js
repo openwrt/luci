@@ -5,6 +5,7 @@
 'require ui';
 'require rpc';
 'require view';
+'require dockerman.api as jsapi';
 
 /*
 Copyright 2026
@@ -943,6 +944,7 @@ const dv = view.extend({
 	/**
 	 * Execute a Docker API action with consistent error handling and user feedback
 	 * Automatically adds X-Registry-Auth header for push/pull operations if credentials exist
+	 * Uses streaming for pull/push operations via onChunk callback
 	 * @param {Function} apiMethod - The Docker API method to call
 	 * @param {Object} params - Parameters to pass to the API method
 	 * @param {string} actionName - Display name for the action
@@ -952,6 +954,18 @@ const dv = view.extend({
 	async executeDockerAction(apiMethod, params, actionName, options = {}) {
 		try {
 			params = await this.getRegistryAuth(params, actionName);
+
+			// Detect if this is a streaming operation and add callback if needed
+			const isPull = params?.query?.fromImage;
+			const isPush = params?.name;
+			const useStreaming = (isPull || isPush) && options.showOutput !== false;
+
+			if (useStreaming) {
+				params.onChunk = (chunk) => {
+					const output = chunk.raw || JSON.stringify(chunk, null, 2);
+					this.insertOutput(output + '\n');
+				};
+			}
 
 			// Execute the API call
 			const response = await apiMethod(params);
@@ -1034,6 +1048,13 @@ const dv = view.extend({
 		// Prefer JS API if available, else fallback to controller
 		let destUrl = `${this.dockerman_url}${commandCPath}${query_str}`;
 		let useRawFile = false;
+		try {
+			const [ok, host] = await apiReady;
+			if (ok && host) {
+				destUrl = host + commandDPath + query_str;
+				useRawFile = true;
+			}
+		} catch { }
 
 		// Show progress dialog with progress bar element
 		let progressBar = E('div', { 
@@ -1353,6 +1374,22 @@ const ansiToHtml = function(text) {
 	return html;
 };
 
+// Decide at call time whether to use JS API or RPC. Keep constructor synchronous.
+let js_api_available = false;
+
+// Store the JS API availability state
+const apiReady = jsapi.js_api_available().then(([ok, host]) => {
+	js_api_available = ok;
+	return [ok, host];
+}).catch(() => {
+	js_api_available = false;
+	return [false, null];	
+});
+
+const preferApi = (apiMethod, rpcMethod) => (...args) => {
+	return apiReady.then(([ok, host]) => ok ? apiMethod(...args) : rpcMethod(...args));
+};
+
 return L.Class.extend({
 	Types: Types,
 	ActionTypes: ActionTypes,
@@ -1360,50 +1397,52 @@ return L.Class.extend({
 	callMountPoints: callMountPoints,
 	callRcInit: callRcInit,
 	dv: dv,
-	container_changes: container_changes,
-	container_create: container_create,
+	js_api_ready: apiReady,
+	container_attach_ws: preferApi(jsapi.container_attach_ws, () => Promise.reject(new Error('Docker JS API not available'))),
+	container_changes: preferApi(jsapi.container_changes, container_changes),
+	container_create: preferApi(jsapi.container_create, container_create),
 	// container_export: container_export, // use controller instead
-	container_info_archive: container_info_archive,
-	container_inspect: container_inspect,
-	container_kill: container_kill,
-	container_list: container_list,
-	container_logs: container_logs,
-	container_pause: container_pause,
-	container_prune: container_prune,
-	container_remove: container_remove,
-	container_rename: container_rename,
-	container_restart: container_restart,
-	container_start: container_start,
-	container_stats: container_stats,
-	container_stop: container_stop,
-	container_top: container_top,
+	container_info_archive: preferApi(jsapi.container_info_archive, container_info_archive),
+	container_inspect: preferApi(jsapi.container_inspect, container_inspect),
+	container_kill: preferApi(jsapi.container_kill, container_kill),
+	container_list: preferApi(jsapi.container_list, container_list),
+	container_logs: preferApi(jsapi.container_logs, container_logs),
+	container_pause: preferApi(jsapi.container_pause, container_pause),
+	container_prune: preferApi(jsapi.container_prune, container_prune),
+	container_remove: preferApi(jsapi.container_remove, container_remove),
+	container_rename: preferApi(jsapi.container_rename, container_rename),
+	container_restart: preferApi(jsapi.container_restart, container_restart),
+	container_start: preferApi(jsapi.container_start, container_start),
+	container_stats: preferApi(jsapi.container_stats, container_stats),
+	container_stop: preferApi(jsapi.container_stop, container_stop),
+	container_top: preferApi(jsapi.container_top, container_top),
 	container_ttyd_start: container_ttyd_start,
-	container_unpause: container_unpause,
-	container_update: container_update,
-	docker_df: docker_df,
-	docker_events: docker_events,
-	docker_info: docker_info,
-	docker_version: docker_version,
-	// image_build: image_build, // use controller instead
-	image_create: image_create,
+	container_unpause: preferApi(jsapi.container_unpause, container_unpause),
+	container_update: preferApi(jsapi.container_update, container_update),
+	docker_df: preferApi(jsapi.docker_df, docker_df),
+	docker_events: preferApi(jsapi.docker_events, docker_events),
+	docker_info: preferApi(jsapi.docker_info, docker_info),
+	docker_version: preferApi(jsapi.docker_version, docker_version),
+	image_build: preferApi(jsapi.image_build, () => Promise.reject(new Error('Docker JS API not available'))),
+	image_create: preferApi(jsapi.image_create, image_create),
 	// image_get: image_get, // use controller instead
-	image_history: image_history,
-	image_inspect: image_inspect,
-	image_list: image_list,
-	image_prune: image_prune,
-	image_push: image_push,
-	image_remove: image_remove,
-	image_tag: image_tag,
-	network_connect: network_connect,
-	network_create: network_create,
-	network_disconnect: network_disconnect,
-	network_inspect: network_inspect,
-	network_list: network_list,
-	network_prune: network_prune,
-	network_remove: network_remove,
-	volume_create: volume_create,
-	volume_inspect: volume_inspect,
-	volume_list: volume_list,
-	volume_prune: volume_prune,
-	volume_remove: volume_remove,
+	image_history: preferApi(jsapi.image_history, image_history),
+	image_inspect: preferApi(jsapi.image_inspect, image_inspect),
+	image_list: preferApi(jsapi.image_list, image_list),
+	image_prune: preferApi(jsapi.image_prune, image_prune),
+	image_push: preferApi(jsapi.image_push, image_push),
+	image_remove: preferApi(jsapi.image_remove, image_remove),
+	image_tag: preferApi(jsapi.image_tag, image_tag),
+	network_connect: preferApi(jsapi.network_connect, network_connect),
+	network_create: preferApi(jsapi.network_create, network_create),
+	network_disconnect: preferApi(jsapi.network_disconnect, network_disconnect),
+	network_inspect: preferApi(jsapi.network_inspect, network_inspect),
+	network_list: preferApi(jsapi.network_list, network_list),
+	network_prune: preferApi(jsapi.network_prune, network_prune),
+	network_remove: preferApi(jsapi.network_remove, network_remove),
+	volume_create: preferApi(jsapi.volume_create, volume_create),
+	volume_inspect: preferApi(jsapi.volume_inspect, volume_inspect),
+	volume_list: preferApi(jsapi.volume_list, volume_list),
+	volume_prune: preferApi(jsapi.volume_prune, volume_prune),
+	volume_remove: preferApi(jsapi.volume_remove, volume_remove),
 });
