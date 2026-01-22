@@ -1066,6 +1066,86 @@ return dm2.dv.extend({
 			return consoleDiv;
 		}, this);
 
+		// WEBSOCKET TAB
+		t = s.tab('wsconsole', _('WebSocket'));
+
+		dm2.js_api_ready.then(([apiAvailable, host]) => {
+			// Wait for JS API availability check to complete
+			// Check if JS API is available
+			if (!apiAvailable) {
+				return;
+			}
+
+			o = s.taboption('wsconsole', form.DummyValue, 'wsconsole_controls', _('WebSocket Console'));
+			o.render = L.bind(function() {
+				const status = this.getContainerStatus();
+				const isRunning = status === 'running';
+
+				if (!isRunning) {
+					return E('div', { 'class': 'alert-message warning' },
+						_('Container is not running. Cannot connect to WebSocket console.'));
+				}
+				const wsDiv = E('div', { 'class': 'cbi-section' }, [
+					E('div', { 'style': 'margin-bottom: 10px;' }, [
+						E('label', { 'style': 'margin-right: 10px;' }, _('Streams:')),
+						E('label', { 'style': 'margin-right: 6px;' }, [
+							E('input', { 'type': 'checkbox', 'id': 'ws-stdin', 'checked': 'checked', 'style': 'margin-right: 4px;' }),
+							_('Stdin')
+						]),
+						E('label', { 'style': 'margin-right: 6px;' }, [
+							E('input', { 'type': 'checkbox', 'id': 'ws-stdout', 'checked': 'checked', 'style': 'margin-right: 4px;' }),
+							_('Stdout')
+						]),
+						E('label', { 'style': 'margin-right: 6px;' }, [
+							E('input', { 'type': 'checkbox', 'id': 'ws-stderr', 'style': 'margin-right: 4px;' }),
+							_('Stderr')
+						]),
+						E('label', { 'style': 'margin-right: 6px;' }, [
+							E('input', { 'type': 'checkbox', 'id': 'ws-logs', 'style': 'margin-right: 4px;' }),
+							_('Include logs')
+						]),
+						E('button', {
+							'class': 'cbi-button cbi-button-positive',
+							'id': 'ws-connect-btn',
+							'click': () => this.connectWebsocketConsole()
+						}, _('Connect')),
+						E('button', {
+							'class': 'cbi-button cbi-button-neutral',
+							'click': () => this.disconnectWebsocketConsole(),
+							'style': 'margin-left: 6px;'
+						}, _('Disconnect')),
+						E('span', { 'id': 'ws-console-status', 'style': 'margin-left: 10px; color: #666;' }, _('Disconnected')),
+					]),
+					E('div', {
+						'id': 'ws-console-output',
+						'style': 'height: 320px; border: 1px solid #ccc; border-radius: 3px; padding: 8px; background:#111; color:#0f0; font-family: monospace; overflow: auto; white-space: pre-wrap;'
+					}, ''),
+					E('div', { 'style': 'margin-top: 10px; display: flex; gap: 6px;' }, [
+						E('textarea', {
+							'id': 'ws-console-input',
+							'rows': '3',
+							'placeholder': _('Type command here... (Ctrl+D to detach)'),
+							'style': 'flex: 1; padding: 6px; font-family: monospace; resize: vertical;',
+							'keydown': (ev) => {
+								if (ev.key === 'Enter' && !ev.shiftKey) {
+									ev.preventDefault();
+									this.sendWebsocketInput();
+								} else if (ev.key === 'd' && ev.ctrlKey) {
+									ev.preventDefault();
+									this.sendWebsocketDetach();
+								}
+							}
+						}),
+						E('button', {
+							'class': 'cbi-button cbi-button-positive',
+							'click': () => this.sendWebsocketInput()
+						}, _('Send'))
+					])
+				]);
+
+				return wsDiv;
+			}, this);
+		});
 
 		// LOGS TAB
 		t = s.tab('logs', _('Logs'));
@@ -1305,6 +1385,206 @@ return dm2.dv.extend({
 				this.showNotification(_('Container rename failed'), err?.message || String(err), 7000, 'error');
 				return false;
 			});
+	},
+
+	connectWebsocketConsole() {
+		const connectBtn = document.getElementById('ws-connect-btn');
+		const statusEl = document.getElementById('ws-console-status');
+		const outputEl = document.getElementById('ws-console-output');
+		const view = this;
+
+		if (connectBtn) connectBtn.disabled = true;
+		if (statusEl) statusEl.textContent = _('Connecting…');
+
+		// Clear the output buffer when connecting anew
+		if (outputEl) outputEl.innerHTML = '';
+
+		// Initialize input buffer
+		this.consoleInputBuffer = '';
+
+		// Tear down any previous hijack or websocket without user-facing noise
+		if (this.hijackController) {
+			try { this.hijackController.abort(); } catch (e) {}
+			this.hijackController = null;
+		}
+		if (this.consoleWs) {
+			try {
+				this.consoleWs.onclose = null;
+				this.consoleWs.onerror = null;
+				this.consoleWs.onmessage = null;
+				this.consoleWs.close();
+			} catch (e) {}
+			this.consoleWs = null;
+		}
+
+		const stdin = document.getElementById('ws-stdin')?.checked ? '1' : '0';
+		const stdout = document.getElementById('ws-stdout')?.checked ? '1' : '0';
+		const stderr = document.getElementById('ws-stderr')?.checked ? '1' : '0';
+		const logs = document.getElementById('ws-logs')?.checked ? '1' : '0';
+		const stream = '1';
+
+		const params = {
+			stdin: stdin,
+			stdout: stdout,
+			stderr: stderr,
+			logs: logs,
+			stream: stream,
+			detachKeys: 'ctrl-d',
+		}
+
+		dm2.container_attach_ws({ id: this.container.Id, query: params })
+		.then(response => {
+			if (!response.ok) {
+				throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+			}
+
+			// Get the WebSocket connection
+			const ws = response.ws || response.body;
+			let opened = false;
+
+			if (!ws || ws.readyState === undefined) {
+				throw new Error('No WebSocket connection');
+			}
+
+			// Expect binary frames from Docker hijack; decode as UTF-8 text
+			ws.binaryType = 'arraybuffer';
+
+			// Set up WebSocket message handler
+			ws.onmessage = (event) => {
+				try {
+					const renderAndAppend = (t) => {
+						if (outputEl && t) {
+							outputEl.innerHTML += dm2.ansiToHtml(t);
+							outputEl.scrollTop = outputEl.scrollHeight;
+						}
+					};
+
+					let text = '';
+					const data = event.data;
+
+					if (typeof data === 'string') {
+						text = data;
+					} else if (data instanceof ArrayBuffer) {
+						text = new TextDecoder('utf-8').decode(new Uint8Array(data));
+					} else if (data instanceof Blob) {
+						// Fallback for Blob frames
+						const reader = new FileReader();
+						reader.onload = () => {
+							const buf = reader.result;
+							const t = new TextDecoder('utf-8').decode(new Uint8Array(buf));
+							renderAndAppend(t);
+						};
+						reader.readAsArrayBuffer(data);
+						return;
+					}
+
+					renderAndAppend(text);
+				} catch (e) {
+					console.error('Error processing message:', e);
+				}
+			};
+
+			// Set up WebSocket error handler
+			ws.onerror = (error) => {
+				console.error('WebSocket error:', error);
+				if (statusEl) statusEl.textContent = _('Error');
+				view.showNotification(_('Error'), _('WebSocket error'), 7000, 'error');
+				if (ws === view.consoleWs) {
+					view.consoleWs = null;
+				}
+			};
+
+			// Set up WebSocket close handler
+			ws.onclose = (evt) => {
+				if (!opened) return; // Suppress close noise from previous/failed sockets
+				if (statusEl) statusEl.textContent = _('Disconnected');
+				if (connectBtn) connectBtn.disabled = false;
+				if (ws === view.consoleWs) {
+					view.consoleWs = null;
+				}
+				const code = evt?.code;
+				const reason = evt?.reason;
+				view.showNotification(_('Info'), _('Console connection closed') + (code ? ` (code: ${code}${reason ? ', ' + reason : ''})` : ''), 3000, 'info');
+			};
+
+			ws.onopen = () => {
+				opened = true;
+				if (statusEl) statusEl.textContent = _('Connected');
+				if (connectBtn) connectBtn.disabled = false;
+				view.showNotification(_('Success'), _('Console connected'), 3000, 'info');
+
+				// Store WebSocket reference so it doesn't get garbage collected
+				view.consoleWs = ws;
+			};
+
+			// If already open (promise resolved after onopen), set state immediately
+			if (ws.readyState === WebSocket.OPEN) {
+				opened = true;
+				view.consoleWs = ws;
+				if (statusEl) statusEl.textContent = _('Connected');
+				if (connectBtn) connectBtn.disabled = false;
+			}
+		})
+		.catch(err => {
+			if (err.name === 'AbortError') {
+				if (statusEl) statusEl.textContent = _('Disconnected');
+			} else {
+				if (statusEl) statusEl.textContent = _('Error');
+				view.showNotification(_('Error'), err?.message || String(err), 7000, 'error');
+			}
+			if (connectBtn) connectBtn.disabled = false;
+			view.hijackController = null;
+		});
+	},
+
+	disconnectWebsocketConsole() {
+		const statusEl = document.getElementById('ws-console-status');
+		const connectBtn = document.getElementById('ws-connect-btn');
+
+		if (this.hijackController) {
+			this.hijackController.abort();
+			this.hijackController = null;
+		}
+
+		if (statusEl) statusEl.textContent = _('Disconnected');
+		if (connectBtn) connectBtn.disabled = false;
+		this.showNotification(_('Info'), _('Console disconnected'), 3000, 'info');
+	},
+
+	sendWebsocketInput() {
+		const inputEl = document.getElementById('ws-console-input');
+		if (!inputEl) return;
+
+		const text = inputEl.value || '';
+
+		// Check if WebSocket is actually connected
+		if (this.consoleWs && this.consoleWs.readyState === WebSocket.OPEN) {
+			try {
+				const payload = text.endsWith('\n') ? text : `${text}\n`;
+				this.consoleWs.send(payload);
+				inputEl.value = '';
+			} catch (e) {
+				console.error('Error sending:', e);
+				this.showNotification(_('Error'), _('Failed to send data'), 5000, 'error');
+			}
+		} else {
+			this.showNotification(_('Error'), _('Console is not connected'), 5000, 'error');
+		}
+	},
+
+	sendWebsocketDetach() {
+		// Send ctrl-d (ASCII 4, EOT) to detach
+		if (this.consoleWs && this.consoleWs.readyState === WebSocket.OPEN) {
+			try {
+				this.consoleWs.send('\x04');
+				this.showNotification(_('Info'), _('Detach signal sent (Ctrl+D)'), 3000, 'info');
+			} catch (e) {
+				console.error('Error sending detach:', e);
+				this.showNotification(_('Error'), _('Failed to send detach signal'), 5000, 'error');
+			}
+		} else {
+			this.showNotification(_('Error'), _('Console is not connected'), 5000, 'error');
+		}
 	},
 
 	handleFileUpload(container_id) {

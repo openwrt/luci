@@ -1,6 +1,7 @@
 'use strict';
 'require form';
 'require fs';
+'require tools.widgets as widgets';
 
 /* 
 Copyright 2026
@@ -89,6 +90,12 @@ return L.view.extend({
 		o.value('tcp6://[::]:2375');
 		o.value('tcp6://[::]:2376');
 
+		o = s.taboption('globals', widgets.NetworkSelect, '_luci_lan',
+			_('LAN connection'),
+			_('Set your LAN interface when docker listens on all addresses like 0.0.0.0 or ::.'));
+		o.rmempty = true;
+		o.noaliases = true;
+		o.nocreate = true;
 
 		t = s.tab('auth', _('Registry Auth'));
 
