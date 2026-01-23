@@ -2,9 +2,29 @@
 	"luci-app-ocserv": {
 		"description": "Grant UCI access for luci-app-ocserv",
 		"read": {
+			"file": {
+				"/etc/ocserv/*": [ "read" ],
+				"/proc/net/ipv6_route": [ "read" ],
+				"/usr/bin/certtool --hash sha256 --key-id --infile /etc/ocserv/server-cert.pem": ["exec"],
+				"/usr/bin/occtl show users": ["exec"],
+				"/usr/bin/occtl --json show users": ["exec"],
+				"/usr/bin/occtl reload": ["exec"],
+				"/usr/bin/occtl disconnect id *": ["exec"]
+			},
+			"ubus": {
+				"file": [ "exec" ],
+				"rc": [ "init" ]
+			},
 			"uci": [ "ocserv" ]
 		},
 		"write": {
+			"file": {
+				"/etc/ocserv/ocserv.conf.template": [ "write" ]
+			},
+			"ubus": {
+				"file": [ "exec" ],
+				"rc": [ "init" ]
+			},
 			"uci": [ "ocserv" ]
 		}
 	}

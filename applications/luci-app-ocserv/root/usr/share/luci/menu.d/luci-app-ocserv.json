@@ -1,0 +1,42 @@
+{
+	"admin/vpn/ocserv": {
+		"title": "OpenConnect VPN",
+		"order": 50,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": [ "luci-app-ocserv" ],
+			"fs": {
+				"/etc/config/ocserv": "file"
+			}
+		}
+	},
+
+	"admin/vpn/ocserv/main": {
+		"title": "Server Settings",
+		"order": 1,
+		"action": {
+			"type": "view",
+			"path": "ocserv/main"
+		}
+	},
+
+	"admin/vpn/ocserv/user-config": {
+		"title": "User Settings",
+		"order": 2,
+		"action": {
+			"type": "view",
+			"path": "ocserv/user-config"
+		}
+	},
+
+	"admin/vpn/ocserv/users": {
+		"title": "Active users",
+		"order": 3,
+		"action": {
+			"type": "view",
+			"path": "ocserv/users"
+		}
+	}
+}
