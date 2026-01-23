@@ -2,7 +2,7 @@
 'require baseclass';
 'require fs';
 'require rpc';
-'require uci'
+'require uci';
 'require ui';
 
 
