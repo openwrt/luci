@@ -55,11 +55,14 @@ const UIElement = baseclass.extend(/** @lends LuCI.ui.AbstractElement.prototype 
 	 * It defaults to `string` which will allow any value.
 	 * See {@link LuCI.validation} for details on the expression format.
 	 *
-	 * @property {function} [validator]
-	 * Specifies a custom validator function which is invoked after the
-	 * standard validation constraints are checked. The function should return
-	 * `true` to accept the given input value. Any other return value type is
-	 * converted to a string and treated as validation error message.
+	 * @property {function|function[]} [validator]
+	 * Specifies one or more custom validator functions which are invoked after
+	 * the standard validation constraints are checked. Each function should
+	 * return `true` to accept the given input value. When multiple functions
+	 * are provided as an array, they are executed serially and validation stops
+	 * at the first function that returns a non-true value. Any non-true return
+	 * value type is converted to a string and treated as a validation error
+	 * message.
 	 *
 	 * @property {boolean} [disabled=false]
 	 * Specifies whether the widget should be rendered in disabled state
@@ -5266,11 +5269,14 @@ const UI = baseclass.extend(/** @lends LuCI.ui.prototype */ {
 	 * If an input element is not marked optional it must not be empty,
 	 * otherwise it will be marked as invalid.
 	 *
-	 * @param {function} [vfunc]
-	 * Specifies a custom validation function which is invoked after the
-	 * other validation constraints are applied. The validation must return
-	 * `true` to accept the passed value. Any other return type is converted
-	 * to a string and treated as validation error message.
+	 * @param {function|function[]} [vfunc]
+	 * Specifies a custom validation function or an array of validation functions
+	 * which are invoked after the other validation constraints are applied. Each
+	 * function must return `true` to accept the passed value. When multiple
+	 * functions are provided as an array, they are executed serially and
+	 * validation stops at the first function that returns a non-true value.
+	 * Any non-true return type is converted to a string and treated as validation
+	 * error message.
 	 *
 	 * @param {...string} [events=blur, keyup]
 	 * The list of events to bind. Each received event will trigger a field
