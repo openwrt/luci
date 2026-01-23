@@ -86,8 +86,18 @@ const Validator = baseclass.extend({
 			return false;
 		}
 
-		if (typeof(this.vfunc) == 'function')
+		if (typeof(this.vfunc) == 'function') {
 			valid = this.vfunc(this.value);
+		} else if (Array.isArray(this.vfunc)) {
+			/* Execute validation functions serially */
+			for (let val of this.vfunc) {
+				if (typeof(val) == 'function') {
+					valid = val(this.value);
+					if (valid !== true)
+						break;
+				}
+			}
+		}
 
 		if (valid !== true) {
 			this.assert(false, valid);

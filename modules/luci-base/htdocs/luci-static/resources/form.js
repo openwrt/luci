@@ -1921,6 +1921,37 @@ const CBIAbstractValue = CBIAbstractElement.extend(/** @lends LuCI.form.Abstract
 	},
 
 	/**
+	 * Get the validator function for the widget, handling both single functions
+	 * and arrays of functions.
+	 *
+	 * @private
+	 * @param {string} section_id
+	 * The configuration section ID
+	 *
+	 * @returns {function}
+	 * Returns a bound validator function suitable for passing to UI widgets.
+	 * If this.validate is an array, returns a wrapper that calls each validator
+	 * serially. Otherwise returns the bound validate method.
+	 */
+	getValidator(section_id) {
+		if (Array.isArray(this.validate)) {
+			const validators = this.validate;
+			const element = this;
+			return (value) => {
+				for (let val of validators) {
+					if (typeof(val) === 'function') {
+						const result = val.call(element, section_id, value);
+						if (result !== true)
+							return result;
+					}
+				}
+				return true;
+			};
+		}
+		return L.bind(this.validate, this, section_id);
+	},
+
+	/**
 	 * Test whether the input value is currently valid.
 	 *
 	 * @param {string} section_id
@@ -3870,7 +3901,7 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 				optional: this.optional || this.rmempty,
 				datatype: this.datatype,
 				select_placeholder: this.placeholder ?? placeholder,
-				validate: L.bind(this.validate, this, section_id),
+				validate: this.getValidator(section_id),
 				disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 			});
 		}
@@ -3881,7 +3912,7 @@ const CBIValue = CBIAbstractValue.extend(/** @lends LuCI.form.Value.prototype */
 				optional: this.optional || this.rmempty,
 				datatype: this.datatype,
 				placeholder: this.placeholder,
-				validate: L.bind(this.validate, this, section_id),
+				validate: this.getValidator(section_id),
 				disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 			});
 		}
@@ -3949,7 +3980,7 @@ const CBIDynamicList = CBIValue.extend(/** @lends LuCI.form.DynamicList.prototyp
 			optional: this.optional || this.rmempty,
 			datatype: this.datatype,
 			placeholder: this.placeholder,
-			validate: L.bind(this.validate, this, section_id),
+			validate: this.getValidator(section_id),
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
 
@@ -4041,7 +4072,7 @@ const CBIListValue = CBIValue.extend(/** @lends LuCI.form.ListValue.prototype */
 			optional: this.optional,
 			orientation: this.orientation,
 			placeholder: this.placeholder,
-			validate: L.bind(this.validate, this, section_id),
+			validate: this.getValidator(section_id),
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
 
@@ -4136,7 +4167,7 @@ const CBIRichListValue = CBIListValue.extend(/** @lends LuCI.form.ListValue.prot
 			orientation: this.orientation,
 			select_placeholder: this.select_placeholder || this.placeholder,
 			custom_placeholder: this.custom_placeholder || this.placeholder,
-			validate: L.bind(this.validate, this, section_id),
+			validate: this.getValidator(section_id),
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
 
@@ -4281,7 +4312,7 @@ const CBIRangeSliderValue = CBIValue.extend(/** @lends LuCI.form.RangeSliderValu
 			calcunits: this.calcunits,
 			disabled: this.readonly || this.disabled,
 			datatype: this.datatype,
-			validate: L.bind(this.validate, this, section_id),
+			validate: this.getValidator(section_id),
 		});
 
 		this.widget = slider;
@@ -4403,7 +4434,7 @@ const CBIFlagValue = CBIValue.extend(/** @lends LuCI.form.Flag.prototype */ {
 			id: this.cbid(section_id),
 			value_enabled: this.enabled,
 			value_disabled: this.disabled,
-			validate: L.bind(this.validate, this, section_id),
+			validate: this.getValidator(section_id),
 			tooltip,
 			tooltipicon: this.tooltipicon,
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
@@ -4546,7 +4577,7 @@ const CBIMultiValue = CBIDynamicList.extend(/** @lends LuCI.form.MultiValue.prot
 			create: this.create,		
 			display_items: this.display_size ?? this.size ?? 3,
 			dropdown_items: this.dropdown_size ?? this.size ?? -1,
-			validate: L.bind(this.validate, this, section_id),
+			validate: this.getValidator(section_id),
 			disabled: (this.readonly != null) ? this.readonly : this.map.readonly
 		});
 
@@ -4639,7 +4670,7 @@ const CBITextValue = CBIValue.extend(/** @lends LuCI.form.TextValue.prototype */
 			cols: this.cols,
 			rows: this.rows,
 			wrap: this.wrap,
-			validate: L.bind(this.validate, this, section_id),
+			validate: this.getValidator(section_id),
 			readonly: (this.readonly != null) ? this.readonly : this.map.readonly,
 			disabled: (this.disabled != null) ? this.disabled : null,
 		});
