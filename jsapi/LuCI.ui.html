@@ -3998,7 +3998,7 @@ external JavaScript, use <code>L.require(&quot;ui&quot;).then(...)</code>.</p></
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3880">line 3880</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3883">line 3883</a>
         </div>
         
     </div>
@@ -4132,7 +4132,7 @@ external JavaScript, use <code>L.require(&quot;ui&quot;).then(...)</code>.</p></
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4089">line 4089</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4092">line 4092</a>
         </div>
         
     </div>
@@ -4362,7 +4362,7 @@ banner element.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4161">line 4161</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4164">line 4164</a>
         </div>
         
     </div>
@@ -4625,7 +4625,7 @@ banner element.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5286">line 5286</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5292">line 5292</a>
         </div>
         
     </div>
@@ -4781,6 +4781,9 @@ otherwise it will be marked as invalid.</p></td>
             
                 
 <span class="param-type">function</span>
+|
+
+<span class="param-type">Array.&lt;function()></span>
 
 
             
@@ -4801,10 +4804,13 @@ otherwise it will be marked as invalid.</p></td>
                         
                     
                 
-                <p>Specifies a custom validation function which is invoked after the
-other validation constraints are applied. The validation must return
-<code>true</code> to accept the passed value. Any other return type is converted
-to a string and treated as validation error message.</p></td>
+                <p>Specifies a custom validation function or an array of validation functions
+which are invoked after the other validation constraints are applied. Each
+function must return <code>true</code> to accept the passed value. When multiple
+functions are provided as an array, they are executed serially and
+validation stops at the first function that returns a non-true value.
+Any non-true return type is converted to a string and treated as validation
+error message.</p></td>
         </tr>
 	
 	
@@ -4939,7 +4945,7 @@ field validation manually or to bind it to further events.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4775">line 4775</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4778">line 4778</a>
         </div>
         
     </div>
@@ -5076,7 +5082,7 @@ default.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5336">line 5336</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5342">line 5342</a>
         </div>
         
     </div>
@@ -5302,7 +5308,7 @@ valid function value.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4266">line 4266</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4269">line 4269</a>
         </div>
         
     </div>
@@ -5450,7 +5456,7 @@ requested indicator was not found.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3980">line 3980</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3983">line 3983</a>
         </div>
         
     </div>
@@ -5526,7 +5532,7 @@ handler as-is without the need to bind it first.</p>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5377">line 5377</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line5383">line 5383</a>
         </div>
         
     </div>
@@ -5678,7 +5684,7 @@ caught and rendered using <a href="LuCI.html#error"><code>LuCI.error()</code></a
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4309">line 4309</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4312">line 4312</a>
         </div>
         
     </div>
@@ -5920,7 +5926,7 @@ accepted by <code>LuCI.dom.content()</code>.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4749">line 4749</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4752">line 4752</a>
         </div>
         
     </div>
@@ -6123,7 +6129,7 @@ or rejecting with <code>null</code> when the connectivity check timed out.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4218">line 4218</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4221">line 4221</a>
         </div>
         
     </div>
@@ -6397,7 +6403,7 @@ changes were made.</td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3954">line 3954</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line3957">line 3957</a>
         </div>
         
     </div>
@@ -6626,7 +6632,7 @@ element.</p></td>
     
         
         <div class="tag-source">
-            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4627">line 4627</a>
+            <a href="ui.js.html">ui.js</a>, <a href="ui.js.html#line4630">line 4630</a>
         </div>
         
     </div>
@@ -6984,7 +6990,7 @@ cancelled by the user.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Jan 23 2026 03:35:09 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Jan 23 2026 22:13:42 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
