@@ -11,13 +11,25 @@ const callSystemBoard = rpc.declare({
 	method: 'board'
 });
 
-function showUpgradeNotification(type, boardinfo, new_version, upgrade_info)
+const check_setting = [ 'attendedsysupgrade', 'client', 'login_check_for_upgrades' ];
+
+function setSetUpgradeCheck(pref) {
+	uci.set(...check_setting, pref);
+	return uci.save()
+		.then(L.bind(L.ui.changes.init, L.ui.changes))
+		.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
+}
+
+function showUpgradeNotification(type, boardinfo, version, upgrade_info)
 {
+
+	// TODO show the toggle for _('Look online for upgrades upon status page load')...
+
 	const table_rows = [
 		// Title                Current                     Available
 		[_('Firmware Version'), boardinfo.release.version,  upgrade_info.version_number        ],
 		[_('Revision'),         boardinfo.release.revision, upgrade_info.version_code          ],
-		[_('Kernel Version'),   boardinfo?.kernel,          upgrade_info.linux_kernel?.version ],
+		[_('Kernel Version'),   boardinfo.kernel,           upgrade_info.linux_kernel?.version ],
 	];
 
 	const table = E('table', { 'class': 'table' });
@@ -30,54 +42,55 @@ function showUpgradeNotification(type, boardinfo, new_version, upgrade_info)
 		])
 	);
 
-	table_rows.forEach((cols) => {
+	table_rows.forEach(([c1, c2, c3]) => {
 		table.appendChild(E('tr', { 'class': 'tr' }, [
-			E('td', { 'class': 'td left', 'width': '33%' }, [ cols[0] ]),
-			E('td', { 'class': 'td left'                 }, [ cols[1] ?? '?' ]),
-			E('td', { 'class': 'td left'                 }, [ cols[2] ?? '?' ]),
+			E('td', { 'class': 'td left', 'width': '33%' }, [ c1 ]),
+			E('td', { 'class': 'td left'                 }, [ c2 ?? '?' ]),
+			E('td', { 'class': 'td left'                 }, [ c3 ?? '?' ]),
 		]));
 	});
 
+	const branch = version.split('.').slice(0, 2).join('.');
 	ui.addTimeLimitedNotification(_('New Firmware Available'), [
 		E('p', _('A new %s version of OpenWrt is available:').format(type)),
 		table,
 		E('p', [
 			_('Check') + ' ',
-			E('a', {href: `/cgi-bin/luci/admin/system/attendedsysupgrade`}, _('Attended Sysupgrade')),
+			E('a', {href: '/cgi-bin/luci/admin/system/attendedsysupgrade'}, _('Attended Sysupgrade')),
 			' ' + _('and') + ' ',
-			E('a', {href: `https://openwrt.org/releases/${new_version?.split('.').slice(0, 2).join('.')}/notes-${new_version}`}, _('release notes')),
+			E('a', {href: `https://openwrt.org/releases/${branch}/notes-${version}`}, _('release notes')),
 		]),
+		E('div', { class: 'btn', click: () => setSetUpgradeCheck(false) }, _('Stop showing upgrade alerts')),
 	], 60000, 'notice');
-};
+}
 
 function shouldUpgrade(installed, available)
 {
 	// If installed is any snapshot (release or main), don't upgrade.
 
 	if (! available) return false;
-	if (! installed || installed.includes('SNAPSHOT')) return false
+	if (! installed) return false;
+	if (installed.includes('SNAPSHOT')) return false;
 
-	const parse = (v) => v.split(/[-+]/)[0]?.split('.').map(Number);
-	const parseRC = (v) => v.split(/[-+]/)[1]?.split('').map(Number);
-	const isPrerelease = (v) => /-/.test(v);
+	// At this point we know the versions are in one of two forms:
+	//    MM.mm.rr
+	//    MM.mm.rr-rcN
+	// so partition them up into a 4-element array, with a value of
+	// 99 for the "release candidate" part of any release.
+	const parse = (v) => [
+		...v.split('-')[0].split('.').map(Number),
+		Number(v.split(/rc/)[1] || 99)
+	];
 
-	const [aParts, bParts] = [parse(available), parse(installed)];
+	const [aParts, iParts] = [parse(available), parse(installed)];
 
-	for (let i = 0; i < Math.max(aParts.length, bParts.length); i++) {
-		const numA = aParts[i] || 0;
-		const numB = bParts[i] || 0;
-		if (numA > numB) return true;
-		if (numA < numB) return false;
+	for (let i = 0; i < iParts.length; i++) {
+		const aVal = aParts[i];
+		const iVal = iParts[i];
+		if (aVal > iVal) return true;
+		if (aVal < iVal) return false;
 	}
 
-	const [aRC, bRC] = [parseRC(available), parseRC(installed)];
-
-	if (aRC > bRC) return true;
-	if (aRC < bRC) return false;
-
-	// If numeric parts are equal, handle release candidates
-	// if (isPrerelease(available) && !isPrerelease(installed)) return false;
-	if (!isPrerelease(available) && isPrerelease(installed)) return true;
 	return false;
 }
 
@@ -116,24 +129,14 @@ return baseclass.extend({
 	load: function() {
 		return Promise.all([
 			L.resolveDefault(callSystemBoard(), {}),
-			uci.load('luci')
+			uci.load(check_setting[0]),
 		]);
 	},
 
-	handleSetUpgradeCheck: function(pref, ev) {
-		ev.currentTarget.classList.add('spinning');
-		ev.currentTarget.blur();
-
-		uci.set('luci', 'main', 'check_for_newer_firmwares', pref);
-
-		return uci.save()
-			.then(L.bind(L.ui.changes.init, L.ui.changes))
-			.then(L.bind(L.ui.changes.displayChanges, L.ui.changes));
-	},
 
 	oneshot: function(data) {
 		var boardinfo = data[0];
-		const check_upgrades = uci.get_bool('luci', 'main', 'check_for_newer_firmwares');
+		const check_upgrades = uci.get_bool(...check_setting);
 
 		if (check_upgrades) {
 			fetch('https://downloads.openwrt.org/.versions.json')
@@ -177,14 +180,32 @@ return baseclass.extend({
 	},
 
 	render: function(data) {
-		const check_upgrades = uci.get_bool('luci', 'main', 'check_for_newer_firmwares') ?? false;
-		const isReadonlyView = !L.hasViewPermission();
+		const isReadOnlyView = !L.hasViewPermission();
+		if (isReadOnlyView)
+			return null;
 
-		let perform_check_pref = E('input', { type: 'checkbox', 'click': L.bind(this.handleSetUpgradeCheck, this, !check_upgrades), });
-		perform_check_pref.checked = check_upgrades;
+		let check_upgrades = uci.get(...check_setting);
+		if (check_upgrades != null)
+			return null;
 
-		let perform_check_pref_p = E('div', [_('Look online for upgrades upon status page load') + ' ', perform_check_pref]);
+		let modal_body = [
+			E('p',  _('Checking for firmware upgrades requires access to several files ' +
+			  'on the downloads site, so requires internet access.')),
 
-		return E('div', [!isReadonlyView ? perform_check_pref_p : '']);
+			E('p',  _('The check will be performed every time the Status -> Overview page is loaded.')),
+
+			E('p', _('You have not yet specified a preference for this setting. ' +
+			  'Once set, this dialog will not be shown again, but you can go to ' +
+			  'System -> Attended Sysupgrade configuration to change the setting.')),
+
+			E('div', { class: 'right' }, [
+				E('div', { class: 'btn', click: () => setSetUpgradeCheck(true)  }, _('Yes, enable checking')),
+				E('div', { class: 'btn', click: () => setSetUpgradeCheck(false) }, _('No, disable checking')),
+				E('div', { class: 'btn', click: ui.hideModal }, _('Close')),
+			]),
+		];
+		ui.showModal(_('Check online for firmware upgrades'), modal_body);
+
+		return null;
 	}
 });
