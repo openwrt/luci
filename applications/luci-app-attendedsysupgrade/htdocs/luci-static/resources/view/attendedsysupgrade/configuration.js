@@ -26,9 +26,8 @@ return view.extend({
 			form.DynamicList,
 			'rebuilder',
 			_('Rebuilders'),
-			_(
-				'Other ASU server instances that rebuild a requested image. ' +
-					'Allows to compare checksums and verify that the results are the same.'
+			_('Other ASU server instances that rebuild a requested image. ' +
+			  'Allows to compare checksums and verify that the results are the same.'
 			)
 		);
 
@@ -37,9 +36,18 @@ return view.extend({
 
 		o = s.option(
 			form.Flag,
+			'login_check_for_upgrades',
+			_('Check for upgrades'),
+			_('Check for upgrades whenever the System -> Overview page is loaded.')
+		);
+		o.default = '0';
+		o.rmempty = false;
+
+		o = s.option(
+			form.Flag,
 			'auto_search',
 			_('Search on opening'),
-			_('Search for new sysupgrades on opening the tab')
+			_('Search for upgrades when opening the Attended Sysupgrade tab')
 		);
 		o.default = '1';
 		o.rmempty = false;
