@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=LuCI Support for OpenConnect VPN
-LUCI_DEPENDS:=+luci-base +luci-compat +ocserv +certtool
+LUCI_DEPENDS:=+luci-base +ocserv +certtool
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Nikos Mavrogiannopoulos <n.mavrogiannopoulos@gmail.com>
