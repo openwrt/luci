@@ -874,19 +874,28 @@ p > a {
 }
 
 .alert-message.info {
+	color: var(--secondary-bright-color);
 	background: var(--main-bright-color);
 }
 
 .alert-message.warning {
+	color: var(--secondary-bright-color);
 	background: var(--warning-color);
 }
 
 .alert-message.danger {
+	color: var(--secondary-bright-color);
 	background: var(--danger-color);
 }
 
 .alert-message.success {
+	color: var(--secondary-bright-color);
 	background: var(--success-color);
+}
+
+.alert-message.notice {
+	color: var(--main-bright-color);
+	background: var(--secondary-bright-color);
 }
 
 .alert-message .btn {
@@ -895,6 +904,17 @@ p > a {
 
 .alert-message .btn:hover {
 	box-shadow: 0 0 4px 1px var(--secondary-bright-color);
+}
+
+/* Fix for table text in notifications */
+.alert-message.notice table,
+.alert-message.notice .table,
+.alert-message.notice td,
+.alert-message.notice th,
+.alert-message.notice .td,
+.alert-message.notice .th {
+	color: var(--main-bright-color) !important;
+	background: transparent !important;
 }
 
 @keyframes fade-in {
