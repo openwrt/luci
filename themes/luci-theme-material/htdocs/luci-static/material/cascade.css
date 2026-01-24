@@ -501,36 +501,36 @@ header > .fill > .container > .status > * {
 
 .alert-message.notice,
 .label.notice {
-	background-color: var(--notice-color);
-	color: var(--on-notice-color);
+	background-color: var(--notice-color) !important;
+	color: var(--on-notice-color) !important;
 }
 
 .alert-message.danger,
 .btn.danger,
 .label.danger {
-	background-color: var(--danger-color);
-	color: var(--on-danger-color);
+	background-color: var(--danger-color) !important;
+	color: var(--on-danger-color) !important;
 }
 
 .alert-message.warning,
 .btn.warning,
 .label.warning {
-	background-color: var(--warning-color);
-	color: var(--on-warning-color);
+	background-color: var(--warning-color) !important;
+	color: var(--on-warning-color) !important;
 }
 
 .alert-message.success,
 .btn.success,
 .label.success {
-	background-color: var(--success-color);
-	color: var(--on-success-color);
+	background-color: var(--success-color) !important;
+	color: var(--on-success-color) !important;
 }
 
 .alert-message.error,
 .btn.error,
 .label.error {
-	background-color: var(--on-error-color);
-	color: var(--error-color);
+	background-color: var(--error-color) !important;
+	color: var(--on-error-color) !important;
 }
 
 [data-indicator]:not([data-style="inactive"]) {
@@ -540,6 +540,17 @@ header > .fill > .container > .status > * {
 .container .alert,
 .container .alert-message {
 	margin-top: 1rem;
+}
+
+/* Fix for table text in notifications - ensures table content inherits notification colors */
+.alert-message.notice table,
+.alert-message.notice .table,
+.alert-message.notice td,
+.alert-message.notice th,
+.alert-message.notice .td,
+.alert-message.notice .th {
+	color: var(--on-notice-color) !important;
+	background: transparent !important;
 }
 
 .main > .main-left > .nav {
