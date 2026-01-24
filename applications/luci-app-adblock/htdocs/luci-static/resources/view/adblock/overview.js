@@ -502,8 +502,11 @@ return view.extend({
 		o.datatype = 'range(1,10)';
 		o.rmempty = true;
 
-		o = s.taboption('adv_report', form.Value, 'adb_replisten', _('Report Ports'), _('Space separated list of ports used by tcpdump.'));
+		o = s.taboption('adv_report', form.DynamicList, 'adb_repport', _('Report Ports'), _('The list of ports used by tcpdump.'));
+		o.datatype = 'port';
 		o.placeholder = '53';
+		o.multiple = true;
+		o.optional = true;
 		o.rmempty = true;
 
 		o = s.taboption('adv_report', form.Flag, 'adb_represolve', _('Resolve IPs'), _('Resolve reporting IP addresses by using reverse DNS (PTR) lookups.'));
