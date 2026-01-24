@@ -38,7 +38,7 @@ return view.extend({
 			form.Flag,
 			'login_check_for_upgrades',
 			_('Check for upgrades'),
-			_('Check for upgrades whenever the System -> Overview page is loaded.')
+			_('Check for upgrades whenever the Status -> Overview page is loaded.')
 		);
 		o.default = '0';
 		o.rmempty = false;
