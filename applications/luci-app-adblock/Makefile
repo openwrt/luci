@@ -7,7 +7,7 @@ LUCI_TITLE:=LuCI support for Adblock
 LUCI_DEPENDS:=+luci-base +adblock
 
 PKG_VERSION:=4.5.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Dirk Brenken <dev@brenken.org>
 
