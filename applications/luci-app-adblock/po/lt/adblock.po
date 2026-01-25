@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-01-18 22:40+0000\n"
+"PO-Revision-Date: 2026-01-22 13:20+0000\n"
 "Last-Translator: Džiugas Januševičius <dziugas1959@hotmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock/lt/>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "(n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:282
 msgid "-- default --"
@@ -746,7 +746,7 @@ msgstr ""
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:338
 msgid "Set the dns backend instance used by adblock."
 msgstr ""
-"Nustatyti „DNS“ Vidine uždarosios sąsajos egzempliorių, naudojama reklaminio/"
+"Nustatyti „DNS“ vidine uždarosios sąsajos egzempliorių, naudojama reklaminio/"
 "skelbimų turinio blokatoriaus."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:184
@@ -899,6 +899,8 @@ msgid ""
 "This tab shows the last generated DNS Report, press the 'Refresh' button to "
 "get a current one."
 msgstr ""
+"Šiame skirtuke rodomas sugeneruotas „DNS“ atskaitas, spauskite mygtuką „"
+"Atnaujinti“, norėdami gauti dabartinį."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:318
 msgid "Time"
@@ -907,6 +909,8 @@ msgstr "Laikas"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:346
 msgid "Timeout to wait for a successful DNS backend restart."
 msgstr ""
+"Pasibaigusios užklausos laikas, sėkmingam „DNS“ vidinės uždarosios sąsajos "
+"paleidimui iš naujo."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:385
 msgid "Top Statistics"
@@ -915,10 +919,12 @@ msgstr "„Top“ – Statistika"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:422
 msgid "Topic for adblock notification E-Mails."
 msgstr ""
+"Tematika, skirta reklaminio/skelbimų turinio blokatoriaus el. pašto "
+"pranešimams."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:375
 msgid "Total DNS Requests"
-msgstr ""
+msgstr "Iš viso „DNS“ užklausų"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:209
 msgid "Trigger Delay"
@@ -926,11 +932,11 @@ msgstr "Suaktyvinimo atidėjimas"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:206
 msgid "URL"
-msgstr ""
+msgstr "„URL“ – Saitas"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:478
 msgid "UTCapitole Archive Selection"
-msgstr ""
+msgstr "„UTCapitole“ archyvo pasirinkimas"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:439
 msgid "Unable to parse the custom feed file!"
@@ -947,7 +953,7 @@ msgstr "Nepavyko išnagrinėti vykdančiosios informacijos!"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/allowlist.js:55
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/blocklist.js:55
 msgid "Unable to save modifications: %s"
-msgstr ""
+msgstr "Nepavyko išsaugoti pakeitimų/redagavimų: %s"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:265
 msgid "Upload"
@@ -957,11 +963,11 @@ msgstr "Įkelti"
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:77
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:83
 msgid "Upload of the custom feed file failed."
-msgstr ""
+msgstr "Įkeliant pasirinktinį padavimo failą įvyko klaida."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/feeds.js:231
 msgid "Varying"
-msgstr ""
+msgstr "Įvairūs/Kintantys"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:272
 msgid "Verbose Debug Logging"
@@ -975,18 +981,24 @@ msgid ""
 "file, delete entries, add new ones or make a local backup. To go back to the "
 "maintainers version just clear the custom feed file."
 msgstr ""
+"Naudodami šį redaktorių, Jūs galite įkelti savo pasirinktinį padavimo failą "
+"arba užpildyti pradinį (1:1 versijos kopija, pateiktas su prog. įrang. "
+"paketu). Failas yra randamas per – „/etc/adblock/adblock.custom.feeds“. Tada "
+"Jūs galite redaguoti šį failą, ištrinti įvestys, pridėti naujų arba sukurti "
+"vietinę atsarginę kopiją. Norėdami grįžti į kūrėjo versiją, tiesiog "
+"išvalykite pasirinktinį padavimo failą."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:317
 msgid "bind"
-msgstr ""
+msgstr "pririšti"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:315
 msgid "dnsmasq"
-msgstr ""
+msgstr "„dnsmasq“"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:319
 msgid "kresd"
-msgstr ""
+msgstr "„kresd“"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:172
 msgid "max. result set size"
@@ -998,15 +1010,15 @@ msgstr "Maksimali „Top“ – Statistika"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:320
 msgid "raw"
-msgstr ""
+msgstr "Neapdorotas/-i"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:318
 msgid "smartdns"
-msgstr ""
+msgstr "„smartdns“"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:316
 msgid "unbound"
-msgstr ""
+msgstr "nesaistomas"
 
 #~ msgid "0.0.0.0<SPACE><DOMAIN>"
 #~ msgstr "0.0.0.0<SPACE><DOMAIN>"
