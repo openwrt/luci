@@ -13,6 +13,13 @@ var callGetBuiltinEthernetPorts = rpc.declare({
 	expect: { result: [] }
 });
 
+const callNetworkDeviceStatus = rpc.declare({
+	object: 'network.device',
+	method: 'status',
+	params: [ 'name' ],
+	expect: { '': {} }
+});
+
 function isString(v)
 {
 	return typeof(v) === 'string' && v !== '';
@@ -236,10 +243,52 @@ function formatSpeed(carrier, speed, duplex) {
 	return carrier ? _('Connected') : _('no link');
 }
 
-function formatStats(portdev) {
-	var stats = portdev._devstate('stats') || {};
+function getPSEStatus(pse) {
+	if (!pse)
+		return null;
 
-	return ui.itemlist(E('span'), [
+	const status = pse['c33-power-status'] || pse['podl-power-status'],
+	    power = pse['c33-actual-power'];
+
+	return {
+		status: status,
+		power: power,
+		isDelivering: status === 'delivering' && power > 0
+	};
+}
+
+function formatPSEPower(pse) {
+	if (!pse)
+		return null;
+
+	const status = pse['c33-power-status'] || pse['podl-power-status'],
+	    power = pse['c33-actual-power'];
+
+	if (status === 'delivering' && power) {
+		const watts = (power / 1000).toFixed(1);
+		/* Format: "⚡ 15.4 W" - lightning bolt + narrow space + watts + narrow space + W */
+		return E('span', { 'style': 'color:#000' },
+			[ '\u26a1\ufe0e\u202f%s\u202fW'.format(watts) ]);
+	}
+	else if (status === 'searching') {
+		return E('span', { 'style': 'color:#000' },
+			[ '\u26a1\ufe0e\u202f' + _('searching') ]);
+	}
+	else if (status === 'fault' || status === 'otherfault' || status === 'error') {
+		return E('span', { 'style': 'color:#d9534f' },
+			[ '\u26a1\ufe0e\u202f' + _('fault') ]);
+	}
+	else if (status === 'disabled') {
+		return E('span', { 'style': 'color:#888' },
+			[ '\u26a1\ufe0e\u202f' + _('off') ]);
+	}
+
+	return null;
+}
+
+function formatStats(portdev, pse) {
+	const stats = portdev._devstate('stats') || {};
+	const items = [
 		_('Received bytes'), '%1024mB'.format(stats.rx_bytes),
 		_('Received packets'), '%1000mPkts.'.format(stats.rx_packets),
 		_('Received multicast'), '%1000mPkts.'.format(stats.multicast),
@@ -252,7 +301,27 @@ function formatStats(portdev) {
 		_('Transmit dropped'), '%1000mPkts.'.format(stats.tx_dropped),
 
 		_('Collisions seen'), stats.collisions
-	]);
+	];
+
+	if (pse) {
+		const status = pse['c33-power-status'] || pse['podl-power-status'],
+		    power = pse['c33-actual-power'],
+		    powerClass = pse['c33-power-class'],
+		    powerLimit = pse['c33-available-power-limit'];
+
+		items.push(_('PoE status'), status || _('unknown'));
+
+		if (power)
+			items.push(_('PoE power'), '%.1f W'.format(power / 1000));
+
+		if (powerClass)
+			items.push(_('PoE class'), powerClass);
+
+		if (powerLimit)
+			items.push(_('PoE limit'), '%.1f W'.format(powerLimit / 1000));
+	}
+
+	return ui.itemlist(E('span'), items);
 }
 
 function renderNetworkBadge(network, zonename) {
@@ -309,16 +378,57 @@ return baseclass.extend({
 			firewall.getZones(),
 			network.getNetworks(),
 			uci.load('network')
-		]);
+		]).then((data) => {
+			/* Get all known port names from builtin ports or board.json */
+			const builtinPorts = data[0] || [];
+			const board = JSON.parse(data[1] || '{}');
+			const allPorts = new Set();
+
+			/* Collect port names from builtin ethernet ports */
+			builtinPorts.forEach((port) => {
+				if (port.device)
+					allPorts.add(port.device);
+			});
+
+			/* Collect port names from board.json if no builtin ports */
+			if (allPorts.size === 0 && board.network) {
+				['lan', 'wan'].forEach((role) => {
+					if (board.network[role]) {
+						if (Array.isArray(board.network[role].ports))
+							board.network[role].ports.forEach((p) => allPorts.add(p));
+						else if (board.network[role].device)
+							allPorts.add(board.network[role].device);
+					}
+				});
+			}
+
+			/* Query PSE status from netifd for all known ports */
+			const psePromises = Array.from(allPorts).map((devname) => {
+				return L.resolveDefault(callNetworkDeviceStatus(devname), {}).then((status) => {
+					return { name: devname, pse: status.pse || null };
+				});
+			});
+
+			return Promise.all(psePromises).then((pseResults) => {
+				const pseMap = {};
+				pseResults.forEach((r) => {
+					if (r.pse)
+						pseMap[r.name] = r.pse;
+				});
+				data.push(pseMap);
+				return data;
+			});
+		});
 	},
 
 	render: function(data) {
 		if (L.hasSystemFeature('swconfig'))
 			return null;
 
-		var board = JSON.parse(data[1]),
-		    known_ports = [],
-		    port_map = buildInterfaceMapping(data[2], data[3]);
+		const board = JSON.parse(data[1]),
+		      port_map = buildInterfaceMapping(data[2], data[3]),
+		      pseMap = data[5] || {};
+		let known_ports = [];
 
 		if (Array.isArray(data[0]) && data[0].length > 0) {
 			known_ports = data[0].map(port => ({
@@ -354,16 +464,40 @@ return baseclass.extend({
 		});
 
 		return E('div', { 'style': 'display:grid;grid-template-columns:repeat(auto-fit, minmax(70px, 1fr));margin-bottom:1em' }, known_ports.map(function(port) {
-			var speed = port.netdev.getSpeed(),
-			    duplex = port.netdev.getDuplex(),
-			    carrier = port.netdev.getCarrier(),
-			    pmap = port_map[port.netdev.getName()],
-			    pzones = (pmap && pmap.zones.length) ? pmap.zones.sort(function(a, b) { return L.naturalCompare(a.getName(), b.getName()) }) : [ null ];
+			const speed = port.netdev.getSpeed();
+			const duplex = port.netdev.getDuplex();
+			const carrier = port.netdev.getCarrier();
+			const pmap = port_map[port.netdev.getName()];
+			const pzones = (pmap && pmap.zones.length) ? pmap.zones.sort((a, b) => L.naturalCompare(a.getName(), b.getName())) : [ null ];
+			const pse = pseMap[port.device];
+			const pseInfo = getPSEStatus(pse);
+			const psePower = formatPSEPower(pse);
+
+			/* Select port icon based on carrier and PSE status */
+			let portIcon;
+			if (pseInfo && pseInfo.isDelivering) {
+				portIcon = carrier ? 'pse_up' : 'pse_down';
+			} else {
+				portIcon = carrier ? 'up' : 'down';
+			}
+
+			const statsContent = [
+				'\u25b2\u202f%1024.1mB'.format(port.netdev.getTXBytes()),
+				E('br'),
+				'\u25bc\u202f%1024.1mB'.format(port.netdev.getRXBytes())
+			];
+
+			if (psePower) {
+				statsContent.push(E('br'));
+				statsContent.push(psePower);
+			}
+
+			statsContent.push(E('span', { 'class': 'cbi-tooltip' }, formatStats(port.netdev, pse)));
 
 			return E('div', { 'class': 'ifacebox', 'style': 'margin:.25em;min-width:70px;max-width:100px' }, [
 				E('div', { 'class': 'ifacebox-head', 'style': 'font-weight:bold' }, [ port.netdev.getName() ]),
 				E('div', { 'class': 'ifacebox-body' }, [
-					E('img', { 'src': L.resource('icons/port_%s.svg').format(carrier ? 'up' : 'down') }),
+					E('img', { 'src': L.resource('icons/port_%s.svg').format(portIcon) }),
 					E('br'),
 					formatSpeed(carrier, speed, duplex)
 				]),
@@ -377,12 +511,7 @@ return baseclass.extend({
 					E('span', { 'class': 'cbi-tooltip left' }, [ renderNetworksTooltip(pmap) ])
 				]),
 				E('div', { 'class': 'ifacebox-body' }, [
-					E('div', { 'class': 'cbi-tooltip-container', 'style': 'text-align:left;font-size:80%' }, [
-						'\u25b2\u202f%1024.1mB'.format(port.netdev.getTXBytes()),
-						E('br'),
-						'\u25bc\u202f%1024.1mB'.format(port.netdev.getRXBytes()),
-						E('span', { 'class': 'cbi-tooltip' }, formatStats(port.netdev))
-					]),
+					E('div', { 'class': 'cbi-tooltip-container', 'style': 'text-align:left;font-size:80%' }, statsContent)
 				])
 			]);
 		}));

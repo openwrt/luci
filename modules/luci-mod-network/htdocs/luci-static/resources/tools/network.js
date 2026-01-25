@@ -440,7 +440,7 @@ return baseclass.extend({
 		return s.taboption(tabName, optionClass, optionName, optionTitle, optionDescription);
 	},
 
-	addDeviceOptions: function(s, dev, isNew, rtTables) {
+	addDeviceOptions: function(s, dev, isNew, rtTables, hasPSE) {
 		var parent_dev = dev ? dev.getParent() : null,
 		    devname = dev ? dev.getName() : null,
 		    o, ss;
@@ -449,6 +449,8 @@ return baseclass.extend({
 		s.tab('devadvanced', _('Advanced device options'));
 		s.tab('brport', _('Bridge port specific options'));
 		s.tab('bridgevlan', _('Bridge VLAN filtering'));
+		if (hasPSE)
+			s.tab('devpse', _('PoE / PSE options'));
 
 		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'type', _('Device type'),
 			(!L.hasSystemFeature('bonding') && isNew ? '<a href="' + L.url("admin", "system", "package-manager", "?query=kmod-bonding") + '">'+
@@ -1138,6 +1140,34 @@ return baseclass.extend({
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'txqueuelen', _('TX queue length'));
 		o.placeholder = dev ? dev._devstate('qlen') : '';
 		o.datatype = 'uinteger';
+
+		/* PSE / PoE options */
+		if (hasPSE) {
+			o = this.replaceOption(s, 'devpse', form.ListValue, 'pse', _('PoE (C33)'),
+				_('Power over Ethernet (IEEE 802.3af/at/bt) control for this port. Requires PSE hardware support.'));
+			o.value('', _('Default'));
+			o.value('1', _('Enabled'));
+			o.value('0', _('Disabled'));
+
+			o = this.replaceOption(s, 'devpse', form.ListValue, 'pse_podl', _('PoDL'),
+				_('Power over Data Lines (IEEE 802.3bu/cg) for single-pair Ethernet.'));
+			o.value('', _('Default'));
+			o.value('1', _('Enabled'));
+			o.value('0', _('Disabled'));
+
+			o = this.replaceOption(s, 'devpse', form.Value, 'pse_power_limit', _('Power limit (mW)'),
+				_('Maximum power budget for this port in milliwatts. Leave empty for default/maximum.'));
+			o.datatype = 'uinteger';
+			o.placeholder = _('auto');
+			o.rmempty = true;
+
+			o = this.replaceOption(s, 'devpse', form.ListValue, 'pse_priority', _('Port priority'),
+				_('Priority level for power allocation when total power budget is exceeded.'));
+			o.value('', _('Default'));
+			o.value('1', _('Critical'));
+			o.value('2', _('High'));
+			o.value('3', _('Low'));
+		}
 
 		o = this.replaceOption(s, 'devadvanced', cbiFlagTristate, 'promisc', _('Enable promiscuous mode'));
 		o.sysfs_default = (dev && dev.dev && dev.dev.flags) ? dev.dev.flags.promisc : null;
