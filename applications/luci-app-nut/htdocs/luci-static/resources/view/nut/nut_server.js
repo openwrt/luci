@@ -154,7 +154,7 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = 'private';
 
-		o = s.option(form.Value, 'desc', _('Description (Display)'));
+		o = s.option(form.Value, 'desc', _('Description (Display)'), _('This is passed through to the driver, so make sure your driver supports this option'));
 		o.optional = true;
 
 		o = s.option(form.ListValue, 'driver', _('Driver'),
@@ -190,10 +190,10 @@ return view.extend({
 		o.datatype = 'uinteger';
 		o.placeholder = 45;
 
-		o = s.option(form.Value, 'mfr', _('Manufacturer (Display)'));
+		o = s.option(form.Value, 'mfr', _('Manufacturer (Display)'), _('This is passed through to the driver, so make sure your driver supports this option'));
 		o.optional = true;
 
-		o = s.option(form.Value, 'model', _('Model (Display)'));
+		o = s.option(form.Value, 'model', _('Model (Display)'), _('This is passed through to the driver, so make sure your driver supports this option'));
 		o.optional = true;
 
 		o = s.option(form.Flag, 'nolock', _('No Lock'), _('Do not lock port when starting driver'));
@@ -244,7 +244,7 @@ return view.extend({
 		o = s.option(form.Value, 'sdtime', _('Additional Shutdown Time(s)'));
 		o.optional = true;
 
-		o = s.option(form.Value, 'serial', _('Serial Number'));
+		o = s.option(form.Value, 'serial', _('Serial Number'),  _('This is passed through to the driver, so make sure your driver supports this option'));
 		o.optional = true;
 
 		o = s.option(form.Value, 'snmp_retries', _('SNMP retries'));
