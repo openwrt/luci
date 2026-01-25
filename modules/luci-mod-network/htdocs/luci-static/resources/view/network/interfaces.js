@@ -5,11 +5,19 @@
 'require fs';
 'require ui';
 'require uci';
+'require rpc';
 'require form';
 'require network';
 'require firewall';
 'require tools.widgets as widgets';
 'require tools.network as nettools';
+
+const callNetworkDeviceStatus = rpc.declare({
+	object: 'network.device',
+	method: 'status',
+	params: [ 'name' ],
+	expect: { '': {} }
+});
 
 var isReadonlyView = !L.hasViewPermission() || null;
 
@@ -1570,10 +1578,20 @@ return view.extend({
 		};
 
 		s.addModalOptions = function(s) {
-			var isNew = (uci.get('network', s.section, 'name') == null),
-			    dev = getDevice(s.section);
+			const isNew = (uci.get('network', s.section, 'name') == null),
+			      dev = getDevice(s.section),
+			      devName = dev ? dev.getName() : null;
 
-			nettools.addDeviceOptions(s, dev, isNew, rtTables);
+			/* Query PSE status from netifd to determine if device has PSE capability */
+			if (devName) {
+				return L.resolveDefault(callNetworkDeviceStatus(devName), {}).then((status) => {
+					const hasPSE = (status.pse != null);
+					nettools.addDeviceOptions(s, dev, isNew, rtTables, hasPSE);
+				});
+			} else {
+				nettools.addDeviceOptions(s, dev, isNew, rtTables, false);
+				return Promise.resolve();
+			}
 		};
 
 		s.handleModalCancel = function(map /*, ... */) {

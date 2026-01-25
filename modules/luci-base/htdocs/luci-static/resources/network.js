@@ -3241,6 +3241,50 @@ Device = baseclass.extend(/** @lends LuCI.network.Device.prototype */ {
 	},
 
 	/**
+	 * Get the PSE (Power Sourcing Equipment / PoE) status of the device.
+	 *
+	 * @returns {Object|null}
+	 * Returns an object containing PSE status information or null if
+	 * PSE is not available on this device. The object may contain:
+	 * - c33AdminState: "enabled" or "disabled" (C33 PoE admin state)
+	 * - c33PowerStatus: "disabled", "searching", "delivering", "test", "fault", "otherfault"
+	 * - c33PowerClass: Power class number (1-8)
+	 * - c33ActualPower: Actual power consumption in mW
+	 * - c33AvailablePowerLimit: Available power limit in mW
+	 * - podlAdminState: "enabled" or "disabled" (PoDL admin state)
+	 * - podlPowerStatus: "disabled", "searching", "delivering", "sleep", "idle", "error"
+	 * - priority: Current priority level
+	 * - priorityMax: Maximum priority level
+	 */
+	getPSE: function() {
+		const pse = this._devstate('pse');
+		if (!pse)
+			return null;
+
+		return {
+			c33AdminState: pse['c33-admin-state'] || null,
+			c33PowerStatus: pse['c33-power-status'] || null,
+			c33PowerClass: pse['c33-power-class'] || null,
+			c33ActualPower: pse['c33-actual-power'] || null,
+			c33AvailablePowerLimit: pse['c33-available-power-limit'] || null,
+			podlAdminState: pse['podl-admin-state'] || null,
+			podlPowerStatus: pse['podl-power-status'] || null,
+			priority: pse['priority'] || null,
+			priorityMax: pse['priority-max'] || null
+		};
+	},
+
+	/**
+	 * Check if PSE (PoE) is available on this device.
+	 *
+	 * @returns {boolean}
+	 * Returns true if PSE hardware is available on this device.
+	 */
+	hasPSE: function() {
+		return this._devstate('pse') != null;
+	},
+
+	/**
 	 * Get the primary logical interface this device is assigned to.
 	 *
 	 * @returns {null|LuCI.network.Protocol}
