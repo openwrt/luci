@@ -16,7 +16,7 @@ msgid ""
 "below."
 msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:42
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:55
 msgid "A new %s version of OpenWrt is available:"
 msgstr "OpenWRT இன் புதிய %s பதிப்பு கிடைக்கிறது:"
 
@@ -28,13 +28,13 @@ msgstr "முகவரி"
 msgid "Address of the sysupgrade server"
 msgstr "Sysupgrade சேவையகத்தின் முகவரி"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:50
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:58
 msgid "Advanced Mode"
 msgstr "மேம்பட்ட பயன்முறை"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:11
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:725
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:46
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:59
 #: applications/luci-app-attendedsysupgrade/root/usr/share/luci/menu.d/luci-app-attendedsysupgrade.json:3
 msgid "Attended Sysupgrade"
 msgstr "சிசுப்பிரேட்டில் கலந்து கொண்டார்"
@@ -43,7 +43,7 @@ msgstr "சிசுப்பிரேட்டில் கலந்து க�
 msgid "Attendedsysupgrade Configuration."
 msgstr "Attedsysupgrade உள்ளமைவில்."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:29
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:41
 msgid "Available"
 msgstr "கிடைக்கிறது"
 
@@ -68,11 +68,29 @@ msgstr "தொகுப்பு ஆச் கணக்கிடுதல்"
 msgid "Cancel"
 msgstr "ரத்துசெய்"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:45
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:58
 msgid "Check"
 msgstr "சரிபார்"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:35
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:40
+msgid "Check for upgrades"
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:41
+msgid "Check for upgrades whenever the Status -> Overview page is loaded."
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:207
+msgid "Check online for firmware upgrades"
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:192
+msgid ""
+"Checking for firmware upgrades requires access to several files on the "
+"downloads site, so requires internet access."
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:34
 msgid "Client"
 msgstr "கிளீன்"
 
@@ -81,6 +99,7 @@ msgstr "கிளீன்"
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:480
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:537
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:680
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:204
 msgid "Close"
 msgstr "மூடு"
 
@@ -100,7 +119,7 @@ msgstr ""
 msgid "Could not reach API at \"%s\". Please try again later."
 msgstr "\"%s\" இல் பநிஇ ஐ அடைய முடியவில்லை. தயவுசெய்து பின்னர் மீண்டும் முயற்சிக்கவும்."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:28
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:40
 msgid "Current"
 msgstr "மின்னோட்ட்ம், ஓட்டம்"
 
@@ -157,7 +176,7 @@ msgstr "கோப்புப்பெயர்"
 msgid "Filesystem"
 msgstr "கோப்பு முறைமை"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:18
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:30
 msgid "Firmware Version"
 msgstr "ஃபார்ம்வேர் பதிப்பு"
 
@@ -189,15 +208,11 @@ msgstr "நிறுவுதல் ..."
 msgid "Keep settings and retain the current configuration"
 msgstr "அமைப்புகளை வைத்து தற்போதைய உள்ளமைவைத் தக்க வைத்துக் கொள்ளுங்கள்"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:20
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:32
 msgid "Kernel Version"
 msgstr "கர்னல் பதிப்பு"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:186
-msgid "Look online for upgrades upon status page load"
-msgstr "நிலை பக்க சுமை மேம்படுத்துவதற்கு ஆன்லைனில் பாருங்கள்"
-
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:41
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:54
 msgid "New Firmware Available"
 msgstr "புதிய ஃபார்ம்வேர் கிடைக்கிறது"
 
@@ -209,11 +224,15 @@ msgstr "புதிய ஃபார்ம்வேர் மேம்படு�
 msgid "No upgrade available"
 msgstr "மேம்படுத்தல் எதுவும் கிடைக்கவில்லை"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:203
+msgid "No, disable checking"
+msgstr ""
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:487
 msgid "Once the image is written, the system will reboot."
 msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:30
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:29
 msgid ""
 "Other ASU server instances that rebuild a requested image. Allows to compare "
 "checksums and verify that the results are the same."
@@ -269,7 +288,7 @@ msgstr "ஃபார்ம்வேர் படத்தைக் கோரு�
 msgid "Request in build queue position %s"
 msgstr "வரிசை நிலை %s இல் கோரிக்கை"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:19
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:31
 msgid "Revision"
 msgstr "திருத்தம்"
 
@@ -281,11 +300,11 @@ msgstr "சிறிய"
 msgid "Search for firmware upgrade"
 msgstr "ஃபார்ம்வேர் மேம்படுத்தலைத் தேடுங்கள்"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:42
-msgid "Search for new sysupgrades on opening the tab"
-msgstr "தாவலைத் திறப்பதில் புதிய சிசுப்ராட்களைத் தேடுங்கள்"
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:50
+msgid "Search for upgrades when opening the Attended Sysupgrade tab"
+msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:41
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:49
 msgid "Search on opening"
 msgstr "திறப்பதில் தேடுங்கள்"
 
@@ -313,13 +332,17 @@ msgstr "இமேச் பில்டரை அமைத்தல்"
 msgid "Setting up ImageBuilder"
 msgstr "இமேச் பில்டரை அமைத்தல்"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:51
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:59
 msgid "Show advanced options like package list modification"
 msgstr "தொகுப்பு பட்டியல் மாற்றம் போன்ற மேம்பட்ட விருப்பங்களைக் காட்டு"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:95
 msgid "Signing images"
 msgstr "படங்களில் கையொப்பமிடுதல்"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:63
+msgid "Stop showing upgrade alerts"
+msgstr ""
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:245
 msgid "Successfully created firmware image"
@@ -336,6 +359,11 @@ msgid ""
 msgstr ""
 "கலந்துகொண்ட சிசுபிரேட் பணி வெண்ணிலா மற்றும் தனிப்பயன் ஃபார்ம்வேர் படங்களை எளிதாக "
 "மேம்படுத்த அனுமதிக்கிறது."
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:195
+msgid ""
+"The check will be performed every time the Status -> Overview page is loaded."
+msgstr ""
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:674
 msgid "The device runs the latest firmware version %s - %s"
@@ -381,21 +409,38 @@ msgstr ""
 msgid "Wrong checksum"
 msgstr "தவறான செக்சம்"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:202
+msgid "Yes, enable checking"
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:197
+msgid ""
+"You have not yet specified a preference for this setting. Once set, this "
+"dialog will not be shown again, but you can go to System -> Attended "
+"Sysupgrade configuration to change the setting."
+msgstr ""
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:602
 msgid "[installed] %s"
 msgstr "[நிறுவப்பட்டது] %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:47
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:60
 msgid "and"
 msgstr "மற்றும்"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:48
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:61
 msgid "release notes"
 msgstr "வெளியீட்டு குறிப்புகள்"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:19
 msgid "this forum thread"
 msgstr ""
+
+#~ msgid "Look online for upgrades upon status page load"
+#~ msgstr "நிலை பக்க சுமை மேம்படுத்துவதற்கு ஆன்லைனில் பாருங்கள்"
+
+#~ msgid "Search for new sysupgrades on opening the tab"
+#~ msgstr "தாவலைத் திறப்பதில் புதிய சிசுப்ராட்களைத் தேடுங்கள்"
 
 #~ msgid "Installing the sysupgrade. Do not unpower device!"
 #~ msgstr "Sysupgrade ஐ நிறுவுதல். சக்தியைக் குறைக்க வேண்டாம்!"

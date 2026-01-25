@@ -16,7 +16,7 @@ msgid ""
 "below."
 msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:42
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:55
 msgid "A new %s version of OpenWrt is available:"
 msgstr "Đã có phiên bản OpenWrt %s mới:"
 
@@ -28,13 +28,13 @@ msgstr "Địa chỉ"
 msgid "Address of the sysupgrade server"
 msgstr "Địa chỉ của máy chủ sysupgrade"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:50
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:58
 msgid "Advanced Mode"
 msgstr "Chế độ nâng cao"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:11
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:725
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:46
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:59
 #: applications/luci-app-attendedsysupgrade/root/usr/share/luci/menu.d/luci-app-attendedsysupgrade.json:3
 msgid "Attended Sysupgrade"
 msgstr "Nâng cấp Sysupgrade được theo dõi"
@@ -43,7 +43,7 @@ msgstr "Nâng cấp Sysupgrade được theo dõi"
 msgid "Attendedsysupgrade Configuration."
 msgstr "Cấu hình nâng cấp hệ thống có hướng dẫn."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:29
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:41
 msgid "Available"
 msgstr ""
 
@@ -68,11 +68,29 @@ msgstr ""
 msgid "Cancel"
 msgstr "Hủy lệnh"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:45
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:58
 msgid "Check"
 msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:35
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:40
+msgid "Check for upgrades"
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:41
+msgid "Check for upgrades whenever the Status -> Overview page is loaded."
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:207
+msgid "Check online for firmware upgrades"
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:192
+msgid ""
+"Checking for firmware upgrades requires access to several files on the "
+"downloads site, so requires internet access."
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:34
 msgid "Client"
 msgstr "Máy Khách"
 
@@ -81,6 +99,7 @@ msgstr "Máy Khách"
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:480
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:537
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:680
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:204
 msgid "Close"
 msgstr "Đóng"
 
@@ -101,7 +120,7 @@ msgstr ""
 msgid "Could not reach API at \"%s\". Please try again later."
 msgstr "Không thể kết nối tới API tại \"%s\". Vui lòng thử lại sau."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:28
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:40
 msgid "Current"
 msgstr ""
 
@@ -158,7 +177,7 @@ msgstr "Tên tệp tin"
 msgid "Filesystem"
 msgstr "Hệ thống tập tin"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:18
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:30
 msgid "Firmware Version"
 msgstr ""
 
@@ -190,15 +209,11 @@ msgstr "Đang cài đặt..."
 msgid "Keep settings and retain the current configuration"
 msgstr "Giữ nguyên cài đặt và giữ nguyên cấu hình hiện tại"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:20
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:32
 msgid "Kernel Version"
 msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:186
-msgid "Look online for upgrades upon status page load"
-msgstr ""
-
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:41
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:54
 msgid "New Firmware Available"
 msgstr ""
 
@@ -210,11 +225,15 @@ msgstr "Có bản nâng cấp firmware mới"
 msgid "No upgrade available"
 msgstr "Không có bản nâng cấp"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:203
+msgid "No, disable checking"
+msgstr ""
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:487
 msgid "Once the image is written, the system will reboot."
 msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:30
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:29
 msgid ""
 "Other ASU server instances that rebuild a requested image. Allows to compare "
 "checksums and verify that the results are the same."
@@ -270,7 +289,7 @@ msgstr "Yêu cầu hình ảnh firmware"
 msgid "Request in build queue position %s"
 msgstr "Yêu cầu ở vị trí hàng đợi xây dựng %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:19
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:31
 msgid "Revision"
 msgstr ""
 
@@ -282,11 +301,11 @@ msgstr "SHA-256"
 msgid "Search for firmware upgrade"
 msgstr "Tìm kiếm bản nâng cấp firmware"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:42
-msgid "Search for new sysupgrades on opening the tab"
-msgstr "Tìm kiếm sysupgrade mới khi mở tab"
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:50
+msgid "Search for upgrades when opening the Attended Sysupgrade tab"
+msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:41
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:49
 msgid "Search on opening"
 msgstr "Tìm kiếm khi mở"
 
@@ -314,12 +333,16 @@ msgstr "Cài đặt ImageBuilder"
 msgid "Setting up ImageBuilder"
 msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:51
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:59
 msgid "Show advanced options like package list modification"
 msgstr "Hiển thị các tùy chọn nâng cao như sửa đổi danh sách gói"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:95
 msgid "Signing images"
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:63
+msgid "Stop showing upgrade alerts"
 msgstr ""
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:245
@@ -337,6 +360,11 @@ msgid ""
 msgstr ""
 "Dịch vụ nâng cấp hệ thống attended cho phép nâng cấp dễ dàng các hình ảnh "
 "firmware gốc và tùy chỉnh."
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:195
+msgid ""
+"The check will be performed every time the Status -> Overview page is loaded."
+msgstr ""
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:674
 msgid "The device runs the latest firmware version %s - %s"
@@ -382,21 +410,35 @@ msgstr ""
 msgid "Wrong checksum"
 msgstr "Checksum sai"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:202
+msgid "Yes, enable checking"
+msgstr ""
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:197
+msgid ""
+"You have not yet specified a preference for this setting. Once set, this "
+"dialog will not be shown again, but you can go to System -> Attended "
+"Sysupgrade configuration to change the setting."
+msgstr ""
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:602
 msgid "[installed] %s"
 msgstr "[đã cài đặt] %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:47
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:60
 msgid "and"
 msgstr ""
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:48
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:61
 msgid "release notes"
 msgstr ""
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:19
 msgid "this forum thread"
 msgstr ""
+
+#~ msgid "Search for new sysupgrades on opening the tab"
+#~ msgstr "Tìm kiếm sysupgrade mới khi mở tab"
 
 #~ msgid "Installing the sysupgrade. Do not unpower device!"
 #~ msgstr "Đang cài đặt sysupgrade. Xin đừng tắt nguồn!"
