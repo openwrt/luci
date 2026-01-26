@@ -2450,6 +2450,8 @@
             
                 <li data-name="LuCI.network.Device#getPorts"><a href="LuCI.network.Device.html#getPorts">getPorts</a></li>
             
+                <li data-name="LuCI.network.Device#getPSE"><a href="LuCI.network.Device.html#getPSE">getPSE</a></li>
+            
                 <li data-name="LuCI.network.Device#getRXBytes"><a href="LuCI.network.Device.html#getRXBytes">getRXBytes</a></li>
             
                 <li data-name="LuCI.network.Device#getRXPackets"><a href="LuCI.network.Device.html#getRXPackets">getRXPackets</a></li>
@@ -2467,6 +2469,8 @@
                 <li data-name="LuCI.network.Device#getTypeI18n"><a href="LuCI.network.Device.html#getTypeI18n">getTypeI18n</a></li>
             
                 <li data-name="LuCI.network.Device#getWifiNetwork"><a href="LuCI.network.Device.html#getWifiNetwork">getWifiNetwork</a></li>
+            
+                <li data-name="LuCI.network.Device#hasPSE"><a href="LuCI.network.Device.html#hasPSE">hasPSE</a></li>
             
                 <li data-name="LuCI.network.Device#isBridge"><a href="LuCI.network.Device.html#isBridge">isBridge</a></li>
             
@@ -5098,7 +5102,7 @@ e.g. for non-Ethernet tunnel devices.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3251">line 3251</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3295">line 3295</a>
         </div>
         
     </div>
@@ -5203,7 +5207,7 @@ assigned to any logical interface.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3262">line 3262</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3306">line 3306</a>
         </div>
         
     </div>
@@ -5304,7 +5308,7 @@ logical interfaces this device is assigned to.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3302">line 3302</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3346">line 3346</a>
         </div>
         
     </div>
@@ -5496,6 +5500,121 @@ ordinary Ethernet interfaces.</td>
             <td class="description last">Returns an array of <code>Network.Device</code> instances representing the ports
 (slave interfaces) of the bridge or <code>null</code> when this device isn't
 a Linux bridge.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="getPSE">
+            
+            getPSE<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{Object|null}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3259">line 3259</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Get the PSE (Power Sourcing Equipment / PoE) status of the device.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        Object
+                         | 
+                    
+                        null
+                        
+                    
+            </td>
+            <td class="description last">Returns an object containing PSE status information or null if
+PSE is not available on this device. The object may contain:
+<ul>
+<li>c33AdminState: &quot;enabled&quot; or &quot;disabled&quot; (C33 PoE admin state)</li>
+<li>c33PowerStatus: &quot;disabled&quot;, &quot;searching&quot;, &quot;delivering&quot;, &quot;test&quot;, &quot;fault&quot;, &quot;otherfault&quot;</li>
+<li>c33PowerClass: Power class number (1-8)</li>
+<li>c33ActualPower: Actual power consumption in mW</li>
+<li>c33AvailablePowerLimit: Available power limit in mW</li>
+<li>podlAdminState: &quot;enabled&quot; or &quot;disabled&quot; (PoDL admin state)</li>
+<li>podlPowerStatus: &quot;disabled&quot;, &quot;searching&quot;, &quot;delivering&quot;, &quot;sleep&quot;, &quot;idle&quot;, &quot;error&quot;</li>
+<li>priority: Current priority level</li>
+<li>priorityMax: Maximum priority level</li>
+</ul></td>
         </tr>
     
     </tbody>
@@ -6335,7 +6454,7 @@ returned.</td>
     
         
         <div class="tag-source">
-            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3286">line 3286</a>
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3330">line 3330</a>
         </div>
         
     </div>
@@ -6419,6 +6538,106 @@ returned.</td>
             <td class="description last">Returns a <code>Network.WifiNetwork</code> instance representing the wireless
 network corresponding to this network device or <code>null</code> if this device
 is not a wireless device.</td>
+        </tr>
+    
+    </tbody>
+</table>
+
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="hasPSE">
+            
+            hasPSE<span class="signature">()</span><span class="glyphicon glyphicon-circle-arrow-right"></span><span class="type-signature returnType">{boolean}</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="network.js.html">network.js</a>, <a href="network.js.html#line3283">line 3283</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Check if PSE (PoE) is available on this device.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Type</th>
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    
+        <tr>
+            
+            <td class="type">
+            
+                        boolean
+                        
+                    
+            </td>
+            <td class="description last">Returns true if PSE hardware is available on this device.</td>
         </tr>
     
     </tbody>
@@ -6751,7 +6970,7 @@ when it is down or absent.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Fri Jan 23 2026 22:13:42 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Mon Jan 26 2026 05:42:33 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
