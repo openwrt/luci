@@ -1,6 +1,7 @@
 'use strict';
 'require baseclass';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 return baseclass.extend({
 	title: _('Ping Plugin Configuration'),
@@ -9,7 +10,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
+		pluginUtil.addCommonOptions(s);
 
 		o = s.option(form.DynamicList, 'Hosts', _('Monitor hosts'));
 		o.default = '127.0.0.1';

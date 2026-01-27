@@ -117,5 +117,9 @@ return baseclass.extend({
 				}
 			];
 		}
+	},
+
+	hasInstanceDetails(plugin_instance) {
+		return plugin_instance != "";
 	}
 });

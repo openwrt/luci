@@ -6,25 +6,28 @@ START=79
 STOP=11
 USE_PROCD=1
 
-BACKUP_DIR="/etc/luci_statistics"
-BACKUP_FILE="${BACKUP_DIR}/rrdbackup.tgz"
-SYSUPGRADE_BACKUP_FILE="${BACKUP_DIR}/rrdbackup.sysupgrade.tgz"
-SYSUPGRADE_BACKUP_TWIN_A="${BACKUP_DIR}/sysupgrade.trustme.txt"
-SYSUPGRADE_BACKUP_TWIN_B="${BACKUP_DIR}/sysupgrade.dont.trustme.txt"
+load_config_vars() {
+  HAVE_RRD=$(uci -q get luci_statistics.collectd_rrdtool.enable)
+  DO_BACKUP=$(uci -q get luci_statistics.collectd_rrdtool.backup)
+  RRD_DIR=$(uci -q get luci_statistics.collectd_rrdtool.DataDir)
+  BACKUP_DIR=$(uci -q get luci_statistics.collectd_rrdtool.backup_dir)
+  
+  BACKUP_FILE="${BACKUP_DIR}/rrdbackup.tgz"
+  SYSUPGRADE_BACKUP_FILE="${BACKUP_DIR}/rrdbackup.sysupgrade.tgz"
+  SYSUPGRADE_BACKUP_TWIN_A="${BACKUP_DIR}/sysupgrade.trustme.txt"
+  SYSUPGRADE_BACKUP_TWIN_B="${BACKUP_DIR}/sysupgrade.dont.trustme.txt"
+
+}
+# make common vars visible fo every call
+load_config_vars
+
 EXTRA_COMMANDS="backup sysupgrade_backup"
 EXTRA_HELP="\
 	backup          Backup current rrd database if configured to do so"
 TRACE=0
 
-doing_backups() {
-	### Determine if we should do backups/restores
-	local rrd_enabled=$(uci -q get luci_statistics.collectd_rrdtool.enable)
-	local rrd_backups_enabled=$(uci -q get luci_statistics.collectd_rrdtool.backup)
-	rrd_dir=$(uci -q get luci_statistics.collectd_rrdtool.DataDir)
-
-	[ "$rrd_enabled" = "1" \
-			 -a "$rrd_backups_enabled" = "1" \
-			 -a -n "$rrd_dir" ] && {
+rrd_doing_backups() {
+	[ "$HAVE_RRD" = "1" -a "$DO_BACKUP" = "1" -a -n "$RRD_DIR" -a -n "$BACKUP_DIR" ] && {
 		return 0
 	}
 	return 1
@@ -34,17 +37,13 @@ service_triggers()
 {
 	procd_add_reload_trigger "luci_statistics"
 }
+	
 
 start_service() {
-	### replace shipped config with symlink
-	mkdir -p /var/etc
-	if [ ! -L /etc/collectd.conf ]; then
-		test -f /etc/collectd.conf && mv /etc/collectd.conf /etc/collectd.conf.bak
-		ln -s /var/etc/collectd.conf /etc/collectd.conf
-	fi
-
-	### create config
-	/usr/libexec/stat-genconfig > /var/etc/collectd.conf
+	local config_file 
+	### create config for others:
+	config_get config_file globals config_file "/var/etc/collectd.conf"
+	/usr/libexec/stat-genconfig > ${config_file}
 
 	### workaround broken permissions on /tmp
 	chmod 1777 /tmp
@@ -70,7 +69,7 @@ remove_sysupgrade_backup() {
 
 rrd_restore() {
 	[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics rrd_restore
-	doing_backups && {
+	rrd_doing_backups && {
 		### Restore backup if backups enabled and we have a
 		### nonzero backup file and the twins are unequal
 		### (absent or one missing or both present but
@@ -85,8 +84,8 @@ rrd_restore() {
 		}
 		[ -s "${BACKUP_FILE}" ] && {
 			[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics restoring backup
-			### unpack only files/directories under the configured rrd_dir
-			data_relative=${rrd_dir#/}
+			### unpack only files/directories under the configured RRD_DIR
+			data_relative=${RRD_DIR#/}
 			[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics restoring only ${data_relative}
 			tar -xzf "${BACKUP_FILE}" -C / ${data_relative}
 		}
@@ -95,10 +94,10 @@ rrd_restore() {
 
 rrd_backup() {
 	[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics rrd_backup
-	doing_backups && [ -d "$rrd_dir" ] && {
+	rrd_doing_backups && [ -d "$RRD_DIR" ] && {
 		[ ${TRACE} -gt 0 ] && logger -t ${0##*/} -- luci_statistics making backup
 		local tmp_file=$(mktemp -u)
-		tar -czf "$tmp_file" -C / "$rrd_dir" 2>/dev/null
+		tar -czf "$tmp_file" -C / "$RRD_DIR" 2>/dev/null
 		mkdir -p "${BACKUP_DIR}"
 		mv "$tmp_file" "${BACKUP_FILE}"
 		rm -f "$tmp_file"

@@ -1,6 +1,7 @@
 'use strict';
 'require baseclass';
 'require form';
+'require statistics.pluginUtil as pluginUtil';
 
 return baseclass.extend({
 	title: _('Network Plugin Configuration'),
@@ -9,8 +10,7 @@ return baseclass.extend({
 	addFormOptions: function(s) {
 		var o, ss;
 
-		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
-		o.default = '0';
+		pluginUtil.addCommonOptions(s, true);
 
 		o = s.option(form.Value, 'TimeToLive', _('TTL for network packets'));
 		o.placeholder = '1';
