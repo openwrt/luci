@@ -13,6 +13,10 @@ import {
 	stdin, stdout, mkstemp
 } from 'fs';
 
+import { cursor } from 'uci';
+
+let uci = cursor();
+
 // luci.http module scope
 export let HTTP_MAX_CONTENT = 1024*100;		// 100 kB maximum content size
 
@@ -503,6 +507,33 @@ const Class = {
 
 		if (!this.headers?.['x-content-type-options'])
 			this.header('X-Content-Type-Options', 'nosniff');
+
+		if (!this.headers?.['content-security-policy']) {
+			// Read UCI settings
+			let csp_mode = uci.get('uhttpd', 'main', 'csp_mode') || 'none';
+			
+			// Define preset policies
+			let presets = {
+                // TODO: strict: default-src: none
+				'strict': 'default-src \'none\'; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' \'trusted-types-eval\'; img-src \'self\' data: blob:; style-src \'self\' \'unsafe-inline\'; connect-src \'self\' https://sysupgrade.openwrt.org;',
+				'permissive': 'default-src \'self\' https://*; script-src \'self\' \'unsafe-inline\' \'unsafe-eval\' \'trusted-types-eval\'; img-src \'self\' data: blob: https://*; style-src \'self\' \'unsafe-inline\' https://*;',
+			};
+			
+			let csp_policy = null;
+			
+			if (csp_mode == 'custom') {
+				// For custom mode, read the user's policy
+				csp_policy = uci.get('uhttpd', 'main', 'csp_policy');
+			}
+			else if (csp_mode in presets) {
+				// For permissive/strict, use preset
+				csp_policy = presets[csp_mode];
+			}
+			// else mode is 'none' - don't set CSP header
+			
+			if (csp_policy)
+				this.header('Content-Security-Policy', csp_policy);
+		}
 
 		this.output('Status: ');
 		this.output(this.status_code);
