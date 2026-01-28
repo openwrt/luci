@@ -317,6 +317,7 @@ return view.extend({
 				E('th', { 'class': 'th' }, _('Date')),
 				E('th', { 'class': 'th' }, _('Time')),
 				E('th', { 'class': 'th' }, _('Client')),
+				E('th', { 'class': 'th' }, _('Interface')),
 				E('th', { 'class': 'th' }, _('Type')),
 				E('th', { 'class': 'th' }, _('Domain')),
 				E('th', { 'class': 'th' }, _('Answer')),
@@ -352,6 +353,7 @@ return view.extend({
 					content[0].requests[i].date,
 					content[0].requests[i].time,
 					content[0].requests[i].client,
+					content[0].requests[i].iface,
 					content[0].requests[i].type,
 					'<a href="https://ip-api.com/#' + encodeURIComponent(content[0].requests[i].domain) + '" target="_blank" rel="noreferrer noopener" title="Domain Lookup">' + content[0].requests[i].domain + '</a>',
 					content[0].requests[i].rc,
@@ -514,7 +516,6 @@ return view.extend({
 			window.addEventListener('resize', function() {
 				drawPie(rot);
 			});
-
 			const tooltip = document.getElementById('dnsPieTooltip');
 			canvas.addEventListener('mousemove', function(ev) {
 				const rect = canvas.getBoundingClientRect();
