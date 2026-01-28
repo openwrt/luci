@@ -6,6 +6,7 @@
 "use strict";
 "require form";
 "require view";
+"require ui";
 "require adblock-fast.status as adb";
 
 var pkg = adb.pkg;
@@ -50,45 +51,45 @@ return view.extend({
 		s1.tab("tab_advanced", _("Advanced Configuration"));
 
 		var text = _(
-			"DNS resolution option, see the %sREADME%s for details."
+			"DNS resolution option, see the %sREADME%s for details.",
 		).format(
 			'<a href="' + pkg.URL + '#dns-resolver-option" target="_blank">',
-			"</a>"
+			"</a>",
 		);
 		if (!reply.platform.dnsmasq_installed) {
 			text +=
 				"<br />" +
 				_("Please note that %s is not supported on this system.").format(
-					"<i>dnsmasq.addnhosts</i>"
+					"<i>dnsmasq.addnhosts</i>",
 				);
 			text +=
 				"<br />" +
 				_("Please note that %s is not supported on this system.").format(
-					"<i>dnsmasq.conf</i>"
+					"<i>dnsmasq.conf</i>",
 				);
 			text +=
 				"<br />" +
 				_("Please note that %s is not supported on this system.").format(
-					"<i>dnsmasq.ipset</i>"
+					"<i>dnsmasq.ipset</i>",
 				);
 			text +=
 				"<br />" +
 				_("Please note that %s is not supported on this system.").format(
-					"<i>dnsmasq.servers</i>"
+					"<i>dnsmasq.servers</i>",
 				);
 		} else {
 			if (!reply.platform.dnsmasq_ipset_support) {
 				text +=
 					"<br />" +
 					_("Please note that %s is not supported on this system.").format(
-						"<i>dnsmasq.ipset</i>"
+						"<i>dnsmasq.ipset</i>",
 					);
 			}
 			if (!reply.platform.dnsmasq_nftset_support) {
 				text +=
 					"<br />" +
 					_("Please note that %s is not supported on this system.").format(
-						"<i>dnsmasq.nftset</i>"
+						"<i>dnsmasq.nftset</i>",
 					);
 			}
 		}
@@ -97,21 +98,21 @@ return view.extend({
 				text +
 				"<br />" +
 				_("Please note that %s is not supported on this system.").format(
-					"<i>smartdns.domainset</i>"
+					"<i>smartdns.domainset</i>",
 				);
 		} else {
 			if (!reply.platform.smartdns_ipset_support) {
 				text +=
 					"<br />" +
 					_("Please note that %s is not supported on this system.").format(
-						"<i>smartdns.ipset</i>"
+						"<i>smartdns.ipset</i>",
 					);
 			}
 			if (!reply.platform.smartdns_nftset_support) {
 				text +=
 					"<br />" +
 					_("Please note that %s is not supported on this system.").format(
-						"<i>smartdns.nftset</i>"
+						"<i>smartdns.nftset</i>",
 					);
 			}
 		}
@@ -120,7 +121,7 @@ return view.extend({
 				text +
 				"<br />" +
 				_("Please note that %s is not supported on this system.").format(
-					"<i>unbound.adb_list</i>"
+					"<i>unbound.adb_list</i>",
 				);
 		}
 
@@ -129,7 +130,7 @@ return view.extend({
 			form.ListValue,
 			"dns",
 			_("DNS Service"),
-			text
+			text,
 		);
 		if (reply.platform.dnsmasq_installed) {
 			o.value("dnsmasq.addnhosts", _("dnsmasq additional hosts"));
@@ -162,11 +163,11 @@ return view.extend({
 			"dnsmasq_config_file_url",
 			_("Dnsmasq Config File URL"),
 			_(
-				"URL to the external dnsmasq config file, see the %sREADME%s for details."
+				"URL to the external dnsmasq config file, see the %sREADME%s for details.",
 			).format(
 				'<a href="' + pkg.URL + '#dnsmasq_config_file_url" target="_blank">',
-				"</a>"
-			)
+				"</a>",
+			),
 		);
 		o.depends("dns", "dnsmasq.conf");
 
@@ -177,11 +178,11 @@ return view.extend({
 				"dnsmasq_instance_option",
 				_("Use ad-blocking on the dnsmasq instance(s)"),
 				_(
-					"You can limit the ad-blocking to the specific dnsmasq instance(s) (%smore information%s)."
+					"You can limit the ad-blocking to the specific dnsmasq instance(s) (%smore information%s).",
 				).format(
 					'<a href="' + pkg.URL + "#dnsmasq_instance" + '" target="_blank">',
-					"</a>"
-				)
+					"</a>",
+				),
 			);
 			o.value("*", _("Ad-blocking on all instances"));
 			o.value("+", _("Ad-blocking on select instances"));
@@ -194,7 +195,7 @@ return view.extend({
 				let val = this.map.data.get(
 					this.map.config,
 					section_id,
-					"dnsmasq_instance"
+					"dnsmasq_instance",
 				);
 				if (val && val[0]) {
 					switch (val[0]) {
@@ -214,22 +215,22 @@ return view.extend({
 				"tab_basic",
 				form.MultiValue,
 				"dnsmasq_instance",
-				_("Pick the dnsmasq instance(s) for ad-blocking")
+				_("Pick the dnsmasq instance(s) for ad-blocking"),
 			);
-			Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(function (
-				element
-			) {
-				var description;
-				var key;
-				if (element[".name"] === L.uci.resolveSID("dhcp", element[".name"])) {
-					key = element[".index"];
-					description = "dnsmasq[" + element[".index"] + "]";
-				} else {
-					key = element[".name"];
-					description = element[".name"];
-				}
-				o.value(key, description);
-			});
+			Object.values(L.uci.sections("dhcp", "dnsmasq")).forEach(
+				function (element) {
+					var description;
+					var key;
+					if (element[".name"] === L.uci.resolveSID("dhcp", element[".name"])) {
+						key = element[".index"];
+						description = "dnsmasq[" + element[".index"] + "]";
+					} else {
+						key = element[".name"];
+						description = element[".name"];
+					}
+					o.value(key, description);
+				},
+			);
 			o.depends("dnsmasq_instance_option", "+");
 			o.retain = true;
 		}
@@ -241,11 +242,11 @@ return view.extend({
 				"smartdns_instance_option",
 				_("Use ad-blocking on the SmartDNS instance(s)"),
 				_(
-					"You can limit the ad-blocking to the specific SmartDNS instance(s) (%smore information%s)."
+					"You can limit the ad-blocking to the specific SmartDNS instance(s) (%smore information%s).",
 				).format(
 					'<a href="' + pkg.URL + "#smartdns_instance" + '" target="_blank">',
-					"</a>"
-				)
+					"</a>",
+				),
 			);
 			o.value("*", _("Ad-blocking on all instances"));
 			o.value("+", _("Ad-blocking on select instances"));
@@ -257,7 +258,7 @@ return view.extend({
 				let val = this.map.data.get(
 					this.map.config,
 					section_id,
-					"smartdns_instance"
+					"smartdns_instance",
 				);
 				if (val && val[0]) {
 					switch (val[0]) {
@@ -277,24 +278,24 @@ return view.extend({
 				"tab_basic",
 				form.MultiValue,
 				"smartdns_instance",
-				_("Pick the SmartDNS instance(s) for ad-blocking")
+				_("Pick the SmartDNS instance(s) for ad-blocking"),
 			);
-			Object.values(L.uci.sections("smartdns", "smartdns")).forEach(function (
-				element
-			) {
-				var description;
-				var key;
-				if (
-					element[".name"] === L.uci.resolveSID("smartdns", element[".name"])
-				) {
-					key = element[".index"];
-					description = "smartdns[" + element[".index"] + "]";
-				} else {
-					key = element[".name"];
-					description = element[".name"];
-				}
-				o.value(key, description);
-			});
+			Object.values(L.uci.sections("smartdns", "smartdns")).forEach(
+				function (element) {
+					var description;
+					var key;
+					if (
+						element[".name"] === L.uci.resolveSID("smartdns", element[".name"])
+					) {
+						key = element[".index"];
+						description = "smartdns[" + element[".index"] + "]";
+					} else {
+						key = element[".name"];
+						description = element[".name"];
+					}
+					o.value(key, description);
+				},
+			);
 			o.depends("smartdns_instance_option", "+");
 			o.retain = true;
 		}
@@ -303,7 +304,7 @@ return view.extend({
 			form.ListValue,
 			"force_dns",
 			_("Force Router DNS"),
-			_("Forces Router DNS use on local devices, also known as DNS Hijacking.")
+			_("Forces Router DNS use on local devices, also known as DNS Hijacking."),
 		);
 		o.value("0", _("Let local devices use their own DNS servers if set"));
 		o.value("1", _("Force Router DNS server to all local devices"));
@@ -314,7 +315,7 @@ return view.extend({
 			form.ListValue,
 			"verbosity",
 			_("Output Verbosity Setting"),
-			_("Controls system log and console output verbosity.")
+			_("Controls system log and console output verbosity."),
 		);
 		o.value("0", _("Suppress output"));
 		o.value("1", _("Some output"));
@@ -328,8 +329,8 @@ return view.extend({
 				"led",
 				_("LED to indicate status"),
 				_(
-					"Pick the LED not already used in %sSystem LED Configuration%s."
-				).format('<a href="' + L.url("admin", "system", "leds") + '">', "</a>")
+					"Pick the LED not already used in %sSystem LED Configuration%s.",
+				).format('<a href="' + L.url("admin", "system", "leds") + '">', "</a>"),
 			);
 			o.value("", _("none"));
 			reply.platform.leds.forEach((element) => {
@@ -343,7 +344,7 @@ return view.extend({
 			form.ListValue,
 			"config_update_enabled",
 			_("Automatic Config Update"),
-			_("Perform config update before downloading the block/allow-lists.")
+			_("Perform config update before downloading the block/allow-lists."),
 		);
 		o.value("0", _("Disable"));
 		o.value("1", _("Enable"));
@@ -352,9 +353,124 @@ return view.extend({
 		o = s1.taboption(
 			"tab_advanced",
 			form.ListValue,
+			"auto_update_enabled",
+			_("Automatic List Update"),
+			_("Enable scheduled list redownloads via /etc/init.d/adblock-fast dl."),
+		);
+		o.value("0", _("Disable"));
+		o.value("1", _("Enable"));
+		o.default = "0";
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
+			"auto_update_mode",
+			_("Schedule Type"),
+		);
+		o.description = _("Select how often the update should run.");
+		o.value("daily", _("Daily"));
+		o.value("weekly", _("Weekly"));
+		o.value("monthly", _("Monthly"));
+		o.value("every_n_days", _("Every N days"));
+		o.value("every_n_hours", _("Every N hours"));
+		o.default = "daily";
+		o.depends("auto_update_enabled", "1");
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
+			"auto_update_hour",
+			_("Update Hour"),
+			_("Hour of day to run the update (0-23)."),
+		);
+		for (var i = 0; i < 24; i++) {
+			var hourLabel = i < 10 ? "0" + i : "" + i;
+			o.value(String(i), hourLabel);
+		}
+		o.default = "4";
+		o.depends({ auto_update_enabled: "1", auto_update_mode: "daily" });
+		o.depends({ auto_update_enabled: "1", auto_update_mode: "weekly" });
+		o.depends({ auto_update_enabled: "1", auto_update_mode: "monthly" });
+		o.depends({ auto_update_enabled: "1", auto_update_mode: "every_n_days" });
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
+			"auto_update_minute",
+			_("Update Minute"),
+			_(
+				"Minute of hour to run the update (0-59). In 'Every N hours' mode, updates run at the selected minute within each interval.",
+			),
+		);
+		for (var i = 0; i < 60; i++) {
+			var minuteLabel = i < 10 ? "0" + i : "" + i;
+			o.value(String(i), minuteLabel);
+		}
+		o.default = "0";
+		o.depends("auto_update_enabled", "1");
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
+			"auto_update_weekday",
+			_("Day of Week"),
+			_("Run on the selected weekday."),
+		);
+		o.value("0", _("Sunday"));
+		o.value("1", _("Monday"));
+		o.value("2", _("Tuesday"));
+		o.value("3", _("Wednesday"));
+		o.value("4", _("Thursday"));
+		o.value("5", _("Friday"));
+		o.value("6", _("Saturday"));
+		o.default = "0";
+		o.depends({ auto_update_enabled: "1", auto_update_mode: "weekly" });
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
+			"auto_update_monthday",
+			_("Day of Month"),
+			_("Run on the selected day of month."),
+		);
+		for (var i = 1; i <= 31; i++) {
+			o.value(String(i), String(i));
+		}
+		o.default = "1";
+		o.depends({ auto_update_enabled: "1", auto_update_mode: "monthly" });
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
+			"auto_update_every_ndays",
+			_("Every N days"),
+			_("Run once every N days."),
+		);
+		for (var i = 1; i <= 31; i++) {
+			o.value(String(i), String(i));
+		}
+		o.default = "3";
+		o.depends({ auto_update_enabled: "1", auto_update_mode: "every_n_days" });
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
+			"auto_update_every_nhours",
+			_("Every N hours"),
+			_("Run once every N hours."),
+		);
+		for (var i = 1; i <= 23; i++) {
+			o.value(String(i), String(i));
+		}
+		o.default = "6";
+		o.depends({ auto_update_enabled: "1", auto_update_mode: "every_n_hours" });
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
 			"ipv6_enabled",
 			_("IPv6 Support"),
-			_("Add IPv6 entries to block-list.")
+			_("Add IPv6 entries to block-list."),
 		);
 		o.value("", _("Do not add IPv6 entries"));
 		o.value("1", _("Add IPv6 entries"));
@@ -369,7 +485,7 @@ return view.extend({
 			form.Value,
 			"download_timeout",
 			_("Download time-out (in seconds)"),
-			_("Stop the download if it is stalled for set number of seconds.")
+			_("Stop the download if it is stalled for set number of seconds."),
 		);
 		o.default = "20";
 		o.datatype = "range(1,60)";
@@ -380,8 +496,8 @@ return view.extend({
 			"curl_max_file_size",
 			_("Curl maximum file size (in bytes)"),
 			_(
-				"If curl is installed and detected, it would not download files bigger than this."
-			)
+				"If curl is installed and detected, it would not download files bigger than this.",
+			),
 		);
 		o.default = "";
 		o.datatype = "uinteger";
@@ -393,8 +509,8 @@ return view.extend({
 			"curl_retry",
 			_("Curl download retry"),
 			_(
-				"If curl is installed and detected, it would retry download this many times on timeout/fail."
-			)
+				"If curl is installed and detected, it would retry download this many times on timeout/fail.",
+			),
 		);
 		o.default = "3";
 		o.datatype = "range(0,30)";
@@ -405,8 +521,8 @@ return view.extend({
 			"parallel_downloads",
 			_("Simultaneous processing"),
 			_(
-				"Launch all lists downloads and processing simultaneously, reducing service start time."
-			)
+				"Launch all lists downloads and processing simultaneously, reducing service start time.",
+			),
 		);
 		o.value("0", _("Do not use simultaneous processing"));
 		o.value("1", _("Use simultaneous processing"));
@@ -418,8 +534,8 @@ return view.extend({
 			"compressed_cache",
 			_("Store compressed cache file on router"),
 			_(
-				"Attempt to create a compressed cache of block-list in the persistent memory."
-			)
+				"Attempt to create a compressed cache of block-list in the persistent memory.",
+			),
 		);
 		o.value("0", _("Do not store compressed cache"));
 		o.value("1", _("Store compressed cache"));
@@ -431,8 +547,8 @@ return view.extend({
 			"compressed_cache_dir",
 			_("Directory for compressed cache file"),
 			_(
-				"Directory for compressed cache file of block-list in the persistent memory."
-			)
+				"Directory for compressed cache file of block-list in the persistent memory.",
+			),
 		);
 		o.datatype = "string";
 		o.rmempty = true;
@@ -443,9 +559,35 @@ return view.extend({
 		o = s1.taboption(
 			"tab_advanced",
 			form.ListValue,
+			"dnsmasq_sanity_check",
+			_("Enable dnsmasq sanity check"),
+			_(
+				"Enable sanity check for dnsmasq block-list processing to detect and report issues.",
+			),
+		);
+		o.value("0", _("Disable"));
+		o.value("1", _("Enable"));
+		o.default = "1";
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
+			"dnsmasq_validity_check",
+			_("Enable dnsmasq domain validation"),
+			_(
+				"Enable RFC 1123 compliant domain validation for dnsmasq block-lists to remove invalid entries.",
+			),
+		);
+		o.value("0", _("Disable"));
+		o.value("1", _("Enable"));
+		o.default = "0";
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.ListValue,
 			"debug",
 			_("Enable Debugging"),
-			_("Enables debug output to /tmp/adblock-fast.log.")
+			_("Enables debug output to /tmp/adblock-fast.log."),
 		);
 		o.value("0", _("Disable Debugging"));
 		o.value("1", _("Enable Debugging"));
@@ -455,7 +597,7 @@ return view.extend({
 			form.NamedSection,
 			"config",
 			"adblock-fast",
-			_("AdBlock-Fast - Allowed and Blocked Domains")
+			_("AdBlock-Fast - Allowed and Blocked Domains"),
 		);
 		o.addremove = true;
 		o.rmempty = true;
@@ -464,7 +606,7 @@ return view.extend({
 			form.DynamicList,
 			"allowed_domain",
 			_("Allowed Domains"),
-			_("Individual domains to be allowed.")
+			_("Individual domains to be allowed."),
 		);
 		o.addremove = true;
 
@@ -472,7 +614,7 @@ return view.extend({
 			form.DynamicList,
 			"blocked_domain",
 			_("Blocked Domains"),
-			_("Individual domains to be blocked.")
+			_("Individual domains to be blocked."),
 		);
 		o.addremove = true;
 
@@ -480,7 +622,7 @@ return view.extend({
 			form.GridSection,
 			"file_url",
 			_("AdBlock-Fast - Allowed and Blocked Lists URLs"),
-			_("URLs to file(s) containing lists to be allowed or blocked.")
+			_("URLs to file(s) containing lists to be allowed or blocked."),
 		);
 		s3.rowcolors = true;
 		s3.sortable = true;
@@ -531,5 +673,28 @@ return view.extend({
 		o.optional = false;
 
 		return Promise.all([status.render(), m.render()]);
+	},
+
+	handleSave: function (ev) {
+		return this.super("handleSave", [ev]);
+	},
+
+	handleSaveApply: function (ev, mode) {
+		return this.super("handleSave", [ev]).then(function () {
+			var onApplied = function () {
+				L.resolveDefault(adb.syncCron(pkg.Name, "apply"), {
+					result: false,
+				}).then(function (result) {
+					if (!result || result.result === false) {
+						ui.addNotification(
+							null,
+							E("p", {}, _("Failed to update cron schedule.")),
+						);
+					}
+				});
+			};
+			document.addEventListener("uci-applied", onApplied, { once: true });
+			ui.changes.apply(mode == "0");
+		});
 	},
 });
