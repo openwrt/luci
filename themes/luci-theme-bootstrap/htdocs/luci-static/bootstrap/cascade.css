@@ -317,7 +317,7 @@ a:hover {
 }
 
 .nowrap:not(span) {
-/*	Sometimes you need to wrap: badges on narrow screens look weird 
+/*	Sometimes you need to wrap: badges on narrow screens look weird
 	and nowrap defeats other width constraints, so exclude span */
 	white-space: nowrap;
 }
@@ -653,7 +653,7 @@ select,
 }
 
 /* indication line for drag-and-drop in UIDynamicList*/
-.cbi-dynlist > .item.drag-over { 
+.cbi-dynlist > .item.drag-over {
 	border-top: 1px solid var(--text-color-highest);
 }
 
@@ -2212,6 +2212,39 @@ th[data-sort-direction="desc"]::after { content: "\a0\25bc"; }
 	line-height: 1.2em;
 }
 
+@media screen and (min-device-width: 800px) {
+	body[data-page="admin-network-wireless"] .td[data-name="_badge"] {
+		width: 1%;
+	}
+
+	body[data-page="admin-network-wireless"] .ifacebadge {
+		align-items: center;
+		padding: 5px;
+		text-align: left;
+	}
+
+	body[data-page="admin-network-wireless"] .tr[data-sid^="radio"] .td[data-name="_badge"] .ifacebadge {
+		min-width: 170px;
+	}
+
+	body[data-page="admin-network-wireless"] .tr:not([data-sid^="radio"]) .td[data-name="_badge"] div.center {
+		align-items: center;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	body[data-page="admin-network-wireless"] .tr:not([data-sid^="radio"]) .td[data-name="_badge"] div.center:before {
+		color: #999;
+		content: '\21B3';
+		font-size: 1.2em;
+		margin-right: 10px;
+	}
+
+	body[data-page="admin-network-wireless"] .tr:not([data-sid^="radio"]) .td[data-name="_badge"] .ifacebadge {
+		min-width: 130px;
+	}
+}
+
 .ifacebadge img {
 	width: 32px;
 	height: 32px;
@@ -2320,7 +2353,7 @@ div.cbi-value var,
 }
 
 .cbi-value-first-field {
-	font-weight: bold;	
+	font-weight: bold;
 }
 
 div.cbi-value var[data-tooltip],
