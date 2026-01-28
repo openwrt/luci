@@ -2615,15 +2615,11 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 				'id': 'cbi-%s-%s'.format(config_name, cfgsections[i]),
 				'class': 'tr cbi-section-table-row',
 				'data-sid': cfgsections[i],
-				'draggable': (drag_sort || touch_sort) ? true : null,
-				'mousedown': drag_sort ? L.bind(this.handleDragInit, this) : null,
-				'dragstart': drag_sort ? L.bind(this.handleDragStart, this) : null,
 				'dragover': drag_sort ? L.bind(this.handleDragOver, this) : null,
 				'dragenter': drag_sort ? L.bind(this.handleDragEnter, this) : null,
 				'dragleave': drag_sort ? L.bind(this.handleDragLeave, this) : null,
 				'dragend': drag_sort ? L.bind(this.handleDragEnd, this) : null,
 				'drop': drag_sort ? L.bind(this.handleDrop, this) : null,
-				'touchmove': touch_sort ? L.bind(this.handleTouchMove, this) : null,
 				'touchend': touch_sort ? L.bind(this.handleTouchEnd, this) : null,
 				'data-title': (sectionname && (!this.anonymous || this.sectiontitle)) ? sectionname : null,
 				'data-section-id': cfgsections[i]
@@ -2750,7 +2746,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	},
 
 	/** @private */
-	renderRowActions(section_id, more_label) {
+	renderRowActions(section_id, more_label, trEl) {
 		const config_name = this.uciconfig ?? this.map.config;
 
 		if (!this.sortable && !this.extedit && !this.addremove && !more_label && !this.cloneable)
@@ -2761,14 +2757,27 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		}, E('div'));
 
 		if (this.sortable) {
-			dom.append(tdEl.lastElementChild, [
-				E('button', {
-					'title': _('Drag to reorder'),
-					'class': 'cbi-button drag-handle center',
-					'style': 'cursor:move',
-					'disabled': this.map.readonly || null
-				}, '☰')
-			]);
+			const touch_sort = ('ontouchstart' in window);
+			const dragHandleProps = {
+				'title': _('Drag to reorder'),
+				'class': 'cbi-button drag-handle center',
+				'style': 'cursor:move; user-select:none; -webkit-user-select:none; display:inline-block;',
+				'draggable': !touch_sort,
+				'dragstart': !touch_sort ? L.bind(function(ev) {
+					this.handleDragStart(ev, trEl);
+				}, this) : null,
+				'dragend': !touch_sort ? L.bind(function(ev) {
+					this.handleDragEnd(ev, trEl);
+				}, this) : null,
+				'touchmove': touch_sort ? L.bind(function(ev) {
+					this.handleTouchMove(ev);
+				}, this) : null,
+				'touchend': touch_sort ? L.bind(function(ev) {
+					this.handleTouchEnd(ev);
+				}, this) : null
+			};
+			const dragHandle = E('div', dragHandleProps, '☰');
+			dom.append(tdEl.lastElementChild, [ dragHandle ]);
 		}
 
 		if (this.extedit) {
@@ -2835,13 +2844,15 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	},
 
 	/** @private */
-	handleDragStart(ev) {
-		if (!scope.dragState?.node.classList.contains('drag-handle')) {
+	handleDragStart(ev, trEl) {
+		// Only allow drag from the handle
+		if (!ev.target || !ev.target.classList || !ev.target.classList.contains('drag-handle')) {
 			scope.dragState = null;
 			return false;
 		}
-
-		scope.dragState.node = dom.parent(scope.dragState.node, '.tr');
+		// Set the row as the drag source
+		scope.dragState = scope.dragState || {};
+		scope.dragState.node = trEl || dom.parent(ev.target, '.tr');
 		ev.dataTransfer.setData('text', 'drag');
 		ev.target.style.opacity = 0.4;
 	},
@@ -2881,9 +2892,19 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	},
 
 	/** @private */
-	handleDragEnd(ev) {
-		const n = ev.target;
-
+	handleDragEnd(ev, trEl) {
+		let n;
+		if (trEl) {
+			n = trEl;
+		} else if (ev.target && typeof ev.target.closest === 'function') {
+			n = ev.target.closest('tr');
+		} else {
+			// Fall-back: skip if no valid row
+			return;
+		}
+		if (!n) return;
+		// Reset drag handle visual state
+		n.querySelector('.drag-handle').style.opacity = '';
 		n.style.opacity = '';
 		n.classList.add('flash');
 		n.parentNode.querySelectorAll('.drag-over-above, .drag-over-below')
@@ -3014,7 +3035,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 		dragHandle.style.top = `${touchLoc.pageY - (parseInt(dragHandle.style.height) / 2)}px`;
 
-		rowElem.parentNode.querySelectorAll('[draggable]').forEach((tr, i, trs) => {
+		rowElem.parentNode.querySelectorAll('.cbi-section-table-row').forEach((tr, i, trs) => {
 			const trRect = tr.getBoundingClientRect();
 			const yTop = trRect.top + window.scrollY;
 			const yBottom = trRect.bottom + window.scrollY;
@@ -3049,6 +3070,9 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 		if (!dragHandle)
 			return;
+
+		// Reset drag handle visual state
+		dragHandle.style.opacity = '';
 
 		if (targetElem) {
 			const isBelow = targetElem.classList.contains('drag-over-below');
