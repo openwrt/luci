@@ -1879,7 +1879,7 @@ return view.extend({
 
 					o = ss.taboption('roaming', form.Value, 'mobility_domain', _('Mobility Domain'), _('4-character hexadecimal ID'));
 					o.depends({ ieee80211r: '1' });
-					o.placeholder = '4f57';
+					o.placeholder = _('automatically derived from SSID');
 					o.datatype = 'and(hexstring,length(4))';
 					o.rmempty = true;
 
@@ -1908,7 +1908,7 @@ return view.extend({
 
 					o = ss.taboption('roaming', form.Value, 'r1_key_holder', _('R1 Key Holder'), _('6-octet identifier as a hex string - no colons'));
 					o.depends({ ieee80211r: '1' });
-					o.placeholder = '00004f577274';
+					o.placeholder = _('automatically derived from Mobility Domain and PSK');
 					o.datatype = 'and(hexstring,length(12))';
 					o.rmempty = true;
 
