@@ -60,7 +60,9 @@
 		"description": "Grant access to Plugin management",
 		"read": {
 			"file": {
-				"/usr/share/ucode/luci/*": [ "read" ]
+				"/usr/share/ucode/luci/*": [ "read" ],
+				"/www/luci-static/resources/view/plugins": [ "list" ],
+				"/www/luci-static/resources/view/plugins/*": [ "read" ]
 			},
 			"uci": [ "luci_plugins" ]
 		}
