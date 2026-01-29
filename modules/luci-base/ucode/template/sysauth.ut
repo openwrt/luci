@@ -7,9 +7,19 @@
 {% include('header') %}
 
 <form method="post">
-	{% if (fuser): %}
+	{% if (fuser && !auth_plugin): %}
 		<div class="alert-message warning">
 			<p>{{ _('Invalid username and/or password! Please try again.') }}</p>
+		</div>
+	{% endif %}
+
+	{% if (auth_failed): %}
+		<div class="alert-message warning">
+			<p>{{ auth_message ?? _('Authentication failed. Please try again.') }}</p>
+		</div>
+	{% elif (auth_message && !auth_failed): %}
+		<div class="alert-message">
+			<p>{{ auth_message }}</p>
 		</div>
 	{% endif %}
 
@@ -31,6 +41,25 @@
 					<input class="cbi-input-text" type="password" name="luci_password" />
 				</div>
 			</div>
+			{% if (auth_fields): %}
+				{% for (let field in auth_fields): %}
+					<div class="cbi-value">
+						<label class="cbi-value-title">{{ _(field.label ?? field.name) }}</label>
+						<div class="cbi-value-field">
+							<input class="cbi-input-text"
+								type="{{ field.type ?? 'text' }}"
+								name="{{ field.name }}"
+								{% if (field.placeholder): %}placeholder="{{ field.placeholder }}"{% endif %}
+								{% if (field.inputmode): %}inputmode="{{ field.inputmode }}"{% endif %}
+								{% if (field.pattern): %}pattern="{{ field.pattern }}"{% endif %}
+								{% if (field.maxlength): %}maxlength="{{ field.maxlength }}"{% endif %}
+								{% if (field.autocomplete): %}autocomplete="{{ field.autocomplete }}"{% endif %}
+								{% if (field.required): %}required{% endif %}
+							/>
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
 		</div></div>
 	</div>
 
