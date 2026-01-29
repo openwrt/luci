@@ -22,6 +22,10 @@ function isFileInSafeList(file){
 	for (let name of safeList) {
 		if (file === name)
 			return true;
+		if (file.toLocaleLowerCase().replace(/^openwrt-[0-9]+\.[0-9]+/i, '') !== file)
+			return true;
+		if (file.toLocaleLowerCase().replace(/^openwrt-snapshots/i, '') !== file)
+			return true;
 	}
 	return false;
 }
