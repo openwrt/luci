@@ -11,7 +11,7 @@ var pkg = {
 		return "pbr";
 	},
 	get LuciCompat() {
-		return 20;
+		return 24;
 	},
 	get ReadmeCompat() {
 		return "1.2.1";
@@ -30,7 +30,7 @@ var pkg = {
 			pkg.Name +
 			"/" +
 			(pkg.ReadmeCompat ? pkg.ReadmeCompat + "/" : "") +
-			"#Donate"
+			"#donate"
 		);
 	},
 	isVersionMismatch: function (luci, pkg, rpcd) {
@@ -93,10 +93,10 @@ var getPlatformSupport = rpc.declare({
 	params: ["name"],
 });
 
-var getUbusInfo = rpc.declare({
-	object: "luci." + pkg.Name,
-	method: "getUbusInfo",
-	params: ["name"],
+var getServiceInfo = rpc.declare({
+	object: "service",
+	method: "list",
+	params: ["name", "verbose"],
 });
 
 var _setInitAction = rpc.declare({
@@ -128,7 +128,7 @@ var RPC = {
 		_setInitAction(name, action).then(
 			function (result) {
 				this.emit("setInitAction", result);
-			}.bind(this)
+			}.bind(this),
 		);
 	},
 };
@@ -142,29 +142,32 @@ var pollServiceStatus = function (callback) {
 		attempt++;
 
 		// Use the RPC function directly from the module scope
-		L.resolveDefault(getInitStatus(pkg.Name), {}).then(function (statusData) {
-			var currentStatus = statusData && statusData[pkg.Name] && statusData[pkg.Name].running;
+		L.resolveDefault(getInitStatus(pkg.Name), {})
+			.then(function (statusData) {
+				var currentStatus =
+					statusData && statusData[pkg.Name] && statusData[pkg.Name].running;
 
-			// Check if completed or failed
-			if (currentStatus === true) {
-				callback(true, currentStatus);
-			}
-			// Check if timed out
-			else if (attempt >= maxAttempts) {
-				callback(false, 'timeout');
-			}
-			// Continue polling
-			else {
-				setTimeout(checkStatus, 1000); // Check again in 1 second
-			}
-		}).catch(function (err) {
-			// Retry on error unless timed out
-			if (attempt < maxAttempts) {
-				setTimeout(checkStatus, 1000);
-			} else {
-				callback(false, 'error');
-			}
-		});
+				// Check if completed or failed
+				if (currentStatus === true) {
+					callback(true, currentStatus);
+				}
+				// Check if timed out
+				else if (attempt >= maxAttempts) {
+					callback(false, "timeout");
+				}
+				// Continue polling
+				else {
+					setTimeout(checkStatus, 1000); // Check again in 1 second
+				}
+			})
+			.catch(function (err) {
+				// Retry on error unless timed out
+				if (attempt < maxAttempts) {
+					setTimeout(checkStatus, 1000);
+				} else {
+					callback(false, "error");
+				}
+			});
 	};
 
 	// Start polling after 2 seconds delay (give backend time to start the task)
@@ -175,7 +178,7 @@ var status = baseclass.extend({
 	render: function () {
 		return Promise.all([
 			L.resolveDefault(getInitStatus(pkg.Name), {}),
-			L.resolveDefault(getUbusInfo(pkg.Name), {}),
+			L.resolveDefault(getServiceInfo(pkg.Name, true), {}),
 		]).then(function ([initStatus, ubusInfo]) {
 			var reply = {
 				status: initStatus?.[pkg.Name] || {
@@ -200,7 +203,7 @@ var status = baseclass.extend({
 				pkg.isVersionMismatch(
 					pkg.LuciCompat,
 					reply.status.packageCompat,
-					reply.status.rpcdCompat
+					reply.status.rpcdCompat,
 				)
 			) {
 				reply.ubus.warnings.push({
@@ -210,8 +213,8 @@ var status = baseclass.extend({
 						pkg.LuciCompat,
 						reply.status.rpcdCompat,
 						'<a href="' +
-						pkg.URL +
-						'#Warning:InternalVersionMismatch" target="_blank">',
+							pkg.URL +
+							'#Warning:InternalVersionMismatch" target="_blank">',
 						"</a>",
 					],
 				});
@@ -222,7 +225,7 @@ var status = baseclass.extend({
 			var statusTitle = E(
 				"label",
 				{ class: "cbi-value-title" },
-				_("Service Status")
+				_("Service Status"),
 			);
 			if (reply.status.version) {
 				text = _("Version %s").format(reply.status.version) + " - ";
@@ -259,27 +262,28 @@ var status = baseclass.extend({
 				var gatewaysTitle = E(
 					"label",
 					{ class: "cbi-value-title" },
-					_("Service Gateways")
+					_("Service Gateways"),
 				);
 				var description =
 					_(
-						"The %s indicates default gateway. See the %sREADME%s for details."
+						"The %s indicates default gateway. See the %sREADME%s for details.",
 					).format(
 						"<strong>✓</strong>",
 						'<a href="' +
-						pkg.URL +
-						'#AWordAboutDefaultRouting" target="_blank">',
-						"</a>"
+							pkg.URL +
+							'#AWordAboutDefaultRouting" target="_blank">',
+						"</a>",
 					) +
+					"<br />" +
 					"<br />" +
 					_("Please %sdonate%s to support development of this project.").format(
 						"<a href='" + pkg.DonateURL + "' target='_blank'>",
-						"</a>"
+						"</a>",
 					);
 				var gatewaysDescr = E(
 					"div",
 					{ class: "cbi-value-description" },
-					description
+					description,
 				);
 				text = pkg.buildGatewayText(reply.ubus.gateways);
 				var gatewaysText = E("div", {}, text);
@@ -297,65 +301,68 @@ var status = baseclass.extend({
 			if (reply.ubus.warnings && reply.ubus.warnings.length) {
 				var warningTable = {
 					warningInternalVersionMismatch: _(
-						"Internal version mismatch (package: %s, luci app: %s, luci rpcd: %s), you may need to update packages or reboot the device, please check the %sREADME%s."
+						"Internal version mismatch (package: %s, luci app: %s, luci rpcd: %s), you may need to update packages or reboot the device, please check the %sREADME%s.",
 					),
 					warningResolverNotSupported: _(
-						"Resolver set (%s) is not supported on this system."
+						"Resolver set (%s) is not supported on this system.",
 					).format(L.uci.get(pkg.Name, "config", "resolver_set")),
 					warningAGHVersionTooLow: _(
-						"Installed AdGuardHome (%s) doesn't support 'ipset_file' option."
+						"Installed AdGuardHome (%s) doesn't support 'ipset_file' option.",
 					),
 					warningPolicyProcessCMD: _("%s"),
 					warningTorUnsetParams: _(
-						"Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'"
+						"Please unset 'src_addr', 'src_port' and 'dest_port' for policy '%s'",
 					),
 					warningTorUnsetProto: _(
-						"Please unset 'proto' or set 'proto' to 'all' for policy '%s'"
+						"Please unset 'proto' or set 'proto' to 'all' for policy '%s'",
 					),
 					warningTorUnsetChainIpt: _(
-						"Please unset 'chain' or set 'chain' to 'PREROUTING' for policy '%s'"
+						"Please unset 'chain' or set 'chain' to 'PREROUTING' for policy '%s'",
 					),
 					warningTorUnsetChainNft: _(
-						"Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'"
+						"Please unset 'chain' or set 'chain' to 'prerouting' for policy '%s'",
 					),
 					warningInvalidOVPNConfig: _(
-						"Invalid OpenVPN config for %s interface"
+						"Invalid OpenVPN config for %s interface",
 					),
 					warningOutdatedLuciPackage: _(
-						"The WebUI application (luci-app-pbr) is outdated, please update it"
+						"The WebUI application (luci-app-pbr) is outdated, please update it",
 					),
 					warningOutdatedPrincipalPackage: _(
-						"The principal package (pbr) is outdated, please update it"
+						"The principal package (pbr) is outdated, please update it",
 					),
 					warningBadNftCallsInUserFile: _(
-						"Incompatible nft calls detected in user include file, disabling fw4 nft file support"
+						"Incompatible nft calls detected in user include file, disabling fw4 nft file support",
 					),
 					warningDnsmasqInstanceNoConfdir: _(
-						"Dnsmasq instance (%s) targeted in settings, but it doesn't have its own confdir"
+						"Dnsmasq instance (%s) targeted in settings, but it doesn't have its own confdir",
 					),
 					warningDhcpLanForce: _(
 						_(
-							"Please set 'dhcp.%%s.force=1' to speed up service start-up %s(more info)%s"
+							"Please set 'dhcp.%%s.force=1' to speed up service start-up %s(more info)%s",
 						).format(
 							"<a href='" +
-							pkg.URL +
-							"#Warning:Pleasesetdhcp.lan.force1" +
-							"' target='_blank'>",
-							"</a>"
-						)
+								pkg.URL +
+								"#Warning:Pleasesetdhcp.lan.force1" +
+								"' target='_blank'>",
+							"</a>",
+						),
 					),
 					warningSummary: _("Warnings encountered, please check %s"),
 					warningIncompatibleDHCPOption6: _(
-						"Incompatible DHCP Option 6 for interface %s"
+						"Incompatible DHCP Option 6 for interface %s",
 					),
 					warningNetifdMissingInterfaceLocal: _(
-						"Netifd setup: option netifd_interface_local is missing, assuming '%s'"
+						"Netifd setup: option netifd_interface_local is missing, assuming '%s'",
+					),
+					warningUplinkDown: _(
+						"Uplink/WAN interface is still down, going back to boot mode",
 					),
 				};
 				var warningsTitle = E(
 					"label",
 					{ class: "cbi-value-title" },
-					_("Service Warnings")
+					_("Service Warnings"),
 				);
 				var text = "";
 				reply.ubus.warnings.forEach((element) => {
@@ -367,13 +374,13 @@ var status = baseclass.extend({
 				});
 				text += _("Warnings encountered, please check the %sREADME%s").format(
 					'<a href="' + pkg.URL + '#WarningMessagesDetails" target="_blank">',
-					"</a>!<br />"
+					"</a>!<br />",
 				);
 				var warningsText = E("div", { class: "cbi-value-description" }, text);
 				var warningsField = E(
 					"div",
 					{ class: "cbi-value-field" },
-					warningsText
+					warningsText,
 				);
 				warningsDiv = E("div", { class: "cbi-value" }, [
 					warningsTitle,
@@ -385,49 +392,52 @@ var status = baseclass.extend({
 			if (reply.ubus.errors && reply.ubus.errors.length) {
 				var errorTable = {
 					errorConfigValidation: _("Config (%s) validation failure").format(
-						"/etc/config/" + pkg.Name
+						"/etc/config/" + pkg.Name,
 					),
 					errorNoIptables: _("%s binary cannot be found").format("iptables"),
 					errorNoIpset: _(
-						"Resolver set support (%s) requires ipset, but ipset binary cannot be found"
+						"Resolver set support (%s) requires ipset, but ipset binary cannot be found",
 					).format(L.uci.get(pkg.Name, "config", "resolver_set")),
 					errorNoNft: _(
-						"Resolver set support (%s) requires nftables, but nft binary cannot be found"
+						"Resolver set support (%s) requires nftables, but nft binary cannot be found",
 					).format(L.uci.get(pkg.Name, "config", "resolver_set")),
 					errorResolverNotSupported: _(
-						"Resolver set (%s) is not supported on this system"
+						"Resolver set (%s) is not supported on this system",
 					).format(L.uci.get(pkg.Name, "config", "resolver_set")),
 					errorServiceDisabled: _(
-						"The %s service is currently disabled"
+						"The %s service is currently disabled",
 					).format(pkg.Name),
-					errorNoWanGateway: _(
-						"The %s service failed to discover WAN gateway"
+					errorNoUplinkGateway: _(
+						"The %s service failed to discover uplink gateway",
 					).format(pkg.Name),
 					errorNoUplinkInterface: _(
-						"The %s interface not found, you need to set the 'pbr.config.uplink_interface' option"
+						"The %s interface not found, you need to set the 'pbr.config.uplink_interface' option",
 					),
 					errorNoUplinkInterfaceHint: _(
-						"Refer to https://docs.openwrt.melmac.ca/pbr/#uplink_interface"
+						"Refer to %sREADME%s for details",
+					).format(
+						'<a href="' + pkg.URL + '#uplink_interface" target="_blank">',
+						"</a>!<br />",
 					),
 					errorIpsetNameTooLong: _(
-						"The ipset name '%s' is longer than allowed 31 characters"
+						"The ipset name '%s' is longer than allowed 31 characters",
 					),
 					errorNftsetNameTooLong: _(
-						"The nft set name '%s' is longer than allowed 255 characters"
+						"The nft set name '%s' is longer than allowed 255 characters",
 					),
 					errorUnexpectedExit: _(
-						"Unexpected exit or service termination: '%s'"
+						"Unexpected exit or service termination: '%s'",
 					),
 					errorPolicyNoSrcDest: _(
-						"Policy '%s' has no source/destination parameters"
+						"Policy '%s' has no source/destination parameters",
 					),
 					errorPolicyNoInterface: _("Policy '%s' has no assigned interface"),
 					errorPolicyNoDns: _("Policy '%s' has no assigned DNS"),
 					errorPolicyProcessNoInterfaceDns: _(
-						"Interface '%s' has no assigned DNS"
+						"Interface '%s' has no assigned DNS",
 					),
 					errorPolicyUnknownInterface: _(
-						"Policy '%s' has an unknown interface"
+						"Policy '%s' has an unknown interface",
 					),
 					errorPolicyProcessCMD: _("%s"),
 					errorFailedSetup: _("Failed to set up '%s'"),
@@ -436,81 +446,100 @@ var status = baseclass.extend({
 					errorUserFileSyntax: _("Syntax error in custom user file '%s'"),
 					errorUserFileRunning: _("Error running custom user file '%s'"),
 					errorUserFileNoCurl: _(
-						"Use of 'curl' is detected in custom user file '%s', but 'curl' isn't installed"
+						"Use of 'curl' is detected in custom user file '%s', but 'curl' isn't installed",
 					),
 					errorNoGateways: _("Failed to set up any gateway"),
 					errorResolver: _("Resolver '%s'"),
 					errorPolicyProcessNoIpv6: _(
-						"Skipping IPv6 policy '%s' as IPv6 support is disabled"
+						"Skipping IPv6 policy '%s' as IPv6 support is disabled",
 					),
 					errorPolicyProcessUnknownFwmark: _(
-						"Unknown packet mark for interface '%s'"
+						"Unknown packet mark for interface '%s'",
 					),
 					errorPolicyProcessMismatchFamily: _(
-						"Mismatched IP family between in policy '%s'"
+						"Mismatched IP family between in policy '%s'",
 					),
 					errorPolicyProcessUnknownProtocol: _(
-						"Unknown protocol in policy '%s'"
+						"Unknown protocol in policy '%s'",
 					),
 					errorPolicyProcessInsertionFailed: _(
-						"Insertion failed for both IPv4 and IPv6 for policy '%s'"
+						"Insertion failed for both IPv4 and IPv6 for policy '%s'",
 					),
 					errorPolicyProcessInsertionFailedIpv4: _(
-						"Insertion failed for IPv4 for policy '%s'"
+						"Insertion failed for IPv4 for policy '%s'",
 					),
 					errorPolicyProcessUnknownEntry: _("Unknown entry in policy '%s'"),
 					errorInterfaceRoutingEmptyValues: _(
-						"Received empty tid/mark or interface name when setting up routing"
+						"Received empty tid/mark or interface name when setting up routing",
+					),
+					errorInterfaceMarkOverflow: _(
+						"Interface mark for '%s' exceeds the fwmask value",
 					),
 					errorFailedToResolve: _("Failed to resolve '%s'"),
 					errorInvalidOVPNConfig: _(
-						"Invalid OpenVPN config for '%s' interface"
+						"Invalid OpenVPN config for '%s' interface",
 					),
-					errorNftFileInstall: _("Failed to install fw4 nft file '%s'"),
+					errorNftMainFileInstall: _("Failed to install fw4 nft file '%s'"),
 					errorNoDownloadWithSecureReload: _(
-						"Policy '%s' refers to URL which can't be downloaded in 'secure_reload' mode"
+						"Policy '%s' refers to URL which can't be downloaded in 'secure_reload' mode",
 					),
 					errorDownloadUrlNoHttps: _(
-						"Failed to download '%s', HTTPS is not supported"
+						"Failed to download '%s', HTTPS is not supported",
 					),
 					errorDownloadUrl: _("Failed to download '%s'"),
 					errorFileSchemaRequiresCurl: _(
-						"The file:// schema requires curl, but it's not detected on this system"
-					),
+						"The '%s' schema requires curl, but it's not detected on this system",
+					).format("file://"),
 					errorTryFailed: _("Command failed: '%s'"),
 					errorIncompatibleUserFile: _(
-						"Incompatible custom user file detected '%s'"
+						"Incompatible custom user file detected '%s'",
 					),
 					errorDefaultFw4TableMissing: _("Default fw4 table '%s' is missing"),
 					errorDefaultFw4ChainMissing: _("Default fw4 chain '%s' is missing"),
 					errorRequiredBinaryMissing: _("Required binary '%s' is missing"),
 					errorInterfaceRoutingUnknownDevType: _(
-						"Unknown IPv6 Link type for device '%s'"
+						"Unknown IPv6 Link type for device '%s'",
 					),
 					errorMktempFileCreate: _(
-						"Failed to create temporary file with mktemp mask: '%s'"
+						"Failed to create temporary file with mktemp mask: '%s'",
 					),
 					errorSummary: _("Errors encountered, please check %s"),
-					errorNetifdNftFileInstall: _(
-						"Netifd setup: failed to install fw4 netifd nft file '%s'"
+					errorNftNetifdFileInstall: _(
+						"Netifd setup: failed to install fw4 netifd nft file '%s'",
 					),
-					errorNetifdNftFileRemove: _(
-						"Netifd setup: failed to remove fw4 netifd nft file '%s'"
+					errorNftNetifdFileDelete: _(
+						"Netifd setup: failed to delete fw4 netifd nft file '%s'",
 					),
 					errorNetifdMissingOption: _(
-						"Netifd setup: required option '%s' is missing"
+						"Netifd setup: required option '%s' is missing",
 					),
 					errorNetifdInvalidGateway4: _(
-						"Netifd setup: invalid value of netifd_interface_default option '%s'"
+						"Netifd setup: invalid value of netifd_interface_default option '%s'",
 					),
 					errorNetifdInvalidGateway6: _(
-						"Netifd setup: invalid value of netifd_interface_default6 option '%s'"
+						"Netifd setup: invalid value of netifd_interface_default6 option '%s'",
+					),
+					errorUplinkDown: _(
+						"Uplink/WAN interface is still down, increase value of 'procd_boot_trigger_delay' option",
+					),
+					errorUnexpectedExit: _(
+						"Unexpected exit or service termination: '%s'",
+					),
+					errorNoDownloadWithSecureReload: _(
+						"Policy '%s' refers to URL which can't be downloaded in 'secure_reload' mode",
+					),
+					errorIncompatibleUserFile: _(
+						"Incompatible custom user file detected '%s'",
+					),
+					errorTryFailed: _("Command failed: '%s'"),
+					errorMktempFileCreate: _(
+						"Failed to create temporary file with mktemp mask: '%s'",
 					),
 				};
 				var errorsTitle = E(
 					"label",
 					{ class: "cbi-value-title" },
-					_("Service Errors")
+					_("Service Errors"),
 				);
 				var text = "";
 				reply.ubus.errors.forEach((element) => {
@@ -522,7 +551,7 @@ var status = baseclass.extend({
 				});
 				text += _("Errors encountered, please check the %sREADME%s").format(
 					'<a href="' + pkg.URL + '#ErrorMessagesDetails" target="_blank">',
-					"</a>!<br />"
+					"</a>!<br />",
 				);
 				var errorsText = E("div", { class: "cbi-value-description" }, text);
 				var errorsField = E("div", { class: "cbi-value-field" }, errorsText);
@@ -536,7 +565,7 @@ var status = baseclass.extend({
 			var btn_gap_long = E(
 				"span",
 				{},
-				"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;"
+				"&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;",
 			);
 
 			var btn_start = E(
@@ -549,13 +578,13 @@ var status = baseclass.extend({
 							E(
 								"p",
 								{ class: "spinning" },
-								_("Starting %s service").format(pkg.Name)
+								_("Starting %s service").format(pkg.Name),
 							),
 						]);
 						return RPC.setInitAction(pkg.Name, "start");
 					},
 				},
-				_("Start")
+				_("Start"),
 			);
 
 			var btn_action = E(
@@ -568,13 +597,13 @@ var status = baseclass.extend({
 							E(
 								"p",
 								{ class: "spinning" },
-								_("Restarting %s service").format(pkg.Name)
+								_("Restarting %s service").format(pkg.Name),
 							),
 						]);
 						return RPC.setInitAction(pkg.Name, "restart");
 					},
 				},
-				_("Restart")
+				_("Restart"),
 			);
 
 			var btn_stop = E(
@@ -587,13 +616,13 @@ var status = baseclass.extend({
 							E(
 								"p",
 								{ class: "spinning" },
-								_("Stopping %s service").format(pkg.Name)
+								_("Stopping %s service").format(pkg.Name),
 							),
 						]);
 						return RPC.setInitAction(pkg.Name, "stop");
 					},
 				},
-				_("Stop")
+				_("Stop"),
 			);
 
 			var btn_enable = E(
@@ -606,13 +635,13 @@ var status = baseclass.extend({
 							E(
 								"p",
 								{ class: "spinning" },
-								_("Enabling %s service").format(pkg.Name)
+								_("Enabling %s service").format(pkg.Name),
 							),
 						]);
 						return RPC.setInitAction(pkg.Name, "enable");
 					},
 				},
-				_("Enable")
+				_("Enable"),
 			);
 
 			var btn_disable = E(
@@ -625,13 +654,13 @@ var status = baseclass.extend({
 							E(
 								"p",
 								{ class: "spinning" },
-								_("Disabling %s service").format(pkg.Name)
+								_("Disabling %s service").format(pkg.Name),
 							),
 						]);
 						return RPC.setInitAction(pkg.Name, "disable");
 					},
 				},
-				_("Disable")
+				_("Disable"),
 			);
 
 			if (reply.status.enabled) {
@@ -657,7 +686,7 @@ var status = baseclass.extend({
 			var buttonsTitle = E(
 				"label",
 				{ class: "cbi-value-title" },
-				_("Service Control")
+				_("Service Control"),
 			);
 			var buttonsText = E("div", {}, [
 				btn_start,
@@ -678,7 +707,7 @@ var status = baseclass.extend({
 			var donateTitle = E(
 				"label",
 				{ class: "cbi-value-title" },
-				_("Donate to the Project")
+				_("Donate to the Project"),
 			);
 			var donateText = E(
 				"div",
@@ -688,9 +717,9 @@ var status = baseclass.extend({
 					{ class: "cbi-value-description" },
 					_("Please %sdonate%s to support development of this project.").format(
 						"<a href='" + pkg.DonateURL + "' target='_blank'>",
-						"</a>"
-					)
-				)
+						"</a>",
+					),
+				),
 			);
 
 			var donateDiv = reply.status.version
@@ -725,5 +754,4 @@ return L.Class.extend({
 	getInitStatus: getInitStatus,
 	getInterfaces: getInterfaces,
 	getPlatformSupport: getPlatformSupport,
-	getUbusInfo: getUbusInfo,
 });
