@@ -4,11 +4,13 @@
 'require ui';
 'require form';
 'require rpc';
+'require uci';
 
 var formData = {
 	password: {
 		pw1: null,
-		pw2: null
+		pw2: null,
+		external_auth: null
 	}
 };
 
@@ -20,6 +22,10 @@ var callSetPassword = rpc.declare({
 });
 
 return view.extend({
+	load: function() {
+		return uci.load('luci');
+	},
+
 	checkPassword: function(section_id, value) {
 		var strength = document.querySelector('.cbi-value-description'),
 		    strongRegex = new RegExp("^(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g"),
@@ -43,7 +49,9 @@ return view.extend({
 	render: function() {
 		var m, s, o;
 
-		m = new form.JSONMap(formData, _('Router Password'), _('Changes the administrator password for accessing the device'));
+		formData.password.external_auth = uci.get('luci', 'main', 'external_auth') || '0';
+
+		m = new form.JSONMap(formData, _('Router Password'), _('Changes the administrator password for accessing the device and configures secondary authentication.'));
 		m.readonly = !L.hasViewPermission();
 
 		s = m.section(form.NamedSection, 'password', 'password');
@@ -65,31 +73,47 @@ return view.extend({
 			return node;
 		};
 
+		o = s.option(form.Flag, 'external_auth', _('Enable external auth plugins'),
+			_('Allow third-party plugins (like 2FA) to provide additional authentication challenges.'));
+		o.enabled = '1';
+		o.disabled = '0';
+		o.default = o.disabled;
+
 		return m.render();
 	},
 
 	handleSave: function() {
 		var map = document.querySelector('.cbi-map');
+		var self = this;
 
 		return dom.callClassMethod(map, 'save').then(function() {
-			if (formData.password.pw1 == null || formData.password.pw1.length == 0)
-				return;
 
-			if (formData.password.pw1 != formData.password.pw2) {
-				ui.addNotification(null, E('p', _('Given password confirmation did not match, password not changed!')), 'danger');
-				return;
-			}
+			uci.set('luci', 'main', 'external_auth', formData.password.external_auth);
 
-			return callSetPassword('root', formData.password.pw1).then(function(success) {
-				if (success)
-					ui.addNotification(null, E('p', _('The system password has been successfully changed.')), 'info');
-				else
-					ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
+			return uci.save().then(function() {
+				return uci.commit('luci');
+			}).then(function() {
+				if (formData.password.pw1 != null && formData.password.pw1.length > 0) {
+					if (formData.password.pw1 != formData.password.pw2) {
+						ui.addNotification(null, E('p', _('Given password confirmation did not match, password not changed!')), 'danger');
+						return;
+					}
 
-				formData.password.pw1 = null;
-				formData.password.pw2 = null;
+					return callSetPassword('root', formData.password.pw1).then(function(success) {
+						if (success) {
+							ui.addNotification(null, E('p', _('Password and authentication settings have been successfully changed.')), 'info');
+						} else {
+							ui.addNotification(null, E('p', _('Failed to change the system password.')), 'danger');
+						}
 
-				dom.callClassMethod(map, 'render');
+						formData.password.pw1 = null;
+						formData.password.pw2 = null;
+						dom.callClassMethod(map, 'render');
+					});
+				} else {
+					ui.addNotification(null, E('p', _('Authentication settings have been successfully saved.')), 'info');
+					dom.callClassMethod(map, 'render');
+				}
 			});
 		});
 	},
