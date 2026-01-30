@@ -542,6 +542,10 @@ function load_auth_plugins() {
 				type(plugin.name) == 'string' &&
 				type(plugin.check) == 'function' &&
 				type(plugin.verify) == 'function') {
+				let is_disabled = uci.get('luci', 'sauth', `${plugin.name}_disabled`);
+				if (is_disabled == '1' || is_disabled === true) {
+					continue;
+				}
 				push(auth_plugins, plugin);
 			}
 		}
