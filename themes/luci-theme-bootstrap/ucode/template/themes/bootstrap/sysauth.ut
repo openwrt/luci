@@ -41,6 +41,11 @@
 						</div>
 					{% endfor %}
 				{% endif %}
+				{% if (auth_html): %}
+					<div class="cbi-value">
+						{{ auth_html }}
+					</div>
+				{% endif %}
 			</div>
 		</div>
 	</form>

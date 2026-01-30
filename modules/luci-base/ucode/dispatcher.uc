@@ -1095,6 +1095,7 @@ dispatch = function(_http, path) {
 							auth_plugin: auth_check.plugin?.name,
 							auth_fields: auth_check.fields,
 							auth_message: auth_verify.message ?? auth_check.message,
+							auth_html: auth_check.html,
 							auth_failed: plugin_auth_attempted
 						};
 
