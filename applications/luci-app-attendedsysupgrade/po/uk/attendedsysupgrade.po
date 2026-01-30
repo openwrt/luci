@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-11-09 07:24+0000\n"
+"PO-Revision-Date: 2026-01-27 05:23+0000\n"
 "Last-Translator: Максим Горпиніч <gorpinicmaksim0@gmail.com>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsattendedsysupgrade/uk/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:290
 msgid ""
@@ -17,7 +17,7 @@ msgid ""
 "below."
 msgstr "Якщо ви не знайдете там рішення, повідомте всю інформацію нижче."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:42
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:55
 msgid "A new %s version of OpenWrt is available:"
 msgstr "Доступна нова версія %s OpenWrt:"
 
@@ -29,13 +29,13 @@ msgstr "Адреса"
 msgid "Address of the sysupgrade server"
 msgstr "Адреса сервера sysupgrade"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:50
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:58
 msgid "Advanced Mode"
 msgstr "Розширений режим"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:11
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:725
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:46
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:59
 #: applications/luci-app-attendedsysupgrade/root/usr/share/luci/menu.d/luci-app-attendedsysupgrade.json:3
 msgid "Attended Sysupgrade"
 msgstr "Сервісне оновлення системи"
@@ -44,7 +44,7 @@ msgstr "Сервісне оновлення системи"
 msgid "Attendedsysupgrade Configuration."
 msgstr "Конфігурація Attendedsysupgrade."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:29
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:41
 msgid "Available"
 msgstr "В наявності"
 
@@ -69,11 +69,33 @@ msgstr "Розрахунок хешу пакета"
 msgid "Cancel"
 msgstr "Скасувати"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:45
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:58
 msgid "Check"
 msgstr "Перевірте"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:35
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:40
+msgid "Check for upgrades"
+msgstr "Перевірте наявність оновлень"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:41
+msgid "Check for upgrades whenever the Status -> Overview page is loaded."
+msgstr ""
+"Перевіряти наявність оновлень щоразу, коли завантажується сторінка Стан -> "
+"Огляд."
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:207
+msgid "Check online for firmware upgrades"
+msgstr "Перевірте онлайн наявність оновлень прошивки"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:192
+msgid ""
+"Checking for firmware upgrades requires access to several files on the "
+"downloads site, so requires internet access."
+msgstr ""
+"Для перевірки оновлень прошивки потрібен доступ до кількох файлів на сайті "
+"завантажень, тому потрібен доступ до Інтернету."
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:34
 msgid "Client"
 msgstr "Клієнт"
 
@@ -82,6 +104,7 @@ msgstr "Клієнт"
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:480
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:537
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:680
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:204
 msgid "Close"
 msgstr "Закрити"
 
@@ -102,7 +125,7 @@ msgid "Could not reach API at \"%s\". Please try again later."
 msgstr ""
 "Не вдалося отримати доступ до API на \"%s\". Будь-ласка спробуйте пізніше."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:28
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:40
 msgid "Current"
 msgstr "Поточний"
 
@@ -159,7 +182,7 @@ msgstr "Ім'я файлу"
 msgid "Filesystem"
 msgstr "Файлова система"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:18
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:30
 msgid "Firmware Version"
 msgstr "Версія мікропрограми"
 
@@ -191,15 +214,11 @@ msgstr "Встановлення..."
 msgid "Keep settings and retain the current configuration"
 msgstr "Зберегти налаштування та поточну конфігурацію"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:20
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:32
 msgid "Kernel Version"
 msgstr "Версія ядра"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:186
-msgid "Look online for upgrades upon status page load"
-msgstr "Шукайте оновлення в Інтернеті після завантаження сторінки стану"
-
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:41
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:54
 msgid "New Firmware Available"
 msgstr "Доступна нова мікропрограма"
 
@@ -211,11 +230,15 @@ msgstr "Доступне оновлення прошивки"
 msgid "No upgrade available"
 msgstr "Немає доступних оновлень"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:203
+msgid "No, disable checking"
+msgstr "Ні, вимкнути перевірку"
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:487
 msgid "Once the image is written, the system will reboot."
 msgstr "Після запису образу система перезавантажиться."
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:30
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:29
 msgid ""
 "Other ASU server instances that rebuild a requested image. Allows to compare "
 "checksums and verify that the results are the same."
@@ -271,7 +294,7 @@ msgstr "Запит образу прошивки"
 msgid "Request in build queue position %s"
 msgstr "Запит в черзі на збірку, позиція %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:19
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:31
 msgid "Revision"
 msgstr "Ревізія"
 
@@ -283,11 +306,12 @@ msgstr "SHA-256"
 msgid "Search for firmware upgrade"
 msgstr "Пошук оновлення прошивки"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:42
-msgid "Search for new sysupgrades on opening the tab"
-msgstr "Пошук нових оновлень системи при відкритті вкладки"
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:50
+msgid "Search for upgrades when opening the Attended Sysupgrade tab"
+msgstr ""
+"Пошук оновлень під час відкриття вкладки «Відстежуване оновлення системи»"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:41
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:49
 msgid "Search on opening"
 msgstr "Пошук при відкритті"
 
@@ -315,13 +339,17 @@ msgstr "Налаштування ImageBuilder"
 msgid "Setting up ImageBuilder"
 msgstr "Налаштування ImageBuilder"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:51
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/configuration.js:59
 msgid "Show advanced options like package list modification"
 msgstr "Показати розширені опції, такі як зміна списку пакетів"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:95
 msgid "Signing images"
 msgstr "Підписування зображень"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:63
+msgid "Stop showing upgrade alerts"
+msgstr "Припинити показ сповіщень про оновлення"
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:245
 msgid "Successfully created firmware image"
@@ -338,6 +366,13 @@ msgid ""
 msgstr ""
 "Сервіс attended sysupgrade дозволяє легко оновлювати ванільні та "
 "користувацькі образи прошивки."
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:195
+msgid ""
+"The check will be performed every time the Status -> Overview page is loaded."
+msgstr ""
+"Перевірка виконуватиметься щоразу, коли завантажується сторінка Стан -> "
+"Огляд."
 
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:674
 msgid "The device runs the latest firmware version %s - %s"
@@ -383,15 +418,30 @@ msgstr "Поки ви чекаєте, не вимикайте пристрій!"
 msgid "Wrong checksum"
 msgstr "Неправильна контрольна сума"
 
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:202
+msgid "Yes, enable checking"
+msgstr "Так, увімкнути перевірку"
+
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:197
+msgid ""
+"You have not yet specified a preference for this setting. Once set, this "
+"dialog will not be shown again, but you can go to System -> Attended "
+"Sysupgrade configuration to change the setting."
+msgstr ""
+"Ви ще не вказали налаштування для цього параметра. Після встановлення це "
+"діалогове вікно більше не відображатиметься, але ви можете перейти до "
+"розділу Система -> Налаштування Attended Sysupgrade, щоб змінити це "
+"налаштування."
+
 #: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/attendedsysupgrade/overview.js:602
 msgid "[installed] %s"
 msgstr "[встановлено] %s"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:47
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:60
 msgid "and"
 msgstr "І"
 
-#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:48
+#: applications/luci-app-attendedsysupgrade/htdocs/luci-static/resources/view/status/include/11_upgrades.js:61
 msgid "release notes"
 msgstr "примітки до випуску"
 

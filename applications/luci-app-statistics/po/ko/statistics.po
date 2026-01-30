@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-05-19 19:35+0200\n"
-"PO-Revision-Date: 2026-01-15 16:49+0000\n"
+"PO-Revision-Date: 2026-01-25 10:55+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/ko/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:54
 msgid "%H: Attenuation on %pi"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:363
 msgid "%H: CRC Errors on %pi"
-msgstr ""
+msgstr "%H: %pi의 CRC 오류"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:133
 msgid "%H: Data rate on %pi"
@@ -120,8 +120,8 @@ msgid ""
 "Backup and restore RRD statistics to/from non-volatile storage around "
 "shutdown, reboot, and/or sysupgrade"
 msgstr ""
-"시스템 종료, 재부팅 및/또는 시스템 업그레이드 시 비휘발성 스토리지에서/로 "
-"RRD 통계 백업 및 복원"
+"시스템 종료, 재부팅, sysupgrade 시 비휘발성 저장소에 RRD 통계 데이터 백업 및 "
+"복구"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:59
 msgid "Base Directory"
@@ -275,7 +275,7 @@ msgstr "DF 플러그인 설정"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dhcpleases.js:7
 msgid "DHCP Leases"
-msgstr "DHCP 임대"
+msgstr "DHCP 할당"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:6
 msgid "DHCP Leases Plugin Configuration"
@@ -747,7 +747,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:14
 msgid "Monitor all local listen ports"
-msgstr ""
+msgstr "전체 로컬 수신 대기 포트 모니터링"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:15
 msgid "Monitor device(s) / thermal zone(s)"
@@ -759,7 +759,7 @@ msgstr "대상 장치"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:15
 msgid "Monitor disks and partitions"
-msgstr ""
+msgstr "대상 디스크 및 파티션"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:59
 msgid "Monitor filesystem types"
@@ -781,11 +781,11 @@ msgstr "대상 인터페이스"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:15
 msgid "Monitor interrupts"
-msgstr ""
+msgstr "대상 인터럽트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:19
 msgid "Monitor local ports"
-msgstr ""
+msgstr "대상 로컬 포트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:37
 msgid "Monitor mount points"
@@ -793,11 +793,11 @@ msgstr "대상 마운트 지점"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:14
 msgid "Monitor processes"
-msgstr ""
+msgstr "대상 프로세스"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:25
 msgid "Monitor remote ports"
-msgstr ""
+msgstr "대상 원격 포트"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:41
 msgid "Monitoring %s and %s, %s %s"
@@ -805,7 +805,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:106
 msgid "Monitoring %s, %s, %s"
-msgstr "%s, %s, %s 항목 모니터링 중"
+msgstr "%s, %s, %s 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:26
 msgid "Monitoring APC UPS at host %s, port %d"
@@ -839,7 +839,7 @@ msgstr[0] "%d개 제외 모든 디스크 모니터링 중"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:33
 msgid "Monitoring all but one interface"
 msgid_plural "Monitoring all but %d interfaces"
-msgstr[0] ""
+msgstr[0] "%d개 제외 모든 인터페이스 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:56
 msgid "Monitoring all but one interrupt"
@@ -889,7 +889,7 @@ msgstr ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:44
 msgid "Monitoring one OpenVPN instance"
 msgid_plural "Monitoring %d OpenVPN instances"
-msgstr[0] ""
+msgstr[0] "OpenVPN 인스턴스 %d개 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:21
 msgid "Monitoring one UPS"
@@ -899,12 +899,12 @@ msgstr[0] "%d개의 UPS 모니터링 중"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:45
 msgid "Monitoring one disk"
 msgid_plural "Monitoring %d disks"
-msgstr[0] "%d개의 디스크 모니터링 중"
+msgstr[0] "디스크 %d개 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:48
 msgid "Monitoring one host"
 msgid_plural "Monitoring %d hosts"
-msgstr[0] ""
+msgstr[0] "호스트 %d개 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/interface.js:34
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:38
@@ -912,22 +912,22 @@ msgstr[0] ""
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:35
 msgid "Monitoring one interface"
 msgid_plural "Monitoring %d interfaces"
-msgstr[0] ""
+msgstr[0] "인터페이스 %d개 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:58
 msgid "Monitoring one interrupt"
 msgid_plural "Monitoring %d interrupts"
-msgstr[0] ""
+msgstr[0] "인터럽트 %d개 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:23
 msgid "Monitoring one process"
 msgid_plural "Monitoring %d processes"
-msgstr[0] "%d개의 프로세스 모니터링 중"
+msgstr[0] "프로세스 %d개 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:60
 msgid "Monitoring one sensor"
 msgid_plural "Monitoring %d sensors"
-msgstr[0] "%d개의 센서 모니터링 중"
+msgstr[0] "센서 %d개 모니터링 중"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/users.js:14
 msgid "Monitoring shell users count"
@@ -1895,7 +1895,7 @@ msgstr[0] "파일 시스템 종류 %d개"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:42
 msgid "one local"
 msgid_plural "%d local"
-msgstr[0] ""
+msgstr[0] "로컬 포트 %d개"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:108
 msgid "one mount"
@@ -1905,7 +1905,7 @@ msgstr[0] "마운트 지점 %d개"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
-msgstr[0] "%d개의 원격 포트"
+msgstr[0] "원격 포트 %d개"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "reduces rrd size"

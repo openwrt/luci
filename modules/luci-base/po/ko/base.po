@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-01-15 17:18+0000\n"
+"PO-Revision-Date: 2026-01-27 02:49+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/"
 ">\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n == 1 ? 0 : 1;\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:212
 msgid "!known (not known)"
@@ -31,7 +31,7 @@ msgstr "%.1f dB"
 msgid "%d Bit"
 msgstr "%d 비트"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4477
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4554
 msgid "%d invalid field(s)"
 msgstr "%d개의 잘못된 필드"
 
@@ -98,7 +98,7 @@ msgid "%s uses the default MAC address format encoding"
 msgstr "%s 은/는 기본 MAC 주소 형식 인코딩을 사용합니다"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:295
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:450
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:486
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:276
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:311
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:329
@@ -135,19 +135,19 @@ msgid "-- Additional Field --"
 msgstr "-- 추가 설정 --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:284
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3828
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4467
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:804
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:1042
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2064
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3938
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4577
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:807
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:1045
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2067
 #: modules/luci-compat/luasrc/view/cbi/header.htm:8
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:89
 msgid "-- Please choose --"
 msgstr "-- 선택하세요 --"
 
 #: modules/luci-base/htdocs/luci-static/resources/cbi.js:285
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:1043
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2065
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:1046
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2068
 #: modules/luci-compat/luasrc/view/cbi/header.htm:9
 msgid "-- custom --"
 msgstr "-- 사용자 정의 --"
@@ -562,47 +562,47 @@ msgstr "<em>추가</em>"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:93
 msgctxt "nft relational \">\" operator expression"
 msgid "<var>%s</var> greater than <strong>%s</strong>"
-msgstr "<var>%s</var>이/가 <strong>%s</strong> 초과"
+msgstr "<var>%s</var> : <strong>%s</strong> 초과"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:91
 msgctxt "nft relational \">=\" operator expression"
 msgid "<var>%s</var> greater than or equal to <strong>%s</strong>"
-msgstr "<var>%s</var>이/가 <strong>%s</strong> 이상"
+msgstr "<var>%s</var> : <strong>%s</strong> 이상"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:96
 msgctxt "nft set match expression"
 msgid "<var>%s</var> in set <strong>%s</strong>"
-msgstr "<var>%s</var> 가 집합(set) <strong>%s</strong> 안에 있음"
+msgstr "<var>%s</var> : <strong>%s</strong> 중 하나"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:89
 msgctxt "nft relational \"==\" operator expression"
 msgid "<var>%s</var> is <strong>%s</strong>"
-msgstr "<var>%s</var>이/가 <strong>%s</strong>와/과 일치"
+msgstr "<var>%s</var> : <strong>%s</strong>"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:95
 msgctxt "nft relational \"in\" operator expression"
 msgid "<var>%s</var> is one of <strong>%s</strong>"
-msgstr "<var>%s</var>이/가 <strong>%s</strong> 중 하나"
+msgstr "<var>%s</var> : <strong>%s</strong> 중 하나"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:94
 msgctxt "nft relational \"<\" operator expression"
 msgid "<var>%s</var> lower than <strong>%s</strong>"
-msgstr "<var>%s</var>이/가 <strong>%s</strong> 미만"
+msgstr "<var>%s</var> : <strong>%s</strong> 미만"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:92
 msgctxt "nft relational \"<=\" operator expression"
 msgid "<var>%s</var> lower than or equal to <strong>%s</strong>"
-msgstr "<var>%s</var>이/가 <strong>%s</strong> 이하"
+msgstr "<var>%s</var> : <strong>%s</strong> 이하"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:90
 msgctxt "nft relational \"!=\" operator expression"
 msgid "<var>%s</var> not <strong>%s</strong>"
-msgstr "<var>%s</var>이/가 <strong>%s</strong>와/과 불일치"
+msgstr "<var>%s</var> : <strong>%s</strong> 이외"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:97
 msgctxt "nft not in set match expression"
 msgid "<var>%s</var> not in set <strong>%s</strong>"
-msgstr "<var>%s</var> 가 집합 <strong>%s</strong>에 없음"
+msgstr "<var>%s</var> : <strong>%s</strong> 이외"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:86
 #, fuzzy
@@ -626,7 +626,7 @@ msgid ""
 "default."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3076
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3141
 msgid "A directory with the same name already exists."
 msgstr "이미 같은 이름의 디렉터리가 존재합니다."
 
@@ -665,67 +665,67 @@ msgstr "ADSL"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1803
 msgid "ADSL (G.992.1) Annex A"
-msgstr "ADSL (G.992.1) 부록 A"
+msgstr "ADSL (G.992.1) Annex A"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1804
 msgid "ADSL (G.992.1) Annex B"
-msgstr "ADSL (G.992.1) 부록 B"
+msgstr "ADSL (G.992.1) Annex B"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1797
 msgid "ADSL (all variants) Annex A/L/M"
-msgstr ""
+msgstr "ADSL (모든 규격) Annex A/L/M"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1793
 msgid "ADSL (all variants) Annex A/L/M + VDSL2 Annex A/B/C"
-msgstr ""
+msgstr "ADSL (모든 규격) Annex A/L/M + VDSL2 Annex A/B/C"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1798
 msgid "ADSL (all variants) Annex B"
-msgstr ""
+msgstr "ADSL (모든 규격) Annex B"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1794
 msgid "ADSL (all variants) Annex B + VDSL2 Annex A/B/C"
-msgstr ""
+msgstr "ADSL (모든 규격) Annex B + VDSL2 Annex A/B/C"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1799
 msgid "ADSL (all variants) Annex B/J"
-msgstr ""
+msgstr "ADSL (모든 규격) Annex B/J"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1795
 msgid "ADSL (all variants) Annex B/J + VDSL2 Annex A/B/C"
-msgstr ""
+msgstr "ADSL (모든 규격) Annex B/J + VDSL2 Annex A/B/C"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1801
 msgid "ADSL (all variants) Annex M"
-msgstr ""
+msgstr "ADSL (모든 규격) Annex M"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1806
 msgid "ADSL2 (G.992.3) Annex A"
-msgstr "ADSL2 (G.992.3) 부록 A"
+msgstr "ADSL2 (G.992.3) Annex A"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1807
 msgid "ADSL2 (G.992.3) Annex B"
-msgstr "ADSL2 (G.992.3) 부록 B"
+msgstr "ADSL2 (G.992.3) Annex B"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1808
 msgid "ADSL2 (G.992.3) Annex L"
-msgstr "ADSL2 (G.992.3) 부록 L"
+msgstr "ADSL2 (G.992.3) Annex L"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1809
 msgid "ADSL2 (G.992.3) Annex M"
-msgstr "ADSL2 (G.992.3) 부록 M"
+msgstr "ADSL2 (G.992.3) Annex M"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1810
 msgid "ADSL2+ (G.992.5) Annex A"
-msgstr "ADSL2+ (G.992.5) 부록 A"
+msgstr "ADSL2+ (G.992.5) Annex A"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1811
 msgid "ADSL2+ (G.992.5) Annex B"
-msgstr "ADSL2+ (G.992.5) 부록 B"
+msgstr "ADSL2+ (G.992.5) Annex B"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1812
 msgid "ADSL2+ (G.992.5) Annex M"
-msgstr "ADSL2+ (G.992.5) 부록 M"
+msgstr "ADSL2+ (G.992.5) Annex M"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1802
 msgid "ANSI T1.413"
@@ -840,7 +840,7 @@ msgstr "패킷 허용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1167
 msgid "Accept packets with local source addresses"
-msgstr "로컬 소스 주소가 있는 패킷 허용"
+msgstr "로컬 출발지 주소를 가진 패킷을 허용합니다"
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:51
@@ -913,7 +913,7 @@ msgstr "활성 IPv6 규칙"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:628
 msgid "Active backup"
-msgstr "활성-예비"
+msgstr "활성-백업"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:256
 msgid "Active peers"
@@ -933,11 +933,11 @@ msgstr "적응형 부하 분산"
 msgid "Adaptive transmit load balancing"
 msgstr "적응형 송신 부하 분산"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2252
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2255
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2268
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2276
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3623
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2295
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2298
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2311
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2319
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3733
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:25
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:189
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:197
@@ -986,8 +986,8 @@ msgstr "디바이스 설정 추가…"
 msgid "Add instance"
 msgstr "인스턴스 추가"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:200
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:267
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:204
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:271
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:171
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:177
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:274
@@ -1038,7 +1038,7 @@ msgstr "서버 인스턴스 추가"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1116
 msgid "Add static forward and reverse DNS entries for this host."
-msgstr ""
+msgstr "이 호스트에 대한 정방향 및 역방향 DNS 정적 항목을 추가합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:708
 msgid "Add subnet address to forwards"
@@ -1089,7 +1089,7 @@ msgstr "추가적인 서버 파일"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1084
 msgid "Additional tags for this host."
-msgstr ""
+msgstr "이 호스트의 추가 태그를 지정합니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:62
 msgid "Address"
@@ -1182,7 +1182,7 @@ msgstr "\"%s\"의 별칭"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:919
 msgid "All"
-msgstr "전체"
+msgstr "모두"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:910
 msgid "All ARP Targets"
@@ -1194,7 +1194,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
 msgid "All ports active"
-msgstr ""
+msgstr "모든 포트 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:253
 msgid "All servers"
@@ -1261,7 +1261,7 @@ msgstr "기기 재부팅 허용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:673
 msgid "Allow receiving on inactive ports"
-msgstr ""
+msgstr "비활성 포트에서 수신을 허용합니다"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:46
 msgid "Allow remote hosts to connect to local SSH forwarded ports"
@@ -1345,7 +1345,7 @@ msgstr "이 장치에 대한 간단한 설명(선택 사항)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1791
 msgid "Annex"
-msgstr "부록"
+msgstr "Annex"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1137
 msgid "Announce DNS domains"
@@ -1428,11 +1428,11 @@ msgstr "모든 영역"
 msgid "Apply backup?"
 msgstr "백업 파일로 복원을 진행하시겠습니까?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5091
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5168
 msgid "Apply checked"
 msgstr "검증 후 적용"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5121
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5198
 msgid "Apply request failed with status <code>%h</code>"
 msgstr "적용 요청에 실패했습니다. (상태 코드: <code>%h</code>)"
 
@@ -1441,13 +1441,13 @@ msgid "Apply these DHCP Options"
 msgstr "적용할 DHCP 옵션"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2140
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4838
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4959
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5095
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4915
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5036
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5172
 msgid "Apply unchecked"
 msgstr "검증 없이 적용"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5032
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5109
 msgid "Applying configuration changes… %ds"
 msgstr "설정 변경 사항 적용 중… %d초 남음"
 
@@ -1458,7 +1458,7 @@ msgstr "아키텍처"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:147
 msgid "Arp-scan"
-msgstr ""
+msgstr "주변 장치 검색"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:739
 msgid "As DHCP-Options; send unsolicited (dnsmasq only)."
@@ -1536,7 +1536,7 @@ msgstr "인증 유형"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:396
 msgid "Authoritative"
-msgstr "권한 있음(Authoritative)"
+msgstr "권위 부여(Authoritative)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:17
 #: themes/luci-theme-bootstrap/htdocs/luci-static/resources/view/bootstrap/sysauth.js:11
@@ -1564,7 +1564,7 @@ msgstr "자동"
 #: modules/luci-compat/luasrc/model/network/proto_hnet.lua:7
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:7
 msgid "Automatic Homenet (HNCP)"
-msgstr ""
+msgstr "자동 홈 네트워크 (HNCP)"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:97
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:97
@@ -1609,9 +1609,9 @@ msgstr "사용 가능"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:268
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:278
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:350
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:360
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:370
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:386
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:396
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:406
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:239
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:249
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:259
@@ -1652,7 +1652,7 @@ msgstr "BSSID"
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:48
 msgid "Back to Overview"
-msgstr "개요로 이동"
+msgstr "개요로 돌아가기"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:864
 msgid "Back to peer configuration"
@@ -1734,7 +1734,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:825
 msgid "Better"
-msgstr ""
+msgstr "성능"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:295
 msgid "Bind NTP server"
@@ -1817,7 +1817,7 @@ msgstr "브리지"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:559
 msgctxt "MACVLAN mode"
 msgid "Bridge (Support direct communication between MAC VLANs)"
-msgstr ""
+msgstr "브리지 (MACVLAN 간 직접 통신 지원)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:451
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:494
@@ -1832,7 +1832,7 @@ msgstr "브리지 장치"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:450
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:493
 msgid "Bridge port specific options"
-msgstr ""
+msgstr "브리지 포트 상세 옵션"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:980
 msgid "Bridge ports"
@@ -1856,15 +1856,15 @@ msgstr "부팅 시 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1024
 msgid "Bring up the bridge interface even if no ports are attached"
-msgstr ""
+msgstr "연결된 포트가 없더라도 브리지 인터페이스를 활성화합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:631
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1111
 msgid "Broadcast"
 msgstr "브로드캐스트"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3166
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4587
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3231
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4664
 msgid "Browse…"
 msgstr "찾아보기…"
 
@@ -1922,7 +1922,7 @@ msgstr "캐시됨"
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:53
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:21
 msgid "Call failed"
-msgstr ""
+msgstr "호 연결 실패"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:857
 msgid "Can be hinted by adding 4 or 6 to the name."
@@ -1933,9 +1933,10 @@ msgid ""
 "Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3258
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4596
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5087
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3114
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3335
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4673
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5164
 #: modules/luci-compat/luasrc/view/cbi/delegator.htm:14
 #: modules/luci-compat/luasrc/view/cbi/simpleform.htm:52
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:178
@@ -1943,7 +1944,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2502
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:128
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:297
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:105
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:109
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:209
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:474
 msgid "Cancel"
@@ -1985,7 +1986,7 @@ msgstr "NIC 수신 직후 패킷 캡처"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:86
 msgid "Carrier"
-msgstr "신호"
+msgstr "연결 신호"
 
 #: protocols/luci-proto-hnet/htdocs/luci-static/resources/protocol/hnet.js:17
 msgid "Category"
@@ -2059,11 +2060,11 @@ msgctxt "Yet unknown nftables chain hook"
 msgid "Chain hook \"%h\""
 msgstr "체인 후크 \"%h\""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4818
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4895
 msgid "Changes"
 msgstr "변경 사항"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5082
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5159
 msgid ""
 "Changes have been made to the existing connection via \"%h\". This could "
 "inhibit access to this device. Any IP change requires <strong>connecting to "
@@ -2073,7 +2074,7 @@ msgstr ""
 "다. 변경 사항을 유지하려면 %d초 이내에 <strong>새 IP로 접속</strong>해야 합니"
 "다."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5157
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5234
 msgid "Changes have been reverted."
 msgstr "이전 설정이 복원되었습니다."
 
@@ -2182,12 +2183,12 @@ msgstr "클라이언트"
 msgid "Client ID to send when requesting DHCP"
 msgstr "DHCP 요청 시 전송할 클라이언트 ID"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2742
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2746
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2817
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2821
 msgid "Clone"
 msgstr "복제"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4835
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4912
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:173
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:179
 msgid "Close"
@@ -2207,7 +2208,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:64
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:85
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2627
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:435
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:471
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:27
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:356
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:359
@@ -2223,7 +2224,7 @@ msgstr "충돌 감지"
 msgid "Command"
 msgstr "명령어"
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:397
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:408
 msgid "Command OK"
 msgstr "명령 실행 완료"
 
@@ -2263,7 +2264,7 @@ msgstr ""
 msgid "Config File"
 msgstr "설정 파일"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4818
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4895
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:456
 msgid "Configuration"
 msgstr "설정"
@@ -2272,11 +2273,11 @@ msgstr "설정"
 msgid "Configuration Export"
 msgstr "설정 내보내기"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5007
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5084
 msgid "Configuration changes applied."
 msgstr "설정 변경 사항이 적용되었습니다."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4945
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5022
 msgid "Configuration changes have been rolled back!"
 msgstr "설정 변경 사항이 롤백되었습니다!"
 
@@ -2361,16 +2362,16 @@ msgstr ""
 msgid "Connection endpoint"
 msgstr "연결 엔드포인트"
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:407
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:418
 msgid "Connection lost"
 msgstr "연결 끊김"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:338
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:374
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:181
 msgid "Connections"
 msgstr "연결"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5081
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5158
 msgid "Connectivity change"
 msgstr "연결 상태 변경"
 
@@ -2401,7 +2402,7 @@ msgstr "계속"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:104
 msgctxt "nft jump action"
 msgid "Continue in <strong><a href=\"#%q.%q\">%h</a></strong>"
-msgstr "<strong><a href=\"#%q.%q\">%h</a></strong> 거쳐 계속"
+msgstr "<strong><a href=\"#%q.%q\">%h</a></strong> 호출"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:139
 msgid "Continue in calling chain"
@@ -2423,7 +2424,7 @@ msgid ""
 "title=\"Router Advertisement\">RA</abbr> messages."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4981
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5058
 msgid ""
 "Could not regain access to the device after applying the configuration "
 "changes. You might need to reconnect if you modified network related "
@@ -2449,10 +2450,18 @@ msgstr "국가 코드"
 msgid "Coverage cell density"
 msgstr "커버리지 셀 밀도"
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3330
+msgid "Create"
+msgstr "생성"
+
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:618
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2492
 msgid "Create / Assign firewall-zone"
 msgstr "방화벽 영역 생성 / 할당"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3121
+msgid "Create Directory"
+msgstr "디렉터리 생성"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1431
 msgid "Create interface"
@@ -2475,7 +2484,7 @@ msgstr "예약 작업(Cron) 로그 수준"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:45
 msgid "Cross Pass (Japan only)"
-msgstr ""
+msgstr "Cross Pass (일본 전용)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:628
 msgid "Current power"
@@ -2517,12 +2526,12 @@ msgid ""
 "Customizes the behaviour of the device <abbr title=\"Light Emitting "
 "Diode\">LED</abbr>s if possible."
 msgstr ""
-"가능하다면 <abbr title=\"Light Emitting Diode\">LED</abbr> 의 동작을 직접 지"
-"정 할 수 있습니다."
+"지원되는 경우, 장치 <abbr title=\"발광 다이오드(Light Emitting Diode)\">LED</"
+"abbr>의 동작을 직접 설정할 수 있습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1206
 msgid "DAD transmits"
-msgstr ""
+msgstr "DAD 전송 횟수"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1788
 msgid "DAE-Client"
@@ -2540,6 +2549,10 @@ msgstr "DAE 비밀"
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:62
 msgid "DHCP"
 msgstr "DHCP"
+
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:20
+msgid "DHCP Leases"
+msgstr "DHCP 할당"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:595
 msgid "DHCP Options"
@@ -2573,7 +2586,7 @@ msgstr "DHCPv6"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:673
 msgid "DHCPv6 Settings"
-msgstr ""
+msgstr "DHCPv6 설정"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:47
 msgid "DHCPv6 Statistics"
@@ -2591,7 +2604,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1093
 msgid "DHCPv6-<abbr title=\"Prefix Delegation\">PD</abbr>"
-msgstr ""
+msgstr "DHCPv6-<abbr title=\"접두사 위임(Prefix Delegation)\">PD</abbr>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1082
 msgid "DHCPv6-Service"
@@ -2794,25 +2807,25 @@ msgstr ""
 msgid "Delegate IPv6 prefixes"
 msgstr "IPv6 접두사 위임"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2330
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2755
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2759
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3607
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3227
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2374
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2830
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2834
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3716
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3299
 #: modules/luci-compat/luasrc/view/cbi/nsection.htm:11
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:162
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:16
 msgid "Delete"
 msgstr "삭제"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:101
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:115
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:105
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:119
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:205
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:211
 msgid "Delete key"
 msgstr "키 제거"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3125
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3190
 msgid "Delete request failed: %s"
 msgstr "삭제 요청 실패: %s"
 
@@ -2833,7 +2846,7 @@ msgstr "전달 트래픽 지시 메시지 전송 간격"
 msgid "Description"
 msgstr "설명"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3219
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3291
 msgid "Deselect"
 msgstr "선택 해제"
 
@@ -2843,7 +2856,7 @@ msgstr "디자인"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:794
 msgid "Designated master"
-msgstr "지정 마스터"
+msgstr "마스터 지정"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:238
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:275
@@ -2851,7 +2864,7 @@ msgid "Dest Port"
 msgstr "목적지 포트"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:174
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:430
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:466
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:71
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:237
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:274
@@ -2944,7 +2957,7 @@ msgstr "장치가 존재하지 않음"
 msgid "Device type"
 msgstr "장치 유형"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4980
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5057
 msgid "Device unreachable!"
 msgstr "장치에 연결할 수 없습니다!"
 
@@ -2982,9 +2995,17 @@ msgstr ""
 msgid "Dir"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3024
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3037
 msgid "Directory"
 msgstr "디렉터리"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3080
+msgid "Directory name"
+msgstr "디렉터리 이름"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3090
+msgid "Directory name cannot be empty."
+msgstr "디렉터리 이름을 입력하세요."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:842
 msgid ""
@@ -3019,8 +3040,8 @@ msgid ""
 "this interface (dnsmasq only)."
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:190
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:418
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:226
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:454
 msgid "Disable DNS lookups"
 msgstr "DNS 조회 비활성화"
 
@@ -3101,11 +3122,11 @@ msgid "Disk space"
 msgstr "디스크 공간"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:614
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3041
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3277
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3291
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4035
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4951
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3131
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3385
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3399
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4112
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5028
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2203
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:360
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/view/wireguard/status.js:54
@@ -3195,11 +3216,11 @@ msgctxt "nft notrack action"
 msgid "Do not track"
 msgstr "추적 안 함"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3111
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3176
 msgid "Do you really want to delete \"%s\" ?"
 msgstr "\"%s\" 삭제를 진행하시겠습니까?"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3109
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3174
 msgid "Do you really want to delete the \"%s\" directory recursively?"
 msgstr "하위 항목을 포함하여 \"%s\" 디렉터리 삭제를 진행하시겠습니까?"
 
@@ -3235,7 +3256,7 @@ msgstr ""
 msgid "Down"
 msgstr "아래로"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3223
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3295
 msgid "Download"
 msgstr "다운로드"
 
@@ -3243,7 +3264,7 @@ msgstr "다운로드"
 msgid "Download backup"
 msgstr "백업 다운로드"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3299
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3376
 msgid "Download failed: %s"
 msgstr "다운로드 실패: %s"
 
@@ -3261,7 +3282,7 @@ msgid ""
 "WireGuard interface."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2700
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2762
 msgid "Drag to reorder"
 msgstr "드래그하여 순서 변경"
 
@@ -3281,23 +3302,23 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1176
 msgid "Drop gratuitous ARP"
-msgstr ""
+msgstr "Gratuitous ARP 차단"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1252
 msgid "Drop layer 2 multicast frames containing IPv4 unicast packets."
-msgstr ""
+msgstr "IPv4 유니캐스트 패킷이 포함된 레이어 2 멀티캐스트 프레임을 차단합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1256
 msgid "Drop layer 2 multicast frames containing IPv6 unicast packets."
-msgstr ""
+msgstr "IPv6 유니캐스트 패킷이 포함된 레이어 2 멀티캐스트 프레임을 차단합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1252
 msgid "Drop nested IPv4 unicast"
-msgstr ""
+msgstr "IPv4 유니캐스트 중첩 차단"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1256
 msgid "Drop nested IPv6 unicast"
-msgstr ""
+msgstr "IPv6 유니캐스트 중첩 차단"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:103
 msgctxt "nft drop action"
@@ -3386,11 +3407,11 @@ msgstr "EAP 방식"
 msgid "Each STA is assigned its own AP_VLAN interface."
 msgstr "각 단말마다 고유한 AP_VLAN 인터페이스를 할당합니다."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:280
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:284
 msgid "Each key is stored as a file in <code>%s</code>."
 msgstr "각 키는 <code>%s</code> 디렉터리에 개별 파일로 저장됩니다."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:278
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:282
 msgid ""
 "Each software repository public key (from official or third party "
 "repositories) allows packages in lists signed by it to be installed by the "
@@ -3399,9 +3420,9 @@ msgstr ""
 "저장소(공식 또는 제3자)의 각 소프트웨어 공개 키는 패키지 관리자가 해당 키로 "
 "서명된 목록을 검증 후 패키지를 설치할 수 있도록 합니다."
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2720
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2723
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3457
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2795
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2798
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3565
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:154
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:160
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:508
@@ -3419,7 +3440,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:573
 msgid "Edit PXE/TFTP/BOOTP Host"
-msgstr ""
+msgstr "PXE/TFTP/BOOTP 호스트 편집"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:783
 msgid "Edit UC"
@@ -3437,7 +3458,7 @@ msgstr "피어 편집"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:936
 msgid "Edit static lease"
-msgstr "고정 임대 편집"
+msgstr "정적 할당 편집"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:663
 msgid "Edit tag"
@@ -3448,6 +3469,8 @@ msgid ""
 "Edit the raw configuration data above to fix any error and hit \"Save\" to "
 "reload the page."
 msgstr ""
+"위의 원본 설정 데이터를 편집하여 오류를 해결한 후, \"저장\"을 눌러 페이지를 "
+"새로고침하세요."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:955
 msgid "Edit this network"
@@ -3469,7 +3492,7 @@ msgstr "이그레스"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:584
 msgid "Egress QoS mapping"
-msgstr ""
+msgstr "이그레스 QoS 매핑"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:12
 msgctxt "nft meta oif"
@@ -3525,19 +3548,20 @@ msgstr "<abbr title=\"인터넷 그룹 관리 프로토콜\">IGMP</abbr> 스누�
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Enable <abbr title=\"Secure Shell\">SSH</abbr> service instance"
 msgstr ""
-"<abbr title=\"보안 셸(Secure Shell)\">SSH</abbr> 서비스 인스턴스를 켭니다"
+"<abbr title=\"보안 셸(Secure Shell)\">SSH</abbr> 서비스 인스턴스를 활성화합니"
+"다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1038
 msgid "Enable <abbr title=\"Spanning Tree Protocol\">STP</abbr>"
-msgstr "<abbr title=\"Spanning Tree Protocol\">STP</abbr> 활성화"
+msgstr "<abbr title=\"스패닝 트리 프로토콜\">STP</abbr> 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:889
 msgid "Enable <abbr title=\"Stateless Address Auto Config\">SLAAC</abbr>"
 msgstr "<abbr title=\"Stateless Address Auto Config\">SLAAC</abbr> 활성화"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:190
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:412
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:418
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:226
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:448
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:454
 msgid "Enable DNS lookups"
 msgstr "DNS 조회 사용"
 
@@ -3573,7 +3597,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Enable Instance"
-msgstr "인스턴스 켜기"
+msgstr "인스턴스 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:194
 msgid "Enable Jumbo Frame passthrough"
@@ -3613,7 +3637,7 @@ msgstr "WPS 버튼 활성화 [WPA(2)-PSK/WPA3-SAE 방식 필요]"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:322
 msgid "Enable Yggdrasil Jumper"
-msgstr ""
+msgstr "Yggdrasil Jumper 활성화"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:14
 msgid ""
@@ -3648,11 +3672,11 @@ msgstr "아웃바운드 패킷 미러링 사용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1248
 msgid "Enable multicast fast leave"
-msgstr "멀티캐스트 빠른 이탈 사용"
+msgstr "멀티캐스트 즉시 탈퇴(Fast Leave) 사용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1067
 msgid "Enable multicast querier"
-msgstr ""
+msgstr "멀티캐스트 쿼리어 활성화"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1212
 msgid "Enable multicast support"
@@ -3743,7 +3767,7 @@ msgstr "활성화됨 (예외 허용 모드)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1058
 msgid "Enables IGMP snooping on this bridge"
-msgstr ""
+msgstr "해당 브리지에서 IGMP 스누핑을 활성화합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1869
 msgid ""
@@ -3759,7 +3783,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1038
 msgid "Enables the Spanning Tree Protocol on this bridge"
-msgstr "이 bridge 에 Spanning Tree Protocol 활성화합니다"
+msgstr "해당 브리지에 스패닝 트리 프로토콜을 활성화합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:691
 msgid "Encap 2+3"
@@ -3831,11 +3855,11 @@ msgstr ""
 
 #: modules/luci-compat/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom value"
-msgstr ""
+msgstr "사용자 정의 값 입력"
 
 #: modules/luci-compat/luasrc/view/cbi/dropdown.htm:16
 msgid "Enter custom values"
-msgstr ""
+msgstr "사용자 정의 값 입력"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:208
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:245
@@ -3847,6 +3871,7 @@ msgid "Erasing..."
 msgstr "삭제 중..."
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:64
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3103
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:850
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:96
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:25
@@ -3943,7 +3968,7 @@ msgstr ""
 msgid "Expecting two priority values separated by a colon"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2288
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2331
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:77
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:156
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:162
@@ -4074,13 +4099,17 @@ msgstr "시스템 암호를 변경하지 못했습니다."
 msgid "Failed to configure modem"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4939
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5016
 msgid "Failed to confirm apply within %ds, waiting for rollback…"
 msgstr "%d초 이내에 설정 검증을 완료하지 못했습니다. 롤백 대기 중…"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:22
 msgid "Failed to connect"
 msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3103
+msgid "Failed to create directory: %s"
+msgstr "디렉터리 생성 실패: %s"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:23
 msgid "Failed to disconnect"
@@ -4090,8 +4119,8 @@ msgstr ""
 msgid "Failed to execute \"/etc/init.d/%s %s\" action: %s"
 msgstr "\"/etc/init.d/%s %s\" 동작 실행 실패: %s"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:150
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:178
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:154
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:182
 msgid "Failed to fetch key"
 msgstr ""
 
@@ -4109,25 +4138,25 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:826
 msgid "Failure"
-msgstr "실패"
+msgstr "장애"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:768
 msgid "Fast (every second)"
 msgstr "빠름 (1초 주기)"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:166
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:170
 msgid "Fetched content seems empty or too short."
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:159
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:163
 msgid "Fetched content seems too long. Maximum 8192 bytes."
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:146
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:150
 msgid "Fetching key from URL…"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3032
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3045
 msgid "File"
 msgstr "파일"
 
@@ -4137,7 +4166,7 @@ msgid ""
 "{servers_file_entry01}, {servers_file_entry02}."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2969
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2982
 msgid "File not accessible"
 msgstr "파일 접근 불가"
 
@@ -4155,14 +4184,14 @@ msgstr "활성 DHCP 임대 목록을 저장할 파일입니다."
 msgid "File with upstream resolvers."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3167
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3232
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:577
 msgid "Filename"
 msgstr "파일 이름"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:562
 msgid "Filename of the boot image advertised to clients."
-msgstr ""
+msgstr "클라이언트에게 안내할 부팅 이미지의 파일 이름입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:390
 msgid "Files"
@@ -4192,7 +4221,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:921
 msgid "Filter active"
-msgstr ""
+msgstr "활성 필터"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:650
 msgid "Filter arbitrary RR"
@@ -4200,7 +4229,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:922
 msgid "Filter backup"
-msgstr ""
+msgstr "백업 필터"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:627
 msgid "Filter private"
@@ -4214,7 +4243,7 @@ msgstr ""
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:24
 msgid "Finalizing failed"
-msgstr ""
+msgstr "종료 작업 실패"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:150
 msgid ""
@@ -4294,7 +4323,7 @@ msgstr "설치 중…"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:853
 msgid "Follow"
-msgstr ""
+msgstr "추종(Follow)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:457
 msgid "For VRF, install %s"
@@ -4334,10 +4363,11 @@ msgstr "CCMP-256 (AES) 강제"
 msgid ""
 "Force DHCP on this network even if another server is detected (dnsmasq only)."
 msgstr ""
+"다른 DHCP 서버가 감지되더라도 DHCP 서버를 강제로 활성화합니다. (dnsmasq 전용)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:738
 msgid "Force DHCP-Options"
-msgstr ""
+msgstr "강제 DHCP 옵션"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1317
 msgid "Force GCMP (AES)"
@@ -4381,7 +4411,7 @@ msgstr "NAT-T 강제 사용"
 
 #: modules/luci-base/ucode/template/csrftoken.ut:8
 msgid "Form token mismatch"
-msgstr ""
+msgstr "보안 토큰 불일치"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1731
 msgid "Format:"
@@ -4418,7 +4448,7 @@ msgstr "브로드캐스트 트래픽 전달"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1047
 msgid "Forward delay"
-msgstr ""
+msgstr "전달 지연"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1063
 msgid "Forward mesh peer traffic"
@@ -4426,7 +4456,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1244
 msgid "Forward multicast packets as unicast packets on this device."
-msgstr ""
+msgstr "이 장치에서 멀티캐스트 패킷을 유니캐스트 패킷으로 변환하여 전송합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:680
 msgid "Forward specific domain queries to specific upstream servers."
@@ -4434,7 +4464,7 @@ msgstr "특정 도메인 질의(queries)를 특정 상위 서버로 전달합니
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1115
 msgid "Forward/reverse DNS"
-msgstr ""
+msgstr "정방향/역방향 DNS"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:98
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:98
@@ -4643,8 +4673,8 @@ msgstr "펌웨어 업데이트로 이동..."
 msgid "Go to password configuration..."
 msgstr "암호 설정으로 이동..."
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2642
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3789
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2704
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3899
 #: modules/luci-compat/luasrc/view/cbi/full_valueheader.htm:4
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:58
 msgid "Go to relevant configuration page"
@@ -4673,19 +4703,19 @@ msgstr "DSL 상태 표시에 관한 접근 권한 부여"
 
 #: protocols/luci-proto-openconnect/root/usr/share/rpcd/acl.d/luci-openconnect.json:3
 msgid "Grant access to LuCI OpenConnect procedures"
-msgstr "LuCI OpenConnect 절차에 관한 접근 권한 부여"
+msgstr "LuCI OpenConnect 프로시저에 접근 권한 부여"
 
 #: protocols/luci-proto-wireguard/root/usr/share/rpcd/acl.d/luci-wireguard.json:3
 msgid "Grant access to LuCI Wireguard procedures"
-msgstr "LuCI Wireguard 절차에 관한 접근 권한 부여"
+msgstr "LuCI Wireguard 프로시저에 접근 권한 부여"
 
 #: protocols/luci-proto-yggdrasil/root/usr/share/rpcd/acl.d/luci-proto-yggdrasil.json:3
 msgid "Grant access to LuCI Yggdrasil procedures"
-msgstr ""
+msgstr "LuCI Yggdrasil 프로시저에 접근 권한 부여"
 
 #: protocols/luci-proto-openfortivpn/root/usr/share/rpcd/acl.d/luci-openfortivpn.json:3
 msgid "Grant access to LuCI openfortivpn procedures"
-msgstr ""
+msgstr "LuCI openfortivpn 프로시저에 접근 권한 부여"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:21
 msgid "Grant access to SSH configuration"
@@ -4701,13 +4731,13 @@ msgstr "스토리지 및 마운트 상태 표시에 접근 권한 부여"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:12
 msgid "Grant access to basic LuCI procedures"
-msgstr "기본 LuCI 절차에 관한 접근 권한 부여"
+msgstr "기본 LuCI 프로시저에 접근 권한 부여"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:93
 msgid "Grant access to crontab configuration"
 msgstr "crontab 설정에 접근 권한 부여"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:82
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:85
 msgid "Grant access to firewall status"
 msgstr "방화벽 상태에 접근 권한 부여"
 
@@ -4737,13 +4767,13 @@ msgstr "네트워크 분석 도구들에 관한 접근 권한 부여"
 
 #: modules/luci-base/root/usr/share/rpcd/acl.d/luci-base.json:37
 msgid "Grant access to network status information"
-msgstr "네트워크 상태 정보 확인에 관한 접근 권한 부여"
+msgstr "네트워크 상태 정보에 접근 권한 부여"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:52
 msgid "Grant access to port status display"
 msgstr "포트 상태 표시에 접근 권한 부여"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:13
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:16
 msgid "Grant access to process status"
 msgstr "프로세스 상태에 접근 권한 부여"
 
@@ -4751,20 +4781,20 @@ msgstr "프로세스 상태에 접근 권한 부여"
 msgid "Grant access to realtime statistics"
 msgstr "실시간 통계에 접근 권한 부여"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:43
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:58
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:46
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:61
 msgid "Grant access to routing status"
 msgstr "라우팅 상태에 접근 권한 부여"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:71
 msgid "Grant access to startup configuration"
-msgstr "시작 프로그램 설정에 접근 권한 부여"
+msgstr "시작 설정에 접근 권한 부여"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:3
 msgid "Grant access to system configuration"
 msgstr "시스템 설정에 접근 권한 부여"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:30
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:33
 msgid "Grant access to system logs"
 msgstr "시스템 로그에 접근 권한 부여"
 
@@ -4772,7 +4802,7 @@ msgstr "시스템 로그에 접근 권한 부여"
 msgid "Grant access to uHTTPd configuration"
 msgstr "uHTTPd 설정에 접근 권한 부여"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:73
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:76
 msgid "Grant access to wireless channel status"
 msgstr "무선 채널 상태에 접근 권한 부여"
 
@@ -4801,9 +4831,9 @@ msgstr "HE.net 암호"
 msgid "HE.net username"
 msgstr "HE.net 사용자 이름"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:151
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:155
 msgid "HTTP error %d"
-msgstr ""
+msgstr "HTTP 오류 %d"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/uhttpd.js:9
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:64
@@ -4824,7 +4854,7 @@ msgstr "하트비트 간격 (kernel: heartbeat)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1042
 msgid "Hello interval"
-msgstr ""
+msgstr "Hello 주기"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:115
 msgid ""
@@ -4864,7 +4894,7 @@ msgstr "높음"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1173
 msgid "Honor gratuitous ARP"
-msgstr ""
+msgstr "Gratuitous ARP 허용"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:694
 msgctxt "Chain hook description"
@@ -4886,7 +4916,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:578
 msgid "Host requests this filename from the boot server."
-msgstr ""
+msgstr "호스트가 부팅 서버에 요청할 파일 이름입니다."
 
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:104
 msgid "Host-Uniq tag content"
@@ -5139,7 +5169,7 @@ msgstr "IPv4 게이트웨이"
 msgid "IPv4 netmask"
 msgstr "IPv4 서브넷 마스크"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:319
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:347
 msgid "IPv4 network in address/netmask notation"
 msgstr "CIDR 형식의 IPv4 네트워크 (주소/넷마스크 표기)"
 
@@ -5282,7 +5312,7 @@ msgstr "IPv6 할당 길이"
 msgid "IPv6 gateway"
 msgstr "IPv6 게이트웨이"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:324
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:352
 msgid "IPv6 network in address/netmask notation"
 msgstr "CIDR 형식의 IPv6 네트워크 (주소/넷마스크 표기)"
 
@@ -5517,18 +5547,20 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:724
 msgid "In order to Set this Tag"
-msgstr "부여 태그"
+msgstr "할당 태그"
 
 #: modules/luci-base/ucode/template/csrftoken.ut:13
 msgid ""
 "In order to prevent unauthorized access to the system, your request has been "
 "blocked. Click \"Continue »\" below to return to the previous page."
 msgstr ""
+"시스템에 대한 무단 액세스를 방지하기 위해 요청이 차단되었습니다. 이전 페이지"
+"로 돌아가려면 아래의 \"계속 »\"을 클릭하세요."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:757
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:790
 msgid "In order to set this Tag"
-msgstr "부여 태그"
+msgstr "할당 태그"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:152
 msgid "In seconds"
@@ -5606,7 +5638,7 @@ msgstr "인그레스"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:578
 msgid "Ingress QoS mapping"
-msgstr ""
+msgstr "인그레스 QoS 매핑"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:11
 msgctxt "nft meta iif"
@@ -5672,7 +5704,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:878
 msgid "Install %s"
-msgstr "%s을 설치하세요"
+msgstr "%s 설치"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:294
 msgid "Install protocol extensions..."
@@ -5708,7 +5740,7 @@ msgstr ""
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:43
 msgid "Insufficient permissions to read UCI configuration."
-msgstr ""
+msgstr "UCI 설정 읽기 권한이 부족합니다."
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:136
 msgid "Integrated Circuit Card Identifier"
@@ -5730,7 +5762,7 @@ msgstr "인터페이스"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:797
 msgid "Interface \"%h\" is already marked as designated master."
-msgstr "\"%h\" 인터페이스가 이미 지정 마스터로 설정되어 있습니다."
+msgstr "\"%h\" 인터페이스가 이미 마스터로 지정되어 있습니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:62
 msgid "Interface %q device auto-migrated from %q to %q."
@@ -5812,15 +5844,18 @@ msgid ""
 "value, an administrator may tune the number of IGMP messages on the subnet; "
 "larger values cause IGMP Queries to be sent less often"
 msgstr ""
+"멀티캐스트 일반 쿼리를 전송하는 주기. (1/100초 단위) 설정값을 변경하여 서브"
+"넷 내 IGMP 메시지 양을 조절할 수 있습니다. 값이 커질수록 IGMP 쿼리 전송 빈도"
+"가 낮아집니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1042
 msgid "Interval in seconds for STP hello packets"
-msgstr ""
+msgstr "STP Hello 패킷이 전송되는 주기 (초 단위)"
 
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:192
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:42
 msgid "Invalid"
-msgstr ""
+msgstr "잘못된 식별자"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:101
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:68
@@ -5863,7 +5898,7 @@ msgstr ""
 msgid "Invalid VLAN ID given! Only unique IDs are allowed"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:399
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:410
 msgid "Invalid argument"
 msgstr "잘못된 인수"
 
@@ -5873,7 +5908,7 @@ msgid ""
 "supports one and only one bearer."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:398
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:409
 msgid "Invalid command"
 msgstr "잘못된 명령"
 
@@ -5885,11 +5920,11 @@ msgstr "잘못된 16진수 값"
 msgid "Invalid hostname or IPv4 address"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:189
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:193
 msgid "Invalid key format"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:165
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:169
 msgid "Invalid or empty key file"
 msgstr ""
 
@@ -5912,7 +5947,7 @@ msgstr "잘못된 서버 URL"
 #: modules/luci-base/ucode/template/sysauth.ut:12
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:32
 msgid "Invalid username and/or password! Please try again."
-msgstr "사용자 이름 및/또는 암호가 잘못되었습니다! 다시 시도하세요."
+msgstr "사용자 이름 또는 암호가 잘못되었습니다! 다시 시도하세요."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:13
 msgid "Invert blinking"
@@ -5925,7 +5960,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:223
 msgctxt "VLAN port state"
 msgid "Is Primary VLAN"
-msgstr ""
+msgstr "기본 VLAN"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1225
 msgid "Isolate Bridge Port"
@@ -6013,7 +6048,7 @@ msgstr "키"
 msgid "Key #%d"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:158
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:162
 msgid "Key file too large"
 msgstr ""
 
@@ -6133,7 +6168,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1095
 msgid "Last member interval"
-msgstr ""
+msgstr "최종 멤버 간격"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:143
 msgid "Latency"
@@ -6198,7 +6233,7 @@ msgstr "임대 트리거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:921
 msgid "Leases"
-msgstr "임대"
+msgstr "할당"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/464xlat.js:41
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pppoe.js:47
@@ -6230,7 +6265,7 @@ msgstr ""
 msgid "Legacy rules detected"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4820
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4897
 msgid "Legend:"
 msgstr "범례:"
 
@@ -6295,7 +6330,7 @@ msgstr "링크 계층 헤더 비트 %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:876
 msgid "Link monitoring mode"
-msgstr ""
+msgstr "링크 모니터링 방식"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:248
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:826
@@ -6419,7 +6454,7 @@ msgstr "설정 불러오기…"
 msgid "Loading data…"
 msgstr "데이터를 불러오는 중…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3309
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3386
 msgid "Loading directory contents…"
 msgstr "디렉토리 내용을 불러오는 중…"
 
@@ -6508,7 +6543,7 @@ msgstr "로컬 IPv6 주소"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:115
 msgid "Local Startup"
-msgstr "로컬 시작 프로그램"
+msgstr "로컬 시작 설정"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/10_system.js:72
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:132
@@ -6643,7 +6678,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1148
 msgid "Loose filtering"
-msgstr ""
+msgstr "느슨한 필터링"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:898
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1593
@@ -6701,7 +6736,7 @@ msgstr "MAC 주소"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:725
 msgid "MAC address for LACPDUs"
-msgstr ""
+msgstr "LACPDU MAC 주소"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:849
 msgid "MAC address selection policy"
@@ -6723,7 +6758,7 @@ msgstr "MAP / LW4over6"
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:65
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:7
 msgid "MAP rule is invalid"
-msgstr ""
+msgstr "MAP 규칙이 잘못됨"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:24
 msgid "MBIM Cellular"
@@ -6740,7 +6775,7 @@ msgstr "MHz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:881
 msgid "MII link monitoring"
-msgstr ""
+msgstr "MII 링크 모니터링"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1100
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1729
@@ -6799,16 +6834,20 @@ msgid ""
 "Match User Class (UC) strings sent by DHCP clients as a trigger to set tags "
 "on them."
 msgstr ""
+"DHCP 클라이언트가 전송한 사용자 클래스 (UC) 문자열을 식별하여 클라이언트에 태"
+"그를 설정합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:743
 msgid ""
 "Match Vendor Class (VC) strings sent by DHCP clients as a trigger to set "
 "tags on them."
 msgstr ""
+"DHCP 클라이언트가 전송한 벤더 클래스 (VC) 문자열을 식별하여 클라이언트에 태그"
+"를 설정합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:602
 msgid "Match this Tag"
-msgstr ""
+msgstr "태그 일치 조건"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:786
 msgid "Match this User Class"
@@ -6816,11 +6855,11 @@ msgstr "사용자 클래스 일치 조건"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:753
 msgid "Match this Vendor Class"
-msgstr "제조사 클래스 일치 조건"
+msgstr "벤더 클래스 일치 조건"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:719
 msgid "Match this client option(+value)"
-msgstr ""
+msgstr "클라이언트 옵션 (및 값) 일치 조건"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:164
 msgid "Match traffic IP protocol type"
@@ -6889,7 +6928,7 @@ msgstr "최대 동시 쿼리 수"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1052
 msgid "Maximum age"
-msgstr ""
+msgstr "최대 에이지"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1262
 msgid "Maximum allowed Listen Interval"
@@ -7000,7 +7039,7 @@ msgstr "메시 라우팅"
 msgid "Mesh and routing related options"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:400
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:411
 msgid "Method not found"
 msgstr "메서드를 찾을 수 없음"
 
@@ -7153,7 +7192,7 @@ msgstr "감시 모드 (Monitor)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:900
 msgid "Monitor Interval"
-msgstr ""
+msgstr "모니터링 주기"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:974
 msgid "Monitor link-down delay"
@@ -7167,7 +7206,7 @@ msgstr ""
 msgid "More Characters"
 msgstr "길이 부족"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2583
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2638
 msgid "More…"
 msgstr "더 보기…"
 
@@ -7316,8 +7355,9 @@ msgstr "NTP 서버 후보"
 msgid "NUD"
 msgstr "NUD"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2620
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4573
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2675
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2682
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4650
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:27
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:117
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1358
@@ -7382,7 +7422,7 @@ msgstr "Netfilter 테이블 이름"
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1089
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2619
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:427
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:463
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:79
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:246
 msgid "Network"
@@ -7420,7 +7460,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:561
 msgid "Network boot image"
-msgstr "네트워크 boot 이미지"
+msgstr "네트워크 부팅 이미지"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:407
 msgid "Network bridge configuration migration"
@@ -7507,7 +7547,7 @@ msgstr "뉴스 (News)"
 msgid "Next »"
 msgstr "다음 »"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4403
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4513
 msgid "No"
 msgstr "아니요"
 
@@ -7539,6 +7579,12 @@ msgstr "RX 신호 없음"
 msgid "No WireGuard interfaces configured."
 msgstr "설정된 WireGuard 인터페이스가 없습니다."
 
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:88
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:164
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:231
+msgid "No active leases found"
+msgstr ""
+
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:16
 msgid "No allowed mode configuration found."
 msgstr ""
@@ -7560,12 +7606,12 @@ msgstr "연결된 클라이언트 없음"
 msgid "No control device specified"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3547
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3624
 msgctxt "empty table placeholder"
 msgid "No data"
 msgstr "데이터 없음"
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:402
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:413
 msgid "No data received"
 msgstr "수신 데이터 없음"
 
@@ -7589,7 +7635,7 @@ msgstr "강제 적용 안 함"
 msgid "No entries available"
 msgstr "사용 가능한 엔트리 없음"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3233
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3305
 msgid "No entries in this directory"
 msgstr "이 디렉터리에 항목이 없습니다"
 
@@ -7608,7 +7654,7 @@ msgid "No host route"
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:789
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:158
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:194
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:394
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:59
 msgid "No information available"
@@ -7621,7 +7667,7 @@ msgstr ""
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:66
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:8
 msgid "No matching prefix delegation"
-msgstr ""
+msgstr "일치하는 접두사 위임 없음"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:666
 msgid "No negative cache"
@@ -7665,7 +7711,7 @@ msgstr "이 체인에 규칙 없음"
 msgid "No rules in this chain."
 msgstr "현재 체인에 규칙이 없습니다."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:85
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:89
 msgid "No software repository public keys present yet."
 msgstr "아직 소프트웨어 저장소 공개 키가 없습니다."
 
@@ -7741,7 +7787,7 @@ msgstr "찾을 수 없음"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:211
 msgctxt "VLAN port state"
 msgid "Not Member"
-msgstr ""
+msgstr "제외"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:83
 msgid "Not associated"
@@ -7763,7 +7809,7 @@ msgstr ""
 msgid "Not started on boot"
 msgstr "부팅 시 시작되지 않음"
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:405
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:416
 msgid "Not supported"
 msgstr "지원되지 않음"
 
@@ -7814,7 +7860,7 @@ msgstr ""
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:143
 msgid "Notes"
-msgstr ""
+msgstr "메모"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:66
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:852
@@ -7825,7 +7871,7 @@ msgstr "알림 (Notice)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:130
 msgid "Nslookup"
-msgstr "Nslookup"
+msgstr "DNS 조회"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:740
 msgid "Number of cached DNS entries, 10000 is maximum, 0 is no caching."
@@ -7840,6 +7886,10 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:799
 msgid "Number of seconds between sent learning packets"
 msgstr ""
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3108
+msgid "OK"
+msgstr "확인"
 
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:69
 msgid "Obfuscated Group Password"
@@ -7919,31 +7969,31 @@ msgstr ""
 msgid "One of hostname or MAC address must be specified!"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:525
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:553
 msgid "One of the following: %s"
-msgstr ""
+msgstr "다음 중 하나 필수: %s"
 
 #: modules/luci-compat/luasrc/view/cbi/nullsection.htm:17
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:22
 msgid "One or more fields contain invalid values!"
-msgstr ""
+msgstr "하나 이상의 항목에 잘못된 값이 포함되어 있습니다!"
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:32
 msgid "One or more invalid/required values on tab"
-msgstr ""
+msgstr "다음 탭에 유효하지 않거나 누락된 값이 있습니다"
 
 #: modules/luci-compat/luasrc/view/cbi/nullsection.htm:19
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:24
 msgid "One or more required fields have no value!"
-msgstr ""
+msgstr "하나 이상의 필수 항목에 값이 입력되지 않았습니다!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:603
 msgid "Only DHCP Clients with this tag are sent this boot option."
-msgstr ""
+msgstr "이 태그가 설정된 DHCP 클라이언트에만 해당 부팅 옵션을 전송합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:540
 msgid "Only accept replies via"
-msgstr ""
+msgstr "응답 수신 인터페이스"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:193
 msgid "Only affects dmesg kernel log"
@@ -7962,6 +8012,8 @@ msgid ""
 "Only one of the MAC addresses is expected to be in active use on the network "
 "at any given time."
 msgstr ""
+"동일한 시간에 목록 내 MAC 주소 중 1개만 고정 IP를 할당받을 수 있습니다. (중"
+"복 할당 불가)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:783
 #, fuzzy
@@ -8019,20 +8071,20 @@ msgstr "통신사 코드"
 msgid "Operator Name"
 msgstr "통신사 이름"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2014
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4416
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2045
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4526
 msgid "Option \"%s\" contains an invalid input value."
 msgstr "옵션 \"%s\"에 잘못된 입력값이 있습니다."
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2029
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2060
 msgid "Option \"%s\" must not be empty."
 msgstr "옵션 \"%s\"는 필수 입력 항목입니다."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4827
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4904
 msgid "Option changed"
 msgstr "변경된 옵션"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4829
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4906
 msgid "Option removed"
 msgstr "삭제된 옵션"
 
@@ -8162,7 +8214,7 @@ msgstr ""
 msgid "Originator Interval"
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:367
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:403
 msgid "Other:"
 msgstr "기타:"
 
@@ -8289,7 +8341,7 @@ msgstr ""
 msgid "Overview"
 msgstr "개요"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3077
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3142
 msgid "Overwrite existing file \"%s\" ?"
 msgstr "기존 \"%s\" 파일을 덮어쓰시겠습니까?"
 
@@ -8365,7 +8417,7 @@ msgstr "PIN"
 #: modules/luci-base/htdocs/luci-static/resources/network.js:21
 #: modules/luci-compat/luasrc/model/network.lua:39
 msgid "PIN code rejected"
-msgstr ""
+msgstr "PIN 코드 거부됨"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:841
 msgid "PIO directory"
@@ -8402,7 +8454,7 @@ msgstr "PPPoSSH"
 #: modules/luci-compat/luasrc/model/network/proto_ppp.lua:15
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/pptp.js:28
 msgid "PPtP"
-msgstr "PPtP"
+msgstr "PPTP"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:73
 msgid "PSID offset"
@@ -8474,7 +8526,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:560
 msgctxt "MACVLAN mode"
 msgid "Pass-through (Mirror physical device to single MAC VLAN)"
-msgstr ""
+msgstr "패스스루 (물리 장치의 모든 트래픽을 단일 MACVLAN에 전달)"
 
 #: modules/luci-base/ucode/template/sysauth.ut:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2088
@@ -8510,7 +8562,7 @@ msgstr "암호 강도"
 msgid "Password2"
 msgstr "암호2"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:259
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:263
 msgid ""
 "Paste content of a file, or a URL to a key file, or drag and drop here to "
 "upload a software repository public key…"
@@ -8533,7 +8585,7 @@ msgid ""
 "connect to the local WireGuard interface."
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:255
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:259
 msgid "Paste or drag repository public key"
 msgstr ""
 
@@ -8575,9 +8627,9 @@ msgstr "갱신 일시 중지"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:271
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:281
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:353
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:363
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:373
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:389
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:399
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:409
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:242
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:252
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:262
@@ -8612,7 +8664,7 @@ msgstr "피어 MAC 주소"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:276
 msgid "Peer URI"
-msgstr ""
+msgstr "피어 URI"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:14
 #: modules/luci-compat/luasrc/model/network.lua:32
@@ -8657,9 +8709,9 @@ msgstr "재부팅하기"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:408
 msgid "Perform reset"
-msgstr "초기화 하기"
+msgstr "초기화 수행"
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:403
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:414
 msgid "Permission denied"
 msgstr "권한이 거부됨"
 
@@ -8693,7 +8745,7 @@ msgstr "Ping"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:50
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:89
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:90
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:138
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:174
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:64
 msgid "Pkts."
 msgstr "패킷"
@@ -8702,7 +8754,7 @@ msgstr "패킷"
 msgid "Please enter your username and password."
 msgstr "사용자 이름과 암호를 입력해 주세요."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4556
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4633
 msgid "Please select the file to upload."
 msgstr "업로드할 파일을 선택하세요."
 
@@ -8748,9 +8800,9 @@ msgstr "포트 상태:"
 msgid "Ports"
 msgstr "포트"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:551
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:579
 msgid "Potential negation of: %s"
-msgstr ""
+msgstr "%s의 부정 형식 (추정)"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:89
 msgid "Power State"
@@ -8832,11 +8884,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:677
 msgid "Primary Device"
-msgstr "주(Primary) 장치"
+msgstr "기본 장치"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:821
 msgid "Primary port reselection policy"
-msgstr ""
+msgstr "기본 포트 재선택 정책"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:730
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1028
@@ -8859,7 +8911,7 @@ msgstr "개인 키"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:558
 msgctxt "MACVLAN mode"
 msgid "Private (Prevent communication between MAC VLANs)"
-msgstr ""
+msgstr "격리 (MACVLAN 간 통신 차단)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:137
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:580
@@ -8898,7 +8950,7 @@ msgstr "프로토콜"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:84
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:587
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1375
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:428
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:464
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:60
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
@@ -8991,7 +9043,7 @@ msgstr "공개 키 설정이 잘못됨"
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:9
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:27
 msgid "QMI Cellular"
-msgstr ""
+msgstr "QMI 셀룰러"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1486
 msgid "QR Code"
@@ -9023,7 +9075,7 @@ msgstr "사용 가능한 모든 상위 서버에 질의(Query)를 동시에 보�
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1076
 msgid "Query interval"
-msgstr "쿼리 간격"
+msgstr "쿼리 주기"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1081
 msgid "Query response interval"
@@ -9043,7 +9095,7 @@ msgstr "R1 키 홀더"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:931
 msgid "RA <abbr title=\"Prefix Information Option\">PIO</abbr> Flags"
-msgstr ""
+msgstr "RA <abbr title=\"접두사 정보 옵션\">PIO</abbr> 플래그"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1735
 msgid "RADIUS Access-Request attributes"
@@ -9148,9 +9200,9 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:487
 msgid "Read %s to configure the DHCP server."
-msgstr ""
+msgstr "%s 파일을 읽어 DHCP 서버를 설정합니다."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:102
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:106
 msgid "Really delete the following software repository public key?"
 msgstr ""
 
@@ -9299,11 +9351,12 @@ msgstr "릴레이"
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:157
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:36
 msgid "Relay Bridge"
-msgstr ""
+msgstr "릴레이 브리지"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:496
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
 msgstr ""
+"DHCP 요청을 다른 주소로 중계합니다. 지원: v4↔v4, v6↔v6. 미지원: v4↔v6, v6↔v4."
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:154
 msgid "Relay between networks"
@@ -9312,7 +9365,7 @@ msgstr ""
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:12
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:64
 msgid "Relay bridge"
-msgstr ""
+msgstr "릴레이 브리지"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:508
 msgid "Relay from"
@@ -9433,7 +9486,7 @@ msgstr ""
 msgid "Repo Public Keys"
 msgstr "저장소 공개 키"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:276
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:280
 msgid "Repository Public Keys"
 msgstr "저장소 공개 키"
 
@@ -9449,7 +9502,7 @@ msgstr "IPv6 주소 요청"
 msgid "Request IPv6-prefix"
 msgstr "IPv6 접두사 요청"
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:404
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:415
 msgid "Request timeout"
 msgstr "요청 시간 초과"
 
@@ -9474,7 +9527,7 @@ msgstr "필수"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 msgid "Required for certain ISPs, e.g. Charter with DOCSIS 3"
-msgstr "특정 ISP 들에 요구됨. 예: Charter (DOCSIS 3 기반)"
+msgstr "일부 ISP에서 요구함 (예: DOCSIS 3 기반의 Charter)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:137
 msgid "Required. Base64-encoded private key for this interface."
@@ -9599,7 +9652,7 @@ msgstr "Resolv 및 Hosts 파일"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:795
 msgid "Resolv file"
-msgstr "Resolve 파일"
+msgstr "Resolv 파일"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:416
 msgid "Resolve addresses locally"
@@ -9621,7 +9674,7 @@ msgstr "자원 레코드 이름"
 msgid "Resource Record Number"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:401
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:412
 msgid "Resource not found"
 msgstr "리소스를 찾을 수 없음"
 
@@ -9649,39 +9702,39 @@ msgstr "복구"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:412
 msgid "Restore backup"
-msgstr "백업 복원"
+msgstr "백업 복구"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:369
 msgid ""
 "Retrieve the listener addresses from the Yggdrasil interface configuration."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:384
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:385
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:387
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:388
 msgid "Reveal/hide password"
 msgstr "암호 보이기/숨기기"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1145
 msgid "Reverse path filter"
-msgstr ""
+msgstr "역경로 필터링"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:271
 msgid "Reverse sort"
 msgstr "역순 정렬"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4849
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4926
 msgid "Revert"
 msgstr "되돌리기"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4955
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5032
 msgid "Revert changes"
 msgstr "변경 사항 되돌리기"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5166
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5243
 msgid "Revert request failed with status <code>%h</code>"
 msgstr "복원 요청에 실패했습니다. (상태 코드: <code>%h</code>)"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5146
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5223
 msgid "Reverting configuration…"
 msgstr "설정 복원 중…"
 
@@ -9742,7 +9795,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1071
 msgid "Robustness"
-msgstr ""
+msgstr "강건성(Robustness)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:555
 msgid ""
@@ -9750,6 +9803,9 @@ msgid ""
 "<em>TFTP server root</em> turn on the TFTP server and serve files from "
 "<em>TFTP server root</em>."
 msgstr ""
+"TFTP 서버의 루트 디렉터리. <em>TFTP 서버 활성화</em> 및 <em>TFTP 서버 루트</"
+"em> 옵션을 설정하면 TFTP 서버가 가동되며 <em>TFTP 서버 루트 디렉터리</em>에"
+"서 파일을 제공합니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:298
 msgid "Root preparation"
@@ -9796,6 +9852,8 @@ msgid ""
 "Routes go in routing tables and define the specific path to reach "
 "destinations."
 msgstr ""
+"경로(Route)는 라우팅 테이블에 기록되며, 목적지까지 가는 구체적인 노선을 정의"
+"합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:29
 #: modules/luci-mod-network/root/usr/share/luci/menu.d/luci-mod-network.json:50
@@ -9815,8 +9873,8 @@ msgid ""
 "Routing defines over which interface and gateway a certain host or network "
 "can be reached."
 msgstr ""
-"라우팅은 특정 호스트 또는 네트워크에 도달 할 수 있는 인터페이스와 게이트웨이"
-"를 지정합니다."
+"라우팅은 특정 호스트 또는 네트워크에 도달하기 위한 인터페이스 및 게이트웨이 "
+"경로를 지정합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1018
 msgid "Routing table"
@@ -9845,7 +9903,7 @@ msgstr "규칙 수행 동작"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:557
 msgctxt "nft comment"
 msgid "Rule comment: %s"
-msgstr "규칙 주석: %s"
+msgstr "규칙 설명: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:641
 msgid "Rule container chain \"%h\""
@@ -9864,6 +9922,8 @@ msgid ""
 "Rules determine which routing table to use, based on conditions like source "
 "address or interface."
 msgstr ""
+"규칙은 출발지 주소나 인터페이스 같은 조건에 따라 어떤 라우팅 테이블을 사용할"
+"지 결정합니다."
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2324
 msgid "Runtime error"
@@ -9947,7 +10007,7 @@ msgstr "SSTP 서버"
 msgid "SWAP"
 msgstr "스왑(SWAP)"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3296
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3404
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2157
 #: modules/luci-compat/luasrc/view/cbi/error.htm:17
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:26
@@ -9958,7 +10018,7 @@ msgid "Save"
 msgstr "저장"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2139
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4837
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4914
 #: modules/luci-compat/luasrc/view/cbi/footer.htm:22
 msgid "Save & Apply"
 msgstr "저장 및 적용"
@@ -10013,11 +10073,11 @@ msgstr ""
 msgid "Section %s is empty."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4823
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4900
 msgid "Section added"
 msgstr "추가된 섹션"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4825
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4902
 msgid "Section removed"
 msgstr "삭제된 섹션"
 
@@ -10029,6 +10089,10 @@ msgstr "자세한 사항은 \"mount\"의 manpage를 확인하세요"
 msgid "See %s and %s."
 msgstr ""
 
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3287
+msgid "Select"
+msgstr "선택"
+
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:285
 msgid ""
 "Select 'Force upgrade' to flash the image even if the image format check "
@@ -10039,9 +10103,15 @@ msgstr ""
 "세요. 해당 펌웨어가 현재 기기에 맞는 올바른 파일인지 확실한 경우에만 사용하세"
 "요!"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:2971
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3118
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3282
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2984
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3183
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3359
+msgid "Select directory…"
+msgstr "디렉터리 선택…"
+
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:2984
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3183
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3359
 msgid "Select file…"
 msgstr "파일 선택…"
 
@@ -10053,7 +10123,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1170
 msgid "Send ICMP redirects"
-msgstr ""
+msgstr "ICMP 리다이렉트 전송"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:143
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:125
@@ -10111,11 +10181,11 @@ msgstr "세션 만료됨"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1083
 msgid "Set Tag"
-msgstr ""
+msgstr "태그 지정"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:645
 msgid "Set Tags"
-msgstr "태그 부여"
+msgstr "태그 할당"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:754
 msgid "Set a maximum seconds TTL value for entries in the cache."
@@ -10132,7 +10202,7 @@ msgstr ""
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:132
 msgctxt "nft mangle"
 msgid "Set header field <var>%s</var> to <strong>%s</strong>"
-msgstr "헤더 필드 <var>%s</var>을/를 <strong>%s</strong>(으)로 설정"
+msgstr "헤더 필드 <var>%s</var> 값을 <strong>%s</strong>(으)로 설정"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1186
 msgid "Set interface as NDP-Proxy external slave. Default is off."
@@ -10143,11 +10213,13 @@ msgid ""
 "Set interface properties regardless of the link carrier (If set, carrier "
 "sense events do not invoke hotplug handlers)."
 msgstr ""
+"연결 신호 감지 여부와 상관없이 인터페이스 속성을 설정합니다. (설정 시, 연결 "
+"감지 이벤트가 발생해도 핫플러그 핸들러를 호출하지 않습니다.)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:456
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:767
 msgid "Set log class/facility for syslog entries."
-msgstr ""
+msgstr "시스로그 항목의 로그 클래스/시설(Facility)을 설정합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:890
 msgid ""
@@ -10179,7 +10251,7 @@ msgstr "PLMN 설정 실패"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:68
 msgid "Setting operation mode failed"
-msgstr ""
+msgstr "운영 모드 설정 실패"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:89
 msgid "Setting the allowed network technology."
@@ -10211,7 +10283,7 @@ msgid "Short Preamble"
 msgstr "짧은 프리앰블"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:17
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:141
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:142
 msgid "Show"
 msgstr "표시"
 
@@ -10261,7 +10333,7 @@ msgstr "신호 갱신율"
 msgid "Signal:"
 msgstr "신호:"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4574
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4651
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:224
 msgid "Size"
 msgstr "크기"
@@ -10295,7 +10367,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:685
 msgid "Slave selection hash policy"
-msgstr ""
+msgstr "슬레이브 선택 해시 정책"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:767
 msgid "Slow (every 30 seconds)"
@@ -10320,7 +10392,7 @@ msgstr "일부 필드가 올바르지 않아, 값을 저장할 수 없습니다!
 
 #: modules/luci-base/ucode/template/error404.ut:10
 msgid "Sorry, the object you requested was not found."
-msgstr "죄송합니다, 요청하신 객체를 찾을 수 없습니다."
+msgstr "죄송합니다. 요청하신 개체를 찾을 수 없습니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:444
 msgid ""
@@ -10333,7 +10405,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:107
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:157
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:429
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:465
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:70
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:187
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:214
@@ -10432,6 +10504,8 @@ msgid ""
 "networks, choose the associated interface as network in the wireless "
 "settings."
 msgstr ""
+"해당 VRF에 연결할 장치를 지정합니다. 무선 네트워크를 연결하려면, 무선 설정 메"
+"뉴의 네트워크 항목에서 해당 인터페이스를 선택하세요."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:293
 msgid "Specifies the directory the device is attached to"
@@ -10452,7 +10526,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:901
 msgid "Specifies the link monitoring frequency in milliseconds"
-msgstr ""
+msgstr "링크 모니터링 주기를 밀리초(ms) 단위로 지정합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:45
 msgid ""
@@ -10510,7 +10584,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:616
 msgid "Specifies the wired ports to attach to this bonding."
-msgstr ""
+msgstr "이 본딩에 포함할 유선 포트를 지정합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1006
 msgid ""
@@ -10518,6 +10592,8 @@ msgid ""
 "wireless networks, choose the associated interface as network in the "
 "wireless settings."
 msgstr ""
+"해당 브리지에 연결할 유선 포트를 지정합니다. 무선 네트워크를 연결하려면, 무"
+"선 설정 메뉴의 네트워크 항목에서 해당 인터페이스를 선택하세요."
 
 #: protocols/luci-proto-ipip/htdocs/luci-static/resources/protocol/ipip.js:63
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:142
@@ -10588,7 +10664,7 @@ msgstr "속도: %d Mibit/s, 이중: %s"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1805
 msgid "Splitterless ADSL (G.992.2) Annex A"
-msgstr ""
+msgstr "스플리터리스 ADSL (G.992.2) Annex A"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:233
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:270
@@ -10629,7 +10705,7 @@ msgstr "시작 우선순위"
 msgid "Start refresh"
 msgstr "새로고침 시작"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5070
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5147
 msgid "Starting configuration apply…"
 msgstr "구성 적용 시작하는 중…"
 
@@ -10641,7 +10717,7 @@ msgstr "무선 스캔 시작하는 중..."
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:109
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:89
 msgid "Startup"
-msgstr "시작 프로그램"
+msgstr "시작 설정"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/view/modemmanager/status.js:90
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:139
@@ -10673,9 +10749,9 @@ msgid ""
 "to DHCP clients. They are also required for non-dynamic interface "
 "configurations where only hosts with a corresponding lease are served."
 msgstr ""
-"정적 임대는 고정IP 할당과 심볼릭 호스트명을 DHCP 클라이언트에 지정하는 데 사"
-"용됩니다. 이 기능은 지정된 host 에 대해서만 주소 임대를 하도록 하는 non-"
-"dynamic 인터페이스 설정에도 요구됩니다."
+"정적 할당은 DHCP 클라이언트에 고정 IP 주소와 호스트 이름을 부여하는 데 사용됩"
+"니다. 또한, 정적 인터페이스 설정 시 할당 기록이 있는 호스트에만 서비스를 제공"
+"하도록 제한하려는 경우에도 필요합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1257
 msgid "Station inactivity limit"
@@ -10718,7 +10794,7 @@ msgstr "저장 공간"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1149
 msgid "Strict filtering"
-msgstr ""
+msgstr "엄격한 필터링"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:802
 msgid "Strict order"
@@ -10743,7 +10819,7 @@ msgstr "로그 기록 억제"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:479
 msgid "Suppress logging of the routine operation for the DHCP protocol."
-msgstr ""
+msgstr "DHCP 프로토콜의 일반적인 동작에 대한 로그 기록을 억제합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:562
 msgid "Svc Parameters"
@@ -10794,9 +10870,9 @@ msgstr "프로토콜 변경"
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:116
 #: modules/luci-compat/luasrc/view/cbi/ipaddr.htm:26
 msgid "Switch to CIDR list notation"
-msgstr ""
+msgstr "CIDR 목록 형식으로 전환"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3016
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3029
 msgid "Symbolic link"
 msgstr "심볼릭 링크"
 
@@ -10889,13 +10965,13 @@ msgctxt "nft tcp sport"
 msgid "TCP source port"
 msgstr "TCP 출발지 포트"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:357
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:393
 msgid "TCP:"
 msgstr "TCP:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:554
 msgid "TFTP server root"
-msgstr "TFTP 서버 root"
+msgstr "TFTP 서버 루트"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:50
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:90
@@ -11036,7 +11112,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:590
 msgid "The IP address of the boot server"
-msgstr ""
+msgstr "부팅 서버의 IP 주소"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1017
 msgid ""
@@ -11101,7 +11177,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1106
 msgid "The MTU must not exceed the parent device MTU of %d bytes"
-msgstr ""
+msgstr "MTU는 상위 장비의 MTU 설정값(%d 바이트)을 초과할 수 없음"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:935
 msgid ""
@@ -11112,7 +11188,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1416
 msgid "The VLAN ID must be unique"
-msgstr ""
+msgstr "VLAN ID는 고유해야 함"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:85
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:85
@@ -11154,7 +11230,7 @@ msgstr ""
 
 #: modules/luci-compat/luasrc/view/cbi/error.htm:6
 msgid "The configuration file could not be loaded due to the following error:"
-msgstr "다음과 같은 오류 때문에 구성 파일을 불러오지 못했습니다:"
+msgstr "다음 오류가 발생하여 설정 파일을 불러올 수 없습니다:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2458
 msgid ""
@@ -11174,7 +11250,7 @@ msgid ""
 "can be overridden on a per-interface basis."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4946
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5023
 msgid ""
 "The device could not be reached within %d seconds after applying the pending "
 "changes, which caused the configuration to be rolled back for safety "
@@ -11200,7 +11276,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:572
 msgid "The device name \"%s\" is already taken"
-msgstr ""
+msgstr "장비 이름(\"%s\")이 이미 사용 중입니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:408
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:442
@@ -11256,13 +11332,13 @@ msgid ""
 msgstr ""
 "제출하신 SSH 키는 올바르지 않습니다. 올바른 RSA 또는 ECDSA 키를 제출해주세요."
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:201
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:205
 msgid "The given software repository public key is already present."
 msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:954
 msgid "The hardware address(es) of this host."
-msgstr "이 호스트의 하드웨어 주소(들)."
+msgstr "해당 호스트의 하드웨어 주소 목록입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1078
 msgid ""
@@ -11280,11 +11356,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:940
 msgid "The hostname for this host (optional)."
-msgstr "이 호스트의 호스트 이름. (선택 사항)"
+msgstr "해당 호스트의 이름을 지정합니다. (선택 사항)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:584
 msgid "The hostname of the boot server"
-msgstr ""
+msgstr "부팅 서버의 호스트 이름"
 
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:28
 msgid "The interface could not be found"
@@ -11338,6 +11414,11 @@ msgid ""
 "\"leave latency\" of the network. A reduced value results in reduced time to "
 "detect the loss of the last member of a group"
 msgstr ""
+"그룹 탈퇴 메시지에 대응해 전송되는 특정 그룹 쿼리(group-specific queries)의 "
+"최대 응답 시간. (1/100초 단위) 또한 특정 그룹 쿼리 메시지 사이의 간격을 의미"
+"합니다. 설정값을 조정하여 네트워크의 \"이탈 지연 시간(Leave Latency)\"을 조절"
+"할 수 있습니다. 값을 낮추면 그룹의 마지막 멤버 이탈을 감지하는 시간이 단축됩"
+"니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1081
 msgid ""
@@ -11346,6 +11427,9 @@ msgid ""
 "IGMP messages on the subnet; larger values make the traffic less bursty, as "
 "host responses are spread out over a larger interval"
 msgstr ""
+"주기적 일반 쿼리의 최대 응답 시간. (1/100초 단위) 설정값을 변경하여 서브넷 "
+"내 IGMP 메시지의 폭주(burstiness)를 제어할 수 있습니다. 값이 클수록 호스트 응"
+"답이 긴 시간에 걸쳐 분산되어 트래픽 폭주가 줄어듭니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1041
 msgid ""
@@ -11355,7 +11439,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:827
 msgid "The netfilter components below are only regarded when running fw4."
-msgstr ""
+msgstr "아래 Netfilter 구성 요소는 fw4를 실행 중인 경우에만 적용됩니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2472
 msgid "The network name is already used"
@@ -11393,7 +11477,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1089
 msgid "The query response interval must be lower than the query interval value"
-msgstr ""
+msgstr "쿼리 응답 간격은 쿼리 주기 값보다 작아야 함"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:158
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:42
@@ -11402,7 +11486,7 @@ msgstr "재부팅 명령을 수행하지 못했습니다. (코드: %d)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:147
 msgid "The restore command failed with code %d"
-msgstr "복원 명령을 수행하지 못했습니다. (코드: %d)"
+msgstr "복구 명령을 수행하지 못했습니다. (코드: %d)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1071
 msgid ""
@@ -11410,6 +11494,9 @@ msgid ""
 "network. If a network is expected to be lossy, the robustness value may be "
 "increased. IGMP is robust to (Robustness-1) packet losses"
 msgstr ""
+"네트워크의 예상 패킷 손실에 따라 쿼리 재시도 횟수를 조정하는 값입니다. 손실"
+"이 잦은 네트워크라면 이 값을 높여 연결 안정성을 높이세요. IGMP는 (설정값-1)회"
+"의 연속된 패킷 손실을 허용합니다"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:171
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:203
@@ -11421,6 +11508,8 @@ msgid ""
 "The same IPv4 address will be (re)assigned to <em>any</em> host using one of "
 "the MAC addresses listed above."
 msgstr ""
+"위에 등록된 MAC 주소 중 하나를 사용하는 <em>모든</em> 호스트에 동일한 IPv4 주"
+"소가 (재)할당됩니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1067
 msgid ""
@@ -11435,11 +11524,11 @@ msgstr "선택된 %s 모드는 %s 암호화 방식과 호환되지 않습니다"
 
 #: modules/luci-base/ucode/template/csrftoken.ut:11
 msgid "The submitted security token is invalid or already expired!"
-msgstr "전송된 보안 토큰이 잘못되었거나 이미 만료되었습니다!"
+msgstr "전송된 보안 토큰이 유효하지 않거나 이미 만료되었습니다!"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:238
 msgid "The syslog output, pre-filtered for messages related to:"
-msgstr ""
+msgstr "다음 항목으로 사전 필터링된 시스로그(syslog) 출력:"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:98
 msgid ""
@@ -11464,8 +11553,8 @@ msgid ""
 "The system is rebooting now. If the restored configuration changed the "
 "current LAN IP address, you might need to reconnect manually."
 msgstr ""
-"시스템이 재시작 됩니다. 복원된 구성에서 현재 LAN IP 주소가 변경된 경우 수동으"
-"로 다시 연결해야 할 수 있습니다."
+"현재 시스템을 재부팅하고 있습니다. 복구된 설정으로 LAN IP 주소가 변경된 경"
+"우, 수동으로 다시 연결해야 할 수도 있습니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:85
 msgid "The system password has been successfully changed."
@@ -11482,6 +11571,10 @@ msgid ""
 "directives are used in preference to untagged ones. Note that one of mac, "
 "duid or hostname still needs to be specified (can be a wildcard)."
 msgstr ""
+"태그 구성을 통해 호스트를 분류하고 설정 항목을 선별하여 적용할 수 있습니다. "
+"태그를 여러 개 입력하면 모든 조건이 일치하는 경우에만 설정이 적용됩니다. 태그"
+"가 지정된 설정은 태그가 없는 설정보다 우선 적용됩니다. MAC 주소, DUID, 호스"
+"트 이름 중 하나는 반드시 지정해야 합니다. (와일드카드 사용 가능)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:120
 msgid ""
@@ -11489,9 +11582,9 @@ msgid ""
 "listed below. Press \"Continue\" to restore the backup and reboot, or "
 "\"Cancel\" to abort the operation."
 msgstr ""
-"업로드된 백업 아카이브는 유효한 것으로 보이며, 아래 목록에 나열된 파일들을 포"
-"함 하고 있습니다. \"계속\" 버튼을 누르면 백업본으로 복구 후, 재시작 됩니다. "
-"또는 \"취소\" 버튼을 눌러 이 작업을 취소 할 수 있습니다."
+"업로드된 백업 아카이브는 유효한 것으로 보이며, 아래의 파일들을 포함하고 있습"
+"니다. \"계속\"을 누르면 백업을 복구하고 재부팅하며, \"취소\"를 누르면 작업을 "
+"중단합니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:115
 msgid "The uploaded backup archive is not readable"
@@ -11528,13 +11621,10 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:300
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:338
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:164
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:231
-#, fuzzy
 msgid "There are no active leases"
-msgstr "활성화 되어 있는 임대 없음"
+msgstr "활성 임대 없음"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:5113
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:5190
 msgid "There are no changes to apply"
 msgstr "변경된 사항이 없습니다"
 
@@ -11606,8 +11696,8 @@ msgid ""
 "This is the content of /etc/rc.local. Insert your own commands here (in "
 "front of 'exit 0') to execute them at the end of the boot process."
 msgstr ""
-"이것은 /etc/rc.local 파일의 내용입니다. 여기에 ('exit 0' 앞에) 부팅 절차가 끝"
-"날 때 실행하고자 하는 명령들을 삽입하세요."
+"/etc/rc.local 파일의 내용입니다. 부팅 프로세스 마지막에 실행할 명령을 여기에 "
+"('exit 0' 윗줄에) 입력하세요."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:54
 msgid ""
@@ -11617,7 +11707,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:397
 msgid "This is the only DHCP server in the local network."
-msgstr "로컬 네트워크 내의 유일한 DHCP 서버인 경우 활성화합니다."
+msgstr "로컬 네트워크의 유일한 DHCP 서버로 설정합니다."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:73
 msgid "This is the plain username for logging into the account"
@@ -11641,13 +11731,13 @@ msgid ""
 "This is usually the address of the nearest PoP operated by the tunnel broker"
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:129
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:133
 msgid ""
 "This key appears to be in PEM format, which is not supported in an opkg "
 "environment."
 msgstr ""
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:131
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:135
 msgid ""
 "This key does not appear to be in PEM format, which is required in an apk "
 "environment."
@@ -11658,7 +11748,7 @@ msgid ""
 "This list gives an overview over currently running system processes and "
 "their status."
 msgstr ""
-"이 목록은 현재 실행중인 시스템 프로세스와 해당 상태에 대한 개요를 보여줍니다."
+"현재 실행 중인 시스템 프로세스와 해당 상태에 대한 요약 정보를 제공합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:261
 msgid "This option adds additional record types to the cache."
@@ -11670,20 +11760,19 @@ msgid ""
 "This option cannot be used because the ca-bundle package is not installed."
 msgstr ""
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:339
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:375
 msgid "This page displays the active connections via this device."
-msgstr "이 페이지는 이 장치를 거치는 활성 연결 목록을 표시합니다."
+msgstr "이 장치를 통해 활성화된 연결 현황을 표시합니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:313
 msgid ""
 "This page displays the bandwidth used for all available physical interfaces."
-msgstr ""
-"이 페이지는 사용 가능한 모든 물리 인터페이스의 대역폭 사용량을 표시합니다."
+msgstr "사용 가능한 모든 물리적 인터페이스의 대역폭 사용 현황을 표시합니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:343
 msgid ""
 "This page displays the wireless metrics for each available radio interface."
-msgstr "이 페이지는 사용 가능한 각 무선 인터페이스의 무선 지표를 표시합니다."
+msgstr "사용 가능한 각 무선 인터페이스의 성능 지표를 표시합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1748
 msgid "This prefix is randomly generated at first install."
@@ -11693,7 +11782,7 @@ msgstr ""
 msgid "This prevents unreachable IPs in subnets not accessible to you."
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2299
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2342
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
 #: modules/luci-compat/luasrc/view/cbi/tsection.htm:32
 msgid "This section contains no values yet"
@@ -11727,7 +11816,7 @@ msgstr "밀리초(ms) 단위 시간"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1047
 msgid "Time in seconds to spend in listening and learning states"
-msgstr ""
+msgstr "리스닝 및 러닝 상태에서 대기하는 시간 (초 단위)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1248
 msgid "Time interval for rekeying GTK"
@@ -11747,11 +11836,11 @@ msgstr "초(s) 단위 시간"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1033
 msgid "Timeout in seconds for learned MAC addresses in the forwarding database"
-msgstr ""
+msgstr "전달 데이터베이스에 학습된 MAC 주소의 유지 시간 (초 단위)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1052
 msgid "Timeout in seconds until topology updates on link loss"
-msgstr ""
+msgstr "연결 손실 시 토폴로지 업데이트를 대기하는 최대 시간 (초 단위)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:146
 msgid "Timezone"
@@ -11774,9 +11863,9 @@ msgid ""
 "archive here. To reset the firmware to its initial state, click \"Perform "
 "reset\" (only possible with squashfs images)."
 msgstr ""
-"설정 파일을 복구하고자 한다면 이전에 백업하신 아카이브 파일을 여기로 업로드"
-"할 수 있습니다. 펌웨어의 초기 설정 초기화를 원하시다면, \"초기화 하기\" 를 클"
-"릭하세요. (squashfs 이미지들만 가능)."
+"설정 파일을 복구하려면 이전에 생성한 백업 아카이브를 여기에 업로드하세요. 펌"
+"웨어를 초기 상태로 되돌리려면 \"초기화 수행\"을 클릭하세요. (SquashFS 이미지"
+"에서만 가능)"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:165
 msgid "ToS"
@@ -11827,7 +11916,7 @@ msgctxt "nft counter"
 msgid "Traffic matched by rule: %.1000mPackets, %.1024mBytes"
 msgstr "규칙 일치 트래픽: %.1000m패킷, %.1024mBytes"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:431
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:467
 msgid "Transfer"
 msgstr "전송량"
 
@@ -11839,7 +11928,7 @@ msgstr ""
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:44
 msgid "Transix (Japan only)"
-msgstr ""
+msgstr "Transix (일본 전용)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/netdev.js:33
 msgid "Transmit"
@@ -11957,7 +12046,7 @@ msgctxt "nft udp sport"
 msgid "UDP source port"
 msgstr "UDP 출발지 포트"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:347
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:383
 msgid "UDP:"
 msgstr "UDP:"
 
@@ -12018,18 +12107,18 @@ msgstr "상위 인터페이스를 확인할 수 없음"
 
 #: modules/luci-base/ucode/template/error404.ut:12
 msgid "Unable to dispatch"
-msgstr ""
+msgstr "요청을 전달할 수 없음"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/views.js:116
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/dmesg.js:111
 msgid "Unable to load log data:"
-msgstr ""
+msgstr "로그 데이터를 불러올 수 없음:"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:54
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:54
 #: protocols/luci-proto-qmi/htdocs/luci-static/resources/protocol/qmi.js:22
 msgid "Unable to obtain client ID"
-msgstr ""
+msgstr "클라이언트 ID 할당 실패"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:221
 msgid "Unable to obtain mount information"
@@ -12046,12 +12135,12 @@ msgstr "iptables의 집계를 초기화 할 수 없습니다: %s"
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:64
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/dslite.js:7
 msgid "Unable to resolve AFTR host name"
-msgstr ""
+msgstr "AFTR 호스트 이름을 확인할 수 없음"
 
 #: modules/luci-base/htdocs/luci-static/resources/network.js:20
 #: modules/luci-compat/luasrc/model/network.lua:38
 msgid "Unable to resolve peer host name"
-msgstr ""
+msgstr "피어 호스트 이름을 확인할 수 없음"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:317
 msgid "Unable to restart firewall: %s"
@@ -12131,7 +12220,7 @@ msgstr ""
 msgid "Unknown error (%s)"
 msgstr "알 수 없는 오류 (%s)"
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:408
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:419
 msgid "Unknown error code"
 msgstr "알 수 없는 오류 코드"
 
@@ -12152,16 +12241,16 @@ msgctxt "Dnsmasq instance"
 msgid "Unnamed instance #%d"
 msgstr "이름 없는 인스턴스 #%d"
 
-#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:71
+#: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:75
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:121
 msgid "Unnamed key"
 msgstr "이름 없는 키"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4762
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4839
 msgid "Unsaved Changes"
 msgstr "적용 안된 변경 사항"
 
-#: modules/luci-base/htdocs/luci-static/resources/rpc.js:406
+#: modules/luci-base/htdocs/luci-static/resources/rpc.js:417
 msgid "Unspecified error"
 msgstr "명시되지 않은 오류"
 
@@ -12177,7 +12266,7 @@ msgstr ""
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:69
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:31
 msgid "Unsupported modem"
-msgstr ""
+msgstr "지원되지 않는 모뎀"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:114
 msgid "Unsupported protocol"
@@ -12201,7 +12290,7 @@ msgstr "이름 없는 피어"
 msgid "Up"
 msgstr "위로"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4648
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4725
 msgid "Upload"
 msgstr "업로드"
 
@@ -12218,25 +12307,25 @@ msgstr ""
 msgid "Upload archive..."
 msgstr "아카이브 업로드..."
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3172
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3237
 msgid "Upload file"
 msgstr "파일 업로드"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3147
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3212
 msgid "Upload file…"
 msgstr "파일 업로드…"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4594
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4671
 msgid "Upload has been cancelled"
 msgstr "업로드가 취소되었습니다"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:3094
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4636
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:3159
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4713
 msgid "Upload request failed: %s"
 msgstr "업로드 요청 실패: %s"
 
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4555
-#: modules/luci-base/htdocs/luci-static/resources/ui.js:4609
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4632
+#: modules/luci-base/htdocs/luci-static/resources/ui.js:4686
 msgid "Uploading file…"
 msgstr "파일 업로드 중…"
 
@@ -12333,7 +12422,7 @@ msgstr "루트 파일 시스템 (/)으로 사용"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:34
 msgid "Use broadcast flag"
-msgstr "Broadcast flag 사용"
+msgstr "브로드캐스트 플래그 사용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1493
 msgid "Use builtin IPv6-management"
@@ -12392,11 +12481,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:777
 msgid "Use the <em>Add</em> Button to add a new UC."
-msgstr ""
+msgstr "<em>추가</em> 버튼으로 새 UC를 추가합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:744
 msgid "Use the <em>Add</em> Button to add a new VC."
-msgstr ""
+msgstr "<em>추가</em> 버튼으로 새 VC를 추가합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:928
 msgid ""
@@ -12406,11 +12495,11 @@ msgid ""
 "the requesting host. The optional <em>Lease time</em> can be used to set non-"
 "standard host-specific lease time, e.g. 12h, 3d or infinite."
 msgstr ""
-"새로운 항목을 추가하기 위해서는 <em>추가</em> 버튼을 사용하세요. <em>MAC-주소"
-"</em>는 host 를 나타내며, <em>IPv4-주소</em>는 사용할 고정 주소를 나타내고, "
-"요청하는 host 에 대해 <em>hostname</em> 이 symbolic name 으로 부여됩니다. 선"
-"택 사항인 <em>임대 시간</em>은 해당 host 에만 해당되는 시각을 설정하는데 사용"
-"될 수 있습니다. 예를 들어 12h, 3d 혹은 infinite 값들이 가능합니다."
+"<em>추가</em> 버튼으로 신규 할당 항목을 추가합니다. <em>MAC 주소</em>로 기기"
+"를 식별하고, <em>IPv4 주소</em>로 할당할 고정 주소를 지정하며, <em>호스트 이"
+"름</em>으로 해당 기기에 이름을 부여합니다. 선택 사항인 <em>임대 시간</em> 설"
+"정을 통해 호스트별로 별도의 기간[예: 12h (12시간), 3d (3일), infinite (무제"
+"한)]을 지정할 수도 있습니다."
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:194
@@ -12462,11 +12551,11 @@ msgstr "사용자 이름"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:141
 msgid "Utilise <strong>%h</strong> conntrack helper"
-msgstr ""
+msgstr "<strong>%h</strong> Conntrack 헬퍼 사용"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:142
 msgid "Utilize flow table <strong>%h</strong>"
-msgstr ""
+msgstr "플로우 테이블 <strong>%h</strong> 사용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:646
 msgid "VC"
@@ -12483,7 +12572,7 @@ msgstr "VDSL"
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:557
 msgctxt "MACVLAN mode"
 msgid "VEPA (Virtual Ethernet Port Aggregator)"
-msgstr ""
+msgstr "VEPA (가상 이더넷 포트 통합)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:465
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1670
@@ -12544,7 +12633,7 @@ msgstr ""
 #: modules/luci-compat/luasrc/model/network/proto_vpnc.lua:9
 #: protocols/luci-proto-vpnc/htdocs/luci-static/resources/protocol/vpnc.js:9
 msgid "VPNC (CISCO 3000 (and others) VPN)"
-msgstr ""
+msgstr "VPNC [Cisco 3000 (및 기타) VPN]"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:116
 msgid "VRF"
@@ -12592,7 +12681,7 @@ msgstr ""
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/dhcp.js:40
 msgid "Vendor Class to send when requesting DHCP"
-msgstr "DHCP 요청시 전송할 Vendor Class"
+msgstr "DHCP 요청 시 전송할 벤더 클래스"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:314
 msgid "Verdict map: <var>%h</var> is"
@@ -12717,6 +12806,8 @@ msgid ""
 "When a host matches an entry then the special tag %s is set. Use %s to match "
 "all known hosts."
 msgstr ""
+"호스트가 항목과 일치하면 특수 태그인 %s이 할당됩니다. %s으로 모든 알려진 호스"
+"트를 매칭합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1283
 msgid ""
@@ -12749,6 +12840,8 @@ msgid ""
 "requests or replies, otherwise only preexisting table entries are updated, "
 "but no new hosts are learned."
 msgstr ""
+"활성화 시 Gratuitous ARP 요청 및 응답 패킷을 수신하여 ARP 테이블에 새 항목을 "
+"추가합니다. 비활성화 시 기존 항목만 갱신하고 신규 호스트를 학습하지 않습니다."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:14
 msgid ""
@@ -12885,7 +12978,7 @@ msgstr "수신한 DNS 질의(queries)를 시스로그에 기록합니다."
 msgid "Write system log to file"
 msgstr "파일에 시스템 로그 쓰기"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:4403
+#: modules/luci-base/htdocs/luci-static/resources/form.js:4513
 msgid "Yes"
 msgstr "예"
 
@@ -12908,10 +13001,9 @@ msgid ""
 "essential init scripts like \"network\", your device might become "
 "inaccessible!</strong>"
 msgstr ""
-"이 메뉴에서 설치된 init script 를 활성화/비활성화 할 수 있습니다. 변경 사항"
-"은 장치가 재부팅 될 때 적용되게 됩니다.<br /><strong>경고: 만약 \"network\" "
-"와 같은 중요 init script 를 비활성화 할 경우, 장치에 접속을 못하실 수 있습니"
-"다!</strong>"
+"설치된 초기화 스크립트를 활성화하거나 비활성화할 수 있습니다. 변경 사항은 장"
+"치를 재부팅한 후에 적용됩니다.<br /><strong>경고: \"network\"와 같은 필수 초"
+"기화 스크립트를 비활성화하면 장치에 접속하지 못할 수 있습니다!</strong>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:346
 msgid "You may add multiple records for the same Target."
@@ -12995,11 +13087,11 @@ msgstr "자동"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (disabled)"
-msgstr "자동 (비활성화됨)"
+msgstr "자동 (비활성)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:198
 msgid "automatic (enabled)"
-msgstr "자동 (활성화됨)"
+msgstr "자동 (활성)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:82
 msgid "baseT"
@@ -13128,7 +13220,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:157
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:748
 msgid "enabled"
-msgstr "활성화됨"
+msgstr "활성"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:699
 msgid "enabled (default)"
@@ -13179,9 +13271,9 @@ msgstr ""
 msgid "half-duplex"
 msgstr "반이중"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:622
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:650
 msgid "hexadecimal encoded value"
-msgstr ""
+msgstr "16진수 값"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2253
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/channel_analysis.js:374
@@ -13211,7 +13303,7 @@ msgstr "검색 내용:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1062
 msgid "infinite (lease does not expire)"
-msgstr ""
+msgstr "infinite (만료되지 않음)"
 
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:85
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:209
@@ -13223,11 +13315,11 @@ msgstr "입력"
 msgid "integer"
 msgstr "정수"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:441
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:469
 msgid "key between 8 and 63 characters"
 msgstr "8~63자의 암호 키"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:453
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:481
 msgid "key with either 5 or 13 characters"
 msgstr "5자 또는 13자의 암호 키"
 
@@ -13288,12 +13380,12 @@ msgstr "연결 없음"
 msgid "no override"
 msgstr ""
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:2288
+#: modules/luci-base/htdocs/luci-static/resources/form.js:2331
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:72
 msgid "non-empty value"
 msgstr "비어 있지 않은 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3447
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3555
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:851
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:913
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:957
@@ -13365,11 +13457,11 @@ msgctxt "packets, abbreviated"
 msgid "pkts"
 msgstr "패킷"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:266
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:276
 msgid "positive decimal value"
 msgstr "양수인 10진수 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:258
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:268
 msgid "positive integer value"
 msgstr "양수 값"
 
@@ -13473,9 +13565,9 @@ msgstr ""
 "(Hypertext Transfer Protocol Secure)\">HTTPS</abbr> 네트워크 접속을 제공합니"
 "다."
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:612
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:640
 msgid "unique value"
-msgstr "유니크 값"
+msgstr "고유한 값"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:629
 msgid "unknown"
@@ -13492,7 +13584,7 @@ msgstr "알 수 없는 버전"
 msgid "unlimited"
 msgstr "무제한"
 
-#: modules/luci-base/htdocs/luci-static/resources/form.js:3828
+#: modules/luci-base/htdocs/luci-static/resources/form.js:3938
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:92
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:154
 #: modules/luci-base/htdocs/luci-static/resources/tools/widgets.js:384
@@ -13516,126 +13608,134 @@ msgstr "지정 안 함 / 직접 생성:"
 msgid "untagged"
 msgstr "untagged"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:271
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:281
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:72
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:83
 msgid "valid IP address"
 msgstr "유효한 IP 주소"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:271
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:281
 msgid "valid IP address or prefix"
 msgstr "유효한 IP 주소 또는 접두사"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:352
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:380
 msgid "valid IP address range"
 msgstr "유효한 IP 주소 범위"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:308
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:336
 msgid "valid IPv4 CIDR"
 msgstr "유효한 IPv4 CIDR"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:279
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:289
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:76
 msgid "valid IPv4 address"
 msgstr "유효한 IPv4 주소"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:279
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:289
 msgid "valid IPv4 address or network"
 msgstr "유효한 IPv4 주소 또는 네트워크"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:358
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:386
 msgid "valid IPv4 address range"
 msgstr "유효한 IPv4 주소 범위"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:420
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:448
 msgid "valid IPv4 address:port"
 msgstr "유효한 IPv4 주소:포트"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:342
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:370
 msgid "valid IPv4 network"
 msgstr "유효한 IPv4 네트워크"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:302
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:330
 msgid "valid IPv4 or IPv6 CIDR"
 msgstr "유효한 IPv4 또는 IPv6 CIDR"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:292
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:320
 msgid "valid IPv4 prefix value (0-32)"
 msgstr "유효한 IPv4 접두사 값 (0-32)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:314
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:342
 msgid "valid IPv6 CIDR"
 msgstr "유효한 IPv6 CIDR"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:287
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:306
+msgid "valid IPv6 Link Local address"
+msgstr "유효한 IPv6 링크 로컬 주소"
+
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:315
+msgid "valid IPv6 ULA address"
+msgstr "유효한 IPv6 ULA 주소"
+
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:297
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:80
 msgid "valid IPv6 address"
 msgstr "유효한 IPv6 주소"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:287
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:297
 msgid "valid IPv6 address or prefix"
 msgstr "유효한 IPv6 주소 또는 접두사"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:364
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:392
 msgid "valid IPv6 address range"
 msgstr "유효한 IPv6 주소 범위"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:332
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:360
 msgid "valid IPv6 host id"
 msgstr "유효한 IPv6 호스트 ID"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:347
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:375
 msgid "valid IPv6 network"
 msgstr "유효한 IPv6 네트워크"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:297
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:325
 msgid "valid IPv6 prefix value (0-128)"
 msgstr "유효한 IPv6 접두사 값 (0-128)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:386
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:414
 msgid "valid MAC address"
 msgstr "유효한 MAC 주소"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:457
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:485
 msgid "valid UCI identifier"
 msgstr "유효한 UCI 식별자"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:408
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:436
 msgid "valid UCI identifier, hostname or IP address range"
 msgstr "유효한 UCI 식별자나 호스트 이름 또는 IP 주소"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:429
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:432
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:457
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:460
 msgid "valid address:port"
 msgstr "유효한 주소:포트"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:587
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:590
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:615
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:618
 msgid "valid date (YYYY-MM-DD)"
 msgstr "올바른 날짜 형식 (YYYY-MM-DD)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:262
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:272
 msgid "valid decimal value"
 msgstr "유효한 16진수 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:461
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:489
 msgid "valid fw4 zone name UCI identifier"
-msgstr ""
+msgstr "유효한 fw4 영역 UCI 식별 이름"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:451
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:479
 msgid "valid hexadecimal WEP key"
 msgstr "유효한 16진수 WEP 키"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:439
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:467
 msgid "valid hexadecimal WPA key"
 msgstr "유효한 16진수 WPA 키"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:414
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:442
 msgid "valid host:port"
 msgstr "유효한 호스트:포트"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:401
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:403
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:429
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:431
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:156
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:162
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:23
@@ -13644,75 +13744,75 @@ msgstr "유효한 호스트:포트"
 msgid "valid hostname"
 msgstr "유효한 호스트 이름"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:391
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:419
 msgid "valid hostname or IP address"
 msgstr "유효한 호스트 이름 또는 IP 주소"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:254
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:264
 msgid "valid integer value"
 msgstr "유효한 정수 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:386
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:414
 msgid "valid multicast MAC address"
 msgstr "유효한 멀티캐스트 MAC 주소"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:470
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:498
 msgid ""
 "valid network device name between 1 and 15 characters not containing \":\", "
 "\"/\", \"%\" or spaces"
-msgstr ""
+msgstr "유효한 네트워크 장치 이름 (\":\", \"/\", \"%\", 공백 제외 1~15자)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:468
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:496
 msgid "valid network device name, not \".\" or \"..\""
-msgstr ""
+msgstr "유효한 네트워크 장치 이름 (\".\", \"..\" 제외)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:337
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:365
 msgid "valid network in address/netmask notation"
 msgstr "유효한 CIDR 형식의 네트워크 (주소/넷마스크 표기)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:567
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:595
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
-msgstr ""
+msgstr "전화번호 숫자 및 기호 (0-9, \"*\", \"#\", \"!\", \".\")"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:377
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:380
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:405
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:408
 msgid "valid port or port range (port1-port2)"
 msgstr "유효한 포트 또는 포트 범위 (포트1-포트2)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:369
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:397
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:87
 msgid "valid port value"
 msgstr "유효한 포트 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:572
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:600
 msgid "valid time (HH:MM:SS)"
 msgstr "올바른 시간 형식 (HH:MM:SS)"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:494
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:522
 msgid "value between %d and %d characters"
 msgstr "%d~%d자의 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:475
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:503
 msgid "value between %f and %f"
-msgstr ""
+msgstr "%f 이상 %f 이하의 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:479
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:507
 msgid "value greater or equal to %f"
 msgstr "%f 이상의 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:483
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:511
 msgid "value smaller or equal to %f"
 msgstr "%f 이하의 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:488
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:516
 msgid "value with %d characters"
 msgstr "%d자의 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:499
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:527
 msgid "value with at least %d characters"
 msgstr "%d자 이상의 값"
 
-#: modules/luci-base/htdocs/luci-static/resources/validation.js:504
+#: modules/luci-base/htdocs/luci-static/resources/validation.js:532
 msgid "value with at most %d characters"
 msgstr "%d자 이하의 값"
 
