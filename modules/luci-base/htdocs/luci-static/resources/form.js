@@ -105,6 +105,9 @@ const CBIJSONConfig = baseclass.extend({
 		if (Array.isArray(value))
 			return value;
 
+		if (L.isObject(value))
+			return value;
+
 		if (value != null)
 			return String(value);
 
@@ -121,6 +124,8 @@ const CBIJSONConfig = baseclass.extend({
 		if (value == null)
 			delete this.data[section][option];
 		else if (Array.isArray(value))
+			this.data[section][option] = value;
+		else if (L.isObject(value))
 			this.data[section][option] = value;
 		else
 			this.data[section][option] = String(value);
