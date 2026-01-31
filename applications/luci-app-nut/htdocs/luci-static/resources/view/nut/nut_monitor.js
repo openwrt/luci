@@ -66,7 +66,7 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = 5;
 
-		o = s.option(form.Value, 'hotsync', _('Hot Sync'));
+		o = s.option(form.Value, 'hostsync', _('Host Sync'));
 		o.optional = true;
 		o.placeholder = 15;
 
