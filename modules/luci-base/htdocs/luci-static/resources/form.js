@@ -2740,7 +2740,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 					this.handleTouchEnd(ev);
 				}, this) : null
 			};
-			const dragHandle = E('div', dragHandleProps, '☰');
+			const dragHandle = E('button', dragHandleProps, '☰');
 			dom.append(tdEl.lastElementChild, [ dragHandle ]);
 		}
 
