@@ -345,6 +345,27 @@ header h3 a, header .brand {
 	[data-page="admin-network-network"] .td[data-name="_ifacestat"] {
 		flex-basis: 60%;
 	}
+
+	[data-page="admin-network-wireless"] .tr[data-sid^="radio"] .td[data-name="_badge"] .ifacebadge {
+		min-width: 100%;
+	}
+
+	[data-page="admin-network-wireless"] .tr:not([data-sid^="radio"]) .td[data-name="_badge"] div.center {
+		align-items: center;
+		display: flex;
+		justify-content: flex-end;
+	}
+
+	[data-page="admin-network-wireless"] .tr:not([data-sid^="radio"]) .td[data-name="_badge"] div.center:before {
+		color: #999;
+		content: '\21B3';
+		font-size: 1.8em;
+		margin-right: 10px;
+	}
+
+	[data-page="admin-network-wireless"] .tr:not([data-sid^="radio"]) .td[data-name="_badge"] .ifacebadge {
+		min-width: 80%;
+	}
 }
 
 @media screen and (max-device-width: 375px) {
@@ -425,5 +446,18 @@ header h3 a, header .brand {
 	.td .ifacebox .ifacebox-head > *,
 	.ifacebox .ifacebox-body > * {
 		margin: .125em;
+	}
+
+	[data-page="admin-network-wireless"] .td[data-name="_badge"] {
+		min-width: 100%;
+	}
+
+	[data-page="admin-network-wireless"] .tr:not([data-sid^="radio"]) .td[data-name="_badge"] .ifacebadge {
+		min-width: 100%;
+	}
+
+	[data-page="admin-network-wireless"] .tr:not([data-sid^="radio"]) .td[data-name="_badge"] div.center:before {
+		content: none;
+		width: 0;
 	}
 }
