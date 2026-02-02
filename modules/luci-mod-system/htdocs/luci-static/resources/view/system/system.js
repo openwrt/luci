@@ -252,6 +252,12 @@ return view.extend({
 			if (k[i].charAt(0) != '.')
 				o.value(uci.get('luci', 'themes', k[i]), k[i]);
 
+		o = s.taboption('language', form.Flag, '_tablefilters', _('Table Filters'));
+		o.default = o.disabled;
+		o.uciconfig = 'luci';
+		o.ucisection = 'main';
+		o.ucioption = 'tablefilters';
+
 		/*
 		 * NTP
 		 */
