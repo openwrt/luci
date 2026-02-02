@@ -177,6 +177,7 @@ return view.extend({
 		s.anonymous = true;
 		s.sortable  = true;
 		s.cloneable = true;
+		s.filterrow = true;
 
 		s.tab('general', _('General Settings'));
 		s.tab('advanced', _('Advanced Settings'));
