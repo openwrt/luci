@@ -2475,6 +2475,15 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 */
 
 	/**
+	 * Set a custom text for the actions column header row when actions buttons
+	 * are present.
+	 *
+	 * @name LuCI.form.TableSection.prototype#actionstitle
+	 * @type string|function
+	 * @default null
+	 */
+
+	/**
 	 * Specify a maximum amount of columns to display. By default, one table
 	 * column is rendered for each child option of the form section element.
 	 * When this option is set to a positive number, then no more columns than
@@ -2715,10 +2724,13 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 					dom.content(trEl.lastElementChild, opt.title);
 			}
 
-			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable)
+			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable) {
+				const rawTitle = (this.actionstitle !== undefined) ? this.actionstitle : null;
+				const actionsTitle = (typeof rawTitle === 'function') ? rawTitle.call(this, has_action) : rawTitle;
 				trEl.appendChild(E('th', {
 					'class': 'th cbi-section-table-cell cbi-section-actions'
-				}));
+				}, (actionsTitle !== undefined) ? actionsTitle : null));
+			}
 
 			trEls.appendChild(trEl);
 		}
@@ -2742,10 +2754,13 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 						(typeof(opt.width) == 'number') ? `${opt.width}px` : opt.width;
 			}
 
-			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable)
+			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable) {
+				const rawTitle = (this.actionstitle !== undefined) ? this.actionstitle : null;
+				const actionsTitle = (typeof rawTitle === 'function') ? rawTitle.call(this, has_action) : rawTitle;
 				trEl.appendChild(E('th', {
 					'class': 'th cbi-section-table-cell cbi-section-actions'
-				}));
+				}, (actionsTitle !== undefined) ? actionsTitle : null));
+			}
 
 			trEls.appendChild(trEl);
 		}
