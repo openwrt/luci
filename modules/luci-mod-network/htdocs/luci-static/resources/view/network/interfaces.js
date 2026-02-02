@@ -474,6 +474,7 @@ return view.extend({
 		s = m.section(form.GridSection, 'interface', _('Interfaces'));
 		s.anonymous = true;
 		s.addremove = true;
+		s.filterrow = true;
 		s.addbtntitle = _('Add new interface...');
 
 		s.load = function() {
