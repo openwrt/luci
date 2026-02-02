@@ -2515,6 +2515,28 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 */
 
 	/**
+	 * Optional table filtering for table sections.
+	 *
+	 * Set `filterrow` to `true` to display a filter header row in the generated
+	 * table with per-column text fields to search for string matches in the
+	 * column. The filter row appears after the titles row.
+	 *
+	 * The filters work cumulatively: text in each field shall match
+	 * an entry for the row to be displayed. The results are filtered live.
+	 * Matching is case-sensitive, and partial, i.e. part or all of the result 
+	 * includes the search string.
+	 *
+	 * The filter fields assume the placeholder text `Filter ` suffixed with
+	 * the column name, to ease correlation of filter fields to their corresponding
+	 * column entries on narrow displays which might fold the columns over 
+	 * multiple lines.
+	 *
+	 * @name LuCI.form.TableSection.prototype#filterrow
+	 * @type boolean
+	 * @default null
+	 */
+
+	/**
 	 * Optional footer row for table sections.
 	 *
 	 * Set `footer` to one of:
@@ -2665,6 +2687,8 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 		sectionEl.appendChild(tableEl);
 
+		setTimeout(() => { try { this.stabilizeActionColumnWidth(tableEl); } catch (e) {} }, 0);
+
 		sectionEl.appendChild(this.renderSectionAdd('cbi-tblsection-create'));
 
 		dom.bindClassInstance(sectionEl, this);
@@ -2679,6 +2703,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		const max_cols = this.max_cols ?? this.children.length;
 		const has_more = max_cols < this.children.length;
 		const anon_class = (!this.anonymous || this.sectiontitle) ? 'named' : 'anonymous';
+		const tableFilter = this.map.data.get('luci', 'main', 'tablefilters') || false;
 		const trEls = E([]);
 
 		for (let i = 0, opt; i < max_cols && (opt = this.children[i]) != null; i++) {
@@ -2729,6 +2754,103 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 			}
 
 			trEls.appendChild(trEl);
+		}
+
+		if (this.filterrow && tableFilter) {
+			const filterTr = E('tr', { 'class': `tr cbi-section-table-filter ${anon_class}` });
+
+			if (!this.anonymous || this.sectiontitle) {
+				filterTr.appendChild(E('th', { 'class': 'th cbi-section-table-cell' }, [
+					E('input', {
+						'type': 'text',
+						'class': 'cbi-input cbi-section-filter',
+						'placeholder': _('Filter'),
+					})
+				]));
+			}
+
+			for (let i = 0, opt; i < max_cols && (opt = this.children[i]) != null; i++) {
+				if (opt.modalonly) continue;
+				const f = /flag/i.test(opt.__name__);
+
+				const th = E('th', { 'class': 'th cbi-section-table-cell' }, [
+					E('input', {
+						'type': 'text',
+						'class': 'cbi-input cbi-section-filter',
+						'placeholder': f ? _('0/1') : _('Filter') + ' ' + opt.title,
+						'maxlength': f ? 1 : '',
+						'style': f ? 'width: 30px;' : '',
+					})
+				]);
+
+				if (opt.width != null) th.style.width = (typeof(opt.width) == 'number') ? `${opt.width}px` : opt.width;
+				filterTr.appendChild(th);
+			}
+
+			if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable) {
+				filterTr.appendChild(E('th', { 'class': 'th cbi-section-table-cell cbi-section-actions' }, [
+					E('button', {
+						'class': 'btn cbi-button cbi-button-neutral',
+						'type': 'button',
+						'title': _('Reset filters'),
+						'click': () => {
+							const inputs = filterTr.querySelectorAll('input.cbi-section-filter');
+							inputs.forEach(i => {
+								i.value = '';
+								i.dispatchEvent(new Event('input', { bubbles: true }));
+							});
+							const tbl = filterTr.closest('table');
+							try { this.stabilizeActionColumnWidth(tbl); } catch (e) { }
+						}
+					}, [ _('Reset') ])
+				]));
+			}
+
+			const attachFn = (input) => {
+				input.addEventListener('input', (ev) => {
+					const tbl = ev.target.closest('table');
+					if (!tbl) return;
+
+					const inputs = tbl.querySelectorAll('tr.cbi-section-table-filter input');
+					const col_filts = Array.from(inputs).map(i => i.value.trim());
+					const rows = tbl.querySelectorAll('tr.tr.cbi-section-table-row');
+
+					rows.forEach(row => {
+						const cells = Array.from(row.children)
+							.filter(c => c.classList && c.classList.contains('td'));
+
+						let hide = false;
+
+						for (let k = 0; k < col_filts.length; k++) {
+							if (!col_filts[k]) continue;
+
+							let txt;
+							const cell = cells[k];
+
+							const checked = cell?.querySelector('input[type="checkbox"]')?.checked;
+							const select = cell?.querySelector('select');
+							const checkbox = checked !== undefined;
+
+							if (checkbox)
+								txt = checked ? '1' : '0';
+							else if (select)
+								txt = Array.from(select.selectedOptions)
+									.map(opt => opt.textContent || opt.value.toLowerCase())
+									.join(' ');
+							else
+								txt = cell.textContent || '';
+
+							if (!txt.includes(col_filts[k])) { hide = true; break; }
+						}
+						row.style.display = hide ? 'none' : '';
+					});
+					try { this.stabilizeActionColumnWidth(tbl); } catch (e) { /* ignore */ }
+				});
+			};
+
+			filterTr.querySelectorAll('input').forEach(attachFn);
+
+			trEls.appendChild(filterTr);
 		}
 
 		if (has_descriptions && !this.nodescriptions) {
@@ -2800,6 +2922,49 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		return trEl;
 	},
 
+
+	/**
+	 * Ensure the actions column keeps a stable width even when rows are hidden
+	 * (e.g., due to filtering). Measures the widest actions cell and applies
+	 * a fixed width to header/filter/footer/action cells. Stores measured width
+	 * in dataset so filtering won't collapse the column if all rows are hidden.
+	 */
+	stabilizeActionColumnWidth(tableEl) {
+		if (!tableEl || !tableEl.querySelector) return;
+
+		const actionDivs = Array.from(tableEl.querySelectorAll('td.cbi-section-actions > div'));
+		let max = 0;
+		actionDivs.forEach(div => {
+			if (div && div.offsetWidth) max = Math.max(max, div.offsetWidth);
+		});
+
+		const saved = parseInt(tableEl.dataset.actionColWidth || '0', 10) || 0;
+		if (max <= 0 && saved > 0) max = saved;
+		if (max <= 0) return; // nothing measurable
+
+		tableEl.dataset.actionColWidth = String(max);
+		const px = `${max}px`;
+
+		const setStyles = (el) => {
+			if (!el) return;
+			el.style.minWidth = px;
+			el.style.width = px;
+		};
+
+		setStyles(tableEl.querySelector('th.cbi-section-actions'));
+		setStyles(tableEl.querySelector('tr.cbi-section-table-filter th.cbi-section-actions'));
+		setStyles(tableEl.querySelector('tr.cbi-section-table-footer td.cbi-section-actions'));
+		actionDivs.forEach(div => setStyles(div.parentNode));
+
+		// attach a single resize handler per table to recalc on viewport changes
+		if (!tableEl.__actionColResizeAttached) {
+			tableEl.__actionColResizeAttached = true;
+			window.addEventListener('resize', () => {
+				delete tableEl.dataset.actionColWidth; // force re-measure
+				this.stabilizeActionColumnWidth(tableEl);
+			});
+		}
+	},
 
 	/** @private */
 	renderRowActions(section_id, more_label, trEl) {
