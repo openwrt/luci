@@ -2034,7 +2034,10 @@ form.inline { display: inline; margin-bottom: 0; }
 	font-weight: normal;
 }
 
-.cbi-section-table-titles.named::before,
+.cbi-section-table-titles {
+	font-weight: bold;
+}
+
 .cbi-section-table-descr.named::before,
 .cbi-section-table-row[data-title]::before {
 	content: none;
@@ -2317,10 +2320,6 @@ div.cbi-value var,
 .td.cbi-value-field var {
 	font-style: italic;
 	color: #0069d6;
-}
-
-.cbi-value-first-field {
-	font-weight: bold;	
 }
 
 div.cbi-value var[data-tooltip],
