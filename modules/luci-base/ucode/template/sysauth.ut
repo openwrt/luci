@@ -7,17 +7,13 @@
 {% include('header') %}
 
 <form method="post">
-	{% if (fuser && !auth_plugin): %}
+	{% if (fuser): %}
 		<div class="alert-message warning">
 			<p>{{ _('Invalid username and/or password! Please try again.') }}</p>
 		</div>
 	{% endif %}
 
-	{% if (auth_failed): %}
-		<div class="alert-message warning">
-			<p>{{ auth_message ?? _('Authentication failed. Please try again.') }}</p>
-		</div>
-	{% elif (auth_message && !auth_failed): %}
+	{% if (auth_message && !fuser): %}
 		<div class="alert-message">
 			<p>{{ auth_message }}</p>
 		</div>

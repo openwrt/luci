@@ -1038,6 +1038,15 @@ dispatch = function(_http, path) {
 					pass = http.formvalue('luci_password');
 				}
 
+				let auth_check = get_auth_challenge(user ?? 'root');
+				let auth_fields = null;
+				let auth_message = null;
+
+				if (auth_check.pending) {
+					auth_fields = auth_check.fields;
+					auth_message = auth_check.message;
+				}
+
 				if (user != null && pass != null)
 					session = session_setup(user, pass, resolved.ctx.request_path);
 
@@ -1047,7 +1056,13 @@ dispatch = function(_http, path) {
 					http.status(403, 'Forbidden');
 					http.header('X-LuCI-Login-Required', 'yes');
 
-					let scope = { duser: 'root', fuser: user };
+					// Show login form with 2FA fields if required
+					let scope = {
+						duser: 'root',
+						fuser: user,
+						auth_fields: auth_fields,
+						auth_message: auth_message
+					};
 					let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;
 
 					if (runtime.is_ucode_template(theme_sysauth) || runtime.is_lua_template(theme_sysauth)) {
@@ -1062,15 +1077,13 @@ dispatch = function(_http, path) {
 					return runtime.render('sysauth', scope);
 				}
 
-				// Check authentication plugins after password verification succeeds
-				// Always use the authenticated username from the session to prevent bypass
 				let auth_user = session.data?.username;
 				if (!auth_user) {
-					// Session doesn't have username, this shouldn't happen but handle gracefully
 					auth_user = user;
 				}
 
-				let auth_check = get_auth_challenge(auth_user);
+				// Re-check auth challenge with actual authenticated user
+				auth_check = get_auth_challenge(auth_user);
 				if (auth_check.pending) {
 					// Plugin requires additional authentication - verify it
 					let auth_verify = verify_auth_challenge(auth_user);
@@ -1084,23 +1097,13 @@ dispatch = function(_http, path) {
 						http.status(403, 'Forbidden');
 						http.header('X-LuCI-Login-Required', 'yes');
 
-						// Determine if user attempted plugin authentication
-						let plugin_auth_attempted = false;
-						for (let field in auth_check.fields ?? []) {
-							if (http.formvalue(field.name) != null) {
-								plugin_auth_attempted = true;
-								break;
-							}
-						}
-
 						let scope = {
 							duser: 'root',
 							fuser: user,
 							auth_plugin: auth_check.plugin?.name,
 							auth_fields: auth_check.fields,
 							auth_message: auth_verify.message ?? auth_check.message,
-							auth_html: auth_check.html,
-							auth_failed: plugin_auth_attempted
+							auth_html: auth_check.html
 						};
 
 						let theme_sysauth = `themes/${basename(runtime.env.media)}/sysauth`;

@@ -52,17 +52,13 @@
 
 	<hr>
 
-	{% if (fuser && !auth_plugin): %}
+	{% if (fuser): %}
 	<div class="alert-message error">
 		{{ _('Invalid username and/or password! Please try again.') }}
 	</div>
 	{% endif %}
 
-	{% if (auth_failed): %}
-	<div class="alert-message error">
-		{{ auth_message ?? _('Authentication failed. Please try again.') }}
-	</div>
-	{% elif (auth_message && !auth_failed): %}
+	{% if (auth_message && !fuser): %}
 	<div class="alert-message">
 		{{ auth_message }}
 	</div>
