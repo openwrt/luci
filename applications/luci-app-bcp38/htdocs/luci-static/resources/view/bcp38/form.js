@@ -9,9 +9,8 @@ return view.extend({
 
 		m = new form.Map('bcp38', _('BCP38'),
 			_('This function blocks packets with private address destinations ' +
-			'from going out onto the internet as per ' +
-			'<a href="http://tools.ietf.org/html/bcp38">BCP 38</a>. ' +
-			'For IPv6, only source specific default routes are installed, so ' +
+			'from going out onto the internet as per %s'.format('<a href="http://tools.ietf.org/html/bcp38">BCP 38</a>') + '<br/>' +
+			_('For IPv6, only source specific default routes are installed, so ' +
 			'no BCP38 firewall routes are needed.'));
 
 
