@@ -197,7 +197,7 @@ return network.registerProtocol('wireguard', {
 		// -- peers -----------------------------------------------------------------------
 
 		try {
-			s.tab('peers', _('Peers'), _('Further information about WireGuard interfaces and peers at <a href=\'http://wireguard.com\'>wireguard.com</a>.'));
+			s.tab('peers', _('Peers'), _('Further information about WireGuard interfaces and peers at %s.'.format('<a href=\'http://wireguard.com\'>wireguard.com</a>')));
 		}
 		catch(e) {}
 
