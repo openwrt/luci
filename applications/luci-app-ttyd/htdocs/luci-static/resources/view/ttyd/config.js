@@ -46,7 +46,7 @@ return view.extend({
 		o = s.option(form.Value, 'signal', _('Signal'), _('Signal to send to the command when exit it (default: 1, SIGHUP)'));
 		o.datatype = 'uinteger';
 
-		s.option(form.Flag, 'url_arg', _('Allow URL args'), _('Allow client to send command line arguments in URL (eg: http://localhost:7681?arg=foo&arg=bar)'));
+		s.option(form.Flag, 'url_arg', _('Allow URL args'), _('Allow client to send command line arguments in URL (eg: %s)'.format('http://localhost:7681?arg=foo&arg=bar')));
 
 		s.option(form.Flag, 'readonly', _('Read-only'), _('Do not allow clients to write to the TTY'));
 
