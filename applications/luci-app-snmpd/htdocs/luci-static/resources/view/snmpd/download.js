@@ -67,8 +67,7 @@ return L.view.extend({
 		ss = o.subsection;
 
 		files.forEach((elem) => {
-			o = ss.option(form.Button, 'dl_mib', _(elem),
-				_(''));
+			o = ss.option(form.Button, 'dl_mib', _(elem));
 			o.inputstyle = 'action important';
 			o.inputtitle = _('Download');
 			o.onclick = ui.createHandlerFn(this, this.handleMIB, elem);
