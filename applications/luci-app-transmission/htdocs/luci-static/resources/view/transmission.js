@@ -176,7 +176,7 @@ return view.extend({
 		o = s.option(form.Value, 'bind_address_ipv6', _('Binding address IPv6'));
 
 		o = s.option(form.Value, 'peer_congestion_algorithm', _('Peer congestion algorithm'),
-			_('This is documented on <a href="https://www.irif.fr/~jch/software/bittorrent/tcp-congestion-control.html" target="_blank" rel="noreferrer noopener">tcp-congestion-control</a>.'));
+			_('This is documented on %s.'.format('<a href="https://www.irif.fr/~jch/software/bittorrent/tcp-congestion-control.html" target="_blank" rel="noreferrer noopener">tcp-congestion-control</a>')));
 
 		o = s.option(form.Value, 'peer_id_ttl_hours', _('Recycle peer id after'), _('hours'));
 
