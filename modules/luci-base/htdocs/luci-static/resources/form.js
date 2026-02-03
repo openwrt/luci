@@ -378,6 +378,7 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 const CBIMap = CBIAbstractElement.extend(/** @lends LuCI.form.Map.prototype */ {
 	__init__(config, ...args) {
 		this.super('__init__', args);
+		uci.load('luci');
 
 		this.config = config;
 		this.parsechain = [ config ];
@@ -2740,7 +2741,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		const max_cols = this.max_cols ?? this.children.length;
 		const has_more = max_cols < this.children.length;
 		const anon_class = (!this.anonymous || this.sectiontitle) ? 'named' : 'anonymous';
-		const tableFilter = this.map.data.get('luci', 'main', 'tablefilters') || false;
+		const tableFilter = uci.get('luci', 'main', 'tablefilters') || false;
 		const trEls = E([]);
 
 		for (let i = 0, opt; i < max_cols && (opt = this.children[i]) != null; i++) {
