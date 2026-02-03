@@ -9,7 +9,7 @@ return view.extend({
 
 		m = new form.Map('openwisp',
 			_('OpenWISP'),
-			_("Configure, start and stop the OpenWISP agent on this device. Read more about configuration values: <a target='_blank' rel='noopener noreferrer' href='https://github.com/openwisp/openwisp-config'>https://github.com/openwisp/openwisp-config</a>"));
+			_("Configure, start and stop the OpenWISP agent on this device. Read more about configuration values: %s.".format("<a target='_blank' rel='noopener noreferrer' href='https://github.com/openwisp/openwisp-config'>openwisp config</a>")));
 
 		s = m.section(form.NamedSection, 'http', 'controller');
 
@@ -30,7 +30,7 @@ return view.extend({
 		o.value('monitoring', _('Enabled'));
 		o.default = 'monitoring'
 
-		o = s.taboption('general', form.Value, 'url', _('Server URL'), _('The URL to the OpenWISP server. Example: https://openwisp2.mynetwork.com'))
+		o = s.taboption('general', form.Value, 'url', _('Server URL'), _('The URL to the OpenWISP server. Example: %s'.format('https://openwisp2.mynetwork.com')))
 		o.placeholder = 'https://openwisp2.mynetwork.com'
 
 		o = s.taboption('general', form.Value, 'shared_secret', _('Shared Secret'), _('The organization shared secret for auto enrollment.'))
