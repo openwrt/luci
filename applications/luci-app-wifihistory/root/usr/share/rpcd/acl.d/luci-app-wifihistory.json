@@ -1,0 +1,16 @@
+{
+	"luci-app-wifihistory": {
+		"description": "Grant access to WiFi station history",
+		"read": {
+			"ubus": {
+				"iwinfo": [ "assoclist" ],
+				"luci.wifihistory": [ "getHistory" ]
+			}
+		},
+		"write": {
+			"ubus": {
+				"luci.wifihistory": [ "clearHistory" ]
+			}
+		}
+	}
+}
