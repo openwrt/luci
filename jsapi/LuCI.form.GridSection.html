@@ -1033,6 +1033,8 @@
             
             <span class="subtitle">Members</span>
             
+                <li data-name="LuCI.form.GridSection#actionstitle"><a href="LuCI.form.GridSection.html#actionstitle">actionstitle</a></li>
+            
                 <li data-name="LuCI.form.GridSection#addbtntitle"><a href="LuCI.form.GridSection.html#addbtntitle">addbtntitle</a></li>
             
                 <li data-name="LuCI.form.GridSection#addremove"><a href="LuCI.form.GridSection.html#addremove">addremove</a></li>
@@ -1046,6 +1048,10 @@
                 <li data-name="LuCI.form.GridSection#delbtntitle"><a href="LuCI.form.GridSection.html#delbtntitle">delbtntitle</a></li>
             
                 <li data-name="LuCI.form.GridSection#extedit"><a href="LuCI.form.GridSection.html#extedit">extedit</a></li>
+            
+                <li data-name="LuCI.form.GridSection#filterrow"><a href="LuCI.form.GridSection.html#filterrow">filterrow</a></li>
+            
+                <li data-name="LuCI.form.GridSection#footer"><a href="LuCI.form.GridSection.html#footer">footer</a></li>
             
                 <li data-name="LuCI.form.GridSection#hidetitle"><a href="LuCI.form.GridSection.html#hidetitle">hidetitle</a></li>
             
@@ -1097,6 +1103,8 @@
                 <li data-name="LuCI.form.GridSection#option"><a href="LuCI.form.GridSection.html#option">option</a></li>
             
                 <li data-name="LuCI.form.GridSection#parse"><a href="LuCI.form.GridSection.html#parse">parse</a></li>
+            
+                <li data-name="LuCI.form.GridSection#stabilizeActionColumnWidth"><a href="LuCI.form.GridSection.html#stabilizeActionColumnWidth">stabilizeActionColumnWidth</a></li>
             
                 <li data-name="LuCI.form.GridSection#stripTags"><a href="LuCI.form.GridSection.html#stripTags">stripTags</a></li>
             
@@ -1885,7 +1893,13 @@
             
             <span class="subtitle">Members</span>
             
+                <li data-name="LuCI.form.TableSection##actionstitle"><a href="LuCI.form.TableSection.html#actionstitle">actionstitle</a></li>
+            
                 <li data-name="LuCI.form.TableSection##extedit"><a href="LuCI.form.TableSection.html#extedit">extedit</a></li>
+            
+                <li data-name="LuCI.form.TableSection##filterrow"><a href="LuCI.form.TableSection.html#filterrow">filterrow</a></li>
+            
+                <li data-name="LuCI.form.TableSection##footer"><a href="LuCI.form.TableSection.html#footer">footer</a></li>
             
                 <li data-name="LuCI.form.TableSection##max_cols"><a href="LuCI.form.TableSection.html#max_cols">max_cols</a></li>
             
@@ -1949,6 +1963,8 @@
                 <li data-name="LuCI.form.TableSection#option"><a href="LuCI.form.TableSection.html#option">option</a></li>
             
                 <li data-name="LuCI.form.TableSection#parse"><a href="LuCI.form.TableSection.html#parse">parse</a></li>
+            
+                <li data-name="LuCI.form.TableSection#stabilizeActionColumnWidth"><a href="LuCI.form.TableSection.html#stabilizeActionColumnWidth">stabilizeActionColumnWidth</a></li>
             
                 <li data-name="LuCI.form.TableSection#stripTags"><a href="LuCI.form.TableSection.html#stripTags">stripTags</a></li>
             
@@ -4014,7 +4030,7 @@ documentation for details.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3418">line 3418</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3678">line 3678</a>
         </div>
         
     </div>
@@ -4235,6 +4251,55 @@ by <a href="LuCI.form.Map.html#section"><code>section()</code></a>.</p></td>
         <h3 class="subsection-title">Members</h3>
         
         <dl>
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="actionstitle">actionstitle<span class="type-signature type string">string</span> <span class="type-signature type function">function</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Set a custom text for the actions column header row when actions buttons
+are present.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
             
 <dt>
     <div class="nameContainer">
@@ -4583,6 +4648,122 @@ name as the first and the DOM click event as the second argument.</p>
     
     <dt class="tag-default">Default Value:</dt>
     <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="filterrow">filterrow<span class="type-signature type boolean">boolean</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Optional table filtering for table sections.</p>
+<p>Set <code>filterrow</code> to <code>true</code> to display a filter header row in the generated
+table with per-column text fields to search for string matches in the
+column. The filter row appears after the titles row.</p>
+<p>The filters work cumulatively: text in each field shall match
+an entry for the row to be displayed. The results are filtered live.
+Matching is case-sensitive, and partial, i.e. part or all of the result
+includes the search string.</p>
+<p>The filter fields assume the placeholder text <code>Filter </code> suffixed with
+the column name, to ease correlation of filter fields to their corresponding
+column entries on narrow displays which might fold the columns over
+multiple lines.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>null</li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer">
+        <h4 class="name" id="footer">footer<span class="type-signature type array.<string>">Array.&lt;string></span> <span class="type-signature type function">function</span> </h4>
+    </div>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <p>Optional footer row for table sections.</p>
+<p>Set <code>footer</code> to one of:</p>
+<ul>
+<li>a function that returns a table row (<code>tr</code>) or node <code>E('...')</code></li>
+<li>an array of string cell contents (first entry maps to the name column
+if present).</li>
+</ul>
+<p>This is useful for providing sum totals, extra function buttons or extra
+space.</p>
+<p>The default implementation returns an empty node.</p>
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy"><li>E([])</li></ul></dd>
     
     
     
@@ -5130,7 +5311,7 @@ The default of <code>null</code> means inherit from the parent form.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3249">line 3249</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3509">line 3509</a>
         </div>
         
     </div>
@@ -6686,7 +6867,7 @@ descendant of <code>AbstractValue</code>.</p>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3574">line 3574</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3834">line 3834</a>
         </div>
         
     </div>
@@ -6776,6 +6957,82 @@ not meet the validation constraints of their respective elements.</td>
     </tbody>
 </table>
 
+    
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <div class="nameContainer inherited">
+        <h4 class="name" id="stabilizeActionColumnWidth">
+            
+                <span class="inherited"><a href="LuCI.form.TableSection.html#stabilizeActionColumnWidth">inherited</a></span>
+            
+            stabilizeActionColumnWidth<span class="signature">()</span>
+        </h4>
+    
+        
+        <div class="tag-source">
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line2976">line 2976</a>
+        </div>
+        
+    </div>
+
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        <p>Ensure the actions column keeps a stable width even when rows are hidden
+(e.g., due to filtering). Measures the widest actions cell and applies
+a fixed width to header/filter/footer/action cells. Stores measured width
+in dataset so filtering won't collapse the column if all rows are hidden.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
     
     
     
@@ -6941,7 +7198,7 @@ entities decoded.</td>
     
         
         <div class="tag-source">
-            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3487">line 3487</a>
+            <a href="form.js.html">form.js</a>, <a href="form.js.html#line3747">line 3747</a>
         </div>
         
     </div>
@@ -7629,7 +7886,7 @@ was neither a string nor a function.</td>
         
 
         <footer>
-            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Sun Feb 01 2026 23:40:31 GMT+0000 (Coordinated Universal Time)
+            Documentation generated by <a target="_blank" href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.11</a> on Tue Feb 03 2026 08:55:06 GMT+0000 (Coordinated Universal Time)
         </footer>
     </div>
 </div>
