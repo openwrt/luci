@@ -25,8 +25,9 @@ return view.extend({
 		// Define the Map
 		m = new form.Map('mosquitto', _('Mosquitto MQTT Broker'), _(
 			'mosquitto - the ' +
-			"<a href='http://www.mosquitto.org'>blood thirsty</a>" +
-			' MQTT messaging broker. Note, only some of the available configuration files ' +
+			'%s' +
+			' MQTT messaging broker.'.format('<a href="http://www.mosquitto.org">blood thirsty</a>')) + '<br/>' +
+			_('Note, only some of the available configuration files ' +
 			'are supported at this stage. Use the checkbox below to use config generated ' +
 			'by this page, or the stock mosquitto configuration file in %s.'
 			.format('<code>' + mosquitto_conf + '</code>')));
