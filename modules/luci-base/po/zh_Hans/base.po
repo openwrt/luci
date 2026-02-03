@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-02-02 07:20+0000\n"
+"PO-Revision-Date: 2026-02-03 07:49+0000\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -1441,7 +1441,7 @@ msgstr "应用请求失败，状态 <code>%h</code>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:686
 msgid "Apply these DHCP Options"
-msgstr "应用这些 DHCP 选项"
+msgstr "应用 DHCP 选项"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2140
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:4915
@@ -1762,7 +1762,9 @@ msgstr "绑定接口"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:274
 msgid ""
 "Bind only to configured interface addresses, instead of the wildcard address."
-msgstr "只绑定已配置的接口地址，而不是通配地址。"
+msgstr ""
+"只绑定到已配置的接口地址，而不是监听所有可用网络接口（即通配符地址 0.0.0.0 "
+"或 ::）。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:382
 msgid ""
@@ -1916,7 +1918,7 @@ msgstr "缓存"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:260
 msgid "Cache arbitrary RR"
-msgstr "缓存任意的资源记录"
+msgstr "缓存 DNS 记录类型"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:43
 msgid "Cached"
@@ -2559,7 +2561,7 @@ msgstr "DHCP"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:20
 msgid "DHCP Leases"
-msgstr "DHCP 租期"
+msgstr "DHCP 租约"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:595
 msgid "DHCP Options"
@@ -3622,7 +3624,7 @@ msgstr "在 PPP 链路上启用 IPv6 协商"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1194
 msgid "Enable IPv6 segment routing"
-msgstr "启用 IPv6 段路由"
+msgstr "启用 IPv6 分段路由"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/dropbear.js:17
 msgid "Enable Instance"
@@ -4209,7 +4211,7 @@ msgstr "存储 DHCP 租约信息的文件。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:830
 msgid "File to store active DHCP leases in."
-msgstr "存储活跃 DHCP 租约的文件。"
+msgstr "存储已分配 DHCP 租约的文件。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:796
 msgid "File with upstream resolvers."
@@ -5602,7 +5604,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:724
 msgid "In order to Set this Tag"
-msgstr "目的是设置这个标签"
+msgstr "设置标签"
 
 #: modules/luci-base/ucode/template/csrftoken.ut:13
 msgid ""
@@ -5615,7 +5617,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:757
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:790
 msgid "In order to set this Tag"
-msgstr "目的是设置这个标签"
+msgstr "设置标签"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:152
 msgid "In seconds"
@@ -6901,15 +6903,15 @@ msgstr "匹配此标签"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:786
 msgid "Match this User Class"
-msgstr "匹配这个用户类"
+msgstr "匹配用户类"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:753
 msgid "Match this Vendor Class"
-msgstr "匹配这个厂商类"
+msgstr "匹配厂商类"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:719
 msgid "Match this client option(+value)"
-msgstr "匹配这个客户端选项（+值）"
+msgstr "匹配客户端选项（+值）"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:164
 msgid "Match traffic IP protocol type"
@@ -7577,7 +7579,7 @@ msgstr "永不转发这些匹配的域名或子域名；只从 DHCP 或 hosts �
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:417
 msgid ""
 "Never send queries for FQDNs in the Address option to an upstream resolver."
-msgstr "永不将地址选项中 FQDN 的查询请求发送至上游解析器。"
+msgstr "禁止将地址选项中 FQDN 的查询请求发送至上游解析器。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:381
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:188
@@ -7637,7 +7639,7 @@ msgstr "未配置 WireGuard 接口。"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:164
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/40_dhcp.js:231
 msgid "No active leases found"
-msgstr "未找到活跃租期"
+msgstr "没有已分配的租约"
 
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:16
 msgid "No allowed mode configuration found."
@@ -9951,7 +9953,7 @@ msgstr "路由算法"
 msgid ""
 "Routing defines over which interface and gateway a certain host or network "
 "can be reached."
-msgstr "路由指定通过哪个接口和网关可以到达某个主机或网络。"
+msgstr "路由指定通过哪个接口或网关可以到达某个主机或网络。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1018
 msgid "Routing table"
@@ -9998,7 +10000,7 @@ msgstr "规则类型"
 msgid ""
 "Rules determine which routing table to use, based on conditions like source "
 "address or interface."
-msgstr "规则根据诸如源地址或接口等条件来决定使用哪个路由表。"
+msgstr "规则根据源地址或接口等条件来决定使用哪个路由表。"
 
 #: modules/luci-base/htdocs/luci-static/resources/luci.js:2324
 msgid "Runtime error"
@@ -10318,7 +10320,7 @@ msgstr "配置 DHCP 服务器"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1181
 msgid "Set up routes for proxied IPv6 neighbours."
-msgstr "设置已代理 IPv6 邻居的路由。"
+msgstr "创建到已代理 IPv6 邻居的路由。"
 
 #: modules/luci-compat/luasrc/model/network/proto_modemmanager.lua:55
 #: modules/luci-compat/luasrc/model/network/proto_qmi.lua:55
@@ -11744,7 +11746,7 @@ msgstr "尚未设置密码。请设置管理员密码以保护此设备。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:651
 msgid "They are attached to a DHCP client or transaction."
-msgstr "它们被附加到 DHCP 客户端或交易。"
+msgstr "它们被附加到 DHCP 客户端或交互过程。"
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:49
 msgid "This IPv4 address of the relay"
@@ -12591,11 +12593,11 @@ msgstr "为内置隧道使用系统证书"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:777
 msgid "Use the <em>Add</em> Button to add a new UC."
-msgstr "使用 <em>添加</em>按钮添加新的用户类。"
+msgstr "使用 <em>添加</em> 按钮添加新的用户类。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:744
 msgid "Use the <em>Add</em> Button to add a new VC."
-msgstr "使用<em>添加</em>按钮添加新的厂商类。"
+msgstr "使用 <em>添加</em> 按钮添加新的厂商类。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:928
 msgid ""
@@ -12607,7 +12609,7 @@ msgid ""
 msgstr ""
 "使用 <em>添加</em> 按钮来增加新的租约条目。<em>IPv4 地址</em> 和 <em>主机名</"
 "em> 字段的值将被固定分配给 <em>MAC 地址</em> 字段标识的主机，<em>租期</em> 是"
-"一个可选字段，可为每个主机单独设定 DHCP 租期的时长，例如：12h、3d、infinite，"
+"一个可选字段，可为每个主机单独设定 DHCP 租约的时长，例如：12h、3d、infinite，"
 "分别表示 12 小时、3 天、永久。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/20_memory.js:36
