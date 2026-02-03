@@ -4,9 +4,9 @@
 
 var desc = _(""
 	+ "<p/>Note: you need a working PageKite account, or at least, your own running front end for this form to work. "
-	+ "Visit <a href='https://pagekite.net/home/'>your account</a> to set up a name for your "
-	+ "router and get a secret key for the connection."
-	+ "<p/><em>Note: this web configurator only supports "
+	+ "Visit %s to set up a name for your "
+	+ "router and get a secret key for the connection."..format(`<a href='https://pagekite.net/home/'>${_('your account')}</a>`)) + '<br/>'
+	+ _("<p/><em>Note: this web configurator only supports "
 	+ "some very very basic uses of pagekite.</em>"
 );
 
