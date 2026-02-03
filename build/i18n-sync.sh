@@ -12,6 +12,14 @@ print_help() {
 	exit 1
 }
 
+RAN_MKBASE=0
+
+if [ "$#" -eq 0 ]; then
+	NOARGS=1
+else
+	NOARGS=0
+fi
+
 case $1 in
 	-h | --help )
 		print_help
@@ -19,13 +27,16 @@ case $1 in
 		;;
 	-b )
 		./build/mkbasepot.sh
+		RAN_MKBASE=1
 		shift
 		;;
 esac
 
 [ -n "$1" ] && set -- "${1%/}"
 
-[ -n "$1" ] || ./build/mkbasepot.sh
+if [ "$NOARGS" -eq 1 ] && [ "$RAN_MKBASE" -eq 0 ]; then
+	./build/mkbasepot.sh
+fi
 
 # Absent a [folder] parameter, use the current path
 find "${1:-.}" -name '*.pot' -and -not -name base.pot | sort | \
