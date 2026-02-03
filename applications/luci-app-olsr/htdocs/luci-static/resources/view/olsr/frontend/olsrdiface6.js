@@ -1,7 +1,7 @@
 'use strict';
 'require view';
 'require form';
-'require	uci';
+'require uci';
 'require ui';
 'require tools.widgets as widgets';
 
@@ -14,12 +14,10 @@ return view.extend({
 		var m = new form.Map(
 			'olsrd6',
 			_('OLSR Daemon - Interface'),
-			_(
-				'The OLSR daemon is an implementation of the Optimized Link State Routing protocol. ' +
-					'As such it allows mesh routing for any network equipment. ' +
-					'It runs on any wifi card that supports ad-hoc mode and of course on any ethernet device. ' +
-					"Visit <a href='http://www.olsr.org'>olsrd.org</a> for help and documentation."
-			)
+			_('The OLSR daemon is an implementation of the Optimized Link State Routing protocol. ' +
+				'As such it allows mesh routing for any network equipment.') + '<br/>' +
+			_('It runs on any wifi card that supports ad-hoc mode and of course on any ethernet device. ' +
+				'Visit %s for help and documentation.'.format('<a href="http://www.olsr.org">olsrd.org</a>'))
 		);
 
 		var pathname = window.location.pathname;
