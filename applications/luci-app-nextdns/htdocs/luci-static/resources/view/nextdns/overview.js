@@ -10,7 +10,7 @@ return view.extend({
 			_('NextDNS Configuration.')
 			+ '<br />'
 			+ _('For further information, go to \
-				<a href="https://nextdns.io" target="_blank">nextdns.io</a>.'));
+				%s.'.format('<a href="https://nextdns.io" target="_blank">nextdns.io</a>')));
 
 		s = m.section(form.TypedSection, 'nextdns', _('General'));
 		s.anonymous = true;
