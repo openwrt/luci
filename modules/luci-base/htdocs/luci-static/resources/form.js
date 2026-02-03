@@ -2546,6 +2546,24 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 */
 
 	/**
+	 * Optional footer row for table sections.
+	 *
+	 * Set `footer` to one of:
+	 *  - a function that returns a table row (`tr`) or node `E('...')`
+	 *  - an array of string cell contents (first entry maps to the name column
+	 * if present).
+	 *
+	 * This is useful for providing sum totals, extra function buttons or extra
+	 * space.
+	 *
+	 * The default implementation returns an empty node.
+	 *
+	 * @name LuCI.form.TableSection.prototype#footer
+	 * @type string[]|function
+	 * @default E([])
+	 */
+
+	/**
 	 * Set to `true`, a sort button is added to the last column, allowing
 	 * the user to reorder the section instances mapped by the section form
 	 * element.
@@ -2611,13 +2629,28 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 			'class': 'table cbi-section-table'
 		});
 
+		const theadEl = E('thead', {
+			'class': 'thead cbi-section-thead'
+		});
+
+		const tbodyEl = E('tbody', {
+			'class': 'tbody cbi-section-tbody'
+		});
+
+		const tfootEl = E('tfoot', {
+			'class': 'tfoot cbi-section-tfoot'
+		});
+
 		if (this.title != null && this.title != '' && !this.hidetitle)
 			sectionEl.appendChild(E('h3', {}, this.title));
 
 		if (this.description != null && this.description != '')
 			sectionEl.appendChild(E('div', { 'class': 'cbi-section-descr' }, this.description));
 
-		tableEl.appendChild(this.renderHeaderRows(false));
+		theadEl.appendChild(this.renderHeaderRows(false));
+
+		if(theadEl.hasChildNodes())
+			tableEl.appendChild(theadEl);
 
 		for (let i = 0; i < nodes.length; i++) {
 			let sectionname = this.titleFn('sectiontitle', cfgsections[i]);
@@ -2640,7 +2673,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 			});
 
 			if (this.extedit || this.rowcolors)
-				trEl.classList.add(!(tableEl.childNodes.length % 2)
+				trEl.classList.add(!(tbodyEl.childNodes.length % 2)
 					? 'cbi-rowstyle-1' : 'cbi-rowstyle-2');
 
 			if  (sectionname && (!this.anonymous || this.sectiontitle)) {
@@ -2653,12 +2686,19 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 				trEl.appendChild(nodes[i].firstChild);
 
 			trEl.appendChild(this.renderRowActions(cfgsections[i], has_more ? _('More…') : null));
-			tableEl.appendChild(trEl);
+			tbodyEl.appendChild(trEl);
 		}
 
 		if (nodes.length == 0)
-			tableEl.appendChild(E('tr', { 'class': 'tr cbi-section-table-row placeholder' },
+			tbodyEl.appendChild(E('tr', { 'class': 'tr cbi-section-table-row placeholder' },
 				E('td', { 'class': 'td' }, this.renderSectionPlaceholder())));
+
+		tableEl.appendChild(tbodyEl);
+
+		tfootEl.appendChild(this.renderFooterRows(false));
+
+		if (tfootEl.hasChildNodes())
+			tableEl.appendChild(tfootEl);
 
 		sectionEl.appendChild(tableEl);
 
@@ -2767,6 +2807,43 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 
 		return trEls;
 	},
+
+	/** @private */
+	renderFooterRows(has_action) {
+		if (this.footer == null)
+			return E([]);
+
+		const max_cols = this.max_cols ?? this.children.length;
+		const has_more = max_cols < this.children.length;
+		const anon_class = (!this.anonymous || this.sectiontitle) ? 'named' : 'anonymous';
+
+		if (typeof this.footer === 'function') {
+			const node = this.footer.call(this, has_action);
+			return node || E([]);
+		}
+
+		const values = Array.isArray(this.footer) ? this.footer : [];
+		let idx = 0;
+		const trEl = E('tr', { 'class': `tr cbi-section-table-footer ${anon_class}` });
+
+		if (!this.anonymous || this.sectiontitle) {
+			trEl.appendChild(E('td', { 'class': 'td cbi-value-field cbi-section-table-titles' }, values[idx++] ?? null));
+		}
+
+		for (let i = 0, opt; i < max_cols && (opt = this.children[i]) != null; i++) {
+			if (opt.modalonly)
+				continue;
+
+			trEl.appendChild(E('td', { 'class': 'td', 'data-widget': opt.__name__ }, values[idx++] ?? null));
+		}
+
+		if (this.sortable || this.extedit || this.addremove || has_more || has_action || this.cloneable) {
+			trEl.appendChild(E('td', { 'class': 'td cbi-section-actions' }, values[idx++] ?? null));
+		}
+
+		return trEl;
+	},
+
 
 	/** @private */
 	renderRowActions(section_id, more_label, trEl) {
