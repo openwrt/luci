@@ -1,0 +1,14 @@
+{
+	"admin/status/wifihistory": {
+		"title": "Station History",
+		"order": 8,
+		"action": {
+			"type": "view",
+			"path": "status/wifihistory"
+		},
+		"depends": {
+			"acl": [ "luci-app-wifihistory" ],
+			"uci": { "wireless": { "@wifi-device": true } }
+		}
+	}
+}
