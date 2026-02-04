@@ -95,7 +95,7 @@ methods.get_settings = {
 	call: function() {
 		let settings = {};
 		uci.load('tailscale');
-		let state_file_path = uci.get('tailscale', 'settings', 'state_file') || "/var/lib/tailscale/tailscaled.state";
+		let state_file_path = uci.get('tailscale', 'settings', 'state_file') || "/etc/tailscale/tailscaled.state";
 		if (access(state_file_path)) {
 			try {
 				let state_content = readfile(state_file_path);
