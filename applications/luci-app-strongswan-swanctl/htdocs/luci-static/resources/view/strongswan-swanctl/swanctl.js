@@ -213,7 +213,7 @@ return view.extend({
 		o.default = 'yes';
 		o.modalonly = true;
 
-		o = s.taboption('advanced', form.Value, 'keyingretries', _('Keying Retries'),
+		o = s.taboption('advanced', form.Value, 'keyingtries', _('Keying Retries'),
 			_('Number of retransmissions attempts during initial negotiation'));
 		o.datatype = 'uinteger';
 		o.default = '3';
