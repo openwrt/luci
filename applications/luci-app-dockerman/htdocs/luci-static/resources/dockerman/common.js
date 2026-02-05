@@ -742,7 +742,10 @@ const dv = view.extend({
 	ensureRegistryScheme(address, hostFallback) {
 		const addr = String(address || '').trim() || hostFallback;
 		if (!addr) return null;
-		return /^https?:\/\//i.test(addr) ? addr : `https://${addr}`;
+		/* jsmin cannot handle /^https?:\/\//i.test(addr) - wrap in parentheses: OK
+		https = new RegExp('https?:\/\/', 'i'); // also OK
+		 */
+		return (/^https?:\/\//i.test(addr)) ? addr : `https://${addr}`;
 	},
 
 	/**
