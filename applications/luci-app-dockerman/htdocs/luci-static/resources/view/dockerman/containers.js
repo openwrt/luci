@@ -161,8 +161,8 @@ return dm2.dv.extend({
 		o = conSec.option(form.DummyValue, 'State', _('State'));
 		o = conSec.option(form.DummyValue, 'Networks', _('Networks'));
 		o.rawhtml = true;
-		// o = conSec.option(form.DummyValue, 'Ports', _('Ports'));
-		// o.rawhtml = true;
+		o = conSec.option(form.DummyValue, 'Ports', _('Ports'));
+		o.rawhtml = true;
 		o = conSec.option(form.DummyValue, 'Command', _('Command'));
 		o.width = 200;
 		o = conSec.option(form.DummyValue, 'Created', _('Created'));
@@ -344,11 +344,12 @@ return dm2.dv.extend({
 				Created: this.buildTimeString(cont?.Created) || '',
 				Ports: (Array.isArray(cont.Ports) && cont.Ports.length > 0)
 						? cont.Ports.map(p => {
-							const ip = p.IP || '';
+							// const ip = p.IP || '';
 							const pub = p.PublicPort || '';
 							const priv = p.PrivatePort || '';
 							const type = p.Type || '';
-							return `${ip ? ip + ':' : ''}${pub} -> ${priv} (${type})`;
+							return `${pub ? pub + ':' : ''}${priv}/${type}`;
+							// return `${ip ? ip + ':' : ''}${pub} -> ${priv} (${type})`;
 						}).join('<br/>')
 						: '',
 			});
