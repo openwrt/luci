@@ -16,6 +16,8 @@ LUCI_DEPENDS:=+luci-light \
 	+luci-app-package-manager \
 	+luci-app-attendedsysupgrade
 
+LUCI_DEFAULT:=y if BUILDBOT
+
 PKG_LICENSE:=Apache-2.0
 
 include ../../luci.mk
