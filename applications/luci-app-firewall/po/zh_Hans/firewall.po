@@ -1,9 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"PO-Revision-Date: 2026-02-04 12:42+0000\n"
-"Last-Translator: 大王叫我来巡山 "
-"<hamburger2048@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-02-05 16:09+0000\n"
+"Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsfirewall/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -148,7 +147,7 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
-"用于对区域目标流量进行分类的额外 <em>iptables</em> 参数。如：<code>-p tcp --"
+"用于对区域目标流量进行分类的额外 <em>iptables</em> 参数。如: <code>-p tcp --"
 "dport 443</code> 表示仅匹配出站 HTTPS 流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:324
@@ -156,7 +155,7 @@ msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
-"用于对区域源流量进行分类的额外 <em>iptables</em> 参数。如：<code>-p tcp --"
+"用于对区域源流量进行分类的额外 <em>iptables</em> 参数。如: <code>-p tcp --"
 "sport 443</code> 表示仅匹配入站 HTTPS 流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
@@ -182,11 +181,11 @@ msgstr "允许“无效”流量"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:397
 msgid "Allow forward from <em>source zones</em>:"
-msgstr "允许来自<em>源区域</em>的转发："
+msgstr "允许来自<em>源区域</em>的转发:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:356
 msgid "Allow forward to <em>destination zones</em>:"
-msgstr "允许转发到<em>目标区域</em>："
+msgstr "允许转发到<em>目标区域</em>:"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:551
 msgid "Any"
@@ -363,7 +362,7 @@ msgstr "为该集合开启数据包和字节计数追踪。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:339
 msgid "Expecting: %s"
-msgstr "请输入：%s"
+msgstr "请输入: %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:290
 msgid "Explicitly choses allowed connection tracking helpers for zone traffic"
@@ -793,7 +792,7 @@ msgid ""
 "Maximum initial number of packets to match: this number gets recharged by "
 "one every time the limit specified above is not reached, up to this number."
 msgstr ""
-"最大初始匹配数据包数量：每当未达到上述指定限制时，系统会自动补充，直到恢复到"
+"最大初始匹配数据包数量: 每当未达到上述指定限制时，系统会自动补充，直到恢复到"
 "此数。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:484
@@ -881,9 +880,9 @@ msgid ""
 "Datatypes: <code>ip, port, mac, net, set</code>.<br />Direction prefixes are "
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
-"要进行匹配的数据包字段。<br />语法：<em>direction_datatype</em>。如："
-"<code>src_port, dest_net</code>。<br />方向：<code>src, dst</code>。数据类"
-"型：<code>ip, port, mac, net, set</code>。<br />方向前缀可选。<br />*注意："
+"要进行匹配的数据包字段。<br />语法: <em>direction_datatype</em>。如: <code>"
+"src_port, dest_net</code>。<br />方向: <code>src, dst</code>。数据类型: "
+"<code>ip, port, mac, net, set</code>。<br />方向前缀可选。<br />*注意: "
 "datatype<code>set</code>在 fw4 中不受支持。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:358
@@ -1003,7 +1002,7 @@ msgid ""
 "Set the given mark value on established connections. Format is value[/mask]. "
 "If a mask is specified then only those bits set in the mask are modified."
 msgstr ""
-"在已建立的连接上设置给定的标记值。格式为：值[/掩码]。如果指定了掩码，则仅修改"
+"在已建立的连接上设置给定的标记值。格式为: 值[/掩码]。如果指定了掩码，则仅修改"
 "掩码中设置的位。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:84
@@ -1104,7 +1103,7 @@ msgid ""
 msgstr ""
 "以下选项控制此区域（%s）和其它区域间的转发策略。<em>目标区域</em>接收<strong>"
 "源自 %q</strong> 的转发流量。<em>源区域</em>匹配的转发流量来自<strong>目标为 "
-"%q</strong> 的其它区域。转发规则的作用是<em>单向</em>的，例如：允许转发从 "
+"%q</strong> 的其它区域。转发规则的作用是<em>单向</em>的，例如: 允许转发从 "
 "lan 到 wan 的流量并<em>不</em>意味着允许反向转发从 wan 到 lan 的流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:125
@@ -1197,7 +1196,7 @@ msgid ""
 "zones, for example to reject traffic between certain hosts or to open WAN "
 "ports on the router."
 msgstr ""
-"通信规则定义了不同区域间的数据包传输策略，例如：拒绝一些主机之间的通信、开放"
+"通信规则定义了不同区域间的数据包传输策略，例如: 拒绝一些主机之间的通信、开放"
 "路由器 WAN 上的端口。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:485
@@ -1207,14 +1206,14 @@ msgstr "星期二"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/custom.js:19
 msgid "Unable to save contents: %s"
-msgstr "无法保存内容：%s"
+msgstr "无法保存内容: %s"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:198
 msgid ""
 "Unit: seconds. Default <code>0</code> means the entry is added permanently "
 "to the set.<br />Max: 2147483 seconds."
 msgstr ""
-"单位：秒。默认值<code>0</code>表示该条目被永久添加到该集合。<br />最大值："
+"单位: 秒。默认值<code>0</code>表示该条目被永久添加到该集合。<br />最大值: "
 "2147483 秒。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:341
@@ -1430,8 +1429,8 @@ msgid ""
 "Port ranges in ipsets are unsupported by firewall4.<br />"
 msgstr ""
 "firewall4 支持通过引用和创建 IP 集合以简化大型地址列表的匹配，从而无需为每个"
-"要匹配的项目创建单独的规则。注意：firewall4 不支持 IP 集合中的端口范围。<br /"
-">"
+"要匹配的项目创建单独的规则。注意: firewall4 不支持 IP 集合中的端口范围"
+"。<br />"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:160
 msgid "fromport-toport"
