@@ -15,7 +15,6 @@ LUCI_DEPENDS:= \
 	+IPV6:luci-proto-ipv6 \
 	+luci-app-firewall \
 	+luci-app-package-manager \
-	+luci-app-attendedsysupgrade \
 	+luci-mod-admin-full \
 	+luci-proto-ppp \
 	+luci-theme-bootstrap \
