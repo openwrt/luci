@@ -51,7 +51,7 @@ return view.extend({
 		let m, s, o;
 
 		m = new form.Map('adblock', 'Adblock', _('Configuration of the adblock package to block ad/abuse domains by using DNS. \
-			For further information %s'.format(`<a href="https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)));
+			For further information %s'.format(`<a style="color:#37c;font-weight:bold;" href="https://github.com/openwrt/packages/blob/master/net/adblock/files/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)));
 
 		/*
 			set text content helper function
