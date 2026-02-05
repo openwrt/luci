@@ -9,6 +9,8 @@ LUCI_DEPENDS:=+luci-base +attendedsysupgrade-common +cgi-io
 PKG_MAINTAINER:=Eric Fahlgren <ericfahlgren@gmail.com>, Paul Spooren <paul@spooren.de>
 PKG_LICENSE:=GPL-2.0
 
+LUCI_DEFAULT:=y if BUILDBOT
+
 include ../../luci.mk
 
 # call BuildPackage - OpenWrt buildroot signature
