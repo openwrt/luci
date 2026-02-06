@@ -13,8 +13,9 @@ LUCI_TITLE:=LuCI with HTTPS support (mbedtls as SSL backend)
 LUCI_DEPENDS:=+luci-light \
 	+libustream-mbedtls \
 	+px5g-mbedtls \
-	+luci-app-package-manager \
-	+luci-app-attendedsysupgrade
+	+luci-app-package-manager
+
+LUCI_DEFAULT:=y if BUILDBOT
 
 PKG_LICENSE:=Apache-2.0
 
