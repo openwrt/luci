@@ -379,7 +379,8 @@ return view.extend({
 		o.modalonly = true;
 		o.rmempty = true;
 
-		fwtool.addMACOption(s, 'advanced', 'src_mac', _('Source MAC address'), null, hosts);
+		fwtool.addMACOption(s, 'advanced', 'src_mac', _('Source MAC address (range)'),
+			_('Enter a MAC address or a range'), hosts);
 		fwtool.addIPOption(s, 'general', 'src_ip', _('Source address'), null, '', hosts, true);
 
 		o = s.taboption('general', form.Value, 'src_port', _('Source port'));
