@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# luci-app-2fa: Setup script for two-factor authentication
+# This script sets up the 2FA configuration without modifying any system files
+
+# Create 2FA config if not exists
+if [ ! -f /etc/config/2fa ]; then
+cat <<EOF > /etc/config/2fa
+config settings 'settings'
+	option enabled '0'
+
+config login 'root'
+	option key ''
+	option type 'totp'
+	option step '30'
+	option counter '0'
+EOF
+fi
+
+# Ensure proper permissions on config file (contains sensitive key)
+chmod 0600 /etc/config/2fa
+
+exit 0
