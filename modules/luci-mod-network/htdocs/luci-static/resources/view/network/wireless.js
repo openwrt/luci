@@ -1370,7 +1370,9 @@ return view.extend({
 
 					if (has_ap_sae || has_sta_sae) {
 						crypto_modes.push(['sae',       'WPA3-SAE',                     31]);
-						crypto_modes.push(['sae-mixed', 'WPA2-PSK/WPA3-SAE Mixed Mode', 30]);
+						// Note: Per WPA3 Spec v3.4 Sections 11.2 and 11.4, WPA3-Personal Transition Mode
+						// does not operate in the 6 GHz band or Sub 1 GHz band
+						crypto_modes.push(['sae-mixed', 'WPA2-PSK/WPA3-SAE Transition Mode', 30]);
 					}
 
 					if (has_ap_wep || has_sta_wep) {
@@ -1481,6 +1483,50 @@ return view.extend({
 
 					encr.value(crypto_mode[0], '%s (%s)'.format(crypto_mode[1], security_level));
 				});
+
+				// Per WPA3 Spec v3.4 Sections 11.2 and 11.4, WPA3-Personal Transition Mode
+				// does not operate in the 6 GHz band or Sub 1 GHz band
+				// Filter out sae-mixed option when 6GHz band is selected
+				const originalRenderWidget = encr.renderWidget;
+				encr.renderWidget = function(section_id, option_index, cfgvalue) {
+					const widget = originalRenderWidget ? originalRenderWidget.apply(this, arguments) : form.ListValue.prototype.renderWidget.apply(this, arguments);
+					
+					// Check if 6GHz band is selected and hide sae-mixed option
+					const freqOption = this.section.children.find(function(o) { return o.option === '_freq'; });
+					if (freqOption && widget) {
+						const select = widget.querySelector ? widget.querySelector('select') : (widget.tagName === 'SELECT' ? widget : null);
+						if (select) {
+							// Use a MutationObserver or check on change events
+							const updateOptions = function() {
+								const freqValue = freqOption.formvalue ? freqOption.formvalue(section_id) : 
+								                  (freqOption.cfgvalue ? freqOption.cfgvalue(section_id) : null);
+								const saeMixedOption = select.querySelector('option[value="sae-mixed"]');
+								if (freqValue === '6g' && saeMixedOption) {
+									saeMixedOption.style.display = 'none';
+									saeMixedOption.disabled = true;
+								} else if (saeMixedOption) {
+									saeMixedOption.style.display = '';
+									saeMixedOption.disabled = false;
+								}
+							};
+							
+							// Check initially
+							updateOptions();
+							
+							// Watch for frequency changes
+							if (freqOption.map) {
+								const freqWidget = freqOption.map.findElement('data-field', freqOption.cbid(section_id));
+								if (freqWidget) {
+									const freqSelect = freqWidget.querySelector('select');
+									if (freqSelect) {
+										freqSelect.addEventListener('change', updateOptions);
+									}
+								}
+							}
+						}
+					}
+					return widget;
+				};
 
 				// QR Code
 				o = ss.taboption('encryption', form.DummyValue, '_qrops', _('QR Code'),
