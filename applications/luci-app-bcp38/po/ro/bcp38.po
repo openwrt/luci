@@ -11,15 +11,15 @@ msgstr ""
 "(n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2;\n"
 "X-Generator: Weblate 5.14.1-dev\n"
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:40
 msgid "Allowed IP ranges"
 msgstr "Intervale IP permise"
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:24
 msgid "Auto-detect upstream IP"
 msgstr "Auto-detectare a IP-ului extern"
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:26
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:25
 msgid ""
 "Automatically attempt to detect whether the upstream IP will be blocked by "
 "the configuration, adding an exception if so. If this does not work "
@@ -34,34 +34,40 @@ msgstr ""
 msgid "BCP38"
 msgstr "BCP38"
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:18
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:17
 msgid "BCP38 config"
 msgstr "Configurație BCP38"
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:38
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:37
 msgid "Blocked IP ranges"
 msgstr "Intervale IP blocate"
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:21
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:20
 msgid "Enable"
 msgstr "Activați"
+
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:13
+msgid ""
+"For IPv6, only source specific default routes are installed, so no BCP38 "
+"firewall routes are needed."
+msgstr ""
 
 #: applications/luci-app-bcp38/root/usr/share/rpcd/acl.d/luci-app-bcp38.json:3
 msgid "Grant UCI access for luci-app-bcp38"
 msgstr "Acordă acces la UCI pentru luci-app-bcp38"
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:30
 msgid "Interface name"
 msgstr "Numele interfeței"
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:32
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:31
 msgid ""
 "Interface to apply the blocking to should be the upstream WAN interface)."
 msgstr ""
 "Interfața la care se aplică blocarea trebuie să fie interfața WAN din "
 "amonte)."
 
-#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:42
+#: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:41
 msgid ""
 "Takes precedence over blocked ranges. Use to whitelist your upstream network "
 "if you're behind a double NAT and the auto-detection doesn't work."
@@ -73,11 +79,16 @@ msgstr ""
 #: applications/luci-app-bcp38/htdocs/luci-static/resources/view/bcp38/form.js:11
 msgid ""
 "This function blocks packets with private address destinations from going "
-"out onto the internet as per <a href=\"http://tools.ietf.org/html/"
-"bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
-"installed, so no BCP38 firewall routes are needed."
+"out onto the internet as per %s"
 msgstr ""
-"Această funcție blochează pachetele cu destinații de adrese private să iasă "
-"pe internet, conform <a href=\"http://tools.ietf.org/html/bcp38\">BCP 38</"
-"a>. Pentru IPv6, sunt instalate numai rutele implicite specifice sursei, "
-"astfel încât nu sunt necesare rutele de firewall BCP38."
+
+#~ msgid ""
+#~ "This function blocks packets with private address destinations from going "
+#~ "out onto the internet as per <a href=\"http://tools.ietf.org/html/"
+#~ "bcp38\">BCP 38</a>. For IPv6, only source specific default routes are "
+#~ "installed, so no BCP38 firewall routes are needed."
+#~ msgstr ""
+#~ "Această funcție blochează pachetele cu destinații de adrese private să "
+#~ "iasă pe internet, conform <a href=\"http://tools.ietf.org/html/"
+#~ "bcp38\">BCP 38</a>. Pentru IPv6, sunt instalate numai rutele implicite "
+#~ "specifice sursei, astfel încât nu sunt necesare rutele de firewall BCP38."
