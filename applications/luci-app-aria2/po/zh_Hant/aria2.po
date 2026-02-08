@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-02-06 13:01+0000\n"
+"PO-Revision-Date: 2026-02-08 18:11+0000\n"
 "Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsaria2/zh_Hant/>\n"
@@ -489,7 +489,7 @@ msgstr "重試等待"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:209
 msgid "Run daemon as user"
-msgstr "執行守護行程的使用者"
+msgstr ""
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:194
 msgid "Running Status"
@@ -524,8 +524,8 @@ msgid ""
 "BitTorrent Magnet URI is used. The file name is hex encoded info hash with "
 "suffix \".torrent\"."
 msgstr ""
-"儲存元資料為「.torrent」檔案。此選項僅在使用 BitTorrent 磁力連結時生效。檔案"
-"名稱 (包含字尾「.torrent」) 為十六進位編碼的雜湊值。"
+"儲存元資料為 \".torrent\" 檔案。此選項僅在使用 BitTorrent 磁力連結時生效。檔"
+"案名稱 (包含字尾 \".torrent\") 為十六進位編碼的雜湊值。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:452
 msgid "Save metadata"
@@ -569,8 +569,8 @@ msgid ""
 "option."
 msgstr ""
 "傳送 <code>Cache-Control: no-cache</code> 和 <code>Pragma: no-cache</code> 標"
-"頭以避免快取內容。停用則不傳送，您可使用「標頭」選項來設定 Cache-Control 標頭"
-"。"
+"頭以避免快取內容。停用則不傳送，您可使用 \"標頭\" 選項來設定 Cache-Control 標"
+"頭。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:473
 msgid ""
@@ -578,8 +578,8 @@ msgid ""
 "\"6881-6999\" and \"6881-6889,6999\". Make sure that the specified ports are "
 "open for incoming TCP traffic."
 msgstr ""
-"為 BitTorrent 下載設定 TCP 連接埠。支援的格式: 「6881,6885」，「6881-6999」和"
-"「6881-6889,6999」。確保指定連接埠對傳入 TCP 流量開放。"
+"為 BitTorrent 下載設定 TCP 連接埠。支援的格式: \"6881,6885\" ，\"6881-6999\" "
+"和 \"6881-6889,6999\"。確保指定連接埠對傳入 TCP 流量開放。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:479
 msgid ""
@@ -614,7 +614,7 @@ msgid ""
 "\"Timeout\" option is used instead."
 msgstr ""
 "設定與 HTTP / FTP / 代理伺服器建立連線的逾時 (秒)。連線建立後，此選項失效並使"
-"用「逾時」選項。"
+"用 \"逾時\" 選項。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:404
 msgid "Set the seconds to wait between retries."
@@ -647,10 +647,10 @@ msgid ""
 "it blocks aria2 entirely until allocation finishes."
 msgstr ""
 "指定檔案分配方式。如果您使用的檔案系統較新，例如: ext4 (支援 extents) 、btrfs"
-"、xfs或NTFS (僅限 MinGW 版本) ，「falloc」是最佳選擇。這種方式幾乎能立即分配"
+"、xfs或NTFS (僅限 MinGW 版本) ，\"falloc\" 是最佳選擇。這種方式幾乎能立即分配"
 "比較大的檔案 (幾 GiB) ，但是它要求您的系統必須支援 posix_fallocate(3) 函式。"
-"不要在 ext3 或者 FAT32 這些舊檔案系統中使用「falloc」，因為它花費的時間和「"
-"prealloc」幾乎一樣多，而且在檔案分配過程中會完全阻塞 Aria2 直到分配完成。"
+"不要在 ext3 或者 FAT32 這些舊檔案系統中使用 \"falloc\" ，因為它花費的時間和 "
+"\"prealloc\" 幾乎一樣多，而且在檔案分配過程中會完全阻塞 Aria2 直到分配完成。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:505
 msgid ""
@@ -664,8 +664,8 @@ msgid ""
 "with this option, seeding ends when at least one of the conditions is "
 "satisfied. Specifying 0 disables seeding after download completed."
 msgstr ""
-"以分鐘指定做種時間。如果同時指定了「做種比例」選項，那麼將在任一條件滿足時停"
-"止做種。設定 0 表示下載完成後停止做種。"
+"以分鐘指定做種時間。如果同時指定了 \"做種比例\" 選項，那麼將在任一條件滿足時"
+"停止做種。設定 0 表示下載完成後停止做種。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:539
 msgid ""
@@ -803,7 +803,7 @@ msgstr "使用者名稱 & 密碼"
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:323
 msgid ""
 "Verify the peer using certificates specified in \"CA certificate\" option."
-msgstr "使用「CA 憑證」選項中指定的憑證驗證對等點。"
+msgstr "使用 \"CA 憑證\" 選項中指定的憑證驗證對等點。"
 
 #: applications/luci-app-aria2/htdocs/luci-static/resources/view/aria2/config.js:233
 msgid "Warn"
