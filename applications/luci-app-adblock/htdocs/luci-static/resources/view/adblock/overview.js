@@ -6,6 +6,7 @@
 'require ui';
 'require uci';
 'require form';
+'require uqr';
 'require tools.widgets as widgets';
 
 /*
@@ -44,7 +45,8 @@ return view.extend({
 			L.resolveDefault(fs.read_direct('/etc/adblock/adblock.custom.feeds'), ''),
 			L.resolveDefault(fs.read_direct('/etc/adblock/adblock.feeds'), ''),
 			L.resolveDefault(fs.read_direct('/etc/adblock/adblock.categories'), ''),
-			uci.load('adblock')
+			uci.load('adblock'),
+			`https://${window.location.hostname}/cgi-bin/adblock`
 		]);
 	},
 	render: function (result) {
@@ -403,6 +405,71 @@ return view.extend({
 		o.value('2620:fe::fe', _('Quad9 (malware)'));
 		o.default = '2a13:1001::86:54:11:13';
 		o.rmempty = true;
+
+		o = s.taboption('firewall', form.DummyValue, '_sub');
+		o.rawhtml = true;
+		o.default = '<hr style="width: 200px; height: 1px;" /><em style="color:#37c;font-weight:bold;">' + _('External Remote DNS Policy (temporary MAC‑based remote DNS bypass)') + '</em>';
+
+		o = s.taboption('firewall', form.Flag, 'adb_nftremote', _('Enable Remote DNS Routing'), _('Allows temporary access to an unfiltered external DNS resolver, bypassing local adblock.'));
+		o.rmempty = false;
+
+		o = s.taboption('firewall', form.DynamicList, 'adb_nftmacremote', _('MAC Remote Filter Targets'), _('Listed MAC addresses are allowed to use the remote DNS bypass.'));
+		o.depends('adb_nftremote', '1');
+		o.datatype = 'macaddr';
+		o.placeholder = '00:11:22:33:44:55';
+		o.multiple = true;
+		o.optional = true;
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.Value, 'adb_nftremotetimeout', _('Remote DNS Timeout'), _('Time limit in minutes for using the remote DNS bypass per listed MAC address.'));
+		o.depends('adb_nftremote', '1');
+		o.datatype = 'range(1,300)';
+		o.value('5', _('5 minutes'));
+		o.value('10', _('10 minutes'));
+		o.value('15', _('15 minutes'));
+		o.value('30', _('30 minutes'));
+		o.value('60', _('60 minutes'));
+		o.default = '15';
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.Value, 'adb_remotednsv4', _('IPv4 Remote DNS Resolver'), _('IPv4 DNS resolver applied to MACs using the unfiltered remote DNS policy.'));
+		o.depends('adb_nftremote', '1');
+		o.datatype = 'ip4addr("nomask")';
+		o.value('86.54.11.100', _('DNS4EU (unfiltered)'));
+		o.value('94.140.14.140', _('AdGuard (unfiltered)'));
+		o.value('76.76.2.0', _('Control D (unfiltered)'));
+		o.value('1.1.1.1', _('Cloudflare (unfiltered)'));
+		o.value('9.9.9.10', _('Quad9 (unfiltered)'));
+		o.value('185.150.99.255', _('Digitale Gesellschaft (unfiltered)'));
+		o.default = '86.54.11.100';
+		o.rmempty = true;
+
+		o = s.taboption('firewall', form.Value, 'adb_remotednsv6', _('IPv6 Remote DNS Resolver'), _('IPv6 DNS resolver applied to MACs using the unfiltered remote DNS policy.'));
+		o.depends('adb_nftremote', '1');
+		o.datatype = 'ip6addr("nomask")';
+		o.value('2a13:1001::86:54:11:100', _('DNS4EU (unfiltered)'));
+		o.value('2a10:50c0::1:ff', _('AdGuard (unfiltered)'));
+		o.value('2606:1a40::', _('Control D (unfiltered)'));
+		o.value('2606:4700:4700::1111', _('Cloudflare (unfiltered)'));
+		o.value('2620:fe::10', _('Quad9 (unfiltered)'));
+		o.value('2a07:6b47:6b47::255', _('Digitale Gesellschaft (unfiltered)'));
+		o.default = '2a13:1001::86:54:11:100';
+		o.rmempty = true;
+
+		const url = result[4];
+		if (url) {
+			const options = {
+				pixelSize: 2,
+				margin: 1,
+				ecLevel: 'M',
+				whiteColor: 'white',
+				blackColor: 'black'
+			};
+			const svg = uqr.renderSVG(url, options);
+			o = s.taboption('firewall', form.DummyValue, '_sub', _('QRCode for Remote Access'));
+			o.rawhtml = true;
+			o.default = svg;
+		}
 
 		o = s.taboption('firewall', form.DummyValue, '_sub');
 		o.rawhtml = true;
