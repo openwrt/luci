@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-02-07 16:10+0000\n"
+"PO-Revision-Date: 2026-02-08 18:12+0000\n"
 "Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsolsr/zh_Hant/>\n"
@@ -113,7 +113,8 @@ msgid ""
 "Enable SmartGateway. If it is disabled, then all other SmartGateway "
 "parameters are ignored. Default is \"no\"."
 msgstr ""
-"啟用SmartGateway。如果禁用，則將忽略SmartGateway的其他所有參數。預設值: “no”."
+"啟用SmartGateway。如果禁用，則將忽略SmartGateway的其他所有參數。預設值: "
+"\"no\"."
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:39
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:39
@@ -146,15 +147,15 @@ msgid ""
 "value too, but does only update the hopcount if the nexthop changes too. "
 "Default is \"flat\"."
 msgstr ""
-"FIBMetric 控制主機路由 OLSRd 集的度量標準值。“flat”表示度量值始終為2。這是首"
-"選值，因為它有助於 linux 核心清理舊路由。“correct”使用 hopcount 作為度量"
-"值。“approx”也使用 hopcount 作為度量值，但只有在下一次更改時才更新 hopcount。"
-"預設為“flat”。"
+"FIBMetric 控制主機路由 OLSRd 集的度量標準值。\"flat\"表示度量值始終為2。這是"
+"首選值，因為它有助於 linux 核心清理舊路由。\"correct\"使用 hopcount 作為度量"
+"值。\"approx\"也使用 hopcount 作為度量值，但只有在下一次更改時才更新 hopcount"
+"。預設為\"flat\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:207
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:201
 msgid "Fisheye mechanism for TCs (checked means on). Default is \"on\""
-msgstr "TC 的魚眼機制 (校驗和開啟) 。預設為“開啟”"
+msgstr "TC 的魚眼機制 (校驗和開啟) 。預設為\"開啟\""
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:132
 msgid "Gateway"
@@ -284,7 +285,7 @@ msgid ""
 "\"yes\""
 msgstr ""
 "滯後連結檢測 (僅適用於 hopcount 度量)。滯後增加了連結感測的健壯性，但延遲了鄰"
-"居註冊過程。預設值為“是”"
+"居註冊過程。預設值為\"是\""
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:283
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:277
@@ -316,7 +317,7 @@ msgid ""
 "interface broadcast IP."
 msgstr ""
 "傳出OLSR封包的IPv4廣播位址。一個有用的例子是255.255.255.255。預設"
-"為“0.0.0.0”，將觸發使用介面的IP廣播位址。"
+"為\"0.0.0.0\"，將觸發使用介面的IP廣播位址。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:365
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:131
@@ -328,7 +329,7 @@ msgstr "IPv4 源位址"
 msgid ""
 "IPv4 src address for outgoing OLSR packages. Default is \"0.0.0.0\", which "
 "triggers usage of the interface IP."
-msgstr "傳出 OLSR 包的 IPv4 源位址。預設為“0.0.0.0”，將觸發使用介面的 IP。"
+msgstr "傳出 OLSR 包的 IPv4 源位址。預設為\"0.0.0.0\"，將觸發使用介面的 IP。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:139
 msgid "IPv6"
@@ -348,13 +349,13 @@ msgstr "IPv6多播位址"
 msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
-msgstr "IPv6多播位址。預設為「FF02::6D」，即manet-router連結本地多播位址。"
+msgstr "IPv6多播位址。預設為 \"FF02::6D\" ，即manet-router連結本地多播位址。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
 msgid ""
 "IPv6 network must be given in full notation, prefix must be in CIDR notation."
-msgstr "IPv6 網路必須完整表出，字首必須是 CIDR 表示法。"
+msgstr "IPv6 網路必須完整表出，前綴必須是 CIDR 表示法。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:374
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:353
@@ -372,8 +373,8 @@ msgid ""
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
 msgstr ""
-"IPv6源字首。OLSRd將選擇一個與此參數字首匹配的介面IP。預設為「0::/0」，觸發使"
-"用介面的非連結本地IP。"
+"IPv6源前綴。OLSRd將選擇一個與此參數前綴匹配的介面IP。預設為 \"0::/0\" ，觸發"
+"使用介面的非連結本地IP。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:111
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:111
@@ -391,13 +392,13 @@ msgid ""
 msgstr ""
 "如果要更改到當前閘道的路由，則在將該閘道與新閘道進行比較之前，將該閘道的ETX值"
 "乘以該值。參數可以是介於0.1和1.0之間的值，但如果更改則應接近1.0。<br /><b>警"
-"告: </b>此參數不應與etx_ffeth指標一起使用！<br />預設為「1.0」。"
+"告: </b>此參數不應與etx_ffeth指標一起使用！<br />預設為 \"1.0\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:91
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:91
 msgid ""
 "If this Node uses NAT for connections to the internet. Default is \"yes\"."
-msgstr "如果此節點使用 NAT 連線到網際網路。預設為“是”。"
+msgstr "如果此節點使用 NAT 連線到網際網路。預設為\"是\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:31
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:31
@@ -417,8 +418,8 @@ msgid ""
 "ethernet interfaces. Valid modes are \"mesh\" and \"ether\". Default is "
 "\"mesh\"."
 msgstr ""
-"介面模式用於防止乙太網交換機介面上不必要的封包轉送。有效模式是「mesh」和"
-"「ether」。預設為「mesh」。"
+"介面模式用於防止乙太網交換機介面上不必要的封包轉送。有效模式是 \"mesh\" 和 "
+"\"ether\"。預設為 \"mesh\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:469
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:448
@@ -440,7 +441,7 @@ msgstr "網際網路協定"
 msgid ""
 "Interval to poll network interfaces for configuration changes (in seconds). "
 "Default is \"2.5\"."
-msgstr "輪詢網路介面以進行配置更改的間隔 (秒) 。預設值為“2.5”。"
+msgstr "輪詢網路介面以進行配置更改的間隔 (秒) 。預設值為\"2.5\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:38
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:38
@@ -528,10 +529,10 @@ msgid ""
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
 "連結品質演算法 (僅適用於 lq 級別 2)。<br /><b>etx_float</b>: 浮點數 ETX，按指"
-"數函式老化<br /><b>etx_fpm</b>: 與 etx_float 相同，但按整數算術 <br /"
-"><b>etx_ff</b>: ETX freifunk，一種使用所有 OLSR 流量 (而不僅僅是 hello) 進行 "
-"ETX 計算的 etx 變體 <br /><b>etx_ffeth</b>: 不相容的變體 etx_ff，允許乙太網連"
-"結使用 ETX 0.1。<br />預設為 “etx_ff”"
+"數函式老化<br /><b>etx_fpm</b>: 與 etx_float 相同，但按整數算術 <br /><b>"
+"etx_ff</b>: ETX freifunk，一種使用所有 OLSR 流量 (而不僅僅是 hello) 進行 ETX "
+"計算的 etx 變體 <br /><b>etx_ffeth</b>: 不相容的變體 etx_ff，允許乙太網連結使"
+"用 ETX 0.1。<br />預設為 \"etx_ff\""
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:170
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:164
@@ -542,7 +543,7 @@ msgid ""
 msgstr ""
 "在 hopcount 和基於代價 (主要是 ETX) 路由之間切換連結品質級別。<br /><b>0</b> "
 "= 不使用連結品質<br /><b>2</b> = 使用連結品質進行 MPR 選擇和路由<br />預設"
-"為“2”"
+"為\"2\""
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:313
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:307
@@ -797,7 +798,7 @@ msgstr "連接埠"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:23
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/smartgw.js:140
 msgid "Prefix"
-msgstr "字首"
+msgstr "前綴"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:544
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:553
@@ -845,7 +846,7 @@ msgid ""
 "during the uptime of olsrd. Default is 0.0.0.0, which triggers usage of the "
 "IP of the first interface."
 msgstr ""
-"設定路由器的主IP (發起方 IP)。在olsrd的上線時間內， 此IP永遠不會改變。預設為"
+"設定路由器的主IP (發起方 IP)。在olsrd的上線時間內，此IP永遠不會改變。預設為"
 "0.0.0.0，觸發使用第一個介面的IP。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:229
@@ -888,7 +889,7 @@ msgid ""
 "upstream, second parameter is downstream. Default is \"128 1024\"."
 msgstr ""
 "以千位元/秒為單位指定上行連結的速度。第一個參數是上傳，第二個參數是下載。預設"
-"為「128 1024」。"
+"為 \"128 1024\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:100
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:100
@@ -963,7 +964,7 @@ msgid ""
 "dynamically based on battery/power status. Default is \"3\"."
 msgstr ""
 "固定的使用意願值。如果未設定，則將根據電池/電源狀態動態計算意願值。預設值"
-"為“3”。"
+"為\"3\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:48
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:48
@@ -986,9 +987,9 @@ msgid ""
 "the IPv6 gateway without any kind of address translation. The maximum prefix "
 "length is 64 bits. Default is \"::/0\" (no prefix)."
 msgstr ""
-"這可用於向用戶端通知上行連結的外部IPv6字首。這可能讓用戶端更改其本地IPv6位址"
-"以使用IPv6閘道器，而無需任何型別的位址轉換。字首長度最大為64位。預設為「::/"
-"0」 (無字首)。"
+"這可用於向用戶端通知上行連結的外部 IPv6 前綴。這可能讓用戶端更改其本地 IPv6 "
+"位址以使用 IPv6 閘道器，而無需任何型別的位址轉換。前綴長度最大為 64 位。預設"
+"為 \"::/0\" (無前綴)。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:284
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:278
@@ -1006,7 +1007,7 @@ msgstr "拓撲"
 msgid ""
 "Type of service value for the IP header of control traffic. Default is "
 "\"16\"."
-msgstr "IP 流量控制頭的服務型別值。預設值為“16”。"
+msgstr "IP 流量控制頭的服務型別值。預設值為\"16\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/error_olsr.js:9
 msgid "Unable to connect to the OLSR daemon!"
@@ -1087,7 +1088,7 @@ msgid ""
 "Default setting is \"both\"."
 msgstr ""
 "將匯出哪種上行連結到其他網狀節點。通過查詢本地HNA 0.0.0.0/0、::ffff:0:0/96或"
-"2000::/3來檢測上行連結。預設為「兩者」。"
+"2000::/3來檢測上行連結。預設為 \"兩者\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:80
 msgid ""
@@ -1096,7 +1097,7 @@ msgid ""
 "setting is \"both\"."
 msgstr ""
 "將匯出哪種上行連結到其他網狀節點。通過查詢本地HNA6 ::ffff:0:0/96或2000::/3來"
-"檢測上行連結。預設為「兩者」。"
+"檢測上行連結。預設為 \"兩者\"。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:242
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:236
