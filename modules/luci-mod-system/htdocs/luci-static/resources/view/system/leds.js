@@ -97,6 +97,26 @@ return view.extend({
 			for (let plugin of plugins) {
 				plugin.form.addFormOptions(s);
 			}
+			const led_names = Object.keys(leds);
+			for (let i = 0; i < led_names.length; i++) {
+				let led = leds[led_names[i]];
+				o = s.option(form.Value, `${led_names[i]}_brightness`, _('Brightness'));
+				o.depends('sysfs', led_names[i]);
+				o.ucioption = 'brightness';
+				o.datatype = `range(0,${led.max_brightness})`;
+				o.placeholder = led.max_brightness;
+				o.modalonly = true;
+				if (led.multi_channel) {
+					for (let channel in led.channels) {
+						o = s.option(form.Value, `${led_names[i]}_color_${channel}`, channel);
+						o.ucioption = `color_${channel}`;
+						o.depends('sysfs', led_names[i]);
+						o.datatype = `range(0,${led.max_brightness})`;
+						o.placeholder = led.channels[channel];
+						o.modalonly = true;
+					}
+				}
+			}
 
 			const opts = s.getOption();
 
