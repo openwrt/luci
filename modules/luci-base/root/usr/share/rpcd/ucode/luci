@@ -203,7 +203,7 @@ const methods = {
 			for (let led in lsdir('/sys/class/leds')) {
 				let s;
 
-				result[led] = { triggers: [] };
+				result[led] = { triggers: [], multi_channel: false, channels: {} };
 
 				s = trim(readfile(`/sys/class/leds/${led}/trigger`));
 				for (let trigger in split(s, ' ')) {
@@ -211,6 +211,16 @@ const methods = {
 
 					if (trigger != result[led].triggers[-1])
 						result[led].active_trigger = result[led].triggers[-1];
+				}
+				s = access(`/sys/class/leds/${led}/multi_index`);
+				if (s) {
+					let channels = split(trim(readfile(`/sys/class/leds/${led}/multi_index`)), ' ');
+					let intensities = split(trim(readfile(`/sys/class/leds/${led}/multi_intensity`)), ' ');
+
+					for (let i = 0; i < length(channels); i++) {
+						result[led].channels[channels[i]] = int(intensities[i]);
+					}
+					result[led].multi_channel = true;
 				}
 
 				s = readfile(`/sys/class/leds/${led}/brightness`);
