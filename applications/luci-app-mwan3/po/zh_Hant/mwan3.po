@@ -3,7 +3,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-02-08 18:13+0000\n"
+"PO-Revision-Date: 2026-02-11 13:58+0000\n"
 "Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsmwan3/zh_Hant/>\n"
@@ -326,7 +326,7 @@ msgstr "當 Ping 失敗次數達到此值後，介面會被認為離線"
 msgid ""
 "Interfaces may not share the same name as configured members, policies or "
 "rules."
-msgstr "介面名稱不能與已設定的成員、策略或規則相同。"
+msgstr "介面不能與已配置的成員、政策或規則共享相同名稱。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:65
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:59
@@ -358,7 +358,7 @@ msgstr "權重較高的負載平衡成員介面將分配到更多的流量。"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:19
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:117
 msgid "Logging"
-msgstr "日誌"
+msgstr "記錄"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/globals.js:22
 msgid "Loglevel"
@@ -403,7 +403,7 @@ msgstr "成員用於設定某個 MWAN 介面的躍點數和權重。"
 msgid ""
 "Members may not share the same name as configured interfaces, policies or "
 "rules."
-msgstr "成員名稱不能與設定的介面、策略或規則相同。"
+msgstr "成員名稱不能與配置的介面、政策或規則相同。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:288
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:57
@@ -442,7 +442,7 @@ msgstr "MultiWAN 管理器 - 概覽"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:17
 msgid "MultiWAN Manager - Policies"
-msgstr "MultiWAN 管理器 - 策略"
+msgstr "MultiWAN 管理器 - 政策"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:19
 msgid "MultiWAN Manager - Rules"
@@ -460,7 +460,7 @@ msgstr "MultiWAN 管理器 - 故障排除"
 msgid ""
 "Mwan3 requires that all interfaces have a unique metric configured in /etc/"
 "config/network."
-msgstr "Mwan3 要求所有介面都有一個在 /etc/config/network 中設定的唯一躍點數。"
+msgstr "Mwan3 要求所有介面都有一個在 /etc/config/network 中配置的唯一躍點數。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/interface.js:49
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/member.js:44
@@ -576,23 +576,22 @@ msgstr "Ping 追蹤 IP"
 msgid ""
 "Policies are profiles grouping one or more members controlling how Mwan3 "
 "distributes traffic."
-msgstr ""
-"策略是將一個或多個成員分組的設定檔案，這些成員控制 Mwan3 如何分配連線。"
+msgstr "政策是將一個或多個成員分組的設定檔案，這些成員控制 Mwan3 如何分配連線。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:24
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:45
 msgid ""
 "Policies may not share the same name as configured interfaces, members or "
 "rules"
-msgstr "策略名稱不能與設定的介面、成員或規則相同"
+msgstr "政策不能與配置的介面、成員或規則具有相同名稱"
 
 #: applications/luci-app-mwan3/root/usr/share/luci/menu.d/luci-app-mwan3.json:83
 msgid "Policy"
-msgstr "策略"
+msgstr "政策"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:121
 msgid "Policy assigned"
-msgstr "分配的策略"
+msgstr "分配的政策"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:66
 msgid "Protocol"
@@ -647,11 +646,11 @@ msgstr "相符規則下面的規則將被忽略。"
 msgid ""
 "Rules may not share the same name as configured interfaces, members or "
 "policies."
-msgstr "規則名稱不能與設定的介面、成員或策略的名稱一樣。"
+msgstr "規則可能不能與已配置的介面、成員或政策共享名稱。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:20
 msgid "Rules specify which traffic will use a particular MWAN policy."
-msgstr "規則指定哪些流量將使用特定的 MWAN 策略。"
+msgstr "規則指定哪些流量將使用特定的 MWAN 政策。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:102
 msgid "Seconds. Acceptable values: 1-1000000. Defaults to 600 if not set"
@@ -752,7 +751,7 @@ msgstr ""
 msgid ""
 "Traffic matching a rule, but all WAN interfaces for that policy are down "
 "will be blackholed."
-msgstr "與規則相符的連線，但該策略的所有 WAN 介面均已離線，將被丟棄。"
+msgstr "與規則相符的連線，但該政策的所有 WAN 介面均已離線，將被丟棄。"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:24
 msgid "Traffic not matching any rule is routed using the main routing table."
@@ -784,7 +783,7 @@ msgstr "警告"
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/policy.js:62
 msgid ""
 "When all policy members are offline use this behavior for matched traffic"
-msgstr "當所有策略成員都無法使用的時候，對使用該策略的連線使用這個動作"
+msgstr "當所有政策成員都無法使用的時候，對使用該政策的連線使用這個動作"
 
 #: applications/luci-app-mwan3/htdocs/luci-static/resources/view/mwan3/network/rule.js:97
 msgid "Yes"
