@@ -12,12 +12,18 @@ on:
       - 'docs/**'
 
 jobs:
-  deploy:
+  build:
     if: endsWith( github.repository, 'luci' )
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install
         run: npm install
@@ -26,14 +32,18 @@ jobs:
         run: npm run doc
 
       - name: Archive docs as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v4
         with:
           name: docs
           path: ./docs/
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+      # Deploy step depends on the repo settings->pages config: choose Branch
+      # "gh-pages", path "/". Deploy creates a commit on the gh-pages branch,
+      # with the content of built docs folder "/docs" in repo root "/".
+      # This is the "luci" repo, so the result of gh-pages is deployed to
+      # "<githubid>.github.io/luci"
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./docs/
-          enable_jekyll: true
+          artifact_name: docs
