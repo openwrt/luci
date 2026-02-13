@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-02-11 13:56+0000\n"
+"PO-Revision-Date: 2026-02-13 16:02+0000\n"
 "Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hant/>\n"
@@ -1009,7 +1009,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:219
 msgid "Add local domain suffix to names served from hosts files."
-msgstr "為主機檔案中的主機名稱新增本機網域尾碼。"
+msgstr "為主機檔案中的主機名稱新增本機網域後綴。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:285
 msgid "Add multicast rule"
@@ -2039,7 +2039,7 @@ msgstr "針對 DNS SAN (如果可用) <br />或主題 CN (完全符合) 的憑�
 msgid ""
 "Certificate constraint(s) against DNS SAN values (if available)<br />or "
 "Subject CN (suffix match)"
-msgstr "針對 DNS SAN (如果可用) <br />或主題 CN (尾碼匹配) 的憑證約束"
+msgstr "針對 DNS SAN (如果可用) <br />或主題 CN (後綴匹配) 的憑證約束"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2005
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2063
@@ -3291,7 +3291,7 @@ msgstr "拖曳或貼上下面的有效 <em>*.conf</em> 檔案以設定本地 Wir
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:3030
 msgid "Drag to reorder"
-msgstr "拖動來排序"
+msgstr "拖動以重新排序"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1206
 msgid ""
@@ -3476,7 +3476,7 @@ msgstr "編輯標籤"
 msgid ""
 "Edit the raw configuration data above to fix any error and hit \"Save\" to "
 "reload the page."
-msgstr "編輯上面的原始設定數據以修復錯誤，點擊 \"儲存\" 重新載入頁面。"
+msgstr "編輯上面的原始設定資料以修復錯誤，點擊 \"儲存\" 重新載入頁面。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:955
 msgid "Edit this network"
@@ -3993,7 +3993,7 @@ msgstr "需要: %s"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:65
 msgid "Expires"
-msgstr "到期"
+msgstr "過期"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:723
 msgid ""
@@ -4750,7 +4750,7 @@ msgstr "授予存取防火牆狀態的權限"
 
 #: modules/luci-mod-system/root/usr/share/rpcd/acl.d/luci-mod-system.json:146
 msgid "Grant access to flash operations"
-msgstr "授予存取 Flash 作業的權限"
+msgstr "授予存取 Flash 操作的權限"
 
 #: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status-index.json:3
 msgid "Grant access to main status display"
@@ -5362,7 +5362,7 @@ msgstr "IPv6 來源路由"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1288
 msgid "IPv6 suffix"
-msgstr "IPv6 尾碼"
+msgstr "IPv6 後綴"
 
 #: protocols/luci-proto-sstp/htdocs/luci-static/resources/protocol/sstp.js:55
 msgid "IPv6 support"
@@ -6580,7 +6580,7 @@ msgstr "本地網域"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:401
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:215
 msgid "Local domain suffix appended to DHCP names and hosts file entries."
-msgstr "附加至 DHCP 名稱和主機檔案條目的本地網域尾碼。"
+msgstr "附加至 DHCP 名稱和主機檔案條目的本地網域後綴。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:621
 msgid "Local service only"
@@ -8147,8 +8147,8 @@ msgid ""
 "for the interface."
 msgstr ""
 "可選。允許值: 'eui64'，'random'，固定值例如':: 1'或'::1:2'。從委派伺服器收到 "
-"IPv6 前綴 (如 'a :b :c :d ::') 時，使用尾碼 (如 ':: 1') 形成 IPv6 位址 "
-"('a :b :c :d : :1')。"
+"IPv6 前綴 (如 'a :b :c :d ::') 時，使用後綴 (如 ':: 1') 形成 IPv6 位址 ('a "
+":b :c :d : :1')。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:589
 msgid ""
@@ -11369,8 +11369,8 @@ msgid ""
 "state."
 msgstr ""
 "在套用變更後的 %d 秒內無法存取此裝置，出於安全原因設定被回滚。如果您仍認為此"
-"設定變更是正確的，請強制套用。或您可關閉此警告並在嘗試再次套用之前編輯的變"
-"更，或恢復所有未套用的變更以保持目前工作的設定狀態。"
+"設定變更是正確的，請強制套用。或您可關閉此警告並在嘗試再次套用之前編輯的變更"
+"，或恢復所有未套用的變更以保持目前運作的設定狀態。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:281
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:391
@@ -11449,7 +11449,7 @@ msgid ""
 "The hexadecimal <abbr title=\"Address suffix\"><a href=\"%s\">IPv6 token</"
 "a></abbr> for this host (up to 16 chars, i.e. 64 bits)."
 msgstr ""
-"此主機的十六進位 <abbr title=\"位址尾碼\"><a href=\"%s\">IPv6 權仗</a></"
+"此主機的十六進位 <abbr title=\"位址後綴\"><a href=\"%s\">IPv6 權仗</a></"
 "abbr> (最多 16 個字元，即 64 位元) 。"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:93
@@ -11544,7 +11544,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:827
 msgid "The netfilter components below are only regarded when running fw4."
-msgstr "netfilter 元件僅在運行 fw4 時才被考慮。"
+msgstr "netfilter 元件僅在執行 fw4 時才被考慮。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2472
 msgid "The network name is already used"
@@ -11993,7 +11993,7 @@ msgstr "可用總數"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:350
 msgid "Trace"
-msgstr "追蹤"
+msgstr "追溯"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:105
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:106
@@ -12122,7 +12122,7 @@ msgstr "發送功率"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:178
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:43
 msgid "Type"
-msgstr "類別"
+msgstr "類型"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:208
 msgid "Type of service"
@@ -12806,7 +12806,7 @@ msgstr "超高速"
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:229
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:229
 msgid "Via"
-msgstr "通過"
+msgstr "透過"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:241
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:241

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-02-11 13:57+0000\n"
+"PO-Revision-Date: 2026-02-11 22:44+0000\n"
 "Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsstatistics/zh_Hant/>\n"
@@ -268,7 +268,7 @@ msgstr "控制應將哪些通知發送到系統日誌。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:28
 msgid "Create statistics about the network plugin itself"
-msgstr "建立有關網路外掛本身的統計資訊"
+msgstr "建立關於網路外掛本身的統計資訊"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:7
 msgid "DF Plugin Configuration"
@@ -568,8 +568,8 @@ msgid ""
 "certain threshold values have been reached. The values leading to invocation "
 "will be fed to the the called programs stdin."
 msgstr ""
-"在這裡您可以定義外部指令，當 Collectd 達到一定閾值時將啟動指令。閾值將會作為"
-"指令的 stdin。"
+"在這裡您可以定義外部指令，當達到一定閾值時 collectd 將會啟動此指令。此值將會"
+"作為被呼叫程式的 stdin。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:21
 msgid ""
@@ -586,6 +586,8 @@ msgid ""
 "Hiding the free memory item makes the graph to scale to actual memory usage, "
 "not to 100%."
 msgstr ""
+"隱藏可用記憶體項目會讓圖表根據實際記憶體使用情況來調整，而不是顯示最大值 "
+"100%。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:29
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:14
@@ -758,7 +760,7 @@ msgstr "監控所有本地監聽埠"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:15
 msgid "Monitor device(s) / thermal zone(s)"
-msgstr "監控裝置 / 散熱區域"
+msgstr "監控裝置 / 溫控區域"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:15
 msgid "Monitor devices"
@@ -816,7 +818,7 @@ msgstr "監控 %s, %s, %s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/apcups.js:26
 msgid "Monitoring APC UPS at host %s, port %d"
-msgstr "在主機位置 %s 連接埠 %d 的位置上監控 APC UPS"
+msgstr "在主機位置 %s 連接埠 %d 監控 APC UPS"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:19
 msgid "Monitoring DHCP leases enabled"
@@ -946,7 +948,7 @@ msgstr "監控 Splash 租約"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:47
 msgid "Monitoring thermal zones %s"
-msgstr "監控熱溫區 %s"
+msgstr "監控溫控區 %s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:16
 msgid "More details about frequency usage and transitions"
@@ -1206,7 +1208,7 @@ msgstr "狀態報告"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:32
 msgid "Report in percent"
-msgstr "使用百分比報告"
+msgstr "百分比報告"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:58
 msgid "Retain"
@@ -1214,7 +1216,7 @@ msgstr "保留"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:57
 msgid "Rows per RRA"
-msgstr "行/RRA"
+msgstr "每 RRA 多少列"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:161
 msgid "Rule monitoring enabled"
@@ -1290,7 +1292,7 @@ msgstr "伺服器連接埠"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:20
 msgid "Set the maximum size for datagrams sent over the network"
-msgstr "設定通過網路發送的數據報的最大大小"
+msgstr "設定通過網路發送的資料包的最大大小"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:185
 msgid "Set up collectd"
@@ -1326,7 +1328,7 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpufreq.js:23
 msgid "Simple CPU frequency monitoring enabled"
-msgstr "簡單的 CPU 頻率監控已啟用"
+msgstr "簡易 CPU 頻率監控已啟用"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/snmp6.json:2
 msgid "Snmp6"
@@ -1334,37 +1336,37 @@ msgstr "Snmp6"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:34
 msgid "Socket %s active"
-msgstr "插槽 %s 處於活動狀態"
+msgstr "Socket %s 處於活動狀態"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:15
 msgid "Socket file"
-msgstr "套接字檔案"
+msgstr "Socket 檔案"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:19
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:19
 msgid "Socket group"
-msgstr "插槽組"
+msgstr "Socket 群組"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:15
 msgid "Socket path"
-msgstr "插槽路徑"
+msgstr "Socket 路徑"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:24
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:25
 msgid "Socket permissions"
-msgstr "插槽權限"
+msgstr "Socket 權限"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:22
 msgid "Specifies what information to collect about links."
-msgstr "收集指定連結相關資訊。"
+msgstr "指定要收集關於連結的哪些資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:29
 msgid "Specifies what information to collect about routes."
-msgstr "收集指定路由相關資訊。"
+msgstr "指定要收集關於路由的哪些資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/olsrd.js:36
 msgid "Specifies what information to collect about the global topology."
-msgstr "收集指定拓撲相關資訊。"
+msgstr "指定要收集關於全域拓樸的哪些資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/splash_leases.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/splash_leases.json:2
@@ -1390,11 +1392,11 @@ msgstr "儲存目錄"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:14
 msgid "Storage directory for the csv files"
-msgstr "CSV 儲存目錄"
+msgstr "csv 檔案儲存目錄"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:18
 msgid "Store data values as rates instead of absolute values"
-msgstr "儲存資料值變化量而不是絕對值"
+msgstr "以速率形式儲存資料值而非絕對值"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:65
 msgid "StoreRates"
@@ -1406,7 +1408,7 @@ msgstr "儲存時間跨度"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:24
 msgid "Storing CSV data in %s"
-msgstr "正將 CSV 資料存到 %s"
+msgstr "正在儲存 CSV 資料到 %s"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:22
 msgid "Subscribe"
@@ -1414,7 +1416,7 @@ msgstr "訂閱"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:30
 msgid "Summary of all ports"
-msgstr ""
+msgstr "所有連接埠概要"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/syslog.json:2
 msgid "Syslog"
@@ -1520,7 +1522,7 @@ msgstr "conntrack 外掛收集追蹤連線數的資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:7
 msgid "The cpu plugin collects basic statistics about the processor usage."
-msgstr "CPU 外掛獲取處理器使用的基本統計資訊。"
+msgstr "CPU 外掛收集處理器使用的基本統計資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:7
 msgid ""
@@ -1532,7 +1534,7 @@ msgstr "csv 外掛以 csv 格式儲存收集到的資料方便外部程式進一
 msgid ""
 "The df plugin collects statistics about the disk space usage on different "
 "devices, mount points or filesystem types."
-msgstr "df 外掛收集磁碟空間使用情況、掛載點及檔案系統相關資訊。"
+msgstr "df 外掛收集磁碟空間使用、掛載點及檔案系統相關資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
 msgid "The dhcpleases plugin collects information about assigned DHCP leases."
@@ -1548,7 +1550,7 @@ msgstr "磁碟外掛收集磁碟分割區或整個磁碟的詳細使用資訊。
 msgid ""
 "The dns plugin collects detailed statistics about dns related traffic on "
 "selected interfaces."
-msgstr "dns外掛收集dns流量相關資訊。"
+msgstr "dns 外掛會收集關於選定介面上的 dns 相關流量的詳細統計資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:8
 msgid ""
@@ -1557,9 +1559,9 @@ msgid ""
 "to be used in conjunction with Mail::SpamAssasin::Plugin::Collectd but can "
 "be used in other ways as well."
 msgstr ""
-"郵件外掛建立一個 unix 套接字用於為 Collectd 守護程序傳送統計資訊到電子郵件系"
-"統。這個外掛主要目的是結合使用 Mail::SpamAssasin::Pulgin::Collectd，但可以用"
-"在其他方面。"
+"email 外掛建立一個 unix socket 用於為 collectd 守護程序傳送統計資訊到電子郵件"
+"系統。這個外掛主要目的是結合使用 Mail::SpamAssasin::Pulgin::Collectd，但可以"
+"用在其他方面。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/entropy.js:7
 msgid "The entropy plugin collects statistics about the available entropy."
@@ -1569,7 +1571,7 @@ msgstr "熵外掛收集可用熵的統計資訊。"
 msgid ""
 "The exec plugin starts external commands to read values from or to notify "
 "external processes when certain threshold values have been reached."
-msgstr "exec外掛用於當某些監控值已到達閾值時，啟動外部指令讀值或通知外部程式。"
+msgstr "exec 外掛用於當某些溫控值到達閾值時，啟動外部指令讀取值或通知外部程式。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:80
 msgid "The instance name must not contain spaces"
@@ -1583,41 +1585,41 @@ msgstr "介面外掛用於統計選定介面的流量統計資訊。"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ipstatistics.js:8
 msgid ""
 "The ipstatistics plugin collects IPv4 and IPv6 statistics to compare them."
-msgstr "Ipstatistics 外掛收集 IPv4 和 IPv6 統計資料來比較它們。"
+msgstr "ipstatistics 外掛收集 IPv4 和 IPv6 統計資料來比較它們。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iptables.js:9
 msgid ""
 "The iptables plugin will monitor selected firewall rules and collect "
 "information about processed bytes and packets per rule."
-msgstr "iptables外掛將監控選定防火牆規則和收集關於每個規則處理的封包資訊。"
+msgstr "iptables 外掛將監控選定防火牆規則和收集關於每個規則處理的封包資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/irq.js:8
 msgid ""
 "The irq plugin will monitor the rate of issues per second for each selected "
 "interrupt. If no interrupt is selected then all interrupts are monitored."
 msgstr ""
-"irq外掛用於監控選定中斷的每秒鐘產生的中斷數。如果沒有中斷被選中，則表示對所有"
-"中斷進行監控。"
+"irq 外掛用於監控選定中斷的每秒鐘產生的中斷數。如果沒有中斷被選中，則表示對所"
+"有中斷進行監控。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:8
 msgid ""
 "The iwinfo plugin collects statistics about wireless signal strength, noise "
 "and quality."
-msgstr "iwinfo 外掛元件收集無線訊號強度、噪聲和品質的統計資訊。"
+msgstr "iwinfo 外掛元件收集無線訊號強度、雜訊和品質的統計資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/load.js:7
 msgid "The load plugin collects statistics about the general system load."
-msgstr "負載外掛收集常規系統負載統計資訊。"
+msgstr "負載外掛收集一般系統負載統計資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:7
 msgid "The memory plugin collects statistics about the memory usage."
-msgstr "記憶體外掛收集關於記憶體使用情況的統計資訊。"
+msgstr "記憶體外掛收集關於記憶體使用的統計資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/netlink.js:8
 msgid ""
 "The netlink plugin collects extended information like qdisc-, class- and "
 "filter-statistics for selected interfaces."
-msgstr "netlink外掛收集為選定介面像是qdisc-、class-和filter-的擴充套件統計資訊。"
+msgstr "netlink 外掛收集為選定介面像是 qdisc-、class- 和 filter- 的擴充套件統計資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:7
 msgid ""
@@ -1626,21 +1628,21 @@ msgid ""
 "client mode locally collected data is transferred to a collectd server "
 "instance, in server mode the local instance receives data from other hosts."
 msgstr ""
-"網路外掛提供了基於網路的不同Collectd實例。Collectd可以工作在客戶端和伺服器兩"
-"個模式。在客戶端模式下收集本地資訊，然後轉移到一個Collectd伺服器實例中，在伺"
-"服器模式將從其他主機收集資訊。"
+"網路外掛提供了基於網路的不同 collectd 實例。Collectd 可以運作在客戶端和伺服器"
+"兩個模式。在客戶端模式下收集本地資訊，然後轉移到一個 Collectd 伺服器實例中，"
+"在伺服器模式將從其他主機收集資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/ping.js:7
 msgid ""
 "The ping plugin will send icmp echo replies to selected hosts and measure "
 "the roundtrip time for each host."
-msgstr "Ping外掛將傳送icmp echo請求到選定主機來測量每臺主機的回應時間。"
+msgstr "ping 外掛將傳送 icmp echo 到選定主機來測量每臺主機的回應時間。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:7
 msgid ""
 "The processes plugin collects information like cpu time, page faults and "
 "memory usage of selected processes."
-msgstr "處理程序外掛收集選定程序的CPU時間、頁面錯誤和記憶體使用資訊。"
+msgstr "處理程序外掛收集選定程序的 cpu 時間、頁面錯誤和記憶體使用資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:7
 msgid ""
@@ -1650,7 +1652,7 @@ msgid ""
 "directory. This can render the device unusable!</strong>"
 msgstr ""
 "rrdtool 外掛將收集資料以圖表的形式儲存在 rrd 資料庫檔案中。<br /><br />"
-"<strong>警告: 錯誤的參數設定，將導致非常高的臨時記憶體消耗。這可能會使裝置無"
+"<strong>警告: 設定錯誤參數將導致非常高的臨時目錄記憶體消耗。這可能會使裝置無"
 "法使用！</strong>"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
@@ -1661,19 +1663,19 @@ msgstr "感測器外掛使用 Linux Sensors 框架來收集環境統計資訊。
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/snmp6.js:8
 msgid "The snmp6 plugin collects IPv6 statistics for selected interfaces."
-msgstr "SNMP6 外掛為已選擇的介面收集 IPv6 統計資料。"
+msgstr "snmp6 外掛為已選擇的介面收集 IPv6 統計資料。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/splash_leases.js:7
 msgid ""
 "The splash leases plugin uses libuci to collect statistics about splash "
 "leases."
-msgstr "splash leases外掛使用libuci來收集splash leases的統計資訊。"
+msgstr "splash leases 外掛使用 libuci 來收集 splash leases 的統計資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:7
 msgid ""
 "The tcpconns plugin collects information about open tcp connections on "
 "selected ports."
-msgstr "tcpconns外掛收集選定連接埠的TCP連線資訊。"
+msgstr "tcpconns 外掛收集選定連接埠的 tcp 連線資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:8
 msgid ""
@@ -1681,18 +1683,18 @@ msgid ""
 "read from /sys/class/thermal/*/temp ( '*' denotes the thermal device to be "
 "read, e.g. thermal_zone1 )"
 msgstr ""
-"溫感外掛將會監控系統溫度。資料主要取自 /sys/class/thermal/*/temp ('*' 表示溫"
-"感裝置的名稱，例如: thermal_zone1)"
+"溫控外掛將會監控系統溫度。資料主要取自 /sys/class/thermal/*/temp ('*' 表示溫"
+"控裝置的名稱，例如: thermal_zone1)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:8
 msgid ""
 "The unixsock plugin creates a unix socket which can be used to read "
 "collected data from a running collectd instance."
-msgstr "unixsock外掛建立一個unix socket可用於讀取Collectd實例的收集資訊。"
+msgstr "unixsock 外掛建立一個 unix socket 可用於讀取 Collectd 實例的收集資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/uptime.js:7
 msgid "The uptime plugin collects statistics about the uptime of the system."
-msgstr "上線時間外掛收集系統啟動時間的統計資訊。"
+msgstr "上線時間外掛收集系統上線時間的統計資訊。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/users.js:7
 msgid ""
@@ -1703,16 +1705,16 @@ msgstr ""
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/graphs.js:179
 msgid "There is no RRD data available yet to render graphs."
-msgstr "尚無可用的 RRD 資料來製作圖表。"
+msgstr "尚無可用的 RRD 資料可以渲染圖表。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/thermal.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/thermal.json:2
 msgid "Thermal"
-msgstr "溫感"
+msgstr "溫控"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:7
 msgid "Thermal Plugin Configuration"
-msgstr "溫度感測外掛配置"
+msgstr "溫控外掛配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/contextswitch.js:7
 msgid "This plugin collects statistics about the processor context switches."
@@ -1726,12 +1728,12 @@ msgstr "此外掛收集處理器頻率變化的統計資訊。"
 msgid ""
 "This section defines on which interfaces collectd will wait for incoming "
 "connections."
-msgstr "定義 Collectd 將監聽哪個介面來傳入連線收集資料。"
+msgstr "定義 collectd 將監聽哪個介面來傳入連線收集資料。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/network.js:51
 msgid ""
 "This section defines to which servers the locally collected data is sent to."
-msgstr "定義本地收集資料被髮送到哪臺 Collected 伺服器。"
+msgstr "定義本地收集資料被髮送到哪臺 collected 伺服器。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/chrony.js:25
 msgid "Timeout for polling chrony"
@@ -1749,11 +1751,11 @@ msgstr "是"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:80
 msgid "Try to look up fully qualified hostname"
-msgstr "嘗試解析主機全域名"
+msgstr "嘗試解析完整的主機名稱"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:20
 msgid "Type"
-msgstr "類別"
+msgstr "類型"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/nut.js:7
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:14
@@ -1763,11 +1765,11 @@ msgstr "UPS"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:6
 msgid "UPS Plugin Configuration"
-msgstr "UPS外掛配置"
+msgstr "UPS 外掛配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/nut.js:14
 msgid "UPS name in NUT ups@host format"
-msgstr "UPS 名使用 NUT (Network UPS Tools) 格式: ups@host"
+msgstr "使用 NUT ups@host 格式的 UPS 名稱"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:27
 msgid "URL"
@@ -1775,11 +1777,11 @@ msgstr "URL"
 
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/unixsock.json:2
 msgid "UnixSock"
-msgstr "Unix網域通訊socket"
+msgstr "UnixSock"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/unixsock.js:7
 msgid "Unixsock Plugin Configuration"
-msgstr "Unixsock外掛配置"
+msgstr "Unixsock 外掛配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:22
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/uptime.js:15
@@ -1797,11 +1799,11 @@ msgstr "上線時間監控已啟用"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/openvpn.js:24
 msgid "Use improved naming schema"
-msgstr "使用改進過的命名規則"
+msgstr "使用已改進的命名規則"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:68
 msgid "Used PID file"
-msgstr "正在使用的 PID 檔案"
+msgstr "使用過的 PID 檔案"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:27
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/exec.js:47
@@ -1811,11 +1813,11 @@ msgstr "使用者"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/users.js:7
 msgid "Users"
-msgstr ""
+msgstr "使用者"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/users.js:6
 msgid "Users Plugin Configuration"
-msgstr ""
+msgstr "使用者外掛配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/dsl.js:109
 msgid "Vectoring Down"
@@ -1834,29 +1836,29 @@ msgid ""
 "When a host has not replied to this number of packets in a row, re-resolve "
 "the hostname in DNS. Useful for dynamic DNS hosts. Default is -1 = disabled."
 msgstr ""
-"當主機接連未回應這個數量的封包時，在DNS中重新解析主機名稱。對動態DNS主機有"
-"用。預設值是-1相當於停用。"
+"當主機連續未回應此數量的封包時，在 DNS 中重新解析主機名稱。對動態 DNS 主機有"
+"用。預設是 -1 等於停用。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/disk.js:16
 msgid "When none selected, all disks will be monitored."
-msgstr "未選取時將監控所有硬碟。"
+msgstr "當無選取時，所有硬碟都將被監控。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dns.js:16
 msgid "When none selected, all interfaces will be monitored."
-msgstr "未選取時將監控所有介面。"
+msgstr "當無選取時，所有介面都將被監控。"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:21
 msgid "When set to true, reports per-state metric (system, user, idle)"
-msgstr "設定為true時，報告每個狀態指標 (系統、用戶、空閒)"
+msgstr "當設定為 true 時，報告每個狀態指標 (系統、用戶、空閒)"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:19
 msgid "When set to true, we request absolute values"
-msgstr "打勾時顯示絕對值"
+msgstr "當設定為 true 時，我們請求絕對值"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:33
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/memory.js:23
 msgid "When set to true, we request percentage values"
-msgstr "打勾時顯示百分比"
+msgstr "當設定為 true 時，我們請求百分比值"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/iwinfo.js:7
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/iwinfo.json:2
@@ -1865,7 +1867,7 @@ msgstr "無線"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:7
 msgid "Wireless iwinfo Plugin Configuration"
-msgstr "無線iwinfo外掛配置"
+msgstr "無線 iwinfo 外掛配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:102
 msgid "Writing *.rrd files to %s"
@@ -1879,7 +1881,7 @@ msgstr "您需要設定 <em>collectd</em> 來將資料寫入 <em>.rrd</em> 檔�
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:44
 msgid "all local listening ports,"
-msgstr ""
+msgstr "所有本地監聽連接埠，"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:31
 msgid "cURL plugin enabled"
@@ -1888,15 +1890,15 @@ msgstr "cURL 外掛已啟用"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/statistics/rrdtool/definitions/curl.js:10
 #: applications/luci-app-statistics/root/usr/share/luci/statistics/plugins/curl.json:2
 msgid "cUrl"
-msgstr "cURL"
+msgstr "cUrl"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/curl.js:6
 msgid "cUrl Plugin Configuration"
-msgstr "cUrl外掛配置"
+msgstr "cUrl 外掛配置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "no summary"
-msgstr ""
+msgstr "無概要"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/collectd.js:139
 msgid "none"
@@ -1905,7 +1907,7 @@ msgstr "無"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:107
 msgid "one device"
 msgid_plural "%d devices"
-msgstr[0] "%d 裝置"
+msgstr[0] "%d 個裝置"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:109
 msgid "one filesystem type"
@@ -1925,7 +1927,7 @@ msgstr[0] "%d 個掛載"
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:43
 msgid "one remote port"
 msgid_plural "%d remote ports"
-msgstr[0] "%d 遠端阜"
+msgstr[0] "%d 遠端連接埠"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/rrdtool.js:34
 msgid "reduces rrd size"
@@ -1933,7 +1935,7 @@ msgstr "減少 rrd 大小"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/tcpconns.js:45
 msgid "summary of all ports"
-msgstr ""
+msgstr "所有連接埠概要"
 
 #~ msgid "Bitrate"
 #~ msgstr "位元速率"
