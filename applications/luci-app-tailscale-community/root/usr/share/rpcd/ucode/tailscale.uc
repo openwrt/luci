@@ -143,8 +143,8 @@ methods.set_settings = {
 		let args = ['set'];
 
 		push(args,'--accept-routes=' + (form_data.accept_routes == '1'));
-		push(args,'--advertise-exit-node=' + (form_data.advertise_exit_node == '1'));
-		push(args,'--exit-node-allow-lan-access=' + (form_data.exit_node_allow_lan_access == '1'));
+		push(args,'--advertise-exit-node=' + ((form_data.advertise_exit_node == '1')&&(form_data.exit_node == "")));
+		if (form_data.exit_node == "") push(args,'--exit-node-allow-lan-access=' + (form_data.exit_node_allow_lan_access == '1'));
 		push(args,'--ssh=' + (form_data.ssh == '1'));
 		push(args,'--accept-dns=' + (form_data.disable_magic_dns != '1'));
 		push(args,'--shields-up=' + (form_data.shields_up == '1'));
@@ -152,7 +152,7 @@ methods.set_settings = {
 		push(args,'--snat-subnet-routes=' + (form_data.nosnat != '1'));
 		push(args,'--advertise-routes ' + (shell_quote(join(',',form_data.advertise_routes)) || '\"\"'));
 		push(args,'--exit-node=' + (shell_quote(form_data.exit_node) || '\"\"'));
-		if (form_data.exit_node != "") push(args,' --exit-node-allow-lan-access');
+		if (form_data.exit_node != "") push(args,' --exit-node-allow-lan-access=true');
 		push(args,'--hostname ' + (shell_quote(form_data.hostname) || '\"\"'));
 
 		let cmd_array = 'tailscale '+join(' ', args);
