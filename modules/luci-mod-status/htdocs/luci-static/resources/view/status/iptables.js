@@ -4,18 +4,18 @@
 'require fs';
 'require ui';
 
-var table_names = [ 'Filter', 'NAT', 'Mangle', 'Raw' ],
-    raw_style = 'font-family:monospace;font-size:smaller;text-align:right';
+const table_names = [ 'Filter', 'NAT', 'Mangle', 'Raw' ];
+const raw_style = 'font-family:monospace;font-size:smaller;text-align:right';
 
 return view.extend({
-	load: function() {
+	load() {
 		return L.resolveDefault(fs.stat('/usr/sbin/ip6tables'));
 	},
 
-	createTableSection: function(is_ipv6, table) {
-		var idiv = document.querySelector('div[data-tab="%s"]'.format(is_ipv6 ? 'ip6tables' : 'iptables')),
-		    tdiv = idiv.querySelector('[data-table="%s-%s"]'.format(is_ipv6 ? 'ipv6' : 'ipv4', table)),
-		    title = '%s: %s'.format(_('Table'), table);
+	createTableSection(is_ipv6, table) {
+		const idiv = document.querySelector('div[data-tab="%s"]'.format(is_ipv6 ? 'ip6tables' : 'iptables'));
+		let tdiv = idiv.querySelector('[data-table="%s-%s"]'.format(is_ipv6 ? 'ipv6' : 'ipv4', table));
+		const title = '%s: %s'.format(_('Table'), table);
 
 		if (!tdiv) {
 			tdiv = E('div', { 'data-table': '%s-%s'.format(is_ipv6 ? 'ipv6' : 'ipv4', table) }, [
@@ -26,10 +26,10 @@ return view.extend({
 			if (idiv.firstElementChild.nodeName.toLowerCase() === 'p')
 				idiv.removeChild(idiv.firstElementChild);
 
-			var added = false, thisIdx = table_names.indexOf(table);
+			let added = false, thisIdx = table_names.indexOf(table);
 
 			idiv.querySelectorAll('[data-table]').forEach(function(child) {
-				var childIdx = table_names.indexOf(child.getAttribute('data-table').split(/-/)[1]);
+				const childIdx = table_names.indexOf(child.getAttribute('data-table').split(/-/)[1]);
 
 				if (added === false && childIdx > thisIdx) {
 					idiv.insertBefore(tdiv, child);
@@ -44,10 +44,10 @@ return view.extend({
 		return tdiv.lastElementChild;
 	},
 
-	createChainSection: function(is_ipv6, table, chain, policy, packets, bytes, references) {
-		var tdiv = this.createTableSection(is_ipv6, table),
-		    cdiv = tdiv.querySelector('[data-chain="%s"]'.format(chain)),
-		    title;
+	createChainSection(is_ipv6, table, chain, policy, packets, bytes, references) {
+		const tdiv = this.createTableSection(is_ipv6, table);
+		let cdiv = tdiv.querySelector('[data-chain="%s"]'.format(chain));
+		let title;
 
 		if (policy)
 			title = '%s <em>%s</em> <span>(%s: <em>%s</em>, %d %s, %.2mB %s)</span>'
@@ -84,14 +84,13 @@ return view.extend({
 		return cdiv.lastElementChild;
 	},
 
-	updateChainSection: function(chaintable, rows) {
+	updateChainSection(chaintable, rows) {
 		if (!chaintable)
 			return;
 
 		cbi_update_table(chaintable, rows, _('No rules in this chain.'));
 
-		if (rows.length === 0 &&
-		    document.querySelector('[data-hide-empty="true"]'))
+		if (rows.length === 0 && document.querySelector('[data-hide-empty="true"]'))
 			chaintable.parentNode.style.display = 'none';
 		else
 			chaintable.parentNode.style.display = '';
@@ -99,21 +98,21 @@ return view.extend({
 		chaintable.parentNode.setAttribute('data-empty', rows.length === 0);
 	},
 
-	parseIptablesDump: function(is_ipv6, table, s) {
-		var current_chain = null;
-		var current_rules = [];
-		var seen_chains = {};
-		var chain_refs = {};
-		var re = /([^\n]*)\n/g;
-		var m, m2;
-		var raw = document.querySelector('[data-raw-counters="true"]');
+	parseIptablesDump(is_ipv6, table, s) {
+		let current_chain = null;
+		let current_rules = [];
+		const seen_chains = {};
+		const chain_refs = {};
+		const re = /([^\n]*)\n/g;
+		let m, m2;
+		const raw = document.querySelector('[data-raw-counters="true"]');
 
 		while ((m = re.exec(s)) != null) {
 			if (m[1].match(/^Chain (.+) \(policy (\w+) (\d+) packets, (\d+) bytes\)$/)) {
-				var chain = RegExp.$1,
-				    policy = RegExp.$2,
-				    packets = +RegExp.$3,
-				    bytes = +RegExp.$4;
+				const chain = RegExp.$1;
+				const policy = RegExp.$2;
+				const packets = +RegExp.$3;
+				const bytes = +RegExp.$4;
 
 				this.updateChainSection(current_chain, current_rules);
 
@@ -122,8 +121,8 @@ return view.extend({
 				current_rules = [];
 			}
 			else if (m[1].match(/^Chain (.+) \((\d+) references\)$/)) {
-				var chain = RegExp.$1,
-				    references = +RegExp.$2;
+				const chain = RegExp.$1;
+				const references = +RegExp.$2;
 
 				this.updateChainSection(current_chain, current_rules);
 
@@ -135,17 +134,17 @@ return view.extend({
 				continue;
 			}
 			else if ((m2 = m[1].match(/^(\d+) +(\d+) +(\d+) +(.*?) +(\S+) +(\S*) +(\S+) +(\S+) +(!?[a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +(!?[a-f0-9:.]+(?:\/[a-f0-9:.]+)?) +(.+)$/)) !== null) {
-				var num = +m2[1],
-				    pkts = +m2[2],
-				    bytes = +m2[3],
-				    target = m2[4],
-				    proto = m2[5],
-				    indev = m2[7],
-				    outdev = m2[8],
-				    srcnet = m2[9],
-				    dstnet = m2[10],
-				    options = m2[11] || '-',
-				    comment = '-';
+				const num = +m2[1];
+				const pkts = +m2[2];
+				const bytes = +m2[3];
+				const target = m2[4];
+				const proto = m2[5];
+				const indev = m2[7];
+				const outdev = m2[8];
+				const srcnet = m2[9];
+				const dstnet = m2[10];
+				let options = m2[11] || '-';
+				let comment = '-';
 
 				options = options.trim().replace(/(?:^| )\/\* (.+) \*\//,
 					function(m1, m2) {
@@ -199,14 +198,14 @@ return view.extend({
 			}, this));
 
 			cdiv.querySelectorAll('.references').forEach(L.bind(function(rspan) {
-				var refs = chain_refs[cdiv.getAttribute('data-chain')];
+				const refs = chain_refs[cdiv.getAttribute('data-chain')];
 				if (refs && refs.length) {
 					rspan.classList.add('cbi-tooltip-container');
 					rspan.appendChild(E('small', { 'class': 'cbi-tooltip ifacebadge', 'style': 'top:1em; left:auto' }, [ E('ul') ]));
 
 					refs.forEach(L.bind(function(ref) {
-						var chain = ref[0].parentNode.getAttribute('data-chain'),
-						    num = ref[1];
+						const chain = ref[0].parentNode.getAttribute('data-chain');
+						const num = ref[1];
 
 						rspan.lastElementChild.lastElementChild.appendChild(E('li', {}, [
 							_('Chain'), ' ',
@@ -223,20 +222,20 @@ return view.extend({
 		}, this));
 	},
 
-	pollFirewallLists: function(has_ip6tables) {
-		var cmds = [ '/usr/sbin/iptables' ];
+	pollFirewallLists(has_ip6tables) {
+		const cmds = [ '/usr/sbin/iptables' ];
 
 		if (has_ip6tables)
 			cmds.push('/usr/sbin/ip6tables');
 
 		poll.add(L.bind(function() {
-			var tasks = [];
+			const tasks = [];
 
-			for (var i = 0; i < cmds.length; i++) {
-				for (var j = 0; j < table_names.length; j++) {
+			for (let i = 0; i < cmds.length; i++) {
+				for (let tn of table_names) {
 					tasks.push(L.resolveDefault(
-						fs.exec_direct(cmds[i], [ '--line-numbers', '-w', '-nvxL', '-t', table_names[j].toLowerCase() ])
-							.then(this.parseIptablesDump.bind(this, i > 0, table_names[j]))));
+						fs.exec_direct(cmds[i], [ '--line-numbers', '-w', '-nvxL', '-t', tn.toLowerCase() ])
+							.then(this.parseIptablesDump.bind(this, i > 0, tn))));
 				}
 			}
 
@@ -244,12 +243,12 @@ return view.extend({
 		}, this));
 	},
 
-	handleJumpTarget: function(ev) {
-		var link = ev.target,
-		    table = findParent(link, '[data-table]').getAttribute('data-table'),
-		    chain = link.textContent,
-		    num = +link.getAttribute('data-num'),
-		    elem = document.getElementById('rule_%s_%s'.format(table.toLowerCase(), chain));
+	handleJumpTarget(ev) {
+		const link = ev.target;
+		const table = findParent(link, '[data-table]').getAttribute('data-table');
+		const chain = link.textContent;
+		const num = +link.getAttribute('data-num');
+		const elem = document.getElementById('rule_%s_%s'.format(table.toLowerCase(), chain));
 
 		if (elem) {
 			if (elem.scrollIntoView) {
@@ -262,7 +261,7 @@ return view.extend({
 			elem.classList.add('flash');
 
 			if (num) {
-				var rule = elem.nextElementSibling.childNodes[num];
+				const rule = elem.nextElementSibling.childNodes[num];
 				if (rule) {
 					rule.classList.remove('flash');
 					void rule.offsetWidth;
@@ -272,9 +271,9 @@ return view.extend({
 		}
 	},
 
-	handleRawCounters: function(ev) {
-		var btn = ev.currentTarget,
-		    raw = (btn.getAttribute('data-raw-counters') === 'false');
+	handleRawCounters(ev) {
+		const btn = ev.currentTarget;
+		const raw = (btn.getAttribute('data-raw-counters') === 'false');
 
 		btn.setAttribute('data-raw-counters', raw);
 		btn.firstChild.data = raw ? _('Human-readable counters') : _('Show raw counters');
@@ -282,16 +281,16 @@ return view.extend({
 
 		document.querySelectorAll('[data-value]')
 			.forEach(function(div) {
-				var fmt = raw ? '%d' : div.getAttribute('data-format');
+				const fmt = raw ? '%d' : div.getAttribute('data-format');
 
 				div.style = raw ? raw_style : '';
 				div.innerText = fmt.format(div.getAttribute('data-value'));
 			});
 	},
 
-	handleHideEmpty: function(ev) {
-		var btn = ev.currentTarget,
-		    hide = (btn.getAttribute('data-hide-empty') === 'false');
+	handleHideEmpty(ev) {
+		const btn = ev.currentTarget;
+		const hide = (btn.getAttribute('data-hide-empty') === 'false');
 
 		btn.setAttribute('data-hide-empty', hide);
 		btn.firstChild.data = hide ? _('Show empty chains') : _('Hide empty chains');
@@ -303,7 +302,7 @@ return view.extend({
 			});
 	},
 
-	handleCounterReset: function(has_ip6tables, ev) {
+	handleCounterReset(has_ip6tables, ev) {
 		return Promise.all([
 			fs.exec('/usr/sbin/iptables', [ '-Z' ])
 				.catch(function(err) { ui.addNotification(null, E('p', {}, _('Unable to reset iptables counters: %s').format(err.message))) }),
@@ -312,13 +311,13 @@ return view.extend({
 		]);
 	},
 
-	handleRestart: function(ev) {
+	handleRestart(ev) {
 		return fs.exec_direct('/etc/init.d/firewall', [ 'restart' ])
 				.catch(function(err) { ui.addNotification(null, E('p', {}, _('Unable to restart firewall: %s').format(err.message))) });
 	},
 
-	render: function(has_ip6tables) {
-		var view = E([], [
+	render(has_ip6tables) {
+		const view = E([], [
 			E('style', { 'type': 'text/css' }, [
 				'.cbi-tooltip-container, span.jump { border-bottom:1px dotted #00f;cursor:pointer }',
 				'ul { list-style:none }',

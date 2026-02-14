@@ -8,22 +8,22 @@
 'require tools.prng as random';
 
 return view.extend({
-	callFrequencyList : rpc.declare({
+	callFrequencyList: rpc.declare({
 		object: 'iwinfo',
 		method: 'freqlist',
 		params: [ 'device' ],
 		expect: { results: [] }
 	}),
 
-	callInfo : rpc.declare({
+	callInfo: rpc.declare({
 		object: 'iwinfo',
 		method: 'info',
 		params: [ 'device' ],
 		expect: { }
 	}),
 
-	render_signal_badge: function(signalPercent, signalValue) {
-		var icon, title, value;
+	render_signal_badge(signalPercent, signalValue) {
+		let icon, title, value;
 
 		if (signalPercent < 0)
 			icon = L.resource('icons/signal-none.svg');
@@ -51,7 +51,7 @@ return view.extend({
 		]);
 	},
 
-	add_wifi_to_graph: function(chan_analysis, res, scanCache, channels, channel_width) {
+	add_wifi_to_graph(chan_analysis, res, scanCache, channels, channel_width) {
 		const offset_tbl = chan_analysis.offset_tbl;
 		const height = chan_analysis.graph.offsetHeight - 2;
 		const step = chan_analysis.col_width;
@@ -112,15 +112,15 @@ return view.extend({
 		})
 	},
 
-	create_channel_graph: function(chan_analysis, freq_tbl, band) {
-		var columns = (band != 2) ? freq_tbl.length * 4 : freq_tbl.length + 3,
-		    chan_graph = chan_analysis.graph,
-		    G = chan_graph.firstElementChild,
-		    step = (chan_graph.offsetWidth - 2) / columns,
-		    curr_offset = step;
+	create_channel_graph(chan_analysis, freq_tbl, band) {
+		const columns = (band != 2) ? freq_tbl.length * 4 : freq_tbl.length + 3;
+		const chan_graph = chan_analysis.graph;
+		const G = chan_graph.firstElementChild;
+		const step = (chan_graph.offsetWidth - 2) / columns;
+		let curr_offset = step;
 
 		function createGraphHLine(graph, pos, width, dash) {
-			var elem = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+			const elem = document.createElementNS('http://www.w3.org/2000/svg', 'line');
 			elem.setAttribute('x1', pos);
 			elem.setAttribute('y1', 0);
 			elem.setAttribute('x2', pos);
@@ -130,7 +130,7 @@ return view.extend({
 		}
 
 		function createGraphText(graph, pos, text) {
-			var elem = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+			const elem = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 			elem.setAttribute('y', 15);
 			elem.setAttribute('style', 'fill:#eee; font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
 			elem.setAttribute('x', pos + 5);
@@ -141,8 +141,8 @@ return view.extend({
 		chan_analysis.col_width = step;
 
 		createGraphHLine(G,curr_offset, 0.1, 1);
-		for (var i=0; i< freq_tbl.length;i++) {
-			var channel = freq_tbl[i]
+		for (let i=0; i< freq_tbl.length;i++) {
+			const channel = freq_tbl[i]
 			chan_analysis.offset_tbl[channel] = curr_offset+step;
 
 			if (band != 2) {
@@ -158,10 +158,10 @@ return view.extend({
 			curr_offset += step;
 
 			if ((band != 2) && freq_tbl[i+1]) {
-				var next_channel = freq_tbl[i+1];
+				const next_channel = freq_tbl[i+1];
 				/* Check if we are transitioning to another 5/6Ghz band range */
 				if ((next_channel - channel) == 4) {
-					for (var j=1; j < 4; j++) {
+					for (let j=1; j < 4; j++) {
 						chan_analysis.offset_tbl[channel+j] = curr_offset+step;
 						if (j == 2)
 							createGraphHLine(G,curr_offset+step, 0.1, 0);
@@ -193,31 +193,30 @@ return view.extend({
 		}, this));
 	},
 
-	handleScanRefresh: function() {
+	handleScanRefresh() {
 		if (!this.active_tab)
 			return;
 
-		var radio = this.radios[this.active_tab];
+		const radio = this.radios[this.active_tab];
+		let q;
 
 		return Promise.all([
 			radio.dev.getScanList(),
 			this.callInfo(radio.dev.getName())
-		]).then(L.bind(function(data) {
-			var results = data[0],
-			    local_wifi = data[1],
-			    table = radio.table,
-			    chan_analysis = radio.graph,
-			    scanCache = radio.scanCache,
-			    band = radio.band;
+		]).then(L.bind(function([results, local_wifi]) {
+			const table = radio.table;
+			const chan_analysis = radio.graph;
+			const scanCache = radio.scanCache;
+			const band = radio.band;
 
-			var rows = [];
+			const rows = [];
 
-			for (var i = 0; i < results.length; i++) {
-				if (scanCache[results[i].bssid] == null)
-					scanCache[results[i].bssid] = {};
+			for (let res of results) {
+				if (scanCache[res.bssid] == null)
+					scanCache[res.bssid] = {};
 
-				scanCache[results[i].bssid].data = results[i];
-				scanCache[results[i].bssid].data.stale = false;
+				scanCache[res.bssid].data = res;
+				scanCache[res.bssid].data.stale = false;
 			}
 
 			if (band + 'g' == radio.dev.get('band')) {
@@ -227,9 +226,9 @@ return view.extend({
 				scanCache[local_wifi.bssid].data = local_wifi;
 
 				if (chan_analysis.offset_tbl[local_wifi.channel] != null && local_wifi.center_chan1) {
-					var center_channels = [local_wifi.center_chan1],
-					    chan_width_text = local_wifi.htmode.replace(/[EV]*H[TE]/,''), /* Handle HT VHT HE EHT */
-					    chan_width = parseInt(chan_width_text)/10;
+					const center_channels = [local_wifi.center_chan1];
+					const chan_width_text = local_wifi.htmode.replace(/[EV]*H[TE]/,''); /* Handle HT VHT HE EHT */
+					let chan_width = parseInt(chan_width_text)/10;
 
 					if (local_wifi.center_chan2) {
 						center_channels.push(local_wifi.center_chan2);
@@ -254,7 +253,7 @@ return view.extend({
 				}
 			}
 
-			for (var k in scanCache)
+			for (let k in scanCache)
 				if (scanCache[k].data.stale)
 					results.push(scanCache[k].data);
 
@@ -273,14 +272,13 @@ return view.extend({
 					return 1;
 			});
 
-			for (var i = 0; i < results.length; i++) {
-				var res = results[i],
-					qv = res.quality || 0,
-					qm = res.quality_max || 0,
-					q = (qv > 0 && qm > 0) ? Math.floor((100 / qm) * qv) : 0,
-					s = res.stale ? 'opacity:0.5' : '',
-					center_channels = [res.channel],
-					chan_width = 2;
+			for (let res of results) {
+				const qv = res.quality || 0;
+				const qm = res.quality_max || 0;
+				q = (qv > 0 && qm > 0) ? Math.floor((100 / qm) * qv) : 0;
+				const s = res.stale ? 'opacity:0.5' : '';
+				const center_channels = [res.channel];
+				let chan_width = 2;
 
 				/* Skip WiFi not supported by the current band */
 				if (band != res.band)
@@ -319,7 +317,7 @@ return view.extend({
 
 						/* If needed, adjust based on the 802.11ac Wave 2 interop workaround. */
 						if (res.vht_operation.center_freq_2) {
-							var diff = Math.abs(res.vht_operation.center_freq_2 -
+							const diff = Math.abs(res.vht_operation.center_freq_2 -
 							                    res.vht_operation.center_freq_1);
 
 							if (diff == 8) {
@@ -370,7 +368,7 @@ return view.extend({
 				rows.push([
 					E('span', { 'style': s }, this.render_signal_badge(q, res.signal)),
 					E('span', { 'style': s }, [
-						E('span', { 'style': 'color:'+scanCache[results[i].bssid].color }, '⬤ '),
+						E('span', { 'style': 'color:'+scanCache[res.bssid].color }, '⬤ '),
 						(res.ssid != null) ? '%h'.format(res.ssid) : E('em', _('hidden'))
 					]),
 					E('span', { 'style': s }, '%d'.format(res.channel)),
@@ -379,7 +377,7 @@ return view.extend({
 					E('span', { 'style': s }, '%h'.format(res.bssid))
 				]);
 
-				scanCache[results[i].bssid].data.stale = true;
+				scanCache[res.bssid].data.stale = true;
 			}
 
 			cbi_update_table(table, rows);
@@ -391,9 +389,9 @@ return view.extend({
 		}, this))
 	},
 
-	radios : {},
+	radios: {},
 
-	loadSVG : function(src) {
+	loadSVG(src) {
 		return request.get(src).then(function(response) {
 			if (!response.ok)
 				throw new Error(response.statusText);
@@ -405,19 +403,19 @@ return view.extend({
 		});
 	},
 
-	load: function() {
+	load() {
 		return Promise.all([
 			this.loadSVG(L.resource('svg/channel_analysis.svg')),
 			network.getWifiDevices().then(L.bind(function(data) {
-				var tasks = [], ret = [];
+				const tasks = [], ret = [];
 
-				for (var i = 0; i < data.length; i++) {
-					ret[data[i].getName()] = { dev : data[i] };
+				for (let d of data) {
+					ret[d.getName()] = { dev : d };
 
-					tasks.push(this.callFrequencyList(data[i].getName())
+					tasks.push(this.callFrequencyList(d.getName())
 					.then(L.bind(function(radio, data) {
 						ret[radio.getName()].freq = data;
-					}, this, data[i])));
+					}, this, d)));
 				}
 
 				return Promise.all(tasks).then(function() { return ret; })
@@ -425,11 +423,8 @@ return view.extend({
 		]);
 	},
 
-	render: function(data) {
-		var svg = data[0],
-		    wifiDevs = data[1];
-
-		var h2 = E('div', {'class' : 'cbi-title-section'}, [
+	render([svg, wifiDevs]) {
+		const h2 = E('div', {'class' : 'cbi-title-section'}, [
 			E('h2', {'class': 'cbi-title-field'}, [ _('Channel Analysis') ]),
 			E('div', {'class': 'cbi-title-buttons'  }, [
 				E('button', {
@@ -438,10 +433,10 @@ return view.extend({
 				}, [ _('Refresh Channels') ])])
 			]);
 
-		var tabs = E('div', {}, E('div'));
+		const tabs = E('div', {}, E('div'));
 
-		for (var ifname in wifiDevs) {
-			var bands = {
+		for (let ifname in wifiDevs) {
+			const bands = {
 				[2] : { title: '2.4GHz', channels: [] },
 				[5] : { title: '5GHz', channels: [] },
 				[6] : { title: '6GHz', channels: [] },
@@ -453,12 +448,12 @@ return view.extend({
 					bands[freq.band].channels.push(freq.channel);
 			});
 
-			for (var band in bands) {
+			for (let band in bands) {
 				if (bands[band].channels.length == 0)
 					continue;
 
-				var csvg = svg.cloneNode(true),
-				table = E('table', { 'class': 'table' }, [
+				const csvg = svg.cloneNode(true);
+				const table = E('table', { 'class': 'table' }, [
 					E('tr', { 'class': 'tr table-titles' }, [
 						E('th', { 'class': 'th col-2 middle center' }, _('Signal')),
 						E('th', { 'class': 'th col-4 middle left' }, _('SSID')),

@@ -224,7 +224,6 @@ return baseclass.extend({
 	},
 
 	render(data) {
-		const seen = {};
 		const radios = data[0];
 		const networks = data[1];
 		const hosthints = data[2];

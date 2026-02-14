@@ -44,7 +44,6 @@ return view.extend({
 		const data_wanted = Math.floor(width / step);
 
 		const data_values = [];
-		const line_elements = [];
 
 		for (const line of lines)
 			if (line)
@@ -244,10 +243,10 @@ return view.extend({
 
 	render([svg, devs]) {
 
-		var v = E('div', { 'class': 'cbi-map', 'id': 'map' }, E('div'));
+		const v = E('div', { 'class': 'cbi-map', 'id': 'map' }, E('div'));
 
 		for (const dev of devs) {
-			var ifname = dev.getName();
+			const ifname = dev.getName();
 			const ssid = dev.wif?.getSSID?.() || null;
 
 			if (!ifname || !dev.isUp() || dev.wif?.isDisabled())

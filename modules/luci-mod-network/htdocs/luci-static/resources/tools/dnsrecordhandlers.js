@@ -146,10 +146,11 @@ return baseclass.extend({
 	},
 
 	encodeSvcParamValue(key, value) {
+		const seen = new Set();
+		let keys, port;
 		switch (key) {
 			case 'mandatory':
-				const seen = new Set();
-				const keys = value.split(',')
+				keys = value.split(',')
 					.map(k => k.trim())
 					.filter(k => {
 						if (seen.has(k)) return false; // D3 Figure 16
@@ -176,7 +177,7 @@ return baseclass.extend({
 				return []; // zero-length value - D3 Figure 13
 
 			case 'port': // D2 Figure 4
-				const port = parseInt(value, 10);
+				port = parseInt(value, 10);
 				return [(port >> 8) & 0xff, port & 0xff];
 
 			case 'ipv4hint':
@@ -311,9 +312,11 @@ return baseclass.extend({
 	},
 
 	decodeSvcParamValue(key, buf) {
+		const keys = [];
+		const addrs = [];
+
 		switch (key) {
 			case 'mandatory':
-				const keys = [];
 				for (let i = 0; i + 1 < buf.length; i += 2) {
 					const k = (buf[i] << 8) | buf[i + 1];
 					keys.push(this.svcParamKeyFromNumber(k));
@@ -351,7 +354,6 @@ return baseclass.extend({
 			// 	return Array.from(buf).map(b => b.toString(16).padStart(2, '0')).join('');
 
 			case 'ipv6hint':
-				const addrs = [];
 				for (let i = 0; i + 15 <= buf.length; i += 16) {
 					let addr = [];
 					for (let j = 0; j < 16; j += 2) {

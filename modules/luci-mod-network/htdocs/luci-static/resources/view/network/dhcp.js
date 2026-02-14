@@ -534,7 +534,6 @@ return view.extend({
 				else
 					return _('Address families of "Relay from" and "Relay to address" must match.')
 			}
-			return true;
 		};
 
 		so = ss.option(widgets.NetworkSelect, 'interface', _('Only accept replies via'));

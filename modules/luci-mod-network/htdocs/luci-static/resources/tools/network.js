@@ -9,21 +9,11 @@
 'require validation';
 'require tools.widgets as widgets';
 
-function validateAddr(section_id, value) {
-	if (value == '')
-		return true;
-
-	var ipv6 = /6$/.test(this.section.formvalue(section_id, 'mode')),
-	    addr = ipv6 ? validation.parseIPv6(value) : validation.parseIPv4(value);
-
-	return addr ? true : (ipv6 ? _('Expecting a valid IPv6 address') : _('Expecting a valid IPv4 address'));
-}
-
 function validateQoSMap(section_id, value) {
 	if (value == '')
 		return true;
 
-	var m = value.match(/^(\d+):(\d+)$/);
+	const m = value.match(/^(\d+):(\d+)$/);
 
 	if (!m || +m[1] > 0xFFFFFFFF || +m[2] > 0xFFFFFFFF)
 		return _('Expecting two priority values separated by a colon');
@@ -32,7 +22,7 @@ function validateQoSMap(section_id, value) {
 }
 
 function deviceSectionExists(section_id, devname) {
-	var exists = false;
+	let exists = false;
 
 	uci.sections('network', 'device', function(ss) {
 		exists = exists || (
@@ -51,7 +41,7 @@ function isBridgePort(dev) {
 	if (dev.isBridgePort())
 		return true;
 
-	var isPort = false;
+	let isPort = false;
 
 	uci.sections('network', null, function(s) {
 		if (s['.type'] != 'interface' && s['.type'] != 'device')
@@ -65,8 +55,8 @@ function isBridgePort(dev) {
 }
 
 function updateDevBadge(node, dev) {
-	var type = dev.getType(),
-	    up = dev.getCarrier();
+	const type = dev.getType();
+	const up = dev.getCarrier();
 
 	dom.content(node, [
 		E('img', {
@@ -88,10 +78,10 @@ function renderDevBadge(dev) {
 }
 
 function updatePortStatus(node, dev) {
-	var carrier = dev.getCarrier(),
-	    duplex = dev.getDuplex(),
-	    speed = dev.getSpeed(),
-	    desc, title;
+	const carrier = dev.getCarrier();
+	const duplex = dev.getDuplex();
+	const speed = dev.getSpeed();
+	let desc, title;
 
 	if (carrier && speed > 0 && duplex != null) {
 		desc = '%d%s'.format(speed, duplex == 'full' ? 'FD' : 'HD');
@@ -130,7 +120,7 @@ function renderPortStatus(dev) {
 function updatePlaceholders(opt, section_id) {
 	var dev = network.instantiateDevice(opt.getUIElement(section_id).getValue());
 
-	for (var i = 0, co; (co = opt.section.children[i]) != null; i++) {
+	for (let i = 0, co; (co = opt.section.children[i]) != null; i++) {
 		if (co !== opt) {
 			switch (co.option) {
 			case 'mtu':
@@ -151,14 +141,14 @@ function updatePlaceholders(opt, section_id) {
 }
 
 var cbiFlagTristate = form.ListValue.extend({
-	__init__: function(/* ... */) {
+	__init__(/* ... */) {
 		this.super('__init__', arguments);
 		this.keylist = [ '', '0!', '1!' ];
 		this.vallist = [ _('automatic'), _('disabled'), _('enabled') ];
 	},
 
-	load: function(section_id) {
-		var invert = false, sysfs = this.sysfs;
+	load(section_id) {
+		let invert = false, sysfs = this.sysfs;
 
 		if (sysfs) {
 			if (sysfs.charAt(0) == '!') {
@@ -181,7 +171,7 @@ var cbiFlagTristate = form.ListValue.extend({
 		return this.super('load', [section_id]);
 	},
 
-	write: function(section_id, formvalue) {
+	write(section_id, formvalue) {
 		if (formvalue == '1!')
 			return this.super('write', [section_id, '1']);
 		else if (formvalue == '0!')
@@ -190,8 +180,8 @@ var cbiFlagTristate = form.ListValue.extend({
 			return this.super('remove', [section_id]);
 	},
 
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var sysdef = this.sysfs_default;
+	renderWidget(section_id, option_index, cfgvalue) {
+		const sysdef = this.sysfs_default;
 
 		if (this.sysfs_default !== null) {
 			this.keylist[0] = sysdef ? '1' : '0';
@@ -203,9 +193,9 @@ var cbiFlagTristate = form.ListValue.extend({
 });
 
 
-var cbiTagValue = form.Value.extend({
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var widget = new ui.Dropdown(cfgvalue || ['-'], {
+const cbiTagValue = form.Value.extend({
+	renderWidget(section_id, option_index, cfgvalue) {
+		const widget = new ui.Dropdown(cfgvalue || ['-'], {
 			'-': E([], [
 				E('span', { 'class': 'hide-open', 'style': 'font-family:monospace' }, [ '—' ]),
 				E('span', { 'class': 'hide-close' }, [ _('Not Member', 'VLAN port state') ])
@@ -229,11 +219,11 @@ var cbiTagValue = form.Value.extend({
 			multiple: true
 		});
 
-		var field = this;
+		const field = this;
 
 		widget.toggleItem = function(sb, li, force_state) {
-			var lis = li.parentNode.querySelectorAll('li'),
-			    toggle = ui.Dropdown.prototype.toggleItem;
+			const lis = li.parentNode.querySelectorAll('li');
+			const toggle = ui.Dropdown.prototype.toggleItem;
 
 			toggle.apply(this, [sb, li, force_state]);
 
@@ -244,7 +234,7 @@ var cbiTagValue = form.Value.extend({
 			{
 			case '-':
 				if (li.hasAttribute('selected')) {
-					for (var i = 0; i < lis.length; i++) {
+					for (let i = 0; i < lis.length; i++) {
 						switch (lis[i].getAttribute('data-value')) {
 						case '-':
 							break;
@@ -264,7 +254,7 @@ var cbiTagValue = form.Value.extend({
 			case 't':
 			case 'u':
 				if (li.hasAttribute('selected')) {
-					for (var i = 0; i < lis.length; i++) {
+					for (let i = 0; i < lis.length; i++) {
 						switch (lis[i].getAttribute('data-value')) {
 						case li.getAttribute('data-value'):
 							break;
@@ -285,16 +275,16 @@ var cbiTagValue = form.Value.extend({
 
 			case '*':
 				if (li.hasAttribute('selected')) {
-					var section_ids = field.section.cfgsections();
+					const section_ids = field.section.cfgsections();
 
-					for (var i = 0; i < section_ids.length; i++) {
-						var other_widget = field.getUIElement(section_ids[i]),
-						    other_value = L.toArray(other_widget.getValue());
+					for (let i = 0; i < section_ids.length; i++) {
+						const other_widget = field.getUIElement(section_ids[i]);
+						const other_value = L.toArray(other_widget.getValue());
 
 						if (other_widget === this)
 							continue;
 
-						var new_value = other_value.filter(function(v) { return v != '*' });
+						const new_value = other_value.filter(function(v) { return v != '*' });
 
 						if (new_value.length == other_value.length)
 							continue;
@@ -306,7 +296,7 @@ var cbiTagValue = form.Value.extend({
 			}
 		};
 
-		var node = widget.render();
+		const node = widget.render();
 
 		node.style.minWidth = '4em';
 
@@ -316,16 +306,16 @@ var cbiTagValue = form.Value.extend({
 		return E('div', { 'style': 'display:inline-block' }, node);
 	},
 
-	cfgvalue: function(section_id) {
-		var ports = L.toArray(uci.get('network', section_id, 'ports'));
+	cfgvalue(section_id) {
+		const ports = L.toArray(uci.get('network', section_id, 'ports'));
 
-		for (var i = 0; i < ports.length; i++) {
-			var s = ports[i].split(/:/);
+		for (let i = 0; i < ports.length; i++) {
+			const s = ports[i].split(/:/);
 
 			if (s[0] != this.port)
 				continue;
 
-			var t = /t/.test(s[1] || '') ? 't' : 'u';
+			const t = /t/.test(s[1] || '') ? 't' : 'u';
 
 			return /\x2a/.test(s[1] || '') ? [t, '*'] : [t];
 		}
@@ -333,12 +323,10 @@ var cbiTagValue = form.Value.extend({
 		return ['-'];
 	},
 
-	write: function(section_id, value) {
-		var ports = [];
+	write(section_id, value) {
+		const ports = [];
 
-		for (var i = 0; i < this.section.children.length; i++) {
-			var opt = this.section.children[i];
-
+		for (let opt of this.section.children) {
 			if (opt.port) {
 				var val = L.toArray(opt.formvalue(section_id)).join('');
 
@@ -360,7 +348,7 @@ var cbiTagValue = form.Value.extend({
 		uci.set('network', section_id, 'ports', ports.length ? ports : null);
 	},
 
-	remove: function() {}
+	remove() {}
 });
 
 return baseclass.extend({
@@ -422,8 +410,8 @@ return baseclass.extend({
 		{ n: 'rohc', i: 142, d: 'ROHC' },
 	],
 
-	replaceOption: function(s, tabName, optionClass, optionName, optionTitle, optionDescription) {
-		var o = s.getOption(optionName);
+	replaceOption(s, tabName, optionClass, optionName, optionTitle, optionDescription) {
+		const o = s.getOption(optionName);
 
 		if (o) {
 			if (o.tab) {
@@ -440,10 +428,10 @@ return baseclass.extend({
 		return s.taboption(tabName, optionClass, optionName, optionTitle, optionDescription);
 	},
 
-	addDeviceOptions: function(s, dev, isNew, rtTables, hasPSE) {
-		var parent_dev = dev ? dev.getParent() : null,
-		    devname = dev ? dev.getName() : null,
-		    o, ss;
+	addDeviceOptions(s, dev, isNew, rtTables, hasPSE) {
+		const parent_dev = dev ? dev.getParent() : null;
+		const devname = dev ? dev.getName() : null;
+		let o, ss;
 
 		s.tab('devgeneral', _('General device options'));
 		s.tab('devadvanced', _('Advanced device options'));
@@ -693,7 +681,7 @@ return baseclass.extend({
 		o.value('encap2+3', _('Encap 2+3'));
 		o.value('encap3+4', _('Encap 3+4'));
 		o.cfgvalue = function(/* ... */) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+			const val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'layer2':
@@ -742,7 +730,7 @@ return baseclass.extend({
 		o.value('bandwidth', _('Bandwidth'));
 		o.value('count', _('Count'));
 		o.cfgvalue = function(/* ... */) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+			const val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'stable':
@@ -769,7 +757,7 @@ return baseclass.extend({
 		o.value('slow', _('Slow (every 30 seconds)'));
 		o.value('fast', _('Fast (every second)'));
 		o.cfgvalue = function(/* ... */) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+			const val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'slow':
@@ -827,7 +815,7 @@ return baseclass.extend({
 		o.value('better', _('Better'));
 		o.value('failure', _('Failure'));
 		o.cfgvalue = function(/* ... */) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+			const val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'always':
@@ -854,7 +842,7 @@ return baseclass.extend({
 		o.value('active', _('Active'));
 		o.value('follow', _('Follow'));
 		o.cfgvalue = function(/* ... */) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+			const val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'none':
@@ -882,7 +870,7 @@ return baseclass.extend({
 		o.value('arp', _('ARP link monitoring'));
 		o.value('mii', _('MII link monitoring'));
 		o.cfgvalue = function(/* ... */) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+			const val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'arp':
@@ -923,7 +911,7 @@ return baseclass.extend({
 		o.value('filter_active', _('Filter active'));
 		o.value('filter_backup', _('Filter backup'));
 		o.cfgvalue = function(/* ... */) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+			const val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'none':
@@ -988,16 +976,16 @@ return baseclass.extend({
 		o.ucioption = 'ports';
 		o.default = L.toArray(dev ? dev.getPorts() : null).filter(function(p) { return p.getType() != 'wifi' }).map(function(p) { return p.getName() });
 		o.filter = function(section_id, device_name) {
-			var bridge_name = uci.get('network', section_id, 'name'),
+			const bridge_name = uci.get('network', section_id, 'name'),
 				choice_dev = network.instantiateDevice(device_name),
 				parent_dev = choice_dev.getParent();
 
 			/* only show wifi networks which are already present in "option ifname" */
 			if (choice_dev.getType() == 'wifi') {
-				var ifnames = L.toArray(uci.get('network', section_id, 'ports'));
+				const ifnames = L.toArray(uci.get('network', section_id, 'ports'));
 
-				for (var i = 0; i < ifnames.length; i++)
-					if (ifnames[i] == device_name)
+				for (let ifn of ifnames)
+					if (ifn == device_name)
 						return true;
 
 				return false;
@@ -1084,8 +1072,8 @@ return baseclass.extend({
 		o.placeholder = '1000';
 		o.datatype = 'uinteger';
 		o.validate = function(section_id, value) {
-			var qiopt = L.toArray(this.map.lookupOption('query_interval', section_id))[0],
-			    qival = qiopt ? (qiopt.formvalue(section_id) || qiopt.placeholder) : '';
+			const qiopt = L.toArray(this.map.lookupOption('query_interval', section_id))[0];
+			const qival = qiopt ? (qiopt.formvalue(section_id) || qiopt.placeholder) : '';
 
 			if (value != '' && qival != '' && +value >= +qival)
 				return _('The query response interval must be lower than the query interval value');
@@ -1102,7 +1090,7 @@ return baseclass.extend({
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'mtu', _('MTU'));
 		o.datatype = 'range(576, 9200)';
 		o.validate = function(section_id, value) {
-			var parent_mtu = (dev && dev.getType() == 'vlan') ? (parent_dev ? parent_dev.getMTU() : null) : null;
+			const parent_mtu = (dev && dev.getType() == 'vlan') ? (parent_dev ? parent_dev.getMTU() : null) : null;
 
 			if (parent_mtu !== null && +value > parent_mtu)
 				return _('The MTU must not exceed the parent device MTU of %d bytes').format(parent_mtu);
@@ -1118,13 +1106,13 @@ return baseclass.extend({
 		o.datatype = 'maxlength(15)';
 		o.depends('type', 'veth');
 		o.load = function(section_id) {
-			var sections = uci.sections('network', 'device'),
-			    idx = 0;
+			const sections = uci.sections('network', 'device');
+			let idx = 0;
 
-			for (var i = 0; i < sections.length; i++)
-				if (sections[i]['.name'] == section_id)
+			for (let s of sections)
+				if (s['.name'] == section_id)
 					break;
-				else if (sections[i].type == 'veth')
+				else if (s.type == 'veth')
 					idx++;
 
 			this.placeholder = 'veth%d'.format(idx);
@@ -1178,7 +1166,7 @@ return baseclass.extend({
 		o.value('loose', _('Loose filtering'));
 		o.value('strict', _('Strict filtering'));
 		o.cfgvalue = function(/* ... */) {
-			var val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
+			const val = form.ListValue.prototype.cfgvalue.apply(this, arguments);
 
 			switch (val || '') {
 			case 'loose':
@@ -1291,9 +1279,9 @@ return baseclass.extend({
 		o = this.replaceOption(s, 'bridgevlan', form.Flag, 'vlan_filtering', _('Enable VLAN filtering'));
 		o.depends('type', 'bridge');
 		o.updateDefaultValue = function(section_id) {
-			var device = uci.get('network', s.section, 'name'),
-			    uielem = this.getUIElement(section_id),
-			    has_vlans = false;
+			const device = uci.get('network', s.section, 'name');
+			const uielem = this.getUIElement(section_id);
+			let has_vlans = false;
 
 			uci.sections('network', 'bridge-vlan', function(bvs) {
 				has_vlans = has_vlans || (bvs.device == device);
@@ -1313,7 +1301,7 @@ return baseclass.extend({
 		ss.anonymous = true;
 
 		ss.renderHeaderRows = function(/* ... */) {
-			var node = form.TableSection.prototype.renderHeaderRows.apply(this, arguments);
+			const node = form.TableSection.prototype.renderHeaderRows.apply(this, arguments);
 
 			node.querySelectorAll('.th').forEach(function(th) {
 				th.classList.add('left');
@@ -1324,7 +1312,7 @@ return baseclass.extend({
 		};
 
 		ss.filter = function(section_id) {
-			var devname = uci.get('network', s.section, 'name');
+			const devname = uci.get('network', s.section, 'name');
 			return (uci.get('network', section_id, 'device') == devname);
 		};
 
@@ -1347,7 +1335,7 @@ return baseclass.extend({
 		};
 
 		ss.updatePorts = function(ports) {
-			var devices = ports.map(function(port) {
+			const devices = ports.map(function(port) {
 				return network.instantiateDevice(port)
 			}).filter(function(dev) {
 				return dev.getType() != 'wifi' || dev.isUp();
@@ -1357,35 +1345,35 @@ return baseclass.extend({
 
 			this.children = this.children.filter(function(opt) { return !opt.option.match(/^port_/) });
 
-			for (var i = 0; i < devices.length; i++) {
-				o = ss.option(cbiTagValue, 'port_%s'.format(sfh(devices[i].getName())), renderDevBadge(devices[i]), renderPortStatus(devices[i]));
-				o.port = devices[i].getName();
+			for (let d of devices) {
+				o = ss.option(cbiTagValue, 'port_%s'.format(sfh(d.getName())), renderDevBadge(d), renderPortStatus(d));
+				o.port = d.getName();
 			}
 
-			var section_ids = this.cfgsections(),
-			    device_names = devices.reduce(function(names, dev) { names[dev.getName()] = true; return names }, {});
+			const section_ids = this.cfgsections();
+			const device_names = devices.reduce(function(names, dev) { names[dev.getName()] = true; return names }, {});
 
-			for (var i = 0; i < section_ids.length; i++) {
-				var old_spec = L.toArray(uci.get('network', section_ids[i], 'ports')),
-				    new_spec = old_spec.filter(function(spec) { return device_names[spec.replace(/:[ut*]+$/, '')] });
+			for (let s of section_ids) {
+				const old_spec = L.toArray(uci.get('network', s, 'ports'));
+				const new_spec = old_spec.filter(function(spec) { return device_names[spec.replace(/:[ut*]+$/, '')] });
 
 				if (old_spec.length != new_spec.length)
-					uci.set('network', section_ids[i], 'ports', new_spec.length ? new_spec : null);
+					uci.set('network', s, 'ports', new_spec.length ? new_spec : null);
 			}
 		};
 
 		ss.handleAdd = function(ev) {
 			return s.parse().then(L.bind(function() {
-				var device = uci.get('network', s.section, 'name'),
-				    section_ids = this.cfgsections(),
-				    section_id = null,
-				    max_vlan_id = 0;
+				const device = uci.get('network', s.section, 'name');
+				const section_ids = this.cfgsections();
+				let section_id = null;
+				let max_vlan_id = 0;
 
 				if (!device)
 					return;
 
-				for (var i = 0; i < section_ids.length; i++) {
-					var vid = +uci.get('network', section_ids[i], 'vlan');
+				for (let s of section_ids) {
+					var vid = +uci.get('network', s, 'vlan');
 
 					if (vid > max_vlan_id)
 						max_vlan_id = vid;
@@ -1428,7 +1416,7 @@ return baseclass.extend({
 		o.datatype = 'range(1, 4094)';
 
 		o.renderWidget = function(/* ... */) {
-			var node = form.Value.prototype.renderWidget.apply(this, arguments);
+			const node = form.Value.prototype.renderWidget.apply(this, arguments);
 
 			node.style.width = '5em';
 
@@ -1436,13 +1424,13 @@ return baseclass.extend({
 		};
 
 		o.validate = function(section_id, value) {
-			var section_ids = this.section.cfgsections();
+			const section_ids = this.section.cfgsections();
 
-			for (var i = 0; i < section_ids.length; i++) {
-				if (section_ids[i] == section_id)
+			for (let s of section_ids) {
+				if (s == section_id)
 					continue;
 
-				if (uci.get('network', section_ids[i], 'vlan') == value)
+				if (uci.get('network', s, 'vlan') == value)
 					return _('The VLAN ID must be unique');
 			}
 

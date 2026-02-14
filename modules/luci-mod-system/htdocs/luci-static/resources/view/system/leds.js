@@ -5,25 +5,24 @@
 'require form';
 'require fs';
 
-var callLeds = rpc.declare({
+const callLeds = rpc.declare({
 	object: 'luci',
 	method: 'getLEDs',
 	expect: { '': {} }
 });
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			callLeds(),
 			L.resolveDefault(fs.list('/www' + L.resource('view/system/led-trigger')), [])
-		]).then(function(data) {
-			var plugins = data[1];
-			var tasks = [];
+		]).then(function([leds, plugins]) {
+			const tasks = [];
 
-			for (var i = 0; i < plugins.length; i++) {
-				var m = plugins[i].name.match(/^(.+)\.js$/);
+			for (let p of plugins) {
+				const m = p.name.match(/^(.+)\.js$/);
 
-				if (plugins[i].type != 'file' || m == null)
+				if (p.type != 'file' || m == null)
 					continue;
 
 				tasks.push(L.require('view.system.led-trigger.' + m[1]).then(L.bind(function(name){
@@ -37,22 +36,18 @@ return view.extend({
 			}
 
 			return Promise.all(tasks).then(function(plugins) {
-				var value = {};
-				value[0] = data[0];
-				value[1] = plugins;
-				return value;
+				return [leds, plugins];
 			});
 		});
 	},
 
-	render: function(data) {
-		var m, s, o, triggers = [];
-		var leds = data[0];
-		var plugins = data[1];
+	render([leds, plugins]) {
+		let m, s, o;
+		const triggers = [];
 
-		for (var k in leds)
-			for (var i = 0; i < leds[k].triggers.length; i++)
-				triggers[i] = leds[k].triggers[i];
+		for (let k in leds)
+			for (let t of leds[k].triggers)
+				triggers.push(t);
 
 		m = new form.Map('system',
 			_('<abbr title="Light Emitting Diode">LED</abbr> Configuration'),
@@ -73,9 +68,7 @@ return view.extend({
 		});
 
 		o = s.option(form.ListValue, 'trigger', _('Trigger'));
-		for (var i = 0; i < plugins.length; i++) {
-			var plugin = plugins[i];
-
+		for (let plugin of plugins) {
 			if ( plugin.form.kernel == false ) {
 				o.value(plugin.name, plugin.form.trigger);
 			}
@@ -85,17 +78,15 @@ return view.extend({
 			}
 		}
 		o.onchange = function(ev, section, value) {
-			for (var i = 0; i < plugins.length; i++) {
-				var plugin = plugins[i];
-				if ( plugin.name === value )
-					this.map.findElement('id', 'cbid.system.%s.trigger'.format(section))
-						.nextElementSibling.innerHTML = plugin.form.description || '';
+			const nes = this.map.findElement('id', 'cbid.system.%s.trigger'.format(section)).nextElementSibling;
+			for (let plugin of plugins) {
+				if ( plugin.name === value && nes )
+					nes.innerText = plugin.form.description || '';
 			}
 		}
 		o.load = function(section_id) {
-			var trigger = uci.get('system', section_id, 'trigger');
-			for (var i = 0; i < plugins.length; i++) {
-				var plugin = plugins[i];
+			const trigger = uci.get('system', section_id, 'trigger');
+			for (let plugin of plugins) {
 				if ( plugin.name === trigger)
 					this.description = plugin.form.description || ' ';
 			}
@@ -103,17 +94,16 @@ return view.extend({
 		};
 
 		s.addModalOptions = function(s) {
-			for (var i = 0; i < plugins.length; i++) {
-				var plugin = plugins[i];
+			for (let plugin of plugins) {
 				plugin.form.addFormOptions(s);
 			}
 
-			var opts = s.getOption();
+			const opts = s.getOption();
 
-			var removeIfNoneActive = function(original_remove_fn, section_id) {
-				var isAnyActive = false;
+			const removeIfNoneActive = function(original_remove_fn, section_id) {
+				let isAnyActive = false;
 
-				for (var optname in opts) {
+				for (let optname in opts) {
 					if (opts[optname].ucioption != this.ucioption)
 						continue;
 
@@ -128,7 +118,7 @@ return view.extend({
 					original_remove_fn.call(this, section_id);
 			};
 
-			for (var optname in opts) {
+			for (let optname in opts) {
 				if (!opts[optname].ucioption || optname == opts[optname].ucioption)
 					continue;
 				opts[optname].remove = removeIfNoneActive.bind(opts[optname], opts[optname].remove);

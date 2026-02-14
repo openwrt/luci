@@ -53,8 +53,7 @@ return view.extend({
 
 		const data_wanted = Math.floor(width / step);
 
-		const data_values = [],
-		    line_elements = [];
+		const data_values = [];
 
 		for (const line of lines)
 			if (line)

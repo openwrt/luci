@@ -4,7 +4,7 @@
 'require poll';
 'require rpc';
 
-var callDSLMetrics = rpc.declare({
+const callDSLMetrics = rpc.declare({
 	object: 'dsl',
 	method: 'metrics',
 	expect: { '': {} }
@@ -19,11 +19,11 @@ function format_latency(val) {
 }
 
 return view.extend({
-	load: function() {
+	load() {
 		return L.resolveDefault(callDSLMetrics(), {});
 	},
 
-	pollData: function(container) {
+	pollData(container) {
 		poll.add(L.bind(function() {
 			return L.resolveDefault(callDSLMetrics(), {}).then(L.bind(function(data) {
 				dom.content(container, this.renderContent(data));
@@ -31,7 +31,7 @@ return view.extend({
 		}, this));
 	},
 
-	formatHelper: function(format, val) {
+	formatHelper(format, val) {
 		if (val != null) {
 			if (format instanceof Function) {
 				return format(val);
@@ -44,14 +44,14 @@ return view.extend({
 		return '-';
 	},
 
-	renderSimpleTable: function(data) {
-		var table = E('table', { 'class': 'table' });
+	renderSimpleTable(data) {
+		const table = E('table', { 'class': 'table' });
 
-		for (var [i, item] of data.entries()) {
-			var label = item[0];
-			var val = item[1];
+		for (let [i, item] of data.entries()) {
+			const label = item[0];
+			const val = item[1];
 
-			var rowstyle = (i % 2 == 0) ? 'cbi-rowstyle-1' : 'cbi-rowstyle-2';
+			const rowstyle = (i % 2 == 0) ? 'cbi-rowstyle-1' : 'cbi-rowstyle-2';
 
 			table.appendChild(E('tr', { 'class': 'tr ' + rowstyle }, [
 				E('td', { 'class': 'td left', 'width': '33%' }, [ label ]),
@@ -62,16 +62,16 @@ return view.extend({
 		return E('div', { 'class': 'cbi-section' }, table);
 	},
 
-	renderTable: function(data) {
-		var table = E('table', { 'class': 'table' });
+	renderTable(data) {
+		const table = E('table', { 'class': 'table' });
 
-		for (var [i, item] of data.entries()) {
-			var label = item[0];
-			var format = item[1];
-			var val1 = item[2];
-			var val2 = item[3];
+		for (let [i, item] of data.entries()) {
+			const label = item[0];
+			const format = item[1];
+			const val1 = item[2];
+			const val2 = item[3];
 
-			var rowstyle = (i % 2 == 0) ? 'cbi-rowstyle-1' : 'cbi-rowstyle-2';
+			const rowstyle = (i % 2 == 0) ? 'cbi-rowstyle-1' : 'cbi-rowstyle-2';
 
 			table.appendChild(E('tr', { 'class': 'tr ' + rowstyle }, [
 				E('td', { 'class': 'td left', 'width': '33%' }, [ label ]),
@@ -83,7 +83,7 @@ return view.extend({
 		return E('div', { 'class': 'cbi-section' }, table);
 	},
 
-	renderContent: function(data) {
+	renderContent(data) {
 		return E([], [
 
 			E('h3', {}, [ _('Connection State') ]),
@@ -169,13 +169,13 @@ return view.extend({
 		]);
 	},
 
-	render: function(data) {
-		var v = E([], [
+	render(data) {
+		const v = E([], [
 			E('h2', {}, [ _('DSL stats') ]),
 			E('div')
 		]);
 
-		var container = v.lastElementChild;
+		const container = v.lastElementChild;
 		dom.content(container, this.renderContent(data));
 		this.pollData(container);
 
