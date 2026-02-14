@@ -309,6 +309,18 @@ const ValidatorFactory = baseclass.extend(/** @lends LuCI.validation.ValidatorFa
 				esc = true;
 				break;
 
+			// Skip over quoted strings so commas inside quotes don't split tokens
+			case 34: // "
+			case 39: { // '\''
+				const quote = code.charCodeAt(i);
+				let j = i + 1;
+				for (; j < code.length; j++) {
+					if (code.charCodeAt(j) === 92) { j++; continue; }
+					if (code.charCodeAt(j) === quote) { i = j; break; }
+				}
+				break;
+			}
+
 			case 40:
 			case 44:
 				if (depth <= 0) {
@@ -839,6 +851,95 @@ const ValidatorFactory = baseclass.extend(/** @lends LuCI.validation.ValidatorFa
 
 			return this.assert(m6 && this.apply('ip6addr', m6[1], [true]) && this.apply('port', m6[2]),
 				_('valid address:port'));
+		},
+
+		/**
+		 * Define a string separator `sep` for use in [tuple]{@link
+		 * LuCI.validation.ValidatorFactory.types#tuple}.
+		 * @function LuCI.validation.ValidatorFactory.types#sep
+		 * @param {string} str define the separator string
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		sep(str) {
+			return this.apply('string', str);
+		},
+
+		/**
+		 * Tuple validator: accepts 1-N tokens separated by a given separator
+		 * {@link LuCI.validation.ValidatorFactory.types#sep sep}
+		 * (whitespace by default if {@link LuCI.validation.ValidatorFactory.types#sep sep}
+		 * is omitted) which will be validated against the 1-N types.
+		 *
+		 * This differs from {@link LuCI.validation.ValidatorFactory.types#and and}
+		 * by first splitting the input and applying each validator function
+		 * sequentially on the resulting array of the split string, whereby the
+		 * first type applies to the first value element, the second to the
+		 * second, and so on, to define a concrete order.
+		 *
+		 * {@link LuCI.validation.ValidatorFactory.types#sep sep}
+		 * can appear at any position in the list.
+		 *
+		 * @example
+		 *
+		 * tuple(ipaddr,port) // "192.0.2.1 88"
+		 *
+		 * tuple(host,port,sep(',')) // "taurus,8000"
+		 *
+		 * tuple(port,port,port,sep('-')) // "33-45-78"
+		 *
+		 * @function LuCI.validation.ValidatorFactory.types#tuple
+		 * @param {...function} types {@link LuCI.validation.ValidatorFactory.types
+		 * types validation functions}
+		 * @param {string} [sep()] function to define split separator string.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		tuple() {
+			const argsraw = Array.prototype.slice.call(arguments);
+			let sep = null;
+
+			// Build list of (validator, validatorArgs) pairs
+			const types = [];
+			for (let i = 0; i < argsraw.length; i += 2)
+				types.push([ argsraw[i], argsraw[i+1] ]);
+
+			// Determine the separator, if provided
+			if (types.length) {
+				for (let t of types) {
+					if (t[0] === this.factory.types['sep']) {
+						const e = types.pop();
+						if (Array.isArray(e[1]) && e[1].length > 0)
+							sep = e[1][0];
+					}
+				}
+			}
+
+			const raw = (this.value || '');
+			let tokens = (sep == null) ? raw.split(/\s+/) : raw.split(sep).map(s => s.trim());
+
+			if (tokens.length != types.length) {
+				const getName = (t) => {
+					if (typeof t === 'function') {
+						for (const k in this.factory.types)
+							if (this.factory.types[k] === t)
+								return k;
+						return _('value');
+					}
+					return _('value');
+				};
+
+				const expectedTypes = types.map(t => getName(t[0])).join(sep == null ? ' ' : sep);
+				const sepDesc = sep == null ? _('whitespace') : `"${sep}"`;
+				const msg_multi = _('%s; %d tokens separated by %s').format(expectedTypes, types.length, sepDesc);
+				const msg_single = _('%s').format(expectedTypes, types.length, sepDesc);
+				return this.assert(false, (types.length > 1) ? msg_multi : msg_single);
+			}
+
+			for (let i = 0; i < tokens.length; i++) {
+				if (!this.apply(types[i][0], tokens[i], types[i][1]))
+					return this.assert(false, this.error);
+			}
+
+			return this.assert(true);
 		},
 
 		/**
