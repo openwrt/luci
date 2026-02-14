@@ -20,7 +20,7 @@
 	 * Class declaration and inheritance helper
 	 */
 
-	const toCamelCase = s => s.replace(/(?:^|[\. -])(.)/g, (m0, m1) => m1.toUpperCase());
+	const toCamelCase = s => s.replace(/(?:^|[. -])(.)/g, (m0, m1) => m1.toUpperCase());
 
 	/**
 	 * @class 
@@ -2261,7 +2261,7 @@
 			if (setenv.base_url == null)
 				this.error('InternalError', 'Cannot find url of luci.js');
 
-			setenv.cgi_base = setenv.scriptname.replace(/\/[^\/]+$/, '');
+			setenv.cgi_base = setenv.scriptname.replace(/\/[^/]+$/, '');
 
 			Object.assign(env, setenv);
 

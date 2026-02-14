@@ -308,7 +308,7 @@ const CBIAbstractElement = baseclass.extend(/** @lends LuCI.form.AbstractElement
 	 * entities decoded.
 	 */
 	stripTags(s) {
-		if (typeof(s) == 'string' && !s.match(/[<>\&]/))
+		if (typeof(s) == 'string' && !s.match(/[<>&]/))
 			return s;
 
 		const x = dom.elem(s) ? s : dom.parse(`<div>${s}</div>`);
@@ -3657,7 +3657,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 				index = i;
 		});
 
-		ev.currentTarget.parentNode.querySelectorAll('tr.cbi-section-table-row').forEach(L.bind((tr, i) => {
+		ev.currentTarget.parentNode.querySelectorAll('tr.cbi-section-table-row').forEach(L.bind((tr) => {
 			const sid = tr.getAttribute('data-sid');
 			const opt = tr.childNodes[index].getAttribute('data-name');
 			let val = this.cfgvalue(sid, opt);

@@ -309,7 +309,7 @@ function cbi_init() {
 
 	nodes = document.querySelectorAll('[data-strings]');
 
-	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+	for (let i = 0, node; (node = nodes[i]) !== undefined; i++) {
 		var str = JSON.parse(node.getAttribute('data-strings'));
 		for (var key in str) {
 			for (var key2 in str[key]) {
@@ -321,30 +321,30 @@ function cbi_init() {
 
 	nodes = document.querySelectorAll('[data-depends]');
 
-	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+	for (let i = 0, node; (node = nodes[i]) !== undefined; i++) {
 		var index = parseInt(node.getAttribute('data-index'), 10);
 		var depends = JSON.parse(node.getAttribute('data-depends'));
 		if (!isNaN(index) && depends.length > 0) {
-			for (var alt = 0; alt < depends.length; alt++)
+			for (let alt = 0; alt < depends.length; alt++)
 				cbi_d_add(node, depends[alt], index);
 		}
 	}
 
 	nodes = document.querySelectorAll('[data-update]');
 
-	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+	for (let i = 0, node; (node = nodes[i]) !== undefined; i++) {
 		var events = node.getAttribute('data-update').split(' ');
-		for (var j = 0, event; (event = events[j]) !== undefined; j++)
+		for (let j = 0, event; (event = events[j]) !== undefined; j++)
 			node.addEventListener(event, cbi_d_update);
 	}
 
 	nodes = document.querySelectorAll('[data-choices]');
 
-	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
-		var choices = JSON.parse(node.getAttribute('data-choices')),
+	for (let i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		let choices = JSON.parse(node.getAttribute('data-choices')),
 		    options = {};
 
-		for (var j = 0; j < choices[0].length; j++)
+		for (let j = 0; j < choices[0].length; j++)
 			options[choices[0][j]] = choices[1][j];
 
 		var def = (node.getAttribute('data-optional') === 'true')
@@ -364,19 +364,19 @@ function cbi_init() {
 
 	nodes = document.querySelectorAll('[data-dynlist]');
 
-	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
-		var choices = JSON.parse(node.getAttribute('data-dynlist')),
+	for (let i = 0, node; (node = nodes[i]) !== undefined; i++) {
+		let choices = JSON.parse(node.getAttribute('data-dynlist')),
 		    values = JSON.parse(node.getAttribute('data-values') || '[]'),
 		    options = null;
 
 		if (choices[0] && choices[0].length) {
 			options = {};
 
-			for (var j = 0; j < choices[0].length; j++)
+			for (let j = 0; j < choices[0].length; j++)
 				options[choices[0][j]] = choices[1][j];
 		}
 
-		var dl = new L.ui.DynamicList(values, options, {
+		let dl = new L.ui.DynamicList(values, options, {
 			name: node.getAttribute('data-prefix'),
 			sort: choices[0],
 			datatype: choices[2],
@@ -384,14 +384,14 @@ function cbi_init() {
 			placeholder: node.getAttribute('data-placeholder')
 		});
 
-		var n = dl.render();
+		let n = dl.render();
 		n.addEventListener('cbi-dynlist-change', cbi_d_update);
 		node.parentNode.replaceChild(n, node);
 	}
 
 	nodes = document.querySelectorAll('[data-type]');
 
-	for (var i = 0, node; (node = nodes[i]) !== undefined; i++) {
+	for (let i = 0, node; (node = nodes[i]) !== undefined; i++) {
 		cbi_validate_field(node, node.getAttribute('data-optional') === 'true',
 		                   node.getAttribute('data-type'));
 	}
@@ -401,7 +401,7 @@ function cbi_init() {
 	});
 
 	document.querySelectorAll('.cbi-section-remove > input[name^="cbi.rts"]').forEach(function(i) {
-		var handler = function(ev) {
+		let handler = function(ev) {
 			var bits = this.name.split(/\./),
 			    section = document.getElementById('cbi-' + bits[2] + '-' + bits[3]);
 
@@ -415,7 +415,7 @@ function cbi_init() {
 	var tasks = [];
 
 	document.querySelectorAll('[data-ui-widget]').forEach(function(node) {
-		var args = JSON.parse(node.getAttribute('data-ui-widget') || '[]'),
+		let args = JSON.parse(node.getAttribute('data-ui-widget') || '[]'),
 		    widget = new (Function.prototype.bind.apply(L.ui[args[0]], args)),
 		    markup = widget.render();
 
@@ -562,7 +562,7 @@ function cbi_row_swap(elem, up, store)
 			node.classList.remove('cbi-rowstyle-2');
 			node.classList.add((n++ % 2) ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1');
 
-			if (/-([^\-]+)$/.test(node.id))
+			if (/-([^-]+)$/.test(node.id))
 				ids.push(RegExp.$1);
 		}
 	}
@@ -675,7 +675,7 @@ String.prototype.format = function()
 	var re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))/;
 	var a = b = [], numSubstitutions = 0, numMatches = 0;
 
-	while (a = re.exec(str)) {
+	while ((a = re.exec(str)) !== null) {
 		var m = a[1];
 		var leftpart = a[2], pPad = a[3], pJustify = a[4], pMinLength = a[5];
 		var pPrecision = a[6], pType = a[7];
@@ -810,7 +810,7 @@ String.prototype.format = function()
 
 		if (pMinLength) {
 			subst = subst.toString();
-			for (var i = subst.length; i < pMinLength; i++)
+			for (let i = subst.length; i < pMinLength; i++)
 				if (pJustify == '-')
 					subst = subst + ' ';
 				else
@@ -896,13 +896,6 @@ if (!window.requestAnimationFrame) {
 function isElem(e) { return L.dom.elem(e) }
 
 /**
- * Parse an HTML string into a DOM element.
- * @param {string} s - HTML string.
- * @returns {HTMLElement} Parsed DOM element.
- */
-function toElem(s) { return L.dom.parse(s) }
-
-/**
  * Test whether node matches a CSS selector.
  * @param {Node} node - Node to test.
  * @param {string} selector - CSS selector.
@@ -958,28 +951,6 @@ function cbi_update_table(table, data, placeholder) {
 	}
 
 	t.update(data, placeholder);
-}
-
-/**
- * Show a modal dialog with the given title and children content.
- * @deprecated
- * @param {string} title - Title of the modal.
- * @param {HTMLElement|Array<HTMLElement>} children - Content of the modal.
- * @returns {Promise} Promise that resolves when modal shown or when closed depending on L.showModal.
- */
-function showModal(title, children)
-{
-	return L.showModal(title, children);
-}
-
-/**
- * Hide any currently shown modal dialog.
- * @deprecated
- * @returns {*} Return value forwarded from L.hideModal.
- */
-function hideModal()
-{
-	return L.hideModal();
 }
 
 
