@@ -4,14 +4,14 @@
 'require network';
 'require tools.widgets as widgets';
 
-var callGetCertificateFiles = rpc.declare({
+const callGetCertificateFiles = rpc.declare({
 	object: 'luci.openfortivpn',
 	method: 'getCertificates',
 	params: [ 'interface' ],
 	expect: { '': {} }
 });
 
-var callSetCertificateFiles = rpc.declare({
+const callSetCertificateFiles = rpc.declare({
 	object: 'luci.openfortivpn',
 	method: 'setCertificates',
 	params: [ 'interface', 'user_cert', 'user_key', 'ca_file' ],
@@ -38,9 +38,9 @@ function sanitizeCert(s) {
 }
 
 function validateCert(priv, section_id, value) {
-	var lines = value.trim().split(/[\r\n]/),
-	    start = false,
-	    i;
+	const lines = value.trim().split(/[\r\n]/);
+	let start = false;
+	let i;
 
 	if (value === null || value === '')
 		return true;
@@ -48,7 +48,7 @@ function validateCert(priv, section_id, value) {
 	for (i = 0; i < lines.length; i++) {
 		if (lines[i].match(/^-{5}BEGIN ((|RSA |DSA )PRIVATE KEY|(|TRUSTED |X509 )CERTIFICATE)-{5}$/))
 			start = true;
-		else if (start && !lines[i].match(/^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/))
+		else if (start && !lines[i].match(/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/))
 			break;
 	}
 
@@ -59,36 +59,36 @@ function validateCert(priv, section_id, value) {
 }
 
 return network.registerProtocol('openfortivpn', {
-	getI18n: function() {
+	getI18n() {
 		return _('OpenFortivpn');
 	},
 
-	getIfname: function() {
+	getIfname() {
 		return this._ubus('l3_device') || 'vpn-%s'.format(this.sid);
 	},
 
-	getPackageName: function() {
+	getPackageName() {
 		return 'openfortivpn';
 	},
 
-	isFloating: function() {
+	isFloating() {
 		return true;
 	},
 
-	isVirtual: function() {
+	isVirtual() {
 		return true;
 	},
 
-	getDevices: function() {
+	getDevices() {
 		return null;
 	},
 
-	containsDevice: function(ifname) {
+	containsDevice(ifname) {
 		return (network.getIfnameOf(ifname) == this.getIfname());
 	},
 
-	renderFormOptions: function(s) {
-		var o;
+	renderFormOptions(s) {
+		let o, certLoadPromise;
 
 		o = s.taboption('general', form.Value, 'peeraddr', _('VPN Server'));
 		o.datatype = 'host(0)';
@@ -108,7 +108,7 @@ return network.registerProtocol('openfortivpn', {
 		o.monospace = true;
 		o.validate = L.bind(validateCert, o, false);
 		o.load = function(section_id) {
-			var certLoadPromise = certLoadPromise || callGetCertificateFiles(section_id);
+			certLoadPromise = certLoadPromise || callGetCertificateFiles(section_id);
 			return certLoadPromise.then(function(certs) { return certs.user_cert });
 		};
 		o.write = function(section_id, value) {
@@ -121,7 +121,7 @@ return network.registerProtocol('openfortivpn', {
 		o.monospace = true;
 		o.validate = L.bind(validateCert, o, true);
 		o.load = function(section_id) {
-			var certLoadPromise = certLoadPromise || callGetCertificateFiles(section_id);
+			certLoadPromise = certLoadPromise || callGetCertificateFiles(section_id);
 			return certLoadPromise.then(function(certs) { return certs.user_key });
 		};
 		o.write = function(section_id, value) {
@@ -134,7 +134,7 @@ return network.registerProtocol('openfortivpn', {
 		o.monospace = true;
 		o.validate = L.bind(validateCert, o, false);
 		o.load = function(section_id) {
-			var certLoadPromise = certLoadPromise || callGetCertificateFiles(section_id);
+			certLoadPromise = certLoadPromise || callGetCertificateFiles(section_id);
 			return certLoadPromise.then(function(certs) { return certs.ca_file });
 		};
 		o.write = function(section_id, value) {

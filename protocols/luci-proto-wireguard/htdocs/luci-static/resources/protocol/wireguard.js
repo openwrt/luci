@@ -34,7 +34,7 @@ function validateBase64(section_id, value) {
 	if (value.length == 0)
 		return true;
 
-	if (value.length != 44 || !value.match(/^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/))
+	if (value.length != 44 || !value.match(/^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/))
 		return _('Invalid Base64 key string');
 
 	if (value[43] != "=" )
@@ -45,25 +45,16 @@ function validateBase64(section_id, value) {
 
 var stubValidator = {
 	factory: validation,
-	apply: function(type, value, args) {
+	apply(type, value, args) {
 		if (value != null)
 			this.value = value;
 
 		return validation.types[type].apply(this, args);
 	},
-	assert: function(condition) {
+	assert(condition) {
 		return !!condition;
 	}
 };
-
-function generateDescription(name, texts) {
-	return E('li', { 'style': 'color: inherit;' }, [
-		E('span', name),
-		E('ul', texts.map(function (text) {
-			return E('li', { 'style': 'color: inherit;' }, text);
-		}))
-	]);
-}
 
 function buildSVGQRCode(data, code) {
 	// pixel size larger than 4 clips right and bottom edges of complex configs
@@ -78,7 +69,7 @@ function buildSVGQRCode(data, code) {
 }
 
 var cbiKeyPairGenerate = form.DummyValue.extend({
-	cfgvalue: function(section_id, value) {
+	cfgvalue(section_id, value) {
 		return E('button', {
 			'class': 'btn',
 			'click': ui.createHandlerFn(this, function(section_id, ev) {
@@ -101,36 +92,36 @@ function handleWindowDragDropIgnore(ev) {
 }
 
 return network.registerProtocol('wireguard', {
-	getI18n: function() {
+	getI18n() {
 		return _('WireGuard VPN');
 	},
 
-	getIfname: function() {
+	getIfname() {
 		return this._ubus('l3_device') || this.sid;
 	},
 
-	getPackageName: function() {
+	getPackageName() {
 		return 'wireguard-tools';
 	},
 
-	isFloating: function() {
+	isFloating() {
 		return true;
 	},
 
-	isVirtual: function() {
+	isVirtual() {
 		return true;
 	},
 
-	getDevices: function() {
+	getDevices() {
 		return null;
 	},
 
-	containsDevice: function(ifname) {
+	containsDevice(ifname) {
 		return (network.getIfnameOf(ifname) == this.getIfname());
 	},
 
-	renderFormOptions: function(s) {
-		var o, ss, ss2;
+	renderFormOptions(s) {
+		var o, ss;
 
 		// -- general ---------------------------------------------------------------------
 
@@ -138,8 +129,6 @@ return network.registerProtocol('wireguard', {
 		o.password = true;
 		o.validate = validateBase64;
 		o.rmempty = false;
-
-		var serverName = this.getIfname();
 
 		o = s.taboption('general', form.Value, 'public_key', _('Public Key'), _('Base64-encoded public key of this interface for sharing.'));
 		o.rmempty = false;
@@ -268,16 +257,16 @@ return network.registerProtocol('wireguard', {
 			if (config.interface_address) {
 				config.interface_address = config.interface_address.split(/[, ]+/);
 
-				for (var i = 0; i < config.interface_address.length; i++)
-					if (!stubValidator.apply('ipaddr', config.interface_address[i]))
+				for (let cfia of config.interface_address)
+					if (!stubValidator.apply('ipaddr', cfia))
 						return _('Address setting is invalid');
 			}
 
 			if (config.interface_dns) {
 				config.interface_dns = config.interface_dns.split(/[, ]+/);
 
-				for (var i = 0; i < config.interface_dns.length; i++)
-					if (!stubValidator.apply('ipaddr', config.interface_dns[i], ['nomask']))
+				for (let cfid of config.interface_dns)
+					if (!stubValidator.apply('ipaddr', cfid, ['nomask']))
 						return _('DNS setting is invalid');
 			}
 
@@ -287,9 +276,7 @@ return network.registerProtocol('wireguard', {
 			if (!stubValidator.apply('port', config.interface_listenport || '0'))
 				return _('ListenPort setting is invalid');
 
-			for (var i = 0; i < config.peers.length; i++) {
-				var pconf = config.peers[i];
-
+			for (let pconf of config.peers) {
 				if (pconf.peer_publickey != null && validateBase64(null, pconf.peer_publickey) !== true)
 					return _('PublicKey setting is invalid');
 
@@ -327,10 +314,10 @@ return network.registerProtocol('wireguard', {
 		};
 
 		ss.handleApplyConfig = function(mode, nodes, comment, ev) {
-			var input = nodes.querySelector('textarea').value,
-			    error = nodes.querySelector('.alert-message'),
-			    cancel = nodes.nextElementSibling.querySelector('.btn'),
-			    config = this.parseConfig(input);
+			const input = nodes.querySelector('textarea').value;
+			const error = nodes.querySelector('.alert-message');
+			const cancel = nodes.nextElementSibling.querySelector('.btn');
+			const config = this.parseConfig(input);
 
 			if (typeof(config) == 'string') {
 				error.firstChild.data = _('Cannot parse configuration: %s').format(config);
@@ -339,7 +326,7 @@ return network.registerProtocol('wireguard', {
 			}
 
 			if (mode == 'full') {
-				var prv = s.formvalue(s.section, 'private_key');
+				const prv = s.formvalue(s.section, 'private_key');
 
 				if (prv && prv != config.interface_privatekey && !confirm(_('Overwrite the current settings with the imported configuration?')))
 					return;
@@ -353,9 +340,8 @@ return network.registerProtocol('wireguard', {
 					if (config.interface_dns)
 						s.getOption('dns').getUIElement(s.section).setValue(config.interface_dns);
 
-					for (var i = 0; i < config.peers.length; i++) {
-						var pconf = config.peers[i];
-						var sid = uci.add('network', 'wireguard_' + s.section);
+					for (let pconf of config.peers) {
+						const sid = uci.add('network', 'wireguard_' + s.section);
 
 						uci.sections('network', 'wireguard_' + s.section, function(peer) {
 							if (peer.public_key == pconf.peer_publickey)
@@ -381,8 +367,8 @@ return network.registerProtocol('wireguard', {
 			}
 			else {
 				return getPublicAndPrivateKeyFromPrivate(config.interface_privatekey).then(function(keypair) {
-					var sid = uci.add('network', 'wireguard_' + s.section);
-					var pub = s.formvalue(s.section, 'public_key');
+					const sid = uci.add('network', 'wireguard_' + s.section);
+					const pub = s.formvalue(s.section, 'public_key');
 
 					uci.sections('network', 'wireguard_' + s.section, function(peer) {
 						if (peer.public_key == keypair.pub)
@@ -393,9 +379,7 @@ return network.registerProtocol('wireguard', {
 					uci.set('network', sid, 'public_key', keypair.pub);
 					uci.set('network', sid, 'private_key', keypair.priv);
 
-					for (var i = 0; i < config.peers.length; i++) {
-						var pconf = config.peers[i];
-
+					for (let pconf of config.peers) {
 						if (pconf.peer_publickey == pub) {
 							uci.set('network', sid, 'preshared_key', pconf.peer_presharedkey);
 							uci.set('network', sid, 'allowed_ips', pconf.peer_allowedips);
@@ -412,11 +396,10 @@ return network.registerProtocol('wireguard', {
 		};
 
 		ss.handleConfigImport = function(mode) {
-			var mapNode = ss.getActiveModalMap(),
-			    headNode = mapNode.parentNode.querySelector('h4'),
-			    parent = this.map;
+			const mapNode = ss.getActiveModalMap();
+			const headNode = mapNode.parentNode.querySelector('h4');
 
-			var nodes = E('div', {
+			const nodes = E('div', {
 				'dragover': this.handleDragConfig,
 				'drop': this.handleDropConfig.bind(this, mode)
 			}, [
@@ -440,7 +423,7 @@ return network.registerProtocol('wireguard', {
 				}, [''])
 			]);
 
-			var cancelFn = function() {
+			const cancelFn = function() {
 				nodes.parentNode.removeChild(nodes.nextSibling);
 				nodes.parentNode.removeChild(nodes);
 				mapNode.classList.remove('hidden');
@@ -450,7 +433,7 @@ return network.registerProtocol('wireguard', {
 				window.removeEventListener('drop', handleWindowDragDropIgnore);
 			};
 
-			var a = nodes.querySelector('a.full-import');
+			const a = nodes.querySelector('a.full-import');
 
 			if (a) {
 				a.addEventListener('click', ui.createHandlerFn(this, function(mode) {
@@ -485,7 +468,7 @@ return network.registerProtocol('wireguard', {
 		};
 
 		ss.renderSectionAdd = function(/* ... */) {
-			var nodes = this.super('renderSectionAdd', arguments);
+			const nodes = this.super('renderSectionAdd', arguments);
 
 			nodes.appendChild(E('button', {
 				'class': 'btn',
@@ -510,14 +493,14 @@ return network.registerProtocol('wireguard', {
 		o.optional = true;
 		o.width = '30%';
 		o.textvalue = function(section_id) {
-			var dis = ss.getOption('disabled'),
-			    pub = ss.getOption('public_key'),
-			    prv = ss.getOption('private_key'),
-			    psk = ss.getOption('preshared_key'),
-			    name = this.cfgvalue(section_id),
-			    key = pub.cfgvalue(section_id);
+			const dis = ss.getOption('disabled');
+			const pub = ss.getOption('public_key');
+			const prv = ss.getOption('private_key');
+			const psk = ss.getOption('preshared_key');
+			const name = this.cfgvalue(section_id);
+			const key = pub.cfgvalue(section_id);
 
-			var desc = [
+			const desc = [
 				E('p', [
 					name ? E('span', [ name ]) : E('em', [ _('Untitled peer') ])
 				])
@@ -566,8 +549,8 @@ return network.registerProtocol('wireguard', {
 		};
 
 		function handleKeyChange(ev, section_id, value) {
-			var prv = this.section.getUIElement(section_id, 'private_key'),
-			    btn = this.map.findElement('.btn.qr-code');
+			const prv = this.section.getUIElement(section_id, 'private_key');
+			const btn = this.map.findElement('.btn.qr-code');
 
 			btn.disabled = (!prv.isValid() || !prv.getValue());
 		}
@@ -611,8 +594,8 @@ return network.registerProtocol('wireguard', {
 		o = ss.option(form.DynamicList, 'allowed_ips', _('Allowed IPs'), _("Optional. IP addresses and prefixes that this peer is allowed to use inside the tunnel. Usually the peer's tunnel IP addresses and the networks the peer routes through the tunnel."));
 		o.datatype = 'ipaddr';
 		o.textvalue = function(section_id) {
-			var ips = L.toArray(this.cfgvalue(section_id)),
-			    list = [];
+			const ips = L.toArray(this.cfgvalue(section_id));
+			const list = [];
 
 			for (var i = 0; i < ips.length; i++) {
 				if (i > 7) {
@@ -650,8 +633,8 @@ return network.registerProtocol('wireguard', {
 		o.placeholder = 'vpn.example.com';
 		o.datatype = 'host';
 		o.textvalue = function(section_id) {
-			var host = this.cfgvalue(section_id),
-			    port = this.section.cfgvalue(section_id, 'endpoint_port');
+			const host = this.cfgvalue(section_id);
+			const port = this.section.cfgvalue(section_id, 'endpoint_port');
 
 			return (host && port)
 				? '%h:%d'.format(host, port)
@@ -680,12 +663,12 @@ return network.registerProtocol('wireguard', {
 		o.modalonly = true;
 
 		o.createPeerConfig = function(section_id, endpoint, ips, eips, dns) {
-			var pub = s.formvalue(s.section, 'public_key'),
-			    port = s.formvalue(s.section, 'listen_port') || '51820',
-			    prv = this.section.formvalue(section_id, 'private_key'),
-			    psk = this.section.formvalue(section_id, 'preshared_key'),
-			    eport = this.section.formvalue(section_id, 'endpoint_port'),
-			    keep = this.section.formvalue(section_id, 'persistent_keepalive');
+			const pub = s.formvalue(s.section, 'public_key');
+			const port = s.formvalue(s.section, 'listen_port') || '51820';
+			const prv = this.section.formvalue(section_id, 'private_key');
+			const psk = this.section.formvalue(section_id, 'preshared_key');
+			const eport = this.section.formvalue(section_id, 'endpoint_port');
+			const keep = this.section.formvalue(section_id, 'persistent_keepalive');
 
 			// If endpoint is IPv6 we must escape it with []
 			if (endpoint.indexOf(':') > 0) {
@@ -709,11 +692,11 @@ return network.registerProtocol('wireguard', {
 		};
 
 		o.handleGenerateQR = function(section_id, ev) {
-			var mapNode = ss.getActiveModalMap(),
-			    headNode = mapNode.parentNode.querySelector('h4'),
-			    configGenerator = this.createPeerConfig.bind(this, section_id),
-			    parent = this.map,
-				eips = this.section.formvalue(section_id, 'allowed_ips');
+			const mapNode = ss.getActiveModalMap();
+			const headNode = mapNode.parentNode.querySelector('h4');
+			const configGenerator = this.createPeerConfig.bind(this, section_id);
+			const parent = this.map;
+			const eips = this.section.formvalue(section_id, 'allowed_ips');
 
 			return Promise.all([
 				network.getWANNetworks(),
@@ -722,8 +705,8 @@ return network.registerProtocol('wireguard', {
 				L.resolveDefault(uci.load('ddns')),
 				L.resolveDefault(uci.load('system')),
 				parent.save(null, true)
-			]).then(function(data) {
-				var hostnames = [];
+			]).then(function([wNets, w6Nets, lnet]) {
+				const hostnames = [];
 
 				uci.sections('ddns', 'service', function(s) {
 					if (typeof(s?.lookup_host) == 'string' && s?.enabled == '1')
@@ -735,25 +718,24 @@ return network.registerProtocol('wireguard', {
 						hostnames.push(s.hostname);
 				});
 
-				for (var i = 0; i < data[0].length; i++)
-					hostnames.push.apply(hostnames, data[0][i].getIPAddrs().map(function(ip) { return ip.split('/')[0] }));
+				for (let wNet of wNets)
+					hostnames.push.apply(hostnames, wNet.getIPAddrs().map(function(ip) { return ip.split('/')[0] }));
 
-				for (var i = 0; i < data[1].length; i++)
-					hostnames.push.apply(hostnames, data[1][i].getIP6Addrs().map(function(ip) { return ip.split('/')[0] }));
+				for (let w6Net of w6Nets)
+					hostnames.push.apply(hostnames, w6Net.getIP6Addrs().map(function(ip) { return ip.split('/')[0] }));
 
-				var ips = [ '0.0.0.0/0', '::/0' ];
+				const ips = [ '0.0.0.0/0', '::/0' ];
 
-				var dns = [];
+				const dns = [];
 
-				var lan = data[2];
-				if (lan) {
-					var lanIp = lan.getIPAddr();
+				if (lnet) {
+					const lanIp = lnet.getIPAddr();
 					if (lanIp) {
 						dns.unshift(lanIp)
 					}
 				}
 
-				var qrm, qrs, qro;
+				let qrm, qrs, qro;
 
 				qrm = new form.JSONMap({ config: { endpoint: hostnames[0], allowed_ips: ips, addresses: eips, dns_servers: dns } }, null, _('The generated configuration can be imported into a WireGuard client application to set up a connection towards this device.'));
 				qrm.parent = parent;
@@ -761,12 +743,12 @@ return network.registerProtocol('wireguard', {
 				qrs = qrm.section(form.NamedSection, 'config');
 
 				function handleConfigChange(ev, section_id, value) {
-					var code = this.map.findElement('.qr-code'),
-					    conf = this.map.findElement('.client-config'),
-					    endpoint = this.section.getUIElement(section_id, 'endpoint'),
-					    ips = this.section.getUIElement(section_id, 'allowed_ips');
-					    eips = this.section.getUIElement(section_id, 'addresses');
-					    dns = this.section.getUIElement(section_id, 'dns_servers');
+					const code = this.map.findElement('.qr-code');
+					const conf = this.map.findElement('.client-config');
+					const endpoint = this.section.getUIElement(section_id, 'endpoint');
+					const ips = this.section.getUIElement(section_id, 'allowed_ips');
+					const eips = this.section.getUIElement(section_id, 'addresses');
+					const dns = this.section.getUIElement(section_id, 'dns_servers');
 
 					if (this.isValid(section_id)) {
 						conf.firstChild.data = configGenerator(endpoint.getValue(), ips.getValue(), eips.getValue(), dns.getValue());
@@ -800,9 +782,9 @@ return network.registerProtocol('wireguard', {
 
 				qro = qrs.option(form.DummyValue, 'output');
 				qro.renderWidget = function() {
-					var peer_config = configGenerator(hostnames[0], ips, eips, dns);
+					const peer_config = configGenerator(hostnames[0], ips, eips, dns);
 
-					var node = E('div', {
+					const node = E('div', {
 						'style': 'display:flex;flex-wrap:wrap;align-items:center;gap:.5em;width:100%'
 					}, [
 						E('div', {
@@ -814,9 +796,9 @@ return network.registerProtocol('wireguard', {
 						E('pre', {
 							'class': 'client-config',
 							'style': 'flex:1;white-space:pre;overflow:auto',
-							'click': function(ev) {
-								var sel = window.getSelection(),
-								    range = document.createRange();
+							'click'(ev) {
+								const sel = window.getSelection();
+								const range = document.createRange();
 
 								range.selectNodeContents(ev.currentTarget);
 
@@ -849,7 +831,7 @@ return network.registerProtocol('wireguard', {
 						}, [
 							E('button', {
 								'class': 'btn',
-								'click': function() {
+								'click'() {
 									// Remove QR code button (row)
 									nodes.parentNode.removeChild(nodes.nextSibling);
 									// Remove QR code form
@@ -891,7 +873,7 @@ return network.registerProtocol('wireguard', {
 		};
 	},
 
-	deleteConfiguration: function() {
+	deleteConfiguration() {
 		uci.sections('network', 'wireguard_%s'.format(this.sid), function(s) {
 			uci.remove('network', s['.name']);
 		});
