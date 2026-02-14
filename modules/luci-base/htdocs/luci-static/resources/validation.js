@@ -375,18 +375,18 @@ const ValidatorFactory = baseclass.extend({
 				_('valid IPv6 network'));
 		},
 
-		iprange(negative) {
-			return this.assert(this.apply('iprange4', null, [negative]) || this.apply('iprange6', null, [negative]),
+		iprange() {
+			return this.assert(this.apply('iprange4', null, []) || this.apply('iprange6', null, []),
 				_('valid IP address range'));
 		},
 
-		iprange4(negative) {
+		iprange4() {
 			const m = this.value.split('-');
 			return this.assert(m.length == 2 && arrayle(this.factory.parseIPv4(m[0]), this.factory.parseIPv4(m[1])),
 				_('valid IPv4 address range'));
 		},
 
-		iprange6(negative) {
+		iprange6() {
 			const m = this.value.split('-');
 			return this.assert(m.length == 2 && arrayle(this.factory.parseIPv6(m[0]), this.factory.parseIPv6(m[1])),
 				_('valid IPv6 address range'));
@@ -449,8 +449,8 @@ const ValidatorFactory = baseclass.extend({
 		},
 
 		ipaddrport(bracket) {
-			const m4 = this.value.match(/^([^\[\]:]+):(\d+)$/);
-			const m6 = this.value.match((bracket == 1) ? /^\[(.+)\]:(\d+)$/ : /^([^\[\]]+):(\d+)$/);
+			const m4 = this.value.match(/^([^[\]:]+):(\d+)$/);
+			const m6 = this.value.match((bracket == 1) ? /^\[(.+)\]:(\d+)$/ : /^([^[\]]+):(\d+)$/);
 
 			if (m4)
 				return this.assert(this.apply('ip4addr', m4[1], [true]) && this.apply('port', m4[2]),
@@ -495,7 +495,7 @@ const ValidatorFactory = baseclass.extend({
 			if (v == '.' || v == '..')
 				return this.assert(false, _('valid network device name, not "." or ".."'));
 
-			return this.assert(v.match(/^[^:\/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
+			return this.assert(v.match(/^[^:/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
 		},
 
 		range(min, max) {
@@ -591,7 +591,7 @@ const ValidatorFactory = baseclass.extend({
 		},
 
 		phonedigit() {
-			return this.assert(this.value.match(/^[0-9\*#!\.]+$/),
+			return this.assert(this.value.match(/^[0-9*#!.]+$/),
 				_('valid phone digit (0-9, "*", "#", "!" or ".")'));
 		},
 
