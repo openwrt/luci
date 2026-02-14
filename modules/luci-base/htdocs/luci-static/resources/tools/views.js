@@ -173,7 +173,7 @@ var CBILogreadBox = function(logtag, name) {
 				'class': 'cbi-input-select',
 				'style': 'margin-bottom:10px',
 			},
-			this.facilities.map(([_, val, label]) =>
+			this.facilities.map(([ , val, label]) =>
 				(val == 'any') ? E('option', { value: val, selected: '' }, label) : E('option', { value: val }, label)
 			));
 
@@ -189,7 +189,7 @@ var CBILogreadBox = function(logtag, name) {
 				'id': 'logSeveritySelect',
 				'class': 'cbi-input-select',
 			},
-			this.severity.map(([_, val, label]) =>
+			this.severity.map(([ , val, label]) =>
 				(val == 'any') ? E('option', { value: val, selected: '' }, label) : E('option', { value: val }, label)
 			));
 

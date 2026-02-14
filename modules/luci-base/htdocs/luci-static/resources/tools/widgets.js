@@ -43,7 +43,7 @@ function getDevices(network) {
 var CBIZoneSelect = form.ListValue.extend({
 	__name__: 'CBI.ZoneSelect',
 
-	load: function(section_id) {
+	load(section_id) {
 		return Promise.all([ firewall.getZones(), network.getNetworks() ]).then(L.bind(function(zn) {
 			this.zones = zn[0];
 			this.networks = zn[1];
@@ -52,22 +52,22 @@ var CBIZoneSelect = form.ListValue.extend({
 		}, this));
 	},
 
-	filter: function(section_id, value) {
+	filter(section_id, value) {
 		return true;
 	},
 
-	lookupZone: function(name) {
+	lookupZone(name) {
 		return this.zones.filter(function(zone) { return zone.getName() == name })[0];
 	},
 
-	lookupNetwork: function(name) {
+	lookupNetwork(name) {
 		return this.networks.filter(function(network) { return network.getName() == name })[0];
 	},
 
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
-		    isOutputOnly = false,
-		    choices = {};
+	renderWidget(section_id, option_index, cfgvalue) {
+		const values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		let isOutputOnly = false;
+		const choices = {};
 		let datatype_str = 'ucifw4zonename';
 		if (!L.hasSystemFeature('firewall4'))
 			datatype_str = `and(${datatype_str},maxlength(11))`;
@@ -77,10 +77,10 @@ var CBIZoneSelect = form.ListValue.extend({
 			datatype_str = `list(${datatype_str})`;
 
 		if (this.option == 'dest') {
-			for (var i = 0; i < this.section.children.length; i++) {
-				var opt = this.section.children[i];
+			for (let c of this.section.children) {
+				const opt = c;
 				if (opt.option == 'src') {
-					var val = opt.cfgvalue(section_id) || opt.default;
+					const val = opt.cfgvalue(section_id) || opt.default;
 					isOutputOnly = (val == null || val == '');
 					break;
 				}
@@ -116,31 +116,30 @@ var CBIZoneSelect = form.ListValue.extend({
 			]);
 		}
 
-		for (var i = 0; i < this.zones.length; i++) {
-			var zone = this.zones[i],
-			    name = zone.getName(),
-			    networks = zone.getNetworks(),
-			    ifaces = [];
+		for (let zone of this.zones) {
+			const name = zone.getName();
+			const networks = zone.getNetworks();
+			const ifaces = [];
 
 			if (!this.filter(section_id, name))
 				continue;
 
-			for (var j = 0; j < networks.length; j++) {
-				var network = this.lookupNetwork(networks[j]);
+			for (let n of networks) {
+				const network = this.lookupNetwork(n);
 
 				if (!network)
 					continue;
 
-				var span = E('span', {
+				const span = E('span', {
 					'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
 				}, network.getName() + ': ');
 
-				var devices = getDevices(network);
+				const devices = getDevices(network);
 
-				for (var k = 0; k < devices.length; k++) {
+				for (let d of devices) {
 					span.appendChild(E('img', {
-						'title': devices[k].getI18n(),
-						'src': L.resource('icons/%s%s.svg'.format(devices[k].getType(), devices[k].isUp() ? '' : '_disabled'))
+						'title': d.getI18n(),
+						'src': L.resource('icons/%s%s.svg'.format(d.getType(), d.isUp() ? '' : '_disabled'))
 					}));
 				}
 
@@ -159,7 +158,7 @@ var CBIZoneSelect = form.ListValue.extend({
 			}, [ E('strong', name) ].concat(ifaces));
 		}
 
-		var widget = new ui.Dropdown(values, choices, {
+		const widget = new ui.Dropdown(values, choices, {
 			id: this.cbid(section_id),
 			sort: true,
 			multiple: this.multiple,
@@ -179,19 +178,19 @@ var CBIZoneSelect = form.ListValue.extend({
 				'</li>'
 		});
 
-		var elem = widget.render();
+		const elem = widget.render();
 
 		if (this.option == 'src') {
 			elem.addEventListener('cbi-dropdown-change', L.bind(function(ev) {
-				var opt = this.map.lookupOption('dest', section_id),
-				    val = ev.detail.instance.getValue();
+				const opt = this.map.lookupOption('dest', section_id);
+				const val = ev.detail.instance.getValue();
 
 				if (opt == null)
 					return;
 
-				var cbid = opt[0].cbid(section_id),
-				    label = document.querySelector('label[for="widget.%s"]'.format(cbid)),
-				    node = document.getElementById(cbid);
+				const cbid = opt[0].cbid(section_id);
+				const label = document.querySelector('label[for="widget.%s"]'.format(cbid));
+				const node = document.getElementById(cbid);
 
 				L.dom.content(label, val == '' ? _('Output zone') : _('Destination zone'));
 
@@ -199,8 +198,8 @@ var CBIZoneSelect = form.ListValue.extend({
 					if (L.dom.callClassMethod(node, 'getValue') == '')
 						L.dom.callClassMethod(node, 'setValue', '*');
 
-					var emptyval = node.querySelector('[data-value=""]'),
-					    anyval = node.querySelector('[data-value="*"]');
+					const emptyval = node.querySelector('[data-value=""]');
+					const anyval = node.querySelector('[data-value="*"]');
 
 					L.dom.content(anyval.querySelector('span'), E('strong', _('Any zone')));
 
@@ -234,7 +233,7 @@ var CBIZoneSelect = form.ListValue.extend({
 			}, this));
 		}
 		else if (isOutputOnly) {
-			var emptyval = elem.querySelector('[data-value=""]');
+			const emptyval = elem.querySelector('[data-value=""]');
 			emptyval.parentNode.removeChild(emptyval);
 		}
 
@@ -245,7 +244,7 @@ var CBIZoneSelect = form.ListValue.extend({
 var CBIZoneForwards = form.DummyValue.extend({
 	__name__: 'CBI.ZoneForwards',
 
-	load: function(section_id) {
+	load(section_id) {
 		return Promise.all([
 			firewall.getDefaults(),
 			firewall.getZones(),
@@ -261,29 +260,29 @@ var CBIZoneForwards = form.DummyValue.extend({
 		}, this));
 	},
 
-	renderZone: function(zone) {
-		var name = zone.getName(),
-		    networks = zone.getNetworks(),
-		    devices = zone.getDevices(),
-		    subnets = zone.getSubnets(),
-		    ifaces = [];
+	renderZone(zone) {
+		const name = zone.getName();
+		const networks = zone.getNetworks();
+		const devices = zone.getDevices();
+		const subnets = zone.getSubnets();
+		const ifaces = [];
 
-		for (var j = 0; j < networks.length; j++) {
-			var network = this.networks.filter(function(net) { return net.getName() == networks[j] })[0];
+		for (let n of networks) {
+			const network = this.networks.filter(function(net) { return net.getName() == n })[0];
 
 			if (!network)
 				continue;
 
-			var span = E('span', {
+			const span = E('span', {
 				'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
 			}, network.getName() + ': ');
 
-			var subdevs = getDevices(network);
+			const subdevs = getDevices(network);
 
-			for (var k = 0; k < subdevs.length && subdevs[k]; k++) {
+			for (let s of subdevs) {
 				span.appendChild(E('img', {
-					'title': subdevs[k].getI18n(),
-					'src': L.resource('icons/%s%s.svg'.format(subdevs[k].getType(), subdevs[k].isUp() ? '' : '_disabled'))
+					'title': s.getI18n(),
+					'src': L.resource('icons/%s%s.svg'.format(s.getType(), s.isUp() ? '' : '_disabled'))
 				}));
 			}
 
@@ -293,18 +292,18 @@ var CBIZoneForwards = form.DummyValue.extend({
 			ifaces.push(span);
 		}
 
-		for (var i = 0; i < devices.length; i++) {
-			var device = this.devices.filter(function(dev) { return dev.getName() == devices[i] })[0],
-			    title = device ? device.getI18n() : _('Absent Interface'),
-			    type = device ? device.getType() : 'ethernet',
-			    up = device ? device.isUp() : false;
+		for (let d of devices) {
+			const device = this.devices.filter(function(dev) { return dev.getName() == d })[0];
+			const title = device ? device.getI18n() : _('Absent Interface');
+			const type = device ? device.getType() : 'ethernet';
+			const up = device ? device.isUp() : false;
 
 			ifaces.push(E('span', { 'class': 'ifacebadge' }, [
 				E('img', {
 					'title': title,
 					'src': L.resource('icons/%s%s.svg'.format(type, up ? '' : '_disabled'))
 				}),
-				device ? device.getName() : devices[i]
+				device ? device.getName() : d
 			]));
 		}
 
@@ -323,18 +322,18 @@ var CBIZoneForwards = form.DummyValue.extend({
 		]);
 	},
 
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var value = (cfgvalue != null) ? cfgvalue : this.default,
-		    zone = this.zones.filter(function(z) { return z.getName() == value })[0];
+	renderWidget(section_id, option_index, cfgvalue) {
+		const value = (cfgvalue != null) ? cfgvalue : this.default;
+		const zone = this.zones.filter(function(z) { return z.getName() == value })[0];
 
 		if (!zone)
 			return E([]);
 
-		var forwards = zone.getForwardingsBy('src'),
-		    dzones = [];
+		const forwards = zone.getForwardingsBy('src');
+		const dzones = [];
 
 		for (var i = 0; i < forwards.length; i++) {
-			var dzone = forwards[i].getDestinationZone();
+			const dzone = forwards[i].getDestinationZone();
 
 			if (!dzone)
 				continue;
@@ -464,7 +463,7 @@ const CBIIPSelect = form.ListValue.extend({
 var CBINetworkSelect = form.ListValue.extend({
 	__name__: 'CBI.NetworkSelect',
 
-	load: function(section_id) {
+	load(section_id) {
 		return network.getNetworks().then(L.bind(function(networks) {
 			this.networks = networks;
 
@@ -472,18 +471,18 @@ var CBINetworkSelect = form.ListValue.extend({
 		}, this));
 	},
 
-	filter: function(section_id, value) {
+	filter(section_id, value) {
 		return true;
 	},
 
-	renderIfaceBadge: function(network) {
-		var span = E('span', { 'class': 'ifacebadge' }, network.getName() + ': '),
-		    devices = getDevices(network);
+	renderIfaceBadge(network) {
+		const span = E('span', { 'class': 'ifacebadge' }, network.getName() + ': ');
+		const devices = getDevices(network);
 
-		for (var j = 0; j < devices.length && devices[j]; j++) {
+		for (let d of devices) {
 			span.appendChild(E('img', {
-				'title': devices[j].getI18n(),
-				'src': L.resource('icons/%s%s.svg'.format(devices[j].getType(), devices[j].isUp() ? '' : '_disabled'))
+				'title': d.getI18n(),
+				'src': L.resource('icons/%s%s.svg'.format(d.getType(), d.isUp() ? '' : '_disabled'))
 			}));
 		}
 
@@ -495,10 +494,10 @@ var CBINetworkSelect = form.ListValue.extend({
 		return span;
 	},
 
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
-		    choices = {},
-		    checked = {};
+	renderWidget(section_id, option_index, cfgvalue) {
+		let values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const choices = {};
+		const checked = {};
 
 		for (var i = 0; i < values.length; i++)
 			checked[values[i]] = true;
@@ -508,9 +507,8 @@ var CBINetworkSelect = form.ListValue.extend({
 		if (!this.multiple && (this.rmempty || this.optional))
 			choices[''] = E('em', _('unspecified'));
 
-		for (var i = 0; i < this.networks.length; i++) {
-			var network = this.networks[i],
-			    name = network.getName();
+		for (let network of this.networks) {
+			const name = network.getName();
 
 			if (name == this.exclude || !this.filter(section_id, name))
 				continue;
@@ -527,7 +525,7 @@ var CBINetworkSelect = form.ListValue.extend({
 			choices[name] = this.renderIfaceBadge(network);
 		}
 
-		var widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
+		const widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
 			id: this.cbid(section_id),
 			sort: true,
 			multiple: this.multiple,
@@ -550,14 +548,13 @@ var CBINetworkSelect = form.ListValue.extend({
 		return widget.render();
 	},
 
-	textvalue: function(section_id) {
-		var cfgvalue = this.cfgvalue(section_id),
-		    values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
-		    rv = E([]);
+	textvalue(section_id) {
+		const cfgvalue = this.cfgvalue(section_id);
+		const values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const rv = E([]);
 
-		for (var i = 0; i < (this.networks || []).length; i++) {
-			var network = this.networks[i],
-			    name = network.getName();
+		for (let network of this.networks) {
+			const name = network.getName();
 
 			if (values.indexOf(name) == -1)
 				continue;
@@ -578,7 +575,7 @@ var CBINetworkSelect = form.ListValue.extend({
 var CBIDeviceSelect = form.ListValue.extend({
 	__name__: 'CBI.DeviceSelect',
 
-	load: function(section_id) {
+	load(section_id) {
 		return Promise.all([
 			network.getDevices(),
 			this.noaliases ? null : network.getNetworks()
@@ -590,11 +587,11 @@ var CBIDeviceSelect = form.ListValue.extend({
 		}, this));
 	},
 
-	filter: function(section_id, value) {
+	filter(section_id, value) {
 		return true;
 	},
 
-	renderWidget: function(section_id, option_index, cfgvalue) {
+	renderWidget(section_id, option_index, cfgvalue) {
 		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
 		    choices = {},
 		    checked = {},
@@ -608,10 +605,9 @@ var CBIDeviceSelect = form.ListValue.extend({
 		if (!this.multiple && (this.rmempty || this.optional))
 			choices[''] = E('em', _('unspecified'));
 
-		for (var i = 0; i < this.devices.length; i++) {
-			var device = this.devices[i],
-			    name = device.getName(),
-			    type = device.getType();
+		for (let device of this.devices) {
+			const name = device.getName();
+			const type = device.getType();
 
 			if (name == 'lo' || name == this.exclude || !this.filter(section_id, name))
 				continue;
@@ -625,7 +621,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 			if (this.noinactive && device.isUp() == false)
 				continue;
 
-			var item = E([
+			const item = E([
 				E('img', {
 					'title': device.getI18n(),
 					'src': L.resource('icons/%s%s.svg'.format(type, device.isUp() ? '' : '_disabled'))
@@ -634,7 +630,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 				E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
 			]);
 
-			var networks = device.getNetworks();
+			const networks = device.getNetworks();
 
 			if (networks.length > 0)
 				L.dom.append(item.lastChild, [ ' (', networks.map(function(n) { return n.getName() }).join(', '), ')' ]);
@@ -647,10 +643,9 @@ var CBIDeviceSelect = form.ListValue.extend({
 		}
 
 		if (this.networks != null) {
-			for (var i = 0; i < this.networks.length; i++) {
-				var net = this.networks[i],
-				    device = network.instantiateDevice('@%s'.format(net.getName()), net),
-				    name = device.getName();
+			for (let net of this.networks) {
+				const device = network.instantiateDevice('@%s'.format(net.getName()), net);
+				const name = device.getName();
 
 				if (name == '@loopback' || name == this.exclude || !this.filter(section_id, name))
 					continue;
@@ -658,7 +653,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 				if (this.noinactive && net.isUp() == false)
 					continue;
 
-				var item = E([
+				const item = E([
 					E('img', {
 						'title': device.getI18n(),
 						'src': L.resource('icons/alias%s.svg'.format(device.isUp() ? '' : '_disabled'))
@@ -690,27 +685,27 @@ var CBIDeviceSelect = form.ListValue.extend({
 		}
 
 		if (!this.nocreate) {
-			var keys = Object.keys(checked).sort(L.naturalCompare);
+			const keys = Object.keys(checked).sort(L.naturalCompare);
 
-			for (var i = 0; i < keys.length; i++) {
-				if (choices.hasOwnProperty(keys[i]))
+			for (let k of keys) {
+				if (choices.hasOwnProperty(k))
 					continue;
 
-				choices[keys[i]] = E([
+				choices[k] = E([
 					E('img', {
 						'title': _('Absent Interface'),
 						'src': L.resource('icons/ethernet_disabled.svg')
 					}),
-					E('span', { 'class': 'hide-open' }, [ keys[i] ]),
-					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(_('Absent Interface'), keys[i]) ])
+					E('span', { 'class': 'hide-open' }, [ k ]),
+					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(_('Absent Interface'), k) ])
 				]);
 
-				values.push(keys[i]);
-				order.push(keys[i]);
+				values.push(k);
+				order.push(k);
 			}
 		}
 
-		var widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
+		const widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
 			id: this.cbid(section_id),
 			sort: order,
 			multiple: this.multiple,
@@ -736,7 +731,7 @@ var CBIDeviceSelect = form.ListValue.extend({
 var CBIUserSelect = form.ListValue.extend({
 	__name__: 'CBI.UserSelect',
 
-	load: function(section_id) {
+	load(section_id) {
 		return getUsers().then(L.bind(function(users) {
 			delete this.keylist;
 			delete this.vallist;
@@ -748,7 +743,7 @@ var CBIUserSelect = form.ListValue.extend({
 		}, this));
 	},
 
-	filter: function(section_id, value) {
+	filter(section_id, value) {
 		return true;
 	},
 });
@@ -756,7 +751,7 @@ var CBIUserSelect = form.ListValue.extend({
 var CBIGroupSelect = form.ListValue.extend({
 	__name__: 'CBI.GroupSelect',
 
-	load: function(section_id) {
+	load(section_id) {
 		return getGroups().then(L.bind(function(groups) {
 			for (var i = 0; i < groups.length; i++) {
 				this.value(groups[i]);
@@ -766,7 +761,7 @@ var CBIGroupSelect = form.ListValue.extend({
 		}, this));
 	},
 
-	filter: function(section_id, value) {
+	filter(section_id, value) {
 		return true;
 	},
 });

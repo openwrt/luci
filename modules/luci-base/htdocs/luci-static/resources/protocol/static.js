@@ -67,9 +67,9 @@ function calculateBroadcast(s, use_cfgvalue) {
  * @returns {boolean}
  */
 function validateBroadcast(section_id, value) {
-	var opt = this.map.lookupOption('broadcast', section_id),
-	    node = opt ? this.map.findElement('id', opt[0].cbid(section_id)) : null,
-	    addr = node ? calculateBroadcast(this.section, false) : null;
+	const opt = this.map.lookupOption('broadcast', section_id);
+	const node = opt ? this.map.findElement('id', opt[0].cbid(section_id)) : null;
+	const addr = node ? calculateBroadcast(this.section, false) : null;
 
 	if (node != null) {
 		if (addr != null)
@@ -83,38 +83,37 @@ function validateBroadcast(section_id, value) {
 
 return network.registerProtocol('static', {
 	CBIIPValue: form.Value.extend({
-		handleSwitch: function(section_id, option_index, ev) {
-			var maskopt = this.map.lookupOption('netmask', section_id);
+		handleSwitch(section_id, option_index, ev) {
+			const maskopt = this.map.lookupOption('netmask', section_id);
 
 			if (maskopt == null || !this.isValid(section_id))
 				return;
 
-			var maskval = maskopt[0].formvalue(section_id),
-			    addrval = this.formvalue(section_id),
-			    prefix = maskval ? network.maskToPrefix(maskval) : 32;
+			const maskval = maskopt[0].formvalue(section_id);
+			const addrval = this.formvalue(section_id);
+			const prefix = maskval ? network.maskToPrefix(maskval) : 32;
 
 			if (prefix == null)
 				return;
 
 			this.datatype = 'or(cidr4,ipmask4)';
 
-			var parent = L.dom.parent(ev.target, '.cbi-value-field');
+			let parent = L.dom.parent(ev.target, '.cbi-value-field');
 			L.dom.content(parent, form.DynamicList.prototype.renderWidget.apply(this, [
 				section_id,
 				option_index,
 				addrval ? '%s/%d'.format(addrval, prefix) : ''
 			]));
 
-			var masknode = this.map.findElement('id', maskopt[0].cbid(section_id));
+			const masknode = this.map.findElement('id', maskopt[0].cbid(section_id));
 			if (masknode) {
 				parent = L.dom.parent(masknode, '.cbi-value');
 				parent.parentNode.removeChild(parent);
 			}
 		},
 
-		renderWidget: function(section_id, option_index, cfgvalue) {
-			var maskopt = this.map.lookupOption('netmask', section_id),
-			    widget = isCIDR(cfgvalue) ? 'DynamicList' : 'Value';
+		renderWidget(section_id, option_index, cfgvalue) {
+			const widget = isCIDR(cfgvalue) ? 'DynamicList' : 'Value';
 
 			if (widget == 'DynamicList') {
 				this.datatype = 'or(cidr4,ipmask4)';
@@ -124,7 +123,7 @@ return network.registerProtocol('static', {
 				this.datatype = 'ip4addr("nomask")';
 			}
 
-			var node = form[widget].prototype.renderWidget.apply(this, [ section_id, option_index, cfgvalue ]);
+			const node = form[widget].prototype.renderWidget.apply(this, [ section_id, option_index, cfgvalue ]);
 
 			if (widget == 'Value')
 				L.dom.append(node, E('button', {
@@ -141,7 +140,7 @@ return network.registerProtocol('static', {
 	}),
 
 	CBINetmaskValue: form.Value.extend({
-		render: function(option_index, section_id, in_table) {
+		render(option_index, section_id, in_table) {
 			var addropt = this.section.children.filter(function(o) { return o.option == 'ipaddr' })[0],
 			    addrval = addropt ? addropt.cfgvalue(section_id) : null;
 
@@ -162,7 +161,7 @@ return network.registerProtocol('static', {
 	CBIGatewayValue: form.Value.extend({
 		datatype: 'ip4addr("nomask")',
 
-		render: function(option_index, section_id, in_table) {
+		render(option_index, section_id, in_table) {
 			return network.getWANNetworks().then(L.bind(function(wans) {
 				if (wans.length == 1) {
 					var gwaddr = wans[0].getGatewayAddr();
@@ -173,13 +172,13 @@ return network.registerProtocol('static', {
 			}, this));
 		},
 
-		validate: function(section_id, value) {
-			var addropt = this.section.children.filter(function(o) { return o.option == 'ipaddr' })[0],
-			    addrval = addropt ? L.toArray(addropt.cfgvalue(section_id)) : null;
+		validate(section_id, value) {
+			const addropt = this.section.children.filter(function(o) { return o.option == 'ipaddr' })[0];
+			const addrval = addropt ? L.toArray(addropt.cfgvalue(section_id)) : null;
 
 			if (addrval != null) {
-				for (var i = 0; i < addrval.length; i++) {
-					var addr = addrval[i].split('/')[0];
+				for (let a of addrval) {
+					const addr = a.split('/')[0];
 					if (value == addr)
 						return _('The gateway address must not be a local IP address');
 				}
@@ -192,18 +191,18 @@ return network.registerProtocol('static', {
 	CBIBroadcastValue: form.Value.extend({
 		datatype: 'ip4addr("nomask")',
 
-		render: function(option_index, section_id, in_table) {
+		render(option_index, section_id, in_table) {
 			this.placeholder = calculateBroadcast(this.section, true);
 			return form.Value.prototype.render.apply(this, [ option_index, section_id, in_table ]);
 		}
 	}),
 
-	getI18n: function() {
+	getI18n() {
 		return _('Static address');
 	},
 
-	renderFormOptions: function(s) {
-		var o;
+	renderFormOptions(s) {
+		let o;
 
 		s.taboption('general', this.CBIIPValue, 'ipaddr', _('IPv4 address'));
 		s.taboption('general', this.CBINetmaskValue, 'netmask', _('IPv4 netmask'));

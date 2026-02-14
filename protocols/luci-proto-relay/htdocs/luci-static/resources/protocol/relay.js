@@ -7,17 +7,17 @@
 network.registerPatternVirtual(/^relay-.+$/);
 
 var RelayDevicePrototype = {
-	__init__: function(ifname, network) {
+	__init__(ifname, network) {
 		this.ifname  = ifname;
 		this.network = network;
 	},
 
-	_aggregateDevices: function(fn, first) {
-		var devices = this.network ? this.network.getDevices() : [],
-		    rv = 0;
+	_aggregateDevices(fn, first) {
+		const devices = this.network ? this.network.getDevices() : [];
+		let rv = 0;
 
-		for (var i = 0; i < devices.length; i++) {
-			var v = devices[i][fn].apply(devices[i]);
+		for (let d of devices) {
+			var v = d[fn].apply(d);
 
 			if (v != null) {
 				if (first)
@@ -30,88 +30,88 @@ var RelayDevicePrototype = {
 		return first ? null : [ rv, devices.length ];
 	},
 
-	getPorts: function() { return this.network ? this.network.getDevices() : [] },
+	getPorts() { return this.network ? this.network.getDevices() : [] },
 
-	getType: function() { return 'tunnel' },
-	getTypeI18n: function() { return _('Relay Bridge') },
+	getType() { return 'tunnel' },
+	getTypeI18n() { return _('Relay Bridge') },
 
-	getShortName: function() {
+	getShortName() {
 		return '%s "%h"'.format(_('Relay'), this.ifname);
 	},
 
-	isUp: function() {
+	isUp() {
 		var res = this._aggregateDevices('isUp');
 		return (res[1] > 0 && res[0] == res[1]);
 	},
 
-	getTXBytes: function() { return this._aggregateDevices('getTXBytes')[0] },
-	getRXBytes: function() { return this._aggregateDevices('getRXBytes')[0] },
-	getTXPackets: function() { return this._aggregateDevices('getTXPackets')[0] },
-	getRXPackets: function() { return this._aggregateDevices('getRXPackets')[0] },
+	getTXBytes() { return this._aggregateDevices('getTXBytes')[0] },
+	getRXBytes() { return this._aggregateDevices('getRXBytes')[0] },
+	getTXPackets() { return this._aggregateDevices('getTXPackets')[0] },
+	getRXPackets() { return this._aggregateDevices('getRXPackets')[0] },
 
-	getMAC: function() { return this._aggregateDevices('getMAC', true) },
+	getMAC() { return this._aggregateDevices('getMAC', true) },
 
-	getIPAddrs: function() {
+	getIPAddrs() {
 		var ipaddr = this.network ? L.toArray(uci.get('network', this.network.getName(), 'ipaddr'))[0] : null;
 		return (ipaddr != null ? [ ipaddr ] : []);
 	},
 
-	getIP6Addrs: function() { return [] }
+	getIP6Addrs() { return [] }
 };
 
 return network.registerProtocol('relay', {
-	getI18n: function() {
+	getI18n() {
 		return _('Relay bridge');
 	},
 
-	getIfname: function() {
+	getIfname() {
 		return 'relay-%s'.format(this.sid);
 	},
 
-	getPackageName: function() {
+	getPackageName() {
 		return 'relayd';
 	},
 
-	isFloating: function() {
+	isFloating() {
 		return true;
 	},
 
-	isVirtual: function() {
+	isVirtual() {
 		return true;
 	},
 
-	containsDevice: function(ifname) {
+	containsDevice(ifname) {
 		return (network.getIfnameOf(ifname) == this.getIfname());
 	},
 
-	isUp: function() {
+	isUp() {
 		var dev = this.getDevice();
 		return (dev ? dev.isUp() : false);
 	},
 
-	getDevice: function() {
+	getDevice() {
 		return network.instantiateDevice(this.sid, this, RelayDevicePrototype);
 	},
 
-	getDevices: function() {
+	getDevices() {
 		if (this.devices)
 			return this.devices;
 
-		var networkNames = L.toArray(uci.get('network', this.sid, 'network')),
-		    deviceNames = L.toArray(uci.get('network', this.sid, 'ifname')),
-		    devices = {},
-		    rv = [];
+		const networkNames = L.toArray(uci.get('network', this.sid, 'network'));
+		let deviceNames = L.toArray(uci.get('network', this.sid, 'ifname'));
+		const devices = {};
+		const rv = [];
 
-		for (var i = 0; i < networkNames.length; i++) {
-			var net = network.instantiateNetwork(networkNames[i]),
+		for (let nn of networkNames) {
+			var net = network.instantiateNetwork(nn),
 			    dev = net ? net.getDevice() : null;
 
 			if (dev)
 				devices[dev.getName()] = dev;
 		}
 
-		for (var i = 0; i < deviceNames.length; i++) {
-			var dev = network.getDevice(deviceNames[i]);
+		for (let dn of deviceNames) {
+			const dev = network.getDevice(dn);
 
 			if (dev)
 				devices[dev.getName()] = dev;
@@ -120,20 +120,20 @@ return network.registerProtocol('relay', {
 		deviceNames = Object.keys(devices);
 		deviceNames.sort();
 
-		for (var i = 0; i < deviceNames.length; i++)
-			rv.push(devices[deviceNames[i]]);
+		for (let dn of deviceNames)
+			rv.push(devices[dn]);
 
 		this.devices = rv;
 
 		return rv;
 	},
 
-	getUptime: function() {
-		var networkNames = L.toArray(uci.get('network', this.sid, 'network')),
-		    uptime = 0;
+	getUptime() {
+		const networkNames = L.toArray(uci.get('network', this.sid, 'network'));
+		let uptime = 0;
 
-		for (var i = 0; i < networkNames.length; i++) {
-			var net = network.instantiateNetwork(networkNames[i]);
+		for (let nn of networkNames) {
+			const net = network.instantiateNetwork(nn);
 			if (net)
 				uptime = Math.max(uptime, net.getUptime());
 		}
@@ -141,11 +141,11 @@ return network.registerProtocol('relay', {
 		return uptime;
 	},
 
-	getErrors: function() {
+	getErrors() {
 		return null;
 	},
 
-	renderFormOptions: function(s) {
+	renderFormOptions(s) {
 		var o;
 
 		o = s.taboption('general', form.Value, 'ipaddr', _('Local IPv4 address'), _('Address to access local relay bridge'));

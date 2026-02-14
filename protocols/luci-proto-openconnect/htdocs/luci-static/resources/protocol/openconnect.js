@@ -59,36 +59,35 @@ function validateCert(priv, section_id, value) {
 }
 
 return network.registerProtocol('openconnect', {
-	getI18n: function() {
+	getI18n() {
 		return _('OpenConnect');
 	},
 
-	getIfname: function() {
+	getIfname() {
 		return this._ubus('l3_device') || 'vpn-%s'.format(this.sid);
 	},
 
-	getPackageName: function() {
+	getPackageName() {
 		return 'openconnect';
 	},
 
-	isFloating: function() {
+	isFloating() {
 		return true;
 	},
 
-	isVirtual: function() {
+	isVirtual() {
 		return true;
 	},
 
-	getDevices: function() {
+	getDevices() {
 		return null;
 	},
 
-	containsDevice: function(ifname) {
+	containsDevice(ifname) {
 		return (network.getIfnameOf(ifname) == this.getIfname());
 	},
 
-	renderFormOptions: function(s) {
-		const dev = this.getDevice().getName();
+	renderFormOptions(s) {
 		let certLoadPromise = null;
 		let o;
 
@@ -104,7 +103,7 @@ return network.registerProtocol('openconnect', {
 		o = s.taboption('general', form.Value, 'uri', _('VPN Server'));
 		o.placeholder = 'https://example.com:443/usergroup';
 		o.validate = function(section_id, value) {
-			const m = String(value).match(/^(?:(\w+):\/\/|)(?:\[([0-9a-f:.]{2,45})\]|([^\/:]+))(?::([0-9]{1,5}))?(?:\/.*)?$/i);
+			const m = String(value).match(/^(?:(\w+):\/\/|)(?:\[([0-9a-f:.]{2,45})\]|([^/:]+))(?::([0-9]{1,5}))?(?:\/.*)?$/i);
 
 			if (!m)
 				return _('Invalid server URL');
