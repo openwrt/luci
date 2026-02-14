@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-02-11 13:57+0000\n"
+"PO-Revision-Date: 2026-02-14 15:04+0000\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -836,7 +836,7 @@ msgstr "接口不存在"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:622
 msgid "Accept DNS queries only from hosts whose address is on a local subnet."
-msgstr "仅在网卡所属的子网中提供 DNS 服务。"
+msgstr "仅在本地子网中提供 DNS 服务。"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:267
 msgid "Accept from public keys"
@@ -1949,7 +1949,7 @@ msgstr "可以在名称后加上 4 或 6 来体现是 IPv4 或 IPv6。"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:641
 msgid ""
 "Can be useful if ISP has IPv6 nameservers but does not provide IPv6 routing."
-msgstr "如果你的 ISP 有 IPv6 名称服务器但不提供 IPv6 路由，本选项可能会有用。"
+msgstr "如果运营商提供 IPv6 DNS 服务器但不提供 IPv6 路由，本选项可能会有用。"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3114
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3335
@@ -2452,8 +2452,8 @@ msgid ""
 "changes. You might need to reconnect if you modified network related "
 "settings such as the IP address or wireless security credentials."
 msgstr ""
-"应用配置更改后，无法重新访问到设备。如果您更改了网络相关设置，如 IP 地址或无"
-"线安全证书，则可能需要重新连接。"
+"应用配置更改后，无法重新访问到设备。如果更改了 IP 地址或无线网络密码等网络相"
+"关配置，则可能需要重新连接。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:743
 msgid "Count"
@@ -2663,8 +2663,8 @@ msgid ""
 "DNS servers for the remote clients using this tunnel to your openwrt device. "
 "Some wireguard clients require this to be set."
 msgstr ""
-"远程客户端使用此隧道连接到您的 OpenWrt 设备的 DNS 服务器。某些 WireGuard 客户"
-"端可能需要设置此选项。"
+"为通过此隧道连接到本设备的远程客户端配置的 DNS 服务器。部分 WireGuard 客户端"
+"需要此配置。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:281
 msgid "DNS setting is invalid"
@@ -3261,19 +3261,19 @@ msgstr "不要跟踪"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3176
 msgid "Do you really want to delete \"%s\" ?"
-msgstr "您确定要删除“%s”吗？"
+msgstr "确定要删除 “%s” 吗？"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3174
 msgid "Do you really want to delete the \"%s\" directory recursively?"
-msgstr "您确定要删除目录“%s”吗？"
+msgstr "确定要删除目录 “%s” 吗？"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/sshkeys.js:206
 msgid "Do you really want to delete the following SSH key?"
-msgstr "您确定要删除以下 SSH 密钥吗？"
+msgstr "确定要删除下列 SSH 密钥吗？"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/flash.js:94
 msgid "Do you really want to erase all settings?"
-msgstr "您确定要清除所有设置吗？"
+msgstr "确定要清除所有设置吗？"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:118
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:393
@@ -4281,7 +4281,7 @@ msgstr "过滤器已激活"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:650
 msgid "Filter arbitrary RR"
-msgstr "过滤任意的资源记录"
+msgstr "过滤 DNS 资源记录"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:924
 msgid "Filter backup"
@@ -4294,7 +4294,7 @@ msgstr "过滤私有地址"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:635
 msgid ""
 "Filters SRV/SOA service discovery, to avoid triggering dial-on-demand links."
-msgstr "过滤 SRV/SOA 服务发现，以避免触发按需拨号链接。"
+msgstr "过滤 SRV/SOA 服务发现，以避免触发按需拨号连接。"
 
 #: modules/luci-compat/luasrc/model/network/proto_ncm.lua:65
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:24
@@ -7940,7 +7940,7 @@ msgid ""
 "Note: you may also need a DHCP Proxy (currently unavailable) when specifying "
 "a non-standard Relay To port(<code>addr#port</code>)."
 msgstr ""
-"注意: 当指定非标准的 RelayTo 端口 (<code>addr#port</code>) 时，您可能还需要一"
+"注意: 当指定非标准的 RelayTo 端口 (<code>addr#port</code>) 时，可能还需要一"
 "个 DHCP 代理 (目前不可用)。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:143
@@ -10557,8 +10557,8 @@ msgid ""
 "flashed manually. Please refer to the wiki for device specific install "
 "instructions."
 msgstr ""
-"抱歉，您的设备暂不支持 sysupgrade 升级，需手动更新固件。请参考 Wiki 中关于此"
-"设备的固件更新说明。"
+"抱歉，此设备暂不支持 sysupgrade 升级，需手动更新固件。请参考 Wiki 中关于此设"
+"备的固件更新说明。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:107
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:157
@@ -10617,8 +10617,8 @@ msgid ""
 "Special <abbr title=\"Preboot eXecution Environment\">PXE</abbr> boot "
 "options for Dnsmasq."
 msgstr ""
-"Dnsmasq 的特殊 <abbr title=\"Preboot eXecution Environment（预启动执行环境）"
-"\">PXE</abbr> 启动选项。"
+"Dnsmasq <abbr title=\"Preboot eXecution Environment（预启动执行环境）\">PXE</"
+"abbr> 启动选项。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1147
 msgid "Specifies a fixed list of DNS search domains to announce via DHCPv6."
@@ -11285,7 +11285,7 @@ msgstr "本地 resolv.conf 中的 DNS 服务器条目主要按此处指定的权
 msgid ""
 "The HE.net endpoint update configuration changed, you must now use the plain "
 "username instead of the user ID!"
-msgstr "HE.net 客户端更新设置已经被改变，您现在必须使用用户名代替用户 ID！"
+msgstr "HE.net 客户端更新设定已变更，现在必须使用用户名而非用户 ID！"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1034
 msgid "The IP address %h is already used by another static lease"
@@ -11878,10 +11878,10 @@ msgid ""
 "selector but rather go to the Wireless settings and select this Interface as "
 "a network from there."
 msgstr ""
-"这是你要将上方的物理设备链接到的 batman-adv 设备。 如果此列表为空，你需要先创"
-"建一个。 如果你想通过有线网络设备路由 mesh 流量，请从上面的设备选择器中选择"
-"它。如果您想将 batman-adv 接口分配给 Wi-fi 网格，则不要在设备选择器中选择设"
-"备，而是转到无线设置并从那里选择此接口作为网络。"
+"这是将上方的物理设备连接到的 batman-adv 设备。 如果此列表为空，需要先创建一个"
+"。 如果想通过有线网络设备路由 mesh 流量，请在上面的设备选择器中选择它。如果想"
+"将 batman-adv 接口分配给 Wi-Fi mesh 网络，则不要在设备选择器中选择设备，而是"
+"在无线设置关联此接口作为网络。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:116
 msgid ""
@@ -11907,7 +11907,7 @@ msgstr "登录账户时填写的用户名"
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6in4.js:57
 msgid ""
 "This is the prefix routed to you by the tunnel broker for use by clients"
-msgstr "这是隧道代理分配给您的路由前缀，供客户端使用"
+msgstr "这是隧道代理分配的供客户端使用的路由前缀"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:196
 msgid "This is the prefix routed to you by your provider for use by clients"
@@ -11974,7 +11974,7 @@ msgstr "此前缀在首次启动时随机生成。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:662
 msgid "This prevents unreachable IPs in subnets not accessible to you."
-msgstr "这能避免返回您无法访问的子网中的无效IP地址。"
+msgstr "这能避免返回无法访问的子网中的 IP 地址。"
 
 #: modules/luci-base/htdocs/luci-static/resources/form.js:2350
 #: modules/luci-compat/luasrc/view/cbi/tblsection.htm:172
@@ -13194,7 +13194,7 @@ msgstr "Yggdrasil 网络"
 msgid ""
 "You appear to be currently connected to the device via the \"%h\" interface. "
 "Do you really want to shut down the interface?"
-msgstr "您似乎正通过“%h”连接到此设备，确认要关闭它吗？"
+msgstr "当前似乎正通过 “%h” 连接到此设备，确认要关闭此接口？"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:112
 msgid ""
@@ -13208,11 +13208,11 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:346
 msgid "You may add multiple records for the same Target."
-msgstr "你可以为同一目标添加多条记录。"
+msgstr "可以为同一目标添加多条记录。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:383
 msgid "You may add multiple records for the same domain."
-msgstr "你可以为同一个域添加多条记录。"
+msgstr "可以为同一个域添加多条记录。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:498
 msgid "You may add multiple unique Relay To on the same Listen addr."
