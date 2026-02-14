@@ -9,10 +9,10 @@
 'require network';
 
 function parse_portvalue(section_id) {
-	var ports = L.toArray(uci.get('network', section_id, 'ports'));
+	const ports = L.toArray(uci.get('network', section_id, 'ports'));
 
-	for (var i = 0; i < ports.length; i++) {
-		var m = ports[i].match(/^(\d+)([tu]?)/);
+	for (let p of ports) {
+		const m = p.match(/^(\d+)([tu]?)/);
 
 		if (m && m[1] == this.option)
 			return m[2] || 'u';
@@ -25,13 +25,13 @@ function validate_portvalue(section_id, value) {
 	if (value != 'u')
 		return true;
 
-	var sections = this.section.cfgsections();
+	const sections = this.section.cfgsections();
 
-	for (var i = 0; i < sections.length; i++) {
-		if (sections[i] == section_id)
+	for (let s of sections) {
+		if (s == section_id)
 			continue;
 
-		if (this.formvalue(sections[i]) == 'u')
+		if (this.formvalue(s) == 'u')
 			return _('%s is untagged in multiple VLANs!').format(this.title);
 	}
 
@@ -39,28 +39,28 @@ function validate_portvalue(section_id, value) {
 }
 
 function update_interfaces(old_ifname, new_ifname) {
-	var interfaces = uci.sections('network', 'interface');
+	const interfaces = uci.sections('network', 'interface');
 
-	for (var i = 0; i < interfaces.length; i++) {
-		var old_ifnames = L.toArray(interfaces[i].ifname),
-		    new_ifnames = [],
-		    changed = false;
+	for (let intf of interfaces) {
+		const old_ifnames = L.toArray(intf.ifname);
+		const new_ifnames = [];
+		let changed = false;
 
-		for (var j = 0; j < old_ifnames.length; j++) {
-			if (old_ifnames[j] == old_ifname) {
+		for (let oif of old_ifnames) {
+			if (oif == old_ifname) {
 				new_ifnames.push(new_ifname);
 				changed = true;
 			}
 			else {
-				new_ifnames.push(old_ifnames[j]);
+				new_ifnames.push(oif);
 			}
 		}
 
 		if (changed) {
-			uci.set('network', interfaces[i]['.name'], 'ifname', new_ifnames.join(' '));
+			uci.set('network', intf['.name'], 'ifname', new_ifnames.join(' '));
 
 			ui.addNotification(null, E('p', _('Interface %q device auto-migrated from %q to %q.')
-				.replace(/%q/g, '"%s"').format(interfaces[i]['.name'], old_ifname, new_ifname)));
+				.replace(/%q/g, '"%s"').format(intf['.name'], old_ifname, new_ifname)));
 		}
 	}
 }
@@ -88,27 +88,27 @@ function render_port_status(node, portstate) {
 }
 
 function update_port_status(topologies) {
-	var tasks = [];
+	const tasks = [];
 
-	for (var switch_name in topologies)
+	for (let switch_name in topologies)
 		tasks.push(callSwconfigPortState(switch_name).then(L.bind(function(switch_name, ports) {
-			for (var i = 0; i < ports.length; i++) {
-				var node = document.querySelector('[data-switch="%s"][data-port="%d"]'.format(switch_name, ports[i].port));
-				render_port_status(node, ports[i]);
+			for (let p of ports) {
+				const node = document.querySelector('[data-switch="%s"][data-port="%d"]'.format(switch_name, p.port));
+				render_port_status(node, p);
 			}
 		}, topologies[switch_name], switch_name)));
 
 	return Promise.all(tasks);
 }
 
-var callSwconfigFeatures = rpc.declare({
+const callSwconfigFeatures = rpc.declare({
 	object: 'luci',
 	method: 'getSwconfigFeatures',
 	params: [ 'switch' ],
 	expect: { '': {} }
 });
 
-var callSwconfigPortState = rpc.declare({
+const callSwconfigPortState = rpc.declare({
 	object: 'luci',
 	method: 'getSwconfigPortState',
 	params: [ 'switch' ],
@@ -116,11 +116,11 @@ var callSwconfigPortState = rpc.declare({
 });
 
 return view.extend({
-	load: function() {
+	load() {
 		return network.getSwitchTopologies().then(function(topologies) {
-			var tasks = [];
+			const tasks = [];
 
-			for (var switch_name in topologies) {
+			for (let switch_name in topologies) {
 				tasks.push(callSwconfigFeatures(switch_name).then(L.bind(function(features) {
 					this.features = features;
 				}, topologies[switch_name])));
@@ -133,18 +133,17 @@ return view.extend({
 		});
 	},
 
-	render: function(topologies) {
-		var m, s, o;
+	render(topologies) {
+		let m, s, o;
 
-		m = new form.Map('network', _('Switch'), _('The network ports on this device can be combined to several <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s in which computers can communicate directly with each other. <abbr title=\"Virtual Local Area Network\">VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network.'));
+		m = new form.Map('network', _('Switch'), _("The network ports on this device can be combined to several <abbr title='Virtual Local Area Network'>VLAN</abbr>s in which computers can communicate directly with each other. <abbr title='Virtual Local Area Network'>VLAN</abbr>s are often used to separate different network segments. Often there is by default one Uplink port for a connection to the next greater network like the internet and other ports for a local network."));
 
-		var switchSections = uci.sections('network', 'switch');
+		const switchSections = uci.sections('network', 'switch');
 
-		for (var i = 0; i < switchSections.length; i++) {
-			var switchSection   = switchSections[i],
-			    sid             = switchSection['.name'],
-			    switch_name     = switchSection.name || sid,
-			    topology        = topologies[switch_name];
+		for (let switchSection of switchSections) {
+			const sid           = switchSection['.name'];
+			const switch_name   = switchSection.name || sid;
+			let   topology      = topologies[switch_name];
 
 			if (!topology) {
 				ui.addNotification(null, _('Switch %q has an unknown topology - the VLAN settings might not be accurate.').replace(/%q/, switch_name));
@@ -165,12 +164,11 @@ return view.extend({
 				};
 			}
 
-			var feat = topology.features,
-			    min_vid = feat.min_vid || 0,
-			    max_vid = feat.max_vid || 16,
-			    num_vlans = feat.num_vlans || 16,
-			    switch_title = _('Switch %q').replace(/%q/, '"%s"'.format(switch_name)),
-			    vlan_title = _('VLANs on %q').replace(/%q/, '"%s"'.format(switch_name));
+			const feat = topology.features;
+			const min_vid = feat.min_vid || 0;
+			const num_vlans = feat.num_vlans || 16;
+			let   switch_title = _('Switch %q').replace(/%q/, '"%s"'.format(switch_name));
+			let   vlan_title = _('VLANs on %q').replace(/%q/, '"%s"'.format(switch_name));
 
 			if (feat.switch_title) {
 				switch_title += ' (%s)'.format(feat.switch_title);
@@ -200,8 +198,8 @@ return view.extend({
 				s.option(form.Flag, 'enable_mirror_rx', _('Enable mirroring of incoming packets'));
 				s.option(form.Flag, 'enable_mirror_tx', _('Enable mirroring of outgoing packets'));
 
-				var sp = s.option(form.ListValue, 'mirror_source_port', _('Mirror source port')),
-				    mp = s.option(form.ListValue, 'mirror_monitor_port', _('Mirror monitor port'));
+				const sp = s.option(form.ListValue, 'mirror_source_port', _('Mirror source port'));
+				const mp = s.option(form.ListValue, 'mirror_monitor_port', _('Mirror monitor port'));
 
 				sp.depends('enable_mirror_rx', '1');
 				sp.depends('enable_mirror_tx', '1');
@@ -209,9 +207,9 @@ return view.extend({
 				mp.depends('enable_mirror_rx', '1');
 				mp.depends('enable_mirror_tx', '1');
 
-				for (var j = 0; j < topology.ports.length; j++) {
-					sp.value(topology.ports[j].num, topology.ports[j].label);
-					mp.value(topology.ports[j].num, topology.ports[j].label);
+				for (let tp of topology.ports) {
+					sp.value(tp.num, tp.label);
+					mp.value(tp.num, tp.label);
 				}
 			}
 
@@ -223,16 +221,16 @@ return view.extend({
 			s.device = switch_name;
 
 			s.filter = function(section_id) {
-				var device = uci.get('network', section_id, 'device');
+				const device = uci.get('network', section_id, 'device');
 				return (device == this.device);
 			};
 
 			s.cfgsections = function() {
-				var sections = form.TableSection.prototype.cfgsections.apply(this);
+				const sections = form.TableSection.prototype.cfgsections.apply(this);
 
 				return sections.sort(function(a, b) {
-					var vidA = feat.vid_option ? uci.get('network', a, feat.vid_option) : null,
-					    vidB = feat.vid_option ? uci.get('network', b, feat.vid_option) : null;
+					let vidA = feat.vid_option ? uci.get('network', a, feat.vid_option) : null;
+					let vidB = feat.vid_option ? uci.get('network', b, feat.vid_option) : null;
 
 					vidA = +(vidA != null ? vidA : uci.get('network', a, 'vlan') || 9999);
 					vidB = +(vidB != null ? vidB : uci.get('network', b, 'vlan') || 9999);
@@ -242,17 +240,17 @@ return view.extend({
 			};
 
 			s.handleAdd = function(ev) {
-				var sections = uci.sections('network', 'switch_vlan'),
-				    section_id = uci.add('network', 'switch_vlan'),
-				    max_vlan = 0,
-				    max_vid = 0;
+				const sections = uci.sections('network', 'switch_vlan');
+				const section_id = uci.add('network', 'switch_vlan');
+				let max_vlan = 0;
+				let max_vid = 0;
 
-				for (var j = 0; j < sections.length; j++) {
-					if (sections[j].device != this.device)
+				for (let s of sections) {
+					if (s.device != this.device)
 						continue;
 
-					var vlan = +sections[j].vlan,
-					    vid = feat.vid_option ? +sections[j][feat.vid_option] : null;
+					const vlan = +s.vlan;
+					const vid = feat.vid_option ? +s[feat.vid_option] : null;
 
 					if (vlan > max_vlan)
 						max_vlan = vlan;
@@ -278,34 +276,34 @@ return view.extend({
 			o.description = _('Port status:');
 
 			o.validate = function(section_id, value) {
-				var v = +value,
-				    m = feat.vid_option ? 4094 : num_vlans - 1;
+				const v = +value;
+				const m = feat.vid_option ? 4094 : num_vlans - 1;
 
 				if (isNaN(v) || v < min_vid || v > m)
 					return _('Invalid VLAN ID given! Only IDs between %d and %d are allowed.').format(min_vid, m);
 
-				var sections = this.section.cfgsections();
+				const sections = this.section.cfgsections();
 
-				for (var i = 0; i < sections.length; i++) {
-					if (sections[i] == section_id)
+				for (let s of sections) {
+					if (s == section_id)
 						continue;
 
-					if (this.formvalue(sections[i]) == v)
+					if (this.formvalue(s) == v)
 						return _('Invalid VLAN ID given! Only unique IDs are allowed');
 				}
 
 				return true;
 			};
 
-			var port_opts = o.port_opts = [];
+			const port_opts = o.port_opts = [];
 
 			o.write = function(section_id, value) {
-				var topology = this.section.topology,
-				    values = [];
+				const topology = this.section.topology;
+				const values = [];
 
-				for (var i = 0; i < this.port_opts.length; i++) {
-					var tagging = this.port_opts[i].formvalue(section_id),
-					    portspec = Array.isArray(topology.ports) ? topology.ports[i] : null;
+				for (let i = 0; i < this.port_opts.length; i++) {
+					const tagging = this.port_opts[i].formvalue(section_id);
+					const portspec = Array.isArray(topology.ports) ? topology.ports[i] : null;
 
 					if (tagging == 't')
 						values.push(this.port_opts[i].option + tagging);
@@ -313,12 +311,12 @@ return view.extend({
 						values.push(this.port_opts[i].option);
 
 					if (portspec && portspec.device) {
-						var old_tag = this.port_opts[i].cfgvalue(section_id),
-						    old_vid = this.cfgvalue(section_id);
+						const old_tag = this.port_opts[i].cfgvalue(section_id);
+						const old_vid = this.cfgvalue(section_id);
 
 						if (old_tag != tagging || old_vid != value) {
-							var old_ifname = portspec.device + (old_tag != 'u' ? '.' + old_vid : ''),
-							    new_ifname = portspec.device + (tagging != 'u' ? '.' + value : '');
+							const old_ifname = portspec.device + (old_tag != 'u' ? '.' + old_vid : '');
+							const new_ifname = portspec.device + (tagging != 'u' ? '.' + value : '');
 
 							if (old_ifname != new_ifname)
 								update_interfaces(old_ifname, new_ifname);
@@ -335,15 +333,15 @@ return view.extend({
 			};
 
 			o.cfgvalue = function(section_id) {
-				var value = feat.vid_option ? uci.get('network', section_id, feat.vid_option) : null;
+				const value = feat.vid_option ? uci.get('network', section_id, feat.vid_option) : null;
 				return (value || uci.get('network', section_id, 'vlan'));
 			};
 
 			s.option(form.Value, 'description', _('Description'));
 
-			for (var j = 0; Array.isArray(topology.ports) && j < topology.ports.length; j++) {
-				var portspec = topology.ports[j],
-				    portstate = Array.isArray(topology.portstate) ? topology.portstate[portspec.num] : null;
+			for (let j = 0; Array.isArray(topology.ports) && j < topology.ports.length; j++) {
+				const portspec = topology.ports[j];
+				const portstate = Array.isArray(topology.portstate) ? topology.portstate[portspec.num] : null;
 
 				o = s.option(form.ListValue, String(portspec.num), portspec.label);
 				o.value('', _('off'));

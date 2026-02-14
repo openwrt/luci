@@ -2,7 +2,7 @@
 // Rendering of DSL spectrum graphs  showing
 // US/DS SNR and US/DS bits/tone
 //
-// This version does depend on an ubus version that support DSL line stattiscis  but 
+// This version does depend on an ubus version that support DSL line statistics but 
 // does not depend on chart.js or any other package
 
 class DataSet {
@@ -221,7 +221,7 @@ let hLogChart = {
 	]
 };
 
-function drawChart (info) {
+function drawChart(info) {
 	drawAxisX(info.config, info.config.minX, info.config.maxX, info.config.stepX, info.config.titleX);
 	drawAxisY(info.config, info.config.minY, info.config.maxY, info.config.stepY, info.config.titleY);
 
@@ -236,17 +236,10 @@ function drawChart (info) {
 	}
 }
 
-function drawBlocks(config, dataPoints, color, borders) {
-	borders.map(drawBlock, {config, dataPoints, color, borders});
-}
-
 function drawLines(config, dataPoints, color) {
 	let ctx = config.ctx;
-	let len = dataPoints.length;
 	let minX = config.minX;
 	let maxX = config.maxX;
-	let minY = config.minY;
-	let maxY = config.maxY;
 
 	ctx.strokeStyle = color;
 	ctx.beginPath();
@@ -292,7 +285,6 @@ function drawData(config, dataPoints, color) {
 function drawLegend(config, dataSet){
 	let ctx = config.ctx;
 	let graphWidth = config.graphWidth;
-	let graphHeight = config.graphHeight;
 
 	ctx.font = "12px Arial";
 
@@ -329,7 +321,6 @@ function drawLegend(config, dataSet){
 function drawAxisX(config, minValue, maxValue, step, title) {
 	let ctx = config.ctx;
 	let graphWidth = config.graphWidth;
-	let graphHeight = config.graphHeight;
 
 	ctx.font = "12px Arial";
 	ctx.textAlign = "center";
@@ -360,7 +351,6 @@ function drawAxisX(config, minValue, maxValue, step, title) {
 
 function drawAxisY(config, minValue, maxValue, step, title) {
 	let ctx = config.ctx
-	let graphWidth = config.graphWidth;
 	let graphHeight = config.graphHeight;
 
 	ctx.font = "12px Arial";

@@ -5,107 +5,106 @@
 'require rpc';
 'require fs';
 
-var callLuciRealtimeStats = rpc.declare({
+const callLuciRealtimeStats = rpc.declare({
 	object: 'luci',
 	method: 'getRealtimeStats',
 	params: [ 'mode', 'device' ],
 	expect: { result: [] }
 });
 
-var callLuciConntrackList = rpc.declare({
+const callLuciConntrackList = rpc.declare({
 	object: 'luci',
 	method: 'getConntrackList',
 	expect: { result: [] }
 });
 
-var callNetworkRrdnsLookup = rpc.declare({
+const callNetworkRrdnsLookup = rpc.declare({
 	object: 'network.rrdns',
 	method: 'lookup',
 	params: [ 'addrs', 'timeout', 'limit' ],
 	expect: { '': {} }
 });
 
-var callLuciRpcGetHostHints = rpc.declare({
+const callLuciRpcGetHostHints = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getHostHints',
 	expect: { '': {} }
 });
 
-var callLuciRpcGetNetworkDevices = rpc.declare({
+const callLuciRpcGetNetworkDevices = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getNetworkDevices',
 	expect: { '': {} }
 });
 
-var callLuciRpcGetDHCPLeases = rpc.declare({
+const callLuciRpcGetDHCPLeases = rpc.declare({
 	object: 'luci-rpc',
 	method: 'getDHCPLeases',
 	expect: { '': {} }
 });
 
-var graphPolls = [],
-	pollInterval = 3,
-	dns_cache = Object.create(null),
-	service_cache = Object.create(null),
-	ethers_cache = Object.create(null),
-	ethers_cache_is_loaded = false,
-	enableLookups = false,
-	filterText = '';
+const graphPolls = [];
+const pollInterval = 3;
+const dns_cache = Object.create(null);
+const service_cache = Object.create(null);
+const ethers_cache = Object.create(null);
+let ethers_cache_is_loaded = false;
+let enableLookups = false;
+let filterText = '';
 
-var recheck_lookup_queue = {};
+const recheck_lookup_queue = {};
 
 Math.log2 = Math.log2 || function(x) { return Math.log(x) * Math.LOG2E; };
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			this.loadSVG(L.resource('svg/connections.svg'))
 		]);
 	},
 
-	updateGraph: function(svg, lines, cb) {
-		var G = svg.firstElementChild;
+	updateGraph(svg, lines, cb) {
+		const G = svg.firstElementChild;
 
-		var view = document.querySelector('#view');
+		const view = document.querySelector('#view');
 
-		var width  = view.offsetWidth - 2;
-		var height = 300 - 2;
-		var step   = 5;
+		const width  = view.offsetWidth - 2;
+		const height = 300 - 2;
+		const step   = 5;
 
-		var data_wanted = Math.floor(width / step);
+		const data_wanted = Math.floor(width / step);
 
-		var data_values = [],
-		    line_elements = [];
+		const data_values = [];
 
-		for (var i = 0; i < lines.length; i++)
-			if (lines[i] != null)
+		for (let line of lines)
+			if (line != null)
 				data_values.push([]);
 
-		var info = {
+		const info = {
 			line_current: [],
 			line_average: [],
 			line_peak:    []
 		};
 
 		/* prefill datasets */
-		for (var i = 0; i < data_values.length; i++)
-			for (var j = 0; j < data_wanted; j++)
-					data_values[i][j] = 0;
+		for (let dv of data_values)
+			for (let j = 0; j < data_wanted; j++)
+					dv[j] = 0;
 
 		/* plot horizontal time interval lines */
-		for (var i = width % (step * 60); i < width; i += step * 60) {
-			var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-				line.setAttribute('x1', i);
-				line.setAttribute('y1', 0);
-				line.setAttribute('x2', i);
-				line.setAttribute('y2', '100%');
-				line.setAttribute('style', 'stroke:black;stroke-width:0.1');
+		for (let i = width % (step * 60); i < width; i += step * 60) {
+			const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+			line.setAttribute('x1', i);
+			line.setAttribute('y1', 0);
+			line.setAttribute('x2', i);
+			line.setAttribute('y2', '100%');
+			line.setAttribute('style', 'stroke:black;stroke-width:0.1');
 
-			var text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-				text.setAttribute('x', i + 5);
-				text.setAttribute('y', 15);
-				text.setAttribute('style', 'fill:#eee; font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
-				text.appendChild(document.createTextNode(Math.round((width - i) / step / 60) + 'm'));
+			const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+			text.setAttribute('x', i + 5);
+			text.setAttribute('y', 15);
+			text.setAttribute('style', 'fill:#eee; font-size:9pt; font-family:sans-serif; text-shadow:1px 1px 1px #000');
+			text.appendChild(document.createTextNode(Math.round((width - i) / step / 60) + 'm'));
 
 			G.appendChild(line);
 			G.appendChild(text);
@@ -128,7 +127,7 @@ return view.extend({
 		});
 	},
 
-	updateConntrack: async function(conn) {
+	async updateConntrack(conn) {
 			async function fetchServices() {
 					if (!enableLookups) return;
 					if (Object.keys(service_cache).length > 0) return;
@@ -283,38 +282,37 @@ return view.extend({
 			}
 	},
 
-	pollData: async function() {
+	async pollData() {
 		poll.add(L.bind(async function() {
-			var tasks = [
+			const tasks = [
 				L.resolveDefault(callLuciConntrackList(), [])
 			];
 
-			for (var i = 0; i < graphPolls.length; i++) {
-				var ctx = graphPolls[i];
+			graphPolls.forEach(() => {
 				tasks.push(L.resolveDefault(callLuciRealtimeStats('conntrack'), []));
-			}
+			});
 
 			const datasets = await Promise.all(tasks);
 			await this.updateConntrack(datasets[0]);
-			for (var gi = 0; gi < graphPolls.length; gi++) {
-				var ctx = graphPolls[gi],
-						data = datasets[gi + 1],
-						values = ctx.values,
-						lines = ctx.lines,
-						info = ctx.info;
+			for (let gi = 0; gi < graphPolls.length; gi++) {
+				const ctx = graphPolls[gi];
+				const data = datasets[gi + 1];
+				const values = ctx.values;
+				const lines = ctx.lines;
+				const info = ctx.info;
 
-				var data_scale = 0;
-				var data_wanted = Math.floor(ctx.width / ctx.step);
-				var last_timestamp = NaN;
+				let data_scale = 0;
+				let data_wanted = Math.floor(ctx.width / ctx.step);
+				let last_timestamp = NaN;
 
-				for (var i = 0, di = 0; di < lines.length; di++) {
+				for (let i = 0, di = 0; di < lines.length; di++) {
 					if (lines[di] == null)
 						continue;
 
-					var multiply = (lines[di].multiply != null) ? lines[di].multiply : 1,
-							offset = (lines[di].offset != null) ? lines[di].offset : 0;
+					const multiply = (lines[di].multiply != null) ? lines[di].multiply : 1;
+					const offset = (lines[di].offset != null) ? lines[di].offset : 0;
 
-					for (var j = ctx.timestamp ? 0 : 1; j < data.length; j++) {
+					for (let j = ctx.timestamp ? 0 : 1; j < data.length; j++) {
 						/* skip overlapping entries */
 						if (data[j][0] <= ctx.timestamp)
 							continue;
@@ -335,15 +333,15 @@ return view.extend({
 				/* cut off outdated entries */
 				ctx.fill = Math.min(ctx.fill, data_wanted);
 
-				for (var i = 0; i < values.length; i++) {
-					var len = values[i].length;
+				for (let i = 0; i < values.length; i++) {
+					const len = values[i].length;
 					values[i] = values[i].slice(len - data_wanted, len);
 
 					/* find peaks, averages */
 					info.line_peak[i] = NaN;
 					info.line_average[i] = 0;
 
-					for (var j = 0; j < values[i].length; j++) {
+					for (let j = 0; j < values[i].length; j++) {
 						info.line_peak[i] = isNaN(info.line_peak[i]) ? values[i][j] : Math.max(info.line_peak[i], values[i][j]);
 						info.line_average[i] += values[i][j];
 					}
@@ -357,29 +355,29 @@ return view.extend({
 				if (!isNaN(last_timestamp))
 					ctx.timestamp = last_timestamp;
 
-				var size = Math.floor(Math.log2(info.peak)),
-						div = Math.pow(2, size - (size % 10)),
-						mult = info.peak / div,
-						mult = (mult < 5) ? 2 : ((mult < 50) ? 10 : ((mult < 500) ? 100 : 1000));
+				const size = Math.floor(Math.log2(info.peak));
+				const div = Math.pow(2, size - (size % 10));
+				let mult = info.peak / div;
+				mult = (mult < 5) ? 2 : ((mult < 50) ? 10 : ((mult < 500) ? 100 : 1000));
 
 				info.peak = info.peak + (mult * div) - (info.peak % (mult * div));
 
 				data_scale = ctx.height / info.peak;
 
 				/* plot data */
-				for (var i = 0, di = 0; di < lines.length; di++) {
+				for (let i = 0, di = 0; di < lines.length; di++) {
 					if (lines[di] == null)
 						continue;
 
-					var el = ctx.svg.firstElementChild.getElementById(lines[di].line),
-							pt = '0,' + ctx.height,
-							y = 0;
+					const el = ctx.svg.firstElementChild.getElementById(lines[di].line);
+					let pt = '0,' + ctx.height;
+					let y = 0;
 
 					if (!el)
 						continue;
 
-					for (var j = 0; j < values[i].length; j++) {
-						var x = j * ctx.step;
+					for (let j = 0; j < values[i].length; j++) {
+						let x = j * ctx.step;
 
 						y = ctx.height - Math.floor(values[i][j] * data_scale);
 						//y -= Math.floor(y % (1 / data_scale));
@@ -406,7 +404,7 @@ return view.extend({
 		}, this), pollInterval);
 	},
 
-	loadSVG: function(src) {
+	loadSVG(src) {
 		return request.get(src).then(function(response) {
 			if (!response.ok)
 				throw new Error(response.statusText);
@@ -417,10 +415,9 @@ return view.extend({
 		});
 	},
 
-	render: function(data) {
-		var svg = data[0];
+	render([svg]) {
 
-		var v = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
+		const v = E('div', { 'class': 'cbi-map', 'id': 'map' }, [
 			E('h2', _('Connections')),
 			E('div', {'class': 'cbi-map-descr'}, _('This page displays the active connections via this device.')),
 			E('div', { 'class': 'cbi-section' }, [
@@ -527,7 +524,7 @@ return view.extend({
 		]);
 
 		this.updateGraph(svg, [ { line: 'udp' }, { line: 'tcp' }, { line: 'other' } ], function(svg, info) {
-			var G = svg.firstElementChild, tab = svg.parentNode;
+			const G = svg.firstElementChild, tab = svg.parentNode;
 
 			G.getElementById('label_25').firstChild.data = '%d'.format(info.label_25);
 			G.getElementById('label_50').firstChild.data = '%d'.format(info.label_50);

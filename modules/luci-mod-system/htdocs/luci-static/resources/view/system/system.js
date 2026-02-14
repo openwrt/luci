@@ -7,52 +7,49 @@
 'require form';
 'require tools.widgets as widgets';
 
-var callRcList, callRcInit, callTimezone,
-    callGetUnixtime, callSetLocaltime, CBILocalTime;
-
-callRcList = rpc.declare({
+const callRcList = rpc.declare({
 	object: 'rc',
 	method: 'list',
 	params: [ 'name' ],
 	expect: { '': {} },
-	filter: function(res) {
+	filter(res) {
 		for (var k in res)
 			return +res[k].enabled;
 		return null;
 	}
 });
 
-callRcInit = rpc.declare({
+const callRcInit = rpc.declare({
 	object: 'rc',
 	method: 'init',
 	params: [ 'name', 'action' ],
 	expect: { result: false }
 });
 
-callGetUnixtime = rpc.declare({
+const callGetUnixtime = rpc.declare({
 	object: 'luci',
 	method: 'getUnixtime',
 	expect: { result: 0 }
 });
 
-callSetLocaltime = rpc.declare({
+const callSetLocaltime = rpc.declare({
 	object: 'luci',
 	method: 'setLocaltime',
 	params: [ 'localtime' ],
 	expect: { result: 0 }
 });
 
-callTimezone = rpc.declare({
+const callTimezone = rpc.declare({
 	object: 'luci',
 	method: 'getTimezones',
 	expect: { '': {} }
 });
 
 function formatTime(epoch) {
-	var date = new Date(epoch * 1000),
-		zn = uci.get('system', '@system[0]', 'zonename')?.replaceAll(' ', '_') || 'UTC',
-		ts = uci.get('system', '@system[0]', 'clock_timestyle') || 0,
-		hc = uci.get('system', '@system[0]', 'clock_hourcycle') || 0;
+	const date = new Date(epoch * 1000);
+	const zn = uci.get('system', '@system[0]', 'zonename')?.replaceAll(' ', '_') || 'UTC';
+	const ts = uci.get('system', '@system[0]', 'clock_timestyle') || 0;
+	const hc = uci.get('system', '@system[0]', 'clock_hourcycle') || 0;
 
 	return new Intl.DateTimeFormat(undefined, {
 		dateStyle: 'medium',
@@ -62,8 +59,8 @@ function formatTime(epoch) {
 	}).format(date);
 }
 
-CBILocalTime = form.DummyValue.extend({
-	renderWidget: function(section_id, option_id, cfgvalue) {
+const CBILocalTime = form.DummyValue.extend({
+	renderWidget(section_id, option_id, cfgvalue) {
 		return E([], [
 			E('input', {
 				'id': 'localtime',
@@ -94,7 +91,7 @@ CBILocalTime = form.DummyValue.extend({
 });
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			callRcList('sysntpd'),
 			callTimezone(),
@@ -104,11 +101,8 @@ return view.extend({
 		]);
 	},
 
-	render: function(rpc_replies) {
-		var ntpd_enabled = rpc_replies[0],
-		    timezones = rpc_replies[1],
-		    unixtime  = rpc_replies[2],
-		    m, s, o;
+	render([ntpd_enabled, timezones, unixtime]) {
+		let m, s, o;
 
 		m = new form.Map('system',
 			_('System'),
@@ -146,12 +140,12 @@ return view.extend({
 		o = s.taboption('general', form.ListValue, 'zonename', _('Timezone'));
 		o.value('UTC');
 
-		var zones = Object.keys(timezones || {}).sort();
-		for (var i = 0; i < zones.length; i++)
-			o.value(zones[i]);
+		const zones = Object.keys(timezones || {}).sort();
+		for (let zone of zones)
+			o.value(zone);
 
 		o.write = function(section_id, formvalue) {
-			var tz = timezones[formvalue] ? timezones[formvalue].tzstring : null;
+			const tz = timezones[formvalue] ? timezones[formvalue].tzstring : null;
 			uci.set('system', section_id, 'zonename', formvalue);
 			uci.set('system', section_id, 'timezone', tz);
 		};
@@ -236,21 +230,21 @@ return view.extend({
 		o.ucioption = 'lang';
 		o.value('auto', _('auto'));
 
-		var l = Object.assign({ en: 'English' }, uci.get('luci', 'languages')),
-		    k = Object.keys(l).sort();
-		for (var i = 0; i < k.length; i++)
-			if (k[i].charAt(0) != '.')
-				o.value(k[i], l[k[i]]);
+		const l = Object.assign({ en: 'English' }, uci.get('luci', 'languages'));
+		const keys = Object.keys(l).sort();
+		for (let k of keys)
+			if (k.charAt(0) != '.')
+				o.value(k, l[k]);
 
 		o = s.taboption('language', form.ListValue, '_mediaurlbase', _('Design'))
 		o.uciconfig = 'luci';
 		o.ucisection = 'main';
 		o.ucioption = 'mediaurlbase';
 
-		var k = Object.keys(uci.get('luci', 'themes') || {}).sort();
-		for (var i = 0; i < k.length; i++)
-			if (k[i].charAt(0) != '.')
-				o.value(uci.get('luci', 'themes', k[i]), k[i]);
+		const th = Object.keys(uci.get('luci', 'themes') || {}).sort();
+		for (let t of th)
+			if (t.charAt(0) != '.')
+				o.value(uci.get('luci', 'themes', t), t);
 
 		o = s.taboption('language', form.Flag, '_tablefilters', _('Table Filters'));
 		o.default = o.disabled;

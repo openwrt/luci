@@ -6,29 +6,27 @@
 'require rpc';
 'require form';
 
-var callBlockDevices, callMountPoints, callBlockDetect;
-
-callBlockDevices = rpc.declare({
+const callBlockDevices = rpc.declare({
 	object: 'luci',
 	method: 'getBlockDevices',
 	expect: { '': {} }
 });
 
-callMountPoints = rpc.declare({
+const callMountPoints = rpc.declare({
 	object: 'luci',
 	method: 'getMountPoints',
 	expect: { result: [] }
 });
 
-callBlockDetect = rpc.declare({
+const callBlockDetect = rpc.declare({
 	object: 'luci',
 	method: 'setBlockDetect',
 	expect: { result: false }
 });
 
 function device_textvalue(devices, section_id) {
-	var v = (uci.get('fstab', section_id, 'uuid') || '').toLowerCase(),
-	    e = Object.keys(devices).filter(function(dev) { return (devices[dev].uuid || '-').toLowerCase() == v })[0];
+	let v = (uci.get('fstab', section_id, 'uuid') || '').toLowerCase();
+	let e = Object.keys(devices).filter(function(dev) { return (devices[dev].uuid || '-').toLowerCase() == v })[0];
 
 	if (v) {
 		this.section.devices[section_id] = devices[e];
@@ -71,13 +69,13 @@ function device_textvalue(devices, section_id) {
 }
 
 return view.extend({
-	handleDetect: function(m, ev) {
+	handleDetect(m, ev) {
 		return callBlockDetect()
 			.then(L.bind(uci.unload, uci, 'fstab'))
 			.then(L.bind(m.render, m));
 	},
 
-	handleMountAll: function(m, ev) {
+	handleMountAll(m, ev) {
 		return fs.exec('/sbin/block', ['mount'])
 			.then(function(res) {
 				if (res.code != 0)
@@ -87,53 +85,34 @@ return view.extend({
 			.then(L.bind(m.render, m));
 	},
 
-	handleUmount: function(m, path, ev) {
+	handleUmount(m, path, ev) {
 		return fs.exec('/bin/umount', [path])
 			.then(L.bind(uci.unload, uci, 'fstab'))
 			.then(L.bind(m.render, m))
 			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
 	},
 
-	load: function() {
+	load() {
 		return Promise.all([
 			callBlockDevices(),
 			fs.lines('/proc/filesystems'),
 			fs.lines('/etc/filesystems'),
-			L.resolveDefault(fs.stat('/usr/sbin/e2fsck'), null),
-			L.resolveDefault(fs.stat('/usr/sbin/fsck.f2fs'), null),
-			L.resolveDefault(fs.stat('/usr/sbin/fsck.fat'), null),
-			L.resolveDefault(fs.stat('/usr/bin/btrfsck'), null),
-			L.resolveDefault(fs.stat('/usr/bin/ntfsfix'), null),
-			uci.load('fstab')
+			uci.load('fstab'),
 		]);
 	},
 
-	render: function(results) {
-		var devices = results[0],
-		    procfs = results[1],
-		    etcfs = results[2],
-		    triggers = {},
-		    trigger, m, s, o;
+	render([devices, procfs, etcfs]) {
+		let m, s, o;
 
-		var fsck = {
-			ext2: results[3],
-			ext3: results[3],
-			ext4: results[3],
-			f2fs: results[4],
-			vfat: results[5],
-			btrfs: results[6],
-			ntfs: results[7]
-		};
+		let filesystems = {};
 
-		var filesystems = {};
+		for (let p of procfs)
+			if (p.match(/\S/) && !p.match(/^nodev\t/))
+				filesystems[p.trim()] = true;
 
-		for (var i = 0; i < procfs.length; i++)
-			if (procfs[i].match(/\S/) && !procfs[i].match(/^nodev\t/))
-				filesystems[procfs[i].trim()] = true;
-
-		for (var i = 0; i < etcfs.length; i++)
-			if (etcfs[i].match(/\S/))
-				filesystems[etcfs[i].trim()] = true;
+		for (let e of etcfs)
+			if (e.match(/\S/))
+				filesystems[e.trim()] = true;
 
 		filesystems = Object.keys(filesystems).sort();
 
@@ -186,7 +165,7 @@ return view.extend({
 		};
 
 		o.render = L.bind(function(view, section_id) {
-			var table = E('table', { 'class': 'table' }, [
+			const table = E('table', { 'class': 'table' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Filesystem')),
 					E('th', { 'class': 'th' }, _('Mount Point')),
@@ -196,23 +175,23 @@ return view.extend({
 				])
 			]);
 
-			var rows = [];
+			const rows = [];
 
-			for (var i = 0; i < this.mounts.length; i++) {
-				var used = this.mounts[i].size - this.mounts[i].free,
+			for (let tm of this.mounts) {
+				var used = tm.size - tm.free,
 				    umount = true;
 
-				if (/^\/(overlay|rom|tmp(?:\/.+)?|dev(?:\/.+)?|)$/.test(this.mounts[i].mount))
+				if (/^\/(overlay|rom|tmp(?:\/.+)?|dev(?:\/.+)?|)$/.test(tm.mount))
 					umount = false;
 
 				rows.push([
-					this.mounts[i].device,
-					this.mounts[i].mount,
-					'%1024.2mB / %1024.2mB'.format(this.mounts[i].avail, this.mounts[i].size),
-					'%.2f%% (%1024.2mB)'.format(100 / this.mounts[i].size * used, used),
+					tm.device,
+					tm.mount,
+					'%1024.2mB / %1024.2mB'.format(tm.avail, tm.size),
+					'%.2f%% (%1024.2mB)'.format(100 / tm.size * used, used),
 					umount ? E('button', {
 						'class': 'btn cbi-button-remove',
-						'click': ui.createHandlerFn(view, 'handleUmount', m, this.mounts[i].mount),
+						'click': ui.createHandlerFn(view, 'handleUmount', m, tm.mount),
 						'disabled': this.map.readonly || null
 					}, [ _('Unmount') ]) : '-'
 				]);
@@ -256,9 +235,9 @@ return view.extend({
 		o.modalonly = true;
 		o.value('', _('-- match by uuid --'));
 
-		var devs = Object.keys(devices).sort();
-		for (var i = 0; i < devs.length; i++) {
-			var dev = devices[devs[i]];
+		const devs = Object.keys(devices).sort();
+		for (let d of devs) {
+			const dev = devices[d];
 			if (dev.uuid && dev.size)
 				o.value(dev.uuid, '%s (%s, %1024.2mB)'.format(dev.uuid, dev.dev, dev.size));
 			else if (dev.uuid)
@@ -270,8 +249,8 @@ return view.extend({
 		o.depends('uuid', '');
 		o.value('', _('-- match by label --'));
 
-		for (var i = 0; i < devs.length; i++) {
-			var dev = devices[devs[i]];
+		for (let d of devs) {
+			const dev = devices[d];
 			if (dev.label && dev.size)
 				o.value(dev.label, '%s (%s, %1024.2mB)'.format(dev.label, dev.dev, dev.size));
 			else if (dev.label)
@@ -282,8 +261,8 @@ return view.extend({
 		o.modalonly = true;
 		o.depends({ uuid: '', label: '' });
 
-		for (var i = 0; i < devs.length; i++) {
-			var dev = devices[devs[i]];
+		for (let d of devs) {
+			const dev = devices[d];
 			if (dev.size)
 				o.value(dev.dev, '%s (%1024.2mB)'.format(dev.dev, dev.size));
 			else
@@ -315,8 +294,8 @@ return view.extend({
 		o = s.taboption('advanced', form.ListValue, 'fstype', _('Filesystem'));
 
 		o.textvalue = function(section_id) {
-			var dev = this.section.devices[section_id],
-			    text = this.cfgvalue(section_id) || 'auto';
+			const dev = this.section.devices[section_id];
+			let text = this.cfgvalue(section_id) || 'auto';
 
 			if (dev && dev.type && dev.type != text)
 				text += ' (%s)'.format(dev.type);
@@ -326,8 +305,8 @@ return view.extend({
 
 		o.value('', 'auto');
 
-		for (var i = 0; i < filesystems.length; i++)
-			o.value(filesystems[i]);
+		for (let fs of filesystems)
+			o.value(fs);
 
 		o = s.taboption('advanced', form.Value, 'options', _('Mount options'), _('See "mount" manpage for details'));
 		o.textvalue = function(section_id) { return this.cfgvalue(section_id) || 'defaults' };
@@ -360,9 +339,8 @@ return view.extend({
 		o.modalonly = true;
 		o.value('', _('-- match by uuid --'));
 
-		var devs = Object.keys(devices).sort();
-		for (var i = 0; i < devs.length; i++) {
-			var dev = devices[devs[i]];
+		for (let d of devs) {
+			const dev = devices[d];
 			if (dev.dev.match(/^\/dev\/(mtdblock|ubi|ubiblock)\d/))
 				continue;
 
@@ -377,8 +355,8 @@ return view.extend({
 		o.depends('uuid', '');
 		o.value('', _('-- match by label --'));
 
-		for (var i = 0; i < devs.length; i++) {
-			var dev = devices[devs[i]];
+		for (let d of devs) {
+			const dev = devices[d];
 			if (dev.dev.match(/^\/dev\/(mtdblock|ubi|ubiblock)\d/))
 				continue;
 
@@ -392,8 +370,8 @@ return view.extend({
 		o.modalonly = true;
 		o.depends({ uuid: '', label: '' });
 
-		for (var i = 0; i < devs.length; i++) {
-			var dev = devices[devs[i]];
+		for (let d of devs) {
+			const dev = devices[d];
 			if (dev.dev.match(/^\/dev\/(mtdblock|ubi|ubiblock)\d/))
 				continue;
 

@@ -35,7 +35,7 @@ return view.extend({
 		*/
 	],
 
-	retrieveLog: async function() {
+	async retrieveLog() {
 		return fs.exec_direct('/bin/dmesg', [ '-r' ]).then(logdata => {
 			let loglines = [];
 			let lastSeverity = null;
@@ -113,7 +113,7 @@ return view.extend({
 		});
 	},
 
-	pollLog: async function() {
+	async pollLog() {
 		const element = document.getElementById('syslog');
 		if (element) {
 			const log = await this.retrieveLog();
@@ -122,12 +122,12 @@ return view.extend({
 		}
 	},
 
-	load: async function() {
+	async load() {
 		poll.add(this.pollLog.bind(this));
 		return await this.retrieveLog();
 	},
 
-	render: function(loglines) {
+	render(loglines) {
 		const scrollDownButton = E('button', { 
 				'id': 'scrollDownButton',
 				'class': 'cbi-button cbi-button-neutral',
@@ -193,7 +193,7 @@ return view.extend({
 			'id': 'logSeveritySelect',
 			'class': 'cbi-input-select',
 		},
-		this.severity.map(([val, tag, label]) =>
+		this.severity.map(([val, , label]) =>
 			E('option', { value: val }, label)
 		));
 

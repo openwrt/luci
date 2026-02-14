@@ -5,22 +5,21 @@
 'require form';
 'require network';
 'require tools.widgets as widgets';
-'require tools.network as tn';
+'require tools.network as nettools';
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			network.getDevices(),
 			fs.lines('/etc/iproute2/rt_tables')
 		]);
 	},
 
-	render: function(data) {
-		var netDevs = data[0],
-		    m, s, o;
+	render([netDevs, rtTables]) {
+		let m, s, o;
 
-		var rtTables = data[1].map(function(l) {
-			var m = l.trim().match(/^(\d+)\s+(\S+)$/);
+		rtTables = rtTables.map(function(l) {
+			const m = l.trim().match(/^(\d+)\s+(\S+)$/);
 			return m ? [ +m[1], m[2] ] : null;
 		}).filter(function(e) {
 			return e && e[0] > 0;
@@ -31,7 +30,7 @@ return view.extend({
 			'<br/>' + _('Rules determine which routing table to use, based on conditions like source address or interface.'));
 		m.tabbed = true;
 
-		for (var family = 4; family <= 6; family += 2) {
+		for (let family = 4; family <= 6; family += 2) {
 			s = m.section(form.GridSection, (family == 6) ? 'route6' : 'route', (family == 6) ? _('Static IPv6 Routes') : _('Static IPv4 Routes'));
 			s.anonymous = true;
 			s.addremove = true;
@@ -64,11 +63,11 @@ return view.extend({
 			o.datatype = (family == 6) ? 'cidr6' : 'cidr4';
 			o.placeholder = (family == 6) ? '::/0' : '0.0.0.0/0';
 			o.cfgvalue = function(section_id) {
-				var section_type = uci.get('network', section_id, '.type'),
-				    target = uci.get('network', section_id, 'target'),
-				    mask = uci.get('network', section_id, 'netmask'),
-				    v6 = (section_type == 'route6') ? true : false,
-				    bits = mask ? network.maskToPrefix(mask, v6) : (v6 ? 128 : 32);
+				const section_type = uci.get('network', section_id, '.type');
+				const target = uci.get('network', section_id, 'target');
+				const mask = uci.get('network', section_id, 'netmask');
+				const v6 = (section_type == 'route6') ? true : false;
+				const bits = mask ? network.maskToPrefix(mask, v6) : (v6 ? 128 : 32);
 				if (target) {
 					return target.split('/')[1] ? target : target + '/' + bits;
 				}
@@ -98,8 +97,8 @@ return view.extend({
 				_('A numeric table index, or symbol alias declared in %s. Special aliases local (255), main (254) and default (253) are also valid').format('<code>/etc/iproute2/rt_tables</code>')
 				+ '<br/>' + _('Only interfaces using this table (via override) will use this route.'));
 			o.datatype = 'or(uinteger, string)';
-			for (var i = 0; i < rtTables.length; i++)
-				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
+			for (let rt of rtTables)
+				o.value(rt[1], '%s (%d)'.format(rt[1], rt[0]));
 			o.textvalue = function(section_id) {
 				return this.cfgvalue(section_id) || E('em', _('auto'));
 			};
@@ -108,10 +107,10 @@ return view.extend({
 				+ '<br/>' + _('This is only used if no default route matches the destination gateway'));
 			o.modalonly = true;
 			o.datatype = (family == 6) ? 'ip6addr' : 'ip4addr';
-			for (var i = 0; i < netDevs.length; i++) {
-				var addrs = (family == 6) ? netDevs[i].getIP6Addrs() : netDevs[i].getIPAddrs();
-				for (var j = 0; j < addrs.length; j++)
-					o.value(addrs[j].split('/')[0]);
+			for (let nd of netDevs) {
+				const addrs = (family == 6) ? nd.getIP6Addrs() : nd.getIPAddrs();
+				for (let a of addrs)
+					o.value(a.split('/')[0]);
 			}
 
 			o = s.taboption('advanced', form.Flag, 'onlink', _('On-link'), _('When enabled, gateway is on-link even if the gateway does not match any interface prefix'));
@@ -124,7 +123,7 @@ return view.extend({
 			o.default = o.disabled;
 		}
 
-		for (var family = 4; family <= 6; family += 2) {
+		for (let family = 4; family <= 6; family += 2) {
 			s = m.section(form.GridSection, (family == 6) ? 'rule6' : 'rule', (family == 6) ? _('IPv6 Rules') : _('IPv4 Rules'));
 			s.anonymous = true;
 			s.addremove = true;
@@ -163,7 +162,7 @@ return view.extend({
 
 			o = s.taboption('general', form.Value, 'ipproto', _('IP Protocol'), _('Match traffic IP protocol type'));
 			o.datatype = 'range(0,255)';
-			tn.protocols.forEach(function(p) {
+			nettools.protocols.forEach(function(p) {
 				o.value(p.i, p.d);
 			});
 
@@ -182,8 +181,8 @@ return view.extend({
 				_('A numeric table index, or symbol alias declared in %s. Special aliases local (255), main (254) and default (253) are also valid').format('<code>/etc/iproute2/rt_tables</code>')
 				+ '<br/>' + _('Matched traffic re-targets to an interface using this table.'));
 			o.datatype = 'or(uinteger, string)';
-			for (var i = 0; i < rtTables.length; i++)
-				o.value(rtTables[i][1], '%s (%d)'.format(rtTables[i][1], rtTables[i][0]));
+			for (let rt of rtTables)
+				o.value(rt[1], '%s (%d)'.format(rt[1], rt[0]));
 
 			o = s.taboption('advanced', form.Value, 'goto', _('Jump to rule'), _('Jumps to another rule specified by its priority value'));
 			o.modalonly = true;

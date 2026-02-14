@@ -4,24 +4,24 @@
 'require poll';
 'require baseclass';
 
-var callBatteryStatus = rpc.declare({
+const callBatteryStatus = rpc.declare({
 	object: 'luci.battstatus',
 	method: 'getBatteryStatus',
 	expect: { '': {} }
 });
 
-var devices = {};
+const devices = {};
 
 return baseclass.extend({
-	__init__: function() {
+	__init__() {
 		this.updateIndicator();
 		poll.add(L.bind(this.updateIndicator, this), 5);
 	},
 
-	updateIndicator: function() {
+	updateIndicator() {
 		return callBatteryStatus().then(L.bind(function(devs) {
-			for (var dev in devs) {
-				var info = devs[dev];
+			for (let dev in devs) {
+				let info = devs[dev];
 				if (info.valid) {
 					info.status = (info.charging ? _('Charging') : _('Not Charging')) + ": " + info.percentage + "%";
 					info.state = "active";
@@ -44,7 +44,7 @@ return baseclass.extend({
 				devices[dev] = info;
 			}
 
-			for (var dev in devices) {
+			for (let dev in devices) {
 				if (!devs.hasOwnProperty(dev)) {
 					ui.hideIndicator('battery-%s'.format(dev));
 					delete devices[dev];

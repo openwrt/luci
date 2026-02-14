@@ -4,23 +4,23 @@
 'require ui';
 'require rpc';
 
-var callDSLStatistics = rpc.declare({
+const callDSLStatistics = rpc.declare({
 	object: 'dsl',
 	method: 'statistics',
 	expect: { '': {} }
 });
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			callDSLStatistics()
 		]);
 	},
 
-	render: function(data) {
+	render(data) {
 		window.json = data[0];
 
-		var v = E('div', {'class': 'cbi-map'}, [
+		const v = E('div', {'class': 'cbi-map'}, [
 			E('h2', {'style': "height: 40px"}, [ _('DSL line spectrum') ]),
 			E('div', {'class': 'cbi-map-descr'}, _('The following diagrams show graphically prepared DSL characteristics that are important for evaluating the DSL connection.')),
 

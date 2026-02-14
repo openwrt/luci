@@ -6,9 +6,9 @@
 'require fs';
 'require ui';
 
-var isReadonlyView = !L.hasViewPermission();
+const isReadonlyView = !L.hasViewPermission();
 
-var callSystemValidateFirmwareImage = rpc.declare({
+const callSystemValidateFirmwareImage = rpc.declare({
 	object: 'system',
 	method: 'validate_firmware_image',
 	params: [ 'path' ],
@@ -16,11 +16,11 @@ var callSystemValidateFirmwareImage = rpc.declare({
 });
 
 function findStorageSize(procmtd, procpart) {
-	var kernsize = 0, rootsize = 0, wholesize = 0;
+	let kernsize = 0, rootsize = 0, wholesize = 0;
 
 	procmtd.split(/\n/).forEach(function(ln) {
-		var match = ln.match(/^mtd\d+: ([0-9a-f]+) [0-9a-f]+ "(.+)"$/),
-		    size = match ? parseInt(match[1], 16) : 0;
+		const match = ln.match(/^mtd\d+: ([0-9a-f]+) [0-9a-f]+ "(.+)"$/);
+		const size = match ? parseInt(match[1], 16) : 0;
 
 		switch (match ? match[2] : '') {
 		case 'linux':
@@ -49,9 +49,9 @@ function findStorageSize(procmtd, procpart) {
 		return kernsize + rootsize;
 
 	procpart.split(/\n/).forEach(function(ln) {
-		var match = ln.match(/^\s*\d+\s+\d+\s+(\d+)\s+(\S+)$/);
+		const match = ln.match(/^\s*\d+\s+\d+\s+(\d+)\s+(\S+)$/);
 		if (match) {
-			var size = parseInt(match[1], 10);
+			const size = parseInt(match[1], 10);
 
 			if (!match[2].match(/\d/) && size > 2048 && wholesize == 0)
 				wholesize = size * 1024;
@@ -62,11 +62,11 @@ function findStorageSize(procmtd, procpart) {
 }
 
 
-var mapdata = { actions: {}, config: {} };
+const mapdata = { actions: {}, config: {} };
 
 return view.extend({
-	load: function() {
-		var tasks = [
+	load() {
+		const tasks = [
 			L.resolveDefault(fs.stat('/lib/upgrade/platform.sh'), {}),
 			fs.trimmed('/proc/sys/kernel/hostname'),
 			fs.trimmed('/proc/mtd'),
@@ -77,8 +77,8 @@ return view.extend({
 		return Promise.all(tasks);
 	},
 
-	handleBackup: function(ev) {
-		var form = E('form', {
+	handleBackup(ev) {
+		const form = E('form', {
 			method: 'post',
 			action: L.env.cgi_base + '/cgi-backup',
 			enctype: 'application/x-www-form-urlencoded'
@@ -90,7 +90,7 @@ return view.extend({
 		form.parentNode.removeChild(form);
 	},
 
-	handleFirstboot: function(ev) {
+	handleFirstboot(ev) {
 		if (!confirm(_('Do you really want to erase all settings?')))
 			return;
 
@@ -104,7 +104,7 @@ return view.extend({
 		ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
 	},
 
-	handleRestore: function(ev) {
+	handleRestore(ev) {
 		return ui.uploadFile('/tmp/backup.tar.gz', ev.target)
 			.then(L.bind(function(btn, res) {
 				btn.firstChild.data = _('Checking archive…');
@@ -139,7 +139,7 @@ return view.extend({
 			}, this, ev.target));
 	},
 
-	handleRestoreConfirm: function(btn, ev) {
+	handleRestoreConfirm(btn, ev) {
 		return fs.exec('/sbin/sysupgrade', [ '--restore-backup', '/tmp/backup.tar.gz' ])
 			.then(L.bind(function(btn, res) {
 				if (res.code != 0) {
@@ -169,11 +169,11 @@ return view.extend({
 			.finally(function() { btn.firstChild.data = _('Upload archive...') });
 	},
 
-	handleBlock: function(hostname, ev) {
-		var mtdblock = dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select');
-		var mtdnumber = mtdblock.value;
-		var mtdname = mtdblock.selectedOptions[0].text.replace(/([^a-zA-Z0-9]+)/g, '-');
-		var form = E('form', {
+	handleBlock(hostname, ev) {
+		const mtdblock = dom.parent(ev.target, '.cbi-section').querySelector('[data-name="mtdselect"] select');
+		const mtdnumber = mtdblock.value;
+		const mtdname = mtdblock.selectedOptions[0].text.replace(/([^a-zA-Z0-9]+)/g, '-');
+		const form = E('form', {
 			'method': 'post',
 			'action': L.env.cgi_base + '/cgi-download',
 			'enctype': 'application/x-www-form-urlencoded'
@@ -189,7 +189,7 @@ return view.extend({
 		form.parentNode.removeChild(form);
 	},
 
-	handleSysupgrade: function(storage_size, has_rootfs_data, ev) {
+	handleSysupgrade(storage_size, has_rootfs_data, ev) {
 		return ui.uploadFile('/tmp/firmware.bin', ev.target.firstChild)
 			.then(L.bind(function(btn, reply) {
 				btn.firstChild.data = _('Checking image…');
@@ -207,7 +207,7 @@ return view.extend({
 			}, this, ev.target))
 			.then(L.bind(function(btn, res) {
 				/* sysupgrade opts table  [0]:checkbox element [1]:check condition [2]:args to pass */
-				var opts = {
+				const opts = {
 				    keep : [ E('input', { type: 'checkbox' }), false, '-n' ],
 				    force : [ E('input', { type: 'checkbox' }), true, '--force' ],
 				    skip_orig : [ E('input', { type: 'checkbox' }), true, '-u' ],
@@ -265,7 +265,7 @@ return view.extend({
 					])));
 				};
 
-				var cntbtn = E('button', {
+				const cntbtn = E('button', {
 					'class': 'btn cbi-button-action important',
 					'click': ui.createHandlerFn(this, 'handleSysupgradeConfirm', btn, opts),
 				}, [ _('Continue') ]);
@@ -315,16 +315,16 @@ return view.extend({
 			}, this, ev.target));
 	},
 
-	handleSysupgradeConfirm: function(btn, opts, ev) {
+	handleSysupgradeConfirm(btn, opts, ev) {
 		btn.firstChild.data = _('Flashing…');
 
 		ui.showModal(_('Flashing…'), [
 			E('p', { 'class': 'spinning' }, _('The system is flashing now.<br /> DO NOT POWER OFF THE DEVICE!<br /> Wait a few minutes before you try to reconnect. It might be necessary to renew the address of your computer to reach the device again, depending on your settings.'))
 		]);
 
-		var args = [];
+		const args = [];
 
-		for (var key in opts)
+		for (let key in opts)
 			/* if checkbox == condition add args to sysupgrade */
 			if (opts[key][0].checked == opts[key][1])
 				args.push(opts[key][2]);
@@ -340,7 +340,7 @@ return view.extend({
 			ui.awaitReconnect('192.168.1.1', 'openwrt.lan');
 	},
 
-	handleBackupList: function(ev) {
+	handleBackupList(ev) {
 		return fs.exec('/sbin/sysupgrade', [ '--list-backup' ]).then(function(res) {
 			if (res.code != 0) {
 				ui.addNotification(null, [
@@ -363,7 +363,7 @@ return view.extend({
 		});
 	},
 
-	handleBackupSave: function(m, ev) {
+	handleBackupSave(m, ev) {
 		return m.save(function() {
 			return fs.write('/etc/sysupgrade.conf', mapdata.config.editlist.trim().replace(/\r\n/g, '\n') + '\n');
 		}).then(function() {
@@ -373,15 +373,11 @@ return view.extend({
 		});
 	},
 
-	render: function(rpc_replies) {
-		var has_sysupgrade = (rpc_replies[0].type == 'file'),
-		    hostname = rpc_replies[1],
-		    procmtd = rpc_replies[2],
-		    procpart = rpc_replies[3],
-		    procmounts = rpc_replies[4],
-		    has_rootfs_data = (procmtd.match(/"rootfs_data"/) != null) || (procmounts.match("overlayfs:\/overlay \/ ") != null),
-		    storage_size = findStorageSize(procmtd, procpart),
-		    m, s, o, ss;
+	render([p_fstat, hostname, procmtd, procpart, procmounts]) {
+		const has_sysupgrade = (p_fstat.type == 'file');
+		const has_rootfs_data = (procmtd.match(/"rootfs_data"/) != null) || (procmounts.match("overlayfs:/overlay / ") != null);
+		const storage_size = findStorageSize(procmtd, procpart);
+		let m, s, o, ss;
 
 		m = new form.JSONMap(mapdata, _('Flash operations'));
 		m.tabbed = true;
@@ -415,9 +411,9 @@ return view.extend({
 		o.onclick = L.bind(this.handleRestore, this);
 
 
-		var mtdblocks = [];
+		const mtdblocks = [];
 		procmtd.split(/\n/).forEach(function(ln) {
-			var match = ln.match(/^mtd(\d+): .+ "(.+?)"$/);
+			const match = ln.match(/^mtd(\d+): .+ "(.+?)"$/);
 			if (match)
 				mtdblocks.push(match[1], match[2]);
 		});
