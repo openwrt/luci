@@ -5,17 +5,15 @@
 'require uci';
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('keepalived'),
 		]);
 	},
 
-	render: function(data) {
+	render(data) {
 		let m, s, o;
-		var instances;
-
-		instances = uci.sections('keepalived', 'vrrp_instance');
+		let instances = uci.sections('keepalived', 'vrrp_instance');
 		if (instances == '' || instances.length < 1) {
 			ui.addNotification(null, E('p', _('Instances must be configured for VRRP Groups')));
 		}
@@ -37,7 +35,7 @@ return view.extend({
 		o = s.option(form.DynamicList, 'group', _('Instance Group'));
 		o.rmempty = false;
 		o.optional = false;
-		for (var i = 0; i < instances.length; i++) {
+		for (let i = 0; i < instances.length; i++) {
 			o.value(instances[i]['name']);
 		}
 

@@ -6,12 +6,12 @@
 var isReadonlyView = !L.hasViewPermission() || null;
 
 return view.extend({
-	load: function() {
+	load() {
 		return L.resolveDefault(fs.read('/etc/keepalived.user'), '');
 	},
 
-	handleSave: function(ev) {
-		var value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
+	handleSave(ev) {
+		const value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
 
 		return fs.write('/etc/keepalived.user', value).then(function(rc) {
 			document.querySelector('textarea').value = value;
@@ -21,7 +21,7 @@ return view.extend({
 		});
 	},
 
-	render: function(keepalived) {
+	render(keepalived) {
 		return E([
 			E('h2', _('Keepalived.user')),
 			E('p', { 'class': 'cbi-section-descr' }, _('This is the /etc/keepalived.user file in which custom commands can be defined.')),

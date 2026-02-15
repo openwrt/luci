@@ -6,14 +6,14 @@
 'require tools.widgets as widgets';
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('keepalived'),
 		]);
 	},
 
-	renderIPAddress: function(m) {
-		var s, o;
+	renderIPAddress(m) {
+		let s, o;
 
 		s = m.section(form.GridSection, 'ipaddress', _('IP Addresses'),
 			_('Addresses would be referenced into Static and Virtual IP Address of VRRP instances'));
@@ -53,11 +53,9 @@ return view.extend({
 		o.optional = true;
 	},
 
-	renderStaticIPAddress: function(m) {
-		var s, o;
-		var ipaddress;
-
-		ipaddress = uci.sections('keepalived', 'ipaddress');
+	renderStaticIPAddress(m) {
+		let s, o;
+		let ipaddress = uci.sections('keepalived', 'ipaddress');
 		if (ipaddress == '') {
 			ui.addNotification(null, E('p', _('IP Addresses must be configured for Static IP List')));
 		}
@@ -72,14 +70,14 @@ return view.extend({
 
 		o = s.option(form.DynamicList, 'address', _('IP Address'),
 			_('List of IP Addresses'));
-		for (var i = 0; i < ipaddress.length; i++) {
+		for (let i = 0; i < ipaddress.length; i++) {
 			o.value(ipaddress[i]['name']);
 		}
 		o.optional = true;
 	},
 
-	render: function() {
-		var m;
+	render() {
+		let m;
 
 		m = new form.Map('keepalived');
 
