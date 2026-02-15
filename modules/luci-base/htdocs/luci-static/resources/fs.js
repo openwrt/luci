@@ -4,9 +4,14 @@
 'require baseclass';
 
 /**
+ * @namespace LuCI.fs
+ * @memberof LuCI
+ */
+
+/**
  * @typedef {Object} FileStatEntry
  * @memberof LuCI.fs
-
+ *
  * @property {string} name - Name of the directory entry
  * @property {string} type - Type of the entry, one of `block`, `char`, `directory`, `fifo`, `symlink`, `file`, `socket` or `unknown`
  * @property {number} size - Size in bytes
@@ -85,6 +90,13 @@ var rpcErrors = [
 	'UnsupportedError'
 ];
 
+/**
+ * Handle an RPC reply.
+ * @param {object} expect
+ * @param {number} rc
+ * @throws {Error}
+ * @returns {number}
+ */
 function handleRpcReply(expect, rc) {
 	if (typeof(rc) == 'number' && rc != 0) {
 		var e = new Error(rpc.getStatusText(rc)); e.name = rpcErrors[rc] || 'Error';
@@ -110,6 +122,12 @@ function handleRpcReply(expect, rc) {
 	return rc;
 }
 
+/**
+ * Handle a CGI-IO reply.
+ * @param {object} res
+ * @throws {Error}
+ * @returns {string}
+ */
 function handleCgiIoReply(res) {
 	if (!res.ok || res.status != 200) {
 		var e = new Error(res.statusText);
@@ -401,7 +419,7 @@ var FileSystem = baseclass.extend(/** @lends LuCI.fs.prototype */ {
 	 * Whether to include stderr output in command output. This is usually
 	 * not needed but can be useful to execute a command and get full output.
 	 *
-	 * @param {function} [responseProgress=null]
+	 * @param {function()} [responseProgress=null]
 	 * An optional request callback function which receives ProgressEvent
 	 * instances as sole argument during the HTTP response transfer. This is
 	 * usually not needed but can be useful to receive realtime command

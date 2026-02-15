@@ -3,10 +3,21 @@
 'require network';
 'require validation';
 
+/**
+ * Determine whether a provided value is a CIDR format IP string.
+ * @param {string} value the IP string to test.
+ * @returns {boolean}
+ */
 function isCIDR(value) {
 	return Array.isArray(value) || /^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\/(\d{1,2}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/.test(value);
 }
 
+/**
+ * Calculate the broadcast IP for a given IP.
+ * @param {Node} s the ui element to test.
+ * @param {boolean} use_cfgvalue whether to use the config or form value.
+ * @returns {string}
+ */
 function calculateBroadcast(s, use_cfgvalue) {
 	const readfn = use_cfgvalue ? 'cfgvalue' : 'formvalue';
 	const addropt = s.children.find(o => o.option == 'ipaddr');
@@ -49,6 +60,12 @@ function calculateBroadcast(s, use_cfgvalue) {
 	return bc.join('.');
 }
 
+/**
+ * Validate a broadcast IP for a section value.
+ * @param {string} section_id
+ * @param {string} value
+ * @returns {boolean}
+ */
 function validateBroadcast(section_id, value) {
 	var opt = this.map.lookupOption('broadcast', section_id),
 	    node = opt ? this.map.findElement('id', opt[0].cbid(section_id)) : null,

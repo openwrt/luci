@@ -4,10 +4,29 @@
 'require tools.prng as random';
 
 
+/**
+ * @namespace LuCI
+ */
+
+/**
+ * @namespace LuCI.firewall
+ * @memberof LuCI
+ */
+
+/**
+ * Load the firewall configuration.
+ * @returns {Promise}
+ */
 function initFirewallState() {
 	return L.resolveDefault(uci.load('firewall'));
 }
 
+/**
+ * Parse an enum value.
+ * @param {?string} s 
+ * @param {Array<string>} values
+ * @returns {string}
+ */
 function parseEnum(s, values) {
 	if (s == null)
 		return null;
@@ -24,6 +43,12 @@ function parseEnum(s, values) {
 	return null;
 }
 
+/**
+ * Parse a policy value, or defaultValue if not found.
+ * @param {?string} s 
+ * @param {Array<string>} [defaultValue=['DROP', 'REJECT', 'ACCEPT']]
+ * @returns {?string}
+ */
 function parsePolicy(s, defaultValue) {
 	return parseEnum(s, ['DROP', 'REJECT', 'ACCEPT']) || (arguments.length < 2 ? null : defaultValue);
 }
@@ -31,6 +56,11 @@ function parsePolicy(s, defaultValue) {
 
 var Firewall, AbstractFirewallItem, Defaults, Zone, Forwarding, Redirect, Rule;
 
+/**
+ * Look up a firewall zone.
+ * @param {?string} name
+ * @returns {?Zone}
+ */
 function lookupZone(name) {
 	var z = uci.get('firewall', name);
 
@@ -49,6 +79,11 @@ function lookupZone(name) {
 	return null;
 }
 
+/**
+ * Generate a colour for a name.
+ * @param {?string} forName
+ * @returns {string}
+ */
 function getColorForName(forName) {
 	if (forName == null)
 		return '#eeeeee';

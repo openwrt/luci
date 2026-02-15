@@ -646,6 +646,11 @@ function enumerateNetworks() {
 var Hosts, Network, Protocol, Device, WifiDevice, WifiNetwork, WifiVlan;
 
 /**
+ * @namespace LuCI.network
+ * @memberof LuCI
+ */
+
+/**
  * @class network
  * @memberof LuCI
  * @hideconstructor
@@ -661,7 +666,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	/**
 	 * Converts the given prefix size in bits to a netmask.
 	 *
-	 * @method
+	 * @function
 	 *
 	 * @param {number} bits
 	 * The prefix size in bits.
@@ -680,7 +685,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	/**
 	 * Converts the given netmask to a prefix size in bits.
 	 *
-	 * @method
+	 * @function
 	 *
 	 * @param {string} netmask
 	 * The netmask to convert into a bits count.
@@ -739,7 +744,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * into a human readable string such as `mixed WPA/WPA2 PSK (TKIP, CCMP)`
 	 * or `WPA3 SAE (CCMP)`.
 	 *
-	 * @method
+	 * @function
 	 *
 	 * @param {LuCI.network.WifiEncryption} encryption
 	 * The wireless encryption entry to convert.
@@ -808,7 +813,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 * with the given methods and returns the resulting subclass value.
 	 *
 	 * This function internally calls
-	 * {@link LuCI.Class.extend Class.extend()} on the `Network.Protocol`
+	 * {@link LuCI.baseclass.extend baseclass.extend()} on the `Network.Protocol`
 	 * base class.
 	 *
 	 * @param {string} protoname
@@ -816,7 +821,7 @@ Network = baseclass.extend(/** @lends LuCI.network.prototype */ {
 	 *
 	 * @param {Object<string, *>} methods
 	 * The member methods and values of the new `Protocol` subclass to
-	 * be passed to {@link LuCI.Class.extend Class.extend()}.
+	 * be passed to {@link LuCI.baseclass.extend baseclass.extend()}.
 	 *
 	 * @returns {LuCI.network.Protocol}
 	 * Returns the new `Protocol` subclass.
@@ -2036,6 +2041,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * @param {null|string|string[]} val
 	 * The value to set or `null` to remove the given option from the
 	 * configuration.
+	 * @returns {null}
 	 */
 	set: function(opt, val) {
 		return uci.set('network', this.sid, opt, val);
@@ -2066,7 +2072,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	/**
 	 * Get the name of this network protocol class.
 	 *
-	 * This function will be overwritten by subclasses created by
+	 * This function will be overridden by subclasses created by
 	 * {@link LuCI.network#registerProtocol Network.registerProtocol()}.
 	 *
 	 * @abstract
@@ -2082,7 +2088,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * Return a human readable description for the protocol, such as
 	 * `Static address` or `DHCP client`.
 	 *
-	 * This function should be overwritten by subclasses.
+	 * This function should be overridden by subclasses.
 	 *
 	 * @abstract
 	 * @returns {string}
@@ -2460,7 +2466,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * package is available via the system default package manager. This is used
 	 * when a config refers to a protocol handler which is not yet installed.
 	 *
-	 * This function should be overwritten by protocol specific subclasses.
+	 * This function should be overridden by protocol specific subclasses.
 	 *
 	 * @abstract
 	 *
@@ -2475,7 +2481,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	/**
 	 * Check function for the protocol handler if a new interface is creatable.
 	 *
-	 * This function should be overwritten by protocol specific subclasses.
+	 * This function should be overridden by protocol specific subclasses.
 	 *
 	 * @abstract
 	 *
@@ -2516,7 +2522,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * network device on startup, examples for non-virtual protocols are
 	 * `dhcp` or `static` which apply IP configuration to existing interfaces.
 	 *
-	 * This function should be overwritten by subclasses.
+	 * This function should be overridden by subclasses.
 	 *
 	 * @returns {boolean}
 	 * Returns a boolean indicating whether the underlying protocol spawns
@@ -2846,7 +2852,7 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 * from the configuration and is responsible for performing any required
 	 * cleanup tasks, such as unsetting uci entries in related configurations.
 	 *
-	 * It should be overwritten by protocol specific subclasses.
+	 * It should be overridden by protocol specific subclasses.
 	 *
 	 * @abstract
 	 *
@@ -3417,6 +3423,7 @@ WifiDevice = baseclass.extend(/** @lends LuCI.network.WifiDevice.prototype */ {
 	 * @param {null|string|string[]} value
 	 * The value to set or `null` to remove the given option from the
 	 * configuration.
+	 * @returns {null}
 	 */
 	set: function(opt, value) {
 		return uci.set('wireless', this.sid, opt, value);
@@ -3741,6 +3748,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * @param {null|string|string[]} value
 	 * The value to set or `null` to remove the given option from the
 	 * configuration.
+	 * @returns {null}
 	 */
 	set: function(opt, value) {
 		return uci.set('wireless', this.sid, opt, value);
@@ -4068,15 +4076,15 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * @property {boolean} tdls
 	 * Specifies whether TDLS is active.
 	 *
-	 * @property {number} [mesh llid]
+	 * @property {number} [mesh_llid]
 	 * The mesh LLID, may be `0` or absent if not applicable or supported
 	 * by the driver.
 	 *
-	 * @property {number} [mesh plid]
+	 * @property {number} [mesh_plid]
 	 * The mesh PLID, may be `0` or absent if not applicable or supported
 	 * by the driver.
 	 *
-	 * @property {string} [mesh plink]
+	 * @property {string} [mesh_plink]
 	 * The mesh peer link state description, may be an empty string (`''`)
 	 * or absent if not applicable or supported by the driver.
 	 *
@@ -4090,7 +4098,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `BLOCKED`
 	 *  - `UNKNOWN`
 	 *
-	 * @property {number} [mesh local PS]
+	 * @property {number} [mesh_local_PS]
 	 * The local power-save mode for the peer link, may be an empty
 	 * string (`''`) or absent if not applicable or supported by
 	 * the driver.
@@ -4101,7 +4109,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `DEEP SLEEP`
 	 *  - `UNKNOWN`
 	 *
-	 * @property {number} [mesh peer PS]
+	 * @property {number} [mesh_peer_PS]
 	 * The remote power-save mode for the peer link, may be an empty
 	 * string (`''`) or absent if not applicable or supported by
 	 * the driver.
@@ -4112,7 +4120,7 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 *  - `DEEP SLEEP`
 	 *  - `UNKNOWN`
 	 *
-	 * @property {number} [mesh non-peer PS]
+	 * @property {number} [mesh_non_peer_PS]
 	 * The power-save mode for all non-peer neighbours, may be an empty
 	 * string (`''`) or absent if not applicable or supported by the driver.
 	 *
@@ -4364,6 +4372,8 @@ WifiNetwork = baseclass.extend(/** @lends LuCI.network.WifiNetwork.prototype */ 
 	 * Calculate the current signal.
 	 *
 	 * @deprecated
+	 * @param {number} signal
+	 * @param {number} noise
 	 * @returns {number}
 	 * Returns the calculated signal level, which is the difference between
 	 * noise and signal (SNR), divided by 5.

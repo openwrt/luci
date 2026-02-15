@@ -5,18 +5,32 @@
 'require firewall';
 'require fs';
 
+
+/**
+ * Get users found in `/etc/passwd`.
+ * @returns {string[]}
+ */
 function getUsers() {
     return fs.lines('/etc/passwd').then(function(lines) {
         return lines.map(function(line) { return line.split(/:/)[0] });
     });
 }
 
+/**
+ * Get users found in `/etc/group`.
+ * @returns {string[]}
+ */
 function getGroups() {
     return fs.lines('/etc/group').then(function(lines) {
         return lines.map(function(line) { return line.split(/:/)[0] });
     });
 }
 
+/**
+ * Get bridge devices or Layer 3 devices of a network object.
+ * @param {object} network
+ * @returns {string[]}
+ */
 function getDevices(network) {
 	if (network.isBridge()) {
 		var devices = network.getDevices();

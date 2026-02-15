@@ -8,6 +8,11 @@ let rpcBaseURL = L.url('admin/ubus');
 const rpcInterceptorFns = [];
 
 /**
+ * @namespace LuCI.rpc
+ * @memberof LuCI
+ */
+
+/**
  * @class rpc
  * @memberof LuCI
  * @hideconstructor
@@ -130,7 +135,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 *  - `list("objname", ...)`
 	 *    Returns method signatures for each given `ubus` object name.
 	 *
-	 * @param {...string} [objectNames]
+	 * @param {...string} [args] (objectNames)
 	 * If any object names are given, this function will return the method
 	 * signatures of each given object.
 	 *
@@ -175,7 +180,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 *
 	 * Extraneous parameters passed to the generated function will not be
 	 * sent to the remote procedure but are passed to the
-	 * {@link LuCI.rpc~filterFn filter function} if one is specified.
+	 * {@link LuCI.rpc.filterFn filter function} if one is specified.
 	 *
 	 * Examples:
 	 *  - `params: [ "foo", "bar" ]` -
@@ -222,7 +227,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 *    `success` or if `reply.success` is not a boolean value, `false` will
 	 *    be returned as default instead.
 	 *
-	 * @property {LuCI.rpc~filterFn} [filter]
+	 * @property {LuCI.rpc.filterFn} [filter]
 	 * Specifies an optional filter function which is invoked to transform the
 	 * received reply data before it is returned to the caller.
 	 *
@@ -236,7 +241,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * The filter function is invoked to transform a received `ubus` RPC call
 	 * reply before returning it to the caller.
 	 *
-	 * @callback LuCI.rpc~filterFn
+	 * @callback LuCI.rpc.filterFn
 	 *
 	 * @param {*} data
 	 * The received `ubus` reply data or a subset of it as described in the
@@ -250,7 +255,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * All extraneous arguments passed to the RPC method exceeding the number
 	 * of arguments describes in the RPC call declaration.
 	 *
-	 * @return {*}
+	 * @returns {*}
 	 * The return value of the filter function will be returned to the caller
 	 * of the RPC method as-is.
 	 */
@@ -264,7 +269,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * using the arguments passed to it as arguments and return a promise
 	 * resolving to the received reply values.
 	 *
-	 * @callback LuCI.rpc~invokeFn
+	 * @callback LuCI.rpc.invokeFn
 	 *
 	 * @param {...*} params
 	 * The parameters to pass to the remote procedure call. The given
@@ -275,7 +280,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * `params` declaration are passed as private extra arguments to the
 	 * declared filter function.
 	 *
-	 * @return {Promise<*>}
+	 * @returns {Promise<*>}
 	 * Returns a promise resolving to the result data of the remote `ubus`
 	 * RPC method invocation, optionally substituted and filtered according
 	 * to the `expect` and `filter` declarations.
@@ -289,7 +294,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * If any object names are given, this function will return the method
 	 * signatures of each given object.
 	 *
-	 * @returns {LuCI.rpc~invokeFn}
+	 * @returns {LuCI.rpc.invokeFn}
 	 * Returns a new function implementing the method call described in
 	 * `options`.
 	 */
@@ -448,7 +453,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	 * declaration object, allowing access to internals of the invocation
 	 * function such as `filter`, `expect` or `params` values.
 	 *
-	 * @return {Promise<*>|*}
+	 * @returns {Promise<*>|*}
 	 * Interceptor functions may return a promise to defer response
 	 * processing until some delayed work completed. Any values the returned
 	 * promise resolves to are ignored.
@@ -460,10 +465,10 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	/**
 	 * Registers a new interceptor function.
 	 *
-	 * @param {LuCI.rpc~interceptorFn} interceptorFn
+	 * @param {LuCI.rpc.interceptorFn} interceptorFn
 	 * The interceptor function to register.
 	 *
-	 * @returns {LuCI.rpc~interceptorFn}
+	 * @returns {LuCI.rpc.interceptorFn}
 	 * Returns the given function value.
 	 */
 	addInterceptor(interceptorFn) {
@@ -476,7 +481,7 @@ return baseclass.extend(/** @lends LuCI.rpc.prototype */ {
 	/**
 	 * Removes a registered interceptor function.
 	 *
-	 * @param {LuCI.rpc~interceptorFn} interceptorFn
+	 * @param {LuCI.rpc.interceptorFn} interceptorFn
 	 * The interceptor function to remove.
 	 *
 	 * @returns {boolean}
