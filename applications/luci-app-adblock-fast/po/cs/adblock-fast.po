@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2025-09-26 20:24+0000\n"
+"PO-Revision-Date: 2026-02-10 18:10+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsadblock-fast/cs/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.14-dev\n"
+"X-Generator: Weblate 5.16-dev\n"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:114
 msgid "%s is currently disabled"
@@ -164,18 +164,21 @@ msgid ""
 "Cron daemon is not available. If BusyBox crond is present, enable it with: "
 "%s; otherwise install another cron daemon."
 msgstr ""
+"Proces služby cron není k dispozici. Pokud je přítomný crond v rámci "
+"BusyBox, zapněte ho pomocí: %s – v opačném případě nainstalujte jiný proces "
+"služby pro cron."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:106
 msgid "Cron entry does not match the schedule; click %s to overwrite it."
-msgstr ""
+msgstr "Položka pro cron neodpovídá plánu – kliknutím na %s ji přepište."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:103
 msgid "Cron entry is missing; click %s to recreate it."
-msgstr ""
+msgstr "Chybí položka v cron – kliknutím na %s ji obnovte."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:97
 msgid "Cron service is not enabled or running. Enable it with: %s."
-msgstr ""
+msgstr "Služba cron není zapnutá nebo spuštěná. Zapněte jí pomocí: %s."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:510
 msgid "Curl download retry"
@@ -196,7 +199,7 @@ msgstr "Předvolba DNS překladu, podrobnosti viz %sREADME%s."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:371
 msgid "Daily"
-msgstr ""
+msgstr "Denní"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:433
 msgid "Day of Month"
@@ -280,6 +283,8 @@ msgid ""
 "Enable RFC 1123 compliant domain validation for dnsmasq block-lists to "
 "remove invalid entries."
 msgstr ""
+"Zapnout ověřování domén splňující normu RFC 1123 pro dnsmasq seznamy "
+"blokovaných pro odebrání neplatných položek."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:576
 msgid "Enable dnsmasq domain validation"
@@ -294,6 +299,8 @@ msgid ""
 "Enable sanity check for dnsmasq block-list processing to detect and report "
 "issues."
 msgstr ""
+"Zapnout kontrolu správnosti pro zpracovávání seznamu blokovaného v dnsmasq "
+"pro zjišťování a hlášení problémů."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:358
 msgid "Enable scheduled list redownloads via /etc/init.d/adblock-fast dl."
@@ -459,7 +466,7 @@ msgstr ""
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:424
 msgid "Friday"
-msgstr ""
+msgstr "pátek"
 
 #: applications/luci-app-adblock-fast/root/usr/share/rpcd/acl.d/luci-app-adblock-fast.json:3
 msgid "Grant UCI and file access for luci-app-adblock-fast"
@@ -538,6 +545,8 @@ msgid ""
 "Minute of hour to run the update (0-59). In 'Every N hours' mode, updates "
 "run at the selected minute within each interval."
 msgstr ""
+"Minuta v rámci hodiny ve kterou aktualizovat (0-59). V režimu „Každých N "
+"hodin“ jsou aktualizace spoutěny ve vybrané minutě v rámci každého intervalu."
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:78
 msgid "Missing recommended package: '%s'"
@@ -545,11 +554,11 @@ msgstr "Chybí doporučený balíček: „%s“"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:420
 msgid "Monday"
-msgstr ""
+msgstr "pondělí"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:373
 msgid "Monthly"
-msgstr ""
+msgstr "Měsíční"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:667
 msgid "Name"
@@ -640,6 +649,8 @@ msgid ""
 "Removed %s invalid domain entries from block-list (domains starting with -/./"
 "numbers or containing invalid patterns)"
 msgstr ""
+"Odebráno %s neplatných položek domén ze seznamu blokovaných (domény "
+"začínající na -/./číslice nebo obsahující neplatné vzory)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:62
 msgid "Restarting"
@@ -648,7 +659,7 @@ msgstr "Restartování"
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:370
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/adblock-fast/status.js:604
 msgid "Resync Cron"
-msgstr ""
+msgstr "Znovu synchronizovat plánovač cron"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:434
 msgid "Run on the selected day of month."
@@ -676,11 +687,11 @@ msgstr "Kontrola správnosti objevila uvozující tečky v %s"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:425
 msgid "Saturday"
-msgstr ""
+msgstr "sobota"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:368
 msgid "Schedule Type"
-msgstr ""
+msgstr "Typ plánu"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:370
 msgid "Select how often the update should run."
@@ -760,7 +771,7 @@ msgstr "Ukládat soubor komprimované mezipaměti na směrovači"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:419
 msgid "Sunday"
-msgstr ""
+msgstr "neděle"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:320
 msgid "Suppress output"
@@ -813,11 +824,11 @@ msgstr "Hlavní balíček (adblock-fast) je zastaralý – zaktualizujte ho"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:423
 msgid "Thursday"
-msgstr ""
+msgstr "čtvrtek"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:421
 msgid "Tuesday"
-msgstr ""
+msgstr "úterý"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:671
 msgid "URL"
@@ -854,11 +865,11 @@ msgstr "Neznámé varování"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:383
 msgid "Update Hour"
-msgstr ""
+msgstr "Hodina aktualizace"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:400
 msgid "Update Minute"
-msgstr ""
+msgstr "Minuta aktualizace"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:243
 msgid "Use ad-blocking on the SmartDNS instance(s)"
@@ -901,11 +912,11 @@ msgstr "Čeká se na spouštěč (on_start)"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:422
 msgid "Wednesday"
-msgstr ""
+msgstr "středa"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:372
 msgid "Weekly"
-msgstr ""
+msgstr "Týdenní"
 
 #: applications/luci-app-adblock-fast/htdocs/luci-static/resources/view/adblock-fast/overview.js:245
 msgid ""

@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-02-07 16:11+0000\n"
+"PO-Revision-Date: 2026-02-14 00:51+0000\n"
 "Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsfirewall/zh_Hant/>\n"
@@ -149,7 +149,7 @@ msgid ""
 "traffic, e.g. <code>-p tcp --dport 443</code> to only match outbound HTTPS "
 "traffic."
 msgstr ""
-"用於對區域目的流量進行分類的額外 <em>iptables</em> 引數。例如 <code>-p tcp --"
+"用於對區域目的流量進行分類的額外 <em>iptables</em> 參數。例如 <code>-p tcp --"
 "dport 443</code> 僅匹配傳出 HTTPS 流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:325
@@ -157,7 +157,7 @@ msgid ""
 "Additional raw <em>iptables</em> arguments to classify zone source traffic, "
 "e.g. <code>-p tcp --sport 443</code> to only match inbound HTTPS traffic."
 msgstr ""
-"用於對區域來源流量進行分類的額外 <em>iptables</em> 引數。例如 <code>-p tcp --"
+"用於對區域來源流量進行分類的額外 <em>iptables</em> 參數。例如 <code>-p tcp --"
 "sport 443</code> 僅匹配傳入 HTTPS 流量。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:107
@@ -179,7 +179,7 @@ msgstr "進階設定"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:284
 msgid "Allow \"invalid\" traffic"
-msgstr "允許「無效」流量"
+msgstr "允許 \"無效\" 流量"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:398
 msgid "Allow forward from <em>source zones</em>:"
@@ -382,19 +382,19 @@ msgstr "外部連接埠"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:474
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:346
 msgid "Extra arguments"
-msgstr "額外引數"
+msgstr "額外參數"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:335
 msgid "Extra destination arguments"
-msgstr "額外目的引數"
+msgstr "額外目的參數"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:117
 msgid "Extra iptables arguments"
-msgstr "額外 iptables 引數"
+msgstr "額外 iptables 參數"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:325
 msgid "Extra source arguments"
-msgstr "額外來源引數"
+msgstr "額外來源參數"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:67
 msgid "Family"
@@ -430,7 +430,7 @@ msgstr "防火牆 - 區域設定"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:693
 msgid "Firewall configuration migration"
-msgstr "防火牆設定遷移"
+msgstr "防火牆配置遷移"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:82
 msgid "Flow offloading type"
@@ -866,7 +866,7 @@ msgstr "傳出區域"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:63
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:153
 msgid "Output"
-msgstr "傳出"
+msgstr "輸出"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:76
 msgid "Packet Field Match"
@@ -880,15 +880,15 @@ msgid ""
 "optional.<br />*Note: datatype <code>set</code> is unsupported in fw4."
 msgstr ""
 "要匹配的封包欄位。<br />語法: <em>direction_datatype</em>。如: "
-"<code>src_port, dest_net</code>。<br />方向: <code>src, dst</code>。數據類"
+"<code>src_port, dest_net</code>。<br />方向: <code>src, dst</code>。資料類"
 "別: <code>ip, port, mac, net, set</code>。<br />方向前綴可選。<br />*注意: "
-"fw4不支援數據類別<code>set</code>。"
+"fw4不支援資料類別<code>set</code>。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:359
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:475
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:347
 msgid "Passes additional arguments to iptables. Use with care!"
-msgstr "傳遞附加引數至 iptables。小心使用！"
+msgstr "傳遞附加參數至 iptables。小心使用！"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:322
 msgid ""
@@ -898,7 +898,7 @@ msgid ""
 "invalid values could render the firewall ruleset broken, completely exposing "
 "all services."
 msgstr ""
-"將原始 iptables 引數傳遞給來源和目的流量分類規則可以根據介面或子網路以外的其"
+"將原始 iptables 參數傳遞給來源和目的流量分類規則可以根據介面或子網路以外的其"
 "他條件匹配封包。使用這些選項時應注意，因為無效值可能會破壞防火牆規則集，從而"
 "完全暴露所有服務。"
 
@@ -951,7 +951,7 @@ msgstr "需要硬體 NAT 支援。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:273
 msgid "Restrict Masquerading to given destination subnets"
-msgstr "限制 NAT 目的子網路"
+msgstr "在給定目的子網路限制偽裝"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:262
 msgid "Restrict Masquerading to given source subnets"
@@ -1083,7 +1083,7 @@ msgstr "星期日"
 msgid ""
 "The existing firewall configuration needs to be changed for LuCI to function "
 "properly."
-msgstr "需要更改現有的防火牆設定以使 LuCI 正常運作。"
+msgstr "需要更改現有的防火牆配置以使 LuCI 正常運作。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/zones.js:39
 msgid ""
@@ -1101,7 +1101,7 @@ msgid ""
 "rule is <em>unidirectional</em>, e.g. a forward from lan to wan does "
 "<em>not</em> imply a permission to forward from wan to lan as well."
 msgstr ""
-"以下選項控制此區域 (%s) 和其他區域之間的轉送策略。<em>目的區域</em>接收"
+"以下選項控制此區域 (%s) 和其他區域之間的轉送政策。<em>目的區域</em>接收"
 "<strong>源自%q</strong>的轉送流量。<em>來源區域</em>匹配來自其他區域<strong>"
 "目標為%q</strong>的轉送流量。轉送規則是<em>單向</em>的，例如: 從lan轉送至wan"
 "並<em>不</em>意味著允許從 wan 轉送至 lan。"
@@ -1115,7 +1115,7 @@ msgid ""
 "networks</em> specifies which available networks are members of this zone."
 msgstr ""
 "本節定義 %q 的通用屬性。<em>傳入</em>和<em>傳出</em>選項設定此區域傳入和傳出"
-"流量的預設策略，<em>轉送</em>選項描述該區域內不同網路之間的流量轉送策略。<em>"
+"流量的預設政策，<em>轉送</em>選項描述該區域內不同網路之間的流量轉送政策。<em>"
 "覆蓋網路</em>指定從屬於這個區域的網路。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:488
@@ -1196,7 +1196,7 @@ msgid ""
 "zones, for example to reject traffic between certain hosts or to open WAN "
 "ports on the router."
 msgstr ""
-"流量規則定義了不同區域間的封包傳輸策略，例如拒絕某些主機間的流量或開啟路由器 "
+"流量規則定義了不同區域間的封包傳輸政策，例如拒絕某些主機間的流量或開啟路由器 "
 "WAN 連接埠。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:486
@@ -1219,7 +1219,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:342
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:457
 msgid "Unknown or not installed conntrack helper \"%s\""
-msgstr "未知或未安裝連線跟蹤助手「%s」"
+msgstr "未知或未安裝連線跟蹤助手 \"%s\""
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:187
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:191
@@ -1254,8 +1254,8 @@ msgid ""
 "be converted to \"nat\" sections and the firewall will be restarted to apply "
 "the updated configuration."
 msgstr ""
-"按下「繼續」後，目標為「SNAT」的「重新導向」部分將轉換為「nat」部分，防火牆將"
-"重新啟動以套用更新的設定。"
+"按下 \"繼續\" 後，目標為 \"SNAT\" 的 \"重新導向\" 部分將轉換為 \"nat\" 部分，"
+"防火牆將重新啟動以套用更新的設定。"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:316
 msgid "Use external IP address"

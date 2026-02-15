@@ -102,7 +102,7 @@ msgid "%s uses the default MAC address format encoding"
 msgstr "„%s“ naudoja numatytąjį „MAC“ adreso formato koduotę"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:295
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:486
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:536
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:276
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:311
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:329
@@ -1709,9 +1709,9 @@ msgstr "Pasiekiamas/-a/-i/-os"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:268
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:278
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:386
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:396
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:406
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:436
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:446
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:456
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:239
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:249
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:259
@@ -2349,7 +2349,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:64
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:85
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2627
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:471
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:521
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/index.js:27
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:356
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:359
@@ -2525,7 +2525,7 @@ msgstr "Ryšio galutinis taškas"
 msgid "Connection lost"
 msgstr "Ryšys prarastas"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:374
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:424
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:181
 msgid "Connections"
 msgstr "Prisijungimai"
@@ -3047,7 +3047,7 @@ msgid "Dest Port"
 msgstr "Paskirties/Kelionės tikslo prievadas"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:174
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:466
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:516
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:71
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:237
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:274
@@ -3231,8 +3231,8 @@ msgstr ""
 "Išjungti/Išgalinti <abbr title=\"Dynamic Host Configuration "
 "Protocol\">„DHCP“</abbr> šiai/-am sąsajai ir/arba sietuvui (tik „dnsmasq“)."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:226
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:454
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:280
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:504
 msgid "Disable DNS lookups"
 msgstr "Išjungti „DNS“ paieškas"
 
@@ -3798,9 +3798,9 @@ msgstr ""
 "Įjungti <abbr title=\"angl. Stateless Address Auto Config | liet. "
 "Neįsimenamasis automatinis adreso konfigūravimas\">„SLAAC“</abbr>"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:226
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:448
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:454
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:280
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:498
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:504
 msgid "Enable DNS lookups"
 msgstr "Įjungti „DNS“ paieškas"
 
@@ -5035,7 +5035,7 @@ msgstr "Duoti prieigą prie paprastų „LuCI procedures“"
 msgid "Grant access to crontab configuration"
 msgstr "Duoti prieigą prie „crontab“ konfigūracijos"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:85
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:86
 msgid "Grant access to firewall status"
 msgstr "Duoti prieigą prie užkardos būsenos"
 
@@ -5071,7 +5071,7 @@ msgstr "Duoti prieigą prie tinklo būklės ir būsenos informacijos"
 msgid "Grant access to port status display"
 msgstr "Suteikti prieigą prie prievado būsenos ekrano"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:16
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:17
 msgid "Grant access to process status"
 msgstr "Duoti prieigą prie vyksmo būsenos"
 
@@ -5079,8 +5079,8 @@ msgstr "Duoti prieigą prie vyksmo būsenos"
 msgid "Grant access to realtime statistics"
 msgstr "Duoti prieigą prie realaus laiko statistikos"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:46
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:61
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:47
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:62
 msgid "Grant access to routing status"
 msgstr "Duoti prieigą prie kelvados būklės ir būsenos"
 
@@ -5092,7 +5092,7 @@ msgstr "Duoti prieigą prie paleidimo konfigūracijos"
 msgid "Grant access to system configuration"
 msgstr "Duoti prieigą prie sistemos konfigūracijos"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:33
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:34
 msgid "Grant access to system logs"
 msgstr "Duoti prieigą prie sistemos žurnalų"
 
@@ -5100,7 +5100,7 @@ msgstr "Duoti prieigą prie sistemos žurnalų"
 msgid "Grant access to uHTTPd configuration"
 msgstr "Duoti prieigą prie „uHTTPd“ konfigūracijos"
 
-#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:76
+#: modules/luci-mod-status/root/usr/share/rpcd/acl.d/luci-mod-status.json:77
 msgid "Grant access to wireless channel status"
 msgstr "Duoti prieigą prie belaidžių/bevielių kanalų būsenos ir būklės"
 
@@ -7855,7 +7855,7 @@ msgstr "„Netfilter“ lentelės pavadinimas"
 #: modules/luci-base/root/usr/share/luci/menu.d/luci-base.json:45
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1089
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2619
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:463
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:513
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:79
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:246
 msgid "Network"
@@ -8100,7 +8100,7 @@ msgid "No host route"
 msgstr "Nėra skleidėjo/vedėjo maršruto"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:789
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:194
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:201
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/60_wifi.js:394
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:59
 msgid "No information available"
@@ -8710,7 +8710,7 @@ msgstr "Kelintinis: pirmiausia atitinka maršrutai su mažiausia metrika"
 msgid "Originator Interval"
 msgstr "Pradininko intervalas"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:403
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:453
 msgid "Other:"
 msgstr "Kiti:"
 
@@ -9130,9 +9130,9 @@ msgstr "Pristabdytas"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:271
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/bandwidth.js:281
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:389
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:399
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:409
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:439
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:449
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:459
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:242
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:252
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/load.js:262
@@ -9250,7 +9250,7 @@ msgstr "Ryšio atsakas"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:58
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:97
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:98
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:174
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:187
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:64
 msgid "Pkts."
 msgstr "Pkt."
@@ -9512,7 +9512,7 @@ msgstr "Protokolas."
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:92
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:596
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1384
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:464
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:514
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/30_network.js:60
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:190
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:217
@@ -11031,7 +11031,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:107
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:157
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:465
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:515
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/iptables.js:70
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:187
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routes.js:214
@@ -11632,7 +11632,7 @@ msgctxt "nft tcp sport"
 msgid "TCP source port"
 msgstr "„TCP“ šaltinio prievadas"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:393
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:443
 msgid "TCP:"
 msgstr "„TCP“:"
 
@@ -12533,7 +12533,7 @@ msgstr ""
 "Šis pasirinkimas negali būti naudojamas, nes „ca-bundle“ prog. įrang. "
 "paketas nėra įdiegtas."
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:375
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:425
 msgid "This page displays the active connections via this device."
 msgstr "Šis puslapis rodo aktyvius prisijungimus per šį įrenginį."
 
@@ -12702,7 +12702,7 @@ msgctxt "nft counter"
 msgid "Traffic matched by rule: %.1000mPackets, %.1024mBytes"
 msgstr "Eismas sulygintas pagal taisyklę: %.1000mPaketai, %.1024Megabaitai"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:467
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:517
 msgid "Transfer"
 msgstr "Perduoti"
 
@@ -12837,7 +12837,7 @@ msgctxt "nft udp sport"
 msgid "UDP source port"
 msgstr "„UDP“ šaltinio prievadas"
 
-#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:383
+#: modules/luci-mod-status/htdocs/luci-static/resources/view/status/connections.js:433
 msgid "UDP:"
 msgstr "„UDP“:"
 
