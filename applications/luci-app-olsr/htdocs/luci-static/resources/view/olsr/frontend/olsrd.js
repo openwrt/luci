@@ -11,11 +11,11 @@ return view.extend({
 		object: 'olsrinfo',
 		method: 'hasipip',
 	}),
-	load: function () {
+	load() {
 		return Promise.all([uci.load('olsrd').then(() => {
-			var hasDefaults = false;
+			let hasDefaults = false;
 
-			uci.sections('olsrd', 'InterfaceDefaults', function (s) {
+			uci.sections('olsrd', 'InterfaceDefaults', () => {
 				hasDefaults = true;
 				return false;
 			});
@@ -25,10 +25,10 @@ return view.extend({
 			}
 		})]);
 	},
-	render: function () {
-		let m, s, o;
+	render() {
+		let m, s;
 
-		var has_ipip;
+		let has_ipip;
 
 		m = new form.Map(
 			'olsrd',
@@ -47,7 +47,7 @@ return view.extend({
 		s.tab('lquality', _('Link Quality Settings'));
 		this.callHasIpIp()
 		.then(function (res) {
-			var output = res.result;
+			const output = res.result;
 			has_ipip = output.trim().length > 0;
 		})
 		.catch(function (err) {
@@ -55,7 +55,7 @@ return view.extend({
 		})
 		.finally(function () {
 			s.tab('smartgw', _('SmartGW'), !has_ipip && _('Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not work, please install it.'));
-			var sgw = s.taboption('smartgw', form.Flag, 'SmartGateway', _('Enable'), _('Enable SmartGateway. If it is disabled, then ' + 'all other SmartGateway parameters are ignored. Default is "no".'));
+			let sgw = s.taboption('smartgw', form.Flag, 'SmartGateway', _('Enable'), _('Enable SmartGateway. If it is disabled, then ' + 'all other SmartGateway parameters are ignored. Default is "no".'));
 			sgw.default = 'no';
 			sgw.enabled = 'yes';
 			sgw.disabled = 'no';
@@ -64,7 +64,7 @@ return view.extend({
 				return uci.get('olsrd', section_id, 'SmartGateway') || 'no';
 			};
 	
-			var sgwnat = s.taboption('smartgw', form.Flag, 'SmartGatewayAllowNAT', _('Allow gateways with NAT'), _('Allow the selection of an outgoing IPv4 gateway with NAT'));
+			let sgwnat = s.taboption('smartgw', form.Flag, 'SmartGatewayAllowNAT', _('Allow gateways with NAT'), _('Allow the selection of an outgoing IPv4 gateway with NAT'));
 			sgwnat.depends('SmartGateway', 'yes');
 			sgwnat.default = 'yes';
 			sgwnat.enabled = 'yes';
@@ -72,7 +72,7 @@ return view.extend({
 			sgwnat.optional = true;
 			sgwnat.rmempty = true;
 	
-			var sgwuplink = s.taboption(
+			let sgwuplink = s.taboption(
 				'smartgw',
 				form.ListValue,
 				'SmartGatewayUplink',
@@ -88,7 +88,7 @@ return view.extend({
 			sgwuplink.optional = true;
 			sgwuplink.rmempty = true;
 	
-			var sgwulnat = s.taboption('smartgw', form.Flag, 'SmartGatewayUplinkNAT', _('Uplink uses NAT'), _('If this Node uses NAT for connections to the internet. ' + 'Default is "yes".'));
+			let sgwulnat = s.taboption('smartgw', form.Flag, 'SmartGatewayUplinkNAT', _('Uplink uses NAT'), _('If this Node uses NAT for connections to the internet. ' + 'Default is "yes".'));
 			sgwulnat.depends('SmartGatewayUplink', 'ipv4');
 			sgwulnat.depends('SmartGatewayUplink', 'both');
 			sgwulnat.default = 'yes';
@@ -97,14 +97,14 @@ return view.extend({
 			sgwnat.optional = true;
 			sgwnat.rmempty = true;
 	
-			var sgwspeed = s.taboption('smartgw', form.Value, 'SmartGatewaySpeed', _('Speed of the uplink'), _('Specifies the speed of ' + 'the uplink in kilobits/s. First parameter is upstream, second parameter is downstream. Default is "128 1024".'));
+			let sgwspeed = s.taboption('smartgw', form.Value, 'SmartGatewaySpeed', _('Speed of the uplink'), _('Specifies the speed of ' + 'the uplink in kilobits/s. First parameter is upstream, second parameter is downstream. Default is "128 1024".'));
 			sgwspeed.depends('SmartGatewayUplink', 'ipv4');
 			sgwspeed.depends('SmartGatewayUplink', 'ipv6');
 			sgwspeed.depends('SmartGatewayUplink', 'both');
 			sgwspeed.optional = true;
 			sgwspeed.rmempty = true;
 	
-			var sgwprefix = s.taboption(
+			let sgwprefix = s.taboption(
 				'smartgw',
 				form.Value,
 				'SmartGatewayPrefix',
@@ -125,26 +125,26 @@ return view.extend({
 
 		s.tab('advanced', _('Advanced Settings'));
 
-		var ipv = s.taboption('general', form.ListValue, 'IpVersion', _('Internet protocol'), _('IP-version to use. If 6and4 is selected then one olsrd instance is started for each protocol.'));
+		let ipv = s.taboption('general', form.ListValue, 'IpVersion', _('Internet protocol'), _('IP-version to use. If 6and4 is selected then one olsrd instance is started for each protocol.'));
 		ipv.value('4', 'IPv4');
 		ipv.value('6and4', '6and4');
 
-		var poll = s.taboption('advanced', form.Value, 'Pollrate', _('Pollrate'), _('Polling rate for OLSR sockets in seconds. Default is 0.05.'));
+		let poll = s.taboption('advanced', form.Value, 'Pollrate', _('Pollrate'), _('Polling rate for OLSR sockets in seconds. Default is 0.05.'));
 		poll.optional = true;
 		poll.datatype = 'ufloat';
 		poll.placeholder = '0.05';
 
-		var nicc = s.taboption('advanced', form.Value, 'NicChgsPollInt', _('Nic changes poll interval'), _('Interval to poll network interfaces for configuration changes (in seconds). Default is "2.5".'));
+		let nicc = s.taboption('advanced', form.Value, 'NicChgsPollInt', _('Nic changes poll interval'), _('Interval to poll network interfaces for configuration changes (in seconds). Default is "2.5".'));
 		nicc.optional = true;
 		nicc.datatype = 'ufloat';
 		nicc.placeholder = '2.5';
 
-		var tos = s.taboption('advanced', form.Value, 'TosValue', _('TOS value'), _('Type of service value for the IP header of control traffic. Default is "16".'));
+		let tos = s.taboption('advanced', form.Value, 'TosValue', _('TOS value'), _('Type of service value for the IP header of control traffic. Default is "16".'));
 		tos.optional = true;
 		tos.datatype = 'uinteger';
 		tos.placeholder = '16';
 
-		var fib = s.taboption(
+		let fib = s.taboption(
 			'general',
 			form.ListValue,
 			'FIBMetric',
@@ -162,7 +162,7 @@ return view.extend({
 		fib.value('correct');
 		fib.value('approx');
 
-		var lql = s.taboption(
+		let lql = s.taboption(
 			'lquality',
 			form.ListValue,
 			'LinkQualityLevel',
@@ -172,7 +172,7 @@ return view.extend({
 		lql.value('2');
 		lql.value('0');
 
-		var lqage = s.taboption(
+		let lqage = s.taboption(
 			'lquality',
 			form.Value,
 			'LinkQualityAging',
@@ -182,7 +182,7 @@ return view.extend({
 		lqage.optional = true;
 		lqage.depends('LinkQualityLevel', '2');
 
-		var lqa = s.taboption(
+		let lqa = s.taboption(
 			'lquality',
 			form.ListValue,
 			'LinkQualityAlgorithm',
@@ -204,11 +204,11 @@ return view.extend({
 		lqa.depends('LinkQualityLevel', '2');
 		lqa.optional = true;
 
-		var lqfish = s.taboption('lquality', form.Flag, 'LinkQualityFishEye', _('LQ fisheye'), _('Fisheye mechanism for TCs (checked means on). Default is "on"'));
+		let lqfish = s.taboption('lquality', form.Flag, 'LinkQualityFishEye', _('LQ fisheye'), _('Fisheye mechanism for TCs (checked means on). Default is "on"'));
 		lqfish.default = '1';
 		lqfish.optional = true;
 
-		var hyst = s.taboption(
+		let hyst = s.taboption(
 			'lquality',
 			form.Flag,
 			'UseHysteresis',
@@ -222,12 +222,12 @@ return view.extend({
 		hyst.optional = true;
 		hyst.rmempty = true;
 
-		var port = s.taboption('general', form.Value, 'OlsrPort', _('Port'), _('The port OLSR uses. This should usually stay at the IANA assigned port 698. It can have a value between 1 and 65535.'));
+		let port = s.taboption('general', form.Value, 'OlsrPort', _('Port'), _('The port OLSR uses. This should usually stay at the IANA assigned port 698. It can have a value between 1 and 65535.'));
 		port.optional = true;
 		port.default = '698';
 		port.rmempty = true;
 
-		var mainip = s.taboption(
+		let mainip = s.taboption(
 			'general',
 			form.Value,
 			'MainIp',
@@ -239,14 +239,14 @@ return view.extend({
 		mainip.datatype = 'ipaddr';
 		mainip.placeholder = '0.0.0.0';
 
-		var willingness = s.taboption('advanced', form.ListValue, 'Willingness', _('Willingness'), _('The fixed willingness to use. If not set willingness will be calculated dynamically based on battery/power status. Default is "3".'));
+		let willingness = s.taboption('advanced', form.ListValue, 'Willingness', _('Willingness'), _('The fixed willingness to use. If not set willingness will be calculated dynamically based on battery/power status. Default is "3".'));
 		for (let i = 0; i < 8; i++) {
 			willingness.value(i);
 		}
 		willingness.optional = true;
 		willingness.default = '3';
 
-		var natthr = s.taboption(
+		let natthr = s.taboption(
 			'advanced',
 			form.Value,
 			'NatThreshold',
@@ -275,7 +275,7 @@ return view.extend({
 			}
 		};
 
-		var i = m.section(form.TypedSection, 'InterfaceDefaults', _('Interfaces Defaults'));
+		let i = m.section(form.TypedSection, 'InterfaceDefaults', _('Interfaces Defaults'));
 		i.anonymous = true;
 		i.addremove = false;
 
@@ -283,13 +283,13 @@ return view.extend({
 		i.tab('addrs', _('IP Addresses'));
 		i.tab('timing', _('Timing and Validity'));
 
-		var mode = i.taboption('general', form.ListValue, 'Mode', _('Mode'), _('Interface mode is used to prevent unnecessary packet forwarding on switched ethernet interfaces. ' + 'Valid modes are "mesh" and "ether". Default is "mesh".'));
-		mode.value('mesh');
-		mode.value('ether');
-		mode.optional = true;
-		mode.rmempty = true;
+		let ifmode = i.taboption('general', form.ListValue, 'Mode', _('Mode'), _('Interface mode is used to prevent unnecessary packet forwarding on switched ethernet interfaces. ' + 'Valid modes are "mesh" and "ether". Default is "mesh".'));
+		ifmode.value('mesh');
+		ifmode.value('ether');
+		ifmode.optional = true;
+		ifmode.rmempty = true;
 
-		var weight = i.taboption(
+		let weight = i.taboption(
 			'general',
 			form.Value,
 			'Weight',
@@ -306,7 +306,7 @@ return view.extend({
 		weight.datatype = 'uinteger';
 		weight.placeholder = '0';
 
-		var lqmult = i.taboption(
+		let lqmult = i.taboption(
 			'general',
 			form.DynamicList,
 			'LinkQualityMult',
@@ -324,12 +324,12 @@ return view.extend({
 		lqmult.placeholder = 'default 1.0';
 
 		lqmult.validate = function (section_id) {
-			for (var i = 0; i < lqmult.formvalue(section_id).length; i++) {
-				var v = lqmult.formvalue(section_id)[i];
+			for (let i = 0; i < lqmult.formvalue(section_id).length; i++) {
+				const v = lqmult.formvalue(section_id)[i];
 				if (v !== '') {
-					var val = v.split(' ');
-					var host = val[0];
-					var mult = val[1];
+					const val = v.split(' ');
+					const host = val[0];
+					const mult = val[1];
 					if (!host || !mult) {
 						return [null, "LQMult requires two values (IP address or 'default' and multiplicator) separated by space."];
 					}
@@ -346,7 +346,7 @@ return view.extend({
 			}
 			return true;
 		};
-		var ip4b = i.taboption(
+		let ip4b = i.taboption(
 			'addrs',
 			form.Value,
 			'Ip4Broadcast',
@@ -357,17 +357,17 @@ return view.extend({
 		ip4b.datatype = 'ip4addr';
 		ip4b.placeholder = '0.0.0.0';
 
-		var ip6m = i.taboption('addrs', form.Value, 'IPv6Multicast', _('IPv6 multicast'), _('IPv6 multicast address. Default is "FF02::6D", the manet-router linklocal multicast.'));
+		let ip6m = i.taboption('addrs', form.Value, 'IPv6Multicast', _('IPv6 multicast'), _('IPv6 multicast address. Default is "FF02::6D", the manet-router linklocal multicast.'));
 		ip6m.optional = true;
 		ip6m.datatype = 'ip6addr';
 		ip6m.placeholder = 'FF02::6D';
 
-		var ip4s = i.taboption('addrs', form.Value, 'IPv4Src', _('IPv4 source'), _('IPv4 src address for outgoing OLSR packages. Default is "0.0.0.0", which triggers usage of the interface IP.'));
+		let ip4s = i.taboption('addrs', form.Value, 'IPv4Src', _('IPv4 source'), _('IPv4 src address for outgoing OLSR packages. Default is "0.0.0.0", which triggers usage of the interface IP.'));
 		ip4s.optional = true;
 		ip4s.datatype = 'ip4addr';
 		ip4s.placeholder = '0.0.0.0';
 
-		var ip6s = i.taboption(
+		let ip6s = i.taboption(
 			'addrs',
 			form.Value,
 			'IPv6Src',
@@ -378,7 +378,7 @@ return view.extend({
 		ip6s.datatype = 'ip6addr';
 		ip6s.placeholder = '0::/0';
 
-		var hi = i.taboption('timing', form.Value, 'HelloInterval', _('Hello interval'));
+		let hi = i.taboption('timing', form.Value, 'HelloInterval', _('Hello interval'));
 		hi.optional = true;
 		hi.datatype = 'ufloat';
 		hi.placeholder = '5.0';
@@ -389,7 +389,7 @@ return view.extend({
 			}
 		};
 
-		var hv = i.taboption('timing', form.Value, 'HelloValidityTime', _('Hello validity time'));
+		let hv = i.taboption('timing', form.Value, 'HelloValidityTime', _('Hello validity time'));
 		hv.optional = true;
 		hv.datatype = 'ufloat';
 		hv.placeholder = '40.0';
@@ -400,7 +400,7 @@ return view.extend({
 			}
 		};
 
-		var ti = i.taboption('timing', form.Value, 'TcInterval', _('TC interval'));
+		let ti = i.taboption('timing', form.Value, 'TcInterval', _('TC interval'));
 		ti.optional = true;
 		ti.datatype = 'ufloat';
 		ti.placeholder = '2.0';
@@ -411,7 +411,7 @@ return view.extend({
 			}
 		};
 
-		var tv = i.taboption('timing', form.Value, 'TcValidityTime', _('TC validity time'));
+		let tv = i.taboption('timing', form.Value, 'TcValidityTime', _('TC validity time'));
 		tv.optional = true;
 		tv.datatype = 'ufloat';
 		tv.placeholder = '256.0';
@@ -422,7 +422,7 @@ return view.extend({
 			}
 		};
 
-		var mi = i.taboption('timing', form.Value, 'MidInterval', _('MID interval'));
+		let mi = i.taboption('timing', form.Value, 'MidInterval', _('MID interval'));
 		mi.optional = true;
 		mi.datatype = 'ufloat';
 		mi.placeholder = '18.0';
@@ -433,7 +433,7 @@ return view.extend({
 			}
 		};
 
-		var mv = i.taboption('timing', form.Value, 'MidValidityTime', _('MID validity time'));
+		let mv = i.taboption('timing', form.Value, 'MidValidityTime', _('MID validity time'));
 		mv.optional = true;
 		mv.datatype = 'ufloat';
 		mv.placeholder = '324.0';
@@ -444,7 +444,7 @@ return view.extend({
 			}
 		};
 
-		var ai = i.taboption('timing', form.Value, 'HnaInterval', _('HNA interval'));
+		let ai = i.taboption('timing', form.Value, 'HnaInterval', _('HNA interval'));
 		ai.optional = true;
 		ai.datatype = 'ufloat';
 		ai.placeholder = '18.0';
@@ -455,7 +455,7 @@ return view.extend({
 			}
 		};
 
-		var av = i.taboption('timing', form.Value, 'HnaValidityTime', _('HNA validity time'));
+		let av = i.taboption('timing', form.Value, 'HnaValidityTime', _('HNA validity time'));
 		av.optional = true;
 		av.datatype = 'ufloat';
 		av.placeholder = '108.0';
@@ -466,14 +466,14 @@ return view.extend({
 			}
 		};
 
-		var ifs = m.section(form.TableSection, 'Interface', _('Interfaces'));
+		let ifs = m.section(form.TableSection, 'Interface', _('Interfaces'));
 		ifs.addremove = true;
 		ifs.anonymous = true;
 
 		ifs.extedit = function (eve) {
-			var editButton = eve.target;
-			var sid;
-			var row = editButton.closest('.cbi-section-table-row');
+			const editButton = eve.target;
+			let sid;
+			const row = editButton.closest('.cbi-section-table-row');
 
 			if (row) {
 				sid = row.getAttribute('data-sid');
@@ -482,18 +482,14 @@ return view.extend({
 			window.location.href = `olsrd/iface/${sid}`;
 		};
 
-		ifs.template = 'cbi/tblsection';
-
 		ifs.handleAdd = function (ev) {
-			var sid = uci.add('olsrd', 'Interface');
 			uci
 				.save()
 				.then(function () {
 					return uci.changes();
 				})
 				.then(function (res) {
-					console.log(res);
-					var sid = null;
+					let sid = null;
 					if (res.olsrd && Array.isArray(res.olsrd)) {
 						res.olsrd.forEach(function (item) {
 							if (item.length >= 3 && item[0] === 'add' && item[2] === 'Interface') {
@@ -501,14 +497,11 @@ return view.extend({
 							}
 						});
 					}
-					if (sid) {
-						console.log(sid);
-					}
 					window.location.href = `olsrd/iface/${sid}`;
 				});
 		};
 
-		var ign = ifs.option(form.Flag, 'ignore', _('Enable'));
+		let ign = ifs.option(form.Flag, 'ignore', _('Enable'));
 		ign.enabled = '0';
 		ign.disabled = '1';
 		ign.rmempty = false;
@@ -516,39 +509,38 @@ return view.extend({
 			return uci.get('olsrd', section_id, 'ignore') || '0';
 		};
 
-		var network = ifs.option(form.DummyValue, 'interface', _('Network'));
-		network.template = 'cbi/network_netinfo';
+		ifs.option(form.DummyValue, 'interface', _('Network'));
 
-		var mode = ifs.option(form.DummyValue, 'Mode', _('Mode'));
+		let mode = ifs.option(form.DummyValue, 'Mode', _('Mode'));
 		mode.cfgvalue = function (section_id) {
 			return uci.get('olsrd', section_id, 'Mode') || uci.get_first('olsrd', 'InterfaceDefaults', 'Mode');
 		};
 
-		var hello = ifs.option(form.DummyValue, '_hello', _('Hello'));
+		let hello = ifs.option(form.DummyValue, '_hello', _('Hello'));
 		hello.cfgvalue = function (section_id) {
-			var i = uci.get('olsrd', section_id, 'HelloInterval') || uci.get_first('olsrd', 'InterfaceDefaults', 'HelloInterval');
-			var v = uci.get('olsrd', section_id, 'HelloValidityTime') || uci.get_first('olsrd', 'InterfaceDefaults', 'HelloValidityTime');
+			const i = uci.get('olsrd', section_id, 'HelloInterval') || uci.get_first('olsrd', 'InterfaceDefaults', 'HelloInterval');
+			const v = uci.get('olsrd', section_id, 'HelloValidityTime') || uci.get_first('olsrd', 'InterfaceDefaults', 'HelloValidityTime');
 			return `${i}s / ${v}s`;
 		};
 
-		var tc = ifs.option(form.DummyValue, '_tc', _('TC'));
+		let tc = ifs.option(form.DummyValue, '_tc', _('TC'));
 		tc.cfgvalue = function (section_id) {
-			var i = uci.get('olsrd', section_id, 'TcInterval') || uci.get_first('olsrd', 'InterfaceDefaults', 'TcInterval');
-			var v = uci.get('olsrd', section_id, 'TcValidityTime') || uci.get_first('olsrd', 'InterfaceDefaults', 'TcValidityTime');
+			const i = uci.get('olsrd', section_id, 'TcInterval') || uci.get_first('olsrd', 'InterfaceDefaults', 'TcInterval');
+			const v = uci.get('olsrd', section_id, 'TcValidityTime') || uci.get_first('olsrd', 'InterfaceDefaults', 'TcValidityTime');
 			return `${i}s / ${v}s`;
 		};
 
-		var mid = ifs.option(form.DummyValue, '_mid', _('MID'));
+		let mid = ifs.option(form.DummyValue, '_mid', _('MID'));
 		mid.cfgvalue = function (section_id) {
-			var i = uci.get('olsrd', section_id, 'MidInterval') || uci.get_first('olsrd', 'InterfaceDefaults', 'MidInterval');
-			var v = uci.get('olsrd', section_id, 'MidValidityTime') || uci.get_first('olsrd', 'InterfaceDefaults', 'MidValidityTime');
+			const i = uci.get('olsrd', section_id, 'MidInterval') || uci.get_first('olsrd', 'InterfaceDefaults', 'MidInterval');
+			const v = uci.get('olsrd', section_id, 'MidValidityTime') || uci.get_first('olsrd', 'InterfaceDefaults', 'MidValidityTime');
 			return `${i}s / ${v}s`;
 		};
 
-		var hna = ifs.option(form.DummyValue, '_hna', _('HNA'));
+		let hna = ifs.option(form.DummyValue, '_hna', _('HNA'));
 		hna.cfgvalue = function (section_id) {
-			var i = uci.get('olsrd', section_id, 'HnaInterval') || uci.get_first('olsrd', 'InterfaceDefaults', 'HnaInterval');
-			var v = uci.get('olsrd', section_id, 'HnaValidityTime') || uci.get_first('olsrd', 'InterfaceDefaults', 'HnaValidityTime');
+			const i = uci.get('olsrd', section_id, 'HnaInterval') || uci.get_first('olsrd', 'InterfaceDefaults', 'HnaInterval');
+			const v = uci.get('olsrd', section_id, 'HnaValidityTime') || uci.get_first('olsrd', 'InterfaceDefaults', 'HnaValidityTime');
 			return `${i}s / ${v}s`;
 		};
 

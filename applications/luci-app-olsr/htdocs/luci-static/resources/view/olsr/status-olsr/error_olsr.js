@@ -3,7 +3,7 @@
 'require rpc';
 'require ui';
 return view.extend({
-	render: function () {
+	render() {
 		return E('div', {}, [
 			E('h2', { 'name': 'content' }, _('OLSR Daemon')),
 			E('p', { 'class': 'error' }, _('Unable to connect to the OLSR daemon!')),

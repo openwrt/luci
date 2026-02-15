@@ -1,120 +1,14 @@
 'use strict';
-'require uci';
-'require view';
-'require poll';
-'require rpc';
-'require ui';
 'require network';
+'require poll';
+'require uci';
+'require ui';
+'require view';
+'require olsr.common_js as olsr';
 
-function etx_color(etx) {
-	let color = '#bb3333';
-	if (etx === 0) {
-		color = '#bb3333';
-	} else if (etx < 2) {
-		color = '#00cc00';
-	} else if (etx < 4) {
-		color = '#ffcb05';
-	} else if (etx < 10) {
-		color = '#ff6600';
-	}
-	return color;
-}
+return olsr.olsrview.extend({
 
-function snr_colors(snr) {
-	let color = '#bb3333';
-	if (snr === 0) {
-		color = '#bb3333';
-	} else if (snr > 30) {
-		color = '#00cc00';
-	} else if (snr > 20) {
-		color = '#ffcb05';
-	} else if (snr > 5) {
-		color = '#ff6600';
-	}
-	return color;
-}
-
-return view.extend({
-	callGetJsonStatus: rpc.declare({
-		object: 'olsrinfo',
-		method: 'getjsondata',
-		params: ['otable', 'v4_port', 'v6_port'],
-	}),
-
-	callGetHosts: rpc.declare({
-		object: 'olsrinfo',
-		method: 'hosts',
-	}),
-
-	fetch_jsoninfo: function (otable) {
-		var jsonreq4 = '';
-		var jsonreq6 = '';
-		var v4_port = parseInt(uci.get('olsrd', 'olsrd_jsoninfo', 'port') || '') || 9090;
-		var v6_port = parseInt(uci.get('olsrd6', 'olsrd_jsoninfo', 'port') || '') || 9090;
-		var json;
-		var self = this;
-		return new Promise(function (resolve, reject) {
-			L.resolveDefault(self.callGetJsonStatus(otable, v4_port, v6_port), {})
-				.then(function (res) {
-					json = res;
-
-					jsonreq4 = JSON.parse(json.jsonreq4);
-					jsonreq6 = json.jsonreq6 !== '' ? JSON.parse(json.jsonreq6) : [];
-					var jsondata4 = {};
-					var jsondata6 = {};
-					var data4 = [];
-					var data6 = [];
-					var has_v4 = false;
-					var has_v6 = false;
-
-					if (jsonreq4 === '' && jsonreq6 === '') {
-						window.location.href = 'error_olsr';
-						reject([null, 0, 0, true]);
-						return;
-					}
-
-					if (jsonreq4 !== '') {
-						has_v4 = true;
-						jsondata4 = jsonreq4 || {};
-						if (otable === 'status') {
-							data4 = jsondata4;
-						} else {
-							data4 = jsondata4[otable] || [];
-						}
-
-						for (var i = 0; i < data4.length; i++) {
-							data4[i]['proto'] = '4';
-						}
-					}
-
-					if (jsonreq6 !== '') {
-						has_v6 = true;
-						jsondata6 = jsonreq6 || {};
-						if (otable === 'status') {
-							data6 = jsondata6;
-						} else {
-							data6 = jsondata6[otable] || [];
-						}
-
-						for (var j = 0; j < data6.length; j++) {
-							data6[j]['proto'] = '6';
-						}
-					}
-
-					for (var k = 0; k < data6.length; k++) {
-						data4.push(data6[k]);
-					}
-
-					resolve([data4, has_v4, has_v6, false]);
-				})
-				.catch(function (err) {
-					console.error(err);
-					reject([null, 0, 0, true]);
-				});
-		});
-	},
-
-	action_neigh: async function () {
+	async action_neigh() {
 		try {
 			const [data, has_v4, has_v6, error] = await this.fetch_jsoninfo('links');
 
@@ -130,24 +24,24 @@ return view.extend({
 				}
 			}
 
-			var assoclist = [];
-			var resolveVal = uci.get('luci_olsr', 'general', 'resolve');
-			var devices;
-			var defaultgw;
+			const assoclist = [];
+			const resolveVal = uci.get('luci_olsr', 'general', 'resolve');
+			let devices;
+			let defaultgw;
 
 			devices = await network.getWifiDevices();
-			var rts = await network.getWANNetworks();
+			const rts = await network.getWANNetworks();
 
 			rts.forEach(function (rt) {
 				defaultgw = rt.getGatewayAddr() || '0.0.0.0';
 			});
 
-			var networkPromises = devices.map(async function (dev) {
-				var networks = await dev.getWifiNetworks();
+			const networkPromises = devices.map(async function (dev) {
+				const networks = await dev.getWifiNetworks();
 
-				var promiseArr = networks.map(async function (net) {
-					var radio = await net.getDevice();
-					var [ifname, devnetwork, device, list] = await Promise.all([net.getIfname(), net.getNetworkNames(), radio ? radio.getName() : null, net.getAssocList()]);
+				const promiseArr = networks.map(async function (net) {
+					const radio = await net.getDevice();
+					const [ifname, devnetwork, device, list] = await Promise.all([net.getIfname(), net.getNetworkNames(), radio ? radio.getName() : null, net.getAssocList()]);
 
 					assoclist.push({
 						ifname: ifname,
@@ -161,8 +55,8 @@ return view.extend({
 			});
 
 			await Promise.all(networkPromises);
-			var res = '';
-			var self = this;
+			let res = '';
+			let self = this;
 			await (async function () {
 				try {
 					res = await self.callGetHosts();
@@ -173,40 +67,36 @@ return view.extend({
 			})();
 
 			function matchHostnames(ip) {
-				var lines = res.hosts.split('\n');
-				for (var i = 0; i < lines.length; i++) {
-					var ipandhostname = lines[i].trim().split(/\s+/);
+				const lines = res.hosts.split('\n');
+				for (let line of lines) {
+					const ipandhostname = line.trim().split(/\s+/);
 					if (ipandhostname[0] === ip) {
 						return ipandhostname[1];
 					}
 				}
 				return null;
 			}
-			var modifiedData = await Promise.all(
+			const modifiedData = await Promise.all(
 				data.map(async function (v) {
-					var snr = 0;
-					var signal = 0;
-					var noise = 0;
-					var mac = '';
-					var ip;
-					var neihgt = [];
+					let snr = 0;
+					let signal = 0;
+					let noise = 0;
 
 					if (resolveVal === '1') {
-						var hostname = matchHostnames(v.remoteIP);
+						const hostname = matchHostnames(v.remoteIP);
 						if (hostname) {
 							v.hostname = hostname;
 						}
 					}
-					var hosthints = await network.getHostHints();
-					var networkStatus = await network.getStatusByAddress(v.localIP);
-					var lmac = await hosthints.getMACAddrByIPAddr(v.localIP);
-					var rmac = await hosthints.getMACAddrByIPAddr(v.remoteIP);
+					const hosthints = await network.getHostHints();
+					const networkStatus = await network.getStatusByAddress(v.localIP);
+					const lmac = await hosthints.getMACAddrByIPAddr(v.localIP);
+					const rmac = await hosthints.getMACAddrByIPAddr(v.remoteIP);
 
-					for (let i = 0; i < assoclist.length; i++) {
-						var val = assoclist[i];
+					for (let val of assoclist) {
 						if (networkStatus != undefined && val.network === networkStatus.interface && val.list) {
-							for (var assocmac in val.list) {
-								var assot = val.list[assocmac];
+							for (let assocmac in val.list) {
+								const assot = val.list[assocmac];
 								if (rmac == assot.mac) {
 									signal = parseInt(assot.signal);
 									noise = parseInt(assot.noise);
@@ -238,7 +128,7 @@ return view.extend({
 
 			modifiedData.sort(compare);
 
-			var result = { links: modifiedData, has_v4: has_v4, has_v6: has_v6 };
+			const result = { links: modifiedData, has_v4: has_v4, has_v6: has_v6 };
 			return result;
 		} catch (err) {
 			console.error(err);
@@ -246,18 +136,18 @@ return view.extend({
 		}
 	},
 
-	load: function () {
-		var self = this;
+	load() {
+		let self = this;
 		poll.add(function () {
 			self.render();
 		}, 5);
 		return Promise.all([uci.load('olsrd'), uci.load('luci_olsr')]);
 	},
-	render: function () {
-		var neigh_res;
-		var has_v4;
-		var has_v6;
-		var self = this;
+
+	render() {
+		let neigh_res;
+		let has_v4;
+		let has_v6;
 
 		return this.action_neigh()
 			.then(function (result) {
@@ -265,7 +155,7 @@ return view.extend({
 				has_v4 = result.has_v4;
 				has_v6 = result.has_v6;
 
-				var table = E('div', { 'class': 'table cbi-section-table', 'id': 'olsr_neigh_table' }, [
+				const table = E('div', { 'class': 'table cbi-section-table', 'id': 'olsr_neigh_table' }, [
 					E('div', { 'class': 'tr cbi-section-table-cell' }, [
 						E('div', { 'class': 'th cbi-section-table-cell' }, _('Neighbour IP')),
 						E('div', { 'class': 'th cbi-section-table-cell' }, _('Hostname')),
@@ -278,16 +168,15 @@ return view.extend({
 					]),
 				]);
 
-				var rv = [];
-				for (var k = 0; k < neigh_res.length; k++) {
-					var link = neigh_res[k];
+				const rv = [];
+				for (let link of neigh_res) {
 					link.linkCost = (link.linkCost).toFixed(3) || 0;
 					if (link.linkCost === 4194304) {
 						link.linkCost = 0;
 					}
-					var color = etx_color(link.linkCost);
-					var snr_color = snr_colors(link.snr);
-					var defaultgw_color = '';
+					const color = etx_color(link.linkCost);
+					const snr_color = snr_colors(link.snr);
+					let defaultgw_color = '';
 					if (link.defaultgw === 1) {
 						defaultgw_color = '#ffff99';
 					}
@@ -310,9 +199,9 @@ return view.extend({
 					});
 				}
 
-				var nt = document.getElementById('olsr_neigh_table');
+				const nt = document.getElementById('olsr_neigh_table');
 				if (nt) {
-					var s =
+					let s =
 						'<div class="tr cbi-section-table-cell">' +
 						'<div class="th cbi-section-table-cell">Neighbour IP</div>' +
 						'<div class="th cbi-section-table-cell">Hostname</div>' +
@@ -324,8 +213,8 @@ return view.extend({
 						'<div class="th cbi-section-table-cell">SNR</div>' +
 						'</div>';
 
-					for (var idx = 0; idx < rv.length; idx++) {
-						var neigh = rv[idx];
+					for (let idx = 0; idx < rv.length; idx++) {
+						const neigh = rv[idx];
 
 						if (neigh.proto == '6') {
 							s +=
@@ -402,28 +291,27 @@ return view.extend({
 					nt.innerHTML = s;
 				}
 
-				var i = 1;
+				let i = 1;
 
-				for (var k = 0; k < neigh_res.length; k++) {
-					var link = neigh_res[k];
+				for (let link of neigh_res) {
 					link.linkCost = Number(link.linkCost).toFixed(3) || 0;
 					if (link.linkCost === 4194304) {
 						link.linkCost = 0;
 					}
 
-					color = etx_color(link.linkCost);
-					snr_color = snr_colors(link.snr);
+					const color = etx_color(link.linkCost);
+					const snr_color = snr_colors(link.snr);
 
 					if (link.snr === 0) {
 						link.snr = '?';
 					}
 
-					var defaultgw_color = '';
+					let defaultgw_color = '';
 					if (link.defaultgw === 1) {
 						defaultgw_color = '#ffff99';
 					}
 
-					var tr = E(
+					const tr = E(
 						'div',
 						{
 							'class': 'tr cbi-section-table-row cbi-rowstyle-' + i + ' proto-' + link.proto,
@@ -526,11 +414,11 @@ return view.extend({
 					i = (i % 2) + 1;
 				}
 
-				var fieldset = E('fieldset', { 'class': 'cbi-section' }, [E('legend', {}, _('Overview of currently established OLSR connections')), table]);
+				const fieldset = E('fieldset', { 'class': 'cbi-section' }, [E('legend', {}, _('Overview of currently established OLSR connections')), table]);
 
-				var h2 = E('h2', { 'name': 'content' }, _('OLSR connections'));
-				var divToggleButtons = E('div', { 'id': 'togglebuttons' });
-				var statusOlsrLegend = E('div', {}, [
+				const h2 = E('h2', { 'name': 'content' }, _('OLSR connections'));
+				const divToggleButtons = E('div', { 'id': 'togglebuttons' });
+				const statusOlsrLegend = E('div', {}, [
 					E('h3', {}, [_('Legend') + ':']),
 					E('ul', {}, [
 						E('li', {}, [E('strong', {}, [_('LQ: ')]), _('Success rate of packages received from the neighbour')]),
@@ -556,7 +444,7 @@ return view.extend({
 					]),
 				]);
 
-				var statusOlsrCommonJs = null;
+				let statusOlsrCommonJs = null;
 
 				if (has_v4 && has_v6) {
 					statusOlsrCommonJs = E('script', {
@@ -565,14 +453,15 @@ return view.extend({
 					});
 				}
 
-				var result = E([], {}, [h2, divToggleButtons, fieldset, statusOlsrLegend, statusOlsrCommonJs]);
+				const fresult = E([], {}, [h2, divToggleButtons, fieldset, statusOlsrLegend, statusOlsrCommonJs]);
 
-				return result;
+				return fresult;
 			})
 			.catch(function (error) {
 				console.error(error);
 			});
 	},
+
 	handleSaveApply: null,
 	handleSave: null,
 	handleReset: null,

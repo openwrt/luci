@@ -5,18 +5,18 @@
 'require uci';
 
 return view.extend({
-	load: function () {
+	load() {
 		return Promise.all([uci.load('luci_olsr')]);
 	},
-	render: function () {
-		let m, s, o;
+	render() {
+		let m, s;
 
 		m = new form.Map('luci_olsr', _('OLSR - Display Options'));
 
 		s = m.section(form.TypedSection, 'olsr');
 		s.anonymous = true;
 
-		var res = s.option(
+		let res = s.option(
 			form.Flag,
 			'resolve',
 			_('Resolve'),

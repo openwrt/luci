@@ -34,39 +34,39 @@ Changes:
 2010-12-11: Changed some paths to make it work with Kamikaze and Luci -- soma
 */
 
-var maxmetric = 3;
-var iconvariant = "-mini";
-var nodes = new Array();
-var ncount = 0;
-var newnodes = new Array();
-var edges = new Array();
-var iel = 220; // ideal edge length
-var optsize = 10; // boundingbox around nodes
+let maxmetric = 3;
+let iconvariant = "-mini";
+let nodes = new Array();
+let ncount = 0;
+let newnodes = new Array();
+let edges = new Array();
+let iel = 220; // ideal edge length
+let optsize = 10; // boundingbox around nodes
 
-var vwidth = 0;
-var vheight = 0;
+let vwidth = 0;
+let vheight = 0;
 
-var xoff = 0;
-var yoff = 0;
-var scale = 1.0;
+let xoff = 0;
+let yoff = 0;
+let scale = 1.0;
 
-var idle_timeout = 15;
-var erase_timeout = 60;
-var dcl_timeout = 250;
-var dcllow_timeout = 500;
-var auto_declump = true;
-var showdesc = true;
-var auto_save = 1;
-var now_secs = 5;
+let idle_timeout = 15;
+let erase_timeout = 60;
+let dcl_timeout = 250;
+let dcllow_timeout = 500;
+let auto_declump = true;
+let showdesc = true;
+let auto_save = 1;
+let now_secs = 5;
 
 // dom elements
-var IFrameObj;
-var mainDiv;
-var nodeDiv;
-var edgeDiv;
-var zoomInput;
-var maxmetricInput;
-var debugSpan;
+let IFrameObj;
+let mainDiv;
+let nodeDiv;
+let edgeDiv;
+let zoomInput;
+let maxmetricInput;
+let debugSpan;
 
 
 /******** EDGE CLASS ********/
@@ -263,23 +263,23 @@ function touch_node(ip) {
 }
 
 function place_new_nodes() {
-	var nc = 0;
-	for (var i = 0; i < newnodes.length; i++) {
-		var n = newnodes[i];
+	let nc = 0;
+	for (let i = 0; i < newnodes.length; i++) {
+		let n = newnodes[i];
 		if (n.placed) { continue; }
-		var sp;
-		if (sp = getCookie("node_" + n.ip)) {
-			var xy = sp.split("x");
+		let sp;
+		if (sp == getCookie("node_" + n.ip)) {
+			let xy = sp.split("x");
 			debug_writeln(("sp: " + sp + " xy[0]: " + xy[0] + " xy[1]: " + xy[1]));
 			n.x = parseFloat(xy[0]);
 			n.y = parseFloat(xy[1]);
 		}
 		else if (n.weight > 1) {
 			// see if we find already placed nodes
-			var ox = 0, oy = 0;
-			var dx = 0, dy = 0;
-			var c = 0;
-			for (var e in n.edges) {
+			let ox = 0, oy = 0;
+			let dx = 0, dy = 0;
+			let c = 0;
+			for (let e in n.edges) {
 				if (nodes[e] && nodes[e].placed) {
 					if (!ox && !oy) {
 						ox = nodes[e].x;
@@ -528,12 +528,12 @@ function fa(x) {
 	return Math.pow((x * x) / iel, 2);
 }
 
-var dclTimer = 0;
-var declump_running = false;
-function declump(t) {
-	var dx;
-	var dy;
-	var d;
+let dclTimer = 0;
+let declump_running = false;
+function declump() {
+	let dx;
+	let dy;
+	let d;
 
 	// clear declump timer
 	if (dclTimer) {
@@ -545,8 +545,7 @@ function declump(t) {
 	declump_running = true;
 
 	// nodes
-	var nc = 0;
-	for (var ip1 in nodes) {
+	for (let ip1 in nodes) {
 		nodes[ip1].fr_x = 0;
 		nodes[ip1].fr_y = 0;
 		nodes[ip1].fa_x = 0;
@@ -555,11 +554,11 @@ function declump(t) {
 		nodes[ip1].y_next = nodes[ip1].y;
 		nodes[ip1].randdisplace = 0;
 	}
-	for (var ip1 in nodes) {
+	for (let ip1 in nodes) {
 		if (nodes[ip1].metric > maxmetric || nodes[ip1].pinned) {
 			continue;
 		}
-		for (var ip2 in nodes) {
+		for (let ip2 in nodes) {
 			if (nodes[ip2].metric > maxmetric || ip1 == ip2) {
 				continue;
 			}
@@ -575,15 +574,13 @@ function declump(t) {
 		dx = nodes[ip1].fr_x;
 		dy = nodes[ip1].fr_y;
 		d = Math.sqrt(dx * dx + dy * dy);
-		var md = Math.min(d, iel / nodes[ip1].weight);
+		let md = Math.min(d, iel / nodes[ip1].weight);
 		nodes[ip1].x_next += (dx / d) * md;
 		nodes[ip1].y_next += (dy / d) * md;
-		nc++;
 	}
 
 	// edges
-	var ec = 0;
-	for (var e in edges) {
+	for (let e in edges) {
 		if (!edges[e].n1 || !edges[e].n2 ||
 			edges[e].n1.metric > maxmetric || edges[e].n2.metric > maxmetric) {
 			continue;
@@ -597,16 +594,15 @@ function declump(t) {
 		edges[e].n1.fa_y -= (dy / d) * fa(d);
 		edges[e].n2.fa_x += (dx / d) * fa(d);
 		edges[e].n2.fa_y += (dy / d) * fa(d);
-		ec++;
 	}
 
 	// displacement
-	var xmin = -20;
-	var ymin = -20;
-	var xmax = 20;
-	var ymax = 20;
-	var dsum = 0;
-	for (var ip in nodes) {
+	let xmin = -20;
+	let ymin = -20;
+	let xmax = 20;
+	let ymax = 20;
+	let dsum = 0;
+	for (let ip in nodes) {
 		if (nodes[ip].metric > maxmetric || nodes[ip].pinned) {
 			continue;
 		}
@@ -657,15 +653,15 @@ function declump(t) {
 }
 
 //Das Objekt, das gerade bewegt wird.
-var dragip = null;
+let dragip = null;
 
 // Position, an der das Objekt angeklickt wurde.
-var dragx = 0;
-var dragy = 0;
+let dragx = 0;
+let dragy = 0;
 
 // Mausposition
-var posx = 0;
-var posy = 0;
+let posx = 0;
+let posy = 0;
 
 function draginit() {
 	// Initialisierung der ãberwachung der Events
@@ -681,7 +677,7 @@ function dragstart(element) {
 	dragx = posx - element.offsetLeft;
 	dragy = posy - element.offsetTop;
 
-	var n = nodes[dragip];
+	let n = nodes[dragip];
 	if (n) {
 		n.pinned = true;
 	}
@@ -691,7 +687,7 @@ function dragstart(element) {
 function dragstop() {
 	//Wird aufgerufen, wenn ein Objekt nicht mehr bewegt werden soll.
 
-	var n = nodes[dragip];
+	let n = nodes[dragip];
 	if (n) {
 		n.pinned = false;
 	}
@@ -706,12 +702,12 @@ function drag(ereignis) {
 	posx = document.all ? window.event.clientX : ereignis.pageX;
 	posy = document.all ? window.event.clientY : ereignis.pageY;
 	if (dragip != null) {
-		var n = nodes[dragip];
+		let n = nodes[dragip];
 		if (n) {
 			n.x = (posx - dragx) / scale - xoff;
 			n.y = (posy - dragy) / scale - yoff;
 		}
-		var e = document.getElementById('node_' + dragip);
+		let e = document.getElementById('node_' + dragip);
 		e.style.left = parseInt((n.x + xoff) * scale) + "px";
 		e.style.top = parseInt((n.y + yoff) * scale) + "px";
 	}
@@ -752,7 +748,7 @@ function setCookie(name, value, expires, path, domain, secure) {
  */
 
 function getCookie(name) {
-	var results = document.cookie.match(name + '=(.*?)(;|$)');
+	let results = document.cookie.match(name + '=(.*?)(;|$)');
 	if (results) {
 		return unescape(results[1]);
 	}
@@ -777,8 +773,8 @@ function deleteCookie(name, path, domain) {
 }
 
 function deleteAllCookies() {
-	var cookies = document.cookie.split("; ");
-	for (var i = 0; i < cookies.length; i++) {
+	const cookies = document.cookie.split("; ");
+	for (let i = 0; i < cookies.length; i++) {
 		deleteCookie(cookies[i].split("=")[0]);
 	}
 }

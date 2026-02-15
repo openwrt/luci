@@ -1,86 +1,15 @@
 'use strict';
-'require uci';
-'require view';
 'require poll';
 'require rpc';
+'require uci';
 'require ui';
+'require view';
+'require olsr.common_js as olsr';
 
-return view.extend({
-	callGetJsonStatus: rpc.declare({
-		object: 'olsrinfo',
-		method: 'getjsondata',
-		params: ['otable', 'v4_port', 'v6_port'],
-	}),
+return olsr.olsrview.extend({
 
-	fetch_jsoninfo: function (otable) {
-		var jsonreq4 = '';
-		var jsonreq6 = '';
-		var v4_port = parseInt(uci.get('olsrd', 'olsrd_jsoninfo', 'port') || '') || 9090;
-		var v6_port = parseInt(uci.get('olsrd6', 'olsrd_jsoninfo', 'port') || '') || 9090;
-		var json;
-		var self = this;
-		return new Promise(function (resolve, reject) {
-			L.resolveDefault(self.callGetJsonStatus(otable, v4_port, v6_port), {})
-				.then(function (res) {
-					json = res;
-
-					jsonreq4 = JSON.parse(json.jsonreq4);
-					jsonreq6 = json.jsonreq6 !== '' ? JSON.parse(json.jsonreq6) : [];
-					var jsondata4 = {};
-					var jsondata6 = {};
-					var data4 = [];
-					var data6 = [];
-					var has_v4 = false;
-					var has_v6 = false;
-
-					if (jsonreq4 === '' && jsonreq6 === '') {
-						window.location.href = 'error_olsr';
-						reject([null, 0, 0, true]);
-						return;
-					}
-
-					if (jsonreq4 !== '') {
-						has_v4 = true;
-						jsondata4 = jsonreq4 || {};
-						if (otable === 'status') {
-							data4 = jsondata4;
-						} else {
-							data4 = jsondata4[otable] || [];
-						}
-
-						for (var i = 0; i < data4.length; i++) {
-							data4[i]['proto'] = '4';
-						}
-					}
-
-					if (jsonreq6 !== '') {
-						has_v6 = true;
-						jsondata6 = jsonreq6 || {};
-						if (otable === 'status') {
-							data6 = jsondata6;
-						} else {
-							data6 = jsondata6[otable] || [];
-						}
-
-						for (var j = 0; j < data6.length; j++) {
-							data6[j]['proto'] = '6';
-						}
-					}
-
-					for (var k = 0; k < data6.length; k++) {
-						data4.push(data6[k]);
-					}
-
-					resolve([data4, has_v4, has_v6, false]);
-				})
-				.catch(function (err) {
-					console.error(err);
-					reject([null, 0, 0, true]);
-				});
-		});
-	},
-	action_smartgw: function () {
-		var self = this;
+	action_smartgw() {
+		let self = this;
 		return new Promise(function (resolve, reject) {
 			self
 				.fetch_jsoninfo('gateways')
@@ -100,7 +29,7 @@ return view.extend({
 					data.ipv4.sort(compare);
 					data.ipv6.sort(compare);
 
-					var result = { gws: data, has_v4: has_v4, has_v6: has_v6 };
+					const result = { gws: data, has_v4: has_v4, has_v6: has_v6 };
 					resolve(result);
 				})
 				.catch(function (err) {
@@ -108,24 +37,25 @@ return view.extend({
 				});
 		});
 	},
-	load: function () {
-		var self = this;
+
+	load() {
+		let self = this;
 		poll.add(function () {
 			self.render();
 		}, 5);
 		return Promise.all([uci.load('olsrd'), uci.load('luci_olsr')]);
 	},
-	render: function () {
-		var gws_res;
-		var has_v4;
-		var has_v6;
-		var self = this;
+
+	render() {
+		let gws_res;
+		let has_v4;
+		let has_v6;
 		return this.action_smartgw()
 			.then(function (result) {
 				gws_res = result.gws;
 				has_v4 = result.has_v4;
 				has_v6 = result.has_v6;
-				var fieldset = E('fieldset', { 'class': 'cbi-section' }, [
+				const fieldset = E('fieldset', { 'class': 'cbi-section' }, [
 					E('legend', {}, _('Overview of smart gateways in this network')),
 					E('div', { 'class': 'table cbi-section-table', 'id': 'olsrd_smartgw' }, [
 						E('div', { 'class': 'tr cbi-section-table-titles' }, [
@@ -141,16 +71,15 @@ return view.extend({
 						]),
 					]),
 				]);
-				var has_smartgw;
+				let has_smartgw;
 				uci.sections('olsrd', 'olsrd', function (s) {
 					if (s.SmartGateway && s.SmartGateway === 'yes') {
 						has_smartgw = true;
 					}
 				});
 
-				var rv = [];
-				for (var k = 0; k < gws_res.ipv4.length; k++) {
-					var gw = gws_res.ipv4[k];
+				const rv = [];
+				for (let gw of gws_res.ipv4) {
 					gw.cost = parseFloat(gw.cost) / 1024 || 0;
 					if (gw.cost >= 100) {
 						gw.cost = 0;
@@ -159,20 +88,20 @@ return view.extend({
 					rv.push({
 						proto: gw.IPv4 ? '4' : '6',
 						originator: gw.originator,
-						selected: gw.selected ? luci.i18n.translate('yes') : luci.i18n.translate('no'),
-						cost: gw.cost > 0 ? gw.cost.toFixed(3) : luci.i18n.translate('infinite'),
+						selected: gw.selected ? _('yes') : _('no'),
+						cost: gw.cost > 0 ? gw.cost.toFixed(3) : _('infinite'),
 						hops: gw.hops,
 						uplink: gw.uplink,
 						downlink: gw.downlink,
-						v4: gw.IPv4 ? luci.i18n.translate('yes') : luci.i18n.translate('no'),
-						v6: gw.IPv6 ? luci.i18n.translate('yes') : luci.i18n.translate('no'),
+						v4: gw.IPv4 ? _('yes') : _('no'),
+						v6: gw.IPv6 ? _('yes') : _('no'),
 						prefix: gw.prefix,
 					});
 				}
 
-				var smartgwdiv = document.getElementById('olsrd_smartgw');
+				const smartgwdiv = document.getElementById('olsrd_smartgw');
 				if (smartgwdiv) {
-					var s =
+					let s =
 						'<div class="tr cbi-section-table-titles">' +
 						'<div class="th cbi-section-table-cell">Gateway</div>' +
 						'<div class="th cbi-section-table-cell">Selected</div>' +
@@ -185,9 +114,9 @@ return view.extend({
 						'<div class="th cbi-section-table-cell">Prefix</div>' +
 						'</div>';
 
-					for (var idx = 0; idx < rv.length; idx++) {
-						var smartgw = rv[idx];
-						var linkgw;
+					for (let idx = 0; idx < rv.length; idx++) {
+						const smartgw = rv[idx];
+						let linkgw;
 						s += '<div class="tr cbi-section-table-row cbi-rowstyle-' + (1 + (idx % 2)) + ' proto-' + smartgw.proto + '">';
 
 						if (smartgw.proto == '6') {
@@ -230,27 +159,26 @@ return view.extend({
 					smartgwdiv.innerHTML = s;
 				}
 
-				var i = 1;
+				let i = 1;
 
 				if (has_smartgw) {
-					for (var k = 0; k < gws_res.ipv4.length; k++) {
-						var gw = gws_res.ipv4[k];
+					for (let gw of gws_res.ipv4) {
 						gw.cost = parseInt(gw.cost) / 1024 || 0;
 						if (gw.cost >= 100) {
 							gw.cost = 0;
 						}
 
-						var tr = E('div', { 'class': 'tr cbi-section-table-row cbi-rowstyle-' + i + ' proto-' + gw.proto }, [
+						const tr = E('div', { 'class': 'tr cbi-section-table-row cbi-rowstyle-' + i + ' proto-' + gw.proto }, [
 							gw.proto === '6'
 								? E('div', { 'class': 'td cbi-section-table-cell left' }, [E('a', { 'href': 'http://[' + gw.originator + ']/cgi-bin-status.html' }, gw.originator)])
 								: E('div', { 'class': 'td cbi-section-table-cell left' }, [E('a', { 'href': 'http://' + gw.originator + '/cgi-bin-status.html' }, gw.originator)]),
-							E('div', { 'class': 'td cbi-section-table-cell left' }, [gw.selected ? luci.i18n.translate('yes') : luci.i18n.translate('no')]),
-							E('div', { 'class': 'td cbi-section-table-cell left' }, [gw.cost > 0 ? string.format('%.3f', gw.cost) : luci.i18n.translate('infinite')]),
+							E('div', { 'class': 'td cbi-section-table-cell left' }, [gw.selected ? _('yes') : _('no')]),
+							E('div', { 'class': 'td cbi-section-table-cell left' }, [gw.cost > 0 ? String.format('%.3f', gw.cost) : _('infinite')]),
 							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.hops),
 							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.uplink),
 							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.downlink),
-							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.IPv4 ? luci.i18n.translate('yes') : luci.i18n.translate('no')),
-							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.IPv6 ? luci.i18n.translate('yes') : luci.i18n.translate('no')),
+							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.IPv4 ? _('yes') : _('no')),
+							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.IPv6 ? _('yes') : _('no')),
 							E('div', { 'class': 'td cbi-section-table-cell left' }, gw.prefix),
 						]);
 
@@ -258,17 +186,17 @@ return view.extend({
 						i = (i % 2) + 1;
 					}
 
-					var h2 = E('h2', { 'name': 'content' }, _('SmartGW announcements'));
-					var divToggleButtons = E('div', { 'id': 'togglebuttons' });
-					var statusOlsrCommonJs = null;
+					const h2 = E('h2', { 'name': 'content' }, _('SmartGW announcements'));
+					const divToggleButtons = E('div', { 'id': 'togglebuttons' });
+					let statusOlsrCommonJs = null;
 
 					if (has_v4 && has_v6) {
 						statusOlsrCommonJs = E('script', { 'type': 'text/javascript', 'src': L.resource('common/common_js.js') });
 					}
 
-					var result = E([], {}, [h2, divToggleButtons, fieldset, statusOlsrCommonJs]);
+					const fresult = E([], {}, [h2, divToggleButtons, fieldset, statusOlsrCommonJs]);
 
-					return result;
+					return fresult;
 				} else {
 					return E('h2', {}, _('SmartGateway is not configured on this system'));
 				}
