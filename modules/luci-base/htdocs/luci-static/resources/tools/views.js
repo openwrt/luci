@@ -213,6 +213,9 @@ var CBILogreadBox = function(logtag, name) {
 				'class': 'cbi-input',
 			});
 
+			/**
+			 * Update the form when log filter parameters change
+			 */
 			function handleLogFilterChange() {
 				self.logFacilityFilter = facilitySelect.value;
 				self.invertLogFacilitySearch = facilityInvert.checked;

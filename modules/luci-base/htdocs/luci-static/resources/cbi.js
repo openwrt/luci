@@ -11,18 +11,44 @@
 	http://www.apache.org/licenses/LICENSE-2.0
 */
 
+/**
+ * CBI (Configuration Bindings Interface) helper utilities and DOM helpers.
+ *
+ * Provides initialization for CBI UI elements, dependency handling,
+ * validation wiring and miscellaneous helpers used by LuCI forms. Functions
+ * defined here are registered as global `window.*` symbols.
+ * @module LuCI.cbi
+ */
 var cbi_d = [];
 var cbi_strings = { path: {}, label: {} };
 
+/**
+ * Read signed 8-bit integer from a byte array at the given offset.
+ * @param {Array<number>} bytes - Byte array.
+ * @param {number} off - Offset into the array.
+ * @returns {number} Signed 8-bit value (returned as unsigned number).
+ */
 function s8(bytes, off) {
 	var n = bytes[off];
 	return (n > 0x7F) ? (n - 256) >>> 0 : n;
 }
 
+/**
+ * Read unsigned 16-bit little-endian integer from a byte array at offset.
+ * @param {Array<number>} bytes - Byte array.
+ * @param {number} off - Offset into the array.
+ * @returns {number} Unsigned 16-bit integer.
+ */
 function u16(bytes, off) {
 	return ((bytes[off + 1] << 8) + bytes[off]) >>> 0;
 }
 
+/**
+ * Compute a stable 32-bit-ish string hash used for translation keys.
+ * Encodes UTF-8 surrogate pairs and mixes bytes into a hex hash string.
+ * @param {string|null} s - Input string.
+ * @returns {string|null} Hex hash string or null for empty input.
+ */
 function sfh(s) {
 	if (s === null || s.length === 0)
 		return null;
@@ -105,15 +131,35 @@ function sfh(s) {
 
 var plural_function = null;
 
+/**
+ * Trim whitespace and normalise internal whitespace sequences to single spaces.
+ * @param {*} s - Value to convert to string and trim.
+ * @returns {string} Trimmed and normalised string.
+ */
 function trimws(s) {
 	return String(s).trim().replace(/[ \t\n]+/g, ' ');
 }
 
+/**
+ * Lookup a translated string for the given message and optional context.
+ * Falls back to the source string when no translation found.
+ * @param {string} s - Source string.
+ * @param {string} [c] - Optional translation context.
+ * @returns {string} Translated string or original.
+ */
 function _(s, c) {
 	var k = (c != null ? trimws(c) + '\u0001' : '') + trimws(s);
 	return (window.TR && TR[sfh(k)]) || s;
 }
 
+/**
+ * Plural-aware translation lookup.
+ * @param {number} n - Quantity to evaluate plural form.
+ * @param {string} s - Singular string.
+ * @param {string} p - Plural string.
+ * @param {string} [c] - Optional context.
+ * @returns {string} Translated plural form or source string.
+ */
 function N_(n, s, p, c) {
 	if (plural_function == null && window.TR)
 		plural_function = new Function('n', (TR['00000000'] || 'plural=(n != 1);') + 'return +plural');
@@ -125,6 +171,12 @@ function N_(n, s, p, c) {
 }
 
 
+/**
+ * Register a dependency entry for a field.
+ * @param {HTMLElement|string} field - Field element or its id.
+ * @param {Object} dep - Dependency specification object.
+ * @param {number} index - Order index of the dependent node.
+ */
 function cbi_d_add(field, dep, index) {
 	var obj = (typeof(field) === 'string') ? document.getElementById(field) : field;
 	if (obj) {
@@ -149,6 +201,12 @@ function cbi_d_add(field, dep, index) {
 	}
 }
 
+/**
+ * Check whether an input/select identified by target matches the given reference value.
+ * @param {string} target - Element id or name to query.
+ * @param {string} ref - Reference value to compare with.
+ * @returns {boolean} True if the current value matches ref.
+ */
 function cbi_d_checkvalue(target, ref) {
 	var value = null,
 	    query = 'input[id="'+target+'"], input[name="'+target+'"], ' +
@@ -162,6 +220,11 @@ function cbi_d_checkvalue(target, ref) {
 	return (((value !== null) ? value : "") == ref);
 }
 
+/**
+ * Evaluate a list of dependency descriptors and return whether any match.
+ * @param {Array<Object>} deps - Array of dependency objects to evaluate.
+ * @returns {boolean} True when dependencies indicate the element should be shown.
+ */
 function cbi_d_check(deps) {
 	var reverse;
 	var def = false;
@@ -186,6 +249,10 @@ function cbi_d_check(deps) {
 	return def;
 }
 
+/**
+ * Update DOM nodes based on registered dependencies, showing or hiding
+ * nodes and restoring their order when dependency state changes.
+ */
 function cbi_d_update() {
 	var state = false;
 	for (var i=0; i<cbi_d.length; i++) {
@@ -227,6 +294,11 @@ function cbi_d_update() {
 		parent.dispatchEvent(new CustomEvent('dependency-update', { bubbles: true }));
 }
 
+/**
+ * Initialize CBI widgets and wire up dependency and validation handlers.
+ * Walks the DOM looking for CBI-specific data attributes and replaces
+ * placeholders with interactive widgets.
+ */
 function cbi_init() {
 	var nodes;
 
@@ -356,6 +428,12 @@ function cbi_init() {
 	Promise.all(tasks).then(cbi_d_update);
 }
 
+/**
+ * Run all validators associated with a form and optionally show an error.
+ * @param {HTMLFormElement} form - Form element containing validators.
+ * @param {string} [errmsg] - Message to show when validation fails.
+ * @returns {boolean} True when form is valid.
+ */
 function cbi_validate_form(form, errmsg)
 {
 	/* if triggered by a section removal or addition, don't validate */
@@ -376,12 +454,21 @@ function cbi_validate_form(form, errmsg)
 	return true;
 }
 
+/**
+ * Enable/disable a named-section add button depending on input value.
+ * @param {HTMLInputElement} input - Input that contains the new section name.
+ */
 function cbi_validate_named_section_add(input)
 {
 	var button = input.parentNode.parentNode.querySelector('.cbi-button-add');
 	button.disabled = input.value === '';
 }
 
+/**
+ * Trigger a delayed form validation (used to allow UI state to settle).
+ * @param {HTMLFormElement} form - Form to validate after a short delay.
+ * @returns {boolean} Always returns true.
+ */
 function cbi_validate_reset(form)
 {
 	window.setTimeout(
@@ -391,6 +478,12 @@ function cbi_validate_reset(form)
 	return true;
 }
 
+/**
+ * Attach a validator to a field and wire validation events.
+ * @param {HTMLElement|string} cbid - Element or element id to validate.
+ * @param {boolean} optional - Whether an empty value is allowed.
+ * @param {string} type - Validator type expression (passed to L.validation).
+ */
 function cbi_validate_field(cbid, optional, type)
 {
 	var field = isElem(cbid) ? cbid : document.getElementById(cbid);
@@ -425,6 +518,13 @@ function cbi_validate_field(cbid, optional, type)
 	}
 }
 
+/**
+ * Move a table row up or down within a section and update the storage field.
+ * @param {HTMLElement} elem - Element inside the row that triggers the swap.
+ * @param {boolean} up - If true, move the row up; otherwise move down.
+ * @param {string} store - ID of the hidden input used to store the order.
+ * @returns {boolean} Always returns false to cancel default action.
+ */
 function cbi_row_swap(elem, up, store)
 {
 	var tr = findParent(elem.parentNode, '.cbi-section-table-row');
@@ -478,6 +578,10 @@ function cbi_row_swap(elem, up, store)
 	return false;
 }
 
+/**
+ * Mark the last visible value container child with class `cbi-value-last`.
+ * @param {HTMLElement} container - Parent container element.
+ */
 function cbi_tag_last(container)
 {
 	var last;
@@ -494,6 +598,14 @@ function cbi_tag_last(container)
 		last.classList.add('cbi-value-last');
 }
 
+/**
+ * Submit a form, optionally adding a hidden input to pass a name/value pair.
+ * @param {HTMLElement} elem - Element inside the form or an element with a form.
+ * @param {string} [name] - Name of hidden input to include, if any.
+ * @param {string} [value] - Value for the hidden input (defaults to '1').
+ * @param {string} [action] - Optional form action URL override.
+ * @returns {boolean} True on successful submit, false when no form found.
+ */
 function cbi_submit(elem, name, value, action)
 {
 	var form = elem.form || findParent(elem, 'form');
@@ -516,6 +628,17 @@ function cbi_submit(elem, name, value, action)
 	return true;
 }
 
+/**
+ * @external String
+ */
+
+/**
+ * Format a string using positional arguments.
+ * @function format
+ * @memberof external:String.prototype
+ * @param {...string} args
+ * @returns {string}
+ */
 String.prototype.format = function()
 {
 	if (!RegExp)
@@ -524,6 +647,14 @@ String.prototype.format = function()
 	var html_esc = [/&/g, '&#38;', /"/g, '&#34;', /'/g, '&#39;', /</g, '&#60;', />/g, '&#62;'];
 	var quot_esc = [/"/g, '&#34;', /'/g, '&#39;'];
 
+	/**
+	 * Escape a string.
+	 * @private
+	 * @function esc
+	 * @param {string} s
+	 * @param {string} r
+	 * @returns {string}
+	 */
 	function esc(s, r) {
 		var t = typeof(s);
 
@@ -693,11 +824,25 @@ String.prototype.format = function()
 	return out + str;
 }
 
+/**
+ * Format a string using positional arguments.
+ * @function nobr
+ * @memberof external:String.prototype
+ * @param {...string} args
+ * @returns {string}
+ */
 String.prototype.nobr = function()
 {
 	return this.replace(/[\s\n]+/g, '&#160;');
 }
 
+/**
+ * Format a string using positional arguments.
+ * @function format
+ * @memberof external:String
+ * @param {...string} args
+ * @returns {string}
+ */
 String.format = function()
 {
 	var a = [ ];
@@ -708,6 +853,13 @@ String.format = function()
 	return ''.format.apply(arguments[0], a);
 }
 
+/**
+ * Format a string using positional arguments.
+ * @function nobr
+ * @memberof external:String
+ * @param {...string} args
+ * @returns {string}
+ */
 String.nobr = function()
 {
 	var a = [ ];
@@ -736,12 +888,48 @@ if (!window.requestAnimationFrame) {
 }
 
 
+/**
+ * Return the element for input which may be an element or an id.
+ * @param {Element|string} e - Element or id.
+ * @returns {HTMLElement|null}
+ */
 function isElem(e) { return L.dom.elem(e) }
+
+/**
+ * Parse an HTML string into a DOM element.
+ * @param {string} s - HTML string.
+ * @returns {HTMLElement} Parsed DOM element.
+ */
 function toElem(s) { return L.dom.parse(s) }
+
+/**
+ * Test whether node matches a CSS selector.
+ * @param {Node} node - Node to test.
+ * @param {string} selector - CSS selector.
+ * @returns {boolean}
+ */
 function matchesElem(node, selector) { return L.dom.matches(node, selector) }
+
+/**
+ * Find the parent matching selector from node upwards.
+ * @param {Node} node - Starting node.
+ * @param {string} selector - CSS selector to match ancestor.
+ * @returns {HTMLElement|null}
+ */
 function findParent(node, selector) { return L.dom.parent(node, selector) }
+
+/**
+ * Create DOM elements using {@link L.dom.create} helper (convenience wrapper).
+ * @returns {HTMLElement}
+ */
 function E() { return L.dom.create.apply(L.dom, arguments) }
 
+/**
+ * Initialize a dropdown element into an {@link L.ui.Dropdown} instance and bind it.
+ * If already bound, this is a no-op.
+ * @param {HTMLElement} sb - The select element to convert.
+ * @returns {L.ui.Dropdown|undefined} Dropdown instance or undefined when already bound.
+ */
 function cbi_dropdown_init(sb) {
 	if (sb && L.dom.findClassInstance(sb) instanceof L.ui.Dropdown)
 		return;
@@ -750,6 +938,12 @@ function cbi_dropdown_init(sb) {
 	return dl.bind(sb);
 }
 
+/**
+ * Update or initialize a table UI widget with new data.
+ * @param {HTMLElement|string} table - Table element or selector.
+ * @param {...Node[]} data - Data to update the table with.
+ * @param {string} [placeholder] - Placeholder text when empty.
+ */
 function cbi_update_table(table, data, placeholder) {
 	var target = isElem(table) ? table : document.querySelector(table);
 
@@ -766,11 +960,23 @@ function cbi_update_table(table, data, placeholder) {
 	t.update(data, placeholder);
 }
 
+/**
+ * Show a modal dialog with the given title and children content.
+ * @deprecated
+ * @param {string} title - Title of the modal.
+ * @param {HTMLElement|Array<HTMLElement>} children - Content of the modal.
+ * @returns {Promise} Promise that resolves when modal shown or when closed depending on L.showModal.
+ */
 function showModal(title, children)
 {
 	return L.showModal(title, children);
 }
 
+/**
+ * Hide any currently shown modal dialog.
+ * @deprecated
+ * @returns {*} Return value forwarded from L.hideModal.
+ */
 function hideModal()
 {
 	return L.hideModal();

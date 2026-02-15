@@ -1,12 +1,14 @@
 /**
- * @class LuCI
- * @classdesc
  *
  * This is the LuCI base class. It is automatically instantiated and
  * accessible using the global `L` variable.
- *
- * @param {Object} env
- * The environment settings to use for the LuCI runtime.
+ * @class LuCI
+ * @classdesc
+ * @property {object} env The environment settings to use for the LuCI runtime.
+ * @param {Window} window - The browser global `window` object.
+ * @param {Document} document - The DOM `document` root for the current page.
+ * @param {undefined} undefined - Local `undefined` slot (prevents shadowing and
+ * ensures `undefined` is the real undefined value).
  */
 
 ((window, document, undefined) => {
@@ -21,9 +23,9 @@
 	const toCamelCase = s => s.replace(/(?:^|[\. -])(.)/g, (m0, m1) => m1.toUpperCase());
 
 	/**
-	 * @class baseclass
+	 * @class 
+	 * @name LuCI.baseclass
 	 * @hideconstructor
-	 * @memberof LuCI
 	 * @classdesc
 	 *
 	 * `LuCI.baseclass` is the abstract base class all LuCI classes inherit from.
@@ -46,6 +48,7 @@
 		 * An object describing the properties to add to the new
 		 * subclass.
 		 *
+		 * @this {LuCI.baseclass}
 		 * @returns {LuCI.baseclass}
 		 * Returns a new LuCI.baseclass subclassed from this class, extended
 		 * by the given properties and with its prototype set to this base
@@ -89,7 +92,7 @@
 		/**
 		 * Extends this base class with the properties described in
 		 * `properties`, instantiates the resulting subclass using
-		 * the additional optional arguments passed to this function
+		 * the given arguments passed to this function
 		 * and returns the resulting subclassed Class instance.
 		 *
 		 * This function serves as a convenience shortcut for
@@ -102,9 +105,8 @@
 		 * An object describing the properties to add to the new
 		 * subclass.
 		 *
-		 * @param {...*} [new_args]
-		 * Specifies arguments to be passed to the subclass constructor
-		 * as-is in order to instantiate the new subclass.
+		 * @param {...*} new_args
+		 * Arguments forwarded to the constructor of the generated subclass.
 		 *
 		 * @returns {LuCI.baseclass}
 		 * Returns a new LuCI.baseclass instance extended by the given
@@ -121,7 +123,7 @@
 		 *
 		 * @memberof LuCI.baseclass
 		 *
-		 * @param {Array<*>} params
+		 * @param {Array<*>} args
 		 * An array of arbitrary values which will be passed as arguments
 		 * to the constructor function.
 		 *
@@ -153,7 +155,7 @@
 		 * @returns {boolean}
 		 * Returns `true` when the given `classValue` is a subclass of this
 		 * class or `false` if the given value is not a valid class or not
-		 * a subclass of this class'.
+		 * a subclass of this class.
 		 */
 		isSubclass(classValue) {
 			return (typeof(classValue) == 'function' && classValue.prototype instanceof this);
@@ -165,7 +167,7 @@
 			 * `offset` and prepend any further given optional parameters to
 			 * the beginning of the resulting array copy.
 			 *
-			 * @memberof LuCI.baseclass
+			 * @memberof LuCI.baseclass.prototype
 			 * @instance
 			 *
 			 * @param {Array<*>} args
@@ -203,16 +205,15 @@
 			 *	Calls the `key()` method with parameters `arg1` and `arg2`
 			 *	when found within one of the parent classes.
 			 *
-			 * @memberof LuCI.baseclass
+			 * @memberof LuCI.baseclass.prototype
 			 * @instance
 			 *
 			 * @param {string} key
 			 * The name of the superclass member to retrieve.
 			 *
-			 * @param {Array<*>} [callArgs]
-			 * An optional array of function call parameters to use. When
-			 * this parameter is specified, the found member value is called
-			 * as a function using the values of this array as arguments.
+			 * @param {...*|Array<*>} [callArgs]
+			 * Arguments to pass when invoking the superclass method. May be 
+			 * either an argument array or variadic arguments.
 			 *
 			 * @throws {ReferenceError}
 			 * Throws a `ReferenceError` when `callArgs` are specified and
@@ -266,6 +267,9 @@
 
 			/**
 			 * Returns a string representation of this class.
+			 *
+			 * @memberof LuCI.baseclass.prototype
+			 * @instance
 			 *
 			 * @returns {string}
 			 * Returns a string representation of this class containing the
@@ -510,6 +514,21 @@
 
 	const requestQueue = [];
 
+	/**
+	 * Check whether a Request.options object is eligible to be queued for RPC
+	 * batching.
+	 *
+	 * A request is considered queueable when all of the following hold:
+	 *  - `classes.rpc` is available
+	 *  - HTTP method is `POST` and `content` is an object
+	 *  - `nobatch` is not explicitly `true`
+	 *  - the request URL starts with the RPC base URL
+	 *
+	 * @private
+	 * @param {object} opt - Options object passed to `Request.request()`
+	 * @returns {boolean} `true` if the request may be queued for batching,
+	 * otherwise `false`
+	 */
 	function isQueueableRequest(opt) {
 		if (!classes.rpc)
 			return false;
@@ -525,6 +544,21 @@
 		return (rpcBaseURL != null && opt.url.indexOf(rpcBaseURL) == 0);
 	}
 
+	/**
+	 * Send all queued RPC requests in a single batched call and dispatch
+	 * individual callbacks for each original request.
+	 *
+	 * Behaviour:
+	 *  - aggregates queued requests' `content` into a single array payload
+	 *  - sends the batch to `rpcBaseURL` with `nobatch: true`
+	 *  - on success: clones and forwards per-request replies to the
+	 *    originally provided resolve callbacks, or rejects when no
+	 *    related reply is available
+	 *  - on failure: invokes each queued request's reject callback
+	 *
+	 * @private
+	 * @returns {void}
+	 */
 	function flushRequestQueue() {
 		if (!requestQueue.length)
 			return;
@@ -631,11 +665,11 @@
 		 * @property {Object<string, string>} [header]
 		 * Specifies HTTP headers to set for the request.
 		 *
-		 * @property {function} [progress]
+		 * @property {function()} [progress]
 		 * An optional request callback function which receives ProgressEvent
 		 * instances as sole argument during the HTTP request transfer.
 		 *
-		 * @property {function} [responseProgress]
+		 * @property {function()} [responseProgress]
 		 * An optional request callback function which receives ProgressEvent
 		 * instances as sole argument during the HTTP response transfer.
 		 */
@@ -772,6 +806,24 @@
 			});
 		},
 
+		/**
+		 * Handle XHR readyState changes for an in-flight request and resolve or
+		 * reject the originating promise.
+		 *
+		 * @instance
+		 * @memberof LuCI.request
+		 * @param {function(LuCI.response)} resolveFn
+		 * Callback invoked on success with the constructed {@link LuCI.response}.
+		 *
+		 * @param {function(Error)} rejectFn
+		 * Callback invoked on failure or abort with an `Error` instance.
+		 *
+		 * @param {Event} [ev]
+		 * The XHR `readystatechange` event (optional).
+		 *
+		 * @returns {void}
+		 * No return value; the function resolves or rejects the supplied callbacks.
+		 */
 		handleReadyStateChange(resolveFn, rejectFn, ev) {
 			const xhr = this.xhr, duration = Date.now() - this.start;
 
@@ -926,14 +978,14 @@
 			 * @param {LuCI.request.RequestOptions} [options]
 			 * Additional options to configure the request.
 			 *
-			 * @param {LuCI.request.poll~callbackFn} [callback]
+			 * @param {LuCI.request.poll.callbackFn} [callback]
 			 * {@link LuCI.request.poll~callbackFn Callback} function to
 			 * invoke for each HTTP reply.
 			 *
 			 * @throws {TypeError}
 			 * Throws `TypeError` when an invalid interval was passed.
 			 *
-			 * @returns {function}
+			 * @returns {function()}
 			 * Returns the internally created poll function.
 			 */
 			add(interval, url, options, callback) {
@@ -965,7 +1017,7 @@
 			 *
 			 * @instance
 			 * @memberof LuCI.request.poll
-			 * @param {function} entry
+			 * @param {function()} entry
 			 * The poll function returned by {@link LuCI.request.poll#add add()}.
 			 *
 			 * @returns {boolean}
@@ -974,27 +1026,30 @@
 			remove(entry) { return Poll.remove(entry) },
 
 			/**
-			  * Alias for {@link LuCI.poll.start LuCI.poll.start()}.
-			  *
-			  * @instance
-			  * @memberof LuCI.request.poll
-			  */
+			 * Alias for {@link LuCI.poll.start LuCI.poll.start()}.
+			 *
+			 * @instance
+			 * @memberof LuCI.request.poll
+			 * @returns {boolean}
+			 */
 			start() { return Poll.start() },
 
 			/**
-			  * Alias for {@link LuCI.poll.stop LuCI.poll.stop()}.
-			  *
-			  * @instance
-			  * @memberof LuCI.request.poll
-			  */
+			 * Alias for {@link LuCI.poll.stop LuCI.poll.stop()}.
+			 *
+			 * @instance
+			 * @memberof LuCI.request.poll
+			 * @returns {boolean}
+			 */
 			stop() { return Poll.stop() },
 
 			/**
-			  * Alias for {@link LuCI.poll.active LuCI.poll.active()}.
-			  *
-			  * @instance
-			  * @memberof LuCI.request.poll
-			  */
+			 * Alias for {@link LuCI.poll.active LuCI.poll.active()}.
+			 *
+			 * @instance
+			 * @memberof LuCI.request.poll
+			 * @returns {boolean}
+			 */
 			active() { return Poll.active() }
 		}
 	});
@@ -1020,7 +1075,7 @@
 		 *
 		 * @instance
 		 * @memberof LuCI.poll
-		 * @param {function} fn
+		 * @param {function()} fn
 		 * The function to invoke on each poll interval.
 		 *
 		 * @param {number} interval
@@ -1064,7 +1119,7 @@
 		 *
 		 * @instance
 		 * @memberof LuCI.poll
-		 * @param {function} fn
+		 * @param {function()} fn
 		 * The function to remove.
 		 *
 		 * @throws {TypeError}
@@ -1430,6 +1485,7 @@
 		 * When `val` is of any other type, it will be added as an attribute
 		 * to the given `node` as-is, with the underlying `setAttribute()`
 		 * call implicitly turning it into a string.
+		 * @returns {null}
 		 */
 		attr(node, key, val) {
 			if (!this.elem(node))
@@ -1472,7 +1528,7 @@
 		 *
 		 * @instance
 		 * @memberof LuCI.dom
-		 * @param {*} html
+		 * @param {string} html
 		 * Describes the node to create.
 		 *
 		 * When the value of `html` is of type array, a `DocumentFragment`
@@ -1713,7 +1769,7 @@
 		 * @param {string} method
 		 * The name of the method to invoke on the found class instance.
 		 *
-		 * @param {...*} params
+		 * @param {...*} args
 		 * Additional arguments to pass to the invoked method as-is.
 		 *
 		 * @returns {*|null}
@@ -1759,7 +1815,7 @@
 		 * @param {Node} node
 		 * The DOM `Node` instance to test.
 		 *
-		 * @param {LuCI.dom~ignoreCallbackFn} [ignoreFn]
+		 * @param {LuCI.dom.ignoreCallbackFn} [ignoreFn]
 		 * Specifies an optional function which is invoked for each child
 		 * node to decide whether the child node should be ignored or not.
 		 *
@@ -2038,6 +2094,8 @@
 		 * @memberof LuCI.view
 		 * @param {Event} ev
 		 * The DOM event that triggered the function.
+		 * @param {number} mode
+		 * Whether to apply the changes checked.
 		 *
 		 * @returns {*|Promise<*>}
 		 * Any return values of this function are discarded, but
@@ -2341,7 +2399,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @param {function} fn
+		 * @param {function()} fn
 		 * The function to bind.
 		 *
 		 * @param {*} self
@@ -2351,7 +2409,7 @@
 		 * Zero or more variable arguments which are bound to the function
 		 * as parameters.
 		 *
-		 * @returns {function}
+		 * @returns {function()}
 		 * Returns the bound function.
 		 */
 		bind(fn, self, ...args) {
@@ -2372,7 +2430,11 @@
 		 * be replaced by spaces and joined with the runtime-determined
 		 * base URL of LuCI.js to form an absolute URL to load the class
 		 * file from.
-		 *
+		 * @param {string[]} [from=[]]
+		 * Optional dependency chain used during dependency resolution. This
+		 * array contains the sequence of class names already being resolved
+		 * (the caller stack). It is used to detect circular dependencies —
+		 * if `name` appears in `from` a `DependencyError` is thrown.
 		 * @throws {DependencyError}
 		 * Throws a `DependencyError` when the class to load includes
 		 * circular dependencies.
@@ -2603,7 +2665,7 @@
 		 * such as `sae` or `11w` support. The `subfeature` argument can
 		 * be used to query these.
 		 *
-		 * @return {boolean|null}
+		 * @returns {boolean|null}
 		 * Return `true` if the queried feature (and sub-feature) is available
 		 * or `false` if the requested feature isn't present or known.
 		 * Return `null` when a sub-feature was queried for a feature which
@@ -2639,8 +2701,7 @@
 		},
 
 		/* private */
-		setupDOM(res) {
-			const domEv = res[0], uiClass = res[1], rpcClass = res[2], formClass = res[3], rpcBaseURL = res[4];
+		setupDOM([domEv, uiClass, rpcClass, formClass, rpcBaseURL]) {
 
 			rpcClass.setBaseURL(rpcBaseURL);
 
@@ -2727,7 +2788,7 @@
 		 * @param {...string} [parts]
 		 * An array of parts to join into a path.
 		 *
-		 * @return {string}
+		 * @returns {string}
 		 * Return the joined path.
 		 */
 		fspath() /* ... */{
@@ -2766,7 +2827,7 @@
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
-		 * @return {string}
+		 * @returns {string}
 		 * Return the joined URL path.
 		 */
 		path(prefix = '', parts) {
@@ -2804,7 +2865,7 @@
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
-		 * @return {string}
+		 * @returns {string}
 		 * Returns the resulting URL path.
 		 */
 		url() {
@@ -2828,7 +2889,7 @@
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
-		 * @return {string}
+		 * @returns {string}
 		 * Returns the resulting URL path.
 		 */
 		resource() {
@@ -2852,7 +2913,7 @@
 		 * An array of parts to join into a URL path. Parts may contain
 		 * slashes and any of the other characters mentioned above.
 		 *
-		 * @return {string}
+		 * @returns {string}
 		 * Returns the resulting URL path.
 		 */
 		media() {
@@ -2865,7 +2926,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @return {string}
+		 * @returns {string}
 		 * Returns the URL path to the current view.
 		 */
 		location() {
@@ -2884,7 +2945,7 @@
 		 * @param {*} [val]
 		 * The value to test
 		 *
-		 * @return {boolean}
+		 * @returns {boolean}
 		 * Returns `true` if the given value is of a type object and
 		 * not `null`, else returns `false`.
 		 */
@@ -2901,7 +2962,7 @@
 		 * @param {*} [val]
 		 * The value to test
 		 *
-		 * @return {boolean}
+		 * @returns {boolean}
 		 * Returns `true` if the given value is a function arguments object,
 		 * else returns `false`.
 		 */
@@ -2931,7 +2992,7 @@
 		 * lexicographic sorting with a sorting suitable for IP/MAC style
 		 * addresses or numeric values respectively.
 		 *
-		 * @return {string[]}
+		 * @returns {string[]}
 		 * Returns an array containing the sorted keys of the given object.
 		 */
 		sortedKeys(obj, key, sortmode) {
@@ -2964,7 +3025,7 @@
 		 * This function is meant to be used as a comparator function for
 		 * Array.sort().
 		 *
-		 * @type {function}
+		 * @type {function()}
 		 *
 		 * @param {*} a
 		 * The first value
@@ -2972,7 +3033,7 @@
 		 * @param {*} b
 		 * The second value.
 		 *
-		 * @return {number}
+		 * @returns {number}
 		 * Returns -1 if the first value is smaller than the second one.
 		 * Returns 0 if both values are equal.
 		 * Returns 1 if the first value is larger than the second one.
@@ -2991,7 +3052,7 @@
 		 * @param {*} val
 		 * The input value to sort (and convert to an array if needed).
 		 *
-		 * @return {Array<*>}
+		 * @returns {Array<*>}
 		 * Returns the resulting, numerically sorted array.
 		 */
 		sortedArray(val) {
@@ -3012,7 +3073,7 @@
 		 * @param {*} val
 		 * The value to convert into an array.
 		 *
-		 * @return {Array<*>}
+		 * @returns {Array<*>}
 		 * Returns the resulting array.
 		 */
 		toArray(val) {
@@ -3091,7 +3152,7 @@
 		 * @param {LuCI.requestCallbackFn} cb
 		 * The callback function to invoke when the request finishes.
 		 *
-		 * @return {Promise<null>}
+		 * @returns {Promise<null>}
 		 * Returns a promise resolving to `null` when concluded.
 		 */
 		get(url, args, cb) {
@@ -3119,7 +3180,7 @@
 		 * @param {LuCI.requestCallbackFn} cb
 		 * The callback function to invoke when the request finishes.
 		 *
-		 * @return {Promise<null>}
+		 * @returns {Promise<null>}
 		 * Returns a promise resolving to `null` when concluded.
 		 */
 		post(url, args, cb) {
@@ -3158,7 +3219,7 @@
 		 * an argument `token` with the current value of `LuCI.env.token` by
 		 * default, regardless of the parameters specified with `args`.
 		 *
-		 * @return {function}
+		 * @returns {function()}
 		 * Returns the internally created function that has been passed to
 		 * {@link LuCI.request.poll#add Request.poll.add()}. This value can
 		 * be passed to {@link LuCI.poll.remove Poll.remove()} to remove the
@@ -3189,7 +3250,7 @@
 		/**
 		 * Check whether a view has sufficient permissions.
 		 *
-		 * @return {boolean|null}
+		 * @returns {boolean|null}
 		 * Returns `null` if the current session has no permission at all to
 		 * load resources required by the view. Returns `false` if readonly
 		 * permissions are granted or `true` if at least one required ACL
@@ -3209,10 +3270,10 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @param {function} entry
+		 * @param {function()} entry
 		 * The polling function to remove.
 		 *
-		 * @return {boolean}
+		 * @returns {boolean}
 		 * Returns `true` when the function has been removed or `false` if
 		 * it could not be found.
 		 */
@@ -3225,7 +3286,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @return {boolean}
+		 * @returns {boolean}
 		 * Returns `true` when the polling loop has been stopped or `false`
 		 * when it didn't run to begin with.
 		 */
@@ -3238,7 +3299,7 @@
 		 * @instance
 		 * @memberof LuCI
 		 *
-		 * @return {boolean}
+		 * @returns {boolean}
 		 * Returns `true` when the polling loop has been started or `false`
 		 * when it was already running.
 		 */
@@ -3341,7 +3402,7 @@
 		 * @param {number} [timeout]
 		 * Request timeout to use
 		 *
-		 * @return {Promise<null>}
+		 * @returns {Promise<null>}
 		 */
 		get(url, data, callback, timeout) {
 			this.active = true;
@@ -3368,7 +3429,7 @@
 		 * @param {number} [timeout]
 		 * Request timeout to use
 		 *
-		 * @return {Promise<null>}
+		 * @returns {Promise<null>}
 		 */
 		post(url, data, callback, timeout) {
 			this.active = true;
