@@ -7,8 +7,8 @@
 return baseclass.extend({
 	title: _('CPU Frequency'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var cpufreq = {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const cpufreq = {
 			title: "%H: Processor frequency - core %pi",
 			alt_autoscale: true,
 			vlabel: "Frequency (Hz)",
@@ -22,7 +22,7 @@ return baseclass.extend({
 		};
 
 	    if (uci.get("luci_statistics", "collectd_cpufreq", "ExtraItems")) {
-			var transitions = {
+			const transitions = {
 				detail: true,
 				title: "%H: Frequency transitions - core %pi",
 				alt_autoscale: true,
@@ -38,7 +38,7 @@ return baseclass.extend({
 				}
 			};
 
-			var percentage = {
+			const percentage = {
 				detail: true,
 				title: "%H: Frequency distribution - core %pi",
 				alt_autoscale: true,

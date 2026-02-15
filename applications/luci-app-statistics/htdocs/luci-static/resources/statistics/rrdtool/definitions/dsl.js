@@ -5,9 +5,9 @@
 return L.Class.extend({
 	title: _("DSL"),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var g = [];
-		var dtypes = graph.dataTypes(host, plugin, plugin_instance);
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const g = [];
+		const dtypes = graph.dataTypes(host, plugin, plugin_instance);
 
 		const d_uptime = {
 			title: _("%H: Line uptime on %pi"),
@@ -416,23 +416,23 @@ return L.Class.extend({
 			g.push(d_bitrate);
 		}
 		if (dtypes.includes("errors")) {
-			var dinsts = graph.dataInstances(host, plugin, plugin_instance, "errors");
-			var e = 0,
-				c = 0,
-				r = 0;
-			for (var i = 0; i < dinsts.length; i++) {
+			const dinsts = graph.dataInstances(host, plugin, plugin_instance, "errors");
+			let e = 0;
+			let c = 0;
+			let r = 0;
+			for (let dinst of dinsts) {
 				if (
 					!e &&
-					(dinsts[i].indexOf("es") > -1 ||
-						dinsts[i].indexOf("loss") > -1 ||
-						dinsts[i].indexOf("uas") > -1)
+					(dinst.indexOf("es") > -1 ||
+						dinst.indexOf("loss") > -1 ||
+						dinst.indexOf("uas") > -1)
 				) {
 					e = g.push(d_errors);
-				} else if (!c && dinsts[i].indexOf("crc") > -1) {
+				} else if (!c && dinst.indexOf("crc") > -1) {
 					c = g.push(d_crc);
 				} else if (
 					!r &&
-					(dinsts[i].indexOf("rx_") == 0 || dinsts[i].indexOf("tx_") == 0)
+					(dinst.indexOf("rx_") == 0 || dinst.indexOf("tx_") == 0)
 				) {
 					r = g.push(d_retx);
 				}

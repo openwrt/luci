@@ -6,8 +6,8 @@
 return baseclass.extend({
 	title: _('Ping'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var ping = {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const ping = {
 			title: "%H: ICMP Round Trip Time",
 			vlabel: "ms",
 			number_format: "%5.1lf ms",
@@ -25,7 +25,7 @@ return baseclass.extend({
 			}
 		};
 
-		var droprate = {
+		const droprate = {
 			title: "%H: ICMP Drop Rate",
 			vlabel: "%",
 			y_min: "0",
@@ -44,7 +44,7 @@ return baseclass.extend({
 			}
 		};
 
-		var stddev = {
+		const stddev = {
 			title: "%H: ICMP Standard Deviation",
 			vlabel: "ms",
 			y_min: "0",

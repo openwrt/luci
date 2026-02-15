@@ -6,7 +6,7 @@
 return baseclass.extend({
 	title: _('Users'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: Users (console logins)",
 			vlabel: "count",

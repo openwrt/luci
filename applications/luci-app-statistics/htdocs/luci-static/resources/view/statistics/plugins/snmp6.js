@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('SNMP6 Plugin Configuration'),
 	description: _('The snmp6 plugin collects IPv6 statistics for selected interfaces.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 		o.default = '0';
@@ -22,10 +22,10 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var basic = L.toArray(section.Interfaces),
-		    count = basic.length,
-		    invert = section.IgnoreSelected == '1';
+	configSummary(section) {
+		const basic = L.toArray(section.Interfaces);
+		const count = basic.length;
+		const invert = section.IgnoreSelected == '1';
 
 		if (invert && count == 0)
 			return _('Monitoring all interfaces');

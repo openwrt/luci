@@ -6,7 +6,7 @@
 return baseclass.extend({
 	title: _('Thermal'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: Temperature of %pi",
 			alt_autoscale: true,

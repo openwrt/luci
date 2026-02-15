@@ -6,7 +6,7 @@
 return baseclass.extend({
 	title: _('Context Switches'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: Context switches",
 			alt_autoscale: true,

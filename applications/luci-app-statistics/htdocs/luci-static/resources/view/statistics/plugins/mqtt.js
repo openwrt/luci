@@ -5,7 +5,7 @@
 return baseclass.extend({
     title: _('Mqtt Plugin Configuration'),
 
-    addFormOptions: function(s) {
+    addFormOptions(s) {
         let o, ss;
 
         o = s.option(form.Flag, 'enable', _('Sends or receives data via mqtt'));
@@ -95,7 +95,7 @@ return baseclass.extend({
         o.modalonly = true;
     },
 
-    configSummary: function(section) {
+    configSummary(section) {
         return _('Mqtt plugin enabled');
     }
 });

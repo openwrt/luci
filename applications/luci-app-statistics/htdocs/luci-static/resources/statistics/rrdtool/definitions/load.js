@@ -6,7 +6,7 @@
 return baseclass.extend({
 	title: _('System Load'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: Load",
 			vlabel: "Load",

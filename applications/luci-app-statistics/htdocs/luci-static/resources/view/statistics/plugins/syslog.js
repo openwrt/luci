@@ -6,8 +6,8 @@ return baseclass.extend({
    title: _('Syslog Plugin Configuration'),
    description: _('The SysLog plugin receives log messages from the daemon and dispatches them to syslog.'),
 
-   addFormOptions: function(s) {
-       var o;
+   addFormOptions(s) {
+       let o;
 
        o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -28,7 +28,7 @@ return baseclass.extend({
        o.default = 'WARNING';
    },
 
-   configSummary: function(section) {
+   configSummary(section) {
        return _('Syslog enabled');
    }
 });

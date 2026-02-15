@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('CPU Plugin Configuration'),
 	description: _('The cpu plugin collects basic statistics about the processor usage.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -36,7 +36,7 @@ return baseclass.extend({
 		o.depends({ 'enable': '1', 'ReportByCpu': '1', 'ReportByState': '1' });
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		return _('CPU monitoring is enabled');
 	}
 });

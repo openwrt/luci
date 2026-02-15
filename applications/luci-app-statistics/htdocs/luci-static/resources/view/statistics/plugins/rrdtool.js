@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('RRDTool Plugin Configuration'),
 	description: _('The rrdtool plugin stores the collected data in rrd database files, the foundation of the diagrams.<br /><br /><strong>Warning: Setting the wrong values will result in a very high memory consumption in the temporary directory. This can render the device unusable!</strong>'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -77,7 +77,7 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 		o.placeholder = '0';
 		o.validate = function(section_id, value) {
-			var flushinp = this.map.findElement('id', 'widget.cbid.luci_statistics.collectd_rrdtool.CacheFlush');
+			const flushinp = this.map.findElement('id', 'widget.cbid.luci_statistics.collectd_rrdtool.CacheFlush');
 
 			if (value != '' && !isNaN(value) && +value > 0) {
 				flushinp.placeholder = 10 * +value;
@@ -97,7 +97,7 @@ return baseclass.extend({
 		o.datatype = 'uinteger';
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		if (section.DataDir)
 			return _('Writing *.rrd files to %s').format(section.DataDir);
 	}

@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('Memory Plugin Configuration'),
 	description: _('The memory plugin collects statistics about the memory usage.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -24,7 +24,7 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		return _('Memory monitoring enabled');
 	}
 });

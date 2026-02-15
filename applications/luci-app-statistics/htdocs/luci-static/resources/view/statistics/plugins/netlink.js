@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('Netlink Plugin Configuration'),
 	description: _('The netlink plugin collects extended information like qdisc-, class- and filter-statistics for selected interfaces.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 		o.default = '0';
@@ -42,11 +42,11 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var basic = L.toArray(section.Interfaces),
-		    verbose = L.toArray(section.VerboseInterfaces),
-		    count = basic.length + verbose.length,
-		    invert = section.IgnoreSelected == '1';
+	configSummary(section) {
+		const basic = L.toArray(section.Interfaces);
+		const verbose = L.toArray(section.VerboseInterfaces);
+		const count = basic.length + verbose.length;
+		const invert = section.IgnoreSelected == '1';
 
 		if (invert && count == 0)
 			return _('Monitoring all interfaces');

@@ -9,7 +9,7 @@
 return baseclass.extend({
 	title: _('Disk Usage'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return [{
 			title: "%H: Disk I/O operations on %pi",
 			vlabel: "Operations/s",

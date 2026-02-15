@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('DNS Plugin Configuration'),
 	description: _('The dns plugin collects detailed statistics about dns related traffic on selected interfaces.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -25,8 +25,8 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var ifaces = L.toArray(section.Interfaces);
+	configSummary(section) {
+		const ifaces = L.toArray(section.Interfaces);
 
 		if (ifaces.length == 0)
 			return _('Monitoring DNS queries on all interfaces');

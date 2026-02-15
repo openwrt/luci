@@ -6,8 +6,8 @@
 return baseclass.extend({
 	title: _('Disk Space Usage'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var df_complex = {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const df_complex = {
 			title: "%H: Disk space usage on %pi",
 			vlabel: "Bytes",
 			number_format: "%5.1lf%sB",
@@ -39,7 +39,7 @@ return baseclass.extend({
 			}
 		};
 
-		var percent_bytes = {
+		const percent_bytes = {
 			title: "%H: Disk space usage on %pi",
 			vlabel: "Percent",
 			number_format: "%5.2lf %%",
@@ -71,13 +71,13 @@ return baseclass.extend({
 			}
 		};
 
-		var types = graph.dataTypes(host, plugin, plugin_instance);
-		var p = [];
+		const types = graph.dataTypes(host, plugin, plugin_instance);
+		const p = [];
 
-		for (var i = 0; i < types.length; i++)
-			if (types[i] == 'percent_bytes')
+		for (let type of types)
+			if (type == 'percent_bytes')
 				p.push(percent_bytes);
-			else if (types[i] == 'df_complex')
+			else if (type == 'df_complex')
 				p.push(df_complex);
 
 		return p;

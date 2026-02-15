@@ -6,7 +6,7 @@
 return baseclass.extend({
 	title: _('Processes'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		if (plugin_instance == "") {
 			return {
 				title: "%H: Processes",

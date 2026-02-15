@@ -7,18 +7,16 @@
 'require form';
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			fs.list('/usr/lib/collectd'),
 			fs.list('/usr/share/luci/statistics/plugins'),
 			uci.load('luci_statistics')
-		]).then(function(data) {
-			var installed = data[0],
-			    plugins = data[1],
-			    tasks = [];
+		]).then(function([installed, plugins]) {
+			const tasks = [];
 
-			for (var i = 0; i < plugins.length; i++) {
-				tasks.push(fs.read_direct('/usr/share/luci/statistics/plugins/' + plugins[i].name, 'json').then(L.bind(function(name, spec) {
+			for (let plugin of plugins) {
+				tasks.push(fs.read_direct('/usr/share/luci/statistics/plugins/' + plugin.name, 'json').then(L.bind(function(name, spec) {
 					return L.resolveDefault(L.require('view.statistics.plugins.' + name)).then(function(form) {
 						if (!uci.get('luci_statistics', 'collectd_' + name))
 							uci.add('luci_statistics', 'statistics', 'collectd_' + name);
@@ -30,18 +28,18 @@ return view.extend({
 							installed: installed.filter(function(e) { return e.name == name + '.so' }).length > 0
 						};
 					});
-				}, this, plugins[i].name.replace(/\.json$/, ''))));
+				}, this, plugin.name.replace(/\.json$/, ''))));
 			}
 
 			return Promise.all(tasks);
 		});
 	},
 
-	render: function(plugins) {
-		var m, s, o, enabled;
+	render(plugins) {
+		let m, s, o, enabled;
 
-		for (var i = 0; i < plugins.length; i++)
-			plugins[plugins[i].name] = plugins[i];
+		for (let plugin of plugins)
+			plugins[plugin.name] = plugin;
 
 		m = new form.Map('luci_statistics', _('Collectd Settings'));
 		m.tabbed = true;
@@ -82,21 +80,21 @@ return view.extend({
 		o.optional = true;
 		o.depends('Hostname', '');
 
-		var groupNames = [
+		let groupNames = [
 			'general', _('General plugins'),
 			'network', _('Network plugins'),
 			'output', _('Output plugins')
 		];
 
-		for (var i = 0; i < groupNames.length; i += 2) {
+		for (let i = 0; i < groupNames.length; i += 2) {
 			s = m.section(form.GridSection, 'statistics_' + groupNames[i], groupNames[i + 1]);
 
 			s.cfgsections = L.bind(function(category) {
 				return this.map.data.sections('luci_statistics', 'statistics')
 					.map(function(s) { return s['.name'] })
 					.filter(function(section_id) {
-						var name = section_id.replace(/^collectd_/, ''),
-						    plugin = plugins[name];
+						const name = section_id.replace(/^collectd_/, '');
+						const plugin = plugins[name];
 
 						return (section_id.indexOf('collectd_') == 0 && plugin != null &&
 						        plugin.installed && plugin.spec.category == category);
@@ -104,8 +102,8 @@ return view.extend({
 			}, s, groupNames[i]);
 
 			s.sectiontitle = function(section_id) {
-				var name = section_id.replace(/^collectd_/, ''),
-				    plugin = plugins[name];
+				const name = section_id.replace(/^collectd_/, '');
+				const plugin = plugins[name];
 
 				return plugin ? plugin.spec.title : name
 			};
@@ -114,7 +112,7 @@ return view.extend({
 			enabled.editable = true;
 			enabled.modalonly = false;
 			enabled.renderWidget = function(section_id, option_index, cfgvalue) {
-				var widget = form.Flag.prototype.renderWidget.apply(this, [section_id, option_index, cfgvalue]);
+				const widget = form.Flag.prototype.renderWidget.apply(this, [section_id, option_index, cfgvalue]);
 
 				widget.querySelector('input[type="checkbox"]').addEventListener('click', L.bind(function(section_id, plugin, ev) {
 					if (ev.target.checked && plugin && plugin.form.addFormOptions)
@@ -128,27 +126,27 @@ return view.extend({
 			o.width = '50%';
 			o.modalonly = false;
 			o.textvalue = function(section_id) {
-				var name = section_id.replace(/^collectd_/, ''),
-				    section = uci.get('luci_statistics', section_id),
-				    plugin = plugins[name];
+				const name = section_id.replace(/^collectd_/, '');
+				const section = uci.get('luci_statistics', section_id);
+				const plugin = plugins[name];
 
 				if (section.enable != '1')
 					return E('em', {}, [_('Plugin is disabled')]);
 
-				var summary = plugin ? plugin.form.configSummary(section) : null;
+				const  summary = plugin ? plugin.form.configSummary(section) : null;
 				return summary || E('em', _('none'));
 			};
 
 			s.modaltitle = function(section_id) {
-				var name = section_id.replace(/^collectd_/, ''),
-				    plugin = plugins[name];
+				const name = section_id.replace(/^collectd_/, '');
+				const plugin = plugins[name];
 
 				return plugin ? plugin.form.title : null;
 			};
 
 			s.addModalOptions = function(s) {
-				var name = s.section.replace(/^collectd_/, ''),
-				    plugin = plugins[name];
+				const name = s.section.replace(/^collectd_/, '');
+				const plugin = plugins[name];
 
 				if (!plugin)
 					return;
@@ -157,7 +155,7 @@ return view.extend({
 
 				plugin.form.addFormOptions(s);
 
-				var opt = s.children.filter(function(o) { return o.option == 'enable' })[0];
+				const opt = s.children.filter(function(o) { return o.option == 'enable' })[0];
 				if (opt)
 					opt.cfgvalue = function(section_id, set_value) {
 						if (arguments.length == 2)
@@ -168,10 +166,10 @@ return view.extend({
 			};
 
 			s.renderRowActions = function(section_id) {
-				var name = section_id.replace(/^collectd_/, ''),
-				    plugin = plugins[name];
+				const name = section_id.replace(/^collectd_/, '');
+				const plugin = plugins[name];
 
-				var trEl = this.super('renderRowActions', [ section_id, _('Configure…') ]);
+				const trEl = this.super('renderRowActions', [ section_id, _('Configure…') ]);
 
 				if (!plugin || !plugin.form.addFormOptions)
 					dom.content(trEl, null);

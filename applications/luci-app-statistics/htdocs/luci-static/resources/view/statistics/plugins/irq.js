@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('IRQ Plugin Configuration'),
 	description: _('The irq plugin will monitor the rate of issues per second for each selected interrupt. If no interrupt is selected then all interrupts are monitored.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -18,19 +18,18 @@ return baseclass.extend({
 		o.depends('enable', '1');
 		o.load = function(section_id) {
 			return fs.trimmed('/proc/interrupts').then(L.bind(function(str) {
-				var lines = str.split(/\n/),
-				    cpus = L.toArray(lines[0]);
+				const lines = str.split(/\n/);
+				const cpus = L.toArray(lines[0]);
 
-				for (var i = 1; i < lines.length; i++) {
-					var line = lines[i],
-					    m = lines[i].match(/^\s*([^\s:]+):/);
+				for (let line of lines) {
+					const m = line.match(/^\s*([^\s:]+):/);
 
 					if (!m)
 						continue;
 
 					line = line.replace(/^[^:]+:\s+/, '');
 
-					for (var j = 0; j < cpus.length; j++)
+					for (let j = 0; j < cpus.length; j++)
 						line = line.replace(/^\d+\s*/, '');
 
 					var desc = line.split(/ {2,}/).join(', ');
@@ -46,9 +45,9 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var irqs = L.toArray(section.Irqs),
-		    invert = section.IgnoreSelected == '1';
+	configSummary(section) {
+		const irqs = L.toArray(section.Irqs);
+		const invert = section.IgnoreSelected == '1';
 
 		if (irqs.length == 0)
 			return _('Monitoring all interrupts');

@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('DHCP Leases Plugin Configuration'),
 	description: _('The dhcpleases plugin collects information about assigned DHCP leases.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -15,7 +15,7 @@ return baseclass.extend({
 		o.default = '/tmp/dhcp.leases';
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		return _('Monitoring DHCP leases enabled');
 	}
 });

@@ -6,7 +6,7 @@
 return baseclass.extend({
 	title: _('DHCP Leases'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: DHCP leases",
 			alt_autoscale_max: true,

@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('Network Plugin Configuration'),
 	description: _('The network plugin provides network based communication between different collectd instances. Collectd can operate both in client and server mode. In client mode locally collected data is transferred to a collectd server instance, in server mode the local instance receives data from other hosts.'),
 
-	addFormOptions: function(s) {
-		var o, ss;
+	addFormOptions(s) {
+		let o, ss;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 		o.default = '0';
@@ -65,7 +65,7 @@ return baseclass.extend({
 		//o.optional = true;
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		return _('Network communication enabled');
 	}
 });

@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('OpenVPN Plugin Configuration'),
 	description: _('The OpenVPN plugin gathers information about the current vpn connection status.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -28,17 +28,17 @@ return baseclass.extend({
 		o.depends('enable', '1');
 		o.load = function(section_id) {
 			return L.resolveDefault(fs.list('/var/run'), []).then(L.bind(function(entries) {
-				for (var i = 0; i < entries.length; i++)
-					if (entries[i].type == 'file' && entries[i].name.match(/^openvpn\..+\.status$/))
-						this.value('/var/run/' + entries[i].name);
+				for (let entry of entries)
+					if (entry.type == 'file' && entry.name.match(/^openvpn\..+\.status$/))
+						this.value('/var/run/' + entry.name);
 
 				return this.super('load', [section_id]);
 			}, this));
 		};
 	},
 
-	configSummary: function(section) {
-		var stats = L.toArray(section.StatusFile);
+	configSummary(section) {
+		const stats = L.toArray(section.StatusFile);
 
 		if (stats.length)
 			return N_(stats.length, 'Monitoring one OpenVPN instance', 'Monitoring %d OpenVPN instances').format(stats.length);

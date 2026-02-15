@@ -6,11 +6,11 @@
 return baseclass.extend({
 	title: _('Wireless'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		/*
 		 * signal/noise diagram
 		 */
-		var snr = {
+		const snr = {
 			title: "%H: Signal and noise on %pi",
 			detail: true,
 			vlabel: "dBm",
@@ -35,7 +35,7 @@ return baseclass.extend({
 		/*
 		 * signal quality diagram
 		 */
-		var quality = {
+		const quality = {
 			title: "%H: Signal quality on %pi",
 			vlabel: "Quality",
 			number_format: "%3.0lf",
@@ -54,7 +54,7 @@ return baseclass.extend({
 		/*
 		 * phy rate diagram
 		 */
-		var bitrate = {
+		const bitrate = {
 			title: "%H: Average phy rate on %pi",
 			detail: true,
 			vlabel: "Mbit/s",
@@ -73,7 +73,7 @@ return baseclass.extend({
 		/*
 		 * associated stations
 		 */
-		var stations = {
+		const stations = {
 			title: "%H: Associated stations on %pi",
 			detail: true,
 			vlabel: "Stations",
