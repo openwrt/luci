@@ -16,9 +16,9 @@ const getOlsrd6Services = rpc.declare({
 });
 
 function createTableData(servicesArray) {
-    var tableData = [];
+    const tableData = [];
     servicesArray.forEach(function (service) {
-        var sourceUrl = service.isIpv6 ? '[' + service.source + ']' : service.source;
+        const sourceUrl = service.isIpv6 ? '[' + service.source + ']' : service.source;
         tableData.push(
             [
                 E('a', { 'href': service.url }, service.description),
@@ -31,17 +31,17 @@ function createTableData(servicesArray) {
 }
 
 function extractServiceInformation(results) {
-    var servicesArray = [];
+    const servicesArray = [];
     results.forEach(function(result) {
         if (result.configured && result.services != "") {
-            var isIpv6 = result.source == "olsrd6";
-            var services = result.services.split('\n');
+            const isIpv6 = result.source == "olsrd6";
+            const services = result.services.split('\n');
             services.forEach(function (service) {
-                var source = service.split('#')[1];
-                var serviceRawDescription = service.replace(/\t/g, '').split('#')[0].split('|');
-                var url = serviceRawDescription[0];
-                var protocol = serviceRawDescription[1];
-                var description = serviceRawDescription[2];
+                const source = service.split('#')[1];
+                const serviceRawDescription = service.replace(/\t/g, '').split('#')[0].split('|');
+                const url = serviceRawDescription[0];
+                const protocol = serviceRawDescription[1];
+                const description = serviceRawDescription[2];
                 servicesArray.push({ "source": source, "url": url, "protocol": protocol, "description": description, "isIpv6": isIpv6 });
             });
         }
@@ -53,7 +53,7 @@ return view.extend({
     handleSaveApply: null,
     handleSave: null,
     handleReset: null,
-    render: function (data) {
+    render() {
         poll.add(function () {
             Promise.all([getOlsrd4Services(), getOlsrd6Services()]).then(function (results) {
                 var servicesArray = extractServiceInformation(results);

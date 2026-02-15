@@ -7,7 +7,7 @@
 include $(TOPDIR)/rules.mk
 
 LUCI_TITLE:=OLSR configuration and status module
-LUCI_DEPENDS:=+luci-base +olsrd
+LUCI_DEPENDS:=+luci-base +olsrd +olsrd-mod-jsoninfo +olsrd-mod-sgwdynspeed
 
 PKG_LICENSE:=Apache-2.0
 PKG_MAINTAINER:=Manuel Munz <munz@comuno.net>
