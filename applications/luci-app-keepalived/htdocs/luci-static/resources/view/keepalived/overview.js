@@ -12,14 +12,14 @@ const callKeepalivedStatus = rpc.declare({
 });
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('keepalived'),
 		]);
 	},
 
-	render: function() {
-		var table =
+	render() {
+		const table =
 			E('table', { 'class': 'table lases' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Name')),
@@ -35,14 +35,14 @@ return view.extend({
 
 		poll.add(function() {
 			return callKeepalivedStatus().then(function(instancesInfo) {
-				var targets = Array.isArray(instancesInfo.status) ? instancesInfo.status : [];
-				var instances = uci.sections('keepalived', 'vrrp_instance');
+				const targets = Array.isArray(instancesInfo.status) ? instancesInfo.status : [];
+				const instances = uci.sections('keepalived', 'vrrp_instance');
 
 				cbi_update_table(table,
 					targets.map(function(target) {
-						var state;
-						var state_initial;
-						var instance_state = target.data.state;
+						let state;
+						let state_initial;
+						const instance_state = target.data.state;
 
 						if (instance_state === 2) {
 							state = 'MASTER';
@@ -59,7 +59,6 @@ return view.extend({
 						if (instances != '') {
 							for (var i = 0; i < instances.length; i++) {
 								if (instances[i]['name'] == target.data.iname) {
-									state = state;
 									state_initial = instances[i]['state'];
 									break;
 								}

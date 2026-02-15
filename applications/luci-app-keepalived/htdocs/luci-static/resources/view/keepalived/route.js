@@ -6,14 +6,14 @@
 'require tools.widgets as widgets';
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('keepalived'),
 		]);
 	},
 
-	renderRoute: function(m) {
-		var s, o;
+	renderRoute(m) {
+		let s, o;
 
 		s = m.section(form.GridSection, 'route', _('Routes'),
 			_('Routes would be referenced into Static and Virtual Routes of VRRP instances'));
@@ -59,9 +59,9 @@ return view.extend({
 		o.placeholder = 'name';
 	},
 
-	renderStaticRoutes: function(m) {
-		var s, o;
-		var route;
+	renderStaticRoutes(m) {
+		let s, o;
+		let route;
 
 		route = uci.sections('keepalived', 'route');
 		if (route == '') {
@@ -78,14 +78,14 @@ return view.extend({
 
 		o = s.option(form.DynamicList, 'route', _('Route'),
 			_('List of Route Object'));
-		for (var i = 0; i < route.length; i++) {
+		for (let i = 0; i < route.length; i++) {
 			o.value(route[i]['name']);
 		}
 		o.optional = true;
 	},
 
-	render: function() {
-		var m;
+	render() {
+		let m;
 
 		m = new form.Map('keepalived');
 
