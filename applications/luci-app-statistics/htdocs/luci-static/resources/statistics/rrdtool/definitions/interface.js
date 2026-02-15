@@ -6,11 +6,11 @@
 return baseclass.extend({
 	title: _('Interfaces'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		/*
 		 * traffic diagram
 		 */
-		var traffic = {
+		const traffic = {
 
 			/* draw this diagram for each plugin instance */
 			per_instance: true,
@@ -45,7 +45,7 @@ return baseclass.extend({
 		/*
 		 * packet diagram
 		 */
-		var packets = {
+		const packets = {
 
 			/* draw this diagram for each plugin instance */
 			per_instance: true,

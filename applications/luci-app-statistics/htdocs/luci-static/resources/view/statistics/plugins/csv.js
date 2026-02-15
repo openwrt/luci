@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('CSV Plugin Configuration'),
 	description: _('The csv plugin stores collected data in csv file format for further processing by external programs.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -19,7 +19,7 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		if (section.DataDir)
 			return _('Storing CSV data in %s').format(section.DataDir);
 	}

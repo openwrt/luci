@@ -6,8 +6,8 @@
 return baseclass.extend({
 	title: _('APC UPS'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var rv = [];
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const rv = [];
 
 		/*
 		 * Types and instances supported by APC UPS
@@ -15,15 +15,15 @@ return baseclass.extend({
 		 * e.g. ups_inst['voltage'] -> [ 'input', 'battery' ]
 		 */
 
-		var ups_types = graph.dataTypes(host, plugin, plugin_instance),
-		    ups_inst = {};
+		const ups_types = graph.dataTypes(host, plugin, plugin_instance);
+		const ups_inst = {};
 
-		for (var i = 0; i < ups_types.length; i++)
-			ups_inst[ups_types[i]] = graph.dataInstances(host, plugin, plugin_instance, ups_types[i]);
+		for (let upst of ups_types)
+			ups_inst[upst] = graph.dataInstances(host, plugin, plugin_instance, upst);
 
 		/* Check if hash table or array is empty or nil-filled */
 		function empty(t) {
-			for (var k in t)
+			for (let k in t)
 				if (t[k] != null)
 					return false;
 
@@ -34,12 +34,12 @@ return baseclass.extend({
 		/* supported and available to the plugin and UPS. */
 
 		function add_supported(t, defs) {
-			var def_inst = defs['data']['instances'];
+			const def_inst = defs['data']['instances'];
 
 			if (L.isObject(def_inst)) {
-				for (var k in def_inst) {
+				for (let k in def_inst) {
 					if (ups_types.filter(function(t) { return t == k }).length) {
-						for (var i = def_inst[k].length - 1; i >= 0; i--)
+						for (let i = def_inst[k].length - 1; i >= 0; i--)
 							if (!ups_inst[k].filter(function(n) { return n == def_inst[k][i] }).length)
 								def_inst[k].splice(i, 1);
 
@@ -62,7 +62,7 @@ return baseclass.extend({
 		/* Graph definitions for APC UPS measurements MUST use only 'instances': */
 		/* e.g. instances = { voltage = {  "input", "output" } } */
 
-		var voltagesdc = {
+		const voltagesdc = {
 			title: "%H: Voltages on APC UPS - Battery",
 			vlabel: "Volts DC",
 			alt_autoscale: true,
@@ -78,7 +78,7 @@ return baseclass.extend({
 		};
 		add_supported(rv, voltagesdc);
 
-		var voltagesac = {
+		const voltagesac = {
 			title: "%H: Voltages on APC UPS - AC",
 			vlabel: "Volts AC",
 			alt_autoscale: true,
@@ -95,7 +95,7 @@ return baseclass.extend({
 		};
 		add_supported(rv, voltagesac);
 
-		var percentload = {
+		const percentload = {
 			title: "%H: Load on APC UPS ",
 			vlabel: "Percent",
 			y_min: "0",
@@ -112,7 +112,7 @@ return baseclass.extend({
 		};
 		add_supported(rv, percentload);
 
-		var charge_percent = {
+		const charge_percent = {
 			title: "%H: Battery charge on APC UPS ",
 			vlabel: "Percent",
 			y_min: "0",
@@ -129,7 +129,7 @@ return baseclass.extend({
 		};
 		add_supported(rv, charge_percent);
 
-		var temperature = {
+		const temperature = {
 			title: "%H: Battery temperature on APC UPS ",
 			vlabel: "\u00b0C",
 			number_format: "%5.1lf\u00b0C",
@@ -143,7 +143,7 @@ return baseclass.extend({
 		};
 		add_supported(rv, temperature);
 
-		var timeleft = {
+		const timeleft = {
 			title: "%H: Time left on APC UPS ",
 			vlabel: "Minutes",
 			number_format: "%.1lfm",
@@ -158,7 +158,7 @@ return baseclass.extend({
 		};
 		add_supported(rv, timeleft);
 
-		var frequency = {
+		const frequency = {
 			title: "%H: Incoming line frequency on APC UPS ",
 			vlabel: "Hz",
 			number_format: "%5.0lfhz",

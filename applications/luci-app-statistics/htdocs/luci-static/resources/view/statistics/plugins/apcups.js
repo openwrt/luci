@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('APCUPS Plugin Configuration'),
 	description: _('The APCUPS plugin collects statistics about the APC UPS.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -22,7 +22,7 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		return _('Monitoring APC UPS at host %s, port %d').format(section.Host || 'localhost', section.Port || 3551);
 	}
 });

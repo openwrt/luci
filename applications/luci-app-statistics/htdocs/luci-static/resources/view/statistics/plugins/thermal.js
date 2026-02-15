@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('Thermal Plugin Configuration'),
 	description: _('The thermal plugin will monitor temperature of the system. Data is typically read from /sys/class/thermal/*/temp ( \'*\' denotes the thermal device to be read, e.g. thermal_zone1 )'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -17,12 +17,12 @@ return baseclass.extend({
 			return Promise.all([
 				L.resolveDefault(fs.list('/sys/class/thermal'), []),
 				L.resolveDefault(fs.list('/proc/acpi/thermal_zone'), [])
-			]).then(L.bind(function(res) {
-				var entries = res[0].concat(res[1]);
+			]).then(L.bind(function([therm, therm_zone]) {
+				const entries = therm.concat(therm_zone);
 
-				for (var i = 0; i < entries.length; i++)
-					if (entries[i].type == 'directory' && !entries[i].name.match(/^cooling_device/))
-						o.value(entries[i].name);
+				for (let e of entries)
+					if (e.type == 'directory' && !e.name.match(/^cooling_device/))
+						o.value(e.name);
 
 				return this.super('load', [ section_id ]);
 			}, this));
@@ -37,9 +37,9 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var zones = L.toArray(section.Device),
-		    invert = section.IgnoreSelected == '1';
+	configSummary(section) {
+		const zones = L.toArray(section.Device);
+		const invert = section.IgnoreSelected == '1';
 
 		if (zones.length)
 			return (invert

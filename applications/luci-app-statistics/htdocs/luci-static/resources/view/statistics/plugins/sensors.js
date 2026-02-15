@@ -17,8 +17,8 @@ return baseclass.extend({
 	title: _('Sensors Plugin Configuration'),
 	description: _('The sensors plugin uses the Linux Sensors framework to gather environmental statistics.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -28,12 +28,12 @@ return baseclass.extend({
 		o.depends('enable', '1');
 		o.load = function(section_id) {
 			return fs.exec_direct('/usr/sbin/sensors', ['-j'], 'json').then(L.bind(function(output) {
-				for (var bus in output) {
-					for (var sensor in output[bus]) {
+				for (let bus in output) {
+					for (let sensor in output[bus]) {
 						if (!L.isObject(output[bus][sensor]))
 							continue;
 
-						for (var j = 0; j < sensorTypes.length; j += 2) {
+						for (let j = 0; j < sensorTypes.length; j += 2) {
 							if (sensor.match(sensorTypes[j])) {
 								this.value('%s/%s-%s'.format(bus, sensorTypes[j + 1], sensor));
 								break;
@@ -50,9 +50,9 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var sensors = L.toArray(section.Sensor),
-		    invert = section.IgnoreSelected == '1';
+	configSummary(section) {
+		const sensors = L.toArray(section.Sensor);
+		const invert = section.IgnoreSelected == '1';
 
 		if (invert && sensors.length)
 			return N_(sensors.length, 'Monitoring all but one sensor', 'Monitoring all but %d sensors').format(sensors.length);

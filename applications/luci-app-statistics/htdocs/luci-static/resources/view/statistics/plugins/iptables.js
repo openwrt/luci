@@ -8,13 +8,13 @@ return baseclass.extend({
 	title: _('Iptables Plugin Configuration'),
 	description: _('The iptables plugin will monitor selected firewall rules and collect information about processed bytes and packets per rule.'),
 
-	addFormOptions: function(s) {
-		var o, ss;
+	addFormOptions(s) {
+		let o, ss;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
-		for (var family = 4; family <= 6; family += 2) {
-			var suffix = (family == 4 ? '' : '6');
+		for (let family = 4; family <= 6; family += 2) {
+			const suffix = (family == 4 ? '' : '6');
 
 			o = s.option(form.SectionValue, '__match' + suffix, form.TableSection, 'collectd_iptables_match' + suffix,
 				suffix ? _('Match IPv6 iptables rules') : _('Match IPv4 iptables rules'),
@@ -23,17 +23,18 @@ return baseclass.extend({
 			o.depends('enable', '1');
 			o.load = L.bind(function(suffix, section_id) {
 				return L.resolveDefault(fs.exec_direct('/usr/sbin/ip' + suffix + 'tables-save', []), '').then(L.bind(function(res) {
-					var lines = res.split(/\n/),
-					    table, chain, count, iptables = {};
+					const lines = res.split(/\n/);
+					let table, count;
+					const iptables = {};
 
-					for (var i = 0; i < lines.length; i++) {
-						var m;
+					for (let line of lines) {
+						let m;
 
-						if ((m = lines[i].match(/^\*(\S+)$/)) != null) {
+						if ((m = line.match(/^\*(\S+)$/)) != null) {
 							table = m[1];
 							count = {};
 						}
-						else if ((m = lines[i].match(/^-A (.+?) ([!-].+)$/)) != null) {
+						else if ((m = line.match(/^-A (.+?) ([!-].+)$/)) != null) {
 							count[m[1]] = (count[m[1]] || 0) + 1;
 
 							iptables[table] = iptables[table] || {};
@@ -50,7 +51,7 @@ return baseclass.extend({
 							 * collectd currently does not support comments with spaces:
 							 * https://github.com/collectd/collectd/issues/2766
 							 */
-							var c = m[2].match(/-m comment --comment "(.+)" -/);
+							const c = m[2].match(/-m comment --comment "(.+)" -/);
 							if (c && c[1] != '!fw3' && !c[1].match(/[ \t\n]/))
 								iptables[table][m[1]][c[1]] = E('span', {}, [ c[1] ]);
 						}
@@ -70,8 +71,8 @@ return baseclass.extend({
 			o = ss.option(form.Value, 'name', _('Instance name'));
 			o.datatype = 'maxlength(63)';
 			o.validate = function(section_id, v) {
-				var table_opt = this.section.children.filter(function(o) { return o.option == 'table' })[0],
-				    table_elem = table_opt.getUIElement(section_id);
+				const table_opt = this.section.children.filter(function(o) { return o.option == 'table' })[0];
+				const table_elem = table_opt.getUIElement(section_id);
 
 				table_elem.clearChoices();
 				table_elem.addChoices(Object.keys(this.section.iptables).sort());
@@ -87,8 +88,8 @@ return baseclass.extend({
 			o.optional = true;
 			o.transformChoices = function() { return this.super('transformChoices', []) || {} };
 			o.validate = function(section_id, table) {
-				var chain_opt = this.section.children.filter(function(o) { return o.option == 'chain' })[0],
-				    chain_elem = chain_opt.getUIElement(section_id);
+				const chain_opt = this.section.children.filter(function(o) { return o.option == 'chain' })[0];
+				const chain_elem = chain_opt.getUIElement(section_id);
 
 				chain_elem.clearChoices();
 				chain_elem.addChoices(Object.keys(this.section.iptables[table]).sort());
@@ -100,17 +101,17 @@ return baseclass.extend({
 			o.optional = true;
 			o.transformChoices = function() { return this.super('transformChoices', []) || {} };
 			o.validate = function(section_id, chain) {
-				var table_opt = this.section.children.filter(function(o) { return o.option == 'table' })[0],
-				    rule_opt = this.section.children.filter(function(o) { return o.option == 'rule' })[0],
-				    rule_elem = rule_opt.getUIElement(section_id),
-				    table = table_opt.formvalue(section_id);
+				const table_opt = this.section.children.filter(function(o) { return o.option == 'table' })[0];
+				const rule_opt = this.section.children.filter(function(o) { return o.option == 'rule' })[0];
+				const rule_elem = rule_opt.getUIElement(section_id);
+				const table = table_opt.formvalue(section_id);
 
 				rule_elem.clearChoices();
 
 				if (this.section.iptables[table][chain]) {
-					var keys = Object.keys(this.section.iptables[table][chain]).sort(function(a, b) {
-						var x = a.match(/^(\d+)/),
-						    y = b.match(/^(\d+)/);
+					const keys = Object.keys(this.section.iptables[table][chain]).sort(function(a, b) {
+						const x = a.match(/^(\d+)/);
+						const y = b.match(/^(\d+)/);
 
 						if (x && y)
 							return +x[1] > +y[1];
@@ -120,10 +121,10 @@ return baseclass.extend({
 							return a > b;
 					});
 
-					var labels = {};
+					const labels = {};
 
-					for (var i = 0; i < keys.length; i++)
-						labels[keys[i]] = this.section.iptables[table][chain][keys[i]].cloneNode(true);
+					for (let key of keys)
+						labels[key] = this.section.iptables[table][chain][key].cloneNode(true);
 
 					rule_elem.addChoices(keys, labels);
 				}
@@ -138,10 +139,10 @@ return baseclass.extend({
 			o.optional = true;
 			o.transformChoices = function() { return this.super('transformChoices', []) || {} };
 			o.load = function(section_id) {
-				var table = uci.get('luci_statistics', section_id, 'table'),
-				    chain = uci.get('luci_statistics', section_id, 'chain'),
-				    rule = uci.get('luci_statistics', section_id, 'rule'),
-				    ipt = this.section.iptables;
+				const table = uci.get('luci_statistics', section_id, 'table');
+				const chain = uci.get('luci_statistics', section_id, 'chain');
+				const rule = uci.get('luci_statistics', section_id, 'rule');
+				const ipt = this.section.iptables;
 
 				if (ipt[table] && ipt[table][chain] && ipt[table][chain][rule])
 					this.value(rule, ipt[table][chain][rule].cloneNode(true));
@@ -157,7 +158,7 @@ return baseclass.extend({
 		}
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		return _('Rule monitoring enabled');
 	}
 });

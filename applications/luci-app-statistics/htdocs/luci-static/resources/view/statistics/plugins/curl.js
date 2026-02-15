@@ -5,8 +5,8 @@
 return baseclass.extend({
 	title: _('cUrl Plugin Configuration'),
 
-	addFormOptions: function(s) {
-		var o, ss;
+	addFormOptions(s) {
+		let o, ss;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -27,7 +27,7 @@ return baseclass.extend({
 		o = ss.option(form.Value, 'url', _('URL'));
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		return _('cURL plugin enabled');
 	}
 });

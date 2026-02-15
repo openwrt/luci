@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('Exec Plugin Configuration'),
 	description: _('The exec plugin starts external commands to read values from or to notify external processes when certain threshold values have been reached.'),
 
-	addFormOptions: function(s) {
-		var o, ss;
+	addFormOptions(s) {
+		let o, ss;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -53,7 +53,7 @@ return baseclass.extend({
 		o.optional = true;
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		return _('Command monitoring enabled');
 	}
 });

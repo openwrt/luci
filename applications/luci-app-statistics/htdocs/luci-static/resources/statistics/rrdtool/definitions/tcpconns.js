@@ -6,7 +6,7 @@
 return baseclass.extend({
 	title: _('TCP Connections'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: TCP connections to port %pi",
 			vlabel: "Connections/s",

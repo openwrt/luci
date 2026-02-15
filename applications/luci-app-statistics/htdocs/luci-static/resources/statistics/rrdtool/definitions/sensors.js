@@ -6,9 +6,9 @@
 return baseclass.extend({
 	title: _('Sensors'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var rv = [];
-		var types = graph.dataTypes(host, plugin, plugin_instance);
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const rv = [];
+		const types = graph.dataTypes(host, plugin, plugin_instance);
 
 		if (types.indexOf('temperature') > -1) {
 			rv.push({

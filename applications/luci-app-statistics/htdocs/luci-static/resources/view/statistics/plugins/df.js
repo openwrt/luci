@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('DF Plugin Configuration'),
 	description: _('The df plugin collects statistics about the disk space usage on different devices, mount points or filesystem types.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -17,18 +17,18 @@ return baseclass.extend({
 		o.depends('enable', '1');
 		o.load = function(section_id) {
 			return fs.lines('/proc/partitions').then(L.bind(function(lines) {
-				var parts = [];
+				const parts = [];
 
-				for (var i = 0; i < lines.length; i++) {
-					var line = L.toArray(lines[i]);
+				for (let l of lines) {
+					const line = L.toArray(l);
 					if (!isNaN(line[0]))
 						parts.push('/dev/' + line[3]);
 				}
 
 				parts.sort();
 
-				for (var i = 0; i < parts.length; i++)
-					this.value(parts[i]);
+				for (let p of parts)
+					this.value(p);
 
 				return this.super('load', [section_id]);
 			}, this));
@@ -40,17 +40,17 @@ return baseclass.extend({
 		o.depends('enable', '1');
 		o.load = function(section_id) {
 			return fs.lines('/proc/mounts').then(L.bind(function(lines) {
-				var mounts = {};
+				let mounts = {};
 
-				for (var i = 0; i < lines.length; i++) {
-					var line = L.toArray(lines[i]);
+				for (let l of lines) {
+					const line = L.toArray(l);
 					mounts[line[1]] = true;
 				}
 
 				mounts = Object.keys(mounts).sort();
 
-				for (var i = 0; i < mounts.length; i++)
-					this.value(mounts[i]);
+				for (let m of mounts)
+					this.value(m);
 
 				return this.super('load', [section_id]);
 			}, this));
@@ -65,11 +65,11 @@ return baseclass.extend({
 				fs.lines('/etc/filesystems'),
 				fs.lines('/proc/filesystems')
 			]).then(L.bind(function(lines) {
-				var fslines = lines[0].concat(lines[1]),
-				    fstypes = {};
+				const fslines = lines[0].concat(lines[1]);
+				let fstypes = {};
 
-				for (var i = 0; i < fslines.length; i++) {
-					var line = L.toArray(fslines[i]);
+				for (let fsl of fslines) {
+					var line = L.toArray(fsl);
 
 					if (line.length == 2 && line[0] == 'nodev')
 						continue;
@@ -79,8 +79,8 @@ return baseclass.extend({
 
 				fstypes = Object.keys(fstypes).sort();
 
-				for (var i = 0; i < fstypes.length; i++)
-					this.value(fstypes[i]);
+				for (let fst of fstypes)
+					this.value(fst);
 
 				return this.super('load', [section_id]);
 			}, this));
@@ -93,12 +93,12 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var devs = L.toArray(section.Devices),
-		    mounts = L.toArray(section.MountPoints),
-		    fstypes = L.toArray(section.FSTypes),
-		    count = devs.length + mounts.length + fstypes.length,
-		    invert = section.IgnoreSelected == '1';
+	configSummary(section) {
+		const devs = L.toArray(section.Devices);
+		const mounts = L.toArray(section.MountPoints);
+		const fstypes = L.toArray(section.FSTypes);
+		const count = devs.length + mounts.length + fstypes.length;
+		const invert = section.IgnoreSelected == '1';
 
 		if (count == 0)
 			return _('Monitoring all partitions');

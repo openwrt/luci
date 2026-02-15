@@ -6,11 +6,10 @@
 return baseclass.extend({
 	title: _('OpenVPN'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var inst = plugin_instance.replace(/^openvpn\.(.+)\.status$/, '$1');
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const inst = plugin_instance.replace(/^openvpn\.(.+)\.status$/, '$1');
 		const types = graph.dataTypes(host, plugin, plugin_instance);
 		const rv = [];
-		let instances;
 		const typeinstances = graph.dataInstances(host, plugin, plugin_instance, "if_octets").sort();
 
 		function find_instances(dtype, wanted) {
@@ -20,7 +19,7 @@ return baseclass.extend({
 			return matching.length ? { [dtype]: matching } : null;
 		}
 
-		if ((instances = find_instances('if_octets', ['overhead', 'traffic'])) !== null) {
+		if (find_instances('if_octets', ['overhead', 'traffic']) !== null) {
 			rv.push({
 				title: "%%H: OpenVPN \"%s\" - Traffic".format(inst),
 				vlabel: "Bytes/s",
@@ -83,7 +82,7 @@ return baseclass.extend({
 					}
 				});
 			} else {
-				console.error('Source "value" not found in any user instances:', sources);
+				console.error('Source "value" not found in any user instances.');
 			}
 		}
 

@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('Interface Plugin Configuration'),
 	description: _('The interface plugin collects traffic statistics on selected interfaces.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -22,9 +22,9 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var ifaces = L.toArray(section.Interfaces),
-		    invert = section.IgnoreSelected == '1';
+	configSummary(section) {
+		const ifaces = L.toArray(section.Interfaces);
+		const invert = section.IgnoreSelected == '1';
 
 		if (ifaces.length == 0)
 			return _('Monitoring all interfaces');

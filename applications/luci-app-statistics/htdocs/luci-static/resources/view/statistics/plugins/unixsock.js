@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('Unixsock Plugin Configuration'),
 	description: _('The unixsock plugin creates a unix socket which can be used to read collected data from a running collectd instance.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -29,7 +29,7 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		if (section.SocketFile)
 			return _('Socket %s active').format(section.SocketFile);
 	}

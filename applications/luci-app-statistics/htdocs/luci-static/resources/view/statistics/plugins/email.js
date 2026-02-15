@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('E-Mail Plugin Configuration'),
 	description: _('The email plugin creates a unix socket which can be used to transmit email-statistics to a running collectd daemon. This plugin is primarily intended to be used in conjunction with Mail::SpamAssasin::Plugin::Collectd but can be used in other ways as well.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -42,7 +42,7 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
+	configSummary(section) {
 		if (section.SocketFile)
 			return _('Awaiting email input at %s').format(section.SocketFile);
 	}

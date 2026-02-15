@@ -6,8 +6,8 @@
 return baseclass.extend({
 	title: _('Conntrack'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var entries = {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const entries = {
 			title: "%H: Conntrack entries",
 			vlabel: "Count",
 			number_format: "%5.0lf",
@@ -28,7 +28,7 @@ return baseclass.extend({
 			}
 		};
 
-		var percent = {
+		const percent = {
 			title: "%H: Conntrack usage",
 			vlabel: "Percent",
 			number_format: "%5.1lf%%",

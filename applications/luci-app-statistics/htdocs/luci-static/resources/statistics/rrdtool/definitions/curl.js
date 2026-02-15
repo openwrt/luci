@@ -9,7 +9,7 @@
 return baseclass.extend({
 	title: _('cUrl'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: cUrl Response Time for #%pi",
 			y_min: "0",

@@ -6,9 +6,9 @@
 return baseclass.extend({
 	title: _('UPS'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var definitions = [];
-		var instances;
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const definitions = [];
+		let instances;
 
 		function find_instances(dtype, wanted) {
 			var matching = graph.dataInstances(host, plugin, plugin_instance, dtype).filter(function(instance) {

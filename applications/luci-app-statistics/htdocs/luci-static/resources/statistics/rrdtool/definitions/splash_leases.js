@@ -9,7 +9,7 @@
 return baseclass.extend({
 	title: _('Splash Leases'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: Splash Leases",
 			vlabel: "Active Clients",

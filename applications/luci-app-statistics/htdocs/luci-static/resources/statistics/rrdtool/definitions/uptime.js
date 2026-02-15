@@ -14,7 +14,7 @@ You may obtain a copy of the License at
 return baseclass.extend({
 	title: _('Uptime'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return {
 			title: "%H: Uptime",
 			vlabel: "seconds",

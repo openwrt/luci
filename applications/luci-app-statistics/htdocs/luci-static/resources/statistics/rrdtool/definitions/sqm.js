@@ -6,8 +6,8 @@
 return baseclass.extend({
 	title: _('SQM'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var overview = {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const overview = {
 			per_instance: false,
 			title: "%H: SQM qdisc %pi Overview",
 			rrdopts: [ "--logarithmic" ],

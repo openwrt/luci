@@ -9,8 +9,8 @@
 return baseclass.extend({
 	title: _('DNS'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var traffic = {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const traffic = {
 			title: "%H: DNS traffic",
 			vlabel: "Bit/s",
 
@@ -35,7 +35,7 @@ return baseclass.extend({
 			}
 		};
 
-		var opcode_query = {
+		const opcode_query = {
 			title: "%H: DNS Opcode Query",
 			vlabel: "Queries/s",
 			data: {
@@ -53,7 +53,7 @@ return baseclass.extend({
 			}
 		};
 
-		var qtype = {
+		const qtype = {
 			title: "%H: DNS QType",
 			vlabel: "Queries/s",
 			data: {

@@ -6,9 +6,9 @@
 return baseclass.extend({
 	title: _('IP-Statistics'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 
-		var traffic = {
+		const traffic = {
 			title: "%H: IPv4 and IPv6 Comparison",
 			vlabel: "Bytes/s",
 			number_format: "%5.1lf%sB/s",

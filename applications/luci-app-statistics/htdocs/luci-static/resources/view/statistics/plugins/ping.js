@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('Ping Plugin Configuration'),
 	description: _('The ping plugin will send icmp echo replies to selected hosts and measure the roundtrip time for each host.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -41,8 +41,8 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var hosts = L.toArray(section.Hosts);
+	configSummary(section) {
+		const hosts = L.toArray(section.Hosts);
 
 		if (hosts.length)
 			return N_(hosts.length, 'Monitoring one host', 'Monitoring %d hosts').format(hosts.length);

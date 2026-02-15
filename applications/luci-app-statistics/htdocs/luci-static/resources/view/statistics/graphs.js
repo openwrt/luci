@@ -11,11 +11,11 @@ var pollFn = null,
     activeInstance = null;
 
 return view.extend({
-	load: function() {
+	load() {
 		return rrdtool.load();
 	},
 
-	updatePluginTab: function(host, span, time, ev) {
+	updatePluginTab(host, span, time, ev) {
 		var container = ev.target,
 		    width = Math.max(200, container.offsetWidth - 100),
 		    plugin = ev.detail.tab,
@@ -75,7 +75,7 @@ return view.extend({
 					'data-plugin': plugin,
 					'data-plugin-instance': plugin_instance,
 					'data-is-index': i || render_instances.length == 1 ? null : true,
-					'cbi-tab-active': function(ev) { activeInstance = ev.target.getAttribute('data-plugin-instance') }
+					'cbi-tab-active'(ev) { activeInstance = ev.target.getAttribute('data-plugin-instance') }
 				}, blobs.map(function(blob) {
 					return E('img', {
 						'src': URL.createObjectURL(new Blob([blob], { type: 'image/png' }))
@@ -90,7 +90,7 @@ return view.extend({
 		});
 	},
 
-	updateGraphs: function(host, span, time, container, ev) {
+	updateGraphs(host, span, time, container, ev) {
 		var plugin_names = rrdtool.pluginNames(host.value);
 
 		container.querySelectorAll('img').forEach(function(img) {
@@ -122,7 +122,7 @@ return view.extend({
 		ui.tabs.initTabGroup(container.childNodes);
 	},
 
-	refreshGraphs: function(host, span, time, container) {
+	refreshGraphs(host, span, time, container) {
 		var div = document.querySelector('[data-plugin="%s"][data-plugin-instance="%s"]'.format(activePlugin, activeInstance || '')),
 		    width = Math.max(200, container.offsetWidth - 100),
 		    render_instances = activeInstance.split(/\|/);
@@ -155,7 +155,7 @@ return view.extend({
 		});
 	},
 
-	togglePolling: function(host, span, time, container, ev) {
+	togglePolling(host, span, time, container, ev) {
 		var btn = ev.currentTarget;
 
 		if (pollFn) {
@@ -169,25 +169,25 @@ return view.extend({
 		}
 	},
 
-	render: function() {
+	render() {
 		var hosts = rrdtool.hostInstances();
 		return hosts.length ? this.renderGraphs() : this.renderNoData();
 	},
 
-	renderNoData: function() {
+	renderNoData() {
 		ui.showModal(_('No RRD data found'), [
 			E('p', {}, _('There is no RRD data available yet to render graphs.')),
 			E('p', {}, _('You need to configure <em>collectd</em> to gather data into <em>.rrd</em> files.')),
 			E('div', { 'class': 'right' }, [
 				E('button', {
 					'class': 'cbi-button',
-					'click': function(ev) { location.href = 'collectd' }
+					'click'(ev) { location.href = 'collectd' }
 				}, [ _('Set up collectd') ])
 			])
 		]);
 	},
 
-	renderGraphs: function() {
+	renderGraphs() {
 		var hostSel = E('select', { 'style': 'max-width:170px', 'data-name': 'host' }, rrdtool.hostInstances().map(function(host) {
 			return E('option', {
 				'selected': (rrdtool.opts.host == host) ? 'selected' : null

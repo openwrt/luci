@@ -6,7 +6,7 @@
 return baseclass.extend({
 	title: _('Firewall (IPv6)'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		return [{
 			title: "%H: Firewall: Processed bytes in %pi",
 			vlabel: "Bytes/s",

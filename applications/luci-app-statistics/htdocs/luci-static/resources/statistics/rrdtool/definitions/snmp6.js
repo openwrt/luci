@@ -6,9 +6,9 @@
 return baseclass.extend({
 	title: _('SNMP6'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 
-		var traffic = {
+		const traffic = {
 			title: "%H: IPv6 on %pi",
 			vlabel: "Bytes/s",
 
@@ -34,7 +34,7 @@ return baseclass.extend({
 			}
 		};
 
-		var mcast_traffic = {
+		const mcast_traffic = {
 			title: "%H: IPv6 Multicast-Traffic on %pi",
 			vlabel: "Bytes/s",
 
@@ -61,7 +61,7 @@ return baseclass.extend({
 		};
 
 
-		var bcast_traffic = {
+		const bcast_traffic = {
 			title: "%H: IPv6 Broadcast-Traffic on %pi",
 			vlabel: "Bytes/s",
 

@@ -7,8 +7,8 @@
 return baseclass.extend({
 	title: _('Chrony'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var offset = {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const offset = {
 			title: "%H: Chrony - time offset",
 			vlabel: "Time offset (ms)",
 			number_format: "%9.3lf ms",
@@ -32,7 +32,7 @@ return baseclass.extend({
 			}
 		};
 
-		var stratum = {
+		const stratum = {
 			title: "%H: Chrony - clock stratum",
 			vlabel: "Clock stratum",
 			number_format: "%3.1lf%S",

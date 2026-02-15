@@ -6,8 +6,8 @@ return baseclass.extend({
 	title: _('TCPConns Plugin Configuration'),
 	description: _('The tcpconns plugin collects information about open tcp connections on selected ports.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -32,11 +32,11 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var lports = L.toArray(section.LocalPorts),
-		    rports = L.toArray(section.RemotePorts),
-		    listen = section.ListeningPorts == '1',
-		    summary = section.AllPortsSummary == '1';
+	configSummary(section) {
+		let lports = L.toArray(section.LocalPorts);
+		const rports = L.toArray(section.RemotePorts);
+		const listen = section.ListeningPorts == '1';
+		const summary = section.AllPortsSummary == '1';
 
 		return _('Monitoring %s and %s, %s %s').format(
 			N_(lports.length, 'one local', '%d local').format(lports.length),

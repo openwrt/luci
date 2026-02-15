@@ -7,8 +7,8 @@ return baseclass.extend({
 	title: _('Wireless iwinfo Plugin Configuration'),
 	description: _('The iwinfo plugin collects statistics about wireless signal strength, noise and quality.'),
 
-	addFormOptions: function(s) {
-		var o;
+	addFormOptions(s) {
+		let o;
 
 		o = s.option(form.Flag, 'enable', _('Enable this plugin'));
 
@@ -18,7 +18,7 @@ return baseclass.extend({
 		o.noinactive = true;
 		o.depends('enable', '1');
 		o.filter = function(section_id, name) {
-			var dev = this.devices.filter(function(dev) { return dev.getName() == name })[0];
+			const dev = this.devices.filter(function(dev) { return dev.getName() == name })[0];
 			return (dev && dev.getType() == 'wifi');
 		};
 
@@ -26,9 +26,9 @@ return baseclass.extend({
 		o.depends('enable', '1');
 	},
 
-	configSummary: function(section) {
-		var ifaces = L.toArray(section.Interfaces),
-		    invert = section.IgnoreSelected == '1';
+	configSummary(section) {
+		const ifaces = L.toArray(section.Interfaces);
+		const invert = section.IgnoreSelected == '1';
 
 		if (ifaces.length == 0)
 			return _('Monitoring all interfaces');

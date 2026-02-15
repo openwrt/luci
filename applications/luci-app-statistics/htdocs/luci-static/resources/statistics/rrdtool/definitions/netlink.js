@@ -6,11 +6,11 @@
 return baseclass.extend({
 	title: _('Netlink'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
 		/*
 		 * traffic diagram
 		 */
-		var traffic = {
+		const traffic = {
 			title: "%H: Netlink - Transfer on %pi",
 			vlabel: "Bytes/s",
 
@@ -42,7 +42,7 @@ return baseclass.extend({
 		/*
 		 * packet diagram
 		 */
-		var packets = {
+		const packets = {
 			title: "%H: Netlink - Packets on %pi",
 			vlabel: "Packets/s", detail: true,
 
@@ -123,7 +123,7 @@ return baseclass.extend({
 		/*
 		 * multicast diagram
 		 */
-		var multicast = {
+		const multicast = {
 			title: "%H: Netlink - Multicast on %pi",
 			vlabel: "Packets/s", detail: true,
 
@@ -147,7 +147,7 @@ return baseclass.extend({
 		/*
 		 * collision diagram
 		 */
-		var collisions = {
+		const collisions = {
 			title: "%H: Netlink - Collisions on %pi",
 			vlabel: "Collisions/s", detail: true,
 
@@ -171,7 +171,7 @@ return baseclass.extend({
 		/*
 		 * error diagram
 		 */
-		var errors = {
+		const errors = {
 			title: "%H: Netlink - Errors on %pi",
 			vlabel: "Errors/s", detail: true,
 

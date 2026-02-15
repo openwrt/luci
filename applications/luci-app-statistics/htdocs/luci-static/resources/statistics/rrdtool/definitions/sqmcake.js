@@ -6,8 +6,8 @@
 return baseclass.extend({
 	title: _('SQM-Cake'),
 
-	rrdargs: function(graph, host, plugin, plugin_instance, dtype) {
-		var tindrops = {
+	rrdargs(graph, host, plugin, plugin_instance, dtype) {
+		const tindrops = {
 			per_instance: true,
 			title: "%H: CAKE %pi %di Drops/s & Backlog",
 			vlabel: "Bytes & Drops/s",
@@ -25,7 +25,7 @@ return baseclass.extend({
 			}
 		};
 
-		var tinlatency = {
+		const tinlatency = {
 			per_instance: true,
 			title: "%H: CAKE %pi %di Latency",
 			vlabel: "ms",
@@ -42,7 +42,7 @@ return baseclass.extend({
 			}
 		};
 
-		var tinflows = {
+		const tinflows = {
 			per_instance: true,
 			title: "%H: CAKE %pi %di Flow Counts",
 			vlabel: "Flows",
@@ -58,7 +58,7 @@ return baseclass.extend({
 			}
 		};
 
-		var tinbytes = {
+		const tinbytes = {
 			per_instance: true,
 			title: "%H: CAKE %pi %di Traffic",
 			vlabel: "Kb/s",
