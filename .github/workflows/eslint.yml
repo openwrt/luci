@@ -1,15 +1,21 @@
 ---
-name: "LuCI repo ESLint JSON Analysis"
+name: "LuCI repo ESLint JS/ON and MD Analysis"
 
 on:
   push:
     branches: [ "master" ]
     path:
       - '**/*.json'
+      - '**/*.js'
+      - '**/*.md'
+
   pull_request:
     branches: [ "master" ]
     path:
       - '**/*.json'
+      - '**/*.js'
+      - '**/*.md'
+
 permissions: {}
 
 jobs:
@@ -17,17 +23,57 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 2
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: latest
 
+      # eslint/json requires eslint@9 - 10 is coming.
       - name: Install ESLint
-        run: npm install --no-audit --no-fund --save-dev eslint@latest @eslint/json@latest
+        run: |
+          npm install --no-audit --no-fund --save-dev \
+          eslint@9 \
+          @eslint/json@latest \
+          @eslint/js \
+          @eslint/markdown \
+          eslint-formatter-gha
 
-      # Currently, we lint JSON only.
-      - name: Run ESLint
-        run: npx eslint **/*.json
+      # - name: Run ESLint (on whole repo)
+      #   run: npx eslint .
+
+      - name: Run ESLint on changed files
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            # push event: always diff last commit
+            BASE="$(git rev-parse HEAD~1 2>/dev/null || true)"
+            HEAD="$(git rev-parse HEAD)"
+          fi
+
+          if [ -z "$BASE" ]; then
+            FILES=$(git ls-files '*.js' '*.json' '*.md')
+          else
+            FILES=$(git diff --diff-filter=ACM --name-only "$BASE" "$HEAD" \
+              | grep -E '\.(js|json|md)$' || true)
+          fi
+
+          if [ -z "$FILES" ]; then
+            echo "No JS/JSON or MD files changed"
+            exit 0
+          fi
+
+          echo "Linting files:"
+          echo "$FILES"
+
+          # One day we might need xargs with huge lists
+          # echo "$FILES" | xargs npx eslint -f gha
+
+          # Until then, do it simply so we can see which error relates to which file
+          npx eslint $FILES
 
