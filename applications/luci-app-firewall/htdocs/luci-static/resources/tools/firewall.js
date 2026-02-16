@@ -9,7 +9,7 @@
 'require validation';
 'require tools.prng as random';
 
-var protocols = [
+const protocols = [
 	'ip', 0, 'IP',
 	'hopopt', 0, 'HOPOPT',
 	'icmp', 1, 'ICMP',
@@ -75,9 +75,9 @@ function lookupProto(x) {
 	if (x == null || x === '')
 		return null;
 
-	var s = String(x).toLowerCase();
+	const s = String(x).toLowerCase();
 
-	for (var i = 0; i < protocols.length; i += 3)
+	for (let i = 0; i < protocols.length; i += 3)
 		if (s == protocols[i] || s == protocols[i+1])
 			return [ protocols[i+1], protocols[i+2], protocols[i] ];
 
@@ -85,27 +85,26 @@ function lookupProto(x) {
 }
 
 return baseclass.extend({
-	fmt: function(fmtstr, args, values) {
-		var repl = [],
-		    wrap = false,
-		    tokens = [];
+	fmt(fmtstr, args, values) {
+		let wrap = false;
+		const tokens = [];
 
 		if (values == null) {
 			values = [];
 			wrap = true;
 		}
 
-		var get = function(args, key) {
-			var names = key.trim().split(/\./),
-			    obj = args,
-			    ctx = obj;
+		const get = function(args, key) {
+			const names = key.trim().split(/\./);
+			let obj = args;
+			let ctx = obj;
 
-			for (var i = 0; i < names.length; i++) {
+			for (let n of names) {
 				if (!L.isObject(obj))
 					return null;
 
 				ctx = obj;
-				obj = obj[names[i]];
+				obj = obj[n];
 			}
 
 			if (typeof(obj) == 'function')
@@ -114,9 +113,9 @@ return baseclass.extend({
 			return obj;
 		};
 
-		var isset = function(val) {
+		const isset = function(val) {
 			if (L.isObject(val) && !dom.elem(val)) {
-				for (var k in val)
+				for (let k in val)
 					if (val.hasOwnProperty(k))
 						return true;
 
@@ -130,7 +129,7 @@ return baseclass.extend({
 			}
 		};
 
-		var parse = function(tokens, text) {
+		const parse = function(tokens, text) {
 			if (dom.elem(text)) {
 				tokens.push('<span data-fmt-placeholder="%d"></span>'.format(values.length));
 				values.push(text);
@@ -140,17 +139,17 @@ return baseclass.extend({
 			}
 		};
 
-		for (var i = 0, last = 0; i <= fmtstr.length; i++) {
+		for (let i = 0, last = 0; i <= fmtstr.length; i++) {
 			if (fmtstr.charAt(i) == '%' && fmtstr.charAt(i + 1) == '{') {
 				if (i > last)
 					parse(tokens, fmtstr.substring(last, i));
 
-				var j = i + 1,  nest = 0;
+				let j = i + 1,  nest = 0;
 
-				var subexpr = [];
+				const subexpr = [];
 
-				for (var off = j + 1, esc = false; j <= fmtstr.length; j++) {
-					var ch = fmtstr.charAt(j);
+				for (let off = j + 1, esc = false; j <= fmtstr.length; j++) {
+					const ch = fmtstr.charAt(j);
 
 					if (esc) {
 						esc = false;
@@ -176,11 +175,11 @@ return baseclass.extend({
 					}
 				}
 
-				var varname  = subexpr[0].trim(),
-				    op1      = (subexpr[1] != null) ? subexpr[1] : '?',
-				    if_set   = (subexpr[2] != null && subexpr[2] != '') ? subexpr[2] : '%{' + varname + '}',
-				    op2      = (subexpr[3] != null) ? subexpr[3] : ':',
-				    if_unset = (subexpr[4] != null) ? subexpr[4] : '';
+				const varname  = subexpr[0].trim();
+				const op1      = (subexpr[1] != null) ? subexpr[1] : '?';
+				const if_set   = (subexpr[2] != null && subexpr[2] != '') ? subexpr[2] : '%{' + varname + '}';
+				const op2      = (subexpr[3] != null) ? subexpr[3] : ':';
+				const if_unset = (subexpr[4] != null) ? subexpr[4] : '';
 
 				/* Invalid expression */
 				if (nest != 0 || subexpr.length > 5 || varname == '') {
@@ -189,9 +188,9 @@ return baseclass.extend({
 
 				/* enumeration */
 				else if (op1 == '#' && subexpr.length == 3) {
-					var items = L.toArray(get(args, varname));
+					const items = L.toArray(get(args, varname));
 
-					for (var k = 0; k < items.length; k++) {
+					for (let k = 0; k < items.length; k++) {
 						tokens.push.apply(tokens, this.fmt(if_set, Object.assign({}, args, {
 							first: k == 0,
 							next:  k > 0,
@@ -203,7 +202,7 @@ return baseclass.extend({
 
 				/* ternary expression */
 				else if (op1 == '?' && op2 == ':' && (subexpr.length == 1 || subexpr.length == 3 || subexpr.length == 5)) {
-					var val = get(args, varname);
+					const val = get(args, varname);
 
 					if (subexpr.length == 1)
 						parse(tokens, isset(val) ? val : '');
@@ -228,11 +227,11 @@ return baseclass.extend({
 		}
 
 		if (wrap) {
-			var node = E('span', {}, tokens.join('')),
-			    repl = node.querySelectorAll('span[data-fmt-placeholder]');
+			const node = E('span', {}, tokens.join(''));
+			const repl = node.querySelectorAll('span[data-fmt-placeholder]');
 
-			for (var i = 0; i < repl.length; i++)
-				repl[i].parentNode.replaceChild(values[repl[i].getAttribute('data-fmt-placeholder')], repl[i]);
+			for (let r of repl)
+				r.parentNode.replaceChild(values[r.getAttribute('data-fmt-placeholder')], r);
 
 			return node;
 		}
@@ -241,7 +240,7 @@ return baseclass.extend({
 		}
 	},
 
-	map_invert: function(v, fn) {
+	map_invert(v, fn) {
 		return L.toArray(v).map(function(v) {
 			v = String(v);
 
@@ -258,8 +257,8 @@ return baseclass.extend({
 
 	lookupProto: lookupProto,
 
-	addDSCPOption: function(s, is_target) {
-		var o = s.taboption(is_target ? 'general' : 'advanced', form.Value, is_target ? 'set_dscp' : 'dscp',
+	addDSCPOption(s, is_target) {
+		const o = s.taboption(is_target ? 'general' : 'advanced', form.Value, is_target ? 'set_dscp' : 'dscp',
 			is_target ? _('DSCP mark') : _('Match DSCP'),
 			is_target ? _('Apply the given DSCP class or value to established connections.') : _('Matches traffic carrying the specified DSCP marking.'));
 
@@ -299,7 +298,7 @@ return baseclass.extend({
 			if (!is_target)
 				value = String(value).replace(/^!\s*/, '');
 
-			var m = value.match(/^(?:CS[0-7]|BE|AF[1234][123]|EF|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$/);
+			const m = value.match(/^(?:CS[0-7]|BE|AF[1234][123]|EF|(0x[0-9a-f]{1,2}|[0-9]{1,2}))$/);
 
 			if (!m || (m[1] != null && +m[1] > 0x3f))
 				return _('Invalid DSCP mark');
@@ -310,8 +309,8 @@ return baseclass.extend({
 		return o;
 	},
 
-	addMarkOption: function(s, is_target) {
-		var o = s.taboption(is_target ? 'general' : 'advanced', form.Value,
+	addMarkOption(s, is_target) {
+		const o = s.taboption(is_target ? 'general' : 'advanced', form.Value,
 			(is_target > 1) ? 'set_xmark' : (is_target ? 'set_mark' : 'mark'),
 			(is_target > 1) ? _('XOR mark') : (is_target ? _('Set mark') : _('Match mark')),
 			(is_target > 1) ? _('Apply a bitwise XOR of the given value and the existing mark value on established connections. Format is value[/mask]. If a mask is specified then those bits set in the mask are zeroed out.') :
@@ -333,7 +332,7 @@ return baseclass.extend({
 			if (!is_target)
 				value = String(value).replace(/^!\s*/, '');
 
-			var m = value.match(/^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
+			const m = value.match(/^(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
 
 			if (!m || +m[1] > 0xffffffff || (m[2] != null && +m[2] > 0xffffffff))
 				return _('Expecting: %s').format(_('valid firewall mark'));
@@ -344,8 +343,8 @@ return baseclass.extend({
 		return o;
 	},
 
-	addLimitOption: function(s) {
-		var o = s.taboption('advanced', form.Value, 'limit',
+	addLimitOption(s) {
+		const o = s.taboption('advanced', form.Value, 'limit',
 			_('Limit matching'),
 			_('Limits traffic matching to the specified rate.'));
 
@@ -360,12 +359,12 @@ return baseclass.extend({
 			if (value == '')
 				return true;
 
-			var m = String(value).toLowerCase().match(/^(?:0x[0-9a-f]{1,8}|[0-9]{1,10})\/([a-z]+)$/),
+			const m = String(value).toLowerCase().match(/^(?:0x[0-9a-f]{1,8}|[0-9]{1,10})\/([a-z]+)$/),
 			    u = ['second', 'minute', 'hour', 'day'],
 			    i = 0;
 
 			if (m)
-				for (i = 0; i < u.length; i++)
+				for (let i = 0; i < u.length; i++)
 					if (u[i].indexOf(m[1]) == 0)
 						break;
 
@@ -378,8 +377,8 @@ return baseclass.extend({
 		return o;
 	},
 
-	addLimitBurstOption: function(s) {
-		var o = s.taboption('advanced', form.Value, 'limit_burst',
+	addLimitBurstOption(s) {
+		const o = s.taboption('advanced', form.Value, 'limit_burst',
 			_('Limit burst'),
 			_('Maximum initial number of packets to match: this number gets recharged by one every time the limit specified above is not reached, up to this number.'));
 
@@ -392,13 +391,13 @@ return baseclass.extend({
 		return o;
 	},
 
-	transformHostHints: function(family, hosts) {
-		var choice_values = [],
-		    choice_labels = {},
-		    ip6addrs = {},
-		    ipaddrs = {};
+	transformHostHints(family, hosts) {
+		const choice_values = [];
+		const choice_labels = {};
+		const ip6addrs = {};
+		const ipaddrs = {};
 
-		for (var mac in hosts) {
+		for (let mac in hosts) {
 			L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4).forEach(function(ip) {
 				ipaddrs[ip] = mac;
 			});
@@ -410,8 +409,8 @@ return baseclass.extend({
 
 		if (!family || family == 'ipv4') {
 			L.sortedKeys(ipaddrs, null, 'addr').forEach(function(ip) {
-				var val = ip,
-				    txt = hosts[ipaddrs[ip]].name || ipaddrs[ip];
+				const val = ip;
+				const txt = hosts[ipaddrs[ip]].name || ipaddrs[ip];
 
 				choice_values.push(val);
 				choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
@@ -420,8 +419,8 @@ return baseclass.extend({
 
 		if (!family || family == 'ipv6') {
 			L.sortedKeys(ip6addrs, null, 'addr').forEach(function(ip) {
-				var val = ip,
-				    txt = hosts[ip6addrs[ip]].name || ip6addrs[ip];
+				const val = ip;
+				const txt = hosts[ip6addrs[ip]].name || ip6addrs[ip];
 
 				choice_values.push(val);
 				choice_labels[val] = E([], [ val, ' (', E('strong', {}, [txt]), ')' ]);
@@ -431,42 +430,42 @@ return baseclass.extend({
 		return [choice_values, choice_labels];
 	},
 
-	updateHostHints: function(map, section_id, option, family, hosts) {
-		var opt = map.lookupOption(option, section_id)[0].getUIElement(section_id),
-		    choices = this.transformHostHints(family, hosts);
+	updateHostHints(map, section_id, option, family, hosts) {
+		const opt = map.lookupOption(option, section_id)[0].getUIElement(section_id);
+		const choices = this.transformHostHints(family, hosts);
 
 		opt.clearChoices();
 		opt.addChoices(choices[0], choices[1]);
 	},
 
 	CBIDynamicMultiValueList: form.DynamicList.extend({
-		renderWidget: function(/* ... */) {
-			var dl = form.DynamicList.prototype.renderWidget.apply(this, arguments),
-			    inst = dom.findClassInstance(dl);
+		renderWidget(/* ... */) {
+			const dl = form.DynamicList.prototype.renderWidget.apply(this, arguments);
+			const inst = dom.findClassInstance(dl);
 
 			inst.addItem = function(dl, value, text, flash) {
-				var values = L.toArray(value);
-				for (var i = 0; i < values.length; i++)
-					ui.DynamicList.prototype.addItem.call(this, dl, values[i], null, true);
+				const values = L.toArray(value);
+				for (let val of values)
+					ui.DynamicList.prototype.addItem.call(this, dl, val, null, true);
 			};
 
 			return dl;
 		}
 	}),
 
-	addIPOption: function(s, tab, name, label, description, family, hosts, multiple) {
-		var o = s.taboption(tab, multiple ? this.CBIDynamicMultiValueList : form.Value, name, label, description);
-		var fw4 = L.hasSystemFeature('firewall4');
+	addIPOption(s, tab, name, label, description, family, hosts, multiple) {
+		const o = s.taboption(tab, multiple ? this.CBIDynamicMultiValueList : form.Value, name, label, description);
+		const fw4 = L.hasSystemFeature('firewall4');
 
 		o.modalonly = true;
 		o.datatype = (fw4 && validation.types.iprange) ? 'list(neg(or(ipmask("true"),iprange)))' : 'list(neg(ipmask("true")))';
 		o.placeholder = multiple ? _('-- add IP --') : _('any');
 
 		if (family != null) {
-			var choices = this.transformHostHints(family, hosts);
+			const choices = this.transformHostHints(family, hosts);
 
-			for (var i = 0; i < choices[0].length; i++)
-				o.value(choices[0][i], choices[1][choices[0][i]]);
+			for (let ch of choices[0])
+				o.value(ch, choices[1][ch]);
 		}
 
 		/* force combobox rendering */
@@ -477,22 +476,22 @@ return baseclass.extend({
 		return o;
 	},
 
-	addLocalIPOption: function(s, tab, name, label, description, devices) {
-		var o = s.taboption(tab, form.Value, name, label, description);
-		var fw4 = L.hasSystemFeature('firewall4');
+	addLocalIPOption(s, tab, name, label, description, devices) {
+		const o = s.taboption(tab, form.Value, name, label, description);
+		const fw4 = L.hasSystemFeature('firewall4');
 
 		o.modalonly = true;
 		o.datatype = !fw4?'ip4addr("nomask")':'ipaddr("nomask")';
 		o.placeholder = _('any');
 
 		L.sortedKeys(devices, 'name').forEach(function(dev) {
-			var ip4addrs = devices[dev].ipaddrs;
-			var ip6addrs = devices[dev].ip6addrs;
+			const ip4addrs = devices[dev].ipaddrs;
+			const ip6addrs = devices[dev].ip6addrs;
 
 			if (!L.isObject(devices[dev].flags) || devices[dev].flags.loopback)
 				return;
 
-			for (var i = 0; Array.isArray(ip4addrs) && i < ip4addrs.length; i++) {
+			for (let i = 0; Array.isArray(ip4addrs) && i < ip4addrs.length; i++) {
 				if (!L.isObject(ip4addrs[i]) || !ip4addrs[i].address)
 					continue;
 
@@ -500,7 +499,7 @@ return baseclass.extend({
 					ip4addrs[i].address, ' (', E('strong', {}, [dev]), ')'
 				]));
 			}
-			for (var i = 0; fw4 && Array.isArray(ip6addrs) && i < ip6addrs.length; i++) {
+			for (let i = 0; fw4 && Array.isArray(ip6addrs) && i < ip6addrs.length; i++) {
 				if (!L.isObject(ip6addrs[i]) || !ip6addrs[i].address)
 					continue;
 
@@ -513,8 +512,8 @@ return baseclass.extend({
 		return o;
 	},
 
-	addMACOption: function(s, tab, name, label, description, hosts) {
-		var o = s.taboption(tab, this.CBIDynamicMultiValueList, name, label, description);
+	addMACOption(s, tab, name, label, description, hosts) {
+		const o = s.taboption(tab, this.CBIDynamicMultiValueList, name, label, description);
 
 		o.modalonly = true;
 		o.datatype = 'list(macaddr)';
@@ -535,13 +534,14 @@ return baseclass.extend({
 	CBIProtocolSelect: form.MultiValue.extend({
 		__name__: 'CBI.ProtocolSelect',
 
-		addChoice: function(value, label) {
+		addChoice(value, label) {
 			if (!Array.isArray(this.keylist) || this.keylist.indexOf(value) == -1)
 				this.value(value, label);
 		},
 
-		load: function(section_id) {
-			var cfgvalue = L.toArray(this.super('load', [section_id]) || this.default).sort();
+		load(section_id) {
+			let cfgvalue = L.toArray(this.super('load', [section_id]) || this.default).sort();
+			let m, p;
 
 			['all', 'tcp', 'udp', 'icmp'].concat(cfgvalue).forEach(L.bind(function(value) {
 				switch (value) {
@@ -557,8 +557,8 @@ return baseclass.extend({
 					break;
 
 				default:
-					var m = value.match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/),
-					    p = lookupProto(m ? +m[1] : value);
+					m = value.match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/);
+					p = lookupProto(m ? +m[1] : value);
 
 					this.addChoice(p[2], p[1]);
 					break;
@@ -571,11 +571,11 @@ return baseclass.extend({
 			return cfgvalue;
 		},
 
-		renderWidget: function(section_id, option_index, cfgvalue) {
-			var value = (cfgvalue != null) ? cfgvalue : this.default,
-			    choices = this.transformChoices();
+		renderWidget(section_id, option_index, cfgvalue) {
+			const value = (cfgvalue != null) ? cfgvalue : this.default;
+			const choices = this.transformChoices();
 
-			var widget = new ui.Dropdown(L.toArray(value), choices, {
+			const widget = new ui.Dropdown(L.toArray(value), choices, {
 				id: this.cbid(section_id),
 				sort: this.keylist,
 				multiple: true,
@@ -584,16 +584,16 @@ return baseclass.extend({
 				dropdown_items: -1,
 				create: true,
 				disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
-				validate: function(value) {
-					var v = L.toArray(value);
+				validate(value) {
+					const vals = L.toArray(value);
 
-					for (var i = 0; i < v.length; i++) {
-						if (v[i] == 'all')
+					for (let v of vals) {
+						if (v == 'all')
 							continue;
 
-						var m = v[i].match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/);
+						const m = v.match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/);
 
-						if (m ? (+m[1] > 255) : (lookupProto(v[i])[0] == -1))
+						if (m ? (+m[1] > 255) : (lookupProto(v)[0] == -1))
 							return _('Unrecognized protocol');
 					}
 
@@ -602,15 +602,15 @@ return baseclass.extend({
 			});
 
 			widget.createChoiceElement = function(sb, value) {
-				var p = lookupProto(value);
+				const p = lookupProto(value);
 
 				return ui.Dropdown.prototype.createChoiceElement.call(this, sb, p[2], p[1]);
 			};
 
 			widget.createItems = function(sb, value) {
-				var values = L.toArray(value).map(function(value) {
-					var m = value.match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/),
-					    p = lookupProto(m ? +m[1] : value);
+				const values = L.toArray(value).map(function(value) {
+					const m = value.match(/^(0x[0-9a-f]{1,2}|[0-9]{1,3})$/);
+					const p = lookupProto(m ? +m[1] : value);
 
 					return (p[0] > -1) ? p[2] : p[1];
 				});
@@ -621,17 +621,17 @@ return baseclass.extend({
 			};
 
 			widget.toggleItem = function(sb, li) {
-				var value = li.getAttribute('data-value'),
-				    toggleFn = ui.Dropdown.prototype.toggleItem;
+				const value = li.getAttribute('data-value');
+				const toggleFn = ui.Dropdown.prototype.toggleItem;
 
 				toggleFn.call(this, sb, li);
 
 				if (value == 'all') {
-					var items = li.parentNode.querySelectorAll('li[data-value]');
+					const items = li.parentNode.querySelectorAll('li[data-value]');
 
-					for (var j = 0; j < items.length; j++)
-						if (items[j] !== li)
-							toggleFn.call(this, sb, items[j], false);
+					for (let i of items)
+						if (i !== li)
+							toggleFn.call(this, sb, i, false);
 				}
 				else {
 					toggleFn.call(this, sb, li.parentNode.querySelector('li[data-value="all"]'), false);
@@ -642,21 +642,20 @@ return baseclass.extend({
 		}
 	}),
 
-	checkLegacySNAT: function() {
-		var redirects = uci.sections('firewall', 'redirect');
+	checkLegacySNAT() {
+		const redirects = uci.sections('firewall', 'redirect');
 
-		for (var i = 0; i < redirects.length; i++)
-			if ((redirects[i]['target'] || '').toLowerCase() == 'snat')
+		for (let red of redirects)
+			if ((red['target'] || '').toLowerCase() == 'snat')
 				return true;
 
 		return false;
 	},
 
-	handleMigration: function(ev) {
-		var redirects = uci.sections('firewall', 'redirect'),
-		    tasks = [];
+	handleMigration(ev) {
+		const redirects = uci.sections('firewall', 'redirect');
 
-		var mapping = {
+		const mapping = {
 			dest: 'src',
 			reflection: null,
 			reflection_src: null,
@@ -665,23 +664,23 @@ return baseclass.extend({
 			src: null
 		};
 
-		for (var i = 0; i < redirects.length; i++) {
-			if ((redirects[i]['target'] || '').toLowerCase() != 'snat')
+		for (let red of redirects) {
+			if ((red['target'] || '').toLowerCase() != 'snat')
 				continue;
 
-			var sid = uci.add('firewall', 'nat');
+			const sid = uci.add('firewall', 'nat');
 
-			for (var opt in redirects[i]) {
+			for (let opt in red) {
 				if (opt.charAt(0) == '.')
 					continue;
 
 				if (mapping[opt] === null)
 					continue;
 
-				uci.set('firewall', sid, mapping[opt] || opt, redirects[i][opt]);
+				uci.set('firewall', sid, mapping[opt] || opt, red[opt]);
 			}
 
-			uci.remove('firewall', redirects[i]['.name']);
+			uci.remove('firewall', red['.name']);
 		}
 
 		return uci.save()
@@ -689,7 +688,7 @@ return baseclass.extend({
 			.then(L.bind(ui.changes.apply, ui.changes));
 	},
 
-	renderMigration: function() {
+	renderMigration() {
 		ui.showModal(_('Firewall configuration migration'), [
 			E('p', _('The existing firewall configuration needs to be changed for LuCI to function properly.')),
 			E('p', _('Upon pressing "Continue", "redirect" sections with target "SNAT" will be converted to "nat" sections and the firewall will be restarted to apply the updated configuration.')),

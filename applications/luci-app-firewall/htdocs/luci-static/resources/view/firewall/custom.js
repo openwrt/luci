@@ -4,12 +4,12 @@
 'require ui';
 
 return view.extend({
-	load: function() {
+	load() {
 		return L.resolveDefault(fs.read('/etc/firewall.user'), '');
 	},
 
-	handleSave: function(ev) {
-		var value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
+	handleSave(ev) {
+		const value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
 
 		return fs.write('/etc/firewall.user', value).then(function(rc) {
 			document.querySelector('textarea').value = value;
@@ -20,7 +20,7 @@ return view.extend({
 		});
 	},
 
-	render: function(fwuser) {
+	render(fwuser) {
 		return E([
 			E('h2', _('Firewall - Custom Rules')),
 			E('p', {}, _('Custom rules allow you to execute arbitrary iptables commands which are not otherwise covered by the firewall framework. The commands are executed after each firewall restart, right after the default ruleset has been loaded.')),

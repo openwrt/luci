@@ -9,22 +9,22 @@
 'require tools.widgets as widgets';
 
 function rule_proto_txt(s) {
-	var family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:all|\*)$/, 'any');
-	var sip = uci.get('firewall', s, 'src_ip') || '';
-	var dip = uci.get('firewall', s, 'dest_ip') || '';
-	var rwip = uci.get('firewall', s, 'snat_ip') || '';
-	var proto = L.toArray(uci.get('firewall', s, 'proto')).filter(function(p) {
+	const family = (uci.get('firewall', s, 'family') || '').toLowerCase().replace(/^(?:all|\*)$/, 'any');
+	const sip = uci.get('firewall', s, 'src_ip') || '';
+	const dip = uci.get('firewall', s, 'dest_ip') || '';
+	const rwip = uci.get('firewall', s, 'snat_ip') || '';
+	const proto = L.toArray(uci.get('firewall', s, 'proto')).filter(function(p) {
 		return (p != '*' && p != 'any' && p != 'all');
 	}).map(function(p) {
-		var pr = fwtool.lookupProto(p);
+		const pr = fwtool.lookupProto(p);
 		return {
 			num:  pr[0],
 			name: pr[1]
 		};
 	});
 
-	var m = String(uci.get('firewall', s, 'mark')).match(/^(!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
-	var f = m ? {
+	const m = String(uci.get('firewall', s, 'mark')).match(/^(!\s*)?(0x[0-9a-f]{1,8}|[0-9]{1,10})(?:\/(0x[0-9a-f]{1,8}|[0-9]{1,10}))?$/i);
+	const f = m ? {
 		val:  m[0].toUpperCase().replace(/X/g, 'x'),
 		inv:  m[1],
 		num:  '0x%02X'.format(+m[2]),
@@ -40,7 +40,7 @@ function rule_proto_txt(s) {
 }
 
 function rule_src_txt(s, hosts) {
-	var z = uci.get('firewall', s, 'src');
+	const z = uci.get('firewall', s, 'src');
 
 	return fwtool.fmt(_('From %{src}%{src_device?, interface <var>%{src_device}</var>}%{src_ip?, IP %{src_ip#%{next?, }<var%{item.inv? data-tooltip="Match IP addresses except %{item.val}."}>%{item.ival}</var>}}%{src_port?, port %{src_port#%{next?, }<var%{item.inv? data-tooltip="Match ports except %{item.val}."}>%{item.ival}</var>}}'), {
 		src: E('span', { 'class': 'zonebadge', 'style': fwmodel.getZoneColorStyle(null) }, [E('em', _('any zone'))]),
@@ -50,7 +50,7 @@ function rule_src_txt(s, hosts) {
 }
 
 function rule_dest_txt(s) {
-	var z = uci.get('firewall', s, 'src');
+	const z = uci.get('firewall', s, 'src');
 
 	return fwtool.fmt(_('To %{dest}%{dest_device?, via interface <var>%{dest_device}</var>}%{dest_ip?, IP %{dest_ip#%{next?, }<var%{item.inv? data-tooltip="Match IP addresses except %{item.val}."}>%{item.ival}</var>}}%{dest_port?, port %{dest_port#%{next?, }<var%{item.inv? data-tooltip="Match ports except %{item.val}."}>%{item.ival}</var>}}'), {
 		dest: E('span', { 'class': 'zonebadge', 'style': fwmodel.getZoneColorStyle(z) }, [(z == '*') ? E('em', _('any zone')) : (z ? E('strong', z) : E('em', _('this device')))]),
@@ -61,8 +61,8 @@ function rule_dest_txt(s) {
 }
 
 function rule_limit_txt(s) {
-	var m = String(uci.get('firewall', s, 'limit')).match(/^(\d+)\/([smhd])\w*$/i),
-	    l = m ? {
+	const m = String(uci.get('firewall', s, 'limit')).match(/^(\d+)\/([smhd])\w*$/i);
+	const l = m ? {
 			num:   +m[1],
 			unit:  ({ s: _('second'), m: _('minute'), h: _('hour'), d: _('day') })[m[2]],
 			burst: uci.get('firewall', s, 'limit_burst')
@@ -74,13 +74,13 @@ function rule_limit_txt(s) {
 	return fwtool.fmt(_('Limit matching to <var>%{limit.num}</var> packets per <var>%{limit.unit}</var>%{limit.burst? burst <var>%{limit.burst}</var>}'), { limit: l });
 }
 
-function rule_target_txt(s) {
-	var t = uci.get('firewall', s, 'target'),
-	    s = {
-	    	target:    t,
-	    	snat_ip:   uci.get('firewall', s, 'snat_ip'),
-	    	snat_port: uci.get('firewall', s, 'snat_port')
-	    };
+function rule_target_txt(sid) {
+	const t = uci.get('firewall', sid, 'target');
+	const s = {
+		target:    t,
+		snat_ip:   uci.get('firewall', sid, 'snat_ip'),
+		snat_port: uci.get('firewall', sid, 'snat_port')
+	};
 
 	switch (t) {
 	case 'SNAT':
@@ -98,11 +98,11 @@ function rule_target_txt(s) {
 }
 
 function validate_opt_family(m, section_id, opt) {
-	var sopt = m.section.getOption('src_ip'),
-	    dopt = m.section.getOption('dest_ip'),
-	    rwopt = m.section.getOption('snat_ip'),
-	    fmopt = m.section.getOption('family'),
-	    tgopt = m.section.getOption('target');
+	const sopt = m.section.getOption('src_ip');
+	const dopt = m.section.getOption('dest_ip');
+	const rwopt = m.section.getOption('snat_ip');
+	const fmopt = m.section.getOption('family');
+	const tgopt = m.section.getOption('target');
 
 	if (!sopt.isValid(section_id) && opt != 'src_ip')
 		return true;
@@ -115,11 +115,11 @@ function validate_opt_family(m, section_id, opt) {
 	if (!tgopt.isValid(section_id) && opt != 'target')
 		return true;
 
-	var sip = sopt.formvalue(section_id) || '',
-	    dip = dopt.formvalue(section_id) || '',
-	    rwip = rwopt.formvalue(section_id) || '',
-	    fm = fmopt.formvalue(section_id) || '',
-	    tg = tgopt.formvalue(section_id);
+	const sip = sopt.formvalue(section_id) || '';
+	const dip = dopt.formvalue(section_id) || '';
+	const rwip = rwopt.formvalue(section_id) || '';
+	const fm = fmopt.formvalue(section_id) || '';
+	const tg = tgopt.formvalue(section_id);
 
 	if (fm == 'ipv6' && (sip.indexOf(':') != -1 || sip == '') && (dip.indexOf(':') != -1 || dip == '') && ((rwip.indexOf(':') != -1 && tg == 'SNAT') || rwip == ''))
 		return true;
@@ -148,7 +148,7 @@ return view.extend({
 		expect: { '': {} }
 	}),
 
-	load: function() {
+	load() {
 		return Promise.all([
 			this.callHostHints(),
 			this.callNetworkDevices(),
@@ -156,18 +156,16 @@ return view.extend({
 		]);
 	},
 
-	render: function(data) {
+	render(data) {
 		if (fwtool.checkLegacySNAT())
 			return fwtool.renderMigration();
 		else
 			return this.renderNats(data);
 	},
 
-	renderNats: function(data) {
-		var hosts = data[0],
-		    devs = data[1],
-		    m, s, o;
-		var fw4 = L.hasSystemFeature('firewall4');
+	renderNats([hosts, devs]) {
+		let m, s, o;
+		const fw4 = L.hasSystemFeature('firewall4');
 
 		m = new form.Map('firewall', _('Firewall - NAT Rules'),
 			_('NAT rules allow fine grained control over the source IP to use for outbound or forwarded traffic.'));
@@ -222,7 +220,7 @@ return view.extend({
 			o.value('ipv6', _('IPv6 only'));
 			o.value('', _('automatic'));  // infer from zone or used IP addresses
 			o.cfgvalue = function(section_id) {
-				var val = this.map.data.get(this.map.config, section_id, 'family');
+				const val = this.map.data.get(this.map.config, section_id, 'family');
 
 				if (!val)
 					return '';
@@ -300,8 +298,8 @@ return view.extend({
 		o.placeholder = null;
 		o.depends('target', 'SNAT');
 		o.validate = function(section_id, value) {
-			var a = this.formvalue(section_id),
-			    p = this.section.formvalue(section_id, 'snat_port');
+			const a = this.formvalue(section_id);
+			const p = this.section.formvalue(section_id, 'snat_port');
 
 			if ((a == null || a == '') && (p == null || p == '') && value == '')
 				return _('A rewrite IP must be specified!');
@@ -318,8 +316,7 @@ return view.extend({
 		o.depends({ proto: 'tcp', '!contains': true });
 		o.depends({ proto: 'udp', '!contains': true });
 
-		var have_fw4 = L.hasSystemFeature('firewall4')
-		if (!have_fw4) {
+		if (!fw4) {
 			o = s.taboption('advanced', form.Value, 'ipset', _('Use ipset'));
 			uci.sections('firewall', 'ipset', function(s) {
 				if (typeof(s.name) == 'string')
@@ -342,7 +339,7 @@ return view.extend({
 		o = s.taboption('advanced', form.Flag, 'log', _('Enable logging'), _('Log matched packets to syslog.'));
 		o.modalonly = true;
 
-		if (!have_fw4) {
+		if (!fw4) {
 			o = s.taboption('advanced', form.Value, 'extra', _('Extra arguments'),
 				_('Passes additional arguments to iptables. Use with care!'));
 			o.modalonly = true;
@@ -373,7 +370,7 @@ return view.extend({
 		o.write = function(section_id, value) {
 			return this.super('write', [ section_id, L.toArray(value).join(' ') ]);
 		};
-		for (var i = 1; i <= 31; i++)
+		for (let i = 1; i <= 31; i++)
 			o.value(i);
 
 		o = s.taboption('timed', form.Value, 'start_time', _('Start Time (hh:mm:ss)'));

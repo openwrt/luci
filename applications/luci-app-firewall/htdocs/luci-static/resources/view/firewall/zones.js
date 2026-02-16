@@ -15,25 +15,23 @@ return view.extend({
 		expect: { result: [] }
 	}),
 
-	load: function() {
+	load() {
 		return Promise.all([
 			this.callConntrackHelpers(),
 			firewall.getDefaults()
 		]);
 	},
 
-	render: function(data) {
+	render(data) {
 		if (fwtool.checkLegacySNAT())
 			return fwtool.renderMigration();
 		else
 			return this.renderZones(data);
 	},
 
-	renderZones: function(data) {
-		var ctHelpers = data[0],
-		    fwDefaults = data[1],
-		    m, s, o, inp, out;
-		var fw4 = L.hasSystemFeature('firewall4');
+	renderZones([ctHelpers, fwDefaults]) {
+		let m, s, o, out;
+		const fw4 = L.hasSystemFeature('firewall4');
 
 		m = new form.Map('firewall', _('Firewall - Zone Settings'),
 			_('The firewall creates zones over your network interfaces to control network traffic flow.'));
@@ -44,7 +42,7 @@ return view.extend({
 
 		o = s.option(form.Flag, 'synflood_protect', _('Enable SYN-flood protection'));
 		o.cfgvalue = function(section_id) {
-			var val = uci.get('firewall', section_id, 'synflood_protect');
+			const val = uci.get('firewall', section_id, 'synflood_protect');
 			return (val != null) ? val : uci.get('firewall', section_id, 'syn_flood');
 		};
 		o.write = function(section_id, value) {
@@ -58,16 +56,16 @@ return view.extend({
 
 		o = s.option(form.Flag, 'drop_invalid', _('Drop invalid packets'));
 
-		var p = [
+		let p = [
 			s.option(form.ListValue, 'input', _('Input')),
 			s.option(form.ListValue, 'output', _('Output')),
 			s.option(form.ListValue, 'forward', _('Forward'))
 		];
 
-		for (var i = 0; i < p.length; i++) {
-			p[i].value('REJECT', _('reject'));
-			p[i].value('DROP', _('drop'));
-			p[i].value('ACCEPT', _('accept'));
+		for (let popt of p) {
+			popt.value('REJECT', _('reject'));
+			popt.value('DROP', _('drop'));
+			popt.value('ACCEPT', _('accept'));
 		}
 
 		/* Netfilter flow offload support */
@@ -85,8 +83,8 @@ return view.extend({
 			o.value('2', _("Hardware flow offloading"), _('Hardware based offloading for routing with/without NAT.') + ' ' + _(' Requires hardware NAT support.'));
 			o.optional = false;
 			o.load = function (section_id) {
-				var flow_offloading = uci.get('firewall', section_id, 'flow_offloading');
-				var flow_offloading_hw = uci.get('firewall', section_id, 'flow_offloading_hw');
+				const flow_offloading = uci.get('firewall', section_id, 'flow_offloading');
+				const flow_offloading_hw = uci.get('firewall', section_id, 'flow_offloading_hw');
 				return (flow_offloading === '1')
 					? (flow_offloading_hw === '1' ? '2' : '1')
 					: '0';
@@ -120,7 +118,7 @@ return view.extend({
 		o.rawhtml = true;
 		o.modalonly = true;
 		o.cfgvalue = function(section_id) {
-			var name = uci.get('firewall', section_id, 'name');
+			let name = uci.get('firewall', section_id, 'name');
 			if (name == null)
 				name = _("this new zone");
 			return _('This section defines common properties of %q. The <em>input</em> and <em>output</em> options set the default policies for traffic entering and leaving this zone while the <em>forward</em> option describes the policy for forwarded traffic between different networks within the zone. <em>Covered networks</em> specifies which available networks are members of this zone.')
@@ -131,9 +129,9 @@ return view.extend({
 		o.placeholder = _('Unnamed zone');
 		o.modalonly = true;
 		o.rmempty = false;
-		o.datatype = L.hasSystemFeature('firewall4') ? 'ucifw4zonename' : 'and(ucifw4zonename,maxlength(11))';
+		o.datatype = fw4 ? 'ucifw4zonename' : 'and(ucifw4zonename,maxlength(11))';
 		o.write = function(section_id, formvalue) {
-			var cfgvalue = this.cfgvalue(section_id);
+			const cfgvalue = this.cfgvalue(section_id);
 
 			if (cfgvalue == null || cfgvalue == '')
 				return uci.set('firewall', section_id, 'name', formvalue);
@@ -148,17 +146,17 @@ return view.extend({
 			return uci.get('firewall', section_id, 'name');
 		};
 
-		var p = [
+		p = [
 			s.taboption('general', form.ListValue, 'input', _('Input')),
 			s.taboption('general', form.ListValue, 'output', _('Output')),
 			s.taboption('general', form.ListValue, 'forward', _('Intra zone forward'))
 		];
 
-		for (var i = 0; i < p.length; i++) {
-			p[i].value('REJECT', _('reject'));
-			p[i].value('DROP', _('drop'));
-			p[i].value('ACCEPT', _('accept'));
-			p[i].editable = true;
+		for (let popt of p) {
+			popt.value('REJECT', _('reject'));
+			popt.value('DROP', _('drop'));
+			popt.value('ACCEPT', _('accept'));
+			popt.editable = true;
 		}
 
 		p[0].default = fwDefaults.getInput();
@@ -188,10 +186,10 @@ return view.extend({
 			return uci.get('firewall', section_id, 'network');
 		};
 		o.write = function(section_id, formvalue) {
-			var name = uci.get('firewall', section_id, 'name'),
-			    cfgvalue = this.cfgvalue(section_id),
-			    oldNetworks = L.toArray(cfgvalue),
-			    newNetworks = L.toArray(formvalue);
+			const name = uci.get('firewall', section_id, 'name');
+			const cfgvalue = this.cfgvalue(section_id);
+			const oldNetworks = L.toArray(cfgvalue);
+			const newNetworks = L.toArray(formvalue);
 
 			oldNetworks.sort();
 			newNetworks.sort();
@@ -199,11 +197,10 @@ return view.extend({
 			if (oldNetworks.join(' ') == newNetworks.join(' '))
 				return;
 
-			var tasks = [ firewall.getZone(name) ];
+			const tasks = [ firewall.getZone(name) ];
 
 			if (Array.isArray(formvalue))
-				for (var i = 0; i < newNetworks.length; i++) {
-					var netname = newNetworks[i];
+				for (let netname of newNetworks) {
 					tasks.push(network.getNetwork(netname).then(L.bind(function(netname, net) {
 						return net || network.addNetwork(netname, { 'proto': 'none' });
 					}, this, netname)));
@@ -222,7 +219,7 @@ return view.extend({
 		o.rawhtml = true;
 		o.modalonly = true;
 		o.cfgvalue = function(section_id) {
-			var name = uci.get('firewall', section_id, 'name');
+			let name = uci.get('firewall', section_id, 'name');
 			if (name == null)
 				name = _("this new zone");
 			return _('The options below control the forwarding policies between this zone (%s) and other zones. <em>Destination zones</em> cover forwarded traffic <strong>originating from %q</strong>. <em>Source zones</em> match forwarded traffic from other zones <strong>targeted at %q</strong>. The forwarding rule is <em>unidirectional</em>, e.g. a forward from lan to wan does <em>not</em> imply a permission to forward from wan to lan as well.')
@@ -244,9 +241,9 @@ return view.extend({
 				_('Enable network address and port translation IPv6 (NAT6 or NAPT6) for outbound traffic on this zone.'));
 			o.modalonly = true;
 			o.tooltip = function(section_id) {
-				var family = uci.get('firewall', section_id, 'family')
-				var masq_src = uci.get('firewall', section_id, 'masq_src')
-				var masq_dest = uci.get('firewall', section_id, 'masq_dest')
+				const family = uci.get('firewall', section_id, 'family')
+				const masq_src = uci.get('firewall', section_id, 'masq_src')
+				const masq_dest = uci.get('firewall', section_id, 'masq_dest')
 				if ((!family || family.indexOf('6') >= 0) && (masq_src || masq_dest))
 					return _('Limited masquerading enabled');
 				return null;
@@ -291,8 +288,8 @@ return view.extend({
 		o = s.taboption('conntrack', form.MultiValue, 'helper', _('Conntrack helpers'), _('Explicitly choses allowed connection tracking helpers for zone traffic'));
 		o.depends('auto_helper', '0');
 		o.modalonly = true;
-		for (var i = 0; i < ctHelpers.length; i++)
-			o.value(ctHelpers[i].name, E('<span><span class="hide-close">%s (%s)</span><span class="hide-open">%s</span></span>'.format(ctHelpers[i].description, ctHelpers[i].name.toUpperCase(), ctHelpers[i].name.toUpperCase())));
+		for (let cth of ctHelpers)
+			o.value(cth.name, E('<span><span class="hide-close">%s (%s)</span><span class="hide-open">%s</span></span>'.format(cth.description, cth.name.toUpperCase(), cth.name.toUpperCase())));
 
 		o = s.taboption('advanced', form.MultiValue, 'log', _('Enable logging'), _('Log matched packets on the selected tables to syslog.'));
 		o.modalonly = true;
@@ -314,7 +311,7 @@ return view.extend({
 		o.placeholder = '10/minute';
 		o.modalonly = true;
 
-		if (!L.hasSystemFeature('firewall4')) {
+		if (!fw4) {
 			o = s.taboption('extra', form.DummyValue, '_extrainfo');
 			o.rawhtml = true;
 			o.modalonly = true;
@@ -347,7 +344,7 @@ return view.extend({
 		o.rawhtml = true;
 		o.modalonly = true;
 		o.cfgvalue = function(section_id) {
-			var name = uci.get('firewall', section_id, 'name');
+			let name = uci.get('firewall', section_id, 'name');
 			if (name == null)
 				name = _("this new zone");
 			return _('The options below control the forwarding policies between this zone (%s) and other zones. <em>Destination zones</em> cover forwarded traffic <strong>originating from %q</strong>. <em>Source zones</em> match forwarded traffic from other zones <strong>targeted at %q</strong>. The forwarding rule is <em>unidirectional</em>, e.g. a forward from lan to wan does <em>not</em> imply a permission to forward from wan to lan as well.')
@@ -362,40 +359,40 @@ return view.extend({
 			return (uci.get('firewall', section_id, 'name') != value);
 		};
 		o.cfgvalue = function(section_id) {
-			var out = (this.option == 'out'),
-			    zone = this.lookupZone(uci.get('firewall', section_id, 'name')),
-			    fwds = zone ? zone.getForwardingsBy(out ? 'src' : 'dest') : [],
-			    value = [];
+			const out = (this.option == 'out');
+			const zone = this.lookupZone(uci.get('firewall', section_id, 'name'));
+			const fwds = zone ? zone.getForwardingsBy(out ? 'src' : 'dest') : [];
+			const value = [];
 
-			for (var i = 0; i < fwds.length; i++)
-				value.push(out ? fwds[i].getDestination() : fwds[i].getSource());
+			for (let fwd of fwds)
+				value.push(out ? fwd.getDestination() : fwd.getSource());
 
 			return value;
 		};
 		o.write = o.remove = function(section_id, formvalue) {
-			var out = (this.option == 'out'),
-			    zone = this.lookupZone(uci.get('firewall', section_id, 'name')),
-			    fwds = zone ? zone.getForwardingsBy(out ? 'src' : 'dest') : [];
+			const out = (this.option == 'out');
+			const zone = this.lookupZone(uci.get('firewall', section_id, 'name'));
+			const fwds = zone ? zone.getForwardingsBy(out ? 'src' : 'dest') : [];
 
 			if (formvalue == null)
 				formvalue = [];
 
 			if (Array.isArray(formvalue)) {
-				for (var i = 0; i < fwds.length; i++) {
-					var cmp = out ? fwds[i].getDestination() : fwds[i].getSource();
+				for (let fwd of fwds) {
+					var cmp = out ? fwd.getDestination() : fwd.getSource();
 					if (!formvalue.filter(function(d) { return d == cmp }).length)
-						zone.deleteForwarding(fwds[i]);
+						zone.deleteForwarding(fwd);
 				}
 
-				for (var i = 0; i < formvalue.length; i++)
+				for (let fv of formvalue)
 					if (out)
-						zone.addForwardingTo(formvalue[i]);
+						zone.addForwardingTo(fv);
 					else
-						zone.addForwardingFrom(formvalue[i]);
+						zone.addForwardingFrom(fv);
 			}
 		};
 
-		inp = o = s.taboption('general', widgets.ZoneSelect, 'in', _('Allow forward from <em>source zones</em>:'));
+		o = s.taboption('general', widgets.ZoneSelect, 'in', _('Allow forward from <em>source zones</em>:'));
 		o.nocreate = true;
 		o.multiple = true;
 		o.modalonly = true;
