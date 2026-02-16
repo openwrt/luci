@@ -1,25 +1,61 @@
 {
-    "tags": {
-        "allowUnknownTags": true,
-        "dictionaries": ["jsdoc","closure"]
-    },
-    "source": {
-        "include": ["modules/luci-base/htdocs/luci-static/resources"],
-        "includePattern": ".+\\.js(doc|x)?$"
-    },
-    "plugins": [
-        "plugins/markdown"
-    ],
-    "templates": {
-        "cleverLinks": true,
-        "monospaceLinks": true,
-        "default": {
-                "outputSourceFiles": true
-        }
-    },
-    "opts": {
-        "destination": "docs/jsapi",
-        "recurse": true,
-        "readme": "docs/jsapi/README.md"
-    }
+	"tags": {
+		"allowUnknownTags": true,
+		"dictionaries": ["jsdoc","closure"]
+	},
+	"source": {
+		"include": ["modules/luci-base/htdocs/luci-static/resources"],
+		"includePattern": ".+\\.js(doc|x)?$"
+	},
+	"plugins": [
+		"plugins/markdown"
+	],
+	"templates": {
+		"cleverLinks": true,
+		"monospaceLinks": true,
+		"default": {
+			"outputSourceFiles": true
+		}
+	},
+	"opts": {
+		"template": "node_modules/clean-jsdoc-theme",
+		"template_alt": "@alphanull/jsdoc-vision-theme",
+		"template_old": "jaguarjs-jsdoc",
+		"destination": "docs/",
+		"destination_comment": "output directory in the repo",
+		"recurse": true,
+		"readme": "doc_gen/README.md",
+		"readme_comment": "generates the index.html file",
+		"tutorials": "doc_gen/tutorials",
+		"tutorials_comment": "tutorials index. See 'sections' below. jaguarjs does not like the tutorials entry",
+		"theme_opts": {
+			"default_theme": "fallback-dark",
+			"favicon": "themes/luci-theme-bootstrap/htdocs/luci-static/bootstrap/logo.svg",
+			"title": "LuCI Documentation",
+			"homepageTitle": "LuCI - Reference Documentation",
+			"displayModuleHeader": false,
+			"prefixModuleToSidebarItems_experimental": false,
+			"includeFilesListInHomepage": false,
+			"include_css": [
+				"doc_gen/extra.css"
+			],
+			"menu": [
+				{
+					"title": "GitHub Project Page",
+					"link": "https://github.com/openwrt/luci",
+					"class": "github-home"
+				}
+			],
+			"sections": [
+				"Tutorials",
+				"Modules",
+				"Classes",
+				"Externals"
+			]
+		}
+	},
+	"markdown": {
+		"hardwrap": false,
+		"idInHeadings": true
+	}
 }

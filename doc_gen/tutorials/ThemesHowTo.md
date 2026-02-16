@@ -1,5 +1,5 @@
-# HowTo: Create Themes
-**Note:** You have already read the [Module Reference](./Modules.md) and the [Template Reference](./Templates.md).
+# Creating Themes
+**Note:** You have already read the [Module Reference](./Modules.md).
 
 We assume you want to call your new theme `mytheme`.
 Replace `mytheme` with your module name every time this is mentioned in this Howto.
@@ -18,31 +18,35 @@ include ../../luci.mk
 ```
 
 Create the following directory structure inside your theme directory.
-* ipkg
 * htdocs
   * luci-static
     * `mytheme`
-* luasrc
-  * view
-   * themes
-      * `mytheme`
+    * resources
 * root
   * etc
-   * uci-defaults
+    * uci-defaults
+* ucode
+  * template
+    * themes
+      * `mytheme`
 
 
 ## Designing
-Create two LuCI HTML-Templates named `header.htm` and `footer.htm` under `luasrc/view/themes/mytheme`.
-The `header.htm` will be included at the beginning of each rendered page and the `footer.htm` at the end.
-So your `header.htm` will probably contain a DOCTYPE description, headers,
-the menu and layout of the page and the `footer.htm` will close all remaining open tags and may add a footer bar.
+Create two LuCI ucode Templates named `header.ut` and `footer.ut` under `ucode/template/themes/mytheme`.
+The `header.ut` will be included at the beginning of each rendered page and the `footer.ut` at the end.
+So your `header.ut` will probably contain a DOCTYPE description, headers,
+the menu and layout of the page and the `footer.ut` will close all remaining open tags and may add a footer bar.
 But hey that's your choice: you are the designer ;-).
 
-Just make sure your `header.htm` begins with the following lines:
+Just make sure your `header.ut` begins with the following lines:
 ```
-<%
-require("luci.http").prepare_content("text/html")
--%>
+{%
+  import { getuid, getspnam } from 'luci.core';
+
+  const boardinfo = ubus.call('system', 'board');
+
+  http.prepare_content('text/html; charset=UTF-8');
+-%}
 ```
 
 This ensures your content is sent to the client with the right content type.
@@ -50,19 +54,22 @@ Of course you can adapt `text/html` to your needs.
 
 
 Put any stylesheets, Javascripts, images, ... into `htdocs/luci-static/mytheme`.
-Refer to this directory in your header and footer templates as: `<%=media%>`.
-That means for a stylesheet `htdocs/luci-static/mytheme/cascade.css` you would write:
+Refer to this directory in your header and footer templates as: `{{ media }}`.
+That means for an icon `htdocs/luci-static/mytheme/logo.svg` you would write:
+
 ```html
-<link rel="stylesheet" href="<%=media%>/cascade.css" />
+<link rel="icon" href="{{ media }}/logo.svg" sizes="any">
 ```
 
 ## Making the theme selectable
 If you are done with your work there are two last steps to do.
 To make your theme OpenWrt-capable and selectable on the settings page, create a file `root/etc/uci-defaults/luci-theme-mytheme` with the following contents:
+
 ```sh
 #!/bin/sh
 uci batch <<-EOF
 	set luci.themes.MyTheme=/luci-static/mytheme
+  set luci.main.mediaurlbase=/luci-static/mytheme
 	commit luci
 EOF
 exit 0
