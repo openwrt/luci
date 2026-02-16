@@ -14,7 +14,7 @@ src-git luci https://github.com/openwrt/luci.git
 ```
 
 To install all its package definitions, run:
-```
+```sh
 ./scripts/feeds update luci
 ./scripts/feeds install -a -p luci
 ```
@@ -23,7 +23,8 @@ To install all its package definitions, run:
 
 You can browse the generated API documentation directly on Github.
 
- - [Server side Lua APIs](http://openwrt.github.io/luci/api/index.html); Note: deprecated - Lua will be removed in future. Use ucode rpcd for server side operations.
+Use [ucode](https://ucode.mein.io/) and rpcd for server side operations.
+
  - [Client side JavaScript APIs](http://openwrt.github.io/luci/jsapi/index.html)
 
 ## Development
