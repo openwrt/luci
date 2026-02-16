@@ -17,11 +17,6 @@ function isEmpty(object, ignore) {
 }
 
 /**
- * @namespace LuCI.uci
- * @memberof LuCI
- */
-
-/**
  * @class uci
  * @memberof LuCI
  * @hideconstructor
