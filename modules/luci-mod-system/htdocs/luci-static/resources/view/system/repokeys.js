@@ -56,12 +56,6 @@ function listKeyFiles() {
 	);
 }
 
-function safeText(str) {
-	return String(str).replace(/[&<>"']/g, s => ({
-		'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
-	}[s]));
-}
-
 function saveKeyFile(keyContent, file, fileContent) {
 	const ts = Date.now();
 	// Note: opkg can only verify against a key with filename that matches its key hash
@@ -92,7 +86,7 @@ function removeKey(ev, key) {
 }
 
 function isPemFormat(content) {
-	return new RegExp('-BEGIN ([A-Z ]+)?PUBLIC KEY-').test(content);
+	return (/-BEGIN ([A-Z ]+)?PUBLIC KEY-/.test(content));
 }
 
 function keyEnvironmentCheck(key) {
@@ -274,7 +268,7 @@ return view.extend({
 		s = m.section(form.NamedSection, 'fup');
 
 		o = s.option(form.DummyValue, '_newkey');
-		o.cfgvalue = function(section_id) {
+		o.cfgvalue = function(/* section_id*/) {
 
 			const addInput = E('textarea', {
 				id: 'key-input',
