@@ -1,0 +1,589 @@
+<!DOCTYPE html><html lang="en" style="font-size:16px"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="themes/luci-theme-bootstrap/htdocs/luci-static/bootstrap/logo.svg"><link type="text/css" rel="stylesheet" href="extra.css"><title>Source: firewall.js</title><!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--><script src="scripts/third-party/hljs.js" defer="defer"></script><script src="scripts/third-party/hljs-line-num.js" defer="defer"></script><script src="scripts/third-party/popper.js" defer="defer"></script><script src="scripts/third-party/tippy.js" defer="defer"></script><script src="scripts/third-party/tocbot.min.js"></script><script>var baseURL="/",locationPathname="";baseURL=(locationPathname=document.location.pathname).substr(0,locationPathname.lastIndexOf("/")+1)</script><link rel="stylesheet" href="styles/clean-jsdoc-theme.min.css"><svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none"><defs><symbol id="copy-icon" viewbox="0 0 488.3 488.3"><g><path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/><path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/></g></symbol><symbol id="search-icon" viewBox="0 0 512 512"><g><g><path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z"/></g></g><g><g><path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g></symbol><symbol id="font-size-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.246 15H4.754l-2 5H.6L7 4h2l6.4 16h-2.154l-2-5zm-.8-2L8 6.885 5.554 13h4.892zM21 12.535V12h2v8h-2v-.535a4 4 0 1 1 0-6.93zM19 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></symbol><symbol id="add-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></symbol><symbol id="minus-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M5 11h14v2H5z"/></symbol><symbol id="dark-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol><symbol id="light-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol><symbol id="reset-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.537 19.567A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 1 0-2.46 5.772l.997 1.795z"/></symbol><symbol id="down-icon" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"></path></symbol><symbol id="codepen-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.5 13.202L13 15.535v3.596L19.197 15 16.5 13.202zM14.697 12L12 10.202 9.303 12 12 13.798 14.697 12zM20 10.869L18.303 12 20 13.131V10.87zM19.197 9L13 4.869v3.596l3.5 2.333L19.197 9zM7.5 10.798L11 8.465V4.869L4.803 9 7.5 10.798zM4.803 15L11 19.131v-3.596l-3.5-2.333L4.803 15zM4 13.131L5.697 12 4 10.869v2.262zM2 9a1 1 0 0 1 .445-.832l9-6a1 1 0 0 1 1.11 0l9 6A1 1 0 0 1 22 9v6a1 1 0 0 1-.445.832l-9 6a1 1 0 0 1-1.11 0l-9-6A1 1 0 0 1 2 15V9z"/></symbol><symbol id="close-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></symbol><symbol id="menu-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></symbol></defs></svg></head><body data-theme="fallback-dark"><div class="sidebar-container"><div class="sidebar" id="sidebar"><a href="/" class="sidebar-title sidebar-title-anchor">LuCI Documentation</a><div class="sidebar-items-container"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-tutorials"><div>Tutorials</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="tutorial-JsonRpcHowTo.html">Using JSON RPC daemon</a></div><div class="sidebar-section-children"><a href="tutorial-Modules.html">Modules</a></div><div class="sidebar-section-children"><a href="tutorial-ThemesHowTo.html">Making Themes</a></div><div class="sidebar-section-children"><a href="tutorial-i18n.html">Internationalisation - i18n</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.module_cbi.html">cbi</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-classes"><div>Classes</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.html">LuCI</a></div><div class="sidebar-section-children"><a href="LuCI.baseclass.html">baseclass</a></div><div class="sidebar-section-children"><a href="LuCI.dom.html">dom</a></div><div class="sidebar-section-children"><a href="LuCI.form.html">form</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractSection.html">AbstractSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractValue.html">AbstractValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Button.html">Button</a></div><div class="sidebar-section-children"><a href="LuCI.form.DirectoryPicker.html">DirectoryPicker</a></div><div class="sidebar-section-children"><a href="LuCI.form.DummyValue.html">DummyValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.form.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.form.Flag.html">Flag</a></div><div class="sidebar-section-children"><a href="LuCI.form.GridSection.html">GridSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.HiddenValue.html">HiddenValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.JSONMap.html">JSONMap</a></div><div class="sidebar-section-children"><a href="LuCI.form.ListValue.html">ListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Map.html">Map</a></div><div class="sidebar-section-children"><a href="LuCI.form.MultiValue.html">MultiValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.NamedSection.html">NamedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.RangeSliderValue.html">RangeSliderValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.RichListValue.html">RichListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.SectionValue.html">SectionValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TableSection.html">TableSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.TextValue.html">TextValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TypedSection.html">TypedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.Value.html">Value</a></div><div class="sidebar-section-children"><a href="LuCI.fs.html">fs</a></div><div class="sidebar-section-children"><a href="LuCI.headers.html">headers</a></div><div class="sidebar-section-children"><a href="LuCI.network.html">network</a></div><div class="sidebar-section-children"><a href="LuCI.network.Device.html">Device</a></div><div class="sidebar-section-children"><a href="LuCI.network.Hosts.html">Hosts</a></div><div class="sidebar-section-children"><a href="LuCI.network.Protocol.html">Protocol</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiDevice.html">WifiDevice</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiNetwork.html">WifiNetwork</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiVlan.html">WifiVlan</a></div><div class="sidebar-section-children"><a href="LuCI.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.request.html">request</a></div><div class="sidebar-section-children"><a href="LuCI.request.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.response.html">response</a></div><div class="sidebar-section-children"><a href="LuCI.rpc.html">rpc</a></div><div class="sidebar-section-children"><a href="LuCI.session.html">session</a></div><div class="sidebar-section-children"><a href="LuCI.uci.html">uci</a></div><div class="sidebar-section-children"><a href="LuCI.ui.html">ui</a></div><div class="sidebar-section-children"><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Checkbox.html">Checkbox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.ComboButton.html">ComboButton</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Combobox.html">Combobox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Dropdown.html">Dropdown</a></div><div class="sidebar-section-children"><a href="LuCI.ui.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.ui.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.RangeSlider.html">RangeSlider</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Select.html">Select</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textarea.html">Textarea</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textfield.html">Textfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.changes.html">changes</a></div><div class="sidebar-section-children"><a href="LuCI.ui.menu.html">menu</a></div><div class="sidebar-section-children"><a href="LuCI.ui.tabs.html">tabs</a></div><div class="sidebar-section-children"><a href="LuCI.validation.html">validation</a></div><div class="sidebar-section-children"><a href="LuCI.validation.Validator.html">Validator</a></div><div class="sidebar-section-children"><a href="LuCI.validation.ValidatorFactory.html">ValidatorFactory</a></div><div class="sidebar-section-children"><a href="LuCI.view.html">view</a></div><div class="sidebar-section-children"><a href="LuCI.xhr.html">xhr</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-externals"><div>Externals</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="external-String.html">String</a></div></div></div></div></div><div class="navbar-container" id="VuAckcnZhf"><nav class="navbar"><div class="navbar-left-items"><div class="github-home navbar-item"><a id="" href="https://github.com/openwrt/luci" target="">GitHub Project Page</a></div></div><div class="navbar-right-items"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div><nav></nav></nav></div><div class="toc-container"><div class="toc-content"><span class="bold">On this page</span><div id="eed4d2a0bfd64539bb9df78095dec881"></div></div></div><div class="body-wrapper"><div class="main-content"><div class="main-wrapper"><section id="source-page" class="source-page"><header><h1 id="title" class="has-anchor">firewall.js</h1></header><article><pre class="prettyprint source lang-js"><code>'use strict';
+'require uci';
+'require rpc';
+'require tools.prng as random';
+
+
+/**
+ * Load the firewall configuration.
+ * @returns {Promise}
+ */
+function initFirewallState() {
+	return L.resolveDefault(uci.load('firewall'));
+}
+
+/**
+ * Parse an enum value.
+ * @param {?string} s 
+ * @param {Array&lt;string>} values
+ * @returns {string}
+ */
+function parseEnum(s, values) {
+	if (s == null)
+		return null;
+
+	s = String(s).toUpperCase();
+
+	if (s == '')
+		return null;
+
+	for (var i = 0; i &lt; values.length; i++)
+		if (values[i].toUpperCase().indexOf(s) == 0)
+			return values[i];
+
+	return null;
+}
+
+/**
+ * Parse a policy value, or defaultValue if not found.
+ * @param {?string} s 
+ * @param {Array&lt;string>} [defaultValue=['DROP', 'REJECT', 'ACCEPT']]
+ * @returns {?string}
+ */
+function parsePolicy(s, defaultValue) {
+	return parseEnum(s, ['DROP', 'REJECT', 'ACCEPT']) || (arguments.length &lt; 2 ? null : defaultValue);
+}
+
+
+var Firewall, AbstractFirewallItem, Defaults, Zone, Forwarding, Redirect, Rule;
+
+/**
+ * Look up a firewall zone.
+ * @param {?string} name
+ * @returns {?Zone}
+ */
+function lookupZone(name) {
+	var z = uci.get('firewall', name);
+
+	if (z != null &amp;&amp; z['.type'] == 'zone')
+		return new Zone(z['.name']);
+
+	var sections = uci.sections('firewall', 'zone');
+
+	for (var i = 0; i &lt; sections.length; i++) {
+		if (sections[i].name != name)
+			continue;
+
+		return new Zone(sections[i]['.name']);
+	}
+
+	return null;
+}
+
+/**
+ * Generate a colour for a name.
+ * @param {?string} forName
+ * @returns {string}
+ */
+function getColorForName(forName) {
+	if (forName == null)
+		return '#eeeeee';
+	else if (forName == 'lan')
+		return '#90f090';
+	else if (forName == 'wan')
+		return '#f09090';
+
+	return random.derive_color(forName);
+}
+
+
+Firewall = L.Class.extend({
+	getDefaults: function() {
+		return initFirewallState().then(function() {
+			return new Defaults();
+		});
+	},
+
+	newZone: function() {
+		return initFirewallState().then(L.bind(function() {
+			var name = 'newzone',
+			    count = 1;
+
+			while (this.getZone(name) != null)
+				name = 'newzone%d'.format(++count);
+
+			return this.addZone(name);
+		}, this));
+	},
+
+	addZone: function(name) {
+		return initFirewallState().then(L.bind(function() {
+			if (name == null || !/^[a-zA-Z0-9_]+$/.test(name))
+				return null;
+
+			if (lookupZone(name) != null)
+				return null;
+
+			var d = new Defaults(),
+			    z = uci.add('firewall', 'zone');
+
+			uci.set('firewall', z, 'name',    name);
+			uci.set('firewall', z, 'input',   d.getInput()   || 'DROP');
+			uci.set('firewall', z, 'output',  d.getOutput()  || 'DROP');
+			uci.set('firewall', z, 'forward', d.getForward() || 'DROP');
+
+			return new Zone(z);
+		}, this));
+	},
+
+	getZone: function(name) {
+		return initFirewallState().then(function() {
+			return lookupZone(name);
+		});
+	},
+
+	getZones: function() {
+		return initFirewallState().then(function() {
+			const sections = uci.sections('firewall', 'zone');
+			const zones = [];
+
+			for (let s of sections)
+				zones.push(new Zone(s['.name']));
+
+			zones.sort(function(a, b) { return a.getName() > b.getName() });
+
+			return zones;
+		});
+	},
+
+	getZoneByNetwork: function(network) {
+		return initFirewallState().then(function() {
+			const sections = uci.sections('firewall', 'zone');
+
+			for (let s of sections)
+				if (L.toArray(s.network).indexOf(network) != -1)
+					return new Zone(s['.name']);
+
+			return null;
+		});
+	},
+
+	deleteZone: function(name) {
+		return initFirewallState().then(function() {
+			const section = uci.get('firewall', name);
+			let found = false;
+
+			if (section != null &amp;&amp; section['.type'] == 'zone') {
+				found = true;
+				name = section.name;
+				uci.remove('firewall', section['.name']);
+			}
+			else if (name != null) {
+				const sections = uci.sections('firewall', 'zone');
+
+				for (let s of sections) {
+					if (s.name != name)
+						continue;
+
+					found = true;
+					uci.remove('firewall', s['.name']);
+				}
+			}
+
+			if (found == true) {
+				const sections = uci.sections('firewall');
+
+				for (let s of sections) {
+					if (s['.type'] != 'rule' &amp;&amp;
+					    s['.type'] != 'redirect' &amp;&amp;
+					    s['.type'] != 'forwarding')
+					    continue;
+
+					if (s.src == name || s.dest == name)
+						uci.remove('firewall', s['.name']);
+				}
+			}
+
+			return found;
+		});
+	},
+
+	renameZone: function(oldName, newName) {
+		return initFirewallState().then(L.bind(function() {
+			if (oldName == null || newName == null || !/^[a-zA-Z0-9_]+$/.test(newName))
+				return false;
+
+			if (lookupZone(newName) != null)
+				return false;
+
+			const sections = uci.sections('firewall', 'zone');
+			let found = false;
+
+			for (let s of sections) {
+				if (s.name != oldName)
+					continue;
+
+				uci.set('firewall', s['.name'], 'name', newName);
+				found = true;
+			}
+
+			if (found == true) {
+				const sections = uci.sections('firewall');
+
+				for (let s of sections) {
+					if (s['.type'] != 'rule' &amp;&amp;
+					    s['.type'] != 'redirect' &amp;&amp;
+					    s['.type'] != 'forwarding')
+					    continue;
+
+					if (s.src == oldName)
+						uci.set('firewall', s['.name'], 'src', newName);
+
+					if (s.dest == oldName)
+						uci.set('firewall', s['.name'], 'dest', newName);
+				}
+			}
+
+			return found;
+		}, this));
+	},
+
+	deleteNetwork: function(network) {
+		return this.getZones().then(L.bind(function(zones) {
+			var rv = false;
+
+			for (var i = 0; i &lt; zones.length; i++)
+				if (zones[i].deleteNetwork(network))
+					rv = true;
+
+			return rv;
+		}, this));
+	},
+
+	getColorForName: getColorForName,
+
+	getZoneColorStyle: function(zone) {
+		var hex = (zone instanceof Zone) ? zone.getColor() : getColorForName((zone != null &amp;&amp; zone != '*') ? zone : null);
+
+		return '--zone-color-rgb:%d, %d, %d; background-color:rgb(var(--zone-color-rgb))'.format(
+			parseInt(hex.substring(1, 3), 16),
+			parseInt(hex.substring(3, 5), 16),
+			parseInt(hex.substring(5, 7), 16)
+		);
+	},
+});
+
+
+AbstractFirewallItem = L.Class.extend({
+	get: function(option) {
+		return uci.get('firewall', this.sid, option);
+	},
+
+	set: function(option, value) {
+		return uci.set('firewall', this.sid, option, value);
+	}
+});
+
+
+Defaults = AbstractFirewallItem.extend({
+	__init__: function() {
+		var sections = uci.sections('firewall', 'defaults');
+
+		for (var i = 0; i &lt; sections.length; i++) {
+			this.sid = sections[i]['.name'];
+			break;
+		}
+
+		if (this.sid == null)
+			this.sid = uci.add('firewall', 'defaults');
+	},
+
+	isSynFlood: function() {
+		return (this.get('syn_flood') == '1');
+	},
+
+	isDropInvalid: function() {
+		return (this.get('drop_invalid') == '1');
+	},
+
+	getInput: function() {
+		return parsePolicy(this.get('input'), 'DROP');
+	},
+
+	getOutput: function() {
+		return parsePolicy(this.get('output'), 'DROP');
+	},
+
+	getForward: function() {
+		return parsePolicy(this.get('forward'), 'DROP');
+	}
+});
+
+
+Zone = AbstractFirewallItem.extend({
+	__init__: function(name) {
+		var section = uci.get('firewall', name);
+
+		if (section != null &amp;&amp; section['.type'] == 'zone') {
+			this.sid  = name;
+			this.data = section;
+		}
+		else if (name != null) {
+			var sections = uci.get('firewall', 'zone');
+
+			for (var i = 0; i &lt; sections.length; i++) {
+				if (sections[i].name != name)
+					continue;
+
+				this.sid  = sections[i]['.name'];
+				this.data = sections[i];
+				break;
+			}
+		}
+	},
+
+	isMasquerade: function() {
+		return (this.get('masq') == '1');
+	},
+
+	getName: function() {
+		return this.get('name');
+	},
+
+	getNetwork: function() {
+		return this.get('network');
+	},
+
+	getInput: function() {
+		return parsePolicy(this.get('input'), (new Defaults()).getInput());
+	},
+
+	getOutput: function() {
+		return parsePolicy(this.get('output'), (new Defaults()).getOutput());
+	},
+
+	getForward: function() {
+		return parsePolicy(this.get('forward'), (new Defaults()).getForward());
+	},
+
+	addNetwork: function(network) {
+		var section = uci.get('network', network);
+
+		if (section == null || section['.type'] != 'interface')
+			return false;
+
+		var newNetworks = this.getNetworks();
+
+		if (newNetworks.filter(function(net) { return net == network }).length)
+			return false;
+
+		newNetworks.push(network);
+		this.set('network', newNetworks);
+
+		return true;
+	},
+
+	deleteNetwork: function(network) {
+		var oldNetworks = this.getNetworks(),
+		    newNetworks = oldNetworks.filter(function(net) { return net != network });
+
+		if (newNetworks.length > 0)
+			this.set('network', newNetworks);
+		else
+			this.set('network', null);
+
+		return (newNetworks.length &lt; oldNetworks.length);
+	},
+
+	getNetworks: function() {
+		return L.toArray(this.get('network'));
+	},
+
+	clearNetworks: function() {
+		this.set('network', null);
+	},
+
+	getDevices: function() {
+		return L.toArray(this.get('device'));
+	},
+
+	getSubnets: function() {
+		return L.toArray(this.get('subnet'));
+	},
+
+	getForwardingsBy: function(what) {
+		var sections = uci.sections('firewall', 'forwarding'),
+		    forwards = [];
+
+		for (var i = 0; i &lt; sections.length; i++) {
+			if (sections[i].src == null || sections[i].dest == null)
+				continue;
+
+			if (sections[i][what] != this.getName())
+				continue;
+
+			forwards.push(new Forwarding(sections[i]['.name']));
+		}
+
+		return forwards;
+	},
+
+	addForwardingTo: function(dest) {
+		var forwards = this.getForwardingsBy('src'),
+		    zone = lookupZone(dest);
+
+		if (zone == null || zone.getName() == this.getName())
+			return null;
+
+		for (var i = 0; i &lt; forwards.length; i++)
+			if (forwards[i].getDestination() == zone.getName())
+				return null;
+
+		var sid = uci.add('firewall', 'forwarding');
+
+		uci.set('firewall', sid, 'src', this.getName());
+		uci.set('firewall', sid, 'dest', zone.getName());
+
+		return new Forwarding(sid);
+	},
+
+	addForwardingFrom: function(src) {
+		var forwards = this.getForwardingsBy('dest'),
+		    zone = lookupZone(src);
+
+		if (zone == null || zone.getName() == this.getName())
+			return null;
+
+		for (var i = 0; i &lt; forwards.length; i++)
+			if (forwards[i].getSource() == zone.getName())
+				return null;
+
+		var sid = uci.add('firewall', 'forwarding');
+
+		uci.set('firewall', sid, 'src', zone.getName());
+		uci.set('firewall', sid, 'dest', this.getName());
+
+		return new Forwarding(sid);
+	},
+
+	deleteForwardingsBy: function(what) {
+		var sections = uci.sections('firewall', 'forwarding'),
+		    found = false;
+
+		for (var i = 0; i &lt; sections.length; i++) {
+			if (sections[i].src == null || sections[i].dest == null)
+				continue;
+
+			if (sections[i][what] != this.getName())
+				continue;
+
+			uci.remove('firewall', sections[i]['.name']);
+			found = true;
+		}
+
+		return found;
+	},
+
+	deleteForwarding: function(forwarding) {
+		if (!(forwarding instanceof Forwarding))
+			return false;
+
+		var section = uci.get('firewall', forwarding.sid);
+
+		if (!section || section['.type'] != 'forwarding')
+			return false;
+
+		uci.remove('firewall', section['.name']);
+
+		return true;
+	},
+
+	addRedirect: function(options) {
+		var sid = uci.add('firewall', 'redirect');
+
+		if (options != null &amp;&amp; typeof(options) == 'object')
+			for (var key in options)
+				if (options.hasOwnProperty(key))
+					uci.set('firewall', sid, key, options[key]);
+
+		uci.set('firewall', sid, 'src', this.getName());
+
+		return new Redirect(sid);
+	},
+
+	addRule: function(options) {
+		var sid = uci.add('firewall', 'rule');
+
+		if (options != null &amp;&amp; typeof(options) == 'object')
+			for (var key in options)
+				if (options.hasOwnProperty(key))
+					uci.set('firewall', sid, key, options[key]);
+
+		uci.set('firewall', sid, 'src', this.getName());
+
+		return new Rule(sid);
+	},
+
+	getColor: function(forName) {
+		var name = (arguments.length > 0 ? forName : this.getName());
+
+		return getColorForName(name);
+	}
+});
+
+
+Forwarding = AbstractFirewallItem.extend({
+	__init__: function(sid) {
+		this.sid = sid;
+	},
+
+	getSource: function() {
+		return this.get('src');
+	},
+
+	getDestination: function() {
+		return this.get('dest');
+	},
+
+	getSourceZone: function() {
+		return lookupZone(this.getSource());
+	},
+
+	getDestinationZone: function() {
+		return lookupZone(this.getDestination());
+	}
+});
+
+
+Rule = AbstractFirewallItem.extend({
+	getSource: function() {
+		return this.get('src');
+	},
+
+	getDestination: function() {
+		return this.get('dest');
+	},
+
+	getSourceZone: function() {
+		return lookupZone(this.getSource());
+	},
+
+	getDestinationZone: function() {
+		return lookupZone(this.getDestination());
+	}
+});
+
+
+Redirect = AbstractFirewallItem.extend({
+	getSource: function() {
+		return this.get('src');
+	},
+
+	getDestination: function() {
+		return this.get('dest');
+	},
+
+	getSourceZone: function() {
+		return lookupZone(this.getSource());
+	},
+
+	getDestinationZone: function() {
+		return lookupZone(this.getDestination());
+	}
+});
+
+
+return Firewall;
+</code></pre></article></section></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">LuCI Documentation</a><div class="mobile-nav-links"><div class="github-home navbar-item"><a id="" href="https://github.com/openwrt/luci" target="">GitHub Project Page</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-tutorials"><div>Tutorials</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="tutorial-JsonRpcHowTo.html">Using JSON RPC daemon</a></div><div class="sidebar-section-children"><a href="tutorial-Modules.html">Modules</a></div><div class="sidebar-section-children"><a href="tutorial-ThemesHowTo.html">Making Themes</a></div><div class="sidebar-section-children"><a href="tutorial-i18n.html">Internationalisation - i18n</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.module_cbi.html">cbi</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-classes"><div>Classes</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.html">LuCI</a></div><div class="sidebar-section-children"><a href="LuCI.baseclass.html">baseclass</a></div><div class="sidebar-section-children"><a href="LuCI.dom.html">dom</a></div><div class="sidebar-section-children"><a href="LuCI.form.html">form</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractSection.html">AbstractSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractValue.html">AbstractValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Button.html">Button</a></div><div class="sidebar-section-children"><a href="LuCI.form.DirectoryPicker.html">DirectoryPicker</a></div><div class="sidebar-section-children"><a href="LuCI.form.DummyValue.html">DummyValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.form.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.form.Flag.html">Flag</a></div><div class="sidebar-section-children"><a href="LuCI.form.GridSection.html">GridSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.HiddenValue.html">HiddenValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.JSONMap.html">JSONMap</a></div><div class="sidebar-section-children"><a href="LuCI.form.ListValue.html">ListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Map.html">Map</a></div><div class="sidebar-section-children"><a href="LuCI.form.MultiValue.html">MultiValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.NamedSection.html">NamedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.RangeSliderValue.html">RangeSliderValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.RichListValue.html">RichListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.SectionValue.html">SectionValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TableSection.html">TableSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.TextValue.html">TextValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TypedSection.html">TypedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.Value.html">Value</a></div><div class="sidebar-section-children"><a href="LuCI.fs.html">fs</a></div><div class="sidebar-section-children"><a href="LuCI.headers.html">headers</a></div><div class="sidebar-section-children"><a href="LuCI.network.html">network</a></div><div class="sidebar-section-children"><a href="LuCI.network.Device.html">Device</a></div><div class="sidebar-section-children"><a href="LuCI.network.Hosts.html">Hosts</a></div><div class="sidebar-section-children"><a href="LuCI.network.Protocol.html">Protocol</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiDevice.html">WifiDevice</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiNetwork.html">WifiNetwork</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiVlan.html">WifiVlan</a></div><div class="sidebar-section-children"><a href="LuCI.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.request.html">request</a></div><div class="sidebar-section-children"><a href="LuCI.request.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.response.html">response</a></div><div class="sidebar-section-children"><a href="LuCI.rpc.html">rpc</a></div><div class="sidebar-section-children"><a href="LuCI.session.html">session</a></div><div class="sidebar-section-children"><a href="LuCI.uci.html">uci</a></div><div class="sidebar-section-children"><a href="LuCI.ui.html">ui</a></div><div class="sidebar-section-children"><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Checkbox.html">Checkbox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.ComboButton.html">ComboButton</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Combobox.html">Combobox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Dropdown.html">Dropdown</a></div><div class="sidebar-section-children"><a href="LuCI.ui.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.ui.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.RangeSlider.html">RangeSlider</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Select.html">Select</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textarea.html">Textarea</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textfield.html">Textfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.changes.html">changes</a></div><div class="sidebar-section-children"><a href="LuCI.ui.menu.html">menu</a></div><div class="sidebar-section-children"><a href="LuCI.ui.tabs.html">tabs</a></div><div class="sidebar-section-children"><a href="LuCI.validation.html">validation</a></div><div class="sidebar-section-children"><a href="LuCI.validation.Validator.html">Validator</a></div><div class="sidebar-section-children"><a href="LuCI.validation.ValidatorFactory.html">ValidatorFactory</a></div><div class="sidebar-section-children"><a href="LuCI.view.html">view</a></div><div class="sidebar-section-children"><a href="LuCI.xhr.html">xhr</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-externals"><div>Externals</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="external-String.html">String</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

@@ -1,0 +1,965 @@
+<!DOCTYPE html><html lang="en" style="font-size:16px"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="themes/luci-theme-bootstrap/htdocs/luci-static/bootstrap/logo.svg"><link type="text/css" rel="stylesheet" href="extra.css"><title>Source: cbi.js</title><!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--><script src="scripts/third-party/hljs.js" defer="defer"></script><script src="scripts/third-party/hljs-line-num.js" defer="defer"></script><script src="scripts/third-party/popper.js" defer="defer"></script><script src="scripts/third-party/tippy.js" defer="defer"></script><script src="scripts/third-party/tocbot.min.js"></script><script>var baseURL="/",locationPathname="";baseURL=(locationPathname=document.location.pathname).substr(0,locationPathname.lastIndexOf("/")+1)</script><link rel="stylesheet" href="styles/clean-jsdoc-theme.min.css"><svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none"><defs><symbol id="copy-icon" viewbox="0 0 488.3 488.3"><g><path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/><path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/></g></symbol><symbol id="search-icon" viewBox="0 0 512 512"><g><g><path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z"/></g></g><g><g><path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g></symbol><symbol id="font-size-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.246 15H4.754l-2 5H.6L7 4h2l6.4 16h-2.154l-2-5zm-.8-2L8 6.885 5.554 13h4.892zM21 12.535V12h2v8h-2v-.535a4 4 0 1 1 0-6.93zM19 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></symbol><symbol id="add-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></symbol><symbol id="minus-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M5 11h14v2H5z"/></symbol><symbol id="dark-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol><symbol id="light-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol><symbol id="reset-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.537 19.567A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 1 0-2.46 5.772l.997 1.795z"/></symbol><symbol id="down-icon" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"></path></symbol><symbol id="codepen-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.5 13.202L13 15.535v3.596L19.197 15 16.5 13.202zM14.697 12L12 10.202 9.303 12 12 13.798 14.697 12zM20 10.869L18.303 12 20 13.131V10.87zM19.197 9L13 4.869v3.596l3.5 2.333L19.197 9zM7.5 10.798L11 8.465V4.869L4.803 9 7.5 10.798zM4.803 15L11 19.131v-3.596l-3.5-2.333L4.803 15zM4 13.131L5.697 12 4 10.869v2.262zM2 9a1 1 0 0 1 .445-.832l9-6a1 1 0 0 1 1.11 0l9 6A1 1 0 0 1 22 9v6a1 1 0 0 1-.445.832l-9 6a1 1 0 0 1-1.11 0l-9-6A1 1 0 0 1 2 15V9z"/></symbol><symbol id="close-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></symbol><symbol id="menu-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></symbol></defs></svg></head><body data-theme="fallback-dark"><div class="sidebar-container"><div class="sidebar" id="sidebar"><a href="/" class="sidebar-title sidebar-title-anchor">LuCI Documentation</a><div class="sidebar-items-container"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-tutorials"><div>Tutorials</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="tutorial-JsonRpcHowTo.html">Using JSON RPC daemon</a></div><div class="sidebar-section-children"><a href="tutorial-Modules.html">Modules</a></div><div class="sidebar-section-children"><a href="tutorial-ThemesHowTo.html">Making Themes</a></div><div class="sidebar-section-children"><a href="tutorial-i18n.html">Internationalisation - i18n</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.module_cbi.html">cbi</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-classes"><div>Classes</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.html">LuCI</a></div><div class="sidebar-section-children"><a href="LuCI.baseclass.html">baseclass</a></div><div class="sidebar-section-children"><a href="LuCI.dom.html">dom</a></div><div class="sidebar-section-children"><a href="LuCI.form.html">form</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractSection.html">AbstractSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractValue.html">AbstractValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Button.html">Button</a></div><div class="sidebar-section-children"><a href="LuCI.form.DirectoryPicker.html">DirectoryPicker</a></div><div class="sidebar-section-children"><a href="LuCI.form.DummyValue.html">DummyValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.form.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.form.Flag.html">Flag</a></div><div class="sidebar-section-children"><a href="LuCI.form.GridSection.html">GridSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.HiddenValue.html">HiddenValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.JSONMap.html">JSONMap</a></div><div class="sidebar-section-children"><a href="LuCI.form.ListValue.html">ListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Map.html">Map</a></div><div class="sidebar-section-children"><a href="LuCI.form.MultiValue.html">MultiValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.NamedSection.html">NamedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.RangeSliderValue.html">RangeSliderValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.RichListValue.html">RichListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.SectionValue.html">SectionValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TableSection.html">TableSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.TextValue.html">TextValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TypedSection.html">TypedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.Value.html">Value</a></div><div class="sidebar-section-children"><a href="LuCI.fs.html">fs</a></div><div class="sidebar-section-children"><a href="LuCI.headers.html">headers</a></div><div class="sidebar-section-children"><a href="LuCI.network.html">network</a></div><div class="sidebar-section-children"><a href="LuCI.network.Device.html">Device</a></div><div class="sidebar-section-children"><a href="LuCI.network.Hosts.html">Hosts</a></div><div class="sidebar-section-children"><a href="LuCI.network.Protocol.html">Protocol</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiDevice.html">WifiDevice</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiNetwork.html">WifiNetwork</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiVlan.html">WifiVlan</a></div><div class="sidebar-section-children"><a href="LuCI.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.request.html">request</a></div><div class="sidebar-section-children"><a href="LuCI.request.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.response.html">response</a></div><div class="sidebar-section-children"><a href="LuCI.rpc.html">rpc</a></div><div class="sidebar-section-children"><a href="LuCI.session.html">session</a></div><div class="sidebar-section-children"><a href="LuCI.uci.html">uci</a></div><div class="sidebar-section-children"><a href="LuCI.ui.html">ui</a></div><div class="sidebar-section-children"><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Checkbox.html">Checkbox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.ComboButton.html">ComboButton</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Combobox.html">Combobox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Dropdown.html">Dropdown</a></div><div class="sidebar-section-children"><a href="LuCI.ui.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.ui.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.RangeSlider.html">RangeSlider</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Select.html">Select</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textarea.html">Textarea</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textfield.html">Textfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.changes.html">changes</a></div><div class="sidebar-section-children"><a href="LuCI.ui.menu.html">menu</a></div><div class="sidebar-section-children"><a href="LuCI.ui.tabs.html">tabs</a></div><div class="sidebar-section-children"><a href="LuCI.validation.html">validation</a></div><div class="sidebar-section-children"><a href="LuCI.validation.Validator.html">Validator</a></div><div class="sidebar-section-children"><a href="LuCI.validation.ValidatorFactory.html">ValidatorFactory</a></div><div class="sidebar-section-children"><a href="LuCI.view.html">view</a></div><div class="sidebar-section-children"><a href="LuCI.xhr.html">xhr</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-externals"><div>Externals</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="external-String.html">String</a></div></div></div></div></div><div class="navbar-container" id="VuAckcnZhf"><nav class="navbar"><div class="navbar-left-items"><div class="github-home navbar-item"><a id="" href="https://github.com/openwrt/luci" target="">GitHub Project Page</a></div></div><div class="navbar-right-items"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div><nav></nav></nav></div><div class="toc-container"><div class="toc-content"><span class="bold">On this page</span><div id="eed4d2a0bfd64539bb9df78095dec881"></div></div></div><div class="body-wrapper"><div class="main-content"><div class="main-wrapper"><section id="source-page" class="source-page"><header><h1 id="title" class="has-anchor">cbi.js</h1></header><article><pre class="prettyprint source lang-js"><code>/*
+	LuCI - Lua Configuration Interface
+
+	Copyright 2008 Steven Barth &lt;steven@midlink.org>
+	Copyright 2008-2018 Jo-Philipp Wich &lt;jo@mein.io>
+
+	Licensed under the Apache License, Version 2.0 (the "License");
+	you may not use this file except in compliance with the License.
+	You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+*/
+
+/**
+ * CBI (Configuration Bindings Interface) helper utilities and DOM helpers.
+ *
+ * Provides initialization for CBI UI elements, dependency handling,
+ * validation wiring and miscellaneous helpers used by LuCI forms. Functions
+ * defined here are registered as global `window.*` symbols.
+ * @module LuCI.cbi
+ */
+const cbi_d = [];
+const cbi_strings = { path: {}, label: {} };
+
+/**
+ * Read signed 8-bit integer from a byte array at the given offset.
+ * @param {Array&lt;number>} bytes - Byte array.
+ * @param {number} off - Offset into the array.
+ * @returns {number} Signed 8-bit value (returned as unsigned number).
+ */
+function s8(bytes, off) {
+	const n = bytes[off];
+	return (n > 0x7F) ? (n - 256) >>> 0 : n;
+}
+
+/**
+ * Read unsigned 16-bit little-endian integer from a byte array at offset.
+ * @param {Array&lt;number>} bytes - Byte array.
+ * @param {number} off - Offset into the array.
+ * @returns {number} Unsigned 16-bit integer.
+ */
+function u16(bytes, off) {
+	return ((bytes[off + 1] &lt;&lt; 8) + bytes[off]) >>> 0;
+}
+
+/**
+ * Compute a stable 32-bit-ish string hash used for translation keys.
+ * Encodes UTF-8 surrogate pairs and mixes bytes into a hex hash string.
+ * @param {string|null} s - Input string.
+ * @returns {string|null} Hex hash string or null for empty input.
+ */
+function sfh(s) {
+	if (s === null || s.length === 0)
+		return null;
+
+	const bytes = [];
+
+	for (let i = 0; i &lt; s.length; i++) {
+		let ch = s.charCodeAt(i);
+
+		// Handle surrogate pairs
+		if (ch >= 0xD800 &amp;&amp; ch &lt;= 0xDBFF &amp;&amp; i + 1 &lt; s.length) {
+			const next = s.charCodeAt(i + 1);
+			if (next >= 0xDC00 &amp;&amp; next &lt;= 0xDFFF) {
+				ch = 0x10000 + ((ch - 0xD800) &lt;&lt; 10) + (next - 0xDC00);
+				i++;
+			}
+		}
+
+		if (ch &lt;= 0x7F)
+			bytes.push(ch);
+		else if (ch &lt;= 0x7FF)
+			bytes.push(((ch >>>  6) &amp; 0x1F) | 0xC0,
+			           ( ch         &amp; 0x3F) | 0x80);
+		else if (ch &lt;= 0xFFFF)
+			bytes.push(((ch >>> 12) &amp; 0x0F) | 0xE0,
+			           ((ch >>>  6) &amp; 0x3F) | 0x80,
+			           ( ch         &amp; 0x3F) | 0x80);
+		else if (ch &lt;= 0x10FFFF)
+			bytes.push(((ch >>> 18) &amp; 0x07) | 0xF0,
+			           ((ch >>> 12) &amp; 0x3F) | 0x80,
+			           ((ch >>   6) &amp; 0x3F) | 0x80,
+			           ( ch         &amp; 0x3F) | 0x80);
+	}
+
+	if (!bytes.length)
+		return null;
+
+	let hash = (bytes.length >>> 0);
+	let len = (bytes.length >>> 2);
+	let off = 0, tmp;
+
+	while (len--) {
+		hash += u16(bytes, off);
+		tmp   = ((u16(bytes, off + 2) &lt;&lt; 11) ^ hash) >>> 0;
+		hash  = ((hash &lt;&lt; 16) ^ tmp) >>> 0;
+		hash += hash >>> 11;
+		off  += 4;
+	}
+
+	switch ((bytes.length &amp; 3) >>> 0) {
+	case 3:
+		hash += u16(bytes, off);
+		hash  = (hash ^ (hash &lt;&lt; 16)) >>> 0;
+		hash  = (hash ^ (s8(bytes, off + 2) &lt;&lt; 18)) >>> 0;
+		hash += hash >>> 11;
+		break;
+
+	case 2:
+		hash += u16(bytes, off);
+		hash  = (hash ^ (hash &lt;&lt; 11)) >>> 0;
+		hash += hash >>> 17;
+		break;
+
+	case 1:
+		hash += s8(bytes, off);
+		hash  = (hash ^ (hash &lt;&lt; 10)) >>> 0;
+		hash += hash >>> 1;
+		break;
+	}
+
+	hash  = (hash ^ (hash &lt;&lt; 3)) >>> 0;
+	hash += hash >>> 5;
+	hash  = (hash ^ (hash &lt;&lt; 4)) >>> 0;
+	hash += hash >>> 17;
+	hash  = (hash ^ (hash &lt;&lt; 25)) >>> 0;
+	hash += hash >>> 6;
+
+	return (0x100000000 + hash).toString(16).slice(1);
+}
+
+var plural_function = null;
+
+/**
+ * Trim whitespace and normalise internal whitespace sequences to single spaces.
+ * @param {*} s - Value to convert to string and trim.
+ * @returns {string} Trimmed and normalised string.
+ */
+function trimws(s) {
+	return String(s).trim().replace(/[ \t\n]+/g, ' ');
+}
+
+/**
+ * Lookup a translated string for the given message and optional context.
+ * Falls back to the source string when no translation found.
+ * @param {string} s - Source string.
+ * @param {string} [c] - Optional translation context.
+ * @returns {string} Translated string or original.
+ */
+function _(s, c) {
+	var k = (c != null ? trimws(c) + '\u0001' : '') + trimws(s);
+	return (window.TR &amp;&amp; TR[sfh(k)]) || s;
+}
+
+/**
+ * Plural-aware translation lookup.
+ * @param {number} n - Quantity to evaluate plural form.
+ * @param {string} s - Singular string.
+ * @param {string} p - Plural string.
+ * @param {string} [c] - Optional context.
+ * @returns {string} Translated plural form or source string.
+ */
+function N_(n, s, p, c) {
+	if (plural_function == null &amp;&amp; window.TR)
+		plural_function = new Function('n', (TR['00000000'] || 'plural=(n != 1);') + 'return +plural');
+
+	var i = plural_function ? plural_function(n) : (n != 1),
+	    k = (c != null ? trimws(c) + '\u0001' : '') + trimws(s) + '\u0002' + i.toString();
+
+	return (window.TR &amp;&amp; TR[sfh(k)]) || (i ? p : s);
+}
+
+
+/**
+ * Register a dependency entry for a field.
+ * @param {HTMLElement|string} field - Field element or its id.
+ * @param {Object} dep - Dependency specification object.
+ * @param {number} index - Order index of the dependent node.
+ */
+function cbi_d_add(field, dep, index) {
+	var obj = (typeof(field) === 'string') ? document.getElementById(field) : field;
+	if (obj) {
+		var entry
+		for (var i=0; i&lt;cbi_d.length; i++) {
+			if (cbi_d[i].id == obj.id) {
+				entry = cbi_d[i];
+				break;
+			}
+		}
+		if (!entry) {
+			entry = {
+				"node": obj,
+				"id": obj.id,
+				"parent": obj.parentNode.id,
+				"deps": [],
+				"index": index
+			};
+			cbi_d.unshift(entry);
+		}
+		entry.deps.push(dep)
+	}
+}
+
+/**
+ * Check whether an input/select identified by target matches the given reference value.
+ * @param {string} target - Element id or name to query.
+ * @param {string} ref - Reference value to compare with.
+ * @returns {boolean} True if the current value matches ref.
+ */
+function cbi_d_checkvalue(target, ref) {
+	var value = null,
+	    query = 'input[id="'+target+'"], input[name="'+target+'"], ' +
+	            'select[id="'+target+'"], select[name="'+target+'"]';
+
+	document.querySelectorAll(query).forEach(function(i) {
+		if (value === null &amp;&amp; ((i.type !== 'radio' &amp;&amp; i.type !== 'checkbox') || i.checked === true))
+			value = i.value;
+	});
+
+	return (((value !== null) ? value : "") == ref);
+}
+
+/**
+ * Evaluate a list of dependency descriptors and return whether any match.
+ * @param {Array&lt;Object>} deps - Array of dependency objects to evaluate.
+ * @returns {boolean} True when dependencies indicate the element should be shown.
+ */
+function cbi_d_check(deps) {
+	var reverse;
+	var def = false;
+	for (var i=0; i&lt;deps.length; i++) {
+		var istat = true;
+		reverse = false;
+		for (var j in deps[i]) {
+			if (j == "!reverse") {
+				reverse = true;
+			} else if (j == "!default") {
+				def = true;
+				istat = false;
+			} else {
+				istat = (istat &amp;&amp; cbi_d_checkvalue(j, deps[i][j]))
+			}
+		}
+
+		if (istat ^ reverse) {
+			return true;
+		}
+	}
+	return def;
+}
+
+/**
+ * Update DOM nodes based on registered dependencies, showing or hiding
+ * nodes and restoring their order when dependency state changes.
+ */
+function cbi_d_update() {
+	var state = false;
+	for (var i=0; i&lt;cbi_d.length; i++) {
+		var entry = cbi_d[i];
+		var node  = document.getElementById(entry.id);
+		var parent = document.getElementById(entry.parent);
+
+		if (node &amp;&amp; node.parentNode &amp;&amp; !cbi_d_check(entry.deps)) {
+			node.parentNode.removeChild(node);
+			state = true;
+		}
+		else if (parent &amp;&amp; (!node || !node.parentNode) &amp;&amp; cbi_d_check(entry.deps)) {
+			var next = undefined;
+
+			for (next = parent.firstChild; next; next = next.nextSibling) {
+				if (next.getAttribute &amp;&amp; parseInt(next.getAttribute('data-index'), 10) > entry.index)
+					break;
+			}
+
+			if (!next)
+				parent.appendChild(entry.node);
+			else
+				parent.insertBefore(entry.node, next);
+
+			state = true;
+		}
+
+		// hide optionals widget if no choices remaining
+		if (parent &amp;&amp; parent.parentNode &amp;&amp; parent.getAttribute('data-optionals'))
+			parent.parentNode.style.display = (parent.options.length &lt;= 1) ? 'none' : '';
+	}
+
+	if (entry &amp;&amp; entry.parent)
+		cbi_tag_last(parent);
+
+	if (state)
+		cbi_d_update();
+	else if (parent)
+		parent.dispatchEvent(new CustomEvent('dependency-update', { bubbles: true }));
+}
+
+/**
+ * Initialize CBI widgets and wire up dependency and validation handlers.
+ * Walks the DOM looking for CBI-specific data attributes and replaces
+ * placeholders with interactive widgets.
+ */
+function cbi_init() {
+	let nodes;
+
+	document.querySelectorAll('.cbi-dropdown').forEach(function(node) {
+		cbi_dropdown_init(node);
+		node.addEventListener('cbi-dropdown-change', cbi_d_update);
+	});
+
+	nodes = document.querySelectorAll('[data-strings]');
+
+	for (let n of nodes) {
+		const str = JSON.parse(n.getAttribute('data-strings'));
+		for (let key in str) {
+			for (let key2 in str[key]) {
+				const dst = cbi_strings[key] || (cbi_strings[key] = { });
+				dst[key2] = str[key][key2];
+			}
+		}
+	}
+
+	nodes = document.querySelectorAll('[data-depends]');
+
+	for (let n of nodes) {
+		const index = parseInt(n.getAttribute('data-index'), 10);
+		const depends = JSON.parse(n.getAttribute('data-depends'));
+		if (!isNaN(index) &amp;&amp; depends.length > 0) {
+			for (let a of depends)
+				cbi_d_add(n, depends[a], index);
+		}
+	}
+
+	nodes = document.querySelectorAll('[data-update]');
+
+	for (let n of nodes) {
+		const events = n.getAttribute('data-update').split(' ');
+		for (let ev of events)
+			n.addEventListener(ev, cbi_d_update);
+	}
+
+	nodes = document.querySelectorAll('[data-choices]');
+
+	for (let node of nodes) {
+		const choices = JSON.parse(node.getAttribute('data-choices'));
+		const options = {};
+
+		for (let j = 0; j &lt; choices[0].length; j++)
+			options[choices[0][j]] = choices[1][j];
+
+		const def = (node.getAttribute('data-optional') === 'true')
+			? node.placeholder || '' : null;
+
+		const cb = new L.ui.Combobox(node.value, options, {
+			name: node.getAttribute('name'),
+			sort: choices[0],
+			select_placeholder: def || _('-- Please choose --'),
+			custom_placeholder: node.getAttribute('data-manual') || _('-- custom --')
+		});
+
+		const n = cb.render();
+		n.addEventListener('cbi-dropdown-change', cbi_d_update);
+		node.parentNode.replaceChild(n, node);
+	}
+
+	nodes = document.querySelectorAll('[data-dynlist]');
+
+	for (let node of nodes) {
+		const choices = JSON.parse(node.getAttribute('data-dynlist'));
+		const values = JSON.parse(node.getAttribute('data-values') || '[]');
+		let options = null;
+
+		if (choices[0] &amp;&amp; choices[0].length) {
+			options = {};
+
+			for (let j = 0; j &lt; choices[0].length; j++)
+				options[choices[0][j]] = choices[1][j];
+		}
+
+		let dl = new L.ui.DynamicList(values, options, {
+			name: node.getAttribute('data-prefix'),
+			sort: choices[0],
+			datatype: choices[2],
+			optional: choices[3],
+			placeholder: node.getAttribute('data-placeholder')
+		});
+
+		let n = dl.render();
+		n.addEventListener('cbi-dynlist-change', cbi_d_update);
+		node.parentNode.replaceChild(n, node);
+	}
+
+	nodes = document.querySelectorAll('[data-type]');
+
+	for (let node of nodes) {
+		cbi_validate_field(node, node.getAttribute('data-optional') === 'true',
+		                   node.getAttribute('data-type'));
+	}
+
+	document.querySelectorAll('.cbi-tooltip:not(:empty)').forEach(function(s) {
+		s.parentNode.classList.add('cbi-tooltip-container');
+	});
+
+	document.querySelectorAll('.cbi-section-remove > input[name^="cbi.rts"]').forEach(function(i) {
+		let handler = function(ev) {
+			var bits = this.name.split(/\./),
+			    section = document.getElementById('cbi-' + bits[2] + '-' + bits[3]);
+
+		    section.style.opacity = (ev.type === 'mouseover') ? 0.5 : '';
+		};
+
+		i.addEventListener('mouseover', handler);
+		i.addEventListener('mouseout', handler);
+	});
+
+	var tasks = [];
+
+	document.querySelectorAll('[data-ui-widget]').forEach(function(node) {
+		const args = JSON.parse(node.getAttribute('data-ui-widget') || '[]');
+		const widget = new (Function.prototype.bind.apply(L.ui[args[0]], args));
+		const markup = widget.render();
+
+		tasks.push(Promise.resolve(markup).then(function(markup) {
+			markup.addEventListener('widget-change', cbi_d_update);
+			node.parentNode.replaceChild(markup, node);
+		}));
+	});
+
+	Promise.all(tasks).then(cbi_d_update);
+}
+
+/**
+ * Run all validators associated with a form and optionally show an error.
+ * @param {HTMLFormElement} form - Form element containing validators.
+ * @param {string} [errmsg] - Message to show when validation fails.
+ * @returns {boolean} True when form is valid.
+ */
+function cbi_validate_form(form, errmsg)
+{
+	/* if triggered by a section removal or addition, don't validate */
+	if (form.cbi_state == 'add-section' || form.cbi_state == 'del-section')
+		return true;
+
+	if (form.cbi_validators) {
+		for (let fv of form.cbi_validators) {
+			const validator = fv;
+
+			if (!validator() &amp;&amp; errmsg) {
+				alert(errmsg);
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Enable/disable a named-section add button depending on input value.
+ * @param {HTMLInputElement} input - Input that contains the new section name.
+ */
+function cbi_validate_named_section_add(input)
+{
+	var button = input.parentNode.parentNode.querySelector('.cbi-button-add');
+	button.disabled = input.value === '';
+}
+
+/**
+ * Trigger a delayed form validation (used to allow UI state to settle).
+ * @param {HTMLFormElement} form - Form to validate after a short delay.
+ * @returns {boolean} Always returns true.
+ */
+function cbi_validate_reset(form)
+{
+	window.setTimeout(
+		function() { cbi_validate_form(form, null) }, 100
+	);
+
+	return true;
+}
+
+/**
+ * Attach a validator to a field and wire validation events.
+ * @param {HTMLElement|string} cbid - Element or element id to validate.
+ * @param {boolean} optional - Whether an empty value is allowed.
+ * @param {string} type - Validator type expression (passed to L.validation).
+ */
+function cbi_validate_field(cbid, optional, type)
+{
+	var field = isElem(cbid) ? cbid : document.getElementById(cbid);
+	var validatorFn;
+
+	try {
+		var cbiValidator = L.validation.create(field, type, optional);
+		validatorFn = cbiValidator.validate.bind(cbiValidator);
+	}
+	catch(e) {
+		validatorFn = null;
+	};
+
+	if (validatorFn !== null) {
+		var form = findParent(field, 'form');
+
+		if (!form.cbi_validators)
+			form.cbi_validators = [ ];
+
+		form.cbi_validators.push(validatorFn);
+
+		field.addEventListener("blur",  validatorFn);
+		field.addEventListener("keyup", validatorFn);
+		field.addEventListener("cbi-dropdown-change", validatorFn);
+
+		if (matchesElem(field, 'select')) {
+			field.addEventListener("change", validatorFn);
+			field.addEventListener("click",  validatorFn);
+		}
+
+		validatorFn();
+	}
+}
+
+/**
+ * Move a table row up or down within a section and update the storage field.
+ * @param {HTMLElement} elem - Element inside the row that triggers the swap.
+ * @param {boolean} up - If true, move the row up; otherwise move down.
+ * @param {string} store - ID of the hidden input used to store the order.
+ * @returns {boolean} Always returns false to cancel default action.
+ */
+function cbi_row_swap(elem, up, store)
+{
+	var tr = findParent(elem.parentNode, '.cbi-section-table-row');
+
+	if (!tr)
+		return false;
+
+	tr.classList.remove('flash');
+
+	if (up) {
+		var prev = tr.previousElementSibling;
+
+		if (prev &amp;&amp; prev.classList.contains('cbi-section-table-row'))
+			tr.parentNode.insertBefore(tr, prev);
+		else
+			return;
+	}
+	else {
+		var next = tr.nextElementSibling ? tr.nextElementSibling.nextElementSibling : null;
+
+		if (next &amp;&amp; next.classList.contains('cbi-section-table-row'))
+			tr.parentNode.insertBefore(tr, next);
+		else if (!next)
+			tr.parentNode.appendChild(tr);
+		else
+			return;
+	}
+
+	var ids = [ ];
+
+	for (var i = 0, n = 0; i &lt; tr.parentNode.childNodes.length; i++) {
+		var node = tr.parentNode.childNodes[i];
+		if (node.classList &amp;&amp; node.classList.contains('cbi-section-table-row')) {
+			node.classList.remove('cbi-rowstyle-1');
+			node.classList.remove('cbi-rowstyle-2');
+			node.classList.add((n++ % 2) ? 'cbi-rowstyle-2' : 'cbi-rowstyle-1');
+
+			if (/-([^-]+)$/.test(node.id))
+				ids.push(RegExp.$1);
+		}
+	}
+
+	var input = document.getElementById(store);
+	if (input)
+		input.value = ids.join(' ');
+
+	window.scrollTo(0, tr.offsetTop);
+	void tr.offsetWidth;
+	tr.classList.add('flash');
+
+	return false;
+}
+
+/**
+ * Mark the last visible value container child with class `cbi-value-last`.
+ * @param {HTMLElement} container - Parent container element.
+ */
+function cbi_tag_last(container)
+{
+	let last;
+
+	for (let cn of container.childNodes) {
+		var c = cn;
+		if (matchesElem(c, 'div')) {
+			c.classList.remove('cbi-value-last');
+			last = c;
+		}
+	}
+
+	if (last)
+		last.classList.add('cbi-value-last');
+}
+
+/**
+ * Submit a form, optionally adding a hidden input to pass a name/value pair.
+ * @param {HTMLElement} elem - Element inside the form or an element with a form.
+ * @param {string} [name] - Name of hidden input to include, if any.
+ * @param {string} [value] - Value for the hidden input (defaults to '1').
+ * @param {string} [action] - Optional form action URL override.
+ * @returns {boolean} True on successful submit, false when no form found.
+ */
+function cbi_submit(elem, name, value, action)
+{
+	const form = elem.form || findParent(elem, 'form');
+
+	if (!form)
+		return false;
+
+	if (action)
+		form.action = action;
+
+	if (name) {
+		var hidden = form.querySelector('input[type="hidden"][name="%s"]'.format(name)) ||
+			E('input', { type: 'hidden', name: name });
+
+		hidden.value = value || '1';
+		form.appendChild(hidden);
+	}
+
+	form.submit();
+	return true;
+}
+
+/**
+ * @external String
+ */
+
+/**
+ * Format a string using positional arguments.
+ * @function format
+ * @memberof external:String.prototype
+ * @param {...string} args
+ * @returns {string}
+ */
+String.prototype.format = function()
+{
+	if (!RegExp)
+		return;
+
+	const html_esc = [/&amp;/g, '&amp;#38;', /"/g, '&amp;#34;', /'/g, '&amp;#39;', /&lt;/g, '&amp;#60;', />/g, '&amp;#62;'];
+	const quot_esc = [/"/g, '&amp;#34;', /'/g, '&amp;#39;'];
+
+	/**
+	 * Escape a string.
+	 * @private
+	 * @function esc
+	 * @param {string} s
+	 * @param {string} r
+	 * @returns {string}
+	 */
+	function esc(s, r) {
+		const t = typeof(s);
+
+		if (s == null || t === 'object' || t === 'function')
+			return '';
+
+		if (t !== 'string')
+			s = String(s);
+
+		for (let i = 0; i &lt; r.length; i += 2)
+			s = s.replace(r[i], r[i+1]);
+
+		return s;
+	}
+
+	let str = this;
+	let subst, n, pad;
+	let out = '';
+	const re = /^(([^%]*)%('.|0|\x20)?(-)?(\d+)?(\.\d+)?(%|b|c|d|u|f|o|s|x|X|q|h|j|t|m))/;
+	let a = [], numSubstitutions = 0;
+
+	while ((a = re.exec(str)) !== null) {
+		const m = a[1];
+		let leftpart = a[2], pPad = a[3], pJustify = a[4], pMinLength = a[5];
+		let pPrecision = a[6], pType = a[7];
+
+		if (pType == '%') {
+			subst = '%';
+		}
+		else {
+			if (numSubstitutions &lt; arguments.length) {
+				let param = arguments[numSubstitutions++];
+
+				pad = '';
+				if (pPad &amp;&amp; pPad.substr(0,1) == "'")
+					pad = leftpart.substr(1,1);
+				else if (pPad)
+					pad = pPad;
+				else
+					pad = ' ';
+
+				var precision = -1;
+				if (pPrecision &amp;&amp; pType == 'f')
+					precision = +pPrecision.substring(1);
+
+				subst = param;
+
+				switch(pType) {
+					case 'b':
+						subst = Math.floor(+param || 0).toString(2);
+						break;
+
+					case 'c':
+						subst = String.fromCharCode(+param || 0);
+						break;
+
+					case 'd':
+						subst = Math.floor(+param || 0).toFixed(0);
+						break;
+
+					case 'u':
+						n = +param || 0;
+						subst = Math.floor((n &lt; 0) ? 0x100000000 + n : n).toFixed(0);
+						break;
+
+					case 'f':
+						subst = (precision > -1)
+							? ((+param || 0.0)).toFixed(precision)
+							: (+param || 0.0);
+						break;
+
+					case 'o':
+						subst = Math.floor(+param || 0).toString(8);
+						break;
+
+					case 's':
+						subst = param;
+						break;
+
+					case 'x':
+						subst = Math.floor(+param || 0).toString(16).toLowerCase();
+						break;
+
+					case 'X':
+						subst = Math.floor(+param || 0).toString(16).toUpperCase();
+						break;
+
+					case 'h':
+						subst = esc(param, html_esc);
+						break;
+
+					case 'q':
+						subst = esc(param, quot_esc);
+						break;
+
+					case 't':
+						var td = 0;
+						var th = 0;
+						var tm = 0;
+						var ts = (param || 0);
+
+						if (ts > 59) {
+							tm = Math.floor(ts / 60);
+							ts = (ts % 60);
+						}
+
+						if (tm > 59) {
+							th = Math.floor(tm / 60);
+							tm = (tm % 60);
+						}
+
+						if (th > 23) {
+							td = Math.floor(th / 24);
+							th = (th % 24);
+						}
+
+						subst = (td > 0)
+							? String.format('%dd %dh %dm %ds', td, th, tm, ts)
+							: String.format('%dh %dm %ds', th, tm, ts);
+
+						break;
+
+					case 'm':
+						var mf = pMinLength ? +pMinLength : 1000;
+						var pr = pPrecision ? ~~(10 * +('0' + pPrecision)) : 2;
+
+						var i = 0;
+						var val = (+param || 0);
+						var units = [ ' ', ' K', ' M', ' G', ' T', ' P', ' E' ];
+
+						for (i = 0; (i &lt; units.length) &amp;&amp; (val > mf); i++)
+							val /= mf;
+
+						if (i)
+							subst = val.toFixed(pr) + units[i] + (mf == 1024 ? 'i' : '');
+						else
+							subst = val + ' ';
+
+						pMinLength = null;
+						break;
+				}
+			}
+		}
+
+		if (pMinLength) {
+			subst = subst.toString();
+			for (let i = subst.length; i &lt; pMinLength; i++)
+				if (pJustify == '-')
+					subst = subst + ' ';
+				else
+					subst = pad + subst;
+		}
+
+		out += leftpart + subst;
+		str = str.substr(m.length);
+	}
+
+	return out + str;
+}
+
+/**
+ * Format a string using positional arguments.
+ * @function nobr
+ * @memberof external:String.prototype
+ * @param {...string} args
+ * @returns {string}
+ */
+String.prototype.nobr = function()
+{
+	return this.replace(/[\s\n]+/g, '&amp;#160;');
+}
+
+/**
+ * Format a string using positional arguments.
+ * @function format
+ * @memberof external:String
+ * @param {...string} args
+ * @returns {string}
+ */
+String.format = function()
+{
+	const a = [ ];
+
+	for (let ar of arguments)
+		a.push(ar);
+
+	return ''.format.apply(arguments[0], a);
+}
+
+/**
+ * Format a string using positional arguments.
+ * @function nobr
+ * @memberof external:String
+ * @param {...string} args
+ * @returns {string}
+ */
+String.nobr = function()
+{
+	const a = [ ];
+
+	for (let ar of arguments)
+		a.push(ar);
+
+	return ''.nobr.apply(arguments[0], a);
+}
+
+if (window.NodeList &amp;&amp; !NodeList.prototype.forEach) {
+	NodeList.prototype.forEach = function (callback, thisArg) {
+		thisArg = thisArg || window;
+		for (var i = 0; i &lt; this.length; i++) {
+			callback.call(thisArg, this[i], i, this);
+		}
+	};
+}
+
+if (!window.requestAnimationFrame) {
+	window.requestAnimationFrame = function(f) {
+		window.setTimeout(function() {
+			f(new Date().getTime())
+		}, 1000/30);
+	};
+}
+
+
+/**
+ * Return the element for input which may be an element or an id.
+ * @param {Element|string} e - Element or id.
+ * @returns {HTMLElement|null}
+ */
+function isElem(e) { return L.dom.elem(e) }
+
+/**
+ * Test whether node matches a CSS selector.
+ * @param {Node} node - Node to test.
+ * @param {string} selector - CSS selector.
+ * @returns {boolean}
+ */
+function matchesElem(node, selector) { return L.dom.matches(node, selector) }
+
+/**
+ * Find the parent matching selector from node upwards.
+ * @param {Node} node - Starting node.
+ * @param {string} selector - CSS selector to match ancestor.
+ * @returns {HTMLElement|null}
+ */
+function findParent(node, selector) { return L.dom.parent(node, selector) }
+
+/**
+ * Create DOM elements using {@link L.dom.create} helper (convenience wrapper).
+ * @returns {HTMLElement}
+ */
+function E() { return L.dom.create.apply(L.dom, arguments) }
+
+/**
+ * Initialize a dropdown element into an {@link L.ui.Dropdown} instance and bind it.
+ * If already bound, this is a no-op.
+ * @param {HTMLElement} sb - The select element to convert.
+ * @returns {L.ui.Dropdown|undefined} Dropdown instance or undefined when already bound.
+ */
+function cbi_dropdown_init(sb) {
+	if (sb &amp;&amp; L.dom.findClassInstance(sb) instanceof L.ui.Dropdown)
+		return;
+
+	const dl = new L.ui.Dropdown(sb, null, { name: sb.getAttribute('name') });
+	return dl.bind(sb);
+}
+
+/**
+ * Update or initialize a table UI widget with new data.
+ * @param {HTMLElement|string} table - Table element or selector.
+ * @param {...Node[]} data - Data to update the table with.
+ * @param {string} [placeholder] - Placeholder text when empty.
+ */
+function cbi_update_table(table, data, placeholder) {
+	const target = isElem(table) ? table : document.querySelector(table);
+
+	if (!isElem(target))
+		return;
+
+	let t = L.dom.findClassInstance(target);
+
+	if (!(t instanceof L.ui.Table)) {
+		t = new L.ui.Table(target);
+		L.dom.bindClassInstance(target, t);
+	}
+
+	t.update(data, placeholder);
+}
+
+
+document.addEventListener('DOMContentLoaded', function() {
+	document.addEventListener('validation-failure', function(ev) {
+		if (ev.target === document.activeElement)
+			L.showTooltip(ev);
+	});
+
+	document.addEventListener('validation-success', function(ev) {
+		if (ev.target === document.activeElement)
+			L.hideTooltip(ev);
+	});
+
+	L.require('ui').then(function(ui) {
+		document.querySelectorAll('.table').forEach(cbi_update_table);
+	});
+});
+</code></pre></article></section></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">LuCI Documentation</a><div class="mobile-nav-links"><div class="github-home navbar-item"><a id="" href="https://github.com/openwrt/luci" target="">GitHub Project Page</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-tutorials"><div>Tutorials</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="tutorial-JsonRpcHowTo.html">Using JSON RPC daemon</a></div><div class="sidebar-section-children"><a href="tutorial-Modules.html">Modules</a></div><div class="sidebar-section-children"><a href="tutorial-ThemesHowTo.html">Making Themes</a></div><div class="sidebar-section-children"><a href="tutorial-i18n.html">Internationalisation - i18n</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.module_cbi.html">cbi</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-classes"><div>Classes</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.html">LuCI</a></div><div class="sidebar-section-children"><a href="LuCI.baseclass.html">baseclass</a></div><div class="sidebar-section-children"><a href="LuCI.dom.html">dom</a></div><div class="sidebar-section-children"><a href="LuCI.form.html">form</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractSection.html">AbstractSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractValue.html">AbstractValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Button.html">Button</a></div><div class="sidebar-section-children"><a href="LuCI.form.DirectoryPicker.html">DirectoryPicker</a></div><div class="sidebar-section-children"><a href="LuCI.form.DummyValue.html">DummyValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.form.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.form.Flag.html">Flag</a></div><div class="sidebar-section-children"><a href="LuCI.form.GridSection.html">GridSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.HiddenValue.html">HiddenValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.JSONMap.html">JSONMap</a></div><div class="sidebar-section-children"><a href="LuCI.form.ListValue.html">ListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Map.html">Map</a></div><div class="sidebar-section-children"><a href="LuCI.form.MultiValue.html">MultiValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.NamedSection.html">NamedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.RangeSliderValue.html">RangeSliderValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.RichListValue.html">RichListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.SectionValue.html">SectionValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TableSection.html">TableSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.TextValue.html">TextValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TypedSection.html">TypedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.Value.html">Value</a></div><div class="sidebar-section-children"><a href="LuCI.fs.html">fs</a></div><div class="sidebar-section-children"><a href="LuCI.headers.html">headers</a></div><div class="sidebar-section-children"><a href="LuCI.network.html">network</a></div><div class="sidebar-section-children"><a href="LuCI.network.Device.html">Device</a></div><div class="sidebar-section-children"><a href="LuCI.network.Hosts.html">Hosts</a></div><div class="sidebar-section-children"><a href="LuCI.network.Protocol.html">Protocol</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiDevice.html">WifiDevice</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiNetwork.html">WifiNetwork</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiVlan.html">WifiVlan</a></div><div class="sidebar-section-children"><a href="LuCI.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.request.html">request</a></div><div class="sidebar-section-children"><a href="LuCI.request.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.response.html">response</a></div><div class="sidebar-section-children"><a href="LuCI.rpc.html">rpc</a></div><div class="sidebar-section-children"><a href="LuCI.session.html">session</a></div><div class="sidebar-section-children"><a href="LuCI.uci.html">uci</a></div><div class="sidebar-section-children"><a href="LuCI.ui.html">ui</a></div><div class="sidebar-section-children"><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Checkbox.html">Checkbox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.ComboButton.html">ComboButton</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Combobox.html">Combobox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Dropdown.html">Dropdown</a></div><div class="sidebar-section-children"><a href="LuCI.ui.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.ui.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.RangeSlider.html">RangeSlider</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Select.html">Select</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textarea.html">Textarea</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textfield.html">Textfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.changes.html">changes</a></div><div class="sidebar-section-children"><a href="LuCI.ui.menu.html">menu</a></div><div class="sidebar-section-children"><a href="LuCI.ui.tabs.html">tabs</a></div><div class="sidebar-section-children"><a href="LuCI.validation.html">validation</a></div><div class="sidebar-section-children"><a href="LuCI.validation.Validator.html">Validator</a></div><div class="sidebar-section-children"><a href="LuCI.validation.ValidatorFactory.html">ValidatorFactory</a></div><div class="sidebar-section-children"><a href="LuCI.view.html">view</a></div><div class="sidebar-section-children"><a href="LuCI.xhr.html">xhr</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-externals"><div>Externals</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="external-String.html">String</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

@@ -1,0 +1,1346 @@
+<!DOCTYPE html><html lang="en" style="font-size:16px"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="themes/luci-theme-bootstrap/htdocs/luci-static/bootstrap/logo.svg"><link type="text/css" rel="stylesheet" href="extra.css"><title>Source: validation.js</title><!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--><script src="scripts/third-party/hljs.js" defer="defer"></script><script src="scripts/third-party/hljs-line-num.js" defer="defer"></script><script src="scripts/third-party/popper.js" defer="defer"></script><script src="scripts/third-party/tippy.js" defer="defer"></script><script src="scripts/third-party/tocbot.min.js"></script><script>var baseURL="/",locationPathname="";baseURL=(locationPathname=document.location.pathname).substr(0,locationPathname.lastIndexOf("/")+1)</script><link rel="stylesheet" href="styles/clean-jsdoc-theme.min.css"><svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none"><defs><symbol id="copy-icon" viewbox="0 0 488.3 488.3"><g><path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/><path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/></g></symbol><symbol id="search-icon" viewBox="0 0 512 512"><g><g><path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z"/></g></g><g><g><path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g></symbol><symbol id="font-size-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.246 15H4.754l-2 5H.6L7 4h2l6.4 16h-2.154l-2-5zm-.8-2L8 6.885 5.554 13h4.892zM21 12.535V12h2v8h-2v-.535a4 4 0 1 1 0-6.93zM19 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></symbol><symbol id="add-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></symbol><symbol id="minus-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M5 11h14v2H5z"/></symbol><symbol id="dark-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol><symbol id="light-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol><symbol id="reset-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.537 19.567A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 1 0-2.46 5.772l.997 1.795z"/></symbol><symbol id="down-icon" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"></path></symbol><symbol id="codepen-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.5 13.202L13 15.535v3.596L19.197 15 16.5 13.202zM14.697 12L12 10.202 9.303 12 12 13.798 14.697 12zM20 10.869L18.303 12 20 13.131V10.87zM19.197 9L13 4.869v3.596l3.5 2.333L19.197 9zM7.5 10.798L11 8.465V4.869L4.803 9 7.5 10.798zM4.803 15L11 19.131v-3.596l-3.5-2.333L4.803 15zM4 13.131L5.697 12 4 10.869v2.262zM2 9a1 1 0 0 1 .445-.832l9-6a1 1 0 0 1 1.11 0l9 6A1 1 0 0 1 22 9v6a1 1 0 0 1-.445.832l-9 6a1 1 0 0 1-1.11 0l-9-6A1 1 0 0 1 2 15V9z"/></symbol><symbol id="close-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></symbol><symbol id="menu-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></symbol></defs></svg></head><body data-theme="fallback-dark"><div class="sidebar-container"><div class="sidebar" id="sidebar"><a href="/" class="sidebar-title sidebar-title-anchor">LuCI Documentation</a><div class="sidebar-items-container"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-tutorials"><div>Tutorials</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="tutorial-JsonRpcHowTo.html">Using JSON RPC daemon</a></div><div class="sidebar-section-children"><a href="tutorial-Modules.html">Modules</a></div><div class="sidebar-section-children"><a href="tutorial-ThemesHowTo.html">Making Themes</a></div><div class="sidebar-section-children"><a href="tutorial-i18n.html">Internationalisation - i18n</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.module_cbi.html">cbi</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-classes"><div>Classes</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.html">LuCI</a></div><div class="sidebar-section-children"><a href="LuCI.baseclass.html">baseclass</a></div><div class="sidebar-section-children"><a href="LuCI.dom.html">dom</a></div><div class="sidebar-section-children"><a href="LuCI.form.html">form</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractSection.html">AbstractSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractValue.html">AbstractValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Button.html">Button</a></div><div class="sidebar-section-children"><a href="LuCI.form.DirectoryPicker.html">DirectoryPicker</a></div><div class="sidebar-section-children"><a href="LuCI.form.DummyValue.html">DummyValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.form.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.form.Flag.html">Flag</a></div><div class="sidebar-section-children"><a href="LuCI.form.GridSection.html">GridSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.HiddenValue.html">HiddenValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.JSONMap.html">JSONMap</a></div><div class="sidebar-section-children"><a href="LuCI.form.ListValue.html">ListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Map.html">Map</a></div><div class="sidebar-section-children"><a href="LuCI.form.MultiValue.html">MultiValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.NamedSection.html">NamedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.RangeSliderValue.html">RangeSliderValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.RichListValue.html">RichListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.SectionValue.html">SectionValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TableSection.html">TableSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.TextValue.html">TextValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TypedSection.html">TypedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.Value.html">Value</a></div><div class="sidebar-section-children"><a href="LuCI.fs.html">fs</a></div><div class="sidebar-section-children"><a href="LuCI.headers.html">headers</a></div><div class="sidebar-section-children"><a href="LuCI.network.html">network</a></div><div class="sidebar-section-children"><a href="LuCI.network.Device.html">Device</a></div><div class="sidebar-section-children"><a href="LuCI.network.Hosts.html">Hosts</a></div><div class="sidebar-section-children"><a href="LuCI.network.Protocol.html">Protocol</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiDevice.html">WifiDevice</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiNetwork.html">WifiNetwork</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiVlan.html">WifiVlan</a></div><div class="sidebar-section-children"><a href="LuCI.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.request.html">request</a></div><div class="sidebar-section-children"><a href="LuCI.request.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.response.html">response</a></div><div class="sidebar-section-children"><a href="LuCI.rpc.html">rpc</a></div><div class="sidebar-section-children"><a href="LuCI.session.html">session</a></div><div class="sidebar-section-children"><a href="LuCI.uci.html">uci</a></div><div class="sidebar-section-children"><a href="LuCI.ui.html">ui</a></div><div class="sidebar-section-children"><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Checkbox.html">Checkbox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.ComboButton.html">ComboButton</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Combobox.html">Combobox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Dropdown.html">Dropdown</a></div><div class="sidebar-section-children"><a href="LuCI.ui.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.ui.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.RangeSlider.html">RangeSlider</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Select.html">Select</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textarea.html">Textarea</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textfield.html">Textfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.changes.html">changes</a></div><div class="sidebar-section-children"><a href="LuCI.ui.menu.html">menu</a></div><div class="sidebar-section-children"><a href="LuCI.ui.tabs.html">tabs</a></div><div class="sidebar-section-children"><a href="LuCI.validation.html">validation</a></div><div class="sidebar-section-children"><a href="LuCI.validation.Validator.html">Validator</a></div><div class="sidebar-section-children"><a href="LuCI.validation.ValidatorFactory.html">ValidatorFactory</a></div><div class="sidebar-section-children"><a href="LuCI.view.html">view</a></div><div class="sidebar-section-children"><a href="LuCI.xhr.html">xhr</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-externals"><div>Externals</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="external-String.html">String</a></div></div></div></div></div><div class="navbar-container" id="VuAckcnZhf"><nav class="navbar"><div class="navbar-left-items"><div class="github-home navbar-item"><a id="" href="https://github.com/openwrt/luci" target="">GitHub Project Page</a></div></div><div class="navbar-right-items"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div><nav></nav></nav></div><div class="toc-container"><div class="toc-content"><span class="bold">On this page</span><div id="eed4d2a0bfd64539bb9df78095dec881"></div></div></div><div class="body-wrapper"><div class="main-content"><div class="main-wrapper"><section id="source-page" class="source-page"><header><h1 id="title" class="has-anchor">validation.js</h1></header><article><pre class="prettyprint source lang-js"><code>'use strict';
+'require baseclass';
+
+/**
+ * @namespace LuCI.validation
+ * @memberof LuCI
+ */
+
+/**
+ * @class validation
+ * @memberof LuCI
+ * @hideconstructor
+ * @classdesc
+ *
+ * The LuCI validation class provides functions to perform validation
+ * on user input within various [form]{@link LuCI.form} input fields.
+ *
+ * To import the class, use `'require validation'`. To import it in
+ * external JavaScript, use `L.require("validation").then(...)`.
+ * 
+ * Note: it is not required to import this class in forms for use: it is
+ * imported by {@link LuCI.ui ui} where {@link LuCI.form form} elements
+ * are defined.
+ *
+ * A typical validation is instantiated by first constructing a
+ * {@link LuCI.form} element and
+ * by adding a [datatype]{@link LuCI.form.AbstractValue#datatype} to the
+ * element properties.
+ *
+ * @example
+ *
+ * 'use strict';
+ * ...
+ *
+ * let m, s, o;
+ *
+ * ...
+ *
+ * o = s.option(form.Value, 'some_value', 'A value element');
+ * o.datatype = 'ipaddr';
+ *
+ * ...
+ *
+ * @example &lt;caption>A validator stub can be instantiated so:&lt;/caption>
+ *
+ * const stubValidator = {
+ * 	factory: validation,
+ * 	apply: function(type, value, args) {
+ * 		if (value != null)
+ * 			this.value = value;
+ *
+ * 		return validation.types[type].apply(this, args);
+ * 	},
+ * 	assert: function(condition) {
+ * 		return !!condition;
+ * 	}
+ * };
+ *
+ * @example &lt;caption>and later used so in a custom `o.validate` function:&lt;/caption>
+ *
+ * ...
+ * stubValidator.apply('ipaddr', m4 ? m4[1] : m6[1])
+ * ...
+ *
+ * @example &lt;caption> One can also add validators to HTML UI elements via
+ * {@link LuCI.ui#addValidator}: &lt;/caption>
+ *
+ * ...
+ * 	s.renderSectionAdd = function(extra_class) {
+ * 	var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
+ * 			nameEl = el.querySelector('.cbi-section-create-name');
+ * 		ui.addValidator(nameEl, 'uciname', true, function(v) {
+ * 			let sections = [
+ * 				...uci.sections('config', 'section_type1'),
+ * 				...uci.sections('config', 'section_type2'),
+ * 			];
+ * 			if (sections.find(function(s) {
+ * 				return s['.name'] == v;
+ * 			})) {
+ * 				return _('This may not share the same name as other section type1 or section type2.');
+ * 			}
+ * 			if (v.length > 15) return _('Name length shall not exceed 15 characters');
+ * 			return true;
+ * 		}, 'blur', 'keyup');
+ * 		return el;
+ * 	};
+ * ...
+ *
+ */
+
+/**
+ * Return byte length of a string using Blob (UTF-8 byte count).
+ *
+ * @memberof LuCI.validation
+ * @param {string} x - Input string.
+ * @returns {number} Byte length of the string.
+ */
+function bytelen(x) {
+	return new Blob([x]).size;
+}
+
+/**
+ * Compare two arrays element-wise: return true if `a &lt; b` in lexicographic
+ * element comparison.
+ *
+ * @memberof LuCI.validation
+ * @param {Array&lt;number>} a - First array.
+ * @param {Array&lt;number>} b - Second array.
+ * @returns {boolean} True if arrays compare as `a &lt; b`, false otherwise.
+ */
+function arrayle(a, b) {
+	if (!Array.isArray(a) || !Array.isArray(b))
+		return false;
+
+	for (let i = 0; i &lt; a.length; i++)
+		if (a[i] > b[i])
+			return false;
+		else if (a[i] &lt; b[i])
+			return true;
+
+	return true;
+}
+
+/**
+ * @class Validator
+ * @classdesc
+ * 
+ * @memberof LuCI.validation
+ * @param {string} field - the UI field to validate.
+ * @param {string} type - type of validator.
+ * @param {boolean} optional - set the validation result as optional.
+ * @param {vfunc} function - validation function.
+ * @param {ValidatorFactory} validatorFactory - a ValidatorFactory instance.
+ * @returns {Validator} a Validator instance.
+ */
+const Validator = baseclass.extend(/** @lends LuCI.validation.Validator.prototype */ {
+	__name__: 'Validation',
+
+	__init__(field, type, optional, vfunc, validatorFactory) {
+		this.field = field;
+		this.optional = optional;
+		this.vfunc = vfunc;
+		this.vstack = validatorFactory.compile(type);
+		this.factory = validatorFactory;
+	},
+
+	/**
+	 * Assert a condition and update field error state.
+	 * 
+	 * @param {boolean} condition - Condition that must be true.
+	 * @param {string} message - Error message when assertion fails.
+	 * @returns {boolean} True when assertion is true, false otherwise.
+	 */
+	assert(condition, message) {
+		if (!condition) {
+			this.field.classList.add('cbi-input-invalid');
+			this.error = message;
+			return false;
+		}
+
+		this.field.classList.remove('cbi-input-invalid');
+		this.error = null;
+		return true;
+	},
+
+	/**
+	 * Apply a validation function by name or directly via function reference.
+	 * If a name is provided it resolves it via the factory's registered `types`.
+	 * 
+	 * @param {string|function} name - Validator name or function.
+	 * @param {*} value - Value to validate (optional; defaults to field value).
+	 * @param {Array} args - Arguments passed to the validator function.
+	 * @returns {*} Validator result.
+	 */
+	apply(name, value, args) {
+		let func;
+
+		if (typeof(name) === 'function')
+			func = name;
+		else if (typeof(this.factory.types[name]) === 'function')
+			func = this.factory.types[name];
+		else
+			return false;
+
+		if (value != null &amp;&amp; value != undefined)
+			this.value = value;
+
+		return func.apply(this, args);
+	},
+
+	/**
+	 * Validate the associated field value using the compiled validator stack
+	 * and any additional validators provided at construction time.
+	 * Emits 'validation-failure' or 'validation-success' CustomEvents on the field.
+	 * 
+	 * @returns {boolean} True if validation succeeds, false otherwise.
+	 */
+	validate() {
+		/* element is detached */
+		if (!findParent(this.field, 'body') &amp;&amp; !findParent(this.field, '[data-field]'))
+			return true;
+
+		this.field.classList.remove('cbi-input-invalid');
+		this.value = (this.field.value != null) ? this.field.value : '';
+		this.error = null;
+
+		let valid;
+
+		if (this.value.length === 0)
+			valid = this.assert(this.optional, _('non-empty value'));
+		else
+			valid = this.vstack[0].apply(this, this.vstack[1]);
+
+		if (valid !== true) {
+			const message = _('Expecting: %s').format(this.error);
+			this.field.setAttribute('data-tooltip', message);
+			this.field.setAttribute('data-tooltip-style', 'error');
+			this.field.dispatchEvent(new CustomEvent('validation-failure', {
+				bubbles: true,
+				detail: {
+					message: message
+				}
+			}));
+			return false;
+		}
+
+		if (typeof(this.vfunc) == 'function') {
+			valid = this.vfunc(this.value);
+		} else if (Array.isArray(this.vfunc)) {
+			/* Execute validation functions serially */
+			for (let val of this.vfunc) {
+				if (typeof(val) == 'function') {
+					valid = val(this.value);
+					if (valid !== true)
+						break;
+				}
+			}
+		}
+
+		if (valid !== true) {
+			this.assert(false, valid);
+			this.field.setAttribute('data-tooltip', valid);
+			this.field.setAttribute('data-tooltip-style', 'error');
+			this.field.dispatchEvent(new CustomEvent('validation-failure', {
+				bubbles: true,
+				detail: {
+					message: valid
+				}
+			}));
+			return false;
+		}
+
+		this.field.removeAttribute('data-tooltip');
+		this.field.removeAttribute('data-tooltip-style');
+		this.field.dispatchEvent(new CustomEvent('validation-success', { bubbles: true }));
+		return true;
+	},
+
+});
+
+/**
+ * @classdesc
+ * Factory to create Validator instances and compile validation expressions.
+ * 
+ * @memberof LuCI.validation
+ * @class ValidatorFactory
+ * @hideconstructor
+ */
+const ValidatorFactory = baseclass.extend(/** @lends LuCI.validation.ValidatorFactory.prototype */ {
+	__name__: 'ValidatorFactory',
+
+
+	/**
+	 * Compile a validator expression string into an internal stack representation.
+	 *
+	 * @param {string} field field name
+	 * @param {string} type validator type
+	 * @param {boolean} optional whether the field is optional
+	 * @param {string} vfunc a validator function
+	 * @returns {Validator} Compiled token stack used by validators.
+	 */
+	create(field, type, optional, vfunc) {
+		return new Validator(field, type, optional, vfunc, this);
+	},
+
+	/**
+	 * Compile a validator expression string into an internal stack representation.
+	 *
+	 * @param {string} code - Validator expression string (e.g. `or(ipaddr,port)`).
+	 * @returns {Array} Compiled token stack used by validators.
+	 */
+	compile(code) {
+		let pos = 0;
+		let esc = false;
+		let depth = 0;
+		const stack = [ ];
+
+		code += ',';
+
+		for (let i = 0; i &lt; code.length; i++) {
+			if (esc) {
+				esc = false;
+				continue;
+			}
+
+			switch (code.charCodeAt(i))
+			{
+			case 92:
+				esc = true;
+				break;
+
+			// Skip over quoted strings so commas inside quotes don't split tokens
+			case 34: // "
+			case 39: { // '\''
+				const quote = code.charCodeAt(i);
+				let j = i + 1;
+				for (; j &lt; code.length; j++) {
+					if (code.charCodeAt(j) === 92) { j++; continue; }
+					if (code.charCodeAt(j) === quote) { i = j; break; }
+				}
+				break;
+			}
+
+			case 40:
+			case 44:
+				if (depth &lt;= 0) {
+					if (pos &lt; i) {
+						let label = code.substring(pos, i);
+							label = label.replace(/\\(.)/g, '$1');
+							label = label.replace(/^[ \t]+/g, '');
+							label = label.replace(/[ \t]+$/g, '');
+
+						if (label &amp;&amp; !isNaN(label)) {
+							stack.push(parseFloat(label));
+						}
+						else if (label.match(/^(['"]).*\1$/)) {
+							stack.push(label.replace(/^(['"])(.*)\1$/, '$2'));
+						}
+						else if (typeof this.types[label] == 'function') {
+							stack.push(this.types[label]);
+							stack.push(null);
+						}
+						else {
+							L.raise('SyntaxError', 'Unhandled token "%s"', label);
+						}
+					}
+
+					pos = i+1;
+				}
+
+				depth += (code.charCodeAt(i) == 40);
+				break;
+
+			case 41:
+				if (--depth &lt;= 0) {
+					if (typeof stack[stack.length-2] != 'function')
+						L.raise('SyntaxError', 'Argument list follows non-function');
+
+					stack[stack.length-1] = this.compile(code.substring(pos, i));
+					pos = i+1;
+				}
+
+				break;
+			}
+		}
+
+		return stack;
+	},
+
+	/**
+	 * Parse an integer string. Returns NaN when not a valid integer.
+	 * @param {string} x
+	 * @returns {number} Integer or NaN
+	 */
+	parseInteger(x) {
+		return (/^-?\d+$/.test(x) ? +x : NaN);
+	},
+
+	/**
+	 * Parse a decimal number string. Returns NaN when not a valid number.
+	 * @param {string} x
+	 * @returns {number} Decimal number or NaN
+	 */
+	parseDecimal(x) {
+		return (/^-?\d+(?:\.\d+)?$/.test(x) ? +x : NaN);
+	},
+
+	/**
+	 * Parse IPv4 address into an array of 4 octets or return null on failure.
+	 * @param {string} x - IPv4 address string
+	 * @returns {Array&lt;number>|null} Array of 4 octets or null.
+	 */
+	parseIPv4(x) {
+		if (!x.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/))
+			return null;
+
+		if (RegExp.$1 > 255 || RegExp.$2 > 255 || RegExp.$3 > 255 || RegExp.$4 > 255)
+			return null;
+
+		return [ +RegExp.$1, +RegExp.$2, +RegExp.$3, +RegExp.$4 ];
+	},
+
+	/**
+	 * Parse IPv6 address into an array of 8 16-bit words or return null on failure.
+	 * Supports IPv4-embedded IPv6 (::ffff:a.b.c.d) and zero-compression.
+	 * @param {string} x - IPv6 address string
+	 * @returns {Array&lt;number>|null} Array of 8 16-bit words or null.
+	 */
+	parseIPv6(x) {
+		if (x.match(/^([a-fA-F0-9:]+):(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/)) {
+			const v6 = RegExp.$1;
+			const v4 = this.parseIPv4(RegExp.$2);
+
+			if (!v4)
+				return null;
+
+			x = `${v6}:${(v4[0] * 256 + v4[1]).toString(16)}:${(v4[2] * 256 + v4[3]).toString(16)}`;
+		}
+
+		if (!x.match(/^[a-fA-F0-9:]+$/))
+			return null;
+
+		const prefix_suffix = x.split(/::/);
+
+		if (prefix_suffix.length > 2)
+			return null;
+
+		const prefix = (prefix_suffix[0] || '0').split(/:/);
+		const suffix = prefix_suffix.length > 1 ? (prefix_suffix[1] || '0').split(/:/) : [];
+
+		if (suffix.length ? (prefix.length + suffix.length > 7)
+			              : ((prefix_suffix.length &lt; 2 &amp;&amp; prefix.length &lt; 8) || prefix.length > 8))
+			return null;
+
+		let i;
+		let word;
+		const words = [];
+
+		for (i = 0, word = parseInt(prefix[0], 16); i &lt; prefix.length; word = parseInt(prefix[++i], 16))
+			if (prefix[i].length &lt;= 4 &amp;&amp; !isNaN(word) &amp;&amp; word &lt;= 0xFFFF)
+				words.push(word);
+			else
+				return null;
+
+		for (i = 0; i &lt; (8 - prefix.length - suffix.length); i++)
+			words.push(0);
+
+		for (i = 0, word = parseInt(suffix[0], 16); i &lt; suffix.length; word = parseInt(suffix[++i], 16))
+			if (suffix[i].length &lt;= 4 &amp;&amp; !isNaN(word) &amp;&amp; word &lt;= 0xFFFF)
+				words.push(word);
+			else
+				return null;
+
+		return words;
+	},
+
+	/**
+	 * Collection of type handlers.
+	 * Each function consumes `this.value` and returns `this.assert` to report errors.
+	 *
+	 * All functions return the result of {@link LuCI.validation.Validator#assert assert()}.
+	 * @namespace types
+	 * @memberof LuCI.validation.ValidatorFactory
+	 */
+	types:  /** @lends LuCI.validation.ValidatorFactory#types */  {
+		/**
+		 * Assert a signed integer value (+/-).
+		 * @function LuCI.validation.ValidatorFactory.types#integer
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		integer() {
+			return this.assert(!isNaN(this.factory.parseInteger(this.value)), _('valid integer value'));
+		},
+
+		/**
+		 * Assert an unsigned integer value (+).
+		 * @function LuCI.validation.ValidatorFactory.types#uinteger
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		uinteger() {
+			return this.assert(this.factory.parseInteger(this.value) >= 0, _('positive integer value'));
+		},
+
+		/**
+		 * Assert a signed float value (+/-).
+		 * @function LuCI.validation.ValidatorFactory.types#float
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		float() {
+			return this.assert(!isNaN(this.factory.parseDecimal(this.value)), _('valid decimal value'));
+		},
+
+		/**
+		 * Assert an unsigned float value (+).
+		 * @function LuCI.validation.ValidatorFactory.types#ufloat
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ufloat() {
+			return this.assert(this.factory.parseDecimal(this.value) >= 0, _('positive decimal value'));
+		},
+
+		/**
+		 * Assert an IPv4/6 address.
+		 * @function LuCI.validation.ValidatorFactory.types#ipaddr
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ipaddr(nomask) {
+			return this.assert(this.apply('ip4addr', null, [nomask]) || this.apply('ip6addr', null, [nomask]),
+				nomask ? _('valid IP address') : _('valid IP address or prefix'));
+		},
+
+		/**
+		 * Assert an IPv4 address.
+		 * @function LuCI.validation.ValidatorFactory.types#ip4addr
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ip4addr(nomask) {
+			const re = nomask ? /^(\d+\.\d+\.\d+\.\d+)$/ : /^(\d+\.\d+\.\d+\.\d+)(?:\/(\d+\.\d+\.\d+\.\d+)|\/(\d{1,2}))?$/;
+			const m = this.value.match(re);
+
+			return this.assert(m &amp;&amp; this.factory.parseIPv4(m[1]) &amp;&amp; (m[2] ? this.factory.parseIPv4(m[2]) : (m[3] ? this.apply('ip4prefix', m[3]) : true)),
+				nomask ? _('valid IPv4 address') : _('valid IPv4 address or network'));
+		},
+
+		/**
+		 * Assert an IPv6 address.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6addr
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ip6addr(nomask) {
+			const re = nomask ? /^([0-9a-fA-F:.]+)$/ : /^([0-9a-fA-F:.]+)(?:\/(\d{1,3}))?$/;
+			const m = this.value.match(re);
+
+			return this.assert(m &amp;&amp; this.factory.parseIPv6(m[1]) &amp;&amp; (m[2] ? this.apply('ip6prefix', m[2]) : true),
+				nomask ? _('valid IPv6 address') : _('valid IPv6 address or prefix'));
+		},
+
+		/**
+		 * Assert an IPv6 Link Local address.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6ll
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ip6ll(nomask) {
+			/* fe80::/10  -> 0xfe80 .. 0xfebf */
+			const x = parseInt(this.value, 16) | 0;
+			const isll = (((x &amp; 0xffc0) ^ 0xfe80) === 0);
+
+			return this.assert(isll &amp;&amp; this.apply('ip6addr', nomask),
+				_('valid IPv6 Link Local address'));
+		},
+
+		/**
+		 * Assert an IPv6 UL address.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6ula
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ip6ula(nomask) {
+			/* fd00::/8  -> 0xfd00 .. 0xfdff */
+			const x = parseInt(this.value, 16) | 0;
+			const isula = (((x &amp; 0xfe00) ^ 0xfc00) === 0);
+
+			return this.assert(isula &amp;&amp; this.apply('ip6addr', nomask),
+				_('valid IPv6 ULA address'));
+		},
+
+		/**
+		 * Assert an IPv4 prefix.
+		 * @function LuCI.validation.ValidatorFactory.types#ip4prefix
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ip4prefix() {
+			return this.assert(!isNaN(this.value) &amp;&amp; this.value >= 0 &amp;&amp; this.value &lt;= 32,
+				_('valid IPv4 prefix value (0-32)'));
+		},
+
+		/**
+		 * Assert an IPv6 prefix.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6prefix
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ip6prefix() {
+			return this.assert(!isNaN(this.value) &amp;&amp; this.value >= 0 &amp;&amp; this.value &lt;= 128,
+				_('valid IPv6 prefix value (0-128)'));
+		},
+
+		/**
+		 * Assert a IPv4/6 CIDR.
+		 * @function LuCI.validation.ValidatorFactory.types#cidr
+		 * @param {boolean} [negative] allow netmask forms with `/-...` to mark
+		 * negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		cidr(negative) {
+			return this.assert(this.apply('cidr4', null, [negative]) || this.apply('cidr6', null, [negative]),
+				_('valid IPv4 or IPv6 CIDR'));
+		},
+
+		/**
+		 * Assert a IPv4 CIDR.
+		 * @function LuCI.validation.ValidatorFactory.types#cidr4
+		 * @param {boolean} [negative] allow netmask forms with `/-...`.
+		 * E.g. `192.0.2.1/-24` to mark negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		cidr4(negative) {
+			const m = this.value.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(-)?(\d{1,2})$/);
+			return this.assert(m &amp;&amp; this.factory.parseIPv4(m[1]) &amp;&amp; (negative || !m[2]) &amp;&amp; this.apply('ip4prefix', m[3]),
+				_('valid IPv4 CIDR'));
+		},
+
+		/**
+		 * Assert a IPv6 CIDR.
+		 * @function LuCI.validation.ValidatorFactory.types#cidr6
+		 * @param {boolean} [negative] allow netmask forms with `/-...`.
+		 * E.g. `2001:db8:dead:beef::/-64` to mark negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		cidr6(negative) {
+			const m = this.value.match(/^([0-9a-fA-F:.]+)\/(-)?(\d{1,3})$/);
+			return this.assert(m &amp;&amp; this.factory.parseIPv6(m[1]) &amp;&amp; (negative || !m[2]) &amp;&amp; this.apply('ip6prefix', m[3]),
+				_('valid IPv6 CIDR'));
+		},
+
+		/**
+		 * Assert an IPv4 network in address/netmask notation. E.g.
+		 * `192.0.2.1/255.255.255.0`
+		 * @function LuCI.validation.ValidatorFactory.types#ipnet4
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ipnet4() {
+			const m = this.value.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/);
+			return this.assert(m &amp;&amp; this.factory.parseIPv4(m[1]) &amp;&amp; this.factory.parseIPv4(m[2]), _('IPv4 network in address/netmask notation'));
+		},
+
+		/**
+		 * Assert an IPv6 network in address/netmask notation. E.g.
+		 * `2001:db8:dead:beef::0001/ffff:ffff:ffff:ffff::`
+		 * @function LuCI.validation.ValidatorFactory.types#ipnet6
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ipnet6() {
+			const m = this.value.match(/^([0-9a-fA-F:.]+)\/([0-9a-fA-F:.]+)$/);
+			return this.assert(m &amp;&amp; this.factory.parseIPv6(m[1]) &amp;&amp; this.factory.parseIPv6(m[2]), _('IPv6 network in address/netmask notation'));
+		},
+
+		/**
+		 * Assert a IPv6 host ID.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6hostid
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ip6hostid() {
+			if (this.value == "eui64" || this.value == "random")
+				return true;
+
+			const v6 = this.factory.parseIPv6(this.value);
+			return this.assert(!(!v6 || v6[0] || v6[1] || v6[2] || v6[3]), _('valid IPv6 host id'));
+		},
+
+		/**
+		 * Assert an IPv4/6 network in address/netmask (CIDR or mask) notation.
+		 * @function LuCI.validation.ValidatorFactory.types#ipmask
+		 * @param {boolean} [negative] allow netmask forms with `/-...` to mark
+		 * negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ipmask(negative) {
+			return this.assert(this.apply('ipmask4', null, [negative]) || this.apply('ipmask6', null, [negative]),
+				_('valid network in address/netmask notation'));
+		},
+
+		/**
+		 * Assert an IPv4 network in address/netmask (CIDR or mask) notation.
+		 * @function LuCI.validation.ValidatorFactory.types#ipmask4
+		 * @param {boolean} [negative] allow netmask forms with `/-...` to mark
+		 * negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ipmask4(negative) {
+			return this.assert(this.apply('cidr4', null, [negative]) || this.apply('ipnet4') || this.apply('ip4addr'),
+				_('valid IPv4 network'));
+		},
+
+		/**
+		 * Assert an IPv6 network in address/netmask (CIDR or mask) notation.
+		 * @function LuCI.validation.ValidatorFactory.types#ipmask6
+		 * @param {boolean} [negative] allow netmask forms with `/-...` to mark
+		 * negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ipmask6(negative) {
+			return this.assert(this.apply('cidr6', null, [negative]) || this.apply('ipnet6') || this.apply('ip6addr'),
+				_('valid IPv6 network'));
+		},
+
+		/**
+		 * Assert a valid IPv4/6 address range.
+		 * @function LuCI.validation.ValidatorFactory.types#iprange
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		iprange() {
+			return this.assert(this.apply('iprange4', null, []) || this.apply('iprange6', null, []),
+				_('valid IP address range'));
+		},
+
+		/**
+		 * Assert a valid IPv4 address range. E.g.
+		 * `192.0.2.1-192.0.2.254`.
+		 * @function LuCI.validation.ValidatorFactory.types#iprange4
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		iprange4() {
+			const m = this.value.split('-');
+			return this.assert(m.length == 2 &amp;&amp; arrayle(this.factory.parseIPv4(m[0]), this.factory.parseIPv4(m[1])),
+				_('valid IPv4 address range'));
+		},
+
+		/**
+		 * Assert a valid IPv6 address range. E.g.
+		 * `2001:db8:0f00:0000::-2001:db8:0f00:0000:ffff:ffff:ffff:ffff`.
+		 * @function LuCI.validation.ValidatorFactory.types#iprange6
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		iprange6() {
+			const m = this.value.split('-');
+			return this.assert(m.length == 2 &amp;&amp; arrayle(this.factory.parseIPv6(m[0]), this.factory.parseIPv6(m[1])),
+				_('valid IPv6 address range'));
+		},
+
+		/**
+		 * Assert a valid port value where `0 &lt;= port &lt;= 65535`.
+		 * @function LuCI.validation.ValidatorFactory.types#port
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		port() {
+			const p = this.factory.parseInteger(this.value);
+			return this.assert(p >= 0 &amp;&amp; p &lt;= 65535, _('valid port value'));
+		},
+
+		/**
+		 * Assert a valid port or port range (port1-port2) where both ports are
+		 * positive integers, `port1 &lt;= port2` and `port2 &lt;= 65535` (`2^16 - 1`).
+		 * @function LuCI.validation.ValidatorFactory.types#portrange
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		portrange() {
+			if (this.value.match(/^(\d+)-(\d+)$/)) {
+				const p1 = +RegExp.$1;
+				const p2 = +RegExp.$2;
+				return this.assert(p1 &lt;= p2 &amp;&amp; p2 &lt;= 65535,
+					_('valid port or port range (port1-port2)'));
+			}
+
+			return this.assert(this.apply('port'), _('valid port or port range (port1-port2)'));
+		},
+
+		/**
+		 * Assert a valid (multicast) MAC address.
+		 * @function LuCI.validation.ValidatorFactory.types#macaddr
+		 * @param {boolean} [multicast] enforce a multicast MAC address.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		macaddr(multicast) {
+			const m = this.value.match(/^([a-fA-F0-9]{2}):([a-fA-F0-9]{2}:){4}[a-fA-F0-9]{2}$/);
+			return this.assert(m != null &amp;&amp; !(+m[1] &amp; 1) == !multicast,
+				multicast ? _('valid multicast MAC address') : _('valid MAC address'));
+		},
+
+		/**
+		 * Assert a valid hostname or IP address.
+		 * @function LuCI.validation.ValidatorFactory.types#host
+		 * @param {boolean} [ipv4only] enforce IPv4 IPs only.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		host(ipv4only) {
+			return this.assert(this.apply('hostname') || this.apply(ipv4only == 1 ? 'ip4addr' : 'ipaddr', null, ['nomask']),
+				_('valid hostname or IP address'));
+		},
+
+		/**
+		 * Validate hostname according to common rules.
+		 * @function LuCI.validation.ValidatorFactory.types#hostname
+		 * @param {boolean} [strict] reject leading underscores.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		hostname(strict) {
+			if (this.value.length &lt;= 253)
+				return this.assert(
+					(this.value.match(/^[a-zA-Z0-9_]+$/) != null ||
+						(this.value.match(/^[a-zA-Z0-9_][a-zA-Z0-9_\-.]*[a-zA-Z0-9]\.?$/) &amp;&amp;
+						 this.value.match(/[^0-9.]/))) &amp;&amp;
+					(!strict || !this.value.match(/^_/)),
+					_('valid hostname'));
+
+			return this.assert(false, _('valid hostname'));
+		},
+
+		/**
+		 * Assert a valid UCI identifier, hostname or IP address range.
+		 * @function LuCI.validation.ValidatorFactory.types#network
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		network() {
+			return this.assert(this.apply('uciname') || this.apply('hostname') || this.apply('ip4addr') || this.apply('ip6addr'),
+				_('valid UCI identifier, hostname or IP address range'));
+		},
+
+		/**
+		 * Assert a valid host:port.
+		 * @function LuCI.validation.ValidatorFactory.types#hostport
+		 * @param {boolean} [ipv4only] restrict to IPv4 IPs only.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		hostport(ipv4only) {
+			const hp = this.value.split(/:/);
+			return this.assert(hp.length == 2 &amp;&amp; this.apply('host', hp[0], [ipv4only]) &amp;&amp; this.apply('port', hp[1]),
+				_('valid host:port'));
+		},
+
+		/**
+		 * Assert a valid IPv4 address:port. E.g.
+		 * `192.0.2.10:80`
+		 * @function LuCI.validation.ValidatorFactory.types#ip4addrport
+		 * @param {boolean} [ipv4only] restrict to IPv4 IPs only.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ip4addrport() {
+			const hp = this.value.split(/:/);
+			return this.assert(hp.length == 2 &amp;&amp; this.apply('ip4addr', hp[0], [true]) &amp;&amp; this.apply('port', hp[1]),
+				_('valid IPv4 address:port'));
+		},
+
+		/**
+		 * Assert a valid IPv4/6 address:port. E.g.
+		 * `192.0.2.10:80` or `[2001:db8:f00d:cafe::1]:8080`
+		 * @function LuCI.validation.ValidatorFactory.types#ipaddrport
+		 * @param {boolean} [bracket] mandate bracketed [IPv6] URI form IPs.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ipaddrport(bracket) {
+			const m4 = this.value.match(/^([^[\]:]+):(\d+)$/);
+			const m6 = this.value.match((bracket == 1) ? /^\[(.+)\]:(\d+)$/ : /^([^[\]]+):(\d+)$/);
+
+			if (m4)
+				return this.assert(this.apply('ip4addr', m4[1], [true]) &amp;&amp; this.apply('port', m4[2]),
+					_('valid address:port'));
+
+			return this.assert(m6 &amp;&amp; this.apply('ip6addr', m6[1], [true]) &amp;&amp; this.apply('port', m6[2]),
+				_('valid address:port'));
+		},
+
+		/**
+		 * Define a string separator `sep` for use in [tuple]{@link
+		 * LuCI.validation.ValidatorFactory.types#tuple}.
+		 * @function LuCI.validation.ValidatorFactory.types#sep
+		 * @param {string} str define the separator string
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		sep(str) {
+			return this.apply('string', str);
+		},
+
+		/**
+		 * Tuple validator: accepts 1-N tokens separated by a given separator
+		 * {@link LuCI.validation.ValidatorFactory.types#sep sep}
+		 * (whitespace by default if {@link LuCI.validation.ValidatorFactory.types#sep sep}
+		 * is omitted) which will be validated against the 1-N types.
+		 *
+		 * This differs from {@link LuCI.validation.ValidatorFactory.types#and and}
+		 * by first splitting the input and applying each validator function
+		 * sequentially on the resulting array of the split string, whereby the
+		 * first type applies to the first value element, the second to the
+		 * second, and so on, to define a concrete order.
+		 *
+		 * {@link LuCI.validation.ValidatorFactory.types#sep sep}
+		 * can appear at any position in the list.
+		 *
+		 * @example
+		 *
+		 * tuple(ipaddr,port) // "192.0.2.1 88"
+		 *
+		 * tuple(host,port,sep(',')) // "taurus,8000"
+		 *
+		 * tuple(port,port,port,sep('-')) // "33-45-78"
+		 *
+		 * @function LuCI.validation.ValidatorFactory.types#tuple
+		 * @param {...function} types {@link LuCI.validation.ValidatorFactory.types
+		 * types validation functions}
+		 * @param {string} [sep()] function to define split separator string.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		tuple() {
+			const argsraw = Array.prototype.slice.call(arguments);
+			let sep = null;
+
+			// Build list of (validator, validatorArgs) pairs
+			const types = [];
+			for (let i = 0; i &lt; argsraw.length; i += 2)
+				types.push([ argsraw[i], argsraw[i+1] ]);
+
+			// Determine the separator, if provided
+			if (types.length) {
+				for (let t of types) {
+					if (t[0] === this.factory.types['sep']) {
+						const e = types.pop();
+						if (Array.isArray(e[1]) &amp;&amp; e[1].length > 0)
+							sep = e[1][0];
+					}
+				}
+			}
+
+			const raw = (this.value || '');
+			let tokens = (sep == null) ? raw.split(/\s+/) : raw.split(sep).map(s => s.trim());
+
+			if (tokens.length != types.length) {
+				const getName = (t) => {
+					if (typeof t === 'function') {
+						for (const k in this.factory.types)
+							if (this.factory.types[k] === t)
+								return k;
+						return _('value');
+					}
+					return _('value');
+				};
+
+				const expectedTypes = types.map(t => getName(t[0])).join(sep == null ? ' ' : sep);
+				const sepDesc = sep == null ? _('whitespace') : `"${sep}"`;
+				const msg_multi = _('%s; %d tokens separated by %s').format(expectedTypes, types.length, sepDesc);
+				const msg_single = _('%s').format(expectedTypes, types.length, sepDesc);
+				return this.assert(false, (types.length > 1) ? msg_multi : msg_single);
+			}
+
+			for (let i = 0; i &lt; tokens.length; i++) {
+				if (!this.apply(types[i][0], tokens[i], types[i][1]))
+					return this.assert(false, this.error);
+			}
+
+			return this.assert(true);
+		},
+
+		/**
+		 * Assert a valid (hexadecimal) WPA key of `8 &lt;= length &lt;= 63`, or hex if `length == 64`.
+		 * @function LuCI.validation.ValidatorFactory.types#wpakey
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		wpakey() {
+			const v = this.value;
+
+			if (v.length == 64)
+				return this.assert(v.match(/^[a-fA-F0-9]{64}$/), _('valid hexadecimal WPA key'));
+
+			return this.assert((v.length >= 8) &amp;&amp; (v.length &lt;= 63), _('key between 8 and 63 characters'));
+		},
+
+		/**
+		 * Assert a valid (hexadecimal) WEP key.
+		 * @function LuCI.validation.ValidatorFactory.types#wepkey
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		wepkey() {
+			let v = this.value;
+
+			if (v.substr(0, 2) === 's:')
+				v = v.substr(2);
+
+			if ((v.length == 10) || (v.length == 26))
+				return this.assert(v.match(/^[a-fA-F0-9]{10,26}$/), _('valid hexadecimal WEP key'));
+
+			return this.assert((v.length === 5) || (v.length === 13), _('key with either 5 or 13 characters'));
+		},
+
+		/**
+		 * Assert a valid UCI identifier: `[a-zA-Z0-9_]+`.
+		 * @function LuCI.validation.ValidatorFactory.types#uciname
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		uciname() {
+			return this.assert(this.value.match(/^[a-zA-Z0-9_]+$/), _('valid UCI identifier'));
+		},
+
+		/**
+		 * Assert a valid fw4 zone name UCI identifier: `[a-zA-Z_][a-zA-Z0-9_]+`
+		 * @function LuCI.validation.ValidatorFactory.types#ucifw4zonename
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		ucifw4zonename() {
+			return this.assert(this.value.match(/^[a-zA-Z_][a-zA-Z0-9_]+$/), _('valid fw4 zone name UCI identifier'));
+		},
+
+		/**
+		 * Assert a valid network device name between 1 and 15 characters not
+		 * containing ":", "/", "%" or spaces.
+		 * @function LuCI.validation.ValidatorFactory.types#netdevname
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		netdevname() {
+			const v = this.value;
+
+			if (v == '.' || v == '..')
+				return this.assert(false, _('valid network device name, not "." or ".."'));
+
+			return this.assert(v.match(/^[^:/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
+		},
+
+		/**
+		 * Assert a decimal value between `min` and `max`.
+		 * @example
+		 *range(-253, 253) // assert a value between -253 and +253
+		 *
+		 *'range(%u,%u)'.format(min_vid, feat.vid_option ? 4094 : num_vlans - 1);
+		 * // assert values calculated at runtime for VLAN IDs.
+		 * @function LuCI.validation.ValidatorFactory.types#range
+		 * @param {string} min set start of range.
+		 * @param {string} max set end of range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		range(min, max) {
+			const val = this.factory.parseDecimal(this.value);
+			return this.assert(val >= +min &amp;&amp; val &lt;= +max, _('value between %f and %f').format(min, max));
+		},
+
+		/**
+		 * Assert a decimal value greater or equal to `min`.
+		 * @function LuCI.validation.ValidatorFactory.types#min
+		 * @param {string} min set start of range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		min(min) {
+			return this.assert(this.factory.parseDecimal(this.value) >= +min, _('value greater or equal to %f').format(min));
+		},
+
+		/**
+		 * Assert a decimal value lesser or equal to `max`.
+		 * @function LuCI.validation.ValidatorFactory.types#max
+		 * @param {string} max set end of range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		max(max) {
+			return this.assert(this.factory.parseDecimal(this.value) &lt;= +max, _('value smaller or equal to %f').format(max));
+		},
+
+		/**
+		 * Assert a string of [bytelen]{@link LuCI.validation.bytelen} length `len` characters.
+		 * @function LuCI.validation.ValidatorFactory.types#length
+		 * @param {string} len set the length.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		length(len) {
+			return this.assert(bytelen(this.value) == +len,
+				_('value with %d characters').format(len));
+		},
+
+		/**
+		 * Assert a string value of [bytelen]{@link LuCI.validation.bytelen} length between `min` and `max` characters.
+		 * @function LuCI.validation.ValidatorFactory.types#rangelength
+		 * @param {string} min set the min length.
+		 * @param {string} max set the max length.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		rangelength(min, max) {
+			const len = bytelen(this.value);
+			return this.assert((len >= +min) &amp;&amp; (len &lt;= +max),
+				_('value between %d and %d characters').format(min, max));
+		},
+
+		/**
+		 * Assert a value of [bytelen]{@link LuCI.validation.bytelen} with at least `min` characters.
+		 * @function LuCI.validation.ValidatorFactory.types#minlength
+		 * @param {string} min set the min length.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		minlength(min) {
+			return this.assert(bytelen(this.value) >= +min,
+				_('value with at least %d characters').format(min));
+		},
+
+		/**
+		 * Assert a value of [bytelen]{@link LuCI.validation.bytelen} with at
+		 * most `max` characters.
+		 * @function LuCI.validation.ValidatorFactory.types#maxlength
+		 * @param {string} max set the max length.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		maxlength(max) {
+			return this.assert(bytelen(this.value) &lt;= +max,
+				_('value with at most %d characters').format(max));
+		},
+
+		/**
+		 * Logical OR `||` to build a more complex expression. Allows multiple
+		 * types within a single field.
+		 *
+		 * See also {@link LuCI.validation.ValidatorFactory.types#and and}
+		 * @function LuCI.validation.ValidatorFactory.types#or
+		 * @param {string} ...args other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 * @example
+		 * or([ipmask("true")]{@link
+		 * LuCI.validation.ValidatorFactory.types#ipmask},[iprange]{@link
+		 * LuCI.validation.ValidatorFactory.types#iprange})
+		 */
+		or() {
+			const errors = [];
+
+			for (let i = 0; i &lt; arguments.length; i += 2) {
+				if (typeof arguments[i] != 'function') {
+					if (arguments[i] == this.value)
+						return this.assert(true);
+					errors.push('"%s"'.format(arguments[i]));
+					i--;
+				}
+				else if (arguments[i].apply(this, arguments[i+1])) {
+					return this.assert(true);
+				}
+				else {
+					errors.push(this.error);
+				}
+			}
+
+			const t = _('One of the following: %s');
+
+			return this.assert(false, t.format(`\n - ${errors.join('\n - ')}`));
+		},
+
+		/**
+		 * Logical AND `&amp;&amp;` to build more complex expressions. Enforces all
+		 * types on the input string.
+		 *
+		 *
+		 * See also {@link LuCI.validation.ValidatorFactory.types#or or}
+		 * @function LuCI.validation.ValidatorFactory.types#and
+		 * @param {string} ...args  other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 * @example
+		 *
+		 * and([minlength(3)]{@link
+		 * LuCI.validation.ValidatorFactory.types#minlength},[maxlength(20)]{@link
+		 * LuCI.validation.ValidatorFactory.types#maxlength})
+		 */
+		and() {
+			for (let i = 0; i &lt; arguments.length; i += 2) {
+				if (typeof arguments[i] != 'function') {
+					if (arguments[i] != this.value)
+						return this.assert(false, '"%s"'.format(arguments[i]));
+					i--;
+				}
+				else if (!arguments[i].apply(this, arguments[i+1])) {
+					return this.assert(false, this.error);
+				}
+			}
+
+			return this.assert(true);
+		},
+
+		/**
+		 * Assert any type, optionally preceded by `!`.
+		 *
+		 * Example:`list(neg(macaddr))` mandates a list of MAC values, which may
+		 * also be prefixed with a single `!`; the MAC strings are validated
+		 * after `!` are removed from all entries.
+		 *```
+		 * 01:02:03:04:05:06
+		 * !01:02:03:04:05:07
+		 * 01:02:03:04:05:08
+		 *```
+		 * @function LuCI.validation.ValidatorFactory.types#neg
+		 * @param {string} ...args other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		neg() {
+			this.value = this.value.replace(/^[ \t]*![ \t]*/, '');
+
+			if (arguments[0].apply(this, arguments[1]))
+				return this.assert(true);
+
+			return this.assert(false, _('Potential negation of: %s').format(this.error));
+		},
+
+		/**
+		 * Assert a list of a type. 
+		 *
+		 * @function LuCI.validation.ValidatorFactory.types#list
+		 * @param {string} subvalidator other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @param {string} subargs arguments to pass to the `subvalidator`
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 * @example
+		 * list(string)
+		 */
+		list(subvalidator, subargs) {
+			this.field.setAttribute('data-is-list', 'true');
+
+			const tokens = this.value.match(/[^ \t]+/g);
+			for (let i = 0; i &lt; tokens.length; i++)
+				if (!this.apply(subvalidator, tokens[i], subargs))
+					return this.assert(false, this.error);
+
+			return this.assert(true);
+		},
+
+		/**
+		 * Assert a valid phone number dial string: `[0-9*#!.]+`.
+		 * @function LuCI.validation.ValidatorFactory.types#phonedigit
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		phonedigit() {
+			return this.assert(this.value.match(/^[0-9*#!.]+$/),
+				_('valid phone digit (0-9, "*", "#", "!" or ".")'));
+		},
+
+		/**
+		 * Assert a string of the form `HH:MM:SS`.
+		 * @function LuCI.validation.ValidatorFactory.types#timehhmmss
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		timehhmmss() {
+			return this.assert(this.value.match(/^(?:[01]\d|2[0-3]):[0-5]\d:(?:[0-5]\d|60)$/),
+				_('valid time (HH:MM:SS)'));
+		},
+
+		/**
+		 * Assert a string of the form `YYYY-MM-DD`.
+		 * @function LuCI.validation.ValidatorFactory.types#dateyyyymmdd
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		dateyyyymmdd() {
+			if (this.value.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)) {
+				const year  = +RegExp.$1;
+				const month = +RegExp.$2;
+				const day   = +RegExp.$3;
+				const days_in_month = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+
+				const is_leap_year = year => (!(year % 4) &amp;&amp; (year % 100)) || !(year % 400);
+				const get_days_in_month = (month, year) => (month === 2 &amp;&amp; is_leap_year(year)) ? 29 : days_in_month[month - 1];
+
+				/* Firewall rules in the past don't make sense */
+				return this.assert(year >= 2015 &amp;&amp; month &amp;&amp; month &lt;= 12 &amp;&amp; day &amp;&amp; day &lt;= get_days_in_month(month, year),
+					_('valid date (YYYY-MM-DD)'));
+			}
+
+			return this.assert(false, _('valid date (YYYY-MM-DD)'));
+		},
+
+		/**
+		 * Assert unique values among lists.
+		 * @function LuCI.validation.ValidatorFactory.types#unique
+		 * @param {string} subvalidator other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @param {string} subargs arguments to subvalidators
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		unique(subvalidator, subargs) {
+			const ctx = this;
+			const option = findParent(ctx.field, '[data-widget][data-name]');
+			const section = findParent(option, '.cbi-section');
+			const query = '[data-widget="%s"][data-name="%s"]'.format(option.getAttribute('data-widget'), option.getAttribute('data-name'));
+			let unique = true;
+
+			section.querySelectorAll(query).forEach(sibling => {
+				if (sibling === option)
+					return;
+
+				const input = sibling.querySelector('[data-type]');
+				const values = input ? (input.getAttribute('data-is-list') ? input.value.match(/[^ \t]+/g) : [ input.value ]) : null;
+
+				if (values !== null &amp;&amp; values.indexOf(ctx.value) !== -1)
+					unique = false;
+			});
+
+			if (!unique)
+				return this.assert(false, _('unique value'));
+
+			if (typeof(subvalidator) === 'function')
+				return this.apply(subvalidator, null, subargs);
+
+			return this.assert(true);
+		},
+
+		/**
+		 * Assert a hexadecimal string.
+		 * @example
+		 * FFFE // valid
+		 * FFF  // invalid
+		 * @function LuCI.validation.ValidatorFactory.types#hexstring
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		hexstring() {
+			return this.assert(this.value.match(/^([a-fA-F0-9]{2})+$/i),
+				_('hexadecimal encoded value'));
+		},
+
+		/**
+		 * Assert a string type, optionally matching `param`.
+		 * @function LuCI.validation.ValidatorFactory.types#string
+		 * @param {string} [param] define an optional exact string
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		string(param) {
+			if (param === null || param === undefined)
+				return true;
+			return this.assert(this.value === param, _('string: "%s"').format(param));
+		},
+
+		/**
+		 * Assert a directory string. This is a hold-over from Lua to maintain
+		 * compatibility and is a stub function.
+		 * @function LuCI.validation.ValidatorFactory.types#directory
+		 * @returns {boolean} Always returns true.
+		 */
+		directory() {
+			return true;
+		},
+
+		/**
+		 * Assert a file string. This is a hold-over from Lua to maintain
+		 * compatibility and is a stub function.
+		 * @function LuCI.validation.ValidatorFactory.types#file
+		 * @returns {boolean} Always returns true.
+		 */
+		file() {
+			return true;
+		},
+
+		/**
+		 * Assert a device string. This is a hold-over from Lua to maintain
+		 * compatibility and is a stub function.
+		 * @function LuCI.validation.ValidatorFactory.types#device
+		 * @returns {boolean} Always returns true.
+		 */
+		device() {
+			return true;
+		}
+	}
+});
+
+return ValidatorFactory;
+</code></pre></article></section></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">LuCI Documentation</a><div class="mobile-nav-links"><div class="github-home navbar-item"><a id="" href="https://github.com/openwrt/luci" target="">GitHub Project Page</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-tutorials"><div>Tutorials</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="tutorial-JsonRpcHowTo.html">Using JSON RPC daemon</a></div><div class="sidebar-section-children"><a href="tutorial-Modules.html">Modules</a></div><div class="sidebar-section-children"><a href="tutorial-ThemesHowTo.html">Making Themes</a></div><div class="sidebar-section-children"><a href="tutorial-i18n.html">Internationalisation - i18n</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.module_cbi.html">cbi</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-classes"><div>Classes</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.html">LuCI</a></div><div class="sidebar-section-children"><a href="LuCI.baseclass.html">baseclass</a></div><div class="sidebar-section-children"><a href="LuCI.dom.html">dom</a></div><div class="sidebar-section-children"><a href="LuCI.form.html">form</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractSection.html">AbstractSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractValue.html">AbstractValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Button.html">Button</a></div><div class="sidebar-section-children"><a href="LuCI.form.DirectoryPicker.html">DirectoryPicker</a></div><div class="sidebar-section-children"><a href="LuCI.form.DummyValue.html">DummyValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.form.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.form.Flag.html">Flag</a></div><div class="sidebar-section-children"><a href="LuCI.form.GridSection.html">GridSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.HiddenValue.html">HiddenValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.JSONMap.html">JSONMap</a></div><div class="sidebar-section-children"><a href="LuCI.form.ListValue.html">ListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Map.html">Map</a></div><div class="sidebar-section-children"><a href="LuCI.form.MultiValue.html">MultiValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.NamedSection.html">NamedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.RangeSliderValue.html">RangeSliderValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.RichListValue.html">RichListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.SectionValue.html">SectionValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TableSection.html">TableSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.TextValue.html">TextValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TypedSection.html">TypedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.Value.html">Value</a></div><div class="sidebar-section-children"><a href="LuCI.fs.html">fs</a></div><div class="sidebar-section-children"><a href="LuCI.headers.html">headers</a></div><div class="sidebar-section-children"><a href="LuCI.network.html">network</a></div><div class="sidebar-section-children"><a href="LuCI.network.Device.html">Device</a></div><div class="sidebar-section-children"><a href="LuCI.network.Hosts.html">Hosts</a></div><div class="sidebar-section-children"><a href="LuCI.network.Protocol.html">Protocol</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiDevice.html">WifiDevice</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiNetwork.html">WifiNetwork</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiVlan.html">WifiVlan</a></div><div class="sidebar-section-children"><a href="LuCI.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.request.html">request</a></div><div class="sidebar-section-children"><a href="LuCI.request.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.response.html">response</a></div><div class="sidebar-section-children"><a href="LuCI.rpc.html">rpc</a></div><div class="sidebar-section-children"><a href="LuCI.session.html">session</a></div><div class="sidebar-section-children"><a href="LuCI.uci.html">uci</a></div><div class="sidebar-section-children"><a href="LuCI.ui.html">ui</a></div><div class="sidebar-section-children"><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Checkbox.html">Checkbox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.ComboButton.html">ComboButton</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Combobox.html">Combobox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Dropdown.html">Dropdown</a></div><div class="sidebar-section-children"><a href="LuCI.ui.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.ui.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.RangeSlider.html">RangeSlider</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Select.html">Select</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textarea.html">Textarea</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textfield.html">Textfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.changes.html">changes</a></div><div class="sidebar-section-children"><a href="LuCI.ui.menu.html">menu</a></div><div class="sidebar-section-children"><a href="LuCI.ui.tabs.html">tabs</a></div><div class="sidebar-section-children"><a href="LuCI.validation.html">validation</a></div><div class="sidebar-section-children"><a href="LuCI.validation.Validator.html">Validator</a></div><div class="sidebar-section-children"><a href="LuCI.validation.ValidatorFactory.html">ValidatorFactory</a></div><div class="sidebar-section-children"><a href="LuCI.view.html">view</a></div><div class="sidebar-section-children"><a href="LuCI.xhr.html">xhr</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-externals"><div>Externals</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="external-String.html">String</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>

@@ -1,0 +1,781 @@
+<!DOCTYPE html><html lang="en" style="font-size:16px"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" href="themes/luci-theme-bootstrap/htdocs/luci-static/bootstrap/logo.svg"><link type="text/css" rel="stylesheet" href="extra.css"><title>Source: tools/widgets.js</title><!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]--><script src="scripts/third-party/hljs.js" defer="defer"></script><script src="scripts/third-party/hljs-line-num.js" defer="defer"></script><script src="scripts/third-party/popper.js" defer="defer"></script><script src="scripts/third-party/tippy.js" defer="defer"></script><script src="scripts/third-party/tocbot.min.js"></script><script>var baseURL="/",locationPathname="";baseURL=(locationPathname=document.location.pathname).substr(0,locationPathname.lastIndexOf("/")+1)</script><link rel="stylesheet" href="styles/clean-jsdoc-theme.min.css"><svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none"><defs><symbol id="copy-icon" viewbox="0 0 488.3 488.3"><g><path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/><path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/></g></symbol><symbol id="search-icon" viewBox="0 0 512 512"><g><g><path d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z"/></g></g><g><g><path d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z"/></g></g></symbol><symbol id="font-size-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11.246 15H4.754l-2 5H.6L7 4h2l6.4 16h-2.154l-2-5zm-.8-2L8 6.885 5.554 13h4.892zM21 12.535V12h2v8h-2v-.535a4 4 0 1 1 0-6.93zM19 18a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></symbol><symbol id="add-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M11 11V5h2v6h6v2h-6v6h-2v-6H5v-2z"/></symbol><symbol id="minus-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M5 11h14v2H5z"/></symbol><symbol id="dark-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M10 7a7 7 0 0 0 12 4.9v.1c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2h.1A6.979 6.979 0 0 0 10 7zm-6 5a8 8 0 0 0 15.062 3.762A9 9 0 0 1 8.238 4.938 7.999 7.999 0 0 0 4 12z"/></symbol><symbol id="light-theme-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 18a6 6 0 1 1 0-12 6 6 0 0 1 0 12zm0-2a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM11 1h2v3h-2V1zm0 19h2v3h-2v-3zM3.515 4.929l1.414-1.414L7.05 5.636 5.636 7.05 3.515 4.93zM16.95 18.364l1.414-1.414 2.121 2.121-1.414 1.414-2.121-2.121zm2.121-14.85l1.414 1.415-2.121 2.121-1.414-1.414 2.121-2.121zM5.636 16.95l1.414 1.414-2.121 2.121-1.414-1.414 2.121-2.121zM23 11v2h-3v-2h3zM4 11v2H1v-2h3z"/></symbol><symbol id="reset-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M18.537 19.567A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10c0 2.136-.67 4.116-1.81 5.74L17 12h3a8 8 0 1 0-2.46 5.772l.997 1.795z"/></symbol><symbol id="down-icon" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"></path></symbol><symbol id="codepen-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M16.5 13.202L13 15.535v3.596L19.197 15 16.5 13.202zM14.697 12L12 10.202 9.303 12 12 13.798 14.697 12zM20 10.869L18.303 12 20 13.131V10.87zM19.197 9L13 4.869v3.596l3.5 2.333L19.197 9zM7.5 10.798L11 8.465V4.869L4.803 9 7.5 10.798zM4.803 15L11 19.131v-3.596l-3.5-2.333L4.803 15zM4 13.131L5.697 12 4 10.869v2.262zM2 9a1 1 0 0 1 .445-.832l9-6a1 1 0 0 1 1.11 0l9 6A1 1 0 0 1 22 9v6a1 1 0 0 1-.445.832l-9 6a1 1 0 0 1-1.11 0l-9-6A1 1 0 0 1 2 15V9z"/></symbol><symbol id="close-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M12 10.586l4.95-4.95 1.414 1.414-4.95 4.95 4.95 4.95-1.414 1.414-4.95-4.95-4.95 4.95-1.414-1.414 4.95-4.95-4.95-4.95L7.05 5.636z"/></symbol><symbol id="menu-icon" viewBox="0 0 24 24"><path fill="none" d="M0 0h24v24H0z"/><path d="M3 4h18v2H3V4zm0 7h18v2H3v-2zm0 7h18v2H3v-2z"/></symbol></defs></svg></head><body data-theme="fallback-dark"><div class="sidebar-container"><div class="sidebar" id="sidebar"><a href="/" class="sidebar-title sidebar-title-anchor">LuCI Documentation</a><div class="sidebar-items-container"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-tutorials"><div>Tutorials</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="tutorial-JsonRpcHowTo.html">Using JSON RPC daemon</a></div><div class="sidebar-section-children"><a href="tutorial-Modules.html">Modules</a></div><div class="sidebar-section-children"><a href="tutorial-ThemesHowTo.html">Making Themes</a></div><div class="sidebar-section-children"><a href="tutorial-i18n.html">Internationalisation - i18n</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.module_cbi.html">cbi</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-classes"><div>Classes</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.html">LuCI</a></div><div class="sidebar-section-children"><a href="LuCI.baseclass.html">baseclass</a></div><div class="sidebar-section-children"><a href="LuCI.dom.html">dom</a></div><div class="sidebar-section-children"><a href="LuCI.form.html">form</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractSection.html">AbstractSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractValue.html">AbstractValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Button.html">Button</a></div><div class="sidebar-section-children"><a href="LuCI.form.DirectoryPicker.html">DirectoryPicker</a></div><div class="sidebar-section-children"><a href="LuCI.form.DummyValue.html">DummyValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.form.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.form.Flag.html">Flag</a></div><div class="sidebar-section-children"><a href="LuCI.form.GridSection.html">GridSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.HiddenValue.html">HiddenValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.JSONMap.html">JSONMap</a></div><div class="sidebar-section-children"><a href="LuCI.form.ListValue.html">ListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Map.html">Map</a></div><div class="sidebar-section-children"><a href="LuCI.form.MultiValue.html">MultiValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.NamedSection.html">NamedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.RangeSliderValue.html">RangeSliderValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.RichListValue.html">RichListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.SectionValue.html">SectionValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TableSection.html">TableSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.TextValue.html">TextValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TypedSection.html">TypedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.Value.html">Value</a></div><div class="sidebar-section-children"><a href="LuCI.fs.html">fs</a></div><div class="sidebar-section-children"><a href="LuCI.headers.html">headers</a></div><div class="sidebar-section-children"><a href="LuCI.network.html">network</a></div><div class="sidebar-section-children"><a href="LuCI.network.Device.html">Device</a></div><div class="sidebar-section-children"><a href="LuCI.network.Hosts.html">Hosts</a></div><div class="sidebar-section-children"><a href="LuCI.network.Protocol.html">Protocol</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiDevice.html">WifiDevice</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiNetwork.html">WifiNetwork</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiVlan.html">WifiVlan</a></div><div class="sidebar-section-children"><a href="LuCI.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.request.html">request</a></div><div class="sidebar-section-children"><a href="LuCI.request.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.response.html">response</a></div><div class="sidebar-section-children"><a href="LuCI.rpc.html">rpc</a></div><div class="sidebar-section-children"><a href="LuCI.session.html">session</a></div><div class="sidebar-section-children"><a href="LuCI.uci.html">uci</a></div><div class="sidebar-section-children"><a href="LuCI.ui.html">ui</a></div><div class="sidebar-section-children"><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Checkbox.html">Checkbox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.ComboButton.html">ComboButton</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Combobox.html">Combobox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Dropdown.html">Dropdown</a></div><div class="sidebar-section-children"><a href="LuCI.ui.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.ui.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.RangeSlider.html">RangeSlider</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Select.html">Select</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textarea.html">Textarea</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textfield.html">Textfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.changes.html">changes</a></div><div class="sidebar-section-children"><a href="LuCI.ui.menu.html">menu</a></div><div class="sidebar-section-children"><a href="LuCI.ui.tabs.html">tabs</a></div><div class="sidebar-section-children"><a href="LuCI.validation.html">validation</a></div><div class="sidebar-section-children"><a href="LuCI.validation.Validator.html">Validator</a></div><div class="sidebar-section-children"><a href="LuCI.validation.ValidatorFactory.html">ValidatorFactory</a></div><div class="sidebar-section-children"><a href="LuCI.view.html">view</a></div><div class="sidebar-section-children"><a href="LuCI.xhr.html">xhr</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-externals"><div>Externals</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="external-String.html">String</a></div></div></div></div></div><div class="navbar-container" id="VuAckcnZhf"><nav class="navbar"><div class="navbar-left-items"><div class="github-home navbar-item"><a id="" href="https://github.com/openwrt/luci" target="">GitHub Project Page</a></div></div><div class="navbar-right-items"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div><nav></nav></nav></div><div class="toc-container"><div class="toc-content"><span class="bold">On this page</span><div id="eed4d2a0bfd64539bb9df78095dec881"></div></div></div><div class="body-wrapper"><div class="main-content"><div class="main-wrapper"><section id="source-page" class="source-page"><header><h1 id="title" class="has-anchor">tools_widgets.js</h1></header><article><pre class="prettyprint source lang-js"><code>'use strict';
+'require ui';
+'require form';
+'require network';
+'require firewall';
+'require fs';
+
+
+/**
+ * Get users found in `/etc/passwd`.
+ * @returns {string[]}
+ */
+function getUsers() {
+    return fs.lines('/etc/passwd').then(function(lines) {
+        return lines.map(function(line) { return line.split(/:/)[0] });
+    });
+}
+
+/**
+ * Get users found in `/etc/group`.
+ * @returns {string[]}
+ */
+function getGroups() {
+    return fs.lines('/etc/group').then(function(lines) {
+        return lines.map(function(line) { return line.split(/:/)[0] });
+    });
+}
+
+/**
+ * Get bridge devices or Layer 3 devices of a network object.
+ * @param {object} network
+ * @returns {string[]}
+ */
+function getDevices(network) {
+	if (network.isBridge()) {
+		var devices = network.getDevices();
+		return devices ? devices : [];
+	} else {
+		return L.toArray(network.getL3Device());
+	}
+}
+
+var CBIZoneSelect = form.ListValue.extend({
+	__name__: 'CBI.ZoneSelect',
+
+	load(section_id) {
+		return Promise.all([ firewall.getZones(), network.getNetworks() ]).then(L.bind(function(zn) {
+			this.zones = zn[0];
+			this.networks = zn[1];
+
+			return this.super('load', section_id);
+		}, this));
+	},
+
+	filter(section_id, value) {
+		return true;
+	},
+
+	lookupZone(name) {
+		return this.zones.filter(function(zone) { return zone.getName() == name })[0];
+	},
+
+	lookupNetwork(name) {
+		return this.networks.filter(function(network) { return network.getName() == name })[0];
+	},
+
+	renderWidget(section_id, option_index, cfgvalue) {
+		const values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		let isOutputOnly = false;
+		const choices = {};
+		let datatype_str = 'ucifw4zonename';
+		if (!L.hasSystemFeature('firewall4'))
+			datatype_str = `and(${datatype_str},maxlength(11))`;
+		if (this.allowany &amp;&amp; this.nocreate)
+			datatype_str = `or(${datatype_str},"*")`;
+		if (this.multiple)
+			datatype_str = `list(${datatype_str})`;
+
+		if (this.option == 'dest') {
+			for (let c of this.section.children) {
+				const opt = c;
+				if (opt.option == 'src') {
+					const val = opt.cfgvalue(section_id) || opt.default;
+					isOutputOnly = (val == null || val == '');
+					break;
+				}
+			}
+
+			this.title = isOutputOnly ? _('Output zone') :  _('Destination zone');
+		}
+
+		if (this.allowlocal) {
+			choices[''] = E('span', {
+				'class': 'zonebadge',
+				'style': firewall.getZoneColorStyle(null)
+			}, [
+				E('strong', _('Device')),
+				(this.allowany || this.allowlocal)
+					? E('span', ' (%s)'.format(this.option != 'dest' ? _('output') : _('input'))) : ''
+			]);
+		}
+		else if (!this.multiple &amp;&amp; (this.rmempty || this.optional)) {
+			choices[''] = E('span', {
+				'class': 'zonebadge',
+				'style': firewall.getZoneColorStyle(null)
+			}, E('em', _('unspecified')));
+		}
+
+		if (this.allowany) {
+			choices['*'] = E('span', {
+				'class': 'zonebadge',
+				'style': firewall.getZoneColorStyle(null)
+			}, [
+				E('strong', _('Any zone')),
+				(this.allowany &amp;&amp; this.allowlocal &amp;&amp; !isOutputOnly) ? E('span', ' (%s)'.format(_('forward'))) : ''
+			]);
+		}
+
+		for (let zone of this.zones) {
+			const name = zone.getName();
+			const networks = zone.getNetworks();
+			const ifaces = [];
+
+			if (!this.filter(section_id, name))
+				continue;
+
+			for (let n of networks) {
+				const network = this.lookupNetwork(n);
+
+				if (!network)
+					continue;
+
+				const span = E('span', {
+					'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
+				}, network.getName() + ': ');
+
+				const devices = getDevices(network);
+
+				for (let d of devices) {
+					span.appendChild(E('img', {
+						'title': d.getI18n(),
+						'src': L.resource('icons/%s%s.svg'.format(d.getType(), d.isUp() ? '' : '_disabled'))
+					}));
+				}
+
+				if (!devices.length)
+					span.appendChild(E('em', _('(empty)')));
+
+				ifaces.push(span);
+			}
+
+			if (!ifaces.length)
+				ifaces.push(E('em', _('(empty)')));
+
+			choices[name] = E('span', {
+				'class': 'zonebadge',
+				'style': firewall.getZoneColorStyle(zone)
+			}, [ E('strong', name) ].concat(ifaces));
+		}
+
+		const widget = new ui.Dropdown(values, choices, {
+			id: this.cbid(section_id),
+			sort: true,
+			multiple: this.multiple,
+			optional: this.optional || this.rmempty,
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
+			select_placeholder: E('em', _('unspecified')),
+			display_items: this.display_size || this.size || 3,
+			dropdown_items: this.dropdown_size || this.size || 5,
+			validate: L.bind(this.validate, this, section_id),
+			datatype: datatype_str,
+			create: !this.nocreate,
+			create_markup: '' +
+				'&lt;li data-value="{{value}}">' +
+					'&lt;span class="zonebadge" style="background:repeating-linear-gradient(45deg,rgba(204,204,204,0.5),rgba(204,204,204,0.5) 5px,rgba(255,255,255,0.5) 5px,rgba(255,255,255,0.5) 10px)">' +
+						'&lt;strong>{{value}}:&lt;/strong> &lt;em>('+_('create')+')&lt;/em>' +
+					'&lt;/span>' +
+				'&lt;/li>'
+		});
+
+		const elem = widget.render();
+
+		if (this.option == 'src') {
+			elem.addEventListener('cbi-dropdown-change', L.bind(function(ev) {
+				const opt = this.map.lookupOption('dest', section_id);
+				const val = ev.detail.instance.getValue();
+
+				if (opt == null)
+					return;
+
+				const cbid = opt[0].cbid(section_id);
+				const label = document.querySelector('label[for="widget.%s"]'.format(cbid));
+				const node = document.getElementById(cbid);
+
+				L.dom.content(label, val == '' ? _('Output zone') : _('Destination zone'));
+
+				if (val == '') {
+					if (L.dom.callClassMethod(node, 'getValue') == '')
+						L.dom.callClassMethod(node, 'setValue', '*');
+
+					const emptyval = node.querySelector('[data-value=""]');
+					const anyval = node.querySelector('[data-value="*"]');
+
+					L.dom.content(anyval.querySelector('span'), E('strong', _('Any zone')));
+
+					if (emptyval != null)
+						emptyval.parentNode.removeChild(emptyval);
+				}
+				else {
+					const anyval = node.querySelector('[data-value="*"]') || '';
+					let emptyval = node.querySelector('[data-value=""]') || '';
+
+					if (emptyval == null &amp;&amp; anyval) {
+						emptyval = anyval.cloneNode(true);
+						emptyval.removeAttribute('display');
+						emptyval.removeAttribute('selected');
+						emptyval.setAttribute('data-value', '');
+					}
+
+					if (opt[0]?.allowlocal &amp;&amp; emptyval)
+						L.dom.content(emptyval.querySelector('span'), [
+							E('strong', _('Device')), E('span', ' (%s)'.format(_('input')))
+						]);
+					if (opt[0]?.allowany &amp;&amp; anyval &amp;&amp; emptyval) {
+						L.dom.content(anyval.querySelector('span'), [
+							E('strong', _('Any zone')), E('span', ' (%s)'.format(_('forward')))
+						]);
+
+						anyval.parentNode.insertBefore(emptyval, anyval);
+					}
+				}
+
+			}, this));
+		}
+		else if (isOutputOnly) {
+			const emptyval = elem.querySelector('[data-value=""]');
+			emptyval.parentNode.removeChild(emptyval);
+		}
+
+		return elem;
+	},
+});
+
+var CBIZoneForwards = form.DummyValue.extend({
+	__name__: 'CBI.ZoneForwards',
+
+	load(section_id) {
+		return Promise.all([
+			firewall.getDefaults(),
+			firewall.getZones(),
+			network.getNetworks(),
+			network.getDevices()
+		]).then(L.bind(function(dznd) {
+			this.defaults = dznd[0];
+			this.zones = dznd[1];
+			this.networks = dznd[2];
+			this.devices = dznd[3];
+
+			return this.super('load', section_id);
+		}, this));
+	},
+
+	renderZone(zone) {
+		const name = zone.getName();
+		const networks = zone.getNetworks();
+		const devices = zone.getDevices();
+		const subnets = zone.getSubnets();
+		const ifaces = [];
+
+		for (let n of networks) {
+			const network = this.networks.filter(function(net) { return net.getName() == n })[0];
+
+			if (!network)
+				continue;
+
+			const span = E('span', {
+				'class': 'ifacebadge' + (network.isUp() ? ' ifacebadge-active' : '')
+			}, network.getName() + ': ');
+
+			const subdevs = getDevices(network);
+
+			for (let s of subdevs) {
+				span.appendChild(E('img', {
+					'title': s.getI18n(),
+					'src': L.resource('icons/%s%s.svg'.format(s.getType(), s.isUp() ? '' : '_disabled'))
+				}));
+			}
+
+			if (!subdevs.length)
+				span.appendChild(E('em', _('(empty)')));
+
+			ifaces.push(span);
+		}
+
+		for (let d of devices) {
+			const device = this.devices.filter(function(dev) { return dev.getName() == d })[0];
+			const title = device ? device.getI18n() : _('Absent Interface');
+			const type = device ? device.getType() : 'ethernet';
+			const up = device ? device.isUp() : false;
+
+			ifaces.push(E('span', { 'class': 'ifacebadge' }, [
+				E('img', {
+					'title': title,
+					'src': L.resource('icons/%s%s.svg'.format(type, up ? '' : '_disabled'))
+				}),
+				device ? device.getName() : d
+			]));
+		}
+
+		if (subnets.length > 0)
+			ifaces.push(E('span', { 'class': 'ifacebadge' }, [ '{ %s }'.format(subnets.join('; ')) ]));
+
+		if (!ifaces.length)
+			ifaces.push(E('span', { 'class': 'ifacebadge' }, E('em', _('(empty)'))));
+
+		return E('label', {
+			'class': 'zonebadge cbi-tooltip-container',
+			'style': firewall.getZoneColorStyle(zone)
+		}, [
+			E('strong', name),
+			E('div', { 'class': 'cbi-tooltip' }, ifaces)
+		]);
+	},
+
+	renderWidget(section_id, option_index, cfgvalue) {
+		const value = (cfgvalue != null) ? cfgvalue : this.default;
+		const zone = this.zones.filter(function(z) { return z.getName() == value })[0];
+
+		if (!zone)
+			return E([]);
+
+		const forwards = zone.getForwardingsBy('src');
+		const dzones = [];
+
+		for (var i = 0; i &lt; forwards.length; i++) {
+			const dzone = forwards[i].getDestinationZone();
+
+			if (!dzone)
+				continue;
+
+			dzones.push(this.renderZone(dzone));
+		}
+
+		if (!dzones.length)
+			dzones.push(E('label', { 'class': 'zonebadge zonebadge-empty' },
+				E('strong', this.defaults.getForward())));
+		else
+			dzones.push(E('label', { 'class': 'zonebadge zonebadge-empty' },
+				E('strong', '%s %s'.format(this.defaults.getForward(), ('all others')))));
+
+		return E('div', { 'class': 'zone-forwards' }, [
+			E('div', { 'class': 'zone-src' }, this.renderZone(zone)),
+			E('span', '⇒'),
+			E('div', { 'class': 'zone-dest' }, dzones)
+		]);
+	},
+});
+
+const CBIIPSelect = form.ListValue.extend({
+	__name__: 'CBI.IPSelect',
+
+	load(section_id) {
+		return network.getDevices().then(L.bind(function(devices) {
+			this.devices = devices;
+			return this.super('load', section_id);
+		}, this));
+	},
+
+	filter(section_id, value) {
+		return true;
+	},
+
+	renderIfaceBadge(device, ip) {
+		return E('div', {}, [
+			ip,
+			' ',
+			E('span', { 'class': 'ifacebadge', }, [ device.getName(),
+				E('img', {
+					'title': device.getI18n(),
+					'src': L.resource('icons/%s%s.svg'.format(device.getType(), device.isUp() ? '' : '_disabled'))
+				})
+			]),
+		]);
+	},
+
+	renderWidget(section_id, option_index, cfgvalue) {
+		let values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const choices = {};
+		const checked = {};
+
+		for (const val of values)
+			checked[val] = true;
+
+		values = [];
+
+		if (!this.multiple &amp;&amp; (this.rmempty || this.optional))
+			choices[''] = E('em', _('unspecified'));
+
+
+		for (const device of (this.devices || [])) {
+			const name = device.getName();
+
+			if (name == this.exclude || !this.filter(section_id, name))
+				continue;
+
+			if (name == 'loopback' &amp;&amp; !this.loopback)
+				continue;
+
+			if (this.novirtual &amp;&amp; device.isVirtual())
+				continue;
+
+			for (const ip of [...device.getIPAddrs(), ...device.getIP6Addrs()]) {
+				const iponly = ip.split('/')?.[0]
+				if (checked[iponly])
+					values.push(iponly);
+				choices[iponly] = this.renderIfaceBadge(device, iponly);
+			}
+		}
+
+		const widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
+			id: this.cbid(section_id),
+			sort: true,
+			multiple: this.multiple,
+			optional: this.optional || this.rmempty,
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
+			select_placeholder: E('em', _('unspecified')),
+			display_items: this.display_size || this.size || 2,
+			dropdown_items: this.dropdown_size || this.size || 5,
+			datatype: this.multiple ? 'list(ipaddr)' : 'ipaddr',
+			validate: L.bind(this.validate, this, section_id),
+			create: false,
+		});
+
+		return widget.render();
+	},
+
+	textvalue(section_id) {
+		const cfgvalue = this.cfgvalue(section_id);
+		const values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const rv = E([]);
+
+		for (const device of (this.devices || [])) {
+			for (const ip of [...device.getIPAddrs(), ...device.getIP6Addrs()]) {
+				const iponly = ip.split('/')[0];
+				if (values.indexOf(iponly) === -1)
+					continue;
+
+				if (rv.childNodes.length)
+					rv.appendChild(document.createTextNode(' '));
+
+				rv.appendChild(this.renderIfaceBadge(device, iponly));
+			}
+		}
+
+		if (!rv.firstChild)
+			rv.appendChild(E('em', _('unspecified')));
+
+		return rv;
+	},
+});
+
+
+var CBINetworkSelect = form.ListValue.extend({
+	__name__: 'CBI.NetworkSelect',
+
+	load(section_id) {
+		return network.getNetworks().then(L.bind(function(networks) {
+			this.networks = networks;
+
+			return this.super('load', section_id);
+		}, this));
+	},
+
+	filter(section_id, value) {
+		return true;
+	},
+
+	renderIfaceBadge(network) {
+		const span = E('span', { 'class': 'ifacebadge' }, network.getName() + ': ');
+		const devices = getDevices(network);
+
+		for (let d of devices) {
+			span.appendChild(E('img', {
+				'title': d.getI18n(),
+				'src': L.resource('icons/%s%s.svg'.format(d.getType(), d.isUp() ? '' : '_disabled'))
+			}));
+		}
+
+		if (!devices.length) {
+			span.appendChild(E('em', { 'class': 'hide-close' }, _('(no interfaces attached)')));
+			span.appendChild(E('em', { 'class': 'hide-open' }, '-'));
+		}
+
+		return span;
+	},
+
+	renderWidget(section_id, option_index, cfgvalue) {
+		let values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const choices = {};
+		const checked = {};
+
+		for (var i = 0; i &lt; values.length; i++)
+			checked[values[i]] = true;
+
+		values = [];
+
+		if (!this.multiple &amp;&amp; (this.rmempty || this.optional))
+			choices[''] = E('em', _('unspecified'));
+
+		for (let network of this.networks) {
+			const name = network.getName();
+
+			if (name == this.exclude || !this.filter(section_id, name))
+				continue;
+
+			if (name == 'loopback' &amp;&amp; !this.loopback)
+				continue;
+
+			if (this.novirtual &amp;&amp; network.isVirtual())
+				continue;
+
+			if (checked[name])
+				values.push(name);
+
+			choices[name] = this.renderIfaceBadge(network);
+		}
+
+		const widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
+			id: this.cbid(section_id),
+			sort: true,
+			multiple: this.multiple,
+			optional: this.optional || this.rmempty,
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
+			select_placeholder: E('em', _('unspecified')),
+			display_items: this.display_size || this.size || 3,
+			dropdown_items: this.dropdown_size || this.size || 5,
+			datatype: this.multiple ? 'list(uciname)' : 'uciname',
+			validate: L.bind(this.validate, this, section_id),
+			create: !this.nocreate,
+			create_markup: '' +
+				'&lt;li data-value="{{value}}">' +
+					'&lt;span class="ifacebadge" style="background:repeating-linear-gradient(45deg,rgba(204,204,204,0.5),rgba(204,204,204,0.5) 5px,rgba(255,255,255,0.5) 5px,rgba(255,255,255,0.5) 10px)">' +
+						'{{value}}: &lt;em>('+_('create')+')&lt;/em>' +
+					'&lt;/span>' +
+				'&lt;/li>'
+		});
+
+		return widget.render();
+	},
+
+	textvalue(section_id) {
+		const cfgvalue = this.cfgvalue(section_id);
+		const values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const rv = E([]);
+
+		for (let network of this.networks) {
+			const name = network.getName();
+
+			if (values.indexOf(name) == -1)
+				continue;
+
+			if (rv.length)
+				L.dom.append(rv, ' ');
+
+			L.dom.append(rv, this.renderIfaceBadge(network));
+		}
+
+		if (!rv.firstChild)
+			rv.appendChild(E('em', _('unspecified')));
+
+		return rv;
+	},
+});
+
+var CBIDeviceSelect = form.ListValue.extend({
+	__name__: 'CBI.DeviceSelect',
+
+	load(section_id) {
+		return Promise.all([
+			network.getDevices(),
+			this.noaliases ? null : network.getNetworks()
+		]).then(L.bind(function(data) {
+			this.devices = data[0];
+			this.networks = data[1];
+
+			return this.super('load', section_id);
+		}, this));
+	},
+
+	filter(section_id, value) {
+		return true;
+	},
+
+	renderWidget(section_id, option_index, cfgvalue) {
+		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
+		    choices = {},
+		    checked = {},
+		    order = [];
+
+		for (var i = 0; i &lt; values.length; i++)
+			checked[values[i]] = true;
+
+		values = [];
+
+		if (!this.multiple &amp;&amp; (this.rmempty || this.optional))
+			choices[''] = E('em', _('unspecified'));
+
+		for (let device of this.devices) {
+			const name = device.getName();
+			const type = device.getType();
+
+			if (name == 'lo' || name == this.exclude || !this.filter(section_id, name))
+				continue;
+
+			if (this.noaliases &amp;&amp; type == 'alias')
+				continue;
+
+			if (this.nobridges &amp;&amp; type == 'bridge')
+				continue;
+
+			if (this.noinactive &amp;&amp; device.isUp() == false)
+				continue;
+
+			const item = E([
+				E('img', {
+					'title': device.getI18n(),
+					'src': L.resource('icons/%s%s.svg'.format(type, device.isUp() ? '' : '_disabled'))
+				}),
+				E('span', { 'class': 'hide-open' }, [ name ]),
+				E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
+			]);
+
+			const networks = device.getNetworks();
+
+			if (networks.length > 0)
+				L.dom.append(item.lastChild, [ ' (', networks.map(function(n) { return n.getName() }).join(', '), ')' ]);
+
+			if (checked[name])
+				values.push(name);
+
+			choices[name] = item;
+			order.push(name);
+		}
+
+		if (this.networks != null) {
+			for (let net of this.networks) {
+				const device = network.instantiateDevice('@%s'.format(net.getName()), net);
+				const name = device.getName();
+
+				if (name == '@loopback' || name == this.exclude || !this.filter(section_id, name))
+					continue;
+
+				if (this.noinactive &amp;&amp; net.isUp() == false)
+					continue;
+
+				const item = E([
+					E('img', {
+						'title': device.getI18n(),
+						'src': L.resource('icons/alias%s.svg'.format(device.isUp() ? '' : '_disabled'))
+					}),
+					E('span', { 'class': 'hide-open' }, [ name ]),
+					E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
+				]);
+
+				if (checked[name])
+					values.push(name);
+
+				choices[name] = item;
+				order.push(name);
+			}
+		}
+
+		if (this.includeips) {
+			this.devices.forEach(net_dev => {
+				['getIPAddrs', 'getIP6Addrs'].forEach(fn => {
+					net_dev[fn]().forEach(addr => {
+						const name = addr.split('/')[0];
+						if (checked[name]) values.push(name);
+
+						choices[name] = E([], [name, ' (', E('strong', net_dev.getName()), ')']);
+						order.push(name);
+					});
+				});
+			});
+		}
+
+		if (!this.nocreate) {
+			const keys = Object.keys(checked).sort(L.naturalCompare);
+
+			for (let k of keys) {
+				if (choices.hasOwnProperty(k))
+					continue;
+
+				choices[k] = E([
+					E('img', {
+						'title': _('Absent Interface'),
+						'src': L.resource('icons/ethernet_disabled.svg')
+					}),
+					E('span', { 'class': 'hide-open' }, [ k ]),
+					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(_('Absent Interface'), k) ])
+				]);
+
+				values.push(k);
+				order.push(k);
+			}
+		}
+
+		const widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
+			id: this.cbid(section_id),
+			sort: order,
+			multiple: this.multiple,
+			optional: this.optional || this.rmempty,
+			disabled: (this.readonly != null) ? this.readonly : this.map.readonly,
+			select_placeholder: E('em', _('unspecified')),
+			display_items: this.display_size || this.size || 3,
+			dropdown_items: this.dropdown_size || this.size || 5,
+			validate: L.bind(this.validate, this, section_id),
+			create: !this.nocreate,
+			create_markup: '' +
+				'&lt;li data-value="{{value}}">' +
+					'&lt;img title="'+_('Custom Interface')+': &amp;quot;{{value}}&amp;quot;" src="'+L.resource('icons/ethernet_disabled.svg')+'" />' +
+					'&lt;span class="hide-open">{{value}}&lt;/span>' +
+					'&lt;span class="hide-close">'+_('Custom Interface')+': "{{value}}"&lt;/span>' +
+				'&lt;/li>'
+		});
+
+		return widget.render();
+	},
+});
+
+var CBIUserSelect = form.ListValue.extend({
+	__name__: 'CBI.UserSelect',
+
+	load(section_id) {
+		return getUsers().then(L.bind(function(users) {
+			delete this.keylist;
+			delete this.vallist;
+			for (var i = 0; i &lt; users.length; i++) {
+				this.value(users[i]);
+			}
+
+			return this.super('load', section_id);
+		}, this));
+	},
+
+	filter(section_id, value) {
+		return true;
+	},
+});
+
+var CBIGroupSelect = form.ListValue.extend({
+	__name__: 'CBI.GroupSelect',
+
+	load(section_id) {
+		return getGroups().then(L.bind(function(groups) {
+			for (var i = 0; i &lt; groups.length; i++) {
+				this.value(groups[i]);
+			}
+
+			return this.super('load', section_id);
+		}, this));
+	},
+
+	filter(section_id, value) {
+		return true;
+	},
+});
+
+
+return L.Class.extend({
+	ZoneSelect: CBIZoneSelect,
+	ZoneForwards: CBIZoneForwards,
+	IPSelect: CBIIPSelect,
+	NetworkSelect: CBINetworkSelect,
+	DeviceSelect: CBIDeviceSelect,
+	UserSelect: CBIUserSelect,
+	GroupSelect: CBIGroupSelect,
+});
+</code></pre></article></section></div></div></div><div class="search-container" id="PkfLWpAbet" style="display:none"><div class="wrapper" id="iCxFxjkHbP"><button class="icon-button search-close-button" id="VjLlGakifb" aria-label="close search"><svg><use xlink:href="#close-icon"></use></svg></button><div class="search-box-c"><svg><use xlink:href="#search-icon"></use></svg> <input type="text" id="vpcKVYIppa" class="search-input" placeholder="Search..." autofocus></div><div class="search-result-c" id="fWwVHRuDuN"><span class="search-result-c-text">Type anything to view search result</span></div></div></div><div class="mobile-menu-icon-container"><button class="icon-button" id="mobile-menu" data-isopen="false" aria-label="menu"><svg><use xlink:href="#menu-icon"></use></svg></button></div><div id="mobile-sidebar" class="mobile-sidebar-container"><div class="mobile-sidebar-wrapper"><a href="/" class="sidebar-title sidebar-title-anchor">LuCI Documentation</a><div class="mobile-nav-links"><div class="github-home navbar-item"><a id="" href="https://github.com/openwrt/luci" target="">GitHub Project Page</a></div></div><div class="mobile-sidebar-items-c"><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-tutorials"><div>Tutorials</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="tutorial-JsonRpcHowTo.html">Using JSON RPC daemon</a></div><div class="sidebar-section-children"><a href="tutorial-Modules.html">Modules</a></div><div class="sidebar-section-children"><a href="tutorial-ThemesHowTo.html">Making Themes</a></div><div class="sidebar-section-children"><a href="tutorial-i18n.html">Internationalisation - i18n</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-modules"><div>Modules</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.module_cbi.html">cbi</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-classes"><div>Classes</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="LuCI.html">LuCI</a></div><div class="sidebar-section-children"><a href="LuCI.baseclass.html">baseclass</a></div><div class="sidebar-section-children"><a href="LuCI.dom.html">dom</a></div><div class="sidebar-section-children"><a href="LuCI.form.html">form</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractSection.html">AbstractSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.AbstractValue.html">AbstractValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Button.html">Button</a></div><div class="sidebar-section-children"><a href="LuCI.form.DirectoryPicker.html">DirectoryPicker</a></div><div class="sidebar-section-children"><a href="LuCI.form.DummyValue.html">DummyValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.form.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.form.Flag.html">Flag</a></div><div class="sidebar-section-children"><a href="LuCI.form.GridSection.html">GridSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.HiddenValue.html">HiddenValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.JSONMap.html">JSONMap</a></div><div class="sidebar-section-children"><a href="LuCI.form.ListValue.html">ListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.Map.html">Map</a></div><div class="sidebar-section-children"><a href="LuCI.form.MultiValue.html">MultiValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.NamedSection.html">NamedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.RangeSliderValue.html">RangeSliderValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.RichListValue.html">RichListValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.SectionValue.html">SectionValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TableSection.html">TableSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.TextValue.html">TextValue</a></div><div class="sidebar-section-children"><a href="LuCI.form.TypedSection.html">TypedSection</a></div><div class="sidebar-section-children"><a href="LuCI.form.Value.html">Value</a></div><div class="sidebar-section-children"><a href="LuCI.fs.html">fs</a></div><div class="sidebar-section-children"><a href="LuCI.headers.html">headers</a></div><div class="sidebar-section-children"><a href="LuCI.network.html">network</a></div><div class="sidebar-section-children"><a href="LuCI.network.Device.html">Device</a></div><div class="sidebar-section-children"><a href="LuCI.network.Hosts.html">Hosts</a></div><div class="sidebar-section-children"><a href="LuCI.network.Protocol.html">Protocol</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiDevice.html">WifiDevice</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiNetwork.html">WifiNetwork</a></div><div class="sidebar-section-children"><a href="LuCI.network.WifiVlan.html">WifiVlan</a></div><div class="sidebar-section-children"><a href="LuCI.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.request.html">request</a></div><div class="sidebar-section-children"><a href="LuCI.request.poll.html">poll</a></div><div class="sidebar-section-children"><a href="LuCI.response.html">response</a></div><div class="sidebar-section-children"><a href="LuCI.rpc.html">rpc</a></div><div class="sidebar-section-children"><a href="LuCI.session.html">session</a></div><div class="sidebar-section-children"><a href="LuCI.uci.html">uci</a></div><div class="sidebar-section-children"><a href="LuCI.ui.html">ui</a></div><div class="sidebar-section-children"><a href="LuCI.ui.AbstractElement.html">AbstractElement</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Checkbox.html">Checkbox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.ComboButton.html">ComboButton</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Combobox.html">Combobox</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Dropdown.html">Dropdown</a></div><div class="sidebar-section-children"><a href="LuCI.ui.DynamicList.html">DynamicList</a></div><div class="sidebar-section-children"><a href="LuCI.ui.FileUpload.html">FileUpload</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Hiddenfield.html">Hiddenfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.RangeSlider.html">RangeSlider</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Select.html">Select</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textarea.html">Textarea</a></div><div class="sidebar-section-children"><a href="LuCI.ui.Textfield.html">Textfield</a></div><div class="sidebar-section-children"><a href="LuCI.ui.changes.html">changes</a></div><div class="sidebar-section-children"><a href="LuCI.ui.menu.html">menu</a></div><div class="sidebar-section-children"><a href="LuCI.ui.tabs.html">tabs</a></div><div class="sidebar-section-children"><a href="LuCI.validation.html">validation</a></div><div class="sidebar-section-children"><a href="LuCI.validation.Validator.html">Validator</a></div><div class="sidebar-section-children"><a href="LuCI.validation.ValidatorFactory.html">ValidatorFactory</a></div><div class="sidebar-section-children"><a href="LuCI.view.html">view</a></div><div class="sidebar-section-children"><a href="LuCI.xhr.html">xhr</a></div></div><div class="sidebar-section-title with-arrow" data-isopen="false" id="sidebar-externals"><div>Externals</div><svg><use xlink:href="#down-icon"></use></svg></div><div class="sidebar-section-children-container"><div class="sidebar-section-children"><a href="external-String.html">String</a></div></div></div><div class="mobile-navbar-actions"><div class="navbar-right-item"><button class="icon-button search-button" aria-label="open-search"><svg><use xlink:href="#search-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button theme-toggle" aria-label="toggle-theme"><svg><use class="theme-svg-use" xlink:href="#dark-theme-icon"></use></svg></button></div><div class="navbar-right-item"><button class="icon-button font-size" aria-label="change-font-size"><svg><use xlink:href="#font-size-icon"></use></svg></button></div></div></div></div><script type="text/javascript" src="scripts/core.min.js"></script><script src="scripts/search.min.js" defer="defer"></script><script src="scripts/third-party/fuse.js" defer="defer"></script><script type="text/javascript">var tocbotInstance=tocbot.init({tocSelector:"#eed4d2a0bfd64539bb9df78095dec881",contentSelector:".main-content",headingSelector:"h1, h2, h3",hasInnerContainers:!0,scrollContainer:".main-content",headingsOffset:130,onClick:bringLinkToView})</script></body></html>
