@@ -6,15 +6,14 @@
 'require view';
 
 return view.extend({
-	load: function () {
+	load() {
 		return L.resolveDefault(fs.list('/root/.ssh/'), []).then(function (entries) {
-			var sshKeyNames = _findAllPossibleIdKeys(entries);
+			const sshKeyNames = _findAllPossibleIdKeys(entries);
 			return Promise.resolve(sshKeyNames);
 		});
 	},
 
-	render: function (data) {
-		var sshKeyNames = data;
+	render([sshKeyNames]) {
 		if (sshKeyNames.length === 0) {
 			ui.addNotification(null, E('p', _('No SSH keys found, <a %s>generate a new one</a>').format('href="./ssh_keys"')), 'warning');
 		}
@@ -54,7 +53,7 @@ return view.extend({
 			_manSshConfig('IdentityFile')
 		);
 		o.value('');
-		for (var sshKeyName of sshKeyNames) {
+		for (let sshKeyName of sshKeyNames) {
 			o.value('/root/.ssh/' + sshKeyName, sshKeyName);
 		}
 		o.optional = true;
@@ -140,12 +139,12 @@ return view.extend({
 });
 
 function _findAllPossibleIdKeys(entries) {
-	var sshKeyNames = new Set();
-	var fileNames = entries.filter(item => item.type === 'file').map(item => item.name);
-	for (var fileName of fileNames) {
+	const sshKeyNames = new Set();
+	const fileNames = entries.filter(item => item.type === 'file').map(item => item.name);
+	for (let fileName of fileNames) {
 		// a key file should have a corresponding .pub file
 		if (fileName.endsWith('.pub')) {
-			var sshKeyName = fileName.slice(0, -4);
+			let sshKeyName = fileName.slice(0, -4);
 			// if such a key exists then add it
 			if (fileNames.includes(sshKeyName)) {
 				sshKeyNames.add(sshKeyName);
@@ -153,7 +152,7 @@ function _findAllPossibleIdKeys(entries) {
 		} else {
 			// or at least it should start with id_ e.g. id_dropbear
 			if (fileName.startsWith('id_')) {
-				var sshKeyName = fileName;
+				let sshKeyName = fileName;
 				sshKeyNames.add(sshKeyName);
 			}
 		}

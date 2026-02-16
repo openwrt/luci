@@ -10,16 +10,14 @@ return view.extend({
 	handleSave: null,
 	handleReset: null,
 
-	load: function () {
+	load() {
 		return Promise.all([
 			fs.lines('/root/.ssh/known_hosts'),
 		]);
 	},
 
-	render: function (data) {
-		var knownHosts = data[0];
-
-		let m, s, o;
+	render([knownHosts]) {
+		let m, s;
 
 		m = new form.Map('sshtunnel', _('SSH Tunnels'),
 			_('This configures <a %s>SSH Tunnels</a>.')
@@ -34,14 +32,14 @@ return view.extend({
 });
 
 function _renderKnownHosts(knownHosts) {
-	var table = E('table', {'class': 'table cbi-section-table', 'id': 'known_hosts'}, [
+	const table = E('table', {'class': 'table cbi-section-table', 'id': 'known_hosts'}, [
 		E('tr', {'class': 'tr table-titles'}, [
 			E('th', {'class': 'th'}, _('Hostname')),
 			E('th', {'class': 'th'}, _('Public Key')),
 		])
 	]);
 
-	var rows = _splitKnownHosts(knownHosts);
+	const rows = _splitKnownHosts(knownHosts);
 	cbi_update_table(table, rows);
 
 	return E('div', {'class': 'cbi-section cbi-tblsection'}, [
@@ -54,14 +52,14 @@ function _renderKnownHosts(knownHosts) {
 }
 
 function _splitKnownHosts(knownHosts) {
-	var knownHostsMap = [];
-	for (var i = 0; i < knownHosts.length; i++) {
-		var sp = knownHosts[i].indexOf(' ');
+	const knownHostsMap = [];
+	for (let kh of knownHosts) {
+		const sp = kh.indexOf(' ');
 		if (sp < 0) {
 			continue;
 		}
-		var hostname = knownHosts[i].substring(0, sp);
-		var pub = knownHosts[i].substring(sp + 1);
+		const hostname = kh.substring(0, sp);
+		const pub = kh.substring(sp + 1);
 		knownHostsMap.push([hostname, '<small><code>' + pub + '</code></small>']);
 	}
 	return knownHostsMap;
