@@ -278,8 +278,7 @@ return dm2.dv.extend({
 	getVolumesTable(volumes) {
 		const data = [];
 
-		for (const [i, vol] of (volumes?.Volumes || []).entries()) {
-			const n = vol.Name;
+		for (const [ , vol] of (volumes?.Volumes || []).entries()) {
 			const labels = vol?.Labels || {};
 
 			// Just push plain data objects without UCI metadata

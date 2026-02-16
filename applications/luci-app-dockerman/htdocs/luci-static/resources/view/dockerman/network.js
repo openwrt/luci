@@ -51,10 +51,10 @@ return dm2.dv.extend({
 		s.addremove = false;
 		s.nodescriptions = true;
 
-		let o, t, ss;
+		let o, ss;
 
 		// INFO TAB
-		t = s.tab('info', _('Info'));
+		s.tab('info', _('Info'));
 
 		o = s.taboption('info', form.DummyValue, 'Name', _('Network Name'));
 		o = s.taboption('info', form.DummyValue, 'Id', _('ID'));
@@ -93,7 +93,7 @@ return dm2.dv.extend({
 		o.cfgvalue = view.objectCfgValueTT;
 
 		// CONFIGS TAB
-		t = s.tab('detail', _('Detail'));
+		s.tab('detail', _('Detail'));
 
 		o = s.taboption('detail', form.DummyValue, 'Driver', _('IPAM Driver'));
 
@@ -131,7 +131,7 @@ return dm2.dv.extend({
 
 		// INSPECT TAB
 
-		t = s.tab('inspect', _('Inspect'));
+		s.tab('inspect', _('Inspect'));
 
 		o = s.taboption('inspect', form.SectionValue, '__ins__', form.NamedSection, '_inspect', null);
 		ss = o.subsection;

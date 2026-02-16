@@ -37,7 +37,7 @@ return dm2.dv.extend({
 
 		return Promise.all([
 			dm2.docker_events({ query: { since: `0`, until: `${now}` } }),
-			dm2.js_api_ready.then(([ok, host]) => this.js_api = ok),
+			dm2.js_api_ready.then(([ok, ]) => this.js_api = ok),
 		]);
 	},
 

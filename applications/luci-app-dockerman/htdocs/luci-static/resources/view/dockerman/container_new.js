@@ -93,7 +93,7 @@ return dm2.dv.extend({
 					if (builtInNetworks.has(netnames[0])) return '';
 					return (nets && (nets.length > 0)) ? nets[0]?.GlobalIPv6Address || '' : '';
 				})(),
-				ipv6: (() => {
+				ipv6_lla: (() => {
 					if (builtInNetworks.has(netnames[0])) return '';
 					return (nets && (nets.length > 0)) ? nets[0]?.LinkLocalIPv6Address || '' : '';
 				})(),
@@ -754,11 +754,11 @@ return dm2.dv.extend({
 			.then(() => {
 				const get = (opt) => map.data.get('json', 'container', opt);
 				const name = get('name');
-				const pull = toBool(get('pull'));
+				// const pull = toBool(get('pull'));
 				const network = get('network');
 				const publish = get('publish');
 				const command = get('command');
-				const publish_all = toBool(get('publish_all'));
+				// const publish_all = toBool(get('publish_all'));
 				const device = get('device');
 				const tmpfs = get('tmpfs');
 				const sysctl = get('sysctl');
@@ -833,7 +833,12 @@ return dm2.dv.extend({
 				const volumeIds = new Set((view.volumes || []).map(v => v.Id));
 				const mounts = [];
 				for (const entry of volumeEntries) {
-					let [source, target, options] = (typeof entry === 'string' ? entry : '')?.split(':')?.map(e => e && e.trim() || '');
+					let e = typeof entry === 'string' ? entry : '';
+					let f = e.split(':')?.map(e => e && e.trim() || '');
+					let source = f[0];
+					let target = f[1];
+					let options = f[2];
+
 					if (!options) options = '';
 
 					// Validate source and target are not empty

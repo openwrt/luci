@@ -78,7 +78,7 @@ const loadPromise = Promise.all([
 			));
 
 	if (dh) {
-		const isTcp6 = dh.startsWith('tcp6://');
+		// const isTcp6 = dh.startsWith('tcp6://');
 		const protocol = dh.includes(':2376') ? 'https://' : 'http://';
 		dockerHost = dh.replace(/^(tcp|inet)6?:\/\//, protocol);
 
@@ -125,7 +125,7 @@ function call_docker(method, path, options = {}) {
 		const host = dockerHost;
 		const onChunk = options.onChunk || null; // Optional callback for streaming NDJSON
 		const api_ver = uci.get('dockerd', 'globals', 'api_version') || '';
-		const api_ver_str = api_ver ? `/${version}` : '';
+		const api_ver_str = api_ver ? `/${api_ver}` : '';
 
 
 		if (!host) {
@@ -362,13 +362,13 @@ const core_methods = {
 	events:  { args: { query: { 'since': '', 'until': `${Date.now()}`, 'filters': '' } }, call: (request) => call_docker('GET', '/events', { query: request?.query, onChunk: request?.onChunk }) },
 };
 
-
+/*
 const exec_methods = {
 	start:   { args: { id: '', body: '' }, call: (request) => call_docker('POST', `/exec/${request?.id}/start`, { payload: request?.body }) },
 	resize:  { args: { id: '', query: { 'h': 0, 'w': 0 } }, call: (request) => call_docker('POST', `/exec/${request?.id}/resize`, { query: request?.query }) },
 	inspect: { args: { id: '' }, call: (request) => call_docker('GET', `/exec/${request?.id}/json`) },
 };
-
+*/
 
 const container_methods = {
 	list:    { args: { query: { 'all': false, 'limit': false, 'size': false, 'filters': '' } }, call: (request) => call_docker('GET', '/containers/json', { query: request?.query }) },
