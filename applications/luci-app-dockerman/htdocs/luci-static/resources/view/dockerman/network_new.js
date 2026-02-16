@@ -20,7 +20,7 @@ return dm2.dv.extend({
 		]);
 	},
 
-	render([]) {
+	render() {
 
 		// stuff JSONMap with {network: {}} to prime it with a new empty entry
 		const m = new form.JSONMap({network: {}}, _('Docker - New Network'));

@@ -1092,7 +1092,7 @@ const dv = view.extend({
 
 		// Track progressive response progress
 		let lastIndex = 0;
-		let title = _('Progress');
+		// let title = _('Progress');
 		xhr.onprogress = (upd) => {
 			const chunk = xhr.responseText.slice(lastIndex);
 			lastIndex = xhr.responseText.length;
@@ -1238,6 +1238,7 @@ const ansiToHtml = function(text) {
 	// These include cursor positioning, screen clearing, etc.
 	text = text
 		// Strip CSI sequences (cursor movement, screen clearing, etc.)
+		// eslint-disable-next-line no-control-regex
 		.replace(/\x1B\[[0-9;?]*[A-Za-z]/g, (match) => {
 			// Keep only SGR (Select Graphic Rendition) sequences ending in 'm'
 			if (match.endsWith('m')) {
@@ -1247,10 +1248,13 @@ const ansiToHtml = function(text) {
 			return '';
 		})
 		// Strip OSC sequences (window title, etc.)
+		// eslint-disable-next-line no-control-regex
 		.replace(/\x1B\][^\x07]*\x07/g, '')
 		// Strip other escape sequences
+		// eslint-disable-next-line no-control-regex
 		.replace(/\x1B[><=]/g, '')
 		// Strip bell character
+		// eslint-disable-next-line no-control-regex
 		.replace(/\x07/g, '');
 
 	// ANSI color codes mapping
@@ -1286,6 +1290,7 @@ const ansiToHtml = function(text) {
 	};
 
 	// Split by ANSI escape sequences and process
+	// eslint-disable-next-line no-control-regex
 	const ansiRegex = /\x1B\[([\d;]*)m/g;
 	let html = '';
 	let currentStyle = {};

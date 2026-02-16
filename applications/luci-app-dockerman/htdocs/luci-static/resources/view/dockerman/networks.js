@@ -204,7 +204,7 @@ return dm2.dv.extend({
 	getNetworksTable(networks, containers) {
 		const data = [];
 
-		for (const [i, net] of (networks || []).entries()) {
+		for (const [ , net] of (networks || []).entries()) {
 			const n = net.Name;
 			const _shortId = (net.Id || '').substring(0, 12);
 			const shortLink = E('a', {

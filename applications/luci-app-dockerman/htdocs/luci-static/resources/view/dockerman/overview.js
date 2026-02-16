@@ -66,7 +66,7 @@ function getVolumesInUseByContainers(containers) {
 
 return dm2.dv.extend({
 	load() {
-		const now = Math.floor(Date.now() / 1000);
+		// const now = Math.floor(Date.now() / 1000);
 
 		return Promise.all([
 			dm2.docker_version(),
@@ -234,21 +234,21 @@ return dm2.dv.extend({
 		m.readonly = true;
 		m.tabbed = false;
 
-		let s, o, v;
+		let s;
 
 		// Add Version and Environment tables
 		s = m.section(form.TableSection, 'vb', _('Version'));
 		s.anonymous = true;
 
-		o = s.option(form.DummyValue, 'entry', _('Name'));
-		o = s.option(form.DummyValue, 'value', _('Value'));
+		s.option(form.DummyValue, 'entry', _('Name'));
+		s.option(form.DummyValue, 'value', _('Value'));
 
 		s = m.section(form.TableSection, 'ib', _('Environment'));
 		s.anonymous = true;
 		s.filterrow = true;
 
-		o = s.option(form.DummyValue, 'entry', _('Entry'));
-		o = s.option(form.DummyValue, 'value', _('Value'));
+		s.option(form.DummyValue, 'entry', _('Entry'));
+		s.option(form.DummyValue, 'value', _('Value'));
 
 		// Render the form sections and append them
 		return m.render()

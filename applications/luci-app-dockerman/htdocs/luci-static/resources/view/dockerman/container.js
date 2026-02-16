@@ -442,9 +442,9 @@ return dm2.dv.extend({
 		s.nodescriptions = true;
 		s.addremove = false;
 
-		let o, t, ss;
+		let o, ss;
 
-		t = s.tab('info', _('Info'));
+		s.tab('info', _('Info'));
 
 		o = s.taboption('info', form.Value, 'Name', _('Name'));
 
@@ -548,7 +548,7 @@ return dm2.dv.extend({
 		};
 
 		// NETWORKS TAB
-		t = s.tab('network', _('Networks'));
+		s.tab('network', _('Networks'));
 
 		o = s.taboption('network', form.SectionValue, '__net__', form.TableSection, 'nets', null);
 		ss = o.subsection;
@@ -596,7 +596,7 @@ return dm2.dv.extend({
 
 
 
-		t = s.tab('resources', _('Resources'));
+		s.tab('resources', _('Resources'));
 
 		o = s.taboption('resources', form.SectionValue, '__hcfg__', form.TypedSection, 'hostcfg', null);
 		ss = o.subsection;
@@ -692,7 +692,7 @@ return dm2.dv.extend({
 		};
 
 		// STATS TAB
-		t = s.tab('stats', _('Stats'));
+		s.tab('stats', _('Stats'));
 
 		function updateStats(stats_data) {
 			const status = view.getContainerStatus(this_container);
@@ -819,7 +819,7 @@ return dm2.dv.extend({
 		o.render = L.bind(() => { return updateStats(stats_data)}, this);
 
 		// PROCESS TAB
-		t = s.tab('ps', _('Processes'));
+		s.tab('ps', _('Processes'));
 
 		// Create custom table for processes using L.ui.Table
 		o = s.taboption('ps', form.DummyValue, '_ps_table', _('Running Processes'));
@@ -879,7 +879,7 @@ return dm2.dv.extend({
 		}, this);
 
 		// CHANGES TAB
-		t = s.tab('changes', _('Changes'));
+		s.tab('changes', _('Changes'));
 
 		// Create custom table for changes using L.ui.Table
 		o = s.taboption('changes', form.DummyValue, '_changes_table', _('Filesystem Changes'));
@@ -913,7 +913,7 @@ return dm2.dv.extend({
 
 
 		// FILE TAB
-		t = s.tab('file', _('File'));
+		s.tab('file', _('File'));
 		let fileDiv = null;
 
 		o = s.taboption('file', form.DummyValue, 'json', '_file');
@@ -962,7 +962,7 @@ return dm2.dv.extend({
 
 
 		// INSPECT TAB
-		t = s.tab('inspect', _('Inspect'));
+		s.tab('inspect', _('Inspect'));
 		let inspectDiv = null;
 
 		o = s.taboption('inspect', form.Button, 'json', _('Container Inspect'));
@@ -995,7 +995,7 @@ return dm2.dv.extend({
 
 
 		// TERMINAL TAB
-		t = s.tab('console', _('Console'));
+		s.tab('console', _('Console'));
 
 		o = s.taboption('console', form.DummyValue, 'console_controls', _('Console Connection'));
 		o.render = L.bind(() => {
@@ -1067,7 +1067,7 @@ return dm2.dv.extend({
 		}, this);
 
 		// WEBSOCKET TAB
-		t = s.tab('wsconsole', _('WebSocket'));
+		s.tab('wsconsole', _('WebSocket'));
 
 		dm2.js_api_ready.then(([apiAvailable, host]) => {
 			// Wait for JS API availability check to complete
@@ -1148,7 +1148,7 @@ return dm2.dv.extend({
 		});
 
 		// LOGS TAB
-		t = s.tab('logs', _('Logs'));
+		s.tab('logs', _('Logs'));
 		let logsDiv = null;
 		let logsLoaded = false;
 
@@ -1305,14 +1305,14 @@ return dm2.dv.extend({
 		if (!map)
 			return Promise.reject(new Error(_('Form is not ready yet.')));
 
-		const listToKv = view.listToKv;
+		// const listToKv = view.listToKv;
 
 		const get = (opt) => map.data.get('json', 'cont', opt);
-		const getn = (opt) => map.data.get('json', 'nets', opt);
+		// const getn = (opt) => map.data.get('json', 'nets', opt);
 		const gethc = (opt) => map.data.get('json', 'hostcfg', opt);
 		const toBool = (val) => (val === 1 || val === '1' || val === true);
 		const toInt = (val) => val ? Number.parseInt(val) : undefined;
-		const toFloat = (val) => val ? Number.parseFloat(val) : undefined;
+		// const toFloat = (val) => val ? Number.parseFloat(val) : undefined;
 
 		// First: update properties
 		map.parse()
@@ -1918,7 +1918,7 @@ return dm2.dv.extend({
 						'click': () => {
 							const selectedNetwork = networkSelect.value;
 							const ip4Address = ip4Input.value || '';
-							const ip6Address = ip6Input.value || '';
+							// const ip6Address = ip6Input.value || '';
 
 							if (!selectedNetwork) {
 								view.showNotification(_('Error'), [_('No network selected')], 5000, 'error');
