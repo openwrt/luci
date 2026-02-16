@@ -131,8 +131,8 @@ const colors = L.Class.singleton({
 	}
 });
 
-const rrdtree = {};
-const graphdefs = {};
+let rrdtree = {};
+let graphdefs = {};
 
 return baseclass.extend({
 	__init__() {
@@ -153,7 +153,7 @@ return baseclass.extend({
 			this.opts.rrasingle = (uci.get('luci_statistics', 'collectd_rrdtool', 'RRASingle') == '1');
 			this.opts.rramax    = (uci.get('luci_statistics', 'collectd_rrdtool', 'RRAMax') == '1');
 
-			const graphdefs = {};
+			graphdefs = {};
 
 			const tasks = [ this.scan() ];
 
@@ -185,17 +185,17 @@ return baseclass.extend({
 				tasks.push(L.resolveDefault(fs.list(dir + '/' + entr.name), []).then(L.bind(function(entries) {
 					const tasks = [];
 
-					for (let dir of entries) {
-						if (dir.type != 'directory')
+					for (let entrj of entries) {
+						if (entrj.type != 'directory')
 							continue;
 
-						tasks.push(L.resolveDefault(fs.list(dir + '/' + this.name + '/' + dir.name), []).then(L.bind(function(entries) {
+						tasks.push(L.resolveDefault(fs.list(dir + '/' + this.name + '/' + entrj.name), []).then(L.bind(function(entries) {
 							return Object.assign(this, {
 								entries: entries.filter(function(e) {
 									return e.type == 'file' && e.name.match(/\.rrd$/);
 								})
 							});
-						}, dir)));
+						}, entrj)));
 					}
 
 					return Promise.all(tasks).then(L.bind(function(entries) {
@@ -212,7 +212,7 @@ return baseclass.extend({
 
 	scan() {
 		return this.ls().then(L.bind(function(entries) {
-			const rrdtree = {};
+			rrdtree = {};
 
 			for (let entr of entries) {
 				const hostInstance = entr.name;
