@@ -9,12 +9,12 @@
 'require network';
 'require tools.widgets as widgets';
 
-var Hosts, Remotehosts, Remoteinfo, Localinfo, Clients, WifiNetworks;
+let Hosts, Remotehosts, Remoteinfo, Localinfo, Clients, WifiNetworks;
 
-var dns_cache = [];
+const dns_cache = [];
 
 function SplitWlan(wlan) {
-	var wlansplit = [];
+	let wlansplit = [];
 	if (typeof wlan.split('#')[1] !== 'undefined') {
 		wlansplit=wlan.split('#');
 		if (typeof dns_cache[wlansplit[0]] !== 'undefined') {
@@ -30,9 +30,9 @@ function SplitWlan(wlan) {
 
 function collectHearingClient(client_table_entries, mac) {
 	if (typeof Clients[mac] !== 'undefined') {
-		for (var wlanc in Clients[mac]) {
-			var SSID = '';
-			var freq = 0;
+		for (let wlanc in Clients[mac]) {
+			let SSID = '';
+			let freq = 0;
 			if (typeof Localinfo[wlanc] !== 'undefined') {
 				SSID = Localinfo[wlanc]['ssid'];
 				freq = Localinfo[wlanc]['freq'];
@@ -41,7 +41,7 @@ function collectHearingClient(client_table_entries, mac) {
 				SSID = Remoteinfo[wlanc]['ssid'];
 				freq = Remoteinfo[wlanc]['freq'];
 			}
-			var wlansplit=SplitWlan(wlanc);
+			const wlansplit=SplitWlan(wlanc);
 			client_table_entries.push([
 				'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 				'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
@@ -54,17 +54,17 @@ function collectHearingClient(client_table_entries, mac) {
 	}
 }
 
-var HearingMap = form.DummyValue.extend({
-	renderWidget: function () {
-		var body = E([
+const HearingMap = form.DummyValue.extend({
+	renderWidget() {
+		const body = E([
 			E('h3', _('Hearing map')),
 			E('div', _('Refresh page to get new mac addresses to show up'))
 		]);
-		for (var mac in Clients) {
-			var maciphost = '';
+		for (let mac in Clients) {
+			let maciphost = '';
 			maciphost = '%h'.format(mac);
-			var macUp = mac.toUpperCase();
-			var macn = macUp.replace(/:/g,'');
+			const macUp = mac.toUpperCase();
+			const macn = macUp.replace(/:/g,'');
 			if (typeof Hosts[macUp] !== 'undefined') {
 				if ((String(Hosts[macUp]['ipaddrs'][0]).length > 0) && (typeof Hosts[macUp]['ipaddrs'][0] !== 'undefined'))
 					maciphost += '\u2003' + Hosts[macUp]['ipaddrs'];
@@ -74,7 +74,7 @@ var HearingMap = form.DummyValue.extend({
 			body.appendChild(
 				E('h4', maciphost)
 			);
-			var client_table = E('table', {'class': 'table cbi-section-table','id':'client_table'+macn}, [
+			const client_table = E('table', {'class': 'table cbi-section-table','id':'client_table'+macn}, [
 				E('tr', {'class': 'tr table-titles'}, [
 					E('th', {'class': 'th'}, _('AP','Name or IP address of access point')),
 					E('th', {'class': 'th'}, _('Interface name','interface name in usteer overview')),
@@ -84,7 +84,7 @@ var HearingMap = form.DummyValue.extend({
 					E('th', {'class': 'th', 'style': 'width:15%'}, _('Signal','Signal strength reported by wireless station in usteer overview'))
 				])
 			]);
-			var client_table_entries = [];
+			const client_table_entries = [];
 			collectHearingClient(client_table_entries, mac);
 			cbi_update_table(client_table, client_table_entries, E('em', _('No data')));
 			body.appendChild(client_table);
@@ -97,8 +97,8 @@ var HearingMap = form.DummyValue.extend({
 
 
 function collectWlanAPInfoEntries(connectioninfo_table_entries, wlanAPInfos) {
-	for (var wlan in wlanAPInfos) {
-		var wlansplit=SplitWlan(wlan);
+	for (let wlan in wlanAPInfos) {
+		const wlansplit=SplitWlan(wlan);
 		connectioninfo_table_entries.push([
 			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
@@ -116,11 +116,11 @@ function collectWlanAPInfoEntries(connectioninfo_table_entries, wlanAPInfos) {
 };
 
 function tootltip(mac, IP, hostname) {
-	var body= E([]);
+	const body= E([]);
 	body.appendChild(E('div', '%h'.format(mac)));
 	if (typeof IP !== 'undefined') {
-		for (var IPaddr in IP['ipaddrs']) body.appendChild(E('div', '%h'.format(IP['ipaddrs'][IPaddr])));
-		for (var IPaddr in IP['ip6addrs']) body.appendChild(E('div', '%h'.format(IP['ip6addrs'][IPaddr])));;
+		for (let IPaddr in IP['ipaddrs']) body.appendChild(E('div', '%h'.format(IP['ipaddrs'][IPaddr])));
+		for (let IPaddr in IP['ip6addrs']) body.appendChild(E('div', '%h'.format(IP['ip6addrs'][IPaddr])));;
 	}
 	if (hostname !== '') {
 		body.appendChild(E('div', '%h'.format(hostname)));
@@ -129,16 +129,16 @@ function tootltip(mac, IP, hostname) {
 }
 
 function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
-	for (var wlan in wlanAPInfos) {
-		var hostl = E([]);
-		for (var mac in Clients) {
+	for (let wlan in wlanAPInfos) {
+		const hostl = E([]);
+		for (let mac in Clients) {
 			if (typeof Clients[mac] !== 'undefined')
 				if (typeof Clients[mac][wlan] !== 'undefined')
 					if (String(Clients[mac][wlan]['connected']).valueOf() === 'true') {
-						var foundname = mac;
-						var IP = '';
-						var hostname = '';
-						var macUp = mac.toUpperCase();
+						let foundname = mac;
+						let IP = '';
+						let hostname = '';
+						const macUp = mac.toUpperCase();
 						if (typeof Hosts[macUp] !== 'undefined') {
 							if ((typeof Hosts[macUp]['ipaddrs'][0] !== 'undefined') && (String(Hosts[macUp]['ipaddrs'][0]).length > 0)) {
 								IP = Hosts[macUp]['ipaddrs'][0];
@@ -157,7 +157,7 @@ function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 						);
 					}
 		}
-		var wlansplit=SplitWlan(wlan);
+		const wlansplit=SplitWlan(wlan);
 		compactconnectioninfo_table_entries.push([
 			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
@@ -182,10 +182,10 @@ function collectRemoteHosts (remotehosttableentries,Remotehosts) {
 	const getUndefinedDnsCacheIPs = (Remotehosts, dns_cache) =>
 		Object.keys(Remotehosts).filter(IPaddr => !dns_cache.hasOwnProperty(IPaddr));
 
-	var ipAddrs = getUndefinedDnsCacheIPs(Remotehosts, dns_cache);
+	const ipAddrs = getUndefinedDnsCacheIPs(Remotehosts, dns_cache);
 
 	L.resolveDefault(callNetworkRrdnsLookup(ipAddrs, 1000, 1000), {}).then(function(replies) {
-				for (var address of ipAddrs) {
+				for (let address of ipAddrs) {
 					if (!address)
 						continue;
 					if (replies[address]) {
@@ -204,32 +204,32 @@ function collectRemoteHosts (remotehosttableentries,Remotehosts) {
 				}
 	});
 
-	for (var IPaddr in Remotehosts) {
+	for (let IPaddr in Remotehosts) {
 		remotehosttableentries.push([IPaddr,'%h'.format(dns_cache[IPaddr]),'%h'.format(Remotehosts[IPaddr]['id'])]);
 	}
 }
 
 
-var Clientinfooverview = form.DummyValue.extend({
-	renderWidget: function () {
-		var body = E([
+const Clientinfooverview = form.DummyValue.extend({
+	renderWidget() {
+		const body = E([
 			E('h3', _('Remote hosts'))
 		]);
-		var remotehost_table = E('table', {'class': 'table cbi-section-table', 'id': 'remotehost_table'}, [
+		const remotehost_table = E('table', {'class': 'table cbi-section-table', 'id': 'remotehost_table'}, [
 			E('tr', {'class': 'tr table-titles'}, [
 				E('th', {'class': 'th'}, _('IP address')),
 				E('th', {'class': 'th'}, _('Hostname')),
 				E('th', {'class': 'th'}, _('Identifier'))
 			])
 		]);
-		var remotehosttableentries = [];
+		const remotehosttableentries = [];
 		collectRemoteHosts(remotehosttableentries,Remotehosts);
 		cbi_update_table(remotehost_table, remotehosttableentries, E('em', _('No data')));
 		body.appendChild(remotehost_table);
 		body.appendChild(
 			E('h3', _('Client list'))
 		);
-		var connectioninfo_table = E('table', {'class': 'table cbi-section-table', 'id': 'connectioninfo_table'}, [
+		const connectioninfo_table = E('table', {'class': 'table cbi-section-table', 'id': 'connectioninfo_table'}, [
 			E('tr', {'class': 'tr table-titles'}, [
 				E('th', {'class': 'th'}, _('AP','Name or IP address of access point')),
 				E('th', {'class': 'th'}, _('Interface name','interface name in usteer overview')),
@@ -244,13 +244,13 @@ var Clientinfooverview = form.DummyValue.extend({
 				E('th', {'class': 'th'}, _('Roam tgt','Roam target in usteer overview'))
 			])
 		]);
-		var connectioninfo_table_entries = [];
+		const connectioninfo_table_entries = [];
 		collectWlanAPInfoEntries(connectioninfo_table_entries, Localinfo);
 		collectWlanAPInfoEntries(connectioninfo_table_entries, Remoteinfo);
 
 		cbi_update_table(connectioninfo_table, connectioninfo_table_entries, E('em', _('No data')));
 		body.appendChild(connectioninfo_table);
-		var compactconnectioninfo_table = E('table', {'class': 'table cbi-section-table','id': 'compactconnectioninfo_table'}, [
+		const compactconnectioninfo_table = E('table', {'class': 'table cbi-section-table','id': 'compactconnectioninfo_table'}, [
 			E('tr', {'class': 'tr table-titles'}, [
 				E('th', {'class': 'th'}, _('AP','Name or IP address of access point')),
 				E('th', {'class': 'th'}, _('Interface name','interface name in usteer overview')),
@@ -261,7 +261,7 @@ var Clientinfooverview = form.DummyValue.extend({
 				E('th', {'class': 'th'}, _('Host', 'host hint in usteer overview'))
 			])
 		]);
-		var compactconnectioninfo_table_entries = [];
+		const compactconnectioninfo_table_entries = [];
 		collectWlanAPInfos(compactconnectioninfo_table_entries, Localinfo);
 		collectWlanAPInfos(compactconnectioninfo_table_entries, Remoteinfo);
 		cbi_update_table(compactconnectioninfo_table, compactconnectioninfo_table_entries, E('em', _('No data')));
@@ -270,9 +270,9 @@ var Clientinfooverview = form.DummyValue.extend({
 	}
 });
 
-var Settingstitle = form.DummyValue.extend({
-	renderWidget: function () {
-		var body = E([
+const Settingstitle = form.DummyValue.extend({
+	renderWidget() {
+		const body = E([
 			E('h3', _('Settings')),
 			E('div',
 				_('The first four options below are mandatory.') + ' ' +
@@ -284,12 +284,9 @@ var Settingstitle = form.DummyValue.extend({
 	}
 });
 
-var footerdata;
-var Settingsfooter = form.DummyValue.extend({
-	renderWidget: function () {
-		var body = E([
-			E('body', footerdata),
-		]);
+let footerdata;
+const Settingsfooter = form.DummyValue.extend({
+	renderWidget() {
 		return E('div', {'style': 'width:100%'}, [footerdata]);
 	}
 });
@@ -321,7 +318,7 @@ return view.extend({
 		method: 'get_clients',
 		expect: {'': {}}
 	}),
-	load: function () {
+	load() {
 		return Promise.all([
 			rpc.list('usteer'),
 			this.callHostHints().catch (function (){return null;}),
@@ -333,38 +330,32 @@ return view.extend({
 		]);
 	},
 
-	poll_status: function(nodes, data) {
+	poll_status(nodes, [Hosts, Remotehosts, Remoteinfo, Localinfo, Clients]) {
 
-		Hosts = data[1];
-		Remotehosts = data[2];
-		Remoteinfo = data[3];
-		Localinfo = data[4];
-		Clients = data[5];
-
-		var remotehosttableentries = [];
+		const remotehosttableentries = [];
 		collectRemoteHosts(remotehosttableentries,Remotehosts);
 		cbi_update_table(nodes.querySelector('#remotehost_table'), remotehosttableentries, E('em', _('No data')));
 
-		var connectioninfo_table_entries = [];
+		const connectioninfo_table_entries = [];
 		collectWlanAPInfoEntries(connectioninfo_table_entries, Localinfo);
 		collectWlanAPInfoEntries(connectioninfo_table_entries, Remoteinfo);
 		cbi_update_table(nodes.querySelector('#connectioninfo_table'), connectioninfo_table_entries, E('em', _('No data')));
 
-		var compactconnectioninfo_table_entries = [];
+		const compactconnectioninfo_table_entries = [];
 		collectWlanAPInfos(compactconnectioninfo_table_entries, Localinfo);
 		collectWlanAPInfos(compactconnectioninfo_table_entries, Remoteinfo);
 		cbi_update_table(nodes.querySelector('#compactconnectioninfo_table'), compactconnectioninfo_table_entries, E('em', _('No data')));
 		
-		for (var mac in Clients) {
-			var macn = mac.toUpperCase().replace(/:/g,'');
-			var client_table_entries = [];
+		for (let mac in Clients) {
+			const macn = mac.toUpperCase().replace(/:/g,'');
+			const client_table_entries = [];
 			collectHearingClient(client_table_entries, mac);
 			cbi_update_table(nodes.querySelector('#client_table'+macn), client_table_entries, E('em', _('No data')));
 		}
 		return;
 	},
 
-	render: function (data) {
+	render(data) {
 		let m, s, o;
 
 		if (!('usteer' in data[0])) {
@@ -653,7 +644,7 @@ return view.extend({
 	},
 
 
-	addFooter: function () {
+	addFooter() {
 		return null;
 	},
 });
