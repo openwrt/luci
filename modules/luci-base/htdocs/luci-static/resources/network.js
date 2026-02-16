@@ -643,11 +643,6 @@ function enumerateNetworks() {
 let Hosts, Network, Protocol, Device, WifiDevice, WifiNetwork, WifiVlan;
 
 /**
- * @namespace LuCI.network
- * @memberof LuCI
- */
-
-/**
  * @class network
  * @memberof LuCI
  * @hideconstructor

@@ -8,11 +8,6 @@ let rpcBaseURL = L.url('admin/ubus');
 const rpcInterceptorFns = [];
 
 /**
- * @namespace LuCI.rpc
- * @memberof LuCI
- */
-
-/**
  * @class rpc
  * @memberof LuCI
  * @hideconstructor

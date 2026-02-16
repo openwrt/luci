@@ -15,11 +15,6 @@ let indicatorDiv = null;
 let tooltipTimeout = null;
 
 /**
- * @namespace LuCI.ui
- * @memberof LuCI
- */
-
-/**
  * @class AbstractElement
  * @memberof LuCI.ui
  * @hideconstructor

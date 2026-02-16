@@ -191,11 +191,6 @@ const CBIJSONConfig = baseclass.extend({
 });
 
 /**
- * @namespace LuCI.form
- * @memberof LuCI
- */
-
-/**
  * @class AbstractElement
  * @memberof LuCI.form
  * @hideconstructor

@@ -5,15 +5,6 @@
 
 
 /**
- * @namespace LuCI
- */
-
-/**
- * @namespace LuCI.firewall
- * @memberof LuCI
- */
-
-/**
  * Load the firewall configuration.
  * @returns {Promise}
  */

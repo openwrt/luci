@@ -4,11 +4,6 @@
 'require baseclass';
 
 /**
- * @namespace LuCI.fs
- * @memberof LuCI
- */
-
-/**
  * @typedef {Object} FileStatEntry
  * @memberof LuCI.fs
  *
