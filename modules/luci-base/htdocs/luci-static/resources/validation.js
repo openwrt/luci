@@ -1,10 +1,113 @@
 'use strict';
 'require baseclass';
 
+/**
+ * @namespace LuCI.validation
+ * @memberof LuCI
+ */
+
+/**
+ * @class validation
+ * @memberof LuCI
+ * @hideconstructor
+ * @classdesc
+ *
+ * The LuCI validation class provides functions to perform validation
+ * on user input within various [form]{@link LuCI.form} input fields.
+ *
+ * To import the class, use `'require validation'`. To import it in
+ * external JavaScript, use `L.require("validation").then(...)`.
+ * 
+ * Note: it is not required to import this class in forms for use: it is
+ * imported by {@link LuCI.ui ui} where {@link LuCI.form form} elements
+ * are defined.
+ *
+ * A typical validation is instantiated by first constructing a
+ * {@link LuCI.form} element and
+ * by adding a [datatype]{@link LuCI.form.AbstractValue#datatype} to the
+ * element properties.
+ *
+ * @example
+ *
+ * 'use strict';
+ * ...
+ *
+ * let m, s, o;
+ *
+ * ...
+ *
+ * o = s.option(form.Value, 'some_value', 'A value element');
+ * o.datatype = 'ipaddr';
+ *
+ * ...
+ *
+ * @example <caption>A validator stub can be instantiated so:</caption>
+ *
+ * const stubValidator = {
+ * 	factory: validation,
+ * 	apply: function(type, value, args) {
+ * 		if (value != null)
+ * 			this.value = value;
+ *
+ * 		return validation.types[type].apply(this, args);
+ * 	},
+ * 	assert: function(condition) {
+ * 		return !!condition;
+ * 	}
+ * };
+ *
+ * @example <caption>and later used so in a custom `o.validate` function:</caption>
+ *
+ * ...
+ * stubValidator.apply('ipaddr', m4 ? m4[1] : m6[1])
+ * ...
+ *
+ * @example <caption> One can also add validators to HTML UI elements via
+ * {@link LuCI.ui#addValidator}: </caption>
+ *
+ * ...
+ * 	s.renderSectionAdd = function(extra_class) {
+ * 	var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
+ * 			nameEl = el.querySelector('.cbi-section-create-name');
+ * 		ui.addValidator(nameEl, 'uciname', true, function(v) {
+ * 			let sections = [
+ * 				...uci.sections('config', 'section_type1'),
+ * 				...uci.sections('config', 'section_type2'),
+ * 			];
+ * 			if (sections.find(function(s) {
+ * 				return s['.name'] == v;
+ * 			})) {
+ * 				return _('This may not share the same name as other section type1 or section type2.');
+ * 			}
+ * 			if (v.length > 15) return _('Name length shall not exceed 15 characters');
+ * 			return true;
+ * 		}, 'blur', 'keyup');
+ * 		return el;
+ * 	};
+ * ...
+ *
+ */
+
+/**
+ * Return byte length of a string using Blob (UTF-8 byte count).
+ *
+ * @memberof LuCI.validation
+ * @param {string} x - Input string.
+ * @returns {number} Byte length of the string.
+ */
 function bytelen(x) {
 	return new Blob([x]).size;
 }
 
+/**
+ * Compare two arrays element-wise: return true if `a < b` in lexicographic
+ * element comparison.
+ *
+ * @memberof LuCI.validation
+ * @param {Array<number>} a - First array.
+ * @param {Array<number>} b - Second array.
+ * @returns {boolean} True if arrays compare as `a < b`, false otherwise.
+ */
 function arrayle(a, b) {
 	if (!Array.isArray(a) || !Array.isArray(b))
 		return false;
@@ -18,7 +121,19 @@ function arrayle(a, b) {
 	return true;
 }
 
-const Validator = baseclass.extend({
+/**
+ * @class Validator
+ * @classdesc
+ * 
+ * @memberof LuCI.validation
+ * @param {string} field - the UI field to validate.
+ * @param {string} type - type of validator.
+ * @param {boolean} optional - set the validation result as optional.
+ * @param {vfunc} function - validation function.
+ * @param {ValidatorFactory} validatorFactory - a ValidatorFactory instance.
+ * @returns {Validator} a Validator instance.
+ */
+const Validator = baseclass.extend(/** @lends LuCI.validation.Validator.prototype */ {
 	__name__: 'Validation',
 
 	__init__(field, type, optional, vfunc, validatorFactory) {
@@ -29,6 +144,13 @@ const Validator = baseclass.extend({
 		this.factory = validatorFactory;
 	},
 
+	/**
+	 * Assert a condition and update field error state.
+	 * 
+	 * @param {boolean} condition - Condition that must be true.
+	 * @param {string} message - Error message when assertion fails.
+	 * @returns {boolean} True when assertion is true, false otherwise.
+	 */
 	assert(condition, message) {
 		if (!condition) {
 			this.field.classList.add('cbi-input-invalid');
@@ -41,6 +163,15 @@ const Validator = baseclass.extend({
 		return true;
 	},
 
+	/**
+	 * Apply a validation function by name or directly via function reference.
+	 * If a name is provided it resolves it via the factory's registered `types`.
+	 * 
+	 * @param {string|function} name - Validator name or function.
+	 * @param {*} value - Value to validate (optional; defaults to field value).
+	 * @param {Array} args - Arguments passed to the validator function.
+	 * @returns {*} Validator result.
+	 */
 	apply(name, value, args) {
 		let func;
 
@@ -57,6 +188,13 @@ const Validator = baseclass.extend({
 		return func.apply(this, args);
 	},
 
+	/**
+	 * Validate the associated field value using the compiled validator stack
+	 * and any additional validators provided at construction time.
+	 * Emits 'validation-failure' or 'validation-success' CustomEvents on the field.
+	 * 
+	 * @returns {boolean} True if validation succeeds, false otherwise.
+	 */
 	validate() {
 		/* element is detached */
 		if (!findParent(this.field, 'body') && !findParent(this.field, '[data-field]'))
@@ -120,13 +258,37 @@ const Validator = baseclass.extend({
 
 });
 
-const ValidatorFactory = baseclass.extend({
+/**
+ * @classdesc
+ * Factory to create Validator instances and compile validation expressions.
+ * 
+ * @memberof LuCI.validation
+ * @class ValidatorFactory
+ * @hideconstructor
+ */
+const ValidatorFactory = baseclass.extend(/** @lends LuCI.validation.ValidatorFactory.prototype */ {
 	__name__: 'ValidatorFactory',
 
+
+	/**
+	 * Compile a validator expression string into an internal stack representation.
+	 *
+	 * @param {string} field field name
+	 * @param {string} type validator type
+	 * @param {boolean} optional whether the field is optional
+	 * @param {string} vfunc a validator function
+	 * @returns {Validator} Compiled token stack used by validators.
+	 */
 	create(field, type, optional, vfunc) {
 		return new Validator(field, type, optional, vfunc, this);
 	},
 
+	/**
+	 * Compile a validator expression string into an internal stack representation.
+	 *
+	 * @param {string} code - Validator expression string (e.g. `or(ipaddr,port)`).
+	 * @returns {Array} Compiled token stack used by validators.
+	 */
 	compile(code) {
 		let pos = 0;
 		let esc = false;
@@ -193,14 +355,29 @@ const ValidatorFactory = baseclass.extend({
 		return stack;
 	},
 
+	/**
+	 * Parse an integer string. Returns NaN when not a valid integer.
+	 * @param {string} x
+	 * @returns {number} Integer or NaN
+	 */
 	parseInteger(x) {
 		return (/^-?\d+$/.test(x) ? +x : NaN);
 	},
 
+	/**
+	 * Parse a decimal number string. Returns NaN when not a valid number.
+	 * @param {string} x
+	 * @returns {number} Decimal number or NaN
+	 */
 	parseDecimal(x) {
 		return (/^-?\d+(?:\.\d+)?$/.test(x) ? +x : NaN);
 	},
 
+	/**
+	 * Parse IPv4 address into an array of 4 octets or return null on failure.
+	 * @param {string} x - IPv4 address string
+	 * @returns {Array<number>|null} Array of 4 octets or null.
+	 */
 	parseIPv4(x) {
 		if (!x.match(/^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/))
 			return null;
@@ -211,6 +388,12 @@ const ValidatorFactory = baseclass.extend({
 		return [ +RegExp.$1, +RegExp.$2, +RegExp.$3, +RegExp.$4 ];
 	},
 
+	/**
+	 * Parse IPv6 address into an array of 8 16-bit words or return null on failure.
+	 * Supports IPv4-embedded IPv6 (::ffff:a.b.c.d) and zero-compression.
+	 * @param {string} x - IPv6 address string
+	 * @returns {Array<number>|null} Array of 8 16-bit words or null.
+	 */
 	parseIPv6(x) {
 		if (x.match(/^([a-fA-F0-9:]+):(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/)) {
 			const v6 = RegExp.$1;
@@ -259,28 +442,68 @@ const ValidatorFactory = baseclass.extend({
 		return words;
 	},
 
-	types: {
+	/**
+	 * Collection of type handlers.
+	 * Each function consumes `this.value` and returns `this.assert` to report errors.
+	 *
+	 * All functions return the result of {@link LuCI.validation.Validator#assert assert()}.
+	 * @namespace types
+	 * @memberof LuCI.validation.ValidatorFactory
+	 */
+	types:  /** @lends LuCI.validation.ValidatorFactory#types */  {
+		/**
+		 * Assert a signed integer value (+/-).
+		 * @function LuCI.validation.ValidatorFactory.types#integer
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		integer() {
 			return this.assert(!isNaN(this.factory.parseInteger(this.value)), _('valid integer value'));
 		},
 
+		/**
+		 * Assert an unsigned integer value (+).
+		 * @function LuCI.validation.ValidatorFactory.types#uinteger
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		uinteger() {
 			return this.assert(this.factory.parseInteger(this.value) >= 0, _('positive integer value'));
 		},
 
+		/**
+		 * Assert a signed float value (+/-).
+		 * @function LuCI.validation.ValidatorFactory.types#float
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		float() {
 			return this.assert(!isNaN(this.factory.parseDecimal(this.value)), _('valid decimal value'));
 		},
 
+		/**
+		 * Assert an unsigned float value (+).
+		 * @function LuCI.validation.ValidatorFactory.types#ufloat
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ufloat() {
 			return this.assert(this.factory.parseDecimal(this.value) >= 0, _('positive decimal value'));
 		},
 
+		/**
+		 * Assert an IPv4/6 address.
+		 * @function LuCI.validation.ValidatorFactory.types#ipaddr
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ipaddr(nomask) {
 			return this.assert(this.apply('ip4addr', null, [nomask]) || this.apply('ip6addr', null, [nomask]),
 				nomask ? _('valid IP address') : _('valid IP address or prefix'));
 		},
 
+		/**
+		 * Assert an IPv4 address.
+		 * @function LuCI.validation.ValidatorFactory.types#ip4addr
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ip4addr(nomask) {
 			const re = nomask ? /^(\d+\.\d+\.\d+\.\d+)$/ : /^(\d+\.\d+\.\d+\.\d+)(?:\/(\d+\.\d+\.\d+\.\d+)|\/(\d{1,2}))?$/;
 			const m = this.value.match(re);
@@ -289,6 +512,12 @@ const ValidatorFactory = baseclass.extend({
 				nomask ? _('valid IPv4 address') : _('valid IPv4 address or network'));
 		},
 
+		/**
+		 * Assert an IPv6 address.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6addr
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ip6addr(nomask) {
 			const re = nomask ? /^([0-9a-fA-F:.]+)$/ : /^([0-9a-fA-F:.]+)(?:\/(\d{1,3}))?$/;
 			const m = this.value.match(re);
@@ -297,6 +526,12 @@ const ValidatorFactory = baseclass.extend({
 				nomask ? _('valid IPv6 address') : _('valid IPv6 address or prefix'));
 		},
 
+		/**
+		 * Assert an IPv6 Link Local address.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6ll
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ip6ll(nomask) {
 			/* fe80::/10  -> 0xfe80 .. 0xfebf */
 			const x = parseInt(this.value, 16) | 0;
@@ -306,6 +541,12 @@ const ValidatorFactory = baseclass.extend({
 				_('valid IPv6 Link Local address'));
 		},
 
+		/**
+		 * Assert an IPv6 UL address.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6ula
+		 * @param {string} [nomask] reject a `/x` netmask.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ip6ula(nomask) {
 			/* fd00::/8  -> 0xfd00 .. 0xfdff */
 			const x = parseInt(this.value, 16) | 0;
@@ -315,43 +556,91 @@ const ValidatorFactory = baseclass.extend({
 				_('valid IPv6 ULA address'));
 		},
 
+		/**
+		 * Assert an IPv4 prefix.
+		 * @function LuCI.validation.ValidatorFactory.types#ip4prefix
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ip4prefix() {
 			return this.assert(!isNaN(this.value) && this.value >= 0 && this.value <= 32,
 				_('valid IPv4 prefix value (0-32)'));
 		},
 
+		/**
+		 * Assert an IPv6 prefix.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6prefix
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ip6prefix() {
 			return this.assert(!isNaN(this.value) && this.value >= 0 && this.value <= 128,
 				_('valid IPv6 prefix value (0-128)'));
 		},
 
+		/**
+		 * Assert a IPv4/6 CIDR.
+		 * @function LuCI.validation.ValidatorFactory.types#cidr
+		 * @param {boolean} [negative] allow netmask forms with `/-...` to mark
+		 * negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		cidr(negative) {
 			return this.assert(this.apply('cidr4', null, [negative]) || this.apply('cidr6', null, [negative]),
 				_('valid IPv4 or IPv6 CIDR'));
 		},
 
+		/**
+		 * Assert a IPv4 CIDR.
+		 * @function LuCI.validation.ValidatorFactory.types#cidr4
+		 * @param {boolean} [negative] allow netmask forms with `/-...`.
+		 * E.g. `192.0.2.1/-24` to mark negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		cidr4(negative) {
 			const m = this.value.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(-)?(\d{1,2})$/);
 			return this.assert(m && this.factory.parseIPv4(m[1]) && (negative || !m[2]) && this.apply('ip4prefix', m[3]),
 				_('valid IPv4 CIDR'));
 		},
 
+		/**
+		 * Assert a IPv6 CIDR.
+		 * @function LuCI.validation.ValidatorFactory.types#cidr6
+		 * @param {boolean} [negative] allow netmask forms with `/-...`.
+		 * E.g. `2001:db8:dead:beef::/-64` to mark negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		cidr6(negative) {
 			const m = this.value.match(/^([0-9a-fA-F:.]+)\/(-)?(\d{1,3})$/);
 			return this.assert(m && this.factory.parseIPv6(m[1]) && (negative || !m[2]) && this.apply('ip6prefix', m[3]),
 				_('valid IPv6 CIDR'));
 		},
 
+		/**
+		 * Assert an IPv4 network in address/netmask notation. E.g.
+		 * `192.0.2.1/255.255.255.0`
+		 * @function LuCI.validation.ValidatorFactory.types#ipnet4
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ipnet4() {
 			const m = this.value.match(/^(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\/(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/);
 			return this.assert(m && this.factory.parseIPv4(m[1]) && this.factory.parseIPv4(m[2]), _('IPv4 network in address/netmask notation'));
 		},
 
+		/**
+		 * Assert an IPv6 network in address/netmask notation. E.g.
+		 * `2001:db8:dead:beef::0001/ffff:ffff:ffff:ffff::`
+		 * @function LuCI.validation.ValidatorFactory.types#ipnet6
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ipnet6() {
 			const m = this.value.match(/^([0-9a-fA-F:.]+)\/([0-9a-fA-F:.]+)$/);
 			return this.assert(m && this.factory.parseIPv6(m[1]) && this.factory.parseIPv6(m[2]), _('IPv6 network in address/netmask notation'));
 		},
 
+		/**
+		 * Assert a IPv6 host ID.
+		 * @function LuCI.validation.ValidatorFactory.types#ip6hostid
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ip6hostid() {
 			if (this.value == "eui64" || this.value == "random")
 				return true;
@@ -360,43 +649,92 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(!(!v6 || v6[0] || v6[1] || v6[2] || v6[3]), _('valid IPv6 host id'));
 		},
 
+		/**
+		 * Assert an IPv4/6 network in address/netmask (CIDR or mask) notation.
+		 * @function LuCI.validation.ValidatorFactory.types#ipmask
+		 * @param {boolean} [negative] allow netmask forms with `/-...` to mark
+		 * negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ipmask(negative) {
 			return this.assert(this.apply('ipmask4', null, [negative]) || this.apply('ipmask6', null, [negative]),
 				_('valid network in address/netmask notation'));
 		},
 
+		/**
+		 * Assert an IPv4 network in address/netmask (CIDR or mask) notation.
+		 * @function LuCI.validation.ValidatorFactory.types#ipmask4
+		 * @param {boolean} [negative] allow netmask forms with `/-...` to mark
+		 * negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ipmask4(negative) {
 			return this.assert(this.apply('cidr4', null, [negative]) || this.apply('ipnet4') || this.apply('ip4addr'),
 				_('valid IPv4 network'));
 		},
 
+		/**
+		 * Assert an IPv6 network in address/netmask (CIDR or mask) notation.
+		 * @function LuCI.validation.ValidatorFactory.types#ipmask6
+		 * @param {boolean} [negative] allow netmask forms with `/-...` to mark
+		 * negation of the range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ipmask6(negative) {
 			return this.assert(this.apply('cidr6', null, [negative]) || this.apply('ipnet6') || this.apply('ip6addr'),
 				_('valid IPv6 network'));
 		},
 
+		/**
+		 * Assert a valid IPv4/6 address range.
+		 * @function LuCI.validation.ValidatorFactory.types#iprange
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		iprange() {
 			return this.assert(this.apply('iprange4', null, []) || this.apply('iprange6', null, []),
 				_('valid IP address range'));
 		},
 
+		/**
+		 * Assert a valid IPv4 address range. E.g.
+		 * `192.0.2.1-192.0.2.254`.
+		 * @function LuCI.validation.ValidatorFactory.types#iprange4
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		iprange4() {
 			const m = this.value.split('-');
 			return this.assert(m.length == 2 && arrayle(this.factory.parseIPv4(m[0]), this.factory.parseIPv4(m[1])),
 				_('valid IPv4 address range'));
 		},
 
+		/**
+		 * Assert a valid IPv6 address range. E.g.
+		 * `2001:db8:0f00:0000::-2001:db8:0f00:0000:ffff:ffff:ffff:ffff`.
+		 * @function LuCI.validation.ValidatorFactory.types#iprange6
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		iprange6() {
 			const m = this.value.split('-');
 			return this.assert(m.length == 2 && arrayle(this.factory.parseIPv6(m[0]), this.factory.parseIPv6(m[1])),
 				_('valid IPv6 address range'));
 		},
 
+		/**
+		 * Assert a valid port value where `0 <= port <= 65535`.
+		 * @function LuCI.validation.ValidatorFactory.types#port
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		port() {
 			const p = this.factory.parseInteger(this.value);
 			return this.assert(p >= 0 && p <= 65535, _('valid port value'));
 		},
 
+		/**
+		 * Assert a valid port or port range (port1-port2) where both ports are
+		 * positive integers, `port1 <= port2` and `port2 <= 65535` (`2^16 - 1`).
+		 * @function LuCI.validation.ValidatorFactory.types#portrange
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		portrange() {
 			if (this.value.match(/^(\d+)-(\d+)$/)) {
 				const p1 = +RegExp.$1;
@@ -408,17 +746,35 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(this.apply('port'), _('valid port or port range (port1-port2)'));
 		},
 
+		/**
+		 * Assert a valid (multicast) MAC address.
+		 * @function LuCI.validation.ValidatorFactory.types#macaddr
+		 * @param {boolean} [multicast] enforce a multicast MAC address.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		macaddr(multicast) {
 			const m = this.value.match(/^([a-fA-F0-9]{2}):([a-fA-F0-9]{2}:){4}[a-fA-F0-9]{2}$/);
 			return this.assert(m != null && !(+m[1] & 1) == !multicast,
 				multicast ? _('valid multicast MAC address') : _('valid MAC address'));
 		},
 
+		/**
+		 * Assert a valid hostname or IP address.
+		 * @function LuCI.validation.ValidatorFactory.types#host
+		 * @param {boolean} [ipv4only] enforce IPv4 IPs only.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		host(ipv4only) {
 			return this.assert(this.apply('hostname') || this.apply(ipv4only == 1 ? 'ip4addr' : 'ipaddr', null, ['nomask']),
 				_('valid hostname or IP address'));
 		},
 
+		/**
+		 * Validate hostname according to common rules.
+		 * @function LuCI.validation.ValidatorFactory.types#hostname
+		 * @param {boolean} [strict] reject leading underscores.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		hostname(strict) {
 			if (this.value.length <= 253)
 				return this.assert(
@@ -431,23 +787,48 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(false, _('valid hostname'));
 		},
 
+		/**
+		 * Assert a valid UCI identifier, hostname or IP address range.
+		 * @function LuCI.validation.ValidatorFactory.types#network
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		network() {
 			return this.assert(this.apply('uciname') || this.apply('hostname') || this.apply('ip4addr') || this.apply('ip6addr'),
 				_('valid UCI identifier, hostname or IP address range'));
 		},
 
+		/**
+		 * Assert a valid host:port.
+		 * @function LuCI.validation.ValidatorFactory.types#hostport
+		 * @param {boolean} [ipv4only] restrict to IPv4 IPs only.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		hostport(ipv4only) {
 			const hp = this.value.split(/:/);
 			return this.assert(hp.length == 2 && this.apply('host', hp[0], [ipv4only]) && this.apply('port', hp[1]),
 				_('valid host:port'));
 		},
 
+		/**
+		 * Assert a valid IPv4 address:port. E.g.
+		 * `192.0.2.10:80`
+		 * @function LuCI.validation.ValidatorFactory.types#ip4addrport
+		 * @param {boolean} [ipv4only] restrict to IPv4 IPs only.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ip4addrport() {
 			const hp = this.value.split(/:/);
 			return this.assert(hp.length == 2 && this.apply('ip4addr', hp[0], [true]) && this.apply('port', hp[1]),
 				_('valid IPv4 address:port'));
 		},
 
+		/**
+		 * Assert a valid IPv4/6 address:port. E.g.
+		 * `192.0.2.10:80` or `[2001:db8:f00d:cafe::1]:8080`
+		 * @function LuCI.validation.ValidatorFactory.types#ipaddrport
+		 * @param {boolean} [bracket] mandate bracketed [IPv6] URI form IPs.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ipaddrport(bracket) {
 			const m4 = this.value.match(/^([^[\]:]+):(\d+)$/);
 			const m6 = this.value.match((bracket == 1) ? /^\[(.+)\]:(\d+)$/ : /^([^[\]]+):(\d+)$/);
@@ -460,6 +841,11 @@ const ValidatorFactory = baseclass.extend({
 				_('valid address:port'));
 		},
 
+		/**
+		 * Assert a valid (hexadecimal) WPA key of `8 <= length <= 63`, or hex if `length == 64`.
+		 * @function LuCI.validation.ValidatorFactory.types#wpakey
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		wpakey() {
 			const v = this.value;
 
@@ -469,6 +855,11 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert((v.length >= 8) && (v.length <= 63), _('key between 8 and 63 characters'));
 		},
 
+		/**
+		 * Assert a valid (hexadecimal) WEP key.
+		 * @function LuCI.validation.ValidatorFactory.types#wepkey
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		wepkey() {
 			let v = this.value;
 
@@ -481,14 +872,30 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert((v.length === 5) || (v.length === 13), _('key with either 5 or 13 characters'));
 		},
 
+		/**
+		 * Assert a valid UCI identifier: `[a-zA-Z0-9_]+`.
+		 * @function LuCI.validation.ValidatorFactory.types#uciname
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		uciname() {
 			return this.assert(this.value.match(/^[a-zA-Z0-9_]+$/), _('valid UCI identifier'));
 		},
 
+		/**
+		 * Assert a valid fw4 zone name UCI identifier: `[a-zA-Z_][a-zA-Z0-9_]+`
+		 * @function LuCI.validation.ValidatorFactory.types#ucifw4zonename
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		ucifw4zonename() {
 			return this.assert(this.value.match(/^[a-zA-Z_][a-zA-Z0-9_]+$/), _('valid fw4 zone name UCI identifier'));
 		},
 
+		/**
+		 * Assert a valid network device name between 1 and 15 characters not
+		 * containing ":", "/", "%" or spaces.
+		 * @function LuCI.validation.ValidatorFactory.types#netdevname
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		netdevname() {
 			const v = this.value;
 
@@ -498,40 +905,104 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(v.match(/^[^:/%\s]{1,15}$/), _('valid network device name between 1 and 15 characters not containing ":", "/", "%" or spaces'));
 		},
 
+		/**
+		 * Assert a decimal value between `min` and `max`.
+		 * @example
+		 *range(-253, 253) // assert a value between -253 and +253
+		 *
+		 *'range(%u,%u)'.format(min_vid, feat.vid_option ? 4094 : num_vlans - 1);
+		 * // assert values calculated at runtime for VLAN IDs.
+		 * @function LuCI.validation.ValidatorFactory.types#range
+		 * @param {string} min set start of range.
+		 * @param {string} max set end of range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		range(min, max) {
 			const val = this.factory.parseDecimal(this.value);
 			return this.assert(val >= +min && val <= +max, _('value between %f and %f').format(min, max));
 		},
 
+		/**
+		 * Assert a decimal value greater or equal to `min`.
+		 * @function LuCI.validation.ValidatorFactory.types#min
+		 * @param {string} min set start of range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		min(min) {
 			return this.assert(this.factory.parseDecimal(this.value) >= +min, _('value greater or equal to %f').format(min));
 		},
 
+		/**
+		 * Assert a decimal value lesser or equal to `max`.
+		 * @function LuCI.validation.ValidatorFactory.types#max
+		 * @param {string} max set end of range.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		max(max) {
 			return this.assert(this.factory.parseDecimal(this.value) <= +max, _('value smaller or equal to %f').format(max));
 		},
 
+		/**
+		 * Assert a string of [bytelen]{@link LuCI.validation.bytelen} length `len` characters.
+		 * @function LuCI.validation.ValidatorFactory.types#length
+		 * @param {string} len set the length.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		length(len) {
 			return this.assert(bytelen(this.value) == +len,
 				_('value with %d characters').format(len));
 		},
 
+		/**
+		 * Assert a string value of [bytelen]{@link LuCI.validation.bytelen} length between `min` and `max` characters.
+		 * @function LuCI.validation.ValidatorFactory.types#rangelength
+		 * @param {string} min set the min length.
+		 * @param {string} max set the max length.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		rangelength(min, max) {
 			const len = bytelen(this.value);
 			return this.assert((len >= +min) && (len <= +max),
 				_('value between %d and %d characters').format(min, max));
 		},
 
+		/**
+		 * Assert a value of [bytelen]{@link LuCI.validation.bytelen} with at least `min` characters.
+		 * @function LuCI.validation.ValidatorFactory.types#minlength
+		 * @param {string} min set the min length.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		minlength(min) {
 			return this.assert(bytelen(this.value) >= +min,
 				_('value with at least %d characters').format(min));
 		},
 
+		/**
+		 * Assert a value of [bytelen]{@link LuCI.validation.bytelen} with at
+		 * most `max` characters.
+		 * @function LuCI.validation.ValidatorFactory.types#maxlength
+		 * @param {string} max set the max length.
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		maxlength(max) {
 			return this.assert(bytelen(this.value) <= +max,
 				_('value with at most %d characters').format(max));
 		},
 
+		/**
+		 * Logical OR `||` to build a more complex expression. Allows multiple
+		 * types within a single field.
+		 *
+		 * See also {@link LuCI.validation.ValidatorFactory.types#and and}
+		 * @function LuCI.validation.ValidatorFactory.types#or
+		 * @param {string} ...args other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 * @example
+		 * or([ipmask("true")]{@link
+		 * LuCI.validation.ValidatorFactory.types#ipmask},[iprange]{@link
+		 * LuCI.validation.ValidatorFactory.types#iprange})
+		 */
 		or() {
 			const errors = [];
 
@@ -555,6 +1026,22 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(false, t.format(`\n - ${errors.join('\n - ')}`));
 		},
 
+		/**
+		 * Logical AND `&&` to build more complex expressions. Enforces all
+		 * types on the input string.
+		 *
+		 *
+		 * See also {@link LuCI.validation.ValidatorFactory.types#or or}
+		 * @function LuCI.validation.ValidatorFactory.types#and
+		 * @param {string} ...args  other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 * @example
+		 *
+		 * and([minlength(3)]{@link
+		 * LuCI.validation.ValidatorFactory.types#minlength},[maxlength(20)]{@link
+		 * LuCI.validation.ValidatorFactory.types#maxlength})
+		 */
 		and() {
 			for (let i = 0; i < arguments.length; i += 2) {
 				if (typeof arguments[i] != 'function') {
@@ -570,6 +1057,22 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(true);
 		},
 
+		/**
+		 * Assert any type, optionally preceded by `!`.
+		 *
+		 * Example:`list(neg(macaddr))` mandates a list of MAC values, which may
+		 * also be prefixed with a single `!`; the MAC strings are validated
+		 * after `!` are removed from all entries.
+		 *```
+		 * 01:02:03:04:05:06
+		 * !01:02:03:04:05:07
+		 * 01:02:03:04:05:08
+		 *```
+		 * @function LuCI.validation.ValidatorFactory.types#neg
+		 * @param {string} ...args other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		neg() {
 			this.value = this.value.replace(/^[ \t]*![ \t]*/, '');
 
@@ -579,6 +1082,17 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(false, _('Potential negation of: %s').format(this.error));
 		},
 
+		/**
+		 * Assert a list of a type. 
+		 *
+		 * @function LuCI.validation.ValidatorFactory.types#list
+		 * @param {string} subvalidator other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @param {string} subargs arguments to pass to the `subvalidator`
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 * @example
+		 * list(string)
+		 */
 		list(subvalidator, subargs) {
 			this.field.setAttribute('data-is-list', 'true');
 
@@ -590,16 +1104,31 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(true);
 		},
 
+		/**
+		 * Assert a valid phone number dial string: `[0-9*#!.]+`.
+		 * @function LuCI.validation.ValidatorFactory.types#phonedigit
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		phonedigit() {
 			return this.assert(this.value.match(/^[0-9*#!.]+$/),
 				_('valid phone digit (0-9, "*", "#", "!" or ".")'));
 		},
 
+		/**
+		 * Assert a string of the form `HH:MM:SS`.
+		 * @function LuCI.validation.ValidatorFactory.types#timehhmmss
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		timehhmmss() {
 			return this.assert(this.value.match(/^(?:[01]\d|2[0-3]):[0-5]\d:(?:[0-5]\d|60)$/),
 				_('valid time (HH:MM:SS)'));
 		},
 
+		/**
+		 * Assert a string of the form `YYYY-MM-DD`.
+		 * @function LuCI.validation.ValidatorFactory.types#dateyyyymmdd
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		dateyyyymmdd() {
 			if (this.value.match(/^(\d\d\d\d)-(\d\d)-(\d\d)/)) {
 				const year  = +RegExp.$1;
@@ -618,6 +1147,14 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(false, _('valid date (YYYY-MM-DD)'));
 		},
 
+		/**
+		 * Assert unique values among lists.
+		 * @function LuCI.validation.ValidatorFactory.types#unique
+		 * @param {string} subvalidator other [types validation functions]{@link
+		 * LuCI.validation.ValidatorFactory.types}
+		 * @param {string} subargs arguments to subvalidators
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		unique(subvalidator, subargs) {
 			const ctx = this;
 			const option = findParent(ctx.field, '[data-widget][data-name]');
@@ -645,23 +1182,57 @@ const ValidatorFactory = baseclass.extend({
 			return this.assert(true);
 		},
 
+		/**
+		 * Assert a hexadecimal string.
+		 * @example
+		 * FFFE // valid
+		 * FFF  // invalid
+		 * @function LuCI.validation.ValidatorFactory.types#hexstring
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
 		hexstring() {
 			return this.assert(this.value.match(/^([a-fA-F0-9]{2})+$/i),
 				_('hexadecimal encoded value'));
 		},
 
-		string() {
-			return true;
+		/**
+		 * Assert a string type, optionally matching `param`.
+		 * @function LuCI.validation.ValidatorFactory.types#string
+		 * @param {string} [param] define an optional exact string
+		 * @returns {@link LuCI.validation.Validator#assert assert()} {boolean}
+		 */
+		string(param) {
+			if (param === null || param === undefined)
+				return true;
+			return this.assert(this.value === param, _('string: "%s"').format(param));
 		},
 
+		/**
+		 * Assert a directory string. This is a hold-over from Lua to maintain
+		 * compatibility and is a stub function.
+		 * @function LuCI.validation.ValidatorFactory.types#directory
+		 * @returns {boolean} Always returns true.
+		 */
 		directory() {
 			return true;
 		},
 
+		/**
+		 * Assert a file string. This is a hold-over from Lua to maintain
+		 * compatibility and is a stub function.
+		 * @function LuCI.validation.ValidatorFactory.types#file
+		 * @returns {boolean} Always returns true.
+		 */
 		file() {
 			return true;
 		},
 
+		/**
+		 * Assert a device string. This is a hold-over from Lua to maintain
+		 * compatibility and is a stub function.
+		 * @function LuCI.validation.ValidatorFactory.types#device
+		 * @returns {boolean} Always returns true.
+		 */
 		device() {
 			return true;
 		}
