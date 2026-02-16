@@ -22,19 +22,17 @@ function calculateNetwork(addr, mask) {
 }
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			network.getDevices(),
 			uci.load('libreswan'),
 		]);
 	},
 
-	render: function(data) {
-		var netDevs = data[0];
+	render([netDevs]) {
 		let m, s, o;
-		var proposals;
 
-		proposals = uci.sections('libreswan', 'crypto_proposal');
+		let proposals = uci.sections('libreswan', 'crypto_proposal');
 		if (proposals == '') {
 			ui.addNotification(null, E('p', _('Proposals must be configured for Tunnels')));
 			return;
@@ -49,8 +47,8 @@ return view.extend({
 		s.addbtntitle = _('Add Tunnel');
 
 		s.renderSectionAdd = function(extra_class) {
-			var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
-				nameEl = el.querySelector('.cbi-section-create-name');
+			const el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments);
+			const nameEl = el.querySelector('.cbi-section-create-name');
 			ui.addValidator(nameEl, 'uciname', true, function(v) {
 				let sections = [
 					...uci.sections('libreswan', 'crypto_proposal'),
@@ -130,10 +128,10 @@ return view.extend({
 
 		o = s.taboption('general', form.DynamicList, 'leftsubnets', _('Local Subnets'));
 		o.datatype = 'ipaddr';
-		for (var i = 0; i < netDevs.length; i++) {
-			var addrs = netDevs[i].getIPAddrs();
-			for (var j = 0; j < addrs.length; j++) {
-				var subnet = calculateNetwork(addrs[j].split('/')[0], addrs[j].split('/')[1]);
+		for (let nd of netDevs) {
+			const addrs = nd.getIPAddrs();
+			for (let ad of addrs) {
+				const subnet = calculateNetwork(ad.split('/')[0], ad.split('/')[1]);
 				if (subnet) {
 					o.value(subnet);
 				}
@@ -167,8 +165,8 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.taboption('advanced', form.MultiValue, 'ike', _('Phase1 Proposals'));
-		for (var i = 0; i < proposals.length; i++) {
-			o.value(proposals[i]['.name']);
+		for (let prop of proposals) {
+			o.value(prop['.name']);
 		}
 		o.modalonly = true;
 
@@ -234,8 +232,8 @@ return view.extend({
 		o.optional = false;
 
 		o = s.taboption('advanced', form.MultiValue, 'phase2alg', _('Phase2 Proposals'));
-		for (var i = 0; i < proposals.length; i++) {
-			o.value(proposals[i]['.name']);
+		for (let prop of proposals) {
+			o.value(prop['.name']);
 		}
 		o.modalonly = true;
 
@@ -246,7 +244,7 @@ return view.extend({
 		o.optional = true;
 		o.modalonly = true;
 
-		var interfaces = uci.sections('network', 'interface');
+		let interfaces = uci.sections('network', 'interface');
 		o = s.taboption('advanced', form.ListValue, 'interface', _('Tunnel Interface'),
 			_('Lists XFRM interfaces in format "ipsecN", N denotes ifid of xfrm interface') + '<br>' +
 			_('Lists VTI interfaces configured with ikey and okey'));

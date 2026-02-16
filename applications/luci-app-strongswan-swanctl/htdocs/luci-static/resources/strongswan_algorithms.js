@@ -109,11 +109,11 @@ return baseclass.extend({
 		['prfsha512']
 	]),
 
-	_getAlgorithmNames: function (algorithms) {
+	_getAlgorithmNames(algorithms) {
 		return Array.from(algorithms.keys());
 	},
 
-	isInsecure: function (algorithmName) {
+	isInsecure(algorithmName) {
 		return this._encryptionAlgorithms.get(algorithmName) == true
 			|| this._authenticatedEncryptionAlgorithms.get(algorithmName) == true
 			|| this._hashAlgorithms.get(algorithmName) == true
@@ -121,23 +121,23 @@ return baseclass.extend({
 			|| this._prfAlgorithms.get(algorithmName) == true;
 	},
 
-	getEncryptionAlgorithms: function () {
+	getEncryptionAlgorithms() {
 		return this._getAlgorithmNames(this._encryptionAlgorithms);
 	},
 
-	getAuthenticatedEncryptionAlgorithms: function () {
+	getAuthenticatedEncryptionAlgorithms() {
 		return this._getAlgorithmNames(this._authenticatedEncryptionAlgorithms);
 	},
 
-	getHashAlgorithms: function () {
+	getHashAlgorithms() {
 		return this._getAlgorithmNames(this._hashAlgorithms);
 	},
 
-	getDiffieHellmanAlgorithms: function () {
+	getDiffieHellmanAlgorithms() {
 		return this._getAlgorithmNames(this._dhAlgorithms);
 	},
 
-	getPrfAlgorithms: function () {
+	getPrfAlgorithms() {
 		return this._getAlgorithmNames(this._prfAlgorithms);
 	}
 });

@@ -23,10 +23,10 @@ const callRcInit = rpc.declare({
 return view.extend({
 	load() {
 		return Promise.all([
-			uci.load('unbound'),
 			fs.read(RESOLV_FILE).catch(() => ''),
 			fs.exec(LOGERR_CMD).catch(() => ''),
-		]).then(([_, resolv, logerr]) => ({
+			uci.load('unbound'),
+		]).then(([resolv, logerr]) => ({
 			resolvContent: resolv || '',
 			logerr: logerr ? logerr.trim().slice(-250) : null,
 		}));
@@ -43,7 +43,7 @@ return view.extend({
 
 		const s = m.section(form.TableSection, 'zone', _('Zones'),
 			_('Organize directed forward, stub, and authoritative zones' +
-			' <a href=\"%s\" target=\"_blank\">(help)</a>.'.format(HELP_URL)));
+			' <a href="%s" target="_blank">(help)</a>.'.format(HELP_URL)));
 		s.anonymous = false;
 		s.addremove = true;
 		s.sortable = true;

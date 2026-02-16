@@ -9,13 +9,13 @@ const callUSB = rpc.declare({
 	method: 'getUSBDevices',
 	expect: { 'ports': [] }
 });
-
+ 
 return baseclass.extend({
 	trigger: _('USB (kernel: usbport)'),
 	description: _('This LED trigger can be used for signalling to the user a presence of USB device in a given port.'),
 	kernel: true,
 	addFormOptions(s){
-		var o;
+		let o;
 
 		o = s.option(form.MultiValue, 'port', _('USB Ports'));
 		o.depends('trigger', 'usbport');
@@ -25,20 +25,20 @@ return baseclass.extend({
 			return Promise.all([
 				callUSB()
 			]).then(L.bind(function(usbport){
-				for (var i = 0; i < usbport[0].length; i++)
+				for (let i = 0; i < usbport[0].length; i++)
 					o.value(usbport[0][i].port, _('Port %s').format(usbport[0][i].port));
 			},this));
 		};
 		o.cfgvalue = function(section_id) {
-			var ports = [],
-				value = uci.get('system', section_id, 'port');
+			const ports = [];
+			let value = uci.get('system', section_id, 'port');
 
 			if (!Array.isArray(value))
 				value = String(value || '').split(/\s+/);
 
-			for (var i = 0; i < value.length; i++)
+			for (let i = 0; i < value.length; i++)
 				if (value[i].match(/^(\d+)-(\d+)$/))
-					ports.push('usb%d-port%d'.format(Regexp.$1, Regexp.$2));
+					ports.push('usb%d-port%d'.format(RegExp.$1, RegExp.$2));
 				else
 					ports.push(value[i]);
 

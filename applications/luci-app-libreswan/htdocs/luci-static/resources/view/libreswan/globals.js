@@ -5,14 +5,13 @@
 'require tools.widgets as widgets';
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			network.getDevices(),
 		]);
 	},
 
-	render: function(data) {
-		var netDevs = data[0];
+	render([netDevs]) {
 		let m, s, o;
 
 		m = new form.Map('libreswan', _('IPSec Global Settings'));
@@ -46,10 +45,10 @@ return view.extend({
 		o = s.option(form.Value, 'listen', _('Listen Address'),
 			_('IP address to listen on, default depends on Listen Interface'));
 		o.datatype = 'ip4addr';
-		for (var i = 0; i < netDevs.length; i++) {
-			var addrs = netDevs[i].getIPAddrs();
-			for (var j = 0; j < addrs.length; j++) {
-				o.value(addrs[j].split('/')[0]);
+		for (let nd of netDevs) {
+			var addrs = nd.getIPAddrs();
+			for (let ad of addrs) {
+				o.value(ad.split('/')[0]);
 			}
 		}
 		o.depends({ 'listen_interface' : '' });

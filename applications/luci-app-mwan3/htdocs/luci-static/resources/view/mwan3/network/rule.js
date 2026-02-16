@@ -35,8 +35,8 @@ return view.extend({
 
 		/* This name length error check can likely be removed when mwan3 migrates to nftables */
 		s.renderSectionAdd = function(extra_class) {
-			var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
-				nameEl = el.querySelector('.cbi-section-create-name');
+			const el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments);
+			const nameEl = el.querySelector('.cbi-section-create-name');
 			ui.addValidator(nameEl, 'uciname', true, function(v) {
 				let sections = [
 					...uci.sections('mwan3', 'interface'),
@@ -74,20 +74,20 @@ return view.extend({
 		o.value('esp');
 
 		o = s.option(form.Value, 'src_ip', _('Source address'),
-			_('Supports CIDR notation (eg \"192.168.100.0/24\") without quotes'));
+			_('Supports CIDR notation (eg "192.168.100.0/24") without quotes'));
 		o.datatype = 'ipaddr';
 
 		o = s.option(form.Value, 'src_port', _('Source port'),
-			_('May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or as a portrange (eg \"1024:2048\") without quotes'));
+			_('May be entered as a single or multiple port(s) (eg "22" or "80,443") or as a portrange (eg "1024:2048") without quotes'));
 		o.depends('proto', 'tcp');
 		o.depends('proto', 'udp');
 
 		o = s.option(form.Value, 'dest_ip', _('Destination address'),
-			_('Supports CIDR notation (eg \"192.168.100.0/24\") without quotes'));
+			_('Supports CIDR notation (eg "192.168.100.0/24") without quotes'));
 		o.datatype = 'ipaddr';
 
 		o = s.option(form.Value, 'dest_port', _('Destination port'),
-			_('May be entered as a single or multiple port(s) (eg \"22\" or \"80,443\") or as a portrange (eg \"1024:2048\") without quotes'));
+			_('May be entered as a single or multiple port(s) (eg "22" or "80,443") or as a portrange (eg "1024:2048") without quotes'));
 		o.depends('proto', 'tcp');
 		o.depends('proto', 'udp');
 
@@ -105,12 +105,12 @@ return view.extend({
 		o.depends('sticky', '1');
 
 		o = s.option(form.Value, 'ipset', _('IPset'),
-			_('Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg \"ipset=/youtube.com/youtube\")'));
+			_('Name of IPset rule. Requires IPset rule in /etc/dnsmasq.conf (eg "ipset=/youtube.com/youtube")'));
 		o.value('', _('-- Please choose --'));
-		var ipsets = data[0].split(/\n/);
-		for (var i = 0; i < ipsets.length; i++) {
-			if (ipsets[i].length > 0)
-				o.value(ipsets[i]);
+		let ipsets = data[0].split(/\n/);
+		for (let ips of ipsets) {
+			if (ips.length > 0)
+				o.value(ips);
 		}
 		o.modalonly = true;
 
@@ -119,10 +119,9 @@ return view.extend({
 		o.modalonly = true;
 
 		o = s.option(form.ListValue, 'use_policy', _('Policy assigned'));
-		var options = uci.sections('mwan3', 'policy')
-		for (var i = 0; i < options.length; i++) {
-			var value = options[i]['.name'];
-			o.value(value);
+		let options = uci.sections('mwan3', 'policy')
+		for (let opt of options) {
+			o.value(opt['.name']);
 		}
 		o.value('unreachable', _('unreachable (reject)'));
 		o.value('blackhole', _('blackhole (drop)'));

@@ -5,7 +5,7 @@
 'require uci';
 
 return view.extend({
-	render: function() {
+	render() {
 		let m, s, o;
 
 		m = new form.Map('libreswan', _('IPSec Proposals'));
@@ -17,7 +17,7 @@ return view.extend({
 		s.addbtntitle = _('Add Proposal');
 
 		s.renderSectionAdd = function(extra_class) {
-			var el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
+			const el = form.GridSection.prototype.renderSectionAdd.apply(this, arguments),
 				nameEl = el.querySelector('.cbi-section-create-name');
 			ui.addValidator(nameEl, 'uciname', true, function(v) {
 				let sections = [

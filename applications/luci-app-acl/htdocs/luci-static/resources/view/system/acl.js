@@ -7,25 +7,25 @@
 'require form';
 'require tools.widgets as widgets';
 
-var aclList = {};
+const aclList = {};
 
 function globListToRegExp(section_id, option) {
-	var list = L.toArray(uci.get('rpcd', section_id, option)),
-	    positivePatterns = [],
-	    negativePatterns = [];
+	const list = L.toArray(uci.get('rpcd', section_id, option));
+	const positivePatterns = [];
+	const negativePatterns = [];
 
 	if (option == 'read')
 		list.push.apply(list, L.toArray(uci.get('rpcd', section_id, 'write')));
 
-	for (var i = 0; i < list.length; i++) {
-		var array, glob;
+	for (let l of list) {
+		let array, glob;
 
-		if (list[i].match(/^\s*!/)) {
-			glob = list[i].replace(/^\s*!/, '').trim();
+		if (l.match(/^\s*!/)) {
+			glob = l.replace(/^\s*!/, '').trim();
 			array = negativePatterns;
 		}
 		else {
-			glob = list[i].trim(),
+			glob = l.trim(),
 			array = positivePatterns;
 		}
 
@@ -49,15 +49,15 @@ function globListToRegExp(section_id, option) {
 	];
 }
 
-var cbiACLLevel = form.DummyValue.extend({
-	textvalue: function(section_id) {
-		var allowedAclMatches = globListToRegExp(section_id, this.option.match(/read/) ? 'read' : 'write'),
-		    aclGroupNames = Object.keys(aclList),
-		    matchingGroupNames = [];
+const cbiACLLevel = form.DummyValue.extend({
+	textvalue(section_id) {
+		const allowedAclMatches = globListToRegExp(section_id, this.option.match(/read/) ? 'read' : 'write');
+		const aclGroupNames = Object.keys(aclList);
+		const matchingGroupNames = [];
 
-		for (var j = 0; j < aclGroupNames.length; j++)
-			if (allowedAclMatches[0].test(aclGroupNames[j]) && !allowedAclMatches[1].test(aclGroupNames[j]))
-				matchingGroupNames.push(aclGroupNames[j]);
+		for (let gn of aclGroupNames)
+			if (allowedAclMatches[0].test(gn) && !allowedAclMatches[1].test(gn))
+				matchingGroupNames.push(gn);
 
 		if (matchingGroupNames.length == aclGroupNames.length)
 			return E('span', { 'class': 'label' }, [ _('full', 'All permissions granted') ]);
@@ -68,12 +68,12 @@ var cbiACLLevel = form.DummyValue.extend({
 	}
 });
 
-var cbiACLSelect = form.Value.extend({
-	renderWidget: function(section_id) {
-		var readMatches = globListToRegExp(section_id, 'read'),
-		    writeMatches = globListToRegExp(section_id, 'write');
+const cbiACLSelect = form.Value.extend({
+	renderWidget(section_id) {
+		const readMatches = globListToRegExp(section_id, 'read');
+		const writeMatches = globListToRegExp(section_id, 'write');
 
-		var table = E('table', { 'class': 'table' }, [
+		const table = E('table', { 'class': 'table' }, [
 			E('tr', { 'class': 'tr' }, [
 				E('th', { 'class': 'th' }, [ _('ACL group') ]),
 				E('th', { 'class': 'th' }, [ _('Description') ]),
@@ -98,9 +98,9 @@ var cbiACLSelect = form.Value.extend({
 		]);
 
 		Object.keys(aclList).sort().forEach(function(aclGroupName) {
-			var isRequired = (aclGroupName == 'unauthenticated' || aclGroupName == 'luci-base' || aclGroupName == 'luci-mod-status-index'),
-			    isReadable = (readMatches[0].test(aclGroupName) && !readMatches[1].test(aclGroupName)) || null,
-			    isWritable = (writeMatches[0].test(aclGroupName) && !writeMatches[1].test(aclGroupName)) || null;
+			const isRequired = (aclGroupName == 'unauthenticated' || aclGroupName == 'luci-base' || aclGroupName == 'luci-mod-status-index');
+			const isReadable = (readMatches[0].test(aclGroupName) && !readMatches[1].test(aclGroupName)) || null;
+			const isWritable = (writeMatches[0].test(aclGroupName) && !writeMatches[1].test(aclGroupName)) || null;
 
 			table.appendChild(E('tr', { 'class': 'tr' }, [
 				E('td', { 'class': 'td' }, [ aclGroupName ]),
@@ -118,13 +118,13 @@ var cbiACLSelect = form.Value.extend({
 		return table;
 	},
 
-	formvalue: function(section_id) {
-		var node = this.map.findElement('data-field', this.cbid(section_id)),
-		    data = {};
+	formvalue(section_id) {
+		const node = this.map.findElement('data-field', this.cbid(section_id));
+		const data = {};
 
 		node.querySelectorAll('[data-acl-group]').forEach(function(select) {
-			var aclGroupName = select.getAttribute('data-acl-group'),
-			    value = select.value;
+			const aclGroupName = select.getAttribute('data-acl-group');
+			const value = select.value;
 
 			if (!value)
 				return;
@@ -145,7 +145,7 @@ var cbiACLSelect = form.Value.extend({
 		return data;
 	},
 
-	write: function(section_id, value) {
+	write(section_id, value) {
 		uci.unset('rpcd', section_id, 'read');
 		uci.unset('rpcd', section_id, 'write');
 
@@ -158,45 +158,44 @@ var cbiACLSelect = form.Value.extend({
 });
 
 return view.extend({
-	load: function() {
+	load() {
 		return L.resolveDefault(fs.list('/usr/share/rpcd/acl.d'), []).then(function(entries) {
-			var tasks = [
+			const tasks = [
 				L.resolveDefault(fs.stat('/usr/sbin/uhttpd'), null),
 				fs.lines('/etc/passwd')
 			];
 
-			for (var i = 0; i < entries.length; i++)
-				if (entries[i].type == 'file' && entries[i].name.match(/\.json$/))
-					tasks.push(L.resolveDefault(fs.read('/usr/share/rpcd/acl.d/' + entries[i].name).then(JSON.parse)));
+			for (let e of entries)
+				if (e.type == 'file' && e.name.match(/\.json$/))
+					tasks.push(L.resolveDefault(fs.read('/usr/share/rpcd/acl.d/' + e.name).then(JSON.parse)));
 
 			return Promise.all(tasks);
 		});
 	},
 
-	render: function(data) {
+	render([has_uhttpd, passwd, ...acls]) {
 		ui.addNotification(null, E('p', [
 			_('The LuCI ACL management is in an experimental stage! It does not yet work reliably with all applications')
 		]), 'warning');
 
-		var has_uhttpd = data[0],
-		    known_unix_users = {};
+		const known_unix_users = {};
 
-		for (var i = 0; i < data[1].length; i++) {
-			var parts = data[1][i].split(/:/);
+		for (let p of passwd) {
+			const parts = p.split(/:/);
 
 			if (parts.length >= 7)
 				known_unix_users[parts[0]] = true;
 		}
 
-		for (var i = 2; i < data.length; i++) {
-			if (!L.isObject(data[i]))
+		for (let acl of acls) {
+			if (!L.isObject(acl))
 				continue;
 
-			for (var aclName in data[i]) {
-				if (!data[i].hasOwnProperty(aclName))
+			for (let aclName in acl) {
+				if (!acl.hasOwnProperty(aclName))
 					continue;
 
-				aclList[aclName] = data[i][aclName];
+				aclList[aclName] = acl[aclName];
 			}
 		}
 
@@ -213,6 +212,8 @@ return view.extend({
 		};
 
 		o = s.option(form.Value, 'username', _('Login name'));
+		for(let user in known_unix_users)
+			o.value(user);
 		o.rmempty = false;
 
 		o = s.option(form.ListValue, '_variant', _('Password variant'));
@@ -220,7 +221,7 @@ return view.extend({
 		o.value('shadow', _('Use UNIX password in /etc/shadow'));
 		o.value('crypted', _('Use encrypted password hash'));
 		o.cfgvalue = function(section_id) {
-			var value = uci.get('rpcd', section_id, 'password') || '';
+			const value = uci.get('rpcd', section_id, 'password') || '';
 
 			if (value.substring(0, 3) == '$p$')
 				return 'shadow';
@@ -233,7 +234,7 @@ return view.extend({
 		o.modalonly = true;
 		o.depends('_variant', 'shadow');
 		o.cfgvalue = function(section_id) {
-			var value = uci.get('rpcd', section_id, 'password') || '';
+			const value = uci.get('rpcd', section_id, 'password') || '';
 			return value.substring(3);
 		};
 		o.write = function(section_id, value) {
@@ -247,11 +248,11 @@ return view.extend({
 		o.rmempty = false;
 		o.depends('_variant', 'crypted');
 		o.cfgvalue = function(section_id) {
-			var value = uci.get('rpcd', section_id, 'password') || '';
+			const value = uci.get('rpcd', section_id, 'password') || '';
 			return (value.substring(0, 3) == '$p$') ? '' : value;
 		};
 		o.validate = function(section_id, value) {
-			var variant = this.map.lookupOption('_variant', section_id)[0];
+			const variant = this.map.lookupOption('_variant', section_id)[0];
 
 			switch (value.substring(0, 3)) {
 			case '$p$':
@@ -269,7 +270,7 @@ return view.extend({
 			return true;
 		};
 		o.write = function(section_id, value) {
-			var variant = this.map.lookupOption('_variant', section_id)[0];
+			const variant = this.map.lookupOption('_variant', section_id)[0];
 
 			if (variant.formvalue(section_id) == 'crypted' && value.substring(0, 3) != '$1$')
 				return fs.exec('/usr/sbin/uhttpd', [ '-m', value ]).then(function(res) {
@@ -289,7 +290,7 @@ return view.extend({
 		o.default = '300';
 		o.datatype = 'uinteger';
 		o.textvalue = function(section_id) {
-			var value = uci.get('rpcd', section_id, 'timeout') || this.default;
+			const value = uci.get('rpcd', section_id, 'timeout') || this.default;
 			return +value ? '%ds'.format(value) : E('em', [ _('does not expire') ]);
 		};
 
@@ -305,8 +306,8 @@ return view.extend({
 		o.value('read', _('readonly', 'Only read permissions granted'));
 		o.value('individual', _('individual', 'Select individual permissions manually'));
 		o.cfgvalue = function(section_id) {
-			var readList = L.toArray(uci.get('rpcd', section_id, 'read')),
-			    writeList = L.toArray(uci.get('rpcd', section_id, 'write'));
+			const readList = L.toArray(uci.get('rpcd', section_id, 'read'));
+			const writeList = L.toArray(uci.get('rpcd', section_id, 'write'));
 
 			if (writeList.length == 1 && writeList[0] == '*')
 				return 'write';

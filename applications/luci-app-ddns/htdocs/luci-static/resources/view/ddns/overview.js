@@ -73,16 +73,15 @@ return view.extend({
 	 * (Special services that requires a dedicated package ARE NOT
 	 * supported by the 'service on demand' feature)
 	 */
-	callGenServiceList: function(m, ev) {
+	callGenServiceList(m, ev) {
 		return Promise.all([
 			L.resolveDefault(fs.list('/usr/share/ddns/default'), []),
 			L.resolveDefault(fs.list('/usr/share/ddns/custom'), []),
 			L.resolveDefault(fs.read('/usr/share/ddns/list'), null)
-		]).then(L.bind(function (data) {
-			var default_service = data[0],
-				custom_service = data[1],
-				list_service = data[2] && data[2].split("\n") || [],
-				_this = this;
+		]).then(L.bind(function ([default_service, custom_service, list_service]) {
+
+			list_service = list_service?.split("\n") || [];
+			let _this = this;
 
 			this.services = {};
 
@@ -107,7 +106,7 @@ return view.extend({
 	* Figure out what the wan interface on the device is.
 	* Determine if the physical device exist, or if we should use an alias.
 	*/
-	callGetWanInterface: function(m, ev) {
+	callGetWanInterface(m, ev) {
 		return network.getDevice('wan').then(dev => dev.getName())
 			.catch(err => network.getNetwork('wan').then(net => '@' + net.getName()))
 			.catch(err => null);
@@ -119,7 +118,7 @@ return view.extend({
 	* If a JSON is found, check if the IP type is supported.
 	* Invalidate the service_name if it is not supported.
 	*/
-	handleCheckService : function(s, service_name, ipv6, ev, section_id) {
+	handleCheckService (s, service_name, ipv6, ev, section_id) {
 
 		var value = service_name.formvalue(section_id);
 		s.service_supported = null;
@@ -139,7 +138,7 @@ return view.extend({
 			.then(L.bind(service_name.triggerValidation, service_name, section_id))
 	},
 
-	handleGetServiceData: function(service) {
+	handleGetServiceData(service) {
 		return Promise.all([
 			L.resolveDefault(fs.read('/usr/share/ddns/custom/'+service+'.json'), null),
 			L.resolveDefault(fs.read('/usr/share/ddns/default/'+service+'.json'), null)
@@ -148,7 +147,7 @@ return view.extend({
 		})
 	},
 
-	handleInstallService: function(m, service_name, section_id, section, _this, ev) {
+	handleInstallService(m, service_name, section_id, section, _this, ev) {
 		var service = service_name.formvalue(section_id)
 		return fs.exec('/usr/bin/ddns', ['service', 'install', service])
 			.then(L.bind(_this.callGenServiceList, _this))
@@ -157,14 +156,14 @@ return view.extend({
 			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
 	},
 
-	handleRefreshServicesList: function(m, ev) {
+	handleRefreshServicesList(m, ev) {
 		return fs.exec('/usr/bin/ddns', ['service', 'update'])
 			.then(L.bind(this.load, this))
 			.then(L.bind(this.render, this))
 			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
 	},
 
-	handleReloadDDnsRule: function(m, section_id, ev) {
+	handleReloadDDnsRule(m, section_id, ev) {
 		return fs.exec('/usr/lib/ddns/dynamic_dns_lucihelper.sh',
 							[ '-S', section_id, '--', 'start' ])
 			.then(L.bind(m.load, m))
@@ -172,14 +171,14 @@ return view.extend({
 			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
 	},
 
-	HandleStopDDnsRule: function(m, section_id, ev) {
+	HandleStopDDnsRule(m, section_id, ev) {
 		return fs.exec('/usr/lib/ddns/dynamic_dns_lucihelper.sh',
 							[ '-S', section_id, '--', 'start' ])
 			.then(L.bind(m.render, m))
 			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
 	},
 
-	handleToggleDDns: function(m, ev) {
+	handleToggleDDns(m, ev) {
         let action = this.status['_enabled'];
 		return this.callInitAction('ddns', action ? 'disable' : 'enable')
 			.then(L.bind(function () { return this.callInitAction('ddns', action ? 'stop' : 'start')}, this))
@@ -187,12 +186,12 @@ return view.extend({
 			.catch(function(e) { ui.addNotification(null, E('p', e.message)) });
 	},
 
-	handleRestartDDns: function(m, ev) {
+	handleRestartDDns(m, ev) {
 		return this.callInitAction('ddns', 'restart')
 			.then(L.bind(m.render, m));
 	},
 
-	poll_status: function(map, data) {
+	poll_status(map, data) {
 		var status = this.status = data[1] || [];
 		var service = data[0] || [], rows = map.querySelectorAll('.cbi-section-table-row[data-sid]'),
 			ddns_enabled = map.querySelector('[data-name="_enabled"]').querySelector('.cbi-value-field'),
@@ -239,25 +238,22 @@ return view.extend({
 		return;
 	},
 
-	load: function() {
+	load() {
 		return Promise.all([
 			this.callDDnsGetServicesStatus(),
 			this.callDDnsGetStatus(),
 			this.callDDnsGetEnv(),
 			this.callGenServiceList(),
+			this.callGetWanInterface(),
 			uci.load('ddns'),
-			this.callGetWanInterface()
 		]);
 	},
 
-	render: function(data) {
-		var resolved = data[0] || [];
-		var status = this.status = data[1] || [];
-		var env = data[2] || [];
-		var logdir = uci.get('ddns', 'global', 'ddns_logdir') || "/var/log/ddns";
-		var wan_interface = data[5];
+	render([resolved, status, env,  , wan_interface]) {
+		this.status = status;
+		const logdir = uci.get('ddns', 'global', 'ddns_logdir') || "/var/log/ddns";
 
-		var _this = this;
+		let _this = this;
 
 		let m, s, o;
 
@@ -275,7 +271,7 @@ return view.extend({
 
 		o = s.taboption('info', form.DummyValue, '_enabled', _('State'));
 		o.cfgvalue = function() {
-			var res = status[this.option];
+			const res = status[this.option];
 			if (!res) {
 				this.description = _("Currently DDNS updates are not started at boot or on interface events.") + "<br />" +
 				_("This is the default if you run DDNS scripts by yourself (i.e. via cron with force_interval set to '0')")
@@ -463,9 +459,9 @@ return view.extend({
 		s.sortable  = true;
 
 		s.handleCreateDDnsRule = function(m, name, service_name, ipv6, ev) {
-			var section_id = name.isValid('_new_') ? name.formvalue('_new_') : null,
-				service_value = service_name.isValid('_new_') ? service_name.formvalue('_new_') : null,
-				ipv6_value = ipv6.isValid('_new_') ? ipv6.formvalue('_new_') : null;
+			const section_id = name.isValid('_new_') ? name.formvalue('_new_') : null;
+			const service_value = service_name.isValid('_new_') ? service_name.formvalue('_new_') : null;
+			const ipv6_value = ipv6.isValid('_new_') ? ipv6.formvalue('_new_') : null;
 
 			if (!section_id || !service_value || !ipv6_value)
 				return;
@@ -481,9 +477,9 @@ return view.extend({
 		};
 
 		s.handleAdd = function(ev) {
-			var m2 = new form.Map('ddns'),
-				s2 = m2.section(form.NamedSection, '_new_'),
-				name, ipv6, service_name;
+			let m2 = new form.Map('ddns');
+			let s2 = m2.section(form.NamedSection, '_new_');
+			let name, ipv6, service_name;
 
 			s2.render = function() {
 				return Promise.all([
@@ -546,7 +542,7 @@ return view.extend({
 		};
 
 		s.renderRowActions = function(section_id) {
-			var tdEl = this.super('renderRowActions', [ section_id, _('Edit') ]),
+			const tdEl = this.super('renderRowActions', [ section_id, _('Edit') ]),
 				cfg_enabled = uci.get('ddns', section_id, 'enabled'),
 				reload_opt = {
 					'class': 'cbi-button cbi-button-neutral reload',
@@ -583,8 +579,9 @@ return view.extend({
 
 		s.addModalOptions = function(s, section_id) {
 
-			var service = uci.get('ddns', section_id, 'service_name') || '-',
-				ipv6 = uci.get('ddns', section_id, 'use_ipv6'), service_name, use_ipv6;
+			const service = uci.get('ddns', section_id, 'service_name') || '-';
+			const ipv6 = uci.get('ddns', section_id, 'use_ipv6');
+			let service_name, use_ipv6;
 
 			return _this.handleGetServiceData(service).then(L.bind(function (service_data) {
 				s.service_available = true;
@@ -683,7 +680,7 @@ return view.extend({
 					};
 				}
 
-				if (Boolean(s.url)) {
+				if (s.url) {
 					o = s.taboption('basic', form.DummyValue, '_url', _("Update URL"));
 					o.rawhtml = true;
 					o.default = '<div style="font-family: monospace;">'
@@ -691,7 +688,7 @@ return view.extend({
 						+ '</div>';
 				}
 
-				var service_switch = s.taboption('basic', form.Button, '_switch_proto');
+				let service_switch = s.taboption('basic', form.Button, '_switch_proto');
 				service_switch.modalonly  = true;
 				service_switch.title      = _('Really switch service?');
 				service_switch.inputtitle = _('Switch service');
@@ -717,7 +714,7 @@ return view.extend({
 					o.optional = true;
 					o.depends("service_name","-");
 					o.validate = function(section_id, value) {
-						var other = this.section.formvalue(section_id, 'update_script');
+						const other = this.section.formvalue(section_id, 'update_script');
 						if ((!value && !other) || (value && other)) {
 							return _("Provide either an Update Script OR an Update URL");
 						}
@@ -739,7 +736,7 @@ return view.extend({
 					o.optional = true;
 					o.depends("service_name","-");
 					o.validate = function(section_id, value) {
-						var other = this.section.formvalue(section_id, 'update_url');
+						const other = this.section.formvalue(section_id, 'update_url');
 						if ((!value && !other) || (value && other)) {
 							return _("Provide either an Update Script OR an Update URL");
 						}
@@ -896,8 +893,8 @@ return view.extend({
 						return uci.get('ddns', section_id, 'interface') || _('This will be autoset to the selected interface');
 					};
 					o.write = function(section_id) {
-						var opt = this.section.formvalue(section_id, 'ip_source');
-						var val = this.section.formvalue(section_id, 'ip_'+opt);
+						const opt = this.section.formvalue(section_id, 'ip_source');
+						const val = this.section.formvalue(section_id, 'ip_'+opt);
 						return uci.set('ddns', section_id, 'interface', val);
 					};
 
@@ -986,8 +983,8 @@ return view.extend({
 					o.modalonly = true;
 					o.datatype = 'uinteger';
 					o.validate = function(section_id, formvalue) {
-						var unit = this.section.formvalue(section_id, 'check_unit'),
-							time_to_sec = _this.time_res[unit || 'minutes'] * formvalue;
+						const unit = this.section.formvalue(section_id, 'check_unit');
+						const time_to_sec = _this.time_res[unit || 'minutes'] * formvalue;
 
 						if (formvalue && time_to_sec < 300)
 							return _('Values below 5 minutes == 300 seconds are not supported');
@@ -1018,11 +1015,11 @@ return view.extend({
 						if (!formvalue)
 							return true;
 
-						var check_unit = this.section.formvalue(section_id, 'check_unit'),
-							check_val = this.section.formvalue(section_id, 'check_interval'),
-							force_unit = this.section.formvalue(section_id, 'force_unit'),
-							check_to_sec = _this.time_res[check_unit || 'minutes'] * ( check_val || '30'),
-							force_to_sec = _this.time_res[force_unit || 'minutes'] * formvalue;
+						const check_unit = this.section.formvalue(section_id, 'check_unit');
+						const check_val = this.section.formvalue(section_id, 'check_interval');
+						const force_unit = this.section.formvalue(section_id, 'force_unit');
+						const check_to_sec = _this.time_res[check_unit || 'minutes'] * ( check_val || '30');
+						const force_to_sec = _this.time_res[force_unit || 'minutes'] * formvalue;
 
 						if (force_to_sec != 0 && force_to_sec < check_to_sec)
 							return _("Values lower than 'Check Interval' except '0' are invalid");
@@ -1075,7 +1072,7 @@ return view.extend({
 						return _this.callGetLogServices(section_id).then(L.bind(log_box.update_log, log_box));
 					}, this);
 
-					var log_box = s.taboption("logview", form.DummyValue, "_logview");
+					const log_box = s.taboption("logview", form.DummyValue, "_logview");
 					log_box.depends('use_logfile','1');
 					log_box.modalonly = true;
 
@@ -1091,8 +1088,7 @@ return view.extend({
 					}, o, this);
 				}
 
-				for (var i = 0; i < s.children.length; i++) {
-					o = s.children[i];
+				for (let o of s.children) {
 					switch (o.option) {
 					case '_switch_proto':
 						o.depends({ service_name : service, use_ipv6: ipv6, "!reverse": true })
@@ -1107,9 +1103,9 @@ return view.extend({
 
 					default:
 						if (o.deps.length)
-							for (var j = 0; j < o.deps.length; j++) {
-								o.deps[j].service_name = service;
-								o.deps[j].use_ipv6 = ipv6;
+							for (let d of o.deps) {
+								d.service_name = service;
+								d.use_ipv6 = ipv6;
 							}
 						else
 							o.depends({service_name: service, use_ipv6: ipv6 });

@@ -4,20 +4,19 @@
 'require uci';
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('apinger'),
 		])
 	},
 
-	render: function(data) {
+	render() {
 		let m, s, o;
-		var a_ifaces, a_down, a_delay, a_loss;
 
-		a_ifaces = uci.sections('apinger', 'interface');
-		a_down = uci.sections('apinger', 'alarm_down');
-		a_delay = uci.sections('apinger', 'alarm_delay');
-		a_loss = uci.sections('apinger', 'alarm_loss');
+		const a_ifaces = uci.sections('apinger', 'interface');
+		const a_down = uci.sections('apinger', 'alarm_down');
+		const a_delay = uci.sections('apinger', 'alarm_delay');
+		const a_loss = uci.sections('apinger', 'alarm_loss');
 
 		m = new form.Map('apinger', _('Apinger - Targets'),
 			_('Interface: Interface to use to track target') + '<br />' +
@@ -34,8 +33,8 @@ return view.extend({
 		s.addbtntitle = _('Add Target');
 
 		o = s.option(form.ListValue, 'interface', _('Interface'));
-		for (var i = 0; i < a_ifaces.length; i++) {
-			o.value(a_ifaces[i]['.name']);
+		for (let aif of a_ifaces) {
+			o.value(aif['.name']);
 		}
 
 		o = s.option(form.Value, 'address', _('Address'));
@@ -58,20 +57,20 @@ return view.extend({
 		o.default = false;
 
 		o = s.option(form.ListValue, 'alarm_down', _('Down Alarm'));
-		for (var i = 0; i < a_down.length; i++) {
-			o.value(a_down[i]['.name']);
+		for (let ad of a_down) {
+			o.value(ad['.name']);
 		}
 		o.optional = true;
 
 		o = s.option(form.ListValue, 'alarm_delay', _('Delay Alarm'));
-		for (var i = 0; i < a_delay.length; i++) {
-			o.value(a_delay[i]['.name']);
+		for (let ad of a_delay) {
+			o.value(ad['.name']);
 		}
 		o.optional = true;
 
 		o = s.option(form.ListValue, 'alarm_loss', _('Loss Alarm'));
-		for (var i = 0; i < a_loss.length; i++) {
-			o.value(a_loss[i]['.name']);
+		for (let al of a_loss) {
+			o.value(al['.name']);
 		}
 		o.optional = true;
 

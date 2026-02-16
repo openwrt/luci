@@ -17,7 +17,7 @@ const callServiceList = rpc.declare({
 
 function getServiceStatus() {
 	return L.resolveDefault(callServiceList('openlist'), {}).then(function (res) {
-		var isRunning = false;
+		let isRunning = false;
 		try {
 			isRunning = res['openlist']['instances']['instance1']['running'];
 		} catch (e) { }
@@ -26,10 +26,10 @@ function getServiceStatus() {
 }
 
 function renderStatus(isRunning, port) {
-	var spanTemp = '<span style="color:%s"><strong>%s %s</strong></span>';
-	var renderHTML;
+	const spanTemp = '<span style="color:%s"><strong>%s %s</strong></span>';
+	let renderHTML;
 	if (isRunning) {
-		var button = String.format('&#160;<a class="btn cbi-button" href="http://%s:%s" target="_blank" rel="noreferrer noopener">%s</a>',
+		const button = String.format('&#160;<a class="btn cbi-button" href="http://%s:%s" target="_blank" rel="noreferrer noopener">%s</a>',
 			window.location.hostname, port, _('Open Web Interface'));
 		renderHTML = spanTemp.format('green', _('OpenList'), _('RUNNING')) + button;
 	} else {
@@ -39,29 +39,29 @@ function renderStatus(isRunning, port) {
 	return renderHTML;
 }
 
-var stubValidator = {
+const stubValidator = {
 	factory: validation,
-	apply: function(type, value, args) {
+	apply(type, value, args) {
 		if (value != null)
 			this.value = value;
 
 		return validation.types[type].apply(this, args);
 	},
-	assert: function(condition) {
+	assert(condition) {
 		return !!condition;
 	}
 };
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('openlist')
 		]);
 	},
 
-	render: function(data) {
+	render(data) {
 		let m, s, o;
-		var webport = uci.get(data[0], 'config', 'listen_http_port') || '5244';
+		const webport = uci.get(data[0], 'config', 'listen_http_port') || '5244';
 
 		m = new form.Map('openlist', _('OpenList'),
 			_('A file list/WebDAV program that supports multiple storages, powered by Gin and Solidjs.') + '<br />' +
@@ -72,7 +72,7 @@ return view.extend({
 		s.render = function () {
 			poll.add(function () {
 				return L.resolveDefault(getServiceStatus()).then(function (res) {
-					var view = document.getElementById('service_status');
+					const view = document.getElementById('service_status');
 					view.innerHTML = renderStatus(res, webport);
 				});
 			});
@@ -92,8 +92,8 @@ return view.extend({
 		o.placeholder = '0.0.0.0';
 		o.validate = function(section_id, value) {
 			if (section_id && value) {
-				var m4 = value.match(/^([^\[\]:]+)$/),
-				    m6 = value.match(/^\[(.+)\]$/ );
+				const m4 = value.match(/^([^[\]:]+)$/);
+				const m6 = value.match(/^\[(.+)\]$/ );
 
 				if ((!m4 && !m6) || !stubValidator.apply('ipaddr', m4 ? m4[1] : m6[1]))
 					return _('Expecting: %s').format(_('valid IP address'));

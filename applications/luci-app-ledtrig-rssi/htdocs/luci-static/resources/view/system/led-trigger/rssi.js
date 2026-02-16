@@ -7,7 +7,7 @@ return baseclass.extend({
 	trigger: _('WiFi signal quality (service: rssileds)'),
 	kernel: false,
 	addFormOptions(s){
-		var o;
+		let o;
 
 		o = s.option(widgets.DeviceSelect, '_rssi_iface', _('Device'));
 		o.rmempty = true;
