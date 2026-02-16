@@ -8,19 +8,19 @@
 
 return view.extend({
 
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('firewall')
 		]);
 	},
 
-	render: function(data) {
+	render() {
 		let m, s, o;
 
 		m = new form.Map('firewall', _('Firewall - IP sets'),
 			_('firewall4 supports referencing and creating IP sets to simplify matching of large address lists without the need to create one rule per item to match. Port ranges in ipsets are unsupported by firewall4.<br />'));
 
-		var have_fw4 = L.hasSystemFeature('firewall4');
+		const have_fw4 = L.hasSystemFeature('firewall4');
 
 		if (have_fw4) {
 			s = m.section(form.NamedSection, 'fwver', 'fwver', '', _('Your device runs firewall4.'));
@@ -43,7 +43,7 @@ return view.extend({
 			o.optional = false;
 			o.rmempty = false;
 			o.validate = function (section_id, value) {
-				if (!/^[a-zA-Z_.][a-zA-Z0-9\/_.-]*$/.test(value))
+				if (!/^[a-zA-Z_.][a-zA-Z0-9/_.-]*$/.test(value))
 					return _('Invalid set name');
 
 				return true;
@@ -133,7 +133,7 @@ return view.extend({
 			o.value('hash', _('hash'));
 			o.value('list', _('list'));
 			o.validate = function(section_id, value) {
-				var family = this.section.formvalue(section_id, 'family');
+				const family = this.section.formvalue(section_id, 'family');
 				if (value.match(/bitmap/) && !family.match(/ipv4/))
 					return _('bitmap is ipv4 only');
 				return true;
