@@ -5,10 +5,10 @@
 'require ui';
 'require tools.widgets as widgets';
 
-var CBIBindSelect = form.ListValue.extend({
+const CBIBindSelect = form.ListValue.extend({
 	__name__: 'CBI.CBIBindSelect',
 
-	load: function(section_id) {
+	load(section_id) {
 		return Promise.all([
 			network.getDevices(),
 			this.noaliases ? null : network.getNetworks()
@@ -20,28 +20,27 @@ var CBIBindSelect = form.ListValue.extend({
 		}, this));
 	},
 
-	filter: function(section_id, value) {
+	filter(section_id, value) {
 		return true;
 	},
 
-	renderWidget: function(section_id, option_index, cfgvalue) {
-		var values = L.toArray((cfgvalue != null) ? cfgvalue : this.default),
-		    choices = {},
-		    checked = {},
-		    order = [];
+	renderWidget(section_id, option_index, cfgvalue) {
+		let values = L.toArray((cfgvalue != null) ? cfgvalue : this.default);
+		const choices = {};
+		const checked = {};
+		const order = [];
 
-		for (var i = 0; i < values.length; i++)
-			checked[values[i]] = true;
+		for (let v of values)
+			checked[v] = true;
 
 		values = [];
 
 		if (!this.multiple && (this.rmempty || this.optional))
 			choices[''] = E('em', _('unspecified'));
 
-		for (var i = 0; i < this.devices.length; i++) {
-			var device = this.devices[i],
-			    name = device.getName(),
-			    type = device.getType();
+		for (let device of this.devices) {
+			const name = device.getName();
+			const type = device.getType();
 
 			if (name == 'lo' || name == this.exclude || !this.filter(section_id, name))
 				continue;
@@ -55,7 +54,7 @@ var CBIBindSelect = form.ListValue.extend({
 			if (this.noinactive && device.isUp() == false)
 				continue;
 
-			var item = E([
+			const item = E([
 				E('img', {
 					'title': device.getI18n(),
 					'src': L.resource('icons/%s%s.svg'.format(type, device.isUp() ? '' : '_disabled'))
@@ -64,7 +63,7 @@ var CBIBindSelect = form.ListValue.extend({
 				E('span', { 'class': 'hide-close'}, [ device.getI18n() ])
 			]);
 
-			var networks = device.getNetworks();
+			const networks = device.getNetworks();
 
 			if (networks.length > 0)
 				L.dom.append(item.lastChild, [ ' (', networks.map(function(n) { return n.getName() }).join(', '), ')' ]);
@@ -77,10 +76,9 @@ var CBIBindSelect = form.ListValue.extend({
 		}
 
 		if (this.networks != null) {
-			for (var i = 0; i < this.networks.length; i++) {
-				var net = this.networks[i],
-				    device = network.instantiateDevice('@%s'.format(net.getName()), net),
-				    name = device.getName();
+			for (let net of this.networks) {
+				const device = network.instantiateDevice('@%s'.format(net.getName()), net);
+				const name = device.getName();
 
 				if (name == '@loopback' || name == this.exclude || !this.filter(section_id, name))
 					continue;
@@ -88,7 +86,7 @@ var CBIBindSelect = form.ListValue.extend({
 				if (this.noinactive && net.isUp() == false)
 					continue;
 
-				var item = E([
+				const item = E([
 					E('img', {
 						'title': device.getI18n(),
 						'src': L.resource('icons/alias%s.svg'.format(net.isUp() ? '' : '_disabled'))
@@ -106,27 +104,27 @@ var CBIBindSelect = form.ListValue.extend({
 		}
 
 		if (!this.nocreate) {
-			var keys = Object.keys(checked).sort(L.naturalCompare);
+			const keys = Object.keys(checked).sort(L.naturalCompare);
 
-			for (var i = 0; i < keys.length; i++) {
-				if (choices.hasOwnProperty(keys[i]))
+			for (let key of keys) {
+				if (choices.hasOwnProperty(key))
 					continue;
 
-				choices[keys[i]] = E([
+				choices[key] = E([
 					E('img', {
 						'title': _('Absent Interface'),
 						'src': L.resource('icons/ethernet_disabled.svg')
 					}),
-					E('span', { 'class': 'hide-open' }, [ keys[i] ]),
-					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(_('Absent Interface'), keys[i]) ])
+					E('span', { 'class': 'hide-open' }, [ key ]),
+					E('span', { 'class': 'hide-close'}, [ '%s: "%h"'.format(_('Absent Interface'), key) ])
 				]);
 
-				values.push(keys[i]);
-				order.push(keys[i]);
+				values.push(key);
+				order.push(key);
 			}
 		}
 
-		var widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
+		const widget = new ui.Dropdown(this.multiple ? values : values[0], choices, {
 			id: this.cbid(section_id),
 			sort: order,
 			multiple: this.multiple,
@@ -150,7 +148,7 @@ var CBIBindSelect = form.ListValue.extend({
 });
 
 return view.extend({
-	render: function () {
+	render () {
 		let m, s, o;
 
 		m = new form.Map('udpxy', _('udpxy'),

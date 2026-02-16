@@ -6,7 +6,7 @@
 'require tools.widgets as widgets';
 
 //	[Widget, Option, Title, Description, {Param: 'Value'}],
-var startupConf = [
+const startupConf = [
 	[form.Flag, 'stdout', _('Log stdout')],
 	[form.Flag, 'stderr', _('Log stderr')],
 	[widgets.UserSelect, 'user', _('Run daemon as user')],
@@ -16,7 +16,7 @@ var startupConf = [
 	[form.DynamicList, 'conf_inc', _('Additional configs'), _('Config files include in temporary config file'), {placeholder: '/etc/frp/frpc.d/frpc_full.ini'}]
 ];
 
-var commonConf = [
+const commonConf = [
 	[form.Value, 'server_addr', _('Server address'), _('ServerAddr specifies the address of the server to connect to.<br />By default, this value is "127.0.0.1".'), {datatype: 'host'}],
 	[form.Value, 'server_port', _('Server port'), _('ServerPort specifies the port to connect to the server on.<br />By default, this value is 7000.'), {datatype: 'port'}],
 	[form.Value, 'http_proxy', _('HTTP proxy'), _('HttpProxy specifies a proxy address to connect to the server through. If this value is "", the server will be connected to directly.<br />By default, this value is read from the "http_proxy" environment variable.')],
@@ -40,7 +40,7 @@ var commonConf = [
 	[form.DynamicList, '_', _('Additional settings'), _('This list can be used to specify some additional parameters which have not been included in this LuCI.'), {placeholder: 'Key-A=Value-A'}]
 ];
 
-var baseProxyConf = [
+const baseProxyConf = [
 	[form.Value, 'name', _('Proxy name'), undefined, {rmempty: false, optional: false}],
 	[form.ListValue, 'type', _('Proxy type'), _('ProxyType specifies the type of this proxy. Valid values include "tcp", "udp", "http", "https", "stcp" and "xtcp".<br />By default, this value is "tcp".'), {values: ['tcp', 'udp', 'http', 'https', 'stcp', 'xtcp']}],
 	[form.Flag, 'use_encryption', _('Encryption'), _('UseEncryption controls whether or not communication with the server will be encrypted. Encryption is done using the tokens supplied in the server and client configuration.<br />By default, this value is false.'), {datatype: 'bool'}],
@@ -49,16 +49,16 @@ var baseProxyConf = [
 	[form.Value, 'local_port', _('Local port'), _('LocalPort specifies the port to proxy to.'), {datatype: 'port'}],
 ];
 
-var bindInfoConf = [
+const bindInfoConf = [
 	[form.Value, 'remote_port', _('Remote port'), _('If remote_port is 0, frps will assign a random port for you'), {datatype: 'port'}]
 ];
 
-var domainConf = [
+const domainConf = [
 	[form.Value, 'custom_domains', _('Custom domains')],
 	[form.Value, 'subdomain', _('Subdomain')],
 ];
 
-var httpProxyConf = [
+const httpProxyConf = [
 	[form.Value, 'locations', _('Locations')],
 	[form.Value, 'http_user', _('HTTP user')],
 	[form.Value, 'http_pwd', _('HTTP password')],
@@ -66,7 +66,7 @@ var httpProxyConf = [
 	// [form.Value, 'headers', _('Headers')], // FIXME
 ];
 
-var stcpProxyConf = [
+const stcpProxyConf = [
 	[form.ListValue, 'role', _('Role'), undefined, {values: ['server', 'visitor']}],
 	[form.Value, 'server_name', _('Server name'), undefined, {depends: [{role: 'visitor'}]}],
 	[form.Value, 'bind_addr', _('Bind addr'), undefined, {depends: [{role: 'visitor'}]}],
@@ -74,7 +74,7 @@ var stcpProxyConf = [
 	[form.Value, 'sk', _('Sk')],
 ];
 
-var pluginConf = [
+const pluginConf = [
 	[form.ListValue, 'plugin', _('Plugin'), undefined, {values: ['', 'http_proxy', 'socks5', 'unix_domain_socket'], rmempty: true}],
 	[form.Value, 'plugin_http_user', _('HTTP user'), undefined, {depends: {plugin: 'http_proxy'}}],
 	[form.Value, 'plugin_http_passwd', _('HTTP password'), undefined, {depends: {plugin: 'http_proxy'}}],
@@ -86,11 +86,11 @@ var pluginConf = [
 
 function setParams(o, params) {
 	if (!params) return;
-	for (var key in params) {
-		var val = params[key];
+	for (let key in params) {
+		let val = params[key];
 		if (key === 'values') {
-			for (var j = 0; j < val.length; j++) {
-				var args = val[j];
+			for (let v of val) {
+				let args = v;
 				if (!Array.isArray(args))
 					args = [args];
 				o.value.apply(o, args);
@@ -99,14 +99,14 @@ function setParams(o, params) {
 			if (!Array.isArray(val))
 				val = [val];
 
-			var deps = [];
-			for (var j = 0; j < val.length; j++) {
-				var d = {};
-				for (var vkey in val[j])
-					d[vkey] = val[j][vkey];
-				for (var k = 0; k < o.deps.length; k++) {
-					for (var dkey in o.deps[k]) {
-						d[dkey] = o.deps[k][dkey];
+			const deps = [];
+			for (let v of val) {
+				const d = {};
+				for (let vkey in v)
+					d[vkey] = v[vkey];
+				for (let od of o.deps) {
+					for (let dkey in od) {
+						d[dkey] = od[dkey];
 					}
 				}
 				deps.push(d);
@@ -123,18 +123,16 @@ function setParams(o, params) {
 }
 
 function defTabOpts(s, t, opts, params) {
-	for (var i = 0; i < opts.length; i++) {
-		var opt = opts[i];
-		var o = s.taboption(t, opt[0], opt[1], opt[2], opt[3]);
+	for (let opt of opts) {
+		const o = s.taboption(t, opt[0], opt[1], opt[2], opt[3]);
 		setParams(o, opt[4]);
 		setParams(o, params);
 	}
 }
 
 function defOpts(s, opts, params) {
-	for (var i = 0; i < opts.length; i++) {
-		var opt = opts[i];
-		var o = s.option(opt[0], opt[1], opt[2], opt[3]);
+	for (let opt of opts) {
+		const o = s.option(opt[0], opt[1], opt[2], opt[3]);
 		setParams(o, opt[4]);
 		setParams(o, params);
 	}
@@ -149,7 +147,7 @@ const callServiceList = rpc.declare({
 
 function getServiceStatus() {
 	return L.resolveDefault(callServiceList('frpc'), {}).then(function (res) {
-		var isRunning = false;
+		let isRunning = false;
 		try {
 			isRunning = res['frpc']['instances']['instance1']['running'];
 		} catch (e) { }
@@ -158,8 +156,8 @@ function getServiceStatus() {
 }
 
 function renderStatus(isRunning) {
-	var renderHTML = "";
-	var spanTemp = '<em><span style="color:%s"><strong>%s %s</strong></span></em>';
+	let renderHTML = "";
+	const spanTemp = '<em><span style="color:%s"><strong>%s %s</strong></span></em>';
 
 	if (isRunning) {
 		renderHTML += String.format(spanTemp, 'green', _("frp Client"), _("RUNNING"));
@@ -171,7 +169,7 @@ function renderStatus(isRunning) {
 }
 
 return view.extend({
-	render: function() {
+	render() {
 		let m, s, o;
 
 		m = new form.Map('frpc', _('frp Client'));
@@ -181,7 +179,7 @@ return view.extend({
 		s.render = function (section_id) {
 			L.Poll.add(function () {
 				return L.resolveDefault(getServiceStatus()).then(function(res) {
-					var view = document.getElementById("service_status");
+					const view = document.getElementById("service_status");
 					view.innerHTML = renderStatus(res);
 				});
 			});
@@ -230,7 +228,7 @@ return view.extend({
 		o.depends('type', 'tcp');
 		o.depends('type', 'udp');
 		o.cfgvalue = function() {
-			var v = this.super('cfgvalue', arguments);
+			const  v = this.super('cfgvalue', arguments);
 			return v&&v!='0'?v:'#';
 		};
 

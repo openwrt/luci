@@ -6,13 +6,13 @@
 'require ui';
 'require tools.widgets as widgets';
 
-var domparser = new DOMParser();
-var QRCODE_VARIABLES = ['KEY_BASE64', 'KEY', 'HMAC_KEY_BASE64', 'HMAC_KEY'];
-var INVALID_KEYS = ['__CHANGEME__', 'CHANGEME'];
+const domparser = new DOMParser();
+const QRCODE_VARIABLES = ['KEY_BASE64', 'KEY', 'HMAC_KEY_BASE64', 'HMAC_KEY'];
+const INVALID_KEYS = ['__CHANGEME__', 'CHANGEME'];
 
 function setOptionValue(map, section_id, option, value) {
-	var option = L.toArray(map.lookupOption(option, section_id))[0];
-	var uiEl = option ? option.getUIElement(section_id) : null;
+	const opt = L.toArray(map.lookupOption(option, section_id))[0];
+	const uiEl = opt ? option.getUIElement(section_id) : null;
 	if (uiEl)
 		uiEl.setValue(value);
 }
@@ -23,10 +23,10 @@ function lines(content) {
 
 function parseLine(rawLine) {
 	if (rawLine[0] != '#' && rawLine[0] != ';') {
-		var line = rawLine.split(/ ([^;]*)/, 2);
+		const line = rawLine.split(/ ([^;]*)/, 2);
 		if (line.length == 2) {
-			var key = line[0].trim();
-			var value = line[1].trim();
+			const key = line[0].trim();
+			const value = line[1].trim();
 			if (key && value)
 				return [key, value];
 		}
@@ -35,23 +35,23 @@ function parseLine(rawLine) {
 }
 
 function parseKeys(content) {
-	var l = lines(content);
-	var keys = {};
-	for (var i = 0; i < l.length; i++) {
-		var p = l[i].split(/:(.*)/, 2);
+	const l = lines(content);
+	const keys = {};
+	for (let line of l) {
+		const p = line.split(/:(.*)/, 2);
 		if (p.length == 2)
 			keys[p[0].trim()] = p[1].trim();
 	}
 	return keys;
 }
 
-var KeyTypeValue = form.ListValue.extend({
-	__init__: function() {
+const KeyTypeValue = form.ListValue.extend({
+	__init__() {
 		this.super('__init__', arguments);
 		this.hidden = false;
 	},
 
-	cfgvalue: function(section_id) {
+	cfgvalue(section_id) {
 		for (var i = 0; i < this.keylist.length; i++) {
 			var value = this.map.data.get(
 				this.uciconfig || this.section.uciconfig || this.map.config,
@@ -64,7 +64,7 @@ var KeyTypeValue = form.ListValue.extend({
 		return this.keylist[0];
 	},
 
-	render: function(section_id, option_index, cfgvalue) {
+	render(section_id, option_index, cfgvalue) {
 		return this.super('render', arguments)
 			.then(L.bind(function(el) {
 				// Use direct style to hide, because class .hidden
@@ -76,32 +76,32 @@ var KeyTypeValue = form.ListValue.extend({
 			}, this));
 	},
 
-	remove: function() {
+	remove() {
 		// Ignore
 	},
 
-	write: function() {
+	write() {
 		// Ignore
 	},
 });
 
-var YNValue = form.Flag.extend({
-	__init__: function() {
+const YNValue = form.Flag.extend({
+	__init__() {
 		this.super('__init__', arguments);
 		this.enabled = 'Y';
 		this.disabled = 'N';
 		this.default = 'N';
 	},
 	
-	cfgvalue: function(section_id) {
-		var value = this.super('cfgvalue', arguments);
+	cfgvalue(section_id) {
+		const value = this.super('cfgvalue', arguments);
 		return value ? String(value).toUpperCase() : value;
 	},
 
-	parse: function(section_id) {
-		var active = this.isActive(section_id),
-		    cval = this.cfgvalue(section_id),
-		    fval = active ? this.formvalue(section_id) : null;
+	parse(section_id) {
+		const active = this.isActive(section_id);
+		const cval = this.cfgvalue(section_id);
+		const fval = active ? this.formvalue(section_id) : null;
 
 		if (String(fval).toUpperCase() != cval) {
 			if (fval == 'Y')
@@ -112,53 +112,53 @@ var YNValue = form.Flag.extend({
 	},
 });
 
-var QrCodeValue = form.DummyValue.extend({
-	__init__: function() {
+const QrCodeValue = form.DummyValue.extend({
+	__init__() {
 		this.super('__init__', arguments);
 		this.needsRefresh = {};
 
 		this.components = [];
 		QRCODE_VARIABLES.forEach(L.bind(function(option) {
 			this.components.push(option);
-			var dep = {};
+			const dep = {};
 			dep[option] = /.+/;
 			this.depends(dep);
 		}, this));
 	},
 
-	cfgQrCode: function(section_id) {
-		var qr = [];
-		for (var i = 0; i < this.components.length; i++) {
-			var value = this.map.data.get(
+	cfgQrCode(section_id) {
+		const qr = [];
+		for (let comp of this.components) {
+			const value = this.map.data.get(
 				this.uciconfig || this.section.uciconfig || this.map.config,
 				this.ucisection || section_id,
-				this.components[i]
+				comp
 			);
 
 			if (value)
-				qr.push(this.components[i] + ':' + value);
+				qr.push(comp + ':' + value);
 		}
 		return qr ? qr.join(' ') : null;
 	},
 
-	formQrCode: function(section_id) {
-		var qr = [];
-		for (var i = 0; i < this.components.length; i++) {
-			var value = null;
+	formQrCode(section_id) {
+		const qr = [];
+		for (let comp of this.components) {
+			let value = null;
 
-			var uiEl = L.toArray(this.map.lookupOption(this.components[i], section_id))[0];
+			const uiEl = L.toArray(this.map.lookupOption(comp, section_id))[0];
 			if (uiEl) {
 				if (uiEl.isActive(section_id))
 					value = uiEl.formvalue(section_id);
 			}
 
 			if (value)
-				qr.push(this.components[i] + ':' + value);
+				qr.push(comp + ':' + value);
 		}
 		return qr ? qr.join(' ') : null;
 	},
 
-	onchange: function(ev, section_id) {
+	onchange(ev, section_id) {
 		if (this.needsRefresh[section_id] !== undefined)
 			this.needsRefresh[section_id] = true;
 		else {
@@ -166,14 +166,14 @@ var QrCodeValue = form.DummyValue.extend({
 		}
 	},
 
-	refresh: function(section_id) {
-		var qrcode = this.formQrCode(section_id);
-		var formvalue = this.formvalue(section_id);
+	refresh(section_id) {
+		const qrcode = this.formQrCode(section_id);
+		const formvalue = this.formvalue(section_id);
 		if (formvalue != qrcode) {
 			this.getUIElement(section_id).setValue(qrcode);
-			var uiEl = document.getElementById(this.cbid(section_id));
+			const uiEl = document.getElementById(this.cbid(section_id));
 			if (uiEl) {
-				var contentEl = uiEl.nextSibling;
+				const contentEl = uiEl.nextSibling;
 				if (contentEl.childNodes.length == 1) {
 					dom.append(contentEl, E('em', { 'class': 'spinning',  }, [ _('Loading…') ]));
 				}
@@ -185,7 +185,7 @@ var QrCodeValue = form.DummyValue.extend({
 					.then(L.bind(function(svgEl) {
 						dom.content(contentEl, svgEl || E('div'));
 
-						var needsAnotherRefresh = this.needsRefresh[section_id];
+						const needsAnotherRefresh = this.needsRefresh[section_id];
 						delete this.needsRefresh[section_id];
 
 						if (needsAnotherRefresh) {
@@ -204,11 +204,11 @@ var QrCodeValue = form.DummyValue.extend({
 		return Promise.resolve(null);
 	},
 
-	renderWidget: function(section_id) {
-		var qrcode = this.cfgQrCode(section_id);
+	renderWidget(section_id) {
+		const qrcode = this.cfgQrCode(section_id);
 		return this.renderSvg(qrcode)
 			.then(L.bind(function(svgEl) {
-				var uiEl = new ui.Hiddenfield(qrcode, { id: this.cbid(section_id) });
+				const uiEl = new ui.Hiddenfield(qrcode, { id: this.cbid(section_id) });
 				return E([
 					uiEl.render(),
 					E('div', {}, svgEl || E('div'))
@@ -216,14 +216,14 @@ var QrCodeValue = form.DummyValue.extend({
 			}, this));
 	},
 
-	qrEncodeSvg: function(qrcode) {
+	qrEncodeSvg(qrcode) {
 		return fs.exec('/usr/bin/qrencode', ['--type', 'svg', '--inline', '-o', '-', qrcode])
 			.then(function(response) {
 				return response.stdout;
 			});
 	},
 
-	renderSvg: function(qrcode) {
+	renderSvg(qrcode) {
 		if (qrcode)
 			return this.qrEncodeSvg(qrcode)
 				.then(function(rawsvg) {
@@ -235,32 +235,32 @@ var QrCodeValue = form.DummyValue.extend({
 	},
 });
 
-var GenerateButton = form.Button.extend({
-	__init__: function() {
+const GenerateButton = form.Button.extend({
+	__init__() {
 		this.super('__init__', arguments);
 		this.onclick = L.bind(this.generateKeys, this);
 		this.keytypes = {};
 	},
 
-	keytype: function(key, regex) {
+	keytype(key, regex) {
 		this.keytypes[key] = regex;
 	},
 
-	qrcode: function(option) {
+	qrcode(option) {
 		this.qrcode = option;
 	},
 
-	generateKeys: function(ev, section_id) {
+	generateKeys(ev, section_id) {
 		return fs.exec('/usr/sbin/fwknopd', ['--key-gen'])
 			.then(function(response) { return parseKeys(response.stdout); })
 			.then(L.bind(this.applyKeys, this, section_id))
 			.catch(L.error);
 	},
 
-	applyKeys: function(section_id, keys) {
-		for (var key in keys) {
+	applyKeys(section_id, keys) {
+		for (let key in keys) {
 			setOptionValue(this.map, section_id, key, keys[key]);
-			for (var type in this.keytypes) {
+			for (let type in this.keytypes) {
 				if (this.keytypes[type].test(key))
 					setOptionValue(this.map, section_id, type, key);
 			}
@@ -270,7 +270,7 @@ var GenerateButton = form.Button.extend({
 		this.map.checkDepends();
 
 		// Refresh QR code
-		var option = L.toArray(this.map.lookupOption(this.qrcode, section_id))[0];
+		const option = L.toArray(this.map.lookupOption(this.qrcode, section_id))[0];
 		if (option)
 			return option.refresh(section_id);
 		else
@@ -278,15 +278,15 @@ var GenerateButton = form.Button.extend({
 	},
 });
 
-var ParseButton = form.Button.extend({
-	__init__: function() {
+const ParseButton = form.Button.extend({
+	__init__() {
 		this.super('__init__', arguments);
 		this.onclick = L.bind(this.parseAccessConf, this);
 	},
 
-	parseAccessConf: function() {
+	parseAccessConf() {
 		this.stanzas = [];
-		var ctx = {
+		const ctx = {
 			processLine: L.bind(this.processAccessLine, this),
 			remainingLines: [],
 			stanzas: {
@@ -300,7 +300,7 @@ var ParseButton = form.Button.extend({
 				if (ctx.stanzas.all.length > 0)
 					return this.renderStanzas(ctx.stanzas.all)
 						.then(function(topEl) {
-							var dlg = ui.showModal(_('Firewall Knock Operator Daemon'), [
+							const dlg = ui.showModal(_('Firewall Knock Operator Daemon'), [
 								topEl,
 								E('button', {
 									'class': 'cbi-button cbi-button-neutral',
@@ -311,7 +311,7 @@ var ParseButton = form.Button.extend({
 							dlg.parentNode.scrollTop = 0;
 						});
 				else {
-					var dlg = ui.showModal(_('Firewall Knock Operator Daemon'), [
+					const dlg = ui.showModal(_('Firewall Knock Operator Daemon'), [
 						E('p', _("No stanza found.")),
 						E('button', {
 							'class': 'cbi-button cbi-button-neutral',
@@ -326,22 +326,22 @@ var ParseButton = form.Button.extend({
 			});
 	},
 
-	parseFile: function(ctx, content) {
+	parseFile(ctx, content) {
 		ctx.remainingLines.unshift.apply(ctx.remainingLines, lines(content));
 		return this.parseLines(ctx);
 	},
 
-	parseFolder: function(ctx, folder, entries) {
+	parseFolder(ctx, folder, entries) {
 		// Parse and process files in order
-		var parseJobs = [];
-		var parsedLines = [];
+		const parseJobs = [];
+		const parsedLines = [];
 		entries.sort(function(el1, el2) {
 			return (el1.name > el2.name) ? 1
 				: (el1.name < el2.name) ? -1
 				: 0;
 		});
 		entries.forEach(L.bind(function(entry) {
-			var ctxLines = [];
+			const ctxLines = [];
 			parsedLines.unshift(ctxLines);
 			parseJobs.push(fs.read(folder + '/' + entry.name)
 				.then(function(content) {
@@ -357,18 +357,18 @@ var ParseButton = form.Button.extend({
 			.then(L.bind(this.parseLines, this, ctx));
 	},
 
-	parseLines: function(ctx) {
+	parseLines(ctx) {
 		while (ctx.remainingLines.length > 0) {
-			var line = parseLine(ctx.remainingLines.shift());
+			const line = parseLine(ctx.remainingLines.shift());
 			if (line) {
-				var result = ctx.processLine.call(this, ctx, line[0], line[1]);
+				const result = ctx.processLine.call(this, ctx, line[0], line[1]);
 				if (result)
 					return result;
 			}
 		}
 	},
 
-	processAccessLine: function(ctx, key, value) {
+	processAccessLine(ctx, key, value) {
 		if (key.endsWith(':')) {
 			key = key.slice(0, -1);
 		}
@@ -379,7 +379,7 @@ var ParseButton = form.Button.extend({
 			return fs.list(value)
 				.then(L.bind(this.parseFolder, this, ctx, value));
 		} else if (key == "%include_keys") {
-			var keysCtx = {
+			const keysCtx = {
 				processLine: L.bind(this.processKeysLine, this),
 				remainingLines: [],
 				stanzas: ctx.stanzas
@@ -396,14 +396,14 @@ var ParseButton = form.Button.extend({
 		}
 	},
 
-	processKeysLine: function(ctx, key, value) {
+	processKeysLine(ctx, key, value) {
 		// Simplification - accept only KEY arguments
 		if (ctx.stanzas.last && key.match(/KEY/))
 			ctx.stanzas.last[key] = value;
 	},
 
-	renderStanzas: function(stanzas) {
-		var config = {};
+	renderStanzas(stanzas) {
+		const config = {};
 		config.access = stanzas;
 
 		let m, s, o;
@@ -461,14 +461,13 @@ var ParseButton = form.Button.extend({
 
 return view.extend({
 
-	load: function() {
+	load() {
 		return Promise.all([
 			L.resolveDefault(fs.stat('/etc/fwknop/access.conf'))
 		]);
 	},
 
-	render: function(results) {
-		var has_access_conf = results[0];
+	render([has_access_conf]) {
 		let m, s, o;
 
 		m = new form.Map('fwknopd', _('Firewall Knock Operator Daemon'));
@@ -499,7 +498,7 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = true;
 
-		var qrCode = s.option(QrCodeValue, 'qr', _('QR code'), ('QR code to configure fwknopd Android application.'));
+		let qrCode = s.option(QrCodeValue, 'qr', _('QR code'), ('QR code to configure fwknopd Android application.'));
 
 		o = s.option(form.Value, 'SOURCE', 'SOURCE', _('The source address from which the SPA packet will be accepted. The string “ANY” is \
 								also accepted if a valid SPA packet should be honored from any source IP. \

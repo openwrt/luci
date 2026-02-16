@@ -16,7 +16,7 @@ const callRcInit = rpc.declare({
 });
 
 return L.view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			L.resolveDefault(fs.read('/proc/net/ipv6_route'), null),
 			L.resolveDefault(fs.exec('/usr/bin/certtool', ['--hash', 'sha256', '--key-id', '--infile', '/etc/ocserv/server-cert.pem']).then(res => res.stdout), null),
@@ -24,7 +24,7 @@ return L.view.extend({
 		]);
 	},
 
-	render: function([has_ipv6, pki_hash, ca_content]) {
+	render([has_ipv6, pki_hash, ca_content]) {
 		pki_hash = pki_hash ? 'sha256:' + pki_hash.trim() : '';
 
 		const m = new form.Map('ocserv', _('OpenConnect VPN'));
@@ -100,13 +100,13 @@ return L.view.extend({
 		o.default = '0';
 
 		// IPv4 Address
-		o = s.taboption('general', form.Value, 'ipaddr', _('VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Network-Address'),
+		o = s.taboption('general', form.Value, 'ipaddr', _('VPN <abbr title="Internet Protocol Version 4">IPv4</abbr>-Network-Address'),
 			_('The IPv4 subnet address to provide to clients; this should be some private network different than the LAN addresses unless proxy ARP is enabled. Leave empty to attempt auto-configuration.'));
 		o.datatype = 'ip4addr';
 		o.default = '192.168.100.1';
 
 		// IPv4 Netmask
-		o = s.taboption('general', form.Value, 'netmask', _('VPN <abbr title=\"Internet Protocol Version 4\">IPv4</abbr>-Netmask'),
+		o = s.taboption('general', form.Value, 'netmask', _('VPN <abbr title="Internet Protocol Version 4">IPv4</abbr>-Netmask'),
 			_('The mask of the subnet above.'));
 		o.datatype = 'ip4addr';
 		o.default = '255.255.255.0';
@@ -116,9 +116,9 @@ return L.view.extend({
 
 		// IPv6 Address (if available)
 		if (has_ipv6) {
-			o = s.taboption('general', form.Value, 'ip6addr', _('VPN <abbr title=\"Internet Protocol Version 6\">IPv6</abbr>-Network-Address'),
+			o = s.taboption('general', form.Value, 'ip6addr', _('VPN <abbr title="Internet Protocol Version 6">IPv6</abbr>-Network-Address'),
 				_('The IPv6 subnet address to provide to clients; leave empty to attempt auto-configuration.') + '<br />' +
-				_('<abbr title=\"Classless Inter-Domain Routing\">CIDR</abbr>-Notation: address/prefix'));
+				_('<abbr title="Classless Inter-Domain Routing">CIDR</abbr>-Notation: address/prefix'));
 			o.datatype = 'ip6addr';
 		}
 
@@ -175,18 +175,18 @@ return L.view.extend({
 		return m.render();
 	},
 
-	addFooter: function() {
+	addFooter() {
 		// Override to add custom behavior after form render
 	},
 
-	handleSave: function(ev) {
+	handleSave(ev) {
 		return this.super('handleSave', [ev]).then(() => {
 			// Reload occtl after save
 			return L.resolveDefault(fs.exec('/usr/bin/occtl', ['reload']), null);
 		});
 	},
 
-	handleSaveApply: function(ev) {
+	handleSaveApply(ev) {
 		return this.handleSave(ev).then(() => {
 			// Get the enable flag value
 			const mapNode = document.querySelector('[data-name="ocserv"]');

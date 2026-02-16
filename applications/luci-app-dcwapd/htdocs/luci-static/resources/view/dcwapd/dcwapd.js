@@ -14,34 +14,33 @@ return view.extend({
 		expect: { '': {} }
 	}),
 
-	load: function() {
+	load() {
 		return Promise.all([
-			L.resolveDefault(L.uci.load('dcwapd'), {}),
 			this.callLuciWirelessDevices(),
+			L.resolveDefault(L.uci.load('dcwapd'), {}),
 		]);
 	},
 
-	render: function(data) {
-		var wireless_devices = data[1];
+	render([wireless_devices]) {
 
-		var m = new form.Map('dcwapd', _('Dual Channel Wi-Fi AP Daemon'),
+		let m = new form.Map('dcwapd', _('Dual Channel Wi-Fi AP Daemon'),
 			_('With %s you can use two simultaneous Wi-Fi connections to decrease wireless traffic congestion and increase throughput.').format('<abbr title="%s">%s</abbr>').format(_('Dual Channel Wi-Fi AP Daemon'), _('Dual Channel WiFi')));
 
 		// General section
-		var s = m.section(form.NamedSection, 'general', _('General'), _('General Settings'));
+		let s = m.section(form.NamedSection, 'general', _('General'), _('General Settings'));
 		s.addremove = false;
 		s.dynamic = false;
 		s.optional = false;
 		s.anonymous = true;
 
 		// Enabled state option
-		var enable = s.option(form.Flag, 'enabled', _('Enable'));
+		let enable = s.option(form.Flag, 'enabled', _('Enable'));
 		enable.default = false;
 		enable.optional = false;
 		enable.rmempty = false;
 
 		// Temp dir option
-		var tmpdir = s.option(form.Value, 'tmpdir', _('Temp Directory'), _('Specify the temporary directory for dcwapd file storage.'));
+		let tmpdir = s.option(form.Value, 'tmpdir', _('Temp Directory'), _('Specify the temporary directory for dcwapd file storage.'));
 		tmpdir.optional = false;
 		tmpdir.rmempty = false;
 
@@ -51,7 +50,7 @@ return view.extend({
 		s.addremove = true;
 
 		// SSID option
-		var dat_ssid = s.option(form.Value, 'ssid', _('SSID'));
+		let dat_ssid = s.option(form.Value, 'ssid', _('SSID'));
 		dat_ssid.optional = false;
 		dat_ssid.rmempty = false;
 		if (wireless_devices.length > 0) {
@@ -65,7 +64,7 @@ return view.extend({
 		}
 
 		// Data bridge option
-		var dat_bridge = s.option(widgets.DeviceSelect, 'bridge', _('Bridge'));
+		let dat_bridge = s.option(widgets.DeviceSelect, 'bridge', _('Bridge'));
 		dat_bridge.optional = false;
 		dat_bridge.rmempty = false;
 		dat_bridge.nocreate = false;
@@ -76,7 +75,7 @@ return view.extend({
 		}
 
 		// Data interfaces list
-		var ifaces = s.option(form.MultiValue, 'interfaces', _('Interfaces'));
+		let ifaces = s.option(form.MultiValue, 'interfaces', _('Interfaces'));
 		ifaces.optional = true;
 		ifaces.rmempty = false;
 		if (wireless_devices.length > 0) {
@@ -97,13 +96,13 @@ return view.extend({
 		s.anonymous = false;
 
 		// Enabled state option
-		var enable = s.option(form.Flag, 'enabled', _('Enable'));
-		enable.default = false;
-		enable.optional = false;
-		enable.rmempty = false;
+		let set_enable = s.option(form.Flag, 'enabled', _('Enable'));
+		set_enable.default = false;
+		set_enable.optional = false;
+		set_enable.rmempty = false;
 
 		// SSID option
-		var pri_ssid = s.option(form.Value, 'ssid', _('SSID'));
+		let pri_ssid = s.option(form.Value, 'ssid', _('SSID'));
 		pri_ssid.optional = false;
 		pri_ssid.rmempty = false;
 		if (wireless_devices.length > 0) {
@@ -117,7 +116,7 @@ return view.extend({
 		}
 
 		// Primary bridge option
-		var pri_bridge = s.option(widgets.DeviceSelect, 'bridge', _('Bridge'));
+		let pri_bridge = s.option(widgets.DeviceSelect, 'bridge', _('Bridge'));
 		pri_bridge.optional = false;
 		pri_bridge.rmempty = false;
 		pri_bridge.nocreate = true;
@@ -128,7 +127,7 @@ return view.extend({
 		}
 
 		// Data channels list
-		var data_channels = s.option(form.MultiValue, 'data_channels', _('Data Channels'));
+		let data_channels = s.option(form.MultiValue, 'data_channels', _('Data Channels'));
 		data_channels.optional = false;
 		data_channels.rmempty = false;
 		const dataChannels = L.uci.sections('dcwapd', 'datachannel');
@@ -148,25 +147,25 @@ return view.extend({
 		s.sortable = true;
 
 		// Packet Size
-		var packetsize = s.option(form.Value, 'packet_size', _('Packet size'));
+		let packetsize = s.option(form.Value, 'packet_size', _('Packet size'));
 		packetsize.rmempty = false;
 		packetsize.value('*');
 		packetsize.default = '*';
 
 		// Source IP
-		var srcip = s.option(form.Value, 'source_ip', _('Source IP'));
+		let srcip = s.option(form.Value, 'source_ip', _('Source IP'));
 		srcip.rmempty = false;
 		srcip.value('*');
 		srcip.default = '*';
 
 		// Source Port
-		var srcport = s.option(form.Value, 'source_port', _('Source port'));
+		let srcport = s.option(form.Value, 'source_port', _('Source port'));
 		srcport.rmempty = false;
 		srcport.value('*');
 		srcport.default = '*';
 
 		// Protocol
-		var proto = s.option(form.Value, 'protocol', _('Protocol'));
+		let proto = s.option(form.Value, 'protocol', _('Protocol'));
 		proto.value('*');
 		proto.value('tcp', 'TCP');
 		proto.value('udp', 'UDP');
@@ -175,7 +174,7 @@ return view.extend({
 		proto.default = '*';
 
 		// Destination Port
-		var dstport = s.option(form.Value, 'dest_port', _('Destination port'));
+		let dstport = s.option(form.Value, 'dest_port', _('Destination port'));
 		dstport.rmempty = false;
 		dstport.value('*');
 		dstport.default = '*';
@@ -188,13 +187,13 @@ return view.extend({
 		s.optional = false;
 
 		// MAC address option
-		var mac = s.option(form.Value, 'mac', _('MAC Address'));
+		let mac = s.option(form.Value, 'mac', _('MAC Address'));
 		mac.optional = false;
 		mac.rmempty = false;
 		mac.datatype = 'or(macaddr,"*")';
 
 		// Filters list
-		var filters = s.option(form.MultiValue, 'filters', _('Filters'));
+		let filters = s.option(form.MultiValue, 'filters', _('Filters'));
 		filters.optional = false;
 		filters.rmempty = false;
 		const filterSections = L.uci.sections('dcwapd', 'filter');

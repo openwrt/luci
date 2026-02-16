@@ -2,16 +2,16 @@
 'require view';
 'require form';
 
-var desc = _(""
+const desc = _(""
 	+ "<p/>Note: you need a working PageKite account, or at least, your own running front end for this form to work. "
 	+ "Visit %s to set up a name for your "
-	+ "router and get a secret key for the connection."..format(`<a href='https://pagekite.net/home/'>${_('your account')}</a>`)) + '<br/>'
+	+ "router and get a secret key for the connection.".format(`<a href='https://pagekite.net/home/'>${_('your account')}</a>`)) + '<br/>'
 	+ _("<p/><em>Note: this web configurator only supports "
 	+ "some very very basic uses of pagekite.</em>"
 );
 
 return view.extend({
-	render: function() {
+	render() {
 		let m, s, o;
 
 		m = new form.Map('pagekitec', _('PageKite'), desc);

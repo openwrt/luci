@@ -18,7 +18,7 @@ const callLLDPStatus = rpc.declare({
 	expect: {}
 });
 
-var dataMap = {
+const dataMap = {
 	local: {
 		localChassis: null,
 	},
@@ -29,7 +29,7 @@ var dataMap = {
 };
 
 return L.view.extend({
-	__init__: function() {
+	__init__() {
 		this.super('__init__', arguments);
 
 		this.rowsUnfolded = {};
@@ -67,15 +67,15 @@ return L.view.extend({
 		]);
 
 		// Inject CSS
-		var head = document.getElementsByTagName('head')[0];
-		var css = E('link', { 'href':
+		const head = document.getElementsByTagName('head')[0];
+		const css = E('link', { 'href':
 			L.resource('lldpd/lldpd.css')
 				+ '?v=#PKG_VERSION', 'rel': 'stylesheet' });
 
 		head.appendChild(css);
 	},
 
-	load: function() {
+	load() {
 		return Promise.all([
 			L.resolveDefault(callLLDPStatus(), {}),
 			lldpd.init(),
@@ -83,7 +83,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderParam: function(param, value) {
+	renderParam(param, value) {
 		if (typeof value === 'undefined')
 			return '';
 
@@ -94,7 +94,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderAge: function(v) {
+	renderAge(v) {
 		if (typeof v === 'undefined')
 			return "&#8211;";
 
@@ -102,7 +102,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderIdType: function(v) {
+	renderIdType(v) {
 		if (typeof v === 'undefined')
 			return "&#8211;";
 
@@ -119,7 +119,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderProtocol: function(v) {
+	renderProtocol(v) {
 		if (typeof v === 'undefined' || v == 'unknown')
 			return "&#8211;";
 
@@ -138,7 +138,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderAdminStatus: function(status) {
+	renderAdminStatus(status) {
 		if ((typeof status === 'undefined') || !Array.isArray(status))
 			return '&#8211;';
 
@@ -155,7 +155,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderNumber: function(v) {
+	renderNumber(v) {
 		if (parseInt(v))
 			return v;
 
@@ -163,7 +163,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderPort: function(port) {
+	renderPort(port) {
 		const portData = port?.port?.[0];
 		const descrValue = portData?.descr?.[0]?.value;
 		const idValue = portData?.id?.[0]?.value;
@@ -184,8 +184,8 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderPortParamTableShort: function(port) {
-		var items = [];
+	renderPortParamTableShort(port) {
+		const items = [];
 
 		items.push(this.renderParam(_('Name'), port.name));
 		items.push(this.renderParam(_('Age'), this.renderAge(port.age)));
@@ -194,7 +194,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderPortParamTable: function(port, only_id_and_ttl) {
+	renderPortParamTable(port, only_id_and_ttl) {
 		const items = [];
 
 		if (!only_id_and_ttl) {
@@ -227,7 +227,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderChassis: function(ch) {
+	renderChassis(ch) {
 		const nameValue = ch?.name?.[0]?.value;
 		const descrValue = ch?.descr?.[0]?.value;
 		const idValue = ch?.id?.[0]?.value;
@@ -253,7 +253,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderChassisParamTable: function(ch) {
+	renderChassisParamTable(ch) {
 		const items = [];
 
 		// Add name and description if available
@@ -293,29 +293,29 @@ return L.view.extend({
 	},
 
 	/** @private */
-	getFoldingImage: function(unfolded) {
+	getFoldingImage(unfolded) {
 		return L.resource('lldpd/details_' +
 			(unfolded ? 'hide' : 'show') + '.svg');
 	},
 
 	/** @private */
-	generateRowId: function(str) {
+	generateRowId(str) {
 		return str.replace(/[^a-z0-9]/gi, '-');
 	},
 
 	/** @private */
-	handleToggleFoldingRow: function(row, row_id) {
-		var e_img      = row.querySelector('img');
-		var e_folded   = row.querySelectorAll('.lldpd-folded');
-		var e_unfolded = row.querySelectorAll('.lldpd-unfolded');
+	handleToggleFoldingRow(row, row_id) {
+		const e_img      = row.querySelector('img');
+		const e_folded   = row.querySelectorAll('.lldpd-folded');
+		const e_unfolded = row.querySelectorAll('.lldpd-unfolded');
 
 		if (e_folded.length != e_unfolded.length)
 			return;
 
-		var do_unfold = (e_folded[0].style.display !== 'none');
+		const do_unfold = (e_folded[0].style.display !== 'none');
 		this.rowsUnfolded[row_id] = do_unfold;
 
-		for (var i = 0; i < e_folded.length; i++)
+		for (let i = 0; i < e_folded.length; i++)
 		{
 			if (do_unfold)
 			{
@@ -333,7 +333,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	makeFoldingTableRow: function(row, unfolded) {
+	makeFoldingTableRow(row, unfolded) {
 		//
 		// row[0] - row id
 		// row[1] - contents for first cell in row
@@ -347,7 +347,7 @@ return L.view.extend({
 		for (let i = 1; i < row.length; i++) {
 			if (i == 1) {
 				// Fold/unfold image appears only in first column
-				var dImg = E('div', { 'style': 'padding: 0 8px 0 0;' }, [
+				const dImg = E('div', { 'style': 'padding: 0 8px 0 0;' }, [
 					E('img', { 'width': '16px', 'src': this.getFoldingImage(unfolded) }),
 				]);
 			}
@@ -392,7 +392,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	makeNeighborsTableRow: function(obj) {
+	makeNeighborsTableRow(obj) {
 		obj.name = obj?.name ?? 'Unknown';
 
 		let new_id = `${obj.name}-${obj.rid}`;
@@ -428,7 +428,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderInterfaceProtocols: function(iface, neighbors) {
+	renderInterfaceProtocols(iface, neighbors) {
 		const ifaceName = iface?.name;
 		const interfaces = neighbors?.lldp?.[0]?.interface;
 
@@ -444,7 +444,7 @@ return L.view.extend({
 	},
 	
 	/** @private */
-	makeStatisticsTableRow: function(sobj, iobj, neighbors) {
+	makeStatisticsTableRow(sobj, iobj, neighbors) {
 		const row_id = this.generateRowId(iobj.name);
 
 		return this.makeFoldingTableRow([
@@ -466,33 +466,33 @@ return L.view.extend({
 	},
 
 	/** @private */
-	updateTable: function(table, data, placeholder) {
-		var target = isElem(table) ? table : document.querySelector(table);
+	updateTable(table, data, placeholder) {
+		const target = isElem(table) ? table : document.querySelector(table);
 
 		if (!isElem(target))
 			return;
 
 		target.querySelectorAll(
 			'.tr.table-titles, .cbi-section-table-titles').forEach(L.bind(function(thead) {
-			var titles = [];
+			const titles = [];
 
 			thead.querySelectorAll('.th').forEach(function(th) {
 				titles.push(th);
 			});
 
 			if (Array.isArray(data)) {
-				var n = 0, rows = target.querySelectorAll('.tr');
+				let n = 0, rows = target.querySelectorAll('.tr');
 
 				data.forEach(L.bind(function(row) {
-					var id = row[0];
-					var trow = E('div', { 'class': 'tr', 'click': L.bind(function(ev) {
+					let id = row[0];
+					const trow = E('div', { 'class': 'tr', 'click': L.bind(function(ev) {
 						this.handleToggleFoldingRow(ev.currentTarget, id);
 						// lldpd_folding_toggle(ev.currentTarget, id);
 					}, this) });
 
-					for (var i = 0; i < titles.length; i++) {
-						var text = (titles[i].innerText || '').trim();
-						var td = trow.appendChild(E('div', {
+					for (let i = 0; i < titles.length; i++) {
+						const text = (titles[i].innerText || '').trim();
+						const td = trow.appendChild(E('div', {
 							'class': titles[i].className,
 							'data-title': (text !== '') ? text : null
 						}, row[i + 1] || ''));
@@ -513,10 +513,10 @@ return L.view.extend({
 					target.removeChild(rows[n]);
 
 				if (placeholder && target.firstElementChild === target.lastElementChild) {
-					var trow = target.appendChild(
+					const trow = target.appendChild(
 						E('div', { 'class': 'tr placeholder' }));
 
-					var td = trow.appendChild(
+					const td = trow.appendChild(
 						E('div', { 'class': 'center ' + titles[0].className }, placeholder));
 
 					td.classList.remove('th');
@@ -527,10 +527,10 @@ return L.view.extend({
 
 				thead.parentNode.querySelectorAll('.tr, .cbi-section-table-row').forEach(function(trow) {
 					if (trow !== thead) {
-						var n = 0;
+						let n = 0;
 						trow.querySelectorAll('.th, .td').forEach(function(td) {
 							if (n < titles.length) {
-								var text = (titles[n++].innerText || '').trim();
+								const text = (titles[n++].innerText || '').trim();
 								if (text !== '')
 									td.setAttribute('data-title', text);
 							}
@@ -544,7 +544,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	startPolling: function() {
+	startPolling() {
 		poll.add(L.bind(function() {
 			return callLLDPStatus().then(L.bind(function(data) {
 				this.renderData(data);
@@ -553,7 +553,7 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderDataLocalChassis: function(data) {
+	renderDataLocalChassis(data) {
 		const chassis = data?.['local-chassis']?.[0]?.chassis?.[0]?.name;
 
 		if (chassis)
@@ -563,13 +563,13 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderDataNeighbors: function(neighbors) {
+	renderDataNeighbors(neighbors) {
 		const ifaces = neighbors?.lldp?.[0]?.interface;
 		return ifaces ? ifaces.map(iface => this.makeNeighborsTableRow(iface)) : [];
 	},
 
 	/** @private */
-	renderDataStatistics: function(statistics, interfaces, neighbors) {
+	renderDataStatistics(statistics, interfaces, neighbors) {
 		const sifaces = statistics?.lldp?.[0]?.interface;
 		const ifaces = interfaces?.lldp?.[0]?.interface;
 
@@ -581,8 +581,8 @@ return L.view.extend({
 	},
 
 	/** @private */
-	renderData: function(data) {
-		var r;
+	renderData(data) {
+		let r;
 
 		r = this.renderDataLocalChassis(data.chassis);
 		dom.content(document.getElementById('lldpd-local-chassis'), r);
@@ -596,8 +596,8 @@ return L.view.extend({
 			_('No data to display'));
 	},
 
-	render: function(data) {
-		var m, s, ss, o;
+	render(data) {
+		let m, s, ss, o;
 
 		m = new form.JSONMap(dataMap,
 			_('LLDP Status'),

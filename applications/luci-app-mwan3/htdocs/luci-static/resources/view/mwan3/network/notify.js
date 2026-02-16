@@ -3,15 +3,15 @@
 'require fs';
 'require ui';
 
-var isReadonlyView = !L.hasViewPermission() || null;
+const isReadonlyView = !L.hasViewPermission() || null;
 
 return view.extend({
-	load: function() {
+	load() {
 		return L.resolveDefault(fs.read('/etc/mwan3.user'), '');
 	},
 
-	handleSave: function(ev) {
-		var value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
+	handleSave(ev) {
+		const value = (document.querySelector('textarea').value || '').trim().replace(/\r\n/g, '\n') + '\n';
 
 		return fs.write('/etc/mwan3.user', value).then(function(rc) {
 			document.querySelector('textarea').value = value;
@@ -21,11 +21,11 @@ return view.extend({
 			});
 		},
 
-	render: function(mwan3user) {
+	render(mwan3user) {
 		return E([
 			E('h2', _('MultiWAN Manager - Notify')),
 			E('p', { 'class': 'cbi-section-descr' },
-			_('This section allows you to modify the content of \"/etc/mwan3.user\".') + '<br/>' +
+			_('This section allows you to modify the content of "/etc/mwan3.user".') + '<br/>' +
 			_('The file is also preserved during sysupgrade.') + '<br/>' +
 			'<br />' +
 			_('Notes:') + '<br />' +
@@ -41,8 +41,8 @@ return view.extend({
 			_('* %s: Is called by netifd and mwan3track').format('ifdown') + '<br />' +
 			_('* %s: Is only called by mwan3track if tracking was successful').format('connected') + '<br />' +
 			_('* %s: Is only called by mwan3track if tracking has failed').format('disonnected') + '<br />' +
-			_('%s: Name of the interface which went up or down (e.g. \"wan\" or \"wwan\")').format('$INTERFACE') + '<br />' +
-			_('%s: Name of Physical device which interface went up or down (e.g. \"eth0\" or \"wwan0\")').format('$DEVICE') + '<br />'),
+			_('%s: Name of the interface which went up or down (e.g. "wan" or "wwan")').format('$INTERFACE') + '<br />' +
+			_('%s: Name of Physical device which interface went up or down (e.g. "eth0" or "wwan0")').format('$DEVICE') + '<br />'),
 			E('p', {}, E('textarea', { 'style': 'width:100%', 'rows': 10, 'disabled': isReadonlyView }, [ mwan3user != null ? mwan3user : '' ]))
 		]);
 	},

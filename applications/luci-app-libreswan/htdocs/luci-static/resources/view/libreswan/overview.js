@@ -28,7 +28,7 @@ function secondsToString(seconds) {
 
 return view.extend({
 	render: function() {
-		var table =
+		const table =
 			E('table', { 'class': 'table lases' }, [
 				E('tr', { 'class': 'tr table-titles' }, [
 					E('th', { 'class': 'th' }, _('Name')),
@@ -47,7 +47,7 @@ return view.extend({
 
 		poll.add(function() {
 			return callLibreswanStatus().then(function(tunnelsInfo) {
-				var tunnels = Array.isArray(tunnelsInfo.tunnels) ? tunnelsInfo.tunnels : [];
+				const tunnels = Array.isArray(tunnelsInfo.tunnels) ? tunnelsInfo.tunnels : [];
 
 				cbi_update_table(table,
 					tunnels.map(function(tunnel) {

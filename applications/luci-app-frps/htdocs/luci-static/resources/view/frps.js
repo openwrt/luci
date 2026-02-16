@@ -5,7 +5,7 @@
 'require tools.widgets as widgets';
 
 //	[Widget, Option, Title, Description, {Param: 'Value'}],
-var startupConf = [
+const startupConf = [
 	[form.Flag, 'stdout', _('Log stdout')],
 	[form.Flag, 'stderr', _('Log stderr')],
 	[widgets.UserSelect, 'user', _('Run daemon as user')],
@@ -15,7 +15,7 @@ var startupConf = [
 	[form.DynamicList, 'conf_inc', _('Additional configs'), _('Config files include in temporary config file'), {placeholder: '/etc/frp/frps.d/frps_full.ini'}]
 ];
 
-var commonConf = [
+const commonConf = [
 	[form.Value, 'bind_addr', _('Bind address'), _('BindAddr specifies the address that the server binds to.<br />By default, this value is "0.0.0.0".'), {datatype: 'ipaddr'}],
 	[form.Value, 'bind_port', _('Bind port'), _('BindPort specifies the port that the server listens on.<br />By default, this value is 7000.'), {datatype: 'port'}],
 	[form.Value, 'bind_udp_port', _('UDP bind port'), _('BindUdpPort specifies the UDP port that the server listens on. If this value is 0, the server will not listen for UDP connections.<br />By default, this value is 0.'), {datatype: 'port'}],
@@ -49,11 +49,11 @@ var commonConf = [
 
 function setParams(o, params) {
 	if (!params) return;
-	for (var key in params) {
-		var val = params[key];
+	for (let key in params) {
+		let val = params[key];
 		if (key === 'values') {
-			for (var j = 0; j < val.length; j++) {
-				var args = val[j];
+			for (let v of val) {
+				let args = v;
 				if (!Array.isArray(args))
 					args = [args];
 				o.value.apply(o, args);
@@ -61,8 +61,8 @@ function setParams(o, params) {
 		} else if (key === 'depends') {
 			if (!Array.isArray(val))
 				val = [val];
-			for (var j = 0; j < val.length; j++) {
-				var args = val[j];
+			for (let v of val) {
+				let args = v;
 				if (!Array.isArray(args))
 					args = [args];
 				o.depends.apply(o, args);
@@ -78,18 +78,16 @@ function setParams(o, params) {
 }
 
 function defTabOpts(s, t, opts, params) {
-	for (var i = 0; i < opts.length; i++) {
-		var opt = opts[i];
-		var o = s.taboption(t, opt[0], opt[1], opt[2], opt[3]);
+	for (let opt of opts) {
+		const o = s.taboption(t, opt[0], opt[1], opt[2], opt[3]);
 		setParams(o, opt[4]);
 		setParams(o, params);
 	}
 }
 
 function defOpts(s, opts, params) {
-	for (var i = 0; i < opts.length; i++) {
-		var opt = opts[i];
-		var o = s.option(opt[0], opt[1], opt[2], opt[3]);
+	for (let opt of opts) {
+		const o = s.option(opt[0], opt[1], opt[2], opt[3]);
 		setParams(o, opt[4]);
 		setParams(o, params);
 	}
@@ -104,7 +102,7 @@ const callServiceList = rpc.declare({
 
 function getServiceStatus() {
 	return L.resolveDefault(callServiceList('frps'), {}).then(function (res) {
-		var isRunning = false;
+		let isRunning = false;
 		try {
 			isRunning = res['frps']['instances']['instance1']['running'];
 		} catch (e) { }
@@ -113,8 +111,8 @@ function getServiceStatus() {
 }
 
 function renderStatus(isRunning) {
-	var renderHTML = "";
-	var spanTemp = '<em><span style="color:%s"><strong>%s %s</strong></span></em>';
+	let renderHTML = "";
+	const spanTemp = '<em><span style="color:%s"><strong>%s %s</strong></span></em>';
 
 	if (isRunning) {
 		renderHTML += String.format(spanTemp, 'green', _("frp Server"), _("RUNNING"));
@@ -126,7 +124,7 @@ function renderStatus(isRunning) {
 }
 
 return view.extend({
-	render: function() {
+	render() {
 		let m, s, o;
 
 		m = new form.Map('frps', _('frp Server'));
@@ -136,7 +134,7 @@ return view.extend({
 		s.render = function (section_id) {
 			L.Poll.add(function () {
 				return L.resolveDefault(getServiceStatus()).then(function(res) {
-					var view = document.getElementById("service_status");
+					const view = document.getElementById("service_status");
 					view.innerHTML = renderStatus(res);
 				});
 			});

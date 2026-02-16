@@ -12,20 +12,17 @@ const callHostHints = rpc.declare({
 });
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
-			network.getNetworks(),
 			callHostHints(),
 		]);
 	},
 
-	render: function (loaded_promises) {
+	render ([hosts]) {
 		let m, s, o;
-		const networks = loaded_promises[0];
-		const hosts = loaded_promises[1];
 
 		m = new form.Map('qos', _('Quality of Service'),
-			_('With %s you can prioritize network traffic selected by addresses, ports or services.'.format('<abbr title=\"Quality of Service\">QoS</abbr>')));
+			_('With %s you can prioritize network traffic selected by addresses, ports or services.'.format('<abbr title="Quality of Service">QoS</abbr>')));
 
 		s = m.section(form.TypedSection, 'interface', _('Interfaces'));
 		s.anonymous = false;
@@ -76,7 +73,7 @@ return view.extend({
 				o.value(n);
 		});
 
-		var ipaddrs = {};
+		let ipaddrs = {};
 		Object.keys(hosts).forEach(function(mac) {
 			L.toArray(hosts[mac].ipaddrs || hosts[mac].ipv4).forEach(function(ip) {
 				ipaddrs[ip] = mac;

@@ -293,7 +293,7 @@ return L.view.extend({
 			if (!value) return true;
 			let valid = _('valid syntax: %f .. %f [mf]').format(min_alt, max_alt);
 			valid = (parseFloat(value) >= min_alt && parseFloat(value) <=  max_alt) ?
-				/^-?\d+(?:\.\d+)?\ [mf]$/.test(value) ? true : valid : valid;
+				/^-?\d+(?:\.\d+)? [mf]$/.test(value) ? true : valid : valid;
 			return valid;
 		}
 		o.load = function(section_id, value) {

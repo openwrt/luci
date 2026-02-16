@@ -8,9 +8,9 @@
 'require view';
 
 return view.extend({
-	render: function() {
+	render() {
 		/* Thanks to luci-app-aria2 */
-		var css = '					\
+		const css = '					\
 			#log_textarea {				\
 				padding: 10px;			\
 				text-align: left;		\
@@ -24,7 +24,7 @@ return view.extend({
 				background-color: #33ccff;	\
 			}';
 
-		var log_textarea = E('div', { 'id': 'log_textarea' },
+		const log_textarea = E('div', { 'id': 'log_textarea' },
 			E('img', {
 				'src': L.resource('icons/loading.svg'),
 				'alt': _('Loading...'),
@@ -35,13 +35,13 @@ return view.extend({
 		poll.add(L.bind(function() {
 			return fs.read_direct('/var/run/openlist/log/openlist.log', 'text')
 			.then(function(res) {
-				var log = E('pre', { 'wrap': 'pre' }, [
+				const log = E('pre', { 'wrap': 'pre' }, [
 					res.trim() || _('Log is empty.')
 				]);
 
 				dom.content(log_textarea, log);
 			}).catch(function(err) {
-				var log;
+				let log;
 
 				if (err.toString().includes('NotFoundError'))
 					log = E('pre', { 'wrap': 'pre' }, [

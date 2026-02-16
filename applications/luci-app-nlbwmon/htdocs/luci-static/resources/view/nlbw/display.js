@@ -14,15 +14,15 @@ const callNetworkRrdnsLookup = rpc.declare({
 	expect: { '': {} }
 });
 
-var chartRegistry = {},
-	trafficPeriods = [],
-	trafficData = { columns: [], data: [] },
-	hostNames = {},
-	hostInfo = {},
-	ouiData = [];
+const chartRegistry = {};
+let trafficPeriods = [];
+let trafficData = { columns: [], data: [] };
+let hostNames = {};
+const hostInfo = {};
+let ouiData = [];
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			this.loadHosts(),
 			this.loadPeriods(),
@@ -31,24 +31,24 @@ return view.extend({
 		]);
 	},
 
-	loadHosts: function() {
+	loadHosts() {
 		return L.resolveDefault(network.getHostHints()).then(function(res) {
 			if (res) {
-				var hints = res.getMACHints();
+				const hints = res.getMACHints();
 
-				for (var i = 0; i < hints.length; i++) {
-					hostInfo[hints[i][0]] = {
-						name: res.getHostnameByMACAddr(hints[i][0]),
-						ipv6: res.getIP6AddrByMACAddr(hints[i][0]),
-						ipv4: res.getIPAddrByMACAddr(hints[i][0])
+				for (let hint of hints) {
+					hostInfo[hint[0]] = {
+						name: res.getHostnameByMACAddr(hint[0]),
+						ipv6: res.getIP6AddrByMACAddr(hint[0]),
+						ipv4: res.getIPAddrByMACAddr(hint[0])
 					};
 				}
 			}
 		});
 	},
 
-	loadOUI: function() {
-		var url = 'https://raw.githubusercontent.com/jow-/oui-database/master/oui.json';
+	loadOUI() {
+		const url = 'https://raw.githubusercontent.com/jow-/oui-database/master/oui.json';
 
 		return L.resolveDefault(request.get(url, { cache: true })).then(function(res) {
 			res = res ? res.json() : [];
@@ -58,15 +58,15 @@ return view.extend({
 		});
 	},
 
-	loadPeriods: function() {
+	loadPeriods() {
 		return L.resolveDefault(fs.exec_direct('/usr/libexec/nlbwmon-action', [ 'periods' ], 'json')).then(function(res) {
 			if (L.isObject(res) && Array.isArray(res.periods))
 				trafficPeriods = res.periods;
 		});
 	},
 
-	loadData: function(period) {
-		var args = [ 'download', '-g', 'family,mac,ip,layer7', '-o', '-rx_bytes,-tx_bytes' ];
+	loadData(period) {
+		const args = [ 'download', '-g', 'family,mac,ip,layer7', '-o', '-rx_bytes,-tx_bytes' ];
 
 		if (period)
 			args.push('-t', period);
@@ -77,12 +77,12 @@ return view.extend({
 
 			trafficData = res;
 
-			var addrs = this.query(null, [ 'ip' ], null),
-			    ipAddrs = [];
+			const addrs = this.query(null, [ 'ip' ], null);
+			const ipAddrs = [];
 
-			for (var i = 0; i < addrs.length; i++)
-				if (ipAddrs.indexOf(addrs[i].ip) < 0)
-					ipAddrs.push(addrs[i].ip);
+			for (let addr of addrs)
+				if (ipAddrs.indexOf(addr.ip) < 0)
+					ipAddrs.push(addr.ip);
 
 			if (ipAddrs.length)
 				return L.resolveDefault(callNetworkRrdnsLookup(ipAddrs, 1000, 1000), {}).then(function(res) {
@@ -93,8 +93,8 @@ return view.extend({
 		});
 	},
 
-	off: function(elem) {
-		var val = [0, 0];
+	off(elem) {
+		const val = [0, 0];
 		do {
 			if (!isNaN(elem.offsetLeft) && !isNaN(elem.offsetTop)) {
 				val[0] += elem.offsetLeft;
@@ -105,8 +105,8 @@ return view.extend({
 		return val;
 	},
 
-	kpi: function(id, val1, val2, val3) {
-		var e = L.dom.elem(id) ? id : document.getElementById(id);
+	kpi(id, val1, val2, val3) {
+		const e = L.dom.elem(id) ? id : document.getElementById(id);
 
 		if (val1 && val2 && val3)
 			e.innerHTML = _('%s, %s and %s').format(val1, val2, val3);
@@ -118,8 +118,8 @@ return view.extend({
 		e.parentNode.style.display = val1 ? 'list-item' : '';
 	},
 
-	pie: function(id, data) {
-		var total = data.reduce(function(n, d) { return n + d.value }, 0);
+	pie(id, data) {
+		const total = data.reduce(function(n, d) { return n + d.value }, 0);
 
 		data.sort(function(a, b) { return b.value - a.value });
 
@@ -130,17 +130,17 @@ return view.extend({
 				label: [ _('no traffic') ]
 			}];
 
-		for (var i = 0; i < data.length; i++) {
+		for (let i = 0; i < data.length; i++) {
 			if (!data[i].color) {
-				var hue = 120 / (data.length-1) * i;
+				const hue = 120 / (data.length-1) * i;
 				data[i].color = 'hsl(%u, 80%%, 50%%)'.format(hue);
 				data[i].label.push(hue);
 			}
 		}
 
-		var node = L.dom.elem(id) ? id : document.getElementById(id),
-		    key = L.dom.elem(id) ? id.id : id,
-		    ctx = node.getContext('2d');
+		const node = L.dom.elem(id) ? id : document.getElementById(id);
+		const key = L.dom.elem(id) ? id.id : id;
+		const ctx = node.getContext('2d');
 
 		if (chartRegistry.hasOwnProperty(key))
 			chartRegistry[key].destroy();
@@ -153,22 +153,22 @@ return view.extend({
 		return chartRegistry[key];
 	},
 
-	oui: function(mac) {
-		var m, l = 0, r = ouiData.length / 3 - 1;
-		var mac1 = parseInt(mac.replace(/[^a-fA-F0-9]/g, ''), 16);
+	oui(mac) {
+		let m, l = 0, r = ouiData.length / 3 - 1;
+		const mac1 = parseInt(mac.replace(/[^a-fA-F0-9]/g, ''), 16);
 
 		while (l <= r) {
 			m = l + Math.floor((r - l) / 2);
 
-			var mask = (0xffffffffffff -
+			const mask = (0xffffffffffff -
 						(Math.pow(2, 48 - ouiData[m * 3 + 1]) - 1));
 
-			var mac1_hi = ((mac1 / 0x10000) & (mask / 0x10000)) >>> 0;
-			var mac1_lo = ((mac1 &  0xffff) & (mask &  0xffff)) >>> 0;
+			const mac1_hi = ((mac1 / 0x10000) & (mask / 0x10000)) >>> 0;
+			const mac1_lo = ((mac1 &  0xffff) & (mask &  0xffff)) >>> 0;
 
-			var mac2 = parseInt(ouiData[m * 3], 16);
-			var mac2_hi = (mac2 / 0x10000) >>> 0;
-			var mac2_lo = (mac2 &  0xffff) >>> 0;
+			const mac2 = parseInt(ouiData[m * 3], 16);
+			const mac2_hi = (mac2 / 0x10000) >>> 0;
+			const mac2_lo = (mac2 &  0xffff) >>> 0;
 
 			if (mac1_hi === mac2_hi && mac1_lo === mac2_lo)
 				return ouiData[m * 3 + 2];
@@ -183,22 +183,21 @@ return view.extend({
 		return null;
 	},
 
-	query: function(filter, group, order) {
-		var keys = [], columns = {}, records = {}, result = [];
+	query(filter, group, order) {
+		const columns = {}, records = {}, result = [];
 
 		if (typeof(group) !== 'function' && typeof(group) !== 'object')
 			group = ['mac'];
 
-		for (var i = 0; i < trafficData.columns.length; i++)
+		for (let i = 0; i < trafficData.columns.length; i++)
 			columns[trafficData.columns[i]] = i;
 
-		for (var i = 0; i < trafficData.data.length; i++) {
-			var record = trafficData.data[i];
+		for (let record of trafficData.data) {
 
 			if (typeof(filter) === 'function' && filter(columns, record) !== true)
 				continue;
 
-			var key;
+			let key;
 
 			if (typeof(group) === 'function') {
 				key = group(columns, record);
@@ -206,17 +205,17 @@ return view.extend({
 			else {
 				key = [];
 
-				for (var j = 0; j < group.length; j++)
-					if (columns.hasOwnProperty(group[j]))
-						key.push(record[columns[group[j]]]);
+				for (let g of group)
+					if (columns.hasOwnProperty(g))
+						key.push(record[columns[g]]);
 
 				key = key.join(',');
 			}
 
 			if (!records.hasOwnProperty(key)) {
-				var rec = {};
+				const rec = {};
 
-				for (var col in columns)
+				for (let col in columns)
 					rec[col] = record[columns[col]];
 
 				records[key] = rec;
@@ -237,19 +236,21 @@ return view.extend({
 		return result;
 	},
 
-	renderPeriods: function() {
+	renderPeriods() {
 		if (!trafficPeriods.length)
 			return E([]);
 
-		var choices = {},
-		    keys = [];
+		const choices = {};
+		const keys = [];
 
-		for (var e, i = trafficPeriods.length - 1; e = trafficPeriods[i]; i--) {
-			var ymd1 = e.split(/-/);
-			var d1 = new Date(+ymd1[0], +ymd1[1] - 1, +ymd1[2]);
-			var ymd2, d2, pd;
+		for (let i = trafficPeriods.length - 1; i >= 0; i--) {
+			const e = trafficPeriods[i];
 
-			if (i) {
+			const ymd1 = e.split(/-/);
+			const d1 = new Date(+ymd1[0], +ymd1[1] - 1, +ymd1[2]);
+			let ymd2, d2, pd;
+
+			if (i > 0) {
 				ymd2 = trafficPeriods[i - 1].split(/-/);
 				d2 = new Date(+ymd2[0], +ymd2[1] - 1, +ymd2[2]);
 				d2.setDate(d2.getDate() - 1);
@@ -267,12 +268,12 @@ return view.extend({
 			);
 		}
 
-		var dropdown = new ui.Dropdown('-', choices, { sort: keys, optional: false }).render();
+		const dropdown = new ui.Dropdown('-', choices, { sort: keys, optional: false }).render();
 
 		dropdown.addEventListener('cbi-dropdown-change', ui.createHandlerFn(this, function(ev) {
 			ui.hideTooltip(ev);
 
-			var period = ev.detail.value.value != '-' ? ev.detail.value.value : null;
+			const period = ev.detail.value.value != '-' ? ev.detail.value.value : null;
 
 			return this.loadData(period).then(L.bind(function() {
 				this.renderHostData();
@@ -287,7 +288,7 @@ return view.extend({
 		]);
 	},
 
-	formatHostname: function(dns) {
+	formatHostname(dns) {
 		if (dns === undefined || dns === null || dns === '')
 			return '-';
 
@@ -299,11 +300,11 @@ return view.extend({
 		return '%h'.format(dns);
 	},
 
-	renderHostData: function() {
-		var trafData = [], connData = [];
-		var rx_total = 0, tx_total = 0, conn_total = 0;
+	renderHostData() {
+		const trafData = [], connData = [];
+		let rx_total = 0, tx_total = 0, conn_total = 0;
 
-		var hostData = this.query(
+		const hostData = this.query(
 			function(c, r) {
 				return (r[c.rx_bytes] > 0 || r[c.tx_bytes] > 0);
 			},
@@ -316,15 +317,14 @@ return view.extend({
 			}
 		);
 
-		var rows = [];
+		const rows = [];
 
-		for (var i = 0; i < hostData.length; i++) {
-			var rec = hostData[i],
-			    mac = rec.mac.toUpperCase(),
-			    key = (mac !== '00:00:00:00:00:00') ? mac : rec.ip,
-			    dns = hostInfo[mac] ? hostInfo[mac].name : null;
+		for (let rec of hostData) {
+			const mac = rec.mac.toUpperCase();
+			const key = (mac !== '00:00:00:00:00:00') ? mac : rec.ip;
+			const dns = hostInfo[mac] ? hostInfo[mac].name : null;
 
-			var cell = E('div', this.formatHostname(dns));
+			const cell = E('div', this.formatHostname(dns));
 
 			rows.push([
 				cell,
@@ -370,22 +370,21 @@ return view.extend({
 		this.kpi('host-total', '%u'.format(hostData.length));
 	},
 
-	renderLayer7Data: function() {
-		var rxData = [], txData = [];
-		var topConn = [[0],[0],[0]], topRx = [[0],[0],[0]], topTx = [[0],[0],[0]];
+	renderLayer7Data() {
+		const rxData = [], txData = [];
+		const topConn = [[0],[0],[0]], topRx = [[0],[0],[0]], topTx = [[0],[0],[0]];
 
-		var layer7Data = this.query(
+		const layer7Data = this.query(
 			null, ['layer7'],
 			function(r1, r2) {
 				return ((r2.rx_bytes + r2.tx_bytes) - (r1.rx_bytes + r1.tx_bytes));
 			}
 		);
 
-		var rows = [];
+		const rows = [];
 
-		for (var i = 0, c = 0; i < layer7Data.length; i++) {
-			var rec = layer7Data[i],
-			    cell = E('div', rec.layer7 || _('other'));
+		for (let rec of layer7Data) {
+			const cell = E('div', rec.layer7 || _('other'));
 
 			rows.push([
 				cell,
@@ -428,31 +427,28 @@ return view.extend({
 		this.kpi('layer7-most-conn', topConn[0][1], topConn[1][1], topConn[2][1]);
 	},
 
-	renderIPv6Data: function() {
-		var col       = { },
-		    rx4_total = 0,
-		    tx4_total = 0,
-		    rx6_total = 0,
-		    tx6_total = 0,
-		    v4_total  = 0,
-		    v6_total  = 0,
-		    ds_total  = 0,
-		    families  = { },
-		    records   = { };
+	renderIPv6Data() {
+		let rx4_total = 0;
+		let tx4_total = 0;
+		let rx6_total = 0;
+		let tx6_total = 0;
+		let v4_total  = 0;
+		let v6_total  = 0;
+		let ds_total  = 0;
+		const families  = { };
+		const records   = { };
 
-		var ipv6Data = this.query(
+		const ipv6Data = this.query(
 			null, ['family', 'mac'],
 			function(r1, r2) {
 				return ((r2.rx_bytes + r2.tx_bytes) - (r1.rx_bytes + r1.tx_bytes));
 			}
 		);
 
-		for (var i = 0, c = 0; i < ipv6Data.length; i++) {
-			var rec = ipv6Data[i],
-			    mac = rec.mac.toUpperCase(),
-			    ip  = rec.ip,
-			    fam = families[mac] || 0,
-			    recs = records[mac] || {};
+		for (let rec of ipv6Data) {
+			const mac = rec.mac.toUpperCase();
+			let fam = families[mac] || 0;
+			const recs = records[mac] || {};
 
 			if (rec.family == 4) {
 				rx4_total += rec.rx_bytes;
@@ -471,7 +467,7 @@ return view.extend({
 			families[mac] = fam;
 		}
 
-		for (var mac in families) {
+		for (let mac in families) {
 			switch (families[mac])
 			{
 			case 3:
@@ -488,15 +484,15 @@ return view.extend({
 			}
 		}
 
-		var rows = [];
+		const rows = [];
 
-		for (var mac in records) {
+		for (let mac in records) {
 			if (mac === '00:00:00:00:00:00')
 				continue;
 
-			var dns = hostInfo[mac] ? hostInfo[mac].name : null,
-			    rec4 = records[mac][4],
-			    rec6 = records[mac][6];
+			const dns = hostInfo[mac] ? hostInfo[mac].name : null;
+			const rec4 = records[mac][4];
+			const rec6 = records[mac][6];
 
 			rows.push([
 				this.formatHostname(dns),
@@ -541,7 +537,7 @@ return view.extend({
 
 		cbi_update_table('#ipv6-data', rows, E('em', _('No data recorded yet.')));
 
-		var shareData = [], hostsData = [];
+		const shareData = [], hostsData = [];
 
 		if (rx4_total > 0 || tx4_total > 0)
 			shareData.push({
@@ -587,12 +583,12 @@ return view.extend({
 		this.kpi('ipv6-tx', '%1024.2mB'.format(tx6_total));
 	},
 
-	renderHostDetail: function(node, tooltip) {
-		var key = node.getAttribute('href').substr(1),
-		    col = node.getAttribute('data-col'),
-		    label = node.getAttribute('data-tooltip');
+	renderHostDetail(node, tooltip) {
+		const key = node.getAttribute('href').substr(1);
+		const col = node.getAttribute('data-col');
+		const label = node.getAttribute('data-tooltip');
 
-		var detailData = this.query(
+		const detailData = this.query(
 			function(c, r) {
 				return ((r[c.mac] === key || r[c.ip] === key) &&
 				        (r[c.rx_bytes] > 0 || r[c.tx_bytes] > 0));
@@ -603,7 +599,7 @@ return view.extend({
 			}
 		);
 
-		var rxData = [], txData = [];
+		const rxData = [], txData = [];
 
 		dom.content(tooltip, [
 			E('div', { 'class': 'head' }, [
@@ -634,11 +630,10 @@ return view.extend({
 			])
 		]);
 
-		var rows = [];
+		const rows = [];
 
-		for (var i = 0; i < detailData.length; i++) {
-			var rec = detailData[i],
-			    cell = E('div', rec[col] || _('other'));
+		for (let rec of detailData) {
+			const cell = E('div', rec[col] || _('other'));
 
 			rows.push([
 				cell,
@@ -665,12 +660,12 @@ return view.extend({
 		this.pie(tooltip.querySelector('#bubble-pie1'), rxData);
 		this.pie(tooltip.querySelector('#bubble-pie2'), txData);
 
-		var mac = key.toUpperCase();
-		var name = hostInfo.hasOwnProperty(mac) ? hostInfo[mac].name : null;
+		const mac = key.toUpperCase();
+		let name = hostInfo.hasOwnProperty(mac) ? hostInfo[mac].name : null;
 
 		if (!name)
-			for (var i = 0; i < detailData.length; i++)
-				if ((name = hostNames[detailData[i].ip]) !== undefined)
+			for (let dd of detailData)
+				if ((name = hostNames[dd.ip]) !== undefined)
 					break;
 
 		if (mac !== '00:00:00:00:00:00') {
@@ -682,22 +677,23 @@ return view.extend({
 			this.kpi(tooltip.querySelector('#bubble-vendor'));
 		}
 
-		var rect = node.getBoundingClientRect(), x, y;
+		const rect = node.getBoundingClientRect()
+		let x, y;
 
 		if ('ontouchstart' in window || window.innerWidth <= 992) {
-			var vpHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0),
-			    scrollFrom = window.pageYOffset,
-			    scrollTo = scrollFrom + rect.top - vpHeight * 0.5,
-			    start = null;
+			const vpHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+			const scrollFrom = window.pageYOffset;
+			const scrollTo = scrollFrom + rect.top - vpHeight * 0.5;
+			let start = null;
 
 			tooltip.style.top = (rect.top + rect.height + window.pageYOffset) + 'px';
 			tooltip.style.left = 0;
 
-			var scrollStep = function(timestamp) {
+			const scrollStep = function(timestamp) {
 				if (!start)
 					start = timestamp;
 
-				var duration = Math.max(timestamp - start, 1);
+				const duration = Math.max(timestamp - start, 1);
 				if (duration < 100) {
 					document.body.scrollTop = scrollFrom + (scrollTo - scrollFrom) * (duration / 100);
 					window.requestAnimationFrame(scrollStep);
@@ -723,9 +719,9 @@ return view.extend({
 		return false;
 	},
 
-	setupCharts: function() {
+	setupCharts() {
 		Chart.defaults.global.customTooltips = L.bind(function(tooltip) {
-			var tooltipEl = document.getElementById('chartjs-tooltip');
+			let tooltipEl = document.getElementById('chartjs-tooltip');
 
 			if (!tooltipEl) {
 				tooltipEl = document.createElement('div');
@@ -741,7 +737,7 @@ return view.extend({
 				return;
 			}
 
-			var pos = this.off(tooltip.chart.canvas);
+			const pos = this.off(tooltip.chart.canvas);
 
 			tooltipEl.className = tooltip.yAlign;
 			tooltipEl.innerHTML = tooltip.text[0];
@@ -750,8 +746,8 @@ return view.extend({
 			tooltipEl.style.left = pos[0] + tooltip.x + 'px';
 			tooltipEl.style.top = pos[1] + tooltip.y - tooltip.caretHeight - tooltip.caretPadding + 'px';
 
-			var row = findParent(tooltip.text[1], '.tr'),
-			    hue = tooltip.text[2];
+			const row = findParent(tooltip.text[1], '.tr');
+			const hue = tooltip.text[2];
 
 			if (row && !isNaN(hue)) {
 				row.style.backgroundColor = 'hsl(%u, 100%%, 80%%)'.format(hue);
@@ -770,8 +766,8 @@ return view.extend({
 		this.renderIPv6Data();
 	},
 
-	handleDownload: function(type, group, order) {
-		var args = [ 'download', '-f', type ];
+	handleDownload(type, group, order) {
+		const args = [ 'download', '-f', type ];
 
 		if (group)
 			args.push('-g', group);
@@ -780,10 +776,10 @@ return view.extend({
 			args.push('-o', order);
 
 		return fs.exec_direct('/usr/libexec/nlbwmon-action', args, 'blob').then(function(blob) {
-			var data = blob.slice(0, blob.size, (type == 'csv') ? 'text/csv' : 'application/json'),
-			    name = 'nlbwmon-data.%s'.format(type),
-			    url = window.URL.createObjectURL(data),
-			    link = E('a', { 'style': 'display:none', 'href': url, 'download': name });
+			const data = blob.slice(0, blob.size, (type == 'csv') ? 'text/csv' : 'application/json');
+			const name = 'nlbwmon-data.%s'.format(type);
+			const url = window.URL.createObjectURL(data);
+			const link = E('a', { 'style': 'display:none', 'href': url, 'download': name });
 
 			document.body.appendChild(link);
 			link.click();
@@ -794,7 +790,7 @@ return view.extend({
 		});
 	},
 
-	handleCommit: function() {
+	handleCommit() {
 		return fs.exec('/usr/libexec/nlbwmon-action', [ 'commit' ]).then(function(res) {
 			if (res.code != 0)
 				throw new Error(res.stderr || res.stdout);
@@ -805,14 +801,14 @@ return view.extend({
 		});
 	},
 
-	render: function() {
+	render() {
 		document.addEventListener('tooltip-open', L.bind(function(ev) {
 			this.renderHostDetail(ev.detail.target, ev.target);
 		}, this));
 
 		if ('ontouchstart' in window) {
 			document.addEventListener('touchstart', function(ev) {
-				var tooltip = document.querySelector('.cbi-tooltip');
+				const tooltip = document.querySelector('.cbi-tooltip');
 				if (tooltip === ev.target || tooltip.contains(ev.target))
 					return;
 
@@ -820,7 +816,7 @@ return view.extend({
 			});
 		}
 
-		var node = E([], [
+		const node = E([], [
 			E('link', { 'rel': 'stylesheet', 'href': L.resource('view/nlbw.css') }),
 			E('script', {
 				'type': 'text/javascript',

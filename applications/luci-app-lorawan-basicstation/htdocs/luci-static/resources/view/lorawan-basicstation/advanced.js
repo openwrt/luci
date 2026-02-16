@@ -4,14 +4,14 @@
 'require uci';
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('basicstation')
 		]);
 	},
 
-	render: function(data) {
-		var m, s, o, options;
+	render() {
+		let m, s, o, options;
 		
 		/* Advanced Settings */
 		m = new form.Map('basicstation', _('Advanced Settings'));
@@ -46,9 +46,8 @@ return view.extend({
 		o = s.option(form.ListValue, 'useRssiTcomp', _('RSSI Tcomp'),
 			_('RSSI Tcomp object to be used for this RF configuration'));
 		options = uci.sections('basicstation', 'rssitcomp')
-		for (var i = 0; i < options.length; i++) {
-			var value = options[i]['.name'];
-			o.value(value);
+		for (let opt of options) {
+			o.value(opt['.name']);
 		}
 		o.default = 'std';
 
@@ -94,9 +93,8 @@ return view.extend({
 		o = s.option(form.DynamicList, 'usedBy', _('Used By'),
 			_('RF configurations that use this tx gain object'));
 		options = uci.sections('basicstation', 'rfconf');
-		for (var i = 0; i < options.length; i++) {
-			var value = options[i]['.name'];
-			o.value(value);
+		for (let opt of options) {
+			o.value(opt['.name']);
 		}
 
 		return m.render();

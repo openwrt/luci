@@ -6,7 +6,7 @@ return baseclass.extend({
 	trigger: _('Switch support (kernel: switch1)'),
 	kernel: true,
 	addFormOptions(s){
-		var o;
+		let o;
 
 		o = s.option(form.Value, 'port_mask', _('Switch Port Mask'));
 		o.modalonly = true;

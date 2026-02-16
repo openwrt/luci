@@ -7,13 +7,13 @@
 'require tools.widgets as widgets'; 
 
 return view.extend({
-	load: function() {
+	load() {
 		return Promise.all([
 			uci.load('basicstation')
 		]);
 	},
 
-	render: function(data) {
+	render() {
 		let m, s, o;
 
 		/* General Settings */
@@ -123,21 +123,19 @@ return view.extend({
 		o.value('1', 'Radio 1');
 		o.default = '0';
 
-		var options = uci.sections('basicstation', 'rfconf');
+		let options = uci.sections('basicstation', 'rfconf');
 
 		o = s.option(form.ListValue, 'radio0', _('Radio 0'),
 			_('RF configuration for Radio 0'));
-		for (var i = 0; i < options.length; i++) {
-			var value = options[i]['.name'];
-			o.value(value);
+		for (let opt of options) {
+			o.value(opt['.name']);
 		}
 		o.default = 'rfconf0';
 
 		o = s.option(form.ListValue, 'radio1', _('Radio 1'),
 			_('RF configuration for Radio 1'));
-		for (var i = 0; i < options.length; i++) {
-			var value = options[i]['.name'];
-			o.value(value);
+		for (let opt of options) {
+			o.value(opt['.name']);
 		}
 		o.default = 'rfconf1';
 		
