@@ -217,13 +217,13 @@ function getWifiNetidBySid(sid) {
 		if (typeof(radioname) == 'string') {
 			const sections = uci.sections('wireless', 'wifi-iface');
 			let n = 0;
-			for (let s of sections) {
-				if (s.device != s.device)
+			for (let sec of sections) {
+				if (sec.device != radioname)
 					continue;
 
 				n++;
 
-				if (s['.name'] != s['.name'])
+				if (sec['.name'] != s['.name'])
 					continue;
 
 				return [ '%s.network%d'.format(s.device, n), s.device ];
