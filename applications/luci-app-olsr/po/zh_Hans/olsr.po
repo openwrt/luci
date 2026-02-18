@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-02-08 18:12+0000\n"
+"PO-Revision-Date: 2026-02-18 07:11+0000\n"
 "Last-Translator: 大王叫我来巡山 "
 "<hamburger2048@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:152
 msgid "Active MID announcements"
@@ -95,7 +95,7 @@ msgstr "ETX"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:292
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:180
 msgid "ETX:"
-msgstr "ETX:"
+msgstr "ETX："
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:58
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:511
@@ -114,8 +114,8 @@ msgid ""
 "Enable SmartGateway. If it is disabled, then all other SmartGateway "
 "parameters are ignored. Default is \"no\"."
 msgstr ""
-"启用 SmartGateway。如果禁用，则将忽略 SmartGateway 的其他所有参数。缺省值: "
-"“no”。"
+"启用 SmartGateway。如果禁用，则将忽略 SmartGateway 的其他所有参数。缺省值： “"
+"no”。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface.js:39
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:39
@@ -350,7 +350,7 @@ msgstr "IPv6 组播地址"
 msgid ""
 "IPv6 multicast address. Default is \"FF02::6D\", the manet-router linklocal "
 "multicast."
-msgstr "IPv6 组播地址。默认为“FF02::6D”，即 manet-router 链路本地组播地址。"
+msgstr "IPv6 组播地址。默认为“FF02：：6D”，即 manet-router 链路本地组播地址。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna.js:33
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdhna6.js:14
@@ -374,8 +374,8 @@ msgid ""
 "the prefix of this parameter. Default is \"0::/0\", which triggers the usage "
 "of a not-linklocal interface IP."
 msgstr ""
-"IPv6 源前缀。OLSRd 将选择一个与此参数前缀匹配的接口 IP。默认为“0::/0”，触发使"
-"用接口的非链路本地 IP。"
+"IPv6 源前缀。OLSRd 将选择一个与此参数前缀匹配的接口 IP。默认为“0：：/0”，触发"
+"使用接口的非链路本地 IP。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:111
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:111
@@ -392,8 +392,8 @@ msgid ""
 "with the etx_ffeth metric!<br />Defaults to \"1.0\"."
 msgstr ""
 "如果要更改到当前网关的路由，则在将该网关与新网关进行比较之前，将该网关的ETX值"
-"乘以该值。参数可以是介于 0.1 和 1.0 之间的值，但如果更改则应接近 1.0。<br /"
-"><b>警告: </b>此参数不应与 etx_ffeth 指标一起使用！<br />默认值到“1.0”。"
+"乘以该值。参数可以是介于 0.1 和 1.0 之间的值，但如果更改则应接近 1.0。<br />"
+"<b>警告： </b>此参数不应与 etx_ffeth 指标一起使用！<br />默认值到“1.0”。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:91
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:91
@@ -487,7 +487,7 @@ msgstr "LQ 级别"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:290
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:178
 msgid "LQ:"
-msgstr "LQ:"
+msgstr "LQ："
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:140
 msgid "Last hop"
@@ -531,10 +531,10 @@ msgid ""
 "calculation<br /><b>etx_ffeth</b>: incompatible variant of etx_ff that "
 "allows ethernet links with ETX 0.1.<br />Defaults to \"etx_ff\""
 msgstr ""
-"链路质量算法（仅适用于 lq 级别 2）。<br /><b>etx_float</b>: 浮点数 ETX，按指"
-"数函数老化<br /><b>etx_fpm</b>: 与 etx_float 相同，但按整数运算<br /"
-"><b>etx_ff</b>: ETX freifunk，一种使用所有 OLSR 流量（而不仅仅是 hello）进行 "
-"ETX 计算的 etx 变体<br /><b>etx_ffeth</b>: 不兼容的变体 etx_ff，允许以太网链"
+"链路质量算法（仅适用于 lq 级别 2）。<br /><b>etx_float</b>： 浮点数 ETX，按指"
+"数函数老化<br /><b>etx_fpm</b>： 与 etx_float 相同，但按整数运算<br /><b>"
+"etx_ff</b>： ETX freifunk，一种使用所有 OLSR 流量（而不仅仅是 hello）进行 "
+"ETX 计算的 etx 变体<br /><b>etx_ffeth</b>： 不兼容的变体 etx_ff，允许以太网链"
 "接使用 ETX 0.1。<br />默认为“etx_ff”"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:170
@@ -618,8 +618,8 @@ msgid ""
 "nodes on this interface by 20%: default 0.8"
 msgstr ""
 "使用此处给出的因子放大路由 LQ。允许值介于 0.01 和 1.0 之间。它仅在 LQ-Level "
-"大于 0 时使用。示例: <br />将到 192.168.0.1 的 LQ 减半: 192.168.0.1 0.5<br />"
-"将此接口到所有节点的 LQ 减少 20%: 默认 0.8"
+"大于 0 时使用。示例： <br />将到 192.168.0.1 的 LQ 减半： 192.168.0.1 "
+"0.5<br />将此接口到所有节点的 LQ 减少 20%： 默认 0.8"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:309
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrdiface6.js:80
@@ -630,8 +630,8 @@ msgid ""
 "LQ to all nodes on this interface by 20%: default 0.8"
 msgstr ""
 "使用此处给出的因子放大路由 LQ。允许值介于 0.01 和 1.0 之间。它仅在 LQ-Level "
-"大于 0 时使用。示例: <br />将到 fd91:662e:3c58::1 的 LQ 减半: "
-"fd91:662e:3c58::1 0.5<br />将此接口到所有节点的 LQ 减少 20%: 默认 0.8"
+"大于 0 时使用。示例： <br />将到 fd91：662e：3c58：：1 的 LQ 减半： fd91："
+"662e：3c58：：1 0.5<br />将此接口到所有节点的 LQ 减少 20%： 默认 0.8"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:253
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:247
@@ -646,7 +646,7 @@ msgstr "NLQ"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:291
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:179
 msgid "NLQ:"
-msgstr "NLQ:"
+msgstr "NLQ："
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:270
 msgid "Neighbour IP"
@@ -835,7 +835,7 @@ msgstr "路由"
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:301
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/topology.js:189
 msgid "SNR:"
-msgstr "SNR:"
+msgstr "SNR："
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/mid.js:122
 msgid "Secondary OLSR interfaces"
@@ -860,8 +860,8 @@ msgid ""
 "during the uptime of olsrd. Default is ::, which triggers usage of the IP of "
 "the first interface."
 msgstr ""
-"设置路由器的主 IP（发起方 IP）。在 olsrd 的正常运行时间内，此 IP 永远不会改"
-"变。默认为 ::，触发使用第一个接口的 IP。"
+"设置路由器的主 IP（发起方 IP）。在 olsrd 的正常运行时间内，此 IP 永远不会改变"
+"。默认为 ：：，触发使用第一个接口的 IP。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/neighbors.js:547
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/status-olsr/routes.js:301
@@ -997,7 +997,7 @@ msgid ""
 msgstr ""
 "这可用于向客户端通知上行链路的外部 IPv6 前缀。这可能可使客户端更改其本地 "
 "IPv6 地址，以使用 IPv6 网关，而无需任何类型的地址转换。前缀长度最大为 64 位。"
-"默认为“::/0”（无前缀）。"
+"默认为“：：/0”（无前缀）。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:284
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:278
@@ -1061,7 +1061,7 @@ msgid ""
 "Warning: kmod-ipip is not installed. Without kmod-ipip SmartGateway will not "
 "work, please install it."
 msgstr ""
-"警告: 未安装 kmod-ipip。没有 kmod-ipip，SmartGateway 将无法正常工作，请安装"
+"警告： 未安装 kmod-ipip。没有 kmod-ipip，SmartGateway 将无法正常工作，请安装"
 "它。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:296
@@ -1085,8 +1085,8 @@ msgid ""
 "instead."
 msgstr ""
 "当主机之间存在多个链路时，接口权重用于确定要使用的链路。通常，权重由 olsrd 根"
-"据接口的特性自动计算，但您可以在此处指定固定值。Olsrd 将选择值最低的链接。"
-"<br /><b>注意: </b>仅当 LinkQualityLevel 设置为 0 时才使用接口权重。"
+"据接口的特性自动计算，但您可以在此处指定固定值。Olsrd 将选择值最低的链接"
+"。<br /><b>注意： </b>仅当 LinkQualityLevel 设置为 0 时才使用接口权重。"
 "LinkQualityLevel 的任何其他值都将使用接口的 ETX 值。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:80
@@ -1095,8 +1095,8 @@ msgid ""
 "detected by looking for a local HNA of 0.0.0.0/0, ::ffff:0:0/96 or 2000::/3. "
 "Default setting is \"both\"."
 msgstr ""
-"将导出哪种上行链路到其他网状节点。通过查找本地 HNA 0.0.0.0/0、::ffff:0:0/96 "
-"或 2000::/3 来检测上行链路。默认设置为“两者”。"
+"将导出哪种上行链路到其他网状节点。通过查找本地 HNA 0.0.0.0/0、：：ffff：0：0/"
+"96 或 2000：：/3 来检测上行链路。默认设置为“两者”。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:80
 msgid ""
@@ -1104,8 +1104,8 @@ msgid ""
 "detected by looking for a local HNA6 ::ffff:0:0/96 or 2000::/3. Default "
 "setting is \"both\"."
 msgstr ""
-"将导出哪种上行链路到其他网状节点。通过查找本地 HNA6 ::ffff:0:0/96 或 "
-"2000::/3 来检测上行链路。默认设置为“两者”。"
+"将导出哪种上行链路到其他网状节点。通过查找本地 HNA6 ：：ffff：0：0/96 或 2000"
+"：：/3 来检测上行链路。默认设置为“两者”。"
 
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd.js:242
 #: applications/luci-app-olsr/htdocs/luci-static/resources/view/olsr/frontend/olsrd6.js:236
