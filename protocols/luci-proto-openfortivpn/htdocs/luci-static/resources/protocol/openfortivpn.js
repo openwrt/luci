@@ -103,6 +103,9 @@ return network.registerProtocol('openfortivpn', {
 		o = s.taboption('general', form.Value, 'password', _('Password'));
 		o.password = true;
 
+		o = s.taboption('general', form.Value, 'password2', _('Password2'));
+		o.password = true;
+
 		o = s.taboption('general', form.TextValue, 'user_cert', _('User certificate (PEM encoded)'));
 		o.rows = 10;
 		o.monospace = true;
