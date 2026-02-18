@@ -26,7 +26,7 @@ function resolveCipher(cipherRaw) {
 	if (!cipherRaw) return "unknown";
 	if (!cipherRaw.includes(':')) return cipherRaw;
 	let id = cipherRaw.split(':').pop();
-	return cipherMap[id] || `Unknown (${cipherRaw})`;
+	return cipherMap[id] || `unknown (${cipherRaw})`;
 }
 
 /*
@@ -60,11 +60,12 @@ function handleToggle(sid) {
 	remove wireless and stale travelmate sections
 */
 function handleRemove(sid) {
-	let w_sections, t_sections, match, row;
+	let w_sections, t_sections, match, row, open, count;
 
 	uci.remove('wireless', sid);
 	w_sections = uci.sections('wireless', 'wifi-iface');
 	t_sections = uci.sections('travelmate', 'uplink');
+
 	for (let i = 0; i < t_sections.length; i++) {
 		match = false;
 		for (let j = 0; j < w_sections.length; j++) {
@@ -74,6 +75,14 @@ function handleRemove(sid) {
 			}
 		}
 		if (match === false) {
+			open = +t_sections[i].opensta || 0;
+			if (open === 1) {
+				count = uci.get('travelmate', 'global', 'trm_autoaddcnt', 0);
+				if (count > 0) {
+					count--;
+					uci.set('travelmate', 'global', 'trm_autoaddcnt', count);
+				}
+			}
 			uci.remove('travelmate', t_sections[i]['.name']);
 		}
 	}
@@ -142,7 +151,7 @@ function handleSectionsVal(action, section_id, option, value) {
 				if (option === 'enabled') {
 					oldValue = t_sections[i][option];
 					if (oldValue !== value && value === '0') {
-						date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString().substr(0, 19).replace(/-/g, '.').replace('T', '-');
+						date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString().substring(0, 19).replace(/-/g, '.').replace('T', '-');
 						uci.set('travelmate', t_sections[i]['.name'], 'con_end', date);
 					} else if (oldValue !== value && value === '1') {
 						uci.unset('travelmate', t_sections[i]['.name'], 'con_end');
@@ -236,42 +245,68 @@ function handleStatus() {
 				});
 			}
 		});
-	}, 1);
+	}, 2);
 }
 
 return view.extend({
 	load: function () {
 		return Promise.all([
-			uci.load('wireless'),
-			uci.load('travelmate')
+			uci.load('wireless').catch(() => 0),
+			uci.load('travelmate').catch(() => 0)
 		]);
 	},
 
 	render: function (result) {
-		var m, s, o
-		let iface = uci.get('travelmate', 'global', 'trm_iface') || 'trm_wwan';
+		/*
+			basic result check
+		*/
+		if (!result[0] || result[0].length === 0) {
+			ui.addNotification(null, E('p', _('No wireless config / radio found!')), 'error');
+			return;
+		} else if (!result[1] || result[1].length === 0) {
+			ui.addNotification(null, E('p', _('No travelmate config found!')), 'error');
+			return;
+		}
 
+		/*
+			main map
+		*/
+		let m, s, o, count;
+		let iface = uci.get('travelmate', 'global', 'trm_iface') || 'trm_wwan';
 		m = new form.Map('wireless');
 		m.chain('travelmate');
 		s = m.section(form.GridSection, 'wifi-iface', null, _('Overview of all configured uplinks for travelmate. \
 			You can edit, remove or prioritize existing uplinks by drag &#38; drop and scan for new ones.<br /> \
 			The currently used uplink connection is emphasized in <span style="color:rgb(51, 119, 204);font-weight:bold">blue</span>, \
 			an encrypted VPN uplink connection is emphasized in <span style="color:rgb(68, 170, 68);font-weight:bold">green</span>.'));
-		s.anonymous = true;
-		s.sortable = true;
 		s.filter = function (section_id) {
 			return (uci.get('wireless', section_id, 'network') == iface && uci.get('wireless', section_id, 'mode') == 'sta');
 		};
+		s.anonymous = true;
+		s.sortable = true;
+
 		s.tab('wireless', _('Wireless Settings'));
 		s.tab('travelmate', _('Travelmate Settings'));
 		s.tab('vpn', _('VPN Settings'));
 		s.renderRowActions = function (section_id) {
-			let btns = [
+			const btns = [
 				E('button', {
-					'class': 'btn cbi-button drag-handle right',
-					'style': 'float:none;margin-right:.4em;',
+					'class': 'cbi-button drag-handle center',
+					'style': 'float:none;margin-right:.4em;cursor:move;',
+					'draggable': true,
+					'dragstart': L.bind(function (ev) {
+						this.handleDragStart(ev, this.handleDrag);
+					}, this),
+					'dragend': L.bind(function (ev) {
+						this.handleDragEnd(ev, this.handleDrag);
+					}, this),
+					'touchmove': L.bind(function (ev) {
+						this.handleTouchMove(ev);
+					}, this),
+					'touchend': L.bind(function (ev) {
+						this.handleTouchEnd(ev);
+					}, this),
 					'title': _('Drag to reorder'),
-					'style': 'cursor:move',
 					'disabled': this.map.readonly || null
 				}, '☰'),
 				E('button', {
@@ -292,7 +327,7 @@ return view.extend({
 					'click': ui.createHandlerFn(this, handleRemove, section_id)
 				}, _('Remove'))
 			];
-			return E('td', { 'class': 'td middle cbi-section-actions' }, E('div', btns));
+			return E('td', { 'class': 'td cbi-section-table-cell nowrap cbi-section-actions' }, E('div', btns));
 		};
 
 		o = s.taboption('travelmate', form.Flag, '_enabled', _('Enabled'));
@@ -550,9 +585,17 @@ return view.extend({
 			return handleSectionsVal('get', section_id, 'opensta');
 		}
 		o.write = function (section_id, value) {
+			count = uci.get('travelmate', 'global', 'trm_autoaddcnt', 0);
+			count++;
+			uci.set('travelmate', 'global', 'trm_autoaddcnt', count);
 			return handleSectionsVal('set', section_id, 'opensta', value);
 		}
 		o.remove = function (section_id, value) {
+			count = uci.get('travelmate', 'global', 'trm_autoaddcnt', 0);
+			if (count > 0) {
+				count--;
+				uci.set('travelmate', 'global', 'trm_autoaddcnt', count);
+			}
 			return handleSectionsVal('set', section_id, 'opensta', value);
 		}
 
@@ -779,105 +822,133 @@ return view.extend({
 			md.style.maxHeight = 'none';
 
 			return L.resolveDefault(fs.exec_direct('/etc/init.d/travelmate', ['scan', radio]))
-			.then(L.bind(function () {
-				return L.resolveDefault(fs.read_direct('/var/run/travelmate.scan'), '')
-				.then(L.bind(function (res) {
-					let lines, strength, channel, bssid, wpa, rsn, cipher, auth = [], ssid, rows = [];
-					if (res) {
-						lines = res.split('\n');
-						for (let i = 0; i < lines.length; i++) {
-							if (lines[i].match(/^\s*\d+/)) {
-								strength = lines[i].slice(0, 3).trim();
-								channel = lines[i].slice(3, 7).trim();
-								bssid = lines[i].slice(7, 25).trim();
-								rsn = lines[i].slice(26, 27).trim();
-								wpa = lines[i].slice(28, 29).trim();
-								cipher = lines[i].slice(29, 40).trim();
-								auth = lines[i].slice(40, 71).trim().split(',');
-								ssid = lines[i].slice(71).trim();
-								let tbl_ssid = ssid;
-								if (ssid === "") {
-									tbl_ssid = "<em>hidden</em>";
-									ssid = "hidden";
+				.then(L.bind(function () {
+					return L.resolveDefault(fs.read_direct('/var/run/travelmate.scan'), '')
+						.then(L.bind(function (res) {
+							let lines, strength, channel, bssid, wpa, cipher, auth, tbl_ssid, ssid, rows = [];
+
+							if (res) {
+								lines = res.split('\n');
+
+								for (let i = 0; i < lines.length; i++) {
+									if (lines[i].match(/^\s*\d+/)) {
+
+										/*
+											result columns
+										*/
+										strength = lines[i].slice(0, 3).trim();
+										channel = lines[i].slice(3, 7).trim();
+										bssid = lines[i].slice(7, 25).trim();
+										wpa = lines[i].slice(25, 37).trim();
+										cipher = lines[i].slice(37, 48).trim();
+										auth = lines[i].slice(48, 59).trim().split(',');
+										ssid = lines[i].slice(59).trim();
+
+										/*
+											SSID preparation
+										*/
+										if (ssid === 'hidden') {
+											tbl_ssid = "<em>hidden</em>";
+										} else {
+											ssid = ssid.replace(/^"(.*)"$/, '$1');
+											tbl_ssid = ssid;
+										}
+
+										/*
+											WPA detection
+										*/
+										let hasWPA1 = wpa.includes("WPA1");
+										let hasWPA2 = wpa.includes("WPA2");
+										let hasWPA3 = wpa.includes("WPA3");
+
+										/*
+											Auth detection
+										*/
+										let hasPSK = auth.some(a => a.includes("PSK"));
+										let hasSAE = auth.some(a => a.includes("SAE"));
+										let has8021x = auth.some(a => a.includes("802.1X"));
+										let hasOWE = auth.includes("OWE");
+										let hasSuiteB = auth.some(a => a.includes("SUITE-B"));
+										let resCipher = resolveCipher(cipher);
+
+										/*
+											encryption classification
+										*/
+										let tbl_encryption = '';
+										let encryption = 'none';
+
+										if (cipher === '-' && wpa === '-') {
+											tbl_encryption = 'Open';
+											encryption = 'none';
+										} else if (hasOWE) {
+											tbl_encryption = `WPA3 OWE (${resCipher})`;
+											encryption = 'owe';
+										} else if (hasSuiteB) {
+											tbl_encryption = `WPA3 Enterprise (${resCipher})`;
+											encryption = 'wpa3';
+										} else if (hasWPA2 && hasWPA3 && hasPSK && !has8021x) {
+											tbl_encryption = `Mixed WPA2/WPA3 PSK (${resCipher})`;
+											encryption = 'sae-mixed';
+										} else if (hasWPA2 && hasWPA3 && has8021x) {
+											tbl_encryption = `Mixed WPA2/WPA3 802.1X (${resCipher})`;
+											encryption = 'wpa3-mixed';
+										} else if (hasWPA3 && hasSAE && !has8021x) {
+											tbl_encryption = `WPA3 PSK (SAE)`;
+											encryption = 'sae';
+										} else if (hasWPA3 && has8021x) {
+											tbl_encryption = `WPA3 802.1X (${resCipher})`;
+											encryption = 'wpa3';
+										} else if (hasWPA1 && hasWPA2 && has8021x) {
+											tbl_encryption = `Mixed WPA/WPA2 802.1X (${resCipher})`;
+											encryption = (resCipher === 'CCMP') ? 'wpa-mixed+ccmp' : 'wpa-mixed+tkip';
+										} else if (hasWPA2 && has8021x) {
+											tbl_encryption = `WPA2 802.1X (${resCipher})`;
+											encryption = (resCipher === 'CCMP' || resCipher === 'GCMP-256') ? 'wpa2+ccmp' : 'wpa2+tkip';
+										} else if (hasWPA1 && has8021x) {
+											tbl_encryption = `WPA 802.1X (${resCipher})`;
+											encryption = (resCipher === 'CCMP') ? 'wpa+ccmp' : 'wpa+tkip';
+										} else if (hasWPA1 && hasWPA2 && hasPSK) {
+											tbl_encryption = `Mixed WPA/WPA2 PSK (${resCipher})`;
+											encryption = (resCipher === 'CCMP') ? 'psk-mixed+ccmp' : 'psk-mixed+tkip';
+										} else if (hasWPA2 && hasPSK) {
+											tbl_encryption = `WPA2 PSK (${resCipher})`;
+											encryption = (resCipher === 'CCMP' || resCipher === 'GCMP-256') ? 'psk2+ccmp' : 'psk2+tkip';
+										} else if (hasWPA1 && hasPSK) {
+											tbl_encryption = `WPA PSK (${resCipher})`;
+											encryption = (resCipher === 'CCMP') ? 'psk+ccmp' : 'psk+tkip';
+										} else {
+											tbl_encryption = 'unknown';
+											encryption = 'none';
+										}
+
+										/*
+											push result row into table
+										*/
+										rows.push([
+											strength,
+											channel,
+											tbl_ssid,
+											bssid,
+											tbl_encryption,
+											E('div', { 'class': 'right' },
+												E('button', {
+													'class': 'cbi-button cbi-button-action',
+													'click': ui.createHandlerFn(this, 'handleAdd', radio, iface, ssid, bssid, encryption)
+												}, _('Add Uplink...'))
+											)
+										]);
+									}
 								}
-								let encryption = 'Open';
-								let tbl_encryption = '';
-								let hasWPA = wpa === '+';
-								let hasRSN = rsn === '+';
-								let hasPSK = auth.some(a => a.includes("PSK"));
-								let hasSAE = auth.includes("SAE") || auth.some(a => a.includes("SHA-256"));
-								let has8021x = auth.some(a => a.includes("802.1X"));
-								let hasSuiteB = auth.some(a => a.includes("SUITE-B"));
-								let hasOWE = auth.includes("OWE");
-								let resCipher = resolveCipher(cipher);
-								if (cipher === '-' && !hasWPA && !hasRSN) {
-									tbl_encryption = 'Open';
-									encryption = 'none';
-								} else if (hasOWE) {
-									tbl_encryption = `WPA3 OWE (${resCipher})`;
-									encryption = 'owe';
-								} else if (hasSuiteB) {
-									tbl_encryption = `WPA3 Enterprise (${resCipher})`;
-									encryption = 'wpa3';
-								} else if (hasSAE && hasPSK && !has8021x) {
-									tbl_encryption = `Mixed WPA2/WPA3 PSK (${resCipher})`;
-									encryption = 'sae-mixed';
-								} else if (hasSAE && has8021x) {
-									tbl_encryption = `Mixed WPA2/WPA3 802.1X (${resCipher})`;
-									encryption = 'wpa3-mixed';
-								} else if (hasSAE && !hasPSK && !has8021x) {
-									tbl_encryption = `WPA3 PSK (${resCipher})`;
-									encryption = 'sae';
-								} else if (hasSAE && !hasPSK && has8021x) {
-									tbl_encryption = `WPA3 802.1X (${resCipher})`;
-									encryption = 'wpa3';
-								} else if (has8021x && hasRSN && hasWPA) {
-									tbl_encryption = `Mixed WPA/WPA2 802.1X (${resCipher})`;
-									encryption = (resCipher === 'CCMP') ? 'wpa-mixed+ccmp' : 'wpa-mixed+tkip';
-								} else if (has8021x && hasRSN) {
-									tbl_encryption = `WPA2 802.1X (${resCipher})`;
-									encryption = (resCipher === 'CCMP' || resCipher === 'GCMP-256') ? 'wpa2+ccmp' : 'wpa2+tkip';
-								} else if (has8021x) {
-									tbl_encryption = `WPA 802.1X (${resCipher})`;
-									encryption = (resCipher === 'CCMP') ? 'wpa+ccmp' : 'wpa+tkip';
-								} else if (hasPSK && hasRSN && hasWPA) {
-									tbl_encryption = `Mixed WPA/WPA2 PSK (${resCipher})`;
-									encryption = (resCipher === 'CCMP') ? 'psk-mixed+ccmp' : 'psk-mixed+tkip';
-								} else if (hasPSK && hasRSN) {
-									tbl_encryption = `WPA2 PSK (${resCipher})`;
-									encryption = (resCipher === 'CCMP' || resCipher === 'GCMP-256') ? 'psk2+ccmp' : 'psk2+tkip';
-								} else if (hasPSK && hasWPA) {
-									tbl_encryption = `WPA PSK (${resCipher})`;
-									encryption = (resCipher === 'CCMP') ? 'psk+ccmp' : 'psk+tkip';
-								} else {
-									tbl_encryption = 'Unknown';
-									encryption = 'none';
-								}
-								rows.push([
-									strength,
-									channel,
-									tbl_ssid,
-									bssid,
-									tbl_encryption,
-									E('div', { 'class': 'right' },
-										E('button', {
-											'class': 'cbi-button cbi-button-action',
-											'click': ui.createHandlerFn(this, 'handleAdd', radio, iface, ssid, bssid, encryption)
-										}, _('Add Uplink...'))
-									)
-								]);
+							} else {
+								rows.push(['Empty resultset']);
 							}
-						}
-					} else {
-						rows.push([
-							'Empty resultset'
-						]);
-					}
-					cbi_update_table(table, rows);
-					document.getElementById('scan-btn').disabled = false;
-					poll.start();
+
+							cbi_update_table(table, rows);
+							document.getElementById('scan-btn').disabled = false;
+							poll.start();
+						}, this));
 				}, this));
-			}, this));
+
 		};
 
 		/*
@@ -915,7 +986,7 @@ return view.extend({
 			o2.rmempty = false;
 
 			o2 = s2.option(form.Flag, 'ignore_bssid', _('Ignore BSSID'));
-			if (ssid === "hidden") {
+			if (ssid === 'hidden') {
 				o2.default = '0';
 			} else {
 				o2.default = '1';

@@ -95,60 +95,60 @@ function handleAction(ev) {
 					}
 				}
 				let selectAP = E('select', {
-				id: 'selectID',
-				class: 'cbi-input-select',
-				change: function (ev) {
-					result = document.getElementById('qrcode');
-					if (document.getElementById("selectID").value) {
-						w_sid = document.getElementById("selectID").value;
-						w_ssid = w_sections[w_sid].ssid;
-						w_enc = w_sections[w_sid].encryption;
-						w_key = w_sections[w_sid].key;
-						w_hidden = (w_sections[w_sid].hidden == 1 ? 'true' : 'false');
-						if (w_enc === 'none') {
-							w_enc = 'nopass';
-							w_key = 'nokey';
+					id: 'selectID',
+					class: 'cbi-input-select',
+					change: function (ev) {
+						result = document.getElementById('qrcode');
+						if (document.getElementById("selectID").value) {
+							w_sid = document.getElementById("selectID").value;
+							w_ssid = w_sections[w_sid].ssid;
+							w_enc = w_sections[w_sid].encryption;
+							w_key = w_sections[w_sid].key;
+							w_hidden = (w_sections[w_sid].hidden == 1 ? 'true' : 'false');
+							if (w_enc === 'none') {
+								w_enc = 'nopass';
+								w_key = 'nokey';
+							} else {
+								w_enc = 'WPA';
+							}
+							const data = `WIFI:S:${w_ssid};T:${w_enc};P:${w_key};H:${w_hidden};;`;
+							const options = {
+								pixelSize: 12,
+								margin: 1,
+								ecLevel: 'M',
+								whiteColor: 'white',
+								blackColor: 'black'
+							};
+							const svg = uqr.renderSVG(data, options);
+							result.innerHTML = svg.trim();
 						} else {
-							w_enc = 'WPA';
+							result.textContent = '';
 						}
-						const data = `WIFI:S:${w_ssid};T:${w_enc};P:${w_key};H:${w_hidden};;`;
-						const options = {
-							pixelSize: 12,
-							margin: 1,
-							ecLevel: 'M',
-							whiteColor: 'white',
-							blackColor: 'black'
-						};
-						const svg = uqr.renderSVG(data, options);
-						result.innerHTML = svg.trim();
-					} else {
-						result.textContent = '';
 					}
-				}
-			}, optionsAP);
-			L.ui.showModal(_('QR-Code Overview'), [
-				E('p', _('Render the QR-Code of the selected Access Point to transfer the WLAN credentials to your mobile devices comfortably.')),
-				E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
-					E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [selectAP,])
-				]),
-				E('div', {
-					'id': 'qrcode'
-				}),
-				E('div', { 'class': 'right' }, [
-					E('button', {
-						'class': 'cbi-button',
-					'click': L.hideModal
-					}, _('Dismiss'))
-				])
-			]);
-		});
+				}, optionsAP);
+				L.ui.showModal(_('QR-Code Overview'), [
+					E('p', _('Render the QR-Code of the selected Access Point to transfer the WLAN credentials to your mobile devices comfortably.')),
+					E('div', { 'class': 'left', 'style': 'display:flex; flex-direction:column' }, [
+						E('label', { 'class': 'cbi-input-select', 'style': 'padding-top:.5em' }, [selectAP,])
+					]),
+					E('div', {
+						'id': 'qrcode'
+					}),
+					E('div', { 'class': 'right' }, [
+						E('button', {
+							'class': 'cbi-button',
+							'click': L.hideModal
+						}, _('Dismiss'))
+					])
+				]);
+			});
 	}
 }
 
 return view.extend({
 	load: function () {
 		return Promise.all([
-			uci.load('travelmate'),
+			uci.load('travelmate').catch(() => 0),
 			network.getWifiDevices().then(function (res) {
 				const radios = [];
 				for (let i = 0; i < res.length; i++) {
@@ -160,13 +160,23 @@ return view.extend({
 	},
 
 	render: function (result) {
-		let m, s, o;
+		/*
+			basic result check
+		*/
+		if (!result[0] || result[0].length === 0) {
+			ui.addNotification(null, E('p', _('No travelmate config found!')), 'error');
+			return;
+		} else if (!result[1] || result[1].length === 0) {
+			ui.addNotification(null, E('p', _('No wireless config / radio found!')), 'error');
+			return;
+		}
 
 		/*
 			main map
 		*/
+		let m, s, o;
 		m = new form.Map('travelmate', 'Travelmate', _('Configuration of the travelmate package to enable travel router functionality. \
-			For further information %s.'.format(`<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)) + '<br />' + \
+			For further information %s.'.format(`<a href="https://github.com/openwrt/packages/blob/master/net/travelmate/files/README.md" target="_blank" rel="noreferrer noopener" >${_('check the online documentation')}</a>`)) + '<br />' +
 			_('<b><em>Please note:</em></b> On first start please call the \'Interface Wizard\' once, to make the necessary network- and firewall settings.'));
 
 		/*
@@ -310,13 +320,6 @@ return view.extend({
 		o.default = 0;
 		o.rmempty = false;
 
-		o = s.taboption('general', form.ListValue, 'trm_scanmode', _('WLAN Scan Mode'), _('Send active probe requests or passively listen for beacon frames that are regularly sent by access points.'));
-		o.value('active', _('active'));
-		o.value('passive', _('passive'));
-		o.placeholder = _('-- default --');
-		o.optional = true;
-		o.rmempty = true;
-
 		o = s.taboption('general', form.Flag, 'trm_captive', _('Captive Portal Detection'), _('Check the internet availability, handle captive portal redirections and keep the uplink connection \'alive\'.'));
 		o.default = 1;
 		o.rmempty = false;
@@ -394,7 +397,7 @@ return view.extend({
 		o.rmempty = true;
 
 		o = s.taboption('additional', form.Value, 'trm_triggerdelay', _('Trigger Delay'), _('Additional trigger delay in seconds before travelmate processing begins.'));
-		o.placeholder = '2';
+		o.placeholder = '5';
 		o.datatype = 'range(1,60)';
 		o.rmempty = true;
 
