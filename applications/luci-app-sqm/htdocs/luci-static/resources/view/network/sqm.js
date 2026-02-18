@@ -133,6 +133,10 @@ return view.extend({
 		o = s.taboption("tab_qdisc", form.Flag, "qdisc_advanced", _("Advanced Configuration"), _("Advanced options will only be used as long as this box is checked."));
 		o.default = false;
 
+		o = s.taboption("tab_qdisc", form.Flag, "use_mq", _("Enable multi-queue config"), _("Enable multi-queue qdisc on supported hardware. If .qos script does not support mq this option is ignored."));
+		o.default = false;
+		o.depends("qdisc_advanced", "1");
+
 		o = s.taboption("tab_qdisc", form.ListValue, "squash_dscp", _("Squash DSCP (ingress)"), _("Squash DSCP markings on inbound packets"));
 		o.value("1", "SQUASH");
 		o.value("0", "DO NOT SQUASH");
