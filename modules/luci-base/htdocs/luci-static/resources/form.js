@@ -3636,32 +3636,34 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 	 * @returns {null}
 	 */
 	handleSort(ev) {
-		if (!ev.target.matches('th[data-sortable-row]'))
+		const th = ev.target && ev.target.closest ? ev.target.closest('th[data-sortable-row]') : null;
+		if (!th)
 			return;
 
-		const th = ev.target;
 		const descending = (th.getAttribute('data-sort-direction') == 'desc');
 		const config_name = this.uciconfig ?? this.map.config;
 		let index = 0;
 		const list = [];
 
-		ev.currentTarget.querySelectorAll('th').forEach((other_th, i) => {
+		const headerRow = ev.currentTarget;
+		headerRow.querySelectorAll('th').forEach((other_th, i) => {
 			if (other_th !== th)
 				other_th.removeAttribute('data-sort-direction');
 			else
 				index = i;
 		});
 
-		ev.currentTarget.parentNode.querySelectorAll('tr.cbi-section-table-row').forEach(L.bind((tr) => {
+		const tableEl = headerRow.closest('table') || headerRow.parentNode;
+		tableEl.querySelectorAll('tr.cbi-section-table-row').forEach(L.bind((tr, i) => {
 			const sid = tr.getAttribute('data-sid');
 			const opt = tr.childNodes[index].getAttribute('data-name');
 			let val = this.cfgvalue(sid, opt);
 
 			tr.querySelectorAll('.flash').forEach((n) => {
-				n.classList.remove('flash')
+				n.classList.remove('flash');
 			});
 
-			val = Array.isArray(val) ? val.join(' '): val;
+			val = Array.isArray(val) ? val.join(' ') : val;
 			val = `${val}`; // coerce non-string types to string
 			list.push([
 				ui.Table.prototype.deriveSortKey((val != null && typeof val.trim === 'function') ? val.trim() : ''),
@@ -3679,9 +3681,11 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 			let ref_sid;
 			let cur_sid;
 
+			const tbodyEl = (tableEl.tBodies && tableEl.tBodies[0]) ? tableEl.tBodies[0] : tableEl;
+
 			for (let i = 0; i < list.length; i++) {
 				list[i][1].childNodes[index].classList.add('flash');
-				th.parentNode.parentNode.appendChild(list[i][1]);
+				tbodyEl.appendChild(list[i][1]);
 
 				cur_sid = list[i][1].getAttribute('data-sid');
 

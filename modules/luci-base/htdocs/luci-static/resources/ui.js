@@ -3901,8 +3901,10 @@ const UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 		this.data = data;
 		this.placeholder = placeholder;
 
+		const tbodyEl = (this.node.tBodies && this.node.tBodies[0]) ? this.node.tBodies[0] : this.node;
+
 		let n = 0;
-		const rows = this.node.querySelectorAll('tr, .tr');
+		const rows = tbodyEl.querySelectorAll('tr, .tr');
 		const trows = [];
 		const captionClasses = this.options.captionClasses;
 		const trTag = (rows[0] && rows[0].nodeName == 'DIV') ? 'div' : 'tr';
@@ -3933,16 +3935,16 @@ const UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 
 		for (let i = 0; i < n; i++) {
 			if (rows[i+1])
-				this.node.replaceChild(trows[i], rows[i+1]);
+				tbodyEl.replaceChild(trows[i], rows[i+1]);
 			else
-				this.node.appendChild(trows[i]);
+				tbodyEl.appendChild(trows[i]);
 		}
 
 		while (rows[++n])
-			this.node.removeChild(rows[n]);
+			tbodyEl.removeChild(rows[n]);
 
-		if (placeholder && this.node.firstElementChild === this.node.lastElementChild) {
-			const trow = this.node.appendChild(E(trTag, { 'class': 'tr placeholder' }));
+		if (placeholder && tbodyEl.firstElementChild === tbodyEl.lastElementChild) {
+			const trow = tbodyEl.appendChild(E(trTag, { 'class': 'tr placeholder' }));
 			const td = trow.appendChild(E(tdTag, { 'class': 'td' }, placeholder));
 
 			if (typeof(captionClasses) == 'object')
@@ -4123,10 +4125,13 @@ const UITable = baseclass.extend(/** @lends LuCI.ui.table.prototype */ {
 	 * @param {Event} ev
 	 */
 	handleSort(ev) {
-		if (!ev.target.matches('th[data-sortable-row]'))
+		let th = (ev && ev.target) ? ev.target : null;
+		if (th && typeof th.matches === 'function' && !th.matches('th[data-sortable-row]'))
+			th = (typeof th.closest === 'function') ? th.closest('th[data-sortable-row]') : null;
+
+		if (!th)
 			return;
 
-		const th = ev.target;
 		const direction = (th.getAttribute('data-sort-direction') == 'asc');
 		let index = 0;
 
