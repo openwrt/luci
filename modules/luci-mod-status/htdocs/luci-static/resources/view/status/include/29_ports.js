@@ -350,14 +350,17 @@ function renderNetworksTooltip(pmap) {
 	const res = [ null ];
 	const zmap = {};
 
-	for (let pmz of pmap.zones) {
+	const zones = (pmap && Array.isArray(pmap.zones)) ? pmap.zones : [];
+	const networks = (pmap && Array.isArray(pmap.networks)) ? pmap.networks : [];
+
+	for (let pmz of zones) {
 		const networknames = pmz.getNetworks();
 
 		for (let nn of networknames)
 			zmap[nn] = pmz.getName();
 	}
 
-	for (let pmn of pmap.networks)
+	for (let pmn of networks)
 		res.push(E('br'), renderNetworkBadge(pmn, zmap[pmn.getName()]));
 
 	if (res.length > 1)
