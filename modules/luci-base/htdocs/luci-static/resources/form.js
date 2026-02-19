@@ -2948,7 +2948,7 @@ const CBITableSection = CBITypedSection.extend(/** @lends LuCI.form.TableSection
 		}
 
 		if (this.filterrow && tableFilter) {
-			const filterTr = E('tr', { 'class': `tr cbi-section-table-filter ${anon_class}` });
+			const filterTr = E('tr', { 'class': `tr cbi-section-table-filter cbi-section-table-titles ${anon_class}` });
 
 			if (!this.anonymous || this.sectiontitle) {
 				filterTr.appendChild(E('th', { 'class': 'th cbi-section-table-cell' }, [
