@@ -95,11 +95,11 @@ Firewall = L.Class.extend({
 	},
 
 	newZone: function() {
-		return initFirewallState().then(L.bind(function() {
+		return initFirewallState().then(L.bind(async function() {
 			var name = 'newzone',
 			    count = 1;
 
-			while (this.getZone(name) != null)
+			while ((await this.getZone(name)) != null)
 				name = 'newzone%d'.format(++count);
 
 			return this.addZone(name);
@@ -140,7 +140,7 @@ Firewall = L.Class.extend({
 			for (let s of sections)
 				zones.push(new Zone(s['.name']));
 
-			zones.sort(function(a, b) { return a.getName() > b.getName() });
+			zones.sort(function(a, b) { return L.naturalCompare(a.getName() || '', b.getName() || '') });
 
 			return zones;
 		});
@@ -546,6 +546,10 @@ Forwarding = AbstractFirewallItem.extend({
 
 
 Rule = AbstractFirewallItem.extend({
+	__init__: function(sid) {
+		this.sid = sid;
+	},
+
 	getSource: function() {
 		return this.get('src');
 	},
@@ -565,6 +569,10 @@ Rule = AbstractFirewallItem.extend({
 
 
 Redirect = AbstractFirewallItem.extend({
+	__init__: function(sid) {
+		this.sid = sid;
+	},
+
 	getSource: function() {
 		return this.get('src');
 	},
