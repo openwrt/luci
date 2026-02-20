@@ -1119,30 +1119,38 @@ return view.extend({
 			save new uplink
 		*/
 		s.handleCommit = function (map, ev) {
-			var w_sections = uci.sections('wireless', 'wifi-iface'),
-				device = L.toArray(map.lookupOption('device', '_add_trm'))[0].formvalue('_add_trm'),
-				network = L.toArray(map.lookupOption('network', '_add_trm'))[0].formvalue('_add_trm'),
-				ssid = L.toArray(map.lookupOption('ssid', '_add_trm'))[0].formvalue('_add_trm'),
-				ignore_bssid = L.toArray(map.lookupOption('ignore_bssid', '_add_trm'))[0].formvalue('_add_trm'),
-				bssid = L.toArray(map.lookupOption('bssid', '_add_trm'))[0].formvalue('_add_trm'),
-				encryption = L.toArray(map.lookupOption('encryption', '_add_trm'))[0].formvalue('_add_trm');
+			const w_sections = uci.sections('wireless', 'wifi-iface');
+			const device = L.toArray(map.lookupOption('device', '_add_trm'))[0].formvalue('_add_trm');
+			const network = L.toArray(map.lookupOption('network', '_add_trm'))[0].formvalue('_add_trm');
+			const ssid = L.toArray(map.lookupOption('ssid', '_add_trm'))[0].formvalue('_add_trm');
+			const ignore_bssid = L.toArray(map.lookupOption('ignore_bssid', '_add_trm'))[0].formvalue('_add_trm');
+			const bssid = L.toArray(map.lookupOption('bssid', '_add_trm'))[0].formvalue('_add_trm');
+			const encryption = L.toArray(map.lookupOption('encryption', '_add_trm'))[0].formvalue('_add_trm');
+
+			let password = null;
+			let eap_type, auth, identity, anonymous_identity, ca_cert_usesystem, ca_cert, ieee80211w;
+			let client_cert, priv_key, priv_key_pwd;
+
 			if (encryption.includes('wpa')) {
-				var eap_type = L.toArray(map.lookupOption('eap_type', '_add_trm'))[0].formvalue('_add_trm'),
-					auth = L.toArray(map.lookupOption('auth', '_add_trm'))[0].formvalue('_add_trm'),
-					identity = L.toArray(map.lookupOption('identity', '_add_trm'))[0].formvalue('_add_trm'),
-					anonymous_identity = L.toArray(map.lookupOption('anonymous_identity', '_add_trm'))[0].formvalue('_add_trm'),
-					password = L.toArray(map.lookupOption('password', '_add_trm'))[0].formvalue('_add_trm'),
-					ca_cert_usesystem = L.toArray(map.lookupOption('ca_cert_usesystem', '_add_trm'))[0].formvalue('_add_trm'),
-					ca_cert = L.toArray(map.lookupOption('ca_cert', '_add_trm'))[0].formvalue('_add_trm'),
-					ieee80211w = L.toArray(map.lookupOption('ieee80211w', '_add_trm'))[0].formvalue('_add_trm');
+				eap_type = L.toArray(map.lookupOption('eap_type', '_add_trm'))[0].formvalue('_add_trm');
+				auth = L.toArray(map.lookupOption('auth', '_add_trm'))[0].formvalue('_add_trm');
+				identity = L.toArray(map.lookupOption('identity', '_add_trm'))[0].formvalue('_add_trm');
+				anonymous_identity = L.toArray(map.lookupOption('anonymous_identity', '_add_trm'))[0].formvalue('_add_trm');
+				password = L.toArray(map.lookupOption('password', '_add_trm'))[0].formvalue('_add_trm');
+				ca_cert_usesystem = L.toArray(map.lookupOption('ca_cert_usesystem', '_add_trm'))[0].formvalue('_add_trm');
+				ca_cert = L.toArray(map.lookupOption('ca_cert', '_add_trm'))[0].formvalue('_add_trm');
+				ieee80211w = L.toArray(map.lookupOption('ieee80211w', '_add_trm'))[0].formvalue('_add_trm');
+
 				if (eap_type.includes('tls')) {
-					var client_cert = L.toArray(map.lookupOption('client_cert', '_add_trm'))[0].formvalue('_add_trm'),
-						priv_key = L.toArray(map.lookupOption('priv_key', '_add_trm'))[0].formvalue('_add_trm'),
-						priv_key_pwd = L.toArray(map.lookupOption('priv_key_pwd', '_add_trm'))[0].formvalue('_add_trm');
+					client_cert = L.toArray(map.lookupOption('client_cert', '_add_trm'))[0].formvalue('_add_trm');
+					priv_key = L.toArray(map.lookupOption('priv_key', '_add_trm'))[0].formvalue('_add_trm');
+					priv_key_pwd = L.toArray(map.lookupOption('priv_key_pwd', '_add_trm'))[0].formvalue('_add_trm');
 				}
-			} else {
-				var password = L.toArray(map.lookupOption('key', '_add_trm'))[0].formvalue('_add_trm');
 			}
+			else {
+				password = L.toArray(map.lookupOption('key', '_add_trm'))[0].formvalue('_add_trm');
+			}
+
 			if (!ssid || ((encryption.includes('psk') || encryption.includes('wpa') || encryption.includes('sae')) && !password)) {
 				if (!ssid) {
 					ui.addNotification(null, E('p', 'Empty SSID, the uplink station could not be saved.'), 'error');

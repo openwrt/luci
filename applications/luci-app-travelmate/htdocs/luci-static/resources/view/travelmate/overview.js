@@ -192,7 +192,7 @@ return view.extend({
 		/*
 			poll runtime information
 		*/
-		pollData: poll.add(function () {
+		poll.add(function () {
 			return L.resolveDefault(fs.stat('/tmp/trm_runtime.json'), null).then(function (res) {
 				const status = document.getElementById('status');
 				if (res && res.size > 0) {
@@ -282,7 +282,6 @@ return view.extend({
 				])
 			]);
 		}, o, this);
-		this.pollData;
 
 		/*
 			tabbed config section
@@ -305,7 +304,7 @@ return view.extend({
 		o.optional = true;
 		o.rmempty = true;
 
-		o = s.taboption('general', form.MultiValue, 'trm_radio', _('Radio Selection'), _('Restrict travelmate to certain radio\(s\).'));
+		o = s.taboption('general', form.MultiValue, 'trm_radio', _('Radio Selection'), _('Restrict travelmate to certain radio(s).'));
 		for (let i = 0; i < result[1].length; i++) {
 			o.value(result[1][i]);
 		}
