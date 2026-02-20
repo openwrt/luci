@@ -20,7 +20,11 @@
  * @module LuCI.cbi
  */
 const cbi_d = [];
+if (typeof window !== 'undefined')
+	window.cbi_d = cbi_d;
 const cbi_strings = { path: {}, label: {} };
+if (typeof window !== 'undefined')
+	window.cbi_strings = cbi_strings;
 
 /**
  * Read signed 8-bit integer from a byte array at the given offset.
@@ -326,7 +330,7 @@ function cbi_init() {
 		const depends = JSON.parse(n.getAttribute('data-depends'));
 		if (!isNaN(index) && depends.length > 0) {
 			for (let a of depends)
-				cbi_d_add(n, depends[a], index);
+				cbi_d_add(n, a, index);
 		}
 	}
 
@@ -445,7 +449,8 @@ function cbi_validate_form(form, errmsg)
 			const validator = fv;
 
 			if (!validator() && errmsg) {
-				alert(errmsg);
+				if (typeof window !== 'undefined' && typeof window.alert === 'function')
+					window.alert(errmsg);
 				return false;
 			}
 		}
