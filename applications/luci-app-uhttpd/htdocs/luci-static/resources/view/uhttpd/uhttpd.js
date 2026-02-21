@@ -96,6 +96,28 @@ return view.extend({
 		o.default = o.enabled;
 		o.rmempty = false;
 
+		const csp_mode_option = s.taboption('general', form.RichListValue, "csp_mode", _('Content-Security-Policy'), _('Configure CSP headers to improve security.'));
+		csp_mode_option.value('none', _('None (default)'), _('Least secure. CSP disabled.'));
+		csp_mode_option.value('strict', _('Strict'), _('Most secure setting compatible with OpenWRT default installs.'));
+		csp_mode_option.value('permissive', _('Permissive'), _('Less secure than Strict, but better than None.<br>Use with integrations incompatible with Strict.'));
+		csp_mode_option.value('custom', _('Custom'), _('For experts only.'));
+		csp_mode_option.default = 'none';
+		csp_mode_option.rmempty = false;
+
+		const csp_policy_option = s.taboption('general', form.Value, 'csp_policy', _('Custom CSP Policy String'), _('The Content-Security-Policy header-value used in custom-mode.') + "<br />" + _(' WARNING: Wrong values for this setting can render the web-UI inaccessible and require recovery by SSH.'));
+		csp_policy_option.default = "default-src 'none'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'trusted-types-eval'; img-src 'self' data: blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://sysupgrade.openwrt.org;";
+
+		csp_mode_option.onchange = function(ev, section_id, value) {
+			const policy_element = csp_policy_option.getUIElement(section_id);
+			const node = policy_element.node.querySelector('input');
+			const isCustom = value === 'custom';
+			if (isCustom) {
+				node.removeAttribute('readonly', 'readonly');
+			} else {
+				node.setAttribute('readonly', 'readonly');
+			}
+		};
+
 		o = s.taboption('general', form.Flag, 'rfc1918_filter', _('Ignore private IPs on public interface'), _('Prevent access from private (RFC1918) IPs on an interface if it has an public IP address'));
 		o.default = o.enabled;
 		o.rmempty = false;
