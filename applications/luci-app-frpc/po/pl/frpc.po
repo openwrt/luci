@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-01-18 00:24+0000\n"
+"PO-Revision-Date: 2026-02-20 00:35+0000\n"
 "Last-Translator: Matthaiks <kitynska@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfrpc/pl/>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.2\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:214
 msgid "Add new proxy..."
@@ -54,7 +54,7 @@ msgid ""
 "value is 0."
 msgstr ""
 "AdminPort określa port, na którym serwer administracyjny ma nasłuchiwać. "
-"Jeśli ta wartość wynosi 0, serwer administracyjny nie zostanie uruchomiony. "
+"Jeśli ta wartość wynosi 0, serwer administracyjny nie zostanie uruchomiony."
 "<br />Domyślnie ta wartość wynosi 0."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:31
@@ -63,7 +63,7 @@ msgid ""
 "<br />By default, this value is \"admin\"."
 msgstr ""
 "AdminPwd określa hasło, którego będzie używał serwer administracyjny do "
-"logowania. <br />Domyślnie ta wartość to \"admin\"."
+"logowania.<br />Domyślnie ta wartość to \"admin\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:30
 msgid ""
@@ -164,8 +164,8 @@ msgid ""
 "default, this value is 30."
 msgstr ""
 "HeartBeatInterval określa, w jakich odstępach czasu pulsy są wysyłane do "
-"serwera, w sekundach. Nie zaleca się zmiany tej wartości. <br /> Domyślnie "
-"ta wartość wynosi 30."
+"serwera, w sekundach. Nie zaleca się zmiany tej wartości.<br />Domyślnie ta "
+"wartość wynosi 30."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:39
 msgid ""
@@ -175,7 +175,7 @@ msgid ""
 msgstr ""
 "HeartBeatTimeout określa maksymalne dozwolone opóźnienie odpowiedzi pulsu "
 "przed zakończeniem połączenia (w sekundach). Nie zaleca się zmiany tej "
-"wartości. <br /> Domyślnie ta wartość wynosi 90."
+"wartości.<br />Domyślnie ta wartość wynosi 90."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:38
 msgid "Heartbeat interval"
@@ -196,7 +196,7 @@ msgid ""
 "default, this value is read from the \"http_proxy\" environment variable."
 msgstr ""
 "HttpProxy określa adres proxy do połączenia z serwerem. Jeśli ta wartość to "
-"\"\", serwer zostanie podłączony bezpośrednio. <br /> Domyślnie ta wartość "
+"\"\", serwer zostanie podłączony bezpośrednio.<br />Domyślnie ta wartość "
 "jest odczytywana ze zmiennej środowiskowej \"http_proxy\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:53
@@ -253,7 +253,7 @@ msgid ""
 "\"console\"."
 msgstr ""
 "LogFile określa plik, w którym będą zapisywane dzienniki. Ta wartość będzie "
-"używana tylko wtedy, gdy LogWay zostanie odpowiednio ustawiony. <br /"
+"używana tylko wtedy, gdy LogWay zostanie odpowiednio ustawiony.<br /"
 ">Domyślnie ta wartość to \"console\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:24
@@ -272,7 +272,7 @@ msgid ""
 "this value is 0."
 msgstr ""
 "LogMaxDays określa maksymalną liczbę dni przechowywania informacji dziennika "
-"przed usunięciem. Jest używana tylko wtedy, gdy LogWay == \"file\". <br /"
+"przed usunięciem. Jest używana tylko wtedy, gdy LogWay == \"file\".<br /"
 ">Domyślnie ta wartość wynosi 0."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:35
@@ -403,8 +403,8 @@ msgid ""
 "ServerPort specifies the port to connect to the server on.<br />By default, "
 "this value is 7000."
 msgstr ""
-"ServerPort określa port do połączenia z serwerem on.<br /> Domyślnie wartość "
-"ta wynosi 7000."
+"ServerPort określa port, na którym należy połączyć się z serwerem.<br /"
+">Domyślnie wartość ta wynosi 7000."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:72
 msgid "Sk"
@@ -443,9 +443,9 @@ msgid ""
 "true."
 msgstr ""
 "TcpMux przełącza multipleksowanie strumienia TCP. Pozwala to wielu żądaniom "
-"klienta na współużytkowanie jednego połączenia TCP. Jeśli ta wartość jest "
-"prawdą, serwer musi również mieć włączone multipleksowanie TCP. <br /> "
-"Domyślnie ta wartość to true."
+"klienta na współużytkowanie jednego połączenia TCP. Jeśli ta wartość to "
+"\"true\", serwer musi również mieć włączone multipleksowanie TCP.<br /"
+">Domyślnie ta wartość to \"true\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:40
 msgid ""
@@ -467,7 +467,7 @@ msgid ""
 msgstr ""
 "Token określa token autoryzacji używany do tworzenia kluczy, które mają "
 "zostać wysłane na serwer. Serwer musi mieć pasujący token, aby autoryzacja "
-"zakończyła się powodzeniem. <br /> Domyślnie ta wartość to \"\"."
+"zakończyła się powodzeniem.<br />Domyślnie ta wartość to \"\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:81
 msgid "Unix domain socket path"
@@ -478,8 +478,8 @@ msgid ""
 "UseCompression controls whether or not communication with the server will be "
 "compressed.<br />By default, this value is false."
 msgstr ""
-"UseCompression kontroluje, czy komunikacja z serwerem będzie kompresowana. "
-"<br /> Domyślnie ta wartość to false."
+"UseCompression kontroluje, czy komunikacja z serwerem będzie kompresowana."
+"<br />Domyślnie ta wartość to \"false\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:46
 msgid ""
@@ -489,7 +489,7 @@ msgid ""
 msgstr ""
 "UseEncryption kontroluje, czy komunikacja z serwerem będzie szyfrowana. "
 "Szyfrowanie odbywa się przy użyciu tokenów dostarczonych w konfiguracji "
-"serwera i klienta. <br /> Domyślnie ta wartość to false."
+"serwera i klienta.<br />Domyślnie ta wartość to \"false\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:34
 msgid "User"
@@ -503,8 +503,8 @@ msgid ""
 msgstr ""
 "Użytkownik określa prefiks nazw serwerów proxy, aby odróżnić je od innych "
 "klientów. Jeśli ta wartość nie jest \"\", nazwy serwerów proxy zostaną "
-"automatycznie zmienione na \"{user}. {proxy_name}\". <br />W razie domyślnie "
-"ta wartość to \"\"."
+"automatycznie zmienione na \"{user}. {proxy_name}\".<br />Domyślnie ta "
+"wartość to \"\"."
 
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:163
 #: applications/luci-app-frpc/htdocs/luci-static/resources/view/frpc.js:165

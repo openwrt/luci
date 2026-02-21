@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-01-11 05:02+0000\n"
+"PO-Revision-Date: 2026-02-18 07:11+0000\n"
 "Last-Translator: Pavel Borecki <pavel.borecki@gmail.com>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsstatistics/cs/>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.15.1\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/mqtt.js:47
 msgid "0 - At most once"
@@ -1344,7 +1344,7 @@ msgstr "Úložný adresář"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:14
 msgid "Storage directory for the csv files"
-msgstr "Úložný adresář pro soubory CSV"
+msgstr "Úložná složka pro soubory CSV"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:18
 msgid "Store data values as rates instead of absolute values"
@@ -1456,23 +1456,24 @@ msgstr "Plugin Conntrack shromažďuje statistiky o počtu sledovaných spojení
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/cpu.js:7
 msgid "The cpu plugin collects basic statistics about the processor usage."
-msgstr "Plugin CPU shromažďuje základní statistiky o vytížení procesoru."
+msgstr ""
+"Zásuvný modul Procesor shromažďuje základní statistiky o vytížení procesoru."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/csv.js:7
 msgid ""
 "The csv plugin stores collected data in csv file format for further "
 "processing by external programs."
 msgstr ""
-"Plugin CSV ukládá shromážděná data ve formátu CSV. Data mohou být později "
-"zpracována externími programy."
+"Zásuvný modul CSV ukládá shromážděná data ve formátu CSV. Data mohou být "
+"později zpracována externími programy."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/df.js:8
 msgid ""
 "The df plugin collects statistics about the disk space usage on different "
 "devices, mount points or filesystem types."
 msgstr ""
-"Plugin DF shromažďuje statistiky o využití diskového prostoru na různých "
-"zařízeních, přípojných bodech nebo typech souborových systémů."
+"Zásuvný modul DF shromažďuje statistiky o využití diskového prostoru na "
+"různých zařízeních, přípojných bodech nebo typech souborových systémů."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/dhcpleases.js:7
 msgid "The dhcpleases plugin collects information about assigned DHCP leases."
@@ -1492,8 +1493,8 @@ msgid ""
 "The dns plugin collects detailed statistics about dns related traffic on "
 "selected interfaces."
 msgstr ""
-"Plugin DNS shromažďuje podrobné statistky o provozu, vztahující se k DNS, na "
-"vybraných rozhraních."
+"Zásuvný modul DNS shromažďuje podrobné statistky o provozu, vztahující se k "
+"DNS, na vybraných rozhraních."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/email.js:8
 msgid ""
@@ -1549,8 +1550,9 @@ msgid ""
 "The irq plugin will monitor the rate of issues per second for each selected "
 "interrupt. If no interrupt is selected then all interrupts are monitored."
 msgstr ""
-"Plugin IRQ monitoruje množství požadavků na přerušení pro každé vybrané "
-"přerušení. Pokud není vybráno žádné přerušení, jsou monitorována všechna."
+"Zásuvný modul IRQ monitoruje množství požadavků na přerušení pro každé "
+"vybrané přerušení. Pokud není vybráno žádné přerušení, jsou monitorována "
+"všechna."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/iwinfo.js:8
 msgid ""
@@ -1593,8 +1595,8 @@ msgid ""
 "The ping plugin will send icmp echo replies to selected hosts and measure "
 "the roundtrip time for each host."
 msgstr ""
-"Plugin Ping bude odesílat ICMP echo odpovědi vybraným hostům a měřit "
-"zpáteční čas pro každého hosta."
+"Zásuvný modul Ping bude odesílat ICMP echo odpovědi vybraným hostům a měřit "
+"zpáteční čas pro každého hostitele."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/processes.js:7
 msgid ""
@@ -1611,10 +1613,10 @@ msgid ""
 "values will result in a very high memory consumption in the temporary "
 "directory. This can render the device unusable!</strong>"
 msgstr ""
-"Plugin Rrdtool ukládá shromažďená data v souborech databáze RRD.<br /><br /"
-"><strong>Varování: Nastavení špatných hodnot bude mít za následek velkou "
-"spotřebu paměti v dočasném adresáří. Zařízení ze tak může stát nepoužitelným!"
-"</strong>"
+"Zásuvný modul Rrdtool ukládá shromažďená data v souborech databáze RRD.<br /"
+"><br /><strong>Varování: Nastavení špatných hodnot bude mít za následek "
+"velkou spotřebu paměti v dočasné složce. Zařízení ze tak může stát "
+"nepoužitelným!</strong>"
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/sensors.js:18
 msgid ""
@@ -1642,7 +1644,7 @@ msgid ""
 "The tcpconns plugin collects information about open tcp connections on "
 "selected ports."
 msgstr ""
-"Plugin Tcpconns shromažďuje informace o otevřených TCP spojeních na "
+"Zásuvný modul Tcpconns shromažďuje informace o otevřených TCP spojeních na "
 "vybraných portech."
 
 #: applications/luci-app-statistics/htdocs/luci-static/resources/view/statistics/plugins/thermal.js:8

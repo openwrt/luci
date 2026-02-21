@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-02-06 03:13+0000\n"
+"PO-Revision-Date: 2026-02-20 00:35+0000\n"
 "Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luciapplicationsacme/zh_Hant/>\n"
@@ -8,7 +8,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.16-dev\n"
+"X-Generator: Weblate 5.16.1-dev\n"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:28
 #: applications/luci-app-acme/root/usr/share/luci/menu.d/luci-app-acme.json:3
@@ -41,7 +41,7 @@ msgstr "憑證儲存位置"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:52
 msgid "Certificate config"
-msgstr "憑證設定"
+msgstr "憑證配置"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:625
 msgid "Certificates"
@@ -69,7 +69,7 @@ msgstr "DNS API 憑證"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:59
 msgid "DNS Challenge Validation"
-msgstr "DNS Challenge 驗證"
+msgstr "DNS Challenge 認證"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:518
 msgid "Days until renewal"
@@ -93,8 +93,8 @@ msgid ""
 "subject name, subsequent names will be alt names. Note that all domain names "
 "must point at the router in the global DNS."
 msgstr ""
-"憑證包含的網域名稱；第一個域名將作為「主體名稱」，其他則為「主體備用名稱」。"
-"請注意: 所有域名都必須在全域 DNS 中解析為路由器的 IP 位址。"
+"憑證包含的網域名稱；第一個域名將作為 \"主體名稱\" ，其他則為 \"主體備用名稱"
+"\"。請注意: 所有域名都必須在全域 DNS 中解析為路由器的 IP 位址。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:413
 msgid ""
@@ -113,15 +113,12 @@ msgid "ECC 384 bits"
 msgstr "ECC 384 位元"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:43
-#, fuzzy
 msgid "Email address to associate with account key."
-msgstr ""
-"與「ACME 帳號金鑰」關聯的電子郵件位址；其用於接收 ACME CA 寄送的憑證過期通知"
-"電子郵件。"
+msgstr "與帳號金鑰關聯的電子郵件位址。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:49
 msgid "Enable debug logging"
-msgstr "啟用除錯日誌"
+msgstr "啟用偵錯日誌"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:62
 msgid "Enabled"
@@ -161,7 +158,7 @@ msgstr "金鑰類型"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:604
 msgid "Main Domain"
-msgstr "主要域名"
+msgstr "主要網域"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:372
 msgid "OCID of tenancy that contains the target DNS zone"
@@ -219,9 +216,9 @@ msgid ""
 "certificate. DNS mode will allow you to use the DNS API of your DNS provider "
 "to issue a certificate."
 msgstr ""
-"「獨立模式」將使用 acme.sh 內建的 Web 伺服器來頒發憑證，「Webroot 模式」則使"
-"用現存的 Web伺服器，「DNS 模式」允許您使用 DNS 服務提供者的 DNS API 來頒發憑"
-"證。"
+"\"獨立模式\" 將使用 acme.sh 內建的 Web 伺服器來頒發憑證，\"Webroot 模式\" 則"
+"使用現存的 Web伺服器，\"DNS 模式\" 允許您使用 DNS 服務提供者的 DNS API 來頒發"
+"憑證。"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:456
 msgid ""
@@ -300,7 +297,7 @@ msgstr "使用臨時伺服器"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:71
 msgid "Validation method"
-msgstr "驗證方法"
+msgstr "認證方法"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:76
 msgid "Webroot"
@@ -308,7 +305,7 @@ msgstr "Webroot"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:58
 msgid "Webroot Challenge Validation"
-msgstr "Webroot Challenge 驗證"
+msgstr "Webroot Challenge 認證"
 
 #: applications/luci-app-acme/htdocs/luci-static/resources/view/acme.js:80
 msgid "Webroot directory"
@@ -320,5 +317,5 @@ msgid ""
 "Acme in webroot mode. The web server must be accessible from the internet on "
 "port 80."
 msgstr ""
-"Web 伺服器根目錄；設定 Web 伺服器文件的根目錄以在「Webroot 模式」下執行 "
+"Web 伺服器根目錄；設定 Web 伺服器文件的根目錄以在 \"Webroot 模式\" 下執行 "
 "ACME。Web 伺服器的 80 連接埠必須允許從網際網路存取。"
