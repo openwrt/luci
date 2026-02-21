@@ -1,0 +1,24 @@
+{
+	"luci-proto-openvpn": {
+		"description": "Grant access to LuCI openvpn procedures",
+		"read": {
+			"ubus": {
+				"luci.openvpn": [
+					"*"
+				]
+			},
+			"uci": [ "openvpn", "openvpn_recipes" ]
+		},
+		"write": {
+			"file": {
+				"/etc/openvpn/*": [ "write" ]
+			},
+			"ubus": {
+				"luci.openvpn": [
+					"*"
+				]
+			},
+			"uci": [ "openvpn" ]
+		}
+	}
+}
