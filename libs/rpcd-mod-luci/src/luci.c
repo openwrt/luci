@@ -523,12 +523,24 @@ lease_next(void)
 					continue;
 
 				n = strtol(p, NULL, 10);
-				if (n > lease_state.now)
-					e.expire = n - lease_state.now;
-				else if (n >= 0)
-					e.expire = 0;
-				else
-					e.expire = -1;
+				if (n < 0) {
+					e.expire = -1;  // unlimited
+				} else {
+					// If n looks like a relative duration (< ~3 years in seconds), treat as relative
+					// This happens if dnsmasq has the HAVE_BROKEN_RTC flag set
+					int relative_expire = (n > 0 && n < 100000000);
+					
+					if (relative_expire) {
+						// n is a relative duration in seconds
+						e.expire = n;   // already relative, pass through as-is
+					} else {
+						// n is an absolute timestamp
+						if (n > lease_state.now)
+							e.expire = n - lease_state.now;
+						else if (n >= 0)
+							e.expire = 0;  // expired, cap at 0
+					}
+				}
 
 				strtok(NULL, " \t\n"); /* id */
 
