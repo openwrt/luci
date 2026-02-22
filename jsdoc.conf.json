@@ -14,14 +14,19 @@
 		"cleverLinks": true,
 		"monospaceLinks": true,
 		"default": {
-			"outputSourceFiles": true
+			"outputSourceFiles": true,
+			"staticFiles": {
+				"include": [
+					"doc_gen/include"
+				]
+			}
 		}
 	},
 	"opts": {
 		"template": "node_modules/clean-jsdoc-theme",
 		"template_alt": "@alphanull/jsdoc-vision-theme",
 		"template_old": "jaguarjs-jsdoc",
-		"destination": "docs/",
+		"destination": "docs/jsapi",
 		"destination_comment": "output directory in the repo",
 		"recurse": true,
 		"readme": "doc_gen/README.md",
@@ -30,7 +35,7 @@
 		"tutorials_comment": "tutorials index. See 'sections' below. jaguarjs does not like the tutorials entry",
 		"theme_opts": {
 			"default_theme": "fallback-dark",
-			"favicon": "themes/luci-theme-bootstrap/htdocs/luci-static/bootstrap/logo.svg",
+			"favicon": "favicon.png",
 			"title": "LuCI Documentation",
 			"homepageTitle": "LuCI - Reference Documentation",
 			"displayModuleHeader": false,
