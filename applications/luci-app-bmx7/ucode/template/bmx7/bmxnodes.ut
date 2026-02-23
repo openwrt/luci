@@ -1,4 +1,4 @@
-<%#
+{#
    Copyright © 2011 Pau Escrich <pau@dabax.net>
    Contributors Lluis Esquerda <eskerda@gmail.com>
                 Roger Pueyo Centelles <roger.pueyo@guifi.net>
@@ -19,11 +19,11 @@
 
    The full GNU General Public License is included in this distribution in
    the file called "COPYING".
--%>
+-#}
 
-<%+header%>
-<script src="<%=resource%>/cbi.js"></script>
-<script src="<%=resource%>/bmx7/js/polling.js"></script>
+{% include('header', { }) %}
+
+<script src="{{ resource }}/bmx7/js/polling.js"></script>
 
 
 <style>
@@ -61,26 +61,26 @@
 <div id="extra-info" class="info">
 	<br />
 	<center>
-	Tip: click the <img src="<%=resource%>/bmx7/world.png" /> icon to see individual node information.
+	Tip: click the <img src="{{ resource }}/bmx7/world.png" /> icon to see individual node information.
 	</center>
 </div>
 
 
 <div class="cbi-section">
-	<legend><%:Originators%></legend>
+	<legend>{{_('Originators')}}</legend>
 	<div class="cbi-section-node">
 	<div class="table" id="nodes_div">
 		<div class="tr table-titles">
 			<div class="th"></div>
-			<div class="th"><%:Name%></div>
-			<div class="th"><%:Short ID%></div>
-			<div class="th"><%:S/s/T/t%></div>
-			<div class="th"><%:Primary IPv6%></div>
-			<div class="th"><%:Via Neighbour%></div>
-			<div class="th"><%:Metric%></div>
-			<div class="th"><%:Last Desc%></div>
-			<div class="th"><%:Last Ref%></div>
-			<div class="th"><%: %></div>
+			<div class="th">{{_('Name')}}</div>
+			<div class="th">{{_('Short ID')}}</div>
+			<div class="th">S/s/T/t</div>
+			<div class="th">{{_('Primary IPv6')}}</div>
+			<div class="th">{{_('Via Neighbour')}}</div>
+			<div class="th">{{_('Metric')}}</div>
+			<div class="th">{{_('Last Desc')}}</div>
+			<div class="th">{{_('Last Ref')}}</div>
+			<div class="th">: </div>
 		</div>
 	</div>
 	</div>
@@ -89,31 +89,31 @@
 </div>
 
 <script>
-		var displayExtraInfo = function ( id ) {
+		let displayExtraInfo = function ( id ) {
 			document.getElementById('extra-info').innerHTML = document.getElementById(id).innerHTML;
 		}
-		new TablePooler(5,"/cgi-bin/bmx7-info", {'originators':''}, "nodes_div", function(st){
-			var infoicon = "<%=resource%>/bmx7/world_small.png";
-			var originators = st.originators;
-			var res = Array();
-			originators.forEach(function(originator,i){
-				var name =  originator.name;
-				var shortId =  originator.shortId;
-				var nodeId = originator.nodeId;
-				var extensions = originator.name;
-				var SsTt = originator.S+'/'+originator.s+'/'+originator.T+'/'+originator.t;
-				var nodeKey = originator.nodeKey;
-				var descSize = originator.descSize;
-				var primaryIp = originator.primaryIp;
-				var nbName = originator.nbName;
-				var dev = originator.dev;
-				var nbLocalIp = originator.nbLocalIp;
-				var metric = originator.metric;
-				var lastDesc = originator.lastDesc;
-				var lastRef = originator.lastRef;
+		new TablePooler(5,"/cgi-bin/bmx7-info", {'originators':'1'}, "nodes_div", function(st){
+			let infoicon = "{{ resource }}/bmx7/world_small.png";
+			let originators = st?.originators;
+			let res = Array();
+			originators.forEach(function(originator, i){
+				let name =  originator?.name;
+				let shortId =  originator?.shortId;
+				let nodeId = originator?.nodeId;
+				let extensions = originator?.name;
+				let SsTt = originator?.S+'/'+originator?.s+'/'+originator?.T+'/'+originator?.t;
+				let nodeKey = originator?.nodeKey;
+				let descSize = originator?.descSize;
+				let primaryIp = originator?.primaryIp;
+				let nbName = originator?.nbName;
+				let dev = originator?.dev;
+				let nbLocalIp = originator?.nbLocalIp;
+				let metric = originator?.metric;
+				let lastDesc = originator?.lastDesc;
+				let lastRef = originator?.lastRef;
 
-			var extrainfo = '<a onclick="displayExtraInfo(\'ip-' + i + '\')"><img src="' + infoicon + '" / ></a>';
-			var extrainfo_link = '<a onclick="displayExtraInfo(\'ip-' + i + '\')">' +  '<img src="' + infoicon + '" />' + '</a>';
+			let extrainfo = '<a onclick="displayExtraInfo(\'ip-' + i + '\')"><img src="' + infoicon + '" / ></a>';
+			let extrainfo_link = '<a onclick="displayExtraInfo(\'ip-' + i + '\')">' +  '<img src="' + infoicon + '" />' + '</a>';
 
 			extrainfo = '<div id="ip-'+ i +'" class="hideme">'
 			+ "<div class='inforow'>"
@@ -152,4 +152,4 @@
 		});
 </script>
 
-<%+footer%>
+{% include('footer', { }) %}

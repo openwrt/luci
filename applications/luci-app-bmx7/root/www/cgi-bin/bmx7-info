@@ -21,31 +21,38 @@
 #    the file called "COPYING".
 #
 #    This script gives information about bmx7
-#    Can be executed from a linux shell: ./bmx7-info -s links
-#    Or from web interfae (with cgi enabled): http://host/cgi-bin/bmx7-info?links
-#    If you ask for a directory you wil get the directory contents in JSON forman
+#    Can be executed from a Linux shell: ./bmx7-info -s links
+#    Or from web interface (with cgi enabled): http://host/cgi-bin/bmx7-info?links
+#    If you ask for a directory you will get the directory contents in JSON format
 
 BMX7_DIR="$(uci get bmx7.general.runtimeDir 2>/dev/null)" || BMX7_DIR="/var/run/bmx7/json"
 
-#Checking if shell mode or cgi-bin mode
-if [ "$1" == "-s" ]; then
-	QUERY="$2"
-else
-	QUERY="${QUERY_STRING%%=*}"
-	echo "Content-type: application/json"
-	echo ""
-fi
+case "${1:-}" in
+	-s)
+		QUERY="$2"
+		;;
+	*)
+		QUERY="${QUERY_STRING%%&*}"
+		QUERY="${QUERY%%=*}"
+		printf 'Content-type: application/json\n\n'
+		;;
+esac
 
 check_path() {
-	[ -d "$1" ] && path=$(cd $1; pwd)
-	[ -f "$1" ] && path=$(cd $1/..; pwd)
-	[ $(echo "$path" | grep -c "^$BMX7_DIR") -ne 1 ] && exit 1
-}
+	target="$1"
 
+	# Resolve real absolute path safely
+	resolved="$(cd "$(dirname -- "$target")" 2>/dev/null && pwd -P)/$(basename -- "$target")"
+
+	[ -e "$resolved" ] || return
+}
 print_mem() {
-	echo -n '{ "memory": { "bmx7": "'
-	cat /proc/$(cat /var/run/bmx7/pid)/status |grep -i VmSize | tr -s " " | cut -d " " -f 2,3 | tr -d "\n"
-	echo '"}}'
+	pid="$(pidof bmx7 2>/dev/null)" || return
+	[ -r "/proc/$pid/status" ] || return
+
+	vm=$(awk '/VmSize:/ {print $2" "$3}' "/proc/$pid/status")
+
+	printf '{ "memory": { "bmx7": "%s" }}' "$vm"
 }
 
 print_query() {
@@ -53,81 +60,75 @@ print_query() {
 	[ -d "$BMX7_DIR/$1" ] &&
 	{
 	# If /all has not been specified
-		[ -z "$QALL" ] &&
-		{
-		total=$(ls $BMX7_DIR/$1 | wc -w)
-		i=1
-		echo -n "{ \"$1\": [ "
-		for f in $(ls $BMX7_DIR/$1); do
-			echo -n "{ \"name\": \"$f\" }"
-			[ $i -lt $total ]  && echo -n ','
-			i=$(( $i + 1 ))
+		if [ -z "$QALL" ]; then
+		first=1
+		printf '{ "%s": [ ' "$1"
+		for f in "$BMX7_DIR"/$1; do
+			[ -e "$f" ] || continue
+			printf '{ "name": "%s" }' "$(tr -d '\n' < "$f")"
+			[ $first -eq 0 ] && printf ','
+			first=0
 		done
-		echo -n " ] }"
+		printf " ] }"
 
-	# If /all has been specified, printing all the files together
-		} || {
-		comma=""
-		echo -n "[ "
-		for entry in "$BMX7_DIR/$1/"*; do
+	# If /all has been specified, print all the files together
+		else
+		first=1
+		printf "[ "
+		for entry in "$BMX7_DIR"/$1; do
 			[ -f "$entry" ] &&
 			{
-				${comma:+echo "$comma"}
-				tr -d '\n' < "$entry"
-				comma=","
+				[ $first -eq 0 ] && printf ','
+				printf "%s" "$(tr -d '\n' < "$entry")"
+				first=0
 			}
 		done
-		echo -n " ]"
-		}
+		printf " ]"
+		fi
 	}
 
-	# If the query is a file, just printing the file
+	# If the query is a file, just print the file
 	[ -f "$BMX7_DIR/$1" ] && [ -s "$BMX7_DIR/$1" ] && cat "$BMX7_DIR/$1" && return 0 || return 1
 }
 
-if [ "${QUERY##*/}" == "all" ]; then
+if [ "${QUERY##*/}" = "all" ]; then
 	QUERY="${QUERY%/all}"
 	QALL=1
 fi
 
-if [ "$QUERY" == 'info' ]; then
-	echo '{ "info": [ '
-	print_query status
-	echo -n ","
-	print_query interfaces && echo -n "," || echo -n '{ "interfaces": "" },'
-	print_query links && echo -n "," || echo -n '{ "links": "" },'
-	print_mem
-	echo "] }"
-fi
-
-if [ "$QUERY" == 'neighbours' ]; then
-	QALL=1
-	echo '{ "neighbours": [ '
-	echo '{ "originators": '
-	print_query originators
-	echo '}, '
-	echo '{ "descriptions": '
-	print_query descriptions
-	echo "} ] }"
-	exit 0
-
-else if [ "$QUERY" == 'tunnels' ]; then
-	bmx7 -c --jshow tunnels /r=0
-	exit 0
-
-	else if [ "$QUERY" == 'originators' ]; then
+case "$QUERY" in
+	neighbours)
+		QALL=1
+		printf '{ "neighbours": [ '
+		printf '{ "originators": '
+		print_query originators
+		printf '}, '
+		printf '{ "descriptions": '
+		print_query descriptions
+		printf "} ] }"
+		exit 0
+		;;
+	tunnels)
+		bmx7 -c --jshow tunnels /r=0
+		exit 0
+		;;
+	originators)
 		bmx7 -c --jshow originators /r=0
 		exit 0
-
-		else
+		;;
+	info)
+		printf '{ "info": [ '
+		print_query status && printf "," || printf '{ "status": "" },'
+		print_query interfaces && printf "," || printf '{ "interfaces": "" },'
+		print_query links && printf "," || printf '{ "links": "" },'
+		print_mem
+		printf "] }"
+		;;
+	*)
 		check_path "$BMX7_DIR/$QUERY"
-		print_query $QUERY
-		exit 0
-		fi
-	fi
-fi
-fi
+		print_query "$QUERY"
+		;;
+esac
 
-ls -1F "$BMX7_DIR"
 exit 0
 

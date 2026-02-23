@@ -1,0 +1,132 @@
+{% include('header', { }) %}
+
+
+<script src="{{ resource }}/bmx7/js/polling.js"></script>
+
+<div class="cbi-map">
+	<center>
+		<img src="{{ resource }}/bmx7/bmx7logo.png" />
+		<br />
+		<br />
+		A mesh routing protocol for Linux devices.<br />
+		Visit <a href="http://bmx6.net">bmx6.net</a> for more information.<br />
+		<br />
+	</center>
+
+<div class="cbi-map-descr"></div>
+
+<div class="cbi-section">
+	<legend>{{ _('Node configuration') }}</legend>
+	<div class="cbi-section-node">
+	<div class="table" id="config_div">
+		<div class="tr table-titles">
+			<div class="th">{{ _('Short ID') }}</div>
+			<div class="th">{{ _('Node name') }}</div>
+			<div class="th">{{ _('Primary IPv6 address') }}</div>
+			<div class="th">{{ _('Node key') }}</div>
+			<div class="th">{{ _('Short DHash') }}</div>
+			<div class="th">{{ _('BMX7 revision') }}</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+
+<div class="cbi-section">
+	<legend>{{ _('Node status') }}</legend>
+	<div class="cbi-section-node">
+	<div class="table" id="status_div">
+		<div class="tr table-titles">
+			<div class="th">{{ _('Nodes seen') }}</div>
+			<div class="th">{{ _('Neighbours') }}</div>
+			<div class="th">{{ _('Tunnelled IPv6 address') }}</div>
+			<div class="th">{{ _('Tunnelled IPv4 address') }}</div>
+			<div class="th">{{ _('Uptime') }}</div>
+			<div class="th">{{ _('CPU usage') }}</div>
+			<div class="th">{{ _('Memory usage') }}</div>
+			<div class="th">{{ _('Tx queue') }}</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+<div class="cbi-section">
+	<legend>{{ _('Network interfaces') }}</legend>
+	<div class="cbi-section-node">
+	<div class="table" id="ifaces_div">
+		<div class="tr table-titles">
+			<div class="th">{{ _('Interface') }}</div>
+			<div class="th">{{ _('State') }}</div>
+			<div class="th">{{ _('Type') }}</div>
+			<div class="th">{{ _('Max rate') }}</div>
+			<div class="th">{{ _('Link-local IPv6') }}</div>
+			<div class="th">{{ _('RX BpP') }}</div>
+			<div class="th">{{ _('TX BpP') }}</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+
+<div class="cbi-section">
+	<legend>{{ _('Links') }}</legend>
+	<div class="cbi-section-node">
+	<div class="table" id="links_div">
+		<div class="tr table-titles">
+			<div class="th">{{ _('Short ID') }}</div>
+			<div class="th">{{ _('Name') }}</div>
+			<div class="th">{{ _('Link key') }}</div>
+			<div class="th">{{ _('Remote link-local IPv6') }}</div>
+			<div class="th">{{ _('Device') }}</div>
+			<div class="th">{{ _('RX rate') }}</div>
+			<div class="th">{{ _('TX rate') }}</div>
+			<div class="th">{{ _('Routes') }}</div>
+		</div>
+	</div>
+	</div>
+</div>
+
+</div>
+
+<script>
+	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':'1'}, "config_div", function(st){
+		let res = Array();
+		let sta = st?.info[0]?.status;
+		res.push([sta?.shortId, sta?.name, sta?.primaryIp, sta?.nodeKey, sta?.shortDhash, sta?.revision]);
+		return res;
+	});
+
+	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':'1'}, "status_div", function(st){
+		let res = Array();
+		let sta = st?.info[0]?.status;
+		let mem = st?.info[3]?.memory?.bmx7;
+		let txQ = sta?.txQ?.split('/');
+		let ptxQ = '<p style="color:rgb('+parseInt(255*txQ?.[0]/txQ?.[1])+','+parseInt(128*(txQ?.[1]-txQ?.[0])/txQ?.[1])+',0)")>'+sta.txQ+'</p>';
+		res.push([sta.nodes, sta.nbs, sta.tun6Address, sta.tun4Address, sta.uptime, sta.cpu, mem, ptxQ]);
+		return res;
+	});
+
+	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':'1'}, "ifaces_div", function(st){
+		let res = Array();
+		let ifaces = st?.info[1]?.interfaces;
+
+		if (ifaces)
+			ifaces?.forEach(function(iface) {
+				res.push([iface?.dev, iface?.state, iface?.type, iface?.rateMax, iface?.localIp, iface?.rxBpP, iface?.txBpP]);
+			});
+		return res;
+	});
+
+	new TablePooler(10,"/cgi-bin/bmx7-info", {'info':'1'}, "links_div", function(st){
+		let res = Array();
+		links = st?.info[2]?.links;
+		if (links)
+			links.forEach(function(link) {
+				res.push([link?.shortId, link?.name, link?.linkKey, link?.nbLocalIp, link?.dev, link?.rxRate, link?.txRate, link?.rts]);
+			});
+		return res;
+	});
+
+</script>
+
+{% include('footer', { }) %}
