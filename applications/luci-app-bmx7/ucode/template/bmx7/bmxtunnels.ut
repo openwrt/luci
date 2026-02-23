@@ -1,4 +1,4 @@
-<%#
+{#
    Copyright (C) 2011 Pau Escrich <pau@dabax.net>
    Contributors Lluis Esquerda <eskerda@gmail.com>
 
@@ -18,31 +18,31 @@
 
    The full GNU General Public License is included in this distribution in
    the file called "COPYING".
--%>
+-#}
 
 
-<%+header%>
-<script src="<%=resource%>/cbi.js"></script>
-<script src="<%=resource%>/bmx7/js/polling.js"></script>
+{% include('header', { }) %}
+
+<script src="{{ resource }}/bmx7/js/polling.js"></script>
 
 <div class="cbi-map">
 <h2>Gateway announcements</h2>
 <div class="cbi-map-descr">Networks announced by mesh nodes</div>
 
 <div class="cbi-section">
-	<legend><%:Announcements%></legend>
+	<legend>{{ _('Announcements') }}</legend>
 	<div class="cbi-section-node">
 	<div class="table" id="tunnels_div">
 		<div class="tr table-titles">
-			<div class="th"><%:Status%></div>
-			<div class="th"><%:Name%></div>
-			<div class="th"><%:Node%></div>
-			<div class="th"><%:Network%></div>
-			<div class="th"><%:Bandwidth%></div>
-			<div class="th"><%:Local net%></div>
-			<div class="th"><%:Path Metric%></div>
-			<div class="th"><%:Tun Metric%></div>
-			<div class="th"><%:Rating%></div>
+			<div class="th">{{ _('Status') }}</div>
+			<div class="th">{{ _('Name') }}</div>
+			<div class="th">{{ _('Node') }}</div>
+			<div class="th">{{ _('Network') }}</div>
+			<div class="th">{{ _('Bandwidth') }}</div>
+			<div class="th">{{ _('Local net') }}</div>
+			<div class="th">{{ _('Path Metric') }}</div>
+			<div class="th">{{ _('Tun Metric') }}</div>
+			<div class="th">{{ _('Rating') }}</div>
 		</div>
 	</div>
 	</div>
@@ -51,26 +51,26 @@
 </div>
 
 <script>
-		new TablePooler(5,"/cgi-bin/bmx7-info", {'tunnels':''}, "tunnels_div", function(st){
-        var tunicon = "<%=resource%>/icons/tunnel.svg";
-        var tunicon_dis = "<%=resource%>/icons/tunnel_disabled.svg";
-        var applyicon = "<%=resource%>/cbi/apply.gif";
-		    var res = Array();
-        for ( var k in st.tunnels ) {
-          var tunnel = st.tunnels[k];
-          var nodename = tunnel.remoteName;
-			    var advnet = tunnel.advNet;
-          var status = '<img src="'+tunicon_dis+'"/>';
-          if ( tunnel.tunName != "---" ) status = '<img src="'+tunicon+'"/>';
+		new TablePooler(5,"/cgi-bin/bmx7-info", {'tunnels':'1'}, "tunnels_div", function(st){
+        let tunicon = "{{ resource }}/icons/tunnel.svg";
+        let tunicon_dis = "{{ resource }}/icons/tunnel_disabled.svg";
+        let applyicon = "{{ resource }}/cbi/apply.gif";
+		    let res = Array();
+        for ( let k in st?.tunnels ) {
+          let tunnel = st?.tunnels[k];
+          let nodename = tunnel?.remoteName;
+			    let advnet = tunnel?.advNet;
+          let status = '<img src="'+tunicon_dis+'"/>';
+          if ( tunnel?.tunName != "---" ) status = '<img src="'+tunicon+'"/>';
           if ( advnet == "0.0.0.0/0" ) advnet = "<b>Internet IPv4</b>";
           if ( advnet == "::/0" ) advnet = "<b>Internet IPv6</b>";
           if (nodename != "---") {
-            res.push([status, tunnel.tunName, nodename, advnet, tunnel.advBw, tunnel.net,
-              tunnel.pathMtc, tunnel.tunMtc, tunnel.rating]);
+            res.push([status, tunnel?.tunName, nodename, advnet, tunnel?.advBw, tunnel?.net,
+              tunnel?.pathMtc, tunnel?.tunMtc, tunnel?.rating]);
             }
           }
 		  return res;
 		});
 </script>
 
-<%+footer%>
+{% include('footer', { }) %}
