@@ -60,8 +60,6 @@ The JSON file that defines what APIs may be called is defined in `root/usr/share
 
 If ACL rights are not granted correctly, the web UI will show an error indicating "Access denied". Fix the ACL file, deploy it to the device/virtual machine, and restart `rpcd`.
 
-Note that there may be legacy UCI (luci-compat) grants ACL in place, permitting read and write for all applications to all UCI resources. This should not be taken as a reason to skip granting the correct ACLs in your application. To ensure your ACLs are correct, you can move `acl.d/luci-compat` out of the way and restart `rpcd`. Put the file back when you've finished testing, as other LuCI applications may depend on it.
-
 ## Additional files
 
 LuCI apps do not have to have any additional files or UCI default setup. However, here's how you deal with those if needed.
