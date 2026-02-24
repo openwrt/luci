@@ -36,7 +36,7 @@ If you're doing a whole new application, instead of editing this one, you can us
 
 ## Toolchain build
 
-Even though you're only building a simple JS + Lua package, you'll need the whole toolchain.
+Even though you're only building a simple JS package, you'll need the whole toolchain.
 Though the command says "install", nothing is actually installed outside of the working directory (`~/src/openwrt` in this case).
 
 * Run `make tools/install`

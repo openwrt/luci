@@ -19,7 +19,6 @@
 ├── README.md
 └── root
     ├── etc
-    │   ├── luci.example.yaml
     │   └── uci-defaults
     │       └── 80_example
     └── usr
@@ -43,7 +42,7 @@ For the rest of this documentation, `appname` is `example`.
 
 ## Root files
 
-At least one file must exist in `applications/luci-app-example` - a Makefile. This defines what license is to be applied to the code, and what packages are required for the package to be installed. In this example app, YAML is processed by the Lua code, so **lyaml** is marked as a dependency.
+At least one file must exist in `applications/luci-app-example` - a Makefile. This defines what license is to be applied to the code, and what packages are required for the package to be installed.
 
 A `README.md` file is also recommended. It should provide context on what the app does, and perhaps instructions on how to test things like RPC calls.
 
@@ -65,7 +64,7 @@ Note that there may be legacy UCI (luci-compat) grants ACL in place, permitting 
 
 ## Additional files
 
-LuCI apps do not have to have any additional files such as Lua scripts or UCI default setup. However, here's how you deal with those if needed.
+LuCI apps do not have to have any additional files or UCI default setup. However, here's how you deal with those if needed.
 
 ### Installing additional files
 

@@ -1,7 +1,6 @@
 # Example app for js based Luci
 
 This app is meant to be a starting point for developing new LuCI apps using the modern JavaScript client-rendered approach.
-Previously the LuCI used a Lua server-side render approach which is deprecated now.
 
 ## Installation
 
@@ -22,7 +21,7 @@ ssh root@192.168.1.1 "sh /etc/uci-defaults/80_example"
 
 Install the app on your OpenWrt installation. This can be an actual router/device, or something like a QEMU virtual machine.
 
-`opkg install luci-app-example`
+`apk add luci-app-example`
 
 Visit the web UI for the device/virtual machine where the package was installed.
 Log in to OpenWrt, and **Example** should be present in the navigation menu.
