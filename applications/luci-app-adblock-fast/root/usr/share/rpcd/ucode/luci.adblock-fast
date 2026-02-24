@@ -1,0 +1,446 @@
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// Copyright 2023-2026 MOSSDeF, Stan Grishin (stangri@melmac.ca).
+//
+// rpcd ucode plugin for adblock-fast.
+
+/*
+ubus -v list luci.adblock-fast
+ubus call luci.adblock-fast getInitList '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getInitStatus '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getPlatformSupport '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getCronStatus '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getCronEntry '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast getFileUrlFilesizes '{"name":"adblock-fast"}'
+ubus call luci.adblock-fast setCronEntry '{"name":"adblock-fast","entry":"0 4 * * * /etc/init.d/adblock-fast dl"}'
+ubus call luci.adblock-fast setInitAction '{"name":"adblock-fast","action":"start"}'
+ubus call luci.adblock-fast syncCron '{"name":"adblock-fast","action":"start"}'
+*/
+
+import adb from '/lib/adblock-fast/adblock-fast.uc';
+import { readfile, writefile, stat, rename, unlink, chmod, mkdir, access } from 'fs';
+import { cursor } from 'uci';
+
+const packageName = 'adblock-fast';
+const rpcdCompat = 13; // ucode-lsp disable
+
+// ── Helpers ─────────────────────────────────────────────────────────
+
+function uci_bool(val) {
+	if (val == null) return false;
+	switch ('' + val) {
+	case '1': case 'yes': case 'on': case 'true': case 'enabled':
+		return true;
+	default:
+		return false;
+	}
+}
+
+// ── Cron Management ─────────────────────────────────────────────────
+
+function update_cron(action) {
+	let cron_file = '/etc/crontabs/root';
+	let tmp_file = cron_file + '.tmp';
+
+	let uci_ctx = cursor();
+	uci_ctx.load(packageName);
+	let cfg = uci_ctx.get_all(packageName, 'config') || {};
+
+	// Read existing cron, filter out our lines
+	let content = readfile(cron_file) || '';
+	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
+	let re = regexp(pattern);
+	let lines = [];
+	for (let line in split(content, '\n')) {
+		if (!match(line, re))
+			push(lines, line);
+	}
+	// Remove trailing empty element from split
+	while (length(lines) > 0 && lines[length(lines) - 1] === '')
+		pop(lines);
+
+	let auto_enabled = uci_bool(cfg.auto_update_enabled ?? '0');
+	let mode = cfg.auto_update_mode || 'daily';
+	let minute = cfg.auto_update_minute || '0';
+	let hour = cfg.auto_update_hour || '4';
+	let wday = cfg.auto_update_weekday || '0';
+	let mday = cfg.auto_update_monthday || '1';
+	let ndays = cfg.auto_update_every_ndays || '3';
+	let nhours = cfg.auto_update_every_nhours || '6';
+
+	let dom = '*', dow = '*';
+	switch (mode) {
+	case 'weekly': dow = wday; break;
+	case 'monthly': dom = mday; break;
+	case 'every_n_days': dom = '*/' + ndays; break;
+	case 'every_n_hours': hour = '*/' + nhours; break;
+	}
+
+	let base_line = sprintf('%s %s %s * %s /etc/init.d/%s dl', minute, hour, dom, dow, packageName);
+	let active_line = base_line + ' # adblock-fast-auto';
+	let disabled_line = '# ' + base_line + ' # adblock-fast-auto-disabled';
+	let suspended_line = '# ' + base_line + ' # adblock-fast-auto-suspended';
+
+	let add_line = 0;
+	if (auto_enabled) {
+		switch (action) {
+		case 'disable': case 'stop':
+			add_line = 2; break;
+		case 'enable': case 'start':
+			add_line = 1; break;
+		default:
+			let is_en = uci_bool(cfg.enabled ?? '0');
+			add_line = is_en ? 1 : 2;
+			break;
+		}
+	} else {
+		add_line = 3;
+	}
+
+	let line_to_add;
+	switch (add_line) {
+	case 1: line_to_add = active_line; break;
+	case 2: line_to_add = suspended_line; break;
+	case 3: line_to_add = disabled_line; break;
+	}
+
+	if (line_to_add)
+		push(lines, line_to_add);
+
+	writefile(tmp_file, join('\n', lines) + '\n');
+
+	if (!rename(tmp_file, cron_file)) {
+		unlink(tmp_file);
+		return false;
+	}
+	chmod(cron_file, 0600);
+	if (access('/etc/init.d/cron', 'x'))
+		system('/etc/init.d/cron reload >/dev/null 2>&1');
+	return true;
+}
+
+function get_cron_status(req) {
+	let name = req.args?.name || packageName;
+	let cron_file = '/etc/crontabs/root';
+
+	let cron_uci = cursor();
+	cron_uci.load(packageName);
+
+	let auto_enabled = uci_bool(cron_uci.get(packageName, 'config', 'auto_update_enabled') ?? '0');
+
+	let cron_init = !!access('/etc/init.d/cron', 'x');
+	let cron_bin = system('command -v crond >/dev/null 2>&1') == 0 || !!access('/usr/sbin/crond', 'x');
+	let cron_enabled = cron_init && system('/etc/init.d/cron enabled >/dev/null 2>&1') == 0;
+	let cron_running = (cron_init && system('/etc/init.d/cron status >/dev/null 2>&1') == 0) ||
+		system('pidof crond >/dev/null 2>&1') == 0;
+
+	let cron_line_present = false;
+	let cron_line_match = false;
+	let cron_multi = false;
+	let cron_parse_ok = false;
+	let cron_state = 'none';
+	let parsed = {};
+
+	let line_count = 0, match_count = 0;
+	let active_seen = false, suspended_seen = false, disabled_seen = false;
+	let last_line_state = '';
+	let matched_entry = '';
+
+	let content = readfile(cron_file) || '';
+	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
+	let re = regexp(pattern);
+
+	for (let line in split(content, '\n')) {
+		if (!length(trim(line))) continue;
+
+		let commented = match(line, /^\s*#/) ? true : false;
+		let line_content = commented ? replace(line, /^\s*#\s*/, '') : line;
+
+		if (!match(line_content, re)) continue;
+
+		line_count++;
+		matched_entry = line;
+		let state;
+		if (index(line, 'adblock-fast-auto-disabled') >= 0) {
+			state = 'disabled';
+		} else if (index(line, 'adblock-fast-auto-suspended') >= 0) {
+			state = 'suspended';
+		} else if (index(line, 'adblock-fast-auto') >= 0) {
+			state = commented ? 'disabled' : 'active';
+		} else {
+			state = commented ? 'disabled' : 'active';
+		}
+		last_line_state = state;
+
+		if (state == 'active') active_seen = true;
+		if (state == 'suspended') suspended_seen = true;
+		if (state == 'disabled') disabled_seen = true;
+
+		let fields = split(trim(line_content), /\s+/);
+		let p_ok = true;
+
+		// Validate basic structure
+		if (length(fields) < 7) p_ok = false;
+		if (p_ok && fields[3] != '*') p_ok = false;
+		if (p_ok && fields[5] != '/etc/init.d/' + packageName) p_ok = false;
+		if (p_ok && fields[6] != 'dl') p_ok = false;
+		if (p_ok && !match(fields[0], /^[0-9]+$/)) p_ok = false;
+
+		let p_minute = fields[0], p_hour = fields[1], p_dom = fields[2], p_dow = fields[4];
+		let p_mode = '', p_ndays = '', p_nhours = '';
+
+		if (p_ok) {
+			if (index(p_hour, '/') >= 0) {
+				p_nhours = split(p_hour, '/')[1];
+				if (!match(p_nhours, /^[0-9]+$/)) p_ok = false;
+				if (p_dom != '*' || p_dow != '*') p_ok = false;
+				p_mode = 'every_n_hours';
+			} else if (index(p_dom, '/') >= 0) {
+				p_ndays = split(p_dom, '/')[1];
+				if (!match(p_ndays, /^[0-9]+$/)) p_ok = false;
+				if (!match(p_hour, /^[0-9]+$/)) p_ok = false;
+				if (p_dow != '*') p_ok = false;
+				p_mode = 'every_n_days';
+			} else if (p_dom != '*') {
+				if (!match(p_dom, /^[0-9]+$/)) p_ok = false;
+				if (!match(p_hour, /^[0-9]+$/)) p_ok = false;
+				if (p_dow != '*') p_ok = false;
+				p_mode = 'monthly';
+			} else if (p_dow != '*') {
+				if (!match(p_dow, /^[0-9]+$/)) p_ok = false;
+				if (!match(p_hour, /^[0-9]+$/)) p_ok = false;
+				p_mode = 'weekly';
+			} else {
+				if (!match(p_hour, /^[0-9]+$/)) p_ok = false;
+				p_mode = 'daily';
+			}
+		}
+
+		if (p_ok) {
+			match_count++;
+			parsed = {
+				state: state, mode: p_mode, minute: p_minute,
+				hour: p_hour, dom: p_dom, dow: p_dow,
+				wday: p_dow, mday: p_dom, ndays: p_ndays, nhours: p_nhours,
+			};
+		}
+	}
+
+	if (line_count > 0) cron_line_present = true;
+
+	if (line_count == 0) {
+		cron_state = 'missing';
+		auto_enabled = false;
+	} else if (line_count > 1) {
+		cron_multi = true;
+		cron_state = 'multi';
+		auto_enabled = active_seen || suspended_seen;
+	} else if (match_count == 1) {
+		cron_line_match = true;
+		cron_parse_ok = true;
+		cron_state = parsed.state;
+		auto_enabled = (parsed.state == 'active' || parsed.state == 'suspended');
+
+		if (parsed.mode)
+			cron_uci.set(packageName, 'config', 'auto_update_mode', parsed.mode);
+		if (parsed.minute)
+			cron_uci.set(packageName, 'config', 'auto_update_minute', parsed.minute);
+		if (parsed.hour && parsed.mode != 'every_n_hours')
+			cron_uci.set(packageName, 'config', 'auto_update_hour', parsed.hour);
+		if (parsed.mode == 'weekly' && parsed.wday)
+			cron_uci.set(packageName, 'config', 'auto_update_weekday', parsed.wday);
+		if (parsed.mode == 'monthly' && parsed.mday)
+			cron_uci.set(packageName, 'config', 'auto_update_monthday', parsed.mday);
+		if (parsed.mode == 'every_n_days' && parsed.ndays)
+			cron_uci.set(packageName, 'config', 'auto_update_every_ndays', parsed.ndays);
+		if (parsed.mode == 'every_n_hours' && parsed.nhours)
+			cron_uci.set(packageName, 'config', 'auto_update_every_nhours', parsed.nhours);
+	} else {
+		cron_state = 'unsupported';
+		auto_enabled = (last_line_state == 'active' || last_line_state == 'suspended');
+	}
+
+	cron_uci.set(packageName, 'config', 'auto_update_enabled', auto_enabled ? '1' : '0');
+	if (length(cron_uci.changes(packageName))) cron_uci.commit(packageName);
+
+	let result = {};
+	result[name] = {
+		auto_update_enabled: auto_enabled,
+		cron_init: cron_init,
+		cron_bin: cron_bin,
+		cron_enabled: cron_enabled,
+		cron_running: cron_running,
+		cron_line_present: cron_line_present,
+		cron_line_match: cron_line_match,
+		cron_line_multi: cron_multi,
+		cron_line_parse_ok: cron_parse_ok,
+		cron_line_state: cron_state,
+		entry: matched_entry,
+	};
+	return result;
+}
+
+function get_cron_entry(req) {
+	let name = req.args?.name || packageName;
+	let cron_file = '/etc/crontabs/root';
+	let entry = '';
+
+	let content = readfile(cron_file) || '';
+	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
+	let re = regexp(pattern);
+
+	for (let line in split(content, '\n')) {
+		if (!length(trim(line))) continue;
+		if (match(line, re)) {
+			entry = line;
+			break;
+		}
+	}
+
+	let result = {};
+	result[name] = { entry: entry };
+	return result;
+}
+
+function set_cron_entry(req) {
+	let name = req.args?.name || packageName;
+	let cron_entry = req.args?.entry;
+	let cron_file = '/etc/crontabs/root';
+	let temp_file = cron_file + '.tmp';
+	let found = false, written = false;
+
+	let dir = replace(cron_file, /\/[^\/]+$/, '');
+	if (!stat(dir)) mkdir(dir);
+
+	let content = readfile(cron_file) || '';
+	let pattern = sprintf('/etc/init.d/%s\\s+dl', packageName);
+	let re = regexp(pattern);
+	let out_lines = [];
+
+	for (let line in split(content, '\n')) {
+		if (match(line, re)) {
+			if (!written && cron_entry) {
+				push(out_lines, cron_entry);
+				written = true;
+			}
+			found = true;
+		} else {
+			push(out_lines, line);
+		}
+	}
+
+	if (!found && cron_entry)
+		push(out_lines, cron_entry);
+
+	writefile(temp_file, join('\n', out_lines) + '\n');
+
+	if (rename(temp_file, cron_file)) {
+		chmod(cron_file, 0600);
+		if (access('/etc/init.d/cron', 'x')) {
+			if (system('/etc/init.d/cron enabled >/dev/null 2>&1') == 0)
+				system('/etc/init.d/cron restart >/dev/null 2>&1');
+			else if (system('pidof crond >/dev/null 2>&1') == 0)
+				system('killall -HUP crond 2>/dev/null');
+		} else if (system('pidof crond >/dev/null 2>&1') == 0) {
+			system('killall -HUP crond 2>/dev/null');
+		}
+		return { result: true };
+	}
+	unlink(temp_file);
+	return { result: false };
+}
+
+function sync_cron(req) {
+	let name = req.args?.name || packageName;
+	let action = req.args?.action;
+	if (update_cron(action))
+		return { result: true };
+	return { result: false };
+}
+
+// ── rpcd Method Handlers ────────────────────────────────────────────
+
+const methods = {
+	getFileUrlFilesizes: {
+		args: { name: 'name' },
+		call: function(req) {
+		return adb.get_file_url_filesizes(req.args.name || packageName);
+		}
+	},
+	getInitList: {
+		args: { name: 'name' },
+		call: function(req) {
+		return adb.get_init_list(req.args.name || packageName);
+		}
+	},
+	getInitStatus: {
+		args: { name: 'name' },
+		call: function(req) {
+		let name = req.args.name || packageName;
+			let result = adb.get_init_status(name);
+			if (result[name])
+				result[name].rpcdCompat = rpcdCompat;
+			return result;
+		}
+	},
+	getPlatformSupport: {
+		args: { name: 'name' },
+		call: function(req) {
+		return adb.get_platform_support(req.args.name || packageName);
+		}
+	},
+	setInitAction: {
+		args: { name: 'name', action: 'action' },
+		call: function(req) {
+			let name = req.args.name || packageName;
+			let action = req.args.action;
+			if (name != packageName) return { result: false };
+			if (!access('/etc/init.d/' + packageName, 'x'))
+				return { error: 'Init script not found!' };
+
+			let result = false;
+			switch (action) {
+			case 'enable':
+			case 'disable': {
+				let val = (action === 'enable') ? '1' : '0';
+				if (system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1", packageName, action)) == 0) {
+					let uci_ctx = cursor();
+					uci_ctx.load(packageName);
+					uci_ctx.set(packageName, 'config', 'enabled', val);
+					uci_ctx.commit(packageName);
+					result = true;
+				}
+				break;
+			}
+			case 'start': case 'stop': case 'reload': case 'restart': case 'dl': case 'pause':
+				if (system(sprintf("/etc/init.d/%s %s >/dev/null 2>&1", packageName, action)) == 0)
+					result = true;
+				break;
+			}
+
+			switch (action) {
+			case 'enable': case 'start': case 'disable': case 'stop':
+				update_cron(action);
+				break;
+			}
+			return { result: result };
+		}
+	},
+	getCronStatus: {
+		args: { name: 'name' },
+		call: get_cron_status,
+	},
+	getCronEntry: {
+		args: { name: 'name' },
+		call: get_cron_entry,
+	},
+	setCronEntry: {
+		args: { name: 'name', entry: 'entry' },
+		call: set_cron_entry,
+	},
+	syncCron: {
+		args: { name: 'name', action: 'action' },
+		call: sync_cron,
+	},
+};
+
+return { 'luci.adblock-fast': methods };
