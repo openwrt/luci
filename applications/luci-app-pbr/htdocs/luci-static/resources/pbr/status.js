@@ -11,10 +11,10 @@ var pkg = {
 		return "pbr";
 	},
 	get LuciCompat() {
-		return 24;
+		return 25;
 	},
 	get ReadmeCompat() {
-		return "1.2.1";
+		return "1.2.2";
 	},
 	get URL() {
 		return (
@@ -364,7 +364,7 @@ var status = baseclass.extend({
 					{ class: "cbi-value-title" },
 					_("Service Warnings"),
 				);
-				var text = "";
+				text = "";
 				reply.ubus.warnings.forEach((element) => {
 					if (element.code && warningTable[element.code]) {
 						text += pkg.formatMessage(element.info, warningTable[element.code]);
@@ -373,7 +373,7 @@ var status = baseclass.extend({
 					}
 				});
 				text += _("Warnings encountered, please check the %sREADME%s").format(
-					'<a href="' + pkg.URL + '#WarningMessagesDetails" target="_blank">',
+					'<a href="' + pkg.URL + '#warning-messages-details" target="_blank">',
 					"</a>!<br />",
 				);
 				var warningsText = E("div", { class: "cbi-value-description" }, text);
@@ -522,26 +522,13 @@ var status = baseclass.extend({
 					errorUplinkDown: _(
 						"Uplink/WAN interface is still down, increase value of 'procd_boot_trigger_delay' option",
 					),
-					errorUnexpectedExit: _(
-						"Unexpected exit or service termination: '%s'",
-					),
-					errorNoDownloadWithSecureReload: _(
-						"Policy '%s' refers to URL which can't be downloaded in 'secure_reload' mode",
-					),
-					errorIncompatibleUserFile: _(
-						"Incompatible custom user file detected '%s'",
-					),
-					errorTryFailed: _("Command failed: '%s'"),
-					errorMktempFileCreate: _(
-						"Failed to create temporary file with mktemp mask: '%s'",
-					),
 				};
 				var errorsTitle = E(
 					"label",
 					{ class: "cbi-value-title" },
 					_("Service Errors"),
 				);
-				var text = "";
+				text = "";
 				reply.ubus.errors.forEach((element) => {
 					if (element.code && errorTable[element.code]) {
 						text += pkg.formatMessage(element.info, errorTable[element.code]);
@@ -550,7 +537,7 @@ var status = baseclass.extend({
 					}
 				});
 				text += _("Errors encountered, please check the %sREADME%s").format(
-					'<a href="' + pkg.URL + '#ErrorMessagesDetails" target="_blank">',
+					'<a href="' + pkg.URL + '#error-messages-details" target="_blank">',
 					"</a>!<br />",
 				);
 				var errorsText = E("div", { class: "cbi-value-description" }, text);
