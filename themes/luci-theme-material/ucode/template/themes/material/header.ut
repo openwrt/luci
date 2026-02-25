@@ -30,14 +30,7 @@
 <html lang="{{ dispatcher.lang }}">
 <head>
 <meta charset="utf-8">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#09c">
-<meta name="msapplication-tap-highlight" content="no">
-<meta name="msapplication-TileColor" content="#09c">
-<meta name="application-name" content="{{ striptags(`${dispatched ? `${dispatched.title} | ` : ''}${boardinfo.hostname ?? '?'}`) }} | LuCI">
-<meta name="apple-mobile-web-app-title" content="{{ striptags(`${dispatched ? `${dispatched.title} | ` : ''}${boardinfo.hostname ?? '?'}`) }} | LuCI">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="{{ media }}/cascade.css">
 <link rel="icon" href="{{ media }}/logo_48.png" sizes="48x48">
 <link rel="icon" href="{{ media }}/logo.svg" sizes="any">
@@ -46,7 +39,7 @@
 {% endif %}
 <script src="{{ dispatcher.build_url('admin/translations', dispatcher.lang) }}"></script>
 <script src="{{ resource }}/cbi.js"></script>
-<title>{{ striptags(`${boardinfo.hostname + ' | ' ?? '?'}${dispatched?.title ? `${_(dispatched.title)} | ` : ''}`) }} LuCI</title>
+<title>{{ striptags(`${boardinfo.hostname ?? '?'}${dispatched?.title ? ` | ${_(dispatched.title)}` : ''}`) }}</title>
 {% if (css): %}
 <style title="text/css">{{ css }}</style>
 {% endif %}

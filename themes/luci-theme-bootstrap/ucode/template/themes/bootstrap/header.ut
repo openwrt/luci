@@ -18,7 +18,7 @@
 <html lang="{{ dispatcher.lang }}" {{ darkpref ? `data-darkmode="${darkpref}"` : '' }}>
 	<head>
 		<meta charset="utf-8">
-		<title>{{ striptags(`${boardinfo.hostname + ' | ' ?? '?'}${dispatched?.title ? `${_(dispatched.title)} | ` : ''}`) }} LuCI</title>
+		<title>{{ striptags(`${boardinfo.hostname ?? '?'}${dispatched?.title ? ` | ${_(dispatched.title)}` : ''}`) }}</title>
 		{% if (!darkpref): %}
 			<script>
 				var mediaQuery = window.matchMedia('(prefers-color-scheme: dark)'),
@@ -29,7 +29,7 @@
 				setDarkMode(mediaQuery);
 			</script>
 		{% endif %}
-		<meta name="viewport" content="initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="darkreader-lock">
 		<link rel="stylesheet" href="{{ media }}/cascade.css">
 		<link rel="stylesheet" media="only screen and (max-device-width: 854px)" href="{{ media }}/mobile.css" />
