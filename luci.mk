@@ -270,7 +270,7 @@ endif
 ifeq ($(LUCI_MINIFY_CSS),1)
   define CssTidy
 	$(FIND) $(1) -type f -name '*.css' | while read src; do \
-		if csstidy "$$$$src" --template=highest --remove_last_semicolon=true "$$$$src.o"; \
+		if csstidy "$$$$src" --template=highest --remove_last_semicolon=true --preserve_css=true "$$$$src.o"; \
 		then mv "$$$$src.o" "$$$$src"; fi; \
 	done
   endef
