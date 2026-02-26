@@ -1,0 +1,29 @@
+#!/bin/sh
+# LED trigger: ping target. Reads UCI system.@led[], for each with trigger=ping
+# sets LED to "none" and drives brightness by pinging the configured target.
+
+LEDS_PATH="/sys/class/leds"
+CHECK_INTERVAL=5
+
+while true; do
+	for sec in $(uci show system 2>/dev/null | sed -n 's/^system\.\([^.=]*\)\.trigger=.*/\1/p'); do
+		[ "$(uci -q get system.$sec.trigger 2>/dev/null)" != "ping" ] && continue
+		sysfs=$(uci -q get system.$sec.sysfs 2>/dev/null)
+		target=$(uci -q get system.$sec.target 2>/dev/null)
+		[ -z "$sysfs" ] || [ -z "$target" ] && continue
+		[ -d "$LEDS_PATH/$sysfs" ] || continue
+
+		echo none > "$LEDS_PATH/$sysfs/trigger" 2>/dev/null
+
+		interval=$(uci -q get system.$sec.interval 2>/dev/null)
+		interval=${interval:-$CHECK_INTERVAL}
+		[ "$interval" -ge 1 ] 2>/dev/null || interval=$CHECK_INTERVAL
+
+		if ping -c 1 -W 3 -q "$target" >/dev/null 2>&1; then
+			echo 255 > "$LEDS_PATH/$sysfs/brightness" 2>/dev/null
+		else
+			echo 0 > "$LEDS_PATH/$sysfs/brightness" 2>/dev/null
+		fi
+	done
+	sleep $CHECK_INTERVAL
+done
