@@ -1129,6 +1129,22 @@ return baseclass.extend({
 		o.placeholder = dev ? dev._devstate('qlen') : '';
 		o.datatype = 'uinteger';
 
+
+		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'autoneg', _('Auto negotiation'));
+    		o.value('',_(''));
+		o.value('1', _('Enable'));
+    		o.value('0', _('Disable'));
+    		o.default = '';
+    		o.rmempty = true;
+
+
+    		o = this.replaceOption(s, 'devgeneral', form.ListValue, 'duplex', _('Duplex'));
+    		o.value('',_(''));
+    		o.value('1', _('Full duplex'));
+    		o.value('0', _('Half duplex'));
+    		o.default = '';
+    		o.rmempty = true;
+
 		/* PSE / PoE options */
 		if (hasPSE) {
 			o = this.replaceOption(s, 'devpse', form.ListValue, 'pse', _('PoE (C33)'),
