@@ -266,6 +266,34 @@ return view.extend({
 		recordtypes.forEach(r => {
 			o.value(r);
 		});
+
+		o = s.taboption('cache', form.Flag, 'nonegcache',
+			_('No negative cache'),
+			_('Do not cache negative replies from upstream nameservers, e.g. for non-existent domains.') + '<br/>' +
+			_('Caching negative replies allows dnsmasq to answer identical queries without forwarding them again.'));
+		o.rmempty = false;
+
+		o = s.taboption('cache', form.Value, 'cachesize',
+			_('Size of DNS query cache'),
+			_('Number of cached DNS entries, 10000 is maximum, 0 is no caching.'));
+		o.optional = true;
+		o.datatype = 'range(0,10000)';
+		o.placeholder = 150;
+
+		o = s.taboption('cache', form.Value, 'min_cache_ttl',
+			_('Min cache TTL'),
+			_('Extend short TTL values to the seconds value given when caching them, one hour(3600s) is maximum.') + '<br/>' +
+			_('Use with caution.'));
+		o.optional = true;
+		o.datatype = 'range(0,3600)';
+		o.placeholder = 60;
+
+		o = s.taboption('cache', form.Value, 'max_cache_ttl',
+			_('Max cache TTL'),
+			_('Set a maximum seconds TTL value for entries in the cache.'));
+		o.optional = true;
+		o.datatype = 'uinteger';
+		o.placeholder = 3600;
 		// End cache
 
 		// Begin devices
@@ -664,10 +692,6 @@ return view.extend({
 			_('This prevents unreachable IPs in subnets not accessible to you.') + '<br />' +
 			_('Note: IPv4 only.'));
 
-		s.taboption('filteropts', form.Flag, 'nonegcache',
-			_('No negative cache'),
-			_('Do not cache negative replies, e.g. for non-existent domains.'));
-
 		o = s.taboption('filteropts', form.DynamicList, 'bogusnxdomain',
 			customi18n(_('IPs to override with {nxdomain}') ),
 			customi18n(_('Transform replies which contain the specified addresses or subnets into {nxdomain} responses.') )
@@ -736,26 +760,6 @@ return view.extend({
 		o.optional = true;
 		o.datatype = 'uinteger';
 		o.placeholder = 150;
-
-		o = s.taboption('limits', form.Value, 'cachesize',
-			_('Size of DNS query cache'),
-			_('Number of cached DNS entries, 10000 is maximum, 0 is no caching.'));
-		o.optional = true;
-		o.datatype = 'range(0,10000)';
-		o.placeholder = 150;
-
-		o = s.taboption('limits', form.Value, 'min_cache_ttl',
-			_('Min cache TTL'),
-			_('Extend short TTL values to the seconds value given when caching them. Use with caution.') +
-			_(' (Max 1h == 3600)'));
-		o.optional = true;
-		o.placeholder = 60;
-
-		o = s.taboption('limits', form.Value, 'max_cache_ttl',
-			_('Max cache TTL'),
-			_('Set a maximum seconds TTL value for entries in the cache.'));
-		o.optional = true;
-		o.placeholder = 3600;
 		// End limits
 
 		// Being logging
