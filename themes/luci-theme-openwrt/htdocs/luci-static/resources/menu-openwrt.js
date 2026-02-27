@@ -5,6 +5,41 @@
 return baseclass.extend({
 	__init__() {
 		ui.menu.load().then((tree) => this.render(tree));
+		this.initDarkMode();
+	},
+
+	initDarkMode() {
+		const toggle = document.getElementById('darkmode-toggle');
+		const icon = document.getElementById('darkmode-icon');
+		
+		if (!toggle) return;
+
+		const savedMode = localStorage.getItem('luci-darkmode');
+		const media = window.matchMedia('(prefers-color-scheme: dark)');
+		
+		let isDark = savedMode === null ? media.matches : (savedMode === 'true');
+		const setMode = (dark, save = false) => {
+			document.documentElement.setAttribute('data-darkmode', dark);
+			if (save)
+				localStorage.setItem('luci-darkmode', dark);
+			this.updateDarkModeUI(dark, icon);
+		};
+		setMode(isDark);
+		
+		toggle.addEventListener('click', () => {
+			const next = document.documentElement.getAttribute('data-darkmode') !== 'true';
+			setMode(next, true);
+		});
+
+		// Change when user has not set a preference
+		media.addEventListener('change', e => {
+			if (localStorage.getItem('luci-darkmode') === null)
+				setMode(e.matches);
+		});
+	},
+
+	updateDarkModeUI(isDark, icon) {
+		if (icon) icon.textContent = isDark ? '☀️' : '🌙';
 	},
 
 	render(tree) {

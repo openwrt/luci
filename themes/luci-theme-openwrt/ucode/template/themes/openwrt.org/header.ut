@@ -19,6 +19,17 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" media="screen" href="{{ media }}/cascade.css" />
+<script>
+(function() {
+	var saved = localStorage.getItem('luci-darkmode');
+	var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+	if (saved === 'true' || (saved === null && prefersDark)) {
+		document.documentElement.setAttribute('data-darkmode', 'true');
+	} else if (saved === 'false') {
+		document.documentElement.setAttribute('data-darkmode', 'false');
+	}
+})();
+</script>
 {% if (node?.css): %}
 <link rel="stylesheet" media="screen" href="{{ resource }}/{{ node.css }}" />
 {% endif %}
@@ -45,7 +56,11 @@
 	{{ _('Load') }}: {{ loadinfo ? join(' ', map(loadinfo, load => sprintf("%.2f", load / 65535.0))) : '-' }}
 </div>
 
-<div id="indicators"></div>
+<div id="indicators">
+	<span class="darkmode-toggle" id="darkmode-toggle" title="{{ _('Toggle dark mode') }}">
+		<span id="darkmode-icon">🌙</span>
+	</span>
+</div>
 
 <ul id="modemenu" style="display:none"></ul>
 
