@@ -1,0 +1,29 @@
+#!/bin/sh
+
+. /usr/share/libubox/jshn.sh
+
+main() {
+	local line pw
+
+	while read line; do
+		echo "$line" | grep "root" > /dev/null 2>&1
+		[ "$?" -eq 0 ] && break
+	done < /etc/shadow
+
+	pw="$(echo "$line" | cut -d: -f2)"
+
+	if [ -z "$pw" ]; then
+		json_init
+		json_add_int "id" "1"
+		json_add_string "service" "system"
+		json_add_string "title" "No root password set"
+		json_add_string "message" "Please configure a root password to protect the web interface"
+		ubus call system.notification add "$(json_dump)"
+	fi
+
+	# This script will be called on every reboot
+	# to verify if a root password is set.
+	exit 1
+}
+
+main "$@"
