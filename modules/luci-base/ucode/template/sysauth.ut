@@ -13,6 +13,12 @@
 		</div>
 	{% endif %}
 
+	{% if (auth_message && !fuser): %}
+		<div class="alert-message">
+			<p>{{ auth_message }}</p>
+		</div>
+	{% endif %}
+
 	<div class="cbi-map">
 		<h2 name="content">{{ _('Authorization Required') }}</h2>
 		<div class="cbi-map-descr">
@@ -31,6 +37,30 @@
 					<input class="cbi-input-text" type="password" name="luci_password" />
 				</div>
 			</div>
+			{% if (auth_fields): %}
+				{% for (let field in auth_fields): %}
+					<div class="cbi-value">
+						<label class="cbi-value-title">{{ _(field.label ?? field.name) }}</label>
+						<div class="cbi-value-field">
+							<input class="cbi-input-text"
+								type="{{ field.type ?? 'text' }}"
+								name="{{ field.name }}"
+								{% if (field.placeholder): %}placeholder="{{ field.placeholder }}"{% endif %}
+								{% if (field.inputmode): %}inputmode="{{ field.inputmode }}"{% endif %}
+								{% if (field.pattern): %}pattern="{{ field.pattern }}"{% endif %}
+								{% if (field.maxlength): %}maxlength="{{ field.maxlength }}"{% endif %}
+								{% if (field.autocomplete): %}autocomplete="{{ field.autocomplete }}"{% endif %}
+								{% if (field.required): %}required{% endif %}
+							/>
+						</div>
+					</div>
+				{% endfor %}
+			{% endif %}
+			{% if (auth_html): %}
+				<div class="cbi-value">
+					{{ auth_html }}
+				</div>
+			{% endif %}
 		</div></div>
 	</div>
 

@@ -85,6 +85,19 @@
 		}
 	},
 
+	"admin/system/admin/exauth": {
+		"title": "Authentication",
+		"order": 6,
+		"action": {
+			"type": "view",
+			"path": "system/exauth"
+		},
+		"depends": {
+			"acl": [ "luci-mod-system-config" ],
+			"uci": { "luci": true }
+		}
+	},
+
 	"admin/system/startup": {
 		"title": "Startup",
 		"order": 45,
