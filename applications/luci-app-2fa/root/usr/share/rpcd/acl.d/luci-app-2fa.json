@@ -1,0 +1,25 @@
+{
+	"luci-app-2fa": {
+		"description": "Grant access to 2-Factor Authentication configuration",
+		"read": {
+			"ubus": {
+				"2fa": [ "getConfig", "verifyOTP", "isEnabled", "checkRateLimit", "getRateLimitStatus", "getCurrentCode", "checkTimeCalibration", "getBackupCodesCount" ]
+			},
+			"uci": [ "2fa" ]
+		},
+		"write": {
+			"ubus": {
+				"2fa": [ "setConfig", "generateKey", "clearRateLimit", "clearAllRateLimits", "generateBackupCodes", "clearBackupCodes" ]
+			},
+			"uci": [ "2fa" ]
+		}
+	},
+	"unauthenticated": {
+		"description": "Grant unauthenticated access to 2FA verification for login flow",
+		"read": {
+			"ubus": {
+				"2fa": [ "isEnabled", "verifyOTP", "checkRateLimit", "checkTimeCalibration" ]
+			}
+		}
+	}
+}

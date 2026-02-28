@@ -1,0 +1,17 @@
+config settings 'settings'
+	option enabled '0'
+	option ip_whitelist_enabled '0'
+	option rate_limit_enabled '1'
+	option rate_limit_max_attempts '15'
+	option rate_limit_window '600'
+	option rate_limit_lockout '3600'
+	# Minimum valid system time (Unix timestamp for 2026-01-01 00:00:00 UTC)
+	# If system time is before this, TOTP will be disabled for security
+	option min_valid_time '1767225600'
+	option strict_mode '1'
+
+config login 'root'
+	option key ''
+	option type 'totp'
+	option step '30'
+	option counter '0'

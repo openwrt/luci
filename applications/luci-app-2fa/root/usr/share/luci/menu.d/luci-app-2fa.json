@@ -1,0 +1,14 @@
+{
+	"admin/system/2fa": {
+		"title": "2-Factor Auth",
+		"order": 95,
+		"action": {
+			"type": "view",
+			"path": "system/2fa"
+		},
+		"depends": {
+			"acl": [ "luci-app-2fa" ],
+			"uci": { "2fa": true }
+		}
+	}
+}
