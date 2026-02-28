@@ -1,0 +1,36 @@
+{
+	"admin/services/shadowsocks-rust": {
+		"title": "Shadowsocks Rust",
+		"order": 60,
+		"action": {
+			"type": "firstchild"
+		},
+		"depends": {
+			"acl": ["luci-app-shadowsocks-rust"]
+		}
+	},
+	"admin/services/shadowsocks-rust/servers": {
+		"title": "Servers",
+		"order": 10,
+		"action": {
+			"type": "view",
+			"path": "shadowsocks-rust/servers"
+		}
+	},
+	"admin/services/shadowsocks-rust/locals": {
+		"title": "Locals",
+		"order": 20,
+		"action": {
+			"type": "view",
+			"path": "shadowsocks-rust/locals"
+		}
+	},
+	"admin/services/shadowsocks-rust/rules": {
+		"title": "Rules",
+		"order": 30,
+		"action": {
+			"type": "view",
+			"path": "shadowsocks-rust/rules"
+		}
+	}
+}
