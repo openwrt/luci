@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-06-10 03:40+0200\n"
-"PO-Revision-Date: 2026-02-24 17:10+0000\n"
+"PO-Revision-Date: 2026-02-25 14:37+0000\n"
 "Last-Translator: Hyeonjeong Lee <h9101654@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/openwrt/luci/ko/>"
 "\n"
@@ -81,7 +81,7 @@ msgstr "%s 는 여러 VLAN에서 태그가 지정되지 않았습니다!"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:596
 msgid "%s means \"the address of the system running dnsmasq\"."
-msgstr "%s 은/는 “dnsmasq를 실행하는 시스템의 주소\"를 의미합니다."
+msgstr "%s은 \"dnsmasq를 실행 중인 시스템의 주소\"를 의미합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1779
 msgid ""
@@ -790,11 +790,11 @@ msgstr "APN 프로필 인덱스"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:870
 msgid "ARP link monitoring"
-msgstr "ARP 링크 모니터링"
+msgstr "ARP 링크 확인"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:896
 msgid "ARP monitor target IP address"
-msgstr ""
+msgstr "ARP 링크 확인 대상 IP 주소"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:107
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:107
@@ -1145,7 +1145,7 @@ msgstr "추가 hosts 파일"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:595
 msgid "Additional options to send to the below match tags."
-msgstr ""
+msgstr "아래 태그 일치 조건에 전달할 추가 옵션입니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:688
 msgid "Additional servers file"
@@ -1250,11 +1250,11 @@ msgstr "모두"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:900
 msgid "All ARP Targets"
-msgstr ""
+msgstr "모든 ARP 대상 확인"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:900
 msgid "All ARP targets must be reachable to consider the link valid"
-msgstr ""
+msgstr "모든 ARP 대상에 도달할 수 있어야 링크가 유효한 것으로 간주합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:663
 msgid "All ports active"
@@ -5341,6 +5341,8 @@ msgid ""
 "Host-specific lease time, e.g. <code>5m</code>, <code>3h</code>, <code>7d</"
 "code>."
 msgstr ""
+"해당 호스트에만 적용되는 임대 시간입니다. 예: <code>5m</code>(5분), <code>"
+"3h</code>(3시간), <code>7d</code>(7일)."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:56
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:78
@@ -6660,7 +6662,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:788
 msgid "Learning packets Interval"
-msgstr ""
+msgstr "학습 패킷 전송 간격"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:490
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:828
@@ -6779,7 +6781,7 @@ msgstr "링크 계층 헤더 비트 %d-%d"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:866
 msgid "Link monitoring mode"
-msgstr "링크 모니터링 방식"
+msgstr "링크 연결 확인 모드"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:248
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:828
@@ -7246,7 +7248,7 @@ msgstr "MHz"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:871
 msgid "MII link monitoring"
-msgstr "MII 링크 모니터링"
+msgstr "MII 링크 확인"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1090
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1749
@@ -7697,15 +7699,15 @@ msgstr "감시 모드(Monitor)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:890
 msgid "Monitor Interval"
-msgstr "모니터링 주기"
+msgstr "링크 확인 주기"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:964
 msgid "Monitor link-down delay"
-msgstr ""
+msgstr "링크 단절 확인 지연"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:958
 msgid "Monitor link-up delay"
-msgstr ""
+msgstr "링크 연결 확인 지연"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:31
 msgid "More Characters"
@@ -8408,10 +8410,12 @@ msgid ""
 "Number of packets to transmit through a slave before moving to the next one. "
 "Slave is chosen at random when 0."
 msgstr ""
+"다음 슬레이브로 넘어가기 전 전송할 패킷 수입니다. 0 설정 시 랜덤으로 "
+"슬레이브를 선택합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:789
 msgid "Number of seconds between sent learning packets"
-msgstr ""
+msgstr "학습 패킷(Learning packets)을 전송하는 시간 간격(초 단위)입니다"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3302
 msgid "OK"
@@ -8495,7 +8499,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1024
 msgid "One of hostname or MAC address must be specified!"
-msgstr ""
+msgstr "호스트 이름 또는 MAC 주소 중 하나는 반드시 입력해야 합니다!"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1125
 msgid "One of the following: %s"
@@ -9064,7 +9068,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:782
 msgid "Packets per slave"
-msgstr ""
+msgstr "슬레이브당 패킷"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:367
 msgid "Part of network:"
@@ -10116,19 +10120,19 @@ msgstr "결과에서 IPv6 주소를 제거하고 IPv4 주소만 반환합니다.
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:706
 msgid "Remove MAC address before forwarding query"
-msgstr "쿼리 전달 시 MAC 주소 제거"
+msgstr "쿼리 전달 전 MAC 주소 제거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:707
 msgid ""
 "Remove any MAC address information already in downstream queries before "
 "forwarding upstream."
-msgstr ""
+msgstr "하위 쿼리에 포함된 모든 MAC 주소 정보를 상위 서버로 전달하기 전에 제거합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:722
 msgid ""
 "Remove any subnet address already present in a downstream query before "
 "forwarding it upstream."
-msgstr ""
+msgstr "하위 쿼리에 포함되어 있는 서브넷 주소를 상위 서버로 전달하기 전에 제거합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:372
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:179
@@ -10154,7 +10158,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:721
 msgid "Remove subnet address before forwarding query"
-msgstr ""
+msgstr "쿼리 전달 전 서브넷 주소 제거"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:652
 msgid "Removes records of the specified type(s) from answers."
@@ -11396,7 +11400,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:891
 msgid "Specifies the link monitoring frequency in milliseconds"
-msgstr "링크 모니터링 주기를 밀리초(ms) 단위로 지정합니다"
+msgstr "링크 연결 확인 주기를 밀리초(ms) 단위로 지정합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:44
 msgid ""
@@ -11439,7 +11443,7 @@ msgstr ""
 msgid ""
 "Specifies the number of IGMP membership reports to be issued after a "
 "failover event"
-msgstr ""
+msgstr "장애 조치(Failover) 발생 후 전송할 IGMP 멤버십 리포트 횟수를 지정합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/routes.js:106
 msgid ""
@@ -11533,7 +11537,7 @@ msgstr ""
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:806
 msgid ""
 "Specify the number of peer notifications to be issued after a failover event."
-msgstr ""
+msgstr "장애 조치 발생 후 전송할 피어 알림 횟수를 지정합니다."
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2481
 msgid "Specify the secret encryption key here."
@@ -12036,7 +12040,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1033
 msgid "The IP address %h is already used by another static lease"
-msgstr ""
+msgstr "%h IP 주소는 이미 다른 정적 할당 항목에서 사용 중입니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1042
 msgid "The IP address is outside of any DHCP pool address range"
@@ -12594,7 +12598,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:650
 msgid "They are attached to a DHCP client or transaction."
-msgstr ""
+msgstr "DHCP 클라이언트나 요청 과정(Transaction)에 부여됩니다."
 
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/6rd.js:49
 msgid "This IPv4 address of the relay"
@@ -12804,7 +12808,7 @@ msgstr "전달 데이터베이스에 학습된 MAC 주소의 유지 시간 (초 
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1042
 msgid "Timeout in seconds until topology updates on link loss"
-msgstr "연결 손실 시 토폴로지 업데이트를 대기하는 최대 시간 (초 단위)"
+msgstr "링크 단절 시 토폴로지 업데이트를 대기하는 최대 시간 (초 단위)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:140
 msgid "Timezone"
@@ -13338,7 +13342,7 @@ msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:954
 msgid "Use Carrier"
-msgstr ""
+msgstr "캐리어 사용"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:106
 msgid "Use DHCP"
@@ -13406,7 +13410,7 @@ msgstr "자체 내장 IPv6-관리 기능 사용"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:954
 msgid "Use carrier status instead of MII result"
-msgstr ""
+msgstr "MII 확인 결과 대신 캐리어(Carrier) 상태를 사용합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1205
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:148
@@ -14218,7 +14222,7 @@ msgstr "사용 안 함"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:795
 msgid "distribute traffic according to port load"
-msgstr ""
+msgstr "포트 부하에 따라 트래픽을 분산합니다"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:350
 msgid "dnsmasq"
@@ -14407,7 +14411,7 @@ msgstr "아니요"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:76
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/include/29_ports.js:243
 msgid "no link"
-msgstr "연결 없음"
+msgstr "링크 없음"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1236
 msgid "no override"
