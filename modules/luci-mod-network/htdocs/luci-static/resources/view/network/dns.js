@@ -243,12 +243,6 @@ return view.extend({
 		o.optional = true;
 		o.placeholder = '/router.local/router.lan/192.168.0.1';
 
-		o = s.taboption('general', form.DynamicList, 'ipset',
-			_('IP sets'),
-			_('List of IP sets to populate with the IPs of DNS lookup results of the FQDNs also specified here.'));
-		o.optional = true;
-		o.placeholder = '/example.org/ipset,ipset6';
-
 		o = s.taboption('general', form.Flag, 'allservers',
 			_('All servers'),
 			_('Query all available upstream resolvers.') + ' ' + _('First answer wins.'));
