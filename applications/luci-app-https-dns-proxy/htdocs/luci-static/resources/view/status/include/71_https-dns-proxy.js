@@ -4,6 +4,7 @@
 "require form";
 "require baseclass";
 "require https-dns-proxy.status as hdp";
+/* globals hdp */
 
 var pkg = hdp.pkg;
 
@@ -19,61 +20,60 @@ return baseclass.extend({
 	},
 
 	render: function (data) {
-		var reply = {
-			status: (data[0] && data[0][pkg.Name]) || {
-				enabled: null,
-				running: null,
-				force_dns_active: null,
-				version: null,
-			},
-			providers: (data[1] && data[1][pkg.Name]) || [{ title: "empty" }],
-			runtime: (data[2] && data[2][pkg.Name]) || { instances: null, triggers: [] },
-		};
-		reply.providers.sort(function (a, b) {
-			return _(a.title).localeCompare(_(b.title));
-		});
-		reply.providers.push({
-			title: "Custom",
-			template: "{option}",
-			params: { option: { type: "text" } },
-		});
-
-		var forceDnsText = "";
-		if (reply.status.force_dns_active) {
-			reply.status.force_dns_ports.forEach((element) => {
-				forceDnsText += element + " ";
+		try {
+			var reply = {
+				status: (data[0] && data[0][pkg.Name]) || {},
+				providers: (data[1] && data[1][pkg.Name]) || [],
+				runtime: (data[2] && data[2][pkg.Name]) || {},
+			};
+			if (Array.isArray(reply.providers)) {
+				reply.providers.sort(function (a, b) {
+					return _(a.title).localeCompare(_(b.title));
+				});
+			} else {
+				reply.providers = [];
+			}
+			reply.providers.push({
+				title: "Custom",
+				template: "{option}",
+				params: { option: { type: "text" } },
 			});
-		} else {
-			forceDnsText = "-";
-		}
 
-		var table = E(
-			"table",
-			{ class: "table", id: "https-dns-proxy_status_table" },
-			[
-				E("tr", { class: "tr table-titles" }, [
-					E("th", { class: "th" }, _("Name / Type")),
-					E("th", { class: "th" }, _("Listen Address")),
-					E("th", { class: "th" }, _("Listen Port")),
-					E("th", { class: "th" }, _("Force DNS Ports")),
-				]),
-			]
-		);
+			var forceDnsText = "-";
+			if (reply.status.force_dns_active && Array.isArray(reply.status.force_dns_ports)) {
+				var ports = reply.status.force_dns_ports.join(" ");
+				if (ports) forceDnsText = ports;
+			}
 
-		var rows = [];
-		if (reply.runtime.instances) {
-			Object.values(reply.runtime.instances).forEach((element) => {
+			var table = E(
+				"table",
+				{ class: "table", id: "https-dns-proxy_status_table" },
+				[
+					E("tr", { class: "tr table-titles" }, [
+						E("th", { class: "th" }, _("Name / Type")),
+						E("th", { class: "th" }, _("Listen Address")),
+						E("th", { class: "th" }, _("Listen Port")),
+						E("th", { class: "th" }, _("Force DNS Ports")),
+					]),
+				]
+			);
+
+			var rows = [];
+			var instances = (reply.runtime && reply.runtime.instances) || {};
+			Object.values(instances).forEach((element) => {
 				var resolver;
 				var address;
 				var port;
 				var name;
 				var option;
 				var found;
-				element.command.forEach((param, index, arr) => {
-					if (param === "-r") resolver = arr[index + 1];
-					if (param === "-a") address = arr[index + 1];
-					if (param === "-p") port = arr[index + 1];
-				});
+				if (Array.isArray(element.command)) {
+					element.command.forEach((param, index, arr) => {
+						if (param === "-r") resolver = arr[index + 1];
+						if (param === "-a") address = arr[index + 1];
+						if (param === "-p") port = arr[index + 1];
+					});
+				}
 				resolver = resolver || "Unknown";
 				address = address || "127.0.0.1";
 				port = port || "Unknown";
@@ -83,27 +83,30 @@ return baseclass.extend({
 						found = true;
 						name = _(prov.title);
 						let match = resolver.match(regexp);
-						if (match[1] != null) {
+						if (match && match[1] != null) {
 							if (
 								prov.params &&
 								prov.params.option &&
-								prov.params.option.options
+								Array.isArray(prov.params.option.options)
 							) {
 								prov.params.option.options.forEach((opt) => {
 									if (opt.value === match[1]) option = _(opt.description);
 								});
-								name += " (" + option + ")";
+								if (option) name += " (" + option + ")";
 							} else {
 								if (match[1] !== "") name += " (" + match[1] + ")";
 							}
 						}
 					}
 				});
-				rows.push([name, address, port, forceDnsText]);
+				rows.push([name || _("Unknown"), address, port, forceDnsText]);
 			});
-		}
-		cbi_update_table(table, rows, E("em", _("There are no active instances.")));
+			cbi_update_table(table, rows, E("em", _("There are no active instances.")));
 
-		return table;
+			return table;
+		} catch (e) {
+			return E("div", { class: "alert-message warning" },
+				_("Unable to retrieve %s status").format("HTTPS DNS Proxy"));
+		}
 	},
 });
