@@ -125,31 +125,39 @@ var RPC = {
 		});
 	},
 	setInitAction: function (name, action) {
-		_setInitAction(name, action).then(
-			function (result) {
-				this.emit("setInitAction", result);
-			}.bind(this),
-		);
+		_setInitAction(name, action)
+			.then(
+				function (result) {
+					this.emit("setInitAction", { result: result, action: action });
+				}.bind(this),
+			)
+			.catch(
+				function (error) {
+					// Even if RPC call fails/times out, emit event to start polling
+					// This handles cases where the backend task starts but RPC times out
+					this.emit("setInitAction", { timeout: true, action: action });
+				}.bind(this),
+			);
 	},
 };
 
-// Poll service status until completion (for long-running operations like download)
-var pollServiceStatus = function (callback) {
+// Poll service status until the expected running state is reached.
+// expectRunning: true for start/restart, false for stop.
+var pollServiceStatus = function (expectRunning, callback) {
 	var maxAttempts = 300; // Max 5 minutes of polling
 	var attempt = 0;
 
 	var checkStatus = function () {
 		attempt++;
 
-		// Use the RPC function directly from the module scope
 		L.resolveDefault(getInitStatus(pkg.Name), {})
 			.then(function (statusData) {
-				var currentStatus =
+				var isRunning =
 					statusData && statusData[pkg.Name] && statusData[pkg.Name].running;
 
-				// Check if completed or failed
-				if (currentStatus === true) {
-					callback(true, currentStatus);
+				// Check if the expected state has been reached
+				if (expectRunning ? isRunning === true : isRunning !== true) {
+					callback(true);
 				}
 				// Check if timed out
 				else if (attempt >= maxAttempts) {
@@ -157,7 +165,7 @@ var pollServiceStatus = function (callback) {
 				}
 				// Continue polling
 				else {
-					setTimeout(checkStatus, 1000); // Check again in 1 second
+					setTimeout(checkStatus, 1000);
 				}
 			})
 			.catch(function (err) {
@@ -170,7 +178,7 @@ var pollServiceStatus = function (callback) {
 			});
 	};
 
-	// Start polling after 2 seconds delay (give backend time to start the task)
+	// Start polling after a delay to give the backend time to start the task
 	setTimeout(checkStatus, 3000);
 };
 
@@ -727,12 +735,24 @@ var status = baseclass.extend({
 });
 
 RPC.on("setInitAction", function (reply) {
-	// Don't immediately hide modal and reload
-	// Instead, poll status until the operation actually completes
-	pollServiceStatus(function () {
+	var action = reply && reply.action;
+	if (action === "start" || action === "restart" || action === "reload") {
+		// Long-running: poll until service is running
+		pollServiceStatus(true, function () {
+			ui.hideModal();
+			location.reload();
+		});
+	} else if (action === "stop") {
+		// Poll until service has stopped
+		pollServiceStatus(false, function () {
+			ui.hideModal();
+			location.reload();
+		});
+	} else {
+		// enable/disable are fast, just reload immediately
 		ui.hideModal();
 		location.reload();
-	});
+	}
 });
 
 return L.Class.extend({
