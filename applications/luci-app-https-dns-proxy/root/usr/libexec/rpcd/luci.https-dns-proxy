@@ -12,6 +12,7 @@
 
 readonly packageName="https-dns-proxy"
 readonly providersDir="/usr/share/${packageName}/providers"
+readonly providersJson="/usr/share/${packageName}/providers.json"
 
 . "${IPKG_INSTROOT}/lib/functions.sh"
 . "${IPKG_INSTROOT}/usr/share/libubox/jshn.sh"
@@ -49,7 +50,7 @@ get_init_status() {
 	local i ports
 	local version
 	name="$(basename "$1")"
-	name="${name:-$packageName}" 
+	name="${name:-${packageName}}" 
 	ports="$(ubus_get_ports)"
 	[ -z "$version" ] && version="$(get_version "$name")"
 	json_init
@@ -82,7 +83,7 @@ get_init_status() {
 get_platform_support() {
 	local name
 	name="$(basename "$1")"
-	name="${name:-$packageName}" 
+	name="${name:-${packageName}}" 
 	json_init
 	json_add_object "$name"
 	if check_http2; then
@@ -102,13 +103,18 @@ get_platform_support() {
 
 get_providers() {
 	local f
-	echo '{"https-dns-proxy":['
-	for f in "$providersDir"/*; do
-		cat "$f"
-		echo ','
-	done
-#	echo '{ "title": "Custom", "template": "{option}", "params": { "option": { "type": "text", }, }, },'
-	echo ']}'
+	echo '{"https-dns-proxy":'
+	if [ -s "$providersJson" ]; then
+		cat "$providersJson"
+	else
+		echo '['
+		for f in "$providersDir"/*; do
+			cat "$f"
+			echo ','
+		done
+		echo ']'
+	fi
+	echo '}'
 }
 
 set_init_action() {
