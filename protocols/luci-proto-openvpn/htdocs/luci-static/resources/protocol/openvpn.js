@@ -28,7 +28,7 @@ const openvpnOptions = [
 	// --client Options error: specify only one of --tls-server, --tls-client, or --secret
 	// --client also needs DCO(?)
 	{ tab: 'general', type: form.Flag, name: 'client', label: _('Configure client mode') + '<br/>' + _('Requires --tls-server, --tls-client, or --secret'), default: 0 },
-	{ tab: 'general', type: form.DynamicList, name: 'remote', label: _('Remote host name or IP address'), placeholder: '1.2.3.4', datatype: 'or(hostname,ipaddr)' },
+	{ tab: 'general', type: form.DynamicList, name: 'remote', datatype: 'tuple(host,port,string)', label: _('Remote host name or IP address'), placeholder: '1.2.3.4' },
 	{ tab: 'general', type: form.FileUpload, root_directory: '/etc/openvpn', name: 'ca', label: _('Certificate authority'), placeholder: '/etc/easy-rsa/keys/ca.crt' },
 	{ tab: 'general', type: form.FileUpload, root_directory: '/etc/openvpn', name: 'cert', label: _('Local certificate'), placeholder: '/etc/easy-rsa/keys/some-client.crt' },
 	{ tab: 'general', type: form.FileUpload, root_directory: '/etc/openvpn', name: 'key', label: _('Local private key'), placeholder: '/etc/easy-rsa/keys/some-client.key' },
