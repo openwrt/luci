@@ -16,7 +16,11 @@
       "ubus": {
         "uci": [ "set", "commit"  ]
       },
-      "uci": [ "usteer" ]
+      "uci": [ "usteer" ],
+      "file": {
+        "/usr/sbin/hostapd_cli -i * all_sta": [ "exec" ]
+      }
     }
   }
 }
+
