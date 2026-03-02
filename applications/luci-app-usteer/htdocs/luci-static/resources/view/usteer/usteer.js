@@ -2,6 +2,7 @@
 'require view';
 'require rpc';
 'require poll';
+'require fs';
 'require dom';
 'require ui';
 'require form';
@@ -12,6 +13,7 @@
 let Hosts, Remotehosts, Remoteinfo, Localinfo, Clients, WifiNetworks;
 
 const dns_cache = [];
+const hostapdClientData = [];
 
 function SplitWlan(wlan) {
 	let wlansplit = [];
@@ -115,7 +117,56 @@ function collectWlanAPInfoEntries(connectioninfo_table_entries, wlanAPInfos) {
 	}
 };
 
-function tootltip(mac, IP, hostname) {
+
+const RSN_CIPHER_MAP = {
+    "00-0f-ac-0": _("Use group cipher"),
+    "00-0f-ac-1": "WEP-40",
+    "00-0f-ac-2": "TKIP",
+    "00-0f-ac-3": _("Reserved"),
+    "00-0f-ac-4": "AES-CCMP-128",
+    "00-0f-ac-5": "WEP-104",
+    "00-0f-ac-6": "BIP-CMAC-128",
+    "00-0f-ac-7": _("Group addressed traffic not allowed"),
+    "00-0f-ac-8": "AES-GCMP-128",
+    "00-0f-ac-9": "AES-GCMP-256",
+    "00-0f-ac-10": "AES-CCMP-256",
+    "00-0f-ac-11": "BIP-GMAC-128",
+    "00-0f-ac-12": "BIP-GMAC-256",
+    "00-0f-ac-13": "BIP-CMAC-256",
+};
+
+const RSN_AKM_MAP = {
+    "00-0f-ac-1": "802.1X",
+    "00-0f-ac-2": "PSK",
+    "00-0f-ac-3": "FT 802.1X",
+    "00-0f-ac-4": "FT PSK",
+    "00-0f-ac-5": "WPA2 Enterprise SHA-256",
+    "00-0f-ac-6": "WPA2 PSK SHA-256",
+    "00-0f-ac-7": "TDLS",
+    "00-0f-ac-8": "SAE",
+    "00-0f-ac-9": "FT SAE",
+    "00-0f-ac-10": _("AP PeerKey"),
+    "00-0f-ac-11": "Suite B 192-bit",
+    "00-0f-ac-12": "Suite B 192-bit FT",
+    "00-0f-ac-13": "FILS SHA-256",
+    "00-0f-ac-14": "FILS SHA-384",
+    "00-0f-ac-15": "FILS FT SHA-256",
+    "00-0f-ac-16": "FILS FT SHA-384",
+    "00-0f-ac-17": "OWE",
+    "00-0f-ac-18": "FT OWE",
+};
+
+function translateCipher(value) {
+	if (!value) return ""; 
+	return RSN_CIPHER_MAP[value] ?? _("Unrecognized cipher code")+": "+value;
+}
+
+function translateAkm(value) { 
+	if (!value) return _("Install hostapd_cli for AKM and cipher info"); 
+	return RSN_AKM_MAP[value] ?? _("Unknown AKM")+": "+value;
+}
+
+function tooltip(mac, IP, hostname, wlan) {
 	const body= E([]);
 	body.appendChild(E('div', '%h'.format(mac)));
 	if (typeof IP !== 'undefined') {
@@ -125,12 +176,19 @@ function tootltip(mac, IP, hostname) {
 	if (hostname !== '') {
 		body.appendChild(E('div', '%h'.format(hostname)));
 	}
+	if (wlan==_('This AP')) {
+		body.appendChild(E('div', 
+		           '%h '.format(translateAkm(hostapdClientData[mac.toUpperCase()]?.AKMSuiteSelector))+
+				   '%h'.format(translateCipher(hostapdClientData[mac.toUpperCase()]?.dot11RSNAStatsSelectedPairwiseCipher))
+		));
+	}
 	return body;
 }
 
 function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 	for (let wlan in wlanAPInfos) {
 		const hostl = E([]);
+		const wlansplit=SplitWlan(wlan);
 		for (let mac in Clients) {
 			if (typeof Clients[mac] !== 'undefined')
 				if (typeof Clients[mac][wlan] !== 'undefined')
@@ -152,12 +210,11 @@ function collectWlanAPInfos(compactconnectioninfo_table_entries, wlanAPInfos) {
 						hostl.appendChild(
 							E('span', { 'class': 'cbi-tooltip-container' }, [
 								'%h\u2003'.format(foundname),
-								E('div', { 'class': 'cbi-tooltip' }, tootltip(mac, Hosts[macUp], hostname))
+								E('div', { 'class': 'cbi-tooltip' }, tooltip(mac, Hosts[macUp], hostname, wlansplit[0]))
 							])
 						);
 					}
 		}
-		const wlansplit=SplitWlan(wlan);
 		compactconnectioninfo_table_entries.push([
 			'<nobr>' + '%h'.format(wlansplit[0]) + '</nobr>',
 			'<nobr>' + '%h'.format(wlansplit[1]) + '</nobr>',
@@ -291,6 +348,35 @@ const Settingsfooter = form.DummyValue.extend({
 	}
 });
 
+function parseAllSta(text) {
+    const lines = text.split('\n');
+    let currentMac = null;
+
+    for (const raw of lines) {
+        const line = raw.trim();
+        // Detect MAC address line
+        if (/^[0-9a-f]{2}(:[0-9a-f]{2}){5}$/i.test(line)) {
+            currentMac = line.toUpperCase();
+            hostapdClientData[currentMac] = {};
+            continue;
+        }
+        if (currentMac && line.includes('=')) {
+            const [key, value] = line.split('=');
+            hostapdClientData[currentMac][key] = value;
+        }
+    }
+}
+
+function getCipherAKM() {
+	for (const wlan in Localinfo) {		
+		fs.stat('/usr/sbin/hostapd_cli').then(stat => {
+			if (!stat || stat.type !== 'file') { return; }
+			fs.exec_direct('/usr/sbin/hostapd_cli', ['-i', wlan.split('.')[1], 'all_sta'])
+				.then(res => { parseAllSta(res); })
+				.catch(err => {});
+		}).catch (function (){return null;});
+	}
+}
 
 return view.extend({
 	callHostHints: rpc.declare({
@@ -337,7 +423,9 @@ return view.extend({
 		Remoteinfo = data[3];
 		Localinfo = data[4];
 		Clients = data[5];
-		
+
+		getCipherAKM();	 
+
 		const remotehosttableentries = [];
 		collectRemoteHosts(remotehosttableentries,Remotehosts);
 		cbi_update_table(nodes.querySelector('#remotehost_table'), remotehosttableentries, E('em', _('No data')));
@@ -383,6 +471,8 @@ return view.extend({
 		Clients = data[5];
 		WifiNetworks = data[6];
 
+		getCipherAKM();
+		
 		s = m.section(form.TypedSection);
 		s.anonymous = true;
 		s.tab('status', _('Status'));
