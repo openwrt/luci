@@ -36,7 +36,7 @@ const openvpnOptions = [
 	{ tab: 'general', type: form.Value, name: 'ifconfig_ipv6', datatype: 'or(ip6addr,tuple(ip6addr,ip6addr))', placeholder: 'fd15:53b6:dead::2/64 [fd15:53b6:dead::1]', label: _('Set tun/tap adapter parameters') },
 	{ tab: 'general', type: form.Value, name: 'server', datatype: 'tuple(ipaddr,ipaddr)', placeholder: '10.200.200.0 255.255.255.0', label: _('Configure server mode') },
 	{ tab: 'general', type: form.Value, name: 'server_bridge', datatype: 'tuple(ipaddr,ipaddr,ipaddr,ipaddr)', placeholder: '192.168.1.1 255.255.255.0 192.168.1.128 192.168.1.254', label: _('Configure server bridge') },
-	// { tab: 'general', type: form.ListValue, name: 'comp_lzo', values: ['yes','no','adaptive'], label: _('Security recommendation: It is recommended to not enable compression and set this parameter to `no`'), default: 'no' },
+	// { tab: 'general', type: form.ListValue, name: 'comp_lzo', lvalues: ['yes','no','adaptive'], label: _('Security recommendation: It is recommended to not enable compression and set this parameter to `no`'), default: 'no' },
 	{ tab: 'general', type: form.Value, name: 'keepalive', placeholder: '10 60', label: _('Helper directive to simplify the expression of --ping and --ping-restart in server mode configurations') },
 	{ tab: 'general', type: form.Flag, name: 'client_to_client', label: _('Allow client-to-client traffic'), default: 0 },
 	// secret requires --cipher *-CBC 
@@ -48,10 +48,10 @@ const openvpnOptions = [
 	// Devices
 	{ tab: 'devices', type: form.Value, name: 'dev', placeholder: 'tun0', label: _('tun/tap device') },
 	// tun == L3 IPv4/6 tap == L2 Ethernet 802.3
-	{ tab: 'devices', type: form.Value, name: 'dev_type', values: ['tun','tap'], label: _('Type of used device'), default: 'tun' },
+	{ tab: 'devices', type: form.Value, name: 'dev_type', lvalues: ['tun','tap'], label: _('Type of used device'), default: 'tun' },
 	{ tab: 'devices', type: form.Value, name: 'dev_node', label: _('Use tun/tap device node'), placeholder: '/dev/net/tun' },
 	{ tab: 'devices', type: form.Flag, name: 'vlan_tagging', label: _('Use VLAN tagging'), default: 0 },
-	{ tab: 'devices', type: form.ListValue, values: ['all', 'tagged', 'untagged'], name: 'vlan_accept', label: _('Accept VLANs') },
+	{ tab: 'devices', type: form.ListValue, lvalues: ['all', 'tagged', 'untagged'], name: 'vlan_accept', label: _('Accept VLANs') },
 	{ tab: 'devices', type: form.Value, datatype: 'and(uinteger,min(1),max(4094))', name: 'vlan_pvid', label: _('Use these PVIDs') },
 
 	// Service (init/daemon)
@@ -118,7 +118,7 @@ const openvpnOptions = [
 	{ tab: 'networking', type: form.Flag, name: 'allow_recursive_routing', label: _('Don\'t drop incoming tun packets with same destination as host'), placeholder: 0 },
 	{ tab: 'networking', type: form.ListValue, name: 'mtu_disc', lvalues: ['yes','maybe','no'], label: _('Enable Path MTU discovery'), default: 'no' },
 	{ tab: 'networking', type: form.Flag, name: 'mtu_test', label: _('Empirically measure MTU'), default: 0 },
-	// { tab: 'networking', type: form.ListValue, name: 'comp_lzo', values: ['yes','no','adaptive'], label: _('Security recommendation: It is recommended to not enable compression and set this parameter to `no`') + '¹', default: 'no' },
+	// { tab: 'networking', type: form.ListValue, name: 'comp_lzo', lvalues: ['yes','no','adaptive'], label: _('Security recommendation: It is recommended to not enable compression and set this parameter to `no`') + '¹', default: 'no' },
 	// { tab: 'networking', type: form.Flag, name: 'comp_noadapt', label: _('Don\'t use adaptive lzo compression') + '¹', placeholder: 0 },
 	// { tab: 'networking', type: form.Value, name: 'link_mtu', datatype: 'uinteger', label: _('Set TCP/UDP MTU') + '¹', placeholder: 1500 },
 	{ tab: 'networking', type: form.Value, name: 'tun_mtu', datatype: 'uinteger', label: _('Set tun/tap device MTU'), placeholder: 1500 },
@@ -149,7 +149,7 @@ const openvpnOptions = [
 	{ tab: 'management', type: form.Value, name: 'management_external_key', datatype: 'path', label: _('Management key'), placeholder: 'nopadding pkcs1' },
 
 	// Topology
-	{ tab: 'topology', type: form.ListValue, name: 'topology', values: ['net30','p2p','subnet'], label: _('\'net30\', \'p2p\', or \'subnet\''), default: '' },
+	{ tab: 'topology', type: form.ListValue, name: 'topology', lvalues: ['net30','p2p','subnet'], label: _('\'net30\', \'p2p\', or \'subnet\''), default: '' },
 	{ tab: 'topology', type: form.Flag, name: 'disable_dco', label: _('Disable Data Channel Offloading (DCO) support'), default: 0 },
 
 	// Crypto
@@ -157,14 +157,14 @@ const openvpnOptions = [
 	{ tab: 'cryptography', type: form.DirectoryPicker, root_directory: '/etc', name: 'capath', label: _('CA path') + '²'},
 	{ tab: 'cryptography', type: form.FileUpload, root_directory: '/etc', name: 'askpass_file', label: _('Get certificate password from file before we daemonize') },
 	{ tab: 'cryptography', type: form.Value, name: 'auth', label: _('HMAC authentication for packets'),
-		values: ['SHA1', 'SHA224', 'SHA256', 'SHA384', 'SHA512', 'SHA3-224', 'SHA3-256', 'SHA3-384', 'SHA3-512', 'none'] },
+		lvalues: ['SHA1', 'SHA224', 'SHA256', 'SHA384', 'SHA512', 'SHA3-224', 'SHA3-256', 'SHA3-384', 'SHA3-512', 'none'] },
 	// --data-ciphers-fallback with cipher 'AES-256-CBC' disables data channel offload.
 	// for --secret pre-shared-key mode. Ignored in >= 2.6 (TLS mode).
 	{ tab: 'cryptography', type: form.Value, name: 'cipher', label: _('Encryption cipher for packets') + '¹',
-		values: ['AES-128-CBC','AES-128-GCM','AES-192-CBC','AES-192-GCM','AES-256-CBC','AES-256-GCM','CHACHA20-POLY1305'] },
+		lvalues: ['AES-128-CBC','AES-128-GCM','AES-192-CBC','AES-192-GCM','AES-256-CBC','AES-256-GCM','CHACHA20-POLY1305'] },
 	// { tab: 'cryptography', type: form.Value, name: 'keysize', label: _('Size of cipher key'), placeholder: 1024 },
-	{ tab: 'cryptography', type: form.Value, name: 'engine', label: _('Enable OpenSSL hardware crypto engines') + '²', values: ['dynamic'] },
-	{ tab: 'cryptography', type: form.Value, name: 'ecdh_curve', label: _('Specify the curve to use for ECDH') + '²', values: ['x25519', 'secp521r1', 'secp384r1', 'secp256r1', 'secp256k1'] },
+	{ tab: 'cryptography', type: form.Value, name: 'engine', label: _('Enable OpenSSL hardware crypto engines') + '²', lvalues: ['dynamic'] },
+	{ tab: 'cryptography', type: form.Value, name: 'ecdh_curve', label: _('Specify the curve to use for ECDH') + '²', lvalues: ['x25519', 'secp521r1', 'secp384r1', 'secp256r1', 'secp256k1'] },
 	{ tab: 'cryptography', type: form.Value, name: 'replay_window', label: _('Replay protection sliding window size'), placeholder: '64 15' },
 	{ tab: 'cryptography', type: form.Value, name: 'replay_window', label: _('Replay protection sliding window size'), placeholder: '64 15' },
 	{ tab: 'cryptography', type: form.Flag, name: 'mute_replay_warnings', label: _('Silence the output of replay warnings'), default: 0 },
@@ -173,7 +173,7 @@ const openvpnOptions = [
 	{ tab: 'cryptography', type: form.Flag, name: 'tls_client', label: _('Enable TLS and assume client role'), default: 0,  }, // depends: { tls_server: 0}
 	// { tab: 'cryptography', type: form.Value, name: 'key_method', label: _('Enable TLS and assume client role') },
 	{ tab: 'cryptography', type: form.DynamicList, name: 'tls_cipher', label: _('TLS cipher'), 
-		values: [
+		lvalues: [
 			'TLS1-3-CHACHA20-POLY1305-SHA256',
 			'TLS1-3-AES-256-GCM-SHA384',
 			'TLS1-3-AES-128-GCM-SHA256',
@@ -212,7 +212,7 @@ const openvpnOptions = [
 			'TLS-PSK-WITH-AES-128-CBC-SHA',
 		]},
 	{ tab: 'cryptography', type: form.DynamicList, name: 'tls_ciphersuites', label: _('TLS 1.3 or newer cipher'),
-		values: ['TLS_AES_256_GCM_SHA384','TLS_AES_128_GCM_SHA256','TLS_CHACHA20_POLY1305_SHA256'] },
+		lvalues: ['TLS_AES_256_GCM_SHA384','TLS_AES_128_GCM_SHA256','TLS_CHACHA20_POLY1305_SHA256'] },
 	{ tab: 'cryptography', type: form.Value, name: 'tls_timeout', datatype: 'uinteger', label: _('Retransmit timeout on TLS control channel'), placeholder: 2 },
 	{ tab: 'cryptography', type: form.Value, name: 'reneg_bytes', datatype: 'uinteger', label: _('Renegotiate data chan. key after bytes'), placeholder: 1024 },
 	{ tab: 'cryptography', type: form.Value, name: 'reneg_pkts', datatype: 'uinteger', label: _('Renegotiate data chan. key after packets'), placeholder: 100 },
@@ -226,21 +226,21 @@ const openvpnOptions = [
 	{ tab: 'cryptography', type: form.FileUpload, root_directory: '/etc/openvpn', name: 'tls_crypt_v2', label: _('Encrypt and authenticate all control channel packets with the key, version 2.'), placeholder: '/etc/openvpn/servertlscryptv2.key' },
 	{ tab: 'cryptography', type: form.Flag, name: 'auth_nocache', label: _('Don\'t cache --askpass or --auth-user-pass passwords'), default: 0 },
 	// { tab: 'cryptography', type: form.Value, name: 'tls_remote', label: _('Only accept connections from given X509 name'), placeholder: 'remote_x509_name' },
-	{ tab: 'cryptography', type: form.ListValue, name: 'ns_cert_type', values: ['client','server'], label: _('Require explicit designation on certificate') },
+	{ tab: 'cryptography', type: form.ListValue, name: 'ns_cert_type', lvalues: ['client','server'], label: _('Require explicit designation on certificate') },
 	{ tab: 'cryptography', type: form.Value, name: 'remote_cert_eku', label: _('Require remote cert extended key usage on certificate'), placeholder: 'oid' },
 	{ tab: 'cryptography', type: form.Value, name: 'remote_cert_ku', label: _('Require explicit key usage on certificate'), placeholder: 'a0' },
-	{ tab: 'cryptography', type: form.ListValue, name: 'remote_cert_tls', values: ['client','server'], label: _('Require explicit key usage on certificate') },
+	{ tab: 'cryptography', type: form.ListValue, name: 'remote_cert_tls', lvalues: ['client','server'], label: _('Require explicit key usage on certificate') },
 	{ tab: 'cryptography', type: form.FileUpload, root_directory: '/etc/openvpn', name: 'crl_verify', label: _('Check peer certificate against a CRL'), placeholder: '/etc/easy-rsa/keys/crl.pem' },
-	{ tab: 'cryptography', type: form.Value, name: 'tls_version_min', label: _('The lowest supported TLS version'), values: ['1.2', '1.3'] },
-	{ tab: 'cryptography', type: form.Value, name: 'tls_version_max', label: _('The highest supported TLS version'), values: ['1.2', '1.3'] },
-	{ tab: 'cryptography', type: form.Value, name: 'tls_cert_profile', label: _('TLS cet profile'), values: ['insecure', 'legacy', 'preferred', 'suiteb'] },
+	{ tab: 'cryptography', type: form.Value, name: 'tls_version_min', label: _('The lowest supported TLS version'), lvalues: ['1.2', '1.3'] },
+	{ tab: 'cryptography', type: form.Value, name: 'tls_version_max', label: _('The highest supported TLS version'), lvalues: ['1.2', '1.3'] },
+	{ tab: 'cryptography', type: form.Value, name: 'tls_cert_profile', label: _('TLS cet profile'), lvalues: ['insecure', 'legacy', 'preferred', 'suiteb'] },
 	// { tab: 'cryptography', type: form.Flag, name: 'ncp_disable', label: _('This completely disables cipher negotiation'), default: 0 },
-	// { tab: 'cryptography', type: form.DynamicList, name: 'ncp_ciphers', label: _('Restrict the allowed ciphers to be negotiated'), values: ['AES-256-GCM','AES-128-GCM'] },
+	// { tab: 'cryptography', type: form.DynamicList, name: 'ncp_ciphers', label: _('Restrict the allowed ciphers to be negotiated'), lvalues: ['AES-256-GCM','AES-128-GCM'] },
 	{ tab: 'cryptography', type: form.DynamicList, name: 'data_ciphers', label: _('Restrict the allowed ciphers to be negotiated'),
-		values: ['CHACHA20-POLY1305','AES-256-GCM','AES-128-GCM','AES-256-CBC'] },
+		lvalues: ['CHACHA20-POLY1305','AES-256-GCM','AES-128-GCM','AES-256-CBC'] },
 
 	// Push/Client
-	{ tab: 'push_opt', depends: { server: "", "!reverse": true }, type: form.DynamicList, name: 'push', label: _('Push options to peer'), values: ['redirect-gateway'] }, // values: ['comp-lzo']
+	{ tab: 'push_opt', depends: { server: "", "!reverse": true }, type: form.DynamicList, name: 'push', label: _('Push options to peer'), lvalues: ['redirect-gateway'] }, // values: ['comp-lzo']
 	{ tab: 'push_opt', depends: { server: "", "!reverse": true }, type: form.Flag, name: 'push_reset', label: _('Don\'t inherit global push options'), default: 0 },
 	{ tab: 'push_opt', depends: { server: "", "!reverse": true }, type: form.Flag, name: 'disable', label: _('Client is disabled'), default: 0 },
 	{ tab: 'push_opt', depends: { server: "", "!reverse": true }, type: form.Value, name: 'ifconfig_pool', label: _('Set aside a pool of subnets') },
