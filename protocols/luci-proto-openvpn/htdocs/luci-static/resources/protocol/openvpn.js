@@ -1178,7 +1178,7 @@ const openvpnOptions = [
 	{
 		tab: 'cryptography',
 		type: form.Flag,
-		name: 'single_session'
+		name: 'single_session',
 		datatype: 'uinteger',
 		label: _('Allow only one session'),
 		default: 0
