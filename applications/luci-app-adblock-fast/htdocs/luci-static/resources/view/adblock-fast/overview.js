@@ -677,6 +677,18 @@ return view.extend({
 		o = s1.taboption(
 			"tab_advanced",
 			form.Value,
+			"pause_timeout",
+			_("Pause time-out (in seconds)"),
+			_(
+				"Pause ad-blocking for the specified number of seconds when the Pause button is pressed.",
+			),
+		);
+		o.default = "20";
+		o.datatype = "range(1,600)";
+
+		o = s1.taboption(
+			"tab_advanced",
+			form.Value,
 			"curl_max_file_size",
 			_("Curl maximum file size (in bytes)"),
 			_(
