@@ -8,6 +8,7 @@
 'require baseclass';
 'require validation';
 'require tools.widgets as widgets';
+'require rpc';
 
 function validateQoSMap(section_id, value) {
 	if (value == '')
@@ -350,6 +351,25 @@ const cbiTagValue = form.Value.extend({
 
 	remove() {}
 });
+
+var callDeviceStatus = rpc.declare({
+        object: 'network.device',
+        method: 'status',
+        params: [ 'name' ]
+});
+
+function extractSupportedSpeeds(status) {
+        var sup = (status && (status['link-supported'] || status['link_supported'])) || [];
+        var uniq = Object.create(null);
+
+        L.toArray(sup).forEach(function (v) {
+                var m = String(v).match(/^(\d+)/);
+                if (m) uniq[m[1]] = true;
+        });
+
+        return Object.keys(uniq).sort(function (a, b) { return (+a) - (+b); });
+}
+
 
 return baseclass.extend({
 
@@ -1128,6 +1148,35 @@ return baseclass.extend({
 		o = this.replaceOption(s, 'devgeneral', form.Value, 'txqueuelen', _('TX queue length'));
 		o.placeholder = dev ? dev._devstate('qlen') : '';
 		o.datatype = 'uinteger';
+
+		o = this.replaceOption(s, 'devgeneral', form.Value, 'speed', _('Speed'));
+
+o.editable = true;
+o.placeholder = '0';
+o.datatype = 'uinteger';
+o.rmempty = true;
+o.default=''
+
+
+o.value('', '');
+o.load = function (section_id) {
+
+        var ifn = this.section.formvalue(section_id, 'ifname_single')
+                || this.section.formvalue(section_id, 'name_simple')
+                || uci.get('network', section_id, 'name')
+                || (dev ? dev.getName() : '');
+
+        ifn = String(ifn || '').replace(/\.\d+$/, '');
+
+        if (!ifn) ifn = 'eth1';
+
+        var self = this;
+        return callDeviceStatus(ifn).then(function (st) {
+                extractSupportedSpeeds(st).forEach(function (sp) {
+                        self.value(sp, sp + ' Mbit/s');
+                });
+        });
+};
 
 		/* PSE / PoE options */
 		if (hasPSE) {
