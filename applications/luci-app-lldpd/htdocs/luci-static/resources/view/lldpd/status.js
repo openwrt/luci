@@ -341,13 +341,14 @@ return L.view.extend({
 		//   ...
 		// row[N] - contents for N-th cell in row
 		//
+		let dImg;
 		if (row.length < 2)
 			return row;
 
 		for (let i = 1; i < row.length; i++) {
 			if (i == 1) {
 				// Fold/unfold image appears only in first column
-				const dImg = E('div', { 'style': 'padding: 0 8px 0 0;' }, [
+				dImg = E('div', { 'style': 'padding: 0 8px 0 0;' }, [
 					E('img', { 'width': '16px', 'src': this.getFoldingImage(unfolded) }),
 				]);
 			}
