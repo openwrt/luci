@@ -354,7 +354,6 @@ function initNetworkState(refresh) {
 	if (_state == null || refresh) {
 		const hasWifi = L.hasSystemFeature('wifi');
 
-		if (refresh) _state = null;
 		if (refresh || !_init) {
 			_init = Promise.all([
 			L.resolveDefault(callNetworkInterfaceDump(), []),
@@ -537,6 +536,9 @@ function initNetworkState(refresh) {
 		} // end if (refresh || !_init)
 
 	}
+
+	if (refresh)
+		return _init;
 
 	return (_state != null ? Promise.resolve(_state) : _init);
 }
