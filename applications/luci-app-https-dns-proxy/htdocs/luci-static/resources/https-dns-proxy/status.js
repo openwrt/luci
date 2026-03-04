@@ -186,7 +186,7 @@ var status = baseclass.extend({
 			var header = E("h2", {}, _("HTTPS DNS Proxy - Status"));
 			var statusTitle = E(
 				"label",
-				{ class: "cbi-value-title" },
+				{ class: "cbi-value-title", for: pkg.Name + "-status" },
 				_("Service Status")
 			);
 			if (reply.status.version) {
@@ -211,7 +211,7 @@ var status = baseclass.extend({
 			} else {
 				text = _("Not installed or not found");
 			}
-			var statusText = E("div", { class: "cbi-value-description" }, text);
+			var statusText = E("output", { id: pkg.Name + "-status", class: "cbi-value-description" }, text);
 			var statusField = E("div", { class: "cbi-value-field" }, statusText);
 			var statusDiv = E("div", { class: "cbi-value" }, [
 				statusTitle,
@@ -222,7 +222,7 @@ var status = baseclass.extend({
 			if (reply.ubus.instances && Object.keys(reply.ubus.instances).length > 0) {
 				var instancesTitle = E(
 					"label",
-					{ class: "cbi-value-title" },
+					{ class: "cbi-value-title", for: pkg.Name + "-instances" },
 					_("Service Instances")
 				);
 				text = _("See the %sREADME%s for details.").format(
@@ -295,7 +295,7 @@ var status = baseclass.extend({
 						"<a href='" + pkg.DonateURL + "' target='_blank'>",
 						"</a>"
 					);
-				var instancesText = E("div", { class: "cbi-value-description" }, text);
+				var instancesText = E("output", { id: pkg.Name + "-instances", class: "cbi-value-description" }, text);
 				var instancesField = E("div", { class: "cbi-value-field" }, [
 					instancesText,
 					instancesDescr,
@@ -429,10 +429,10 @@ var status = baseclass.extend({
 
 			var buttonsTitle = E(
 				"label",
-				{ class: "cbi-value-title" },
+				{ class: "cbi-value-title", for: pkg.Name + "-buttons" },
 				_("Service Control")
 			);
-			var buttonsText = E("div", {}, [
+			var buttonsText = E("output", { id: pkg.Name + "-buttons" }, [
 				btn_start,
 				btn_gap,
 				btn_action,
