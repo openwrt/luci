@@ -899,7 +899,7 @@ const openvpnOptions = [
 		tab: 'management',
 		type: form.Value,
 		name: 'management_external_cert',
-		datatype: 'path',
+		datatype: 'file',
 		label: _('Management cert'),
 		placeholder: 'certificate-hint'
 	},
@@ -907,7 +907,7 @@ const openvpnOptions = [
 		tab: 'management',
 		type: form.Value,
 		name: 'management_external_key',
-		datatype: 'path',
+		datatype: 'file',
 		label: _('Management key'),
 		placeholder: 'nopadding pkcs1'
 	},
@@ -1867,9 +1867,11 @@ return network.registerProtocol('openvpn', {
 		};
 		ovconf.write = function(sid, value) {
 			const config_name = `/etc/openvpn/${sid}/${sid}_config.cfg`;
+			fs.exec_direct('/bin/mkdir', ['-p', `/etc/openvpn/${sid}/`]).then(result => {
+				fs.write(config_name, value).catch(() => {});
+				uci.set(this.config, sid, 'config', config_name);
+			});
 
-			fs.write(config_name, value).catch(() => {});
-			uci.set(this.config, sid, 'config', config_name);
 			return 
 		};
 		ovconf.rmempty = true;
