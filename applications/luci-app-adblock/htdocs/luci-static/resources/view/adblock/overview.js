@@ -79,64 +79,72 @@ return view.extend({
 			poll runtime information
 		*/
 		poll.add(function () {
-			return L.resolveDefault(fs.read_direct('/var/run/adb_runtime.json'), null).then(function (res) {
-				const status = document.getElementById('status');
-				const buttons = document.querySelectorAll('.cbi-page-actions button');
-				let info = null;
-				try {
-					info = JSON.parse(res);
-				} catch (e) {
-					info = null;
-					status.textContent = '-';
-					if (status.classList.contains('spinning')) {
-						buttons.forEach(function (btn) {
-							btn.disabled = false;
-						})
-						status.classList.remove('spinning');
-					}
-					ui.addNotification(null, E('p', _('Unable to parse the runtime information!')), 'error');
+			return L.resolveDefault(fs.stat('/var/run/adb_runtime.json'), null).then(function (stat) {
+				if (!stat) {
 					return;
 				}
-				if (status && info) {
-					status.textContent = `${info.adblock_status || '-'} (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
-					if (info.adblock_status === "processing") {
-						if (!status.classList.contains("spinning")) {
-							status.classList.add("spinning");
+				return L.resolveDefault(fs.read_direct('/var/run/adb_runtime.json'), null).then(function (res) {
+					const status = document.getElementById('status');
+					const buttons = document.querySelectorAll('.cbi-page-actions button');
+					let info = null;
+					try {
+						info = JSON.parse(res);
+					} catch (e) {
+						info = null;
+						if (status) {
+							status.textContent = '-';
+							if (status.classList.contains('spinning')) {
+								buttons.forEach(function (btn) {
+									btn.disabled = false;
+								})
+								status.classList.remove('spinning');
+								ui.addNotification(null, E('p', _('Unable to parse the adblock runtime information!')), 'error');
+								poll.stop();
+							}
 						}
-						buttons.forEach(function (btn) {
-							btn.disabled = true;
-							btn.blur();
-						})
-					} else {
-						if (status.classList.contains("spinning")) {
+						return;
+					}
+					if (status && info) {
+						status.textContent = `${info.adblock_status || '-'} (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
+						if (info.adblock_status === "processing") {
+							if (!status.classList.contains("spinning")) {
+								status.classList.add("spinning");
+							}
 							buttons.forEach(function (btn) {
-								btn.disabled = false;
+								btn.disabled = true;
+								btn.blur();
 							})
-							status.classList.remove("spinning");
-							if (document.getElementById('btn_suspend')) {
-								if (info.adblock_status === 'paused') {
-									document.querySelector('#btn_suspend').textContent = 'Resume';
-								}
-								if (info.adblock_status === 'enabled') {
-									document.querySelector('#btn_suspend').textContent = 'Suspend';
+						} else {
+							if (status.classList.contains("spinning")) {
+								buttons.forEach(function (btn) {
+									btn.disabled = false;
+								})
+								status.classList.remove("spinning");
+								if (document.getElementById('btn_suspend')) {
+									if (info.adblock_status === 'paused') {
+										document.querySelector('#btn_suspend').textContent = 'Resume';
+									}
+									if (info.adblock_status === 'enabled') {
+										document.querySelector('#btn_suspend').textContent = 'Suspend';
+									}
 								}
 							}
 						}
+						if (info.adblock_status === 'paused' && document.getElementById('btn_suspend')) {
+							document.querySelector('#btn_suspend').textContent = 'Resume';
+						}
 					}
-					if (info.adblock_status === 'paused' && document.getElementById('btn_suspend')) {
-						document.querySelector('#btn_suspend').textContent = 'Resume';
+					if (info) {
+						setText('domains', info.blocked_domains);
+						setText('feeds', info.active_feeds?.join(' '));
+						setText('backend', info.dns_backend);
+						setText('ifaces', info.run_ifaces);
+						setText('run', info.run_information);
+						setText('flags', info.run_flags);
+						setText('last', info.last_run);
+						setText('sys', info.system_info);
 					}
-				}
-				if (info) {
-					setText('domains', info.blocked_domains);
-					setText('feeds', info.active_feeds?.join(' '));
-					setText('backend', info.dns_backend);
-					setText('ifaces', info.run_ifaces);
-					setText('dirs', info.run_information);
-					setText('flags', info.run_flags);
-					setText('run', info.last_run);
-					setText('sys', info.system_info);
-				}
+				});
 			});
 		}, 2);
 
@@ -169,7 +177,7 @@ return view.extend({
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Information')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'dirs', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Run Flags')),
@@ -177,7 +185,7 @@ return view.extend({
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('Last Run')),
-					E('div', { 'class': 'cbi-value-field', 'id': 'run', 'style': 'margin-bottom:-5px;color:#37c;' }, '-')
+					E('div', { 'class': 'cbi-value-field', 'id': 'last', 'style': 'margin - bottom:- 5px; color:#37c; ' }, ' - ')
 				]),
 				E('div', { 'class': 'cbi-value' }, [
 					E('label', { 'class': 'cbi-value-title', 'style': 'margin-bottom:-5px;padding-top:0rem;' }, _('System Info')),
@@ -511,7 +519,7 @@ return view.extend({
 		o.default = '86.54.11.13';
 		o.rmempty = true;
 
-		o = s.taboption('firewall', form.Value, 'adb_bridgednsv6', _('IPv6 DNS Resolver'), _('external IPv6 DNS resolver used during bridging.'));
+		o = s.taboption('firewall', form.Value, 'adb_bridgednsv6', _('IPv6 DNS Resolver'), _('External IPv6 DNS resolver used during bridging.'));
 		o.depends('adb_nftbridge', '1');
 		o.datatype = 'ip6addr("nomask")';
 		o.value('2a13:1001::86:54:11:1', _('DNS4EU (protective)'));
