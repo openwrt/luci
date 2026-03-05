@@ -1373,10 +1373,11 @@ return view.extend({
 				if (uci.get('network', value) != null)
 					return _('The interface name is already used');
 
+				/* // The kernel takes max 15 character names. We can skip this.
 				const pr = network.getProtocol(proto.formvalue(section_id), value);
 				const ifname = pr.isVirtual() ? '%s-%s'.format(pr.getProtocol(), value) : 'br-%s'.format(value);
-
-				if (ifname.length > 15)
+				*/
+				if (value.length > 15)
 					return _('The interface name is too long');
 
 				return true;
