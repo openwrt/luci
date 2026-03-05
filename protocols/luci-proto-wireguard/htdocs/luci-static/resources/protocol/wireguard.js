@@ -808,7 +808,30 @@ return network.registerProtocol('wireguard', {
 						}, [ peer_config ])
 					]);
 
+					const linkdiv = E('div', {
+						'style': 'width:100%;text-align:center'
+					}, [
+						E('button', {
+							'class': 'btn',
+							'click'(ev) {
+								ev.preventDefault();
+
+								const blob = new Blob([peer_config], { type: 'text/plain' });
+								const url = URL.createObjectURL(blob);
+								const a = document.createElement('a');
+
+								a.href = url;
+								a.download = 'wireguard-peer.conf';
+								document.body.appendChild(a);
+								a.click();
+								document.body.removeChild(a);
+								URL.revokeObjectURL(url);
+							}
+						}, [ _('Download peer configuration file') ])
+					]);
+
 					buildSVGQRCode(peer_config, node.firstChild);
+					node.appendChild(linkdiv);
 
 					return node;
 				};
