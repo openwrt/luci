@@ -1,0 +1,154 @@
+#!/bin/sh /etc/rc.common
+
+USE_PROCD=1
+START=99
+STOP=10
+
+NAME=tailscale-settings
+
+# Compare version strings: return 0 (true) if $1 >= $2
+version_gte() {
+	awk -v a="${1%%-*}" -v b="${2%%-*}" 'BEGIN {
+		split(a, av, ".")
+		split(b, bv, ".")
+		for (i=1; i<=3; i++) {
+			ai = int(av[i]+0); bi = int(bv[i]+0)
+			if (ai > bi) { exit 0 }
+			if (ai < bi) { exit 1 }
+		}
+		exit 0
+	}'
+	return $?
+}
+
+apply_settings() {
+	local ts_bin
+	if [ -x /usr/sbin/tailscale ]; then
+		ts_bin=/usr/sbin/tailscale
+	elif [ -x /usr/bin/tailscale ]; then
+		ts_bin=/usr/bin/tailscale
+	else
+		logger -t "$NAME" "tailscale binary not found, skipping settings apply"
+		return 0
+	fi
+
+	config_load tailscale
+
+	local accept_routes advertise_exit_node exit_node exit_node_allow_lan_access
+	local ssh disable_magic_dns shields_up runwebclient nosnat hostname
+	local enable_relay relay_server_port
+
+	config_get accept_routes              settings accept_routes              '0'
+	config_get advertise_exit_node        settings advertise_exit_node        '0'
+	config_get exit_node                  settings exit_node                  ''
+	config_get exit_node_allow_lan_access settings exit_node_allow_lan_access '0'
+	config_get ssh                        settings ssh                        '0'
+	config_get disable_magic_dns          settings disable_magic_dns          '0'
+	config_get shields_up                 settings shields_up                 '0'
+	config_get runwebclient               settings runwebclient               '0'
+	config_get nosnat                     settings nosnat                     '0'
+	config_get hostname                   settings hostname                   ''
+	config_get enable_relay               settings enable_relay               '0'
+	config_get relay_server_port          settings relay_server_port          '40000'
+
+	# Collect advertise_routes UCI list into comma-separated string
+	local routes=""
+	append_route() {
+		if [ -z "$routes" ]; then
+			routes="$1"
+		else
+			routes="$routes,$1"
+		fi
+	}
+	config_list_foreach settings advertise_routes append_route
+
+	# Build argument list for 'tailscale set'
+	set -- set
+
+	# --accept-routes
+	[ "$accept_routes" = "1" ] \
+		&& set -- "$@" --accept-routes=true \
+		|| set -- "$@" --accept-routes=false
+
+	# --advertise-exit-node (only when no exit node is selected)
+	if [ "$advertise_exit_node" = "1" ] && [ -z "$exit_node" ]; then
+		set -- "$@" --advertise-exit-node=true
+	else
+		set -- "$@" --advertise-exit-node=false
+	fi
+
+	# --exit-node-allow-lan-access (only when no exit node is selected)
+	if [ -z "$exit_node" ]; then
+		[ "$exit_node_allow_lan_access" = "1" ] \
+			&& set -- "$@" --exit-node-allow-lan-access=true \
+			|| set -- "$@" --exit-node-allow-lan-access=false
+	fi
+
+	# --ssh
+	[ "$ssh" = "1" ] \
+		&& set -- "$@" --ssh=true \
+		|| set -- "$@" --ssh=false
+
+	# --accept-dns (inverse of disable_magic_dns)
+	[ "$disable_magic_dns" = "1" ] \
+		&& set -- "$@" --accept-dns=false \
+		|| set -- "$@" --accept-dns=true
+
+	# --shields-up
+	[ "$shields_up" = "1" ] \
+		&& set -- "$@" --shields-up=true \
+		|| set -- "$@" --shields-up=false
+
+	# --webclient
+	[ "$runwebclient" = "1" ] \
+		&& set -- "$@" --webclient=true \
+		|| set -- "$@" --webclient=false
+
+	# --snat-subnet-routes (inverse of nosnat)
+	[ "$nosnat" = "1" ] \
+		&& set -- "$@" --snat-subnet-routes=false \
+		|| set -- "$@" --snat-subnet-routes=true
+
+	# --advertise-routes (comma-separated, empty clears routes)
+	set -- "$@" "--advertise-routes=$routes"
+
+	# --exit-node (empty clears the exit node)
+	set -- "$@" "--exit-node=$exit_node"
+
+	# when an exit node is configured, always allow LAN access
+	[ -n "$exit_node" ] && set -- "$@" --exit-node-allow-lan-access=true
+
+	# --hostname (only set if non-empty)
+	[ -n "$hostname" ] && set -- "$@" "--hostname=$hostname"
+
+	# --relay-server-port (requires tailscale >= 1.90.5)
+	local ts_ver
+	ts_ver=$("$ts_bin" version 2>/dev/null | head -n1)
+	if version_gte "$ts_ver" "1.90.5"; then
+		if [ "$enable_relay" = "1" ]; then
+			set -- "$@" "--relay-server-port=${relay_server_port:-40000}"
+		else
+			set -- "$@" "--relay-server-port="
+		fi
+	fi
+
+	logger -t "$NAME" "Applying settings"
+	"$ts_bin" "$@"
+	local ret=$?
+	[ $ret -eq 0 ] \
+		&& logger -t "$NAME" "Settings applied successfully" \
+		|| logger -t "$NAME" "Failed to apply settings (exit code: $ret)"
+	return $ret
+}
+
+start_service() {
+	apply_settings
+}
+
+service_triggers() {
+	procd_add_reload_trigger "tailscale"
+}
+
+reload_service() {
+	apply_settings
+}
