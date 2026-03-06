@@ -142,6 +142,7 @@ return view.extend({
 			_('Whether this print port is bi-directional.')  + '<br />' +
 			_('Note: USB hotplug correctly detects this.'));
 		o.modalonly = true;
+		o.rmempty = false;
 
 		o = s.option(form.Flag, 'runas_root', _('Run as root'),
 			_('Overrides default of %s.').format('<code>user p910nd, group lp</code>'));
