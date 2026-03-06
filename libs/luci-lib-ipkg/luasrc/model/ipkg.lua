@@ -27,13 +27,17 @@ local function _action(cmd, ...)
 		cmdline[#cmdline+1] = util.shellquote(v)
 	end
 
-	local c = "%s >/tmp/opkg.stdout 2>/tmp/opkg.stderr" % table.concat(cmdline, " ")
+	-- Use secure temporary files to prevent race conditions and symlink attacks
+	local tmpout = os.tmpname()
+	local tmperr = os.tmpname()
+	local c = "%s >%s 2>%s" % { table.concat(cmdline, " "), tmpout, tmperr }
 	local r = os.execute(c)
-	local e = fs.readfile("/tmp/opkg.stderr")
-	local o = fs.readfile("/tmp/opkg.stdout")
+	local e = fs.readfile(tmperr)
+	local o = fs.readfile(tmpout)
 
-	fs.unlink("/tmp/opkg.stderr")
-	fs.unlink("/tmp/opkg.stdout")
+	-- Secure cleanup of temporary files
+	fs.unlink(tmperr)
+	fs.unlink(tmpout)
 
 	return r, o or "", e or ""
 end
@@ -85,6 +89,7 @@ local function _lookup(cmd, pkg)
 	-- OPKG sometimes kills the whole machine because it sucks
 	-- Therefore we have to use a sucky approach too and use
 	-- tmpfiles instead of directly reading the output
+	-- Use secure temporary files to prevent race conditions
 	local tmpfile = os.tmpname()
 	os.execute("%s >%s 2>/dev/null" %{ table.concat(cmdline, " "), tmpfile })
 
