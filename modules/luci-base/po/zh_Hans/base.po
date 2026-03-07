@@ -4,7 +4,7 @@
 #
 msgid ""
 msgstr ""
-"PO-Revision-Date: 2026-03-05 15:10+0000\n"
+"PO-Revision-Date: 2026-03-06 16:33+0000\n"
 "Last-Translator: nKsyn <e.nksyn@gmail.com>\n"
 "Language-Team: Chinese (Simplified Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hans/>\n"
@@ -1595,8 +1595,7 @@ msgstr ""
 msgid ""
 "At most <strong>%h</strong> per <strong>%h</strong>, burst of <strong>%h</"
 "strong>"
-msgstr ""
-"至多 <strong>%h</strong> 每 <strong>%h</strong>，<strong>%h</strong> 突发"
+msgstr "最多 <strong>%h</strong> 每 <strong>%h</strong>，<strong>%h</strong> 突发上限"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/mounts.js:133
 msgid "Attempt to enable configured mount points for attached devices"
@@ -1626,7 +1625,7 @@ msgstr "以用户名/密码的方式进行验证"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2024
 msgid "Authentication"
-msgstr "身份认证"
+msgstr "认证"
 
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:76
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:79
@@ -2921,7 +2920,7 @@ msgstr "已发送"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:163
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:349
 msgid "Debug"
-msgstr "调试"
+msgstr "调试 (Debug)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1136
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1142
@@ -3375,9 +3374,7 @@ msgstr "距离优化"
 msgid ""
 "Distance to farthest network member in meters. Set only for distances above "
 "one kilometer; otherwise it is harmful."
-msgstr ""
-"和最远网络成员之间的距离，单位为米。请仅在距离超出 1 千米时设置此项，否则有"
-"害。"
+msgstr "到最远网络成员的距离（米）。仅在距离超过 1 千米时设置；否则会有负面影响。"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:75
 msgid "Distributed ARP Table"
@@ -3452,7 +3449,7 @@ msgid ""
 "abbr> messages on this interface."
 msgstr ""
 "不在此接口上发送任何 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路"
-"由器通告，ICMPv6 类型 134）\">RA</abbr> 消息。"
+"由器通告，ICMPv6 消息类型 134）\">RA</abbr> 消息。"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:102
 msgctxt "nft notrack action"
@@ -4083,7 +4080,7 @@ msgstr "启用单播泛洪"
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:109
 #: protocols/luci-proto-mbim/htdocs/luci-static/resources/protocol/mbim.js:118
 msgid "Enabled"
-msgstr "启用"
+msgstr "已启用"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1793
 msgid "Enabled (all CPUs)"
@@ -4101,7 +4098,7 @@ msgstr "在此网桥上启用 IGMP 嗅探"
 msgid ""
 "Enables fast roaming among access points that belong to the same Mobility "
 "Domain"
-msgstr "启用属于同一移动域接入点之间的快速漫游"
+msgstr "在属于同一移动域的接入点（AP）间启用快速漫游"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:100
 msgid ""
@@ -4220,7 +4217,7 @@ msgstr "擦除中…"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:160
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:346
 msgid "Error"
-msgstr "错误"
+msgstr "错误 (Error)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:145
 msgid "Error getting PublicKey"
@@ -4808,8 +4805,8 @@ msgid ""
 "messages received on the designated master interface to downstream "
 "interfaces."
 msgstr ""
-"将指定主接口上接收到的 <abbr title=\"Router Advertisement, ICMPv6 Type 134"
-"（路由器通告, ICMPv6类型 134）\">RA</abbr> 消息转发到下游接口。"
+"将指定主接口上接收到的 <abbr title=\"Router Advertisement, ICMPv6 Type 134（"
+"路由器通告, ICMPv6 消息类型 134）\">RA</abbr> 消息转发到下游接口。"
 
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:164
 msgid "Forward DHCP traffic"
@@ -5419,12 +5416,12 @@ msgstr "ICMP 类型"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:57
 msgctxt "nft icmpv6 code"
 msgid "ICMPv6 code"
-msgstr "ICMPv6 码"
+msgstr "ICMPv6 消息码"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:58
 msgctxt "nft icmpv6 type"
 msgid "ICMPv6 type"
-msgstr "ICMPv6 类型"
+msgstr "ICMPv6 消息类型"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:128
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:128
@@ -6061,7 +6058,7 @@ msgstr "仅室内频道被选中"
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:162
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:348
 msgid "Info"
-msgstr "信息"
+msgstr "信息 (Info)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:102
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:103
@@ -6279,9 +6276,9 @@ msgid ""
 "value, an administrator may tune the number of IGMP messages on the subnet; "
 "larger values cause IGMP Queries to be sent less often"
 msgstr ""
-"组播常规查询之间的时间间隔（单位：<abbr title=\"1 厘秒 = 10 毫秒\">厘秒</"
-"abbr>）。通过更改该值，管理员可以调整子网中 IGMP 消息的数量。 数值越大，IGMP "
-"查询的发送频率越低"
+"组播常规查询的时间间隔（单位：<abbr title=\"1 厘秒 = 10 毫秒\">厘秒</abbr>）"
+"。通过更改该值，管理员可以调整子网中 IGMP 消息的数量。 数值越大，IGMP 查询的"
+"发送频率越低"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1032
 msgid "Interval in seconds for STP hello packets"
@@ -6324,7 +6321,7 @@ msgstr "无效的通信类别，请输入 00..FF 或继承"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:283
 msgid "Invalid VLAN ID given! Only IDs between %d and %d are allowed."
-msgstr "无效的 VLAN ID！只有 %d 和 %d 之间的 ID 有效。"
+msgstr "无效的 VLAN ID！有效值范围： %d ~ %d。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:292
 msgid "Invalid VLAN ID given! Only unique IDs are allowed"
@@ -6722,7 +6719,7 @@ msgstr "图例："
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:769
 msgid "Limit"
-msgstr "最大租约数"
+msgstr "限制"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:95
 msgid "Limit repeated log messages"
@@ -7472,8 +7469,8 @@ msgid ""
 "Maximum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 600 seconds."
 msgstr ""
-"连续发送主动 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通"
-"告，ICMPv6 类型 134）\">RA</abbr> 消息时允许的最长时间间隔。默认为 600 秒。"
+"连续发送主动 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告"
+"，ICMPv6 消息类型 134）\">RA</abbr> 消息时允许的最长时间间隔。默认为 600 秒。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1003
 msgid "Maximum transmit power"
@@ -7600,8 +7597,8 @@ msgid ""
 "Minimum time allowed between sending unsolicited <abbr title=\"Router "
 "Advertisement, ICMPv6 Type 134\">RA</abbr>. Default is 200 seconds."
 msgstr ""
-"连续发送主动 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通"
-"告，ICMPv6 类型 134）\">RA</abbr> 消息时允许的最短时间间隔。默认为 200 秒。"
+"连续发送主动 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告"
+"，ICMPv6 消息类型 134）\">RA</abbr> 消息时允许的最短时间间隔。默认为 200 秒。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:202
 msgid "Mirror monitor port"
@@ -8326,7 +8323,7 @@ msgstr "不支持"
 msgid ""
 "Note that many options are set on a per-interface basis in the <a href=\"./"
 "network\">Interfaces</a> tab."
-msgstr "提示：可在<a href=\"./network\">接口</a>配置页给不同接口配置不同的选项。"
+msgstr "注意：许多选项需在 <a href=\"./network\">接口</a> 页面中按接口分别设置。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:665
 msgid "Note: IPv4 only."
@@ -8891,7 +8888,7 @@ msgstr "重设内部路由表"
 
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:3
 msgid "Overview"
-msgstr "概况"
+msgstr "概览"
 
 #: modules/luci-base/htdocs/luci-static/resources/ui.js:3342
 msgid "Overwrite existing file \"%s\" ?"
@@ -9458,7 +9455,7 @@ msgstr "已连接"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:572
 msgid "Preshared Key"
-msgstr "预共享密钥"
+msgstr "预共享密钥 (PSK)"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:543
 msgid "Preshared key in use"
@@ -9983,7 +9980,7 @@ msgstr "使用 <strong>ICMP 类型 %h</strong> 拒绝数据包"
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:112
 msgctxt "nft reject with icmpv6 type"
 msgid "Reject packet with <strong>ICMPv6 type %h</strong>"
-msgstr "使用 <strong>ICMPv6 类型 %h</strong> 拒绝数据包"
+msgstr "使用 <strong>ICMPv6 消息类型 %h</strong> 拒绝数据包"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:110
 msgctxt "nft reject with tcp reset"
@@ -10579,8 +10576,8 @@ msgid ""
 "Router Lifetime published in <abbr title=\"Router Advertisement, ICMPv6 Type "
 "134\">RA</abbr> messages. Maximum is 9000 seconds."
 msgstr ""
-"在 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告，ICMPv6 类"
-"型 134）\">RA</abbr> 消息中发布的路由器生存时间。最大值为 9000 秒。"
+"在 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告，ICMPv6 消"
+"息类型 134）\">RA</abbr> 消息中发布的路由器生存时间。最大值为 9000 秒。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/password.js:46
 #: modules/luci-mod-system/root/usr/share/luci/menu.d/luci-mod-system.json:26
@@ -10880,7 +10877,7 @@ msgid ""
 "messages advertising this device as IPv6 router."
 msgstr ""
 "发送 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告，ICMPv6 "
-"类型 134）\">RA</abbr> 消息，以通告此设备为 IPv6 路由器。"
+"消息类型 134）\">RA</abbr> 消息，以通告此设备为 IPv6 路由器。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1188
 msgid "Send ICMP redirects"
@@ -11976,8 +11973,8 @@ msgid ""
 "Minimum is 1280 bytes."
 msgstr ""
 "将在 <abbr title=\"Router Advertisement, ICMPv6 Type 134（路由器通告，ICMPv6 "
-"类型 134）\">RA</abbr> 消息中发布的 <abbr title=\"Maximum Transmission Unit"
-"（最大传输单元）\">MTU</abbr>。最小值为 1280 字节。"
+"消息类型 134）\">RA</abbr> 消息中发布的 <abbr title=\"Maximum Transmission "
+"Unit（最大传输单元）\">MTU</abbr>。最小值为 1280 字节。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:910
 msgid ""
@@ -12352,9 +12349,8 @@ msgid ""
 "detect the loss of the last member of a group"
 msgstr ""
 "在响应离组消息时发出的特定组查询中插入的最大响应时间 (单位：<abbr title=\"1 "
-"厘秒 = 10 毫秒\">厘秒</abbr>)。同时也是组特定查询消息之间的时间间隔。 通过调"
-"整该值以修改网络的“离开等待时间”。 降低该值会缩短检测组中最后一个成员离组的时"
-"间"
+"厘秒 = 10 毫秒\">厘秒</abbr>)。同时也是组特定查询消息的时间间隔。 通过调整该"
+"值以修改网络的“离开等待时间”。 降低该值会缩短检测组中最后一个成员离组的时间"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1071
 msgid ""
@@ -12837,7 +12833,7 @@ msgstr "可用数"
 
 #: protocols/luci-proto-yggdrasil/htdocs/luci-static/resources/protocol/yggdrasil.js:350
 msgid "Trace"
-msgstr "跟踪"
+msgstr "追踪 (Trace)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:105
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/diagnostics.js:106
@@ -13755,7 +13751,7 @@ msgstr "警告"
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/system.js:191
 #: protocols/luci-proto-modemmanager/htdocs/luci-static/resources/protocol/modemmanager.js:161
 msgid "Warning"
-msgstr "警告"
+msgstr "警告 (Warning)"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/reboot.js:26
 msgid "Warning: There are unsaved changes that will get lost on reboot!"
@@ -14315,7 +14311,7 @@ msgstr "整数"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:956
 msgid "key between 8 and 63 characters"
-msgstr "密钥在 8 到 63 个字符之间"
+msgstr "密钥长度范围为 8 ~ 63 个字符"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:973
 msgid "key with either 5 or 13 characters"
@@ -14435,7 +14431,7 @@ msgstr "开放网络"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/nftables.js:345
 msgid "or"
-msgstr "或者"
+msgstr "或"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:911
 msgid "other config (O)"
@@ -14814,11 +14810,11 @@ msgstr "值"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1067
 msgid "value between %d and %d characters"
-msgstr "%d 和 %d 字符之间的值"
+msgstr "%d ~ %d 字符之间"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1023
 msgid "value between %f and %f"
-msgstr "%f 和 %f 之间的值"
+msgstr "%f ~ %f 之间的值"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1033
 msgid "value greater or equal to %f"
@@ -14838,7 +14834,7 @@ msgstr "值至少为 %d 个字符"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1090
 msgid "value with at most %d characters"
-msgstr "值至多为 %d 个字符"
+msgstr "值最多为 %d 个字符"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1480
 msgid "weak security"
