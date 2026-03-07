@@ -3,9 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-03-30 17:00+0200\n"
-"PO-Revision-Date: 2025-05-30 02:35+0000\n"
-"Last-Translator: 109247019824 "
-"<109247019824@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-03-05 17:52+0000\n"
+"Last-Translator: Nikolay Tsanov <nick.tsanov@gmail.com>\n"
 "Language-Team: Bulgarian <https://hosted.weblate.org/projects/openwrt/"
 "luciapplicationsfirewall/bg/>\n"
 "Language: bg\n"
@@ -13,10 +12,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.12-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:48
-#, fuzzy
 msgid ""
 "%{src?%{dest?Forwarded:Incoming}:Outgoing} %{ipv6?%{ipv4?<var>IPv4</var> and "
 "<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%"
@@ -32,19 +30,19 @@ msgid ""
 "&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}\">%"
 "{helper.val}</var>}}"
 msgstr ""
-"%{src?%{dest?Forwarded:Incoming}:Изходящ} %{ipv6?%{ipv4?<var>IPv4</var> and "
-"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, protocol %{proto#%"
+"%{src?%{dest?Препратен:Входящ}:Изходящ} %{ipv6?%{ipv4?<var>IPv4</var> и "
+"<var>IPv6</var>:<var>IPv6</var>}:<var>IPv4</var>}%{proto?, протокол %{proto#%"
 "{next?, }%{item.types?<var class=\"cbi-tooltip-container\">%{item.name}<span "
 "class=\"cbi-tooltip\">ICMP с типове %{item.types#%{next?, }<var>%{item}</"
-"var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, mark <var%{mark.inv? "
-"data-tooltip=\"Match fwmarks except %{mark.num}%{mark.mask? with mask %"
-"{mark.mask}}.\":%{mark.mask? data-tooltip=\"Mask fwmark value with %"
-"{mark.mask} before compare.\"}}>%{mark.val}</var>}%{dscp?, DSCP %{dscp.inv?"
-"<var data-tooltip=\"Match DSCP classifications except %{dscp.num?:%"
-"{dscp.name}}\">%{dscp.val}</var>:<var>%{dscp.val}</var>}}%{helper?, helper %"
-"{helper.inv?<var data-tooltip=\"Съвпадение на всеки помощник, освен &quot;%"
-"{helper.name}&quot;\">%{helper.val}</var>:<var data-tooltip=\"%{helper.name}"
-"\">%{helper.val}</var>}}"
+"var>}</span></var>:<var>%{item.name}</var>}}}%{mark?, маркер <var%{mark.inv? "
+"data-tooltip=\"Съвпадение с fwmark с изключение на %{mark.num}%{mark.mask? с "
+"маска %{mark.mask}}.\":%{mark.mask? data-tooltip=\"Маскиране на стойността "
+"на fwmark с %{mark.mask} преди сравнение.\"}}>%{mark.val}</var>}%{dscp?, "
+"DSCP %{dscp.inv?<var data-tooltip=\"Съвпадение с DSCP класификации с "
+"изключение на %{dscp.num?:%{dscp.name}}\">%{dscp.val}</var>:<var>%{dscp.val}"
+"</var>}}%{helper?, helper %{helper.inv?<var data-tooltip=\"Съвпадение с "
+"всеки helper с изключение на &quot;%{helper.name}&quot;\">%{helper.val}</"
+"var>:<var data-tooltip=\"%{helper.name}\">%{helper.val}</var>}}"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/tools/firewall.js:462
 msgid "-- add IP --"
@@ -56,11 +54,11 @@ msgstr "-- добави MAC --"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:200
 msgid "0"
-msgstr ""
+msgstr "0"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/ipsets.js:183
 msgid "1024"
-msgstr ""
+msgstr "1024"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:118
 msgid ""
@@ -282,7 +280,7 @@ msgstr "Адрес на дестинацията"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:398
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:277
 msgid "Destination port"
-msgstr "Дестинейшън Порт"
+msgstr "Порт на местоназначението"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:390
 msgid "Destination zone"
@@ -306,7 +304,7 @@ msgstr "Изпускане на невалидни пакети"
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:225
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:209
 msgid "Enable"
-msgstr "Включване"
+msgstr "Активиране"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:304
 msgid "Enable NAT Loopback"
@@ -961,7 +959,7 @@ msgstr ""
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:383
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/snats.js:260
 msgid "Source port"
-msgstr ""
+msgstr "Порт на източника"
 
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/forwards.js:239
 #: applications/luci-app-firewall/htdocs/luci-static/resources/view/firewall/rules.js:366
