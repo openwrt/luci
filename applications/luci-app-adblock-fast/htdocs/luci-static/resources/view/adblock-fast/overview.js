@@ -190,6 +190,20 @@ return view.extend({
 		var status, m, s1, s2, s3, o;
 
 		status = new adb.status();
+
+		if (!initData.enabled) {
+			return status.render().then(function (statusNode) {
+				return E("div", {}, [
+					statusNode,
+					E("div", { class: "cbi-map" }, [
+						E("h2", {}, _("AdBlock-Fast - Configuration")),
+						E("div", { class: "cbi-map-descr" },
+							_("Service is disabled. Please enable the service using the Service Control button above to configure service options.")),
+					]),
+				]);
+			});
+		}
+
 		m = new form.Map(pkg.Name, _("AdBlock-Fast - Configuration"));
 		this._map = m;
 
