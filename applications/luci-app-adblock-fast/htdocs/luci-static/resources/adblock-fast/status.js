@@ -403,7 +403,7 @@ var status = baseclass.extend({
 			var header = E("h2", {}, _("AdBlock-Fast - Status"));
 			var statusTitle = E(
 				"label",
-				{ class: "cbi-value-title" },
+				{ class: "cbi-value-title", for: pkg.Name + "-status" },
 				_("Service Status"),
 			);
 			if (reply.status.version) {
@@ -436,7 +436,7 @@ var status = baseclass.extend({
 			} else {
 				text = _("Not installed or not found");
 			}
-			var statusText = E("div", {}, text);
+			var statusText = E("output", { id: pkg.Name + "-status" }, text);
 			var statusField = E("div", { class: "cbi-value-field" }, statusText);
 			var statusDiv = E("div", { class: "cbi-value" }, [
 				statusTitle,
@@ -472,7 +472,7 @@ var status = baseclass.extend({
 				if (detailsText) {
 					var detailsTitle = E(
 						"label",
-						{ class: "cbi-value-title" },
+						{ class: "cbi-value-title", for: pkg.Name + "-details" },
 						_("Service Details"),
 					);
 					var detailsDescr = E(
@@ -485,7 +485,7 @@ var status = baseclass.extend({
 							"</a>",
 						),
 					);
-					var detailsContent = E("div", {}, detailsText);
+					var detailsContent = E("output", { id: pkg.Name + "-details" }, detailsText);
 					var detailsField = E("div", { class: "cbi-value-field" }, [
 						detailsContent,
 						E("br"),
@@ -503,7 +503,7 @@ var status = baseclass.extend({
 			if (reply.ubus.warnings && reply.ubus.warnings.length) {
 				var warningsTitle = E(
 					"label",
-					{ class: "cbi-value-title" },
+					{ class: "cbi-value-title", for: pkg.Name + "-warnings" },
 					_("Service Warnings"),
 				);
 				text = "";
@@ -517,7 +517,7 @@ var status = baseclass.extend({
 						text += _("Unknown warning") + "<br />";
 					}
 				});
-				var warningsText = E("div", { class: "cbi-value-description" }, text);
+				var warningsText = E("output", { id: pkg.Name + "-warnings", class: "cbi-value-description" }, text);
 				var warningsField = E(
 					"div",
 					{ class: "cbi-value-field" },
@@ -533,7 +533,7 @@ var status = baseclass.extend({
 			if (reply.ubus.errors && reply.ubus.errors.length) {
 				var errorsTitle = E(
 					"label",
-					{ class: "cbi-value-title" },
+					{ class: "cbi-value-title", for: pkg.Name + "-errors" },
 					_("Service Errors"),
 				);
 				text = "";
@@ -551,7 +551,7 @@ var status = baseclass.extend({
 					'<a href="' + pkg.URL + '" target="_blank">',
 					"</a>!<br />",
 				);
-				var errorsText = E("div", { class: "cbi-value-description" }, text);
+				var errorsText = E("output", { id: pkg.Name + "-errors", class: "cbi-value-description" }, text);
 				var errorsField = E("div", { class: "cbi-value-field" }, errorsText);
 				errorsDiv = E("div", { class: "cbi-value" }, [
 					errorsTitle,
@@ -748,7 +748,7 @@ var status = baseclass.extend({
 			var buttonsDiv = [];
 			var buttonsTitle = E(
 				"label",
-				{ class: "cbi-value-title" },
+				{ class: "cbi-value-title", for: pkg.Name + "-buttons" },
 				_("Service Control"),
 			);
 			var buttonsTextItems = [
@@ -764,7 +764,7 @@ var status = baseclass.extend({
 				btn_gap,
 				btn_disable,
 			];
-			var buttonsText = E("div", {}, buttonsTextItems);
+			var buttonsText = E("output", { id: pkg.Name + "-buttons" }, buttonsTextItems);
 			var buttonsField = E("div", { class: "cbi-value-field" }, buttonsText);
 			if (reply.status.version) {
 				buttonsDiv = E("div", { class: "cbi-value" }, [
