@@ -35,10 +35,12 @@
 		"read": {
 			"cgi-io": [ "exec" ],
 			"file": {
-				"/bin/dmesg -r": [ "exec" ]
+				"/bin/dmesg -r": [ "exec" ],
+				"/usr/libexec/syslog-wrapper": [ "exec" ]
 			},
 			"ubus": {
-				"log": [ "read" ]
+				"log": [ "read" ],
+				"file": [ "stat" ]
 			}
 		}
 	},
