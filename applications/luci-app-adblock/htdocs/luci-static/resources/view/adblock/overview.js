@@ -107,31 +107,26 @@ return view.extend({
 					if (status && info) {
 						status.textContent = `${info.adblock_status || '-'} (frontend: ${info.frontend_ver || '-'} / backend: ${info.backend_ver || '-'})`;
 						if (info.adblock_status === "processing") {
-							if (!status.classList.contains("spinning")) {
-								status.classList.add("spinning");
-							}
 							buttons.forEach(function (btn) {
 								btn.disabled = true;
 								btn.blur();
 							})
+							if (!status.classList.contains("spinning")) {
+								status.classList.add("spinning");
+							}
 						} else {
-							if (status.classList.contains("spinning")) {
-								buttons.forEach(function (btn) {
-									btn.disabled = false;
-								})
-								status.classList.remove("spinning");
-								if (document.getElementById('btn_suspend')) {
-									if (info.adblock_status === 'paused') {
-										document.querySelector('#btn_suspend').textContent = 'Resume';
-									}
-									if (info.adblock_status === 'enabled') {
-										document.querySelector('#btn_suspend').textContent = 'Suspend';
-									}
+							status.classList.remove("spinning");
+							if (document.getElementById('btn_suspend')) {
+								if (info.adblock_status === 'paused') {
+									document.querySelector('#btn_suspend').textContent = 'Resume';
+								}
+								if (info.adblock_status === 'enabled') {
+									document.querySelector('#btn_suspend').textContent = 'Suspend';
 								}
 							}
-						}
-						if (info.adblock_status === 'paused' && document.getElementById('btn_suspend')) {
-							document.querySelector('#btn_suspend').textContent = 'Resume';
+							buttons.forEach(function (btn) {
+								btn.disabled = false;
+							})
 						}
 					}
 					if (info) {
@@ -516,6 +511,12 @@ return view.extend({
 		o.value('1.1.1.2', _('Cloudflare (malware)'));
 		o.value('1.1.1.3', _('Cloudflare (malware+family)'));
 		o.value('9.9.9.9', _('Quad9 (malware)'));
+		o.value('86.54.11.100', _('DNS4EU (unfiltered)'));
+		o.value('94.140.14.140', _('AdGuard (unfiltered)'));
+		o.value('76.76.2.0', _('Control D (unfiltered)'));
+		o.value('1.1.1.1', _('Cloudflare (unfiltered)'));
+		o.value('9.9.9.10', _('Quad9 (unfiltered)'));
+		o.value('185.150.99.255', _('Digitale Gesellschaft (unfiltered)'));
 		o.default = '86.54.11.13';
 		o.rmempty = true;
 
@@ -537,6 +538,12 @@ return view.extend({
 		o.value('2606:4700:4700::1112', _('Cloudflare (malware)'));
 		o.value('2606:4700:4700::1113', _('Cloudflare (malware+family)'));
 		o.value('2620:fe::fe', _('Quad9 (malware)'));
+		o.value('2a13:1001::86:54:11:100', _('DNS4EU (unfiltered)'));
+		o.value('2a10:50c0::1:ff', _('AdGuard (unfiltered)'));
+		o.value('2606:1a40::', _('Control D (unfiltered)'));
+		o.value('2606:4700:4700::1111', _('Cloudflare (unfiltered)'));
+		o.value('2620:fe::10', _('Quad9 (unfiltered)'));
+		o.value('2a07:6b47:6b47::255', _('Digitale Gesellschaft (unfiltered)'));
 		o.default = '2a13:1001::86:54:11:13';
 		o.rmempty = true;
 
