@@ -19,8 +19,8 @@ include ../../luci.mk
 
 define Package/$(PKG_NAME)/install
 	$(call Package/$(PKG_NAME)/install/default,$(1))
-	chmod 755 $(1)/etc/init.d/ledtrig-ping
-	chmod 755 $(1)/usr/libexec/ledtrig-ping
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/root/etc/init.d/ledtrig-ping $(1)/etc/init.d/ledtrig-ping
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/root/usr/libexec/ledtrig-ping $(1)/usr/libexec/ledtrig-ping
 endef
 
 # call BuildPackage - OpenWrt buildroot signature
