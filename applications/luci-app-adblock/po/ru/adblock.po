@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: LuCI: adblock\n"
 "POT-Creation-Date: 2017-10-22 13:00+0300\n"
-"PO-Revision-Date: 2026-02-24 17:10+0000\n"
+"PO-Revision-Date: 2026-03-08 17:30+0000\n"
 "Last-Translator: SnIPeRSnIPeR <snipersniper@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/openwrt/"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.16.1-dev\n"
+"X-Generator: Weblate 5.17-dev\n"
 "Project-Info: Это технический перевод, не дословный. Главное-удобный русский "
 "интерфейс, все проверялось в графическом режиме, совместим с другими apps\n"
 
@@ -204,7 +204,7 @@ msgstr "В список блокировок..."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:273
 msgid "CPU Cores"
-msgstr ""
+msgstr "Ядра CPU"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:25
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/dnsreport.js:63
@@ -486,7 +486,7 @@ msgstr ""
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:498
 msgid "Enable DNS Bridge"
-msgstr ""
+msgstr "Включить DNS-мост"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:369
 msgid "Enable Filtered DNS Routing"
@@ -530,6 +530,8 @@ msgid ""
 "Enables a temporary DNS bridge to an external DNS resolver during local DNS "
 "restarts."
 msgstr ""
+"Включает временный DNS-мост к внешнему DNS-резолверу во время перезапусков "
+"локального DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:235
 msgid ""
@@ -557,7 +559,7 @@ msgstr "Внешние источники списков блокировок"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:496
 msgid "External DNS Bridge (Zero‑Downtime during DNS Restarts)"
-msgstr ""
+msgstr "Внешний DNS-мост (без простоев при перезапусках DNS)"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:367
 msgid "External Filtered DNS Policy (MAC-/Interface‑based DNS bypass)"
@@ -569,44 +571,56 @@ msgid ""
 "External IPv4 DNS resolver applied to MACs and interfaces using the filtered "
 "DNS policy."
 msgstr ""
+"Внешний IPv4 DNS-резолвер, применяемый к MAC-адресам и интерфейсам, "
+"использующим политику фильтрованного DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:341
 msgid ""
 "External IPv4 DNS resolver applied to MACs and interfaces using the "
 "unfiltered DNS policy."
 msgstr ""
+"Внешний IPv4 DNS-резолвер, применяемый к MAC-адресам и интерфейсам, "
+"использующим политику нефильтрованного DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:455
 msgid ""
 "External IPv4 DNS resolver applied to MACs using the unfiltered remote DNS "
 "policy."
 msgstr ""
+"Внешний IPv4 DNS-резолвер, применяемый к MAC-адресам, использующим политику "
+"нефильтрованного удалённого DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:501
 msgid "External IPv4 DNS resolver used during bridging."
-msgstr ""
+msgstr "Внешний IPv4 DNS-резолвер, используемый во время мостового соединения."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:408
 msgid ""
 "External IPv6 DNS resolver applied to MACs and interfaces using the filtered "
 "DNS policy."
 msgstr ""
+"Внешний IPv6 DNS-резолвер, применяемый к MAC-адресам и интерфейсам, "
+"использующим политику фильтрованного DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:353
 msgid ""
 "External IPv6 DNS resolver applied to MACs and interfaces using the "
 "unfiltered DNS policy."
 msgstr ""
+"Внешний IPv6 DNS-резолвер, применяемый к MAC-адресам и интерфейсам, "
+"использующим политику нефильтрованного DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:467
 msgid ""
 "External IPv6 DNS resolver applied to MACs using the unfiltered remote DNS "
 "policy."
 msgstr ""
+"Внешний IPv6 DNS-резолвер, применяемый к MAC-адресам, использующим политику "
+"нефильтрованного удалённого DNS."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:522
 msgid "External IPv6 DNS resolver used during bridging."
-msgstr ""
+msgstr "Внешний IPv6 DNS-резолвер, используемый во время мостового соединения."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:431
 msgid "External Remote DNS Policy (temporary MAC‑based remote DNS bypass)"
@@ -795,6 +809,8 @@ msgstr ""
 msgid ""
 "Limit the cpu cores used by adblock to save RAM, autodetected by default."
 msgstr ""
+"Ограничить количество ядер CPU, используемых Adblock, для экономии RAM; по "
+"умолчанию определяется автоматически."
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:623
 msgid "List of available network devices used by tcpdump."
@@ -1019,7 +1035,7 @@ msgstr "Флаги запуска"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:179
 msgid "Run Information"
-msgstr ""
+msgstr "Информация о запуске"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:175
 msgid "Run Interfaces"
@@ -1232,7 +1248,7 @@ msgstr "Выбор архивов UTCapitole"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:101
 msgid "Unable to parse the adblock runtime information!"
-msgstr ""
+msgstr "Не удалось обработать информацию о работе Adblock!"
 
 #: applications/luci-app-adblock/htdocs/luci-static/resources/view/adblock/overview.js:685
 msgid "Unable to parse the custom feed file!"
