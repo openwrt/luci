@@ -126,6 +126,7 @@ return view.extend({
 		ena.load = (section_id) => { 
 			let _temp = uci.get('unbound', section_id, 'enabled');
 			if (_temp === '1') section_enabled = true;
+			return _temp;
 		}
 
 		return m.render();
