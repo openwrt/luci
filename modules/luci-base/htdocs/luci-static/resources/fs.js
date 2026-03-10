@@ -17,6 +17,9 @@
  * @property {number} inode - Inode number
  * @property {number} uid - Numeric owner id
  * @property {number} gid - Numeric group id
+ * @property {string} user - User name of owner
+ * @property {string} group - Group name of owner
+ * @property {Object?} target - a dictionary of properties of any symlink target for `list` operation result entries
  */
 
 /**
@@ -37,6 +40,12 @@ const callFileList = rpc.declare({
 const callFileStat = rpc.declare({
 	object: 'file',
 	method: 'stat',
+	params: [ 'path' ]
+});
+
+const callFileLStat = rpc.declare({
+	object: 'file',
+	method: 'lstat',
 	params: [ 'path' ]
 });
 
@@ -185,6 +194,23 @@ var FileSystem = baseclass.extend(/** @lends LuCI.fs.prototype */ {
 	 */
 	stat(path) {
 		return callFileStat(path).then(handleRpcReply.bind(this, { '': {} }));
+	},
+
+	/**
+	 * Return symlink aware file stat information on the specified path. This
+	 * call differs from stat in that it gives information about the symlink
+	 * instead of following the symlink, whereby size is the length of the
+	 * string of the symlink target path and file name.
+	 *
+	 * @param {string} path
+	 * The filesystem path to lstat.
+	 *
+	 * @returns {Promise<LuCI.fs.FileStatEntry>}
+	 * Returns a promise resolving to a stat detail object or
+	 * rejecting with an error stating the failure reason.
+	 */
+	lstat(path) {
+		return callFileLStat(path).then(handleRpcReply.bind(this, { '': {} }));
 	},
 
 	/**
