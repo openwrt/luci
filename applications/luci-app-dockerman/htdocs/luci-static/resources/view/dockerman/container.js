@@ -250,8 +250,12 @@ return dm2.dv.extend({
 		if (!portBindings || typeof portBindings !== 'object') return [];
 		const ports = [];
 		for (const [containerPort, bindings] of Object.entries(portBindings)) {
-			if (Array.isArray(bindings) && bindings.length > 0 && bindings[0]?.HostPort) {
-				ports.push(`${bindings[0].HostPort}:${containerPort}`);
+			if (Array.isArray(bindings)) {
+				for (const b of bindings) {
+					if (!b?.HostPort) continue;
+					const ip = (b.HostIp && b.HostIp !== '0.0.0.0') ? b.HostIp + ':' : '';
+					ports.push(`${ip}${b.HostPort}:${containerPort}`);
+				}
 			}
 		}
 		return ports;
