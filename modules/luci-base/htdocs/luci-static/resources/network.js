@@ -2322,21 +2322,21 @@ Protocol = baseclass.extend(/** @lends LuCI.network.Protocol.prototype */ {
 	 */
 	getIP6Addrs() {
 		let addrs = this._ubus('ipv6-address');
-		const rv = [];
+		const rv = new Set();
 
 		if (Array.isArray(addrs))
 			for (let a of addrs)
 				if (L.isObject(a))
-					rv.push('%s/%d'.format(a.address, a.mask));
+					rv.add('%s/%d'.format(a.address, a.mask));
 
 		addrs = this._ubus('ipv6-prefix-assignment');
 
 		if (Array.isArray(addrs))
 			for (let a of addrs)
 				if (L.isObject(a) && L.isObject(a['local-address']))
-					rv.push('%s/%d'.format(a['local-address'].address, a['local-address'].mask));
+					rv.add('%s/%d'.format(a['local-address'].address, a['local-address'].mask));
 
-		return rv;
+		return Array.from(rv);
 	},
 
 	/**
