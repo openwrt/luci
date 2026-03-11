@@ -50,7 +50,7 @@ const openvpnOptions = [
 		tab: 'general',
 		type: form.DynamicList,
 		name: 'remote',
-		datatype: 'tuple(host,port,string)',
+		datatype: 'or(host,tuple(host,port),tuple(host,port,string))',
 		label: _('Remote host name or IP address'),
 		placeholder: '1.2.3.4'
 	},
@@ -385,14 +385,6 @@ const openvpnOptions = [
 		tab: 'scripts',
 		depends: { script_security: /[1-3]/ },
 		type: form.Value,
-		name: 'route_pre_up',
-		placeholder: '/usr/bin/ovpn-routepreup',
-		label: _('Execute shell cmd before routes are added')
-	},
-	{
-		tab: 'scripts',
-		depends: { script_security: /[1-3]/ },
-		type: form.Value,
 		name: 'route_up',
 		placeholder: '/usr/bin/ovpn-routeup',
 		label: _('Execute shell cmd after routes are added')
@@ -458,7 +450,7 @@ const openvpnOptions = [
 		depends: { script_security: /[1-3]/ },
 		type: form.Value,
 		name: 'tls_crypt_v2_verify',
-		placeholder: '/usr/bin/ovpn-tlscryp2v2verify',
+		placeholder: '/usr/bin/ovpn-tlscryptv2verify',
 		label: _('Run script cmd for client TLS verification')
 	},
 	{
@@ -1341,15 +1333,19 @@ const openvpnOptions = [
 	/* Push/Client */
 	{
 		tab: 'push_opt',
-		depends: { server: "", "!reverse": true },
 		type: form.DynamicList,
 		name: 'push',
 		label: _('Push options to peer'),
 		lvalues: ['redirect-gateway']
-	}, // values: ['comp-lzo']
+	},
 	{
 		tab: 'push_opt',
-		depends: { server: "", "!reverse": true },
+		type: form.DynamicList,
+		name: 'push_remove',
+		label: _('Remove Push options'),
+	},
+	{
+		tab: 'push_opt',
 		type: form.Flag,
 		name: 'push_reset',
 		label: _('Don\'t inherit global push options'),
