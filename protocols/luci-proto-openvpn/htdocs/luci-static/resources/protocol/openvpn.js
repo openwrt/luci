@@ -1863,12 +1863,13 @@ return network.registerProtocol('openvpn', {
 		};
 		ovconf.write = function(sid, value) {
 			const config_name = `/etc/openvpn/${sid}/${sid}_config.cfg`;
-			fs.exec_direct('/bin/mkdir', ['-p', `/etc/openvpn/${sid}/`]).then(result => {
-				fs.write(config_name, value).catch(() => {});
-				uci.set(this.config, sid, 'config', config_name);
+			return fs.exec('/bin/mkdir', ['-p', `/etc/openvpn/${sid}/`]).then(() => {
+				return fs.write(config_name, value);
+			}).then(() => {
+				try {
+					uci.set(this.config, sid, 'config', config_name);
+				} catch (err) {}
 			});
-
-			return 
 		};
 		ovconf.rmempty = true;
 	},

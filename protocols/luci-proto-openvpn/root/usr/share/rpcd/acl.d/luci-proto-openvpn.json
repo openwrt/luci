@@ -2,23 +2,27 @@
 	"luci-proto-openvpn": {
 		"description": "Grant access to LuCI openvpn procedures",
 		"read": {
+			"file": {
+				"/bin/mkdir -p /etc/openvpn/*": [ "exec" ],
+				"/etc/openvpn/*": [ "read" ]
+			},
 			"ubus": {
 				"luci.openvpn": [
 					"*"
 				]
 			},
-			"uci": [ "openvpn", "openvpn_recipes" ]
+			"uci": [ "network" ]
 		},
 		"write": {
 			"file": {
-				"/etc/openvpn/*": [ "write" ]
+				"/etc/openvpn/*": [ "write", "remove" ]
 			},
 			"ubus": {
 				"luci.openvpn": [
 					"*"
 				]
 			},
-			"uci": [ "openvpn" ]
+			"uci": [ "network" ]
 		}
 	}
 }
