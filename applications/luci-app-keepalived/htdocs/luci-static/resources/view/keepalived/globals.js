@@ -12,10 +12,18 @@ return view.extend({
 		s.anonymous = true;
 		s.addremove = false;
 
+		o = s.option(form.Flag, 'enabled', _('Enabled'));
+		o.default = o.disabled;
+
 		o = s.option(form.Value, 'router_id', _('Router ID'),
 			_('String identifying the machine (need not be hostname)'));
 		o.optional = true;
 		o.placeholder = 'OpenWrt';
+
+		o = s.option(form.FileUpload, 'alt_config_file', _('Alternative config'));
+		o.optional = true;
+		o.default = '/etc/keepalived/keepalived.conf';
+		o.root_directory = '/etc/';
 
 		o = s.option(form.Flag, 'linkbeat_use_polling', _('Link Polling'),
 			_('Poll to detect media link failure using ETHTOOL, MII or ioctl interface otherwise uses netlink interface'));
