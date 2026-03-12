@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"PO-Revision-Date: 2026-03-09 19:10+0000\n"
+"PO-Revision-Date: 2026-03-11 18:10+0000\n"
 "Last-Translator: EESF-2 <eesf-2@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
 "projects/openwrt/luci/zh_Hant/>\n"
@@ -516,7 +516,7 @@ msgstr "90m (90 分鐘 - 預設)"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:205
 msgid "; invalid MAC:"
-msgstr "；無效 MAC:"
+msgstr "; 無效 MAC:"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1086
 msgid "<abbr title=\"Basic Service Set Identifier\">BSSID</abbr>"
@@ -1058,7 +1058,7 @@ msgstr "新增新介面..."
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:298
 msgid "Add new repository public key by pasting its content, a file, or a URL."
-msgstr "貼上內容、上傳檔案或提供 URL 來新增儲存庫公開金鑰。"
+msgstr "貼上內容、上傳檔案或提供 URL 來新增儲存庫公鑰。"
 
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan.js:188
 #: protocols/luci-proto-vxlan/htdocs/luci-static/resources/protocol/vxlan6.js:188
@@ -1242,7 +1242,7 @@ msgstr "所有 ARP 目標"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:900
 msgid "All ARP targets must be reachable to consider the link valid"
-msgstr "所有 ARP 目標必須可達才能認為此連結有效"
+msgstr "所有 ARP 目標必須可到達才能認為此連結有效"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:663
 msgid "All ports active"
@@ -1371,7 +1371,7 @@ msgstr "允許的網路技術"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:291
 msgid "AllowedIPs setting is invalid"
-msgstr "允許的 IP 設定無效"
+msgstr "AllowedIPs 設定無效"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1682
 msgid ""
@@ -1709,7 +1709,7 @@ msgstr "平均:"
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:70
 msgid "Avoid Bridge Loops"
-msgstr "避免橋接環路"
+msgstr "避免橋接迴圈"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1842
 msgid "B43 + B43C"
@@ -1948,7 +1948,7 @@ msgstr "開機自動執行"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1014
 msgid "Bring up the bridge interface even if no ports are attached"
-msgstr "即使沒有介面附加也啟動橋接"
+msgstr "即使沒有附加介面也要啟動橋接"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:621
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:1110
@@ -4058,11 +4058,10 @@ msgid "Enables IGMP snooping on this bridge"
 msgstr "在此橋接上啟用 IGMP 監聽"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1869
-#, fuzzy
 msgid ""
 "Enables fast roaming among access points that belong to the same Mobility "
 "Domain"
-msgstr "啟用屬於同一行動網域存取點之間的快速漫遊"
+msgstr ""
 
 #: protocols/luci-proto-batman-adv/htdocs/luci-static/resources/protocol/batadv.js:100
 msgid ""
@@ -4286,7 +4285,7 @@ msgstr "需要一個十六進位值"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:205
 msgid "Expecting a valid MAC address, optionally including wildcards"
-msgstr "需要有效的 MAC 位址，可包含萬用字元"
+msgstr "需要有效 MAC 位址，可包含萬用字元"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:19
 msgid "Expecting two priority values separated by a colon"
@@ -4445,7 +4444,7 @@ msgstr "中斷連線失敗"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/startup.js:36
 msgid "Failed to execute \"/etc/init.d/%s %s\" action: %s"
-msgstr "執行 \"/etc/init.d/%s %s\" 失敗: %s"
+msgstr "無法執行 \"/etc/init.d/%s %s\" 動作: %s"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:117
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:145
@@ -5663,7 +5662,7 @@ msgstr "IPv6 上游"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1074
 msgid "IPv6 Valid Prefix Lifetime"
-msgstr "IPv6 前綴有效時間"
+msgstr "IPv6 前綴生命週期"
 
 #: modules/luci-base/htdocs/luci-static/resources/protocol/static.js:212
 msgid "IPv6 address"
@@ -5928,8 +5927,8 @@ msgid ""
 "In bridged LAN setups it is advisable to enable the bridge loop avoidance in "
 "order to avoid broadcast loops that can bring the entire LAN to a standstill."
 msgstr ""
-"在橋接 LAN 設定中，建議啟用橋接環路避免功能，以避免可能導致整個 LAN 癱瘓的廣"
-"播環路。"
+"在橋接 LAN 設定中，建議啟用橋接迴圈避免功能，以避免可能導致整個 LAN 癱瘓的廣"
+"播迴圈。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:723
 msgid "In order to Set this Tag"
@@ -6253,17 +6252,17 @@ msgstr "DHCP 租約時間格式無效。使用整數值 (可選後接 s、m、h�
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:118
 msgid "Invalid IPv6 address"
-msgstr "無效的 IPv6 位址"
+msgstr "無效 IPv6 位址"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gre.js:78
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/gretap.js:83
 msgid "Invalid TOS value, expected 00..FF or inherit"
-msgstr "TOS 值無效，應為 00..FF 或繼承"
+msgstr "無效 TOS 值，應為 00..FF 或繼承"
 
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6.js:83
 #: protocols/luci-proto-gre/htdocs/luci-static/resources/protocol/grev6tap.js:88
 msgid "Invalid Traffic Class value, expected 00..FF or inherit"
-msgstr "流量類別值無效，應為 00..FF 或繼承"
+msgstr "無效流量類別值，應為 00..FF 或繼承"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/switch.js:283
 msgid "Invalid VLAN ID given! Only IDs between %d and %d are allowed."
@@ -6289,15 +6288,15 @@ msgstr "無效指令"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:180
 msgid "Invalid hexadecimal value"
-msgstr "無效的十六進位值"
+msgstr "無效十六進位值"
 
 #: protocols/luci-proto-openconnect/htdocs/luci-static/resources/protocol/openconnect.js:127
 msgid "Invalid hostname or IPv4 address"
-msgstr "無效的主機名或 IPv4 位址"
+msgstr "無效主機名或 IPv4 位址"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:156
 msgid "Invalid key format"
-msgstr "金鑰格式無效"
+msgstr "無效金鑰格式"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:132
 msgid "Invalid or empty key file"
@@ -6322,7 +6321,7 @@ msgstr "無效伺服器 URL"
 #: modules/luci-base/ucode/template/sysauth.ut:12
 #: themes/luci-theme-bootstrap/ucode/template/themes/bootstrap/sysauth.ut:32
 msgid "Invalid username and/or password! Please try again."
-msgstr "無效使用者名稱/密碼！再試一次。"
+msgstr "無效使用者名稱 (和 / 或) 密碼！再試一次。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/led-trigger/heartbeat.js:13
 msgid "Invert blinking"
@@ -6821,7 +6820,7 @@ msgstr "監聽多播信標"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:277
 msgid "ListenPort setting is invalid"
-msgstr "監聽連接埠設定無效"
+msgstr "ListenPort 設定無效"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:293
 msgid "Listening port for inbound DNS queries."
@@ -7143,7 +7142,7 @@ msgstr "MAC 位址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:715
 msgid "MAC address for LACPDUs"
-msgstr "LACPDUs 的 MAC 位址"
+msgstr "LACPDU 的 MAC 位址"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:839
 msgid "MAC address selection policy"
@@ -7216,15 +7215,15 @@ msgstr "確保使用以下指令複製根檔案系統:"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1608
 msgid "Management"
-msgstr ""
+msgstr "管理"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:903
 msgid "Management cert"
-msgstr ""
+msgstr "管理憑證"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:911
 msgid "Management key"
-msgstr ""
+msgstr "管理金鑰"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:122
 #: protocols/luci-proto-ncm/htdocs/luci-static/resources/protocol/ncm.js:115
@@ -7420,7 +7419,7 @@ msgstr "最大傳輸功率"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1074
 msgid "Maximum valid lifetime for a prefix."
-msgstr "前綴的最大有效時間。"
+msgstr "前綴最大生命週期。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:632
 msgid "May prevent VoIP or other services from working."
@@ -8109,9 +8108,8 @@ msgid "No information available"
 msgstr "無可用資訊"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/routesj.js:115
-#, fuzzy
 msgid "No master"
-msgstr "No master"
+msgstr ""
 
 #: modules/luci-compat/luasrc/model/network/proto_4x6.lua:66
 #: protocols/luci-proto-ipv6/htdocs/luci-static/resources/protocol/map.js:8
@@ -8442,7 +8440,7 @@ msgstr "一個或多個欄位包含無效值！"
 
 #: modules/luci-compat/luasrc/view/cbi/map.htm:32
 msgid "One or more invalid/required values on tab"
-msgstr "分頁上有一個或多個無效/必要值"
+msgstr "分頁上有一個或多個無效 / 必要值"
 
 #: modules/luci-compat/luasrc/view/cbi/nullsection.htm:19
 #: modules/luci-compat/luasrc/view/cbi/ucisection.htm:24
@@ -8655,8 +8653,8 @@ msgid ""
 "code if available. It can be removed after the configuration has been "
 "exported."
 msgstr ""
-"可選。WireGuard 對等點的私鑰。建立連線不需要此金鑰，但允許產生對等點設定或 "
-"QR 碼 (如果可用) 。匯出設定後可將其刪除。"
+"可選。WireGuard 對等點私鑰。建立連線不需要此金鑰，但允許產生對等點設定或 QR "
+"碼 (如果可用) 。匯出設定後可將其刪除。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:653
 msgid ""
@@ -9231,7 +9229,7 @@ msgstr "持續保持連線"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:310
 msgid "PersistentKeepAlive setting is invalid"
-msgstr "持續保持連線設定無效"
+msgstr "PersistentKeepAlive 設定無效"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/wireless.js:290
 msgid "Phy Rate:"
@@ -9402,7 +9400,7 @@ msgstr "使用中的預先共用金鑰"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:284
 msgid "PresharedKey setting is invalid"
-msgstr "預先共用金鑰設定無效"
+msgstr "PresharedKey 設定無效"
 
 #: protocols/luci-proto-3g/htdocs/luci-static/resources/protocol/3g.js:130
 #: protocols/luci-proto-ppp/htdocs/luci-static/resources/protocol/ppp.js:112
@@ -9504,7 +9502,7 @@ msgstr "私鑰存在"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:274
 msgid "PrivateKey setting is missing or invalid"
-msgstr "私鑰設定遺失或無效"
+msgstr "PrivateKey 設定遺失或無效"
 
 #: modules/luci-mod-status/htdocs/luci-static/resources/view/status/processes.js:64
 #: modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json:114
@@ -9608,11 +9606,11 @@ msgstr "分配給用戶端的公共路由前綴。"
 
 #: protocols/luci-proto-wireguard/htdocs/luci-static/resources/protocol/wireguard.js:281
 msgid "PublicKey setting is invalid"
-msgstr "公鑰設定無效"
+msgstr "PublicKey 設定無效"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1610
 msgid "Push"
-msgstr ""
+msgstr "推送"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1385
 msgid "Push an ifconfig option to remote"
@@ -9662,7 +9660,7 @@ msgstr "查詢間隔"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:880
 msgid "Query management channel for private key"
-msgstr "私鑰的佇列管理頻道"
+msgstr "私鑰佇列管理頻道"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/tools/network.js:1071
 msgid "Query response interval"
@@ -9721,9 +9719,8 @@ msgid "RADIUS Dynamic VLAN Assignment"
 msgstr "RADIUS 動態 VLAN 分配"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1759
-#, fuzzy
 msgid "RADIUS Per STA VLAN"
-msgstr "RADIUS Per STA VLAN"
+msgstr ""
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1781
 msgid "RADIUS VLAN Bridge Naming Scheme"
@@ -9951,7 +9948,7 @@ msgstr "中繼"
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:157
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:36
 msgid "Relay Bridge"
-msgstr "橋接中繼"
+msgstr "中繼橋接"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:496
 msgid "Relay DHCP requests elsewhere. OK: v4↔v4, v6↔v6. Not OK: v4↔v6, v6↔v4."
@@ -9964,7 +9961,7 @@ msgstr "網路間中繼"
 #: modules/luci-compat/luasrc/model/network/proto_relay.lua:12
 #: protocols/luci-proto-relay/htdocs/luci-static/resources/protocol/relay.js:64
 msgid "Relay bridge"
-msgstr "橋接中繼"
+msgstr "中繼橋接"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:508
 msgid "Relay from"
@@ -11799,7 +11796,7 @@ msgstr "TLS 1.3 或更新的密碼"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1299
 msgid "TLS cet profile"
-msgstr ""
+msgstr "TLS 憑證設定檔"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:1079
 msgid "TLS cipher"
@@ -12177,7 +12174,7 @@ msgstr "給定的 SSH 公鑰已增加。"
 msgid ""
 "The given SSH public key is invalid. Please supply proper public RSA, "
 "ED25519 or ECDSA keys."
-msgstr "給定的 SSH 公鑰無效。請提供正確的 RSA，ED25519 或 ECDSA 公鑰。"
+msgstr "給定的 SSH 公鑰無效。請提供正確的公共 RSA，ED25519 或 ECDSA 公鑰。"
 
 #: modules/luci-mod-system/htdocs/luci-static/resources/view/system/repokeys.js:166
 msgid "The given software repository public key is already present."
@@ -12893,7 +12890,7 @@ msgstr "使用裝置類型"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:646
 msgid "UC"
-msgstr ""
+msgstr "UC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1787
 msgid "UDP Layer 3 Master Device (udp_l3mdev) accept"
@@ -13209,7 +13206,7 @@ msgstr ""
 msgid ""
 "Upon pressing \"Continue\", bridges configuration will be updated and the "
 "network will be restarted to apply the updated configuration."
-msgstr "按 \"繼續\" ，橋接設定將被更新，網路將重新啟動以套用更新的設定。"
+msgstr "按下 \"繼續\" ，橋接設定將被更新，網路將重新啟動以套用更新的設定。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:450
 msgid ""
@@ -13358,7 +13355,7 @@ msgstr "對內部隧道使用系統憑證"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:776
 msgid "Use the <em>Add</em> Button to add a new UC."
-msgstr ""
+msgstr "使用<em>新增</em>按鈕以新增一個 UC。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:743
 msgid "Use the <em>Add</em> Button to add a new VC."
@@ -13378,7 +13375,7 @@ msgstr ""
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:227
 msgid "Use these PVIDs"
-msgstr ""
+msgstr "使用這些 PVID"
 
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:201
 msgid "Use tun/tap device node"
@@ -13447,7 +13444,7 @@ msgstr "使用流量表 <strong>%h</strong>"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dhcp.js:645
 msgid "VC"
-msgstr ""
+msgstr "VC"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:1906
 msgid "VC-Mux"
@@ -13543,7 +13540,7 @@ msgstr "VXLANv6 (RFC7348)"
 msgid ""
 "Validate DNS replies and cache DNSSEC data, requires upstream to support "
 "DNSSEC."
-msgstr "需要上級支援 DNSSEC，驗證未簽章的回應確實是來自未簽章的網域。"
+msgstr "驗證未簽章的回應確實是來自未簽章的網域，需要上游支援 DNSSEC。"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:1987
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/wireless.js:2045
@@ -14272,7 +14269,7 @@ msgstr "行動 hom e代理 (H)"
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:414
 #: protocols/luci-proto-openvpn/htdocs/luci-static/resources/protocol/openvpn.js:422
 msgid "name value"
-msgstr ""
+msgstr "名稱值"
 
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/interfaces.js:55
 msgid "no"
@@ -14541,28 +14538,28 @@ msgstr "未標記"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:72
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:83
 msgid "valid IP address"
-msgstr "有效的 IP 位址"
+msgstr "有效 IP 位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:510
 msgid "valid IP address or prefix"
-msgstr "有效的 IP 位址或前綴"
+msgstr "有效 IP 位址或前綴"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:707
 msgid "valid IP address range"
-msgstr "有效的 IP 位址範圍"
+msgstr "有效 IP 位址範圍"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:613
 msgid "valid IPv4 CIDR"
-msgstr "有效的 IPv4 CIDR"
+msgstr "有效 IPv4 CIDR"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:524
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:76
 msgid "valid IPv4 address"
-msgstr "有效的 IPv4 位址"
+msgstr "有效 IPv4 位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:524
 msgid "valid IPv4 address or network"
-msgstr "有效的 IPv4 位址或網路"
+msgstr "有效 IPv4 位址或網路"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:719
 msgid "valid IPv4 address range"
@@ -14570,98 +14567,98 @@ msgstr "有效 IPv4 位址範圍"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:834
 msgid "valid IPv4 address:port"
-msgstr "有效的 IPv4 位址:連接埠"
+msgstr "有效 IPv4 位址:連接埠"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:685
 msgid "valid IPv4 network"
-msgstr "有效的 IPv4 網路"
+msgstr "有效 IPv4 網路"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:600
 msgid "valid IPv4 or IPv6 CIDR"
-msgstr "有效的 IPv4 或 IPv6 CIDR"
+msgstr "有效 IPv4 或 IPv6 CIDR"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:578
 msgid "valid IPv4 prefix value (0-32)"
-msgstr "有效的 IPv4 前綴值 (0-32)"
+msgstr "有效 IPv4 前綴值 (0-32)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:626
 msgid "valid IPv6 CIDR"
-msgstr "有效的 IPv6 CIDR"
+msgstr "有效 IPv6 CIDR"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:553
 msgid "valid IPv6 Link Local address"
-msgstr "有效的 IPv6 本地連結位址"
+msgstr "有效 IPv6 本地連結位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:568
 msgid "valid IPv6 ULA address"
-msgstr "有效的 IPv6 ULA 位址"
+msgstr "有效 IPv6 ULA 位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:538
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:80
 msgid "valid IPv6 address"
-msgstr "有效的 IPv6 位址"
+msgstr "有效 IPv6 位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:538
 msgid "valid IPv6 address or prefix"
-msgstr "有效的 IPv6 位址或前綴"
+msgstr "有效 IPv6 位址或前綴"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:731
 msgid "valid IPv6 address range"
-msgstr "有效的 IPv6 位址範圍"
+msgstr "有效 IPv6 位址範圍"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:661
 msgid "valid IPv6 host id"
-msgstr "有效的 IPv6 主機 ID"
+msgstr "有效 IPv6 主機 ID"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:697
 msgid "valid IPv6 network"
-msgstr "有效的 IPv6 網路"
+msgstr "有效 IPv6 網路"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:588
 msgid "valid IPv6 prefix value (0-128)"
-msgstr "有效的 IPv6 前綴值 (0-128)"
+msgstr "有效 IPv6 前綴值 (0-128)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:770
 msgid "valid MAC address"
-msgstr "有效的 MAC 位址"
+msgstr "有效 MAC 位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:982
 msgid "valid UCI identifier"
-msgstr "有效的 UCI 識別碼"
+msgstr "有效 UCI 識別碼"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:809
 msgid "valid UCI identifier, hostname or IP address range"
-msgstr "有效的 UCI 識別碼，主機名稱或 IP 位址範圍"
+msgstr "有效 UCI 識別碼，主機名稱或 IP 位址範圍"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:850
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:853
 msgid "valid address:port"
-msgstr "有效的位址:連接埠"
+msgstr "有效位址:連接埠"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1245
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1248
 msgid "valid date (YYYY-MM-DD)"
-msgstr "有效的日期 (YYYY-MM-DD)"
+msgstr "有效日期 (YYYY-MM-DD)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:490
 msgid "valid decimal value"
-msgstr "有效的十進位值"
+msgstr "有效十進位值"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:991
 msgid "valid fw4 zone name UCI identifier"
-msgstr ""
+msgstr "有效 fw4 區域名稱 UCI 識別碼"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:971
 msgid "valid hexadecimal WEP key"
-msgstr "有效的十六進位 WEP 金鑰"
+msgstr "有效十六進位 WEP 金鑰"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:954
 msgid "valid hexadecimal WPA key"
-msgstr "有效的十六進位 WPA 金鑰"
+msgstr "有效十六進位 WPA 金鑰"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:821
 msgid "valid host:port"
-msgstr "有效的主機:連接埠"
+msgstr "有效主機:連接埠"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:797
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:799
@@ -14671,50 +14668,50 @@ msgstr "有效的主機:連接埠"
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:29
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:56
 msgid "valid hostname"
-msgstr "有效的主機名稱"
+msgstr "有效主機名稱"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:781
 msgid "valid hostname or IP address"
-msgstr "有效的主機名稱或 IP 位址"
+msgstr "有效主機名稱或 IP 位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:472
 msgid "valid integer value"
-msgstr "有效的整數值"
+msgstr "有效整數值"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:770
 msgid "valid multicast MAC address"
-msgstr "有效的多播 MAC 位址"
+msgstr "有效多播 MAC 位址"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1004
 msgid "valid network device name, not \".\" or \"..\""
-msgstr "有效的網路裝置名稱，非 \".\" 或 \"..\""
+msgstr "有效網路裝置名稱，非 \".\" 或 \"..\""
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:673
 msgid "valid network in address/netmask notation"
-msgstr "有效的網路 (\"位址/網路遮罩\" 標記法)"
+msgstr "有效網路 (\"位址/網路遮罩\" 標記法)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1215
 msgid "valid phone digit (0-9, \"*\", \"#\", \"!\" or \".\")"
-msgstr "有效的電話號碼 (0-9, \"*\",\"#\",\"!\" 或 \".\")"
+msgstr "有效電話號碼 (0-9, \"*\",\"#\",\"!\" 或 \".\")"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:755
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:758
 msgid "valid port or port range (port1-port2)"
-msgstr "有效的連接埠或者連接埠範圍 (連接埠1-連接埠2)"
+msgstr "有效連接埠或者連接埠範圍 (連接埠1-連接埠2)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:741
 #: modules/luci-mod-network/htdocs/luci-static/resources/view/network/dns.js:87
 msgid "valid port value"
-msgstr "有效的連接埠值"
+msgstr "有效連接埠值"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1225
 msgid "valid time (HH:MM:SS)"
-msgstr "有效的時間 (HH:MM:SS)"
+msgstr "有效時間 (HH:MM:SS)"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:925
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:927
 msgid "value"
-msgstr ""
+msgstr "值"
 
 #: modules/luci-base/htdocs/luci-static/resources/validation.js:1067
 msgid "value between %d and %d characters"
