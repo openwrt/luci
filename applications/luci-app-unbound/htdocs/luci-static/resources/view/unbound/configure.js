@@ -271,8 +271,8 @@ return view.extend({
 			tlm.placeholder = '120';
 
 			const tlnm = s.taboption('resource', form.Value, 'ttl_neg_max', _('TTL Neg Max'));
-			tlm.datatype = 'and(uinteger,min(0),max(1200))';
-			tlm.placeholder = '1000';
+			tlnm.datatype = 'and(uinteger,min(0),max(1200))';
+			tlnm.placeholder = '1000';
 
 			const rtt = s.taboption('resource', form.Value, 'rate_limit', _('Query Rate Limit'),
 				_('Prevent client query overload; zero is off'));
