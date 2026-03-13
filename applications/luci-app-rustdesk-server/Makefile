@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
-PKG_VERSION:=20250610
-PKG_RELEASE:=4
+PKG_VERSION:=20260313
+PKG_RELEASE:=1
 PKG_NAME:=luci-app-rustdesk-server
 PKG_MAINTAINER:=Guilherme Cardoso <luminoso@gmail.com>
 
